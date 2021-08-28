@@ -172,7 +172,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "clpool_c" );
+   chkin_c ( naif_state, "clpool_c" );
 
    /*
    Just call the f2c'd routine.

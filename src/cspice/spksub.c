@@ -8,8 +8,7 @@
 
 
 extern spksub_init_t __spksub_init;
-static spksub_state_t* get_spksub_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spksub_state_t* get_spksub_state(cspice_t* state) {
 	if (!state->spksub)
 		state->spksub = __cspice_allocate_module(sizeof(
 	spksub_state_t), &__spksub_init, sizeof(__spksub_init));
@@ -18,8 +17,9 @@ static spksub_state_t* get_spksub_state() {
 }
 
 /* $Procedure      SPKSUB ( S/P Kernel, subset ) */
-/* Subroutine */ int spksub_(integer *handle, doublereal *descr, char *ident, 
-	doublereal *begin, doublereal *end, integer *newh, ftnlen ident_len)
+/* Subroutine */ int spksub_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, char *ident, doublereal *begin, doublereal *end, 
+	integer *newh, ftnlen ident_len)
 {
     logical okay;
     integer type__;
@@ -27,59 +27,60 @@ static spksub_state_t* get_spksub_state() {
     integer eaddr;
     doublereal alpha;
     doublereal omega;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     doublereal ndscr[5];
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int spks01_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks02_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks03_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks10_(integer *, doublereal *, integer *, 
-	    doublereal *, char *, ftnlen);
-    extern /* Subroutine */ int spks05_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks12_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks13_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks08_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks09_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks14_(integer *, doublereal *, integer *, 
-	    doublereal *, char *, ftnlen);
-    extern /* Subroutine */ int spks15_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks17_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks18_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks19_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks20_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int spks21_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    doublereal dc[2];
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
 	    ftnlen);
+    extern /* Subroutine */ int spks01_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks02_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks03_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks10_(cspice_t*, integer *, doublereal *, 
+	    integer *, doublereal *, char *, ftnlen);
+    extern /* Subroutine */ int spks05_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks12_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks13_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks08_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks09_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks14_(cspice_t*, integer *, doublereal *, 
+	    integer *, doublereal *, char *, ftnlen);
+    extern /* Subroutine */ int spks15_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks17_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks18_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks19_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks20_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int spks21_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    doublereal dc[2];
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
     integer ic[6];
-    extern /* Subroutine */ int dafena_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int dafena_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spksub_state_t* __state = get_spksub_state();
+    spksub_state_t* __state = get_spksub_state(__global_state);
 /* $ Abstract */
 
 /*     Extract a subset of the data in an SPK segment into a */
@@ -345,15 +346,15 @@ static spksub_state_t* get_spksub_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKSUB", (ftnlen)6);
+	chkin_(__global_state, "SPKSUB", (ftnlen)6);
     }
 
 /*     Unpack the descriptor. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     alpha = dc[0];
     omega = dc[1];
     type__ = ic[3];
@@ -364,14 +365,14 @@ static spksub_state_t* get_spksub_state() {
 
     okay = alpha <= *begin && *begin <= *end && *end <= omega;
     if (! okay) {
-	setmsg_("Specified interval [#, #] is not a subset of segment interv"
-		"al [#, #].", (ftnlen)69);
-	errdp_("#", begin, (ftnlen)1);
-	errdp_("#", end, (ftnlen)1);
-	errdp_("#", &alpha, (ftnlen)1);
-	errdp_("#", &omega, (ftnlen)1);
-	sigerr_("SPICE(SPKNOTASUBSET)", (ftnlen)20);
-	chkout_("SPKSUB", (ftnlen)6);
+	setmsg_(__global_state, "Specified interval [#, #] is not a subset o"
+		"f segment interval [#, #].", (ftnlen)69);
+	errdp_(__global_state, "#", begin, (ftnlen)1);
+	errdp_(__global_state, "#", end, (ftnlen)1);
+	errdp_(__global_state, "#", &alpha, (ftnlen)1);
+	errdp_(__global_state, "#", &omega, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SPKNOTASUBSET)", (ftnlen)20);
+	chkout_(__global_state, "SPKSUB", (ftnlen)6);
 	return 0;
     }
 
@@ -380,22 +381,22 @@ static spksub_state_t* get_spksub_state() {
 
     dc[0] = *begin;
     dc[1] = *end;
-    dafps_(&__state->c__2, &__state->c__6, dc, ic, ndscr);
+    dafps_(__global_state, &__state->c__2, &__state->c__6, dc, ic, ndscr);
 
 /*     Let the type-specific (SPKSnn) routines decide what to move. */
 
     if (type__ == 1) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks01_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks01_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 2) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks02_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks02_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 3) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks03_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks03_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
 
 /*      Type 04 has not been yet been added to SPICELIB. */
 
@@ -404,61 +405,62 @@ static spksub_state_t* get_spksub_state() {
 /*         CALL SPKS04 ( HANDLE, BADDR, EADDR, BEGIN, END ) */
 /*         CALL DAFENA */
     } else if (type__ == 5) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks05_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks05_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 8) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks08_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks08_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 9) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks09_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks09_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 10) {
-	spks10_(handle, descr, newh, ndscr, ident, ident_len);
+	spks10_(__global_state, handle, descr, newh, ndscr, ident, ident_len);
     } else if (type__ == 12) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks12_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks12_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 13) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks13_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks13_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 14) {
-	spks14_(handle, descr, newh, ndscr, ident, ident_len);
+	spks14_(__global_state, handle, descr, newh, ndscr, ident, ident_len);
     } else if (type__ == 15) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks15_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks15_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 17) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks17_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks17_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 18) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks18_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks18_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 19) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks19_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks19_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 20) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks20_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks20_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else if (type__ == 21) {
-	dafbna_(newh, ndscr, ident, ident_len);
-	spks21_(handle, &baddr, &eaddr, begin, end);
-	dafena_();
+	dafbna_(__global_state, newh, ndscr, ident, ident_len);
+	spks21_(__global_state, handle, &baddr, &eaddr, begin, end);
+	dafena_(__global_state);
     } else {
-	setmsg_("SPK data type # is not supported.", (ftnlen)33);
-	errint_("#", &type__, (ftnlen)1);
-	sigerr_("SPICE(SPKTYPENOTSUPP)", (ftnlen)21);
-	chkout_("SPKSUB", (ftnlen)6);
+	setmsg_(__global_state, "SPK data type # is not supported.", (ftnlen)
+		33);
+	errint_(__global_state, "#", &type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SPKTYPENOTSUPP)", (ftnlen)21);
+	chkout_(__global_state, "SPKSUB", (ftnlen)6);
 	return 0;
     }
-    chkout_("SPKSUB", (ftnlen)6);
+    chkout_(__global_state, "SPKSUB", (ftnlen)6);
     return 0;
 } /* spksub_ */
 

@@ -441,7 +441,7 @@
    {
       return; 
    }
-   chkin_c ( "pckcov_c" );
+   chkin_c ( naif_state, "pckcov_c" );
 
 
    /*

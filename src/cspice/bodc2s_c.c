@@ -238,7 +238,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "bodc2s_c");
+   chkin_c ( naif_state, "bodc2s_c");
 
 
    /*

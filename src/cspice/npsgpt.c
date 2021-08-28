@@ -8,34 +8,34 @@
 
 
 typedef int npsgpt_state_t;
-static npsgpt_state_t* get_npsgpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline npsgpt_state_t* get_npsgpt_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      NPSGPT ( Nearest point on line segment ) */
-/* Subroutine */ int npsgpt_(doublereal *ep1, doublereal *ep2, doublereal *
-	point, doublereal *pnear, doublereal *dist)
+/* Subroutine */ int npsgpt_(cspice_t* __global_state, doublereal *ep1, 
+	doublereal *ep2, doublereal *point, doublereal *pnear, doublereal *
+	dist)
 {
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal lnear[3];
-    extern doublereal vdist_(doublereal *, doublereal *);
-    extern logical vzero_(doublereal *);
-    extern logical failed_(void);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal offdot;
     doublereal segdot;
     doublereal offset[3];
-    extern /* Subroutine */ int nplnpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int nplnpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
     doublereal seg[3];
 
 
     /* Module state */
-    npsgpt_state_t* __state = get_npsgpt_state();
+    npsgpt_state_t* __state = get_npsgpt_state(__global_state);
 /* $ Abstract */
 
 /*     Find the nearest point on a line segment to a given point. */
@@ -218,63 +218,63 @@ static npsgpt_state_t* get_npsgpt_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Find a direction vector defined by the endpoints. */
 
-    vsub_(ep2, ep1, seg);
-    if (vzero_(seg)) {
+    vsub_(__global_state, ep2, ep1, seg);
+    if (vzero_(__global_state, seg)) {
 
 /*        The endpoints coincide, and both coincide with the */
 /*        near point. */
 
-	vequ_(ep1, pnear);
-	*dist = vdist_(ep1, point);
+	vequ_(__global_state, ep1, pnear);
+	*dist = vdist_(__global_state, ep1, point);
 	return 0;
     }
 
 /*     Find the nearest point to POINT on the line defined by */
 /*     EP1 and SEG. */
 
-    nplnpt_(ep1, seg, point, lnear, dist);
-    if (failed_()) {
+    nplnpt_(__global_state, ep1, seg, point, lnear, dist);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
 /*     Determine whether LNEAR is on the segment, "before" EP1, or */
 /*     "after" EP2, where SEG points in the "increasing" direction. */
 
-    vsub_(lnear, ep1, offset);
-    offdot = vdot_(offset, seg);
+    vsub_(__global_state, lnear, ep1, offset);
+    offdot = vdot_(__global_state, offset, seg);
     if (offdot < 0.) {
 
 /*        The nearest point on the line precedes the first endpoint. */
 /*        The closest point on the segment is the first endpoint. */
 
-	vequ_(ep1, pnear);
-	*dist = vdist_(ep1, point);
+	vequ_(__global_state, ep1, pnear);
+	*dist = vdist_(__global_state, ep1, point);
     } else {
 
 /*        See whether OFFSET is past the second endpoint. Compare */
 /*        the dot product of OFFSET with SEG to that of SEG with */
 /*        itself, since SEG is the offset of EP2 from EP1. */
 
-	segdot = vdot_(seg, seg);
+	segdot = vdot_(__global_state, seg, seg);
 	if (offdot > segdot) {
 
 /*           The nearest point on the line follows the last endpoint. */
 /*           The closest point on the segment is the last endpoint. */
 
-	    vequ_(ep2, pnear);
-	    *dist = vdist_(ep2, point);
+	    vequ_(__global_state, ep2, pnear);
+	    *dist = vdist_(__global_state, ep2, point);
 	} else {
 
 /*           The near point is on the segment. LNEAR is actually the */
 /*           solution. */
 
-	    vequ_(lnear, pnear);
+	    vequ_(__global_state, lnear, pnear);
 
 /*           DIST was correctly set by the call to NPLNPT. */
 

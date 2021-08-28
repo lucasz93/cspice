@@ -8,47 +8,47 @@
 
 
 typedef int zzinil_state_t;
-static zzinil_state_t* get_zzinil_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzinil_state_t* get_zzinil_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZINIL ( SGP4 initializer ) */
-/* Subroutine */ int zzinil_(doublereal *geophs, integer *opmode, doublereal *
-	ecco, doublereal *epoch, doublereal *inclo, doublereal *no, 
-	doublereal *ainv, doublereal *ao, doublereal *con41, doublereal *
-	con42, doublereal *cosio, doublereal *cosio2, doublereal *eccsq, 
-	doublereal *omeosq, doublereal *posq, doublereal *rp, doublereal *
-	rteosq, doublereal *sinio, doublereal *gsto)
+/* Subroutine */ int zzinil_(cspice_t* __global_state, doublereal *geophs, 
+	integer *opmode, doublereal *ecco, doublereal *epoch, doublereal *
+	inclo, doublereal *no, doublereal *ainv, doublereal *ao, doublereal *
+	con41, doublereal *con42, doublereal *cosio, doublereal *cosio2, 
+	doublereal *eccsq, doublereal *omeosq, doublereal *posq, doublereal *
+	rp, doublereal *rteosq, doublereal *sinio, doublereal *gsto)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    double sqrt(doublereal), cos(doublereal), pow_dd(doublereal *, doublereal 
-	    *), sin(doublereal), d_int(doublereal *), d_mod(doublereal *, 
-	    doublereal *);
+    double sqrt(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal), 
+	    pow_dd(f2c_state_t*, doublereal *, doublereal *), sin(f2c_state_t*
+	    , doublereal), d_int(f2c_state_t*, doublereal *), d_mod(
+	    f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     doublereal adel;
     doublereal c1p2p;
     integer ids70;
     doublereal temp;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal tfrac;
     doublereal thgr70;
     doublereal c1;
     doublereal d1;
     doublereal j2;
-    extern doublereal twopi_(void);
+    extern doublereal twopi_(cspice_t*);
     doublereal ak;
     doublereal po;
     doublereal radday;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal del;
     doublereal xke;
     doublereal x2o3;
@@ -58,7 +58,7 @@ static zzinil_state_t* get_zzinil_state() {
 
 
     /* Module state */
-    zzinil_state_t* __state = get_zzinil_state();
+    zzinil_state_t* __state = get_zzinil_state(__global_state);
 /* $ Abstract */
 
 /*     This subroutine initializes the SGP4 propagator. All the */
@@ -387,10 +387,10 @@ static zzinil_state_t* get_zzinil_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZINIL", (ftnlen)6);
+    chkin_(__global_state, "ZZINIL", (ftnlen)6);
 
 /*     This code block replaces the call: */
 
@@ -408,14 +408,14 @@ static zzinil_state_t* get_zzinil_state() {
 
     *eccsq = *ecco * *ecco;
     *omeosq = 1. - *eccsq;
-    *rteosq = sqrt(*omeosq);
-    *cosio = cos(*inclo);
+    *rteosq = sqrt(&__global_state->f2c, *omeosq);
+    *cosio = cos(&__global_state->f2c, *inclo);
     *cosio2 = *cosio * *cosio;
 
 /*     Un-KOZAI the mean motion */
 
     d__1 = xke / *no;
-    ak = pow_dd(&d__1, &x2o3);
+    ak = pow_dd(&__global_state->f2c, &d__1, &x2o3);
     d1 = j2 * .75 * (*cosio2 * 3. - 1.) / (*rteosq * *omeosq);
     del = d1 / (ak * ak);
     adel = ak * (1. - del * del - del * (del * 134. * del / 81. + 
@@ -423,8 +423,8 @@ static zzinil_state_t* get_zzinil_state() {
     del = d1 / (adel * adel);
     *no /= del + 1.;
     d__1 = xke / *no;
-    *ao = pow_dd(&d__1, &x2o3);
-    *sinio = sin(*inclo);
+    *ao = pow_dd(&__global_state->f2c, &d__1, &x2o3);
+    *sinio = sin(&__global_state->f2c, *inclo);
     po = *ao * *omeosq;
     *con42 = 1. - *cosio2 * 5.;
     *con41 = -(*con42) - *cosio2 - *cosio2;
@@ -441,14 +441,15 @@ static zzinil_state_t* get_zzinil_state() {
 
 /*        Radians per day, earth rotation, 6.30038809866574D0. */
 
-	radday = twopi_() * 1.002737909350795;
+	radday = twopi_(__global_state) * 1.002737909350795;
 	temp = *epoch + 2433281.5;
 	d__1 = temp - .5;
-	tut1 = (d_int(&d__1) + .5 - 2451545.) / 36525.;
+	tut1 = (d_int(&__global_state->f2c, &d__1) + .5 - 2451545.) / 36525.;
 	d__1 = temp - .5;
 	*gsto = tut1 * 628.331970688841 + 1.75336855923327 + tut1 * 
 		6.77071394490334e-6 * tut1 - tut1 * 4.50876723431868e-10 * 
-		tut1 * tut1 + radday * (temp - .5 - d_int(&d__1));
+		tut1 * tut1 + radday * (temp - .5 - d_int(&
+		__global_state->f2c, &d__1));
     } else if (*opmode == 1) {
 
 /*        sgp4fix Use old way of finding GST */
@@ -464,25 +465,25 @@ static zzinil_state_t* get_zzinil_state() {
 	c1 = .0172027916940703639;
 	thgr70 = 1.7321343856509374;
 	fk5r = 5.07551419432269442e-15;
-	c1p2p = c1 + twopi_();
+	c1p2p = c1 + twopi_(__global_state);
 	*gsto = thgr70 + c1 * ids70 + c1p2p * tfrac + ts70 * ts70 * fk5r;
     } else {
-	setmsg_("Unknown value for OPMODE. Value # not coded in zzsgp4.inc.", 
-		(ftnlen)58);
-	errint_("#", opmode, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNMODE)", (ftnlen)18);
-	chkout_("ZZINIL", (ftnlen)6);
+	setmsg_(__global_state, "Unknown value for OPMODE. Value # not coded"
+		" in zzsgp4.inc.", (ftnlen)58);
+	errint_(__global_state, "#", opmode, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNMODE)", (ftnlen)18);
+	chkout_(__global_state, "ZZINIL", (ftnlen)6);
 	return 0;
     }
 
 /*     Check quadrants */
 
-    d__1 = twopi_();
-    *gsto = d_mod(gsto, &d__1);
+    d__1 = twopi_(__global_state);
+    *gsto = d_mod(&__global_state->f2c, gsto, &d__1);
     if (*gsto < 0.) {
-	*gsto += twopi_();
+	*gsto += twopi_(__global_state);
     }
-    chkout_("ZZINIL", (ftnlen)6);
+    chkout_(__global_state, "ZZINIL", (ftnlen)6);
     return 0;
 } /* zzinil_ */
 

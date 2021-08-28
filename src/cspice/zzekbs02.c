@@ -8,8 +8,7 @@
 
 
 extern zzekbs02_init_t __zzekbs02_init;
-static zzekbs02_state_t* get_zzekbs02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekbs02_state_t* get_zzekbs02_state(cspice_t* state) {
 	if (!state->zzekbs02)
 		state->zzekbs02 = __cspice_allocate_module(sizeof(
 	zzekbs02_state_t), &__zzekbs02_init, sizeof(__zzekbs02_init));
@@ -18,45 +17,51 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 }
 
 /* $Procedure      ZZEKBS02 ( EK, begin segment, type 1 ) */
-/* Subroutine */ int zzekbs02_(integer *handle, char *tabnam, integer *ncols, 
-	char *cnames, integer *cdscrs, integer *segno, ftnlen tabnam_len, 
-	ftnlen cnames_len)
+/* Subroutine */ int zzekbs02_(cspice_t* __global_state, integer *handle, 
+	char *tabnam, integer *ncols, char *cnames, integer *cdscrs, integer *
+	segno, ftnlen tabnam_len, ftnlen cnames_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer base;
     integer room;
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int zzekpgan_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgwc_(integer *, integer *, char *, 
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
 	    ftnlen);
-    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrap_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekpgan_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgbs_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzektrit_(integer *, integer *);
+    extern /* Subroutine */ int zzekpgwc_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int zzekpgwi_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzektrap_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzektrit_(cspice_t*, integer *, integer *);
     integer i__;
     integer cbase;
     char cpage[1024];
     integer p;
     integer ipage[256];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer p1;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer p1base;
     integer cp;
-    extern logical failed_(void);
-    extern integer eknseg_(integer *);
-    extern logical return_(void);
+    extern logical failed_(cspice_t*);
+    extern integer eknseg_(cspice_t*, integer *);
+    extern logical return_(cspice_t*);
     char tmpcnm[32];
     char tmptnm[64];
     integer cp1;
@@ -68,17 +73,17 @@ static zzekbs02_state_t* get_zzekbs02_state() {
     integer ncpage;
     integer nipage;
     integer sgtree;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer cpt;
     integer dpt;
     integer ipt;
 
 
     /* Module state */
-    zzekbs02_state_t* __state = get_zzekbs02_state();
+    zzekbs02_state_t* __state = get_zzekbs02_state(__global_state);
 /* $ Abstract */
 
 /*     Start a new type 2 segment in an E-kernel. */
@@ -1051,10 +1056,10 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKBS02", (ftnlen)8);
+	chkin_(__global_state, "ZZEKBS02", (ftnlen)8);
     }
 
 /*     Before trying to actually write anything, do every error */
@@ -1063,9 +1068,9 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 /*     Is this file handle valid--is the file open for paged write */
 /*     access?  Signal an error if not. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZEKBS02", (ftnlen)8);
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZEKBS02", (ftnlen)8);
 	return 0;
     }
 
@@ -1104,27 +1109,27 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 /*     enforces contiguity.  Also allocate one character page, which */
 /*     need not be new. */
 
-    zzekpgan_(handle, &__state->c__3, &p1, &p1base);
+    zzekpgan_(__global_state, handle, &__state->c__3, &p1, &p1base);
     i__1 = nipage;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	zzekpgan_(handle, &__state->c__3, &p, &base);
+	zzekpgan_(__global_state, handle, &__state->c__3, &p, &base);
     }
 
 /*     Calculate the number of contiguous character pages we'll need. */
 
     ncpage = ((*ncols << 5) + 1087) / 1024;
-    zzekpgan_(handle, &__state->c__1, &cp1, &cbase);
+    zzekpgan_(__global_state, handle, &__state->c__1, &cp1, &cbase);
     i__1 = ncpage;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	zzekpgan_(handle, &__state->c__1, &p, &base);
+	zzekpgan_(__global_state, handle, &__state->c__1, &p, &base);
     }
 
 /*     On the third day of Christmas, we initialized three data page */
 /*     trees:  one for each data type. */
 
-    zzektrit_(handle, &cpt);
-    zzektrit_(handle, &dpt);
-    zzektrit_(handle, &ipt);
+    zzektrit_(__global_state, handle, &cpt);
+    zzektrit_(__global_state, handle, &dpt);
+    zzektrit_(__global_state, handle, &ipt);
 
 /*     Prepare the contents of the first integer page:  initialize */
 /*     everything other than the column descriptors. */
@@ -1135,12 +1140,12 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 /*     `last word' counts of each type for both the data and modified */
 /*     record trees are initialized in this fashion. */
 
-    cleari_(&__state->c__256, ipage);
+    cleari_(__global_state, &__state->c__256, ipage);
 
 /*     The value at index EKTIDX is the segment type. */
 
     ipage[0] = 2;
-    ipage[1] = eknseg_(handle) + 1;
+    ipage[1] = eknseg_(__global_state, handle) + 1;
     ipage[2] = p1base;
     ipage[3] = cbase;
     ipage[4] = *ncols;
@@ -1165,10 +1170,10 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 /*     Initialize the character metadata page:  fill in the table name. */
 /*     The table name gets converted to upper case and is left justified. */
 
-    s_copy(cpage, " ", (ftnlen)1024, (ftnlen)1);
-    ljust_(tabnam, tmptnm, tabnam_len, (ftnlen)64);
-    ucase_(tmptnm, tmptnm, (ftnlen)64, (ftnlen)64);
-    s_copy(cpage, tmptnm, (ftnlen)64, (ftnlen)64);
+    s_copy(&__global_state->f2c, cpage, " ", (ftnlen)1024, (ftnlen)1);
+    ljust_(__global_state, tabnam, tmptnm, tabnam_len, (ftnlen)64);
+    ucase_(__global_state, tmptnm, tmptnm, (ftnlen)64, (ftnlen)64);
+    s_copy(&__global_state->f2c, cpage, tmptnm, (ftnlen)64, (ftnlen)64);
 
 /*     Now for the column-specific tasks.  We write out a descriptor for */
 /*     each column.  At the same time, we write out the column's name. */
@@ -1190,13 +1195,14 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 /*        up to a length of CNAMSZ characters, if necessary.  Convert the */
 /*        name to upper case as well. */
 
-	ucase_(cnames + (i__ - 1) * cnames_len, tmpcnm, cnames_len, (ftnlen)
-		32);
+	ucase_(__global_state, cnames + (i__ - 1) * cnames_len, tmpcnm, 
+		cnames_len, (ftnlen)32);
 	nambas = (i__ - 1 << 5) + 64 - (cpagno - 1 << 10);
 	room = 1024 - nambas;
 	if (32 <= room) {
 	    i__2 = nambas;
-	    s_copy(cpage + i__2, tmpcnm, nambas + 32 - i__2, (ftnlen)32);
+	    s_copy(&__global_state->f2c, cpage + i__2, tmpcnm, nambas + 32 - 
+		    i__2, (ftnlen)32);
 
 /*           Fill the column name's base address into the descriptor. */
 
@@ -1208,7 +1214,8 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 
 	    if (room > 0) {
 		i__2 = nambas;
-		s_copy(cpage + i__2, tmpcnm, nambas + room - i__2, room);
+		s_copy(&__global_state->f2c, cpage + i__2, tmpcnm, nambas + 
+			room - i__2, room);
 		cdscrs[i__ * 11 - 7] = cbase + (cpagno - 1 << 10) + nambas;
 	    } else {
 		cdscrs[i__ * 11 - 7] = cbase + (cpagno << 10);
@@ -1216,7 +1223,7 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 
 /*           Write out the page we just filled up. */
 
-	    zzekpgwc_(handle, &cp, cpage, (ftnlen)1024);
+	    zzekpgwc_(__global_state, handle, &cp, cpage, (ftnlen)1024);
 
 /*           The next character page will hold the overflow.  The next */
 /*           page is the successor of page CP, since we allocated */
@@ -1225,7 +1232,8 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 	    ++cp;
 	    ++cpagno;
 	    i__2 = room;
-	    s_copy(cpage, tmpcnm + i__2, (ftnlen)1024, 32 - i__2);
+	    s_copy(&__global_state->f2c, cpage, tmpcnm + i__2, (ftnlen)1024, 
+		    32 - i__2);
 	}
 
 /*        Add the column descriptor to the metadata page, if the */
@@ -1238,23 +1246,25 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 
 /*           The whole descriptor fits in the current page. */
 
-	    movei_(&cdscrs[i__ * 11 - 11], &__state->c__11, &ipage[(i__2 = 
-		    dscbas) < 256 && 0 <= i__2 ? i__2 : s_rnge("ipage", i__2, 
-		    "zzekbs02_", (ftnlen)426)]);
+	    movei_(__global_state, &cdscrs[i__ * 11 - 11], &__state->c__11, &
+		    ipage[(i__2 = dscbas) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ipage", i__2, "zzekbs02_", (ftnlen)
+		    426)]);
 	} else {
 
 /*           Some or all of the descriptor will overflow onto the next */
 /*           page. */
 
 	    if (room > 0) {
-		movei_(&cdscrs[i__ * 11 - 11], &room, &ipage[(i__2 = dscbas) <
-			 256 && 0 <= i__2 ? i__2 : s_rnge("ipage", i__2, 
-			"zzekbs02_", (ftnlen)435)]);
+		movei_(__global_state, &cdscrs[i__ * 11 - 11], &room, &ipage[(
+			i__2 = dscbas) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "ipage", i__2, "zzekbs02_", (
+			ftnlen)435)]);
 	    }
 
 /*           Write out the page we just filled up. */
 
-	    zzekpgwi_(handle, &p, ipage);
+	    zzekpgwi_(__global_state, handle, &p, ipage);
 
 /*           The next integer page will hold the overflow.  The next page */
 /*           is the successor of page P, since we allocated consecutive */
@@ -1262,15 +1272,16 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 
 	    ++p;
 	    ++ipagno;
-	    cleari_(&__state->c__256, ipage);
+	    cleari_(__global_state, &__state->c__256, ipage);
 	    i__2 = 11 - room;
-	    movei_(&cdscrs[room + 1 + i__ * 11 - 12], &i__2, ipage);
+	    movei_(__global_state, &cdscrs[room + 1 + i__ * 11 - 12], &i__2, 
+		    ipage);
 	}
 
 /*        If we encountered a DAS error, leave now. */
 
-	if (failed_()) {
-	    chkout_("ZZEKBS02", (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZEKBS02", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -1278,25 +1289,25 @@ static zzekbs02_state_t* get_zzekbs02_state() {
 /*     Write out the last integer metadata page, and write out the */
 /*     character metadata page. */
 
-    zzekpgwi_(handle, &p, ipage);
-    zzekpgwc_(handle, &cp, cpage, (ftnlen)1024);
+    zzekpgwi_(__global_state, handle, &p, ipage);
+    zzekpgwc_(__global_state, handle, &cp, cpage, (ftnlen)1024);
 
 /*     At this point, the segment's metadata is filled in.  We must */
 /*     update the file's segment list information to account for this */
 /*     segment.  All we need do is add a new entry to the file's */
 /*     segment pointer tree.  First, look up the tree. */
 
-    zzekpgbs_(&__state->c__3, &__state->c__1, &base);
+    zzekpgbs_(__global_state, &__state->c__3, &__state->c__1, &base);
     i__1 = base + 1;
     i__2 = base + 1;
-    dasrdi_(handle, &i__1, &i__2, &sgtree);
+    dasrdi_(__global_state, handle, &i__1, &i__2, &sgtree);
 
 /*     Append the head node of this segment at the end of the segment */
 /*     tree.  The tree will point to the first integer metadata page of */
 /*     the new segment. */
 
-    zzektrap_(handle, &sgtree, &p1, segno);
-    chkout_("ZZEKBS02", (ftnlen)8);
+    zzektrap_(__global_state, handle, &sgtree, &p1, segno);
+    chkout_(__global_state, "ZZEKBS02", (ftnlen)8);
     return 0;
 } /* zzekbs02_ */
 

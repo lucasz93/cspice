@@ -68,7 +68,7 @@ extern int en_fio(void);
 extern void f_init(void);
 extern int t_putc(int), x_wSL(void);
 extern void b_char(char*,char*,ftnlen), g_char(char*,ftnlen,char*);
-extern int c_sfe(cilist*), z_rnew(void);
+extern int c_sfe(f2c_state_t *,cilist*), z_rnew(void);
 extern int isatty(int);
 extern int err__fl(int,int,char*);
 extern int xrd_SL(void);
@@ -79,9 +79,6 @@ extern int f__putbuf(int);
 #endif
 #define err(f,m,s) {if(f) errno= m; else f__fatal(m,s); return(m);}
 #define errfl(f,m,s) return err__fl((int)f,m,s)
-
-/*Table sizes*/
-#define MXUNIT 100
 
 #define WRITE	1
 #define READ	2

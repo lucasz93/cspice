@@ -63,21 +63,19 @@ extern int ungetc(int, FILE*);	/* for systems with a buggy stdio.h */
 #endif
 #endif
 
-t_getc(Void)
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int ch;
+t_getc(f2c_state_t *f2c)
+{	int ch;
 	if(f2c->f__curunit->uend) return(EOF);
 	if((ch=getc(f2c->f__cf))!=EOF) return(ch);
 	if(feof(f2c->f__cf))
 		f2c->f__curunit->uend = f2c->l_eof = 1;
 	return(EOF);
 }
-integer e_rsle(Void)
+integer e_rsle(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int ch;
 	if(f2c->f__curunit->uend) return(0);
-	while((ch=t_getc())!='\n')
+	while((ch=t_getc(f2c))!='\n')
 		if (ch == EOF) {
 			if(feof(f2c->f__cf))
 				f2c->f__curunit->uend = f2c->l_eof = 1;
@@ -92,12 +90,11 @@ integer e_rsle(Void)
 
  static int
 #ifdef KR_headers
-l_R(poststar, reqint) int poststar, reqint;
+l_R(f2c, poststar, reqint) f2c_state_t *f2c; int poststar, reqint;
 #else
-l_R(int poststar, int reqint)
+l_R(f2c_state_t *f2c, int poststar, int reqint)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	char s[FMAX+EXPMAXDIGS+4];
 	register int ch;
 	register char *sp, *spe, *sp1;
@@ -244,12 +241,11 @@ bad:
 
  static int
 #ifdef KR_headers
-rd_count(ch) register int ch;
+rd_count(f2c, ch) f2c_state_t *f2c; register int ch;
 #else
-rd_count(register int ch)
+rd_count(f2c_state_t *f2c, register int ch)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if (ch < '0' || ch > '9')
 		return 1;
 	f2c->f__lcount = ch - '0';
@@ -260,9 +256,8 @@ rd_count(register int ch)
 	}
 
  static int
-l_C(Void)
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int ch, nml_save;
+l_C(f2c_state_t *f2c)
+{	int ch, nml_save;
 	double lz;
 	if(f2c->f__lcount>0) return(0);
 	f2c->f__ltype=0;
@@ -274,7 +269,7 @@ l_C(Void)
 			f2c->f__lquit = 2;
 			return 0;
 			}
-		if (rd_count(ch))
+		if (rd_count(f2c, ch))
 			if(!f2c->f__cf || !feof(f2c->f__cf))
 				errfl(f2c->f__elist->cierr,112,"complex format");
 			else
@@ -297,7 +292,7 @@ l_C(Void)
 	Ungetc(f2c,ch,f2c->f__cf);
 	nml_save = f2c->nml_read;
 	f2c->nml_read = 0;
-	if (ch = l_R(1,0))
+	if (ch = l_R(f2c,1,0))
 		return ch;
 	if (!f2c->f__ltype)
 		errfl(f2c->f__elist->cierr,112,"no real part");
@@ -309,7 +304,7 @@ l_C(Void)
 	}
 	while(iswhit(GETC(f2c, ch)));
 	(void) Ungetc(f2c, ch, f2c->f__cf);
-	if (ch = l_R(1,0))
+	if (ch = l_R(f2c,1,0))
 		return ch;
 	if (!f2c->f__ltype)
 		errfl(f2c->f__elist->cierr,112,"no imaginary part");
@@ -325,9 +320,8 @@ l_C(Void)
 }
 
  static int
-l_L(Void)
+l_L(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int ch;
 	if(f2c->f__lcount>0) return(0);
 	f2c->f__lcount = 1;
@@ -335,7 +329,7 @@ l_L(Void)
 	GETC(f2c, ch);
 	if(isdigit(ch))
 	{
-		rd_count(ch);
+		rd_count(f2c,ch);
 		if(GETC(f2c, ch)!='*')
 			if(!f2c->f__cf || !feof(f2c->f__cf))
 				errfl(f2c->f__elist->cierr,112,"no star");
@@ -375,9 +369,8 @@ l_L(Void)
 #define BUFSIZE	128
 
  static int
-l_CHAR(Void)
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int ch,size,i;
+l_CHAR(f2c_state_t *f2c)
+{	int ch,size,i;
 	static char rafail[] = "realloc failure";
 	char quote,*p;
 	if(f2c->f__lcount>0) return(0);
@@ -516,12 +509,11 @@ l_CHAR(Void)
 	}
 }
 #ifdef KR_headers
-c_le(a) cilist *a;
+c_le(f2c,a) f2c_state_t *f2c; cilist *a;
 #else
-c_le(cilist *a)
+c_le(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if(!f2c->f__init)
 		f_init();
 	f2c->f__fmtbuf="list io";
@@ -537,13 +529,12 @@ c_le(cilist *a)
 	return(0);
 }
 #ifdef KR_headers
-l_read(number,ptr,len,type) ftnint *number,type; char *ptr; ftnlen len;
+l_read(f2c,number,ptr,len,type) f2c_state_t *f2c; ftnint *number,type; char *ptr; ftnlen len;
 #else
-l_read(ftnint *number, char *ptr, ftnlen len, ftnint type)
+l_read(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len, ftnint type)
 #endif
 {
 #define Ptr ((flex *)ptr)
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int i,n,ch;
 	doublereal *yy;
 	real *xx;
@@ -582,12 +573,12 @@ l_read(ftnint *number, char *ptr, ftnlen len, ftnint type)
 		case TYSHORT:
 		case TYLONG:
 #ifndef ALLOW_FLOAT_IN_INTEGER_LIST_INPUT
-			ERR(l_R(0,1));
+			ERR(l_R(f2c,0,1));
 			break;
 #endif
 		case TYREAL:
 		case TYDREAL:
-			ERR(l_R(0,0));
+			ERR(l_R(f2c,0,0));
 			break;
 #ifdef TYQUAD
 		case TYQUAD:
@@ -598,15 +589,15 @@ l_read(ftnint *number, char *ptr, ftnlen len, ftnint type)
 #endif
 		case TYCOMPLEX:
 		case TYDCOMPLEX:
-			ERR(l_C());
+			ERR(l_C(f2c));
 			break;
 		case TYLOGICAL1:
 		case TYLOGICAL2:
 		case TYLOGICAL:
-			ERR(l_L());
+			ERR(l_L(f2c));
 			break;
 		case TYCHAR:
-			ERR(l_CHAR());
+			ERR(l_CHAR(f2c));
 			break;
 		}
 	while (GETC(f2c, ch) == ' ' || ch == '\t');
@@ -669,12 +660,11 @@ l_read(ftnint *number, char *ptr, ftnlen len, ftnint type)
 #undef Ptr
 }
 #ifdef KR_headers
-integer s_rsle(a) cilist *a;
+integer s_rsle(f2c,a) f2c_state_t *f2c; cilist *a;
 #else
-integer s_rsle(cilist *a)
+integer s_rsle(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 
 	f2c->f__reading=1;

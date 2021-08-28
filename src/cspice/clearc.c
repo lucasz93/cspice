@@ -8,26 +8,26 @@
 
 
 typedef int clearc_state_t;
-static clearc_state_t* get_clearc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline clearc_state_t* get_clearc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CLEARC ( Clear a character-string array ) */
-/* Subroutine */ int clearc_(integer *ndim, char *array, ftnlen array_len)
+/* Subroutine */ int clearc_(cspice_t* __global_state, integer *ndim, char *
+	array, ftnlen array_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    clearc_state_t* __state = get_clearc_state();
+    clearc_state_t* __state = get_clearc_state(__global_state);
 /* $ Abstract */
 
 /*      Fill a character-string array with blank strings. */
@@ -143,7 +143,8 @@ static clearc_state_t* get_clearc_state() {
 
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	s_copy(array + (i__ - 1) * array_len, " ", array_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, array + (i__ - 1) * array_len, " ", 
+		array_len, (ftnlen)1);
     }
     return 0;
 } /* clearc_ */

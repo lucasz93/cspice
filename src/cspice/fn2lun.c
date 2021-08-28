@@ -8,35 +8,37 @@
 
 
 typedef int fn2lun_state_t;
-static fn2lun_state_t* get_fn2lun_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline fn2lun_state_t* get_fn2lun_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      FN2LUN ( Map name of open file to its logical unit. ) */
-/* Subroutine */ int fn2lun_(char *filnam, integer *lunit, ftnlen filnam_len)
+/* Subroutine */ int fn2lun_(cspice_t* __global_state, char *filnam, integer *
+	lunit, ftnlen filnam_len)
 {
     /* System generated locals */
     inlist ioin__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), f_inqu(inlist *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), f_inqu(
+	    f2c_state_t*, inlist *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical opened;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     logical exists;
 
 
     /* Module state */
-    fn2lun_state_t* __state = get_fn2lun_state();
+    fn2lun_state_t* __state = get_fn2lun_state(__global_state);
 /* $ Abstract */
 
 /*      Map the name of an open file to its associated logical unit. */
@@ -165,18 +167,19 @@ static fn2lun_state_t* get_fn2lun_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("FN2LUN", (ftnlen)6);
+	chkin_(__global_state, "FN2LUN", (ftnlen)6);
     }
 
 /*     First we test to see if the filename is blank. */
 
-    if (s_cmp(filnam, " ", filnam_len, (ftnlen)1) == 0) {
-	setmsg_("The filename is blank.", (ftnlen)22);
-	sigerr_("SPICE(BLANKFILENAME)", (ftnlen)20);
-	chkout_("FN2LUN", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, filnam, " ", filnam_len, (ftnlen)1) == 0) 
+	    {
+	setmsg_(__global_state, "The filename is blank.", (ftnlen)22);
+	sigerr_(__global_state, "SPICE(BLANKFILENAME)", (ftnlen)20);
+	chkout_(__global_state, "FN2LUN", (ftnlen)6);
 	return 0;
     }
 
@@ -199,14 +202,14 @@ static fn2lun_state_t* get_fn2lun_state() {
     ioin__1.inrecl = 0;
     ioin__1.innrec = 0;
     ioin__1.inblank = 0;
-    iostat = f_inqu(&ioin__1);
+    iostat = f_inqu(&__global_state->f2c, &ioin__1);
     if (iostat != 0) {
-	setmsg_("INQUIRE error on file '#'. The value of IOSTAT is: #.", (
-		ftnlen)53);
-	errch_("#", filnam, (ftnlen)1, filnam_len);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(INQUIREFAILED)", (ftnlen)20);
-	chkout_("FN2LUN", (ftnlen)6);
+	setmsg_(__global_state, "INQUIRE error on file '#'. The value of IOS"
+		"TAT is: #.", (ftnlen)53);
+	errch_(__global_state, "#", filnam, (ftnlen)1, filnam_len);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	chkout_(__global_state, "FN2LUN", (ftnlen)6);
 	return 0;
     }
 
@@ -215,10 +218,11 @@ static fn2lun_state_t* get_fn2lun_state() {
 /*     they do not exist. */
 
     if (! exists) {
-	setmsg_("No file with the name '#' was found.", (ftnlen)36);
-	errch_("#", filnam, (ftnlen)1, filnam_len);
-	sigerr_("SPICE(FILEDOESNOTEXIST)", (ftnlen)23);
-	chkout_("FN2LUN", (ftnlen)6);
+	setmsg_(__global_state, "No file with the name '#' was found.", (
+		ftnlen)36);
+	errch_(__global_state, "#", filnam, (ftnlen)1, filnam_len);
+	sigerr_(__global_state, "SPICE(FILEDOESNOTEXIST)", (ftnlen)23);
+	chkout_(__global_state, "FN2LUN", (ftnlen)6);
 	return 0;
     }
 
@@ -226,14 +230,14 @@ static fn2lun_state_t* get_fn2lun_state() {
 /*     error, there cannot be a logical unit associated with it.. */
 
     if (! opened) {
-	setmsg_("There was not an open file associated with the filename '#'."
-		, (ftnlen)60);
-	errch_("#", filnam, (ftnlen)1, filnam_len);
-	sigerr_("SPICE(FILENOTOPEN)", (ftnlen)18);
-	chkout_("FN2LUN", (ftnlen)6);
+	setmsg_(__global_state, "There was not an open file associated with "
+		"the filename '#'.", (ftnlen)60);
+	errch_(__global_state, "#", filnam, (ftnlen)1, filnam_len);
+	sigerr_(__global_state, "SPICE(FILENOTOPEN)", (ftnlen)18);
+	chkout_(__global_state, "FN2LUN", (ftnlen)6);
 	return 0;
     }
-    chkout_("FN2LUN", (ftnlen)6);
+    chkout_(__global_state, "FN2LUN", (ftnlen)6);
     return 0;
 } /* fn2lun_ */
 

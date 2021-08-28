@@ -8,13 +8,12 @@
 
 
 typedef int isordv_state_t;
-static isordv_state_t* get_isordv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline isordv_state_t* get_isordv_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ISORDV ( Is it an order vector ) */
-logical isordv_(integer *array, integer *n)
+logical isordv_(cspice_t* __global_state, integer *array, integer *n)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -26,7 +25,7 @@ logical isordv_(integer *array, integer *n)
 
 
     /* Module state */
-    isordv_state_t* __state = get_isordv_state();
+    isordv_state_t* __state = get_isordv_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether an array of N items contains the integers */

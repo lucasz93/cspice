@@ -8,8 +8,7 @@
 
 
 extern ckfrot_init_t __ckfrot_init;
-static ckfrot_state_t* get_ckfrot_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckfrot_state_t* get_ckfrot_state(cspice_t* state) {
 	if (!state->ckfrot)
 		state->ckfrot = __cspice_allocate_module(sizeof(
 	ckfrot_state_t), &__ckfrot_init, sizeof(__ckfrot_init));
@@ -18,38 +17,40 @@ static ckfrot_state_t* get_ckfrot_state() {
 }
 
 /* $Procedure      CKFROT ( C-kernel, find rotation ) */
-/* Subroutine */ int ckfrot_(integer *inst, doublereal *et, doublereal *
-	rotate, integer *ref, logical *found)
+/* Subroutine */ int ckfrot_(cspice_t* __global_state, integer *inst, 
+	doublereal *et, doublereal *rotate, integer *ref, logical *found)
 {
     logical have;
     logical pfnd;
     logical sfnd;
     doublereal time;
-    extern /* Subroutine */ int sce2c_(integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sce2c_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
     char segid[40];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal descr[5];
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int ckbss_(integer *, doublereal *, doublereal *, 
-	    logical *);
-    extern /* Subroutine */ int ckpfs_(integer *, doublereal *, doublereal *, 
-	    doublereal *, logical *, doublereal *, doublereal *, doublereal *,
-	     logical *);
-    extern /* Subroutine */ int cksns_(integer *, doublereal *, char *, 
-	    logical *, ftnlen);
-    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int ckbss_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, logical *);
+    extern /* Subroutine */ int ckpfs_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, logical *, doublereal *, doublereal *,
+	     doublereal *, logical *);
+    extern /* Subroutine */ int cksns_(cspice_t*, integer *, doublereal *, 
+	    char *, logical *, ftnlen);
+    extern /* Subroutine */ int xpose_(cspice_t*, doublereal *, doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal av[3];
     integer handle;
-    extern /* Subroutine */ int ckhave_(logical *);
+    extern /* Subroutine */ int ckhave_(cspice_t*, logical *);
     logical needav;
-    extern /* Subroutine */ int ckmeta_(integer *, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ckmeta_(cspice_t*, integer *, char *, integer 
+	    *, ftnlen);
     integer sclkid;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal clkout;
-    extern logical return_(void);
-    extern logical zzsclk_(integer *, integer *);
+    extern logical return_(cspice_t*);
+    extern logical zzsclk_(cspice_t*, integer *, integer *);
     doublereal dcd[2];
     integer icd[6];
     doublereal tol;
@@ -57,7 +58,7 @@ static ckfrot_state_t* get_ckfrot_state() {
 
 
     /* Module state */
-    ckfrot_state_t* __state = get_ckfrot_state();
+    ckfrot_state_t* __state = get_ckfrot_state(__global_state);
 /* $ Abstract */
 
 /*     Find the rotation from a C-kernel Id to the native */
@@ -246,10 +247,10 @@ static ckfrot_state_t* get_ckfrot_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKFROT", (ftnlen)6);
+	chkin_(__global_state, "CKFROT", (ftnlen)6);
     }
 
 /*     We don't need angular velocity data. */
@@ -261,18 +262,18 @@ static ckfrot_state_t* get_ckfrot_state() {
 /*     Begin a search for this instrument and time, and get the first */
 /*     applicable segment. */
 
-    ckhave_(&have);
-    ckmeta_(inst, "SCLK", &sclkid, (ftnlen)4);
+    ckhave_(__global_state, &have);
+    ckmeta_(__global_state, inst, "SCLK", &sclkid, (ftnlen)4);
     if (! have) {
-	chkout_("CKFROT", (ftnlen)6);
+	chkout_(__global_state, "CKFROT", (ftnlen)6);
 	return 0;
-    } else if (! zzsclk_(inst, &sclkid)) {
-	chkout_("CKFROT", (ftnlen)6);
+    } else if (! zzsclk_(__global_state, inst, &sclkid)) {
+	chkout_(__global_state, "CKFROT", (ftnlen)6);
 	return 0;
     }
-    sce2c_(&sclkid, et, &time);
-    ckbss_(inst, &time, &tol, &needav);
-    cksns_(&handle, descr, segid, &sfnd, (ftnlen)40);
+    sce2c_(__global_state, &sclkid, et, &time);
+    ckbss_(__global_state, inst, &time, &tol, &needav);
+    cksns_(__global_state, &handle, descr, segid, &sfnd, (ftnlen)40);
 
 /*     Keep trying candidate segments until a segment can produce a */
 /*     pointing instance within the specified time tolerance of the */
@@ -281,14 +282,16 @@ static ckfrot_state_t* get_ckfrot_state() {
 /*     Check FAILED to prevent an infinite loop if an error is detected */
 /*     by a SPICELIB routine and the error handling is not set to abort. */
 
-    while(sfnd && ! failed_()) {
-	ckpfs_(&handle, descr, &time, &tol, &needav, rot, av, &clkout, &pfnd);
+    while(sfnd && ! failed_(__global_state)) {
+	ckpfs_(__global_state, &handle, descr, &time, &tol, &needav, rot, av, 
+		&clkout, &pfnd);
 	if (pfnd) {
 
 /*           Found one. Fetch the ID code of the reference frame */
 /*           from the descriptor. */
 
-	    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
+	    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dcd,
+		     icd);
 	    *ref = icd[1];
 	    *found = TRUE_;
 
@@ -296,13 +299,13 @@ static ckfrot_state_t* get_ckfrot_state() {
 /*           REF to INS. We invert ROT to get the rotation */
 /*           from INST to REF. */
 
-	    xpose_(rot, rotate);
-	    chkout_("CKFROT", (ftnlen)6);
+	    xpose_(__global_state, rot, rotate);
+	    chkout_(__global_state, "CKFROT", (ftnlen)6);
 	    return 0;
 	}
-	cksns_(&handle, descr, segid, &sfnd, (ftnlen)40);
+	cksns_(__global_state, &handle, descr, segid, &sfnd, (ftnlen)40);
     }
-    chkout_("CKFROT", (ftnlen)6);
+    chkout_(__global_state, "CKFROT", (ftnlen)6);
     return 0;
 } /* ckfrot_ */
 

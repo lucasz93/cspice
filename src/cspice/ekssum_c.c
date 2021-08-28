@@ -347,7 +347,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekssum_c" );
+   chkin_c ( naif_state, "ekssum_c" );
 
 
    /*

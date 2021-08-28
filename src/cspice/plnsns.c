@@ -8,8 +8,7 @@
 
 
 extern plnsns_init_t __plnsns_init;
-static plnsns_state_t* get_plnsns_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline plnsns_state_t* get_plnsns_state(cspice_t* state) {
 	if (!state->plnsns)
 		state->plnsns = __cspice_allocate_module(sizeof(
 	plnsns_state_t), &__plnsns_init, sizeof(__plnsns_init));
@@ -18,13 +17,13 @@ static plnsns_state_t* get_plnsns_state() {
 }
 
 /* $Procedure      PLNSNS ( Planetographic Longitude Sense ) */
-integer plnsns_(integer *bodid)
+integer plnsns_(cspice_t* __global_state, integer *bodid)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal rate;
@@ -33,16 +32,16 @@ integer plnsns_(integer *bodid)
     integer n;
     logical found;
     integer value;
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
-	    *, doublereal *, logical *, ftnlen);
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int gdpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
 
 
     /* Module state */
-    plnsns_state_t* __state = get_plnsns_state();
+    plnsns_state_t* __state = get_plnsns_state(__global_state);
 /* $ Abstract */
 
 /*    This function returns the quotient of the planetographic */
@@ -224,17 +223,18 @@ integer plnsns_(integer *bodid)
 
 /*     Create the name of the item to look up in the kernel pool. */
 
-    s_copy(item, "BODY#_PM", (ftnlen)32, (ftnlen)8);
-    repmi_(item, "#", bodid, item, (ftnlen)32, (ftnlen)1, (ftnlen)32);
+    s_copy(&__global_state->f2c, item, "BODY#_PM", (ftnlen)32, (ftnlen)8);
+    repmi_(__global_state, item, "#", bodid, item, (ftnlen)32, (ftnlen)1, (
+	    ftnlen)32);
 
 /*     See if this item exists in the kernel pool. */
 
-    dtpool_(item, &found, &n, type__, (ftnlen)32, (ftnlen)1);
+    dtpool_(__global_state, item, &found, &n, type__, (ftnlen)32, (ftnlen)1);
     if (! found || *(unsigned char *)type__ != 'N' || n < 2) {
 	value = 0;
     } else {
-	gdpool_(item, &__state->c__2, &__state->c__1, &n, &rate, &found, (
-		ftnlen)32);
+	gdpool_(__global_state, item, &__state->c__2, &__state->c__1, &n, &
+		rate, &found, (ftnlen)32);
 
 /*        If the rate of change of the prime meridian is negative */
 /*        the planetocentric and planetographic longitude are the */

@@ -915,7 +915,7 @@
      {
       return;
       }
-   chkin_c ( "gfudb_c" );
+   chkin_c ( naif_state, "gfudb_c" );
 
 
    /*
@@ -932,8 +932,8 @@
    Store the input function pointers so these functions can be
    called by the GF adapters.
    */
-   zzadsave_c ( UDFUNC,  (void *)(udfuns)  );
-   zzadsave_c ( UDQDEC,  (void *)(udfunb)  );
+   zzadsave_c ( naif_state, UDFUNC,  (void *)(udfuns)  );
+   zzadsave_c ( naif_state, UDQDEC,  (void *)(udfunb)  );
 
 
    /*

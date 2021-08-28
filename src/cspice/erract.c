@@ -8,8 +8,7 @@
 
 
 extern erract_init_t __erract_init;
-static erract_state_t* get_erract_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline erract_state_t* get_erract_state(cspice_t* state) {
 	if (!state->erract)
 		state->erract = __cspice_allocate_module(sizeof(
 	erract_state_t), &__erract_init, sizeof(__erract_init));
@@ -18,8 +17,8 @@ static erract_state_t* get_erract_state() {
 }
 
 /* $Procedure     ERRACT  ( Get/Set Default Error Action ) */
-/* Subroutine */ int erract_(char *op, char *action, ftnlen op_len, ftnlen 
-	action_len)
+/* Subroutine */ int erract_(cspice_t* __global_state, char *op, char *action,
+	 ftnlen op_len, ftnlen action_len)
 {
     /* Initialized data */
 
@@ -30,28 +29,32 @@ static erract_state_t* get_erract_state() {
     char ch__1[73], ch__2[65];
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
 
     /* Local variables */
     integer iact;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char locop[3];
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char locact[7];
-    extern /* Subroutine */ int getact_(integer *);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int putact_(integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int getact_(cspice_t*, integer *);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int putact_(cspice_t*, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    erract_state_t* __state = get_erract_state();
+    erract_state_t* __state = get_erract_state(__global_state);
 /* $ Abstract */
 
 /*     Retrieve or set the default error action. */
@@ -447,38 +450,43 @@ static erract_state_t* get_erract_state() {
 
 /*     Executable Code: */
 
-    chkin_("ERRACT", (ftnlen)6);
+    chkin_(__global_state, "ERRACT", (ftnlen)6);
 
 /*     We convert the input values to upper case, as needed. Note: we */
 /*     only check the first character of the input variable OP, as that */
 /*     is sufficient to distinguish 'GET' from 'SET' */
 
-    ljust_(op, locop, op_len, (ftnlen)3);
-    ucase_(locop, locop, (ftnlen)3, (ftnlen)3);
-    if (s_cmp(locop, "GET", (ftnlen)3, (ftnlen)3) == 0) {
-	getact_(&iact);
-	s_copy(action, __state->actns + ((i__1 = iact - 1) < 5 && 0 <= i__1 ? 
-		i__1 : s_rnge("actns", i__1, "erract_", (ftnlen)442)) * 7, 
-		action_len, (ftnlen)7);
-    } else if (s_cmp(locop, "SET", (ftnlen)3, (ftnlen)3) == 0) {
-	ljust_(action, locact, action_len, (ftnlen)7);
-	ucase_(locact, locact, (ftnlen)7, (ftnlen)7);
-	iact = isrchc_(locact, &__state->c__5, __state->actns, (ftnlen)7, (
+    ljust_(__global_state, op, locop, op_len, (ftnlen)3);
+    ucase_(__global_state, locop, locop, (ftnlen)3, (ftnlen)3);
+    if (s_cmp(&__global_state->f2c, locop, "GET", (ftnlen)3, (ftnlen)3) == 0) 
+	    {
+	getact_(__global_state, &iact);
+	s_copy(&__global_state->f2c, action, __state->actns + ((i__1 = iact - 
+		1) < 5 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"actns", i__1, "erract_", (ftnlen)442)) * 7, action_len, (
 		ftnlen)7);
+    } else if (s_cmp(&__global_state->f2c, locop, "SET", (ftnlen)3, (ftnlen)3)
+	     == 0) {
+	ljust_(__global_state, action, locact, action_len, (ftnlen)7);
+	ucase_(__global_state, locact, locact, (ftnlen)7, (ftnlen)7);
+	iact = isrchc_(__global_state, locact, &__state->c__5, __state->actns,
+		 (ftnlen)7, (ftnlen)7);
 	if (iact > 0) {
-	    putact_(&iact);
+	    putact_(__global_state, &iact);
 	} else {
 
 /*           We have an invalid value of ACTION */
 
-	    s_copy(locact, action, (ftnlen)7, action_len);
+	    s_copy(&__global_state->f2c, locact, action, (ftnlen)7, 
+		    action_len);
 /* Writing concatenation */
 	    i__2[0] = 66, a__1[0] = "ERRACT: An invalid value of ACTION was "
 		    "supplied.  The value was:  ";
 	    i__2[1] = 7, a__1[1] = locact;
-	    s_cat(ch__1, a__1, i__2, &__state->c__2, (ftnlen)73);
-	    setmsg_(ch__1, (ftnlen)73);
-	    sigerr_("SPICE(INVALIDACTION)", (ftnlen)20);
+	    s_cat(&__global_state->f2c, ch__1, a__1, i__2, &__state->c__2, (
+		    ftnlen)73);
+	    setmsg_(__global_state, ch__1, (ftnlen)73);
+	    sigerr_(__global_state, "SPICE(INVALIDACTION)", (ftnlen)20);
 	}
 
 /*        We've set the error action, or signalled an error. */
@@ -487,20 +495,21 @@ static erract_state_t* get_erract_state() {
 
 /*        We have an invalid value of OP */
 
-	s_copy(locop, op, (ftnlen)3, op_len);
+	s_copy(&__global_state->f2c, locop, op, (ftnlen)3, op_len);
 /* Writing concatenation */
 	i__2[0] = 62, a__1[0] = "ERRACT: An invalid value of OP was supplied"
 		".  The value was:  ";
 	i__2[1] = 3, a__1[1] = locop;
-	s_cat(ch__2, a__1, i__2, &__state->c__2, (ftnlen)65);
-	setmsg_(ch__2, (ftnlen)65);
-	sigerr_("SPICE(INVALIDOPERATION)", (ftnlen)23);
+	s_cat(&__global_state->f2c, ch__2, a__1, i__2, &__state->c__2, (
+		ftnlen)65);
+	setmsg_(__global_state, ch__2, (ftnlen)65);
+	sigerr_(__global_state, "SPICE(INVALIDOPERATION)", (ftnlen)23);
     }
 
 /*     We've performed the requested operation, or signalled an */
 /*     error. */
 
-    chkout_("ERRACT", (ftnlen)6);
+    chkout_(__global_state, "ERRACT", (ftnlen)6);
     return 0;
 } /* erract_ */
 

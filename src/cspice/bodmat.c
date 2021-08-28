@@ -8,34 +8,34 @@
 
 
 typedef int bodmat_state_t;
-static bodmat_state_t* get_bodmat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bodmat_state_t* get_bodmat_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      BODMAT ( Return transformation matrix for a body ) */
-/* Subroutine */ int bodmat_(integer *body, doublereal *et, doublereal *tipm)
+/* Subroutine */ int bodmat_(cspice_t* __global_state, integer *body, 
+	doublereal *et, doublereal *tipm)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal tsipm[36]	/* was [6][6] */;
-    extern logical failed_(void);
-    extern /* Subroutine */ int tisbod_(char *, integer *, doublereal *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int tisbod_(cspice_t*, char *, integer *, 
+	    doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    bodmat_state_t* __state = get_bodmat_state();
+    bodmat_state_t* __state = get_bodmat_state(__global_state);
 /* $ Abstract */
 
 /*     Return the J2000 to body Equator and Prime Meridian coordinate */
@@ -400,29 +400,30 @@ static bodmat_state_t* get_bodmat_state() {
 
 /*     Standard SPICE Error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("BODMAT", (ftnlen)6);
+	chkin_(__global_state, "BODMAT", (ftnlen)6);
     }
 
 /*     Get 6x6 state transformation from TISBOD. If succeeded, pull out */
 /*     left-top 3x3 matrix. */
 
-    tisbod_("J2000", body, et, tsipm, (ftnlen)5);
-    if (failed_()) {
-	chkout_("BODMAT", (ftnlen)6);
+    tisbod_(__global_state, "J2000", body, et, tsipm, (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "BODMAT", (ftnlen)6);
 	return 0;
     }
     for (i__ = 1; i__ <= 3; ++i__) {
 	for (j = 1; j <= 3; ++j) {
-	    tipm[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "tipm", i__1, "bodmat_", (ftnlen)408)] = tsipm[(i__2 = 
-		    i__ + j * 6 - 7) < 36 && 0 <= i__2 ? i__2 : s_rnge("tsipm"
-		    , i__2, "bodmat_", (ftnlen)408)];
+	    tipm[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "tipm", i__1, "bodmat_", (ftnlen)408)
+		    ] = tsipm[(i__2 = i__ + j * 6 - 7) < 36 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "tsipm", i__2, "bodm"
+		    "at_", (ftnlen)408)];
 	}
     }
-    chkout_("BODMAT", (ftnlen)6);
+    chkout_(__global_state, "BODMAT", (ftnlen)6);
     return 0;
 } /* bodmat_ */
 

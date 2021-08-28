@@ -8,8 +8,7 @@
 
 
 extern ekrced_init_t __ekrced_init;
-static ekrced_state_t* get_ekrced_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekrced_state_t* get_ekrced_state(cspice_t* state) {
 	if (!state->ekrced)
 		state->ekrced = __cspice_allocate_module(sizeof(
 	ekrced_state_t), &__ekrced_init, sizeof(__ekrced_init));
@@ -18,41 +17,44 @@ static ekrced_state_t* get_ekrced_state() {
 }
 
 /* $Procedure   EKRCED ( EK, read column entry element, d.p. ) */
-/* Subroutine */ int ekrced_(integer *handle, integer *segno, integer *recno, 
-	char *column, integer *nvals, doublereal *dvals, logical *isnull, 
-	ftnlen column_len)
+/* Subroutine */ int ekrced_(cspice_t* __global_state, integer *handle, 
+	integer *segno, integer *recno, char *column, integer *nvals, 
+	doublereal *dvals, logical *isnull, ftnlen column_len)
 {
-    extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekcdsc_(cspice_t*, integer *, integer *, 
+	    char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern integer zzekesiz_(integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzektrdp_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern integer zzekesiz_(cspice_t*, integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer class__;
     logical found;
     integer dtype;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer coldsc[11];
     integer segdsc[24];
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     integer recptr;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int zzekrd02_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *);
-    extern /* Subroutine */ int zzekrd05_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *, logical *, logical 
-	    *);
-    extern /* Subroutine */ int zzekrd08_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzekrd02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int zzekrd05_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, doublereal *, logical 
+	    *, logical *);
+    extern /* Subroutine */ int zzekrd08_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
 
 
     /* Module state */
-    ekrced_state_t* __state = get_ekrced_state();
+    ekrced_state_t* __state = get_ekrced_state(__global_state);
 /* $ Abstract */
 
 /*     Read data from a double precision column in a specified EK */
@@ -530,9 +532,9 @@ static ekrced_state_t* get_ekrced_state() {
 /*     First step:  find the descriptor for the named segment.  Using */
 /*     this descriptor, get the column descriptor. */
 
-    zzeksdsc_(handle, segno, segdsc);
-    zzekcdsc_(handle, segdsc, column, coldsc, column_len);
-    if (failed_()) {
+    zzeksdsc_(__global_state, handle, segno, segdsc);
+    zzekcdsc_(__global_state, handle, segdsc, column, coldsc, column_len);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -540,16 +542,17 @@ static ekrced_state_t* get_ekrced_state() {
 
     dtype = coldsc[1];
     if (dtype != 2 && dtype != 4) {
-	chkin_("EKRCED", (ftnlen)6);
-	setmsg_("Column # is of type #; EKRCED only works with d.p. or TIME "
-		"columns.  RECNO = #; SEGNO =  #; EK = #.", (ftnlen)99);
-	errch_("#", column, (ftnlen)1, column_len);
-	errint_("#", &dtype, (ftnlen)1);
-	errint_("#", recno, (ftnlen)1);
-	errint_("#", segno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
-	chkout_("EKRCED", (ftnlen)6);
+	chkin_(__global_state, "EKRCED", (ftnlen)6);
+	setmsg_(__global_state, "Column # is of type #; EKRCED only works wi"
+		"th d.p. or TIME columns.  RECNO = #; SEGNO =  #; EK = #.", (
+		ftnlen)99);
+	errch_(__global_state, "#", column, (ftnlen)1, column_len);
+	errint_(__global_state, "#", &dtype, (ftnlen)1);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	errint_(__global_state, "#", segno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGDATATYPE)", (ftnlen)20);
+	chkout_(__global_state, "EKRCED", (ftnlen)6);
 	return 0;
     }
 
@@ -561,37 +564,39 @@ static ekrced_state_t* get_ekrced_state() {
 
 /*        Look up the record pointer for the target record. */
 
-	zzektrdp_(handle, &segdsc[6], recno, &recptr);
-	zzekrd02_(handle, segdsc, coldsc, &recptr, dvals, isnull);
+	zzektrdp_(__global_state, handle, &segdsc[6], recno, &recptr);
+	zzekrd02_(__global_state, handle, segdsc, coldsc, &recptr, dvals, 
+		isnull);
 	*nvals = 1;
     } else if (class__ == 5) {
-	zzektrdp_(handle, &segdsc[6], recno, &recptr);
-	*nvals = zzekesiz_(handle, segdsc, coldsc, &recptr);
-	zzekrd05_(handle, segdsc, coldsc, &recptr, &__state->c__1, nvals, 
-		dvals, isnull, &found);
+	zzektrdp_(__global_state, handle, &segdsc[6], recno, &recptr);
+	*nvals = zzekesiz_(__global_state, handle, segdsc, coldsc, &recptr);
+	zzekrd05_(__global_state, handle, segdsc, coldsc, &recptr, &
+		__state->c__1, nvals, dvals, isnull, &found);
     } else if (class__ == 8) {
 
 /*        Records in class 8 columns are identified by a record number */
 /*        rather than a pointer. */
 
-	zzekrd08_(handle, segdsc, coldsc, recno, dvals, isnull);
+	zzekrd08_(__global_state, handle, segdsc, coldsc, recno, dvals, 
+		isnull);
 	*nvals = 1;
     } else {
 
 /*        This is an unsupported d.p. column class. */
 
 	*segno = segdsc[1];
-	chkin_("EKRCED", (ftnlen)6);
-	setmsg_("Class # from input column descriptor is not a supported d.p"
-		". class.  COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (ftnlen)
-		110);
-	errint_("#", &class__, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, column_len);
-	errint_("#", recno, (ftnlen)1);
-	errint_("#", segno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
-	chkout_("EKRCED", (ftnlen)6);
+	chkin_(__global_state, "EKRCED", (ftnlen)6);
+	setmsg_(__global_state, "Class # from input column descriptor is not"
+		" a supported d.p. class.  COLUMN = #; RECNO = #; SEGNO = #; "
+		"EK = #.", (ftnlen)110);
+	errint_(__global_state, "#", &class__, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, column_len);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	errint_(__global_state, "#", segno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOCLASS)", (ftnlen)14);
+	chkout_(__global_state, "EKRCED", (ftnlen)6);
 	return 0;
     }
     return 0;

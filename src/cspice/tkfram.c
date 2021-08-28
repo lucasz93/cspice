@@ -8,8 +8,7 @@
 
 
 extern tkfram_init_t __tkfram_init;
-static tkfram_state_t* get_tkfram_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline tkfram_state_t* get_tkfram_state(cspice_t* state) {
 	if (!state->tkfram)
 		state->tkfram = __cspice_allocate_module(sizeof(
 	tkfram_state_t), &__tkfram_init, sizeof(__tkfram_init));
@@ -18,8 +17,8 @@ static tkfram_state_t* get_tkfram_state() {
 }
 
 /* $Procedure      TKFRAM (Text kernel frame transformation ) */
-/* Subroutine */ int tkfram_(integer *id, doublereal *rot, integer *frame, 
-	logical *found)
+/* Subroutine */ int tkfram_(cspice_t* __global_state, integer *id, 
+	doublereal *rot, integer *frame, logical *found)
 {
     /* Initialized data */
 
@@ -29,60 +28,66 @@ static tkfram_state_t* get_tkfram_state() {
     integer i__1, i__2[2], i__3;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
 
     /* Local variables */
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
-	    *, integer *, integer *, integer *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int ident_(doublereal *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int vhatg_(doublereal *, integer *, doublereal *);
-    extern integer lnktl_(integer *, integer *);
-    extern integer rtrim_(char *, ftnlen);
-    extern logical failed_(void);
-    extern logical badkpv_(char *, char *, char *, integer *, integer *, char 
-	    *, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int locati_(integer *, integer *, integer *, 
-	    integer *, integer *, logical *);
-    extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int lnkini_(integer *, integer *);
-    extern integer lnknfn_(integer *);
-    extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
-	    *, doublereal *, logical *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
-	    *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sharpr_(doublereal *);
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int cvpool_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int dwpool_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int convrt_(doublereal *, char *, char *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int q2m_(doublereal *, doublereal *);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int eul2m_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
+    extern /* Subroutine */ int ident_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int vhatg_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern integer lnktl_(cspice_t*, integer *, integer *);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern logical badkpv_(cspice_t*, char *, char *, char *, integer *, 
+	    integer *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int locati_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, logical *);
+    extern /* Subroutine */ int frmnam_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int lnkini_(cspice_t*, integer *, integer *);
+    extern integer lnknfn_(cspice_t*, integer *);
+    extern /* Subroutine */ int gcpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gdpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int gipool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sharpr_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cvpool_(cspice_t*, char *, logical *, ftnlen);
+    extern /* Subroutine */ int dwpool_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int convrt_(cspice_t*, doublereal *, char *, char 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int q2m_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int swpool_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
 
     /* Module state */
-    tkfram_state_t* __state = get_tkfram_state();
+    tkfram_state_t* __state = get_tkfram_state(__global_state);
 /* $ Abstract */
 
 /*     This routine returns the rotation from the input frame */
@@ -352,18 +357,19 @@ static tkfram_state_t* get_tkfram_state() {
 
     if (__state->first) {
 	__state->first = FALSE_;
-	s_copy(__state->versn, "1.0.0", (ftnlen)8, (ftnlen)5);
-	lnkini_(&__state->c__200, __state->pool);
+	s_copy(&__global_state->f2c, __state->versn, "1.0.0", (ftnlen)8, (
+		ftnlen)5);
+	lnkini_(__global_state, &__state->c__200, __state->pool);
     }
 
 /*     Now do the standard SPICE error handling.  Sure this is */
 /*     a bit unconventional, but nothing will be hurt by doing */
 /*     the stuff above first. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("TKFRAM", (ftnlen)6);
+    chkin_(__global_state, "TKFRAM", (ftnlen)6);
 
 /*     So far, we've not FOUND the rotation to the specified frame. */
 
@@ -372,11 +378,12 @@ static tkfram_state_t* get_tkfram_state() {
 /*     Check the ID to make sure it is non-zero. */
 
     if (*id == 0) {
-	lnkini_(&__state->c__200, __state->pool);
-	setmsg_("Frame identification codes are required to be non-zero.  Yo"
-		"u've specified a frame with ID value zero. ", (ftnlen)102);
-	sigerr_("SPICE(ZEROFRAMEID)", (ftnlen)18);
-	chkout_("TKFRAM", (ftnlen)6);
+	lnkini_(__global_state, &__state->c__200, __state->pool);
+	setmsg_(__global_state, "Frame identification codes are required to "
+		"be non-zero.  You've specified a frame with ID value zero. ", 
+		(ftnlen)102);
+	sigerr_(__global_state, "SPICE(ZEROFRAMEID)", (ftnlen)18);
+	chkout_(__global_state, "TKFRAM", (ftnlen)6);
 	return 0;
     }
 
@@ -384,7 +391,7 @@ static tkfram_state_t* get_tkfram_state() {
 /*     We'll use this information later to decide whether we're */
 /*     going to have to delete a watcher. */
 
-    __state->full = lnknfn_(__state->pool) == 0;
+    __state->full = lnknfn_(__global_state, __state->pool) == 0;
     if (__state->full) {
 
 /*        If the input frame ID is not buffered, we'll need to */
@@ -395,24 +402,25 @@ static tkfram_state_t* get_tkfram_state() {
 /*        opportunity. The old ID sits at the tail of the list */
 /*        whose head node is AT. */
 
-	__state->tail = lnktl_(&__state->at, __state->pool);
+	__state->tail = lnktl_(__global_state, &__state->at, __state->pool);
 	__state->oldid = __state->idents[(i__1 = __state->tail - 1) < 200 && 
-		0 <= i__1 ? i__1 : s_rnge("idents", i__1, "tkfram_", (ftnlen)
-		426)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "idents", 
+		i__1, "tkfram_", (ftnlen)426)];
 
 /*        Create the name of the agent associated with the old */
 /*        frame. */
 
-	s_copy(__state->oldagt, "TKFRAME_#", (ftnlen)32, (ftnlen)9);
-	repmi_(__state->oldagt, "#", &__state->oldid, __state->oldagt, (
-		ftnlen)32, (ftnlen)1, (ftnlen)32);
+	s_copy(&__global_state->f2c, __state->oldagt, "TKFRAME_#", (ftnlen)32,
+		 (ftnlen)9);
+	repmi_(__global_state, __state->oldagt, "#", &__state->oldid, 
+		__state->oldagt, (ftnlen)32, (ftnlen)1, (ftnlen)32);
     }
 
 /*     Look up the address of the instance data. */
 
     __state->idnt[0] = *id;
-    locati_(__state->idnt, &__state->c__1, __state->idents, __state->pool, &
-	    __state->at, &__state->buffrd);
+    locati_(__global_state, __state->idnt, &__state->c__1, __state->idents, 
+	    __state->pool, &__state->at, &__state->buffrd);
     if (__state->full && ! __state->buffrd) {
 
 /*        Since the buffer is already full, we'll delete the watcher for */
@@ -422,14 +430,15 @@ static tkfram_state_t* get_tkfram_state() {
 /*        First clear the update status of the old agent; DWPOOL won't */
 /*        delete an agent with a unchecked update. */
 
-	cvpool_(__state->oldagt, &__state->update, (ftnlen)32);
-	dwpool_(__state->oldagt, (ftnlen)32);
+	cvpool_(__global_state, __state->oldagt, &__state->update, (ftnlen)32)
+		;
+	dwpool_(__global_state, __state->oldagt, (ftnlen)32);
     }
 
 /*     Until we have better information we put the identity matrix */
 /*     into the output rotation and set FRAME to zero. */
 
-    ident_(rot);
+    ident_(__global_state, rot);
     *frame = 0;
 
 /*     If we have to look up the data for our frame, we do */
@@ -440,33 +449,37 @@ static tkfram_state_t* get_tkfram_state() {
 /*     Construct the name of the agent associated with the */
 /*     requested frame.  (Each frame has its own agent). */
 
-    intstr_(id, __state->idstr, (ftnlen)32);
-    frmnam_(id, __state->frname, (ftnlen)32);
-    if (s_cmp(__state->frname, " ", (ftnlen)32, (ftnlen)1) == 0) {
-	lnkini_(&__state->c__200, __state->pool);
-	setmsg_("The Text Kernel (TK) frame with id-code # does not have a r"
-		"ecognized name. ", (ftnlen)75);
-	errint_("#", id, (ftnlen)1);
-	sigerr_("SPICE(INCOMPLETFRAME)", (ftnlen)21);
-	chkout_("TKFRAM", (ftnlen)6);
+    intstr_(__global_state, id, __state->idstr, (ftnlen)32);
+    frmnam_(__global_state, id, __state->frname, (ftnlen)32);
+    if (s_cmp(&__global_state->f2c, __state->frname, " ", (ftnlen)32, (ftnlen)
+	    1) == 0) {
+	lnkini_(__global_state, &__state->c__200, __state->pool);
+	setmsg_(__global_state, "The Text Kernel (TK) frame with id-code # d"
+		"oes not have a recognized name. ", (ftnlen)75);
+	errint_(__global_state, "#", id, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INCOMPLETFRAME)", (ftnlen)21);
+	chkout_(__global_state, "TKFRAM", (ftnlen)6);
 	return 0;
     }
 /* Writing concatenation */
     i__2[0] = 8, a__1[0] = "TKFRAME_";
     i__2[1] = 32, a__1[1] = __state->idstr;
-    s_cat(__state->agent, a__1, i__2, &__state->c__2, (ftnlen)32);
-    __state->r__ = rtrim_(__state->agent, (ftnlen)32);
+    s_cat(&__global_state->f2c, __state->agent, a__1, i__2, &__state->c__2, (
+	    ftnlen)32);
+    __state->r__ = rtrim_(__global_state, __state->agent, (ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 8, a__1[0] = "TKFRAME_";
     i__2[1] = 32, a__1[1] = __state->frname;
-    s_cat(__state->altnat, a__1, i__2, &__state->c__2, (ftnlen)32);
-    __state->ar = rtrim_(__state->altnat, (ftnlen)32);
+    s_cat(&__global_state->f2c, __state->altnat, a__1, i__2, &__state->c__2, (
+	    ftnlen)32);
+    __state->ar = rtrim_(__global_state, __state->altnat, (ftnlen)32);
 
 /*     If the frame is buffered, we check the kernel pool to */
 /*     see if there has been an update to this frame. */
 
     if (__state->buffrd) {
-	cvpool_(__state->agent, &__state->update, __state->r__);
+	cvpool_(__global_state, __state->agent, &__state->update, 
+		__state->r__);
     } else {
 
 /*        If the frame is not buffered we definitely need to update */
@@ -479,25 +492,35 @@ static tkfram_state_t* get_tkfram_state() {
 /*        information from the local buffer. */
 
 	rot[0] = __state->buffd[(i__1 = __state->at * 9 - 9) < 1800 && 0 <= 
-		i__1 ? i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)519)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, 
+		"tkfram_", (ftnlen)519)];
 	rot[1] = __state->buffd[(i__1 = __state->at * 9 - 8) < 1800 && 0 <= 
-		i__1 ? i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)520)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, 
+		"tkfram_", (ftnlen)520)];
 	rot[2] = __state->buffd[(i__1 = __state->at * 9 - 7) < 1800 && 0 <= 
-		i__1 ? i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)521)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, 
+		"tkfram_", (ftnlen)521)];
 	rot[3] = __state->buffd[(i__1 = __state->at * 9 - 6) < 1800 && 0 <= 
-		i__1 ? i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)522)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, 
+		"tkfram_", (ftnlen)522)];
 	rot[4] = __state->buffd[(i__1 = __state->at * 9 - 5) < 1800 && 0 <= 
-		i__1 ? i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)523)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, 
+		"tkfram_", (ftnlen)523)];
 	rot[5] = __state->buffd[(i__1 = __state->at * 9 - 4) < 1800 && 0 <= 
-		i__1 ? i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)524)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, 
+		"tkfram_", (ftnlen)524)];
 	rot[6] = __state->buffd[(i__1 = __state->at * 9 - 3) < 1800 && 0 <= 
-		i__1 ? i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)525)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, 
+		"tkfram_", (ftnlen)525)];
 	rot[7] = __state->buffd[(i__1 = __state->at * 9 - 2) < 1800 && 0 <= 
-		i__1 ? i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)526)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, 
+		"tkfram_", (ftnlen)526)];
 	rot[8] = __state->buffd[(i__1 = __state->at * 9 - 1) < 1800 && 0 <= 
-		i__1 ? i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)527)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, 
+		"tkfram_", (ftnlen)527)];
 	*frame = __state->buffi[(i__1 = __state->at - 1) < 200 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffi", i__1, "tkfram_", (ftnlen)529)];
+		i__1 : s_rnge(&__global_state->f2c, "buffi", i__1, "tkfram_", 
+		(ftnlen)529)];
     } else {
 
 /*        Determine how the frame is specified and what it */
@@ -509,74 +532,81 @@ static tkfram_state_t* get_tkfram_state() {
 /* Writing concatenation */
 	i__2[0] = __state->r__, a__1[0] = __state->agent;
 	i__2[1] = 5, a__1[1] = "_SPEC";
-	s_cat(__state->item, a__1, i__2, &__state->c__2, (ftnlen)32);
+	s_cat(&__global_state->f2c, __state->item, a__1, i__2, &__state->c__2,
+		 (ftnlen)32);
 /* Writing concatenation */
 	i__2[0] = __state->r__, a__1[0] = __state->agent;
 	i__2[1] = 9, a__1[1] = "_RELATIVE";
-	s_cat(__state->item + 32, a__1, i__2, &__state->c__2, (ftnlen)32);
+	s_cat(&__global_state->f2c, __state->item + 32, a__1, i__2, &
+		__state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	i__2[1] = 5, a__1[1] = "_SPEC";
-	s_cat(__state->alt, a__1, i__2, &__state->c__2, (ftnlen)32);
+	s_cat(&__global_state->f2c, __state->alt, a__1, i__2, &__state->c__2, 
+		(ftnlen)32);
 /* Writing concatenation */
 	i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	i__2[1] = 9, a__1[1] = "_RELATIVE";
-	s_cat(__state->alt + 32, a__1, i__2, &__state->c__2, (ftnlen)32);
+	s_cat(&__global_state->f2c, __state->alt + 32, a__1, i__2, &
+		__state->c__2, (ftnlen)32);
 
 /*        See if the friendlier version of the kernel pool variables */
 /*        are available. */
 
 	for (__state->i__ = 1; __state->i__ <= 2; ++__state->i__) {
-	    dtpool_(__state->alt + (((i__1 = __state->i__ - 1) < 14 && 0 <= 
-		    i__1 ? i__1 : s_rnge("alt", i__1, "tkfram_", (ftnlen)550))
-		     << 5), found, &__state->n, __state->type__, (ftnlen)32, (
-		    ftnlen)1);
+	    dtpool_(__global_state, __state->alt + (((i__1 = __state->i__ - 1)
+		     < 14 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "alt", i__1, "tkfram_", (ftnlen)550)) << 5), found, &
+		    __state->n, __state->type__, (ftnlen)32, (ftnlen)1);
 	    if (*found) {
-		s_copy(__state->item + (((i__1 = __state->i__ - 1) < 14 && 0 
-			<= i__1 ? i__1 : s_rnge("item", i__1, "tkfram_", (
-			ftnlen)553)) << 5), __state->alt + (((i__3 = 
-			__state->i__ - 1) < 14 && 0 <= i__3 ? i__3 : s_rnge(
-			"alt", i__3, "tkfram_", (ftnlen)553)) << 5), (ftnlen)
-			32, (ftnlen)32);
+		s_copy(&__global_state->f2c, __state->item + (((i__1 = 
+			__state->i__ - 1) < 14 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "item", i__1, "tkfram_", (ftnlen)
+			553)) << 5), __state->alt + (((i__3 = __state->i__ - 
+			1) < 14 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "alt", i__3, "tkfram_", (ftnlen)
+			553)) << 5), (ftnlen)32, (ftnlen)32);
 	    }
 	}
 
 /*        If either the SPEC or RELATIVE frame are missing from */
 /*        the kernel pool, we simply return. */
 
-	if (badkpv_("TKFRAM", __state->item, "=", &__state->c__1, &
-		__state->c__1, "C", (ftnlen)6, (ftnlen)32, (ftnlen)1, (ftnlen)
-		1) || badkpv_("TKFRAM", __state->item + 32, "=", &
+	if (badkpv_(__global_state, "TKFRAM", __state->item, "=", &
 		__state->c__1, &__state->c__1, "C", (ftnlen)6, (ftnlen)32, (
-		ftnlen)1, (ftnlen)1)) {
-	    lnkini_(&__state->c__200, __state->pool);
+		ftnlen)1, (ftnlen)1) || badkpv_(__global_state, "TKFRAM", 
+		__state->item + 32, "=", &__state->c__1, &__state->c__1, 
+		"C", (ftnlen)6, (ftnlen)32, (ftnlen)1, (ftnlen)1)) {
+	    lnkini_(__global_state, &__state->c__200, __state->pool);
 	    *frame = 0;
-	    ident_(rot);
-	    chkout_("TKFRAM", (ftnlen)6);
+	    ident_(__global_state, rot);
+	    chkout_(__global_state, "TKFRAM", (ftnlen)6);
 	    return 0;
 	}
 
 /*        If we make it this far, look up the SPEC and RELATIVE frame. */
 
-	gcpool_(__state->item, &__state->c__1, &__state->c__1, &__state->n, 
-		__state->spec, &__state->fnd, (ftnlen)32, (ftnlen)32);
-	gcpool_(__state->item + 32, &__state->c__1, &__state->c__1, &
-		__state->n, __state->name__, &__state->fnd, (ftnlen)32, (
+	gcpool_(__global_state, __state->item, &__state->c__1, &__state->c__1,
+		 &__state->n, __state->spec, &__state->fnd, (ftnlen)32, (
 		ftnlen)32);
+	gcpool_(__global_state, __state->item + 32, &__state->c__1, &
+		__state->c__1, &__state->n, __state->name__, &__state->fnd, (
+		ftnlen)32, (ftnlen)32);
 
 /*        Look up the id-code for this frame. */
 
-	namfrm_(__state->name__, frame, (ftnlen)32);
+	namfrm_(__global_state, __state->name__, frame, (ftnlen)32);
 	if (*frame == 0) {
-	    lnkini_(&__state->c__200, __state->pool);
-	    setmsg_("The frame to which frame # is relatively defined is not"
-		    " recognized. The kernel pool specification of the relati"
-		    "ve frame is '#'.  This is not a recognized frame. ", (
-		    ftnlen)161);
-	    errint_("#", id, (ftnlen)1);
-	    errch_("#", __state->name__, (ftnlen)1, (ftnlen)32);
-	    sigerr_("SPICE(BADFRAMESPEC)", (ftnlen)19);
-	    chkout_("TKFRAM", (ftnlen)6);
+	    lnkini_(__global_state, &__state->c__200, __state->pool);
+	    setmsg_(__global_state, "The frame to which frame # is relativel"
+		    "y defined is not recognized. The kernel pool specificati"
+		    "on of the relative frame is '#'.  This is not a recogniz"
+		    "ed frame. ", (ftnlen)161);
+	    errint_(__global_state, "#", id, (ftnlen)1);
+	    errch_(__global_state, "#", __state->name__, (ftnlen)1, (ftnlen)
+		    32);
+	    sigerr_(__global_state, "SPICE(BADFRAMESPEC)", (ftnlen)19);
+	    chkout_(__global_state, "TKFRAM", (ftnlen)6);
 	    return 0;
 	}
 
@@ -585,22 +615,25 @@ static tkfram_state_t* get_tkfram_state() {
 /*        indefinite loop. */
 
 	if (*frame == *id) {
-	    lnkini_(&__state->c__200, __state->pool);
-	    setmsg_("Bad fixed offset frame specification: the frame '#' (fr"
-		    "ame ID #) is defined relative to itself. SPICE cannot wo"
-		    "rk with such frames. ", (ftnlen)132);
-	    errch_("#", __state->name__, (ftnlen)1, (ftnlen)32);
-	    errint_("#", id, (ftnlen)1);
-	    sigerr_("SPICE(BADFRAMESPEC2)", (ftnlen)20);
-	    chkout_("TKFRAM", (ftnlen)6);
+	    lnkini_(__global_state, &__state->c__200, __state->pool);
+	    setmsg_(__global_state, "Bad fixed offset frame specification: t"
+		    "he frame '#' (frame ID #) is defined relative to itself."
+		    " SPICE cannot work with such frames. ", (ftnlen)132);
+	    errch_(__global_state, "#", __state->name__, (ftnlen)1, (ftnlen)
+		    32);
+	    errint_(__global_state, "#", id, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADFRAMESPEC2)", (ftnlen)20);
+	    chkout_(__global_state, "TKFRAM", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Convert SPEC to upper case so that we can easily check */
 /*        to see if this is one of the expected specification types. */
 
-	ucase_(__state->spec, __state->spec, (ftnlen)32, (ftnlen)32);
-	if (s_cmp(__state->spec, "MATRIX", (ftnlen)32, (ftnlen)6) == 0) {
+	ucase_(__global_state, __state->spec, __state->spec, (ftnlen)32, (
+		ftnlen)32);
+	if (s_cmp(&__global_state->f2c, __state->spec, "MATRIX", (ftnlen)32, (
+		ftnlen)6) == 0) {
 
 /*           This is the easiest case.  Just grab the matrix */
 /*           from the kernel pool (and polish it up a bit just */
@@ -612,50 +645,53 @@ static tkfram_state_t* get_tkfram_state() {
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 7, a__1[1] = "_MATRIX";
-	    s_cat(__state->item + 64, a__1, i__2, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->item + 64, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 7, a__1[1] = "_MATRIX";
-	    s_cat(__state->alt + 64, a__1, i__2, &__state->c__2, (ftnlen)32);
-	    dtpool_(__state->alt + 64, found, &__state->n, __state->type__, (
-		    ftnlen)32, (ftnlen)1);
+	    s_cat(&__global_state->f2c, __state->alt + 64, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
+	    dtpool_(__global_state, __state->alt + 64, found, &__state->n, 
+		    __state->type__, (ftnlen)32, (ftnlen)1);
 	    if (*found) {
-		s_copy(__state->item + 64, __state->alt + 64, (ftnlen)32, (
-			ftnlen)32);
+		s_copy(&__global_state->f2c, __state->item + 64, __state->alt 
+			+ 64, (ftnlen)32, (ftnlen)32);
 	    }
-	    if (badkpv_("TKFRAM", __state->item + 64, "=", &__state->c__9, &
-		    __state->c__1, "N", (ftnlen)6, (ftnlen)32, (ftnlen)1, (
-		    ftnlen)1)) {
-		lnkini_(&__state->c__200, __state->pool);
+	    if (badkpv_(__global_state, "TKFRAM", __state->item + 64, "=", &
+		    __state->c__9, &__state->c__1, "N", (ftnlen)6, (ftnlen)32,
+		     (ftnlen)1, (ftnlen)1)) {
+		lnkini_(__global_state, &__state->c__200, __state->pool);
 		*frame = 0;
-		ident_(rot);
-		chkout_("TKFRAM", (ftnlen)6);
+		ident_(__global_state, rot);
+		chkout_(__global_state, "TKFRAM", (ftnlen)6);
 		return 0;
 	    }
 
 /*           The variable meets current expectations, look it up */
 /*           from the kernel pool. */
 
-	    gdpool_(__state->item + 64, &__state->c__1, &__state->c__9, &
-		    __state->n, __state->matrix, &__state->fnd, (ftnlen)32);
+	    gdpool_(__global_state, __state->item + 64, &__state->c__1, &
+		    __state->c__9, &__state->n, __state->matrix, &
+		    __state->fnd, (ftnlen)32);
 
 /*           In this case the full transformation matrix has been */
 /*           specified.  We simply polish it up a bit. */
 
-	    moved_(__state->matrix, &__state->c__9, rot);
-	    sharpr_(rot);
+	    moved_(__global_state, __state->matrix, &__state->c__9, rot);
+	    sharpr_(__global_state, rot);
 
 /*           The matrix might not be right-handed, so correct */
 /*           the sense of the second and third columns if necessary. */
 
-	    if (vdot_(&rot[3], &__state->matrix[3]) < 0.) {
-		vsclip_(&__state->c_b101, &rot[3]);
+	    if (vdot_(__global_state, &rot[3], &__state->matrix[3]) < 0.) {
+		vsclip_(__global_state, &__state->c_b101, &rot[3]);
 	    }
-	    if (vdot_(&rot[6], &__state->matrix[6]) < 0.) {
-		vsclip_(&__state->c_b101, &rot[6]);
+	    if (vdot_(__global_state, &rot[6], &__state->matrix[6]) < 0.) {
+		vsclip_(__global_state, &__state->c_b101, &rot[6]);
 	    }
-	} else if (s_cmp(__state->spec, "ANGLES", (ftnlen)32, (ftnlen)6) == 0)
-		 {
+	} else if (s_cmp(&__global_state->f2c, __state->spec, "ANGLES", (
+		ftnlen)32, (ftnlen)6) == 0) {
 
 /*           Look up the angles, their units and axes for the */
 /*           frame specified by ID. (Note that UNITS are optional). */
@@ -665,91 +701,103 @@ static tkfram_state_t* get_tkfram_state() {
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 7, a__1[1] = "_ANGLES";
-	    s_cat(__state->item + 64, a__1, i__2, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->item + 64, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 5, a__1[1] = "_AXES";
-	    s_cat(__state->item + 96, a__1, i__2, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->item + 96, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 6, a__1[1] = "_UNITS";
-	    s_cat(__state->item + 128, a__1, i__2, &__state->c__2, (ftnlen)32)
-		    ;
+	    s_cat(&__global_state->f2c, __state->item + 128, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 7, a__1[1] = "_ANGLES";
-	    s_cat(__state->alt + 64, a__1, i__2, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->alt + 64, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 5, a__1[1] = "_AXES";
-	    s_cat(__state->alt + 96, a__1, i__2, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->alt + 96, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 6, a__1[1] = "_UNITS";
-	    s_cat(__state->alt + 128, a__1, i__2, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->alt + 128, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 
 /*           Again, we give preference to the more friendly form */
 /*           of TKFRAME specification. */
 
 	    for (__state->i__ = 3; __state->i__ <= 5; ++__state->i__) {
-		dtpool_(__state->alt + (((i__1 = __state->i__ - 1) < 14 && 0 
-			<= i__1 ? i__1 : s_rnge("alt", i__1, "tkfram_", (
-			ftnlen)703)) << 5), found, &__state->n, 
-			__state->type__, (ftnlen)32, (ftnlen)1);
+		dtpool_(__global_state, __state->alt + (((i__1 = __state->i__ 
+			- 1) < 14 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "alt", i__1, "tkfram_", (ftnlen)
+			703)) << 5), found, &__state->n, __state->type__, (
+			ftnlen)32, (ftnlen)1);
 		if (*found) {
-		    s_copy(__state->item + (((i__1 = __state->i__ - 1) < 14 &&
-			     0 <= i__1 ? i__1 : s_rnge("item", i__1, "tkfram_"
-			    , (ftnlen)706)) << 5), __state->alt + (((i__3 = 
-			    __state->i__ - 1) < 14 && 0 <= i__3 ? i__3 : 
-			    s_rnge("alt", i__3, "tkfram_", (ftnlen)706)) << 5)
-			    , (ftnlen)32, (ftnlen)32);
+		    s_copy(&__global_state->f2c, __state->item + (((i__1 = 
+			    __state->i__ - 1) < 14 && 0 <= i__1 ? i__1 : 
+			    s_rnge(&__global_state->f2c, "item", i__1, "tkfr"
+			    "am_", (ftnlen)706)) << 5), __state->alt + (((i__3 
+			    = __state->i__ - 1) < 14 && 0 <= i__3 ? i__3 : 
+			    s_rnge(&__global_state->f2c, "alt", i__3, "tkfra"
+			    "m_", (ftnlen)706)) << 5), (ftnlen)32, (ftnlen)32);
 		}
 	    }
-	    if (badkpv_("TKFRAM", __state->item + 64, "=", &__state->c__3, &
-		    __state->c__1, "N", (ftnlen)6, (ftnlen)32, (ftnlen)1, (
-		    ftnlen)1) || badkpv_("TKFRAM", __state->item + 96, "=", &
+	    if (badkpv_(__global_state, "TKFRAM", __state->item + 64, "=", &
 		    __state->c__3, &__state->c__1, "N", (ftnlen)6, (ftnlen)32,
-		     (ftnlen)1, (ftnlen)1)) {
-		lnkini_(&__state->c__200, __state->pool);
+		     (ftnlen)1, (ftnlen)1) || badkpv_(__global_state, "TKFRAM"
+		    , __state->item + 96, "=", &__state->c__3, &__state->c__1,
+		     "N", (ftnlen)6, (ftnlen)32, (ftnlen)1, (ftnlen)1)) {
+		lnkini_(__global_state, &__state->c__200, __state->pool);
 		*frame = 0;
-		ident_(rot);
-		chkout_("TKFRAM", (ftnlen)6);
+		ident_(__global_state, rot);
+		chkout_(__global_state, "TKFRAM", (ftnlen)6);
 		return 0;
 	    }
-	    s_copy(__state->units, "RADIANS", (ftnlen)32, (ftnlen)7);
-	    gdpool_(__state->item + 64, &__state->c__1, &__state->c__3, &
-		    __state->n, __state->angles, &__state->fnd, (ftnlen)32);
-	    gipool_(__state->item + 96, &__state->c__1, &__state->c__3, &
-		    __state->n, __state->axes, &__state->fnd, (ftnlen)32);
-	    gcpool_(__state->item + 128, &__state->c__1, &__state->c__1, &
-		    __state->n, __state->units, &__state->fnd, (ftnlen)32, (
-		    ftnlen)32);
+	    s_copy(&__global_state->f2c, __state->units, "RADIANS", (ftnlen)
+		    32, (ftnlen)7);
+	    gdpool_(__global_state, __state->item + 64, &__state->c__1, &
+		    __state->c__3, &__state->n, __state->angles, &
+		    __state->fnd, (ftnlen)32);
+	    gipool_(__global_state, __state->item + 96, &__state->c__1, &
+		    __state->c__3, &__state->n, __state->axes, &__state->fnd, 
+		    (ftnlen)32);
+	    gcpool_(__global_state, __state->item + 128, &__state->c__1, &
+		    __state->c__1, &__state->n, __state->units, &__state->fnd,
+		     (ftnlen)32, (ftnlen)32);
 
 /*           Convert angles to radians. */
 
 	    for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
-		convrt_(&__state->angles[(i__1 = __state->i__ - 1) < 3 && 0 <=
-			 i__1 ? i__1 : s_rnge("angles", i__1, "tkfram_", (
+		convrt_(__global_state, &__state->angles[(i__1 = __state->i__ 
+			- 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "angles", i__1, "tkfram_", (
 			ftnlen)735)], __state->units, "RADIANS", &
 			__state->tempd, (ftnlen)32, (ftnlen)7);
 		__state->angles[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 ? 
-			i__1 : s_rnge("angles", i__1, "tkfram_", (ftnlen)736)]
-			 = __state->tempd;
+			i__1 : s_rnge(&__global_state->f2c, "angles", i__1, 
+			"tkfram_", (ftnlen)736)] = __state->tempd;
 	    }
-	    if (failed_()) {
-		lnkini_(&__state->c__200, __state->pool);
+	    if (failed_(__global_state)) {
+		lnkini_(__global_state, &__state->c__200, __state->pool);
 		*frame = 0;
-		ident_(rot);
-		chkout_("TKFRAM", (ftnlen)6);
+		ident_(__global_state, rot);
+		chkout_(__global_state, "TKFRAM", (ftnlen)6);
 		return 0;
 	    }
 
 /*           Compute the rotation from instrument frame to CK frame. */
 
-	    eul2m_(__state->angles, &__state->angles[1], &__state->angles[2], 
-		    __state->axes, &__state->axes[1], &__state->axes[2], rot);
-	} else if (s_cmp(__state->spec, "QUATERNION", (ftnlen)32, (ftnlen)10) 
-		== 0) {
+	    eul2m_(__global_state, __state->angles, &__state->angles[1], &
+		    __state->angles[2], __state->axes, &__state->axes[1], &
+		    __state->axes[2], rot);
+	} else if (s_cmp(&__global_state->f2c, __state->spec, "QUATERNION", (
+		ftnlen)32, (ftnlen)10) == 0) {
 
 /*           Look up the quaternion and convert it to a rotation */
 /*           matrix. Again there are two possible variables that */
@@ -759,86 +807,91 @@ static tkfram_state_t* get_tkfram_state() {
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 2, a__1[1] = "_Q";
-	    s_cat(__state->item + 64, a__1, i__2, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->item + 64, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 2, a__1[1] = "_Q";
-	    s_cat(__state->alt + 64, a__1, i__2, &__state->c__2, (ftnlen)32);
-	    dtpool_(__state->alt + 64, found, &__state->n, __state->type__, (
-		    ftnlen)32, (ftnlen)1);
+	    s_cat(&__global_state->f2c, __state->alt + 64, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
+	    dtpool_(__global_state, __state->alt + 64, found, &__state->n, 
+		    __state->type__, (ftnlen)32, (ftnlen)1);
 	    if (*found) {
-		s_copy(__state->item + 64, __state->alt + 64, (ftnlen)32, (
-			ftnlen)32);
+		s_copy(&__global_state->f2c, __state->item + 64, __state->alt 
+			+ 64, (ftnlen)32, (ftnlen)32);
 	    }
-	    if (badkpv_("TKFRAM", __state->item + 64, "=", &__state->c__4, &
-		    __state->c__1, "N", (ftnlen)6, (ftnlen)32, (ftnlen)1, (
-		    ftnlen)1)) {
-		lnkini_(&__state->c__200, __state->pool);
+	    if (badkpv_(__global_state, "TKFRAM", __state->item + 64, "=", &
+		    __state->c__4, &__state->c__1, "N", (ftnlen)6, (ftnlen)32,
+		     (ftnlen)1, (ftnlen)1)) {
+		lnkini_(__global_state, &__state->c__200, __state->pool);
 		*frame = 0;
-		ident_(rot);
-		chkout_("TKFRAM", (ftnlen)6);
+		ident_(__global_state, rot);
+		chkout_(__global_state, "TKFRAM", (ftnlen)6);
 		return 0;
 	    }
 
 /*           In this case we have the quaternion representation. */
 /*           Again, we do a small amount of polishing of the input. */
 
-	    gdpool_(__state->item + 64, &__state->c__1, &__state->c__4, &
-		    __state->n, __state->quatrn, &__state->fnd, (ftnlen)32);
-	    vhatg_(__state->quatrn, &__state->c__4, __state->qtmp);
-	    q2m_(__state->qtmp, rot);
+	    gdpool_(__global_state, __state->item + 64, &__state->c__1, &
+		    __state->c__4, &__state->n, __state->quatrn, &
+		    __state->fnd, (ftnlen)32);
+	    vhatg_(__global_state, __state->quatrn, &__state->c__4, 
+		    __state->qtmp);
+	    q2m_(__global_state, __state->qtmp, rot);
 	} else {
 
 /*           We don't recognize the SPEC for this frame.  Say */
 /*           so.  Also note that perhaps the user needs to upgrade */
 /*           the toolkit. */
 
-	    lnkini_(&__state->c__200, __state->pool);
-	    setmsg_("The frame specification \"# = '#'\" is not one of the r"
-		    "econized means of specifying a text-kernel constant offs"
-		    "et frame (as of version # of the routine TKFRAM). This m"
-		    "ay reflect a typographical error or may indicate that yo"
-		    "u need to consider updating your version of the SPICE to"
-		    "olkit. ", (ftnlen)284);
-	    errch_("#", __state->item, (ftnlen)1, (ftnlen)32);
-	    errch_("#", __state->spec, (ftnlen)1, (ftnlen)32);
-	    errch_("#", __state->versn, (ftnlen)1, (ftnlen)8);
-	    sigerr_("SPICE(UNKNOWNFRAMESPEC)", (ftnlen)23);
-	    chkout_("TKFRAM", (ftnlen)6);
+	    lnkini_(__global_state, &__state->c__200, __state->pool);
+	    setmsg_(__global_state, "The frame specification \"# = '#'\" is "
+		    "not one of the reconized means of specifying a text-kern"
+		    "el constant offset frame (as of version # of the routine"
+		    " TKFRAM). This may reflect a typographical error or may "
+		    "indicate that you need to consider updating your version"
+		    " of the SPICE toolkit. ", (ftnlen)284);
+	    errch_(__global_state, "#", __state->item, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", __state->spec, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", __state->versn, (ftnlen)1, (ftnlen)8);
+	    sigerr_(__global_state, "SPICE(UNKNOWNFRAMESPEC)", (ftnlen)23);
+	    chkout_(__global_state, "TKFRAM", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Buffer the identifier, relative frame and rotation matrix. */
 
 	__state->buffd[(i__1 = __state->at * 9 - 9) < 1800 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)819)] = rot[0]
-		;
+		i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, "tkfram_", 
+		(ftnlen)819)] = rot[0];
 	__state->buffd[(i__1 = __state->at * 9 - 8) < 1800 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)820)] = rot[1]
-		;
+		i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, "tkfram_", 
+		(ftnlen)820)] = rot[1];
 	__state->buffd[(i__1 = __state->at * 9 - 7) < 1800 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)821)] = rot[2]
-		;
+		i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, "tkfram_", 
+		(ftnlen)821)] = rot[2];
 	__state->buffd[(i__1 = __state->at * 9 - 6) < 1800 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)822)] = rot[3]
-		;
+		i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, "tkfram_", 
+		(ftnlen)822)] = rot[3];
 	__state->buffd[(i__1 = __state->at * 9 - 5) < 1800 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)823)] = rot[4]
-		;
+		i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, "tkfram_", 
+		(ftnlen)823)] = rot[4];
 	__state->buffd[(i__1 = __state->at * 9 - 4) < 1800 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)824)] = rot[5]
-		;
+		i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, "tkfram_", 
+		(ftnlen)824)] = rot[5];
 	__state->buffd[(i__1 = __state->at * 9 - 3) < 1800 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)825)] = rot[6]
-		;
+		i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, "tkfram_", 
+		(ftnlen)825)] = rot[6];
 	__state->buffd[(i__1 = __state->at * 9 - 2) < 1800 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)826)] = rot[7]
-		;
+		i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, "tkfram_", 
+		(ftnlen)826)] = rot[7];
 	__state->buffd[(i__1 = __state->at * 9 - 1) < 1800 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffd", i__1, "tkfram_", (ftnlen)827)] = rot[8]
-		;
+		i__1 : s_rnge(&__global_state->f2c, "buffd", i__1, "tkfram_", 
+		(ftnlen)827)] = rot[8];
 	__state->buffi[(i__1 = __state->at - 1) < 200 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffi", i__1, "tkfram_", (ftnlen)829)] = *frame;
+		s_rnge(&__global_state->f2c, "buffi", i__1, "tkfram_", (
+		ftnlen)829)] = *frame;
 
 /*        If these were not previously buffered, we need to set */
 /*        a watch on the various items that might be used to define */
@@ -853,77 +906,82 @@ static tkfram_state_t* get_tkfram_state() {
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 9, a__1[1] = "_RELATIVE";
-	    s_cat(__state->item, a__1, i__2, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->item, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 5, a__1[1] = "_SPEC";
-	    s_cat(__state->item + 32, a__1, i__2, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->item + 32, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 5, a__1[1] = "_AXES";
-	    s_cat(__state->item + 64, a__1, i__2, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->item + 64, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 7, a__1[1] = "_MATRIX";
-	    s_cat(__state->item + 96, a__1, i__2, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->item + 96, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 2, a__1[1] = "_Q";
-	    s_cat(__state->item + 128, a__1, i__2, &__state->c__2, (ftnlen)32)
-		    ;
+	    s_cat(&__global_state->f2c, __state->item + 128, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 7, a__1[1] = "_ANGLES";
-	    s_cat(__state->item + 160, a__1, i__2, &__state->c__2, (ftnlen)32)
-		    ;
+	    s_cat(&__global_state->f2c, __state->item + 160, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->r__, a__1[0] = __state->agent;
 	    i__2[1] = 6, a__1[1] = "_UNITS";
-	    s_cat(__state->item + 192, a__1, i__2, &__state->c__2, (ftnlen)32)
-		    ;
+	    s_cat(&__global_state->f2c, __state->item + 192, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 9, a__1[1] = "_RELATIVE";
-	    s_cat(__state->item + 224, a__1, i__2, &__state->c__2, (ftnlen)32)
-		    ;
+	    s_cat(&__global_state->f2c, __state->item + 224, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 5, a__1[1] = "_SPEC";
-	    s_cat(__state->item + 256, a__1, i__2, &__state->c__2, (ftnlen)32)
-		    ;
+	    s_cat(&__global_state->f2c, __state->item + 256, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 5, a__1[1] = "_AXES";
-	    s_cat(__state->item + 288, a__1, i__2, &__state->c__2, (ftnlen)32)
-		    ;
+	    s_cat(&__global_state->f2c, __state->item + 288, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 7, a__1[1] = "_MATRIX";
-	    s_cat(__state->item + 320, a__1, i__2, &__state->c__2, (ftnlen)32)
-		    ;
+	    s_cat(&__global_state->f2c, __state->item + 320, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 2, a__1[1] = "_Q";
-	    s_cat(__state->item + 352, a__1, i__2, &__state->c__2, (ftnlen)32)
-		    ;
+	    s_cat(&__global_state->f2c, __state->item + 352, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 7, a__1[1] = "_ANGLES";
-	    s_cat(__state->item + 384, a__1, i__2, &__state->c__2, (ftnlen)32)
-		    ;
+	    s_cat(&__global_state->f2c, __state->item + 384, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
 /* Writing concatenation */
 	    i__2[0] = __state->ar, a__1[0] = __state->altnat;
 	    i__2[1] = 6, a__1[1] = "_UNITS";
-	    s_cat(__state->item + 416, a__1, i__2, &__state->c__2, (ftnlen)32)
-		    ;
-	    swpool_(__state->agent, &__state->c__14, __state->item, (ftnlen)
-		    32, (ftnlen)32);
-	    cvpool_(__state->agent, &__state->update, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->item + 416, a__1, i__2, &
+		    __state->c__2, (ftnlen)32);
+	    swpool_(__global_state, __state->agent, &__state->c__14, 
+		    __state->item, (ftnlen)32, (ftnlen)32);
+	    cvpool_(__global_state, __state->agent, &__state->update, (ftnlen)
+		    32);
 	}
     }
-    if (failed_()) {
-	lnkini_(&__state->c__200, __state->pool);
-	chkout_("TKFRAM", (ftnlen)6);
+    if (failed_(__global_state)) {
+	lnkini_(__global_state, &__state->c__200, __state->pool);
+	chkout_(__global_state, "TKFRAM", (ftnlen)6);
 	return 0;
     }
 
@@ -935,7 +993,7 @@ static tkfram_state_t* get_tkfram_state() {
 
 /*     That's it */
 
-    chkout_("TKFRAM", (ftnlen)6);
+    chkout_(__global_state, "TKFRAM", (ftnlen)6);
     return 0;
 } /* tkfram_ */
 

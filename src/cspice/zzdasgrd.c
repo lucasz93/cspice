@@ -8,8 +8,7 @@
 
 
 extern zzdasgrd_init_t __zzdasgrd_init;
-static zzdasgrd_state_t* get_zzdasgrd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdasgrd_state_t* get_zzdasgrd_state(cspice_t* state) {
 	if (!state->zzdasgrd)
 		state->zzdasgrd = __cspice_allocate_module(sizeof(
 	zzdasgrd_state_t), &__zzdasgrd_init, sizeof(__zzdasgrd_init));
@@ -18,45 +17,46 @@ static zzdasgrd_state_t* get_zzdasgrd_state() {
 }
 
 /* $Procedure ZZDASGRD ( DAS, get record, double precision ) */
-/* Subroutine */ int zzdasgrd_(integer *handle, integer *recno, doublereal *
-	record)
+/* Subroutine */ int zzdasgrd_(cspice_t* __global_state, integer *handle, 
+	integer *recno, doublereal *record)
 {
     /* Initialized data */
 
 
     /* Builtin functions */
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
+    integer s_rdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rdue(f2c_state_t*);
 
     /* Local variables */
     integer unit;
-    extern /* Subroutine */ int zzddhnfc_(integer *);
-    extern /* Subroutine */ int zzddhnfo_(integer *, char *, integer *, 
-	    integer *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzxlated_(integer *, char *, integer *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzddhnfc_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzddhnfo_(cspice_t*, integer *, char *, 
+	    integer *, integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int zzxlated_(cspice_t*, integer *, char *, 
+	    integer *, doublereal *, ftnlen);
     char fname[255];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     char chrrec[1024];
     integer intamh;
     integer intarc;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    zzdasgrd_state_t* __state = get_zzdasgrd_state();
+    zzdasgrd_state_t* __state = get_zzdasgrd_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -229,17 +229,17 @@ static zzdasgrd_state_t* get_zzdasgrd_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDASGRD", (ftnlen)8);
+    chkin_(__global_state, "ZZDASGRD", (ftnlen)8);
     if (__state->first) {
 
 /*        Get the integer code for the host binary file format. */
 
-	zzddhnfc_(&__state->natbff);
-	if (failed_()) {
-	    chkout_("ZZDASGRD", (ftnlen)8);
+	zzddhnfc_(__global_state, &__state->natbff);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDASGRD", (ftnlen)8);
 	    return 0;
 	}
 	__state->first = FALSE_;
@@ -247,23 +247,24 @@ static zzdasgrd_state_t* get_zzdasgrd_state() {
 
 /*     Get a logical unit for this file. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &unit, (
+	    ftnlen)3);
 
 /*     Get the binary file format of the file designated by HANDLE. */
 
-    zzddhnfo_(handle, fname, &intarc, &__state->intbff, &intamh, &found, (
-	    ftnlen)255);
-    if (failed_()) {
-	chkout_("ZZDASGRD", (ftnlen)8);
+    zzddhnfo_(__global_state, handle, fname, &intarc, &__state->intbff, &
+	    intamh, &found, (ftnlen)255);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZDASGRD", (ftnlen)8);
 	return 0;
     }
     if (! found) {
-	setmsg_("Unable to locate file associated with HANDLE, #. The most l"
-		"ikely cause of this is the file that you are trying to read "
-		"has been closed.", (ftnlen)135);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(HANDLENOTFOUND)", (ftnlen)21);
-	chkout_("ZZDASGRD", (ftnlen)8);
+	setmsg_(__global_state, "Unable to locate file associated with HANDL"
+		"E, #. The most likely cause of this is the file that you are"
+		" trying to read has been closed.", (ftnlen)135);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(HANDLENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZDASGRD", (ftnlen)8);
 	return 0;
     }
     if (__state->intbff == __state->natbff) {
@@ -272,25 +273,25 @@ static zzdasgrd_state_t* get_zzdasgrd_state() {
 
 	__state->io___10.ciunit = unit;
 	__state->io___10.cirec = *recno;
-	iostat = s_rdue(&__state->io___10);
+	iostat = s_rdue(&__global_state->f2c, &__state->io___10);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__128, (char *)&record[0], (ftnlen)sizeof(
-		doublereal));
+	iostat = do_uio(&__global_state->f2c, &__state->c__128, (char *)&
+		record[0], (ftnlen)sizeof(doublereal));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = e_rdue();
+	iostat = e_rdue(&__global_state->f2c);
 L100001:
 	if (iostat != 0) {
-	    setmsg_("Could not read DAS d.p. record. File = # Record number "
-		    "= #. IOSTAT = #.", (ftnlen)71);
-	    errfnm_("#", &unit, (ftnlen)1);
-	    errint_("#", recno, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DASFILEREADFAILED)", (ftnlen)24);
-	    chkout_("ZZDASGRD", (ftnlen)8);
+	    setmsg_(__global_state, "Could not read DAS d.p. record. File = "
+		    "# Record number = #. IOSTAT = #.", (ftnlen)71);
+	    errfnm_(__global_state, "#", &unit, (ftnlen)1);
+	    errint_(__global_state, "#", recno, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DASFILEREADFAILED)", (ftnlen)24);
+	    chkout_(__global_state, "ZZDASGRD", (ftnlen)8);
 	    return 0;
 	}
     } else {
@@ -300,38 +301,39 @@ L100001:
 
 	__state->io___11.ciunit = unit;
 	__state->io___11.cirec = *recno;
-	iostat = s_rdue(&__state->io___11);
+	iostat = s_rdue(&__global_state->f2c, &__state->io___11);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&__state->c__1, chrrec, (ftnlen)1024);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, chrrec, (ftnlen)
+		1024);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = e_rdue();
+	iostat = e_rdue(&__global_state->f2c);
 L100002:
 	if (iostat != 0) {
-	    setmsg_("Could not read non-native DAS d.p. record into characte"
-		    "r array. File = # Record number = #. IOSTAT = #.", (
-		    ftnlen)103);
-	    errfnm_("#", &unit, (ftnlen)1);
-	    errint_("#", recno, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DASFILEREADFAILED)", (ftnlen)24);
-	    chkout_("ZZDASGRD", (ftnlen)8);
+	    setmsg_(__global_state, "Could not read non-native DAS d.p. reco"
+		    "rd into character array. File = # Record number = #. IOS"
+		    "TAT = #.", (ftnlen)103);
+	    errfnm_(__global_state, "#", &unit, (ftnlen)1);
+	    errint_(__global_state, "#", recno, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DASFILEREADFAILED)", (ftnlen)24);
+	    chkout_(__global_state, "ZZDASGRD", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Translate the character record to double precision type. */
 
-	zzxlated_(&__state->intbff, chrrec, &__state->c__128, record, (ftnlen)
-		1024);
+	zzxlated_(__global_state, &__state->intbff, chrrec, &__state->c__128, 
+		record, (ftnlen)1024);
 
 /*        We don't test FAILED here because the routine */
 /*        will return from this point. */
 
     }
-    chkout_("ZZDASGRD", (ftnlen)8);
+    chkout_(__global_state, "ZZDASGRD", (ftnlen)8);
     return 0;
 } /* zzdasgrd_ */
 

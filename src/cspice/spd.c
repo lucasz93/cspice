@@ -8,20 +8,19 @@
 
 
 typedef int spd_state_t;
-static spd_state_t* get_spd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spd_state_t* get_spd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure                     SPD ( Seconds per day ) */
-doublereal spd_(void)
+doublereal spd_(cspice_t* __global_state)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    spd_state_t* __state = get_spd_state();
+    spd_state_t* __state = get_spd_state(__global_state);
 /* $ Abstract */
 
 /*     Return the number of seconds in a day. */

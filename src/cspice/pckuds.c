@@ -8,8 +8,7 @@
 
 
 extern pckuds_init_t __pckuds_init;
-static pckuds_state_t* get_pckuds_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pckuds_state_t* get_pckuds_state(cspice_t* state) {
 	if (!state->pckuds)
 		state->pckuds = __cspice_allocate_module(sizeof(
 	pckuds_state_t), &__pckuds_init, sizeof(__pckuds_init));
@@ -18,22 +17,22 @@ static pckuds_state_t* get_pckuds_state() {
 }
 
 /* $Procedure PCKUDS (PCK, unpack segment descriptor ) */
-/* Subroutine */ int pckuds_(doublereal *descr, integer *body, integer *frame,
-	 integer *type__, doublereal *first, doublereal *last, integer *begin,
-	 integer *end)
+/* Subroutine */ int pckuds_(cspice_t* __global_state, doublereal *descr, 
+	integer *body, integer *frame, integer *type__, doublereal *first, 
+	doublereal *last, integer *begin, integer *end)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer ipart[5];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal dppart[2];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    pckuds_state_t* __state = get_pckuds_state();
+    pckuds_state_t* __state = get_pckuds_state(__global_state);
 /* $ Abstract */
 
 /*     Unpack the contents of a PCK segment descriptor */
@@ -192,19 +191,20 @@ static pckuds_state_t* get_pckuds_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PCKUDS", (ftnlen)6);
+	chkin_(__global_state, "PCKUDS", (ftnlen)6);
     }
 
 /*     No judgements are made about the descriptor when we */
 /*     unpack it.  If things were done right when the descriptor */
 /*     was created, it should be fine now. */
 
-    dafus_(descr, &__state->c__2, &__state->c__5, dppart, ipart);
-    if (failed_()) {
-	chkout_("PCKUDS", (ftnlen)6);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__5, dppart, 
+	    ipart);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "PCKUDS", (ftnlen)6);
 	return 0;
     }
     *body = ipart[0];
@@ -214,7 +214,7 @@ static pckuds_state_t* get_pckuds_state() {
     *end = ipart[4];
     *first = dppart[0];
     *last = dppart[1];
-    chkout_("PCKUDS", (ftnlen)6);
+    chkout_(__global_state, "PCKUDS", (ftnlen)6);
     return 0;
 } /* pckuds_ */
 

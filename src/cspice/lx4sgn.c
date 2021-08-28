@@ -8,28 +8,27 @@
 
 
 typedef int lx4sgn_state_t;
-static lx4sgn_state_t* get_lx4sgn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lx4sgn_state_t* get_lx4sgn_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LX4SGN (Scan for signed integer) */
-/* Subroutine */ int lx4sgn_(char *string, integer *first, integer *last, 
-	integer *nchar, ftnlen string_len)
+/* Subroutine */ int lx4sgn_(cspice_t* __global_state, char *string, integer *
+	first, integer *last, integer *nchar, ftnlen string_len)
 {
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer f;
     integer i__;
     integer l;
-    extern /* Subroutine */ int lx4uns_(char *, integer *, integer *, integer 
-	    *, ftnlen);
+    extern /* Subroutine */ int lx4uns_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
 
 
     /* Module state */
-    lx4sgn_state_t* __state = get_lx4sgn_state();
+    lx4sgn_state_t* __state = get_lx4sgn_state(__global_state);
 /* $ Abstract */
 
 /*     Scan a string from a specified starting position for the */
@@ -186,7 +185,7 @@ static lx4sgn_state_t* get_lx4sgn_state() {
 
 /* -& */
     *last = *first - 1;
-    l = i_len(string, string_len);
+    l = i_len(&__global_state->f2c, string, string_len);
 
 /*     If start is beyond the ends of the string, we  can quit now. */
 
@@ -205,7 +204,7 @@ static lx4sgn_state_t* get_lx4sgn_state() {
 /*        be an unsigned integer following. */
 
 	f = *first + 1;
-	lx4uns_(string, &f, last, nchar, string_len);
+	lx4uns_(__global_state, string, &f, last, nchar, string_len);
 	if (*nchar == 0) {
 	    *last = *first - 1;
 	} else {
@@ -216,7 +215,7 @@ static lx4sgn_state_t* get_lx4sgn_state() {
 /*        Case 2.  The leading character is not a sign character. */
 /*        We simply check to see how much unsigned integer we have. */
 
-	lx4uns_(string, first, last, nchar, string_len);
+	lx4uns_(__global_state, string, first, last, nchar, string_len);
     }
     return 0;
 } /* lx4sgn_ */

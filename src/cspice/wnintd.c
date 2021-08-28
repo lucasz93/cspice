@@ -8,13 +8,13 @@
 
 
 typedef int wnintd_state_t;
-static wnintd_state_t* get_wnintd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wnintd_state_t* get_wnintd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      WNINTD ( Intersect two DP windows ) */
-/* Subroutine */ int wnintd_(doublereal *a, doublereal *b, doublereal *c__)
+/* Subroutine */ int wnintd_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *c__)
 {
     /* System generated locals */
     doublereal d__1, d__2;
@@ -23,23 +23,23 @@ static wnintd_state_t* get_wnintd_state() {
     integer over;
     integer acard;
     integer bcard;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer csize;
-    extern integer sized_(doublereal *);
+    extern integer sized_(cspice_t*, doublereal *);
     integer ap;
     integer bp;
     integer cp;
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int excess_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     char use[1];
 
 
     /* Module state */
-    wnintd_state_t* __state = get_wnintd_state();
+    wnintd_state_t* __state = get_wnintd_state(__global_state);
 /* $ Abstract */
 
 /*      Place the intersection of two double precision windows into */
@@ -179,18 +179,18 @@ static wnintd_state_t* get_wnintd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("WNINTD", (ftnlen)6);
+	chkin_(__global_state, "WNINTD", (ftnlen)6);
     }
 
 /*     Find the cardinality of the input windows, and the allowed size */
 /*     of the output window. */
 
-    acard = cardd_(a);
-    bcard = cardd_(b);
-    csize = sized_(c__);
+    acard = cardd_(__global_state, a);
+    bcard = cardd_(__global_state, b);
+    csize = sized_(__global_state, c__);
 
 /*     Begin with the input pointers at the first elements of the */
 /*     input windows. The initial cardinality of the output window */
@@ -261,16 +261,16 @@ static wnintd_state_t* get_wnintd_state() {
 
 /*     Set the cardinality of the output window. */
 
-    scardd_(&cp, c__);
+    scardd_(__global_state, &cp, c__);
 
 /*     If there are any excess elements, signal an error and check out */
 /*     as usual. */
 
     if (over > 0) {
-	excess_(&over, "window", (ftnlen)6);
-	sigerr_("SPICE(WINDOWEXCESS)", (ftnlen)19);
+	excess_(__global_state, &over, "window", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(WINDOWEXCESS)", (ftnlen)19);
     }
-    chkout_("WNINTD", (ftnlen)6);
+    chkout_(__global_state, "WNINTD", (ftnlen)6);
     return 0;
 } /* wnintd_ */
 

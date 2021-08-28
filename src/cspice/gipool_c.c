@@ -286,7 +286,7 @@
    Participate in error handling
    */
 
-   chkin_c ( "gipool_c");
+   chkin_c ( naif_state, "gipool_c");
 
 
    /*

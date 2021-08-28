@@ -8,8 +8,7 @@
 
 
 extern zzgftreb_init_t __zzgftreb_init;
-static zzgftreb_state_t* get_zzgftreb_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgftreb_state_t* get_zzgftreb_state(cspice_t* state) {
 	if (!state->zzgftreb)
 		state->zzgftreb = __cspice_allocate_module(sizeof(
 	zzgftreb_state_t), &__zzgftreb_init, sizeof(__zzgftreb_init));
@@ -18,29 +17,30 @@ static zzgftreb_state_t* get_zzgftreb_state() {
 }
 
 /* $Procedure ZZGFTREB ( Geometry finder: return body axes ) */
-/* Subroutine */ int zzgftreb_(integer *body, doublereal *axes)
+/* Subroutine */ int zzgftreb_(cspice_t* __global_state, integer *body, 
+	doublereal *axes)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzgftreb_state_t* __state = get_zzgftreb_state();
+    zzgftreb_state_t* __state = get_zzgftreb_state(__global_state);
 /* $ Abstract */
 
 /*     Return the values of the triaxial radii for any body in the */
@@ -182,42 +182,44 @@ static zzgftreb_state_t* get_zzgftreb_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZGFTREB", (ftnlen)8);
+	chkin_(__global_state, "ZZGFTREB", (ftnlen)8);
     }
 
 /*     Look it up in the kernel pool. */
 
-    bodvcd_(body, "RADII", &__state->c__3, &n, axes, (ftnlen)5);
+    bodvcd_(__global_state, body, "RADII", &__state->c__3, &n, axes, (ftnlen)
+	    5);
     if (n != 3) {
-	setmsg_("Only # axes were found  for ID # . Three axes are needed.", (
-		ftnlen)57);
-	errint_("#", &n, (ftnlen)1);
-	errint_("#", body, (ftnlen)1);
-	sigerr_("SPICE(ZEROAXISLENGTH)", (ftnlen)21);
-	chkout_("ZZGFTREB", (ftnlen)8);
+	setmsg_(__global_state, "Only # axes were found  for ID # . Three ax"
+		"es are needed.", (ftnlen)57);
+	errint_(__global_state, "#", &n, (ftnlen)1);
+	errint_(__global_state, "#", body, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ZEROAXISLENGTH)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFTREB", (ftnlen)8);
 	return 0;
     } else {
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    if (axes[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("axes",
-		     i__1, "zzgftreb_", (ftnlen)185)] < 0.) {
-		setmsg_("The # axis of body # is negative.  Please check you"
-			"r text PCK file. You should fix the  # component of "
-			"the kernel pool variable  BODY#_RADII. ", (ftnlen)142)
-			;
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", body, (ftnlen)1);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", body, (ftnlen)1);
-		sigerr_("SPICE(BADAXISNUMBERS)", (ftnlen)21);
-		chkout_("ZZGFTREB", (ftnlen)8);
+	    if (axes[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "axes", i__1, "zzgftreb_", (ftnlen)
+		    185)] < 0.) {
+		setmsg_(__global_state, "The # axis of body # is negative.  "
+			"Please check your text PCK file. You should fix the "
+			" # component of the kernel pool variable  BODY#_RADI"
+			"I. ", (ftnlen)142);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", body, (ftnlen)1);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", body, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADAXISNUMBERS)", (ftnlen)21);
+		chkout_(__global_state, "ZZGFTREB", (ftnlen)8);
 		return 0;
 	    }
 	}
     }
-    chkout_("ZZGFTREB", (ftnlen)8);
+    chkout_(__global_state, "ZZGFTREB", (ftnlen)8);
     return 0;
 } /* zzgftreb_ */
 

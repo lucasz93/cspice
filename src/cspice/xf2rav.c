@@ -8,32 +8,31 @@
 
 
 typedef int xf2rav_state_t;
-static xf2rav_state_t* get_xf2rav_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline xf2rav_state_t* get_xf2rav_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      XF2RAV ( Transform to rotation and angular velocity) */
-/* Subroutine */ int xf2rav_(doublereal *xform, doublereal *rot, doublereal *
-	av)
+/* Subroutine */ int xf2rav_(cspice_t* __global_state, doublereal *xform, 
+	doublereal *rot, doublereal *av)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal drdt[9]	/* was [3][3] */;
-    extern /* Subroutine */ int mtxm_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int mtxm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     integer i__;
     integer j;
     doublereal omega[9]	/* was [3][3] */;
 
 
     /* Module state */
-    xf2rav_state_t* __state = get_xf2rav_state();
+    xf2rav_state_t* __state = get_xf2rav_state(__global_state);
 /* $ Abstract */
 
 /*     This routine determines from a state transformation matrix */
@@ -191,14 +190,16 @@ static xf2rav_state_t* get_xf2rav_state() {
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	for (j = 1; j <= 3; ++j) {
-	    rot[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rot", i__1, "xf2rav_", (ftnlen)178)] = xform[(i__2 = i__ 
-		    + j * 6 - 7) < 36 && 0 <= i__2 ? i__2 : s_rnge("xform", 
-		    i__2, "xf2rav_", (ftnlen)178)];
-	    drdt[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "drdt", i__1, "xf2rav_", (ftnlen)179)] = xform[(i__2 = 
-		    i__ + 3 + j * 6 - 7) < 36 && 0 <= i__2 ? i__2 : s_rnge(
-		    "xform", i__2, "xf2rav_", (ftnlen)179)];
+	    rot[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "rot", i__1, "xf2rav_", (ftnlen)178)]
+		     = xform[(i__2 = i__ + j * 6 - 7) < 36 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "xform", i__2, "xf2r"
+		    "av_", (ftnlen)178)];
+	    drdt[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "drdt", i__1, "xf2rav_", (ftnlen)179)
+		    ] = xform[(i__2 = i__ + 3 + j * 6 - 7) < 36 && 0 <= i__2 ?
+		     i__2 : s_rnge(&__global_state->f2c, "xform", i__2, "xf2"
+		    "rav_", (ftnlen)179)];
 	}
     }
 
@@ -235,7 +236,7 @@ static xf2rav_state_t* get_xf2rav_state() {
 
 
 
-    mtxm_(drdt, rot, omega);
+    mtxm_(__global_state, drdt, rot, omega);
 
 /*     Recall that OMEGA has the form */
 

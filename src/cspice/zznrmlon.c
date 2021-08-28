@@ -8,8 +8,7 @@
 
 
 extern zznrmlon_init_t __zznrmlon_init;
-static zznrmlon_state_t* get_zznrmlon_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zznrmlon_state_t* get_zznrmlon_state(cspice_t* state) {
 	if (!state->zznrmlon)
 		state->zznrmlon = __cspice_allocate_module(sizeof(
 	zznrmlon_state_t), &__zznrmlon_init, sizeof(__zznrmlon_init));
@@ -18,8 +17,9 @@ static zznrmlon_state_t* get_zznrmlon_state() {
 }
 
 /* $Procedure ZZNRMLON ( Normalize longitude bounds ) */
-/* Subroutine */ int zznrmlon_(doublereal *inmin, doublereal *inmax, 
-	doublereal *tol, doublereal *outmin, doublereal *outmax)
+/* Subroutine */ int zznrmlon_(cspice_t* __global_state, doublereal *inmin, 
+	doublereal *inmax, doublereal *tol, doublereal *outmin, doublereal *
+	outmax)
 {
     /* Initialized data */
 
@@ -29,18 +29,19 @@ static zznrmlon_state_t* get_zznrmlon_state() {
 
     /* Local variables */
     doublereal delta;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal twopi_(void);
-    extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern doublereal dpr_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal twopi_(cspice_t*);
+    extern doublereal touchd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern doublereal dpr_(cspice_t*);
 
 
     /* Module state */
-    zznrmlon_state_t* __state = get_zznrmlon_state();
+    zznrmlon_state_t* __state = get_zznrmlon_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -216,18 +217,19 @@ static zznrmlon_state_t* get_zznrmlon_state() {
 /*     Use discovery check-in. Don't check RETURN. */
 
     if (__state->first) {
-	__state->pi2 = twopi_();
+	__state->pi2 = twopi_(__global_state);
 	__state->first = FALSE_;
     }
 
 /*     TOL cannot be negative. */
 
     if (*tol < 0.) {
-	chkin_("ZZNRMLON", (ftnlen)8);
-	setmsg_("Tolerance must be non-negative but was #.", (ftnlen)41);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZNRMLON", (ftnlen)8);
+	chkin_(__global_state, "ZZNRMLON", (ftnlen)8);
+	setmsg_(__global_state, "Tolerance must be non-negative but was #.", (
+		ftnlen)41);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZNRMLON", (ftnlen)8);
 	return 0;
     }
 
@@ -235,33 +237,33 @@ static zznrmlon_state_t* get_zznrmlon_state() {
 /*     for the tolerance. */
 
     if (*inmin < -__state->pi2 - *tol || *inmin > __state->pi2 + *tol) {
-	chkin_("ZZNRMLON", (ftnlen)8);
-	setmsg_("Longitude lower bound INMIN = # (radians),  = # (deg). The "
-		"minimum allowed value is  -2*pi - TOL = # (radians), = # (de"
-		"g).", (ftnlen)122);
-	errdp_("#", inmin, (ftnlen)1);
-	d__1 = *inmin * dpr_();
-	errdp_("#", &d__1, (ftnlen)1);
+	chkin_(__global_state, "ZZNRMLON", (ftnlen)8);
+	setmsg_(__global_state, "Longitude lower bound INMIN = # (radians), "
+		" = # (deg). The minimum allowed value is  -2*pi - TOL = # (r"
+		"adians), = # (deg).", (ftnlen)122);
+	errdp_(__global_state, "#", inmin, (ftnlen)1);
+	d__1 = *inmin * dpr_(__global_state);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
 	d__1 = -__state->pi2 - *tol;
-	errdp_("#", &d__1, (ftnlen)1);
-	d__1 = (-__state->pi2 - *tol) * dpr_();
-	errdp_("#", &d__1, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZNRMLON", (ftnlen)8);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	d__1 = (-__state->pi2 - *tol) * dpr_(__global_state);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZNRMLON", (ftnlen)8);
 	return 0;
     }
 
 /*     The input bounds may not be equal. */
 
     if (*inmin == *inmax) {
-	chkin_("ZZNRMLON", (ftnlen)8);
-	setmsg_("Longitude lower bound INMIN = # (radians),  = # (deg), is e"
-		"qual to upper bound.", (ftnlen)79);
-	errdp_("#", inmin, (ftnlen)1);
-	d__1 = *inmin * dpr_();
-	errdp_("#", &d__1, (ftnlen)1);
-	sigerr_("SPICE(ZEROBOUNDSEXTENT)", (ftnlen)23);
-	chkout_("ZZNRMLON", (ftnlen)8);
+	chkin_(__global_state, "ZZNRMLON", (ftnlen)8);
+	setmsg_(__global_state, "Longitude lower bound INMIN = # (radians), "
+		" = # (deg), is equal to upper bound.", (ftnlen)79);
+	errdp_(__global_state, "#", inmin, (ftnlen)1);
+	d__1 = *inmin * dpr_(__global_state);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ZEROBOUNDSEXTENT)", (ftnlen)23);
+	chkout_(__global_state, "ZZNRMLON", (ftnlen)8);
 	return 0;
     }
 
@@ -274,19 +276,19 @@ static zznrmlon_state_t* get_zznrmlon_state() {
 /*     Same deal for the upper bound. */
 
     if (*inmax < -__state->pi2 - *tol || *inmax > __state->pi2 + *tol) {
-	chkin_("ZZNRMLON", (ftnlen)8);
-	setmsg_("Longitude upper bound INMAX = # (radians),  = # (deg). The "
-		"minimum allowed value is  -2*pi - TOL = # (radians), = # (de"
-		"g).", (ftnlen)122);
-	errdp_("#", inmax, (ftnlen)1);
-	d__1 = *inmax * dpr_();
-	errdp_("#", &d__1, (ftnlen)1);
+	chkin_(__global_state, "ZZNRMLON", (ftnlen)8);
+	setmsg_(__global_state, "Longitude upper bound INMAX = # (radians), "
+		" = # (deg). The minimum allowed value is  -2*pi - TOL = # (r"
+		"adians), = # (deg).", (ftnlen)122);
+	errdp_(__global_state, "#", inmax, (ftnlen)1);
+	d__1 = *inmax * dpr_(__global_state);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
 	d__1 = -__state->pi2 - *tol;
-	errdp_("#", &d__1, (ftnlen)1);
-	d__1 = (-__state->pi2 - *tol) * dpr_();
-	errdp_("#", &d__1, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZNRMLON", (ftnlen)8);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	d__1 = (-__state->pi2 - *tol) * dpr_(__global_state);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZNRMLON", (ftnlen)8);
 	return 0;
     }
 /* Computing MAX */
@@ -301,7 +303,7 @@ static zznrmlon_state_t* get_zznrmlon_state() {
 /*     order." */
 
     d__1 = *outmin + *tol;
-    if (*outmax <= touchd_(&d__1)) {
+    if (*outmax <= touchd_(__global_state, &d__1)) {
 
 /*        Shift one of the bounds by 2*pi, while keeping */
 /*        the bounds in the range [-2pi, 2pi]. */
@@ -312,7 +314,7 @@ static zznrmlon_state_t* get_zznrmlon_state() {
 
 /* Computing MIN */
 	    d__2 = *outmax + __state->pi2;
-	    d__1 = touchd_(&d__2);
+	    d__1 = touchd_(__global_state, &d__2);
 	    *outmax = min(d__1,__state->pi2);
 	    if (*outmax < *outmin) {
 
@@ -321,7 +323,7 @@ static zznrmlon_state_t* get_zznrmlon_state() {
 
 /* Computing MAX */
 		d__3 = *outmin - __state->pi2;
-		d__1 = touchd_(&d__3), d__2 = -__state->pi2;
+		d__1 = touchd_(__global_state, &d__3), d__2 = -__state->pi2;
 		*outmin = max(d__1,d__2);
 	    }
 	} else {
@@ -330,7 +332,7 @@ static zznrmlon_state_t* get_zznrmlon_state() {
 
 /* Computing MAX */
 	    d__3 = *outmin - __state->pi2;
-	    d__1 = touchd_(&d__3), d__2 = -__state->pi2;
+	    d__1 = touchd_(__global_state, &d__3), d__2 = -__state->pi2;
 	    *outmin = max(d__1,d__2);
 	}
     }
@@ -339,14 +341,14 @@ static zznrmlon_state_t* get_zznrmlon_state() {
 /*     that OUTMIN and OUTMAX are already set at this point. */
 
     d__1 = *outmax - *outmin;
-    delta = touchd_(&d__1);
+    delta = touchd_(__global_state, &d__1);
     d__1 = __state->pi2 + *tol;
-    if (delta > touchd_(&d__1)) {
+    if (delta > touchd_(__global_state, &d__1)) {
 
 /*        Shift the upper bound lower by 2*pi. */
 
 	d__1 = *outmax - __state->pi2;
-	*outmax = touchd_(&d__1);
+	*outmax = touchd_(__global_state, &d__1);
     }
 
 /*     The output bounds must not be equal. We could end up with */
@@ -355,21 +357,21 @@ static zznrmlon_state_t* get_zznrmlon_state() {
 /*     multiple of 2*pi. */
 
     if (*outmin == *outmax) {
-	chkin_("ZZNRMLON", (ftnlen)8);
-	setmsg_("After adjustment, input longitude lower bound INMIN = # (ra"
-		"dians),  = # (deg), is equal to adjusted longitude upper bou"
-		"nd. Input upper bound = # (radians),  = # (deg). When the in"
-		"put upper bound is less than the input lower bound, the diff"
-		"erence must not be an integer multiple of 2*pi.", (ftnlen)286)
-		;
-	errdp_("#", inmin, (ftnlen)1);
-	d__1 = *inmin * dpr_();
-	errdp_("#", &d__1, (ftnlen)1);
-	errdp_("#", inmax, (ftnlen)1);
-	d__1 = *inmax * dpr_();
-	errdp_("#", &d__1, (ftnlen)1);
-	sigerr_("SPICE(ZEROBOUNDSEXTENT)", (ftnlen)23);
-	chkout_("ZZNRMLON", (ftnlen)8);
+	chkin_(__global_state, "ZZNRMLON", (ftnlen)8);
+	setmsg_(__global_state, "After adjustment, input longitude lower bou"
+		"nd INMIN = # (radians),  = # (deg), is equal to adjusted lon"
+		"gitude upper bound. Input upper bound = # (radians),  = # (d"
+		"eg). When the input upper bound is less than the input lower"
+		" bound, the difference must not be an integer multiple of 2*"
+		"pi.", (ftnlen)286);
+	errdp_(__global_state, "#", inmin, (ftnlen)1);
+	d__1 = *inmin * dpr_(__global_state);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	errdp_(__global_state, "#", inmax, (ftnlen)1);
+	d__1 = *inmax * dpr_(__global_state);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ZEROBOUNDSEXTENT)", (ftnlen)23);
+	chkout_(__global_state, "ZZNRMLON", (ftnlen)8);
 	return 0;
     }
     return 0;

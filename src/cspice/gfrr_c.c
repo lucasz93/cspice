@@ -853,7 +853,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "gfrr_c" );
+   chkin_c ( naif_state, "gfrr_c" );
 
    /*
    Make sure cell data types are d.p.

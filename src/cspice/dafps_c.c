@@ -228,7 +228,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafps_c" );
+   chkin_c ( naif_state, "dafps_c" );
 
 
    dafps_ (  ( integer    * ) &nd,

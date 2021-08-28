@@ -180,7 +180,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "bodfnd_c" );
+   chkin_c ( naif_state, "bodfnd_c" );
 
 
    /*

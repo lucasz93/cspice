@@ -8,33 +8,33 @@
 
 
 typedef int zztogrid_state_t;
-static zztogrid_state_t* get_zztogrid_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zztogrid_state_t* get_zztogrid_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZTOGRID ( Model coordinates to voxel grid coordinates ) */
-/* Subroutine */ int zztogrid_(doublereal *modxyz, doublereal *voxori, 
-	doublereal *voxsiz, doublereal *grdxyz)
+/* Subroutine */ int zztogrid_(cspice_t* __global_state, doublereal *modxyz, 
+	doublereal *voxori, doublereal *voxsiz, doublereal *grdxyz)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zztogrid_state_t* __state = get_zztogrid_state();
+    zztogrid_state_t* __state = get_zztogrid_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -202,15 +202,16 @@ static zztogrid_state_t* get_zztogrid_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
     if (*voxsiz <= 0.) {
-	chkin_("ZZTOGRID", (ftnlen)8);
-	setmsg_("Voxel size was #; must be positive.", (ftnlen)35);
-	errdp_("#", voxsiz, (ftnlen)1);
-	sigerr_("SPICE(NONPOSITIVEVALUE)", (ftnlen)23);
-	chkout_("ZZTOGRID", (ftnlen)8);
+	chkin_(__global_state, "ZZTOGRID", (ftnlen)8);
+	setmsg_(__global_state, "Voxel size was #; must be positive.", (
+		ftnlen)35);
+	errdp_(__global_state, "#", voxsiz, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONPOSITIVEVALUE)", (ftnlen)23);
+	chkout_(__global_state, "ZZTOGRID", (ftnlen)8);
 	return 0;
     }
 
@@ -218,12 +219,13 @@ static zztogrid_state_t* get_zztogrid_state() {
 /*     via a Galilean transform. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	grdxyz[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("grdxyz", 
-		i__1, "zztogrid_", (ftnlen)206)] = (modxyz[(i__2 = i__ - 1) < 
-		3 && 0 <= i__2 ? i__2 : s_rnge("modxyz", i__2, "zztogrid_", (
-		ftnlen)206)] - voxori[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		i__3 : s_rnge("voxori", i__3, "zztogrid_", (ftnlen)206)]) / *
-		voxsiz;
+	grdxyz[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "grdxyz", i__1, "zztogrid_", (ftnlen)206)
+		] = (modxyz[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+		&__global_state->f2c, "modxyz", i__2, "zztogrid_", (ftnlen)
+		206)] - voxori[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "voxori", i__3, "zztogrid_", (
+		ftnlen)206)]) / *voxsiz;
     }
     return 0;
 } /* zztogrid_ */

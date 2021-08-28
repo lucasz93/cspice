@@ -8,8 +8,7 @@
 
 
 extern drotat_init_t __drotat_init;
-static drotat_state_t* get_drotat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline drotat_state_t* get_drotat_state(cspice_t* state) {
 	if (!state->drotat)
 		state->drotat = __cspice_allocate_module(sizeof(
 	drotat_state_t), &__drotat_init, sizeof(__drotat_init));
@@ -18,8 +17,8 @@ static drotat_state_t* get_drotat_state() {
 }
 
 /* $Procedure      DROTAT ( Derivative of a rotation matrix ) */
-/* Subroutine */ int drotat_(doublereal *angle, integer *iaxis, doublereal *
-	dmout)
+/* Subroutine */ int drotat_(cspice_t* __global_state, doublereal *angle, 
+	integer *iaxis, doublereal *dmout)
 {
     /* Initialized data */
 
@@ -28,24 +27,24 @@ static drotat_state_t* get_drotat_state() {
     integer i__1;
 
     /* Builtin functions */
-    double sin(doublereal), cos(doublereal);
-    integer s_rnge(char *, integer, char *, integer);
+    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal c__;
     doublereal s;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer i1;
     integer i2;
     integer i3;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    drotat_state_t* __state = get_drotat_state();
+    drotat_state_t* __state = get_drotat_state(__global_state);
 /* $ Abstract */
 
 /*      Calculate the derivative with respect to the angle of rotation */
@@ -221,50 +220,52 @@ static drotat_state_t* get_drotat_state() {
 /*     First make sure the input axis is reasonable. */
 
     if (*iaxis > 3 || *iaxis < 1) {
-	chkin_("DROTAT", (ftnlen)6);
-	setmsg_("The input axis is out of range.  Its value is #.", (ftnlen)
-		48);
-	errint_("#", iaxis, (ftnlen)1);
-	sigerr_("SPICE(BADAXIS)", (ftnlen)14);
-	chkout_("DROTAT", (ftnlen)6);
+	chkin_(__global_state, "DROTAT", (ftnlen)6);
+	setmsg_(__global_state, "The input axis is out of range.  Its value "
+		"is #.", (ftnlen)48);
+	errint_(__global_state, "#", iaxis, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADAXIS)", (ftnlen)14);
+	chkout_(__global_state, "DROTAT", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the sine and cosine of ANGLE */
 
-    s = sin(*angle);
-    c__ = cos(*angle);
+    s = sin(&__global_state->f2c, *angle);
+    c__ = cos(&__global_state->f2c, *angle);
 
 /*     Get indices for axes. The first index is for the axis of rotation. */
 /*     The next two axes follow in right hand order (XYZ). */
 
     i1 = __state->indexs[(i__1 = *iaxis - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(
-	    "indexs", i__1, "drotat_", (ftnlen)223)];
-    i2 = __state->indexs[(i__1 = *iaxis) < 5 && 0 <= i__1 ? i__1 : s_rnge(
-	    "indexs", i__1, "drotat_", (ftnlen)224)];
+	    &__global_state->f2c, "indexs", i__1, "drotat_", (ftnlen)223)];
+    i2 = __state->indexs[(i__1 = *iaxis) < 5 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "indexs", i__1, "drotat_", (ftnlen)224)];
     i3 = __state->indexs[(i__1 = *iaxis + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(
-	    "indexs", i__1, "drotat_", (ftnlen)225)];
+	    &__global_state->f2c, "indexs", i__1, "drotat_", (ftnlen)225)];
 
 /*  Construct the rotation matrix */
 
-    dmout[(i__1 = i1 + i1 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("dmout", 
-	    i__1, "drotat_", (ftnlen)230)] = 0.;
-    dmout[(i__1 = i2 + i1 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("dmout", 
-	    i__1, "drotat_", (ftnlen)231)] = 0.;
-    dmout[(i__1 = i3 + i1 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("dmout", 
-	    i__1, "drotat_", (ftnlen)232)] = 0.;
-    dmout[(i__1 = i1 + i2 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("dmout", 
-	    i__1, "drotat_", (ftnlen)233)] = 0.;
-    dmout[(i__1 = i2 + i2 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("dmout", 
-	    i__1, "drotat_", (ftnlen)234)] = -s;
-    dmout[(i__1 = i3 + i2 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("dmout", 
-	    i__1, "drotat_", (ftnlen)235)] = -c__;
-    dmout[(i__1 = i1 + i3 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("dmout", 
-	    i__1, "drotat_", (ftnlen)236)] = 0.;
-    dmout[(i__1 = i2 + i3 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("dmout", 
-	    i__1, "drotat_", (ftnlen)237)] = c__;
-    dmout[(i__1 = i3 + i3 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("dmout", 
-	    i__1, "drotat_", (ftnlen)238)] = -s;
+    dmout[(i__1 = i1 + i1 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "dmout", i__1, "drotat_", (ftnlen)230)] = 0.;
+    dmout[(i__1 = i2 + i1 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "dmout", i__1, "drotat_", (ftnlen)231)] = 0.;
+    dmout[(i__1 = i3 + i1 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "dmout", i__1, "drotat_", (ftnlen)232)] = 0.;
+    dmout[(i__1 = i1 + i2 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "dmout", i__1, "drotat_", (ftnlen)233)] = 0.;
+    dmout[(i__1 = i2 + i2 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "dmout", i__1, "drotat_", (ftnlen)234)] = -s;
+    dmout[(i__1 = i3 + i2 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "dmout", i__1, "drotat_", (ftnlen)235)] = 
+	    -c__;
+    dmout[(i__1 = i1 + i3 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "dmout", i__1, "drotat_", (ftnlen)236)] = 0.;
+    dmout[(i__1 = i2 + i3 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "dmout", i__1, "drotat_", (ftnlen)237)] = 
+	    c__;
+    dmout[(i__1 = i3 + i3 * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "dmout", i__1, "drotat_", (ftnlen)238)] = -s;
 
     return 0;
 } /* drotat_ */

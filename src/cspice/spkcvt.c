@@ -8,8 +8,7 @@
 
 
 extern spkcvt_init_t __spkcvt_init;
-static spkcvt_state_t* get_spkcvt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkcvt_state_t* get_spkcvt_state(cspice_t* state) {
 	if (!state->spkcvt)
 		state->spkcvt = __cspice_allocate_module(sizeof(
 	spkcvt_state_t), &__spkcvt_init, sizeof(__spkcvt_init));
@@ -18,11 +17,11 @@ static spkcvt_state_t* get_spkcvt_state() {
 }
 
 /* $Procedure SPKCVT ( SPK, constant velocity target state ) */
-/* Subroutine */ int spkcvt_(doublereal *trgsta, doublereal *trgepc, char *
-	trgctr, char *trgref, doublereal *et, char *outref, char *refloc, 
-	char *abcorr, char *obsrvr, doublereal *state, doublereal *lt, ftnlen 
-	trgctr_len, ftnlen trgref_len, ftnlen outref_len, ftnlen refloc_len, 
-	ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int spkcvt_(cspice_t* __global_state, doublereal *trgsta, 
+	doublereal *trgepc, char *trgctr, char *trgref, doublereal *et, char *
+	outref, char *refloc, char *abcorr, char *obsrvr, doublereal *state, 
+	doublereal *lt, ftnlen trgctr_len, ftnlen trgref_len, ftnlen 
+	outref_len, ftnlen refloc_len, ftnlen abcorr_len, ftnlen obsrvr_len)
 {
     /* Initialized data */
 
@@ -31,55 +30,60 @@ static spkcvt_state_t* get_spkcvt_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzspkfat_(U_fp, doublereal *, char *, char *, 
-	    integer *, doublereal *, doublereal *, doublereal *, ftnlen, 
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzcvssta_(doublereal *, integer *, doublereal 
-	    *, char *, ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int zzcorsxf_(logical *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern /* Subroutine */ int zzcvxsta_();
+    extern /* Subroutine */ int mxvg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, integer *, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzspkfat_(cspice_t*, U_fp, doublereal *, char 
+	    *, char *, integer *, doublereal *, doublereal *, doublereal *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int zzcvssta_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, char *, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzcorsxf_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzcvxsta_(cspice_t*);
     doublereal s;
-    extern /* Subroutine */ int zzspkfzt_(U_fp, doublereal *, char *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int zzspkfzt_(cspice_t*, U_fp, doublereal *, char 
+	    *, char *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     logical found;
     doublereal j2stat[6];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer obscde;
     integer orfcde;
     integer ctrcde;
-    extern /* Subroutine */ int frmchg_(integer *, integer *, doublereal *, 
-	    doublereal *);
-    extern integer esrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int frmchg_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern integer esrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     logical attblk[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal tmpxfm[36]	/* was [6][6] */;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal xtrans[36]	/* was [6][6] */;
     integer evltyp;
     doublereal dlt;
 
 
     /* Module state */
-    spkcvt_state_t* __state = get_spkcvt_state();
+    spkcvt_state_t* __state = get_spkcvt_state(__global_state);
 /* $ Abstract */
 
 /*     Return the state, relative to a specified observer, of a target */
@@ -1361,10 +1365,10 @@ static spkcvt_state_t* get_spkcvt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKCVT", (ftnlen)6);
+    chkin_(__global_state, "SPKCVT", (ftnlen)6);
 
 /*     Counter initialization is done separately. */
 
@@ -1372,97 +1376,102 @@ static spkcvt_state_t* get_spkcvt_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
-	zzctruin_(__state->svctr3);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
+	zzctruin_(__global_state, __state->svctr3);
     }
-    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    if (__state->first || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        On the first pass, save the ID code of the J2000 frame. */
 
 	if (__state->first) {
-	    irfnum_("J2000", &__state->j2code, (ftnlen)5);
+	    irfnum_(__global_state, "J2000", &__state->j2code, (ftnlen)5);
 	}
 
 /*        Analyze the aberration correction string; produce an attribute */
 /*        block. */
 
-	zzvalcor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("SPKCVT", (ftnlen)6);
+	zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKCVT", (ftnlen)6);
 	    return 0;
 	}
 	__state->uselt = attblk[1];
 	__state->xmit = attblk[4];
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
 	__state->first = FALSE_;
     }
 
 /*     Convert the input name of the center of motion to */
 /*     an ID code. */
 
-    zzbods2c_(__state->svctr1, __state->svtctr, &__state->svccde, &
-	    __state->svfnd1, trgctr, &ctrcde, &found, (ftnlen)36, trgctr_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtctr, &
+	    __state->svccde, &__state->svfnd1, trgctr, &ctrcde, &found, (
+	    ftnlen)36, trgctr_len);
     if (! found) {
-	setmsg_("Could not map body name # to an ID code.", (ftnlen)40);
-	errch_("#", trgctr, (ftnlen)1, trgctr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SPKCVT", (ftnlen)6);
+	setmsg_(__global_state, "Could not map body name # to an ID code.", (
+		ftnlen)40);
+	errch_(__global_state, "#", trgctr, (ftnlen)1, trgctr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SPKCVT", (ftnlen)6);
 	return 0;
     }
 
 /*     Convert the input name of the observer to an ID code. */
 
-    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
-	    __state->svfnd2, obsrvr, &obscde, &found, (ftnlen)36, obsrvr_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svobsr, &
+	    __state->svobsc, &__state->svfnd2, obsrvr, &obscde, &found, (
+	    ftnlen)36, obsrvr_len);
     if (! found) {
-	setmsg_("Could not map body name # to an ID code.", (ftnlen)40);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SPKCVT", (ftnlen)6);
+	setmsg_(__global_state, "Could not map body name # to an ID code.", (
+		ftnlen)40);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SPKCVT", (ftnlen)6);
 	return 0;
     }
 
 /*     Look up the output frame's ID code. */
 
-    zznamfrm_(__state->svctr3, __state->svoref, &__state->svorfc, outref, &
-	    orfcde, (ftnlen)32, outref_len);
+    zznamfrm_(__global_state, __state->svctr3, __state->svoref, &
+	    __state->svorfc, outref, &orfcde, (ftnlen)32, outref_len);
     if (orfcde == 0) {
 
 /*        Only non-zero ID codes are legitimate.  Zero */
 /*        indicates that the frame wasn't recognized. */
 
-	setmsg_("The frame # was not recognized. Possible causes are that th"
-		"e frame name was misspelled or that a required frame kernel "
-		"has not been loaded.", (ftnlen)139);
-	errch_("#", outref, (ftnlen)1, outref_len);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
-	chkout_("SPKCVT", (ftnlen)6);
+	setmsg_(__global_state, "The frame # was not recognized. Possible ca"
+		"uses are that the frame name was misspelled or that a requir"
+		"ed frame kernel has not been loaded.", (ftnlen)139);
+	errch_(__global_state, "#", outref, (ftnlen)1, outref_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	chkout_(__global_state, "SPKCVT", (ftnlen)6);
 	return 0;
     }
 
 /*     Identify the frame evaluation locus. */
 
-    evltyp = esrchc_(refloc, &__state->c__3, __state->evlflg, refloc_len, (
-	    ftnlen)25);
+    evltyp = esrchc_(__global_state, refloc, &__state->c__3, __state->evlflg, 
+	    refloc_len, (ftnlen)25);
     if (evltyp == 0) {
 
 /*        REFLOC is not a valid evaluation choice. */
 
-	setmsg_("Output frame evaluation locus # was not recognized. Allowed"
-		" values are 'OBSERVER', 'TARGET', and 'CENTER'.", (ftnlen)106)
-		;
-	errch_("#", refloc, (ftnlen)1, refloc_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("SPKCVT", (ftnlen)6);
+	setmsg_(__global_state, "Output frame evaluation locus # was not rec"
+		"ognized. Allowed values are 'OBSERVER', 'TARGET', and 'CENTE"
+		"R'.", (ftnlen)106);
+	errch_(__global_state, "#", refloc, (ftnlen)1, refloc_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "SPKCVT", (ftnlen)6);
 	return 0;
     }
 
 /*     Store inputs required to evaluate the target's state relative to */
 /*     its center of motion. */
 
-    zzcvssta_(trgsta, &ctrcde, trgepc, trgref, trgref_len);
+    zzcvssta_(__global_state, trgsta, &ctrcde, trgepc, trgref, trgref_len);
 
 /*     Below, the routine that uses the inputs stored by ZZCVSSTA */
 /*     is ZZCVXSTA. ZZCVXSTA computes the geometric state of the */
@@ -1477,9 +1486,9 @@ static spkcvt_state_t* get_spkcvt_state() {
 /*        We evaluate the target frame at ET, regardless of */
 /*        the setting of EVLTYP. */
 
-	zzspkfzt_((U_fp)zzcvxsta_, et, outref, abcorr, &obscde, state, lt, 
-		outref_len, abcorr_len);
-	chkout_("SPKCVT", (ftnlen)6);
+	zzspkfzt_(__global_state, (U_fp)zzcvxsta_, et, outref, abcorr, &
+		obscde, state, lt, outref_len, abcorr_len);
+	chkout_(__global_state, "SPKCVT", (ftnlen)6);
 	return 0;
     }
 
@@ -1492,8 +1501,8 @@ static spkcvt_state_t* get_spkcvt_state() {
 /*        the output frame evaluation epoch; this is what ZZSPKFZT */
 /*        does. */
 
-	zzspkfzt_((U_fp)zzcvxsta_, et, outref, abcorr, &obscde, state, lt, 
-		outref_len, abcorr_len);
+	zzspkfzt_(__global_state, (U_fp)zzcvxsta_, et, outref, abcorr, &
+		obscde, state, lt, outref_len, abcorr_len);
     } else if (evltyp == 1) {
 
 /*        The output frame orientation is to be evaluated at the */
@@ -1503,17 +1512,18 @@ static spkcvt_state_t* get_spkcvt_state() {
 /*        observer, we will first look up the state in an inertial */
 /*        frame, then transform the state as necessary. */
 
-	zzspkfzt_((U_fp)zzcvxsta_, et, "J2000", abcorr, &obscde, j2stat, lt, (
-		ftnlen)5, abcorr_len);
+	zzspkfzt_(__global_state, (U_fp)zzcvxsta_, et, "J2000", abcorr, &
+		obscde, j2stat, lt, (ftnlen)5, abcorr_len);
 	if (orfcde == __state->j2code) {
-	    moved_(j2stat, &__state->c__6, state);
+	    moved_(__global_state, j2stat, &__state->c__6, state);
 	} else {
-	    frmchg_(&__state->j2code, &orfcde, et, xtrans);
-	    if (failed_()) {
-		chkout_("SPKCVT", (ftnlen)6);
+	    frmchg_(__global_state, &__state->j2code, &orfcde, et, xtrans);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SPKCVT", (ftnlen)6);
 		return 0;
 	    }
-	    mxvg_(xtrans, j2stat, &__state->c__6, &__state->c__6, state);
+	    mxvg_(__global_state, xtrans, j2stat, &__state->c__6, &
+		    __state->c__6, state);
 	}
     } else if (evltyp == 2) {
 
@@ -1543,10 +1553,10 @@ static spkcvt_state_t* get_spkcvt_state() {
 /*        Get the observer-target state in the J2000 frame, along */
 /*        with the light time and light time rate. */
 
-	zzspkfat_((U_fp)zzcvxsta_, et, "J2000", abcorr, &obscde, j2stat, lt, &
-		dlt, (ftnlen)5, abcorr_len);
-	if (failed_()) {
-	    chkout_("SPKCVT", (ftnlen)6);
+	zzspkfat_(__global_state, (U_fp)zzcvxsta_, et, "J2000", abcorr, &
+		obscde, j2stat, lt, &dlt, (ftnlen)5, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKCVT", (ftnlen)6);
 	    return 0;
 	}
 	if (orfcde == __state->j2code) {
@@ -1554,27 +1564,28 @@ static spkcvt_state_t* get_spkcvt_state() {
 /*           The output frame is J2000. No frame transformation is */
 /*           required. */
 
-	    moved_(j2stat, &__state->c__6, state);
+	    moved_(__global_state, j2stat, &__state->c__6, state);
 	} else {
 
 /*           Look up the state transformation from the J2000 frame to */
 /*           OUTREF at the light time corrected epoch. */
 
 	    d__1 = *et + s * *lt;
-	    frmchg_(&__state->j2code, &orfcde, &d__1, xtrans);
-	    if (failed_()) {
-		chkout_("SPKCVT", (ftnlen)6);
+	    frmchg_(__global_state, &__state->j2code, &orfcde, &d__1, xtrans);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SPKCVT", (ftnlen)6);
 		return 0;
 	    }
 
 /*           Adjust the transformation to account for the rate of change */
 /*           of light time. */
 
-	    zzcorsxf_(&__state->xmit, &dlt, xtrans, tmpxfm);
+	    zzcorsxf_(__global_state, &__state->xmit, &dlt, xtrans, tmpxfm);
 
 /*           Map the output state to the frame OUTREF. */
 
-	    mxvg_(tmpxfm, j2stat, &__state->c__6, &__state->c__6, state);
+	    mxvg_(__global_state, tmpxfm, j2stat, &__state->c__6, &
+		    __state->c__6, state);
 	}
     } else {
 
@@ -1582,14 +1593,14 @@ static spkcvt_state_t* get_spkcvt_state() {
 /*        supposed to have caught this problem earlier, so this */
 /*        is the result of a coding error. */
 
-	setmsg_("Output frame evaluation locus # was not recognized. [Coding"
-		" error].", (ftnlen)67);
-	errch_("#", refloc, (ftnlen)1, refloc_len);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("SPKCVT", (ftnlen)6);
+	setmsg_(__global_state, "Output frame evaluation locus # was not rec"
+		"ognized. [Coding error].", (ftnlen)67);
+	errch_(__global_state, "#", refloc, (ftnlen)1, refloc_len);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "SPKCVT", (ftnlen)6);
 	return 0;
     }
-    chkout_("SPKCVT", (ftnlen)6);
+    chkout_(__global_state, "SPKCVT", (ftnlen)6);
     return 0;
 } /* spkcvt_ */
 

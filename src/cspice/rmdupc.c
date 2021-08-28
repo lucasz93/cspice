@@ -8,29 +8,29 @@
 
 
 typedef int rmdupc_state_t;
-static rmdupc_state_t* get_rmdupc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rmdupc_state_t* get_rmdupc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RMDUPC ( Remove duplicates from a character array ) */
-/* Subroutine */ int rmdupc_(integer *nelt, char *array, ftnlen array_len)
+/* Subroutine */ int rmdupc_(cspice_t* __global_state, integer *nelt, char *
+	array, ftnlen array_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int shellc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int shellc_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    rmdupc_state_t* __state = get_rmdupc_state();
+    rmdupc_state_t* __state = get_rmdupc_state(__global_state);
 /* $ Abstract */
 
 /*      Remove duplicate elements from a character array. */
@@ -174,7 +174,7 @@ static rmdupc_state_t* get_rmdupc_state() {
 
 /*        Sort the array in place. */
 
-	shellc_(nelt, array, array_len);
+	shellc_(__global_state, nelt, array, array_len);
 
 /*        Drop duplicate entries. Compare adjacent entries, and move */
 /*        duplicates forward. (Duplicates are now adjacent, because of */
@@ -183,11 +183,12 @@ static rmdupc_state_t* get_rmdupc_state() {
 	j = 1;
 	i__1 = *nelt;
 	for (i__ = 2; i__ <= i__1; ++i__) {
-	    if (s_cmp(array + (i__ - 1) * array_len, array + (i__ - 2) * 
-		    array_len, array_len, array_len) != 0) {
+	    if (s_cmp(&__global_state->f2c, array + (i__ - 1) * array_len, 
+		    array + (i__ - 2) * array_len, array_len, array_len) != 0)
+		     {
 		++j;
-		s_copy(array + (j - 1) * array_len, array + (i__ - 1) * 
-			array_len, array_len, array_len);
+		s_copy(&__global_state->f2c, array + (j - 1) * array_len, 
+			array + (i__ - 1) * array_len, array_len, array_len);
 	    }
 	}
 	*nelt = j;

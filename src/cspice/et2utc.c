@@ -8,8 +8,7 @@
 
 
 extern et2utc_init_t __et2utc_init;
-static et2utc_state_t* get_et2utc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline et2utc_state_t* get_et2utc_state(cspice_t* state) {
 	if (!state->et2utc)
 		state->et2utc = __cspice_allocate_module(sizeof(
 	et2utc_state_t), &__et2utc_init, sizeof(__et2utc_init));
@@ -18,8 +17,9 @@ static et2utc_state_t* get_et2utc_state() {
 }
 
 /* $Procedure      ET2UTC ( Ephemeris Time to UTC ) */
-/* Subroutine */ int et2utc_(doublereal *et, char *format, integer *prec, 
-	char *utcstr, ftnlen format_len, ftnlen utcstr_len)
+/* Subroutine */ int et2utc_(cspice_t* __global_state, doublereal *et, char *
+	format, integer *prec, char *utcstr, ftnlen format_len, ftnlen 
+	utcstr_len)
 {
     /* Initialized data */
 
@@ -29,36 +29,40 @@ static et2utc_state_t* get_et2utc_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    double d_int(doublereal *), pow_di(doublereal *, integer *), d_nint(
-	    doublereal *);
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer), 
-	    i_indx(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    double d_int(f2c_state_t*, doublereal *), pow_di(f2c_state_t*, doublereal 
+	    *, integer *), d_nint(f2c_state_t*, doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer), i_indx(f2c_state_t*, char *, char *, 
+	    ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int dpstrf_(doublereal *, integer *, char *, char 
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int prefix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dpstrf_(cspice_t*, doublereal *, integer *, 
+	    char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern doublereal unitim_(cspice_t*, doublereal *, char *, char *, ftnlen,
+	     ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ttrans_(cspice_t*, char *, char *, doublereal 
 	    *, ftnlen, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern doublereal unitim_(doublereal *, char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ttrans_(char *, char *, doublereal *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
 
     /* Module state */
-    et2utc_state_t* __state = get_et2utc_state();
+    et2utc_state_t* __state = get_et2utc_state(__global_state);
 /* $ Abstract */
 
 /*      Convert an input time from ephemeris seconds past J2000 */
@@ -475,26 +479,29 @@ static et2utc_state_t* get_et2utc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ET2UTC", (ftnlen)6);
+    chkin_(__global_state, "ET2UTC", (ftnlen)6);
 
 /*     Convert FORMAT to uppercase for ease of comparison. Make sure it's */
 /*     one of the recognized formats. */
 
-    ucase_(format, __state->fmt, format_len, (ftnlen)4);
-    if (s_cmp(__state->fmt, "J", (ftnlen)4, (ftnlen)1) != 0 && s_cmp(
-	    __state->fmt, "C", (ftnlen)4, (ftnlen)1) != 0 && s_cmp(
-	    __state->fmt, "D", (ftnlen)4, (ftnlen)1) != 0 && s_cmp(
-	    __state->fmt, "ISOD", (ftnlen)4, (ftnlen)4) != 0 && s_cmp(
-	    __state->fmt, "ISOC", (ftnlen)4, (ftnlen)4) != 0) {
-	setmsg_("ET2UTC: Format specification for output time string is not "
-		"recognized. Valid specifications are: 'C', 'D', 'J', 'ISOC',"
-		" or 'ISOD'. The supplied format was '#'. ", (ftnlen)160);
-	errch_("#", format, (ftnlen)1, format_len);
-	sigerr_("SPICE(INVALIDTIMEFORMAT)", (ftnlen)24);
-	chkout_("ET2UTC", (ftnlen)6);
+    ucase_(__global_state, format, __state->fmt, format_len, (ftnlen)4);
+    if (s_cmp(&__global_state->f2c, __state->fmt, "J", (ftnlen)4, (ftnlen)1) 
+	    != 0 && s_cmp(&__global_state->f2c, __state->fmt, "C", (ftnlen)4, 
+	    (ftnlen)1) != 0 && s_cmp(&__global_state->f2c, __state->fmt, 
+	    "D", (ftnlen)4, (ftnlen)1) != 0 && s_cmp(&__global_state->f2c, 
+	    __state->fmt, "ISOD", (ftnlen)4, (ftnlen)4) != 0 && s_cmp(&
+	    __global_state->f2c, __state->fmt, "ISOC", (ftnlen)4, (ftnlen)4) 
+	    != 0) {
+	setmsg_(__global_state, "ET2UTC: Format specification for output tim"
+		"e string is not recognized. Valid specifications are: 'C', '"
+		"D', 'J', 'ISOC', or 'ISOD'. The supplied format was '#'. ", (
+		ftnlen)160);
+	errch_(__global_state, "#", format, (ftnlen)1, format_len);
+	sigerr_(__global_state, "SPICE(INVALIDTIMEFORMAT)", (ftnlen)24);
+	chkout_(__global_state, "ET2UTC", (ftnlen)6);
 	return 0;
     }
 
@@ -507,19 +514,23 @@ static et2utc_state_t* get_et2utc_state() {
 /*     If the output is Julian Date, we're ready to go. Remember that */
 /*     the day part of Julian Date already has seven digits built in. */
 
-    if (s_cmp(__state->fmt, "J", (ftnlen)4, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, __state->fmt, "J", (ftnlen)4, (ftnlen)1) 
+	    == 0) {
 	__state->tvec[0] = *et;
-	ttrans_("TDB", "JDUTC", __state->tvec, (ftnlen)3, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("ET2UTC", (ftnlen)6);
+	ttrans_(__global_state, "TDB", "JDUTC", __state->tvec, (ftnlen)3, (
+		ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ET2UTC", (ftnlen)6);
 	    return 0;
 	}
 	i__1 = __state->myprec + 7;
-	dpstrf_(__state->tvec, &i__1, "F", __state->str, (ftnlen)1, (ftnlen)
-		80);
-	prefix_("JD", &__state->c__0, __state->str, (ftnlen)2, (ftnlen)80);
-	s_copy(utcstr, __state->str, utcstr_len, (ftnlen)80);
-	chkout_("ET2UTC", (ftnlen)6);
+	dpstrf_(__global_state, __state->tvec, &i__1, "F", __state->str, (
+		ftnlen)1, (ftnlen)80);
+	prefix_(__global_state, "JD", &__state->c__0, __state->str, (ftnlen)2,
+		 (ftnlen)80);
+	s_copy(&__global_state->f2c, utcstr, __state->str, utcstr_len, (
+		ftnlen)80);
+	chkout_(__global_state, "ET2UTC", (ftnlen)6);
 	return 0;
     }
 
@@ -527,7 +538,8 @@ static et2utc_state_t* get_et2utc_state() {
 /*     to construct a calendar format string. First thing to */
 /*     do is convert from ET to TAI. */
 
-    __state->tai = unitim_(et, "TDB", "TAI", (ftnlen)3, (ftnlen)3);
+    __state->tai = unitim_(__global_state, et, "TDB", "TAI", (ftnlen)3, (
+	    ftnlen)3);
 
 /*     We're going to break up TAI into an integer and a */
 /*     fractional part.  The integer will be the greatest */
@@ -556,7 +568,7 @@ static et2utc_state_t* get_et2utc_state() {
 /*     is negative and is not already an integer, the result we */
 /*     want is one less than AINT(TAI). */
 
-    __state->whlsec = d_int(&__state->tai);
+    __state->whlsec = d_int(&__global_state->f2c, &__state->tai);
     if (__state->tai < 0. && __state->tai != __state->whlsec) {
 	__state->whlsec += -1.;
     }
@@ -570,10 +582,10 @@ static et2utc_state_t* get_et2utc_state() {
 /*     10**MYPREC. */
 
 
-    d__1 = pow_di(&__state->c_b22, &__state->myprec);
-    __state->scale = d_nint(&d__1);
+    d__1 = pow_di(&__global_state->f2c, &__state->c_b22, &__state->myprec);
+    __state->scale = d_nint(&__global_state->f2c, &d__1);
     d__1 = __state->scale * (__state->tai - __state->whlsec);
-    __state->frcsec = d_nint(&d__1);
+    __state->frcsec = d_nint(&__global_state->f2c, &d__1);
 
 /*     If a carry occurred, the fraction becomes zero, and */
 /*     we must increment WHLSEC. */
@@ -592,19 +604,21 @@ static et2utc_state_t* get_et2utc_state() {
 /*     assembled. */
 
     __state->tvec[0] = __state->whlsec;
-    if (s_cmp(__state->fmt, "C", (ftnlen)4, (ftnlen)1) == 0 || s_cmp(
-	    __state->fmt, "ISOC", (ftnlen)4, (ftnlen)4) == 0) {
-	ttrans_("TAI", "YMD", __state->tvec, (ftnlen)3, (ftnlen)3);
-	if (failed_()) {
-	    chkout_("ET2UTC", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, __state->fmt, "C", (ftnlen)4, (ftnlen)1) 
+	    == 0 || s_cmp(&__global_state->f2c, __state->fmt, "ISOC", (ftnlen)
+	    4, (ftnlen)4) == 0) {
+	ttrans_(__global_state, "TAI", "YMD", __state->tvec, (ftnlen)3, (
+		ftnlen)3);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ET2UTC", (ftnlen)6);
 	    return 0;
 	}
-	__state->year = i_dnnt(__state->tvec);
-	__state->month = i_dnnt(&__state->tvec[1]);
-	__state->day = i_dnnt(&__state->tvec[2]);
-	__state->hour = i_dnnt(&__state->tvec[3]);
-	__state->minute = i_dnnt(&__state->tvec[4]);
-	__state->second = i_dnnt(&__state->tvec[5]);
+	__state->year = i_dnnt(&__global_state->f2c, __state->tvec);
+	__state->month = i_dnnt(&__global_state->f2c, &__state->tvec[1]);
+	__state->day = i_dnnt(&__global_state->f2c, &__state->tvec[2]);
+	__state->hour = i_dnnt(&__global_state->f2c, &__state->tvec[3]);
+	__state->minute = i_dnnt(&__global_state->f2c, &__state->tvec[4]);
+	__state->second = i_dnnt(&__global_state->f2c, &__state->tvec[5]);
 
 /*        The beginning of the string is going to be the year. */
 /*        Depending upon the size of the year, it may or */
@@ -612,13 +626,14 @@ static et2utc_state_t* get_et2utc_state() {
 /*        string has a fixed size.  We set up that portion of the */
 /*        string now.  First fill in the month... */
 
-	if (s_cmp(__state->fmt, "C", (ftnlen)4, (ftnlen)1) == 0) {
-	    s_copy(__state->endstr, " MMM 00 00:00:00", (ftnlen)80, (ftnlen)
-		    16);
-	    s_copy(__state->endstr + 1, __state->mthnam + ((i__1 = 
-		    __state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		    "mthnam", i__1, "et2utc_", (ftnlen)650)) * 3, (ftnlen)3, (
-		    ftnlen)3);
+	if (s_cmp(&__global_state->f2c, __state->fmt, "C", (ftnlen)4, (ftnlen)
+		1) == 0) {
+	    s_copy(&__global_state->f2c, __state->endstr, " MMM 00 00:00:00", 
+		    (ftnlen)80, (ftnlen)16);
+	    s_copy(&__global_state->f2c, __state->endstr + 1, __state->mthnam 
+		    + ((i__1 = __state->month - 1) < 12 && 0 <= i__1 ? i__1 : 
+		    s_rnge(&__global_state->f2c, "mthnam", i__1, "et2utc_", (
+		    ftnlen)650)) * 3, (ftnlen)3, (ftnlen)3);
 
 /*           ... and then fill in the day portion of the string. */
 
@@ -631,14 +646,14 @@ static et2utc_state_t* get_et2utc_state() {
 	    i__5 = 1, i__6 = __state->day / 10;
 	    __state->bday = __state->eday - (min(i__1,i__2) + min(i__3,i__4) 
 		    + min(i__5,i__6) + 1) + 1;
-	    intstr_(&__state->day, __state->endstr + (__state->bday - 1), 
-		    __state->eday - (__state->bday - 1));
+	    intstr_(__global_state, &__state->day, __state->endstr + (
+		    __state->bday - 1), __state->eday - (__state->bday - 1));
 	    __state->ehr = 10;
 	    __state->emn = 13;
 	    __state->esc = 16;
 	} else {
-	    s_copy(__state->endstr, "-0M-00T00:00:00", (ftnlen)80, (ftnlen)15)
-		    ;
+	    s_copy(&__global_state->f2c, __state->endstr, "-0M-00T00:00:00", (
+		    ftnlen)80, (ftnlen)15);
 	    __state->eday = 6;
 /* Computing MIN */
 	    i__1 = 1, i__2 = __state->day / 1000;
@@ -657,10 +672,11 @@ static et2utc_state_t* get_et2utc_state() {
 	    i__5 = 1, i__6 = __state->month / 10;
 	    __state->bmonth = __state->emonth - (min(i__1,i__2) + min(i__3,
 		    i__4) + min(i__5,i__6) + 1) + 1;
-	    intstr_(&__state->month, __state->endstr + (__state->bmonth - 1), 
-		    __state->emonth - (__state->bmonth - 1));
-	    intstr_(&__state->day, __state->endstr + (__state->bday - 1), 
-		    __state->eday - (__state->bday - 1));
+	    intstr_(__global_state, &__state->month, __state->endstr + (
+		    __state->bmonth - 1), __state->emonth - (__state->bmonth 
+		    - 1));
+	    intstr_(__global_state, &__state->day, __state->endstr + (
+		    __state->bday - 1), __state->eday - (__state->bday - 1));
 	    __state->ehr = 9;
 	    __state->emn = 12;
 	    __state->esc = 15;
@@ -670,17 +686,18 @@ static et2utc_state_t* get_et2utc_state() {
 /*        We must have day of year format.  Convert TAI to that */
 /*        format. */
 
-	ttrans_("TAI", "YD", __state->tvec, (ftnlen)3, (ftnlen)2);
-	if (failed_()) {
-	    chkout_("ET2UTC", (ftnlen)6);
+	ttrans_(__global_state, "TAI", "YD", __state->tvec, (ftnlen)3, (
+		ftnlen)2);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ET2UTC", (ftnlen)6);
 	    return 0;
 	}
-	__state->year = i_dnnt(__state->tvec);
+	__state->year = i_dnnt(&__global_state->f2c, __state->tvec);
 	__state->month = 1;
-	__state->day = i_dnnt(&__state->tvec[1]);
-	__state->hour = i_dnnt(&__state->tvec[2]);
-	__state->minute = i_dnnt(&__state->tvec[3]);
-	__state->second = i_dnnt(&__state->tvec[4]);
+	__state->day = i_dnnt(&__global_state->f2c, &__state->tvec[1]);
+	__state->hour = i_dnnt(&__global_state->f2c, &__state->tvec[2]);
+	__state->minute = i_dnnt(&__global_state->f2c, &__state->tvec[3]);
+	__state->second = i_dnnt(&__global_state->f2c, &__state->tvec[4]);
 
 /*        As in the previous case, the end of the output string will */
 /*        have a fixed size.  We fill in the day portion of the string */
@@ -688,9 +705,10 @@ static et2utc_state_t* get_et2utc_state() {
 /*        minutes and seconds appear in the same location in both */
 /*        day of year and calendar format of strings. */
 
-	if (s_cmp(__state->fmt, "D", (ftnlen)4, (ftnlen)1) == 0) {
-	    s_copy(__state->endstr, "-000 // 00:00:00", (ftnlen)80, (ftnlen)
-		    16);
+	if (s_cmp(&__global_state->f2c, __state->fmt, "D", (ftnlen)4, (ftnlen)
+		1) == 0) {
+	    s_copy(&__global_state->f2c, __state->endstr, "-000 // 00:00:00", 
+		    (ftnlen)80, (ftnlen)16);
 	    __state->eday = 4;
 /* Computing MIN */
 	    i__1 = 1, i__2 = __state->day / 1000;
@@ -700,13 +718,14 @@ static et2utc_state_t* get_et2utc_state() {
 	    i__5 = 1, i__6 = __state->day / 10;
 	    __state->bday = __state->eday - (min(i__1,i__2) + min(i__3,i__4) 
 		    + min(i__5,i__6) + 1) + 1;
-	    intstr_(&__state->day, __state->endstr + (__state->bday - 1), 
-		    __state->eday - (__state->bday - 1));
+	    intstr_(__global_state, &__state->day, __state->endstr + (
+		    __state->bday - 1), __state->eday - (__state->bday - 1));
 	    __state->ehr = 10;
 	    __state->emn = 13;
 	    __state->esc = 16;
 	} else {
-	    s_copy(__state->endstr, "-000T00:00:00", (ftnlen)80, (ftnlen)13);
+	    s_copy(&__global_state->f2c, __state->endstr, "-000T00:00:00", (
+		    ftnlen)80, (ftnlen)13);
 	    __state->eday = 4;
 /* Computing MIN */
 	    i__1 = 1, i__2 = __state->day / 1000;
@@ -716,8 +735,8 @@ static et2utc_state_t* get_et2utc_state() {
 	    i__5 = 1, i__6 = __state->day / 10;
 	    __state->bday = __state->eday - (min(i__1,i__2) + min(i__3,i__4) 
 		    + min(i__5,i__6) + 1) + 1;
-	    intstr_(&__state->day, __state->endstr + (__state->bday - 1), 
-		    __state->eday - (__state->bday - 1));
+	    intstr_(__global_state, &__state->day, __state->endstr + (
+		    __state->bday - 1), __state->eday - (__state->bday - 1));
 	    __state->ehr = 7;
 	    __state->emn = 10;
 	    __state->esc = 13;
@@ -751,12 +770,12 @@ static et2utc_state_t* get_et2utc_state() {
     i__5 = 1, i__6 = __state->second / 10;
     __state->bsc = __state->esc - (min(i__1,i__2) + min(i__3,i__4) + min(i__5,
 	    i__6) + 1) + 1;
-    intstr_(&__state->hour, __state->endstr + (__state->bhr - 1), 
-	    __state->ehr - (__state->bhr - 1));
-    intstr_(&__state->minute, __state->endstr + (__state->bmn - 1), 
-	    __state->emn - (__state->bmn - 1));
-    intstr_(&__state->second, __state->endstr + (__state->bsc - 1), 
-	    __state->esc - (__state->bsc - 1));
+    intstr_(__global_state, &__state->hour, __state->endstr + (__state->bhr - 
+	    1), __state->ehr - (__state->bhr - 1));
+    intstr_(__global_state, &__state->minute, __state->endstr + (__state->bmn 
+	    - 1), __state->emn - (__state->bmn - 1));
+    intstr_(__global_state, &__state->second, __state->endstr + (__state->bsc 
+	    - 1), __state->esc - (__state->bsc - 1));
 
 /*     Append the fractional part of the seconds component. */
 
@@ -775,13 +794,14 @@ static et2utc_state_t* get_et2utc_state() {
 
 	__state->frcsec += 1.;
 	i__1 = __state->myprec + 1;
-	dpstrf_(&__state->frcsec, &i__1, "F", __state->fract, (ftnlen)1, (
-		ftnlen)80);
-	__state->i__ = i_indx(__state->fract, ".", (ftnlen)80, (ftnlen)1);
+	dpstrf_(__global_state, &__state->frcsec, &i__1, "F", __state->fract, 
+		(ftnlen)1, (ftnlen)80);
+	__state->i__ = i_indx(&__global_state->f2c, __state->fract, ".", (
+		ftnlen)80, (ftnlen)1);
 	i__1 = __state->esc;
-	s_copy(__state->endstr + i__1, __state->fract + (__state->i__ - 1), 
-		80 - i__1, __state->i__ + __state->myprec - (__state->i__ - 1)
-		);
+	s_copy(&__global_state->f2c, __state->endstr + i__1, __state->fract + 
+		(__state->i__ - 1), 80 - i__1, __state->i__ + __state->myprec 
+		- (__state->i__ - 1));
     }
 
 /*     The end of the time string is now complete.  We need to */
@@ -793,30 +813,33 @@ static et2utc_state_t* get_et2utc_state() {
 /*     999 A.D.-019 // 12:13:18. */
 
     if (__state->year >= 1000) {
-	intstr_(&__state->year, __state->str, (ftnlen)80);
+	intstr_(__global_state, &__state->year, __state->str, (ftnlen)80);
     } else if (__state->year > 0) {
-	intstr_(&__state->year, __state->str, (ftnlen)80);
-	if (s_cmp(__state->fmt, "C", (ftnlen)4, (ftnlen)1) == 0 || s_cmp(
-		__state->fmt, "D", (ftnlen)4, (ftnlen)1) == 0) {
-	    suffix_("A.D.", &__state->c__1, __state->str, (ftnlen)4, (ftnlen)
-		    80);
+	intstr_(__global_state, &__state->year, __state->str, (ftnlen)80);
+	if (s_cmp(&__global_state->f2c, __state->fmt, "C", (ftnlen)4, (ftnlen)
+		1) == 0 || s_cmp(&__global_state->f2c, __state->fmt, "D", (
+		ftnlen)4, (ftnlen)1) == 0) {
+	    suffix_(__global_state, "A.D.", &__state->c__1, __state->str, (
+		    ftnlen)4, (ftnlen)80);
 	    *(unsigned char *)__state->endstr = ' ';
 	}
     } else if (__state->year <= 0) {
-	if (s_cmp(__state->fmt, "C", (ftnlen)4, (ftnlen)1) == 0 || s_cmp(
-		__state->fmt, "D", (ftnlen)4, (ftnlen)1) == 0) {
+	if (s_cmp(&__global_state->f2c, __state->fmt, "C", (ftnlen)4, (ftnlen)
+		1) == 0 || s_cmp(&__global_state->f2c, __state->fmt, "D", (
+		ftnlen)4, (ftnlen)1) == 0) {
 	    __state->year = -__state->year + 1;
-	    intstr_(&__state->year, __state->str, (ftnlen)80);
-	    suffix_("B.C.", &__state->c__1, __state->str, (ftnlen)4, (ftnlen)
-		    80);
+	    intstr_(__global_state, &__state->year, __state->str, (ftnlen)80);
+	    suffix_(__global_state, "B.C.", &__state->c__1, __state->str, (
+		    ftnlen)4, (ftnlen)80);
 	    *(unsigned char *)__state->endstr = ' ';
 	} else {
 	    __state->year = -__state->year + 1;
-	    setmsg_("The year of the ET epoch supplied is # B.C.  Years in t"
-		    "his era are not supported in ISO format. ", (ftnlen)96);
-	    errint_("#", &__state->year, (ftnlen)1);
-	    sigerr_("SPICE(YEAROUTOFRANGE)", (ftnlen)21);
-	    chkout_("ET2UTC", (ftnlen)6);
+	    setmsg_(__global_state, "The year of the ET epoch supplied is # "
+		    "B.C.  Years in this era are not supported in ISO format. "
+		    , (ftnlen)96);
+	    errint_(__global_state, "#", &__state->year, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(YEAROUTOFRANGE)", (ftnlen)21);
+	    chkout_(__global_state, "ET2UTC", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -824,10 +847,11 @@ static et2utc_state_t* get_et2utc_state() {
 /*     Finally append the ENDSTR to STR to get the fully formatted */
 /*     string. */
 
-    suffix_(__state->endstr, &__state->c__0, __state->str, (ftnlen)80, (
-	    ftnlen)80);
-    s_copy(utcstr, __state->str, utcstr_len, (ftnlen)80);
-    chkout_("ET2UTC", (ftnlen)6);
+    suffix_(__global_state, __state->endstr, &__state->c__0, __state->str, (
+	    ftnlen)80, (ftnlen)80);
+    s_copy(&__global_state->f2c, utcstr, __state->str, utcstr_len, (ftnlen)80)
+	    ;
+    chkout_(__global_state, "ET2UTC", (ftnlen)6);
     return 0;
 } /* et2utc_ */
 

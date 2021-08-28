@@ -8,24 +8,23 @@
 
 
 typedef int tkvrsn_state_t;
-static tkvrsn_state_t* get_tkvrsn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline tkvrsn_state_t* get_tkvrsn_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      TKVRSN ( Toolkit version strings ) */
-/* Subroutine */ int tkvrsn_(char *item, char *verstr, ftnlen item_len, 
-	ftnlen verstr_len)
+/* Subroutine */ int tkvrsn_(cspice_t* __global_state, char *item, char *
+	verstr, ftnlen item_len, ftnlen verstr_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
 
 
     /* Module state */
-    tkvrsn_state_t* __state = get_tkvrsn_state();
+    tkvrsn_state_t* __state = get_tkvrsn_state(__global_state);
 /* $ Abstract */
 
 /*     Given an item such as the toolkit or an entry point name, return */
@@ -288,10 +287,11 @@ static tkvrsn_state_t* get_tkvrsn_state() {
 /*     At the current time only the TOOLKIT version number is */
 /*     defined. */
 
-    if (eqstr_(item, "TOOLKIT", item_len, (ftnlen)7)) {
-	s_copy(verstr, "N0066", verstr_len, (ftnlen)5);
+    if (eqstr_(__global_state, item, "TOOLKIT", item_len, (ftnlen)7)) {
+	s_copy(&__global_state->f2c, verstr, "N0066", verstr_len, (ftnlen)5);
     } else {
-	s_copy(verstr, "No version found.", verstr_len, (ftnlen)17);
+	s_copy(&__global_state->f2c, verstr, "No version found.", verstr_len, 
+		(ftnlen)17);
     }
     return 0;
 } /* tkvrsn_ */

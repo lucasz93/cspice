@@ -9,9 +9,8 @@ extern void z_putc(int);
 #endif
 
  static int
-z_wSL(Void)
+z_wSL(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	while(f2c->f__recpos < f2c->f__svic->icirlen)
 		z_putc(' ');
 	return z_rnew();
@@ -19,12 +18,11 @@ z_wSL(Void)
 
  static void
 #ifdef KR_headers
-c_liw(a) icilist *a;
+c_liw(f2c, a) f2c_state_t *f2c; icilist *a;
 #else
-c_liw(icilist *a)
+c_liw(f2c_state_t *f2c, icilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	f2c->f__reading = 0;
 	f2c->f__external = 0;
 	f2c->f__formatted = 1;
@@ -43,35 +41,34 @@ c_liw(icilist *a)
 
  integer
 #ifdef KR_headers
-s_wsni(a) icilist *a;
+s_wsni(f2c, a) f2c_state_t *f2c; icilist *a;
 #else
-s_wsni(icilist *a)
+s_wsni(f2c_state_t *f2c, icilist *a)
 #endif
 {
 	cilist ca;
 
-	c_liw(a);
+	c_liw(f2c, a);
 	ca.cifmt = a->icifmt;
 	x_wsne(&ca);
-	z_wSL();
+	z_wSL(f2c);
 	return 0;
 	}
 
  integer
 #ifdef KR_headers
-s_wsli(a) icilist *a;
+s_wsli(f2c, a) f2c_state_t *f2c; icilist *a;
 #else
-s_wsli(icilist *a)
+s_wsli(f2c_state_t *f2c, icilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	f2c->f__lioproc = l_write;
-	c_liw(a);
+	c_liw(f2c, a);
 	return(0);
 	}
 
-integer e_wsli(Void)
+integer e_wsli(f2c_state_t *f2c)
 {
-	z_wSL();
+	z_wSL(f2c);
 	return(0);
 	}

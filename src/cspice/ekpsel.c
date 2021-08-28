@@ -8,8 +8,7 @@
 
 
 extern ekpsel_init_t __ekpsel_init;
-static ekpsel_state_t* get_ekpsel_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekpsel_state_t* get_ekpsel_state(cspice_t* state) {
 	if (!state->ekpsel)
 		state->ekpsel = __cspice_allocate_module(sizeof(
 	ekpsel_state_t), &__ekpsel_init, sizeof(__ekpsel_init));
@@ -18,10 +17,11 @@ static ekpsel_state_t* get_ekpsel_state() {
 }
 
 /* $Procedure  EKPSEL ( EK, parse SELECT clause ) */
-/* Subroutine */ int ekpsel_(char *query, integer *n, integer *xbegs, integer 
-	*xends, char *xtypes, char *xclass, char *tabs, char *cols, logical *
-	error, char *errmsg, ftnlen query_len, ftnlen xtypes_len, ftnlen 
-	xclass_len, ftnlen tabs_len, ftnlen cols_len, ftnlen errmsg_len)
+/* Subroutine */ int ekpsel_(cspice_t* __global_state, char *query, integer *
+	n, integer *xbegs, integer *xends, char *xtypes, char *xclass, char *
+	tabs, char *cols, logical *error, char *errmsg, ftnlen query_len, 
+	ftnlen xtypes_len, ftnlen xclass_len, ftnlen tabs_len, ftnlen 
+	cols_len, ftnlen errmsg_len)
 {
     /* Initialized data */
 
@@ -30,42 +30,42 @@ static ekpsel_state_t* get_ekpsel_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     char qtab[64];
-    extern /* Subroutine */ int zzekencd_(char *, integer *, char *, 
-	    doublereal *, logical *, char *, integer *, ftnlen, ftnlen, 
+    extern /* Subroutine */ int zzekencd_(cspice_t*, char *, integer *, char *
+	    , doublereal *, logical *, char *, integer *, ftnlen, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzekqtab_(integer *, char *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekqini_(integer *, integer *, integer *, 
-	    char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekqsel_(integer *, char *, integer *, 
-	    integer *, integer *, char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqtab_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqini_(cspice_t*, integer *, integer *, 
+	    integer *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzekqsel_(cspice_t*, integer *, char *, 
+	    integer *, integer *, integer *, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen, ftnlen);
     integer i__;
-    extern /* Subroutine */ int ekcii_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int ekcii_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     char eqryc[2000];
     doublereal eqryd[100];
     integer eqryi[27875];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     char aka[64];
     char column[32];
     integer attdsc[6];
     integer colidx;
     integer errptr;
     integer tabidx;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    ekpsel_state_t* __state = get_ekpsel_state();
+    ekpsel_state_t* __state = get_ekpsel_state(__global_state);
 /* $ Abstract */
 
 /*     Parse the SELECT clause of an EK query, returning full particulars */
@@ -1116,54 +1116,56 @@ static ekpsel_state_t* get_ekpsel_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKPSEL", (ftnlen)6);
+	chkin_(__global_state, "EKPSEL", (ftnlen)6);
     }
 
 /*     Initialize the encoded query each time, for safety. */
 
-    zzekqini_(&__state->c__27869, &__state->c__100, eqryi, eqryc, eqryd, (
-	    ftnlen)2000);
+    zzekqini_(__global_state, &__state->c__27869, &__state->c__100, eqryi, 
+	    eqryc, eqryd, (ftnlen)2000);
 
 /*     Encode the input query. */
 
-    zzekencd_(query, eqryi, eqryc, eqryd, error, errmsg, &errptr, query_len, (
-	    ftnlen)2000, errmsg_len);
+    zzekencd_(__global_state, query, eqryi, eqryc, eqryd, error, errmsg, &
+	    errptr, query_len, (ftnlen)2000, errmsg_len);
     if (*error) {
-	chkout_("EKPSEL", (ftnlen)6);
+	chkout_(__global_state, "EKPSEL", (ftnlen)6);
 	return 0;
     }
 
 /*     Look up the number of SELECT columns.  For each column, look up */
 /*     the parent table, the alias, and the column's name. */
 
-    zzekreqi_(eqryi, "NUM_SELECT_COLS", n, (ftnlen)15);
+    zzekreqi_(__global_state, eqryi, "NUM_SELECT_COLS", n, (ftnlen)15);
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	zzekqsel_(eqryi, eqryc, &i__, &xbegs[i__ - 1], &xends[i__ - 1], qtab, 
-		&tabidx, cols + (i__ - 1) * cols_len, &colidx, (ftnlen)2000, (
-		ftnlen)64, cols_len);
+	zzekqsel_(__global_state, eqryi, eqryc, &i__, &xbegs[i__ - 1], &xends[
+		i__ - 1], qtab, &tabidx, cols + (i__ - 1) * cols_len, &colidx,
+		 (ftnlen)2000, (ftnlen)64, cols_len);
 
 /*        Make the table index to the table name. */
 
-	zzekqtab_(eqryi, eqryc, &tabidx, tabs + (i__ - 1) * tabs_len, aka, (
-		ftnlen)2000, tabs_len, (ftnlen)64);
+	zzekqtab_(__global_state, eqryi, eqryc, &tabidx, tabs + (i__ - 1) * 
+		tabs_len, aka, (ftnlen)2000, tabs_len, (ftnlen)64);
 
 /*        Currently, every expression is a column. */
 
-	s_copy(xclass + (i__ - 1) * xclass_len, "COL", xclass_len, (ftnlen)3);
+	s_copy(&__global_state->f2c, xclass + (i__ - 1) * xclass_len, "COL", 
+		xclass_len, (ftnlen)3);
 
 /*        Look up the data type of the column. */
 
-	ekcii_(tabs + (i__ - 1) * tabs_len, &colidx, column, attdsc, tabs_len,
-		 (ftnlen)32);
-	s_copy(xtypes + (i__ - 1) * xtypes_len, __state->chrtyp + (((i__2 = 
-		attdsc[1] - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge("chrtyp", 
-		i__2, "ekpsel_", (ftnlen)498)) << 2), xtypes_len, (ftnlen)4);
+	ekcii_(__global_state, tabs + (i__ - 1) * tabs_len, &colidx, column, 
+		attdsc, tabs_len, (ftnlen)32);
+	s_copy(&__global_state->f2c, xtypes + (i__ - 1) * xtypes_len, 
+		__state->chrtyp + (((i__2 = attdsc[1] - 1) < 4 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "chrtyp", i__2, "ekpsel_",
+		 (ftnlen)498)) << 2), xtypes_len, (ftnlen)4);
     }
-    chkout_("EKPSEL", (ftnlen)6);
+    chkout_(__global_state, "EKPSEL", (ftnlen)6);
     return 0;
 } /* ekpsel_ */
 

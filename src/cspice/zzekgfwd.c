@@ -8,35 +8,36 @@
 
 
 typedef int zzekgfwd_state_t;
-static zzekgfwd_state_t* get_zzekgfwd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekgfwd_state_t* get_zzekgfwd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKGFWD ( EK, get forward pointer for data page ) */
-/* Subroutine */ int zzekgfwd_(integer *handle, integer *type__, integer *p, 
-	integer *fward)
+/* Subroutine */ int zzekgfwd_(cspice_t* __global_state, integer *handle, 
+	integer *type__, integer *p, integer *fward)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer base;
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
-    doublereal dpptr;
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekpgbs_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzekgei_(integer *, integer *, integer *);
+    doublereal dpptr;
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasrdd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekgei_(cspice_t*, integer *, integer *, 
+	    integer *);
 
 
     /* Module state */
-    zzekgfwd_state_t* __state = get_zzekgfwd_state();
+    zzekgfwd_state_t* __state = get_zzekgfwd_state(__global_state);
 /* $ Abstract */
 
 /*     Return the forward data pointer for a specified EK data page. */
@@ -440,8 +441,8 @@ static zzekgfwd_state_t* get_zzekgfwd_state() {
 
 /*     Look up the base address of the page. */
 
-    zzekpgbs_(type__, p, &base);
-    if (failed_()) {
+    zzekpgbs_(__global_state, type__, p, &base);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (*type__ == 1) {
@@ -449,15 +450,15 @@ static zzekgfwd_state_t* get_zzekgfwd_state() {
 /*        Get the encoded pointer. */
 
 	i__1 = base + 1015;
-	zzekgei_(handle, &i__1, fward);
+	zzekgei_(__global_state, handle, &i__1, fward);
     } else if (*type__ == 2) {
 
 /*        Convert the d.p. pointer to integer type. */
 
 	i__1 = base + 127;
 	i__2 = base + 127;
-	dasrdd_(handle, &i__1, &i__2, &dpptr);
-	*fward = i_dnnt(&dpptr);
+	dasrdd_(__global_state, handle, &i__1, &i__2, &dpptr);
+	*fward = i_dnnt(&__global_state->f2c, &dpptr);
     } else {
 
 /*        The remaining possibility is that TYPE is INT.  If we had had */
@@ -465,7 +466,7 @@ static zzekgfwd_state_t* get_zzekgfwd_state() {
 
 	i__1 = base + 255;
 	i__2 = base + 255;
-	dasrdi_(handle, &i__1, &i__2, fward);
+	dasrdi_(__global_state, handle, &i__1, &i__2, fward);
     }
     return 0;
 } /* zzekgfwd_ */

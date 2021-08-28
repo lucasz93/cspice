@@ -8,13 +8,13 @@
 
 
 typedef int wnextd_state_t;
-static wnextd_state_t* get_wnextd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wnextd_state_t* get_wnextd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      WNEXTD ( Extract the endpoints from a DP window ) */
-/* Subroutine */ int wnextd_(char *side, doublereal *window, ftnlen side_len)
+/* Subroutine */ int wnextd_(cspice_t* __global_state, char *side, doublereal 
+	*window, ftnlen side_len)
 {
     /* System generated locals */
     integer i__1;
@@ -22,17 +22,18 @@ static wnextd_state_t* get_wnextd_state() {
     /* Local variables */
     integer card;
     integer i__;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    wnextd_state_t* __state = get_wnextd_state();
+    wnextd_state_t* __state = get_wnextd_state(__global_state);
 /* $ Abstract */
 
 /*     Extract the left or right endpoints from a double precision */
@@ -187,16 +188,16 @@ static wnextd_state_t* get_wnextd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("WNEXTD", (ftnlen)6);
+	chkin_(__global_state, "WNEXTD", (ftnlen)6);
     }
 
 /*     Get the cardinality of the window. (The size is not important; */
 /*     this routine can't create any new intervals.) */
 
-    card = cardd_(window);
+    card = cardd_(__global_state, window);
 
 /*     Step through the window, keeping one endpoint from each interval. */
 /*     For the sake of efficiency, we have separate loops for the two */
@@ -214,11 +215,11 @@ static wnextd_state_t* get_wnextd_state() {
 	    window[i__ + 5] = window[i__ + 6];
 	}
     } else {
-	setmsg_("SIDE was *.", (ftnlen)11);
-	errch_("*", side, (ftnlen)1, (ftnlen)1);
-	sigerr_("SPICE(INVALIDENDPNTSPEC)", (ftnlen)24);
+	setmsg_(__global_state, "SIDE was *.", (ftnlen)11);
+	errch_(__global_state, "*", side, (ftnlen)1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDENDPNTSPEC)", (ftnlen)24);
     }
-    chkout_("WNEXTD", (ftnlen)6);
+    chkout_(__global_state, "WNEXTD", (ftnlen)6);
     return 0;
 } /* wnextd_ */
 

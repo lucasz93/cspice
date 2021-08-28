@@ -8,8 +8,7 @@
 
 
 extern dasacu_init_t __dasacu_init;
-static dasacu_state_t* get_dasacu_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasacu_state_t* get_dasacu_state(cspice_t* state) {
 	if (!state->dasacu)
 		state->dasacu = __cspice_allocate_module(sizeof(
 	dasacu_state_t), &__dasacu_init, sizeof(__dasacu_init));
@@ -18,9 +17,9 @@ static dasacu_state_t* get_dasacu_state() {
 }
 
 /* $Procedure      DASACU ( DAS add comments from a logical unit ) */
-/* Subroutine */ int dasacu_(integer *comlun, char *begmrk, char *endmrk, 
-	logical *insbln, integer *handle, ftnlen begmrk_len, ftnlen 
-	endmrk_len)
+/* Subroutine */ int dasacu_(cspice_t* __global_state, integer *comlun, char *
+	begmrk, char *endmrk, logical *insbln, integer *handle, ftnlen 
+	begmrk_len, ftnlen endmrk_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -29,53 +28,59 @@ static dasacu_state_t* get_dasacu_state() {
     alist al__1;
 
     /* Builtin functions */
-    integer f_open(olist *);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), f_clos(cllist *), s_rnge(
-	    char *, integer, char *, integer), f_rew(alist *);
+    integer f_open(f2c_state_t*, olist *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), f_clos(
+	    f2c_state_t*, cllist *), s_rnge(f2c_state_t*, char *, integer, 
+	    char *, integer), f_rew(f2c_state_t*, alist *);
 
     /* Local variables */
     char line[255];
     logical more;
     integer i__;
     integer j;
-    extern /* Subroutine */ int dasac_(integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dasac_(cspice_t*, integer *, integer *, char *
+	    , ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer ncomr;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int readla_(integer *, integer *, integer *, char 
-	    *, logical *, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int readla_(cspice_t*, integer *, integer *, 
+	    integer *, char *, logical *, ftnlen);
     char ifname[60];
-    extern /* Subroutine */ int readln_(integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int readln_(cspice_t*, integer *, char *, logical 
+	    *, ftnlen);
     char combuf[255*22];
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
-    extern integer lastnb_(char *, ftnlen);
+    extern /* Subroutine */ int dassih_(cspice_t*, integer *, char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer length;
     integer intchr;
     char idword[8];
-    extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int dasrfr_(cspice_t*, integer *, char *, char *, 
+	    integer *, integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer numcom;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer nresvc;
-    extern /* Subroutine */ int getlun_(integer *);
+    extern /* Subroutine */ int getlun_(cspice_t*, integer *);
     integer iostat;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer scrlun;
-    extern /* Subroutine */ int writla_(integer *, char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int writla_(cspice_t*, integer *, char *, integer 
+	    *, ftnlen);
+    extern logical return_(cspice_t*);
     integer nresvr;
     logical eof;
 
 
     /* Module state */
-    dasacu_state_t* __state = get_dasacu_state();
+    dasacu_state_t* __state = get_dasacu_state(__global_state);
 /* $ Abstract */
 
 /*     Add comments to a previously opened binary DAS file from a */
@@ -481,36 +486,36 @@ static dasacu_state_t* get_dasacu_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASACU", (ftnlen)6);
+	chkin_(__global_state, "DASACU", (ftnlen)6);
     }
 
 /*     Verify that the DAS file attached to HANDLE is opened with write */
 /*     access. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DASACU", (ftnlen)6);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASACU", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the number of comment characters, and some other stuff that */
 /*     we will not be using. */
 
-    dasrfr_(handle, idword, ifname, &nresvr, &nresvc, &ncomr, &ncomc, (ftnlen)
-	    8, (ftnlen)60);
-    if (failed_()) {
-	chkout_("DASACU", (ftnlen)6);
+    dasrfr_(__global_state, handle, idword, ifname, &nresvr, &nresvc, &ncomr, 
+	    &ncomc, (ftnlen)8, (ftnlen)60);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASACU", (ftnlen)6);
 	return 0;
     }
 
 /*     Get an available logical unit for the comment scratch file. */
 
-    getlun_(&scrlun);
-    if (failed_()) {
-	chkout_("DASACU", (ftnlen)6);
+    getlun_(__global_state, &scrlun);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASACU", (ftnlen)6);
 	return 0;
     }
 
@@ -524,13 +529,13 @@ static dasacu_state_t* get_dasacu_state() {
     o__1.oacc = 0;
     o__1.ofm = 0;
     o__1.oblnk = 0;
-    iostat = f_open(&o__1);
+    iostat = f_open(&__global_state->f2c, &o__1);
     if (iostat != 0) {
-	setmsg_("Attempt to open a temporary file failed. IOSTAT = #.", (
-		ftnlen)52);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEOPENFAILED)", (ftnlen)21);
-	chkout_("DASACU", (ftnlen)6);
+	setmsg_(__global_state, "Attempt to open a temporary file failed. IO"
+		"STAT = #.", (ftnlen)52);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEOPENFAILED)", (ftnlen)21);
+	chkout_(__global_state, "DASACU", (ftnlen)6);
 	return 0;
     }
 
@@ -540,17 +545,18 @@ static dasacu_state_t* get_dasacu_state() {
 /*     immediately following the line which contains the begin comments */
 /*     marker. */
 
-    s_copy(line, " ", (ftnlen)255, (ftnlen)1);
+    s_copy(&__global_state->f2c, line, " ", (ftnlen)255, (ftnlen)1);
     eof = FALSE_;
-    while(s_cmp(line, begmrk, (ftnlen)255, begmrk_len) != 0) {
-	readln_(comlun, line, &eof, (ftnlen)255);
-	ljust_(line, line, (ftnlen)255, (ftnlen)255);
-	if (failed_()) {
+    while(s_cmp(&__global_state->f2c, line, begmrk, (ftnlen)255, begmrk_len) 
+	    != 0) {
+	readln_(__global_state, comlun, line, &eof, (ftnlen)255);
+	ljust_(__global_state, line, line, (ftnlen)255, (ftnlen)255);
+	if (failed_(__global_state)) {
 	    cl__1.cerr = 0;
 	    cl__1.cunit = scrlun;
 	    cl__1.csta = 0;
-	    f_clos(&cl__1);
-	    chkout_("DASACU", (ftnlen)6);
+	    f_clos(&__global_state->f2c, &cl__1);
+	    chkout_(__global_state, "DASACU", (ftnlen)6);
 	    return 0;
 	}
 
@@ -563,13 +569,13 @@ static dasacu_state_t* get_dasacu_state() {
 	    cl__1.cerr = 0;
 	    cl__1.cunit = scrlun;
 	    cl__1.csta = 0;
-	    f_clos(&cl__1);
-	    setmsg_("The begin comments marker '#' was not found in the comm"
-		    "ent file '#'.", (ftnlen)68);
-	    errch_("#", begmrk, (ftnlen)1, begmrk_len);
-	    errfnm_("#", comlun, (ftnlen)1);
-	    sigerr_("SPICE(MARKERNOTFOUND)", (ftnlen)21);
-	    chkout_("DASACU", (ftnlen)6);
+	    f_clos(&__global_state->f2c, &cl__1);
+	    setmsg_(__global_state, "The begin comments marker '#' was not f"
+		    "ound in the comment file '#'.", (ftnlen)68);
+	    errch_(__global_state, "#", begmrk, (ftnlen)1, begmrk_len);
+	    errfnm_(__global_state, "#", comlun, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(MARKERNOTFOUND)", (ftnlen)21);
+	    chkout_(__global_state, "DASACU", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -578,22 +584,23 @@ static dasacu_state_t* get_dasacu_state() {
 /*     placing them a buffer at a time into the temporary file. */
 /*     We also scan each line for non printing characters. */
 
-    s_copy(line, " ", (ftnlen)255, (ftnlen)1);
-    if (s_cmp(endmrk, " ", endmrk_len, (ftnlen)1) == 0) {
+    s_copy(&__global_state->f2c, line, " ", (ftnlen)255, (ftnlen)1);
+    if (s_cmp(&__global_state->f2c, endmrk, " ", endmrk_len, (ftnlen)1) == 0) 
+	    {
 
 /*        If the end mark is blank, then we want to go until we hit the */
 /*        end of the comment file. */
 
 	while(! eof) {
 	    numcom = 0;
-	    readla_(comlun, &__state->c__22, &numcom, combuf, &eof, (ftnlen)
-		    255);
-	    if (failed_()) {
+	    readla_(__global_state, comlun, &__state->c__22, &numcom, combuf, 
+		    &eof, (ftnlen)255);
+	    if (failed_(__global_state)) {
 		cl__1.cerr = 0;
 		cl__1.cunit = scrlun;
 		cl__1.csta = 0;
-		f_clos(&cl__1);
-		chkout_("DASACU", (ftnlen)6);
+		f_clos(&__global_state->f2c, &cl__1);
+		chkout_(__global_state, "DASACU", (ftnlen)6);
 		return 0;
 	    }
 
@@ -603,8 +610,9 @@ static dasacu_state_t* get_dasacu_state() {
 	    if (numcom > 0) {
 		i__1 = numcom;
 		for (i__ = 1; i__ <= i__1; ++i__) {
-		    length = lastnb_(combuf + ((i__2 = i__ - 1) < 22 && 0 <= 
-			    i__2 ? i__2 : s_rnge("combuf", i__2, "dasacu_", (
+		    length = lastnb_(__global_state, combuf + ((i__2 = i__ - 
+			    1) < 22 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "combuf", i__2, "dasacu_", (
 			    ftnlen)587)) * 255, (ftnlen)255);
 
 /*                 Scan the comment line for non printing characters. */
@@ -619,19 +627,21 @@ static dasacu_state_t* get_dasacu_state() {
 /*                    $ Local Parameters section of the header. */
 
 			intchr = *(unsigned char *)&combuf[((i__3 = i__ - 1) <
-				 22 && 0 <= i__3 ? i__3 : s_rnge("combuf", 
-				i__3, "dasacu_", (ftnlen)599)) * 255 + (j - 1)
-				];
+				 22 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "combuf", i__3, "dasacu_"
+				, (ftnlen)599)) * 255 + (j - 1)];
 			if (intchr > 126 || intchr < 32) {
 			    cl__1.cerr = 0;
 			    cl__1.cunit = scrlun;
 			    cl__1.csta = 0;
-			    f_clos(&cl__1);
-			    setmsg_("A nonprinting character was encountered"
-				    " in the comments. Value: #", (ftnlen)65);
-			    errint_("#", &intchr, (ftnlen)1);
-			    sigerr_("SPICE(ILLEGALCHARACTER)", (ftnlen)23);
-			    chkout_("DASACU", (ftnlen)6);
+			    f_clos(&__global_state->f2c, &cl__1);
+			    setmsg_(__global_state, "A nonprinting character"
+				    " was encountered in the comments. Value:"
+				    " #", (ftnlen)65);
+			    errint_(__global_state, "#", &intchr, (ftnlen)1);
+			    sigerr_(__global_state, "SPICE(ILLEGALCHARACTER)",
+				     (ftnlen)23);
+			    chkout_(__global_state, "DASACU", (ftnlen)6);
 			    return 0;
 			}
 		    }
@@ -639,14 +649,15 @@ static dasacu_state_t* get_dasacu_state() {
 
 /*              Write the comments to the temporary file. */
 
-		writla_(&numcom, combuf, &scrlun, (ftnlen)255);
+		writla_(__global_state, &numcom, combuf, &scrlun, (ftnlen)255)
+			;
 	    }
-	    if (failed_()) {
+	    if (failed_(__global_state)) {
 		cl__1.cerr = 0;
 		cl__1.cunit = scrlun;
 		cl__1.csta = 0;
-		f_clos(&cl__1);
-		chkout_("DASACU", (ftnlen)6);
+		f_clos(&__global_state->f2c, &cl__1);
+		chkout_(__global_state, "DASACU", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -659,14 +670,14 @@ static dasacu_state_t* get_dasacu_state() {
 	more = TRUE_;
 	while(more) {
 	    numcom = 0;
-	    readla_(comlun, &__state->c__22, &numcom, combuf, &eof, (ftnlen)
-		    255);
-	    if (failed_()) {
+	    readla_(__global_state, comlun, &__state->c__22, &numcom, combuf, 
+		    &eof, (ftnlen)255);
+	    if (failed_(__global_state)) {
 		cl__1.cerr = 0;
 		cl__1.cunit = scrlun;
 		cl__1.csta = 0;
-		f_clos(&cl__1);
-		chkout_("DASACU", (ftnlen)6);
+		f_clos(&__global_state->f2c, &cl__1);
+		chkout_(__global_state, "DASACU", (ftnlen)6);
 		return 0;
 	    }
 
@@ -676,11 +687,14 @@ static dasacu_state_t* get_dasacu_state() {
 	    if (numcom > 0) {
 		i__ = 1;
 		while(more && i__ <= numcom) {
-		    s_copy(line, combuf + ((i__1 = i__ - 1) < 22 && 0 <= i__1 
-			    ? i__1 : s_rnge("combuf", i__1, "dasacu_", (
+		    s_copy(&__global_state->f2c, line, combuf + ((i__1 = i__ 
+			    - 1) < 22 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "combuf", i__1, "dasacu_", (
 			    ftnlen)662)) * 255, (ftnlen)255, (ftnlen)255);
-		    ljust_(line, line, (ftnlen)255, (ftnlen)255);
-		    if (s_cmp(line, endmrk, (ftnlen)255, endmrk_len) == 0) {
+		    ljust_(__global_state, line, line, (ftnlen)255, (ftnlen)
+			    255);
+		    if (s_cmp(&__global_state->f2c, line, endmrk, (ftnlen)255,
+			     endmrk_len) == 0) {
 			more = FALSE_;
 			numcom = i__ - 1;
 		    } else {
@@ -695,8 +709,9 @@ static dasacu_state_t* get_dasacu_state() {
 	    if (numcom > 0) {
 		i__1 = numcom;
 		for (i__ = 1; i__ <= i__1; ++i__) {
-		    length = lastnb_(combuf + ((i__2 = i__ - 1) < 22 && 0 <= 
-			    i__2 ? i__2 : s_rnge("combuf", i__2, "dasacu_", (
+		    length = lastnb_(__global_state, combuf + ((i__2 = i__ - 
+			    1) < 22 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "combuf", i__2, "dasacu_", (
 			    ftnlen)687)) * 255, (ftnlen)255);
 
 /*                 Scan the comment line for non printinig characters. */
@@ -711,20 +726,21 @@ static dasacu_state_t* get_dasacu_state() {
 /*                    $ Local Parameters section of the header. */
 
 			intchr = *(unsigned char *)&combuf[((i__3 = i__ - 1) <
-				 22 && 0 <= i__3 ? i__3 : s_rnge("combuf", 
-				i__3, "dasacu_", (ftnlen)699)) * 255 + (j - 1)
-				];
+				 22 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "combuf", i__3, "dasacu_"
+				, (ftnlen)699)) * 255 + (j - 1)];
 			if (intchr > 126 || intchr < 32) {
 			    cl__1.cerr = 0;
 			    cl__1.cunit = scrlun;
 			    cl__1.csta = 0;
-			    f_clos(&cl__1);
-			    setmsg_("A nonprinting character was encountered"
-				    " in the comment buffer. Value: #", (
-				    ftnlen)71);
-			    errint_("#", &intchr, (ftnlen)1);
-			    sigerr_("SPICE(ILLEGALCHARACTER)", (ftnlen)23);
-			    chkout_("DASACU", (ftnlen)6);
+			    f_clos(&__global_state->f2c, &cl__1);
+			    setmsg_(__global_state, "A nonprinting character"
+				    " was encountered in the comment buffer. "
+				    "Value: #", (ftnlen)71);
+			    errint_(__global_state, "#", &intchr, (ftnlen)1);
+			    sigerr_(__global_state, "SPICE(ILLEGALCHARACTER)",
+				     (ftnlen)23);
+			    chkout_(__global_state, "DASACU", (ftnlen)6);
 			    return 0;
 			}
 		    }
@@ -732,14 +748,15 @@ static dasacu_state_t* get_dasacu_state() {
 
 /*              Write the comments to the temporary file. */
 
-		writla_(&numcom, combuf, &scrlun, (ftnlen)255);
+		writla_(__global_state, &numcom, combuf, &scrlun, (ftnlen)255)
+			;
 	    }
-	    if (failed_()) {
+	    if (failed_(__global_state)) {
 		cl__1.cerr = 0;
 		cl__1.cunit = scrlun;
 		cl__1.csta = 0;
-		f_clos(&cl__1);
-		chkout_("DASACU", (ftnlen)6);
+		f_clos(&__global_state->f2c, &cl__1);
+		chkout_(__global_state, "DASACU", (ftnlen)6);
 		return 0;
 	    }
 
@@ -752,13 +769,13 @@ static dasacu_state_t* get_dasacu_state() {
 		cl__1.cerr = 0;
 		cl__1.cunit = scrlun;
 		cl__1.csta = 0;
-		f_clos(&cl__1);
-		setmsg_("The end comments marker '#' was not found in the co"
-			"mment file '#'.", (ftnlen)66);
-		errch_("#", endmrk, (ftnlen)1, endmrk_len);
-		errfnm_("#", comlun, (ftnlen)1);
-		sigerr_("SPICE(MARKERNOTFOUND)", (ftnlen)21);
-		chkout_("DASACU", (ftnlen)6);
+		f_clos(&__global_state->f2c, &cl__1);
+		setmsg_(__global_state, "The end comments marker '#' was not"
+			" found in the comment file '#'.", (ftnlen)66);
+		errch_(__global_state, "#", endmrk, (ftnlen)1, endmrk_len);
+		errfnm_(__global_state, "#", comlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(MARKERNOTFOUND)", (ftnlen)21);
+		chkout_(__global_state, "DASACU", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -774,13 +791,13 @@ static dasacu_state_t* get_dasacu_state() {
 /*     we insert the blank line. Otherwise, just add the comments. */
 
     if (*insbln && ncomc > 0) {
-	dasac_(handle, &__state->c__1, " ", (ftnlen)1);
-	if (failed_()) {
+	dasac_(__global_state, handle, &__state->c__1, " ", (ftnlen)1);
+	if (failed_(__global_state)) {
 	    cl__1.cerr = 0;
 	    cl__1.cunit = scrlun;
 	    cl__1.csta = 0;
-	    f_clos(&cl__1);
-	    chkout_("DASACU", (ftnlen)6);
+	    f_clos(&__global_state->f2c, &cl__1);
+	    chkout_(__global_state, "DASACU", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -790,7 +807,7 @@ static dasacu_state_t* get_dasacu_state() {
 
     al__1.aerr = 0;
     al__1.aunit = scrlun;
-    f_rew(&al__1);
+    f_rew(&__global_state->f2c, &al__1);
 
 /*     Begin reading through the scratch file, placing the comment lines */
 /*     into the comment area of the DAS file a buffer at a time */
@@ -801,19 +818,20 @@ static dasacu_state_t* get_dasacu_state() {
 
 /*        Read in a buffer of comment lines. */
 
-	readla_(&scrlun, &__state->c__22, &numcom, combuf, &eof, (ftnlen)255);
+	readla_(__global_state, &scrlun, &__state->c__22, &numcom, combuf, &
+		eof, (ftnlen)255);
 
 /*        If we got some, add them to the comment area of the DAS file. */
 
 	if (numcom > 0) {
-	    dasac_(handle, &numcom, combuf, (ftnlen)255);
+	    dasac_(__global_state, handle, &numcom, combuf, (ftnlen)255);
 	}
-	if (failed_()) {
+	if (failed_(__global_state)) {
 	    cl__1.cerr = 0;
 	    cl__1.cunit = scrlun;
 	    cl__1.csta = 0;
-	    f_clos(&cl__1);
-	    chkout_("DASACU", (ftnlen)6);
+	    f_clos(&__global_state->f2c, &cl__1);
+	    chkout_(__global_state, "DASACU", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -824,8 +842,8 @@ static dasacu_state_t* get_dasacu_state() {
     cl__1.cerr = 0;
     cl__1.cunit = scrlun;
     cl__1.csta = 0;
-    f_clos(&cl__1);
-    chkout_("DASACU", (ftnlen)6);
+    f_clos(&__global_state->f2c, &cl__1);
+    chkout_(__global_state, "DASACU", (ftnlen)6);
     return 0;
 } /* dasacu_ */
 

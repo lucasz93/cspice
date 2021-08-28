@@ -8,8 +8,7 @@
 
 
 extern zzgfsolvx_init_t __zzgfsolvx_init;
-static zzgfsolvx_state_t* get_zzgfsolvx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfsolvx_state_t* get_zzgfsolvx_state(cspice_t* state) {
 	if (!state->zzgfsolvx)
 		state->zzgfsolvx = __cspice_allocate_module(sizeof(
 	zzgfsolvx_state_t), &__zzgfsolvx_init, sizeof(__zzgfsolvx_init));
@@ -18,27 +17,28 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 }
 
 /* $Procedure ZZGFSOLVX ( Private --- GF, event finding routine ) */
-/* Subroutine */ int zzgfsolvx_(U_fp udfuns, S_fp udfunb, S_fp udstep, S_fp 
-	udrefn, logical *bail, L_fp udbail, logical *cstep, doublereal *step, 
-	doublereal *start, doublereal *finish, doublereal *tol, logical *rpt, 
-	S_fp udrepu, doublereal *result)
+/* Subroutine */ int zzgfsolvx_(cspice_t* __global_state, U_fp udfuns, S_fp 
+	udfunb, S_fp udstep, S_fp udrefn, logical *bail, L_fp udbail, logical 
+	*cstep, doublereal *step, doublereal *start, doublereal *finish, 
+	doublereal *tol, logical *rpt, S_fp udrepu, doublereal *result)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal diff;
-    extern /* Subroutine */ int zzwninsd_(doublereal *, doublereal *, char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzwninsd_(cspice_t*, doublereal *, doublereal 
+	    *, char *, doublereal *, ftnlen);
     logical s;
     doublereal begin;
     doublereal t;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer nloop;
     logical l1;
     logical l2;
@@ -46,26 +46,27 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
     doublereal t1;
     doublereal t2;
     logical state1;
-    extern logical failed_(void);
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    extern doublereal touchd_(doublereal *);
+    extern logical failed_(cspice_t*);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal touchd_(cspice_t*, doublereal *);
     doublereal prvdif;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     logical instat;
     doublereal curtim;
     doublereal svdtim;
     doublereal timest;
     logical curste;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     char contxt[256];
     doublereal trnstn;
 
 
     /* Module state */
-    zzgfsolvx_state_t* __state = get_zzgfsolvx_state();
+    zzgfsolvx_state_t* __state = get_zzgfsolvx_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -456,18 +457,19 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFSOLVX", (ftnlen)9);
+    chkin_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 
 /*     Check the convergence tolerance. */
 
     if (*tol <= 0.) {
-	setmsg_("Tolerance must be positive but was #.", (ftnlen)37);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTOLERANCE)", (ftnlen)23);
-	chkout_("ZZGFSOLVX", (ftnlen)9);
+	setmsg_(__global_state, "Tolerance must be positive but was #.", (
+		ftnlen)37);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTOLERANCE)", (ftnlen)23);
+	chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 	return 0;
     }
 
@@ -475,16 +477,17 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*     error for START > FINISH. */
 
     if (*start > *finish) {
-	setmsg_("Bad time interval result, START > FINISH.", (ftnlen)41);
-	sigerr_("SPICE(BADTIMECASE)", (ftnlen)18);
-	chkout_("ZZGFSOLVX", (ftnlen)9);
+	setmsg_(__global_state, "Bad time interval result, START > FINISH.", (
+		ftnlen)41);
+	sigerr_(__global_state, "SPICE(BADTIMECASE)", (ftnlen)18);
+	chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 	return 0;
     }
 
 /*     If active, update the progress reporter. */
 
     if (*rpt) {
-	(*udrepu)(start, finish, start);
+	(*udrepu)(__global_state, start, finish, start);
     }
 
 /*     This algorithm determines those intervals when a given state */
@@ -512,9 +515,9 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*     constraint. This constraint may indicate only existence of */
 /*     a state. */
 
-    (*udfunb)((U_fp)udfuns, &curtim, &curste);
-    if (failed_()) {
-	chkout_("ZZGFSOLVX", (ftnlen)9);
+    (*udfunb)(__global_state, (U_fp)udfuns, &curtim, &curste);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 	return 0;
     }
 
@@ -551,9 +554,9 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*        time. */
 
 	if (! (*cstep)) {
-	    (*udstep)(&curtim, &timest);
-	    if (failed_()) {
-		chkout_("ZZGFSOLVX", (ftnlen)9);
+	    (*udstep)(__global_state, &curtim, &timest);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 		return 0;
 	    }
 	}
@@ -567,9 +570,9 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 
 /*        Compute the state at time CURTIM. */
 
-	(*udfunb)((U_fp)udfuns, &curtim, &curste);
-	if (failed_()) {
-	    chkout_("ZZGFSOLVX", (ftnlen)9);
+	(*udfunb)(__global_state, (U_fp)udfuns, &curtim, &curste);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 	    return 0;
 	}
 
@@ -581,8 +584,8 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*           First check for an interrupt signal if checking is enabled. */
 
 	    if (*bail) {
-		if ((*udbail)()) {
-		    chkout_("ZZGFSOLVX", (ftnlen)9);
+		if ((*udbail)(__global_state)) {
+		    chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 		    return 0;
 		}
 	    }
@@ -591,7 +594,7 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*           appropriate. */
 
 	    if (*rpt) {
-		(*udrepu)(start, finish, &svdtim);
+		(*udrepu)(__global_state, start, finish, &svdtim);
 	    }
 
 /*           Save the current time and state somewhere. */
@@ -609,9 +612,9 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*                 4. A minimum time step allowed. */
 
 	    if (! (*cstep)) {
-		(*udstep)(&curtim, &timest);
-		if (failed_()) {
-		    chkout_("ZZGFSOLVX", (ftnlen)9);
+		(*udstep)(__global_state, &curtim, &timest);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 		    return 0;
 		}
 	    }
@@ -621,9 +624,9 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 
 /*           Compute the current state */
 
-	    (*udfunb)((U_fp)udfuns, &curtim, &curste);
-	    if (failed_()) {
-		chkout_("ZZGFSOLVX", (ftnlen)9);
+	    (*udfunb)(__global_state, (U_fp)udfuns, &curtim, &curste);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 		return 0;
 	    }
 
@@ -659,9 +662,10 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*           error for T1 > T2. */
 
 	    if (t1 > t2) {
-		setmsg_("Bad time interval result, T1 > T2.", (ftnlen)34);
-		sigerr_("SPICE(BADTIMECASE)", (ftnlen)18);
-		chkout_("ZZGFSOLVX", (ftnlen)9);
+		setmsg_(__global_state, "Bad time interval result, T1 > T2.", 
+			(ftnlen)34);
+		sigerr_(__global_state, "SPICE(BADTIMECASE)", (ftnlen)18);
+		chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 		return 0;
 	    }
 	    svdtim = curtim;
@@ -676,9 +680,9 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*           of the difference is decreasing from one loop iteration */
 /*           to the next. */
 
-	    prvdif = dpmax_();
+	    prvdif = dpmax_(__global_state);
 	    d__2 = (d__1 = t2 - t1, abs(d__1));
-	    diff = touchd_(&d__2);
+	    diff = touchd_(__global_state, &d__2);
 	    nloop = 0;
 	    while(diff > *tol && diff < prvdif) {
 		++nloop;
@@ -692,18 +696,19 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*              probably use bisection. */
 
 		if (nloop >= 1000) {
-		    setmsg_("Loop run exceeds maximum loop count. Unable to "
-			    "converge to TOL value #1 within MXLOOP value #2 "
-			    "iterations.", (ftnlen)106);
-		    errdp_("#1", tol, (ftnlen)2);
-		    errint_("#2", &__state->c__1000, (ftnlen)2);
-		    sigerr_("SPICE(NOCONVERG)", (ftnlen)16);
-		    chkout_("ZZGFSOLVX", (ftnlen)9);
+		    setmsg_(__global_state, "Loop run exceeds maximum loop c"
+			    "ount. Unable to converge to TOL value #1 within "
+			    "MXLOOP value #2 iterations.", (ftnlen)106);
+		    errdp_(__global_state, "#1", tol, (ftnlen)2);
+		    errint_(__global_state, "#2", &__state->c__1000, (ftnlen)
+			    2);
+		    sigerr_(__global_state, "SPICE(NOCONVERG)", (ftnlen)16);
+		    chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 		    return 0;
 		}
 		if (*bail) {
-		    if ((*udbail)()) {
-			chkout_("ZZGFSOLVX", (ftnlen)9);
+		    if ((*udbail)(__global_state)) {
+			chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 			return 0;
 		    }
 		}
@@ -711,13 +716,13 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*              Select a time T, between T1 and T2 (possibly based on the */
 /*              values of L1 and L2). */
 
-		(*udrefn)(&t1, &t2, &l1, &l2, &t);
+		(*udrefn)(__global_state, &t1, &t2, &l1, &l2, &t);
 
 /*              Check for an error signal. The default refinement */
 /*              routine, GFREFN, does not include error checks. */
 
-		if (failed_()) {
-		    chkout_("ZZGFSOLVX", (ftnlen)9);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
 		    return 0;
 		}
 
@@ -726,7 +731,7 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*              we can in refining our estimate of the transition */
 /*              point. Set T1 and T2 equal to T. */
 
-		t = brcktd_(&t, &t1, &t2);
+		t = brcktd_(__global_state, &t, &t1, &t2);
 		if (t == t1) {
 		    t2 = t;
 		} else if (t == t2) {
@@ -737,7 +742,7 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*                 equals STATE1, set T1 to T, otherwise set */
 /*                 T2 to T. */
 
-		    (*udfunb)((U_fp)udfuns, &t, &s);
+		    (*udfunb)(__global_state, (U_fp)udfuns, &t, &s);
 		    if (s == state1) {
 			t1 = t;
 			l1 = s;
@@ -752,14 +757,14 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 
 		prvdif = diff;
 		d__2 = (d__1 = t2 - t1, abs(d__1));
-		diff = touchd_(&d__2);
+		diff = touchd_(__global_state, &d__2);
 	    }
 
 /*           Let TRNSTN be the midpoint of [T1, T2].  Record this */
 /*           time as marking the transition from STATE1 to STATE2. */
 
 	    d__1 = (t1 + t2) * .5;
-	    trnstn = brcktd_(&d__1, &t1, &t2);
+	    trnstn = brcktd_(__global_state, &d__1, &t1, &t2);
 
 /*           In state-of-interest or not? */
 
@@ -775,10 +780,12 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*              Add an interval starting at BEGIN and ending at TRNSTN */
 /*              to the result window. */
 
-		s_copy(contxt, "Adding interval [BEGIN,TRNSTN] to RESULT. TR"
-			"NSTN represents time of passage out of the state-of-"
-			"interest.", (ftnlen)256, (ftnlen)105);
-		zzwninsd_(&begin, &trnstn, contxt, result, (ftnlen)256);
+		s_copy(&__global_state->f2c, contxt, "Adding interval [BEGIN"
+			",TRNSTN] to RESULT. TRNSTN represents time of passag"
+			"e out of the state-of-interest.", (ftnlen)256, (
+			ftnlen)105);
+		zzwninsd_(__global_state, &begin, &trnstn, contxt, result, (
+			ftnlen)256);
 	    } else {
 
 /*              We were not in the state of interest.  As a result */
@@ -812,22 +819,23 @@ static zzgfsolvx_state_t* get_zzgfsolvx_state() {
 /*        Add an interval starting at BEGIN and ending at FINISH to the */
 /*        window. */
 
-	s_copy(contxt, "Adding interval [BEGIN,FINISH] to RESULT. FINISH rep"
-		"resents end of the search interval.", (ftnlen)256, (ftnlen)87)
+	s_copy(&__global_state->f2c, contxt, "Adding interval [BEGIN,FINISH]"
+		" to RESULT. FINISH represents end of the search interval.", (
+		ftnlen)256, (ftnlen)87);
+	zzwninsd_(__global_state, &begin, finish, contxt, result, (ftnlen)256)
 		;
-	zzwninsd_(&begin, finish, contxt, result, (ftnlen)256);
     }
 
 /*     If active, update the progress reporter before exiting this */
 /*     routine. */
 
     if (*rpt) {
-	(*udrepu)(start, finish, finish);
+	(*udrepu)(__global_state, start, finish, finish);
     }
 
 /*     Check-out then return. */
 
-    chkout_("ZZGFSOLVX", (ftnlen)9);
+    chkout_(__global_state, "ZZGFSOLVX", (ftnlen)9);
     return 0;
 } /* zzgfsolvx_ */
 

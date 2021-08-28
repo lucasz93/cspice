@@ -8,26 +8,25 @@
 
 
 typedef int srfc2s_state_t;
-static srfc2s_state_t* get_srfc2s_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline srfc2s_state_t* get_srfc2s_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure SRFC2S ( Surface and body ID codes to surface string ) */
-/* Subroutine */ int srfc2s_(integer *code, integer *bodyid, char *srfstr, 
-	logical *isname, ftnlen srfstr_len)
+/* Subroutine */ int srfc2s_(cspice_t* __global_state, integer *code, integer 
+	*bodyid, char *srfstr, logical *isname, ftnlen srfstr_len)
 {
-    extern /* Subroutine */ int zzsrfc2n_(integer *, integer *, char *, 
-	    logical *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzsrfc2n_(cspice_t*, integer *, integer *, 
+	    char *, logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    srfc2s_state_t* __state = get_srfc2s_state();
+    srfc2s_state_t* __state = get_srfc2s_state(__global_state);
 /* $ Abstract */
 
 /*     Translate a surface ID code, together with a body ID code, to the */
@@ -349,16 +348,16 @@ static srfc2s_state_t* get_srfc2s_state() {
 
 /*     SPICELIB functions */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SRFC2S", (ftnlen)6);
+    chkin_(__global_state, "SRFC2S", (ftnlen)6);
 
 /*     Try to translate the input codes to a known surface name. */
 
-    zzsrfc2n_(code, bodyid, srfstr, isname, srfstr_len);
-    if (failed_()) {
-	chkout_("SRFC2S", (ftnlen)6);
+    zzsrfc2n_(__global_state, code, bodyid, srfstr, isname, srfstr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SRFC2S", (ftnlen)6);
 	return 0;
     }
 
@@ -366,9 +365,9 @@ static srfc2s_state_t* get_srfc2s_state() {
 /*     string representation. */
 
     if (! (*isname)) {
-	intstr_(code, srfstr, srfstr_len);
+	intstr_(__global_state, code, srfstr, srfstr_len);
     }
-    chkout_("SRFC2S", (ftnlen)6);
+    chkout_(__global_state, "SRFC2S", (ftnlen)6);
     return 0;
 } /* srfc2s_ */
 

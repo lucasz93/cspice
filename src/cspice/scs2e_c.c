@@ -244,7 +244,7 @@
    /*
    Participate in error handling
    */
-   chkin_c ( "scs2e_c");
+   chkin_c ( naif_state, "scs2e_c");
 
 
    /*

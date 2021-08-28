@@ -149,7 +149,7 @@
    {
       return ( 0 );
    }
-   chkin_c ( "zzadrepf_c" );
+   chkin_c ( naif_state, "zzadrepf_c" );
 
 
    /*
@@ -158,7 +158,7 @@
    list matches that of gfrepf_c.
    */
 
-   fPtr = (  void (*) ()  )  zzadget_c ( UDREPF );
+   fPtr = (  void (*) ()  )  zzadget_c ( naif_state,  ( UDREPF );
  
    /*
    Call the CSPICE-style progress report termination function. 

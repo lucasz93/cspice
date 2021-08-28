@@ -8,8 +8,7 @@
 
 
 extern zzraybox_init_t __zzraybox_init;
-static zzraybox_state_t* get_zzraybox_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzraybox_state_t* get_zzraybox_state(cspice_t* state) {
 	if (!state->zzraybox)
 		state->zzraybox = __cspice_allocate_module(sizeof(
 	zzraybox_state_t), &__zzraybox_init, sizeof(__zzraybox_init));
@@ -18,57 +17,58 @@ static zzraybox_state_t* get_zzraybox_state() {
 }
 
 /* $Procedure ZZRAYBOX ( Ray-box intercept ) */
-/* Subroutine */ int zzraybox_(doublereal *vertex, doublereal *raydir, 
-	doublereal *boxori, doublereal *extent, doublereal *xpt, logical *
-	found)
+/* Subroutine */ int zzraybox_(cspice_t* __global_state, doublereal *vertex, 
+	doublereal *raydir, doublereal *boxori, doublereal *extent, 
+	doublereal *xpt, logical *found)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal near__[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal udir[3];
     doublereal maxt;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     integer i__;
     doublereal r__;
     doublereal t[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal limit;
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal vtemp[3];
-    extern doublereal vnorm_(doublereal *);
-    extern logical vzero_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     doublereal center[3];
     logical sphfnd;
     doublereal offset[3];
     integer maxidx;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer sector[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal plndst[3];
-    extern logical return_(void);
-    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
-	    ;
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int surfpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, logical *
+	    );
     doublereal sphxpt[3];
     doublereal sphvtx[3];
 
 
     /* Module state */
-    zzraybox_state_t* __state = get_zzraybox_state();
+    zzraybox_state_t* __state = get_zzraybox_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -213,7 +213,7 @@ static zzraybox_state_t* get_zzraybox_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -223,29 +223,29 @@ static zzraybox_state_t* get_zzraybox_state() {
 
 /*     Check for a zero ray direction vector. */
 
-    if (vzero_(raydir)) {
-	chkin_("ZZRAYBOX", (ftnlen)8);
-	setmsg_("Input ray direction was the zero vector; this vector must b"
-		"e non-zero.", (ftnlen)70);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("ZZRAYBOX", (ftnlen)8);
+    if (vzero_(__global_state, raydir)) {
+	chkin_(__global_state, "ZZRAYBOX", (ftnlen)8);
+	setmsg_(__global_state, "Input ray direction was the zero vector; th"
+		"is vector must be non-zero.", (ftnlen)70);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "ZZRAYBOX", (ftnlen)8);
 	return 0;
     }
-    vhat_(raydir, udir);
+    vhat_(__global_state, raydir, udir);
 
 /*     Check the box extents. */
 
 /* Computing MIN */
     d__1 = min(extent[0],extent[1]);
     if (min(d__1,extent[2]) <= 0.) {
-	chkin_("ZZRAYBOX", (ftnlen)8);
-	setmsg_("All box extents should be strictly positive but the extents"
-		" were #, #, #.", (ftnlen)73);
-	errdp_("#", extent, (ftnlen)1);
-	errdp_("#", &extent[1], (ftnlen)1);
-	errdp_("#", &extent[2], (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZRAYBOX", (ftnlen)8);
+	chkin_(__global_state, "ZZRAYBOX", (ftnlen)8);
+	setmsg_(__global_state, "All box extents should be strictly positive"
+		" but the extents were #, #, #.", (ftnlen)73);
+	errdp_(__global_state, "#", extent, (ftnlen)1);
+	errdp_(__global_state, "#", &extent[1], (ftnlen)1);
+	errdp_(__global_state, "#", &extent[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZRAYBOX", (ftnlen)8);
 	return 0;
     }
 
@@ -253,20 +253,22 @@ static zzraybox_state_t* get_zzraybox_state() {
 /*     the offset of the ray's vertex from the center. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	center[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("center", 
-		i__1, "zzraybox_", (ftnlen)242)] = boxori[(i__2 = i__ - 1) < 
-		3 && 0 <= i__2 ? i__2 : s_rnge("boxori", i__2, "zzraybox_", (
-		ftnlen)242)] + extent[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		i__3 : s_rnge("extent", i__3, "zzraybox_", (ftnlen)242)] / 2;
+	center[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "center", i__1, "zzraybox_", (ftnlen)242)
+		] = boxori[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "boxori", i__2, "zzraybox_", (ftnlen)242)
+		] + extent[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "extent", i__3, "zzraybox_", (ftnlen)242)
+		] / 2;
     }
-    vsub_(vertex, center, offset);
+    vsub_(__global_state, vertex, center, offset);
 
 /*     If the ray's vertex is inside the box, we consider the */
 /*     vertex to be the intercept. */
 
     if (abs(offset[0]) <= extent[0] / 2 && abs(offset[1]) <= extent[1] / 2 && 
 	    abs(offset[2]) <= extent[2] / 2) {
-	vequ_(vertex, xpt);
+	vequ_(__global_state, vertex, xpt);
 	*found = TRUE_;
 	return 0;
     }
@@ -274,14 +276,15 @@ static zzraybox_state_t* get_zzraybox_state() {
 /*     Compute the intercept of the ray on the surface of a bounding */
 /*     sphere that contains the box. Let R be the radius of this sphere. */
 
-    r__ = vnorm_(extent) * .50049999999999994;
-    if (vnorm_(offset) < r__) {
+    r__ = vnorm_(__global_state, extent) * .50049999999999994;
+    if (vnorm_(__global_state, offset) < r__) {
 
 /*        The vertex is already inside the bounding sphere. */
 
-	vequ_(offset, sphxpt);
+	vequ_(__global_state, offset, sphxpt);
     } else {
-	surfpt_(offset, udir, &r__, &r__, &r__, sphxpt, &sphfnd);
+	surfpt_(__global_state, offset, udir, &r__, &r__, &r__, sphxpt, &
+		sphfnd);
 	if (! sphfnd) {
 
 /*           The ray misses the bounding sphere. */
@@ -295,13 +298,15 @@ static zzraybox_state_t* get_zzraybox_state() {
 /*     as the origin of the reference frame. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	sphvtx[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sphvtx", 
-		i__1, "zzraybox_", (ftnlen)293)] = sphxpt[(i__2 = i__ - 1) < 
-		3 && 0 <= i__2 ? i__2 : s_rnge("sphxpt", i__2, "zzraybox_", (
-		ftnlen)293)] + center[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		i__3 : s_rnge("center", i__3, "zzraybox_", (ftnlen)293)] - 
-		boxori[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge(
-		"boxori", i__4, "zzraybox_", (ftnlen)293)];
+	sphvtx[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "sphvtx", i__1, "zzraybox_", (ftnlen)293)
+		] = sphxpt[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "sphxpt", i__2, "zzraybox_", (ftnlen)293)
+		] + center[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "center", i__3, "zzraybox_", (ftnlen)293)
+		] - boxori[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge(&
+		__global_state->f2c, "boxori", i__4, "zzraybox_", (ftnlen)293)
+		];
     }
 
 /*     Classify the position of the vertex relative to the planes */
@@ -311,27 +316,35 @@ static zzraybox_state_t* get_zzraybox_state() {
 /*     the bounds, or greater than the upper bound. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	if (sphvtx[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sphvtx",
-		 i__1, "zzraybox_", (ftnlen)305)] < 0.) {
-	    sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sector",
-		     i__1, "zzraybox_", (ftnlen)307)] = 1;
-	    near__[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("near", 
-		    i__1, "zzraybox_", (ftnlen)308)] = 0.;
-	} else if (sphvtx[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"sphvtx", i__1, "zzraybox_", (ftnlen)310)] > extent[(i__2 = 
-		i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("extent", i__2, 
-		"zzraybox_", (ftnlen)310)]) {
-	    sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sector",
-		     i__1, "zzraybox_", (ftnlen)312)] = 3;
-	    near__[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("near", 
-		    i__1, "zzraybox_", (ftnlen)313)] = extent[(i__2 = i__ - 1)
-		     < 3 && 0 <= i__2 ? i__2 : s_rnge("extent", i__2, "zzray"
-		    "box_", (ftnlen)313)];
+	if (sphvtx[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "sphvtx", i__1, "zzraybox_", (ftnlen)305)
+		] < 0.) {
+	    sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "sector", i__1, "zzraybox_", (ftnlen)
+		    307)] = 1;
+	    near__[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "near", i__1, "zzraybox_", (ftnlen)
+		    308)] = 0.;
+	} else if (sphvtx[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "sphvtx", i__1, "zzraybox_", (ftnlen)310)
+		] > extent[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "extent", i__2, "zzraybox_", (ftnlen)310)
+		]) {
+	    sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "sector", i__1, "zzraybox_", (ftnlen)
+		    312)] = 3;
+	    near__[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "near", i__1, "zzraybox_", (ftnlen)
+		    313)] = extent[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "extent", i__2, "zzraybox_", 
+		    (ftnlen)313)];
 	} else {
-	    sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sector",
-		     i__1, "zzraybox_", (ftnlen)316)] = 2;
-	    near__[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("near", 
-		    i__1, "zzraybox_", (ftnlen)317)] = 0.;
+	    sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "sector", i__1, "zzraybox_", (ftnlen)
+		    316)] = 2;
+	    near__[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "near", i__1, "zzraybox_", (ftnlen)
+		    317)] = 0.;
 	}
     }
 
@@ -358,25 +371,28 @@ static zzraybox_state_t* get_zzraybox_state() {
     maxidx = 1;
     maxt = -1.;
     for (i__ = 1; i__ <= 3; ++i__) {
-	t[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("t", i__1, "zzra"
-		"ybox_", (ftnlen)349)] = -1.;
-	if (sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sector",
-		 i__1, "zzraybox_", (ftnlen)351)] != 2) {
-	    plndst[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("plndst",
-		     i__1, "zzraybox_", (ftnlen)353)] = near__[(i__2 = i__ - 
-		    1) < 3 && 0 <= i__2 ? i__2 : s_rnge("near", i__2, "zzray"
-		    "box_", (ftnlen)353)] - sphvtx[(i__3 = i__ - 1) < 3 && 0 <=
-		     i__3 ? i__3 : s_rnge("sphvtx", i__3, "zzraybox_", (
-		    ftnlen)353)];
+	t[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "t", i__1, "zzraybox_", (ftnlen)349)] = 
+		-1.;
+	if (sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "sector", i__1, "zzraybox_", (ftnlen)351)
+		] != 2) {
+	    plndst[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "plndst", i__1, "zzraybox_", (ftnlen)
+		    353)] = near__[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "near", i__2, "zzraybox_", (
+		    ftnlen)353)] - sphvtx[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
+		    i__3 : s_rnge(&__global_state->f2c, "sphvtx", i__3, "zzr"
+		    "aybox_", (ftnlen)353)];
 
 /*           Prepare for a "safe" division. */
 
 	    limit = r__ * 2 * (d__1 = udir[(i__1 = i__ - 1) < 3 && 0 <= i__1 ?
-		     i__1 : s_rnge("udir", i__1, "zzraybox_", (ftnlen)358)], 
-		    abs(d__1));
+		     i__1 : s_rnge(&__global_state->f2c, "udir", i__1, "zzra"
+		    "ybox_", (ftnlen)358)], abs(d__1));
 	    if ((d__1 = plndst[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("plndst", i__1, "zzraybox_", (ftnlen)360)], abs(
-		    d__1)) > limit) {
+		    s_rnge(&__global_state->f2c, "plndst", i__1, "zzraybox_", 
+		    (ftnlen)360)], abs(d__1)) > limit) {
 
 /*              The ray can't get to the nearest bounding plane */
 /*              before exiting the bounding sphere. No intersection */
@@ -387,24 +403,29 @@ static zzraybox_state_t* get_zzraybox_state() {
 
 /*           The magnitude of the following quotient is bounded by 2R. */
 
-	    t[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("t", i__1, 
-		    "zzraybox_", (ftnlen)372)] = plndst[(i__2 = i__ - 1) < 3 
-		    && 0 <= i__2 ? i__2 : s_rnge("plndst", i__2, "zzraybox_", 
+	    t[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "t", i__1, "zzraybox_", (ftnlen)372)]
+		     = plndst[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "plndst", i__2, "zzraybox_", 
 		    (ftnlen)372)] / udir[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		    i__3 : s_rnge("udir", i__3, "zzraybox_", (ftnlen)372)];
-	    if (t[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("t", i__1,
-		     "zzraybox_", (ftnlen)374)] < 0.) {
+		    i__3 : s_rnge(&__global_state->f2c, "udir", i__3, "zzray"
+		    "box_", (ftnlen)372)];
+	    if (t[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "t", i__1, "zzraybox_", (ftnlen)374)]
+		     < 0.) {
 
 /*              This component of the ray is going in the wrong */
 /*              direction. No intersection is possible. */
 
 		return 0;
 	    }
-	    if (t[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("t", i__1,
-		     "zzraybox_", (ftnlen)383)] > maxt) {
+	    if (t[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "t", i__1, "zzraybox_", (ftnlen)383)]
+		     > maxt) {
 		maxidx = i__;
-		maxt = t[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"t", i__1, "zzraybox_", (ftnlen)386)];
+		maxt = t[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "t", i__1, "zzraybox_", (ftnlen)
+			386)];
 	    }
 	}
     }
@@ -419,7 +440,7 @@ static zzraybox_state_t* get_zzraybox_state() {
 /*     Compute the candidate intercept. Note that we're now working */
 /*     in a frame centered at the box origin. */
 
-    vlcom_(&__state->c_b73, sphvtx, &maxt, udir, xpt);
+    vlcom_(__global_state, &__state->c_b73, sphvtx, &maxt, udir, xpt);
 
 /*     Decide whether XPT is actually on the surface of the box. */
 /*     Sharpen XPT as part of the process. */
@@ -430,25 +451,29 @@ static zzraybox_state_t* get_zzraybox_state() {
 /*           XPT is supposed to lie exactly on the bounding plane */
 /*           orthogonal to the Ith axis and nearest to SPHVTX. */
 
-	    xpt[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("xpt", i__1,
-		     "zzraybox_", (ftnlen)419)] = near__[(i__2 = i__ - 1) < 3 
-		    && 0 <= i__2 ? i__2 : s_rnge("near", i__2, "zzraybox_", (
+	    xpt[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "xpt", i__1, "zzraybox_", (ftnlen)
+		    419)] = near__[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "near", i__2, "zzraybox_", (
 		    ftnlen)419)];
 	} else {
-	    if (sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "sector", i__1, "zzraybox_", (ftnlen)423)] == 2) {
+	    if (sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "sector", i__1, "zzraybox_", (ftnlen)
+		    423)] == 2) {
 
 /*              The Ith component of the vertex is between the */
 /*              bounding planes for the Ith coordinate. If the */
 /*              Ith component of XPT is outside these bounds, */
 /*              the ray misses the box. */
 
-		if (xpt[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"xpt", i__1, "zzraybox_", (ftnlen)430)] < 0. || xpt[(
-			i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-			"xpt", i__2, "zzraybox_", (ftnlen)430)] > extent[(
-			i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(
-			"extent", i__3, "zzraybox_", (ftnlen)430)]) {
+		if (xpt[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "xpt", i__1, "zzraybox_", (
+			ftnlen)430)] < 0. || xpt[(i__2 = i__ - 1) < 3 && 0 <= 
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "xpt", 
+			i__2, "zzraybox_", (ftnlen)430)] > extent[(i__3 = i__ 
+			- 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "extent", i__3, "zzraybox_", (
+			ftnlen)430)]) {
 		    return 0;
 		}
 	    } else {
@@ -461,21 +486,24 @@ static zzraybox_state_t* get_zzraybox_state() {
 /*              plane farthest from SPHVTX(I), no intersection can */
 /*              exist. */
 
-		if (sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"sector", i__1, "zzraybox_", (ftnlen)447)] == 1) {
+		if (sector[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "sector", i__1, "zzraybox_", (
+			ftnlen)447)] == 1) {
 
 /*                 Sharpen the Ith component of XPT. */
 
 /* Computing MAX */
 		    d__1 = xpt[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
-			    s_rnge("xpt", i__2, "zzraybox_", (ftnlen)451)];
-		    xpt[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			    "xpt", i__1, "zzraybox_", (ftnlen)451)] = max(
-			    d__1,0.);
+			    s_rnge(&__global_state->f2c, "xpt", i__2, "zzray"
+			    "box_", (ftnlen)451)];
+		    xpt[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "xpt", i__1, "zzraybox_", (
+			    ftnlen)451)] = max(d__1,0.);
 		    if (xpt[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			    "xpt", i__1, "zzraybox_", (ftnlen)453)] > extent[(
-			    i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-			    "extent", i__2, "zzraybox_", (ftnlen)453)]) {
+			    &__global_state->f2c, "xpt", i__1, "zzraybox_", (
+			    ftnlen)453)] > extent[(i__2 = i__ - 1) < 3 && 0 <=
+			     i__2 ? i__2 : s_rnge(&__global_state->f2c, "ext"
+			    "ent", i__2, "zzraybox_", (ftnlen)453)]) {
 
 /*                    The ray hits the MAXIDX face too far away from */
 /*                    SPHVTX(I). There's no intersection with the box. */
@@ -490,15 +518,17 @@ static zzraybox_state_t* get_zzraybox_state() {
 
 /* Computing MIN */
 		    d__1 = xpt[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
-			    s_rnge("xpt", i__2, "zzraybox_", (ftnlen)469)], 
-			    d__2 = extent[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-			    i__3 : s_rnge("extent", i__3, "zzraybox_", (
-			    ftnlen)469)];
-		    xpt[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			    "xpt", i__1, "zzraybox_", (ftnlen)469)] = min(
-			    d__1,d__2);
+			    s_rnge(&__global_state->f2c, "xpt", i__2, "zzray"
+			    "box_", (ftnlen)469)], d__2 = extent[(i__3 = i__ - 
+			    1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "extent", i__3, "zzraybox_", 
+			    (ftnlen)469)];
+		    xpt[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "xpt", i__1, "zzraybox_", (
+			    ftnlen)469)] = min(d__1,d__2);
 		    if (xpt[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			    "xpt", i__1, "zzraybox_", (ftnlen)471)] < 0.) {
+			    &__global_state->f2c, "xpt", i__1, "zzraybox_", (
+			    ftnlen)471)] < 0.) {
 
 /*                    The ray hits the MAXIDX face too far away from */
 /*                    SPHVTX(I). There's no intersection with the box. */
@@ -526,8 +556,8 @@ static zzraybox_state_t* get_zzraybox_state() {
 
 /*     Shift XPT to the input reference frame. */
 
-    vadd_(xpt, boxori, vtemp);
-    vequ_(vtemp, xpt);
+    vadd_(__global_state, xpt, boxori, vtemp);
+    vequ_(__global_state, vtemp, xpt);
     *found = TRUE_;
     return 0;
 } /* zzraybox_ */

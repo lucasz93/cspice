@@ -180,7 +180,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ldpool_c" );
+   chkin_c ( naif_state, "ldpool_c" );
 
 
    /*

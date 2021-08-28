@@ -8,27 +8,26 @@
 
 
 typedef int movec_state_t;
-static movec_state_t* get_movec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline movec_state_t* get_movec_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  MOVEC  ( Move a character array to another ) */
-/* Subroutine */ int movec_(char *arrfrm, integer *ndim, char *arrto, ftnlen 
-	arrfrm_len, ftnlen arrto_len)
+/* Subroutine */ int movec_(cspice_t* __global_state, char *arrfrm, integer *
+	ndim, char *arrto, ftnlen arrfrm_len, ftnlen arrto_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    movec_state_t* __state = get_movec_state();
+    movec_state_t* __state = get_movec_state(__global_state);
 /* $ Abstract */
 
 /*      Copy the elements of one character array into another */
@@ -172,8 +171,8 @@ static movec_state_t* get_movec_state() {
 
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	s_copy(arrto + (i__ - 1) * arrto_len, arrfrm + (i__ - 1) * arrfrm_len,
-		 arrto_len, arrfrm_len);
+	s_copy(&__global_state->f2c, arrto + (i__ - 1) * arrto_len, arrfrm + (
+		i__ - 1) * arrfrm_len, arrto_len, arrfrm_len);
     }
     return 0;
 } /* movec_ */

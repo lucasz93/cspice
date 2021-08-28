@@ -1358,7 +1358,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkcpo_c" );
+   chkin_c ( naif_state, "spkcpo_c" );
 
    /*
    Check the input state pointer.

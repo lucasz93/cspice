@@ -8,8 +8,7 @@
 
 
 extern zzekrd08_init_t __zzekrd08_init;
-static zzekrd08_state_t* get_zzekrd08_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrd08_state_t* get_zzekrd08_state(cspice_t* state) {
 	if (!state->zzekrd08)
 		state->zzekrd08 = __cspice_allocate_module(sizeof(
 	zzekrd08_state_t), &__zzekrd08_init, sizeof(__zzekrd08_init));
@@ -18,19 +17,20 @@ static zzekrd08_state_t* get_zzekrd08_state() {
 }
 
 /* $Procedure   ZZEKRD08 ( EK, read class 8 column entry ) */
-/* Subroutine */ int zzekrd08_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr, doublereal *dval, logical *isnull)
+/* Subroutine */ int zzekrd08_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr, doublereal *dval, 
+	logical *isnull)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     integer mdat[2];
-    extern integer zzekrp2n_(integer *, integer *, integer *);
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
     char cflag[1];
     integer q;
     integer r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
     integer ncols;
     integer addrss;
@@ -40,21 +40,21 @@ static zzekrd08_state_t* get_zzekrd08_state() {
     integer nflbas;
     integer offset;
     logical nullok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasrdc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrdd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
 
 
     /* Module state */
-    zzekrd08_state_t* __state = get_zzekrd08_state();
+    zzekrd08_state_t* __state = get_zzekrd08_state(__global_state);
 /* $ Abstract */
 
 /*     Read a column entry from a specified record in a class 8 column. */
@@ -787,17 +787,17 @@ static zzekrd08_state_t* get_zzekrd08_state() {
     metloc = coldsc[9];
     nullok = coldsc[7] == 1;
     if (colidx < 1 || colidx > ncols) {
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKRD08", (ftnlen)8);
-	setmsg_("Column index = #; valid range is 1:#.SEGNO = #; RECNO = #; "
-		"EK = #", (ftnlen)65);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &ncols, (ftnlen)1);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKRD08", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKRD08", (ftnlen)8);
+	setmsg_(__global_state, "Column index = #; valid range is 1:#.SEGNO "
+		"= #; RECNO = #; EK = #", (ftnlen)65);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &ncols, (ftnlen)1);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKRD08", (ftnlen)8);
 	return 0;
     }
 
@@ -809,7 +809,7 @@ static zzekrd08_state_t* get_zzekrd08_state() {
 
     i__1 = metloc + 1;
     i__2 = metloc + 2;
-    dasrdi_(handle, &i__1, &i__2, mdat);
+    dasrdi_(__global_state, handle, &i__1, &i__2, mdat);
     datbas = mdat[0];
     nflbas = mdat[1];
 
@@ -825,8 +825,8 @@ static zzekrd08_state_t* get_zzekrd08_state() {
 	r__ = *recptr - q * 1014;
 	offset = r__ + (q << 10);
 	addrss = nflbas + offset;
-	dasrdc_(handle, &addrss, &addrss, &__state->c__1, &__state->c__1, 
-		cflag, (ftnlen)1);
+	dasrdc_(__global_state, handle, &addrss, &addrss, &__state->c__1, &
+		__state->c__1, cflag, (ftnlen)1);
 	*isnull = *(unsigned char *)cflag == 'T';
 	if (*isnull) {
 	    return 0;
@@ -844,7 +844,7 @@ static zzekrd08_state_t* get_zzekrd08_state() {
     r__ = *recptr - q * 126;
     offset = r__ + (q << 7);
     addrss = datbas + offset;
-    dasrdd_(handle, &addrss, &addrss, dval);
+    dasrdd_(__global_state, handle, &addrss, &addrss, dval);
     return 0;
 } /* zzekrd08_ */
 

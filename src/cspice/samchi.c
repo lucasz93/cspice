@@ -8,27 +8,26 @@
 
 
 typedef int samchi_state_t;
-static samchi_state_t* get_samchi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline samchi_state_t* get_samchi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   SAMCHI ( Same character --- case insensitive ) */
-logical samchi_(char *str1, integer *l1, char *str2, integer *l2, ftnlen 
-	str1_len, ftnlen str2_len)
+logical samchi_(cspice_t* __global_state, char *str1, integer *l1, char *str2,
+	 integer *l2, ftnlen str1_len, ftnlen str2_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
-    extern logical eqchr_(char *, char *, ftnlen, ftnlen);
+    extern logical eqchr_(cspice_t*, char *, char *, ftnlen, ftnlen);
 
 
     /* Module state */
-    samchi_state_t* __state = get_samchi_state();
+    samchi_state_t* __state = get_samchi_state(__global_state);
 /* $ Abstract */
 
 /*     Determine if two characters from different strings are the */
@@ -203,13 +202,13 @@ logical samchi_(char *str1, integer *l1, char *str2, integer *l2, ftnlen
 
 /*     Spicelib Functions */
 
-    if (*l1 < 1 || *l2 < 1 || *l1 > i_len(str1, str1_len) || *l2 > i_len(str2,
-	     str2_len)) {
+    if (*l1 < 1 || *l2 < 1 || *l1 > i_len(&__global_state->f2c, str1, 
+	    str1_len) || *l2 > i_len(&__global_state->f2c, str2, str2_len)) {
 	ret_val = FALSE_;
 	return ret_val;
     }
-    ret_val = eqchr_(str1 + (*l1 - 1), str2 + (*l2 - 1), (ftnlen)1, (ftnlen)1)
-	    ;
+    ret_val = eqchr_(__global_state, str1 + (*l1 - 1), str2 + (*l2 - 1), (
+	    ftnlen)1, (ftnlen)1);
     return ret_val;
 } /* samchi_ */
 

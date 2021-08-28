@@ -8,22 +8,22 @@
 
 
 typedef int insang_state_t;
-static insang_state_t* get_insang_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline insang_state_t* get_insang_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure INSANG ( Inside Tetrahedral Angle ) */
-/* Subroutine */ int insang_(doublereal *v, doublereal *e1, doublereal *e2, 
-	doublereal *e3, logical *found, doublereal *scale)
+/* Subroutine */ int insang_(cspice_t* __global_state, doublereal *v, 
+	doublereal *e1, doublereal *e2, doublereal *e3, logical *found, 
+	doublereal *scale)
 {
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     doublereal denom;
     doublereal norm12[3];
     doublereal norm31[3];
     doublereal norm23[3];
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal en;
     doublereal vn12;
     doublereal vn31;
@@ -31,7 +31,7 @@ static insang_state_t* get_insang_state() {
 
 
     /* Module state */
-    insang_state_t* __state = get_insang_state();
+    insang_state_t* __state = get_insang_state(__global_state);
 /* $ Abstract */
 
 /*     Determine if a given vector lies inside the solid tetrahedral */
@@ -233,13 +233,13 @@ static insang_state_t* get_insang_state() {
 /*     get the zero vector, E1 and E2 are linearly dependent so we */
 /*     set the value of FOUND to FALSE and return. */
 
-    vcrss_(e1, e2, norm12);
+    vcrss_(__global_state, e1, e2, norm12);
 
 /*     First make sure V and E3 are in the same half space */
 /*     bounded by E1 and E2.  If they are not, we can return. */
 
-    vn12 = vdot_(v, norm12);
-    en = vdot_(e3, norm12);
+    vn12 = vdot_(__global_state, v, norm12);
+    en = vdot_(__global_state, e3, norm12);
 
 /*     Determine whether NORML and E3 are perpendicular.  If they */
 /*     are perpendicular, E3 is a linear combination of E1 and E2. */
@@ -267,8 +267,8 @@ static insang_state_t* get_insang_state() {
 
 /*       < (E1 x E2), E3 > =  < (E2 x E3), E1 > = < (E3 x E1), E2 > */
 
-    vcrss_(e2, e3, norm23);
-    vn23 = vdot_(v, norm23);
+    vcrss_(__global_state, e2, e3, norm23);
+    vn23 = vdot_(__global_state, v, norm23);
 
 /*     The following tests are the same as in the previous case. */
 
@@ -283,8 +283,8 @@ static insang_state_t* get_insang_state() {
 /*     Finally check to see if V and E2 are in the same half space */
 /*     bounded by E3 and E2 */
 
-    vcrss_(e3, e1, norm31);
-    vn31 = vdot_(v, norm31);
+    vcrss_(__global_state, e3, e1, norm31);
+    vn31 = vdot_(__global_state, v, norm31);
     if (en > 0. && vn31 < 0.) {
 	*found = FALSE_;
 	return 0;

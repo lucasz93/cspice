@@ -172,7 +172,7 @@
    {
       return ( cell->card );
    }
-   chkin_c ( "card_c" );
+   chkin_c ( naif_state, "card_c" );
 
 
    /*

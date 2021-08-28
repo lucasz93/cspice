@@ -8,8 +8,7 @@
 
 
 extern rquad_init_t __rquad_init;
-static rquad_state_t* get_rquad_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rquad_state_t* get_rquad_state(cspice_t* state) {
 	if (!state->rquad)
 		state->rquad = __cspice_allocate_module(sizeof(rquad_state_t),
 	 &__rquad_init, sizeof(__rquad_init));
@@ -18,32 +17,33 @@ static rquad_state_t* get_rquad_state() {
 }
 
 /* $Procedure      RQUAD ( Roots of a quadratic equation ) */
-/* Subroutine */ int rquad_(doublereal *a, doublereal *b, doublereal *c__, 
-	doublereal *root1, doublereal *root2)
+/* Subroutine */ int rquad_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *c__, doublereal *root1, doublereal *root2)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     doublereal discrm;
     logical zeroed;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal con;
     doublereal lin;
     doublereal sqr;
 
 
     /* Module state */
-    rquad_state_t* __state = get_rquad_state();
+    rquad_state_t* __state = get_rquad_state(__global_state);
 /* $ Abstract */
 
 /*     Find the roots of a quadratic equation. */
@@ -252,19 +252,20 @@ static rquad_state_t* get_rquad_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("RQUAD", (ftnlen)5);
+	chkin_(__global_state, "RQUAD", (ftnlen)5);
     }
 
 /*     The degree of the equation is zero unless at least one of the */
 /*     second or first degree coefficients is non-zero. */
 
     if (*a == 0. && *b == 0.) {
-	setmsg_("Both 1st and 2nd degree coefficients are zero.", (ftnlen)46);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("RQUAD", (ftnlen)5);
+	setmsg_(__global_state, "Both 1st and 2nd degree coefficients are ze"
+		"ro.", (ftnlen)46);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "RQUAD", (ftnlen)5);
 	return 0;
     }
 
@@ -317,19 +318,21 @@ static rquad_state_t* get_rquad_state() {
 
 /*              ROOT1 will contain the root of larger magnitude. */
 
-		root1[0] = (-lin + sqrt(discrm)) / (sqr * 2.);
+		root1[0] = (-lin + sqrt(&__global_state->f2c, discrm)) / (sqr 
+			* 2.);
 		root2[0] = con / sqr / root1[0];
 	    } else if (lin > 0.) {
 
 /*              ROOT2 will contain the root of larger magnitude. */
 
-		root2[0] = (-lin - sqrt(discrm)) / (sqr * 2.);
+		root2[0] = (-lin - sqrt(&__global_state->f2c, discrm)) / (sqr 
+			* 2.);
 		root1[0] = con / sqr / root2[0];
 	    } else {
 
 /*              The roots have the same magnitude. */
 
-		root1[0] = sqrt(discrm) / (sqr * 2.);
+		root1[0] = sqrt(&__global_state->f2c, discrm) / (sqr * 2.);
 		root2[0] = -root1[0];
 	    }
 
@@ -341,7 +344,7 @@ static rquad_state_t* get_rquad_state() {
 /*           magnitudes. */
 
 	    root1[0] = -lin / (sqr * 2.);
-	    root1[1] = sqrt(-discrm) / (sqr * 2.);
+	    root1[1] = sqrt(&__global_state->f2c, -discrm) / (sqr * 2.);
 	    root2[0] = root1[0];
 	    root2[1] = -root1[1];
 	}
@@ -356,9 +359,9 @@ static rquad_state_t* get_rquad_state() {
 /*        We set the second root equal to the first, rather than */
 /*        leaving it undefined. */
 
-	moved_(root1, &__state->c__2, root2);
+	moved_(__global_state, root1, &__state->c__2, root2);
     }
-    chkout_("RQUAD", (ftnlen)5);
+    chkout_(__global_state, "RQUAD", (ftnlen)5);
     return 0;
 } /* rquad_ */
 

@@ -8,26 +8,26 @@
 
 
 typedef int stlabx_state_t;
-static stlabx_state_t* get_stlabx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline stlabx_state_t* get_stlabx_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      STLABX ( Stellar aberration, transmission case ) */
-/* Subroutine */ int stlabx_(doublereal *pobj, doublereal *vobs, doublereal *
-	corpos)
+/* Subroutine */ int stlabx_(cspice_t* __global_state, doublereal *pobj, 
+	doublereal *vobs, doublereal *corpos)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int stelab_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal negvel[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
 
 
     /* Module state */
-    stlabx_state_t* __state = get_stlabx_state();
+    stlabx_state_t* __state = get_stlabx_state(__global_state);
 /* $ Abstract */
 
 /*     Correct the position of a target for the stellar aberration */
@@ -233,10 +233,10 @@ static stlabx_state_t* get_stlabx_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("STLABX", (ftnlen)6);
+	chkin_(__global_state, "STLABX", (ftnlen)6);
     }
 
 /*     Obtain the negative of the observer's velocity.  This */
@@ -244,9 +244,9 @@ static stlabx_state_t* get_stlabx_state() {
 /*     the inverse of the usual stellar aberration correction, */
 /*     which is exactly what we seek. */
 
-    vminus_(vobs, negvel);
-    stelab_(pobj, negvel, corpos);
-    chkout_("STLABX", (ftnlen)6);
+    vminus_(__global_state, vobs, negvel);
+    stelab_(__global_state, pobj, negvel, corpos);
+    chkout_(__global_state, "STLABX", (ftnlen)6);
     return 0;
 } /* stlabx_ */
 

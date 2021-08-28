@@ -8,35 +8,35 @@
 
 
 typedef int chckid_state_t;
-static chckid_state_t* get_chckid_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline chckid_state_t* get_chckid_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CHCKID ( Check ID string ) */
-/* Subroutine */ int chckid_(char *class__, integer *maxlen, char *id, ftnlen 
-	class_len, ftnlen id_len)
+/* Subroutine */ int chckid_(cspice_t* __global_state, char *class__, integer 
+	*maxlen, char *id, ftnlen class_len, ftnlen id_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
     integer l;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer chrcod;
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer frstnp_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer frstnp_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    chckid_state_t* __state = get_chckid_state();
+    chckid_state_t* __state = get_chckid_state(__global_state);
 /* $ Abstract */
 
 /*     Validate an ID string:  check for non-printing characters */
@@ -212,78 +212,82 @@ static chckid_state_t* get_chckid_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CHCKID", (ftnlen)6);
+	chkin_(__global_state, "CHCKID", (ftnlen)6);
     }
 
 /*     Check CLASS before trying to use it in an error message. */
 
-    i__ = frstnp_(class__, class_len);
+    i__ = frstnp_(__global_state, class__, class_len);
     if (i__ > 0) {
 	chrcod = *(unsigned char *)&class__[i__ - 1];
-	setmsg_("The class string '#' is invalid; this string contains a non"
-		"-printing character (ICHAR = #) at position #.", (ftnlen)105);
-	errch_("#", class__, (ftnlen)1, class_len);
-	errint_("#", &chrcod, (ftnlen)1);
-	errint_("#", &i__, (ftnlen)1);
-	sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	chkout_("CHCKID", (ftnlen)6);
+	setmsg_(__global_state, "The class string '#' is invalid; this strin"
+		"g contains a non-printing character (ICHAR = #) at position "
+		"#.", (ftnlen)105);
+	errch_(__global_state, "#", class__, (ftnlen)1, class_len);
+	errint_(__global_state, "#", &chrcod, (ftnlen)1);
+	errint_(__global_state, "#", &i__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	chkout_(__global_state, "CHCKID", (ftnlen)6);
 	return 0;
     }
 
 /*     MAXLEN must be a sensible value. */
 
     if (*maxlen < 1) {
-	setmsg_("Non-blank length limit MAXLEN should be positive but was #.",
-		 (ftnlen)59);
-	errint_("#", maxlen, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("CHCKID", (ftnlen)6);
+	setmsg_(__global_state, "Non-blank length limit MAXLEN should be pos"
+		"itive but was #.", (ftnlen)59);
+	errint_(__global_state, "#", maxlen, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "CHCKID", (ftnlen)6);
 	return 0;
     }
-    l = lastnb_(id, id_len);
+    l = lastnb_(__global_state, id, id_len);
 
 /*     The ID must not be too long. */
 
     if (l > *maxlen) {
-	setmsg_("The # '#' is invalid; the last non-blank character is locat"
-		"ed at position #; the maximum allowed length is #.", (ftnlen)
-		109);
-	if (s_cmp(class__, " ", class_len, (ftnlen)1) != 0) {
-	    errch_("#", class__, (ftnlen)1, class_len);
+	setmsg_(__global_state, "The # '#' is invalid; the last non-blank ch"
+		"aracter is located at position #; the maximum allowed length"
+		" is #.", (ftnlen)109);
+	if (s_cmp(&__global_state->f2c, class__, " ", class_len, (ftnlen)1) !=
+		 0) {
+	    errch_(__global_state, "#", class__, (ftnlen)1, class_len);
 	} else {
-	    errch_("#", "ID", (ftnlen)1, (ftnlen)2);
+	    errch_(__global_state, "#", "ID", (ftnlen)1, (ftnlen)2);
 	}
-	errch_("#", id, (ftnlen)1, id_len);
-	errint_("#", &l, (ftnlen)1);
-	errint_("#", maxlen, (ftnlen)1);
-	sigerr_("SPICE(IDSTRINGTOOLONG)", (ftnlen)22);
-	chkout_("CHCKID", (ftnlen)6);
+	errch_(__global_state, "#", id, (ftnlen)1, id_len);
+	errint_(__global_state, "#", &l, (ftnlen)1);
+	errint_(__global_state, "#", maxlen, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(IDSTRINGTOOLONG)", (ftnlen)22);
+	chkout_(__global_state, "CHCKID", (ftnlen)6);
 	return 0;
     }
 
 /*     Look for non-printing characters in ID. */
 
-    i__ = frstnp_(id, id_len);
+    i__ = frstnp_(__global_state, id, id_len);
     if (i__ > 0) {
 	chrcod = *(unsigned char *)&id[i__ - 1];
-	setmsg_("The # '#' is invalid; this string contains a non-printing c"
-		"haracter (ICHAR = #) at position #.", (ftnlen)94);
-	if (s_cmp(class__, " ", class_len, (ftnlen)1) != 0) {
-	    errch_("#", class__, (ftnlen)1, class_len);
+	setmsg_(__global_state, "The # '#' is invalid; this string contains "
+		"a non-printing character (ICHAR = #) at position #.", (ftnlen)
+		94);
+	if (s_cmp(&__global_state->f2c, class__, " ", class_len, (ftnlen)1) !=
+		 0) {
+	    errch_(__global_state, "#", class__, (ftnlen)1, class_len);
 	} else {
-	    errch_("#", "ID", (ftnlen)1, (ftnlen)2);
+	    errch_(__global_state, "#", "ID", (ftnlen)1, (ftnlen)2);
 	}
-	errch_("#", id, (ftnlen)1, id_len);
-	errint_("#", &chrcod, (ftnlen)1);
-	errint_("#", &i__, (ftnlen)1);
-	sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	chkout_("CHCKID", (ftnlen)6);
+	errch_(__global_state, "#", id, (ftnlen)1, id_len);
+	errint_(__global_state, "#", &chrcod, (ftnlen)1);
+	errint_(__global_state, "#", &i__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	chkout_(__global_state, "CHCKID", (ftnlen)6);
 	return 0;
     }
-    chkout_("CHCKID", (ftnlen)6);
+    chkout_(__global_state, "CHCKID", (ftnlen)6);
     return 0;
 } /* chckid_ */
 

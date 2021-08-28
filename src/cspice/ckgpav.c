@@ -8,8 +8,7 @@
 
 
 extern ckgpav_init_t __ckgpav_init;
-static ckgpav_state_t* get_ckgpav_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckgpav_state_t* get_ckgpav_state(cspice_t* state) {
 	if (!state->ckgpav)
 		state->ckgpav = __cspice_allocate_module(sizeof(
 	ckgpav_state_t), &__ckgpav_init, sizeof(__ckgpav_init));
@@ -18,70 +17,73 @@ static ckgpav_state_t* get_ckgpav_state() {
 }
 
 /* $Procedure      CKGPAV ( C-kernel, get pointing and angular velocity ) */
-/* Subroutine */ int ckgpav_(integer *inst, doublereal *sclkdp, doublereal *
-	tol, char *ref, doublereal *cmat, doublereal *av, doublereal *clkout, 
-	logical *found, ftnlen ref_len)
+/* Subroutine */ int ckgpav_(cspice_t* __global_state, integer *inst, 
+	doublereal *sclkdp, doublereal *tol, char *ref, doublereal *cmat, 
+	doublereal *av, doublereal *clkout, logical *found, ftnlen ref_len)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     logical pfnd;
     logical sfnd;
     integer sclk;
     doublereal tmpv[3];
-    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int mtxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int sct2e_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
     integer type1;
     integer type2;
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     doublereal omega[3];
     char segid[40];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal descr[5];
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int ckbss_(integer *, doublereal *, doublereal *, 
-	    logical *);
-    extern /* Subroutine */ int ckpfs_(integer *, doublereal *, doublereal *, 
-	    doublereal *, logical *, doublereal *, doublereal *, doublereal *,
-	     logical *);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int cksns_(integer *, doublereal *, char *, 
-	    logical *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int ckbss_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, logical *);
+    extern /* Subroutine */ int ckpfs_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, logical *, doublereal *, doublereal *,
+	     doublereal *, logical *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int cksns_(cspice_t*, integer *, doublereal *, 
+	    char *, logical *, ftnlen);
     logical gotit;
     doublereal xform[36]	/* was [6][6] */;
-    extern /* Subroutine */ int xf2rav_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int xf2rav_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal et;
     integer handle;
     logical needav;
-    extern /* Subroutine */ int ckmeta_(integer *, char *, integer *, ftnlen);
-    extern /* Subroutine */ int frmchg_(integer *, integer *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int ckmeta_(cspice_t*, integer *, char *, integer 
+	    *, ftnlen);
+    extern /* Subroutine */ int frmchg_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
     integer refseg;
     integer center;
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
     integer refreq;
     integer typeid;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal tmpmat[9]	/* was [3][3] */;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer icd[6];
-    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal rot[9]	/* was [3][3] */;
 
 
     /* Module state */
-    ckgpav_state_t* __state = get_ckgpav_state();
+    ckgpav_state_t* __state = get_ckgpav_state(__global_state);
 /* $ Abstract */
 
 /*     Get pointing (attitude) and angular velocity for a specified */
@@ -1090,10 +1092,10 @@ static ckgpav_state_t* get_ckgpav_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKGPAV", (ftnlen)6);
+	chkin_(__global_state, "CKGPAV", (ftnlen)6);
     }
 
 /*     Initialization. */
@@ -1102,7 +1104,7 @@ static ckgpav_state_t* get_ckgpav_state() {
 
 /*        Initialize counter. */
 
-	zzctruin_(__state->svctr1);
+	zzctruin_(__global_state, __state->svctr1);
 	__state->first = FALSE_;
     }
 
@@ -1115,15 +1117,15 @@ static ckgpav_state_t* get_ckgpav_state() {
 /*     If the tolerance is less than zero, we go no further. */
 
     if (*tol < 0.) {
-	chkout_("CKGPAV", (ftnlen)6);
+	chkout_(__global_state, "CKGPAV", (ftnlen)6);
 	return 0;
     }
 
 /*     Begin a search for this instrument and time, and get the first */
 /*     applicable segment. */
 
-    ckbss_(inst, sclkdp, tol, &needav);
-    cksns_(&handle, descr, segid, &sfnd, (ftnlen)40);
+    ckbss_(__global_state, inst, sclkdp, tol, &needav);
+    cksns_(__global_state, &handle, descr, segid, &sfnd, (ftnlen)40);
 
 /*     Keep trying candidate segments until a segment can produce a */
 /*     pointing instance within the specified time tolerance of the */
@@ -1132,20 +1134,22 @@ static ckgpav_state_t* get_ckgpav_state() {
 /*     Check FAILED to prevent an infinite loop if an error is detected */
 /*     by a SPICELIB routine and the error handling is not set to abort. */
 
-    while(sfnd && ! failed_()) {
-	ckpfs_(&handle, descr, sclkdp, tol, &needav, cmat, av, clkout, &pfnd);
+    while(sfnd && ! failed_(__global_state)) {
+	ckpfs_(__global_state, &handle, descr, sclkdp, tol, &needav, cmat, av,
+		 clkout, &pfnd);
 	if (pfnd) {
 
 /*           Found one. If the data aren't already referenced to the */
 /*           requested frame, rotate them. */
 
-	    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
+	    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dcd,
+		     icd);
 	    refseg = icd[1];
 
 /*           Look up the id code for the requested reference frame. */
 
-	    zznamfrm_(__state->svctr1, __state->svref, &__state->svrefr, ref, 
-		    &refreq, (ftnlen)32, ref_len);
+	    zznamfrm_(__global_state, __state->svctr1, __state->svref, &
+		    __state->svrefr, ref, &refreq, (ftnlen)32, ref_len);
 	    if (refreq != refseg) {
 
 /*              We may need to convert the output ticks CLKOUT to ET */
@@ -1153,8 +1157,10 @@ static ckgpav_state_t* get_ckgpav_state() {
 /*              matrix.  This is the case if either of the frames */
 /*              is non-inertial. */
 
-		frinfo_(&refreq, &center, &type1, &typeid, &gotit);
-		frinfo_(&refseg, &center, &type2, &typeid, &gotit);
+		frinfo_(__global_state, &refreq, &center, &type1, &typeid, &
+			gotit);
+		frinfo_(__global_state, &refseg, &center, &type2, &typeid, &
+			gotit);
 		if (type1 == 1 && type2 == 1) {
 
 /*                 Any old value of ET will do in this case.  We'll */
@@ -1166,20 +1172,20 @@ static ckgpav_state_t* get_ckgpav_state() {
 /*                 Look up the spacecraft clock id to use to convert */
 /*                 the output CLKOUT to ET. */
 
-		    ckmeta_(inst, "SCLK", &sclk, (ftnlen)4);
-		    sct2e_(&sclk, clkout, &et);
+		    ckmeta_(__global_state, inst, "SCLK", &sclk, (ftnlen)4);
+		    sct2e_(__global_state, &sclk, clkout, &et);
 		}
 
 /*              Get the transformation from the requested frame to */
 /*              the segment frame at ET. */
 
-		frmchg_(&refreq, &refseg, &et, xform);
+		frmchg_(__global_state, &refreq, &refseg, &et, xform);
 
 /*              If FRMCHG detects that the reference frame is invalid */
 /*              then return from this routine with FOUND equal to false. */
 
-		if (failed_()) {
-		    chkout_("CKGPAV", (ftnlen)6);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "CKGPAV", (ftnlen)6);
 		    return 0;
 		}
 
@@ -1189,9 +1195,9 @@ static ckgpav_state_t* get_ckgpav_state() {
 /*              Then convert CMAT so that it maps from request frame */
 /*              to C-matrix frame. */
 
-		xf2rav_(xform, rot, omega);
-		mxm_(cmat, rot, tmpmat);
-		moved_(tmpmat, &__state->c__9, cmat);
+		xf2rav_(__global_state, xform, rot, omega);
+		mxm_(__global_state, cmat, rot, tmpmat);
+		moved_(__global_state, tmpmat, &__state->c__9, cmat);
 
 /*              Now transform the angular velocity information. */
 /*              Currently we have OMEGA (the angular velocity of */
@@ -1311,16 +1317,16 @@ static ckgpav_state_t* get_ckgpav_state() {
 /*                                          CMAT         ROT */
 
 
-		mtxv_(rot, av, tmpv);
-		vadd_(omega, tmpv, av);
+		mtxv_(__global_state, rot, av, tmpv);
+		vadd_(__global_state, omega, tmpv, av);
 	    }
 	    *found = TRUE_;
-	    chkout_("CKGPAV", (ftnlen)6);
+	    chkout_(__global_state, "CKGPAV", (ftnlen)6);
 	    return 0;
 	}
-	cksns_(&handle, descr, segid, &sfnd, (ftnlen)40);
+	cksns_(__global_state, &handle, descr, segid, &sfnd, (ftnlen)40);
     }
-    chkout_("CKGPAV", (ftnlen)6);
+    chkout_(__global_state, "CKGPAV", (ftnlen)6);
     return 0;
 } /* ckgpav_ */
 

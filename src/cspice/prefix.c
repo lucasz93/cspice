@@ -8,30 +8,29 @@
 
 
 typedef int prefix_state_t;
-static prefix_state_t* get_prefix_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline prefix_state_t* get_prefix_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PREFIX (Prefix a character string) */
-/* Subroutine */ int prefix_(char *pref, integer *spaces, char *string, 
-	ftnlen pref_len, ftnlen string_len)
+/* Subroutine */ int prefix_(cspice_t* __global_state, char *pref, integer *
+	spaces, char *string, ftnlen pref_len, ftnlen string_len)
 {
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer plen;
     integer slen;
     integer shift;
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int shiftr_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int shiftr_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
 
 
     /* Module state */
-    prefix_state_t* __state = get_prefix_state();
+    prefix_state_t* __state = get_prefix_state(__global_state);
 /* $ Abstract */
 
 /*      Add a prefix to a character string. */
@@ -185,11 +184,11 @@ static prefix_state_t* get_prefix_state() {
 /*     PLEN is the length of the prefix. Remember that a blank (null) */
 /*     prefix has zero length. */
 
-    plen = lastnb_(pref, pref_len);
+    plen = lastnb_(__global_state, pref, pref_len);
 
 /*     SLEN is the allocated length of the string. */
 
-    slen = i_len(string, string_len);
+    slen = i_len(&__global_state->f2c, string, string_len);
 
 /*     We can't just do a concatenation, because the input and output */
 /*     strings are of indeterminate length. (This would be a violation */
@@ -199,16 +198,17 @@ static prefix_state_t* get_prefix_state() {
 /*     truncated, well, that's life. */
 
     shift = plen + max(*spaces,0);
-    shiftr_(string, &shift, " ", string, string_len, (ftnlen)1, string_len);
+    shiftr_(__global_state, string, &shift, " ", string, string_len, (ftnlen)
+	    1, string_len);
 
 /*     Put the non-blank part of the prefix in the vacated part of */
 /*     the string. The spaces will fill themselves in. */
 
     if (plen > 0) {
 	if (shift < slen) {
-	    s_copy(string, pref, shift, pref_len);
+	    s_copy(&__global_state->f2c, string, pref, shift, pref_len);
 	} else {
-	    s_copy(string, pref, string_len, pref_len);
+	    s_copy(&__global_state->f2c, string, pref, string_len, pref_len);
 	}
     }
     return 0;

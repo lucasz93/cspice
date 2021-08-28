@@ -2,7 +2,7 @@
 #include "fio.h"
 #include "__cspice_state.h"
 #ifdef KR_headers
-integer f_clos(a) cllist *a;
+integer f_clos(f2c, a) f2c_state_t *f2c; cllist *a;
 #else
 #undef abs
 #undef min
@@ -24,10 +24,9 @@ extern int unlink(const char*);
 #endif
 #endif
 
-integer f_clos(cllist *a)
+integer f_clos(f2c_state_t *f2c, cllist *a)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	unit *b;
+{	unit *b;
 
 	if(a->cunit >= MXUNIT) return(0);
 	b= &f2c->f__units[a->cunit];
@@ -66,30 +65,28 @@ integer f_clos(cllist *a)
 	}
  void
 #ifdef KR_headers
-f_exit()
+f_exit(f2c) f2c_state_t *f2c;
 #else
-f_exit(void)
+f_exit(f2c_state_t *f2c)
 #endif
 {	int i;
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if (!f2c->xx.cerr) {
 		f2c->xx.cerr=1;
 		f2c->xx.csta=NULL;
 		for(i=0;i<MXUNIT;i++)
 		{
 			f2c->xx.cunit=i;
-			(void) f_clos(&f2c->xx);
+			(void) f_clos(f2c, &f2c->xx);
 		}
 	}
 }
  int
 #ifdef KR_headers
-flush_()
+flush_(f2c) f2c_state_t *f2c;
 #else
-flush_(void)
+flush_(f2c_state_t *f2c)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int i;
+{	int i;
 	for(i=0;i<MXUNIT;i++)
 		if(f2c->f__units[i].ufd != NULL && f2c->f__units[i].uwrt)
 			fflush(f2c->f__units[i].ufd);

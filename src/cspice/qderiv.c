@@ -8,29 +8,28 @@
 
 
 typedef int qderiv_state_t;
-static qderiv_state_t* get_qderiv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline qderiv_state_t* get_qderiv_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure QDERIV ( Quadratic derivative ) */
-/* Subroutine */ int qderiv_(integer *n, doublereal *f0, doublereal *f2, 
-	doublereal *delta, doublereal *dfdt)
+/* Subroutine */ int qderiv_(cspice_t* __global_state, integer *n, doublereal 
+	*f0, doublereal *f2, doublereal *delta, doublereal *dfdt)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vlcomg_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vlcomg_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    qderiv_state_t* __state = get_qderiv_state();
+    qderiv_state_t* __state = get_qderiv_state(__global_state);
 /* $ Abstract */
 
 /*     Estimate the derivative of a function by finding the derivative */
@@ -209,11 +208,11 @@ static qderiv_state_t* get_qderiv_state() {
 /*     Use discovery check-in. */
 
     if (*delta == 0.) {
-	chkin_("QDERIV", (ftnlen)6);
-	setmsg_("Delta abscissa value is zero; a non-zero value is required.",
-		 (ftnlen)59);
-	sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-	chkout_("QDERIV", (ftnlen)6);
+	chkin_(__global_state, "QDERIV", (ftnlen)6);
+	setmsg_(__global_state, "Delta abscissa value is zero; a non-zero va"
+		"lue is required.", (ftnlen)59);
+	sigerr_(__global_state, "SPICE(DIVIDEBYZERO)", (ftnlen)19);
+	chkout_(__global_state, "QDERIV", (ftnlen)6);
 	return 0;
     }
 
@@ -232,7 +231,7 @@ static qderiv_state_t* get_qderiv_state() {
 
     d__1 = .5 / *delta;
     d__2 = -.5 / *delta;
-    vlcomg_(n, &d__1, f2, &d__2, f0, dfdt);
+    vlcomg_(__global_state, n, &d__1, f2, &d__2, f0, dfdt);
     return 0;
 } /* qderiv_ */
 

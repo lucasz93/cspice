@@ -8,20 +8,19 @@
 
 
 typedef int j1950_state_t;
-static j1950_state_t* get_j1950_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline j1950_state_t* get_j1950_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure                     J1950 ( Julian Date of 1950.0 JAN 1.0 ) */
-doublereal j1950_(void)
+doublereal j1950_(cspice_t* __global_state)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    j1950_state_t* __state = get_j1950_state();
+    j1950_state_t* __state = get_j1950_state(__global_state);
 /* $ Abstract */
 
 /*     Return the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0). */

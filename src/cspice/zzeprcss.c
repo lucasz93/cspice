@@ -8,8 +8,7 @@
 
 
 extern zzeprcss_init_t __zzeprcss_init;
-static zzeprcss_state_t* get_zzeprcss_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzeprcss_state_t* get_zzeprcss_state(cspice_t* state) {
 	if (!state->zzeprcss)
 		state->zzeprcss = __cspice_allocate_module(sizeof(
 	zzeprcss_state_t), &__zzeprcss_init, sizeof(__zzeprcss_init));
@@ -18,25 +17,26 @@ static zzeprcss_state_t* get_zzeprcss_state() {
 }
 
 /* $Procedure   ZZEPRCSS   ( Earth precession, 1976 IAU model ) */
-/* Subroutine */ int zzeprcss_(doublereal *et, doublereal *precm)
+/* Subroutine */ int zzeprcss_(cspice_t* __global_state, doublereal *et, 
+	doublereal *precm)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Local variables */
     doublereal zeta;
-    extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
-	    *, integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int eul2m_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, integer *, integer *, integer *, doublereal *);
     doublereal t;
     doublereal scale;
     doublereal z__;
     doublereal theta;
-    extern doublereal jyear_(void);
-    extern doublereal rpd_(void);
+    extern doublereal jyear_(cspice_t*);
+    extern doublereal rpd_(cspice_t*);
 
 
     /* Module state */
-    zzeprcss_state_t* __state = get_zzeprcss_state();
+    zzeprcss_state_t* __state = get_zzeprcss_state(__global_state);
 /* $ Abstract */
 
 /*     Return the 1976 IAU Earth precession matrix for a specified time. */
@@ -209,8 +209,8 @@ static zzeprcss_state_t* get_zzeprcss_state() {
 /*     angles in units of arcseconds prior to scaling.  After scaling, */
 /*     the angles are in units of radians. */
 
-    t = *et / (jyear_() * 100.);
-    scale = rpd_() / 3600.;
+    t = *et / (jyear_(__global_state) * 100.);
+    scale = rpd_(__global_state) / 3600.;
     zeta = t * (t * (t * .017998 + .30188) + 2306.2181) * scale;
     z__ = t * (t * (t * .018203 + 1.09468) + 2306.2181) * scale;
     theta = t * (t * (t * -.041833 - .42665) + 2004.3109) * scale;
@@ -219,8 +219,8 @@ static zzeprcss_state_t* get_zzeprcss_state() {
 
     d__1 = -z__;
     d__2 = -zeta;
-    eul2m_(&d__1, &theta, &d__2, &__state->c__3, &__state->c__2, &
-	    __state->c__3, precm);
+    eul2m_(__global_state, &d__1, &theta, &d__2, &__state->c__3, &
+	    __state->c__2, &__state->c__3, precm);
     return 0;
 } /* zzeprcss_ */
 

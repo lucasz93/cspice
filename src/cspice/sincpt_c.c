@@ -1673,7 +1673,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "sincpt_c" );
+   chkin_c ( naif_state, "sincpt_c" );
 
    /*
    Check the input string arguments:

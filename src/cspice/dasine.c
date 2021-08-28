@@ -8,30 +8,30 @@
 
 
 typedef int dasine_state_t;
-static dasine_state_t* get_dasine_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasine_state_t* get_dasine_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DASINE (arc sine of bracketed argument) */
-doublereal dasine_(doublereal *arg, doublereal *tol)
+doublereal dasine_(cspice_t* __global_state, doublereal *arg, doublereal *tol)
 {
     /* System generated locals */
     doublereal ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double asin(doublereal);
+    double asin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    dasine_state_t* __state = get_dasine_state();
+    dasine_state_t* __state = get_dasine_state(__global_state);
 /* $ Abstract */
 
 /*     This routine produces a SPICE error if the |argument| exceeds */
@@ -158,16 +158,17 @@ doublereal dasine_(doublereal *arg, doublereal *tol)
 
 /* Computing MAX */
     d__1 = -1., d__2 = min(1.,*arg);
-    ret_val = asin((max(d__1,d__2)));
+    ret_val = asin(&__global_state->f2c, (max(d__1,d__2)));
 
 /*     Check that tolerance is non negative. */
 
     if (*tol < 0.) {
-	chkin_("DASINE", (ftnlen)6);
-	setmsg_("TOL was #; must be non-negative.", (ftnlen)32);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("DASINE", (ftnlen)6);
+	chkin_(__global_state, "DASINE", (ftnlen)6);
+	setmsg_(__global_state, "TOL was #; must be non-negative.", (ftnlen)
+		32);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DASINE", (ftnlen)6);
 	return ret_val;
     }
 
@@ -175,13 +176,14 @@ doublereal dasine_(doublereal *arg, doublereal *tol)
 /*     appropriate. */
 
     if (abs(*arg) - *tol > 1.) {
-	chkin_("DASINE", (ftnlen)6);
-	setmsg_("The |argument| specified was greater than 1.D0 by more than"
-		" #. The value of the argument is #. ", (ftnlen)95);
-	errdp_("#", tol, (ftnlen)1);
-	errdp_("#", arg, (ftnlen)1);
-	sigerr_("SPICE(INPUTOUTOFBOUNDS)", (ftnlen)23);
-	chkout_("DASINE", (ftnlen)6);
+	chkin_(__global_state, "DASINE", (ftnlen)6);
+	setmsg_(__global_state, "The |argument| specified was greater than 1"
+		".D0 by more than #. The value of the argument is #. ", (
+		ftnlen)95);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	errdp_(__global_state, "#", arg, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INPUTOUTOFBOUNDS)", (ftnlen)23);
+	chkout_(__global_state, "DASINE", (ftnlen)6);
 	return ret_val;
     }
     return ret_val;

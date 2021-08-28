@@ -8,30 +8,30 @@
 
 
 typedef int nvp2pl_state_t;
-static nvp2pl_state_t* get_nvp2pl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline nvp2pl_state_t* get_nvp2pl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      NVP2PL ( Normal vector and point to plane ) */
-/* Subroutine */ int nvp2pl_(doublereal *normal, doublereal *point, 
-	doublereal *plane)
+/* Subroutine */ int nvp2pl_(cspice_t* __global_state, doublereal *normal, 
+	doublereal *point, doublereal *plane)
 {
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal tmpvec[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
 
 
     /* Module state */
-    nvp2pl_state_t* __state = get_nvp2pl_state();
+    nvp2pl_state_t* __state = get_nvp2pl_state(__global_state);
 /* $ Abstract */
 
 /*     Make a SPICELIB plane from a normal vector and a point. */
@@ -223,21 +223,22 @@ static nvp2pl_state_t* get_nvp2pl_state() {
 
 /*     This routine checks in only if an error is discovered. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     The normal vector must be non-zero. */
 
-    if (vzero_(normal)) {
-	chkin_("NVP2PL", (ftnlen)6);
-	setmsg_("Plane's normal must be non-zero.", (ftnlen)32);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("NVP2PL", (ftnlen)6);
+    if (vzero_(__global_state, normal)) {
+	chkin_(__global_state, "NVP2PL", (ftnlen)6);
+	setmsg_(__global_state, "Plane's normal must be non-zero.", (ftnlen)
+		32);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "NVP2PL", (ftnlen)6);
 	return 0;
     }
-    vhat_(normal, plane);
-    plane[3] = vdot_(point, plane);
+    vhat_(__global_state, normal, plane);
+    plane[3] = vdot_(__global_state, point, plane);
 
 /*     The constant should be the distance of the plane from the */
 /*     origin.  If the constant is negative, negate both it and the */
@@ -245,8 +246,8 @@ static nvp2pl_state_t* get_nvp2pl_state() {
 
     if (plane[3] < 0.) {
 	plane[3] = -plane[3];
-	vminus_(plane, tmpvec);
-	vequ_(tmpvec, plane);
+	vminus_(__global_state, plane, tmpvec);
+	vequ_(__global_state, tmpvec, plane);
     }
     return 0;
 } /* nvp2pl_ */

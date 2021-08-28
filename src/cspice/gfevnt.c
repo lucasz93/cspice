@@ -8,8 +8,7 @@
 
 
 extern gfevnt_init_t __gfevnt_init;
-static gfevnt_state_t* get_gfevnt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gfevnt_state_t* get_gfevnt_state(cspice_t* state) {
 	if (!state->gfevnt)
 		state->gfevnt = __cspice_allocate_module(sizeof(
 	gfevnt_state_t), &__gfevnt_init, sizeof(__gfevnt_init));
@@ -18,14 +17,14 @@ static gfevnt_state_t* get_gfevnt_state() {
 }
 
 /* $Procedure GFEVNT ( GF, Geometric event finder ) */
-/* Subroutine */ int gfevnt_(U_fp udstep, U_fp udrefn, char *gquant, integer *
-	qnpars, char *qpnams, char *qcpars, doublereal *qdpars, integer *
-	qipars, logical *qlpars, char *op, doublereal *refval, doublereal *
-	tol, doublereal *adjust, doublereal *cnfine, logical *rpt, U_fp 
-	udrepi, U_fp udrepu, U_fp udrepf, integer *mw, integer *nw, 
-	doublereal *work, logical *bail, L_fp udbail, doublereal *result, 
-	ftnlen gquant_len, ftnlen qpnams_len, ftnlen qcpars_len, ftnlen 
-	op_len)
+/* Subroutine */ int gfevnt_(cspice_t* __global_state, U_fp udstep, U_fp 
+	udrefn, char *gquant, integer *qnpars, char *qpnams, char *qcpars, 
+	doublereal *qdpars, integer *qipars, logical *qlpars, char *op, 
+	doublereal *refval, doublereal *tol, doublereal *adjust, doublereal *
+	cnfine, logical *rpt, U_fp udrepi, U_fp udrepu, U_fp udrepf, integer *
+	mw, integer *nw, doublereal *work, logical *bail, L_fp udbail, 
+	doublereal *result, ftnlen gquant_len, ftnlen qpnams_len, ftnlen 
+	qcpars_len, ftnlen op_len)
 {
     /* Initialized data */
 
@@ -34,64 +33,69 @@ static gfevnt_state_t* get_gfevnt_state() {
     integer work_dim1, work_offset, i__1, i__2, i__3;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal dvec[3];
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzgfdidc_();
-    extern /* Subroutine */ int zzgfpadc_();
-    extern /* Subroutine */ int zzgfildc_();
-    extern /* Subroutine */ int zzgfdiin_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfdigq_();
-    extern /* Subroutine */ int zzgfpain_(char *, char *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfpagq_();
-    extern /* Subroutine */ int zzgfspdc_();
-    extern /* Subroutine */ int zzgfrrdc_();
-    extern /* Subroutine */ int zzgfilin_(char *, char *, char *, char *, 
-	    char *, char *, char *, doublereal *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfilgq_();
-    extern /* Subroutine */ int zzgfcslv_(char *, char *, char *, char *, 
-	    char *, char *, char *, doublereal *, char *, char *, char *, 
-	    doublereal *, doublereal *, doublereal *, U_fp, U_fp, logical *, 
-	    U_fp, U_fp, U_fp, logical *, L_fp, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfudlt_();
-    extern /* Subroutine */ int zzgfspin_(char *, char *, char *, char *, 
-	    char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfspgq_();
-    extern /* Subroutine */ int zzgfrrgq_();
-    extern /* Subroutine */ int zzgfrelx_(U_fp, U_fp, U_fp, U_fp, U_fp, char *
-	    , doublereal *, doublereal *, doublereal *, doublereal *, integer 
-	    *, integer *, doublereal *, logical *, U_fp, U_fp, U_fp, char *, 
-	    char *, logical *, L_fp, doublereal *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfrrin_(char *, char *, char *, doublereal *
-	    , ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzgfdidc_(cspice_t*);
+    extern /* Subroutine */ int zzgfpadc_(cspice_t*);
+    extern /* Subroutine */ int zzgfildc_(cspice_t*);
+    extern /* Subroutine */ int zzgfdiin_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfdigq_(cspice_t*);
+    extern /* Subroutine */ int zzgfpain_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfpagq_(cspice_t*);
+    extern /* Subroutine */ int zzgfspdc_(cspice_t*);
+    extern /* Subroutine */ int zzgfrrdc_(cspice_t*);
+    extern /* Subroutine */ int zzgfilin_(cspice_t*, char *, char *, char *, 
+	    char *, char *, char *, char *, doublereal *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfilgq_(cspice_t*);
+    extern /* Subroutine */ int zzgfcslv_(cspice_t*, char *, char *, char *, 
+	    char *, char *, char *, char *, doublereal *, char *, char *, 
+	    char *, doublereal *, doublereal *, doublereal *, U_fp, U_fp, 
+	    logical *, U_fp, U_fp, U_fp, logical *, L_fp, integer *, integer *
+	    , doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfudlt_(cspice_t*);
+    extern /* Subroutine */ int zzgfspin_(cspice_t*, char *, char *, char *, 
+	    char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfspgq_(cspice_t*);
+    extern /* Subroutine */ int zzgfrrgq_(cspice_t*);
+    extern /* Subroutine */ int zzgfrelx_(cspice_t*, U_fp, U_fp, U_fp, U_fp, 
+	    U_fp, char *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, integer *, integer *, doublereal *, logical *, U_fp,
+	     U_fp, U_fp, char *, char *, logical *, L_fp, doublereal *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfrrin_(cspice_t*, char *, char *, char *, 
+	    doublereal *, ftnlen, ftnlen, ftnlen);
     integer i__;
     char frame[80*2];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     char shape[80*2];
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char cpars[80*10];
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
     char illum[80];
     char quant[80];
     integer npass;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer qtnum;
     char of[80*2];
     doublereal dt;
     char vecdef[80];
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern logical return_(cspice_t*);
     char abcorr[80];
     char angtyp[80];
     char cornam[80];
@@ -106,15 +110,15 @@ static gfevnt_state_t* get_gfevnt_state() {
     integer loc;
     logical noadjx;
     doublereal spoint[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     char uop[6];
 
 
     /* Module state */
-    gfevnt_state_t* __state = get_gfevnt_state();
+    gfevnt_state_t* __state = get_gfevnt_state(__global_state);
 /* $ Abstract */
 
 /*     Determine time intervals when a specified geometric quantity */
@@ -2011,10 +2015,10 @@ static gfevnt_state_t* get_gfevnt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("GFEVNT", (ftnlen)6);
+    chkin_(__global_state, "GFEVNT", (ftnlen)6);
     if (__state->first) {
 
 /*        Set the progress report prefix and suffix strings for */
@@ -2022,75 +2026,90 @@ static gfevnt_state_t* get_gfevnt_state() {
 /*        The coordinate solver performs that function. */
 
 	__state->first = FALSE_;
-	s_copy(__state->srcpre, "Angular separation pass 1 of #", (ftnlen)55, 
-		(ftnlen)30);
-	s_copy(__state->srcpre + 55, "Angular separation pass 2 of #", (
-		ftnlen)55, (ftnlen)30);
-	s_copy(__state->srcpre + 110, "Distance pass 1 of # ", (ftnlen)55, (
-		ftnlen)21);
-	s_copy(__state->srcpre + 165, "Distance pass 2 of # ", (ftnlen)55, (
-		ftnlen)21);
-	s_copy(__state->srcpre + 660, "Angular Rate pass 1 of #", (ftnlen)55, 
-		(ftnlen)24);
-	s_copy(__state->srcpre + 715, "Angular Rate pass 2 of #", (ftnlen)55, 
-		(ftnlen)24);
-	s_copy(__state->srcpre + 330, "Range Rate pass 1 of #", (ftnlen)55, (
-		ftnlen)22);
-	s_copy(__state->srcpre + 385, "Range Rate pass 2 of #", (ftnlen)55, (
-		ftnlen)22);
-	s_copy(__state->srcpre + 440, "Phase angle search pass 1 of #", (
-		ftnlen)55, (ftnlen)30);
-	s_copy(__state->srcpre + 495, "Phase angle search pass 2 of #", (
-		ftnlen)55, (ftnlen)30);
-	s_copy(__state->srcpre + 770, "Diameter pass 1 of #", (ftnlen)55, (
-		ftnlen)20);
-	s_copy(__state->srcpre + 825, "Diameter pass 2 of #", (ftnlen)55, (
-		ftnlen)20);
-	s_copy(__state->srcpre + 550, "Illumination angle pass 1 of #", (
-		ftnlen)55, (ftnlen)30);
-	s_copy(__state->srcpre + 605, "Illumination angle pass 2 of #", (
-		ftnlen)55, (ftnlen)30);
-	s_copy(__state->srcsuf, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 13, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 26, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 39, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 156, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 169, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 78, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 91, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 104, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 117, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 182, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 195, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 130, "done.", (ftnlen)13, (ftnlen)5);
-	s_copy(__state->srcsuf + 143, "done.", (ftnlen)13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcpre, "Angular separation pa"
+		"ss 1 of #", (ftnlen)55, (ftnlen)30);
+	s_copy(&__global_state->f2c, __state->srcpre + 55, "Angular separati"
+		"on pass 2 of #", (ftnlen)55, (ftnlen)30);
+	s_copy(&__global_state->f2c, __state->srcpre + 110, "Distance pass 1"
+		" of # ", (ftnlen)55, (ftnlen)21);
+	s_copy(&__global_state->f2c, __state->srcpre + 165, "Distance pass 2"
+		" of # ", (ftnlen)55, (ftnlen)21);
+	s_copy(&__global_state->f2c, __state->srcpre + 660, "Angular Rate pa"
+		"ss 1 of #", (ftnlen)55, (ftnlen)24);
+	s_copy(&__global_state->f2c, __state->srcpre + 715, "Angular Rate pa"
+		"ss 2 of #", (ftnlen)55, (ftnlen)24);
+	s_copy(&__global_state->f2c, __state->srcpre + 330, "Range Rate pass"
+		" 1 of #", (ftnlen)55, (ftnlen)22);
+	s_copy(&__global_state->f2c, __state->srcpre + 385, "Range Rate pass"
+		" 2 of #", (ftnlen)55, (ftnlen)22);
+	s_copy(&__global_state->f2c, __state->srcpre + 440, "Phase angle sea"
+		"rch pass 1 of #", (ftnlen)55, (ftnlen)30);
+	s_copy(&__global_state->f2c, __state->srcpre + 495, "Phase angle sea"
+		"rch pass 2 of #", (ftnlen)55, (ftnlen)30);
+	s_copy(&__global_state->f2c, __state->srcpre + 770, "Diameter pass 1"
+		" of #", (ftnlen)55, (ftnlen)20);
+	s_copy(&__global_state->f2c, __state->srcpre + 825, "Diameter pass 2"
+		" of #", (ftnlen)55, (ftnlen)20);
+	s_copy(&__global_state->f2c, __state->srcpre + 550, "Illumination an"
+		"gle pass 1 of #", (ftnlen)55, (ftnlen)30);
+	s_copy(&__global_state->f2c, __state->srcpre + 605, "Illumination an"
+		"gle pass 2 of #", (ftnlen)55, (ftnlen)30);
+	s_copy(&__global_state->f2c, __state->srcsuf, "done.", (ftnlen)13, (
+		ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 13, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 26, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 39, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 156, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 169, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 78, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 91, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 104, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 117, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 182, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 195, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 130, "done.", (ftnlen)
+		13, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->srcsuf + 143, "done.", (ftnlen)
+		13, (ftnlen)5);
     }
 
 /*     Make sure the requested quantity is one we recognize. */
 
-    ljust_(gquant, quant, gquant_len, (ftnlen)80);
-    ucase_(quant, quant, (ftnlen)80, (ftnlen)80);
-    qtnum = isrchc_(quant, &__state->c__8, __state->qnames, (ftnlen)80, (
-	    ftnlen)80);
+    ljust_(__global_state, gquant, quant, gquant_len, (ftnlen)80);
+    ucase_(__global_state, quant, quant, (ftnlen)80, (ftnlen)80);
+    qtnum = isrchc_(__global_state, quant, &__state->c__8, __state->qnames, (
+	    ftnlen)80, (ftnlen)80);
     if (qtnum == 0) {
-	setmsg_("The geometric quantity, # is not recognized. Supported quan"
-		"tities are: DISTANCE, PHASE ANGLE, COORDINATE, RANGE RATE, A"
-		"NGULAR SEPARATION,ILLUMINATION ANGLE.", (ftnlen)156);
-	errch_("#", gquant, (ftnlen)1, gquant_len);
-	sigerr_("SPICE(NOTRECOGNIZED)", (ftnlen)20);
-	chkout_("GFEVNT", (ftnlen)6);
+	setmsg_(__global_state, "The geometric quantity, # is not recognized"
+		". Supported quantities are: DISTANCE, PHASE ANGLE, COORDINAT"
+		"E, RANGE RATE, ANGULAR SEPARATION,ILLUMINATION ANGLE.", (
+		ftnlen)156);
+	errch_(__global_state, "#", gquant, (ftnlen)1, gquant_len);
+	sigerr_(__global_state, "SPICE(NOTRECOGNIZED)", (ftnlen)20);
+	chkout_(__global_state, "GFEVNT", (ftnlen)6);
 	return 0;
     }
 
 /*     Check number of quantity definition parameters. */
 
     if (*qnpars < 0 || *qnpars > 10) {
-	setmsg_("Number of quantity definition parameters = #;  must be in r"
-		"ange 0:#.", (ftnlen)68);
-	errint_("#", qnpars, (ftnlen)1);
-	errint_("#", &__state->c__10, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("GFEVNT", (ftnlen)6);
+	setmsg_(__global_state, "Number of quantity definition parameters = "
+		"#;  must be in range 0:#.", (ftnlen)68);
+	errint_(__global_state, "#", qnpars, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__10, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "GFEVNT", (ftnlen)6);
 	return 0;
     }
 
@@ -2098,19 +2117,23 @@ static gfevnt_state_t* get_gfevnt_state() {
 
     i__1 = *qnpars;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	ljust_(qpnams + (i__ - 1) * qpnams_len, pnames + ((i__2 = i__ - 1) < 
-		10 && 0 <= i__2 ? i__2 : s_rnge("pnames", i__2, "gfevnt_", (
-		ftnlen)1829)) * 80, qpnams_len, (ftnlen)80);
-	ucase_(pnames + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"pnames", i__2, "gfevnt_", (ftnlen)1830)) * 80, pnames + ((
-		i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("pnames", 
-		i__3, "gfevnt_", (ftnlen)1830)) * 80, (ftnlen)80, (ftnlen)80);
-	ljust_(qcpars + (i__ - 1) * qcpars_len, cpars + ((i__2 = i__ - 1) < 
-		10 && 0 <= i__2 ? i__2 : s_rnge("cpars", i__2, "gfevnt_", (
-		ftnlen)1832)) * 80, qcpars_len, (ftnlen)80);
-	ucase_(cpars + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"cpars", i__2, "gfevnt_", (ftnlen)1833)) * 80, cpars + ((i__3 
-		= i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("cpars", i__3, 
+	ljust_(__global_state, qpnams + (i__ - 1) * qpnams_len, pnames + ((
+		i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "pnames", i__2, "gfevnt_", (ftnlen)1829))
+		 * 80, qpnams_len, (ftnlen)80);
+	ucase_(__global_state, pnames + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "pnames", i__2, "gfevnt_",
+		 (ftnlen)1830)) * 80, pnames + ((i__3 = i__ - 1) < 10 && 0 <= 
+		i__3 ? i__3 : s_rnge(&__global_state->f2c, "pnames", i__3, 
+		"gfevnt_", (ftnlen)1830)) * 80, (ftnlen)80, (ftnlen)80);
+	ljust_(__global_state, qcpars + (i__ - 1) * qcpars_len, cpars + ((
+		i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "cpars", i__2, "gfevnt_", (ftnlen)1832)) 
+		* 80, qcpars_len, (ftnlen)80);
+	ucase_(__global_state, cpars + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "cpars", i__2, "gfevnt_", 
+		(ftnlen)1833)) * 80, cpars + ((i__3 = i__ - 1) < 10 && 0 <= 
+		i__3 ? i__3 : s_rnge(&__global_state->f2c, "cpars", i__3, 
 		"gfevnt_", (ftnlen)1833)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
@@ -2118,28 +2141,31 @@ static gfevnt_state_t* get_gfevnt_state() {
 /*     quantity. */
 
     for (i__ = 1; i__ <= 10; ++i__) {
-	if (s_cmp(__state->qpars + ((i__1 = i__ + qtnum * 10 - 11) < 80 && 0 
-		<= i__1 ? i__1 : s_rnge("qpars", i__1, "gfevnt_", (ftnlen)
-		1843)) * 80, " ", (ftnlen)80, (ftnlen)1) != 0) {
+	if (s_cmp(&__global_state->f2c, __state->qpars + ((i__1 = i__ + qtnum 
+		* 10 - 11) < 80 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "qpars", i__1, "gfevnt_", (ftnlen)1843)) 
+		* 80, " ", (ftnlen)80, (ftnlen)1) != 0) {
 
 /*           The Ith parameter must be supplied by the caller. */
 
-	    loc = isrchc_(__state->qpars + ((i__1 = i__ + qtnum * 10 - 11) < 
-		    80 && 0 <= i__1 ? i__1 : s_rnge("qpars", i__1, "gfevnt_", 
-		    (ftnlen)1847)) * 80, qnpars, pnames, (ftnlen)80, (ftnlen)
-		    80);
+	    loc = isrchc_(__global_state, __state->qpars + ((i__1 = i__ + 
+		    qtnum * 10 - 11) < 80 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "qpars", i__1, "gfevnt_", (ftnlen)
+		    1847)) * 80, qnpars, pnames, (ftnlen)80, (ftnlen)80);
 	    if (loc == 0) {
-		setmsg_("The parameter # is required in order to compute eve"
-			"nts pertaining to the quantity #; this parameter was"
-			" not supplied.", (ftnlen)117);
-		errch_("#", __state->qpars + ((i__1 = i__ + qtnum * 10 - 11) <
-			 80 && 0 <= i__1 ? i__1 : s_rnge("qpars", i__1, "gfe"
-			"vnt_", (ftnlen)1856)) * 80, (ftnlen)1, (ftnlen)80);
-		errch_("#", __state->qnames + ((i__1 = qtnum - 1) < 8 && 0 <= 
-			i__1 ? i__1 : s_rnge("qnames", i__1, "gfevnt_", (
+		setmsg_(__global_state, "The parameter # is required in orde"
+			"r to compute events pertaining to the quantity #; th"
+			"is parameter was not supplied.", (ftnlen)117);
+		errch_(__global_state, "#", __state->qpars + ((i__1 = i__ + 
+			qtnum * 10 - 11) < 80 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "qpars", i__1, "gfevnt_", (
+			ftnlen)1856)) * 80, (ftnlen)1, (ftnlen)80);
+		errch_(__global_state, "#", __state->qnames + ((i__1 = qtnum 
+			- 1) < 8 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "qnames", i__1, "gfevnt_", (
 			ftnlen)1857)) * 80, (ftnlen)1, (ftnlen)80);
-		sigerr_("SPICE(MISSINGVALUE)", (ftnlen)19);
-		chkout_("GFEVNT", (ftnlen)6);
+		sigerr_(__global_state, "SPICE(MISSINGVALUE)", (ftnlen)19);
+		chkout_(__global_state, "GFEVNT", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -2172,183 +2198,203 @@ static gfevnt_state_t* get_gfevnt_state() {
 
 /*     -TARGET- */
 
-    loc = isrchc_("TARGET", qnpars, pnames, (ftnlen)6, (ftnlen)80);
+    loc = isrchc_(__global_state, "TARGET", qnpars, pnames, (ftnlen)6, (
+	    ftnlen)80);
     if (loc > 0) {
-	s_copy(target, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1902)) * 80, (ftnlen)
-		80, (ftnlen)80);
+	s_copy(&__global_state->f2c, target, cpars + ((i__1 = loc - 1) < 10 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars", 
+		i__1, "gfevnt_", (ftnlen)1902)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
 /*     -OBSERVER- */
 
-    loc = isrchc_("OBSERVER", qnpars, pnames, (ftnlen)8, (ftnlen)80);
+    loc = isrchc_(__global_state, "OBSERVER", qnpars, pnames, (ftnlen)8, (
+	    ftnlen)80);
     if (loc > 0) {
-	s_copy(obsrvr, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1914)) * 80, (ftnlen)
-		80, (ftnlen)80);
+	s_copy(&__global_state->f2c, obsrvr, cpars + ((i__1 = loc - 1) < 10 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars", 
+		i__1, "gfevnt_", (ftnlen)1914)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
 /*     -ILLUM- */
 
-    loc = isrchc_("ILLUM", qnpars, pnames, (ftnlen)5, (ftnlen)80);
+    loc = isrchc_(__global_state, "ILLUM", qnpars, pnames, (ftnlen)5, (ftnlen)
+	    80);
     if (loc > 0) {
-	s_copy(illum, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1926)) * 80, (ftnlen)
-		80, (ftnlen)80);
+	s_copy(&__global_state->f2c, illum, cpars + ((i__1 = loc - 1) < 10 && 
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars", i__1,
+		 "gfevnt_", (ftnlen)1926)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
 /*     -TARGET1- */
 
-    loc = isrchc_("TARGET1", qnpars, pnames, (ftnlen)7, (ftnlen)80);
+    loc = isrchc_(__global_state, "TARGET1", qnpars, pnames, (ftnlen)7, (
+	    ftnlen)80);
     if (loc > 0) {
-	s_copy(of, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1938)) * 80, (ftnlen)
-		80, (ftnlen)80);
+	s_copy(&__global_state->f2c, of, cpars + ((i__1 = loc - 1) < 10 && 0 
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars", i__1, 
+		"gfevnt_", (ftnlen)1938)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
 /*     -TARGET2- */
 
-    loc = isrchc_("TARGET2", qnpars, pnames, (ftnlen)7, (ftnlen)80);
+    loc = isrchc_(__global_state, "TARGET2", qnpars, pnames, (ftnlen)7, (
+	    ftnlen)80);
     if (loc > 0) {
-	s_copy(of + 80, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1950)) * 80, (ftnlen)
-		80, (ftnlen)80);
+	s_copy(&__global_state->f2c, of + 80, cpars + ((i__1 = loc - 1) < 10 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars", 
+		i__1, "gfevnt_", (ftnlen)1950)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
 /*     -FRAME1- */
 
-    loc = isrchc_("FRAME1", qnpars, pnames, (ftnlen)6, (ftnlen)80);
+    loc = isrchc_(__global_state, "FRAME1", qnpars, pnames, (ftnlen)6, (
+	    ftnlen)80);
     if (loc > 0) {
-	s_copy(frame, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1962)) * 80, (ftnlen)
-		80, (ftnlen)80);
+	s_copy(&__global_state->f2c, frame, cpars + ((i__1 = loc - 1) < 10 && 
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars", i__1,
+		 "gfevnt_", (ftnlen)1962)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
 /*     -FRAME2- */
 
-    loc = isrchc_("FRAME2", qnpars, pnames, (ftnlen)6, (ftnlen)80);
+    loc = isrchc_(__global_state, "FRAME2", qnpars, pnames, (ftnlen)6, (
+	    ftnlen)80);
     if (loc > 0) {
-	s_copy(frame + 80, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 
-		: s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1973)) * 80, (
-		ftnlen)80, (ftnlen)80);
+	s_copy(&__global_state->f2c, frame + 80, cpars + ((i__1 = loc - 1) < 
+		10 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars",
+		 i__1, "gfevnt_", (ftnlen)1973)) * 80, (ftnlen)80, (ftnlen)80)
+		;
     }
 
 /*     -SHAPE1- */
 
-    loc = isrchc_("SHAPE1", qnpars, pnames, (ftnlen)6, (ftnlen)80);
+    loc = isrchc_(__global_state, "SHAPE1", qnpars, pnames, (ftnlen)6, (
+	    ftnlen)80);
     if (loc > 0) {
-	s_copy(shape, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1985)) * 80, (ftnlen)
-		80, (ftnlen)80);
+	s_copy(&__global_state->f2c, shape, cpars + ((i__1 = loc - 1) < 10 && 
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars", i__1,
+		 "gfevnt_", (ftnlen)1985)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
 /*     -SHAPE2- */
 
-    loc = isrchc_("SHAPE2", qnpars, pnames, (ftnlen)6, (ftnlen)80);
+    loc = isrchc_(__global_state, "SHAPE2", qnpars, pnames, (ftnlen)6, (
+	    ftnlen)80);
     if (loc > 0) {
-	s_copy(shape + 80, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 
-		: s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1997)) * 80, (
-		ftnlen)80, (ftnlen)80);
+	s_copy(&__global_state->f2c, shape + 80, cpars + ((i__1 = loc - 1) < 
+		10 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars",
+		 i__1, "gfevnt_", (ftnlen)1997)) * 80, (ftnlen)80, (ftnlen)80)
+		;
     }
 
 /*     -ABCORR- */
 
-    loc = isrchc_("ABCORR", qnpars, pnames, (ftnlen)6, (ftnlen)80);
+    loc = isrchc_(__global_state, "ABCORR", qnpars, pnames, (ftnlen)6, (
+	    ftnlen)80);
     if (loc > 0) {
-	s_copy(abcorr, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2009)) * 80, (ftnlen)
-		80, (ftnlen)80);
+	s_copy(&__global_state->f2c, abcorr, cpars + ((i__1 = loc - 1) < 10 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars", 
+		i__1, "gfevnt_", (ftnlen)2009)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
 /*     -REFERENCE FRAME- */
 
-    loc = isrchc_("REFERENCE FRAME", qnpars, pnames, (ftnlen)15, (ftnlen)80);
+    loc = isrchc_(__global_state, "REFERENCE FRAME", qnpars, pnames, (ftnlen)
+	    15, (ftnlen)80);
     if (loc > 0) {
-	s_copy(ref, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2021)) * 80, (ftnlen)
-		80, (ftnlen)80);
+	s_copy(&__global_state->f2c, ref, cpars + ((i__1 = loc - 1) < 10 && 0 
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars", i__1, 
+		"gfevnt_", (ftnlen)2021)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
 /*     -COORDINATE SYSTEM- */
 
-    loc = isrchc_("COORDINATE SYSTEM", qnpars, qpnams, (ftnlen)17, qpnams_len)
-	    ;
+    loc = isrchc_(__global_state, "COORDINATE SYSTEM", qnpars, qpnams, (
+	    ftnlen)17, qpnams_len);
     if (loc > 0) {
-	s_copy(corsys, qcpars + (loc - 1) * qcpars_len, (ftnlen)80, 
-		qcpars_len);
+	s_copy(&__global_state->f2c, corsys, qcpars + (loc - 1) * qcpars_len, 
+		(ftnlen)80, qcpars_len);
     }
 
 /*     -COORDINATE- */
 
-    loc = isrchc_("COORDINATE", qnpars, qpnams, (ftnlen)10, qpnams_len);
+    loc = isrchc_(__global_state, "COORDINATE", qnpars, qpnams, (ftnlen)10, 
+	    qpnams_len);
     if (loc > 0) {
-	s_copy(cornam, qcpars + (loc - 1) * qcpars_len, (ftnlen)80, 
-		qcpars_len);
+	s_copy(&__global_state->f2c, cornam, qcpars + (loc - 1) * qcpars_len, 
+		(ftnlen)80, qcpars_len);
     }
 
 /*     -VECTOR DEFINITION- */
 
-    loc = isrchc_("VECTOR DEFINITION", qnpars, qpnams, (ftnlen)17, qpnams_len)
-	    ;
+    loc = isrchc_(__global_state, "VECTOR DEFINITION", qnpars, qpnams, (
+	    ftnlen)17, qpnams_len);
     if (loc > 0) {
-	s_copy(vecdef, qcpars + (loc - 1) * qcpars_len, (ftnlen)80, 
-		qcpars_len);
+	s_copy(&__global_state->f2c, vecdef, qcpars + (loc - 1) * qcpars_len, 
+		(ftnlen)80, qcpars_len);
     }
 
 /*     -DVEC- */
 
-    loc = isrchc_("DVEC", qnpars, pnames, (ftnlen)4, (ftnlen)80);
+    loc = isrchc_(__global_state, "DVEC", qnpars, pnames, (ftnlen)4, (ftnlen)
+	    80);
     if (loc > 0) {
-	vequ_(qdpars, dvec);
+	vequ_(__global_state, qdpars, dvec);
     }
 
 /*     -METHOD- */
 
-    loc = isrchc_("METHOD", qnpars, qpnams, (ftnlen)6, qpnams_len);
+    loc = isrchc_(__global_state, "METHOD", qnpars, qpnams, (ftnlen)6, 
+	    qpnams_len);
     if (loc > 0) {
-	s_copy(method, qcpars + (loc - 1) * qcpars_len, (ftnlen)80, 
-		qcpars_len);
+	s_copy(&__global_state->f2c, method, qcpars + (loc - 1) * qcpars_len, 
+		(ftnlen)80, qcpars_len);
     }
 
 /*     -DREF- */
 
-    loc = isrchc_("DREF", qnpars, pnames, (ftnlen)4, (ftnlen)80);
+    loc = isrchc_(__global_state, "DREF", qnpars, pnames, (ftnlen)4, (ftnlen)
+	    80);
     if (loc > 0) {
-	s_copy(__state->dref, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2092)) * 80, (
-		ftnlen)80, (ftnlen)80);
+	s_copy(&__global_state->f2c, __state->dref, cpars + ((i__1 = loc - 1) 
+		< 10 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpa"
+		"rs", i__1, "gfevnt_", (ftnlen)2092)) * 80, (ftnlen)80, (
+		ftnlen)80);
     }
 
 /*     -ANGTYP- */
 
-    loc = isrchc_("ANGTYP", qnpars, pnames, (ftnlen)6, (ftnlen)80);
+    loc = isrchc_(__global_state, "ANGTYP", qnpars, pnames, (ftnlen)6, (
+	    ftnlen)80);
     if (loc > 0) {
-	s_copy(angtyp, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2103)) * 80, (ftnlen)
-		80, (ftnlen)80);
+	s_copy(&__global_state->f2c, angtyp, cpars + ((i__1 = loc - 1) < 10 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cpars", 
+		i__1, "gfevnt_", (ftnlen)2103)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
 /*     -SPOINT- */
 
-    loc = isrchc_("SPOINT", qnpars, pnames, (ftnlen)6, (ftnlen)80);
+    loc = isrchc_(__global_state, "SPOINT", qnpars, pnames, (ftnlen)6, (
+	    ftnlen)80);
     if (loc > 0) {
-	vequ_(qdpars, spoint);
+	vequ_(__global_state, qdpars, spoint);
     }
 
 /*     Make sure that the requested comparison operation is one we */
 /*     recognize. */
 
-    ljust_(op, uop, op_len, (ftnlen)6);
-    ucase_(uop, uop, (ftnlen)6, (ftnlen)6);
-    loc = isrchc_(uop, &__state->c__7, __state->cnames, (ftnlen)6, (ftnlen)80)
-	    ;
+    ljust_(__global_state, op, uop, op_len, (ftnlen)6);
+    ucase_(__global_state, uop, uop, (ftnlen)6, (ftnlen)6);
+    loc = isrchc_(__global_state, uop, &__state->c__7, __state->cnames, (
+	    ftnlen)6, (ftnlen)80);
     if (loc == 0) {
-	setmsg_("The comparison operator, # is not recognized.  Supported op"
-		"erators are: >, =, <, ABSMAX, ABSMIN, LOCMAX, LOCMIN. ", (
-		ftnlen)113);
-	errch_("#", op, (ftnlen)1, op_len);
-	sigerr_("SPICE(NOTRECOGNIZED)", (ftnlen)20);
-	chkout_("GFEVNT", (ftnlen)6);
+	setmsg_(__global_state, "The comparison operator, # is not recognize"
+		"d.  Supported operators are: >, =, <, ABSMAX, ABSMIN, LOCMAX"
+		", LOCMIN. ", (ftnlen)113);
+	errch_(__global_state, "#", op, (ftnlen)1, op_len);
+	sigerr_(__global_state, "SPICE(NOTRECOGNIZED)", (ftnlen)20);
+	chkout_(__global_state, "GFEVNT", (ftnlen)6);
 	return 0;
     }
 
@@ -2361,10 +2407,12 @@ static gfevnt_state_t* get_gfevnt_state() {
 /*        operator and the flag NOADJX to indicate an absolute extremum */
 /*        operator with zero adjustment. */
 
-	localx = s_cmp(uop, "LOCMIN", (ftnlen)6, (ftnlen)6) == 0 || s_cmp(uop,
-		 "LOCMAX", (ftnlen)6, (ftnlen)6) == 0;
-	noadjx = *adjust == 0. && (s_cmp(uop, "ABSMIN", (ftnlen)6, (ftnlen)6) 
-		== 0 || s_cmp(uop, "ABSMAX", (ftnlen)6, (ftnlen)6) == 0);
+	localx = s_cmp(&__global_state->f2c, uop, "LOCMIN", (ftnlen)6, (
+		ftnlen)6) == 0 || s_cmp(&__global_state->f2c, uop, "LOCMAX", (
+		ftnlen)6, (ftnlen)6) == 0;
+	noadjx = *adjust == 0. && (s_cmp(&__global_state->f2c, uop, "ABSMIN", 
+		(ftnlen)6, (ftnlen)6) == 0 || s_cmp(&__global_state->f2c, uop,
+		 "ABSMAX", (ftnlen)6, (ftnlen)6) == 0);
 	if (localx || noadjx) {
 
 /*           These operators correspond to 1-pass searches. */
@@ -2380,12 +2428,13 @@ static gfevnt_state_t* get_gfevnt_state() {
 
 	i__1 = npass;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    repmi_(__state->srcpre + ((i__2 = i__ + (qtnum << 1) - 3) < 16 && 
-		    0 <= i__2 ? i__2 : s_rnge("srcpre", i__2, "gfevnt_", (
-		    ftnlen)2182)) * 55, "#", &npass, rptpre + ((i__3 = i__ - 
-		    1) < 2 && 0 <= i__3 ? i__3 : s_rnge("rptpre", i__3, "gfe"
-		    "vnt_", (ftnlen)2182)) * 55, (ftnlen)55, (ftnlen)1, (
-		    ftnlen)55);
+	    repmi_(__global_state, __state->srcpre + ((i__2 = i__ + (qtnum << 
+		    1) - 3) < 16 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "srcpre", i__2, "gfevnt_", (ftnlen)
+		    2182)) * 55, "#", &npass, rptpre + ((i__3 = i__ - 1) < 2 
+		    && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "rptp"
+		    "re", i__3, "gfevnt_", (ftnlen)2182)) * 55, (ftnlen)55, (
+		    ftnlen)1, (ftnlen)55);
 	}
     }
 
@@ -2399,34 +2448,36 @@ static gfevnt_state_t* get_gfevnt_state() {
 
 /*        Separation condition initializer. */
 
-	zzgfspin_(of, obsrvr, shape, frame, abcorr, (ftnlen)80, (ftnlen)80, (
-		ftnlen)80, (ftnlen)80, (ftnlen)80);
-	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfspdc_, (U_fp)
-		zzgfudlt_, (U_fp)zzgfspgq_, op, refval, tol, adjust, cnfine, 
-		mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
-		rptpre, __state->srcsuf, bail, (L_fp)udbail, result, op_len, (
-		ftnlen)55, (ftnlen)13);
+	zzgfspin_(__global_state, of, obsrvr, shape, frame, abcorr, (ftnlen)
+		80, (ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80);
+	zzgfrelx_(__global_state, (U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfspdc_,
+		 (U_fp)zzgfudlt_, (U_fp)zzgfspgq_, op, refval, tol, adjust, 
+		cnfine, mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)
+		udrepf, rptpre, __state->srcsuf, bail, (L_fp)udbail, result, 
+		op_len, (ftnlen)55, (ftnlen)13);
     } else if (qtnum == 2) {
 
 /*        Distance condition initializer. */
 
-	zzgfdiin_(target, abcorr, obsrvr, (ftnlen)80, (ftnlen)80, (ftnlen)80);
-	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfdidc_, (U_fp)
-		zzgfudlt_, (U_fp)zzgfdigq_, op, refval, tol, adjust, cnfine, 
-		mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
-		rptpre, __state->srcsuf + 26, bail, (L_fp)udbail, result, 
-		op_len, (ftnlen)55, (ftnlen)13);
+	zzgfdiin_(__global_state, target, abcorr, obsrvr, (ftnlen)80, (ftnlen)
+		80, (ftnlen)80);
+	zzgfrelx_(__global_state, (U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfdidc_,
+		 (U_fp)zzgfudlt_, (U_fp)zzgfdigq_, op, refval, tol, adjust, 
+		cnfine, mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)
+		udrepf, rptpre, __state->srcsuf + 26, bail, (L_fp)udbail, 
+		result, op_len, (ftnlen)55, (ftnlen)13);
     } else if (qtnum == 3) {
 
 /*        Solve for a coordinate condition. ZZGFCSLV calls the coordinate */
 /*        event initializer. */
 
-	zzgfcslv_(vecdef, method, target, ref, abcorr, obsrvr, __state->dref, 
-		dvec, corsys, cornam, op, refval, tol, adjust, (U_fp)udstep, (
-		U_fp)udrefn, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
-		bail, (L_fp)udbail, mw, nw, work, cnfine, result, (ftnlen)80, 
-		(ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80, (
-		ftnlen)80, (ftnlen)80, (ftnlen)80, op_len);
+	zzgfcslv_(__global_state, vecdef, method, target, ref, abcorr, obsrvr,
+		 __state->dref, dvec, corsys, cornam, op, refval, tol, adjust,
+		 (U_fp)udstep, (U_fp)udrefn, rpt, (U_fp)udrepi, (U_fp)udrepu, 
+		(U_fp)udrepf, bail, (L_fp)udbail, mw, nw, work, cnfine, 
+		result, (ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80, (
+		ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80, 
+		op_len);
     } else if (qtnum == 7) {
 
 /*        d( sep ) */
@@ -2442,24 +2493,24 @@ static gfevnt_state_t* get_gfevnt_state() {
 /*        reset. */
 
 	dt = 1.;
-	zzgfrrin_(target, abcorr, obsrvr, &dt, (ftnlen)80, (ftnlen)80, (
-		ftnlen)80);
-	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfrrdc_, (U_fp)
-		zzgfudlt_, (U_fp)zzgfrrgq_, op, refval, tol, adjust, cnfine, 
-		mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
-		rptpre, __state->srcsuf + 78, bail, (L_fp)udbail, result, 
-		op_len, (ftnlen)55, (ftnlen)13);
+	zzgfrrin_(__global_state, target, abcorr, obsrvr, &dt, (ftnlen)80, (
+		ftnlen)80, (ftnlen)80);
+	zzgfrelx_(__global_state, (U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfrrdc_,
+		 (U_fp)zzgfudlt_, (U_fp)zzgfrrgq_, op, refval, tol, adjust, 
+		cnfine, mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)
+		udrepf, rptpre, __state->srcsuf + 78, bail, (L_fp)udbail, 
+		result, op_len, (ftnlen)55, (ftnlen)13);
     } else if (qtnum == 5) {
 
 /*        Phase angle condition initializer. */
 
-	zzgfpain_(target, illum, abcorr, obsrvr, (ftnlen)80, (ftnlen)80, (
-		ftnlen)80, (ftnlen)80);
-	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfpadc_, (U_fp)
-		zzgfudlt_, (U_fp)zzgfpagq_, op, refval, tol, adjust, cnfine, 
-		mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
-		rptpre, __state->srcsuf + 104, bail, (L_fp)udbail, result, 
-		op_len, (ftnlen)55, (ftnlen)13);
+	zzgfpain_(__global_state, target, illum, abcorr, obsrvr, (ftnlen)80, (
+		ftnlen)80, (ftnlen)80, (ftnlen)80);
+	zzgfrelx_(__global_state, (U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfpadc_,
+		 (U_fp)zzgfudlt_, (U_fp)zzgfpagq_, op, refval, tol, adjust, 
+		cnfine, mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)
+		udrepf, rptpre, __state->srcsuf + 104, bail, (L_fp)udbail, 
+		result, op_len, (ftnlen)55, (ftnlen)13);
     } else if (qtnum == 8) {
 
 /*                ---Not yet implemented--- */
@@ -2468,28 +2519,28 @@ static gfevnt_state_t* get_gfevnt_state() {
 
 /*        Illumination angle condition initializer. */
 
-	zzgfilin_(method, angtyp, target, illum, ref, abcorr, obsrvr, spoint, 
-		(ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)80, (
-		ftnlen)80, (ftnlen)80);
-	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfildc_, (U_fp)
-		zzgfudlt_, (U_fp)zzgfilgq_, op, refval, tol, adjust, cnfine, 
-		mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)udrepf, 
-		rptpre, __state->srcsuf + 130, bail, (L_fp)udbail, result, 
-		op_len, (ftnlen)55, (ftnlen)13);
+	zzgfilin_(__global_state, method, angtyp, target, illum, ref, abcorr, 
+		obsrvr, spoint, (ftnlen)80, (ftnlen)80, (ftnlen)80, (ftnlen)
+		80, (ftnlen)80, (ftnlen)80, (ftnlen)80);
+	zzgfrelx_(__global_state, (U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfildc_,
+		 (U_fp)zzgfudlt_, (U_fp)zzgfilgq_, op, refval, tol, adjust, 
+		cnfine, mw, nw, work, rpt, (U_fp)udrepi, (U_fp)udrepu, (U_fp)
+		udrepf, rptpre, __state->srcsuf + 130, bail, (L_fp)udbail, 
+		result, op_len, (ftnlen)55, (ftnlen)13);
     } else {
 
 /*        QTNUM is not a recognized event code. This block should */
 /*        never execute since we already checked the input quantity */
 /*        name string. */
 
-	setmsg_("Unknown event '#'. This error indicates a bug. Please conta"
-		"ct NAIF.", (ftnlen)67);
-	errch_("#", gquant, (ftnlen)1, gquant_len);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("GFEVNT", (ftnlen)6);
+	setmsg_(__global_state, "Unknown event '#'. This error indicates a b"
+		"ug. Please contact NAIF.", (ftnlen)67);
+	errch_(__global_state, "#", gquant, (ftnlen)1, gquant_len);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "GFEVNT", (ftnlen)6);
 	return 0;
     }
-    chkout_("GFEVNT", (ftnlen)6);
+    chkout_(__global_state, "GFEVNT", (ftnlen)6);
     return 0;
 } /* gfevnt_ */
 

@@ -8,41 +8,42 @@
 
 
 typedef int ekacli_state_t;
-static ekacli_state_t* get_ekacli_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekacli_state_t* get_ekacli_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure     EKACLI ( EK, add integer column to segment ) */
-/* Subroutine */ int ekacli_(integer *handle, integer *segno, char *column, 
-	integer *ivals, integer *entszs, logical *nlflgs, integer *rcptrs, 
-	integer *wkindx, ftnlen column_len)
+/* Subroutine */ int ekacli_(cspice_t* __global_state, integer *handle, 
+	integer *segno, char *column, integer *ivals, integer *entszs, 
+	logical *nlflgs, integer *rcptrs, integer *wkindx, ftnlen column_len)
 {
-    extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekcdsc_(cspice_t*, integer *, integer *, 
+	    char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer class__;
     integer dtype;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer coldsc[11];
     integer segdsc[24];
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int zzekac01_(integer *, integer *, integer *, 
-	    integer *, logical *, integer *, integer *);
-    extern /* Subroutine */ int zzekac04_(integer *, integer *, integer *, 
-	    integer *, integer *, logical *);
-    extern /* Subroutine */ int zzekac07_(integer *, integer *, integer *, 
-	    integer *, logical *, integer *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzekac01_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekac04_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, logical *);
+    extern /* Subroutine */ int zzekac07_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *, integer *);
 
 
     /* Module state */
-    ekacli_state_t* __state = get_ekacli_state();
+    ekacli_state_t* __state = get_ekacli_state(__global_state);
 /* $ Abstract */
 
 /*     Add an entire integer column to an EK segment. */
@@ -682,18 +683,18 @@ static ekacli_state_t* get_ekacli_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKACLI", (ftnlen)6);
+	chkin_(__global_state, "EKACLI", (ftnlen)6);
     }
 
 /*     Find the descriptors for the specified segment and column. */
 
-    zzeksdsc_(handle, segno, segdsc);
-    zzekcdsc_(handle, segdsc, column, coldsc, column_len);
-    if (failed_()) {
-	chkout_("EKACLI", (ftnlen)6);
+    zzeksdsc_(__global_state, handle, segno, segdsc);
+    zzekcdsc_(__global_state, handle, segdsc, column, coldsc, column_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKACLI", (ftnlen)6);
 	return 0;
     }
 
@@ -702,12 +703,12 @@ static ekacli_state_t* get_ekacli_state() {
     class__ = coldsc[0];
     dtype = coldsc[1];
     if (dtype != 3) {
-	setmsg_("Column # is of type #; EKACLI only works with integer colum"
-		"ns.", (ftnlen)62);
-	errch_("#", column, (ftnlen)1, column_len);
-	errint_("#", &dtype, (ftnlen)1);
-	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
-	chkout_("EKACLI", (ftnlen)6);
+	setmsg_(__global_state, "Column # is of type #; EKACLI only works wi"
+		"th integer columns.", (ftnlen)62);
+	errch_(__global_state, "#", column, (ftnlen)1, column_len);
+	errint_(__global_state, "#", &dtype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGDATATYPE)", (ftnlen)20);
+	chkout_(__global_state, "EKACLI", (ftnlen)6);
 	return 0;
     }
 
@@ -717,30 +718,33 @@ static ekacli_state_t* get_ekacli_state() {
 
 /*        Class 1 columns contain integer scalars. */
 
-	zzekac01_(handle, segdsc, coldsc, ivals, nlflgs, rcptrs, wkindx);
+	zzekac01_(__global_state, handle, segdsc, coldsc, ivals, nlflgs, 
+		rcptrs, wkindx);
     } else if (class__ == 4) {
 
 /*        Class 4 columns contain integer arrays. */
 
-	zzekac04_(handle, segdsc, coldsc, ivals, entszs, nlflgs);
+	zzekac04_(__global_state, handle, segdsc, coldsc, ivals, entszs, 
+		nlflgs);
     } else if (class__ == 7) {
 
 /*        Class 7 columns contain fixed-count integer scalars. */
 
-	zzekac07_(handle, segdsc, coldsc, ivals, nlflgs, wkindx);
+	zzekac07_(__global_state, handle, segdsc, coldsc, ivals, nlflgs, 
+		wkindx);
     } else {
 
 /*        This is an unsupported column class. */
 
-	setmsg_("Unsupported column class code # found in descriptor for col"
-		"umn #.", (ftnlen)65);
-	errint_("#", &class__, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, column_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("EKACLI", (ftnlen)6);
+	setmsg_(__global_state, "Unsupported column class code # found in de"
+		"scriptor for column #.", (ftnlen)65);
+	errint_(__global_state, "#", &class__, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, column_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "EKACLI", (ftnlen)6);
 	return 0;
     }
-    chkout_("EKACLI", (ftnlen)6);
+    chkout_(__global_state, "EKACLI", (ftnlen)6);
     return 0;
 } /* ekacli_ */
 

@@ -220,7 +220,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "lmpool_c" );
+   chkin_c ( naif_state, "lmpool_c" );
 
    /*
    Make sure the input string pointer is non-null and that the

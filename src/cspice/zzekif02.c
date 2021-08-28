@@ -8,8 +8,7 @@
 
 
 extern zzekif02_init_t __zzekif02_init;
-static zzekif02_state_t* get_zzekif02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekif02_state_t* get_zzekif02_state(cspice_t* state) {
 	if (!state->zzekif02)
 		state->zzekif02 = __cspice_allocate_module(sizeof(
 	zzekif02_state_t), &__zzekif02_init, sizeof(__zzekif02_init));
@@ -18,7 +17,8 @@ static zzekif02_state_t* get_zzekif02_state() {
 }
 
 /* $Procedure ZZEKIF02 ( EK, initialize type 2 segment for fast load ) */
-/* Subroutine */ int zzekif02_(integer *handle, integer *segno)
+/* Subroutine */ int zzekif02_(cspice_t* __global_state, integer *handle, 
+	integer *segno)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -26,33 +26,33 @@ static zzekif02_state_t* get_zzekif02_state() {
     /* Local variables */
     integer base;
     integer page[256];
-    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekmloc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer i__;
     integer p;
     integer mbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer class__;
     integer ncols;
     integer nrows;
     integer dscbas;
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer segdsc[24];
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern logical return_(cspice_t*);
     integer offset;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
-	    logical *, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzekaps_(cspice_t*, integer *, integer *, 
+	    integer *, logical *, integer *, integer *);
 
 
     /* Module state */
-    zzekif02_state_t* __state = get_zzekif02_state();
+    zzekif02_state_t* __state = get_zzekif02_state(__global_state);
 /* $ Abstract */
 
 /*     Initialize a new type 2 EK segment to allow fast loading. */
@@ -692,25 +692,26 @@ static zzekif02_state_t* get_zzekif02_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKIF02", (ftnlen)8);
+	chkin_(__global_state, "ZZEKIF02", (ftnlen)8);
     }
 
 /*     Read in the segment descriptor. */
 
-    zzekmloc_(handle, segno, page, &mbase);
+    zzekmloc_(__global_state, handle, segno, page, &mbase);
     i__1 = mbase + 1;
     i__2 = mbase + 24;
-    dasrdi_(handle, &i__1, &i__2, segdsc);
+    dasrdi_(__global_state, handle, &i__1, &i__2, segdsc);
     ncols = segdsc[4];
     nrows = segdsc[5];
 
 /*     Allocate space for column metadata.  We assume that one page */
 /*     of IPSIZE integers is enough room. */
 
-    zzekaps_(handle, segdsc, &__state->c__3, &__state->c_false, &p, &base);
+    zzekaps_(__global_state, handle, segdsc, &__state->c__3, &
+	    __state->c_false, &p, &base);
     offset = base;
     i__1 = ncols;
     for (i__ = 1; i__ <= i__1; ++i__) {
@@ -722,14 +723,14 @@ static zzekif02_state_t* get_zzekif02_state() {
 	dscbas = mbase + 24 + (i__ - 1) * 11;
 	i__2 = dscbas + 1;
 	i__3 = dscbas + 1;
-	dasrdi_(handle, &i__2, &i__3, &class__);
+	dasrdi_(__global_state, handle, &i__2, &i__3, &class__);
 
 /*        Update the file.  Set the column descriptor's metadata pointer */
 /*        to the base address of the metadata area. */
 
 	i__2 = dscbas + 10;
 	i__3 = dscbas + 10;
-	dasudi_(handle, &i__2, &i__3, &offset);
+	dasudi_(__global_state, handle, &i__2, &i__3, &offset);
 
 /*        Increment the metadata offset by the size of the metadata */
 /*        for the current column.  The classes of interest range from */
@@ -742,14 +743,14 @@ static zzekif02_state_t* get_zzekif02_state() {
 	} else if (class__ == 9) {
 	    offset += 2;
 	} else {
-	    setmsg_("Class # is not supported.", (ftnlen)25);
-	    errint_("#", &class__, (ftnlen)1);
-	    sigerr_("SPICE(NOCLASS)", (ftnlen)14);
-	    chkout_("ZZEKIF02", (ftnlen)8);
+	    setmsg_(__global_state, "Class # is not supported.", (ftnlen)25);
+	    errint_(__global_state, "#", &class__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOCLASS)", (ftnlen)14);
+	    chkout_(__global_state, "ZZEKIF02", (ftnlen)8);
 	    return 0;
 	}
     }
-    chkout_("ZZEKIF02", (ftnlen)8);
+    chkout_(__global_state, "ZZEKIF02", (ftnlen)8);
     return 0;
 } /* zzekif02_ */
 

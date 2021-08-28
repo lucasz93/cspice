@@ -8,34 +8,34 @@
 
 
 typedef int zzekscdp_state_t;
-static zzekscdp_state_t* get_zzekscdp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekscdp_state_t* get_zzekscdp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKSCDP ( EK, set column data pointer ) */
-/* Subroutine */ int zzekscdp_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr, integer *datptr)
+/* Subroutine */ int zzekscdp_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr, integer *datptr)
 {
-    extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
     integer ncols;
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer colidx;
     integer ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzekscdp_state_t* __state = get_zzekscdp_state();
+    zzekscdp_state_t* __state = get_zzekscdp_state(__global_state);
 /* $ Abstract */
 
 /*     Set the data pointer for a specified EK column entry. */
@@ -513,8 +513,8 @@ static zzekscdp_state_t* get_zzekscdp_state() {
 /*     Is this file handle valid--is the file open for paged write */
 /*     access?  Signal an error if not. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -523,24 +523,24 @@ static zzekscdp_state_t* get_zzekscdp_state() {
     ncols = segdsc[4];
     colidx = coldsc[8];
     if (colidx < 1 || colidx > ncols) {
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKSCDP", (ftnlen)8);
-	setmsg_("Column index = #; valid range is 1:#.SEGNO = #; RECNO = #; "
-		"EK = #", (ftnlen)65);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &ncols, (ftnlen)1);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKSCDP", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKSCDP", (ftnlen)8);
+	setmsg_(__global_state, "Column index = #; valid range is 1:#.SEGNO "
+		"= #; RECNO = #; EK = #", (ftnlen)65);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &ncols, (ftnlen)1);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKSCDP", (ftnlen)8);
 	return 0;
     }
 
 /*     Compute the data pointer location, and set the pointer. */
 
     ptrloc = *recptr + 2 + colidx;
-    dasudi_(handle, &ptrloc, &ptrloc, datptr);
+    dasudi_(__global_state, handle, &ptrloc, &ptrloc, datptr);
     return 0;
 } /* zzekscdp_ */
 

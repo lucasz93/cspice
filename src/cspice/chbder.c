@@ -8,14 +8,14 @@
 
 
 typedef int chbder_state_t;
-static chbder_state_t* get_chbder_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline chbder_state_t* get_chbder_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CHBDER ( Derivatives of a Chebyshev expansion ) */
-/* Subroutine */ int chbder_(doublereal *cp, integer *degp, doublereal *x2s, 
-	doublereal *x, integer *nderiv, doublereal *partdp, doublereal *dpdxs)
+/* Subroutine */ int chbder_(cspice_t* __global_state, doublereal *cp, 
+	integer *degp, doublereal *x2s, doublereal *x, integer *nderiv, 
+	doublereal *partdp, doublereal *dpdxs)
 {
     /* System generated locals */
     integer i__1;
@@ -29,7 +29,7 @@ static chbder_state_t* get_chbder_state() {
 
 
     /* Module state */
-    chbder_state_t* __state = get_chbder_state();
+    chbder_state_t* __state = get_chbder_state(__global_state);
 /* $ Abstract */
 
 /*     Given the coefficients for the Chebyshev expansion of a */

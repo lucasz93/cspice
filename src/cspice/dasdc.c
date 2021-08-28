@@ -8,34 +8,33 @@
 
 
 typedef int dasdc_state_t;
-static dasdc_state_t* get_dasdc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasdc_state_t* get_dasdc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DASDC    ( DAS delete comments ) */
-/* Subroutine */ int dasdc_(integer *handle)
+/* Subroutine */ int dasdc_(cspice_t* __global_state, integer *handle)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
     integer ncomr;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     char ifname[60];
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int dasrcr_(integer *, integer *);
-    extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int daswfr_(integer *, char *, char *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dassih_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrcr_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int dasrfr_(cspice_t*, integer *, char *, char *, 
+	    integer *, integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int daswfr_(cspice_t*, integer *, char *, char *, 
+	    integer *, integer *, integer *, integer *, ftnlen, ftnlen);
     char idword[8];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer nresvc;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer nresvr;
 
 
     /* Module state */
-    dasdc_state_t* __state = get_dasdc_state();
+    dasdc_state_t* __state = get_dasdc_state(__global_state);
 /* $ Abstract */
 
 /*     Delete the entire comment area of a previously opened binary */
@@ -199,18 +198,18 @@ static dasdc_state_t* get_dasdc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASDC", (ftnlen)5);
+	chkin_(__global_state, "DASDC", (ftnlen)5);
     }
 
 /*     Verify that the DAS file attached to HANDLE is opened with write */
 /*     access. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DASDC", (ftnlen)5);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASDC", (ftnlen)5);
 	return 0;
     }
 
@@ -218,10 +217,10 @@ static dasdc_state_t* get_dasdc_state() {
 /*     records in the DAS file attached to HANDLE. We will also get */
 /*     back some extra stuff that we do not use. */
 
-    dasrfr_(handle, idword, ifname, &nresvr, &nresvc, &ncomr, &ncomc, (ftnlen)
-	    8, (ftnlen)60);
-    if (failed_()) {
-	chkout_("DASDC", (ftnlen)5);
+    dasrfr_(__global_state, handle, idword, ifname, &nresvr, &nresvc, &ncomr, 
+	    &ncomc, (ftnlen)8, (ftnlen)60);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASDC", (ftnlen)5);
 	return 0;
     }
 
@@ -229,9 +228,9 @@ static dasdc_state_t* get_dasdc_state() {
 /*     any, otherwise we do nothing. */
 
     if (ncomr > 0) {
-	dasrcr_(handle, &ncomr);
-	if (failed_()) {
-	    chkout_("DASDC", (ftnlen)5);
+	dasrcr_(__global_state, handle, &ncomr);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DASDC", (ftnlen)5);
 	    return 0;
 	}
 
@@ -240,10 +239,10 @@ static dasdc_state_t* get_dasdc_state() {
 /*        Read in the updated file record since it has been modified: */
 /*        we deleted all of the comment records. */
 
-	dasrfr_(handle, idword, ifname, &nresvr, &nresvc, &ncomr, &ncomc, (
-		ftnlen)8, (ftnlen)60);
-	if (failed_()) {
-	    chkout_("DASDC", (ftnlen)5);
+	dasrfr_(__global_state, handle, idword, ifname, &nresvr, &nresvc, &
+		ncomr, &ncomc, (ftnlen)8, (ftnlen)60);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DASDC", (ftnlen)5);
 	    return 0;
 	}
 
@@ -251,17 +250,17 @@ static dasdc_state_t* get_dasdc_state() {
 /*        updated file record to the file. */
 
 	ncomc = 0;
-	daswfr_(handle, idword, ifname, &nresvr, &nresvc, &ncomr, &ncomc, (
-		ftnlen)8, (ftnlen)60);
-	if (failed_()) {
-	    chkout_("DASDC", (ftnlen)5);
+	daswfr_(__global_state, handle, idword, ifname, &nresvr, &nresvc, &
+		ncomr, &ncomc, (ftnlen)8, (ftnlen)60);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DASDC", (ftnlen)5);
 	    return 0;
 	}
     }
 
 /*     We're done now, so goodbye. */
 
-    chkout_("DASDC", (ftnlen)5);
+    chkout_(__global_state, "DASDC", (ftnlen)5);
     return 0;
 } /* dasdc_ */
 

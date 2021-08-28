@@ -217,7 +217,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dasrfr_c" );
+   chkin_c ( naif_state, "dasrfr_c" );
 
    /*
    Check output string pointers and lengths. 

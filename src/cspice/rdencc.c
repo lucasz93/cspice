@@ -8,8 +8,7 @@
 
 
 extern rdencc_init_t __rdencc_init;
-static rdencc_state_t* get_rdencc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rdencc_state_t* get_rdencc_state(cspice_t* state) {
 	if (!state->rdencc)
 		state->rdencc = __cspice_allocate_module(sizeof(
 	rdencc_state_t), &__rdencc_init, sizeof(__rdencc_init));
@@ -18,26 +17,28 @@ static rdencc_state_t* get_rdencc_state() {
 }
 
 /* $Procedure  RDENCC  ( Read encoded characters from a text file ) */
-/* Subroutine */ int rdencc_(integer *unit, integer *n, char *data, ftnlen 
-	data_len)
+/* Subroutine */ int rdencc_(cspice_t* __global_state, integer *unit, integer 
+	*n, char *data, ftnlen data_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen), s_rsle(cilist *), do_lio(integer *, 
-	    integer *, char *, ftnlen), e_rsle(void);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_rsle(f2c_state_t*, cilist *
+	    ), do_lio(f2c_state_t*, integer *, integer *, char *, ftnlen), 
+	    e_rsle(f2c_state_t*);
 
     /* Local variables */
     integer nescd;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer intch;
     logical error;
     char ch[1];
-    extern /* Subroutine */ int hx2int_(char *, integer *, logical *, char *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int hx2int_(cspice_t*, char *, integer *, logical 
+	    *, char *, ftnlen, ftnlen);
     logical escape;
     char encchr[64];
     integer dtalen;
@@ -45,21 +46,21 @@ static rdencc_state_t* get_rdencc_state() {
     integer nchars;
     integer encpos;
     integer dtapos;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char errmsg[80];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
     char hexnum[2];
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    rdencc_state_t* __state = get_rdencc_state();
+    rdencc_state_t* __state = get_rdencc_state(__global_state);
 /* $ Abstract */
 
 /*     Read and decode encoded characters from a text file. */
@@ -350,21 +351,21 @@ static rdencc_state_t* get_rdencc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("RDENCC", (ftnlen)6);
+	chkin_(__global_state, "RDENCC", (ftnlen)6);
     }
 
 /*     Check to see if the number of data items is less than or equal */
 /*     to zero. If it is, signal an error. */
 
     if (*n < 1) {
-	setmsg_("The number of data items to be read was not positive: #.", (
-		ftnlen)56);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("RDENCC", (ftnlen)6);
+	setmsg_(__global_state, "The number of data items to be read was not"
+		" positive: #.", (ftnlen)56);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "RDENCC", (ftnlen)6);
 	return 0;
     }
 
@@ -373,7 +374,7 @@ static rdencc_state_t* get_rdencc_state() {
 /*     Make sure that the encoding character string is empty when we */
 /*     start. */
 
-    s_copy(encchr, " ", (ftnlen)64, (ftnlen)1);
+    s_copy(&__global_state->f2c, encchr, " ", (ftnlen)64, (ftnlen)1);
 
 /*     We have not encountered any errors yet, so set the error indicator */
 /*     to .FALSE.. */
@@ -382,7 +383,7 @@ static rdencc_state_t* get_rdencc_state() {
 
 /*     Get the length of a data ``line'' in the data buffer DATA. */
 
-    dtalen = i_len(data, data_len);
+    dtalen = i_len(&__global_state->f2c, data, data_len);
 
 /*     We are not currently parsing an escaped character, so set the */
 /*     escape indicator to .FALSE. and set the number of escape digits */
@@ -415,24 +416,24 @@ static rdencc_state_t* get_rdencc_state() {
 
 	if (encpos > 64) {
 	    __state->io___11.ciunit = *unit;
-	    iostat = s_rsle(&__state->io___11);
+	    iostat = s_rsle(&__global_state->f2c, &__state->io___11);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
-	    iostat = do_lio(&__state->c__9, &__state->c__1, encchr, (ftnlen)
-		    64);
+	    iostat = do_lio(&__global_state->f2c, &__state->c__9, &
+		    __state->c__1, encchr, (ftnlen)64);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
-	    iostat = e_rsle();
+	    iostat = e_rsle(&__global_state->f2c);
 L100001:
 	    if (iostat != 0) {
-		setmsg_("Error reading from logical unit #, IOSTAT = #.", (
-			ftnlen)46);
-		errint_("#", unit, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		chkout_("RDENCC", (ftnlen)6);
+		setmsg_(__global_state, "Error reading from logical unit #, "
+			"IOSTAT = #.", (ftnlen)46);
+		errint_(__global_state, "#", unit, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+		chkout_(__global_state, "RDENCC", (ftnlen)6);
 		return 0;
 	    }
 
@@ -454,17 +455,19 @@ L100001:
 /*              then decode it. */
 
 		*(unsigned char *)&hexnum[nescd - 1] = *(unsigned char *)ch;
-		hx2int_(hexnum, &intch, &error, errmsg, (ftnlen)2, (ftnlen)80)
-			;
+		hx2int_(__global_state, hexnum, &intch, &error, errmsg, (
+			ftnlen)2, (ftnlen)80);
 		if (error) {
-		    setmsg_("Decoding error occurred while attempting to dec"
-			    "ode item #: @#. #", (ftnlen)64);
+		    setmsg_(__global_state, "Decoding error occurred while a"
+			    "ttempting to decode item #: @#. #", (ftnlen)64);
 		    i__1 = nchars + 1;
-		    errint_("#", &i__1, (ftnlen)1);
-		    errch_("#", hexnum, (ftnlen)1, (ftnlen)2);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)80);
-		    sigerr_("SPICE(DECODINGERROR)", (ftnlen)20);
-		    chkout_("RDENCC", (ftnlen)6);
+		    errint_(__global_state, "#", &i__1, (ftnlen)1);
+		    errch_(__global_state, "#", hexnum, (ftnlen)1, (ftnlen)2);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)80)
+			    ;
+		    sigerr_(__global_state, "SPICE(DECODINGERROR)", (ftnlen)
+			    20);
+		    chkout_(__global_state, "RDENCC", (ftnlen)6);
 		    return 0;
 		}
 		*(unsigned char *)ch = (char) intch;
@@ -546,7 +549,7 @@ L100001:
 /*             character, otherwise it is .FALSE.. */
 
     }
-    chkout_("RDENCC", (ftnlen)6);
+    chkout_(__global_state, "RDENCC", (ftnlen)6);
     return 0;
 } /* rdencc_ */
 

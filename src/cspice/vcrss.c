@@ -8,19 +8,19 @@
 
 
 typedef int vcrss_state_t;
-static vcrss_state_t* get_vcrss_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vcrss_state_t* get_vcrss_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VCRSS ( Vector cross product, 3 dimensions ) */
-/* Subroutine */ int vcrss_(doublereal *v1, doublereal *v2, doublereal *vout)
+/* Subroutine */ int vcrss_(cspice_t* __global_state, doublereal *v1, 
+	doublereal *v2, doublereal *vout)
 {
     doublereal vtemp[3];
 
 
     /* Module state */
-    vcrss_state_t* __state = get_vcrss_state();
+    vcrss_state_t* __state = get_vcrss_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the cross product of two 3-dimensional vectors. */

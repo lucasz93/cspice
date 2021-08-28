@@ -8,8 +8,7 @@
 
 
 extern ednmpt_init_t __ednmpt_init;
-static ednmpt_state_t* get_ednmpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ednmpt_state_t* get_ednmpt_state(cspice_t* state) {
 	if (!state->ednmpt)
 		state->ednmpt = __cspice_allocate_module(sizeof(
 	ednmpt_state_t), &__ednmpt_init, sizeof(__ednmpt_init));
@@ -18,37 +17,38 @@ static ednmpt_state_t* get_ednmpt_state() {
 }
 
 /* $Procedure EDNMPT ( Ellipsoid normal vector to surface point ) */
-/* Subroutine */ int ednmpt_(doublereal *a, doublereal *b, doublereal *c__, 
-	doublereal *normal, doublereal *point)
+/* Subroutine */ int ednmpt_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *c__, doublereal *normal, doublereal *point)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern logical vzero_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern logical vzero_(cspice_t*, doublereal *);
     doublereal lambda;
     doublereal sa;
     doublereal sb;
     doublereal sc;
-    extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern doublereal touchd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal na2;
     doublereal nb2;
     doublereal nc2;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal arg;
 
 
     /* Module state */
-    ednmpt_state_t* __state = get_ednmpt_state();
+    ednmpt_state_t* __state = get_ednmpt_state(__global_state);
 /* $ Abstract */
 
 /*     Return the unique point on an ellipsoid's surface where the */
@@ -355,7 +355,7 @@ static ednmpt_state_t* get_ednmpt_state() {
 /*     we could have invalid inputs to our arithmetic computations */
 /*     if a SPICE error condition exists upon entry. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -364,14 +364,15 @@ static ednmpt_state_t* get_ednmpt_state() {
 /*     We need a non-degenerate ellipsoid to start with. */
 
     if (*a <= 0. || *b <= 0. || *c__ <= 0.) {
-	chkin_("EDNMPT", (ftnlen)6);
-	setmsg_("All ellipsoid semi-axis lengths must be strictly positive. "
-		"Lengths were: A = #; B = #; C = #", (ftnlen)92);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
-	chkout_("EDNMPT", (ftnlen)6);
+	chkin_(__global_state, "EDNMPT", (ftnlen)6);
+	setmsg_(__global_state, "All ellipsoid semi-axis lengths must be str"
+		"ictly positive. Lengths were: A = #; B = #; C = #", (ftnlen)
+		92);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADAXISLENGTH)", (ftnlen)20);
+	chkout_(__global_state, "EDNMPT", (ftnlen)6);
 	return 0;
     }
 
@@ -382,35 +383,36 @@ static ednmpt_state_t* get_ednmpt_state() {
     d__1 = max(*a,*b);
     scale = max(d__1,*c__);
     d__1 = *a / scale;
-    sa = touchd_(&d__1);
+    sa = touchd_(__global_state, &d__1);
     d__1 = *b / scale;
-    sb = touchd_(&d__1);
+    sb = touchd_(__global_state, &d__1);
     d__1 = *c__ / scale;
-    sc = touchd_(&d__1);
+    sc = touchd_(__global_state, &d__1);
 
 /*     If any of the scaled-semi axes underflowed to zero, */
 /*     we can't continue. */
 
     if (sa <= 0. || sb <= 0. || sc <= 0.) {
-	chkin_("EDNMPT", (ftnlen)6);
-	setmsg_("Scaled semi-axis lengths must be strictly positive. Scaled "
-		"lengths were: SA = #; SB = #; SC = #", (ftnlen)95);
-	errdp_("#", &sa, (ftnlen)1);
-	errdp_("#", &sb, (ftnlen)1);
-	errdp_("#", &sc, (ftnlen)1);
-	sigerr_("SPICE(AXISUNDERFLOW)", (ftnlen)20);
-	chkout_("EDNMPT", (ftnlen)6);
+	chkin_(__global_state, "EDNMPT", (ftnlen)6);
+	setmsg_(__global_state, "Scaled semi-axis lengths must be strictly p"
+		"ositive. Scaled lengths were: SA = #; SB = #; SC = #", (
+		ftnlen)95);
+	errdp_(__global_state, "#", &sa, (ftnlen)1);
+	errdp_(__global_state, "#", &sb, (ftnlen)1);
+	errdp_(__global_state, "#", &sc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(AXISUNDERFLOW)", (ftnlen)20);
+	chkout_(__global_state, "EDNMPT", (ftnlen)6);
 	return 0;
     }
 
 /*     The normal vector can't be the zero vector. */
 
-    if (vzero_(normal)) {
-	chkin_("EDNMPT", (ftnlen)6);
-	setmsg_("The input normal vector was the zero vector. There is no so"
-		"lution.", (ftnlen)66);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("EDNMPT", (ftnlen)6);
+    if (vzero_(__global_state, normal)) {
+	chkin_(__global_state, "EDNMPT", (ftnlen)6);
+	setmsg_(__global_state, "The input normal vector was the zero vector"
+		". There is no solution.", (ftnlen)66);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "EDNMPT", (ftnlen)6);
 	return 0;
     }
 
@@ -447,21 +449,21 @@ static ednmpt_state_t* get_ednmpt_state() {
     nb2 = normal[1] * sb * sb;
     nc2 = normal[2] * sc * sc;
     d__1 = na2 * normal[0] + nb2 * normal[1] + nc2 * normal[2];
-    arg = touchd_(&d__1);
+    arg = touchd_(__global_state, &d__1);
     if (arg <= 0.) {
-	chkin_("EDNMPT", (ftnlen)6);
-	setmsg_("Scale factor LAMBDA must be positive, but reciprocal of squ"
-		"are of LAMBDA is #.", (ftnlen)78);
-	errdp_("#", &arg, (ftnlen)1);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("EDNMPT", (ftnlen)6);
+	chkin_(__global_state, "EDNMPT", (ftnlen)6);
+	setmsg_(__global_state, "Scale factor LAMBDA must be positive, but r"
+		"eciprocal of square of LAMBDA is #.", (ftnlen)78);
+	errdp_(__global_state, "#", &arg, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "EDNMPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Compute LAMBDA as above, and scale it too. This will place */
 /*     POINT on the original ellipsoid. */
 
-    lambda = pow_dd(&arg, &__state->c_b25) * scale;
+    lambda = pow_dd(&__global_state->f2c, &arg, &__state->c_b25) * scale;
     point[0] = lambda * na2;
     point[1] = lambda * nb2;
     point[2] = lambda * nc2;

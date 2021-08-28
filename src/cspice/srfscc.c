@@ -8,29 +8,28 @@
 
 
 typedef int srfscc_state_t;
-static srfscc_state_t* get_srfscc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline srfscc_state_t* get_srfscc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure SRFSCC (Surface string and body ID code to surface ID code ) */
-/* Subroutine */ int srfscc_(char *srfstr, integer *bodyid, integer *code, 
-	logical *found, ftnlen srfstr_len)
+/* Subroutine */ int srfscc_(cspice_t* __global_state, char *srfstr, integer *
+	bodyid, integer *code, logical *found, ftnlen srfstr_len)
 {
-    extern /* Subroutine */ int zzsrfn2c_(char *, integer *, integer *, 
-	    logical *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzsrfn2c_(cspice_t*, char *, integer *, 
+	    integer *, logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int nparsi_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char errmsg[80];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer ptr;
 
 
     /* Module state */
-    srfscc_state_t* __state = get_srfscc_state();
+    srfscc_state_t* __state = get_srfscc_state(__global_state);
 /* $ Abstract */
 
 /*     Translate a surface string, together with a body ID code, to the */
@@ -377,10 +376,10 @@ static srfscc_state_t* get_srfscc_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SRFSCC", (ftnlen)6);
+    chkin_(__global_state, "SRFSCC", (ftnlen)6);
 
 /*     No result has been found yet. */
 
@@ -389,9 +388,9 @@ static srfscc_state_t* get_srfscc_state() {
 /*     Try to translate the input surface name to a known surface ID */
 /*     code. */
 
-    zzsrfn2c_(srfstr, bodyid, code, found, srfstr_len);
-    if (failed_()) {
-	chkout_("SRFSCC", (ftnlen)6);
+    zzsrfn2c_(__global_state, srfstr, bodyid, code, found, srfstr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SRFSCC", (ftnlen)6);
 	return 0;
     }
     if (! (*found)) {
@@ -402,7 +401,8 @@ static srfscc_state_t* get_srfscc_state() {
 /*        integer, for example, '999'.  If so, find the equivalent datum */
 /*        of INTEGER type. */
 
-	nparsi_(srfstr, code, errmsg, &ptr, srfstr_len, (ftnlen)80);
+	nparsi_(__global_state, srfstr, code, errmsg, &ptr, srfstr_len, (
+		ftnlen)80);
 
 /*        If the string parsed as an integer, PTR is zero; otherwise */
 /*        it's non-zero. */
@@ -412,7 +412,7 @@ static srfscc_state_t* get_srfscc_state() {
 
 /*     CODE and FOUND are set. */
 
-    chkout_("SRFSCC", (ftnlen)6);
+    chkout_(__global_state, "SRFSCC", (ftnlen)6);
     return 0;
 } /* srfscc_ */
 

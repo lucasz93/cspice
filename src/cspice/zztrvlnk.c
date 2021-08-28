@@ -8,28 +8,27 @@
 
 
 typedef int zztrvlnk_state_t;
-static zztrvlnk_state_t* get_zztrvlnk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zztrvlnk_state_t* get_zztrvlnk_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZTRVLNK ( Traverse AB cell linked-list ) */
-/* Subroutine */ int zztrvlnk_(integer *aval, integer *maxa, integer *pntrs, 
-	integer *cellsz, integer *cells, integer *maxb, integer *nb, integer *
-	blist)
+/* Subroutine */ int zztrvlnk_(cspice_t* __global_state, integer *aval, 
+	integer *maxa, integer *pntrs, integer *cellsz, integer *cells, 
+	integer *maxb, integer *nb, integer *blist)
 {
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer ptr;
 
 
     /* Module state */
-    zztrvlnk_state_t* __state = get_zztrvlnk_state();
+    zztrvlnk_state_t* __state = get_zztrvlnk_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -259,25 +258,25 @@ static zztrvlnk_state_t* get_zztrvlnk_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZTRVLNK", (ftnlen)8);
+    chkin_(__global_state, "ZZTRVLNK", (ftnlen)8);
     if (*aval < 1 || *aval > *maxa) {
-	setmsg_("Index AVAL is out of range. Index = #1. Valid range = 1:#2.",
-		 (ftnlen)59);
-	errint_("#1", aval, (ftnlen)2);
-	errint_("#2", maxa, (ftnlen)2);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZTRVLNK", (ftnlen)8);
+	setmsg_(__global_state, "Index AVAL is out of range. Index = #1. Val"
+		"id range = 1:#2.", (ftnlen)59);
+	errint_(__global_state, "#1", aval, (ftnlen)2);
+	errint_(__global_state, "#2", maxa, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZTRVLNK", (ftnlen)8);
 	return 0;
     }
     if (*maxb < 1) {
-	setmsg_("Maximum output list size MAXB is invalid. MAXB = #1.", (
-		ftnlen)52);
-	errint_("#1", maxb, (ftnlen)2);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("ZZTRVLNK", (ftnlen)8);
+	setmsg_(__global_state, "Maximum output list size MAXB is invalid. M"
+		"AXB = #1.", (ftnlen)52);
+	errint_(__global_state, "#1", maxb, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "ZZTRVLNK", (ftnlen)8);
 	return 0;
     }
     *nb = 0;
@@ -285,28 +284,29 @@ static zztrvlnk_state_t* get_zztrvlnk_state() {
     ptr = pntrs[*aval - 1];
     while(ptr != -1) {
 	if (ptr < -1 || ptr == 0 || ptr > *cellsz) {
-	    setmsg_("Value in PNTRS array is not a valid index in the cell a"
-		    "rray.Value = #1. Array size = #2.", (ftnlen)88);
-	    errint_("#1", &ptr, (ftnlen)2);
-	    errint_("#2", cellsz, (ftnlen)2);
-	    sigerr_("SPICE(POINTEROUTOFRANGE)", (ftnlen)24);
-	    chkout_("ZZTRVLNK", (ftnlen)8);
+	    setmsg_(__global_state, "Value in PNTRS array is not a valid ind"
+		    "ex in the cell array.Value = #1. Array size = #2.", (
+		    ftnlen)88);
+	    errint_(__global_state, "#1", &ptr, (ftnlen)2);
+	    errint_(__global_state, "#2", cellsz, (ftnlen)2);
+	    sigerr_(__global_state, "SPICE(POINTEROUTOFRANGE)", (ftnlen)24);
+	    chkout_(__global_state, "ZZTRVLNK", (ftnlen)8);
 	    return 0;
 	}
 	++(*nb);
 	if (*nb > *maxb) {
-	    setmsg_("Output value count is larger than B-list array room. Co"
-		    "unt = #1. Output array room = #2. Input pointer index wa"
-		    "s #3. Input pointer list size was #4. Last pointer was #"
-		    "5. Cell size was #6.", (ftnlen)187);
-	    errint_("#1", nb, (ftnlen)2);
-	    errint_("#2", maxb, (ftnlen)2);
-	    errint_("#3", aval, (ftnlen)2);
-	    errint_("#4", maxa, (ftnlen)2);
-	    errint_("#5", &ptr, (ftnlen)2);
-	    errint_("#6", cellsz, (ftnlen)2);
-	    sigerr_("SPICE(BARRAYTOOSMALL)", (ftnlen)21);
-	    chkout_("ZZTRVLNK", (ftnlen)8);
+	    setmsg_(__global_state, "Output value count is larger than B-lis"
+		    "t array room. Count = #1. Output array room = #2. Input "
+		    "pointer index was #3. Input pointer list size was #4. La"
+		    "st pointer was #5. Cell size was #6.", (ftnlen)187);
+	    errint_(__global_state, "#1", nb, (ftnlen)2);
+	    errint_(__global_state, "#2", maxb, (ftnlen)2);
+	    errint_(__global_state, "#3", aval, (ftnlen)2);
+	    errint_(__global_state, "#4", maxa, (ftnlen)2);
+	    errint_(__global_state, "#5", &ptr, (ftnlen)2);
+	    errint_(__global_state, "#6", cellsz, (ftnlen)2);
+	    sigerr_(__global_state, "SPICE(BARRAYTOOSMALL)", (ftnlen)21);
+	    chkout_(__global_state, "ZZTRVLNK", (ftnlen)8);
 	    return 0;
 	}
 	blist[*nb - 1] = cells[(ptr << 1) - 2];
@@ -316,7 +316,7 @@ static zztrvlnk_state_t* get_zztrvlnk_state() {
 
 /*     Standard SPICE error handling. */
 
-    chkout_("ZZTRVLNK", (ftnlen)8);
+    chkout_(__global_state, "ZZTRVLNK", (ftnlen)8);
     return 0;
 } /* zztrvlnk_ */
 

@@ -8,21 +8,21 @@
 
 
 typedef int mxmg_state_t;
-static mxmg_state_t* get_mxmg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline mxmg_state_t* get_mxmg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      MXMG ( Matrix times matrix, general dimension ) */
-/* Subroutine */ int mxmg_(doublereal *m1, doublereal *m2, integer *row1, 
-	integer *col1, integer *col2, doublereal *mout)
+/* Subroutine */ int mxmg_(cspice_t* __global_state, doublereal *m1, 
+	doublereal *m2, integer *row1, integer *col1, integer *col2, 
+	doublereal *mout)
 {
     /* System generated locals */
     integer m1_dim1, m1_dim2, m1_offset, m2_dim1, m2_dim2, m2_offset, 
 	    mout_dim1, mout_dim2, mout_offset, i__1, i__2, i__3, i__4, i__5;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
@@ -32,7 +32,7 @@ static mxmg_state_t* get_mxmg_state() {
 
 
     /* Module state */
-    mxmg_state_t* __state = get_mxmg_state();
+    mxmg_state_t* __state = get_mxmg_state(__global_state);
 /* $ Abstract */
 
 /*      Multiply two double precision matrices of arbitrary size. */
@@ -213,15 +213,17 @@ static mxmg_state_t* get_mxmg_state() {
 	    i__3 = *col1;
 	    for (k = 1; k <= i__3; ++k) {
 		sum += m1[(i__4 = i__ + k * m1_dim1 - m1_offset) < 1 * 
-			m1_dim1 * m1_dim2 && 0 <= i__4 ? i__4 : s_rnge("m1", 
-			i__4, "mxmg_", (ftnlen)183)] * m2[(i__5 = k + j * 
-			m2_dim1 - m2_offset) < 1 * m2_dim1 * m2_dim2 && 0 <= 
-			i__5 ? i__5 : s_rnge("m2", i__5, "mxmg_", (ftnlen)183)
+			m1_dim1 * m1_dim2 && 0 <= i__4 ? i__4 : s_rnge(&
+			__global_state->f2c, "m1", i__4, "mxmg_", (ftnlen)183)
+			] * m2[(i__5 = k + j * m2_dim1 - m2_offset) < 1 * 
+			m2_dim1 * m2_dim2 && 0 <= i__5 ? i__5 : s_rnge(&
+			__global_state->f2c, "m2", i__5, "mxmg_", (ftnlen)183)
 			];
 	    }
 	    mout[(i__3 = i__ + j * mout_dim1 - mout_offset) < 1 * mout_dim1 * 
-		    mout_dim2 && 0 <= i__3 ? i__3 : s_rnge("mout", i__3, 
-		    "mxmg_", (ftnlen)185)] = sum;
+		    mout_dim2 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "mout", i__3, "mxmg_", (ftnlen)185)] 
+		    = sum;
 	}
     }
 

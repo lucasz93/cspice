@@ -8,26 +8,26 @@
 
 
 typedef int zzekordc_state_t;
-static zzekordc_state_t* get_zzekordc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekordc_state_t* get_zzekordc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKORDC ( Order of a character EK column ) */
-/* Subroutine */ int zzekordc_(char *cvals, logical *nullok, logical *nlflgs, 
-	integer *nvals, integer *iorder, ftnlen cvals_len)
+/* Subroutine */ int zzekordc_(cspice_t* __global_state, char *cvals, logical 
+	*nullok, logical *nlflgs, integer *nvals, integer *iorder, ftnlen 
+	cvals_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    logical l_le(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    logical l_le(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int swapi_(integer *, integer *);
+    extern /* Subroutine */ int swapi_(cspice_t*, integer *, integer *);
     integer jg;
     logical le1;
     logical eq1;
@@ -35,7 +35,7 @@ static zzekordc_state_t* get_zzekordc_state() {
 
 
     /* Module state */
-    zzekordc_state_t* __state = get_zzekordc_state();
+    zzekordc_state_t* __state = get_zzekordc_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the order of elements in a character EK column, */
@@ -242,12 +242,12 @@ static zzekordc_state_t* get_zzekordc_state() {
 	    j = i__ - gap;
 	    while(j > 0) {
 		jg = j + gap;
-		le1 = l_le(cvals + (iorder[j - 1] - 1) * cvals_len, cvals + (
-			iorder[jg - 1] - 1) * cvals_len, cvals_len, cvals_len)
-			;
-		eq1 = s_cmp(cvals + (iorder[j - 1] - 1) * cvals_len, cvals + (
-			iorder[jg - 1] - 1) * cvals_len, cvals_len, cvals_len)
-			 == 0;
+		le1 = l_le(&__global_state->f2c, cvals + (iorder[j - 1] - 1) *
+			 cvals_len, cvals + (iorder[jg - 1] - 1) * cvals_len, 
+			cvals_len, cvals_len);
+		eq1 = s_cmp(&__global_state->f2c, cvals + (iorder[j - 1] - 1) 
+			* cvals_len, cvals + (iorder[jg - 1] - 1) * cvals_len,
+			 cvals_len, cvals_len) == 0;
 		if (! (*nullok) && (le1 || eq1 && iorder[j - 1] < iorder[jg - 
 			1]) || *nullok && (nlflgs[iorder[j - 1] - 1] && ! 
 			nlflgs[iorder[jg - 1] - 1] || nlflgs[iorder[j - 1] - 
@@ -264,7 +264,7 @@ static zzekordc_state_t* get_zzekordc_state() {
 
 		    j = 0;
 		} else {
-		    swapi_(&iorder[j - 1], &iorder[jg - 1]);
+		    swapi_(__global_state, &iorder[j - 1], &iorder[jg - 1]);
 		}
 		j -= gap;
 	    }

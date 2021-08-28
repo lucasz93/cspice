@@ -8,17 +8,17 @@
 
 
 typedef int vequ_state_t;
-static vequ_state_t* get_vequ_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vequ_state_t* get_vequ_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VEQU ( Vector equality, 3 dimensions ) */
-/* Subroutine */ int vequ_(doublereal *vin, doublereal *vout)
+/* Subroutine */ int vequ_(cspice_t* __global_state, doublereal *vin, 
+	doublereal *vout)
 {
 
     /* Module state */
-    vequ_state_t* __state = get_vequ_state();
+    vequ_state_t* __state = get_vequ_state(__global_state);
 /* $ Abstract */
 
 /*      Make one double precision 3-dimensional vector equal to */

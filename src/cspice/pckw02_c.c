@@ -259,7 +259,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "pckw02_c" );
+   chkin_c ( naif_state, "pckw02_c" );
 
 
    /*

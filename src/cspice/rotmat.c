@@ -8,8 +8,7 @@
 
 
 extern rotmat_init_t __rotmat_init;
-static rotmat_state_t* get_rotmat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rotmat_state_t* get_rotmat_state(cspice_t* state) {
 	if (!state->rotmat)
 		state->rotmat = __cspice_allocate_module(sizeof(
 	rotmat_state_t), &__rotmat_init, sizeof(__rotmat_init));
@@ -18,8 +17,8 @@ static rotmat_state_t* get_rotmat_state() {
 }
 
 /* $Procedure      ROTMAT ( Rotate a matrix ) */
-/* Subroutine */ int rotmat_(doublereal *m1, doublereal *angle, integer *
-	iaxis, doublereal *mout)
+/* Subroutine */ int rotmat_(cspice_t* __global_state, doublereal *m1, 
+	doublereal *angle, integer *iaxis, doublereal *mout)
 {
     /* Initialized data */
 
@@ -28,15 +27,16 @@ static rotmat_state_t* get_rotmat_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    double sin(doublereal), cos(doublereal);
-    integer s_rnge(char *, integer, char *, integer);
+    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer temp;
     doublereal c__;
     integer i__;
     doublereal s;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     doublereal prodm[9]	/* was [3][3] */;
     integer i1;
     integer i2;
@@ -44,7 +44,7 @@ static rotmat_state_t* get_rotmat_state() {
 
 
     /* Module state */
-    rotmat_state_t* __state = get_rotmat_state();
+    rotmat_state_t* __state = get_rotmat_state(__global_state);
 /* $ Abstract */
 
 /*     ROTMAT applies a rotation of ANGLE radians about axis IAXIS to a */
@@ -205,45 +205,48 @@ static rotmat_state_t* get_rotmat_state() {
 
 /*  Get the sine and cosine of ANGLE */
 
-    s = sin(*angle);
-    c__ = cos(*angle);
+    s = sin(&__global_state->f2c, *angle);
+    c__ = cos(&__global_state->f2c, *angle);
 
 /*  Get indices for axes. The first index is for the axis of rotation. */
 /*  The next two axes follow in right hand order (XYZ).  First get the */
 /*  non-negative value of IAXIS mod 3 . */
 
     temp = (*iaxis % 3 + 3) % 3;
-    i1 = __state->indexs[(i__1 = temp) < 5 && 0 <= i__1 ? i__1 : s_rnge("ind"
-	    "exs", i__1, "rotmat_", (ftnlen)201)];
-    i2 = __state->indexs[(i__1 = temp + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(
-	    "indexs", i__1, "rotmat_", (ftnlen)202)];
-    i3 = __state->indexs[(i__1 = temp + 2) < 5 && 0 <= i__1 ? i__1 : s_rnge(
-	    "indexs", i__1, "rotmat_", (ftnlen)203)];
+    i1 = __state->indexs[(i__1 = temp) < 5 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "indexs", i__1, "rotmat_", (ftnlen)201)];
+    i2 = __state->indexs[(i__1 = temp + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "indexs", i__1, "rotmat_", (ftnlen)202)];
+    i3 = __state->indexs[(i__1 = temp + 2) < 5 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "indexs", i__1, "rotmat_", (ftnlen)203)];
 
 /*  Calculate the output matrix column by column */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	prodm[(i__1 = i1 + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"prodm", i__1, "rotmat_", (ftnlen)208)] = m1[(i__2 = i1 + i__ 
-		* 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("m1", i__2, "rotma"
-		"t_", (ftnlen)208)];
-	prodm[(i__1 = i2 + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"prodm", i__1, "rotmat_", (ftnlen)209)] = c__ * m1[(i__2 = i2 
-		+ i__ * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("m1", i__2, 
-		"rotmat_", (ftnlen)209)] + s * m1[(i__3 = i3 + i__ * 3 - 4) < 
-		9 && 0 <= i__3 ? i__3 : s_rnge("m1", i__3, "rotmat_", (ftnlen)
-		209)];
-	prodm[(i__1 = i3 + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"prodm", i__1, "rotmat_", (ftnlen)210)] = -s * m1[(i__2 = i2 
-		+ i__ * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("m1", i__2, 
-		"rotmat_", (ftnlen)210)] + c__ * m1[(i__3 = i3 + i__ * 3 - 4) 
-		< 9 && 0 <= i__3 ? i__3 : s_rnge("m1", i__3, "rotmat_", (
+	prodm[(i__1 = i1 + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "prodm", i__1, "rotmat_", (ftnlen)208)] =
+		 m1[(i__2 = i1 + i__ * 3 - 4) < 9 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "m1", i__2, "rotmat_", (ftnlen)
+		208)];
+	prodm[(i__1 = i2 + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "prodm", i__1, "rotmat_", (ftnlen)209)] =
+		 c__ * m1[(i__2 = i2 + i__ * 3 - 4) < 9 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "m1", i__2, "rotmat_", (ftnlen)
+		209)] + s * m1[(i__3 = i3 + i__ * 3 - 4) < 9 && 0 <= i__3 ? 
+		i__3 : s_rnge(&__global_state->f2c, "m1", i__3, "rotmat_", (
+		ftnlen)209)];
+	prodm[(i__1 = i3 + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "prodm", i__1, "rotmat_", (ftnlen)210)] =
+		 -s * m1[(i__2 = i2 + i__ * 3 - 4) < 9 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "m1", i__2, "rotmat_", (ftnlen)
+		210)] + c__ * m1[(i__3 = i3 + i__ * 3 - 4) < 9 && 0 <= i__3 ? 
+		i__3 : s_rnge(&__global_state->f2c, "m1", i__3, "rotmat_", (
 		ftnlen)210)];
     }
 
 /*  Move the buffered matrix into MOUT. */
 
-    moved_(prodm, &__state->c__9, mout);
+    moved_(__global_state, prodm, &__state->c__9, mout);
 
     return 0;
 } /* rotmat_ */

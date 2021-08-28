@@ -8,32 +8,31 @@
 
 
 typedef int rmaind_state_t;
-static rmaind_state_t* get_rmaind_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rmaind_state_t* get_rmaind_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RMAIND ( Remainder --- double precision ) */
-/* Subroutine */ int rmaind_(doublereal *num, doublereal *denom, doublereal *
-	q, doublereal *rem)
+/* Subroutine */ int rmaind_(cspice_t* __global_state, doublereal *num, 
+	doublereal *denom, doublereal *q, doublereal *rem)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    double d_int(doublereal *);
+    double d_int(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal mynum;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal mydnom;
 
 
     /* Module state */
-    rmaind_state_t* __state = get_rmaind_state();
+    rmaind_state_t* __state = get_rmaind_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the integer quotient and non-negative remainder */
@@ -162,17 +161,17 @@ static rmaind_state_t* get_rmaind_state() {
 /*     Take care of the zero-denominator case first */
 
     if (*denom == 0.) {
-	chkin_("RMAIND", (ftnlen)6);
-	setmsg_("Attempting to compute a quotient with a divide by zero.", (
-		ftnlen)55);
-	sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-	chkout_("RMAIND", (ftnlen)6);
+	chkin_(__global_state, "RMAIND", (ftnlen)6);
+	setmsg_(__global_state, "Attempting to compute a quotient with a div"
+		"ide by zero.", (ftnlen)55);
+	sigerr_(__global_state, "SPICE(DIVIDEBYZERO)", (ftnlen)19);
+	chkout_(__global_state, "RMAIND", (ftnlen)6);
 	return 0;
     }
     mydnom = *denom;
     mynum = *num;
     d__1 = mynum / mydnom;
-    *q = d_int(&d__1);
+    *q = d_int(&__global_state->f2c, &d__1);
     *rem = mynum - *q * mydnom;
     if (*rem < 0.) {
 	*q += -1.;

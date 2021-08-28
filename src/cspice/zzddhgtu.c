@@ -8,39 +8,41 @@
 
 
 typedef int zzddhgtu_state_t;
-static zzddhgtu_state_t* get_zzddhgtu_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzddhgtu_state_t* get_zzddhgtu_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZDDHGTU ( Private --- DDH Get Unit ) */
-/* Subroutine */ int zzddhgtu_(integer *utcst, integer *uthan, logical *utlck,
-	 integer *utlun, integer *nut, integer *uindex)
+/* Subroutine */ int zzddhgtu_(cspice_t* __global_state, integer *utcst, 
+	integer *uthan, logical *utlck, integer *utlun, integer *nut, integer 
+	*uindex)
 {
     /* System generated locals */
     integer i__1;
     cllist cl__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), f_clos(cllist *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), f_clos(
+	    f2c_state_t*, cllist *);
 
     /* Local variables */
     logical done;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int orderi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int frelun_(integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int getlun_(integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int orderi_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int frelun_(cspice_t*, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int getlun_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer orderv[23];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzddhgtu_state_t* __state = get_zzddhgtu_state();
+    zzddhgtu_state_t* __state = get_zzddhgtu_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -446,7 +448,7 @@ static zzddhgtu_state_t* get_zzddhgtu_state() {
 
 /*     Standard SPICE discovery error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -458,12 +460,12 @@ static zzddhgtu_state_t* get_zzddhgtu_state() {
 	utcst[*uindex - 1] = 0;
 	uthan[*uindex - 1] = 0;
 	utlck[*uindex - 1] = FALSE_;
-	getlun_(&utlun[*uindex - 1]);
+	getlun_(__global_state, &utlun[*uindex - 1]);
 
 /*        Check FAILED to see if GETLUN signaled an error.  If so, then */
 /*        return an invalid unit to the caller. */
 
-	if (failed_()) {
+	if (failed_(__global_state)) {
 	    utlun[*uindex - 1] = -1;
 	    return 0;
 	}
@@ -477,7 +479,7 @@ static zzddhgtu_state_t* get_zzddhgtu_state() {
 /*     If we reach here, then the table contains at least one entry. */
 /*     Order the table rows by cost. */
 
-    orderi_(utcst, nut, orderv);
+    orderi_(__global_state, utcst, nut, orderv);
 
 /*     Now check to for '0' cost rows as this indicates rows whose */
 /*     logical units are reserved for this suite of routines usage, */
@@ -492,7 +494,7 @@ static zzddhgtu_state_t* get_zzddhgtu_state() {
 /*        row is reserved for this module's usage only with RESLUN. */
 /*        Free it, since we're about to reassign it. */
 
-	frelun_(&utlun[*uindex - 1]);
+	frelun_(__global_state, &utlun[*uindex - 1]);
 	return 0;
     }
 
@@ -511,12 +513,12 @@ static zzddhgtu_state_t* get_zzddhgtu_state() {
 	utcst[*uindex - 1] = 0;
 	uthan[*uindex - 1] = 0;
 	utlck[*uindex - 1] = FALSE_;
-	getlun_(&utlun[*uindex - 1]);
+	getlun_(__global_state, &utlun[*uindex - 1]);
 
 /*        Check FAILED to see if GETLUN signaled an error.  If so, then */
 /*        return an invalid unit to the caller. */
 
-	if (failed_()) {
+	if (failed_(__global_state)) {
 	    utlun[*uindex - 1] = -1;
 	    return 0;
 	}
@@ -536,7 +538,8 @@ static zzddhgtu_state_t* get_zzddhgtu_state() {
     while(! done && i__ != *nut) {
 	++i__;
 	done = ! utlck[orderv[(i__1 = i__ - 1) < 23 && 0 <= i__1 ? i__1 : 
-		s_rnge("orderv", i__1, "zzddhgtu_", (ftnlen)279)] - 1];
+		s_rnge(&__global_state->f2c, "orderv", i__1, "zzddhgtu_", (
+		ftnlen)279)] - 1];
     }
 
 /*     Before going any further, signal an error if we discover */
@@ -544,33 +547,36 @@ static zzddhgtu_state_t* get_zzddhgtu_state() {
 
     if (! done) {
 	*uindex = 0;
-	chkin_("ZZDDHGTU", (ftnlen)8);
-	setmsg_("The unit table is full and all entries are locked.  This sh"
-		"ould never happen. Contact NAIF.", (ftnlen)91);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZDDHGTU", (ftnlen)8);
+	chkin_(__global_state, "ZZDDHGTU", (ftnlen)8);
+	setmsg_(__global_state, "The unit table is full and all entries are "
+		"locked.  This should never happen. Contact NAIF.", (ftnlen)91)
+		;
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZDDHGTU", (ftnlen)8);
 	return 0;
     }
 
 /*     Clear UTCST and UTHAN since we intend to disconnect */
 /*     the unit upon return. */
 
-    utcst[orderv[(i__1 = i__ - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("orderv", 
-	    i__1, "zzddhgtu_", (ftnlen)304)] - 1] = 0;
-    uthan[orderv[(i__1 = i__ - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("orderv", 
-	    i__1, "zzddhgtu_", (ftnlen)305)] - 1] = 0;
+    utcst[orderv[(i__1 = i__ - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "orderv", i__1, "zzddhgtu_", (ftnlen)304)] - 
+	    1] = 0;
+    uthan[orderv[(i__1 = i__ - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "orderv", i__1, "zzddhgtu_", (ftnlen)305)] - 
+	    1] = 0;
 
 /*     Set UINDEX and CLSLUN, then return. */
 
-    *uindex = orderv[(i__1 = i__ - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge("ord"
-	    "erv", i__1, "zzddhgtu_", (ftnlen)310)];
+    *uindex = orderv[(i__1 = i__ - 1) < 23 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "orderv", i__1, "zzddhgtu_", (ftnlen)310)];
 
 /*     At this point we need to close the unit from the row of interest. */
 
     cl__1.cerr = 0;
     cl__1.cunit = utlun[*uindex - 1];
     cl__1.csta = 0;
-    f_clos(&cl__1);
+    f_clos(&__global_state->f2c, &cl__1);
     return 0;
 } /* zzddhgtu_ */
 

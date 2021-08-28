@@ -8,8 +8,7 @@
 
 
 extern gfposc_init_t __gfposc_init;
-static gfposc_state_t* get_gfposc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gfposc_state_t* get_gfposc_state(cspice_t* state) {
 	if (!state->gfposc)
 		state->gfposc = __cspice_allocate_module(sizeof(
 	gfposc_state_t), &__gfposc_init, sizeof(__gfposc_init));
@@ -18,12 +17,13 @@ static gfposc_state_t* get_gfposc_state() {
 }
 
 /* $Procedure GFPOSC (GF, observer-target vector coordinate search ) */
-/* Subroutine */ int gfposc_(char *target, char *frame, char *abcorr, char *
-	obsrvr, char *crdsys, char *coord, char *relate, doublereal *refval, 
-	doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw,
-	 integer *nw, doublereal *work, doublereal *result, ftnlen target_len,
-	 ftnlen frame_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen 
-	crdsys_len, ftnlen coord_len, ftnlen relate_len)
+/* Subroutine */ int gfposc_(cspice_t* __global_state, char *target, char *
+	frame, char *abcorr, char *obsrvr, char *crdsys, char *coord, char *
+	relate, doublereal *refval, doublereal *adjust, doublereal *step, 
+	doublereal *cnfine, integer *mw, integer *nw, doublereal *work, 
+	doublereal *result, ftnlen target_len, ftnlen frame_len, ftnlen 
+	abcorr_len, ftnlen obsrvr_len, ftnlen crdsys_len, ftnlen coord_len, 
+	ftnlen relate_len)
 {
     /* Initialized data */
 
@@ -32,43 +32,43 @@ static gfposc_state_t* get_gfposc_state() {
     integer work_dim1, work_offset, i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern logical even_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sized_(doublereal *);
-    extern logical gfbail_();
+    extern logical even_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern logical gfbail_(cspice_t*);
     logical ok;
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern logical return_(void);
-    extern /* Subroutine */ int gfrefn_();
-    extern /* Subroutine */ int gfrepi_();
-    extern /* Subroutine */ int gfrepu_();
-    extern /* Subroutine */ int gfrepf_();
-    extern /* Subroutine */ int gfstep_();
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int gfrefn_(cspice_t*);
+    extern /* Subroutine */ int gfrepi_(cspice_t*);
+    extern /* Subroutine */ int gfrepu_(cspice_t*);
+    extern /* Subroutine */ int gfrepf_(cspice_t*);
+    extern /* Subroutine */ int gfstep_(cspice_t*);
     char qcpars[80*10];
     char qpnams[80*10];
     doublereal qdpars[10];
     integer qipars[10];
     logical qlpars[10];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int gfsstp_(doublereal *);
-    extern /* Subroutine */ int gfevnt_(U_fp, U_fp, char *, integer *, char *,
-	     char *, doublereal *, integer *, logical *, char *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, logical *, U_fp, U_fp, 
-	    U_fp, integer *, integer *, doublereal *, logical *, L_fp, 
-	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int gfsstp_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int gfevnt_(cspice_t*, U_fp, U_fp, char *, 
+	    integer *, char *, char *, doublereal *, integer *, logical *, 
+	    char *, doublereal *, doublereal *, doublereal *, doublereal *, 
+	    logical *, U_fp, U_fp, U_fp, integer *, integer *, doublereal *, 
+	    logical *, L_fp, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen);
     doublereal tol;
-    extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
-	    doublereal *);
+    extern /* Subroutine */ int zzholdd_(cspice_t*, integer *, integer *, 
+	    logical *, doublereal *);
 
 
     /* Module state */
-    gfposc_state_t* __state = get_gfposc_state();
+    gfposc_state_t* __state = get_gfposc_state(__global_state);
 /* $ Abstract */
 
 /*     Determine time intervals for which a coordinate of an */
@@ -1682,67 +1682,78 @@ static gfposc_state_t* get_gfposc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Check into the error subsystem. */
 
-    chkin_("GFPOSC", (ftnlen)6);
+    chkin_(__global_state, "GFPOSC", (ftnlen)6);
 
 /*     Confirm minimum window sizes. */
 
-    if (*mw < 2 || ! even_(mw)) {
-	setmsg_("Workspace window size was #; size must be at least 2 and an"
-		" even value.", (ftnlen)71);
-	errint_("#", mw, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
-	chkout_("GFPOSC", (ftnlen)6);
+    if (*mw < 2 || ! even_(__global_state, mw)) {
+	setmsg_(__global_state, "Workspace window size was #; size must be a"
+		"t least 2 and an even value.", (ftnlen)71);
+	errint_(__global_state, "#", mw, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDIMENSION)", (ftnlen)23);
+	chkout_(__global_state, "GFPOSC", (ftnlen)6);
 	return 0;
     }
-    if (sized_(result) < 2) {
-	setmsg_("Result window size was #; size must be at least 2.", (ftnlen)
-		50);
-	i__1 = sized_(result);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
-	chkout_("GFPOSC", (ftnlen)6);
+    if (sized_(__global_state, result) < 2) {
+	setmsg_(__global_state, "Result window size was #; size must be at l"
+		"east 2.", (ftnlen)50);
+	i__1 = sized_(__global_state, result);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDIMENSION)", (ftnlen)23);
+	chkout_(__global_state, "GFPOSC", (ftnlen)6);
 	return 0;
     }
 
 /*     Set up a call to GFEVNT specific to the observer-target */
 /*     coordinate search. */
 
-    s_copy(qpnams, "TARGET", (ftnlen)80, (ftnlen)6);
-    s_copy(qcpars, target, (ftnlen)80, target_len);
-    s_copy(qpnams + 80, "OBSERVER", (ftnlen)80, (ftnlen)8);
-    s_copy(qcpars + 80, obsrvr, (ftnlen)80, obsrvr_len);
-    s_copy(qpnams + 160, "ABCORR", (ftnlen)80, (ftnlen)6);
-    s_copy(qcpars + 160, abcorr, (ftnlen)80, abcorr_len);
-    s_copy(qpnams + 240, "COORDINATE SYSTEM", (ftnlen)80, (ftnlen)17);
-    s_copy(qcpars + 240, crdsys, (ftnlen)80, crdsys_len);
-    s_copy(qpnams + 320, "COORDINATE", (ftnlen)80, (ftnlen)10);
-    s_copy(qcpars + 320, coord, (ftnlen)80, coord_len);
-    s_copy(qpnams + 400, "REFERENCE FRAME", (ftnlen)80, (ftnlen)15);
-    s_copy(qcpars + 400, frame, (ftnlen)80, frame_len);
-    s_copy(qpnams + 480, "VECTOR DEFINITION", (ftnlen)80, (ftnlen)17);
-    s_copy(qcpars + 480, "POSITION", (ftnlen)80, (ftnlen)8);
-    s_copy(qpnams + 560, "METHOD", (ftnlen)80, (ftnlen)6);
-    s_copy(qcpars + 560, " ", (ftnlen)80, (ftnlen)1);
-    s_copy(qpnams + 640, "DREF", (ftnlen)80, (ftnlen)4);
-    s_copy(qcpars + 640, __state->dref, (ftnlen)80, (ftnlen)80);
-    s_copy(qpnams + 720, "DVEC", (ftnlen)80, (ftnlen)4);
+    s_copy(&__global_state->f2c, qpnams, "TARGET", (ftnlen)80, (ftnlen)6);
+    s_copy(&__global_state->f2c, qcpars, target, (ftnlen)80, target_len);
+    s_copy(&__global_state->f2c, qpnams + 80, "OBSERVER", (ftnlen)80, (ftnlen)
+	    8);
+    s_copy(&__global_state->f2c, qcpars + 80, obsrvr, (ftnlen)80, obsrvr_len);
+    s_copy(&__global_state->f2c, qpnams + 160, "ABCORR", (ftnlen)80, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, qcpars + 160, abcorr, (ftnlen)80, abcorr_len)
+	    ;
+    s_copy(&__global_state->f2c, qpnams + 240, "COORDINATE SYSTEM", (ftnlen)
+	    80, (ftnlen)17);
+    s_copy(&__global_state->f2c, qcpars + 240, crdsys, (ftnlen)80, crdsys_len)
+	    ;
+    s_copy(&__global_state->f2c, qpnams + 320, "COORDINATE", (ftnlen)80, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, qcpars + 320, coord, (ftnlen)80, coord_len);
+    s_copy(&__global_state->f2c, qpnams + 400, "REFERENCE FRAME", (ftnlen)80, 
+	    (ftnlen)15);
+    s_copy(&__global_state->f2c, qcpars + 400, frame, (ftnlen)80, frame_len);
+    s_copy(&__global_state->f2c, qpnams + 480, "VECTOR DEFINITION", (ftnlen)
+	    80, (ftnlen)17);
+    s_copy(&__global_state->f2c, qcpars + 480, "POSITION", (ftnlen)80, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, qpnams + 560, "METHOD", (ftnlen)80, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, qcpars + 560, " ", (ftnlen)80, (ftnlen)1);
+    s_copy(&__global_state->f2c, qpnams + 640, "DREF", (ftnlen)80, (ftnlen)4);
+    s_copy(&__global_state->f2c, qcpars + 640, __state->dref, (ftnlen)80, (
+	    ftnlen)80);
+    s_copy(&__global_state->f2c, qpnams + 720, "DVEC", (ftnlen)80, (ftnlen)4);
     qdpars[0] = __state->dvec[0];
     qdpars[1] = __state->dvec[1];
     qdpars[2] = __state->dvec[2];
 
 /*     Set the step size. */
 
-    gfsstp_(step);
+    gfsstp_(__global_state, step);
 
 /*     Retrieve the convergence tolerance, if set. */
 
-    zzholdd_(&__state->c_n1, &__state->c__3, &ok, &tol);
+    zzholdd_(__global_state, &__state->c_n1, &__state->c__3, &ok, &tol);
 
 /*     Use the default value CNVTOL if no stored tolerance value. */
 
@@ -1752,18 +1763,19 @@ static gfposc_state_t* get_gfposc_state() {
 
 /*     Initialize the RESULT window to empty. */
 
-    scardd_(&__state->c__0, result);
+    scardd_(__global_state, &__state->c__0, result);
 
 /*     Look for solutions. */
 
 /*     Progress report and interrupt options are set to .FALSE. */
 
-    gfevnt_((U_fp)gfstep_, (U_fp)gfrefn_, "COORDINATE", &__state->c__10, 
-	    qpnams, qcpars, qdpars, qipars, qlpars, relate, refval, &tol, 
-	    adjust, cnfine, &__state->c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (
-	    U_fp)gfrepf_, mw, nw, work, &__state->c_false, (L_fp)gfbail_, 
-	    result, (ftnlen)10, (ftnlen)80, (ftnlen)80, relate_len);
-    chkout_("GFPOSC", (ftnlen)6);
+    gfevnt_(__global_state, (U_fp)gfstep_, (U_fp)gfrefn_, "COORDINATE", &
+	    __state->c__10, qpnams, qcpars, qdpars, qipars, qlpars, relate, 
+	    refval, &tol, adjust, cnfine, &__state->c_false, (U_fp)gfrepi_, (
+	    U_fp)gfrepu_, (U_fp)gfrepf_, mw, nw, work, &__state->c_false, (
+	    L_fp)gfbail_, result, (ftnlen)10, (ftnlen)80, (ftnlen)80, 
+	    relate_len);
+    chkout_(__global_state, "GFPOSC", (ftnlen)6);
     return 0;
 } /* gfposc_ */
 

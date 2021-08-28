@@ -349,7 +349,7 @@
    {
       return;
    }
-   chkin_c ( "et2lst_c" );
+   chkin_c ( naif_state, "et2lst_c" );
 
    /*
    Check the input type argument. 

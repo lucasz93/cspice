@@ -8,27 +8,26 @@
 
 
 typedef int wnfetd_state_t;
-static wnfetd_state_t* get_wnfetd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wnfetd_state_t* get_wnfetd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      WNFETD ( Fetch an interval from a DP window ) */
-/* Subroutine */ int wnfetd_(doublereal *window, integer *n, doublereal *left,
-	 doublereal *right)
+/* Subroutine */ int wnfetd_(cspice_t* __global_state, doublereal *window, 
+	integer *n, doublereal *left, doublereal *right)
 {
     integer card;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer end;
 
 
     /* Module state */
-    wnfetd_state_t* __state = get_wnfetd_state();
+    wnfetd_state_t* __state = get_wnfetd_state(__global_state);
 /* $ Abstract */
 
 /*     Fetch a particular interval from a double precision window. */
@@ -175,25 +174,25 @@ static wnfetd_state_t* get_wnfetd_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("WNFETD", (ftnlen)6);
+    chkin_(__global_state, "WNFETD", (ftnlen)6);
 
 
 /*     How many endpoints in the window? Enough? Normally, endpoints */
 /*     of the Nth interval are stored in elements 2N and 2N-1. */
 
-    card = cardd_(window);
+    card = cardd_(__global_state, window);
     end = *n << 1;
     if (*n < 1 || card < end) {
-	setmsg_("WNFETD: No such interval.", (ftnlen)25);
-	sigerr_("SPICE(NOINTERVAL)", (ftnlen)17);
+	setmsg_(__global_state, "WNFETD: No such interval.", (ftnlen)25);
+	sigerr_(__global_state, "SPICE(NOINTERVAL)", (ftnlen)17);
     } else {
 	*left = window[end + 4];
 	*right = window[end + 5];
     }
-    chkout_("WNFETD", (ftnlen)6);
+    chkout_(__global_state, "WNFETD", (ftnlen)6);
     return 0;
 } /* wnfetd_ */
 

@@ -215,7 +215,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafrs_c" );
+   chkin_c ( naif_state, "dafrs_c" );
 
    /*
    Not much to it. 

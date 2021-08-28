@@ -172,7 +172,7 @@
       return;
    }
 
-   chkin_c ( "gfstep_c" );
+   chkin_c ( naif_state, "gfstep_c" );
 
    /*
    Let the f2c'd routine do the work.

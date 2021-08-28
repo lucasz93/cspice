@@ -8,19 +8,19 @@
 
 
 typedef int xpose_state_t;
-static xpose_state_t* get_xpose_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline xpose_state_t* get_xpose_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      XPOSE ( Transpose a matrix, 3x3 ) */
-/* Subroutine */ int xpose_(doublereal *m1, doublereal *mout)
+/* Subroutine */ int xpose_(cspice_t* __global_state, doublereal *m1, 
+	doublereal *mout)
 {
     doublereal temp;
 
 
     /* Module state */
-    xpose_state_t* __state = get_xpose_state();
+    xpose_state_t* __state = get_xpose_state(__global_state);
 /* $ Abstract */
 
 /*     Transpose a 3x3 matrix. */

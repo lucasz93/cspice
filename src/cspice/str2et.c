@@ -8,8 +8,7 @@
 
 
 extern str2et_init_t __str2et_init;
-static str2et_state_t* get_str2et_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline str2et_state_t* get_str2et_state(cspice_t* state) {
 	if (!state->str2et)
 		state->str2et = __cspice_allocate_module(sizeof(
 	str2et_state_t), &__str2et_init, sizeof(__str2et_init));
@@ -18,7 +17,8 @@ static str2et_state_t* get_str2et_state() {
 }
 
 /* $Procedure      STR2ET ( String to ET ) */
-/* Subroutine */ int str2et_(char *string, doublereal *et, ftnlen string_len)
+/* Subroutine */ int str2et_(cspice_t* __global_state, char *string, 
+	doublereal *et, ftnlen string_len)
 {
     /* Initialized data */
 
@@ -27,49 +27,52 @@ static str2et_state_t* get_str2et_state() {
     integer i__1, i__2, i__3, i__4, i__5, i__6;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), i_dnnt(doublereal *);
-    double d_int(doublereal *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), i_dnnt(
+	    f2c_state_t*, doublereal *);
+    double d_int(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int dpfmt_(doublereal *, char *, char *, ftnlen, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int dpfmt_(cspice_t*, doublereal *, char *, char *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int jul2gr_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int gr2jul_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int tchckd_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int tcheck_(cspice_t*, doublereal *, char *, 
+	    logical *, char *, logical *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int timdef_(cspice_t*, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int jul2gr_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int gr2jul_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int tchckd_(char *, ftnlen);
-    extern /* Subroutine */ int tcheck_(doublereal *, char *, logical *, char 
-	    *, logical *, char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int timdef_(char *, char *, char *, ftnlen, 
+    extern /* Subroutine */ int tparch_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int prefix_(cspice_t*, char *, integer *, char *, 
 	    ftnlen, ftnlen);
-    extern /* Subroutine */ int tparch_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int ttrans_(char *, char *, doublereal *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int tpartv_(char *, doublereal *, integer *, char 
-	    *, char *, logical *, logical *, logical *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int texpyr_(integer *);
-    extern /* Subroutine */ int zzutcpm_(char *, integer *, doublereal *, 
-	    doublereal *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ttrans_(cspice_t*, char *, char *, doublereal 
+	    *, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int tpartv_(cspice_t*, char *, doublereal *, 
+	    integer *, char *, char *, logical *, logical *, logical *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int texpyr_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzutcpm_(cspice_t*, char *, integer *, 
+	    doublereal *, doublereal *, integer *, logical *, ftnlen);
 
 
     /* Module state */
-    str2et_state_t* __state = get_str2et_state();
+    str2et_state_t* __state = get_str2et_state(__global_state);
 /* $ Abstract */
 
 /*     Convert a string representing an epoch to a double precision */
@@ -740,22 +743,26 @@ static str2et_state_t* get_str2et_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("STR2ET", (ftnlen)6);
+    chkin_(__global_state, "STR2ET", (ftnlen)6);
 
 /*     Collect the current defaults. */
 
-    timdef_("GET", "SYSTEM", __state->defsys, (ftnlen)3, (ftnlen)6, (ftnlen)
-	    16);
-    timdef_("GET", "ZONE", __state->defzon, (ftnlen)3, (ftnlen)4, (ftnlen)16);
-    timdef_("GET", "CALENDAR", __state->calndr, (ftnlen)3, (ftnlen)8, (ftnlen)
-	    16);
-    if (s_cmp(__state->defzon, " ", (ftnlen)16, (ftnlen)1) != 0) {
-	prefix_("::", &__state->c__0, __state->defzon, (ftnlen)2, (ftnlen)16);
-	zzutcpm_(__state->defzon, &__state->c__1, &__state->dhoff, &
-		__state->dmoff, &__state->last, &__state->succes, (ftnlen)16);
+    timdef_(__global_state, "GET", "SYSTEM", __state->defsys, (ftnlen)3, (
+	    ftnlen)6, (ftnlen)16);
+    timdef_(__global_state, "GET", "ZONE", __state->defzon, (ftnlen)3, (
+	    ftnlen)4, (ftnlen)16);
+    timdef_(__global_state, "GET", "CALENDAR", __state->calndr, (ftnlen)3, (
+	    ftnlen)8, (ftnlen)16);
+    if (s_cmp(&__global_state->f2c, __state->defzon, " ", (ftnlen)16, (ftnlen)
+	    1) != 0) {
+	prefix_(__global_state, "::", &__state->c__0, __state->defzon, (
+		ftnlen)2, (ftnlen)16);
+	zzutcpm_(__global_state, __state->defzon, &__state->c__1, &
+		__state->dhoff, &__state->dmoff, &__state->last, &
+		__state->succes, (ftnlen)16);
     } else {
 	__state->dhoff = 0.;
 	__state->dmoff = 0.;
@@ -763,29 +770,33 @@ static str2et_state_t* get_str2et_state() {
 
 /*     See if TPARTV can recognize what the user has supplied. */
 
-    tpartv_(string, __state->tvec, &__state->ntvec, __state->type__, 
-	    __state->modify, &__state->mods, &__state->yabbrv, &
-	    __state->succes, __state->pictur, __state->error, string_len, (
-	    ftnlen)16, (ftnlen)16, (ftnlen)80, (ftnlen)400);
+    tpartv_(__global_state, string, __state->tvec, &__state->ntvec, 
+	    __state->type__, __state->modify, &__state->mods, &
+	    __state->yabbrv, &__state->succes, __state->pictur, 
+	    __state->error, string_len, (ftnlen)16, (ftnlen)16, (ftnlen)80, (
+	    ftnlen)400);
     if (! __state->succes) {
-	setmsg_(__state->error, (ftnlen)400);
-	sigerr_("SPICE(UNPARSEDTIME)", (ftnlen)19);
-	chkout_("STR2ET", (ftnlen)6);
+	setmsg_(__global_state, __state->error, (ftnlen)400);
+	sigerr_(__global_state, "SPICE(UNPARSEDTIME)", (ftnlen)19);
+	chkout_(__global_state, "STR2ET", (ftnlen)6);
 	return 0;
     }
 
 /*     A system and time zone are incompatible components in a */
 /*     time string. */
 
-    if (s_cmp(__state->modify + 32, " ", (ftnlen)16, (ftnlen)1) != 0 && s_cmp(
-	    __state->modify + 64, " ", (ftnlen)16, (ftnlen)1) != 0) {
-	setmsg_("Both a time system and time zone have been specified in the"
-		" input string (# and #). These are inconsistent. A time zone"
-		" is a fixed offset from UTC. ", (ftnlen)148);
-	errch_("#", __state->modify + 64, (ftnlen)1, (ftnlen)16);
-	errch_("#", __state->modify + 32, (ftnlen)1, (ftnlen)16);
-	sigerr_("SPICE(TIMECONFLICT)", (ftnlen)19);
-	chkout_("STR2ET", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, __state->modify + 32, " ", (ftnlen)16, (
+	    ftnlen)1) != 0 && s_cmp(&__global_state->f2c, __state->modify + 
+	    64, " ", (ftnlen)16, (ftnlen)1) != 0) {
+	setmsg_(__global_state, "Both a time system and time zone have been "
+		"specified in the input string (# and #). These are inconsist"
+		"ent. A time zone is a fixed offset from UTC. ", (ftnlen)148);
+	errch_(__global_state, "#", __state->modify + 64, (ftnlen)1, (ftnlen)
+		16);
+	errch_(__global_state, "#", __state->modify + 32, (ftnlen)1, (ftnlen)
+		16);
+	sigerr_(__global_state, "SPICE(TIMECONFLICT)", (ftnlen)19);
+	chkout_(__global_state, "STR2ET", (ftnlen)6);
 	return 0;
     }
 
@@ -794,30 +805,36 @@ static str2et_state_t* get_str2et_state() {
 /*     can be non-blank). */
 
     __state->zoned = FALSE_;
-    if (s_cmp(__state->modify + 32, " ", (ftnlen)16, (ftnlen)1) == 0 && s_cmp(
-	    __state->modify + 64, " ", (ftnlen)16, (ftnlen)1) == 0) {
-	s_copy(__state->modify + 32, __state->defzon, (ftnlen)16, (ftnlen)16);
-	s_copy(__state->modify + 64, __state->defsys, (ftnlen)16, (ftnlen)16);
+    if (s_cmp(&__global_state->f2c, __state->modify + 32, " ", (ftnlen)16, (
+	    ftnlen)1) == 0 && s_cmp(&__global_state->f2c, __state->modify + 
+	    64, " ", (ftnlen)16, (ftnlen)1) == 0) {
+	s_copy(&__global_state->f2c, __state->modify + 32, __state->defzon, (
+		ftnlen)16, (ftnlen)16);
+	s_copy(&__global_state->f2c, __state->modify + 64, __state->defsys, (
+		ftnlen)16, (ftnlen)16);
 	__state->hoff = __state->dhoff;
 	__state->moff = __state->dmoff;
-	__state->zoned = s_cmp(__state->modify + 32, " ", (ftnlen)16, (ftnlen)
-		1) != 0;
-    } else if (s_cmp(__state->modify + 32, " ", (ftnlen)16, (ftnlen)1) != 0) {
+	__state->zoned = s_cmp(&__global_state->f2c, __state->modify + 32, 
+		" ", (ftnlen)16, (ftnlen)1) != 0;
+    } else if (s_cmp(&__global_state->f2c, __state->modify + 32, " ", (ftnlen)
+	    16, (ftnlen)1) != 0) {
 
 /*        Parse the time zone specification.  If we don't succeed */
 /*        in the parsing, signal an error. */
 
 	__state->zoned = TRUE_;
-	prefix_("::", &__state->c__0, __state->modify + 32, (ftnlen)2, (
-		ftnlen)16);
-	zzutcpm_(__state->modify + 32, &__state->c__1, &__state->hoff, &
-		__state->moff, &__state->last, &__state->succes, (ftnlen)16);
+	prefix_(__global_state, "::", &__state->c__0, __state->modify + 32, (
+		ftnlen)2, (ftnlen)16);
+	zzutcpm_(__global_state, __state->modify + 32, &__state->c__1, &
+		__state->hoff, &__state->moff, &__state->last, &
+		__state->succes, (ftnlen)16);
 	if (! __state->succes) {
-	    setmsg_("# is not a legitimate time zone specification. ", (
-		    ftnlen)47);
-	    errch_("#", __state->modify + 34, (ftnlen)1, (ftnlen)14);
-	    sigerr_("SPICE(TIMEZONEERROR)", (ftnlen)20);
-	    chkout_("STR2ET", (ftnlen)6);
+	    setmsg_(__global_state, "# is not a legitimate time zone specifi"
+		    "cation. ", (ftnlen)47);
+	    errch_(__global_state, "#", __state->modify + 34, (ftnlen)1, (
+		    ftnlen)14);
+	    sigerr_(__global_state, "SPICE(TIMEZONEERROR)", (ftnlen)20);
+	    chkout_(__global_state, "STR2ET", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -826,34 +843,43 @@ static str2et_state_t* get_str2et_state() {
 /*     complications associated with it that the calendar strings */
 /*     have. */
 
-    if (s_cmp(__state->type__, "JD", (ftnlen)16, (ftnlen)2) == 0) {
-	if (s_cmp(__state->modify + 64, "UTC", (ftnlen)16, (ftnlen)3) == 0) {
-	    s_copy(__state->type__, "JDUTC", (ftnlen)16, (ftnlen)5);
-	} else if (s_cmp(__state->modify + 64, "TDB", (ftnlen)16, (ftnlen)3) 
-		== 0) {
-	    s_copy(__state->type__, "JDTDB", (ftnlen)16, (ftnlen)5);
-	} else if (s_cmp(__state->modify + 64, "TDT", (ftnlen)16, (ftnlen)3) 
-		== 0) {
-	    s_copy(__state->type__, "JDTDT", (ftnlen)16, (ftnlen)5);
+    if (s_cmp(&__global_state->f2c, __state->type__, "JD", (ftnlen)16, (
+	    ftnlen)2) == 0) {
+	if (s_cmp(&__global_state->f2c, __state->modify + 64, "UTC", (ftnlen)
+		16, (ftnlen)3) == 0) {
+	    s_copy(&__global_state->f2c, __state->type__, "JDUTC", (ftnlen)16,
+		     (ftnlen)5);
+	} else if (s_cmp(&__global_state->f2c, __state->modify + 64, "TDB", (
+		ftnlen)16, (ftnlen)3) == 0) {
+	    s_copy(&__global_state->f2c, __state->type__, "JDTDB", (ftnlen)16,
+		     (ftnlen)5);
+	} else if (s_cmp(&__global_state->f2c, __state->modify + 64, "TDT", (
+		ftnlen)16, (ftnlen)3) == 0) {
+	    s_copy(&__global_state->f2c, __state->type__, "JDTDT", (ftnlen)16,
+		     (ftnlen)5);
 	} else {
-	    s_copy(__state->type__, "JDUTC", (ftnlen)16, (ftnlen)5);
+	    s_copy(&__global_state->f2c, __state->type__, "JDUTC", (ftnlen)16,
+		     (ftnlen)5);
 	}
-	ttrans_(__state->type__, "TDB", __state->tvec, (ftnlen)16, (ftnlen)3);
+	ttrans_(__global_state, __state->type__, "TDB", __state->tvec, (
+		ftnlen)16, (ftnlen)3);
 	*et = __state->tvec[0];
-	chkout_("STR2ET", (ftnlen)6);
+	chkout_(__global_state, "STR2ET", (ftnlen)6);
 	return 0;
     }
 
 /*     Set the indexes of the hours, minutes, seconds, etc. components */
 /*     of the time vector. */
 
-    if (s_cmp(__state->type__, "YD", (ftnlen)16, (ftnlen)2) == 0) {
+    if (s_cmp(&__global_state->f2c, __state->type__, "YD", (ftnlen)16, (
+	    ftnlen)2) == 0) {
 	__state->yr = 1;
 	__state->dy = 2;
 	__state->hr = 3;
 	__state->mn = 4;
 	__state->sc = 5;
-	s_copy(__state->forml, "YDF", (ftnlen)16, (ftnlen)3);
+	s_copy(&__global_state->f2c, __state->forml, "YDF", (ftnlen)16, (
+		ftnlen)3);
     } else {
 	__state->yr = 1;
 	__state->mm = 2;
@@ -861,33 +887,37 @@ static str2et_state_t* get_str2et_state() {
 	__state->hr = 4;
 	__state->mn = 5;
 	__state->sc = 6;
-	s_copy(__state->forml, "YMDF", (ftnlen)16, (ftnlen)4);
+	s_copy(&__global_state->f2c, __state->forml, "YMDF", (ftnlen)16, (
+		ftnlen)4);
     }
 
 /*     Check the components for reasonableness. */
 
-    tchckd_(__state->check, (ftnlen)16);
-    tparch_("YES", (ftnlen)3);
+    tchckd_(__global_state, __state->check, (ftnlen)16);
+    tparch_(__global_state, "YES", (ftnlen)3);
 
 /*     If the calendar is NOT gregorian, or if we have a time zone */
 /*     present, we avoid the problem of checking for legitimate */
 /*     leapseconds (at least we avoid this problem for the moment). */
 
     __state->adjust = FALSE_;
-    if (__state->zoned || s_cmp(__state->calndr, __state->gregrn, (ftnlen)16, 
-	    (ftnlen)16) != 0) {
+    if (__state->zoned || s_cmp(&__global_state->f2c, __state->calndr, 
+	    __state->gregrn, (ftnlen)16, (ftnlen)16) != 0) {
 	if (__state->tvec[(i__1 = __state->sc - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)949)] >= 60. && 
-		__state->tvec[(i__2 = __state->sc - 1) < 8 && 0 <= i__2 ? 
-		i__2 : s_rnge("tvec", i__2, "str2et_", (ftnlen)949)] < 61.) {
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		949)] >= 60. && __state->tvec[(i__2 = __state->sc - 1) < 8 && 
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "tvec", i__2, 
+		"str2et_", (ftnlen)949)] < 61.) {
 	    __state->adjust = TRUE_;
 	    __state->tvec[(i__1 = __state->sc - 1) < 8 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tvec", i__1, "str2et_", (ftnlen)953)] = 
-		    __state->tvec[(i__2 = __state->sc - 1) < 8 && 0 <= i__2 ? 
-		    i__2 : s_rnge("tvec", i__2, "str2et_", (ftnlen)953)] - 1.;
+		    s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (
+		    ftnlen)953)] = __state->tvec[(i__2 = __state->sc - 1) < 8 
+		    && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "tvec",
+		     i__2, "str2et_", (ftnlen)953)] - 1.;
 	}
     }
-    if (s_cmp(__state->calndr, __state->mixed, (ftnlen)16, (ftnlen)16) == 0) {
+    if (s_cmp(&__global_state->f2c, __state->calndr, __state->mixed, (ftnlen)
+	    16, (ftnlen)16) == 0) {
 
 /*        This is a bit awkward, but here's what's going on. */
 /*        If the input calendar is part of the Julian calendar */
@@ -903,58 +933,60 @@ static str2et_state_t* get_str2et_state() {
 /*        of the checks to see if we have a legitimate time vector. */
 
 	if (__state->tvec[(i__1 = __state->yr - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)976)] < 1580.) {
-	    moved_(__state->tvec, &__state->c__6, __state->tvecm);
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		976)] < 1580.) {
+	    moved_(__global_state, __state->tvec, &__state->c__6, 
+		    __state->tvecm);
 	    __state->tvecm[0] += 4.;
-	    tcheck_(__state->tvecm, __state->type__, &__state->mods, 
-		    __state->modify, &__state->ok1, __state->error, (ftnlen)
-		    16, (ftnlen)16, (ftnlen)400);
-	    tcheck_(__state->tvec, __state->type__, &__state->mods, 
-		    __state->modify, &__state->ok2, __state->error, (ftnlen)
-		    16, (ftnlen)16, (ftnlen)400);
+	    tcheck_(__global_state, __state->tvecm, __state->type__, &
+		    __state->mods, __state->modify, &__state->ok1, 
+		    __state->error, (ftnlen)16, (ftnlen)16, (ftnlen)400);
+	    tcheck_(__global_state, __state->tvec, __state->type__, &
+		    __state->mods, __state->modify, &__state->ok2, 
+		    __state->error, (ftnlen)16, (ftnlen)16, (ftnlen)400);
 	    __state->ok = __state->ok1 || __state->ok2;
 	} else {
-	    tcheck_(__state->tvec, __state->type__, &__state->mods, 
-		    __state->modify, &__state->ok, __state->error, (ftnlen)16,
-		     (ftnlen)16, (ftnlen)400);
+	    tcheck_(__global_state, __state->tvec, __state->type__, &
+		    __state->mods, __state->modify, &__state->ok, 
+		    __state->error, (ftnlen)16, (ftnlen)16, (ftnlen)400);
 	}
-    } else if (s_cmp(__state->calndr, __state->juln, (ftnlen)16, (ftnlen)16) 
-	    == 0) {
+    } else if (s_cmp(&__global_state->f2c, __state->calndr, __state->juln, (
+	    ftnlen)16, (ftnlen)16) == 0) {
 
 /*        Basically, this is the same story as before, but there */
 /*        are no bounds in the years where we might be on a century. */
 /*        So we just check twice for each time vector. */
 
-	moved_(__state->tvec, &__state->c__6, __state->tvecm);
+	moved_(__global_state, __state->tvec, &__state->c__6, __state->tvecm);
 	__state->tvecm[0] += 4.;
-	tcheck_(__state->tvecm, __state->type__, &__state->mods, 
-		__state->modify, &__state->ok1, __state->error, (ftnlen)16, (
-		ftnlen)16, (ftnlen)400);
-	tcheck_(__state->tvec, __state->type__, &__state->mods, 
-		__state->modify, &__state->ok2, __state->error, (ftnlen)16, (
-		ftnlen)16, (ftnlen)400);
+	tcheck_(__global_state, __state->tvecm, __state->type__, &
+		__state->mods, __state->modify, &__state->ok1, __state->error,
+		 (ftnlen)16, (ftnlen)16, (ftnlen)400);
+	tcheck_(__global_state, __state->tvec, __state->type__, &
+		__state->mods, __state->modify, &__state->ok2, __state->error,
+		 (ftnlen)16, (ftnlen)16, (ftnlen)400);
 	__state->ok = __state->ok1 || __state->ok2;
     } else {
 
 /*        TCHECK was designed for the Gregorian Calendar,  So we */
 /*        don't have much to do. */
 
-	tcheck_(__state->tvec, __state->type__, &__state->mods, 
-		__state->modify, &__state->ok, __state->error, (ftnlen)16, (
-		ftnlen)16, (ftnlen)400);
+	tcheck_(__global_state, __state->tvec, __state->type__, &
+		__state->mods, __state->modify, &__state->ok, __state->error, 
+		(ftnlen)16, (ftnlen)16, (ftnlen)400);
     }
 
 /*     Reset the checking status. */
 
-    tparch_(__state->check, (ftnlen)16);
+    tparch_(__global_state, __state->check, (ftnlen)16);
 
 /*     If we didn't get an OK from the inspection above, */
 /*     say so and signal an error. */
 
     if (! __state->ok) {
-	setmsg_(__state->error, (ftnlen)400);
-	sigerr_("SPICE(BADTIMESTRING)", (ftnlen)20);
-	chkout_("STR2ET", (ftnlen)6);
+	setmsg_(__global_state, __state->error, (ftnlen)400);
+	sigerr_(__global_state, "SPICE(BADTIMESTRING)", (ftnlen)20);
+	chkout_(__global_state, "STR2ET", (ftnlen)6);
 	return 0;
     }
 
@@ -962,68 +994,78 @@ static str2et_state_t* get_str2et_state() {
 
     if (__state->adjust) {
 	__state->tvec[(i__1 = __state->sc - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)1037)] = 
-		__state->tvec[(i__2 = __state->sc - 1) < 8 && 0 <= i__2 ? 
-		i__2 : s_rnge("tvec", i__2, "str2et_", (ftnlen)1037)] + 1.;
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		1037)] = __state->tvec[(i__2 = __state->sc - 1) < 8 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "tvec", i__2, 
+		"str2et_", (ftnlen)1037)] + 1.;
     }
 
 /*     There are no leapseconds in the TDT and TDB time systems */
 /*     This means that the seconds component must be less than 60. */
 
-    if (s_cmp(__state->modify + 64, "TDT", (ftnlen)16, (ftnlen)3) == 0 || 
-	    s_cmp(__state->modify + 64, "TDB", (ftnlen)16, (ftnlen)3) == 0) {
+    if (s_cmp(&__global_state->f2c, __state->modify + 64, "TDT", (ftnlen)16, (
+	    ftnlen)3) == 0 || s_cmp(&__global_state->f2c, __state->modify + 
+	    64, "TDB", (ftnlen)16, (ftnlen)3) == 0) {
 	if (__state->tvec[(i__1 = __state->sc - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)1047)] >= 60.) {
-	    setmsg_("The seconds component of time must be less than 60 for "
-		    "any calendar representation of #. ", (ftnlen)89);
-	    errch_("#", __state->modify + 64, (ftnlen)1, (ftnlen)16);
-	    sigerr_("SPICE(BADTIMESTRING)", (ftnlen)20);
-	    chkout_("STR2ET", (ftnlen)6);
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		1047)] >= 60.) {
+	    setmsg_(__global_state, "The seconds component of time must be l"
+		    "ess than 60 for any calendar representation of #. ", (
+		    ftnlen)89);
+	    errch_(__global_state, "#", __state->modify + 64, (ftnlen)1, (
+		    ftnlen)16);
+	    sigerr_(__global_state, "SPICE(BADTIMESTRING)", (ftnlen)20);
+	    chkout_(__global_state, "STR2ET", (ftnlen)6);
 	    return 0;
 	}
     }
 
 /*     If a B.C. era  marker is present we can't have a year abbreviation */
 
-    if (s_cmp(__state->modify, "B.C.", (ftnlen)16, (ftnlen)4) == 0 && 
-	    __state->yabbrv) {
-	setmsg_("The Year may be abbreviated only if the year belongs to the"
-		" Christian Era (A.D.) ", (ftnlen)81);
-	sigerr_("SPICE(BADTIMESTRING)", (ftnlen)20);
-	chkout_("STR2ET", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, __state->modify, "B.C.", (ftnlen)16, (
+	    ftnlen)4) == 0 && __state->yabbrv) {
+	setmsg_(__global_state, "The Year may be abbreviated only if the yea"
+		"r belongs to the Christian Era (A.D.) ", (ftnlen)81);
+	sigerr_(__global_state, "SPICE(BADTIMESTRING)", (ftnlen)20);
+	chkout_(__global_state, "STR2ET", (ftnlen)6);
 	return 0;
     }
 
 /*     If the era is B.C. we need to reset the year. */
 
-    if (s_cmp(__state->modify, "B.C.", (ftnlen)16, (ftnlen)4) == 0) {
+    if (s_cmp(&__global_state->f2c, __state->modify, "B.C.", (ftnlen)16, (
+	    ftnlen)4) == 0) {
 	__state->tvec[(i__1 = __state->yr - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)1078)] = 1. - 
-		__state->tvec[(i__2 = __state->yr - 1) < 8 && 0 <= i__2 ? 
-		i__2 : s_rnge("tvec", i__2, "str2et_", (ftnlen)1078)];
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		1078)] = 1. - __state->tvec[(i__2 = __state->yr - 1) < 8 && 0 
+		<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "tvec", i__2, 
+		"str2et_", (ftnlen)1078)];
     }
 
 /*     If there is a A.M. or P.M. time string modifier, we need to adjust */
 /*     the hours component of the time. */
 
-    if (s_cmp(__state->modify + 48, "P.M.", (ftnlen)16, (ftnlen)4) == 0) {
+    if (s_cmp(&__global_state->f2c, __state->modify + 48, "P.M.", (ftnlen)16, 
+	    (ftnlen)4) == 0) {
 	if (__state->tvec[(i__1 = __state->hr - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)1087)] < 12.) {
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		1087)] < 12.) {
 	    __state->tvec[(i__1 = __state->hr - 1) < 8 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tvec", i__1, "str2et_", (ftnlen)1088)] = 
-		    __state->tvec[(i__2 = __state->hr - 1) < 8 && 0 <= i__2 ? 
-		    i__2 : s_rnge("tvec", i__2, "str2et_", (ftnlen)1088)] + 
-		    12.;
+		    s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (
+		    ftnlen)1088)] = __state->tvec[(i__2 = __state->hr - 1) < 
+		    8 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "tvec", i__2, "str2et_", (ftnlen)1088)] + 12.;
 	}
-    } else if (s_cmp(__state->modify + 48, "A.M.", (ftnlen)16, (ftnlen)4) == 
-	    0) {
+    } else if (s_cmp(&__global_state->f2c, __state->modify + 48, "A.M.", (
+	    ftnlen)16, (ftnlen)4) == 0) {
 	if (__state->tvec[(i__1 = __state->hr - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)1093)] >= 12.) {
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		1093)] >= 12.) {
 	    __state->tvec[(i__1 = __state->hr - 1) < 8 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tvec", i__1, "str2et_", (ftnlen)1094)] = 
-		    __state->tvec[(i__2 = __state->hr - 1) < 8 && 0 <= i__2 ? 
-		    i__2 : s_rnge("tvec", i__2, "str2et_", (ftnlen)1094)] - 
-		    12.;
+		    s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (
+		    ftnlen)1094)] = __state->tvec[(i__2 = __state->hr - 1) < 
+		    8 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "tvec", i__2, "str2et_", (ftnlen)1094)] - 12.;
 	}
     }
 
@@ -1032,54 +1074,60 @@ static str2et_state_t* get_str2et_state() {
 /*     than 100 that is not qualified with the B.C. or A.D. era */
 /*     string is in fact an abbreviated year. */
 
-    __state->year = i_dnnt(&__state->tvec[(i__1 = __state->yr - 1) < 8 && 0 <=
-	     i__1 ? i__1 : s_rnge("tvec", i__1, "str2et_", (ftnlen)1105)]);
+    __state->year = i_dnnt(&__global_state->f2c, &__state->tvec[(i__1 = 
+	    __state->yr - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)1105)]);
     if (__state->yabbrv) {
-	texpyr_(&__state->year);
+	texpyr_(__global_state, &__state->year);
 	__state->tvec[(i__1 = __state->yr - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)1110)] = (doublereal) 
-		__state->year;
-    } else if (__state->year < 100 && s_cmp(__state->modify, " ", (ftnlen)16, 
-	    (ftnlen)1) == 0) {
-	texpyr_(&__state->year);
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		1110)] = (doublereal) __state->year;
+    } else if (__state->year < 100 && s_cmp(&__global_state->f2c, 
+	    __state->modify, " ", (ftnlen)16, (ftnlen)1) == 0) {
+	texpyr_(__global_state, &__state->year);
 	__state->tvec[(i__1 = __state->yr - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)1116)] = (doublereal) 
-		__state->year;
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		1116)] = (doublereal) __state->year;
     }
 
 /*     We may need to convert to the Gregorian Calendar, now is */
 /*     the time to do so. */
 
-    if (s_cmp(__state->calndr, __state->mixed, (ftnlen)16, (ftnlen)16) == 0) {
+    if (s_cmp(&__global_state->f2c, __state->calndr, __state->mixed, (ftnlen)
+	    16, (ftnlen)16) == 0) {
 
 /*        We need to check the components. */
 
-	if (s_cmp(__state->type__, "YD", (ftnlen)16, (ftnlen)2) == 0) {
+	if (s_cmp(&__global_state->f2c, __state->type__, "YD", (ftnlen)16, (
+		ftnlen)2) == 0) {
 	    __state->dojul = __state->tvec[(i__1 = __state->yr - 1) < 8 && 0 
-		    <= i__1 ? i__1 : s_rnge("tvec", i__1, "str2et_", (ftnlen)
-		    1131)] < 1582. || __state->tvec[(i__2 = __state->yr - 1) <
-		     8 && 0 <= i__2 ? i__2 : s_rnge("tvec", i__2, "str2et_", (
-		    ftnlen)1131)] == 1582. && __state->tvec[(i__3 = 
-		    __state->dy - 1) < 8 && 0 <= i__3 ? i__3 : s_rnge("tvec", 
-		    i__3, "str2et_", (ftnlen)1131)] < 279.;
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tvec", 
+		    i__1, "str2et_", (ftnlen)1131)] < 1582. || __state->tvec[(
+		    i__2 = __state->yr - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "tvec", i__2, "str2et_", (ftnlen)
+		    1131)] == 1582. && __state->tvec[(i__3 = __state->dy - 1) 
+		    < 8 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "tvec", i__3, "str2et_", (ftnlen)1131)] < 279.;
 	} else {
 	    __state->dojul = __state->tvec[(i__1 = __state->yr - 1) < 8 && 0 
-		    <= i__1 ? i__1 : s_rnge("tvec", i__1, "str2et_", (ftnlen)
-		    1137)] < 1582. || __state->tvec[(i__2 = __state->yr - 1) <
-		     8 && 0 <= i__2 ? i__2 : s_rnge("tvec", i__2, "str2et_", (
-		    ftnlen)1137)] <= 1582. && __state->tvec[(i__3 = 
-		    __state->mm - 1) < 8 && 0 <= i__3 ? i__3 : s_rnge("tvec", 
-		    i__3, "str2et_", (ftnlen)1137)] < 10. || __state->tvec[(
-		    i__4 = __state->yr - 1) < 8 && 0 <= i__4 ? i__4 : s_rnge(
-		    "tvec", i__4, "str2et_", (ftnlen)1137)] <= 1582. && 
-		    __state->tvec[(i__5 = __state->mm - 1) < 8 && 0 <= i__5 ? 
-		    i__5 : s_rnge("tvec", i__5, "str2et_", (ftnlen)1137)] <= 
-		    10. && __state->tvec[(i__6 = __state->dy - 1) < 8 && 0 <= 
-		    i__6 ? i__6 : s_rnge("tvec", i__6, "str2et_", (ftnlen)
-		    1137)] < 6.;
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tvec", 
+		    i__1, "str2et_", (ftnlen)1137)] < 1582. || __state->tvec[(
+		    i__2 = __state->yr - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "tvec", i__2, "str2et_", (ftnlen)
+		    1137)] <= 1582. && __state->tvec[(i__3 = __state->mm - 1) 
+		    < 8 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "tvec", i__3, "str2et_", (ftnlen)1137)] < 10. || 
+		    __state->tvec[(i__4 = __state->yr - 1) < 8 && 0 <= i__4 ? 
+		    i__4 : s_rnge(&__global_state->f2c, "tvec", i__4, "str2e"
+		    "t_", (ftnlen)1137)] <= 1582. && __state->tvec[(i__5 = 
+		    __state->mm - 1) < 8 && 0 <= i__5 ? i__5 : s_rnge(&
+		    __global_state->f2c, "tvec", i__5, "str2et_", (ftnlen)
+		    1137)] <= 10. && __state->tvec[(i__6 = __state->dy - 1) < 
+		    8 && 0 <= i__6 ? i__6 : s_rnge(&__global_state->f2c, 
+		    "tvec", i__6, "str2et_", (ftnlen)1137)] < 6.;
 	}
-    } else if (s_cmp(__state->calndr, __state->juln, (ftnlen)16, (ftnlen)16) 
-	    == 0) {
+    } else if (s_cmp(&__global_state->f2c, __state->calndr, __state->juln, (
+	    ftnlen)16, (ftnlen)16) == 0) {
 	__state->dojul = TRUE_;
     } else {
 	__state->dojul = FALSE_;
@@ -1091,74 +1139,83 @@ static str2et_state_t* get_str2et_state() {
 /*     diagnostic message. */
 
     if (__state->dojul) {
-	if (s_cmp(__state->type__, "YD", (ftnlen)16, (ftnlen)2) == 0) {
-	    __state->year = (integer) d_int(&__state->tvec[(i__1 = 
-		    __state->yr - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("tvec", 
-		    i__1, "str2et_", (ftnlen)1165)]);
+	if (s_cmp(&__global_state->f2c, __state->type__, "YD", (ftnlen)16, (
+		ftnlen)2) == 0) {
+	    __state->year = (integer) d_int(&__global_state->f2c, &
+		    __state->tvec[(i__1 = __state->yr - 1) < 8 && 0 <= i__1 ? 
+		    i__1 : s_rnge(&__global_state->f2c, "tvec", i__1, "str2e"
+		    "t_", (ftnlen)1165)]);
 	    __state->month = 1;
-	    __state->day = (integer) d_int(&__state->tvec[(i__1 = __state->dy 
-		    - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("tvec", i__1, "str"
-		    "2et_", (ftnlen)1167)]);
+	    __state->day = (integer) d_int(&__global_state->f2c, &
+		    __state->tvec[(i__1 = __state->dy - 1) < 8 && 0 <= i__1 ? 
+		    i__1 : s_rnge(&__global_state->f2c, "tvec", i__1, "str2e"
+		    "t_", (ftnlen)1167)]);
 	    __state->frac = __state->tvec[(i__1 = __state->dy - 1) < 8 && 0 <=
-		     i__1 ? i__1 : s_rnge("tvec", i__1, "str2et_", (ftnlen)
-		    1168)] - (doublereal) __state->day;
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "tvec", i__1, 
+		    "str2et_", (ftnlen)1168)] - (doublereal) __state->day;
 	    __state->orgnyr = __state->year;
-	    jul2gr_(&__state->year, &__state->month, &__state->day, &
-		    __state->doy);
+	    jul2gr_(__global_state, &__state->year, &__state->month, &
+		    __state->day, &__state->doy);
 	    __state->tvec[(i__1 = __state->yr - 1) < 8 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tvec", i__1, "str2et_", (ftnlen)1173)] = (
-		    doublereal) __state->year;
+		    s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (
+		    ftnlen)1173)] = (doublereal) __state->year;
 	    __state->tvec[(i__1 = __state->dy - 1) < 8 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tvec", i__1, "str2et_", (ftnlen)1174)] = (
-		    doublereal) __state->doy + __state->frac;
+		    s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (
+		    ftnlen)1174)] = (doublereal) __state->doy + __state->frac;
 	} else {
-	    __state->year = (integer) d_int(&__state->tvec[(i__1 = 
-		    __state->yr - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("tvec", 
-		    i__1, "str2et_", (ftnlen)1178)]);
-	    __state->month = (integer) d_int(&__state->tvec[(i__1 = 
-		    __state->mm - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("tvec", 
-		    i__1, "str2et_", (ftnlen)1179)]);
-	    __state->day = (integer) d_int(&__state->tvec[(i__1 = __state->dy 
-		    - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("tvec", i__1, "str"
-		    "2et_", (ftnlen)1180)]);
+	    __state->year = (integer) d_int(&__global_state->f2c, &
+		    __state->tvec[(i__1 = __state->yr - 1) < 8 && 0 <= i__1 ? 
+		    i__1 : s_rnge(&__global_state->f2c, "tvec", i__1, "str2e"
+		    "t_", (ftnlen)1178)]);
+	    __state->month = (integer) d_int(&__global_state->f2c, &
+		    __state->tvec[(i__1 = __state->mm - 1) < 8 && 0 <= i__1 ? 
+		    i__1 : s_rnge(&__global_state->f2c, "tvec", i__1, "str2e"
+		    "t_", (ftnlen)1179)]);
+	    __state->day = (integer) d_int(&__global_state->f2c, &
+		    __state->tvec[(i__1 = __state->dy - 1) < 8 && 0 <= i__1 ? 
+		    i__1 : s_rnge(&__global_state->f2c, "tvec", i__1, "str2e"
+		    "t_", (ftnlen)1180)]);
 	    __state->frac = __state->tvec[(i__1 = __state->dy - 1) < 8 && 0 <=
-		     i__1 ? i__1 : s_rnge("tvec", i__1, "str2et_", (ftnlen)
-		    1181)] - (doublereal) __state->day;
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "tvec", i__1, 
+		    "str2et_", (ftnlen)1181)] - (doublereal) __state->day;
 	    __state->orgnyr = __state->year;
-	    jul2gr_(&__state->year, &__state->month, &__state->day, &
-		    __state->doy);
+	    jul2gr_(__global_state, &__state->year, &__state->month, &
+		    __state->day, &__state->doy);
 	    __state->tvec[(i__1 = __state->yr - 1) < 8 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tvec", i__1, "str2et_", (ftnlen)1186)] = (
-		    doublereal) __state->year;
+		    s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (
+		    ftnlen)1186)] = (doublereal) __state->year;
 	    __state->tvec[(i__1 = __state->mm - 1) < 8 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tvec", i__1, "str2et_", (ftnlen)1187)] = (
-		    doublereal) __state->month;
+		    s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (
+		    ftnlen)1187)] = (doublereal) __state->month;
 	    __state->tvec[(i__1 = __state->dy - 1) < 8 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tvec", i__1, "str2et_", (ftnlen)1188)] = (
-		    doublereal) __state->day + __state->frac;
+		    s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (
+		    ftnlen)1188)] = (doublereal) __state->day + __state->frac;
 	}
     } else {
-	__state->orgnyr = (integer) d_int(&__state->tvec[(i__1 = __state->yr 
-		- 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("tvec", i__1, "str2et_",
-		 (ftnlen)1194)]);
+	__state->orgnyr = (integer) d_int(&__global_state->f2c, &
+		__state->tvec[(i__1 = __state->yr - 1) < 8 && 0 <= i__1 ? 
+		i__1 : s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (
+		ftnlen)1194)]);
     }
 
 /*     The TDT and TDB calendars don't need to worry about time */
 /*     zone adjustments. */
 
-    if (s_cmp(__state->modify + 64, "TDT", (ftnlen)16, (ftnlen)3) == 0) {
-	ttrans_(__state->forml, "FORMAL", __state->tvec, (ftnlen)16, (ftnlen)
-		6);
-	ttrans_("TDT", "TDB", __state->tvec, (ftnlen)3, (ftnlen)3);
+    if (s_cmp(&__global_state->f2c, __state->modify + 64, "TDT", (ftnlen)16, (
+	    ftnlen)3) == 0) {
+	ttrans_(__global_state, __state->forml, "FORMAL", __state->tvec, (
+		ftnlen)16, (ftnlen)6);
+	ttrans_(__global_state, "TDT", "TDB", __state->tvec, (ftnlen)3, (
+		ftnlen)3);
 	*et = __state->tvec[0];
-	chkout_("STR2ET", (ftnlen)6);
+	chkout_(__global_state, "STR2ET", (ftnlen)6);
 	return 0;
-    } else if (s_cmp(__state->modify + 64, "TDB", (ftnlen)16, (ftnlen)3) == 0)
-	     {
-	ttrans_(__state->forml, "FORMAL", __state->tvec, (ftnlen)16, (ftnlen)
-		6);
+    } else if (s_cmp(&__global_state->f2c, __state->modify + 64, "TDB", (
+	    ftnlen)16, (ftnlen)3) == 0) {
+	ttrans_(__global_state, __state->forml, "FORMAL", __state->tvec, (
+		ftnlen)16, (ftnlen)6);
 	*et = __state->tvec[0];
-	chkout_("STR2ET", (ftnlen)6);
+	chkout_(__global_state, "STR2ET", (ftnlen)6);
 	return 0;
     }
 
@@ -1172,24 +1229,26 @@ static str2et_state_t* get_str2et_state() {
 /*        associated with the time zone. */
 
 	__state->tvec[(i__1 = __state->hr - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)1230)] = 
-		__state->tvec[(i__2 = __state->hr - 1) < 8 && 0 <= i__2 ? 
-		i__2 : s_rnge("tvec", i__2, "str2et_", (ftnlen)1230)] - 
-		__state->hoff;
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		1230)] = __state->tvec[(i__2 = __state->hr - 1) < 8 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "tvec", i__2, 
+		"str2et_", (ftnlen)1230)] - __state->hoff;
 	__state->tvec[(i__1 = __state->mn - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)1231)] = 
-		__state->tvec[(i__2 = __state->mn - 1) < 8 && 0 <= i__2 ? 
-		i__2 : s_rnge("tvec", i__2, "str2et_", (ftnlen)1231)] - 
-		__state->moff;
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		1231)] = __state->tvec[(i__2 = __state->mn - 1) < 8 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "tvec", i__2, 
+		"str2et_", (ftnlen)1231)] - __state->moff;
 	__state->secs = __state->tvec[(i__1 = __state->sc - 1) < 8 && 0 <= 
-		i__1 ? i__1 : s_rnge("tvec", i__1, "str2et_", (ftnlen)1232)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "tvec", i__1, 
+		"str2et_", (ftnlen)1232)];
 	__state->tvec[(i__1 = __state->sc - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)1233)] = 0.;
-	ttrans_(__state->forml, __state->forml, __state->tvec, (ftnlen)16, (
-		ftnlen)16);
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		1233)] = 0.;
+	ttrans_(__global_state, __state->forml, __state->forml, __state->tvec,
+		 (ftnlen)16, (ftnlen)16);
 	__state->tvec[(i__1 = __state->sc - 1) < 8 && 0 <= i__1 ? i__1 : 
-		s_rnge("tvec", i__1, "str2et_", (ftnlen)1237)] = 
-		__state->secs;
+		s_rnge(&__global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)
+		1237)] = __state->secs;
     }
 
 /*     If we decided to forgo the leapseconds check earlier */
@@ -1197,13 +1256,14 @@ static str2et_state_t* get_str2et_state() {
 /*     time components. */
 
     if (__state->adjust) {
-	tchckd_(__state->check, (ftnlen)16);
-	tparch_("YES", (ftnlen)3);
+	tchckd_(__global_state, __state->check, (ftnlen)16);
+	tparch_(__global_state, "YES", (ftnlen)3);
 	__state->mods = FALSE_;
-	s_copy(__state->modify + 48, " ", (ftnlen)16, (ftnlen)1);
-	tcheck_(__state->tvec, __state->type__, &__state->mods, 
-		__state->modify, &__state->ok, __state->error, (ftnlen)16, (
-		ftnlen)16, (ftnlen)400);
+	s_copy(&__global_state->f2c, __state->modify + 48, " ", (ftnlen)16, (
+		ftnlen)1);
+	tcheck_(__global_state, __state->tvec, __state->type__, &
+		__state->mods, __state->modify, &__state->ok, __state->error, 
+		(ftnlen)16, (ftnlen)16, (ftnlen)400);
     } else {
 	__state->ok = TRUE_;
     }
@@ -1211,9 +1271,10 @@ static str2et_state_t* get_str2et_state() {
 
 /*        That's it we are ready to rumble. */
 
-	ttrans_(__state->type__, "TDB", __state->tvec, (ftnlen)16, (ftnlen)3);
+	ttrans_(__global_state, __state->type__, "TDB", __state->tvec, (
+		ftnlen)16, (ftnlen)3);
 	*et = __state->tvec[0];
-	chkout_("STR2ET", (ftnlen)6);
+	chkout_(__global_state, "STR2ET", (ftnlen)6);
 	return 0;
     }
 /*     =============================================================== */
@@ -1224,45 +1285,49 @@ static str2et_state_t* get_str2et_state() {
 /*     unlikely to occur very often.) */
 
     if (__state->zoned && __state->dojul) {
-	s_copy(__state->error, "The seconds component of '#' is out of range"
-		". On the Julian Calendar in the specified time zone  (#) lea"
-		"pseconds can occur during the year # only in the second that"
-		" immediately follows the time #:#:59 on  # # and # #. ", (
-		ftnlen)400, (ftnlen)218);
-	repmc_(__state->error, "#", string, __state->error, (ftnlen)400, (
-		ftnlen)1, string_len, (ftnlen)400);
-	repmc_(__state->error, "#", __state->modify + 34, __state->error, (
-		ftnlen)400, (ftnlen)1, (ftnlen)14, (ftnlen)400);
+	s_copy(&__global_state->f2c, __state->error, "The seconds component "
+		"of '#' is out of range. On the Julian Calendar in the specif"
+		"ied time zone  (#) leapseconds can occur during the year # o"
+		"nly in the second that immediately follows the time #:#:59 o"
+		"n  # # and # #. ", (ftnlen)400, (ftnlen)218);
+	repmc_(__global_state, __state->error, "#", string, __state->error, (
+		ftnlen)400, (ftnlen)1, string_len, (ftnlen)400);
+	repmc_(__global_state, __state->error, "#", __state->modify + 34, 
+		__state->error, (ftnlen)400, (ftnlen)1, (ftnlen)14, (ftnlen)
+		400);
     } else if (__state->zoned) {
 
 /*        If we had a time zone, we want to say what time zone */
 /*        in the output string. */
 
-	s_copy(__state->error, "The seconds component of '#' is out of range"
-		". In the specified time zone  (#) leapseconds can occur duri"
-		"ng the year # only in the second that immediately follows th"
-		"e time #:#:59 on  # # and # #.", (ftnlen)400, (ftnlen)194);
-	repmc_(__state->error, "#", string, __state->error, (ftnlen)400, (
-		ftnlen)1, string_len, (ftnlen)400);
-	repmc_(__state->error, "#", __state->modify + 34, __state->error, (
-		ftnlen)400, (ftnlen)1, (ftnlen)14, (ftnlen)400);
+	s_copy(&__global_state->f2c, __state->error, "The seconds component "
+		"of '#' is out of range. In the specified time zone  (#) leap"
+		"seconds can occur during the year # only in the second that "
+		"immediately follows the time #:#:59 on  # # and # #.", (
+		ftnlen)400, (ftnlen)194);
+	repmc_(__global_state, __state->error, "#", string, __state->error, (
+		ftnlen)400, (ftnlen)1, string_len, (ftnlen)400);
+	repmc_(__global_state, __state->error, "#", __state->modify + 34, 
+		__state->error, (ftnlen)400, (ftnlen)1, (ftnlen)14, (ftnlen)
+		400);
     } else {
 
 /*        No time zone, this case can only occur if we interpreted */
 /*        the input string as a date on the Julian Calendar */
 
-	s_copy(__state->error, "The seconds component of '#' is out of range"
-		". Leapseconds can occur during the year # of the Julian cale"
-		"ndar only in the second that immediately follows the time #:"
-		"#:59  on # # and # #.' ", (ftnlen)400, (ftnlen)187);
-	repmc_(__state->error, "#", string, __state->error, (ftnlen)400, (
-		ftnlen)1, string_len, (ftnlen)400);
+	s_copy(&__global_state->f2c, __state->error, "The seconds component "
+		"of '#' is out of range. Leapseconds can occur during the yea"
+		"r # of the Julian calendar only in the second that immediate"
+		"ly follows the time #:#:59  on # # and # #.' ", (ftnlen)400, (
+		ftnlen)187);
+	repmc_(__global_state, __state->error, "#", string, __state->error, (
+		ftnlen)400, (ftnlen)1, string_len, (ftnlen)400);
     }
 
 /*     First fill in the year portion of the error message. */
 
-    repmi_(__state->error, "#", &__state->orgnyr, __state->error, (ftnlen)400,
-	     (ftnlen)1, (ftnlen)400);
+    repmi_(__global_state, __state->error, "#", &__state->orgnyr, 
+	    __state->error, (ftnlen)400, (ftnlen)1, (ftnlen)400);
     __state->mon[0] = 6.;
     __state->mon[1] = 12.;
     __state->mdy[0] = 30.;
@@ -1292,12 +1357,14 @@ static str2et_state_t* get_str2et_state() {
 /*     Convert the hours and minutes to strings and place the */
 /*     strings in the message. */
 
-    dpfmt_(&__state->hour, "0x", __state->hstr, (ftnlen)2, (ftnlen)2);
-    dpfmt_(&__state->minute, "0x", __state->mstr, (ftnlen)2, (ftnlen)2);
-    repmc_(__state->error, "#", __state->hstr, __state->error, (ftnlen)400, (
-	    ftnlen)1, (ftnlen)2, (ftnlen)400);
-    repmc_(__state->error, "#", __state->mstr, __state->error, (ftnlen)400, (
-	    ftnlen)1, (ftnlen)2, (ftnlen)400);
+    dpfmt_(__global_state, &__state->hour, "0x", __state->hstr, (ftnlen)2, (
+	    ftnlen)2);
+    dpfmt_(__global_state, &__state->minute, "0x", __state->mstr, (ftnlen)2, (
+	    ftnlen)2);
+    repmc_(__global_state, __state->error, "#", __state->hstr, __state->error,
+	     (ftnlen)400, (ftnlen)1, (ftnlen)2, (ftnlen)400);
+    repmc_(__global_state, __state->error, "#", __state->mstr, __state->error,
+	     (ftnlen)400, (ftnlen)1, (ftnlen)2, (ftnlen)400);
 
 /*     Last step we generate the month and day corresponding */
 /*     to Dec 31, 23:59, and Jun 30, 23:59.  We only want the */
@@ -1315,48 +1382,49 @@ static str2et_state_t* get_str2et_state() {
 /*     that might have leapseconds in the user specified year */
 /*     of whatever calendar happens to be in use. */
 
-    __state->cyear = (integer) d_int(&__state->tvec[(i__1 = __state->yr - 1) <
-	     8 && 0 <= i__1 ? i__1 : s_rnge("tvec", i__1, "str2et_", (ftnlen)
-	    1387)]);
+    __state->cyear = (integer) d_int(&__global_state->f2c, &__state->tvec[(
+	    i__1 = __state->yr - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "tvec", i__1, "str2et_", (ftnlen)1387)]);
     i__1 = __state->cyear - 1;
     for (__state->gyear = __state->cyear; __state->gyear >= i__1; 
 	    --__state->gyear) {
 	for (__state->i__ = 1; __state->i__ <= 2; ++__state->i__) {
 	    __state->tvec[0] = (doublereal) __state->gyear;
 	    __state->tvec[1] = __state->mon[(i__2 = __state->i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("mon", i__2, "str2et_", (ftnlen)
-		    1394)];
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "mon", 
+		    i__2, "str2et_", (ftnlen)1394)];
 	    __state->tvec[2] = __state->mdy[(i__2 = __state->i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("mdy", i__2, "str2et_", (ftnlen)
-		    1395)];
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "mdy", 
+		    i__2, "str2et_", (ftnlen)1395)];
 	    __state->tvec[3] = __state->hoff + 23.;
 	    __state->tvec[4] = __state->moff + 59.;
 	    __state->tvec[5] = 0.;
 
 /*           Normalize the time vector. */
 
-	    ttrans_("YMDF", "YMDF", __state->tvec, (ftnlen)4, (ftnlen)4);
-	    __state->year = i_dnnt(__state->tvec);
-	    __state->month = i_dnnt(&__state->tvec[1]);
-	    __state->day = i_dnnt(&__state->tvec[2]);
+	    ttrans_(__global_state, "YMDF", "YMDF", __state->tvec, (ftnlen)4, 
+		    (ftnlen)4);
+	    __state->year = i_dnnt(&__global_state->f2c, __state->tvec);
+	    __state->month = i_dnnt(&__global_state->f2c, &__state->tvec[1]);
+	    __state->day = i_dnnt(&__global_state->f2c, &__state->tvec[2]);
 	    if (__state->dojul) {
-		gr2jul_(&__state->year, &__state->month, &__state->day, &
-			__state->doy);
+		gr2jul_(__global_state, &__state->year, &__state->month, &
+			__state->day, &__state->doy);
 	    }
 	    if (__state->year == __state->orgnyr) {
-		repmc_(__state->error, "#", __state->mname + (((i__2 = 
-			__state->month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-			"mname", i__2, "str2et_", (ftnlen)1415)) << 4), 
-			__state->error, (ftnlen)400, (ftnlen)1, (ftnlen)16, (
-			ftnlen)400);
-		repmi_(__state->error, "#", &__state->day, __state->error, (
-			ftnlen)400, (ftnlen)1, (ftnlen)400);
+		repmc_(__global_state, __state->error, "#", __state->mname + (
+			((i__2 = __state->month - 1) < 12 && 0 <= i__2 ? i__2 
+			: s_rnge(&__global_state->f2c, "mname", i__2, "str2e"
+			"t_", (ftnlen)1415)) << 4), __state->error, (ftnlen)
+			400, (ftnlen)1, (ftnlen)16, (ftnlen)400);
+		repmi_(__global_state, __state->error, "#", &__state->day, 
+			__state->error, (ftnlen)400, (ftnlen)1, (ftnlen)400);
 	    }
 	}
     }
-    setmsg_(__state->error, (ftnlen)400);
-    sigerr_("SPICE(BADTIMESTRING)", (ftnlen)20);
-    chkout_("STR2ET", (ftnlen)6);
+    setmsg_(__global_state, __state->error, (ftnlen)400);
+    sigerr_(__global_state, "SPICE(BADTIMESTRING)", (ftnlen)20);
+    chkout_(__global_state, "STR2ET", (ftnlen)6);
     return 0;
 } /* str2et_ */
 

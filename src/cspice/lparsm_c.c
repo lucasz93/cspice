@@ -220,7 +220,7 @@
    {
       return;
    }
-   chkin_c ( "lparsm_c" );
+   chkin_c ( naif_state, "lparsm_c" );
 
 
    /*

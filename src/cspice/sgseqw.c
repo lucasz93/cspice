@@ -8,8 +8,7 @@
 
 
 extern sgseqw_init_t __sgseqw_init;
-static sgseqw_state_t* get_sgseqw_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sgseqw_state_t* get_sgseqw_state(cspice_t* state) {
 	if (!state->sgseqw)
 		state->sgseqw = __cspice_allocate_module(sizeof(
 	sgseqw_state_t), &__sgseqw_init, sizeof(__sgseqw_init));
@@ -18,10 +17,10 @@ static sgseqw_state_t* get_sgseqw_state() {
 }
 
 /* $Procedure  SGSEQW ( Generic segements: Sequential writer. ) */
-/* Subroutine */ int sgseqw_0_(int n__, integer *handle, doublereal *descr, 
-	char *segid, integer *nconst, doublereal *const__, integer *npkts, 
-	integer *pktsiz, doublereal *pktdat, integer *nrefs, doublereal *
-	refdat, integer *idxtyp, ftnlen segid_len)
+/* Subroutine */ int sgseqw_0_(cspice_t* __global_state, int n__, integer *
+	handle, doublereal *descr, char *segid, integer *nconst, doublereal *
+	const__, integer *npkts, integer *pktsiz, doublereal *pktdat, integer 
+	*nrefs, doublereal *refdat, integer *idxtyp, ftnlen segid_len)
 {
     /* Initialized data */
 
@@ -30,56 +29,58 @@ static sgseqw_state_t* get_sgseqw_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double d_int(doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double d_int(f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer meta[17];
     integer size;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal xmeta[17];
     doublereal myref;
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    extern /* Subroutine */ int dafcad_(integer *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
-	    ftnlen);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int dafcad_(cspice_t*, integer *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
     char dummy1[60];
     integer dummy2;
     integer dummy3;
-    extern /* Subroutine */ int dafena_(void);
+    extern /* Subroutine */ int dafena_(cspice_t*);
     integer nc;
     integer nd;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer begadr;
     integer ni;
-    extern /* Subroutine */ int dafhsf_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafhsf_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
     integer refadr;
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
     integer sidlen;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     doublereal myaddr;
-    extern integer isrchi_(integer *, integer *, integer *);
-    extern integer lastnb_(char *, ftnlen);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer pktadr;
     doublereal dpksiz;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal mysize;
     integer pktpos;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer ich;
 
 
     /* Module state */
-    sgseqw_state_t* __state = get_sgseqw_state();
+    sgseqw_state_t* __state = get_sgseqw_state(__global_state);
 /* $ Abstract */
 
 /*     This is the umbrella routine for managing the sequential writing */
@@ -1728,18 +1729,19 @@ static sgseqw_state_t* get_sgseqw_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Signal an error if this routine is called directly. */
 
-    chkin_("SGSEQW", (ftnlen)6);
-    setmsg_("This routine should never be called directly. It exists as an u"
-	    "mbrella routine to maintain all of the variables for the generic"
-	    " segment sequential writing entry points.", (ftnlen)168);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("SGSEQW", (ftnlen)6);
+    chkin_(__global_state, "SGSEQW", (ftnlen)6);
+    setmsg_(__global_state, "This routine should never be called directly. I"
+	    "t exists as an umbrella routine to maintain all of the variables"
+	    " for the generic segment sequential writing entry points.", (
+	    ftnlen)168);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "SGSEQW", (ftnlen)6);
     return 0;
 /* $Procedure SGBWFS ( Generic segements: Begin a fixed size segment. ) */
 
@@ -1941,10 +1943,10 @@ L_sgbwfs:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SGBWFS", (ftnlen)6);
+    chkin_(__global_state, "SGBWFS", (ftnlen)6);
 
 /*     We need to do some sanity checks on our input arguments before we */
 /*     should attempt to write anything to the file. So, let's start with */
@@ -1953,9 +1955,9 @@ L_sgbwfs:
 /*     Check to see if the file attached to the handle is open for */
 /*     writing. If not, an error is signalled. */
 
-    dafsih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("SGBWFS", (ftnlen)6);
+    dafsih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGBWFS", (ftnlen)6);
 	return 0;
     }
 
@@ -1967,14 +1969,15 @@ L_sgbwfs:
 /*     SGBWVS. In either case, we cannot continue, so we signal an error. */
 
     if (__state->nft > 0) {
-	__state->index = isrchi_(handle, &__state->nft, __state->fthan);
+	__state->index = isrchi_(__global_state, handle, &__state->nft, 
+		__state->fthan);
 	if (__state->index != 0) {
-	    setmsg_("A segment is already being written to the file '#'. A n"
-		    "ew segment cannot be started for this file until the cur"
-		    "rent segment is finished. ", (ftnlen)137);
-	    errhan_("#", handle, (ftnlen)1);
-	    sigerr_("SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
-	    chkout_("SGBWFS", (ftnlen)6);
+	    setmsg_(__global_state, "A segment is already being written to t"
+		    "he file '#'. A new segment cannot be started for this fi"
+		    "le until the current segment is finished. ", (ftnlen)137);
+	    errhan_(__global_state, "#", handle, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
+	    chkout_(__global_state, "SGBWFS", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -1988,9 +1991,9 @@ L_sgbwfs:
 /*                      NC =  8 *  | ----------------- | */
 /*                                 \         2         / */
 
-    dafhsf_(handle, &nd, &ni);
-    if (failed_()) {
-	chkout_("SGBWFS", (ftnlen)6);
+    dafhsf_(__global_state, handle, &nd, &ni);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGBWFS", (ftnlen)6);
 	return 0;
     }
     nc = nd + (ni + 1) / 2 << 3;
@@ -1998,28 +2001,28 @@ L_sgbwfs:
 /*     Get the length of the segment ID. Leading blanks are considered to */
 /*     be important. A blank segment ID is OK too. */
 
-    sidlen = lastnb_(segid, segid_len);
+    sidlen = lastnb_(__global_state, segid, segid_len);
 
 /*     Check the segment ID to see if it is OK. Its length must be less */
 /*     than NC and it must consist of only printing ASCII characters. */
 
     if (sidlen > nc) {
-	setmsg_("Segment identifier contains more than # characters.", (
-		ftnlen)51);
-	errint_("#", &nc, (ftnlen)1);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("SGBWFS", (ftnlen)6);
+	setmsg_(__global_state, "Segment identifier contains more than # cha"
+		"racters.", (ftnlen)51);
+	errint_(__global_state, "#", &nc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "SGBWFS", (ftnlen)6);
 	return 0;
     }
     i__1 = sidlen;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ich = *(unsigned char *)&segid[i__ - 1];
 	if (ich < 32 || ich > 126) {
-	    setmsg_("The segment identifier contains  a nonprinting characte"
-		    "r at location #.", (ftnlen)71);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(NONPRINTINGCHARS)", (ftnlen)23);
-	    chkout_("SGBWFS", (ftnlen)6);
+	    setmsg_(__global_state, "The segment identifier contains  a nonp"
+		    "rinting character at location #.", (ftnlen)71);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NONPRINTINGCHARS)", (ftnlen)23);
+	    chkout_(__global_state, "SGBWFS", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2028,51 +2031,52 @@ L_sgbwfs:
 /*     we can do here, we cannot check the constant values. */
 
     if (*nconst < 0) {
-	setmsg_("The number of constants specified was #. This number must b"
-		"e non-negative. Perhaps the variable was not properlyinitial"
-		"ized. ", (ftnlen)125);
-	errint_("#", nconst, (ftnlen)1);
-	sigerr_("SPICE(NUMCONSTANTSNEG) ", (ftnlen)23);
-	chkout_("SGBWFS", (ftnlen)6);
+	setmsg_(__global_state, "The number of constants specified was #. Th"
+		"is number must be non-negative. Perhaps the variable was not"
+		" properlyinitialized. ", (ftnlen)125);
+	errint_(__global_state, "#", nconst, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NUMCONSTANTSNEG) ", (ftnlen)23);
+	chkout_(__global_state, "SGBWFS", (ftnlen)6);
 	return 0;
     }
 
 /*     Check to see that the packet size is OK. It should be positive. */
 
     if (pktsiz[0] <= 0) {
-	setmsg_("The size of the data packets must be positive. It was speci"
-		"fied as #. Perhaps the input variable was not properly initi"
-		"alized. ", (ftnlen)127);
-	errint_("#", pktsiz, (ftnlen)1);
-	sigerr_("SPICE(NONPOSPACKETSIZE)", (ftnlen)23);
-	chkout_("SGBWFS", (ftnlen)6);
+	setmsg_(__global_state, "The size of the data packets must be positi"
+		"ve. It was specified as #. Perhaps the input variable was no"
+		"t properly initialized. ", (ftnlen)127);
+	errint_(__global_state, "#", pktsiz, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONPOSPACKETSIZE)", (ftnlen)23);
+	chkout_(__global_state, "SGBWFS", (ftnlen)6);
 	return 0;
     }
 
 /*     Check to see if the index type is one that we recognize. */
 
     if (*idxtyp < 0 || *idxtyp > 4) {
-	setmsg_("The index type specified was #.  This is not a valid index "
-		"type. Valid types are in the range from # to #.", (ftnlen)106)
-		;
-	errint_("#", idxtyp, (ftnlen)1);
-	errint_("#", &__state->c__0, (ftnlen)1);
-	errint_("#", &__state->c__4, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNINDEXTYPE)", (ftnlen)23);
-	chkout_("SGBWFS", (ftnlen)6);
+	setmsg_(__global_state, "The index type specified was #.  This is no"
+		"t a valid index type. Valid types are in the range from # to"
+		" #.", (ftnlen)106);
+	errint_(__global_state, "#", idxtyp, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__0, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__4, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNINDEXTYPE)", (ftnlen)23);
+	chkout_(__global_state, "SGBWFS", (ftnlen)6);
 	return 0;
     }
 
 /*     Check to see whether we still have room in the file table. */
 
     if (__state->nft == 20) {
-	setmsg_("There are already # files being written by generic segment "
-		"writing routines. No more files may be written by the generi"
-		"c segment writers until one of those currently being written"
-		" is closed via a call to SGWES.", (ftnlen)210);
-	errint_("#", &__state->nft, (ftnlen)1);
-	sigerr_("SPICE(FILETABLEFULL)", (ftnlen)20);
-	chkout_("SGBWFS", (ftnlen)6);
+	setmsg_(__global_state, "There are already # files being written by "
+		"generic segment writing routines. No more files may be writt"
+		"en by the generic segment writers until one of those current"
+		"ly being written is closed via a call to SGWES.", (ftnlen)210)
+		;
+	errint_(__global_state, "#", &__state->nft, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILETABLEFULL)", (ftnlen)20);
+	chkout_(__global_state, "SGBWFS", (ftnlen)6);
 	return 0;
     }
 
@@ -2093,13 +2097,14 @@ L_sgbwfs:
 /*     Get the address for the beginning of the array that we are going */
 /*     to create. We have to get this by reading the file record. */
 
-    dafrfr_(handle, &nd, &ni, dummy1, &dummy2, &dummy3, &begadr, (ftnlen)60);
+    dafrfr_(__global_state, handle, &nd, &ni, dummy1, &dummy2, &dummy3, &
+	    begadr, (ftnlen)60);
 
 /*     Begin a new segment in the DAF file. */
 
-    dafbna_(handle, descr, segid, segid_len);
-    if (failed_()) {
-	chkout_("SGBWFS", (ftnlen)6);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGBWFS", (ftnlen)6);
 	return 0;
     }
 
@@ -2107,9 +2112,9 @@ L_sgbwfs:
 /*     constants. */
 
     if (*nconst > 0) {
-	dafada_(const__, nconst);
-	if (failed_()) {
-	    chkout_("SGBWFS", (ftnlen)6);
+	dafada_(__global_state, const__, nconst);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGBWFS", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2118,44 +2123,57 @@ L_sgbwfs:
 
     ++__state->nft;
     __state->ftityp[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftityp", i__1, "sgseqw_", (ftnlen)1781)] = *idxtyp;
+	    s_rnge(&__global_state->f2c, "ftityp", i__1, "sgseqw_", (ftnlen)
+	    1781)] = *idxtyp;
     __state->ftpksz[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftpksz", i__1, "sgseqw_", (ftnlen)1782)] = pktsiz[0];
+	    s_rnge(&__global_state->f2c, "ftpksz", i__1, "sgseqw_", (ftnlen)
+	    1782)] = pktsiz[0];
     __state->ftmxsz[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftmxsz", i__1, "sgseqw_", (ftnlen)1783)] = 0;
+	    s_rnge(&__global_state->f2c, "ftmxsz", i__1, "sgseqw_", (ftnlen)
+	    1783)] = 0;
     __state->ftncon[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftncon", i__1, "sgseqw_", (ftnlen)1785)] = *nconst;
+	    s_rnge(&__global_state->f2c, "ftncon", i__1, "sgseqw_", (ftnlen)
+	    1785)] = *nconst;
     __state->ftnpkt[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)1786)] = 0;
+	    s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_", (ftnlen)
+	    1786)] = 0;
     __state->ftnref[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)1787)] = 0;
+	    s_rnge(&__global_state->f2c, "ftnref", i__1, "sgseqw_", (ftnlen)
+	    1787)] = 0;
     __state->ftnres[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnres", i__1, "sgseqw_", (ftnlen)1788)] = 0;
+	    s_rnge(&__global_state->f2c, "ftnres", i__1, "sgseqw_", (ftnlen)
+	    1788)] = 0;
     __state->ftexpl[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftexpl", i__1, "sgseqw_", (ftnlen)1790)] = 
-	    __state->explct;
+	    s_rnge(&__global_state->f2c, "ftexpl", i__1, "sgseqw_", (ftnlen)
+	    1790)] = __state->explct;
     __state->ftfixd[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftfixd", i__1, "sgseqw_", (ftnlen)1792)] = 
-	    __state->fxdseg;
+	    s_rnge(&__global_state->f2c, "ftfixd", i__1, "sgseqw_", (ftnlen)
+	    1792)] = __state->fxdseg;
     __state->fthan[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "sgseqw_", (ftnlen)1794)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "sgseqw_", (ftnlen)
+	    1794)] = *handle;
     __state->ftbadr[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftbadr", i__1, "sgseqw_", (ftnlen)1795)] = begadr;
+	    s_rnge(&__global_state->f2c, "ftbadr", i__1, "sgseqw_", (ftnlen)
+	    1795)] = begadr;
     __state->ftrefs[(i__1 = (__state->nft << 1) - 2) < 40 && 0 <= i__1 ? i__1 
-	    : s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)1797)] = 0.;
+	    : s_rnge(&__global_state->f2c, "ftrefs", i__1, "sgseqw_", (ftnlen)
+	    1797)] = 0.;
     __state->ftrefs[(i__1 = (__state->nft << 1) - 1) < 40 && 0 <= i__1 ? i__1 
-	    : s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)1798)] = 0.;
+	    : s_rnge(&__global_state->f2c, "ftrefs", i__1, "sgseqw_", (ftnlen)
+	    1798)] = 0.;
     if (__state->explct) {
 	__state->ftoff[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)1801)] = 1;
+		s_rnge(&__global_state->f2c, "ftoff", i__1, "sgseqw_", (
+		ftnlen)1801)] = 1;
     } else {
 	__state->ftoff[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)1803)] = 0;
+		s_rnge(&__global_state->f2c, "ftoff", i__1, "sgseqw_", (
+		ftnlen)1803)] = 0;
     }
     __state->lsthan = *handle;
     __state->index = __state->nft;
     ++__state->numfxd;
-    chkout_("SGBWFS", (ftnlen)6);
+    chkout_(__global_state, "SGBWFS", (ftnlen)6);
     return 0;
 /* $Procedure SGBWVS ( Generic segements: Begin a variable size segment. ) */
 
@@ -2347,10 +2365,10 @@ L_sgbwvs:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SGBWVS", (ftnlen)6);
+    chkin_(__global_state, "SGBWVS", (ftnlen)6);
 
 /*     We need to do some sanity checks on our input arguments before we */
 /*     should attempt to write anything to the file. So, let's start with */
@@ -2359,9 +2377,9 @@ L_sgbwvs:
 /*     Check to see if the file attached to the handle is open for */
 /*     writing. If not, an error is signalled. */
 
-    dafsih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("SGBWVS", (ftnlen)6);
+    dafsih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGBWVS", (ftnlen)6);
 	return 0;
     }
 
@@ -2374,14 +2392,15 @@ L_sgbwvs:
 /*     error. */
 
     if (__state->nft > 0) {
-	__state->index = isrchi_(handle, &__state->nft, __state->fthan);
+	__state->index = isrchi_(__global_state, handle, &__state->nft, 
+		__state->fthan);
 	if (__state->index != 0) {
-	    setmsg_("A segment is already being written to the file '#'. A n"
-		    "ew segment cannot be started for this file until the cur"
-		    "rent segment is finished. ", (ftnlen)137);
-	    errhan_("#", handle, (ftnlen)1);
-	    sigerr_("SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
-	    chkout_("SGBWVS", (ftnlen)6);
+	    setmsg_(__global_state, "A segment is already being written to t"
+		    "he file '#'. A new segment cannot be started for this fi"
+		    "le until the current segment is finished. ", (ftnlen)137);
+	    errhan_(__global_state, "#", handle, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
+	    chkout_(__global_state, "SGBWVS", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2395,9 +2414,9 @@ L_sgbwvs:
 /*                      NC =  8 *  | ----------------- | */
 /*                                 \         2         / */
 
-    dafhsf_(handle, &nd, &ni);
-    if (failed_()) {
-	chkout_("SGBWVS", (ftnlen)6);
+    dafhsf_(__global_state, handle, &nd, &ni);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGBWVS", (ftnlen)6);
 	return 0;
     }
     nc = nd + (ni + 1) / 2 << 3;
@@ -2405,28 +2424,28 @@ L_sgbwvs:
 /*     Get the length of the segment ID. Leading blanks are considered to */
 /*     be important. A blank segment ID is OK too. */
 
-    sidlen = lastnb_(segid, segid_len);
+    sidlen = lastnb_(__global_state, segid, segid_len);
 
 /*     Check the segment ID to see if it is OK. Its length must be less */
 /*     than NC and it must consist of only printing ASCII characters. */
 
     if (sidlen > nc) {
-	setmsg_("Segment identifier contains more than # characters.", (
-		ftnlen)51);
-	errint_("#", &nc, (ftnlen)1);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("SGBWVS", (ftnlen)6);
+	setmsg_(__global_state, "Segment identifier contains more than # cha"
+		"racters.", (ftnlen)51);
+	errint_(__global_state, "#", &nc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "SGBWVS", (ftnlen)6);
 	return 0;
     }
     i__1 = sidlen;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ich = *(unsigned char *)&segid[i__ - 1];
 	if (ich < 32 || ich > 126) {
-	    setmsg_("The segment identifier contains  a nonprinting characte"
-		    "r at location #.", (ftnlen)71);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(NONPRINTINGCHARS)", (ftnlen)23);
-	    chkout_("SGBWVS", (ftnlen)6);
+	    setmsg_(__global_state, "The segment identifier contains  a nonp"
+		    "rinting character at location #.", (ftnlen)71);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NONPRINTINGCHARS)", (ftnlen)23);
+	    chkout_(__global_state, "SGBWVS", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2435,39 +2454,40 @@ L_sgbwvs:
 /*     we can do here, we cannot check the constant values. */
 
     if (*nconst < 0) {
-	setmsg_("The number of constants specified was #. This number must b"
-		"e non-negative. Perhaps the variable was not initialized. ", (
-		ftnlen)117);
-	errint_("#", nconst, (ftnlen)1);
-	sigerr_("SPICE(NUMCONSTANTSNEG) ", (ftnlen)23);
-	chkout_("SGBWVS", (ftnlen)6);
+	setmsg_(__global_state, "The number of constants specified was #. Th"
+		"is number must be non-negative. Perhaps the variable was not"
+		" initialized. ", (ftnlen)117);
+	errint_(__global_state, "#", nconst, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NUMCONSTANTSNEG) ", (ftnlen)23);
+	chkout_(__global_state, "SGBWVS", (ftnlen)6);
 	return 0;
     }
 
 /*     Check to see if the index type is one that we recognize. */
 
     if (*idxtyp < 0 || *idxtyp > 4) {
-	setmsg_("The index type specified was #.  This is not a valid index "
-		"type. Valid types are in the range from # to #.", (ftnlen)106)
-		;
-	errint_("#", idxtyp, (ftnlen)1);
-	errint_("#", &__state->c__0, (ftnlen)1);
-	errint_("#", &__state->c__4, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNINDEXTYPE)", (ftnlen)23);
-	chkout_("SGBWVS", (ftnlen)6);
+	setmsg_(__global_state, "The index type specified was #.  This is no"
+		"t a valid index type. Valid types are in the range from # to"
+		" #.", (ftnlen)106);
+	errint_(__global_state, "#", idxtyp, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__0, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__4, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNINDEXTYPE)", (ftnlen)23);
+	chkout_(__global_state, "SGBWVS", (ftnlen)6);
 	return 0;
     }
 
 /*     Check to see if there is room in the file table. */
 
     if (__state->nft == 20) {
-	setmsg_("There are already # files being written by generic segment "
-		"writing routines. No more files may be written by the generi"
-		"c segment writers until one of those currently being written"
-		" is closed via a call to SGWES. ", (ftnlen)211);
-	errint_("#", &__state->nft, (ftnlen)1);
-	sigerr_("SPICE(FILETABLEFULL)", (ftnlen)20);
-	chkout_("SGBWVS", (ftnlen)6);
+	setmsg_(__global_state, "There are already # files being written by "
+		"generic segment writing routines. No more files may be writt"
+		"en by the generic segment writers until one of those current"
+		"ly being written is closed via a call to SGWES. ", (ftnlen)
+		211);
+	errint_(__global_state, "#", &__state->nft, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILETABLEFULL)", (ftnlen)20);
+	chkout_(__global_state, "SGBWVS", (ftnlen)6);
 	return 0;
     }
 
@@ -2488,13 +2508,14 @@ L_sgbwvs:
 /*     Get the address for the beginning of the array that we are going */
 /*     to create. We have to get this by reading the file record. */
 
-    dafrfr_(handle, &nd, &ni, dummy1, &dummy2, &dummy3, &begadr, (ftnlen)60);
+    dafrfr_(__global_state, handle, &nd, &ni, dummy1, &dummy2, &dummy3, &
+	    begadr, (ftnlen)60);
 
 /*     Begin a new segment in the DAF file. */
 
-    dafbna_(handle, descr, segid, segid_len);
-    if (failed_()) {
-	chkout_("SGBWVS", (ftnlen)6);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGBWVS", (ftnlen)6);
 	return 0;
     }
 
@@ -2502,9 +2523,9 @@ L_sgbwvs:
 /*     constants. */
 
     if (*nconst > 0) {
-	dafada_(const__, nconst);
-	if (failed_()) {
-	    chkout_("SGBWVS", (ftnlen)6);
+	dafada_(__global_state, const__, nconst);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGBWVS", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2513,44 +2534,57 @@ L_sgbwvs:
 
     ++__state->nft;
     __state->ftityp[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftityp", i__1, "sgseqw_", (ftnlen)2209)] = *idxtyp;
+	    s_rnge(&__global_state->f2c, "ftityp", i__1, "sgseqw_", (ftnlen)
+	    2209)] = *idxtyp;
     __state->ftpksz[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftpksz", i__1, "sgseqw_", (ftnlen)2210)] = 0;
+	    s_rnge(&__global_state->f2c, "ftpksz", i__1, "sgseqw_", (ftnlen)
+	    2210)] = 0;
     __state->ftmxsz[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftmxsz", i__1, "sgseqw_", (ftnlen)2211)] = 0;
+	    s_rnge(&__global_state->f2c, "ftmxsz", i__1, "sgseqw_", (ftnlen)
+	    2211)] = 0;
     __state->ftncon[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftncon", i__1, "sgseqw_", (ftnlen)2213)] = *nconst;
+	    s_rnge(&__global_state->f2c, "ftncon", i__1, "sgseqw_", (ftnlen)
+	    2213)] = *nconst;
     __state->ftnpkt[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)2214)] = 0;
+	    s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_", (ftnlen)
+	    2214)] = 0;
     __state->ftnref[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)2215)] = 0;
+	    s_rnge(&__global_state->f2c, "ftnref", i__1, "sgseqw_", (ftnlen)
+	    2215)] = 0;
     __state->ftnres[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnres", i__1, "sgseqw_", (ftnlen)2216)] = 0;
+	    s_rnge(&__global_state->f2c, "ftnres", i__1, "sgseqw_", (ftnlen)
+	    2216)] = 0;
     __state->ftexpl[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftexpl", i__1, "sgseqw_", (ftnlen)2218)] = 
-	    __state->explct;
+	    s_rnge(&__global_state->f2c, "ftexpl", i__1, "sgseqw_", (ftnlen)
+	    2218)] = __state->explct;
     __state->ftfixd[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftfixd", i__1, "sgseqw_", (ftnlen)2220)] = 
-	    __state->fxdseg;
+	    s_rnge(&__global_state->f2c, "ftfixd", i__1, "sgseqw_", (ftnlen)
+	    2220)] = __state->fxdseg;
     __state->fthan[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "sgseqw_", (ftnlen)2222)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "sgseqw_", (ftnlen)
+	    2222)] = *handle;
     __state->ftbadr[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftbadr", i__1, "sgseqw_", (ftnlen)2223)] = begadr;
+	    s_rnge(&__global_state->f2c, "ftbadr", i__1, "sgseqw_", (ftnlen)
+	    2223)] = begadr;
     __state->ftrefs[(i__1 = (__state->nft << 1) - 2) < 40 && 0 <= i__1 ? i__1 
-	    : s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)2225)] = 0.;
+	    : s_rnge(&__global_state->f2c, "ftrefs", i__1, "sgseqw_", (ftnlen)
+	    2225)] = 0.;
     __state->ftrefs[(i__1 = (__state->nft << 1) - 1) < 40 && 0 <= i__1 ? i__1 
-	    : s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)2226)] = 0.;
+	    : s_rnge(&__global_state->f2c, "ftrefs", i__1, "sgseqw_", (ftnlen)
+	    2226)] = 0.;
     if (__state->explct) {
 	__state->ftoff[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)2229)] = 2;
+		s_rnge(&__global_state->f2c, "ftoff", i__1, "sgseqw_", (
+		ftnlen)2229)] = 2;
     } else {
 	__state->ftoff[(i__1 = __state->nft - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)2231)] = 1;
+		s_rnge(&__global_state->f2c, "ftoff", i__1, "sgseqw_", (
+		ftnlen)2231)] = 1;
     }
     __state->lsthan = *handle;
     __state->index = __state->nft;
     ++__state->numvar;
-    chkout_("SGBWVS", (ftnlen)6);
+    chkout_(__global_state, "SGBWVS", (ftnlen)6);
     return 0;
 /* $Procedure SGWFPK ( Generic segements: Write fixed size packets. ) */
 
@@ -2801,21 +2835,21 @@ L_sgwfpk:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SGWFPK", (ftnlen)6);
+    chkin_(__global_state, "SGWFPK", (ftnlen)6);
 
 /*     Check to see if this is the first time here. If it is, we have */
 /*     been called out of order, so signal an error. */
 
     if (__state->numfxd == 0) {
-	setmsg_("No segment with fixed size packets is currently being writt"
-		"en. This routine has been called out of order. The routine S"
-		"GBWFS must be called before his routine may be called.", (
-		ftnlen)173);
-	sigerr_("SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
-	chkout_("SGWFPK", (ftnlen)6);
+	setmsg_(__global_state, "No segment with fixed size packets is curre"
+		"ntly being written. This routine has been called out of orde"
+		"r. The routine SGBWFS must be called before his routine may "
+		"be called.", (ftnlen)173);
+	sigerr_(__global_state, "SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
+	chkout_(__global_state, "SGWFPK", (ftnlen)6);
 	return 0;
     }
 
@@ -2824,27 +2858,28 @@ L_sgwfpk:
 /*     into the file table to restore the information for that handle. */
 
     if (*handle != __state->lsthan) {
-	__state->index = isrchi_(handle, &__state->nft, __state->fthan);
+	__state->index = isrchi_(__global_state, handle, &__state->nft, 
+		__state->fthan);
 	if (__state->index == 0) {
-	    setmsg_("No segment with fixed size packets is associated with t"
-		    "he file '#'. In order to write fixed size packets to a f"
-		    "ile the routine SGBWFS must be called to begin the segme"
-		    "nt.", (ftnlen)170);
-	    errhan_("#", handle, (ftnlen)1);
-	    sigerr_("SPICE(SEGMENTNOTFOUND)", (ftnlen)22);
-	    chkout_("SGWFPK", (ftnlen)6);
+	    setmsg_(__global_state, "No segment with fixed size packets is a"
+		    "ssociated with the file '#'. In order to write fixed siz"
+		    "e packets to a file the routine SGBWFS must be called to"
+		    " begin the segment.", (ftnlen)170);
+	    errhan_(__global_state, "#", handle, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(SEGMENTNOTFOUND)", (ftnlen)22);
+	    chkout_(__global_state, "SGWFPK", (ftnlen)6);
 	    return 0;
 	}
 	__state->explct = __state->ftexpl[(i__1 = __state->index - 1) < 20 && 
-		0 <= i__1 ? i__1 : s_rnge("ftexpl", i__1, "sgseqw_", (ftnlen)
-		2539)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftexpl", 
+		i__1, "sgseqw_", (ftnlen)2539)];
 	__state->fxdseg = __state->ftfixd[(i__1 = __state->index - 1) < 20 && 
-		0 <= i__1 ? i__1 : s_rnge("ftfixd", i__1, "sgseqw_", (ftnlen)
-		2540)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftfixd", 
+		i__1, "sgseqw_", (ftnlen)2540)];
 	__state->lsthan = *handle;
-	dafcad_(handle);
-	if (failed_()) {
-	    chkout_("SGWFPK", (ftnlen)6);
+	dafcad_(__global_state, handle);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGWFPK", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2854,13 +2889,13 @@ L_sgwfpk:
 /*     this is the wrong routine. */
 
     if (! __state->fxdseg) {
-	setmsg_("The segment being written to the file  '#' is a variable pa"
-		"cket size segment, not a fixed packet size segment.  The rou"
-		"tine SGWVPK may be used to write variable size packets.", (
-		ftnlen)174);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(SEGTYPECONFLICT)", (ftnlen)22);
-	chkout_("SGWFPK", (ftnlen)6);
+	setmsg_(__global_state, "The segment being written to the file  '#' "
+		"is a variable packet size segment, not a fixed packet size s"
+		"egment.  The routine SGWVPK may be used to write variable si"
+		"ze packets.", (ftnlen)174);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SEGTYPECONFLICT)", (ftnlen)22);
+	chkout_(__global_state, "SGWFPK", (ftnlen)6);
 	return 0;
     }
 
@@ -2871,12 +2906,12 @@ L_sgwfpk:
 /*     Check the number of packets to be sure that it is positive. */
 
     if (*npkts <= 0) {
-	setmsg_("The number of packets to store is not positive.  The value "
-		"supplied was #. Perhaps this packet count was unitialized.", (
-		ftnlen)117);
-	errint_("#", npkts, (ftnlen)1);
-	sigerr_("SPICE(NUMPACKETSNOTPOS)", (ftnlen)23);
-	chkout_("SGWFPK", (ftnlen)6);
+	setmsg_(__global_state, "The number of packets to store is not posit"
+		"ive.  The value supplied was #. Perhaps this packet count wa"
+		"s unitialized.", (ftnlen)117);
+	errint_(__global_state, "#", npkts, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NUMPACKETSNOTPOS)", (ftnlen)23);
+	chkout_(__global_state, "SGWFPK", (ftnlen)6);
 	return 0;
     }
 
@@ -2892,14 +2927,15 @@ L_sgwfpk:
 /*        also be in increasing order. */
 
 	if (*nrefs != *npkts) {
-	    setmsg_("The number of reference values supplied, #, is not comp"
-		    "atible with explicitly indexed packets. Explicitly index"
-		    "ed packets require the number of reference values to equ"
-		    "al the number of packets, in this case, #.", (ftnlen)209);
-	    errint_("#", nrefs, (ftnlen)1);
-	    errint_("#", npkts, (ftnlen)1);
-	    sigerr_("SPICE(INCOMPATIBLENUMREF)", (ftnlen)25);
-	    chkout_("SGWFPK", (ftnlen)6);
+	    setmsg_(__global_state, "The number of reference values supplied"
+		    ", #, is not compatible with explicitly indexed packets. "
+		    "Explicitly indexed packets require the number of referen"
+		    "ce values to equal the number of packets, in this case, "
+		    "#.", (ftnlen)209);
+	    errint_(__global_state, "#", nrefs, (ftnlen)1);
+	    errint_(__global_state, "#", npkts, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INCOMPATIBLENUMREF)", (ftnlen)25);
+	    chkout_(__global_state, "SGWFPK", (ftnlen)6);
 	    return 0;
 	}
 
@@ -2909,37 +2945,41 @@ L_sgwfpk:
 /*        previous addition of packets to the segment. */
 
 	if (__state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)2622)] > 0) {
+		i__1 : s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_",
+		 (ftnlen)2622)] > 0) {
 	    if (__state->ftrefs[(i__1 = (__state->index << 1) - 2) < 40 && 0 
-		    <= i__1 ? i__1 : s_rnge("ftrefs", i__1, "sgseqw_", (
-		    ftnlen)2624)] >= refdat[0]) {
-		setmsg_("Reference values are out of order. The offending va"
-			"lue, #, was found to be out of order. The reference "
-			"values for explicitly indexed packets must be in inc"
-			"reasing order, and the first reference value is less"
-			" than or equal to the last reference value, #, from "
-			"the previous addition of packets.", (ftnlen)292);
-		errdp_("#", refdat, (ftnlen)1);
-		errdp_("#", &__state->ftrefs[(i__1 = (__state->index << 1) - 
-			2) < 40 && 0 <= i__1 ? i__1 : s_rnge("ftrefs", i__1, 
-			"sgseqw_", (ftnlen)2635)], (ftnlen)1);
-		sigerr_("SPICE(UNORDEREDREFS)", (ftnlen)20);
-		chkout_("SGWFPK", (ftnlen)6);
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftrefs", 
+		    i__1, "sgseqw_", (ftnlen)2624)] >= refdat[0]) {
+		setmsg_(__global_state, "Reference values are out of order. "
+			"The offending value, #, was found to be out of order"
+			". The reference values for explicitly indexed packet"
+			"s must be in increasing order, and the first referen"
+			"ce value is less than or equal to the last reference"
+			" value, #, from the previous addition of packets.", (
+			ftnlen)292);
+		errdp_(__global_state, "#", refdat, (ftnlen)1);
+		errdp_(__global_state, "#", &__state->ftrefs[(i__1 = (
+			__state->index << 1) - 2) < 40 && 0 <= i__1 ? i__1 : 
+			s_rnge(&__global_state->f2c, "ftrefs", i__1, "sgseqw_"
+			, (ftnlen)2635)], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(UNORDEREDREFS)", (ftnlen)20);
+		chkout_(__global_state, "SGWFPK", (ftnlen)6);
 		return 0;
 	    }
 	}
 	i__1 = *nrefs;
 	for (i__ = 2; i__ <= i__1; ++i__) {
 	    if (refdat[i__ - 2] >= refdat[i__ - 1]) {
-		setmsg_("Reference values are out of order. The offending va"
-			"lue, #, was found to be out of order for index #. Th"
-			"e reference values for explicitly indexed packets mu"
-			"st be in increasing order.", (ftnlen)181);
-		errdp_("#", &refdat[i__ - 2], (ftnlen)1);
+		setmsg_(__global_state, "Reference values are out of order. "
+			"The offending value, #, was found to be out of order"
+			" for index #. The reference values for explicitly in"
+			"dexed packets must be in increasing order.", (ftnlen)
+			181);
+		errdp_(__global_state, "#", &refdat[i__ - 2], (ftnlen)1);
 		i__2 = i__ - 1;
-		errint_("#", &i__2, (ftnlen)1);
-		sigerr_("SPICE(UNORDEREDREFS)", (ftnlen)20);
-		chkout_("SGWFPK", (ftnlen)6);
+		errint_(__global_state, "#", &i__2, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(UNORDEREDREFS)", (ftnlen)20);
+		chkout_(__global_state, "SGWFPK", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -2952,15 +2992,15 @@ L_sgwfpk:
 
 	i__1 = *npkts;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    dafada_(&refdat[i__ - 1], &__state->c__1);
-	    dafada_(&pktdat[(i__ - 1) * __state->ftpksz[(i__2 = 
-		    __state->index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ftpksz", i__2, "sgseqw_", (ftnlen)2673)]], &
-		    __state->ftpksz[(i__3 = __state->index - 1) < 20 && 0 <= 
-		    i__3 ? i__3 : s_rnge("ftpksz", i__3, "sgseqw_", (ftnlen)
-		    2673)]);
-	    if (failed_()) {
-		chkout_("SGWFPK", (ftnlen)6);
+	    dafada_(__global_state, &refdat[i__ - 1], &__state->c__1);
+	    dafada_(__global_state, &pktdat[(i__ - 1) * __state->ftpksz[(i__2 
+		    = __state->index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ftpksz", i__2, "sgseqw_", (ftnlen)
+		    2673)]], &__state->ftpksz[(i__3 = __state->index - 1) < 
+		    20 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "ftpksz", i__3, "sgseqw_", (ftnlen)2673)]);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SGWFPK", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -2970,22 +3010,22 @@ L_sgwfpk:
 /*        the increasing order of the reference values. */
 
 	__state->ftrefs[(i__1 = (__state->index << 1) - 2) < 40 && 0 <= i__1 ?
-		 i__1 : s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)2687)] = 
-		refdat[*nrefs - 1];
+		 i__1 : s_rnge(&__global_state->f2c, "ftrefs", i__1, "sgseqw_"
+		, (ftnlen)2687)] = refdat[*nrefs - 1];
 
 /*        Update the counts for the number of packets, the number of */
 /*        references. */
 
 	__state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? i__1 :
-		 s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)2692)] = 
-		__state->ftnpkt[(i__2 = __state->index - 1) < 20 && 0 <= i__2 
-		? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)2692)] + *
-		npkts;
+		 s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_", (
+		ftnlen)2692)] = __state->ftnpkt[(i__2 = __state->index - 1) < 
+		20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnpkt"
+		, i__2, "sgseqw_", (ftnlen)2692)] + *npkts;
 	__state->ftnref[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? i__1 :
-		 s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)2693)] = 
-		__state->ftnref[(i__2 = __state->index - 1) < 20 && 0 <= i__2 
-		? i__2 : s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)2693)] + *
-		nrefs;
+		 s_rnge(&__global_state->f2c, "ftnref", i__1, "sgseqw_", (
+		ftnlen)2693)] = __state->ftnref[(i__2 = __state->index - 1) < 
+		20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnref"
+		, i__2, "sgseqw_", (ftnlen)2693)] + *nrefs;
     } else {
 
 /*        For implicitly indexed packets the number of reference values */
@@ -2997,23 +3037,25 @@ L_sgwfpk:
 /*        these arguments are ignored. */
 
 	if (__state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)2706)] == 0) 
-		{
+		i__1 : s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_",
+		 (ftnlen)2706)] == 0) {
 	    if (*nrefs != 2) {
-		setmsg_("The number of reference values supplied, #, is not "
-			"compatible with implicitly indexed packets. Implicit"
-			"ly indexed packets require the number of reference v"
-			"alues to be two (2).", (ftnlen)175);
-		errint_("#", nrefs, (ftnlen)1);
-		sigerr_("SPICE(INCOMPATIBLENUMREF)", (ftnlen)25);
-		chkout_("SGWFPK", (ftnlen)6);
+		setmsg_(__global_state, "The number of reference values supp"
+			"lied, #, is not compatible with implicitly indexed p"
+			"ackets. Implicitly indexed packets require the numbe"
+			"r of reference values to be two (2).", (ftnlen)175);
+		errint_(__global_state, "#", nrefs, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INCOMPATIBLENUMREF)", (ftnlen)
+			25);
+		chkout_(__global_state, "SGWFPK", (ftnlen)6);
 		return 0;
 	    }
-	    if (d_int(&refdat[1]) != refdat[1]) {
-		setmsg_("For implicitly indexed packets the step size must b"
-			"e an integer.", (ftnlen)64);
-		sigerr_("SPICE(REFVALNOTINTEGER)", (ftnlen)23);
-		chkout_("SGWFPK", (ftnlen)6);
+	    if (d_int(&__global_state->f2c, &refdat[1]) != refdat[1]) {
+		setmsg_(__global_state, "For implicitly indexed packets the "
+			"step size must be an integer.", (ftnlen)64);
+		sigerr_(__global_state, "SPICE(REFVALNOTINTEGER)", (ftnlen)23)
+			;
+		chkout_(__global_state, "SGWFPK", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -3021,11 +3063,11 @@ L_sgwfpk:
 /*        Add the packets to the segment. */
 
 	i__2 = __state->ftpksz[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ?
-		 i__1 : s_rnge("ftpksz", i__1, "sgseqw_", (ftnlen)2736)] * *
-		npkts;
-	dafada_(pktdat, &i__2);
-	if (failed_()) {
-	    chkout_("SGWFPK", (ftnlen)6);
+		 i__1 : s_rnge(&__global_state->f2c, "ftpksz", i__1, "sgseqw_"
+		, (ftnlen)2736)] * *npkts;
+	dafada_(__global_state, pktdat, &i__2);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGWFPK", (ftnlen)6);
 	    return 0;
 	}
 
@@ -3034,28 +3076,28 @@ L_sgwfpk:
 /*        through the routine. */
 
 	if (__state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)2747)] == 0) 
-		{
+		i__1 : s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_",
+		 (ftnlen)2747)] == 0) {
 	    __state->ftnref[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)2749)] = 
-		    *nrefs;
+		    i__1 : s_rnge(&__global_state->f2c, "ftnref", i__1, "sgs"
+		    "eqw_", (ftnlen)2749)] = *nrefs;
 	    __state->ftrefs[(i__1 = (__state->index << 1) - 2) < 40 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)
-		    2750)] = refdat[0];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftrefs", i__1,
+		     "sgseqw_", (ftnlen)2750)] = refdat[0];
 	    __state->ftrefs[(i__1 = (__state->index << 1) - 1) < 40 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)
-		    2751)] = refdat[1];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftrefs", i__1,
+		     "sgseqw_", (ftnlen)2751)] = refdat[1];
 	}
 
 /*        Update the count for the number of packets. */
 
 	__state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? i__1 :
-		 s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)2757)] = 
-		__state->ftnpkt[(i__2 = __state->index - 1) < 20 && 0 <= i__2 
-		? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)2757)] + *
-		npkts;
+		 s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_", (
+		ftnlen)2757)] = __state->ftnpkt[(i__2 = __state->index - 1) < 
+		20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnpkt"
+		, i__2, "sgseqw_", (ftnlen)2757)] + *npkts;
     }
-    chkout_("SGWFPK", (ftnlen)6);
+    chkout_(__global_state, "SGWFPK", (ftnlen)6);
     return 0;
 /* $Procedure SGWVPK ( Generic segement: Write variable size packets. ) */
 
@@ -3326,21 +3368,21 @@ L_sgwvpk:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SGWVPK", (ftnlen)6);
+    chkin_(__global_state, "SGWVPK", (ftnlen)6);
 
 /*     Check to see if this is the first time here. If it is, we have */
 /*     been called out of order, so signal an error. */
 
     if (__state->numvar == 0) {
-	setmsg_("No segment with variable size packets is currently being wr"
-		"itten. This routine has been called out of order. The routin"
-		"e SGBWVS must be called before his routine may be called.", (
-		ftnlen)176);
-	sigerr_("SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
-	chkout_("SGWVPK", (ftnlen)6);
+	setmsg_(__global_state, "No segment with variable size packets is cu"
+		"rrently being written. This routine has been called out of o"
+		"rder. The routine SGBWVS must be called before his routine m"
+		"ay be called.", (ftnlen)176);
+	sigerr_(__global_state, "SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
+	chkout_(__global_state, "SGWVPK", (ftnlen)6);
 	return 0;
     }
 
@@ -3349,27 +3391,28 @@ L_sgwvpk:
 /*     into the file table to restore the information for that handle. */
 
     if (*handle != __state->lsthan) {
-	__state->index = isrchi_(handle, &__state->nft, __state->fthan);
+	__state->index = isrchi_(__global_state, handle, &__state->nft, 
+		__state->fthan);
 	if (__state->index == 0) {
-	    setmsg_("No segment with variable size packets is associated wit"
-		    "h the file '#'. In order to write variable size packets "
-		    "to a file the routine SGBWVS must be called to begin the"
-		    " segment.", (ftnlen)176);
-	    errhan_("#", handle, (ftnlen)1);
-	    sigerr_("SPICE(SEGMENTNOTFOUND)", (ftnlen)22);
-	    chkout_("SGWVPK", (ftnlen)6);
+	    setmsg_(__global_state, "No segment with variable size packets i"
+		    "s associated with the file '#'. In order to write variab"
+		    "le size packets to a file the routine SGBWVS must be cal"
+		    "led to begin the segment.", (ftnlen)176);
+	    errhan_(__global_state, "#", handle, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(SEGMENTNOTFOUND)", (ftnlen)22);
+	    chkout_(__global_state, "SGWVPK", (ftnlen)6);
 	    return 0;
 	}
 	__state->explct = __state->ftexpl[(i__1 = __state->index - 1) < 20 && 
-		0 <= i__1 ? i__1 : s_rnge("ftexpl", i__1, "sgseqw_", (ftnlen)
-		3082)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftexpl", 
+		i__1, "sgseqw_", (ftnlen)3082)];
 	__state->fxdseg = __state->ftfixd[(i__1 = __state->index - 1) < 20 && 
-		0 <= i__1 ? i__1 : s_rnge("ftfixd", i__1, "sgseqw_", (ftnlen)
-		3083)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftfixd", 
+		i__1, "sgseqw_", (ftnlen)3083)];
 	__state->lsthan = *handle;
-	dafcad_(handle);
-	if (failed_()) {
-	    chkout_("SGWVPK", (ftnlen)6);
+	dafcad_(__global_state, handle);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGWVPK", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -3379,13 +3422,13 @@ L_sgwvpk:
 /*     this is the wrong routine. */
 
     if (__state->fxdseg) {
-	setmsg_("The segment being written to the file  '#' is a fixed packe"
-		"t size segment, not a variable packet size segment.  The rou"
-		"tine SGWFPK may be used to write fixed size packets.", (
-		ftnlen)171);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(SEGTYPECONFLICT)", (ftnlen)22);
-	chkout_("SGWVPK", (ftnlen)6);
+	setmsg_(__global_state, "The segment being written to the file  '#' "
+		"is a fixed packet size segment, not a variable packet size s"
+		"egment.  The routine SGWFPK may be used to write fixed size "
+		"packets.", (ftnlen)171);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SEGTYPECONFLICT)", (ftnlen)22);
+	chkout_(__global_state, "SGWVPK", (ftnlen)6);
 	return 0;
     }
 
@@ -3397,12 +3440,12 @@ L_sgwvpk:
 /*     Check the number of packets to be sure that it is positive. */
 
     if (*npkts <= 0) {
-	setmsg_("The number of packets to store is not positive.  The value "
-		"supplied was #. Perhaps this packet count was unitialized.", (
-		ftnlen)117);
-	errint_("#", npkts, (ftnlen)1);
-	sigerr_("SPICE(NUMPACKETSNOTPOS)", (ftnlen)23);
-	chkout_("SGWVPK", (ftnlen)6);
+	setmsg_(__global_state, "The number of packets to store is not posit"
+		"ive.  The value supplied was #. Perhaps this packet count wa"
+		"s unitialized.", (ftnlen)117);
+	errint_(__global_state, "#", npkts, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NUMPACKETSNOTPOS)", (ftnlen)23);
+	chkout_(__global_state, "SGWVPK", (ftnlen)6);
 	return 0;
     }
 
@@ -3418,14 +3461,15 @@ L_sgwvpk:
 /*        also be in increasing order. */
 
 	if (*nrefs != *npkts) {
-	    setmsg_("The number of reference values supplied, #, is not comp"
-		    "atible with explicitly indexed packets. Explicitly index"
-		    "ed packets require the number of reference values to equ"
-		    "al the number of packets, in this case, #.", (ftnlen)209);
-	    errint_("#", nrefs, (ftnlen)1);
-	    errint_("#", npkts, (ftnlen)1);
-	    sigerr_("SPICE(INCOMPATIBLENUMREF)", (ftnlen)25);
-	    chkout_("SGWVPK", (ftnlen)6);
+	    setmsg_(__global_state, "The number of reference values supplied"
+		    ", #, is not compatible with explicitly indexed packets. "
+		    "Explicitly indexed packets require the number of referen"
+		    "ce values to equal the number of packets, in this case, "
+		    "#.", (ftnlen)209);
+	    errint_(__global_state, "#", nrefs, (ftnlen)1);
+	    errint_(__global_state, "#", npkts, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INCOMPATIBLENUMREF)", (ftnlen)25);
+	    chkout_(__global_state, "SGWVPK", (ftnlen)6);
 	    return 0;
 	}
 
@@ -3435,37 +3479,41 @@ L_sgwvpk:
 /*        provious addition of packets to the segment. */
 
 	if (__state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3166)] > 0) {
+		i__1 : s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_",
+		 (ftnlen)3166)] > 0) {
 	    if (__state->ftrefs[(i__1 = (__state->index << 1) - 2) < 40 && 0 
-		    <= i__1 ? i__1 : s_rnge("ftrefs", i__1, "sgseqw_", (
-		    ftnlen)3168)] >= refdat[0]) {
-		setmsg_("Reference values are out of order. The offending va"
-			"lue, #, was found The reference values for explicitl"
-			"y to be out of order. indexed packets must be in inc"
-			"reasing order, and the first reference value is less"
-			" than or equal to the last reference value, #, from "
-			"the previous addition of packets.", (ftnlen)292);
-		errdp_("#", refdat, (ftnlen)1);
-		errdp_("#", &__state->ftrefs[(i__1 = (__state->index << 1) - 
-			2) < 40 && 0 <= i__1 ? i__1 : s_rnge("ftrefs", i__1, 
-			"sgseqw_", (ftnlen)3179)], (ftnlen)1);
-		sigerr_("SPICE(UNORDEREDREFS)", (ftnlen)20);
-		chkout_("SGWVPK", (ftnlen)6);
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftrefs", 
+		    i__1, "sgseqw_", (ftnlen)3168)] >= refdat[0]) {
+		setmsg_(__global_state, "Reference values are out of order. "
+			"The offending value, #, was found The reference valu"
+			"es for explicitly to be out of order. indexed packet"
+			"s must be in increasing order, and the first referen"
+			"ce value is less than or equal to the last reference"
+			" value, #, from the previous addition of packets.", (
+			ftnlen)292);
+		errdp_(__global_state, "#", refdat, (ftnlen)1);
+		errdp_(__global_state, "#", &__state->ftrefs[(i__1 = (
+			__state->index << 1) - 2) < 40 && 0 <= i__1 ? i__1 : 
+			s_rnge(&__global_state->f2c, "ftrefs", i__1, "sgseqw_"
+			, (ftnlen)3179)], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(UNORDEREDREFS)", (ftnlen)20);
+		chkout_(__global_state, "SGWVPK", (ftnlen)6);
 		return 0;
 	    }
 	}
 	i__1 = *nrefs;
 	for (i__ = 2; i__ <= i__1; ++i__) {
 	    if (refdat[i__ - 2] >= refdat[i__ - 1]) {
-		setmsg_("Reference values are out of order. The offending va"
-			"lue, #, was found to be out of order for index #. Th"
-			"e reference values for explicitly indexed packets mu"
-			"st be in increasing order.", (ftnlen)181);
-		errdp_("#", &refdat[i__ - 2], (ftnlen)1);
+		setmsg_(__global_state, "Reference values are out of order. "
+			"The offending value, #, was found to be out of order"
+			" for index #. The reference values for explicitly in"
+			"dexed packets must be in increasing order.", (ftnlen)
+			181);
+		errdp_(__global_state, "#", &refdat[i__ - 2], (ftnlen)1);
 		i__2 = i__ - 1;
-		errint_("#", &i__2, (ftnlen)1);
-		sigerr_("SPICE(UNORDEREDREFS)", (ftnlen)20);
-		chkout_("SGWVPK", (ftnlen)6);
+		errint_(__global_state, "#", &i__2, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(UNORDEREDREFS)", (ftnlen)20);
+		chkout_(__global_state, "SGWVPK", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -3475,13 +3523,14 @@ L_sgwvpk:
 	i__1 = *npkts;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (pktsiz[i__ - 1] <= 0) {
-		setmsg_("The packet size for packet # was not positive. It h"
-			"ad a value of #. All packet sizes must be greater th"
-			"en zero.", (ftnlen)111);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", &pktsiz[i__ - 1], (ftnlen)1);
-		sigerr_("SPICE(NONPOSPACKETSIZE)", (ftnlen)23);
-		chkout_("SGWVPK", (ftnlen)6);
+		setmsg_(__global_state, "The packet size for packet # was no"
+			"t positive. It had a value of #. All packet sizes mu"
+			"st be greater then zero.", (ftnlen)111);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", &pktsiz[i__ - 1], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(NONPOSPACKETSIZE)", (ftnlen)23)
+			;
+		chkout_(__global_state, "SGWVPK", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -3496,28 +3545,29 @@ L_sgwvpk:
 	i__1 = *npkts;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    dpksiz = (doublereal) pktsiz[i__ - 1];
-	    dafada_(&refdat[i__ - 1], &__state->c__1);
-	    dafada_(&dpksiz, &__state->c__1);
-	    dafada_(&pktdat[pktpos - 1], &pktsiz[i__ - 1]);
-	    if (failed_()) {
-		chkout_("SGWVPK", (ftnlen)6);
+	    dafada_(__global_state, &refdat[i__ - 1], &__state->c__1);
+	    dafada_(__global_state, &dpksiz, &__state->c__1);
+	    dafada_(__global_state, &pktdat[pktpos - 1], &pktsiz[i__ - 1]);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SGWVPK", (ftnlen)6);
 		return 0;
 	    }
 	    pktpos += pktsiz[i__ - 1];
 	    __state->ftpksz[(i__2 = __state->index - 1) < 20 && 0 <= i__2 ? 
-		    i__2 : s_rnge("ftpksz", i__2, "sgseqw_", (ftnlen)3250)] = 
-		    __state->ftpksz[(i__3 = __state->index - 1) < 20 && 0 <= 
-		    i__3 ? i__3 : s_rnge("ftpksz", i__3, "sgseqw_", (ftnlen)
+		    i__2 : s_rnge(&__global_state->f2c, "ftpksz", i__2, "sgs"
+		    "eqw_", (ftnlen)3250)] = __state->ftpksz[(i__3 = 
+		    __state->index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "ftpksz", i__3, "sgseqw_", (ftnlen)
 		    3250)] + pktsiz[i__ - 1];
 
 /*           Remember the maximum packet size encountered. */
 
 	    if (pktsiz[i__ - 1] > __state->ftmxsz[(i__2 = __state->index - 1) 
-		    < 20 && 0 <= i__2 ? i__2 : s_rnge("ftmxsz", i__2, "sgseq"
-		    "w_", (ftnlen)3254)]) {
+		    < 20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "ftmxsz", i__2, "sgseqw_", (ftnlen)3254)]) {
 		__state->ftmxsz[(i__2 = __state->index - 1) < 20 && 0 <= i__2 
-			? i__2 : s_rnge("ftmxsz", i__2, "sgseqw_", (ftnlen)
-			3256)] = pktsiz[i__ - 1];
+			? i__2 : s_rnge(&__global_state->f2c, "ftmxsz", i__2, 
+			"sgseqw_", (ftnlen)3256)] = pktsiz[i__ - 1];
 	    }
 	}
 
@@ -3526,22 +3576,22 @@ L_sgwvpk:
 /*        the increasing order of the reference values. */
 
 	__state->ftrefs[(i__1 = (__state->index << 1) - 2) < 40 && 0 <= i__1 ?
-		 i__1 : s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)3266)] = 
-		refdat[*nrefs - 1];
+		 i__1 : s_rnge(&__global_state->f2c, "ftrefs", i__1, "sgseqw_"
+		, (ftnlen)3266)] = refdat[*nrefs - 1];
 
 /*        Update the counts for the number of packets, the number of */
 /*        references. */
 
 	__state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? i__1 :
-		 s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3271)] = 
-		__state->ftnpkt[(i__2 = __state->index - 1) < 20 && 0 <= i__2 
-		? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3271)] + *
-		npkts;
+		 s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_", (
+		ftnlen)3271)] = __state->ftnpkt[(i__2 = __state->index - 1) < 
+		20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnpkt"
+		, i__2, "sgseqw_", (ftnlen)3271)] + *npkts;
 	__state->ftnref[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? i__1 :
-		 s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3272)] = 
-		__state->ftnref[(i__2 = __state->index - 1) < 20 && 0 <= i__2 
-		? i__2 : s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)3272)] + *
-		nrefs;
+		 s_rnge(&__global_state->f2c, "ftnref", i__1, "sgseqw_", (
+		ftnlen)3272)] = __state->ftnref[(i__2 = __state->index - 1) < 
+		20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnref"
+		, i__2, "sgseqw_", (ftnlen)3272)] + *nrefs;
     } else {
 
 /*        For implicitly indexed packets the number of reference values */
@@ -3553,23 +3603,25 @@ L_sgwvpk:
 /*        these arguments are ignored. */
 
 	if (__state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3284)] == 0) 
-		{
+		i__1 : s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_",
+		 (ftnlen)3284)] == 0) {
 	    if (*nrefs != 2) {
-		setmsg_("The number of reference values supplied, #, is not "
-			"compatible with implicitly indexed packets. Implicit"
-			"ly indexed packets require the number of reference v"
-			"alues to be two (2).", (ftnlen)175);
-		errint_("#", nrefs, (ftnlen)1);
-		sigerr_("SPICE(INCOMPATIBLENUMREF)", (ftnlen)25);
-		chkout_("SGWVPK", (ftnlen)6);
+		setmsg_(__global_state, "The number of reference values supp"
+			"lied, #, is not compatible with implicitly indexed p"
+			"ackets. Implicitly indexed packets require the numbe"
+			"r of reference values to be two (2).", (ftnlen)175);
+		errint_(__global_state, "#", nrefs, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INCOMPATIBLENUMREF)", (ftnlen)
+			25);
+		chkout_(__global_state, "SGWVPK", (ftnlen)6);
 		return 0;
 	    }
-	    if (d_int(&refdat[1]) != refdat[1]) {
-		setmsg_("For implicitly indexed packets the step size must b"
-			"e an integer.", (ftnlen)64);
-		sigerr_("SPICE(REFVALNOTINTEGER)", (ftnlen)23);
-		chkout_("SGWVPK", (ftnlen)6);
+	    if (d_int(&__global_state->f2c, &refdat[1]) != refdat[1]) {
+		setmsg_(__global_state, "For implicitly indexed packets the "
+			"step size must be an integer.", (ftnlen)64);
+		sigerr_(__global_state, "SPICE(REFVALNOTINTEGER)", (ftnlen)23)
+			;
+		chkout_(__global_state, "SGWVPK", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -3581,17 +3633,18 @@ L_sgwvpk:
 	i__1 = *npkts;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    dpksiz = (doublereal) pktsiz[i__ - 1];
-	    dafada_(&dpksiz, &__state->c__1);
-	    dafada_(&pktdat[pktpos - 1], &pktsiz[i__ - 1]);
-	    if (failed_()) {
-		chkout_("SGWVPK", (ftnlen)6);
+	    dafada_(__global_state, &dpksiz, &__state->c__1);
+	    dafada_(__global_state, &pktdat[pktpos - 1], &pktsiz[i__ - 1]);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SGWVPK", (ftnlen)6);
 		return 0;
 	    }
 	    pktpos += pktsiz[i__ - 1];
 	    __state->ftpksz[(i__2 = __state->index - 1) < 20 && 0 <= i__2 ? 
-		    i__2 : s_rnge("ftpksz", i__2, "sgseqw_", (ftnlen)3331)] = 
-		    __state->ftpksz[(i__3 = __state->index - 1) < 20 && 0 <= 
-		    i__3 ? i__3 : s_rnge("ftpksz", i__3, "sgseqw_", (ftnlen)
+		    i__2 : s_rnge(&__global_state->f2c, "ftpksz", i__2, "sgs"
+		    "eqw_", (ftnlen)3331)] = __state->ftpksz[(i__3 = 
+		    __state->index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "ftpksz", i__3, "sgseqw_", (ftnlen)
 		    3331)] + pktsiz[i__ - 1];
 	}
 
@@ -3600,28 +3653,28 @@ L_sgwvpk:
 /*        the routine. */
 
 	if (__state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3339)] == 0) 
-		{
+		i__1 : s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_",
+		 (ftnlen)3339)] == 0) {
 	    __state->ftnref[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3341)] = 
-		    *nrefs;
+		    i__1 : s_rnge(&__global_state->f2c, "ftnref", i__1, "sgs"
+		    "eqw_", (ftnlen)3341)] = *nrefs;
 	    __state->ftrefs[(i__1 = (__state->index << 1) - 2) < 40 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)
-		    3342)] = refdat[0];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftrefs", i__1,
+		     "sgseqw_", (ftnlen)3342)] = refdat[0];
 	    __state->ftrefs[(i__1 = (__state->index << 1) - 1) < 40 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ftrefs", i__1, "sgseqw_", (ftnlen)
-		    3343)] = refdat[1];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftrefs", i__1,
+		     "sgseqw_", (ftnlen)3343)] = refdat[1];
 	}
 
 /*        Update the counts for the number of packets. */
 
 	__state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= i__1 ? i__1 :
-		 s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)3349)] = 
-		__state->ftnpkt[(i__2 = __state->index - 1) < 20 && 0 <= i__2 
-		? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)3349)] + *
-		npkts;
+		 s_rnge(&__global_state->f2c, "ftnpkt", i__1, "sgseqw_", (
+		ftnlen)3349)] = __state->ftnpkt[(i__2 = __state->index - 1) < 
+		20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnpkt"
+		, i__2, "sgseqw_", (ftnlen)3349)] + *npkts;
     }
-    chkout_("SGWVPK", (ftnlen)6);
+    chkout_(__global_state, "SGWVPK", (ftnlen)6);
     return 0;
 /* $Procedure SGWES ( Generic segements: End a segment. ) */
 
@@ -3786,21 +3839,21 @@ L_sgwes:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SGWES", (ftnlen)5);
+    chkin_(__global_state, "SGWES", (ftnlen)5);
 
 /*     Check to see if we have any fixed or variable segments being */
 /*     written. */
 
     if (__state->nft == 0) {
-	setmsg_("No segment is currently being written. This routine has bee"
-		"n called out of order. One of the routines SGBWFS or SGBWVS "
-		"must be called before his routine may be called.", (ftnlen)
-		167);
-	sigerr_("SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
-	chkout_("SGWES", (ftnlen)5);
+	setmsg_(__global_state, "No segment is currently being written. This"
+		" routine has been called out of order. One of the routines S"
+		"GBWFS or SGBWVS must be called before his routine may be cal"
+		"led.", (ftnlen)167);
+	sigerr_(__global_state, "SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
+	chkout_(__global_state, "SGWES", (ftnlen)5);
 	return 0;
     }
 
@@ -3809,27 +3862,28 @@ L_sgwes:
 /*     into the file table to restore the information for that handle. */
 
     if (*handle != __state->lsthan) {
-	__state->index = isrchi_(handle, &__state->nft, __state->fthan);
+	__state->index = isrchi_(__global_state, handle, &__state->nft, 
+		__state->fthan);
 	if (__state->index == 0) {
-	    setmsg_("No segment is associated with the file '#'. In order to"
-		    " write packets to a segment one of the routines SGBWFS o"
-		    "r SGBWVS must be called to begin a segment.", (ftnlen)154)
-		    ;
-	    errhan_("#", handle, (ftnlen)1);
-	    sigerr_("SPICE(SEGMENTNOTFOUND)", (ftnlen)22);
-	    chkout_("SGWES", (ftnlen)5);
+	    setmsg_(__global_state, "No segment is associated with the file "
+		    "'#'. In order to write packets to a segment one of the r"
+		    "outines SGBWFS or SGBWVS must be called to begin a segme"
+		    "nt.", (ftnlen)154);
+	    errhan_(__global_state, "#", handle, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(SEGMENTNOTFOUND)", (ftnlen)22);
+	    chkout_(__global_state, "SGWES", (ftnlen)5);
 	    return 0;
 	}
 	__state->explct = __state->ftexpl[(i__1 = __state->index - 1) < 20 && 
-		0 <= i__1 ? i__1 : s_rnge("ftexpl", i__1, "sgseqw_", (ftnlen)
-		3569)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftexpl", 
+		i__1, "sgseqw_", (ftnlen)3569)];
 	__state->fxdseg = __state->ftfixd[(i__1 = __state->index - 1) < 20 && 
-		0 <= i__1 ? i__1 : s_rnge("ftfixd", i__1, "sgseqw_", (ftnlen)
-		3570)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftfixd", 
+		i__1, "sgseqw_", (ftnlen)3570)];
 	__state->lsthan = *handle;
-	dafcad_(handle);
-	if (failed_()) {
-	    chkout_("SGWES", (ftnlen)5);
+	dafcad_(__global_state, handle);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGWES", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -3859,28 +3913,30 @@ L_sgwes:
 /*              segment. */
 
 	    size = __state->ftoff[(i__1 = __state->index - 1) < 20 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)
-		    3606)] + __state->ftpksz[(i__2 = __state->index - 1) < 20 
-		    && 0 <= i__2 ? i__2 : s_rnge("ftpksz", i__2, "sgseqw_", (
-		    ftnlen)3606)];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftoff", i__1, 
+		    "sgseqw_", (ftnlen)3606)] + __state->ftpksz[(i__2 = 
+		    __state->index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ftpksz", i__2, "sgseqw_", (ftnlen)
+		    3606)];
 	    refadr = __state->ftbadr[(i__1 = __state->index - 1) < 20 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ftbadr", i__1, "sgseqw_", (ftnlen)
-		    3607)] + __state->ftncon[(i__2 = __state->index - 1) < 20 
-		    && 0 <= i__2 ? i__2 : s_rnge("ftncon", i__2, "sgseqw_", (
-		    ftnlen)3607)];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftbadr", i__1,
+		     "sgseqw_", (ftnlen)3607)] + __state->ftncon[(i__2 = 
+		    __state->index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ftncon", i__2, "sgseqw_", (ftnlen)
+		    3607)];
 
 /*           2) Collect all of the references stored with the packets */
 /*              when they were written, and copy them into the */
 /*              reference area. */
 
 	    i__2 = __state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)
-		    3613)];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftnpkt", i__1,
+		     "sgseqw_", (ftnlen)3613)];
 	    for (i__ = 1; i__ <= i__2; ++i__) {
-		dafgda_(handle, &refadr, &refadr, &myref);
-		dafada_(&myref, &__state->c__1);
-		if (failed_()) {
-		    chkout_("SGWES", (ftnlen)5);
+		dafgda_(__global_state, handle, &refadr, &refadr, &myref);
+		dafada_(__global_state, &myref, &__state->c__1);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SGWES", (ftnlen)5);
 		    return 0;
 		}
 		refadr += size;
@@ -3890,24 +3946,26 @@ L_sgwes:
 /*              references is greater than DIRSIZ. */
 
 	    if (__state->ftnref[(i__2 = __state->index - 1) < 20 && 0 <= i__2 
-		    ? i__2 : s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)3630)] 
-		    > 100) {
+		    ? i__2 : s_rnge(&__global_state->f2c, "ftnref", i__2, 
+		    "sgseqw_", (ftnlen)3630)] > 100) {
 		refadr = __state->ftbadr[(i__2 = __state->index - 1) < 20 && 
-			0 <= i__2 ? i__2 : s_rnge("ftbadr", i__2, "sgseqw_", (
-			ftnlen)3632)] + __state->ftncon[(i__1 = 
-			__state->index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"ftncon", i__1, "sgseqw_", (ftnlen)3632)];
+			0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftb"
+			"adr", i__2, "sgseqw_", (ftnlen)3632)] + 
+			__state->ftncon[(i__1 = __state->index - 1) < 20 && 0 
+			<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftncon"
+			, i__1, "sgseqw_", (ftnlen)3632)];
 		refadr = refadr + __state->ftnpkt[(i__2 = __state->index - 1) 
-			< 20 && 0 <= i__2 ? i__2 : s_rnge("ftnpkt", i__2, 
-			"sgseqw_", (ftnlen)3633)] * size + 99;
+			< 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "ftnpkt", i__2, "sgseqw_", (
+			ftnlen)3633)] * size + 99;
 		i__1 = (__state->ftnref[(i__2 = __state->index - 1) < 20 && 0 
-			<= i__2 ? i__2 : s_rnge("ftnref", i__2, "sgseqw_", (
-			ftnlen)3635)] - 1) / 100;
+			<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnref"
+			, i__2, "sgseqw_", (ftnlen)3635)] - 1) / 100;
 		for (i__ = 1; i__ <= i__1; ++i__) {
-		    dafgda_(handle, &refadr, &refadr, &myref);
-		    dafada_(&myref, &__state->c__1);
-		    if (failed_()) {
-			chkout_("SGWES", (ftnlen)5);
+		    dafgda_(__global_state, handle, &refadr, &refadr, &myref);
+		    dafada_(__global_state, &myref, &__state->c__1);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "SGWES", (ftnlen)5);
 			return 0;
 		    }
 		    refadr += 100;
@@ -3917,42 +3975,43 @@ L_sgwes:
 /*           4) Construct the meta data for the segment. */
 
 	    size = (__state->ftoff[(i__1 = __state->index - 1) < 20 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)
-		    3653)] + __state->ftpksz[(i__2 = __state->index - 1) < 20 
-		    && 0 <= i__2 ? i__2 : s_rnge("ftpksz", i__2, "sgseqw_", (
-		    ftnlen)3653)]) * __state->ftnpkt[(i__3 = __state->index - 
-		    1) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftnpkt", i__3, 
-		    "sgseqw_", (ftnlen)3653)];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftoff", i__1, 
+		    "sgseqw_", (ftnlen)3653)] + __state->ftpksz[(i__2 = 
+		    __state->index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ftpksz", i__2, "sgseqw_", (ftnlen)
+		    3653)]) * __state->ftnpkt[(i__3 = __state->index - 1) < 
+		    20 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "ftnpkt", i__3, "sgseqw_", (ftnlen)3653)];
 	    meta[0] = 0;
 	    meta[1] = __state->ftncon[(i__1 = __state->index - 1) < 20 && 0 <=
-		     i__1 ? i__1 : s_rnge("ftncon", i__1, "sgseqw_", (ftnlen)
-		    3656)];
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftncon", 
+		    i__1, "sgseqw_", (ftnlen)3656)];
 	    meta[10] = meta[0] + meta[1];
 	    meta[11] = __state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 
-		    <= i__1 ? i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (
-		    ftnlen)3658)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftnpkt", 
+		    i__1, "sgseqw_", (ftnlen)3658)];
 	    meta[15] = __state->ftoff[(i__1 = __state->index - 1) < 20 && 0 <=
-		     i__1 ? i__1 : s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)
-		    3659)];
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftoff", i__1,
+		     "sgseqw_", (ftnlen)3659)];
 	    meta[7] = 0;
 	    meta[8] = 0;
 	    meta[9] = 0;
 	    meta[5] = meta[10] + size;
 	    meta[6] = __state->ftnref[(i__1 = __state->index - 1) < 20 && 0 <=
-		     i__1 ? i__1 : s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)
-		    3664)];
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftnref", 
+		    i__1, "sgseqw_", (ftnlen)3664)];
 	    meta[2] = meta[5] + meta[6];
 	    meta[3] = (__state->ftnref[(i__1 = __state->index - 1) < 20 && 0 
-		    <= i__1 ? i__1 : s_rnge("ftnref", i__1, "sgseqw_", (
-		    ftnlen)3666)] - 1) / 100;
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftnref", 
+		    i__1, "sgseqw_", (ftnlen)3666)] - 1) / 100;
 	    meta[4] = __state->ftityp[(i__1 = __state->index - 1) < 20 && 0 <=
-		     i__1 ? i__1 : s_rnge("ftityp", i__1, "sgseqw_", (ftnlen)
-		    3667)];
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftityp", 
+		    i__1, "sgseqw_", (ftnlen)3667)];
 	    meta[12] = 0;
 	    meta[13] = 0;
 	    meta[14] = __state->ftpksz[(i__1 = __state->index - 1) < 20 && 0 
-		    <= i__1 ? i__1 : s_rnge("ftpksz", i__1, "sgseqw_", (
-		    ftnlen)3670)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftpksz", 
+		    i__1, "sgseqw_", (ftnlen)3670)];
 	    meta[16] = 17;
 	} else {
 
@@ -3969,15 +4028,16 @@ L_sgwes:
 /*              packet. */
 
 	    pktadr = __state->ftbadr[(i__1 = __state->index - 1) < 20 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ftbadr", i__1, "sgseqw_", (ftnlen)
-		    3687)] + __state->ftncon[(i__2 = __state->index - 1) < 20 
-		    && 0 <= i__2 ? i__2 : s_rnge("ftncon", i__2, "sgseqw_", (
-		    ftnlen)3687)] + __state->ftoff[(i__3 = __state->index - 1)
-		     < 20 && 0 <= i__3 ? i__3 : s_rnge("ftoff", i__3, "sgseq"
-		    "w_", (ftnlen)3687)];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftbadr", i__1,
+		     "sgseqw_", (ftnlen)3687)] + __state->ftncon[(i__2 = 
+		    __state->index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ftncon", i__2, "sgseqw_", (ftnlen)
+		    3687)] + __state->ftoff[(i__3 = __state->index - 1) < 20 
+		    && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "ftoff"
+		    , i__3, "sgseqw_", (ftnlen)3687)];
 	    myaddr = (doublereal) (__state->ftoff[(i__1 = __state->index - 1) 
-		    < 20 && 0 <= i__1 ? i__1 : s_rnge("ftoff", i__1, "sgseqw_"
-		    , (ftnlen)3688)] + 1);
+		    < 20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "ftoff", i__1, "sgseqw_", (ftnlen)3688)] + 1);
 
 /*           2) Create a packet directory. The packet directory consists */
 /*              of the beginning addresses for each of the packets and a */
@@ -3985,33 +4045,35 @@ L_sgwes:
 /*              compute the size of the last packet. */
 
 	    i__2 = __state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <= 
-		    i__1 ? i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)
-		    3695)];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftnpkt", i__1,
+		     "sgseqw_", (ftnlen)3695)];
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 		i__1 = pktadr - 1;
 		i__3 = pktadr - 1;
-		dafgda_(handle, &i__1, &i__3, &mysize);
-		dafada_(&myaddr, &__state->c__1);
-		if (failed_()) {
-		    chkout_("SGWES", (ftnlen)5);
+		dafgda_(__global_state, handle, &i__1, &i__3, &mysize);
+		dafada_(__global_state, &myaddr, &__state->c__1);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SGWES", (ftnlen)5);
 		    return 0;
 		}
 		size = (integer) mysize;
 		pktadr = pktadr + size + __state->ftoff[(i__1 = 
 			__state->index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"ftoff", i__1, "sgseqw_", (ftnlen)3707)];
+			&__global_state->f2c, "ftoff", i__1, "sgseqw_", (
+			ftnlen)3707)];
 		myaddr += (doublereal) (size + __state->ftoff[(i__1 = 
 			__state->index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"ftoff", i__1, "sgseqw_", (ftnlen)3708)]);
+			&__global_state->f2c, "ftoff", i__1, "sgseqw_", (
+			ftnlen)3708)]);
 	    }
 
 /*           Put in the fake beginning for an extra packet. PKTADR should */
 /*           contain the proper value. */
 
 	    myaddr = myaddr;
-	    dafada_(&myaddr, &__state->c__1);
-	    if (failed_()) {
-		chkout_("SGWES", (ftnlen)5);
+	    dafada_(__global_state, &myaddr, &__state->c__1);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SGWES", (ftnlen)5);
 		return 0;
 	    }
 
@@ -4020,27 +4082,29 @@ L_sgwes:
 /*              reference area. */
 
 	    refadr = __state->ftbadr[(i__2 = __state->index - 1) < 20 && 0 <= 
-		    i__2 ? i__2 : s_rnge("ftbadr", i__2, "sgseqw_", (ftnlen)
-		    3729)] + __state->ftncon[(i__1 = __state->index - 1) < 20 
-		    && 0 <= i__1 ? i__1 : s_rnge("ftncon", i__1, "sgseqw_", (
-		    ftnlen)3729)];
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftbadr", i__2,
+		     "sgseqw_", (ftnlen)3729)] + __state->ftncon[(i__1 = 
+		    __state->index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftncon", i__1, "sgseqw_", (ftnlen)
+		    3729)];
 	    i__1 = __state->ftnpkt[(i__2 = __state->index - 1) < 20 && 0 <= 
-		    i__2 ? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)
-		    3731)];
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnpkt", i__2,
+		     "sgseqw_", (ftnlen)3731)];
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		dafgda_(handle, &refadr, &refadr, &myref);
+		dafgda_(__global_state, handle, &refadr, &refadr, &myref);
 		i__2 = refadr + 1;
 		i__3 = refadr + 1;
-		dafgda_(handle, &i__2, &i__3, &mysize);
-		dafada_(&myref, &__state->c__1);
-		if (failed_()) {
-		    chkout_("SGWES", (ftnlen)5);
+		dafgda_(__global_state, handle, &i__2, &i__3, &mysize);
+		dafada_(__global_state, &myref, &__state->c__1);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SGWES", (ftnlen)5);
 		    return 0;
 		}
 		size = (integer) mysize;
 		refadr = refadr + size + __state->ftoff[(i__2 = 
 			__state->index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"ftoff", i__2, "sgseqw_", (ftnlen)3743)];
+			&__global_state->f2c, "ftoff", i__2, "sgseqw_", (
+			ftnlen)3743)];
 	    }
 
 /*           3) Create a reference directory if the number of */
@@ -4050,33 +4114,36 @@ L_sgwes:
 /*              packet. */
 
 	    if (__state->ftnref[(i__1 = __state->index - 1) < 20 && 0 <= i__1 
-		    ? i__1 : s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)3753)] 
-		    > 100) {
+		    ? i__1 : s_rnge(&__global_state->f2c, "ftnref", i__1, 
+		    "sgseqw_", (ftnlen)3753)] > 100) {
 		refadr = __state->ftbadr[(i__1 = __state->index - 1) < 20 && 
-			0 <= i__1 ? i__1 : s_rnge("ftbadr", i__1, "sgseqw_", (
-			ftnlen)3755)] + __state->ftncon[(i__2 = 
-			__state->index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"ftncon", i__2, "sgseqw_", (ftnlen)3755)];
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftb"
+			"adr", i__1, "sgseqw_", (ftnlen)3755)] + 
+			__state->ftncon[(i__2 = __state->index - 1) < 20 && 0 
+			<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftncon"
+			, i__2, "sgseqw_", (ftnlen)3755)];
 		refadr += __state->ftpksz[(i__1 = __state->index - 1) < 20 && 
-			0 <= i__1 ? i__1 : s_rnge("ftpksz", i__1, "sgseqw_", (
-			ftnlen)3756)];
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftp"
+			"ksz", i__1, "sgseqw_", (ftnlen)3756)];
 		refadr += __state->ftoff[(i__1 = __state->index - 1) < 20 && 
-			0 <= i__1 ? i__1 : s_rnge("ftoff", i__1, "sgseqw_", (
-			ftnlen)3757)] * __state->ftnpkt[(i__2 = 
-			__state->index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"ftnpkt", i__2, "sgseqw_", (ftnlen)3757)];
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "fto"
+			"ff", i__1, "sgseqw_", (ftnlen)3757)] * 
+			__state->ftnpkt[(i__2 = __state->index - 1) < 20 && 0 
+			<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnpkt"
+			, i__2, "sgseqw_", (ftnlen)3757)];
 		refadr = refadr + __state->ftnpkt[(i__1 = __state->index - 1) 
-			< 20 && 0 <= i__1 ? i__1 : s_rnge("ftnpkt", i__1, 
-			"sgseqw_", (ftnlen)3758)] + 1;
+			< 20 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "ftnpkt", i__1, "sgseqw_", (
+			ftnlen)3758)] + 1;
 		refadr += 99;
 		i__2 = (__state->ftnref[(i__1 = __state->index - 1) < 20 && 0 
-			<= i__1 ? i__1 : s_rnge("ftnref", i__1, "sgseqw_", (
-			ftnlen)3761)] - 1) / 100;
+			<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftnref"
+			, i__1, "sgseqw_", (ftnlen)3761)] - 1) / 100;
 		for (i__ = 1; i__ <= i__2; ++i__) {
-		    dafgda_(handle, &refadr, &refadr, &myref);
-		    dafada_(&myref, &__state->c__1);
-		    if (failed_()) {
-			chkout_("SGWES", (ftnlen)5);
+		    dafgda_(__global_state, handle, &refadr, &refadr, &myref);
+		    dafada_(__global_state, &myref, &__state->c__1);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "SGWES", (ftnlen)5);
 			return 0;
 		    }
 		    refadr += 100;
@@ -4087,42 +4154,44 @@ L_sgwes:
 
 	    meta[0] = 0;
 	    meta[1] = __state->ftncon[(i__2 = __state->index - 1) < 20 && 0 <=
-		     i__2 ? i__2 : s_rnge("ftncon", i__2, "sgseqw_", (ftnlen)
-		    3780)];
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftncon", 
+		    i__2, "sgseqw_", (ftnlen)3780)];
 	    meta[10] = meta[0] + meta[1];
 	    meta[11] = __state->ftnpkt[(i__2 = __state->index - 1) < 20 && 0 
-		    <= i__2 ? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (
-		    ftnlen)3782)];
+		    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnpkt", 
+		    i__2, "sgseqw_", (ftnlen)3782)];
 	    meta[15] = __state->ftoff[(i__2 = __state->index - 1) < 20 && 0 <=
-		     i__2 ? i__2 : s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)
-		    3783)];
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftoff", i__2,
+		     "sgseqw_", (ftnlen)3783)];
 	    meta[7] = meta[10] + __state->ftpksz[(i__2 = __state->index - 1) <
-		     20 && 0 <= i__2 ? i__2 : s_rnge("ftpksz", i__2, "sgseqw_"
-		    , (ftnlen)3784)] + __state->ftoff[(i__1 = __state->index 
-		    - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftoff", i__1, 
+		     20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "ftpksz", i__2, "sgseqw_", (ftnlen)3784)] + 
+		    __state->ftoff[(i__1 = __state->index - 1) < 20 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftoff", i__1, 
 		    "sgseqw_", (ftnlen)3784)] * __state->ftnpkt[(i__3 = 
-		    __state->index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge(
-		    "ftnpkt", i__3, "sgseqw_", (ftnlen)3784)];
+		    __state->index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "ftnpkt", i__3, "sgseqw_", (ftnlen)
+		    3784)];
 	    meta[8] = __state->ftnpkt[(i__2 = __state->index - 1) < 20 && 0 <=
-		     i__2 ? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)
-		    3786)] + 1;
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnpkt", 
+		    i__2, "sgseqw_", (ftnlen)3786)] + 1;
 	    meta[9] = 1;
 	    meta[5] = meta[7] + meta[8];
 	    meta[6] = __state->ftnref[(i__2 = __state->index - 1) < 20 && 0 <=
-		     i__2 ? i__2 : s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)
-		    3789)];
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnref", 
+		    i__2, "sgseqw_", (ftnlen)3789)];
 	    meta[2] = meta[5] + meta[6];
 	    meta[3] = (__state->ftnref[(i__2 = __state->index - 1) < 20 && 0 
-		    <= i__2 ? i__2 : s_rnge("ftnref", i__2, "sgseqw_", (
-		    ftnlen)3791)] - 1) / 100;
+		    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnref", 
+		    i__2, "sgseqw_", (ftnlen)3791)] - 1) / 100;
 	    meta[4] = __state->ftityp[(i__2 = __state->index - 1) < 20 && 0 <=
-		     i__2 ? i__2 : s_rnge("ftityp", i__2, "sgseqw_", (ftnlen)
-		    3792)];
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftityp", 
+		    i__2, "sgseqw_", (ftnlen)3792)];
 	    meta[12] = 0;
 	    meta[13] = 0;
 	    meta[14] = __state->ftmxsz[(i__2 = __state->index - 1) < 20 && 0 
-		    <= i__2 ? i__2 : s_rnge("ftmxsz", i__2, "sgseqw_", (
-		    ftnlen)3795)];
+		    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftmxsz", 
+		    i__2, "sgseqw_", (ftnlen)3795)];
 	    meta[16] = 17;
 	}
     } else {
@@ -4136,13 +4205,14 @@ L_sgwes:
 /*           implicitly indexed packets only have two (2) reference */
 /*           values. */
 
-	    dafada_(&__state->ftrefs[(i__2 = (__state->index << 1) - 2) < 40 
-		    && 0 <= i__2 ? i__2 : s_rnge("ftrefs", i__2, "sgseqw_", (
-		    ftnlen)3811)], &__state->ftnref[(i__1 = __state->index - 
-		    1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ftnref", i__1, 
-		    "sgseqw_", (ftnlen)3811)]);
-	    if (failed_()) {
-		chkout_("SGWES", (ftnlen)5);
+	    dafada_(__global_state, &__state->ftrefs[(i__2 = (__state->index 
+		    << 1) - 2) < 40 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ftrefs", i__2, "sgseqw_", (ftnlen)
+		    3811)], &__state->ftnref[(i__1 = __state->index - 1) < 20 
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftnr"
+		    "ef", i__1, "sgseqw_", (ftnlen)3811)]);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SGWES", (ftnlen)5);
 		return 0;
 	    }
 
@@ -4150,40 +4220,41 @@ L_sgwes:
 /*           will write it to the file a bit later. */
 
 	    size = (__state->ftoff[(i__2 = __state->index - 1) < 20 && 0 <= 
-		    i__2 ? i__2 : s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)
-		    3821)] + __state->ftpksz[(i__1 = __state->index - 1) < 20 
-		    && 0 <= i__1 ? i__1 : s_rnge("ftpksz", i__1, "sgseqw_", (
-		    ftnlen)3821)]) * __state->ftnpkt[(i__3 = __state->index - 
-		    1) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftnpkt", i__3, 
-		    "sgseqw_", (ftnlen)3821)];
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftoff", i__2, 
+		    "sgseqw_", (ftnlen)3821)] + __state->ftpksz[(i__1 = 
+		    __state->index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftpksz", i__1, "sgseqw_", (ftnlen)
+		    3821)]) * __state->ftnpkt[(i__3 = __state->index - 1) < 
+		    20 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "ftnpkt", i__3, "sgseqw_", (ftnlen)3821)];
 	    meta[0] = 0;
 	    meta[1] = __state->ftncon[(i__2 = __state->index - 1) < 20 && 0 <=
-		     i__2 ? i__2 : s_rnge("ftncon", i__2, "sgseqw_", (ftnlen)
-		    3824)];
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftncon", 
+		    i__2, "sgseqw_", (ftnlen)3824)];
 	    meta[10] = meta[0] + meta[1];
 	    meta[11] = __state->ftnpkt[(i__2 = __state->index - 1) < 20 && 0 
-		    <= i__2 ? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (
-		    ftnlen)3826)];
+		    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnpkt", 
+		    i__2, "sgseqw_", (ftnlen)3826)];
 	    meta[15] = __state->ftoff[(i__2 = __state->index - 1) < 20 && 0 <=
-		     i__2 ? i__2 : s_rnge("ftoff", i__2, "sgseqw_", (ftnlen)
-		    3827)];
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftoff", i__2,
+		     "sgseqw_", (ftnlen)3827)];
 	    meta[7] = 0;
 	    meta[8] = 0;
 	    meta[9] = 0;
 	    meta[5] = meta[10] + size;
 	    meta[6] = __state->ftnref[(i__2 = __state->index - 1) < 20 && 0 <=
-		     i__2 ? i__2 : s_rnge("ftnref", i__2, "sgseqw_", (ftnlen)
-		    3832)];
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnref", 
+		    i__2, "sgseqw_", (ftnlen)3832)];
 	    meta[2] = meta[5] + meta[6];
 	    meta[3] = 0;
 	    meta[4] = __state->ftityp[(i__2 = __state->index - 1) < 20 && 0 <=
-		     i__2 ? i__2 : s_rnge("ftityp", i__2, "sgseqw_", (ftnlen)
-		    3835)];
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftityp", 
+		    i__2, "sgseqw_", (ftnlen)3835)];
 	    meta[12] = 0;
 	    meta[13] = 0;
 	    meta[14] = __state->ftpksz[(i__2 = __state->index - 1) < 20 && 0 
-		    <= i__2 ? i__2 : s_rnge("ftpksz", i__2, "sgseqw_", (
-		    ftnlen)3838)];
+		    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftpksz", 
+		    i__2, "sgseqw_", (ftnlen)3838)];
 	    meta[16] = 17;
 	} else {
 
@@ -4198,15 +4269,16 @@ L_sgwes:
 /*              packet. */
 
 	    pktadr = __state->ftbadr[(i__2 = __state->index - 1) < 20 && 0 <= 
-		    i__2 ? i__2 : s_rnge("ftbadr", i__2, "sgseqw_", (ftnlen)
-		    3853)] + __state->ftncon[(i__1 = __state->index - 1) < 20 
-		    && 0 <= i__1 ? i__1 : s_rnge("ftncon", i__1, "sgseqw_", (
-		    ftnlen)3853)] + __state->ftoff[(i__3 = __state->index - 1)
-		     < 20 && 0 <= i__3 ? i__3 : s_rnge("ftoff", i__3, "sgseq"
-		    "w_", (ftnlen)3853)];
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftbadr", i__2,
+		     "sgseqw_", (ftnlen)3853)] + __state->ftncon[(i__1 = 
+		    __state->index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftncon", i__1, "sgseqw_", (ftnlen)
+		    3853)] + __state->ftoff[(i__3 = __state->index - 1) < 20 
+		    && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "ftoff"
+		    , i__3, "sgseqw_", (ftnlen)3853)];
 	    myaddr = (doublereal) (__state->ftoff[(i__2 = __state->index - 1) 
-		    < 20 && 0 <= i__2 ? i__2 : s_rnge("ftoff", i__2, "sgseqw_"
-		    , (ftnlen)3854)] + 1);
+		    < 20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "ftoff", i__2, "sgseqw_", (ftnlen)3854)] + 1);
 
 /*           2) Create a packet directory. The packet directory consists */
 /*              of the beginning addresses for each of the packets and a */
@@ -4214,35 +4286,38 @@ L_sgwes:
 /*              compute the size of the last packet. */
 
 	    i__1 = __state->ftnpkt[(i__2 = __state->index - 1) < 20 && 0 <= 
-		    i__2 ? i__2 : s_rnge("ftnpkt", i__2, "sgseqw_", (ftnlen)
-		    3861)];
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnpkt", i__2,
+		     "sgseqw_", (ftnlen)3861)];
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 		i__2 = pktadr - 1;
 		i__3 = pktadr - 1;
-		dafgda_(handle, &i__2, &i__3, &mysize);
-		dafada_(&myaddr, &__state->c__1);
-		if (failed_()) {
-		    chkout_("SGWES", (ftnlen)5);
+		dafgda_(__global_state, handle, &i__2, &i__3, &mysize);
+		dafada_(__global_state, &myaddr, &__state->c__1);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SGWES", (ftnlen)5);
 		    return 0;
 		}
 		size = (integer) mysize;
 		pktadr = pktadr + size + __state->ftoff[(i__2 = 
 			__state->index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"ftoff", i__2, "sgseqw_", (ftnlen)3872)];
+			&__global_state->f2c, "ftoff", i__2, "sgseqw_", (
+			ftnlen)3872)];
 		myaddr += (doublereal) (size + __state->ftoff[(i__2 = 
 			__state->index - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"ftoff", i__2, "sgseqw_", (ftnlen)3873)]);
+			&__global_state->f2c, "ftoff", i__2, "sgseqw_", (
+			ftnlen)3873)]);
 	    }
 
 /*           Put in the fake beginning for an extra packet. PKTADR should */
 /*           contain the proper value. */
 
 	    myaddr = (doublereal) (pktadr - __state->ftbadr[(i__1 = 
-		    __state->index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ftbadr", i__1, "sgseqw_", (ftnlen)3880)]);
-	    dafada_(&myaddr, &__state->c__1);
-	    if (failed_()) {
-		chkout_("SGWES", (ftnlen)5);
+		    __state->index - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftbadr", i__1, "sgseqw_", (ftnlen)
+		    3880)]);
+	    dafada_(__global_state, &myaddr, &__state->c__1);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SGWES", (ftnlen)5);
 		return 0;
 	    }
 
@@ -4250,40 +4325,42 @@ L_sgwes:
 
 	    meta[0] = 0;
 	    meta[1] = __state->ftncon[(i__1 = __state->index - 1) < 20 && 0 <=
-		     i__1 ? i__1 : s_rnge("ftncon", i__1, "sgseqw_", (ftnlen)
-		    3892)];
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftncon", 
+		    i__1, "sgseqw_", (ftnlen)3892)];
 	    meta[10] = meta[0] + meta[1];
 	    meta[11] = __state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 
-		    <= i__1 ? i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (
-		    ftnlen)3894)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftnpkt", 
+		    i__1, "sgseqw_", (ftnlen)3894)];
 	    meta[15] = __state->ftoff[(i__1 = __state->index - 1) < 20 && 0 <=
-		     i__1 ? i__1 : s_rnge("ftoff", i__1, "sgseqw_", (ftnlen)
-		    3895)];
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftoff", i__1,
+		     "sgseqw_", (ftnlen)3895)];
 	    meta[7] = meta[10] + __state->ftpksz[(i__1 = __state->index - 1) <
-		     20 && 0 <= i__1 ? i__1 : s_rnge("ftpksz", i__1, "sgseqw_"
-		    , (ftnlen)3896)] + __state->ftoff[(i__2 = __state->index 
-		    - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ftoff", i__2, 
+		     20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "ftpksz", i__1, "sgseqw_", (ftnlen)3896)] + 
+		    __state->ftoff[(i__2 = __state->index - 1) < 20 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftoff", i__2, 
 		    "sgseqw_", (ftnlen)3896)] * __state->ftnpkt[(i__3 = 
-		    __state->index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge(
-		    "ftnpkt", i__3, "sgseqw_", (ftnlen)3896)];
+		    __state->index - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "ftnpkt", i__3, "sgseqw_", (ftnlen)
+		    3896)];
 	    meta[8] = __state->ftnpkt[(i__1 = __state->index - 1) < 20 && 0 <=
-		     i__1 ? i__1 : s_rnge("ftnpkt", i__1, "sgseqw_", (ftnlen)
-		    3898)] + 1;
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftnpkt", 
+		    i__1, "sgseqw_", (ftnlen)3898)] + 1;
 	    meta[9] = 1;
 	    meta[5] = meta[7] + meta[8];
 	    meta[6] = __state->ftnref[(i__1 = __state->index - 1) < 20 && 0 <=
-		     i__1 ? i__1 : s_rnge("ftnref", i__1, "sgseqw_", (ftnlen)
-		    3901)];
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftnref", 
+		    i__1, "sgseqw_", (ftnlen)3901)];
 	    meta[2] = meta[5] + meta[6];
 	    meta[3] = 0;
 	    meta[4] = __state->ftityp[(i__1 = __state->index - 1) < 20 && 0 <=
-		     i__1 ? i__1 : s_rnge("ftityp", i__1, "sgseqw_", (ftnlen)
-		    3904)];
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftityp", 
+		    i__1, "sgseqw_", (ftnlen)3904)];
 	    meta[12] = 0;
 	    meta[13] = 0;
 	    meta[14] = __state->ftmxsz[(i__1 = __state->index - 1) < 20 && 0 
-		    <= i__1 ? i__1 : s_rnge("ftmxsz", i__1, "sgseqw_", (
-		    ftnlen)3907)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftmxsz", 
+		    i__1, "sgseqw_", (ftnlen)3907)];
 	    meta[16] = 17;
 	}
     }
@@ -4291,18 +4368,19 @@ L_sgwes:
 /*     Write the meta data to the segment and end the segment. */
 
     for (i__ = 1; i__ <= 17; ++i__) {
-	xmeta[(i__1 = i__ - 1) < 17 && 0 <= i__1 ? i__1 : s_rnge("xmeta", 
-		i__1, "sgseqw_", (ftnlen)3917)] = (doublereal) meta[(i__2 = 
-		i__ - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge("meta", i__2, 
-		"sgseqw_", (ftnlen)3917)];
+	xmeta[(i__1 = i__ - 1) < 17 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "xmeta", i__1, "sgseqw_", (ftnlen)3917)] 
+		= (doublereal) meta[(i__2 = i__ - 1) < 17 && 0 <= i__2 ? i__2 
+		: s_rnge(&__global_state->f2c, "meta", i__2, "sgseqw_", (
+		ftnlen)3917)];
     }
-    dafada_(xmeta, &__state->c__17);
+    dafada_(__global_state, xmeta, &__state->c__17);
 
 /*     End the segment. */
 
-    dafena_();
-    if (failed_()) {
-	chkout_("SGWES", (ftnlen)5);
+    dafena_(__global_state);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGWES", (ftnlen)5);
 	return 0;
     }
 
@@ -4312,104 +4390,117 @@ L_sgwes:
     --__state->nft;
     i__1 = __state->nft;
     for (i__ = __state->index; i__ <= i__1; ++i__) {
-	__state->ftbadr[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftbadr", i__2, "sgseqw_", (ftnlen)3937)] = __state->ftbadr[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftbadr", i__3, 
-		"sgseqw_", (ftnlen)3937)];
-	__state->fthan[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"fthan", i__2, "sgseqw_", (ftnlen)3938)] = __state->fthan[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("fthan", i__3, 
-		"sgseqw_", (ftnlen)3938)];
-	__state->ftityp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftityp", i__2, "sgseqw_", (ftnlen)3939)] = __state->ftityp[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftityp", i__3, 
-		"sgseqw_", (ftnlen)3939)];
-	__state->ftncon[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftncon", i__2, "sgseqw_", (ftnlen)3940)] = __state->ftncon[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftncon", i__3, 
-		"sgseqw_", (ftnlen)3940)];
-	__state->ftnpkt[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftnpkt", i__2, "sgseqw_", (ftnlen)3941)] = __state->ftnpkt[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftnpkt", i__3, 
-		"sgseqw_", (ftnlen)3941)];
-	__state->ftnref[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftnref", i__2, "sgseqw_", (ftnlen)3942)] = __state->ftnref[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftnref", i__3, 
-		"sgseqw_", (ftnlen)3942)];
-	__state->ftnres[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftnres", i__2, "sgseqw_", (ftnlen)3943)] = __state->ftnres[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftnres", i__3, 
-		"sgseqw_", (ftnlen)3943)];
-	__state->ftoff[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftoff", i__2, "sgseqw_", (ftnlen)3944)] = __state->ftoff[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftoff", i__3, 
-		"sgseqw_", (ftnlen)3944)];
-	__state->ftpksz[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftpksz", i__2, "sgseqw_", (ftnlen)3945)] = __state->ftpksz[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftpksz", i__3, 
-		"sgseqw_", (ftnlen)3945)];
-	__state->ftfixd[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftfixd", i__2, "sgseqw_", (ftnlen)3946)] = __state->ftfixd[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftfixd", i__3, 
-		"sgseqw_", (ftnlen)3946)];
-	__state->ftexpl[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftexpl", i__2, "sgseqw_", (ftnlen)3947)] = __state->ftexpl[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("ftexpl", i__3, 
-		"sgseqw_", (ftnlen)3947)];
+	__state->ftbadr[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftbadr", i__2, "sgseqw_", (ftnlen)3937)]
+		 = __state->ftbadr[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftbadr", i__3, "sgseqw_", (
+		ftnlen)3937)];
+	__state->fthan[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "fthan", i__2, "sgseqw_", (ftnlen)3938)] 
+		= __state->fthan[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "fthan", i__3, "sgseqw_", (
+		ftnlen)3938)];
+	__state->ftityp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftityp", i__2, "sgseqw_", (ftnlen)3939)]
+		 = __state->ftityp[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftityp", i__3, "sgseqw_", (
+		ftnlen)3939)];
+	__state->ftncon[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftncon", i__2, "sgseqw_", (ftnlen)3940)]
+		 = __state->ftncon[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftncon", i__3, "sgseqw_", (
+		ftnlen)3940)];
+	__state->ftnpkt[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftnpkt", i__2, "sgseqw_", (ftnlen)3941)]
+		 = __state->ftnpkt[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftnpkt", i__3, "sgseqw_", (
+		ftnlen)3941)];
+	__state->ftnref[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftnref", i__2, "sgseqw_", (ftnlen)3942)]
+		 = __state->ftnref[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftnref", i__3, "sgseqw_", (
+		ftnlen)3942)];
+	__state->ftnres[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftnres", i__2, "sgseqw_", (ftnlen)3943)]
+		 = __state->ftnres[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftnres", i__3, "sgseqw_", (
+		ftnlen)3943)];
+	__state->ftoff[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftoff", i__2, "sgseqw_", (ftnlen)3944)] 
+		= __state->ftoff[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftoff", i__3, "sgseqw_", (
+		ftnlen)3944)];
+	__state->ftpksz[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftpksz", i__2, "sgseqw_", (ftnlen)3945)]
+		 = __state->ftpksz[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftpksz", i__3, "sgseqw_", (
+		ftnlen)3945)];
+	__state->ftfixd[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftfixd", i__2, "sgseqw_", (ftnlen)3946)]
+		 = __state->ftfixd[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftfixd", i__3, "sgseqw_", (
+		ftnlen)3946)];
+	__state->ftexpl[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftexpl", i__2, "sgseqw_", (ftnlen)3947)]
+		 = __state->ftexpl[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftexpl", i__3, "sgseqw_", (
+		ftnlen)3947)];
     }
     if (__state->fxdseg) {
 	--__state->numfxd;
     } else {
 	--__state->numvar;
     }
-    chkout_("SGWES", (ftnlen)5);
+    chkout_(__global_state, "SGWES", (ftnlen)5);
     return 0;
 } /* sgseqw_ */
 
-/* Subroutine */ int sgseqw_(integer *handle, doublereal *descr, char *segid, 
-	integer *nconst, doublereal *const__, integer *npkts, integer *pktsiz,
-	 doublereal *pktdat, integer *nrefs, doublereal *refdat, integer *
-	idxtyp, ftnlen segid_len)
+/* Subroutine */ int sgseqw_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, char *segid, integer *nconst, doublereal *const__, 
+	integer *npkts, integer *pktsiz, doublereal *pktdat, integer *nrefs, 
+	doublereal *refdat, integer *idxtyp, ftnlen segid_len)
 {
     return sgseqw_0_(0, handle, descr, segid, nconst, const__, npkts, pktsiz, 
 	    pktdat, nrefs, refdat, idxtyp, segid_len);
     }
 
-/* Subroutine */ int sgbwfs_(integer *handle, doublereal *descr, char *segid, 
-	integer *nconst, doublereal *const__, integer *pktsiz, integer *
-	idxtyp, ftnlen segid_len)
+/* Subroutine */ int sgbwfs_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, char *segid, integer *nconst, doublereal *const__, 
+	integer *pktsiz, integer *idxtyp, ftnlen segid_len)
 {
     return sgseqw_0_(1, handle, descr, segid, nconst, const__, (integer *)0, 
 	    pktsiz, (doublereal *)0, (integer *)0, (doublereal *)0, idxtyp, 
 	    segid_len);
     }
 
-/* Subroutine */ int sgbwvs_(integer *handle, doublereal *descr, char *segid, 
-	integer *nconst, doublereal *const__, integer *idxtyp, ftnlen 
-	segid_len)
+/* Subroutine */ int sgbwvs_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, char *segid, integer *nconst, doublereal *const__, 
+	integer *idxtyp, ftnlen segid_len)
 {
     return sgseqw_0_(2, handle, descr, segid, nconst, const__, (integer *)0, (
 	    integer *)0, (doublereal *)0, (integer *)0, (doublereal *)0, 
 	    idxtyp, segid_len);
     }
 
-/* Subroutine */ int sgwfpk_(integer *handle, integer *npkts, doublereal *
-	pktdat, integer *nrefs, doublereal *refdat)
+/* Subroutine */ int sgwfpk_(cspice_t* __global_state, integer *handle, 
+	integer *npkts, doublereal *pktdat, integer *nrefs, doublereal *
+	refdat)
 {
     return sgseqw_0_(3, handle, (doublereal *)0, (char *)0, (integer *)0, (
 	    doublereal *)0, npkts, (integer *)0, pktdat, nrefs, refdat, (
 	    integer *)0, (ftnint)0);
     }
 
-/* Subroutine */ int sgwvpk_(integer *handle, integer *npkts, integer *pktsiz,
-	 doublereal *pktdat, integer *nrefs, doublereal *refdat)
+/* Subroutine */ int sgwvpk_(cspice_t* __global_state, integer *handle, 
+	integer *npkts, integer *pktsiz, doublereal *pktdat, integer *nrefs, 
+	doublereal *refdat)
 {
     return sgseqw_0_(4, handle, (doublereal *)0, (char *)0, (integer *)0, (
 	    doublereal *)0, npkts, pktsiz, pktdat, nrefs, refdat, (integer *)
 	    0, (ftnint)0);
     }
 
-/* Subroutine */ int sgwes_(integer *handle)
+/* Subroutine */ int sgwes_(cspice_t* __global_state, integer *handle)
 {
     return sgseqw_0_(5, handle, (doublereal *)0, (char *)0, (integer *)0, (
 	    doublereal *)0, (integer *)0, (integer *)0, (doublereal *)0, (

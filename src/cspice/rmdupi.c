@@ -8,13 +8,13 @@
 
 
 typedef int rmdupi_state_t;
-static rmdupi_state_t* get_rmdupi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rmdupi_state_t* get_rmdupi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RMDUPI ( Remove duplicates from an integer array ) */
-/* Subroutine */ int rmdupi_(integer *nelt, integer *array)
+/* Subroutine */ int rmdupi_(cspice_t* __global_state, integer *nelt, integer 
+	*array)
 {
     /* System generated locals */
     integer i__1;
@@ -22,11 +22,11 @@ static rmdupi_state_t* get_rmdupi_state() {
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int shelli_(integer *, integer *);
+    extern /* Subroutine */ int shelli_(cspice_t*, integer *, integer *);
 
 
     /* Module state */
-    rmdupi_state_t* __state = get_rmdupi_state();
+    rmdupi_state_t* __state = get_rmdupi_state(__global_state);
 /* $ Abstract */
 
 /*      Remove duplicate elements from an integer array. */
@@ -170,7 +170,7 @@ static rmdupi_state_t* get_rmdupi_state() {
 
 /*        Sort the array in place. */
 
-	shelli_(nelt, array);
+	shelli_(__global_state, nelt, array);
 
 /*        Drop duplicate entries. Compare adjacent entries, and move */
 /*        duplicates forward. (Duplicates are now adjacent, because of */

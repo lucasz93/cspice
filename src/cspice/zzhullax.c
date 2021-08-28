@@ -8,8 +8,7 @@
 
 
 extern zzhullax_init_t __zzhullax_init;
-static zzhullax_state_t* get_zzhullax_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzhullax_state_t* get_zzhullax_state(cspice_t* state) {
 	if (!state->zzhullax)
 		state->zzhullax = __cspice_allocate_module(sizeof(
 	zzhullax_state_t), &__zzhullax_init, sizeof(__zzhullax_init));
@@ -18,23 +17,23 @@ static zzhullax_state_t* get_zzhullax_state() {
 }
 
 /* $Procedure   ZZHULLAX ( Pyramidal FOV convex hull to FOV axis ) */
-/* Subroutine */ int zzhullax_(char *inst, integer *n, doublereal *bounds, 
-	doublereal *axis, ftnlen inst_len)
+/* Subroutine */ int zzhullax_(cspice_t* __global_state, char *inst, integer *
+	n, doublereal *bounds, doublereal *axis, ftnlen inst_len)
 {
     /* System generated locals */
     integer bounds_dim2, i__1, i__2;
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal xvec[3];
     doublereal yvec[3];
     doublereal zvec[3];
     integer xidx;
-    extern doublereal vsep_(doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
     integer next;
     logical pass1;
     integer i__;
@@ -42,48 +41,51 @@ static zzhullax_state_t* get_zzhullax_state() {
     doublereal r__;
     doublereal v[3];
     doublereal delta;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     integer minix;
     integer maxix;
     doublereal trans[9]	/* was [3][3] */;
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    doublereal cp[3];
-    extern doublereal pi_(void);
-    logical ok;
-    extern doublereal halfpi_(void);
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vrotv_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    doublereal cp[3];
+    extern doublereal pi_(cspice_t*);
+    logical ok;
+    extern doublereal halfpi_(cspice_t*);
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     doublereal minlon;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal maxlon;
-    extern /* Subroutine */ int vhatip_(doublereal *);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal lat;
     doublereal sep;
     doublereal lon;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal ray1[3];
     doublereal ray2[3];
 
 
     /* Module state */
-    zzhullax_state_t* __state = get_zzhullax_state();
+    zzhullax_state_t* __state = get_zzhullax_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -386,10 +388,10 @@ static zzhullax_state_t* get_zzhullax_state() {
     bounds_dim2 = *n;
 
     /* Function Body */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZHULLAX", (ftnlen)8);
+    chkin_(__global_state, "ZZHULLAX", (ftnlen)8);
 
 /*     Nothing found yet. */
 
@@ -399,12 +401,12 @@ static zzhullax_state_t* get_zzhullax_state() {
 /*     We must have at least 3 boundary vectors. */
 
     if (*n < 3) {
-	setmsg_("Polygonal FOV requires at least 3 boundary vectors but numb"
-		"er supplied for # was #.", (ftnlen)83);
-	errch_("#", inst, (ftnlen)1, inst_len);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZHULLAX", (ftnlen)8);
+	setmsg_(__global_state, "Polygonal FOV requires at least 3 boundary "
+		"vectors but number supplied for # was #.", (ftnlen)83);
+	errch_(__global_state, "#", inst, (ftnlen)1, inst_len);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZHULLAX", (ftnlen)8);
 	return 0;
     }
 
@@ -431,24 +433,26 @@ static zzhullax_state_t* get_zzhullax_state() {
 /*        vectors, this could be an inward or outward normal, */
 /*        in the case the current face is exterior. */
 
-	vcrss_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? 
-		i__1 : s_rnge("bounds", i__1, "zzhullax_", (ftnlen)408)], &
-		bounds[(i__2 = next * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? 
-		i__2 : s_rnge("bounds", i__2, "zzhullax_", (ftnlen)408)], cp);
+	vcrss_(__global_state, &bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bounds", 
+		i__1, "zzhullax_", (ftnlen)408)], &bounds[(i__2 = next * 3 - 
+		3) < 3 * bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "bounds", i__2, "zzhullax_", (ftnlen)408)
+		], cp);
 
 /*        We insist on consecutive boundary vectors being */
 /*        linearly independent. */
 
-	if (vzero_(cp)) {
-	    setmsg_("Polygonal FOV must have linearly independent consecutiv"
-		    "e boundary but vectors at indices # and # have cross pro"
-		    "duct equal to the zero vector. Instrument is #.", (ftnlen)
-		    158);
-	    errint_("#", &i__, (ftnlen)1);
-	    errint_("#", &next, (ftnlen)1);
-	    errch_("#", inst, (ftnlen)1, inst_len);
-	    sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	    chkout_("ZZHULLAX", (ftnlen)8);
+	if (vzero_(__global_state, cp)) {
+	    setmsg_(__global_state, "Polygonal FOV must have linearly indepe"
+		    "ndent consecutive boundary but vectors at indices # and "
+		    "# have cross product equal to the zero vector. Instrumen"
+		    "t is #.", (ftnlen)158);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errint_(__global_state, "#", &next, (ftnlen)1);
+	    errch_(__global_state, "#", inst, (ftnlen)1, inst_len);
+	    sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	    chkout_(__global_state, "ZZHULLAX", (ftnlen)8);
 	    return 0;
 	}
 
@@ -465,27 +469,28 @@ static zzhullax_state_t* get_zzhullax_state() {
 /*           latter is not an edge of the current face. */
 
 	    if (m != i__ && m != next) {
-		sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < 3 * bounds_dim2 
-			&& 0 <= i__1 ? i__1 : s_rnge("bounds", i__1, "zzhull"
-			"ax_", (ftnlen)446)]);
+		sep = vsep_(__global_state, cp, &bounds[(i__1 = m * 3 - 3) < 
+			3 * bounds_dim2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "bounds", i__1, "zzhullax_", (
+			ftnlen)446)]);
 		if (pass1) {
 
 /*                 Adjust CP if necessary so that it points */
 /*                 toward the interior of the pyramid. */
 
-		    if (sep > halfpi_()) {
+		    if (sep > halfpi_(__global_state)) {
 
 /*                    Invert the cross product vector and adjust SEP */
 /*                    accordingly. Within this "M" loop, all other */
 /*                    angular separations will be computed using the new */
 /*                    value of CP. */
 
-			vsclip_(&__state->c_b20, cp);
-			sep = pi_() - sep;
+			vsclip_(__global_state, &__state->c_b20, cp);
+			sep = pi_(__global_state) - sep;
 		    }
 		    pass1 = FALSE_;
 		}
-		ok = sep < halfpi_() - 1e-12;
+		ok = sep < halfpi_(__global_state) - 1e-12;
 	    }
 	    if (ok) {
 
@@ -533,17 +538,19 @@ static zzhullax_state_t* get_zzhullax_state() {
 /*              or outward normal, depending on the ordering of the */
 /*              boundary vectors. */
 
-		vcrss_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= 
-			i__1 ? i__1 : s_rnge("bounds", i__1, "zzhullax_", (
+		vcrss_(__global_state, &bounds[(i__1 = i__ * 3 - 3) < 3 * 
+			bounds_dim2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "bounds", i__1, "zzhullax_", (
 			ftnlen)530)], &bounds[(i__2 = next * 3 - 3) < 3 * 
-			bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge("bounds", 
-			i__2, "zzhullax_", (ftnlen)530)], cp);
+			bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "bounds", i__2, "zzhullax_", (
+			ftnlen)530)], cp);
 
 /*              It's allowable for non-consecutive boundary vectors to */
 /*              be linearly dependent, but if we have such a pair, */
 /*              it doesn't define an exterior face. */
 
-		if (! vzero_(cp)) {
+		if (! vzero_(__global_state, cp)) {
 
 /*                 The rays having direction vectors indexed I and NEXT */
 /*                 define a semi-infinite sector of a plane that might */
@@ -564,28 +571,29 @@ static zzhullax_state_t* get_zzhullax_state() {
 /*                    face. */
 
 			if (m != i__ && m != next) {
-			    sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < 3 * 
-				    bounds_dim2 && 0 <= i__1 ? i__1 : s_rnge(
-				    "bounds", i__1, "zzhullax_", (ftnlen)560)]
-				    );
+			    sep = vsep_(__global_state, cp, &bounds[(i__1 = m 
+				    * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? 
+				    i__1 : s_rnge(&__global_state->f2c, "bou"
+				    "nds", i__1, "zzhullax_", (ftnlen)560)]);
 			    if (pass1) {
 
 /*                          Adjust CP if necessary so that it points */
 /*                          toward the interior of the pyramid. */
 
-				if (sep > halfpi_()) {
+				if (sep > halfpi_(__global_state)) {
 
 /*                             Invert the cross product vector and */
 /*                             adjust SEP accordingly. Within this "M" */
 /*                             loop, all other angular separations will */
 /*                             be computed using the new value of CP. */
 
-				    vsclip_(&__state->c_b20, cp);
-				    sep = pi_() - sep;
+				    vsclip_(__global_state, &__state->c_b20, 
+					    cp);
+				    sep = pi_(__global_state) - sep;
 				}
 				pass1 = FALSE_;
 			    }
-			    ok = sep < halfpi_() - 1e-12;
+			    ok = sep < halfpi_(__global_state) - 1e-12;
 			}
 			if (ok) {
 
@@ -643,11 +651,11 @@ static zzhullax_state_t* get_zzhullax_state() {
 /*     If we still haven't found an exterior face, we can't continue. */
 
     if (! found) {
-	setmsg_("Unable to find face of convex hull of FOV of instrument #.", 
-		(ftnlen)58);
-	errch_("#", inst, (ftnlen)1, inst_len);
-	sigerr_("SPICE(FACENOTFOUND)", (ftnlen)19);
-	chkout_("ZZHULLAX", (ftnlen)8);
+	setmsg_(__global_state, "Unable to find face of convex hull of FOV o"
+		"f instrument #.", (ftnlen)58);
+	errch_(__global_state, "#", inst, (ftnlen)1, inst_len);
+	sigerr_(__global_state, "SPICE(FACENOTFOUND)", (ftnlen)19);
+	chkout_(__global_state, "ZZHULLAX", (ftnlen)8);
 	return 0;
     }
 
@@ -668,38 +676,41 @@ static zzhullax_state_t* get_zzhullax_state() {
 /*     the "face frame." */
 
 
-    vhat_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? i__1 :
-	     s_rnge("bounds", i__1, "zzhullax_", (ftnlen)683)], ray1);
-    vhat_(&bounds[(i__1 = next * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? i__1 
-	    : s_rnge("bounds", i__1, "zzhullax_", (ftnlen)684)], ray2);
-    vlcom_(&__state->c_b36, ray1, &__state->c_b36, ray2, xvec);
-    vhatip_(xvec);
-    vhat_(cp, yvec);
-    ucrss_(xvec, yvec, zvec);
+    vhat_(__global_state, &bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bounds", i__1, 
+	    "zzhullax_", (ftnlen)683)], ray1);
+    vhat_(__global_state, &bounds[(i__1 = next * 3 - 3) < 3 * bounds_dim2 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bounds", i__1, 
+	    "zzhullax_", (ftnlen)684)], ray2);
+    vlcom_(__global_state, &__state->c_b36, ray1, &__state->c_b36, ray2, xvec)
+	    ;
+    vhatip_(__global_state, xvec);
+    vhat_(__global_state, cp, yvec);
+    ucrss_(__global_state, xvec, yvec, zvec);
 
 /*     Create a transformation matrix to map the input boundary */
 /*     vectors into the face frame. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	trans[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge("trans", 
-		i__1, "zzhullax_", (ftnlen)698)] = xvec[(i__2 = i__ - 1) < 3 
-		&& 0 <= i__2 ? i__2 : s_rnge("xvec", i__2, "zzhullax_", (
-		ftnlen)698)];
-	trans[(i__1 = i__ * 3 - 2) < 9 && 0 <= i__1 ? i__1 : s_rnge("trans", 
-		i__1, "zzhullax_", (ftnlen)699)] = yvec[(i__2 = i__ - 1) < 3 
-		&& 0 <= i__2 ? i__2 : s_rnge("yvec", i__2, "zzhullax_", (
-		ftnlen)699)];
-	trans[(i__1 = i__ * 3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("trans", 
-		i__1, "zzhullax_", (ftnlen)700)] = zvec[(i__2 = i__ - 1) < 3 
-		&& 0 <= i__2 ? i__2 : s_rnge("zvec", i__2, "zzhullax_", (
-		ftnlen)700)];
+	trans[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "trans", i__1, "zzhullax_", (ftnlen)698)]
+		 = xvec[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "xvec", i__2, "zzhullax_", (ftnlen)698)];
+	trans[(i__1 = i__ * 3 - 2) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "trans", i__1, "zzhullax_", (ftnlen)699)]
+		 = yvec[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "yvec", i__2, "zzhullax_", (ftnlen)699)];
+	trans[(i__1 = i__ * 3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "trans", i__1, "zzhullax_", (ftnlen)700)]
+		 = zvec[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "zvec", i__2, "zzhullax_", (ftnlen)700)];
     }
 
 /*     Now we're going to compute the longitude of each boundary in the */
 /*     face frame. The vectors with indices XIDX and NEXT are excluded. */
 /*     We expect all longitudes to be between MARGIN and pi - MARGIN. */
 
-    minlon = pi_();
+    minlon = pi_(__global_state);
     maxlon = 0.;
     minix = 1;
     maxix = 1;
@@ -710,10 +721,11 @@ static zzhullax_state_t* get_zzhullax_state() {
 /*           The current vector is not a boundary of our edge, */
 /*           so find its longitude. */
 
-	    mxv_(trans, &bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <=
-		     i__2 ? i__2 : s_rnge("bounds", i__2, "zzhullax_", (
-		    ftnlen)720)], v);
-	    reclat_(v, &r__, &lon, &lat);
+	    mxv_(__global_state, trans, &bounds[(i__2 = i__ * 3 - 3) < 3 * 
+		    bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "bounds", i__2, "zzhullax_", (ftnlen)
+		    720)], v);
+	    reclat_(__global_state, v, &r__, &lon, &lat);
 
 /*           Update the longitude bounds. */
 
@@ -732,26 +744,26 @@ static zzhullax_state_t* get_zzhullax_state() {
 /*     to continue. */
 
     if (minlon < 2e-12) {
-	setmsg_("Minimum boundary vector longitude in exterior face frame is"
-		" # radians. Minimum occurs at index #. This FOV does not con"
-		"form to the requirements of this routine. Instrument is #.", (
-		ftnlen)177);
-	errdp_("#", &minlon, (ftnlen)1);
-	errint_("#", &minix, (ftnlen)1);
-	errch_("#", inst, (ftnlen)1, inst_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZHULLAX", (ftnlen)8);
+	setmsg_(__global_state, "Minimum boundary vector longitude in exteri"
+		"or face frame is # radians. Minimum occurs at index #. This "
+		"FOV does not conform to the requirements of this routine. In"
+		"strument is #.", (ftnlen)177);
+	errdp_(__global_state, "#", &minlon, (ftnlen)1);
+	errint_(__global_state, "#", &minix, (ftnlen)1);
+	errch_(__global_state, "#", inst, (ftnlen)1, inst_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZHULLAX", (ftnlen)8);
 	return 0;
-    } else if (maxlon > pi_() - 2e-12) {
-	setmsg_("Maximum boundary vector longitude in exterior face frame is"
-		" # radians. Maximum occurs at index #. This FOV does not con"
-		"form to the requirements of this routine. Instrument is #.", (
-		ftnlen)177);
-	errdp_("#", &maxlon, (ftnlen)1);
-	errint_("#", &maxix, (ftnlen)1);
-	errch_("#", inst, (ftnlen)1, inst_len);
-	sigerr_("SPICE(FOVTOOWIDE)", (ftnlen)17);
-	chkout_("ZZHULLAX", (ftnlen)8);
+    } else if (maxlon > pi_(__global_state) - 2e-12) {
+	setmsg_(__global_state, "Maximum boundary vector longitude in exteri"
+		"or face frame is # radians. Maximum occurs at index #. This "
+		"FOV does not conform to the requirements of this routine. In"
+		"strument is #.", (ftnlen)177);
+	errdp_(__global_state, "#", &maxlon, (ftnlen)1);
+	errint_(__global_state, "#", &maxix, (ftnlen)1);
+	errch_(__global_state, "#", inst, (ftnlen)1, inst_len);
+	sigerr_(__global_state, "SPICE(FOVTOOWIDE)", (ftnlen)17);
+	chkout_(__global_state, "ZZHULLAX", (ftnlen)8);
 	return 0;
     }
 
@@ -759,37 +771,37 @@ static zzhullax_state_t* get_zzhullax_state() {
 /*     face clockwise about +Z without contacting another boundary */
 /*     vector. */
 
-    delta = pi_() - maxlon;
+    delta = pi_(__global_state) - maxlon;
 
 /*     Rotate +Y by -DELTA/2 about +Z. The result is our candidate */
 /*     FOV axis. Make the axis vector unit length. */
 
     d__1 = -delta / 2;
-    vrotv_(yvec, zvec, &d__1, axis);
-    vhatip_(axis);
+    vrotv_(__global_state, yvec, zvec, &d__1, axis);
+    vhatip_(__global_state, axis);
 
 /*     If we have a viable result, ALL boundary vectors have */
 /*     angular separation less than HALFPI-MARGIN from AXIS. */
 
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	sep = vsep_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= 
-		i__2 ? i__2 : s_rnge("bounds", i__2, "zzhullax_", (ftnlen)794)
-		], axis);
-	if (sep > halfpi_() - 1e-12) {
-	    setmsg_("Boundary vector at index # has angular separation of # "
-		    "radians from candidate FOV axis. This FOV does not confo"
-		    "rm to the requirements of this routine. Instrument is #.",
-		     (ftnlen)167);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &sep, (ftnlen)1);
-	    errch_("#", inst, (ftnlen)1, inst_len);
-	    sigerr_("SPICE(FOVTOOWIDE)", (ftnlen)17);
-	    chkout_("ZZHULLAX", (ftnlen)8);
+	sep = vsep_(__global_state, &bounds[(i__2 = i__ * 3 - 3) < 3 * 
+		bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c,
+		 "bounds", i__2, "zzhullax_", (ftnlen)794)], axis);
+	if (sep > halfpi_(__global_state) - 1e-12) {
+	    setmsg_(__global_state, "Boundary vector at index # has angular "
+		    "separation of # radians from candidate FOV axis. This FO"
+		    "V does not conform to the requirements of this routine. "
+		    "Instrument is #.", (ftnlen)167);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &sep, (ftnlen)1);
+	    errch_(__global_state, "#", inst, (ftnlen)1, inst_len);
+	    sigerr_(__global_state, "SPICE(FOVTOOWIDE)", (ftnlen)17);
+	    chkout_(__global_state, "ZZHULLAX", (ftnlen)8);
 	    return 0;
 	}
     }
-    chkout_("ZZHULLAX", (ftnlen)8);
+    chkout_(__global_state, "ZZHULLAX", (ftnlen)8);
     return 0;
 } /* zzhullax_ */
 

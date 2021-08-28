@@ -8,8 +8,7 @@
 
 
 extern zzascii_init_t __zzascii_init;
-static zzascii_state_t* get_zzascii_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzascii_state_t* get_zzascii_state(cspice_t* state) {
 	if (!state->zzascii)
 		state->zzascii = __cspice_allocate_module(sizeof(
 	zzascii_state_t), &__zzascii_init, sizeof(__zzascii_init));
@@ -18,37 +17,42 @@ static zzascii_state_t* get_zzascii_state() {
 }
 
 /* $Procedure ZZASCII ( determine/verify EOL terminators in a text file ) */
-/* Subroutine */ int zzascii_(char *file, char *line, logical *check, char *
-	termin, ftnlen file_len, ftnlen line_len, ftnlen termin_len)
+/* Subroutine */ int zzascii_(cspice_t* __global_state, char *file, char *
+	line, logical *check, char *termin, ftnlen file_len, ftnlen line_len, 
+	ftnlen termin_len)
 {
     /* System generated locals */
     olist o__1;
     cllist cl__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen), f_open(olist *), f_clos(cllist *), s_rdue(
-	    cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), f_open(f2c_state_t*, olist *)
+	    , f_clos(f2c_state_t*, cllist *), s_rdue(f2c_state_t*, cilist *), 
+	    do_uio(f2c_state_t*, integer *, char *, ftnlen), e_rdue(
+	    f2c_state_t*);
 
     /* Local variables */
-    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzplatfm_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
     integer maccnt;
     integer reclen;
     char native[5];
     integer number;
     integer doscnt;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int getlun_(integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int getlun_(cspice_t*, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer unxcnt;
 
     /* Fortran I/O blocks */
@@ -56,7 +60,7 @@ static zzascii_state_t* get_zzascii_state() {
 
 
     /* Module state */
-    zzascii_state_t* __state = get_zzascii_state();
+    zzascii_state_t* __state = get_zzascii_state(__global_state);
 /* $ Abstract */
 
 /*     Returns a string indicating the line terminators of an ASCII file */
@@ -337,95 +341,95 @@ static zzascii_state_t* get_zzascii_state() {
 /*     Discovery check-in. Can't determine the terminator in RETURN */
 /*     mode. */
 
-    if (return_()) {
-	s_copy(termin, "?", termin_len, (ftnlen)1);
+    if (return_(__global_state)) {
+	s_copy(&__global_state->f2c, termin, "?", termin_len, (ftnlen)1);
 	return 0;
     }
 
 /*     Check-in to the error system. */
 
-    chkin_("ZZASCII", (ftnlen)7);
+    chkin_(__global_state, "ZZASCII", (ftnlen)7);
 
 /*     Retrieve the native line terminator. */
 
-    zzplatfm_("TEXT_FORMAT", native, (ftnlen)11, (ftnlen)5);
+    zzplatfm_(__global_state, "TEXT_FORMAT", native, (ftnlen)11, (ftnlen)5);
 
 /*     If it is VAX, return immediately with undefined terminator. */
 
-    if (eqstr_(native, "VAX", (ftnlen)5, (ftnlen)3)) {
-	s_copy(termin, "?", termin_len, (ftnlen)1);
-	chkout_("ZZASCII", (ftnlen)7);
+    if (eqstr_(__global_state, native, "VAX", (ftnlen)5, (ftnlen)3)) {
+	s_copy(&__global_state->f2c, termin, "?", termin_len, (ftnlen)1);
+	chkout_(__global_state, "ZZASCII", (ftnlen)7);
 	return 0;
     }
 
 /*     Set the record lenght that will be used to read data from */
 /*     the file. */
 
-    reclen = i_len(line, line_len);
+    reclen = i_len(&__global_state->f2c, line, line_len);
 
 /*     Check the length of the work string is sufficient to perform the */
 /*     operations. Less than 3 is a no-op. */
 
-    if (i_len(line, line_len) < 3) {
-	s_copy(termin, "?", termin_len, (ftnlen)1);
-	setmsg_("Work string lacks sufficient length to perform operation.", (
-		ftnlen)57);
-	sigerr_("SPICE(STRINGTOOSHORT)", (ftnlen)21);
-	chkout_("ZZASCII", (ftnlen)7);
+    if (i_len(&__global_state->f2c, line, line_len) < 3) {
+	s_copy(&__global_state->f2c, termin, "?", termin_len, (ftnlen)1);
+	setmsg_(__global_state, "Work string lacks sufficient length to perf"
+		"orm operation.", (ftnlen)57);
+	sigerr_(__global_state, "SPICE(STRINGTOOSHORT)", (ftnlen)21);
+	chkout_(__global_state, "ZZASCII", (ftnlen)7);
 	return 0;
     }
 
 /*     Find a free logical unit for file access. */
 
-    getlun_(&number);
+    getlun_(__global_state, &number);
 
 /*     Open the file for DIRECT access. */
 
     o__1.oerr = 1;
     o__1.ounit = number;
-    o__1.ofnmlen = rtrim_(file, file_len);
+    o__1.ofnmlen = rtrim_(__global_state, file, file_len);
     o__1.ofnm = file;
     o__1.orl = reclen;
     o__1.osta = "OLD";
     o__1.oacc = "DIRECT";
     o__1.ofm = 0;
     o__1.oblnk = 0;
-    iostat = f_open(&o__1);
+    iostat = f_open(&__global_state->f2c, &o__1);
     if (iostat != 0) {
 
 /*        The open failed, can't determine the terminator if the routine */
 /*        can't open the file. */
 
-	s_copy(termin, "?", termin_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, termin, "?", termin_len, (ftnlen)1);
 
 /*        Execute a close, J.I.C. */
 
 	cl__1.cerr = 0;
 	cl__1.cunit = number;
 	cl__1.csta = 0;
-	f_clos(&cl__1);
-	setmsg_("File open failed for file '$1'. IOSTAT  value $2.", (ftnlen)
-		49);
-	errch_("$1", file, (ftnlen)2, file_len);
-	errint_("$2", &iostat, (ftnlen)2);
-	sigerr_("SPICE(FILEOPENFAIL)", (ftnlen)19);
-	chkout_("ZZASCII", (ftnlen)7);
+	f_clos(&__global_state->f2c, &cl__1);
+	setmsg_(__global_state, "File open failed for file '$1'. IOSTAT  val"
+		"ue $2.", (ftnlen)49);
+	errch_(__global_state, "$1", file, (ftnlen)2, file_len);
+	errint_(__global_state, "$2", &iostat, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(FILEOPENFAIL)", (ftnlen)19);
+	chkout_(__global_state, "ZZASCII", (ftnlen)7);
 	return 0;
     }
 
 /*     Read a line into the LINE variable assigned by the user. */
 
-    s_copy(line, " ", line_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, line, " ", line_len, (ftnlen)1);
     __state->io___5.ciunit = number;
-    iostat = s_rdue(&__state->io___5);
+    iostat = s_rdue(&__global_state->f2c, &__state->io___5);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, line, line_len);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, line, line_len);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rdue();
+    iostat = e_rdue(&__global_state->f2c);
 L100001:
     if (iostat != 0) {
 
@@ -434,15 +438,15 @@ L100001:
 /*        making wrong determination based on it, set terminator to */
 /*        undefined and return. */
 
-	s_copy(termin, "?", termin_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, termin, "?", termin_len, (ftnlen)1);
 
 /*        Execute a close, J.I.C. */
 
 	cl__1.cerr = 0;
 	cl__1.cunit = number;
 	cl__1.csta = 0;
-	f_clos(&cl__1);
-	chkout_("ZZASCII", (ftnlen)7);
+	f_clos(&__global_state->f2c, &cl__1);
+	chkout_(__global_state, "ZZASCII", (ftnlen)7);
 	return 0;
     }
 
@@ -454,7 +458,7 @@ L100001:
     unxcnt = 0;
     maccnt = 0;
     i__ = 1;
-    while(i__ < i_len(line, line_len)) {
+    while(i__ < i_len(&__global_state->f2c, line, line_len)) {
 
 /*        Check for ICHAR values of 10 (LF) and 13 (CR). */
 
@@ -490,18 +494,18 @@ L100001:
 
 /*        Only DOS terminator counter is non-zero. ID the file as DOS. */
 
-	s_copy(termin, "CR-LF", termin_len, (ftnlen)5);
+	s_copy(&__global_state->f2c, termin, "CR-LF", termin_len, (ftnlen)5);
     } else if (doscnt == 0 && unxcnt > 0 && maccnt == 0) {
 
 /*        Only Unix terminator counter is non-zero. ID the file as UNIX. */
 
-	s_copy(termin, "LF", termin_len, (ftnlen)2);
+	s_copy(&__global_state->f2c, termin, "LF", termin_len, (ftnlen)2);
     } else if (doscnt == 0 && unxcnt == 0 && maccnt > 0) {
 
 /*        Only Mac terminator counter is non-zero. ID the file as Mac */
 /*        Classic. */
 
-	s_copy(termin, "CR", termin_len, (ftnlen)2);
+	s_copy(&__global_state->f2c, termin, "CR", termin_len, (ftnlen)2);
     } else {
 
 /*        We can get here in two cases. First if the line did not */
@@ -509,7 +513,7 @@ L100001:
 /*        one kind of terminators. In either case the format of the file */
 /*        is unclear. */
 
-	s_copy(termin, "?", termin_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, termin, "?", termin_len, (ftnlen)1);
     }
 
 /*     Close the file. */
@@ -517,7 +521,7 @@ L100001:
     cl__1.cerr = 0;
     cl__1.cunit = number;
     cl__1.csta = 0;
-    f_clos(&cl__1);
+    f_clos(&__global_state->f2c, &cl__1);
 
 /*     If we were told check the terminator against the native one, do */
 /*     it. */
@@ -527,25 +531,26 @@ L100001:
 /*        If the terminator was identified and does not match the native */
 /*        one, error out. */
 
-	if (! eqstr_(termin, native, termin_len, (ftnlen)5) && ! eqstr_(
-		termin, "?", termin_len, (ftnlen)1)) {
-	    setmsg_("Text file '$1' contains lines terminated with '$2' whil"
-		    "e the expected terminator for this platform is '$3'. SPI"
-		    "CE cannot process the file in the current form. This pro"
-		    "blem likely occurred because the file was copied in bina"
-		    "ry mode between operating systems where the operating sy"
-		    "stems use different text line terminators. Try convertin"
-		    "g the file to native text form using a utility such as d"
-		    "os2unix or unix2dos.", (ftnlen)411);
-	    errch_("$1", file, (ftnlen)2, file_len);
-	    errch_("$2", termin, (ftnlen)2, termin_len);
-	    errch_("$3", native, (ftnlen)2, (ftnlen)5);
-	    sigerr_("SPICE(INCOMPATIBLEEOL)", (ftnlen)22);
-	    chkout_("ZZASCII", (ftnlen)7);
+	if (! eqstr_(__global_state, termin, native, termin_len, (ftnlen)5) &&
+		 ! eqstr_(__global_state, termin, "?", termin_len, (ftnlen)1))
+		 {
+	    setmsg_(__global_state, "Text file '$1' contains lines terminate"
+		    "d with '$2' while the expected terminator for this platf"
+		    "orm is '$3'. SPICE cannot process the file in the curren"
+		    "t form. This problem likely occurred because the file wa"
+		    "s copied in binary mode between operating systems where "
+		    "the operating systems use different text line terminator"
+		    "s. Try converting the file to native text form using a u"
+		    "tility such as dos2unix or unix2dos.", (ftnlen)411);
+	    errch_(__global_state, "$1", file, (ftnlen)2, file_len);
+	    errch_(__global_state, "$2", termin, (ftnlen)2, termin_len);
+	    errch_(__global_state, "$3", native, (ftnlen)2, (ftnlen)5);
+	    sigerr_(__global_state, "SPICE(INCOMPATIBLEEOL)", (ftnlen)22);
+	    chkout_(__global_state, "ZZASCII", (ftnlen)7);
 	    return 0;
 	}
     }
-    chkout_("ZZASCII", (ftnlen)7);
+    chkout_(__global_state, "ZZASCII", (ftnlen)7);
     return 0;
 } /* zzascii_ */
 

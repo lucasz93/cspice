@@ -8,8 +8,7 @@
 
 
 extern ckgr04_init_t __ckgr04_init;
-static ckgr04_state_t* get_ckgr04_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckgr04_state_t* get_ckgr04_state(cspice_t* state) {
 	if (!state->ckgr04)
 		state->ckgr04 = __cspice_allocate_module(sizeof(
 	ckgr04_state_t), &__ckgr04_init, sizeof(__ckgr04_init));
@@ -18,40 +17,41 @@ static ckgr04_state_t* get_ckgr04_state() {
 }
 
 /* $Procedure      CKGR04 ( C-kernel, get record, type 04 ) */
-/* Subroutine */ int ckgr04_(integer *handle, doublereal *descr, integer *
-	recno, doublereal *record)
+/* Subroutine */ int ckgr04_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, integer *recno, doublereal *record)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer nrec;
     integer ends[1];
     integer k;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cknr04_(integer *, doublereal *, integer *);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    integer numall;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    integer numcft[7];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cknr04_(cspice_t*, integer *, doublereal *, 
+	    integer *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
 	    integer *, doublereal *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    integer numall;
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    integer numcft[7];
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgfpkt_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer icd[6];
-    extern /* Subroutine */ int zzck4d2i_(doublereal *, integer *, doublereal 
-	    *, integer *);
+    extern /* Subroutine */ int zzck4d2i_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, integer *);
 
 
     /* Module state */
-    ckgr04_state_t* __state = get_ckgr04_state();
+    ckgr04_state_t* __state = get_ckgr04_state(__global_state);
 /* $ Abstract */
 
 /*     Given the handle and descriptor of a type 4 segment in */
@@ -522,53 +522,54 @@ static ckgr04_state_t* get_ckgr04_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKGR04", (ftnlen)6);
+	chkin_(__global_state, "CKGR04", (ftnlen)6);
     }
 
 /*     Unpack descriptor and check segment data type. Signal an error */
 /*     if it's not 4. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dcd, icd);
     if (icd[2] != 4) {
-	setmsg_("Data type of the segment should be 4: Passed  descriptor sh"
-		"ows type = #.", (ftnlen)72);
-	errint_("#", &icd[2], (ftnlen)1);
-	sigerr_("SPICE(CKWRONGDATATYPE)", (ftnlen)22);
-	chkout_("CKGR04", (ftnlen)6);
+	setmsg_(__global_state, "Data type of the segment should be 4: Passe"
+		"d  descriptor shows type = #.", (ftnlen)72);
+	errint_(__global_state, "#", &icd[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CKWRONGDATATYPE)", (ftnlen)22);
+	chkout_(__global_state, "CKGR04", (ftnlen)6);
 	return 0;
     }
 
 /*     If a request was made for a data record which doesn't */
 /*     exist, then signal an error and leave. */
 
-    cknr04_(handle, descr, &nrec);
+    cknr04_(__global_state, handle, descr, &nrec);
     if (*recno < 1 || *recno > nrec) {
-	setmsg_("Requested record number (#) does not exist. There are # rec"
-		"ords in the segment.", (ftnlen)79);
-	errint_("#", recno, (ftnlen)1);
-	errint_("#", &nrec, (ftnlen)1);
-	sigerr_("SPICE(CKNONEXISTREC)", (ftnlen)20);
-	chkout_("CKGR04", (ftnlen)6);
+	setmsg_(__global_state, "Requested record number (#) does not exist."
+		" There are # records in the segment.", (ftnlen)79);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	errint_(__global_state, "#", &nrec, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CKNONEXISTREC)", (ftnlen)20);
+	chkout_(__global_state, "CKGR04", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the data record indexed by RECNO. */
 
-    sgfpkt_(handle, descr, recno, recno, record, ends);
+    sgfpkt_(__global_state, handle, descr, recno, recno, record, ends);
 
 /*     Decode 7 numbers of coefficients from double precision value. */
 
-    zzck4d2i_(&record[2], &__state->c__7, &__state->c_b15, numcft);
+    zzck4d2i_(__global_state, &record[2], &__state->c__7, &__state->c_b15, 
+	    numcft);
 
 /*     Compute total number of coefficients in the fetched packet. */
 
     numall = 0;
     for (k = 1; k <= 7; ++k) {
-	numall += numcft[(i__1 = k - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		"numcft", i__1, "ckgr04_", (ftnlen)369)];
+	numall += numcft[(i__1 = k - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "numcft", i__1, "ckgr04_", (ftnlen)369)];
     }
 
 /*     Move polynomial coefficients to the right to free space for */
@@ -580,12 +581,13 @@ static ckgr04_state_t* get_ckgr04_state() {
     }
     for (k = 1; k <= 7; ++k) {
 	record[k + 1] = (doublereal) numcft[(i__1 = k - 1) < 7 && 0 <= i__1 ? 
-		i__1 : s_rnge("numcft", i__1, "ckgr04_", (ftnlen)382)];
+		i__1 : s_rnge(&__global_state->f2c, "numcft", i__1, "ckgr04_",
+		 (ftnlen)382)];
     }
 
 /*     All done. */
 
-    chkout_("CKGR04", (ftnlen)6);
+    chkout_(__global_state, "CKGR04", (ftnlen)6);
     return 0;
 } /* ckgr04_ */
 

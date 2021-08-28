@@ -8,23 +8,22 @@
 
 
 typedef int zzinrypl_state_t;
-static zzinrypl_state_t* get_zzinrypl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzinrypl_state_t* get_zzinrypl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZINRYPL ( Simplified intersection of ray and plane ) */
-/* Subroutine */ int zzinrypl_(doublereal *vertex, doublereal *udir, 
-	doublereal *uplnml, doublereal *const__, doublereal *maxd, integer *
-	nxpts, doublereal *xpt)
+/* Subroutine */ int zzinrypl_(cspice_t* __global_state, doublereal *vertex, 
+	doublereal *udir, doublereal *uplnml, doublereal *const__, doublereal 
+	*maxd, integer *nxpts, doublereal *xpt)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
     doublereal lpar;
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal h__;
     doublereal s;
     doublereal dircon;
@@ -32,7 +31,7 @@ static zzinrypl_state_t* get_zzinrypl_state() {
 
 
     /* Module state */
-    zzinrypl_state_t* __state = get_zzinrypl_state();
+    zzinrypl_state_t* __state = get_zzinrypl_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -205,12 +204,12 @@ static zzinrypl_state_t* get_zzinrypl_state() {
 
 /*     VTXCON is the plane constant of the ray's vertex. */
 
-    vtxcon = vdot_(vertex, uplnml);
+    vtxcon = vdot_(__global_state, vertex, uplnml);
 
 /*     DIRCON is the length of the component of the ray's */
 /*     direction vector in the direction of UPLNML. */
 
-    dircon = vdot_(udir, uplnml);
+    dircon = vdot_(__global_state, udir, uplnml);
 
 /*     Dispose of the easy non-intersection cases. (The ray */
 /*     lying in the plane is considered a non-intersection case, */
@@ -232,7 +231,7 @@ static zzinrypl_state_t* get_zzinrypl_state() {
 /*           intercept is the ray's vertex. */
 
 	    *nxpts = 1;
-	    vequ_(vertex, xpt);
+	    vequ_(__global_state, vertex, xpt);
 	}
 	return 0;
     }

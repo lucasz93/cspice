@@ -8,19 +8,19 @@
 
 
 typedef int wdindx_state_t;
-static wdindx_state_t* get_wdindx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wdindx_state_t* get_wdindx_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            WDINDX ( Index of a Word Within a String ) */
-integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
+integer wdindx_(cspice_t* __global_state, char *string, char *word, ftnlen 
+	string_len, ftnlen word_len)
 {
     /* System generated locals */
     integer ret_val, i__1, i__2;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
@@ -29,15 +29,15 @@ integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
     integer endwd;
     integer wdlen;
     integer bgtond;
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer begstr;
-    extern integer frstnb_(char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
     integer endstr;
     integer strlen;
 
 
     /* Module state */
-    wdindx_state_t* __state = get_wdindx_state();
+    wdindx_state_t* __state = get_wdindx_state(__global_state);
 /* $ Abstract */
 
 /*     Find the index of a word within a string.  If the word does not */
@@ -165,10 +165,10 @@ integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
 
 /*     Find the ends of the word and input string. */
 
-    endstr = lastnb_(string, string_len);
-    begstr = frstnb_(string, string_len);
-    endwd = lastnb_(word, word_len);
-    begwd = frstnb_(word, word_len);
+    endstr = lastnb_(__global_state, string, string_len);
+    begstr = frstnb_(__global_state, string, string_len);
+    endwd = lastnb_(__global_state, word, word_len);
+    begwd = frstnb_(__global_state, word, word_len);
 
 /*     Get the offset from the beginning of the word to the end of the */
 /*     word, the word length and the string length. */
@@ -191,8 +191,8 @@ integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
 /*        ... the word and string have the same non-blank length. */
 /*        Either they match up or they don't.  Find out and return. */
 
-	if (s_cmp(string + (begstr - 1), word + (begwd - 1), endstr - (begstr 
-		- 1), endwd - (begwd - 1)) == 0) {
+	if (s_cmp(&__global_state->f2c, string + (begstr - 1), word + (begwd 
+		- 1), endstr - (begstr - 1), endwd - (begwd - 1)) == 0) {
 	    ret_val = begstr;
 	} else {
 	    ret_val = 0;
@@ -207,9 +207,10 @@ integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
     i__ = begstr;
     j = i__ + bgtond;
     i__1 = j;
-    if (s_cmp(string + (i__ - 1), word + (begwd - 1), j - (i__ - 1), endwd - (
-	    begwd - 1)) == 0 && s_cmp(string + i__1, " ", j + 1 - i__1, (
-	    ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, string + (i__ - 1), word + (begwd - 1), j 
+	    - (i__ - 1), endwd - (begwd - 1)) == 0 && s_cmp(&
+	    __global_state->f2c, string + i__1, " ", j + 1 - i__1, (ftnlen)1) 
+	    == 0) {
 	ret_val = i__;
 	return ret_val;
     }
@@ -222,9 +223,10 @@ integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
     for(;;) { /* while(complicated condition) */
 	i__1 = i__ - 2;
 	i__2 = j;
-	if (!(j < endstr && ! (s_cmp(string + (i__ - 1), word + (begwd - 1), 
-		j - (i__ - 1), endwd - (begwd - 1)) == 0 && s_cmp(string + 
-		i__1, " ", i__ - 1 - i__1, (ftnlen)1) == 0 && s_cmp(string + 
+	if (!(j < endstr && ! (s_cmp(&__global_state->f2c, string + (i__ - 1),
+		 word + (begwd - 1), j - (i__ - 1), endwd - (begwd - 1)) == 0 
+		&& s_cmp(&__global_state->f2c, string + i__1, " ", i__ - 1 - 
+		i__1, (ftnlen)1) == 0 && s_cmp(&__global_state->f2c, string + 
 		i__2, " ", j + 1 - i__2, (ftnlen)1) == 0)))
 		break;
 	++i__;
@@ -236,9 +238,10 @@ integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
 
     if (j == endstr) {
 	i__1 = i__ - 2;
-	if (s_cmp(string + i__1, " ", i__ - 1 - i__1, (ftnlen)1) == 0 && 
-		s_cmp(string + (i__ - 1), word + (begwd - 1), j - (i__ - 1), 
-		endwd - (begwd - 1)) == 0) {
+	if (s_cmp(&__global_state->f2c, string + i__1, " ", i__ - 1 - i__1, (
+		ftnlen)1) == 0 && s_cmp(&__global_state->f2c, string + (i__ - 
+		1), word + (begwd - 1), j - (i__ - 1), endwd - (begwd - 1)) ==
+		 0) {
 	    ret_val = i__;
 	} else {
 	    ret_val = 0;

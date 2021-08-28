@@ -8,8 +8,7 @@
 
 
 extern zzrefch1_init_t __zzrefch1_init;
-static zzrefch1_state_t* get_zzrefch1_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzrefch1_state_t* get_zzrefch1_state(cspice_t* state) {
 	if (!state->zzrefch1)
 		state->zzrefch1 = __cspice_allocate_module(sizeof(
 	zzrefch1_state_t), &__zzrefch1_init, sizeof(__zzrefch1_init));
@@ -18,47 +17,48 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 }
 
 /* $Procedure      ZZREFCH1 (Reference frame Change) */
-/* Subroutine */ int zzrefch1_(integer *frame1, integer *frame2, doublereal *
-	et, doublereal *rotate)
+/* Subroutine */ int zzrefch1_(cspice_t* __global_state, integer *frame1, 
+	integer *frame2, doublereal *et, doublereal *rotate)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer node;
     logical done;
     integer cent;
     integer this__;
-    extern /* Subroutine */ int zzrotgt1_(integer *, doublereal *, doublereal 
-	    *, integer *, logical *);
-    extern /* Subroutine */ int zznofcon_(doublereal *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzrotgt1_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zznofcon_(cspice_t*, doublereal *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
     integer i__;
     integer j;
     integer frame[10];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ident_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ident_(cspice_t*, doublereal *);
     integer class__;
     logical found;
     integer relto;
-    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzrxr_(doublereal *, integer *, doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int xpose_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzrxr_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern logical failed_(cspice_t*);
     integer cmnode;
-    extern integer isrchi_(integer *, integer *, integer *);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
     integer clssid;
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
     logical gotone;
     char errmsg[1840];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal tmprot[9]	/* was [3][3] */;
     integer inc;
     integer get;
@@ -68,7 +68,7 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 
 
     /* Module state */
-    zzrefch1_state_t* __state = get_zzrefch1_state();
+    zzrefch1_state_t* __state = get_zzrefch1_state(__global_state);
 /* $ Abstract */
 
 /*     Return the transformation matrix from one */
@@ -386,63 +386,66 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZREFCH1", (ftnlen)8);
+    chkin_(__global_state, "ZZREFCH1", (ftnlen)8);
 
 /*     Do the obvious thing first.  If FRAME1 and FRAME2 are the */
 /*     same then we simply return the identity matrix. */
 
     if (*frame1 == *frame2) {
-	ident_(rotate);
-	chkout_("ZZREFCH1", (ftnlen)8);
+	ident_(__global_state, rotate);
+	chkout_(__global_state, "ZZREFCH1", (ftnlen)8);
 	return 0;
     }
 
 /*     Now perform the obvious check to make sure that both */
 /*     frames are recognized. */
 
-    frinfo_(frame1, &cent, &class__, &clssid, &found);
+    frinfo_(__global_state, frame1, &cent, &class__, &clssid, &found);
     if (! found) {
-	setmsg_("The number # is not a recognized id-code for a reference fr"
-		"ame. ", (ftnlen)64);
-	errint_("#", frame1, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
-	chkout_("ZZREFCH1", (ftnlen)8);
+	setmsg_(__global_state, "The number # is not a recognized id-code fo"
+		"r a reference frame. ", (ftnlen)64);
+	errint_(__global_state, "#", frame1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	chkout_(__global_state, "ZZREFCH1", (ftnlen)8);
 	return 0;
     }
-    frinfo_(frame2, &cent, &class__, &clssid, &found);
+    frinfo_(__global_state, frame2, &cent, &class__, &clssid, &found);
     if (! found) {
-	setmsg_("The number # is not a recognized id-code for a reference fr"
-		"ame. ", (ftnlen)64);
-	errint_("#", frame2, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
-	chkout_("ZZREFCH1", (ftnlen)8);
+	setmsg_(__global_state, "The number # is not a recognized id-code fo"
+		"r a reference frame. ", (ftnlen)64);
+	errint_(__global_state, "#", frame2, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	chkout_(__global_state, "ZZREFCH1", (ftnlen)8);
 	return 0;
     }
     node = 1;
-    frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", i__1, 
-	    "zzrefch1_", (ftnlen)287)] = *frame1;
+    frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "frame", i__1, "zzrefch1_", (ftnlen)287)] = *
+	    frame1;
     found = TRUE_;
 
 /*     Follow the chain of rotations until we run into */
 /*     one that rotates to J2000 (frame id = 1) or we hit FRAME2. */
 
-    while(frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", 
-	    i__1, "zzrefch1_", (ftnlen)293)] != 1 && node < 10 && frame[(i__2 
-	    = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("frame", i__2, 
-	    "zzrefch1_", (ftnlen)293)] != *frame2 && found) {
+    while(frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "frame", i__1, "zzrefch1_", (ftnlen)293)] != 
+	    1 && node < 10 && frame[(i__2 = node - 1) < 10 && 0 <= i__2 ? 
+	    i__2 : s_rnge(&__global_state->f2c, "frame", i__2, "zzrefch1_", (
+	    ftnlen)293)] != *frame2 && found) {
 
 /*        Find out what rotation is available for this */
 /*        frame. */
 
-	zzrotgt1_(&frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"frame", i__1, "zzrefch1_", (ftnlen)301)], et, &rot[(i__2 = (
-		node * 3 + 1) * 3 - 12) < 126 && 0 <= i__2 ? i__2 : s_rnge(
+	zzrotgt1_(__global_state, &frame[(i__1 = node - 1) < 10 && 0 <= i__1 ?
+		 i__1 : s_rnge(&__global_state->f2c, "frame", i__1, "zzrefch"
+		"1_", (ftnlen)301)], et, &rot[(i__2 = (node * 3 + 1) * 3 - 12) 
+		< 126 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
 		"rot", i__2, "zzrefch1_", (ftnlen)301)], &frame[(i__3 = node) 
-		< 10 && 0 <= i__3 ? i__3 : s_rnge("frame", i__3, "zzrefch1_", 
-		(ftnlen)301)], &found);
+		< 10 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "fra"
+		"me", i__3, "zzrefch1_", (ftnlen)301)], &found);
 	if (found) {
 
 /*           We found a rotation matrix.  ROT(1,1,NODE) */
@@ -453,10 +456,11 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 	    ++node;
 	}
     }
-    done = frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", 
-	    i__1, "zzrefch1_", (ftnlen)317)] == 1 || frame[(i__2 = node - 1) <
-	     10 && 0 <= i__2 ? i__2 : s_rnge("frame", i__2, "zzrefch1_", (
-	    ftnlen)317)] == *frame2 || ! found;
+    done = frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "frame", i__1, "zzrefch1_", (ftnlen)317)] == 
+	    1 || frame[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "frame", i__2, "zzrefch1_", (ftnlen)317)] == 
+	    *frame2 || ! found;
     while(! done) {
 
 /*        The only way to get to this point is to have run out of */
@@ -466,9 +470,10 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 /*        chain is.  We'll do this until we get to one of the */
 /*        root classes or we run into FRAME2. */
 
-	zzrotgt1_(&frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"frame", i__1, "zzrefch1_", (ftnlen)331)], et, &rot[(i__2 = (
-		node * 3 + 1) * 3 - 12) < 126 && 0 <= i__2 ? i__2 : s_rnge(
+	zzrotgt1_(__global_state, &frame[(i__1 = node - 1) < 10 && 0 <= i__1 ?
+		 i__1 : s_rnge(&__global_state->f2c, "frame", i__1, "zzrefch"
+		"1_", (ftnlen)331)], et, &rot[(i__2 = (node * 3 + 1) * 3 - 12) 
+		< 126 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
 		"rot", i__2, "zzrefch1_", (ftnlen)331)], &relto, &found);
 	if (found) {
 
@@ -478,17 +483,20 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 /*           that ROT(1,1,NODE-1) should be replaced with the */
 /*           rotation from FRAME(NODE) to RELTO. */
 
-	    frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame",
-		     i__1, "zzrefch1_", (ftnlen)342)] = relto;
-	    zzrxr_(&rot[(i__1 = ((node - 1) * 3 + 1) * 3 - 12) < 126 && 0 <= 
-		    i__1 ? i__1 : s_rnge("rot", i__1, "zzrefch1_", (ftnlen)
-		    343)], &__state->c__2, tmprot);
+	    frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "frame", i__1, "zzrefch1_", (ftnlen)
+		    342)] = relto;
+	    zzrxr_(__global_state, &rot[(i__1 = ((node - 1) * 3 + 1) * 3 - 12)
+		     < 126 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "rot", i__1, "zzrefch1_", (ftnlen)343)], &__state->c__2, 
+		    tmprot);
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		for (j = 1; j <= 3; ++j) {
 		    rot[(i__1 = i__ + (j + (node - 1) * 3) * 3 - 13) < 126 && 
-			    0 <= i__1 ? i__1 : s_rnge("rot", i__1, "zzrefch1_"
-			    , (ftnlen)347)] = tmprot[(i__2 = i__ + j * 3 - 4) 
-			    < 9 && 0 <= i__2 ? i__2 : s_rnge("tmprot", i__2, 
+			    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			    "rot", i__1, "zzrefch1_", (ftnlen)347)] = tmprot[(
+			    i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "tmprot", i__2, 
 			    "zzrefch1_", (ftnlen)347)];
 		}
 	    }
@@ -498,10 +506,11 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 /*        or if the last frame is FRAME2 or if we simply couldn't get */
 /*        another rotation. */
 
-	done = frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"frame", i__1, "zzrefch1_", (ftnlen)357)] == 1 || frame[(i__2 
-		= node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("frame", i__2, 
-		"zzrefch1_", (ftnlen)357)] == *frame2 || ! found;
+	done = frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "frame", i__1, "zzrefch1_", (ftnlen)357)]
+		 == 1 || frame[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "frame", i__2, "zzrefch1_", (
+		ftnlen)357)] == *frame2 || ! found;
     }
 
 /*     Right now we have the following situation.  We have in hand */
@@ -534,15 +543,16 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 
 /*     We now have to do essentially the same thing for FRAME2. */
 
-    if (frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", 
-	    i__1, "zzrefch1_", (ftnlen)395)] == *frame2) {
+    if (frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "frame", i__1, "zzrefch1_", (ftnlen)395)] == 
+	    *frame2) {
 
 /*        We can handle this one immediately with the private routine */
 /*        ZZRXR which multiplies a series of matrices. */
 
 	i__1 = node - 1;
-	zzrxr_(rot, &i__1, rotate);
-	chkout_("ZZREFCH1", (ftnlen)8);
+	zzrxr_(__global_state, rot, &i__1, rotate);
+	chkout_(__global_state, "ZZREFCH1", (ftnlen)8);
 	return 0;
     }
 
@@ -586,22 +596,23 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 /*           This is the first pass, just put the rotation */
 /*           directly into ROT2(,,PUT). */
 
-	    zzrotgt1_(&this__, et, &rot2[(i__1 = (put * 3 + 1) * 3 - 12) < 18 
-		    && 0 <= i__1 ? i__1 : s_rnge("rot2", i__1, "zzrefch1_", (
-		    ftnlen)452)], &relto, &found);
+	    zzrotgt1_(__global_state, &this__, et, &rot2[(i__1 = (put * 3 + 1)
+		     * 3 - 12) < 18 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "rot2", i__1, "zzrefch1_", (ftnlen)
+		    452)], &relto, &found);
 	    if (found) {
 		this__ = relto;
 		get = put;
 		put += inc;
 		inc = -inc;
-		cmnode = isrchi_(&this__, &node, frame);
+		cmnode = isrchi_(__global_state, &this__, &node, frame);
 		gotone = cmnode > 0;
 	    }
 	} else {
 
 /*           Fetch the rotation into a temporary spot TMPROT */
 
-	    zzrotgt1_(&this__, et, tmprot, &relto, &found);
+	    zzrotgt1_(__global_state, &this__, et, tmprot, &relto, &found);
 	    if (found) {
 
 /*              Next multiply TMPROT on the right by the last partial */
@@ -610,23 +621,26 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 		for (i__ = 1; i__ <= 3; ++i__) {
 		    for (j = 1; j <= 3; ++j) {
 			rot2[(i__1 = i__ + (j + put * 3) * 3 - 13) < 18 && 0 
-				<= i__1 ? i__1 : s_rnge("rot2", i__1, "zzref"
-				"ch1_", (ftnlen)478)] = tmprot[(i__2 = i__ - 1)
-				 < 9 && 0 <= i__2 ? i__2 : s_rnge("tmprot", 
+				<= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"rot2", i__1, "zzrefch1_", (ftnlen)478)] = 
+				tmprot[(i__2 = i__ - 1) < 9 && 0 <= i__2 ? 
+				i__2 : s_rnge(&__global_state->f2c, "tmprot", 
 				i__2, "zzrefch1_", (ftnlen)478)] * rot2[(i__3 
 				= (j + get * 3) * 3 - 12) < 18 && 0 <= i__3 ? 
-				i__3 : s_rnge("rot2", i__3, "zzrefch1_", (
-				ftnlen)478)] + tmprot[(i__4 = i__ + 2) < 9 && 
-				0 <= i__4 ? i__4 : s_rnge("tmprot", i__4, 
+				i__3 : s_rnge(&__global_state->f2c, "rot2", 
+				i__3, "zzrefch1_", (ftnlen)478)] + tmprot[(
+				i__4 = i__ + 2) < 9 && 0 <= i__4 ? i__4 : 
+				s_rnge(&__global_state->f2c, "tmprot", i__4, 
 				"zzrefch1_", (ftnlen)478)] * rot2[(i__5 = (j 
 				+ get * 3) * 3 - 11) < 18 && 0 <= i__5 ? i__5 
-				: s_rnge("rot2", i__5, "zzrefch1_", (ftnlen)
-				478)] + tmprot[(i__6 = i__ + 5) < 9 && 0 <= 
-				i__6 ? i__6 : s_rnge("tmprot", i__6, "zzrefc"
+				: s_rnge(&__global_state->f2c, "rot2", i__5, 
+				"zzrefch1_", (ftnlen)478)] + tmprot[(i__6 = 
+				i__ + 5) < 9 && 0 <= i__6 ? i__6 : s_rnge(&
+				__global_state->f2c, "tmprot", i__6, "zzrefc"
 				"h1_", (ftnlen)478)] * rot2[(i__7 = (j + get * 
 				3) * 3 - 10) < 18 && 0 <= i__7 ? i__7 : 
-				s_rnge("rot2", i__7, "zzrefch1_", (ftnlen)478)
-				];
+				s_rnge(&__global_state->f2c, "rot2", i__7, 
+				"zzrefch1_", (ftnlen)478)];
 		    }
 		}
 
@@ -639,7 +653,7 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 		put += inc;
 		inc = -inc;
 		this__ = relto;
-		cmnode = isrchi_(&this__, &node, frame);
+		cmnode = isrchi_(__global_state, &this__, &node, frame);
 		gotone = cmnode > 0;
 	    }
 	}
@@ -658,25 +672,26 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 /*     get from FRAME1 to FRAME2. */
 
     if (! gotone) {
-	zznofcon_(et, frame1, &frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("frame", i__1, "zzrefch1_", (ftnlen)525)], 
-		frame2, &this__, errmsg, (ftnlen)1840);
-	if (failed_()) {
+	zznofcon_(__global_state, et, frame1, &frame[(i__1 = node - 1) < 10 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "frame", 
+		i__1, "zzrefch1_", (ftnlen)525)], frame2, &this__, errmsg, (
+		ftnlen)1840);
+	if (failed_(__global_state)) {
 
 /*           We were unable to create the error message. This */
 /*           unfortunate situation could arise if a frame kernel */
 /*           is corrupted. */
 
-	    chkout_("ZZREFCH1", (ftnlen)8);
+	    chkout_(__global_state, "ZZREFCH1", (ftnlen)8);
 	    return 0;
 	}
 
 /*        The normal case: signal an error with a descriptive long */
 /*        error message. */
 
-	setmsg_(errmsg, (ftnlen)1840);
-	sigerr_("SPICE(NOFRAMECONNECT)", (ftnlen)21);
-	chkout_("ZZREFCH1", (ftnlen)8);
+	setmsg_(__global_state, errmsg, (ftnlen)1840);
+	sigerr_(__global_state, "SPICE(NOFRAMECONNECT)", (ftnlen)21);
+	chkout_(__global_state, "ZZREFCH1", (ftnlen)8);
 	return 0;
     }
 
@@ -699,12 +714,13 @@ static zzrefch1_state_t* get_zzrefch1_state() {
 /*     sequence of rotation matrices together to get the */
 /*     result from FRAME1 to FRAME2. */
 
-    xpose_(&rot2[(i__1 = (get * 3 + 1) * 3 - 12) < 18 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rot2", i__1, "zzrefch1_", (ftnlen)568)], &rot[(i__2 = (
-	    cmnode * 3 + 1) * 3 - 12) < 126 && 0 <= i__2 ? i__2 : s_rnge(
-	    "rot", i__2, "zzrefch1_", (ftnlen)568)]);
-    zzrxr_(rot, &cmnode, rotate);
-    chkout_("ZZREFCH1", (ftnlen)8);
+    xpose_(__global_state, &rot2[(i__1 = (get * 3 + 1) * 3 - 12) < 18 && 0 <= 
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rot2", i__1, "zzrefc"
+	    "h1_", (ftnlen)568)], &rot[(i__2 = (cmnode * 3 + 1) * 3 - 12) < 
+	    126 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "rot", 
+	    i__2, "zzrefch1_", (ftnlen)568)]);
+    zzrxr_(__global_state, rot, &cmnode, rotate);
+    chkout_(__global_state, "ZZREFCH1", (ftnlen)8);
     return 0;
 } /* zzrefch1_ */
 

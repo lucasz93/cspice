@@ -237,7 +237,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "getfat_c" );
+   chkin_c ( naif_state, "getfat_c" );
 
    /*
    Check the input file name to make sure the pointer is non-null

@@ -8,38 +8,37 @@
 
 
 typedef int pltvol_state_t;
-static pltvol_state_t* get_pltvol_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pltvol_state_t* get_pltvol_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure PLTVOL ( Compute volume of plate model ) */
-doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
-	plates)
+doublereal pltvol_(cspice_t* __global_state, integer *nv, doublereal *vrtces, 
+	integer *np, integer *plates)
 {
     /* System generated locals */
     integer vrtces_dim2, plates_dim2, i__1, i__2, i__3, i__4;
     doublereal ret_val;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     integer i__;
     integer j;
     doublereal m[9]	/* was [3][3] */;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern doublereal det_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern doublereal det_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    pltvol_state_t* __state = get_pltvol_state();
+    pltvol_state_t* __state = get_pltvol_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the volume of a three-dimensional region bounded by a */
@@ -328,26 +327,28 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 
 /*     This routine uses discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return ret_val;
     }
 
 /*     Check the vertex and plate counts. */
 
     if (*nv < 4) {
-	chkin_("PLTVOL", (ftnlen)6);
-	setmsg_("At least 4 vertices are needed, but NV = #.", (ftnlen)43);
-	errint_("#", nv, (ftnlen)1);
-	sigerr_("SPICE(TOOFEWVERTICES)", (ftnlen)21);
-	chkout_("PLTVOL", (ftnlen)6);
+	chkin_(__global_state, "PLTVOL", (ftnlen)6);
+	setmsg_(__global_state, "At least 4 vertices are needed, but NV = #.",
+		 (ftnlen)43);
+	errint_(__global_state, "#", nv, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TOOFEWVERTICES)", (ftnlen)21);
+	chkout_(__global_state, "PLTVOL", (ftnlen)6);
 	return ret_val;
     }
     if (*np < 4) {
-	chkin_("PLTVOL", (ftnlen)6);
-	setmsg_("At least 4 plates are needed, but NP = #.", (ftnlen)41);
-	errint_("#", np, (ftnlen)1);
-	sigerr_("SPICE(TOOFEWPLATES)", (ftnlen)19);
-	chkout_("PLTVOL", (ftnlen)6);
+	chkin_(__global_state, "PLTVOL", (ftnlen)6);
+	setmsg_(__global_state, "At least 4 plates are needed, but NP = #.", (
+		ftnlen)41);
+	errint_(__global_state, "#", np, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TOOFEWPLATES)", (ftnlen)19);
+	chkout_(__global_state, "PLTVOL", (ftnlen)6);
 	return ret_val;
     }
 
@@ -357,24 +358,26 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
     for (i__ = 1; i__ <= i__1; ++i__) {
 	for (j = 1; j <= 3; ++j) {
 	    if (plates[(i__2 = j + i__ * 3 - 4) < 3 * plates_dim2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("plates", i__2, "pltvol_", (ftnlen)
-		    346)] < 1 || plates[(i__3 = j + i__ * 3 - 4) < 3 * 
-		    plates_dim2 && 0 <= i__3 ? i__3 : s_rnge("plates", i__3, 
-		    "pltvol_", (ftnlen)346)] > *nv) {
-		chkin_("PLTVOL", (ftnlen)6);
-		setmsg_("Vertex indices must be in the range [1, NV] for all"
-			" SPICE language versions. The input value of NV was "
-			"#. Vertex index # in plate # was #. (The vertex and "
-			"plate numbers in this message are 1-based as well.)", 
-			(ftnlen)206);
-		errint_("#", nv, (ftnlen)1);
-		errint_("#", &j, (ftnlen)1);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", &plates[(i__2 = j + i__ * 3 - 4) < 3 * 
-			plates_dim2 && 0 <= i__2 ? i__2 : s_rnge("plates", 
-			i__2, "pltvol_", (ftnlen)359)], (ftnlen)1);
-		sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-		chkout_("PLTVOL", (ftnlen)6);
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "plates", i__2,
+		     "pltvol_", (ftnlen)346)] < 1 || plates[(i__3 = j + i__ * 
+		    3 - 4) < 3 * plates_dim2 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "plates", i__3, "pltvol_", (ftnlen)
+		    346)] > *nv) {
+		chkin_(__global_state, "PLTVOL", (ftnlen)6);
+		setmsg_(__global_state, "Vertex indices must be in the range"
+			" [1, NV] for all SPICE language versions. The input "
+			"value of NV was #. Vertex index # in plate # was #. "
+			"(The vertex and plate numbers in this message are 1-"
+			"based as well.)", (ftnlen)206);
+		errint_(__global_state, "#", nv, (ftnlen)1);
+		errint_(__global_state, "#", &j, (ftnlen)1);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", &plates[(i__2 = j + i__ * 3 - 4) 
+			< 3 * plates_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "plates", i__2, "pltvol_", (
+			ftnlen)359)], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+		chkout_(__global_state, "PLTVOL", (ftnlen)6);
 		return ret_val;
 	    }
 	}
@@ -587,12 +590,14 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 /*        Pack the vertices of the current plate into a 3x3 matrix. */
 
 	for (j = 1; j <= 3; ++j) {
-	    vequ_(&vrtces[(i__3 = plates[(i__2 = j + i__ * 3 - 4) < 3 * 
-		    plates_dim2 && 0 <= i__2 ? i__2 : s_rnge("plates", i__2, 
-		    "pltvol_", (ftnlen)579)] * 3 - 3) < 3 * vrtces_dim2 && 0 
-		    <= i__3 ? i__3 : s_rnge("vrtces", i__3, "pltvol_", (
+	    vequ_(__global_state, &vrtces[(i__3 = plates[(i__2 = j + i__ * 3 
+		    - 4) < 3 * plates_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "plates", i__2, "pltvol_", (ftnlen)
+		    579)] * 3 - 3) < 3 * vrtces_dim2 && 0 <= i__3 ? i__3 : 
+		    s_rnge(&__global_state->f2c, "vrtces", i__3, "pltvol_", (
 		    ftnlen)579)], &m[(i__4 = j * 3 - 3) < 9 && 0 <= i__4 ? 
-		    i__4 : s_rnge("m", i__4, "pltvol_", (ftnlen)579)]);
+		    i__4 : s_rnge(&__global_state->f2c, "m", i__4, "pltvol_", 
+		    (ftnlen)579)]);
 	}
 
 /*        The determinant of M gives the volume of the parallelepiped */
@@ -601,7 +606,7 @@ doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer *
 /*        the area of the pyramid's base is half that of base of the */
 /*        parallelepiped. So the determinant must be divided by 6. */
 
-	ret_val += det_(m) / 6.;
+	ret_val += det_(__global_state, m) / 6.;
     }
 
 /*     No check-out required, since the routine is not checked in */

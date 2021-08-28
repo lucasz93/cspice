@@ -8,18 +8,17 @@
 
 
 typedef int touchc_state_t;
-static touchc_state_t* get_touchc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline touchc_state_t* get_touchc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      TOUCHC ( Touch a variable ) */
-/* Character */ VOID touchc_(char *ret_val, ftnlen ret_val_len, char *string, 
-	ftnlen string_len)
+/* Character */ VOID touchc_(cspice_t* __global_state, char *ret_val, ftnlen 
+	ret_val_len, char *string, ftnlen string_len)
 {
 
     /* Module state */
-    touchc_state_t* __state = get_touchc_state();
+    touchc_state_t* __state = get_touchc_state(__global_state);
 /* $ Abstract */
 
 /*     Return the first character of a string */

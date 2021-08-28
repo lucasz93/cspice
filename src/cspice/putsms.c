@@ -8,8 +8,7 @@
 
 
 extern putsms_init_t __putsms_init;
-static putsms_state_t* get_putsms_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline putsms_state_t* get_putsms_state(cspice_t* state) {
 	if (!state->putsms)
 		state->putsms = __cspice_allocate_module(sizeof(
 	putsms_state_t), &__putsms_init, sizeof(__putsms_init));
@@ -18,17 +17,18 @@ static putsms_state_t* get_putsms_state() {
 }
 
 /* $Procedure      PUTSMS ( Store Short Error Message ) */
-/* Subroutine */ int putsms_0_(int n__, char *msg, ftnlen msg_len)
+/* Subroutine */ int putsms_0_(cspice_t* __global_state, int n__, char *msg, 
+	ftnlen msg_len)
 {
     /* Initialized data */
 
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
 
     /* Module state */
-    putsms_state_t* __state = get_putsms_state();
+    putsms_state_t* __state = get_putsms_state(__global_state);
 /* $ Abstract */
 
 /*     PUTSMS is a low-level data structure access routine which stores */
@@ -224,7 +224,7 @@ static putsms_state_t* get_putsms_state() {
 
 /*     Executable Code: */
 
-    s_copy(__state->savmsg, msg, (ftnlen)25, msg_len);
+    s_copy(&__global_state->f2c, __state->savmsg, msg, (ftnlen)25, msg_len);
     return 0;
 /* $Procedure      GETSMS ( Get Short Error Message ) */
 
@@ -359,16 +359,18 @@ L_getsms:
 
 /*     Grab saved short message: */
 
-    s_copy(msg, __state->savmsg, msg_len, (ftnlen)25);
+    s_copy(&__global_state->f2c, msg, __state->savmsg, msg_len, (ftnlen)25);
     return 0;
 } /* putsms_ */
 
-/* Subroutine */ int putsms_(char *msg, ftnlen msg_len)
+/* Subroutine */ int putsms_(cspice_t* __global_state, char *msg, ftnlen 
+	msg_len)
 {
     return putsms_0_(0, msg, msg_len);
     }
 
-/* Subroutine */ int getsms_(char *msg, ftnlen msg_len)
+/* Subroutine */ int getsms_(cspice_t* __global_state, char *msg, ftnlen 
+	msg_len)
 {
     return putsms_0_(1, msg, msg_len);
     }

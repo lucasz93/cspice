@@ -8,8 +8,7 @@
 
 
 extern zzbodtrn_init_t __zzbodtrn_init;
-static zzbodtrn_state_t* get_zzbodtrn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzbodtrn_state_t* get_zzbodtrn_state(cspice_t* state) {
 	if (!state->zzbodtrn)
 		state->zzbodtrn = __cspice_allocate_module(sizeof(
 	zzbodtrn_state_t), &__zzbodtrn_init, sizeof(__zzbodtrn_init));
@@ -18,8 +17,9 @@ static zzbodtrn_state_t* get_zzbodtrn_state() {
 }
 
 /* $Procedure ZZBODTRN ( Private --- Body name and code translation ) */
-/* Subroutine */ int zzbodtrn_0_(int n__, char *name__, integer *code, 
-	logical *found, integer *usrctr, logical *update, ftnlen name_len)
+/* Subroutine */ int zzbodtrn_0_(cspice_t* __global_state, int n__, char *
+	name__, integer *code, logical *found, integer *usrctr, logical *
+	update, ftnlen name_len)
 {
     /* Initialized data */
 
@@ -28,45 +28,49 @@ static zzbodtrn_state_t* get_zzbodtrn_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzhscchk_(integer *, integer *, char *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzbodget_(integer *, char *, char *, integer *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzbodini_(char *, char *, integer *, integer *
-	    , integer *, integer *, integer *, char *, integer *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzbodker_(char *, char *, integer *, integer *
-	    , logical *, integer *, integer *, char *, integer *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzhsichk_(integer *, integer *, integer *, 
-	    integer *, integer *);
-    extern /* Subroutine */ int zzctrchk_(integer *, integer *, logical *);
-    extern /* Subroutine */ int zzctrinc_(integer *);
-    extern /* Subroutine */ int zzctrsin_(integer *);
-    extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
+    extern /* Subroutine */ int zzhscchk_(cspice_t*, integer *, integer *, 
+	    char *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbodget_(cspice_t*, integer *, char *, char *
+	    , integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbodini_(cspice_t*, char *, char *, integer *
+	    , integer *, integer *, integer *, integer *, char *, integer *, 
+	    integer *, integer *, integer *, integer *, ftnlen, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+    extern /* Subroutine */ int zzbodker_(cspice_t*, char *, char *, integer *
+	    , integer *, logical *, integer *, integer *, char *, integer *, 
+	    integer *, integer *, integer *, integer *, ftnlen, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int zzhsichk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzctrchk_(cspice_t*, integer *, integer *, 
+	    logical *);
+    extern /* Subroutine */ int zzctrinc_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzctrsin_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzcvpool_(cspice_t*, char *, integer *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(cspice_t*, integer *, char *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int swpool_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
 
 
     /* Module state */
-    zzbodtrn_state_t* __state = get_zzbodtrn_state();
+    zzbodtrn_state_t* __state = get_zzbodtrn_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -973,12 +977,12 @@ static zzbodtrn_state_t* get_zzbodtrn_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZBODTRN", (ftnlen)8);
-	sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-	chkout_("ZZBODTRN", (ftnlen)8);
+	chkin_(__global_state, "ZZBODTRN", (ftnlen)8);
+	sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+	chkout_(__global_state, "ZZBODTRN", (ftnlen)8);
     }
     return 0;
 /* $Procedure ZZBODN2C ( Private --- Body name to code ) */
@@ -1216,10 +1220,10 @@ L_zzbodn2c:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZBODN2C", (ftnlen)8);
+	chkin_(__global_state, "ZZBODN2C", (ftnlen)8);
     }
 
 /*     Assume we will not find the code we seek. */
@@ -1237,38 +1241,40 @@ L_zzbodn2c:
 /*        POOL counter, for which this umbrella is the user, to user */
 /*        values. */
 
-	zzctrsin_(__state->subctr);
-	zzctruin_(__state->pulctr);
+	zzctrsin_(__global_state, __state->subctr);
+	zzctruin_(__global_state, __state->pulctr);
 
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code-name list. */
 
-	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
-		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZBODN2C", (ftnlen)8);
+	zzbodget_(__global_state, &__state->c__773, __state->defnam, 
+		__state->defnor, __state->defcod, &__state->defsiz, (ftnlen)
+		36, (ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODN2C", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
-		__state->defsiz, &__state->c__773, __state->dnmlst, 
-		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
-		__state->didlst, __state->didpol, __state->didids, 
-		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZBODN2C", (ftnlen)8);
+	zzbodini_(__global_state, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, &__state->c__773, 
+		__state->dnmlst, __state->dnmpol, __state->dnmnms, 
+		__state->dnmidx, __state->didlst, __state->didpol, 
+		__state->didids, __state->dididx, (ftnlen)36, (ftnlen)36, (
+		ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODN2C", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Set up the watchers for the kernel pool name-code mapping */
 /*        variables. */
 
-	swpool_("ZZBODTRN", &__state->nwatch, __state->wnames, (ftnlen)8, (
-		ftnlen)32);
-	if (failed_()) {
-	    chkout_("ZZBODN2C", (ftnlen)8);
+	swpool_(__global_state, "ZZBODTRN", &__state->nwatch, __state->wnames,
+		 (ftnlen)8, (ftnlen)32);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODN2C", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1282,24 +1288,26 @@ L_zzbodn2c:
 /*     LUPDTE.  This ensures that any initial assignments are properly */
 /*     processed. */
 
-    zzcvpool_("ZZBODTRN", __state->pulctr, &__state->lupdte, (ftnlen)8);
+    zzcvpool_(__global_state, "ZZBODTRN", __state->pulctr, &__state->lupdte, (
+	    ftnlen)8);
     if (__state->lupdte || __state->nodata) {
 
 /*        Conservatively increment the ZZBODTRN state counter */
 /*        in expectation of successful update. */
 
-	zzctrinc_(__state->subctr);
+	zzctrinc_(__global_state, __state->subctr);
 
 /*        Update kernel pool mapping lists and hashes. */
 
-	zzbodker_(__state->kernam, __state->kernor, __state->kercod, &
-		__state->kersiz, &__state->extker, __state->knmlst, 
-		__state->knmpol, __state->knmnms, __state->knmidx, 
-		__state->kidlst, __state->kidpol, __state->kidids, 
-		__state->kididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
+	zzbodker_(__global_state, __state->kernam, __state->kernor, 
+		__state->kercod, &__state->kersiz, &__state->extker, 
+		__state->knmlst, __state->knmpol, __state->knmnms, 
+		__state->knmidx, __state->kidlst, __state->kidpol, 
+		__state->kidids, __state->kididx, (ftnlen)36, (ftnlen)36, (
+		ftnlen)36);
+	if (failed_(__global_state)) {
 	    __state->nodata = TRUE_;
-	    chkout_("ZZBODN2C", (ftnlen)8);
+	    chkout_(__global_state, "ZZBODN2C", (ftnlen)8);
 	    return 0;
 	}
 	__state->nodata = FALSE_;
@@ -1308,7 +1316,8 @@ L_zzbodn2c:
 /*     Normalize the input argument NAME. We will look this normalized */
 /*     name up in the built-in and kernel pool names hashes. */
 
-    ljucrs_(&__state->c__1, name__, __state->tmpnam, name_len, (ftnlen)36);
+    ljucrs_(__global_state, &__state->c__1, name__, __state->tmpnam, name_len,
+	     (ftnlen)36);
 
 /*     If necessary, first examine the contents of the kernel pool */
 /*     name-code mapping list. */
@@ -1317,16 +1326,18 @@ L_zzbodn2c:
 
 /*        Check if this name is in the kernel pool names hash. */
 
-	zzhscchk_(__state->knmlst, __state->knmpol, __state->knmnms, 
-		__state->tmpnam, &__state->i__, (ftnlen)36, (ftnlen)36);
+	zzhscchk_(__global_state, __state->knmlst, __state->knmpol, 
+		__state->knmnms, __state->tmpnam, &__state->i__, (ftnlen)36, (
+		ftnlen)36);
 	if (__state->i__ != 0) {
 	    *code = __state->kercod[(i__2 = __state->knmidx[(i__1 = 
-		    __state->i__ - 1) < 14983 && 0 <= i__1 ? i__1 : s_rnge(
-		    "knmidx", i__1, "zzbodtrn_", (ftnlen)1196)] - 1) < 14983 
-		    && 0 <= i__2 ? i__2 : s_rnge("kercod", i__2, "zzbodtrn_", 
-		    (ftnlen)1196)];
+		    __state->i__ - 1) < 14983 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "knmidx", i__1, "zzbodtrn_", (ftnlen)
+		    1196)] - 1) < 14983 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "kercod", i__2, "zzbodtrn_", (ftnlen)
+		    1196)];
 	    *found = TRUE_;
-	    chkout_("ZZBODN2C", (ftnlen)8);
+	    chkout_(__global_state, "ZZBODN2C", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -1334,16 +1345,18 @@ L_zzbodn2c:
 /*     If we reach here, we did not find this name in the kernel pool */
 /*     names hash. Check the built-in names hash. */
 
-    zzhscchk_(__state->dnmlst, __state->dnmpol, __state->dnmnms, 
-	    __state->tmpnam, &__state->i__, (ftnlen)36, (ftnlen)36);
+    zzhscchk_(__global_state, __state->dnmlst, __state->dnmpol, 
+	    __state->dnmnms, __state->tmpnam, &__state->i__, (ftnlen)36, (
+	    ftnlen)36);
     if (__state->i__ != 0) {
 	*code = __state->defcod[(i__2 = __state->dnmidx[(i__1 = __state->i__ 
-		- 1) < 773 && 0 <= i__1 ? i__1 : s_rnge("dnmidx", i__1, "zzb"
-		"odtrn_", (ftnlen)1212)] - 1) < 773 && 0 <= i__2 ? i__2 : 
-		s_rnge("defcod", i__2, "zzbodtrn_", (ftnlen)1212)];
+		- 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"dnmidx", i__1, "zzbodtrn_", (ftnlen)1212)] - 1) < 773 && 0 <=
+		 i__2 ? i__2 : s_rnge(&__global_state->f2c, "defcod", i__2, 
+		"zzbodtrn_", (ftnlen)1212)];
 	*found = TRUE_;
     }
-    chkout_("ZZBODN2C", (ftnlen)8);
+    chkout_(__global_state, "ZZBODN2C", (ftnlen)8);
     return 0;
 /* $Procedure ZZBODC2N ( Private --- Body code to name ) */
 
@@ -1579,10 +1592,10 @@ L_zzbodc2n:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZBODC2N", (ftnlen)8);
+	chkin_(__global_state, "ZZBODC2N", (ftnlen)8);
     }
 
 /*     Assume we will not find the name we seek. */
@@ -1600,38 +1613,40 @@ L_zzbodc2n:
 /*        POOL counter, for which this umbrella is the user, to user */
 /*        values. */
 
-	zzctrsin_(__state->subctr);
-	zzctruin_(__state->pulctr);
+	zzctrsin_(__global_state, __state->subctr);
+	zzctruin_(__global_state, __state->pulctr);
 
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
-		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZBODC2N", (ftnlen)8);
+	zzbodget_(__global_state, &__state->c__773, __state->defnam, 
+		__state->defnor, __state->defcod, &__state->defsiz, (ftnlen)
+		36, (ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODC2N", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
-		__state->defsiz, &__state->c__773, __state->dnmlst, 
-		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
-		__state->didlst, __state->didpol, __state->didids, 
-		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZBODC2N", (ftnlen)8);
+	zzbodini_(__global_state, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, &__state->c__773, 
+		__state->dnmlst, __state->dnmpol, __state->dnmnms, 
+		__state->dnmidx, __state->didlst, __state->didpol, 
+		__state->didids, __state->dididx, (ftnlen)36, (ftnlen)36, (
+		ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODC2N", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Set up the watchers for the kernel pool name-code mapping */
 /*        variables. */
 
-	swpool_("ZZBODTRN", &__state->nwatch, __state->wnames, (ftnlen)8, (
-		ftnlen)32);
-	if (failed_()) {
-	    chkout_("ZZBODC2N", (ftnlen)8);
+	swpool_(__global_state, "ZZBODTRN", &__state->nwatch, __state->wnames,
+		 (ftnlen)8, (ftnlen)32);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODC2N", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1645,24 +1660,26 @@ L_zzbodc2n:
 /*     LUPDTE. This ensures that any initial assignments are properly */
 /*     processed. */
 
-    zzcvpool_("ZZBODTRN", __state->pulctr, &__state->lupdte, (ftnlen)8);
+    zzcvpool_(__global_state, "ZZBODTRN", __state->pulctr, &__state->lupdte, (
+	    ftnlen)8);
     if (__state->lupdte || __state->nodata) {
 
 /*        Conservatively increment the ZZBODTRN state counter */
 /*        in expectation of successful update. */
 
-	zzctrinc_(__state->subctr);
+	zzctrinc_(__global_state, __state->subctr);
 
 /*        Update kernel pool mapping lists and hashes. */
 
-	zzbodker_(__state->kernam, __state->kernor, __state->kercod, &
-		__state->kersiz, &__state->extker, __state->knmlst, 
-		__state->knmpol, __state->knmnms, __state->knmidx, 
-		__state->kidlst, __state->kidpol, __state->kidids, 
-		__state->kididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
+	zzbodker_(__global_state, __state->kernam, __state->kernor, 
+		__state->kercod, &__state->kersiz, &__state->extker, 
+		__state->knmlst, __state->knmpol, __state->knmnms, 
+		__state->knmidx, __state->kidlst, __state->kidpol, 
+		__state->kidids, __state->kididx, (ftnlen)36, (ftnlen)36, (
+		ftnlen)36);
+	if (failed_(__global_state)) {
 	    __state->nodata = TRUE_;
-	    chkout_("ZZBODC2N", (ftnlen)8);
+	    chkout_(__global_state, "ZZBODC2N", (ftnlen)8);
 	    return 0;
 	}
 	__state->nodata = FALSE_;
@@ -1675,16 +1692,17 @@ L_zzbodc2n:
 
 /*        Check if this code is in the kernel pool codes hash. */
 
-	zzhsichk_(__state->kidlst, __state->kidpol, __state->kidids, code, &
-		__state->i__);
+	zzhsichk_(__global_state, __state->kidlst, __state->kidpol, 
+		__state->kidids, code, &__state->i__);
 	if (__state->i__ != 0) {
-	    s_copy(name__, __state->kernam + ((i__2 = __state->kididx[(i__1 = 
-		    __state->i__ - 1) < 14983 && 0 <= i__1 ? i__1 : s_rnge(
-		    "kididx", i__1, "zzbodtrn_", (ftnlen)1574)] - 1) < 14983 
-		    && 0 <= i__2 ? i__2 : s_rnge("kernam", i__2, "zzbodtrn_", 
-		    (ftnlen)1574)) * 36, name_len, (ftnlen)36);
+	    s_copy(&__global_state->f2c, name__, __state->kernam + ((i__2 = 
+		    __state->kididx[(i__1 = __state->i__ - 1) < 14983 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "kididx", i__1,
+		     "zzbodtrn_", (ftnlen)1574)] - 1) < 14983 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "kernam", i__2, "zzb"
+		    "odtrn_", (ftnlen)1574)) * 36, name_len, (ftnlen)36);
 	    *found = TRUE_;
-	    chkout_("ZZBODC2N", (ftnlen)8);
+	    chkout_(__global_state, "ZZBODC2N", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -1692,8 +1710,8 @@ L_zzbodc2n:
 /*     If we reach here, we did not find this code in the kernel pool */
 /*     codes hash. Check the built-in codes hash. */
 
-    zzhsichk_(__state->didlst, __state->didpol, __state->didids, code, &
-	    __state->i__);
+    zzhsichk_(__global_state, __state->didlst, __state->didpol, 
+	    __state->didids, code, &__state->i__);
 
 /*     If we find a match, verify that it is not masked by a kernel pool */
 /*     entry before returning. */
@@ -1704,12 +1722,14 @@ L_zzbodc2n:
 /*           Only bother performing this check if there are actually */
 /*           mappings present in the kernel pool lists. */
 
-	    zzhscchk_(__state->knmlst, __state->knmpol, __state->knmnms, 
-		    __state->defnor + ((i__2 = __state->dididx[(i__1 = 
-		    __state->i__ - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(
-		    "dididx", i__1, "zzbodtrn_", (ftnlen)1600)] - 1) < 773 && 
-		    0 <= i__2 ? i__2 : s_rnge("defnor", i__2, "zzbodtrn_", (
-		    ftnlen)1600)) * 36, &__state->j, (ftnlen)36, (ftnlen)36);
+	    zzhscchk_(__global_state, __state->knmlst, __state->knmpol, 
+		    __state->knmnms, __state->defnor + ((i__2 = 
+		    __state->dididx[(i__1 = __state->i__ - 1) < 773 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "dididx", i__1,
+		     "zzbodtrn_", (ftnlen)1600)] - 1) < 773 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "defnor", i__2, "zzb"
+		    "odtrn_", (ftnlen)1600)) * 36, &__state->j, (ftnlen)36, (
+		    ftnlen)36);
 	    if (__state->j != 0) {
 
 /*              This name is defined in the kernel pool mappings. Set */
@@ -1723,12 +1743,13 @@ L_zzbodc2n:
 /*              No match for this name in the kernel pool mapping list. */
 /*              Return the name. */
 
-		s_copy(name__, __state->defnam + ((i__2 = __state->dididx[(
-			i__1 = __state->i__ - 1) < 773 && 0 <= i__1 ? i__1 : 
-			s_rnge("dididx", i__1, "zzbodtrn_", (ftnlen)1619)] - 
-			1) < 773 && 0 <= i__2 ? i__2 : s_rnge("defnam", i__2, 
-			"zzbodtrn_", (ftnlen)1619)) * 36, name_len, (ftnlen)
-			36);
+		s_copy(&__global_state->f2c, name__, __state->defnam + ((i__2 
+			= __state->dididx[(i__1 = __state->i__ - 1) < 773 && 
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "did"
+			"idx", i__1, "zzbodtrn_", (ftnlen)1619)] - 1) < 773 && 
+			0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "def"
+			"nam", i__2, "zzbodtrn_", (ftnlen)1619)) * 36, 
+			name_len, (ftnlen)36);
 		*found = TRUE_;
 	    }
 	} else {
@@ -1736,15 +1757,16 @@ L_zzbodc2n:
 /*           No kernel pool mappings were defined, simply return */
 /*           return the name. */
 
-	    s_copy(name__, __state->defnam + ((i__2 = __state->dididx[(i__1 = 
-		    __state->i__ - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(
-		    "dididx", i__1, "zzbodtrn_", (ftnlen)1630)] - 1) < 773 && 
-		    0 <= i__2 ? i__2 : s_rnge("defnam", i__2, "zzbodtrn_", (
-		    ftnlen)1630)) * 36, name_len, (ftnlen)36);
+	    s_copy(&__global_state->f2c, name__, __state->defnam + ((i__2 = 
+		    __state->dididx[(i__1 = __state->i__ - 1) < 773 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "dididx", i__1,
+		     "zzbodtrn_", (ftnlen)1630)] - 1) < 773 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "defnam", i__2, "zzb"
+		    "odtrn_", (ftnlen)1630)) * 36, name_len, (ftnlen)36);
 	    *found = TRUE_;
 	}
     }
-    chkout_("ZZBODC2N", (ftnlen)8);
+    chkout_(__global_state, "ZZBODC2N", (ftnlen)8);
     return 0;
 /* $Procedure ZZBODDEF ( Private --- Body name/code definition ) */
 
@@ -2029,10 +2051,10 @@ L_zzboddef:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZBODDEF", (ftnlen)8);
+	chkin_(__global_state, "ZZBODDEF", (ftnlen)8);
     }
 
 /*     On the first pass through this entry point, initialize the */
@@ -2046,38 +2068,40 @@ L_zzboddef:
 /*        POOL counter, for which this umbrella is the user, to user */
 /*        values. */
 
-	zzctrsin_(__state->subctr);
-	zzctruin_(__state->pulctr);
+	zzctrsin_(__global_state, __state->subctr);
+	zzctruin_(__global_state, __state->pulctr);
 
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
-		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZBODDEF", (ftnlen)8);
+	zzbodget_(__global_state, &__state->c__773, __state->defnam, 
+		__state->defnor, __state->defcod, &__state->defsiz, (ftnlen)
+		36, (ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODDEF", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
-		__state->defsiz, &__state->c__773, __state->dnmlst, 
-		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
-		__state->didlst, __state->didpol, __state->didids, 
-		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZBODDEF", (ftnlen)8);
+	zzbodini_(__global_state, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, &__state->c__773, 
+		__state->dnmlst, __state->dnmpol, __state->dnmnms, 
+		__state->dnmidx, __state->didlst, __state->didpol, 
+		__state->didids, __state->dididx, (ftnlen)36, (ftnlen)36, (
+		ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODDEF", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Set up the watchers for the kernel pool name-code mapping */
 /*        variables. */
 
-	swpool_("ZZBODTRN", &__state->nwatch, __state->wnames, (ftnlen)8, (
-		ftnlen)32);
-	if (failed_()) {
-	    chkout_("ZZBODDEF", (ftnlen)8);
+	swpool_(__global_state, "ZZBODTRN", &__state->nwatch, __state->wnames,
+		 (ftnlen)8, (ftnlen)32);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODDEF", (ftnlen)8);
 	    return 0;
 	}
 
@@ -2089,34 +2113,36 @@ L_zzboddef:
 /*     Begin by verifying that the user is not attempting to assign a */
 /*     blank string a code. */
 
-    if (s_cmp(name__, " ", name_len, (ftnlen)1) == 0) {
-	setmsg_("An attempt to assign the code, #, to a blank string was mad"
-		"e.  Check loaded text kernels for a blank string in the NAIF"
-		"_BODY_NAME array.", (ftnlen)136);
-	errint_("#", &__state->i__, (ftnlen)1);
-	sigerr_("SPICE(BLANKNAMEASSIGNED)", (ftnlen)24);
-	chkout_("ZZBODDEF", (ftnlen)8);
+    if (s_cmp(&__global_state->f2c, name__, " ", name_len, (ftnlen)1) == 0) {
+	setmsg_(__global_state, "An attempt to assign the code, #, to a blan"
+		"k string was made.  Check loaded text kernels for a blank st"
+		"ring in the NAIF_BODY_NAME array.", (ftnlen)136);
+	errint_(__global_state, "#", &__state->i__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BLANKNAMEASSIGNED)", (ftnlen)24);
+	chkout_(__global_state, "ZZBODDEF", (ftnlen)8);
 	return 0;
     }
 
 /*     Conservatively increment the ZZBODTRN state counter in */
 /*     expectation of successful addition. */
 
-    zzctrinc_(__state->subctr);
+    zzctrinc_(__global_state, __state->subctr);
 
 /*     Get normalized form of the input NAME. */
 
-    ljucrs_(&__state->c__1, name__, __state->tmpnam, name_len, (ftnlen)36);
+    ljucrs_(__global_state, &__state->c__1, name__, __state->tmpnam, name_len,
+	     (ftnlen)36);
 
 /*     Determine if we are going to replace an entry currently present */
 /*     in the DEF* lists. */
 
-    zzhscchk_(__state->dnmlst, __state->dnmpol, __state->dnmnms, 
-	    __state->tmpnam, &__state->i__, (ftnlen)36, (ftnlen)36);
+    zzhscchk_(__global_state, __state->dnmlst, __state->dnmpol, 
+	    __state->dnmnms, __state->tmpnam, &__state->i__, (ftnlen)36, (
+	    ftnlen)36);
     if (__state->i__ != 0) {
 	__state->index = __state->dnmidx[(i__1 = __state->i__ - 1) < 773 && 0 
-		<= i__1 ? i__1 : s_rnge("dnmidx", i__1, "zzbodtrn_", (ftnlen)
-		2026)];
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "dnmidx", i__1, 
+		"zzbodtrn_", (ftnlen)2026)];
 
 /*        We are going to replace an existing entry.  There are */
 /*        two possible ways in which a replace operation can */
@@ -2135,12 +2161,12 @@ L_zzboddef:
 
 /*        See if we should handle 1) first. */
 
-	zzhsichk_(__state->didlst, __state->didpol, __state->didids, code, &
-		__state->i__);
+	zzhsichk_(__global_state, __state->didlst, __state->didpol, 
+		__state->didids, code, &__state->i__);
 	if (__state->i__ != 0) {
 	    __state->codidx = __state->dididx[(i__1 = __state->i__ - 1) < 773 
-		    && 0 <= i__1 ? i__1 : s_rnge("dididx", i__1, "zzbodtrn_", 
-		    (ftnlen)2049)];
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "didi"
+		    "dx", i__1, "zzbodtrn_", (ftnlen)2049)];
 	} else {
 	    __state->codidx = 0;
 	}
@@ -2153,10 +2179,11 @@ L_zzboddef:
 /*           We altered the built-in body list. Set BODCHG to .TRUE. */
 
 	    __state->bodchg = TRUE_;
-	    s_copy(__state->defnam + ((i__1 = __state->index - 1) < 773 && 0 
-		    <= i__1 ? i__1 : s_rnge("defnam", i__1, "zzbodtrn_", (
-		    ftnlen)2065)) * 36, name__, (ftnlen)36, name_len);
-	    chkout_("ZZBODDEF", (ftnlen)8);
+	    s_copy(&__global_state->f2c, __state->defnam + ((i__1 = 
+		    __state->index - 1) < 773 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "defnam", i__1, "zzbodtrn_", (ftnlen)
+		    2065)) * 36, name__, (ftnlen)36, name_len);
+	    chkout_(__global_state, "ZZBODDEF", (ftnlen)8);
 	    return 0;
 	}
 
@@ -2168,20 +2195,25 @@ L_zzboddef:
 	i__1 = __state->defsiz;
 	for (__state->i__ = __state->index + 1; __state->i__ <= i__1; 
 		++__state->i__) {
-	    s_copy(__state->defnam + ((i__2 = __state->i__ - 2) < 773 && 0 <= 
-		    i__2 ? i__2 : s_rnge("defnam", i__2, "zzbodtrn_", (ftnlen)
+	    s_copy(&__global_state->f2c, __state->defnam + ((i__2 = 
+		    __state->i__ - 2) < 773 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "defnam", i__2, "zzbodtrn_", (ftnlen)
 		    2080)) * 36, __state->defnam + ((i__3 = __state->i__ - 1) 
-		    < 773 && 0 <= i__3 ? i__3 : s_rnge("defnam", i__3, "zzbo"
-		    "dtrn_", (ftnlen)2080)) * 36, (ftnlen)36, (ftnlen)36);
-	    s_copy(__state->defnor + ((i__2 = __state->i__ - 2) < 773 && 0 <= 
-		    i__2 ? i__2 : s_rnge("defnor", i__2, "zzbodtrn_", (ftnlen)
+		    < 773 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "defnam", i__3, "zzbodtrn_", (ftnlen)2080)) * 36, (ftnlen)
+		    36, (ftnlen)36);
+	    s_copy(&__global_state->f2c, __state->defnor + ((i__2 = 
+		    __state->i__ - 2) < 773 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "defnor", i__2, "zzbodtrn_", (ftnlen)
 		    2081)) * 36, __state->defnor + ((i__3 = __state->i__ - 1) 
-		    < 773 && 0 <= i__3 ? i__3 : s_rnge("defnor", i__3, "zzbo"
-		    "dtrn_", (ftnlen)2081)) * 36, (ftnlen)36, (ftnlen)36);
+		    < 773 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "defnor", i__3, "zzbodtrn_", (ftnlen)2081)) * 36, (ftnlen)
+		    36, (ftnlen)36);
 	    __state->defcod[(i__2 = __state->i__ - 2) < 773 && 0 <= i__2 ? 
-		    i__2 : s_rnge("defcod", i__2, "zzbodtrn_", (ftnlen)2082)] 
-		    = __state->defcod[(i__3 = __state->i__ - 1) < 773 && 0 <= 
-		    i__3 ? i__3 : s_rnge("defcod", i__3, "zzbodtrn_", (ftnlen)
+		    i__2 : s_rnge(&__global_state->f2c, "defcod", i__2, "zzb"
+		    "odtrn_", (ftnlen)2082)] = __state->defcod[(i__3 = 
+		    __state->i__ - 1) < 773 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "defcod", i__3, "zzbodtrn_", (ftnlen)
 		    2082)];
 	}
     } else {
@@ -2190,14 +2222,14 @@ L_zzboddef:
 /*        is room; signal an error and return if there is not. */
 
 	if (__state->defsiz >= 773) {
-	    setmsg_("There is no room available for adding '#'  to the list "
-		    "of name/code pairs. The number of names that can be supp"
-		    "orted is #.  This number has been reached. ", (ftnlen)154)
-		    ;
-	    errch_("#", name__, (ftnlen)1, name_len);
-	    errint_("#", &__state->defsiz, (ftnlen)1);
-	    sigerr_("SPICE(TOOMANYPAIRS)", (ftnlen)19);
-	    chkout_("ZZBODDEF", (ftnlen)8);
+	    setmsg_(__global_state, "There is no room available for adding '"
+		    "#'  to the list of name/code pairs. The number of names "
+		    "that can be supported is #.  This number has been reache"
+		    "d. ", (ftnlen)154);
+	    errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	    errint_(__global_state, "#", &__state->defsiz, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(TOOMANYPAIRS)", (ftnlen)19);
+	    chkout_(__global_state, "ZZBODDEF", (ftnlen)8);
 	    return 0;
 	}
 
@@ -2215,23 +2247,27 @@ L_zzboddef:
 /*     Now, we need to add the new entry on to the end of the */
 /*     DEFNAM, DEFNOR, and DEFCOD lists. */
 
-    s_copy(__state->defnam + ((i__1 = __state->defsiz - 1) < 773 && 0 <= i__1 
-	    ? i__1 : s_rnge("defnam", i__1, "zzbodtrn_", (ftnlen)2125)) * 36, 
-	    name__, (ftnlen)36, name_len);
-    s_copy(__state->defnor + ((i__1 = __state->defsiz - 1) < 773 && 0 <= i__1 
-	    ? i__1 : s_rnge("defnor", i__1, "zzbodtrn_", (ftnlen)2126)) * 36, 
-	    __state->tmpnam, (ftnlen)36, (ftnlen)36);
+    s_copy(&__global_state->f2c, __state->defnam + ((i__1 = __state->defsiz - 
+	    1) < 773 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "def"
+	    "nam", i__1, "zzbodtrn_", (ftnlen)2125)) * 36, name__, (ftnlen)36, 
+	    name_len);
+    s_copy(&__global_state->f2c, __state->defnor + ((i__1 = __state->defsiz - 
+	    1) < 773 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "def"
+	    "nor", i__1, "zzbodtrn_", (ftnlen)2126)) * 36, __state->tmpnam, (
+	    ftnlen)36, (ftnlen)36);
     __state->defcod[(i__1 = __state->defsiz - 1) < 773 && 0 <= i__1 ? i__1 : 
-	    s_rnge("defcod", i__1, "zzbodtrn_", (ftnlen)2127)] = *code;
+	    s_rnge(&__global_state->f2c, "defcod", i__1, "zzbodtrn_", (ftnlen)
+	    2127)] = *code;
 
 /*     Reset the built-in/BODDEF hashes. */
 
-    zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
-	    __state->defsiz, &__state->c__773, __state->dnmlst, 
-	    __state->dnmpol, __state->dnmnms, __state->dnmidx, 
-	    __state->didlst, __state->didpol, __state->didids, 
-	    __state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
-    chkout_("ZZBODDEF", (ftnlen)8);
+    zzbodini_(__global_state, __state->defnam, __state->defnor, 
+	    __state->defcod, &__state->defsiz, &__state->c__773, 
+	    __state->dnmlst, __state->dnmpol, __state->dnmnms, 
+	    __state->dnmidx, __state->didlst, __state->didpol, 
+	    __state->didids, __state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)
+	    36);
+    chkout_(__global_state, "ZZBODDEF", (ftnlen)8);
     return 0;
 /* $Procedure ZZBODKIK ( Private --- Run the kernel read block ) */
 
@@ -2372,10 +2408,10 @@ L_zzbodkik:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZBODKIK", (ftnlen)8);
+	chkin_(__global_state, "ZZBODKIK", (ftnlen)8);
     }
 
 /*     On the first pass through this entry point, initialize the */
@@ -2389,38 +2425,40 @@ L_zzbodkik:
 /*        POOL counter, for which this umbrella is the user, to user */
 /*        values. */
 
-	zzctrsin_(__state->subctr);
-	zzctruin_(__state->pulctr);
+	zzctrsin_(__global_state, __state->subctr);
+	zzctruin_(__global_state, __state->pulctr);
 
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
-		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZBODKIK", (ftnlen)8);
+	zzbodget_(__global_state, &__state->c__773, __state->defnam, 
+		__state->defnor, __state->defcod, &__state->defsiz, (ftnlen)
+		36, (ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODKIK", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Populate the initial built-in/BODDEF hashes. */
 
-	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
-		__state->defsiz, &__state->c__773, __state->dnmlst, 
-		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
-		__state->didlst, __state->didpol, __state->didids, 
-		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZBODKIK", (ftnlen)8);
+	zzbodini_(__global_state, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, &__state->c__773, 
+		__state->dnmlst, __state->dnmpol, __state->dnmnms, 
+		__state->dnmidx, __state->didlst, __state->didpol, 
+		__state->didids, __state->dididx, (ftnlen)36, (ftnlen)36, (
+		ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODKIK", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Set up the watchers for the kernel pool name-code mapping */
 /*        variables. */
 
-	swpool_("ZZBODTRN", &__state->nwatch, __state->wnames, (ftnlen)8, (
-		ftnlen)32);
-	if (failed_()) {
-	    chkout_("ZZBODKIK", (ftnlen)8);
+	swpool_(__global_state, "ZZBODTRN", &__state->nwatch, __state->wnames,
+		 (ftnlen)8, (ftnlen)32);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODKIK", (ftnlen)8);
 	    return 0;
 	}
 
@@ -2434,29 +2472,31 @@ L_zzbodkik:
 /*     LUPDTE. This ensures that any initial assignments are properly */
 /*     processed. */
 
-    zzcvpool_("ZZBODTRN", __state->pulctr, &__state->lupdte, (ftnlen)8);
+    zzcvpool_(__global_state, "ZZBODTRN", __state->pulctr, &__state->lupdte, (
+	    ftnlen)8);
     if (__state->lupdte || __state->nodata) {
 
 /*        Conservatively increment the ZZBODTRN state counter */
 /*        in expectation of successful update. */
 
-	zzctrinc_(__state->subctr);
+	zzctrinc_(__global_state, __state->subctr);
 
 /*        Update kernel pool mapping lists and hashes. */
 
-	zzbodker_(__state->kernam, __state->kernor, __state->kercod, &
-		__state->kersiz, &__state->extker, __state->knmlst, 
-		__state->knmpol, __state->knmnms, __state->knmidx, 
-		__state->kidlst, __state->kidpol, __state->kidids, 
-		__state->kididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
+	zzbodker_(__global_state, __state->kernam, __state->kernor, 
+		__state->kercod, &__state->kersiz, &__state->extker, 
+		__state->knmlst, __state->knmpol, __state->knmnms, 
+		__state->knmidx, __state->kidlst, __state->kidpol, 
+		__state->kidids, __state->kididx, (ftnlen)36, (ftnlen)36, (
+		ftnlen)36);
+	if (failed_(__global_state)) {
 	    __state->nodata = TRUE_;
-	    chkout_("ZZBODKIK", (ftnlen)8);
+	    chkout_(__global_state, "ZZBODKIK", (ftnlen)8);
 	    return 0;
 	}
 	__state->nodata = FALSE_;
     }
-    chkout_("ZZBODKIK", (ftnlen)8);
+    chkout_(__global_state, "ZZBODKIK", (ftnlen)8);
     return 0;
 /* $Procedure ZZBODRST ( Private --- Body List Reset ) */
 
@@ -2572,10 +2612,10 @@ L_zzbodrst:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZBODRST", (ftnlen)8);
+	chkin_(__global_state, "ZZBODRST", (ftnlen)8);
     }
 
 /*     On the first pass through this entry point, initialize the */
@@ -2589,38 +2629,40 @@ L_zzbodrst:
 /*        POOL counter, for which this umbrella is the user, to user */
 /*        values. */
 
-	zzctrsin_(__state->subctr);
-	zzctruin_(__state->pulctr);
+	zzctrsin_(__global_state, __state->subctr);
+	zzctruin_(__global_state, __state->pulctr);
 
 /*        Populate the initial values of the DEFNAM, DEFNOR, and DEFCOD */
 /*        arrays from the built-in code list. */
 
-	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
-		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZBODRST", (ftnlen)8);
+	zzbodget_(__global_state, &__state->c__773, __state->defnam, 
+		__state->defnor, __state->defcod, &__state->defsiz, (ftnlen)
+		36, (ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODRST", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Populate the initial built-in code-name hashes. */
 
-	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
-		__state->defsiz, &__state->c__773, __state->dnmlst, 
-		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
-		__state->didlst, __state->didpol, __state->didids, 
-		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZBODRST", (ftnlen)8);
+	zzbodini_(__global_state, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, &__state->c__773, 
+		__state->dnmlst, __state->dnmpol, __state->dnmnms, 
+		__state->dnmidx, __state->didlst, __state->didpol, 
+		__state->didids, __state->dididx, (ftnlen)36, (ftnlen)36, (
+		ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODRST", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Set up the watchers for the kernel pool name-code mapping */
 /*        variables. */
 
-	swpool_("ZZBODTRN", &__state->nwatch, __state->wnames, (ftnlen)8, (
-		ftnlen)32);
-	if (failed_()) {
-	    chkout_("ZZBODRST", (ftnlen)8);
+	swpool_(__global_state, "ZZBODTRN", &__state->nwatch, __state->wnames,
+		 (ftnlen)8, (ftnlen)32);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZBODRST", (ftnlen)8);
 	    return 0;
 	}
 
@@ -2637,25 +2679,27 @@ L_zzbodrst:
 /*        Conservatively increment the ZZBODTRN state counter */
 /*        in expectation of successful update. */
 
-	zzctrinc_(__state->subctr);
+	zzctrinc_(__global_state, __state->subctr);
 
 /*        Fetch the initial body name-code mapping list. Note: we need */
 /*        not check FAILED() here, because if an error had occurred due */
 /*        to the improper specification of MAXE it would have been */
 /*        signaled already to the user. */
 
-	zzbodget_(&__state->c__773, __state->defnam, __state->defnor, 
-		__state->defcod, &__state->defsiz, (ftnlen)36, (ftnlen)36);
+	zzbodget_(__global_state, &__state->c__773, __state->defnam, 
+		__state->defnor, __state->defcod, &__state->defsiz, (ftnlen)
+		36, (ftnlen)36);
 
 /*        Reset the built-in/BODDEF hashes. */
 
-	zzbodini_(__state->defnam, __state->defnor, __state->defcod, &
-		__state->defsiz, &__state->c__773, __state->dnmlst, 
-		__state->dnmpol, __state->dnmnms, __state->dnmidx, 
-		__state->didlst, __state->didpol, __state->didids, 
-		__state->dididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
+	zzbodini_(__global_state, __state->defnam, __state->defnor, 
+		__state->defcod, &__state->defsiz, &__state->c__773, 
+		__state->dnmlst, __state->dnmpol, __state->dnmnms, 
+		__state->dnmidx, __state->didlst, __state->didpol, 
+		__state->didids, __state->dididx, (ftnlen)36, (ftnlen)36, (
+		ftnlen)36);
     }
-    chkout_("ZZBODRST", (ftnlen)8);
+    chkout_(__global_state, "ZZBODRST", (ftnlen)8);
     return 0;
 /* $Procedure ZZBCTRCK ( Private -- check/update user's ZZBODTRN counter ) */
 
@@ -2848,85 +2892,90 @@ L_zzbctrck:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Check for updates to the kernel pool variables. */
 
-    zzcvpool_("ZZBODTRN", __state->pulctr, &__state->lupdte, (ftnlen)8);
+    zzcvpool_(__global_state, "ZZBODTRN", __state->pulctr, &__state->lupdte, (
+	    ftnlen)8);
     if (__state->lupdte || __state->nodata) {
 
 /*        Check in because ZZBODKER can fail. */
 
-	chkin_("ZZBCTRCK", (ftnlen)8);
+	chkin_(__global_state, "ZZBCTRCK", (ftnlen)8);
 
 /*        Conservatively increment the ZZBODTRN state counter in */
 /*        expectation of successful update. */
 
-	zzctrinc_(__state->subctr);
+	zzctrinc_(__global_state, __state->subctr);
 
 /*        Update kernel pool mapping lists and hashes. */
 
-	zzbodker_(__state->kernam, __state->kernor, __state->kercod, &
-		__state->kersiz, &__state->extker, __state->knmlst, 
-		__state->knmpol, __state->knmnms, __state->knmidx, 
-		__state->kidlst, __state->kidpol, __state->kidids, 
-		__state->kididx, (ftnlen)36, (ftnlen)36, (ftnlen)36);
-	if (failed_()) {
+	zzbodker_(__global_state, __state->kernam, __state->kernor, 
+		__state->kercod, &__state->kersiz, &__state->extker, 
+		__state->knmlst, __state->knmpol, __state->knmnms, 
+		__state->knmidx, __state->kidlst, __state->kidpol, 
+		__state->kidids, __state->kididx, (ftnlen)36, (ftnlen)36, (
+		ftnlen)36);
+	if (failed_(__global_state)) {
 	    __state->nodata = TRUE_;
-	    chkout_("ZZBCTRCK", (ftnlen)8);
+	    chkout_(__global_state, "ZZBCTRCK", (ftnlen)8);
 	    return 0;
 	}
 	__state->nodata = FALSE_;
-	chkout_("ZZBCTRCK", (ftnlen)8);
+	chkout_(__global_state, "ZZBCTRCK", (ftnlen)8);
     }
 
 /*     Check the input counter against the ZZBODTRN counter. */
 
-    zzctrchk_(__state->subctr, usrctr, update);
+    zzctrchk_(__global_state, __state->subctr, usrctr, update);
     return 0;
 } /* zzbodtrn_ */
 
-/* Subroutine */ int zzbodtrn_(char *name__, integer *code, logical *found, 
-	integer *usrctr, logical *update, ftnlen name_len)
+/* Subroutine */ int zzbodtrn_(cspice_t* __global_state, char *name__, 
+	integer *code, logical *found, integer *usrctr, logical *update, 
+	ftnlen name_len)
 {
     return zzbodtrn_0_(0, name__, code, found, usrctr, update, name_len);
     }
 
-/* Subroutine */ int zzbodn2c_(char *name__, integer *code, logical *found, 
-	ftnlen name_len)
+/* Subroutine */ int zzbodn2c_(cspice_t* __global_state, char *name__, 
+	integer *code, logical *found, ftnlen name_len)
 {
     return zzbodtrn_0_(1, name__, code, found, (integer *)0, (logical *)0, 
 	    name_len);
     }
 
-/* Subroutine */ int zzbodc2n_(integer *code, char *name__, logical *found, 
-	ftnlen name_len)
+/* Subroutine */ int zzbodc2n_(cspice_t* __global_state, integer *code, char *
+	name__, logical *found, ftnlen name_len)
 {
     return zzbodtrn_0_(2, name__, code, found, (integer *)0, (logical *)0, 
 	    name_len);
     }
 
-/* Subroutine */ int zzboddef_(char *name__, integer *code, ftnlen name_len)
+/* Subroutine */ int zzboddef_(cspice_t* __global_state, char *name__, 
+	integer *code, ftnlen name_len)
 {
     return zzbodtrn_0_(3, name__, code, (logical *)0, (integer *)0, (logical *
 	    )0, name_len);
     }
 
-/* Subroutine */ int zzbodkik_(void)
+/* Subroutine */ int zzbodkik_(cspice_t* __global_state)
 {
     return zzbodtrn_0_(4, (char *)0, (integer *)0, (logical *)0, (integer *)0,
 	     (logical *)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzbodrst_(void)
+/* Subroutine */ int zzbodrst_(cspice_t* __global_state)
 {
     return zzbodtrn_0_(5, (char *)0, (integer *)0, (logical *)0, (integer *)0,
 	     (logical *)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzbctrck_(integer *usrctr, logical *update)
+/* Subroutine */ int zzbctrck_(cspice_t* __global_state, integer *usrctr, 
+	logical *update)
 {
     return zzbodtrn_0_(6, (char *)0, (integer *)0, (logical *)0, usrctr, 
 	    update, (ftnint)0);

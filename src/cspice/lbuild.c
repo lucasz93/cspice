@@ -8,8 +8,7 @@
 
 
 extern lbuild_init_t __lbuild_init;
-static lbuild_state_t* get_lbuild_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lbuild_state_t* get_lbuild_state(cspice_t* state) {
 	if (!state->lbuild)
 		state->lbuild = __cspice_allocate_module(sizeof(
 	lbuild_state_t), &__lbuild_init, sizeof(__lbuild_init));
@@ -18,15 +17,17 @@ static lbuild_state_t* get_lbuild_state() {
 }
 
 /* $Procedure      LBUILD ( Build a list in a character string ) */
-/* Subroutine */ int lbuild_(char *items, integer *n, char *delim, char *list,
-	 ftnlen items_len, ftnlen delim_len, ftnlen list_len)
+/* Subroutine */ int lbuild_(cspice_t* __global_state, char *items, integer *
+	n, char *delim, char *list, ftnlen items_len, ftnlen delim_len, 
+	ftnlen list_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer dlen;
@@ -36,14 +37,14 @@ static lbuild_state_t* get_lbuild_state() {
     integer lpos;
     integer i__;
     integer first;
-    extern integer lastnb_(char *, ftnlen);
-    extern integer frstnb_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
 
 
     /* Module state */
-    lbuild_state_t* __state = get_lbuild_state();
+    lbuild_state_t* __state = get_lbuild_state(__global_state);
 /* $ Abstract */
 
 /*      Build a list of items delimited by a character. */
@@ -214,27 +215,30 @@ static lbuild_state_t* get_lbuild_state() {
 /*     DLEN is the length of DELIM. */
 /*     ILEN is the length of the next item in the list. */
 
-    s_copy(list, " ", list_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, list, " ", list_len, (ftnlen)1);
     lpos = 1;
-    llen = i_len(list, list_len);
-    dlen = i_len(delim, delim_len);
+    llen = i_len(&__global_state->f2c, list, list_len);
+    dlen = i_len(&__global_state->f2c, delim, delim_len);
     if (*n > 0) {
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (lpos <= llen) {
-		if (s_cmp(items + (i__ - 1) * items_len, " ", items_len, (
-			ftnlen)1) == 0) {
-		    s_copy(list + (lpos - 1), delim, list_len - (lpos - 1), 
-			    delim_len);
+		if (s_cmp(&__global_state->f2c, items + (i__ - 1) * items_len,
+			 " ", items_len, (ftnlen)1) == 0) {
+		    s_copy(&__global_state->f2c, list + (lpos - 1), delim, 
+			    list_len - (lpos - 1), delim_len);
 		    lpos += dlen;
 		} else {
-		    first = frstnb_(items + (i__ - 1) * items_len, items_len);
-		    last = lastnb_(items + (i__ - 1) * items_len, items_len);
+		    first = frstnb_(__global_state, items + (i__ - 1) * 
+			    items_len, items_len);
+		    last = lastnb_(__global_state, items + (i__ - 1) * 
+			    items_len, items_len);
 		    ilen = last - first + 1;
-		    s_copy(list + (lpos - 1), items + ((i__ - 1) * items_len 
-			    + (first - 1)), list_len - (lpos - 1), last - (
-			    first - 1));
-		    suffix_(delim, &__state->c__0, list, delim_len, list_len);
+		    s_copy(&__global_state->f2c, list + (lpos - 1), items + ((
+			    i__ - 1) * items_len + (first - 1)), list_len - (
+			    lpos - 1), last - (first - 1));
+		    suffix_(__global_state, delim, &__state->c__0, list, 
+			    delim_len, list_len);
 		    lpos = lpos + ilen + dlen;
 		}
 	    }
@@ -245,7 +249,8 @@ static lbuild_state_t* get_lbuild_state() {
 
 	if (lpos - dlen <= llen) {
 	    i__1 = lpos - dlen - 1;
-	    s_copy(list + i__1, " ", list_len - i__1, (ftnlen)1);
+	    s_copy(&__global_state->f2c, list + i__1, " ", list_len - i__1, (
+		    ftnlen)1);
 	}
     }
     return 0;

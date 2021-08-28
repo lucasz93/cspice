@@ -8,8 +8,7 @@
 
 
 extern zzekdps_init_t __zzekdps_init;
-static zzekdps_state_t* get_zzekdps_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekdps_state_t* get_zzekdps_state(cspice_t* state) {
 	if (!state->zzekdps)
 		state->zzekdps = __cspice_allocate_module(sizeof(
 	zzekdps_state_t), &__zzekdps_init, sizeof(__zzekdps_init));
@@ -18,26 +17,28 @@ static zzekdps_state_t* get_zzekdps_state() {
 }
 
 /* $Procedure      ZZEKDPS ( EK, delete page from segment ) */
-/* Subroutine */ int zzekdps_(integer *handle, integer *segdsc, integer *
-	type__, integer *p)
+/* Subroutine */ int zzekdps_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *type__, integer *p)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     integer tree;
-    extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrdl_(integer *, integer *, integer *);
-    extern integer zzektrls_(integer *, integer *, integer *);
-    integer mbase;
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekpgfr_(cspice_t*, integer *, integer *, 
 	    integer *);
+    extern /* Subroutine */ int zzektrdl_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer zzektrls_(cspice_t*, integer *, integer *, integer *);
+    integer mbase;
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer loc;
 
 
     /* Module state */
-    zzekdps_state_t* __state = get_zzekdps_state();
+    zzekdps_state_t* __state = get_zzekdps_state(__global_state);
 /* $ Abstract */
 
 /*     Delete a specified data page for a specified EK segment. */
@@ -460,8 +461,8 @@ static zzekdps_state_t* get_zzekdps_state() {
 
 /*     Ashes to ashes, dust to dust.  This page goes to the free list. */
 
-    zzekpgfr_(handle, type__, p);
-    if (failed_()) {
+    zzekpgfr_(__global_state, handle, type__, p);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -478,7 +479,7 @@ static zzekdps_state_t* get_zzekdps_state() {
 	if (segdsc[15] == *p) {
 	    i__1 = mbase + 19;
 	    i__2 = mbase + 19;
-	    dasudi_(handle, &i__1, &i__2, &__state->c__1014);
+	    dasudi_(__global_state, handle, &i__1, &i__2, &__state->c__1014);
 	}
 	if (*p == segdsc[15]) {
 	    segdsc[18] = 1014;
@@ -488,7 +489,7 @@ static zzekdps_state_t* get_zzekdps_state() {
 	if (segdsc[16] == *p) {
 	    i__1 = mbase + 20;
 	    i__2 = mbase + 20;
-	    dasudi_(handle, &i__1, &i__2, &__state->c__126);
+	    dasudi_(__global_state, handle, &i__1, &i__2, &__state->c__126);
 	}
 	if (*p == segdsc[16]) {
 	    segdsc[19] = 126;
@@ -503,7 +504,7 @@ static zzekdps_state_t* get_zzekdps_state() {
 	if (segdsc[17] == *p) {
 	    i__1 = mbase + 21;
 	    i__2 = mbase + 21;
-	    dasudi_(handle, &i__1, &i__2, &__state->c__254);
+	    dasudi_(__global_state, handle, &i__1, &i__2, &__state->c__254);
 	}
 	if (*p == segdsc[17]) {
 	    segdsc[20] = 254;
@@ -514,8 +515,8 @@ static zzekdps_state_t* get_zzekdps_state() {
 /*     appropriate type.  This removal requires finding the key that */
 /*     points to the page to be removed. */
 
-    loc = zzektrls_(handle, &tree, p);
-    zzektrdl_(handle, &tree, &loc);
+    loc = zzektrls_(__global_state, handle, &tree, p);
+    zzektrdl_(__global_state, handle, &tree, &loc);
     return 0;
 } /* zzekdps_ */
 

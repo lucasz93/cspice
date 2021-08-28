@@ -8,20 +8,20 @@
 
 
 typedef int reclat_state_t;
-static reclat_state_t* get_reclat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline reclat_state_t* get_reclat_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RECLAT ( Rectangular to latitudinal coordinates ) */
-/* Subroutine */ int reclat_(doublereal *rectan, doublereal *radius, 
-	doublereal *long__, doublereal *lat)
+/* Subroutine */ int reclat_(cspice_t* __global_state, doublereal *rectan, 
+	doublereal *radius, doublereal *long__, doublereal *lat)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal), atan2(doublereal, doublereal);
+    double sqrt(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
+	    doublereal);
 
     /* Local variables */
     doublereal x;
@@ -31,7 +31,7 @@ static reclat_state_t* get_reclat_state() {
 
 
     /* Module state */
-    reclat_state_t* __state = get_reclat_state();
+    reclat_state_t* __state = get_reclat_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from rectangular coordinates to latitudinal coordinates. */
@@ -223,14 +223,15 @@ static reclat_state_t* get_reclat_state() {
 	x = rectan[0] / big;
 	y = rectan[1] / big;
 	z__ = rectan[2] / big;
-	*radius = big * sqrt(x * x + y * y + z__ * z__);
-	*lat = atan2(z__, sqrt(x * x + y * y));
+	*radius = big * sqrt(&__global_state->f2c, x * x + y * y + z__ * z__);
+	*lat = atan2(&__global_state->f2c, z__, sqrt(&__global_state->f2c, x *
+		 x + y * y));
 	x = rectan[0];
 	y = rectan[1];
 	if (x == 0. && y == 0.) {
 	    *long__ = 0.;
 	} else {
-	    *long__ = atan2(y, x);
+	    *long__ = atan2(&__global_state->f2c, y, x);
 	}
     } else {
 	*radius = 0.;

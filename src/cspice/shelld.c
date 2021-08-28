@@ -8,13 +8,13 @@
 
 
 typedef int shelld_state_t;
-static shelld_state_t* get_shelld_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline shelld_state_t* get_shelld_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SHELLD ( Shell sort a double precision array ) */
-/* Subroutine */ int shelld_(integer *ndim, doublereal *array)
+/* Subroutine */ int shelld_(cspice_t* __global_state, integer *ndim, 
+	doublereal *array)
 {
     /* System generated locals */
     integer i__1;
@@ -22,13 +22,13 @@ static shelld_state_t* get_shelld_state() {
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int swapd_(doublereal *, doublereal *);
+    extern /* Subroutine */ int swapd_(cspice_t*, doublereal *, doublereal *);
     integer jg;
     integer gap;
 
 
     /* Module state */
-    shelld_state_t* __state = get_shelld_state();
+    shelld_state_t* __state = get_shelld_state(__global_state);
 /* $ Abstract */
 
 /*      Sort a double precision array using the Shell Sort algorithm. */
@@ -167,7 +167,7 @@ static shelld_state_t* get_shelld_state() {
 		if (array[j - 1] <= array[jg - 1]) {
 		    j = 0;
 		} else {
-		    swapd_(&array[j - 1], &array[jg - 1]);
+		    swapd_(__global_state, &array[j - 1], &array[jg - 1]);
 		}
 		j -= gap;
 	    }

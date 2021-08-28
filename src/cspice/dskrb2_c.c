@@ -507,7 +507,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dskrb2_c" );
+   chkin_c ( naif_state, "dskrb2_c" );
 
    
    dskrb2_ ( (SpiceInt      *) &nv,

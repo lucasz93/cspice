@@ -8,8 +8,7 @@
 
 
 extern ckpfs_init_t __ckpfs_init;
-static ckpfs_state_t* get_ckpfs_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckpfs_state_t* get_ckpfs_state(cspice_t* state) {
 	if (!state->ckpfs)
 		state->ckpfs = __cspice_allocate_module(sizeof(ckpfs_state_t),
 	 &__ckpfs_init, sizeof(__ckpfs_init));
@@ -18,51 +17,52 @@ static ckpfs_state_t* get_ckpfs_state() {
 }
 
 /* $Procedure      CKPFS ( C-kernel, get pointing from segment ) */
-/* Subroutine */ int ckpfs_(integer *handle, doublereal *descr, doublereal *
-	sclkdp, doublereal *tol, logical *needav, doublereal *cmat, 
-	doublereal *av, doublereal *clkout, logical *found)
+/* Subroutine */ int ckpfs_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *
+	needav, doublereal *cmat, doublereal *av, doublereal *clkout, logical 
+	*found)
 {
-    extern /* Subroutine */ int cke01_(logical *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int cke02_(logical *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int cke03_(logical *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int cke04_(logical *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int cke05_(logical *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int cke06_(logical *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int ckr01_(integer *, doublereal *, doublereal *, 
-	    doublereal *, logical *, doublereal *, logical *);
-    extern /* Subroutine */ int ckr02_(integer *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *);
-    extern /* Subroutine */ int ckr03_(integer *, doublereal *, doublereal *, 
-	    doublereal *, logical *, doublereal *, logical *);
-    extern /* Subroutine */ int ckr04_(integer *, doublereal *, doublereal *, 
-	    doublereal *, logical *, doublereal *, logical *);
-    extern /* Subroutine */ int ckr05_(integer *, doublereal *, doublereal *, 
-	    doublereal *, logical *, doublereal *, logical *);
-    extern /* Subroutine */ int ckr06_(integer *, doublereal *, doublereal *, 
-	    doublereal *, logical *, doublereal *, logical *);
+    extern /* Subroutine */ int cke01_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int cke02_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int cke03_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int cke04_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int cke05_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int cke06_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int ckr01_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, logical *, doublereal *, logical *);
+    extern /* Subroutine */ int ckr02_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int ckr03_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, logical *, doublereal *, logical *);
+    extern /* Subroutine */ int ckr04_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, logical *, doublereal *, logical *);
+    extern /* Subroutine */ int ckr05_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, logical *, doublereal *, logical *);
+    extern /* Subroutine */ int ckr06_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, logical *, doublereal *, logical *);
     integer type__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern logical failed_(cspice_t*);
     doublereal record[340];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer icd[6];
 
 
     /* Module state */
-    ckpfs_state_t* __state = get_ckpfs_state();
+    ckpfs_state_t* __state = get_ckpfs_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate pointing data from a segment for a given time. */
@@ -630,10 +630,10 @@ static ckpfs_state_t* get_ckpfs_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKPFS", (ftnlen)5);
+	chkin_(__global_state, "CKPFS", (ftnlen)5);
     }
 
 /*     Start off with FOUND set to false. */
@@ -658,52 +658,58 @@ static ckpfs_state_t* get_ckpfs_state() {
 /*     Unpack the descriptor to see what the data type of the segment is, */
 /*     and call the appropriate read-and-evaluate routines. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dcd, icd);
     type__ = icd[2];
     if (type__ == 1) {
-	ckr01_(handle, descr, sclkdp, tol, needav, record, found);
+	ckr01_(__global_state, handle, descr, sclkdp, tol, needav, record, 
+		found);
 	if (*found) {
-	    cke01_(needav, record, cmat, av, clkout);
+	    cke01_(__global_state, needav, record, cmat, av, clkout);
 	}
     } else if (type__ == 2) {
-	ckr02_(handle, descr, sclkdp, tol, record, found);
+	ckr02_(__global_state, handle, descr, sclkdp, tol, record, found);
 	if (*found) {
-	    cke02_(needav, record, cmat, av, clkout);
+	    cke02_(__global_state, needav, record, cmat, av, clkout);
 	}
     } else if (type__ == 3) {
-	ckr03_(handle, descr, sclkdp, tol, needav, record, found);
+	ckr03_(__global_state, handle, descr, sclkdp, tol, needav, record, 
+		found);
 	if (*found) {
-	    cke03_(needav, record, cmat, av, clkout);
+	    cke03_(__global_state, needav, record, cmat, av, clkout);
 	}
     } else if (type__ == 4) {
-	ckr04_(handle, descr, sclkdp, tol, needav, record, found);
+	ckr04_(__global_state, handle, descr, sclkdp, tol, needav, record, 
+		found);
 	if (*found) {
-	    cke04_(needav, record, cmat, av, clkout);
+	    cke04_(__global_state, needav, record, cmat, av, clkout);
 	}
     } else if (type__ == 5) {
-	ckr05_(handle, descr, sclkdp, tol, needav, record, found);
+	ckr05_(__global_state, handle, descr, sclkdp, tol, needav, record, 
+		found);
 	if (*found) {
-	    cke05_(needav, record, cmat, av, clkout);
+	    cke05_(__global_state, needav, record, cmat, av, clkout);
 	}
     } else if (type__ == 6) {
-	ckr06_(handle, descr, sclkdp, tol, needav, record, found);
+	ckr06_(__global_state, handle, descr, sclkdp, tol, needav, record, 
+		found);
 	if (*found) {
-	    cke06_(needav, record, cmat, av, clkout);
+	    cke06_(__global_state, needav, record, cmat, av, clkout);
 	}
     } else {
-	setmsg_("The data type # is not currently supported.", (ftnlen)43);
-	errint_("#", &type__, (ftnlen)1);
-	sigerr_("SPICE(CKUNKNOWNDATATYPE)", (ftnlen)24);
+	setmsg_(__global_state, "The data type # is not currently supported.",
+		 (ftnlen)43);
+	errint_(__global_state, "#", &type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CKUNKNOWNDATATYPE)", (ftnlen)24);
     }
 
 /*     In case an evaluator signaled an error, we check the SPICE */
 /*     error status here. If a SPICE error occurred, indicate no */
 /*     data were found. */
 
-    if (failed_()) {
+    if (failed_(__global_state)) {
 	*found = FALSE_;
     }
-    chkout_("CKPFS", (ftnlen)5);
+    chkout_(__global_state, "CKPFS", (ftnlen)5);
     return 0;
 } /* ckpfs_ */
 

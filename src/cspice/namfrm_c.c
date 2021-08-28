@@ -172,7 +172,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "namfrm_c" );
+   chkin_c ( naif_state, "namfrm_c" );
 
    /*
    Check the input string to make sure the pointer

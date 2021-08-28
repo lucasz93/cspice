@@ -8,8 +8,7 @@
 
 
 extern zzgfdiu_init_t __zzgfdiu_init;
-static zzgfdiu_state_t* get_zzgfdiu_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfdiu_state_t* get_zzgfdiu_state(cspice_t* state) {
 	if (!state->zzgfdiu)
 		state->zzgfdiu = __cspice_allocate_module(sizeof(
 	zzgfdiu_state_t), &__zzgfdiu_init, sizeof(__zzgfdiu_init));
@@ -18,35 +17,41 @@ static zzgfdiu_state_t* get_zzgfdiu_state() {
 }
 
 /* $Procedure ZZGFDIU ( Private --- GF, distance utilities ) */
-/* Subroutine */ int zzgfdiu_0_(int n__, char *target, char *abcorr, char *
-	obsrvr, U_fp udfunc, doublereal *et, logical *decres, doublereal *
-	dist, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int zzgfdiu_0_(cspice_t* __global_state, int n__, char *
+	target, char *abcorr, char *obsrvr, U_fp udfunc, doublereal *et, 
+	logical *decres, doublereal *dist, ftnlen target_len, ftnlen 
+	abcorr_len, ftnlen obsrvr_len)
 {
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
     doublereal state[6];
-    extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
-	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int spkez_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int bods2c_(cspice_t*, char *, integer *, logical 
+	    *, ftnlen);
+    extern logical failed_(cspice_t*);
     doublereal lt;
     logical attblk[15];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int zzgfdiq_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzgfdiq_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, ftnlen);
 
 
     /* Module state */
-    zzgfdiu_state_t* __state = get_zzgfdiu_state();
+    zzgfdiu_state_t* __state = get_zzgfdiu_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -343,9 +348,9 @@ static zzgfdiu_state_t* get_zzgfdiu_state() {
 	case 3: goto L_zzgfdigq;
 	}
 
-    chkin_("ZZGFDIU", (ftnlen)7);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZGFDIU", (ftnlen)7);
+    chkin_(__global_state, "ZZGFDIU", (ftnlen)7);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZGFDIU", (ftnlen)7);
     return 0;
 /* $Procedure  ZZGFDIIN ( Private --- GF, distance initialization ) */
 
@@ -507,62 +512,65 @@ L_zzgfdiin:
 /*     distance initialization routine */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFDIIN", (ftnlen)8);
+    chkin_(__global_state, "ZZGFDIIN", (ftnlen)8);
 
 /*     Find NAIF IDs for TARGET and OBSRVR. */
 
-    bods2c_(target, &__state->svtarg, &found, target_len);
+    bods2c_(__global_state, target, &__state->svtarg, &found, target_len);
     if (! found) {
-	setmsg_("The target object, '#', is not a recognized name for an eph"
-		"emeris object. The cause of this problem may be that you nee"
-		"d an updated version of the SPICE Toolkit. ", (ftnlen)162);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFDIIN", (ftnlen)8);
+	setmsg_(__global_state, "The target object, '#', is not a recognized"
+		" name for an ephemeris object. The cause of this problem may"
+		" be that you need an updated version of the SPICE Toolkit. ", 
+		(ftnlen)162);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFDIIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(obsrvr, &__state->svobs, &found, obsrvr_len);
+    bods2c_(__global_state, obsrvr, &__state->svobs, &found, obsrvr_len);
     if (! found) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE toolkit. ", (ftnlen)157);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFDIIN", (ftnlen)8);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE toolkit. ", (
+		ftnlen)157);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFDIIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure the observer and target are distinct. */
 
     if (__state->svtarg == __state->svobs) {
-	setmsg_("The observer and target must be distinct objects, but are n"
-		"ot: OBSRVR = #; TARGET = #.", (ftnlen)86);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("ZZGFDIIN", (ftnlen)8);
+	setmsg_(__global_state, "The observer and target must be distinct ob"
+		"jects, but are not: OBSRVR = #; TARGET = #.", (ftnlen)86);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "ZZGFDIIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Squeeze all blanks out of the aberration correction */
 /*     string; ensure the string is in upper case. */
 
-    cmprss_(" ", &__state->c__0, abcorr, __state->svcorr, (ftnlen)1, 
-	    abcorr_len, (ftnlen)5);
-    ucase_(__state->svcorr, __state->svcorr, (ftnlen)5, (ftnlen)5);
+    cmprss_(__global_state, " ", &__state->c__0, abcorr, __state->svcorr, (
+	    ftnlen)1, abcorr_len, (ftnlen)5);
+    ucase_(__global_state, __state->svcorr, __state->svcorr, (ftnlen)5, (
+	    ftnlen)5);
 
 /*     Check the aberration correction. If SPKEZR can't handle it, */
 /*     neither can we. */
 
-    zzvalcor_(__state->svcorr, attblk, (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZGFDIIN", (ftnlen)8);
+    zzvalcor_(__global_state, __state->svcorr, attblk, (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFDIIN", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZGFDIIN", (ftnlen)8);
+    chkout_(__global_state, "ZZGFDIIN", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFDIDC ( Private --- GF, is distance decreasing? ) */
 
@@ -713,14 +721,14 @@ L_zzgfdidc:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFDIDC", (ftnlen)8);
-    spkez_(&__state->svtarg, et, "J2000", __state->svcorr, &__state->svobs, 
-	    state, &lt, (ftnlen)5, (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZGFDIDC", (ftnlen)8);
+    chkin_(__global_state, "ZZGFDIDC", (ftnlen)8);
+    spkez_(__global_state, &__state->svtarg, et, "J2000", __state->svcorr, &
+	    __state->svobs, state, &lt, (ftnlen)5, (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFDIDC", (ftnlen)8);
 	return 0;
     }
 
@@ -728,8 +736,8 @@ L_zzgfdidc:
 /*     if the dot product of the velocity and position is */
 /*     negative. */
 
-    *decres = vdot_(state, &state[3]) < 0.;
-    chkout_("ZZGFDIDC", (ftnlen)8);
+    *decres = vdot_(__global_state, state, &state[3]) < 0.;
+    chkout_(__global_state, "ZZGFDIDC", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFDIGQ ( Private --- GF, get observer-target distance ) */
 
@@ -859,38 +867,42 @@ L_zzgfdigq:
 /*     return distance between two bodies */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFDIGQ", (ftnlen)8);
-    zzgfdiq_(&__state->svtarg, et, __state->svcorr, &__state->svobs, dist, (
-	    ftnlen)5);
-    chkout_("ZZGFDIGQ", (ftnlen)8);
+    chkin_(__global_state, "ZZGFDIGQ", (ftnlen)8);
+    zzgfdiq_(__global_state, &__state->svtarg, et, __state->svcorr, &
+	    __state->svobs, dist, (ftnlen)5);
+    chkout_(__global_state, "ZZGFDIGQ", (ftnlen)8);
     return 0;
 } /* zzgfdiu_ */
 
-/* Subroutine */ int zzgfdiu_(char *target, char *abcorr, char *obsrvr, U_fp 
-	udfunc, doublereal *et, logical *decres, doublereal *dist, ftnlen 
-	target_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int zzgfdiu_(cspice_t* __global_state, char *target, char *
+	abcorr, char *obsrvr, U_fp udfunc, doublereal *et, logical *decres, 
+	doublereal *dist, ftnlen target_len, ftnlen abcorr_len, ftnlen 
+	obsrvr_len)
 {
     return zzgfdiu_0_(0, target, abcorr, obsrvr, udfunc, et, decres, dist, 
 	    target_len, abcorr_len, obsrvr_len);
     }
 
-/* Subroutine */ int zzgfdiin_(char *target, char *abcorr, char *obsrvr, 
-	ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int zzgfdiin_(cspice_t* __global_state, char *target, char *
+	abcorr, char *obsrvr, ftnlen target_len, ftnlen abcorr_len, ftnlen 
+	obsrvr_len)
 {
     return zzgfdiu_0_(1, target, abcorr, obsrvr, (U_fp)0, (doublereal *)0, (
 	    logical *)0, (doublereal *)0, target_len, abcorr_len, obsrvr_len);
     }
 
-/* Subroutine */ int zzgfdidc_(U_fp udfunc, doublereal *et, logical *decres)
+/* Subroutine */ int zzgfdidc_(cspice_t* __global_state, U_fp udfunc, 
+	doublereal *et, logical *decres)
 {
     return zzgfdiu_0_(2, (char *)0, (char *)0, (char *)0, udfunc, et, decres, 
 	    (doublereal *)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzgfdigq_(doublereal *et, doublereal *dist)
+/* Subroutine */ int zzgfdigq_(cspice_t* __global_state, doublereal *et, 
+	doublereal *dist)
 {
     return zzgfdiu_0_(3, (char *)0, (char *)0, (char *)0, (U_fp)0, et, (
 	    logical *)0, dist, (ftnint)0, (ftnint)0, (ftnint)0);

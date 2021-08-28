@@ -190,7 +190,7 @@
    {
       return;
    }
-   chkin_c ( "wncomd_c" );
+   chkin_c ( naif_state, "wncomd_c" );
 
 
    /*

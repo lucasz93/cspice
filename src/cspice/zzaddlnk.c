@@ -8,25 +8,25 @@
 
 
 typedef int zzaddlnk_state_t;
-static zzaddlnk_state_t* get_zzaddlnk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzaddlnk_state_t* get_zzaddlnk_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZADDLNK ( Add a new AB cell to an AB structure ) */
-/* Subroutine */ int zzaddlnk_(integer *aval, integer *bval, integer *maxa, 
-	integer *cellsz, integer *pntrs, integer *ncell, integer *cells)
+/* Subroutine */ int zzaddlnk_(cspice_t* __global_state, integer *aval, 
+	integer *bval, integer *maxa, integer *cellsz, integer *pntrs, 
+	integer *ncell, integer *cells)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzaddlnk_state_t* __state = get_zzaddlnk_state();
+    zzaddlnk_state_t* __state = get_zzaddlnk_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -245,20 +245,20 @@ static zzaddlnk_state_t* get_zzaddlnk_state() {
 
 /*     Standard RETURN test. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZADDLNK", (ftnlen)8);
+    chkin_(__global_state, "ZZADDLNK", (ftnlen)8);
 
 /*     Test the pointer array index AVAL. */
 
     if (*aval < 1 || *aval > *maxa) {
-	setmsg_("Index AVAL is out of range. AVAL = #1; valid range is 1:#2.",
-		 (ftnlen)59);
-	errint_("#1", aval, (ftnlen)2);
-	errint_("#2", maxa, (ftnlen)2);
-	sigerr_("SPICE(AVALOUTOFRANGE)", (ftnlen)21);
-	chkout_("ZZADDLNK", (ftnlen)8);
+	setmsg_(__global_state, "Index AVAL is out of range. AVAL = #1; vali"
+		"d range is 1:#2.", (ftnlen)59);
+	errint_(__global_state, "#1", aval, (ftnlen)2);
+	errint_(__global_state, "#2", maxa, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(AVALOUTOFRANGE)", (ftnlen)21);
+	chkout_(__global_state, "ZZADDLNK", (ftnlen)8);
 	return 0;
     }
 
@@ -266,12 +266,12 @@ static zzaddlnk_state_t* get_zzaddlnk_state() {
 
     ++(*ncell);
     if (*ncell > *cellsz) {
-	setmsg_("NCELL larger than cell array. Cell index = #1. Array size ="
-		" #2.", (ftnlen)63);
-	errint_("#1", ncell, (ftnlen)2);
-	errint_("#2", cellsz, (ftnlen)2);
-	sigerr_("SPICE(CELLARRAYTOOSMALL)", (ftnlen)24);
-	chkout_("ZZADDLNK", (ftnlen)8);
+	setmsg_(__global_state, "NCELL larger than cell array. Cell index = "
+		"#1. Array size = #2.", (ftnlen)63);
+	errint_(__global_state, "#1", ncell, (ftnlen)2);
+	errint_(__global_state, "#2", cellsz, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(CELLARRAYTOOSMALL)", (ftnlen)24);
+	chkout_(__global_state, "ZZADDLNK", (ftnlen)8);
 	return 0;
     }
 
@@ -281,7 +281,7 @@ static zzaddlnk_state_t* get_zzaddlnk_state() {
     cells[(*ncell << 1) - 2] = *bval;
     cells[(*ncell << 1) - 1] = pntrs[*aval - 1];
     pntrs[*aval - 1] = *ncell;
-    chkout_("ZZADDLNK", (ftnlen)8);
+    chkout_(__global_state, "ZZADDLNK", (ftnlen)8);
     return 0;
 } /* zzaddlnk_ */
 

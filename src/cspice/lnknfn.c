@@ -8,20 +8,19 @@
 
 
 typedef int lnknfn_state_t;
-static lnknfn_state_t* get_lnknfn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lnknfn_state_t* get_lnknfn_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LNKNFN ( LNK, number of free nodes ) */
-integer lnknfn_(integer *pool)
+integer lnknfn_(cspice_t* __global_state, integer *pool)
 {
     /* System generated locals */
     integer ret_val;
 
 
     /* Module state */
-    lnknfn_state_t* __state = get_lnknfn_state();
+    lnknfn_state_t* __state = get_lnknfn_state(__global_state);
 /* $ Abstract */
 
 /*     Return the number of free nodes in a doubly linked list pool. */

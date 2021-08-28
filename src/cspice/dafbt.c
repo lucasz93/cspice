@@ -8,8 +8,7 @@
 
 
 extern dafbt_init_t __dafbt_init;
-static dafbt_state_t* get_dafbt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafbt_state_t* get_dafbt_state(cspice_t* state) {
 	if (!state->dafbt)
 		state->dafbt = __cspice_allocate_module(sizeof(dafbt_state_t),
 	 &__dafbt_init, sizeof(__dafbt_init));
@@ -18,7 +17,8 @@ static dafbt_state_t* get_dafbt_state() {
 }
 
 /* $Procedure DAFBT ( DAF, convert binary file to transfer file ) */
-/* Subroutine */ int dafbt_(char *binfil, integer *xfrlun, ftnlen binfil_len)
+/* Subroutine */ int dafbt_(cspice_t* __global_state, char *binfil, integer *
+	xfrlun, ftnlen binfil_len)
 {
     /* System generated locals */
     address a__1[3];
@@ -27,61 +27,65 @@ static dafbt_state_t* get_dafbt_state() {
     cilist ci__1;
 
     /* Builtin functions */
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void),
-	     s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe(void)
-	    ;
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rdue(f2c_state_t*), s_wsfe(f2c_state_t*, 
+	    cilist *), do_fio(f2c_state_t*, integer *, char *, ftnlen), 
+	    e_wsfe(f2c_state_t*);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char name__[1000];
     integer free;
     char line[80];
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int dafgn_(char *, ftnlen);
-    extern /* Subroutine */ int dafgs_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int dafgn_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafgs_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer bward;
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer fward;
     logical found;
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int daffna_(logical *);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int daffna_(cspice_t*, logical *);
     integer nd;
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafbfs_(cspice_t*, integer *);
     integer dtabeg;
     integer ni;
-    extern /* Subroutine */ int dafcls_(integer *);
+    extern /* Subroutine */ int dafcls_(cspice_t*, integer *);
     char ifname[60];
     integer binhdl;
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
     doublereal buffer[1024];
     integer dtacnt;
-    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int wrencd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int dafopr_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int wrencd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
     integer binlun;
     char idword[8];
     integer numdta;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer snmlen;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int wrenci_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wrenci_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer iostat;
     integer numarr;
     integer numlft;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dsumry[125];
     integer isumry[250];
     doublereal summry[125];
@@ -91,7 +95,7 @@ static dafbt_state_t* get_dafbt_state() {
 
 
     /* Module state */
-    dafbt_state_t* __state = get_dafbt_state();
+    dafbt_state_t* __state = get_dafbt_state(__global_state);
 /* $ Abstract */
 
 /*     Convert the contents of a binary DAF file to an equivalent DAF */
@@ -346,10 +350,10 @@ static dafbt_state_t* get_dafbt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFBT", (ftnlen)5);
+	chkin_(__global_state, "DAFBT", (ftnlen)5);
     }
 
 /*     A brief description of the DAF transfer file format and its */
@@ -472,13 +476,13 @@ static dafbt_state_t* get_dafbt_state() {
 /*     We begin by opening the binary DAF file specified by BINFIL for */
 /*     read access, obtaining a DAF file handle. */
 
-    dafopr_(binfil, &binhdl, binfil_len);
+    dafopr_(__global_state, binfil, &binhdl, binfil_len);
 
 /*     If the open failed, check out and return, as an appropriate error */
 /*     message should have already been set. */
 
-    if (failed_()) {
-	chkout_("DAFBT", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFBT", (ftnlen)5);
 	return 0;
     }
 
@@ -490,13 +494,14 @@ static dafbt_state_t* get_dafbt_state() {
 /*     unit. We need to do this in order to accurately move the file */
 /*     ID word to the DAF transfer file. */
 
-    zzddhhlu_(&binhdl, "DAF", &__state->c_false, &binlun, (ftnlen)3);
+    zzddhhlu_(__global_state, &binhdl, "DAF", &__state->c_false, &binlun, (
+	    ftnlen)3);
 
 /*     If the translation failed, checkout and return, as an appropriate */
 /*     error message should have already been set. */
 
-    if (failed_()) {
-	chkout_("DAFBT", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFBT", (ftnlen)5);
 	return 0;
     }
 
@@ -504,23 +509,23 @@ static dafbt_state_t* get_dafbt_state() {
 /*     characters on the first record in the file. */
 
     __state->io___4.ciunit = binlun;
-    iostat = s_rdue(&__state->io___4);
+    iostat = s_rdue(&__global_state->f2c, &__state->io___4);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, idword, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rdue();
+    iostat = e_rdue(&__global_state->f2c);
 L100001:
     if (iostat != 0) {
-	setmsg_("Error reading the file ID word from the binary DAF file '#'"
-		". IOSTAT = #.", (ftnlen)72);
-	errfnm_("#", &binlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("DAFBT", (ftnlen)5);
+	setmsg_(__global_state, "Error reading the file ID word from the bin"
+		"ary DAF file '#'. IOSTAT = #.", (ftnlen)72);
+	errfnm_(__global_state, "#", &binlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "DAFBT", (ftnlen)5);
 	return 0;
     }
 
@@ -529,9 +534,10 @@ L100001:
 /*     in the summary (NI), the internal filename (IFNAME), and some */
 /*     data pointer information (FWARD, BWARD, FREE). */
 
-    dafrfr_(&binhdl, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
-    if (failed_()) {
-	chkout_("DAFBT", (ftnlen)5);
+    dafrfr_(__global_state, &binhdl, &nd, &ni, ifname, &fward, &bward, &free, 
+	    (ftnlen)60);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFBT", (ftnlen)5);
 	return 0;
     }
 
@@ -545,24 +551,24 @@ L100001:
     ci__1.cierr = 1;
     ci__1.ciunit = *xfrlun;
     ci__1.cifmt = "(A)";
-    iostat = s_wsfe(&ci__1);
+    iostat = s_wsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_fio(&__state->c__1, "DAFETF NAIF DAF ENCODED TRANSFER FILE", (
-	    ftnlen)37);
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, "DAFETF NAIF DAF E"
+	    "NCODED TRANSFER FILE", (ftnlen)37);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = e_wsfe();
+    iostat = e_wsfe(&__global_state->f2c);
 L100002:
     if (iostat != 0) {
-	setmsg_("Error writing to the DAF transfer file '#'.IOSTAT = #.", (
-		ftnlen)54);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("DAFBT", (ftnlen)5);
+	setmsg_(__global_state, "Error writing to the DAF transfer file '#'."
+		"IOSTAT = #.", (ftnlen)54);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "DAFBT", (ftnlen)5);
 	return 0;
     }
 
@@ -571,7 +577,7 @@ L100002:
     ci__1.cierr = 1;
     ci__1.ciunit = *xfrlun;
     ci__1.cifmt = "(A)";
-    iostat = s_wsfe(&ci__1);
+    iostat = s_wsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100003;
     }
@@ -579,20 +585,21 @@ L100002:
     i__1[0] = 1, a__1[0] = "'";
     i__1[1] = 8, a__1[1] = idword;
     i__1[2] = 1, a__1[2] = "'";
-    s_cat(ch__1, a__1, i__1, &__state->c__3, (ftnlen)10);
-    iostat = do_fio(&__state->c__1, ch__1, (ftnlen)10);
+    s_cat(&__global_state->f2c, ch__1, a__1, i__1, &__state->c__3, (ftnlen)10)
+	    ;
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, ch__1, (ftnlen)10);
     if (iostat != 0) {
 	goto L100003;
     }
-    iostat = e_wsfe();
+    iostat = e_wsfe(&__global_state->f2c);
 L100003:
     if (iostat != 0) {
-	setmsg_("Error writing to the DAF transfer file '#'. IOSTAT = #.", (
-		ftnlen)55);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("DAFBT", (ftnlen)5);
+	setmsg_(__global_state, "Error writing to the DAF transfer file '#'."
+		" IOSTAT = #.", (ftnlen)55);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "DAFBT", (ftnlen)5);
 	return 0;
     }
 
@@ -600,9 +607,9 @@ L100003:
 
     isumry[0] = nd;
     isumry[1] = ni;
-    wrenci_(xfrlun, &__state->c__2, isumry);
-    if (failed_()) {
-	chkout_("DAFBT", (ftnlen)5);
+    wrenci_(__global_state, xfrlun, &__state->c__2, isumry);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFBT", (ftnlen)5);
 	return 0;
     }
 
@@ -611,7 +618,7 @@ L100003:
     ci__1.cierr = 1;
     ci__1.ciunit = *xfrlun;
     ci__1.cifmt = "(A)";
-    iostat = s_wsfe(&ci__1);
+    iostat = s_wsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100004;
     }
@@ -619,20 +626,21 @@ L100003:
     i__1[0] = 1, a__1[0] = "'";
     i__1[1] = 60, a__1[1] = ifname;
     i__1[2] = 1, a__1[2] = "'";
-    s_cat(ch__2, a__1, i__1, &__state->c__3, (ftnlen)62);
-    iostat = do_fio(&__state->c__1, ch__2, (ftnlen)62);
+    s_cat(&__global_state->f2c, ch__2, a__1, i__1, &__state->c__3, (ftnlen)62)
+	    ;
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, ch__2, (ftnlen)62);
     if (iostat != 0) {
 	goto L100004;
     }
-    iostat = e_wsfe();
+    iostat = e_wsfe(&__global_state->f2c);
 L100004:
     if (iostat != 0) {
-	setmsg_("Error writing to the DAF transfer file '#'. IOSTAT = #.", (
-		ftnlen)55);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("DAFBT", (ftnlen)5);
+	setmsg_(__global_state, "Error writing to the DAF transfer file '#'."
+		" IOSTAT = #.", (ftnlen)55);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "DAFBT", (ftnlen)5);
 	return 0;
     }
 
@@ -643,9 +651,9 @@ L100004:
 /*     Get ready to begin a forward search through the DAF file for the */
 /*     data. */
 
-    dafbfs_(&binhdl);
-    if (failed_()) {
-	chkout_("DAFBT", (ftnlen)5);
+    dafbfs_(__global_state, &binhdl);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFBT", (ftnlen)5);
 	return 0;
     }
 
@@ -664,9 +672,9 @@ L100004:
 
 /*        Look for a DAF array. */
 
-	daffna_(&found);
-	if (failed_()) {
-	    chkout_("DAFBT", (ftnlen)5);
+	daffna_(__global_state, &found);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFBT", (ftnlen)5);
 	    return 0;
 	}
 
@@ -680,60 +688,64 @@ L100004:
 /*           Get and unpack the summary information for the current */
 /*           array. */
 
-	    dafgs_(summry);
-	    dafus_(summry, &nd, &ni, dsumry, isumry);
+	    dafgs_(__global_state, summry);
+	    dafus_(__global_state, summry, &nd, &ni, dsumry, isumry);
 
 /*           Get the name of the current array. */
 
-	    dafgn_(name__, (ftnlen)1000);
-	    if (failed_()) {
+	    dafgn_(__global_state, name__, (ftnlen)1000);
+	    if (failed_(__global_state)) {
 
 /*              If an error occurred on any of the DAF system calls */
 /*              above, return to the caller. An appropriate error */
 /*              message will have already been set by the routine which */
 /*              signalled the error. */
 
-		chkout_("DAFBT", (ftnlen)5);
+		chkout_(__global_state, "DAFBT", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Get the beginning address for the data in the current array. */
 
 	    dtabeg = isumry[(i__2 = ni - 2) < 250 && 0 <= i__2 ? i__2 : 
-		    s_rnge("isumry", i__2, "dafbt_", (ftnlen)657)];
+		    s_rnge(&__global_state->f2c, "isumry", i__2, "dafbt_", (
+		    ftnlen)657)];
 
 /*           Set the number of double precision numbers in the current */
 /*           array. */
 
 	    dtacnt = isumry[(i__2 = ni - 1) < 250 && 0 <= i__2 ? i__2 : 
-		    s_rnge("isumry", i__2, "dafbt_", (ftnlen)662)] - isumry[(
-		    i__3 = ni - 2) < 250 && 0 <= i__3 ? i__3 : s_rnge("isumry"
-		    , i__3, "dafbt_", (ftnlen)662)] + 1;
-	    s_copy(line, "BEGIN_ARRAY # #", (ftnlen)80, (ftnlen)15);
-	    repmi_(line, "#", &numarr, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
-	    repmi_(line, "#", &dtacnt, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
+		    s_rnge(&__global_state->f2c, "isumry", i__2, "dafbt_", (
+		    ftnlen)662)] - isumry[(i__3 = ni - 2) < 250 && 0 <= i__3 ?
+		     i__3 : s_rnge(&__global_state->f2c, "isumry", i__3, 
+		    "dafbt_", (ftnlen)662)] + 1;
+	    s_copy(&__global_state->f2c, line, "BEGIN_ARRAY # #", (ftnlen)80, 
+		    (ftnlen)15);
+	    repmi_(__global_state, line, "#", &numarr, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
+	    repmi_(__global_state, line, "#", &dtacnt, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100005;
 	    }
-	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, 
+		    rtrim_(__global_state, line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100005;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100005:
 	    if (iostat != 0) {
-		setmsg_("Error writing to the DAF transfer file '#'. IOSTAT "
-			"= #.", (ftnlen)55);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DAFBT", (ftnlen)5);
+		setmsg_(__global_state, "Error writing to the DAF transfer f"
+			"ile '#'. IOSTAT = #.", (ftnlen)55);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DAFBT", (ftnlen)5);
 		return 0;
 	    }
 
@@ -742,7 +754,7 @@ L100005:
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100006;
 	    }
@@ -750,26 +762,28 @@ L100005:
 	    i__1[0] = 1, a__1[0] = "'";
 	    i__1[1] = snmlen, a__1[1] = name__;
 	    i__1[2] = 1, a__1[2] = "'";
-	    s_cat(ch__3, a__1, i__1, &__state->c__3, (ftnlen)1002);
-	    iostat = do_fio(&__state->c__1, ch__3, snmlen + 2);
+	    s_cat(&__global_state->f2c, ch__3, a__1, i__1, &__state->c__3, (
+		    ftnlen)1002);
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, ch__3, 
+		    snmlen + 2);
 	    if (iostat != 0) {
 		goto L100006;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100006:
 	    if (iostat != 0) {
-		setmsg_("Error writing to the DAF transfer file '#'. IOSTAT "
-			"= #.", (ftnlen)55);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DAFBT", (ftnlen)5);
+		setmsg_(__global_state, "Error writing to the DAF transfer f"
+			"ile '#'. IOSTAT = #.", (ftnlen)55);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DAFBT", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Write out the double precision part of the summary. */
 
-	    wrencd_(xfrlun, &nd, dsumry);
+	    wrencd_(__global_state, xfrlun, &nd, dsumry);
 
 /*           Write out the integer part of the summary, excluding the */
 /*           beginning and ending addresses of the data in the array, */
@@ -777,15 +791,15 @@ L100006:
 /*           the number of reserved records allocated. */
 
 	    i__2 = ni - 2;
-	    wrenci_(xfrlun, &i__2, isumry);
-	    if (failed_()) {
+	    wrenci_(__global_state, xfrlun, &i__2, isumry);
+	    if (failed_(__global_state)) {
 
 /*              If an error occurred on any of the data encoding calls */
 /*              above, return to the caller. An appropriate error message */
 /*              will have already been set by the routine which signalled */
 /*              the error. */
 
-		chkout_("DAFBT", (ftnlen)5);
+		chkout_(__global_state, "DAFBT", (ftnlen)5);
 		return 0;
 	    }
 	    numlft = dtacnt;
@@ -802,90 +816,94 @@ L100006:
 /*              of 1 in the call. */
 
 		i__2 = dtabeg + numdta - 1;
-		dafgda_(&binhdl, &dtabeg, &i__2, buffer);
-		if (failed_()) {
+		dafgda_(__global_state, &binhdl, &dtabeg, &i__2, buffer);
+		if (failed_(__global_state)) {
 
 /*                 We want to check failed here because were in a loop. */
 /*                 We should exit the loop, and the routine, as soon as */
 /*                 an error is detected, so we don't continue doing */
 /*                 things for a long time. */
 
-		    chkout_("DAFBT", (ftnlen)5);
+		    chkout_(__global_state, "DAFBT", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Write out the count of double precision numbers which are */
 /*              in the buffer. */
 
-		s_copy(line, "#", (ftnlen)80, (ftnlen)1);
-		repmi_(line, "#", &numdta, line, (ftnlen)80, (ftnlen)1, (
-			ftnlen)80);
+		s_copy(&__global_state->f2c, line, "#", (ftnlen)80, (ftnlen)1)
+			;
+		repmi_(__global_state, line, "#", &numdta, line, (ftnlen)80, (
+			ftnlen)1, (ftnlen)80);
 		ci__1.cierr = 1;
 		ci__1.ciunit = *xfrlun;
 		ci__1.cifmt = "(A)";
-		iostat = s_wsfe(&ci__1);
+		iostat = s_wsfe(&__global_state->f2c, &ci__1);
 		if (iostat != 0) {
 		    goto L100007;
 		}
-		iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80)
-			);
+		iostat = do_fio(&__global_state->f2c, &__state->c__1, line, 
+			rtrim_(__global_state, line, (ftnlen)80));
 		if (iostat != 0) {
 		    goto L100007;
 		}
-		iostat = e_wsfe();
+		iostat = e_wsfe(&__global_state->f2c);
 L100007:
 		if (iostat != 0) {
-		    setmsg_("Error writing to the DAF transfer file '#'. IOS"
-			    "TAT = #.", (ftnlen)55);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    errint_("#", &iostat, (ftnlen)1);
-		    sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		    chkout_("DAFBT", (ftnlen)5);
+		    setmsg_(__global_state, "Error writing to the DAF transf"
+			    "er file '#'. IOSTAT = #.", (ftnlen)55);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    errint_(__global_state, "#", &iostat, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)
+			    22);
+		    chkout_(__global_state, "DAFBT", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Encode and write out a buffer of double precision */
 /*              numbers. */
 
-		wrencd_(xfrlun, &numdta, buffer);
-		if (failed_()) {
+		wrencd_(__global_state, xfrlun, &numdta, buffer);
+		if (failed_(__global_state)) {
 
 /*                 We want to check failed here because were in a loop. */
 /*                 We should exit the loop, and the routine, as soon as */
 /*                 an error is detected, so we don't continue doing */
 /*                 things for a long time. */
 
-		    chkout_("DAFBT", (ftnlen)5);
+		    chkout_(__global_state, "DAFBT", (ftnlen)5);
 		    return 0;
 		}
 		numlft -= numdta;
 		dtabeg += numdta;
 	    }
-	    s_copy(line, "END_ARRAY # #", (ftnlen)80, (ftnlen)13);
-	    repmi_(line, "#", &numarr, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
-	    repmi_(line, "#", &dtacnt, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
+	    s_copy(&__global_state->f2c, line, "END_ARRAY # #", (ftnlen)80, (
+		    ftnlen)13);
+	    repmi_(__global_state, line, "#", &numarr, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
+	    repmi_(__global_state, line, "#", &dtacnt, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100008;
 	    }
-	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, 
+		    rtrim_(__global_state, line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100008;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100008:
 	    if (iostat != 0) {
-		setmsg_("Error writing to the DAF transfer file '#'. IOSTAT "
-			"= #.", (ftnlen)55);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DAFBT", (ftnlen)5);
+		setmsg_(__global_state, "Error writing to the DAF transfer f"
+			"ile '#'. IOSTAT = #.", (ftnlen)55);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DAFBT", (ftnlen)5);
 		return 0;
 	    }
 	}
@@ -897,35 +915,38 @@ L100008:
 
 /*     Write out the number of arrays processed. */
 
-    s_copy(line, "TOTAL_ARRAYS #", (ftnlen)80, (ftnlen)14);
-    repmi_(line, "#", &numarr, line, (ftnlen)80, (ftnlen)1, (ftnlen)80);
+    s_copy(&__global_state->f2c, line, "TOTAL_ARRAYS #", (ftnlen)80, (ftnlen)
+	    14);
+    repmi_(__global_state, line, "#", &numarr, line, (ftnlen)80, (ftnlen)1, (
+	    ftnlen)80);
     ci__1.cierr = 1;
     ci__1.ciunit = *xfrlun;
     ci__1.cifmt = "(A)";
-    iostat = s_wsfe(&ci__1);
+    iostat = s_wsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100009;
     }
-    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, rtrim_(
+	    __global_state, line, (ftnlen)80));
     if (iostat != 0) {
 	goto L100009;
     }
-    iostat = e_wsfe();
+    iostat = e_wsfe(&__global_state->f2c);
 L100009:
     if (iostat != 0) {
-	setmsg_("Error writing to the DAF transfer file '#'. IOSTAT = #.", (
-		ftnlen)55);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("DAFBT", (ftnlen)5);
+	setmsg_(__global_state, "Error writing to the DAF transfer file '#'."
+		" IOSTAT = #.", (ftnlen)55);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "DAFBT", (ftnlen)5);
 	return 0;
     }
 
 /*     Close only the binary file. */
 
-    dafcls_(&binhdl);
-    chkout_("DAFBT", (ftnlen)5);
+    dafcls_(__global_state, &binhdl);
+    chkout_(__global_state, "DAFBT", (ftnlen)5);
     return 0;
 } /* dafbt_ */
 

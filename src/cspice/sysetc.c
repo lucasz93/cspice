@@ -8,8 +8,7 @@
 
 
 extern sysetc_init_t __sysetc_init;
-static sysetc_state_t* get_sysetc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sysetc_state_t* get_sysetc_state(cspice_t* state) {
 	if (!state->sysetc)
 		state->sysetc = __cspice_allocate_module(sizeof(
 	sysetc_state_t), &__sysetc_init, sizeof(__sysetc_init));
@@ -18,49 +17,51 @@ static sysetc_state_t* get_sysetc_state() {
 }
 
 /* $Procedure      SYSETC ( Set the value associated with a symbol ) */
-/* Subroutine */ int sysetc_(char *name__, char *value, char *tabsym, integer 
-	*tabptr, char *tabval, ftnlen name_len, ftnlen value_len, ftnlen 
-	tabsym_len, ftnlen tabval_len)
+/* Subroutine */ int sysetc_(cspice_t* __global_state, char *name__, char *
+	value, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, 
+	ftnlen value_len, ftnlen tabsym_len, ftnlen tabval_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer nval;
     integer nptr;
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer sizec_(char *, ftnlen);
-    extern integer sumai_(integer *, integer *);
-    extern integer sizei_(integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int remlac_(integer *, integer *, char *, integer 
-	    *, ftnlen);
-    extern /* Subroutine */ int scardi_(integer *, integer *);
-    extern /* Subroutine */ int inslac_(char *, integer *, integer *, char *, 
-	    integer *, ftnlen, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer sizec_(cspice_t*, char *, ftnlen);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern integer sizei_(cspice_t*, integer *);
+    extern /* Subroutine */ int scardc_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int remlac_(cspice_t*, integer *, integer *, char 
+	    *, integer *, ftnlen);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int inslac_(cspice_t*, char *, integer *, integer 
+	    *, char *, integer *, ftnlen, ftnlen);
     integer dimval;
-    extern /* Subroutine */ int inslai_(integer *, integer *, integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int inslai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
     integer locval;
-    extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern integer lstlec_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer locsym;
     logical oldsym;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sysetc_state_t* __state = get_sysetc_state();
+    sysetc_state_t* __state = get_sysetc_state(__global_state);
 /* $ Abstract */
 
 /*     Set the value of a particular symbol in a character symbol table. */
@@ -251,24 +252,24 @@ static sysetc_state_t* get_sysetc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYSETC", (ftnlen)6);
+	chkin_(__global_state, "SYSETC", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
-    nptr = cardi_(tabptr);
-    nval = cardc_(tabval, tabval_len);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
+    nptr = cardi_(__global_state, tabptr);
+    nval = cardc_(__global_state, tabval, tabval_len);
 
 /*     Where does this symbol belong? Is it already in the table? */
 
-    locsym = lstlec_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
-    oldsym = locsym != 0 && s_cmp(tabsym + (locsym + 5) * tabsym_len, name__, 
-	    tabsym_len, name_len) == 0;
+    locsym = lstlec_(__global_state, name__, &nsym, tabsym + tabsym_len * 6, 
+	    name_len, tabsym_len);
+    oldsym = locsym != 0 && s_cmp(&__global_state->f2c, tabsym + (locsym + 5) 
+	    * tabsym_len, name__, tabsym_len, name_len) == 0;
 
 /*     If it's already in the table, there's no chance of overflow. */
 /*     Leave the name where it is. Remove all but one of the existing */
@@ -277,54 +278,55 @@ static sysetc_state_t* get_sysetc_state() {
 
     if (oldsym) {
 	i__1 = locsym - 1;
-	locval = sumai_(&tabptr[6], &i__1) + 1;
+	locval = sumai_(__global_state, &tabptr[6], &i__1) + 1;
 	dimval = tabptr[locsym + 5];
 	if (dimval > 1) {
 	    i__1 = dimval - 1;
-	    remlac_(&i__1, &locval, tabval + tabval_len * 6, &nval, 
-		    tabval_len);
-	    scardc_(&nval, tabval, tabval_len);
+	    remlac_(__global_state, &i__1, &locval, tabval + tabval_len * 6, &
+		    nval, tabval_len);
+	    scardc_(__global_state, &nval, tabval, tabval_len);
 	}
 	tabptr[locsym + 5] = 1;
-	s_copy(tabval + (locval + 5) * tabval_len, value, tabval_len, 
-		value_len);
+	s_copy(&__global_state->f2c, tabval + (locval + 5) * tabval_len, 
+		value, tabval_len, value_len);
 
 /*     Otherwise, we can't proceed unless we know that we have enough */
 /*     room for one extra addition in all three tables. */
 
-    } else if (nsym >= sizec_(tabsym, tabsym_len)) {
-	setmsg_("SYSETC: Addition of the new symbol # causes an overflow in "
-		"the name table.", (ftnlen)74);
-	errch_("#", name__, (ftnlen)1, name_len);
-	sigerr_("SPICE(NAMETABLEFULL)", (ftnlen)20);
-    } else if (nptr >= sizei_(tabptr)) {
-	setmsg_("SYSETC: Addition of the new symbol # causes an overflow in "
-		"the pointer table.", (ftnlen)77);
-	errch_("#", name__, (ftnlen)1, name_len);
-	sigerr_("SPICE(POINTERTABLEFULL)", (ftnlen)23);
-    } else if (nval >= sizec_(tabval, tabval_len)) {
-	setmsg_("SYSETC: Addition of the new symbol #  causes an overflow in"
-		" the value table.", (ftnlen)76);
-	errch_("#", name__, (ftnlen)1, name_len);
-	sigerr_("SPICE(VALUETABLEFULL)", (ftnlen)21);
+    } else if (nsym >= sizec_(__global_state, tabsym, tabsym_len)) {
+	setmsg_(__global_state, "SYSETC: Addition of the new symbol # causes"
+		" an overflow in the name table.", (ftnlen)74);
+	errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	sigerr_(__global_state, "SPICE(NAMETABLEFULL)", (ftnlen)20);
+    } else if (nptr >= sizei_(__global_state, tabptr)) {
+	setmsg_(__global_state, "SYSETC: Addition of the new symbol # causes"
+		" an overflow in the pointer table.", (ftnlen)77);
+	errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	sigerr_(__global_state, "SPICE(POINTERTABLEFULL)", (ftnlen)23);
+    } else if (nval >= sizec_(__global_state, tabval, tabval_len)) {
+	setmsg_(__global_state, "SYSETC: Addition of the new symbol #  cause"
+		"s an overflow in the value table.", (ftnlen)76);
+	errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	sigerr_(__global_state, "SPICE(VALUETABLEFULL)", (ftnlen)21);
 
 /*     If there's room, add the new name to the name table. Give the */
 /*     symbol dimension one, and put the value in the right place. */
 
     } else {
 	i__1 = locsym + 1;
-	inslac_(name__, &__state->c__1, &i__1, tabsym + tabsym_len * 6, &nsym,
-		 name_len, tabsym_len);
-	scardc_(&nsym, tabsym, tabsym_len);
+	inslac_(__global_state, name__, &__state->c__1, &i__1, tabsym + 
+		tabsym_len * 6, &nsym, name_len, tabsym_len);
+	scardc_(__global_state, &nsym, tabsym, tabsym_len);
 	i__1 = locsym + 1;
-	inslai_(&__state->c__1, &__state->c__1, &i__1, &tabptr[6], &nptr);
-	scardi_(&nptr, tabptr);
-	locval = sumai_(&tabptr[6], &locsym) + 1;
-	inslac_(value, &__state->c__1, &locval, tabval + tabval_len * 6, &
-		nval, value_len, tabval_len);
-	scardc_(&nval, tabval, tabval_len);
+	inslai_(__global_state, &__state->c__1, &__state->c__1, &i__1, &
+		tabptr[6], &nptr);
+	scardi_(__global_state, &nptr, tabptr);
+	locval = sumai_(__global_state, &tabptr[6], &locsym) + 1;
+	inslac_(__global_state, value, &__state->c__1, &locval, tabval + 
+		tabval_len * 6, &nval, value_len, tabval_len);
+	scardc_(__global_state, &nval, tabval, tabval_len);
     }
-    chkout_("SYSETC", (ftnlen)6);
+    chkout_(__global_state, "SYSETC", (ftnlen)6);
     return 0;
 } /* sysetc_ */
 

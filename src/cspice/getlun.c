@@ -8,29 +8,28 @@
 
 
 typedef int getlun_state_t;
-static getlun_state_t* get_getlun_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline getlun_state_t* get_getlun_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      GETLUN ( Get a free logical unit ) */
-/* Subroutine */ int getlun_(integer *unit)
+/* Subroutine */ int getlun_(cspice_t* __global_state, integer *unit)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int fndlun_(integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int fndlun_(cspice_t*, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    getlun_state_t* __state = get_getlun_state();
+    getlun_state_t* __state = get_getlun_state(__global_state);
 /* $ Abstract */
 
 /*     Return the number of a free logical unit. */
@@ -216,23 +215,24 @@ static getlun_state_t* get_getlun_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("GETLUN", (ftnlen)6);
+	chkin_(__global_state, "GETLUN", (ftnlen)6);
     }
 
 /*     Find a free logical unit, if there's one to be had. */
 
-    fndlun_(unit);
+    fndlun_(__global_state, unit);
     if (*unit == 0) {
 
 /*        There are no free units to be had.  C'est la vie.  Signal an */
 /*        error. */
 
-	setmsg_("No free logical units are available.", (ftnlen)36);
-	sigerr_("SPICE(NOFREELOGICALUNIT)", (ftnlen)24);
-	chkout_("GETLUN", (ftnlen)6);
+	setmsg_(__global_state, "No free logical units are available.", (
+		ftnlen)36);
+	sigerr_(__global_state, "SPICE(NOFREELOGICALUNIT)", (ftnlen)24);
+	chkout_(__global_state, "GETLUN", (ftnlen)6);
 	return 0;
     } else if (*unit < 0) {
 
@@ -240,15 +240,15 @@ static getlun_state_t* get_getlun_state() {
 /*        "INQUIRE" attempted by FNDLUN failed.  Assign 0 to the unit */
 /*        number, and signal an error. */
 
-	setmsg_("INQUIRE iostat was #.", (ftnlen)21);
+	setmsg_(__global_state, "INQUIRE iostat was #.", (ftnlen)21);
 	i__1 = -(*unit);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(INQUIREFAILED)", (ftnlen)20);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INQUIREFAILED)", (ftnlen)20);
 	*unit = 0;
-	chkout_("GETLUN", (ftnlen)6);
+	chkout_(__global_state, "GETLUN", (ftnlen)6);
 	return 0;
     }
-    chkout_("GETLUN", (ftnlen)6);
+    chkout_(__global_state, "GETLUN", (ftnlen)6);
     return 0;
 } /* getlun_ */
 

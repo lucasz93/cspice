@@ -8,8 +8,7 @@
 
 
 extern sepool_init_t __sepool_init;
-static sepool_state_t* get_sepool_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sepool_state_t* get_sepool_state(cspice_t* state) {
 	if (!state->sepool)
 		state->sepool = __cspice_allocate_module(sizeof(
 	sepool_state_t), &__sepool_init, sizeof(__sepool_init));
@@ -18,13 +17,14 @@ static sepool_state_t* get_sepool_state() {
 }
 
 /* $Procedure      SEPOOL ( String from pool ) */
-/* Subroutine */ int sepool_(char *item, integer *fidx, char *contin, char *
-	string, integer *size, integer *lidx, logical *found, ftnlen item_len,
-	 ftnlen contin_len, ftnlen string_len)
+/* Subroutine */ int sepool_(cspice_t* __global_state, char *item, integer *
+	fidx, char *contin, char *string, integer *size, integer *lidx, 
+	logical *found, ftnlen item_len, ftnlen contin_len, ftnlen string_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer comp;
@@ -32,21 +32,21 @@ static sepool_state_t* get_sepool_state() {
     char part[80];
     integer room;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer clast;
     integer csize;
     logical gotit;
-    extern integer rtrim_(char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
     integer putat;
-    extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gcpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, char *, logical *, ftnlen, ftnlen);
     integer cfirst;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sepool_state_t* __state = get_sepool_state();
+    sepool_state_t* __state = get_sepool_state(__global_state);
 /* $ Abstract */
 
 /*     Retrieve the string starting at the FIDX element of the kernel */
@@ -378,7 +378,7 @@ static sepool_state_t* get_sepool_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -386,7 +386,7 @@ static sepool_state_t* get_sepool_state() {
 
     if (*fidx < 1) {
 	*found = FALSE_;
-	s_copy(string, " ", string_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, string, " ", string_len, (ftnlen)1);
 	*size = 0;
 	*lidx = 0;
 	return 0;
@@ -394,58 +394,58 @@ static sepool_state_t* get_sepool_state() {
 
 /*     Check in. */
 
-    chkin_("SEPOOL", (ftnlen)6);
+    chkin_(__global_state, "SEPOOL", (ftnlen)6);
 
 /*     Check if the first component exists. Return empty output if not. */
 
-    gcpool_(item, fidx, &__state->c__1, &n, part, &gotit, item_len, (ftnlen)
-	    80);
+    gcpool_(__global_state, item, fidx, &__state->c__1, &n, part, &gotit, 
+	    item_len, (ftnlen)80);
     gotit = gotit && n > 0;
     if (! gotit) {
 	*found = FALSE_;
-	s_copy(string, " ", string_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, string, " ", string_len, (ftnlen)1);
 	*size = 0;
 	*lidx = 0;
-	chkout_("SEPOOL", (ftnlen)6);
+	chkout_(__global_state, "SEPOOL", (ftnlen)6);
 	return 0;
     }
 
 /*     Fetch the string using Bill's algorithm from STPOOL 'as is'. */
 
-    room = i_len(string, string_len);
-    csize = rtrim_(contin, contin_len);
+    room = i_len(&__global_state->f2c, string, string_len);
+    csize = rtrim_(__global_state, contin, contin_len);
     putat = 1;
     comp = *fidx;
     more = TRUE_;
-    s_copy(string, " ", string_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, string, " ", string_len, (ftnlen)1);
     n = 0;
     while(more) {
-	gcpool_(item, &comp, &__state->c__1, &n, part, &more, item_len, (
-		ftnlen)80);
+	gcpool_(__global_state, item, &comp, &__state->c__1, &n, part, &more, 
+		item_len, (ftnlen)80);
 	more = more && n > 0;
 	if (more) {
 	    *found = TRUE_;
-	    clast = rtrim_(part, (ftnlen)80);
+	    clast = rtrim_(__global_state, part, (ftnlen)80);
 	    cfirst = clast - csize + 1;
 	    if (cfirst < 0) {
 		if (putat <= room) {
-		    s_copy(string + (putat - 1), part, string_len - (putat - 
-			    1), clast);
+		    s_copy(&__global_state->f2c, string + (putat - 1), part, 
+			    string_len - (putat - 1), clast);
 		}
 		putat += clast;
 		more = FALSE_;
-	    } else if (s_cmp(part + (cfirst - 1), contin, clast - (cfirst - 1)
-		    , contin_len) != 0) {
+	    } else if (s_cmp(&__global_state->f2c, part + (cfirst - 1), 
+		    contin, clast - (cfirst - 1), contin_len) != 0) {
 		if (putat <= room) {
-		    s_copy(string + (putat - 1), part, string_len - (putat - 
-			    1), clast);
+		    s_copy(&__global_state->f2c, string + (putat - 1), part, 
+			    string_len - (putat - 1), clast);
 		}
 		putat += clast;
 		more = FALSE_;
 	    } else if (cfirst > 1) {
 		if (putat <= room) {
-		    s_copy(string + (putat - 1), part, string_len - (putat - 
-			    1), cfirst - 1);
+		    s_copy(&__global_state->f2c, string + (putat - 1), part, 
+			    string_len - (putat - 1), cfirst - 1);
 		}
 		putat = putat + cfirst - 1;
 	    }
@@ -458,7 +458,7 @@ static sepool_state_t* get_sepool_state() {
 
     *size = putat - 1;
     *lidx = comp - 1;
-    chkout_("SEPOOL", (ftnlen)6);
+    chkout_(__global_state, "SEPOOL", (ftnlen)6);
     return 0;
 } /* sepool_ */
 

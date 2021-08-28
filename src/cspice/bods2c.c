@@ -8,29 +8,28 @@
 
 
 typedef int bods2c_state_t;
-static bods2c_state_t* get_bods2c_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bods2c_state_t* get_bods2c_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure BODS2C ( Body string to ID code translation ) */
-/* Subroutine */ int bods2c_(char *name__, integer *code, logical *found, 
-	ftnlen name_len)
+/* Subroutine */ int bods2c_(cspice_t* __global_state, char *name__, integer *
+	code, logical *found, ftnlen name_len)
 {
-    extern /* Subroutine */ int zzbodn2c_(char *, integer *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical beint_(char *, ftnlen);
-    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzbodn2c_(cspice_t*, char *, integer *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical beint_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int nparsi_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char errmsg[1];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer ptr;
 
 
     /* Module state */
-    bods2c_state_t* __state = get_bods2c_state();
+    bods2c_state_t* __state = get_bods2c_state(__global_state);
 /* $ Abstract */
 
 /*     Translate a string containing a body name or ID code to an */
@@ -283,23 +282,23 @@ static bods2c_state_t* get_bods2c_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("BODS2C", (ftnlen)6);
+    chkin_(__global_state, "BODS2C", (ftnlen)6);
 
 /*     Attempt to translate the input name to an integer code.  Call */
 /*     the private routine ZZBODN2C to avoid additional CHKIN and */
 /*     CHKOUT calls. */
 
-    zzbodn2c_(name__, code, found, name_len);
+    zzbodn2c_(__global_state, name__, code, found, name_len);
     if (! (*found)) {
 
 /*        It's possible the name is a string representation */
 /*        of an integer, for example, '999'.  If so, find */
 /*        the equivalent datum of INTEGER type. */
 
-	if (beint_(name__, name_len)) {
+	if (beint_(__global_state, name__, name_len)) {
 
 /*           The input conforms to the syntax of an integer, but it may */
 /*           be outside of the range of the INTEGER data type. */
@@ -307,7 +306,8 @@ static bods2c_state_t* get_bods2c_state() {
 /*           rather than the cleaner PRSINT to attempt to convert the */
 /*           string to an INTEGER. */
 
-	    nparsi_(name__, code, errmsg, &ptr, name_len, (ftnlen)1);
+	    nparsi_(__global_state, name__, code, errmsg, &ptr, name_len, (
+		    ftnlen)1);
 
 /*           We have an ID code if and only if PTR is zero. */
 
@@ -318,7 +318,7 @@ static bods2c_state_t* get_bods2c_state() {
 /*     FOUND is set.  CODE is set if NAME was a recognized name */
 /*     or a string representation of an integer. */
 
-    chkout_("BODS2C", (ftnlen)6);
+    chkout_(__global_state, "BODS2C", (ftnlen)6);
     return 0;
 } /* bods2c_ */
 

@@ -308,7 +308,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkw08_c" );
+   chkin_c ( naif_state, "spkw08_c" );
 
    /*
    Check the input strings to make sure the pointers

@@ -8,8 +8,7 @@
 
 
 extern ckw02_init_t __ckw02_init;
-static ckw02_state_t* get_ckw02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckw02_state_t* get_ckw02_state(cspice_t* state) {
 	if (!state->ckw02)
 		state->ckw02 = __cspice_allocate_module(sizeof(ckw02_state_t),
 	 &__ckw02_init, sizeof(__ckw02_init));
@@ -18,10 +17,11 @@ static ckw02_state_t* get_ckw02_state() {
 }
 
 /* $Procedure  CKW02 ( C-Kernel, write segment to C-kernel, data type 2 ) */
-/* Subroutine */ int ckw02_(integer *handle, doublereal *begtim, doublereal *
-	endtim, integer *inst, char *ref, char *segid, integer *nrec, 
-	doublereal *start, doublereal *stop, doublereal *quats, doublereal *
-	avvs, doublereal *rates, ftnlen ref_len, ftnlen segid_len)
+/* Subroutine */ int ckw02_(cspice_t* __global_state, integer *handle, 
+	doublereal *begtim, doublereal *endtim, integer *inst, char *ref, 
+	char *segid, integer *nrec, doublereal *start, doublereal *stop, 
+	doublereal *quats, doublereal *avvs, doublereal *rates, ftnlen 
+	ref_len, ftnlen segid_len)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -29,35 +29,37 @@ static ckw02_state_t* get_ckw02_state() {
     /* Local variables */
     integer ndir;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer index;
     integer value;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
 	    ftnlen);
-    extern /* Subroutine */ int dafena_(void);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int dafena_(cspice_t*);
+    extern logical failed_(cspice_t*);
     integer refcod;
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern integer lastnb_(char *, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     doublereal dirent;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical vzerog_(doublereal *, integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical vzerog_(cspice_t*, doublereal *, integer *);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer icd[6];
 
 
     /* Module state */
-    ckw02_state_t* __state = get_ckw02_state();
+    ckw02_state_t* __state = get_ckw02_state(__global_state);
 /* $ Abstract */
 
 /*     Write a type 2 segment to a C-kernel. */
@@ -619,10 +621,10 @@ static ckw02_state_t* get_ckw02_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKW02", (ftnlen)5);
+	chkin_(__global_state, "CKW02", (ftnlen)5);
     }
 
 /*     The first thing that we will do is create the segment descriptor. */
@@ -641,32 +643,32 @@ static ckw02_state_t* get_ckw02_state() {
 /*     Make sure that there is a positive number of pointing records. */
 
     if (*nrec <= 0) {
-	setmsg_("# is an invalid number of pointing instances for type 2.", (
-		ftnlen)56);
-	errint_("#", nrec, (ftnlen)1);
-	sigerr_("SPICE(INVALIDNUMREC)", (ftnlen)20);
-	chkout_("CKW02", (ftnlen)5);
+	setmsg_(__global_state, "# is an invalid number of pointing instance"
+		"s for type 2.", (ftnlen)56);
+	errint_(__global_state, "#", nrec, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDNUMREC)", (ftnlen)20);
+	chkout_(__global_state, "CKW02", (ftnlen)5);
 	return 0;
     }
 
 /*     Check that the SCLK bounds on the segment are reasonable. */
 
     if (*begtim > start[0]) {
-	setmsg_("The first d.p. component of the descriptor is invalid.  DCD"
-		"(1) = # and START(1) = # ", (ftnlen)84);
-	errdp_("#", begtim, (ftnlen)1);
-	errdp_("#", start, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDESCRTIME)", (ftnlen)23);
-	chkout_("CKW02", (ftnlen)5);
+	setmsg_(__global_state, "The first d.p. component of the descriptor "
+		"is invalid.  DCD(1) = # and START(1) = # ", (ftnlen)84);
+	errdp_(__global_state, "#", begtim, (ftnlen)1);
+	errdp_(__global_state, "#", start, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDESCRTIME)", (ftnlen)23);
+	chkout_(__global_state, "CKW02", (ftnlen)5);
 	return 0;
     }
     if (*endtim < stop[*nrec - 1]) {
-	setmsg_("The second d.p. component of the descriptor is invalid.  DC"
-		"D(2) = # and STOP(NREC) = # ", (ftnlen)87);
-	errdp_("#", endtim, (ftnlen)1);
-	errdp_("#", &stop[*nrec - 1], (ftnlen)1);
-	sigerr_("SPICE(INVALIDDESCRTIME)", (ftnlen)23);
-	chkout_("CKW02", (ftnlen)5);
+	setmsg_(__global_state, "The second d.p. component of the descriptor"
+		" is invalid.  DCD(2) = # and STOP(NREC) = # ", (ftnlen)87);
+	errdp_(__global_state, "#", endtim, (ftnlen)1);
+	errdp_(__global_state, "#", &stop[*nrec - 1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDESCRTIME)", (ftnlen)23);
+	chkout_(__global_state, "CKW02", (ftnlen)5);
 	return 0;
     }
     dcd[0] = *begtim;
@@ -674,12 +676,13 @@ static ckw02_state_t* get_ckw02_state() {
 
 /*     Get the NAIF integer code for the reference frame. */
 
-    namfrm_(ref, &refcod, ref_len);
+    namfrm_(__global_state, ref, &refcod, ref_len);
     if (refcod == 0) {
-	setmsg_("The reference frame # is not supported.", (ftnlen)39);
-	errch_("#", ref, (ftnlen)1, ref_len);
-	sigerr_("SPICE(INVALIDREFFRAME)", (ftnlen)22);
-	chkout_("CKW02", (ftnlen)5);
+	setmsg_(__global_state, "The reference frame # is not supported.", (
+		ftnlen)39);
+	errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	sigerr_(__global_state, "SPICE(INVALIDREFFRAME)", (ftnlen)22);
+	chkout_(__global_state, "CKW02", (ftnlen)5);
 	return 0;
     }
 
@@ -693,29 +696,29 @@ static ckw02_state_t* get_ckw02_state() {
 
 /*     Now pack the segment descriptor. */
 
-    dafps_(&__state->c__2, &__state->c__6, dcd, icd, descr);
+    dafps_(__global_state, &__state->c__2, &__state->c__6, dcd, icd, descr);
 
 /*     Now check that all the characters in the segid can be printed. */
 
-    i__1 = lastnb_(segid, segid_len);
+    i__1 = lastnb_(__global_state, segid, segid_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	value = *(unsigned char *)&segid[i__ - 1];
 	if (value < 32 || value > 126) {
-	    setmsg_("The segment identifier contains nonprintable characters",
-		     (ftnlen)55);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("CKW02", (ftnlen)5);
+	    setmsg_(__global_state, "The segment identifier contains nonprin"
+		    "table characters", (ftnlen)55);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "CKW02", (ftnlen)5);
 	    return 0;
 	}
     }
 
 /*     Also check to see if the segment identifier is too long. */
 
-    if (lastnb_(segid, segid_len) > 40) {
-	setmsg_("Segment identifier contains more than 40 characters.", (
-		ftnlen)52);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("CKW02", (ftnlen)5);
+    if (lastnb_(__global_state, segid, segid_len) > 40) {
+	setmsg_(__global_state, "Segment identifier contains more than 40 ch"
+		"aracters.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "CKW02", (ftnlen)5);
 	return 0;
     }
 
@@ -733,60 +736,61 @@ static ckw02_state_t* get_ckw02_state() {
 /*     nonnegative. */
 
     if (start[0] < 0.) {
-	setmsg_("The first START time: # is negative.", (ftnlen)36);
-	errdp_("#", start, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSCLKTIME)", (ftnlen)22);
-	chkout_("CKW02", (ftnlen)5);
+	setmsg_(__global_state, "The first START time: # is negative.", (
+		ftnlen)36);
+	errdp_(__global_state, "#", start, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSCLKTIME)", (ftnlen)22);
+	chkout_(__global_state, "CKW02", (ftnlen)5);
 	return 0;
     }
     if (stop[0] <= start[0]) {
-	setmsg_("The STOP time is less than or equal to the START time for i"
-		"nterval number 1. START time is # and STOP time is #.", (
-		ftnlen)112);
-	errdp_("#", start, (ftnlen)1);
-	errdp_("#", stop, (ftnlen)1);
-	sigerr_("SPICE(DEGENERATEINTERVAL)", (ftnlen)25);
-	chkout_("CKW02", (ftnlen)5);
+	setmsg_(__global_state, "The STOP time is less than or equal to the "
+		"START time for interval number 1. START time is # and STOP t"
+		"ime is #.", (ftnlen)112);
+	errdp_(__global_state, "#", start, (ftnlen)1);
+	errdp_(__global_state, "#", stop, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DEGENERATEINTERVAL)", (ftnlen)25);
+	chkout_(__global_state, "CKW02", (ftnlen)5);
 	return 0;
     }
     i__1 = *nrec;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	if (stop[i__ - 1] <= start[i__ - 1]) {
-	    setmsg_("The STOP time is less than or equal to the START time f"
-		    "or interval number #. START time is # and STOP time is #."
-		    , (ftnlen)112);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &start[i__ - 1], (ftnlen)1);
-	    errdp_("#", &stop[i__ - 1], (ftnlen)1);
-	    sigerr_("SPICE(DEGENERATEINTERVAL)", (ftnlen)25);
-	    chkout_("CKW02", (ftnlen)5);
+	    setmsg_(__global_state, "The STOP time is less than or equal to "
+		    "the START time for interval number #. START time is # an"
+		    "d STOP time is #.", (ftnlen)112);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &start[i__ - 1], (ftnlen)1);
+	    errdp_(__global_state, "#", &stop[i__ - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DEGENERATEINTERVAL)", (ftnlen)25);
+	    chkout_(__global_state, "CKW02", (ftnlen)5);
 	    return 0;
 	}
 	if (start[i__ - 1] <= start[i__ - 2]) {
-	    setmsg_("The START times are not strictly increasing.  START(#) "
-		    "= # and START(#) = #.", (ftnlen)76);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &start[i__ - 1], (ftnlen)1);
+	    setmsg_(__global_state, "The START times are not strictly increa"
+		    "sing.  START(#) = # and START(#) = #.", (ftnlen)76);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &start[i__ - 1], (ftnlen)1);
 	    i__2 = i__ - 1;
-	    errint_("#", &i__2, (ftnlen)1);
-	    errdp_("#", &start[i__ - 2], (ftnlen)1);
-	    sigerr_("SPICE(TIMESOUTOFORDER)", (ftnlen)22);
-	    chkout_("CKW02", (ftnlen)5);
+	    errint_(__global_state, "#", &i__2, (ftnlen)1);
+	    errdp_(__global_state, "#", &start[i__ - 2], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(TIMESOUTOFORDER)", (ftnlen)22);
+	    chkout_(__global_state, "CKW02", (ftnlen)5);
 	    return 0;
 	}
 	if (stop[i__ - 2] > start[i__ - 1]) {
-	    setmsg_("The STOP time for interval # is greater than the follow"
-		    "ing START time. STOP(#) = # and START(#) = #.", (ftnlen)
-		    100);
+	    setmsg_(__global_state, "The STOP time for interval # is greater"
+		    " than the following START time. STOP(#) = # and START(#)"
+		    " = #.", (ftnlen)100);
 	    i__2 = i__ - 1;
-	    errint_("#", &i__2, (ftnlen)1);
+	    errint_(__global_state, "#", &i__2, (ftnlen)1);
 	    i__2 = i__ - 1;
-	    errint_("#", &i__2, (ftnlen)1);
-	    errdp_("#", &stop[i__ - 2], (ftnlen)1);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &start[i__ - 1], (ftnlen)1);
-	    sigerr_("SPICE(BADSTOPTIME)", (ftnlen)18);
-	    chkout_("CKW02", (ftnlen)5);
+	    errint_(__global_state, "#", &i__2, (ftnlen)1);
+	    errdp_(__global_state, "#", &stop[i__ - 2], (ftnlen)1);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &start[i__ - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADSTOPTIME)", (ftnlen)18);
+	    chkout_(__global_state, "CKW02", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -796,21 +800,21 @@ static ckw02_state_t* get_ckw02_state() {
 
     i__1 = *nrec;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if (vzerog_(&quats[(i__ << 2) - 4], &__state->c__4)) {
-	    setmsg_("The quaternion at index # has magnitude zero.", (ftnlen)
-		    45);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(ZEROQUATERNION)", (ftnlen)21);
-	    chkout_("CKW02", (ftnlen)5);
+	if (vzerog_(__global_state, &quats[(i__ << 2) - 4], &__state->c__4)) {
+	    setmsg_(__global_state, "The quaternion at index # has magnitude"
+		    " zero.", (ftnlen)45);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(ZEROQUATERNION)", (ftnlen)21);
+	    chkout_(__global_state, "CKW02", (ftnlen)5);
 	    return 0;
 	}
     }
 
 /*     No more checks, begin writing the segment. */
 
-    dafbna_(handle, descr, segid, segid_len);
-    if (failed_()) {
-	chkout_("CKW02", (ftnlen)5);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKW02", (ftnlen)5);
 	return 0;
     }
 
@@ -819,18 +823,18 @@ static ckw02_state_t* get_ckw02_state() {
 
     i__1 = *nrec;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&quats[(i__ << 2) - 4], &__state->c__4);
-	dafada_(&avvs[i__ * 3 - 3], &__state->c__3);
-	dafada_(&rates[i__ - 1], &__state->c__1);
+	dafada_(__global_state, &quats[(i__ << 2) - 4], &__state->c__4);
+	dafada_(__global_state, &avvs[i__ * 3 - 3], &__state->c__3);
+	dafada_(__global_state, &rates[i__ - 1], &__state->c__1);
     }
 
 /*     The SCLK start times. */
 
-    dafada_(start, nrec);
+    dafada_(__global_state, start, nrec);
 
 /*     The SCLK stop times. */
 
-    dafada_(stop, nrec);
+    dafada_(__global_state, stop, nrec);
 
 /*     The time tag directory.  The Ith element is defined to be the */
 /*     average of the (I*100)th STOP time and the (I*100+1)th START time. */
@@ -840,14 +844,14 @@ static ckw02_state_t* get_ckw02_state() {
     i__1 = ndir;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	dirent = (stop[index - 1] + start[index]) / 2.;
-	dafada_(&dirent, &__state->c__1);
+	dafada_(__global_state, &dirent, &__state->c__1);
 	index += 100;
     }
 
 /*     End the segment. */
 
-    dafena_();
-    chkout_("CKW02", (ftnlen)5);
+    dafena_(__global_state);
+    chkout_(__global_state, "CKW02", (ftnlen)5);
     return 0;
 } /* ckw02_ */
 

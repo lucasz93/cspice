@@ -8,23 +8,22 @@
 
 
 typedef int rtrim_state_t;
-static rtrim_state_t* get_rtrim_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rtrim_state_t* get_rtrim_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  RTRIM ( Right trim ) */
-integer rtrim_(char *string, ftnlen string_len)
+integer rtrim_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     integer ret_val, i__1, i__2;
 
     /* Local variables */
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    rtrim_state_t* __state = get_rtrim_state();
+    rtrim_state_t* __state = get_rtrim_state(__global_state);
 /* $ Abstract */
 
 /*     Return the maximum of 1 and the location of the last non-blank */
@@ -168,7 +167,7 @@ integer rtrim_(char *string, ftnlen string_len)
 /*     `Just do it'. */
 
 /* Computing MAX */
-    i__1 = 1, i__2 = lastnb_(string, string_len);
+    i__1 = 1, i__2 = lastnb_(__global_state, string, string_len);
     ret_val = max(i__1,i__2);
     return ret_val;
 } /* rtrim_ */

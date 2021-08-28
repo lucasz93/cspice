@@ -8,29 +8,28 @@
 
 
 typedef int dlafps_state_t;
-static dlafps_state_t* get_dlafps_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dlafps_state_t* get_dlafps_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DLAFPS ( DLA, find previous segment ) */
-/* Subroutine */ int dlafps_(integer *handle, integer *descr, integer *prvdsc,
-	 logical *found)
+/* Subroutine */ int dlafps_(cspice_t* __global_state, integer *handle, 
+	integer *descr, integer *prvdsc, logical *found)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer bwd;
 
 
     /* Module state */
-    dlafps_state_t* __state = get_dlafps_state();
+    dlafps_state_t* __state = get_dlafps_state(__global_state);
 /* $ Abstract */
 
 /*     Find the segment preceding a specified segment in a DLA file. */
@@ -418,10 +417,10 @@ static dlafps_state_t* get_dlafps_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DLAFPS", (ftnlen)6);
+    chkin_(__global_state, "DLAFPS", (ftnlen)6);
 
 /*     Nothing found yet. */
 
@@ -434,16 +433,16 @@ static dlafps_state_t* get_dlafps_state() {
 
 /*        There is no segment preceding the input segment. */
 
-	chkout_("DLAFPS", (ftnlen)6);
+	chkout_(__global_state, "DLAFPS", (ftnlen)6);
 	return 0;
     }
 
 /*     Look up the previous descriptor */
 
     i__1 = bwd + 7;
-    dasrdi_(handle, &bwd, &i__1, prvdsc);
+    dasrdi_(__global_state, handle, &bwd, &i__1, prvdsc);
     *found = TRUE_;
-    chkout_("DLAFPS", (ftnlen)6);
+    chkout_(__global_state, "DLAFPS", (ftnlen)6);
     return 0;
 } /* dlafps_ */
 

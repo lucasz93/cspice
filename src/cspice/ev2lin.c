@@ -8,8 +8,7 @@
 
 
 extern ev2lin_init_t __ev2lin_init;
-static ev2lin_state_t* get_ev2lin_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ev2lin_state_t* get_ev2lin_state(cspice_t* state) {
 	if (!state->ev2lin)
 		state->ev2lin = __cspice_allocate_module(sizeof(
 	ev2lin_state_t), &__ev2lin_init, sizeof(__ev2lin_init));
@@ -18,8 +17,8 @@ static ev2lin_state_t* get_ev2lin_state() {
 }
 
 /* $Procedure      EV2LIN ( Evaluate "two-line" element data) */
-/* Subroutine */ int ev2lin_(doublereal *et, doublereal *geophs, doublereal *
-	elems, doublereal *state)
+/* Subroutine */ int ev2lin_(cspice_t* __global_state, doublereal *et, 
+	doublereal *geophs, doublereal *elems, doublereal *state)
 {
     /* Initialized data */
 
@@ -29,23 +28,26 @@ static ev2lin_state_t* get_ev2lin_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double cos(doublereal), sin(doublereal), sqrt(doublereal), pow_dd(
-	    doublereal *, doublereal *), d_mod(doublereal *, doublereal *), 
-	    atan2(doublereal, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), sqrt(
+	    f2c_state_t*, doublereal), pow_dd(f2c_state_t*, doublereal *, 
+	    doublereal *), d_mod(f2c_state_t*, doublereal *, doublereal *), 
+	    atan2(f2c_state_t*, doublereal, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal twopi_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal twopi_(cspice_t*);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
     /* Module state */
-    ev2lin_state_t* __state = get_ev2lin_state();
+    ev2lin_state_t* __state = get_ev2lin_state(__global_state);
 /* $ Abstract */
 
 /*     This routine evaluates NORAD two-line element data for */
@@ -349,7 +351,7 @@ static ev2lin_state_t* get_ev2lin_state() {
 /*     Intermediate quantities. The time independent quantities */
 /*     are calculated only as new elements come into the routine. */
 
-    chkin_("EV2LIN", (ftnlen)6);
+    chkin_(__global_state, "EV2LIN", (ftnlen)6);
 
 /*     Rather than always making function calls we store the */
 /*     values of the PI dependent constants the first time */
@@ -357,16 +359,17 @@ static ev2lin_state_t* get_ev2lin_state() {
 
     if (__state->doinit) {
 	__state->doinit = FALSE_;
-	__state->pix2 = twopi_();
+	__state->pix2 = twopi_(__global_state);
 	for (__state->i__ = 1; __state->i__ <= 8; ++__state->i__) {
 	    __state->lstgeo[(i__1 = __state->i__ - 1) < 8 && 0 <= i__1 ? i__1 
-		    : s_rnge("lstgeo", i__1, "ev2lin_", (ftnlen)605)] = 0.;
+		    : s_rnge(&__global_state->f2c, "lstgeo", i__1, "ev2lin_", 
+		    (ftnlen)605)] = 0.;
 	}
 	for (__state->i__ = 1; __state->i__ <= 6; ++__state->i__) {
 	    for (__state->j = 1; __state->j <= 10; ++__state->j) {
 		__state->elemnt[(i__1 = __state->j + __state->i__ * 10 - 11) <
-			 60 && 0 <= i__1 ? i__1 : s_rnge("elemnt", i__1, 
-			"ev2lin_", (ftnlen)610)] = 0.;
+			 60 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+			 "elemnt", i__1, "ev2lin_", (ftnlen)610)] = 0.;
 	    }
 	}
 
@@ -384,15 +387,16 @@ static ev2lin_state_t* get_ev2lin_state() {
 
 	__state->head = 1;
 	__state->list[(i__1 = (__state->head << 1) - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("list", i__1, "ev2lin_", (ftnlen)629)] = 0;
+		i__1 : s_rnge(&__global_state->f2c, "list", i__1, "ev2lin_", (
+		ftnlen)629)] = 0;
 	__state->list[0] = 2;
 	for (__state->i__ = 2; __state->i__ <= 5; ++__state->i__) {
 	    __state->list[(i__1 = (__state->i__ << 1) - 2) < 12 && 0 <= i__1 ?
-		     i__1 : s_rnge("list", i__1, "ev2lin_", (ftnlen)634)] = 
-		    __state->i__ + 1;
+		     i__1 : s_rnge(&__global_state->f2c, "list", i__1, "ev2l"
+		    "in_", (ftnlen)634)] = __state->i__ + 1;
 	    __state->list[(i__1 = (__state->i__ << 1) - 1) < 12 && 0 <= i__1 ?
-		     i__1 : s_rnge("list", i__1, "ev2lin_", (ftnlen)635)] = 
-		    __state->i__ - 1;
+		     i__1 : s_rnge(&__global_state->f2c, "list", i__1, "ev2l"
+		    "in_", (ftnlen)635)] = __state->i__ - 1;
 	}
 	__state->list[10] = 0;
 	__state->list[11] = 5;
@@ -409,8 +413,8 @@ static ev2lin_state_t* get_ev2lin_state() {
 	     != geophs[5]) {
 	for (__state->i__ = 1; __state->i__ <= 8; ++__state->i__) {
 	    __state->lstgeo[(i__1 = __state->i__ - 1) < 8 && 0 <= i__1 ? i__1 
-		    : s_rnge("lstgeo", i__1, "ev2lin_", (ftnlen)657)] = 
-		    geophs[__state->i__ - 1];
+		    : s_rnge(&__global_state->f2c, "lstgeo", i__1, "ev2lin_", 
+		    (ftnlen)657)] = geophs[__state->i__ - 1];
 	}
 	__state->j2 = geophs[0];
 	__state->j3 = geophs[1];
@@ -475,16 +479,16 @@ static ev2lin_state_t* get_ev2lin_state() {
 	while(__state->recog && __state->i__ > 0) {
 	    __state->recog = __state->recog && __state->elemnt[(i__1 = 
 		    __state->i__ + __state->n * 10 - 11) < 60 && 0 <= i__1 ? 
-		    i__1 : s_rnge("elemnt", i__1, "ev2lin_", (ftnlen)733)] == 
-		    elems[__state->i__ - 1];
+		    i__1 : s_rnge(&__global_state->f2c, "elemnt", i__1, "ev2"
+		    "lin_", (ftnlen)733)] == elems[__state->i__ - 1];
 	    --__state->i__;
 	}
 	__state->unrec = ! __state->recog;
 	if (__state->unrec) {
 	    __state->last = __state->n;
 	    __state->n = __state->list[(i__1 = (__state->n << 1) - 2) < 12 && 
-		    0 <= i__1 ? i__1 : s_rnge("list", i__1, "ev2lin_", (
-		    ftnlen)741)];
+		    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "list", 
+		    i__1, "ev2lin_", (ftnlen)741)];
 	}
     }
     if (__state->n == 0) {
@@ -503,34 +507,35 @@ static ev2lin_state_t* get_ev2lin_state() {
 /*        link them together. */
 
 	__state->before = __state->list[(i__1 = (__state->n << 1) - 1) < 12 &&
-		 0 <= i__1 ? i__1 : s_rnge("list", i__1, "ev2lin_", (ftnlen)
-		762)];
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "list", i__1,
+		 "ev2lin_", (ftnlen)762)];
 	__state->after = __state->list[(i__1 = (__state->n << 1) - 2) < 12 && 
-		0 <= i__1 ? i__1 : s_rnge("list", i__1, "ev2lin_", (ftnlen)
-		763)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "list", i__1, 
+		"ev2lin_", (ftnlen)763)];
 	__state->list[(i__1 = (__state->before << 1) - 2) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("list", i__1, "ev2lin_", (ftnlen)765)] = 
-		__state->after;
+		i__1 : s_rnge(&__global_state->f2c, "list", i__1, "ev2lin_", (
+		ftnlen)765)] = __state->after;
 	if (__state->after != 0) {
 	    __state->list[(i__1 = (__state->after << 1) - 1) < 12 && 0 <= 
-		    i__1 ? i__1 : s_rnge("list", i__1, "ev2lin_", (ftnlen)768)
-		    ] = __state->before;
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "list", i__1, 
+		    "ev2lin_", (ftnlen)768)] = __state->before;
 	}
 
 /*        Now the guy that will come after N is the current */
 /*        head of the list.  N will have no predecessor. */
 
 	__state->list[(i__1 = (__state->n << 1) - 2) < 12 && 0 <= i__1 ? i__1 
-		: s_rnge("list", i__1, "ev2lin_", (ftnlen)774)] = 
-		__state->head;
+		: s_rnge(&__global_state->f2c, "list", i__1, "ev2lin_", (
+		ftnlen)774)] = __state->head;
 	__state->list[(i__1 = (__state->n << 1) - 1) < 12 && 0 <= i__1 ? i__1 
-		: s_rnge("list", i__1, "ev2lin_", (ftnlen)775)] = 0;
+		: s_rnge(&__global_state->f2c, "list", i__1, "ev2lin_", (
+		ftnlen)775)] = 0;
 
 /*        The predecessor the current head of the list becomes N */
 
 	__state->list[(i__1 = (__state->head << 1) - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("list", i__1, "ev2lin_", (ftnlen)779)] = 
-		__state->n;
+		i__1 : s_rnge(&__global_state->f2c, "list", i__1, "ev2lin_", (
+		ftnlen)779)] = __state->n;
 
 /*        and finally, N becomes the head of the list. */
 
@@ -543,99 +548,99 @@ static ev2lin_state_t* get_ev2lin_state() {
 /*        routine. */
 
 	__state->aodp = __state->prelim[(i__1 = __state->n * 29 - 29) < 174 &&
-		 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		794)];
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)794)];
 	__state->aycof = __state->prelim[(i__1 = __state->n * 29 - 28) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)795)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)795)];
 	__state->c1 = __state->prelim[(i__1 = __state->n * 29 - 27) < 174 && 
-		0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		796)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)796)];
 	__state->c4 = __state->prelim[(i__1 = __state->n * 29 - 26) < 174 && 
-		0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		797)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)797)];
 	__state->c5 = __state->prelim[(i__1 = __state->n * 29 - 25) < 174 && 
-		0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		798)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)798)];
 	__state->cosio = __state->prelim[(i__1 = __state->n * 29 - 24) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)799)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)799)];
 	__state->d2 = __state->prelim[(i__1 = __state->n * 29 - 23) < 174 && 
-		0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		800)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)800)];
 	__state->d3 = __state->prelim[(i__1 = __state->n * 29 - 22) < 174 && 
-		0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		801)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)801)];
 	__state->d4 = __state->prelim[(i__1 = __state->n * 29 - 21) < 174 && 
-		0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		802)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)802)];
 	__state->delmo = __state->prelim[(i__1 = __state->n * 29 - 20) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)803)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)803)];
 	__state->eta = __state->prelim[(i__1 = __state->n * 29 - 19) < 174 && 
-		0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		804)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)804)];
 	__state->omgcof = __state->prelim[(i__1 = __state->n * 29 - 18) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)805)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)805)];
 	__state->omgdot = __state->prelim[(i__1 = __state->n * 29 - 17) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)806)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)806)];
 	__state->perige = __state->prelim[(i__1 = __state->n * 29 - 16) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)807)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)807)];
 	__state->sinio = __state->prelim[(i__1 = __state->n * 29 - 15) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)808)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)808)];
 	__state->sinmo = __state->prelim[(i__1 = __state->n * 29 - 14) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)809)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)809)];
 	__state->t2cof = __state->prelim[(i__1 = __state->n * 29 - 13) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)810)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)810)];
 	__state->t3cof = __state->prelim[(i__1 = __state->n * 29 - 12) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)811)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)811)];
 	__state->t4cof = __state->prelim[(i__1 = __state->n * 29 - 11) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)812)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)812)];
 	__state->t5cof = __state->prelim[(i__1 = __state->n * 29 - 10) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)813)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)813)];
 	__state->x1mth2 = __state->prelim[(i__1 = __state->n * 29 - 9) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)814)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)814)];
 	__state->x3thm1 = __state->prelim[(i__1 = __state->n * 29 - 8) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)815)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)815)];
 	__state->x7thm1 = __state->prelim[(i__1 = __state->n * 29 - 7) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)816)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)816)];
 	__state->xlcof = __state->prelim[(i__1 = __state->n * 29 - 6) < 174 &&
-		 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		817)];
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)817)];
 	__state->xmcof = __state->prelim[(i__1 = __state->n * 29 - 5) < 174 &&
-		 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		818)];
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)818)];
 	__state->xmdot = __state->prelim[(i__1 = __state->n * 29 - 4) < 174 &&
-		 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		819)];
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)819)];
 	__state->xnodcf = __state->prelim[(i__1 = __state->n * 29 - 3) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)820)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)820)];
 	__state->xnodot = __state->prelim[(i__1 = __state->n * 29 - 2) < 174 
-		&& 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (
-		ftnlen)821)];
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)821)];
 	__state->xnodp = __state->prelim[(i__1 = __state->n * 29 - 1) < 174 &&
-		 0 <= i__1 ? i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)
-		822)];
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prelim", 
+		i__1, "ev2lin_", (ftnlen)822)];
     } else {
 
 /*        Compute all of the intermediate items needed. */
 /*        First, the inclination dependent constants. */
 
-	__state->cosio = cos(__state->xincl);
-	__state->sinio = sin(__state->xincl);
+	__state->cosio = cos(&__global_state->f2c, __state->xincl);
+	__state->sinio = sin(&__global_state->f2c, __state->xincl);
 	__state->theta2 = __state->cosio * __state->cosio;
 	__state->theta4 = __state->theta2 * __state->theta2;
 	__state->x3thm1 = __state->theta2 * 3. - 1.;
@@ -645,7 +650,8 @@ static ev2lin_state_t* get_ev2lin_state() {
 
 /*        Eccentricity dependent constants */
 
-	__state->betao = sqrt(1. - __state->eo * __state->eo);
+	__state->betao = sqrt(&__global_state->f2c, 1. - __state->eo * 
+		__state->eo);
 	__state->betao2 = 1. - __state->eo * __state->eo;
 	__state->betao3 = __state->betao * __state->betao2;
 	__state->betao4 = __state->betao2 * __state->betao2;
@@ -653,7 +659,7 @@ static ev2lin_state_t* get_ev2lin_state() {
 /*        Semi-major axis and ascending node related constants. */
 
 	d__1 = __state->ke / __state->xno;
-	__state->a1 = pow_dd(&d__1, &__state->c_b91);
+	__state->a1 = pow_dd(&__global_state->f2c, &d__1, &__state->c_b91);
 	__state->del1 = __state->ck2 * 1.5 * __state->x3thm1 / (__state->a1 * 
 		__state->a1 * __state->betao3);
 	__state->ao = __state->a1 * (1. - __state->del1 * (__state->del1 * (
@@ -695,8 +701,8 @@ static ev2lin_state_t* get_ev2lin_state() {
 	d__1 = __state->tsi, d__1 *= d__1;
 	__state->coef = __state->qoms24 * (d__1 * d__1);
 	__state->psisq = (d__1 = 1. - __state->etasq, abs(d__1));
-	__state->coef1 = __state->coef / pow_dd(&__state->psisq, &
-		__state->c_b92);
+	__state->coef1 = __state->coef / pow_dd(&__global_state->f2c, &
+		__state->psisq, &__state->c_b92);
 	__state->c2 = __state->coef1 * __state->xnodp * (__state->aodp * (
 		__state->etasq * 1.5 + 1. + __state->eeta * (__state->etasq + 
 		4.)) + __state->ck2 * .75 * (__state->tsi / __state->psisq) * 
@@ -710,10 +716,10 @@ static ev2lin_state_t* get_ev2lin_state() {
 		+ __state->eo * (__state->etasq * 2. + .5) - __state->ck2 * 
 		__state->tsi / (__state->aodp * __state->psisq) * 2. * (
 		__state->x3thm1 * -3. * (1. - __state->eeta * 2. + 
-		__state->etasq * (1.5 - __state->eeta * .5)) + cos(
-		__state->omegao * 2.) * .75 * __state->x1mth2 * (
-		__state->etasq * 2. - __state->eeta * (__state->etasq + 1.))))
-		;
+		__state->etasq * (1.5 - __state->eeta * .5)) + cos(&
+		__global_state->f2c, __state->omegao * 2.) * .75 * 
+		__state->x1mth2 * (__state->etasq * 2. - __state->eeta * (
+		__state->etasq + 1.))));
 	__state->c5 = __state->coef1 * 2. * __state->aodp * __state->betao2 * 
 		((__state->etasq + __state->eeta) * 2.75 + 1. + __state->eeta 
 		* __state->etasq);
@@ -733,7 +739,8 @@ static ev2lin_state_t* get_ev2lin_state() {
 	__state->xnodot = __state->xhdot1 + __state->cosio * (__state->temp2 *
 		 .5 * (4. - __state->theta2 * 19.) + __state->temp3 * 2. * (
 		3. - __state->theta2 * 7.));
-	__state->omgcof = __state->bstar * __state->c3 * cos(__state->omegao);
+	__state->omgcof = __state->bstar * __state->c3 * cos(&
+		__global_state->f2c, __state->omegao);
 	__state->xmcof = -__state->bstar * .66666666666666663 * __state->coef 
 		* __state->ae / __state->eeta;
 	__state->xnodcf = __state->betao2 * 3.5 * __state->xhdot1 * 
@@ -743,9 +750,9 @@ static ev2lin_state_t* get_ev2lin_state() {
 	__state->xlcof = __state->aycof * .5 * (__state->cosio * 5. + 3.) / (
 		__state->cosio + 1.);
 /* Computing 3rd power */
-	d__1 = __state->eta * cos(__state->xmo) + 1.;
+	d__1 = __state->eta * cos(&__global_state->f2c, __state->xmo) + 1.;
 	__state->delmo = d__1 * (d__1 * d__1);
-	__state->sinmo = sin(__state->xmo);
+	__state->sinmo = sin(&__global_state->f2c, __state->xmo);
 
 /*        For perigee less than 220 kilometers, the ISIMP flag is set */
 /*        and the equations are truncated to linear variation in SQRT */
@@ -776,100 +783,101 @@ static ev2lin_state_t* get_ev2lin_state() {
 /*        results from the above computations. */
 
 	__state->prelim[(i__1 = __state->n * 29 - 29) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)992)] = 
-		__state->aodp;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)992)] = __state->aodp;
 	__state->prelim[(i__1 = __state->n * 29 - 28) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)993)] = 
-		__state->aycof;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)993)] = __state->aycof;
 	__state->prelim[(i__1 = __state->n * 29 - 27) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)994)] = 
-		__state->c1;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)994)] = __state->c1;
 	__state->prelim[(i__1 = __state->n * 29 - 26) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)995)] = 
-		__state->c4;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)995)] = __state->c4;
 	__state->prelim[(i__1 = __state->n * 29 - 25) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)996)] = 
-		__state->c5;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)996)] = __state->c5;
 	__state->prelim[(i__1 = __state->n * 29 - 24) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)997)] = 
-		__state->cosio;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)997)] = __state->cosio;
 	__state->prelim[(i__1 = __state->n * 29 - 23) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)998)] = 
-		__state->d2;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)998)] = __state->d2;
 	__state->prelim[(i__1 = __state->n * 29 - 22) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)999)] = 
-		__state->d3;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)999)] = __state->d3;
 	__state->prelim[(i__1 = __state->n * 29 - 21) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1000)] = 
-		__state->d4;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1000)] = __state->d4;
 	__state->prelim[(i__1 = __state->n * 29 - 20) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1001)] = 
-		__state->delmo;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1001)] = __state->delmo;
 	__state->prelim[(i__1 = __state->n * 29 - 19) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1002)] = 
-		__state->eta;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1002)] = __state->eta;
 	__state->prelim[(i__1 = __state->n * 29 - 18) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1003)] = 
-		__state->omgcof;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1003)] = __state->omgcof;
 	__state->prelim[(i__1 = __state->n * 29 - 17) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1004)] = 
-		__state->omgdot;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1004)] = __state->omgdot;
 	__state->prelim[(i__1 = __state->n * 29 - 16) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1005)] = 
-		__state->perige;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1005)] = __state->perige;
 	__state->prelim[(i__1 = __state->n * 29 - 15) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1006)] = 
-		__state->sinio;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1006)] = __state->sinio;
 	__state->prelim[(i__1 = __state->n * 29 - 14) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1007)] = 
-		__state->sinmo;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1007)] = __state->sinmo;
 	__state->prelim[(i__1 = __state->n * 29 - 13) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1008)] = 
-		__state->t2cof;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1008)] = __state->t2cof;
 	__state->prelim[(i__1 = __state->n * 29 - 12) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1009)] = 
-		__state->t3cof;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1009)] = __state->t3cof;
 	__state->prelim[(i__1 = __state->n * 29 - 11) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1010)] = 
-		__state->t4cof;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1010)] = __state->t4cof;
 	__state->prelim[(i__1 = __state->n * 29 - 10) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1011)] = 
-		__state->t5cof;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1011)] = __state->t5cof;
 	__state->prelim[(i__1 = __state->n * 29 - 9) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1012)] = 
-		__state->x1mth2;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1012)] = __state->x1mth2;
 	__state->prelim[(i__1 = __state->n * 29 - 8) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1013)] = 
-		__state->x3thm1;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1013)] = __state->x3thm1;
 	__state->prelim[(i__1 = __state->n * 29 - 7) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1014)] = 
-		__state->x7thm1;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1014)] = __state->x7thm1;
 	__state->prelim[(i__1 = __state->n * 29 - 6) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1015)] = 
-		__state->xlcof;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1015)] = __state->xlcof;
 	__state->prelim[(i__1 = __state->n * 29 - 5) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1016)] = 
-		__state->xmcof;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1016)] = __state->xmcof;
 	__state->prelim[(i__1 = __state->n * 29 - 4) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1017)] = 
-		__state->xmdot;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1017)] = __state->xmdot;
 	__state->prelim[(i__1 = __state->n * 29 - 3) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1018)] = 
-		__state->xnodcf;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1018)] = __state->xnodcf;
 	__state->prelim[(i__1 = __state->n * 29 - 2) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1019)] = 
-		__state->xnodot;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1019)] = __state->xnodot;
 	__state->prelim[(i__1 = __state->n * 29 - 1) < 174 && 0 <= i__1 ? 
-		i__1 : s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1020)] = 
-		__state->xnodp;
+		i__1 : s_rnge(&__global_state->f2c, "prelim", i__1, "ev2lin_",
+		 (ftnlen)1020)] = __state->xnodp;
 
 /*        Finally, move these elements in the storage area */
 /*        for checking the next time through. */
 
 	for (__state->i__ = 1; __state->i__ <= 10; ++__state->i__) {
 	    __state->elemnt[(i__1 = __state->i__ + __state->n * 10 - 11) < 60 
-		    && 0 <= i__1 ? i__1 : s_rnge("elemnt", i__1, "ev2lin_", (
-		    ftnlen)1026)] = elems[__state->i__ - 1];
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "elem"
+		    "nt", i__1, "ev2lin_", (ftnlen)1026)] = elems[__state->i__ 
+		    - 1];
 	}
     }
 
@@ -898,7 +906,7 @@ static ev2lin_state_t* get_ev2lin_state() {
 	__state->tfour = __state->tcube * __state->tsince;
 	__state->delomg = __state->omgcof * __state->tsince;
 /* Computing 3rd power */
-	d__1 = __state->eta * cos(__state->xmdf) + 1.;
+	d__1 = __state->eta * cos(&__global_state->f2c, __state->xmdf) + 1.;
 	__state->delm = __state->xmcof * (d__1 * (d__1 * d__1) - 
 		__state->delmo);
 	__state->temp = __state->delomg + __state->delm;
@@ -906,8 +914,8 @@ static ev2lin_state_t* get_ev2lin_state() {
 	__state->omega = __state->omgadf - __state->temp;
 	__state->tempa = __state->tempa - __state->d2 * __state->tsq - 
 		__state->d3 * __state->tcube - __state->d4 * __state->tfour;
-	__state->tempe += __state->bstar * __state->c5 * (sin(__state->xmp) - 
-		__state->sinmo);
+	__state->tempe += __state->bstar * __state->c5 * (sin(&
+		__global_state->f2c, __state->xmp) - __state->sinmo);
 	__state->templ = __state->templ + __state->tcube * __state->t3cof + 
 		__state->tfour * (__state->t4cof + __state->tsince * 
 		__state->t5cof);
@@ -925,14 +933,16 @@ static ev2lin_state_t* get_ev2lin_state() {
 
 /*     BETA =  DSQRT( 1.0D0 - E*E ) */
 
-    __state->xn = __state->ke / pow_dd(&__state->a, &__state->c_b153);
+    __state->xn = __state->ke / pow_dd(&__global_state->f2c, &__state->a, &
+	    __state->c_b153);
 
 /*     Long period periodics */
 
     __state->temp = 1. / (__state->a * (1. - __state->e * __state->e));
     __state->aynl = __state->temp * __state->aycof;
-    __state->ayn = __state->e * sin(__state->omega) + __state->aynl;
-    __state->axn = __state->e * cos(__state->omega);
+    __state->ayn = __state->e * sin(&__global_state->f2c, __state->omega) + 
+	    __state->aynl;
+    __state->axn = __state->e * cos(&__global_state->f2c, __state->omega);
     __state->xll = __state->temp * __state->xlcof * __state->axn;
     __state->xlt = __state->xl + __state->xll;
 
@@ -1145,11 +1155,11 @@ static ev2lin_state_t* get_ev2lin_state() {
 /*     of x, we can use Newton's method to acheive faster */
 /*     convergence. */
 
-    __state->m = sqrt(__state->axn * __state->axn + __state->ayn * 
-	    __state->ayn);
+    __state->m = sqrt(&__global_state->f2c, __state->axn * __state->axn + 
+	    __state->ayn * __state->ayn);
     __state->mov1m = (d__1 = __state->m / (1. - __state->m), abs(d__1));
     d__1 = __state->xlt - __state->xnode;
-    __state->fmod2p = d_mod(&d__1, &__state->pix2);
+    __state->fmod2p = d_mod(&__global_state->f2c, &d__1, &__state->pix2);
     if (__state->fmod2p < 0.) {
 	__state->fmod2p += __state->pix2;
     }
@@ -1160,16 +1170,18 @@ static ev2lin_state_t* get_ev2lin_state() {
     while(__state->est > .125) {
 	++__state->count;
 	if (__state->count > 20) {
-	    setmsg_("EST iteration count of #1 exceeded at time ET #2. This "
-		    "error may indicate a bad TLE set.", (ftnlen)88);
-	    errint_("#1", &__state->c__20, (ftnlen)2);
-	    errdp_("#2", et, (ftnlen)2);
-	    sigerr_("SPICE(ITERATIONEXCEEDED)", (ftnlen)24);
-	    chkout_("EV2LIN", (ftnlen)6);
+	    setmsg_(__global_state, "EST iteration count of #1 exceeded at t"
+		    "ime ET #2. This error may indicate a bad TLE set.", (
+		    ftnlen)88);
+	    errint_(__global_state, "#1", &__state->c__20, (ftnlen)2);
+	    errdp_(__global_state, "#2", et, (ftnlen)2);
+	    sigerr_(__global_state, "SPICE(ITERATIONEXCEEDED)", (ftnlen)24);
+	    chkout_(__global_state, "EV2LIN", (ftnlen)6);
 	    return 0;
 	}
-	__state->epwnxt = __state->capu - __state->axn * sin(__state->epw) + 
-		__state->ayn * cos(__state->epw);
+	__state->epwnxt = __state->capu - __state->axn * sin(&
+		__global_state->f2c, __state->epw) + __state->ayn * cos(&
+		__global_state->f2c, __state->epw);
 	__state->est = __state->mov1m * (d__1 = __state->epwnxt - 
 		__state->epw, abs(d__1));
 	__state->epw = __state->epwnxt;
@@ -1188,8 +1200,8 @@ static ev2lin_state_t* get_ev2lin_state() {
 /*        with). */
 
 	for (__state->i__ = 1; __state->i__ <= 5; ++__state->i__) {
-	    __state->sinepw = sin(__state->epw);
-	    __state->cosepw = cos(__state->epw);
+	    __state->sinepw = sin(&__global_state->f2c, __state->epw);
+	    __state->cosepw = cos(&__global_state->f2c, __state->epw);
 	    __state->f = __state->epw - __state->capu - __state->axn * 
 		    __state->sinepw + __state->ayn * __state->cosepw;
 	    __state->fprime = 1. - __state->axn * __state->cosepw - 
@@ -1220,8 +1232,8 @@ static ev2lin_state_t* get_ev2lin_state() {
 /*     close to zero that it can't alter EPW by adding it to */
 /*     or subtracting it from EPW. */
 
-    __state->sinepw = sin(__state->epw);
-    __state->cosepw = cos(__state->epw);
+    __state->sinepw = sin(&__global_state->f2c, __state->epw);
+    __state->cosepw = cos(&__global_state->f2c, __state->epw);
     __state->f = __state->epw - __state->capu - __state->axn * 
 	    __state->sinepw + __state->ayn * __state->cosepw;
 /* Computing MAX */
@@ -1237,8 +1249,9 @@ static ev2lin_state_t* get_ev2lin_state() {
 	__state->epw = __state->lower;
 	while(__state->f > 0. && __state->lower != __state->upper) {
 	    __state->epw -= __state->epsiln;
-	    __state->f = __state->epw - __state->capu - __state->axn * sin(
-		    __state->epw) + __state->ayn * cos(__state->epw);
+	    __state->f = __state->epw - __state->capu - __state->axn * sin(&
+		    __global_state->f2c, __state->epw) + __state->ayn * cos(&
+		    __global_state->f2c, __state->epw);
 	    __state->epsiln *= 2.;
 	}
 	__state->lower = __state->epw;
@@ -1253,8 +1266,9 @@ static ev2lin_state_t* get_ev2lin_state() {
 	__state->epw = __state->upper;
 	while(__state->f < 0. && __state->lower != __state->upper) {
 	    __state->epw += __state->epsiln;
-	    __state->f = __state->epw - __state->capu - __state->axn * sin(
-		    __state->epw) + __state->ayn * cos(__state->epw);
+	    __state->f = __state->epw - __state->capu - __state->axn * sin(&
+		    __global_state->f2c, __state->epw) + __state->ayn * cos(&
+		    __global_state->f2c, __state->epw);
 	    __state->epsiln *= 2.;
 	}
 	__state->upper = __state->epw;
@@ -1270,7 +1284,8 @@ static ev2lin_state_t* get_ev2lin_state() {
     while(__state->upper > __state->lower && __state->count < 20) {
 	++__state->count;
 	d__1 = (__state->upper + __state->lower) * .5;
-	__state->epw = brcktd_(&d__1, &__state->lower, &__state->upper);
+	__state->epw = brcktd_(__global_state, &d__1, &__state->lower, &
+		__state->upper);
 
 /*        EPW eventually will not be different from one of the */
 /*        two bracketing values.  If this is the time, we need */
@@ -1286,8 +1301,9 @@ static ev2lin_state_t* get_ev2lin_state() {
 		__state->lower = __state->upper;
 	    }
 	} else {
-	    __state->f = __state->epw - __state->capu - __state->axn * sin(
-		    __state->epw) + __state->ayn * cos(__state->epw);
+	    __state->f = __state->epw - __state->capu - __state->axn * sin(&
+		    __global_state->f2c, __state->epw) + __state->ayn * cos(&
+		    __global_state->f2c, __state->epw);
 	    if (__state->f > 0.) {
 		__state->upper = __state->epw;
 		__state->fu = __state->f;
@@ -1303,8 +1319,8 @@ static ev2lin_state_t* get_ev2lin_state() {
 
 /*     Short period preliminary quantities */
 
-    __state->sinepw = sin(__state->epw);
-    __state->cosepw = cos(__state->epw);
+    __state->sinepw = sin(&__global_state->f2c, __state->epw);
+    __state->cosepw = cos(&__global_state->f2c, __state->epw);
     __state->temp3 = __state->axn * __state->sinepw;
     __state->temp4 = __state->ayn * __state->cosepw;
     __state->temp5 = __state->axn * __state->cosepw;
@@ -1316,11 +1332,12 @@ static ev2lin_state_t* get_ev2lin_state() {
     __state->pl = __state->a * __state->temp;
     __state->r__ = __state->a * (1. - __state->ecose);
     __state->temp1 = 1. / __state->r__;
-    __state->rdot = __state->ke * __state->temp1 * sqrt(__state->a) * 
-	    __state->esine;
-    __state->rfdot = __state->ke * __state->temp1 * sqrt(__state->pl);
+    __state->rdot = __state->ke * __state->temp1 * sqrt(&__global_state->f2c, 
+	    __state->a) * __state->esine;
+    __state->rfdot = __state->ke * __state->temp1 * sqrt(&__global_state->f2c,
+	     __state->pl);
     __state->temp2 = __state->a * __state->temp1;
-    __state->betal = sqrt(__state->temp);
+    __state->betal = sqrt(&__global_state->f2c, __state->temp);
     __state->temp3 = 1. / (__state->betal + 1.);
     __state->cosu = __state->temp2 * (__state->cosepw - __state->axn + 
 	    __state->ayn * __state->esine * __state->temp3);
@@ -1330,7 +1347,8 @@ static ev2lin_state_t* get_ev2lin_state() {
 /*     Compute the angle from the x-axis of the point ( COSU, SINU ) */
 
     if (__state->sinu != 0. || __state->cosu != 0.) {
-	__state->u = atan2(__state->sinu, __state->cosu);
+	__state->u = atan2(&__global_state->f2c, __state->sinu, __state->cosu)
+		;
 	if (__state->u < 0.) {
 	    __state->u += __state->pix2;
 	}
@@ -1361,12 +1379,12 @@ static ev2lin_state_t* get_ev2lin_state() {
 
 /*     Orientation vectors */
 
-    __state->sinuk = sin(__state->uk);
-    __state->cosuk = cos(__state->uk);
-    __state->sinik = sin(__state->xinck);
-    __state->cosik = cos(__state->xinck);
-    __state->sinnok = sin(__state->xnodek);
-    __state->cosnok = cos(__state->xnodek);
+    __state->sinuk = sin(&__global_state->f2c, __state->uk);
+    __state->cosuk = cos(&__global_state->f2c, __state->uk);
+    __state->sinik = sin(&__global_state->f2c, __state->xinck);
+    __state->cosik = cos(&__global_state->f2c, __state->xinck);
+    __state->sinnok = sin(&__global_state->f2c, __state->xnodek);
+    __state->cosnok = cos(&__global_state->f2c, __state->xnodek);
     __state->xmx = -__state->sinnok * __state->cosik;
     __state->xmy = __state->cosnok * __state->cosik;
     __state->ux = __state->xmx * __state->sinuk + __state->cosnok * 
@@ -1391,7 +1409,7 @@ static ev2lin_state_t* get_ev2lin_state() {
 	    __state->rfdotk * __state->vy);
     state[5] = __state->tokmps * (__state->rdotk * __state->uz + 
 	    __state->rfdotk * __state->vz);
-    chkout_("EV2LIN", (ftnlen)6);
+    chkout_(__global_state, "EV2LIN", (ftnlen)6);
     return 0;
 } /* ev2lin_ */
 

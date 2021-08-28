@@ -199,7 +199,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "dsphdr_c" );
+   chkin_c ( naif_state, "dsphdr_c" );
 
 
    dsphdr_ ( (doublereal *) &x,

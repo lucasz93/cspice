@@ -305,7 +305,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "gcpool_c");
+   chkin_c ( naif_state, "gcpool_c");
  
  
    /*

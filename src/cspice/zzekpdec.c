@@ -8,8 +8,7 @@
 
 
 extern zzekpdec_init_t __zzekpdec_init;
-static zzekpdec_state_t* get_zzekpdec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekpdec_state_t* get_zzekpdec_state(cspice_t* state) {
 	if (!state->zzekpdec)
 		state->zzekpdec = __cspice_allocate_module(sizeof(
 	zzekpdec_state_t), &__zzekpdec_init, sizeof(__zzekpdec_init));
@@ -18,7 +17,8 @@ static zzekpdec_state_t* get_zzekpdec_state() {
 }
 
 /* $Procedure      ZZEKPDEC ( EK, parse column declaration ) */
-/* Subroutine */ int zzekpdec_(char *decl, integer *pardsc, ftnlen decl_len)
+/* Subroutine */ int zzekpdec_(cspice_t* __global_state, char *decl, integer *
+	pardsc, ftnlen decl_len)
 {
     /* Initialized data */
 
@@ -27,40 +27,42 @@ static zzekpdec_state_t* get_zzekpdec_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
     integer j;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
     logical attfnd[11];
     integer attloc[11];
     integer tokloc;
-    extern /* Subroutine */ int lparsm_(char *, char *, integer *, integer *, 
-	    char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int lparsm_(cspice_t*, char *, char *, integer *, 
+	    integer *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     char tokens[32*20];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int nparsi_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
     char msg[320];
     integer ptr;
 
 
     /* Module state */
-    zzekpdec_state_t* __state = get_zzekpdec_state();
+    zzekpdec_state_t* __state = get_zzekpdec_state(__global_state);
 /* $ Abstract */
 
 /*     Parse a declaration of a new EK column. */
@@ -583,15 +585,15 @@ static zzekpdec_state_t* get_zzekpdec_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKPDEC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPDEC", (ftnlen)8);
     }
 
 /*     Start with a clean slate. */
 
-    cleari_(&__state->c__11, pardsc);
+    cleari_(__global_state, &__state->c__11, pardsc);
 
 /*     Our declaration language has been cleverly designed so that the */
 /*     characters */
@@ -637,17 +639,18 @@ static zzekpdec_state_t* get_zzekpdec_state() {
 /*     The order of the token pairs is not necessarily as shown. */
 
 
-    lparsm_(decl, ",=", &__state->c__20, &n, tokens, decl_len, (ftnlen)2, (
-	    ftnlen)32);
+    lparsm_(__global_state, decl, ",=", &__state->c__20, &n, tokens, decl_len,
+	     (ftnlen)2, (ftnlen)32);
 
 /*     Make sure the tokens are in upper case.  They are already */
 /*     left-justified. */
 
     i__1 = n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	ucase_(tokens + (((i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"tokens", i__2, "zzekpdec_", (ftnlen)453)) << 5), tokens + (((
-		i__3 = i__ - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge("tokens", 
+	ucase_(__global_state, tokens + (((i__2 = i__ - 1) < 20 && 0 <= i__2 ?
+		 i__2 : s_rnge(&__global_state->f2c, "tokens", i__2, "zzekpd"
+		"ec_", (ftnlen)453)) << 5), tokens + (((i__3 = i__ - 1) < 20 &&
+		 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "tokens", 
 		i__3, "zzekpdec_", (ftnlen)453)) << 5), (ftnlen)32, (ftnlen)
 		32);
     }
@@ -656,24 +659,29 @@ static zzekpdec_state_t* get_zzekpdec_state() {
 /*     of the token indices of the keywords that start the clauses. */
 
     for (i__ = 1; i__ <= 5; ++i__) {
-	attfnd[(i__1 = i__ - 1) < 11 && 0 <= i__1 ? i__1 : s_rnge("attfnd", 
-		i__1, "zzekpdec_", (ftnlen)461)] = FALSE_;
+	attfnd[(i__1 = i__ - 1) < 11 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "attfnd", i__1, "zzekpdec_", (ftnlen)461)
+		] = FALSE_;
     }
     i__1 = n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	j = 1;
 	found = FALSE_;
 	while(j <= 5 && ! found) {
-	    if (s_cmp(tokens + (((i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("tokens", i__2, "zzekpdec_", (ftnlen)471)) << 5), 
+	    if (s_cmp(&__global_state->f2c, tokens + (((i__2 = i__ - 1) < 20 
+		    && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "toke"
+		    "ns", i__2, "zzekpdec_", (ftnlen)471)) << 5), 
 		    __state->attkey + (((i__3 = j - 1) < 5 && 0 <= i__3 ? 
-		    i__3 : s_rnge("attkey", i__3, "zzekpdec_", (ftnlen)471)) 
-		    << 5), (ftnlen)32, (ftnlen)32) == 0) {
+		    i__3 : s_rnge(&__global_state->f2c, "attkey", i__3, "zze"
+		    "kpdec_", (ftnlen)471)) << 5), (ftnlen)32, (ftnlen)32) == 
+		    0) {
 		found = TRUE_;
-		attfnd[(i__2 = j - 1) < 11 && 0 <= i__2 ? i__2 : s_rnge("att"
-			"fnd", i__2, "zzekpdec_", (ftnlen)473)] = TRUE_;
-		attloc[(i__2 = j - 1) < 11 && 0 <= i__2 ? i__2 : s_rnge("att"
-			"loc", i__2, "zzekpdec_", (ftnlen)474)] = i__;
+		attfnd[(i__2 = j - 1) < 11 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "attfnd", i__2, "zzekpdec_", (
+			ftnlen)473)] = TRUE_;
+		attloc[(i__2 = j - 1) < 11 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "attloc", i__2, "zzekpdec_", (
+			ftnlen)474)] = i__;
 	    } else {
 		++j;
 	    }
@@ -684,19 +692,21 @@ static zzekpdec_state_t* get_zzekpdec_state() {
 
     for (i__ = 1; i__ <= 1; ++i__) {
 	if (! attfnd[(i__2 = __state->reqkey[(i__1 = i__ - 1) < 1 && 0 <= 
-		i__1 ? i__1 : s_rnge("reqkey", i__1, "zzekpdec_", (ftnlen)488)
-		] - 1) < 11 && 0 <= i__2 ? i__2 : s_rnge("attfnd", i__2, 
-		"zzekpdec_", (ftnlen)488)]) {
-	    setmsg_("Required keyword # was not found in column declaration "
-		    "#.", (ftnlen)57);
-	    errch_("#", __state->attkey + (((i__2 = __state->reqkey[(i__1 = 
-		    i__ - 1) < 1 && 0 <= i__1 ? i__1 : s_rnge("reqkey", i__1, 
-		    "zzekpdec_", (ftnlen)492)] - 1) < 5 && 0 <= i__2 ? i__2 : 
-		    s_rnge("attkey", i__2, "zzekpdec_", (ftnlen)492)) << 5), (
-		    ftnlen)1, (ftnlen)32);
-	    errch_("#", decl, (ftnlen)1, decl_len);
-	    sigerr_("SPICE(BADCOLUMDECL)", (ftnlen)19);
-	    chkout_("ZZEKPDEC", (ftnlen)8);
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "reqkey", i__1, 
+		"zzekpdec_", (ftnlen)488)] - 1) < 11 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "attfnd", i__2, "zzekpdec_", (
+		ftnlen)488)]) {
+	    setmsg_(__global_state, "Required keyword # was not found in col"
+		    "umn declaration #.", (ftnlen)57);
+	    errch_(__global_state, "#", __state->attkey + (((i__2 = 
+		    __state->reqkey[(i__1 = i__ - 1) < 1 && 0 <= i__1 ? i__1 :
+		     s_rnge(&__global_state->f2c, "reqkey", i__1, "zzekpdec_",
+		     (ftnlen)492)] - 1) < 5 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "attkey", i__2, "zzekpdec_", (ftnlen)
+		    492)) << 5), (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+	    sigerr_(__global_state, "SPICE(BADCOLUMDECL)", (ftnlen)19);
+	    chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -720,31 +730,35 @@ static zzekpdec_state_t* get_zzekpdec_state() {
 
     tokloc = attloc[0] + 1;
     if (n < tokloc) {
-	setmsg_("Column data type specification did not follow \"DATATYPE\" "
-		"keyword in declaration #.", (ftnlen)82);
-	errch_("#", decl, (ftnlen)1, decl_len);
-	sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-	chkout_("ZZEKPDEC", (ftnlen)8);
+	setmsg_(__global_state, "Column data type specification did not foll"
+		"ow \"DATATYPE\" keyword in declaration #.", (ftnlen)82);
+	errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+	sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 	return 0;
     }
-    if (s_cmp(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)531)) << 5), "INTEGER"
-	    , (ftnlen)32, (ftnlen)7) == 0) {
+    if (s_cmp(&__global_state->f2c, tokens + (((i__1 = tokloc - 1) < 20 && 0 
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens", i__1, 
+	    "zzekpdec_", (ftnlen)531)) << 5), "INTEGER", (ftnlen)32, (ftnlen)
+	    7) == 0) {
 	pardsc[1] = 3;
 	pardsc[2] = 1;
-    } else if (eqstr_(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? i__1 
-	    : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)536)) << 5), "DOUB"
-	    "LE PRECISION", (ftnlen)32, (ftnlen)16)) {
+    } else if (eqstr_(__global_state, tokens + (((i__1 = tokloc - 1) < 20 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens", i__1, 
+	    "zzekpdec_", (ftnlen)536)) << 5), "DOUBLE PRECISION", (ftnlen)32, 
+	    (ftnlen)16)) {
 	pardsc[1] = 2;
 	pardsc[2] = 1;
-    } else if (eqstr_(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? i__1 
-	    : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)541)) << 5), "TIME",
-	     (ftnlen)32, (ftnlen)4)) {
+    } else if (eqstr_(__global_state, tokens + (((i__1 = tokloc - 1) < 20 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens", i__1, 
+	    "zzekpdec_", (ftnlen)541)) << 5), "TIME", (ftnlen)32, (ftnlen)4)) 
+	    {
 	pardsc[1] = 4;
 	pardsc[2] = 1;
-    } else if (s_cmp(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? i__1 :
-	     s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)546)) << 5), "CHARA"
-	    "CTER", (ftnlen)9, (ftnlen)9) == 0) {
+    } else if (s_cmp(&__global_state->f2c, tokens + (((i__1 = tokloc - 1) < 
+	    20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens", 
+	    i__1, "zzekpdec_", (ftnlen)546)) << 5), "CHARACTER", (ftnlen)9, (
+	    ftnlen)9) == 0) {
 	pardsc[1] = 1;
 
 /*        To simplify picking up the length specification, compress */
@@ -758,37 +772,42 @@ static zzekpdec_state_t* get_zzekpdec_state() {
 /*           CHARACTER** */
 
 
-	cmprss_(" ", &__state->c__0, tokens + (((i__1 = tokloc - 1) < 20 && 0 
-		<= i__1 ? i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)
-		561)) << 5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 
-		? i__2 : s_rnge("tokens", i__2, "zzekpdec_", (ftnlen)561)) << 
-		5), (ftnlen)1, (ftnlen)32, (ftnlen)32);
-	cmprss_("(", &__state->c__0, tokens + (((i__1 = tokloc - 1) < 20 && 0 
-		<= i__1 ? i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)
-		562)) << 5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 
-		? i__2 : s_rnge("tokens", i__2, "zzekpdec_", (ftnlen)562)) << 
-		5), (ftnlen)1, (ftnlen)32, (ftnlen)32);
-	cmprss_(")", &__state->c__0, tokens + (((i__1 = tokloc - 1) < 20 && 0 
-		<= i__1 ? i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)
-		563)) << 5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 
-		? i__2 : s_rnge("tokens", i__2, "zzekpdec_", (ftnlen)563)) << 
-		5), (ftnlen)1, (ftnlen)32, (ftnlen)32);
+	cmprss_(__global_state, " ", &__state->c__0, tokens + (((i__1 = 
+		tokloc - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tokens", i__1, "zzekpdec_", (ftnlen)561)
+		) << 5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "tokens", i__2, "zzekpde"
+		"c_", (ftnlen)561)) << 5), (ftnlen)1, (ftnlen)32, (ftnlen)32);
+	cmprss_(__global_state, "(", &__state->c__0, tokens + (((i__1 = 
+		tokloc - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tokens", i__1, "zzekpdec_", (ftnlen)562)
+		) << 5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "tokens", i__2, "zzekpde"
+		"c_", (ftnlen)562)) << 5), (ftnlen)1, (ftnlen)32, (ftnlen)32);
+	cmprss_(__global_state, ")", &__state->c__0, tokens + (((i__1 = 
+		tokloc - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tokens", i__1, "zzekpdec_", (ftnlen)563)
+		) << 5), tokens + (((i__2 = tokloc - 1) < 20 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "tokens", i__2, "zzekpde"
+		"c_", (ftnlen)563)) << 5), (ftnlen)1, (ftnlen)32, (ftnlen)32);
 	if (*(unsigned char *)&tokens[(((i__1 = tokloc - 1) < 20 && 0 <= i__1 
-		? i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)566)) << 
-		5) + 9] != '*') {
-	    setmsg_("Required asterisk missing from character column declara"
-		    "tion:  #  in declaration:  #", (ftnlen)83);
-	    errch_("#", tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)571)) 
-		    << 5), (ftnlen)1, (ftnlen)32);
-	    errch_("#", decl, (ftnlen)1, decl_len);
-	    sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-	    chkout_("ZZEKPDEC", (ftnlen)8);
+		? i__1 : s_rnge(&__global_state->f2c, "tokens", i__1, "zzekp"
+		"dec_", (ftnlen)566)) << 5) + 9] != '*') {
+	    setmsg_(__global_state, "Required asterisk missing from characte"
+		    "r column declaration:  #  in declaration:  #", (ftnlen)83)
+		    ;
+	    errch_(__global_state, "#", tokens + (((i__1 = tokloc - 1) < 20 &&
+		     0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens",
+		     i__1, "zzekpdec_", (ftnlen)571)) << 5), (ftnlen)1, (
+		    ftnlen)32);
+	    errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+	    sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+	    chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 	    return 0;
 	}
 	if (*(unsigned char *)&tokens[(((i__1 = tokloc - 1) < 20 && 0 <= i__1 
-		? i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)580)) << 
-		5) + 10] == '*') {
+		? i__1 : s_rnge(&__global_state->f2c, "tokens", i__1, "zzekp"
+		"dec_", (ftnlen)580)) << 5) + 10] == '*') {
 
 /*           The string length is variable. */
 
@@ -798,19 +817,23 @@ static zzekpdec_state_t* get_zzekpdec_state() {
 /*           The portion of the token following the asterisk should be a */
 /*           string length. */
 
-	    s_copy(msg, " ", (ftnlen)320, (ftnlen)1);
-	    nparsi_(tokens + ((((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? i__1 :
-		     s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)592)) << 5) 
-		    + 10), &pardsc[2], msg, &ptr, (ftnlen)22, (ftnlen)320);
-	    if (s_cmp(msg, " ", (ftnlen)320, (ftnlen)1) != 0) {
-		setmsg_("String length specification # didn't parse as an in"
-			"teger in declaration   #", (ftnlen)75);
-		errch_("#", tokens + ((((i__1 = tokloc - 1) < 20 && 0 <= i__1 
-			? i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)
-			598)) << 5) + 10), (ftnlen)1, (ftnlen)22);
-		errch_("#", decl, (ftnlen)1, decl_len);
-		sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-		chkout_("ZZEKPDEC", (ftnlen)8);
+	    s_copy(&__global_state->f2c, msg, " ", (ftnlen)320, (ftnlen)1);
+	    nparsi_(__global_state, tokens + ((((i__1 = tokloc - 1) < 20 && 0 
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens", 
+		    i__1, "zzekpdec_", (ftnlen)592)) << 5) + 10), &pardsc[2], 
+		    msg, &ptr, (ftnlen)22, (ftnlen)320);
+	    if (s_cmp(&__global_state->f2c, msg, " ", (ftnlen)320, (ftnlen)1) 
+		    != 0) {
+		setmsg_(__global_state, "String length specification # didn'"
+			"t parse as an integer in declaration   #", (ftnlen)75)
+			;
+		errch_(__global_state, "#", tokens + ((((i__1 = tokloc - 1) < 
+			20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"tokens", i__1, "zzekpdec_", (ftnlen)598)) << 5) + 10)
+			, (ftnlen)1, (ftnlen)22);
+		errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+		sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+		chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -818,14 +841,14 @@ static zzekpdec_state_t* get_zzekpdec_state() {
 
 /*        The type specification is invalid. */
 
-	setmsg_("Data type specification # is unrecognized in declaration #.",
-		 (ftnlen)59);
-	errch_("#", tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)614)) << 5), (
-		ftnlen)1, (ftnlen)32);
-	errch_("#", decl, (ftnlen)1, decl_len);
-	sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-	chkout_("ZZEKPDEC", (ftnlen)8);
+	setmsg_(__global_state, "Data type specification # is unrecognized i"
+		"n declaration #.", (ftnlen)59);
+	errch_(__global_state, "#", tokens + (((i__1 = tokloc - 1) < 20 && 0 
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens", i__1, 
+		"zzekpdec_", (ftnlen)614)) << 5), (ftnlen)1, (ftnlen)32);
+	errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+	sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 	return 0;
     }
 
@@ -835,45 +858,51 @@ static zzekpdec_state_t* get_zzekpdec_state() {
     if (attfnd[1]) {
 	tokloc = attloc[1] + 1;
 	if (n < tokloc) {
-	    setmsg_("Column size specification did not follow \"SIZE\" keywo"
-		    "rd in declaration #.", (ftnlen)73);
-	    errch_("#", decl, (ftnlen)1, decl_len);
-	    sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-	    chkout_("ZZEKPDEC", (ftnlen)8);
+	    setmsg_(__global_state, "Column size specification did not follo"
+		    "w \"SIZE\" keyword in declaration #.", (ftnlen)73);
+	    errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+	    sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+	    chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 	    return 0;
 	}
-	if (s_cmp(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)643)) << 5), 
-		"VARIABLE", (ftnlen)32, (ftnlen)8) == 0) {
+	if (s_cmp(&__global_state->f2c, tokens + (((i__1 = tokloc - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens", 
+		i__1, "zzekpdec_", (ftnlen)643)) << 5), "VARIABLE", (ftnlen)
+		32, (ftnlen)8) == 0) {
 
 /*           Variable size entries are not allowed for CHARACTER*(*) */
 /*           columns. */
 
 	    if (pardsc[1] == 1) {
 		if (pardsc[2] == -1) {
-		    setmsg_("Column size specification was VARIABLE for a CH"
-			    "ARACTER*(*) column in  declaration #.", (ftnlen)
-			    84);
-		    errch_("#", decl, (ftnlen)1, decl_len);
-		    sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-		    chkout_("ZZEKPDEC", (ftnlen)8);
+		    setmsg_(__global_state, "Column size specification was V"
+			    "ARIABLE for a CHARACTER*(*) column in  declarati"
+			    "on #.", (ftnlen)84);
+		    errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+		    sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)
+			    20);
+		    chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 		    return 0;
 		}
 	    }
 	    pardsc[3] = -1;
 	} else {
-	    nparsi_(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)669)) << 5), &
-		    pardsc[3], msg, &ptr, (ftnlen)32, (ftnlen)320);
-	    if (s_cmp(msg, " ", (ftnlen)320, (ftnlen)1) != 0) {
-		setmsg_("Column element size  specification # didn't parse a"
-			"s an integer in in declaration #", (ftnlen)83);
-		errch_("#", tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ?
-			 i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)
-			676)) << 5), (ftnlen)1, (ftnlen)32);
-		errch_("#", decl, (ftnlen)1, decl_len);
-		sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-		chkout_("ZZEKPDEC", (ftnlen)8);
+	    nparsi_(__global_state, tokens + (((i__1 = tokloc - 1) < 20 && 0 
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens", 
+		    i__1, "zzekpdec_", (ftnlen)669)) << 5), &pardsc[3], msg, &
+		    ptr, (ftnlen)32, (ftnlen)320);
+	    if (s_cmp(&__global_state->f2c, msg, " ", (ftnlen)320, (ftnlen)1) 
+		    != 0) {
+		setmsg_(__global_state, "Column element size  specification "
+			"# didn't parse as an integer in in declaration #", (
+			ftnlen)83);
+		errch_(__global_state, "#", tokens + (((i__1 = tokloc - 1) < 
+			20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"tokens", i__1, "zzekpdec_", (ftnlen)676)) << 5), (
+			ftnlen)1, (ftnlen)32);
+		errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+		sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+		chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -921,30 +950,33 @@ static zzekpdec_state_t* get_zzekpdec_state() {
     if (attfnd[3]) {
 	tokloc = attloc[3] + 1;
 	if (n < tokloc) {
-	    setmsg_("Boolean value did not follow \"NULLS_OK\" keyword in de"
-		    "claration #.", (ftnlen)65);
-	    errch_("#", decl, (ftnlen)1, decl_len);
-	    sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-	    chkout_("ZZEKPDEC", (ftnlen)8);
+	    setmsg_(__global_state, "Boolean value did not follow \"NULLS_O"
+		    "K\" keyword in declaration #.", (ftnlen)65);
+	    errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+	    sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+	    chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 	    return 0;
 	}
-	if (s_cmp(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)751)) << 5), 
-		"TRUE", (ftnlen)32, (ftnlen)4) == 0) {
+	if (s_cmp(&__global_state->f2c, tokens + (((i__1 = tokloc - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens", 
+		i__1, "zzekpdec_", (ftnlen)751)) << 5), "TRUE", (ftnlen)32, (
+		ftnlen)4) == 0) {
 	    pardsc[7] = 1;
-	} else if (s_cmp(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)755)) << 5)
-		, "FALSE", (ftnlen)32, (ftnlen)5) == 0) {
+	} else if (s_cmp(&__global_state->f2c, tokens + (((i__1 = tokloc - 1) 
+		< 20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tok"
+		"ens", i__1, "zzekpdec_", (ftnlen)755)) << 5), "FALSE", (
+		ftnlen)32, (ftnlen)5) == 0) {
 	    pardsc[7] = -1;
 	} else {
-	    setmsg_("Invalid token # follows NULLS_OK keyword in declaration"
-		    " #. ", (ftnlen)59);
-	    errch_("#", tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)763)) 
-		    << 5), (ftnlen)1, (ftnlen)32);
-	    errch_("#", decl, (ftnlen)1, decl_len);
-	    sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-	    chkout_("ZZEKPDEC", (ftnlen)8);
+	    setmsg_(__global_state, "Invalid token # follows NULLS_OK keywor"
+		    "d in declaration #. ", (ftnlen)59);
+	    errch_(__global_state, "#", tokens + (((i__1 = tokloc - 1) < 20 &&
+		     0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens",
+		     i__1, "zzekpdec_", (ftnlen)763)) << 5), (ftnlen)1, (
+		    ftnlen)32);
+	    errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+	    sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+	    chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 	    return 0;
 	}
     } else {
@@ -960,43 +992,46 @@ static zzekpdec_state_t* get_zzekpdec_state() {
     if (attfnd[2]) {
 	tokloc = attloc[2] + 1;
 	if (n < tokloc) {
-	    setmsg_("Boolean value did not follow \"INDEXED\" keyword in dec"
-		    "laration #.", (ftnlen)64);
-	    errch_("#", decl, (ftnlen)1, decl_len);
-	    sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-	    chkout_("ZZEKPDEC", (ftnlen)8);
+	    setmsg_(__global_state, "Boolean value did not follow \"INDEXE"
+		    "D\" keyword in declaration #.", (ftnlen)64);
+	    errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+	    sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+	    chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 	    return 0;
 	}
-	if (s_cmp(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)802)) << 5), 
-		"TRUE", (ftnlen)32, (ftnlen)4) == 0) {
+	if (s_cmp(&__global_state->f2c, tokens + (((i__1 = tokloc - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens", 
+		i__1, "zzekpdec_", (ftnlen)802)) << 5), "TRUE", (ftnlen)32, (
+		ftnlen)4) == 0) {
 
 /*           If we have a fixed-size column whose size is 1, then it's */
 /*           possible to index that column.  Otherwise, we should not */
 /*           have an `INDEXED' clause. */
 
 	    if (pardsc[3] != 1) {
-		setmsg_("Non-scalar columns cannot be indexed. Declaration w"
-			"as #.", (ftnlen)56);
-		errch_("#", decl, (ftnlen)1, decl_len);
-		sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-		chkout_("ZZEKPDEC", (ftnlen)8);
+		setmsg_(__global_state, "Non-scalar columns cannot be indexe"
+			"d. Declaration was #.", (ftnlen)56);
+		errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+		sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+		chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 		return 0;
 	    }
 	    pardsc[5] = 1;
-	} else if (s_cmp(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)821)) << 5)
-		, "FALSE", (ftnlen)32, (ftnlen)5) == 0) {
+	} else if (s_cmp(&__global_state->f2c, tokens + (((i__1 = tokloc - 1) 
+		< 20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tok"
+		"ens", i__1, "zzekpdec_", (ftnlen)821)) << 5), "FALSE", (
+		ftnlen)32, (ftnlen)5) == 0) {
 	    pardsc[5] = -1;
 	} else {
-	    setmsg_("Invalid token # follows INDEXED keyword in declaration "
-		    "#. ", (ftnlen)58);
-	    errch_("#", tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)829)) 
-		    << 5), (ftnlen)1, (ftnlen)32);
-	    errch_("#", decl, (ftnlen)1, decl_len);
-	    sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-	    chkout_("ZZEKPDEC", (ftnlen)8);
+	    setmsg_(__global_state, "Invalid token # follows INDEXED keyword"
+		    " in declaration #. ", (ftnlen)58);
+	    errch_(__global_state, "#", tokens + (((i__1 = tokloc - 1) < 20 &&
+		     0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens",
+		     i__1, "zzekpdec_", (ftnlen)829)) << 5), (ftnlen)1, (
+		    ftnlen)32);
+	    errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+	    sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+	    chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 	    return 0;
 	}
     } else {
@@ -1011,16 +1046,17 @@ static zzekpdec_state_t* get_zzekpdec_state() {
     if (attfnd[4]) {
 	tokloc = attloc[4] + 1;
 	if (n < tokloc) {
-	    setmsg_("Boolean value did not follow \"FIXED_COUNT\" keyword in"
-		    " declaration #.", (ftnlen)68);
-	    errch_("#", decl, (ftnlen)1, decl_len);
-	    sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-	    chkout_("ZZEKPDEC", (ftnlen)8);
+	    setmsg_(__global_state, "Boolean value did not follow \"FIXED_CO"
+		    "UNT\" keyword in declaration #.", (ftnlen)68);
+	    errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+	    sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+	    chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 	    return 0;
 	}
-	if (s_cmp(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)867)) << 5), 
-		"TRUE", (ftnlen)32, (ftnlen)4) == 0) {
+	if (s_cmp(&__global_state->f2c, tokens + (((i__1 = tokloc - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens", 
+		i__1, "zzekpdec_", (ftnlen)867)) << 5), "TRUE", (ftnlen)32, (
+		ftnlen)4) == 0) {
 
 /*           The column is a fixed-count column.  Only scalar columns */
 /*           are permitted to have fixed count.  We adjust the column */
@@ -1042,33 +1078,35 @@ static zzekpdec_state_t* get_zzekpdec_state() {
 
 		pardsc[0] = 9;
 	    } else {
-		setmsg_("FIXED_COUNT attribute used in non-scalar column dec"
-			"laration #. ", (ftnlen)63);
-		errch_("#", decl, (ftnlen)1, decl_len);
-		sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-		chkout_("ZZEKPDEC", (ftnlen)8);
+		setmsg_(__global_state, "FIXED_COUNT attribute used in non-s"
+			"calar column declaration #. ", (ftnlen)63);
+		errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+		sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+		chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 		return 0;
 	    }
-	} else if (s_cmp(tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)903)) << 5)
-		, "FALSE", (ftnlen)32, (ftnlen)5) != 0) {
+	} else if (s_cmp(&__global_state->f2c, tokens + (((i__1 = tokloc - 1) 
+		< 20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tok"
+		"ens", i__1, "zzekpdec_", (ftnlen)903)) << 5), "FALSE", (
+		ftnlen)32, (ftnlen)5) != 0) {
 
 /*           No action is required if the FIXED_COUNT keyword is set */
 /*           to FALSE, but no value other than FALSE or TRUE may appear */
 /*           on the RHS. */
 
-	    setmsg_("Invalid token # follows NULLS_OK keyword in declaration"
-		    " #. ", (ftnlen)59);
-	    errch_("#", tokens + (((i__1 = tokloc - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("tokens", i__1, "zzekpdec_", (ftnlen)911)) 
-		    << 5), (ftnlen)1, (ftnlen)32);
-	    errch_("#", decl, (ftnlen)1, decl_len);
-	    sigerr_("SPICE(BADCOLUMNDECL)", (ftnlen)20);
-	    chkout_("ZZEKPDEC", (ftnlen)8);
+	    setmsg_(__global_state, "Invalid token # follows NULLS_OK keywor"
+		    "d in declaration #. ", (ftnlen)59);
+	    errch_(__global_state, "#", tokens + (((i__1 = tokloc - 1) < 20 &&
+		     0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tokens",
+		     i__1, "zzekpdec_", (ftnlen)911)) << 5), (ftnlen)1, (
+		    ftnlen)32);
+	    errch_(__global_state, "#", decl, (ftnlen)1, decl_len);
+	    sigerr_(__global_state, "SPICE(BADCOLUMNDECL)", (ftnlen)20);
+	    chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
 	    return 0;
 	}
     }
-    chkout_("ZZEKPDEC", (ftnlen)8);
+    chkout_(__global_state, "ZZEKPDEC", (ftnlen)8);
     return 0;
 } /* zzekpdec_ */
 

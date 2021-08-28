@@ -219,7 +219,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "frmnam_c" );
+   chkin_c ( naif_state, "frmnam_c" );
 
    /*
    Make sure the output frmnam has at least enough room for one output

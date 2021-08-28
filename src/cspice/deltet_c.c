@@ -187,7 +187,7 @@
    {
       return;
    }
-   chkin_c ( "deltet_c" );
+   chkin_c ( naif_state, "deltet_c" );
 
 
    /*

@@ -1,13 +1,5 @@
 #include "__cspice_state.h"
 
-static cspice_t** get_tls_ptr() {
-	static _Thread_local cspice_t* state = 0;
-	return &state;
-}
-
-cspice_t* __cspice_get_state(void) { return *get_tls_ptr(); }
-void __cspice_set_state(cspice_t* state) { *get_tls_ptr() = state; }
-
 /* -------------------------------------------------------------------------- */
 accept_init_t __accept_init = {
 TRUE_,

@@ -383,7 +383,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "srfscc_c" );
+   chkin_c ( naif_state, "srfscc_c" );
  
    /*
    Check the input string to make sure the pointer is non-null and

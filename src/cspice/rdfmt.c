@@ -17,12 +17,11 @@ extern double atof();
 
  static int
 #ifdef KR_headers
-rd_Z(n,w,len) Uint *n; ftnlen len;
+rd_Z(f2c,n,w,len) f2c_state_t *f2c; Uint *n; ftnlen len;
 #else
-rd_Z(Uint *n, int w, ftnlen len)
+rd_Z(f2c_state_t *f2c, Uint *n, int w, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	long x[9];
 	char *s, *s0, *s1, *se, *t;
 	int ch, i, w1, w2;
@@ -96,12 +95,11 @@ rd_Z(Uint *n, int w, ftnlen len)
 
  static int
 #ifdef KR_headers
-rd_I(n,w,len, base) Uint *n; int w; ftnlen len; register int base;
+rd_I(f2c,n,w,len, base) f2c_state_t *f2c; Uint *n; int w; ftnlen len; register int base;
 #else
-rd_I(Uint *n, int w, ftnlen len, register int base)
+rd_I(f2c_state_t *f2c, Uint *n, int w, ftnlen len, register int base)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	longint x;
+{	longint x;
 	int sign,ch;
 	char s[84], *ps;
 	ps=s; x=0;
@@ -129,12 +127,11 @@ loop:	while (*ps>='0' && *ps<='9') { x=x*base+(*ps-'0'); ps++; }
 }
  static int
 #ifdef KR_headers
-rd_L(n,w,len) ftnint *n; ftnlen len;
+rd_L(f2c,n,w,len) f2c_state_t *f2c; ftnint *n; ftnlen len;
 #else
-rd_L(ftnint *n, int w, ftnlen len)
+rd_L(f2c_state_t *f2c, ftnint *n, int w, ftnlen len)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int ch, lv;
+{	int ch, lv;
 	char s[84], *ps;
 	ps=s;
 	while (w) {
@@ -161,12 +158,11 @@ rd_L(ftnint *n, int w, ftnlen len)
 
  static int
 #ifdef KR_headers
-rd_F(p, w, d, len) ufloat *p; ftnlen len;
+rd_F(f2c, p, w, d, len) f2c_state_t *f2c; ufloat *p; ftnlen len;
 #else
-rd_F(ufloat *p, int w, int d, ftnlen len)
+rd_F(f2c_state_t *f2c, ufloat *p, int w, int d, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	char s[FMAX+EXPMAXDIGS+4];
 	register int ch;
 	register char *sp, *spe, *sp1;
@@ -329,12 +325,11 @@ zero:
 
  static int
 #ifdef KR_headers
-rd_A(p,len) char *p; ftnlen len;
+rd_A(f2c,p,len) f2c_state_t *f2c; char *p; ftnlen len;
 #else
-rd_A(char *p, ftnlen len)
+rd_A(f2c_state_t *f2c, char *p, ftnlen len)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int i,ch;
+{	int i,ch;
 	for(i=0;i<len;i++)
 	{	GET(f2c,ch);
 		*p++=VAL(ch);
@@ -343,12 +338,11 @@ rd_A(char *p, ftnlen len)
 }
  static int
 #ifdef KR_headers
-rd_AW(p,w,len) char *p; ftnlen len;
+rd_AW(f2c,p,w,len) f2c_state_t *f2c; char *p; ftnlen len;
 #else
-rd_AW(char *p, int w, ftnlen len)
+rd_AW(f2c_state_t *f2c, char *p, int w, ftnlen len)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int i,ch;
+{	int i,ch;
 	if(w>=len)
 	{	for(i=0;i<w-len;i++)
 			GET(f2c,ch);
@@ -367,12 +361,11 @@ rd_AW(char *p, int w, ftnlen len)
 }
  static int
 #ifdef KR_headers
-rd_H(n,s) char *s;
+rd_H(f2c,n,s) f2c_state_t *f2c; char *s;
 #else
-rd_H(int n, char *s)
+rd_H(f2c_state_t *f2c, int n, char *s)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int i,ch;
+{	int i,ch;
 	for(i=0;i<n;i++)
 		if((ch=(*f2c->f__getn)())<0) return(ch);
 		else *s++ = ch=='\n'?' ':ch;
@@ -380,12 +373,11 @@ rd_H(int n, char *s)
 }
  static int
 #ifdef KR_headers
-rd_POS(s) char *s;
+rd_POS(f2c,s) f2c_state_t *f2c; char *s;
 #else
-rd_POS(char *s)
+rd_POS(f2c_state_t *f2c, char *s)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	char quote;
+{	char quote;
 	int ch;
 	quote= *s++;
 	for(;*s;s++)
@@ -395,12 +387,11 @@ rd_POS(char *s)
 	return(1);
 }
 #ifdef KR_headers
-rd_ed(p,ptr,len) struct syl *p; char *ptr; ftnlen len;
+rd_ed(f2c,p,ptr,len) f2c_state_t *f2c; struct syl *p; char *ptr; ftnlen len;
 #else
-rd_ed(struct syl *p, char *ptr, ftnlen len)
+rd_ed(f2c_state_t *f2c, struct syl *p, char *ptr, ftnlen len)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int ch;
+{	int ch;
 	for(;f2c->f__cursor>0;f2c->f__cursor--) if((ch=(*f2c->f__getn)())<0) return(ch);
 	if(f2c->f__cursor<0)
 	{	if(f2c->f__recpos+f2c->f__cursor < 0) /*err(elist->cierr,110,"fmt")*/
@@ -420,7 +411,7 @@ rd_ed(struct syl *p, char *ptr, ftnlen len)
 	default: fprintf(stderr,"rd_ed, unexpected code: %d\n", p->op);
 		sig_die(f2c->f__fmtbuf, 1);
 	case IM:
-	case I: ch = rd_I((Uint *)ptr,p->p1,len, 10);
+	case I: ch = rd_I(f2c,(Uint *)ptr,p->p1,len, 10);
 		break;
 
 		/* O and OM don't work right for character, double, complex, */
@@ -428,27 +419,27 @@ rd_ed(struct syl *p, char *ptr, ftnlen len)
 		/* showing a minus sign for negative values. */
 
 	case OM:
-	case O: ch = rd_I((Uint *)ptr, p->p1, len, 8);
+	case O: ch = rd_I(f2c,(Uint *)ptr, p->p1, len, 8);
 		break;
-	case L: ch = rd_L((ftnint *)ptr,p->p1,len);
+	case L: ch = rd_L(f2c,(ftnint *)ptr,p->p1,len);
 		break;
-	case A:	ch = rd_A(ptr,len);
+	case A:	ch = rd_A(f2c,ptr,len);
 		break;
 	case AW:
-		ch = rd_AW(ptr,p->p1,len);
+		ch = rd_AW(f2c,ptr,p->p1,len);
 		break;
 	case E: case EE:
 	case D:
 	case G:
 	case GE:
-	case F:	ch = rd_F((ufloat *)ptr,p->p1,p->p2.i[0],len);
+	case F:	ch = rd_F(f2c,(ufloat *)ptr,p->p1,p->p2.i[0],len);
 		break;
 
 		/* Z and ZM assume 8-bit bytes. */
 
 	case ZM:
 	case Z:
-		ch = rd_Z((Uint *)ptr, p->p1, len);
+		ch = rd_Z(f2c,(Uint *)ptr, p->p1, len);
 		break;
 	}
 	if(ch == 0) return(ch);
@@ -458,19 +449,18 @@ rd_ed(struct syl *p, char *ptr, ftnlen len)
 	return(errno);
 }
 #ifdef KR_headers
-rd_ned(p) struct syl *p;
+rd_ned(f2c,p) f2c_state_t *f2c; struct syl *p;
 #else
-rd_ned(struct syl *p)
+rd_ned(f2c_state_t *f2c, struct syl *p)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	switch(p->op)
 	{
 	default: fprintf(stderr,"rd_ned, unexpected code: %d\n", p->op);
 		sig_die(f2c->f__fmtbuf, 1);
 	case APOS:
-		return(rd_POS(p->p2.s));
-	case H:	return(rd_H(p->p1,p->p2.s));
+		return(rd_POS(f2c,p->p2.s));
+	case H:	return(rd_H(f2c,p->p1,p->p2.s));
 	case SLASH: return((*f2c->f__donewrec)());
 	case TR:
 	case X:	f2c->f__cursor += p->p1;

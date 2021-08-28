@@ -8,32 +8,31 @@
 
 
 typedef int axisar_state_t;
-static axisar_state_t* get_axisar_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline axisar_state_t* get_axisar_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      AXISAR ( Axis and angle to rotation ) */
-/* Subroutine */ int axisar_(doublereal *axis, doublereal *angle, doublereal *
-	r__)
+/* Subroutine */ int axisar_(cspice_t* __global_state, doublereal *axis, 
+	doublereal *angle, doublereal *r__)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     integer i__;
-    extern /* Subroutine */ int ident_(doublereal *);
+    extern /* Subroutine */ int ident_(cspice_t*, doublereal *);
     doublereal vtemp[3];
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
+    extern /* Subroutine */ int vrotv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
 
 
     /* Module state */
-    axisar_state_t* __state = get_axisar_state();
+    axisar_state_t* __state = get_axisar_state(__global_state);
 /* $ Abstract */
 
 /*     Construct a rotation matrix that rotates vectors by a specified */
@@ -249,17 +248,19 @@ static axisar_state_t* get_axisar_state() {
 
 /*     First, set R equal to the identity. */
 
-    ident_(r__);
+    ident_(__global_state, r__);
 
 /*     The matrix we want rotates EVERY vector by ANGLE about AXIS. */
 /*     In particular, it does so to our basis vectors.  The columns */
 /*     of R are the images of the basis vectors under this rotation. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	vrotv_(&r__[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"r", i__1, "axisar_", (ftnlen)240)], axis, angle, vtemp);
-	vequ_(vtemp, &r__[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : 
-		s_rnge("r", i__1, "axisar_", (ftnlen)241)]);
+	vrotv_(__global_state, &r__[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? 
+		i__1 : s_rnge(&__global_state->f2c, "r", i__1, "axisar_", (
+		ftnlen)240)], axis, angle, vtemp);
+	vequ_(__global_state, vtemp, &r__[(i__1 = i__ * 3 - 3) < 9 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "r", i__1, "axisa"
+		"r_", (ftnlen)241)]);
     }
     return 0;
 } /* axisar_ */

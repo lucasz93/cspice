@@ -8,8 +8,7 @@
 
 
 extern spkr19_init_t __spkr19_init;
-static spkr19_state_t* get_spkr19_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr19_state_t* get_spkr19_state(cspice_t* state) {
 	if (!state->spkr19)
 		state->spkr19 = __cspice_allocate_module(sizeof(
 	spkr19_state_t), &__spkr19_init, sizeof(__spkr19_init));
@@ -18,8 +17,8 @@ static spkr19_state_t* get_spkr19_state() {
 }
 
 /* $Procedure  SPKR19 ( SPK, read record from segment, type 19 ) */
-/* Subroutine */ int spkr19_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr19_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
     /* Initialized data */
 
@@ -28,7 +27,8 @@ static spkr19_state_t* get_spkr19_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer high;
@@ -42,13 +42,14 @@ static spkr19_state_t* get_spkr19_state() {
     integer n;
     integer eaddr;
     integer nread;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer minib;
     integer minie;
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer ivbas;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer ivbix;
     integer iveix;
     integer lsize;
@@ -56,11 +57,11 @@ static spkr19_state_t* get_spkr19_state() {
     integer group;
     integer rsize;
     logical prvok;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer begidx;
     integer bufbas;
     integer dirbas;
@@ -70,30 +71,30 @@ static spkr19_state_t* get_spkr19_state() {
     integer remain;
     integer timbas;
     logical samseg;
-    extern integer lstled_(doublereal *, integer *, doublereal *);
+    extern integer lstled_(cspice_t*, doublereal *, integer *, doublereal *);
     integer npkdir;
     logical samivl;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     doublereal mintim[2];
     integer maxwnd;
     integer miniix;
     doublereal contrl[3];
     integer nrcpkt;
-    extern integer lstltd_(doublereal *, integer *, doublereal *);
+    extern integer lstltd_(cspice_t*, doublereal *, integer *, doublereal *);
     logical ivlsel;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer wndsiz;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer pktsiz;
     integer subtyp;
-    extern logical odd_(integer *);
+    extern logical odd_(cspice_t*, integer *);
     integer low;
 
 
     /* Module state */
-    spkr19_state_t* __state = get_spkr19_state();
+    spkr19_state_t* __state = get_spkr19_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 19 */
@@ -490,10 +491,10 @@ static spkr19_state_t* get_spkr19_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKR19", (ftnlen)6);
+    chkin_(__global_state, "SPKR19", (ftnlen)6);
 
 /*     Before any error checks are done, copy the status from */
 /*     the previous call. Set the saved status variable to */
@@ -590,11 +591,12 @@ static spkr19_state_t* get_spkr19_state() {
 
     if (__state->pass1) {
 	if (FALSE_) {
-	    setmsg_("SPK type 19 record size may be as large as #, but SPKPV"
-		    "N record size (defined in spkrec.inc) is #.", (ftnlen)98);
-	    errint_("#", &__state->c__198, (ftnlen)1);
-	    errint_("#", &__state->c__198, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
+	    setmsg_(__global_state, "SPK type 19 record size may be as large"
+		    " as #, but SPKPVN record size (defined in spkrec.inc) is"
+		    " #.", (ftnlen)98);
+	    errint_(__global_state, "#", &__state->c__198, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c__198, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
 	}
 
 /*        Indicate the first pass was completed. */
@@ -605,7 +607,7 @@ static spkr19_state_t* get_spkr19_state() {
 /*     Unpack the segment descriptor, and get the start and end */
 /*     addresses of the segment. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[3];
     baddr = ic[4];
     eaddr = ic[5];
@@ -614,13 +616,13 @@ static spkr19_state_t* get_spkr19_state() {
 /*     descriptor. */
 
     if (*et < dc[0] || *et > dc[1]) {
-	setmsg_("Request time # is outside of descriptor bounds # : #.", (
-		ftnlen)53);
-	errdp_("#", et, (ftnlen)1);
-	errdp_("#", dc, (ftnlen)1);
-	errdp_("#", &dc[1], (ftnlen)1);
-	sigerr_("SPICE(TIMEOUTOFBOUNDS)", (ftnlen)22);
-	chkout_("SPKR19", (ftnlen)6);
+	setmsg_(__global_state, "Request time # is outside of descriptor bou"
+		"nds # : #.", (ftnlen)53);
+	errdp_(__global_state, "#", et, (ftnlen)1);
+	errdp_(__global_state, "#", dc, (ftnlen)1);
+	errdp_(__global_state, "#", &dc[1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TIMEOUTOFBOUNDS)", (ftnlen)22);
+	chkout_(__global_state, "SPKR19", (ftnlen)6);
 	return 0;
     }
 
@@ -717,11 +719,11 @@ static spkr19_state_t* get_spkr19_state() {
 /*        Make sure that this really is a type 19 data segment. */
 
 	if (type__ != 19) {
-	    setmsg_("You are attempting to locate type * data in a type 19 d"
-		    "ata segment.", (ftnlen)67);
-	    errint_("*", &type__, (ftnlen)1);
-	    sigerr_("SPICE(WRONGSPKTYPE)", (ftnlen)19);
-	    chkout_("SPKR19", (ftnlen)6);
+	    setmsg_(__global_state, "You are attempting to locate type * dat"
+		    "a in a type 19 data segment.", (ftnlen)67);
+	    errint_(__global_state, "*", &type__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(WRONGSPKTYPE)", (ftnlen)19);
+	    chkout_(__global_state, "SPKR19", (ftnlen)6);
 	    return 0;
 	}
 
@@ -734,13 +736,13 @@ static spkr19_state_t* get_spkr19_state() {
 /*        to resolve this. */
 
 	i__1 = eaddr - 1;
-	dafgda_(handle, &i__1, &eaddr, contrl);
-	if (failed_()) {
-	    chkout_("SPKR19", (ftnlen)6);
+	dafgda_(__global_state, handle, &i__1, &eaddr, contrl);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKR19", (ftnlen)6);
 	    return 0;
 	}
-	isel = i_dnnt(contrl);
-	n = i_dnnt(&contrl[1]);
+	isel = i_dnnt(&__global_state->f2c, contrl);
+	n = i_dnnt(&__global_state->f2c, &contrl[1]);
 	ivlsel = isel == 1;
 
 /*        Determine the number of interval directory entries in the */
@@ -801,9 +803,9 @@ static spkr19_state_t* get_spkr19_state() {
 
 		i__1 = bufbas + 1;
 		i__2 = bufbas + nread;
-		dafgda_(handle, &i__1, &i__2, buffer);
-		if (failed_()) {
-		    chkout_("SPKR19", (ftnlen)6);
+		dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SPKR19", (ftnlen)6);
 		    return 0;
 		}
 		remain = ndir - nread;
@@ -812,8 +814,8 @@ static spkr19_state_t* get_spkr19_state() {
 /*              this point, so we can use it as an array index. */
 
 		while(remain > 0 && buffer[(i__1 = nread - 1) < 101 && 0 <= 
-			i__1 ? i__1 : s_rnge("buffer", i__1, "spkr19_", (
-			ftnlen)742)] <= *et) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffer", 
+			i__1, "spkr19_", (ftnlen)742)] <= *et) {
 		    bufbas += nread;
 		    nread = min(remain,101);
 
@@ -821,9 +823,9 @@ static spkr19_state_t* get_spkr19_state() {
 
 		    i__1 = bufbas + 1;
 		    i__2 = bufbas + nread;
-		    dafgda_(handle, &i__1, &i__2, buffer);
-		    if (failed_()) {
-			chkout_("SPKR19", (ftnlen)6);
+		    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "SPKR19", (ftnlen)6);
 			return 0;
 		    }
 		    remain -= nread;
@@ -835,7 +837,8 @@ static spkr19_state_t* get_spkr19_state() {
 /*              epochs containing ET exceeds the skipped directory count */
 /*              by 1. */
 
-		group = bufbas - dirbas + lstled_(et, &nread, buffer) + 1;
+		group = bufbas - dirbas + lstled_(__global_state, et, &nread, 
+			buffer) + 1;
 	    } else {
 
 /*              There's no question about which group of epochs to */
@@ -866,9 +869,9 @@ static spkr19_state_t* get_spkr19_state() {
 	    nread = min(100,remain);
 	    i__1 = bufbas + 1;
 	    i__2 = bufbas + nread;
-	    dafgda_(handle, &i__1, &i__2, buffer);
-	    if (failed_()) {
-		chkout_("SPKR19", (ftnlen)6);
+	    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SPKR19", (ftnlen)6);
 		return 0;
 	    }
 
@@ -876,7 +879,8 @@ static spkr19_state_t* get_spkr19_state() {
 /*           where ET matches the final epoch must be handled here, */
 /*           since in this case no epoch exceeds ET. */
 
-	    iveix = bufbas - ivbas + lstled_(et, &nread, buffer) + 1;
+	    iveix = bufbas - ivbas + lstled_(__global_state, et, &nread, 
+		    buffer) + 1;
 /* Computing MIN */
 	    i__1 = iveix, i__2 = n + 1;
 	    iveix = min(i__1,i__2);
@@ -884,10 +888,10 @@ static spkr19_state_t* get_spkr19_state() {
 /*           Backstop test: */
 
 	    if (iveix < 2) {
-		setmsg_("IVEIX = #.", (ftnlen)10);
-		errint_("#", &iveix, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("SPKR19", (ftnlen)6);
+		setmsg_(__global_state, "IVEIX = #.", (ftnlen)10);
+		errint_(__global_state, "#", &iveix, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "SPKR19", (ftnlen)6);
 		return 0;
 	    }
 
@@ -918,9 +922,9 @@ static spkr19_state_t* get_spkr19_state() {
 
 		i__1 = bufbas + 1;
 		i__2 = bufbas + nread;
-		dafgda_(handle, &i__1, &i__2, buffer);
-		if (failed_()) {
-		    chkout_("SPKR19", (ftnlen)6);
+		dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SPKR19", (ftnlen)6);
 		    return 0;
 		}
 
@@ -928,8 +932,8 @@ static spkr19_state_t* get_spkr19_state() {
 /*              this point, so we can use it as an array index. */
 
 		while(remain > 0 && buffer[(i__1 = nread - 1) < 101 && 0 <= 
-			i__1 ? i__1 : s_rnge("buffer", i__1, "spkr19_", (
-			ftnlen)877)] < *et) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffer", 
+			i__1, "spkr19_", (ftnlen)877)] < *et) {
 		    bufbas += nread;
 		    nread = min(remain,101);
 
@@ -937,9 +941,9 @@ static spkr19_state_t* get_spkr19_state() {
 
 		    i__1 = bufbas + 1;
 		    i__2 = bufbas + nread;
-		    dafgda_(handle, &i__1, &i__2, buffer);
-		    if (failed_()) {
-			chkout_("SPKR19", (ftnlen)6);
+		    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "SPKR19", (ftnlen)6);
 			return 0;
 		    }
 		    remain -= nread;
@@ -950,7 +954,8 @@ static spkr19_state_t* get_spkr19_state() {
 /*              is BUFBAS-DIRBAS. The index of the group of epochs */
 /*              containing ET exceeds the skipped directory count by 1. */
 
-		group = bufbas - dirbas + lstltd_(et, &nread, buffer) + 1;
+		group = bufbas - dirbas + lstltd_(__global_state, et, &nread, 
+			buffer) + 1;
 	    } else {
 
 /*              There's no question about which group of epochs to */
@@ -981,9 +986,9 @@ static spkr19_state_t* get_spkr19_state() {
 	    nread = min(100,remain);
 	    i__1 = bufbas + 1;
 	    i__2 = bufbas + nread;
-	    dafgda_(handle, &i__1, &i__2, buffer);
-	    if (failed_()) {
-		chkout_("SPKR19", (ftnlen)6);
+	    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SPKR19", (ftnlen)6);
 		return 0;
 	    }
 
@@ -991,16 +996,17 @@ static spkr19_state_t* get_spkr19_state() {
 /*           where ET matches the first epoch must be handled here, */
 /*           since in this case no epoch precedes ET. */
 
-	    ivbix = bufbas - ivbas + lstltd_(et, &nread, buffer);
+	    ivbix = bufbas - ivbas + lstltd_(__global_state, et, &nread, 
+		    buffer);
 	    ivbix = max(ivbix,1);
 
 /*           Backstop test: */
 
 	    if (ivbix > n) {
-		setmsg_("IVBIX = #.", (ftnlen)10);
-		errint_("#", &ivbix, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("SPKR19", (ftnlen)6);
+		setmsg_(__global_state, "IVBIX = #.", (ftnlen)10);
+		errint_(__global_state, "#", &ivbix, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "SPKR19", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1021,18 +1027,18 @@ static spkr19_state_t* get_spkr19_state() {
 	bufbas = eaddr - 2 - (n + 1) + (miniix - 1);
 	i__1 = bufbas + 1;
 	i__2 = bufbas + 2;
-	dafgda_(handle, &i__1, &i__2, buffer);
-	if (failed_()) {
-	    chkout_("SPKR19", (ftnlen)6);
+	dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKR19", (ftnlen)6);
 	    return 0;
 	}
-	minib = i_dnnt(buffer) + baddr - 1;
+	minib = i_dnnt(&__global_state->f2c, buffer) + baddr - 1;
 
 /*        Note that the end of the current mini-segment */
 /*        precedes the start of the next mini-segment by */
 /*        one address. */
 
-	minie = i_dnnt(&buffer[1]) + baddr - 2;
+	minie = i_dnnt(&__global_state->f2c, &buffer[1]) + baddr - 2;
 
 /*        Look up the time bounds of the mini-segment at index MINIIX. */
 /*        These bounds are used quite a bit farther on, when we save */
@@ -1040,9 +1046,9 @@ static spkr19_state_t* get_spkr19_state() {
 
 	i__1 = ivbas + miniix;
 	i__2 = ivbas + miniix + 1;
-	dafgda_(handle, &i__1, &i__2, mintim);
-	if (failed_()) {
-	    chkout_("SPKR19", (ftnlen)6);
+	dafgda_(__global_state, handle, &i__1, &i__2, mintim);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKR19", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1052,53 +1058,56 @@ static spkr19_state_t* get_spkr19_state() {
 /*        Look up the control area of the mini-segment. */
 
 	i__1 = minie - 2;
-	dafgda_(handle, &i__1, &minie, contrl);
-	if (failed_()) {
-	    chkout_("SPKR19", (ftnlen)6);
+	dafgda_(__global_state, handle, &i__1, &minie, contrl);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKR19", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Fetch the control area parameters for the mini-segment. */
 
-	subtyp = i_dnnt(contrl);
-	wndsiz = i_dnnt(&contrl[1]);
-	npkt = i_dnnt(&contrl[2]);
+	subtyp = i_dnnt(&__global_state->f2c, contrl);
+	wndsiz = i_dnnt(&__global_state->f2c, &contrl[1]);
+	npkt = i_dnnt(&__global_state->f2c, &contrl[2]);
 	if (subtyp < 0 || subtyp >= 3) {
-	    setmsg_("Unexpected SPK type 19 subtype # found in type 19 segme"
-		    "nt within mini-segment #.", (ftnlen)80);
-	    errint_("#", &subtyp, (ftnlen)1);
-	    errint_("#", &miniix, (ftnlen)1);
-	    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	    chkout_("SPKR19", (ftnlen)6);
+	    setmsg_(__global_state, "Unexpected SPK type 19 subtype # found "
+		    "in type 19 segment within mini-segment #.", (ftnlen)80);
+	    errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	    errint_(__global_state, "#", &miniix, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	    chkout_(__global_state, "SPKR19", (ftnlen)6);
 	    return 0;
 	}
 	pktsiz = __state->pktszs[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("pktszs", i__1, "spkr19_", (ftnlen)1047)];
+		s_rnge(&__global_state->f2c, "pktszs", i__1, "spkr19_", (
+		ftnlen)1047)];
 	maxwnd = __state->mxwnsz[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("mxwnsz", i__1, "spkr19_", (ftnlen)1048)];
+		s_rnge(&__global_state->f2c, "mxwnsz", i__1, "spkr19_", (
+		ftnlen)1048)];
 
 /*        Check the window size. */
 
 	if (wndsiz < 2 || wndsiz > maxwnd) {
-	    setmsg_("Window size in type 19 segment was #; must be in the ra"
-		    "nge 2:# for subtype #. Mini-segment index is #.", (ftnlen)
-		    102);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    errint_("#", &maxwnd, (ftnlen)1);
-	    errint_("#", &subtyp, (ftnlen)1);
-	    errint_("#", &miniix, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("SPKR19", (ftnlen)6);
+	    setmsg_(__global_state, "Window size in type 19 segment was #; m"
+		    "ust be in the range 2:# for subtype #. Mini-segment inde"
+		    "x is #.", (ftnlen)102);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    errint_(__global_state, "#", &maxwnd, (ftnlen)1);
+	    errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	    errint_(__global_state, "#", &miniix, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "SPKR19", (ftnlen)6);
 	    return 0;
 	}
-	if (odd_(&wndsiz)) {
-	    setmsg_("Window size in type 19 segment was #; must be even for "
-		    "subtype #. Mini-segment index is #.", (ftnlen)90);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    errint_("#", &subtyp, (ftnlen)1);
-	    errint_("#", &miniix, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("SPKR19", (ftnlen)6);
+	if (odd_(__global_state, &wndsiz)) {
+	    setmsg_(__global_state, "Window size in type 19 segment was #; m"
+		    "ust be even for subtype #. Mini-segment index is #.", (
+		    ftnlen)90);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	    errint_(__global_state, "#", &miniix, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "SPKR19", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1115,8 +1124,8 @@ static spkr19_state_t* get_spkr19_state() {
 /*        The test below is done for safety. No SPICE error s */
 /*        should ever be detected at this point. */
 
-	if (failed_()) {
-	    chkout_("SPKR19", (ftnlen)6);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKR19", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1199,14 +1208,14 @@ static spkr19_state_t* get_spkr19_state() {
 	remain = npkdir - nread;
 	i__1 = bufbas + 1;
 	i__2 = bufbas + nread;
-	dafgda_(handle, &i__1, &i__2, buffer);
-	if (failed_()) {
-	    chkout_("SPKR19", (ftnlen)6);
+	dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKR19", (ftnlen)6);
 	    return 0;
 	}
-	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"buffer", i__1, "spkr19_", (ftnlen)1196)] < *et && remain > 0)
-		 {
+	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "buffer", i__1, "spkr19_", (ftnlen)1196)]
+		 < *et && remain > 0) {
 	    bufbas += nread;
 	    nread = min(remain,100);
 	    remain -= nread;
@@ -1215,9 +1224,9 @@ static spkr19_state_t* get_spkr19_state() {
 
 	    i__1 = bufbas + 1;
 	    i__2 = bufbas + nread;
-	    dafgda_(handle, &i__1, &i__2, buffer);
-	    if (failed_()) {
-		chkout_("SPKR19", (ftnlen)6);
+	    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SPKR19", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1225,7 +1234,8 @@ static spkr19_state_t* get_spkr19_state() {
 /*        At this point, BUFBAS - PKDBAS is the number of directory */
 /*        entries preceding the one contained in BUFFER(1). */
 
-	group = bufbas - pkdbas + lstltd_(et, &nread, buffer) + 1;
+	group = bufbas - pkdbas + lstltd_(__global_state, et, &nread, buffer) 
+		+ 1;
     }
 
 /*     GROUP now indicates the set of epochs in which to search for the */
@@ -1257,9 +1267,9 @@ static spkr19_state_t* get_spkr19_state() {
     timbas = pkdbas - npkt;
     i__1 = timbas + begidx;
     i__2 = timbas + endidx;
-    dafgda_(handle, &i__1, &i__2, buffer);
-    if (failed_()) {
-	chkout_("SPKR19", (ftnlen)6);
+    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKR19", (ftnlen)6);
 	return 0;
     }
 
@@ -1268,7 +1278,7 @@ static spkr19_state_t* get_spkr19_state() {
 /*     cannot precede the first element of the group. */
 
     i__1 = endidx - begidx + 1;
-    i__ = lstltd_(et, &i__1, buffer);
+    i__ = lstltd_(__global_state, et, &i__1, buffer);
 
 /*     The variables LOW and high are the indices of a pair of time */
 /*     tags that bracket the request time. */
@@ -1329,7 +1339,7 @@ static spkr19_state_t* get_spkr19_state() {
 
     i__1 = minib + (first - 1) * pktsiz;
     i__2 = minib + last * pktsiz - 1;
-    dafgda_(handle, &i__1, &i__2, &record[2]);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[2]);
 
 /*     Finally, add the epochs to the output record. */
 /*     Read the sequence of time tags. */
@@ -1337,9 +1347,10 @@ static spkr19_state_t* get_spkr19_state() {
     bufbas = minib - 1 + npkt * pktsiz + (first - 1);
     i__1 = bufbas + 1;
     i__2 = bufbas + nrcpkt;
-    dafgda_(handle, &i__1, &i__2, &record[nrcpkt * pktsiz + 2]);
-    if (failed_()) {
-	chkout_("SPKR19", (ftnlen)6);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[nrcpkt * pktsiz + 2]
+	    );
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKR19", (ftnlen)6);
 	return 0;
     }
 
@@ -1347,7 +1358,7 @@ static spkr19_state_t* get_spkr19_state() {
 /*     interval data are available for re-use. */
 
     __state->svok = TRUE_;
-    chkout_("SPKR19", (ftnlen)6);
+    chkout_(__global_state, "SPKR19", (ftnlen)6);
     return 0;
 } /* spkr19_ */
 

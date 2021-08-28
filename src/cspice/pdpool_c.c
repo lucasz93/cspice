@@ -251,7 +251,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "pdpool_c" );
+   chkin_c ( naif_state, "pdpool_c" );
 
 
    /*

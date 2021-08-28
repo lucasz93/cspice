@@ -185,7 +185,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "twovec_c" );
+   chkin_c ( naif_state, "twovec_c" );
 
    /*
    Call the f2c'd routine.

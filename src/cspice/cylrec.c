@@ -8,17 +8,16 @@
 
 
 typedef int cylrec_state_t;
-static cylrec_state_t* get_cylrec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cylrec_state_t* get_cylrec_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CYLREC ( Cylindrical to rectangular ) */
-/* Subroutine */ int cylrec_(doublereal *r__, doublereal *long__, doublereal *
-	z__, doublereal *rectan)
+/* Subroutine */ int cylrec_(cspice_t* __global_state, doublereal *r__, 
+	doublereal *long__, doublereal *z__, doublereal *rectan)
 {
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal x;
@@ -26,7 +25,7 @@ static cylrec_state_t* get_cylrec_state() {
 
 
     /* Module state */
-    cylrec_state_t* __state = get_cylrec_state();
+    cylrec_state_t* __state = get_cylrec_state(__global_state);
 /* $ Abstract */
 
 /*      Convert from cylindrical to rectangular coordinates. */
@@ -182,8 +181,8 @@ static cylrec_state_t* get_cylrec_state() {
 /*     Convert to rectangular coordinates, storing the results in */
 /*     temporary variables. */
 
-    x = *r__ * cos(*long__);
-    y = *r__ * sin(*long__);
+    x = *r__ * cos(&__global_state->f2c, *long__);
+    y = *r__ * sin(&__global_state->f2c, *long__);
 
 /*     Move the results to the output variables. */
 

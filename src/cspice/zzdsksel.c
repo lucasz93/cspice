@@ -8,8 +8,7 @@
 
 
 extern zzdsksel_init_t __zzdsksel_init;
-static zzdsksel_state_t* get_zzdsksel_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdsksel_state_t* get_zzdsksel_state(cspice_t* state) {
 	if (!state->zzdsksel)
 		state->zzdsksel = __cspice_allocate_module(sizeof(
 	zzdsksel_state_t), &__zzdsksel_init, sizeof(__zzdsksel_init));
@@ -18,11 +17,11 @@ static zzdsksel_state_t* get_zzdsksel_state() {
 }
 
 /* $Procedure ZZDSKSEL ( DSK, segment selection callback umbrella ) */
-logical zzdsksel_0_(int n__, integer *surfid, integer *nsurf, integer *srflst,
-	 integer *bodyid, integer *dclass, integer *corsys, doublereal *
-	corpar, doublereal *cor1, doublereal *cor2, integer *framid, 
-	doublereal *pos, doublereal *et, integer *handle, integer *dladsc, 
-	doublereal *dskdsc)
+logical zzdsksel_0_(cspice_t* __global_state, int n__, integer *surfid, 
+	integer *nsurf, integer *srflst, integer *bodyid, integer *dclass, 
+	integer *corsys, doublereal *corpar, doublereal *cor1, doublereal *
+	cor2, integer *framid, doublereal *pos, doublereal *et, integer *
+	handle, integer *dladsc, doublereal *dskdsc)
 {
     /* Initialized data */
 
@@ -33,50 +32,52 @@ logical zzdsksel_0_(int n__, integer *surfid, integer *nsurf, integer *srflst,
     logical ret_val;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     doublereal rmat[9]	/* was [3][3] */;
     integer surf;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal f;
     integer i__;
     doublereal r__;
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern doublereal twopi_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern doublereal twopi_(cspice_t*);
     doublereal co1min;
     doublereal co2min;
     doublereal co1max;
     doublereal co2max;
     doublereal re;
-    extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
-	    doublereal *);
-    integer segfid;
-    extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern integer bsrchi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int shelli_(integer *, integer *);
-    doublereal loccor[1];
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int refchg_(cspice_t*, integer *, integer *, 
 	    doublereal *, doublereal *);
-    extern integer touchi_(integer *);
+    integer segfid;
+    extern /* Subroutine */ int recgeo_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern integer bsrchi_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int shelli_(cspice_t*, integer *, integer *);
+    doublereal loccor[1];
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern integer touchi_(cspice_t*, integer *);
     doublereal locpos[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer segsys;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     doublereal alt;
     doublereal lat;
     doublereal lon;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    zzdsksel_state_t* __state = get_zzdsksel_state();
+    zzdsksel_state_t* __state = get_zzdsksel_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -536,13 +537,13 @@ logical zzdsksel_0_(int n__, integer *surfid, integer *nsurf, integer *srflst,
 /*     The following no-op calls are used to suppress compiler */
 /*     warnings. */
 
-    i__ = touchi_(handle);
-    i__ = touchi_(corsys);
-    i__ = touchi_(dladsc);
-    i__ = touchi_(framid);
-    chkin_("ZZDSKSEL", (ftnlen)8);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZDSKSEL", (ftnlen)8);
+    i__ = touchi_(__global_state, handle);
+    i__ = touchi_(__global_state, corsys);
+    i__ = touchi_(__global_state, dladsc);
+    i__ = touchi_(__global_state, framid);
+    chkin_(__global_state, "ZZDSKSEL", (ftnlen)8);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZDSKSEL", (ftnlen)8);
     return ret_val;
 /* $Procedure ZZDSKSBD ( DSK, set body ID ) */
 
@@ -809,7 +810,7 @@ L_zzdskbdc:
 
 /*     The body ID is the only DSK segment attribute that must match. */
 
-    ret_val = i_dnnt(&dskdsc[1]) == __state->savbid;
+    ret_val = i_dnnt(&__global_state->f2c, &dskdsc[1]) == __state->savbid;
     return ret_val;
 /* $Procedure ZZDSKNOT ( DSK, match nothing ) */
 
@@ -1090,22 +1091,23 @@ L_zzdsksit:
     __state->savbid = *bodyid;
     __state->savet = *et;
     if (*nsurf > 100) {
-	chkin_("ZZDSKSIT", (ftnlen)8);
-	setmsg_("Maximum allowed surface ID count is #; input count was #.", (
-		ftnlen)57);
-	errint_("#", &__state->c__100, (ftnlen)1);
-	errint_("#", nsurf, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZDSKSIT", (ftnlen)8);
+	chkin_(__global_state, "ZZDSKSIT", (ftnlen)8);
+	setmsg_(__global_state, "Maximum allowed surface ID count is #; inpu"
+		"t count was #.", (ftnlen)57);
+	errint_(__global_state, "#", &__state->c__100, (ftnlen)1);
+	errint_(__global_state, "#", nsurf, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZDSKSIT", (ftnlen)8);
 	return ret_val;
     }
     __state->savnsf = *nsurf;
     i__1 = *nsurf;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	__state->savsrf[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-		"savsrf", i__2, "zzdsksel_", (ftnlen)958)] = srflst[i__ - 1];
+	__state->savsrf[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "savsrf", i__2, "zzdsksel_", (ftnlen)958)
+		] = srflst[i__ - 1];
     }
-    shelli_(nsurf, __state->savsrf);
+    shelli_(__global_state, nsurf, __state->savsrf);
     return ret_val;
 /* $Procedure ZZDSKCIT ( DSK, check body ID, surface, and time ) */
 
@@ -1241,7 +1243,7 @@ L_zzdskcit:
 /*     to make this test, but the required inputs are available. */
 
     ret_val = FALSE_;
-    if (__state->savbid == i_dnnt(&dskdsc[1])) {
+    if (__state->savbid == i_dnnt(&__global_state->f2c, &dskdsc[1])) {
 	if (__state->savet >= dskdsc[22] && __state->savet <= dskdsc[23]) {
 	    if (__state->savnsf < 1) {
 
@@ -1254,9 +1256,9 @@ L_zzdskcit:
 /*              We have a match if and only if the surface ID of this */
 /*              segment is on the list of allowed surface IDs. */
 
-		surf = i_dnnt(dskdsc);
-		ret_val = bsrchi_(&surf, &__state->savnsf, __state->savsrf) > 
-			0;
+		surf = i_dnnt(&__global_state->f2c, dskdsc);
+		ret_val = bsrchi_(__global_state, &surf, &__state->savnsf, 
+			__state->savsrf) > 0;
 	    }
 	}
     }
@@ -1546,13 +1548,13 @@ L_zzdskumc:
 
     ret_val = FALSE_;
     if (__state->first) {
-	__state->pi2 = twopi_();
+	__state->pi2 = twopi_(__global_state);
 	__state->first = FALSE_;
     }
 
 /*     Check the body ID first. */
 
-    if (__state->savbid == i_dnnt(&dskdsc[1])) {
+    if (__state->savbid == i_dnnt(&__global_state->f2c, &dskdsc[1])) {
 
 /*        The body ID matches; check the time coverage. */
 
@@ -1566,7 +1568,7 @@ L_zzdskumc:
 /*           is a longitude, since we may need to adjust it to */
 /*           get it into the range of the segment. */
 
-	    segsys = i_dnnt(&dskdsc[5]);
+	    segsys = i_dnnt(&__global_state->f2c, &dskdsc[5]);
 
 /*           Make a local copy of the first coordinate. */
 
@@ -1798,7 +1800,7 @@ L_zzdskmsc:
     __state->savbid = *surfid;
     __state->savfid = *framid;
     __state->savsys = *corsys;
-    moved_(corpar, &__state->c__10, __state->savpar);
+    moved_(__global_state, corpar, &__state->c__10, __state->savpar);
     __state->savet = *et;
     __state->savco1 = *cor1;
     __state->savco2 = *cor2;
@@ -1957,31 +1959,31 @@ L_zzdskmmc:
 
     ret_val = FALSE_;
     if (__state->first) {
-	__state->pi2 = twopi_();
+	__state->pi2 = twopi_(__global_state);
 	__state->first = FALSE_;
     }
 
 /*     Check the target ID. */
 
-    if (__state->savtrg != i_dnnt(&dskdsc[1])) {
+    if (__state->savtrg != i_dnnt(&__global_state->f2c, &dskdsc[1])) {
 	return ret_val;
     }
 
 /*     Check the surface ID. */
 
-    if (__state->savbid != i_dnnt(dskdsc)) {
+    if (__state->savbid != i_dnnt(&__global_state->f2c, dskdsc)) {
 	return ret_val;
     }
 
 /*     Check the frame ID. */
 
-    if (__state->savfid != i_dnnt(&dskdsc[4])) {
+    if (__state->savfid != i_dnnt(&__global_state->f2c, &dskdsc[4])) {
 	return ret_val;
     }
 
 /*     Check the coordinate system. */
 
-    if (__state->savsys != i_dnnt(&dskdsc[5])) {
+    if (__state->savsys != i_dnnt(&__global_state->f2c, &dskdsc[5])) {
 	return ret_val;
     }
 
@@ -2003,7 +2005,7 @@ L_zzdskmmc:
 
 /*        Check the coordinates. */
 
-	segsys = i_dnnt(&dskdsc[5]);
+	segsys = i_dnnt(&__global_state->f2c, &dskdsc[5]);
 
 /*        Make a local copy of the first coordinate. */
 
@@ -2223,7 +2225,7 @@ L_zzdsksrc:
     __state->savcls = *dclass;
     __state->savet = *et;
     __state->savfid = *framid;
-    vequ_(pos, __state->savpos);
+    vequ_(__global_state, pos, __state->savpos);
     return ret_val;
 /* $Procedure ZZDSKMRC ( DSK, rectangular coordinate comparison ) */
 
@@ -2376,19 +2378,19 @@ L_zzdskmrc:
 
     ret_val = FALSE_;
     if (__state->first) {
-	__state->pi2 = twopi_();
+	__state->pi2 = twopi_(__global_state);
 	__state->first = FALSE_;
     }
 /*     Check the surface ID. */
 
-    if (__state->savbid != i_dnnt(dskdsc)) {
+    if (__state->savbid != i_dnnt(&__global_state->f2c, dskdsc)) {
 	return ret_val;
     }
 
 /*     Reject any segment whose target (center) ID doesn't match */
 /*     the request ID. */
 
-    if (__state->savtrg != i_dnnt(&dskdsc[1])) {
+    if (__state->savtrg != i_dnnt(&__global_state->f2c, &dskdsc[1])) {
 	return ret_val;
     }
 
@@ -2400,7 +2402,7 @@ L_zzdskmrc:
 
 /*     Check the data class. */
 
-    if (__state->savcls != i_dnnt(&dskdsc[2])) {
+    if (__state->savcls != i_dnnt(&__global_state->f2c, &dskdsc[2])) {
 	return ret_val;
     }
 
@@ -2408,44 +2410,45 @@ L_zzdskmrc:
 /*     In order to determine this, we need to transform the vector */
 /*     into the frame of the segment, if the frames differ. */
 
-    segfid = i_dnnt(&dskdsc[4]);
+    segfid = i_dnnt(&__global_state->f2c, &dskdsc[4]);
     if (__state->savfid == segfid) {
 
 /*        The request frame and segment frame match. Just copy */
 /*        the saved vector. */
 
-	vequ_(__state->savpos, locpos);
+	vequ_(__global_state, __state->savpos, locpos);
     } else {
 
 /*        Transform the saved vector to the frame of the */
 /*        segment. The transformation epoch is the saved */
 /*        value of ET. */
 
-	refchg_(&__state->savfid, &segfid, &__state->savet, rmat);
-	mxv_(rmat, __state->savpos, locpos);
+	refchg_(__global_state, &__state->savfid, &segfid, &__state->savet, 
+		rmat);
+	mxv_(__global_state, rmat, __state->savpos, locpos);
     }
 /*     We do need to know whether the first coordinate is a longitude, */
 /*     since we may need to adjust it to get it into the range of the */
 /*     segment. */
 
-    segsys = i_dnnt(&dskdsc[5]);
+    segsys = i_dnnt(&__global_state->f2c, &dskdsc[5]);
     if (segsys == 1 || segsys == 4) {
 
 /*        Find the latitude and longitude of the input point, expressed */
 /*        in the coordinate system of this segment. */
 
 	if (segsys == 1) {
-	    reclat_(locpos, &r__, &lon, &lat);
+	    reclat_(__global_state, locpos, &r__, &lon, &lat);
 	} else if (segsys == 4) {
 	    re = dskdsc[6];
 	    f = dskdsc[7];
-	    recgeo_(locpos, &re, &f, &lon, &lat, &alt);
+	    recgeo_(__global_state, locpos, &re, &f, &lon, &lat, &alt);
 	} else {
-	    chkin_("ZZDSKMRC", (ftnlen)8);
-	    setmsg_("Backstop error (0): this code should be unreachable.", (
-		    ftnlen)52);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZDSKMRC", (ftnlen)8);
+	    chkin_(__global_state, "ZZDSKMRC", (ftnlen)8);
+	    setmsg_(__global_state, "Backstop error (0): this code should be"
+		    " unreachable.", (ftnlen)52);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZDSKMRC", (ftnlen)8);
 	    return ret_val;
 	}
 
@@ -2463,13 +2466,13 @@ L_zzdskmrc:
 	    lon -= __state->pi2;
 	}
     } else {
-	chkin_("ZZDSKMRC", (ftnlen)8);
-	setmsg_("Only planetocentric and planetodetic coordinates are suppor"
-		"ted by this entry point. Segment coordinate system was #.", (
-		ftnlen)116);
-	errint_("#", &segsys, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED", (ftnlen)18);
-	chkout_("ZZDSKMRC", (ftnlen)8);
+	chkin_(__global_state, "ZZDSKMRC", (ftnlen)8);
+	setmsg_(__global_state, "Only planetocentric and planetodetic coordi"
+		"nates are supported by this entry point. Segment coordinate "
+		"system was #.", (ftnlen)116);
+	errint_(__global_state, "#", &segsys, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED", (ftnlen)18);
+	chkout_(__global_state, "ZZDSKMRC", (ftnlen)8);
 	return ret_val;
     }
 
@@ -2501,16 +2504,17 @@ L_zzdskmrc:
     return ret_val;
 } /* zzdsksel_ */
 
-logical zzdsksel_(integer *surfid, integer *nsurf, integer *srflst, integer *
-	bodyid, integer *dclass, integer *corsys, doublereal *corpar, 
-	doublereal *cor1, doublereal *cor2, integer *framid, doublereal *pos, 
-	doublereal *et, integer *handle, integer *dladsc, doublereal *dskdsc)
+logical zzdsksel_(cspice_t* __global_state, integer *surfid, integer *nsurf, 
+	integer *srflst, integer *bodyid, integer *dclass, integer *corsys, 
+	doublereal *corpar, doublereal *cor1, doublereal *cor2, integer *
+	framid, doublereal *pos, doublereal *et, integer *handle, integer *
+	dladsc, doublereal *dskdsc)
 {
     return zzdsksel_0_(0, surfid, nsurf, srflst, bodyid, dclass, corsys, 
 	    corpar, cor1, cor2, framid, pos, et, handle, dladsc, dskdsc);
     }
 
-logical zzdsksbd_(integer *bodyid)
+logical zzdsksbd_(cspice_t* __global_state, integer *bodyid)
 {
     return zzdsksel_0_(1, (integer *)0, (integer *)0, (integer *)0, bodyid, (
 	    integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, (
@@ -2518,7 +2522,8 @@ logical zzdsksbd_(integer *bodyid)
 	    integer *)0, (integer *)0, (doublereal *)0);
     }
 
-logical zzdskbdc_(integer *handle, integer *dladsc, doublereal *dskdsc)
+logical zzdskbdc_(cspice_t* __global_state, integer *handle, integer *dladsc, 
+	doublereal *dskdsc)
 {
     return zzdsksel_0_(2, (integer *)0, (integer *)0, (integer *)0, (integer *
 	    )0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
@@ -2526,7 +2531,8 @@ logical zzdskbdc_(integer *handle, integer *dladsc, doublereal *dskdsc)
 	    handle, dladsc, dskdsc);
     }
 
-logical zzdsknot_(integer *handle, integer *dladsc, doublereal *dskdsc)
+logical zzdsknot_(cspice_t* __global_state, integer *handle, integer *dladsc, 
+	doublereal *dskdsc)
 {
     return zzdsksel_0_(3, (integer *)0, (integer *)0, (integer *)0, (integer *
 	    )0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
@@ -2534,8 +2540,8 @@ logical zzdsknot_(integer *handle, integer *dladsc, doublereal *dskdsc)
 	    handle, dladsc, dskdsc);
     }
 
-logical zzdsksit_(integer *bodyid, integer *nsurf, integer *srflst, 
-	doublereal *et)
+logical zzdsksit_(cspice_t* __global_state, integer *bodyid, integer *nsurf, 
+	integer *srflst, doublereal *et)
 {
     return zzdsksel_0_(4, (integer *)0, nsurf, srflst, bodyid, (integer *)0, (
 	    integer *)0, (doublereal *)0, (doublereal *)0, (doublereal *)0, (
@@ -2543,7 +2549,8 @@ logical zzdsksit_(integer *bodyid, integer *nsurf, integer *srflst,
 	    doublereal *)0);
     }
 
-logical zzdskcit_(integer *handle, integer *dladsc, doublereal *dskdsc)
+logical zzdskcit_(cspice_t* __global_state, integer *handle, integer *dladsc, 
+	doublereal *dskdsc)
 {
     return zzdsksel_0_(5, (integer *)0, (integer *)0, (integer *)0, (integer *
 	    )0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
@@ -2551,8 +2558,8 @@ logical zzdskcit_(integer *handle, integer *dladsc, doublereal *dskdsc)
 	    handle, dladsc, dskdsc);
     }
 
-logical zzdskusc_(integer *bodyid, doublereal *et, doublereal *cor1, 
-	doublereal *cor2)
+logical zzdskusc_(cspice_t* __global_state, integer *bodyid, doublereal *et, 
+	doublereal *cor1, doublereal *cor2)
 {
     return zzdsksel_0_(6, (integer *)0, (integer *)0, (integer *)0, bodyid, (
 	    integer *)0, (integer *)0, (doublereal *)0, cor1, cor2, (integer *
@@ -2560,7 +2567,8 @@ logical zzdskusc_(integer *bodyid, doublereal *et, doublereal *cor1,
 	    )0);
     }
 
-logical zzdskumc_(integer *handle, integer *dladsc, doublereal *dskdsc)
+logical zzdskumc_(cspice_t* __global_state, integer *handle, integer *dladsc, 
+	doublereal *dskdsc)
 {
     return zzdsksel_0_(7, (integer *)0, (integer *)0, (integer *)0, (integer *
 	    )0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
@@ -2568,16 +2576,17 @@ logical zzdskumc_(integer *handle, integer *dladsc, doublereal *dskdsc)
 	    handle, dladsc, dskdsc);
     }
 
-logical zzdskmsc_(integer *bodyid, integer *surfid, integer *framid, integer *
-	corsys, doublereal *corpar, doublereal *et, doublereal *cor1, 
-	doublereal *cor2)
+logical zzdskmsc_(cspice_t* __global_state, integer *bodyid, integer *surfid, 
+	integer *framid, integer *corsys, doublereal *corpar, doublereal *et, 
+	doublereal *cor1, doublereal *cor2)
 {
     return zzdsksel_0_(8, surfid, (integer *)0, (integer *)0, bodyid, (
 	    integer *)0, corsys, corpar, cor1, cor2, framid, (doublereal *)0, 
 	    et, (integer *)0, (integer *)0, (doublereal *)0);
     }
 
-logical zzdskmmc_(integer *handle, integer *dladsc, doublereal *dskdsc)
+logical zzdskmmc_(cspice_t* __global_state, integer *handle, integer *dladsc, 
+	doublereal *dskdsc)
 {
     return zzdsksel_0_(9, (integer *)0, (integer *)0, (integer *)0, (integer *
 	    )0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0, 
@@ -2585,15 +2594,16 @@ logical zzdskmmc_(integer *handle, integer *dladsc, doublereal *dskdsc)
 	    handle, dladsc, dskdsc);
     }
 
-logical zzdsksrc_(integer *surfid, integer *bodyid, integer *dclass, 
-	doublereal *et, integer *framid, doublereal *pos)
+logical zzdsksrc_(cspice_t* __global_state, integer *surfid, integer *bodyid, 
+	integer *dclass, doublereal *et, integer *framid, doublereal *pos)
 {
     return zzdsksel_0_(10, surfid, (integer *)0, (integer *)0, bodyid, dclass,
 	     (integer *)0, (doublereal *)0, (doublereal *)0, (doublereal *)0, 
 	    framid, pos, et, (integer *)0, (integer *)0, (doublereal *)0);
     }
 
-logical zzdskmrc_(integer *handle, integer *dladsc, doublereal *dskdsc)
+logical zzdskmrc_(cspice_t* __global_state, integer *handle, integer *dladsc, 
+	doublereal *dskdsc)
 {
     return zzdsksel_0_(11, (integer *)0, (integer *)0, (integer *)0, (integer 
 	    *)0, (integer *)0, (integer *)0, (doublereal *)0, (doublereal *)0,

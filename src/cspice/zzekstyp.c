@@ -8,30 +8,29 @@
 
 
 typedef int zzekstyp_state_t;
-static zzekstyp_state_t* get_zzekstyp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekstyp_state_t* get_zzekstyp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKSTYP ( EK, determine segment type ) */
-integer zzekstyp_(integer *ncols, integer *cdscrs)
+integer zzekstyp_(cspice_t* __global_state, integer *ncols, integer *cdscrs)
 {
     /* System generated locals */
     integer ret_val, i__1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical fixed;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     logical var;
 
 
     /* Module state */
-    zzekstyp_state_t* __state = get_zzekstyp_state();
+    zzekstyp_state_t* __state = get_zzekstyp_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the type of segment required to support a specified */
@@ -297,11 +296,11 @@ integer zzekstyp_(integer *ncols, integer *cdscrs)
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0;
 	return ret_val;
     } else {
-	chkin_("ZZEKSTYP", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSTYP", (ftnlen)8);
     }
 
 /*     FIXED and VAR indicate whether we've seen any fixed or variable */
@@ -323,14 +322,14 @@ integer zzekstyp_(integer *ncols, integer *cdscrs)
 	ret_val = 2;
     } else {
 	ret_val = 0;
-	setmsg_("Column set contains a mixture of variable and fixed-count c"
-		"olumns.  Segments must contain all variable or all fixed cou"
-		"nt columns.", (ftnlen)130);
-	sigerr_("SPICE(BADATTRIBUTES)", (ftnlen)20);
-	chkout_("ZZEKSTYP", (ftnlen)8);
+	setmsg_(__global_state, "Column set contains a mixture of variable a"
+		"nd fixed-count columns.  Segments must contain all variable "
+		"or all fixed count columns.", (ftnlen)130);
+	sigerr_(__global_state, "SPICE(BADATTRIBUTES)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKSTYP", (ftnlen)8);
 	return ret_val;
     }
-    chkout_("ZZEKSTYP", (ftnlen)8);
+    chkout_(__global_state, "ZZEKSTYP", (ftnlen)8);
     return ret_val;
 } /* zzekstyp_ */
 

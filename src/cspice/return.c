@@ -8,25 +8,24 @@
 
 
 typedef int return_state_t;
-static return_state_t* get_return_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline return_state_t* get_return_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RETURN ( Immediate Return Indicator ) */
-logical return_(void)
+logical return_(cspice_t* __global_state)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Local variables */
-    extern logical failed_(void);
-    extern /* Subroutine */ int getact_(integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int getact_(cspice_t*, integer *);
     integer action;
 
 
     /* Module state */
-    return_state_t* __state = get_return_state();
+    return_state_t* __state = get_return_state(__global_state);
 /* $ Abstract */
 
 /*     True if SPICELIB routines should return immediately upon entry. */
@@ -283,14 +282,14 @@ logical return_(void)
 /*     Immediate return is indicated only in 'RETURN' mode, */
 /*     when an error condition is in effect: */
 
-    if (! failed_()) {
+    if (! failed_(__global_state)) {
 	ret_val = FALSE_;
 	return ret_val;
     }
 
 /*     At this point, we know a SPICE error condition exists. */
 
-    getact_(&action);
+    getact_(__global_state, &action);
     ret_val = action == 3;
     return ret_val;
 } /* return_ */

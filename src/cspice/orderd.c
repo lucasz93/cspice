@@ -8,14 +8,13 @@
 
 
 typedef int orderd_state_t;
-static orderd_state_t* get_orderd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline orderd_state_t* get_orderd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ORDERD ( Order of a double precision array ) */
-/* Subroutine */ int orderd_(doublereal *array, integer *ndim, integer *
-	iorder)
+/* Subroutine */ int orderd_(cspice_t* __global_state, doublereal *array, 
+	integer *ndim, integer *iorder)
 {
     /* System generated locals */
     integer i__1;
@@ -23,13 +22,13 @@ static orderd_state_t* get_orderd_state() {
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int swapi_(integer *, integer *);
+    extern /* Subroutine */ int swapi_(cspice_t*, integer *, integer *);
     integer jg;
     integer gap;
 
 
     /* Module state */
-    orderd_state_t* __state = get_orderd_state();
+    orderd_state_t* __state = get_orderd_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the order of elements in a double precision array. */
@@ -190,7 +189,7 @@ static orderd_state_t* get_orderd_state() {
 		if (array[iorder[j - 1] - 1] <= array[iorder[jg - 1] - 1]) {
 		    j = 0;
 		} else {
-		    swapi_(&iorder[j - 1], &iorder[jg - 1]);
+		    swapi_(__global_state, &iorder[j - 1], &iorder[jg - 1]);
 		}
 		j -= gap;
 	    }

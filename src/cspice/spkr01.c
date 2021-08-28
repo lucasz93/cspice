@@ -8,8 +8,7 @@
 
 
 extern spkr01_init_t __spkr01_init;
-static spkr01_state_t* get_spkr01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr01_state_t* get_spkr01_state(cspice_t* state) {
 	if (!state->spkr01)
 		state->spkr01 = __cspice_allocate_module(sizeof(
 	spkr01_state_t), &__spkr01_init, sizeof(__spkr01_init));
@@ -18,8 +17,8 @@ static spkr01_state_t* get_spkr01_state() {
 }
 
 /* $Procedure      SPKR01 ( Read SPK record from segment, type 1 ) */
-/* Subroutine */ int spkr01_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr01_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -33,23 +32,23 @@ static spkr01_state_t* get_spkr01_state() {
     integer offr;
     integer i__;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer recno;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern integer lstltd_(doublereal *, integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern integer lstltd_(cspice_t*, doublereal *, integer *, doublereal *);
+    extern logical return_(cspice_t*);
     integer end;
     integer off;
 
 
     /* Module state */
-    spkr01_state_t* __state = get_spkr01_state();
+    spkr01_state_t* __state = get_spkr01_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 1 */
@@ -212,15 +211,15 @@ static spkr01_state_t* get_spkr01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKR01", (ftnlen)6);
+	chkin_(__global_state, "SPKR01", (ftnlen)6);
     }
 
 /*     Unpack the segment descriptor. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     begin = ic[4];
     end = ic[5];
 
@@ -236,7 +235,7 @@ static spkr01_state_t* get_spkr01_state() {
 
 /*     the number of directory epochs. */
 
-    dafgda_(handle, &end, &end, data);
+    dafgda_(__global_state, handle, &end, &end, data);
     nrec = (integer) data[0];
     ndir = nrec / 100;
     offd = end - ndir - 1;
@@ -253,13 +252,13 @@ static spkr01_state_t* get_spkr01_state() {
     if (nrec <= 100) {
 	i__1 = offe + 1;
 	i__2 = offe + nrec;
-	dafgda_(handle, &i__1, &i__2, data);
-	recno = lstltd_(et, &nrec, data) + 1;
+	dafgda_(__global_state, handle, &i__1, &i__2, data);
+	recno = lstltd_(__global_state, et, &nrec, data) + 1;
 	offr = begin - 1 + (recno - 1) * 71;
 	i__1 = offr + 1;
 	i__2 = offr + 71;
-	dafgda_(handle, &i__1, &i__2, record);
-	chkout_("SPKR01", (ftnlen)6);
+	dafgda_(__global_state, handle, &i__1, &i__2, record);
+	chkout_(__global_state, "SPKR01", (ftnlen)6);
 	return 0;
     }
 
@@ -274,18 +273,19 @@ static spkr01_state_t* get_spkr01_state() {
     for (i__ = 1; i__ <= i__1; ++i__) {
 	i__2 = offd + i__;
 	i__3 = offd + i__;
-	dafgda_(handle, &i__2, &i__3, data);
+	dafgda_(__global_state, handle, &i__2, &i__3, data);
 	if (data[0] >= *et) {
 	    off = offe + (i__ - 1) * 100;
 	    i__2 = off + 1;
 	    i__3 = off + 100;
-	    dafgda_(handle, &i__2, &i__3, data);
-	    recno = (i__ - 1) * 100 + lstltd_(et, &__state->c__100, data) + 1;
+	    dafgda_(__global_state, handle, &i__2, &i__3, data);
+	    recno = (i__ - 1) * 100 + lstltd_(__global_state, et, &
+		    __state->c__100, data) + 1;
 	    offr = begin - 1 + (recno - 1) * 71;
 	    i__2 = offr + 1;
 	    i__3 = offr + 71;
-	    dafgda_(handle, &i__2, &i__3, record);
-	    chkout_("SPKR01", (ftnlen)6);
+	    dafgda_(__global_state, handle, &i__2, &i__3, record);
+	    chkout_(__global_state, "SPKR01", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -296,13 +296,13 @@ static spkr01_state_t* get_spkr01_state() {
     i__ = nrec % 100;
     i__1 = end - ndir - i__;
     i__2 = end - ndir - 1;
-    dafgda_(handle, &i__1, &i__2, data);
-    recno = ndir * 100 + lstltd_(et, &i__, data) + 1;
+    dafgda_(__global_state, handle, &i__1, &i__2, data);
+    recno = ndir * 100 + lstltd_(__global_state, et, &i__, data) + 1;
     offr = begin - 1 + (recno - 1) * 71;
     i__1 = offr + 1;
     i__2 = offr + 71;
-    dafgda_(handle, &i__1, &i__2, record);
-    chkout_("SPKR01", (ftnlen)6);
+    dafgda_(__global_state, handle, &i__1, &i__2, record);
+    chkout_(__global_state, "SPKR01", (ftnlen)6);
     return 0;
 } /* spkr01_ */
 

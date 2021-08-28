@@ -8,8 +8,7 @@
 
 
 extern zzmkspin_init_t __zzmkspin_init;
-static zzmkspin_state_t* get_zzmkspin_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzmkspin_state_t* get_zzmkspin_state(cspice_t* state) {
 	if (!state->zzmkspin)
 		state->zzmkspin = __cspice_allocate_module(sizeof(
 	zzmkspin_state_t), &__zzmkspin_init, sizeof(__zzmkspin_init));
@@ -18,53 +17,55 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 }
 
 /* $Procedure ZZMKSPIN ( Make spatial index of plates ) */
-/* Subroutine */ int zzmkspin_(integer *np, integer *plates, doublereal *
-	vrtces, doublereal *voxscl, integer *cgscal, integer *maxptr, integer 
-	*mxcell, integer *maxvxl, integer *cells, integer *nvox, doublereal *
-	voxsiz, doublereal *voxori, integer *nvxtot, integer *nvxptr, integer 
-	*vxptr, integer *nvxlst, integer *vxlist, doublereal *extent, integer 
-	*cgrptr)
+/* Subroutine */ int zzmkspin_(cspice_t* __global_state, integer *np, integer 
+	*plates, doublereal *vrtces, doublereal *voxscl, integer *cgscal, 
+	integer *maxptr, integer *mxcell, integer *maxvxl, integer *cells, 
+	integer *nvox, doublereal *voxsiz, doublereal *voxori, integer *
+	nvxtot, integer *nvxptr, integer *vxptr, integer *nvxlst, integer *
+	vxlist, doublereal *extent, integer *cgrptr)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
     doublereal d__1, d__2, d__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double d_nint(doublereal *);
-    integer i_dnnt(doublereal *);
-    double pow_dd(doublereal *, doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double d_nint(f2c_state_t*, doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
-    extern integer zzvox2id_(integer *, integer *);
-    extern /* Subroutine */ int zzaddlnk_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int zzinilnk_(integer *, integer *, integer *, 
-	    integer *, integer *);
-    extern /* Subroutine */ int zzuntngl_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int zzgetvox_(doublereal *, doublereal *, integer 
-	    *, doublereal *, logical *, integer *);
-    extern /* Subroutine */ int zzvoxcvo_(integer *, integer *, integer *, 
+    extern integer zzvox2id_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzaddlnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzinilnk_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern doublereal dpmin_(void);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzuntngl_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzgetvox_(cspice_t*, doublereal *, doublereal 
+	    *, integer *, doublereal *, logical *, integer *);
+    extern /* Subroutine */ int zzvoxcvo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern doublereal dpmin_(cspice_t*);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzmkspin_state_t* __state = get_zzmkspin_state();
+    zzmkspin_state_t* __state = get_zzmkspin_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -633,20 +634,20 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZMKSPIN", (ftnlen)8);
+    chkin_(__global_state, "ZZMKSPIN", (ftnlen)8);
 
 /*     Check NP. */
 
     if (*np < 1 || *np > 32000000) {
-	setmsg_("Plate count NP = #; count must be in the range 1:#.", (
-		ftnlen)51);
-	errint_("#", np, (ftnlen)1);
-	errint_("#", &__state->c_b6, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZMKSPIN", (ftnlen)8);
+	setmsg_(__global_state, "Plate count NP = #; count must be in the ra"
+		"nge 1:#.", (ftnlen)51);
+	errint_(__global_state, "#", np, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c_b6, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZMKSPIN", (ftnlen)8);
 	return 0;
     }
 
@@ -656,11 +657,11 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 /*     scale is zero. */
 
     if (*cgscal < 1) {
-	setmsg_("Coarse voxel scale = #; scale must be positive.", (ftnlen)47)
-		;
-	errint_("#", cgscal, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZMKSPIN", (ftnlen)8);
+	setmsg_(__global_state, "Coarse voxel scale = #; scale must be posit"
+		"ive.", (ftnlen)47);
+	errint_(__global_state, "#", cgscal, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZMKSPIN", (ftnlen)8);
 	return 0;
     }
 
@@ -669,20 +670,20 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 /*     other words km. */
 
     __state->avext = 0.;
-    __state->xmin = dpmax_();
-    __state->xmax = dpmin_();
-    __state->ymin = dpmax_();
-    __state->ymax = dpmin_();
-    __state->zmin = dpmax_();
-    __state->zmax = dpmin_();
+    __state->xmin = dpmax_(__global_state);
+    __state->xmax = dpmin_(__global_state);
+    __state->ymin = dpmax_(__global_state);
+    __state->ymax = dpmin_(__global_state);
+    __state->zmin = dpmax_(__global_state);
+    __state->zmax = dpmin_(__global_state);
     i__1 = *np;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
-	__state->bxmin = dpmax_();
-	__state->bxmax = dpmin_();
-	__state->bymin = dpmax_();
-	__state->bymax = dpmin_();
-	__state->bzmin = dpmax_();
-	__state->bzmax = dpmin_();
+	__state->bxmin = dpmax_(__global_state);
+	__state->bxmax = dpmin_(__global_state);
+	__state->bymin = dpmax_(__global_state);
+	__state->bymax = dpmin_(__global_state);
+	__state->bzmin = dpmax_(__global_state);
+	__state->bzmax = dpmin_(__global_state);
 	__state->xp[0] = vrtces[plates[__state->i__ * 3 - 3] * 3 - 3];
 	__state->xp[1] = vrtces[plates[__state->i__ * 3 - 2] * 3 - 3];
 	__state->xp[2] = vrtces[plates[__state->i__ * 3 - 1] * 3 - 3];
@@ -698,33 +699,33 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 
 /* Computing MIN */
 	    d__1 = __state->bxmin, d__2 = __state->xp[(i__2 = __state->j - 1) 
-		    < 3 && 0 <= i__2 ? i__2 : s_rnge("xp", i__2, "zzmkspin_", 
-		    (ftnlen)498)];
+		    < 3 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "xp", i__2, "zzmkspin_", (ftnlen)498)];
 	    __state->bxmin = min(d__1,d__2);
 /* Computing MAX */
 	    d__1 = __state->bxmax, d__2 = __state->xp[(i__2 = __state->j - 1) 
-		    < 3 && 0 <= i__2 ? i__2 : s_rnge("xp", i__2, "zzmkspin_", 
-		    (ftnlen)499)];
+		    < 3 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "xp", i__2, "zzmkspin_", (ftnlen)499)];
 	    __state->bxmax = max(d__1,d__2);
 /* Computing MIN */
 	    d__1 = __state->bymin, d__2 = __state->yp[(i__2 = __state->j - 1) 
-		    < 3 && 0 <= i__2 ? i__2 : s_rnge("yp", i__2, "zzmkspin_", 
-		    (ftnlen)501)];
+		    < 3 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "yp", i__2, "zzmkspin_", (ftnlen)501)];
 	    __state->bymin = min(d__1,d__2);
 /* Computing MAX */
 	    d__1 = __state->bymax, d__2 = __state->yp[(i__2 = __state->j - 1) 
-		    < 3 && 0 <= i__2 ? i__2 : s_rnge("yp", i__2, "zzmkspin_", 
-		    (ftnlen)502)];
+		    < 3 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "yp", i__2, "zzmkspin_", (ftnlen)502)];
 	    __state->bymax = max(d__1,d__2);
 /* Computing MIN */
 	    d__1 = __state->bzmin, d__2 = __state->zp[(i__2 = __state->j - 1) 
-		    < 3 && 0 <= i__2 ? i__2 : s_rnge("zp", i__2, "zzmkspin_", 
-		    (ftnlen)504)];
+		    < 3 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "zp", i__2, "zzmkspin_", (ftnlen)504)];
 	    __state->bzmin = min(d__1,d__2);
 /* Computing MAX */
 	    d__1 = __state->bzmax, d__2 = __state->zp[(i__2 = __state->j - 1) 
-		    < 3 && 0 <= i__2 ? i__2 : s_rnge("zp", i__2, "zzmkspin_", 
-		    (ftnlen)505)];
+		    < 3 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "zp", i__2, "zzmkspin_", (ftnlen)505)];
 	    __state->bzmax = max(d__1,d__2);
 
 /*           Determine model extent. */
@@ -765,13 +766,15 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 
     for (__state->i__ = 1; __state->i__ <= 5; __state->i__ += 2) {
 	__state->xextnt[(i__1 = __state->i__ - 1) < 6 && 0 <= i__1 ? i__1 : 
-		s_rnge("xextnt", i__1, "zzmkspin_", (ftnlen)553)] = extent[(
-		i__2 = __state->i__ - 1) < 6 && 0 <= i__2 ? i__2 : s_rnge(
-		"extent", i__2, "zzmkspin_", (ftnlen)553)] - __state->mdltol;
+		s_rnge(&__global_state->f2c, "xextnt", i__1, "zzmkspin_", (
+		ftnlen)553)] = extent[(i__2 = __state->i__ - 1) < 6 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "extent", i__2, 
+		"zzmkspin_", (ftnlen)553)] - __state->mdltol;
 	__state->xextnt[(i__1 = __state->i__) < 6 && 0 <= i__1 ? i__1 : 
-		s_rnge("xextnt", i__1, "zzmkspin_", (ftnlen)554)] = extent[(
-		i__2 = __state->i__) < 6 && 0 <= i__2 ? i__2 : s_rnge("extent"
-		, i__2, "zzmkspin_", (ftnlen)554)] + __state->mdltol;
+		s_rnge(&__global_state->f2c, "xextnt", i__1, "zzmkspin_", (
+		ftnlen)554)] = extent[(i__2 = __state->i__) < 6 && 0 <= i__2 ?
+		 i__2 : s_rnge(&__global_state->f2c, "extent", i__2, "zzmksp"
+		"in_", (ftnlen)554)] + __state->mdltol;
     }
 
 /*     Determine the size of the coarse voxels. */
@@ -796,17 +799,17 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 /*     coarse voxel length along each degree of freedom. */
 
     d__1 = __state->xvmin - 1.;
-    __state->xvmin = d_nint(&d__1);
+    __state->xvmin = d_nint(&__global_state->f2c, &d__1);
     d__1 = __state->yvmin - 1.;
-    __state->yvmin = d_nint(&d__1);
+    __state->yvmin = d_nint(&__global_state->f2c, &d__1);
     d__1 = __state->zvmin - 1.;
-    __state->zvmin = d_nint(&d__1);
+    __state->zvmin = d_nint(&__global_state->f2c, &d__1);
     d__1 = __state->xvmax + 1.;
-    __state->xvmax = d_nint(&d__1);
+    __state->xvmax = d_nint(&__global_state->f2c, &d__1);
     d__1 = __state->yvmax + 1.;
-    __state->yvmax = d_nint(&d__1);
+    __state->yvmax = d_nint(&__global_state->f2c, &d__1);
     d__1 = __state->zvmax + 1.;
-    __state->zvmax = d_nint(&d__1);
+    __state->zvmax = d_nint(&__global_state->f2c, &d__1);
 
 /*     Calculate the coarse voxel grid origin in model units. */
 
@@ -818,11 +821,11 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 /*     units of (regular) voxels. */
 
     d__1 = __state->xvmax - __state->xvmin;
-    __state->nx = i_dnnt(&d__1) * *cgscal;
+    __state->nx = i_dnnt(&__global_state->f2c, &d__1) * *cgscal;
     d__1 = __state->yvmax - __state->yvmin;
-    __state->ny = i_dnnt(&d__1) * *cgscal;
+    __state->ny = i_dnnt(&__global_state->f2c, &d__1) * *cgscal;
     d__1 = __state->zvmax - __state->zvmin;
-    __state->nz = i_dnnt(&d__1) * *cgscal;
+    __state->nz = i_dnnt(&__global_state->f2c, &d__1) * *cgscal;
     nvox[0] = __state->nx;
     nvox[1] = __state->ny;
     nvox[2] = __state->nz;
@@ -831,12 +834,12 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 /*     Make sure the number of voxels NVXTOT is within range. */
 
     if (*nvxtot > 100000000) {
-	setmsg_("Fine voxel count NVXTOT = #; count must be in the range 1:#."
-		, (ftnlen)60);
-	errint_("#", nvxtot, (ftnlen)1);
-	errint_("#", &__state->c_b36, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZMKSPIN", (ftnlen)8);
+	setmsg_(__global_state, "Fine voxel count NVXTOT = #; count must be "
+		"in the range 1:#.", (ftnlen)60);
+	errint_(__global_state, "#", nvxtot, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c_b36, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZMKSPIN", (ftnlen)8);
 	return 0;
     }
 
@@ -844,15 +847,15 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 /*     cube must not exceed the fine voxel count. */
 
     d__1 = (doublereal) (*nvxtot);
-    if (*cgscal < 1 || (doublereal) (*cgscal) > pow_dd(&d__1, &__state->c_b39)
-	    ) {
-	setmsg_("Coarse voxel scale = #; scale must be in the range 1:NVXTOT"
-		"**3, where NVXTOT is the total fine voxel count. In this cas"
-		"e, NVXTOT = #.", (ftnlen)133);
-	errint_("#", cgscal, (ftnlen)1);
-	errint_("#", nvxtot, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZMKSPIN", (ftnlen)8);
+    if (*cgscal < 1 || (doublereal) (*cgscal) > pow_dd(&__global_state->f2c, &
+	    d__1, &__state->c_b39)) {
+	setmsg_(__global_state, "Coarse voxel scale = #; scale must be in th"
+		"e range 1:NVXTOT**3, where NVXTOT is the total fine voxel co"
+		"unt. In this case, NVXTOT = #.", (ftnlen)133);
+	errint_(__global_state, "#", cgscal, (ftnlen)1);
+	errint_(__global_state, "#", nvxtot, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZMKSPIN", (ftnlen)8);
 	return 0;
     }
 
@@ -867,13 +870,13 @@ static zzmkspin_state_t* get_zzmkspin_state() {
     i__1 = *cgscal;
     __state->r__ = *nvxtot - __state->q * (i__1 * (i__1 * i__1));
     if (__state->r__ != 0) {
-	setmsg_("Coarse voxel scale = #; the cube of the scale must divide N"
-		"VXTOT evenly, where NVXTOT is the total  fine voxel count. I"
-		"n this case, NVXTOT = #.", (ftnlen)143);
-	errint_("#", cgscal, (ftnlen)1);
-	errint_("#", nvxtot, (ftnlen)1);
-	sigerr_("SPICE(INCOMPATIBLESCALE)", (ftnlen)24);
-	chkout_("ZZMKSPIN", (ftnlen)8);
+	setmsg_(__global_state, "Coarse voxel scale = #; the cube of the sca"
+		"le must divide NVXTOT evenly, where NVXTOT is the total  fin"
+		"e voxel count. In this case, NVXTOT = #.", (ftnlen)143);
+	errint_(__global_state, "#", cgscal, (ftnlen)1);
+	errint_(__global_state, "#", nvxtot, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INCOMPATIBLESCALE)", (ftnlen)24);
+	chkout_(__global_state, "ZZMKSPIN", (ftnlen)8);
 	return 0;
     }
 
@@ -884,25 +887,26 @@ static zzmkspin_state_t* get_zzmkspin_state() {
     __state->npcg = i__1 * (i__1 * i__1);
     __state->ncgflg = *nvxtot / __state->npcg;
     if (__state->ncgflg > 100000) {
-	setmsg_("Number of coarse voxels # exceeds limit #. Increase coarse "
-		"voxel scale, fine voxel scale, or both.", (ftnlen)98);
-	errint_("#", &__state->ncgflg, (ftnlen)1);
-	errint_("#", &__state->c_b53, (ftnlen)1);
-	sigerr_("SPICE(COARSEGRIDOVERFLOW)", (ftnlen)25);
-	chkout_("ZZMKSPIN", (ftnlen)8);
+	setmsg_(__global_state, "Number of coarse voxels # exceeds limit #. "
+		"Increase coarse voxel scale, fine voxel scale, or both.", (
+		ftnlen)98);
+	errint_(__global_state, "#", &__state->ncgflg, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c_b53, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(COARSEGRIDOVERFLOW)", (ftnlen)25);
+	chkout_(__global_state, "ZZMKSPIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Enumerate all voxels that each plate might intersect. */
 
-    zzinilnk_(maxptr, mxcell, &__state->ncell, vxptr, cells);
+    zzinilnk_(__global_state, maxptr, mxcell, &__state->ncell, vxptr, cells);
 
 /*     Set the dimensions of the coarse grid. */
 
     __state->cgrdim[0] = __state->nx / *cgscal;
     __state->cgrdim[1] = __state->ny / *cgscal;
     __state->cgrdim[2] = __state->nz / *cgscal;
-    cleari_(&__state->ncgflg, cgrptr);
+    cleari_(__global_state, &__state->ncgflg, cgrptr);
 
 /*     TO points to the first free location in the VXPTR array. */
 
@@ -927,31 +931,33 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 /* Computing MIN */
 	d__2 = min(__state->xp[0],__state->xp[1]);
 	d__1 = min(d__2,__state->xp[2]) - __state->mdltol;
-	__state->bxmin = brcktd_(&d__1, __state->xextnt, &__state->xextnt[1]);
+	__state->bxmin = brcktd_(__global_state, &d__1, __state->xextnt, &
+		__state->xextnt[1]);
 /* Computing MAX */
 	d__2 = max(__state->xp[0],__state->xp[1]);
 	d__1 = max(d__2,__state->xp[2]) + __state->mdltol;
-	__state->bxmax = brcktd_(&d__1, __state->xextnt, &__state->xextnt[1]);
+	__state->bxmax = brcktd_(__global_state, &d__1, __state->xextnt, &
+		__state->xextnt[1]);
 /* Computing MIN */
 	d__2 = min(__state->yp[0],__state->yp[1]);
 	d__1 = min(d__2,__state->yp[2]) - __state->mdltol;
-	__state->bymin = brcktd_(&d__1, &__state->xextnt[2], &__state->xextnt[
-		3]);
+	__state->bymin = brcktd_(__global_state, &d__1, &__state->xextnt[2], &
+		__state->xextnt[3]);
 /* Computing MAX */
 	d__2 = max(__state->yp[0],__state->yp[1]);
 	d__1 = max(d__2,__state->yp[2]) + __state->mdltol;
-	__state->bymax = brcktd_(&d__1, &__state->xextnt[2], &__state->xextnt[
-		3]);
+	__state->bymax = brcktd_(__global_state, &d__1, &__state->xextnt[2], &
+		__state->xextnt[3]);
 /* Computing MIN */
 	d__2 = min(__state->zp[0],__state->zp[1]);
 	d__1 = min(d__2,__state->zp[2]) - __state->mdltol;
-	__state->bzmin = brcktd_(&d__1, &__state->xextnt[4], &__state->xextnt[
-		5]);
+	__state->bzmin = brcktd_(__global_state, &d__1, &__state->xextnt[4], &
+		__state->xextnt[5]);
 /* Computing MAX */
 	d__2 = max(__state->zp[0],__state->zp[1]);
 	d__1 = max(d__2,__state->zp[2]) + __state->mdltol;
-	__state->bzmax = brcktd_(&d__1, &__state->xextnt[4], &__state->xextnt[
-		5]);
+	__state->bzmax = brcktd_(__global_state, &d__1, &__state->xextnt[4], &
+		__state->xextnt[5]);
 
 /*        Find the range of voxel coordinates that contain the bounding */
 /*        box of the plate. All we need look at are the coordinates */
@@ -959,24 +965,24 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 
 /*        Start with the corner having minimum coordinates: */
 
-	vpack_(&__state->bxmin, &__state->bymin, &__state->bzmin, 
-		__state->vmod);
-	zzgetvox_(voxsiz, voxori, nvox, __state->vmod, &__state->inbox, 
-		__state->vcoord);
+	vpack_(__global_state, &__state->bxmin, &__state->bymin, &
+		__state->bzmin, __state->vmod);
+	zzgetvox_(__global_state, voxsiz, voxori, nvox, __state->vmod, &
+		__state->inbox, __state->vcoord);
 	if (! __state->inbox) {
 
 /*           A corner of the bounding box lies outside the voxel grid. */
 /*           This should never occur. */
 
-	    setmsg_("BUG: bounding box of plate is outside of voxel grid. In"
-		    "put coordinates were (#, #, #). Plate ID = #.", (ftnlen)
-		    100);
-	    errdp_("#", __state->vmod, (ftnlen)1);
-	    errdp_("#", &__state->vmod[1], (ftnlen)1);
-	    errdp_("#", &__state->vmod[2], (ftnlen)1);
-	    errint_("#", &__state->i__, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZMKSPIN", (ftnlen)8);
+	    setmsg_(__global_state, "BUG: bounding box of plate is outside o"
+		    "f voxel grid. Input coordinates were (#, #, #). Plate ID"
+		    " = #.", (ftnlen)100);
+	    errdp_(__global_state, "#", __state->vmod, (ftnlen)1);
+	    errdp_(__global_state, "#", &__state->vmod[1], (ftnlen)1);
+	    errdp_(__global_state, "#", &__state->vmod[2], (ftnlen)1);
+	    errint_(__global_state, "#", &__state->i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZMKSPIN", (ftnlen)8);
 	    return 0;
 	}
 
@@ -988,24 +994,24 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 
 /*        Now handle the corner having maximum coordinates: */
 
-	vpack_(&__state->bxmax, &__state->bymax, &__state->bzmax, 
-		__state->vmod);
-	zzgetvox_(voxsiz, voxori, nvox, __state->vmod, &__state->inbox, 
-		__state->vcoord);
+	vpack_(__global_state, &__state->bxmax, &__state->bymax, &
+		__state->bzmax, __state->vmod);
+	zzgetvox_(__global_state, voxsiz, voxori, nvox, __state->vmod, &
+		__state->inbox, __state->vcoord);
 	if (! __state->inbox) {
 
 /*           A corner of the bounding box lies outside the voxel grid. */
 /*           This should never occur. */
 
-	    setmsg_("BUG: bounding box of plate is outside of voxel grid. In"
-		    "put coordinates were (#, #, #). Plate ID = #.", (ftnlen)
-		    100);
-	    errdp_("#", __state->vmod, (ftnlen)1);
-	    errdp_("#", &__state->vmod[1], (ftnlen)1);
-	    errdp_("#", &__state->vmod[2], (ftnlen)1);
-	    errint_("#", &__state->i__, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZMKSPIN", (ftnlen)8);
+	    setmsg_(__global_state, "BUG: bounding box of plate is outside o"
+		    "f voxel grid. Input coordinates were (#, #, #). Plate ID"
+		    " = #.", (ftnlen)100);
+	    errdp_(__global_state, "#", __state->vmod, (ftnlen)1);
+	    errdp_(__global_state, "#", &__state->vmod[1], (ftnlen)1);
+	    errdp_(__global_state, "#", &__state->vmod[2], (ftnlen)1);
+	    errint_(__global_state, "#", &__state->i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZMKSPIN", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1040,14 +1046,14 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 /*                   coordinates VIXYZ) from the start of the coarse */
 /*                   voxel. */
 
-		    zzvoxcvo_(__state->vixyz, nvox, cgscal, __state->cgxyz, 
-			    __state->cgoff, &__state->cgof1d);
-		    if (failed_()) {
-			chkout_("ZZMKSPIN", (ftnlen)8);
+		    zzvoxcvo_(__global_state, __state->vixyz, nvox, cgscal, 
+			    __state->cgxyz, __state->cgoff, &__state->cgof1d);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZMKSPIN", (ftnlen)8);
 			return 0;
 		    }
-		    __state->cvid = zzvox2id_(__state->cgxyz, __state->cgrdim)
-			    ;
+		    __state->cvid = zzvox2id_(__global_state, __state->cgxyz, 
+			    __state->cgrdim);
 		    if (cgrptr[__state->cvid - 1] == 0) {
 
 /*                      The coarse voxel at index CVID is empty so far. */
@@ -1064,10 +1070,10 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 
 		    __state->ixptr = cgrptr[__state->cvid - 1] - 1 + 
 			    __state->cgof1d;
-		    zzaddlnk_(&__state->ixptr, &__state->i__, maxptr, mxcell, 
-			    vxptr, &__state->ncell, cells);
-		    if (failed_()) {
-			chkout_("ZZMKSPIN", (ftnlen)8);
+		    zzaddlnk_(__global_state, &__state->ixptr, &__state->i__, 
+			    maxptr, mxcell, vxptr, &__state->ncell, cells);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZMKSPIN", (ftnlen)8);
 			return 0;
 		    }
 		}
@@ -1095,8 +1101,9 @@ static zzmkspin_state_t* get_zzmkspin_state() {
 /*             The N elements following VXLIST( VXPTR(VOX_ID) ), */
 /*             contain the IDs of those plates within the voxel. */
 
-    zzuntngl_(nvxptr, mxcell, cells, maxvxl, vxptr, nvxlst, vxlist);
-    chkout_("ZZMKSPIN", (ftnlen)8);
+    zzuntngl_(__global_state, nvxptr, mxcell, cells, maxvxl, vxptr, nvxlst, 
+	    vxlist);
+    chkout_(__global_state, "ZZMKSPIN", (ftnlen)8);
     return 0;
 } /* zzmkspin_ */
 

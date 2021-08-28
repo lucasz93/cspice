@@ -8,8 +8,7 @@
 
 
 extern edterm_init_t __edterm_init;
-static edterm_state_t* get_edterm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline edterm_state_t* get_edterm_state(cspice_t* state) {
 	if (!state->edterm)
 		state->edterm = __cspice_allocate_module(sizeof(
 	edterm_state_t), &__edterm_init, sizeof(__edterm_init));
@@ -18,11 +17,11 @@ static edterm_state_t* get_edterm_state() {
 }
 
 /* $Procedure EDTERM ( Ellipsoid terminator ) */
-/* Subroutine */ int edterm_(char *trmtyp, char *source, char *target, 
-	doublereal *et, char *fixref, char *abcorr, char *obsrvr, integer *
-	npts, doublereal *trgepc, doublereal *obspos, doublereal *trmpts, 
-	ftnlen trmtyp_len, ftnlen source_len, ftnlen target_len, ftnlen 
-	fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int edterm_(cspice_t* __global_state, char *trmtyp, char *
+	source, char *target, doublereal *et, char *fixref, char *abcorr, 
+	char *obsrvr, integer *npts, doublereal *trgepc, doublereal *obspos, 
+	doublereal *trmpts, ftnlen trmtyp_len, ftnlen source_len, ftnlen 
+	target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len)
 {
     /* Initialized data */
 
@@ -31,51 +30,55 @@ static edterm_state_t* get_edterm_state() {
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzedterm_(char *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-	     ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzcorepc_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzedterm_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+	     doublereal *, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer n;
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer obsid;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer srcid;
     integer trgid;
     logical found;
     doublereal ltsrc;
-    extern logical failed_(void);
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
     integer frcode;
     integer frclas;
     doublereal srcrad[3];
     integer center;
     integer clssid;
     doublereal trgrad[3];
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
     doublereal lttarg;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     doublereal srcpos[3];
-    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int spkezp_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern logical return_(cspice_t*);
     doublereal trgpos[3];
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
 
 
     /* Module state */
-    edterm_state_t* __state = get_edterm_state();
+    edterm_state_t* __state = get_edterm_state(__global_state);
 /* $ Abstract */
 
 /*     Compute a set of points on the umbral or penumbral terminator of */
@@ -909,10 +912,10 @@ static edterm_state_t* get_edterm_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("EDTERM", (ftnlen)6);
+    chkin_(__global_state, "EDTERM", (ftnlen)6);
 
 /*     Initialization. */
 
@@ -920,102 +923,111 @@ static edterm_state_t* get_edterm_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
-	zzctruin_(__state->svctr3);
-	zzctruin_(__state->svctr4);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
+	zzctruin_(__global_state, __state->svctr3);
+	zzctruin_(__global_state, __state->svctr4);
 	__state->first = FALSE_;
     }
 
 /*     Get the input frame code and frame info. */
 
-    zznamfrm_(__state->svctr4, __state->svfref, &__state->svfrcd, fixref, &
-	    frcode, (ftnlen)32, fixref_len);
+    zznamfrm_(__global_state, __state->svctr4, __state->svfref, &
+	    __state->svfrcd, fixref, &frcode, (ftnlen)32, fixref_len);
     if (frcode == 0) {
-	setmsg_("Input frame # has no associated frame ID code.", (ftnlen)46);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	sigerr_("SPICE(NOTRANSLATION)", (ftnlen)20);
-	chkout_("EDTERM", (ftnlen)6);
+	setmsg_(__global_state, "Input frame # has no associated frame ID co"
+		"de.", (ftnlen)46);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	sigerr_(__global_state, "SPICE(NOTRANSLATION)", (ftnlen)20);
+	chkout_(__global_state, "EDTERM", (ftnlen)6);
 	return 0;
     }
-    frinfo_(&frcode, &center, &frclas, &clssid, &found);
+    frinfo_(__global_state, &frcode, &center, &frclas, &clssid, &found);
     if (! found) {
-	setmsg_("Input frame # has associated frame ID code #, but no info w"
-		"as found by FRINFO for this frame.", (ftnlen)93);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	errint_("#", &frcode, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("EDTERM", (ftnlen)6);
+	setmsg_(__global_state, "Input frame # has associated frame ID code "
+		"#, but no info was found by FRINFO for this frame.", (ftnlen)
+		93);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	errint_(__global_state, "#", &frcode, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "EDTERM", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the ID codes of the target, source, and observer. */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtgid, &
-	    __state->svfnd1, target, &trgid, &found, (ftnlen)36, target_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtgid, &__state->svfnd1, target, &trgid, &found, (
+	    ftnlen)36, target_len);
     if (! found) {
-	setmsg_("Input target # has no associated body ID code.", (ftnlen)46);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(NOTRANSLATION)", (ftnlen)20);
-	chkout_("EDTERM", (ftnlen)6);
+	setmsg_(__global_state, "Input target # has no associated body ID co"
+		"de.", (ftnlen)46);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(NOTRANSLATION)", (ftnlen)20);
+	chkout_(__global_state, "EDTERM", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(__state->svctr2, __state->svscre, &__state->svsrci, &
-	    __state->svfnd2, source, &srcid, &found, (ftnlen)36, source_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svscre, &
+	    __state->svsrci, &__state->svfnd2, source, &srcid, &found, (
+	    ftnlen)36, source_len);
     if (! found) {
-	setmsg_("Input source # has no associated body ID code.", (ftnlen)46);
-	errch_("#", source, (ftnlen)1, source_len);
-	sigerr_("SPICE(NOTRANSLATION)", (ftnlen)20);
-	chkout_("EDTERM", (ftnlen)6);
+	setmsg_(__global_state, "Input source # has no associated body ID co"
+		"de.", (ftnlen)46);
+	errch_(__global_state, "#", source, (ftnlen)1, source_len);
+	sigerr_(__global_state, "SPICE(NOTRANSLATION)", (ftnlen)20);
+	chkout_(__global_state, "EDTERM", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(__state->svctr3, __state->svobsr, &__state->svobsi, &
-	    __state->svfnd3, obsrvr, &obsid, &found, (ftnlen)36, obsrvr_len);
+    zzbods2c_(__global_state, __state->svctr3, __state->svobsr, &
+	    __state->svobsi, &__state->svfnd3, obsrvr, &obsid, &found, (
+	    ftnlen)36, obsrvr_len);
     if (! found) {
-	setmsg_("Input observer # has no associated body ID code.", (ftnlen)
-		48);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(NOTRANSLATION)", (ftnlen)20);
-	chkout_("EDTERM", (ftnlen)6);
+	setmsg_(__global_state, "Input observer # has no associated body ID "
+		"code.", (ftnlen)48);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(NOTRANSLATION)", (ftnlen)20);
+	chkout_(__global_state, "EDTERM", (ftnlen)6);
 	return 0;
     }
 
 /*     If the frame is not centered on the target, reject it. */
 
     if (center != trgid) {
-	setmsg_("Input frame # is not centered on target body #. This frame "
-		"must be a body-fixed frame associated with the target.", (
-		ftnlen)113);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(INVALIDFIXREF)", (ftnlen)20);
-	chkout_("EDTERM", (ftnlen)6);
+	setmsg_(__global_state, "Input frame # is not centered on target bod"
+		"y #. This frame must be a body-fixed frame associated with t"
+		"he target.", (ftnlen)113);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(INVALIDFIXREF)", (ftnlen)20);
+	chkout_(__global_state, "EDTERM", (ftnlen)6);
 	return 0;
     }
 
 /*     Look up the radii associated with the target body. */
 
-    bodvcd_(&trgid, "RADII", &__state->c__3, &n, trgrad, (ftnlen)5);
+    bodvcd_(__global_state, &trgid, "RADII", &__state->c__3, &n, trgrad, (
+	    ftnlen)5);
     if (n != 3) {
-	setmsg_("Three radii are required for the target body's (#) shape mo"
-		"del, but # were found.", (ftnlen)81);
-	errch_("#", target, (ftnlen)1, target_len);
-	errint_("#", &n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("EDTERM", (ftnlen)6);
+	setmsg_(__global_state, "Three radii are required for the target bod"
+		"y's (#) shape model, but # were found.", (ftnlen)81);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errint_(__global_state, "#", &n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "EDTERM", (ftnlen)6);
 	return 0;
     }
 
 /*     Look up the radii associated with the light source. */
 
-    bodvcd_(&srcid, "RADII", &__state->c__3, &n, srcrad, (ftnlen)5);
+    bodvcd_(__global_state, &srcid, "RADII", &__state->c__3, &n, srcrad, (
+	    ftnlen)5);
     if (n != 3) {
-	setmsg_("Three radii are required for the light source's (#) shape m"
-		"odel, but # were found.", (ftnlen)82);
-	errch_("#", source, (ftnlen)1, source_len);
-	errint_("#", &n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("EDTERM", (ftnlen)6);
+	setmsg_(__global_state, "Three radii are required for the light sour"
+		"ce's (#) shape model, but # were found.", (ftnlen)82);
+	errch_(__global_state, "#", source, (ftnlen)1, source_len);
+	errint_(__global_state, "#", &n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "EDTERM", (ftnlen)6);
 	return 0;
     }
 /* Computing MAX */
@@ -1025,22 +1037,22 @@ static edterm_state_t* get_edterm_state() {
 /*     Look up the observer-target vector and the target-source vector. */
 /*     Also set the output OBSPOS. */
 
-    spkezp_(&trgid, et, fixref, abcorr, &obsid, trgpos, &lttarg, fixref_len, 
-	    abcorr_len);
-    if (failed_()) {
-	chkout_("EDTERM", (ftnlen)6);
+    spkezp_(__global_state, &trgid, et, fixref, abcorr, &obsid, trgpos, &
+	    lttarg, fixref_len, abcorr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EDTERM", (ftnlen)6);
 	return 0;
     }
-    zzcorepc_(abcorr, et, &lttarg, trgepc, abcorr_len);
-    vminus_(trgpos, obspos);
-    spkezp_(&srcid, trgepc, fixref, abcorr, &trgid, srcpos, &ltsrc, 
-	    fixref_len, abcorr_len);
+    zzcorepc_(__global_state, abcorr, et, &lttarg, trgepc, abcorr_len);
+    vminus_(__global_state, trgpos, obspos);
+    spkezp_(__global_state, &srcid, trgepc, fixref, abcorr, &trgid, srcpos, &
+	    ltsrc, fixref_len, abcorr_len);
 
 /*     We're ready to compute the terminator. */
 
-    zzedterm_(trmtyp, trgrad, &trgrad[1], &trgrad[2], &r__, srcpos, npts, 
-	    trmpts, trmtyp_len);
-    chkout_("EDTERM", (ftnlen)6);
+    zzedterm_(__global_state, trmtyp, trgrad, &trgrad[1], &trgrad[2], &r__, 
+	    srcpos, npts, trmpts, trmtyp_len);
+    chkout_(__global_state, "EDTERM", (ftnlen)6);
     return 0;
 } /* edterm_ */
 

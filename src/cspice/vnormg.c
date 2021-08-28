@@ -8,21 +8,20 @@
 
 
 typedef int vnormg_state_t;
-static vnormg_state_t* get_vnormg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vnormg_state_t* get_vnormg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VNORMG ( Vector norm, general dimension ) */
-doublereal vnormg_(doublereal *v1, integer *ndim)
+doublereal vnormg_(cspice_t* __global_state, doublereal *v1, integer *ndim)
 {
     /* System generated locals */
     integer v1_dim1, i__1, i__2, i__3;
     doublereal ret_val, d__1, d__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double sqrt(doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal v1max;
@@ -31,7 +30,7 @@ doublereal vnormg_(doublereal *v1, integer *ndim)
 
 
     /* Module state */
-    vnormg_state_t* __state = get_vnormg_state();
+    vnormg_state_t* __state = get_vnormg_state(__global_state);
 /* $ Abstract */
 
 /*      Compute the magnitude of a double precision vector of arbitrary */
@@ -169,11 +168,11 @@ doublereal vnormg_(doublereal *v1, integer *ndim)
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if ((d__1 = v1[(i__2 = i__ - 1) < 1 * v1_dim1 && 0 <= i__2 ? i__2 : 
-		s_rnge("v1", i__2, "vnormg_", (ftnlen)148)], abs(d__1)) > 
-		v1max) {
+		s_rnge(&__global_state->f2c, "v1", i__2, "vnormg_", (ftnlen)
+		148)], abs(d__1)) > v1max) {
 	    v1max = (d__2 = v1[(i__3 = i__ - 1) < 1 * v1_dim1 && 0 <= i__3 ? 
-		    i__3 : s_rnge("v1", i__3, "vnormg_", (ftnlen)148)], abs(
-		    d__2));
+		    i__3 : s_rnge(&__global_state->f2c, "v1", i__3, "vnormg_",
+		     (ftnlen)148)], abs(d__2));
 	}
     }
 
@@ -189,10 +188,11 @@ doublereal vnormg_(doublereal *v1, integer *ndim)
 	i__1 = *ndim;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    a = v1[(i__2 = i__ - 1) < 1 * v1_dim1 && 0 <= i__2 ? i__2 : 
-		    s_rnge("v1", i__2, "vnormg_", (ftnlen)167)] / v1max;
+		    s_rnge(&__global_state->f2c, "v1", i__2, "vnormg_", (
+		    ftnlen)167)] / v1max;
 	    ret_val += a * a;
 	}
-	ret_val = v1max * sqrt(ret_val);
+	ret_val = v1max * sqrt(&__global_state->f2c, ret_val);
     }
 
     return ret_val;

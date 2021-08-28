@@ -8,8 +8,7 @@
 
 
 extern intstr_init_t __intstr_init;
-static intstr_state_t* get_intstr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline intstr_state_t* get_intstr_state(cspice_t* state) {
 	if (!state->intstr)
 		state->intstr = __cspice_allocate_module(sizeof(
 	intstr_state_t), &__intstr_init, sizeof(__intstr_init));
@@ -18,7 +17,8 @@ static intstr_state_t* get_intstr_state() {
 }
 
 /* $Procedure  INTSTR  ( Integer to character string ) */
-/* Subroutine */ int intstr_(integer *number, char *string, ftnlen string_len)
+/* Subroutine */ int intstr_(cspice_t* __global_state, integer *number, char *
+	string, ftnlen string_len)
 {
     /* Initialized data */
 
@@ -27,8 +27,9 @@ static intstr_state_t* get_intstr_state() {
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen), s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer i__;
@@ -39,7 +40,7 @@ static intstr_state_t* get_intstr_state() {
 
 
     /* Module state */
-    intstr_state_t* __state = get_intstr_state();
+    intstr_state_t* __state = get_intstr_state(__global_state);
 /* $ Abstract */
 
 /*     Convert an integer to an equivalent character string. */
@@ -215,7 +216,7 @@ static intstr_state_t* get_intstr_state() {
 /*     Initialize the temporary character buffer used to store the */
 /*     character string as it is generated to blanks. */
 
-    s_copy(tmpstr, " ", (ftnlen)80, (ftnlen)1);
+    s_copy(&__global_state->f2c, tmpstr, " ", (ftnlen)80, (ftnlen)1);
 
 /*     We need to do different things for the cases where the number to */
 /*     be converted is positive, negative, or zero. ( Actually, the */
@@ -227,7 +228,7 @@ static intstr_state_t* get_intstr_state() {
 /*     For 32 bit numbers, INTMIN = -214748368 and INTMAX = 214748367. */
 /*     You should be able to see the repercussions of this. */
 
-    i__ = i_len(tmpstr, (ftnlen)80) + 1;
+    i__ = i_len(&__global_state->f2c, tmpstr, (ftnlen)80) + 1;
     if (tmpnum < 0) {
 
 /*        Collect all of the digits in the string. */
@@ -239,7 +240,8 @@ static intstr_state_t* get_intstr_state() {
 	    tmpnum = result;
 	    *(unsigned char *)&tmpstr[i__ - 1] = *(unsigned char *)&
 		    __state->digits[(i__1 = remndr) < 10 && 0 <= i__1 ? i__1 :
-		     s_rnge("digits", i__1, "intstr_", (ftnlen)237)];
+		     s_rnge(&__global_state->f2c, "digits", i__1, "intstr_", (
+		    ftnlen)237)];
 	}
 
 /*        Put the minus sign in place. */
@@ -257,7 +259,8 @@ static intstr_state_t* get_intstr_state() {
 	    tmpnum = result;
 	    *(unsigned char *)&tmpstr[i__ - 1] = *(unsigned char *)&
 		    __state->digits[(i__1 = remndr) < 10 && 0 <= i__1 ? i__1 :
-		     s_rnge("digits", i__1, "intstr_", (ftnlen)257)];
+		     s_rnge(&__global_state->f2c, "digits", i__1, "intstr_", (
+		    ftnlen)257)];
 	}
     } else {
 
@@ -273,8 +276,8 @@ static intstr_state_t* get_intstr_state() {
 /*     truncation on the right if the string STRING is not long enough */
 /*     to contain all of the characters necessary. */
 
-    s_copy(string, tmpstr + (i__ - 1), string_len, i_len(tmpstr, (ftnlen)80) 
-	    - (i__ - 1));
+    s_copy(&__global_state->f2c, string, tmpstr + (i__ - 1), string_len, 
+	    i_len(&__global_state->f2c, tmpstr, (ftnlen)80) - (i__ - 1));
     return 0;
 } /* intstr_ */
 

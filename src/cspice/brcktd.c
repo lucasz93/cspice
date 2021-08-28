@@ -8,20 +8,20 @@
 
 
 typedef int brcktd_state_t;
-static brcktd_state_t* get_brcktd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline brcktd_state_t* get_brcktd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure BRCKTD (Bracket a double precision value within an interval) */
-doublereal brcktd_(doublereal *number, doublereal *end1, doublereal *end2)
+doublereal brcktd_(cspice_t* __global_state, doublereal *number, doublereal *
+	end1, doublereal *end2)
 {
     /* System generated locals */
     doublereal ret_val, d__1, d__2;
 
 
     /* Module state */
-    brcktd_state_t* __state = get_brcktd_state();
+    brcktd_state_t* __state = get_brcktd_state(__global_state);
 /* $ Abstract */
 
 /*      Bracket a number. That is, given a number and an acceptable */

@@ -389,7 +389,7 @@
    Participate in error handling
    */
 
-   chkin_c ( "eul2m_c");
+   chkin_c ( naif_state, "eul2m_c");
 
 
    /*

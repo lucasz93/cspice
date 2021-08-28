@@ -8,8 +8,7 @@
 
 
 extern oscltx_init_t __oscltx_init;
-static oscltx_state_t* get_oscltx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline oscltx_state_t* get_oscltx_state(cspice_t* state) {
 	if (!state->oscltx)
 		state->oscltx = __cspice_allocate_module(sizeof(
 	oscltx_state_t), &__oscltx_init, sizeof(__oscltx_init));
@@ -18,8 +17,8 @@ static oscltx_state_t* get_oscltx_state() {
 }
 
 /* $Procedure  OSCLTX ( Extended osculating elements from state ) */
-/* Subroutine */ int oscltx_(doublereal *state, doublereal *et, doublereal *
-	mu, doublereal *elts)
+/* Subroutine */ int oscltx_(cspice_t* __global_state, doublereal *state, 
+	doublereal *et, doublereal *mu, doublereal *elts)
 {
     /* Initialized data */
 
@@ -28,7 +27,7 @@ static oscltx_state_t* get_oscltx_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     doublereal rmag;
@@ -36,50 +35,51 @@ static oscltx_state_t* get_oscltx_state() {
     doublereal rhat[3];
     doublereal pole[3];
     doublereal xmat[9]	/* was [3][3] */;
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal a;
     doublereal b;
     doublereal e;
     doublereal range;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal exact_(doublereal *, doublereal *, doublereal *);
-    extern doublereal dpmax_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal exact_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal dpmax_(cspice_t*);
     doublereal rperi[3];
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal c1;
     doublereal c2;
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
-    extern doublereal twopi_(void);
-    extern logical failed_(void);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern doublereal twopi_(cspice_t*);
+    extern logical failed_(cspice_t*);
     doublereal eccvec[3];
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int recrad_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int recrad_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal nu;
     logical cmptau;
-    extern /* Subroutine */ int oscelt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int oscelt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal mucubr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int twovec_(doublereal *, integer *, doublereal *,
-	     integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int twovec_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern logical return_(cspice_t*);
     doublereal ecc;
     doublereal dec;
     doublereal vel[3];
     doublereal tau;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    oscltx_state_t* __state = get_oscltx_state();
+    oscltx_state_t* __state = get_oscltx_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the set of osculating conic orbital elements that */
@@ -401,12 +401,12 @@ static oscltx_state_t* get_oscltx_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("OSCLTX", (ftnlen)6);
+    chkin_(__global_state, "OSCLTX", (ftnlen)6);
     if (__state->pass1) {
-	__state->limit = dpmax_() / 200.;
+	__state->limit = dpmax_(__global_state) / 200.;
 	__state->pass1 = FALSE_;
     }
 
@@ -414,7 +414,7 @@ static oscltx_state_t* get_oscltx_state() {
 /*     is necessary because this routine may return early if A or TAU */
 /*     cannot be computed. */
 
-    cleard_(&__state->c__12, &elts[8]);
+    cleard_(__global_state, &__state->c__12, &elts[8]);
     nu = 0.;
     tau = 0.;
     a = 0.;
@@ -422,9 +422,9 @@ static oscltx_state_t* get_oscltx_state() {
 /*     Compute osculating elements using OSCELT. Take advantage */
 /*     of OSCELT's error handling. */
 
-    oscelt_(state, et, mu, elts);
-    if (failed_()) {
-	chkout_("OSCLTX", (ftnlen)6);
+    oscelt_(__global_state, state, et, mu, elts);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "OSCLTX", (ftnlen)6);
 	return 0;
     }
 
@@ -456,10 +456,10 @@ static oscltx_state_t* get_oscltx_state() {
 
 
 
-    unorm_(state, rhat, &rmag);
-    vequ_(&state[3], vel);
-    vmag = vnorm_(vel);
-    ecc = exact_(&elts[1], &__state->c_b5, &__state->c_b6);
+    unorm_(__global_state, state, rhat, &rmag);
+    vequ_(__global_state, &state[3], vel);
+    vmag = vnorm_(__global_state, vel);
+    ecc = exact_(__global_state, &elts[1], &__state->c_b5, &__state->c_b6);
     if (ecc != 0.) {
 /*                                 _   _ */
 /*        C1 is the coefficient of r/||r|| in (1) above: */
@@ -470,22 +470,23 @@ static oscltx_state_t* get_oscltx_state() {
 /*                                 _ */
 /*        C2 is the coefficient of v in (1) above: */
 
-	c2 = -(1. / *mu) * vdot_(state, vel);
+	c2 = -(1. / *mu) * vdot_(__global_state, state, vel);
 
 /*        ECCVEC is the eccentricity vector: */
 
-	vlcom_(&c1, rhat, &c2, vel, eccvec);
+	vlcom_(__global_state, &c1, rhat, &c2, vel, eccvec);
 
 /*        POLE is the orbital pole unit vector. */
 
-	ucrss_(state, vel, pole);
+	ucrss_(__global_state, state, vel, pole);
 
 /*        Compute the transformation from the frame of the input state */
 /*        to the perifocal frame. */
 
-	twovec_(eccvec, &__state->c__1, pole, &__state->c__3, xmat);
-	if (failed_()) {
-	    chkout_("OSCLTX", (ftnlen)6);
+	twovec_(__global_state, eccvec, &__state->c__1, pole, &__state->c__3, 
+		xmat);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "OSCLTX", (ftnlen)6);
 	    return 0;
 	}
 
@@ -493,8 +494,8 @@ static oscltx_state_t* get_oscltx_state() {
 /*        compute its "right ascension." This is the true anomaly NU, */
 /*        confined to the range [0, 2*pi) radians. */
 
-	mxv_(xmat, state, rperi);
-	recrad_(rperi, &range, &nu, &dec);
+	mxv_(__global_state, xmat, state, rperi);
+	recrad_(__global_state, rperi, &range, &nu, &dec);
     } else {
 
 /*        The orbit is circular or nearly so. The mean anomaly can */
@@ -547,7 +548,7 @@ static oscltx_state_t* get_oscltx_state() {
 
 /*        This is the parabolic case. */
 
-	chkout_("OSCLTX", (ftnlen)6);
+	chkout_(__global_state, "OSCLTX", (ftnlen)6);
 	return 0;
     }
     if (rmag <= *mu / __state->limit) {
@@ -556,7 +557,7 @@ static oscltx_state_t* get_oscltx_state() {
 
 /*        We can't safely compute E. */
 
-	chkout_("OSCLTX", (ftnlen)6);
+	chkout_(__global_state, "OSCLTX", (ftnlen)6);
 	return 0;
     }
 
@@ -570,7 +571,7 @@ static oscltx_state_t* get_oscltx_state() {
 /*        We can't safely compute A. The case of E equal to 0 */
 /*        gets the code to this point. */
 
-	chkout_("OSCLTX", (ftnlen)6);
+	chkout_(__global_state, "OSCLTX", (ftnlen)6);
 	return 0;
     }
 
@@ -609,9 +610,9 @@ static oscltx_state_t* get_oscltx_state() {
 /*        Note that the case of non-positive MU has already */
 /*        been ruled out. */
 
-	d__1 = __state->limit / twopi_();
-	b = pow_dd(&d__1, &__state->c_b13);
-	mucubr = pow_dd(mu, &__state->c_b14);
+	d__1 = __state->limit / twopi_(__global_state);
+	b = pow_dd(&__global_state->f2c, &d__1, &__state->c_b13);
+	mucubr = pow_dd(&__global_state->f2c, mu, &__state->c_b14);
 	if (*mu >= 1.) {
 	    cmptau = a / mucubr < b;
 	} else {
@@ -619,14 +620,15 @@ static oscltx_state_t* get_oscltx_state() {
 	}
 	if (cmptau) {
 	    d__1 = a / mucubr;
-	    tau = twopi_() * pow_dd(&d__1, &__state->c_b15);
+	    tau = twopi_(__global_state) * pow_dd(&__global_state->f2c, &d__1,
+		     &__state->c_b15);
 	}
     }
 
 /*     Assign the remaining members of ELTS. */
 
     elts[10] = tau;
-    chkout_("OSCLTX", (ftnlen)6);
+    chkout_(__global_state, "OSCLTX", (ftnlen)6);
     return 0;
 } /* oscltx_ */
 

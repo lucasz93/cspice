@@ -8,8 +8,7 @@
 
 
 extern spke10_init_t __spke10_init;
-static spke10_state_t* get_spke10_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spke10_state_t* get_spke10_state(cspice_t* state) {
 	if (!state->spke10)
 		state->spke10 = __cspice_allocate_module(sizeof(
 	spke10_state_t), &__spke10_init, sizeof(__spke10_init));
@@ -18,8 +17,8 @@ static spke10_state_t* get_spke10_state() {
 }
 
 /* $Procedure SPKE10 ( Evaluate SPK record, type 10 ) */
-/* Subroutine */ int spke10_(doublereal *et, doublereal *record, doublereal *
-	state)
+/* Subroutine */ int spke10_(cspice_t* __global_state, doublereal *et, 
+	doublereal *record, doublereal *state)
 {
     /* Initialized data */
 
@@ -28,34 +27,38 @@ static spke10_state_t* get_spke10_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int mxvg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern doublereal twopi_(cspice_t*);
+    extern logical failed_(cspice_t*);
+    extern doublereal pi_(cspice_t*);
+    extern /* Subroutine */ int vlcomg_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzteme_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int invstm_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int xxsgp4e_(cspice_t*, doublereal *, doublereal *
 	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern doublereal twopi_(void);
-    extern logical failed_(void);
-    extern doublereal pi_(void);
-    extern /* Subroutine */ int vlcomg_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int zzteme_(doublereal *, doublereal *);
-    extern logical return_(void);
-    extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
-    extern /* Subroutine */ int xxsgp4e_(doublereal *, doublereal *);
-    extern /* Subroutine */ int xxsgp4i_(doublereal *, doublereal *, integer *
-	    );
+    extern /* Subroutine */ int xxsgp4i_(cspice_t*, doublereal *, doublereal *
+	    , integer *);
 
 
     /* Module state */
-    spke10_state_t* __state = get_spke10_state();
+    spke10_state_t* __state = get_spke10_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 10 */
@@ -449,15 +452,15 @@ static spke10_state_t* get_spke10_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKE10", (ftnlen)6);
+	chkin_(__global_state, "SPKE10", (ftnlen)6);
     }
     if (__state->first) {
 	__state->first = FALSE_;
-	__state->mypi = pi_();
-	__state->my2pi = twopi_();
+	__state->mypi = pi_(__global_state);
+	__state->my2pi = twopi_(__global_state);
     }
 
 /*     Fetch the two epochs stored in the record. */
@@ -500,35 +503,35 @@ static spke10_state_t* get_spke10_state() {
 
 /*        Evaluate first TLE. */
 
-	xxsgp4i_(record, &record[8], &__state->c__1);
-	if (failed_()) {
-	    chkout_("SPKE10", (ftnlen)6);
+	xxsgp4i_(__global_state, record, &record[8], &__state->c__1);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKE10", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Time from epoch of set 1 in minutes. */
 
 	d__1 = (*et - __state->t1) / 60.;
-	xxsgp4e_(&d__1, __state->s1);
-	if (failed_()) {
-	    chkout_("SPKE10", (ftnlen)6);
+	xxsgp4e_(__global_state, &d__1, __state->s1);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKE10", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Evaluate second TLE. */
 
-	xxsgp4i_(record, &record[22], &__state->c__1);
-	if (failed_()) {
-	    chkout_("SPKE10", (ftnlen)6);
+	xxsgp4i_(__global_state, record, &record[22], &__state->c__1);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKE10", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Time from epoch of set 2 in minutes. */
 
 	d__1 = (*et - __state->t2) / 60.;
-	xxsgp4e_(&d__1, __state->s2);
-	if (failed_()) {
-	    chkout_("SPKE10", (ftnlen)6);
+	xxsgp4e_(__global_state, &d__1, __state->s2);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKE10", (ftnlen)6);
 	    return 0;
 	}
 
@@ -539,35 +542,36 @@ static spke10_state_t* get_spke10_state() {
 	__state->denom = __state->t2 - __state->t1;
 	__state->arg = __state->numer * __state->mypi / __state->denom;
 	__state->dargdt = __state->mypi / __state->denom;
-	__state->w = cos(__state->arg) * .5 + .5;
-	__state->dwdt = sin(__state->arg) * -.5 * __state->dargdt;
+	__state->w = cos(&__global_state->f2c, __state->arg) * .5 + .5;
+	__state->dwdt = sin(&__global_state->f2c, __state->arg) * -.5 * 
+		__state->dargdt;
 
 /*        Now compute the weighted average of the two states. */
 
 	d__1 = 1. - __state->w;
-	vlcomg_(&__state->c__6, &__state->w, __state->s1, &d__1, __state->s2, 
-		state);
+	vlcomg_(__global_state, &__state->c__6, &__state->w, __state->s1, &
+		d__1, __state->s2, state);
 	d__1 = -__state->dwdt;
-	vlcom_(&__state->dwdt, __state->s1, &d__1, __state->s2, 
-		__state->vcomp);
-	vadd_(&state[3], __state->vcomp, &__state->tmpsta[3]);
-	vequ_(&__state->tmpsta[3], &state[3]);
+	vlcom_(__global_state, &__state->dwdt, __state->s1, &d__1, 
+		__state->s2, __state->vcomp);
+	vadd_(__global_state, &state[3], __state->vcomp, &__state->tmpsta[3]);
+	vequ_(__global_state, &__state->tmpsta[3], &state[3]);
     } else {
 
 /*        Evaluate the TLE. */
 
-	xxsgp4i_(record, &record[8], &__state->c__1);
-	if (failed_()) {
-	    chkout_("SPKE10", (ftnlen)6);
+	xxsgp4i_(__global_state, record, &record[8], &__state->c__1);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKE10", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Time from epoch of set 1 in minutes. */
 
 	d__1 = (*et - __state->t1) / 60.;
-	xxsgp4e_(&d__1, state);
-	if (failed_()) {
-	    chkout_("SPKE10", (ftnlen)6);
+	xxsgp4e_(__global_state, &d__1, state);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKE10", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -575,19 +579,19 @@ static spke10_state_t* get_spke10_state() {
 /*     Finally, convert the TEME state to J2000.  First get */
 /*     the rotation from J2000 to TEME... */
 
-    zzteme_(et, __state->precm);
+    zzteme_(__global_state, et, __state->precm);
 
 /*     ...now convert STATE to J2000. Invert the state transformation */
 /*     operator (important to correctly do this). */
 
-    invstm_(__state->precm, __state->invprc);
+    invstm_(__global_state, __state->precm, __state->invprc);
 
 /*     Map STATE to the corresponding expression in J2000. */
 
-    mxvg_(__state->invprc, state, &__state->c__6, &__state->c__6, 
-	    __state->tmpsta);
-    moved_(__state->tmpsta, &__state->c__6, state);
-    chkout_("SPKE10", (ftnlen)6);
+    mxvg_(__global_state, __state->invprc, state, &__state->c__6, &
+	    __state->c__6, __state->tmpsta);
+    moved_(__global_state, __state->tmpsta, &__state->c__6, state);
+    chkout_(__global_state, "SPKE10", (ftnlen)6);
     return 0;
 } /* spke10_ */
 

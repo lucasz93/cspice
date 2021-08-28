@@ -1039,7 +1039,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkcpt_c" );
+   chkin_c ( naif_state, "spkcpt_c" );
 
    /*
    Check the input state pointer. 

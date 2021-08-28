@@ -8,13 +8,13 @@
 
 
 typedef int lstcli_state_t;
-static lstcli_state_t* get_lstcli_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lstcli_state_t* get_lstcli_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   LSTCLI ( Closest integer array element ) */
-integer lstcli_(integer *x, integer *n, integer *array)
+integer lstcli_(cspice_t* __global_state, integer *x, integer *n, integer *
+	array)
 {
     /* System generated locals */
     integer ret_val;
@@ -28,7 +28,7 @@ integer lstcli_(integer *x, integer *n, integer *array)
 
 
     /* Module state */
-    lstcli_state_t* __state = get_lstcli_state();
+    lstcli_state_t* __state = get_lstcli_state(__global_state);
 /* $ Abstract */
 
 /*     Given a number X and an array of non-decreasing integers, find */

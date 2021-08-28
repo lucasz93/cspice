@@ -228,7 +228,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "etcal_c" );
+   chkin_c ( naif_state, "etcal_c" );
 
 
    /*

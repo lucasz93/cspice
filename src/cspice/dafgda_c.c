@@ -180,7 +180,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafgda_c" );
+   chkin_c ( naif_state, "dafgda_c" );
    
    dafgda_ ( ( integer    * ) &handle,
              ( integer    * ) &begin,

@@ -8,8 +8,7 @@
 
 
 extern dpstr_init_t __dpstr_init;
-static dpstr_state_t* get_dpstr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dpstr_state_t* get_dpstr_state(cspice_t* state) {
 	if (!state->dpstr)
 		state->dpstr = __cspice_allocate_module(sizeof(dpstr_state_t),
 	 &__dpstr_init, sizeof(__dpstr_init));
@@ -18,8 +17,8 @@ static dpstr_state_t* get_dpstr_state() {
 }
 
 /* $Procedure      DPSTR ( Double Precision Number to Character ) */
-/* Subroutine */ int dpstr_(doublereal *x, integer *sigdig, char *string, 
-	ftnlen string_len)
+/* Subroutine */ int dpstr_(cspice_t* __global_state, doublereal *x, integer *
+	sigdig, char *string, ftnlen string_len)
 {
     /* Initialized data */
 
@@ -30,11 +29,12 @@ static dpstr_state_t* get_dpstr_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
-    double d_lg10(doublereal *);
-    integer s_rnge(char *, integer, char *, integer);
-    double d_nint(doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
+    double d_lg10(f2c_state_t*, doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double d_nint(f2c_state_t*, doublereal *);
 
     /* Local variables */
     doublereal exp10;
@@ -47,12 +47,12 @@ static dpstr_state_t* get_dpstr_state() {
     integer postn;
     integer maxsig;
     integer expont;
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
     char numstr[32];
 
 
     /* Module state */
-    dpstr_state_t* __state = get_dpstr_state();
+    dpstr_state_t* __state = get_dpstr_state(__global_state);
 /* $ Abstract */
 
 /*     Take a double precision number and convert it to */
@@ -331,7 +331,7 @@ static dpstr_state_t* get_dpstr_state() {
 
 /*     Wipe out anything sitting in NUMSTR */
 
-    s_copy(numstr, " ", (ftnlen)32, (ftnlen)1);
+    s_copy(&__global_state->f2c, numstr, " ", (ftnlen)32, (ftnlen)1);
 
 /*     At least 1 significant digit is required.  The most allowed is 14. */
 /*     MAXSIG is the integer in this range that is closest to SIGDIG. */
@@ -354,19 +354,21 @@ static dpstr_state_t* get_dpstr_state() {
 	postn = 2;
 	*(unsigned char *)&numstr[2] = '.';
     } else {
-	s_copy(zero, " 0.0000000000000000000000000", (ftnlen)28, (ftnlen)28);
+	s_copy(&__global_state->f2c, zero, " 0.0000000000000000000000000", (
+		ftnlen)28, (ftnlen)28);
 /* Writing concatenation */
 	i__3[0] = maxsig + 2, a__1[0] = zero;
 	i__3[1] = 4, a__1[1] = "E+00";
-	s_cat(numstr, a__1, i__3, &__state->c__2, (ftnlen)32);
-	s_copy(string, numstr, string_len, (ftnlen)32);
+	s_cat(&__global_state->f2c, numstr, a__1, i__3, &__state->c__2, (
+		ftnlen)32);
+	s_copy(&__global_state->f2c, string, numstr, string_len, (ftnlen)32);
 	return 0;
     }
 
 /*     We need a first guess at the exponent string.  Compute the LOG */
 /*     base 10 of COPY */
 
-    exp10 = d_lg10(&copy);
+    exp10 = d_lg10(&__global_state->f2c, &copy);
 
 /*     Scale our copy of the input into the range 1 to 10. */
 
@@ -385,7 +387,8 @@ static dpstr_state_t* get_dpstr_state() {
 	}
 	if (k != 0) {
 	    copy *= __state->power[(i__1 = k) < 18 && 0 <= i__1 ? i__1 : 
-		    s_rnge("power", i__1, "dpstr_", (ftnlen)434)];
+		    s_rnge(&__global_state->f2c, "power", i__1, "dpstr_", (
+		    ftnlen)434)];
 	}
     } else {
 	expont = (integer) exp10;
@@ -396,17 +399,19 @@ static dpstr_state_t* get_dpstr_state() {
 	}
 	if (k != 0) {
 	    copy *= __state->ipower[(i__1 = k) < 18 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ipower", i__1, "dpstr_", (ftnlen)449)];
+		    s_rnge(&__global_state->f2c, "ipower", i__1, "dpstr_", (
+		    ftnlen)449)];
 	}
     }
 
 /*     Round off the last significant digit. */
 
     d__1 = copy * __state->power[(i__1 = maxsig - 1) < 18 && 0 <= i__1 ? i__1 
-	    : s_rnge("power", i__1, "dpstr_", (ftnlen)460)];
-    copy = (d_nint(&d__1) + .125) * __state->ipower[(i__2 = maxsig - 1) < 18 
-	    && 0 <= i__2 ? i__2 : s_rnge("ipower", i__2, "dpstr_", (ftnlen)
+	    : s_rnge(&__global_state->f2c, "power", i__1, "dpstr_", (ftnlen)
 	    460)];
+    copy = (d_nint(&__global_state->f2c, &d__1) + .125) * __state->ipower[(
+	    i__2 = maxsig - 1) < 18 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "ipower", i__2, "dpstr_", (ftnlen)460)];
 
 /*     We might have accidently made copy as big as 10 by the */
 /*     round off process.  If we did we need to divide by 10 and add 1 */
@@ -421,10 +426,11 @@ static dpstr_state_t* get_dpstr_state() {
 
     i__ = (integer) copy;
     *(unsigned char *)&numstr[postn - 1] = *(unsigned char *)&__state->digits[
-	    (i__1 = i__) < 10 && 0 <= i__1 ? i__1 : s_rnge("digits", i__1, 
-	    "dpstr_", (ftnlen)476)];
+	    (i__1 = i__) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "digits", i__1, "dpstr_", (ftnlen)476)];
     copy = (copy - __state->values[(i__1 = i__) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("values", i__1, "dpstr_", (ftnlen)478)]) * 10.;
+	    s_rnge(&__global_state->f2c, "values", i__1, "dpstr_", (ftnlen)
+	    478)]) * 10.;
 
 /*     Set the string pointer to the next position and compute the */
 /*     position of the last significant digit */
@@ -439,9 +445,11 @@ static dpstr_state_t* get_dpstr_state() {
 	i__ = (integer) copy;
 	*(unsigned char *)&numstr[postn - 1] = *(unsigned char *)&
 		__state->digits[(i__1 = i__) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("digits", i__1, "dpstr_", (ftnlen)494)];
+		s_rnge(&__global_state->f2c, "digits", i__1, "dpstr_", (
+		ftnlen)494)];
 	copy = (copy - __state->values[(i__1 = i__) < 10 && 0 <= i__1 ? i__1 :
-		 s_rnge("values", i__1, "dpstr_", (ftnlen)495)]) * 10.;
+		 s_rnge(&__global_state->f2c, "values", i__1, "dpstr_", (
+		ftnlen)495)]) * 10.;
 	++postn;
     }
 
@@ -452,24 +460,28 @@ static dpstr_state_t* get_dpstr_state() {
 /*     First get the exponent symbol and sign of the exponent. */
 
     if (expont >= 0) {
-	s_copy(numstr + (postn - 1), "E+", 32 - (postn - 1), (ftnlen)2);
+	s_copy(&__global_state->f2c, numstr + (postn - 1), "E+", 32 - (postn 
+		- 1), (ftnlen)2);
     } else {
 	expont = -expont;
-	s_copy(numstr + (postn - 1), "E-", 32 - (postn - 1), (ftnlen)2);
+	s_copy(&__global_state->f2c, numstr + (postn - 1), "E-", 32 - (postn 
+		- 1), (ftnlen)2);
     }
     postn += 2;
 
 /*     Now get the numeric representation. */
 
     if (expont <= 40) {
-	s_copy(expc, __state->vaxexp + (((i__1 = expont) < 41 && 0 <= i__1 ? 
-		i__1 : s_rnge("vaxexp", i__1, "dpstr_", (ftnlen)524)) << 1), (
-		ftnlen)20, (ftnlen)2);
+	s_copy(&__global_state->f2c, expc, __state->vaxexp + (((i__1 = expont)
+		 < 41 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"vaxexp", i__1, "dpstr_", (ftnlen)524)) << 1), (ftnlen)20, (
+		ftnlen)2);
     } else {
-	intstr_(&expont, expc, (ftnlen)20);
+	intstr_(__global_state, &expont, expc, (ftnlen)20);
     }
-    s_copy(numstr + (postn - 1), expc, 32 - (postn - 1), (ftnlen)20);
-    s_copy(string, numstr, string_len, (ftnlen)32);
+    s_copy(&__global_state->f2c, numstr + (postn - 1), expc, 32 - (postn - 1),
+	     (ftnlen)20);
+    s_copy(&__global_state->f2c, string, numstr, string_len, (ftnlen)32);
 
 /*     That's all folks. */
 

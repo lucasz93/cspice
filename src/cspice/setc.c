@@ -8,28 +8,28 @@
 
 
 typedef int setc_state_t;
-static setc_state_t* get_setc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline setc_state_t* get_setc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            SETC ( Compare character sets ) */
-logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen 
-	b_len)
+logical setc_(cspice_t* __global_state, char *a, char *op, char *b, ftnlen 
+	a_len, ftnlen op_len, ftnlen b_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer cond;
     integer carda;
     integer cardb;
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer condab;
     integer condoa;
     integer condob;
@@ -38,14 +38,14 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
     integer indexb;
     integer condgt;
     integer condlt;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    setc_state_t* __state = get_setc_state();
+    setc_state_t* __state = get_setc_state(__global_state);
 /* $ Abstract */
 
 /*     Given a relational operator, compare two character sets. */
@@ -259,18 +259,18 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = FALSE_;
 	return ret_val;
     } else {
-	chkin_("SETC", (ftnlen)4);
+	chkin_(__global_state, "SETC", (ftnlen)4);
 	ret_val = FALSE_;
     }
 
 /*     Obtain the cardinality of the sets. */
 
-    carda = cardc_(a, a_len);
-    cardb = cardc_(b, b_len);
+    carda = cardc_(__global_state, a, a_len);
+    cardb = cardc_(__global_state, b, b_len);
 
 /*     The easiest way to compare two sets is to list them side by side */
 /*     as shown below: */
@@ -396,10 +396,10 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 /*     A cannot be a proper subset of B if the cardinality of A is */
 /*     greater than or equal to the cardinality of B. */
 
-    if (s_cmp(op, "<", op_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, op, "<", op_len, (ftnlen)1) == 0) {
 	if (carda >= cardb) {
 	    ret_val = FALSE_;
-	    chkout_("SETC", (ftnlen)4);
+	    chkout_(__global_state, "SETC", (ftnlen)4);
 	    return ret_val;
 	} else {
 	    condlt = 0;
@@ -412,10 +412,11 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 
 /*     A cannot be a subset of B if A contains more elements than B. */
 
-    } else if (s_cmp(op, "<=", op_len, (ftnlen)2) == 0) {
+    } else if (s_cmp(&__global_state->f2c, op, "<=", op_len, (ftnlen)2) == 0) 
+	    {
 	if (carda > cardb) {
 	    ret_val = FALSE_;
-	    chkout_("SETC", (ftnlen)4);
+	    chkout_(__global_state, "SETC", (ftnlen)4);
 	    return ret_val;
 	} else {
 	    condlt = 0;
@@ -429,10 +430,10 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 /*     If the cardinality of the two sets is not equal, there's no way */
 /*     that the two sets could be equal. */
 
-    } else if (s_cmp(op, "=", op_len, (ftnlen)1) == 0) {
+    } else if (s_cmp(&__global_state->f2c, op, "=", op_len, (ftnlen)1) == 0) {
 	if (carda != cardb) {
 	    ret_val = FALSE_;
-	    chkout_("SETC", (ftnlen)4);
+	    chkout_(__global_state, "SETC", (ftnlen)4);
 	    return ret_val;
 	} else {
 	    condlt = 0;
@@ -446,10 +447,11 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 /*     If the cardinality of the two sets is not equal, the sets */
 /*     are not equal. */
 
-    } else if (s_cmp(op, "<>", op_len, (ftnlen)2) == 0) {
+    } else if (s_cmp(&__global_state->f2c, op, "<>", op_len, (ftnlen)2) == 0) 
+	    {
 	if (carda != cardb) {
 	    ret_val = TRUE_;
-	    chkout_("SETC", (ftnlen)4);
+	    chkout_(__global_state, "SETC", (ftnlen)4);
 	    return ret_val;
 	} else {
 	    condlt = 2;
@@ -463,10 +465,10 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 /*     B cannot be a proper subset of A if the cardinality of A is less */
 /*     than or equal to the cardinality of B. */
 
-    } else if (s_cmp(op, ">", op_len, (ftnlen)1) == 0) {
+    } else if (s_cmp(&__global_state->f2c, op, ">", op_len, (ftnlen)1) == 0) {
 	if (carda <= cardb) {
 	    ret_val = FALSE_;
-	    chkout_("SETC", (ftnlen)4);
+	    chkout_(__global_state, "SETC", (ftnlen)4);
 	    return ret_val;
 	} else {
 	    condlt = 1;
@@ -479,10 +481,11 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 
 /*     B cannot be a subset of A if B contains more elements than A. */
 
-    } else if (s_cmp(op, ">=", op_len, (ftnlen)2) == 0) {
+    } else if (s_cmp(&__global_state->f2c, op, ">=", op_len, (ftnlen)2) == 0) 
+	    {
 	if (carda < cardb) {
 	    ret_val = FALSE_;
-	    chkout_("SETC", (ftnlen)4);
+	    chkout_(__global_state, "SETC", (ftnlen)4);
 	    return ret_val;
 	} else {
 	    condlt = 1;
@@ -496,10 +499,10 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 /*     If the cardinality of one of the sets is zero, they can't */
 /*     possibly have any elements in common. */
 
-    } else if (s_cmp(op, "&", op_len, (ftnlen)1) == 0) {
+    } else if (s_cmp(&__global_state->f2c, op, "&", op_len, (ftnlen)1) == 0) {
 	if (carda == 0 || cardb == 0) {
 	    ret_val = FALSE_;
-	    chkout_("SETC", (ftnlen)4);
+	    chkout_(__global_state, "SETC", (ftnlen)4);
 	    return ret_val;
 	} else {
 	    condlt = 1;
@@ -511,10 +514,10 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 
 /*     If either A or B is the null set, the two sets are disjoint. */
 
-    } else if (s_cmp(op, "~", op_len, (ftnlen)1) == 0) {
+    } else if (s_cmp(&__global_state->f2c, op, "~", op_len, (ftnlen)1) == 0) {
 	if (carda == 0 || cardb == 0) {
 	    ret_val = TRUE_;
-	    chkout_("SETC", (ftnlen)4);
+	    chkout_(__global_state, "SETC", (ftnlen)4);
 	    return ret_val;
 	} else {
 	    condlt = 1;
@@ -528,10 +531,11 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 /*     error. */
 
     } else {
-	setmsg_("Relational operator, *, is not recognized.", (ftnlen)42);
-	errch_("*", op, (ftnlen)1, op_len);
-	sigerr_("SPICE(INVALIDOPERATION)", (ftnlen)23);
-	chkout_("SETC", (ftnlen)4);
+	setmsg_(__global_state, "Relational operator, *, is not recognized.", 
+		(ftnlen)42);
+	errch_(__global_state, "*", op, (ftnlen)1, op_len);
+	sigerr_(__global_state, "SPICE(INVALIDOPERATION)", (ftnlen)23);
+	chkout_(__global_state, "SETC", (ftnlen)4);
 	return ret_val;
     }
 
@@ -545,12 +549,12 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 /*     sets to determine the function value. */
 
     while(indexa <= carda && indexb <= cardb) {
-	if (s_cmp(a + (indexa + 5) * a_len, b + (indexb + 5) * b_len, a_len, 
-		b_len) < 0) {
+	if (s_cmp(&__global_state->f2c, a + (indexa + 5) * a_len, b + (indexb 
+		+ 5) * b_len, a_len, b_len) < 0) {
 	    cond = condlt;
 	    ++indexa;
-	} else if (s_cmp(a + (indexa + 5) * a_len, b + (indexb + 5) * b_len, 
-		a_len, b_len) == 0) {
+	} else if (s_cmp(&__global_state->f2c, a + (indexa + 5) * a_len, b + (
+		indexb + 5) * b_len, a_len, b_len) == 0) {
 	    cond = condeq;
 	    ++indexa;
 	    ++indexb;
@@ -583,11 +587,11 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 
 	if (cond == 0) {
 	    ret_val = FALSE_;
-	    chkout_("SETC", (ftnlen)4);
+	    chkout_(__global_state, "SETC", (ftnlen)4);
 	    return ret_val;
 	} else if (cond == 2) {
 	    ret_val = TRUE_;
-	    chkout_("SETC", (ftnlen)4);
+	    chkout_(__global_state, "SETC", (ftnlen)4);
 	    return ret_val;
 	}
     }
@@ -617,7 +621,7 @@ logical setc_(char *a, char *op, char *b, ftnlen a_len, ftnlen op_len, ftnlen
 /*     Determine the value of SETC from the results. */
 
     ret_val = cond == 1;
-    chkout_("SETC", (ftnlen)4);
+    chkout_(__global_state, "SETC", (ftnlen)4);
     return ret_val;
 } /* setc_ */
 

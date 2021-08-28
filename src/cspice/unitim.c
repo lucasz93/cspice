@@ -8,8 +8,7 @@
 
 
 extern unitim_init_t __unitim_init;
-static unitim_state_t* get_unitim_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline unitim_state_t* get_unitim_state(cspice_t* state) {
 	if (!state->unitim)
 		state->unitim = __cspice_allocate_module(sizeof(
 	unitim_state_t), &__unitim_init, sizeof(__unitim_init));
@@ -18,8 +17,8 @@ static unitim_state_t* get_unitim_state() {
 }
 
 /* $Procedure      UNITIM ( Uniform time scale transformation ) */
-doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen 
-	insys_len, ftnlen outsys_len)
+doublereal unitim_(cspice_t* __global_state, doublereal *epoch, char *insys, 
+	char *outsys, ftnlen insys_len, ftnlen outsys_len)
 {
     /* Initialized data */
 
@@ -31,55 +30,61 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
     char ch__1[714];
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
-    double sin(doublereal);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    double sin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern logical setc_(char *, char *, char *, ftnlen, ftnlen, ftnlen);
-    char myin[8];
-    extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
+    extern logical setc_(cspice_t*, char *, char *, char *, ftnlen, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    char myin[8];
+    extern /* Subroutine */ int zzcvpool_(cspice_t*, char *, integer *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer i__;
     integer n;
-    extern logical elemc_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern logical elemc_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical intdb;
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found[4];
     logical intdt;
     char types[8*8];
     char myout[8];
-    extern logical failed_(void);
-    extern /* Subroutine */ int validc_(integer *, integer *, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int validc_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
     logical update;
-    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
-	    *, doublereal *, logical *, ftnlen);
-    extern /* Subroutine */ int unionc_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int gdpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int unionc_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ssizec_(cspice_t*, integer *, char *, ftnlen);
     logical outtdb;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical somfls_(logical *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical somfls_(cspice_t*, logical *, integer *);
     doublereal mytime;
-    extern /* Subroutine */ int insrtc_(char *, char *, ftnlen, ftnlen);
-    extern logical return_(void);
-    logical outtdt;
-    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int insrtc_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern doublereal j2000_(void);
+    extern logical return_(cspice_t*);
+    logical outtdt;
+    extern /* Subroutine */ int swpool_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern doublereal j2000_(cspice_t*);
     doublereal tdb;
-    extern doublereal spd_(void);
+    extern doublereal spd_(cspice_t*);
     doublereal tdt;
 
     /* Module state */
-    unitim_state_t* __state = get_unitim_state();
+    unitim_state_t* __state = get_unitim_state(__global_state);
 /* $ Abstract */
 
 /*     Transform time from one uniform scale to another.  The uniform */
@@ -369,11 +374,11 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0.;
 	return ret_val;
     }
-    chkin_("UNITIM", (ftnlen)6);
+    chkin_(__global_state, "UNITIM", (ftnlen)6);
     if (__state->first) {
 	__state->first = FALSE_;
 
@@ -384,61 +389,70 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /*        Set up the parameters that we are going to need often. */
 
-	__state->secspd = spd_();
-	__state->jd2000 = j2000_();
+	__state->secspd = spd_(__global_state);
+	__state->jd2000 = j2000_(__global_state);
 
 /*        Initialize the sets that we will use. */
 
-	s_copy(__state->typtdt + 48, "JDTDT", (ftnlen)8, (ftnlen)5);
-	s_copy(__state->typtdt + 56, "TAI", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->typtdt + 64, "TDT", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->typtdb + 48, "ET", (ftnlen)8, (ftnlen)2);
-	s_copy(__state->typtdb + 56, "JDTDB", (ftnlen)8, (ftnlen)5);
-	s_copy(__state->typtdb + 64, "JED", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->typtdb + 72, "TDB", (ftnlen)8, (ftnlen)3);
-	validc_(&__state->c__3, &__state->c__3, __state->typtdt, (ftnlen)8);
-	validc_(&__state->c__4, &__state->c__4, __state->typtdb, (ftnlen)8);
-	ssizec_(&__state->c__7, __state->recog, (ftnlen)8);
-	unionc_(__state->typtdt, __state->typtdb, __state->recog, (ftnlen)8, (
-		ftnlen)8, (ftnlen)8);
+	s_copy(&__global_state->f2c, __state->typtdt + 48, "JDTDT", (ftnlen)8,
+		 (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->typtdt + 56, "TAI", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->typtdt + 64, "TDT", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->typtdb + 48, "ET", (ftnlen)8, (
+		ftnlen)2);
+	s_copy(&__global_state->f2c, __state->typtdb + 56, "JDTDB", (ftnlen)8,
+		 (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->typtdb + 64, "JED", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->typtdb + 72, "TDB", (ftnlen)8, (
+		ftnlen)3);
+	validc_(__global_state, &__state->c__3, &__state->c__3, 
+		__state->typtdt, (ftnlen)8);
+	validc_(__global_state, &__state->c__4, &__state->c__4, 
+		__state->typtdb, (ftnlen)8);
+	ssizec_(__global_state, &__state->c__7, __state->recog, (ftnlen)8);
+	unionc_(__global_state, __state->typtdt, __state->typtdb, 
+		__state->recog, (ftnlen)8, (ftnlen)8, (ftnlen)8);
 
 /*        Initialize the local POOL counter to user value. */
 
-	zzctruin_(__state->usrctr);
+	zzctruin_(__global_state, __state->usrctr);
 
 /*        Set up the kernel pool watchers */
 
-	swpool_("UNITIM", &__state->c__4, __state->vars__, (ftnlen)6, (ftnlen)
-		16);
+	swpool_(__global_state, "UNITIM", &__state->c__4, __state->vars__, (
+		ftnlen)6, (ftnlen)16);
     }
 
 /*     Check to see if any of the kernel items required by this */
 /*     routine have been updated since the last call to this */
 /*     entry point. */
 
-    zzcvpool_("UNITIM", __state->usrctr, &update, (ftnlen)6);
+    zzcvpool_(__global_state, "UNITIM", __state->usrctr, &update, (ftnlen)6);
     if (update || __state->nodata) {
 
 /*        Fetch all of the time parameters from the kernel pool. */
 
-	gdpool_("DELTET/DELTA_T_A", &__state->c__1, &__state->c__1, &n, &
-		__state->dta, found, (ftnlen)16);
-	gdpool_("DELTET/K", &__state->c__1, &__state->c__1, &n, &__state->k, &
-		found[1], (ftnlen)8);
-	gdpool_("DELTET/EB", &__state->c__1, &__state->c__1, &n, &__state->eb,
-		 &found[2], (ftnlen)9);
-	gdpool_("DELTET/M", &__state->c__1, &__state->c__2, &n, __state->m, &
-		found[3], (ftnlen)8);
-	if (failed_()) {
+	gdpool_(__global_state, "DELTET/DELTA_T_A", &__state->c__1, &
+		__state->c__1, &n, &__state->dta, found, (ftnlen)16);
+	gdpool_(__global_state, "DELTET/K", &__state->c__1, &__state->c__1, &
+		n, &__state->k, &found[1], (ftnlen)8);
+	gdpool_(__global_state, "DELTET/EB", &__state->c__1, &__state->c__1, &
+		n, &__state->eb, &found[2], (ftnlen)9);
+	gdpool_(__global_state, "DELTET/M", &__state->c__1, &__state->c__2, &
+		n, __state->m, &found[3], (ftnlen)8);
+	if (failed_(__global_state)) {
 	    __state->nodata = TRUE_;
 	    ret_val = 0.;
-	    chkout_("UNITIM", (ftnlen)6);
+	    chkout_(__global_state, "UNITIM", (ftnlen)6);
 	    return ret_val;
 	}
 
 /*        If anything wasn't found, it's an error dude. */
 
-	if (somfls_(found, &__state->c__4)) {
+	if (somfls_(__global_state, found, &__state->c__4)) {
 	    __state->nodata = TRUE_;
 
 /*           If we didn't get all of the things we needed for time */
@@ -446,8 +460,8 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 /*           subsequent calls to this routine will never have the */
 /*           needed data. */
 
-	    swpool_("UNITIM", &__state->c__4, __state->vars__, (ftnlen)6, (
-		    ftnlen)16);
+	    swpool_(__global_state, "UNITIM", &__state->c__4, __state->vars__,
+		     (ftnlen)6, (ftnlen)16);
 /* Writing concatenation */
 	    i__1[0] = 281, a__1[0] = "The following, needed to convert betwe"
 		    "en the input uniform time scales, were not found in the "
@@ -474,19 +488,22 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 	    i__1[12] = 39, a__1[12] = "or the \"Intro to Kernels\" and \"LSK"
 		    " and ";
 	    i__1[13] = 34, a__1[13] = "SCLK\" SPICE Tutorials for details.";
-	    s_cat(ch__1, a__1, i__1, &__state->c__14, (ftnlen)714);
-	    setmsg_(ch__1, (ftnlen)714);
+	    s_cat(&__global_state->f2c, ch__1, a__1, i__1, &__state->c__14, (
+		    ftnlen)714);
+	    setmsg_(__global_state, ch__1, (ftnlen)714);
 	    for (i__ = 1; i__ <= 4; ++i__) {
 		if (! found[(i__2 = i__ - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge(
-			"found", i__2, "unitim_", (ftnlen)465)]) {
-		    errch_("#", __state->missed + ((i__2 = i__ - 1) < 4 && 0 
-			    <= i__2 ? i__2 : s_rnge("missed", i__2, "unitim_",
-			     (ftnlen)466)) * 20, (ftnlen)1, (ftnlen)20);
+			&__global_state->f2c, "found", i__2, "unitim_", (
+			ftnlen)465)]) {
+		    errch_(__global_state, "#", __state->missed + ((i__2 = 
+			    i__ - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "missed", i__2, "unitim_", (
+			    ftnlen)466)) * 20, (ftnlen)1, (ftnlen)20);
 		}
 	    }
-	    errch_(", #", ".", (ftnlen)3, (ftnlen)1);
-	    sigerr_("SPICE(MISSINGTIMEINFO)", (ftnlen)22);
-	    chkout_("UNITIM", (ftnlen)6);
+	    errch_(__global_state, ", #", ".", (ftnlen)3, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(MISSINGTIMEINFO)", (ftnlen)22);
+	    chkout_(__global_state, "UNITIM", (ftnlen)6);
 	    ret_val = *epoch;
 	    return ret_val;
 	}
@@ -498,11 +515,11 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /*     Normalize the IN and OUT scale variables */
 
-    ucase_(insys, myin, insys_len, (ftnlen)8);
-    ucase_(outsys, myout, outsys_len, (ftnlen)8);
-    ssizec_(&__state->c__2, types, (ftnlen)8);
-    insrtc_(myin, types, (ftnlen)8, (ftnlen)8);
-    insrtc_(myout, types, (ftnlen)8, (ftnlen)8);
+    ucase_(__global_state, insys, myin, insys_len, (ftnlen)8);
+    ucase_(__global_state, outsys, myout, outsys_len, (ftnlen)8);
+    ssizec_(__global_state, &__state->c__2, types, (ftnlen)8);
+    insrtc_(__global_state, myin, types, (ftnlen)8, (ftnlen)8);
+    insrtc_(__global_state, myout, types, (ftnlen)8, (ftnlen)8);
 
 /*     We will work with a local copy of EPOCH. */
 
@@ -510,15 +527,16 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
 /*     First make sure both types are recognized. */
 
-    if (! setc_(types, "<", __state->recog, (ftnlen)8, (ftnlen)1, (ftnlen)8)) 
-	    {
-	setmsg_("The time types recognized by UNITIM are: TAI, TDT, JDTDT, T"
-		"DB, ET, JED, JDTDB.  At least one of the inputs (#, #) was n"
-		"ot in the list of recognized types. ", (ftnlen)155);
-	errch_("#", myin, (ftnlen)1, (ftnlen)8);
-	errch_("#", myout, (ftnlen)1, (ftnlen)8);
-	sigerr_("SPICE(BADTIMETYPE)", (ftnlen)18);
-	chkout_("UNITIM", (ftnlen)6);
+    if (! setc_(__global_state, types, "<", __state->recog, (ftnlen)8, (
+	    ftnlen)1, (ftnlen)8)) {
+	setmsg_(__global_state, "The time types recognized by UNITIM are: TA"
+		"I, TDT, JDTDT, TDB, ET, JED, JDTDB.  At least one of the inp"
+		"uts (#, #) was not in the list of recognized types. ", (
+		ftnlen)155);
+	errch_(__global_state, "#", myin, (ftnlen)1, (ftnlen)8);
+	errch_(__global_state, "#", myout, (ftnlen)1, (ftnlen)8);
+	sigerr_(__global_state, "SPICE(BADTIMETYPE)", (ftnlen)18);
+	chkout_(__global_state, "UNITIM", (ftnlen)6);
 	ret_val = *epoch;
 	return ret_val;
     }
@@ -526,16 +544,18 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 /*     If the input and output types are the same, just copy the input */
 /*     epoch to the output and call it quits. */
 
-    if (s_cmp(myin, myout, (ftnlen)8, (ftnlen)8) == 0) {
+    if (s_cmp(&__global_state->f2c, myin, myout, (ftnlen)8, (ftnlen)8) == 0) {
 	ret_val = mytime;
-	chkout_("UNITIM", (ftnlen)6);
+	chkout_(__global_state, "UNITIM", (ftnlen)6);
 	return ret_val;
     }
 
 /*     Determine the base types of the input and output types. */
 
-    intdt = elemc_(myin, __state->typtdt, (ftnlen)8, (ftnlen)8);
-    outtdt = elemc_(myout, __state->typtdt, (ftnlen)8, (ftnlen)8);
+    intdt = elemc_(__global_state, myin, __state->typtdt, (ftnlen)8, (ftnlen)
+	    8);
+    outtdt = elemc_(__global_state, myout, __state->typtdt, (ftnlen)8, (
+	    ftnlen)8);
     intdb = ! intdt;
     outtdb = ! outtdt;
 
@@ -547,13 +567,16 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 /*        (ET is already TDB.) */
 
 
-    if (s_cmp(myin, "TAI", (ftnlen)8, (ftnlen)3) == 0) {
+    if (s_cmp(&__global_state->f2c, myin, "TAI", (ftnlen)8, (ftnlen)3) == 0) {
 	mytime += __state->dta;
-    } else if (s_cmp(myin, "JDTDT", (ftnlen)8, (ftnlen)5) == 0) {
+    } else if (s_cmp(&__global_state->f2c, myin, "JDTDT", (ftnlen)8, (ftnlen)
+	    5) == 0) {
 	mytime = (mytime - __state->jd2000) * __state->secspd;
-    } else if (s_cmp(myin, "JED", (ftnlen)8, (ftnlen)3) == 0) {
+    } else if (s_cmp(&__global_state->f2c, myin, "JED", (ftnlen)8, (ftnlen)3) 
+	    == 0) {
 	mytime = (mytime - __state->jd2000) * __state->secspd;
-    } else if (s_cmp(myin, "JDTDB", (ftnlen)8, (ftnlen)5) == 0) {
+    } else if (s_cmp(&__global_state->f2c, myin, "JDTDB", (ftnlen)8, (ftnlen)
+	    5) == 0) {
 	mytime = (mytime - __state->jd2000) * __state->secspd;
     }
 
@@ -565,8 +588,9 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 
     if (intdt && outtdb) {
 	tdt = mytime;
-	tdb = tdt + __state->k * sin(__state->m[0] + __state->m[1] * tdt + 
-		__state->eb * sin(__state->m[0] + __state->m[1] * tdt));
+	tdb = tdt + __state->k * sin(&__global_state->f2c, __state->m[0] + 
+		__state->m[1] * tdt + __state->eb * sin(&__global_state->f2c, 
+		__state->m[0] + __state->m[1] * tdt));
 	mytime = tdb;
     } else if (intdb && outtdt) {
 
@@ -693,8 +717,10 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 	tdb = mytime;
 	tdt = tdb;
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    tdt = tdb - __state->k * sin(__state->m[0] + __state->m[1] * tdt 
-		    + __state->eb * sin(__state->m[0] + __state->m[1] * tdt));
+	    tdt = tdb - __state->k * sin(&__global_state->f2c, __state->m[0] 
+		    + __state->m[1] * tdt + __state->eb * sin(&
+		    __global_state->f2c, __state->m[0] + __state->m[1] * tdt))
+		    ;
 	}
 	mytime = tdt;
     }
@@ -702,17 +728,21 @@ doublereal unitim_(doublereal *epoch, char *insys, char *outsys, ftnlen
 /*     Now MYTIME is in the base type of the requested output. */
 /*     If further conversion is required, we do it here. */
 
-    if (s_cmp(myout, "TAI", (ftnlen)8, (ftnlen)3) == 0) {
+    if (s_cmp(&__global_state->f2c, myout, "TAI", (ftnlen)8, (ftnlen)3) == 0) 
+	    {
 	mytime -= __state->dta;
-    } else if (s_cmp(myout, "JDTDT", (ftnlen)8, (ftnlen)5) == 0) {
+    } else if (s_cmp(&__global_state->f2c, myout, "JDTDT", (ftnlen)8, (ftnlen)
+	    5) == 0) {
 	mytime = mytime / __state->secspd + __state->jd2000;
-    } else if (s_cmp(myout, "JED", (ftnlen)8, (ftnlen)3) == 0) {
+    } else if (s_cmp(&__global_state->f2c, myout, "JED", (ftnlen)8, (ftnlen)3)
+	     == 0) {
 	mytime = mytime / __state->secspd + __state->jd2000;
-    } else if (s_cmp(myout, "JDTDB", (ftnlen)8, (ftnlen)5) == 0) {
+    } else if (s_cmp(&__global_state->f2c, myout, "JDTDB", (ftnlen)8, (ftnlen)
+	    5) == 0) {
 	mytime = mytime / __state->secspd + __state->jd2000;
     }
     ret_val = mytime;
-    chkout_("UNITIM", (ftnlen)6);
+    chkout_(__global_state, "UNITIM", (ftnlen)6);
     return ret_val;
 } /* unitim_ */
 

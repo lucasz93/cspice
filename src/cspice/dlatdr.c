@@ -8,36 +8,36 @@
 
 
 typedef int dlatdr_state_t;
-static dlatdr_state_t* get_dlatdr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dlatdr_state_t* get_dlatdr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure    DLATDR ( Derivative of latitudinal w.r.t. rectangular ) */
-/* Subroutine */ int dlatdr_(doublereal *x, doublereal *y, doublereal *z__, 
-	doublereal *jacobi)
+/* Subroutine */ int dlatdr_(cspice_t* __global_state, doublereal *x, 
+	doublereal *y, doublereal *z__, doublereal *jacobi)
 {
     doublereal long__;
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     doublereal injacb[9]	/* was [3][3] */;
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal rectan[3];
-    extern /* Subroutine */ int drdlat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int invort_(doublereal *, doublereal *);
+    extern /* Subroutine */ int drdlat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int invort_(cspice_t*, doublereal *, doublereal *)
+	    ;
     doublereal lat;
 
 
     /* Module state */
-    dlatdr_state_t* __state = get_dlatdr_state();
+    dlatdr_state_t* __state = get_dlatdr_state(__global_state);
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */
@@ -225,20 +225,20 @@ static dlatdr_state_t* get_dlatdr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DLATDR", (ftnlen)6);
+	chkin_(__global_state, "DLATDR", (ftnlen)6);
     }
 
 /*     There is a singularity of the Jacobian for points on the z-axis. */
 
     if (*x == 0. && *y == 0.) {
-	setmsg_("The Jacobian of the transformation from rectangular to lati"
-		"tudinal coordinates is not defined for points on the z-axis.",
-		 (ftnlen)119);
-	sigerr_("SPICE(POINTONZAXIS)", (ftnlen)19);
-	chkout_("DLATDR", (ftnlen)6);
+	setmsg_(__global_state, "The Jacobian of the transformation from rec"
+		"tangular to latitudinal coordinates is not defined for point"
+		"s on the z-axis.", (ftnlen)119);
+	sigerr_(__global_state, "SPICE(POINTONZAXIS)", (ftnlen)19);
+	chkout_(__global_state, "DLATDR", (ftnlen)6);
 	return 0;
     }
 
@@ -247,22 +247,22 @@ static dlatdr_state_t* get_dlatdr_state() {
 
 /*     First move the X,Y and Z coordinates into a vector. */
 
-    vpack_(x, y, z__, rectan);
+    vpack_(__global_state, x, y, z__, rectan);
 
 /*     Convert from rectangular to latitudinal coordinates. */
 
-    reclat_(rectan, &r__, &long__, &lat);
+    reclat_(__global_state, rectan, &r__, &long__, &lat);
 
 /*     Get the Jacobian of the transformation from latitudinal to */
 /*     rectangular coordinates at R, LONG, LAT. */
 
-    drdlat_(&r__, &long__, &lat, injacb);
+    drdlat_(__global_state, &r__, &long__, &lat, injacb);
 
 /*     Now invert INJACB to get the Jacobian of the transformation from */
 /*     rectangular to latitudinal coordinates. */
 
-    invort_(injacb, jacobi);
-    chkout_("DLATDR", (ftnlen)6);
+    invort_(__global_state, injacb, jacobi);
+    chkout_(__global_state, "DLATDR", (ftnlen)6);
     return 0;
 } /* dlatdr_ */
 

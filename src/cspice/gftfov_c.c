@@ -825,7 +825,7 @@
    {
       return;
    }
-   chkin_c ( "gftfov_c" );
+   chkin_c ( naif_state, "gftfov_c" );
 
    /*
    Make sure cell data types are d.p. 

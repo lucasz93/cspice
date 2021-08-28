@@ -8,36 +8,37 @@
 
 
 typedef int synthc_state_t;
-static synthc_state_t* get_synthc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline synthc_state_t* get_synthc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SYNTHC ( Return Nth value associated with the symbol ) */
-/* Subroutine */ int synthc_(char *name__, integer *nth, char *tabsym, 
-	integer *tabptr, char *tabval, char *value, logical *found, ftnlen 
-	name_len, ftnlen tabsym_len, ftnlen tabval_len, ftnlen value_len)
+/* Subroutine */ int synthc_(cspice_t* __global_state, char *name__, integer *
+	nth, char *tabsym, integer *tabptr, char *tabval, char *value, 
+	logical *found, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len,
+	 ftnlen value_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sumai_(integer *, integer *);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer locval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer locsym;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    synthc_state_t* __state = get_synthc_state();
+    synthc_state_t* __state = get_synthc_state(__global_state);
 /* $ Abstract */
 
 /*     Return the Nth value associated with a particular symbol in a */
@@ -205,20 +206,20 @@ static synthc_state_t* get_synthc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYNTHC", (ftnlen)6);
+	chkin_(__global_state, "SYNTHC", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
 
 /*     Is this symbol even in the table? */
 
-    locsym = bsrchc_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
+    locsym = bsrchc_(__global_state, name__, &nsym, tabsym + tabsym_len * 6, 
+	    name_len, tabsym_len);
 
 /*     If it's not in the table, it's definitely a problem. */
 
@@ -236,11 +237,11 @@ static synthc_state_t* get_synthc_state() {
     } else {
 	*found = TRUE_;
 	i__1 = locsym - 1;
-	locval = sumai_(&tabptr[6], &i__1) + *nth;
-	s_copy(value, tabval + (locval + 5) * tabval_len, value_len, 
-		tabval_len);
+	locval = sumai_(__global_state, &tabptr[6], &i__1) + *nth;
+	s_copy(&__global_state->f2c, value, tabval + (locval + 5) * 
+		tabval_len, value_len, tabval_len);
     }
-    chkout_("SYNTHC", (ftnlen)6);
+    chkout_(__global_state, "SYNTHC", (ftnlen)6);
     return 0;
 } /* synthc_ */
 

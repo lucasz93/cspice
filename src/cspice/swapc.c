@@ -8,20 +8,20 @@
 
 
 typedef int swapc_state_t;
-static swapc_state_t* get_swapc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline swapc_state_t* get_swapc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SWAPC ( Swap character values ) */
-/* Subroutine */ int swapc_(char *a, char *b, ftnlen a_len, ftnlen b_len)
+/* Subroutine */ int swapc_(cspice_t* __global_state, char *a, char *b, 
+	ftnlen a_len, ftnlen b_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer alen;
@@ -32,7 +32,7 @@ static swapc_state_t* get_swapc_state() {
 
 
     /* Module state */
-    swapc_state_t* __state = get_swapc_state();
+    swapc_state_t* __state = get_swapc_state(__global_state);
 /* $ Abstract */
 
 /*      Swap the contents of two character strings. */
@@ -158,8 +158,8 @@ static swapc_state_t* get_swapc_state() {
 
 /*     Get the lengths of the strings. */
 
-    alen = i_len(a, a_len);
-    blen = i_len(b, b_len);
+    alen = i_len(&__global_state->f2c, a, a_len);
+    blen = i_len(&__global_state->f2c, b, b_len);
     short__ = min(alen,blen);
 
 /*     Keep going until the end of the shorter string is reached. */
@@ -176,10 +176,10 @@ static swapc_state_t* get_swapc_state() {
 
     if (alen > short__) {
 	i__1 = short__;
-	s_copy(a + i__1, " ", a_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, a + i__1, " ", a_len - i__1, (ftnlen)1);
     } else if (blen > short__) {
 	i__1 = short__;
-	s_copy(b + i__1, " ", b_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, b + i__1, " ", b_len - i__1, (ftnlen)1);
     }
     return 0;
 } /* swapc_ */

@@ -8,8 +8,7 @@
 
 
 extern zzsinutl_init_t __zzsinutl_init;
-static zzsinutl_state_t* get_zzsinutl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzsinutl_state_t* get_zzsinutl_state(cspice_t* state) {
 	if (!state->zzsinutl)
 		state->zzsinutl = __cspice_allocate_module(sizeof(
 	zzsinutl_state_t), &__zzsinutl_init, sizeof(__zzsinutl_init));
@@ -18,42 +17,44 @@ static zzsinutl_state_t* get_zzsinutl_state() {
 }
 
 /* $Procedure ZZSINUTL ( DSK, utilities for generalized ray intercept ) */
-/* Subroutine */ int zzsinutl_0_(int n__, integer *trgcde, integer *nsurf, 
-	integer *srflst, doublereal *et, integer *fixfid, doublereal *vertex, 
-	doublereal *raydir, doublereal *spoint, logical *found, doublereal *
-	minrad, doublereal *maxrad, doublereal *pnear, doublereal *dist)
+/* Subroutine */ int zzsinutl_0_(cspice_t* __global_state, int n__, integer *
+	trgcde, integer *nsurf, integer *srflst, doublereal *et, integer *
+	fixfid, doublereal *vertex, doublereal *raydir, doublereal *spoint, 
+	logical *found, doublereal *minrad, doublereal *maxrad, doublereal *
+	pnear, doublereal *dist)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int zzdsksph_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzdsksph_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
-    extern /* Subroutine */ int npedln_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int npedln_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
-	    ;
-    extern /* Subroutine */ int zzsbfxr_(integer *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
-	     logical *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int surfpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, logical *
+	    );
+    extern /* Subroutine */ int zzsbfxr_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, doublereal *, doublereal *, 
+	    doublereal *, logical *);
 
 
     /* Module state */
-    zzsinutl_state_t* __state = get_zzsinutl_state();
+    zzsinutl_state_t* __state = get_zzsinutl_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -287,12 +288,12 @@ static zzsinutl_state_t* get_zzsinutl_state() {
 	case 6: goto L_zzraynp;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSINUTL", (ftnlen)8);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZSINUTL", (ftnlen)8);
+    chkin_(__global_state, "ZZSINUTL", (ftnlen)8);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZSINUTL", (ftnlen)8);
     return 0;
 /* $Procedure ZZSUELIN ( DSK, initialize SINCPT utilities for ellipsoid ) */
 
@@ -437,14 +438,15 @@ L_zzsuelin:
 /*     initialize intercept utilities for ellipsoidal target */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSUELIN", (ftnlen)8);
+    chkin_(__global_state, "ZZSUELIN", (ftnlen)8);
     __state->savtyp = 1;
-    bodvcd_(trgcde, "RADII", &__state->c__3, &n, __state->savrad, (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZSUELIN", (ftnlen)8);
+    bodvcd_(__global_state, trgcde, "RADII", &__state->c__3, &n, 
+	    __state->savrad, (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSUELIN", (ftnlen)8);
 	return 0;
     }
 /* Computing MIN */
@@ -453,7 +455,7 @@ L_zzsuelin:
 /* Computing MAX */
     d__1 = max(__state->savrad[0],__state->savrad[1]);
     __state->savmxr = max(d__1,__state->savrad[2]);
-    chkout_("ZZSUELIN", (ftnlen)8);
+    chkout_(__global_state, "ZZSUELIN", (ftnlen)8);
     return 0;
 /* $Procedure ZZSUDSKI ( DSK, initialize SINCPT utilities for dsk target ) */
 
@@ -618,35 +620,35 @@ L_zzsudski:
 /*     initialize intercept utilities for dsk target */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSUDSKI", (ftnlen)8);
+    chkin_(__global_state, "ZZSUDSKI", (ftnlen)8);
     __state->savtyp = 2;
     if (*nsurf < 0 || *nsurf > 100) {
-	setmsg_("Surface count must be in the range 0:# but was #.", (ftnlen)
-		49);
-	errint_("#", &__state->c__100, (ftnlen)1);
-	errint_("#", nsurf, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZSUDSKI", (ftnlen)8);
+	setmsg_(__global_state, "Surface count must be in the range 0:# but "
+		"was #.", (ftnlen)49);
+	errint_(__global_state, "#", &__state->c__100, (ftnlen)1);
+	errint_(__global_state, "#", nsurf, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZSUDSKI", (ftnlen)8);
 	return 0;
     }
     __state->savnsf = *nsurf;
-    movei_(srflst, &__state->savnsf, __state->savsrf);
+    movei_(__global_state, srflst, &__state->savnsf, __state->savsrf);
     __state->savfid = *fixfid;
     __state->savtrg = *trgcde;
-    cleard_(&__state->c__3, __state->savrad);
-    if (failed_()) {
-	chkout_("ZZSUDSKI", (ftnlen)8);
+    cleard_(__global_state, &__state->c__3, __state->savrad);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSUDSKI", (ftnlen)8);
 	return 0;
     }
 
 /*     Fetch minimum and maximum radius of target body surface. */
 
-    zzdsksph_(trgcde, &__state->savnsf, __state->savsrf, &__state->savmnr, &
-	    __state->savmxr);
-    chkout_("ZZSUDSKI", (ftnlen)8);
+    zzdsksph_(__global_state, trgcde, &__state->savnsf, __state->savsrf, &
+	    __state->savmnr, &__state->savmxr);
+    chkout_(__global_state, "ZZSUDSKI", (ftnlen)8);
     return 0;
 /* $Procedure ZZRAYSFX ( DSK, callback for ray-surface intercept ) */
 
@@ -815,25 +817,26 @@ L_zzraysfx:
 /*     callback for generalized ray surface intercept */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZRAYSFX", (ftnlen)8);
+    chkin_(__global_state, "ZZRAYSFX", (ftnlen)8);
     if (__state->savtyp == 1) {
-	surfpt_(vertex, raydir, __state->savrad, &__state->savrad[1], &
-		__state->savrad[2], spoint, found);
+	surfpt_(__global_state, vertex, raydir, __state->savrad, &
+		__state->savrad[1], &__state->savrad[2], spoint, found);
     } else if (__state->savtyp == 2) {
-	zzsbfxr_(&__state->savtrg, &__state->savnsf, __state->savsrf, et, &
-		__state->savfid, vertex, raydir, spoint, found);
+	zzsbfxr_(__global_state, &__state->savtrg, &__state->savnsf, 
+		__state->savsrf, et, &__state->savfid, vertex, raydir, spoint,
+		 found);
     } else {
-	setmsg_("Surface type code # is not supported. This code branch is n"
-		"ot supposed to be reached.", (ftnlen)85);
-	errint_("#", &__state->savtyp, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZRAYSFX", (ftnlen)8);
+	setmsg_(__global_state, "Surface type code # is not supported. This "
+		"code branch is not supposed to be reached.", (ftnlen)85);
+	errint_(__global_state, "#", &__state->savtyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZRAYSFX", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZRAYSFX", (ftnlen)8);
+    chkout_(__global_state, "ZZRAYSFX", (ftnlen)8);
     return 0;
 /* $Procedure ZZMAXRAD ( DSK, maximum radius ) */
 
@@ -1313,46 +1316,47 @@ L_zzraynp:
 /*     callback for generalized ray surface near point */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZRAYNP", (ftnlen)7);
+    chkin_(__global_state, "ZZRAYNP", (ftnlen)7);
     if (__state->savtyp == 1) {
 
 /*        Find the nearest point on the ellipsoid's surface to */
 /*        to the ray. */
 
-	npedln_(__state->savrad, &__state->savrad[1], &__state->savrad[2], 
-		vertex, raydir, pnear, dist);
+	npedln_(__global_state, __state->savrad, &__state->savrad[1], &
+		__state->savrad[2], vertex, raydir, pnear, dist);
     } else if (__state->savtyp == 2) {
 
 /*        Find the nearest point on the outer bounding sphere to */
 /*        to the ray. */
 
-	npedln_(&__state->savmxr, &__state->savmxr, &__state->savmxr, vertex, 
-		raydir, pnear, dist);
+	npedln_(__global_state, &__state->savmxr, &__state->savmxr, &
+		__state->savmxr, vertex, raydir, pnear, dist);
     } else {
-	setmsg_("Surface type code # is not supported. This code branch is n"
-		"ot supposed to be reached.", (ftnlen)85);
-	errint_("#", &__state->savtyp, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZRAYNP", (ftnlen)7);
+	setmsg_(__global_state, "Surface type code # is not supported. This "
+		"code branch is not supposed to be reached.", (ftnlen)85);
+	errint_(__global_state, "#", &__state->savtyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZRAYNP", (ftnlen)7);
 	return 0;
     }
-    chkout_("ZZRAYNP", (ftnlen)7);
+    chkout_(__global_state, "ZZRAYNP", (ftnlen)7);
     return 0;
 } /* zzsinutl_ */
 
-/* Subroutine */ int zzsinutl_(integer *trgcde, integer *nsurf, integer *
-	srflst, doublereal *et, integer *fixfid, doublereal *vertex, 
-	doublereal *raydir, doublereal *spoint, logical *found, doublereal *
-	minrad, doublereal *maxrad, doublereal *pnear, doublereal *dist)
+/* Subroutine */ int zzsinutl_(cspice_t* __global_state, integer *trgcde, 
+	integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, 
+	doublereal *vertex, doublereal *raydir, doublereal *spoint, logical *
+	found, doublereal *minrad, doublereal *maxrad, doublereal *pnear, 
+	doublereal *dist)
 {
     return zzsinutl_0_(0, trgcde, nsurf, srflst, et, fixfid, vertex, raydir, 
 	    spoint, found, minrad, maxrad, pnear, dist);
     }
 
-/* Subroutine */ int zzsuelin_(integer *trgcde)
+/* Subroutine */ int zzsuelin_(cspice_t* __global_state, integer *trgcde)
 {
     return zzsinutl_0_(1, trgcde, (integer *)0, (integer *)0, (doublereal *)0,
 	     (integer *)0, (doublereal *)0, (doublereal *)0, (doublereal *)0, 
@@ -1360,8 +1364,8 @@ L_zzraynp:
 	    doublereal *)0);
     }
 
-/* Subroutine */ int zzsudski_(integer *trgcde, integer *nsurf, integer *
-	srflst, integer *fixfid)
+/* Subroutine */ int zzsudski_(cspice_t* __global_state, integer *trgcde, 
+	integer *nsurf, integer *srflst, integer *fixfid)
 {
     return zzsinutl_0_(2, trgcde, nsurf, srflst, (doublereal *)0, fixfid, (
 	    doublereal *)0, (doublereal *)0, (doublereal *)0, (logical *)0, (
@@ -1369,15 +1373,16 @@ L_zzraynp:
 	    ;
     }
 
-/* Subroutine */ int zzraysfx_(doublereal *vertex, doublereal *raydir, 
-	doublereal *et, doublereal *spoint, logical *found)
+/* Subroutine */ int zzraysfx_(cspice_t* __global_state, doublereal *vertex, 
+	doublereal *raydir, doublereal *et, doublereal *spoint, logical *
+	found)
 {
     return zzsinutl_0_(3, (integer *)0, (integer *)0, (integer *)0, et, (
 	    integer *)0, vertex, raydir, spoint, found, (doublereal *)0, (
 	    doublereal *)0, (doublereal *)0, (doublereal *)0);
     }
 
-/* Subroutine */ int zzmaxrad_(doublereal *maxrad)
+/* Subroutine */ int zzmaxrad_(cspice_t* __global_state, doublereal *maxrad)
 {
     return zzsinutl_0_(4, (integer *)0, (integer *)0, (integer *)0, (
 	    doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, (
@@ -1385,7 +1390,7 @@ L_zzraynp:
 	    doublereal *)0, (doublereal *)0);
     }
 
-/* Subroutine */ int zzminrad_(doublereal *minrad)
+/* Subroutine */ int zzminrad_(cspice_t* __global_state, doublereal *minrad)
 {
     return zzsinutl_0_(5, (integer *)0, (integer *)0, (integer *)0, (
 	    doublereal *)0, (integer *)0, (doublereal *)0, (doublereal *)0, (
@@ -1393,8 +1398,9 @@ L_zzraynp:
 	    doublereal *)0, (doublereal *)0);
     }
 
-/* Subroutine */ int zzraynp_(doublereal *vertex, doublereal *raydir, 
-	doublereal *et, doublereal *pnear, doublereal *dist)
+/* Subroutine */ int zzraynp_(cspice_t* __global_state, doublereal *vertex, 
+	doublereal *raydir, doublereal *et, doublereal *pnear, doublereal *
+	dist)
 {
     return zzsinutl_0_(6, (integer *)0, (integer *)0, (integer *)0, et, (
 	    integer *)0, vertex, raydir, (doublereal *)0, (logical *)0, (

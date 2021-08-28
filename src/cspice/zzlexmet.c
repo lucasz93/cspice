@@ -8,8 +8,7 @@
 
 
 extern zzlexmet_init_t __zzlexmet_init;
-static zzlexmet_state_t* get_zzlexmet_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzlexmet_state_t* get_zzlexmet_state(cspice_t* state) {
 	if (!state->zzlexmet)
 		state->zzlexmet = __cspice_allocate_module(sizeof(
 	zzlexmet_state_t), &__zzlexmet_init, sizeof(__zzlexmet_init));
@@ -18,14 +17,16 @@ static zzlexmet_state_t* get_zzlexmet_state() {
 }
 
 /* $Procedure ZZLEXMET ( Scan method string ) */
-/* Subroutine */ int zzlexmet_(char *method, integer *maxn, integer *n, 
-	integer *begs, integer *ends, ftnlen method_len)
+/* Subroutine */ int zzlexmet_(cspice_t* __global_state, char *method, 
+	integer *maxn, integer *n, integer *begs, integer *ends, ftnlen 
+	method_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern integer cpos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen)
+	    ;
     integer room;
     integer qpos;
     integer b;
@@ -33,24 +34,25 @@ static zzlexmet_state_t* get_zzlexmet_state() {
     integer i__;
     integer r__;
     integer nchar;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer ltrim_(char *, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer ltrim_(cspice_t*, char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
     integer eq;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int lxqstr_(char *, char *, integer *, integer *, 
-	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int lxqstr_(cspice_t*, char *, char *, integer *, 
+	    integer *, integer *, ftnlen, ftnlen);
     integer loc;
     integer tke;
 
 
     /* Module state */
-    zzlexmet_state_t* __state = get_zzlexmet_state();
+    zzlexmet_state_t* __state = get_zzlexmet_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -245,29 +247,30 @@ static zzlexmet_state_t* get_zzlexmet_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZLEXMET", (ftnlen)8);
-    if (s_cmp(method, " ", method_len, (ftnlen)1) == 0) {
+    chkin_(__global_state, "ZZLEXMET", (ftnlen)8);
+    if (s_cmp(&__global_state->f2c, method, " ", method_len, (ftnlen)1) == 0) 
+	    {
 
 /*        No tokens here. */
 
 	*n = 0;
-	chkout_("ZZLEXMET", (ftnlen)8);
+	chkout_(__global_state, "ZZLEXMET", (ftnlen)8);
 	return 0;
     }
     *n = 0;
     room = *maxn;
-    r__ = rtrim_(method, method_len);
+    r__ = rtrim_(__global_state, method, method_len);
     i__ = 1;
     while(i__ <= r__) {
 
 /*        Look ahead in the input string for the start of a */
 /*        quoted string. */
 
-	qpos = cpos_(method + (i__ - 1), "\"", &__state->c__1, method_len - (
-		i__ - 1), (ftnlen)1);
+	qpos = cpos_(__global_state, method + (i__ - 1), "\"", &__state->c__1,
+		 method_len - (i__ - 1), (ftnlen)1);
 	b = i__;
 	if (qpos == 0) {
 
@@ -288,8 +291,8 @@ static zzlexmet_state_t* get_zzlexmet_state() {
 /*              Find the next delimiter in the substring */
 /*              from indices I : E. */
 
-		loc = cpos_(method + (i__ - 1), " /,=:", &__state->c__1, e - (
-			i__ - 1), (ftnlen)5);
+		loc = cpos_(__global_state, method + (i__ - 1), " /,=:", &
+			__state->c__1, e - (i__ - 1), (ftnlen)5);
 		if (loc == 1) {
 
 /*                 There is a delimiter character at index I in METHOD. */
@@ -303,8 +306,8 @@ static zzlexmet_state_t* get_zzlexmet_state() {
 
 /*                 in METHOD. */
 
-		    if (s_cmp(method + (i__ - 1), " ", i__ + loc - 2 - (i__ - 
-			    1), (ftnlen)1) != 0) {
+		    if (s_cmp(&__global_state->f2c, method + (i__ - 1), " ", 
+			    i__ + loc - 2 - (i__ - 1), (ftnlen)1) != 0) {
 
 /*                    There's a token preceding the delimiter. */
 
@@ -327,24 +330,25 @@ static zzlexmet_state_t* get_zzlexmet_state() {
 /*              indices I and TKE. We don't return blank tokens */
 /*              in the output array. */
 
-		if (s_cmp(method + (i__ - 1), " ", tke - (i__ - 1), (ftnlen)1)
-			 != 0) {
+		if (s_cmp(&__global_state->f2c, method + (i__ - 1), " ", tke 
+			- (i__ - 1), (ftnlen)1) != 0) {
 		    if (room > 0) {
 			++(*n);
 			--room;
-			begs[*n - 1] = ltrim_(method + (i__ - 1), tke - (i__ 
-				- 1)) + i__ - 1;
-			ends[*n - 1] = rtrim_(method + (i__ - 1), tke - (i__ 
-				- 1)) + i__ - 1;
+			begs[*n - 1] = ltrim_(__global_state, method + (i__ - 
+				1), tke - (i__ - 1)) + i__ - 1;
+			ends[*n - 1] = rtrim_(__global_state, method + (i__ - 
+				1), tke - (i__ - 1)) + i__ - 1;
 		    } else {
-			setmsg_("Need more room in output arrays. Token coun"
-				"t = #; substring indices = #:#; substring = "
-				"#.", (ftnlen)89);
-			errint_("#", n, (ftnlen)1);
-			errint_("#", &i__, (ftnlen)1);
-			errint_("#", &tke, (ftnlen)1);
-			sigerr_("SPICE(ARRAYTOOSMALL)", (ftnlen)20);
-			chkout_("ZZLEXMET", (ftnlen)8);
+			setmsg_(__global_state, "Need more room in output ar"
+				"rays. Token count = #; substring indices = #"
+				":#; substring = #.", (ftnlen)89);
+			errint_(__global_state, "#", n, (ftnlen)1);
+			errint_(__global_state, "#", &i__, (ftnlen)1);
+			errint_(__global_state, "#", &tke, (ftnlen)1);
+			sigerr_(__global_state, "SPICE(ARRAYTOOSMALL)", (
+				ftnlen)20);
+			chkout_(__global_state, "ZZLEXMET", (ftnlen)8);
 			return 0;
 		    }
 		}
@@ -357,8 +361,8 @@ static zzlexmet_state_t* get_zzlexmet_state() {
 /*           at index E + 1. */
 
 	    i__ = e + 1;
-	    lxqstr_(method + (i__ - 1), "\"", &__state->c__1, &eq, &nchar, 
-		    method_len - (i__ - 1), (ftnlen)1);
+	    lxqstr_(__global_state, method + (i__ - 1), "\"", &__state->c__1, 
+		    &eq, &nchar, method_len - (i__ - 1), (ftnlen)1);
 	    if (nchar > 0) {
 		if (room > 0) {
 		    ++(*n);
@@ -366,29 +370,30 @@ static zzlexmet_state_t* get_zzlexmet_state() {
 		    begs[*n - 1] = i__;
 		    ends[*n - 1] = i__ - 1 + eq;
 		} else {
-		    setmsg_("Need more room in output arrays. Token count = "
-			    "#; substring indices = #:#; substring = #.", (
-			    ftnlen)89);
-		    errint_("#", n, (ftnlen)1);
-		    errint_("#", &i__, (ftnlen)1);
-		    errint_("#", &tke, (ftnlen)1);
-		    errch_("#", method + (i__ - 1), (ftnlen)1, tke - (i__ - 1)
-			    );
-		    sigerr_("SPICE(ARRAYTOOSMALL)", (ftnlen)20);
-		    chkout_("ZZLEXMET", (ftnlen)8);
+		    setmsg_(__global_state, "Need more room in output arrays"
+			    ". Token count = #; substring indices = #:#; subs"
+			    "tring = #.", (ftnlen)89);
+		    errint_(__global_state, "#", n, (ftnlen)1);
+		    errint_(__global_state, "#", &i__, (ftnlen)1);
+		    errint_(__global_state, "#", &tke, (ftnlen)1);
+		    errch_(__global_state, "#", method + (i__ - 1), (ftnlen)1,
+			     tke - (i__ - 1));
+		    sigerr_(__global_state, "SPICE(ARRAYTOOSMALL)", (ftnlen)
+			    20);
+		    chkout_(__global_state, "ZZLEXMET", (ftnlen)8);
 		    return 0;
 		}
 	    } else {
 
 /*              We have a syntax error in the input string. */
 
-		setmsg_("Invalid quoted string found starting at index #. Su"
-			"bstring is #.", (ftnlen)64);
-		errint_("#", &i__, (ftnlen)1);
-		errch_("#", method + (i__ - 1), (ftnlen)1, method_len - (i__ 
-			- 1));
-		sigerr_("SPICE(SYNTAXERROR)", (ftnlen)18);
-		chkout_("ZZLEXMET", (ftnlen)8);
+		setmsg_(__global_state, "Invalid quoted string found startin"
+			"g at index #. Substring is #.", (ftnlen)64);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errch_(__global_state, "#", method + (i__ - 1), (ftnlen)1, 
+			method_len - (i__ - 1));
+		sigerr_(__global_state, "SPICE(SYNTAXERROR)", (ftnlen)18);
+		chkout_(__global_state, "ZZLEXMET", (ftnlen)8);
 		return 0;
 	    }
 	    i__ = ends[*n - 1] + 1;
@@ -397,7 +402,7 @@ static zzlexmet_state_t* get_zzlexmet_state() {
 /*        The index I has been moved forward by at least one position. */
 
     }
-    chkout_("ZZLEXMET", (ftnlen)8);
+    chkout_(__global_state, "ZZLEXMET", (ftnlen)8);
     return 0;
 } /* zzlexmet_ */
 

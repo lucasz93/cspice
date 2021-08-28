@@ -8,8 +8,7 @@
 
 
 extern zzdynrot_init_t __zzdynrot_init;
-static zzdynrot_state_t* get_zzdynrot_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdynrot_state_t* get_zzdynrot_state(cspice_t* state) {
 	if (!state->zzdynrot)
 		state->zzdynrot = __cspice_allocate_module(sizeof(
 	zzdynrot_state_t), &__zzdynrot_init, sizeof(__zzdynrot_init));
@@ -18,8 +17,8 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 }
 
 /* $Procedure ZZDYNROT ( Dynamic position transformation evaluation ) */
-/* Subroutine */ int zzdynrot_(integer *infram, integer *center, doublereal *
-	et, doublereal *rotate, integer *basfrm)
+/* Subroutine */ int zzdynrot_(cspice_t* __global_state, integer *infram, 
+	integer *center, doublereal *et, doublereal *rotate, integer *basfrm)
 {
     /* Initialized data */
 
@@ -29,94 +28,106 @@ static zzdynrot_state_t* get_zzdynrot_state() {
     integer i__1, i__2, i__3[2];
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    double sin(doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    double sin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int zzrefch0_(integer *, integer *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int zzrefch0_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
     doublereal dmob;
     integer degs[3];
     integer frid;
     char spec[80];
     integer targ;
     doublereal oblr[9]	/* was [3][3] */;
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal pobs[3];
     integer axis[2];
-    extern /* Subroutine */ int zzspksb0_(integer *, doublereal *, char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzspksb0_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, ftnlen);
     doublereal tipm[9]	/* was [3][3] */;
     doublereal vflt;
-    extern doublereal vsep_(doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
     doublereal rinv[9]	/* was [3][3] */;
-    extern /* Subroutine */ int zzspkez0_(integer *, doublereal *, char *, 
-	    char *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzspkez0_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal poly[2];
     doublereal rnut[9]	/* was [3][3] */;
-    extern /* Subroutine */ int zzspkzp0_(integer *, doublereal *, char *, 
-	    char *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzdynbid_(char *, integer *, char *, integer *
-	    , ftnlen, ftnlen);
-    extern /* Subroutine */ int zzdynfid_(char *, integer *, char *, integer *
-	    , ftnlen, ftnlen);
-    extern /* Subroutine */ int zzdynoad_(char *, integer *, char *, integer *
-	    , integer *, doublereal *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzdynoac_(char *, integer *, char *, integer *
-	    , integer *, char *, logical *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
-	    *, integer *, integer *, integer *, doublereal *);
-    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int zzmobliq_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int zzdynvac_(char *, integer *, char *, integer *
-	    , integer *, char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzdynvad_(char *, integer *, char *, integer *
-	    , integer *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzdynvai_(char *, integer *, char *, integer *
-	    , integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzspkzp0_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzdynbid_(cspice_t*, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynfid_(cspice_t*, char *, integer *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynoad_(cspice_t*, char *, integer *, char *
+	    , integer *, integer *, doublereal *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynoac_(cspice_t*, char *, integer *, char *
+	    , integer *, integer *, char *, logical *, ftnlen, ftnlen, ftnlen)
+	    ;
+    extern /* Subroutine */ int eul2m_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int zzcorepc_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzmobliq_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *);
+    extern /* Subroutine */ int zzdynvac_(cspice_t*, char *, integer *, char *
+	    , integer *, integer *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynvad_(cspice_t*, char *, integer *, char *
+	    , integer *, integer *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynvai_(cspice_t*, char *, integer *, char *
+	    , integer *, integer *, integer *, ftnlen, ftnlen);
     integer i__;
-    extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzprscor_(cspice_t*, char *, logical *, 
+	    ftnlen);
     integer n;
     integer frcid;
     doublereal radii[3];
     doublereal delta;
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int etcal_(cspice_t*, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal epoch;
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal pnear[3];
     integer frcls;
     integer iaxes[3];
     doublereal rprec[9]	/* was [3][3] */;
     integer cvobs;
     integer frctr;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal ptemp[3];
     doublereal rtemp[9]	/* was [3][3] */;
     doublereal stemp[6];
     doublereal stobs[6];
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int xpose_(cspice_t*, doublereal *, doublereal *);
     char units[80];
     doublereal nutxf[36]	/* was [6][6] */;
     doublereal t0;
-    extern /* Subroutine */ int bodn2c_(char *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int bodn2c_(cspice_t*, char *, integer *, logical 
+	    *, ftnlen);
     doublereal v2[6]	/* was [3][2] */;
-    extern /* Subroutine */ int bodc2n_(integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int bodc2n_(cspice_t*, integer *, char *, logical 
+	    *, ftnlen);
     doublereal ra;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     logical meanec;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     char vecdef[80*2];
     char basnam[32];
     doublereal lt;
@@ -125,8 +136,9 @@ static zzdynrot_state_t* get_zzdynrot_state() {
     char inname__[32];
     char abcorr[5];
     char axname[80];
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern logical return_(cspice_t*);
     char cfrmnm[32];
     char ctrnam[36];
     char cvcorr[5];
@@ -162,46 +174,49 @@ static zzdynrot_state_t* get_zzdynrot_state() {
     logical meaneq;
     logical ofdate;
     logical trueeq;
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
-	    ;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
-    extern /* Subroutine */ int cidfrm_(integer *, integer *, char *, logical 
-	    *, ftnlen);
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int convrt_(doublereal *, char *, char *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int stlabx_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int frmnam_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int mxm_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int twovec_(doublereal *, integer *, doublereal *,
-	     integer *, doublereal *);
-    extern /* Subroutine */ int polyds_(doublereal *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int zzeprc76_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzenut80_(doublereal *, doublereal *);
+    extern /* Subroutine */ int cidfrm_(cspice_t*, integer *, integer *, char 
+	    *, logical *, ftnlen);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int nearpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int convrt_(cspice_t*, doublereal *, char *, char 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int latrec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int stlabx_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int stelab_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int twovec_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int polyds_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzeprc76_(cspice_t*, doublereal *, doublereal 
+	    *);
+    extern /* Subroutine */ int zzenut80_(cspice_t*, doublereal *, doublereal 
+	    *);
 
 
     /* Module state */
-    zzdynrot_state_t* __state = get_zzdynrot_state();
+    zzdynrot_state_t* __state = get_zzdynrot_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -1063,20 +1078,20 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDYNROT", (ftnlen)8);
+    chkin_(__global_state, "ZZDYNROT", (ftnlen)8);
     if (__state->first) {
 
 /*        Get the ID code for the J2000 frame. */
 
-	irfnum_("J2000", &__state->j2000, (ftnlen)5);
+	irfnum_(__global_state, "J2000", &__state->j2000, (ftnlen)5);
 
 /*        Get the ID code for the earth (we needn't check the found */
 /*        flag). */
 
-	bodn2c_("EARTH", &__state->earth, &fnd, (ftnlen)5);
+	bodn2c_(__global_state, "EARTH", &__state->earth, &fnd, (ftnlen)5);
 
 /*        Initialize "item" strings used to create kernel variable */
 /*        names. */
@@ -1087,164 +1102,177 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)502)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)502)) << 2);
 	    i__3[1] = 4, a__1[1] = "AXIS";
-	    s_cat(__state->itmaxe + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmaxe", i__1, "zzdynrot_", (ftnlen)502)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmaxe + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmaxe", i__1, "zzdynrot_", (ftnlen)502)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector definition: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)506)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)506)) << 2);
 	    i__3[1] = 10, a__1[1] = "VECTOR_DEF";
-	    s_cat(__state->itmvdf + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmvdf", i__1, "zzdynrot_", (ftnlen)506)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmvdf + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmvdf", i__1, "zzdynrot_", (ftnlen)506)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector aberration correction: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)510)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)510)) << 2);
 	    i__3[1] = 6, a__1[1] = "ABCORR";
-	    s_cat(__state->itmabc + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmabc", i__1, "zzdynrot_", (ftnlen)510)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmabc + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmabc", i__1, "zzdynrot_", (ftnlen)510)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector frame: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)514)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)514)) << 2);
 	    i__3[1] = 5, a__1[1] = "FRAME";
-	    s_cat(__state->itmfrm + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmfrm", i__1, "zzdynrot_", (ftnlen)514)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmfrm + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmfrm", i__1, "zzdynrot_", (ftnlen)514)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector observer: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)518)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)518)) << 2);
 	    i__3[1] = 8, a__1[1] = "OBSERVER";
-	    s_cat(__state->itmobs + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmobs", i__1, "zzdynrot_", (ftnlen)518)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmobs + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmobs", i__1, "zzdynrot_", (ftnlen)518)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector target: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)522)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)522)) << 2);
 	    i__3[1] = 6, a__1[1] = "TARGET";
-	    s_cat(__state->itmtrg + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmtrg", i__1, "zzdynrot_", (ftnlen)522)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmtrg + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmtrg", i__1, "zzdynrot_", (ftnlen)522)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector longitude: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)526)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)526)) << 2);
 	    i__3[1] = 9, a__1[1] = "LONGITUDE";
-	    s_cat(__state->itmlon + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmlon", i__1, "zzdynrot_", (ftnlen)526)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmlon + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmlon", i__1, "zzdynrot_", (ftnlen)526)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector latitude: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)530)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)530)) << 2);
 	    i__3[1] = 8, a__1[1] = "LATITUDE";
-	    s_cat(__state->itmlat + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmlat", i__1, "zzdynrot_", (ftnlen)530)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmlat + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmlat", i__1, "zzdynrot_", (ftnlen)530)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector right ascension: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)534)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)534)) << 2);
 	    i__3[1] = 2, a__1[1] = "RA";
-	    s_cat(__state->itmra + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 
-		    : s_rnge("itmra", i__1, "zzdynrot_", (ftnlen)534)) << 5), 
-		    a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmra + (((i__1 = i__ - 1) < 
+		    2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmra", i__1, "zzdynrot_", (ftnlen)534)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector declination: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)538)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)538)) << 2);
 	    i__3[1] = 3, a__1[1] = "DEC";
-	    s_cat(__state->itmdec + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmdec", i__1, "zzdynrot_", (ftnlen)538)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmdec + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmdec", i__1, "zzdynrot_", (ftnlen)538)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Vector units: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)542)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)542)) << 2);
 	    i__3[1] = 5, a__1[1] = "UNITS";
-	    s_cat(__state->itmunt + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmunt", i__1, "zzdynrot_", (ftnlen)542)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmunt + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmunt", i__1, "zzdynrot_", (ftnlen)542)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Constant vector coordinate specification: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)546)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)546)) << 2);
 	    i__3[1] = 4, a__1[1] = "SPEC";
-	    s_cat(__state->itmspc + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmspc", i__1, "zzdynrot_", (ftnlen)546)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmspc + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmspc", i__1, "zzdynrot_", (ftnlen)546)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 
 /*           Constant vector in cartesian coordinates, literal value: */
 
 /* Writing concatenation */
 	    i__3[0] = 4, a__1[0] = __state->vname + (((i__2 = i__ - 1) < 2 && 
-		    0 <= i__2 ? i__2 : s_rnge("vname", i__2, "zzdynrot_", (
-		    ftnlen)550)) << 2);
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vname", 
+		    i__2, "zzdynrot_", (ftnlen)550)) << 2);
 	    i__3[1] = 6, a__1[1] = "VECTOR";
-	    s_cat(__state->itmvec + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("itmvec", i__1, "zzdynrot_", (ftnlen)550)) 
-		    << 5), a__1, i__3, &__state->c__2, (ftnlen)32);
+	    s_cat(&__global_state->f2c, __state->itmvec + (((i__1 = i__ - 1) <
+		     2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "itmvec", i__1, "zzdynrot_", (ftnlen)550)) << 5), a__1, 
+		    i__3, &__state->c__2, (ftnlen)32);
 	}
 	__state->first = FALSE_;
     }
 
 /*     Initialize the output arguments. */
 
-    cleard_(&__state->c__9, rotate);
+    cleard_(__global_state, &__state->c__9, rotate);
     *basfrm = 0;
 
 /*     Initialize certain variables to ensure that we don't do */
 /*     arithmetic operations using bogus, possibly large, */
 /*     undefined values. */
 
-    cleard_(&__state->c__36, nutxf);
-    cleard_(&__state->c__9, oblr);
-    cleard_(&__state->c__36, precxf);
-    cleard_(&__state->c__9, r2000);
-    cleard_(&__state->c__9, rtemp);
-    cleard_(&__state->c__9, rinv);
-    cleard_(&__state->c__9, tipm);
+    cleard_(__global_state, &__state->c__36, nutxf);
+    cleard_(__global_state, &__state->c__9, oblr);
+    cleard_(__global_state, &__state->c__36, precxf);
+    cleard_(__global_state, &__state->c__9, r2000);
+    cleard_(__global_state, &__state->c__9, rtemp);
+    cleard_(__global_state, &__state->c__9, rinv);
+    cleard_(__global_state, &__state->c__9, tipm);
     mob = 0.;
     dmob = 0.;
     t0 = 0.;
@@ -1252,38 +1280,40 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 
 /*     Get the input frame name. */
 
-    frmnam_(infram, inname__, (ftnlen)32);
+    frmnam_(__global_state, infram, inname__, (ftnlen)32);
 
 /*     We need the name of the base frame. */
 
-    zzdynfid_(inname__, infram, "RELATIVE", basfrm, (ftnlen)32, (ftnlen)8);
-    frmnam_(basfrm, basnam, (ftnlen)32);
+    zzdynfid_(__global_state, inname__, infram, "RELATIVE", basfrm, (ftnlen)
+	    32, (ftnlen)8);
+    frmnam_(__global_state, basfrm, basnam, (ftnlen)32);
 
 /*     The output frame code and name are set. */
 
 /*     Look up the dynamic frame definition style from the kernel pool. */
 /*     The kernel variable's name might be specified by name or ID. */
 
-    zzdynvac_(inname__, infram, "DEF_STYLE", &__state->c__1, &n, dynstl, (
-	    ftnlen)32, (ftnlen)9, (ftnlen)80);
-    if (failed_()) {
-	chkout_("ZZDYNROT", (ftnlen)8);
+    zzdynvac_(__global_state, inname__, infram, "DEF_STYLE", &__state->c__1, &
+	    n, dynstl, (ftnlen)32, (ftnlen)9, (ftnlen)80);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 	return 0;
     }
 
 /*     At this time, the only supported dynamic frame definition style is */
 /*     PARAMETERIZED. */
 
-    if (eqstr_(dynstl, "PARAMETERIZED", (ftnlen)80, (ftnlen)13)) {
+    if (eqstr_(__global_state, dynstl, "PARAMETERIZED", (ftnlen)80, (ftnlen)
+	    13)) {
 
 /*        Parameterized dynamic frames belong to families.  Look up */
 /*        the family for this frame. */
 
-	zzdynvac_(inname__, infram, "FAMILY", &__state->c__1, &n, dynfam, (
-		ftnlen)32, (ftnlen)6, (ftnlen)80);
-	cmprss_(" ", &__state->c__0, dynfam, tmpfam, (ftnlen)1, (ftnlen)80, (
-		ftnlen)80);
-	ucase_(tmpfam, dynfam, (ftnlen)80, (ftnlen)80);
+	zzdynvac_(__global_state, inname__, infram, "FAMILY", &__state->c__1, 
+		&n, dynfam, (ftnlen)32, (ftnlen)6, (ftnlen)80);
+	cmprss_(__global_state, " ", &__state->c__0, dynfam, tmpfam, (ftnlen)
+		1, (ftnlen)80, (ftnlen)80);
+	ucase_(__global_state, tmpfam, dynfam, (ftnlen)80, (ftnlen)80);
 
 /*        Determine whether we have an "of-date" frame family. */
 /*        The logical flags used here and respective meanings are: */
@@ -1292,12 +1322,12 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*           TRUEEQ   True equator and equinox of date */
 /*           MEANEC   Mean ecliptic and equinox of date */
 
-	meaneq = s_cmp(dynfam, "MEAN_EQUATOR_AND_EQUINOX_OF_DATE", (ftnlen)80,
-		 (ftnlen)32) == 0;
-	trueeq = s_cmp(dynfam, "TRUE_EQUATOR_AND_EQUINOX_OF_DATE", (ftnlen)80,
-		 (ftnlen)32) == 0;
-	meanec = s_cmp(dynfam, "MEAN_ECLIPTIC_AND_EQUINOX_OF_DATE", (ftnlen)
-		80, (ftnlen)33) == 0;
+	meaneq = s_cmp(&__global_state->f2c, dynfam, "MEAN_EQUATOR_AND_EQUIN"
+		"OX_OF_DATE", (ftnlen)80, (ftnlen)32) == 0;
+	trueeq = s_cmp(&__global_state->f2c, dynfam, "TRUE_EQUATOR_AND_EQUIN"
+		"OX_OF_DATE", (ftnlen)80, (ftnlen)32) == 0;
+	meanec = s_cmp(&__global_state->f2c, dynfam, "MEAN_ECLIPTIC_AND_EQUI"
+		"NOX_OF_DATE", (ftnlen)80, (ftnlen)33) == 0;
 	ofdate = meaneq || meanec || trueeq;
 
 /*        Set the evaluation epoch T0.  Normally this epoch is ET, */
@@ -1308,10 +1338,10 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*        specified; let FROZEN receive the FOUND flag value */
 /*        returned by ZZDYNOAD. */
 
-	zzdynoad_(inname__, infram, "FREEZE_EPOCH", &__state->c__1, &n, &t0, &
-		frozen, (ftnlen)32, (ftnlen)12);
-	if (failed_()) {
-	    chkout_("ZZDYNROT", (ftnlen)8);
+	zzdynoad_(__global_state, inname__, infram, "FREEZE_EPOCH", &
+		__state->c__1, &n, &t0, &frozen, (ftnlen)32, (ftnlen)12);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 	    return 0;
 	}
 	if (! frozen) {
@@ -1326,29 +1356,33 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*        semantic checking:  there's no use made of the fact that */
 /*        the rotation state is 'ROTATING' or 'INERTIAL'. */
 
-	zzdynoac_(inname__, infram, "ROTATION_STATE", &__state->c__1, &n, 
-		rotsta, &fnd, (ftnlen)32, (ftnlen)14, (ftnlen)80);
-	if (failed_()) {
-	    chkout_("ZZDYNROT", (ftnlen)8);
+	zzdynoac_(__global_state, inname__, infram, "ROTATION_STATE", &
+		__state->c__1, &n, rotsta, &fnd, (ftnlen)32, (ftnlen)14, (
+		ftnlen)80);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 	    return 0;
 	}
 	if (fnd) {
 
 /*           Catch invalid rotation states here. */
 
-	    if (! eqstr_(rotsta, "ROTATING", (ftnlen)80, (ftnlen)8) && ! 
-		    eqstr_(rotsta, "INERTIAL", (ftnlen)80, (ftnlen)8)) {
-		setmsg_("Definition of frame # contains # specification #. T"
-			"he only valid rotation states are # or #. This situa"
-			"tion is usually caused by an error in a frame kernel"
-			" in which the frame is defined.", (ftnlen)186);
-		errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-		errch_("#", "ROTATION_STATE", (ftnlen)1, (ftnlen)14);
-		errch_("#", rotsta, (ftnlen)1, (ftnlen)80);
-		errch_("#", "ROTATING", (ftnlen)1, (ftnlen)8);
-		errch_("#", "INERTIAL", (ftnlen)1, (ftnlen)8);
-		sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-		chkout_("ZZDYNROT", (ftnlen)8);
+	    if (! eqstr_(__global_state, rotsta, "ROTATING", (ftnlen)80, (
+		    ftnlen)8) && ! eqstr_(__global_state, rotsta, "INERTIAL", 
+		    (ftnlen)80, (ftnlen)8)) {
+		setmsg_(__global_state, "Definition of frame # contains # sp"
+			"ecification #. The only valid rotation states are # "
+			"or #. This situation is usually caused by an error i"
+			"n a frame kernel in which the frame is defined.", (
+			ftnlen)186);
+		errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)32);
+		errch_(__global_state, "#", "ROTATION_STATE", (ftnlen)1, (
+			ftnlen)14);
+		errch_(__global_state, "#", rotsta, (ftnlen)1, (ftnlen)80);
+		errch_(__global_state, "#", "ROTATING", (ftnlen)1, (ftnlen)8);
+		errch_(__global_state, "#", "INERTIAL", (ftnlen)1, (ftnlen)8);
+		sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+		chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -1358,15 +1392,18 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*        absent*. */
 
 	if (frozen && fnd) {
-	    setmsg_("Definition of frame # contains both # and # keywords; a"
-		    "t most one of these must be present in the frame definit"
-		    "ion. This situation is usually caused by an error in a f"
-		    "rame kernel in which the frame is defined.", (ftnlen)209);
-	    errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-	    errch_("#", "FREEZE_EPOCH", (ftnlen)1, (ftnlen)12);
-	    errch_("#", "ROTATION_STATE", (ftnlen)1, (ftnlen)14);
-	    sigerr_("SPICE(FRAMEDEFERROR)", (ftnlen)20);
-	    chkout_("ZZDYNROT", (ftnlen)8);
+	    setmsg_(__global_state, "Definition of frame # contains both # a"
+		    "nd # keywords; at most one of these must be present in t"
+		    "he frame definition. This situation is usually caused by"
+		    " an error in a frame kernel in which the frame is define"
+		    "d.", (ftnlen)209);
+	    errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", "FREEZE_EPOCH", (ftnlen)1, (ftnlen)12)
+		    ;
+	    errch_(__global_state, "#", "ROTATION_STATE", (ftnlen)1, (ftnlen)
+		    14);
+	    sigerr_(__global_state, "SPICE(FRAMEDEFERROR)", (ftnlen)20);
+	    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1375,22 +1412,24 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*        frozen. */
 
 	if (ofdate && ! frozen && ! fnd) {
-	    setmsg_("Definition of frame #, which belongs to parameterized d"
-		    "ynamic frame family #, contains neither # nor # keywords"
-		    "; frames in this family require exactly one of these in "
-		    "their frame definitions. This situation is usually cause"
-		    "d by an error in a frame kernel in which the frame is de"
-		    "fined.", (ftnlen)285);
-	    errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-	    errch_("#", dynfam, (ftnlen)1, (ftnlen)80);
-	    errch_("#", "FREEZE_EPOCH", (ftnlen)1, (ftnlen)12);
-	    errch_("#", "ROTATION_STATE", (ftnlen)1, (ftnlen)14);
-	    sigerr_("SPICE(FRAMEDEFERROR)", (ftnlen)20);
-	    chkout_("ZZDYNROT", (ftnlen)8);
+	    setmsg_(__global_state, "Definition of frame #, which belongs to"
+		    " parameterized dynamic frame family #, contains neither "
+		    "# nor # keywords; frames in this family require exactly "
+		    "one of these in their frame definitions. This situation "
+		    "is usually caused by an error in a frame kernel in which"
+		    " the frame is defined.", (ftnlen)285);
+	    errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", dynfam, (ftnlen)1, (ftnlen)80);
+	    errch_(__global_state, "#", "FREEZE_EPOCH", (ftnlen)1, (ftnlen)12)
+		    ;
+	    errch_(__global_state, "#", "ROTATION_STATE", (ftnlen)1, (ftnlen)
+		    14);
+	    sigerr_(__global_state, "SPICE(FRAMEDEFERROR)", (ftnlen)20);
+	    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 	    return 0;
 	}
-	if (failed_()) {
-	    chkout_("ZZDYNROT", (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1408,64 +1447,73 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*           Fetch the name of the true equator and equinox of date */
 /*           precession model. */
 
-	    zzdynvac_(inname__, infram, "PREC_MODEL", &__state->c__1, &n, 
-		    prcmod, (ftnlen)32, (ftnlen)10, (ftnlen)80);
-	    if (failed_()) {
-		chkout_("ZZDYNROT", (ftnlen)8);
+	    zzdynvac_(__global_state, inname__, infram, "PREC_MODEL", &
+		    __state->c__1, &n, prcmod, (ftnlen)32, (ftnlen)10, (
+		    ftnlen)80);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		return 0;
 	    }
 
 /*           Get the precession transformation. */
 
-	    if (eqstr_(prcmod, "EARTH_IAU_1976", (ftnlen)80, (ftnlen)14)) {
+	    if (eqstr_(__global_state, prcmod, "EARTH_IAU_1976", (ftnlen)80, (
+		    ftnlen)14)) {
 
 /*              This is the 1976 IAU earth precession model. */
 
 /*              Make sure the center of the input frame is the earth. */
 
 		if (*center != __state->earth) {
-		    bodc2n_(center, ctrnam, &fnd, (ftnlen)36);
+		    bodc2n_(__global_state, center, ctrnam, &fnd, (ftnlen)36);
 		    if (! fnd) {
-			intstr_(center, ctrnam, (ftnlen)36);
+			intstr_(__global_state, center, ctrnam, (ftnlen)36);
 		    }
-		    setmsg_("Definition of frame # specifies frame center # "
-			    "and precession model #. This precession model is"
-			    " not applicable to body #. This situation is usu"
-			    "ally caused by an error in a frame kernel in whi"
-			    "ch the frame is defined.", (ftnlen)215);
-		    errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-		    errch_("#", ctrnam, (ftnlen)1, (ftnlen)36);
-		    errch_("#", "EARTH_IAU_1976", (ftnlen)1, (ftnlen)14);
-		    errch_("#", ctrnam, (ftnlen)1, (ftnlen)36);
-		    sigerr_("SPICE(INVALIDSELECTION)", (ftnlen)23);
-		    chkout_("ZZDYNROT", (ftnlen)8);
+		    setmsg_(__global_state, "Definition of frame # specifies"
+			    " frame center # and precession model #. This pre"
+			    "cession model is not applicable to body #. This "
+			    "situation is usually caused by an error in a fra"
+			    "me kernel in which the frame is defined.", (
+			    ftnlen)215);
+		    errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)
+			    32);
+		    errch_(__global_state, "#", ctrnam, (ftnlen)1, (ftnlen)36)
+			    ;
+		    errch_(__global_state, "#", "EARTH_IAU_1976", (ftnlen)1, (
+			    ftnlen)14);
+		    errch_(__global_state, "#", ctrnam, (ftnlen)1, (ftnlen)36)
+			    ;
+		    sigerr_(__global_state, "SPICE(INVALIDSELECTION)", (
+			    ftnlen)23);
+		    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		    return 0;
 		}
 
 /*              Look up the precession transformation.  Extract */
 /*              the precession rotation matrix. */
 
-		zzeprc76_(&t0, precxf);
-		moved_(precxf, &__state->c__3, rprec);
-		moved_(&precxf[6], &__state->c__3, &rprec[3]);
-		moved_(&precxf[12], &__state->c__3, &rprec[6]);
+		zzeprc76_(__global_state, &t0, precxf);
+		moved_(__global_state, precxf, &__state->c__3, rprec);
+		moved_(__global_state, &precxf[6], &__state->c__3, &rprec[3]);
+		moved_(__global_state, &precxf[12], &__state->c__3, &rprec[6])
+			;
 
 /*              If we're in the mean-of-date case, invert this */
 /*              transformation to obtain the mapping from the */
 /*              mean-of-date frame to J2000. */
 
 		if (meaneq) {
-		    xpose_(rprec, rtemp);
+		    xpose_(__global_state, rprec, rtemp);
 		}
 	    } else {
-		setmsg_("Definition of frame # specifies precession model #,"
-			" which is not recognized. This situation is usually "
-			"caused by an error in a frame kernel in which the fr"
-			"ame is defined.", (ftnlen)170);
-		errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-		errch_("#", prcmod, (ftnlen)1, (ftnlen)80);
-		sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-		chkout_("ZZDYNROT", (ftnlen)8);
+		setmsg_(__global_state, "Definition of frame # specifies pre"
+			"cession model #, which is not recognized. This situa"
+			"tion is usually caused by an error in a frame kernel"
+			" in which the frame is defined.", (ftnlen)170);
+		errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)32);
+		errch_(__global_state, "#", prcmod, (ftnlen)1, (ftnlen)80);
+		sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+		chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		return 0;
 	    }
 
@@ -1477,64 +1525,78 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*              We need a nutation transformation as well. Get the name */
 /*              of the nutation model. */
 
-		zzdynvac_(inname__, infram, "NUT_MODEL", &__state->c__1, &n, 
-			nutmod, (ftnlen)32, (ftnlen)9, (ftnlen)80);
-		if (failed_()) {
-		    chkout_("ZZDYNROT", (ftnlen)8);
+		zzdynvac_(__global_state, inname__, infram, "NUT_MODEL", &
+			__state->c__1, &n, nutmod, (ftnlen)32, (ftnlen)9, (
+			ftnlen)80);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		    return 0;
 		}
 
 /*              Get the nutation transformation. */
 
-		if (eqstr_(nutmod, "EARTH_IAU_1980", (ftnlen)80, (ftnlen)14)) 
-			{
+		if (eqstr_(__global_state, nutmod, "EARTH_IAU_1980", (ftnlen)
+			80, (ftnlen)14)) {
 
 /*                 This is the 1980 IAU earth nutation model. */
 
 /*                 Make sure the center is the earth. */
 
 		    if (*center != __state->earth) {
-			bodc2n_(center, ctrnam, &fnd, (ftnlen)36);
+			bodc2n_(__global_state, center, ctrnam, &fnd, (ftnlen)
+				36);
 			if (! fnd) {
-			    intstr_(center, ctrnam, (ftnlen)36);
+			    intstr_(__global_state, center, ctrnam, (ftnlen)
+				    36);
 			}
-			setmsg_("Definition of frame # specifies frame cente"
-				"r # and nutation model #. This nutation mode"
-				"l is not applicable to body #.  This situati"
-				"on is usually caused by an error in a frame "
-				"kernel in which the frame is defined.", (
-				ftnlen)212);
-			errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-			errch_("#", ctrnam, (ftnlen)1, (ftnlen)36);
-			errch_("#", "EARTH_IAU_1980", (ftnlen)1, (ftnlen)14);
-			errch_("#", ctrnam, (ftnlen)1, (ftnlen)36);
-			sigerr_("SPICE(INVALIDSELECTION)", (ftnlen)23);
-			chkout_("ZZDYNROT", (ftnlen)8);
+			setmsg_(__global_state, "Definition of frame # speci"
+				"fies frame center # and nutation model #. Th"
+				"is nutation model is not applicable to body "
+				"#.  This situation is usually caused by an e"
+				"rror in a frame kernel in which the frame is"
+				" defined.", (ftnlen)212);
+			errch_(__global_state, "#", inname__, (ftnlen)1, (
+				ftnlen)32);
+			errch_(__global_state, "#", ctrnam, (ftnlen)1, (
+				ftnlen)36);
+			errch_(__global_state, "#", "EARTH_IAU_1980", (ftnlen)
+				1, (ftnlen)14);
+			errch_(__global_state, "#", ctrnam, (ftnlen)1, (
+				ftnlen)36);
+			sigerr_(__global_state, "SPICE(INVALIDSELECTION)", (
+				ftnlen)23);
+			chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			return 0;
 		    }
 
 /*                 Look up the nutation transformation.  Extract */
 /*                 the nutation rotation matrix. */
 
-		    zzenut80_(&t0, nutxf);
-		    moved_(nutxf, &__state->c__3, rnut);
-		    moved_(&nutxf[6], &__state->c__3, &rnut[3]);
-		    moved_(&nutxf[12], &__state->c__3, &rnut[6]);
+		    zzenut80_(__global_state, &t0, nutxf);
+		    moved_(__global_state, nutxf, &__state->c__3, rnut);
+		    moved_(__global_state, &nutxf[6], &__state->c__3, &rnut[3]
+			    );
+		    moved_(__global_state, &nutxf[12], &__state->c__3, &rnut[
+			    6]);
 
 /*                 Find the rotation from the J2000 frame to the earth */
 /*                 true of date frame.  Invert. */
 
-		    mxm_(rnut, rprec, rinv);
-		    xpose_(rinv, rtemp);
+		    mxm_(__global_state, rnut, rprec, rinv);
+		    xpose_(__global_state, rinv, rtemp);
 		} else {
-		    setmsg_("Definition of frame # specifies nutation model "
-			    "#, which is not recognized. This situation is us"
-			    "ually caused by an error in a frame kernel in wh"
-			    "ich the frame is defined.", (ftnlen)168);
-		    errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-		    errch_("#", nutmod, (ftnlen)1, (ftnlen)80);
-		    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-		    chkout_("ZZDYNROT", (ftnlen)8);
+		    setmsg_(__global_state, "Definition of frame # specifies"
+			    " nutation model #, which is not recognized. This"
+			    " situation is usually caused by an error in a fr"
+			    "ame kernel in which the frame is defined.", (
+			    ftnlen)168);
+		    errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)
+			    32);
+		    errch_(__global_state, "#", nutmod, (ftnlen)1, (ftnlen)80)
+			    ;
+		    sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19)
+			    ;
+		    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		    return 0;
 		}
 	    } else if (meanec) {
@@ -1542,17 +1604,18 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*              We need a mean obliquity transformation as well. */
 /*              Get the name of the obliquity model. */
 
-		zzdynvac_(inname__, infram, "OBLIQ_MODEL", &__state->c__1, &n,
-			 oblmod, (ftnlen)32, (ftnlen)11, (ftnlen)80);
-		if (failed_()) {
-		    chkout_("ZZDYNROT", (ftnlen)8);
+		zzdynvac_(__global_state, inname__, infram, "OBLIQ_MODEL", &
+			__state->c__1, &n, oblmod, (ftnlen)32, (ftnlen)11, (
+			ftnlen)80);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		    return 0;
 		}
 
 /*              Get the obliquity transformation. */
 
-		if (eqstr_(oblmod, "EARTH_IAU_1980", (ftnlen)80, (ftnlen)14)) 
-			{
+		if (eqstr_(__global_state, oblmod, "EARTH_IAU_1980", (ftnlen)
+			80, (ftnlen)14)) {
 
 /*                 This is the 1980 IAU earth mean obliquity of */
 /*                 date model. */
@@ -1560,53 +1623,64 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                 Make sure the center is the earth. */
 
 		    if (*center != __state->earth) {
-			bodc2n_(center, ctrnam, &fnd, (ftnlen)36);
+			bodc2n_(__global_state, center, ctrnam, &fnd, (ftnlen)
+				36);
 			if (! fnd) {
-			    intstr_(center, ctrnam, (ftnlen)36);
+			    intstr_(__global_state, center, ctrnam, (ftnlen)
+				    36);
 			}
-			setmsg_("Definition of frame # specifies frame cente"
-				"r # and obliquity model #.  This obliquity m"
-				"odel is not applicable to body #. This situa"
-				"tion is usually caused by an error in a fram"
-				"e kernel in which the frame is defined.", (
-				ftnlen)214);
-			errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-			errch_("#", ctrnam, (ftnlen)1, (ftnlen)36);
-			errch_("#", "EARTH_IAU_1980", (ftnlen)1, (ftnlen)14);
-			errch_("#", ctrnam, (ftnlen)1, (ftnlen)36);
-			sigerr_("SPICE(INVALIDSELECTION)", (ftnlen)23);
-			chkout_("ZZDYNROT", (ftnlen)8);
+			setmsg_(__global_state, "Definition of frame # speci"
+				"fies frame center # and obliquity model #.  "
+				"This obliquity model is not applicable to bo"
+				"dy #. This situation is usually caused by an"
+				" error in a frame kernel in which the frame "
+				"is defined.", (ftnlen)214);
+			errch_(__global_state, "#", inname__, (ftnlen)1, (
+				ftnlen)32);
+			errch_(__global_state, "#", ctrnam, (ftnlen)1, (
+				ftnlen)36);
+			errch_(__global_state, "#", "EARTH_IAU_1980", (ftnlen)
+				1, (ftnlen)14);
+			errch_(__global_state, "#", ctrnam, (ftnlen)1, (
+				ftnlen)36);
+			sigerr_(__global_state, "SPICE(INVALIDSELECTION)", (
+				ftnlen)23);
+			chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			return 0;
 		    }
 
 /*                 Create the obliquity transformation. */
 /*                 First look up the obliquity state. */
 
-		    zzmobliq_(&t0, &mob, &dmob);
+		    zzmobliq_(__global_state, &t0, &mob, &dmob);
 
 /*                 The obliquity rotation is about the mean-of-date */
 /*                 x-axis.  The other Euler angles are identically */
 /*                 zero; the axes are arbitrary, as long as the */
 /*                 middle axis is distinct from the other two. */
 
-		    eul2m_(&__state->c_b192, &__state->c_b192, &mob, &
-			    __state->c__1, &__state->c__3, &__state->c__1, 
-			    oblr);
+		    eul2m_(__global_state, &__state->c_b192, &__state->c_b192,
+			     &mob, &__state->c__1, &__state->c__3, &
+			    __state->c__1, oblr);
 
 /*                 Find the rotation from the J2000 to the */
 /*                 earth mean ecliptic of date frame.  Invert. */
 
-		    mxm_(oblr, rprec, rinv);
-		    xpose_(rinv, rtemp);
+		    mxm_(__global_state, oblr, rprec, rinv);
+		    xpose_(__global_state, rinv, rtemp);
 		} else {
-		    setmsg_("Definition of frame # specifies obliquity model"
-			    " #, which is not recognized. This situation is u"
-			    "sually caused by an error in a frame kernel in w"
-			    "hich the frame is defined.", (ftnlen)169);
-		    errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-		    errch_("#", oblmod, (ftnlen)1, (ftnlen)80);
-		    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-		    chkout_("ZZDYNROT", (ftnlen)8);
+		    setmsg_(__global_state, "Definition of frame # specifies"
+			    " obliquity model #, which is not recognized. Thi"
+			    "s situation is usually caused by an error in a f"
+			    "rame kernel in which the frame is defined.", (
+			    ftnlen)169);
+		    errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)
+			    32);
+		    errch_(__global_state, "#", oblmod, (ftnlen)1, (ftnlen)80)
+			    ;
+		    sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19)
+			    ;
+		    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		    return 0;
 		}
 	    }
@@ -1617,13 +1691,14 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*           If the base frame is not J2000, we must find the */
 /*           transformation from J2000 to the base frame. */
 	    if (*basfrm != __state->j2000) {
-		zzrefch0_(&__state->j2000, basfrm, &t0, r2000);
-		mxm_(r2000, rtemp, rotate);
+		zzrefch0_(__global_state, &__state->j2000, basfrm, &t0, r2000)
+			;
+		mxm_(__global_state, r2000, rtemp, rotate);
 	    } else {
 
 /*              Otherwise, RTEMP is the matrix we want. */
 
-		moved_(rtemp, &__state->c__9, rotate);
+		moved_(__global_state, rtemp, &__state->c__9, rotate);
 	    }
 
 /*           Now ROTATE is the state transformation mapping from */
@@ -1632,49 +1707,56 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*           This is the end of the work specific to "of-date" frames. */
 /*           From here we drop out of the IF block. */
 
-	} else if (s_cmp(dynfam, "TWO-VECTOR", (ftnlen)80, (ftnlen)10) == 0) {
+	} else if (s_cmp(&__global_state->f2c, dynfam, "TWO-VECTOR", (ftnlen)
+		80, (ftnlen)10) == 0) {
 
 /*           The frame belongs to the TWO-VECTOR family. */
 
 /*           Fetch the specifications of the primary and secondary */
 /*           axes. */
 
-	    cleard_(&__state->c__6, v2);
+	    cleard_(__global_state, &__state->c__6, v2);
 	    for (i__ = 1; i__ <= 2; ++i__) {
 
 /*              Get the name of the axis associated with the Ith */
 /*              defining vector. */
 
-		zzdynvac_(inname__, infram, __state->itmaxe + (((i__1 = i__ - 
-			1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmaxe", i__1, 
-			"zzdynrot_", (ftnlen)1058)) << 5), &__state->c__1, &n,
-			 axname, (ftnlen)32, (ftnlen)32, (ftnlen)80);
-		cmprss_(" ", &__state->c__0, axname, axname, (ftnlen)1, (
-			ftnlen)80, (ftnlen)80);
-		ucase_(axname, axname, (ftnlen)80, (ftnlen)80);
+		zzdynvac_(__global_state, inname__, infram, __state->itmaxe + 
+			(((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "itmaxe", i__1, "zzdynrot_", (
+			ftnlen)1058)) << 5), &__state->c__1, &n, axname, (
+			ftnlen)32, (ftnlen)32, (ftnlen)80);
+		cmprss_(__global_state, " ", &__state->c__0, axname, axname, (
+			ftnlen)1, (ftnlen)80, (ftnlen)80);
+		ucase_(__global_state, axname, axname, (ftnlen)80, (ftnlen)80)
+			;
 
 /*              Set the sign flag associated with the axis. */
 
 		negate = *(unsigned char *)axname == '-';
-		cmprss_("-", &__state->c__0, axname, axname, (ftnlen)1, (
-			ftnlen)80, (ftnlen)80);
-		cmprss_("+", &__state->c__0, axname, axname, (ftnlen)1, (
-			ftnlen)80, (ftnlen)80);
-		axis[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("axis",
-			 i__1, "zzdynrot_", (ftnlen)1071)] = isrchc_(axname, &
+		cmprss_(__global_state, "-", &__state->c__0, axname, axname, (
+			ftnlen)1, (ftnlen)80, (ftnlen)80);
+		cmprss_(__global_state, "+", &__state->c__0, axname, axname, (
+			ftnlen)1, (ftnlen)80, (ftnlen)80);
+		axis[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "axis", i__1, "zzdynrot_", (
+			ftnlen)1071)] = isrchc_(__global_state, axname, &
 			__state->c__3, __state->axes, (ftnlen)80, (ftnlen)1);
-		if (axis[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-			"axis", i__1, "zzdynrot_", (ftnlen)1074)] == 0) {
-		    setmsg_("Definition of frame # associates vector # with "
-			    "axis #.  The only valid axis values are { X, -X,"
-			    " Y, -Y, Z, -Z }. This situation is usually cause"
-			    "d by an error in a frame kernel in which the fra"
-			    "me is defined.", (ftnlen)205);
-		    errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-		    errint_("#", &i__, (ftnlen)1);
-		    errch_("#", axname, (ftnlen)1, (ftnlen)80);
-		    sigerr_("SPICE(INVALIDAXIS)", (ftnlen)18);
-		    chkout_("ZZDYNROT", (ftnlen)8);
+		if (axis[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "axis", i__1, "zzdynrot_", (
+			ftnlen)1074)] == 0) {
+		    setmsg_(__global_state, "Definition of frame # associate"
+			    "s vector # with axis #.  The only valid axis val"
+			    "ues are { X, -X, Y, -Y, Z, -Z }. This situation "
+			    "is usually caused by an error in a frame kernel "
+			    "in which the frame is defined.", (ftnlen)205);
+		    errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)
+			    32);
+		    errint_(__global_state, "#", &i__, (ftnlen)1);
+		    errch_(__global_state, "#", axname, (ftnlen)1, (ftnlen)80)
+			    ;
+		    sigerr_(__global_state, "SPICE(INVALIDAXIS)", (ftnlen)18);
+		    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		    return 0;
 		}
 
@@ -1688,107 +1770,122 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*              VECDEF(I) indicates the vector definition method */
 /*              for the Ith vector. */
 
-		zzdynvac_(inname__, infram, __state->itmvdf + (((i__1 = i__ - 
-			1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmvdf", i__1, 
-			"zzdynrot_", (ftnlen)1103)) << 5), &__state->c__1, &n,
-			 vecdef + ((i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : 
-			s_rnge("vecdef", i__2, "zzdynrot_", (ftnlen)1103)) * 
-			80, (ftnlen)32, (ftnlen)32, (ftnlen)80);
-		cmprss_(" ", &__state->c__0, vecdef + ((i__1 = i__ - 1) < 2 &&
-			 0 <= i__1 ? i__1 : s_rnge("vecdef", i__1, "zzdynrot_"
-			, (ftnlen)1106)) * 80, vecdef + ((i__2 = i__ - 1) < 2 
-			&& 0 <= i__2 ? i__2 : s_rnge("vecdef", i__2, "zzdynr"
-			"ot_", (ftnlen)1106)) * 80, (ftnlen)1, (ftnlen)80, (
-			ftnlen)80);
-		ucase_(vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-			s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)1107)) * 
-			80, vecdef + ((i__2 = i__ - 1) < 2 && 0 <= i__2 ? 
-			i__2 : s_rnge("vecdef", i__2, "zzdynrot_", (ftnlen)
-			1107)) * 80, (ftnlen)80, (ftnlen)80);
-		if (s_cmp(vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 :
-			 s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)1110)) * 
-			80, "OBSERVER_TARGET_POSITION", (ftnlen)80, (ftnlen)
-			24) == 0) {
+		zzdynvac_(__global_state, inname__, infram, __state->itmvdf + 
+			(((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "itmvdf", i__1, "zzdynrot_", (
+			ftnlen)1103)) << 5), &__state->c__1, &n, vecdef + ((
+			i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "vecdef", i__2, "zzdynrot_", (
+			ftnlen)1103)) * 80, (ftnlen)32, (ftnlen)32, (ftnlen)
+			80);
+		cmprss_(__global_state, " ", &__state->c__0, vecdef + ((i__1 =
+			 i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "vecdef", i__1, "zzdynrot_", (
+			ftnlen)1106)) * 80, vecdef + ((i__2 = i__ - 1) < 2 && 
+			0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "vec"
+			"def", i__2, "zzdynrot_", (ftnlen)1106)) * 80, (ftnlen)
+			1, (ftnlen)80, (ftnlen)80);
+		ucase_(__global_state, vecdef + ((i__1 = i__ - 1) < 2 && 0 <= 
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "vecdef", 
+			i__1, "zzdynrot_", (ftnlen)1107)) * 80, vecdef + ((
+			i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "vecdef", i__2, "zzdynrot_", (
+			ftnlen)1107)) * 80, (ftnlen)80, (ftnlen)80);
+		if (s_cmp(&__global_state->f2c, vecdef + ((i__1 = i__ - 1) < 
+			2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"vecdef", i__1, "zzdynrot_", (ftnlen)1110)) * 80, 
+			"OBSERVER_TARGET_POSITION", (ftnlen)80, (ftnlen)24) ==
+			 0) {
 
 /*                 The vector is the position of a target relative */
 /*                 to an observer. */
 
 /*                 We need a target, observer, and aberration correction. */
 
-		    zzdynbid_(inname__, infram, __state->itmtrg + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg"
-			    , i__1, "zzdynrot_", (ftnlen)1117)) << 5), &targ, 
-			    (ftnlen)32, (ftnlen)32);
-		    zzdynbid_(inname__, infram, __state->itmobs + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmobs"
-			    , i__1, "zzdynrot_", (ftnlen)1119)) << 5), &obs, (
-			    ftnlen)32, (ftnlen)32);
-		    zzdynvac_(inname__, infram, __state->itmabc + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmabc"
-			    , i__1, "zzdynrot_", (ftnlen)1121)) << 5), &
+		    zzdynbid_(__global_state, inname__, infram, 
+			    __state->itmtrg + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itmt"
+			    "rg", i__1, "zzdynrot_", (ftnlen)1117)) << 5), &
+			    targ, (ftnlen)32, (ftnlen)32);
+		    zzdynbid_(__global_state, inname__, infram, 
+			    __state->itmobs + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itmo"
+			    "bs", i__1, "zzdynrot_", (ftnlen)1119)) << 5), &
+			    obs, (ftnlen)32, (ftnlen)32);
+		    zzdynvac_(__global_state, inname__, infram, 
+			    __state->itmabc + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itma"
+			    "bc", i__1, "zzdynrot_", (ftnlen)1121)) << 5), &
 			    __state->c__1, &n, abcorr, (ftnlen)32, (ftnlen)32,
 			     (ftnlen)5);
 
 /*                 Look up the Ith position vector in the J2000 frame. */
 
-		    zzspkzp0_(&targ, &t0, "J2000", abcorr, &obs, &v2[(i__1 = 
-			    i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : s_rnge(
-			    "v2", i__1, "zzdynrot_", (ftnlen)1127)], &lt, (
-			    ftnlen)5, (ftnlen)5);
-		    if (failed_()) {
-			chkout_("ZZDYNROT", (ftnlen)8);
+		    zzspkzp0_(__global_state, &targ, &t0, "J2000", abcorr, &
+			    obs, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? 
+			    i__1 : s_rnge(&__global_state->f2c, "v2", i__1, 
+			    "zzdynrot_", (ftnlen)1127)], &lt, (ftnlen)5, (
+			    ftnlen)5);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			return 0;
 		    }
 
 /*                 At this point, V2(*,I) contains position relative to */
 /*                 frame J2000. */
 
-		} else if (s_cmp(vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ?
-			 i__1 : s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)
-			1140)) * 80, "OBSERVER_TARGET_VELOCITY", (ftnlen)80, (
-			ftnlen)24) == 0) {
+		} else if (s_cmp(&__global_state->f2c, vecdef + ((i__1 = i__ 
+			- 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "vecdef", i__1, "zzdynrot_", (
+			ftnlen)1140)) * 80, "OBSERVER_TARGET_VELOCITY", (
+			ftnlen)80, (ftnlen)24) == 0) {
 
 /*                 The vector is the velocity of a target relative */
 /*                 to an observer. */
 
 /*                 We need a target, observer, and aberration correction. */
 
-		    zzdynbid_(inname__, infram, __state->itmtrg + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg"
-			    , i__1, "zzdynrot_", (ftnlen)1147)) << 5), &targ, 
-			    (ftnlen)32, (ftnlen)32);
-		    zzdynbid_(inname__, infram, __state->itmobs + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmobs"
-			    , i__1, "zzdynrot_", (ftnlen)1149)) << 5), &obs, (
-			    ftnlen)32, (ftnlen)32);
-		    zzdynvac_(inname__, infram, __state->itmabc + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmabc"
-			    , i__1, "zzdynrot_", (ftnlen)1151)) << 5), &
+		    zzdynbid_(__global_state, inname__, infram, 
+			    __state->itmtrg + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itmt"
+			    "rg", i__1, "zzdynrot_", (ftnlen)1147)) << 5), &
+			    targ, (ftnlen)32, (ftnlen)32);
+		    zzdynbid_(__global_state, inname__, infram, 
+			    __state->itmobs + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itmo"
+			    "bs", i__1, "zzdynrot_", (ftnlen)1149)) << 5), &
+			    obs, (ftnlen)32, (ftnlen)32);
+		    zzdynvac_(__global_state, inname__, infram, 
+			    __state->itmabc + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itma"
+			    "bc", i__1, "zzdynrot_", (ftnlen)1151)) << 5), &
 			    __state->c__1, &n, abcorr, (ftnlen)32, (ftnlen)32,
 			     (ftnlen)5);
 
 /*                 We need to know the frame in which the velocity is */
 /*                 defined. */
 
-		    zzdynfid_(inname__, infram, __state->itmfrm + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmfrm"
-			    , i__1, "zzdynrot_", (ftnlen)1158)) << 5), &frid, 
-			    (ftnlen)32, (ftnlen)32);
-		    frmnam_(&frid, velfrm, (ftnlen)32);
-		    if (failed_()) {
-			chkout_("ZZDYNROT", (ftnlen)8);
+		    zzdynfid_(__global_state, inname__, infram, 
+			    __state->itmfrm + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itmf"
+			    "rm", i__1, "zzdynrot_", (ftnlen)1158)) << 5), &
+			    frid, (ftnlen)32, (ftnlen)32);
+		    frmnam_(__global_state, &frid, velfrm, (ftnlen)32);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			return 0;
 		    }
 
 /*                 Look up the Ith velocity vector in the velocity frame. */
 
-		    zzspkez0_(&targ, &t0, velfrm, abcorr, &obs, stemp, &lt, (
-			    ftnlen)32, (ftnlen)5);
+		    zzspkez0_(__global_state, &targ, &t0, velfrm, abcorr, &
+			    obs, stemp, &lt, (ftnlen)32, (ftnlen)5);
 
 /*                 We'll work with the unit velocity vector. */
 
-		    vhat_(&stemp[3], &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
-			    i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrot_", (
+		    vhat_(__global_state, &stemp[3], &v2[(i__1 = i__ * 3 - 3) 
+			    < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "v2", i__1, "zzdynrot_", (
 			    ftnlen)1175)]);
 
 /*                 We need the epoch VET at which VELFRM is evaluated. */
@@ -1802,7 +1899,7 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                 Parse the aberration correction.  Capture the */
 /*                 epoch used to evaluate the velocity vector's frame. */
 
-		    zzprscor_(abcorr, corblk, (ftnlen)5);
+		    zzprscor_(__global_state, abcorr, corblk, (ftnlen)5);
 		    if (corblk[1]) {
 
 /*                    Light time correction is used.  The epoch used */
@@ -1811,21 +1908,24 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 
 /*                    Look up the velocity frame's center. */
 
-			frinfo_(&frid, &frctr, &frcls, &frcid, &fnd);
+			frinfo_(__global_state, &frid, &frctr, &frcls, &frcid,
+				 &fnd);
 			if (! fnd) {
-			    setmsg_("In definition of frame #, the frame ass"
-				    "ociated with a velocity vector has frame"
-				    " ID code #, but no frame center, frame c"
-				    "lass, or frame class ID was found by FRI"
-				    "NFO.  This situation MAY be caused by an"
-				    " error in a frame kernel in which the fr"
-				    "ame is defined. The problem also could b"
-				    "e indicative of a SPICELIB bug.", (ftnlen)
-				    310);
-			    errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-			    errint_("#", &frid, (ftnlen)1);
-			    sigerr_("SPICE(FRAMEDATANOTFOUND)", (ftnlen)24);
-			    chkout_("ZZDYNROT", (ftnlen)8);
+			    setmsg_(__global_state, "In definition of frame "
+				    "#, the frame associated with a velocity "
+				    "vector has frame ID code #, but no frame"
+				    " center, frame class, or frame class ID "
+				    "was found by FRINFO.  This situation MAY"
+				    " be caused by an error in a frame kernel"
+				    " in which the frame is defined. The prob"
+				    "lem also could be indicative of a SPICEL"
+				    "IB bug.", (ftnlen)310);
+			    errch_(__global_state, "#", inname__, (ftnlen)1, (
+				    ftnlen)32);
+			    errint_(__global_state, "#", &frid, (ftnlen)1);
+			    sigerr_(__global_state, "SPICE(FRAMEDATANOTFOUND)"
+				    , (ftnlen)24);
+			    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			    return 0;
 			}
 			if (frcls != 1) {
@@ -1833,11 +1933,14 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                       Obtain light time from the observer to the */
 /*                       frame's center. */
 
-			    zzspkzp0_(&frctr, &t0, "J2000", abcorr, &obs, 
-				    ctrpos, &vflt, (ftnlen)5, (ftnlen)5);
-			    zzcorepc_(abcorr, &t0, &vflt, &vet, (ftnlen)5);
-			    if (failed_()) {
-				chkout_("ZZDYNROT", (ftnlen)8);
+			    zzspkzp0_(__global_state, &frctr, &t0, "J2000", 
+				    abcorr, &obs, ctrpos, &vflt, (ftnlen)5, (
+				    ftnlen)5);
+			    zzcorepc_(__global_state, abcorr, &t0, &vflt, &
+				    vet, (ftnlen)5);
+			    if (failed_(__global_state)) {
+				chkout_(__global_state, "ZZDYNROT", (ftnlen)8)
+					;
 				return 0;
 			    }
 			}
@@ -1857,42 +1960,49 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                 into the J2000 frame. */
 
 		    if (frid != __state->j2000) {
-			zzrefch0_(&frid, &__state->j2000, &vet, r2000);
-			if (failed_()) {
-			    chkout_("ZZDYNROT", (ftnlen)8);
+			zzrefch0_(__global_state, &frid, &__state->j2000, &
+				vet, r2000);
+			if (failed_(__global_state)) {
+			    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			    return 0;
 			}
-			mxv_(r2000, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 
-				? i__1 : s_rnge("v2", i__1, "zzdynrot_", (
-				ftnlen)1267)], ptemp);
-			moved_(ptemp, &__state->c__3, &v2[(i__1 = i__ * 3 - 3)
-				 < 6 && 0 <= i__1 ? i__1 : s_rnge("v2", i__1, 
+			mxv_(__global_state, r2000, &v2[(i__1 = i__ * 3 - 3) <
+				 6 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "v2", i__1, "zzdynrot_", 
+				(ftnlen)1267)], ptemp);
+			moved_(__global_state, ptemp, &__state->c__3, &v2[(
+				i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : 
+				s_rnge(&__global_state->f2c, "v2", i__1, 
 				"zzdynrot_", (ftnlen)1268)]);
 		    }
 
 /*                 At this point, V2(*,I) contains velocity */
 /*                 relative to frame J2000. */
-		} else if (s_cmp(vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ?
-			 i__1 : s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)
-			1277)) * 80, "TARGET_NEAR_POINT", (ftnlen)80, (ftnlen)
-			17) == 0) {
+		} else if (s_cmp(&__global_state->f2c, vecdef + ((i__1 = i__ 
+			- 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "vecdef", i__1, "zzdynrot_", (
+			ftnlen)1277)) * 80, "TARGET_NEAR_POINT", (ftnlen)80, (
+			ftnlen)17) == 0) {
 
 /*                 The vector points from an observer to the near */
 /*                 point to the observer on the target body. */
 
 /*                 We need a target, observer, and aberration correction. */
 
-		    zzdynbid_(inname__, infram, __state->itmtrg + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmtrg"
-			    , i__1, "zzdynrot_", (ftnlen)1284)) << 5), &targ, 
-			    (ftnlen)32, (ftnlen)32);
-		    zzdynbid_(inname__, infram, __state->itmobs + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmobs"
-			    , i__1, "zzdynrot_", (ftnlen)1286)) << 5), &obs, (
-			    ftnlen)32, (ftnlen)32);
-		    zzdynvac_(inname__, infram, __state->itmabc + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmabc"
-			    , i__1, "zzdynrot_", (ftnlen)1288)) << 5), &
+		    zzdynbid_(__global_state, inname__, infram, 
+			    __state->itmtrg + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itmt"
+			    "rg", i__1, "zzdynrot_", (ftnlen)1284)) << 5), &
+			    targ, (ftnlen)32, (ftnlen)32);
+		    zzdynbid_(__global_state, inname__, infram, 
+			    __state->itmobs + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itmo"
+			    "bs", i__1, "zzdynrot_", (ftnlen)1286)) << 5), &
+			    obs, (ftnlen)32, (ftnlen)32);
+		    zzdynvac_(__global_state, inname__, infram, 
+			    __state->itmabc + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itma"
+			    "bc", i__1, "zzdynrot_", (ftnlen)1288)) << 5), &
 			    __state->c__1, &n, abcorr, (ftnlen)32, (ftnlen)32,
 			     (ftnlen)5);
 
@@ -1909,57 +2019,62 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                 Look up the body-fixed frame associated with the */
 /*                 target body. */
 
-		    cidfrm_(&targ, &cfrmid, cfrmnm, &fnd, (ftnlen)32);
+		    cidfrm_(__global_state, &targ, &cfrmid, cfrmnm, &fnd, (
+			    ftnlen)32);
 		    if (! fnd) {
-			setmsg_("Definition of frame # requires definition o"
-				"f body-fixed frame associated with target bo"
-				"dy #. A call to CIDFRM indicated no body-fix"
-				"ed frame is associated with the target body."
-				"  This situation can arise when a frame kern"
-				"el defining the target's body-fixed frame  l"
-				"acks the OBJECT_<ID>_FRAME or OBJECT_<name>_"
-				"FRAME keywords.  The problem also could be c"
-				"aused by an error in a frame kernel in which"
-				" the parameterized two-vector dynamic frame "
-				"# is defined.", (ftnlen)452);
-			errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-			errint_("#", &targ, (ftnlen)1);
-			errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-			sigerr_("SPICE(FRAMEDATANOTFOUND)", (ftnlen)24);
-			chkout_("ZZDYNROT", (ftnlen)8);
+			setmsg_(__global_state, "Definition of frame # requi"
+				"res definition of body-fixed frame associate"
+				"d with target body #. A call to CIDFRM indic"
+				"ated no body-fixed frame is associated with "
+				"the target body.  This situation can arise w"
+				"hen a frame kernel defining the target's bod"
+				"y-fixed frame  lacks the OBJECT_<ID>_FRAME o"
+				"r OBJECT_<name>_FRAME keywords.  The problem"
+				" also could be caused by an error in a frame"
+				" kernel in which the parameterized two-vecto"
+				"r dynamic frame # is defined.", (ftnlen)452);
+			errch_(__global_state, "#", inname__, (ftnlen)1, (
+				ftnlen)32);
+			errint_(__global_state, "#", &targ, (ftnlen)1);
+			errch_(__global_state, "#", inname__, (ftnlen)1, (
+				ftnlen)32);
+			sigerr_(__global_state, "SPICE(FRAMEDATANOTFOUND)", (
+				ftnlen)24);
+			chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			return 0;
 		    }
 
 /*                 Get the radii of the target body. */
 
-		    bodvcd_(&targ, "RADII", &__state->c__3, &n, radii, (
-			    ftnlen)5);
+		    bodvcd_(__global_state, &targ, "RADII", &__state->c__3, &
+			    n, radii, (ftnlen)5);
 
 /*                 Look up the Ith position vector in the target-fixed */
 /*                 frame.  Negate the vector to obtain the target-to- */
 /*                 observer vector. */
 
-		    zzspkzp0_(&targ, &t0, cfrmnm, abcorr, &obs, ptemp, &lt, (
-			    ftnlen)32, (ftnlen)5);
+		    zzspkzp0_(__global_state, &targ, &t0, cfrmnm, abcorr, &
+			    obs, ptemp, &lt, (ftnlen)32, (ftnlen)5);
 
 /*                 We check FAILED() here because VMINUS is a simple */
 /*                 arithmetic routine that doesn't return on entry. */
 
-		    if (failed_()) {
-			chkout_("ZZDYNROT", (ftnlen)8);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			return 0;
 		    }
-		    vminus_(ptemp, pobs);
-		    nearpt_(pobs, radii, &radii[1], &radii[2], pnear, &alt);
-		    if (failed_()) {
-			chkout_("ZZDYNROT", (ftnlen)8);
+		    vminus_(__global_state, ptemp, pobs);
+		    nearpt_(__global_state, pobs, radii, &radii[1], &radii[2],
+			     pnear, &alt);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			return 0;
 		    }
 
 /*                 Find the observer-near point vector in the current */
 /*                 frame CFRMNM. */
 
-		    vsub_(pnear, pobs, ptemp);
+		    vsub_(__global_state, pnear, pobs, ptemp);
 
 /*                 Rotate the vector to frame J2000.  To get the required */
 /*                 rotation matrix, we'll need to obtain the epoch */
@@ -1967,30 +2082,34 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                 correction and adjust the frame evaluation epoch as */
 /*                 needed. */
 
-		    zzcorepc_(abcorr, &t0, &lt, &fet, (ftnlen)5);
+		    zzcorepc_(__global_state, abcorr, &t0, &lt, &fet, (ftnlen)
+			    5);
 
 /*                 Obtain the matrix for transforming position vectors */
 /*                 from the target center frame to the J2000 frame and */
 /*                 apply it to the observer-to-near point position */
 /*                 vector. */
 
-		    zzrefch0_(&cfrmid, &__state->j2000, &fet, tipm);
-		    if (failed_()) {
-			chkout_("ZZDYNROT", (ftnlen)8);
+		    zzrefch0_(__global_state, &cfrmid, &__state->j2000, &fet, 
+			    tipm);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			return 0;
 		    }
-		    mxv_(tipm, ptemp, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
-			    i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrot_", (
+		    mxv_(__global_state, tipm, ptemp, &v2[(i__1 = i__ * 3 - 3)
+			     < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "v2", i__1, "zzdynrot_", (
 			    ftnlen)1395)]);
 
 /*                 At this point, V2(*,I) contains position of the near */
 /*                 point on the target as seen by the observer, relative */
 /*                 to frame J2000. */
 
-		} else if (s_cmp(vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ?
-			 i__1 : s_rnge("vecdef", i__1, "zzdynrot_", (ftnlen)
-			1403)) * 80, "CONSTANT", (ftnlen)80, (ftnlen)8) == 0) 
-			{
+		} else if (s_cmp(&__global_state->f2c, vecdef + ((i__1 = i__ 
+			- 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "vecdef", i__1, "zzdynrot_", (
+			ftnlen)1403)) * 80, "CONSTANT", (ftnlen)80, (ftnlen)8)
+			 == 0) {
 
 /*                 The vector is constant in a specified frame. */
 
@@ -1999,10 +2118,11 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 
 /*                 Look up the ID of the frame first. */
 
-		    zzdynfid_(inname__, infram, __state->itmfrm + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmfrm"
-			    , i__1, "zzdynrot_", (ftnlen)1412)) << 5), &frid, 
-			    (ftnlen)32, (ftnlen)32);
+		    zzdynfid_(__global_state, inname__, infram, 
+			    __state->itmfrm + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itmf"
+			    "rm", i__1, "zzdynrot_", (ftnlen)1412)) << 5), &
+			    frid, (ftnlen)32, (ftnlen)32);
 
 /*                 Let FET ("frame ET") be the evaluation epoch for */
 /*                 the constant vector's frame.  By default, this */
@@ -2020,24 +2140,26 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                 If so, an observer must be associated with the */
 /*                 frame.  Look up the correction first. */
 
-		    zzdynoac_(inname__, infram, __state->itmabc + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmabc"
-			    , i__1, "zzdynrot_", (ftnlen)1432)) << 5), &
+		    zzdynoac_(__global_state, inname__, infram, 
+			    __state->itmabc + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itma"
+			    "bc", i__1, "zzdynrot_", (ftnlen)1432)) << 5), &
 			    __state->c__1, &n, cvcorr, &fnd, (ftnlen)32, (
 			    ftnlen)32, (ftnlen)5);
-		    if (failed_()) {
-			chkout_("ZZDYNROT", (ftnlen)8);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			return 0;
 		    }
 		    if (! fnd) {
-			s_copy(cvcorr, "NONE", (ftnlen)5, (ftnlen)4);
+			s_copy(&__global_state->f2c, cvcorr, "NONE", (ftnlen)
+				5, (ftnlen)4);
 		    }
-		    zzprscor_(cvcorr, corblk, (ftnlen)5);
+		    zzprscor_(__global_state, cvcorr, corblk, (ftnlen)5);
 		    if (! corblk[0]) {
 
 /*                    We need to apply an aberration correction to */
 /*                    the constant vector. */
-			zzprscor_(cvcorr, corblk, (ftnlen)5);
+			zzprscor_(__global_state, cvcorr, corblk, (ftnlen)5);
 
 /*                    Check for errors in the aberration correction */
 /*                    specification. */
@@ -2046,19 +2168,22 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                         are mutually exclusive. */
 
 			if (corblk[1] && corblk[2]) {
-			    setmsg_("Definition of frame # specifies aberrat"
-				    "ion correction # for constant vector.  L"
-				    "ight time and stellar aberration correct"
-				    "ions are mutually exclusive for constant"
-				    " vectors used in two-vector parameterize"
-				    "d dynamic frame definitions.  This situa"
-				    "tion is usually caused by an error in a "
-				    "frame kernel in which the frame is defin"
-				    "ed.", (ftnlen)322);
-			    errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-			    errch_("#", cvcorr, (ftnlen)1, (ftnlen)5);
-			    sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-			    chkout_("ZZDYNROT", (ftnlen)8);
+			    setmsg_(__global_state, "Definition of frame # s"
+				    "pecifies aberration correction # for con"
+				    "stant vector.  Light time and stellar ab"
+				    "erration corrections are mutually exclus"
+				    "ive for constant vectors used in two-vec"
+				    "tor parameterized dynamic frame definiti"
+				    "ons.  This situation is usually caused b"
+				    "y an error in a frame kernel in which th"
+				    "e frame is defined.", (ftnlen)322);
+			    errch_(__global_state, "#", inname__, (ftnlen)1, (
+				    ftnlen)32);
+			    errch_(__global_state, "#", cvcorr, (ftnlen)1, (
+				    ftnlen)5);
+			    sigerr_(__global_state, "SPICE(INVALIDOPTION)", (
+				    ftnlen)20);
+			    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			    return 0;
 			}
 			if (corblk[1]) {
@@ -2069,23 +2194,27 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 
 /*                       Look up the constant vector frame's center. */
 
-			    frinfo_(&frid, &frctr, &frcls, &frcid, &fnd);
+			    frinfo_(__global_state, &frid, &frctr, &frcls, &
+				    frcid, &fnd);
 			    if (! fnd) {
-				setmsg_("In definition of frame #, the frame"
-					" associated with a constant vector h"
-					"as frame ID code #, but no frame cen"
-					"ter, frame class, or frame class ID "
-					"was found by FRINFO.  This situation"
-					" MAY be caused by an error in a fram"
-					"e kernel in which the frame is defin"
-					"ed. The problem also could be indica"
-					"tive of a SPICELIB bug.", (ftnlen)310)
+				setmsg_(__global_state, "In definition of fr"
+					"ame #, the frame associated with a c"
+					"onstant vector has frame ID code #, "
+					"but no frame center, frame class, or"
+					" frame class ID was found by FRINFO."
+					"  This situation MAY be caused by an"
+					" error in a frame kernel in which th"
+					"e frame is defined. The problem also"
+					" could be indicative of a SPICELIB b"
+					"ug.", (ftnlen)310);
+				errch_(__global_state, "#", inname__, (ftnlen)
+					1, (ftnlen)32);
+				errint_(__global_state, "#", &frid, (ftnlen)1)
 					;
-				errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-				errint_("#", &frid, (ftnlen)1);
-				sigerr_("SPICE(FRAMEDATANOTFOUND)", (ftnlen)
-					24);
-				chkout_("ZZDYNROT", (ftnlen)8);
+				sigerr_(__global_state, "SPICE(FRAMEDATANOTF"
+					"OUND)", (ftnlen)24);
+				chkout_(__global_state, "ZZDYNROT", (ftnlen)8)
+					;
 				return 0;
 			    }
 			    if (frcls != 1) {
@@ -2095,22 +2224,24 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                          together with the frame's center, determines */
 /*                          the evaluation epoch for the frame. */
 
-				zzdynbid_(inname__, infram, __state->itmobs + 
-					(((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-					i__1 : s_rnge("itmobs", i__1, "zzdyn"
-					"rot_", (ftnlen)1525)) << 5), &cvobs, (
-					ftnlen)32, (ftnlen)32);
+				zzdynbid_(__global_state, inname__, infram, 
+					__state->itmobs + (((i__1 = i__ - 1) <
+					 2 && 0 <= i__1 ? i__1 : s_rnge(&
+					__global_state->f2c, "itmobs", i__1, 
+					"zzdynrot_", (ftnlen)1525)) << 5), &
+					cvobs, (ftnlen)32, (ftnlen)32);
 
 /*                          Obtain light time from the observer to the */
 /*                          frame's center. */
 
-				zzspkzp0_(&frctr, &t0, "J2000", cvcorr, &
-					cvobs, ctrpos, &lt, (ftnlen)5, (
-					ftnlen)5);
+				zzspkzp0_(__global_state, &frctr, &t0, "J2000"
+					, cvcorr, &cvobs, ctrpos, &lt, (
+					ftnlen)5, (ftnlen)5);
 
 /*                          Find the evaluation epoch for the frame. */
 
-				zzcorepc_(cvcorr, &t0, &lt, &fet, (ftnlen)5);
+				zzcorepc_(__global_state, cvcorr, &t0, &lt, &
+					fet, (ftnlen)5);
 			    }
 			} else if (corblk[2]) {
 
@@ -2124,117 +2255,136 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                       later, when the constant vector has been */
 /*                       transformed to the J2000 frame. */
 
-			    zzdynbid_(inname__, infram, __state->itmobs + (((
-				    i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				    s_rnge("itmobs", i__1, "zzdynrot_", (
-				    ftnlen)1555)) << 5), &cvobs, (ftnlen)32, (
-				    ftnlen)32);
-			    zzspksb0_(&cvobs, &t0, "J2000", stobs, (ftnlen)5);
+			    zzdynbid_(__global_state, inname__, infram, 
+				    __state->itmobs + (((i__1 = i__ - 1) < 2 
+				    && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "itmobs", i__1, 
+				    "zzdynrot_", (ftnlen)1555)) << 5), &cvobs,
+				     (ftnlen)32, (ftnlen)32);
+			    zzspksb0_(__global_state, &cvobs, &t0, "J2000", 
+				    stobs, (ftnlen)5);
 			}
 		    }
 
 /*                 Get the constant vector specification. */
 
-		    zzdynvac_(inname__, infram, __state->itmspc + (((i__1 = 
-			    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("itmspc"
-			    , i__1, "zzdynrot_", (ftnlen)1567)) << 5), &
+		    zzdynvac_(__global_state, inname__, infram, 
+			    __state->itmspc + (((i__1 = i__ - 1) < 2 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "itms"
+			    "pc", i__1, "zzdynrot_", (ftnlen)1567)) << 5), &
 			    __state->c__1, &n, spec, (ftnlen)32, (ftnlen)32, (
 			    ftnlen)80);
-		    if (failed_()) {
-			chkout_("ZZDYNROT", (ftnlen)8);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			return 0;
 		    }
-		    cmprss_(" ", &__state->c__0, spec, spec, (ftnlen)1, (
-			    ftnlen)80, (ftnlen)80);
-		    ucase_(spec, spec, (ftnlen)80, (ftnlen)80);
-		    if (s_cmp(spec, "RECTANGULAR", (ftnlen)80, (ftnlen)11) == 
-			    0) {
+		    cmprss_(__global_state, " ", &__state->c__0, spec, spec, (
+			    ftnlen)1, (ftnlen)80, (ftnlen)80);
+		    ucase_(__global_state, spec, spec, (ftnlen)80, (ftnlen)80)
+			    ;
+		    if (s_cmp(&__global_state->f2c, spec, "RECTANGULAR", (
+			    ftnlen)80, (ftnlen)11) == 0) {
 
 /*                    The coordinate system is rectangular. */
 
 /*                    Look up the constant vector. */
 
-			zzdynvad_(inname__, infram, __state->itmvec + (((i__1 
-				= i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
+			zzdynvad_(__global_state, inname__, infram, 
+				__state->itmvec + (((i__1 = i__ - 1) < 2 && 0 
+				<= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
 				"itmvec", i__1, "zzdynrot_", (ftnlen)1584)) <<
 				 5), &__state->c__3, &n, dirvec, (ftnlen)32, (
 				ftnlen)32);
-		    } else if (s_cmp(spec, "LATITUDINAL", (ftnlen)80, (ftnlen)
-			    11) == 0 || s_cmp(spec, "RA/DEC", (ftnlen)80, (
+		    } else if (s_cmp(&__global_state->f2c, spec, "LATITUDINAL"
+			    , (ftnlen)80, (ftnlen)11) == 0 || s_cmp(&
+			    __global_state->f2c, spec, "RA/DEC", (ftnlen)80, (
 			    ftnlen)6) == 0) {
 
 /*                    The coordinate system is latitudinal or RA/DEC. */
 
 /*                    Look up the units associated with the angles. */
 
-			zzdynvac_(inname__, infram, __state->itmunt + (((i__1 
-				= i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
+			zzdynvac_(__global_state, inname__, infram, 
+				__state->itmunt + (((i__1 = i__ - 1) < 2 && 0 
+				<= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
 				"itmunt", i__1, "zzdynrot_", (ftnlen)1595)) <<
 				 5), &__state->c__1, &n, units, (ftnlen)32, (
 				ftnlen)32, (ftnlen)80);
-			if (s_cmp(spec, "LATITUDINAL", (ftnlen)80, (ftnlen)11)
-				 == 0) {
+			if (s_cmp(&__global_state->f2c, spec, "LATITUDINAL", (
+				ftnlen)80, (ftnlen)11) == 0) {
 
 /*                       Look up longitude and latitude. */
 
-			    zzdynvad_(inname__, infram, __state->itmlon + (((
-				    i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				    s_rnge("itmlon", i__1, "zzdynrot_", (
-				    ftnlen)1603)) << 5), &__state->c__1, &n, &
-				    lon, (ftnlen)32, (ftnlen)32);
-			    zzdynvad_(inname__, infram, __state->itmlat + (((
-				    i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				    s_rnge("itmlat", i__1, "zzdynrot_", (
-				    ftnlen)1606)) << 5), &__state->c__1, &n, &
-				    lat, (ftnlen)32, (ftnlen)32);
+			    zzdynvad_(__global_state, inname__, infram, 
+				    __state->itmlon + (((i__1 = i__ - 1) < 2 
+				    && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "itmlon", i__1, 
+				    "zzdynrot_", (ftnlen)1603)) << 5), &
+				    __state->c__1, &n, &lon, (ftnlen)32, (
+				    ftnlen)32);
+			    zzdynvad_(__global_state, inname__, infram, 
+				    __state->itmlat + (((i__1 = i__ - 1) < 2 
+				    && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "itmlat", i__1, 
+				    "zzdynrot_", (ftnlen)1606)) << 5), &
+				    __state->c__1, &n, &lat, (ftnlen)32, (
+				    ftnlen)32);
 
 /*                       Convert angles from input units to radians. */
 
-			    convrt_(&lon, units, "RADIANS", angles, (ftnlen)
-				    80, (ftnlen)7);
-			    convrt_(&lat, units, "RADIANS", &angles[1], (
-				    ftnlen)80, (ftnlen)7);
+			    convrt_(__global_state, &lon, units, "RADIANS", 
+				    angles, (ftnlen)80, (ftnlen)7);
+			    convrt_(__global_state, &lat, units, "RADIANS", &
+				    angles[1], (ftnlen)80, (ftnlen)7);
 			} else {
 
 /*                       Look up RA and DEC. */
 
-			    zzdynvad_(inname__, infram, __state->itmra + (((
-				    i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				    s_rnge("itmra", i__1, "zzdynrot_", (
-				    ftnlen)1619)) << 5), &__state->c__1, &n, &
-				    ra, (ftnlen)32, (ftnlen)32);
-			    zzdynvad_(inname__, infram, __state->itmdec + (((
-				    i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				    s_rnge("itmdec", i__1, "zzdynrot_", (
-				    ftnlen)1622)) << 5), &__state->c__1, &n, &
-				    dec, (ftnlen)32, (ftnlen)32);
+			    zzdynvad_(__global_state, inname__, infram, 
+				    __state->itmra + (((i__1 = i__ - 1) < 2 &&
+				     0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "itmra", i__1, "zzd"
+				    "ynrot_", (ftnlen)1619)) << 5), &
+				    __state->c__1, &n, &ra, (ftnlen)32, (
+				    ftnlen)32);
+			    zzdynvad_(__global_state, inname__, infram, 
+				    __state->itmdec + (((i__1 = i__ - 1) < 2 
+				    && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "itmdec", i__1, 
+				    "zzdynrot_", (ftnlen)1622)) << 5), &
+				    __state->c__1, &n, &dec, (ftnlen)32, (
+				    ftnlen)32);
 
 /*                       Convert angles from input units to radians. */
 
-			    convrt_(&ra, units, "RADIANS", angles, (ftnlen)80,
-				     (ftnlen)7);
-			    convrt_(&dec, units, "RADIANS", &angles[1], (
-				    ftnlen)80, (ftnlen)7);
+			    convrt_(__global_state, &ra, units, "RADIANS", 
+				    angles, (ftnlen)80, (ftnlen)7);
+			    convrt_(__global_state, &dec, units, "RADIANS", &
+				    angles[1], (ftnlen)80, (ftnlen)7);
 			}
-			if (failed_()) {
-			    chkout_("ZZDYNROT", (ftnlen)8);
+			if (failed_(__global_state)) {
+			    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			    return 0;
 			}
 
 /*                    Now  produce a direction vector. */
 
-			latrec_(&__state->c_b365, angles, &angles[1], dirvec);
+			latrec_(__global_state, &__state->c_b365, angles, &
+				angles[1], dirvec);
 		    } else {
-			setmsg_("Definition of two-vector parameterized dyna"
-				"mic frame # includes constant vector specifi"
-				"cation #, which is not supported.  This situ"
-				"ation is usually caused by an error in a fra"
-				"me kernel in which the frame is defined.", (
-				ftnlen)215);
-			errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-			errch_("#", spec, (ftnlen)1, (ftnlen)80);
-			sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-			chkout_("ZZDYNROT", (ftnlen)8);
+			setmsg_(__global_state, "Definition of two-vector pa"
+				"rameterized dynamic frame # includes constan"
+				"t vector specification #, which is not suppo"
+				"rted.  This situation is usually caused by a"
+				"n error in a frame kernel in which the frame"
+				" is defined.", (ftnlen)215);
+			errch_(__global_state, "#", inname__, (ftnlen)1, (
+				ftnlen)32);
+			errch_(__global_state, "#", spec, (ftnlen)1, (ftnlen)
+				80);
+			sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (
+				ftnlen)19);
+			chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			return 0;
 		    }
 
@@ -2243,21 +2393,24 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                 are stored in DIRVEC. */
 
 		    if (frid == __state->j2000) {
-			vequ_(dirvec, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
-				i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrot_", 
+			vequ_(__global_state, dirvec, &v2[(i__1 = i__ * 3 - 3)
+				 < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "v2", i__1, "zzdynrot_", 
 				(ftnlen)1669)]);
 		    } else {
 
 /*                    Convert the direction vector to the J2000 frame. */
 
-			zzrefch0_(&frid, &__state->j2000, &fet, r2000);
-			if (failed_()) {
-			    chkout_("ZZDYNROT", (ftnlen)8);
+			zzrefch0_(__global_state, &frid, &__state->j2000, &
+				fet, r2000);
+			if (failed_(__global_state)) {
+			    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			    return 0;
 			}
-			mxv_(r2000, dirvec, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 
-				<= i__1 ? i__1 : s_rnge("v2", i__1, "zzdynro"
-				"t_", (ftnlen)1682)]);
+			mxv_(__global_state, r2000, dirvec, &v2[(i__1 = i__ * 
+				3 - 3) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "v2", i__1, "zzdynrot_", 
+				(ftnlen)1682)]);
 		    }
 
 /*                 The constant vector is now represented */
@@ -2273,23 +2426,26 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 
 /*                       The correction is for transmission. */
 
-			    stlabx_(&v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 
-				    ? i__1 : s_rnge("v2", i__1, "zzdynrot_", (
-				    ftnlen)1700)], &stobs[3], ptemp);
+			    stlabx_(__global_state, &v2[(i__1 = i__ * 3 - 3) <
+				     6 && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "v2", i__1, "zzdynr"
+				    "ot_", (ftnlen)1700)], &stobs[3], ptemp);
 			} else {
 
 /*                       The correction is for reception. */
 
-			    stelab_(&v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 
-				    ? i__1 : s_rnge("v2", i__1, "zzdynrot_", (
-				    ftnlen)1706)], &stobs[3], ptemp);
+			    stelab_(__global_state, &v2[(i__1 = i__ * 3 - 3) <
+				     6 && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "v2", i__1, "zzdynr"
+				    "ot_", (ftnlen)1706)], &stobs[3], ptemp);
 			}
-			if (failed_()) {
-			    chkout_("ZZDYNROT", (ftnlen)8);
+			if (failed_(__global_state)) {
+			    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 			    return 0;
 			}
-			vequ_(ptemp, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
-				i__1 ? i__1 : s_rnge("v2", i__1, "zzdynrot_", 
+			vequ_(__global_state, ptemp, &v2[(i__1 = i__ * 3 - 3) 
+				< 6 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "v2", i__1, "zzdynrot_", 
 				(ftnlen)1715)]);
 		    }
 
@@ -2299,29 +2455,33 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*                 J2000. */
 
 		} else {
-		    setmsg_("Definition of two-vector parameterized dynamic "
-			    "frame # includes vector definition #, which is n"
-			    "ot supported.  This situation is usually caused "
-			    "by an error in a frame kernel in which the frame"
-			    " is defined.", (ftnlen)203);
-		    errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-		    errch_("#", vecdef + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-			    i__1 : s_rnge("vecdef", i__1, "zzdynrot_", (
-			    ftnlen)1736)) * 80, (ftnlen)1, (ftnlen)80);
-		    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-		    chkout_("ZZDYNROT", (ftnlen)8);
+		    setmsg_(__global_state, "Definition of two-vector parame"
+			    "terized dynamic frame # includes vector definiti"
+			    "on #, which is not supported.  This situation is"
+			    " usually caused by an error in a frame kernel in"
+			    " which the frame is defined.", (ftnlen)203);
+		    errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)
+			    32);
+		    errch_(__global_state, "#", vecdef + ((i__1 = i__ - 1) < 
+			    2 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "vecdef", i__1, "zzdynrot_", 
+			    (ftnlen)1736)) * 80, (ftnlen)1, (ftnlen)80);
+		    sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19)
+			    ;
+		    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		    return 0;
 		}
 
 /*              Negate the vector if the axis has negative sign. */
 
 		if (negate) {
-		    vminus_(&v2[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 :
-			     s_rnge("v2", i__1, "zzdynrot_", (ftnlen)1747)], 
-			    ptemp);
-		    moved_(ptemp, &__state->c__3, &v2[(i__1 = i__ * 3 - 3) < 
-			    6 && 0 <= i__1 ? i__1 : s_rnge("v2", i__1, "zzdy"
-			    "nrot_", (ftnlen)1748)]);
+		    vminus_(__global_state, &v2[(i__1 = i__ * 3 - 3) < 6 && 0 
+			    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			    "v2", i__1, "zzdynrot_", (ftnlen)1747)], ptemp);
+		    moved_(__global_state, ptemp, &__state->c__3, &v2[(i__1 = 
+			    i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "v2", i__1, "zzdynrot_", (
+			    ftnlen)1748)]);
 		}
 	    }
 
@@ -2329,10 +2489,10 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*           the defining vectors.  Use the default value if none */
 /*           was supplied. */
 
-	    zzdynoad_(inname__, infram, __state->itmsep, &__state->c__1, &n, &
-		    minsep, &fnd, (ftnlen)32, (ftnlen)32);
-	    if (failed_()) {
-		chkout_("ZZDYNROT", (ftnlen)8);
+	    zzdynoad_(__global_state, inname__, infram, __state->itmsep, &
+		    __state->c__1, &n, &minsep, &fnd, (ftnlen)32, (ftnlen)32);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		return 0;
 	    }
 	    if (! fnd) {
@@ -2348,30 +2508,32 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*           close to 0 or separation close to Pi---by comparing the */
 /*           sine of the separation to the sine of the separation limit. */
 
-	    sep = vsep_(v2, &v2[3]);
-	    if (sin(sep) < sin(minsep)) {
-		etcal_(&t0, timstr, (ftnlen)50);
-		setmsg_("Angular separation of vectors defining two-vector p"
-			"arameterized dynamic frame # is # (radians); minimum"
-			" allowed difference of separation from 0 or Pi is # "
-			"radians.  Evaluation epoch is #.  Extreme loss of pr"
-			"ecision can occur when defining vectors are nearly l"
-			"inearly dependent.  This type of error can be due to"
-			" using a dynamic frame outside of the time range for"
-			" which it is meant. It also can be due to a conceptu"
-			"al error pertaining to the frame's definition, or to"
-			" an implementation error in the frame kernel contain"
-			"ing the frame definition. However, if you wish to pr"
-			"oceed with this computation, the # keyword can be us"
-			"ed in the frame definition to adjust the separation "
-			"limit.", (ftnlen)681);
-		errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-		errdp_("#", &sep, (ftnlen)1);
-		errdp_("#", &minsep, (ftnlen)1);
-		errch_("#", timstr, (ftnlen)1, (ftnlen)50);
-		errch_("#", "ANGLE_SEP_TOL", (ftnlen)1, (ftnlen)13);
-		sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-		chkout_("ZZDYNROT", (ftnlen)8);
+	    sep = vsep_(__global_state, v2, &v2[3]);
+	    if (sin(&__global_state->f2c, sep) < sin(&__global_state->f2c, 
+		    minsep)) {
+		etcal_(__global_state, &t0, timstr, (ftnlen)50);
+		setmsg_(__global_state, "Angular separation of vectors defin"
+			"ing two-vector parameterized dynamic frame # is # (r"
+			"adians); minimum allowed difference of separation fr"
+			"om 0 or Pi is # radians.  Evaluation epoch is #.  Ex"
+			"treme loss of precision can occur when defining vect"
+			"ors are nearly linearly dependent.  This type of err"
+			"or can be due to using a dynamic frame outside of th"
+			"e time range for which it is meant. It also can be d"
+			"ue to a conceptual error pertaining to the frame's d"
+			"efinition, or to an implementation error in the fram"
+			"e kernel containing the frame definition. However, i"
+			"f you wish to proceed with this computation, the # k"
+			"eyword can be used in the frame definition to adjust"
+			" the separation limit.", (ftnlen)681);
+		errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)32);
+		errdp_(__global_state, "#", &sep, (ftnlen)1);
+		errdp_(__global_state, "#", &minsep, (ftnlen)1);
+		errch_(__global_state, "#", timstr, (ftnlen)1, (ftnlen)50);
+		errch_(__global_state, "#", "ANGLE_SEP_TOL", (ftnlen)1, (
+			ftnlen)13);
+		sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+		chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		return 0;
 	    }
 
@@ -2379,16 +2541,17 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*           at this point.  Find the transformation from INNAME to */
 /*           the frame J2000, then from J2000 to frame BASNAM. */
 
-	    twovec_(v2, axis, &v2[3], &axis[1], rinv);
-	    xpose_(rinv, rotate);
+	    twovec_(__global_state, v2, axis, &v2[3], &axis[1], rinv);
+	    xpose_(__global_state, rinv, rotate);
 	    if (*basfrm != __state->j2000) {
-		moved_(rotate, &__state->c__9, rtemp);
-		zzrefch0_(&__state->j2000, basfrm, &t0, r2000);
-		if (failed_()) {
-		    chkout_("ZZDYNROT", (ftnlen)8);
+		moved_(__global_state, rotate, &__state->c__9, rtemp);
+		zzrefch0_(__global_state, &__state->j2000, basfrm, &t0, r2000)
+			;
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		    return 0;
 		}
-		mxm_(r2000, rtemp, rotate);
+		mxm_(__global_state, r2000, rtemp, rotate);
 	    }
 
 /*           ROTATE is set. */
@@ -2396,7 +2559,8 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*           This is the end of the work specific to two-vector frames. */
 /*           From here we drop out of the IF block. */
 
-	} else if (s_cmp(dynfam, "EULER", (ftnlen)80, (ftnlen)5) == 0) {
+	} else if (s_cmp(&__global_state->f2c, dynfam, "EULER", (ftnlen)80, (
+		ftnlen)5) == 0) {
 
 /*           The frame belongs to the Euler family. */
 
@@ -2411,14 +2575,14 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*           is invalid due to a lookup error. */
 
 	    epoch = 0.;
-	    zzdynvad_(inname__, infram, "EPOCH", &__state->c__1, &n, &epoch, (
-		    ftnlen)32, (ftnlen)5);
+	    zzdynvad_(__global_state, inname__, infram, "EPOCH", &
+		    __state->c__1, &n, &epoch, (ftnlen)32, (ftnlen)5);
 	    delta = t0 - epoch;
 
 /*           Now the axis sequence. */
 
-	    zzdynvai_(inname__, infram, "AXES", &__state->c__3, &n, iaxes, (
-		    ftnlen)32, (ftnlen)4);
+	    zzdynvai_(__global_state, inname__, infram, "AXES", &
+		    __state->c__3, &n, iaxes, (ftnlen)32, (ftnlen)4);
 
 /*           Now the coefficients for the angles. */
 
@@ -2428,25 +2592,28 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*              is invalid due to a lookup error. */
 
 		n = 0;
-		zzdynvad_(inname__, infram, __state->itmcof + (((i__1 = i__ - 
-			1) < 3 && 0 <= i__1 ? i__1 : s_rnge("itmcof", i__1, 
-			"zzdynrot_", (ftnlen)1880)) << 5), &__state->c__20, &
-			n, &coeffs[(i__2 = i__ * 20 - 20) < 60 && 0 <= i__2 ? 
-			i__2 : s_rnge("coeffs", i__2, "zzdynrot_", (ftnlen)
-			1880)], (ftnlen)32, (ftnlen)32);
+		zzdynvad_(__global_state, inname__, infram, __state->itmcof + 
+			(((i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "itmcof", i__1, "zzdynrot_", (
+			ftnlen)1880)) << 5), &__state->c__20, &n, &coeffs[(
+			i__2 = i__ * 20 - 20) < 60 && 0 <= i__2 ? i__2 : 
+			s_rnge(&__global_state->f2c, "coeffs", i__2, "zzdynr"
+			"ot_", (ftnlen)1880)], (ftnlen)32, (ftnlen)32);
 
 /*              Set the polynomial degree for the Ith angle. */
 
-		degs[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("degs",
-			 i__1, "zzdynrot_", (ftnlen)1886)] = n - 1;
+		degs[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "degs", i__1, "zzdynrot_", (
+			ftnlen)1886)] = n - 1;
 	    }
 
 /*           Look up the units associated with the angles. */
 
-	    zzdynvac_(inname__, infram, "UNITS", &__state->c__1, &n, units, (
-		    ftnlen)32, (ftnlen)5, (ftnlen)80);
-	    if (failed_()) {
-		chkout_("ZZDYNROT", (ftnlen)8);
+	    zzdynvac_(__global_state, inname__, infram, "UNITS", &
+		    __state->c__1, &n, units, (ftnlen)32, (ftnlen)5, (ftnlen)
+		    80);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 		return 0;
 	    }
 
@@ -2454,37 +2621,39 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*           units to radians. */
 
 	    for (i__ = 1; i__ <= 3; ++i__) {
-		polyds_(&coeffs[(i__1 = i__ * 20 - 20) < 60 && 0 <= i__1 ? 
-			i__1 : s_rnge("coeffs", i__1, "zzdynrot_", (ftnlen)
-			1906)], &degs[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
-			i__2 : s_rnge("degs", i__2, "zzdynrot_", (ftnlen)1906)
-			], &__state->c__0, &delta, poly);
+		polyds_(__global_state, &coeffs[(i__1 = i__ * 20 - 20) < 60 &&
+			 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"coeffs", i__1, "zzdynrot_", (ftnlen)1906)], &degs[(
+			i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "degs", i__2, "zzdynrot_", (
+			ftnlen)1906)], &__state->c__0, &delta, poly);
 
 /*              Convert units.  Fill in the Euler angle vector. */
 
-		convrt_(poly, units, "RADIANS", &eulang[(i__1 = i__ - 1) < 3 
-			&& 0 <= i__1 ? i__1 : s_rnge("eulang", i__1, "zzdynr"
-			"ot_", (ftnlen)1910)], (ftnlen)80, (ftnlen)7);
+		convrt_(__global_state, poly, units, "RADIANS", &eulang[(i__1 
+			= i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "eulang", i__1, "zzdynrot_", (
+			ftnlen)1910)], (ftnlen)80, (ftnlen)7);
 	    }
 
 /*           Produce a position transformation matrix that maps from */
 /*           the defined frame to the base frame. */
 
-	    eul2m_(eulang, &eulang[1], &eulang[2], iaxes, &iaxes[1], &iaxes[2]
-		    , rotate);
+	    eul2m_(__global_state, eulang, &eulang[1], &eulang[2], iaxes, &
+		    iaxes[1], &iaxes[2], rotate);
 
 /*           This is the end of the work specific to Euler frames. */
 /*           From here we drop out of the IF block. */
 
 	} else {
-	    setmsg_("Dynamic frame family # (in definition of frame #) is no"
-		    "t supported. This situation is usually caused by an erro"
-		    "r in a frame kernel in which the frame is defined.", (
-		    ftnlen)161);
-	    errch_("#", dynfam, (ftnlen)1, (ftnlen)80);
-	    errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-	    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	    chkout_("ZZDYNROT", (ftnlen)8);
+	    setmsg_(__global_state, "Dynamic frame family # (in definition o"
+		    "f frame #) is not supported. This situation is usually c"
+		    "aused by an error in a frame kernel in which the frame i"
+		    "s defined.", (ftnlen)161);
+	    errch_(__global_state, "#", dynfam, (ftnlen)1, (ftnlen)80);
+	    errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)32);
+	    sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 	    return 0;
 	}
 
@@ -2492,13 +2661,14 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 /*        parameterized dynamic frame families. */
 
     } else {
-	setmsg_("Dynamic frame style # (in definition of frame #) is not sup"
-		"ported. This situation is usually caused by an error in a fr"
-		"ame kernel in which the frame is defined.", (ftnlen)160);
-	errch_("#", dynstl, (ftnlen)1, (ftnlen)80);
-	errch_("#", inname__, (ftnlen)1, (ftnlen)32);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZDYNROT", (ftnlen)8);
+	setmsg_(__global_state, "Dynamic frame style # (in definition of fra"
+		"me #) is not supported. This situation is usually caused by "
+		"an error in a frame kernel in which the frame is defined.", (
+		ftnlen)160);
+	errch_(__global_state, "#", dynstl, (ftnlen)1, (ftnlen)80);
+	errch_(__global_state, "#", inname__, (ftnlen)1, (ftnlen)32);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
 	return 0;
     }
 
@@ -2507,7 +2677,7 @@ static zzdynrot_state_t* get_zzdynrot_state() {
 
 /*     ROTATE and BASFRM is set. */
 
-    chkout_("ZZDYNROT", (ftnlen)8);
+    chkout_(__global_state, "ZZDYNROT", (ftnlen)8);
     return 0;
 } /* zzdynrot_ */
 

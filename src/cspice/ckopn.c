@@ -8,8 +8,7 @@
 
 
 extern ckopn_init_t __ckopn_init;
-static ckopn_state_t* get_ckopn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckopn_state_t* get_ckopn_state(cspice_t* state) {
 	if (!state->ckopn)
 		state->ckopn = __cspice_allocate_module(sizeof(ckopn_state_t),
 	 &__ckopn_init, sizeof(__ckopn_init));
@@ -18,20 +17,21 @@ static ckopn_state_t* get_ckopn_state() {
 }
 
 /* $Procedure      CKOPN ( CK, open new file. ) */
-/* Subroutine */ int ckopn_(char *name__, char *ifname, integer *ncomch, 
-	integer *handle, ftnlen name_len, ftnlen ifname_len)
+/* Subroutine */ int ckopn_(cspice_t* __global_state, char *name__, char *
+	ifname, integer *ncomch, integer *handle, ftnlen name_len, ftnlen 
+	ifname_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomr;
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafonw_(char *, char *, integer *, integer *, 
-	    char *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafonw_(cspice_t*, char *, char *, integer *, 
+	    integer *, char *, integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ckopn_state_t* __state = get_ckopn_state();
+    ckopn_state_t* __state = get_ckopn_state(__global_state);
 /* $ Abstract */
 
 /*     Open a new CK file, returning the handle of the opened file. */
@@ -189,10 +189,10 @@ static ckopn_state_t* get_ckopn_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKOPN", (ftnlen)5);
+    chkin_(__global_state, "CKOPN", (ftnlen)5);
 
 /*     Compute the number of comment records that we want to allocate, if */
 /*     the number of comment characters requested is greater than zero, */
@@ -207,16 +207,16 @@ static ckopn_state_t* get_ckopn_state() {
 
 /*     Just do it. All of the error handling is taken care of for us. */
 
-    dafonw_(name__, "CK", &__state->c__2, &__state->c__6, ifname, &ncomr, 
-	    handle, name_len, (ftnlen)2, ifname_len);
-    if (failed_()) {
+    dafonw_(__global_state, name__, "CK", &__state->c__2, &__state->c__6, 
+	    ifname, &ncomr, handle, name_len, (ftnlen)2, ifname_len);
+    if (failed_(__global_state)) {
 
 /*        If we failed, make sure that HANDLE does not contain a value */
 /*        that represents a valid DAF file handle. */
 
 	*handle = 0;
     }
-    chkout_("CKOPN", (ftnlen)5);
+    chkout_(__global_state, "CKOPN", (ftnlen)5);
     return 0;
 } /* ckopn_ */
 

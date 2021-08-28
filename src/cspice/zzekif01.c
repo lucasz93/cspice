@@ -8,8 +8,7 @@
 
 
 extern zzekif01_init_t __zzekif01_init;
-static zzekif01_state_t* get_zzekif01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekif01_state_t* get_zzekif01_state(cspice_t* state) {
 	if (!state->zzekif01)
 		state->zzekif01 = __cspice_allocate_module(sizeof(
 	zzekif01_state_t), &__zzekif01_init, sizeof(__zzekif01_init));
@@ -18,41 +17,42 @@ static zzekif01_state_t* get_zzekif01_state() {
 }
 
 /* $Procedure ZZEKIF01 ( EK, initialize type 1 segment for fast load ) */
-/* Subroutine */ int zzekif01_(integer *handle, integer *segno, integer *
-	rcptrs)
+/* Subroutine */ int zzekif01_(cspice_t* __global_state, integer *handle, 
+	integer *segno, integer *rcptrs)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     integer base;
-    extern /* Subroutine */ int zzeksdec_(integer *);
-    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekspsh_(integer *, integer *);
-    extern /* Subroutine */ int zzekstop_(integer *);
+    extern /* Subroutine */ int zzeksdec_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzeksdsc_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekspsh_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzekstop_(cspice_t*, integer *);
     integer i__;
     integer j;
     integer p;
     integer npage;
     integer pbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
     integer ncols;
     integer nrows;
     integer nr;
     integer segdsc[24];
     integer remain;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer rpsize;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer nrp;
     integer top;
-    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
-	    logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekaps_(cspice_t*, integer *, integer *, 
+	    integer *, logical *, integer *, integer *);
 
 
     /* Module state */
-    zzekif01_state_t* __state = get_zzekif01_state();
+    zzekif01_state_t* __state = get_zzekif01_state(__global_state);
 /* $ Abstract */
 
 /*     Initialize a new type 1 EK segment to allow fast loading. */
@@ -580,27 +580,27 @@ static zzekif01_state_t* get_zzekif01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKIF01", (ftnlen)8);
+	chkin_(__global_state, "ZZEKIF01", (ftnlen)8);
     }
 
 /*     Read in the segment descriptor. */
 
-    zzeksdsc_(handle, segno, segdsc);
+    zzeksdsc_(__global_state, handle, segno, segdsc);
     ncols = segdsc[4];
     nrows = segdsc[5];
 
 /*     Empty the EK scratch area stack. */
 
-    zzekstop_(&top);
-    zzeksdec_(&top);
+    zzekstop_(__global_state, &top);
+    zzeksdec_(__global_state, &top);
 
 /*     Push the handle and segment number onto the stack. */
 
-    zzekspsh_(&__state->c__1, handle);
-    zzekspsh_(&__state->c__1, segno);
+    zzekspsh_(__global_state, &__state->c__1, handle);
+    zzekspsh_(__global_state, &__state->c__1, segno);
 
 /*     The segment will require a record pointer structure for each row */
 /*     in the segment.  Right now, all we're going to do is allocate */
@@ -626,8 +626,8 @@ static zzekif01_state_t* get_zzekif01_state() {
 /*        the free list is acceptable, hence the argument .FALSE. */
 /*        passed to ZZEKAPS. */
 
-	zzekaps_(handle, segdsc, &__state->c__3, &__state->c_false, &p, &
-		pbase);
+	zzekaps_(__global_state, handle, segdsc, &__state->c__3, &
+		__state->c_false, &p, &pbase);
 
 /*        NR is the number of record pointers we'll eventually write to */
 /*        this page. */
@@ -645,7 +645,7 @@ static zzekif01_state_t* get_zzekif01_state() {
 	recno += nr;
 	remain -= nr;
     }
-    chkout_("ZZEKIF01", (ftnlen)8);
+    chkout_(__global_state, "ZZEKIF01", (ftnlen)8);
     return 0;
 } /* zzekif01_ */
 

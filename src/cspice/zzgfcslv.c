@@ -8,8 +8,7 @@
 
 
 extern zzgfcslv_init_t __zzgfcslv_init;
-static zzgfcslv_state_t* get_zzgfcslv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfcslv_state_t* get_zzgfcslv_state(cspice_t* state) {
 	if (!state->zzgfcslv)
 		state->zzgfcslv = __cspice_allocate_module(sizeof(
 	zzgfcslv_state_t), &__zzgfcslv_init, sizeof(__zzgfcslv_init));
@@ -18,15 +17,16 @@ static zzgfcslv_state_t* get_zzgfcslv_state() {
 }
 
 /* $Procedure ZZGFCSLV ( GF, coordinate solver ) */
-/* Subroutine */ int zzgfcslv_(char *vecdef, char *method, char *target, char 
-	*ref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, char *
-	crdsys, char *crdnam, char *relate, doublereal *refval, doublereal *
-	tol, doublereal *adjust, U_fp udstep, U_fp udrefn, logical *rpt, S_fp 
-	udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, integer 
-	*mw, integer *nw, doublereal *work, doublereal *cnfine, doublereal *
-	result, ftnlen vecdef_len, ftnlen method_len, ftnlen target_len, 
-	ftnlen ref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len,
-	 ftnlen crdsys_len, ftnlen crdnam_len, ftnlen relate_len)
+/* Subroutine */ int zzgfcslv_(cspice_t* __global_state, char *vecdef, char *
+	method, char *target, char *ref, char *abcorr, char *obsrvr, char *
+	dref, doublereal *dvec, char *crdsys, char *crdnam, char *relate, 
+	doublereal *refval, doublereal *tol, doublereal *adjust, U_fp udstep, 
+	U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, 
+	logical *bail, L_fp udbail, integer *mw, integer *nw, doublereal *
+	work, doublereal *cnfine, doublereal *result, ftnlen vecdef_len, 
+	ftnlen method_len, ftnlen target_len, ftnlen ref_len, ftnlen 
+	abcorr_len, ftnlen obsrvr_len, ftnlen dref_len, ftnlen crdsys_len, 
+	ftnlen crdnam_len, ftnlen relate_len)
 {
     /* Initialized data */
 
@@ -35,71 +35,78 @@ static zzgfcslv_state_t* get_zzgfcslv_state() {
     integer work_dim1, work_dim2, work_offset, i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzgfcodc_();
-    extern /* Subroutine */ int zzgfcoin_(char *, char *, char *, char *, 
-	    char *, char *, char *, doublereal *, char *, char *, ftnlen, 
+    extern /* Subroutine */ int zzgfcodc_(cspice_t*);
+    extern /* Subroutine */ int zzgfcoin_(cspice_t*, char *, char *, char *, 
+	    char *, char *, char *, char *, doublereal *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzgfcoex_(cspice_t*);
+    extern /* Subroutine */ int zzgflong_(cspice_t*, char *, char *, char *, 
+	    char *, char *, char *, char *, doublereal *, char *, char *, 
+	    char *, doublereal *, doublereal *, doublereal *, U_fp, U_fp, 
+	    logical *, S_fp, U_fp, S_fp, logical *, L_fp, integer *, integer *
+	    , doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, 
 	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfcoex_();
-    extern /* Subroutine */ int zzgflong_(char *, char *, char *, char *, 
-	    char *, char *, char *, doublereal *, char *, char *, char *, 
-	    doublereal *, doublereal *, doublereal *, U_fp, U_fp, logical *, 
-	    S_fp, U_fp, S_fp, logical *, L_fp, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfudlt_();
-    extern /* Subroutine */ int zzgfrelx_(U_fp, U_fp, U_fp, U_fp, U_fp, char *
-	    , doublereal *, doublereal *, doublereal *, doublereal *, integer 
-	    *, integer *, doublereal *, logical *, S_fp, U_fp, S_fp, char *, 
-	    char *, logical *, L_fp, doublereal *, ftnlen, ftnlen, ftnlen);
-    integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    doublereal excon;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int copyd_(doublereal *, doublereal *);
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
+    extern /* Subroutine */ int zzgfudlt_(cspice_t*);
+    extern /* Subroutine */ int zzgfrelx_(cspice_t*, U_fp, U_fp, U_fp, U_fp, 
+	    U_fp, char *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, integer *, integer *, doublereal *, logical *, S_fp,
+	     U_fp, S_fp, char *, char *, logical *, L_fp, doublereal *, 
 	    ftnlen, ftnlen, ftnlen);
+    integer i__;
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    doublereal excon;
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int copyd_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
     integer npass;
     doublereal start;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int zzgfsolvx_(U_fp, U_fp, U_fp, U_fp, logical *, 
-	    L_fp, logical *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *, U_fp, doublereal *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern integer wncard_(doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int zzgfsolvx_(cspice_t*, U_fp, U_fp, U_fp, U_fp, 
+	    logical *, L_fp, logical *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *, U_fp, doublereal *);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern integer wncard_(cspice_t*, doublereal *);
+    extern logical return_(cspice_t*);
     char loccrd[80];
     char locvdf[80];
     char prebuf[55*3];
     doublereal finish;
     logical localx;
     logical noadjx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ssized_(integer *, doublereal *);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int wnfetd_(doublereal *, integer *, doublereal *,
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ssized_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int wnfetd_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int wncond_(cspice_t*, doublereal *, doublereal *,
 	     doublereal *);
-    extern /* Subroutine */ int wncond_(doublereal *, doublereal *, 
-	    doublereal *);
     integer loc;
-    extern /* Subroutine */ int udf_();
+    extern /* Subroutine */ int udf_(cspice_t*);
     char uop[6];
-    extern /* Subroutine */ int zzgfcog_();
+    extern /* Subroutine */ int zzgfcog_(cspice_t*);
 
 
     /* Module state */
-    zzgfcslv_state_t* __state = get_zzgfcslv_state();
+    zzgfcslv_state_t* __state = get_zzgfcslv_state(__global_state);
 /* $ Abstract */
 
 /*     Perform a coordinate search. */
@@ -1171,20 +1178,20 @@ static zzgfcslv_state_t* get_zzgfcslv_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFCSLV", (ftnlen)8);
+    chkin_(__global_state, "ZZGFCSLV", (ftnlen)8);
 
 /*     Check the workspace window count. */
 
     if (*nw < 15) {
-	setmsg_("Workspace window count was # but must be at least #.", (
-		ftnlen)52);
-	errint_("#", nw, (ftnlen)1);
-	errint_("#", &__state->c__15, (ftnlen)1);
-	sigerr_("SPICE(TOOFEWWINDOWS)", (ftnlen)20);
-	chkout_("ZZGFCSLV", (ftnlen)8);
+	setmsg_(__global_state, "Workspace window count was # but must be at"
+		" least #.", (ftnlen)52);
+	errint_(__global_state, "#", nw, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__15, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TOOFEWWINDOWS)", (ftnlen)20);
+	chkout_(__global_state, "ZZGFCSLV", (ftnlen)8);
 	return 0;
     }
 
@@ -1192,47 +1199,49 @@ static zzgfcslv_state_t* get_zzgfcslv_state() {
 /*     makes any sense is 2. */
 
     if (*mw < 2) {
-	setmsg_("Workspace window size was # but must be at least 2.", (
-		ftnlen)51);
-	errint_("#", mw, (ftnlen)1);
-	sigerr_("SPICE(WINDOWSTOOSMALL)", (ftnlen)22);
-	chkout_("ZZGFCSLV", (ftnlen)8);
+	setmsg_(__global_state, "Workspace window size was # but must be at "
+		"least 2.", (ftnlen)51);
+	errint_(__global_state, "#", mw, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WINDOWSTOOSMALL)", (ftnlen)22);
+	chkout_(__global_state, "ZZGFCSLV", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure ADJUST is non-negative. */
 
     if (*adjust < 0.) {
-	setmsg_("ADJUST was #; must be non-negative.", (ftnlen)35);
-	errdp_("#", adjust, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZGFCSLV", (ftnlen)8);
+	setmsg_(__global_state, "ADJUST was #; must be non-negative.", (
+		ftnlen)35);
+	errdp_(__global_state, "#", adjust, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZGFCSLV", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure TOL is positive. */
 
     if (*tol <= 0.) {
-	setmsg_("TOL was #; must be positive.", (ftnlen)28);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZGFCSLV", (ftnlen)8);
+	setmsg_(__global_state, "TOL was #; must be positive.", (ftnlen)28);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZGFCSLV", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure that the requested comparison operation is one we */
 /*     recognize. */
 
-    ljust_(relate, uop, relate_len, (ftnlen)6);
-    ucase_(uop, uop, (ftnlen)6, (ftnlen)6);
-    loc = isrchc_(uop, &__state->c__7, __state->cnames, (ftnlen)6, (ftnlen)6);
+    ljust_(__global_state, relate, uop, relate_len, (ftnlen)6);
+    ucase_(__global_state, uop, uop, (ftnlen)6, (ftnlen)6);
+    loc = isrchc_(__global_state, uop, &__state->c__7, __state->cnames, (
+	    ftnlen)6, (ftnlen)6);
     if (loc == 0) {
-	setmsg_("The comparison operator, # is not recognized.  Supported op"
-		"erators are: >,=,<,ABSMAX,ABSMIN,LOCMAX,LOCMIN.", (ftnlen)106)
-		;
-	errch_("#", relate, (ftnlen)1, relate_len);
-	sigerr_("SPICE(NOTRECOGNIZED)", (ftnlen)20);
-	chkout_("ZZGFCSLV", (ftnlen)8);
+	setmsg_(__global_state, "The comparison operator, # is not recognize"
+		"d.  Supported operators are: >,=,<,ABSMAX,ABSMIN,LOCMAX,LOCM"
+		"IN.", (ftnlen)106);
+	errch_(__global_state, "#", relate, (ftnlen)1, relate_len);
+	sigerr_(__global_state, "SPICE(NOTRECOGNIZED)", (ftnlen)20);
+	chkout_(__global_state, "ZZGFCSLV", (ftnlen)8);
 	return 0;
     }
 
@@ -1240,37 +1249,39 @@ static zzgfcslv_state_t* get_zzgfcslv_state() {
 
     i__1 = *nw;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	ssized_(mw, &work[(i__2 = i__ * work_dim1 - 5 - work_offset) < 1 * 
-		work_dim1 * work_dim2 && 0 <= i__2 ? i__2 : s_rnge("work", 
-		i__2, "zzgfcslv_", (ftnlen)969)]);
+	ssized_(__global_state, mw, &work[(i__2 = i__ * work_dim1 - 5 - 
+		work_offset) < 1 * work_dim1 * work_dim2 && 0 <= i__2 ? i__2 :
+		 s_rnge(&__global_state->f2c, "work", i__2, "zzgfcslv_", (
+		ftnlen)969)]);
     }
 
 /*     Initialize the result window. */
 
-    scardd_(&__state->c__0, result);
+    scardd_(__global_state, &__state->c__0, result);
 
 /*     Create a left-justified, compressed copy of the */
 /*     input vector definition method. */
 
-    ljust_(vecdef, locvdf, vecdef_len, (ftnlen)80);
-    cmprss_(" ", &__state->c__1, locvdf, locvdf, (ftnlen)1, (ftnlen)80, (
-	    ftnlen)80);
-    ucase_(locvdf, locvdf, (ftnlen)80, (ftnlen)80);
+    ljust_(__global_state, vecdef, locvdf, vecdef_len, (ftnlen)80);
+    cmprss_(__global_state, " ", &__state->c__1, locvdf, locvdf, (ftnlen)1, (
+	    ftnlen)80, (ftnlen)80);
+    ucase_(__global_state, locvdf, locvdf, (ftnlen)80, (ftnlen)80);
 
 /*     If the vector definition method is "surface intercept," */
 /*     find the "existence window": the window over which */
 /*     the intercept and its time derivative are computable. */
 
-    if (s_cmp(locvdf, "SURFACE INTERCEPT POINT", (ftnlen)80, (ftnlen)23) == 0)
-	     {
+    if (s_cmp(&__global_state->f2c, locvdf, "SURFACE INTERCEPT POINT", (
+	    ftnlen)80, (ftnlen)23) == 0) {
 
 /*        Initialize the search for the existence window. */
 
-	zzgfcoin_(vecdef, method, target, ref, abcorr, obsrvr, dref, dvec, 
-		crdsys, crdnam, vecdef_len, method_len, target_len, ref_len, 
-		abcorr_len, obsrvr_len, dref_len, crdsys_len, crdnam_len);
-	if (failed_()) {
-	    chkout_("ZZGFCSLV", (ftnlen)8);
+	zzgfcoin_(__global_state, vecdef, method, target, ref, abcorr, obsrvr,
+		 dref, dvec, crdsys, crdnam, vecdef_len, method_len, 
+		target_len, ref_len, abcorr_len, obsrvr_len, dref_len, 
+		crdsys_len, crdnam_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFCSLV", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1281,8 +1292,8 @@ static zzgfcslv_state_t* get_zzgfcslv_state() {
 /*        report for the existence window search. */
 
 	if (*rpt) {
-	    (*udrepi)(cnfine, __state->rptpre + 110, __state->rptsuf + 26, (
-		    ftnlen)55, (ftnlen)13);
+	    (*udrepi)(__global_state, cnfine, __state->rptpre + 110, 
+		    __state->rptsuf + 26, (ftnlen)55, (ftnlen)13);
 	}
 
 /*        ZZGFSOLV will add the result of each search to the workspace */
@@ -1292,23 +1303,25 @@ static zzgfcslv_state_t* get_zzgfcslv_state() {
 
 /*        Initialize this window. */
 
-	ssized_(mw, &work[(i__1 = work_dim1 * 13 - 5 - work_offset) < 1 * 
-		work_dim1 * work_dim2 && 0 <= i__1 ? i__1 : s_rnge("work", 
-		i__1, "zzgfcslv_", (ftnlen)1022)]);
+	ssized_(__global_state, mw, &work[(i__1 = work_dim1 * 13 - 5 - 
+		work_offset) < 1 * work_dim1 * work_dim2 && 0 <= i__1 ? i__1 :
+		 s_rnge(&__global_state->f2c, "work", i__1, "zzgfcslv_", (
+		ftnlen)1022)]);
 
 /*        Search each interval of the confinement window. */
 
-	i__1 = wncard_(cnfine);
+	i__1 = wncard_(__global_state, cnfine);
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    wnfetd_(cnfine, &i__, &start, &finish);
-	    zzgfsolvx_((U_fp)udf_, (U_fp)zzgfcoex_, (U_fp)udstep, (U_fp)
-		    udrefn, bail, (L_fp)udbail, &__state->c_false, &
-		    __state->c_b36, &start, &finish, tol, rpt, (U_fp)udrepu, &
-		    work[(i__2 = work_dim1 * 13 - 5 - work_offset) < 1 * 
-		    work_dim1 * work_dim2 && 0 <= i__2 ? i__2 : s_rnge("work",
-		     i__2, "zzgfcslv_", (ftnlen)1031)]);
-	    if (failed_()) {
-		chkout_("ZZGFCSLV", (ftnlen)8);
+	    wnfetd_(__global_state, cnfine, &i__, &start, &finish);
+	    zzgfsolvx_(__global_state, (U_fp)udf_, (U_fp)zzgfcoex_, (U_fp)
+		    udstep, (U_fp)udrefn, bail, (L_fp)udbail, &
+		    __state->c_false, &__state->c_b36, &start, &finish, tol, 
+		    rpt, (U_fp)udrepu, &work[(i__2 = work_dim1 * 13 - 5 - 
+		    work_offset) < 1 * work_dim1 * work_dim2 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "work", i__2, "zzgfc"
+		    "slv_", (ftnlen)1031)]);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZGFCSLV", (ftnlen)8);
 		return 0;
 	    }
 
@@ -1316,8 +1329,8 @@ static zzgfcslv_state_t* get_zzgfcslv_state() {
 /*           whether an interrupt has occurred. */
 
 	    if (*bail) {
-		if ((*udbail)()) {
-		    chkout_("ZZGFCSLV", (ftnlen)8);
+		if ((*udbail)(__global_state)) {
+		    chkout_(__global_state, "ZZGFCSLV", (ftnlen)8);
 		    return 0;
 		}
 	    }
@@ -1327,23 +1340,25 @@ static zzgfcslv_state_t* get_zzgfcslv_state() {
 /*        for this pass. */
 
 	if (*rpt) {
-	    (*udrepf)();
+	    (*udrepf)(__global_state);
 	}
 
 /*        For safety, contract the existence window. Store */
 /*        the result in the workspace. */
 
 	excon = *tol + 1.;
-	wncond_(&excon, &excon, &work[(i__1 = work_dim1 * 13 - 5 - 
-		work_offset) < 1 * work_dim1 * work_dim2 && 0 <= i__1 ? i__1 :
-		 s_rnge("work", i__1, "zzgfcslv_", (ftnlen)1069)]);
+	wncond_(__global_state, &excon, &excon, &work[(i__1 = work_dim1 * 13 
+		- 5 - work_offset) < 1 * work_dim1 * work_dim2 && 0 <= i__1 ? 
+		i__1 : s_rnge(&__global_state->f2c, "work", i__1, "zzgfcslv_",
+		 (ftnlen)1069)]);
     } else {
 
 /*        Simply copy the confinement window to the workspace. */
 
-	copyd_(cnfine, &work[(i__1 = work_dim1 * 13 - 5 - work_offset) < 1 * 
-		work_dim1 * work_dim2 && 0 <= i__1 ? i__1 : s_rnge("work", 
-		i__1, "zzgfcslv_", (ftnlen)1075)]);
+	copyd_(__global_state, cnfine, &work[(i__1 = work_dim1 * 13 - 5 - 
+		work_offset) < 1 * work_dim1 * work_dim2 && 0 <= i__1 ? i__1 :
+		 s_rnge(&__global_state->f2c, "work", i__1, "zzgfcslv_", (
+		ftnlen)1075)]);
     }
 
 /*     If progress reporting is enabled, set the report prefix array */
@@ -1355,10 +1370,12 @@ static zzgfcslv_state_t* get_zzgfcslv_state() {
 /*        operator and the flag NOADJX to indicate an absolut extremum */
 /*        operator with zero adjustment. */
 
-	localx = s_cmp(uop, "LOCMIN", (ftnlen)6, (ftnlen)6) == 0 || s_cmp(uop,
-		 "LOCMAX", (ftnlen)6, (ftnlen)6) == 0;
-	noadjx = *adjust == 0. && (s_cmp(uop, "ABSMIN", (ftnlen)6, (ftnlen)6) 
-		== 0 || s_cmp(uop, "ABSMAX", (ftnlen)6, (ftnlen)6) == 0);
+	localx = s_cmp(&__global_state->f2c, uop, "LOCMIN", (ftnlen)6, (
+		ftnlen)6) == 0 || s_cmp(&__global_state->f2c, uop, "LOCMAX", (
+		ftnlen)6, (ftnlen)6) == 0;
+	noadjx = *adjust == 0. && (s_cmp(&__global_state->f2c, uop, "ABSMIN", 
+		(ftnlen)6, (ftnlen)6) == 0 || s_cmp(&__global_state->f2c, uop,
+		 "ABSMAX", (ftnlen)6, (ftnlen)6) == 0);
 	if (localx || noadjx) {
 
 /*           These operators correspond to 1-pass searches. */
@@ -1372,61 +1389,65 @@ static zzgfcslv_state_t* get_zzgfcslv_state() {
 
 	i__1 = npass;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    repmi_(__state->rptpre + ((i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
-		    i__2 : s_rnge("rptpre", i__2, "zzgfcslv_", (ftnlen)1110)) 
-		    * 55, "#", &npass, prebuf + ((i__3 = i__ - 1) < 3 && 0 <= 
-		    i__3 ? i__3 : s_rnge("prebuf", i__3, "zzgfcslv_", (ftnlen)
-		    1110)) * 55, (ftnlen)55, (ftnlen)1, (ftnlen)55);
+	    repmi_(__global_state, __state->rptpre + ((i__2 = i__ - 1) < 3 && 
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "rptpre", 
+		    i__2, "zzgfcslv_", (ftnlen)1110)) * 55, "#", &npass, 
+		    prebuf + ((i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
+		    s_rnge(&__global_state->f2c, "prebuf", i__3, "zzgfcslv_", 
+		    (ftnlen)1110)) * 55, (ftnlen)55, (ftnlen)1, (ftnlen)55);
 	}
     }
 
 /*     Create a left-justified, compressed, upper case copy of the */
 /*     input coordinate name. */
 
-    ljust_(crdnam, loccrd, crdnam_len, (ftnlen)80);
-    cmprss_(" ", &__state->c__1, loccrd, loccrd, (ftnlen)1, (ftnlen)80, (
-	    ftnlen)80);
-    ucase_(loccrd, loccrd, (ftnlen)80, (ftnlen)80);
+    ljust_(__global_state, crdnam, loccrd, crdnam_len, (ftnlen)80);
+    cmprss_(__global_state, " ", &__state->c__1, loccrd, loccrd, (ftnlen)1, (
+	    ftnlen)80, (ftnlen)80);
+    ucase_(__global_state, loccrd, loccrd, (ftnlen)80, (ftnlen)80);
 
 /*     If the coordinate of interest is longitude or right ascension, we */
 /*     have a special case, since the mapping from Cartesian to */
 /*     latitudinal coordinates has a branch discontinuity. */
 
-    if (s_cmp(loccrd, "LONGITUDE", (ftnlen)80, (ftnlen)9) == 0 || s_cmp(
-	    loccrd, "RIGHT ASCENSION", (ftnlen)80, (ftnlen)15) == 0) {
+    if (s_cmp(&__global_state->f2c, loccrd, "LONGITUDE", (ftnlen)80, (ftnlen)
+	    9) == 0 || s_cmp(&__global_state->f2c, loccrd, "RIGHT ASCENSION", 
+	    (ftnlen)80, (ftnlen)15) == 0) {
 
 /*        The coordinate is longitude or right ascension. */
 
-	zzgflong_(vecdef, method, target, ref, abcorr, obsrvr, dref, dvec, 
-		crdsys, crdnam, relate, refval, tol, adjust, (U_fp)udstep, (
-		U_fp)udrefn, rpt, (S_fp)udrepi, (U_fp)udrepu, (S_fp)udrepf, 
-		bail, (L_fp)udbail, mw, nw, work, &work[(i__1 = work_dim1 * 
-		13 - 5 - work_offset) < 1 * work_dim1 * work_dim2 && 0 <= 
-		i__1 ? i__1 : s_rnge("work", i__1, "zzgfcslv_", (ftnlen)1133)]
-		, result, vecdef_len, method_len, target_len, ref_len, 
-		abcorr_len, obsrvr_len, dref_len, crdsys_len, crdnam_len, 
-		relate_len);
+	zzgflong_(__global_state, vecdef, method, target, ref, abcorr, obsrvr,
+		 dref, dvec, crdsys, crdnam, relate, refval, tol, adjust, (
+		U_fp)udstep, (U_fp)udrefn, rpt, (S_fp)udrepi, (U_fp)udrepu, (
+		S_fp)udrepf, bail, (L_fp)udbail, mw, nw, work, &work[(i__1 = 
+		work_dim1 * 13 - 5 - work_offset) < 1 * work_dim1 * work_dim2 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "work", 
+		i__1, "zzgfcslv_", (ftnlen)1133)], result, vecdef_len, 
+		method_len, target_len, ref_len, abcorr_len, obsrvr_len, 
+		dref_len, crdsys_len, crdnam_len, relate_len);
     } else {
 
 /*        This is the normal case. */
 
 /*        Initialize the coordinate quantity utilities. */
 
-	zzgfcoin_(vecdef, method, target, ref, abcorr, obsrvr, dref, dvec, 
-		crdsys, crdnam, vecdef_len, method_len, target_len, ref_len, 
-		abcorr_len, obsrvr_len, dref_len, crdsys_len, crdnam_len);
+	zzgfcoin_(__global_state, vecdef, method, target, ref, abcorr, obsrvr,
+		 dref, dvec, crdsys, crdnam, vecdef_len, method_len, 
+		target_len, ref_len, abcorr_len, obsrvr_len, dref_len, 
+		crdsys_len, crdnam_len);
 
 /*        Perform the search. */
 
-	zzgfrelx_((U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfcodc_, (U_fp)
-		zzgfudlt_, (U_fp)zzgfcog_, relate, refval, tol, adjust, &work[
-		(i__1 = work_dim1 * 13 - 5 - work_offset) < 1 * work_dim1 * 
-		work_dim2 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "zzgfcs"
-		"lv_", (ftnlen)1154)], mw, nw, work, rpt, (S_fp)udrepi, (U_fp)
-		udrepu, (S_fp)udrepf, prebuf, __state->rptsuf, bail, (L_fp)
-		udbail, result, relate_len, (ftnlen)55, (ftnlen)13);
+	zzgfrelx_(__global_state, (U_fp)udstep, (U_fp)udrefn, (U_fp)zzgfcodc_,
+		 (U_fp)zzgfudlt_, (U_fp)zzgfcog_, relate, refval, tol, adjust,
+		 &work[(i__1 = work_dim1 * 13 - 5 - work_offset) < 1 * 
+		work_dim1 * work_dim2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "work", i__1, "zzgfcslv_", (ftnlen)1154)]
+		, mw, nw, work, rpt, (S_fp)udrepi, (U_fp)udrepu, (S_fp)udrepf,
+		 prebuf, __state->rptsuf, bail, (L_fp)udbail, result, 
+		relate_len, (ftnlen)55, (ftnlen)13);
     }
-    chkout_("ZZGFCSLV", (ftnlen)8);
+    chkout_(__global_state, "ZZGFCSLV", (ftnlen)8);
     return 0;
 } /* zzgfcslv_ */
 

@@ -261,7 +261,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "lgrind_c" );
+   chkin_c ( naif_state, "lgrind_c" );
 
    /*
    The f2c'd routine does the work.

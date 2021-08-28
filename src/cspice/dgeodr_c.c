@@ -216,7 +216,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dgeodr_c" );
+   chkin_c ( naif_state, "dgeodr_c" );
 
 
    dgeodr_ ( (doublereal *) &x,

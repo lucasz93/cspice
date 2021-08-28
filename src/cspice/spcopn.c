@@ -8,8 +8,7 @@
 
 
 extern spcopn_init_t __spcopn_init;
-static spcopn_state_t* get_spcopn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spcopn_state_t* get_spcopn_state(cspice_t* state) {
 	if (!state->spcopn)
 		state->spcopn = __cspice_allocate_module(sizeof(
 	spcopn_state_t), &__spcopn_init, sizeof(__spcopn_init));
@@ -18,18 +17,18 @@ static spcopn_state_t* get_spcopn_state() {
 }
 
 /* $Procedure SPCOPN ( SPK or CK, open new file ) */
-/* Subroutine */ int spcopn_(char *spc, char *ifname, integer *handle, ftnlen 
-	spc_len, ftnlen ifname_len)
+/* Subroutine */ int spcopn_(cspice_t* __global_state, char *spc, char *
+	ifname, integer *handle, ftnlen spc_len, ftnlen ifname_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafopn_(char *, integer *, integer *, char *, 
-	    integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafopn_(cspice_t*, char *, integer *, integer 
+	    *, char *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spcopn_state_t* __state = get_spcopn_state();
+    spcopn_state_t* __state = get_spcopn_state(__global_state);
 /* $ Abstract */
 
 /*     Open a new SPK or CK file for subsequent write requests. */
@@ -203,19 +202,19 @@ static spcopn_state_t* get_spcopn_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPCOPN", (ftnlen)6);
+	chkin_(__global_state, "SPCOPN", (ftnlen)6);
     }
 
 /*     DAFOPN does all the work.  We just handle the values of */
 /*     ND and NI which are specific to SPK and CK.  We'll not */
 /*     reserve any records. */
 
-    dafopn_(spc, &__state->c__2, &__state->c__6, ifname, &__state->c__0, 
-	    handle, spc_len, ifname_len);
-    chkout_("SPCOPN", (ftnlen)6);
+    dafopn_(__global_state, spc, &__state->c__2, &__state->c__6, ifname, &
+	    __state->c__0, handle, spc_len, ifname_len);
+    chkout_(__global_state, "SPCOPN", (ftnlen)6);
     return 0;
 } /* spcopn_ */
 

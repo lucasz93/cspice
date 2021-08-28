@@ -8,34 +8,35 @@
 
 
 typedef int sygeti_state_t;
-static sygeti_state_t* get_sygeti_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sygeti_state_t* get_sygeti_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SYGETI ( Return all components for a symbol ) */
-/* Subroutine */ int sygeti_(char *name__, char *tabsym, integer *tabptr, 
-	integer *tabval, integer *n, integer *values, logical *found, ftnlen 
-	name_len, ftnlen tabsym_len)
+/* Subroutine */ int sygeti_(cspice_t* __global_state, char *name__, char *
+	tabsym, integer *tabptr, integer *tabval, integer *n, integer *values,
+	 logical *found, ftnlen name_len, ftnlen tabsym_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sumai_(integer *, integer *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer locval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer locsym;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sygeti_state_t* __state = get_sygeti_state();
+    sygeti_state_t* __state = get_sygeti_state(__global_state);
 /* $ Abstract */
 
 /*     Return the dimension and associated values for a particular */
@@ -219,20 +220,20 @@ static sygeti_state_t* get_sygeti_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYGETI", (ftnlen)6);
+	chkin_(__global_state, "SYGETI", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
 
 /*     Is this symbol even in the table? */
 
-    locsym = bsrchc_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
+    locsym = bsrchc_(__global_state, name__, &nsym, tabsym + tabsym_len * 6, 
+	    name_len, tabsym_len);
 
 /*     If it's not in the table, it's definitely a problem. */
 
@@ -246,11 +247,11 @@ static sygeti_state_t* get_sygeti_state() {
     } else {
 	*found = TRUE_;
 	i__1 = locsym - 1;
-	locval = sumai_(&tabptr[6], &i__1) + 1;
+	locval = sumai_(__global_state, &tabptr[6], &i__1) + 1;
 	*n = tabptr[locsym + 5];
-	movei_(&tabval[locval + 5], n, values);
+	movei_(__global_state, &tabval[locval + 5], n, values);
     }
-    chkout_("SYGETI", (ftnlen)6);
+    chkout_(__global_state, "SYGETI", (ftnlen)6);
     return 0;
 } /* sygeti_ */
 

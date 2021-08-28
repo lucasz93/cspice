@@ -8,8 +8,7 @@
 
 
 extern ekops_init_t __ekops_init;
-static ekops_state_t* get_ekops_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekops_state_t* get_ekops_state(cspice_t* state) {
 	if (!state->ekops)
 		state->ekops = __cspice_allocate_module(sizeof(ekops_state_t),
 	 &__ekops_init, sizeof(__ekops_init));
@@ -18,29 +17,29 @@ static ekops_state_t* get_ekops_state() {
 }
 
 /* $Procedure   EKOPS ( EK, open scratch file ) */
-/* Subroutine */ int ekops_(integer *handle)
+/* Subroutine */ int ekops_(cspice_t* __global_state, integer *handle)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     integer base;
-    extern /* Subroutine */ int zzekpgan_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekpgin_(integer *);
-    extern /* Subroutine */ int zzektrit_(integer *, integer *);
+    extern /* Subroutine */ int zzekpgan_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgin_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzektrit_(cspice_t*, integer *, integer *);
     integer p;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasops_(integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasops_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ekops_state_t* __state = get_ekops_state();
+    ekops_state_t* __state = get_ekops_state(__global_state);
 /* $ Abstract */
 
 /*     Open a scratch E-kernel file and prepare the file for writing. */
@@ -282,45 +281,45 @@ static ekops_state_t* get_ekops_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKOPS", (ftnlen)5);
+	chkin_(__global_state, "EKOPS", (ftnlen)5);
     }
-    dasops_(handle);
-    if (failed_()) {
-	chkout_("EKOPS", (ftnlen)5);
+    dasops_(__global_state, handle);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKOPS", (ftnlen)5);
 	return 0;
     }
 
 /*     Initialize the file for paged access.  The EK architecture */
 /*     code is automatically set by the paging initialization routine. */
 
-    zzekpgin_(handle);
-    if (failed_()) {
-	chkout_("EKOPS", (ftnlen)5);
+    zzekpgin_(__global_state, handle);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKOPS", (ftnlen)5);
 	return 0;
     }
 
 /*     Allocate the first integer page for the file's metadata.  We */
 /*     don't need to examine the page number; it's 1. */
 
-    zzekpgan_(handle, &__state->c__3, &p, &base);
+    zzekpgan_(__global_state, handle, &__state->c__3, &p, &base);
 
 /*     Initialize a new tree.  This tree will point to the file's */
 /*     segments. */
 
-    zzektrit_(handle, &p);
+    zzektrit_(__global_state, handle, &p);
 
 /*     Save the segment pointer's root page number. */
 
     i__1 = base + 1;
     i__2 = base + 1;
-    dasudi_(handle, &i__1, &i__2, &p);
+    dasudi_(__global_state, handle, &i__1, &i__2, &p);
 
 /*     That's it.  We're ready to add data to the file. */
 
-    chkout_("EKOPS", (ftnlen)5);
+    chkout_(__global_state, "EKOPS", (ftnlen)5);
     return 0;
 } /* ekops_ */
 

@@ -8,13 +8,12 @@
 
 
 typedef int somfls_state_t;
-static somfls_state_t* get_somfls_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline somfls_state_t* get_somfls_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SOMFLS ( Some entries false? ) */
-logical somfls_(logical *logcls, integer *n)
+logical somfls_(cspice_t* __global_state, logical *logcls, integer *n)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +24,7 @@ logical somfls_(logical *logcls, integer *n)
 
 
     /* Module state */
-    somfls_state_t* __state = get_somfls_state();
+    somfls_state_t* __state = get_somfls_state(__global_state);
 /* $ Abstract */
 
 /*     Determine if some of the entries in an array of logicals are */

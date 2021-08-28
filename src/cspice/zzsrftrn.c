@@ -8,8 +8,7 @@
 
 
 extern zzsrftrn_init_t __zzsrftrn_init;
-static zzsrftrn_state_t* get_zzsrftrn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzsrftrn_state_t* get_zzsrftrn_state(cspice_t* state) {
 	if (!state->zzsrftrn)
 		state->zzsrftrn = __cspice_allocate_module(sizeof(
 	zzsrftrn_state_t), &__zzsrftrn_init, sizeof(__zzsrftrn_init));
@@ -18,9 +17,9 @@ static zzsrftrn_state_t* get_zzsrftrn_state() {
 }
 
 /* $Procedure ZZSRFTRN ( Surface name/ID mapping umbrella ) */
-/* Subroutine */ int zzsrftrn_0_(int n__, integer *bodyid, char *srfnam, 
-	integer *surfid, integer *usrctr, logical *found, logical *update, 
-	ftnlen srfnam_len)
+/* Subroutine */ int zzsrftrn_0_(cspice_t* __global_state, int n__, integer *
+	bodyid, char *srfnam, integer *surfid, integer *usrctr, logical *
+	found, logical *update, ftnlen srfnam_len)
 {
     /* Initialized data */
 
@@ -29,36 +28,37 @@ static zzsrftrn_state_t* get_zzsrftrn_state() {
     integer i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzctrchk_(integer *, integer *, logical *);
-    extern /* Subroutine */ int zzctrinc_(integer *);
-    extern /* Subroutine */ int zzsrfker_(char *, char *, integer *, integer *
-	    , logical *, integer *, integer *, integer *, integer *, integer *
-	    , integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzctrsin_(integer *);
-    extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern integer zzhash2_(char *, integer *, ftnlen);
-    extern integer zzhashi_(integer *, integer *);
+    extern /* Subroutine */ int zzctrchk_(cspice_t*, integer *, integer *, 
+	    logical *);
+    extern /* Subroutine */ int zzctrinc_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzsrfker_(cspice_t*, char *, char *, integer *
+	    , integer *, logical *, integer *, integer *, integer *, integer *
+	    , integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctrsin_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzcvpool_(cspice_t*, char *, integer *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(cspice_t*, integer *, char *, char *, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern integer zzhash2_(cspice_t*, char *, integer *, ftnlen);
+    extern integer zzhashi_(cspice_t*, integer *, integer *);
 
 
     /* Module state */
-    zzsrftrn_state_t* __state = get_zzsrftrn_state();
+    zzsrftrn_state_t* __state = get_zzsrftrn_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -646,14 +646,14 @@ static zzsrftrn_state_t* get_zzsrftrn_state() {
 	case 3: goto L_zzsrftrk;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSRFTRN", (ftnlen)8);
-    setmsg_("ZZSRFTRN is an umbrella routine. It should never be called dire"
-	    "ctly.", (ftnlen)68);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZSRFTRN", (ftnlen)8);
+    chkin_(__global_state, "ZZSRFTRN", (ftnlen)8);
+    setmsg_(__global_state, "ZZSRFTRN is an umbrella routine. It should neve"
+	    "r be called directly.", (ftnlen)68);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZSRFTRN", (ftnlen)8);
     return 0;
 /* $Procedure ZZSRFN2C ( Surface name to ID code mapping ) */
 
@@ -823,10 +823,10 @@ L_zzsrfn2c:
 /*     map surface name and body id to surface id */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSRFN2C", (ftnlen)8);
+    chkin_(__global_state, "ZZSRFN2C", (ftnlen)8);
 
 /*     No result has been found. */
 
@@ -839,24 +839,25 @@ L_zzsrfn2c:
 /*        with respect to the kernel pool. Hence the different */
 /*        initializations. */
 
-	zzctrsin_(__state->srfctr);
-	zzctruin_(__state->polctr);
+	zzctrsin_(__global_state, __state->srfctr);
+	zzctruin_(__global_state, __state->polctr);
 
 /*        Initialize local data structures. The first instance of this */
 /*        call also sets a watch on the surface mapping kernel */
 /*        variables. */
 
-	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
-		__state->kerbid, &__state->extker, &__state->nkvar, 
-		__state->snmhls, __state->snmpol, __state->snmidx, 
-		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
-		 (ftnlen)36);
+	zzsrfker_(__global_state, __state->kernam, __state->nornam, 
+		__state->kersid, __state->kerbid, &__state->extker, &
+		__state->nkvar, __state->snmhls, __state->snmpol, 
+		__state->snmidx, __state->sidhls, __state->sidpol, 
+		__state->sididx, (ftnlen)36, (ftnlen)36);
 
 /*        Sync POLCTR with the kernel pool counter. */
 
-	zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
-	if (failed_()) {
-	    chkout_("ZZSRFN2C", (ftnlen)8);
+	zzcvpool_(__global_state, "ZZSRFTRN", __state->polctr, &
+		__state->lupdte, (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSRFN2C", (ftnlen)8);
 	    return 0;
 	}
 	__state->pass1 = FALSE_;
@@ -865,23 +866,24 @@ L_zzsrfn2c:
 /*     Determine whether the data structures need to be updated */
 /*     due to a change in the kernel pool contents. */
 
-    zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
+    zzcvpool_(__global_state, "ZZSRFTRN", __state->polctr, &__state->lupdte, (
+	    ftnlen)8);
     if (__state->lupdte) {
 
 /*        Conservatively increment the ZZSRFTRN state counter in */
 /*        expectation of successful update. */
 
-	zzctrinc_(__state->srfctr);
+	zzctrinc_(__global_state, __state->srfctr);
 
 /*        Initialize local data structures. */
 
-	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
-		__state->kerbid, &__state->extker, &__state->nkvar, 
-		__state->snmhls, __state->snmpol, __state->snmidx, 
-		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
-		 (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZSRFN2C", (ftnlen)8);
+	zzsrfker_(__global_state, __state->kernam, __state->nornam, 
+		__state->kersid, __state->kerbid, &__state->extker, &
+		__state->nkvar, __state->snmhls, __state->snmpol, 
+		__state->snmidx, __state->sidhls, __state->sidpol, 
+		__state->sididx, (ftnlen)36, (ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSRFN2C", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -890,28 +892,29 @@ L_zzsrfn2c:
 /*     are not in the pool. */
 
     if (! __state->extker) {
-	chkout_("ZZSRFN2C", (ftnlen)8);
+	chkout_(__global_state, "ZZSRFN2C", (ftnlen)8);
 	return 0;
     }
 
 /*     Get a "normalized" copy of the input name: left-justified, */
 /*     compressed, upper case. */
 
-    ljucrs_(&__state->c__1, srfnam, __state->nsrfnm, srfnam_len, (ftnlen)36);
+    ljucrs_(__global_state, &__state->c__1, srfnam, __state->nsrfnm, 
+	    srfnam_len, (ftnlen)36);
 
 /*     Get a "squished" version of the above name: a version */
 /*     containing no blanks. */
 
-    cmprss_(" ", &__state->c__0, __state->nsrfnm, __state->sqshnm, (ftnlen)1, 
-	    (ftnlen)36, (ftnlen)36);
+    cmprss_(__global_state, " ", &__state->c__0, __state->nsrfnm, 
+	    __state->sqshnm, (ftnlen)1, (ftnlen)36, (ftnlen)36);
 
 /*     Find the hash value of the squished input name. */
 
-    __state->lookat = zzhash2_(__state->sqshnm, &__state->snmpol[5], (ftnlen)
-	    36);
+    __state->lookat = zzhash2_(__global_state, __state->sqshnm, &
+	    __state->snmpol[5], (ftnlen)36);
     __state->node = __state->snmhls[(i__1 = __state->lookat - 1) < 2003 && 0 
-	    <= i__1 ? i__1 : s_rnge("snmhls", i__1, "zzsrftrn_", (ftnlen)738)]
-	    ;
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "snmhls", i__1, 
+	    "zzsrftrn_", (ftnlen)738)];
     *found = FALSE_;
     if (__state->node > 0) {
 
@@ -920,20 +923,23 @@ L_zzsrfn2c:
 /*           match or run out of items in the collision list. */
 
 	while(__state->node > 0 && ! (*found)) {
-	    *found = s_cmp(__state->nsrfnm, __state->nornam + ((i__2 = 
-		    __state->snmidx[(i__1 = __state->node - 1) < 2003 && 0 <= 
-		    i__1 ? i__1 : s_rnge("snmidx", i__1, "zzsrftrn_", (ftnlen)
-		    750)] - 1) < 2000 && 0 <= i__2 ? i__2 : s_rnge("nornam", 
-		    i__2, "zzsrftrn_", (ftnlen)750)) * 36, (ftnlen)36, (
-		    ftnlen)36) == 0 && *bodyid == __state->kerbid[(i__4 = 
-		    __state->snmidx[(i__3 = __state->node - 1) < 2003 && 0 <= 
-		    i__3 ? i__3 : s_rnge("snmidx", i__3, "zzsrftrn_", (ftnlen)
-		    750)] - 1) < 2000 && 0 <= i__4 ? i__4 : s_rnge("kerbid", 
-		    i__4, "zzsrftrn_", (ftnlen)750)];
+	    *found = s_cmp(&__global_state->f2c, __state->nsrfnm, 
+		    __state->nornam + ((i__2 = __state->snmidx[(i__1 = 
+		    __state->node - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "snmidx", i__1, "zzsrftrn_", (ftnlen)
+		    750)] - 1) < 2000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "nornam", i__2, "zzsrftrn_", (ftnlen)
+		    750)) * 36, (ftnlen)36, (ftnlen)36) == 0 && *bodyid == 
+		    __state->kerbid[(i__4 = __state->snmidx[(i__3 = 
+		    __state->node - 1) < 2003 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "snmidx", i__3, "zzsrftrn_", (ftnlen)
+		    750)] - 1) < 2000 && 0 <= i__4 ? i__4 : s_rnge(&
+		    __global_state->f2c, "kerbid", i__4, "zzsrftrn_", (ftnlen)
+		    750)];
 	    __state->itemat = __state->node;
 	    __state->node = __state->snmpol[(i__1 = __state->node + 5) < 2009 
-		    && 0 <= i__1 ? i__1 : s_rnge("snmpol", i__1, "zzsrftrn_", 
-		    (ftnlen)754)];
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "snmp"
+		    "ol", i__1, "zzsrftrn_", (ftnlen)754)];
 	}
 
 /*        ITEMAT is the value of the last node checked, or */
@@ -942,12 +948,13 @@ L_zzsrfn2c:
     }
     if (*found) {
 	*surfid = __state->kersid[(i__2 = __state->snmidx[(i__1 = 
-		__state->itemat - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(
-		"snmidx", i__1, "zzsrftrn_", (ftnlen)765)] - 1) < 2000 && 0 <=
-		 i__2 ? i__2 : s_rnge("kersid", i__2, "zzsrftrn_", (ftnlen)
-		765)];
+		__state->itemat - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "snmidx", i__1, "zzsrftrn_", (ftnlen)765)
+		] - 1) < 2000 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "kersid", i__2, "zzsrftrn_", (ftnlen)765)
+		];
     }
-    chkout_("ZZSRFN2C", (ftnlen)8);
+    chkout_(__global_state, "ZZSRFN2C", (ftnlen)8);
     return 0;
 /* $Procedure ZZSRFC2N ( Surface ID code to name mapping ) */
 
@@ -1117,10 +1124,10 @@ L_zzsrfc2n:
 /*     map surface id and body id to surface name */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSRFC2N", (ftnlen)8);
+    chkin_(__global_state, "ZZSRFC2N", (ftnlen)8);
 
 /*     No result has been found. */
 
@@ -1133,24 +1140,25 @@ L_zzsrfc2n:
 /*        with respect to the kernel pool. Hence the different */
 /*        initializations. */
 
-	zzctrsin_(__state->srfctr);
-	zzctruin_(__state->polctr);
+	zzctrsin_(__global_state, __state->srfctr);
+	zzctruin_(__global_state, __state->polctr);
 
 /*        Initialize local data structures. The first instance of this */
 /*        call also sets a watch on the surface mapping kernel */
 /*        variables. */
 
-	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
-		__state->kerbid, &__state->extker, &__state->nkvar, 
-		__state->snmhls, __state->snmpol, __state->snmidx, 
-		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
-		 (ftnlen)36);
+	zzsrfker_(__global_state, __state->kernam, __state->nornam, 
+		__state->kersid, __state->kerbid, &__state->extker, &
+		__state->nkvar, __state->snmhls, __state->snmpol, 
+		__state->snmidx, __state->sidhls, __state->sidpol, 
+		__state->sididx, (ftnlen)36, (ftnlen)36);
 
 /*        Sync SRFCTR with the kernel pool counter. */
 
-	zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
-	if (failed_()) {
-	    chkout_("ZZSRFC2N", (ftnlen)8);
+	zzcvpool_(__global_state, "ZZSRFTRN", __state->polctr, &
+		__state->lupdte, (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSRFC2N", (ftnlen)8);
 	    return 0;
 	}
 	__state->pass1 = FALSE_;
@@ -1159,23 +1167,24 @@ L_zzsrfc2n:
 /*     Determine whether the data structures need to be updated */
 /*     due to a change in the kernel pool contents. */
 
-    zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
+    zzcvpool_(__global_state, "ZZSRFTRN", __state->polctr, &__state->lupdte, (
+	    ftnlen)8);
     if (__state->lupdte) {
 
 /*        Conservatively increment the ZZSRFTRN state counter in */
 /*        expectation of successful update. */
 
-	zzctrinc_(__state->srfctr);
+	zzctrinc_(__global_state, __state->srfctr);
 
 /*        Initialize local data structures. */
 
-	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
-		__state->kerbid, &__state->extker, &__state->nkvar, 
-		__state->snmhls, __state->snmpol, __state->snmidx, 
-		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
-		 (ftnlen)36);
-	if (failed_()) {
-	    chkout_("ZZSRFC2N", (ftnlen)8);
+	zzsrfker_(__global_state, __state->kernam, __state->nornam, 
+		__state->kersid, __state->kerbid, &__state->extker, &
+		__state->nkvar, __state->snmhls, __state->snmpol, 
+		__state->snmidx, __state->sidhls, __state->sidpol, 
+		__state->sididx, (ftnlen)36, (ftnlen)36);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSRFC2N", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -1184,16 +1193,16 @@ L_zzsrfc2n:
 /*     are not in the pool. */
 
     if (! __state->extker) {
-	chkout_("ZZSRFC2N", (ftnlen)8);
+	chkout_(__global_state, "ZZSRFC2N", (ftnlen)8);
 	return 0;
     }
 
 /*     Find the hash value of the squished input name. */
 
-    __state->lookat = zzhashi_(surfid, &__state->sidpol[5]);
+    __state->lookat = zzhashi_(__global_state, surfid, &__state->sidpol[5]);
     __state->node = __state->sidhls[(i__1 = __state->lookat - 1) < 2003 && 0 
-	    <= i__1 ? i__1 : s_rnge("sidhls", i__1, "zzsrftrn_", (ftnlen)1034)
-	    ];
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "sidhls", i__1, 
+	    "zzsrftrn_", (ftnlen)1034)];
     *found = FALSE_;
     if (__state->node > 0) {
 
@@ -1203,18 +1212,20 @@ L_zzsrfc2n:
 
 	while(__state->node > 0 && ! (*found)) {
 	    *found = *surfid == __state->kersid[(i__2 = __state->sididx[(i__1 
-		    = __state->node - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(
-		    "sididx", i__1, "zzsrftrn_", (ftnlen)1046)] - 1) < 2000 &&
-		     0 <= i__2 ? i__2 : s_rnge("kersid", i__2, "zzsrftrn_", (
-		    ftnlen)1046)] && *bodyid == __state->kerbid[(i__4 = 
+		    = __state->node - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "sididx", i__1, "zzsrftrn_", (ftnlen)
+		    1046)] - 1) < 2000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "kersid", i__2, "zzsrftrn_", (ftnlen)
+		    1046)] && *bodyid == __state->kerbid[(i__4 = 
 		    __state->sididx[(i__3 = __state->node - 1) < 2003 && 0 <= 
-		    i__3 ? i__3 : s_rnge("sididx", i__3, "zzsrftrn_", (ftnlen)
-		    1046)] - 1) < 2000 && 0 <= i__4 ? i__4 : s_rnge("kerbid", 
-		    i__4, "zzsrftrn_", (ftnlen)1046)];
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "sididx", i__3,
+		     "zzsrftrn_", (ftnlen)1046)] - 1) < 2000 && 0 <= i__4 ? 
+		    i__4 : s_rnge(&__global_state->f2c, "kerbid", i__4, "zzs"
+		    "rftrn_", (ftnlen)1046)];
 	    __state->itemat = __state->node;
 	    __state->node = __state->sidpol[(i__1 = __state->node + 5) < 2009 
-		    && 0 <= i__1 ? i__1 : s_rnge("sidpol", i__1, "zzsrftrn_", 
-		    (ftnlen)1050)];
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "sidp"
+		    "ol", i__1, "zzsrftrn_", (ftnlen)1050)];
 	}
 
 /*        ITEMAT is the value of the last node checked, or */
@@ -1222,13 +1233,14 @@ L_zzsrfc2n:
 
     }
     if (*found) {
-	s_copy(srfnam, __state->kernam + ((i__2 = __state->sididx[(i__1 = 
-		__state->itemat - 1) < 2003 && 0 <= i__1 ? i__1 : s_rnge(
-		"sididx", i__1, "zzsrftrn_", (ftnlen)1061)] - 1) < 2000 && 0 
-		<= i__2 ? i__2 : s_rnge("kernam", i__2, "zzsrftrn_", (ftnlen)
-		1061)) * 36, srfnam_len, (ftnlen)36);
+	s_copy(&__global_state->f2c, srfnam, __state->kernam + ((i__2 = 
+		__state->sididx[(i__1 = __state->itemat - 1) < 2003 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "sididx", i__1, 
+		"zzsrftrn_", (ftnlen)1061)] - 1) < 2000 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "kernam", i__2, "zzsrftrn_", (
+		ftnlen)1061)) * 36, srfnam_len, (ftnlen)36);
     }
-    chkout_("ZZSRFC2N", (ftnlen)8);
+    chkout_(__global_state, "ZZSRFC2N", (ftnlen)8);
     return 0;
 /* $Procedure ZZSRFTRK ( Surface mapping tracker ) */
 
@@ -1398,14 +1410,14 @@ L_zzsrftrk:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
     if (__state->pass1) {
 
 /*        Check in because ZZSRFKER can fail. */
 
-	chkin_("ZZSRFTRK", (ftnlen)8);
+	chkin_(__global_state, "ZZSRFTRK", (ftnlen)8);
 
 /*        Initialize the surface kernel variable update counter */
 /*        and the local pool counter. Note that this routine */
@@ -1413,28 +1425,29 @@ L_zzsrftrk:
 /*        with respect to the kernel pool. Hence the different */
 /*        initializations. */
 
-	zzctrsin_(__state->srfctr);
-	zzctruin_(__state->polctr);
+	zzctrsin_(__global_state, __state->srfctr);
+	zzctruin_(__global_state, __state->polctr);
 
 /*        Initialize local data structures. The first instance of this */
 /*        call also sets a watch on the surface mapping kernel */
 /*        variables. */
 
-	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
-		__state->kerbid, &__state->extker, &__state->nkvar, 
-		__state->snmhls, __state->snmpol, __state->snmidx, 
-		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
-		 (ftnlen)36);
+	zzsrfker_(__global_state, __state->kernam, __state->nornam, 
+		__state->kersid, __state->kerbid, &__state->extker, &
+		__state->nkvar, __state->snmhls, __state->snmpol, 
+		__state->snmidx, __state->sidhls, __state->sidpol, 
+		__state->sididx, (ftnlen)36, (ftnlen)36);
 
 /*        Sync SRFCTR with the kernel pool counter. */
 
-	zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
+	zzcvpool_(__global_state, "ZZSRFTRN", __state->polctr, &
+		__state->lupdte, (ftnlen)8);
 
 /*        Check out here since this routine doesn't check out */
 /*        before its normal exit. */
 
-	chkout_("ZZSRFTRK", (ftnlen)8);
-	if (failed_()) {
+	chkout_(__global_state, "ZZSRFTRK", (ftnlen)8);
+	if (failed_(__global_state)) {
 	    return 0;
 	}
 	__state->pass1 = FALSE_;
@@ -1442,27 +1455,28 @@ L_zzsrftrk:
 
 /*     Check for updates to the kernel pool variables. */
 
-    zzcvpool_("ZZSRFTRN", __state->polctr, &__state->lupdte, (ftnlen)8);
+    zzcvpool_(__global_state, "ZZSRFTRN", __state->polctr, &__state->lupdte, (
+	    ftnlen)8);
     if (__state->lupdte) {
 
 /*        Check in because ZZSRFKER can fail. */
 
-	chkin_("ZZSRFTRK", (ftnlen)8);
+	chkin_(__global_state, "ZZSRFTRK", (ftnlen)8);
 
 /*        Conservatively increment the ZZSRFTRN state counter in */
 /*        expectation of successful update. */
 
-	zzctrinc_(__state->srfctr);
+	zzctrinc_(__global_state, __state->srfctr);
 
 /*        Update kernel pool mapping lists and hashes. */
 
-	zzsrfker_(__state->kernam, __state->nornam, __state->kersid, 
-		__state->kerbid, &__state->extker, &__state->nkvar, 
-		__state->snmhls, __state->snmpol, __state->snmidx, 
-		__state->sidhls, __state->sidpol, __state->sididx, (ftnlen)36,
-		 (ftnlen)36);
-	chkout_("ZZSRFTRK", (ftnlen)8);
-	if (failed_()) {
+	zzsrfker_(__global_state, __state->kernam, __state->nornam, 
+		__state->kersid, __state->kerbid, &__state->extker, &
+		__state->nkvar, __state->snmhls, __state->snmpol, 
+		__state->snmidx, __state->sidhls, __state->sidpol, 
+		__state->sididx, (ftnlen)36, (ftnlen)36);
+	chkout_(__global_state, "ZZSRFTRK", (ftnlen)8);
+	if (failed_(__global_state)) {
 	    return 0;
 	}
     }
@@ -1470,32 +1484,34 @@ L_zzsrftrk:
 /*     Check the input counter against the ZZSRFTRN counter; */
 /*     sync the user counter. */
 
-    zzctrchk_(__state->srfctr, usrctr, update);
+    zzctrchk_(__global_state, __state->srfctr, usrctr, update);
     return 0;
 } /* zzsrftrn_ */
 
-/* Subroutine */ int zzsrftrn_(integer *bodyid, char *srfnam, integer *surfid,
-	 integer *usrctr, logical *found, logical *update, ftnlen srfnam_len)
+/* Subroutine */ int zzsrftrn_(cspice_t* __global_state, integer *bodyid, 
+	char *srfnam, integer *surfid, integer *usrctr, logical *found, 
+	logical *update, ftnlen srfnam_len)
 {
     return zzsrftrn_0_(0, bodyid, srfnam, surfid, usrctr, found, update, 
 	    srfnam_len);
     }
 
-/* Subroutine */ int zzsrfn2c_(char *srfnam, integer *bodyid, integer *surfid,
-	 logical *found, ftnlen srfnam_len)
+/* Subroutine */ int zzsrfn2c_(cspice_t* __global_state, char *srfnam, 
+	integer *bodyid, integer *surfid, logical *found, ftnlen srfnam_len)
 {
     return zzsrftrn_0_(1, bodyid, srfnam, surfid, (integer *)0, found, (
 	    logical *)0, srfnam_len);
     }
 
-/* Subroutine */ int zzsrfc2n_(integer *surfid, integer *bodyid, char *srfnam,
-	 logical *found, ftnlen srfnam_len)
+/* Subroutine */ int zzsrfc2n_(cspice_t* __global_state, integer *surfid, 
+	integer *bodyid, char *srfnam, logical *found, ftnlen srfnam_len)
 {
     return zzsrftrn_0_(2, bodyid, srfnam, surfid, (integer *)0, found, (
 	    logical *)0, srfnam_len);
     }
 
-/* Subroutine */ int zzsrftrk_(integer *usrctr, logical *update)
+/* Subroutine */ int zzsrftrk_(cspice_t* __global_state, integer *usrctr, 
+	logical *update)
 {
     return zzsrftrn_0_(3, (integer *)0, (char *)0, (integer *)0, usrctr, (
 	    logical *)0, update, (ftnint)0);

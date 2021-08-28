@@ -8,13 +8,13 @@
 
 
 typedef int xpsgip_state_t;
-static xpsgip_state_t* get_xpsgip_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline xpsgip_state_t* get_xpsgip_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure XPSGIP ( Transpose a matrix, general dimension, in place ) */
-/* Subroutine */ int xpsgip_(integer *nrow, integer *ncol, doublereal *matrix)
+/* Subroutine */ int xpsgip_(cspice_t* __global_state, integer *nrow, integer 
+	*ncol, doublereal *matrix)
 {
     integer dest;
     doublereal temp;
@@ -29,7 +29,7 @@ static xpsgip_state_t* get_xpsgip_state() {
 
 
     /* Module state */
-    xpsgip_state_t* __state = get_xpsgip_state();
+    xpsgip_state_t* __state = get_xpsgip_state(__global_state);
 /* $ Abstract */
 
 /*     Transpose a matrix of arbitrary size and shape in place. */

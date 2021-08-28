@@ -8,8 +8,7 @@
 
 
 extern zzekacps_init_t __zzekacps_init;
-static zzekacps_state_t* get_zzekacps_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekacps_state_t* get_zzekacps_state(cspice_t* state) {
 	if (!state->zzekacps)
 		state->zzekacps = __cspice_allocate_module(sizeof(
 	zzekacps_state_t), &__zzekacps_init, sizeof(__zzekacps_init));
@@ -18,31 +17,32 @@ static zzekacps_state_t* get_zzekacps_state() {
 }
 
 /* $Procedure ZZEKACPS ( EK, allocate contiguous pages for segment ) */
-/* Subroutine */ int zzekacps_(integer *handle, integer *segdsc, integer *
-	type__, integer *n, integer *p, integer *base)
+/* Subroutine */ int zzekacps_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *type__, integer *n, integer *p, integer *
+	base)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     integer tree;
-    extern /* Subroutine */ int zzekpgan_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzeksfwd_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzektrap_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekpgan_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzeksfwd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzektrap_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekslnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer b;
     integer i__;
     integer p2;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer idx;
 
 
     /* Module state */
-    zzekacps_state_t* __state = get_zzekacps_state();
+    zzekacps_state_t* __state = get_zzekacps_state(__global_state);
 /* $ Abstract */
 
 /*     Allocate a series of contiguous data pages for a specified EK */
@@ -362,12 +362,12 @@ static zzekacps_state_t* get_zzekacps_state() {
 
 /*     Allocate the pages. */
 
-    zzekpgan_(handle, type__, p, base);
+    zzekpgan_(__global_state, handle, type__, p, base);
     i__1 = *n;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	zzekpgan_(handle, type__, &p2, &b);
+	zzekpgan_(__global_state, handle, type__, &p2, &b);
     }
-    if (failed_()) {
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -379,9 +379,9 @@ static zzekacps_state_t* get_zzekacps_state() {
 /*        Zero out the page's link count and forward pointer. */
 
 	i__2 = *p + i__ - 1;
-	zzekslnk_(handle, type__, &i__2, &__state->c__0);
+	zzekslnk_(__global_state, handle, type__, &i__2, &__state->c__0);
 	i__2 = *p + i__ - 1;
-	zzeksfwd_(handle, type__, &i__2, &__state->c__0);
+	zzeksfwd_(__global_state, handle, type__, &i__2, &__state->c__0);
     }
 
 /*     Update the segment's metadata.  Insert the number of each new */
@@ -402,7 +402,7 @@ static zzekacps_state_t* get_zzekacps_state() {
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	i__2 = *p + i__ - 1;
-	zzektrap_(handle, &tree, &i__2, &idx);
+	zzektrap_(__global_state, handle, &tree, &i__2, &idx);
     }
     return 0;
 } /* zzekacps_ */

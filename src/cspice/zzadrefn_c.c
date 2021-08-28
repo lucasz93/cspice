@@ -165,7 +165,7 @@
    {
       return ( 0 );
    }
-   chkin_c ( "zzadrefn_c" );
+   chkin_c ( naif_state, "zzadrefn_c" );
 
 
    /*
@@ -178,7 +178,7 @@
                         SpiceDouble,
                         SpiceBoolean,
                         SpiceBoolean,
-                        SpiceDouble * )  )   zzadget_c ( UDREFN );
+                        SpiceDouble * )  )   zzadget_c ( naif_state,  ( UDREFN );
 
    /*
    Call the stored function. 

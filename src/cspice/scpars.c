@@ -8,8 +8,7 @@
 
 
 extern scpars_init_t __scpars_init;
-static scpars_state_t* get_scpars_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline scpars_state_t* get_scpars_state(cspice_t* state) {
 	if (!state->scpars)
 		state->scpars = __cspice_allocate_module(sizeof(
 	scpars_state_t), &__scpars_init, sizeof(__scpars_init));
@@ -18,56 +17,58 @@ static scpars_state_t* get_scpars_state() {
 }
 
 /* $Procedure      SCPARS ( Parse a spacecraft clock string ) */
-/* Subroutine */ int scpars_(integer *sc, char *sclkch, logical *error, char *
-	msg, doublereal *sclkdp, ftnlen sclkch_len, ftnlen msg_len)
+/* Subroutine */ int scpars_(cspice_t* __global_state, integer *sc, char *
+	sclkch, logical *error, char *msg, doublereal *sclkdp, ftnlen 
+	sclkch_len, ftnlen msg_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    double d_nint(doublereal *);
-    integer s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    double d_nint(f2c_state_t*, doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern integer cpos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen)
+	    ;
     integer part;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int scps01_(integer *, char *, logical *, char *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int scps01_(cspice_t*, integer *, char *, logical 
+	    *, char *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
     doublereal ticks;
     integer dtype;
     integer pnter;
     char psmsg[255];
     logical pserr;
     doublereal pstop[9999];
-    extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int scpart_(integer *, integer *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer sctype_(integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int scpart_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int nparsi_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer sctype_(cspice_t*, integer *);
     integer nparts;
     doublereal pstart[9999];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     char strerr[255];
     doublereal ptotls[9999];
     integer pos;
 
 
     /* Module state */
-    scpars_state_t* __state = get_scpars_state();
+    scpars_state_t* __state = get_scpars_state(__global_state);
 /* $ Abstract */
 
 /*     Parse a character representation of spacecraft clock time and */
@@ -585,10 +586,10 @@ static scpars_state_t* get_scpars_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCPARS", (ftnlen)6);
+	chkin_(__global_state, "SCPARS", (ftnlen)6);
     }
 
 /*     This routine handles errors in two different ways. */
@@ -606,36 +607,39 @@ static scpars_state_t* get_scpars_state() {
 /*     and MSG will be initialized to the following values: */
 
     *error = TRUE_;
-    s_copy(msg, "SPICELIB error detected.", msg_len, (ftnlen)24);
+    s_copy(&__global_state->f2c, msg, "SPICELIB error detected.", msg_len, (
+	    ftnlen)24);
 
 /*     First check if the string is blank. */
 
-    if (s_cmp(sclkch, " ", sclkch_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, sclkch, " ", sclkch_len, (ftnlen)1) == 0) 
+	    {
 	*error = TRUE_;
-	s_copy(msg, "Input spacecraft clock string is blank.", msg_len, (
-		ftnlen)39);
-	chkout_("SCPARS", (ftnlen)6);
+	s_copy(&__global_state->f2c, msg, "Input spacecraft clock string is "
+		"blank.", msg_len, (ftnlen)39);
+	chkout_(__global_state, "SCPARS", (ftnlen)6);
 	return 0;
     }
 
 /*     Convert the non-partition clock string to a tick value. */
 /*     This conversion depends on the data type of the clock. */
 
-    pos = cpos_(sclkch, "/", &__state->c__1, sclkch_len, (ftnlen)1);
-    dtype = sctype_(sc);
-    if (failed_()) {
-	chkout_("SCPARS", (ftnlen)6);
+    pos = cpos_(__global_state, sclkch, "/", &__state->c__1, sclkch_len, (
+	    ftnlen)1);
+    dtype = sctype_(__global_state, sc);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SCPARS", (ftnlen)6);
 	return 0;
     }
     if (dtype == 1) {
 	i__1 = pos;
-	scps01_(sc, sclkch + i__1, &pserr, psmsg, &ticks, sclkch_len - i__1, (
-		ftnlen)255);
+	scps01_(__global_state, sc, sclkch + i__1, &pserr, psmsg, &ticks, 
+		sclkch_len - i__1, (ftnlen)255);
     } else {
-	setmsg_("Clock type # is not supported.", (ftnlen)30);
-	errint_("#", &dtype, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("SCPARS", (ftnlen)6);
+	setmsg_(__global_state, "Clock type # is not supported.", (ftnlen)30);
+	errint_(__global_state, "#", &dtype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "SCPARS", (ftnlen)6);
 	return 0;
     }
 
@@ -643,8 +647,8 @@ static scpars_state_t* get_scpars_state() {
 
     if (pserr) {
 	*error = TRUE_;
-	s_copy(msg, psmsg, msg_len, (ftnlen)255);
-	chkout_("SCPARS", (ftnlen)6);
+	s_copy(&__global_state->f2c, msg, psmsg, msg_len, (ftnlen)255);
+	chkout_(__global_state, "SCPARS", (ftnlen)6);
 	return 0;
     }
 
@@ -654,19 +658,19 @@ static scpars_state_t* get_scpars_state() {
 /*     Read the partition start and stop times (in ticks) for this */
 /*     mission. Error if there are too many of them. */
 
-    scpart_(sc, &nparts, pstart, pstop);
-    if (failed_()) {
-	chkout_("SCPARS", (ftnlen)6);
+    scpart_(__global_state, sc, &nparts, pstart, pstop);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SCPARS", (ftnlen)6);
 	return 0;
     }
     if (nparts > 9999) {
-	setmsg_("The number of partitions, #, for spacecraft # exceeds the v"
-		"alue for parameter MXPART, #.", (ftnlen)88);
-	errint_("#", &nparts, (ftnlen)1);
-	errint_("#", sc, (ftnlen)1);
-	errint_("#", &__state->c__9999, (ftnlen)1);
-	sigerr_("SPICE(TOOMANYPARTS)", (ftnlen)19);
-	chkout_("SCPARS", (ftnlen)6);
+	setmsg_(__global_state, "The number of partitions, #, for spacecraft"
+		" # exceeds the value for parameter MXPART, #.", (ftnlen)88);
+	errint_(__global_state, "#", &nparts, (ftnlen)1);
+	errint_(__global_state, "#", sc, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__9999, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TOOMANYPARTS)", (ftnlen)19);
+	chkout_(__global_state, "SCPARS", (ftnlen)6);
 	return 0;
     }
 
@@ -674,16 +678,19 @@ static scpars_state_t* get_scpars_state() {
 /*     partition plus all preceding partitions. */
 
     d__1 = pstop[0] - pstart[0];
-    ptotls[0] = d_nint(&d__1);
+    ptotls[0] = d_nint(&__global_state->f2c, &d__1);
     i__1 = nparts;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	d__1 = ptotls[(i__3 = i__ - 2) < 9999 && 0 <= i__3 ? i__3 : s_rnge(
-		"ptotls", i__3, "scpars_", (ftnlen)588)] + pstop[(i__4 = i__ 
-		- 1) < 9999 && 0 <= i__4 ? i__4 : s_rnge("pstop", i__4, "scp"
-		"ars_", (ftnlen)588)] - pstart[(i__5 = i__ - 1) < 9999 && 0 <= 
-		i__5 ? i__5 : s_rnge("pstart", i__5, "scpars_", (ftnlen)588)];
-	ptotls[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge("ptotls", 
-		i__2, "scpars_", (ftnlen)588)] = d_nint(&d__1);
+	d__1 = ptotls[(i__3 = i__ - 2) < 9999 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "ptotls", i__3, "scpars_", (ftnlen)588)] 
+		+ pstop[(i__4 = i__ - 1) < 9999 && 0 <= i__4 ? i__4 : s_rnge(&
+		__global_state->f2c, "pstop", i__4, "scpars_", (ftnlen)588)] 
+		- pstart[(i__5 = i__ - 1) < 9999 && 0 <= i__5 ? i__5 : s_rnge(
+		&__global_state->f2c, "pstart", i__5, "scpars_", (ftnlen)588)]
+		;
+	ptotls[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ptotls", i__2, "scpars_", (ftnlen)588)] 
+		= d_nint(&__global_state->f2c, &d__1);
     }
 
 /*     Determine the partition number for the input clock string: */
@@ -715,60 +722,68 @@ static scpars_state_t* get_scpars_state() {
 /*        The slash character is first character in the string which */
 /*        means that the partition number is not there. */
 
-	s_copy(msg, "Unable to parse the partition number from SCLK string #."
-		, msg_len, (ftnlen)56);
-	repmc_(msg, "#", sclkch, msg, msg_len, (ftnlen)1, sclkch_len, msg_len)
-		;
-	chkout_("SCPARS", (ftnlen)6);
+	s_copy(&__global_state->f2c, msg, "Unable to parse the partition num"
+		"ber from SCLK string #.", msg_len, (ftnlen)56);
+	repmc_(__global_state, msg, "#", sclkch, msg, msg_len, (ftnlen)1, 
+		sclkch_len, msg_len);
+	chkout_(__global_state, "SCPARS", (ftnlen)6);
 	return 0;
     } else if (pos > 1) {
 
 /*        Try to parse the partition number. */
 
 	part = 0;
-	nparsi_(sclkch, &part, strerr, &pnter, pos - 1, (ftnlen)255);
+	nparsi_(__global_state, sclkch, &part, strerr, &pnter, pos - 1, (
+		ftnlen)255);
 
 /*        Make sure that the number parsed is correct. */
 
-	if (s_cmp(strerr, " ", (ftnlen)255, (ftnlen)1) != 0) {
+	if (s_cmp(&__global_state->f2c, strerr, " ", (ftnlen)255, (ftnlen)1) 
+		!= 0) {
 
 /*          Was not able to parse a number. */
 
-	    s_copy(msg, "Unable to parse the partition number from SCLK stri"
-		    "ng #.", msg_len, (ftnlen)56);
-	    repmc_(msg, "#", sclkch, msg, msg_len, (ftnlen)1, sclkch_len, 
-		    msg_len);
-	    chkout_("SCPARS", (ftnlen)6);
+	    s_copy(&__global_state->f2c, msg, "Unable to parse the partition"
+		    " number from SCLK string #.", msg_len, (ftnlen)56);
+	    repmc_(__global_state, msg, "#", sclkch, msg, msg_len, (ftnlen)1, 
+		    sclkch_len, msg_len);
+	    chkout_(__global_state, "SCPARS", (ftnlen)6);
 	    return 0;
 	} else if (part <= 0 || part > nparts) {
 
 /*           The parsed number does not fall in the range of valid */
 /*           numbers. */
 
-	    s_copy(msg, "Partition number # taken from SCLK string # is not "
-		    "in acceptable range 1 to #.", msg_len, (ftnlen)78);
-	    repmi_(msg, "#", &part, msg, msg_len, (ftnlen)1, msg_len);
-	    repmc_(msg, "#", sclkch, msg, msg_len, (ftnlen)1, sclkch_len, 
+	    s_copy(&__global_state->f2c, msg, "Partition number # taken from"
+		    " SCLK string # is not in acceptable range 1 to #.", 
+		    msg_len, (ftnlen)78);
+	    repmi_(__global_state, msg, "#", &part, msg, msg_len, (ftnlen)1, 
 		    msg_len);
-	    repmi_(msg, "#", &nparts, msg, msg_len, (ftnlen)1, msg_len);
-	    chkout_("SCPARS", (ftnlen)6);
+	    repmc_(__global_state, msg, "#", sclkch, msg, msg_len, (ftnlen)1, 
+		    sclkch_len, msg_len);
+	    repmi_(__global_state, msg, "#", &nparts, msg, msg_len, (ftnlen)1,
+		     msg_len);
+	    chkout_(__global_state, "SCPARS", (ftnlen)6);
 	    return 0;
 	} else if (ticks < pstart[(i__1 = part - 1) < 9999 && 0 <= i__1 ? 
-		i__1 : s_rnge("pstart", i__1, "scpars_", (ftnlen)673)] || 
-		ticks > pstop[(i__2 = part - 1) < 9999 && 0 <= i__2 ? i__2 : 
-		s_rnge("pstop", i__2, "scpars_", (ftnlen)673)]) {
+		i__1 : s_rnge(&__global_state->f2c, "pstart", i__1, "scpars_",
+		 (ftnlen)673)] || ticks > pstop[(i__2 = part - 1) < 9999 && 0 
+		<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "pstop", i__2, 
+		"scpars_", (ftnlen)673)]) {
 
 /*           The TICKS value does not fall in the range of valid */
 /*           values for the partition number parsed from the input */
 /*           clock string. */
 
-	    s_copy(msg, "SCLK count from # does not fall in the boundaries o"
-		    "f partition number #.", msg_len, (ftnlen)72);
+	    s_copy(&__global_state->f2c, msg, "SCLK count from # does not fa"
+		    "ll in the boundaries of partition number #.", msg_len, (
+		    ftnlen)72);
 	    i__1 = pos;
-	    repmc_(msg, "#", sclkch + i__1, msg, msg_len, (ftnlen)1, 
-		    sclkch_len - i__1, msg_len);
-	    repmi_(msg, "#", &part, msg, msg_len, (ftnlen)1, msg_len);
-	    chkout_("SCPARS", (ftnlen)6);
+	    repmc_(__global_state, msg, "#", sclkch + i__1, msg, msg_len, (
+		    ftnlen)1, sclkch_len - i__1, msg_len);
+	    repmi_(__global_state, msg, "#", &part, msg, msg_len, (ftnlen)1, 
+		    msg_len);
+	    chkout_(__global_state, "SCPARS", (ftnlen)6);
 	    return 0;
 	}
     } else {
@@ -779,20 +794,22 @@ static scpars_state_t* get_scpars_state() {
 
 	part = 1;
 	while(part <= nparts && (ticks < pstart[(i__1 = part - 1) < 9999 && 0 
-		<= i__1 ? i__1 : s_rnge("pstart", i__1, "scpars_", (ftnlen)
-		702)] || ticks > pstop[(i__2 = part - 1) < 9999 && 0 <= i__2 ?
-		 i__2 : s_rnge("pstop", i__2, "scpars_", (ftnlen)702)])) {
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "pstart", i__1, 
+		"scpars_", (ftnlen)702)] || ticks > pstop[(i__2 = part - 1) < 
+		9999 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "pst"
+		"op", i__2, "scpars_", (ftnlen)702)])) {
 	    ++part;
 	}
 	if (part > nparts) {
-	    s_copy(msg, "SCLK count # does not fall in the boundaries of any"
-		    " of the partitions for spacecraft #.", msg_len, (ftnlen)
-		    87);
+	    s_copy(&__global_state->f2c, msg, "SCLK count # does not fall in"
+		    " the boundaries of any of the partitions for spacecraft "
+		    "#.", msg_len, (ftnlen)87);
 	    i__1 = pos;
-	    repmc_(msg, "#", sclkch + i__1, msg, msg_len, (ftnlen)1, 
-		    sclkch_len - i__1, msg_len);
-	    repmi_(msg, "#", sc, msg, msg_len, (ftnlen)1, msg_len);
-	    chkout_("SCPARS", (ftnlen)6);
+	    repmc_(__global_state, msg, "#", sclkch + i__1, msg, msg_len, (
+		    ftnlen)1, sclkch_len - i__1, msg_len);
+	    repmi_(__global_state, msg, "#", sc, msg, msg_len, (ftnlen)1, 
+		    msg_len);
+	    chkout_(__global_state, "SCPARS", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -804,16 +821,18 @@ static scpars_state_t* get_scpars_state() {
 
     if (part > 1) {
 	*sclkdp = ticks - pstart[(i__1 = part - 1) < 9999 && 0 <= i__1 ? i__1 
-		: s_rnge("pstart", i__1, "scpars_", (ftnlen)733)] + ptotls[(
-		i__2 = part - 2) < 9999 && 0 <= i__2 ? i__2 : s_rnge("ptotls",
-		 i__2, "scpars_", (ftnlen)733)];
+		: s_rnge(&__global_state->f2c, "pstart", i__1, "scpars_", (
+		ftnlen)733)] + ptotls[(i__2 = part - 2) < 9999 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "ptotls", i__2, "scpars_",
+		 (ftnlen)733)];
     } else {
 	*sclkdp = ticks - pstart[(i__1 = part - 1) < 9999 && 0 <= i__1 ? i__1 
-		: s_rnge("pstart", i__1, "scpars_", (ftnlen)735)];
+		: s_rnge(&__global_state->f2c, "pstart", i__1, "scpars_", (
+		ftnlen)735)];
     }
     *error = FALSE_;
-    s_copy(msg, " ", msg_len, (ftnlen)1);
-    chkout_("SCPARS", (ftnlen)6);
+    s_copy(&__global_state->f2c, msg, " ", msg_len, (ftnlen)1);
+    chkout_(__global_state, "SCPARS", (ftnlen)6);
     return 0;
 } /* scpars_ */
 

@@ -8,8 +8,7 @@
 
 
 extern spkr18_init_t __spkr18_init;
-static spkr18_state_t* get_spkr18_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr18_state_t* get_spkr18_state(cspice_t* state) {
 	if (!state->spkr18)
 		state->spkr18 = __cspice_allocate_module(sizeof(
 	spkr18_state_t), &__spkr18_init, sizeof(__spkr18_init));
@@ -18,14 +17,15 @@ static spkr18_state_t* get_spkr18_state() {
 }
 
 /* $Procedure      SPKR18 ( Read SPK record from segment, type 18 ) */
-/* Subroutine */ int spkr18_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr18_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer high;
@@ -36,20 +36,21 @@ static spkr18_state_t* get_spkr18_state() {
     integer n;
     integer begin;
     integer nread;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer lsize;
     integer first;
     integer group;
     integer rsize;
     integer start;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer begidx;
     integer bufbas;
     integer dirbas;
@@ -58,23 +59,23 @@ static spkr18_state_t* get_spkr18_state() {
     integer remain;
     integer timbas;
     integer packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer maxwnd;
     doublereal contrl[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer lstltd_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lstltd_(cspice_t*, doublereal *, integer *, doublereal *);
     integer wndsiz;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer subtyp;
-    extern logical odd_(integer *);
+    extern logical odd_(cspice_t*, integer *);
     integer end;
     integer low;
 
 
     /* Module state */
-    spkr18_state_t* __state = get_spkr18_state();
+    spkr18_state_t* __state = get_spkr18_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 18 */
@@ -355,15 +356,15 @@ static spkr18_state_t* get_spkr18_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKR18", (ftnlen)6);
+    chkin_(__global_state, "SPKR18", (ftnlen)6);
 
 /*     Unpack the segment descriptor, and get the start and end addresses */
 /*     of the segment. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[3];
     begin = ic[4];
     end = ic[5];
@@ -371,11 +372,11 @@ static spkr18_state_t* get_spkr18_state() {
 /*     Make sure that this really is a type 18 data segment. */
 
     if (type__ != 18) {
-	setmsg_("You are attempting to locate type * data in a type 18 data "
-		"segment.", (ftnlen)67);
-	errint_("*", &type__, (ftnlen)1);
-	sigerr_("SPICE(WRONGSPKTYPE)", (ftnlen)19);
-	chkout_("SPKR18", (ftnlen)6);
+	setmsg_(__global_state, "You are attempting to locate type * data in"
+		" a type 18 data segment.", (ftnlen)67);
+	errint_(__global_state, "*", &type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGSPKTYPE)", (ftnlen)19);
+	chkout_(__global_state, "SPKR18", (ftnlen)6);
 	return 0;
     }
 
@@ -383,38 +384,38 @@ static spkr18_state_t* get_spkr18_state() {
 /*     descriptor. */
 
     if (*et < dc[0] || *et > dc[1]) {
-	setmsg_("Request time # is outside of descriptor bounds # : #.", (
-		ftnlen)53);
-	errdp_("#", et, (ftnlen)1);
-	errdp_("#", dc, (ftnlen)1);
-	errdp_("#", &dc[1], (ftnlen)1);
-	sigerr_("SPICE(TIMEOUTOFBOUNDS)", (ftnlen)22);
-	chkout_("SPKR18", (ftnlen)6);
+	setmsg_(__global_state, "Request time # is outside of descriptor bou"
+		"nds # : #.", (ftnlen)53);
+	errdp_(__global_state, "#", et, (ftnlen)1);
+	errdp_(__global_state, "#", dc, (ftnlen)1);
+	errdp_(__global_state, "#", &dc[1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TIMEOUTOFBOUNDS)", (ftnlen)22);
+	chkout_(__global_state, "SPKR18", (ftnlen)6);
 	return 0;
     }
 /*     We'll need the last two items before we can determine which */
 /*     packets make up our output record. */
 
     i__1 = end - 2;
-    dafgda_(handle, &i__1, &end, contrl);
+    dafgda_(__global_state, handle, &i__1, &end, contrl);
 
 /*     Check the FAILED flag just in case HANDLE is not attached to */
 /*     any DAF file and the error action is not set to ABORT. You need */
 /*     need to do this only after the first call to DAFGDA. */
 
-    if (failed_()) {
-	chkout_("SPKR18", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKR18", (ftnlen)6);
 	return 0;
     }
-    subtyp = i_dnnt(contrl);
-    wndsiz = i_dnnt(&contrl[1]);
-    n = i_dnnt(&contrl[2]);
+    subtyp = i_dnnt(&__global_state->f2c, contrl);
+    wndsiz = i_dnnt(&__global_state->f2c, &contrl[1]);
+    n = i_dnnt(&__global_state->f2c, &contrl[2]);
     if (n < 2) {
-	setmsg_("Packet count # is less than the minimum valid value, which "
-		"is 2.", (ftnlen)64);
-	errint_("#", &n, (ftnlen)1);
-	sigerr_("SPICE(TOOFEWSTATES)", (ftnlen)19);
-	chkout_("SPKR18", (ftnlen)6);
+	setmsg_(__global_state, "Packet count # is less than the minimum val"
+		"id value, which is 2.", (ftnlen)64);
+	errint_(__global_state, "#", &n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TOOFEWSTATES)", (ftnlen)19);
+	chkout_(__global_state, "SPKR18", (ftnlen)6);
 	return 0;
     }
 
@@ -444,70 +445,72 @@ static spkr18_state_t* get_spkr18_state() {
     } else if (subtyp == 1) {
 	packsz = 6;
     } else {
-	setmsg_("Unexpected SPK type 18 subtype # found in type 18 segment.", 
-		(ftnlen)58);
-	errint_("#", &subtyp, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("SPKR18", (ftnlen)6);
+	setmsg_(__global_state, "Unexpected SPK type 18 subtype # found in t"
+		"ype 18 segment.", (ftnlen)58);
+	errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "SPKR18", (ftnlen)6);
 	return 0;
     }
 
 /*     Check the window size. */
 
     if (wndsiz <= 0) {
-	setmsg_("Window size in type 18 segment was #; must be positive.", (
-		ftnlen)55);
-	errint_("#", &subtyp, (ftnlen)1);
-	sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	chkout_("SPKR18", (ftnlen)6);
+	setmsg_(__global_state, "Window size in type 18 segment was #; must "
+		"be positive.", (ftnlen)55);
+	errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	chkout_(__global_state, "SPKR18", (ftnlen)6);
 	return 0;
     }
     if (subtyp == 0) {
 	maxwnd = 8;
 	if (wndsiz > maxwnd) {
-	    setmsg_("Window size in type 18 segment was #; max allowed value"
-		    " is # for subtype 0 (Hermite, 12-element packets).", (
-		    ftnlen)105);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    errint_("#", &maxwnd, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("SPKR18", (ftnlen)6);
+	    setmsg_(__global_state, "Window size in type 18 segment was #; m"
+		    "ax allowed value is # for subtype 0 (Hermite, 12-element"
+		    " packets).", (ftnlen)105);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    errint_(__global_state, "#", &maxwnd, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "SPKR18", (ftnlen)6);
 	    return 0;
 	}
-	if (odd_(&wndsiz)) {
-	    setmsg_("Window size in type 18 segment was #; must be even for "
-		    "subtype 0 (Hermite, 12-element packets).", (ftnlen)95);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("SPKR18", (ftnlen)6);
+	if (odd_(__global_state, &wndsiz)) {
+	    setmsg_(__global_state, "Window size in type 18 segment was #; m"
+		    "ust be even for subtype 0 (Hermite, 12-element packets).",
+		     (ftnlen)95);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "SPKR18", (ftnlen)6);
 	    return 0;
 	}
     } else if (subtyp == 1) {
 	maxwnd = 16;
 	if (wndsiz > maxwnd) {
-	    setmsg_("Window size in type 18 segment was #; max allowed value"
-		    " is # for subtype 1 (Lagrange, 6-element packets).", (
-		    ftnlen)105);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    errint_("#", &maxwnd, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("SPKR18", (ftnlen)6);
+	    setmsg_(__global_state, "Window size in type 18 segment was #; m"
+		    "ax allowed value is # for subtype 1 (Lagrange, 6-element"
+		    " packets).", (ftnlen)105);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    errint_(__global_state, "#", &maxwnd, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "SPKR18", (ftnlen)6);
 	    return 0;
 	}
-	if (odd_(&wndsiz)) {
-	    setmsg_("Window size in type 18 segment was #; must be even for "
-		    "subtype 1 (Lagrange, 6-element packets).", (ftnlen)95);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("SPKR18", (ftnlen)6);
+	if (odd_(__global_state, &wndsiz)) {
+	    setmsg_(__global_state, "Window size in type 18 segment was #; m"
+		    "ust be even for subtype 1 (Lagrange, 6-element packets).",
+		     (ftnlen)95);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "SPKR18", (ftnlen)6);
 	    return 0;
 	}
     } else {
-	setmsg_("This point should not be reached. Getting here may indicate"
-		" that the code needs to updated to handle new subtypes.", (
-		ftnlen)114);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("SPKR18", (ftnlen)6);
+	setmsg_(__global_state, "This point should not be reached. Getting h"
+		"ere may indicate that the code needs to updated to handle ne"
+		"w subtypes.", (ftnlen)114);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "SPKR18", (ftnlen)6);
 	return 0;
     }
 
@@ -538,10 +541,10 @@ static spkr18_state_t* get_spkr18_state() {
 	remain = ndir - nread;
 	i__1 = bufbas + 1;
 	i__2 = bufbas + nread;
-	dafgda_(handle, &i__1, &i__2, buffer);
-	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"buffer", i__1, "spkr18_", (ftnlen)515)] < *et && remain > 0) 
-		{
+	dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "buffer", i__1, "spkr18_", (ftnlen)515)] 
+		< *et && remain > 0) {
 	    bufbas += nread;
 	    nread = min(remain,100);
 	    remain -= nread;
@@ -550,13 +553,14 @@ static spkr18_state_t* get_spkr18_state() {
 
 	    i__1 = bufbas + 1;
 	    i__2 = bufbas + nread;
-	    dafgda_(handle, &i__1, &i__2, buffer);
+	    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
 	}
 
 /*        At this point, BUFBAS - DIRBAS is the number of directory */
 /*        entries preceding the one contained in BUFFER(1). */
 
-	group = bufbas - dirbas + lstltd_(et, &nread, buffer) + 1;
+	group = bufbas - dirbas + lstltd_(__global_state, et, &nread, buffer) 
+		+ 1;
     }
 
 /*     GROUP now indicates the set of epochs in which to search for the */
@@ -588,14 +592,14 @@ static spkr18_state_t* get_spkr18_state() {
     timbas = dirbas - n;
     i__1 = timbas + begidx;
     i__2 = timbas + endidx;
-    dafgda_(handle, &i__1, &i__2, buffer);
+    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
 
 /*     Find two adjacent epochs bounding the request epoch.  The request */
 /*     time cannot be greater than all of epochs in the group, and it */
 /*     cannot precede the first element of the group. */
 
     i__1 = endidx - begidx + 1;
-    i__ = lstltd_(et, &i__1, buffer);
+    i__ = lstltd_(__global_state, et, &i__1, buffer);
 
 /*     The variables LOW and high are the indices of a pair of time */
 /*     tags that bracket the request time. */
@@ -655,15 +659,16 @@ static spkr18_state_t* get_spkr18_state() {
 
     i__1 = begin + (first - 1) * packsz;
     i__2 = begin + last * packsz - 1;
-    dafgda_(handle, &i__1, &i__2, &record[2]);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[2]);
 
 /*     Finally, add the epochs to the output record. */
 
     start = begin + n * packsz + first - 2;
     i__1 = start + 1;
     i__2 = start + wndsiz;
-    dafgda_(handle, &i__1, &i__2, &record[wndsiz * packsz + 2]);
-    chkout_("SPKR18", (ftnlen)6);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[wndsiz * packsz + 2]
+	    );
+    chkout_(__global_state, "SPKR18", (ftnlen)6);
     return 0;
 } /* spkr18_ */
 

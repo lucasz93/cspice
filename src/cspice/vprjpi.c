@@ -8,8 +8,7 @@
 
 
 extern vprjpi_init_t __vprjpi_init;
-static vprjpi_state_t* get_vprjpi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vprjpi_state_t* get_vprjpi_state(cspice_t* state) {
 	if (!state->vprjpi)
 		state->vprjpi = __cspice_allocate_module(sizeof(
 	vprjpi_state_t), &__vprjpi_init, sizeof(__vprjpi_init));
@@ -18,8 +17,9 @@ static vprjpi_state_t* get_vprjpi_state() {
 }
 
 /* $Procedure      VPRJPI ( Vector projection onto plane, inverted ) */
-/* Subroutine */ int vprjpi_(doublereal *vin, doublereal *projpl, doublereal *
-	invpl, doublereal *vout, logical *found)
+/* Subroutine */ int vprjpi_(cspice_t* __global_state, doublereal *vin, 
+	doublereal *projpl, doublereal *invpl, doublereal *vout, logical *
+	found)
 {
     /* System generated locals */
     doublereal d__1;
@@ -27,25 +27,25 @@ static vprjpi_state_t* get_vprjpi_state() {
     /* Local variables */
     doublereal invc;
     doublereal invn[3];
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     doublereal mult;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal denom;
-    extern doublereal dpmax_(void);
+    extern doublereal dpmax_(cspice_t*);
     doublereal projc;
     doublereal limit;
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal numer;
     doublereal projn[3];
-    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int pl2nvc_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    vprjpi_state_t* __state = get_vprjpi_state();
+    vprjpi_state_t* __state = get_vprjpi_state(__global_state);
 /* $ Abstract */
 
 /*     Find the vector in a specified plane that maps to a specified */
@@ -268,16 +268,16 @@ static vprjpi_state_t* get_vprjpi_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("VPRJPI", (ftnlen)6);
+	chkin_(__global_state, "VPRJPI", (ftnlen)6);
     }
 
 /*     Unpack the planes. */
 
-    pl2nvc_(projpl, projn, &projc);
-    pl2nvc_(invpl, invn, &invc);
+    pl2nvc_(__global_state, projpl, projn, &projc);
+    pl2nvc_(__global_state, invpl, invn, &invc);
 
 /*     We'll first discuss the computation of VOUT in the nominal case, */
 /*     and then deal with the exceptional cases. */
@@ -318,8 +318,8 @@ static vprjpi_state_t* get_vprjpi_state() {
 
 /*     Compute the numerator and denominator of the right side of (2). */
 
-    numer = invc - vdot_(vin, invn);
-    denom = vdot_(projn, invn);
+    numer = invc - vdot_(__global_state, vin, invn);
+    denom = vdot_(__global_state, projn, invn);
 
 /*     If the magnitude of the denominator is greater than the absolute */
 /*     value of */
@@ -344,16 +344,16 @@ static vprjpi_state_t* get_vprjpi_state() {
 /*     on some systems. */
 
     if (abs(numer) < 1.) {
-	limit = 10. / dpmax_();
+	limit = 10. / dpmax_(__global_state);
     } else {
-	limit = (d__1 = 10. / dpmax_() * numer, abs(d__1));
+	limit = (d__1 = 10. / dpmax_(__global_state) * numer, abs(d__1));
     }
     if (abs(denom) > limit) {
 
 /*        We can find VOUT after all. */
 
 	mult = numer / denom;
-	vlcom_(&__state->c_b3, vin, &mult, projn, vout);
+	vlcom_(__global_state, &__state->c_b3, vin, &mult, projn, vout);
 	*found = TRUE_;
     } else {
 
@@ -361,7 +361,7 @@ static vprjpi_state_t* get_vprjpi_state() {
 
 	*found = FALSE_;
     }
-    chkout_("VPRJPI", (ftnlen)6);
+    chkout_(__global_state, "VPRJPI", (ftnlen)6);
     return 0;
 } /* vprjpi_ */
 

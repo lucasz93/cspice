@@ -934,7 +934,7 @@
       {
       return;
       }
-   chkin_c ( "gfsep_c" );
+   chkin_c ( naif_state, "gfsep_c" );
 
 
    /*

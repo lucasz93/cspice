@@ -8,8 +8,7 @@
 
 
 extern hx2int_init_t __hx2int_init;
-static hx2int_state_t* get_hx2int_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline hx2int_state_t* get_hx2int_state(cspice_t* state) {
 	if (!state->hx2int)
 		state->hx2int = __cspice_allocate_module(sizeof(
 	hx2int_state_t), &__hx2int_init, sizeof(__hx2int_init));
@@ -18,8 +17,9 @@ static hx2int_state_t* get_hx2int_state() {
 }
 
 /* $Procedure  HX2INT  ( Signed hexadecimal string to integer ) */
-/* Subroutine */ int hx2int_(char *string, integer *number, logical *error, 
-	char *errmsg, ftnlen string_len, ftnlen errmsg_len)
+/* Subroutine */ int hx2int_(cspice_t* __global_state, char *string, integer *
+	number, logical *error, char *errmsg, ftnlen string_len, ftnlen 
+	errmsg_len)
 {
     /* Initialized data */
 
@@ -28,19 +28,19 @@ static hx2int_state_t* get_hx2int_state() {
     char ch__1[1];
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     logical more;
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer idigit;
     integer strbeg;
     logical negtiv;
-    extern integer intmin_(void);
-    extern integer intmax_(void);
+    extern integer intmin_(cspice_t*);
+    extern integer intmax_(cspice_t*);
     integer letter;
     integer strend;
     integer tmpnum;
@@ -48,7 +48,7 @@ static hx2int_state_t* get_hx2int_state() {
 
 
     /* Module state */
-    hx2int_state_t* __state = get_hx2int_state();
+    hx2int_state_t* __state = get_hx2int_state(__global_state);
 /* $ Abstract */
 
 /*     Convert a signed hexadecimal string representation of an integer */
@@ -392,10 +392,10 @@ static hx2int_state_t* get_hx2int_state() {
 /*        constructing the desired integer. These are used to help */
 /*        determine integer overflow or integer underflow errors. */
 
-	__state->mini = intmin_() / 16;
-	__state->minmod = (__state->mini << 4) - intmin_();
-	__state->maxi = intmax_() / 16;
-	__state->maxmod = intmax_() - (__state->maxi << 4);
+	__state->mini = intmin_(__global_state) / 16;
+	__state->minmod = (__state->mini << 4) - intmin_(__global_state);
+	__state->maxi = intmax_(__global_state) / 16;
+	__state->maxmod = intmax_(__global_state) - (__state->maxi << 4);
     }
 
 /*     There are no errors initially, so set the error flag to */
@@ -405,16 +405,17 @@ static hx2int_state_t* get_hx2int_state() {
 
 /*     If the string is blank, set the error flag and return immediately. */
 
-    if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, string, " ", string_len, (ftnlen)1) == 0) 
+	    {
 	*error = TRUE_;
-	s_copy(errmsg, "ERROR: A blank input string is not allowed.", 
-		errmsg_len, (ftnlen)43);
+	s_copy(&__global_state->f2c, errmsg, "ERROR: A blank input string is"
+		" not allowed.", errmsg_len, (ftnlen)43);
 	return 0;
     }
 
 /*     Initialize a few other things. */
 
-    s_copy(errmsg, " ", errmsg_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, errmsg, " ", errmsg_len, (ftnlen)1);
     tmpnum = 0;
 
 /*     Assume that the number is nonnegative. */
@@ -436,9 +437,9 @@ static hx2int_state_t* get_hx2int_state() {
     strend = strbeg + 1;
     more = TRUE_;
     while(more) {
-	if (strend <= i_len(string, string_len)) {
-	    if (s_cmp(string + (strend - 1), " ", string_len - (strend - 1), (
-		    ftnlen)1) != 0) {
+	if (strend <= i_len(&__global_state->f2c, string, string_len)) {
+	    if (s_cmp(&__global_state->f2c, string + (strend - 1), " ", 
+		    string_len - (strend - 1), (ftnlen)1) != 0) {
 		++strend;
 	    } else {
 		more = FALSE_;
@@ -504,11 +505,11 @@ static hx2int_state_t* get_hx2int_state() {
 		idigit = letter + 10 - __state->lccbeg;
 	    } else {
 		*error = TRUE_;
-		s_copy(errmsg, "ERROR: Illegal character '#' encountered.", 
-			errmsg_len, (ftnlen)41);
+		s_copy(&__global_state->f2c, errmsg, "ERROR: Illegal charact"
+			"er '#' encountered.", errmsg_len, (ftnlen)41);
 		*(unsigned char *)&ch__1[0] = letter;
-		repmc_(errmsg, "#", ch__1, errmsg, errmsg_len, (ftnlen)1, (
-			ftnlen)1, errmsg_len);
+		repmc_(__global_state, errmsg, "#", ch__1, errmsg, errmsg_len,
+			 (ftnlen)1, (ftnlen)1, errmsg_len);
 		return 0;
 	    }
 	    if (tmpnum > __state->mini) {
@@ -519,8 +520,8 @@ static hx2int_state_t* get_hx2int_state() {
 		++pos;
 	    } else {
 		*error = TRUE_;
-		s_copy(errmsg, "ERROR: Integer too small to be represented.", 
-			errmsg_len, (ftnlen)43);
+		s_copy(&__global_state->f2c, errmsg, "ERROR: Integer too sma"
+			"ll to be represented.", errmsg_len, (ftnlen)43);
 		return 0;
 	    }
 	}
@@ -537,11 +538,11 @@ static hx2int_state_t* get_hx2int_state() {
 		idigit = letter + 10 - __state->lccbeg;
 	    } else {
 		*error = TRUE_;
-		s_copy(errmsg, "ERROR: Illegal character '#' encountered.", 
-			errmsg_len, (ftnlen)41);
+		s_copy(&__global_state->f2c, errmsg, "ERROR: Illegal charact"
+			"er '#' encountered.", errmsg_len, (ftnlen)41);
 		*(unsigned char *)&ch__1[0] = letter;
-		repmc_(errmsg, "#", ch__1, errmsg, errmsg_len, (ftnlen)1, (
-			ftnlen)1, errmsg_len);
+		repmc_(__global_state, errmsg, "#", ch__1, errmsg, errmsg_len,
+			 (ftnlen)1, (ftnlen)1, errmsg_len);
 		return 0;
 	    }
 	    if (tmpnum < __state->maxi) {
@@ -552,8 +553,8 @@ static hx2int_state_t* get_hx2int_state() {
 		++pos;
 	    } else {
 		*error = TRUE_;
-		s_copy(errmsg, "ERROR: Integer too large to be represented.", 
-			errmsg_len, (ftnlen)43);
+		s_copy(&__global_state->f2c, errmsg, "ERROR: Integer too lar"
+			"ge to be represented.", errmsg_len, (ftnlen)43);
 		return 0;
 	    }
 	}

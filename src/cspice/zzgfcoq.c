@@ -8,8 +8,7 @@
 
 
 extern zzgfcoq_init_t __zzgfcoq_init;
-static zzgfcoq_state_t* get_zzgfcoq_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfcoq_state_t* get_zzgfcoq_state(cspice_t* state) {
 	if (!state->zzgfcoq)
 		state->zzgfcoq = __cspice_allocate_module(sizeof(
 	zzgfcoq_state_t), &__zzgfcoq_init, sizeof(__zzgfcoq_init));
@@ -18,12 +17,13 @@ static zzgfcoq_state_t* get_zzgfcoq_state() {
 }
 
 /* $Procedure      ZZGFCOQ ( GF, return coordinate quantity ) */
-/* Subroutine */ int zzgfcoq_(char *vecdef, char *method, integer *trgid, 
-	doublereal *et, char *ref, char *abcorr, integer *obsid, char *dref, 
-	doublereal *dvec, char *crdsys, integer *ctrid, doublereal *re, 
-	doublereal *f, char *crdnam, doublereal *value, logical *found, 
-	ftnlen vecdef_len, ftnlen method_len, ftnlen ref_len, ftnlen 
-	abcorr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen crdnam_len)
+/* Subroutine */ int zzgfcoq_(cspice_t* __global_state, char *vecdef, char *
+	method, integer *trgid, doublereal *et, char *ref, char *abcorr, 
+	integer *obsid, char *dref, doublereal *dvec, char *crdsys, integer *
+	ctrid, doublereal *re, doublereal *f, char *crdnam, doublereal *value,
+	 logical *found, ftnlen vecdef_len, ftnlen method_len, ftnlen ref_len,
+	 ftnlen abcorr_len, ftnlen dref_len, ftnlen crdsys_len, ftnlen 
+	crdnam_len)
 {
     /* Initialized data */
 
@@ -32,54 +32,59 @@ static zzgfcoq_state_t* get_zzgfcoq_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int bodc2s_(integer *, char *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int bodc2s_(cspice_t*, integer *, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     doublereal lt;
-    extern /* Subroutine */ int recrad_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int recrad_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern logical return_(cspice_t*);
     char sysnam[32];
     doublereal coords[3];
     doublereal trgepc;
     doublereal srfvec[3];
     integer crdidx;
     integer sysidx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int subpnt_(char *, char *, doublereal *, char *, 
-	    char *, char *, doublereal *, doublereal *, doublereal *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int sincpt_(char *, char *, doublereal *, char *, 
-	    char *, char *, char *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int spkezp_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int recsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int reccyl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int recpgr_(char *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int subpnt_(cspice_t*, char *, char *, doublereal 
+	    *, char *, char *, char *, doublereal *, doublereal *, doublereal 
+	    *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int sincpt_(cspice_t*, char *, char *, doublereal 
+	    *, char *, char *, char *, char *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *, ftnlen, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int recsph_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int reccyl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int recgeo_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int recpgr_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen);
     doublereal pos[3];
 
 
     /* Module state */
-    zzgfcoq_state_t* __state = get_zzgfcoq_state();
+    zzgfcoq_state_t* __state = get_zzgfcoq_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -815,10 +820,10 @@ static zzgfcoq_state_t* get_zzgfcoq_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFCOQ", (ftnlen)7);
+    chkin_(__global_state, "ZZGFCOQ", (ftnlen)7);
 
 /*     No result was found yet. */
 
@@ -827,38 +832,40 @@ static zzgfcoq_state_t* get_zzgfcoq_state() {
 /*     Find the index of the coordinate system name in the list of */
 /*     supported names. */
 
-    sysidx = isrchc_(crdsys, &__state->c__7, __state->sysnms, crdsys_len, (
-	    ftnlen)32);
+    sysidx = isrchc_(__global_state, crdsys, &__state->c__7, __state->sysnms, 
+	    crdsys_len, (ftnlen)32);
     if (sysidx == 0) {
 
 /*        We don't recognize this system name. */
 
-	setmsg_("The coordinate system # is not supported.", (ftnlen)41);
-	errch_("#", crdsys, (ftnlen)1, crdsys_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZGFCOQ", (ftnlen)7);
+	setmsg_(__global_state, "The coordinate system # is not supported.", (
+		ftnlen)41);
+	errch_(__global_state, "#", crdsys, (ftnlen)1, crdsys_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFCOQ", (ftnlen)7);
 	return 0;
     }
-    s_copy(sysnam, __state->sysnms + (((i__1 = sysidx - 1) < 7 && 0 <= i__1 ? 
-	    i__1 : s_rnge("sysnms", i__1, "zzgfcoq_", (ftnlen)560)) << 5), (
-	    ftnlen)32, (ftnlen)32);
+    s_copy(&__global_state->f2c, sysnam, __state->sysnms + (((i__1 = sysidx - 
+	    1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "sysnms"
+	    , i__1, "zzgfcoq_", (ftnlen)560)) << 5), (ftnlen)32, (ftnlen)32);
 
 /*     Find the index of the coordinate name in the list of */
 /*     supported names. */
 
-    crdidx = isrchc_(crdnam, &__state->c__3, __state->crdnms + (((i__1 = 
-	    sysidx * 3 - 3) < 21 && 0 <= i__1 ? i__1 : s_rnge("crdnms", i__1, 
-	    "zzgfcoq_", (ftnlen)566)) << 5), crdnam_len, (ftnlen)32);
+    crdidx = isrchc_(__global_state, crdnam, &__state->c__3, __state->crdnms 
+	    + (((i__1 = sysidx * 3 - 3) < 21 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "crdnms", i__1, "zzgfcoq_", (ftnlen)566)) << 
+	    5), crdnam_len, (ftnlen)32);
     if (crdidx == 0) {
 
 /*        We don't recognize this coordinate name. */
 
-	setmsg_("The coordinate name # belonging to the coordinate system # "
-		"is not recognized.", (ftnlen)77);
-	errch_("#", crdnam, (ftnlen)1, crdnam_len);
-	errch_("#", crdsys, (ftnlen)1, crdsys_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZGFCOQ", (ftnlen)7);
+	setmsg_(__global_state, "The coordinate name # belonging to the coor"
+		"dinate system # is not recognized.", (ftnlen)77);
+	errch_(__global_state, "#", crdnam, (ftnlen)1, crdnam_len);
+	errch_(__global_state, "#", crdsys, (ftnlen)1, crdsys_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFCOQ", (ftnlen)7);
 	return 0;
     }
 
@@ -867,67 +874,72 @@ static zzgfcoq_state_t* get_zzgfcoq_state() {
 /*     The RECPGR interface requires the frame center ID code */
 /*     as well. */
 
-    if (s_cmp(vecdef, "SUB-OBSERVER POINT", vecdef_len, (ftnlen)18) == 0 || 
-	    s_cmp(vecdef, "SURFACE INTERCEPT POINT", vecdef_len, (ftnlen)23) 
-	    == 0 || s_cmp(sysnam, "PLANETOGRAPHIC", (ftnlen)32, (ftnlen)14) ==
-	     0) {
+    if (s_cmp(&__global_state->f2c, vecdef, "SUB-OBSERVER POINT", vecdef_len, 
+	    (ftnlen)18) == 0 || s_cmp(&__global_state->f2c, vecdef, "SURFACE"
+	    " INTERCEPT POINT", vecdef_len, (ftnlen)23) == 0 || s_cmp(&
+	    __global_state->f2c, sysnam, "PLANETOGRAPHIC", (ftnlen)32, (
+	    ftnlen)14) == 0) {
 	if (__state->first || *trgid != __state->prvtrg) {
-	    bodc2s_(trgid, __state->trgnam, (ftnlen)36);
+	    bodc2s_(__global_state, trgid, __state->trgnam, (ftnlen)36);
 	    __state->prvtrg = *trgid;
 	}
 	if (__state->first || *obsid != __state->prvobs) {
-	    bodc2s_(obsid, __state->obsnam, (ftnlen)36);
+	    bodc2s_(__global_state, obsid, __state->obsnam, (ftnlen)36);
 	    __state->prvobs = *obsid;
 	}
 	if (__state->first || *ctrid != __state->prvctr) {
-	    bodc2s_(ctrid, __state->ctrnam, (ftnlen)36);
+	    bodc2s_(__global_state, ctrid, __state->ctrnam, (ftnlen)36);
 	    __state->prvctr = *ctrid;
 	}
 	__state->first = FALSE_;
     }
-    if (s_cmp(vecdef, "POSITION", vecdef_len, (ftnlen)8) == 0) {
+    if (s_cmp(&__global_state->f2c, vecdef, "POSITION", vecdef_len, (ftnlen)8)
+	     == 0) {
 
 /*        Find the observer-target position vector. */
 
-	spkezp_(trgid, et, ref, abcorr, obsid, pos, &lt, ref_len, abcorr_len);
-    } else if (s_cmp(vecdef, "SUB-OBSERVER POINT", vecdef_len, (ftnlen)18) == 
-	    0) {
+	spkezp_(__global_state, trgid, et, ref, abcorr, obsid, pos, &lt, 
+		ref_len, abcorr_len);
+    } else if (s_cmp(&__global_state->f2c, vecdef, "SUB-OBSERVER POINT", 
+	    vecdef_len, (ftnlen)18) == 0) {
 
 /*        The caller has requested a sub-observer point coordinate */
 /*        computation. */
 
-	subpnt_(method, __state->trgnam, et, ref, abcorr, __state->obsnam, 
-		pos, &trgepc, srfvec, method_len, (ftnlen)36, ref_len, 
-		abcorr_len, (ftnlen)36);
-    } else if (s_cmp(vecdef, "SURFACE INTERCEPT POINT", vecdef_len, (ftnlen)
-	    23) == 0) {
+	subpnt_(__global_state, method, __state->trgnam, et, ref, abcorr, 
+		__state->obsnam, pos, &trgepc, srfvec, method_len, (ftnlen)36,
+		 ref_len, abcorr_len, (ftnlen)36);
+    } else if (s_cmp(&__global_state->f2c, vecdef, "SURFACE INTERCEPT POINT", 
+	    vecdef_len, (ftnlen)23) == 0) {
 
 /*        The caller has requested a surface intercept point coordinate */
 /*        computation. */
 
-	sincpt_(method, __state->trgnam, et, ref, abcorr, __state->obsnam, 
-		dref, dvec, pos, &trgepc, srfvec, found, method_len, (ftnlen)
-		36, ref_len, abcorr_len, (ftnlen)36, dref_len);
+	sincpt_(__global_state, method, __state->trgnam, et, ref, abcorr, 
+		__state->obsnam, dref, dvec, pos, &trgepc, srfvec, found, 
+		method_len, (ftnlen)36, ref_len, abcorr_len, (ftnlen)36, 
+		dref_len);
 
 /*        Without an intercept, there's nothing left to do here. */
 
 	if (! (*found)) {
-	    chkout_("ZZGFCOQ", (ftnlen)7);
+	    chkout_(__global_state, "ZZGFCOQ", (ftnlen)7);
 	    return 0;
 	}
     } else {
-	setmsg_("The coordinate quantity # is not recognized.", (ftnlen)44);
-	errch_("#", vecdef, (ftnlen)1, vecdef_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZGFCOQ", (ftnlen)7);
+	setmsg_(__global_state, "The coordinate quantity # is not recognized."
+		, (ftnlen)44);
+	errch_(__global_state, "#", vecdef, (ftnlen)1, vecdef_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFCOQ", (ftnlen)7);
 	return 0;
     }
 
 /*     If we already encountered an error while trying to compute */
 /*     the vector of interest, return now. */
 
-    if (failed_()) {
-	chkout_("ZZGFCOQ", (ftnlen)7);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFCOQ", (ftnlen)7);
 	return 0;
     }
 
@@ -935,32 +947,40 @@ static zzgfcoq_state_t* get_zzgfcoq_state() {
 /*     to be computed resides in POS. Convert POS to the */
 /*     specified coordinate system. */
 
-    if (s_cmp(sysnam, "RECTANGULAR", (ftnlen)32, (ftnlen)11) == 0) {
+    if (s_cmp(&__global_state->f2c, sysnam, "RECTANGULAR", (ftnlen)32, (
+	    ftnlen)11) == 0) {
 
 /*        No conversion needed for rectangular coordinates. */
 
-	moved_(pos, &__state->c__3, coords);
-    } else if (s_cmp(sysnam, "LATITUDINAL", (ftnlen)32, (ftnlen)11) == 0) {
-	reclat_(pos, coords, &coords[1], &coords[2]);
-    } else if (s_cmp(sysnam, "RA/DEC", (ftnlen)32, (ftnlen)6) == 0) {
-	recrad_(pos, coords, &coords[1], &coords[2]);
-    } else if (s_cmp(sysnam, "SPHERICAL", (ftnlen)32, (ftnlen)9) == 0) {
-	recsph_(pos, coords, &coords[1], &coords[2]);
-    } else if (s_cmp(sysnam, "CYLINDRICAL", (ftnlen)32, (ftnlen)11) == 0) {
-	reccyl_(pos, coords, &coords[1], &coords[2]);
-    } else if (s_cmp(sysnam, "GEODETIC", (ftnlen)32, (ftnlen)8) == 0) {
-	recgeo_(pos, re, f, coords, &coords[1], &coords[2]);
-    } else if (s_cmp(sysnam, "PLANETOGRAPHIC", (ftnlen)32, (ftnlen)14) == 0) {
-	recpgr_(__state->ctrnam, pos, re, f, coords, &coords[1], &coords[2], (
-		ftnlen)36);
+	moved_(__global_state, pos, &__state->c__3, coords);
+    } else if (s_cmp(&__global_state->f2c, sysnam, "LATITUDINAL", (ftnlen)32, 
+	    (ftnlen)11) == 0) {
+	reclat_(__global_state, pos, coords, &coords[1], &coords[2]);
+    } else if (s_cmp(&__global_state->f2c, sysnam, "RA/DEC", (ftnlen)32, (
+	    ftnlen)6) == 0) {
+	recrad_(__global_state, pos, coords, &coords[1], &coords[2]);
+    } else if (s_cmp(&__global_state->f2c, sysnam, "SPHERICAL", (ftnlen)32, (
+	    ftnlen)9) == 0) {
+	recsph_(__global_state, pos, coords, &coords[1], &coords[2]);
+    } else if (s_cmp(&__global_state->f2c, sysnam, "CYLINDRICAL", (ftnlen)32, 
+	    (ftnlen)11) == 0) {
+	reccyl_(__global_state, pos, coords, &coords[1], &coords[2]);
+    } else if (s_cmp(&__global_state->f2c, sysnam, "GEODETIC", (ftnlen)32, (
+	    ftnlen)8) == 0) {
+	recgeo_(__global_state, pos, re, f, coords, &coords[1], &coords[2]);
+    } else if (s_cmp(&__global_state->f2c, sysnam, "PLANETOGRAPHIC", (ftnlen)
+	    32, (ftnlen)14) == 0) {
+	recpgr_(__global_state, __state->ctrnam, pos, re, f, coords, &coords[
+		1], &coords[2], (ftnlen)36);
     } else {
 
 /*        We should never arrive here. */
 
-	setmsg_("The coordinate system # is not supported.", (ftnlen)41);
-	errch_("#", crdsys, (ftnlen)1, crdsys_len);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZGFCOQ", (ftnlen)7);
+	setmsg_(__global_state, "The coordinate system # is not supported.", (
+		ftnlen)41);
+	errch_(__global_state, "#", crdsys, (ftnlen)1, crdsys_len);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZGFCOQ", (ftnlen)7);
 	return 0;
     }
 
@@ -969,13 +989,13 @@ static zzgfcoq_state_t* get_zzgfcoq_state() {
 /*     CRDIDX indicates the index of the coordinate of interest */
 /*     in the list of coordinates for the input coordinate system. */
 
-    *value = coords[(i__1 = crdidx - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "coords", i__1, "zzgfcoq_", (ftnlen)733)];
+    *value = coords[(i__1 = crdidx - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "coords", i__1, "zzgfcoq_", (ftnlen)733)];
 
 /*     Having made it this far means the result was found. */
 
     *found = TRUE_;
-    chkout_("ZZGFCOQ", (ftnlen)7);
+    chkout_(__global_state, "ZZGFCOQ", (ftnlen)7);
     return 0;
 } /* zzgfcoq_ */
 

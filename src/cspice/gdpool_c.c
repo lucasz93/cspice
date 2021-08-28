@@ -272,7 +272,7 @@
    /*
    Participate in error handling
    */
-   chkin_c ( "gdpool_c");
+   chkin_c ( naif_state, "gdpool_c");
 
 
    /*

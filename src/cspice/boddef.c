@@ -8,22 +8,23 @@
 
 
 typedef int boddef_state_t;
-static boddef_state_t* get_boddef_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline boddef_state_t* get_boddef_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      BODDEF ( Body name/ID code definition ) */
-/* Subroutine */ int boddef_(char *name__, integer *code, ftnlen name_len)
+/* Subroutine */ int boddef_(cspice_t* __global_state, char *name__, integer *
+	code, ftnlen name_len)
 {
-    extern /* Subroutine */ int zzboddef_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzboddef_(cspice_t*, char *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    boddef_state_t* __state = get_boddef_state();
+    boddef_state_t* __state = get_boddef_state(__global_state);
 /* $ Abstract */
 
 /*     Define a body name/ID code pair for later translation via */
@@ -297,17 +298,17 @@ static boddef_state_t* get_boddef_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("BODDEF", (ftnlen)6);
+	chkin_(__global_state, "BODDEF", (ftnlen)6);
     }
-    zzboddef_(name__, code, name_len);
+    zzboddef_(__global_state, name__, code, name_len);
 
 /*     No need for any error checking, since all we do is check out */
 /*     and return anyway. We leave the error checking to the caller. */
 
-    chkout_("BODDEF", (ftnlen)6);
+    chkout_(__global_state, "BODDEF", (ftnlen)6);
     return 0;
 } /* boddef_ */
 

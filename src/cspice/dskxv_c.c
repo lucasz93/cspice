@@ -517,7 +517,7 @@
          SpiceInt                surfid;
 
 
-         chkin_c ( "vspear" );
+         chkin_c ( naif_state, "vspear" );
 
          /.
          Get meta-kernel name from the command line. 
@@ -790,7 +790,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dskxv_c" );
+   chkin_c ( naif_state, "dskxv_c" );
 
    /*
    Check the input string arguments:

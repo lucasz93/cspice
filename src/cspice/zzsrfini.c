@@ -8,8 +8,7 @@
 
 
 extern zzsrfini_init_t __zzsrfini_init;
-static zzsrfini_state_t* get_zzsrfini_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzsrfini_state_t* get_zzsrfini_state(cspice_t* state) {
 	if (!state->zzsrfini)
 		state->zzsrfini = __cspice_allocate_module(sizeof(
 	zzsrfini_state_t), &__zzsrfini_init, sizeof(__zzsrfini_init));
@@ -18,42 +17,45 @@ static zzsrfini_state_t* get_zzsrfini_state() {
 }
 
 /* $Procedure ZZSRFINI ( Private --- Surface-Code Hash Initialization ) */
-/* Subroutine */ int zzsrfini_(char *nornam, integer *codes, integer *bodies, 
-	integer *nvals, integer *maxval, integer *snmhls, integer *snmpol, 
-	integer *snmidx, integer *sidhls, integer *sidpol, integer *sididx, 
-	ftnlen nornam_len)
+/* Subroutine */ int zzsrfini_(cspice_t* __global_state, char *nornam, 
+	integer *codes, integer *bodies, integer *nvals, integer *maxval, 
+	integer *snmhls, integer *snmpol, integer *snmidx, integer *sidhls, 
+	integer *sidpol, integer *sididx, ftnlen nornam_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer head;
     integer node;
     logical full;
-    extern /* Subroutine */ int zzhscini_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzhsiini_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzhscini_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzhsiini_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical idnew;
-    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
     integer itemat;
     logical namnew;
     logical lfound;
     integer lookat;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
     char sqshnm[36];
-    extern integer zzhash2_(char *, integer *, ftnlen);
-    extern integer zzhashi_(integer *, integer *);
+    extern integer zzhash2_(cspice_t*, char *, integer *, ftnlen);
+    extern integer zzhashi_(cspice_t*, integer *, integer *);
 
 
     /* Module state */
-    zzsrfini_state_t* __state = get_zzsrfini_state();
+    zzsrfini_state_t* __state = get_zzsrfini_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -397,25 +399,25 @@ static zzsrfini_state_t* get_zzsrfini_state() {
 /*     Consistency check. */
 
     if (*maxval < *nvals) {
-	chkin_("ZZSRFINI", (ftnlen)8);
-	setmsg_("There is an inconsistency between the number of input bodie"
-		"s and the size of the output hashes. The number of input bod"
-		"ies was #. The size of the output hashes was #.", (ftnlen)166)
-		;
-	errint_("#", nvals, (ftnlen)1);
-	errint_("#", maxval, (ftnlen)1);
-	sigerr_("SPICE(BUG1)", (ftnlen)11);
-	chkout_("ZZSRFINI", (ftnlen)8);
+	chkin_(__global_state, "ZZSRFINI", (ftnlen)8);
+	setmsg_(__global_state, "There is an inconsistency between the numbe"
+		"r of input bodies and the size of the output hashes. The num"
+		"ber of input bodies was #. The size of the output hashes was"
+		" #.", (ftnlen)166);
+	errint_(__global_state, "#", nvals, (ftnlen)1);
+	errint_(__global_state, "#", maxval, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG1)", (ftnlen)11);
+	chkout_(__global_state, "ZZSRFINI", (ftnlen)8);
 	return 0;
     }
 
 /*     Initialize output hashes. Set all collision list pointers */
 /*     to 0, which is the null value. */
 
-    zzhsiini_(maxval, sidhls, sidpol);
-    zzhscini_(maxval, snmhls, snmpol);
-    cleari_(&sidpol[5], &sidpol[6]);
-    cleari_(&snmpol[5], &snmpol[6]);
+    zzhsiini_(__global_state, maxval, sidhls, sidpol);
+    zzhscini_(__global_state, maxval, snmhls, snmpol);
+    cleari_(__global_state, &sidpol[5], &sidpol[6]);
+    cleari_(__global_state, &snmpol[5], &snmpol[6]);
 
 /*     Loop through the input arrays to populate hashes. We do it */
 /*     backwards to pick and register only the highest priority (latest) */
@@ -432,9 +434,9 @@ static zzsrfini_state_t* get_zzsrfini_state() {
 
 /*        Use hash function to get index of the head node. */
 
-	cmprss_(" ", &__state->c__0, nornam + (i__ - 1) * nornam_len, sqshnm, 
-		(ftnlen)1, nornam_len, (ftnlen)36);
-	lookat = zzhash2_(sqshnm, &snmpol[5], (ftnlen)36);
+	cmprss_(__global_state, " ", &__state->c__0, nornam + (i__ - 1) * 
+		nornam_len, sqshnm, (ftnlen)1, nornam_len, (ftnlen)36);
+	lookat = zzhash2_(__global_state, sqshnm, &snmpol[5], (ftnlen)36);
 	head = snmhls[lookat - 1];
 
 /*        Indicate name and body were not found to begin with. */
@@ -458,10 +460,10 @@ static zzsrfini_state_t* get_zzsrfini_state() {
 /*           match or run out of items in the collision list. */
 
 	    while(node > 0 && ! lfound) {
-		lfound = s_cmp(nornam + (snmidx[node - 1] - 1) * nornam_len, 
-			nornam + (i__ - 1) * nornam_len, nornam_len, 
-			nornam_len) == 0 && bodies[snmidx[node - 1] - 1] == 
-			bodies[i__ - 1];
+		lfound = s_cmp(&__global_state->f2c, nornam + (snmidx[node - 
+			1] - 1) * nornam_len, nornam + (i__ - 1) * nornam_len,
+			 nornam_len, nornam_len) == 0 && bodies[snmidx[node - 
+			1] - 1] == bodies[i__ - 1];
 		itemat = node;
 		node = snmpol[node + 5];
 	    }
@@ -478,14 +480,14 @@ static zzsrfini_state_t* get_zzsrfini_state() {
 
 	    full = snmpol[4] > snmpol[5];
 	    if (full) {
-		chkin_("ZZSRFINI", (ftnlen)8);
-		setmsg_("Could not add name # body ID # to the hash.", (
-			ftnlen)43);
-		errch_("#", nornam + (i__ - 1) * nornam_len, (ftnlen)1, 
-			nornam_len);
-		errint_("#", &bodies[i__ - 1], (ftnlen)1);
-		sigerr_("SPICE(BUG2)", (ftnlen)11);
-		chkout_("ZZSRFINI", (ftnlen)8);
+		chkin_(__global_state, "ZZSRFINI", (ftnlen)8);
+		setmsg_(__global_state, "Could not add name # body ID # to t"
+			"he hash.", (ftnlen)43);
+		errch_(__global_state, "#", nornam + (i__ - 1) * nornam_len, (
+			ftnlen)1, nornam_len);
+		errint_(__global_state, "#", &bodies[i__ - 1], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG2)", (ftnlen)11);
+		chkout_(__global_state, "ZZSRFINI", (ftnlen)8);
 		return 0;
 	    } else {
 
@@ -532,7 +534,7 @@ static zzsrfini_state_t* get_zzsrfini_state() {
 
 /*           Use hash function to get index of the head node. */
 
-	    lookat = zzhashi_(&codes[i__ - 1], &sidpol[5]);
+	    lookat = zzhashi_(__global_state, &codes[i__ - 1], &sidpol[5]);
 	    head = sidhls[lookat - 1];
 
 /*           Indicate surface ID and body were not found to begin with. */
@@ -571,13 +573,13 @@ static zzsrfini_state_t* get_zzsrfini_state() {
 
 		full = sidpol[4] > sidpol[5];
 		if (full) {
-		    chkin_("ZZSRFINI", (ftnlen)8);
-		    setmsg_("Could not add surface ID # body ID # to the has"
-			    "h.", (ftnlen)49);
-		    errint_("#", &codes[i__ - 1], (ftnlen)1);
-		    errint_("#", &bodies[i__ - 1], (ftnlen)1);
-		    sigerr_("SPICE(BUG3)", (ftnlen)11);
-		    chkout_("ZZSRFINI", (ftnlen)8);
+		    chkin_(__global_state, "ZZSRFINI", (ftnlen)8);
+		    setmsg_(__global_state, "Could not add surface ID # body"
+			    " ID # to the hash.", (ftnlen)49);
+		    errint_(__global_state, "#", &codes[i__ - 1], (ftnlen)1);
+		    errint_(__global_state, "#", &bodies[i__ - 1], (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG3)", (ftnlen)11);
+		    chkout_(__global_state, "ZZSRFINI", (ftnlen)8);
 		    return 0;
 		} else {
 

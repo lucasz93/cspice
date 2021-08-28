@@ -639,7 +639,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkapo_c" );
+   chkin_c ( naif_state, "spkapo_c" );
 
 
    /*

@@ -161,7 +161,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "kclear_c" );
+   chkin_c ( naif_state, "kclear_c" );
 
 
    kclear_();

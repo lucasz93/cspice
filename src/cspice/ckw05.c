@@ -8,8 +8,7 @@
 
 
 extern ckw05_init_t __ckw05_init;
-static ckw05_state_t* get_ckw05_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckw05_state_t* get_ckw05_state(cspice_t* state) {
 	if (!state->ckw05)
 		state->ckw05 = __cspice_allocate_module(sizeof(ckw05_state_t),
 	 &__ckw05_init, sizeof(__ckw05_init));
@@ -18,11 +17,11 @@ static ckw05_state_t* get_ckw05_state() {
 }
 
 /* $Procedure      CKW05 ( Write CK segment, type 5 ) */
-/* Subroutine */ int ckw05_(integer *handle, integer *subtyp, integer *degree,
-	 doublereal *begtim, doublereal *endtim, integer *inst, char *ref, 
-	logical *avflag, char *segid, integer *n, doublereal *sclkdp, 
-	doublereal *packts, doublereal *rate, integer *nints, doublereal *
-	starts, ftnlen ref_len, ftnlen segid_len)
+/* Subroutine */ int ckw05_(cspice_t* __global_state, integer *handle, 
+	integer *subtyp, integer *degree, doublereal *begtim, doublereal *
+	endtim, integer *inst, char *ref, logical *avflag, char *segid, 
+	integer *n, doublereal *sclkdp, doublereal *packts, doublereal *rate, 
+	integer *nints, doublereal *starts, ftnlen ref_len, ftnlen segid_len)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -31,38 +30,40 @@ static ckw05_state_t* get_ckw05_state() {
     /* Local variables */
     integer addr__;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    doublereal dc[2];
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    doublereal dc[2];
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
     integer ic[6];
-    extern /* Subroutine */ int dafena_(void);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dafena_(cspice_t*);
+    extern logical failed_(cspice_t*);
     integer chrcod;
     integer refcod;
-    extern integer bsrchd_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern integer lastnb_(char *, ftnlen);
+    extern integer bsrchd_(cspice_t*, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer lstltd_(doublereal *, integer *, doublereal *);
-    extern logical vzerog_(doublereal *, integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lstltd_(cspice_t*, doublereal *, integer *, doublereal *);
+    extern logical vzerog_(cspice_t*, doublereal *, integer *);
+    extern logical return_(cspice_t*);
     integer winsiz;
-    extern logical odd_(integer *);
+    extern logical odd_(cspice_t*, integer *);
 
 
     /* Module state */
-    ckw05_state_t* __state = get_ckw05_state();
+    ckw05_state_t* __state = get_ckw05_state(__global_state);
 /* $ Abstract */
 
 /*     Write a type 5 segment to a CK file. */
@@ -746,20 +747,20 @@ static ckw05_state_t* get_ckw05_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKW05", (ftnlen)5);
+	chkin_(__global_state, "CKW05", (ftnlen)5);
     }
 
 /*     Make sure that the number of packets is positive. */
 
     if (*n < 1) {
-	setmsg_("At least 1 packet is required for CK type 5. Number of pack"
-		"ets supplied:  #", (ftnlen)75);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(TOOFEWPACKETS)", (ftnlen)20);
-	chkout_("CKW05", (ftnlen)5);
+	setmsg_(__global_state, "At least 1 packet is required for CK type 5"
+		". Number of packets supplied:  #", (ftnlen)75);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TOOFEWPACKETS)", (ftnlen)20);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
@@ -767,46 +768,47 @@ static ckw05_state_t* get_ckw05_state() {
 /*     intervals. */
 
     if (*nints <= 0) {
-	setmsg_("# is an invalid number of interpolation intervals for type "
-		"5.", (ftnlen)61);
-	errint_("#", nints, (ftnlen)1);
-	sigerr_("SPICE(INVALIDNUMINTS)", (ftnlen)21);
-	chkout_("CKW05", (ftnlen)5);
+	setmsg_(__global_state, "# is an invalid number of interpolation int"
+		"ervals for type 5.", (ftnlen)61);
+	errint_(__global_state, "#", nints, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDNUMINTS)", (ftnlen)21);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
 /*     Get the NAIF integer code for the reference frame. */
 
-    namfrm_(ref, &refcod, ref_len);
+    namfrm_(__global_state, ref, &refcod, ref_len);
     if (refcod == 0) {
-	setmsg_("The reference frame # is not supported.", (ftnlen)39);
-	errch_("#", ref, (ftnlen)1, ref_len);
-	sigerr_("SPICE(INVALIDREFFRAME)", (ftnlen)22);
-	chkout_("CKW05", (ftnlen)5);
+	setmsg_(__global_state, "The reference frame # is not supported.", (
+		ftnlen)39);
+	errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	sigerr_(__global_state, "SPICE(INVALIDREFFRAME)", (ftnlen)22);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
 /*     Check to see if the segment identifier is too long. */
 
-    if (lastnb_(segid, segid_len) > 40) {
-	setmsg_("Segment identifier contains more than 40 characters.", (
-		ftnlen)52);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("CKW05", (ftnlen)5);
+    if (lastnb_(__global_state, segid, segid_len) > 40) {
+	setmsg_(__global_state, "Segment identifier contains more than 40 ch"
+		"aracters.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
 /*     Now check that all the characters in the segment identifier */
 /*     can be printed. */
 
-    i__1 = lastnb_(segid, segid_len);
+    i__1 = lastnb_(__global_state, segid, segid_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	chrcod = *(unsigned char *)&segid[i__ - 1];
 	if (chrcod < 32 || chrcod > 126) {
-	    setmsg_("The segment identifier contains nonprintable characters",
-		     (ftnlen)55);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("CKW05", (ftnlen)5);
+	    setmsg_(__global_state, "The segment identifier contains nonprin"
+		    "table characters", (ftnlen)55);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "CKW05", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -817,10 +819,11 @@ static ckw05_state_t* get_ckw05_state() {
 /*     Check that the first time is nonnegative. */
 
     if (sclkdp[0] < 0.) {
-	setmsg_("The first SCLKDP time: # is negative.", (ftnlen)37);
-	errdp_("#", sclkdp, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSCLKTIME)", (ftnlen)22);
-	chkout_("CKW05", (ftnlen)5);
+	setmsg_(__global_state, "The first SCLKDP time: # is negative.", (
+		ftnlen)37);
+	errdp_(__global_state, "#", sclkdp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSCLKTIME)", (ftnlen)22);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
@@ -829,15 +832,15 @@ static ckw05_state_t* get_ckw05_state() {
     i__1 = *n;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	if (sclkdp[i__ - 1] <= sclkdp[i__ - 2]) {
-	    setmsg_("The SCLKDP times are not strictly increasing. SCLKDP(#)"
-		    " = # and SCLKDP(#) = #.", (ftnlen)78);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &sclkdp[i__ - 1], (ftnlen)1);
+	    setmsg_(__global_state, "The SCLKDP times are not strictly incre"
+		    "asing. SCLKDP(#) = # and SCLKDP(#) = #.", (ftnlen)78);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &sclkdp[i__ - 1], (ftnlen)1);
 	    i__2 = i__ - 1;
-	    errint_("#", &i__2, (ftnlen)1);
-	    errdp_("#", &sclkdp[i__ - 2], (ftnlen)1);
-	    sigerr_("SPICE(TIMESOUTOFORDER)", (ftnlen)22);
-	    chkout_("CKW05", (ftnlen)5);
+	    errint_(__global_state, "#", &i__2, (ftnlen)1);
+	    errdp_(__global_state, "#", &sclkdp[i__ - 2], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(TIMESOUTOFORDER)", (ftnlen)22);
+	    chkout_(__global_state, "CKW05", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -847,15 +850,16 @@ static ckw05_state_t* get_ckw05_state() {
     i__1 = *nints;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	if (starts[i__ - 1] <= starts[i__ - 2]) {
-	    setmsg_("The interval start times are not strictly increasing. S"
-		    "TARTS(#) = # and STARTS(#) = #.", (ftnlen)86);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &starts[i__ - 1], (ftnlen)1);
+	    setmsg_(__global_state, "The interval start times are not strict"
+		    "ly increasing. STARTS(#) = # and STARTS(#) = #.", (ftnlen)
+		    86);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &starts[i__ - 1], (ftnlen)1);
 	    i__2 = i__ - 1;
-	    errint_("#", &i__2, (ftnlen)1);
-	    errdp_("#", &starts[i__ - 2], (ftnlen)1);
-	    sigerr_("SPICE(TIMESOUTOFORDER)", (ftnlen)22);
-	    chkout_("CKW05", (ftnlen)5);
+	    errint_(__global_state, "#", &i__2, (ftnlen)1);
+	    errdp_(__global_state, "#", &starts[i__ - 2], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(TIMESOUTOFORDER)", (ftnlen)22);
+	    chkout_(__global_state, "CKW05", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -869,14 +873,14 @@ static ckw05_state_t* get_ckw05_state() {
 /*        We know the SCLKDP array is ordered, so a binary search is */
 /*        ok. */
 
-	if (bsrchd_(&starts[i__ - 1], n, sclkdp) == 0) {
-	    setmsg_("Interval start time number # is invalid. STARTS(#) = *", 
-		    (ftnlen)54);
-	    errint_("#", &i__, (ftnlen)1);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("*", &starts[i__ - 1], (ftnlen)1);
-	    sigerr_("SPICE(INVALIDSTARTTIME)", (ftnlen)23);
-	    chkout_("CKW05", (ftnlen)5);
+	if (bsrchd_(__global_state, &starts[i__ - 1], n, sclkdp) == 0) {
+	    setmsg_(__global_state, "Interval start time number # is invalid"
+		    ". STARTS(#) = *", (ftnlen)54);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "*", &starts[i__ - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDSTARTTIME)", (ftnlen)23);
+	    chkout_(__global_state, "CKW05", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -897,10 +901,11 @@ static ckw05_state_t* get_ckw05_state() {
 	winsiz = *degree + 1;
 	packsz = 7;
     } else {
-	setmsg_("CK type 5 subtype <#> is not supported.", (ftnlen)39);
-	errint_("#", subtyp, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("CKW05", (ftnlen)5);
+	setmsg_(__global_state, "CK type 5 subtype <#> is not supported.", (
+		ftnlen)39);
+	errint_(__global_state, "#", subtyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
@@ -914,12 +919,12 @@ static ckw05_state_t* get_ckw05_state() {
 /*        of the packet array is not known at compile time. */
 
 	addr__ = packsz * (i__ - 1) + 1;
-	if (vzerog_(&packts[addr__ - 1], &__state->c__4)) {
-	    setmsg_("The quaternion at index # has magnitude zero.", (ftnlen)
-		    45);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(ZEROQUATERNION)", (ftnlen)21);
-	    chkout_("CKW05", (ftnlen)5);
+	if (vzerog_(__global_state, &packts[addr__ - 1], &__state->c__4)) {
+	    setmsg_(__global_state, "The quaternion at index # has magnitude"
+		    " zero.", (ftnlen)45);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(ZEROQUATERNION)", (ftnlen)21);
+	    chkout_(__global_state, "CKW05", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -928,26 +933,26 @@ static ckw05_state_t* get_ckw05_state() {
 /*     in range. */
 
     if (*degree < 1 || *degree > 23) {
-	setmsg_("The interpolating polynomials have degree #; the valid degr"
-		"ee range is [1, #]", (ftnlen)77);
-	errint_("#", degree, (ftnlen)1);
-	errint_("#", &__state->c__23, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
-	chkout_("CKW05", (ftnlen)5);
+	setmsg_(__global_state, "The interpolating polynomials have degree #"
+		"; the valid degree range is [1, #]", (ftnlen)77);
+	errint_(__global_state, "#", degree, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__23, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDEGREE)", (ftnlen)20);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
 /*     Make sure that the window size is even.  If not, the input */
 /*     DEGREE is incompatible with the subtype. */
 
-    if (odd_(&winsiz)) {
-	setmsg_("The interpolating polynomials have degree #; for CK type 5,"
-		" the degree must be equivalent to 3 mod 4 for Hermite interp"
-		"olation and odd for for Lagrange interpolation.", (ftnlen)166)
-		;
-	errint_("#", degree, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
-	chkout_("CKW05", (ftnlen)5);
+    if (odd_(__global_state, &winsiz)) {
+	setmsg_(__global_state, "The interpolating polynomials have degree #"
+		"; for CK type 5, the degree must be equivalent to 3 mod 4 fo"
+		"r Hermite interpolation and odd for for Lagrange interpolati"
+		"on.", (ftnlen)166);
+	errint_(__global_state, "#", degree, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDEGREE)", (ftnlen)20);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
@@ -971,11 +976,12 @@ static ckw05_state_t* get_ckw05_state() {
 /*     Make sure the descriptor times are in increasing order. */
 
     if (*endtim < *begtim) {
-	setmsg_("Descriptor bounds are non-increasing: #:#", (ftnlen)41);
-	errdp_("#", begtim, (ftnlen)1);
-	errdp_("#", endtim, (ftnlen)1);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("CKW05", (ftnlen)5);
+	setmsg_(__global_state, "Descriptor bounds are non-increasing: #:#", (
+		ftnlen)41);
+	errdp_(__global_state, "#", begtim, (ftnlen)1);
+	errdp_(__global_state, "#", endtim, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
@@ -983,42 +989,42 @@ static ckw05_state_t* get_ckw05_state() {
 /*     ENDTIM.  The first time tag not less than BEGTIM must exist */
 /*     and must be less than or equal to ENDTIM. */
 
-    i__ = lstltd_(begtim, n, sclkdp);
+    i__ = lstltd_(__global_state, begtim, n, sclkdp);
     if (i__ == *n) {
-	setmsg_("All time tags are less than segment start time #.", (ftnlen)
-		49);
-	errdp_("#", begtim, (ftnlen)1);
-	sigerr_("SPICE(EMPTYSEGMENT)", (ftnlen)19);
-	chkout_("CKW05", (ftnlen)5);
+	setmsg_(__global_state, "All time tags are less than segment start t"
+		"ime #.", (ftnlen)49);
+	errdp_(__global_state, "#", begtim, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(EMPTYSEGMENT)", (ftnlen)19);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     } else if (sclkdp[i__] > *endtim) {
-	setmsg_("No time tags lie between the segment start time # and segme"
-		"nt end time #", (ftnlen)72);
-	errdp_("#", begtim, (ftnlen)1);
-	errdp_("#", endtim, (ftnlen)1);
-	sigerr_("SPICE(EMPTYSEGMENT)", (ftnlen)19);
-	chkout_("CKW05", (ftnlen)5);
+	setmsg_(__global_state, "No time tags lie between the segment start "
+		"time # and segment end time #", (ftnlen)72);
+	errdp_(__global_state, "#", begtim, (ftnlen)1);
+	errdp_(__global_state, "#", endtim, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(EMPTYSEGMENT)", (ftnlen)19);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
 /*     The clock rate must be non-zero. */
 
     if (*rate == 0.) {
-	setmsg_("The SCLK rate RATE was zero.", (ftnlen)28);
-	sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	chkout_("CKW05", (ftnlen)5);
+	setmsg_(__global_state, "The SCLK rate RATE was zero.", (ftnlen)28);
+	sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
 /*     Now pack the segment descriptor. */
 
-    dafps_(&__state->c__2, &__state->c__6, dc, ic, descr);
+    dafps_(__global_state, &__state->c__2, &__state->c__6, dc, ic, descr);
 
 /*     Begin a new segment. */
 
-    dafbna_(handle, descr, segid, segid_len);
-    if (failed_()) {
-	chkout_("CKW05", (ftnlen)5);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKW05", (ftnlen)5);
 	return 0;
     }
 
@@ -1085,44 +1091,44 @@ static ckw05_state_t* get_ckw05_state() {
 
 
     i__1 = *n * packsz;
-    dafada_(packts, &i__1);
-    dafada_(sclkdp, n);
+    dafada_(__global_state, packts, &i__1);
+    dafada_(__global_state, sclkdp, n);
     i__1 = (*n - 1) / 100;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&sclkdp[i__ * 100 - 1], &__state->c__1);
+	dafada_(__global_state, &sclkdp[i__ * 100 - 1], &__state->c__1);
     }
 
 /*     Now add the interval start times. */
 
-    dafada_(starts, nints);
+    dafada_(__global_state, starts, nints);
 
 /*     And the directory of interval start times.  The directory of */
 /*     start times will simply be every (DIRSIZ)th start time. */
 
     i__1 = (*nints - 1) / 100;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&starts[i__ * 100 - 1], &__state->c__1);
+	dafada_(__global_state, &starts[i__ * 100 - 1], &__state->c__1);
     }
 
 /*     Add the SCLK rate, segment subtype, window size, interval */
 /*     count, and packet count. */
 
-    dafada_(rate, &__state->c__1);
+    dafada_(__global_state, rate, &__state->c__1);
     d__1 = (doublereal) (*subtyp);
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
     d__1 = (doublereal) winsiz;
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
     d__1 = (doublereal) (*nints);
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
     d__1 = (doublereal) (*n);
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
 
 /*     As long as nothing went wrong, end the segment. */
 
-    if (! failed_()) {
-	dafena_();
+    if (! failed_(__global_state)) {
+	dafena_(__global_state);
     }
-    chkout_("CKW05", (ftnlen)5);
+    chkout_(__global_state, "CKW05", (ftnlen)5);
     return 0;
 } /* ckw05_ */
 

@@ -8,8 +8,7 @@
 
 
 extern dnearp_init_t __dnearp_init;
-static dnearp_state_t* get_dnearp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dnearp_state_t* get_dnearp_state(cspice_t* state) {
 	if (!state->dnearp)
 		state->dnearp = __cspice_allocate_module(sizeof(
 	dnearp_state_t), &__dnearp_init, sizeof(__dnearp_init));
@@ -18,8 +17,9 @@ static dnearp_state_t* get_dnearp_state() {
 }
 
 /* $Procedure      DNEARP ( Derivative of near point ) */
-/* Subroutine */ int dnearp_(doublereal *state, doublereal *a, doublereal *b, 
-	doublereal *c__, doublereal *dnear, doublereal *dalt, logical *found)
+/* Subroutine */ int dnearp_(cspice_t* __global_state, doublereal *state, 
+	doublereal *a, doublereal *b, doublereal *c__, doublereal *dnear, 
+	doublereal *dalt, logical *found)
 {
     /* Initialized data */
 
@@ -29,39 +29,40 @@ static dnearp_state_t* get_dnearp_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal grad[3];
     doublereal temp[3];
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern doublereal vtmv_(doublereal *, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vtmv_(cspice_t*, doublereal *, doublereal *, doublereal 
+	    *);
     integer i__;
     doublereal l;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal denom;
     doublereal dterm[3];
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal norml[3];
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal length;
     doublereal lprime;
-    extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int nearpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal zenith[3];
-    extern logical return_(void);
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    dnearp_state_t* __state = get_dnearp_state();
+    dnearp_state_t* __state = get_dnearp_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the ellipsoid surface point nearest to a specified */
@@ -335,10 +336,10 @@ static dnearp_state_t* get_dnearp_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DNEARP", (ftnlen)6);
+    chkin_(__global_state, "DNEARP", (ftnlen)6);
 
 /*     Until we have reason to believe otherwise, we set FOUND to TRUE. */
 
@@ -346,13 +347,13 @@ static dnearp_state_t* get_dnearp_state() {
 
 /*     First we need to compute the near point. */
 
-    nearpt_(state, a, b, c__, dnear, dalt);
+    nearpt_(__global_state, state, a, b, c__, dnear, dalt);
 
 /*     Make sure nothing went bump in the dark innards of NEARPT. */
 
-    if (failed_()) {
+    if (failed_(__global_state)) {
 	*found = FALSE_;
-	chkout_("DNEARP", (ftnlen)6);
+	chkout_(__global_state, "DNEARP", (ftnlen)6);
 	return 0;
     }
 
@@ -403,10 +404,10 @@ static dnearp_state_t* get_dnearp_state() {
     __state->gradm[0] = 1. / (*a * *a);
     __state->gradm[4] = 1. / (*b * *b);
     __state->gradm[8] = 1. / (*c__ * *c__);
-    vsub_(state, dnear, zenith);
-    mxv_(__state->gradm, dnear, grad);
-    unorm_(grad, norml, &length);
-    l = vdot_(zenith, norml) / length;
+    vsub_(__global_state, state, dnear, zenith);
+    mxv_(__global_state, __state->gradm, dnear, grad);
+    unorm_(__global_state, grad, norml, &length);
+    l = vdot_(__global_state, zenith, norml) / length;
 
 /*     We can rewrite equation (1) as */
 
@@ -461,31 +462,34 @@ static dnearp_state_t* get_dnearp_state() {
 /*        zero when computing L'. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	dterm[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("dterm", i__1,
-		 "dnearp_", (ftnlen)458)] = l * __state->gradm[(i__2 = i__ + 
-		i__ * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("gradm", i__2, 
+	dterm[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "dterm", i__1, "dnearp_", (ftnlen)458)] =
+		 l * __state->gradm[(i__2 = i__ + i__ * 3 - 4) < 9 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "gradm", i__2, 
 		"dnearp_", (ftnlen)458)] + 1.;
     }
     for (i__ = 1; i__ <= 3; ++i__) {
-	if (dterm[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("dterm", 
-		i__1, "dnearp_", (ftnlen)463)] != 0.) {
+	if (dterm[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "dterm", i__1, "dnearp_", (ftnlen)463)] 
+		!= 0.) {
 	    __state->m[(i__1 = i__ + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-		    s_rnge("m", i__1, "dnearp_", (ftnlen)464)] = 1. / dterm[(
-		    i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("dterm", 
-		    i__2, "dnearp_", (ftnlen)464)];
+		    s_rnge(&__global_state->f2c, "m", i__1, "dnearp_", (
+		    ftnlen)464)] = 1. / dterm[(i__2 = i__ - 1) < 3 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "dterm", i__2, 
+		    "dnearp_", (ftnlen)464)];
 	} else {
 	    *found = FALSE_;
-	    chkout_("DNEARP", (ftnlen)6);
+	    chkout_(__global_state, "DNEARP", (ftnlen)6);
 	    return 0;
 	}
     }
-    denom = vtmv_(grad, __state->m, grad);
+    denom = vtmv_(__global_state, grad, __state->m, grad);
     if (denom == 0.) {
 	*found = FALSE_;
-	chkout_("DNEARP", (ftnlen)6);
+	chkout_(__global_state, "DNEARP", (ftnlen)6);
 	return 0;
     }
-    lprime = vtmv_(grad, __state->m, &state[3]) / denom;
+    lprime = vtmv_(__global_state, grad, __state->m, &state[3]) / denom;
 
 /*     Now that we have L' we can easily compute N'. Rewriting */
 /*     equation (2) from above we have. */
@@ -493,8 +497,8 @@ static dnearp_state_t* get_dnearp_state() {
 /*        N'  = M * ( P' - L'*GRAD ) */
 
     d__1 = -lprime;
-    vlcom_(&__state->c_b16, &state[3], &d__1, grad, temp);
-    mxv_(__state->m, temp, &dnear[3]);
+    vlcom_(__global_state, &__state->c_b16, &state[3], &d__1, grad, temp);
+    mxv_(__global_state, __state->m, temp, &dnear[3]);
 
 /*     Only one thing left to do.  Compute the derivative */
 /*     of the altitude ALT.  Recall that */
@@ -531,8 +535,8 @@ static dnearp_state_t* get_dnearp_state() {
 
 /*        dALT/dt = < P', NORML > */
 
-    dalt[1] = vdot_(&state[3], norml);
-    chkout_("DNEARP", (ftnlen)6);
+    dalt[1] = vdot_(__global_state, &state[3], norml);
+    chkout_(__global_state, "DNEARP", (ftnlen)6);
     return 0;
 } /* dnearp_ */
 

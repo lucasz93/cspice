@@ -8,25 +8,25 @@
 
 
 typedef int bodc2s_state_t;
-static bodc2s_state_t* get_bodc2s_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bodc2s_state_t* get_bodc2s_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure BODC2S ( Body ID code to string translation ) */
-/* Subroutine */ int bodc2s_(integer *code, char *name__, ftnlen name_len)
+/* Subroutine */ int bodc2s_(cspice_t* __global_state, integer *code, char *
+	name__, ftnlen name_len)
 {
-    extern /* Subroutine */ int zzbodc2n_(integer *, char *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzbodc2n_(cspice_t*, integer *, char *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    bodc2s_state_t* __state = get_bodc2s_state();
+    bodc2s_state_t* __state = get_bodc2s_state(__global_state);
 /* $ Abstract */
 
 /*     Translate a body ID code to either the corresponding name */
@@ -234,10 +234,10 @@ static bodc2s_state_t* get_bodc2s_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("BODC2S", (ftnlen)6);
+    chkin_(__global_state, "BODC2S", (ftnlen)6);
 
 /*     Fortran. No type check available for CODE. Bother. */
 
@@ -245,12 +245,12 @@ static bodc2s_state_t* get_bodc2s_state() {
 /*     Attempt to translate the input CODE to a name. Use */
 /*     the private routine ZZBODC2N. */
 
-    zzbodc2n_(code, name__, &found, name_len);
+    zzbodc2n_(__global_state, code, name__, &found, name_len);
     if (found) {
 
 /*        Success. CODE maps to NAME. Return. */
 
-	chkout_("BODC2S", (ftnlen)6);
+	chkout_(__global_state, "BODC2S", (ftnlen)6);
 	return 0;
     }
 
@@ -258,8 +258,8 @@ static bodc2s_state_t* get_bodc2s_state() {
 /*     to name mapping lacks an assignment for CODE. Convert */
 /*     CODE to a string representation of the integer value. */
 
-    intstr_(code, name__, name_len);
-    chkout_("BODC2S", (ftnlen)6);
+    intstr_(__global_state, code, name__, name_len);
+    chkout_(__global_state, "BODC2S", (ftnlen)6);
     return 0;
 } /* bodc2s_ */
 

@@ -130,7 +130,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "spkcls_c" );
+   chkin_c ( naif_state, "spkcls_c" );
 
    spkcls_ ( ( integer * ) &handle );
 

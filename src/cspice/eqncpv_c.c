@@ -392,7 +392,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "eqncpv_c" );
+   chkin_c ( naif_state, "eqncpv_c" );
 
    eqncpv_ ( ( doublereal * ) &et,
              ( doublereal * ) &epoch,

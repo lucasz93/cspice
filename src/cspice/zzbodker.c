@@ -8,8 +8,7 @@
 
 
 extern zzbodker_init_t __zzbodker_init;
-static zzbodker_state_t* get_zzbodker_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzbodker_state_t* get_zzbodker_state(cspice_t* state) {
 	if (!state->zzbodker)
 		state->zzbodker = __cspice_allocate_module(sizeof(
 	zzbodker_state_t), &__zzbodker_init, sizeof(__zzbodker_init));
@@ -18,11 +17,11 @@ static zzbodker_state_t* get_zzbodker_state() {
 }
 
 /* $Procedure ZZBODKER ( Private --- Process Body-Name Kernel Pool Maps ) */
-/* Subroutine */ int zzbodker_(char *names, char *nornam, integer *codes, 
-	integer *nvals, logical *extker, integer *bnmlst, integer *bnmpol, 
-	char *bnmnms, integer *bnmidx, integer *bidlst, integer *bidpol, 
-	integer *bidids, integer *bididx, ftnlen names_len, ftnlen nornam_len,
-	 ftnlen bnmnms_len)
+/* Subroutine */ int zzbodker_(cspice_t* __global_state, char *names, char *
+	nornam, integer *codes, integer *nvals, logical *extker, integer *
+	bnmlst, integer *bnmpol, char *bnmnms, integer *bnmidx, integer *
+	bidlst, integer *bidpol, integer *bidids, integer *bididx, ftnlen 
+	names_len, ftnlen nornam_len, ftnlen bnmnms_len)
 {
     /* Initialized data */
 
@@ -31,39 +30,41 @@ static zzbodker_state_t* get_zzbodker_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char type__[1*2];
     integer nsiz[2];
-    extern /* Subroutine */ int zzbodini_(char *, char *, integer *, integer *
-	    , integer *, integer *, integer *, char *, integer *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    logical found;
-    extern logical failed_(void);
-    logical plfind[2];
-    extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
-	    *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+    extern /* Subroutine */ int zzbodini_(cspice_t*, char *, char *, integer *
+	    , integer *, integer *, integer *, integer *, char *, integer *, 
+	    integer *, integer *, integer *, integer *, ftnlen, ftnlen, 
 	    ftnlen);
-    extern logical return_(void);
+    integer i__;
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    logical found;
+    extern logical failed_(cspice_t*);
+    logical plfind[2];
+    extern /* Subroutine */ int gcpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gipool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(cspice_t*, integer *, char *, char *, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
     integer num[2];
 
 
     /* Module state */
-    zzbodker_state_t* __state = get_zzbodker_state();
+    zzbodker_state_t* __state = get_zzbodker_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -400,10 +401,10 @@ static zzbodker_state_t* get_zzbodker_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZBODKER", (ftnlen)8);
+	chkin_(__global_state, "ZZBODKER", (ftnlen)8);
     }
 
 /*     Until the code below proves otherwise, we shall assume */
@@ -413,12 +414,12 @@ static zzbodker_state_t* get_zzbodker_state() {
 
 /*     Check for the external body ID variables in the kernel pool. */
 
-    gcpool_(__state->nbn, &__state->c__1, &__state->c__14983, num, names, 
-	    plfind, (ftnlen)32, (ftnlen)36);
-    gipool_(__state->nbc, &__state->c__1, &__state->c__14983, &num[1], codes, 
-	    &plfind[1], (ftnlen)32);
-    if (failed_()) {
-	chkout_("ZZBODKER", (ftnlen)8);
+    gcpool_(__global_state, __state->nbn, &__state->c__1, &__state->c__14983, 
+	    num, names, plfind, (ftnlen)32, (ftnlen)36);
+    gipool_(__global_state, __state->nbc, &__state->c__1, &__state->c__14983, 
+	    &num[1], codes, &plfind[1], (ftnlen)32);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZBODKER", (ftnlen)8);
 	return 0;
     }
 
@@ -428,59 +429,61 @@ static zzbodker_state_t* get_zzbodker_state() {
 
 /*        If they are not both present or absent, signal an error. */
 
-	setmsg_("The kernel pool vector, #, used in mapping between names an"
-		"d ID-codes is absent, while # is not.  This is often due to "
-		"an improperly constructed text kernel.  Check loaded kernels"
-		" for these keywords.", (ftnlen)199);
+	setmsg_(__global_state, "The kernel pool vector, #, used in mapping "
+		"between names and ID-codes is absent, while # is not.  This "
+		"is often due to an improperly constructed text kernel.  Chec"
+		"k loaded kernels for these keywords.", (ftnlen)199);
 	if (plfind[0]) {
-	    errch_("#", __state->nbc, (ftnlen)1, (ftnlen)32);
-	    errch_("#", __state->nbn, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", __state->nbc, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", __state->nbn, (ftnlen)1, (ftnlen)32);
 	} else {
-	    errch_("#", __state->nbn, (ftnlen)1, (ftnlen)32);
-	    errch_("#", __state->nbc, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", __state->nbn, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", __state->nbc, (ftnlen)1, (ftnlen)32);
 	}
-	sigerr_("SPICE(MISSINGKPV)", (ftnlen)17);
-	chkout_("ZZBODKER", (ftnlen)8);
+	sigerr_(__global_state, "SPICE(MISSINGKPV)", (ftnlen)17);
+	chkout_(__global_state, "ZZBODKER", (ftnlen)8);
 	return 0;
     } else if (! plfind[0]) {
 
 /*        Return if both keywords are absent. */
 
-	chkout_("ZZBODKER", (ftnlen)8);
+	chkout_(__global_state, "ZZBODKER", (ftnlen)8);
 	return 0;
     }
 
 /*     If we reach here, then both kernel pool variables are present. */
 /*     Perform some simple sanity checks on their lengths. */
 
-    dtpool_(__state->nbn, &found, nsiz, type__, (ftnlen)32, (ftnlen)1);
-    dtpool_(__state->nbc, &found, &nsiz[1], type__ + 1, (ftnlen)32, (ftnlen)1)
-	    ;
-    if (failed_()) {
-	chkout_("ZZBODKER", (ftnlen)8);
+    dtpool_(__global_state, __state->nbn, &found, nsiz, type__, (ftnlen)32, (
+	    ftnlen)1);
+    dtpool_(__global_state, __state->nbc, &found, &nsiz[1], type__ + 1, (
+	    ftnlen)32, (ftnlen)1);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZBODKER", (ftnlen)8);
 	return 0;
     }
     if (nsiz[0] > 14983 || nsiz[1] > 14983) {
-	setmsg_("The kernel pool vectors used to define the names/ID-codes m"
-		"appingexceeds the max size. The size of the NAME vector is #"
-		"1. The size of the CODE vector is #2. The max number allowed"
-		" of elements is #3.", (ftnlen)198);
-	errint_("#1", nsiz, (ftnlen)2);
-	errint_("#2", &nsiz[1], (ftnlen)2);
-	errint_("#3", &__state->c__14983, (ftnlen)2);
-	sigerr_("SPICE(KERVARTOOBIG)", (ftnlen)19);
-	chkout_("ZZBODKER", (ftnlen)8);
+	setmsg_(__global_state, "The kernel pool vectors used to define the "
+		"names/ID-codes mappingexceeds the max size. The size of the "
+		"NAME vector is #1. The size of the CODE vector is #2. The ma"
+		"x number allowed of elements is #3.", (ftnlen)198);
+	errint_(__global_state, "#1", nsiz, (ftnlen)2);
+	errint_(__global_state, "#2", &nsiz[1], (ftnlen)2);
+	errint_(__global_state, "#3", &__state->c__14983, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(KERVARTOOBIG)", (ftnlen)19);
+	chkout_(__global_state, "ZZBODKER", (ftnlen)8);
 	return 0;
     } else if (nsiz[0] != nsiz[1]) {
-	setmsg_("The kernel pool vectors used for mapping between names and "
-		"ID-codes are not the same size.  The size of the name vector"
-		", NAIF_BODY_NAME is #. The size of the ID-code vector, NAIF_"
-		"BODY_CODE is #. You need to examine the ID-code kernel you l"
-		"oaded and correct the mismatch.", (ftnlen)270);
-	errint_("#", nsiz, (ftnlen)1);
-	errint_("#", &nsiz[1], (ftnlen)1);
-	sigerr_("SPICE(BADDIMENSIONS)", (ftnlen)20);
-	chkout_("ZZBODKER", (ftnlen)8);
+	setmsg_(__global_state, "The kernel pool vectors used for mapping be"
+		"tween names and ID-codes are not the same size.  The size of"
+		" the name vector, NAIF_BODY_NAME is #. The size of the ID-co"
+		"de vector, NAIF_BODY_CODE is #. You need to examine the ID-c"
+		"ode kernel you loaded and correct the mismatch.", (ftnlen)270)
+		;
+	errint_(__global_state, "#", nsiz, (ftnlen)1);
+	errint_(__global_state, "#", &nsiz[1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDIMENSIONS)", (ftnlen)20);
+	chkout_(__global_state, "ZZBODKER", (ftnlen)8);
 	return 0;
     }
 
@@ -496,34 +499,36 @@ static zzbodker_state_t* get_zzbodker_state() {
 
 /*        Check for blank strings. */
 
-	if (s_cmp(names + ((i__2 = i__ - 1) < 14983 && 0 <= i__2 ? i__2 : 
-		s_rnge("names", i__2, "zzbodker_", (ftnlen)403)) * 36, " ", (
-		ftnlen)36, (ftnlen)1) == 0) {
-	    setmsg_("An attempt to assign the code, #, to a blank string was"
-		    " made.  Check loaded text kernels for a blank string in "
-		    "the NAIF_BODY_NAME array.", (ftnlen)136);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(BLANKNAMEASSIGNED)", (ftnlen)24);
-	    chkout_("ZZBODKER", (ftnlen)8);
+	if (s_cmp(&__global_state->f2c, names + ((i__2 = i__ - 1) < 14983 && 
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "names", i__2,
+		 "zzbodker_", (ftnlen)403)) * 36, " ", (ftnlen)36, (ftnlen)1) 
+		== 0) {
+	    setmsg_(__global_state, "An attempt to assign the code, #, to a "
+		    "blank string was made.  Check loaded text kernels for a "
+		    "blank string in the NAIF_BODY_NAME array.", (ftnlen)136);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BLANKNAMEASSIGNED)", (ftnlen)24);
+	    chkout_(__global_state, "ZZBODKER", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Compute the canonical member of the equivalence class. */
 
-	ljucrs_(&__state->c__1, names + ((i__2 = i__ - 1) < 14983 && 0 <= 
-		i__2 ? i__2 : s_rnge("names", i__2, "zzbodker_", (ftnlen)419))
-		 * 36, nornam + ((i__3 = i__ - 1) < 14983 && 0 <= i__3 ? i__3 
-		: s_rnge("nornam", i__3, "zzbodker_", (ftnlen)419)) * 36, (
-		ftnlen)36, (ftnlen)36);
+	ljucrs_(__global_state, &__state->c__1, names + ((i__2 = i__ - 1) < 
+		14983 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		"names", i__2, "zzbodker_", (ftnlen)419)) * 36, nornam + ((
+		i__3 = i__ - 1) < 14983 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "nornam", i__3, "zzbodker_", (ftnlen)419)
+		) * 36, (ftnlen)36, (ftnlen)36);
     }
 
 /*     Populate hashes required by ZZBODTRN. */
 
-    zzbodini_(names, nornam, codes, nvals, &__state->c__14983, bnmlst, bnmpol,
-	     bnmnms, bnmidx, bidlst, bidpol, bidids, bididx, (ftnlen)36, (
-	    ftnlen)36, (ftnlen)36);
-    if (failed_()) {
-	chkout_("ZZBODKER", (ftnlen)8);
+    zzbodini_(__global_state, names, nornam, codes, nvals, &__state->c__14983,
+	     bnmlst, bnmpol, bnmnms, bnmidx, bidlst, bidpol, bidids, bididx, (
+	    ftnlen)36, (ftnlen)36, (ftnlen)36);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZBODKER", (ftnlen)8);
 	return 0;
     }
 
@@ -531,7 +536,7 @@ static zzbodker_state_t* get_zzbodker_state() {
 /*     to .TRUE., check out and return. */
 
     *extker = TRUE_;
-    chkout_("ZZBODKER", (ftnlen)8);
+    chkout_(__global_state, "ZZBODKER", (ftnlen)8);
     return 0;
 } /* zzbodker_ */
 

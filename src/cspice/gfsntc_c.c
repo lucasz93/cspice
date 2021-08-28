@@ -1211,7 +1211,7 @@
       {
       return;
       }
-   chkin_c ( "gfsntc_c" );
+   chkin_c ( naif_state, "gfsntc_c" );
 
 
    /*

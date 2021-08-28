@@ -8,8 +8,7 @@
 
 
 extern zzdsksph_init_t __zzdsksph_init;
-static zzdsksph_state_t* get_zzdsksph_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdsksph_state_t* get_zzdsksph_state(cspice_t* state) {
 	if (!state->zzdsksph)
 		state->zzdsksph = __cspice_allocate_module(sizeof(
 	zzdsksph_state_t), &__zzdsksph_init, sizeof(__zzdsksph_init));
@@ -18,8 +17,9 @@ static zzdsksph_state_t* get_zzdsksph_state() {
 }
 
 /* $Procedure ZZDSKSPH ( DSK, bounding spheres for target body ) */
-/* Subroutine */ int zzdsksph_(integer *bodyid, integer *nsurf, integer *
-	srflst, doublereal *minrad, doublereal *maxrad)
+/* Subroutine */ int zzdsksph_(cspice_t* __global_state, integer *bodyid, 
+	integer *nsurf, integer *srflst, doublereal *minrad, doublereal *
+	maxrad)
 {
     /* Initialized data */
 
@@ -29,40 +29,42 @@ static zzdsksph_state_t* get_zzdsksph_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), i_dnnt(doublereal *), 
-	    s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), i_dnnt(
+	    f2c_state_t*, doublereal *), s_cmp(f2c_state_t*, char *, char *, 
+	    ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     logical same;
     doublereal minr;
     doublereal maxr;
-    extern /* Subroutine */ int zzdskbdc_();
-    extern /* Subroutine */ int zzdskbbl_(integer *);
-    extern /* Subroutine */ int zzdskchk_(integer *, logical *);
-    extern /* Subroutine */ int zzdsksbd_(integer *);
-    extern /* Subroutine */ int zzrecbox_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzdskbss_(integer *);
+    extern /* Subroutine */ int zzdskbdc_(cspice_t*);
+    extern /* Subroutine */ int zzdskbbl_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzdskchk_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int zzdsksbd_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzrecbox_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzdskbss_(cspice_t*, integer *);
     doublereal f;
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int zzdsksns_(U_fp, integer *, integer *, 
-	    doublereal *, logical *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzdsksns_(cspice_t*, U_fp, integer *, integer 
+	    *, doublereal *, logical *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
-    extern doublereal dpmax_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
     logical found;
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern doublereal vnorm_(doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal re;
     integer dladsc[8];
     integer handle;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     doublereal offmag;
     doublereal lt;
     doublereal rp;
@@ -72,10 +74,10 @@ static zzdsksph_state_t* get_zzdsksph_state() {
     integer framid;
     char frname[32];
     integer frclid;
-    extern integer isrchi_(integer *, integer *, integer *);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
     char errmsg[1840];
     doublereal boxctr[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal boxrad;
     doublereal ctrmnr;
     doublereal dskdsc[24];
@@ -90,19 +92,19 @@ static zzdsksph_state_t* get_zzdsksph_state() {
     logical newlst;
     logical segfnd;
     logical update;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int spkgps_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int frmnam_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int spkgps_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
 
 
     /* Module state */
-    zzdsksph_state_t* __state = get_zzdsksph_state();
+    zzdsksph_state_t* __state = get_zzdsksph_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -710,21 +712,22 @@ static zzdsksph_state_t* get_zzdsksph_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKSPH", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKSPH", (ftnlen)8);
     if (__state->first) {
-	zzctruin_(__state->ctr);
+	zzctruin_(__global_state, __state->ctr);
     }
 
 /*     Check NSURF. */
 
     if (*nsurf < 0) {
-	setmsg_("NSURF must be non-negative but was #.", (ftnlen)37);
-	errint_("#", nsurf, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZDSKSPH", (ftnlen)8);
+	setmsg_(__global_state, "NSURF must be non-negative but was #.", (
+		ftnlen)37);
+	errint_(__global_state, "#", nsurf, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZDSKSPH", (ftnlen)8);
 	return 0;
     }
 
@@ -740,8 +743,9 @@ static zzdsksph_state_t* get_zzdsksph_state() {
 		i__ = 1;
 		while(i__ <= *nsurf && same) {
 		    same = srflst[i__ - 1] == __state->prvlst[(i__1 = i__ - 1)
-			     < 100 && 0 <= i__1 ? i__1 : s_rnge("prvlst", 
-			    i__1, "zzdsksph_", (ftnlen)353)];
+			     < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "prvlst", i__1, "zzdsksph_", 
+			    (ftnlen)353)];
 		    ++i__;
 		}
 
@@ -761,7 +765,7 @@ static zzdsksph_state_t* get_zzdsksph_state() {
 
 /*     Check for DSK update in ZZDSKBSR. */
 
-    zzdskchk_(__state->ctr, &update);
+    zzdskchk_(__global_state, __state->ctr, &update);
 
 /*     Initialize the temporary variables MINR, MAXR. */
 
@@ -772,14 +776,14 @@ static zzdsksph_state_t* get_zzdsksph_state() {
 /*        Initialize the saved radius data. */
 
 	__state->svmaxr = -1.;
-	__state->svminr = dpmax_();
+	__state->svminr = dpmax_(__global_state);
 
 /*        Prepare to fetch segment data. Initialize the ZZDSKBSR */
 /*        segment list for the body of interest. */
 
-	zzdskbbl_(bodyid);
-	if (failed_()) {
-	    chkout_("ZZDSKSPH", (ftnlen)8);
+	zzdskbbl_(__global_state, bodyid);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDSKSPH", (ftnlen)8);
 	    return 0;
 	}
 
@@ -787,26 +791,27 @@ static zzdsksph_state_t* get_zzdsksph_state() {
 /*        surface list. */
 
 	__state->prvfid = 0;
-	cleard_(&__state->c__3, offset);
+	cleard_(__global_state, &__state->c__3, offset);
 
 /*        Re-initialize MINR and MAXR. */
 
 	maxr = -1.;
-	minr = dpmax_();
+	minr = dpmax_(__global_state);
 
 /*        Examine all segments for BODYID. */
 
-	zzdskbss_(bodyid);
-	zzdsksbd_(bodyid);
-	zzdsksns_((U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &segfnd);
+	zzdskbss_(__global_state, bodyid);
+	zzdsksbd_(__global_state, bodyid);
+	zzdsksns_(__global_state, (U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &
+		segfnd);
 	while(segfnd) {
-	    if (failed_()) {
-		chkout_("ZZDSKSPH", (ftnlen)8);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZDSKSPH", (ftnlen)8);
 		return 0;
 	    }
 	    if (*nsurf > 0) {
-		surfid = i_dnnt(dskdsc);
-		i__ = isrchi_(&surfid, nsurf, srflst);
+		surfid = i_dnnt(&__global_state->f2c, dskdsc);
+		i__ = isrchi_(__global_state, &surfid, nsurf, srflst);
 	    } else {
 		i__ = 1;
 	    }
@@ -819,18 +824,20 @@ static zzdsksph_state_t* get_zzdsksph_state() {
 /*              Get the frame ID of this segment, and look up the frame's */
 /*              center. */
 
-		framid = i_dnnt(&dskdsc[4]);
+		framid = i_dnnt(&__global_state->f2c, &dskdsc[4]);
 		if (framid != __state->prvfid) {
 
 /*                 Get the frame center for the current segment. */
 
-		    frinfo_(&framid, &frcent, &frclas, &frclid, &found);
+		    frinfo_(__global_state, &framid, &frcent, &frclas, &
+			    frclid, &found);
 		    if (! found) {
-			setmsg_("No frame specification was found for frame "
-				"ID #.", (ftnlen)48);
-			errint_("#", &framid, (ftnlen)1);
-			sigerr_("SPICE(NOFRAMEDATA)", (ftnlen)18);
-			chkout_("ZZDSKSPH", (ftnlen)8);
+			setmsg_(__global_state, "No frame specification was "
+				"found for frame ID #.", (ftnlen)48);
+			errint_(__global_state, "#", &framid, (ftnlen)1);
+			sigerr_(__global_state, "SPICE(NOFRAMEDATA)", (ftnlen)
+				18);
+			chkout_(__global_state, "ZZDSKSPH", (ftnlen)8);
 			return 0;
 		    }
 		    if (frcent == *bodyid) {
@@ -840,34 +847,36 @@ static zzdsksph_state_t* get_zzdsksph_state() {
 
 			offmag = 0.;
 		    } else {
-			frmnam_(&framid, frname, (ftnlen)32);
-			if (failed_()) {
-			    chkout_("ZZDSKSPH", (ftnlen)8);
+			frmnam_(__global_state, &framid, frname, (ftnlen)32);
+			if (failed_(__global_state)) {
+			    chkout_(__global_state, "ZZDSKSPH", (ftnlen)8);
 			    return 0;
 			}
-			if (s_cmp(frname, " ", (ftnlen)32, (ftnlen)1) == 0) {
-			    setmsg_("No frame name was found for frame ID #.",
-				     (ftnlen)39);
-			    errint_("#", &framid, (ftnlen)1);
-			    sigerr_("SPICE(FRAMENAMENOTFOUND)", (ftnlen)24);
-			    chkout_("ZZDSKSPH", (ftnlen)8);
+			if (s_cmp(&__global_state->f2c, frname, " ", (ftnlen)
+				32, (ftnlen)1) == 0) {
+			    setmsg_(__global_state, "No frame name was found"
+				    " for frame ID #.", (ftnlen)39);
+			    errint_(__global_state, "#", &framid, (ftnlen)1);
+			    sigerr_(__global_state, "SPICE(FRAMENAMENOTFOUND)"
+				    , (ftnlen)24);
+			    chkout_(__global_state, "ZZDSKSPH", (ftnlen)8);
 			    return 0;
 			}
 			midtim = (dskdsc[22] + dskdsc[23]) / 2;
-			spkgps_(&frcent, &midtim, frname, bodyid, offset, &lt,
-				 (ftnlen)32);
-			if (failed_()) {
-			    chkout_("ZZDSKSPH", (ftnlen)8);
+			spkgps_(__global_state, &frcent, &midtim, frname, 
+				bodyid, offset, &lt, (ftnlen)32);
+			if (failed_(__global_state)) {
+			    chkout_(__global_state, "ZZDSKSPH", (ftnlen)8);
 			    return 0;
 			}
-			offmag = vnorm_(offset);
+			offmag = vnorm_(__global_state, offset);
 		    }
 		}
 
 /*              Get the segment coordinate system and derive the maximum */
 /*              radius of the segment. */
 
-		corsys = i_dnnt(&dskdsc[5]);
+		corsys = i_dnnt(&__global_state->f2c, &dskdsc[5]);
 
 /*              Get bounding radii for the segment relative to the */
 /*              origin of the segment's coordinate system. We'll account */
@@ -906,21 +915,23 @@ static zzdsksph_state_t* get_zzdsksph_state() {
 			sgminr = re + dskdsc[20];
 		    }
 		} else if (corsys == 3) {
-		    zzrecbox_(&dskdsc[16], boxctr, &lx, &ly, &lz, &boxrad);
+		    zzrecbox_(__global_state, &dskdsc[16], boxctr, &lx, &ly, &
+			    lz, &boxrad);
 
 /*                 SGMINR is a lower bound on the distance of the */
 /*                 segment from the origin of the coordinate system. */
 
 /* Computing MAX */
-		    d__1 = vnorm_(boxctr) - boxrad;
+		    d__1 = vnorm_(__global_state, boxctr) - boxrad;
 		    sgminr = max(d__1,0.);
-		    sgmaxr = vnorm_(boxctr) + boxrad;
+		    sgmaxr = vnorm_(__global_state, boxctr) + boxrad;
 		} else {
-		    setmsg_("Coordinate system # is not currently supported.",
-			     (ftnlen)47);
-		    errint_("#", &corsys, (ftnlen)1);
-		    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-		    chkout_("ZZDSKSPH", (ftnlen)8);
+		    setmsg_(__global_state, "Coordinate system # is not curr"
+			    "ently supported.", (ftnlen)47);
+		    errint_(__global_state, "#", &corsys, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19)
+			    ;
+		    chkout_(__global_state, "ZZDSKSPH", (ftnlen)8);
 		    return 0;
 		}
 
@@ -964,10 +975,11 @@ static zzdsksph_state_t* get_zzdsksph_state() {
 
 /*           Look at the next segment. */
 
-	    zzdsksbd_(bodyid);
-	    zzdsksns_((U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &segfnd);
+	    zzdsksbd_(__global_state, bodyid);
+	    zzdsksns_(__global_state, (U_fp)zzdskbdc_, &handle, dladsc, 
+		    dskdsc, &segfnd);
 	}
-	if (maxr > 0. && ! failed_()) {
+	if (maxr > 0. && ! failed_(__global_state)) {
 
 /*           Update the saved bounds. */
 
@@ -983,38 +995,39 @@ static zzdsksph_state_t* get_zzdsksph_state() {
 /*        We have no radius data for the specified surface list. */
 
 	if (*nsurf == 0) {
-	    s_copy(errmsg, "No segments were found matching the body ID #.", (
-		    ftnlen)1840, (ftnlen)46);
+	    s_copy(&__global_state->f2c, errmsg, "No segments were found mat"
+		    "ching the body ID #.", (ftnlen)1840, (ftnlen)46);
 	} else {
-	    s_copy(errmsg, "No segments were found matching the body ID # an"
-		    "d the surface list <@>.", (ftnlen)1840, (ftnlen)71);
+	    s_copy(&__global_state->f2c, errmsg, "No segments were found mat"
+		    "ching the body ID # and the surface list <@>.", (ftnlen)
+		    1840, (ftnlen)71);
 	    i__1 = *nsurf - 1;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		repmc_(errmsg, "@", "*, @", errmsg, (ftnlen)1840, (ftnlen)1, (
-			ftnlen)4, (ftnlen)1840);
-		repmi_(errmsg, "*", &srflst[i__ - 1], errmsg, (ftnlen)1840, (
-			ftnlen)1, (ftnlen)1840);
+		repmc_(__global_state, errmsg, "@", "*, @", errmsg, (ftnlen)
+			1840, (ftnlen)1, (ftnlen)4, (ftnlen)1840);
+		repmi_(__global_state, errmsg, "*", &srflst[i__ - 1], errmsg, 
+			(ftnlen)1840, (ftnlen)1, (ftnlen)1840);
 	    }
-	    repmi_(errmsg, "@", &srflst[*nsurf - 1], errmsg, (ftnlen)1840, (
-		    ftnlen)1, (ftnlen)1840);
+	    repmi_(__global_state, errmsg, "@", &srflst[*nsurf - 1], errmsg, (
+		    ftnlen)1840, (ftnlen)1, (ftnlen)1840);
 	}
-	setmsg_(errmsg, (ftnlen)1840);
-	errint_("#", bodyid, (ftnlen)1);
-	sigerr_("SPICE(DSKDATANOTFOUND)", (ftnlen)22);
-	chkout_("ZZDSKSPH", (ftnlen)8);
+	setmsg_(__global_state, errmsg, (ftnlen)1840);
+	errint_(__global_state, "#", bodyid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DSKDATANOTFOUND)", (ftnlen)22);
+	chkout_(__global_state, "ZZDSKSPH", (ftnlen)8);
 	return 0;
     }
-    if (! failed_()) {
+    if (! failed_(__global_state)) {
 	__state->first = FALSE_;
 	__state->prvbod = *bodyid;
 	__state->prvnls = *nsurf;
 	if (newlst) {
-	    movei_(srflst, nsurf, __state->prvlst);
+	    movei_(__global_state, srflst, nsurf, __state->prvlst);
 	}
 	*maxrad = __state->svmaxr;
 	*minrad = __state->svminr;
     }
-    chkout_("ZZDSKSPH", (ftnlen)8);
+    chkout_(__global_state, "ZZDSKSPH", (ftnlen)8);
     return 0;
 } /* zzdsksph_ */
 

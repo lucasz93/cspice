@@ -8,8 +8,7 @@
 
 
 extern zzeksei_init_t __zzeksei_init;
-static zzeksei_state_t* get_zzeksei_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzeksei_state_t* get_zzeksei_state(cspice_t* state) {
 	if (!state->zzeksei)
 		state->zzeksei = __cspice_allocate_module(sizeof(
 	zzeksei_state_t), &__zzeksei_init, sizeof(__zzeksei_init));
@@ -18,20 +17,21 @@ static zzeksei_state_t* get_zzeksei_state() {
 }
 
 /* $Procedure  ZZEKSEI ( Private: EK, set encoded integer ) */
-/* Subroutine */ int zzeksei_(integer *handle, integer *addrss, integer *ival)
+/* Subroutine */ int zzeksei_(cspice_t* __global_state, integer *handle, 
+	integer *addrss, integer *ival)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     char cval[5];
-    extern /* Subroutine */ int dasudc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int prtenc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasudc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int prtenc_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    zzeksei_state_t* __state = get_zzeksei_state();
+    zzeksei_state_t* __state = get_zzeksei_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -273,13 +273,13 @@ static zzeksei_state_t* get_zzeksei_state() {
 
 /*     Encode the number. */
 
-    prtenc_(ival, cval, (ftnlen)5);
+    prtenc_(__global_state, ival, cval, (ftnlen)5);
 
 /*     Write the encoded value. */
 
     i__1 = *addrss + 4;
-    dasudc_(handle, addrss, &i__1, &__state->c__1, &__state->c__5, cval, (
-	    ftnlen)5);
+    dasudc_(__global_state, handle, addrss, &i__1, &__state->c__1, &
+	    __state->c__5, cval, (ftnlen)5);
     return 0;
 } /* zzeksei_ */
 

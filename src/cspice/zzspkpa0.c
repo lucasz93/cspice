@@ -8,8 +8,7 @@
 
 
 extern zzspkpa0_init_t __zzspkpa0_init;
-static zzspkpa0_state_t* get_zzspkpa0_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzspkpa0_state_t* get_zzspkpa0_state(cspice_t* state) {
 	if (!state->zzspkpa0)
 		state->zzspkpa0 = __cspice_allocate_module(sizeof(
 	zzspkpa0_state_t), &__zzspkpa0_init, sizeof(__zzspkpa0_init));
@@ -18,9 +17,9 @@ static zzspkpa0_state_t* get_zzspkpa0_state() {
 }
 
 /* $Procedure ZZSPKPA0 ( S/P Kernel, apparent position only ) */
-/* Subroutine */ int zzspkpa0_(integer *targ, doublereal *et, char *ref, 
-	doublereal *sobs, char *abcorr, doublereal *ptarg, doublereal *lt, 
-	ftnlen ref_len, ftnlen abcorr_len)
+/* Subroutine */ int zzspkpa0_(cspice_t* __global_state, integer *targ, 
+	doublereal *et, char *ref, doublereal *sobs, char *abcorr, doublereal 
+	*ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len)
 {
     /* Initialized data */
 
@@ -30,43 +29,45 @@ static zzspkpa0_state_t* get_zzspkpa0_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char corr[5];
-    extern /* Subroutine */ int zzspkgp0_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzspkgp0_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal tpos[3];
     integer i__;
     integer refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern doublereal vnorm_(doublereal *);
-    extern logical failed_(void);
-    extern doublereal clight_(void);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int stlabx_(doublereal *, doublereal *, 
-	    doublereal *);
-    integer ltsign;
-    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern doublereal clight_(cspice_t*);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int stelab_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int stlabx_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    integer ltsign;
+    extern /* Subroutine */ int ljucrs_(cspice_t*, integer *, char *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer maxitr;
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern logical odd_(integer *);
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern logical odd_(cspice_t*, integer *);
 
 
     /* Module state */
-    zzspkpa0_state_t* __state = get_zzspkpa0_state();
+    zzspkpa0_state_t* __state = get_zzspkpa0_state(__global_state);
 /* $ Abstract */
 
 /*     Return the position of a target body relative to an observer, */
@@ -721,13 +722,13 @@ static zzspkpa0_state_t* get_zzspkpa0_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZSPKPA0", (ftnlen)8);
+	chkin_(__global_state, "ZZSPKPA0", (ftnlen)8);
     }
-    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    if (__state->first || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
@@ -735,43 +736,46 @@ static zzspkpa0_state_t* get_zzspkpa0_state() {
 /*        Remove leading and embedded white space from the aberration */
 /*        correction flag, then convert to upper case. */
 
-	ljucrs_(&__state->c__0, abcorr, corr, abcorr_len, (ftnlen)5);
+	ljucrs_(__global_state, &__state->c__0, abcorr, corr, abcorr_len, (
+		ftnlen)5);
 
 /*        Locate the flag in our list of flags. */
 
-	i__ = isrchc_(corr, &__state->c__9, __state->flags, (ftnlen)5, (
-		ftnlen)5);
+	i__ = isrchc_(__global_state, corr, &__state->c__9, __state->flags, (
+		ftnlen)5, (ftnlen)5);
 	if (i__ == 0) {
-	    setmsg_("Requested aberration correction was #.", (ftnlen)38);
-	    errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	    sigerr_("SPICE(SPKINVALIDOPTION)", (ftnlen)23);
-	    chkout_("ZZSPKPA0", (ftnlen)8);
+	    setmsg_(__global_state, "Requested aberration correction was #.", 
+		    (ftnlen)38);
+	    errch_(__global_state, "#", abcorr, (ftnlen)1, abcorr_len);
+	    sigerr_(__global_state, "SPICE(SPKINVALIDOPTION)", (ftnlen)23);
+	    chkout_(__global_state, "ZZSPKPA0", (ftnlen)8);
 	    return 0;
 	}
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction. */
 
 	__state->xmit = i__ > 5;
 	__state->uselt = i__ == 2 || i__ == 3 || i__ == 6 || i__ == 7;
-	__state->usestl = i__ > 1 && odd_(&i__);
+	__state->usestl = i__ > 1 && odd_(__global_state, &i__);
 	__state->usecn = i__ == 4 || i__ == 5 || i__ == 8 || i__ == 9;
 	__state->first = FALSE_;
     }
 
 /*     See if the reference frame is a recognized inertial frame. */
 
-    irfnum_(ref, &refid, ref_len);
+    irfnum_(__global_state, ref, &refid, ref_len);
     if (refid == 0) {
-	setmsg_("The requested frame '#' is not a recognized inertial frame. "
-		, (ftnlen)60);
-	errch_("#", ref, (ftnlen)1, ref_len);
-	sigerr_("SPICE(BADFRAME)", (ftnlen)15);
-	chkout_("ZZSPKPA0", (ftnlen)8);
+	setmsg_(__global_state, "The requested frame '#' is not a recognized"
+		" inertial frame. ", (ftnlen)60);
+	errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	sigerr_(__global_state, "SPICE(BADFRAME)", (ftnlen)15);
+	chkout_(__global_state, "ZZSPKPA0", (ftnlen)8);
 	return 0;
     }
 
@@ -788,14 +792,15 @@ static zzspkpa0_state_t* get_zzspkpa0_state() {
 /*     to get the relative position. Use this to compute the one-way */
 /*     light time. */
 
-    zzspkgp0_(targ, et, ref, &__state->c__0, ptarg, lt, ref_len);
-    if (failed_()) {
-	chkout_("ZZSPKPA0", (ftnlen)8);
+    zzspkgp0_(__global_state, targ, et, ref, &__state->c__0, ptarg, lt, 
+	    ref_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSPKPA0", (ftnlen)8);
 	return 0;
     }
-    vsub_(ptarg, sobs, tpos);
-    vequ_(tpos, ptarg);
-    *lt = vnorm_(ptarg) / clight_();
+    vsub_(__global_state, ptarg, sobs, tpos);
+    vequ_(__global_state, tpos, ptarg);
+    *lt = vnorm_(__global_state, ptarg) / clight_(__global_state);
 
 /*     To correct for light time, find the position of the target body */
 /*     at the current epoch minus the one-way light time. Note that */
@@ -811,14 +816,15 @@ static zzspkpa0_state_t* get_zzspkpa0_state() {
     i__1 = maxitr;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	d__1 = *et + ltsign * *lt;
-	zzspkgp0_(targ, &d__1, ref, &__state->c__0, ptarg, lt, ref_len);
-	if (failed_()) {
-	    chkout_("ZZSPKPA0", (ftnlen)8);
+	zzspkgp0_(__global_state, targ, &d__1, ref, &__state->c__0, ptarg, lt,
+		 ref_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKPA0", (ftnlen)8);
 	    return 0;
 	}
-	vsub_(ptarg, sobs, tpos);
-	vequ_(tpos, ptarg);
-	*lt = vnorm_(ptarg) / clight_();
+	vsub_(__global_state, ptarg, sobs, tpos);
+	vequ_(__global_state, tpos, ptarg);
+	*lt = vnorm_(__global_state, ptarg) / clight_(__global_state);
     }
 
 /*     At this point, PTARG contains the geometric or light-time */
@@ -835,8 +841,8 @@ static zzspkpa0_state_t* get_zzspkpa0_state() {
 /*           Compute the position vector obtained by applying */
 /*           "reception" stellar aberration to PTARG. */
 
-	    stlabx_(ptarg, &sobs[3], tpos);
-	    vequ_(tpos, ptarg);
+	    stlabx_(__global_state, ptarg, &sobs[3], tpos);
+	    vequ_(__global_state, tpos, ptarg);
 	} else {
 
 /*           This is the reception case. */
@@ -844,11 +850,11 @@ static zzspkpa0_state_t* get_zzspkpa0_state() {
 /*           Compute the position vector obtained by applying */
 /*           "reception" stellar aberration to PTARG. */
 
-	    stelab_(ptarg, &sobs[3], tpos);
-	    vequ_(tpos, ptarg);
+	    stelab_(__global_state, ptarg, &sobs[3], tpos);
+	    vequ_(__global_state, tpos, ptarg);
 	}
     }
-    chkout_("ZZSPKPA0", (ftnlen)8);
+    chkout_(__global_state, "ZZSPKPA0", (ftnlen)8);
     return 0;
 } /* zzspkpa0_ */
 

@@ -8,40 +8,43 @@
 
 
 typedef int zzekesiz_state_t;
-static zzekesiz_state_t* get_zzekesiz_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekesiz_state_t* get_zzekesiz_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZEKESIZ ( EK, element entry size ) */
-integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, integer *
-	recptr)
+integer zzekesiz_(cspice_t* __global_state, integer *handle, integer *segdsc, 
+	integer *coldsc, integer *recptr)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Local variables */
-    extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekcnam_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer class__;
     integer recno;
     integer segno;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     char column[32];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern integer zzeksz04_(integer *, integer *, integer *, integer *);
-    extern integer zzeksz05_(integer *, integer *, integer *, integer *);
-    extern integer zzeksz06_(integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern integer zzeksz04_(cspice_t*, integer *, integer *, integer *, 
+	    integer *);
+    extern integer zzeksz05_(cspice_t*, integer *, integer *, integer *, 
+	    integer *);
+    extern integer zzeksz06_(cspice_t*, integer *, integer *, integer *, 
+	    integer *);
 
 
     /* Module state */
-    zzekesiz_state_t* __state = get_zzekesiz_state();
+    zzekesiz_state_t* __state = get_zzekesiz_state(__global_state);
 /* $ Abstract */
 
 /*     Return the size of a specified column entry. */
@@ -434,11 +437,11 @@ integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, integer *
     } else if (class__ == 3) {
 	ret_val = 1;
     } else if (class__ == 4) {
-	ret_val = zzeksz04_(handle, segdsc, coldsc, recptr);
+	ret_val = zzeksz04_(__global_state, handle, segdsc, coldsc, recptr);
     } else if (class__ == 5) {
-	ret_val = zzeksz05_(handle, segdsc, coldsc, recptr);
+	ret_val = zzeksz05_(__global_state, handle, segdsc, coldsc, recptr);
     } else if (class__ == 6) {
-	ret_val = zzeksz06_(handle, segdsc, coldsc, recptr);
+	ret_val = zzeksz06_(__global_state, handle, segdsc, coldsc, recptr);
     } else if (class__ == 7) {
 	ret_val = 1;
     } else if (class__ == 8) {
@@ -449,20 +452,20 @@ integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, integer *
 
 /*        This is an unsupported column class. */
 
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
 	segno = segdsc[1];
-	chkin_("ZZEKESIZ", (ftnlen)8);
-	setmsg_("Class # from input column descriptor is not a supported int"
-		"eger class.  COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (
-		ftnlen)113);
-	errint_("#", &class__, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	errint_("#", &recno, (ftnlen)1);
-	errint_("#", &segno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
-	chkout_("ZZEKESIZ", (ftnlen)8);
+	chkin_(__global_state, "ZZEKESIZ", (ftnlen)8);
+	setmsg_(__global_state, "Class # from input column descriptor is not"
+		" a supported integer class.  COLUMN = #; RECNO = #; SEGNO = "
+		"#; EK = #.", (ftnlen)113);
+	errint_(__global_state, "#", &class__, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errint_(__global_state, "#", &segno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOCLASS)", (ftnlen)14);
+	chkout_(__global_state, "ZZEKESIZ", (ftnlen)8);
 	return ret_val;
     }
     return ret_val;

@@ -8,13 +8,13 @@
 
 
 typedef int shelli_state_t;
-static shelli_state_t* get_shelli_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline shelli_state_t* get_shelli_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SHELLI ( Shell sort an integer array ) */
-/* Subroutine */ int shelli_(integer *ndim, integer *array)
+/* Subroutine */ int shelli_(cspice_t* __global_state, integer *ndim, integer 
+	*array)
 {
     /* System generated locals */
     integer i__1;
@@ -22,13 +22,13 @@ static shelli_state_t* get_shelli_state() {
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int swapi_(integer *, integer *);
+    extern /* Subroutine */ int swapi_(cspice_t*, integer *, integer *);
     integer jg;
     integer gap;
 
 
     /* Module state */
-    shelli_state_t* __state = get_shelli_state();
+    shelli_state_t* __state = get_shelli_state(__global_state);
 /* $ Abstract */
 
 /*      Sort an integer array using the Shell Sort algorithm. */
@@ -167,7 +167,7 @@ static shelli_state_t* get_shelli_state() {
 		if (array[j - 1] <= array[jg - 1]) {
 		    j = 0;
 		} else {
-		    swapi_(&array[j - 1], &array[jg - 1]);
+		    swapi_(__global_state, &array[j - 1], &array[jg - 1]);
 		}
 		j -= gap;
 	    }

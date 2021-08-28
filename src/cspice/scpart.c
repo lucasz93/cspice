@@ -8,8 +8,7 @@
 
 
 extern scpart_init_t __scpart_init;
-static scpart_state_t* get_scpart_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline scpart_state_t* get_scpart_state(cspice_t* state) {
 	if (!state->scpart)
 		state->scpart = __cspice_allocate_module(sizeof(
 	scpart_state_t), &__scpart_init, sizeof(__scpart_init));
@@ -18,8 +17,8 @@ static scpart_state_t* get_scpart_state() {
 }
 
 /* $Procedure      SCPART ( Spacecraft Clock Partition Information ) */
-/* Subroutine */ int scpart_(integer *sc, integer *nparts, doublereal *pstart,
-	 doublereal *pstop)
+/* Subroutine */ int scpart_(cspice_t* __global_state, integer *sc, integer *
+	nparts, doublereal *pstart, doublereal *pstop)
 {
     /* Initialized data */
 
@@ -28,37 +27,37 @@ static scpart_state_t* get_scpart_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
-    double d_nint(doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double d_nint(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzcvpool_(cspice_t*, char *, integer *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer i__;
-    extern /* Subroutine */ int scld01_(char *, integer *, integer *, integer 
-	    *, doublereal *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int scld01_(cspice_t*, char *, integer *, integer 
+	    *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
     char kvname[60*2];
     logical update;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
     integer nprtsa;
-    extern logical return_(void);
-    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int swpool_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
     integer nprtso;
 
     /* Module state */
-    scpart_state_t* __state = get_scpart_state();
+    scpart_state_t* __state = get_scpart_state(__global_state);
 /* $ Abstract */
 
 /*     Get spacecraft clock partition information from a spacecraft */
@@ -411,10 +410,10 @@ static scpart_state_t* get_scpart_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SCPART", (ftnlen)6);
+    chkin_(__global_state, "SCPART", (ftnlen)6);
 
 /*     On the first pass through the subroutine, or if the */
 /*     spacecraft code changes, set watches on the SCLK kernel */
@@ -424,23 +423,28 @@ static scpart_state_t* get_scpart_state() {
 
 /*        Make up a list of names of kernel variables that we'll use. */
 
-	s_copy(kvname, "SCLK_PARTITION_START", (ftnlen)60, (ftnlen)20);
-	s_copy(kvname + 60, "SCLK_PARTITION_END", (ftnlen)60, (ftnlen)18);
+	s_copy(&__global_state->f2c, kvname, "SCLK_PARTITION_START", (ftnlen)
+		60, (ftnlen)20);
+	s_copy(&__global_state->f2c, kvname + 60, "SCLK_PARTITION_END", (
+		ftnlen)60, (ftnlen)18);
 	for (i__ = 1; i__ <= 2; ++i__) {
-	    suffix_("_#", &__state->c__0, kvname + ((i__1 = i__ - 1) < 2 && 0 
-		    <= i__1 ? i__1 : s_rnge("kvname", i__1, "scpart_", (
-		    ftnlen)284)) * 60, (ftnlen)2, (ftnlen)60);
+	    suffix_(__global_state, "_#", &__state->c__0, kvname + ((i__1 = 
+		    i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "kvname", i__1, "scpart_", (ftnlen)
+		    284)) * 60, (ftnlen)2, (ftnlen)60);
 	    i__3 = -(*sc);
-	    repmi_(kvname + ((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("kvname", i__1, "scpart_", (ftnlen)285)) * 60, 
-		    "#", &i__3, kvname + ((i__2 = i__ - 1) < 2 && 0 <= i__2 ? 
-		    i__2 : s_rnge("kvname", i__2, "scpart_", (ftnlen)285)) * 
-		    60, (ftnlen)60, (ftnlen)1, (ftnlen)60);
+	    repmi_(__global_state, kvname + ((i__1 = i__ - 1) < 2 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "kvname", i__1,
+		     "scpart_", (ftnlen)285)) * 60, "#", &i__3, kvname + ((
+		    i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "kvname", i__2, "scpart_", (ftnlen)
+		    285)) * 60, (ftnlen)60, (ftnlen)1, (ftnlen)60);
 	}
 
 /*        Set a watch on all of the kernel variables used. */
 
-	swpool_("SCPART", &__state->c__2, kvname, (ftnlen)6, (ftnlen)60);
+	swpool_(__global_state, "SCPART", &__state->c__2, kvname, (ftnlen)6, (
+		ftnlen)60);
 
 /*        Keep track of the last spacecraft ID encountered. */
 
@@ -448,7 +452,7 @@ static scpart_state_t* get_scpart_state() {
 
 /*        Initialize the local POOL counter to user value. */
 
-	zzctruin_(__state->usrctr);
+	zzctruin_(__global_state, __state->usrctr);
 	__state->first = FALSE_;
     }
 
@@ -456,18 +460,18 @@ static scpart_state_t* get_scpart_state() {
 /*     have been updated, or if the spacecraft ID changes, look up */
 /*     the new values from the kernel pool. */
 
-    zzcvpool_("SCPART", __state->usrctr, &update, (ftnlen)6);
+    zzcvpool_(__global_state, "SCPART", __state->usrctr, &update, (ftnlen)6);
     if (update || __state->nodata) {
 
 /*        Read the values from the kernel pool. */
 
-	scld01_("SCLK_PARTITION_START", sc, &__state->c__9999, &nprtsa, 
-		__state->prtsa, (ftnlen)20);
-	scld01_("SCLK_PARTITION_END", sc, &__state->c__9999, &nprtso, 
-		__state->prtso, (ftnlen)18);
-	if (failed_()) {
+	scld01_(__global_state, "SCLK_PARTITION_START", sc, &__state->c__9999,
+		 &nprtsa, __state->prtsa, (ftnlen)20);
+	scld01_(__global_state, "SCLK_PARTITION_END", sc, &__state->c__9999, &
+		nprtso, __state->prtso, (ftnlen)18);
+	if (failed_(__global_state)) {
 	    __state->nodata = TRUE_;
-	    chkout_("SCPART", (ftnlen)6);
+	    chkout_(__global_state, "SCPART", (ftnlen)6);
 	    return 0;
 	}
 
@@ -475,11 +479,11 @@ static scpart_state_t* get_scpart_state() {
 
 	if (nprtsa != nprtso) {
 	    __state->nodata = TRUE_;
-	    setmsg_("The number of partition start and stop times are unequa"
-		    "l for spacecraft #.    ", (ftnlen)78);
-	    errint_("#", sc, (ftnlen)1);
-	    sigerr_("SPICE(NUMPARTSUNEQUAL)", (ftnlen)22);
-	    chkout_("SCPART", (ftnlen)6);
+	    setmsg_(__global_state, "The number of partition start and stop "
+		    "times are unequal for spacecraft #.    ", (ftnlen)78);
+	    errint_(__global_state, "#", sc, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NUMPARTSUNEQUAL)", (ftnlen)22);
+	    chkout_(__global_state, "SCPART", (ftnlen)6);
 	    return 0;
 	}
 
@@ -499,13 +503,17 @@ static scpart_state_t* get_scpart_state() {
 	i__1 = __state->lstprt;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    __state->prtsa[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : 
-		    s_rnge("prtsa", i__2, "scpart_", (ftnlen)360)] = d_nint(&
+		    s_rnge(&__global_state->f2c, "prtsa", i__2, "scpart_", (
+		    ftnlen)360)] = d_nint(&__global_state->f2c, &
 		    __state->prtsa[(i__3 = i__ - 1) < 9999 && 0 <= i__3 ? 
-		    i__3 : s_rnge("prtsa", i__3, "scpart_", (ftnlen)360)]);
+		    i__3 : s_rnge(&__global_state->f2c, "prtsa", i__3, "scpa"
+		    "rt_", (ftnlen)360)]);
 	    __state->prtso[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : 
-		    s_rnge("prtso", i__2, "scpart_", (ftnlen)361)] = d_nint(&
+		    s_rnge(&__global_state->f2c, "prtso", i__2, "scpart_", (
+		    ftnlen)361)] = d_nint(&__global_state->f2c, &
 		    __state->prtso[(i__3 = i__ - 1) < 9999 && 0 <= i__3 ? 
-		    i__3 : s_rnge("prtso", i__3, "scpart_", (ftnlen)361)]);
+		    i__3 : s_rnge(&__global_state->f2c, "prtso", i__3, "scpa"
+		    "rt_", (ftnlen)361)]);
 	}
     }
 
@@ -515,11 +523,13 @@ static scpart_state_t* get_scpart_state() {
     i__1 = *nparts;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	pstart[i__ - 1] = __state->prtsa[(i__2 = i__ - 1) < 9999 && 0 <= i__2 
-		? i__2 : s_rnge("prtsa", i__2, "scpart_", (ftnlen)372)];
+		? i__2 : s_rnge(&__global_state->f2c, "prtsa", i__2, "scpart_"
+		, (ftnlen)372)];
 	pstop[i__ - 1] = __state->prtso[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ?
-		 i__2 : s_rnge("prtso", i__2, "scpart_", (ftnlen)373)];
+		 i__2 : s_rnge(&__global_state->f2c, "prtso", i__2, "scpart_",
+		 (ftnlen)373)];
     }
-    chkout_("SCPART", (ftnlen)6);
+    chkout_(__global_state, "SCPART", (ftnlen)6);
     return 0;
 } /* scpart_ */
 

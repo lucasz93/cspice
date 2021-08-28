@@ -8,17 +8,16 @@
 
 
 typedef int sphrec_state_t;
-static sphrec_state_t* get_sphrec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sphrec_state_t* get_sphrec_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPHREC ( Spherical to rectangular coordinates ) */
-/* Subroutine */ int sphrec_(doublereal *r__, doublereal *colat, doublereal *
-	long__, doublereal *rectan)
+/* Subroutine */ int sphrec_(cspice_t* __global_state, doublereal *r__, 
+	doublereal *colat, doublereal *long__, doublereal *rectan)
 {
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal x;
@@ -27,7 +26,7 @@ static sphrec_state_t* get_sphrec_state() {
 
 
     /* Module state */
-    sphrec_state_t* __state = get_sphrec_state();
+    sphrec_state_t* __state = get_sphrec_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from spherical coordinates to rectangular coordinates. */
@@ -205,9 +204,11 @@ static sphrec_state_t* get_sphrec_state() {
 /*     Convert to rectangular coordinates, storing in the results in */
 /*     temporary variables */
 
-    x = *r__ * cos(*long__) * sin(*colat);
-    y = *r__ * sin(*long__) * sin(*colat);
-    z__ = *r__ * cos(*colat);
+    x = *r__ * cos(&__global_state->f2c, *long__) * sin(&__global_state->f2c, 
+	    *colat);
+    y = *r__ * sin(&__global_state->f2c, *long__) * sin(&__global_state->f2c, 
+	    *colat);
+    z__ = *r__ * cos(&__global_state->f2c, *colat);
 
 /*     Move the results to the output variables */
 

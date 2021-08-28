@@ -8,8 +8,7 @@
 
 
 extern zzdskbun_init_t __zzdskbun_init;
-static zzdskbun_state_t* get_zzdskbun_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdskbun_state_t* get_zzdskbun_state(cspice_t* state) {
 	if (!state->zzdskbun)
 		state->zzdskbun = __cspice_allocate_module(sizeof(
 	zzdskbun_state_t), &__zzdskbun_init, sizeof(__zzdskbun_init));
@@ -18,17 +17,18 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 }
 
 /* $Procedure ZZDSKBUN ( DSK, buffered unprioritized normal vector ) */
-/* Subroutine */ int zzdskbun_(integer *bodyid, integer *nsurf, integer *
-	srflst, doublereal *et, integer *fixfid, integer *nseg, integer *
-	hanbuf, integer *dlabuf, doublereal *dskbuf, doublereal *offbuf, 
-	doublereal *ctrbuf, doublereal *radbuf, doublereal *point, doublereal 
-	*normal)
+/* Subroutine */ int zzdskbun_(cspice_t* __global_state, integer *bodyid, 
+	integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, 
+	integer *nseg, integer *hanbuf, integer *dlabuf, doublereal *dskbuf, 
+	doublereal *offbuf, doublereal *ctrbuf, doublereal *radbuf, 
+	doublereal *point, doublereal *normal)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     logical done;
@@ -36,30 +36,32 @@ static zzdskbun_state_t* get_zzdskbun_state() {
     logical xfnd;
     integer nhit;
     doublereal dist;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer plate[3];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer sghit[1000];
     doublereal segpt[3];
     integer dtype;
-    extern doublereal vdist_(doublereal *, doublereal *);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
     doublereal vtemp[3];
     doublereal xform[9]	/* was [3][3] */;
     doublereal verts[9]	/* was [3][3] */;
-    extern logical failed_(void);
-    extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
-	    doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int refchg_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
     integer segfid;
-    extern integer isrchi_(integer *, integer *, integer *);
-    extern logical return_(void);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
+    extern logical return_(cspice_t*);
     doublereal sgmarg;
     doublereal sgxbuf[9000]	/* was [3][3][1000] */;
     integer corsys;
@@ -71,28 +73,29 @@ static zzdskbun_state_t* get_zzdskbun_state() {
     logical multfr;
     logical surfok;
     logical timeok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dskgtl_(integer *, doublereal *);
-    extern /* Subroutine */ int pltnrm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int vhatip_(doublereal *);
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
-    extern /* Subroutine */ int zzinrec_(doublereal *, doublereal *, 
-	    doublereal *, integer *, logical *);
-    extern /* Subroutine */ int zzinlat_(doublereal *, doublereal *, 
-	    doublereal *, integer *, logical *);
-    extern /* Subroutine */ int zzinpdt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, logical *);
-    extern /* Subroutine */ int zzptpl02_(integer *, integer *, doublereal *, 
-	    doublereal *, integer *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dskgtl_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int pltnrm_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzinrec_(cspice_t*, doublereal *, doublereal *
+	    , doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzinlat_(cspice_t*, doublereal *, doublereal *
+	    , doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzinpdt_(cspice_t*, doublereal *, doublereal *
+	    , doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzptpl02_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
+	    logical *);
 
 
     /* Module state */
-    zzdskbun_state_t* __state = get_zzdskbun_state();
+    zzdskbun_state_t* __state = get_zzdskbun_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -838,25 +841,26 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKBUN", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKBUN", (ftnlen)8);
 
 /*     Check the incoming segment count. */
 
     if (*nseg <= 0) {
-	setmsg_("Input segment list was empty. This may be due to no DSKs co"
-		"ntaining data for body # having been loaded.", (ftnlen)103);
-	errint_("#", bodyid, (ftnlen)1);
-	sigerr_("SPICE(NODSKSEGMENTS)", (ftnlen)20);
-	chkout_("ZZDSKBUN", (ftnlen)8);
+	setmsg_(__global_state, "Input segment list was empty. This may be d"
+		"ue to no DSKs containing data for body # having been loaded.",
+		 (ftnlen)103);
+	errint_(__global_state, "#", bodyid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NODSKSEGMENTS)", (ftnlen)20);
+	chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
 	return 0;
     }
 
 /*     Get the segment margin from the tolerance database. */
 
-    dskgtl_(&__state->c__2, &sgmarg);
+    dskgtl_(__global_state, &__state->c__2, &sgmarg);
 
 /*     Indicate we haven't yet seen a segment frame different */
 /*     from the one designated by FIXFID. */
@@ -866,7 +870,7 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 /*     Make a local copy of the point. We'll update this copy */
 /*     later if need be. */
 
-    vequ_(point, segpt);
+    vequ_(__global_state, point, segpt);
 
 /*     By default, each segment in the input list must be checked */
 /*     for intersection. */
@@ -886,7 +890,8 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 
 	surfok = FALSE_;
 	timeok = FALSE_;
-	bodyok = *bodyid == i_dnnt(&dskbuf[i__ * 24 - 23]);
+	bodyok = *bodyid == i_dnnt(&__global_state->f2c, &dskbuf[i__ * 24 - 
+		23]);
 	if (bodyok) {
 
 /*           See whether the current segment contains a surface we're */
@@ -896,8 +901,8 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 
 	    j = 0;
 	    if (*nsurf > 0) {
-		surfce = i_dnnt(&dskbuf[i__ * 24 - 24]);
-		j = isrchi_(&surfce, nsurf, srflst);
+		surfce = i_dnnt(&__global_state->f2c, &dskbuf[i__ * 24 - 24]);
+		j = isrchi_(__global_state, &surfce, nsurf, srflst);
 	    }
 	    surfok = *nsurf == 0 || j > 0;
 
@@ -916,7 +921,7 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 
 /*           Get the segment's frame ID. Get the transformation from the */
 /*           input frame to the output frame if needed. */
-	    segfid = i_dnnt(&dskbuf[i__ * 24 - 20]);
+	    segfid = i_dnnt(&__global_state->f2c, &dskbuf[i__ * 24 - 20]);
 	    if (segfid != *fixfid) {
 
 /*              We have a segment that uses a different frame */
@@ -933,9 +938,9 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 /*                 Otherwise, XFORM already contains the correct */
 /*                 transformation. */
 
-		    refchg_(fixfid, &segfid, et, xform);
-		    if (failed_()) {
-			chkout_("ZZDSKBUN", (ftnlen)8);
+		    refchg_(__global_state, fixfid, &segfid, et, xform);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
 			return 0;
 		    }
 
@@ -944,14 +949,14 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 /*                 that it represents an offset relative to center of */
 /*                 the segment's frame. */
 
-		    mxv_(xform, point, segpt);
+		    mxv_(__global_state, xform, point, segpt);
 
 /*                 The direction of the buffered offset is from the body */
 /*                 to the segment frame's center. The offset is */
 /*                 expressed in the segment's frame. */
 
-		    vsub_(segpt, &offbuf[i__ * 3 - 3], vtemp);
-		    vequ_(vtemp, segpt);
+		    vsub_(__global_state, segpt, &offbuf[i__ * 3 - 3], vtemp);
+		    vequ_(__global_state, vtemp, segpt);
 		}
 	    } else if (multfr) {
 
@@ -959,38 +964,39 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 /*              segment, but the current value of SEGPT needs to be */
 /*              reset. */
 
-		vequ_(point, segpt);
+		vequ_(__global_state, point, segpt);
 	    }
 
 /*           Find the distance of the point from the "center" of the */
 /*           segment's coverage volume. */
 
-	    dist = vdist_(&ctrbuf[i__ * 3 - 3], segpt);
+	    dist = vdist_(__global_state, &ctrbuf[i__ * 3 - 3], segpt);
 	    if (dist <= radbuf[i__ - 1]) {
 
 /*              The point is inside or on the bounding surface. We'll */
 /*              check the boundary of the segment for an intersection. */
 
-		corsys = i_dnnt(&dskbuf[i__ * 24 - 19]);
+		corsys = i_dnnt(&__global_state->f2c, &dskbuf[i__ * 24 - 19]);
 		if (corsys == 1) {
-		    zzinlat_(segpt, &dskbuf[i__ * 24 - 8], &sgmarg, &
-			    __state->c__0, &inside);
+		    zzinlat_(__global_state, segpt, &dskbuf[i__ * 24 - 8], &
+			    sgmarg, &__state->c__0, &inside);
 		} else if (corsys == 3) {
-		    zzinrec_(segpt, &dskbuf[i__ * 24 - 8], &sgmarg, &
-			    __state->c__0, &inside);
+		    zzinrec_(__global_state, segpt, &dskbuf[i__ * 24 - 8], &
+			    sgmarg, &__state->c__0, &inside);
 		} else if (corsys == 4) {
-		    zzinpdt_(segpt, &dskbuf[i__ * 24 - 8], &dskbuf[i__ * 24 - 
-			    18], &sgmarg, &__state->c__0, &inside);
+		    zzinpdt_(__global_state, segpt, &dskbuf[i__ * 24 - 8], &
+			    dskbuf[i__ * 24 - 18], &sgmarg, &__state->c__0, &
+			    inside);
 		} else {
-		    setmsg_("Coordinate system # is not supported.", (ftnlen)
-			    37);
-		    errint_("#", &corsys, (ftnlen)1);
-		    sigerr_("SPICE(BADCOORDSYS)", (ftnlen)18);
-		    chkout_("ZZDSKBUN", (ftnlen)8);
+		    setmsg_(__global_state, "Coordinate system # is not supp"
+			    "orted.", (ftnlen)37);
+		    errint_(__global_state, "#", &corsys, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADCOORDSYS)", (ftnlen)18);
+		    chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
 		    return 0;
 		}
-		if (failed_()) {
-		    chkout_("ZZDSKBUN", (ftnlen)8);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
 		    return 0;
 		}
 		if (inside) {
@@ -1000,23 +1006,27 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 /*                 segment in the "hit list." */
 
 		    if (nhit == 1000) {
-			setmsg_("Too many segments contain the input point. "
-				"Buffer size is #.", (ftnlen)60);
-			errint_("#", &__state->c__1000, (ftnlen)1);
-			sigerr_("SPICE(TOOMANYHITS)", (ftnlen)18);
-			chkout_("ZZDSKBUN", (ftnlen)8);
+			setmsg_(__global_state, "Too many segments contain t"
+				"he input point. Buffer size is #.", (ftnlen)
+				60);
+			errint_(__global_state, "#", &__state->c__1000, (
+				ftnlen)1);
+			sigerr_(__global_state, "SPICE(TOOMANYHITS)", (ftnlen)
+				18);
+			chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
 			return 0;
 		    }
 		    ++nhit;
 		    sghit[(i__2 = nhit - 1) < 1000 && 0 <= i__2 ? i__2 : 
-			    s_rnge("sghit", i__2, "zzdskbun_", (ftnlen)538)] =
-			     i__;
+			    s_rnge(&__global_state->f2c, "sghit", i__2, "zzd"
+			    "skbun_", (ftnlen)538)] = i__;
 
 /*                 Save the frame transformation for this segment. */
 
-		    moved_(xform, &__state->c__9, &sgxbuf[(i__2 = (nhit * 3 + 
-			    1) * 3 - 12) < 9000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "sgxbuf", i__2, "zzdskbun_", (ftnlen)542)]);
+		    moved_(__global_state, xform, &__state->c__9, &sgxbuf[(
+			    i__2 = (nhit * 3 + 1) * 3 - 12) < 9000 && 0 <= 
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "sgxb"
+			    "uf", i__2, "zzdskbun_", (ftnlen)542)]);
 		}
 	    }
 
@@ -1033,15 +1043,16 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 /*     "not found" nonsense here. */
 
     if (nhit == 0) {
-	setmsg_("Input point (# # #) in frame # does not lie inside any segm"
-		"ent for the specified body (#) and surfaces.", (ftnlen)103);
-	errdp_("#", point, (ftnlen)1);
-	errdp_("#", &point[1], (ftnlen)1);
-	errdp_("#", &point[2], (ftnlen)1);
-	errint_("#", fixfid, (ftnlen)1);
-	errint_("#", bodyid, (ftnlen)1);
-	sigerr_("SPICE(POINTNOTINSEGMENT)", (ftnlen)24);
-	chkout_("ZZDSKBUN", (ftnlen)8);
+	setmsg_(__global_state, "Input point (# # #) in frame # does not lie"
+		" inside any segment for the specified body (#) and surfaces.",
+		 (ftnlen)103);
+	errdp_(__global_state, "#", point, (ftnlen)1);
+	errdp_(__global_state, "#", &point[1], (ftnlen)1);
+	errdp_(__global_state, "#", &point[2], (ftnlen)1);
+	errint_(__global_state, "#", fixfid, (ftnlen)1);
+	errint_(__global_state, "#", bodyid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(POINTNOTINSEGMENT)", (ftnlen)24);
+	chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
 	return 0;
     }
 
@@ -1059,9 +1070,10 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 /*        we're considering. J is the index of that segment */
 /*        in the parallel input arrays. */
 
-	j = sghit[(i__1 = i__ - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge("sghit"
-		, i__1, "zzdskbun_", (ftnlen)597)];
-	segfid = i_dnnt(&dskbuf[j * 24 - 20]);
+	j = sghit[(i__1 = i__ - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "sghit", i__1, "zzdskbun_", (ftnlen)597)]
+		;
+	segfid = i_dnnt(&__global_state->f2c, &dskbuf[j * 24 - 20]);
 	if (segfid != *fixfid) {
 	    if (segfid != prvfrm) {
 
@@ -1070,31 +1082,32 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 /*              Here I is an index in the hit list and J is */
 /*              an index in the input arrays. */
 
-		moved_(&sgxbuf[(i__1 = (i__ * 3 + 1) * 3 - 12) < 9000 && 0 <= 
-			i__1 ? i__1 : s_rnge("sgxbuf", i__1, "zzdskbun_", (
+		moved_(__global_state, &sgxbuf[(i__1 = (i__ * 3 + 1) * 3 - 12)
+			 < 9000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "sgxbuf", i__1, "zzdskbun_", (
 			ftnlen)611)], &__state->c__9, xform);
-		mxv_(xform, point, segpt);
-		vsub_(segpt, &offbuf[j * 3 - 3], vtemp);
-		vequ_(vtemp, segpt);
+		mxv_(__global_state, xform, point, segpt);
+		vsub_(__global_state, segpt, &offbuf[j * 3 - 3], vtemp);
+		vequ_(__global_state, vtemp, segpt);
 	    }
 	} else if (multfr) {
-	    vequ_(point, segpt);
+	    vequ_(__global_state, point, segpt);
 	}
 
 /*        If the point lies on the surface described by the */
 /*        current segment, find the outward unit normal */
 /*        vector at the point. */
 
-	dtype = i_dnnt(&dskbuf[j * 24 - 21]);
+	dtype = i_dnnt(&__global_state->f2c, &dskbuf[j * 24 - 21]);
 	xfnd = FALSE_;
 	if (dtype == 2) {
 
 /*           Find the plate on which the point lies, if any. */
 
-	    zzptpl02_(&hanbuf[j - 1], &dlabuf[(j << 3) - 8], &dskbuf[j * 24 - 
-		    24], segpt, &plid, plate, verts, &xfnd);
-	    if (failed_()) {
-		chkout_("ZZDSKBUN", (ftnlen)8);
+	    zzptpl02_(__global_state, &hanbuf[j - 1], &dlabuf[(j << 3) - 8], &
+		    dskbuf[j * 24 - 24], segpt, &plid, plate, verts, &xfnd);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
 		return 0;
 	    }
 	    if (xfnd) {
@@ -1102,12 +1115,12 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 /*              Find the unit outward normal at SEGPT. We must */
 /*              convert the output of PLTNRM to unit length. */
 
-		pltnrm_(verts, &verts[3], &verts[6], normal);
-		if (failed_()) {
-		    chkout_("ZZDSKBUN", (ftnlen)8);
+		pltnrm_(__global_state, verts, &verts[3], &verts[6], normal);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
 		    return 0;
 		}
-		vhatip_(normal);
+		vhatip_(__global_state, normal);
 
 /*              WINNER is the index in the hit list of the current */
 /*              segment. */
@@ -1116,15 +1129,15 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 		done = TRUE_;
 	    }
 	} else {
-	    setmsg_("Segment type is #; this type is not currently supported."
-		    , (ftnlen)56);
-	    errint_("#", &dtype, (ftnlen)1);
-	    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	    chkout_("ZZDSKBUN", (ftnlen)8);
+	    setmsg_(__global_state, "Segment type is #; this type is not cur"
+		    "rently supported.", (ftnlen)56);
+	    errint_(__global_state, "#", &dtype, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	    chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
 	    return 0;
 	}
-	if (failed_()) {
-	    chkout_("ZZDSKBUN", (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
 	    return 0;
 	}
 	if (! done) {
@@ -1150,38 +1163,40 @@ static zzdskbun_state_t* get_zzdskbun_state() {
 
 /*        J is the index in the input arrays of the "winning" segment. */
 
-	j = sghit[(i__1 = winner - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge(
-		"sghit", i__1, "zzdskbun_", (ftnlen)717)];
-	segfid = i_dnnt(&dskbuf[j * 24 - 20]);
+	j = sghit[(i__1 = winner - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "sghit", i__1, "zzdskbun_", (ftnlen)717)]
+		;
+	segfid = i_dnnt(&__global_state->f2c, &dskbuf[j * 24 - 20]);
 	if (segfid != *fixfid) {
 
 /*           The segment frame and input frame differ. The normal */
 /*           vector must be converted back to the input frame. */
 
-	    moved_(&sgxbuf[(i__1 = (winner * 3 + 1) * 3 - 12) < 9000 && 0 <= 
-		    i__1 ? i__1 : s_rnge("sgxbuf", i__1, "zzdskbun_", (ftnlen)
-		    726)], &__state->c__9, xform);
-	    mtxv_(xform, normal, vtemp);
-	    vequ_(vtemp, normal);
+	    moved_(__global_state, &sgxbuf[(i__1 = (winner * 3 + 1) * 3 - 12) 
+		    < 9000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "sgxbuf", i__1, "zzdskbun_", (ftnlen)726)], &
+		    __state->c__9, xform);
+	    mtxv_(__global_state, xform, normal, vtemp);
+	    vequ_(__global_state, vtemp, normal);
 	}
     } else {
 
 /*        The input point was not legitimate; otherwise we */
 /*        would have found a solution. */
 
-	setmsg_("Input point (# # #) in frame # does not lie on the surface "
-		"contained in any segment for the specified body (#) and surf"
-		"aces.", (ftnlen)124);
-	errdp_("#", point, (ftnlen)1);
-	errdp_("#", &point[1], (ftnlen)1);
-	errdp_("#", &point[2], (ftnlen)1);
-	errint_("#", fixfid, (ftnlen)1);
-	errint_("#", bodyid, (ftnlen)1);
-	sigerr_("SPICE(POINTOFFSURFACE)", (ftnlen)22);
-	chkout_("ZZDSKBUN", (ftnlen)8);
+	setmsg_(__global_state, "Input point (# # #) in frame # does not lie"
+		" on the surface contained in any segment for the specified b"
+		"ody (#) and surfaces.", (ftnlen)124);
+	errdp_(__global_state, "#", point, (ftnlen)1);
+	errdp_(__global_state, "#", &point[1], (ftnlen)1);
+	errdp_(__global_state, "#", &point[2], (ftnlen)1);
+	errint_(__global_state, "#", fixfid, (ftnlen)1);
+	errint_(__global_state, "#", bodyid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(POINTOFFSURFACE)", (ftnlen)22);
+	chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZDSKBUN", (ftnlen)8);
+    chkout_(__global_state, "ZZDSKBUN", (ftnlen)8);
     return 0;
 } /* zzdskbun_ */
 

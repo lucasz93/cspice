@@ -136,7 +136,7 @@
    /*
    Participate in error handling.
    */
-   chkin_c ( "ckcls_c");
+   chkin_c ( naif_state, "ckcls_c");
 
 
    ckcls_ ( ( integer * ) &handle );

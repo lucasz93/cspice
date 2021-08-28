@@ -8,30 +8,29 @@
 
 
 typedef int prtenc_state_t;
-static prtenc_state_t* get_prtenc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline prtenc_state_t* get_prtenc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PRTENC ( Encode a character string, portably ) */
-/* Subroutine */ int prtenc_0_(int n__, integer *number, char *string, ftnlen 
-	string_len)
+/* Subroutine */ int prtenc_0_(cspice_t* __global_state, int n__, integer *
+	number, char *string, ftnlen string_len)
 {
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer base;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer remain;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer num;
 
 
     /* Module state */
-    prtenc_state_t* __state = get_prtenc_state();
+    prtenc_state_t* __state = get_prtenc_state(__global_state);
 /* $ Abstract */
 
 /*     Encode a nonnegative integer number into a character string, */
@@ -188,15 +187,15 @@ static prtenc_state_t* get_prtenc_state() {
 	case 1: goto L_prtdec;
 	}
 
-    if (i_len(string, string_len) < 5) {
-	chkin_("PRTENC", (ftnlen)6);
-	sigerr_("SPICE(INSUFFLEN)", (ftnlen)16);
-	chkout_("PRTENC", (ftnlen)6);
+    if (i_len(&__global_state->f2c, string, string_len) < 5) {
+	chkin_(__global_state, "PRTENC", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(INSUFFLEN)", (ftnlen)16);
+	chkout_(__global_state, "PRTENC", (ftnlen)6);
 	return 0;
     } else if (*number < 0) {
-	chkin_("PRTENC", (ftnlen)6);
-	sigerr_("SPICE(OUTOFRANGE)", (ftnlen)17);
-	chkout_("PRTENC", (ftnlen)6);
+	chkin_(__global_state, "PRTENC", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(OUTOFRANGE)", (ftnlen)17);
+	chkout_(__global_state, "PRTENC", (ftnlen)6);
 	return 0;
     }
 
@@ -213,9 +212,9 @@ static prtenc_state_t* get_prtenc_state() {
 /*     More error handling. */
 
     if (num > 0) {
-	chkin_("PRTENC", (ftnlen)6);
-	sigerr_("SPICE(OUTOFRANGE)", (ftnlen)17);
-	chkout_("PRTENC", (ftnlen)6);
+	chkin_(__global_state, "PRTENC", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(OUTOFRANGE)", (ftnlen)17);
+	chkout_(__global_state, "PRTENC", (ftnlen)6);
     }
     return 0;
 /* $Procedure      PRTDEC ( Decode a character string ) */
@@ -343,10 +342,10 @@ L_prtdec:
 /*     decode a portably encoded character string */
 
 /* -& */
-    if (i_len(string, string_len) < 5) {
-	chkin_("PRTDEC", (ftnlen)6);
-	sigerr_("SPICE(INSUFFLEN)", (ftnlen)16);
-	chkout_("PRTDEC", (ftnlen)6);
+    if (i_len(&__global_state->f2c, string, string_len) < 5) {
+	chkin_(__global_state, "PRTDEC", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(INSUFFLEN)", (ftnlen)16);
+	chkout_(__global_state, "PRTDEC", (ftnlen)6);
 	return 0;
     }
 
@@ -361,12 +360,14 @@ L_prtdec:
     return 0;
 } /* prtenc_ */
 
-/* Subroutine */ int prtenc_(integer *number, char *string, ftnlen string_len)
+/* Subroutine */ int prtenc_(cspice_t* __global_state, integer *number, char *
+	string, ftnlen string_len)
 {
     return prtenc_0_(0, number, string, string_len);
     }
 
-/* Subroutine */ int prtdec_(char *string, integer *number, ftnlen string_len)
+/* Subroutine */ int prtdec_(cspice_t* __global_state, char *string, integer *
+	number, ftnlen string_len)
 {
     return prtenc_0_(1, number, string, string_len);
     }

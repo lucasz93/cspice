@@ -8,31 +8,30 @@
 
 
 typedef int suffix_state_t;
-static suffix_state_t* get_suffix_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline suffix_state_t* get_suffix_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SUFFIX (Suffix a character string) */
-/* Subroutine */ int suffix_(char *suff, integer *spaces, char *string, 
-	ftnlen suff_len, ftnlen string_len)
+/* Subroutine */ int suffix_(cspice_t* __global_state, char *suff, integer *
+	spaces, char *string, ftnlen suff_len, ftnlen string_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer slen;
     integer l;
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer end;
 
 
     /* Module state */
-    suffix_state_t* __state = get_suffix_state();
+    suffix_state_t* __state = get_suffix_state(__global_state);
 /* $ Abstract */
 
 /*      Add a suffix to a character string. */
@@ -177,8 +176,8 @@ static suffix_state_t* get_suffix_state() {
 /*     SLEN is the allocated length of the string. L is the location of */
 /*     the last non-blank character of the prefix. */
 
-    slen = i_len(string, string_len);
-    l = lastnb_(string, string_len);
+    slen = i_len(&__global_state->f2c, string, string_len);
+    l = lastnb_(__global_state, string, string_len);
 
 /*     Put the suffix at the end of the string. The spaces will fill */
 /*     themselves in. */
@@ -186,7 +185,8 @@ static suffix_state_t* get_suffix_state() {
     end = l + max(*spaces,0);
     if (end < slen) {
 	i__1 = end;
-	s_copy(string + i__1, suff, string_len - i__1, suff_len);
+	s_copy(&__global_state->f2c, string + i__1, suff, string_len - i__1, 
+		suff_len);
     }
     return 0;
 } /* suffix_ */

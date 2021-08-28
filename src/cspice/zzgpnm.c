@@ -8,39 +8,40 @@
 
 
 typedef int zzgpnm_state_t;
-static zzgpnm_state_t* get_zzgpnm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgpnm_state_t* get_zzgpnm_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZGPNM ( Get position of a name ) */
-/* Subroutine */ int zzgpnm_(integer *namlst, integer *nmpool, char *names, 
-	integer *datlst, integer *dppool, doublereal *dpvals, integer *chpool,
-	 char *chvals, char *varnam, logical *found, integer *lookat, integer 
-	*nameat, ftnlen names_len, ftnlen chvals_len, ftnlen varnam_len)
+/* Subroutine */ int zzgpnm_(cspice_t* __global_state, integer *namlst, 
+	integer *nmpool, char *names, integer *datlst, integer *dppool, 
+	doublereal *dpvals, integer *chpool, char *chvals, char *varnam, 
+	logical *found, integer *lookat, integer *nameat, ftnlen names_len, 
+	ftnlen chvals_len, ftnlen varnam_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer head;
     integer node;
     integer tail;
     logical full;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int lnkan_(integer *, integer *);
-    extern /* Subroutine */ int lnkila_(integer *, integer *, integer *);
-    extern integer lnknfn_(integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern integer zzhash_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int lnkan_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int lnkila_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer lnknfn_(cspice_t*, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern integer zzhash_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzgpnm_state_t* __state = get_zzgpnm_state();
+    zzgpnm_state_t* __state = get_zzgpnm_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -209,10 +210,10 @@ static zzgpnm_state_t* get_zzgpnm_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGPNM", (ftnlen)6);
+    chkin_(__global_state, "ZZGPNM", (ftnlen)6);
     *nameat = 0;
 
 
@@ -221,9 +222,9 @@ static zzgpnm_state_t* get_zzgpnm_state() {
 /*     we will use the variable FOUND to indicate whether or */
 /*     not it was already present. */
 
-    *lookat = zzhash_(varnam, varnam_len);
+    *lookat = zzhash_(__global_state, varnam, varnam_len);
     node = namlst[*lookat - 1];
-    full = lnknfn_(nmpool) <= 0;
+    full = lnknfn_(__global_state, nmpool) <= 0;
     *found = FALSE_;
 
 /*     See if this name (or one colliding with it in the */
@@ -233,8 +234,8 @@ static zzgpnm_state_t* get_zzgpnm_state() {
 	head = node;
 	tail = -nmpool[(head << 1) + 11];
 	while(node > 0 && ! (*found)) {
-	    *found = s_cmp(names + (node - 1) * names_len, varnam, names_len, 
-		    varnam_len) == 0;
+	    *found = s_cmp(&__global_state->f2c, names + (node - 1) * 
+		    names_len, varnam, names_len, varnam_len) == 0;
 	    *nameat = node;
 	    node = nmpool[(node << 1) + 10];
 	}
@@ -243,10 +244,10 @@ static zzgpnm_state_t* get_zzgpnm_state() {
 /*           We didn't find this name on the conflict resolution */
 /*           list. Allocate a new slot for it. */
 
-	    lnkan_(nmpool, &node);
-	    lnkila_(&tail, &node, nmpool);
-	    s_copy(names + (node - 1) * names_len, varnam, names_len, 
-		    varnam_len);
+	    lnkan_(__global_state, nmpool, &node);
+	    lnkila_(__global_state, &tail, &node, nmpool);
+	    s_copy(&__global_state->f2c, names + (node - 1) * names_len, 
+		    varnam, names_len, varnam_len);
 	    *nameat = node;
 	}
     } else if (! full) {
@@ -255,9 +256,10 @@ static zzgpnm_state_t* get_zzgpnm_state() {
 /*        has been loaded so far.  We need to allocate */
 /*        a name slot for this variable. */
 
-	lnkan_(nmpool, &node);
+	lnkan_(__global_state, nmpool, &node);
 	namlst[*lookat - 1] = node;
-	s_copy(names + (node - 1) * names_len, varnam, names_len, varnam_len);
+	s_copy(&__global_state->f2c, names + (node - 1) * names_len, varnam, 
+		names_len, varnam_len);
 	*nameat = node;
     }
 
@@ -265,13 +267,13 @@ static zzgpnm_state_t* get_zzgpnm_state() {
 /*     we've got an error. Diagnose it and return. */
 
     if (full && ! (*found)) {
-	setmsg_("The kernel pool does not have room for any more variables.", 
-		(ftnlen)58);
-	sigerr_("SPICE(KERNELPOOLFULL)", (ftnlen)21);
-	chkout_("ZZGPNM", (ftnlen)6);
+	setmsg_(__global_state, "The kernel pool does not have room for any "
+		"more variables.", (ftnlen)58);
+	sigerr_(__global_state, "SPICE(KERNELPOOLFULL)", (ftnlen)21);
+	chkout_(__global_state, "ZZGPNM", (ftnlen)6);
 	return 0;
     }
-    chkout_("ZZGPNM", (ftnlen)6);
+    chkout_(__global_state, "ZZGPNM", (ftnlen)6);
     return 0;
 } /* zzgpnm_ */
 

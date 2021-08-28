@@ -8,14 +8,13 @@
 
 
 typedef int locati_state_t;
-static locati_state_t* get_locati_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline locati_state_t* get_locati_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LOCATI ( Locate an identifier in a list ) */
-/* Subroutine */ int locati_(integer *id, integer *idsz, integer *list, 
-	integer *pool, integer *at, logical *presnt)
+/* Subroutine */ int locati_(cspice_t* __global_state, integer *id, integer *
+	idsz, integer *list, integer *pool, integer *at, logical *presnt)
 {
     /* System generated locals */
     integer list_dim1, list_offset, i__1;
@@ -26,23 +25,25 @@ static locati_state_t* get_locati_state() {
     logical more;
     integer last;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer nfree;
-    extern /* Subroutine */ int lnkan_(integer *, integer *);
+    extern /* Subroutine */ int lnkan_(cspice_t*, integer *, integer *);
     integer psize;
-    extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *);
-    extern integer lnknfn_(integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer lnksiz_(integer *);
-    extern /* Subroutine */ int lnkxsl_(integer *, integer *, integer *);
+    extern /* Subroutine */ int lnkilb_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer lnknfn_(cspice_t*, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lnksiz_(cspice_t*, integer *);
+    extern /* Subroutine */ int lnkxsl_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer new__;
 
 
     /* Module state */
-    locati_state_t* __state = get_locati_state();
+    locati_state_t* __state = get_locati_state(__global_state);
 /* $ Abstract */
 
 /*     This routine locates the current location of an identifier */
@@ -351,36 +352,36 @@ static locati_state_t* get_locati_state() {
     list_offset = 1 + list_dim1 * 1;
 
     /* Function Body */
-    chkin_("LOCATI", (ftnlen)6);
+    chkin_(__global_state, "LOCATI", (ftnlen)6);
 
 /*     We begin by looking through the list of items at our disposal. */
 /*     One way or the other we will need the number of free nodes */
 /*     in the linked list. */
 
-    nfree = lnknfn_(pool);
-    psize = lnksiz_(pool);
+    nfree = lnknfn_(__global_state, pool);
+    psize = lnksiz_(__global_state, pool);
     if (nfree == psize) {
 
 /*        There's nothing in the list so far. Allocate a */
 /*        node and begin a list. */
 
-	lnkan_(pool, at);
+	lnkan_(__global_state, pool, at);
 	i__1 = *idsz;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    list[i__ + *at * list_dim1 - list_offset] = id[i__ - 1];
 	}
 	*presnt = FALSE_;
-	chkout_("LOCATI", (ftnlen)6);
+	chkout_(__global_state, "LOCATI", (ftnlen)6);
 	return 0;
     }
     if (*at <= 0 || *at > psize) {
-	setmsg_("The input value for the head of the ID address linked list "
-		"is out of bounds. It should be between 0 and #. The value su"
-		"pplied was #.", (ftnlen)132);
-	errint_("#", &psize, (ftnlen)1);
-	errint_("#", at, (ftnlen)1);
-	sigerr_("SPICE(ADDRESSOUTOFBOUNDS)", (ftnlen)25);
-	chkout_("LOCATI", (ftnlen)6);
+	setmsg_(__global_state, "The input value for the head of the ID addr"
+		"ess linked list is out of bounds. It should be between 0 and"
+		" #. The value supplied was #.", (ftnlen)132);
+	errint_(__global_state, "#", &psize, (ftnlen)1);
+	errint_(__global_state, "#", at, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ADDRESSOUTOFBOUNDS)", (ftnlen)25);
+	chkout_(__global_state, "LOCATI", (ftnlen)6);
 	return 0;
     }
 
@@ -457,10 +458,10 @@ static locati_state_t* get_locati_state() {
 /*        move this node to the front of the list. */
 
 	if (last > 0) {
-	    lnkxsl_(at, at, pool);
-	    lnkilb_(at, &head, pool);
+	    lnkxsl_(__global_state, at, at, pool);
+	    lnkilb_(__global_state, at, &head, pool);
 	}
-	chkout_("LOCATI", (ftnlen)6);
+	chkout_(__global_state, "LOCATI", (ftnlen)6);
 	return 0;
     }
 
@@ -476,7 +477,7 @@ static locati_state_t* get_locati_state() {
 
 /*        Allocate a free node and put our ID at the NEW address. */
 
-	lnkan_(pool, &new__);
+	lnkan_(__global_state, pool, &new__);
 	i__1 = *idsz;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    list[i__ + new__ * list_dim1 - list_offset] = id[i__ - 1];
@@ -484,7 +485,7 @@ static locati_state_t* get_locati_state() {
 
 /*        Put the new node at the head of the linked list. */
 
-	lnkilb_(&new__, &head, pool);
+	lnkilb_(__global_state, &new__, &head, pool);
 	*at = new__;
     } else {
 
@@ -502,11 +503,11 @@ static locati_state_t* get_locati_state() {
 /*        Extract the last item as a sublist and insert it before */
 /*        the current head of the list. */
 
-	lnkxsl_(&last, &last, pool);
-	lnkilb_(&last, &head, pool);
+	lnkxsl_(__global_state, &last, &last, pool);
+	lnkilb_(__global_state, &last, &head, pool);
 	*at = last;
     }
-    chkout_("LOCATI", (ftnlen)6);
+    chkout_(__global_state, "LOCATI", (ftnlen)6);
     return 0;
 } /* locati_ */
 

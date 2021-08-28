@@ -252,7 +252,7 @@
    {
       return;
    }
-   chkin_c ( "gfrepi_c" );
+   chkin_c ( naif_state, "gfrepi_c" );
 
 
    /*

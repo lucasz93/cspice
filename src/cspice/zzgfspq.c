@@ -8,8 +8,7 @@
 
 
 extern zzgfspq_init_t __zzgfspq_init;
-static zzgfspq_state_t* get_zzgfspq_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfspq_state_t* get_zzgfspq_state(cspice_t* state) {
 	if (!state->zzgfspq)
 		state->zzgfspq = __cspice_allocate_module(sizeof(
 	zzgfspq_state_t), &__zzgfspq_init, sizeof(__zzgfspq_init));
@@ -18,32 +17,35 @@ static zzgfspq_state_t* get_zzgfspq_state() {
 }
 
 /* $Procedure ZZGFSPQ ( GF, separation quantity ) */
-/* Subroutine */ int zzgfspq_(doublereal *et, integer *targ1, integer *targ2, 
-	doublereal *r1, doublereal *r2, integer *obs, char *abcorr, char *ref,
-	 doublereal *value, ftnlen abcorr_len, ftnlen ref_len)
+/* Subroutine */ int zzgfspq_(cspice_t* __global_state, doublereal *et, 
+	integer *targ1, integer *targ2, doublereal *r1, doublereal *r2, 
+	integer *obs, char *abcorr, char *ref, doublereal *value, ftnlen 
+	abcorr_len, ftnlen ref_len)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal theta;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal vnorm_(doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal range1;
     doublereal range2;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal lt;
-    extern doublereal dasine_(doublereal *, doublereal *);
-    extern doublereal halfpi_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern doublereal dasine_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal halfpi_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkezp_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern logical return_(cspice_t*);
     doublereal pv1[3];
     doublereal pv2[3];
     doublereal ang1;
@@ -51,7 +53,7 @@ static zzgfspq_state_t* get_zzgfspq_state() {
 
 
     /* Module state */
-    zzgfspq_state_t* __state = get_zzgfspq_state();
+    zzgfspq_state_t* __state = get_zzgfspq_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -262,72 +264,74 @@ static zzgfspq_state_t* get_zzgfspq_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFSPQ", (ftnlen)7);
+    chkin_(__global_state, "ZZGFSPQ", (ftnlen)7);
 
 /*     First check for bad inputs. */
 
     if (*r1 < 0. || *r2 < 0.) {
-	setmsg_("A negative radius for a body was encountered. The radius fo"
-		"r body # was given as #, the radius of body # was given as #"
-		". ", (ftnlen)121);
-	errint_("#", targ1, (ftnlen)1);
-	errdp_("#", r1, (ftnlen)1);
-	errint_("#", targ2, (ftnlen)1);
-	errdp_("#", r2, (ftnlen)1);
-	sigerr_("SPICE(BADRADIUS)", (ftnlen)16);
-	chkout_("ZZGFSPQ", (ftnlen)7);
+	setmsg_(__global_state, "A negative radius for a body was encountere"
+		"d. The radius for body # was given as #, the radius of body "
+		"# was given as #. ", (ftnlen)121);
+	errint_(__global_state, "#", targ1, (ftnlen)1);
+	errdp_(__global_state, "#", r1, (ftnlen)1);
+	errint_(__global_state, "#", targ2, (ftnlen)1);
+	errdp_(__global_state, "#", r2, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADRADIUS)", (ftnlen)16);
+	chkout_(__global_state, "ZZGFSPQ", (ftnlen)7);
 	return 0;
     }
 
 /*     Get the state of the TARG1, TARG2 objects relative to OBS. */
 
-    spkezp_(targ1, et, ref, abcorr, obs, pv1, &lt, ref_len, abcorr_len);
-    if (failed_()) {
-	chkout_("ZZGFSPQ", (ftnlen)7);
+    spkezp_(__global_state, targ1, et, ref, abcorr, obs, pv1, &lt, ref_len, 
+	    abcorr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFSPQ", (ftnlen)7);
 	return 0;
     }
-    spkezp_(targ2, et, ref, abcorr, obs, pv2, &lt, ref_len, abcorr_len);
-    if (failed_()) {
-	chkout_("ZZGFSPQ", (ftnlen)7);
+    spkezp_(__global_state, targ2, et, ref, abcorr, obs, pv2, &lt, ref_len, 
+	    abcorr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFSPQ", (ftnlen)7);
 	return 0;
     }
 
 /*     Compute the range to the objects of interest. */
 
-    range1 = vnorm_(pv1);
-    range2 = vnorm_(pv2);
+    range1 = vnorm_(__global_state, pv1);
+    range2 = vnorm_(__global_state, pv2);
 
 /*     Compute the apparent angular radii as seen from OBS. */
 
     if (range1 > *r1) {
 	d__1 = *r1 / range1;
-	ang1 = dasine_(&d__1, &__state->c_b12);
-	if (failed_()) {
-	    chkout_("ZZGFSPQ", (ftnlen)7);
+	ang1 = dasine_(__global_state, &d__1, &__state->c_b12);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFSPQ", (ftnlen)7);
 	    return 0;
 	}
     } else {
-	ang1 = halfpi_();
+	ang1 = halfpi_(__global_state);
     }
     if (range2 > *r2) {
 	d__1 = *r2 / range2;
-	ang2 = dasine_(&d__1, &__state->c_b12);
-	if (failed_()) {
-	    chkout_("ZZGFSPQ", (ftnlen)7);
+	ang2 = dasine_(__global_state, &d__1, &__state->c_b12);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFSPQ", (ftnlen)7);
 	    return 0;
 	}
     } else {
-	ang2 = halfpi_();
+	ang2 = halfpi_(__global_state);
     }
 
 /*     Finally compute the apparent separation. */
 
-    theta = vsep_(pv1, pv2);
+    theta = vsep_(__global_state, pv1, pv2);
     *value = theta - ang1 - ang2;
-    chkout_("ZZGFSPQ", (ftnlen)7);
+    chkout_(__global_state, "ZZGFSPQ", (ftnlen)7);
     return 0;
 } /* zzgfspq_ */
 

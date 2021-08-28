@@ -8,8 +8,7 @@
 
 
 extern inelpl_init_t __inelpl_init;
-static inelpl_state_t* get_inelpl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline inelpl_state_t* get_inelpl_state(cspice_t* state) {
 	if (!state->inelpl)
 		state->inelpl = __cspice_allocate_module(sizeof(
 	inelpl_state_t), &__inelpl_init, sizeof(__inelpl_init));
@@ -18,62 +17,64 @@ static inelpl_state_t* get_inelpl_state() {
 }
 
 /* $Procedure      INELPL ( Intersection of ellipse and plane ) */
-/* Subroutine */ int inelpl_(doublereal *ellips, doublereal *plane, integer *
-	nxpts, doublereal *xpt1, doublereal *xpt2)
+/* Subroutine */ int inelpl_(cspice_t* __global_state, doublereal *ellips, 
+	doublereal *plane, integer *nxpts, doublereal *xpt1, doublereal *xpt2)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double acos(doublereal), atan2(doublereal, doublereal), cos(doublereal), 
-	    sin(doublereal);
+    double acos(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
+	    doublereal), cos(f2c_state_t*, doublereal), sin(f2c_state_t*, 
+	    doublereal);
 
     /* Local variables */
     doublereal beta;
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal alpha;
     doublereal v[2];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal const__;
     doublereal trans[4];
     doublereal point[3];
-    extern logical vzero_(doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     doublereal angle1;
     doublereal angle2;
-    extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int el2cgv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom3_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int pl2nvp_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int nvp2pl_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern doublereal halfpi_(void);
+    extern /* Subroutine */ int pl2nvc_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int pl2nvp_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int nvp2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern doublereal halfpi_(cspice_t*);
     doublereal center[3];
     doublereal inpcon;
     doublereal normal[3];
     doublereal smajor[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal tmpvec[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal sminor[3];
-    extern doublereal vnormg_(doublereal *, integer *);
-    extern logical vzerog_(doublereal *, integer *);
-    extern logical return_(void);
+    extern doublereal vnormg_(cspice_t*, doublereal *, integer *);
+    extern logical vzerog_(cspice_t*, doublereal *, integer *);
+    extern logical return_(cspice_t*);
     doublereal sep;
 
 
     /* Module state */
-    inelpl_state_t* __state = get_inelpl_state();
+    inelpl_state_t* __state = get_inelpl_state(__global_state);
 /* $ Abstract */
 
 /*     Find the intersection of an ellipse and a plane. */
@@ -361,26 +362,27 @@ static inelpl_state_t* get_inelpl_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("INELPL", (ftnlen)6);
+    chkin_(__global_state, "INELPL", (ftnlen)6);
 
 /*     Check the input plane. */
 
-    pl2nvc_(plane, normal, &inpcon);
-    if (vzero_(normal)) {
-	setmsg_("Input SPICE plane has zero normal vector.", (ftnlen)41);
-	sigerr_("SPICE(INVALIDPLANE)", (ftnlen)19);
-	chkout_("INELPL", (ftnlen)6);
+    pl2nvc_(__global_state, plane, normal, &inpcon);
+    if (vzero_(__global_state, normal)) {
+	setmsg_(__global_state, "Input SPICE plane has zero normal vector.", (
+		ftnlen)41);
+	sigerr_(__global_state, "SPICE(INVALIDPLANE)", (ftnlen)19);
+	chkout_(__global_state, "INELPL", (ftnlen)6);
 	return 0;
     } else if (inpcon < 0.) {
-	setmsg_("Input SPICE plane has non-positive constant #. Properly con"
-		"structed SPICE planes always have non-negative constants.", (
-		ftnlen)116);
-	errdp_("#", &inpcon, (ftnlen)1);
-	sigerr_("SPICE(INVALIDPLANE)", (ftnlen)19);
-	chkout_("INELPL", (ftnlen)6);
+	setmsg_(__global_state, "Input SPICE plane has non-positive constant"
+		" #. Properly constructed SPICE planes always have non-negati"
+		"ve constants.", (ftnlen)116);
+	errdp_(__global_state, "#", &inpcon, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDPLANE)", (ftnlen)19);
+	chkout_(__global_state, "INELPL", (ftnlen)6);
 	return 0;
     }
 
@@ -389,23 +391,23 @@ static inelpl_state_t* get_inelpl_state() {
 /*     but they must always be orthogonal. We require this */
 /*     check only if both semi-axes have non-zero length. */
 
-    el2cgv_(ellips, center, smajor, sminor);
-    if (! vzero_(sminor)) {
-	sep = vsep_(smajor, sminor);
-	if ((d__1 = sep - halfpi_(), abs(d__1)) > 1e-9) {
-	    setmsg_("Input SPICE ellipse has non-orthogonal semi-axes: (#,#,"
-		    "#) and (#,#,#). Angular separation of these vectors is #"
-		    " radians. Properly constructed SPICE ellipses always hav"
-		    "e orthogonal semi-axes.", (ftnlen)190);
-	    errdp_("#", smajor, (ftnlen)1);
-	    errdp_("#", &smajor[1], (ftnlen)1);
-	    errdp_("#", &smajor[2], (ftnlen)1);
-	    errdp_("#", sminor, (ftnlen)1);
-	    errdp_("#", &sminor[1], (ftnlen)1);
-	    errdp_("#", &sminor[2], (ftnlen)1);
-	    errdp_("#", &sep, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDELLIPSE)", (ftnlen)21);
-	    chkout_("INELPL", (ftnlen)6);
+    el2cgv_(__global_state, ellips, center, smajor, sminor);
+    if (! vzero_(__global_state, sminor)) {
+	sep = vsep_(__global_state, smajor, sminor);
+	if ((d__1 = sep - halfpi_(__global_state), abs(d__1)) > 1e-9) {
+	    setmsg_(__global_state, "Input SPICE ellipse has non-orthogonal "
+		    "semi-axes: (#,#,#) and (#,#,#). Angular separation of th"
+		    "ese vectors is # radians. Properly constructed SPICE ell"
+		    "ipses always have orthogonal semi-axes.", (ftnlen)190);
+	    errdp_(__global_state, "#", smajor, (ftnlen)1);
+	    errdp_(__global_state, "#", &smajor[1], (ftnlen)1);
+	    errdp_(__global_state, "#", &smajor[2], (ftnlen)1);
+	    errdp_(__global_state, "#", sminor, (ftnlen)1);
+	    errdp_(__global_state, "#", &sminor[1], (ftnlen)1);
+	    errdp_(__global_state, "#", &sminor[2], (ftnlen)1);
+	    errdp_(__global_state, "#", &sep, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDELLIPSE)", (ftnlen)21);
+	    chkout_(__global_state, "INELPL", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -413,20 +415,20 @@ static inelpl_state_t* get_inelpl_state() {
 /*     If the input ellipse is a single point, decide now */
 /*     whether the ellipse lies in the plane. */
 
-    if (vzero_(smajor)) {
+    if (vzero_(__global_state, smajor)) {
 
 /*        The ellipse is a single point. If the ellipse's center */
 /*        lies in the plane, the whole ellipse is the one */
 /*        intersection point. Check the inner product of the */
 /*        center and the plane's normal vector. */
 
-	if (vdot_(center, normal) == inpcon) {
+	if (vdot_(__global_state, center, normal) == inpcon) {
 
 /*           The center does in fact lie in the plane. */
 
 	    *nxpts = 1;
-	    vequ_(center, xpt1);
-	    vequ_(center, xpt2);
+	    vequ_(__global_state, center, xpt1);
+	    vequ_(__global_state, center, xpt2);
 	} else {
 
 /*           There's no intersection: the intersection arguments */
@@ -437,7 +439,7 @@ static inelpl_state_t* get_inelpl_state() {
 
 /*        Return now; this simplifies the logic to follow. */
 
-	chkout_("INELPL", (ftnlen)6);
+	chkout_(__global_state, "INELPL", (ftnlen)6);
 	return 0;
     }
 
@@ -450,10 +452,10 @@ static inelpl_state_t* get_inelpl_state() {
 /*     the plane, just get a point and normal vector, and translate */
 /*     the point.  Find the plane constant of the translated plane. */
 
-    pl2nvp_(plane, normal, tmpvec);
-    vsub_(tmpvec, center, point);
-    nvp2pl_(normal, point, trans);
-    pl2nvc_(trans, normal, &const__);
+    pl2nvp_(__global_state, plane, normal, tmpvec);
+    vsub_(__global_state, tmpvec, center, point);
+    nvp2pl_(__global_state, normal, point, trans);
+    pl2nvc_(__global_state, trans, normal, &const__);
 
 /*     Ok, we can get to work.  The locus of the ellipse is */
 
@@ -479,12 +481,12 @@ static inelpl_state_t* get_inelpl_state() {
 /*     theta are solutions. Let's get this case out of the way */
 /*     right now, shall we? */
 
-    v[0] = vdot_(smajor, normal);
-    v[1] = vdot_(sminor, normal);
+    v[0] = vdot_(__global_state, smajor, normal);
+    v[1] = vdot_(__global_state, sminor, normal);
 
 /*     Test whether the plane and ellipse are parallel: */
 
-    if (vzerog_(v, &__state->c__2)) {
+    if (vzerog_(__global_state, v, &__state->c__2)) {
 
 /*        The ellipse lies in the plane if and only if CONST is zero. */
 /*        In any case, we don't modify XPT1 or XPT2. */
@@ -494,7 +496,7 @@ static inelpl_state_t* get_inelpl_state() {
 	} else {
 	    *nxpts = 0;
 	}
-	chkout_("INELPL", (ftnlen)6);
+	chkout_(__global_state, "INELPL", (ftnlen)6);
 	return 0;
     }
 
@@ -530,9 +532,9 @@ static inelpl_state_t* get_inelpl_state() {
 
 /*     Let's return right now if there are no solutions. */
 
-    if (vnormg_(v, &__state->c__2) < const__) {
+    if (vnormg_(__global_state, v, &__state->c__2) < const__) {
 	*nxpts = 0;
-	chkout_("INELPL", (ftnlen)6);
+	chkout_(__global_state, "INELPL", (ftnlen)6);
 	return 0;
     }
 
@@ -551,8 +553,9 @@ static inelpl_state_t* get_inelpl_state() {
 
 /*     The values of theta are the angles we seek. */
 
-    alpha = acos(const__ / vnormg_(v, &__state->c__2));
-    beta = atan2(v[1], v[0]);
+    alpha = acos(&__global_state->f2c, const__ / vnormg_(__global_state, v, &
+	    __state->c__2));
+    beta = atan2(&__global_state->f2c, v[1], v[0]);
     angle1 = beta - alpha;
     angle2 = beta + alpha;
 
@@ -569,7 +572,7 @@ static inelpl_state_t* get_inelpl_state() {
 /*     the solutions are identical. */
 
 
-    if (vzero_(sminor)) {
+    if (vzero_(__global_state, sminor)) {
 	*nxpts = 1;
     } else {
 	if (angle1 == angle2) {
@@ -584,13 +587,15 @@ static inelpl_state_t* get_inelpl_state() {
 
 /*     Compute the intersection points. */
 
-    d__1 = cos(angle1);
-    d__2 = sin(angle1);
-    vlcom3_(&__state->c_b26, center, &d__1, smajor, &d__2, sminor, xpt1);
-    d__1 = cos(angle2);
-    d__2 = sin(angle2);
-    vlcom3_(&__state->c_b26, center, &d__1, smajor, &d__2, sminor, xpt2);
-    chkout_("INELPL", (ftnlen)6);
+    d__1 = cos(&__global_state->f2c, angle1);
+    d__2 = sin(&__global_state->f2c, angle1);
+    vlcom3_(__global_state, &__state->c_b26, center, &d__1, smajor, &d__2, 
+	    sminor, xpt1);
+    d__1 = cos(&__global_state->f2c, angle2);
+    d__2 = sin(&__global_state->f2c, angle2);
+    vlcom3_(__global_state, &__state->c_b26, center, &d__1, smajor, &d__2, 
+	    sminor, xpt2);
+    chkout_(__global_state, "INELPL", (ftnlen)6);
     return 0;
 } /* inelpl_ */
 

@@ -8,39 +8,39 @@
 
 
 typedef int spke02_state_t;
-static spke02_state_t* get_spke02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spke02_state_t* get_spke02_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPKE02 ( SPK, evaluate record, type 2 ) */
-/* Subroutine */ int spke02_(doublereal *et, doublereal *record, doublereal *
-	xyzdot)
+/* Subroutine */ int spke02_(cspice_t* __global_state, doublereal *et, 
+	doublereal *record, doublereal *xyzdot)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer degp;
     integer ncof;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer cofloc;
-    extern /* Subroutine */ int chbint_(doublereal *, integer *, doublereal *,
-	     doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chbint_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spke02_state_t* __state = get_spke02_state();
+    spke02_state_t* __state = get_spke02_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single data record from an PCK or SPK segment of type */
@@ -258,7 +258,7 @@ static spke02_state_t* get_spke02_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -270,23 +270,24 @@ static spke02_state_t* get_spke02_state() {
 
     ncof = ((integer) record[0] - 2) / 3;
     if (ncof < 1) {
-	chkin_("SPKE02", (ftnlen)6);
-	setmsg_("The input record's coefficient count NCOF should be positiv"
-		"e but was #.", (ftnlen)71);
-	errint_("#", &ncof, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("SPKE02", (ftnlen)6);
+	chkin_(__global_state, "SPKE02", (ftnlen)6);
+	setmsg_(__global_state, "The input record's coefficient count NCOF s"
+		"hould be positive but was #.", (ftnlen)71);
+	errint_(__global_state, "#", &ncof, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "SPKE02", (ftnlen)6);
 	return 0;
     }
 
 /*     Check the radius of the domain interval. */
 
     if (record[2] <= 0.) {
-	chkin_("SPKE02", (ftnlen)6);
-	setmsg_("Interval radius must be positive but was #.", (ftnlen)43);
-	errdp_("#", &record[2], (ftnlen)1);
-	sigerr_("SPICE(INVALIDRADIUS)", (ftnlen)20);
-	chkout_("SPKE02", (ftnlen)6);
+	chkin_(__global_state, "SPKE02", (ftnlen)6);
+	setmsg_(__global_state, "Interval radius must be positive but was #.",
+		 (ftnlen)43);
+	errdp_(__global_state, "#", &record[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDRADIUS)", (ftnlen)20);
+	chkout_(__global_state, "SPKE02", (ftnlen)6);
 	return 0;
     }
 
@@ -312,11 +313,12 @@ static spke02_state_t* get_spke02_state() {
 
 /*        Note that CHBINT is "error free." */
 
-	chbint_(&record[cofloc - 1], &degp, &record[1], et, &xyzdot[(i__1 = 
-		i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("xyzdot", i__1, 
-		"spke02_", (ftnlen)297)], &xyzdot[(i__2 = i__ + 2) < 6 && 0 <=
-		 i__2 ? i__2 : s_rnge("xyzdot", i__2, "spke02_", (ftnlen)297)]
-		);
+	chbint_(__global_state, &record[cofloc - 1], &degp, &record[1], et, &
+		xyzdot[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "xyzdot", i__1, "spke02_", (ftnlen)297)],
+		 &xyzdot[(i__2 = i__ + 2) < 6 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "xyzdot", i__2, "spke02_", (ftnlen)297)])
+		;
     }
     return 0;
 } /* spke02_ */

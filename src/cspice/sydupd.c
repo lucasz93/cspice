@@ -8,8 +8,7 @@
 
 
 extern sydupd_init_t __sydupd_init;
-static sydupd_state_t* get_sydupd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sydupd_state_t* get_sydupd_state(cspice_t* state) {
 	if (!state->sydupd)
 		state->sydupd = __cspice_allocate_module(sizeof(
 	sydupd_state_t), &__sydupd_init, sizeof(__sydupd_init));
@@ -18,54 +17,56 @@ static sydupd_state_t* get_sydupd_state() {
 }
 
 /* $Procedure      SYDUPD ( Create a duplicate of a symbol ) */
-/* Subroutine */ int sydupd_(char *name__, char *copy, char *tabsym, integer *
-	tabptr, doublereal *tabval, ftnlen name_len, ftnlen copy_len, ftnlen 
-	tabsym_len)
+/* Subroutine */ int sydupd_(cspice_t* __global_state, char *name__, char *
+	copy, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen 
+	name_len, ftnlen copy_len, ftnlen tabsym_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer nval;
     integer nptr;
     integer nsym;
     integer i__;
-    extern integer cardc_(char *, ftnlen);
-    extern integer cardd_(doublereal *);
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer sizec_(char *, ftnlen);
-    extern integer sized_(doublereal *);
-    extern integer sumai_(integer *, integer *);
-    extern integer sizei_(integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int remlad_(integer *, integer *, doublereal *, 
-	    integer *);
-    extern /* Subroutine */ int scardi_(integer *, integer *);
-    extern /* Subroutine */ int inslac_(char *, integer *, integer *, char *, 
-	    integer *, ftnlen, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer sizec_(cspice_t*, char *, ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern integer sizei_(cspice_t*, integer *);
+    extern /* Subroutine */ int scardc_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int remlad_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int inslac_(cspice_t*, char *, integer *, integer 
+	    *, char *, integer *, ftnlen, ftnlen);
     integer dimval[2];
-    extern /* Subroutine */ int inslai_(integer *, integer *, integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int inslai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
     integer locval[2];
-    extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern integer lstlec_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer newval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer locsym[2];
     logical oldsym[2];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer newsym;
 
 
     /* Module state */
-    sydupd_state_t* __state = get_sydupd_state();
+    sydupd_state_t* __state = get_sydupd_state(__global_state);
 /* $ Abstract */
 
 /*     Create a duplicate of a symbol within a double precision symbol */
@@ -238,42 +239,42 @@ static sydupd_state_t* get_sydupd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYDUPD", (ftnlen)6);
+	chkin_(__global_state, "SYDUPD", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
-    nptr = cardi_(tabptr);
-    nval = cardd_(tabval);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
+    nptr = cardi_(__global_state, tabptr);
+    nval = cardd_(__global_state, tabval);
 
 /*     Where do these symbols belong? Are they already in the table? */
 
-    locsym[0] = lstlec_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
-    locsym[1] = lstlec_(copy, &nsym, tabsym + tabsym_len * 6, copy_len, 
-	    tabsym_len);
-    oldsym[0] = locsym[0] != 0 && s_cmp(tabsym + (locsym[0] + 5) * tabsym_len,
-	     name__, tabsym_len, name_len) == 0;
-    oldsym[1] = locsym[1] != 0 && s_cmp(tabsym + (locsym[1] + 5) * tabsym_len,
-	     copy, tabsym_len, copy_len) == 0;
+    locsym[0] = lstlec_(__global_state, name__, &nsym, tabsym + tabsym_len * 
+	    6, name_len, tabsym_len);
+    locsym[1] = lstlec_(__global_state, copy, &nsym, tabsym + tabsym_len * 6, 
+	    copy_len, tabsym_len);
+    oldsym[0] = locsym[0] != 0 && s_cmp(&__global_state->f2c, tabsym + (
+	    locsym[0] + 5) * tabsym_len, name__, tabsym_len, name_len) == 0;
+    oldsym[1] = locsym[1] != 0 && s_cmp(&__global_state->f2c, tabsym + (
+	    locsym[1] + 5) * tabsym_len, copy, tabsym_len, copy_len) == 0;
 
 /*     If the original symbol is not in the table, we can't make a copy. */
 
     if (! oldsym[0]) {
-	setmsg_("SYDUPD: The symbol to be duplicated, #, is not in the symbo"
-		"l table.", (ftnlen)67);
-	errch_("#", name__, (ftnlen)1, name_len);
-	sigerr_("SPICE(NOSUCHSYMBOL)", (ftnlen)19);
+	setmsg_(__global_state, "SYDUPD: The symbol to be duplicated, #, is "
+		"not in the symbol table.", (ftnlen)67);
+	errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	sigerr_(__global_state, "SPICE(NOSUCHSYMBOL)", (ftnlen)19);
 
 /*     Otherwise, we need to know the dimension, to check for overflow. */
 
     } else {
 	i__1 = locsym[0] - 1;
-	locval[0] = sumai_(&tabptr[6], &i__1) + 1;
+	locval[0] = sumai_(__global_state, &tabptr[6], &i__1) + 1;
 	dimval[0] = tabptr[locsym[0] + 5];
 
 /*        If the new symbol already exists, we need to know its dimension */
@@ -281,11 +282,11 @@ static sydupd_state_t* get_sydupd_state() {
 
 	if (oldsym[1]) {
 	    i__1 = locsym[1] - 1;
-	    locval[1] = sumai_(&tabptr[6], &i__1) + 1;
+	    locval[1] = sumai_(__global_state, &tabptr[6], &i__1) + 1;
 	    dimval[1] = tabptr[locsym[1] + 5];
 	    newsym = 0;
 	} else {
-	    locval[1] = sumai_(&tabptr[6], &locsym[1]) + 1;
+	    locval[1] = sumai_(__global_state, &tabptr[6], &locsym[1]) + 1;
 	    dimval[1] = 0;
 	    newsym = 1;
 	}
@@ -293,21 +294,21 @@ static sydupd_state_t* get_sydupd_state() {
 
 /*        Can we make a copy without overflow? */
 
-	if (nsym + newsym > sizec_(tabsym, tabsym_len)) {
-	    setmsg_("SYDUPD: Duplication of the symbol # causes an overflow "
-		    "in the name table.", (ftnlen)73);
-	    errch_("#", name__, (ftnlen)1, name_len);
-	    sigerr_("SPICE(NAMETABLEFULL)", (ftnlen)20);
-	} else if (nptr + newsym > sizei_(tabptr)) {
-	    setmsg_("SYDUPD: Duplication of the symbol # causes an overflow "
-		    "in the pointer table.", (ftnlen)76);
-	    errch_("#", name__, (ftnlen)1, name_len);
-	    sigerr_("SPICE(POINTERTABLEFULL)", (ftnlen)23);
-	} else if (nval + newval > sized_(tabval)) {
-	    setmsg_("SYDUPD: Duplication of the symbol # causes an overflow "
-		    "in the value table.", (ftnlen)74);
-	    errch_("#", name__, (ftnlen)1, name_len);
-	    sigerr_("SPICE(VALUETABLEFULL)", (ftnlen)21);
+	if (nsym + newsym > sizec_(__global_state, tabsym, tabsym_len)) {
+	    setmsg_(__global_state, "SYDUPD: Duplication of the symbol # cau"
+		    "ses an overflow in the name table.", (ftnlen)73);
+	    errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	    sigerr_(__global_state, "SPICE(NAMETABLEFULL)", (ftnlen)20);
+	} else if (nptr + newsym > sizei_(__global_state, tabptr)) {
+	    setmsg_(__global_state, "SYDUPD: Duplication of the symbol # cau"
+		    "ses an overflow in the pointer table.", (ftnlen)76);
+	    errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	    sigerr_(__global_state, "SPICE(POINTERTABLEFULL)", (ftnlen)23);
+	} else if (nval + newval > sized_(__global_state, tabval)) {
+	    setmsg_(__global_state, "SYDUPD: Duplication of the symbol # cau"
+		    "ses an overflow in the value table.", (ftnlen)74);
+	    errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	    sigerr_(__global_state, "SPICE(VALUETABLEFULL)", (ftnlen)21);
 
 /*        Looks like we can. */
 
@@ -318,20 +319,22 @@ static sydupd_state_t* get_sydupd_state() {
 /*           dimension to the name and pointer tables. */
 
 	    if (dimval[1] > 0) {
-		remlad_(&dimval[1], &locval[1], &tabval[6], &nval);
-		scardd_(&nval, tabval);
+		remlad_(__global_state, &dimval[1], &locval[1], &tabval[6], &
+			nval);
+		scardd_(__global_state, &nval, tabval);
 		tabptr[locsym[1] + 5] = dimval[0];
 		if (locval[0] > locval[1]) {
 		    locval[0] -= dimval[1];
 		}
 	    } else {
 		i__1 = locsym[1] + 1;
-		inslac_(copy, &__state->c__1, &i__1, tabsym + tabsym_len * 6, 
-			&nsym, copy_len, tabsym_len);
-		scardc_(&nsym, tabsym, tabsym_len);
+		inslac_(__global_state, copy, &__state->c__1, &i__1, tabsym + 
+			tabsym_len * 6, &nsym, copy_len, tabsym_len);
+		scardc_(__global_state, &nsym, tabsym, tabsym_len);
 		i__1 = locsym[1] + 1;
-		inslai_(dimval, &__state->c__1, &i__1, &tabptr[6], &nptr);
-		scardi_(&nptr, tabptr);
+		inslai_(__global_state, dimval, &__state->c__1, &i__1, &
+			tabptr[6], &nptr);
+		scardi_(__global_state, &nptr, tabptr);
 	    }
 
 /*           In either case, allocate space for the new symbol values, */
@@ -350,10 +353,10 @@ static sydupd_state_t* get_sydupd_state() {
 		tabval[locval[1] + i__ + 5] = tabval[locval[0] + i__ + 5];
 	    }
 	    i__1 = nval + dimval[0];
-	    scardd_(&i__1, tabval);
+	    scardd_(__global_state, &i__1, tabval);
 	}
     }
-    chkout_("SYDUPD", (ftnlen)6);
+    chkout_(__global_state, "SYDUPD", (ftnlen)6);
     return 0;
 } /* sydupd_ */
 

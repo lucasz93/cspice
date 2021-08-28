@@ -8,8 +8,7 @@
 
 
 extern pxfrm2_init_t __pxfrm2_init;
-static pxfrm2_state_t* get_pxfrm2_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pxfrm2_state_t* get_pxfrm2_state(cspice_t* state) {
 	if (!state->pxfrm2)
 		state->pxfrm2 = __cspice_allocate_module(sizeof(
 	pxfrm2_state_t), &__pxfrm2_init, sizeof(__pxfrm2_init));
@@ -18,33 +17,35 @@ static pxfrm2_state_t* get_pxfrm2_state() {
 }
 
 /* $Procedure      PXFRM2 ( Position Transform Matrix, Different Epochs ) */
-/* Subroutine */ int pxfrm2_(char *from, char *to, doublereal *etfrom, 
-	doublereal *etto, doublereal *rotate, ftnlen from_len, ftnlen to_len)
+/* Subroutine */ int pxfrm2_(cspice_t* __global_state, char *from, char *to, 
+	doublereal *etfrom, doublereal *etto, doublereal *rotate, ftnlen 
+	from_len, ftnlen to_len)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer fcode;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer tcode;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal jf[9]	/* was [3][3] */;
     doublereal tj[9]	/* was [3][3] */;
-    extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
+    extern /* Subroutine */ int refchg_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int mxm_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
-	    ;
 
 
     /* Module state */
-    pxfrm2_state_t* __state = get_pxfrm2_state();
+    pxfrm2_state_t* __state = get_pxfrm2_state(__global_state);
 /* $ Abstract */
 
 /*     Return the 3x3 matrix that transforms position vectors from one */
@@ -700,10 +701,10 @@ static pxfrm2_state_t* get_pxfrm2_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("PXFRM2", (ftnlen)6);
+    chkin_(__global_state, "PXFRM2", (ftnlen)6);
 
 /*     Initialization. */
 
@@ -711,17 +712,17 @@ static pxfrm2_state_t* get_pxfrm2_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
 	__state->first = FALSE_;
     }
 
 /*     The frame names must be converted to their corresponding IDs. */
 
-    zznamfrm_(__state->svctr1, __state->svfrom, &__state->svfcod, from, &
-	    fcode, (ftnlen)32, from_len);
-    zznamfrm_(__state->svctr2, __state->svto, &__state->svtcde, to, &tcode, (
-	    ftnlen)32, to_len);
+    zznamfrm_(__global_state, __state->svctr1, __state->svfrom, &
+	    __state->svfcod, from, &fcode, (ftnlen)32, from_len);
+    zznamfrm_(__global_state, __state->svctr2, __state->svto, &
+	    __state->svtcde, to, &tcode, (ftnlen)32, to_len);
 
 /*     Only non-zero ID codes are legitimate frame ID codes.  Zero */
 /*     indicates that the frame was not recognized. */
@@ -739,30 +740,30 @@ static pxfrm2_state_t* get_pxfrm2_state() {
 
 /*                              [ROTATE] = [TF] = [TJ][JF] */
 
-	refchg_(&fcode, &__state->c__1, etfrom, jf);
-	refchg_(&__state->c__1, &tcode, etto, tj);
-	mxm_(tj, jf, rotate);
+	refchg_(__global_state, &fcode, &__state->c__1, etfrom, jf);
+	refchg_(__global_state, &__state->c__1, &tcode, etto, tj);
+	mxm_(__global_state, tj, jf, rotate);
     } else if (fcode == 0 && tcode == 0) {
-	setmsg_("Neither frame # nor # was recognized as a known reference f"
-		"rame. ", (ftnlen)65);
-	errch_("#", from, (ftnlen)1, from_len);
-	errch_("#", to, (ftnlen)1, to_len);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	setmsg_(__global_state, "Neither frame # nor # was recognized as a k"
+		"nown reference frame. ", (ftnlen)65);
+	errch_(__global_state, "#", from, (ftnlen)1, from_len);
+	errch_(__global_state, "#", to, (ftnlen)1, to_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
     } else if (fcode == 0) {
-	setmsg_("The frame # was not recognized as a known reference frame. ",
-		 (ftnlen)59);
-	errch_("#", from, (ftnlen)1, from_len);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	setmsg_(__global_state, "The frame # was not recognized as a known r"
+		"eference frame. ", (ftnlen)59);
+	errch_(__global_state, "#", from, (ftnlen)1, from_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
     } else {
 
 /*        TCODE is zero */
 
-	setmsg_("The frame # was not recognized as a known reference frame. ",
-		 (ftnlen)59);
-	errch_("#", to, (ftnlen)1, to_len);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	setmsg_(__global_state, "The frame # was not recognized as a known r"
+		"eference frame. ", (ftnlen)59);
+	errch_(__global_state, "#", to, (ftnlen)1, to_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
     }
-    chkout_("PXFRM2", (ftnlen)6);
+    chkout_(__global_state, "PXFRM2", (ftnlen)6);
     return 0;
 } /* pxfrm2_ */
 

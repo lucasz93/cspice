@@ -8,58 +8,60 @@
 
 
 typedef int zzckcv01_state_t;
-static zzckcv01_state_t* get_zzckcv01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzckcv01_state_t* get_zzckcv01_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZCKCV01 ( Private --- C-kernel segment coverage, type 01 ) */
-/* Subroutine */ int zzckcv01_(integer *handle, integer *arrbeg, integer *
-	arrend, integer *sclkid, doublereal *tol, char *timsys, doublereal *
-	schedl, ftnlen timsys_len)
+/* Subroutine */ int zzckcv01_(cspice_t* __global_state, integer *handle, 
+	integer *arrbeg, integer *arrend, integer *sclkid, doublereal *tol, 
+	char *timsys, doublereal *schedl, ftnlen timsys_len)
 {
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer nrec;
     integer psiz;
-    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sct2e_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
     integer i__;
     integer n;
     doublereal begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer tbase;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical istdb;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer avsln;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal et;
     doublereal buffer[100];
     integer remain;
     integer seglen;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     doublereal finish;
     integer offset;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer navsln;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int wninsd_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzckcv01_state_t* __state = get_zzckcv01_state();
+    zzckcv01_state_t* __state = get_zzckcv01_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -242,36 +244,36 @@ static zzckcv01_state_t* get_zzckcv01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZCKCV01", (ftnlen)8);
+	chkin_(__global_state, "ZZCKCV01", (ftnlen)8);
     }
 
 /*     Check tolerance value. */
 
     if (*tol < 0.) {
-	setmsg_("Tolerance must be non-negative; actual value was #.", (
-		ftnlen)51);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZCKCV01", (ftnlen)8);
+	setmsg_(__global_state, "Tolerance must be non-negative; actual valu"
+		"e was #.", (ftnlen)51);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZCKCV01", (ftnlen)8);
 	return 0;
     }
 
 /*     Set a logical flag indicating whether the time systm is SCLK. */
 
-    istdb = eqstr_(timsys, "TDB", timsys_len, (ftnlen)3);
+    istdb = eqstr_(__global_state, timsys, "TDB", timsys_len, (ftnlen)3);
 
 /*     Check time system. */
 
     if (! istdb) {
-	if (! eqstr_(timsys, "SCLK", timsys_len, (ftnlen)4)) {
-	    setmsg_("Time system spec TIMSYS was #; allowed values are SCLK "
-		    "and TDB.", (ftnlen)63);
-	    errch_("#", timsys, (ftnlen)1, timsys_len);
-	    sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	    chkout_("ZZCKCV01", (ftnlen)8);
+	if (! eqstr_(__global_state, timsys, "SCLK", timsys_len, (ftnlen)4)) {
+	    setmsg_(__global_state, "Time system spec TIMSYS was #; allowed "
+		    "values are SCLK and TDB.", (ftnlen)63);
+	    errch_(__global_state, "#", timsys, (ftnlen)1, timsys_len);
+	    sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	    chkout_(__global_state, "ZZCKCV01", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -282,7 +284,7 @@ static zzckcv01_state_t* get_zzckcv01_state() {
 
 /*     First, get the number of records in this segment. */
 
-    dafgda_(handle, arrend, arrend, buffer);
+    dafgda_(__global_state, handle, arrend, arrend, buffer);
     nrec = (integer) buffer[0];
 
 /*     Determine the size of the pointing packets. This is dependent */
@@ -305,16 +307,17 @@ static zzckcv01_state_t* get_zzckcv01_state() {
     } else if (seglen == avsln) {
 	psiz = 7;
     } else {
-	setmsg_("The requested segment in file # reports a length of # d.p. "
-		"numbers, but the metadata in the segment indicates the lengt"
-		"h must either be # (no angular rate data) or # (angular rate"
-		" data). Perhaps the segment is not type 1?", (ftnlen)221);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &seglen, (ftnlen)1);
-	errint_("#", &navsln, (ftnlen)1);
-	errint_("#", &avsln, (ftnlen)1);
-	sigerr_("SPICE(BADCK1SEGMENT)", (ftnlen)20);
-	chkout_("ZZCKCV01", (ftnlen)8);
+	setmsg_(__global_state, "The requested segment in file # reports a l"
+		"ength of # d.p. numbers, but the metadata in the segment ind"
+		"icates the length must either be # (no angular rate data) or"
+		" # (angular rate data). Perhaps the segment is not type 1?", (
+		ftnlen)221);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &seglen, (ftnlen)1);
+	errint_(__global_state, "#", &navsln, (ftnlen)1);
+	errint_(__global_state, "#", &avsln, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADCK1SEGMENT)", (ftnlen)20);
+	chkout_(__global_state, "ZZCKCV01", (ftnlen)8);
 	return 0;
     }
 
@@ -338,16 +341,18 @@ static zzckcv01_state_t* get_zzckcv01_state() {
 	n = min(100,remain);
 	i__1 = tbase + offset + 1;
 	i__2 = tbase + offset + n;
-	dafgda_(handle, &i__1, &i__2, buffer);
+	dafgda_(__global_state, handle, &i__1, &i__2, buffer);
 
 /*        Insert the current batch of N singleton intervals. */
 
 	i__1 = n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    begin = buffer[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("buffer", i__2, "zzckcv01_", (ftnlen)359)];
+		    s_rnge(&__global_state->f2c, "buffer", i__2, "zzckcv01_", 
+		    (ftnlen)359)];
 	    finish = buffer[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("buffer", i__2, "zzckcv01_", (ftnlen)360)];
+		    s_rnge(&__global_state->f2c, "buffer", i__2, "zzckcv01_", 
+		    (ftnlen)360)];
 	    if (*tol > 0.) {
 
 /*              Adjust the interval using the tolerance. */
@@ -361,17 +366,17 @@ static zzckcv01_state_t* get_zzckcv01_state() {
 /*           Convert the time to TDB if necessary. */
 
 	    if (istdb) {
-		sct2e_(sclkid, &begin, &et);
+		sct2e_(__global_state, sclkid, &begin, &et);
 		begin = et;
-		sct2e_(sclkid, &finish, &et);
+		sct2e_(__global_state, sclkid, &finish, &et);
 		finish = et;
 	    }
-	    wninsd_(&begin, &finish, schedl);
+	    wninsd_(__global_state, &begin, &finish, schedl);
 	}
 	offset += n;
 	remain -= n;
     }
-    chkout_("ZZCKCV01", (ftnlen)8);
+    chkout_(__global_state, "ZZCKCV01", (ftnlen)8);
     return 0;
 } /* zzckcv01_ */
 

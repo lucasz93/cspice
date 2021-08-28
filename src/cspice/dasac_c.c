@@ -221,7 +221,7 @@
    {
       return;
    }
-   chkin_c ( "dasac_c" );
+   chkin_c ( naif_state, "dasac_c" );
 
    /*
    Check the line count of the input buffer. 

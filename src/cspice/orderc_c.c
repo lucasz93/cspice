@@ -186,7 +186,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "orderc_c" );
+   chkin_c ( naif_state, "orderc_c" );
 
    /*
    Return immediately if the array dimension is non-positive. 

@@ -8,8 +8,7 @@
 
 
 extern prtpkg_init_t __prtpkg_init;
-static prtpkg_state_t* get_prtpkg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline prtpkg_state_t* get_prtpkg_state(cspice_t* state) {
 	if (!state->prtpkg)
 		state->prtpkg = __cspice_allocate_module(sizeof(
 	prtpkg_state_t), &__prtpkg_init, sizeof(__prtpkg_init));
@@ -18,8 +17,9 @@ static prtpkg_state_t* get_prtpkg_state() {
 }
 
 /* $Procedure      PRTPKG ( Declare Arguments for Error Message Routines ) */
-logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl, 
-	logical *trace, logical *dfault, char *type__, ftnlen type_len)
+logical prtpkg_0_(cspice_t* __global_state, int n__, logical *short__, 
+	logical *long__, logical *expl, logical *trace, logical *dfault, char 
+	*type__, ftnlen type_len)
 {
     /* Initialized data */
 
@@ -31,22 +31,26 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
     char ch__1[96];
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char ltype[10];
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char device[255];
-    extern /* Subroutine */ int getdev_(char *, ftnlen);
-    extern /* Subroutine */ int wrline_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int getdev_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wrline_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char loctyp[10];
 
 
     /* Module state */
-    prtpkg_state_t* __state = get_prtpkg_state();
+    prtpkg_state_t* __state = get_prtpkg_state(__global_state);
 /* $ Abstract */
 
 /*      Declare the arguments for the error message selection entry */
@@ -364,11 +368,13 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
 
 /*     Executable Code: */
 
-    getdev_(device, (ftnlen)255);
-    wrline_(device, "PRTPKG:  You have called an entry point which has no ru"
-	    "n-time function; this may indicate a program bug.  Please check "
-	    "the PRTPKG documentation.  ", (ftnlen)255, (ftnlen)146);
-    wrline_(device, "SPICE(BOGUSENTRY)", (ftnlen)255, (ftnlen)17);
+    getdev_(__global_state, device, (ftnlen)255);
+    wrline_(__global_state, device, "PRTPKG:  You have called an entry point"
+	    " which has no run-time function; this may indicate a program bug"
+	    ".  Please check the PRTPKG documentation.  ", (ftnlen)255, (
+	    ftnlen)146);
+    wrline_(__global_state, device, "SPICE(BOGUSENTRY)", (ftnlen)255, (ftnlen)
+	    17);
     ret_val = FALSE_;
     return ret_val;
 /* $Procedure      SETPRT ( Store Error Message Types to be Output ) */
@@ -775,17 +781,22 @@ L_msgsel:
 
 /*     Executable Code: */
 
-    ljust_(type__, ltype, type_len, (ftnlen)10);
-    ucase_(ltype, ltype, (ftnlen)10, (ftnlen)10);
-    if (s_cmp(ltype, "SHORT", (ftnlen)10, (ftnlen)5) == 0) {
+    ljust_(__global_state, type__, ltype, type_len, (ftnlen)10);
+    ucase_(__global_state, ltype, ltype, (ftnlen)10, (ftnlen)10);
+    if (s_cmp(&__global_state->f2c, ltype, "SHORT", (ftnlen)10, (ftnlen)5) == 
+	    0) {
 	ret_val = __state->svshrt;
-    } else if (s_cmp(ltype, "EXPLAIN", (ftnlen)10, (ftnlen)7) == 0) {
+    } else if (s_cmp(&__global_state->f2c, ltype, "EXPLAIN", (ftnlen)10, (
+	    ftnlen)7) == 0) {
 	ret_val = __state->svexpl;
-    } else if (s_cmp(ltype, "LONG", (ftnlen)10, (ftnlen)4) == 0) {
+    } else if (s_cmp(&__global_state->f2c, ltype, "LONG", (ftnlen)10, (ftnlen)
+	    4) == 0) {
 	ret_val = __state->svlong;
-    } else if (s_cmp(ltype, "TRACEBACK", (ftnlen)10, (ftnlen)9) == 0) {
+    } else if (s_cmp(&__global_state->f2c, ltype, "TRACEBACK", (ftnlen)10, (
+	    ftnlen)9) == 0) {
 	ret_val = __state->svtrac;
-    } else if (s_cmp(ltype, "DEFAULT", (ftnlen)10, (ftnlen)7) == 0) {
+    } else if (s_cmp(&__global_state->f2c, ltype, "DEFAULT", (ftnlen)10, (
+	    ftnlen)7) == 0) {
 	ret_val = __state->svdflt;
     } else {
 
@@ -793,10 +804,11 @@ L_msgsel:
 /*        avoid recursion, we output the messages directly, */
 /*        rather than call SIGERR. */
 
-	getdev_(device, (ftnlen)255);
-	wrline_(device, "SPICE(INVALIDMSGTYPE)", (ftnlen)255, (ftnlen)21);
-	wrline_(device, " ", (ftnlen)255, (ftnlen)1);
-	s_copy(loctyp, type__, (ftnlen)10, type_len);
+	getdev_(__global_state, device, (ftnlen)255);
+	wrline_(__global_state, device, "SPICE(INVALIDMSGTYPE)", (ftnlen)255, 
+		(ftnlen)21);
+	wrline_(__global_state, device, " ", (ftnlen)255, (ftnlen)1);
+	s_copy(&__global_state->f2c, loctyp, type__, (ftnlen)10, type_len);
 
 /*        Note:  What looks like a typo below isn't; there's */
 /*        a line break after the substring 'specified' of */
@@ -806,27 +818,29 @@ L_msgsel:
 	i__1[0] = 86, a__1[0] = "MSGSEL:  An invalid error message type was "
 		"supplied as input; the type specifiedwas:  ";
 	i__1[1] = 10, a__1[1] = loctyp;
-	s_cat(ch__1, a__1, i__1, &__state->c__2, (ftnlen)96);
-	wrline_(device, ch__1, (ftnlen)255, (ftnlen)96);
+	s_cat(&__global_state->f2c, ch__1, a__1, i__1, &__state->c__2, (
+		ftnlen)96);
+	wrline_(__global_state, device, ch__1, (ftnlen)255, (ftnlen)96);
     }
     return ret_val;
 } /* prtpkg_ */
 
-logical prtpkg_(logical *short__, logical *long__, logical *expl, logical *
-	trace, logical *dfault, char *type__, ftnlen type_len)
+logical prtpkg_(cspice_t* __global_state, logical *short__, logical *long__, 
+	logical *expl, logical *trace, logical *dfault, char *type__, ftnlen 
+	type_len)
 {
     return prtpkg_0_(0, short__, long__, expl, trace, dfault, type__, 
 	    type_len);
     }
 
-logical setprt_(logical *short__, logical *expl, logical *long__, logical *
-	trace, logical *dfault)
+logical setprt_(cspice_t* __global_state, logical *short__, logical *expl, 
+	logical *long__, logical *trace, logical *dfault)
 {
     return prtpkg_0_(1, short__, long__, expl, trace, dfault, (char *)0, (
 	    ftnint)0);
     }
 
-logical msgsel_(char *type__, ftnlen type_len)
+logical msgsel_(cspice_t* __global_state, char *type__, ftnlen type_len)
 {
     return prtpkg_0_(2, (logical *)0, (logical *)0, (logical *)0, (logical *)
 	    0, (logical *)0, type__, type_len);

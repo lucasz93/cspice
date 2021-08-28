@@ -8,8 +8,7 @@
 
 
 extern zzdynoad_init_t __zzdynoad_init;
-static zzdynoad_state_t* get_zzdynoad_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdynoad_state_t* get_zzdynoad_state(cspice_t* state) {
 	if (!state->zzdynoad)
 		state->zzdynoad = __cspice_allocate_module(sizeof(
 	zzdynoad_state_t), &__zzdynoad_init, sizeof(__zzdynoad_init));
@@ -18,40 +17,41 @@ static zzdynoad_state_t* get_zzdynoad_state() {
 }
 
 /* $Procedure ZZDYNOAD ( Fetch optional array, d.p. frame variable ) */
-/* Subroutine */ int zzdynoad_(char *frname, integer *frcode, char *item, 
-	integer *maxn, integer *n, doublereal *values, logical *found, ftnlen 
-	frname_len, ftnlen item_len)
+/* Subroutine */ int zzdynoad_(cspice_t* __global_state, char *frname, 
+	integer *frcode, char *item, integer *maxn, integer *n, doublereal *
+	values, logical *found, ftnlen frname_len, ftnlen item_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
     char dtype[1];
-    extern integer rtrim_(char *, ftnlen);
-    extern logical failed_(void);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     integer codeln;
     integer nameln;
     char kvname[32];
     char cdestr[32];
     integer itemln;
     integer reqnam;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer reqnum;
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
-	    *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int gdpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, doublereal *, logical *, ftnlen);
 
 
     /* Module state */
-    zzdynoad_state_t* __state = get_zzdynoad_state();
+    zzdynoad_state_t* __state = get_zzdynoad_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -729,10 +729,10 @@ static zzdynoad_state_t* get_zzdynoad_state() {
 
 /*     Standard SPICE error handling */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDYNOAD", (ftnlen)8);
+    chkin_(__global_state, "ZZDYNOAD", (ftnlen)8);
 
 /*     Nothing found yet. */
 
@@ -743,9 +743,9 @@ static zzdynoad_state_t* get_zzdynoad_state() {
 
 /*     Convert the frame code to a string. */
 
-    intstr_(frcode, cdestr, (ftnlen)32);
-    if (failed_()) {
-	chkout_("ZZDYNOAD", (ftnlen)8);
+    intstr_(__global_state, frcode, cdestr, (ftnlen)32);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZDYNOAD", (ftnlen)8);
 	return 0;
     }
 
@@ -755,9 +755,9 @@ static zzdynoad_state_t* get_zzdynoad_state() {
 /*     the name is too long, proceed to look up the form of the */
 /*     kernel variable name based on the frame name. */
 
-    codeln = rtrim_(cdestr, (ftnlen)32);
-    nameln = rtrim_(frname, frname_len);
-    itemln = rtrim_(item, item_len);
+    codeln = rtrim_(__global_state, cdestr, (ftnlen)32);
+    nameln = rtrim_(__global_state, frname, frname_len);
+    itemln = rtrim_(__global_state, item, item_len);
     reqnum = codeln + itemln + 7;
     if (reqnum <= 32) {
 
@@ -768,11 +768,12 @@ static zzdynoad_state_t* get_zzdynoad_state() {
 
 /*            'FRAME_#_#' */
 
-	repmi_("FRAME_#_#", "#", frcode, kvname, (ftnlen)9, (ftnlen)1, (
-		ftnlen)32);
-	repmc_(kvname, "#", item, kvname, (ftnlen)32, (ftnlen)1, item_len, (
-		ftnlen)32);
-	dtpool_(kvname, found, n, dtype, (ftnlen)32, (ftnlen)1);
+	repmi_(__global_state, "FRAME_#_#", "#", frcode, kvname, (ftnlen)9, (
+		ftnlen)1, (ftnlen)32);
+	repmc_(__global_state, kvname, "#", item, kvname, (ftnlen)32, (ftnlen)
+		1, item_len, (ftnlen)32);
+	dtpool_(__global_state, kvname, found, n, dtype, (ftnlen)32, (ftnlen)
+		1);
     } else {
 
 /*        The ID-based name is too long. We can't find the variable if */
@@ -791,19 +792,20 @@ static zzdynoad_state_t* get_zzdynoad_state() {
 
 /*           Both forms of the name are too long. */
 
-	    setmsg_("Kernel variable FRAME_#_# has length #; kernel variable"
-		    " FRAME_#_# has length #; maximum allowed length is #.  N"
-		    "either variable could be searched for in the kernel pool"
-		    " due to these name length errors.", (ftnlen)200);
-	    errint_("#", frcode, (ftnlen)1);
-	    errch_("#", item, (ftnlen)1, item_len);
-	    errint_("#", &reqnum, (ftnlen)1);
-	    errch_("#", frname, (ftnlen)1, frname_len);
-	    errch_("#", item, (ftnlen)1, item_len);
-	    errint_("#", &reqnam, (ftnlen)1);
-	    errint_("#", &__state->c__32, (ftnlen)1);
-	    sigerr_("SPICE(VARNAMETOOLONG)", (ftnlen)21);
-	    chkout_("ZZDYNOAD", (ftnlen)8);
+	    setmsg_(__global_state, "Kernel variable FRAME_#_# has length #;"
+		    " kernel variable FRAME_#_# has length #; maximum allowed"
+		    " length is #.  Neither variable could be searched for in"
+		    " the kernel pool due to these name length errors.", (
+		    ftnlen)200);
+	    errint_(__global_state, "#", frcode, (ftnlen)1);
+	    errch_(__global_state, "#", item, (ftnlen)1, item_len);
+	    errint_(__global_state, "#", &reqnum, (ftnlen)1);
+	    errch_(__global_state, "#", frname, (ftnlen)1, frname_len);
+	    errch_(__global_state, "#", item, (ftnlen)1, item_len);
+	    errint_(__global_state, "#", &reqnam, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c__32, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VARNAMETOOLONG)", (ftnlen)21);
+	    chkout_(__global_state, "ZZDYNOAD", (ftnlen)8);
 	    return 0;
 	} else if (reqnam > 32) {
 
@@ -811,23 +813,24 @@ static zzdynoad_state_t* get_zzdynoad_state() {
 /*           and the frame name-based variable name is too long to */
 /*           look up. */
 
-	    chkout_("ZZDYNOAD", (ftnlen)8);
+	    chkout_(__global_state, "ZZDYNOAD", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Now try looking for a kernel variable including the frame */
 /*        name. */
 
-	repmc_("FRAME_#_#", "#", frname, kvname, (ftnlen)9, (ftnlen)1, 
-		frname_len, (ftnlen)32);
-	repmc_(kvname, "#", item, kvname, (ftnlen)32, (ftnlen)1, item_len, (
-		ftnlen)32);
-	dtpool_(kvname, found, n, dtype, (ftnlen)32, (ftnlen)1);
+	repmc_(__global_state, "FRAME_#_#", "#", frname, kvname, (ftnlen)9, (
+		ftnlen)1, frname_len, (ftnlen)32);
+	repmc_(__global_state, kvname, "#", item, kvname, (ftnlen)32, (ftnlen)
+		1, item_len, (ftnlen)32);
+	dtpool_(__global_state, kvname, found, n, dtype, (ftnlen)32, (ftnlen)
+		1);
 	if (! (*found)) {
 
 /*           The FOUND flag is set appropriately. */
 
-	    chkout_("ZZDYNOAD", (ftnlen)8);
+	    chkout_(__global_state, "ZZDYNOAD", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -841,43 +844,45 @@ static zzdynoad_state_t* get_zzdynoad_state() {
 /*     error message if need be. */
 
     if (*(unsigned char *)dtype == 'C') {
-	setmsg_("The kernel variable # has used to define frame # was expect"
-		"ed to have double precision data type but in fact has  chara"
-		"cter type.  Usually this type of problem is due to an error "
-		"in a frame definition provided in a frame kernel.", (ftnlen)
-		228);
-	errch_("#", kvname, (ftnlen)1, (ftnlen)32);
-	errch_("#", frname, (ftnlen)1, frname_len);
-	sigerr_("SPICE(BADVARIABLETYPE)", (ftnlen)22);
-	chkout_("ZZDYNOAD", (ftnlen)8);
+	setmsg_(__global_state, "The kernel variable # has used to define fr"
+		"ame # was expected to have double precision data type but in"
+		" fact has  character type.  Usually this type of problem is "
+		"due to an error in a frame definition provided in a frame ke"
+		"rnel.", (ftnlen)228);
+	errch_(__global_state, "#", kvname, (ftnlen)1, (ftnlen)32);
+	errch_(__global_state, "#", frname, (ftnlen)1, frname_len);
+	sigerr_(__global_state, "SPICE(BADVARIABLETYPE)", (ftnlen)22);
+	chkout_(__global_state, "ZZDYNOAD", (ftnlen)8);
 	return 0;
     }
     if (*n > *maxn) {
-	setmsg_("The kernel variable # has used to define frame # was expect"
-		"ed to have size not exceeding # but in fact has size #. Usua"
-		"lly this type of problem is due to an error in a frame defin"
-		"ition provided in a frame kernel.", (ftnlen)212);
-	errch_("#", kvname, (ftnlen)1, (ftnlen)32);
-	errch_("#", frname, (ftnlen)1, frname_len);
-	errint_("#", maxn, (ftnlen)1);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(BADVARIABLESIZE)", (ftnlen)22);
-	chkout_("ZZDYNOAD", (ftnlen)8);
+	setmsg_(__global_state, "The kernel variable # has used to define fr"
+		"ame # was expected to have size not exceeding # but in fact "
+		"has size #. Usually this type of problem is due to an error "
+		"in a frame definition provided in a frame kernel.", (ftnlen)
+		212);
+	errch_(__global_state, "#", kvname, (ftnlen)1, (ftnlen)32);
+	errch_(__global_state, "#", frname, (ftnlen)1, frname_len);
+	errint_(__global_state, "#", maxn, (ftnlen)1);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADVARIABLESIZE)", (ftnlen)22);
+	chkout_(__global_state, "ZZDYNOAD", (ftnlen)8);
 	return 0;
     }
 
 /*     Look up the kernel variable. */
 
-    gdpool_(kvname, &__state->c__1, maxn, n, values, found, (ftnlen)32);
+    gdpool_(__global_state, kvname, &__state->c__1, maxn, n, values, found, (
+	    ftnlen)32);
     if (! (*found)) {
-	setmsg_("Variable # not found after DTPOOL indicated it was present "
-		"in pool.", (ftnlen)67);
-	errch_("#", kvname, (ftnlen)1, (ftnlen)32);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZDYNOAD", (ftnlen)8);
+	setmsg_(__global_state, "Variable # not found after DTPOOL indicated"
+		" it was present in pool.", (ftnlen)67);
+	errch_(__global_state, "#", kvname, (ftnlen)1, (ftnlen)32);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZDYNOAD", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZDYNOAD", (ftnlen)8);
+    chkout_(__global_state, "ZZDYNOAD", (ftnlen)8);
     return 0;
 } /* zzdynoad_ */
 

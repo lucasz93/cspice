@@ -559,7 +559,7 @@
    {
       return;
    }
-   chkin_c ( "xfmsta_c" );
+   chkin_c ( naif_state, "xfmsta_c" );
 
    /*
    Check the input strings to make sure the pointers are non-null

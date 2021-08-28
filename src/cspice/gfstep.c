@@ -8,8 +8,7 @@
 
 
 extern gfstep_init_t __gfstep_init;
-static gfstep_state_t* get_gfstep_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gfstep_state_t* get_gfstep_state(cspice_t* state) {
 	if (!state->gfstep)
 		state->gfstep = __cspice_allocate_module(sizeof(
 	gfstep_state_t), &__gfstep_init, sizeof(__gfstep_init));
@@ -18,20 +17,22 @@ static gfstep_state_t* get_gfstep_state() {
 }
 
 /* $Procedure GFSTEP ( GF, step size ) */
-/* Subroutine */ int gfstep_0_(int n__, doublereal *time, doublereal *step)
+/* Subroutine */ int gfstep_0_(cspice_t* __global_state, int n__, doublereal *
+	time, doublereal *step)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    gfstep_state_t* __state = get_gfstep_state();
+    gfstep_state_t* __state = get_gfstep_state(__global_state);
 /* $ Abstract */
 
 /*     Return the time step set by the most recent call to GFSSTP. */
@@ -206,10 +207,11 @@ static gfstep_state_t* get_gfstep_state() {
 /*     Discovery check-in. */
 
     if (! __state->svinit) {
-	chkin_("GFSTEP", (ftnlen)6);
-	setmsg_("Step size was never initialized.", (ftnlen)32);
-	sigerr_("SPICE(NOTINITIALIZED)", (ftnlen)21);
-	chkout_("GFSTEP", (ftnlen)6);
+	chkin_(__global_state, "GFSTEP", (ftnlen)6);
+	setmsg_(__global_state, "Step size was never initialized.", (ftnlen)
+		32);
+	sigerr_(__global_state, "SPICE(NOTINITIALIZED)", (ftnlen)21);
+	chkout_(__global_state, "GFSTEP", (ftnlen)6);
 	return 0;
     }
 
@@ -342,11 +344,12 @@ L_gfsstp:
 /*     Check the step size. */
 
     if (*step <= 0.) {
-	chkin_("GFSSTP", (ftnlen)6);
-	setmsg_("Step has value #; step size must be positive.", (ftnlen)45);
-	errdp_("#", step, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSTEP)", (ftnlen)18);
-	chkout_("GFSSTP", (ftnlen)6);
+	chkin_(__global_state, "GFSSTP", (ftnlen)6);
+	setmsg_(__global_state, "Step has value #; step size must be positiv"
+		"e.", (ftnlen)45);
+	errdp_(__global_state, "#", step, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSTEP)", (ftnlen)18);
+	chkout_(__global_state, "GFSSTP", (ftnlen)6);
 	return 0;
     }
     __state->svstep = *step;
@@ -354,12 +357,13 @@ L_gfsstp:
     return 0;
 } /* gfstep_ */
 
-/* Subroutine */ int gfstep_(doublereal *time, doublereal *step)
+/* Subroutine */ int gfstep_(cspice_t* __global_state, doublereal *time, 
+	doublereal *step)
 {
     return gfstep_0_(0, time, step);
     }
 
-/* Subroutine */ int gfsstp_(doublereal *step)
+/* Subroutine */ int gfsstp_(cspice_t* __global_state, doublereal *step)
 {
     return gfstep_0_(1, (doublereal *)0, step);
     }

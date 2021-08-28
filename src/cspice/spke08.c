@@ -8,8 +8,7 @@
 
 
 extern spke08_init_t __spke08_init;
-static spke08_state_t* get_spke08_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spke08_state_t* get_spke08_state(cspice_t* state) {
 	if (!state->spke08)
 		state->spke08 = __cspice_allocate_module(sizeof(
 	spke08_state_t), &__spke08_init, sizeof(__spke08_init));
@@ -18,8 +17,8 @@ static spke08_state_t* get_spke08_state() {
 }
 
 /* $Procedure      SPKE08 ( S/P Kernel, evaluate, type 8 ) */
-/* Subroutine */ int spke08_(doublereal *et, doublereal *record, doublereal *
-	state)
+/* Subroutine */ int spke08_(cspice_t* __global_state, doublereal *et, 
+	doublereal *record, doublereal *state)
 {
     /* Initialized data */
 
@@ -28,21 +27,22 @@ static spke08_state_t* get_spke08_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer i__;
     integer n;
-    extern doublereal lgresp_(integer *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int xposeg_(doublereal *, integer *, integer *, 
-	    doublereal *);
-    extern logical return_(void);
+    extern doublereal lgresp_(cspice_t*, integer *, doublereal *, doublereal *
+	    , doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int xposeg_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *);
+    extern logical return_(cspice_t*);
     integer ystart;
 
 
     /* Module state */
-    spke08_state_t* __state = get_spke08_state();
+    spke08_state_t* __state = get_spke08_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 8 */
@@ -333,7 +333,7 @@ static spke08_state_t* get_spke08_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -341,18 +341,19 @@ static spke08_state_t* get_spke08_state() {
 /*     so that contiguous pieces of it can be shoved directly into the */
 /*     interpolation routine LGRESP. */
 
-    n = i_dnnt(record);
-    xposeg_(&record[3], &__state->c__6, &n, __state->locrec);
+    n = i_dnnt(&__global_state->f2c, record);
+    xposeg_(__global_state, &record[3], &__state->c__6, &n, __state->locrec);
 
 /*     We interpolate each state component in turn. */
 
     for (i__ = 1; i__ <= 6; ++i__) {
 	ystart = (i__ - 1) * n + 1;
-	state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
-		 "spke08_", (ftnlen)291)] = lgresp_(&n, &record[1], &record[2]
-		, &__state->locrec[(i__2 = ystart - 1) < 198 && 0 <= i__2 ? 
-		i__2 : s_rnge("locrec", i__2, "spke08_", (ftnlen)291)], 
-		__state->work, et);
+	state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "state", i__1, "spke08_", (ftnlen)291)] =
+		 lgresp_(__global_state, &n, &record[1], &record[2], &
+		__state->locrec[(i__2 = ystart - 1) < 198 && 0 <= i__2 ? i__2 
+		: s_rnge(&__global_state->f2c, "locrec", i__2, "spke08_", (
+		ftnlen)291)], __state->work, et);
     }
     return 0;
 } /* spke08_ */

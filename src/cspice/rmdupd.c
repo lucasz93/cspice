@@ -8,13 +8,13 @@
 
 
 typedef int rmdupd_state_t;
-static rmdupd_state_t* get_rmdupd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rmdupd_state_t* get_rmdupd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure RMDUPD ( Remove duplicates from a double precision array ) */
-/* Subroutine */ int rmdupd_(integer *nelt, doublereal *array)
+/* Subroutine */ int rmdupd_(cspice_t* __global_state, integer *nelt, 
+	doublereal *array)
 {
     /* System generated locals */
     integer i__1;
@@ -22,11 +22,11 @@ static rmdupd_state_t* get_rmdupd_state() {
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int shelld_(integer *, doublereal *);
+    extern /* Subroutine */ int shelld_(cspice_t*, integer *, doublereal *);
 
 
     /* Module state */
-    rmdupd_state_t* __state = get_rmdupd_state();
+    rmdupd_state_t* __state = get_rmdupd_state(__global_state);
 /* $ Abstract */
 
 /*      Remove duplicate elements from a double precision array. */
@@ -170,7 +170,7 @@ static rmdupd_state_t* get_rmdupd_state() {
 
 /*        Sort the array in place. */
 
-	shelld_(nelt, array);
+	shelld_(__global_state, nelt, array);
 
 /*        Drop duplicate entries. Compare adjacent entries, and move */
 /*        duplicates forward. (Duplicates are now adjacent, because of */

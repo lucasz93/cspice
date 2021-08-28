@@ -8,8 +8,7 @@
 
 
 extern zzekff01_init_t __zzekff01_init;
-static zzekff01_state_t* get_zzekff01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekff01_state_t* get_zzekff01_state(cspice_t* state) {
 	if (!state->zzekff01)
 		state->zzekff01 = __cspice_allocate_module(sizeof(
 	zzekff01_state_t), &__zzekff01_init, sizeof(__zzekff01_init));
@@ -18,26 +17,27 @@ static zzekff01_state_t* get_zzekff01_state() {
 }
 
 /* $Procedure      ZZEKFF01 ( EK, finish fast load, segment type 1 ) */
-/* Subroutine */ int zzekff01_(integer *handle, integer *segno, integer *
-	rcptrs)
+/* Subroutine */ int zzekff01_(cspice_t* __global_state, integer *handle, 
+	integer *segno, integer *rcptrs)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer base;
     integer tree;
-    extern /* Subroutine */ int zzektr1s_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzektr1s_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekmloc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgpg_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrit_(integer *, integer *);
+    extern /* Subroutine */ int zzektrit_(cspice_t*, integer *, integer *);
     integer i__;
     integer j;
     integer p;
@@ -45,13 +45,13 @@ static zzekff01_state_t* get_zzekff01_state() {
     integer mbase;
     integer npage;
     integer pbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
     integer ncols;
     integer nrows;
     integer adrbuf[100];
     integer nr;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer addrss;
     integer colidx;
     integer colord[100];
@@ -62,24 +62,25 @@ static zzekff01_state_t* get_zzekff01_state() {
     integer stkbas;
     integer stkhan;
     integer stkseg;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer col;
     integer loc;
     integer nrp;
     integer row;
-    extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzeksrd_(cspice_t*, integer *, integer *, 
+	    integer *);
 
 
     /* Module state */
-    zzekff01_state_t* __state = get_zzekff01_state();
+    zzekff01_state_t* __state = get_zzekff01_state(__global_state);
 /* $ Abstract */
 
 /*     Complete a fast load operation on a new type 1 E-kernel segment. */
@@ -761,38 +762,38 @@ static zzekff01_state_t* get_zzekff01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKFF01", (ftnlen)8);
+	chkin_(__global_state, "ZZEKFF01", (ftnlen)8);
     }
 
 /*     Dig the handle and segment number out of the EK stack.  If the */
 /*     stacked values don't match the inputs HANDLE and SEGNO, we've */
 /*     got trouble. */
 
-    zzeksrd_(&__state->c__1, &__state->c__1, &stkhan);
-    zzeksrd_(&__state->c__2, &__state->c__2, &stkseg);
+    zzeksrd_(__global_state, &__state->c__1, &__state->c__1, &stkhan);
+    zzeksrd_(__global_state, &__state->c__2, &__state->c__2, &stkseg);
     if (stkhan != *handle || stkseg != *segno) {
-	setmsg_("Attempt to finish fast load of wrong segment.  Input segmen"
-		"t number is #; stacked segment number is #.  Input handle is"
-		" #; stacked handle is #.", (ftnlen)143);
-	errint_("#", segno, (ftnlen)1);
-	errint_("#", &stkseg, (ftnlen)1);
-	errint_("#", handle, (ftnlen)1);
-	errint_("#", &stkhan, (ftnlen)1);
-	sigerr_("SPICE(WRONGSEGMENT)", (ftnlen)19);
-	chkout_("ZZEKFF01", (ftnlen)8);
+	setmsg_(__global_state, "Attempt to finish fast load of wrong segmen"
+		"t.  Input segment number is #; stacked segment number is #. "
+		" Input handle is #; stacked handle is #.", (ftnlen)143);
+	errint_(__global_state, "#", segno, (ftnlen)1);
+	errint_(__global_state, "#", &stkseg, (ftnlen)1);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &stkhan, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGSEGMENT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKFF01", (ftnlen)8);
 	return 0;
     }
 
 /*     Look up the segment descriptor for the indicated segment.  Find */
 /*     out how many rows and columns the segment contains. */
 
-    zzekmloc_(handle, segno, &p, &mbase);
+    zzekmloc_(__global_state, handle, segno, &p, &mbase);
     i__1 = mbase + 1;
     i__2 = mbase + 24;
-    dasrdi_(handle, &i__1, &i__2, segdsc);
+    dasrdi_(__global_state, handle, &i__1, &i__2, segdsc);
     nrows = segdsc[5];
     ncols = segdsc[4];
 
@@ -806,9 +807,10 @@ static zzekff01_state_t* get_zzekff01_state() {
     i__1 = ncols;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	loc = (i__ - 1) * (nrows + 1) + 3;
-	zzeksrd_(&loc, &loc, &colidx);
-	colord[(i__2 = colidx - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("colord"
-		, i__2, "zzekff01_", (ftnlen)240)] = i__;
+	zzeksrd_(__global_state, &loc, &loc, &colidx);
+	colord[(i__2 = colidx - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "colord", i__2, "zzekff01_", (ftnlen)240)
+		] = i__;
     }
 
 /*     We'll need to create a record pointer structure for each row */
@@ -834,8 +836,8 @@ static zzekff01_state_t* get_zzekff01_state() {
 /*        structure on the page. */
 
 	addrss = rcptrs[recno] + 1;
-	zzekpgpg_(&__state->c__3, &addrss, &p, &pbase);
-	cleari_(&__state->c__254, ipage);
+	zzekpgpg_(__global_state, &__state->c__3, &addrss, &p, &pbase);
+	cleari_(__global_state, &__state->c__254, ipage);
 
 /*        NR is the number of record pointers we'll write to this page. */
 
@@ -847,10 +849,12 @@ static zzekff01_state_t* get_zzekff01_state() {
 /*           each record pointer on the page. */
 
 	    base = (j - 1) * rpsize;
-	    ipage[(i__3 = base) < 256 && 0 <= i__3 ? i__3 : s_rnge("ipage", 
-		    i__3, "zzekff01_", (ftnlen)285)] = 1;
-	    ipage[(i__3 = base + 1) < 256 && 0 <= i__3 ? i__3 : s_rnge("ipage"
-		    , i__3, "zzekff01_", (ftnlen)286)] = -1;
+	    ipage[(i__3 = base) < 256 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "ipage", i__3, "zzekff01_", (ftnlen)
+		    285)] = 1;
+	    ipage[(i__3 = base + 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "ipage", i__3, "zzekff01_", (ftnlen)
+		    286)] = -1;
 	}
 
 /*        For each column, take NR addresses off the stack and */
@@ -865,58 +869,60 @@ static zzekff01_state_t* get_zzekff01_state() {
 /*           addresses for the data of each column follow.  The addresses */
 /*           for each column are stored contiguously. */
 
-	    j = colord[(i__3 = col - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-		    "colord", i__3, "zzekff01_", (ftnlen)302)];
+	    j = colord[(i__3 = col - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "colord", i__3, "zzekff01_", (ftnlen)
+		    302)];
 	    stkbas = (j - 1) * (nrows + 1) + 3;
 	    loc = stkbas + recno;
 	    i__3 = loc + 1;
 	    i__4 = loc + nr;
-	    zzeksrd_(&i__3, &i__4, adrbuf);
+	    zzeksrd_(__global_state, &i__3, &i__4, adrbuf);
 	    i__3 = nr;
 	    for (row = 1; row <= i__3; ++row) {
 		base = (row - 1) * rpsize;
 		pagloc = base + 2 + col;
-		ipage[(i__4 = pagloc - 1) < 256 && 0 <= i__4 ? i__4 : s_rnge(
-			"ipage", i__4, "zzekff01_", (ftnlen)312)] = adrbuf[(
-			i__5 = row - 1) < 100 && 0 <= i__5 ? i__5 : s_rnge(
-			"adrbuf", i__5, "zzekff01_", (ftnlen)312)];
+		ipage[(i__4 = pagloc - 1) < 256 && 0 <= i__4 ? i__4 : s_rnge(&
+			__global_state->f2c, "ipage", i__4, "zzekff01_", (
+			ftnlen)312)] = adrbuf[(i__5 = row - 1) < 100 && 0 <= 
+			i__5 ? i__5 : s_rnge(&__global_state->f2c, "adrbuf", 
+			i__5, "zzekff01_", (ftnlen)312)];
 	    }
 	}
 
 /*        Write out the initialized pointer page. */
 
-	zzekpgwi_(handle, &p, ipage);
+	zzekpgwi_(__global_state, handle, &p, ipage);
 	recno += nr;
 	remain -= nr;
     }
 
 /*     Create the record pointer tree for this segment. */
 
-    zzektrit_(handle, &tree);
-    zzektr1s_(handle, &tree, &nrows, rcptrs);
+    zzektrit_(__global_state, handle, &tree);
+    zzektr1s_(__global_state, handle, &tree, &nrows, rcptrs);
 
 /*     Update the record tree pointer and row count in the segment */
 /*     descriptor.  Set the records of the last DAS words in use */
 /*     to their maximum values, to ensure allocation of new pages */
 /*     if further writes are done. */
 
-    zzekmloc_(handle, segno, &p, &base);
+    zzekmloc_(__global_state, handle, segno, &p, &base);
     i__1 = base + 7;
     i__2 = base + 7;
-    dasudi_(handle, &i__1, &i__2, &tree);
+    dasudi_(__global_state, handle, &i__1, &i__2, &tree);
     i__1 = base + 6;
     i__2 = base + 6;
-    dasudi_(handle, &i__1, &i__2, &nrows);
+    dasudi_(__global_state, handle, &i__1, &i__2, &nrows);
     i__1 = base + 19;
     i__2 = base + 19;
-    dasudi_(handle, &i__1, &i__2, &__state->c__1014);
+    dasudi_(__global_state, handle, &i__1, &i__2, &__state->c__1014);
     i__1 = base + 20;
     i__2 = base + 20;
-    dasudi_(handle, &i__1, &i__2, &__state->c__126);
+    dasudi_(__global_state, handle, &i__1, &i__2, &__state->c__126);
     i__1 = base + 21;
     i__2 = base + 21;
-    dasudi_(handle, &i__1, &i__2, &__state->c__254);
-    chkout_("ZZEKFF01", (ftnlen)8);
+    dasudi_(__global_state, handle, &i__1, &i__2, &__state->c__254);
+    chkout_(__global_state, "ZZEKFF01", (ftnlen)8);
     return 0;
 } /* zzekff01_ */
 

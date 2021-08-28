@@ -8,8 +8,7 @@
 
 
 extern zzsgp4_init_t __zzsgp4_init;
-static zzsgp4_state_t* get_zzsgp4_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzsgp4_state_t* get_zzsgp4_state(cspice_t* state) {
 	if (!state->zzsgp4)
 		state->zzsgp4 = __cspice_allocate_module(sizeof(
 	zzsgp4_state_t), &__zzsgp4_init, sizeof(__zzsgp4_init));
@@ -18,16 +17,18 @@ static zzsgp4_state_t* get_zzsgp4_state() {
 }
 
 /* $Procedure ZZSGP4 ( SGP4 wrapper ) */
-/* Subroutine */ int zzsgp4_0_(int n__, doublereal *geophs, doublereal *elems,
-	 integer *opmode, doublereal *t, doublereal *state)
+/* Subroutine */ int zzsgp4_0_(cspice_t* __global_state, int n__, doublereal *
+	geophs, doublereal *elems, integer *opmode, doublereal *t, doublereal 
+	*state)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *), cos(doublereal), sin(
-	    doublereal), d_mod(doublereal *, doublereal *), sqrt(doublereal), 
-	    atan2(doublereal, doublereal);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *), cos(f2c_state_t*,
+	     doublereal), sin(f2c_state_t*, doublereal), d_mod(f2c_state_t*, 
+	    doublereal *, doublereal *), sqrt(f2c_state_t*, doublereal), 
+	    atan2(f2c_state_t*, doublereal, doublereal);
 
     /* Local variables */
     doublereal eccm;
@@ -63,7 +64,7 @@ static zzsgp4_state_t* get_zzsgp4_state() {
     doublereal sin2u;
     doublereal betal;
     doublereal u;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal eccsq;
     doublereal cnodm;
     doublereal argpm;
@@ -116,13 +117,14 @@ static zzsgp4_state_t* get_zzsgp4_state() {
     doublereal z1;
     doublereal z2;
     doublereal z3;
-    extern doublereal twopi_(void);
+    extern doublereal twopi_(cspice_t*);
     doublereal am;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal ao;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal tc;
-    extern doublereal pi_(void);
+    extern doublereal pi_(cspice_t*);
     doublereal mm;
     doublereal mp;
     doublereal mr;
@@ -193,21 +195,22 @@ static zzsgp4_state_t* get_zzsgp4_state() {
     doublereal sz33;
     doublereal tsi;
     doublereal xlm;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal xmx;
     doublereal xmy;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ttrans_(char *, char *, doublereal *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int zzinil_(doublereal *, integer *, doublereal *,
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ttrans_(cspice_t*, char *, char *, doublereal 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzinil_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzdscm_(cspice_t*, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzdscm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
@@ -229,18 +232,19 @@ static zzsgp4_state_t* get_zzsgp4_state() {
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    extern /* Subroutine */ int zzdspr_(integer *, doublereal *, doublereal *,
+    extern /* Subroutine */ int zzdspr_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, logical *,
 	     doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, logical *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzdsin_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzdsin_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
@@ -258,8 +262,7 @@ static zzsgp4_state_t* get_zzsgp4_state() {
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    extern /* Subroutine */ int zzdspc_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int zzdspc_(cspice_t*, integer *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
@@ -267,12 +270,13 @@ static zzsgp4_state_t* get_zzsgp4_state() {
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal tem5;
 
 
     /* Module state */
-    zzsgp4_state_t* __state = get_zzsgp4_state();
+    zzsgp4_state_t* __state = get_zzsgp4_state(__global_state);
 /* $ Abstract */
 
 /*     Umbrella for the SGP4 initializer and evaluator routines. */
@@ -873,12 +877,12 @@ static zzsgp4_state_t* get_zzsgp4_state() {
 	case 2: goto L_xxsgp4e;
 	}
 
-    chkin_("ZZSGP4", (ftnlen)6);
-    setmsg_("The routine ZZSGP4 is an umbrella for the SGP4 initializer and "
-	    "propagator entry points. Do not call ZZSGP4. It is likely that a"
-	    " programming error has been made.", (ftnlen)160);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZSGP4", (ftnlen)6);
+    chkin_(__global_state, "ZZSGP4", (ftnlen)6);
+    setmsg_(__global_state, "The routine ZZSGP4 is an umbrella for the SGP4 "
+	    "initializer and propagator entry points. Do not call ZZSGP4. It "
+	    "is likely that a programming error has been made.", (ftnlen)160);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZSGP4", (ftnlen)6);
     return 0;
 /* $Procedure XXSGP4I ( SGP4 initializer ) */
 
@@ -1114,10 +1118,10 @@ L_xxsgp4i:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("XXSGP4I", (ftnlen)7);
+    chkin_(__global_state, "XXSGP4I", (ftnlen)7);
 
 /*     Initialize. */
 
@@ -1162,10 +1166,10 @@ L_xxsgp4i:
 /*     reference. */
 
     tvec[0] = elems[9];
-    ttrans_("TDB", "JDUTC", tvec, (ftnlen)3, (ftnlen)5);
+    ttrans_(__global_state, "TDB", "JDUTC", tvec, (ftnlen)3, (ftnlen)5);
     epoch = tvec[0] - 2433281.5;
-    if (failed_()) {
-	chkout_("XXSGP4I", (ftnlen)7);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "XXSGP4I", (ftnlen)7);
 	return 0;
     }
 
@@ -1187,14 +1191,15 @@ L_xxsgp4i:
 /*     from TWOLINE2RVSGP4. */
 
     d__1 = __state->no * tumin;
-    __state->a = pow_dd(&d__1, &__state->c_b10);
+    __state->a = pow_dd(&__global_state->f2c, &d__1, &__state->c_b10);
     if ((d__1 = __state->ecco - 1., abs(d__1)) > 1e-6) {
 	__state->altp = __state->a * (1. - __state->ecco) - 1.;
 	__state->alta = __state->a * (__state->ecco + 1.) - 1.;
     } else {
 	__state->alta = 999999.9;
 	d__1 = __state->no * __state->no;
-	__state->altp = 4. / pow_dd(&d__1, &__state->c_b11) * 2.;
+	__state->altp = 4. / pow_dd(&__global_state->f2c, &d__1, &
+		__state->c_b11) * 2.;
     }
     ss = 78. / __state->er + 1.;
 /* Computing 4th power */
@@ -1210,11 +1215,12 @@ L_xxsgp4i:
     temp4 = 1.5e-12;
     tzero = 0.;
     doinit = TRUE_;
-    zzinil_(geophs, opmode, &__state->ecco, &epoch, &__state->inclo, &
-	    __state->no, &ainv, &ao, &__state->con41, &con42, &cosio, &cosio2,
-	     &eccsq, &omeosq, &posq, &rp, &rteosq, &sinio, &__state->gsto);
-    if (failed_()) {
-	chkout_("XXSGP4I", (ftnlen)7);
+    zzinil_(__global_state, geophs, opmode, &__state->ecco, &epoch, &
+	    __state->inclo, &__state->no, &ainv, &ao, &__state->con41, &con42,
+	     &cosio, &cosio2, &eccsq, &omeosq, &posq, &rp, &rteosq, &sinio, &
+	    __state->gsto);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "XXSGP4I", (ftnlen)7);
 	return 0;
     }
 
@@ -1222,9 +1228,9 @@ L_xxsgp4i:
 /*       calculate correct state values for RP < 1. */
 
     if (rp < 1.) {
-	setmsg_("TLE elements suborbital.", (ftnlen)24);
-	sigerr_("SPICE(SUBORBITAL)", (ftnlen)17);
-	chkout_("XXSGP4I", (ftnlen)7);
+	setmsg_(__global_state, "TLE elements suborbital.", (ftnlen)24);
+	sigerr_(__global_state, "SPICE(SUBORBITAL)", (ftnlen)17);
+	chkout_(__global_state, "XXSGP4I", (ftnlen)7);
 	return 0;
     }
 
@@ -1260,7 +1266,7 @@ L_xxsgp4i:
 /* Computing 4th power */
 	d__1 = tsi, d__1 *= d__1;
 	coef = qzms24 * (d__1 * d__1);
-	coef1 = coef / pow_dd(&psisq, &__state->c_b16);
+	coef1 = coef / pow_dd(&__global_state->f2c, &psisq, &__state->c_b16);
 	cc2 = coef1 * __state->no * (ao * (etasq * 1.5 + 1. + eeta * (etasq + 
 		4.)) + __state->j2 * .375 * tsi / psisq * __state->con41 * (
 		etasq * 3. * (etasq + 8.) + 8.));
@@ -1275,8 +1281,8 @@ L_xxsgp4i:
 		* (etasq * .5 + 2.) + __state->ecco * (etasq * 2. + .5) - 
 		__state->j2 * tsi / (ao * psisq) * (__state->con41 * -3. * (
 		1. - eeta * 2. + etasq * (1.5 - eeta * .5)) + __state->x1mth2 
-		* .75 * (etasq * 2. - eeta * (etasq + 1.)) * cos(
-		__state->argpo * 2.)));
+		* .75 * (etasq * 2. - eeta * (etasq + 1.)) * cos(&
+		__global_state->f2c, __state->argpo * 2.)));
 	__state->cc5 = coef1 * 2. * ao * omeosq * ((etasq + eeta) * 2.75 + 1. 
 		+ eeta * etasq);
 	cosio4 = cosio2 * cosio2;
@@ -1292,7 +1298,8 @@ L_xxsgp4i:
 	__state->nodedot = xhdot1 + (temp2 * .5 * (4. - cosio2 * 19.) + temp3 
 		* 2. * (3. - cosio2 * 7.)) * cosio;
 	xpidot = __state->argpdot + __state->nodedot;
-	__state->omgcof = __state->bstar * cc3 * cos(__state->argpo);
+	__state->omgcof = __state->bstar * cc3 * cos(&__global_state->f2c, 
+		__state->argpo);
 	__state->xmcof = 0.;
 	if (__state->ecco > 1e-4) {
 	    __state->xmcof = -x2o3 * coef * __state->bstar / eeta;
@@ -1311,14 +1318,14 @@ L_xxsgp4i:
 	}
 	__state->aycof = __state->j3oj2 * -.5 * sinio;
 /* Computing 3rd power */
-	d__1 = __state->eta * cos(__state->mo) + 1.;
+	d__1 = __state->eta * cos(&__global_state->f2c, __state->mo) + 1.;
 	__state->delmo = d__1 * (d__1 * d__1);
-	__state->sinmao = sin(__state->mo);
+	__state->sinmao = sin(&__global_state->f2c, __state->mo);
 	__state->x7thm1 = cosio2 * 7. - 1.;
 
 /*           Deep Space Initialization */
 
-	if (twopi_() / __state->no >= 225.) {
+	if (twopi_(__global_state) / __state->no >= 225.) {
 	    __state->dodeep = TRUE_;
 	    __state->dosimp = TRUE_;
 	    tc = 0.;
@@ -1326,9 +1333,9 @@ L_xxsgp4i:
 
 /*               Common. */
 
-	    zzdscm_(&epoch, &__state->ecco, &__state->argpo, &tc, &
-		    __state->inclo, &__state->nodeo, &__state->no, &snodm, &
-		    cnodm, &sinim, &cosim, &sinomm, &cosomm, &day, &
+	    zzdscm_(__global_state, &epoch, &__state->ecco, &__state->argpo, &
+		    tc, &__state->inclo, &__state->nodeo, &__state->no, &
+		    snodm, &cnodm, &sinim, &cosim, &sinomm, &cosomm, &day, &
 		    __state->e3, &__state->ee2, &eccm, &emsq, &gam, &
 		    __state->peo, &__state->pgho, &__state->pho, &
 		    __state->pinco, &__state->plo, &rtemsq, &__state->se2, &
@@ -1346,39 +1353,40 @@ L_xxsgp4i:
 
 /*               Long period perturbations. */
 
-	    zzdspr_(opmode, &__state->e3, &__state->ee2, &__state->peo, &
-		    __state->pgho, &__state->pho, &__state->pinco, &
-		    __state->plo, &__state->se2, &__state->se3, &
-		    __state->sgh2, &__state->sgh3, &__state->sgh4, &
-		    __state->sh2, &__state->sh3, &__state->si2, &__state->si3,
-		     &__state->sl2, &__state->sl3, &__state->sl4, &tzero, &
-		    __state->xgh2, &__state->xgh3, &__state->xgh4, &
-		    __state->xh2, &__state->xh3, &__state->xi2, &__state->xi3,
-		     &__state->xl2, &__state->xl3, &__state->xl4, &
-		    __state->zmol, &__state->zmos, &inclm, &doinit, &
-		    __state->ecco, &__state->inclo, &__state->nodeo, &
-		    __state->argpo, &__state->mo);
+	    zzdspr_(__global_state, opmode, &__state->e3, &__state->ee2, &
+		    __state->peo, &__state->pgho, &__state->pho, &
+		    __state->pinco, &__state->plo, &__state->se2, &
+		    __state->se3, &__state->sgh2, &__state->sgh3, &
+		    __state->sgh4, &__state->sh2, &__state->sh3, &
+		    __state->si2, &__state->si3, &__state->sl2, &__state->sl3,
+		     &__state->sl4, &tzero, &__state->xgh2, &__state->xgh3, &
+		    __state->xgh4, &__state->xh2, &__state->xh3, &
+		    __state->xi2, &__state->xi3, &__state->xl2, &__state->xl3,
+		     &__state->xl4, &__state->zmol, &__state->zmos, &inclm, &
+		    doinit, &__state->ecco, &__state->inclo, &__state->nodeo, 
+		    &__state->argpo, &__state->mo);
 	    argpm = 0.;
 	    nodem = 0.;
 	    mm = 0.;
 
 /*               Initialization */
 
-	    zzdsin_(geophs, &cosim, &emsq, &__state->argpo, &s1, &s2, &s3, &
-		    s4, &s5, &sinim, &ss1, &ss2, &ss3, &ss4, &ss5, &sz1, &sz3,
-		     &sz11, &sz13, &sz21, &sz23, &sz31, &sz33, &tzero, &tc, &
-		    __state->gsto, &__state->mo, &__state->mdot, &__state->no,
-		     &__state->nodeo, &__state->nodedot, &xpidot, &z1, &z3, &
-		    z11, &z13, &z21, &z23, &z31, &z33, &__state->ecco, &eccsq,
-		     &eccm, &argpm, &inclm, &mm, &xn, &nodem, &__state->irez, 
-		    &__state->atime, &__state->d2201, &__state->d2211, &
-		    __state->d3210, &__state->d3222, &__state->d4410, &
-		    __state->d4422, &__state->d5220, &__state->d5232, &
-		    __state->d5421, &__state->d5433, &__state->dedt, &
-		    __state->didt, &__state->dmdt, &dndt, &__state->dnodt, &
-		    __state->domdt, &__state->del1, &__state->del2, &
-		    __state->del3, &__state->xfact, &__state->xlamo, &
-		    __state->xli, &__state->xni);
+	    zzdsin_(__global_state, geophs, &cosim, &emsq, &__state->argpo, &
+		    s1, &s2, &s3, &s4, &s5, &sinim, &ss1, &ss2, &ss3, &ss4, &
+		    ss5, &sz1, &sz3, &sz11, &sz13, &sz21, &sz23, &sz31, &sz33,
+		     &tzero, &tc, &__state->gsto, &__state->mo, &
+		    __state->mdot, &__state->no, &__state->nodeo, &
+		    __state->nodedot, &xpidot, &z1, &z3, &z11, &z13, &z21, &
+		    z23, &z31, &z33, &__state->ecco, &eccsq, &eccm, &argpm, &
+		    inclm, &mm, &xn, &nodem, &__state->irez, &__state->atime, 
+		    &__state->d2201, &__state->d2211, &__state->d3210, &
+		    __state->d3222, &__state->d4410, &__state->d4422, &
+		    __state->d5220, &__state->d5232, &__state->d5421, &
+		    __state->d5433, &__state->dedt, &__state->didt, &
+		    __state->dmdt, &dndt, &__state->dnodt, &__state->domdt, &
+		    __state->del1, &__state->del2, &__state->del3, &
+		    __state->xfact, &__state->xlamo, &__state->xli, &
+		    __state->xni);
 	}
 
 /*           Set variables if not deep space or rp < 220 */
@@ -1399,7 +1407,7 @@ L_xxsgp4i:
 	}
     }
     doinit = FALSE_;
-    chkout_("XXSGP4I", (ftnlen)7);
+    chkout_(__global_state, "XXSGP4I", (ftnlen)7);
     return 0;
 /* $Procedure XXSGP4E ( SGP4 evaluator ) */
 
@@ -1576,10 +1584,10 @@ L_xxsgp4e:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("XXSGP4E", (ftnlen)7);
+    chkin_(__global_state, "XXSGP4E", (ftnlen)7);
 
 /*     Local constants. Keep compiler ok for warnings on */
 /*     uninitialized variables */
@@ -1622,7 +1630,7 @@ L_xxsgp4e:
     if (! __state->dosimp) {
 	delomg = __state->omgcof * *t;
 /* Computing 3rd power */
-	d__1 = __state->eta * cos(xmdf) + 1.;
+	d__1 = __state->eta * cos(&__global_state->f2c, xmdf) + 1.;
 	delm = __state->xmcof * (d__1 * (d__1 * d__1) - __state->delmo);
 	temp = delomg + delm;
 	mm = xmdf + temp;
@@ -1631,7 +1639,8 @@ L_xxsgp4e:
 	t4 = t3 * *t;
 	tempa = tempa - __state->d2 * t2 - __state->d3 * t3 - __state->d4 * 
 		t4;
-	tempe += __state->bstar * __state->cc5 * (sin(mm) - __state->sinmao);
+	tempe += __state->bstar * __state->cc5 * (sin(&__global_state->f2c, 
+		mm) - __state->sinmao);
 	templ = templ + __state->t3cof * t3 + t4 * (__state->t4cof + *t * 
 		__state->t5cof);
     }
@@ -1640,32 +1649,32 @@ L_xxsgp4e:
     inclm = __state->inclo;
     if (__state->dodeep) {
 	tc = *t;
-	zzdspc_(&__state->irez, &__state->d2201, &__state->d2211, &
-		__state->d3210, &__state->d3222, &__state->d4410, &
-		__state->d4422, &__state->d5220, &__state->d5232, &
-		__state->d5421, &__state->d5433, &__state->dedt, &
-		__state->del1, &__state->del2, &__state->del3, &__state->didt,
-		 &__state->dmdt, &__state->dnodt, &__state->domdt, &
-		__state->argpo, &__state->argpdot, t, &tc, &__state->gsto, &
-		__state->xfact, &__state->xlamo, &__state->no, &
-		__state->atime, &eccm, &argpm, &inclm, &__state->xli, &mm, &
+	zzdspc_(__global_state, &__state->irez, &__state->d2201, &
+		__state->d2211, &__state->d3210, &__state->d3222, &
+		__state->d4410, &__state->d4422, &__state->d5220, &
+		__state->d5232, &__state->d5421, &__state->d5433, &
+		__state->dedt, &__state->del1, &__state->del2, &__state->del3,
+		 &__state->didt, &__state->dmdt, &__state->dnodt, &
+		__state->domdt, &__state->argpo, &__state->argpdot, t, &tc, &
+		__state->gsto, &__state->xfact, &__state->xlamo, &__state->no,
+		 &__state->atime, &eccm, &argpm, &inclm, &__state->xli, &mm, &
 		__state->xni, &nodem, &dndt, &xn);
     }
 
 /*     Mean motion less than 0.0. */
 
     if (xn <= 0.) {
-	setmsg_("Mean motion less-than zero. This error may indicate a bad T"
-		"LE set.", (ftnlen)66);
-	sigerr_("SPICE(BADMEANMOTION)", (ftnlen)20);
-	chkout_("XXSGP4E", (ftnlen)7);
+	setmsg_(__global_state, "Mean motion less-than zero. This error may "
+		"indicate a bad TLE set.", (ftnlen)66);
+	sigerr_(__global_state, "SPICE(BADMEANMOTION)", (ftnlen)20);
+	chkout_(__global_state, "XXSGP4E", (ftnlen)7);
 	return 0;
     }
     d__1 = __state->xke / xn;
 /* Computing 2nd power */
     d__2 = tempa;
-    am = pow_dd(&d__1, &x2o3) * (d__2 * d__2);
-    xn = __state->xke / pow_dd(&am, &__state->c_b22);
+    am = pow_dd(&__global_state->f2c, &d__1, &x2o3) * (d__2 * d__2);
+    xn = __state->xke / pow_dd(&__global_state->f2c, &am, &__state->c_b22);
     eccm -= tempe;
 
 /*     Fix tolerance for error recognition. Vallado code used */
@@ -1673,20 +1682,21 @@ L_xxsgp4e:
 /*     an error signal due to roundoff error. */
 
     if (eccm >= 1. || eccm < -.001) {
-	setmsg_("Mean eccentricity value, #, beyond allowed bounds [-0.001,1"
-		".0). This error may indicate a bad TLE set.", (ftnlen)102);
-	errdp_("#", &eccm, (ftnlen)1);
-	sigerr_("SPICE(BADMECCENTRICITY)", (ftnlen)23);
-	chkout_("XXSGP4E", (ftnlen)7);
+	setmsg_(__global_state, "Mean eccentricity value, #, beyond allowed "
+		"bounds [-0.001,1.0). This error may indicate a bad TLE set.", 
+		(ftnlen)102);
+	errdp_(__global_state, "#", &eccm, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADMECCENTRICITY)", (ftnlen)23);
+	chkout_(__global_state, "XXSGP4E", (ftnlen)7);
 	return 0;
     }
     if (am < .95f) {
-	setmsg_("Mean semi-major axis value, #, below allowed minimum of 0.9"
-		"5. This error may indicate a bad TLE set or a decayed orbit.",
-		 (ftnlen)119);
-	errdp_("#", &eccm, (ftnlen)1);
-	sigerr_("SPICE(BADMSEMIMAJOR)", (ftnlen)20);
-	chkout_("XXSGP4E", (ftnlen)7);
+	setmsg_(__global_state, "Mean semi-major axis value, #, below allowe"
+		"d minimum of 0.95. This error may indicate a bad TLE set or "
+		"a decayed orbit.", (ftnlen)119);
+	errdp_(__global_state, "#", &eccm, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADMSEMIMAJOR)", (ftnlen)20);
+	chkout_(__global_state, "XXSGP4E", (ftnlen)7);
 	return 0;
     }
 
@@ -1699,20 +1709,20 @@ L_xxsgp4e:
     xlm = mm + argpm + nodem;
     emsq = eccm * eccm;
     temp = 1. - emsq;
-    d__1 = twopi_();
-    nodem = d_mod(&nodem, &d__1);
-    d__1 = twopi_();
-    argpm = d_mod(&argpm, &d__1);
-    d__1 = twopi_();
-    xlm = d_mod(&xlm, &d__1);
+    d__1 = twopi_(__global_state);
+    nodem = d_mod(&__global_state->f2c, &nodem, &d__1);
+    d__1 = twopi_(__global_state);
+    argpm = d_mod(&__global_state->f2c, &argpm, &d__1);
+    d__1 = twopi_(__global_state);
+    xlm = d_mod(&__global_state->f2c, &xlm, &d__1);
     d__1 = xlm - argpm - nodem;
-    d__2 = twopi_();
-    mm = d_mod(&d__1, &d__2);
+    d__2 = twopi_(__global_state);
+    mm = d_mod(&__global_state->f2c, &d__1, &d__2);
 
 /*     Compute extra mean quantities */
 
-    sinim = sin(inclm);
-    cosim = cos(inclm);
+    sinim = sin(&__global_state->f2c, inclm);
+    cosim = cos(&__global_state->f2c, inclm);
 
 /*     Add lunar-solar periodics */
 
@@ -1727,28 +1737,28 @@ L_xxsgp4e:
 /*     Use deep space perturbation if indicated. */
 
     if (__state->dodeep) {
-	zzdspr_(&__state->svmode, &__state->e3, &__state->ee2, &__state->peo, 
-		&__state->pgho, &__state->pho, &__state->pinco, &__state->plo,
-		 &__state->se2, &__state->se3, &__state->sgh2, &__state->sgh3,
-		 &__state->sgh4, &__state->sh2, &__state->sh3, &__state->si2, 
-		&__state->si3, &__state->sl2, &__state->sl3, &__state->sl4, t,
-		 &__state->xgh2, &__state->xgh3, &__state->xgh4, &
-		__state->xh2, &__state->xh3, &__state->xi2, &__state->xi3, &
-		__state->xl2, &__state->xl3, &__state->xl4, &__state->zmol, &
-		__state->zmos, &__state->inclo, &__state->c_false, &eccp, &
-		xincp, &nodep, &argpp, &mp);
+	zzdspr_(__global_state, &__state->svmode, &__state->e3, &__state->ee2,
+		 &__state->peo, &__state->pgho, &__state->pho, &
+		__state->pinco, &__state->plo, &__state->se2, &__state->se3, &
+		__state->sgh2, &__state->sgh3, &__state->sgh4, &__state->sh2, 
+		&__state->sh3, &__state->si2, &__state->si3, &__state->sl2, &
+		__state->sl3, &__state->sl4, t, &__state->xgh2, &
+		__state->xgh3, &__state->xgh4, &__state->xh2, &__state->xh3, &
+		__state->xi2, &__state->xi3, &__state->xl2, &__state->xl3, &
+		__state->xl4, &__state->zmol, &__state->zmos, &__state->inclo,
+		 &__state->c_false, &eccp, &xincp, &nodep, &argpp, &mp);
 	if (xincp < 0.) {
 	    xincp = -xincp;
-	    nodep += pi_();
-	    argpp -= pi_();
+	    nodep += pi_(__global_state);
+	    argpp -= pi_(__global_state);
 	}
 	if (eccp < 0. || eccp > 1.) {
-	    setmsg_("Perturbed eccentricity value, #, beyond allowed bounds "
-		    "[0,1]. This error may indicate a bad TLE set.", (ftnlen)
-		    100);
-	    errdp_("#", &eccp, (ftnlen)1);
-	    sigerr_("SPICE(BADPECCENTRICITY)", (ftnlen)23);
-	    chkout_("XXSGP4E", (ftnlen)7);
+	    setmsg_(__global_state, "Perturbed eccentricity value, #, beyond"
+		    " allowed bounds [0,1]. This error may indicate a bad TLE"
+		    " set.", (ftnlen)100);
+	    errdp_(__global_state, "#", &eccp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADPECCENTRICITY)", (ftnlen)23);
+	    chkout_(__global_state, "XXSGP4E", (ftnlen)7);
 	    return 0;
 	}
     }
@@ -1756,8 +1766,8 @@ L_xxsgp4e:
 /*     Update for long period periodics if a deep space trajectory. */
 
     if (__state->dodeep) {
-	sinip = sin(xincp);
-	cosip = cos(xincp);
+	sinip = sin(&__global_state->f2c, xincp);
+	cosip = cos(&__global_state->f2c, xincp);
 	__state->aycof = __state->j3oj2 * -.5 * sinip;
 
 /*         sgp4fix for divide by zero with xincp = 180 deg */
@@ -1770,16 +1780,16 @@ L_xxsgp4e:
 		     / temp4;
 	}
     }
-    axnl = eccp * cos(argpp);
+    axnl = eccp * cos(&__global_state->f2c, argpp);
     temp = 1. / (am * (1. - eccp * eccp));
-    aynl = eccp * sin(argpp) + temp * __state->aycof;
+    aynl = eccp * sin(&__global_state->f2c, argpp) + temp * __state->aycof;
     xl = mp + argpp + nodep + temp * __state->xlcof * axnl;
 
 /*     Solve Kepler's equation. */
 
     d__1 = xl - nodep;
-    d__2 = twopi_();
-    u = d_mod(&d__1, &d__2);
+    d__2 = twopi_(__global_state);
+    u = d_mod(&__global_state->f2c, &d__1, &d__2);
     eo1 = u;
     iter = 0;
 
@@ -1789,8 +1799,8 @@ L_xxsgp4e:
     temp = 9999.9;
     while(temp >= 1e-12 && iter < 10) {
 	++iter;
-	sineo1 = sin(eo1);
-	coseo1 = cos(eo1);
+	sineo1 = sin(&__global_state->f2c, eo1);
+	coseo1 = cos(&__global_state->f2c, eo1);
 	tem5 = 1. - coseo1 * axnl - sineo1 * aynl;
 	tem5 = (u - aynl * coseo1 + axnl * sineo1 - eo1) / tem5;
 	temp = abs(tem5);
@@ -1813,19 +1823,20 @@ L_xxsgp4e:
 /*     Error check for semi-latus rectum < 0.0 */
 
     if (pl < 0.) {
-	setmsg_("Semi-latus rectum less-than zero.", (ftnlen)33);
-	sigerr_("SPICE(BADSEMILATUS)", (ftnlen)19);
-	chkout_("XXSGP4E", (ftnlen)7);
+	setmsg_(__global_state, "Semi-latus rectum less-than zero.", (ftnlen)
+		33);
+	sigerr_(__global_state, "SPICE(BADSEMILATUS)", (ftnlen)19);
+	chkout_(__global_state, "XXSGP4E", (ftnlen)7);
 	return 0;
     }
     rl = am * (1. - ecose);
-    rdotl = sqrt(am) * esine / rl;
-    rvdotl = sqrt(pl) / rl;
-    betal = sqrt(1. - el2);
+    rdotl = sqrt(&__global_state->f2c, am) * esine / rl;
+    rvdotl = sqrt(&__global_state->f2c, pl) / rl;
+    betal = sqrt(&__global_state->f2c, 1. - el2);
     temp = esine / (betal + 1.);
     sinu = am / rl * (sineo1 - aynl - axnl * temp);
     cosu = am / rl * (coseo1 - axnl + aynl * temp);
-    su = atan2(sinu, cosu);
+    su = atan2(&__global_state->f2c, sinu, cosu);
     sin2u = (cosu + cosu) * sinu;
     cos2u = 1. - sinu * 2. * sinu;
     temp = 1. / pl;
@@ -1851,12 +1862,12 @@ L_xxsgp4e:
 
 /*     Orientation vectors. */
 
-    sinsu = sin(su);
-    cossu = cos(su);
-    snod = sin(xnode);
-    cnod = cos(xnode);
-    sini = sin(xinc);
-    cosi = cos(xinc);
+    sinsu = sin(&__global_state->f2c, su);
+    cossu = cos(&__global_state->f2c, su);
+    snod = sin(&__global_state->f2c, xnode);
+    cnod = cos(&__global_state->f2c, xnode);
+    sini = sin(&__global_state->f2c, xinc);
+    cosi = cos(&__global_state->f2c, xinc);
     xmx = -snod * cosi;
     xmy = cnod * cosi;
     ux = xmx * sinsu + cnod * cossu;
@@ -1881,29 +1892,30 @@ L_xxsgp4e:
 /*     The result may be physically invalid. */
 
     if (mr < 1.) {
-	setmsg_("Satellite has decayed.", (ftnlen)22);
-	sigerr_("SPICE(ORBITDECAY)", (ftnlen)17);
-	chkout_("XXSGP4E", (ftnlen)7);
+	setmsg_(__global_state, "Satellite has decayed.", (ftnlen)22);
+	sigerr_(__global_state, "SPICE(ORBITDECAY)", (ftnlen)17);
+	chkout_(__global_state, "XXSGP4E", (ftnlen)7);
 	return 0;
     }
-    chkout_("XXSGP4E", (ftnlen)7);
+    chkout_(__global_state, "XXSGP4E", (ftnlen)7);
     return 0;
 } /* zzsgp4_ */
 
-/* Subroutine */ int zzsgp4_(doublereal *geophs, doublereal *elems, integer *
-	opmode, doublereal *t, doublereal *state)
+/* Subroutine */ int zzsgp4_(cspice_t* __global_state, doublereal *geophs, 
+	doublereal *elems, integer *opmode, doublereal *t, doublereal *state)
 {
     return zzsgp4_0_(0, geophs, elems, opmode, t, state);
     }
 
-/* Subroutine */ int xxsgp4i_(doublereal *geophs, doublereal *elems, integer *
-	opmode)
+/* Subroutine */ int xxsgp4i_(cspice_t* __global_state, doublereal *geophs, 
+	doublereal *elems, integer *opmode)
 {
     return zzsgp4_0_(1, geophs, elems, opmode, (doublereal *)0, (doublereal *)
 	    0);
     }
 
-/* Subroutine */ int xxsgp4e_(doublereal *t, doublereal *state)
+/* Subroutine */ int xxsgp4e_(cspice_t* __global_state, doublereal *t, 
+	doublereal *state)
 {
     return zzsgp4_0_(2, (doublereal *)0, (doublereal *)0, (integer *)0, t, 
 	    state);

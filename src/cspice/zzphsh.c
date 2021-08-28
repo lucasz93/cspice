@@ -8,8 +8,7 @@
 
 
 extern zzphsh_init_t __zzphsh_init;
-static zzphsh_state_t* get_zzphsh_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzphsh_state_t* get_zzphsh_state(cspice_t* state) {
 	if (!state->zzphsh)
 		state->zzphsh = __cspice_allocate_module(sizeof(
 	zzphsh_state_t), &__zzphsh_init, sizeof(__zzphsh_init));
@@ -18,8 +17,8 @@ static zzphsh_state_t* get_zzphsh_state() {
 }
 
 /* $Procedure ZZPHSH ( Private---kernel POOL hash function umbrella ) */
-integer zzphsh_0_(int n__, char *word, integer *m, integer *m2, ftnlen 
-	word_len)
+integer zzphsh_0_(cspice_t* __global_state, int n__, char *word, integer *m, 
+	integer *m2, ftnlen word_len)
 {
     /* Initialized data */
 
@@ -28,19 +27,21 @@ integer zzphsh_0_(int n__, char *word, integer *m, integer *m2, ftnlen
     integer ret_val, i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), i_len(char *, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), i_len(
+	    f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern integer intmax_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern integer intmax_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
     /* Module state */
-    zzphsh_state_t* __state = get_zzphsh_state();
+    zzphsh_state_t* __state = get_zzphsh_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -357,266 +358,334 @@ L_zzshsh:
 	__state->first = FALSE_;
 	__state->base = 68;
 	__state->blank = ' ';
-	__state->maxdiv = intmax_() / __state->base - 1;
+	__state->maxdiv = intmax_(__global_state) / __state->base - 1;
 	for (__state->i__ = 0; __state->i__ <= 128; ++__state->i__) {
 	    __state->val[(i__1 = __state->i__) < 129 && 0 <= i__1 ? i__1 : 
-		    s_rnge("val", i__1, "zzphsh_", (ftnlen)360)] = 0;
+		    s_rnge(&__global_state->f2c, "val", i__1, "zzphsh_", (
+		    ftnlen)360)] = 0;
 	}
-	__state->val[(i__1 = '0') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)363)] = 1;
-	__state->val[(i__1 = '1') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)364)] = 2;
-	__state->val[(i__1 = '2') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)365)] = 3;
-	__state->val[(i__1 = '3') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)366)] = 4;
-	__state->val[(i__1 = '4') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)367)] = 5;
-	__state->val[(i__1 = '5') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)368)] = 6;
-	__state->val[(i__1 = '6') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)369)] = 7;
-	__state->val[(i__1 = '7') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)370)] = 8;
-	__state->val[(i__1 = '8') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)371)] = 9;
-	__state->val[(i__1 = '9') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)372)] = 10;
-	__state->val[(i__1 = 'A') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)373)] = 11;
-	__state->val[(i__1 = 'B') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)374)] = 12;
-	__state->val[(i__1 = 'C') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)375)] = 13;
-	__state->val[(i__1 = 'D') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)376)] = 14;
-	__state->val[(i__1 = 'E') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)377)] = 15;
-	__state->val[(i__1 = 'F') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)378)] = 16;
-	__state->val[(i__1 = 'G') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)379)] = 17;
-	__state->val[(i__1 = 'H') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)380)] = 18;
-	__state->val[(i__1 = 'I') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)381)] = 19;
-	__state->val[(i__1 = 'J') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)382)] = 20;
-	__state->val[(i__1 = 'K') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)383)] = 21;
-	__state->val[(i__1 = 'L') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)384)] = 22;
-	__state->val[(i__1 = 'M') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)385)] = 23;
-	__state->val[(i__1 = 'N') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)386)] = 24;
-	__state->val[(i__1 = 'O') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)387)] = 25;
-	__state->val[(i__1 = 'P') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)388)] = 26;
-	__state->val[(i__1 = 'Q') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)389)] = 27;
-	__state->val[(i__1 = 'R') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)390)] = 28;
-	__state->val[(i__1 = 'S') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)391)] = 29;
-	__state->val[(i__1 = 'T') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)392)] = 30;
-	__state->val[(i__1 = 'U') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)393)] = 31;
-	__state->val[(i__1 = 'V') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)394)] = 32;
-	__state->val[(i__1 = 'W') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)395)] = 33;
-	__state->val[(i__1 = 'X') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)396)] = 34;
-	__state->val[(i__1 = 'Y') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)397)] = 35;
-	__state->val[(i__1 = 'Z') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)398)] = 36;
-	__state->val[(i__1 = '-') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)399)] = 37;
-	__state->val[(i__1 = '_') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)400)] = 38;
-	__state->val[(i__1 = '.') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)401)] = 39;
-	__state->val[(i__1 = '/') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)402)] = 40;
-	__state->val[(i__1 = '!') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)403)] = 41;
-	__state->val[(i__1 = '@') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)404)] = 42;
-	__state->val[(i__1 = '#') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)405)] = 43;
-	__state->val[(i__1 = '$') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)406)] = 44;
-	__state->val[(i__1 = '%') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)407)] = 45;
-	__state->val[(i__1 = '^') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)408)] = 46;
-	__state->val[(i__1 = '&') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)409)] = 47;
-	__state->val[(i__1 = '*') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)410)] = 48;
-	__state->val[(i__1 = '(') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)411)] = 49;
-	__state->val[(i__1 = ')') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)412)] = 50;
-	__state->val[(i__1 = '+') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)413)] = 51;
-	__state->val[(i__1 = '=') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)414)] = 52;
-	__state->val[(i__1 = '[') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)415)] = 53;
-	__state->val[(i__1 = '{') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)416)] = 54;
-	__state->val[(i__1 = ']') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)417)] = 55;
-	__state->val[(i__1 = '}') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)418)] = 56;
-	__state->val[(i__1 = '|') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)419)] = 57;
+	__state->val[(i__1 = '0') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)363)] = 
+		1;
+	__state->val[(i__1 = '1') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)364)] = 
+		2;
+	__state->val[(i__1 = '2') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)365)] = 
+		3;
+	__state->val[(i__1 = '3') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)366)] = 
+		4;
+	__state->val[(i__1 = '4') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)367)] = 
+		5;
+	__state->val[(i__1 = '5') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)368)] = 
+		6;
+	__state->val[(i__1 = '6') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)369)] = 
+		7;
+	__state->val[(i__1 = '7') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)370)] = 
+		8;
+	__state->val[(i__1 = '8') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)371)] = 
+		9;
+	__state->val[(i__1 = '9') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)372)] = 
+		10;
+	__state->val[(i__1 = 'A') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)373)] = 
+		11;
+	__state->val[(i__1 = 'B') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)374)] = 
+		12;
+	__state->val[(i__1 = 'C') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)375)] = 
+		13;
+	__state->val[(i__1 = 'D') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)376)] = 
+		14;
+	__state->val[(i__1 = 'E') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)377)] = 
+		15;
+	__state->val[(i__1 = 'F') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)378)] = 
+		16;
+	__state->val[(i__1 = 'G') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)379)] = 
+		17;
+	__state->val[(i__1 = 'H') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)380)] = 
+		18;
+	__state->val[(i__1 = 'I') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)381)] = 
+		19;
+	__state->val[(i__1 = 'J') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)382)] = 
+		20;
+	__state->val[(i__1 = 'K') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)383)] = 
+		21;
+	__state->val[(i__1 = 'L') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)384)] = 
+		22;
+	__state->val[(i__1 = 'M') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)385)] = 
+		23;
+	__state->val[(i__1 = 'N') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)386)] = 
+		24;
+	__state->val[(i__1 = 'O') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)387)] = 
+		25;
+	__state->val[(i__1 = 'P') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)388)] = 
+		26;
+	__state->val[(i__1 = 'Q') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)389)] = 
+		27;
+	__state->val[(i__1 = 'R') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)390)] = 
+		28;
+	__state->val[(i__1 = 'S') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)391)] = 
+		29;
+	__state->val[(i__1 = 'T') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)392)] = 
+		30;
+	__state->val[(i__1 = 'U') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)393)] = 
+		31;
+	__state->val[(i__1 = 'V') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)394)] = 
+		32;
+	__state->val[(i__1 = 'W') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)395)] = 
+		33;
+	__state->val[(i__1 = 'X') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)396)] = 
+		34;
+	__state->val[(i__1 = 'Y') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)397)] = 
+		35;
+	__state->val[(i__1 = 'Z') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)398)] = 
+		36;
+	__state->val[(i__1 = '-') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)399)] = 
+		37;
+	__state->val[(i__1 = '_') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)400)] = 
+		38;
+	__state->val[(i__1 = '.') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)401)] = 
+		39;
+	__state->val[(i__1 = '/') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)402)] = 
+		40;
+	__state->val[(i__1 = '!') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)403)] = 
+		41;
+	__state->val[(i__1 = '@') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)404)] = 
+		42;
+	__state->val[(i__1 = '#') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)405)] = 
+		43;
+	__state->val[(i__1 = '$') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)406)] = 
+		44;
+	__state->val[(i__1 = '%') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)407)] = 
+		45;
+	__state->val[(i__1 = '^') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)408)] = 
+		46;
+	__state->val[(i__1 = '&') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)409)] = 
+		47;
+	__state->val[(i__1 = '*') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)410)] = 
+		48;
+	__state->val[(i__1 = '(') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)411)] = 
+		49;
+	__state->val[(i__1 = ')') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)412)] = 
+		50;
+	__state->val[(i__1 = '+') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)413)] = 
+		51;
+	__state->val[(i__1 = '=') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)414)] = 
+		52;
+	__state->val[(i__1 = '[') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)415)] = 
+		53;
+	__state->val[(i__1 = '{') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)416)] = 
+		54;
+	__state->val[(i__1 = ']') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)417)] = 
+		55;
+	__state->val[(i__1 = '}') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)418)] = 
+		56;
+	__state->val[(i__1 = '|') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)419)] = 
+		57;
 	__state->val[92] = 58;
-	__state->val[(i__1 = ':') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)421)] = 59;
-	__state->val[(i__1 = ';') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)422)] = 60;
-	__state->val[(i__1 = '<') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)423)] = 61;
-	__state->val[(i__1 = ',') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)424)] = 62;
-	__state->val[(i__1 = '>') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)425)] = 63;
-	__state->val[(i__1 = '?') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)426)] = 64;
+	__state->val[(i__1 = ':') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)421)] = 
+		59;
+	__state->val[(i__1 = ';') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)422)] = 
+		60;
+	__state->val[(i__1 = '<') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)423)] = 
+		61;
+	__state->val[(i__1 = ',') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)424)] = 
+		62;
+	__state->val[(i__1 = '>') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)425)] = 
+		63;
+	__state->val[(i__1 = '?') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)426)] = 
+		64;
 
 /*        Note, ICHAR('''') returns the ASCII value for the single */
 /*        quote -> '. */
 
-	__state->val[(i__1 = '\'') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)432)] = 65;
-	__state->val[(i__1 = '"') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)433)] = 66;
-	__state->val[(i__1 = '`') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)434)] = 67;
-	__state->val[(i__1 = '~') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)435)] = 68;
-	__state->val[(i__1 = 'a') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)437)] = __state->val[(i__2 = 'A') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)437)];
-	__state->val[(i__1 = 'b') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)438)] = __state->val[(i__2 = 'B') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)438)];
-	__state->val[(i__1 = 'c') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)439)] = __state->val[(i__2 = 'C') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)439)];
-	__state->val[(i__1 = 'd') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)440)] = __state->val[(i__2 = 'D') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)440)];
-	__state->val[(i__1 = 'e') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)441)] = __state->val[(i__2 = 'E') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)441)];
-	__state->val[(i__1 = 'f') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)442)] = __state->val[(i__2 = 'F') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)442)];
-	__state->val[(i__1 = 'g') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)443)] = __state->val[(i__2 = 'G') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)443)];
-	__state->val[(i__1 = 'h') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)444)] = __state->val[(i__2 = 'H') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)444)];
-	__state->val[(i__1 = 'i') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)445)] = __state->val[(i__2 = 'I') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)445)];
-	__state->val[(i__1 = 'j') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)446)] = __state->val[(i__2 = 'J') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)446)];
-	__state->val[(i__1 = 'k') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)447)] = __state->val[(i__2 = 'K') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)447)];
-	__state->val[(i__1 = 'l') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)448)] = __state->val[(i__2 = 'L') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)448)];
-	__state->val[(i__1 = 'm') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)449)] = __state->val[(i__2 = 'M') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)449)];
-	__state->val[(i__1 = 'n') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)450)] = __state->val[(i__2 = 'N') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)450)];
-	__state->val[(i__1 = 'o') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)451)] = __state->val[(i__2 = 'O') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)451)];
-	__state->val[(i__1 = 'p') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)452)] = __state->val[(i__2 = 'P') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)452)];
-	__state->val[(i__1 = 'q') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)453)] = __state->val[(i__2 = 'Q') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)453)];
-	__state->val[(i__1 = 'r') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)454)] = __state->val[(i__2 = 'R') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)454)];
-	__state->val[(i__1 = 's') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)455)] = __state->val[(i__2 = 'S') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)455)];
-	__state->val[(i__1 = 't') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)456)] = __state->val[(i__2 = 'T') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)456)];
-	__state->val[(i__1 = 'u') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)457)] = __state->val[(i__2 = 'U') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)457)];
-	__state->val[(i__1 = 'v') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)458)] = __state->val[(i__2 = 'V') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)458)];
-	__state->val[(i__1 = 'w') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)459)] = __state->val[(i__2 = 'W') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)459)];
-	__state->val[(i__1 = 'x') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)460)] = __state->val[(i__2 = 'X') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)460)];
-	__state->val[(i__1 = 'y') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)461)] = __state->val[(i__2 = 'Y') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)461)];
-	__state->val[(i__1 = 'z') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)462)] = __state->val[(i__2 = 'Z') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)462)];
+	__state->val[(i__1 = '\'') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)432)] = 
+		65;
+	__state->val[(i__1 = '"') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)433)] = 
+		66;
+	__state->val[(i__1 = '`') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)434)] = 
+		67;
+	__state->val[(i__1 = '~') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)435)] = 
+		68;
+	__state->val[(i__1 = 'a') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)437)] = 
+		__state->val[(i__2 = 'A') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)437)];
+	__state->val[(i__1 = 'b') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)438)] = 
+		__state->val[(i__2 = 'B') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)438)];
+	__state->val[(i__1 = 'c') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)439)] = 
+		__state->val[(i__2 = 'C') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)439)];
+	__state->val[(i__1 = 'd') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)440)] = 
+		__state->val[(i__2 = 'D') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)440)];
+	__state->val[(i__1 = 'e') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)441)] = 
+		__state->val[(i__2 = 'E') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)441)];
+	__state->val[(i__1 = 'f') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)442)] = 
+		__state->val[(i__2 = 'F') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)442)];
+	__state->val[(i__1 = 'g') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)443)] = 
+		__state->val[(i__2 = 'G') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)443)];
+	__state->val[(i__1 = 'h') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)444)] = 
+		__state->val[(i__2 = 'H') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)444)];
+	__state->val[(i__1 = 'i') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)445)] = 
+		__state->val[(i__2 = 'I') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)445)];
+	__state->val[(i__1 = 'j') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)446)] = 
+		__state->val[(i__2 = 'J') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)446)];
+	__state->val[(i__1 = 'k') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)447)] = 
+		__state->val[(i__2 = 'K') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)447)];
+	__state->val[(i__1 = 'l') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)448)] = 
+		__state->val[(i__2 = 'L') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)448)];
+	__state->val[(i__1 = 'm') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)449)] = 
+		__state->val[(i__2 = 'M') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)449)];
+	__state->val[(i__1 = 'n') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)450)] = 
+		__state->val[(i__2 = 'N') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)450)];
+	__state->val[(i__1 = 'o') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)451)] = 
+		__state->val[(i__2 = 'O') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)451)];
+	__state->val[(i__1 = 'p') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)452)] = 
+		__state->val[(i__2 = 'P') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)452)];
+	__state->val[(i__1 = 'q') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)453)] = 
+		__state->val[(i__2 = 'Q') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)453)];
+	__state->val[(i__1 = 'r') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)454)] = 
+		__state->val[(i__2 = 'R') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)454)];
+	__state->val[(i__1 = 's') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)455)] = 
+		__state->val[(i__2 = 'S') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)455)];
+	__state->val[(i__1 = 't') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)456)] = 
+		__state->val[(i__2 = 'T') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)456)];
+	__state->val[(i__1 = 'u') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)457)] = 
+		__state->val[(i__2 = 'U') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)457)];
+	__state->val[(i__1 = 'v') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)458)] = 
+		__state->val[(i__2 = 'V') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)458)];
+	__state->val[(i__1 = 'w') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)459)] = 
+		__state->val[(i__2 = 'W') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)459)];
+	__state->val[(i__1 = 'x') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)460)] = 
+		__state->val[(i__2 = 'X') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)460)];
+	__state->val[(i__1 = 'y') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)461)] = 
+		__state->val[(i__2 = 'Y') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)461)];
+	__state->val[(i__1 = 'z') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)462)] = 
+		__state->val[(i__2 = 'Z') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)462)];
     }
 
 /*     Check and save divisor. */
 
     if (*m <= 0 || *m > __state->maxdiv) {
-	chkin_("ZZSHSH", (ftnlen)6);
-	setmsg_("The input hash function divisor was not in the allowed rang"
-		"e from 1 to #. It was #.", (ftnlen)83);
-	errint_("#", &__state->maxdiv, (ftnlen)1);
-	errint_("#", m, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDIVISOR)", (ftnlen)21);
-	chkout_("ZZSHSH", (ftnlen)6);
+	chkin_(__global_state, "ZZSHSH", (ftnlen)6);
+	setmsg_(__global_state, "The input hash function divisor was not in "
+		"the allowed range from 1 to #. It was #.", (ftnlen)83);
+	errint_(__global_state, "#", &__state->maxdiv, (ftnlen)1);
+	errint_(__global_state, "#", m, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDIVISOR)", (ftnlen)21);
+	chkout_(__global_state, "ZZSHSH", (ftnlen)6);
 	return ret_val;
     }
     __state->divisr = *m;
@@ -753,18 +822,19 @@ L_zzhash:
 
     if (__state->divisr == -1) {
 	ret_val = 0;
-	chkin_("ZZHASH", (ftnlen)6);
-	setmsg_("The ZZHASH function was called before the POOL hash paramet"
-		"ers were initialized by a call to ZZSHSH.", (ftnlen)100);
-	sigerr_("SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
-	chkout_("ZZHASH", (ftnlen)6);
+	chkin_(__global_state, "ZZHASH", (ftnlen)6);
+	setmsg_(__global_state, "The ZZHASH function was called before the P"
+		"OOL hash parameters were initialized by a call to ZZSHSH.", (
+		ftnlen)100);
+	sigerr_(__global_state, "SPICE(CALLEDOUTOFORDER)", (ftnlen)23);
+	chkout_(__global_state, "ZZHASH", (ftnlen)6);
 	return ret_val;
     }
 
 /*     Compute hash value for the input string. */
 
     __state->f = 0;
-    __state->length = i_len(word, word_len);
+    __state->length = i_len(&__global_state->f2c, word, word_len);
     i__1 = __state->length;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	if (*(unsigned char *)&word[__state->i__ - 1] == __state->blank) {
@@ -773,20 +843,22 @@ L_zzhash:
 /*           A negative value for ZZHASH indicates a serious problem. */
 
 	    if (ret_val < 0) {
-		chkin_("ZZHASH", (ftnlen)6);
-		setmsg_("The ZZHASH function calculated a negative value for"
-			" string $1. Contact NAIF.", (ftnlen)76);
-		errch_("$1", word, (ftnlen)2, word_len);
-		sigerr_("SPICE(NEGATIVEHASHVALUE1)", (ftnlen)25);
-		chkout_("ZZHASH", (ftnlen)6);
+		chkin_(__global_state, "ZZHASH", (ftnlen)6);
+		setmsg_(__global_state, "The ZZHASH function calculated a ne"
+			"gative value for string $1. Contact NAIF.", (ftnlen)
+			76);
+		errch_(__global_state, "$1", word, (ftnlen)2, word_len);
+		sigerr_(__global_state, "SPICE(NEGATIVEHASHVALUE1)", (ftnlen)
+			25);
+		chkout_(__global_state, "ZZHASH", (ftnlen)6);
 	    }
 	    return ret_val;
 	}
 /* Computing MIN */
 	i__3 = 128, i__4 = *(unsigned char *)&word[__state->i__ - 1];
 	__state->f = __state->val[(i__2 = min(i__3,i__4)) < 129 && 0 <= i__2 ?
-		 i__2 : s_rnge("val", i__2, "zzphsh_", (ftnlen)664)] + 
-		__state->f * __state->base;
+		 i__2 : s_rnge(&__global_state->f2c, "val", i__2, "zzphsh_", (
+		ftnlen)664)] + __state->f * __state->base;
 	__state->f %= __state->divisr;
     }
     ret_val = __state->f * __state->base % __state->divisr + 1;
@@ -794,12 +866,12 @@ L_zzhash:
 /*     A negative value for ZZHASH indicates a serious problem. */
 
     if (ret_val < 0) {
-	chkin_("ZZHASH", (ftnlen)6);
-	setmsg_("The ZZHASH function calculated a negative value for string "
-		"$1. Contact NAIF.", (ftnlen)76);
-	errch_("$1", word, (ftnlen)2, word_len);
-	sigerr_("SPICE(NEGATIVEHASHVALUE2)", (ftnlen)25);
-	chkout_("ZZHASH", (ftnlen)6);
+	chkin_(__global_state, "ZZHASH", (ftnlen)6);
+	setmsg_(__global_state, "The ZZHASH function calculated a negative v"
+		"alue for string $1. Contact NAIF.", (ftnlen)76);
+	errch_(__global_state, "$1", word, (ftnlen)2, word_len);
+	sigerr_(__global_state, "SPICE(NEGATIVEHASHVALUE2)", (ftnlen)25);
+	chkout_(__global_state, "ZZHASH", (ftnlen)6);
     }
     return ret_val;
 /* $Procedure ZZHASH2 ( Private---Arbitrary divisor hash function ) */
@@ -946,274 +1018,342 @@ L_zzhash2:
 	__state->first = FALSE_;
 	__state->base = 68;
 	__state->blank = ' ';
-	__state->maxdiv = intmax_() / __state->base - 1;
+	__state->maxdiv = intmax_(__global_state) / __state->base - 1;
 	for (__state->i__ = 0; __state->i__ <= 128; ++__state->i__) {
 	    __state->val[(i__1 = __state->i__) < 129 && 0 <= i__1 ? i__1 : 
-		    s_rnge("val", i__1, "zzphsh_", (ftnlen)841)] = 0;
+		    s_rnge(&__global_state->f2c, "val", i__1, "zzphsh_", (
+		    ftnlen)841)] = 0;
 	}
-	__state->val[(i__1 = '0') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)844)] = 1;
-	__state->val[(i__1 = '1') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)845)] = 2;
-	__state->val[(i__1 = '2') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)846)] = 3;
-	__state->val[(i__1 = '3') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)847)] = 4;
-	__state->val[(i__1 = '4') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)848)] = 5;
-	__state->val[(i__1 = '5') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)849)] = 6;
-	__state->val[(i__1 = '6') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)850)] = 7;
-	__state->val[(i__1 = '7') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)851)] = 8;
-	__state->val[(i__1 = '8') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)852)] = 9;
-	__state->val[(i__1 = '9') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)853)] = 10;
-	__state->val[(i__1 = 'A') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)854)] = 11;
-	__state->val[(i__1 = 'B') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)855)] = 12;
-	__state->val[(i__1 = 'C') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)856)] = 13;
-	__state->val[(i__1 = 'D') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)857)] = 14;
-	__state->val[(i__1 = 'E') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)858)] = 15;
-	__state->val[(i__1 = 'F') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)859)] = 16;
-	__state->val[(i__1 = 'G') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)860)] = 17;
-	__state->val[(i__1 = 'H') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)861)] = 18;
-	__state->val[(i__1 = 'I') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)862)] = 19;
-	__state->val[(i__1 = 'J') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)863)] = 20;
-	__state->val[(i__1 = 'K') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)864)] = 21;
-	__state->val[(i__1 = 'L') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)865)] = 22;
-	__state->val[(i__1 = 'M') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)866)] = 23;
-	__state->val[(i__1 = 'N') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)867)] = 24;
-	__state->val[(i__1 = 'O') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)868)] = 25;
-	__state->val[(i__1 = 'P') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)869)] = 26;
-	__state->val[(i__1 = 'Q') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)870)] = 27;
-	__state->val[(i__1 = 'R') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)871)] = 28;
-	__state->val[(i__1 = 'S') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)872)] = 29;
-	__state->val[(i__1 = 'T') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)873)] = 30;
-	__state->val[(i__1 = 'U') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)874)] = 31;
-	__state->val[(i__1 = 'V') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)875)] = 32;
-	__state->val[(i__1 = 'W') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)876)] = 33;
-	__state->val[(i__1 = 'X') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)877)] = 34;
-	__state->val[(i__1 = 'Y') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)878)] = 35;
-	__state->val[(i__1 = 'Z') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)879)] = 36;
-	__state->val[(i__1 = '-') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)880)] = 37;
-	__state->val[(i__1 = '_') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)881)] = 38;
-	__state->val[(i__1 = '.') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)882)] = 39;
-	__state->val[(i__1 = '/') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)883)] = 40;
-	__state->val[(i__1 = '!') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)884)] = 41;
-	__state->val[(i__1 = '@') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)885)] = 42;
-	__state->val[(i__1 = '#') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)886)] = 43;
-	__state->val[(i__1 = '$') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)887)] = 44;
-	__state->val[(i__1 = '%') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)888)] = 45;
-	__state->val[(i__1 = '^') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)889)] = 46;
-	__state->val[(i__1 = '&') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)890)] = 47;
-	__state->val[(i__1 = '*') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)891)] = 48;
-	__state->val[(i__1 = '(') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)892)] = 49;
-	__state->val[(i__1 = ')') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)893)] = 50;
-	__state->val[(i__1 = '+') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)894)] = 51;
-	__state->val[(i__1 = '=') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)895)] = 52;
-	__state->val[(i__1 = '[') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)896)] = 53;
-	__state->val[(i__1 = '{') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)897)] = 54;
-	__state->val[(i__1 = ']') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)898)] = 55;
-	__state->val[(i__1 = '}') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)899)] = 56;
-	__state->val[(i__1 = '|') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)900)] = 57;
+	__state->val[(i__1 = '0') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)844)] = 
+		1;
+	__state->val[(i__1 = '1') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)845)] = 
+		2;
+	__state->val[(i__1 = '2') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)846)] = 
+		3;
+	__state->val[(i__1 = '3') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)847)] = 
+		4;
+	__state->val[(i__1 = '4') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)848)] = 
+		5;
+	__state->val[(i__1 = '5') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)849)] = 
+		6;
+	__state->val[(i__1 = '6') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)850)] = 
+		7;
+	__state->val[(i__1 = '7') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)851)] = 
+		8;
+	__state->val[(i__1 = '8') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)852)] = 
+		9;
+	__state->val[(i__1 = '9') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)853)] = 
+		10;
+	__state->val[(i__1 = 'A') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)854)] = 
+		11;
+	__state->val[(i__1 = 'B') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)855)] = 
+		12;
+	__state->val[(i__1 = 'C') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)856)] = 
+		13;
+	__state->val[(i__1 = 'D') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)857)] = 
+		14;
+	__state->val[(i__1 = 'E') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)858)] = 
+		15;
+	__state->val[(i__1 = 'F') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)859)] = 
+		16;
+	__state->val[(i__1 = 'G') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)860)] = 
+		17;
+	__state->val[(i__1 = 'H') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)861)] = 
+		18;
+	__state->val[(i__1 = 'I') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)862)] = 
+		19;
+	__state->val[(i__1 = 'J') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)863)] = 
+		20;
+	__state->val[(i__1 = 'K') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)864)] = 
+		21;
+	__state->val[(i__1 = 'L') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)865)] = 
+		22;
+	__state->val[(i__1 = 'M') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)866)] = 
+		23;
+	__state->val[(i__1 = 'N') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)867)] = 
+		24;
+	__state->val[(i__1 = 'O') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)868)] = 
+		25;
+	__state->val[(i__1 = 'P') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)869)] = 
+		26;
+	__state->val[(i__1 = 'Q') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)870)] = 
+		27;
+	__state->val[(i__1 = 'R') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)871)] = 
+		28;
+	__state->val[(i__1 = 'S') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)872)] = 
+		29;
+	__state->val[(i__1 = 'T') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)873)] = 
+		30;
+	__state->val[(i__1 = 'U') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)874)] = 
+		31;
+	__state->val[(i__1 = 'V') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)875)] = 
+		32;
+	__state->val[(i__1 = 'W') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)876)] = 
+		33;
+	__state->val[(i__1 = 'X') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)877)] = 
+		34;
+	__state->val[(i__1 = 'Y') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)878)] = 
+		35;
+	__state->val[(i__1 = 'Z') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)879)] = 
+		36;
+	__state->val[(i__1 = '-') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)880)] = 
+		37;
+	__state->val[(i__1 = '_') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)881)] = 
+		38;
+	__state->val[(i__1 = '.') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)882)] = 
+		39;
+	__state->val[(i__1 = '/') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)883)] = 
+		40;
+	__state->val[(i__1 = '!') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)884)] = 
+		41;
+	__state->val[(i__1 = '@') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)885)] = 
+		42;
+	__state->val[(i__1 = '#') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)886)] = 
+		43;
+	__state->val[(i__1 = '$') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)887)] = 
+		44;
+	__state->val[(i__1 = '%') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)888)] = 
+		45;
+	__state->val[(i__1 = '^') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)889)] = 
+		46;
+	__state->val[(i__1 = '&') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)890)] = 
+		47;
+	__state->val[(i__1 = '*') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)891)] = 
+		48;
+	__state->val[(i__1 = '(') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)892)] = 
+		49;
+	__state->val[(i__1 = ')') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)893)] = 
+		50;
+	__state->val[(i__1 = '+') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)894)] = 
+		51;
+	__state->val[(i__1 = '=') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)895)] = 
+		52;
+	__state->val[(i__1 = '[') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)896)] = 
+		53;
+	__state->val[(i__1 = '{') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)897)] = 
+		54;
+	__state->val[(i__1 = ']') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)898)] = 
+		55;
+	__state->val[(i__1 = '}') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)899)] = 
+		56;
+	__state->val[(i__1 = '|') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)900)] = 
+		57;
 	__state->val[92] = 58;
-	__state->val[(i__1 = ':') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)902)] = 59;
-	__state->val[(i__1 = ';') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)903)] = 60;
-	__state->val[(i__1 = '<') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)904)] = 61;
-	__state->val[(i__1 = ',') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)905)] = 62;
-	__state->val[(i__1 = '>') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)906)] = 63;
-	__state->val[(i__1 = '?') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)907)] = 64;
+	__state->val[(i__1 = ':') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)902)] = 
+		59;
+	__state->val[(i__1 = ';') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)903)] = 
+		60;
+	__state->val[(i__1 = '<') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)904)] = 
+		61;
+	__state->val[(i__1 = ',') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)905)] = 
+		62;
+	__state->val[(i__1 = '>') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)906)] = 
+		63;
+	__state->val[(i__1 = '?') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)907)] = 
+		64;
 
 /*        Note, ICHAR('''') returns the ASCII value for the single */
 /*        quote -> '. */
 
-	__state->val[(i__1 = '\'') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)913)] = 65;
-	__state->val[(i__1 = '"') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)914)] = 66;
-	__state->val[(i__1 = '`') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)915)] = 67;
-	__state->val[(i__1 = '~') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)916)] = 68;
-	__state->val[(i__1 = 'a') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)918)] = __state->val[(i__2 = 'A') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)918)];
-	__state->val[(i__1 = 'b') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)919)] = __state->val[(i__2 = 'B') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)919)];
-	__state->val[(i__1 = 'c') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)920)] = __state->val[(i__2 = 'C') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)920)];
-	__state->val[(i__1 = 'd') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)921)] = __state->val[(i__2 = 'D') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)921)];
-	__state->val[(i__1 = 'e') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)922)] = __state->val[(i__2 = 'E') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)922)];
-	__state->val[(i__1 = 'f') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)923)] = __state->val[(i__2 = 'F') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)923)];
-	__state->val[(i__1 = 'g') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)924)] = __state->val[(i__2 = 'G') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)924)];
-	__state->val[(i__1 = 'h') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)925)] = __state->val[(i__2 = 'H') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)925)];
-	__state->val[(i__1 = 'i') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)926)] = __state->val[(i__2 = 'I') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)926)];
-	__state->val[(i__1 = 'j') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)927)] = __state->val[(i__2 = 'J') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)927)];
-	__state->val[(i__1 = 'k') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)928)] = __state->val[(i__2 = 'K') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)928)];
-	__state->val[(i__1 = 'l') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)929)] = __state->val[(i__2 = 'L') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)929)];
-	__state->val[(i__1 = 'm') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)930)] = __state->val[(i__2 = 'M') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)930)];
-	__state->val[(i__1 = 'n') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)931)] = __state->val[(i__2 = 'N') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)931)];
-	__state->val[(i__1 = 'o') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)932)] = __state->val[(i__2 = 'O') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)932)];
-	__state->val[(i__1 = 'p') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)933)] = __state->val[(i__2 = 'P') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)933)];
-	__state->val[(i__1 = 'q') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)934)] = __state->val[(i__2 = 'Q') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)934)];
-	__state->val[(i__1 = 'r') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)935)] = __state->val[(i__2 = 'R') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)935)];
-	__state->val[(i__1 = 's') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)936)] = __state->val[(i__2 = 'S') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)936)];
-	__state->val[(i__1 = 't') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)937)] = __state->val[(i__2 = 'T') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)937)];
-	__state->val[(i__1 = 'u') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)938)] = __state->val[(i__2 = 'U') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)938)];
-	__state->val[(i__1 = 'v') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)939)] = __state->val[(i__2 = 'V') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)939)];
-	__state->val[(i__1 = 'w') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)940)] = __state->val[(i__2 = 'W') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)940)];
-	__state->val[(i__1 = 'x') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)941)] = __state->val[(i__2 = 'X') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)941)];
-	__state->val[(i__1 = 'y') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)942)] = __state->val[(i__2 = 'Y') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)942)];
-	__state->val[(i__1 = 'z') < 129 && 0 <= i__1 ? i__1 : s_rnge("val", 
-		i__1, "zzphsh_", (ftnlen)943)] = __state->val[(i__2 = 'Z') < 
-		129 && 0 <= i__2 ? i__2 : s_rnge("val", i__2, "zzphsh_", (
-		ftnlen)943)];
+	__state->val[(i__1 = '\'') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)913)] = 
+		65;
+	__state->val[(i__1 = '"') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)914)] = 
+		66;
+	__state->val[(i__1 = '`') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)915)] = 
+		67;
+	__state->val[(i__1 = '~') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)916)] = 
+		68;
+	__state->val[(i__1 = 'a') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)918)] = 
+		__state->val[(i__2 = 'A') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)918)];
+	__state->val[(i__1 = 'b') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)919)] = 
+		__state->val[(i__2 = 'B') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)919)];
+	__state->val[(i__1 = 'c') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)920)] = 
+		__state->val[(i__2 = 'C') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)920)];
+	__state->val[(i__1 = 'd') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)921)] = 
+		__state->val[(i__2 = 'D') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)921)];
+	__state->val[(i__1 = 'e') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)922)] = 
+		__state->val[(i__2 = 'E') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)922)];
+	__state->val[(i__1 = 'f') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)923)] = 
+		__state->val[(i__2 = 'F') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)923)];
+	__state->val[(i__1 = 'g') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)924)] = 
+		__state->val[(i__2 = 'G') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)924)];
+	__state->val[(i__1 = 'h') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)925)] = 
+		__state->val[(i__2 = 'H') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)925)];
+	__state->val[(i__1 = 'i') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)926)] = 
+		__state->val[(i__2 = 'I') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)926)];
+	__state->val[(i__1 = 'j') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)927)] = 
+		__state->val[(i__2 = 'J') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)927)];
+	__state->val[(i__1 = 'k') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)928)] = 
+		__state->val[(i__2 = 'K') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)928)];
+	__state->val[(i__1 = 'l') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)929)] = 
+		__state->val[(i__2 = 'L') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)929)];
+	__state->val[(i__1 = 'm') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)930)] = 
+		__state->val[(i__2 = 'M') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)930)];
+	__state->val[(i__1 = 'n') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)931)] = 
+		__state->val[(i__2 = 'N') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)931)];
+	__state->val[(i__1 = 'o') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)932)] = 
+		__state->val[(i__2 = 'O') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)932)];
+	__state->val[(i__1 = 'p') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)933)] = 
+		__state->val[(i__2 = 'P') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)933)];
+	__state->val[(i__1 = 'q') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)934)] = 
+		__state->val[(i__2 = 'Q') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)934)];
+	__state->val[(i__1 = 'r') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)935)] = 
+		__state->val[(i__2 = 'R') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)935)];
+	__state->val[(i__1 = 's') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)936)] = 
+		__state->val[(i__2 = 'S') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)936)];
+	__state->val[(i__1 = 't') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)937)] = 
+		__state->val[(i__2 = 'T') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)937)];
+	__state->val[(i__1 = 'u') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)938)] = 
+		__state->val[(i__2 = 'U') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)938)];
+	__state->val[(i__1 = 'v') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)939)] = 
+		__state->val[(i__2 = 'V') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)939)];
+	__state->val[(i__1 = 'w') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)940)] = 
+		__state->val[(i__2 = 'W') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)940)];
+	__state->val[(i__1 = 'x') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)941)] = 
+		__state->val[(i__2 = 'X') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)941)];
+	__state->val[(i__1 = 'y') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)942)] = 
+		__state->val[(i__2 = 'Y') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)942)];
+	__state->val[(i__1 = 'z') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "val", i__1, "zzphsh_", (ftnlen)943)] = 
+		__state->val[(i__2 = 'Z') < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "val", i__2, "zzphsh_", (ftnlen)943)];
     }
 
 /*     Check divisor. */
 
     if (*m2 <= 0 || *m2 > __state->maxdiv) {
 	ret_val = 0;
-	chkin_("ZZHASH2", (ftnlen)7);
-	setmsg_("The input hash function divisor was not in the allowed rang"
-		"e from 1 to #. It was #.", (ftnlen)83);
-	errint_("#", &__state->maxdiv, (ftnlen)1);
-	errint_("#", m2, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDIVISOR)", (ftnlen)21);
-	chkout_("ZZHASH2", (ftnlen)7);
+	chkin_(__global_state, "ZZHASH2", (ftnlen)7);
+	setmsg_(__global_state, "The input hash function divisor was not in "
+		"the allowed range from 1 to #. It was #.", (ftnlen)83);
+	errint_(__global_state, "#", &__state->maxdiv, (ftnlen)1);
+	errint_(__global_state, "#", m2, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDIVISOR)", (ftnlen)21);
+	chkout_(__global_state, "ZZHASH2", (ftnlen)7);
 	return ret_val;
     }
 
 /*     Compute hash value for the input string. */
 
     __state->f = 0;
-    __state->length = i_len(word, word_len);
+    __state->length = i_len(&__global_state->f2c, word, word_len);
     i__1 = __state->length;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	if (*(unsigned char *)&word[__state->i__ - 1] == __state->blank) {
@@ -1222,20 +1362,22 @@ L_zzhash2:
 /*           A negative value for ZZHASH2 indicates a serious problem. */
 
 	    if (ret_val < 0) {
-		chkin_("ZZHASH2", (ftnlen)7);
-		setmsg_("The ZZHASH2 function calculated a negative value fo"
-			"r string $1. Contact NAIF.", (ftnlen)77);
-		errch_("$1", word, (ftnlen)2, word_len);
-		sigerr_("SPICE(NEGATIVEHASHVALUE1)", (ftnlen)25);
-		chkout_("ZZHASH2", (ftnlen)7);
+		chkin_(__global_state, "ZZHASH2", (ftnlen)7);
+		setmsg_(__global_state, "The ZZHASH2 function calculated a n"
+			"egative value for string $1. Contact NAIF.", (ftnlen)
+			77);
+		errch_(__global_state, "$1", word, (ftnlen)2, word_len);
+		sigerr_(__global_state, "SPICE(NEGATIVEHASHVALUE1)", (ftnlen)
+			25);
+		chkout_(__global_state, "ZZHASH2", (ftnlen)7);
 	    }
 	    return ret_val;
 	}
 /* Computing MIN */
 	i__3 = 128, i__4 = *(unsigned char *)&word[__state->i__ - 1];
 	__state->f = __state->val[(i__2 = min(i__3,i__4)) < 129 && 0 <= i__2 ?
-		 i__2 : s_rnge("val", i__2, "zzphsh_", (ftnlen)996)] + 
-		__state->f * __state->base;
+		 i__2 : s_rnge(&__global_state->f2c, "val", i__2, "zzphsh_", (
+		ftnlen)996)] + __state->f * __state->base;
 	__state->f %= *m2;
     }
     ret_val = __state->f * __state->base % *m2 + 1;
@@ -1243,32 +1385,34 @@ L_zzhash2:
 /*     A negative value for ZZHASH2 indicates a serious problem. */
 
     if (ret_val < 0) {
-	chkin_("ZZHASH2", (ftnlen)7);
-	setmsg_("The ZZHASH2 function calculated a negative value for string"
-		" $1. Contact NAIF.", (ftnlen)77);
-	errch_("$1", word, (ftnlen)2, word_len);
-	sigerr_("SPICE(NEGATIVEHASHVALUE2)", (ftnlen)25);
-	chkout_("ZZHASH2", (ftnlen)7);
+	chkin_(__global_state, "ZZHASH2", (ftnlen)7);
+	setmsg_(__global_state, "The ZZHASH2 function calculated a negative "
+		"value for string $1. Contact NAIF.", (ftnlen)77);
+	errch_(__global_state, "$1", word, (ftnlen)2, word_len);
+	sigerr_(__global_state, "SPICE(NEGATIVEHASHVALUE2)", (ftnlen)25);
+	chkout_(__global_state, "ZZHASH2", (ftnlen)7);
     }
     return ret_val;
 } /* zzphsh_ */
 
-integer zzphsh_(char *word, integer *m, integer *m2, ftnlen word_len)
+integer zzphsh_(cspice_t* __global_state, char *word, integer *m, integer *m2,
+	 ftnlen word_len)
 {
     return zzphsh_0_(0, word, m, m2, word_len);
     }
 
-integer zzshsh_(integer *m)
+integer zzshsh_(cspice_t* __global_state, integer *m)
 {
     return zzphsh_0_(1, (char *)0, m, (integer *)0, (ftnint)0);
     }
 
-integer zzhash_(char *word, ftnlen word_len)
+integer zzhash_(cspice_t* __global_state, char *word, ftnlen word_len)
 {
     return zzphsh_0_(2, word, (integer *)0, (integer *)0, word_len);
     }
 
-integer zzhash2_(char *word, integer *m2, ftnlen word_len)
+integer zzhash2_(cspice_t* __global_state, char *word, integer *m2, ftnlen 
+	word_len)
 {
     return zzphsh_0_(3, word, (integer *)0, m2, word_len);
     }

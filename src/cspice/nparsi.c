@@ -8,8 +8,7 @@
 
 
 extern nparsi_init_t __nparsi_init;
-static nparsi_state_t* get_nparsi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline nparsi_state_t* get_nparsi_state(cspice_t* state) {
 	if (!state->nparsi)
 		state->nparsi = __cspice_allocate_module(sizeof(
 	nparsi_state_t), &__nparsi_init, sizeof(__nparsi_init));
@@ -18,25 +17,25 @@ static nparsi_state_t* get_nparsi_state() {
 }
 
 /* $Procedure      NPARSI ( Integer parsing of a character string) */
-/* Subroutine */ int nparsi_(char *string, integer *n, char *error, integer *
-	pnter, ftnlen string_len, ftnlen error_len)
+/* Subroutine */ int nparsi_(cspice_t* __global_state, char *string, integer *
+	n, char *error, integer *pnter, ftnlen string_len, ftnlen error_len)
 {
     /* Initialized data */
 
 
     /* Builtin functions */
-    double d_int(doublereal *);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    double d_int(f2c_state_t*, doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal x;
-    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
-	    *, ftnlen, ftnlen);
-    extern integer intmin_(void);
-    extern integer intmax_(void);
+    extern /* Subroutine */ int nparsd_(cspice_t*, char *, doublereal *, char 
+	    *, integer *, ftnlen, ftnlen);
+    extern integer intmin_(cspice_t*);
+    extern integer intmax_(cspice_t*);
 
     /* Module state */
-    nparsi_state_t* __state = get_nparsi_state();
+    nparsi_state_t* __state = get_nparsi_state(__global_state);
 /* $ Abstract */
 
 /*     Parse a character string that represents a number and return */
@@ -332,19 +331,21 @@ static nparsi_state_t* get_nparsi_state() {
 
     if (__state->first) {
 	__state->first = FALSE_;
-	__state->xmxint = (doublereal) intmax_();
-	__state->xmnint = (doublereal) intmin_();
+	__state->xmxint = (doublereal) intmax_(__global_state);
+	__state->xmnint = (doublereal) intmin_(__global_state);
     }
 
 /*     NPARSD will define ERROR and PNTER if there is an error, */
 /*     so we do not need to initialize them here. */
 
-    nparsd_(string, &x, error, pnter, string_len, error_len);
+    nparsd_(__global_state, string, &x, error, pnter, string_len, error_len);
     if (*pnter == 0) {
-	if (d_int(&x) < __state->xmnint || d_int(&x) > __state->xmxint) {
+	if (d_int(&__global_state->f2c, &x) < __state->xmnint || d_int(&
+		__global_state->f2c, &x) > __state->xmxint) {
 	    *pnter = 1;
-	    s_copy(error, "NPARSI: Value entered is beyond the bounds of rep"
-		    "resentable integers.", error_len, (ftnlen)69);
+	    s_copy(&__global_state->f2c, error, "NPARSI: Value entered is be"
+		    "yond the bounds of representable integers.", error_len, (
+		    ftnlen)69);
 	} else {
 	    *n = (integer) x;
 	}

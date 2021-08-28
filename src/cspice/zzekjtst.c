@@ -8,8 +8,7 @@
 
 
 extern zzekjtst_init_t __zzekjtst_init;
-static zzekjtst_state_t* get_zzekjtst_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekjtst_state_t* get_zzekjtst_state(cspice_t* state) {
 	if (!state->zzekjtst)
 		state->zzekjtst = __cspice_allocate_module(sizeof(
 	zzekjtst_state_t), &__zzekjtst_init, sizeof(__zzekjtst_init));
@@ -18,44 +17,47 @@ static zzekjtst_state_t* get_zzekjtst_state() {
 }
 
 /* $Procedure  ZZEKJTST  ( Test join candidates ) */
-/* Subroutine */ int zzekjtst_0_(int n__, integer *segvec, integer *jbase1, 
-	integer *nt1, integer *rb1, integer *nr1, integer *jbase2, integer *
-	nt2, integer *rb2, integer *nr2, integer *njcnst, logical *active, 
-	integer *cpidx1, integer *clidx1, integer *elts1, integer *ops, 
-	integer *cpidx2, integer *clidx2, integer *elts2, integer *sthan, 
-	integer *stsdsc, integer *stdtpt, integer *dtpool, integer *dtdscs, 
-	logical *found, integer *rowvec)
+/* Subroutine */ int zzekjtst_0_(cspice_t* __global_state, int n__, integer *
+	segvec, integer *jbase1, integer *nt1, integer *rb1, integer *nr1, 
+	integer *jbase2, integer *nt2, integer *rb2, integer *nr2, integer *
+	njcnst, logical *active, integer *cpidx1, integer *clidx1, integer *
+	elts1, integer *ops, integer *cpidx2, integer *clidx2, integer *elts2,
+	 integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, 
+	integer *dtdscs, logical *found, integer *rowvec)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern logical zzekvmch_(integer *, logical *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern logical zzekrcmp_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *);
-    extern /* Subroutine */ int zzekspsh_(integer *, integer *);
-    extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekjsrt_(integer *, integer *, integer *, 
+    extern logical zzekvmch_(cspice_t*, integer *, logical *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekstop_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern integer lnknxt_(integer *, integer *);
-    extern logical return_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
+    extern logical zzekrcmp_(cspice_t*, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekspsh_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzeksupd_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekjsrt_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekstop_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer lnknxt_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzeksrd_(cspice_t*, integer *, integer *, 
+	    integer *);
 
 
     /* Module state */
-    zzekjtst_state_t* __state = get_zzekjtst_state();
+    zzekjtst_state_t* __state = get_zzekjtst_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -1085,9 +1087,9 @@ static zzekjtst_state_t* get_zzekjtst_state() {
 	case 2: goto L_zzekjnxt;
 	}
 
-    chkin_("ZZEKJTST", (ftnlen)8);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZEKJTST", (ftnlen)8);
+    chkin_(__global_state, "ZZEKJTST", (ftnlen)8);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZEKJTST", (ftnlen)8);
     return 0;
 /* $Procedure  ZZEKJPRP  ( Prepare join condition test ) */
 
@@ -1385,10 +1387,10 @@ L_zzekjprp:
 /* -    Beta Version 1.0.0, 11-OCT-1995 (NJB) */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZEKJPRP", (ftnlen)8);
+    chkin_(__global_state, "ZZEKJPRP", (ftnlen)8);
 
 /*     We don't validate the inputs; these must be checked by ZZEKJOIN, */
 /*     the only routine that should call this one. */
@@ -1398,7 +1400,7 @@ L_zzekjprp:
 
     if (*nr1 == 0 || *nr2 == 0) {
 	__state->case__ = 4;
-	chkout_("ZZEKJPRP", (ftnlen)8);
+	chkout_(__global_state, "ZZEKJPRP", (ftnlen)8);
 	return 0;
     }
 
@@ -1418,37 +1420,43 @@ L_zzekjprp:
 	    __state->lseg = segvec[__state->ltab - 1];
 	    __state->rseg = segvec[__state->rtab - 1];
 	    __state->lhans[(i__2 = __state->j - 1) < 100 && 0 <= i__2 ? i__2 :
-		     s_rnge("lhans", i__2, "zzekjtst_", (ftnlen)650)] = sthan[
-		    __state->lseg - 1];
+		     s_rnge(&__global_state->f2c, "lhans", i__2, "zzekjtst_", 
+		    (ftnlen)650)] = sthan[__state->lseg - 1];
 	    __state->rhans[(i__2 = __state->j - 1) < 100 && 0 <= i__2 ? i__2 :
-		     s_rnge("rhans", i__2, "zzekjtst_", (ftnlen)651)] = sthan[
-		    __state->rseg - 1];
-	    movei_(&stsdsc[__state->lseg * 24 - 24], &__state->c__24, &
-		    __state->lsdsc[(i__2 = __state->j * 24 - 24) < 2400 && 0 
-		    <= i__2 ? i__2 : s_rnge("lsdsc", i__2, "zzekjtst_", (
-		    ftnlen)653)]);
-	    movei_(&stsdsc[__state->rseg * 24 - 24], &__state->c__24, &
-		    __state->rsdsc[(i__2 = __state->j * 24 - 24) < 2400 && 0 
-		    <= i__2 ? i__2 : s_rnge("rsdsc", i__2, "zzekjtst_", (
-		    ftnlen)654)]);
+		     s_rnge(&__global_state->f2c, "rhans", i__2, "zzekjtst_", 
+		    (ftnlen)651)] = sthan[__state->rseg - 1];
+	    movei_(__global_state, &stsdsc[__state->lseg * 24 - 24], &
+		    __state->c__24, &__state->lsdsc[(i__2 = __state->j * 24 - 
+		    24) < 2400 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "lsdsc", i__2, "zzekjtst_", (ftnlen)
+		    653)]);
+	    movei_(__global_state, &stsdsc[__state->rseg * 24 - 24], &
+		    __state->c__24, &__state->rsdsc[(i__2 = __state->j * 24 - 
+		    24) < 2400 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rsdsc", i__2, "zzekjtst_", (ftnlen)
+		    654)]);
 	    __state->dtptr = stdtpt[__state->lseg - 1];
 	    i__2 = clidx1[__state->j - 1];
 	    for (__state->k = 2; __state->k <= i__2; ++__state->k) {
-		__state->dtptr = lnknxt_(&__state->dtptr, dtpool);
+		__state->dtptr = lnknxt_(__global_state, &__state->dtptr, 
+			dtpool);
 	    }
-	    movei_(&dtdscs[__state->dtptr * 11 - 11], &__state->c__11, &
-		    __state->ldscrs[(i__2 = __state->j * 11 - 11) < 1100 && 0 
-		    <= i__2 ? i__2 : s_rnge("ldscrs", i__2, "zzekjtst_", (
-		    ftnlen)662)]);
+	    movei_(__global_state, &dtdscs[__state->dtptr * 11 - 11], &
+		    __state->c__11, &__state->ldscrs[(i__2 = __state->j * 11 
+		    - 11) < 1100 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ldscrs", i__2, "zzekjtst_", (ftnlen)
+		    662)]);
 	    __state->dtptr = stdtpt[__state->rseg - 1];
 	    i__2 = clidx2[__state->j - 1];
 	    for (__state->k = 2; __state->k <= i__2; ++__state->k) {
-		__state->dtptr = lnknxt_(&__state->dtptr, dtpool);
+		__state->dtptr = lnknxt_(__global_state, &__state->dtptr, 
+			dtpool);
 	    }
-	    movei_(&dtdscs[__state->dtptr * 11 - 11], &__state->c__11, &
-		    __state->rdscrs[(i__2 = __state->j * 11 - 11) < 1100 && 0 
-		    <= i__2 ? i__2 : s_rnge("rdscrs", i__2, "zzekjtst_", (
-		    ftnlen)672)]);
+	    movei_(__global_state, &dtdscs[__state->dtptr * 11 - 11], &
+		    __state->c__11, &__state->rdscrs[(i__2 = __state->j * 11 
+		    - 11) < 1100 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rdscrs", i__2, "zzekjtst_", (ftnlen)
+		    672)]);
 	}
     }
 
@@ -1531,7 +1539,7 @@ L_zzekjprp:
 /*        join row set include file for a picture of the data structure */
 /*        we're creating. */
 
-	zzekstop_(&__state->lbase);
+	zzekstop_(__global_state, &__state->lbase);
 	__state->ltab = cpidx1[__state->cnstr - 1];
 	__state->lcol = clidx1[__state->cnstr - 1];
 	__state->lelt = elts1[__state->cnstr - 1];
@@ -1564,13 +1572,13 @@ L_zzekjprp:
 	__state->svnt1 = __state->nt;
 	__state->svrb1 = __state->rb;
 	__state->svnr1 = __state->nr;
-	zzekspsh_(&__state->c__1, &__state->c__0);
-	zzekspsh_(&__state->c__1, &__state->nr);
-	zzekspsh_(&__state->c__1, &__state->c__1);
-	zzekspsh_(&__state->c__1, &__state->c__1);
-	zzekspsh_(&__state->c__1, &segvec[__state->ltab - 1]);
-	zzekspsh_(&__state->c__1, &__state->c__7);
-	zzekspsh_(&__state->c__1, &__state->nr);
+	zzekspsh_(__global_state, &__state->c__1, &__state->c__0);
+	zzekspsh_(__global_state, &__state->c__1, &__state->nr);
+	zzekspsh_(__global_state, &__state->c__1, &__state->c__1);
+	zzekspsh_(__global_state, &__state->c__1, &__state->c__1);
+	zzekspsh_(__global_state, &__state->c__1, &segvec[__state->ltab - 1]);
+	zzekspsh_(__global_state, &__state->c__1, &__state->c__7);
+	zzekspsh_(__global_state, &__state->c__1, &__state->nr);
 	i__1 = __state->nr;
 	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 
@@ -1582,7 +1590,7 @@ L_zzekjprp:
 		    * (__state->nt + 1);
 	    i__2 = __state->base + __state->tab;
 	    i__3 = __state->base + __state->tab;
-	    zzeksrd_(&i__2, &i__3, __state->minirv);
+	    zzeksrd_(__global_state, &i__2, &i__3, __state->minirv);
 
 /*           Fill in the segment vector pointer for the new very */
 /*           narrow row vector. */
@@ -1591,21 +1599,22 @@ L_zzekjprp:
 
 /*           Append to the join row set under construction. */
 
-	    zzekspsh_(&__state->c__2, __state->minirv);
+	    zzekspsh_(__global_state, &__state->c__2, __state->minirv);
 	}
-	zzekstop_(&__state->top);
+	zzekstop_(__global_state, &__state->top);
 	i__1 = __state->lbase + 1;
 	i__2 = __state->lbase + 1;
 	i__3 = __state->top - __state->lbase;
-	zzeksupd_(&i__1, &i__2, &i__3);
-	zzekjsrt_(&__state->c__1, &__state->lbase, &__state->c__1, &
-		__state->c__1, &__state->lcol, &__state->lelt, &__state->c__0,
-		 sthan, stsdsc, stdtpt, dtpool, dtdscs, &__state->lovbas);
+	zzeksupd_(__global_state, &i__1, &i__2, &i__3);
+	zzekjsrt_(__global_state, &__state->c__1, &__state->lbase, &
+		__state->c__1, &__state->c__1, &__state->lcol, &__state->lelt,
+		 &__state->c__0, sthan, stsdsc, stdtpt, dtpool, dtdscs, &
+		__state->lovbas);
 
 /*        Produce an order vector for the column on the right side of */
 /*        the CNSTR constraint. */
 
-	zzekstop_(&__state->rbase);
+	zzekstop_(__global_state, &__state->rbase);
 	__state->rtab = cpidx2[__state->cnstr - 1];
 	__state->rcol = clidx2[__state->cnstr - 1];
 	__state->relt = elts2[__state->cnstr - 1];
@@ -1638,13 +1647,13 @@ L_zzekjprp:
 	__state->svnt2 = __state->nt;
 	__state->svrb2 = __state->rb;
 	__state->svnr2 = __state->nr;
-	zzekspsh_(&__state->c__1, &__state->c__0);
-	zzekspsh_(&__state->c__1, &__state->nr);
-	zzekspsh_(&__state->c__1, &__state->c__1);
-	zzekspsh_(&__state->c__1, &__state->c__1);
-	zzekspsh_(&__state->c__1, &segvec[__state->rtab - 1]);
-	zzekspsh_(&__state->c__1, &__state->c__7);
-	zzekspsh_(&__state->c__1, &__state->nr);
+	zzekspsh_(__global_state, &__state->c__1, &__state->c__0);
+	zzekspsh_(__global_state, &__state->c__1, &__state->nr);
+	zzekspsh_(__global_state, &__state->c__1, &__state->c__1);
+	zzekspsh_(__global_state, &__state->c__1, &__state->c__1);
+	zzekspsh_(__global_state, &__state->c__1, &segvec[__state->rtab - 1]);
+	zzekspsh_(__global_state, &__state->c__1, &__state->c__7);
+	zzekspsh_(__global_state, &__state->c__1, &__state->nr);
 	i__1 = __state->nr;
 	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 
@@ -1656,7 +1665,7 @@ L_zzekjprp:
 		    * (__state->nt + 1);
 	    i__2 = __state->base + __state->tab;
 	    i__3 = __state->base + __state->tab;
-	    zzeksrd_(&i__2, &i__3, __state->minirv);
+	    zzeksrd_(__global_state, &i__2, &i__3, __state->minirv);
 
 /*           Fill in the segment vector pointer for the new very */
 /*           narrow row vector. */
@@ -1665,16 +1674,17 @@ L_zzekjprp:
 
 /*           Append to the join row set under construction. */
 
-	    zzekspsh_(&__state->c__2, __state->minirv);
+	    zzekspsh_(__global_state, &__state->c__2, __state->minirv);
 	}
-	zzekstop_(&__state->top);
+	zzekstop_(__global_state, &__state->top);
 	i__1 = __state->rbase + 1;
 	i__2 = __state->rbase + 1;
 	i__3 = __state->top - __state->rbase;
-	zzeksupd_(&i__1, &i__2, &i__3);
-	zzekjsrt_(&__state->c__1, &__state->rbase, &__state->c__1, &
-		__state->c__1, &__state->rcol, &__state->relt, &__state->c__0,
-		 sthan, stsdsc, stdtpt, dtpool, dtdscs, &__state->rovbas);
+	zzeksupd_(__global_state, &i__1, &i__2, &i__3);
+	zzekjsrt_(__global_state, &__state->c__1, &__state->rbase, &
+		__state->c__1, &__state->c__1, &__state->rcol, &__state->relt,
+		 &__state->c__0, sthan, stsdsc, stdtpt, dtpool, dtdscs, &
+		__state->rovbas);
 
 /*        Keep a local copy of the active constraint flags, deactivating */
 /*        the distinguished one. */
@@ -1682,11 +1692,12 @@ L_zzekjprp:
 	i__1 = *njcnst;
 	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	    __state->locact[(i__2 = __state->i__ - 1) < 100 && 0 <= i__2 ? 
-		    i__2 : s_rnge("locact", i__2, "zzekjtst_", (ftnlen)935)] =
-		     active[__state->i__ - 1];
+		    i__2 : s_rnge(&__global_state->f2c, "locact", i__2, "zze"
+		    "kjtst_", (ftnlen)935)] = active[__state->i__ - 1];
 	}
 	__state->locact[(i__1 = __state->cnstr - 1) < 100 && 0 <= i__1 ? i__1 
-		: s_rnge("locact", i__1, "zzekjtst_", (ftnlen)938)] = FALSE_;
+		: s_rnge(&__global_state->f2c, "locact", i__1, "zzekjtst_", (
+		ftnlen)938)] = FALSE_;
     } else {
 
 /*        This is the `no luck' case.  Save all of the constraints. */
@@ -1694,8 +1705,8 @@ L_zzekjprp:
 	i__1 = *njcnst;
 	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	    __state->locact[(i__2 = __state->i__ - 1) < 100 && 0 <= i__2 ? 
-		    i__2 : s_rnge("locact", i__2, "zzekjtst_", (ftnlen)946)] =
-		     active[__state->i__ - 1];
+		    i__2 : s_rnge(&__global_state->f2c, "locact", i__2, "zze"
+		    "kjtst_", (ftnlen)946)] = active[__state->i__ - 1];
 	}
 
 /*        Save the counts pertaining to the input join row sets. */
@@ -1726,14 +1737,14 @@ L_zzekjprp:
     i__1 = __state->svncon;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	__state->svcp1[(i__2 = __state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		s_rnge("svcp1", i__2, "zzekjtst_", (ftnlen)980)] = cpidx1[
-		__state->i__ - 1];
+		s_rnge(&__global_state->f2c, "svcp1", i__2, "zzekjtst_", (
+		ftnlen)980)] = cpidx1[__state->i__ - 1];
 	__state->svops[(i__2 = __state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		s_rnge("svops", i__2, "zzekjtst_", (ftnlen)981)] = ops[
-		__state->i__ - 1];
+		s_rnge(&__global_state->f2c, "svops", i__2, "zzekjtst_", (
+		ftnlen)981)] = ops[__state->i__ - 1];
 	__state->svcp2[(i__2 = __state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		s_rnge("svcp2", i__2, "zzekjtst_", (ftnlen)982)] = cpidx2[
-		__state->i__ - 1];
+		s_rnge(&__global_state->f2c, "svcp2", i__2, "zzekjtst_", (
+		ftnlen)982)] = cpidx2[__state->i__ - 1];
     }
 
 /*     Initialize the pointers we'll use to keep track of the */
@@ -1744,7 +1755,7 @@ L_zzekjprp:
     __state->lcur = 1;
     __state->rptr = 1;
     __state->done = FALSE_;
-    chkout_("ZZEKJPRP", (ftnlen)8);
+    chkout_(__global_state, "ZZEKJPRP", (ftnlen)8);
     return 0;
 /* $Procedure  ZZEKJNXT  ( Return next join row vector ) */
 
@@ -1918,36 +1929,41 @@ L_zzekjnxt:
 
 	    i__1 = __state->lovbas + __state->lcur;
 	    i__2 = __state->lovbas + __state->lcur;
-	    zzeksrd_(&i__1, &i__2, &__state->lrvidx);
+	    zzeksrd_(__global_state, &i__1, &i__2, &__state->lrvidx);
 	    i__1 = __state->rovbas + __state->rptr;
 	    i__2 = __state->rovbas + __state->rptr;
-	    zzeksrd_(&i__1, &i__2, &__state->rrvidx);
+	    zzeksrd_(__global_state, &i__1, &i__2, &__state->rrvidx);
 	    __state->addrss = __state->lbase + 7 + (__state->lrvidx - 1 << 1) 
 		    + 1;
-	    zzeksrd_(&__state->addrss, &__state->addrss, &__state->lrow);
+	    zzeksrd_(__global_state, &__state->addrss, &__state->addrss, &
+		    __state->lrow);
 	    __state->addrss = __state->rbase + 7 + (__state->rrvidx - 1 << 1) 
 		    + 1;
-	    zzeksrd_(&__state->addrss, &__state->addrss, &__state->rrow);
+	    zzeksrd_(__global_state, &__state->addrss, &__state->addrss, &
+		    __state->rrow);
 
 /*           Compare column entries, and advance the pointers as */
 /*           required. */
 
-	    if (zzekrcmp_(&__state->c__5, &__state->c__1, &__state->lhans[(
-		    i__1 = __state->cnstr - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("lhans", i__1, "zzekjtst_", (ftnlen)1197)], &
-		    __state->lsdsc[(i__2 = __state->cnstr * 24 - 24) < 2400 &&
-		     0 <= i__2 ? i__2 : s_rnge("lsdsc", i__2, "zzekjtst_", (
+	    if (zzekrcmp_(__global_state, &__state->c__5, &__state->c__1, &
+		    __state->lhans[(i__1 = __state->cnstr - 1) < 100 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "lhans", i__1, 
+		    "zzekjtst_", (ftnlen)1197)], &__state->lsdsc[(i__2 = 
+		    __state->cnstr * 24 - 24) < 2400 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "lsdsc", i__2, "zzekjtst_", (
 		    ftnlen)1197)], &__state->ldscrs[(i__3 = __state->cnstr * 
-		    11 - 11) < 1100 && 0 <= i__3 ? i__3 : s_rnge("ldscrs", 
-		    i__3, "zzekjtst_", (ftnlen)1197)], &__state->lrow, &
-		    __state->lelt, &__state->rhans[(i__4 = __state->cnstr - 1)
-		     < 100 && 0 <= i__4 ? i__4 : s_rnge("rhans", i__4, "zzek"
-		    "jtst_", (ftnlen)1197)], &__state->rsdsc[(i__5 = 
-		    __state->cnstr * 24 - 24) < 2400 && 0 <= i__5 ? i__5 : 
-		    s_rnge("rsdsc", i__5, "zzekjtst_", (ftnlen)1197)], &
-		    __state->rdscrs[(i__6 = __state->cnstr * 11 - 11) < 1100 
-		    && 0 <= i__6 ? i__6 : s_rnge("rdscrs", i__6, "zzekjtst_", 
-		    (ftnlen)1197)], &__state->rrow, &__state->relt)) {
+		    11 - 11) < 1100 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "ldscrs", i__3, "zzekjtst_", (ftnlen)
+		    1197)], &__state->lrow, &__state->lelt, &__state->rhans[(
+		    i__4 = __state->cnstr - 1) < 100 && 0 <= i__4 ? i__4 : 
+		    s_rnge(&__global_state->f2c, "rhans", i__4, "zzekjtst_", (
+		    ftnlen)1197)], &__state->rsdsc[(i__5 = __state->cnstr * 
+		    24 - 24) < 2400 && 0 <= i__5 ? i__5 : s_rnge(&
+		    __global_state->f2c, "rsdsc", i__5, "zzekjtst_", (ftnlen)
+		    1197)], &__state->rdscrs[(i__6 = __state->cnstr * 11 - 11)
+		     < 1100 && 0 <= i__6 ? i__6 : s_rnge(&__global_state->f2c,
+		     "rdscrs", i__6, "zzekjtst_", (ftnlen)1197)], &
+		    __state->rrow, &__state->relt)) {
 
 
 /*              The `left' key entry is smaller.  Advance the bottom */
@@ -1959,23 +1975,25 @@ L_zzekjnxt:
 		} else {
 		    __state->done = TRUE_;
 		}
-	    } else if (zzekrcmp_(&__state->c__1, &__state->c__1, &
-		    __state->lhans[(i__1 = __state->cnstr - 1) < 100 && 0 <= 
-		    i__1 ? i__1 : s_rnge("lhans", i__1, "zzekjtst_", (ftnlen)
-		    1223)], &__state->lsdsc[(i__2 = __state->cnstr * 24 - 24) 
-		    < 2400 && 0 <= i__2 ? i__2 : s_rnge("lsdsc", i__2, "zzek"
-		    "jtst_", (ftnlen)1223)], &__state->ldscrs[(i__3 = 
-		    __state->cnstr * 11 - 11) < 1100 && 0 <= i__3 ? i__3 : 
-		    s_rnge("ldscrs", i__3, "zzekjtst_", (ftnlen)1223)], &
-		    __state->lrow, &__state->lelt, &__state->rhans[(i__4 = 
-		    __state->cnstr - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge(
-		    "rhans", i__4, "zzekjtst_", (ftnlen)1223)], &
-		    __state->rsdsc[(i__5 = __state->cnstr * 24 - 24) < 2400 &&
-		     0 <= i__5 ? i__5 : s_rnge("rsdsc", i__5, "zzekjtst_", (
+	    } else if (zzekrcmp_(__global_state, &__state->c__1, &
+		    __state->c__1, &__state->lhans[(i__1 = __state->cnstr - 1)
+		     < 100 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "lhans", i__1, "zzekjtst_", (ftnlen)1223)], &
+		    __state->lsdsc[(i__2 = __state->cnstr * 24 - 24) < 2400 &&
+		     0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "lsdsc", 
+		    i__2, "zzekjtst_", (ftnlen)1223)], &__state->ldscrs[(i__3 
+		    = __state->cnstr * 11 - 11) < 1100 && 0 <= i__3 ? i__3 : 
+		    s_rnge(&__global_state->f2c, "ldscrs", i__3, "zzekjtst_", 
+		    (ftnlen)1223)], &__state->lrow, &__state->lelt, &
+		    __state->rhans[(i__4 = __state->cnstr - 1) < 100 && 0 <= 
+		    i__4 ? i__4 : s_rnge(&__global_state->f2c, "rhans", i__4, 
+		    "zzekjtst_", (ftnlen)1223)], &__state->rsdsc[(i__5 = 
+		    __state->cnstr * 24 - 24) < 2400 && 0 <= i__5 ? i__5 : 
+		    s_rnge(&__global_state->f2c, "rsdsc", i__5, "zzekjtst_", (
 		    ftnlen)1223)], &__state->rdscrs[(i__6 = __state->cnstr * 
-		    11 - 11) < 1100 && 0 <= i__6 ? i__6 : s_rnge("rdscrs", 
-		    i__6, "zzekjtst_", (ftnlen)1223)], &__state->rrow, &
-		    __state->relt)) {
+		    11 - 11) < 1100 && 0 <= i__6 ? i__6 : s_rnge(&
+		    __global_state->f2c, "rdscrs", i__6, "zzekjtst_", (ftnlen)
+		    1223)], &__state->rrow, &__state->relt)) {
 
 
 /*              The `left' key entry is equal.  Form a composite */
@@ -1983,8 +2001,8 @@ L_zzekjnxt:
 /*              constraints. */
 
 		if (__state->svcp1[(i__1 = __state->cnstr - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("svcp1", i__1, "zzekjtst_", (
-			ftnlen)1241)] <= __state->svnt1) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "svcp1", 
+			i__1, "zzekjtst_", (ftnlen)1241)] <= __state->svnt1) {
 
 /*                 The parent table of the column on the LHS of our */
 /*                 equi-join constraint belongs to the first join */
@@ -2000,12 +2018,14 @@ L_zzekjnxt:
 			__state->svnt1 + 1);
 		i__1 = __state->svbas1 + __state->offset + 1;
 		i__2 = __state->svbas1 + __state->offset + __state->svnt1;
-		zzeksrd_(&i__1, &i__2, &rowvec[__state->j - 1]);
+		zzeksrd_(__global_state, &i__1, &i__2, &rowvec[__state->j - 1]
+			);
 		__state->offset = __state->svrb2 + (__state->rrvidx - 1) * (
 			__state->svnt2 + 1);
 		i__1 = __state->svbas2 + __state->offset + 1;
 		i__2 = __state->svbas2 + __state->offset + __state->svnt2;
-		zzeksrd_(&i__1, &i__2, &rowvec[__state->k - 1]);
+		zzeksrd_(__global_state, &i__1, &i__2, &rowvec[__state->k - 1]
+			);
 
 /*              Create row arrays for both sides of each active */
 /*              relational constraint. */
@@ -2013,29 +2033,31 @@ L_zzekjnxt:
 		i__1 = __state->svncon;
 		for (__state->j = 1; __state->j <= i__1; ++__state->j) {
 		    if (__state->locact[(i__2 = __state->j - 1) < 100 && 0 <= 
-			    i__2 ? i__2 : s_rnge("locact", i__2, "zzekjtst_", 
-			    (ftnlen)1274)]) {
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "loca"
+			    "ct", i__2, "zzekjtst_", (ftnlen)1274)]) {
 			__state->ltab = __state->svcp1[(i__2 = __state->j - 1)
-				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp1", 
-				i__2, "zzekjtst_", (ftnlen)1275)];
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "svcp1", i__2, "zzekjts"
+				"t_", (ftnlen)1275)];
 			__state->rtab = __state->svcp2[(i__2 = __state->j - 1)
-				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp2", 
-				i__2, "zzekjtst_", (ftnlen)1276)];
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "svcp2", i__2, "zzekjts"
+				"t_", (ftnlen)1276)];
 			__state->lrows[(i__2 = __state->j - 1) < 100 && 0 <= 
-				i__2 ? i__2 : s_rnge("lrows", i__2, "zzekjts"
-				"t_", (ftnlen)1277)] = rowvec[__state->ltab - 
-				1];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"lrows", i__2, "zzekjtst_", (ftnlen)1277)] = 
+				rowvec[__state->ltab - 1];
 			__state->rrows[(i__2 = __state->j - 1) < 100 && 0 <= 
-				i__2 ? i__2 : s_rnge("rrows", i__2, "zzekjts"
-				"t_", (ftnlen)1278)] = rowvec[__state->rtab - 
-				1];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"rrows", i__2, "zzekjtst_", (ftnlen)1278)] = 
+				rowvec[__state->rtab - 1];
 		    }
 		}
-		*found = zzekvmch_(&__state->svncon, __state->locact, 
-			__state->lhans, __state->lsdsc, __state->ldscrs, 
-			__state->lrows, __state->lelts, __state->svops, 
-			__state->rhans, __state->rsdsc, __state->rdscrs, 
-			__state->rrows, __state->relts);
+		*found = zzekvmch_(__global_state, &__state->svncon, 
+			__state->locact, __state->lhans, __state->lsdsc, 
+			__state->ldscrs, __state->lrows, __state->lelts, 
+			__state->svops, __state->rhans, __state->rsdsc, 
+			__state->rdscrs, __state->rrows, __state->relts);
 
 /*              Update the pointers. */
 
@@ -2098,37 +2120,42 @@ L_zzekjnxt:
 
 	    i__1 = __state->lovbas + __state->lptr;
 	    i__2 = __state->lovbas + __state->lptr;
-	    zzeksrd_(&i__1, &i__2, &__state->lrvidx);
+	    zzeksrd_(__global_state, &i__1, &i__2, &__state->lrvidx);
 	    i__1 = __state->rovbas + __state->rptr;
 	    i__2 = __state->rovbas + __state->rptr;
-	    zzeksrd_(&i__1, &i__2, &__state->rrvidx);
+	    zzeksrd_(__global_state, &i__1, &i__2, &__state->rrvidx);
 	    __state->addrss = __state->lbase + 7 + (__state->lrvidx - 1 << 1) 
 		    + 1;
-	    zzeksrd_(&__state->addrss, &__state->addrss, &__state->lrow);
+	    zzeksrd_(__global_state, &__state->addrss, &__state->addrss, &
+		    __state->lrow);
 	    __state->addrss = __state->rbase + 7 + (__state->rrvidx - 1 << 1) 
 		    + 1;
-	    zzeksrd_(&__state->addrss, &__state->addrss, &__state->rrow);
+	    zzeksrd_(__global_state, &__state->addrss, &__state->addrss, &
+		    __state->rrow);
 
 /*           Compare column entries, and advance the pointers as */
 /*           required. */
 
-	    if (zzekrcmp_(&__state->svops[(i__1 = __state->cnstr - 1) < 100 &&
-		     0 <= i__1 ? i__1 : s_rnge("svops", i__1, "zzekjtst_", (
-		    ftnlen)1374)], &__state->c__1, &__state->lhans[(i__2 = 
-		    __state->cnstr - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-		    "lhans", i__2, "zzekjtst_", (ftnlen)1374)], &
-		    __state->lsdsc[(i__3 = __state->cnstr * 24 - 24) < 2400 &&
-		     0 <= i__3 ? i__3 : s_rnge("lsdsc", i__3, "zzekjtst_", (
-		    ftnlen)1374)], &__state->ldscrs[(i__4 = __state->cnstr * 
-		    11 - 11) < 1100 && 0 <= i__4 ? i__4 : s_rnge("ldscrs", 
-		    i__4, "zzekjtst_", (ftnlen)1374)], &__state->lrow, &
+	    if (zzekrcmp_(__global_state, &__state->svops[(i__1 = 
+		    __state->cnstr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "svops", i__1, "zzekjtst_", (ftnlen)
+		    1374)], &__state->c__1, &__state->lhans[(i__2 = 
+		    __state->cnstr - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "lhans", i__2, "zzekjtst_", (ftnlen)
+		    1374)], &__state->lsdsc[(i__3 = __state->cnstr * 24 - 24) 
+		    < 2400 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "lsdsc", i__3, "zzekjtst_", (ftnlen)1374)], &
+		    __state->ldscrs[(i__4 = __state->cnstr * 11 - 11) < 1100 
+		    && 0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c, "ldsc"
+		    "rs", i__4, "zzekjtst_", (ftnlen)1374)], &__state->lrow, &
 		    __state->lelt, &__state->rhans[(i__5 = __state->cnstr - 1)
-		     < 100 && 0 <= i__5 ? i__5 : s_rnge("rhans", i__5, "zzek"
-		    "jtst_", (ftnlen)1374)], &__state->rsdsc[(i__6 = 
-		    __state->cnstr * 24 - 24) < 2400 && 0 <= i__6 ? i__6 : 
-		    s_rnge("rsdsc", i__6, "zzekjtst_", (ftnlen)1374)], &
-		    __state->rdscrs[(i__7 = __state->cnstr * 11 - 11) < 1100 
-		    && 0 <= i__7 ? i__7 : s_rnge("rdscrs", i__7, "zzekjtst_", 
+		     < 100 && 0 <= i__5 ? i__5 : s_rnge(&__global_state->f2c, 
+		    "rhans", i__5, "zzekjtst_", (ftnlen)1374)], &
+		    __state->rsdsc[(i__6 = __state->cnstr * 24 - 24) < 2400 &&
+		     0 <= i__6 ? i__6 : s_rnge(&__global_state->f2c, "rsdsc", 
+		    i__6, "zzekjtst_", (ftnlen)1374)], &__state->rdscrs[(i__7 
+		    = __state->cnstr * 11 - 11) < 1100 && 0 <= i__7 ? i__7 : 
+		    s_rnge(&__global_state->f2c, "rdscrs", i__7, "zzekjtst_", 
 		    (ftnlen)1374)], &__state->rrow, &__state->relt)) {
 
 
@@ -2137,8 +2164,8 @@ L_zzekjnxt:
 /*              set of active constraints. */
 
 		if (__state->svcp1[(i__1 = __state->cnstr - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("svcp1", i__1, "zzekjtst_", (
-			ftnlen)1392)] <= __state->svnt1) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "svcp1", 
+			i__1, "zzekjtst_", (ftnlen)1392)] <= __state->svnt1) {
 
 /*                 The parent table of the column on the LHS of our */
 /*                 equi-join constraint belongs to the first join */
@@ -2154,12 +2181,14 @@ L_zzekjnxt:
 			__state->svnt1 + 1);
 		i__1 = __state->svbas1 + __state->offset + 1;
 		i__2 = __state->svbas1 + __state->offset + __state->svnt1;
-		zzeksrd_(&i__1, &i__2, &rowvec[__state->j - 1]);
+		zzeksrd_(__global_state, &i__1, &i__2, &rowvec[__state->j - 1]
+			);
 		__state->offset = __state->svrb2 + (__state->rrvidx - 1) * (
 			__state->svnt2 + 1);
 		i__1 = __state->svbas2 + __state->offset + 1;
 		i__2 = __state->svbas2 + __state->offset + __state->svnt2;
-		zzeksrd_(&i__1, &i__2, &rowvec[__state->k - 1]);
+		zzeksrd_(__global_state, &i__1, &i__2, &rowvec[__state->k - 1]
+			);
 
 /*              Create row arrays for both sides of each active */
 /*              relational constraint. */
@@ -2167,29 +2196,31 @@ L_zzekjnxt:
 		i__1 = __state->svncon;
 		for (__state->j = 1; __state->j <= i__1; ++__state->j) {
 		    if (__state->locact[(i__2 = __state->j - 1) < 100 && 0 <= 
-			    i__2 ? i__2 : s_rnge("locact", i__2, "zzekjtst_", 
-			    (ftnlen)1426)]) {
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "loca"
+			    "ct", i__2, "zzekjtst_", (ftnlen)1426)]) {
 			__state->ltab = __state->svcp1[(i__2 = __state->j - 1)
-				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp1", 
-				i__2, "zzekjtst_", (ftnlen)1427)];
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "svcp1", i__2, "zzekjts"
+				"t_", (ftnlen)1427)];
 			__state->rtab = __state->svcp2[(i__2 = __state->j - 1)
-				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp2", 
-				i__2, "zzekjtst_", (ftnlen)1428)];
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "svcp2", i__2, "zzekjts"
+				"t_", (ftnlen)1428)];
 			__state->lrows[(i__2 = __state->j - 1) < 100 && 0 <= 
-				i__2 ? i__2 : s_rnge("lrows", i__2, "zzekjts"
-				"t_", (ftnlen)1429)] = rowvec[__state->ltab - 
-				1];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"lrows", i__2, "zzekjtst_", (ftnlen)1429)] = 
+				rowvec[__state->ltab - 1];
 			__state->rrows[(i__2 = __state->j - 1) < 100 && 0 <= 
-				i__2 ? i__2 : s_rnge("rrows", i__2, "zzekjts"
-				"t_", (ftnlen)1430)] = rowvec[__state->rtab - 
-				1];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"rrows", i__2, "zzekjtst_", (ftnlen)1430)] = 
+				rowvec[__state->rtab - 1];
 		    }
 		}
-		*found = zzekvmch_(&__state->svncon, __state->locact, 
-			__state->lhans, __state->lsdsc, __state->ldscrs, 
-			__state->lrows, __state->lelts, __state->svops, 
-			__state->rhans, __state->rsdsc, __state->rdscrs, 
-			__state->rrows, __state->relts);
+		*found = zzekvmch_(__global_state, &__state->svncon, 
+			__state->locact, __state->lhans, __state->lsdsc, 
+			__state->ldscrs, __state->lrows, __state->lelts, 
+			__state->svops, __state->rhans, __state->rsdsc, 
+			__state->rdscrs, __state->rrows, __state->relts);
 		if (__state->lsmall) {
 
 /*                 The `left' key entry is smaller.  All higher-indexed */
@@ -2273,12 +2304,13 @@ L_zzekjnxt:
 			__state->svnt1 + 1);
 		i__1 = __state->svbas1 + __state->offset + 1;
 		i__2 = __state->svbas1 + __state->offset + __state->svnt1;
-		zzeksrd_(&i__1, &i__2, rowvec);
+		zzeksrd_(__global_state, &i__1, &i__2, rowvec);
 		__state->offset = __state->svrb2 + (__state->rptr - 1) * (
 			__state->svnt2 + 1);
 		i__1 = __state->svbas2 + __state->offset + 1;
 		i__2 = __state->svbas2 + __state->offset + __state->svnt2;
-		zzeksrd_(&i__1, &i__2, &rowvec[__state->svnt1]);
+		zzeksrd_(__global_state, &i__1, &i__2, &rowvec[__state->svnt1]
+			);
 
 /*              Create row arrays for both sides of each active */
 /*              relational constraint. */
@@ -2286,29 +2318,31 @@ L_zzekjnxt:
 		i__1 = __state->svncon;
 		for (__state->j = 1; __state->j <= i__1; ++__state->j) {
 		    if (__state->locact[(i__2 = __state->j - 1) < 100 && 0 <= 
-			    i__2 ? i__2 : s_rnge("locact", i__2, "zzekjtst_", 
-			    (ftnlen)1567)]) {
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "loca"
+			    "ct", i__2, "zzekjtst_", (ftnlen)1567)]) {
 			__state->ltab = __state->svcp1[(i__2 = __state->j - 1)
-				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp1", 
-				i__2, "zzekjtst_", (ftnlen)1568)];
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "svcp1", i__2, "zzekjts"
+				"t_", (ftnlen)1568)];
 			__state->rtab = __state->svcp2[(i__2 = __state->j - 1)
-				 < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp2", 
-				i__2, "zzekjtst_", (ftnlen)1569)];
+				 < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "svcp2", i__2, "zzekjts"
+				"t_", (ftnlen)1569)];
 			__state->lrows[(i__2 = __state->j - 1) < 100 && 0 <= 
-				i__2 ? i__2 : s_rnge("lrows", i__2, "zzekjts"
-				"t_", (ftnlen)1570)] = rowvec[__state->ltab - 
-				1];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"lrows", i__2, "zzekjtst_", (ftnlen)1570)] = 
+				rowvec[__state->ltab - 1];
 			__state->rrows[(i__2 = __state->j - 1) < 100 && 0 <= 
-				i__2 ? i__2 : s_rnge("rrows", i__2, "zzekjts"
-				"t_", (ftnlen)1571)] = rowvec[__state->rtab - 
-				1];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"rrows", i__2, "zzekjtst_", (ftnlen)1571)] = 
+				rowvec[__state->rtab - 1];
 		    }
 		}
-		*found = zzekvmch_(&__state->svncon, __state->locact, 
-			__state->lhans, __state->lsdsc, __state->ldscrs, 
-			__state->lrows, __state->lelts, __state->svops, 
-			__state->rhans, __state->rsdsc, __state->rdscrs, 
-			__state->rrows, __state->relts);
+		*found = zzekvmch_(__global_state, &__state->svncon, 
+			__state->locact, __state->lhans, __state->lsdsc, 
+			__state->ldscrs, __state->lrows, __state->lelts, 
+			__state->svops, __state->rhans, __state->rsdsc, 
+			__state->rdscrs, __state->rrows, __state->relts);
 		++__state->rptr;
 		if (*found) {
 		    return 0;
@@ -2321,25 +2355,26 @@ L_zzekjnxt:
     return 0;
 } /* zzekjtst_ */
 
-/* Subroutine */ int zzekjtst_(integer *segvec, integer *jbase1, integer *nt1,
-	 integer *rb1, integer *nr1, integer *jbase2, integer *nt2, integer *
-	rb2, integer *nr2, integer *njcnst, logical *active, integer *cpidx1, 
-	integer *clidx1, integer *elts1, integer *ops, integer *cpidx2, 
-	integer *clidx2, integer *elts2, integer *sthan, integer *stsdsc, 
-	integer *stdtpt, integer *dtpool, integer *dtdscs, logical *found, 
-	integer *rowvec)
+/* Subroutine */ int zzekjtst_(cspice_t* __global_state, integer *segvec, 
+	integer *jbase1, integer *nt1, integer *rb1, integer *nr1, integer *
+	jbase2, integer *nt2, integer *rb2, integer *nr2, integer *njcnst, 
+	logical *active, integer *cpidx1, integer *clidx1, integer *elts1, 
+	integer *ops, integer *cpidx2, integer *clidx2, integer *elts2, 
+	integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, 
+	integer *dtdscs, logical *found, integer *rowvec)
 {
     return zzekjtst_0_(0, segvec, jbase1, nt1, rb1, nr1, jbase2, nt2, rb2, 
 	    nr2, njcnst, active, cpidx1, clidx1, elts1, ops, cpidx2, clidx2, 
 	    elts2, sthan, stsdsc, stdtpt, dtpool, dtdscs, found, rowvec);
     }
 
-/* Subroutine */ int zzekjprp_(integer *segvec, integer *jbase1, integer *nt1,
-	 integer *rb1, integer *nr1, integer *jbase2, integer *nt2, integer *
-	rb2, integer *nr2, integer *njcnst, logical *active, integer *cpidx1, 
-	integer *clidx1, integer *elts1, integer *ops, integer *cpidx2, 
-	integer *clidx2, integer *elts2, integer *sthan, integer *stsdsc, 
-	integer *stdtpt, integer *dtpool, integer *dtdscs)
+/* Subroutine */ int zzekjprp_(cspice_t* __global_state, integer *segvec, 
+	integer *jbase1, integer *nt1, integer *rb1, integer *nr1, integer *
+	jbase2, integer *nt2, integer *rb2, integer *nr2, integer *njcnst, 
+	logical *active, integer *cpidx1, integer *clidx1, integer *elts1, 
+	integer *ops, integer *cpidx2, integer *clidx2, integer *elts2, 
+	integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, 
+	integer *dtdscs)
 {
     return zzekjtst_0_(1, segvec, jbase1, nt1, rb1, nr1, jbase2, nt2, rb2, 
 	    nr2, njcnst, active, cpidx1, clidx1, elts1, ops, cpidx2, clidx2, 
@@ -2347,7 +2382,8 @@ L_zzekjnxt:
 	    integer *)0);
     }
 
-/* Subroutine */ int zzekjnxt_(logical *found, integer *rowvec)
+/* Subroutine */ int zzekjnxt_(cspice_t* __global_state, logical *found, 
+	integer *rowvec)
 {
     return zzekjtst_0_(2, (integer *)0, (integer *)0, (integer *)0, (integer *
 	    )0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (

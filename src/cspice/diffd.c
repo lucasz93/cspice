@@ -8,33 +8,33 @@
 
 
 typedef int diffd_state_t;
-static diffd_state_t* get_diffd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline diffd_state_t* get_diffd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DIFFD ( Difference of two double precision sets ) */
-/* Subroutine */ int diffd_(doublereal *a, doublereal *b, doublereal *c__)
+/* Subroutine */ int diffd_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *c__)
 {
     integer over;
     integer acard;
     integer bcard;
-    extern integer cardd_(doublereal *);
+    extern integer cardd_(cspice_t*, doublereal *);
     integer ccard;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer csize;
-    extern integer sized_(doublereal *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
     integer apoint;
     integer bpoint;
-    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int excess_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    diffd_state_t* __state = get_diffd_state();
+    diffd_state_t* __state = get_diffd_state(__global_state);
 /* $ Abstract */
 
 /*      Take the difference of two double precision sets to form */
@@ -204,17 +204,17 @@ static diffd_state_t* get_diffd_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DIFFD", (ftnlen)5);
+    chkin_(__global_state, "DIFFD", (ftnlen)5);
 
 /*     Find the cardinality of the input sets, and the allowed size */
 /*     of the output set. */
 
-    acard = cardd_(a);
-    bcard = cardd_(b);
-    csize = sized_(c__);
+    acard = cardd_(__global_state, a);
+    bcard = cardd_(__global_state, b);
+    csize = sized_(__global_state, c__);
 
 /*     Begin with the input pointers at the first elements of the */
 /*     input sets. The cardinality of the output set is zero. */
@@ -269,15 +269,15 @@ static diffd_state_t* get_diffd_state() {
 
 /*     Set the cardinality of the output set. */
 
-    scardd_(&ccard, c__);
+    scardd_(__global_state, &ccard, c__);
 
 /*     Report any excess. */
 
     if (over > 0) {
-	excess_(&over, "set", (ftnlen)3);
-	sigerr_("SPICE(SETEXCESS)", (ftnlen)16);
+	excess_(__global_state, &over, "set", (ftnlen)3);
+	sigerr_(__global_state, "SPICE(SETEXCESS)", (ftnlen)16);
     }
-    chkout_("DIFFD", (ftnlen)5);
+    chkout_(__global_state, "DIFFD", (ftnlen)5);
     return 0;
 } /* diffd_ */
 

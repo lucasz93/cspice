@@ -8,13 +8,12 @@
 
 
 typedef int somtru_state_t;
-static somtru_state_t* get_somtru_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline somtru_state_t* get_somtru_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SOMTRU ( Some entries true? ) */
-logical somtru_(logical *logcls, integer *n)
+logical somtru_(cspice_t* __global_state, logical *logcls, integer *n)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +24,7 @@ logical somtru_(logical *logcls, integer *n)
 
 
     /* Module state */
-    somtru_state_t* __state = get_somtru_state();
+    somtru_state_t* __state = get_somtru_state(__global_state);
 /* $ Abstract */
 
 /*     Determine if some of the entries in an array of logicals are */

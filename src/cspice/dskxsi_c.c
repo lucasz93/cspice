@@ -596,7 +596,7 @@
 
 
 
-         chkin_c ( "spear" );
+         chkin_c ( naif_state, "spear" );
 
          /.
          Get meta-kernel name from the command line. 
@@ -888,7 +888,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dskxsi_c" );
+   chkin_c ( naif_state, "dskxsi_c" );
 
    /*
    Check the input string arguments:

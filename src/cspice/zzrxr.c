@@ -8,20 +8,19 @@
 
 
 typedef int zzrxr_state_t;
-static zzrxr_state_t* get_zzrxr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzrxr_state_t* get_zzrxr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZRXR ( Multiply sequence of 3x3 matrices ) */
-/* Subroutine */ int zzrxr_(doublereal *matrix, integer *n, doublereal *
-	output)
+/* Subroutine */ int zzrxr_(cspice_t* __global_state, doublereal *matrix, 
+	integer *n, doublereal *output)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer incr;
@@ -29,13 +28,13 @@ static zzrxr_state_t* get_zzrxr_state() {
     integer i__;
     integer j;
     integer k;
-    extern /* Subroutine */ int ident_(doublereal *);
+    extern /* Subroutine */ int ident_(cspice_t*, doublereal *);
     integer get;
     integer put;
 
 
     /* Module state */
-    zzrxr_state_t* __state = get_zzrxr_state();
+    zzrxr_state_t* __state = get_zzrxr_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -170,10 +169,10 @@ static zzrxr_state_t* get_zzrxr_state() {
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzrxr_", (ftnlen)158)] = 
-			matrix[j + 8] * matrix[(k + 3) * 3 - 12] + matrix[j + 
-			11] * matrix[(k + 3) * 3 - 11] + matrix[j + 14] * 
-			matrix[(k + 3) * 3 - 10];
+			s_rnge(&__global_state->f2c, "output", i__1, "zzrxr_",
+			 (ftnlen)158)] = matrix[j + 8] * matrix[(k + 3) * 3 - 
+			12] + matrix[j + 11] * matrix[(k + 3) * 3 - 11] + 
+			matrix[j + 14] * matrix[(k + 3) * 3 - 10];
 	    }
 	}
     } else if (*n > 2) {
@@ -190,10 +189,10 @@ static zzrxr_state_t* get_zzrxr_state() {
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		temp[(i__1 = j + (k + put * 3) * 3 - 13) < 18 && 0 <= i__1 ? 
-			i__1 : s_rnge("temp", i__1, "zzrxr_", (ftnlen)180)] = 
-			matrix[j + 8] * matrix[(k + 3) * 3 - 12] + matrix[j + 
-			11] * matrix[(k + 3) * 3 - 11] + matrix[j + 14] * 
-			matrix[(k + 3) * 3 - 10];
+			i__1 : s_rnge(&__global_state->f2c, "temp", i__1, 
+			"zzrxr_", (ftnlen)180)] = matrix[j + 8] * matrix[(k + 
+			3) * 3 - 12] + matrix[j + 11] * matrix[(k + 3) * 3 - 
+			11] + matrix[j + 14] * matrix[(k + 3) * 3 - 10];
 	    }
 	}
 
@@ -216,16 +215,18 @@ static zzrxr_state_t* get_zzrxr_state() {
 	    for (j = 1; j <= 3; ++j) {
 		for (k = 1; k <= 3; ++k) {
 		    temp[(i__2 = j + (k + put * 3) * 3 - 13) < 18 && 0 <= 
-			    i__2 ? i__2 : s_rnge("temp", i__2, "zzrxr_", (
-			    ftnlen)207)] = matrix[j + (i__ * 3 + 1) * 3 - 13] 
-			    * temp[(i__3 = (k + get * 3) * 3 - 12) < 18 && 0 
-			    <= i__3 ? i__3 : s_rnge("temp", i__3, "zzrxr_", (
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "temp",
+			     i__2, "zzrxr_", (ftnlen)207)] = matrix[j + (i__ *
+			     3 + 1) * 3 - 13] * temp[(i__3 = (k + get * 3) * 
+			    3 - 12) < 18 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "temp", i__3, "zzrxr_", (
 			    ftnlen)207)] + matrix[j + (i__ * 3 + 2) * 3 - 13] 
 			    * temp[(i__4 = (k + get * 3) * 3 - 11) < 18 && 0 
-			    <= i__4 ? i__4 : s_rnge("temp", i__4, "zzrxr_", (
-			    ftnlen)207)] + matrix[j + (i__ * 3 + 3) * 3 - 13] 
-			    * temp[(i__5 = (k + get * 3) * 3 - 10) < 18 && 0 
-			    <= i__5 ? i__5 : s_rnge("temp", i__5, "zzrxr_", (
+			    <= i__4 ? i__4 : s_rnge(&__global_state->f2c, 
+			    "temp", i__4, "zzrxr_", (ftnlen)207)] + matrix[j 
+			    + (i__ * 3 + 3) * 3 - 13] * temp[(i__5 = (k + get 
+			    * 3) * 3 - 10) < 18 && 0 <= i__5 ? i__5 : s_rnge(&
+			    __global_state->f2c, "temp", i__5, "zzrxr_", (
 			    ftnlen)207)];
 		}
 	    }
@@ -246,16 +247,18 @@ static zzrxr_state_t* get_zzrxr_state() {
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzrxr_", (ftnlen)234)] = 
-			matrix[j + (*n * 3 + 1) * 3 - 13] * temp[(i__2 = (k + 
-			get * 3) * 3 - 12) < 18 && 0 <= i__2 ? i__2 : s_rnge(
-			"temp", i__2, "zzrxr_", (ftnlen)234)] + matrix[j + (*
-			n * 3 + 2) * 3 - 13] * temp[(i__3 = (k + get * 3) * 3 
-			- 11) < 18 && 0 <= i__3 ? i__3 : s_rnge("temp", i__3, 
-			"zzrxr_", (ftnlen)234)] + matrix[j + (*n * 3 + 3) * 3 
-			- 13] * temp[(i__4 = (k + get * 3) * 3 - 10) < 18 && 
-			0 <= i__4 ? i__4 : s_rnge("temp", i__4, "zzrxr_", (
-			ftnlen)234)];
+			s_rnge(&__global_state->f2c, "output", i__1, "zzrxr_",
+			 (ftnlen)234)] = matrix[j + (*n * 3 + 1) * 3 - 13] * 
+			temp[(i__2 = (k + get * 3) * 3 - 12) < 18 && 0 <= 
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "temp", 
+			i__2, "zzrxr_", (ftnlen)234)] + matrix[j + (*n * 3 + 
+			2) * 3 - 13] * temp[(i__3 = (k + get * 3) * 3 - 11) < 
+			18 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+			"temp", i__3, "zzrxr_", (ftnlen)234)] + matrix[j + (*
+			n * 3 + 3) * 3 - 13] * temp[(i__4 = (k + get * 3) * 3 
+			- 10) < 18 && 0 <= i__4 ? i__4 : s_rnge(&
+			__global_state->f2c, "temp", i__4, "zzrxr_", (ftnlen)
+			234)];
 	    }
 	}
     } else if (*n == 1) {
@@ -266,12 +269,12 @@ static zzrxr_state_t* get_zzrxr_state() {
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    for (j = 1; j <= 3; ++j) {
 		output[(i__1 = j + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzrxr_", (ftnlen)248)] = 
-			matrix[j + (i__ + 3) * 3 - 13];
+			s_rnge(&__global_state->f2c, "output", i__1, "zzrxr_",
+			 (ftnlen)248)] = matrix[j + (i__ + 3) * 3 - 13];
 	    }
 	}
     } else if (*n <= 0) {
-	ident_(output);
+	ident_(__global_state, output);
     }
     return 0;
 } /* zzrxr_ */

@@ -2,26 +2,23 @@
 #include "fio.h"
 #include "lio.h"
 #include "fmt.h"
-#include "__cspice_state.h"
 
  static VOID
-nl_donewrec(Void)
+nl_donewrec(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	(*f2c->f__donewrec)();
 	PUT(f2c,' ');
 	}
 
 #ifdef KR_headers
-x_wsne(a) cilist *a;
+x_wsne(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
 #include "string.h"
 
  VOID
-x_wsne(cilist *a)
+x_wsne(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	Namelist *nl;
 	char *s;
 	Vardesc *v, **vd, **vde;
@@ -46,7 +43,7 @@ x_wsne(cilist *a)
 #ifdef No_Extra_Namelist_Newlines
 		if (f2c->f__recpos+strlen(s)+2 >= L_len)
 #endif
-			nl_donewrec();
+			nl_donewrec(f2c);
 		while(*s)
 			PUT(f2c,*s++);
 		PUT(f2c,' ');
@@ -62,12 +59,12 @@ x_wsne(cilist *a)
 		l_write(number, v->addr, size, type);
 		if (vd < vde) {
 			if (f2c->f__recpos+2 >= f2c->L_len)
-				nl_donewrec();
+				nl_donewrec(f2c);
 			PUT(f2c,',');
 			PUT(f2c,' ');
 			}
 		else if (f2c->f__recpos+1 >= f2c->L_len)
-			nl_donewrec();
+			nl_donewrec(f2c);
 		}
 	f2c->f__Aquote = 0;
 	PUT(f2c,'/');

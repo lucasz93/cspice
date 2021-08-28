@@ -601,7 +601,7 @@
    {
       return; 
    }
-   chkin_c ( "ckcov_c" );
+   chkin_c ( naif_state, "ckcov_c" );
 
    /*
    Check the input string `ck' to make sure the pointer is non-null 

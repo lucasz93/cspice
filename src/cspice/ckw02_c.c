@@ -508,7 +508,7 @@
    /*
    Participate in error handling.
    */
-   chkin_c ( "ckw02_c" );
+   chkin_c ( naif_state, "ckw02_c" );
 
    /*
    Check the input strings to make sure the pointers

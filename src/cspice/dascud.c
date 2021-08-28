@@ -8,8 +8,7 @@
 
 
 extern dascud_init_t __dascud_init;
-static dascud_state_t* get_dascud_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dascud_state_t* get_dascud_state(cspice_t* state) {
 	if (!state->dascud)
 		state->dascud = __cspice_allocate_module(sizeof(
 	dascud_state_t), &__dascud_init, sizeof(__dascud_init));
@@ -18,8 +17,8 @@ static dascud_state_t* get_dascud_state() {
 }
 
 /* $Procedure      DASCUD ( DAS, create or update directories ) */
-/* Subroutine */ int dascud_(integer *handle, integer *type__, integer *
-	nwords)
+/* Subroutine */ int dascud_(cspice_t* __global_state, integer *handle, 
+	integer *type__, integer *nwords)
 {
     /* Initialized data */
 
@@ -28,7 +27,7 @@ static dascud_state_t* get_dascud_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer free;
@@ -36,47 +35,50 @@ static dascud_state_t* get_dascud_state() {
     integer last;
     integer room;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
     integer descr;
-    extern /* Subroutine */ int maxai_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int maxai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer recno;
     integer ncomr;
     integer lword;
     integer ltype;
     integer needed;
-    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
     integer dscrec;
     integer nw;
     integer dirrec[256];
-    extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dashfs_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *);
     integer minadr;
     integer maxadr;
     integer lastla[3];
     integer rngloc;
-    extern /* Subroutine */ int dasufs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int dasrri_(integer *, integer *, integer *, 
-	    integer *, integer *);
-    extern /* Subroutine */ int dasuri_(integer *, integer *, integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int dasufs_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasrri_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int dasuri_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
     integer lastrc[3];
-    extern /* Subroutine */ int daswri_(integer *, integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int daswri_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer lastwd[3];
     integer nresvc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer nresvr;
     integer loc;
 
 
     /* Module state */
-    dascud_state_t* __state = get_dascud_state();
+    dascud_state_t* __state = get_dascud_state(__global_state);
 /* $ Abstract */
 
 /*     Create or update directories in a DAS file to reflect addition */
@@ -358,10 +360,10 @@ static dascud_state_t* get_dascud_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASCUD", (ftnlen)6);
+	chkin_(__global_state, "DASCUD", (ftnlen)6);
     }
 
 /*     Here's a preview of coming attractions: */
@@ -469,8 +471,8 @@ static dascud_state_t* get_dascud_state() {
 
 /*     Get the file summary. */
 
-    dashfs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 
-	    lastwd);
+    dashfs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, 
+	    lastla, lastrc, lastwd);
 
 /*     Now do all of the data-type-dependent work: */
 
@@ -490,10 +492,10 @@ static dascud_state_t* get_dascud_state() {
 /*     data addition. */
 
 
-    last = lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("las"
-	    "tla", i__1, "dascud_", (ftnlen)513)];
-    dscrec = lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "lastrc", i__1, "dascud_", (ftnlen)514)];
+    last = lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "lastla", i__1, "dascud_", (ftnlen)513)];
+    dscrec = lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "lastrc", i__1, "dascud_", (ftnlen)514)];
     if (*type__ == 2) {
 	nw = 128;
 	rngloc = 5;
@@ -504,20 +506,21 @@ static dascud_state_t* get_dascud_state() {
 	nw = 1024;
 	rngloc = 3;
     } else {
-	setmsg_("Invalid data type: #. ", (ftnlen)22);
-	errint_("#", type__, (ftnlen)1);
-	sigerr_("SPICE(DASINVALIDTYPE)", (ftnlen)21);
-	chkout_("DASCUD", (ftnlen)6);
+	setmsg_(__global_state, "Invalid data type: #. ", (ftnlen)22);
+	errint_(__global_state, "#", type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASINVALIDTYPE)", (ftnlen)21);
+	chkout_(__global_state, "DASCUD", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure that NWORDS is something sensible. */
 
     if (*nwords < 0) {
-	setmsg_("NWORDS was #; should be non-negative.", (ftnlen)37);
-	errint_("#", nwords, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("DASCUD", (ftnlen)6);
+	setmsg_(__global_state, "NWORDS was #; should be non-negative.", (
+		ftnlen)37);
+	errint_(__global_state, "#", nwords, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DASCUD", (ftnlen)6);
 	return 0;
     }
 
@@ -525,16 +528,18 @@ static dascud_state_t* get_dascud_state() {
 /*     descriptor in the file, and also find the type of the descriptor */
 /*     LTYPE. */
 
-    maxai_(lastrc, &__state->c__3, &lrec, &loc);
+    maxai_(__global_state, lastrc, &__state->c__3, &lrec, &loc);
     lword = 0;
     ltype = 0;
     for (i__ = 1; i__ <= 3; ++i__) {
-	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc",
-		 i__1, "dascud_", (ftnlen)565)] == lrec && lastwd[(i__2 = i__ 
-		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("lastwd", i__2, "dascu"
-		"d_", (ftnlen)565)] > lword) {
-	    lword = lastwd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dascud_", (ftnlen)568)];
+	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "lastrc", i__1, "dascud_", (ftnlen)565)] 
+		== lrec && lastwd[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "lastwd", i__2, "dascud_", (
+		ftnlen)565)] > lword) {
+	    lword = lastwd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "lastwd", i__1, "dascud_", (ftnlen)
+		    568)];
 	    ltype = i__;
 	}
     }
@@ -575,17 +580,18 @@ static dascud_state_t* get_dascud_state() {
 	maxadr = last + *nwords;
 	i__1 = rngloc + 1;
 	i__2 = rngloc + 1;
-	dasuri_(handle, &dscrec, &i__1, &i__2, &maxadr);
+	dasuri_(__global_state, handle, &dscrec, &i__1, &i__2, &maxadr);
 
 /*        The last logical address of TYPE is now MAXADR. */
 
-	lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastla",
-		 i__1, "dascud_", (ftnlen)621)] = maxadr;
+	lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "lastla", i__1, "dascud_", (ftnlen)621)] 
+		= maxadr;
 
 /*        Write out the updated file summary. */
 
-	dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, 
-		lastrc, lastwd);
+	dasufs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, &
+		free, lastla, lastrc, lastwd);
     } else if (*type__ == ltype && dscrec > 0 && lword < 256) {
 
 
@@ -600,7 +606,7 @@ static dascud_state_t* get_dascud_state() {
 /*        Get the old descriptor, since we're going to update it. */
 
 
-	dasrri_(handle, &dscrec, &lword, &lword, &descr);
+	dasrri_(__global_state, handle, &dscrec, &lword, &lword, &descr);
 
 /*        Update the descriptor and write it back into the file. */
 
@@ -609,26 +615,27 @@ static dascud_state_t* get_dascud_state() {
 	} else {
 	    descr += needed;
 	}
-	dasuri_(handle, &dscrec, &lword, &lword, &descr);
+	dasuri_(__global_state, handle, &dscrec, &lword, &lword, &descr);
 
 /*        Update the address range for this type. */
 
 	maxadr = last + *nwords;
 	i__1 = rngloc + 1;
 	i__2 = rngloc + 1;
-	dasuri_(handle, &dscrec, &i__1, &i__2, &maxadr);
+	dasuri_(__global_state, handle, &dscrec, &i__1, &i__2, &maxadr);
 
 /*        The last logical address of TYPE is now MAXADR.  The first */
 /*        free record follows the last data record in use. */
 
-	lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastla",
-		 i__1, "dascud_", (ftnlen)678)] = maxadr;
+	lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "lastla", i__1, "dascud_", (ftnlen)678)] 
+		= maxadr;
 	free += needed;
 
 /*        Write out the updated file summary. */
 
-	dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, 
-		lastrc, lastwd);
+	dasufs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, &
+		free, lastla, lastrc, lastwd);
     } else {
 
 /*        This is case (3).  We need a new descriptor. */
@@ -642,7 +649,7 @@ static dascud_state_t* get_dascud_state() {
 
 /*           Start with an empty directory record. */
 
-	    cleari_(&__state->c__256, dirrec);
+	    cleari_(__global_state, &__state->c__256, dirrec);
 
 /*           Add a new descriptor to the directory.  The record */
 /*           count is the number of new records required:  NEEDED. */
@@ -653,14 +660,16 @@ static dascud_state_t* get_dascud_state() {
 /*           Fill in the address range for TYPE covered by this */
 /*           directory. */
 
-	    dirrec[(i__1 = rngloc - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		    "dirrec", i__1, "dascud_", (ftnlen)723)] = 1;
-	    dirrec[(i__1 = rngloc) < 256 && 0 <= i__1 ? i__1 : s_rnge("dirrec"
-		    , i__1, "dascud_", (ftnlen)724)] = *nwords;
+	    dirrec[(i__1 = rngloc - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "dirrec", i__1, "dascud_", (ftnlen)
+		    723)] = 1;
+	    dirrec[(i__1 = rngloc) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "dirrec", i__1, "dascud_", (ftnlen)
+		    724)] = *nwords;
 
 /*           Write out this directory. */
 
-	    daswri_(handle, &recno, dirrec);
+	    daswri_(__global_state, handle, &recno, dirrec);
 
 /*           Update the file summary:  the location of the descriptor */
 /*           and the last logical address for this type must be set. */
@@ -671,14 +680,17 @@ static dascud_state_t* get_dascud_state() {
 /*           The first free record follows the last data record in use. */
 
 	    free = recno + needed + 1;
-	    lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastla", i__1, "dascud_", (ftnlen)741)] = *nwords;
-	    lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastrc", i__1, "dascud_", (ftnlen)742)] = recno;
-	    lastwd[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dascud_", (ftnlen)743)] = 10;
-	    dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, 
-		    lastrc, lastwd);
+	    lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "lastla", i__1, "dascud_", (ftnlen)
+		    741)] = *nwords;
+	    lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "lastrc", i__1, "dascud_", (ftnlen)
+		    742)] = recno;
+	    lastwd[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "lastwd", i__1, "dascud_", (ftnlen)
+		    743)] = 10;
+	    dasufs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, 
+		    &free, lastla, lastrc, lastwd);
 	} else if (lword < 256) {
 
 /*           This is case (3b).  We have room for another descriptor */
@@ -701,7 +713,8 @@ static dascud_state_t* get_dascud_state() {
 		maxadr = last + room;
 		i__1 = rngloc + 1;
 		i__2 = rngloc + 1;
-		dasuri_(handle, &dscrec, &i__1, &i__2, &maxadr);
+		dasuri_(__global_state, handle, &dscrec, &i__1, &i__2, &
+			maxadr);
 	    }
 
 /*           Make up the new descriptor and write it to the last */
@@ -710,7 +723,8 @@ static dascud_state_t* get_dascud_state() {
 /*           the current last descriptor. */
 
 	    if (*type__ == __state->next[(i__1 = ltype - 1) < 3 && 0 <= i__1 ?
-		     i__1 : s_rnge("next", i__1, "dascud_", (ftnlen)789)]) {
+		     i__1 : s_rnge(&__global_state->f2c, "next", i__1, "dasc"
+		    "ud_", (ftnlen)789)]) {
 
 /*              TYPE is the successor in the type sequence of the type */
 /*              of the previous descriptor; use a positive count. */
@@ -721,7 +735,7 @@ static dascud_state_t* get_dascud_state() {
 	    }
 	    i__1 = lword + 1;
 	    i__2 = lword + 1;
-	    dasuri_(handle, &lrec, &i__1, &i__2, &descr);
+	    dasuri_(__global_state, handle, &lrec, &i__1, &i__2, &descr);
 
 /*           Update the address range for this type.  Some care is needed */
 /*           when updating the minimum address:  this value should be */
@@ -730,12 +744,13 @@ static dascud_state_t* get_dascud_state() {
 
 	    if (dscrec < lrec) {
 		minadr = last + room + 1;
-		dasuri_(handle, &lrec, &rngloc, &rngloc, &minadr);
+		dasuri_(__global_state, handle, &lrec, &rngloc, &rngloc, &
+			minadr);
 	    }
 	    maxadr = last + *nwords;
 	    i__1 = rngloc + 1;
 	    i__2 = rngloc + 1;
-	    dasuri_(handle, &lrec, &i__1, &i__2, &maxadr);
+	    dasuri_(__global_state, handle, &lrec, &i__1, &i__2, &maxadr);
 
 /*           Update the file summary:  the location of the descriptor */
 /*           and the last logical address for this type must be set. */
@@ -743,12 +758,15 @@ static dascud_state_t* get_dascud_state() {
 /*           The first free record follows the last data record in use. */
 
 	    free += needed;
-	    lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastla", i__1, "dascud_", (ftnlen)829)] = last + *nwords;
-	    lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastrc", i__1, "dascud_", (ftnlen)830)] = lrec;
-	    lastwd[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dascud_", (ftnlen)831)] = lword + 1;
+	    lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "lastla", i__1, "dascud_", (ftnlen)
+		    829)] = last + *nwords;
+	    lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "lastrc", i__1, "dascud_", (ftnlen)
+		    830)] = lrec;
+	    lastwd[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "lastwd", i__1, "dascud_", (ftnlen)
+		    831)] = lword + 1;
 
 /*           Before writing out the summary, see whether we'll need */
 /*           a new directory; this will decide whether the first free */
@@ -766,14 +784,15 @@ static dascud_state_t* get_dascud_state() {
 /*              Update the previous directory to point forward to the */
 /*              next one. */
 
-		dasuri_(handle, &lrec, &__state->c__2, &__state->c__2, &free);
+		dasuri_(__global_state, handle, &lrec, &__state->c__2, &
+			__state->c__2, &free);
 
 /*              Prepare the new directory record: clear it, set the */
 /*              backward pointer, and write the record. */
 
-		cleari_(&__state->c__256, dirrec);
+		cleari_(__global_state, &__state->c__256, dirrec);
 		dirrec[0] = lrec;
-		daswri_(handle, &free, dirrec);
+		daswri_(__global_state, handle, &free, dirrec);
 
 /*              Update the free record number. */
 
@@ -782,8 +801,8 @@ static dascud_state_t* get_dascud_state() {
 
 /*           Now write out the file summary. */
 
-	    dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, 
-		    lastrc, lastwd);
+	    dasufs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, 
+		    &free, lastla, lastrc, lastwd);
 	} else {
 
 /*           This is case (3c).  We must put the new descriptor in */
@@ -805,33 +824,36 @@ static dascud_state_t* get_dascud_state() {
 		maxadr = last + room;
 		i__1 = rngloc + 1;
 		i__2 = rngloc + 1;
-		dasuri_(handle, &dscrec, &i__1, &i__2, &maxadr);
+		dasuri_(__global_state, handle, &dscrec, &i__1, &i__2, &
+			maxadr);
 	    }
 
 /*           Obtain the record number for this directory. */
 
-	    dasrri_(handle, &lrec, &__state->c__2, &__state->c__2, &recno);
+	    dasrri_(__global_state, handle, &lrec, &__state->c__2, &
+		    __state->c__2, &recno);
 
 /*           Now fill in the new directory record.  Start with a clean */
 /*           record. */
 
-	    cleari_(&__state->c__256, dirrec);
+	    cleari_(__global_state, &__state->c__256, dirrec);
 
 /*           Set the backward pointer, the address range for TYPE, */
 /*           initial data type, and record count. */
 
 	    dirrec[0] = lrec;
-	    dirrec[(i__1 = rngloc - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		    "dirrec", i__1, "dascud_", (ftnlen)925)] = last + room + 
-		    1;
-	    dirrec[(i__1 = rngloc) < 256 && 0 <= i__1 ? i__1 : s_rnge("dirrec"
-		    , i__1, "dascud_", (ftnlen)926)] = last + *nwords;
+	    dirrec[(i__1 = rngloc - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "dirrec", i__1, "dascud_", (ftnlen)
+		    925)] = last + room + 1;
+	    dirrec[(i__1 = rngloc) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "dirrec", i__1, "dascud_", (ftnlen)
+		    926)] = last + *nwords;
 	    dirrec[8] = *type__;
 	    dirrec[9] = needed;
 
 /*           Write out the record. */
 
-	    daswri_(handle, &recno, dirrec);
+	    daswri_(__global_state, handle, &recno, dirrec);
 
 /*           Update the file summary to reflect the new record and word */
 /*           offsets of the last descriptor of the indicated type.  The */
@@ -839,17 +861,20 @@ static dascud_state_t* get_dascud_state() {
 /*           record lies after the added data records. */
 
 	    free += needed;
-	    lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastla", i__1, "dascud_", (ftnlen)943)] = last + *nwords;
-	    lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastrc", i__1, "dascud_", (ftnlen)944)] = recno;
-	    lastwd[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dascud_", (ftnlen)945)] = 10;
-	    dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, 
-		    lastrc, lastwd);
+	    lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "lastla", i__1, "dascud_", (ftnlen)
+		    943)] = last + *nwords;
+	    lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "lastrc", i__1, "dascud_", (ftnlen)
+		    944)] = recno;
+	    lastwd[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "lastwd", i__1, "dascud_", (ftnlen)
+		    945)] = 10;
+	    dasufs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, 
+		    &free, lastla, lastrc, lastwd);
 	}
     }
-    chkout_("DASCUD", (ftnlen)6);
+    chkout_(__global_state, "DASCUD", (ftnlen)6);
     return 0;
 } /* dascud_ */
 

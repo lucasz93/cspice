@@ -8,26 +8,26 @@
 
 
 typedef int zzektrnk_state_t;
-static zzektrnk_state_t* get_zzektrnk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrnk_state_t* get_zzektrnk_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKTRNK ( EK, node size ) */
-integer zzektrnk_(integer *handle, integer *tree, integer *node)
+integer zzektrnk_(cspice_t* __global_state, integer *handle, integer *tree, 
+	integer *node)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Local variables */
-    extern integer zzektrbs_(integer *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern integer zzektrbs_(cspice_t*, integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer addrss;
 
 
     /* Module state */
-    zzektrnk_state_t* __state = get_zzektrnk_state();
+    zzektrnk_state_t* __state = get_zzektrnk_state(__global_state);
 /* $ Abstract */
 
 /*     Return the number of keys in a node. */
@@ -354,11 +354,11 @@ integer zzektrnk_(integer *handle, integer *tree, integer *node)
 /*     node is stored. */
 
     if (*tree == *node) {
-	addrss = zzektrbs_(node) + 5;
+	addrss = zzektrbs_(__global_state, node) + 5;
     } else {
-	addrss = zzektrbs_(node) + 1;
+	addrss = zzektrbs_(__global_state, node) + 1;
     }
-    dasrdi_(handle, &addrss, &addrss, &ret_val);
+    dasrdi_(__global_state, handle, &addrss, &addrss, &ret_val);
     return ret_val;
 } /* zzektrnk_ */
 

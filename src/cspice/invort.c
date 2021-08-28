@@ -8,8 +8,7 @@
 
 
 extern invort_init_t __invort_init;
-static invort_state_t* get_invort_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline invort_state_t* get_invort_state(cspice_t* state) {
 	if (!state->invort)
 		state->invort = __cspice_allocate_module(sizeof(
 	invort_state_t), &__invort_init, sizeof(__invort_init));
@@ -18,7 +17,8 @@ static invort_state_t* get_invort_state() {
 }
 
 /* $Procedure      INVORT ( Invert nearly orthogonal matrices ) */
-/* Subroutine */ int invort_(doublereal *m, doublereal *mit)
+/* Subroutine */ int invort_(cspice_t* __global_state, doublereal *m, 
+	doublereal *mit)
 {
     /* Initialized data */
 
@@ -27,28 +27,30 @@ static invort_state_t* get_invort_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal temp[9]	/* was [3][3] */;
     integer i__;
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int xpose_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal length;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    invort_state_t* __state = get_invort_state();
+    invort_state_t* __state = get_invort_state(__global_state);
 /* $ Abstract */
 
 /*     Construct the inverse of a 3x3 matrix with orthogonal columns */
@@ -218,7 +220,7 @@ static invort_state_t* get_invort_state() {
 /*     The first time through, get a copy of DPMAX. */
 
     if (__state->first) {
-	__state->bound = dpmax_();
+	__state->bound = dpmax_(__global_state);
 	__state->first = FALSE_;
     }
 
@@ -226,17 +228,18 @@ static invort_state_t* get_invort_state() {
 /*     everything is do-able before trying something. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	unorm_(&m[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge("m", 
-		i__1, "invort_", (ftnlen)208)], &temp[(i__2 = i__ * 3 - 3) < 
-		9 && 0 <= i__2 ? i__2 : s_rnge("temp", i__2, "invort_", (
+	unorm_(__global_state, &m[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? 
+		i__1 : s_rnge(&__global_state->f2c, "m", i__1, "invort_", (
+		ftnlen)208)], &temp[(i__2 = i__ * 3 - 3) < 9 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "temp", i__2, "invort_", (
 		ftnlen)208)], &length);
 	if (length == 0.) {
-	    chkin_("INVORT", (ftnlen)6);
-	    setmsg_("Column # of the input matrix has a norm of zero. ", (
-		    ftnlen)49);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(ZEROLENGTHCOLUMN)", (ftnlen)23);
-	    chkout_("INVORT", (ftnlen)6);
+	    chkin_(__global_state, "INVORT", (ftnlen)6);
+	    setmsg_(__global_state, "Column # of the input matrix has a norm"
+		    " of zero. ", (ftnlen)49);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(ZEROLENGTHCOLUMN)", (ftnlen)23);
+	    chkout_(__global_state, "INVORT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -244,25 +247,27 @@ static invort_state_t* get_invort_state() {
 
 	if (length < 1.) {
 	    if (length * __state->bound < 1.) {
-		chkin_("INVORT", (ftnlen)6);
-		setmsg_("The length of column # is #. This number cannot be "
-			"inverted.  For this reason, the scaled transpose of "
-			"the input matrix cannot be formed. ", (ftnlen)138);
-		errint_("#", &i__, (ftnlen)1);
-		errdp_("#", &length, (ftnlen)1);
-		sigerr_("SPICE(COLUMNTOOSMALL)", (ftnlen)21);
-		chkout_("INVORT", (ftnlen)6);
+		chkin_(__global_state, "INVORT", (ftnlen)6);
+		setmsg_(__global_state, "The length of column # is #. This n"
+			"umber cannot be inverted.  For this reason, the scal"
+			"ed transpose of the input matrix cannot be formed. ", 
+			(ftnlen)138);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errdp_(__global_state, "#", &length, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(COLUMNTOOSMALL)", (ftnlen)21);
+		chkout_(__global_state, "INVORT", (ftnlen)6);
 		return 0;
 	    }
 	}
 	scale = 1. / length;
-	vsclip_(&scale, &temp[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : 
-		s_rnge("temp", i__1, "invort_", (ftnlen)246)]);
+	vsclip_(__global_state, &scale, &temp[(i__1 = i__ * 3 - 3) < 9 && 0 <=
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "temp", i__1, 
+		"invort_", (ftnlen)246)]);
     }
 
 /*     If we make it this far, we just need to transpose TEMP into MIT. */
 
-    xpose_(temp, mit);
+    xpose_(__global_state, temp, mit);
     return 0;
 } /* invort_ */
 

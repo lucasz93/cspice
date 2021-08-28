@@ -8,8 +8,7 @@
 
 
 extern ljucrs_init_t __ljucrs_init;
-static ljucrs_state_t* get_ljucrs_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ljucrs_state_t* get_ljucrs_state(cspice_t* state) {
 	if (!state->ljucrs)
 		state->ljucrs = __cspice_allocate_module(sizeof(
 	ljucrs_state_t), &__ljucrs_init, sizeof(__ljucrs_init));
@@ -18,8 +17,8 @@ static ljucrs_state_t* get_ljucrs_state() {
 }
 
 /* $Procedure      LJUCRS ( Left-justify, Uppercase, Compress ) */
-/* Subroutine */ int ljucrs_(integer *n, char *input, char *output, ftnlen 
-	input_len, ftnlen output_len)
+/* Subroutine */ int ljucrs_(cspice_t* __global_state, integer *n, char *
+	input, char *output, ftnlen input_len, ftnlen output_len)
 {
     /* Initialized data */
 
@@ -28,8 +27,8 @@ static ljucrs_state_t* get_ljucrs_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
@@ -41,7 +40,7 @@ static ljucrs_state_t* get_ljucrs_state() {
 
 
     /* Module state */
-    ljucrs_state_t* __state = get_ljucrs_state();
+    ljucrs_state_t* __state = get_ljucrs_state(__global_state);
 /* $ Abstract */
 
 /*     Left-justify, uppercase, and space-compress a character string. */
@@ -182,8 +181,8 @@ static ljucrs_state_t* get_ljucrs_state() {
 /*     Find out how much space there is in the INPUT and OUTPUT strings */
 /*     and initialize the space counter and output place holder. */
 
-    inlen = i_len(input, input_len);
-    outlen = i_len(output, output_len);
+    inlen = i_len(&__global_state->f2c, input, input_len);
+    outlen = i_len(&__global_state->f2c, output, output_len);
     count = 0;
     j = 0;
     i__1 = inlen;
@@ -244,7 +243,8 @@ static ljucrs_state_t* get_ljucrs_state() {
 
     if (j < outlen) {
 	i__1 = j;
-	s_copy(output + i__1, " ", output_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, output + i__1, " ", output_len - i__1, (
+		ftnlen)1);
     }
     return 0;
 } /* ljucrs_ */

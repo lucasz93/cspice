@@ -8,28 +8,27 @@
 
 
 typedef int zzekrplk_state_t;
-static zzekrplk_state_t* get_zzekrplk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrplk_state_t* get_zzekrplk_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZEKRPLK ( EK, look up record pointer ) */
-/* Subroutine */ int zzekrplk_(integer *handle, integer *segdsc, integer *n, 
-	integer *recptr)
+/* Subroutine */ int zzekrplk_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *n, integer *recptr)
 {
     integer tree;
-    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzektrdp_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer stype;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzekrplk_state_t* __state = get_zzekrplk_state();
+    zzekrplk_state_t* __state = get_zzekrplk_state(__global_state);
 /* $ Abstract */
 
 /*     Look up the record pointer of an EK record having a specified */
@@ -485,7 +484,7 @@ static zzekrplk_state_t* get_zzekrplk_state() {
 /*        the record tree. */
 
 	tree = segdsc[6];
-	zzektrdp_(handle, &tree, n, recptr);
+	zzektrdp_(__global_state, handle, &tree, n, recptr);
     } else if (stype == 2) {
 
 /*        For type 2 segments, the record pointer *is* the ordinal */
@@ -496,11 +495,12 @@ static zzekrplk_state_t* get_zzekrplk_state() {
 
 /*        Sorry, no other types of segments are supported. */
 
-	chkin_("ZZEKRPLK", (ftnlen)8);
-	setmsg_("The segment type # is not supported.", (ftnlen)36);
-	errint_("#", &stype, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("ZZEKRPLK", (ftnlen)8);
+	chkin_(__global_state, "ZZEKRPLK", (ftnlen)8);
+	setmsg_(__global_state, "The segment type # is not supported.", (
+		ftnlen)36);
+	errint_(__global_state, "#", &stype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKRPLK", (ftnlen)8);
 	return 0;
     }
     return 0;

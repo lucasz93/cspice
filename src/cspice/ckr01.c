@@ -8,8 +8,7 @@
 
 
 extern ckr01_init_t __ckr01_init;
-static ckr01_state_t* get_ckr01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckr01_state_t* get_ckr01_state(cspice_t* state) {
 	if (!state->ckr01)
 		state->ckr01 = __cspice_allocate_module(sizeof(ckr01_state_t),
 	 &__ckr01_init, sizeof(__ckr01_init));
@@ -18,16 +17,16 @@ static ckr01_state_t* get_ckr01_state() {
 }
 
 /* $Procedure      CKR01 ( C-kernel, read pointing record, data type 1 ) */
-/* Subroutine */ int ckr01_(integer *handle, doublereal *descr, doublereal *
-	sclkdp, doublereal *tol, logical *needav, doublereal *record, logical 
-	*found)
+/* Subroutine */ int ckr01_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *
+	needav, doublereal *record, logical *found)
 {
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer nrec;
@@ -36,23 +35,23 @@ static ckr01_state_t* get_ckr01_state() {
     integer psiz;
     integer i__;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer group;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal buffer[100];
     integer remain;
     integer dirloc;
-    extern integer lstcld_(doublereal *, integer *, doublereal *);
-    extern integer lstled_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern integer lstcld_(cspice_t*, doublereal *, integer *, doublereal *);
+    extern integer lstled_(cspice_t*, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer grpndx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer beg;
     integer icd[6];
@@ -61,7 +60,7 @@ static ckr01_state_t* get_ckr01_state() {
 
 
     /* Module state */
-    ckr01_state_t* __state = get_ckr01_state();
+    ckr01_state_t* __state = get_ckr01_state(__global_state);
 /* $ Abstract */
 
 /*     Read a pointing record from a CK segment, data type 1. */
@@ -424,10 +423,10 @@ static ckr01_state_t* get_ckr01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKR01", (ftnlen)5);
+	chkin_(__global_state, "CKR01", (ftnlen)5);
     }
 
 /*     To minimize the number of file reads performed during the search, */
@@ -461,16 +460,16 @@ static ckr01_state_t* get_ckr01_state() {
 /*        ICD(5)  Initial address of segment data */
 /*        ICD(6)  Final address of segment data */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dcd, icd);
 
 /*     Check to make sure that the segment is type 1. */
 
     if (icd[2] != 1) {
-	setmsg_("The segment is not a type 1 segment.  Type is #", (ftnlen)47)
-		;
-	errint_("#", &icd[2], (ftnlen)1);
-	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
-	chkout_("CKR01", (ftnlen)5);
+	setmsg_(__global_state, "The segment is not a type 1 segment.  Type "
+		"is #", (ftnlen)47);
+	errint_(__global_state, "#", &icd[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGDATATYPE)", (ftnlen)20);
+	chkout_(__global_state, "CKR01", (ftnlen)5);
 	return 0;
     }
 
@@ -485,10 +484,10 @@ static ckr01_state_t* get_ckr01_state() {
     } else {
 	psiz = 4;
 	if (*needav) {
-	    setmsg_("Segment does not contain angular velocity data.", (
-		    ftnlen)47);
-	    sigerr_("SPICE(NOAVDATA)", (ftnlen)15);
-	    chkout_("CKR01", (ftnlen)5);
+	    setmsg_(__global_state, "Segment does not contain angular veloci"
+		    "ty data.", (ftnlen)47);
+	    sigerr_(__global_state, "SPICE(NOAVDATA)", (ftnlen)15);
+	    chkout_(__global_state, "CKR01", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -502,7 +501,7 @@ static ckr01_state_t* get_ckr01_state() {
 /*     Get the number of records in this segment, and from that determine */
 /*     the number of directory epochs. */
 
-    dafgda_(handle, &end, &end, buffer);
+    dafgda_(__global_state, handle, &end, &end, buffer);
     nrec = (integer) buffer[0];
     ndir = (nrec - 1) / 100;
 
@@ -537,7 +536,7 @@ static ckr01_state_t* get_ckr01_state() {
 
 	    n = min(remain,100);
 	    i__1 = dirloc + n - 1;
-	    dafgda_(handle, &dirloc, &i__1, buffer);
+	    dafgda_(__global_state, handle, &dirloc, &i__1, buffer);
 	    remain -= n;
 
 /*           If we find the first directory time greater than or equal */
@@ -549,7 +548,7 @@ static ckr01_state_t* get_ckr01_state() {
 
 /*           Otherwise keep looking. */
 
-	    i__ = lstled_(sclkdp, &n, buffer);
+	    i__ = lstled_(__global_state, sclkdp, &n, buffer);
 	    if (i__ < n) {
 		group = group + i__ + 1;
 		fnd = TRUE_;
@@ -584,16 +583,16 @@ static ckr01_state_t* get_ckr01_state() {
     i__1 = 100, i__2 = nrec - skip;
     n = min(i__1,i__2);
     i__1 = grpndx + n - 1;
-    dafgda_(handle, &grpndx, &i__1, buffer);
+    dafgda_(__global_state, handle, &grpndx, &i__1, buffer);
 
 /*     Find the time in the group closest to the input time, and see */
 /*     if it's within tolerance. */
 
-    i__ = lstcld_(sclkdp, &n, buffer);
+    i__ = lstcld_(__global_state, sclkdp, &n, buffer);
     if ((d__1 = *sclkdp - buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-	    s_rnge("buffer", i__1, "ckr01_", (ftnlen)625)], abs(d__1)) > *tol)
-	     {
-	chkout_("CKR01", (ftnlen)5);
+	    s_rnge(&__global_state->f2c, "buffer", i__1, "ckr01_", (ftnlen)
+	    625)], abs(d__1)) > *tol) {
+	chkout_(__global_state, "CKR01", (ftnlen)5);
 	return 0;
     }
 
@@ -602,8 +601,8 @@ static ckr01_state_t* get_ckr01_state() {
 /*     RECORD( 1 ) holds CLKOUT. */
 
     *found = TRUE_;
-    record[0] = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-	    "buffer", i__1, "ckr01_", (ftnlen)638)];
+    record[0] = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "buffer", i__1, "ckr01_", (ftnlen)638)];
 
 /*     We need the Ith pointing record out of this group of DIRSIZ. */
 /*     This group of DIRSIZ is SKIP records into the beginning */
@@ -611,11 +610,11 @@ static ckr01_state_t* get_ckr01_state() {
 
     n = beg + psiz * (skip + i__ - 1);
     i__1 = n + psiz - 1;
-    dafgda_(handle, &n, &i__1, &record[1]);
+    dafgda_(__global_state, handle, &n, &i__1, &record[1]);
 
 /*     That is all. */
 
-    chkout_("CKR01", (ftnlen)5);
+    chkout_(__global_state, "CKR01", (ftnlen)5);
     return 0;
 } /* ckr01_ */
 

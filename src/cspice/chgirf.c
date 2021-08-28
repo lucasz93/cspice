@@ -8,8 +8,7 @@
 
 
 extern chgirf_init_t __chgirf_init;
-static chgirf_state_t* get_chgirf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline chgirf_state_t* get_chgirf_state(cspice_t* state) {
 	if (!state->chgirf)
 		state->chgirf = __cspice_allocate_module(sizeof(
 	chgirf_state_t), &__chgirf_init, sizeof(__chgirf_init));
@@ -18,8 +17,9 @@ static chgirf_state_t* get_chgirf_state() {
 }
 
 /* $Procedure CHGIRF ( Change inertial reference frames ) */
-/* Subroutine */ int chgirf_0_(int n__, integer *refa, integer *refb, 
-	doublereal *rotab, char *name__, integer *index, ftnlen name_len)
+/* Subroutine */ int chgirf_0_(cspice_t* __global_state, int n__, integer *
+	refa, integer *refb, doublereal *rotab, char *name__, integer *index, 
+	ftnlen name_len)
 {
     /* Initialized data */
 
@@ -28,42 +28,45 @@ static chgirf_state_t* get_chgirf_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int mxmt_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern integer wdcnt_(char *, ftnlen);
-    extern /* Subroutine */ int nthwd_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern integer esrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
-	    *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int rotate_(doublereal *, integer *, doublereal *)
-	    ;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int rotmat_(doublereal *, doublereal *, integer *,
-	     doublereal *);
-    extern /* Subroutine */ int convrt_(doublereal *, char *, char *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxmt_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern integer wdcnt_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int nthwd_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern integer esrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int nparsd_(cspice_t*, char *, doublereal *, char 
+	    *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int nparsi_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int rotate_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int rotmat_(cspice_t*, doublereal *, doublereal *,
+	     integer *, doublereal *);
+    extern /* Subroutine */ int convrt_(cspice_t*, doublereal *, char *, char 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int mxm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    chgirf_state_t* __state = get_chgirf_state();
+    chgirf_state_t* __state = get_chgirf_state(__global_state);
 /* $ Abstract */
 
 /*     Support changes among a standard set of inertial coordinate */
@@ -600,13 +603,13 @@ static chgirf_state_t* get_chgirf_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CHGIRF", (ftnlen)6);
+	chkin_(__global_state, "CHGIRF", (ftnlen)6);
     }
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("CHGIRF", (ftnlen)6);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "CHGIRF", (ftnlen)6);
     return 0;
 /* $Procedure IRFROT ( Inertial reference frame rotation ) */
 
@@ -851,7 +854,7 @@ L_irfrot:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -867,52 +870,60 @@ L_irfrot:
 /*         root->frame      base->frame    root->base */
 
     if (! __state->ready) {
-	chkin_("IRFROT", (ftnlen)6);
+	chkin_(__global_state, "IRFROT", (ftnlen)6);
 	for (__state->i__ = 1; __state->i__ <= 21; ++__state->i__) {
-	    rotate_(&__state->c_b6, &__state->c__1, &__state->trans[(i__1 = 
-		    __state->i__ * 9 - 9) < 189 && 0 <= i__1 ? i__1 : s_rnge(
-		    "trans", i__1, "chgirf_", (ftnlen)882)]);
-	    for (__state->j = wdcnt_(__state->defs + ((i__1 = __state->i__ - 
-		    1) < 21 && 0 <= i__1 ? i__1 : s_rnge("defs", i__1, "chgi"
-		    "rf_", (ftnlen)884)) * 80, (ftnlen)80); __state->j >= 2; 
-		    __state->j += -2) {
-		nthwd_(__state->defs + ((i__1 = __state->i__ - 1) < 21 && 0 <=
-			 i__1 ? i__1 : s_rnge("defs", i__1, "chgirf_", (
-			ftnlen)886)) * 80, &__state->j, __state->word, &
-			__state->loc, (ftnlen)80, (ftnlen)25);
-		nparsi_(__state->word, &__state->axis, __state->error, &
-			__state->p, (ftnlen)25, (ftnlen)25);
+	    rotate_(__global_state, &__state->c_b6, &__state->c__1, &
+		    __state->trans[(i__1 = __state->i__ * 9 - 9) < 189 && 0 <=
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "trans", i__1,
+		     "chgirf_", (ftnlen)882)]);
+	    for (__state->j = wdcnt_(__global_state, __state->defs + ((i__1 = 
+		    __state->i__ - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "defs", i__1, "chgirf_", (ftnlen)884)
+		    ) * 80, (ftnlen)80); __state->j >= 2; __state->j += -2) {
+		nthwd_(__global_state, __state->defs + ((i__1 = __state->i__ 
+			- 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "defs", i__1, "chgirf_", (ftnlen)
+			886)) * 80, &__state->j, __state->word, &__state->loc,
+			 (ftnlen)80, (ftnlen)25);
+		nparsi_(__global_state, __state->word, &__state->axis, 
+			__state->error, &__state->p, (ftnlen)25, (ftnlen)25);
 		i__2 = __state->j - 1;
-		nthwd_(__state->defs + ((i__1 = __state->i__ - 1) < 21 && 0 <=
-			 i__1 ? i__1 : s_rnge("defs", i__1, "chgirf_", (
-			ftnlen)889)) * 80, &i__2, __state->word, &
-			__state->loc, (ftnlen)80, (ftnlen)25);
-		nparsd_(__state->word, &__state->angle, __state->error, &
-			__state->p, (ftnlen)25, (ftnlen)25);
-		convrt_(&__state->angle, "ARCSECONDS", "RADIANS", &
-			__state->radang, (ftnlen)10, (ftnlen)7);
-		rotmat_(&__state->trans[(i__1 = __state->i__ * 9 - 9) < 189 &&
-			 0 <= i__1 ? i__1 : s_rnge("trans", i__1, "chgirf_", (
+		nthwd_(__global_state, __state->defs + ((i__1 = __state->i__ 
+			- 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "defs", i__1, "chgirf_", (ftnlen)
+			889)) * 80, &i__2, __state->word, &__state->loc, (
+			ftnlen)80, (ftnlen)25);
+		nparsd_(__global_state, __state->word, &__state->angle, 
+			__state->error, &__state->p, (ftnlen)25, (ftnlen)25);
+		convrt_(__global_state, &__state->angle, "ARCSECONDS", "RADI"
+			"ANS", &__state->radang, (ftnlen)10, (ftnlen)7);
+		rotmat_(__global_state, &__state->trans[(i__1 = __state->i__ *
+			 9 - 9) < 189 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "trans", i__1, "chgirf_", (
 			ftnlen)894)], &__state->radang, &__state->axis, 
 			__state->tmpmat);
-		moved_(__state->tmpmat, &__state->c__9, &__state->trans[(i__1 
-			= __state->i__ * 9 - 9) < 189 && 0 <= i__1 ? i__1 : 
-			s_rnge("trans", i__1, "chgirf_", (ftnlen)895)]);
+		moved_(__global_state, __state->tmpmat, &__state->c__9, &
+			__state->trans[(i__1 = __state->i__ * 9 - 9) < 189 && 
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tra"
+			"ns", i__1, "chgirf_", (ftnlen)895)]);
 	    }
-	    __state->b = isrchc_(__state->bases + (((i__1 = __state->i__ - 1) 
-		    < 21 && 0 <= i__1 ? i__1 : s_rnge("bases", i__1, "chgirf_"
-		    , (ftnlen)899)) << 4), &__state->i__, __state->frames, (
-		    ftnlen)16, (ftnlen)16);
-	    mxm_(&__state->trans[(i__1 = __state->i__ * 9 - 9) < 189 && 0 <= 
-		    i__1 ? i__1 : s_rnge("trans", i__1, "chgirf_", (ftnlen)
-		    901)], &__state->trans[(i__2 = __state->b * 9 - 9) < 189 
-		    && 0 <= i__2 ? i__2 : s_rnge("trans", i__2, "chgirf_", (
+	    __state->b = isrchc_(__global_state, __state->bases + (((i__1 = 
+		    __state->i__ - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "bases", i__1, "chgirf_", (ftnlen)
+		    899)) << 4), &__state->i__, __state->frames, (ftnlen)16, (
+		    ftnlen)16);
+	    mxm_(__global_state, &__state->trans[(i__1 = __state->i__ * 9 - 9)
+		     < 189 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "trans", i__1, "chgirf_", (ftnlen)901)], &__state->trans[(
+		    i__2 = __state->b * 9 - 9) < 189 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "trans", i__2, "chgirf_", (
 		    ftnlen)901)], __state->tmpmat);
-	    moved_(__state->tmpmat, &__state->c__9, &__state->trans[(i__1 = 
-		    __state->i__ * 9 - 9) < 189 && 0 <= i__1 ? i__1 : s_rnge(
-		    "trans", i__1, "chgirf_", (ftnlen)902)]);
+	    moved_(__global_state, __state->tmpmat, &__state->c__9, &
+		    __state->trans[(i__1 = __state->i__ * 9 - 9) < 189 && 0 <=
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "trans", i__1,
+		     "chgirf_", (ftnlen)902)]);
 	}
-	chkout_("IRFROT", (ftnlen)6);
+	chkout_(__global_state, "IRFROT", (ftnlen)6);
 	__state->ready = TRUE_;
     }
 
@@ -934,34 +945,35 @@ L_irfrot:
 /*     should work, but why risk roundoff problems? */
 
     if (*refa < 1 || *refa > 21) {
-	chkin_("IRFROT", (ftnlen)6);
-	setmsg_("A request has been made to obtain the transformation from i"
-		"nertial reference frame # to inertial reference frame #. Unf"
-		"ortunately # is not the id-code of a known inertial frame. ", 
-		(ftnlen)178);
-	errint_("#", refa, (ftnlen)1);
-	errint_("#", refb, (ftnlen)1);
-	errint_("#", refa, (ftnlen)1);
-	sigerr_("SPICE(IRFNOTREC)", (ftnlen)16);
-	chkout_("IRFROT", (ftnlen)6);
+	chkin_(__global_state, "IRFROT", (ftnlen)6);
+	setmsg_(__global_state, "A request has been made to obtain the trans"
+		"formation from inertial reference frame # to inertial refere"
+		"nce frame #. Unfortunately # is not the id-code of a known i"
+		"nertial frame. ", (ftnlen)178);
+	errint_(__global_state, "#", refa, (ftnlen)1);
+	errint_(__global_state, "#", refb, (ftnlen)1);
+	errint_(__global_state, "#", refa, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(IRFNOTREC)", (ftnlen)16);
+	chkout_(__global_state, "IRFROT", (ftnlen)6);
     } else if (*refb < 1 || *refb > 21) {
-	chkin_("IRFROT", (ftnlen)6);
-	setmsg_("A request has been made to obtain the transformation from i"
-		"nertial reference frame # to inertial reference frame #. Unf"
-		"ortunately # is not the id-code of a known inertial frame. ", 
-		(ftnlen)178);
-	errint_("#", refa, (ftnlen)1);
-	errint_("#", refb, (ftnlen)1);
-	errint_("#", refb, (ftnlen)1);
-	sigerr_("SPICE(IRFNOTREC)", (ftnlen)16);
-	chkout_("IRFROT", (ftnlen)6);
+	chkin_(__global_state, "IRFROT", (ftnlen)6);
+	setmsg_(__global_state, "A request has been made to obtain the trans"
+		"formation from inertial reference frame # to inertial refere"
+		"nce frame #. Unfortunately # is not the id-code of a known i"
+		"nertial frame. ", (ftnlen)178);
+	errint_(__global_state, "#", refa, (ftnlen)1);
+	errint_(__global_state, "#", refb, (ftnlen)1);
+	errint_(__global_state, "#", refb, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(IRFNOTREC)", (ftnlen)16);
+	chkout_(__global_state, "IRFROT", (ftnlen)6);
     } else if (*refa == *refb) {
-	rotate_(&__state->c_b6, &__state->c__1, rotab);
+	rotate_(__global_state, &__state->c_b6, &__state->c__1, rotab);
     } else {
-	mxmt_(&__state->trans[(i__1 = *refb * 9 - 9) < 189 && 0 <= i__1 ? 
-		i__1 : s_rnge("trans", i__1, "chgirf_", (ftnlen)963)], &
-		__state->trans[(i__2 = *refa * 9 - 9) < 189 && 0 <= i__2 ? 
-		i__2 : s_rnge("trans", i__2, "chgirf_", (ftnlen)963)], rotab);
+	mxmt_(__global_state, &__state->trans[(i__1 = *refb * 9 - 9) < 189 && 
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "trans", i__1,
+		 "chgirf_", (ftnlen)963)], &__state->trans[(i__2 = *refa * 9 
+		- 9) < 189 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		"trans", i__2, "chgirf_", (ftnlen)963)], rotab);
     }
     return 0;
 /* $Procedure IRFNUM ( Inertial reference frame number ) */
@@ -1152,19 +1164,20 @@ L_irfnum:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    if (s_cmp(name__, "J2000", name_len, (ftnlen)5) == 0 || s_cmp(name__, 
-	    "j2000", name_len, (ftnlen)5) == 0) {
+    if (s_cmp(&__global_state->f2c, name__, "J2000", name_len, (ftnlen)5) == 
+	    0 || s_cmp(&__global_state->f2c, name__, "j2000", name_len, (
+	    ftnlen)5) == 0) {
 	*index = 1;
 	return 0;
     }
-    if (eqstr_(name__, "DEFAULT", name_len, (ftnlen)7)) {
+    if (eqstr_(__global_state, name__, "DEFAULT", name_len, (ftnlen)7)) {
 	*index = __state->dframe;
     } else {
-	*index = esrchc_(name__, &__state->c__21, __state->frames, name_len, (
-		ftnlen)16);
+	*index = esrchc_(__global_state, name__, &__state->c__21, 
+		__state->frames, name_len, (ftnlen)16);
     }
     return 0;
 /* $Procedure IRFNAM ( Inertial reference frame name ) */
@@ -1346,19 +1359,20 @@ L_irfnam:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("IRFNAM", (ftnlen)6);
+	chkin_(__global_state, "IRFNAM", (ftnlen)6);
     }
     if (*index < 1 || *index > 21) {
-	s_copy(name__, " ", name_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, name__, " ", name_len, (ftnlen)1);
     } else {
-	s_copy(name__, __state->frames + (((i__1 = *index - 1) < 21 && 0 <= 
-		i__1 ? i__1 : s_rnge("frames", i__1, "chgirf_", (ftnlen)1376))
+	s_copy(&__global_state->f2c, name__, __state->frames + (((i__1 = *
+		index - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "frames", i__1, "chgirf_", (ftnlen)1376))
 		 << 4), name_len, (ftnlen)16);
     }
-    chkout_("IRFNAM", (ftnlen)6);
+    chkout_(__global_state, "IRFNAM", (ftnlen)6);
     return 0;
 /* $Procedure IRFDEF ( Inertial reference frame, default ) */
 
@@ -1548,51 +1562,55 @@ L_irfdef:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("IRFDEF", (ftnlen)6);
+	chkin_(__global_state, "IRFDEF", (ftnlen)6);
     }
 
 /*     There's not much to do, except save the value for later use. */
 
     if (*index < 1 || *index > 21) {
-	setmsg_("The reference frame with id-code # is not a recognized iner"
-		"tial reference frame. ", (ftnlen)81);
-	errint_("#", index, (ftnlen)1);
-	sigerr_("SPICE(IRFNOTREC)", (ftnlen)16);
+	setmsg_(__global_state, "The reference frame with id-code # is not a"
+		" recognized inertial reference frame. ", (ftnlen)81);
+	errint_(__global_state, "#", index, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(IRFNOTREC)", (ftnlen)16);
     } else {
 	__state->dframe = *index;
     }
-    chkout_("IRFDEF", (ftnlen)6);
+    chkout_(__global_state, "IRFDEF", (ftnlen)6);
     return 0;
 } /* chgirf_ */
 
-/* Subroutine */ int chgirf_(integer *refa, integer *refb, doublereal *rotab, 
-	char *name__, integer *index, ftnlen name_len)
+/* Subroutine */ int chgirf_(cspice_t* __global_state, integer *refa, integer 
+	*refb, doublereal *rotab, char *name__, integer *index, ftnlen 
+	name_len)
 {
     return chgirf_0_(0, refa, refb, rotab, name__, index, name_len);
     }
 
-/* Subroutine */ int irfrot_(integer *refa, integer *refb, doublereal *rotab)
+/* Subroutine */ int irfrot_(cspice_t* __global_state, integer *refa, integer 
+	*refb, doublereal *rotab)
 {
     return chgirf_0_(1, refa, refb, rotab, (char *)0, (integer *)0, (ftnint)0)
 	    ;
     }
 
-/* Subroutine */ int irfnum_(char *name__, integer *index, ftnlen name_len)
+/* Subroutine */ int irfnum_(cspice_t* __global_state, char *name__, integer *
+	index, ftnlen name_len)
 {
     return chgirf_0_(2, (integer *)0, (integer *)0, (doublereal *)0, name__, 
 	    index, name_len);
     }
 
-/* Subroutine */ int irfnam_(integer *index, char *name__, ftnlen name_len)
+/* Subroutine */ int irfnam_(cspice_t* __global_state, integer *index, char *
+	name__, ftnlen name_len)
 {
     return chgirf_0_(3, (integer *)0, (integer *)0, (doublereal *)0, name__, 
 	    index, name_len);
     }
 
-/* Subroutine */ int irfdef_(integer *index)
+/* Subroutine */ int irfdef_(cspice_t* __global_state, integer *index)
 {
     return chgirf_0_(4, (integer *)0, (integer *)0, (doublereal *)0, (char *)
 	    0, index, (ftnint)0);

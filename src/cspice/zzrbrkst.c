@@ -8,25 +8,26 @@
 
 
 typedef int zzrbrkst_state_t;
-static zzrbrkst_state_t* get_zzrbrkst_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzrbrkst_state_t* get_zzrbrkst_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZRBRKST ( Private --- Reverse Bracketed String Extractor ) */
-/* Subroutine */ int zzrbrkst_(char *string, char *lftend, char *rgtend, char 
-	*substr, integer *length, logical *bkpres, ftnlen string_len, ftnlen 
-	lftend_len, ftnlen rgtend_len, ftnlen substr_len)
+/* Subroutine */ int zzrbrkst_(cspice_t* __global_state, char *string, char *
+	lftend, char *rgtend, char *substr, integer *length, logical *bkpres, 
+	ftnlen string_len, ftnlen lftend_len, ftnlen rgtend_len, ftnlen 
+	substr_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern integer posr_(char *, char *, integer *, ftnlen, ftnlen);
+    extern integer posr_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen)
+	    ;
     integer bsize;
     integer lsize;
     integer rsize;
@@ -35,7 +36,7 @@ static zzrbrkst_state_t* get_zzrbrkst_state() {
 
 
     /* Module state */
-    zzrbrkst_state_t* __state = get_zzrbrkst_state();
+    zzrbrkst_state_t* __state = get_zzrbrkst_state(__global_state);
 /* $ Abstract */
 
 /*    Extract from a string the last instance of a substring bracketed */
@@ -207,13 +208,14 @@ static zzrbrkst_state_t* get_zzrbrkst_state() {
 /*     Compute the sizes of the bracketing substrings and the text */
 /*     block. */
 
-    lsize = i_len(lftend, lftend_len);
-    rsize = i_len(rgtend, rgtend_len);
-    bsize = i_len(string, string_len);
+    lsize = i_len(&__global_state->f2c, lftend, lftend_len);
+    rsize = i_len(&__global_state->f2c, rgtend, rgtend_len);
+    bsize = i_len(&__global_state->f2c, string, string_len);
 
 /*     Search from the right for RGTEND. */
 
-    rindex = posr_(string, rgtend, &bsize, string_len, rgtend_len);
+    rindex = posr_(__global_state, string, rgtend, &bsize, string_len, 
+	    rgtend_len);
 
 /*     Now continue the search from RINDEX to the right, this time */
 /*     looking for LFTEND. If RINDEX comes back as 0, then the right */
@@ -222,10 +224,12 @@ static zzrbrkst_state_t* get_zzrbrkst_state() {
 /*     search left off. */
 
     if (rindex == 0) {
-	lindex = posr_(string, lftend, &bsize, string_len, lftend_len);
+	lindex = posr_(__global_state, string, lftend, &bsize, string_len, 
+		lftend_len);
     } else {
 	i__1 = rindex - lsize;
-	lindex = posr_(string, lftend, &i__1, string_len, lftend_len);
+	lindex = posr_(__global_state, string, lftend, &i__1, string_len, 
+		lftend_len);
     }
 
 /*     Interpret the results.  If RINDEX and LINDEX are both non-zero, */
@@ -248,7 +252,8 @@ static zzrbrkst_state_t* get_zzrbrkst_state() {
 	    *length = rindex - (lindex + lsize);
 	    *bkpres = TRUE_;
 	    i__1 = lindex + lsize - 1;
-	    s_copy(substr, string + i__1, substr_len, rindex - 1 - i__1);
+	    s_copy(&__global_state->f2c, substr, string + i__1, substr_len, 
+		    rindex - 1 - i__1);
 	}
     } else {
 

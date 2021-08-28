@@ -8,8 +8,7 @@
 
 
 extern zzrytlat_init_t __zzrytlat_init;
-static zzrytlat_state_t* get_zzrytlat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzrytlat_state_t* get_zzrytlat_state(cspice_t* state) {
 	if (!state->zzrytlat)
 		state->zzrytlat = __cspice_allocate_module(sizeof(
 	zzrytlat_state_t), &__zzrytlat_init, sizeof(__zzrytlat_init));
@@ -18,9 +17,9 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 }
 
 /* $Procedure ZZRYTLAT ( DSK, ray touches latitudinal element ) */
-/* Subroutine */ int zzrytlat_(doublereal *vertex, doublereal *raydir, 
-	doublereal *bounds, doublereal *margin, integer *nxpts, doublereal *
-	xpt)
+/* Subroutine */ int zzrytlat_(cspice_t* __global_state, doublereal *vertex, 
+	doublereal *raydir, doublereal *bounds, doublereal *margin, integer *
+	nxpts, doublereal *xpt)
 {
     /* Initialized data */
 
@@ -29,69 +28,70 @@ static zzrytlat_state_t* get_zzrytlat_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal dist;
     doublereal udir[3];
     doublereal minr;
     doublereal vlat;
     doublereal maxr;
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     doublereal vlon;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal srfx[3];
     doublereal eback[3];
-    extern /* Subroutine */ int zznrmlon_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzinrypl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, integer *, doublereal *)
-	    ;
+    extern /* Subroutine */ int zznrmlon_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzinrypl_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, integer *, 
+	    doublereal *);
     doublereal s;
     doublereal angle;
     doublereal wback[3];
     doublereal eastb[3];
-    extern /* Subroutine */ int zzryxsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern doublereal dpmax_(void);
+    extern /* Subroutine */ int zzryxsph_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern doublereal dpmax_(cspice_t*);
     logical found;
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal westb[3];
-    extern doublereal vdist_(doublereal *, doublereal *);
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal endpt2[3];
-    extern logical failed_(void);
-    extern doublereal halfpi_(void);
+    extern logical failed_(cspice_t*);
+    extern doublereal halfpi_(cspice_t*);
     integer nx;
     doublereal negdir[3];
     doublereal vr;
     logical inside;
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal minlat;
     doublereal maxlat;
-    extern /* Subroutine */ int incnsg_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-	     doublereal *);
+    extern /* Subroutine */ int incnsg_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, integer *, doublereal *
+	    , doublereal *);
     doublereal minlon;
     doublereal maxlon;
     doublereal loncov;
     doublereal mndist;
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
     logical xin;
-    extern /* Subroutine */ int zzinlat_(doublereal *, doublereal *, 
-	    doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzinlat_(cspice_t*, doublereal *, doublereal *
+	    , doublereal *, integer *, logical *);
     doublereal xpt2[3];
 
 
     /* Module state */
-    zzrytlat_state_t* __state = get_zzrytlat_state();
+    zzrytlat_state_t* __state = get_zzrytlat_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -474,8 +474,8 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*     vertices lying on the expanded element boundary. */
 
     d__1 = 2 * *margin;
-    zzinlat_(vertex, bounds, &d__1, &__state->c__0, &inside);
-    if (failed_()) {
+    zzinlat_(__global_state, vertex, bounds, &d__1, &__state->c__0, &inside);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (inside) {
@@ -483,7 +483,7 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*        We know the answer. */
 
 	*nxpts = 1;
-	vequ_(vertex, xpt);
+	vequ_(__global_state, vertex, xpt);
 	return 0;
     }
 
@@ -496,8 +496,9 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*     Normalize the longitude bounds. After this step, the bounds will */
 /*     be in order and differ by no more than 2*pi. */
 
-    zznrmlon_(bounds, &bounds[1], &__state->c_b3, &minlon, &maxlon);
-    if (failed_()) {
+    zznrmlon_(__global_state, bounds, &bounds[1], &__state->c_b3, &minlon, &
+	    maxlon);
+    if (failed_(__global_state)) {
 	return 0;
     }
     minlat = bounds[2];
@@ -511,19 +512,19 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 
 /*     We'll use a unit length copy of the ray's direction vector. */
 
-    vhat_(raydir, udir);
+    vhat_(__global_state, raydir, udir);
 
 /*     Initialize the distance to the closest solution. We'll keep track */
 /*     of this quantity in order to compare competing solutions. */
 
-    mndist = dpmax_();
+    mndist = dpmax_(__global_state);
 
 /*     Find the intersection of the ray and outer bounding sphere, if */
 /*     possible. Often this intersection is the closest to the vertex. */
 /*     If the intersection exists and is on the boundary of the element, */
 /*     it's a winner. */
 
-    zzryxsph_(vertex, udir, &maxr, srfx, &found);
+    zzryxsph_(__global_state, vertex, udir, &maxr, srfx, &found);
     if (! found) {
 
 /*        There are no intersections. The ray cannot hit the */
@@ -534,22 +535,22 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 
 /*     Get the latitudinal coordinates of the ray's vertex. */
 
-    reclat_(vertex, &vr, &vlon, &vlat);
+    reclat_(__global_state, vertex, &vr, &vlon, &vlat);
 
 /*     The ray hits the outer bounding sphere. See whether */
 /*     the longitude and latitude are within bounds, taking */
 /*     the margin into account. Exclude the radius coordinate */
 /*     from testing. */
 
-    zzinlat_(srfx, bounds, margin, &__state->c__3, &xin);
-    if (failed_()) {
+    zzinlat_(__global_state, srfx, bounds, margin, &__state->c__3, &xin);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (xin) {
 
 /*        This solution is a candidate. */
 
-	vequ_(srfx, xpt);
+	vequ_(__global_state, srfx, xpt);
 	*nxpts = 1;
 	if (vr > maxr) {
 
@@ -564,7 +565,7 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 
 /*           We have a possible solution. */
 
-	    mndist = vdist_(vertex, xpt);
+	    mndist = vdist_(__global_state, vertex, xpt);
 	}
     }
 
@@ -575,41 +576,42 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*     need a far endpoint for the line segment on which to perform the */
 /*     test. */
 
-    s = vnorm_(vertex) + maxr * 1.1;
-    vlcom_(&__state->c_b5, vertex, &s, udir, endpt2);
+    s = vnorm_(__global_state, vertex) + maxr * 1.1;
+    vlcom_(__global_state, &__state->c_b5, vertex, &s, udir, endpt2);
 
 /*     Now try the upper latitude bound. We can skip this test */
 /*     if the upper bound is pi/2 radians. */
 
-    if (maxlat < halfpi_()) {
+    if (maxlat < halfpi_(__global_state)) {
 
 /*        Let ANGLE be the angular separation of the surface of latitude */
 /*        MAXLAT and the +Z axis. Note that the surface might be the */
 /*        lower nappe of the cone. */
 
 /* Computing MAX */
-	d__1 = 0., d__2 = halfpi_() - maxlat;
+	d__1 = 0., d__2 = halfpi_(__global_state) - maxlat;
 	angle = max(d__1,d__2);
-	incnsg_(__state->origin, __state->z__, &angle, vertex, endpt2, &nx, 
-		srfx, xpt2);
-	if (failed_()) {
+	incnsg_(__global_state, __state->origin, __state->z__, &angle, vertex,
+		 endpt2, &nx, srfx, xpt2);
+	if (failed_(__global_state)) {
 	    return 0;
 	}
 	if (nx >= 1) {
 
 /*           See whether SRFX is in the element. */
 
-	    zzinlat_(srfx, bounds, margin, &__state->c__2, &xin);
-	    if (failed_()) {
+	    zzinlat_(__global_state, srfx, bounds, margin, &__state->c__2, &
+		    xin);
+	    if (failed_(__global_state)) {
 		return 0;
 	    }
 	    if (xin) {
 
 /*              SRFX is a candidate solution. */
 
-		dist = vdist_(vertex, srfx);
+		dist = vdist_(__global_state, vertex, srfx);
 		if (dist < mndist) {
-		    vequ_(srfx, xpt);
+		    vequ_(__global_state, srfx, xpt);
 		    *nxpts = 1;
 		    if (vlat > maxlat) {
 
@@ -630,17 +632,18 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 
 /*              Check the second solution as well. */
 
-		zzinlat_(xpt2, bounds, margin, &__state->c__2, &xin);
-		if (failed_()) {
+		zzinlat_(__global_state, xpt2, bounds, margin, &__state->c__2,
+			 &xin);
+		if (failed_(__global_state)) {
 		    return 0;
 		}
 		if (xin) {
 
 /*                 XPT2 is a candidate solution. */
 
-		    dist = vdist_(vertex, xpt2);
+		    dist = vdist_(__global_state, vertex, xpt2);
 		    if (dist < mndist) {
-			vequ_(xpt2, xpt);
+			vequ_(__global_state, xpt2, xpt);
 			*nxpts = 1;
 			mndist = dist;
 
@@ -663,33 +666,34 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*     Try the lower latitude bound. We can skip this test if the lower */
 /*     bound is -pi/2 radians. */
 
-    if (minlat > -halfpi_()) {
+    if (minlat > -halfpi_(__global_state)) {
 
 /*        Let ANGLE be the angular separation of the surface */
 /*        of latitude MINLAT and the +Z axis. Note that the */
 /*        surface might be the lower nappe of the cone. */
 
-	angle = halfpi_() - minlat;
-	incnsg_(__state->origin, __state->z__, &angle, vertex, endpt2, &nx, 
-		srfx, xpt2);
-	if (failed_()) {
+	angle = halfpi_(__global_state) - minlat;
+	incnsg_(__global_state, __state->origin, __state->z__, &angle, vertex,
+		 endpt2, &nx, srfx, xpt2);
+	if (failed_(__global_state)) {
 	    return 0;
 	}
 	if (nx >= 1) {
 
 /*           See whether SRFX is in the element. */
 
-	    zzinlat_(srfx, bounds, margin, &__state->c__2, &xin);
-	    if (failed_()) {
+	    zzinlat_(__global_state, srfx, bounds, margin, &__state->c__2, &
+		    xin);
+	    if (failed_(__global_state)) {
 		return 0;
 	    }
 	    if (xin) {
 
 /*              SRFX is a candidate solution. */
 
-		dist = vdist_(vertex, srfx);
+		dist = vdist_(__global_state, vertex, srfx);
 		if (dist < mndist) {
-		    vequ_(srfx, xpt);
+		    vequ_(__global_state, srfx, xpt);
 		    *nxpts = 1;
 		    if (vlat < minlat) {
 
@@ -710,17 +714,18 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 
 /*              Check the second solution as well. */
 
-		zzinlat_(xpt2, bounds, margin, &__state->c__2, &xin);
-		if (failed_()) {
+		zzinlat_(__global_state, xpt2, bounds, margin, &__state->c__2,
+			 &xin);
+		if (failed_(__global_state)) {
 		    return 0;
 		}
 		if (xin) {
 
 /*                 XPT2 is a candidate solution. */
 
-		    dist = vdist_(vertex, xpt2);
+		    dist = vdist_(__global_state, vertex, xpt2);
 		    if (dist < mndist) {
-			vequ_(xpt2, xpt);
+			vequ_(__global_state, xpt2, xpt);
 			*nxpts = 1;
 			mndist = dist;
 
@@ -742,7 +747,7 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*     2*pi radians. Note that MAXLON > MINLON at this point. */
 
     loncov = maxlon - minlon;
-    if (cos(loncov) < 1.) {
+    if (cos(&__global_state->f2c, loncov) < 1.) {
 
 /*        We have distinct longitude boundaries. Go to work. */
 
@@ -753,11 +758,12 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*        The vector WESTB is an outward-facing vector normal to */
 /*        the west boundary. */
 
-	d__1 = sin(minlon);
-	d__2 = -cos(minlon);
-	vpack_(&d__1, &d__2, &__state->c_b10, westb);
-	s = (vnorm_(vertex) + maxr) * 1.1;
-	zzinrypl_(vertex, udir, westb, &__state->c_b10, &s, &nx, srfx);
+	d__1 = sin(&__global_state->f2c, minlon);
+	d__2 = -cos(&__global_state->f2c, minlon);
+	vpack_(__global_state, &d__1, &d__2, &__state->c_b10, westb);
+	s = (vnorm_(__global_state, vertex) + maxr) * 1.1;
+	zzinrypl_(__global_state, vertex, udir, westb, &__state->c_b10, &s, &
+		nx, srfx);
 	if (nx == 1) {
 
 /*           We have one point of intersection. Determine whether it's a */
@@ -765,8 +771,9 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*           inclusion test. Note that we'll perform a separate check */
 /*           later in place of the longitude check. */
 
-	    zzinlat_(srfx, bounds, margin, &__state->c__1, &xin);
-	    if (failed_()) {
+	    zzinlat_(__global_state, srfx, bounds, margin, &__state->c__1, &
+		    xin);
+	    if (failed_(__global_state)) {
 		return 0;
 	    }
 	    if (xin) {
@@ -774,19 +781,19 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*              Make sure the intercept is not too far on the */
 /*              "wrong" side of the Z axis. */
 
-		ucrss_(westb, __state->z__, wback);
-		if (vdot_(srfx, wback) < *margin * maxr) {
+		ucrss_(__global_state, westb, __state->z__, wback);
+		if (vdot_(__global_state, srfx, wback) < *margin * maxr) {
 
 /*                 The intercept is either on the same side of the Z */
 /*                 axis as the west face of the segment, or is very */
 /*                 close to the Z axis. */
 
-		    dist = vdist_(vertex, srfx);
+		    dist = vdist_(__global_state, vertex, srfx);
 		    if (dist < mndist) {
 
 /*                    Record the intercept, distance, and surface index. */
 
-			vequ_(srfx, xpt);
+			vequ_(__global_state, srfx, xpt);
 			*nxpts = 1;
 			mndist = dist;
 		    }
@@ -801,17 +808,19 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 
 /*        The vector EASTB is an outward-facing vector normal to */
 /*        the east boundary. */
-	d__1 = -sin(maxlon);
-	d__2 = cos(maxlon);
-	vpack_(&d__1, &d__2, &__state->c_b10, eastb);
-	zzinrypl_(vertex, udir, eastb, &__state->c_b10, &s, &nx, srfx);
+	d__1 = -sin(&__global_state->f2c, maxlon);
+	d__2 = cos(&__global_state->f2c, maxlon);
+	vpack_(__global_state, &d__1, &d__2, &__state->c_b10, eastb);
+	zzinrypl_(__global_state, vertex, udir, eastb, &__state->c_b10, &s, &
+		nx, srfx);
 	if (nx == 1) {
 
 /*           We have one point of intersection. Determine whether it's a */
 /*           candidate solution. */
 
-	    zzinlat_(srfx, bounds, margin, &__state->c__1, &xin);
-	    if (failed_()) {
+	    zzinlat_(__global_state, srfx, bounds, margin, &__state->c__1, &
+		    xin);
+	    if (failed_(__global_state)) {
 		return 0;
 	    }
 	    if (xin) {
@@ -819,19 +828,19 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*              Make sure the intercept is not too far on the "wrong" */
 /*              side of the Z axis. */
 
-		ucrss_(__state->z__, eastb, eback);
-		if (vdot_(srfx, eback) < *margin * maxr) {
+		ucrss_(__global_state, __state->z__, eastb, eback);
+		if (vdot_(__global_state, srfx, eback) < *margin * maxr) {
 
 /*                 The intercept is either on the same side of the Z */
 /*                 axis as the east face of the segment, or is very */
 /*                 close to the Z axis. */
 
-		    dist = vdist_(vertex, srfx);
+		    dist = vdist_(__global_state, vertex, srfx);
 		    if (dist < mndist) {
 
 /*                    Record the intercept, distance, and surface index. */
 
-			vequ_(srfx, xpt);
+			vequ_(__global_state, srfx, xpt);
 			*nxpts = 1;
 			mndist = dist;
 		    }
@@ -847,22 +856,23 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*     sphere, if possible. */
 
     if (minr > 0.) {
-	zzryxsph_(vertex, udir, &minr, srfx, &found);
+	zzryxsph_(__global_state, vertex, udir, &minr, srfx, &found);
 	if (found) {
 
 /*           See whether this solution is in the element. */
 
-	    zzinlat_(srfx, bounds, margin, &__state->c__3, &xin);
-	    if (failed_()) {
+	    zzinlat_(__global_state, srfx, bounds, margin, &__state->c__3, &
+		    xin);
+	    if (failed_(__global_state)) {
 		return 0;
 	    }
 	    if (xin) {
-		dist = vdist_(vertex, srfx);
+		dist = vdist_(__global_state, vertex, srfx);
 		if (dist < mndist) {
 
 /*                 Record the intercept, distance, and surface index. */
 
-		    vequ_(srfx, xpt);
+		    vequ_(__global_state, srfx, xpt);
 		    *nxpts = 1;
 		    mndist = dist;
 		}
@@ -874,20 +884,21 @@ static zzrytlat_state_t* get_zzrytlat_state() {
 /*        the case where the intercept further from the ray's vertex is */
 /*        the correct solution. */
 
-	vminus_(udir, negdir);
-	zzryxsph_(endpt2, negdir, &minr, srfx, &found);
+	vminus_(__global_state, udir, negdir);
+	zzryxsph_(__global_state, endpt2, negdir, &minr, srfx, &found);
 	if (found) {
-	    zzinlat_(srfx, bounds, margin, &__state->c__3, &xin);
-	    if (failed_()) {
+	    zzinlat_(__global_state, srfx, bounds, margin, &__state->c__3, &
+		    xin);
+	    if (failed_(__global_state)) {
 		return 0;
 	    }
 	    if (xin) {
-		dist = vdist_(vertex, srfx);
+		dist = vdist_(__global_state, vertex, srfx);
 		if (dist < mndist) {
 
 /*                 Record the intercept, distance, and surface index. */
 
-		    vequ_(srfx, xpt);
+		    vequ_(__global_state, srfx, xpt);
 		    *nxpts = 1;
 		    mndist = dist;
 		}

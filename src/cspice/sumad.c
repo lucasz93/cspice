@@ -8,13 +8,12 @@
 
 
 typedef int sumad_state_t;
-static sumad_state_t* get_sumad_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sumad_state_t* get_sumad_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure SUMAD ( Sum of a double precision array ) */
-doublereal sumad_(doublereal *array, integer *n)
+doublereal sumad_(cspice_t* __global_state, doublereal *array, integer *n)
 {
     /* System generated locals */
     integer i__1;
@@ -26,7 +25,7 @@ doublereal sumad_(doublereal *array, integer *n)
 
 
     /* Module state */
-    sumad_state_t* __state = get_sumad_state();
+    sumad_state_t* __state = get_sumad_state(__global_state);
 /* $ Abstract */
 
 /*      Return the sum of the elements of a double precision array. */

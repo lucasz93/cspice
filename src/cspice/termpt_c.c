@@ -1898,7 +1898,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "termpt_c" );
+   chkin_c ( naif_state, "termpt_c" );
 
 
    /*

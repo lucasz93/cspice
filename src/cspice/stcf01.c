@@ -8,8 +8,7 @@
 
 
 extern stcf01_init_t __stcf01_init;
-static stcf01_state_t* get_stcf01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline stcf01_state_t* get_stcf01_state(cspice_t* state) {
 	if (!state->stcf01)
 		state->stcf01 = __cspice_allocate_module(sizeof(
 	stcf01_state_t), &__stcf01_init, sizeof(__stcf01_init));
@@ -18,40 +17,41 @@ static stcf01_state_t* get_stcf01_state() {
 }
 
 /* $Procedure   STCF01 (STAR catalog type 1, find stars in RA-DEC box) */
-/* Subroutine */ int stcf01_(char *catnam, doublereal *westra, doublereal *
-	eastra, doublereal *sthdec, doublereal *nthdec, integer *nstars, 
-	ftnlen catnam_len)
+/* Subroutine */ int stcf01_(cspice_t* __global_state, char *catnam, 
+	doublereal *westra, doublereal *eastra, doublereal *sthdec, 
+	doublereal *nthdec, integer *nstars, ftnlen catnam_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal ramin;
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     doublereal ramax;
-    extern /* Subroutine */ int repmd_(char *, char *, doublereal *, integer *
-	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmd_(cspice_t*, char *, char *, doublereal *
+	    , integer *, char *, ftnlen, ftnlen, ftnlen);
     logical error;
     char query[512];
     char qrytm1[512];
     char qrytm2[512];
     doublereal decmin;
-    extern /* Subroutine */ int ekfind_(char *, integer *, logical *, char *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int ekfind_(cspice_t*, char *, integer *, logical 
+	    *, char *, ftnlen, ftnlen);
     doublereal decmax;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char errmsg[512];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern doublereal dpr_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern doublereal dpr_(cspice_t*);
 
 
     /* Module state */
-    stcf01_state_t* __state = get_stcf01_state();
+    stcf01_state_t* __state = get_stcf01_state(__global_state);
 /* $ Abstract */
 
 /*     Search through a type 1 star catalog and return the number of */
@@ -289,63 +289,65 @@ static stcf01_state_t* get_stcf01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("STCF01", (ftnlen)6);
+	chkin_(__global_state, "STCF01", (ftnlen)6);
     }
 
 /*     Query templates. */
 
-    s_copy(qrytm1, "SELECT RA, DEC, RA_SIGMA, DEC_SIGMA,CATALOG_NUMBER, SPEC"
-	    "TRAL_TYPE, VISUAL_MAGNITUDE FROM # WHERE ( RA  BETWEEN # AND # )"
-	    " AND ( DEC BETWEEN # AND # ) ", (ftnlen)512, (ftnlen)149);
-    s_copy(qrytm2, "SELECT RA, DEC, RA_SIGMA, DEC_SIGMA,CATALOG_NUMBER, SPEC"
-	    "TRAL_TYPE, VISUAL_MAGNITUDE FROM # WHERE ( ( RA BETWEEN # AND 36"
-	    "0 ) OR   ( RA BETWEEN 0 AND #   )      ) AND   ( DEC BETWEEN # A"
-	    "ND # ) ", (ftnlen)512, (ftnlen)191);
+    s_copy(&__global_state->f2c, qrytm1, "SELECT RA, DEC, RA_SIGMA, DEC_SIGM"
+	    "A,CATALOG_NUMBER, SPECTRAL_TYPE, VISUAL_MAGNITUDE FROM # WHERE ("
+	    " RA  BETWEEN # AND # ) AND ( DEC BETWEEN # AND # ) ", (ftnlen)512,
+	     (ftnlen)149);
+    s_copy(&__global_state->f2c, qrytm2, "SELECT RA, DEC, RA_SIGMA, DEC_SIGM"
+	    "A,CATALOG_NUMBER, SPECTRAL_TYPE, VISUAL_MAGNITUDE FROM # WHERE ("
+	    " ( RA BETWEEN # AND 360 ) OR   ( RA BETWEEN 0 AND #   )      ) A"
+	    "ND   ( DEC BETWEEN # AND # ) ", (ftnlen)512, (ftnlen)191);
 
 /*     Choose query template to be used. */
 
     if (*westra <= *eastra) {
-	s_copy(query, qrytm1, (ftnlen)512, (ftnlen)512);
+	s_copy(&__global_state->f2c, query, qrytm1, (ftnlen)512, (ftnlen)512);
     } else {
-	s_copy(query, qrytm2, (ftnlen)512, (ftnlen)512);
+	s_copy(&__global_state->f2c, query, qrytm2, (ftnlen)512, (ftnlen)512);
     }
 
 /*     Convert angles in radians to angles in degrees. */
 
-    ramin = *westra * dpr_();
-    ramax = *eastra * dpr_();
-    decmin = *sthdec * dpr_();
-    decmax = *nthdec * dpr_();
+    ramin = *westra * dpr_(__global_state);
+    ramax = *eastra * dpr_(__global_state);
+    decmin = *sthdec * dpr_(__global_state);
+    decmax = *nthdec * dpr_(__global_state);
 
 /*     Construct query using inputs and chosen template. */
 
-    repmc_(query, "#", catnam, query, (ftnlen)512, (ftnlen)1, catnam_len, (
-	    ftnlen)512);
-    repmd_(query, "#", &ramin, &__state->c__15, query, (ftnlen)512, (ftnlen)1,
-	     (ftnlen)512);
-    repmd_(query, "#", &ramax, &__state->c__15, query, (ftnlen)512, (ftnlen)1,
-	     (ftnlen)512);
-    repmd_(query, "#", &decmin, &__state->c__15, query, (ftnlen)512, (ftnlen)
-	    1, (ftnlen)512);
-    repmd_(query, "#", &decmax, &__state->c__15, query, (ftnlen)512, (ftnlen)
-	    1, (ftnlen)512);
+    repmc_(__global_state, query, "#", catnam, query, (ftnlen)512, (ftnlen)1, 
+	    catnam_len, (ftnlen)512);
+    repmd_(__global_state, query, "#", &ramin, &__state->c__15, query, (
+	    ftnlen)512, (ftnlen)1, (ftnlen)512);
+    repmd_(__global_state, query, "#", &ramax, &__state->c__15, query, (
+	    ftnlen)512, (ftnlen)1, (ftnlen)512);
+    repmd_(__global_state, query, "#", &decmin, &__state->c__15, query, (
+	    ftnlen)512, (ftnlen)1, (ftnlen)512);
+    repmd_(__global_state, query, "#", &decmax, &__state->c__15, query, (
+	    ftnlen)512, (ftnlen)1, (ftnlen)512);
 
 /*     Submit query and get number of stars. Check for */
 /*     errors in QUERY. */
 
-    ekfind_(query, nstars, &error, errmsg, (ftnlen)512, (ftnlen)512);
+    ekfind_(__global_state, query, nstars, &error, errmsg, (ftnlen)512, (
+	    ftnlen)512);
     if (error) {
-	setmsg_("Error querying type 1 star catalog. Error message: # ", (
-		ftnlen)53);
-	errch_("#", errmsg, (ftnlen)1, (ftnlen)512);
-	sigerr_("SPICE(QUERYFAILURE)", (ftnlen)19);
-	chkout_("STCF01", (ftnlen)6);
+	setmsg_(__global_state, "Error querying type 1 star catalog. Error m"
+		"essage: # ", (ftnlen)53);
+	errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)512);
+	sigerr_(__global_state, "SPICE(QUERYFAILURE)", (ftnlen)19);
+	chkout_(__global_state, "STCF01", (ftnlen)6);
 	return 0;
     }
-    chkout_("STCF01", (ftnlen)6);
+    chkout_(__global_state, "STCF01", (ftnlen)6);
     return 0;
 } /* stcf01_ */
 

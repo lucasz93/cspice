@@ -8,8 +8,7 @@
 
 
 extern errprt_init_t __errprt_init;
-static errprt_state_t* get_errprt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline errprt_state_t* get_errprt_state(cspice_t* state) {
 	if (!state->errprt)
 		state->errprt = __cspice_allocate_module(sizeof(
 	errprt_state_t), &__errprt_init, sizeof(__errprt_init));
@@ -18,8 +17,8 @@ static errprt_state_t* get_errprt_state() {
 }
 
 /* $Procedure      ERRPRT ( Get/Set Error Output Items ) */
-/* Subroutine */ int errprt_(char *op, char *list, ftnlen op_len, ftnlen 
-	list_len)
+/* Subroutine */ int errprt_(cspice_t* __global_state, char *op, char *list, 
+	ftnlen op_len, ftnlen list_len)
 {
     /* System generated locals */
     address a__1[2];
@@ -27,41 +26,44 @@ static errprt_state_t* get_errprt_state() {
     char ch__1[89], ch__2[65];
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
 
     /* Local variables */
     logical long__;
     logical expl;
     char upop[3];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical trace;
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char locop[3];
     char words[9*10];
     logical short__;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    logical dfault;
-    extern /* Subroutine */ int lparse_(char *, char *, integer *, integer *, 
-	    char *, ftnlen, ftnlen, ftnlen);
-    extern logical msgsel_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
+    logical dfault;
+    extern /* Subroutine */ int lparse_(cspice_t*, char *, char *, integer *, 
+	    integer *, char *, ftnlen, ftnlen, ftnlen);
+    extern logical msgsel_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
     integer numwrd;
     char upword[9];
-    extern logical setprt_(logical *, logical *, logical *, logical *, 
-	    logical *);
+    extern logical setprt_(cspice_t*, logical *, logical *, logical *, 
+	    logical *, logical *);
     logical status;
 
 
     /* Module state */
-    errprt_state_t* __state = get_errprt_state();
+    errprt_state_t* __state = get_errprt_state(__global_state);
 /* $ Abstract */
 
 /*      Retrieve or set the list of error message items */
@@ -345,62 +347,72 @@ static errprt_state_t* get_errprt_state() {
 
 /*     Executable Code: */
 
-    chkin_("ERRPRT", (ftnlen)6);
+    chkin_(__global_state, "ERRPRT", (ftnlen)6);
 
 /*     We first initialize the message selection flags to */
 /*     correspond to the current selection of error messages: */
 
-    short__ = msgsel_("SHORT", (ftnlen)5);
-    long__ = msgsel_("LONG", (ftnlen)4);
-    expl = msgsel_("EXPLAIN", (ftnlen)7);
-    trace = msgsel_("TRACEBACK", (ftnlen)9);
-    dfault = msgsel_("DEFAULT", (ftnlen)7);
+    short__ = msgsel_(__global_state, "SHORT", (ftnlen)5);
+    long__ = msgsel_(__global_state, "LONG", (ftnlen)4);
+    expl = msgsel_(__global_state, "EXPLAIN", (ftnlen)7);
+    trace = msgsel_(__global_state, "TRACEBACK", (ftnlen)9);
+    dfault = msgsel_(__global_state, "DEFAULT", (ftnlen)7);
 
 /*     We save the operation string as input, and get */
 /*     an upper case version for our own use: */
 
-    ljust_(op, upop, op_len, (ftnlen)3);
-    ucase_(upop, upop, (ftnlen)3, (ftnlen)3);
-    if (s_cmp(upop, "GET", (ftnlen)3, (ftnlen)3) == 0) {
+    ljust_(__global_state, op, upop, op_len, (ftnlen)3);
+    ucase_(__global_state, upop, upop, (ftnlen)3, (ftnlen)3);
+    if (s_cmp(&__global_state->f2c, upop, "GET", (ftnlen)3, (ftnlen)3) == 0) {
 
 /*        Construct a string indicating which messages are enabled. */
 
-	s_copy(list, " ", list_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, list, " ", list_len, (ftnlen)1);
 	if (short__) {
-	    s_copy(list, "SHORT", list_len, (ftnlen)5);
+	    s_copy(&__global_state->f2c, list, "SHORT", list_len, (ftnlen)5);
 	}
 	if (long__) {
-	    if (s_cmp(list, " ", list_len, (ftnlen)1) == 0) {
-		s_copy(list, "LONG", list_len, (ftnlen)4);
+	    if (s_cmp(&__global_state->f2c, list, " ", list_len, (ftnlen)1) ==
+		     0) {
+		s_copy(&__global_state->f2c, list, "LONG", list_len, (ftnlen)
+			4);
 	    } else {
-		suffix_(", LONG", &__state->c__0, list, (ftnlen)6, list_len);
+		suffix_(__global_state, ", LONG", &__state->c__0, list, (
+			ftnlen)6, list_len);
 	    }
 	}
 	if (expl) {
-	    if (s_cmp(list, " ", list_len, (ftnlen)1) == 0) {
-		s_copy(list, "EXPLAIN", list_len, (ftnlen)7);
+	    if (s_cmp(&__global_state->f2c, list, " ", list_len, (ftnlen)1) ==
+		     0) {
+		s_copy(&__global_state->f2c, list, "EXPLAIN", list_len, (
+			ftnlen)7);
 	    } else {
-		suffix_(", EXPLAIN", &__state->c__0, list, (ftnlen)9, 
-			list_len);
+		suffix_(__global_state, ", EXPLAIN", &__state->c__0, list, (
+			ftnlen)9, list_len);
 	    }
 	}
 	if (trace) {
-	    if (s_cmp(list, " ", list_len, (ftnlen)1) == 0) {
-		s_copy(list, "TRACEBACK", list_len, (ftnlen)9);
+	    if (s_cmp(&__global_state->f2c, list, " ", list_len, (ftnlen)1) ==
+		     0) {
+		s_copy(&__global_state->f2c, list, "TRACEBACK", list_len, (
+			ftnlen)9);
 	    } else {
-		suffix_(", TRACEBACK", &__state->c__0, list, (ftnlen)11, 
-			list_len);
+		suffix_(__global_state, ", TRACEBACK", &__state->c__0, list, (
+			ftnlen)11, list_len);
 	    }
 	}
 	if (dfault) {
-	    if (s_cmp(list, " ", list_len, (ftnlen)1) == 0) {
-		s_copy(list, "DEFAULT", list_len, (ftnlen)7);
+	    if (s_cmp(&__global_state->f2c, list, " ", list_len, (ftnlen)1) ==
+		     0) {
+		s_copy(&__global_state->f2c, list, "DEFAULT", list_len, (
+			ftnlen)7);
 	    } else {
-		suffix_(", DEFAULT", &__state->c__0, list, (ftnlen)9, 
-			list_len);
+		suffix_(__global_state, ", DEFAULT", &__state->c__0, list, (
+			ftnlen)9, list_len);
 	    }
 	}
-    } else if (s_cmp(upop, "SET", (ftnlen)3, (ftnlen)3) == 0) {
+    } else if (s_cmp(&__global_state->f2c, upop, "SET", (ftnlen)3, (ftnlen)3) 
+	    == 0) {
 
 /*        We parse the list of words, converting each word */
 /*        to upper case, testing each word for validity, */
@@ -415,40 +427,48 @@ static errprt_state_t* get_errprt_state() {
 /*        error, and continue parsing the list. */
 
 
-	lparse_(list, ",", &__state->c__10, &numwrd, words, list_len, (ftnlen)
-		1, (ftnlen)9);
+	lparse_(__global_state, list, ",", &__state->c__10, &numwrd, words, 
+		list_len, (ftnlen)1, (ftnlen)9);
 	i__1 = numwrd;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    ucase_(words + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
-		    s_rnge("words", i__2, "errprt_", (ftnlen)434)) * 9, 
-		    upword, (ftnlen)9, (ftnlen)9);
-	    if (s_cmp(upword, "SHORT", (ftnlen)9, (ftnlen)5) == 0) {
+	    ucase_(__global_state, words + ((i__2 = i__ - 1) < 10 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "words", i__2, 
+		    "errprt_", (ftnlen)434)) * 9, upword, (ftnlen)9, (ftnlen)
+		    9);
+	    if (s_cmp(&__global_state->f2c, upword, "SHORT", (ftnlen)9, (
+		    ftnlen)5) == 0) {
 		short__ = TRUE_;
-	    } else if (s_cmp(upword, "LONG", (ftnlen)9, (ftnlen)4) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, upword, "LONG", (ftnlen)9, 
+		    (ftnlen)4) == 0) {
 		long__ = TRUE_;
-	    } else if (s_cmp(upword, "EXPLAIN", (ftnlen)9, (ftnlen)7) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, upword, "EXPLAIN", (ftnlen)
+		    9, (ftnlen)7) == 0) {
 		expl = TRUE_;
-	    } else if (s_cmp(upword, "TRACEBACK", (ftnlen)9, (ftnlen)9) == 0) 
-		    {
+	    } else if (s_cmp(&__global_state->f2c, upword, "TRACEBACK", (
+		    ftnlen)9, (ftnlen)9) == 0) {
 		trace = TRUE_;
-	    } else if (s_cmp(upword, "ALL", (ftnlen)9, (ftnlen)3) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, upword, "ALL", (ftnlen)9, (
+		    ftnlen)3) == 0) {
 		short__ = TRUE_;
 		long__ = TRUE_;
 		expl = TRUE_;
 		trace = TRUE_;
-	    } else if (s_cmp(upword, "DEFAULT", (ftnlen)9, (ftnlen)7) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, upword, "DEFAULT", (ftnlen)
+		    9, (ftnlen)7) == 0) {
 		short__ = TRUE_;
 		long__ = TRUE_;
 		expl = TRUE_;
 		trace = TRUE_;
 		dfault = TRUE_;
-	    } else if (s_cmp(upword, "NONE", (ftnlen)9, (ftnlen)4) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, upword, "NONE", (ftnlen)9, 
+		    (ftnlen)4) == 0) {
 		short__ = FALSE_;
 		long__ = FALSE_;
 		expl = FALSE_;
 		trace = FALSE_;
 		dfault = FALSE_;
-	    } else if (s_cmp(upword, " ", (ftnlen)9, (ftnlen)1) != 0) {
+	    } else if (s_cmp(&__global_state->f2c, upword, " ", (ftnlen)9, (
+		    ftnlen)1) != 0) {
 
 /*              Oops! Invalid word... */
 
@@ -456,11 +476,12 @@ static errprt_state_t* get_errprt_state() {
 		i__3[0] = 80, a__1[0] = "ERRPRT: An invalid list item was fo"
 			"und in the error message list.  The word was:";
 		i__3[1] = 9, a__1[1] = words + ((i__2 = i__ - 1) < 10 && 0 <= 
-			i__2 ? i__2 : s_rnge("words", i__2, "errprt_", (
-			ftnlen)480)) * 9;
-		s_cat(ch__1, a__1, i__3, &__state->c__2, (ftnlen)89);
-		setmsg_(ch__1, (ftnlen)89);
-		sigerr_("SPICE(INVALIDLISTITEM)", (ftnlen)22);
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "words", 
+			i__2, "errprt_", (ftnlen)480)) * 9;
+		s_cat(&__global_state->f2c, ch__1, a__1, i__3, &__state->c__2,
+			 (ftnlen)89);
+		setmsg_(__global_state, ch__1, (ftnlen)89);
+		sigerr_(__global_state, "SPICE(INVALIDLISTITEM)", (ftnlen)22);
 	    }
 
 /*           At this point, we have either set some set of */
@@ -475,21 +496,23 @@ static errprt_state_t* get_errprt_state() {
 /*        Now we store the flag values we've set, for global */
 /*        consumption (SETPRT doesn't actually detect errors). */
 
-	status = setprt_(&short__, &expl, &long__, &trace, &dfault);
+	status = setprt_(__global_state, &short__, &expl, &long__, &trace, &
+		dfault);
     } else {
 
 /*        An invalid value of OP was supplied. */
 
-	s_copy(locop, op, (ftnlen)3, op_len);
+	s_copy(&__global_state->f2c, locop, op, (ftnlen)3, op_len);
 /* Writing concatenation */
 	i__3[0] = 62, a__1[0] = "ERRPRT:  An invalid value of OP was supplie"
 		"d.  The value was: ";
 	i__3[1] = 3, a__1[1] = locop;
-	s_cat(ch__2, a__1, i__3, &__state->c__2, (ftnlen)65);
-	setmsg_(ch__2, (ftnlen)65);
-	sigerr_("SPICE(INVALIDOPERATION)", (ftnlen)23);
+	s_cat(&__global_state->f2c, ch__2, a__1, i__3, &__state->c__2, (
+		ftnlen)65);
+	setmsg_(__global_state, ch__2, (ftnlen)65);
+	sigerr_(__global_state, "SPICE(INVALIDOPERATION)", (ftnlen)23);
     }
-    chkout_("ERRPRT", (ftnlen)6);
+    chkout_(__global_state, "ERRPRT", (ftnlen)6);
     return 0;
 } /* errprt_ */
 

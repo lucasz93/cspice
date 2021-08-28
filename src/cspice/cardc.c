@@ -8,13 +8,12 @@
 
 
 typedef int cardc_state_t;
-static cardc_state_t* get_cardc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cardc_state_t* get_cardc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            CARDC ( Cardinality of a character cell ) */
-integer cardc_(char *cell, ftnlen cell_len)
+integer cardc_(cspice_t* __global_state, char *cell, ftnlen cell_len)
 {
     /* System generated locals */
     integer ret_val;
@@ -22,17 +21,17 @@ integer cardc_(char *cell, ftnlen cell_len)
     /* Local variables */
     integer card;
     integer size;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dechar_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dechar_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    cardc_state_t* __state = get_cardc_state();
+    cardc_state_t* __state = get_cardc_state(__global_state);
 /* $ Abstract */
 
 /*     Return the cardinality (number of elements) of a character cell. */
@@ -196,44 +195,46 @@ integer cardc_(char *cell, ftnlen cell_len)
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0;
 	return ret_val;
     } else {
-	chkin_("CARDC", (ftnlen)5);
+	chkin_(__global_state, "CARDC", (ftnlen)5);
     }
 
 /*     Set return value, regardless of validity. */
 
-    dechar_(cell + cell_len * 5, &card, cell_len);
+    dechar_(__global_state, cell + cell_len * 5, &card, cell_len);
     ret_val = card;
 
 /*     Squeal if something is awry. */
 
-    dechar_(cell + (cell_len << 2), &size, cell_len);
+    dechar_(__global_state, cell + (cell_len << 2), &size, cell_len);
     if (size < 0) {
-	setmsg_("Invalid cell size.  The size was #.", (ftnlen)35);
-	errint_("#", &size, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("CARDC", (ftnlen)5);
+	setmsg_(__global_state, "Invalid cell size.  The size was #.", (
+		ftnlen)35);
+	errint_(__global_state, "#", &size, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "CARDC", (ftnlen)5);
 	return ret_val;
     } else if (card < 0) {
-	setmsg_("Invalid cell cardinality.  The cardinality was #.", (ftnlen)
-		49);
-	errint_("#", &card, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCARDINALITY)", (ftnlen)25);
-	chkout_("CARDC", (ftnlen)5);
+	setmsg_(__global_state, "Invalid cell cardinality.  The cardinality "
+		"was #.", (ftnlen)49);
+	errint_(__global_state, "#", &card, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCARDINALITY)", (ftnlen)25);
+	chkout_(__global_state, "CARDC", (ftnlen)5);
 	return ret_val;
     } else if (card > size) {
-	setmsg_("Invalid cell cardinality; cardinality exceeds cell size.  T"
-		"he cardinality was #.  The size was #.", (ftnlen)97);
-	errint_("#", &card, (ftnlen)1);
-	errint_("#", &size, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCARDINALITY)", (ftnlen)25);
-	chkout_("CARDC", (ftnlen)5);
+	setmsg_(__global_state, "Invalid cell cardinality; cardinality excee"
+		"ds cell size.  The cardinality was #.  The size was #.", (
+		ftnlen)97);
+	errint_(__global_state, "#", &card, (ftnlen)1);
+	errint_(__global_state, "#", &size, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCARDINALITY)", (ftnlen)25);
+	chkout_(__global_state, "CARDC", (ftnlen)5);
 	return ret_val;
     }
-    chkout_("CARDC", (ftnlen)5);
+    chkout_(__global_state, "CARDC", (ftnlen)5);
     return ret_val;
 } /* cardc_ */
 

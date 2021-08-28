@@ -8,20 +8,20 @@
 
 
 typedef int ncposr_state_t;
-static ncposr_state_t* get_ncposr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ncposr_state_t* get_ncposr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            NCPOSR (NOT character position, reverse) */
-integer ncposr_(char *str, char *chars, integer *start, ftnlen str_len, 
-	ftnlen chars_len)
+integer ncposr_(cspice_t* __global_state, char *str, char *chars, integer *
+	start, ftnlen str_len, ftnlen chars_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), i_indx(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), i_indx(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer b;
@@ -30,7 +30,7 @@ integer ncposr_(char *str, char *chars, integer *start, ftnlen str_len,
 
 
     /* Module state */
-    ncposr_state_t* __state = get_ncposr_state();
+    ncposr_state_t* __state = get_ncposr_state(__global_state);
 /* $ Abstract */
 
 /*     Find the first occurrence in a string of a character NOT */
@@ -208,14 +208,15 @@ integer ncposr_(char *str, char *chars, integer *start, ftnlen str_len,
 
 /*     Local variables */
 
-    lenstr = i_len(str, str_len);
+    lenstr = i_len(&__global_state->f2c, str, str_len);
     b = min(lenstr,*start);
     found = FALSE_;
     ret_val = 0;
     while(! found) {
 	if (b <= 0) {
 	    return ret_val;
-	} else if (i_indx(chars, str + (b - 1), chars_len, (ftnlen)1) == 0) {
+	} else if (i_indx(&__global_state->f2c, chars, str + (b - 1), 
+		chars_len, (ftnlen)1) == 0) {
 	    ret_val = b;
 	    return ret_val;
 	} else {

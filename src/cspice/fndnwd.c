@@ -8,20 +8,19 @@
 
 
 typedef int fndnwd_state_t;
-static fndnwd_state_t* get_fndnwd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline fndnwd_state_t* get_fndnwd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      FNDNWD ( Find the next word after an index ) */
-/* Subroutine */ int fndnwd_(char *string, integer *start, integer *b, 
-	integer *e, ftnlen string_len)
+/* Subroutine */ int fndnwd_(cspice_t* __global_state, char *string, integer *
+	start, integer *b, integer *e, ftnlen string_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer size;
@@ -34,7 +33,7 @@ static fndnwd_state_t* get_fndnwd_state() {
 
 
     /* Module state */
-    fndnwd_state_t* __state = get_fndnwd_state();
+    fndnwd_state_t* __state = get_fndnwd_state(__global_state);
 /* $ Abstract */
 
 /*     Find the beginning and end of the first word starting at */
@@ -189,7 +188,7 @@ static fndnwd_state_t* get_fndnwd_state() {
 /*     Set up neede parameters and check obvious out-of-bound cases. */
 
     blank = ' ';
-    size = i_len(string, string_len);
+    size = i_len(&__global_state->f2c, string, string_len);
     if (*start > size) {
 	*b = 0;
 	*e = 0;

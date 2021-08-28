@@ -160,7 +160,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "cgv2el_c" );
+   chkin_c ( naif_state, "cgv2el_c" );
 
    /*
    The center of the ellipse is held in the first three elements.

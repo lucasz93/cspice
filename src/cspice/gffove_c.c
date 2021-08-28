@@ -1482,7 +1482,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "gffove_c" );
+   chkin_c ( naif_state, "gffove_c" );
 
    /*
    Make sure cell data types are d.p. 
@@ -1553,12 +1553,12 @@
    Store the input function pointers so these functions can be
    called by the GF adapters. 
    */
-   zzadsave_c ( UDSTEP,  (void *)(udstep)  );
-   zzadsave_c ( UDREFN,  (void *)(udrefn)  );
-   zzadsave_c ( UDREPF,  (void *)(udrepf)  );
-   zzadsave_c ( UDREPI,  (void *)(udrepi)  );
-   zzadsave_c ( UDREPU,  (void *)(udrepu)  );
-   zzadsave_c ( UDBAIL,  (void *)(udbail)  );
+   zzadsave_c ( naif_state, UDSTEP,  (void *)(udstep)  );
+   zzadsave_c ( naif_state, UDREFN,  (void *)(udrefn)  );
+   zzadsave_c ( naif_state, UDREPF,  (void *)(udrepf)  );
+   zzadsave_c ( naif_state, UDREPI,  (void *)(udrepi)  );
+   zzadsave_c ( naif_state, UDREPU,  (void *)(udrepu)  );
+   zzadsave_c ( naif_state, UDBAIL,  (void *)(udbail)  );
 
 
    /*

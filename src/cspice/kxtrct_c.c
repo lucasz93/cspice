@@ -275,7 +275,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "kxtrct_c" );
+   chkin_c ( naif_state, "kxtrct_c" );
 
    /*
    Check the input keyword to make sure the pointer is

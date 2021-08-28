@@ -8,28 +8,28 @@
 
 
 typedef int zzektrls_state_t;
-static zzektrls_state_t* get_zzektrls_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrls_state_t* get_zzektrls_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKTRLS ( EK tree, linear search ) */
-integer zzektrls_(integer *handle, integer *tree, integer *ival)
+integer zzektrls_(cspice_t* __global_state, integer *handle, integer *tree, 
+	integer *ival)
 {
     /* System generated locals */
     integer ret_val, i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzektrdp_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer i__;
     integer n;
-    extern integer zzektrsz_(integer *, integer *);
+    extern integer zzektrsz_(cspice_t*, integer *, integer *);
     integer value;
 
 
     /* Module state */
-    zzektrls_state_t* __state = get_zzektrls_state();
+    zzektrls_state_t* __state = get_zzektrls_state(__global_state);
 /* $ Abstract */
 
 /*     Search an EK tree linearly to find a specified data value.  The */
@@ -360,10 +360,10 @@ integer zzektrls_(integer *handle, integer *tree, integer *ival)
 /*     Use discovery check-in. */
 
     ret_val = 0;
-    n = zzektrsz_(handle, tree);
+    n = zzektrsz_(__global_state, handle, tree);
     i__1 = n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	zzektrdp_(handle, tree, &i__, &value);
+	zzektrdp_(__global_state, handle, tree, &i__, &value);
 	if (*ival == value) {
 	    ret_val = i__;
 	    return ret_val;

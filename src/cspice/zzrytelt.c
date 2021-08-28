@@ -8,38 +8,37 @@
 
 
 typedef int zzrytelt_state_t;
-static zzrytelt_state_t* get_zzrytelt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzrytelt_state_t* get_zzrytelt_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZRYTELT ( DSK, ray touches coordinate volume element ) */
-/* Subroutine */ int zzrytelt_(doublereal *vertex, doublereal *raydir, 
-	doublereal *dskdsc, doublereal *margin, integer *nxpts, doublereal *
-	xpt)
+/* Subroutine */ int zzrytelt_(cspice_t* __global_state, doublereal *vertex, 
+	doublereal *raydir, doublereal *dskdsc, doublereal *margin, integer *
+	nxpts, doublereal *xpt)
 {
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int zzrytrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int zzrytlat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int zzrytpdt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, integer *, doublereal *)
-	    ;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzrytrec_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int zzrytlat_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int zzrytpdt_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer corsys;
 
 
     /* Module state */
-    zzrytelt_state_t* __state = get_zzrytelt_state();
+    zzrytelt_state_t* __state = get_zzrytelt_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -371,26 +370,29 @@ static zzrytelt_state_t* get_zzrytelt_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZRYTELT", (ftnlen)8);
-    corsys = i_dnnt(&dskdsc[5]);
+    chkin_(__global_state, "ZZRYTELT", (ftnlen)8);
+    corsys = i_dnnt(&__global_state->f2c, &dskdsc[5]);
     if (corsys == 1) {
-	zzrytlat_(vertex, raydir, &dskdsc[16], margin, nxpts, xpt);
+	zzrytlat_(__global_state, vertex, raydir, &dskdsc[16], margin, nxpts, 
+		xpt);
     } else if (corsys == 3) {
-	zzrytrec_(vertex, raydir, &dskdsc[16], margin, nxpts, xpt);
+	zzrytrec_(__global_state, vertex, raydir, &dskdsc[16], margin, nxpts, 
+		xpt);
     } else if (corsys == 4) {
-	zzrytpdt_(vertex, raydir, &dskdsc[16], &dskdsc[6], margin, nxpts, xpt)
-		;
+	zzrytpdt_(__global_state, vertex, raydir, &dskdsc[16], &dskdsc[6], 
+		margin, nxpts, xpt);
     } else {
-	setmsg_("Coordinate system # is not supported.", (ftnlen)37);
-	errint_("#", &corsys, (ftnlen)1);
-	sigerr_("SPICE(BADCOORDSYS)", (ftnlen)18);
-	chkout_("ZZRYTELT", (ftnlen)8);
+	setmsg_(__global_state, "Coordinate system # is not supported.", (
+		ftnlen)37);
+	errint_(__global_state, "#", &corsys, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADCOORDSYS)", (ftnlen)18);
+	chkout_(__global_state, "ZZRYTELT", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZRYTELT", (ftnlen)8);
+    chkout_(__global_state, "ZZRYTELT", (ftnlen)8);
     return 0;
 } /* zzrytelt_ */
 

@@ -8,8 +8,7 @@
 
 
 extern zzekaps_init_t __zzekaps_init;
-static zzekaps_state_t* get_zzekaps_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekaps_state_t* get_zzekaps_state(cspice_t* state) {
 	if (!state->zzekaps)
 		state->zzekaps = __cspice_allocate_module(sizeof(
 	zzekaps_state_t), &__zzekaps_init, sizeof(__zzekaps_init));
@@ -18,26 +17,27 @@ static zzekaps_state_t* get_zzekaps_state() {
 }
 
 /* $Procedure      ZZEKAPS ( EK, allocate page for segment ) */
-/* Subroutine */ int zzekaps_(integer *handle, integer *segdsc, integer *
-	type__, logical *new__, integer *p, integer *base)
+/* Subroutine */ int zzekaps_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *type__, logical *new__, integer *p, integer 
+	*base)
 {
     integer tree;
-    extern /* Subroutine */ int zzekpgal_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekpgan_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzeksfwd_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzektrap_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
-	    integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int zzekpgal_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgan_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzeksfwd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzektrap_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekslnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern logical failed_(cspice_t*);
     integer idx;
 
 
     /* Module state */
-    zzekaps_state_t* __state = get_zzekaps_state();
+    zzekaps_state_t* __state = get_zzekaps_state(__global_state);
 /* $ Abstract */
 
 /*     Allocate a data page for a specified EK segment. */
@@ -352,22 +352,22 @@ static zzekaps_state_t* get_zzekaps_state() {
 
 /*        We must allocate a new page. */
 
-	zzekpgan_(handle, type__, p, base);
+	zzekpgan_(__global_state, handle, type__, p, base);
     } else {
 
 /*        We can allocate a page from the free list if one is available. */
 /*        Otherwise take a new page. */
 
-	zzekpgal_(handle, type__, p, base);
+	zzekpgal_(__global_state, handle, type__, p, base);
     }
-    if (failed_()) {
+    if (failed_(__global_state)) {
 	return 0;
     }
 
 /*     Zero out the page's link count and forward pointer. */
 
-    zzekslnk_(handle, type__, p, &__state->c__0);
-    zzeksfwd_(handle, type__, p, &__state->c__0);
+    zzekslnk_(__global_state, handle, type__, p, &__state->c__0);
+    zzeksfwd_(__global_state, handle, type__, p, &__state->c__0);
 
 /*     Update the segment's metadata.  For type 1 segments, */
 /*     the new page into the page tree of the appropriate data type. */
@@ -384,7 +384,7 @@ static zzekaps_state_t* get_zzekaps_state() {
 
 	tree = segdsc[9];
     }
-    zzektrap_(handle, &tree, p, &idx);
+    zzektrap_(__global_state, handle, &tree, p, &idx);
     return 0;
 } /* zzekaps_ */
 

@@ -8,21 +8,22 @@
 
 
 typedef int zzinssub_state_t;
-static zzinssub_state_t* get_zzinssub_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzinssub_state_t* get_zzinssub_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZINSSUB ( Insert a substring ) */
-/* Subroutine */ int zzinssub_(char *in, char *sub, integer *loc, char *out, 
-	ftnlen in_len, ftnlen sub_len, ftnlen out_len)
+/* Subroutine */ int zzinssub_(cspice_t* __global_state, char *in, char *sub, 
+	integer *loc, char *out, ftnlen in_len, ftnlen sub_len, ftnlen 
+	out_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     logical same;
@@ -39,7 +40,7 @@ static zzinssub_state_t* get_zzinssub_state() {
 
 
     /* Module state */
-    zzinssub_state_t* __state = get_zzinssub_state();
+    zzinssub_state_t* __state = get_zzinssub_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -234,9 +235,9 @@ static zzinssub_state_t* get_zzinssub_state() {
 /*     Capture the lengths of the input, output, and substitution */
 /*     strings. */
 
-    inlen = i_len(in, in_len);
-    outlen = i_len(out, out_len);
-    sublen = i_len(sub, sub_len);
+    inlen = i_len(&__global_state->f2c, in, in_len);
+    outlen = i_len(&__global_state->f2c, out, out_len);
+    sublen = i_len(&__global_state->f2c, sub, sub_len);
 /* Computing MIN */
     i__1 = inlen + 1, i__2 = max(1,*loc);
     myloc = min(i__1,i__2);
@@ -247,10 +248,10 @@ static zzinssub_state_t* get_zzinssub_state() {
 /*     is not needed in this case and could cause a run-time error if */
 /*     OUT and IN refer to the same memory. */
 
-    same = s_cmp(out, in, out_len, in_len) == 0;
+    same = s_cmp(&__global_state->f2c, out, in, out_len, in_len) == 0;
     if (myloc > outlen) {
 	if (! same) {
-	    s_copy(out, in, out_len, in_len);
+	    s_copy(&__global_state->f2c, out, in, out_len, in_len);
 	}
 	return 0;
     }
@@ -274,7 +275,7 @@ static zzinssub_state_t* get_zzinssub_state() {
 /*        Again, do the assignment only if it's required. */
 
 	if (! same) {
-	    s_copy(out, in, myloc - 1, in_len);
+	    s_copy(&__global_state->f2c, out, in, myloc - 1, in_len);
 	}
     }
 
@@ -297,13 +298,15 @@ static zzinssub_state_t* get_zzinssub_state() {
 
 /*     And the new word is dropped into the middle. */
 
-    s_copy(out + (myloc - 1), sub, min(subend,outlen) - (myloc - 1), sub_len);
+    s_copy(&__global_state->f2c, out + (myloc - 1), sub, min(subend,outlen) - 
+	    (myloc - 1), sub_len);
 
 /*     Blank-pad the output string if necessary. */
 
     if (outlen > inlen + sublen) {
 	i__1 = inlen + sublen;
-	s_copy(out + i__1, " ", out_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, out + i__1, " ", out_len - i__1, (ftnlen)
+		1);
     }
     return 0;
 } /* zzinssub_ */

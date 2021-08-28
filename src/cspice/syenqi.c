@@ -8,8 +8,7 @@
 
 
 extern syenqi_init_t __syenqi_init;
-static syenqi_state_t* get_syenqi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline syenqi_state_t* get_syenqi_state(cspice_t* state) {
 	if (!state->syenqi)
 		state->syenqi = __cspice_allocate_module(sizeof(
 	syenqi_state_t), &__syenqi_init, sizeof(__syenqi_init));
@@ -18,39 +17,42 @@ static syenqi_state_t* get_syenqi_state() {
 }
 
 /* $Procedure      SYENQI ( Enqueue a value onto a symbol ) */
-/* Subroutine */ int syenqi_(char *name__, integer *value, char *tabsym, 
-	integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len)
+/* Subroutine */ int syenqi_(cspice_t* __global_state, char *name__, integer *
+	value, char *tabsym, integer *tabptr, integer *tabval, ftnlen 
+	name_len, ftnlen tabsym_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer nval;
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer sumai_(integer *, integer *);
-    extern integer sizei_(integer *);
-    extern /* Subroutine */ int scardi_(integer *, integer *);
-    extern /* Subroutine */ int inslai_(integer *, integer *, integer *, 
-	    integer *, integer *);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern integer sizei_(cspice_t*, integer *);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int inslai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
     integer locval;
-    extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern integer lstlec_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer locsym;
     logical oldsym;
-    extern logical return_(void);
-    extern /* Subroutine */ int syseti_(char *, integer *, char *, integer *, 
-	    integer *, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int syseti_(cspice_t*, char *, integer *, char *, 
+	    integer *, integer *, ftnlen, ftnlen);
 
 
     /* Module state */
-    syenqi_state_t* __state = get_syenqi_state();
+    syenqi_state_t* __state = get_syenqi_state(__global_state);
 /* $ Abstract */
 
 /*     Enqueue a value onto a particular symbol in an integer */
@@ -226,50 +228,52 @@ static syenqi_state_t* get_syenqi_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYENQI", (ftnlen)6);
+	chkin_(__global_state, "SYENQI", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
-    nval = cardi_(tabval);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
+    nval = cardi_(__global_state, tabval);
 
 /*     Where does this symbol belong? Is it already in the table? */
 
-    locsym = lstlec_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
-    oldsym = locsym != 0 && s_cmp(tabsym + (locsym + 5) * tabsym_len, name__, 
-	    tabsym_len, name_len) == 0;
+    locsym = lstlec_(__global_state, name__, &nsym, tabsym + tabsym_len * 6, 
+	    name_len, tabsym_len);
+    oldsym = locsym != 0 && s_cmp(&__global_state->f2c, tabsym + (locsym + 5) 
+	    * tabsym_len, name__, tabsym_len, name_len) == 0;
 
 /*     If it's not already in the table, use SET to create a brand new */
 /*     symbol. */
 
     if (! oldsym) {
-	syseti_(name__, value, tabsym, tabptr, tabval, name_len, tabsym_len);
+	syseti_(__global_state, name__, value, tabsym, tabptr, tabval, 
+		name_len, tabsym_len);
 
 /*     If it is in the table, we can't proceed unless we know that we */
 /*     have enough room for one extra addition in the value table. */
 
-    } else if (nval >= sizei_(tabval)) {
-	setmsg_("SYENQI: The addition of the value $ to the symbol # causes "
-		"an overflow in the value table.", (ftnlen)90);
-	errint_("$", value, (ftnlen)1);
-	errch_("#", name__, (ftnlen)1, name_len);
-	sigerr_("SPICE(VALUETABLEFULL)", (ftnlen)21);
+    } else if (nval >= sizei_(__global_state, tabval)) {
+	setmsg_(__global_state, "SYENQI: The addition of the value $ to the "
+		"symbol # causes an overflow in the value table.", (ftnlen)90);
+	errint_(__global_state, "$", value, (ftnlen)1);
+	errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	sigerr_(__global_state, "SPICE(VALUETABLEFULL)", (ftnlen)21);
 
 /*     If there's room, add the new value to the value table. Add one */
 /*     to the dimension, and put the value in the right place. */
 
     } else {
-	locval = sumai_(&tabptr[6], &locsym) + 1;
-	inslai_(value, &__state->c__1, &locval, &tabval[6], &nval);
-	scardi_(&nval, tabval);
+	locval = sumai_(__global_state, &tabptr[6], &locsym) + 1;
+	inslai_(__global_state, value, &__state->c__1, &locval, &tabval[6], &
+		nval);
+	scardi_(__global_state, &nval, tabval);
 	++tabptr[locsym + 5];
     }
-    chkout_("SYENQI", (ftnlen)6);
+    chkout_(__global_state, "SYENQI", (ftnlen)6);
     return 0;
 } /* syenqi_ */
 

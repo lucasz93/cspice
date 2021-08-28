@@ -8,8 +8,7 @@
 
 
 extern diags2_init_t __diags2_init;
-static diags2_state_t* get_diags2_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline diags2_state_t* get_diags2_state(cspice_t* state) {
 	if (!state->diags2)
 		state->diags2 = __cspice_allocate_module(sizeof(
 	diags2_state_t), &__diags2_init, sizeof(__diags2_init));
@@ -18,8 +17,8 @@ static diags2_state_t* get_diags2_state() {
 }
 
 /* $Procedure  DIAGS2   ( Diagonalize symmetric 2x2 matrix ) */
-/* Subroutine */ int diags2_(doublereal *symmat, doublereal *diag, doublereal 
-	*rotate)
+/* Subroutine */ int diags2_(cspice_t* __global_state, doublereal *symmat, 
+	doublereal *diag, doublereal *rotate)
 {
     /* Initialized data */
 
@@ -36,18 +35,20 @@ static diags2_state_t* get_diags2_state() {
     doublereal root1[2];
     doublereal root2[2];
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vhatg_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int rquad_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vhatg_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int rquad_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal eigvec[2];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    diags2_state_t* __state = get_diags2_state();
+    diags2_state_t* __state = get_diags2_state(__global_state);
 /* $ Abstract */
 
 /*     Diagonalize a symmetric 2x2 matrix. */
@@ -382,24 +383,24 @@ static diags2_state_t* get_diags2_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DIAGS2", (ftnlen)6);
+	chkin_(__global_state, "DIAGS2", (ftnlen)6);
     }
 
 /*     We check for the case of a diagonal input matrix, since */
 /*     eigenvector determination is simplified by ruling out this */
 /*     case. */
     if (symmat[2] == 0.) {
-	moved_(__state->ident, &__state->c__4, rotate);
-	moved_(symmat, &__state->c__4, diag);
+	moved_(__global_state, __state->ident, &__state->c__4, rotate);
+	moved_(__global_state, symmat, &__state->c__4, diag);
 
 /*        Explicity zero out the (2,1) entry of DIAG, since DIAG is */
 /*        guaranteed to be diagonal. */
 
 	diag[1] = 0.;
-	chkout_("DIAGS2", (ftnlen)6);
+	chkout_(__global_state, "DIAGS2", (ftnlen)6);
 	return 0;
     }
 
@@ -432,7 +433,7 @@ static diags2_state_t* get_diags2_state() {
 /* Computing 2nd power */
     d__3 = b;
     d__2 = a * c__ - d__3 * d__3;
-    rquad_(&__state->c_b6, &d__1, &d__2, root1, root2);
+    rquad_(__global_state, &__state->c_b6, &d__1, &d__2, root1, root2);
 
 /*     ROOT1 is the root corresponding to the positive discriminant term; */
 /*     this is guaranteed by RQUAD. */
@@ -546,8 +547,8 @@ static diags2_state_t* get_diags2_state() {
 
 /*        Unitize the eigenvector. */
 
-	vhatg_(eigvec, &__state->c__2, tmpv);
-	moved_(tmpv, &__state->c__2, eigvec);
+	vhatg_(__global_state, eigvec, &__state->c__2, tmpv);
+	moved_(__global_state, tmpv, &__state->c__2, eigvec);
 	rotate[0] = eigvec[1];
 	rotate[1] = -eigvec[0];
 	rotate[2] = eigvec[0];
@@ -572,8 +573,8 @@ static diags2_state_t* get_diags2_state() {
 
 /*        Unitize the eigenvector. */
 
-	vhatg_(eigvec, &__state->c__2, tmpv);
-	moved_(tmpv, &__state->c__2, eigvec);
+	vhatg_(__global_state, eigvec, &__state->c__2, tmpv);
+	moved_(__global_state, tmpv, &__state->c__2, eigvec);
 	rotate[0] = eigvec[0];
 	rotate[1] = eigvec[1];
 	rotate[2] = -eigvec[1];
@@ -584,7 +585,7 @@ static diags2_state_t* get_diags2_state() {
 
     diag[0] *= scale;
     diag[3] *= scale;
-    chkout_("DIAGS2", (ftnlen)6);
+    chkout_(__global_state, "DIAGS2", (ftnlen)6);
     return 0;
 } /* diags2_ */
 

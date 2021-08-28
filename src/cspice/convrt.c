@@ -8,8 +8,7 @@
 
 
 extern convrt_init_t __convrt_init;
-static convrt_state_t* get_convrt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline convrt_state_t* get_convrt_state(cspice_t* state) {
 	if (!state->convrt)
 		state->convrt = __cspice_allocate_module(sizeof(
 	convrt_state_t), &__convrt_init, sizeof(__convrt_init));
@@ -18,8 +17,8 @@ static convrt_state_t* get_convrt_state() {
 }
 
 /* $Procedure      CONVRT ( Convert Units ) */
-/* Subroutine */ int convrt_(doublereal *x, char *in, char *out, doublereal *
-	y, ftnlen in_len, ftnlen out_len)
+/* Subroutine */ int convrt_(cspice_t* __global_state, doublereal *x, char *
+	in, char *out, doublereal *y, ftnlen in_len, ftnlen out_len)
 {
     /* Initialized data */
 
@@ -30,28 +29,31 @@ static convrt_state_t* get_convrt_state() {
     char ch__1[101], ch__2[56], ch__3[57], ch__4[123];
 
     /* Builtin functions */
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal temp;
     char outu[16];
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern doublereal dpr_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern doublereal dpr_(cspice_t*);
     char inu[16];
 
 
     /* Module state */
-    convrt_state_t* __state = get_convrt_state();
+    convrt_state_t* __state = get_convrt_state(__global_state);
 /* $ Abstract */
 
 /*      Take a measurement X, the units associated with */
@@ -346,20 +348,20 @@ static convrt_state_t* get_convrt_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CONVRT", (ftnlen)6);
+    chkin_(__global_state, "CONVRT", (ftnlen)6);
     if (__state->first) {
-	__state->cnvrtn[0] = dpr_();
+	__state->cnvrtn[0] = dpr_(__global_state);
 	__state->first = FALSE_;
     }
-    ucase_(in, inu, in_len, (ftnlen)16);
-    ucase_(out, outu, out_len, (ftnlen)16);
-    i__ = isrchc_(inu, &__state->c__31, __state->units, (ftnlen)16, (ftnlen)
-	    16);
-    j = isrchc_(outu, &__state->c__31, __state->units, (ftnlen)16, (ftnlen)16)
-	    ;
+    ucase_(__global_state, in, inu, in_len, (ftnlen)16);
+    ucase_(__global_state, out, outu, out_len, (ftnlen)16);
+    i__ = isrchc_(__global_state, inu, &__state->c__31, __state->units, (
+	    ftnlen)16, (ftnlen)16);
+    j = isrchc_(__global_state, outu, &__state->c__31, __state->units, (
+	    ftnlen)16, (ftnlen)16);
     if (i__ == 0 || j == 0) {
 	if (i__ == 0 && j == 0) {
 /* Writing concatenation */
@@ -368,64 +370,71 @@ static convrt_state_t* get_convrt_state() {
 	    i__1[2] = 21, a__1[2] = "nor the output units ";
 	    i__1[3] = 16, a__1[3] = outu;
 	    i__1[4] = 16, a__1[4] = "were recognized.";
-	    s_cat(ch__1, a__1, i__1, &__state->c__5, (ftnlen)101);
-	    setmsg_(ch__1, (ftnlen)101);
-	    sigerr_("SPICE(UNITSNOTREC)", (ftnlen)18);
-	    chkout_("CONVRT", (ftnlen)6);
+	    s_cat(&__global_state->f2c, ch__1, a__1, i__1, &__state->c__5, (
+		    ftnlen)101);
+	    setmsg_(__global_state, ch__1, (ftnlen)101);
+	    sigerr_(__global_state, "SPICE(UNITSNOTREC)", (ftnlen)18);
+	    chkout_(__global_state, "CONVRT", (ftnlen)6);
 	    return 0;
 	} else if (i__ == 0) {
 /* Writing concatenation */
 	    i__2[0] = 20, a__2[0] = "CONVRT: Input units ";
 	    i__2[1] = 16, a__2[1] = inu;
 	    i__2[2] = 20, a__2[2] = " were not recognized";
-	    s_cat(ch__2, a__2, i__2, &__state->c__3, (ftnlen)56);
-	    setmsg_(ch__2, (ftnlen)56);
-	    sigerr_("SPICE(UNITSNOTREC)", (ftnlen)18);
-	    chkout_("CONVRT", (ftnlen)6);
+	    s_cat(&__global_state->f2c, ch__2, a__2, i__2, &__state->c__3, (
+		    ftnlen)56);
+	    setmsg_(__global_state, ch__2, (ftnlen)56);
+	    sigerr_(__global_state, "SPICE(UNITSNOTREC)", (ftnlen)18);
+	    chkout_(__global_state, "CONVRT", (ftnlen)6);
 	    return 0;
 	} else if (j == 0) {
 /* Writing concatenation */
 	    i__2[0] = 21, a__2[0] = "CONVRT: Output units ";
 	    i__2[1] = 16, a__2[1] = outu;
 	    i__2[2] = 20, a__2[2] = " were not recognized";
-	    s_cat(ch__3, a__2, i__2, &__state->c__3, (ftnlen)57);
-	    setmsg_(ch__3, (ftnlen)57);
-	    sigerr_("SPICE(UNITSNOTREC)", (ftnlen)18);
-	    chkout_("CONVRT", (ftnlen)6);
+	    s_cat(&__global_state->f2c, ch__3, a__2, i__2, &__state->c__3, (
+		    ftnlen)57);
+	    setmsg_(__global_state, ch__3, (ftnlen)57);
+	    sigerr_(__global_state, "SPICE(UNITSNOTREC)", (ftnlen)18);
+	    chkout_(__global_state, "CONVRT", (ftnlen)6);
 	    return 0;
 	}
     }
-    if (s_cmp(__state->type__ + (((i__3 = i__ - 1) < 31 && 0 <= i__3 ? i__3 : 
-	    s_rnge("type", i__3, "convrt_", (ftnlen)547)) << 3), 
-	    __state->type__ + (((i__4 = j - 1) < 31 && 0 <= i__4 ? i__4 : 
-	    s_rnge("type", i__4, "convrt_", (ftnlen)547)) << 3), (ftnlen)8, (
-	    ftnlen)8) != 0) {
+    if (s_cmp(&__global_state->f2c, __state->type__ + (((i__3 = i__ - 1) < 31 
+	    && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "type", i__3, 
+	    "convrt_", (ftnlen)547)) << 3), __state->type__ + (((i__4 = j - 1)
+	     < 31 && 0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c, "type", 
+	    i__4, "convrt_", (ftnlen)547)) << 3), (ftnlen)8, (ftnlen)8) != 0) 
+	    {
 /* Writing concatenation */
 	i__5[0] = 58, a__3[0] = "CONVRT: Incompatible units. You are attempt"
 		"ing to convert ";
 	i__5[1] = 16, a__3[1] = inu;
 	i__5[2] = 6, a__3[2] = "type: ";
 	i__5[3] = 8, a__3[3] = __state->type__ + (((i__3 = i__ - 1) < 31 && 0 
-		<= i__3 ? i__3 : s_rnge("type", i__3, "convrt_", (ftnlen)549))
-		 << 3);
+		<= i__3 ? i__3 : s_rnge(&__global_state->f2c, "type", i__3, 
+		"convrt_", (ftnlen)549)) << 3);
 	i__5[4] = 4, a__3[4] = " to ";
 	i__5[5] = 16, a__3[5] = outu;
 	i__5[6] = 6, a__3[6] = "type: ";
 	i__5[7] = 8, a__3[7] = __state->type__ + (((i__4 = j - 1) < 31 && 0 <=
-		 i__4 ? i__4 : s_rnge("type", i__4, "convrt_", (ftnlen)549)) 
-		<< 3);
+		 i__4 ? i__4 : s_rnge(&__global_state->f2c, "type", i__4, 
+		"convrt_", (ftnlen)549)) << 3);
 	i__5[8] = 1, a__3[8] = ".";
-	s_cat(ch__4, a__3, i__5, &__state->c__9, (ftnlen)123);
-	setmsg_(ch__4, (ftnlen)123);
-	sigerr_("SPICE(INCOMPATIBLEUNITS)", (ftnlen)24);
-	chkout_("CONVRT", (ftnlen)6);
+	s_cat(&__global_state->f2c, ch__4, a__3, i__5, &__state->c__9, (
+		ftnlen)123);
+	setmsg_(__global_state, ch__4, (ftnlen)123);
+	sigerr_(__global_state, "SPICE(INCOMPATIBLEUNITS)", (ftnlen)24);
+	chkout_(__global_state, "CONVRT", (ftnlen)6);
 	return 0;
     }
     temp = *x * __state->cnvrtn[(i__3 = i__ - 1) < 31 && 0 <= i__3 ? i__3 : 
-	    s_rnge("cnvrtn", i__3, "convrt_", (ftnlen)565)];
+	    s_rnge(&__global_state->f2c, "cnvrtn", i__3, "convrt_", (ftnlen)
+	    565)];
     *y = temp / __state->cnvrtn[(i__3 = j - 1) < 31 && 0 <= i__3 ? i__3 : 
-	    s_rnge("cnvrtn", i__3, "convrt_", (ftnlen)566)];
-    chkout_("CONVRT", (ftnlen)6);
+	    s_rnge(&__global_state->f2c, "cnvrtn", i__3, "convrt_", (ftnlen)
+	    566)];
+    chkout_(__global_state, "CONVRT", (ftnlen)6);
     return 0;
 } /* convrt_ */
 

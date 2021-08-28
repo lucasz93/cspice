@@ -8,25 +8,24 @@
 
 
 typedef int cgv2el_state_t;
-static cgv2el_state_t* get_cgv2el_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cgv2el_state_t* get_cgv2el_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CGV2EL ( Center and generating vectors to ellipse ) */
-/* Subroutine */ int cgv2el_(doublereal *center, doublereal *vec1, doublereal 
-	*vec2, doublereal *ellips)
+/* Subroutine */ int cgv2el_(cspice_t* __global_state, doublereal *center, 
+	doublereal *vec1, doublereal *vec2, doublereal *ellips)
 {
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int saelgv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int saelgv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    cgv2el_state_t* __state = get_cgv2el_state();
+    cgv2el_state_t* __state = get_cgv2el_state(__global_state);
 /* $ Abstract */
 
 /*     Form a SPICELIB ellipse from a center vector and two generating */
@@ -188,20 +187,20 @@ static cgv2el_state_t* get_cgv2el_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CGV2EL", (ftnlen)6);
+	chkin_(__global_state, "CGV2EL", (ftnlen)6);
     }
 
 /*     The center of the ellipse is held in the first three elements. */
 
-    vequ_(center, ellips);
+    vequ_(__global_state, center, ellips);
 
 /*     Find the semi-axes of the ellipse.  These may be degenerate. */
 
-    saelgv_(vec1, vec2, &ellips[3], &ellips[6]);
-    chkout_("CGV2EL", (ftnlen)6);
+    saelgv_(__global_state, vec1, vec2, &ellips[3], &ellips[6]);
+    chkout_(__global_state, "CGV2EL", (ftnlen)6);
     return 0;
 } /* cgv2el_ */
 

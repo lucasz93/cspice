@@ -8,8 +8,7 @@
 
 
 extern zzeknres_init_t __zzeknres_init;
-static zzeknres_state_t* get_zzeknres_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzeknres_state_t* get_zzeknres_state(cspice_t* state) {
 	if (!state->zzeknres)
 		state->zzeknres = __cspice_allocate_module(sizeof(
 	zzeknres_state_t), &__zzeknres_init, sizeof(__zzeknres_init));
@@ -18,17 +17,17 @@ static zzeknres_state_t* get_zzeknres_state() {
 }
 
 /* $Procedure  ZZEKNRES ( Private: EK, resolve names in encoded query ) */
-/* Subroutine */ int zzeknres_(char *query, integer *eqryi, char *eqryc, 
-	logical *error, char *errmsg, integer *errptr, ftnlen query_len, 
-	ftnlen eqryc_len, ftnlen errmsg_len)
+/* Subroutine */ int zzeknres_(cspice_t* __global_state, char *query, integer 
+	*eqryi, char *eqryc, logical *error, char *errmsg, integer *errptr, 
+	ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer base;
@@ -37,42 +36,43 @@ static zzeknres_state_t* get_zzeknres_state() {
     integer ncns;
     integer nord;
     integer nsel;
-    extern /* Subroutine */ int zzekcchk_(char *, integer *, char *, integer *
-	    , char *, char *, integer *, logical *, char *, integer *, ftnlen,
-	     ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekqtab_(integer *, char *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekweqi_(char *, integer *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int zzekcchk_(cspice_t*, char *, integer *, char *
+	    , integer *, char *, char *, integer *, logical *, char *, 
+	    integer *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqtab_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzekweqi_(cspice_t*, char *, integer *, 
+	    integer *, ftnlen);
     integer i__;
     integer j;
     char table[64*10];
     char alias[64*10];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer nload;
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer cc[10];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     char ltable[64];
-    extern /* Subroutine */ int ekntab_(integer *);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ekntab_(cspice_t*, integer *);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer cnstyp;
     integer iparse;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ektnam_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int ekccnt_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ektnam_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int ekccnt_(cspice_t*, char *, integer *, ftnlen);
     logical fnd;
     integer lxb;
     integer lxe;
 
 
     /* Module state */
-    zzeknres_state_t* __state = get_zzeknres_state();
+    zzeknres_state_t* __state = get_zzeknres_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -778,40 +778,42 @@ static zzeknres_state_t* get_zzeknres_state() {
 /*     No error to start with. */
 
     *error = FALSE_;
-    s_copy(errmsg, " ", errmsg_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, errmsg, " ", errmsg_len, (ftnlen)1);
     *errptr = 0;
 
 /*     The query must have been parsed at this point, or it's no go. */
 
-    zzekreqi_(eqryi, "PARSED", &iparse, (ftnlen)6);
-    if (failed_()) {
+    zzekreqi_(__global_state, eqryi, "PARSED", &iparse, (ftnlen)6);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (iparse == -1) {
-	chkin_("ZZEKNRES", (ftnlen)8);
-	setmsg_("Encoded query has not been parsed.", (ftnlen)34);
-	sigerr_("SPICE(QUERYNOTPARSED)", (ftnlen)21);
-	chkout_("ZZEKNRES", (ftnlen)8);
+	chkin_(__global_state, "ZZEKNRES", (ftnlen)8);
+	setmsg_(__global_state, "Encoded query has not been parsed.", (ftnlen)
+		34);
+	sigerr_(__global_state, "SPICE(QUERYNOTPARSED)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKNRES", (ftnlen)8);
 	return 0;
     }
 
 /*     Get the important counts from the query. */
 
-    zzekreqi_(eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
-    zzekreqi_(eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
-    zzekreqi_(eqryi, "NUM_CONJUNCTIONS", &ncnj, (ftnlen)16);
-    zzekreqi_(eqryi, "NUM_ORDERBY_COLS", &nord, (ftnlen)16);
-    zzekreqi_(eqryi, "NUM_SELECT_COLS", &nsel, (ftnlen)15);
+    zzekreqi_(__global_state, eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
+    zzekreqi_(__global_state, eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
+    zzekreqi_(__global_state, eqryi, "NUM_CONJUNCTIONS", &ncnj, (ftnlen)16);
+    zzekreqi_(__global_state, eqryi, "NUM_ORDERBY_COLS", &nord, (ftnlen)16);
+    zzekreqi_(__global_state, eqryi, "NUM_SELECT_COLS", &nsel, (ftnlen)15);
 
 /*     Start out by fetching the table names and their aliases. */
 
     i__1 = ntab;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	zzekqtab_(eqryi, eqryc, &i__, table + (((i__2 = i__ - 1) < 10 && 0 <= 
-		i__2 ? i__2 : s_rnge("table", i__2, "zzeknres_", (ftnlen)254))
-		 << 6), alias + (((i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : 
-		s_rnge("alias", i__3, "zzeknres_", (ftnlen)254)) << 6), 
-		eqryc_len, (ftnlen)64, (ftnlen)64);
+	zzekqtab_(__global_state, eqryi, eqryc, &i__, table + (((i__2 = i__ - 
+		1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		"table", i__2, "zzeknres_", (ftnlen)254)) << 6), alias + (((
+		i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "alias", i__3, "zzeknres_", (ftnlen)254))
+		 << 6), eqryc_len, (ftnlen)64, (ftnlen)64);
     }
 
 /*     Make sure that the aliases are distinct.  Rather than sorting */
@@ -821,22 +823,24 @@ static zzeknres_state_t* get_zzeknres_state() {
     for (i__ = 1; i__ <= i__1; ++i__) {
 	i__2 = ntab;
 	for (j = i__ + 1; j <= i__2; ++j) {
-	    if (s_cmp(alias + (((i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : 
-		    s_rnge("alias", i__3, "zzeknres_", (ftnlen)265)) << 6), 
-		    alias + (((i__4 = j - 1) < 10 && 0 <= i__4 ? i__4 : 
-		    s_rnge("alias", i__4, "zzeknres_", (ftnlen)265)) << 6), (
-		    ftnlen)64, (ftnlen)64) == 0 && s_cmp(alias + (((i__5 = 
-		    i__ - 1) < 10 && 0 <= i__5 ? i__5 : s_rnge("alias", i__5, 
-		    "zzeknres_", (ftnlen)265)) << 6), " ", (ftnlen)64, (
+	    if (s_cmp(&__global_state->f2c, alias + (((i__3 = i__ - 1) < 10 &&
+		     0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "alias", 
+		    i__3, "zzeknres_", (ftnlen)265)) << 6), alias + (((i__4 = 
+		    j - 1) < 10 && 0 <= i__4 ? i__4 : s_rnge(&
+		    __global_state->f2c, "alias", i__4, "zzeknres_", (ftnlen)
+		    265)) << 6), (ftnlen)64, (ftnlen)64) == 0 && s_cmp(&
+		    __global_state->f2c, alias + (((i__5 = i__ - 1) < 10 && 0 
+		    <= i__5 ? i__5 : s_rnge(&__global_state->f2c, "alias", 
+		    i__5, "zzeknres_", (ftnlen)265)) << 6), " ", (ftnlen)64, (
 		    ftnlen)1) != 0) {
 		*error = TRUE_;
-		s_copy(errmsg, "Non-distinct alias <#> was found.", 
-			errmsg_len, (ftnlen)33);
+		s_copy(&__global_state->f2c, errmsg, "Non-distinct alias <#>"
+			" was found.", errmsg_len, (ftnlen)33);
 		base = ((j - 1 << 1) + 1) * 6 + 19;
 		lxb = eqryi[base + 7];
 		lxe = eqryi[base + 8];
-		repmc_(errmsg, "#", query + (lxb - 1), errmsg, errmsg_len, (
-			ftnlen)1, lxe - (lxb - 1), errmsg_len);
+		repmc_(__global_state, errmsg, "#", query + (lxb - 1), errmsg,
+			 errmsg_len, (ftnlen)1, lxe - (lxb - 1), errmsg_len);
 		*errptr = lxb;
 		return 0;
 	    }
@@ -851,19 +855,20 @@ static zzeknres_state_t* get_zzeknres_state() {
 
     i__1 = ntab;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	j = isrchc_(alias + (((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
-		s_rnge("alias", i__2, "zzeknres_", (ftnlen)295)) << 6), &ntab,
-		 table, (ftnlen)64, (ftnlen)64);
+	j = isrchc_(__global_state, alias + (((i__2 = i__ - 1) < 10 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "alias", i__2, 
+		"zzeknres_", (ftnlen)295)) << 6), &ntab, table, (ftnlen)64, (
+		ftnlen)64);
 	if (j != 0) {
 	    if (j != i__) {
 		*error = TRUE_;
-		s_copy(errmsg, "Alias <#> conflicts with table name.", 
-			errmsg_len, (ftnlen)36);
+		s_copy(&__global_state->f2c, errmsg, "Alias <#> conflicts wi"
+			"th table name.", errmsg_len, (ftnlen)36);
 		base = ((i__ - 1 << 1) + 1) * 6 + 19;
 		lxb = eqryi[base + 7];
 		lxe = eqryi[base + 8];
-		repmc_(errmsg, "#", query + (lxb - 1), errmsg, errmsg_len, (
-			ftnlen)1, lxe - (lxb - 1), errmsg_len);
+		repmc_(__global_state, errmsg, "#", query + (lxb - 1), errmsg,
+			 errmsg_len, (ftnlen)1, lxe - (lxb - 1), errmsg_len);
 		*errptr = lxb;
 		return 0;
 	    }
@@ -872,32 +877,33 @@ static zzeknres_state_t* get_zzeknres_state() {
 
 /*     Make sure that all of the tables are loaded in the EK system. */
 
-    ekntab_(&nload);
+    ekntab_(__global_state, &nload);
     i__1 = ntab;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	fnd = FALSE_;
 	j = 1;
 	while(j <= nload && ! fnd) {
-	    ektnam_(&j, ltable, (ftnlen)64);
-	    if (s_cmp(table + (((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
-		    s_rnge("table", i__2, "zzeknres_", (ftnlen)336)) << 6), 
-		    ltable, (ftnlen)64, (ftnlen)64) == 0) {
+	    ektnam_(__global_state, &j, ltable, (ftnlen)64);
+	    if (s_cmp(&__global_state->f2c, table + (((i__2 = i__ - 1) < 10 &&
+		     0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "table", 
+		    i__2, "zzeknres_", (ftnlen)336)) << 6), ltable, (ftnlen)
+		    64, (ftnlen)64) == 0) {
 
 /*              When we find a loaded table, save the column count for */
 /*              that table. */
 
 		fnd = TRUE_;
-		ekccnt_(table, &cc[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 :
-			 s_rnge("cc", i__2, "zzeknres_", (ftnlen)342)], (
-			ftnlen)64);
+		ekccnt_(__global_state, table, &cc[(i__2 = i__ - 1) < 10 && 0 
+			<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "cc", 
+			i__2, "zzeknres_", (ftnlen)342)], (ftnlen)64);
 	    } else {
 		++j;
 	    }
 	}
 	if (! fnd) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Table <#> is not currently loaded.", errmsg_len, (
-		    ftnlen)34);
+	    s_copy(&__global_state->f2c, errmsg, "Table <#> is not currently"
+		    " loaded.", errmsg_len, (ftnlen)34);
 
 /*           In order to set the error pointer, we'll need the */
 /*           lexeme begin value for the offending table. */
@@ -905,8 +911,8 @@ static zzeknres_state_t* get_zzeknres_state() {
 	    base = (i__ - 1) * 12 + 19;
 	    lxb = eqryi[base + 7];
 	    lxe = eqryi[base + 8];
-	    repmc_(errmsg, "#", query + (lxb - 1), errmsg, errmsg_len, (
-		    ftnlen)1, lxe - (lxb - 1), errmsg_len);
+	    repmc_(__global_state, errmsg, "#", query + (lxb - 1), errmsg, 
+		    errmsg_len, (ftnlen)1, lxe - (lxb - 1), errmsg_len);
 	    *errptr = lxb;
 	    return 0;
 	}
@@ -939,9 +945,9 @@ static zzeknres_state_t* get_zzeknres_state() {
 /*        Check the column and table on the LHS of the constraint. */
 
 	i__2 = base + 1;
-	zzekcchk_(query, eqryi, eqryc, &ntab, table, alias, &i__2, error, 
-		errmsg, errptr, query_len, eqryc_len, (ftnlen)64, (ftnlen)64, 
-		errmsg_len);
+	zzekcchk_(__global_state, query, eqryi, eqryc, &ntab, table, alias, &
+		i__2, error, errmsg, errptr, query_len, eqryc_len, (ftnlen)64,
+		 (ftnlen)64, errmsg_len);
 	if (*error) {
 	    return 0;
 	}
@@ -950,9 +956,9 @@ static zzeknres_state_t* get_zzeknres_state() {
 /*           Check the column and table on the RHS of the constraint. */
 
 	    i__2 = base + 14;
-	    zzekcchk_(query, eqryi, eqryc, &ntab, table, alias, &i__2, error, 
-		    errmsg, errptr, query_len, eqryc_len, (ftnlen)64, (ftnlen)
-		    64, errmsg_len);
+	    zzekcchk_(__global_state, query, eqryi, eqryc, &ntab, table, 
+		    alias, &i__2, error, errmsg, errptr, query_len, eqryc_len,
+		     (ftnlen)64, (ftnlen)64, errmsg_len);
 	    if (*error) {
 		return 0;
 	    }
@@ -967,9 +973,9 @@ static zzeknres_state_t* get_zzeknres_state() {
 /*        Calculate the base address of the SELECT column descriptor. */
 
 	base = ntab * 12 + 19 + ncnj + ncns * 26 + nord * 13 + (i__ - 1) * 12;
-	zzekcchk_(query, eqryi, eqryc, &ntab, table, alias, &base, error, 
-		errmsg, errptr, query_len, eqryc_len, (ftnlen)64, (ftnlen)64, 
-		errmsg_len);
+	zzekcchk_(__global_state, query, eqryi, eqryc, &ntab, table, alias, &
+		base, error, errmsg, errptr, query_len, eqryc_len, (ftnlen)64,
+		 (ftnlen)64, errmsg_len);
 	if (*error) {
 	    return 0;
 	}
@@ -983,9 +989,9 @@ static zzeknres_state_t* get_zzeknres_state() {
 /*        Calculate the base address of the order-by column descriptor. */
 
 	base = ntab * 12 + 19 + ncnj + ncns * 26 + (i__ - 1) * 13;
-	zzekcchk_(query, eqryi, eqryc, &ntab, table, alias, &base, error, 
-		errmsg, errptr, query_len, eqryc_len, (ftnlen)64, (ftnlen)64, 
-		errmsg_len);
+	zzekcchk_(__global_state, query, eqryi, eqryc, &ntab, table, alias, &
+		base, error, errmsg, errptr, query_len, eqryc_len, (ftnlen)64,
+		 (ftnlen)64, errmsg_len);
 	if (*error) {
 	    return 0;
 	}
@@ -993,7 +999,8 @@ static zzeknres_state_t* get_zzeknres_state() {
 
 /*     Indicate completion of name resolution. */
 
-    zzekweqi_("NAMES_RESOLVED", &__state->c__1, eqryi, (ftnlen)14);
+    zzekweqi_(__global_state, "NAMES_RESOLVED", &__state->c__1, eqryi, (
+	    ftnlen)14);
     return 0;
 } /* zzeknres_ */
 

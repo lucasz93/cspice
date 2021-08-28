@@ -8,8 +8,7 @@
 
 
 extern ckw04b_init_t __ckw04b_init;
-static ckw04b_state_t* get_ckw04b_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckw04b_state_t* get_ckw04b_state(cspice_t* state) {
 	if (!state->ckw04b)
 		state->ckw04b = __cspice_allocate_module(sizeof(
 	ckw04b_state_t), &__ckw04b_init, sizeof(__ckw04b_init));
@@ -18,37 +17,38 @@ static ckw04b_state_t* get_ckw04b_state() {
 }
 
 /* $Procedure      CKW04B ( CK type 04: Begin a segment ) */
-/* Subroutine */ int ckw04b_(integer *handle, doublereal *begtim, integer *
-	inst, char *ref, logical *avflag, char *segid, ftnlen ref_len, ftnlen 
-	segid_len)
+/* Subroutine */ int ckw04b_(cspice_t* __global_state, integer *handle, 
+	doublereal *begtim, integer *inst, char *ref, logical *avflag, char *
+	segid, ftnlen ref_len, ftnlen segid_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer value;
     doublereal dcoeff;
     integer refcod;
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sgbwvs_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgbwvs_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer icd[6];
 
 
     /* Module state */
-    ckw04b_state_t* __state = get_ckw04b_state();
+    ckw04b_state_t* __state = get_ckw04b_state(__global_state);
 /* $ Abstract */
 
 /*     Begin a type CK04 segment in the DAF file associated with */
@@ -918,10 +918,10 @@ static ckw04b_state_t* get_ckw04b_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKW04B", (ftnlen)6);
+	chkin_(__global_state, "CKW04B", (ftnlen)6);
     }
 
 /*     Create a descriptor for the segment we are about to write. First */
@@ -934,12 +934,13 @@ static ckw04b_state_t* get_ckw04b_state() {
 /*     assign it to the corresponding descriptor component. Signal */
 /*     an error if frame is not recognized. */
 
-    namfrm_(ref, &refcod, ref_len);
+    namfrm_(__global_state, ref, &refcod, ref_len);
     if (refcod == 0) {
-	setmsg_("The reference frame # is not supported.", (ftnlen)39);
-	errch_("#", ref, (ftnlen)1, ref_len);
-	sigerr_("SPICE(INVALIDREFFRAME)", (ftnlen)22);
-	chkout_("CKW04B", (ftnlen)6);
+	setmsg_(__global_state, "The reference frame # is not supported.", (
+		ftnlen)39);
+	errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	sigerr_(__global_state, "SPICE(INVALIDREFFRAME)", (ftnlen)22);
+	chkout_(__global_state, "CKW04B", (ftnlen)6);
 	return 0;
     }
     icd[1] = refcod;
@@ -957,29 +958,29 @@ static ckw04b_state_t* get_ckw04b_state() {
 
 /*     Now pack the segment descriptor. */
 
-    dafps_(&__state->c__2, &__state->c__6, dcd, icd, descr);
+    dafps_(__global_state, &__state->c__2, &__state->c__6, dcd, icd, descr);
 
 /*     Check that all characters in the SEGID are printable. */
 
-    i__1 = lastnb_(segid, segid_len);
+    i__1 = lastnb_(__global_state, segid, segid_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	value = *(unsigned char *)&segid[i__ - 1];
 	if (value < 32 || value > 126) {
-	    setmsg_("The segment identifier contains nonprintable characters",
-		     (ftnlen)55);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("CKW04B", (ftnlen)6);
+	    setmsg_(__global_state, "The segment identifier contains nonprin"
+		    "table characters", (ftnlen)55);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "CKW04B", (ftnlen)6);
 	    return 0;
 	}
     }
 
 /*     Also check if the segment identifier is too long. */
 
-    if (lastnb_(segid, segid_len) > 40) {
-	setmsg_("Segment identifier contains more than 40 characters.", (
-		ftnlen)52);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("CKW04B", (ftnlen)6);
+    if (lastnb_(__global_state, segid, segid_len) > 40) {
+	setmsg_(__global_state, "Segment identifier contains more than 40 ch"
+		"aracters.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "CKW04B", (ftnlen)6);
 	return 0;
     }
 
@@ -992,13 +993,13 @@ static ckw04b_state_t* get_ckw04b_state() {
 /*     characteristics are prescribed by the mnemonic EXPLE. See the */
 /*     include file 'sgparam.inc' for more details. */
 
-    sgbwvs_(handle, descr, segid, &__state->c__0, &dcoeff, &__state->c__3, 
-	    segid_len);
+    sgbwvs_(__global_state, handle, descr, segid, &__state->c__0, &dcoeff, &
+	    __state->c__3, segid_len);
 
 /*     No need to check FAILED() here, since all we do after this */
 /*     point is checking out. */
 
-    chkout_("CKW04B", (ftnlen)6);
+    chkout_(__global_state, "CKW04B", (ftnlen)6);
     return 0;
 } /* ckw04b_ */
 

@@ -172,7 +172,7 @@
    {
       return;
    }
-   chkin_c ( "copy_c" );
+   chkin_c ( naif_state, "copy_c" );
 
 
    /*

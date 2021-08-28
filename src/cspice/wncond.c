@@ -8,28 +8,27 @@
 
 
 typedef int wncond_state_t;
-static wncond_state_t* get_wncond_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wncond_state_t* get_wncond_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      WNCOND ( Contract the intervals of a DP window ) */
-/* Subroutine */ int wncond_(doublereal *left, doublereal *right, doublereal *
-	window)
+/* Subroutine */ int wncond_(cspice_t* __global_state, doublereal *left, 
+	doublereal *right, doublereal *window)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int wnexpd_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wnexpd_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    wncond_state_t* __state = get_wncond_state();
+    wncond_state_t* __state = get_wncond_state(__global_state);
 /* $ Abstract */
 
 /*     Contract each of the intervals of a double precision window. */
@@ -187,18 +186,18 @@ static wncond_state_t* get_wncond_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("WNCOND", (ftnlen)6);
+	chkin_(__global_state, "WNCOND", (ftnlen)6);
     }
 
 /*     This is just negative expansion. */
 
     d__1 = -(*left);
     d__2 = -(*right);
-    wnexpd_(&d__1, &d__2, window);
-    chkout_("WNCOND", (ftnlen)6);
+    wnexpd_(__global_state, &d__1, &d__2, window);
+    chkout_(__global_state, "WNCOND", (ftnlen)6);
     return 0;
 } /* wncond_ */
 

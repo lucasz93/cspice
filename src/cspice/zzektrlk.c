@@ -8,8 +8,7 @@
 
 
 extern zzektrlk_init_t __zzektrlk_init;
-static zzektrlk_state_t* get_zzektrlk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrlk_state_t* get_zzektrlk_state(cspice_t* state) {
 	if (!state->zzektrlk)
 		state->zzektrlk = __cspice_allocate_module(sizeof(
 	zzektrlk_state_t), &__zzektrlk_init, sizeof(__zzektrlk_init));
@@ -18,9 +17,9 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 }
 
 /* $Procedure      ZZEKTRLK ( EK tree, locate key ) */
-/* Subroutine */ int zzektrlk_(integer *handle, integer *tree, integer *key, 
-	integer *idx, integer *node, integer *noffst, integer *level, integer 
-	*value)
+/* Subroutine */ int zzektrlk_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *key, integer *idx, integer *node, integer *
+	noffst, integer *level, integer *value)
 {
     /* Initialized data */
 
@@ -29,23 +28,24 @@ static zzektrlk_state_t* get_zzektrlk_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dasham_(integer *, char *, ftnlen);
-    extern integer lstlei_(integer *, integer *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int zzekpgri_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasham_(cspice_t*, integer *, char *, ftnlen);
+    extern integer lstlei_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzektrlk_state_t* __state = get_zzektrlk_state();
+    zzektrlk_state_t* __state = get_zzektrlk_state(__global_state);
 /* $ Abstract */
 
 /*     Locate a specified key.  Return metadata describing the node */
@@ -605,9 +605,9 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 
 /*        Find out the access method for the current file. */
 
-	dasham_(handle, __state->access, (ftnlen)15);
-	__state->rdonly = s_cmp(__state->access, "READ", (ftnlen)15, (ftnlen)
-		4) == 0;
+	dasham_(__global_state, handle, __state->access, (ftnlen)15);
+	__state->rdonly = s_cmp(&__global_state->f2c, __state->access, "READ",
+		 (ftnlen)15, (ftnlen)4) == 0;
 	__state->samkey = FALSE_;
 	__state->samtre = FALSE_;
 	__state->leaf = FALSE_;
@@ -620,9 +620,9 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 /*        for read access only. */
 
 	if (*handle != __state->oldhan) {
-	    dasham_(handle, __state->access, (ftnlen)15);
-	    __state->rdonly = s_cmp(__state->access, "READ", (ftnlen)15, (
-		    ftnlen)4) == 0;
+	    dasham_(__global_state, handle, __state->access, (ftnlen)15);
+	    __state->rdonly = s_cmp(&__global_state->f2c, __state->access, 
+		    "READ", (ftnlen)15, (ftnlen)4) == 0;
 	    __state->samtre = FALSE_;
 	    __state->samkey = FALSE_;
 	} else {
@@ -669,8 +669,8 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 	    *node = __state->oldnod;
 	    *noffst = __state->oldnof;
 	    *value = __state->page[(i__1 = __state->datbas + *idx - 1) < 256 
-		    && 0 <= i__1 ? i__1 : s_rnge("page", i__1, "zzektrlk_", (
-		    ftnlen)332)];
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "page",
+		     i__1, "zzektrlk_", (ftnlen)332)];
 	    __state->oldidx = *idx;
 	    __state->oldkey = *key;
 	    __state->oldval = *value;
@@ -682,7 +682,7 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 /*     Start out by looking at the root page.  Save the tree depth; */
 /*     we'll use this for error checking. */
 
-    zzekpgri_(handle, tree, __state->page);
+    zzekpgri_(__global_state, handle, tree, __state->page);
     __state->depth = __state->page[3];
     *level = 1;
 
@@ -691,25 +691,27 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 
     __state->totkey = __state->page[2];
     if (*key < 1 || *key > __state->totkey) {
-	chkin_("ZZEKTRLK", (ftnlen)8);
-	setmsg_("Key = #; valid range = 1:#. Tree = #, file = #", (ftnlen)46);
-	errint_("#", key, (ftnlen)1);
-	errint_("#", &__state->totkey, (ftnlen)1);
-	errint_("#", tree, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZEKTRLK", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRLK", (ftnlen)8);
+	setmsg_(__global_state, "Key = #; valid range = 1:#. Tree = #, file "
+		"= #", (ftnlen)46);
+	errint_(__global_state, "#", key, (ftnlen)1);
+	errint_(__global_state, "#", &__state->totkey, (ftnlen)1);
+	errint_(__global_state, "#", tree, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZEKTRLK", (ftnlen)8);
 	return 0;
     }
 
 /*     Find the last key at this level that is less than or equal to */
 /*     the requested key. */
 
-    __state->prev = lstlei_(key, &__state->page[4], &__state->page[5]);
+    __state->prev = lstlei_(__global_state, key, &__state->page[4], &
+	    __state->page[5]);
     if (__state->prev > 0) {
 	__state->prvkey = __state->page[(i__1 = __state->prev + 4) < 256 && 0 
-		<= i__1 ? i__1 : s_rnge("page", i__1, "zzektrlk_", (ftnlen)
-		381)];
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "page", i__1, 
+		"zzektrlk_", (ftnlen)381)];
     } else {
 	__state->prvkey = 0;
     }
@@ -722,7 +724,8 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 	*idx = __state->prev;
 	*node = *tree;
 	*value = __state->page[(i__1 = *idx + 171) < 256 && 0 <= i__1 ? i__1 :
-		 s_rnge("page", i__1, "zzektrlk_", (ftnlen)395)];
+		 s_rnge(&__global_state->f2c, "page", i__1, "zzektrlk_", (
+		ftnlen)395)];
 	__state->oldhan = *handle;
 	__state->oldtre = *tree;
 	__state->oldkey = *key;
@@ -744,24 +747,25 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 /*     or run out of progeny. */
 
     __state->child = __state->page[(i__1 = __state->prev + 88) < 256 && 0 <= 
-	    i__1 ? i__1 : s_rnge("page", i__1, "zzektrlk_", (ftnlen)421)];
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "page", i__1, "zzektr"
+	    "lk_", (ftnlen)421)];
     *noffst = __state->prvkey;
     while(__state->child > 0 && ! __state->found) {
 
 /*        Look up the child node. */
 
-	zzekpgri_(handle, &__state->child, __state->page);
+	zzekpgri_(__global_state, handle, &__state->child, __state->page);
 	++(*level);
 	if (*level > __state->depth) {
-	    chkin_("ZZEKTRLK", (ftnlen)8);
-	    setmsg_("Runaway node pointer chain.  Key = #; valid range = 1:#"
-		    ". Tree = #, file = #", (ftnlen)75);
-	    errint_("#", key, (ftnlen)1);
-	    errint_("#", &__state->totkey, (ftnlen)1);
-	    errint_("#", tree, (ftnlen)1);
-	    errhan_("#", handle, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZEKTRLK", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKTRLK", (ftnlen)8);
+	    setmsg_(__global_state, "Runaway node pointer chain.  Key = #; v"
+		    "alid range = 1:#. Tree = #, file = #", (ftnlen)75);
+	    errint_(__global_state, "#", key, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->totkey, (ftnlen)1);
+	    errint_(__global_state, "#", tree, (ftnlen)1);
+	    errhan_(__global_state, "#", handle, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZEKTRLK", (ftnlen)8);
 	    return 0;
 	}
 
@@ -772,12 +776,12 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 /*        node preceding the first key of this subtree. */
 
 	__state->newkey = *key - *noffst;
-	__state->prev = lstlei_(&__state->newkey, __state->page, &
-		__state->page[1]);
+	__state->prev = lstlei_(__global_state, &__state->newkey, 
+		__state->page, &__state->page[1]);
 	if (__state->prev > 0) {
 	    __state->prvkey = __state->page[(i__1 = __state->prev) < 256 && 0 
-		    <= i__1 ? i__1 : s_rnge("page", i__1, "zzektrlk_", (
-		    ftnlen)460)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "page", 
+		    i__1, "zzektrlk_", (ftnlen)460)];
 	} else {
 	    __state->prvkey = 0;
 	}
@@ -791,7 +795,8 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 	    *idx = __state->prev;
 	    *node = __state->child;
 	    *value = __state->page[(i__1 = *idx + 127) < 256 && 0 <= i__1 ? 
-		    i__1 : s_rnge("page", i__1, "zzektrlk_", (ftnlen)475)];
+		    i__1 : s_rnge(&__global_state->f2c, "page", i__1, "zzekt"
+		    "rlk_", (ftnlen)475)];
 	    __state->oldhan = *handle;
 	    __state->oldtre = *tree;
 	    __state->oldkey = *key;
@@ -804,8 +809,8 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 	    __state->leaf = *level == __state->depth;
 	} else {
 	    __state->child = __state->page[(i__1 = __state->prev + 64) < 256 
-		    && 0 <= i__1 ? i__1 : s_rnge("page", i__1, "zzektrlk_", (
-		    ftnlen)491)];
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "page",
+		     i__1, "zzektrlk_", (ftnlen)491)];
 	    *noffst = __state->prvkey + *noffst;
 	}
     }
@@ -814,16 +819,16 @@ static zzektrlk_state_t* get_zzektrlk_state() {
 /*     got trouble. */
 
     if (! __state->found) {
-	chkin_("ZZEKTRLK", (ftnlen)8);
-	setmsg_("Key #; valid range = 1:#. Tree = #, file = #.  Key was not "
-		"found.  This probably indicates a corrupted file or a bug in"
-		" the EK code.", (ftnlen)132);
-	errint_("#", key, (ftnlen)1);
-	errint_("#", &__state->totkey, (ftnlen)1);
-	errint_("#", tree, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKTRLK", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRLK", (ftnlen)8);
+	setmsg_(__global_state, "Key #; valid range = 1:#. Tree = #, file = "
+		"#.  Key was not found.  This probably indicates a corrupted "
+		"file or a bug in the EK code.", (ftnlen)132);
+	errint_(__global_state, "#", key, (ftnlen)1);
+	errint_(__global_state, "#", &__state->totkey, (ftnlen)1);
+	errint_(__global_state, "#", tree, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKTRLK", (ftnlen)8);
 	return 0;
     }
     return 0;

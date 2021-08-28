@@ -798,7 +798,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "srfnrm_c" );
+   chkin_c ( naif_state, "srfnrm_c" );
 
 
    /*

@@ -8,26 +8,26 @@
 
 
 typedef int dvcrss_state_t;
-static dvcrss_state_t* get_dvcrss_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dvcrss_state_t* get_dvcrss_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DVCRSS ( Derivative of Vector cross product ) */
-/* Subroutine */ int dvcrss_(doublereal *s1, doublereal *s2, doublereal *sout)
+/* Subroutine */ int dvcrss_(cspice_t* __global_state, doublereal *s1, 
+	doublereal *s2, doublereal *sout)
 {
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal vtemp[3];
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal dvtmp1[3];
     doublereal dvtmp2[3];
 
 
     /* Module state */
-    dvcrss_state_t* __state = get_dvcrss_state();
+    dvcrss_state_t* __state = get_dvcrss_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the cross product of two 3-dimensional vectors */
@@ -163,17 +163,17 @@ static dvcrss_state_t* get_dvcrss_state() {
 
 /*     Calculate the cross product of S1 and S2, store it in VTEMP. */
 
-    vcrss_(s1, s2, vtemp);
+    vcrss_(__global_state, s1, s2, vtemp);
 
 /*     Calculate the two components of the derivative of S1 x S2. */
 
-    vcrss_(&s1[3], s2, dvtmp1);
-    vcrss_(s1, &s2[3], dvtmp2);
+    vcrss_(__global_state, &s1[3], s2, dvtmp1);
+    vcrss_(__global_state, s1, &s2[3], dvtmp2);
 
 /*     Put all of the pieces into SOUT. */
 
-    vequ_(vtemp, sout);
-    vadd_(dvtmp1, dvtmp2, &sout[3]);
+    vequ_(__global_state, vtemp, sout);
+    vadd_(__global_state, dvtmp1, dvtmp2, &sout[3]);
     return 0;
 } /* dvcrss_ */
 

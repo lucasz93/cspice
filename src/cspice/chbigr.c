@@ -8,38 +8,39 @@
 
 
 typedef int chbigr_state_t;
-static chbigr_state_t* get_chbigr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline chbigr_state_t* get_chbigr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  CHBIGR ( Chebyshev expansion integral ) */
-/* Subroutine */ int chbigr_(integer *degp, doublereal *cp, doublereal *x2s, 
-	doublereal *x, doublereal *p, doublereal *itgrlp)
+/* Subroutine */ int chbigr_(cspice_t* __global_state, integer *degp, 
+	doublereal *cp, doublereal *x2s, doublereal *x, doublereal *p, 
+	doublereal *itgrlp)
 {
     doublereal f[3];
     integer i__;
     doublereal s;
     doublereal w[3];
     doublereal z__[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal a2;
     doublereal c0;
     doublereal adegp1;
     doublereal adegp2;
     doublereal s2;
     doublereal ai;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer nterms;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    chbigr_state_t* __state = get_chbigr_state();
+    chbigr_state_t* __state = get_chbigr_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate an indefinite integral of a Chebyshev expansion at a */
@@ -384,30 +385,31 @@ static chbigr_state_t* get_chbigr_state() {
 
 /*     Test RETURN but don't check in. Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Check the expansion degree. */
 
     if (*degp < 0) {
-	chkin_("CHBIGR", (ftnlen)6);
-	setmsg_("Expansion degree must be non-negative but was #.", (ftnlen)
-		48);
-	errint_("#", degp, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
-	chkout_("CHBIGR", (ftnlen)6);
+	chkin_(__global_state, "CHBIGR", (ftnlen)6);
+	setmsg_(__global_state, "Expansion degree must be non-negative but w"
+		"as #.", (ftnlen)48);
+	errint_(__global_state, "#", degp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDEGREE)", (ftnlen)20);
+	chkout_(__global_state, "CHBIGR", (ftnlen)6);
 	return 0;
     }
 
 /*     Check the radius of the domain interval. */
 
     if (x2s[1] <= 0.) {
-	chkin_("CHBIGR", (ftnlen)6);
-	setmsg_("Interval radius must be positive but was #.", (ftnlen)43);
-	errdp_("#", &x2s[1], (ftnlen)1);
-	sigerr_("SPICE(INVALIDRADIUS)", (ftnlen)20);
-	chkout_("CHBIGR", (ftnlen)6);
+	chkin_(__global_state, "CHBIGR", (ftnlen)6);
+	setmsg_(__global_state, "Interval radius must be positive but was #.",
+		 (ftnlen)43);
+	errdp_(__global_state, "#", &x2s[1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDRADIUS)", (ftnlen)20);
+	chkout_(__global_state, "CHBIGR", (ftnlen)6);
 	return 0;
     }
     nterms = *degp + 1;

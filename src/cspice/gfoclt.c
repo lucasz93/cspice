@@ -8,8 +8,7 @@
 
 
 extern gfoclt_init_t __gfoclt_init;
-static gfoclt_state_t* get_gfoclt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gfoclt_state_t* get_gfoclt_state(cspice_t* state) {
 	if (!state->gfoclt)
 		state->gfoclt = __cspice_allocate_module(sizeof(
 	gfoclt_state_t), &__gfoclt_init, sizeof(__gfoclt_init));
@@ -18,44 +17,44 @@ static gfoclt_state_t* get_gfoclt_state() {
 }
 
 /* $Procedure GFOCLT ( GF, find occultation ) */
-/* Subroutine */ int gfoclt_(char *occtyp, char *front, char *fshape, char *
-	fframe, char *back, char *bshape, char *bframe, char *abcorr, char *
-	obsrvr, doublereal *step, doublereal *cnfine, doublereal *result, 
-	ftnlen occtyp_len, ftnlen front_len, ftnlen fshape_len, ftnlen 
-	fframe_len, ftnlen back_len, ftnlen bshape_len, ftnlen bframe_len, 
-	ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int gfoclt_(cspice_t* __global_state, char *occtyp, char *
+	front, char *fshape, char *fframe, char *back, char *bshape, char *
+	bframe, char *abcorr, char *obsrvr, doublereal *step, doublereal *
+	cnfine, doublereal *result, ftnlen occtyp_len, ftnlen front_len, 
+	ftnlen fshape_len, ftnlen fframe_len, ftnlen back_len, ftnlen 
+	bshape_len, ftnlen bframe_len, ftnlen abcorr_len, ftnlen obsrvr_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sized_(doublereal *);
-    extern logical gfbail_();
-    extern /* Subroutine */ int gfocce_(char *, char *, char *, char *, char *
-	    , char *, char *, char *, char *, doublereal *, U_fp, U_fp, 
-	    logical *, U_fp, U_fp, U_fp, logical *, L_fp, doublereal *, 
-	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern logical gfbail_(cspice_t*);
+    extern /* Subroutine */ int gfocce_(cspice_t*, char *, char *, char *, 
+	    char *, char *, char *, char *, char *, char *, doublereal *, 
+	    U_fp, U_fp, logical *, U_fp, U_fp, U_fp, logical *, L_fp, 
+	    doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     logical ok;
-    extern /* Subroutine */ int gfrefn_();
-    extern /* Subroutine */ int gfrepf_();
-    extern /* Subroutine */ int gfrepi_();
-    extern /* Subroutine */ int gfrepu_();
-    extern /* Subroutine */ int gfstep_();
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int gfsstp_(doublereal *);
+    extern /* Subroutine */ int gfrefn_(cspice_t*);
+    extern /* Subroutine */ int gfrepf_(cspice_t*);
+    extern /* Subroutine */ int gfrepi_(cspice_t*);
+    extern /* Subroutine */ int gfrepu_(cspice_t*);
+    extern /* Subroutine */ int gfstep_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int gfsstp_(cspice_t*, doublereal *);
     doublereal tol;
-    extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
-	    doublereal *);
+    extern /* Subroutine */ int zzholdd_(cspice_t*, integer *, integer *, 
+	    logical *, doublereal *);
 
 
     /* Module state */
-    gfoclt_state_t* __state = get_gfoclt_state();
+    gfoclt_state_t* __state = get_gfoclt_state(__global_state);
 /* $ Abstract */
 
 /*     Determine time intervals when an observer sees one target body */
@@ -2028,10 +2027,10 @@ static gfoclt_state_t* get_gfoclt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("GFOCLT", (ftnlen)6);
+    chkin_(__global_state, "GFOCLT", (ftnlen)6);
 
 /*     Note to maintenance programmer: input exception checks */
 /*     are delegated to GFOCCE. If the implementation of that */
@@ -2042,23 +2041,23 @@ static gfoclt_state_t* get_gfoclt_state() {
 
 /*     Check the result window's size. */
 
-    if (sized_(result) < 2) {
-	setmsg_("Result window size must be at least 2 but was #.", (ftnlen)
-		48);
-	i__1 = sized_(result);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(WINDOWTOOSMALL)", (ftnlen)21);
-	chkout_("GFOCLT", (ftnlen)6);
+    if (sized_(__global_state, result) < 2) {
+	setmsg_(__global_state, "Result window size must be at least 2 but w"
+		"as #.", (ftnlen)48);
+	i__1 = sized_(__global_state, result);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WINDOWTOOSMALL)", (ftnlen)21);
+	chkout_(__global_state, "GFOCLT", (ftnlen)6);
 	return 0;
     }
 
 /*     Check and set the step size. */
 
-    gfsstp_(step);
+    gfsstp_(__global_state, step);
 
 /*     Retrieve the convergence tolerance, if set. */
 
-    zzholdd_(&__state->c_n1, &__state->c__3, &ok, &tol);
+    zzholdd_(__global_state, &__state->c_n1, &__state->c__3, &ok, &tol);
 
 /*     Use the default value CNVTOL if no stored tolerance value. */
 
@@ -2068,13 +2067,13 @@ static gfoclt_state_t* get_gfoclt_state() {
 
 /*     Look for solutions. */
 
-    gfocce_(occtyp, front, fshape, fframe, back, bshape, bframe, abcorr, 
-	    obsrvr, &tol, (U_fp)gfstep_, (U_fp)gfrefn_, &__state->c_false, (
-	    U_fp)gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, &__state->c_false, (
-	    L_fp)gfbail_, cnfine, result, occtyp_len, front_len, fshape_len, 
-	    fframe_len, back_len, bshape_len, bframe_len, abcorr_len, 
-	    obsrvr_len);
-    chkout_("GFOCLT", (ftnlen)6);
+    gfocce_(__global_state, occtyp, front, fshape, fframe, back, bshape, 
+	    bframe, abcorr, obsrvr, &tol, (U_fp)gfstep_, (U_fp)gfrefn_, &
+	    __state->c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, &
+	    __state->c_false, (L_fp)gfbail_, cnfine, result, occtyp_len, 
+	    front_len, fshape_len, fframe_len, back_len, bshape_len, 
+	    bframe_len, abcorr_len, obsrvr_len);
+    chkout_(__global_state, "GFOCLT", (ftnlen)6);
     return 0;
 } /* gfoclt_ */
 

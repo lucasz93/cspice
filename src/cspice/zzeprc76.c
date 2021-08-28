@@ -8,8 +8,7 @@
 
 
 extern zzeprc76_init_t __zzeprc76_init;
-static zzeprc76_state_t* get_zzeprc76_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzeprc76_state_t* get_zzeprc76_state(cspice_t* state) {
 	if (!state->zzeprc76)
 		state->zzeprc76 = __cspice_allocate_module(sizeof(
 	zzeprc76_state_t), &__zzeprc76_init, sizeof(__zzeprc76_init));
@@ -18,7 +17,8 @@ static zzeprc76_state_t* get_zzeprc76_state() {
 }
 
 /* $Procedure   ZZEPRC76   ( Earth precession, 1976 IAU model ) */
-/* Subroutine */ int zzeprc76_(doublereal *et, doublereal *precxf)
+/* Subroutine */ int zzeprc76_(cspice_t* __global_state, doublereal *et, 
+	doublereal *precxf)
 {
     doublereal cent;
     doublereal zeta;
@@ -27,18 +27,18 @@ static zzeprc76_state_t* get_zzeprc76_state() {
     doublereal z__;
     doublereal theta;
     doublereal dzeta;
-    extern doublereal jyear_(void);
-    extern /* Subroutine */ int eul2xf_(doublereal *, integer *, integer *, 
-	    integer *, doublereal *);
+    extern doublereal jyear_(cspice_t*);
+    extern /* Subroutine */ int eul2xf_(cspice_t*, doublereal *, integer *, 
+	    integer *, integer *, doublereal *);
     doublereal dz;
     doublereal ts;
     doublereal dtheta;
     doublereal eulang[6];
-    extern doublereal rpd_(void);
+    extern doublereal rpd_(cspice_t*);
 
 
     /* Module state */
-    zzeprc76_state_t* __state = get_zzeprc76_state();
+    zzeprc76_state_t* __state = get_zzeprc76_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -221,9 +221,9 @@ static zzeprc76_state_t* get_zzeprc76_state() {
 /*     angles in units of arcseconds prior to scaling.  After scaling, */
 /*     the angles are in units of radians. */
 
-    cent = jyear_() * 100.;
+    cent = jyear_(__global_state) * 100.;
     t = *et / cent;
-    scale = rpd_() / 3600.;
+    scale = rpd_(__global_state) / 3600.;
     zeta = t * (t * (t * .017998 + .30188) + 2306.2181) * scale;
     z__ = t * (t * (t * .018203 + 1.09468) + 2306.2181) * scale;
     theta = t * (t * (t * -.041833 - .42665) + 2004.3109) * scale;
@@ -243,7 +243,8 @@ static zzeprc76_state_t* get_zzeprc76_state() {
     eulang[3] = -dz;
     eulang[4] = dtheta;
     eulang[5] = -dzeta;
-    eul2xf_(eulang, &__state->c__3, &__state->c__2, &__state->c__3, precxf);
+    eul2xf_(__global_state, eulang, &__state->c__3, &__state->c__2, &
+	    __state->c__3, precxf);
     return 0;
 } /* zzeprc76_ */
 

@@ -8,8 +8,7 @@
 
 
 extern dasacr_init_t __dasacr_init;
-static dasacr_state_t* get_dasacr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasacr_state_t* get_dasacr_state(cspice_t* state) {
 	if (!state->dasacr)
 		state->dasacr = __cspice_allocate_module(sizeof(
 	dasacr_state_t), &__dasacr_init, sizeof(__dasacr_init));
@@ -18,7 +17,8 @@ static dasacr_state_t* get_dasacr_state() {
 }
 
 /* $Procedure      DASACR ( DAS, add comment records ) */
-/* Subroutine */ int dasacr_(integer *handle, integer *n)
+/* Subroutine */ int dasacr_(cspice_t* __global_state, integer *handle, 
+	integer *n)
 {
     /* Initialized data */
 
@@ -27,7 +27,7 @@ static dasacr_state_t* get_dasacr_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer base;
@@ -40,40 +40,42 @@ static dasacr_state_t* get_dasacr_state() {
     integer prec;
     integer unit;
     integer type__;
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
-    extern /* Subroutine */ int maxai_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int maxai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer ncomr;
     integer lword;
-    extern logical failed_(void);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int dasiod_(char *, integer *, integer *, 
-	    doublereal *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int dasioc_(cspice_t*, char *, integer *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dasiod_(cspice_t*, char *, integer *, integer 
+	    *, doublereal *, ftnlen);
     integer dirrec[256];
-    extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int dasioi_(char *, integer *, integer *, integer 
-	    *, ftnlen);
+    extern /* Subroutine */ int dashfs_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dassih_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasioi_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
     integer lastla[3];
-    extern /* Subroutine */ int daswbr_(integer *);
+    extern /* Subroutine */ int daswbr_(cspice_t*, integer *);
     integer lindex;
-    extern /* Subroutine */ int dasufs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dasufs_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *);
     integer lastrc[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer lastwd[3];
     integer nresvc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer nresvr;
     integer nxttyp;
     integer loc;
@@ -81,7 +83,7 @@ static dasacr_state_t* get_dasacr_state() {
 
 
     /* Module state */
-    dasacr_state_t* __state = get_dasacr_state();
+    dasacr_state_t* __state = get_dasacr_state(__global_state);
 /* $ Abstract */
 
 /*     Increase the size of the comment area in a DAS file to accommodate */
@@ -289,10 +291,10 @@ static dasacr_state_t* get_dasacr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASACR", (ftnlen)6);
+    chkin_(__global_state, "DASACR", (ftnlen)6);
 
 /*     Programmer's note: the calls to */
 
@@ -308,24 +310,25 @@ static dasacr_state_t* get_dasacr_state() {
 /*     Make sure this DAS file is open for writing.  Signal an error if */
 /*     not. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
 
 /*     Get the logical unit for this DAS file. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
-    if (failed_()) {
-	chkout_("DASACR", (ftnlen)6);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &unit, (
+	    ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASACR", (ftnlen)6);
 	return 0;
     }
 
 /*     It's a mistake to use a negative value of N. */
 
     if (*n < 0) {
-	setmsg_("Number of comment records to add must be non-negative.  Act"
-		"ual number requested was #.", (ftnlen)86);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(DASINVALIDCOUNT)", (ftnlen)22);
-	chkout_("DASACR", (ftnlen)6);
+	setmsg_(__global_state, "Number of comment records to add must be no"
+		"n-negative.  Actual number requested was #.", (ftnlen)86);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASINVALIDCOUNT)", (ftnlen)22);
+	chkout_(__global_state, "DASACR", (ftnlen)6);
 	return 0;
     }
 
@@ -337,26 +340,28 @@ static dasacr_state_t* get_dasacr_state() {
 
 /*     DASWBR flushes buffered records to the file. */
 
-    daswbr_(handle);
+    daswbr_(__global_state, handle);
 
 /*     Grab the file summary for this DAS file.  Find the number of */
 /*     comment records and the number of the first free record. */
 
-    dashfs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 
-	    lastwd);
+    dashfs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, 
+	    lastla, lastrc, lastwd);
 
 /*     Find the record and word positions LREC and LWORD of the last */
 /*     descriptor in the file. */
 
-    maxai_(lastrc, &__state->c__3, &lrec, &loc);
+    maxai_(__global_state, lastrc, &__state->c__3, &lrec, &loc);
     lword = 0;
     for (i__ = 1; i__ <= 3; ++i__) {
-	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc",
-		 i__1, "dasacr_", (ftnlen)373)] == lrec && lastwd[(i__2 = i__ 
-		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("lastwd", i__2, "dasac"
-		"r_", (ftnlen)373)] > lword) {
-	    lword = lastwd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dasacr_", (ftnlen)376)];
+	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "lastrc", i__1, "dasacr_", (ftnlen)373)] 
+		== lrec && lastwd[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "lastwd", i__2, "dasacr_", (
+		ftnlen)373)] > lword) {
+	    lword = lastwd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "lastwd", i__1, "dasacr_", (ftnlen)
+		    376)];
 	}
     }
 
@@ -373,9 +378,9 @@ static dasacr_state_t* get_dasacr_state() {
 
 /*           NRESVR + NCOMR + N + 2 */
 
-	cleari_(&__state->c__256, dirrec);
+	cleari_(__global_state, &__state->c__256, dirrec);
 	i__1 = nresvr + ncomr + *n + 2;
-	dasioi_("WRITE", &unit, &i__1, dirrec, (ftnlen)5);
+	dasioi_(__global_state, "WRITE", &unit, &i__1, dirrec, (ftnlen)5);
     } else {
 
 /*        There really is stuff to move.  For each directory record, */
@@ -391,7 +396,7 @@ static dasacr_state_t* get_dasacr_state() {
 
 /*           Read the current directory record. */
 
-	    dasioi_("READ", &unit, &nrec, dirrec, (ftnlen)4);
+	    dasioi_(__global_state, "READ", &unit, &nrec, dirrec, (ftnlen)4);
 
 /*           Find the data type, size, and base record number of the */
 /*           last cluster in the current directory.  To do this, */
@@ -408,18 +413,19 @@ static dasacr_state_t* get_dasacr_state() {
 	    i__1 = lindex;
 	    for (i__ = 11; i__ <= i__1; ++i__) {
 		if (dirrec[(i__2 = i__ - 1) < 256 && 0 <= i__2 ? i__2 : 
-			s_rnge("dirrec", i__2, "dasacr_", (ftnlen)435)] < 0) {
+			s_rnge(&__global_state->f2c, "dirrec", i__2, "dasacr_"
+			, (ftnlen)435)] < 0) {
 		    type__ = __state->prev[(i__2 = type__ - 1) < 3 && 0 <= 
-			    i__2 ? i__2 : s_rnge("prev", i__2, "dasacr_", (
-			    ftnlen)436)];
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "prev",
+			     i__2, "dasacr_", (ftnlen)436)];
 		} else {
 		    type__ = __state->next[(i__2 = type__ - 1) < 3 && 0 <= 
-			    i__2 ? i__2 : s_rnge("next", i__2, "dasacr_", (
-			    ftnlen)438)];
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "next",
+			     i__2, "dasacr_", (ftnlen)438)];
 		}
 		base += (i__3 = dirrec[(i__2 = i__ - 2) < 256 && 0 <= i__2 ? 
-			i__2 : s_rnge("dirrec", i__2, "dasacr_", (ftnlen)441)]
-			, abs(i__3));
+			i__2 : s_rnge(&__global_state->f2c, "dirrec", i__2, 
+			"dasacr_", (ftnlen)441)], abs(i__3));
 	    }
 
 /*           TYPE and BASE are now the data type and base record number */
@@ -442,8 +448,8 @@ static dasacr_state_t* get_dasacr_state() {
 /*                 ordering of types. */
 
 		    if (dirrec[(i__1 = pos) < 256 && 0 <= i__1 ? i__1 : 
-			    s_rnge("dirrec", i__1, "dasacr_", (ftnlen)467)] > 
-			    0) {
+			    s_rnge(&__global_state->f2c, "dirrec", i__1, 
+			    "dasacr_", (ftnlen)467)] > 0) {
 
 /*                    This assignment and the one below in the ELSE */
 /*                    block are performed from the second loop iteration */
@@ -451,41 +457,46 @@ static dasacr_state_t* get_dasacr_state() {
 /*                    iteration. */
 
 			type__ = __state->prev[(i__1 = nxttyp - 1) < 3 && 0 <=
-				 i__1 ? i__1 : s_rnge("prev", i__1, "dasacr_",
-				 (ftnlen)474)];
+				 i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"prev", i__1, "dasacr_", (ftnlen)474)];
 		    } else {
 			type__ = __state->next[(i__1 = nxttyp - 1) < 3 && 0 <=
-				 i__1 ? i__1 : s_rnge("next", i__1, "dasacr_",
-				 (ftnlen)476)];
+				 i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"next", i__1, "dasacr_", (ftnlen)476)];
 		    }
 
 /*                 Update the cluster base record number. */
 
 		    base -= (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 <= 
-			    i__1 ? i__1 : s_rnge("dirrec", i__1, "dasacr_", (
-			    ftnlen)482)], abs(i__2));
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "dirr"
+			    "ec", i__1, "dasacr_", (ftnlen)482)], abs(i__2));
 		}
 
 /*              Move the current cluster. */
 
 		i__3 = base;
 		for (i__ = base + (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 
-			<= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasacr_", (
-			ftnlen)489)], abs(i__2)) - 1; i__ >= i__3; --i__) {
+			<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "dirrec"
+			, i__1, "dasacr_", (ftnlen)489)], abs(i__2)) - 1; i__ 
+			>= i__3; --i__) {
 		    if (type__ == 1) {
-			dasioc_("READ", &unit, &i__, recc, (ftnlen)4, (ftnlen)
-				1024);
+			dasioc_(__global_state, "READ", &unit, &i__, recc, (
+				ftnlen)4, (ftnlen)1024);
 			i__1 = i__ + *n;
-			dasioc_("WRITE", &unit, &i__1, recc, (ftnlen)5, (
-				ftnlen)1024);
+			dasioc_(__global_state, "WRITE", &unit, &i__1, recc, (
+				ftnlen)5, (ftnlen)1024);
 		    } else if (type__ == 2) {
-			dasiod_("READ", &unit, &i__, recd, (ftnlen)4);
+			dasiod_(__global_state, "READ", &unit, &i__, recd, (
+				ftnlen)4);
 			i__1 = i__ + *n;
-			dasiod_("WRITE", &unit, &i__1, recd, (ftnlen)5);
+			dasiod_(__global_state, "WRITE", &unit, &i__1, recd, (
+				ftnlen)5);
 		    } else {
-			dasioi_("READ", &unit, &i__, reci, (ftnlen)4);
+			dasioi_(__global_state, "READ", &unit, &i__, reci, (
+				ftnlen)4);
 			i__1 = i__ + *n;
-			dasioi_("WRITE", &unit, &i__1, reci, (ftnlen)5);
+			dasioi_(__global_state, "WRITE", &unit, &i__1, reci, (
+				ftnlen)5);
 		    }
 		}
 
@@ -513,7 +524,7 @@ static dasacr_state_t* get_dasacr_state() {
 /*           Move the current directory record. */
 
 	    i__3 = nrec + *n;
-	    dasioi_("WRITE", &unit, &i__3, dirrec, (ftnlen)5);
+	    dasioi_(__global_state, "WRITE", &unit, &i__3, dirrec, (ftnlen)5);
 
 /*           Consider the previous directory. */
 
@@ -532,17 +543,19 @@ static dasacr_state_t* get_dasacr_state() {
     ncomr += *n;
     free += *n;
     for (i__ = 1; i__ <= 3; ++i__) {
-	if (lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("lastrc",
-		 i__3, "dasacr_", (ftnlen)564)] != 0) {
-	    lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("lastrc",
-		     i__3, "dasacr_", (ftnlen)565)] = lastrc[(i__1 = i__ - 1) 
-		    < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc", i__1, "dasacr_"
-		    , (ftnlen)565)] + *n;
+	if (lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "lastrc", i__3, "dasacr_", (ftnlen)564)] 
+		!= 0) {
+	    lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "lastrc", i__3, "dasacr_", (ftnlen)
+		    565)] = lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
+		    s_rnge(&__global_state->f2c, "lastrc", i__1, "dasacr_", (
+		    ftnlen)565)] + *n;
 	}
     }
-    dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 
-	    lastwd);
-    chkout_("DASACR", (ftnlen)6);
+    dasufs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, 
+	    lastla, lastrc, lastwd);
+    chkout_(__global_state, "DASACR", (ftnlen)6);
     return 0;
 } /* dasacr_ */
 

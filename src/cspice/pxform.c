@@ -8,8 +8,7 @@
 
 
 extern pxform_init_t __pxform_init;
-static pxform_state_t* get_pxform_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pxform_state_t* get_pxform_state(cspice_t* state) {
 	if (!state->pxform)
 		state->pxform = __cspice_allocate_module(sizeof(
 	pxform_state_t), &__pxform_init, sizeof(__pxform_init));
@@ -18,29 +17,30 @@ static pxform_state_t* get_pxform_state() {
 }
 
 /* $Procedure      PXFORM ( Position Transformation Matrix ) */
-/* Subroutine */ int pxform_(char *from, char *to, doublereal *et, doublereal 
-	*rotate, ftnlen from_len, ftnlen to_len)
+/* Subroutine */ int pxform_(cspice_t* __global_state, char *from, char *to, 
+	doublereal *et, doublereal *rotate, ftnlen from_len, ftnlen to_len)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer fcode;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer tcode;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int refchg_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    pxform_state_t* __state = get_pxform_state();
+    pxform_state_t* __state = get_pxform_state(__global_state);
 /* $ Abstract */
 
 /*     Return the matrix that transforms position vectors from one */
@@ -288,10 +288,10 @@ static pxform_state_t* get_pxform_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("PXFORM", (ftnlen)6);
+    chkin_(__global_state, "PXFORM", (ftnlen)6);
 
 /*     Initialization. */
 
@@ -299,38 +299,38 @@ static pxform_state_t* get_pxform_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
 	__state->first = FALSE_;
     }
-    zznamfrm_(__state->svctr1, __state->svfrom, &__state->svfcod, from, &
-	    fcode, (ftnlen)32, from_len);
-    zznamfrm_(__state->svctr2, __state->svto, &__state->svtcde, to, &tcode, (
-	    ftnlen)32, to_len);
+    zznamfrm_(__global_state, __state->svctr1, __state->svfrom, &
+	    __state->svfcod, from, &fcode, (ftnlen)32, from_len);
+    zznamfrm_(__global_state, __state->svctr2, __state->svto, &
+	    __state->svtcde, to, &tcode, (ftnlen)32, to_len);
 
 /*     Only non-zero id-codes are legitimate frame id-codes.  Zero */
 /*     indicates that the frame wasn't recognized. */
 
     if (fcode != 0 && tcode != 0) {
-	refchg_(&fcode, &tcode, et, rotate);
+	refchg_(__global_state, &fcode, &tcode, et, rotate);
     } else if (fcode == 0 && tcode == 0) {
-	setmsg_("Neither of the frames # or # was recognized as a known refe"
-		"rence frame. ", (ftnlen)72);
-	errch_("#", from, (ftnlen)1, from_len);
-	errch_("#", to, (ftnlen)1, to_len);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	setmsg_(__global_state, "Neither of the frames # or # was recognized"
+		" as a known reference frame. ", (ftnlen)72);
+	errch_(__global_state, "#", from, (ftnlen)1, from_len);
+	errch_(__global_state, "#", to, (ftnlen)1, to_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
     } else if (fcode == 0) {
-	setmsg_("The frame # was not recognized as a known reference frame. ",
-		 (ftnlen)59);
-	errch_("#", from, (ftnlen)1, from_len);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	setmsg_(__global_state, "The frame # was not recognized as a known r"
+		"eference frame. ", (ftnlen)59);
+	errch_(__global_state, "#", from, (ftnlen)1, from_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
     } else if (tcode == 0) {
-	setmsg_("The frame # was not recognized as a known reference frame. ",
-		 (ftnlen)59);
-	errch_("#", to, (ftnlen)1, to_len);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	setmsg_(__global_state, "The frame # was not recognized as a known r"
+		"eference frame. ", (ftnlen)59);
+	errch_(__global_state, "#", to, (ftnlen)1, to_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
     }
-    chkout_("PXFORM", (ftnlen)6);
+    chkout_(__global_state, "PXFORM", (ftnlen)6);
     return 0;
 } /* pxform_ */
 

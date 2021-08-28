@@ -8,20 +8,21 @@
 
 
 typedef int cylsph_state_t;
-static cylsph_state_t* get_cylsph_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cylsph_state_t* get_cylsph_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CYLSPH ( Cylindrical to spherical ) */
-/* Subroutine */ int cylsph_(doublereal *r__, doublereal *longc, doublereal *
-	z__, doublereal *radius, doublereal *colat, doublereal *long__)
+/* Subroutine */ int cylsph_(cspice_t* __global_state, doublereal *r__, 
+	doublereal *longc, doublereal *z__, doublereal *radius, doublereal *
+	colat, doublereal *long__)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal), atan2(doublereal, doublereal);
+    double sqrt(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
+	    doublereal);
 
     /* Local variables */
     doublereal x;
@@ -32,7 +33,7 @@ static cylsph_state_t* get_cylsph_state() {
 
 
     /* Module state */
-    cylsph_state_t* __state = get_cylsph_state();
+    cylsph_state_t* __state = get_cylsph_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from cylindrical to spherical coordinates. */
@@ -201,8 +202,8 @@ static cylsph_state_t* get_cylsph_state() {
     } else {
 	x = *r__ / big;
 	y = *z__ / big;
-	rh = big * sqrt(x * x + y * y);
-	th = atan2(*r__, *z__);
+	rh = big * sqrt(&__global_state->f2c, x * x + y * y);
+	th = atan2(&__global_state->f2c, *r__, *z__);
     }
 
 /*     Move the results to output variables */

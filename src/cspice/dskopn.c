@@ -8,24 +8,24 @@
 
 
 typedef int dskopn_state_t;
-static dskopn_state_t* get_dskopn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskopn_state_t* get_dskopn_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DSKOPN ( DSK, open new file ) */
-/* Subroutine */ int dskopn_(char *fname, char *ifname, integer *ncomch, 
-	integer *handle, ftnlen fname_len, ftnlen ifname_len)
+/* Subroutine */ int dskopn_(cspice_t* __global_state, char *fname, char *
+	ifname, integer *ncomch, integer *handle, ftnlen fname_len, ftnlen 
+	ifname_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dlaopn_(char *, char *, char *, integer *, 
-	    integer *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dlaopn_(cspice_t*, char *, char *, char *, 
+	    integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dskopn_state_t* __state = get_dskopn_state();
+    dskopn_state_t* __state = get_dskopn_state(__global_state);
 /* $ Abstract */
 
 /*     Open a new DSK file for subsequent write operations. */
@@ -319,13 +319,13 @@ static dskopn_state_t* get_dskopn_state() {
 
 /*     SPICELIB functions */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKOPN", (ftnlen)6);
-    dlaopn_(fname, "DSK", ifname, ncomch, handle, fname_len, (ftnlen)3, 
-	    ifname_len);
-    chkout_("DSKOPN", (ftnlen)6);
+    chkin_(__global_state, "DSKOPN", (ftnlen)6);
+    dlaopn_(__global_state, fname, "DSK", ifname, ncomch, handle, fname_len, (
+	    ftnlen)3, ifname_len);
+    chkout_(__global_state, "DSKOPN", (ftnlen)6);
     return 0;
 } /* dskopn_ */
 

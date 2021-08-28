@@ -8,8 +8,7 @@
 
 
 extern oscelt_init_t __oscelt_init;
-static oscelt_state_t* get_oscelt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline oscelt_state_t* get_oscelt_state(cspice_t* state) {
 	if (!state->oscelt)
 		state->oscelt = __cspice_allocate_module(sizeof(
 	oscelt_state_t), &__oscelt_init, sizeof(__oscelt_init));
@@ -18,8 +17,8 @@ static oscelt_state_t* get_oscelt_state() {
 }
 
 /* $Procedure      OSCELT ( Determine conic elements from state ) */
-/* Subroutine */ int oscelt_(doublereal *state, doublereal *et, doublereal *
-	mu, doublereal *elts)
+/* Subroutine */ int oscelt_(cspice_t* __global_state, doublereal *state, 
+	doublereal *et, doublereal *mu, doublereal *elts)
 {
     /* Initialized data */
 
@@ -28,18 +27,19 @@ static oscelt_state_t* get_oscelt_state() {
     doublereal d__1, d__2, d__3;
 
     /* Builtin functions */
-    double atan2(doublereal, doublereal), cos(doublereal), sqrt(doublereal), 
-	    sin(doublereal), d_sign(doublereal *, doublereal *), sinh(
-	    doublereal), tan(doublereal);
+    double atan2(f2c_state_t*, doublereal, doublereal), cos(f2c_state_t*, 
+	    doublereal), sqrt(f2c_state_t*, doublereal), sin(f2c_state_t*, 
+	    doublereal), d_sign(f2c_state_t*, doublereal *, doublereal *), 
+	    sinh(f2c_state_t*, doublereal), tan(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal rmag;
     doublereal argp;
     doublereal vmag;
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal e[3];
     doublereal h__[3];
     doublereal n[3];
@@ -47,43 +47,46 @@ static oscelt_state_t* get_oscelt_state() {
     doublereal r__[3];
     doublereal v[3];
     doublereal cosea;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal sinea;
     doublereal lnode;
     doublereal coshf;
-    extern doublereal exact_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern doublereal exact_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal perix[3];
     doublereal periy[3];
     doublereal xprod[3];
     doublereal m0;
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
-    extern doublereal twopi_(void);
-    extern logical vzero_(doublereal *);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern doublereal twopi_(cspice_t*);
+    extern logical vzero_(cspice_t*, doublereal *);
     doublereal ea;
-    extern doublereal pi_(void);
-    extern doublereal dacosh_(doublereal *);
+    extern doublereal pi_(cspice_t*);
+    extern doublereal dacosh_(cspice_t*, doublereal *);
     doublereal nu;
     doublereal rp;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal ecc;
     doublereal inc;
 
 
     /* Module state */
-    oscelt_state_t* __state = get_oscelt_state();
+    oscelt_state_t* __state = get_oscelt_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the set of osculating conic orbital elements that */
@@ -442,16 +445,17 @@ static oscelt_state_t* get_oscelt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("OSCELT", (ftnlen)6);
+	chkin_(__global_state, "OSCELT", (ftnlen)6);
     }
     if (*mu <= 0.) {
-	setmsg_("MU = #; non-positive gravitational parameter", (ftnlen)44);
-	errdp_("#", mu, (ftnlen)1);
-	sigerr_("SPICE(NONPOSITIVEMASS)", (ftnlen)22);
-	chkout_("OSCELT", (ftnlen)6);
+	setmsg_(__global_state, "MU = #; non-positive gravitational parameter"
+		, (ftnlen)44);
+	errdp_(__global_state, "#", mu, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONPOSITIVEMASS)", (ftnlen)22);
+	chkout_(__global_state, "OSCELT", (ftnlen)6);
 	return 0;
     }
 
@@ -482,47 +486,50 @@ static oscelt_state_t* get_oscelt_state() {
 /*                        e = (1/mu)( (v  - mu/r) r  -  <r,v> v ) */
 /*                        -                       -      - -  - */
 
-    vequ_(state, r__);
-    vequ_(&state[3], v);
+    vequ_(__global_state, state, r__);
+    vequ_(__global_state, &state[3], v);
 
 /*     Check for non-physical cases. Probably due to user */
 /*     input error */
 
-    if (vzero_(r__)) {
-	setmsg_("Zero vector for input position vector.", (ftnlen)38);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("OSCELT", (ftnlen)6);
+    if (vzero_(__global_state, r__)) {
+	setmsg_(__global_state, "Zero vector for input position vector.", (
+		ftnlen)38);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "OSCELT", (ftnlen)6);
 	return 0;
     }
-    if (vzero_(v)) {
-	setmsg_("Zero vector for input velocity vector.", (ftnlen)38);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("OSCELT", (ftnlen)6);
+    if (vzero_(__global_state, v)) {
+	setmsg_(__global_state, "Zero vector for input velocity vector.", (
+		ftnlen)38);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "OSCELT", (ftnlen)6);
 	return 0;
     }
-    rmag = vnorm_(r__);
-    vmag = vnorm_(v);
-    vcrss_(r__, v, h__);
+    rmag = vnorm_(__global_state, r__);
+    vmag = vnorm_(__global_state, v);
+    vcrss_(__global_state, r__, v, h__);
 
 /*     If the specific angular momentum vector is the zero vector, */
 /*     we have a degenerate orbit and cannot proceed. */
 
-    if (vzero_(h__)) {
-	setmsg_("Input position and velocity are too close to parallel; the "
-		"specific angular momentum vector is zero.", (ftnlen)100);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("OSCELT", (ftnlen)6);
+    if (vzero_(__global_state, h__)) {
+	setmsg_(__global_state, "Input position and velocity are too close t"
+		"o parallel; the specific angular momentum vector is zero.", (
+		ftnlen)100);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "OSCELT", (ftnlen)6);
 	return 0;
     }
     d__1 = -h__[1];
-    vpack_(&d__1, h__, &__state->c_b16, n);
+    vpack_(__global_state, &d__1, h__, &__state->c_b16, n);
 /* Computing 2nd power */
     d__2 = vmag;
     d__1 = d__2 * d__2 - *mu / rmag;
-    d__3 = -vdot_(r__, v);
-    vlcom_(&d__1, r__, &d__3, v, e);
+    d__3 = -vdot_(__global_state, r__, v);
+    vlcom_(__global_state, &d__1, r__, &d__3, v, e);
     d__1 = 1. / *mu;
-    vsclip_(&d__1, e);
+    vsclip_(__global_state, &d__1, e);
 
 /*     We begin by determining the size and shape of the orbit. */
 
@@ -534,9 +541,9 @@ static oscelt_state_t* get_oscelt_state() {
 /*     semi-latus rectum, which in turn orbit depends only on the */
 /*     specific angular momentum of the orbiting object. */
 
-    d__1 = vnorm_(e);
-    ecc = exact_(&d__1, &__state->c_b17, &__state->c_b18);
-    p = vdot_(h__, h__) / *mu;
+    d__1 = vnorm_(__global_state, e);
+    ecc = exact_(__global_state, &d__1, &__state->c_b17, &__state->c_b18);
+    p = vdot_(__global_state, h__, h__) / *mu;
     rp = p / (ecc + 1.);
 
 /*     Next, the orientation of the orbit. */
@@ -548,13 +555,15 @@ static oscelt_state_t* get_oscelt_state() {
 /*     If close to zero or pi, make it exact. In either case, the node */
 /*     vector becomes undefined. */
 
-    inc = vsep_(h__, __state->zvec);
+    inc = vsep_(__global_state, h__, __state->zvec);
     if ((d__1 = inc + 0., abs(d__1)) < 1e-10) {
 	inc = 0.;
-	vpack_(&__state->c_b17, &__state->c_b16, &__state->c_b16, n);
-    } else if ((d__1 = inc - pi_(), abs(d__1)) < 1e-10) {
-	inc = pi_();
-	vpack_(&__state->c_b17, &__state->c_b16, &__state->c_b16, n);
+	vpack_(__global_state, &__state->c_b17, &__state->c_b16, &
+		__state->c_b16, n);
+    } else if ((d__1 = inc - pi_(__global_state), abs(d__1)) < 1e-10) {
+	inc = pi_(__global_state);
+	vpack_(__global_state, &__state->c_b17, &__state->c_b16, &
+		__state->c_b16, n);
     }
 
 /*                                                              ^ */
@@ -562,9 +571,9 @@ static oscelt_state_t* get_oscelt_state() {
 /*     (the x-axis) and the node vector, n. */
 /*                                       - */
 
-    lnode = atan2(n[1], n[0]);
+    lnode = atan2(&__global_state->f2c, n[1], n[0]);
     if (lnode < 0.) {
-	lnode += twopi_();
+	lnode += twopi_(__global_state);
     }
 
 /*     The argument of periapsis is the angle between the node vector */
@@ -579,23 +588,23 @@ static oscelt_state_t* get_oscelt_state() {
 
 /*        Set the magnitude of ARGP; we'll determine the sign next. */
 
-	argp = vsep_(n, e);
+	argp = vsep_(__global_state, n, e);
 	if (argp != 0.) {
-	    if (inc == 0. || inc == pi_()) {
+	    if (inc == 0. || inc == pi_(__global_state)) {
 
 /*              The quadrant of ARGP is determined by the component of E */
 /*              in the direction H x N. */
 
-		ucrss_(h__, n, xprod);
-		if (vdot_(e, xprod) < 0.) {
-		    argp = twopi_() - argp;
+		ucrss_(__global_state, h__, n, xprod);
+		if (vdot_(__global_state, e, xprod) < 0.) {
+		    argp = twopi_(__global_state) - argp;
 		}
 	    } else if (e[2] < 0.) {
 
 /*              The periapsis is below the reference plane;  the argument */
 /*              of periapsis must be greater than 180 degrees. */
 
-		argp = twopi_() - argp;
+		argp = twopi_(__global_state) - argp;
 	    }
 	}
     }
@@ -615,12 +624,13 @@ static oscelt_state_t* get_oscelt_state() {
 /*        In this case, the argument of periapse is set to zero, */
 /*        so the nu is measured from N. */
 
-	vhat_(n, perix);
+	vhat_(__global_state, n, perix);
     } else {
-	vhat_(e, perix);
+	vhat_(__global_state, e, perix);
     }
-    ucrss_(h__, perix, periy);
-    nu = atan2(vdot_(r__, periy), vdot_(r__, perix));
+    ucrss_(__global_state, h__, perix, periy);
+    nu = atan2(&__global_state->f2c, vdot_(__global_state, r__, periy), vdot_(
+	    __global_state, r__, perix));
 
 /*     Unfortunately, the other element routines need the mean */
 /*     anomaly, M. The true and mean anomalies are related through */
@@ -654,7 +664,8 @@ static oscelt_state_t* get_oscelt_state() {
 /*        sine and cosine of the eccentric anomaly, then let ATAN2 */
 /*        find the eccentric anomaly. */
 
-	cosea = (ecc + cos(nu)) / (ecc * cos(nu) + 1.);
+	cosea = (ecc + cos(&__global_state->f2c, nu)) / (ecc * cos(&
+		__global_state->f2c, nu) + 1.);
 
 /*        Here we use the relationships (here b is the length */
 /*        of the semi-minor axis): */
@@ -666,25 +677,27 @@ static oscelt_state_t* get_oscelt_state() {
 /*                    = (r/rp) \/ (1-e) / (1+e)  sin(nu) */
 
 
-	sinea = rmag / rp * sqrt((1. - ecc) / (ecc + 1.)) * sin(nu);
-	ea = atan2(sinea, cosea);
-	d__1 = ea - ecc * sin(ea);
-	m0 = d_sign(&d__1, &nu);
+	sinea = rmag / rp * sqrt(&__global_state->f2c, (1. - ecc) / (ecc + 1.)
+		) * sin(&__global_state->f2c, nu);
+	ea = atan2(&__global_state->f2c, sinea, cosea);
+	d__1 = ea - ecc * sin(&__global_state->f2c, ea);
+	m0 = d_sign(&__global_state->f2c, &d__1, &nu);
 	if (m0 < 0.) {
-	    m0 += twopi_();
+	    m0 += twopi_(__global_state);
 	}
     } else if (ecc > 1.) {
-	coshf = (ecc + cos(nu)) / (ecc * cos(nu) + 1.);
+	coshf = (ecc + cos(&__global_state->f2c, nu)) / (ecc * cos(&
+		__global_state->f2c, nu) + 1.);
 	d__1 = max(1.,coshf);
-	ea = dacosh_(&d__1);
-	d__1 = ecc * sinh(ea) - ea;
-	m0 = d_sign(&d__1, &nu);
+	ea = dacosh_(__global_state, &d__1);
+	d__1 = ecc * sinh(&__global_state->f2c, ea) - ea;
+	m0 = d_sign(&__global_state->f2c, &d__1, &nu);
     } else {
-	ea = tan(nu / 2.);
+	ea = tan(&__global_state->f2c, nu / 2.);
 /* Computing 3rd power */
 	d__2 = ea;
 	d__1 = ea + d__2 * (d__2 * d__2) / 3.;
-	m0 = d_sign(&d__1, &nu);
+	m0 = d_sign(&__global_state->f2c, &d__1, &nu);
     }
 
 /*     Return the elements as a vector, suitable for input to CONICS. */
@@ -697,7 +710,7 @@ static oscelt_state_t* get_oscelt_state() {
     elts[5] = m0;
     elts[6] = *et;
     elts[7] = *mu;
-    chkout_("OSCELT", (ftnlen)6);
+    chkout_(__global_state, "OSCELT", (ftnlen)6);
     return 0;
 } /* oscelt_ */
 

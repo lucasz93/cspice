@@ -8,8 +8,7 @@
 
 
 extern eqncpv_init_t __eqncpv_init;
-static eqncpv_state_t* get_eqncpv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline eqncpv_state_t* get_eqncpv_state(cspice_t* state) {
 	if (!state->eqncpv)
 		state->eqncpv = __cspice_allocate_module(sizeof(
 	eqncpv_state_t), &__eqncpv_init, sizeof(__eqncpv_init));
@@ -18,8 +17,9 @@ static eqncpv_state_t* get_eqncpv_state() {
 }
 
 /* $Procedure      EQNCPV (Equinoctial Elements to position and velocity) */
-/* Subroutine */ int eqncpv_(doublereal *et, doublereal *epoch, doublereal *
-	eqel, doublereal *rapol, doublereal *decpol, doublereal *state)
+/* Subroutine */ int eqncpv_(cspice_t* __global_state, doublereal *et, 
+	doublereal *epoch, doublereal *eqel, doublereal *rapol, doublereal *
+	decpol, doublereal *state)
 {
     /* Initialized data */
 
@@ -28,8 +28,9 @@ static eqncpv_state_t* get_eqncpv_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    double sqrt(doublereal), sin(doublereal), cos(doublereal), d_mod(
-	    doublereal *, doublereal *);
+    double sqrt(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), cos(
+	    f2c_state_t*, doublereal), d_mod(f2c_state_t*, doublereal *, 
+	    doublereal *);
 
     /* Local variables */
     doublereal nfac;
@@ -45,19 +46,20 @@ static eqncpv_state_t* get_eqncpv_state() {
     doublereal p;
     doublereal q;
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal dlpdt;
     doublereal prate;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal xhold[6];
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal trans[9]	/* was [3][3] */;
-    extern doublereal twopi_(void);
+    extern doublereal twopi_(cspice_t*);
     doublereal x1;
     doublereal y1;
-    extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int vlcom3_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
     doublereal ca;
     doublereal cd;
@@ -77,23 +79,24 @@ static eqncpv_state_t* get_eqncpv_state() {
     doublereal vg[3];
     doublereal sn;
     doublereal nodedt;
-    extern doublereal kepleq_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern doublereal kepleq_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal dx1;
     doublereal dy1;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal ecc;
     doublereal can;
     doublereal dlp;
     doublereal san;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    eqncpv_state_t* __state = get_eqncpv_state();
+    eqncpv_state_t* __state = get_eqncpv_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the state (position and velocity of an object whose */
@@ -370,53 +373,53 @@ static eqncpv_state_t* get_eqncpv_state() {
 
 /*     Standard SPICE exception handling code. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("EQNCPV", (ftnlen)6);
+    chkin_(__global_state, "EQNCPV", (ftnlen)6);
 
 /*     The first time through this routine we fetch the various */
 /*     constants we need for this routine. */
 
     if (__state->first) {
 	__state->first = FALSE_;
-	__state->pi2 = twopi_();
+	__state->pi2 = twopi_(__global_state);
     }
 
 /*     Take care of the various errors that can arise with the */
 /*     input elements. */
 
     if (eqel[0] <= 0.) {
-	setmsg_("The semi-major axis supplied to EQNCPV was non-positive. Th"
-		"e value is required to be positive by this routine. The valu"
-		"e supplied was #. ", (ftnlen)137);
-	errdp_("#", eqel, (ftnlen)1);
-	sigerr_("SPICE(BADSEMIAXIS)", (ftnlen)18);
-	chkout_("EQNCPV", (ftnlen)6);
+	setmsg_(__global_state, "The semi-major axis supplied to EQNCPV was "
+		"non-positive. The value is required to be positive by this r"
+		"outine. The value supplied was #. ", (ftnlen)137);
+	errdp_(__global_state, "#", eqel, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSEMIAXIS)", (ftnlen)18);
+	chkout_(__global_state, "EQNCPV", (ftnlen)6);
 	return 0;
     }
-    ecc = sqrt(eqel[1] * eqel[1] + eqel[2] * eqel[2]);
+    ecc = sqrt(&__global_state->f2c, eqel[1] * eqel[1] + eqel[2] * eqel[2]);
     if (ecc > .9) {
-	setmsg_("The routine EQNCPV can reliably evaluate states from equino"
-		"ctial elements if the eccentricity of the orbit associated w"
-		"ith the elements is less than 0.9.  The eccentricity associa"
-		"ted with the elements supplies is #.  The values of H and K "
-		"are: # and # respectively. ", (ftnlen)266);
-	errdp_("#", &ecc, (ftnlen)1);
-	errdp_("#", &eqel[1], (ftnlen)1);
-	errdp_("#", &eqel[2], (ftnlen)1);
-	sigerr_("SPICE(ECCOUTOFRANGE)", (ftnlen)20);
-	chkout_("EQNCPV", (ftnlen)6);
+	setmsg_(__global_state, "The routine EQNCPV can reliably evaluate st"
+		"ates from equinoctial elements if the eccentricity of the or"
+		"bit associated with the elements is less than 0.9.  The ecce"
+		"ntricity associated with the elements supplies is #.  The va"
+		"lues of H and K are: # and # respectively. ", (ftnlen)266);
+	errdp_(__global_state, "#", &ecc, (ftnlen)1);
+	errdp_(__global_state, "#", &eqel[1], (ftnlen)1);
+	errdp_(__global_state, "#", &eqel[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ECCOUTOFRANGE)", (ftnlen)20);
+	chkout_(__global_state, "EQNCPV", (ftnlen)6);
 	return 0;
     }
 
 /*     Form the transformation from planetary equator to the inertial */
 /*     reference frame. */
 
-    sa = sin(*rapol);
-    ca = cos(*rapol);
-    sd = sin(*decpol);
-    cd = cos(*decpol);
+    sa = sin(&__global_state->f2c, *rapol);
+    ca = cos(&__global_state->f2c, *rapol);
+    sd = sin(&__global_state->f2c, *decpol);
+    cd = cos(&__global_state->f2c, *decpol);
     trans[0] = -sa;
     trans[3] = -ca * sd;
     trans[6] = ca * cd;
@@ -473,8 +476,8 @@ static eqncpv_state_t* get_eqncpv_state() {
 
     dlpdt = eqel[6];
     dlp = dt * dlpdt;
-    can = cos(dlp);
-    san = sin(dlp);
+    can = cos(&__global_state->f2c, dlp);
+    san = sin(&__global_state->f2c, dlp);
     h__ = eqel[1] * can + eqel[2] * san;
     k = eqel[2] * can - eqel[1] * san;
 
@@ -500,8 +503,8 @@ static eqncpv_state_t* get_eqncpv_state() {
 
     nodedt = eqel[8];
     node = dt * nodedt;
-    cn = cos(node);
-    sn = sin(node);
+    cn = cos(&__global_state->f2c, node);
+    sn = sin(&__global_state->f2c, node);
     p = eqel[4] * cn + eqel[5] * sn;
     q = eqel[5] * cn - eqel[4] * sn;
     mldt = eqel[7];
@@ -514,7 +517,7 @@ static eqncpv_state_t* get_eqncpv_state() {
 
 /*     Form Broucke's beta parameter */
 
-    b = sqrt(1. - h__ * h__ - k * k);
+    b = sqrt(&__global_state->f2c, 1. - h__ * h__ - k * k);
     b = 1. / (b + 1.);
 
 /*     Construct the coordinate axes */
@@ -530,16 +533,16 @@ static eqncpv_state_t* get_eqncpv_state() {
 /*     Compute the mean longitude */
 
     d__1 = mldt * dt;
-    ml = l + d_mod(&d__1, &__state->pi2);
+    ml = l + d_mod(&__global_state->f2c, &d__1, &__state->pi2);
 
 /*     Obtain the eccentric longitude from Kepler's equation */
 
-    eecan = kepleq_(&ml, &h__, &k);
+    eecan = kepleq_(__global_state, &ml, &h__, &k);
 
 /*     Trigonometric functions of the eccentric longitude */
 
-    sf = sin(eecan);
-    cf = cos(eecan);
+    sf = sin(&__global_state->f2c, eecan);
+    cf = cos(&__global_state->f2c, eecan);
 
 /*     Position in the orbit plane */
 
@@ -573,20 +576,21 @@ static eqncpv_state_t* get_eqncpv_state() {
 
 /*     Form the planetary mean equator position vector */
 
-    vlcom_(&x1, vf, &y1, vg, xhold);
+    vlcom_(__global_state, &x1, vf, &y1, vg, xhold);
 
 /*     Form the planetary mean equator velocity vector */
 
     temp[0] = -nodedt * xhold[1];
     temp[1] = nodedt * xhold[0];
     temp[2] = 0.;
-    vlcom3_(&__state->c_b13, temp, &dx, vf, &dy, vg, &xhold[3]);
+    vlcom3_(__global_state, &__state->c_b13, temp, &dx, vf, &dy, vg, &xhold[3]
+	    );
 
 /*     Transform to an inertial state vector */
 
-    mxv_(trans, xhold, state);
-    mxv_(trans, &xhold[3], &state[3]);
-    chkout_("EQNCPV", (ftnlen)6);
+    mxv_(__global_state, trans, xhold, state);
+    mxv_(__global_state, trans, &xhold[3], &state[3]);
+    chkout_(__global_state, "EQNCPV", (ftnlen)6);
     return 0;
 } /* eqncpv_ */
 

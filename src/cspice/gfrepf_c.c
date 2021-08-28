@@ -193,7 +193,7 @@
       return;
    }
 
-   chkin_c ( "gfrepf_c" );
+   chkin_c ( naif_state, "gfrepf_c" );
 
    /*
    Let the f2c'd routine do the work.

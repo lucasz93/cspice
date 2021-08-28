@@ -8,8 +8,7 @@
 
 
 extern spkr08_init_t __spkr08_init;
-static spkr08_state_t* get_spkr08_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr08_state_t* get_spkr08_state(cspice_t* state) {
 	if (!state->spkr08)
 		state->spkr08 = __cspice_allocate_module(sizeof(
 	spkr08_state_t), &__spkr08_init, sizeof(__spkr08_init));
@@ -18,15 +17,15 @@ static spkr08_state_t* get_spkr08_state() {
 }
 
 /* $Procedure      SPKR08 ( Read SPK record from segment, type 8 ) */
-/* Subroutine */ int spkr08_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr08_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
     doublereal d__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer near__;
@@ -35,31 +34,32 @@ static spkr08_state_t* get_spkr08_state() {
     integer type__;
     integer n;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer first;
     doublereal start;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
     integer degree;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal contrl[4];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer grpsiz;
-    extern logical return_(void);
-    extern logical odd_(integer *);
+    extern logical return_(cspice_t*);
+    extern logical odd_(cspice_t*, integer *);
     integer end;
     integer low;
 
 
     /* Module state */
-    spkr08_state_t* __state = get_spkr08_state();
+    spkr08_state_t* __state = get_spkr08_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 8 */
@@ -258,14 +258,14 @@ static spkr08_state_t* get_spkr08_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Unpack the segment descriptor, and get the start and end addresses */
 /*     of the segment. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[3];
     begin = ic[4];
     end = ic[5];
@@ -273,12 +273,12 @@ static spkr08_state_t* get_spkr08_state() {
 /*     Make sure that this really is a type 8 or type 12 data segment. */
 
     if (type__ != 8 && type__ != 12) {
-	chkin_("SPKR08", (ftnlen)6);
-	setmsg_("You are attempting to locate type 8 or type 12 data in a ty"
-		"pe # data segment.", (ftnlen)77);
-	errint_("#", &type__, (ftnlen)1);
-	sigerr_("SPICE(WRONGSPKTYPE)", (ftnlen)19);
-	chkout_("SPKR08", (ftnlen)6);
+	chkin_(__global_state, "SPKR08", (ftnlen)6);
+	setmsg_(__global_state, "You are attempting to locate type 8 or type"
+		" 12 data in a type # data segment.", (ftnlen)77);
+	errint_(__global_state, "#", &type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGSPKTYPE)", (ftnlen)19);
+	chkout_(__global_state, "SPKR08", (ftnlen)6);
 	return 0;
     }
 
@@ -286,14 +286,14 @@ static spkr08_state_t* get_spkr08_state() {
 /*     descriptor. */
 
     if (*et < dc[0] || *et > dc[1]) {
-	chkin_("SPKR08", (ftnlen)6);
-	setmsg_("Request time # is outside of descriptor bounds # : #.", (
-		ftnlen)53);
-	errdp_("#", et, (ftnlen)1);
-	errdp_("#", dc, (ftnlen)1);
-	errdp_("#", &dc[1], (ftnlen)1);
-	sigerr_("SPICE(TIMEOUTOFBOUNDS)", (ftnlen)22);
-	chkout_("SPKR08", (ftnlen)6);
+	chkin_(__global_state, "SPKR08", (ftnlen)6);
+	setmsg_(__global_state, "Request time # is outside of descriptor bou"
+		"nds # : #.", (ftnlen)53);
+	errdp_(__global_state, "#", et, (ftnlen)1);
+	errdp_(__global_state, "#", dc, (ftnlen)1);
+	errdp_(__global_state, "#", &dc[1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TIMEOUTOFBOUNDS)", (ftnlen)22);
+	chkout_(__global_state, "SPKR08", (ftnlen)6);
 	return 0;
     }
 
@@ -326,18 +326,18 @@ static spkr08_state_t* get_spkr08_state() {
 
 
     i__1 = end - 3;
-    dafgda_(handle, &i__1, &end, contrl);
+    dafgda_(__global_state, handle, &i__1, &end, contrl);
     start = contrl[0];
     step = contrl[1];
-    degree = i_dnnt(&contrl[2]);
-    n = i_dnnt(&contrl[3]);
+    degree = i_dnnt(&__global_state->f2c, &contrl[2]);
+    n = i_dnnt(&__global_state->f2c, &contrl[3]);
     grpsiz = degree + 1;
 
 /*     We'll now select the set of states that define the interpolating */
 /*     polynomials.  The cases of odd and even GRPSIZ are handled */
 /*     separately. */
 
-    if (odd_(&grpsiz)) {
+    if (odd_(__global_state, &grpsiz)) {
 
 /*        Find the index of the state whose epoch is closest to the */
 /*        input epoch.  Find the first and last indices in the record */
@@ -345,7 +345,7 @@ static spkr08_state_t* get_spkr08_state() {
 /*        state. */
 
 	d__1 = (*et - start) / step;
-	near__ = i_dnnt(&d__1) + 1;
+	near__ = i_dnnt(&__global_state->f2c, &d__1) + 1;
 /* Computing MIN */
 /* Computing MAX */
 	i__3 = 1, i__4 = near__ - degree / 2;
@@ -379,7 +379,7 @@ static spkr08_state_t* get_spkr08_state() {
 
     i__1 = begin + (first - 1) * 6;
     i__2 = begin + last * 6 - 1;
-    dafgda_(handle, &i__1, &i__2, &record[3]);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[3]);
     return 0;
 } /* spkr08_ */
 

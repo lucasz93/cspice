@@ -8,8 +8,7 @@
 
 
 extern zzekjoin_init_t __zzekjoin_init;
-static zzekjoin_state_t* get_zzekjoin_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekjoin_state_t* get_zzekjoin_state(cspice_t* state) {
 	if (!state->zzekjoin)
 		state->zzekjoin = __cspice_allocate_module(sizeof(
 	zzekjoin_state_t), &__zzekjoin_init, sizeof(__zzekjoin_init));
@@ -18,30 +17,32 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 }
 
 /* $Procedure  ZZEKJOIN  ( Perform join on two join row sets ) */
-/* Subroutine */ int zzekjoin_(integer *jbase1, integer *jbase2, integer *
-	njcnst, logical *active, integer *cpidx1, integer *clidx1, integer *
-	elts1, integer *ops, integer *cpidx2, integer *clidx2, integer *elts2,
-	 integer *sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, 
-	integer *dtdscs, integer *jbase3, integer *nrows)
+/* Subroutine */ int zzekjoin_(cspice_t* __global_state, integer *jbase1, 
+	integer *jbase2, integer *njcnst, logical *active, integer *cpidx1, 
+	integer *clidx1, integer *elts1, integer *ops, integer *cpidx2, 
+	integer *clidx2, integer *elts2, integer *sthan, integer *stsdsc, 
+	integer *stdtpt, integer *dtpool, integer *dtdscs, integer *jbase3, 
+	integer *nrows)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekjprp_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzeksupd_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekjprp_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, logical *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *, logical *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *);
-    extern /* Subroutine */ int zzekspsh_(integer *, integer *);
-    extern /* Subroutine */ int zzekjnxt_(logical *, integer *);
-    extern /* Subroutine */ int zzekstop_(integer *);
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekspsh_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzekjnxt_(cspice_t*, logical *, integer *);
+    extern /* Subroutine */ int zzekstop_(cspice_t*, integer *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found;
     integer nresv;
     integer s1;
@@ -60,19 +61,20 @@ static zzekjoin_state_t* get_zzekjoin_state() {
     integer rb3;
     integer rowvec[11];
     integer sgvbas;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer top;
-    extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzeksrd_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer nsv1;
     integer nsv2;
     integer nsv3;
 
 
     /* Module state */
-    zzekjoin_state_t* __state = get_zzekjoin_state();
+    zzekjoin_state_t* __state = get_zzekjoin_state(__global_state);
 /* $ Abstract */
 
 /*     Perform join of two EK join row sets, subject to a specified set */
@@ -774,13 +776,13 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 /*     Validate constraint count. */
 
     if (*njcnst < 0 || *njcnst > 100) {
-	chkin_("ZZEKJOIN", (ftnlen)8);
-	setmsg_("Number of join constraints was #; valid range is 0:#", (
-		ftnlen)52);
-	errint_("#", njcnst, (ftnlen)1);
-	errint_("#", &__state->c__100, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKJOIN", (ftnlen)8);
+	chkin_(__global_state, "ZZEKJOIN", (ftnlen)8);
+	setmsg_(__global_state, "Number of join constraints was #; valid ran"
+		"ge is 0:#", (ftnlen)52);
+	errint_(__global_state, "#", njcnst, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__100, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKJOIN", (ftnlen)8);
 	return 0;
     }
 
@@ -789,16 +791,16 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 
     i__1 = *jbase1 + 3;
     i__2 = *jbase1 + 3;
-    zzeksrd_(&i__1, &i__2, &nt1);
+    zzeksrd_(__global_state, &i__1, &i__2, &nt1);
     i__1 = *jbase1 + 4;
     i__2 = *jbase1 + 4;
-    zzeksrd_(&i__1, &i__2, &nsv1);
+    zzeksrd_(__global_state, &i__1, &i__2, &nsv1);
     i__1 = *jbase2 + 3;
     i__2 = *jbase2 + 3;
-    zzeksrd_(&i__1, &i__2, &nt2);
+    zzeksrd_(__global_state, &i__1, &i__2, &nt2);
     i__1 = *jbase2 + 4;
     i__2 = *jbase2 + 4;
-    zzeksrd_(&i__1, &i__2, &nsv2);
+    zzeksrd_(__global_state, &i__1, &i__2, &nsv2);
 
 /*     Set the table count and segment vector count for the output join */
 /*     row set. */
@@ -806,31 +808,31 @@ static zzekjoin_state_t* get_zzekjoin_state() {
     nt3 = nt1 + nt2;
     nsv3 = nsv1 * nsv2;
     if (nt1 < 1 || nt2 > 9) {
-	chkin_("ZZEKJOIN", (ftnlen)8);
-	setmsg_("Number tables in first join row set was #; valid range is 1"
-		":#", (ftnlen)61);
-	errint_("#", &nt1, (ftnlen)1);
-	errint_("#", &__state->c__9, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKJOIN", (ftnlen)8);
+	chkin_(__global_state, "ZZEKJOIN", (ftnlen)8);
+	setmsg_(__global_state, "Number tables in first join row set was #; "
+		"valid range is 1:#", (ftnlen)61);
+	errint_(__global_state, "#", &nt1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__9, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKJOIN", (ftnlen)8);
 	return 0;
     } else if (nt2 < 1 || nt2 > 9) {
-	chkin_("ZZEKJOIN", (ftnlen)8);
-	setmsg_("Number tables in second join row set was #; valid range is "
-		"1:#", (ftnlen)62);
-	errint_("#", &nt2, (ftnlen)1);
-	errint_("#", &__state->c__9, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKJOIN", (ftnlen)8);
+	chkin_(__global_state, "ZZEKJOIN", (ftnlen)8);
+	setmsg_(__global_state, "Number tables in second join row set was #;"
+		" valid range is 1:#", (ftnlen)62);
+	errint_(__global_state, "#", &nt2, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__9, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKJOIN", (ftnlen)8);
 	return 0;
     } else if (nt3 > 10) {
-	chkin_("ZZEKJOIN", (ftnlen)8);
-	setmsg_("Number of crossed tables was #; valid range is 0:#", (ftnlen)
-		50);
-	errint_("#", &nt3, (ftnlen)1);
-	errint_("#", &__state->c__10, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKJOIN", (ftnlen)8);
+	chkin_(__global_state, "ZZEKJOIN", (ftnlen)8);
+	setmsg_(__global_state, "Number of crossed tables was #; valid range"
+		" is 0:#", (ftnlen)50);
+	errint_(__global_state, "#", &nt3, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__10, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKJOIN", (ftnlen)8);
 	return 0;
     }
 
@@ -842,24 +844,26 @@ static zzekjoin_state_t* get_zzekjoin_state() {
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (active[i__ - 1]) {
 	    if (cpidx1[i__ - 1] < 1 || cpidx1[i__ - 1] > nt3) {
-		chkin_("ZZEKJOIN", (ftnlen)8);
-		setmsg_("Cross product table index for left hand side of con"
-			"straint # was #; valid range is 1:#", (ftnlen)86);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", &cpidx1[i__ - 1], (ftnlen)1);
-		errint_("#", &nt3, (ftnlen)1);
-		sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-		chkout_("ZZEKJOIN", (ftnlen)8);
+		chkin_(__global_state, "ZZEKJOIN", (ftnlen)8);
+		setmsg_(__global_state, "Cross product table index for left "
+			"hand side of constraint # was #; valid range is 1:#", 
+			(ftnlen)86);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", &cpidx1[i__ - 1], (ftnlen)1);
+		errint_(__global_state, "#", &nt3, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+		chkout_(__global_state, "ZZEKJOIN", (ftnlen)8);
 		return 0;
 	    } else if (cpidx2[i__ - 1] < 1 || cpidx2[i__ - 1] > nt3) {
-		chkin_("ZZEKJOIN", (ftnlen)8);
-		setmsg_("Cross product table index for right hand side of co"
-			"nstraint # was #; valid range is 1:#", (ftnlen)87);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", &cpidx2[i__ - 1], (ftnlen)1);
-		errint_("#", &nt3, (ftnlen)1);
-		sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-		chkout_("ZZEKJOIN", (ftnlen)8);
+		chkin_(__global_state, "ZZEKJOIN", (ftnlen)8);
+		setmsg_(__global_state, "Cross product table index for right"
+			" hand side of constraint # was #; valid range is 1:#",
+			 (ftnlen)87);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", &cpidx2[i__ - 1], (ftnlen)1);
+		errint_(__global_state, "#", &nt3, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+		chkout_(__global_state, "ZZEKJOIN", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -870,18 +874,18 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 /*     The current stack top is the base address of the output join row */
 /*     set. */
 
-    zzekstop_(jbase3);
+    zzekstop_(__global_state, jbase3);
 
 /*     Save room for the size and row vector count */
 
     for (i__ = 1; i__ <= 2; ++i__) {
-	zzekspsh_(&__state->c__1, &__state->c__0);
+	zzekspsh_(__global_state, &__state->c__1, &__state->c__0);
     }
 
 /*     The table count and segment vector count come next. */
 
-    zzekspsh_(&__state->c__1, &nt3);
-    zzekspsh_(&__state->c__1, &nsv3);
+    zzekspsh_(__global_state, &__state->c__1, &nt3);
+    zzekspsh_(__global_state, &__state->c__1, &nsv3);
 
 /*     Just reserve room for the segment vectors and the segment vector */
 /*     row set base addresses and counts. */
@@ -889,7 +893,7 @@ static zzekjoin_state_t* get_zzekjoin_state() {
     nresv = nsv3 * (nt3 + 2);
     i__1 = nresv;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	zzekspsh_(&__state->c__1, &__state->c__0);
+	zzekspsh_(__global_state, &__state->c__1, &__state->c__0);
     }
 
 /*     Initialize the output segment vector count and the total row */
@@ -909,17 +913,17 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 	offset = (s1 - 1) * nt1 + 4;
 	i__2 = *jbase1 + offset + 1;
 	i__3 = *jbase1 + offset + nt1;
-	zzeksrd_(&i__2, &i__3, segvec);
+	zzeksrd_(__global_state, &i__2, &i__3, segvec);
 
 /*        Get the row set base address and count for this segment vector. */
 
 	offset = nsv1 * nt1 + 4 + (s1 - 1 << 1) + 1;
 	i__2 = *jbase1 + offset;
 	i__3 = *jbase1 + offset;
-	zzeksrd_(&i__2, &i__3, &rb1);
+	zzeksrd_(__global_state, &i__2, &i__3, &rb1);
 	i__2 = *jbase1 + offset + 1;
 	i__3 = *jbase1 + offset + 1;
-	zzeksrd_(&i__2, &i__3, &nr1);
+	zzeksrd_(__global_state, &i__2, &i__3, &nr1);
 
 /*        For every segment vector in the second join row set, */
 
@@ -933,8 +937,9 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 	    offset = (s2 - 1) * nt2 + 4;
 	    i__4 = *jbase2 + offset + 1;
 	    i__5 = *jbase2 + offset + nt2;
-	    zzeksrd_(&i__4, &i__5, &segvec[(i__3 = nt1) < 10 && 0 <= i__3 ? 
-		    i__3 : s_rnge("segvec", i__3, "zzekjoin_", (ftnlen)516)]);
+	    zzeksrd_(__global_state, &i__4, &i__5, &segvec[(i__3 = nt1) < 10 
+		    && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "segv"
+		    "ec", i__3, "zzekjoin_", (ftnlen)516)]);
 
 /*           Write this segment vector to the output join row set. */
 
@@ -942,7 +947,7 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 	    sgvbas = (s3 - 1) * nt3 + 4;
 	    i__3 = *jbase3 + sgvbas + 1;
 	    i__4 = *jbase3 + sgvbas + nt3;
-	    zzeksupd_(&i__3, &i__4, segvec);
+	    zzeksupd_(__global_state, &i__3, &i__4, segvec);
 
 /*           Get the row set base address and count for this segment */
 /*           vector. */
@@ -950,10 +955,10 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 	    offset = nsv2 * nt2 + 4 + (s2 - 1 << 1) + 1;
 	    i__3 = *jbase2 + offset;
 	    i__4 = *jbase2 + offset;
-	    zzeksrd_(&i__3, &i__4, &rb2);
+	    zzeksrd_(__global_state, &i__3, &i__4, &rb2);
 	    i__3 = *jbase2 + offset + 1;
 	    i__4 = *jbase2 + offset + 1;
-	    zzeksrd_(&i__3, &i__4, &nr2);
+	    zzeksrd_(__global_state, &i__3, &i__4, &nr2);
 
 /*           It's time to decide which row vectors corresponding to */
 /*           our two segment vectors satisfy the join constraints. */
@@ -965,25 +970,26 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 /*           row vector set until the join reduction is done, since */
 /*           the join operation will use the scratch area. */
 
-	    zzekjprp_(segvec, jbase1, &nt1, &rb1, &nr1, jbase2, &nt2, &rb2, &
-		    nr2, njcnst, active, cpidx1, clidx1, elts1, ops, cpidx2, 
-		    clidx2, elts2, sthan, stsdsc, stdtpt, dtpool, dtdscs);
+	    zzekjprp_(__global_state, segvec, jbase1, &nt1, &rb1, &nr1, 
+		    jbase2, &nt2, &rb2, &nr2, njcnst, active, cpidx1, clidx1, 
+		    elts1, ops, cpidx2, clidx2, elts2, sthan, stsdsc, stdtpt, 
+		    dtpool, dtdscs);
 
 /*           Initialize the row count for the current output segment */
 /*           vector.  Also set the segment vector row set base address. */
 
 	    nr3 = 0;
-	    zzekstop_(&top);
+	    zzekstop_(__global_state, &top);
 	    rb3 = top - *jbase3;
 	    offset = nsv3 * nt3 + 4 + (s3 - 1 << 1) + 1;
 	    i__3 = *jbase3 + offset;
 	    i__4 = *jbase3 + offset;
-	    zzeksupd_(&i__3, &i__4, &rb3);
+	    zzeksupd_(__global_state, &i__3, &i__4, &rb3);
 
 /*           Fetch the row vectors that satisfy the join constraints. */
 
 	    nr3 = 0;
-	    zzekjnxt_(&found, rowvec);
+	    zzekjnxt_(__global_state, &found, rowvec);
 	    while(found) {
 
 /*              Append the base offset of the parent segment vector */
@@ -991,15 +997,16 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 /*              the base-relative address of the segment vector. */
 
 		++nr3;
-		rowvec[(i__3 = nt3) < 11 && 0 <= i__3 ? i__3 : s_rnge("rowvec"
-			, i__3, "zzekjoin_", (ftnlen)584)] = sgvbas;
+		rowvec[(i__3 = nt3) < 11 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "rowvec", i__3, "zzekjoin_", (
+			ftnlen)584)] = sgvbas;
 
 /*              Add this vector to the output join row set.  Get the */
 /*              next row vector. */
 
 		i__3 = nt3 + 1;
-		zzekspsh_(&i__3, rowvec);
-		zzekjnxt_(&found, rowvec);
+		zzekspsh_(__global_state, &i__3, rowvec);
+		zzekjnxt_(__global_state, &found, rowvec);
 	    }
 
 /*           At this point, we've tested every row corresponding to the */
@@ -1009,7 +1016,7 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 	    offset = nsv3 * nt3 + 4 + (s3 - 1 << 1) + 2;
 	    i__3 = *jbase3 + offset;
 	    i__4 = *jbase3 + offset;
-	    zzeksupd_(&i__3, &i__4, &nr3);
+	    zzeksupd_(__global_state, &i__3, &i__4, &nr3);
 
 /*           Keep the overall row total up to date. */
 
@@ -1020,14 +1027,14 @@ static zzekjoin_state_t* get_zzekjoin_state() {
 /*     Fill in the row count and size values in the output join row */
 /*     set. */
 
-    zzekstop_(&top);
+    zzekstop_(__global_state, &top);
     i__1 = *jbase3 + 1;
     i__2 = *jbase3 + 1;
     i__3 = top - *jbase3;
-    zzeksupd_(&i__1, &i__2, &i__3);
+    zzeksupd_(__global_state, &i__1, &i__2, &i__3);
     i__1 = *jbase3 + 2;
     i__2 = *jbase3 + 2;
-    zzeksupd_(&i__1, &i__2, nrows);
+    zzeksupd_(__global_state, &i__1, &i__2, nrows);
 
 /*     We've constructed the output join row set resulting from */
 /*     joining the input row sets. */

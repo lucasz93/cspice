@@ -8,14 +8,14 @@
 
 
 typedef int mtxmg_state_t;
-static mtxmg_state_t* get_mtxmg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline mtxmg_state_t* get_mtxmg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   MTXMG ( Matrix transpose times matrix, general dimension ) */
-/* Subroutine */ int mtxmg_(doublereal *m1, doublereal *m2, integer *nc1, 
-	integer *nr1r2, integer *nc2, doublereal *mout)
+/* Subroutine */ int mtxmg_(cspice_t* __global_state, doublereal *m1, 
+	doublereal *m2, integer *nc1, integer *nr1r2, integer *nc2, 
+	doublereal *mout)
 {
     /* System generated locals */
     integer m1_dim1, m1_dim2, m1_offset, m2_dim1, m2_dim2, m2_offset, 
@@ -23,7 +23,7 @@ static mtxmg_state_t* get_mtxmg_state() {
 	    i__6, i__7;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
@@ -32,7 +32,7 @@ static mtxmg_state_t* get_mtxmg_state() {
 
 
     /* Module state */
-    mtxmg_state_t* __state = get_mtxmg_state();
+    mtxmg_state_t* __state = get_mtxmg_state(__global_state);
 /* $ Abstract */
 
 /*      Multiply the transpose of a matrix with another matrix, */
@@ -221,21 +221,24 @@ static mtxmg_state_t* get_mtxmg_state() {
 	i__2 = *nc2;
 	for (j = 1; j <= i__2; ++j) {
 	    mout[(i__3 = i__ + j * mout_dim1 - mout_offset) < 1 * mout_dim1 * 
-		    mout_dim2 && 0 <= i__3 ? i__3 : s_rnge("mout", i__3, 
-		    "mtxmg_", (ftnlen)196)] = 0.;
+		    mout_dim2 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "mout", i__3, "mtxmg_", (ftnlen)196)]
+		     = 0.;
 	    i__3 = *nr1r2;
 	    for (k = 1; k <= i__3; ++k) {
 		mout[(i__4 = i__ + j * mout_dim1 - mout_offset) < 1 * 
-			mout_dim1 * mout_dim2 && 0 <= i__4 ? i__4 : s_rnge(
-			"mout", i__4, "mtxmg_", (ftnlen)198)] = mout[(i__5 = 
-			i__ + j * mout_dim1 - mout_offset) < 1 * mout_dim1 * 
-			mout_dim2 && 0 <= i__5 ? i__5 : s_rnge("mout", i__5, 
+			mout_dim1 * mout_dim2 && 0 <= i__4 ? i__4 : s_rnge(&
+			__global_state->f2c, "mout", i__4, "mtxmg_", (ftnlen)
+			198)] = mout[(i__5 = i__ + j * mout_dim1 - 
+			mout_offset) < 1 * mout_dim1 * mout_dim2 && 0 <= i__5 
+			? i__5 : s_rnge(&__global_state->f2c, "mout", i__5, 
 			"mtxmg_", (ftnlen)198)] + m1[(i__6 = k + i__ * 
 			m1_dim1 - m1_offset) < 1 * m1_dim1 * m1_dim2 && 0 <= 
-			i__6 ? i__6 : s_rnge("m1", i__6, "mtxmg_", (ftnlen)
-			198)] * m2[(i__7 = k + j * m2_dim1 - m2_offset) < 1 * 
-			m2_dim1 * m2_dim2 && 0 <= i__7 ? i__7 : s_rnge("m2", 
-			i__7, "mtxmg_", (ftnlen)198)];
+			i__6 ? i__6 : s_rnge(&__global_state->f2c, "m1", i__6,
+			 "mtxmg_", (ftnlen)198)] * m2[(i__7 = k + j * m2_dim1 
+			- m2_offset) < 1 * m2_dim1 * m2_dim2 && 0 <= i__7 ? 
+			i__7 : s_rnge(&__global_state->f2c, "m2", i__7, "mtx"
+			"mg_", (ftnlen)198)];
 	    }
 	}
     }

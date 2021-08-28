@@ -8,14 +8,13 @@
 
 
 typedef int dafgda_state_t;
-static dafgda_state_t* get_dafgda_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafgda_state_t* get_dafgda_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DAFGDA ( DAF, read data from address ) */
-/* Subroutine */ int dafgda_(integer *handle, integer *begin, integer *end, 
-	doublereal *data)
+/* Subroutine */ int dafgda_(cspice_t* __global_state, integer *handle, 
+	integer *begin, integer *end, doublereal *data)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -27,23 +26,24 @@ static dafgda_state_t* get_dafgda_state() {
     integer endw;
     integer last;
     integer next;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
     logical found;
     integer first;
-    extern /* Subroutine */ int dafgdr_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int dafarw_(integer *, integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int dafgdr_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int dafarw_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dafgda_state_t* __state = get_dafgda_state();
+    dafgda_state_t* __state = get_dafgda_state(__global_state);
 /* $ Abstract */
 
 /*     Read the double precision data bounded by two addresses within */
@@ -201,34 +201,35 @@ static dafgda_state_t* get_dafgda_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Bad addresses? */
 
     if (*begin <= 0) {
-	chkin_("DAFGDA", (ftnlen)6);
-	setmsg_("Negative value for BEGIN address: #", (ftnlen)35);
-	errint_("#", begin, (ftnlen)1);
-	sigerr_("SPICE(DAFNEGADDR)", (ftnlen)17);
-	chkout_("DAFGDA", (ftnlen)6);
+	chkin_(__global_state, "DAFGDA", (ftnlen)6);
+	setmsg_(__global_state, "Negative value for BEGIN address: #", (
+		ftnlen)35);
+	errint_(__global_state, "#", begin, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNEGADDR)", (ftnlen)17);
+	chkout_(__global_state, "DAFGDA", (ftnlen)6);
 	return 0;
     } else if (*begin > *end) {
-	chkin_("DAFGDA", (ftnlen)6);
-	setmsg_("Beginning address (#) greater than ending address (#).", (
-		ftnlen)54);
-	errint_("#", begin, (ftnlen)1);
-	errint_("#", end, (ftnlen)1);
-	sigerr_("SPICE(DAFBEGGTEND)", (ftnlen)18);
-	chkout_("DAFGDA", (ftnlen)6);
+	chkin_(__global_state, "DAFGDA", (ftnlen)6);
+	setmsg_(__global_state, "Beginning address (#) greater than ending a"
+		"ddress (#).", (ftnlen)54);
+	errint_(__global_state, "#", begin, (ftnlen)1);
+	errint_(__global_state, "#", end, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFBEGGTEND)", (ftnlen)18);
+	chkout_(__global_state, "DAFGDA", (ftnlen)6);
 	return 0;
     }
 
 /*     Convert raw addresses to record/word representations. */
 
-    dafarw_(begin, &begr, &begw);
-    dafarw_(end, &endr, &endw);
+    dafarw_(__global_state, begin, &begr, &begw);
+    dafarw_(__global_state, end, &endr, &endw);
 
 /*     Get as many records as needed. Return the last part of the */
 /*     first record, the first part of the last record, and all of */
@@ -251,10 +252,11 @@ static dafgda_state_t* get_dafgda_state() {
 	    first = 1;
 	    last = 128;
 	}
-	dafgdr_(handle, &recno, &first, &last, &data[next - 1], &found);
+	dafgdr_(__global_state, handle, &recno, &first, &last, &data[next - 1]
+		, &found);
 	if (! found) {
 	    i__2 = last - first + 1;
-	    cleard_(&i__2, &data[next - 1]);
+	    cleard_(__global_state, &i__2, &data[next - 1]);
 	}
 	next += last - first + 1;
     }

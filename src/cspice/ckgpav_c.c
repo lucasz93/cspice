@@ -721,7 +721,7 @@
    /*
    Participate in error handling
    */
-   chkin_c ( "ckgpav_c");
+   chkin_c ( naif_state, "ckgpav_c");
    
 
    /*

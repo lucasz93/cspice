@@ -8,8 +8,7 @@
 
 
 extern ckobj_init_t __ckobj_init;
-static ckobj_state_t* get_ckobj_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckobj_state_t* get_ckobj_state(cspice_t* state) {
 	if (!state->ckobj)
 		state->ckobj = __cspice_allocate_module(sizeof(ckobj_state_t),
 	 &__ckobj_init, sizeof(__ckobj_init));
@@ -18,40 +17,42 @@ static ckobj_state_t* get_ckobj_state() {
 }
 
 /* $Procedure      CKOBJ ( CK objects ) */
-/* Subroutine */ int ckobj_(char *ck, integer *ids, ftnlen ck_len)
+/* Subroutine */ int ckobj_(cspice_t* __global_state, char *ck, integer *ids, 
+	ftnlen ck_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char arch[80];
-    extern /* Subroutine */ int dafgs_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafgs_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal descr[5];
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
     doublereal dc[2];
     integer ic[6];
-    extern /* Subroutine */ int daffna_(logical *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *);
+    extern /* Subroutine */ int daffna_(cspice_t*, logical *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafbfs_(cspice_t*, integer *);
     integer handle;
-    extern /* Subroutine */ int dafcls_(integer *);
-    extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int insrti_(integer *, integer *);
+    extern /* Subroutine */ int dafcls_(cspice_t*, integer *);
+    extern /* Subroutine */ int getfat_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafopr_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int insrti_(cspice_t*, integer *, integer *);
     char kertyp[80];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ckobj_state_t* __state = get_ckobj_state();
+    ckobj_state_t* __state = get_ckobj_state(__global_state);
 /* $ Abstract */
 
 /*     Find the set of ID codes of all objects in a specified CK file. */
@@ -362,55 +363,59 @@ static ckobj_state_t* get_ckobj_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKOBJ", (ftnlen)5);
+    chkin_(__global_state, "CKOBJ", (ftnlen)5);
 
 /*     See whether GETFAT thinks we've got a CK file. */
 
-    getfat_(ck, arch, kertyp, ck_len, (ftnlen)80, (ftnlen)80);
-    if (s_cmp(arch, "XFR", (ftnlen)80, (ftnlen)3) == 0) {
-	setmsg_("Input file # has architecture #. The file must be a binary "
-		"CK file to be readable by this routine.  If the input file i"
-		"s an CK file in transfer format, run TOBIN on the file to co"
-		"nvert it to binary format.", (ftnlen)205);
-	errch_("#", ck, (ftnlen)1, ck_len);
-	errch_("#", arch, (ftnlen)1, (ftnlen)80);
-	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
-	chkout_("CKOBJ", (ftnlen)5);
+    getfat_(__global_state, ck, arch, kertyp, ck_len, (ftnlen)80, (ftnlen)80);
+    if (s_cmp(&__global_state->f2c, arch, "XFR", (ftnlen)80, (ftnlen)3) == 0) 
+	    {
+	setmsg_(__global_state, "Input file # has architecture #. The file m"
+		"ust be a binary CK file to be readable by this routine.  If "
+		"the input file is an CK file in transfer format, run TOBIN o"
+		"n the file to convert it to binary format.", (ftnlen)205);
+	errch_(__global_state, "#", ck, (ftnlen)1, ck_len);
+	errch_(__global_state, "#", arch, (ftnlen)1, (ftnlen)80);
+	sigerr_(__global_state, "SPICE(INVALIDFORMAT)", (ftnlen)20);
+	chkout_(__global_state, "CKOBJ", (ftnlen)5);
 	return 0;
-    } else if (s_cmp(arch, "DAF", (ftnlen)80, (ftnlen)3) != 0) {
-	setmsg_("Input file # has architecture #. The file must be a binary "
-		"CK file to be readable by this routine.  Binary CK files hav"
-		"e DAF architecture.  If you expected the file to be a binary"
-		" CK file, the problem may be due to the file being an old no"
-		"n-native file lacking binary file format information. It's a"
-		"lso possible the file has been corrupted.", (ftnlen)340);
-	errch_("#", ck, (ftnlen)1, ck_len);
-	errch_("#", arch, (ftnlen)1, (ftnlen)80);
-	sigerr_("SPICE(INVALIDARCHTYPE)", (ftnlen)22);
-	chkout_("CKOBJ", (ftnlen)5);
-	return 0;
-    } else if (s_cmp(kertyp, "CK", (ftnlen)80, (ftnlen)2) != 0) {
-	setmsg_("Input file # has file type #. The file must be a binary CK "
-		"file to be readable by this routine. If you expected the fil"
+    } else if (s_cmp(&__global_state->f2c, arch, "DAF", (ftnlen)80, (ftnlen)3)
+	     != 0) {
+	setmsg_(__global_state, "Input file # has architecture #. The file m"
+		"ust be a binary CK file to be readable by this routine.  Bin"
+		"ary CK files have DAF architecture.  If you expected the fil"
 		"e to be a binary CK file, the problem may be due to the file"
 		" being an old non-native file lacking binary file format inf"
 		"ormation. It's also possible the file has been corrupted.", (
-		ftnlen)296);
-	errch_("#", ck, (ftnlen)1, ck_len);
-	errch_("#", kertyp, (ftnlen)1, (ftnlen)80);
-	sigerr_("SPICE(INVALIDFILETYPE)", (ftnlen)22);
-	chkout_("CKOBJ", (ftnlen)5);
+		ftnlen)340);
+	errch_(__global_state, "#", ck, (ftnlen)1, ck_len);
+	errch_(__global_state, "#", arch, (ftnlen)1, (ftnlen)80);
+	sigerr_(__global_state, "SPICE(INVALIDARCHTYPE)", (ftnlen)22);
+	chkout_(__global_state, "CKOBJ", (ftnlen)5);
+	return 0;
+    } else if (s_cmp(&__global_state->f2c, kertyp, "CK", (ftnlen)80, (ftnlen)
+	    2) != 0) {
+	setmsg_(__global_state, "Input file # has file type #. The file must"
+		" be a binary CK file to be readable by this routine. If you "
+		"expected the file to be a binary CK file, the problem may be"
+		" due to the file being an old non-native file lacking binary"
+		" file format information. It's also possible the file has be"
+		"en corrupted.", (ftnlen)296);
+	errch_(__global_state, "#", ck, (ftnlen)1, ck_len);
+	errch_(__global_state, "#", kertyp, (ftnlen)1, (ftnlen)80);
+	sigerr_(__global_state, "SPICE(INVALIDFILETYPE)", (ftnlen)22);
+	chkout_(__global_state, "CKOBJ", (ftnlen)5);
 	return 0;
     }
 
 /*     Open the file for reading. */
 
-    dafopr_(ck, &handle, ck_len);
-    if (failed_()) {
-	chkout_("CKOBJ", (ftnlen)5);
+    dafopr_(__global_state, ck, &handle, ck_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKOBJ", (ftnlen)5);
 	return 0;
     }
 
@@ -420,30 +425,30 @@ static ckobj_state_t* get_ckobj_state() {
 
 /*     Start a forward search. */
 
-    dafbfs_(&handle);
+    dafbfs_(__global_state, &handle);
 
 /*     Find the next DAF array. */
 
-    daffna_(&found);
-    while(found && ! failed_()) {
+    daffna_(__global_state, &found);
+    while(found && ! failed_(__global_state)) {
 
 /*        Fetch and unpack the segment descriptor. */
 
-	dafgs_(descr);
-	dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+	dafgs_(__global_state, descr);
+	dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
 
 /*        Insert the current ID code into the output set. */
 /*        The insertion algorithm will handle duplicates; no special */
 /*        action is required here. */
 
-	insrti_(ic, ids);
-	daffna_(&found);
+	insrti_(__global_state, ic, ids);
+	daffna_(__global_state, &found);
     }
 
 /*     Release the file. */
 
-    dafcls_(&handle);
-    chkout_("CKOBJ", (ftnlen)5);
+    dafcls_(__global_state, &handle);
+    chkout_(__global_state, "CKOBJ", (ftnlen)5);
     return 0;
 } /* ckobj_ */
 

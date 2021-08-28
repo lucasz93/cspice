@@ -8,8 +8,7 @@
 
 
 extern zzgapool_init_t __zzgapool_init;
-static zzgapool_state_t* get_zzgapool_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgapool_state_t* get_zzgapool_state(cspice_t* state) {
 	if (!state->zzgapool)
 		state->zzgapool = __cspice_allocate_module(sizeof(
 	zzgapool_state_t), &__zzgapool_init, sizeof(__zzgapool_init));
@@ -18,33 +17,36 @@ static zzgapool_state_t* get_zzgapool_state() {
 }
 
 /* $Procedure ZZGAPOOL ( Private: get agent set for watched variable ) */
-/* Subroutine */ int zzgapool_(char *varnam, char *wtvars, integer *wtptrs, 
-	integer *wtpool, char *wtagnt, char *agtset, ftnlen varnam_len, 
-	ftnlen wtvars_len, ftnlen wtagnt_len, ftnlen agtset_len)
+/* Subroutine */ int zzgapool_(cspice_t* __global_state, char *varnam, char *
+	wtvars, integer *wtptrs, integer *wtpool, char *wtagnt, char *agtset, 
+	ftnlen varnam_len, ftnlen wtvars_len, ftnlen wtagnt_len, ftnlen 
+	agtset_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer node;
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sizec_(char *, ftnlen);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int validc_(integer *, integer *, char *, ftnlen);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sizec_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int scardc_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int validc_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer nfetch;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern integer lnknxt_(integer *, integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern integer lnknxt_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
     integer loc;
 
 
     /* Module state */
-    zzgapool_state_t* __state = get_zzgapool_state();
+    zzgapool_state_t* __state = get_zzgapool_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -187,28 +189,28 @@ static zzgapool_state_t* get_zzgapool_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGAPOOL", (ftnlen)8);
+    chkin_(__global_state, "ZZGAPOOL", (ftnlen)8);
 
 /*     The output agent set is empty until we find any */
 /*     agents. */
 
-    scardc_(&__state->c__0, agtset, agtset_len);
+    scardc_(__global_state, &__state->c__0, agtset, agtset_len);
 
 /*     Find the location of VARNAM in the set of watched */
 /*     variables. */
 
-    i__1 = cardc_(wtvars, wtvars_len);
-    loc = bsrchc_(varnam, &i__1, wtvars + wtvars_len * 6, varnam_len, 
-	    wtvars_len);
+    i__1 = cardc_(__global_state, wtvars, wtvars_len);
+    loc = bsrchc_(__global_state, varnam, &i__1, wtvars + wtvars_len * 6, 
+	    varnam_len, wtvars_len);
     if (loc == 0) {
 
 /*        This variable is not watched. The agent set is */
 /*        empty. */
 
-	chkout_("ZZGAPOOL", (ftnlen)8);
+	chkout_(__global_state, "ZZGAPOOL", (ftnlen)8);
 	return 0;
     }
 
@@ -220,13 +222,13 @@ static zzgapool_state_t* get_zzgapool_state() {
     nfetch = 0;
     while(node > 0) {
 	++nfetch;
-	s_copy(agtset + (nfetch + 5) * agtset_len, wtagnt + (node - 1) * 
-		wtagnt_len, agtset_len, wtagnt_len);
-	node = lnknxt_(&node, wtpool);
+	s_copy(&__global_state->f2c, agtset + (nfetch + 5) * agtset_len, 
+		wtagnt + (node - 1) * wtagnt_len, agtset_len, wtagnt_len);
+	node = lnknxt_(__global_state, &node, wtpool);
     }
-    i__1 = sizec_(agtset, agtset_len);
-    validc_(&i__1, &nfetch, agtset, agtset_len);
-    chkout_("ZZGAPOOL", (ftnlen)8);
+    i__1 = sizec_(__global_state, agtset, agtset_len);
+    validc_(__global_state, &i__1, &nfetch, agtset, agtset_len);
+    chkout_(__global_state, "ZZGAPOOL", (ftnlen)8);
     return 0;
 } /* zzgapool_ */
 

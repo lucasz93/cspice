@@ -8,8 +8,7 @@
 
 
 extern dafac_init_t __dafac_init;
-static dafac_state_t* get_dafac_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafac_state_t* get_dafac_state(cspice_t* state) {
 	if (!state->dafac)
 		state->dafac = __cspice_allocate_module(sizeof(dafac_state_t),
 	 &__dafac_init, sizeof(__dafac_init));
@@ -18,8 +17,8 @@ static dafac_state_t* get_dafac_state() {
 }
 
 /* $Procedure DAFAC ( DAF add comments ) */
-/* Subroutine */ int dafac_(integer *handle, integer *n, char *buffer, ftnlen 
-	buffer_len)
+/* Subroutine */ int dafac_(cspice_t* __global_state, integer *handle, 
+	integer *n, char *buffer, ftnlen buffer_len)
 {
     /* Initialized data */
 
@@ -28,60 +27,63 @@ static dafac_state_t* get_dafac_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_wdue(cilist *), e_wdue(void);
+    integer s_rdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rdue(f2c_state_t*);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_wdue(f2c_state_t*, cilist *), e_wdue(f2c_state_t*);
 
     /* Local variables */
     integer free;
-    extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
+    extern integer cpos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen)
+	    ;
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
     integer i__;
     integer j;
     integer space;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
     integer bward;
     integer fward;
     integer recno;
     logical found;
     integer ncomr;
-    extern integer ncpos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern integer ncpos_(cspice_t*, char *, char *, integer *, ftnlen, 
+	    ftnlen);
     logical empty;
     integer nd;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer ni;
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
     char ifname[60];
-    extern /* Subroutine */ int dafarr_(integer *, integer *);
+    extern /* Subroutine */ int dafarr_(cspice_t*, integer *, integer *);
     char crecrd[1000];
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
     integer daflun;
     integer nchars;
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer length;
     integer newrec;
     integer eocpos;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer nelpos;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer rinuse;
     integer curpos;
     integer notusd;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    dafac_state_t* __state = get_dafac_state();
+    dafac_state_t* __state = get_dafac_state(__global_state);
 /* $ Abstract */
 
 /*     Add comments from a buffer of character strings to the comment */
@@ -298,10 +300,10 @@ static dafac_state_t* get_dafac_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFAC", (ftnlen)5);
+	chkin_(__global_state, "DAFAC", (ftnlen)5);
     }
 
 /*     The lines of text in BUFFER will be ``packed'' into DAF comment */
@@ -324,30 +326,31 @@ static dafac_state_t* get_dafac_state() {
 /*     Verify that the DAF file attached to HANDLE is opened with write */
 /*     access. */
 
-    dafsih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DAFAC", (ftnlen)5);
+    dafsih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFAC", (ftnlen)5);
 	return 0;
     }
 
 /*     Convert the DAF file handle to its corresponding Fortran logical */
 /*     unit number for reading and writing comment records. */
 
-    zzddhhlu_(handle, "DAF", &__state->c_false, &daflun, (ftnlen)3);
-    if (failed_()) {
-	chkout_("DAFAC", (ftnlen)5);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_false, &daflun, (
+	    ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFAC", (ftnlen)5);
 	return 0;
     }
 
 /*     Check for a nonpositive number of lines in the buffer. */
 
     if (*n <= 0) {
-	setmsg_("The number of comment lines to be added to the binary DAF f"
-		"ile '#' was not positive: #.", (ftnlen)87);
-	errfnm_("#", &daflun, (ftnlen)1);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("DAFAC", (ftnlen)5);
+	setmsg_(__global_state, "The number of comment lines to be added to "
+		"the binary DAF file '#' was not positive: #.", (ftnlen)87);
+	errfnm_(__global_state, "#", &daflun, (ftnlen)1);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "DAFAC", (ftnlen)5);
 	return 0;
     }
 
@@ -363,7 +366,8 @@ static dafac_state_t* get_dafac_state() {
 
 /*        Get the length of the significant portion of a comment line. */
 
-	length = lastnb_(buffer + (i__ - 1) * buffer_len, buffer_len);
+	length = lastnb_(__global_state, buffer + (i__ - 1) * buffer_len, 
+		buffer_len);
 
 /*        Scan the comment line for non printing characters. */
 
@@ -378,13 +382,14 @@ static dafac_state_t* get_dafac_state() {
 	    if (*(unsigned char *)&buffer[(i__ - 1) * buffer_len + (j - 1)] > 
 		    126 || *(unsigned char *)&buffer[(i__ - 1) * buffer_len + 
 		    (j - 1)] < 32) {
-		setmsg_("A nonprinting character was encountered in the comm"
-			"ent buffer. Value: #", (ftnlen)71);
+		setmsg_(__global_state, "A nonprinting character was encount"
+			"ered in the comment buffer. Value: #", (ftnlen)71);
 		i__3 = *(unsigned char *)&buffer[(i__ - 1) * buffer_len + (j 
 			- 1)];
-		errint_("#", &i__3, (ftnlen)1);
-		sigerr_("SPICE(ILLEGALCHARACTER)", (ftnlen)23);
-		chkout_("DAFAC", (ftnlen)5);
+		errint_(__global_state, "#", &i__3, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(ILLEGALCHARACTER)", (ftnlen)23)
+			;
+		chkout_(__global_state, "DAFAC", (ftnlen)5);
 		return 0;
 	    }
 	}
@@ -407,9 +412,10 @@ static dafac_state_t* get_dafac_state() {
 /*     from the DAF file attached to HANDLE. We will also get back some */
 /*     extra stuff that we do not use. */
 
-    dafrfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
-    if (failed_()) {
-	chkout_("DAFAC", (ftnlen)5);
+    dafrfr_(__global_state, handle, &nd, &ni, ifname, &fward, &bward, &free, (
+	    ftnlen)60);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFAC", (ftnlen)5);
 	return 0;
     }
 
@@ -431,36 +437,37 @@ static dafac_state_t* get_dafac_state() {
 	    recno = ncomr + 1;
 	    __state->io___21.ciunit = daflun;
 	    __state->io___21.cirec = recno;
-	    iostat = s_rdue(&__state->io___21);
+	    iostat = s_rdue(&__global_state->f2c, &__state->io___21);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
-	    iostat = do_uio(&__state->c__1, crecrd, (ftnlen)1000);
+	    iostat = do_uio(&__global_state->f2c, &__state->c__1, crecrd, (
+		    ftnlen)1000);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
-	    iostat = e_rdue();
+	    iostat = e_rdue(&__global_state->f2c);
 L100001:
 	    if (iostat != 0) {
-		setmsg_("Error reading comment area of binary file named '#'"
-			".  IOSTAT = #.", (ftnlen)65);
-		errfnm_("#", &daflun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		chkout_("DAFAC", (ftnlen)5);
+		setmsg_(__global_state, "Error reading comment area of binar"
+			"y file named '#'.  IOSTAT = #.", (ftnlen)65);
+		errfnm_(__global_state, "#", &daflun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+		chkout_(__global_state, "DAFAC", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Scan the comment record looking for the end of comments */
 /*           marker. */
 
-	    eocpos = cpos_(crecrd, __state->eocmrk, &__state->c__1, (ftnlen)
-		    1000, (ftnlen)1);
+	    eocpos = cpos_(__global_state, crecrd, __state->eocmrk, &
+		    __state->c__1, (ftnlen)1000, (ftnlen)1);
 	    if (eocpos > 0) {
 		found = TRUE_;
 	    } else {
-		nelpos = ncpos_(crecrd, __state->eolmrk, &__state->c__1, (
-			ftnlen)1000, (ftnlen)1);
+		nelpos = ncpos_(__global_state, crecrd, __state->eolmrk, &
+			__state->c__1, (ftnlen)1000, (ftnlen)1);
 		if (nelpos != 0) {
 		    empty = FALSE_;
 		} else {
@@ -474,11 +481,12 @@ L100001:
 /*        area is not empty, then it is an error. */
 
 	if (! found && ! empty) {
-	    setmsg_("The comment area in the DAF file '#' may be damaged. Th"
-		    "e end of the comments could not be found.", (ftnlen)96);
-	    errfnm_("#", &daflun, (ftnlen)1);
-	    sigerr_("SPICE(BADCOMMENTAREA)", (ftnlen)21);
-	    chkout_("DAFAC", (ftnlen)5);
+	    setmsg_(__global_state, "The comment area in the DAF file '#' ma"
+		    "y be damaged. The end of the comments could not be found."
+		    , (ftnlen)96);
+	    errfnm_(__global_state, "#", &daflun, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADCOMMENTAREA)", (ftnlen)21);
+	    chkout_(__global_state, "DAFAC", (ftnlen)5);
 	    return 0;
 	} else if (found) {
 	    ncomc = (ncomr - 1) * 1000 + eocpos - 1;
@@ -522,9 +530,9 @@ L100001:
 /*     if we need to add any. */
 
     if (newrec > 0) {
-	dafarr_(handle, &newrec);
-	if (failed_()) {
-	    chkout_("DAFAC", (ftnlen)5);
+	dafarr_(__global_state, handle, &newrec);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFAC", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -548,7 +556,7 @@ L100001:
 
 	recno = 2;
 	curpos = 1;
-	s_copy(crecrd, " ", (ftnlen)1000, (ftnlen)1);
+	s_copy(&__global_state->f2c, crecrd, " ", (ftnlen)1000, (ftnlen)1);
     } else {
 
 /*        If there are comments in the comment area, then we need to */
@@ -573,7 +581,8 @@ L100001:
 
 /*        Get the length of the significant portion of comment line I. */
 
-	length = lastnb_(buffer + (i__ - 1) * buffer_len, buffer_len);
+	length = lastnb_(__global_state, buffer + (i__ - 1) * buffer_len, 
+		buffer_len);
 
 /*        Process the comment line. */
 
@@ -588,29 +597,33 @@ L100001:
 	    if (curpos > 1000) {
 		__state->io___30.ciunit = daflun;
 		__state->io___30.cirec = recno;
-		iostat = s_wdue(&__state->io___30);
+		iostat = s_wdue(&__global_state->f2c, &__state->io___30);
 		if (iostat != 0) {
 		    goto L100002;
 		}
-		iostat = do_uio(&__state->c__1, crecrd, (ftnlen)1000);
+		iostat = do_uio(&__global_state->f2c, &__state->c__1, crecrd, 
+			(ftnlen)1000);
 		if (iostat != 0) {
 		    goto L100002;
 		}
-		iostat = e_wdue();
+		iostat = e_wdue(&__global_state->f2c);
 L100002:
 		if (iostat != 0) {
-		    setmsg_("Error writing to record # of the binary file na"
-			    "med '#'. IOSTAT = #.", (ftnlen)67);
-		    errint_("#", &recno, (ftnlen)1);
-		    errfnm_("#", &daflun, (ftnlen)1);
-		    errint_("#", &iostat, (ftnlen)1);
-		    sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		    chkout_("DAFAC", (ftnlen)5);
+		    setmsg_(__global_state, "Error writing to record # of th"
+			    "e binary file named '#'. IOSTAT = #.", (ftnlen)67)
+			    ;
+		    errint_(__global_state, "#", &recno, (ftnlen)1);
+		    errfnm_(__global_state, "#", &daflun, (ftnlen)1);
+		    errint_(__global_state, "#", &iostat, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)
+			    22);
+		    chkout_(__global_state, "DAFAC", (ftnlen)5);
 		    return 0;
 		}
 		++recno;
 		curpos = 1;
-		s_copy(crecrd, " ", (ftnlen)1000, (ftnlen)1);
+		s_copy(&__global_state->f2c, crecrd, " ", (ftnlen)1000, (
+			ftnlen)1);
 	    }
 	    *(unsigned char *)&crecrd[curpos - 1] = *(unsigned char *)&buffer[
 		    (i__ - 1) * buffer_len + (j - 1)];
@@ -627,29 +640,31 @@ L100002:
 	if (curpos > 1000) {
 	    __state->io___31.ciunit = daflun;
 	    __state->io___31.cirec = recno;
-	    iostat = s_wdue(&__state->io___31);
+	    iostat = s_wdue(&__global_state->f2c, &__state->io___31);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = do_uio(&__state->c__1, crecrd, (ftnlen)1000);
+	    iostat = do_uio(&__global_state->f2c, &__state->c__1, crecrd, (
+		    ftnlen)1000);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = e_wdue();
+	    iostat = e_wdue(&__global_state->f2c);
 L100003:
 	    if (iostat != 0) {
-		setmsg_("Error writing to record # of the binary file named "
-			"'#'. IOSTAT = #.", (ftnlen)67);
-		errint_("#", &recno, (ftnlen)1);
-		errfnm_("#", &daflun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DAFAC", (ftnlen)5);
+		setmsg_(__global_state, "Error writing to record # of the bi"
+			"nary file named '#'. IOSTAT = #.", (ftnlen)67);
+		errint_(__global_state, "#", &recno, (ftnlen)1);
+		errfnm_(__global_state, "#", &daflun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DAFAC", (ftnlen)5);
 		return 0;
 	    }
 	    ++recno;
 	    curpos = 1;
-	    s_copy(crecrd, " ", (ftnlen)1000, (ftnlen)1);
+	    s_copy(&__global_state->f2c, crecrd, " ", (ftnlen)1000, (ftnlen)1)
+		    ;
 	}
 
 /*        Append the end-of-line marker to the comment line that we just */
@@ -675,29 +690,30 @@ L100003:
 
 	__state->io___32.ciunit = daflun;
 	__state->io___32.cirec = recno;
-	iostat = s_wdue(&__state->io___32);
+	iostat = s_wdue(&__global_state->f2c, &__state->io___32);
 	if (iostat != 0) {
 	    goto L100004;
 	}
-	iostat = do_uio(&__state->c__1, crecrd, (ftnlen)1000);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, crecrd, (ftnlen)
+		1000);
 	if (iostat != 0) {
 	    goto L100004;
 	}
-	iostat = e_wdue();
+	iostat = e_wdue(&__global_state->f2c);
 L100004:
 	if (iostat != 0) {
-	    setmsg_("Error writing to record # of the binary file named '#'."
-		    " IOSTAT = #.", (ftnlen)67);
-	    errint_("#", &recno, (ftnlen)1);
-	    errfnm_("#", &daflun, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	    chkout_("DAFAC", (ftnlen)5);
+	    setmsg_(__global_state, "Error writing to record # of the binary"
+		    " file named '#'. IOSTAT = #.", (ftnlen)67);
+	    errint_(__global_state, "#", &recno, (ftnlen)1);
+	    errfnm_(__global_state, "#", &daflun, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	    chkout_(__global_state, "DAFAC", (ftnlen)5);
 	    return 0;
 	}
 	++recno;
 	curpos = 1;
-	s_copy(crecrd, " ", (ftnlen)1000, (ftnlen)1);
+	s_copy(&__global_state->f2c, crecrd, " ", (ftnlen)1000, (ftnlen)1);
     }
 
 /*     Add the end of comments mark to the final comment record and */
@@ -706,30 +722,31 @@ L100004:
     *(unsigned char *)&crecrd[curpos - 1] = *(unsigned char *)__state->eocmrk;
     __state->io___33.ciunit = daflun;
     __state->io___33.cirec = recno;
-    iostat = s_wdue(&__state->io___33);
+    iostat = s_wdue(&__global_state->f2c, &__state->io___33);
     if (iostat != 0) {
 	goto L100005;
     }
-    iostat = do_uio(&__state->c__1, crecrd, (ftnlen)1000);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, crecrd, (ftnlen)
+	    1000);
     if (iostat != 0) {
 	goto L100005;
     }
-    iostat = e_wdue();
+    iostat = e_wdue(&__global_state->f2c);
 L100005:
     if (iostat != 0) {
-	setmsg_("Error writing to record # of the binary file named '#'. IOS"
-		"TAT = #.", (ftnlen)67);
-	errint_("#", &recno, (ftnlen)1);
-	errfnm_("#", &daflun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("DAFAC", (ftnlen)5);
+	setmsg_(__global_state, "Error writing to record # of the binary fil"
+		"e named '#'. IOSTAT = #.", (ftnlen)67);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errfnm_(__global_state, "#", &daflun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "DAFAC", (ftnlen)5);
 	return 0;
     }
 
 /*     Check out and leave DAFAC. */
 
-    chkout_("DAFAC", (ftnlen)5);
+    chkout_(__global_state, "DAFAC", (ftnlen)5);
     return 0;
 } /* dafac_ */
 

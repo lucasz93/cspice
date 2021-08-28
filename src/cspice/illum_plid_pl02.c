@@ -1231,7 +1231,7 @@
    {
       return;
    }
-   chkin_c ( "illum_plid_pl02" );
+   chkin_c ( naif_state, "illum_plid_pl02" );
  
 
    /*

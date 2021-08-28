@@ -257,7 +257,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "hx2dp_c" );
+   chkin_c ( naif_state, "hx2dp_c" );
 
    /*
    Check the input time string to make sure the pointer is non-null and

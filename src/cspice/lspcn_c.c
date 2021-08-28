@@ -290,7 +290,7 @@
    {
       return ( retval ); 
    }
-   chkin_c ( "lspcn_c" );
+   chkin_c ( naif_state, "lspcn_c" );
 
    /*
    Check the input string body to make sure the pointer is non-null 

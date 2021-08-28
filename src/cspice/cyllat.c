@@ -8,20 +8,21 @@
 
 
 typedef int cyllat_state_t;
-static cyllat_state_t* get_cyllat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cyllat_state_t* get_cyllat_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CYLLAT ( Cylindrical to latitudinal ) */
-/* Subroutine */ int cyllat_(doublereal *r__, doublereal *longc, doublereal *
-	z__, doublereal *radius, doublereal *long__, doublereal *lat)
+/* Subroutine */ int cyllat_(cspice_t* __global_state, doublereal *r__, 
+	doublereal *longc, doublereal *z__, doublereal *radius, doublereal *
+	long__, doublereal *lat)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal), atan2(doublereal, doublereal);
+    double sqrt(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
+	    doublereal);
 
     /* Local variables */
     doublereal x;
@@ -32,7 +33,7 @@ static cyllat_state_t* get_cyllat_state() {
 
 
     /* Module state */
-    cyllat_state_t* __state = get_cyllat_state();
+    cyllat_state_t* __state = get_cyllat_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from cylindrical to latitudinal coordinates. */
@@ -204,14 +205,14 @@ static cyllat_state_t* get_cyllat_state() {
     if (big > 0.) {
 	x = *r__ / big;
 	y = *z__ / big;
-	rho = big * sqrt(x * x + y * y);
+	rho = big * sqrt(&__global_state->f2c, x * x + y * y);
     } else {
 	rho = 0.;
     }
     if (rho == 0.) {
 	lattud = 0.;
     } else {
-	lattud = atan2(*z__, *r__);
+	lattud = atan2(&__global_state->f2c, *z__, *r__);
     }
 
 /*     Move results to output variables */

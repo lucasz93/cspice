@@ -8,8 +8,7 @@
 
 
 extern spke15_init_t __spke15_init;
-static spke15_state_t* get_spke15_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spke15_state_t* get_spke15_state(cspice_t* state) {
 	if (!state->spke15)
 		state->spke15 = __cspice_allocate_module(sizeof(
 	spke15_state_t), &__spke15_init, sizeof(__spke15_init));
@@ -18,72 +17,75 @@ static spke15_state_t* get_spke15_state() {
 }
 
 /* $Procedure      SPKE15 ( Evaluate a type 15 SPK data record) */
-/* Subroutine */ int spke15_(doublereal *et, doublereal *recin, doublereal *
-	state)
+/* Subroutine */ int spke15_(cspice_t* __global_state, doublereal *et, 
+	doublereal *recin, doublereal *state)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    double sqrt(doublereal), d_mod(doublereal *, doublereal *), d_sign(
-	    doublereal *, doublereal *);
+    double sqrt(f2c_state_t*, doublereal), d_mod(f2c_state_t*, doublereal *, 
+	    doublereal *), d_sign(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     doublereal near__;
     doublereal dmdt;
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     integer j2flg;
     doublereal p;
     doublereal angle;
     doublereal dnode;
     doublereal z__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal epoch;
     doublereal speed;
     doublereal dperi;
     doublereal theta;
     doublereal manom;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal twopi_(void);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal twopi_(cspice_t*);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vrotv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     doublereal oneme2;
     doublereal state0[6];
-    extern /* Subroutine */ int prop2b_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int prop2b_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal pa[3];
     doublereal gm;
     doublereal ta;
     doublereal dt;
-    extern doublereal pi_(void);
+    extern doublereal pi_(cspice_t*);
     doublereal tp[3];
     doublereal pv[3];
     doublereal cosinc;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int vhatip_(doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal tmpsta[6];
     doublereal oj2;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal ecc;
-    extern doublereal dpr_(void);
+    extern doublereal dpr_(cspice_t*);
     doublereal dot;
     doublereal rpl;
     doublereal k2pi;
 
 
     /* Module state */
-    spke15_state_t* __state = get_spke15_state();
+    spke15_state_t* __state = get_spke15_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluates a single SPK data record from a segment of type 15 */
@@ -378,10 +380,10 @@ static spke15_state_t* get_spke15_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKE15", (ftnlen)6);
+    chkin_(__global_state, "SPKE15", (ftnlen)6);
 
 /*     Fetch the various entities from the input record, first the epoch. */
 
@@ -389,11 +391,11 @@ static spke15_state_t* get_spke15_state() {
 
 /*     The trajectory pole vector. */
 
-    vequ_(&recin[1], tp);
+    vequ_(__global_state, &recin[1], tp);
 
 /*     The periapsis vector. */
 
-    vequ_(&recin[4], pa);
+    vequ_(__global_state, &recin[4], pa);
 
 /*     Semi-latus rectum ( P in the P/(1 + ECC*COS(Nu)  ), */
 /*     and eccentricity. */
@@ -407,7 +409,7 @@ static spke15_state_t* get_spke15_state() {
 
 /*     Central body pole vector. */
 
-    vequ_(&recin[10], pv);
+    vequ_(__global_state, &recin[10], pv);
 
 /*     The central mass, J2 and radius of the central body. */
 
@@ -421,56 +423,57 @@ static spke15_state_t* get_spke15_state() {
 /*     here should not be significant. */
 
     if (p <= 0.) {
-	setmsg_("The semi-latus rectum supplied to the SPK type 15 evaluator"
-		" was non-positive.  This value must be positive. The value s"
-		"upplied was #.", (ftnlen)133);
-	errdp_("#", &p, (ftnlen)1);
-	sigerr_("SPICE(BADLATUSRECTUM)", (ftnlen)21);
-	chkout_("SPKE15", (ftnlen)6);
+	setmsg_(__global_state, "The semi-latus rectum supplied to the SPK t"
+		"ype 15 evaluator was non-positive.  This value must be posit"
+		"ive. The value supplied was #.", (ftnlen)133);
+	errdp_(__global_state, "#", &p, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADLATUSRECTUM)", (ftnlen)21);
+	chkout_(__global_state, "SPKE15", (ftnlen)6);
 	return 0;
     } else if (ecc < 0.) {
-	setmsg_("The eccentricity supplied for a type 15 segment is negative"
-		".  It must be non-negative. The value supplied to the type 1"
-		"5 evaluator was #. ", (ftnlen)138);
-	errdp_("#", &ecc, (ftnlen)1);
-	sigerr_("SPICE(BADECCENTRICITY)", (ftnlen)22);
-	chkout_("SPKE15", (ftnlen)6);
+	setmsg_(__global_state, "The eccentricity supplied for a type 15 seg"
+		"ment is negative.  It must be non-negative. The value suppli"
+		"ed to the type 15 evaluator was #. ", (ftnlen)138);
+	errdp_(__global_state, "#", &ecc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADECCENTRICITY)", (ftnlen)22);
+	chkout_(__global_state, "SPKE15", (ftnlen)6);
 	return 0;
     } else if (gm <= 0.) {
-	setmsg_("The mass supplied for the central body of a type 15 segment"
-		" was non-positive. Masses must be positive.  The value suppl"
-		"ied was #. ", (ftnlen)130);
-	errdp_("#", &gm, (ftnlen)1);
-	sigerr_("SPICE(NONPOSITIVEMASS)", (ftnlen)22);
-	chkout_("SPKE15", (ftnlen)6);
+	setmsg_(__global_state, "The mass supplied for the central body of a"
+		" type 15 segment was non-positive. Masses must be positive. "
+		" The value supplied was #. ", (ftnlen)130);
+	errdp_(__global_state, "#", &gm, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONPOSITIVEMASS)", (ftnlen)22);
+	chkout_(__global_state, "SPKE15", (ftnlen)6);
 	return 0;
-    } else if (vzero_(tp)) {
-	setmsg_("The trajectory pole vector supplied to SPKE15 had length ze"
-		"ro. The most likely cause of this problem is a corrupted SPK"
-		" (ephemeris) file. ", (ftnlen)138);
-	sigerr_("SPICE(BADVECTOR)", (ftnlen)16);
-	chkout_("SPKE15", (ftnlen)6);
+    } else if (vzero_(__global_state, tp)) {
+	setmsg_(__global_state, "The trajectory pole vector supplied to SPKE"
+		"15 had length zero. The most likely cause of this problem is"
+		" a corrupted SPK (ephemeris) file. ", (ftnlen)138);
+	sigerr_(__global_state, "SPICE(BADVECTOR)", (ftnlen)16);
+	chkout_(__global_state, "SPKE15", (ftnlen)6);
 	return 0;
-    } else if (vzero_(pa)) {
-	setmsg_("The periapse vector supplied to SPKE15 had length zero. The"
-		" most likely cause of this problem is a corrupted SPK (ephem"
-		"eris) file. ", (ftnlen)131);
-	sigerr_("SPICE(BADVECTOR)", (ftnlen)16);
-	chkout_("SPKE15", (ftnlen)6);
+    } else if (vzero_(__global_state, pa)) {
+	setmsg_(__global_state, "The periapse vector supplied to SPKE15 had "
+		"length zero. The most likely cause of this problem is a corr"
+		"upted SPK (ephemeris) file. ", (ftnlen)131);
+	sigerr_(__global_state, "SPICE(BADVECTOR)", (ftnlen)16);
+	chkout_(__global_state, "SPKE15", (ftnlen)6);
 	return 0;
-    } else if (vzero_(pv)) {
-	setmsg_("The central pole vector supplied to SPKE15 had length zero."
-		" The most likely cause of this problem is a corrupted SPK (e"
-		"phemeris) file. ", (ftnlen)135);
-	sigerr_("SPICE(BADVECTOR)", (ftnlen)16);
-	chkout_("SPKE15", (ftnlen)6);
+    } else if (vzero_(__global_state, pv)) {
+	setmsg_(__global_state, "The central pole vector supplied to SPKE15 "
+		"had length zero. The most likely cause of this problem is a "
+		"corrupted SPK (ephemeris) file. ", (ftnlen)135);
+	sigerr_(__global_state, "SPICE(BADVECTOR)", (ftnlen)16);
+	chkout_(__global_state, "SPKE15", (ftnlen)6);
 	return 0;
     } else if (rpl < 0.) {
-	setmsg_("The central body radius was negative. It must be zero or po"
-		"sitive.  The value supplied was #. ", (ftnlen)94);
-	errdp_("#", &rpl, (ftnlen)1);
-	sigerr_("SPICE(BADRADIUS)", (ftnlen)16);
-	chkout_("SPKE15", (ftnlen)6);
+	setmsg_(__global_state, "The central body radius was negative. It mu"
+		"st be zero or positive.  The value supplied was #. ", (ftnlen)
+		94);
+	errdp_(__global_state, "#", &rpl, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADRADIUS)", (ftnlen)16);
+	chkout_(__global_state, "SPKE15", (ftnlen)6);
 	return 0;
     }
 
@@ -478,38 +481,39 @@ static spke15_state_t* get_spke15_state() {
 /*     (It won't hurt to polish them up a bit here if they are already */
 /*      unit vectors.) */
 
-    vhatip_(pa);
-    vhatip_(tp);
-    vhatip_(pv);
+    vhatip_(__global_state, pa);
+    vhatip_(__global_state, tp);
+    vhatip_(__global_state, pv);
 
 /*     One final check.  Make sure the pole and periapse vectors are */
 /*     orthogonal. (We will use a very crude check but this should */
 /*     rule out any obvious errors.) */
 
-    dot = vdot_(pa, tp);
+    dot = vdot_(__global_state, pa, tp);
     if (abs(dot) > 1e-5) {
-	angle = vsep_(pa, tp) * dpr_();
-	setmsg_("The periapsis and trajectory pole vectors are not orthogona"
-		"l. The anglebetween them is # degrees. ", (ftnlen)98);
-	errdp_("#", &angle, (ftnlen)1);
-	sigerr_("SPICE(BADINITSTATE)", (ftnlen)19);
-	chkout_("SPKE15", (ftnlen)6);
+	angle = vsep_(__global_state, pa, tp) * dpr_(__global_state);
+	setmsg_(__global_state, "The periapsis and trajectory pole vectors a"
+		"re not orthogonal. The anglebetween them is # degrees. ", (
+		ftnlen)98);
+	errdp_(__global_state, "#", &angle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADINITSTATE)", (ftnlen)19);
+	chkout_(__global_state, "SPKE15", (ftnlen)6);
 	return 0;
     }
 
 /*     Compute the distance and speed at periapse. */
 
     near__ = p / (ecc + 1.);
-    speed = sqrt(gm / p) * (ecc + 1.);
+    speed = sqrt(&__global_state->f2c, gm / p) * (ecc + 1.);
 
 /*     Next get the position at periapse ... */
 
-    vscl_(&near__, pa, state0);
+    vscl_(__global_state, &near__, pa, state0);
 
 /*     ... and the velocity at periapsis. */
 
-    vcrss_(tp, pa, &state0[3]);
-    vsclip_(&speed, &state0[3]);
+    vcrss_(__global_state, tp, pa, &state0[3]);
+    vsclip_(__global_state, &speed, &state0[3]);
 
 /*     Determine the elapsed time from periapse to the requested */
 /*     epoch and propagate the state at periapsis to the epoch of */
@@ -540,7 +544,7 @@ static spke15_state_t* get_spke15_state() {
 /*     of nodes and apsides by simply precessing the resulting state. */
 
     dt = *et - epoch;
-    prop2b_(&gm, state0, &dt, state);
+    prop2b_(__global_state, &gm, state0, &dt, state);
 
 /*     If called for, handle precession needed due to the J2 term.  Note */
 /*     that the motion of the lines of nodes and apsides is formulated */
@@ -554,18 +558,18 @@ static spke15_state_t* get_spke15_state() {
 /* Computing 2nd power */
 	d__1 = ecc;
 	oneme2 = 1. - d__1 * d__1;
-	dmdt = oneme2 / p * sqrt(gm * oneme2 / p);
+	dmdt = oneme2 / p * sqrt(&__global_state->f2c, gm * oneme2 / p);
 	manom = dmdt * dt;
 
 /*        Next compute the angle THETA such that THETA is between */
 /*        -pi and pi and such than MANOM = THETA + K*2*pi for */
 /*        some integer K. */
 
-	d__1 = twopi_();
-	theta = d_mod(&manom, &d__1);
-	if (abs(theta) > pi_()) {
-	    d__1 = twopi_();
-	    theta -= d_sign(&d__1, &theta);
+	d__1 = twopi_(__global_state);
+	theta = d_mod(&__global_state->f2c, &manom, &d__1);
+	if (abs(theta) > pi_(__global_state)) {
+	    d__1 = twopi_(__global_state);
+	    theta -= d_sign(&__global_state->f2c, &d__1, &theta);
 	}
 	k2pi = manom - theta;
 
@@ -573,13 +577,13 @@ static spke15_state_t* get_spke15_state() {
 /*        state theta and the accumulated mean anomaly prior to this */
 /*        orbit. */
 
-	ta = vsep_(pa, state);
-	ta = d_sign(&ta, &theta);
+	ta = vsep_(__global_state, pa, state);
+	ta = d_sign(&__global_state->f2c, &ta, &theta);
 	ta += k2pi;
 
 /*        Determine how far the line of nodes and periapsis have moved. */
 
-	cosinc = vdot_(pv, tp);
+	cosinc = vdot_(__global_state, pv, tp);
 /* Computing 2nd power */
 	d__1 = rpl / p;
 	z__ = ta * 1.5 * oj2 * (d__1 * d__1);
@@ -592,18 +596,18 @@ static spke15_state_t* get_spke15_state() {
 /*        trajectory pole */
 
 	if (j2flg != 1) {
-	    vrotv_(state, tp, &dperi, tmpsta);
-	    vrotv_(&state[3], tp, &dperi, &tmpsta[3]);
-	    moved_(tmpsta, &__state->c__6, state);
+	    vrotv_(__global_state, state, tp, &dperi, tmpsta);
+	    vrotv_(__global_state, &state[3], tp, &dperi, &tmpsta[3]);
+	    moved_(__global_state, tmpsta, &__state->c__6, state);
 	}
 
 /*        Regress the line of nodes by rotating the state */
 /*        about the pole of the central body. */
 
 	if (j2flg != 2) {
-	    vrotv_(state, pv, &dnode, tmpsta);
-	    vrotv_(&state[3], pv, &dnode, &tmpsta[3]);
-	    moved_(tmpsta, &__state->c__6, state);
+	    vrotv_(__global_state, state, pv, &dnode, tmpsta);
+	    vrotv_(__global_state, &state[3], pv, &dnode, &tmpsta[3]);
+	    moved_(__global_state, tmpsta, &__state->c__6, state);
 	}
 
 /*        We could perform the rotations above in the other order, */
@@ -614,7 +618,7 @@ static spke15_state_t* get_spke15_state() {
 
 /*     That's all folks.  Check out and return. */
 
-    chkout_("SPKE15", (ftnlen)6);
+    chkout_(__global_state, "SPKE15", (ftnlen)6);
     return 0;
 } /* spke15_ */
 

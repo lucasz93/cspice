@@ -8,22 +8,21 @@
 
 
 typedef int ekcls_state_t;
-static ekcls_state_t* get_ekcls_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekcls_state_t* get_ekcls_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   EKCLS ( EK, close file ) */
-/* Subroutine */ int ekcls_(integer *handle)
+/* Subroutine */ int ekcls_(cspice_t* __global_state, integer *handle)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dascls_(integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dascls_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ekcls_state_t* __state = get_ekcls_state();
+    ekcls_state_t* __state = get_ekcls_state(__global_state);
 /* $ Abstract */
 
 /*     Close an E-kernel. */
@@ -154,16 +153,16 @@ static ekcls_state_t* get_ekcls_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKCLS", (ftnlen)5);
+	chkin_(__global_state, "EKCLS", (ftnlen)5);
     }
 
 /*     Close the file as a DAS file. */
 
-    dascls_(handle);
-    chkout_("EKCLS", (ftnlen)5);
+    dascls_(__global_state, handle);
+    chkout_(__global_state, "EKCLS", (ftnlen)5);
     return 0;
 } /* ekcls_ */
 

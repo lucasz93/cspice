@@ -8,8 +8,7 @@
 
 
 extern dlaens_init_t __dlaens_init;
-static dlaens_state_t* get_dlaens_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dlaens_state_t* get_dlaens_state(cspice_t* state) {
 	if (!state->dlaens)
 		state->dlaens = __cspice_allocate_module(sizeof(
 	dlaens_state_t), &__dlaens_init, sizeof(__dlaens_init));
@@ -18,30 +17,30 @@ static dlaens_state_t* get_dlaens_state() {
 }
 
 /* $Procedure DLAENS ( DLA, end new segment ) */
-/* Subroutine */ int dlaens_(integer *handle)
+/* Subroutine */ int dlaens_(cspice_t* __global_state, integer *handle)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer this__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer descr[8];
     integer lastc;
     integer lastd;
     integer lasti;
-    extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int daslla_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dlaens_state_t* __state = get_dlaens_state();
+    dlaens_state_t* __state = get_dlaens_state(__global_state);
 /* $ Abstract */
 
 /*     End a new segment in a DLA file. */
@@ -505,10 +504,10 @@ static dlaens_state_t* get_dlaens_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DLAENS", (ftnlen)6);
+    chkin_(__global_state, "DLAENS", (ftnlen)6);
 
 /*     Now that the segment has been written, our only task is */
 /*     to update the corresponding segment descriptor to reflect */
@@ -517,13 +516,13 @@ static dlaens_state_t* get_dlaens_state() {
 /*     Look up the pointer to the last DLA segment descriptor in the */
 /*     file.  Then look up the segment descriptor itself. */
 
-    dasrdi_(handle, &__state->c__3, &__state->c__3, &this__);
+    dasrdi_(__global_state, handle, &__state->c__3, &__state->c__3, &this__);
     i__1 = this__ + 7;
-    dasrdi_(handle, &this__, &i__1, descr);
+    dasrdi_(__global_state, handle, &this__, &i__1, descr);
 
 /*     Find the last DAS logical addresses in use for each data type. */
 
-    daslla_(handle, &lastc, &lastd, &lasti);
+    daslla_(__global_state, handle, &lastc, &lastd, &lasti);
 
 /*     Set the component sizes in the descriptor. The sizes are easily */
 /*     computed from the last addresses in use and the component base */
@@ -536,12 +535,12 @@ static dlaens_state_t* get_dlaens_state() {
 /*     Update the descriptor in the file. */
 
     i__1 = this__ + 7;
-    dasudi_(handle, &this__, &i__1, descr);
+    dasudi_(__global_state, handle, &this__, &i__1, descr);
 
 /*     Leave the file open.  The file is now ready for the */
 /*     addition of a new segment. */
 
-    chkout_("DLAENS", (ftnlen)6);
+    chkout_(__global_state, "DLAENS", (ftnlen)6);
     return 0;
 } /* dlaens_ */
 

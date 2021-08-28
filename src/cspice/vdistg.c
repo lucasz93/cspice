@@ -8,20 +8,20 @@
 
 
 typedef int vdistg_state_t;
-static vdistg_state_t* get_vdistg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vdistg_state_t* get_vdistg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VDISTG ( Vector distance, general dimension ) */
-doublereal vdistg_(doublereal *v1, doublereal *v2, integer *ndim)
+doublereal vdistg_(cspice_t* __global_state, doublereal *v1, doublereal *v2, 
+	integer *ndim)
 {
     /* System generated locals */
     integer i__1;
     doublereal ret_val, d__1, d__2, d__3;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     integer i__;
@@ -29,7 +29,7 @@ doublereal vdistg_(doublereal *v1, doublereal *v2, integer *ndim)
 
 
     /* Module state */
-    vdistg_state_t* __state = get_vdistg_state();
+    vdistg_state_t* __state = get_vdistg_state(__global_state);
 /* $ Abstract */
 
 /*     Return the distance between two vectors of arbitrary dimension. */
@@ -216,7 +216,7 @@ doublereal vdistg_(doublereal *v1, doublereal *v2, integer *ndim)
 	    d__1 = (v1[i__ - 1] - v2[i__ - 1]) / scale;
 	    ret_val += d__1 * d__1;
 	}
-	ret_val = scale * sqrt(ret_val);
+	ret_val = scale * sqrt(&__global_state->f2c, ret_val);
     }
     return ret_val;
 } /* vdistg_ */

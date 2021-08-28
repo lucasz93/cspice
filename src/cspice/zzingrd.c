@@ -8,27 +8,26 @@
 
 
 typedef int zzingrd_state_t;
-static zzingrd_state_t* get_zzingrd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzingrd_state_t* get_zzingrd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  ZZINGRD  ( is a voxel inside the grid? ) */
-logical zzingrd_(integer *nvox, integer *voxel)
+logical zzingrd_(cspice_t* __global_state, integer *nvox, integer *voxel)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     logical ret_val;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    zzingrd_state_t* __state = get_zzingrd_state();
+    zzingrd_state_t* __state = get_zzingrd_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -145,11 +144,13 @@ logical zzingrd_(integer *nvox, integer *voxel)
 /*     in any direction. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	if (voxel[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("voxel", 
-		i__1, "zzingrd_", (ftnlen)135)] < 1 || voxel[(i__2 = i__ - 1) 
-		< 3 && 0 <= i__2 ? i__2 : s_rnge("voxel", i__2, "zzingrd_", (
+	if (voxel[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "voxel", i__1, "zzingrd_", (ftnlen)135)] 
+		< 1 || voxel[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "voxel", i__2, "zzingrd_", (
 		ftnlen)135)] > nvox[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 :
-		 s_rnge("nvox", i__3, "zzingrd_", (ftnlen)135)]) {
+		 s_rnge(&__global_state->f2c, "nvox", i__3, "zzingrd_", (
+		ftnlen)135)]) {
 	    return ret_val;
 	}
     }

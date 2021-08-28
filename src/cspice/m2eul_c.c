@@ -475,7 +475,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "m2eul_c" );
+   chkin_c ( naif_state, "m2eul_c" );
 
 
    /*

@@ -8,33 +8,34 @@
 
 
 typedef int kepleq_state_t;
-static kepleq_state_t* get_kepleq_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline kepleq_state_t* get_kepleq_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      KEPLEQ ( Kepler's Equation - Equinoctial Version ) */
-doublereal kepleq_(doublereal *ml, doublereal *h__, doublereal *k)
+doublereal kepleq_(cspice_t* __global_state, doublereal *ml, doublereal *h__, 
+	doublereal *k)
 {
     /* System generated locals */
     doublereal ret_val;
 
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal evec[2];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal e2;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern doublereal kpsolv_(doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern doublereal kpsolv_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    kepleq_state_t* __state = get_kepleq_state();
+    kepleq_state_t* __state = get_kepleq_state(__global_state);
 /* $ Abstract */
 
 /*    This function solves the equinoctial version of Kepler's */
@@ -172,16 +173,16 @@ doublereal kepleq_(doublereal *ml, doublereal *h__, doublereal *k)
     e2 = *h__ * *h__ + *k * *k;
     if (e2 >= .81) {
 	ret_val = 0.;
-	chkin_("KEPLEQ", (ftnlen)6);
-	setmsg_("The values of H and K supplied to KEPLEQ must satisfy the i"
-		"nequality H*H + K*K < ECC**2 where ECC is the eccentricity t"
-		"hreshold of 0.9.  The values of H and K are: # and # respect"
-		"ively. H*H + K*K = #. ", (ftnlen)201);
-	errdp_("#", h__, (ftnlen)1);
-	errdp_("#", k, (ftnlen)1);
-	errdp_("#", &e2, (ftnlen)1);
-	sigerr_("SPICE(ECCOUTOFBOUNDS)", (ftnlen)21);
-	chkout_("KEPLEQ", (ftnlen)6);
+	chkin_(__global_state, "KEPLEQ", (ftnlen)6);
+	setmsg_(__global_state, "The values of H and K supplied to KEPLEQ mu"
+		"st satisfy the inequality H*H + K*K < ECC**2 where ECC is th"
+		"e eccentricity threshold of 0.9.  The values of H and K are:"
+		" # and # respectively. H*H + K*K = #. ", (ftnlen)201);
+	errdp_(__global_state, "#", h__, (ftnlen)1);
+	errdp_(__global_state, "#", k, (ftnlen)1);
+	errdp_(__global_state, "#", &e2, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ECCOUTOFBOUNDS)", (ftnlen)21);
+	chkout_(__global_state, "KEPLEQ", (ftnlen)6);
 	return ret_val;
     }
 
@@ -238,9 +239,11 @@ doublereal kepleq_(doublereal *ml, doublereal *h__, doublereal *k)
 /*     The routine KPEVEC returns the value of X that solves */
 /*     the equation X - < EVEC, UVEC(X) > */
 
-    evec[0] = -(*h__) * cos(*ml) + *k * sin(*ml);
-    evec[1] = *h__ * sin(*ml) + *k * cos(*ml);
-    ret_val = *ml + kpsolv_(evec);
+    evec[0] = -(*h__) * cos(&__global_state->f2c, *ml) + *k * sin(&
+	    __global_state->f2c, *ml);
+    evec[1] = *h__ * sin(&__global_state->f2c, *ml) + *k * cos(&
+	    __global_state->f2c, *ml);
+    ret_val = *ml + kpsolv_(__global_state, evec);
     return ret_val;
 } /* kepleq_ */
 

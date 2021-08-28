@@ -109,7 +109,7 @@
          }
       else
          {
-         chkin_c ( module );
+         chkin_c ( naif_state, module );
          }
 
 

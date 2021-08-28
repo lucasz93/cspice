@@ -8,28 +8,28 @@
 
 
 typedef int lnkini_state_t;
-static lnkini_state_t* get_lnkini_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lnkini_state_t* get_lnkini_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LNKINI ( LNK, initialize ) */
-/* Subroutine */ int lnkini_(integer *size, integer *pool)
+/* Subroutine */ int lnkini_(cspice_t* __global_state, integer *size, integer 
+	*pool)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    lnkini_state_t* __state = get_lnkini_state();
+    lnkini_state_t* __state = get_lnkini_state(__global_state);
 /* $ Abstract */
 
 /*     Initialize a doubly linked list pool. */
@@ -214,11 +214,12 @@ static lnkini_state_t* get_lnkini_state() {
 /*     The requested number of nodes must be valid. */
 
     if (*size < 1) {
-	chkin_("LNKINI", (ftnlen)6);
-	setmsg_("A linked list cannot have # nodes.", (ftnlen)34);
-	errint_("#", size, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("LNKINI", (ftnlen)6);
+	chkin_(__global_state, "LNKINI", (ftnlen)6);
+	setmsg_(__global_state, "A linked list cannot have # nodes.", (ftnlen)
+		34);
+	errint_(__global_state, "#", size, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "LNKINI", (ftnlen)6);
 	return 0;
     }
 

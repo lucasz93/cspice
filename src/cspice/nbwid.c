@@ -8,19 +8,19 @@
 
 
 typedef int nbwid_state_t;
-static nbwid_state_t* get_nbwid_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline nbwid_state_t* get_nbwid_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            NBWID ( Non-blank width of a character array ) */
-integer nbwid_(char *array, integer *nelt, ftnlen array_len)
+integer nbwid_(cspice_t* __global_state, char *array, integer *nelt, ftnlen 
+	array_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
@@ -29,7 +29,7 @@ integer nbwid_(char *array, integer *nelt, ftnlen array_len)
 
 
     /* Module state */
-    nbwid_state_t* __state = get_nbwid_state();
+    nbwid_state_t* __state = get_nbwid_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the non-blank width of a character array---that is, */
@@ -175,7 +175,7 @@ integer nbwid_(char *array, integer *nelt, ftnlen array_len)
 /*     any elements. */
 
     } else {
-	strlen = i_len(array, array_len);
+	strlen = i_len(&__global_state->f2c, array, array_len);
 	ret_val = 0;
 	i__ = 0;
 

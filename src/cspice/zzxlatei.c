@@ -8,8 +8,7 @@
 
 
 extern zzxlatei_init_t __zzxlatei_init;
-static zzxlatei_state_t* get_zzxlatei_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzxlatei_state_t* get_zzxlatei_state(cspice_t* state) {
 	if (!state->zzxlatei)
 		state->zzxlatei = __cspice_allocate_module(sizeof(
 	zzxlatei_state_t), &__zzxlatei_init, sizeof(__zzxlatei_init));
@@ -18,8 +17,8 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 }
 
 /* $Procedure ZZXLATEI ( Private --- Translate Integers ) */
-/* Subroutine */ int zzxlatei_(integer *inbff, char *input, integer *space, 
-	integer *output, ftnlen input_len)
+/* Subroutine */ int zzxlatei_(cspice_t* __global_state, integer *inbff, char 
+	*input, integer *space, integer *output, ftnlen input_len)
 {
     /* Initialized data */
 
@@ -29,34 +28,39 @@ static zzxlatei_state_t* get_zzxlatei_state() {
     char ch__1[1];
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), i_len(
+	    f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int zzddhgsd_(cspice_t*, char *, integer *, char *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzplatfm_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer value;
     integer osign;
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer lenipt;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern integer intmin_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern integer intmin_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer numint;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     char tmpstr[8];
 
 
     /* Module state */
-    zzxlatei_state_t* __state = get_zzxlatei_state();
+    zzxlatei_state_t* __state = get_zzxlatei_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -614,10 +618,10 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZXLATEI", (ftnlen)8);
+	chkin_(__global_state, "ZZXLATEI", (ftnlen)8);
     }
 
 /*     Perform some initialization tasks. */
@@ -628,24 +632,26 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 /*        format labels. */
 
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    zzddhgsd_("BFF", &i__, __state->strbff + (((i__1 = i__ - 1) < 4 &&
-		     0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", (
-		    ftnlen)367)) << 3), (ftnlen)3, (ftnlen)8);
+	    zzddhgsd_(__global_state, "BFF", &i__, __state->strbff + (((i__1 =
+		     i__ - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "strbff", i__1, "zzxlatei_", (ftnlen)
+		    367)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format. */
 
-	zzplatfm_("FILE_FORMAT", tmpstr, (ftnlen)11, (ftnlen)8);
-	ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-	__state->natbff = isrchc_(tmpstr, &__state->c__4, __state->strbff, (
-		ftnlen)8, (ftnlen)8);
+	zzplatfm_(__global_state, "FILE_FORMAT", tmpstr, (ftnlen)11, (ftnlen)
+		8);
+	ucase_(__global_state, tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
+	__state->natbff = isrchc_(__global_state, tmpstr, &__state->c__4, 
+		__state->strbff, (ftnlen)8, (ftnlen)8);
 	if (__state->natbff == 0) {
-	    setmsg_("The binary file format, '#', is not supported by this v"
-		    "ersion of the toolkit. This is a serious problem, contac"
-		    "t NAIF.", (ftnlen)118);
-	    errch_("#", tmpstr, (ftnlen)1, (ftnlen)8);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZXLATEI", (ftnlen)8);
+	    setmsg_(__global_state, "The binary file format, '#', is not sup"
+		    "ported by this version of the toolkit. This is a serious"
+		    " problem, contact NAIF.", (ftnlen)118);
+	    errch_(__global_state, "#", tmpstr, (ftnlen)1, (ftnlen)8);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZXLATEI", (ftnlen)8);
 	    return 0;
 	}
 
@@ -657,7 +663,7 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 /*        Prepare the smallest value a 32-bit integer can actually */
 /*        store, regardless of what INTMIN returns. */
 
-	__state->smlint = intmin_();
+	__state->smlint = intmin_(__global_state);
 
 /*        Set SMLINT to the appropriate value if INTMIN is too large. */
 
@@ -674,18 +680,18 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 /*     routine is called properly. */
 
     if (*inbff < 1 || *inbff > 4) {
-	setmsg_("The integer code used to indicate the binary file format of"
-		" the input integers, #, is out of range.  This error should "
-		"never occur.", (ftnlen)131);
-	errint_("#", inbff, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZXLATEI", (ftnlen)8);
+	setmsg_(__global_state, "The integer code used to indicate the binar"
+		"y file format of the input integers, #, is out of range.  Th"
+		"is error should never occur.", (ftnlen)131);
+	errint_(__global_state, "#", inbff, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZXLATEI", (ftnlen)8);
 	return 0;
     }
 
 /*     Retrieve the length of the input string. */
 
-    lenipt = i_len(input, input_len);
+    lenipt = i_len(&__global_state->f2c, input, input_len);
 
 /*     Now branch based on the value of NATBFF. */
 
@@ -700,18 +706,20 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 
 	    numint = lenipt / 4;
 	    if (lenipt - (numint << 2) != 0) {
-		setmsg_("The input string that is to be translated from the "
-			"binary format # to format # has a length that is not"
-			" a multiple of 4 bytes.  This error should never occ"
-			"ur.", (ftnlen)158);
-		errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 
-			<= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", (
+		setmsg_(__global_state, "The input string that is to be tran"
+			"slated from the binary format # to format # has a le"
+			"ngth that is not a multiple of 4 bytes.  This error "
+			"should never occur.", (ftnlen)158);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = *
+			inbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "strbff", i__1, "zzxlatei_", (
 			ftnlen)462)) << 3), (ftnlen)1, (ftnlen)8);
-		errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) <
-			 4 && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzx"
-			"latei_", (ftnlen)463)) << 3), (ftnlen)1, (ftnlen)8);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZXLATEI", (ftnlen)8);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = 
+			__state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+			&__global_state->f2c, "strbff", i__1, "zzxlatei_", (
+			ftnlen)463)) << 3), (ftnlen)1, (ftnlen)8);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZXLATEI", (ftnlen)8);
 		return 0;
 	    }
 
@@ -719,20 +727,23 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 /*           the translation. */
 
 	    if (numint > *space) {
-		setmsg_("The caller specified that # integers are to be tran"
-			"slated from binary format # to #.  However there is "
-			"only room to hold # integers in the output array.  T"
-			"his error should never occur.", (ftnlen)184);
-		errint_("#", &numint, (ftnlen)1);
-		errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 
-			<= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", (
+		setmsg_(__global_state, "The caller specified that # integer"
+			"s are to be translated from binary format # to #.  H"
+			"owever there is only room to hold # integers in the "
+			"output array.  This error should never occur.", (
+			ftnlen)184);
+		errint_(__global_state, "#", &numint, (ftnlen)1);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = *
+			inbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "strbff", i__1, "zzxlatei_", (
 			ftnlen)482)) << 3), (ftnlen)1, (ftnlen)8);
-		errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) <
-			 4 && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzx"
-			"latei_", (ftnlen)483)) << 3), (ftnlen)1, (ftnlen)8);
-		errint_("#", space, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZXLATEI", (ftnlen)8);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = 
+			__state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+			&__global_state->f2c, "strbff", i__1, "zzxlatei_", (
+			ftnlen)483)) << 3), (ftnlen)1, (ftnlen)8);
+		errint_(__global_state, "#", space, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZXLATEI", (ftnlen)8);
 		return 0;
 	    }
 
@@ -783,7 +794,8 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 		value = *(unsigned char *)&ch__1[0] - (max(i__2,i__3) << 8);
 		output[i__ - 1] = value;
 		i__2 = j;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 1 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 1 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
@@ -792,7 +804,8 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 		value <<= 8;
 		output[i__ - 1] += value;
 		i__2 = j + 1;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 2 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 2 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
@@ -801,7 +814,8 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 		value <<= 16;
 		output[i__ - 1] += value;
 		i__2 = j + 2;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 3 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 3 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
@@ -864,17 +878,19 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 		}
 	    }
 	} else {
-	    setmsg_("Unable to translate integers from binary file format # "
-		    "to #.  This error should never occur and is indicative o"
-		    "f a bug.  Contact NAIF.", (ftnlen)134);
-	    errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 <= 
-		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-		    612)) << 3), (ftnlen)1, (ftnlen)8);
-	    errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) < 4 
-		    && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", 
-		    (ftnlen)613)) << 3), (ftnlen)1, (ftnlen)8);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZXLATEI", (ftnlen)8);
+	    setmsg_(__global_state, "Unable to translate integers from binar"
+		    "y file format # to #.  This error should never occur and"
+		    " is indicative of a bug.  Contact NAIF.", (ftnlen)134);
+	    errch_(__global_state, "#", __state->strbff + (((i__1 = *inbff - 
+		    1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "strbff", i__1, "zzxlatei_", (ftnlen)612)) << 3), (ftnlen)
+		    1, (ftnlen)8);
+	    errch_(__global_state, "#", __state->strbff + (((i__1 = 
+		    __state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "strbff", i__1, "zzxlatei_", (ftnlen)
+		    613)) << 3), (ftnlen)1, (ftnlen)8);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZXLATEI", (ftnlen)8);
 	    return 0;
 	}
     } else if (__state->natbff == 2) {
@@ -888,18 +904,20 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 
 	    numint = lenipt / 4;
 	    if (lenipt - (numint << 2) != 0) {
-		setmsg_("The input string that is to be translated from the "
-			"binary format # to format # has a length that is not"
-			" a multiple of 4 bytes.  This error should never occ"
-			"ur.", (ftnlen)158);
-		errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 
-			<= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", (
+		setmsg_(__global_state, "The input string that is to be tran"
+			"slated from the binary format # to format # has a le"
+			"ngth that is not a multiple of 4 bytes.  This error "
+			"should never occur.", (ftnlen)158);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = *
+			inbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "strbff", i__1, "zzxlatei_", (
 			ftnlen)640)) << 3), (ftnlen)1, (ftnlen)8);
-		errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) <
-			 4 && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzx"
-			"latei_", (ftnlen)641)) << 3), (ftnlen)1, (ftnlen)8);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZXLATEI", (ftnlen)8);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = 
+			__state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+			&__global_state->f2c, "strbff", i__1, "zzxlatei_", (
+			ftnlen)641)) << 3), (ftnlen)1, (ftnlen)8);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZXLATEI", (ftnlen)8);
 		return 0;
 	    }
 
@@ -907,20 +925,23 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 /*           the translation. */
 
 	    if (numint > *space) {
-		setmsg_("The caller specified that # integers are to be tran"
-			"slated from binary format # to #.  However there is "
-			"only room to hold # integers in the output array.  T"
-			"his error should never occur.", (ftnlen)184);
-		errint_("#", &numint, (ftnlen)1);
-		errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 
-			<= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", (
+		setmsg_(__global_state, "The caller specified that # integer"
+			"s are to be translated from binary format # to #.  H"
+			"owever there is only room to hold # integers in the "
+			"output array.  This error should never occur.", (
+			ftnlen)184);
+		errint_(__global_state, "#", &numint, (ftnlen)1);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = *
+			inbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "strbff", i__1, "zzxlatei_", (
 			ftnlen)660)) << 3), (ftnlen)1, (ftnlen)8);
-		errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) <
-			 4 && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzx"
-			"latei_", (ftnlen)661)) << 3), (ftnlen)1, (ftnlen)8);
-		errint_("#", space, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZXLATEI", (ftnlen)8);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = 
+			__state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+			&__global_state->f2c, "strbff", i__1, "zzxlatei_", (
+			ftnlen)661)) << 3), (ftnlen)1, (ftnlen)8);
+		errint_(__global_state, "#", space, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZXLATEI", (ftnlen)8);
 		return 0;
 	    }
 
@@ -964,7 +985,8 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 /*              into place through simple multiplication. */
 
 		i__2 = j + 2;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 3 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 3 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
@@ -972,7 +994,8 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		output[i__ - 1] = value;
 		i__2 = j + 1;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 2 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 2 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
@@ -981,7 +1004,8 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 		value <<= 8;
 		output[i__ - 1] += value;
 		i__2 = j;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 1 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 1 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
@@ -1053,17 +1077,19 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 		}
 	    }
 	} else {
-	    setmsg_("Unable to translate integers from binary file format # "
-		    "to #.  This error should never occur and is indicative o"
-		    "f a bug.  Contact NAIF.", (ftnlen)134);
-	    errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 <= 
-		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-		    791)) << 3), (ftnlen)1, (ftnlen)8);
-	    errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) < 4 
-		    && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", 
-		    (ftnlen)792)) << 3), (ftnlen)1, (ftnlen)8);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZXLATEI", (ftnlen)8);
+	    setmsg_(__global_state, "Unable to translate integers from binar"
+		    "y file format # to #.  This error should never occur and"
+		    " is indicative of a bug.  Contact NAIF.", (ftnlen)134);
+	    errch_(__global_state, "#", __state->strbff + (((i__1 = *inbff - 
+		    1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "strbff", i__1, "zzxlatei_", (ftnlen)791)) << 3), (ftnlen)
+		    1, (ftnlen)8);
+	    errch_(__global_state, "#", __state->strbff + (((i__1 = 
+		    __state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "strbff", i__1, "zzxlatei_", (ftnlen)
+		    792)) << 3), (ftnlen)1, (ftnlen)8);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZXLATEI", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1072,17 +1098,18 @@ static zzxlatei_state_t* get_zzxlatei_state() {
 /*     of code should never be reached in normal operation. */
 
     } else {
-	setmsg_("The native binary file format of this toolkit build, #, is "
-		"not currently supported for translation of integers from non"
-		"-native formats.", (ftnlen)135);
-	errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) < 4 && 0 
-		<= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlatei_", (ftnlen)
-		810)) << 3), (ftnlen)1, (ftnlen)8);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZXLATEI", (ftnlen)8);
+	setmsg_(__global_state, "The native binary file format of this toolk"
+		"it build, #, is not currently supported for translation of i"
+		"ntegers from non-native formats.", (ftnlen)135);
+	errch_(__global_state, "#", __state->strbff + (((i__1 = 
+		__state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "strbff", i__1, "zzxlatei_", (ftnlen)810)
+		) << 3), (ftnlen)1, (ftnlen)8);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZXLATEI", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZXLATEI", (ftnlen)8);
+    chkout_(__global_state, "ZZXLATEI", (ftnlen)8);
     return 0;
 } /* zzxlatei_ */
 

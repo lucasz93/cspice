@@ -8,20 +8,20 @@
 
 
 typedef int recsph_state_t;
-static recsph_state_t* get_recsph_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline recsph_state_t* get_recsph_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RECSPH ( Rectangular to spherical coordinates ) */
-/* Subroutine */ int recsph_(doublereal *rectan, doublereal *r__, doublereal *
-	colat, doublereal *long__)
+/* Subroutine */ int recsph_(cspice_t* __global_state, doublereal *rectan, 
+	doublereal *r__, doublereal *colat, doublereal *long__)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal), atan2(doublereal, doublereal);
+    double sqrt(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
+	    doublereal);
 
     /* Local variables */
     doublereal x;
@@ -31,7 +31,7 @@ static recsph_state_t* get_recsph_state() {
 
 
     /* Module state */
-    recsph_state_t* __state = get_recsph_state();
+    recsph_state_t* __state = get_recsph_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from rectangular coordinates to spherical coordinates. */
@@ -206,14 +206,15 @@ static recsph_state_t* get_recsph_state() {
 	x = rectan[0] / big;
 	y = rectan[1] / big;
 	z__ = rectan[2] / big;
-	*r__ = big * sqrt(x * x + y * y + z__ * z__);
-	*colat = atan2(sqrt(x * x + y * y), z__);
+	*r__ = big * sqrt(&__global_state->f2c, x * x + y * y + z__ * z__);
+	*colat = atan2(&__global_state->f2c, sqrt(&__global_state->f2c, x * x 
+		+ y * y), z__);
 	x = rectan[0];
 	y = rectan[1];
 	if (x == 0. && y == 0.) {
 	    *long__ = 0.;
 	} else {
-	    *long__ = atan2(y, x);
+	    *long__ = atan2(&__global_state->f2c, y, x);
 	}
     } else {
 	*r__ = 0.;

@@ -8,8 +8,7 @@
 
 
 extern pckbsr_init_t __pckbsr_init;
-static pckbsr_state_t* get_pckbsr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pckbsr_state_t* get_pckbsr_state(cspice_t* state) {
 	if (!state->pckbsr)
 		state->pckbsr = __cspice_allocate_module(sizeof(
 	pckbsr_state_t), &__pckbsr_init, sizeof(__pckbsr_init));
@@ -18,9 +17,9 @@ static pckbsr_state_t* get_pckbsr_state() {
 }
 
 /* $Procedure PCKBSR ( PCK, buffer segments for readers ) */
-/* Subroutine */ int pckbsr_0_(int n__, char *fname, integer *handle, integer 
-	*body, doublereal *et, doublereal *descr, char *ident, logical *found,
-	 ftnlen fname_len, ftnlen ident_len)
+/* Subroutine */ int pckbsr_0_(cspice_t* __global_state, int n__, char *fname,
+	 integer *handle, integer *body, doublereal *et, doublereal *descr, 
+	char *ident, logical *found, ftnlen fname_len, ftnlen ident_len)
 {
     /* Initialized data */
 
@@ -30,9 +29,9 @@ static pckbsr_state_t* get_pckbsr_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer head;
@@ -40,49 +39,53 @@ static pckbsr_state_t* get_pckbsr_state() {
     integer cost;
     integer i__;
     integer j;
-    extern /* Subroutine */ int dafgn_(char *, ftnlen);
+    extern /* Subroutine */ int dafgn_(cspice_t*, char *, ftnlen);
     integer cheap;
     integer p;
-    extern /* Subroutine */ int dafgs_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafgs_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     char doing[15];
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     char stack[15*2];
-    extern doublereal dpmin_(void);
-    extern /* Subroutine */ int lnkan_(integer *, integer *);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern integer lnktl_(integer *, integer *);
-    extern /* Subroutine */ int daffna_(logical *);
-    extern /* Subroutine */ int dafbbs_(integer *);
-    extern /* Subroutine */ int daffpa_(logical *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int dafcls_(integer *);
+    extern doublereal dpmin_(cspice_t*);
+    extern /* Subroutine */ int lnkan_(cspice_t*, integer *, integer *);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern integer lnktl_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int daffna_(cspice_t*, logical *);
+    extern /* Subroutine */ int dafbbs_(cspice_t*, integer *);
+    extern /* Subroutine */ int daffpa_(cspice_t*, logical *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafbfs_(cspice_t*, integer *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int dafcls_(cspice_t*, integer *);
     logical fndhan;
     integer crflbg;
     integer bindex;
-    extern /* Subroutine */ int lnkila_(integer *, integer *, integer *);
+    extern /* Subroutine */ int lnkila_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer findex;
-    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
-    extern integer isrchi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *);
-    extern /* Subroutine */ int lnkini_(integer *, integer *);
-    extern integer lnknfn_(integer *);
-    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern integer intmax_(void);
+    extern /* Subroutine */ int dafopr_(cspice_t*, char *, integer *, ftnlen);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int lnkilb_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int lnkini_(cspice_t*, integer *, integer *);
+    extern integer lnknfn_(cspice_t*, integer *);
+    extern /* Subroutine */ int lnkfsl_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern integer intmax_(cspice_t*);
     char urgent[15];
     integer minexp;
     integer nxtseg;
-    extern integer lnkprv_(integer *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern integer lnknxt_(integer *, integer *);
-    extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern integer lnkprv_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern integer lnknxt_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     char status[15];
     doublereal dcd[2];
     integer icd[5];
@@ -92,7 +95,7 @@ static pckbsr_state_t* get_pckbsr_state() {
 
 
     /* Module state */
-    pckbsr_state_t* __state = get_pckbsr_state();
+    pckbsr_state_t* __state = get_pckbsr_state(__global_state);
 /* $ Abstract */
 
 /*     Load and unload PCK binary files for use by the readers. */
@@ -630,12 +633,12 @@ static pckbsr_state_t* get_pckbsr_state() {
 
 /*     Nobody has any business calling PCKBSR directly. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("PCKBSR", (ftnlen)6);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("PCKBSR", (ftnlen)6);
+    chkin_(__global_state, "PCKBSR", (ftnlen)6);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "PCKBSR", (ftnlen)6);
     return 0;
 /* $Procedure PCKLOF ( PCK, load binary file ) */
 
@@ -801,10 +804,10 @@ L_pcklof:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PCKLOF", (ftnlen)6);
+	chkin_(__global_state, "PCKLOF", (ftnlen)6);
     }
 
 /*     Any time we load a file, there is a possibility that the */
@@ -815,8 +818,9 @@ L_pcklof:
 
     i__1 = __state->nbt;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	__state->btchkp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		"btchkp", i__2, "pckbsr_", (ftnlen)874)] = FALSE_;
+	__state->btchkp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "btchkp", i__2, "pckbsr_", (ftnlen)874)] 
+		= FALSE_;
     }
 
 /*     Nothing works unless at least one file has been loaded, so this */
@@ -828,26 +832,26 @@ L_pcklof:
 /*     entries. */
 
     if (__state->nft == 0) {
-	lnkini_(&__state->c__5000, __state->stpool);
+	lnkini_(__global_state, &__state->c__5000, __state->stpool);
     }
 
 /*     To load a new file, first try to open it for reading. */
 
-    dafopr_(fname, handle, fname_len);
-    if (failed_()) {
-	chkout_("PCKLOF", (ftnlen)6);
+    dafopr_(__global_state, fname, handle, fname_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "PCKLOF", (ftnlen)6);
 	return 0;
     }
 
 /*     Determine if the file is already in the table. */
 
-    findex = isrchi_(handle, &__state->nft, __state->fthan);
+    findex = isrchi_(__global_state, handle, &__state->nft, __state->fthan);
     if (findex > 0) {
 
 /*        The last call we made to DAFOPR added another DAF link to */
 /*        the PCK file.  Remove this link. */
 
-	dafcls_(handle);
+	dafcls_(__global_state, handle);
 
 /*        Remove the file from the file table and remove its segments */
 /*        from the segment table.  If the segment list for a body */
@@ -857,26 +861,29 @@ L_pcklof:
 	i__1 = __state->nft;
 	for (i__ = findex; i__ <= i__1; ++i__) {
 	    __state->fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("fthan", i__2, "pckbsr_", (ftnlen)920)] = 
-		    __state->fthan[(i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : 
-		    s_rnge("fthan", i__3, "pckbsr_", (ftnlen)920)];
+		    s_rnge(&__global_state->f2c, "fthan", i__2, "pckbsr_", (
+		    ftnlen)920)] = __state->fthan[(i__3 = i__) < 5000 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "fthan", i__3, 
+		    "pckbsr_", (ftnlen)920)];
 	    __state->ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)921)] = 
-		    __state->ftnum[(i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : 
-		    s_rnge("ftnum", i__3, "pckbsr_", (ftnlen)921)];
+		    s_rnge(&__global_state->f2c, "ftnum", i__2, "pckbsr_", (
+		    ftnlen)921)] = __state->ftnum[(i__3 = i__) < 5000 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "ftnum", i__3, 
+		    "pckbsr_", (ftnlen)921)];
 	}
 	i__ = 1;
 	while(i__ <= __state->nbt) {
 	    p = __state->btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)928)];
+		    s_rnge(&__global_state->f2c, "btbeg", i__1, "pckbsr_", (
+		    ftnlen)928)];
 	    while(p > 0) {
 
 /*              Find the successor of P, if any. */
 
-		nxtseg = lnknxt_(&p, __state->stpool);
+		nxtseg = lnknxt_(__global_state, &p, __state->stpool);
 		if (__state->sthan[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 :
-			 s_rnge("sthan", i__1, "pckbsr_", (ftnlen)936)] == *
-			handle) {
+			 s_rnge(&__global_state->f2c, "sthan", i__1, "pckbsr_"
+			, (ftnlen)936)] == *handle) {
 
 /*                 The segment corresponding to node P came from */
 /*                 the file we're unloading.  Delete the node for */
@@ -884,13 +891,13 @@ L_pcklof:
 /*                 to be the head node for body I's segment list, */
 /*                 make the successor of P the head of the list. */
 
-		    lnkfsl_(&p, &p, __state->stpool);
+		    lnkfsl_(__global_state, &p, &p, __state->stpool);
 		    if (p == __state->btbeg[(i__1 = i__ - 1) < 20 && 0 <= 
-			    i__1 ? i__1 : s_rnge("btbeg", i__1, "pckbsr_", (
-			    ftnlen)946)]) {
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "btbeg"
+			    , i__1, "pckbsr_", (ftnlen)946)]) {
 			__state->btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
-				i__1 : s_rnge("btbeg", i__1, "pckbsr_", (
-				ftnlen)947)] = nxtseg;
+				i__1 : s_rnge(&__global_state->f2c, "btbeg", 
+				i__1, "pckbsr_", (ftnlen)947)] = nxtseg;
 		    }
 		}
 
@@ -904,7 +911,8 @@ L_pcklof:
 /*           table into the space occupied by the one we've deleted. */
 
 	    if (__state->btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)963)] <= 0) {
+		    s_rnge(&__global_state->f2c, "btbeg", i__1, "pckbsr_", (
+		    ftnlen)963)] <= 0) {
 
 /*              Because all of the re-use intervals are invalid, we need */
 /*              not copy the saved items associated with them.  The */
@@ -919,29 +927,34 @@ L_pcklof:
 /*                 BTUB */
 
 		__state->btbod[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbod", i__1, "pckbsr_", (ftnlen)977)] = 
-			__state->btbod[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("btbod", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btbod", i__1, "pckbsr_",
+			 (ftnlen)977)] = __state->btbod[(i__2 = __state->nbt 
+			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btbod", i__2, "pckbsr_", (
 			ftnlen)977)];
 		__state->btexp[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btexp", i__1, "pckbsr_", (ftnlen)978)] = 
-			__state->btexp[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("btexp", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btexp", i__1, "pckbsr_",
+			 (ftnlen)978)] = __state->btexp[(i__2 = __state->nbt 
+			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btexp", i__2, "pckbsr_", (
 			ftnlen)978)];
 		__state->bthfs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)979)] = 
-			__state->bthfs[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("bthfs", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "bthfs", i__1, "pckbsr_",
+			 (ftnlen)979)] = __state->bthfs[(i__2 = __state->nbt 
+			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "bthfs", i__2, "pckbsr_", (
 			ftnlen)979)];
 		__state->btlfs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)980)] = 
-			__state->btlfs[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("btlfs", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btlfs", i__1, "pckbsr_",
+			 (ftnlen)980)] = __state->btlfs[(i__2 = __state->nbt 
+			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btlfs", i__2, "pckbsr_", (
 			ftnlen)980)];
 		__state->btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)981)] = 
-			__state->btbeg[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("btbeg", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btbeg", i__1, "pckbsr_",
+			 (ftnlen)981)] = __state->btbeg[(i__2 = __state->nbt 
+			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btbeg", i__2, "pckbsr_", (
 			ftnlen)981)];
 		--__state->nbt;
 	    } else {
@@ -959,12 +972,12 @@ L_pcklof:
 /*           the maximum number of open DAF files.  Currently FTSIZE */
 /*           is equal to this limit. */
 
-	    dafcls_(handle);
-	    setmsg_("The internal file table is already full, with # entries."
-		    , (ftnlen)56);
-	    errint_("#", &__state->c__5000, (ftnlen)1);
-	    sigerr_("SPICE(PCKFILETABLEFULL)", (ftnlen)23);
-	    chkout_("PCKLOF", (ftnlen)6);
+	    dafcls_(__global_state, handle);
+	    setmsg_(__global_state, "The internal file table is already full"
+		    ", with # entries.", (ftnlen)56);
+	    errint_(__global_state, "#", &__state->c__5000, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(PCKFILETABLEFULL)", (ftnlen)23);
+	    chkout_(__global_state, "PCKLOF", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -973,7 +986,7 @@ L_pcklof:
 /*     that the file number can be incremented by 1, so we can't allow */
 /*     the file number to reach INTMAX(). */
 
-    if (__state->next < intmax_() - 1) {
+    if (__state->next < intmax_(__global_state) - 1) {
 	++__state->next;
     } else {
 
@@ -993,16 +1006,18 @@ L_pcklof:
 
 /*           Re-map the HFS table for the Ith body. */
 
-	    j = isrchi_(&__state->bthfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? 
-		    i__2 : s_rnge("bthfs", i__2, "pckbsr_", (ftnlen)1043)], &
-		    __state->nft, __state->ftnum);
+	    j = isrchi_(__global_state, &__state->bthfs[(i__2 = i__ - 1) < 20 
+		    && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "bthfs"
+		    , i__2, "pckbsr_", (ftnlen)1043)], &__state->nft, 
+		    __state->ftnum);
 	    if (j > 0) {
 
 /*              The highest file searched for body I is the Jth file */
 /*              in the file table. */
 
 		__state->bthfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-			s_rnge("bthfs", i__2, "pckbsr_", (ftnlen)1050)] = j;
+			s_rnge(&__global_state->f2c, "bthfs", i__2, "pckbsr_",
+			 (ftnlen)1050)] = j;
 	    } else {
 
 /*              The highest file searched for body I is not in the file */
@@ -1011,21 +1026,24 @@ L_pcklof:
 /*              appear to be "new" when a lookup for body I is performed. */
 
 		__state->bthfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-			s_rnge("bthfs", i__2, "pckbsr_", (ftnlen)1059)] = 0;
+			s_rnge(&__global_state->f2c, "bthfs", i__2, "pckbsr_",
+			 (ftnlen)1059)] = 0;
 	    }
 
 /*           Re-map the LFS table for the Ith body. */
 
-	    j = isrchi_(&__state->btlfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? 
-		    i__2 : s_rnge("btlfs", i__2, "pckbsr_", (ftnlen)1066)], &
-		    __state->nft, __state->ftnum);
+	    j = isrchi_(__global_state, &__state->btlfs[(i__2 = i__ - 1) < 20 
+		    && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "btlfs"
+		    , i__2, "pckbsr_", (ftnlen)1066)], &__state->nft, 
+		    __state->ftnum);
 	    if (j > 0) {
 
 /*              The lowest file searched for body I is the Jth file */
 /*              in the file table. */
 
 		__state->btlfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-			s_rnge("btlfs", i__2, "pckbsr_", (ftnlen)1073)] = j;
+			s_rnge(&__global_state->f2c, "btlfs", i__2, "pckbsr_",
+			 (ftnlen)1073)] = j;
 	    } else {
 
 /*              The lowest file searched for body I is not in the file */
@@ -1034,9 +1052,11 @@ L_pcklof:
 /*              making all files "new." */
 
 		__state->btlfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-			s_rnge("btlfs", i__2, "pckbsr_", (ftnlen)1082)] = 0;
+			s_rnge(&__global_state->f2c, "btlfs", i__2, "pckbsr_",
+			 (ftnlen)1082)] = 0;
 		__state->bthfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-			s_rnge("bthfs", i__2, "pckbsr_", (ftnlen)1083)] = 0;
+			s_rnge(&__global_state->f2c, "bthfs", i__2, "pckbsr_",
+			 (ftnlen)1083)] = 0;
 	    }
 	}
 
@@ -1045,7 +1065,8 @@ L_pcklof:
 	i__1 = __state->nft;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    __state->ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)1094)] = i__;
+		    s_rnge(&__global_state->f2c, "ftnum", i__2, "pckbsr_", (
+		    ftnlen)1094)] = i__;
 	}
 
 /*        Assign a new file number. */
@@ -1054,10 +1075,12 @@ L_pcklof:
     }
     ++__state->nft;
     __state->fthan[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "pckbsr_", (ftnlen)1107)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "pckbsr_", (ftnlen)
+	    1107)] = *handle;
     __state->ftnum[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnum", i__1, "pckbsr_", (ftnlen)1108)] = __state->next;
-    chkout_("PCKLOF", (ftnlen)6);
+	    s_rnge(&__global_state->f2c, "ftnum", i__1, "pckbsr_", (ftnlen)
+	    1108)] = __state->next;
+    chkout_(__global_state, "PCKLOF", (ftnlen)6);
     return 0;
 /* $Procedure PCKUOF ( PCK, unload binary file ) */
 
@@ -1194,7 +1217,7 @@ L_pckuof:
 /*     unload PCK file */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -1204,7 +1227,7 @@ L_pckuof:
 
 /*     Don't do anything if the given handle is not in the file table. */
 
-    findex = isrchi_(handle, &__state->nft, __state->fthan);
+    findex = isrchi_(__global_state, handle, &__state->nft, __state->fthan);
     if (findex == 0) {
 	return 0;
     }
@@ -1212,19 +1235,22 @@ L_pckuof:
 /*     First get rid of the entry in the file table. Close the file */
 /*     before wiping out the handle. */
 
-    dafcls_(&__state->fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "pckbsr_", (ftnlen)1274)]);
+    dafcls_(__global_state, &__state->fthan[(i__1 = findex - 1) < 5000 && 0 <=
+	     i__1 ? i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, "pckb"
+	    "sr_", (ftnlen)1274)]);
     --__state->nft;
     i__1 = __state->nft;
     for (i__ = findex; i__ <= i__1; ++i__) {
-	__state->fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		"fthan", i__2, "pckbsr_", (ftnlen)1279)] = __state->fthan[(
-		i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : s_rnge("fthan", i__3,
-		 "pckbsr_", (ftnlen)1279)];
-	__state->ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftnum", i__2, "pckbsr_", (ftnlen)1280)] = __state->ftnum[(
-		i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : s_rnge("ftnum", i__3,
-		 "pckbsr_", (ftnlen)1280)];
+	__state->fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "fthan", i__2, "pckbsr_", (ftnlen)1279)] 
+		= __state->fthan[(i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "fthan", i__3, "pckbsr_", (
+		ftnlen)1279)];
+	__state->ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftnum", i__2, "pckbsr_", (ftnlen)1280)] 
+		= __state->ftnum[(i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftnum", i__3, "pckbsr_", (
+		ftnlen)1280)];
     }
 
 /*     Check each body list individually. Note that the first node */
@@ -1233,20 +1259,21 @@ L_pckuof:
     i__ = 1;
     while(i__ <= __state->nbt) {
 	p = __state->btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"btbeg", i__1, "pckbsr_", (ftnlen)1291)];
+		&__global_state->f2c, "btbeg", i__1, "pckbsr_", (ftnlen)1291)]
+		;
 	while(p > 0) {
-	    nxtseg = lnknxt_(&p, __state->stpool);
+	    nxtseg = lnknxt_(__global_state, &p, __state->stpool);
 	    if (__state->sthan[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("sthan", i__1, "pckbsr_", (ftnlen)1297)] == *
-		    handle) {
+		    s_rnge(&__global_state->f2c, "sthan", i__1, "pckbsr_", (
+		    ftnlen)1297)] == *handle) {
 		if (p == __state->btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
-			i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)1299)]
-			) {
+			i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1, 
+			"pckbsr_", (ftnlen)1299)]) {
 		    __state->btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 :
-			     s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)1300)] =
-			     nxtseg;
+			     s_rnge(&__global_state->f2c, "btbeg", i__1, 
+			    "pckbsr_", (ftnlen)1300)] = nxtseg;
 		}
-		lnkfsl_(&p, &p, __state->stpool);
+		lnkfsl_(__global_state, &p, &p, __state->stpool);
 	    }
 	    p = nxtseg;
 	}
@@ -1257,69 +1284,83 @@ L_pckuof:
 /*        space occupied by the deleted body. */
 
 	if (__state->btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"btbeg", i__1, "pckbsr_", (ftnlen)1317)] <= 0) {
+		&__global_state->f2c, "btbeg", i__1, "pckbsr_", (ftnlen)1317)]
+		 <= 0) {
 	    if (i__ != __state->nbt) {
 		__state->btbod[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbod", i__1, "pckbsr_", (ftnlen)1321)] = 
-			__state->btbod[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("btbod", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btbod", i__1, "pckbsr_",
+			 (ftnlen)1321)] = __state->btbod[(i__2 = __state->nbt 
+			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btbod", i__2, "pckbsr_", (
 			ftnlen)1321)];
 		__state->btexp[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btexp", i__1, "pckbsr_", (ftnlen)1322)] = 
-			__state->btexp[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("btexp", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btexp", i__1, "pckbsr_",
+			 (ftnlen)1322)] = __state->btexp[(i__2 = __state->nbt 
+			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btexp", i__2, "pckbsr_", (
 			ftnlen)1322)];
 		__state->bthfs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)1323)] = 
-			__state->bthfs[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("bthfs", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "bthfs", i__1, "pckbsr_",
+			 (ftnlen)1323)] = __state->bthfs[(i__2 = __state->nbt 
+			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "bthfs", i__2, "pckbsr_", (
 			ftnlen)1323)];
 		__state->btlfs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)1324)] = 
-			__state->btlfs[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("btlfs", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btlfs", i__1, "pckbsr_",
+			 (ftnlen)1324)] = __state->btlfs[(i__2 = __state->nbt 
+			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btlfs", i__2, "pckbsr_", (
 			ftnlen)1324)];
 		__state->btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)1325)] = 
-			__state->btbeg[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("btbeg", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btbeg", i__1, "pckbsr_",
+			 (ftnlen)1325)] = __state->btbeg[(i__2 = __state->nbt 
+			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btbeg", i__2, "pckbsr_", (
 			ftnlen)1325)];
 		__state->btlb[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btlb", i__1, "pckbsr_", (ftnlen)1326)] = 
-			__state->btlb[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("btlb", i__2, "pckbsr_", (ftnlen)
+			s_rnge(&__global_state->f2c, "btlb", i__1, "pckbsr_", 
+			(ftnlen)1326)] = __state->btlb[(i__2 = __state->nbt - 
+			1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btlb", i__2, "pckbsr_", (ftnlen)
 			1326)];
 		__state->btub[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btub", i__1, "pckbsr_", (ftnlen)1327)] = 
-			__state->btub[(i__2 = __state->nbt - 1) < 20 && 0 <= 
-			i__2 ? i__2 : s_rnge("btub", i__2, "pckbsr_", (ftnlen)
+			s_rnge(&__global_state->f2c, "btub", i__1, "pckbsr_", 
+			(ftnlen)1327)] = __state->btub[(i__2 = __state->nbt - 
+			1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btub", i__2, "pckbsr_", (ftnlen)
 			1327)];
 		__state->btprvh[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btprvh", i__1, "pckbsr_", (ftnlen)1328)] = 
-			__state->btprvh[(i__2 = __state->nbt - 1) < 20 && 0 <=
-			 i__2 ? i__2 : s_rnge("btprvh", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btprvh", i__1, "pckbsr_"
+			, (ftnlen)1328)] = __state->btprvh[(i__2 = 
+			__state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btprvh", i__2, "pckbsr_", (
 			ftnlen)1328)];
-		s_copy(__state->btprvi + ((i__1 = i__ - 1) < 20 && 0 <= i__1 ?
-			 i__1 : s_rnge("btprvi", i__1, "pckbsr_", (ftnlen)
-			1329)) * 40, __state->btprvi + ((i__2 = __state->nbt 
-			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("btprvi", i__2,
-			 "pckbsr_", (ftnlen)1329)) * 40, (ftnlen)40, (ftnlen)
-			40);
+		s_copy(&__global_state->f2c, __state->btprvi + ((i__1 = i__ - 
+			1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "btprvi", i__1, "pckbsr_", (
+			ftnlen)1329)) * 40, __state->btprvi + ((i__2 = 
+			__state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btprvi", i__2, "pckbsr_", (
+			ftnlen)1329)) * 40, (ftnlen)40, (ftnlen)40);
 		__state->btchkp[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btchkp", i__1, "pckbsr_", (ftnlen)1330)] = 
-			__state->btchkp[(i__2 = __state->nbt - 1) < 20 && 0 <=
-			 i__2 ? i__2 : s_rnge("btchkp", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btchkp", i__1, "pckbsr_"
+			, (ftnlen)1330)] = __state->btchkp[(i__2 = 
+			__state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btchkp", i__2, "pckbsr_", (
 			ftnlen)1330)];
 		__state->btruex[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btruex", i__1, "pckbsr_", (ftnlen)1331)] = 
-			__state->btruex[(i__2 = __state->nbt - 1) < 20 && 0 <=
-			 i__2 ? i__2 : s_rnge("btruex", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btruex", i__1, "pckbsr_"
+			, (ftnlen)1331)] = __state->btruex[(i__2 = 
+			__state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btruex", i__2, "pckbsr_", (
 			ftnlen)1331)];
-		moved_(&__state->btprvd[(i__1 = __state->nbt * 5 - 5) < 100 &&
-			 0 <= i__1 ? i__1 : s_rnge("btprvd", i__1, "pckbsr_", 
-			(ftnlen)1333)], &__state->c__5, &__state->btprvd[(
-			i__2 = i__ * 5 - 5) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("btprvd", i__2, "pckbsr_", (ftnlen)1333)]);
+		moved_(__global_state, &__state->btprvd[(i__1 = __state->nbt *
+			 5 - 5) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "btprvd", i__1, "pckbsr_", (
+			ftnlen)1333)], &__state->c__5, &__state->btprvd[(i__2 
+			= i__ * 5 - 5) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btprvd", i__2, "pckbsr_", (
+			ftnlen)1333)]);
 	    }
 	    --__state->nbt;
 	} else {
@@ -1336,13 +1377,14 @@ L_pckuof:
     i__1 = __state->nbt;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (__state->btchkp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		s_rnge("btchkp", i__2, "pckbsr_", (ftnlen)1356)]) {
+		s_rnge(&__global_state->f2c, "btchkp", i__2, "pckbsr_", (
+		ftnlen)1356)]) {
 	    if (__state->btprvh[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("btprvh", i__2, "pckbsr_", (ftnlen)1358)] == *
-		    handle) {
+		    s_rnge(&__global_state->f2c, "btprvh", i__2, "pckbsr_", (
+		    ftnlen)1358)] == *handle) {
 		__state->btchkp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-			s_rnge("btchkp", i__2, "pckbsr_", (ftnlen)1359)] = 
-			FALSE_;
+			s_rnge(&__global_state->f2c, "btchkp", i__2, "pckbsr_"
+			, (ftnlen)1359)] = FALSE_;
 	    }
 	}
     }
@@ -1561,10 +1603,10 @@ L_pcksfs:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PCKSFS", (ftnlen)6);
+	chkin_(__global_state, "PCKSFS", (ftnlen)6);
     }
 
 /*     Assume the segment is not found, until it actually is. */
@@ -1582,7 +1624,7 @@ L_pcksfs:
 /*     loaded. */
 
     if (__state->nft == 0) {
-	chkout_("PCKSFS", (ftnlen)6);
+	chkout_(__global_state, "PCKSFS", (ftnlen)6);
 	return 0;
     }
 
@@ -1699,9 +1741,10 @@ L_pcksfs:
 /*     Is the body already in the body table?  This determines what the */
 /*     first task should be. */
 
-    bindex = isrchi_(body, &__state->nbt, __state->btbod);
+    bindex = isrchi_(__global_state, body, &__state->nbt, __state->btbod);
     if (bindex == 0) {
-	s_copy(status, "NEW BODY", (ftnlen)15, (ftnlen)8);
+	s_copy(&__global_state->f2c, status, "NEW BODY", (ftnlen)15, (ftnlen)
+		8);
     } else {
 
 /*        Much of the time, the segment used to satisfy the previous */
@@ -1709,7 +1752,8 @@ L_pcksfs:
 /*        for data for that body.  Check whether this is the case. */
 
 	if (__state->btchkp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("btchkp", i__1, "pckbsr_", (ftnlen)1744)]) {
+		s_rnge(&__global_state->f2c, "btchkp", i__1, "pckbsr_", (
+		ftnlen)1744)]) {
 
 /*           The previous segment found for the current body is a */
 /*           viable candidate for the current request.  See whether */
@@ -1723,9 +1767,11 @@ L_pcksfs:
 /*           segments. */
 
 	    if (*et > __state->btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("btlb", i__1, "pckbsr_", (ftnlen)1757)] && *
-		    et < __state->btub[(i__2 = bindex - 1) < 20 && 0 <= i__2 ?
-		     i__2 : s_rnge("btub", i__2, "pckbsr_", (ftnlen)1757)]) {
+		    i__1 : s_rnge(&__global_state->f2c, "btlb", i__1, "pckbs"
+		    "r_", (ftnlen)1757)] && *et < __state->btub[(i__2 = bindex 
+		    - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "btub", i__2, "pckbsr_", (ftnlen)
+		    1757)]) {
 
 /*              The request time is covered by the segment found on */
 /*              the previous request for data for the current body, */
@@ -1734,16 +1780,18 @@ L_pcksfs:
 /*              the request. */
 
 		*handle = __state->btprvh[(i__1 = bindex - 1) < 20 && 0 <= 
-			i__1 ? i__1 : s_rnge("btprvh", i__1, "pckbsr_", (
-			ftnlen)1766)];
-		s_copy(ident, __state->btprvi + ((i__1 = bindex - 1) < 20 && 
-			0 <= i__1 ? i__1 : s_rnge("btprvi", i__1, "pckbsr_", (
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "btprvh", 
+			i__1, "pckbsr_", (ftnlen)1766)];
+		s_copy(&__global_state->f2c, ident, __state->btprvi + ((i__1 =
+			 bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "btprvi", i__1, "pckbsr_", (
 			ftnlen)1767)) * 40, ident_len, (ftnlen)40);
-		moved_(&__state->btprvd[(i__1 = bindex * 5 - 5) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("btprvd", i__1, "pckbsr_", (
+		moved_(__global_state, &__state->btprvd[(i__1 = bindex * 5 - 
+			5) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "btprvd", i__1, "pckbsr_", (
 			ftnlen)1769)], &__state->c__5, descr);
 		*found = TRUE_;
-		chkout_("PCKSFS", (ftnlen)6);
+		chkout_(__global_state, "PCKSFS", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1753,13 +1801,16 @@ L_pcksfs:
 /*           that component from the expense. */
 
 	    __state->btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btexp", i__1, "pckbsr_", (ftnlen)1784)] = 
-		    __state->btexp[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? 
-		    i__2 : s_rnge("btexp", i__2, "pckbsr_", (ftnlen)1784)] - 
-		    __state->btruex[(i__3 = bindex - 1) < 20 && 0 <= i__3 ? 
-		    i__3 : s_rnge("btruex", i__3, "pckbsr_", (ftnlen)1784)];
+		    s_rnge(&__global_state->f2c, "btexp", i__1, "pckbsr_", (
+		    ftnlen)1784)] = __state->btexp[(i__2 = bindex - 1) < 20 &&
+		     0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "btexp", 
+		    i__2, "pckbsr_", (ftnlen)1784)] - __state->btruex[(i__3 = 
+		    bindex - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "btruex", i__3, "pckbsr_", (ftnlen)
+		    1784)];
 	    __state->btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btruex", i__1, "pckbsr_", (ftnlen)1785)] = 0;
+		    s_rnge(&__global_state->f2c, "btruex", i__1, "pckbsr_", (
+		    ftnlen)1785)] = 0;
 
 /*           The re-use interval becomes invalid if it didn't satisfy */
 /*           the request.  The validity flag gets re-set below. */
@@ -1774,25 +1825,30 @@ L_pcksfs:
 /*                recently loaded segment. */
 
 	    __state->btchkp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btchkp", i__1, "pckbsr_", (ftnlen)1800)] = FALSE_;
+		    s_rnge(&__global_state->f2c, "btchkp", i__1, "pckbsr_", (
+		    ftnlen)1800)] = FALSE_;
 	}
 
 /*        If the segment list for this body is empty, make sure the */
 /*        expense is reset to 0. */
 
 	if (__state->btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)1809)] == 0) {
+		s_rnge(&__global_state->f2c, "btbeg", i__1, "pckbsr_", (
+		ftnlen)1809)] == 0) {
 	    __state->btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btexp", i__1, "pckbsr_", (ftnlen)1811)] = 0;
+		    s_rnge(&__global_state->f2c, "btexp", i__1, "pckbsr_", (
+		    ftnlen)1811)] = 0;
 	}
-	s_copy(status, "?", (ftnlen)15, (ftnlen)1);
+	s_copy(&__global_state->f2c, status, "?", (ftnlen)15, (ftnlen)1);
     }
-    while(s_cmp(status, "HOPELESS", (ftnlen)15, (ftnlen)8) != 0) {
+    while(s_cmp(&__global_state->f2c, status, "HOPELESS", (ftnlen)15, (ftnlen)
+	    8) != 0) {
 
 /*        If new files have been added, they have to be searched. */
 /*        Otherwise, we can go right to the list of stored segments. */
 
-	if (s_cmp(status, "?", (ftnlen)15, (ftnlen)1) == 0) {
+	if (s_cmp(&__global_state->f2c, status, "?", (ftnlen)15, (ftnlen)1) ==
+		 0) {
 
 /*           There are two ways to get to this point. */
 
@@ -1804,15 +1860,18 @@ L_pcksfs:
 /*               a new file. */
 
 	    if (__state->bthfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)1838)] < 
-		    __state->ftnum[(i__2 = __state->nft - 1) < 5000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)
-		    1838)]) {
-		s_copy(status, "NEW FILES", (ftnlen)15, (ftnlen)9);
+		    s_rnge(&__global_state->f2c, "bthfs", i__1, "pckbsr_", (
+		    ftnlen)1838)] < __state->ftnum[(i__2 = __state->nft - 1) <
+		     5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "ftnum", i__2, "pckbsr_", (ftnlen)1838)]) {
+		s_copy(&__global_state->f2c, status, "NEW FILES", (ftnlen)15, 
+			(ftnlen)9);
 	    } else {
-		s_copy(status, "CHECK LIST", (ftnlen)15, (ftnlen)10);
+		s_copy(&__global_state->f2c, status, "CHECK LIST", (ftnlen)15,
+			 (ftnlen)10);
 	    }
-	} else if (s_cmp(status, "NEW BODY", (ftnlen)15, (ftnlen)8) == 0) {
+	} else if (s_cmp(&__global_state->f2c, status, "NEW BODY", (ftnlen)15,
+		 (ftnlen)8) == 0) {
 
 /*           New bodies are added to the end of the body table. If the */
 /*           table is full, one of the current occupants must be */
@@ -1851,12 +1910,12 @@ L_pcksfs:
 		i__1 = __state->nbt;
 		for (i__ = 2; i__ <= i__1; ++i__) {
 		    if (__state->btexp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? 
-			    i__2 : s_rnge("btexp", i__2, "pckbsr_", (ftnlen)
-			    1887)] < minexp) {
+			    i__2 : s_rnge(&__global_state->f2c, "btexp", i__2,
+			     "pckbsr_", (ftnlen)1887)] < minexp) {
 			cheap = i__;
 			minexp = __state->btexp[(i__2 = i__ - 1) < 20 && 0 <= 
-				i__2 ? i__2 : s_rnge("btexp", i__2, "pckbsr_",
-				 (ftnlen)1889)];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"btexp", i__2, "pckbsr_", (ftnlen)1889)];
 		    }
 		}
 
@@ -1865,34 +1924,38 @@ L_pcksfs:
 /*              list. */
 
 		head = __state->btbeg[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
-			i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)1899)]
-			;
+			i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1, 
+			"pckbsr_", (ftnlen)1899)];
 		if (head > 0) {
-		    tail = -lnkprv_(&head, __state->stpool);
-		    lnkfsl_(&head, &tail, __state->stpool);
+		    tail = -lnkprv_(__global_state, &head, __state->stpool);
+		    lnkfsl_(__global_state, &head, &tail, __state->stpool);
 		}
 	    }
 
 /*           Set up a body table entry for the new body. */
 
 	    __state->btbod[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btbod", i__1, "pckbsr_", (ftnlen)1913)] = *body;
+		    s_rnge(&__global_state->f2c, "btbod", i__1, "pckbsr_", (
+		    ftnlen)1913)] = *body;
 	    __state->btexp[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btexp", i__1, "pckbsr_", (ftnlen)1914)] = 0;
+		    s_rnge(&__global_state->f2c, "btexp", i__1, "pckbsr_", (
+		    ftnlen)1914)] = 0;
 	    __state->bthfs[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)1915)] = 
-		    __state->ftnum[(i__2 = __state->nft - 1) < 5000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)
-		    1915)];
+		    s_rnge(&__global_state->f2c, "bthfs", i__1, "pckbsr_", (
+		    ftnlen)1915)] = __state->ftnum[(i__2 = __state->nft - 1) <
+		     5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "ftnum", i__2, "pckbsr_", (ftnlen)1915)];
 	    __state->btlfs[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)1916)] = 
-		    __state->ftnum[(i__2 = __state->nft - 1) < 5000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)
-		    1916)] + 1;
+		    s_rnge(&__global_state->f2c, "btlfs", i__1, "pckbsr_", (
+		    ftnlen)1916)] = __state->ftnum[(i__2 = __state->nft - 1) <
+		     5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "ftnum", i__2, "pckbsr_", (ftnlen)1916)] + 1;
 	    __state->btbeg[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)1917)] = 0;
+		    s_rnge(&__global_state->f2c, "btbeg", i__1, "pckbsr_", (
+		    ftnlen)1917)] = 0;
 	    __state->btchkp[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btchkp", i__1, "pckbsr_", (ftnlen)1918)] = FALSE_;
+		    s_rnge(&__global_state->f2c, "btchkp", i__1, "pckbsr_", (
+		    ftnlen)1918)] = FALSE_;
 
 /*           The following items associated with the re-use interval */
 /*           need not be initialized at this point: */
@@ -1909,19 +1972,25 @@ L_pcksfs:
 /*           compilers. */
 
 	    __state->btruex[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btruex", i__1, "pckbsr_", (ftnlen)1935)] = 0;
+		    s_rnge(&__global_state->f2c, "btruex", i__1, "pckbsr_", (
+		    ftnlen)1935)] = 0;
 	    __state->btlb[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btlb", i__1, "pckbsr_", (ftnlen)1936)] = dpmin_();
+		    s_rnge(&__global_state->f2c, "btlb", i__1, "pckbsr_", (
+		    ftnlen)1936)] = dpmin_(__global_state);
 	    __state->btub[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btub", i__1, "pckbsr_", (ftnlen)1937)] = dpmax_();
+		    s_rnge(&__global_state->f2c, "btub", i__1, "pckbsr_", (
+		    ftnlen)1937)] = dpmax_(__global_state);
 	    __state->btprvh[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btprvh", i__1, "pckbsr_", (ftnlen)1938)] = 0;
-	    s_copy(__state->btprvi + ((i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("btprvi", i__1, "pckbsr_", (ftnlen)1939)) * 
-		    40, " ", (ftnlen)40, (ftnlen)1);
-	    cleard_(&__state->c__5, &__state->btprvd[(i__1 = cheap * 5 - 5) < 
-		    100 && 0 <= i__1 ? i__1 : s_rnge("btprvd", i__1, "pckbsr_"
-		    , (ftnlen)1940)]);
+		    s_rnge(&__global_state->f2c, "btprvh", i__1, "pckbsr_", (
+		    ftnlen)1938)] = 0;
+	    s_copy(&__global_state->f2c, __state->btprvi + ((i__1 = cheap - 1)
+		     < 20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "btprvi", i__1, "pckbsr_", (ftnlen)1939)) * 40, " ", (
+		    ftnlen)40, (ftnlen)1);
+	    cleard_(__global_state, &__state->c__5, &__state->btprvd[(i__1 = 
+		    cheap * 5 - 5) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "btprvd", i__1, "pckbsr_", (ftnlen)
+		    1940)]);
 
 /*           BINDEX is the body table index of the new entry. */
 
@@ -1931,8 +2000,10 @@ L_pcksfs:
 /*           this body.  We start with the last-loaded files and */
 /*           work backwards. */
 
-	    s_copy(status, "OLD FILES", (ftnlen)15, (ftnlen)9);
-	} else if (s_cmp(status, "NEW FILES", (ftnlen)15, (ftnlen)9) == 0) {
+	    s_copy(&__global_state->f2c, status, "OLD FILES", (ftnlen)15, (
+		    ftnlen)9);
+	} else if (s_cmp(&__global_state->f2c, status, "NEW FILES", (ftnlen)
+		15, (ftnlen)9) == 0) {
 
 /*           When new files exist, they should be searched in forward */
 /*           order, beginning with the oldest new file not yet searched. */
@@ -1952,29 +2023,33 @@ L_pcksfs:
 
 	    findex = 1;
 	    while(__state->bthfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 
-		    : s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)1976)] >= 
-		    __state->ftnum[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)1976)]) {
+		    : s_rnge(&__global_state->f2c, "bthfs", i__1, "pckbsr_", (
+		    ftnlen)1976)] >= __state->ftnum[(i__2 = findex - 1) < 
+		    5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "ftnum", i__2, "pckbsr_", (ftnlen)1976)]) {
 		++findex;
 	    }
 	    __state->bthfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)1980)] = 
-		    __state->ftnum[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)1980)];
-	    dafbfs_(&__state->fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("fthan", i__1, "pckbsr_", (ftnlen)1982)]);
-	    if (failed_()) {
-		chkout_("PCKSFS", (ftnlen)6);
+		    s_rnge(&__global_state->f2c, "bthfs", i__1, "pckbsr_", (
+		    ftnlen)1980)] = __state->ftnum[(i__2 = findex - 1) < 5000 
+		    && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftnum"
+		    , i__2, "pckbsr_", (ftnlen)1980)];
+	    dafbfs_(__global_state, &__state->fthan[(i__1 = findex - 1) < 
+		    5000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "fthan", i__1, "pckbsr_", (ftnlen)1982)]);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "PCKSFS", (ftnlen)6);
 		return 0;
 	    }
-	    s_copy(status, "NEW SEGMENTS", (ftnlen)15, (ftnlen)12);
+	    s_copy(&__global_state->f2c, status, "NEW SEGMENTS", (ftnlen)15, (
+		    ftnlen)12);
 
 /*           The cost of the list contributed by the new file is */
 /*           zero so far. */
 
 	    cost = 0;
-	} else if (s_cmp(status, "NEW SEGMENTS", (ftnlen)15, (ftnlen)12) == 0)
-		 {
+	} else if (s_cmp(&__global_state->f2c, status, "NEW SEGMENTS", (
+		ftnlen)15, (ftnlen)12) == 0) {
 
 /*           New files are searched in forward order. Segments, when */
 /*           found, are inserted at the front of the list. Invisible */
@@ -1985,9 +2060,9 @@ L_pcksfs:
 
 /*           The only way to get here is from the NEW FILES block */
 /*           of the IF structure. */
-	    daffna_(&fnd);
-	    if (failed_()) {
-		chkout_("PCKSFS", (ftnlen)6);
+	    daffna_(__global_state, &fnd);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "PCKSFS", (ftnlen)6);
 		return 0;
 	    }
 	    if (! fnd) {
@@ -1996,23 +2071,28 @@ L_pcksfs:
 /*              whether we need to examine another new file, or */
 /*              whether we're ready to check the list. */
 
-		s_copy(status, "?", (ftnlen)15, (ftnlen)1);
+		s_copy(&__global_state->f2c, status, "?", (ftnlen)15, (ftnlen)
+			1);
 		__state->btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btexp", i__1, "pckbsr_", (ftnlen)2024)] = 
-			__state->btexp[(i__2 = bindex - 1) < 20 && 0 <= i__2 ?
-			 i__2 : s_rnge("btexp", i__2, "pckbsr_", (ftnlen)2024)
-			] + cost;
+			s_rnge(&__global_state->f2c, "btexp", i__1, "pckbsr_",
+			 (ftnlen)2024)] = __state->btexp[(i__2 = bindex - 1) <
+			 20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c,
+			 "btexp", i__2, "pckbsr_", (ftnlen)2024)] + cost;
 	    } else {
-		dafgs_(descr);
-		dafus_(descr, &__state->c__2, &__state->c__5, dcd, icd);
-		if (failed_()) {
-		    chkout_("PCKSFS", (ftnlen)6);
+		dafgs_(__global_state, descr);
+		dafus_(__global_state, descr, &__state->c__2, &__state->c__5, 
+			dcd, icd);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "PCKSFS", (ftnlen)6);
 		    return 0;
 		}
 		if (icd[0] == *body && dcd[0] <= dcd[1]) {
-		    s_copy(doing, "NEW SEGMENTS", (ftnlen)15, (ftnlen)12);
-		    s_copy(urgent, "ADD TO FRONT", (ftnlen)15, (ftnlen)12);
-		    s_copy(status, "SUSPEND", (ftnlen)15, (ftnlen)7);
+		    s_copy(&__global_state->f2c, doing, "NEW SEGMENTS", (
+			    ftnlen)15, (ftnlen)12);
+		    s_copy(&__global_state->f2c, urgent, "ADD TO FRONT", (
+			    ftnlen)15, (ftnlen)12);
+		    s_copy(&__global_state->f2c, status, "SUSPEND", (ftnlen)
+			    15, (ftnlen)7);
 		}
 		++cost;
 	    }
@@ -2020,7 +2100,8 @@ L_pcksfs:
 /*           If we haven't reset the status, we'll return for another */
 /*           'NEW SEGMENTS' pass. */
 
-	} else if (s_cmp(status, "OLD FILES", (ftnlen)15, (ftnlen)9) == 0) {
+	} else if (s_cmp(&__global_state->f2c, status, "OLD FILES", (ftnlen)
+		15, (ftnlen)9) == 0) {
 
 /*           When old files must be searched (because the segments */
 /*           in the list are inadequate), they should be searched */
@@ -2042,18 +2123,21 @@ L_pcksfs:
 /*              have some files left that have not been searched. */
 	    findex = __state->nft;
 	    while(__state->btlfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 
-		    : s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)2076)] <= 
-		    __state->ftnum[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)2076)]) {
+		    : s_rnge(&__global_state->f2c, "btlfs", i__1, "pckbsr_", (
+		    ftnlen)2076)] <= __state->ftnum[(i__2 = findex - 1) < 
+		    5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "ftnum", i__2, "pckbsr_", (ftnlen)2076)]) {
 		--findex;
 	    }
-	    dafbbs_(&__state->fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("fthan", i__1, "pckbsr_", (ftnlen)2080)]);
-	    if (failed_()) {
-		chkout_("PCKSFS", (ftnlen)6);
+	    dafbbs_(__global_state, &__state->fthan[(i__1 = findex - 1) < 
+		    5000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "fthan", i__1, "pckbsr_", (ftnlen)2080)]);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "PCKSFS", (ftnlen)6);
 		return 0;
 	    }
-	    s_copy(status, "OLD SEGMENTS", (ftnlen)15, (ftnlen)12);
+	    s_copy(&__global_state->f2c, status, "OLD SEGMENTS", (ftnlen)15, (
+		    ftnlen)12);
 
 /*           The next thing we'll do is search through all the segments */
 /*           of this file for those that applicable to this body. */
@@ -2061,8 +2145,8 @@ L_pcksfs:
 /*           zero so far. */
 
 	    cost = 0;
-	} else if (s_cmp(status, "OLD SEGMENTS", (ftnlen)15, (ftnlen)12) == 0)
-		 {
+	} else if (s_cmp(&__global_state->f2c, status, "OLD SEGMENTS", (
+		ftnlen)15, (ftnlen)12) == 0) {
 
 /*           Old files are searched in backward order. Segments, when */
 /*           found, are inserted at the end of the list. Invisible */
@@ -2076,9 +2160,9 @@ L_pcksfs:
 /*           expense of the list for this body until we've */
 /*           completely searched this file. */
 
-	    daffpa_(&fnd);
-	    if (failed_()) {
-		chkout_("PCKSFS", (ftnlen)6);
+	    daffpa_(__global_state, &fnd);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "PCKSFS", (ftnlen)6);
 		return 0;
 	    }
 	    if (! fnd) {
@@ -2088,27 +2172,33 @@ L_pcksfs:
 /*              to be the current file, and go check the current list. */
 
 		__state->btlfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)2125)] = 
-			__state->ftnum[(i__2 = findex - 1) < 5000 && 0 <= 
-			i__2 ? i__2 : s_rnge("ftnum", i__2, "pckbsr_", (
+			s_rnge(&__global_state->f2c, "btlfs", i__1, "pckbsr_",
+			 (ftnlen)2125)] = __state->ftnum[(i__2 = findex - 1) <
+			 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "ftnum", i__2, "pckbsr_", (
 			ftnlen)2125)];
 		__state->btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btexp", i__1, "pckbsr_", (ftnlen)2126)] = 
-			__state->btexp[(i__2 = bindex - 1) < 20 && 0 <= i__2 ?
-			 i__2 : s_rnge("btexp", i__2, "pckbsr_", (ftnlen)2126)
-			] + cost;
-		s_copy(status, "CHECK LIST", (ftnlen)15, (ftnlen)10);
+			s_rnge(&__global_state->f2c, "btexp", i__1, "pckbsr_",
+			 (ftnlen)2126)] = __state->btexp[(i__2 = bindex - 1) <
+			 20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c,
+			 "btexp", i__2, "pckbsr_", (ftnlen)2126)] + cost;
+		s_copy(&__global_state->f2c, status, "CHECK LIST", (ftnlen)15,
+			 (ftnlen)10);
 	    } else {
-		dafgs_(descr);
-		dafus_(descr, &__state->c__2, &__state->c__5, dcd, icd);
-		if (failed_()) {
-		    chkout_("PCKSFS", (ftnlen)6);
+		dafgs_(__global_state, descr);
+		dafus_(__global_state, descr, &__state->c__2, &__state->c__5, 
+			dcd, icd);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "PCKSFS", (ftnlen)6);
 		    return 0;
 		}
 		if (icd[0] == *body && dcd[0] <= dcd[1]) {
-		    s_copy(doing, "OLD SEGMENTS", (ftnlen)15, (ftnlen)12);
-		    s_copy(urgent, "ADD TO END", (ftnlen)15, (ftnlen)10);
-		    s_copy(status, "SUSPEND", (ftnlen)15, (ftnlen)7);
+		    s_copy(&__global_state->f2c, doing, "OLD SEGMENTS", (
+			    ftnlen)15, (ftnlen)12);
+		    s_copy(&__global_state->f2c, urgent, "ADD TO END", (
+			    ftnlen)15, (ftnlen)10);
+		    s_copy(&__global_state->f2c, status, "SUSPEND", (ftnlen)
+			    15, (ftnlen)7);
 		}
 		++cost;
 	    }
@@ -2116,7 +2206,8 @@ L_pcksfs:
 /*           If we haven't reset the status, we'll return for another */
 /*           'OLD SEGMENTS' pass. */
 
-	} else if (s_cmp(status, "CHECK LIST", (ftnlen)15, (ftnlen)10) == 0) {
+	} else if (s_cmp(&__global_state->f2c, status, "CHECK LIST", (ftnlen)
+		15, (ftnlen)10) == 0) {
 
 /*           Okay, all the new files (and maybe an old file or two) have */
 /*           been searched. Time to look at the list of segments stored */
@@ -2134,96 +2225,107 @@ L_pcksfs:
 /*           associated with the current body. */
 
 	    __state->btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2173)] = dpmin_();
+		    s_rnge(&__global_state->f2c, "btlb", i__1, "pckbsr_", (
+		    ftnlen)2173)] = dpmin_(__global_state);
 	    __state->btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btub", i__1, "pckbsr_", (ftnlen)2174)] = dpmax_();
+		    s_rnge(&__global_state->f2c, "btub", i__1, "pckbsr_", (
+		    ftnlen)2174)] = dpmax_(__global_state);
 	    p = __state->btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2175)];
+		    s_rnge(&__global_state->f2c, "btbeg", i__1, "pckbsr_", (
+		    ftnlen)2175)];
 	    while(p > 0) {
 		if (*et > __state->stdes[(i__1 = p * 5 - 4) < 25000 && 0 <= 
-			i__1 ? i__1 : s_rnge("stdes", i__1, "pckbsr_", (
-			ftnlen)2179)]) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "stdes", 
+			i__1, "pckbsr_", (ftnlen)2179)]) {
 
 /*                 ET is to the right of the coverage interval of this */
 /*                 segment. */
 
 /* Computing MAX */
 		    d__1 = __state->btlb[(i__2 = bindex - 1) < 20 && 0 <= 
-			    i__2 ? i__2 : s_rnge("btlb", i__2, "pckbsr_", (
-			    ftnlen)2184)], d__2 = __state->stdes[(i__3 = p * 
-			    5 - 4) < 25000 && 0 <= i__3 ? i__3 : s_rnge("std"
-			    "es", i__3, "pckbsr_", (ftnlen)2184)];
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "btlb",
+			     i__2, "pckbsr_", (ftnlen)2184)], d__2 = 
+			    __state->stdes[(i__3 = p * 5 - 4) < 25000 && 0 <= 
+			    i__3 ? i__3 : s_rnge(&__global_state->f2c, "stdes"
+			    , i__3, "pckbsr_", (ftnlen)2184)];
 		    __state->btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btlb", i__1, "pckbsr_", (ftnlen)
-			    2184)] = max(d__1,d__2);
+			    i__1 : s_rnge(&__global_state->f2c, "btlb", i__1, 
+			    "pckbsr_", (ftnlen)2184)] = max(d__1,d__2);
 		} else if (*et < __state->stdes[(i__1 = p * 5 - 5) < 25000 && 
-			0 <= i__1 ? i__1 : s_rnge("stdes", i__1, "pckbsr_", (
-			ftnlen)2187)]) {
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "std"
+			"es", i__1, "pckbsr_", (ftnlen)2187)]) {
 
 /*                 ET is to the left of the coverage interval of this */
 /*                 segment. */
 
 /* Computing MIN */
 		    d__1 = __state->btub[(i__2 = bindex - 1) < 20 && 0 <= 
-			    i__2 ? i__2 : s_rnge("btub", i__2, "pckbsr_", (
-			    ftnlen)2192)], d__2 = __state->stdes[(i__3 = p * 
-			    5 - 5) < 25000 && 0 <= i__3 ? i__3 : s_rnge("std"
-			    "es", i__3, "pckbsr_", (ftnlen)2192)];
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "btub",
+			     i__2, "pckbsr_", (ftnlen)2192)], d__2 = 
+			    __state->stdes[(i__3 = p * 5 - 5) < 25000 && 0 <= 
+			    i__3 ? i__3 : s_rnge(&__global_state->f2c, "stdes"
+			    , i__3, "pckbsr_", (ftnlen)2192)];
 		    __state->btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btub", i__1, "pckbsr_", (ftnlen)
-			    2192)] = min(d__1,d__2);
+			    i__1 : s_rnge(&__global_state->f2c, "btub", i__1, 
+			    "pckbsr_", (ftnlen)2192)] = min(d__1,d__2);
 		} else {
 
 /*                 The segment coverage interval includes ET. */
 
-		    moved_(&__state->stdes[(i__1 = p * 5 - 5) < 25000 && 0 <= 
-			    i__1 ? i__1 : s_rnge("stdes", i__1, "pckbsr_", (
+		    moved_(__global_state, &__state->stdes[(i__1 = p * 5 - 5) 
+			    < 25000 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stdes", i__1, "pckbsr_", (
 			    ftnlen)2198)], &__state->c__5, descr);
-		    s_copy(ident, __state->stidnt + ((i__1 = p - 1) < 5000 && 
-			    0 <= i__1 ? i__1 : s_rnge("stidnt", i__1, "pckbs"
-			    "r_", (ftnlen)2199)) * 40, ident_len, (ftnlen)40);
+		    s_copy(&__global_state->f2c, ident, __state->stidnt + ((
+			    i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
+			    &__global_state->f2c, "stidnt", i__1, "pckbsr_", (
+			    ftnlen)2199)) * 40, ident_len, (ftnlen)40);
 		    *handle = __state->sthan[(i__1 = p - 1) < 5000 && 0 <= 
-			    i__1 ? i__1 : s_rnge("sthan", i__1, "pckbsr_", (
-			    ftnlen)2200)];
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "sthan"
+			    , i__1, "pckbsr_", (ftnlen)2200)];
 		    *found = TRUE_;
 
 /*                 Set the re-use interval for the current body. */
 
 /* Computing MAX */
 		    d__1 = __state->btlb[(i__2 = bindex - 1) < 20 && 0 <= 
-			    i__2 ? i__2 : s_rnge("btlb", i__2, "pckbsr_", (
-			    ftnlen)2206)], d__2 = __state->stdes[(i__3 = p * 
-			    5 - 5) < 25000 && 0 <= i__3 ? i__3 : s_rnge("std"
-			    "es", i__3, "pckbsr_", (ftnlen)2206)];
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "btlb",
+			     i__2, "pckbsr_", (ftnlen)2206)], d__2 = 
+			    __state->stdes[(i__3 = p * 5 - 5) < 25000 && 0 <= 
+			    i__3 ? i__3 : s_rnge(&__global_state->f2c, "stdes"
+			    , i__3, "pckbsr_", (ftnlen)2206)];
 		    __state->btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btlb", i__1, "pckbsr_", (ftnlen)
-			    2206)] = max(d__1,d__2);
+			    i__1 : s_rnge(&__global_state->f2c, "btlb", i__1, 
+			    "pckbsr_", (ftnlen)2206)] = max(d__1,d__2);
 /* Computing MIN */
 		    d__1 = __state->btub[(i__2 = bindex - 1) < 20 && 0 <= 
-			    i__2 ? i__2 : s_rnge("btub", i__2, "pckbsr_", (
-			    ftnlen)2207)], d__2 = __state->stdes[(i__3 = p * 
-			    5 - 4) < 25000 && 0 <= i__3 ? i__3 : s_rnge("std"
-			    "es", i__3, "pckbsr_", (ftnlen)2207)];
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "btub",
+			     i__2, "pckbsr_", (ftnlen)2207)], d__2 = 
+			    __state->stdes[(i__3 = p * 5 - 4) < 25000 && 0 <= 
+			    i__3 ? i__3 : s_rnge(&__global_state->f2c, "stdes"
+			    , i__3, "pckbsr_", (ftnlen)2207)];
 		    __state->btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btub", i__1, "pckbsr_", (ftnlen)
-			    2207)] = min(d__1,d__2);
+			    i__1 : s_rnge(&__global_state->f2c, "btub", i__1, 
+			    "pckbsr_", (ftnlen)2207)] = min(d__1,d__2);
 
 /*                 Save the returned output items, in case this segment */
 /*                 may satisfy the next request. */
 
 		    __state->btprvh[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btprvh", i__1, "pckbsr_", (ftnlen)
-			    2213)] = *handle;
-		    s_copy(__state->btprvi + ((i__1 = bindex - 1) < 20 && 0 <=
-			     i__1 ? i__1 : s_rnge("btprvi", i__1, "pckbsr_", (
+			    i__1 : s_rnge(&__global_state->f2c, "btprvh", 
+			    i__1, "pckbsr_", (ftnlen)2213)] = *handle;
+		    s_copy(&__global_state->f2c, __state->btprvi + ((i__1 = 
+			    bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "btprvi", i__1, "pckbsr_", (
 			    ftnlen)2214)) * 40, ident, (ftnlen)40, ident_len);
-		    moved_(descr, &__state->c__5, &__state->btprvd[(i__1 = 
-			    bindex * 5 - 5) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btprvd", i__1, "pckbsr_", (ftnlen)2215)]);
+		    moved_(__global_state, descr, &__state->c__5, &
+			    __state->btprvd[(i__1 = bindex * 5 - 5) < 100 && 
+			    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			    "btprvd", i__1, "pckbsr_", (ftnlen)2215)]);
 		    __state->btchkp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btchkp", i__1, "pckbsr_", (ftnlen)
-			    2216)] = TRUE_;
-		    chkout_("PCKSFS", (ftnlen)6);
+			    i__1 : s_rnge(&__global_state->f2c, "btchkp", 
+			    i__1, "pckbsr_", (ftnlen)2216)] = TRUE_;
+		    chkout_(__global_state, "PCKSFS", (ftnlen)6);
 		    return 0;
 		}
 
@@ -2231,8 +2333,8 @@ L_pcksfs:
 /*              to speed up the operation. */
 
 		p = __state->stpool[(i__1 = (p << 1) + 10) < 10012 && 0 <= 
-			i__1 ? i__1 : s_rnge("stpool", i__1, "pckbsr_", (
-			ftnlen)2227)];
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpool", 
+			i__1, "pckbsr_", (ftnlen)2227)];
 	    }
 
 /*           If we're still here we didn't have information for this */
@@ -2242,13 +2344,16 @@ L_pcksfs:
 /*           Otherwise, things are hopeless, set the status that way. */
 
 	    if (__state->btlfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)2238)] > 
-		    __state->ftnum[0]) {
-		s_copy(status, "OLD FILES", (ftnlen)15, (ftnlen)9);
+		    s_rnge(&__global_state->f2c, "btlfs", i__1, "pckbsr_", (
+		    ftnlen)2238)] > __state->ftnum[0]) {
+		s_copy(&__global_state->f2c, status, "OLD FILES", (ftnlen)15, 
+			(ftnlen)9);
 	    } else {
-		s_copy(status, "HOPELESS", (ftnlen)15, (ftnlen)8);
+		s_copy(&__global_state->f2c, status, "HOPELESS", (ftnlen)15, (
+			ftnlen)8);
 	    }
-	} else if (s_cmp(status, "MAKE ROOM", (ftnlen)15, (ftnlen)9) == 0) {
+	} else if (s_cmp(&__global_state->f2c, status, "MAKE ROOM", (ftnlen)
+		15, (ftnlen)9) == 0) {
 
 /*           When adding a segment to a full segment table, one of */
 /*           the current bodies must be dropped. The ideal candidate */
@@ -2281,7 +2386,7 @@ L_pcksfs:
 /*           be the index of the "cheapest" segment list in the body */
 /*           table. */
 
-	    minexp = intmax_();
+	    minexp = intmax_(__global_state);
 	    cheap = 0;
 	    i__1 = __state->nbt;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
@@ -2291,8 +2396,9 @@ L_pcksfs:
 /*                 one. */
 
 		    if (__state->btexp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? 
-			    i__2 : s_rnge("btexp", i__2, "pckbsr_", (ftnlen)
-			    2289)] < minexp || cheap == 0) {
+			    i__2 : s_rnge(&__global_state->f2c, "btexp", i__2,
+			     "pckbsr_", (ftnlen)2289)] < minexp || cheap == 0)
+			     {
 
 /*                    This list is the cheapest seen so far, */
 /*                    possibly because it's the first one */
@@ -2301,8 +2407,8 @@ L_pcksfs:
 
 			cheap = i__;
 			minexp = __state->btexp[(i__2 = i__ - 1) < 20 && 0 <= 
-				i__2 ? i__2 : s_rnge("btexp", i__2, "pckbsr_",
-				 (ftnlen)2298)];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"btexp", i__2, "pckbsr_", (ftnlen)2298)];
 		    }
 		}
 	    }
@@ -2312,14 +2418,16 @@ L_pcksfs:
 /*              depends on the task that was suspended before entering */
 /*              'MAKE ROOM'. */
 
-		if (s_cmp(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : 
-			s_rnge("stack", i__1, "pckbsr_", (ftnlen)2313)) * 15, 
-			"ADD TO END", (ftnlen)15, (ftnlen)10) == 0) {
+		if (s_cmp(&__global_state->f2c, stack + ((i__1 = top - 1) < 2 
+			&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"stack", i__1, "pckbsr_", (ftnlen)2313)) * 15, "ADD "
+			"TO END", (ftnlen)15, (ftnlen)10) == 0) {
 
 /*                 There's nothing left to do but search the remaining */
 /*                 files and segments without buffering them. */
 
-		    s_copy(status, "SEARCH W/O BUFF", (ftnlen)15, (ftnlen)15);
+		    s_copy(&__global_state->f2c, status, "SEARCH W/O BUFF", (
+			    ftnlen)15, (ftnlen)15);
 		} else {
 
 /*                 STACK(TOP) is set to 'ADD TO FRONT'. */
@@ -2338,32 +2446,35 @@ L_pcksfs:
 /*                 node. */
 
 		    p = __state->btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ?
-			     i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)
-			    2338)];
-		    tail = -lnkprv_(&p, __state->stpool);
-		    lnkfsl_(&p, &tail, __state->stpool);
+			     i__1 : s_rnge(&__global_state->f2c, "btbeg", 
+			    i__1, "pckbsr_", (ftnlen)2338)];
+		    tail = -lnkprv_(__global_state, &p, __state->stpool);
+		    lnkfsl_(__global_state, &p, &tail, __state->stpool);
 
 /*                 Re-initialize the table for this body, and initiate */
 /*                 an 'OLD FILES' search, just as in 'NEW BODY'. */
 /*                 Also, reset the suspended task stack to be empty. */
 
 		    __state->btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)
-			    2348)] = 0;
+			    i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1,
+			     "pckbsr_", (ftnlen)2348)] = 0;
 		    __state->btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btexp", i__1, "pckbsr_", (ftnlen)
-			    2349)] = 0;
+			    i__1 : s_rnge(&__global_state->f2c, "btexp", i__1,
+			     "pckbsr_", (ftnlen)2349)] = 0;
 		    __state->bthfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)
-			    2350)] = __state->ftnum[(i__2 = __state->nft - 1) 
-			    < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2,
-			     "pckbsr_", (ftnlen)2350)];
+			    i__1 : s_rnge(&__global_state->f2c, "bthfs", i__1,
+			     "pckbsr_", (ftnlen)2350)] = __state->ftnum[(i__2 
+			    = __state->nft - 1) < 5000 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "ftnum", i__2, "pck"
+			    "bsr_", (ftnlen)2350)];
 		    __state->btlfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)
-			    2351)] = __state->ftnum[(i__2 = __state->nft - 1) 
-			    < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2,
-			     "pckbsr_", (ftnlen)2351)] + 1;
-		    s_copy(status, "OLD FILES", (ftnlen)15, (ftnlen)9);
+			    i__1 : s_rnge(&__global_state->f2c, "btlfs", i__1,
+			     "pckbsr_", (ftnlen)2351)] = __state->ftnum[(i__2 
+			    = __state->nft - 1) < 5000 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "ftnum", i__2, "pck"
+			    "bsr_", (ftnlen)2351)] + 1;
+		    s_copy(&__global_state->f2c, status, "OLD FILES", (ftnlen)
+			    15, (ftnlen)9);
 		    top = 0;
 		}
 	    } else {
@@ -2371,11 +2482,11 @@ L_pcksfs:
 /*              Return this cheapest list to the segment pool. */
 
 		p = __state->btbeg[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
-			i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2361)]
-			;
+			i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1, 
+			"pckbsr_", (ftnlen)2361)];
 		if (p > 0) {
-		    tail = -lnkprv_(&p, __state->stpool);
-		    lnkfsl_(&p, &tail, __state->stpool);
+		    tail = -lnkprv_(__global_state, &p, __state->stpool);
+		    lnkfsl_(__global_state, &p, &tail, __state->stpool);
 		}
 
 /*              Fill the deleted body's space in the table with */
@@ -2383,67 +2494,80 @@ L_pcksfs:
 
 		if (cheap != __state->nbt) {
 		    __state->btbod[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btbod", i__1, "pckbsr_", (ftnlen)
-			    2376)] = __state->btbod[(i__2 = __state->nbt - 1) 
-			    < 20 && 0 <= i__2 ? i__2 : s_rnge("btbod", i__2, 
-			    "pckbsr_", (ftnlen)2376)];
+			    i__1 : s_rnge(&__global_state->f2c, "btbod", i__1,
+			     "pckbsr_", (ftnlen)2376)] = __state->btbod[(i__2 
+			    = __state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "btbod", i__2, "pck"
+			    "bsr_", (ftnlen)2376)];
 		    __state->btexp[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btexp", i__1, "pckbsr_", (ftnlen)
-			    2377)] = __state->btexp[(i__2 = __state->nbt - 1) 
-			    < 20 && 0 <= i__2 ? i__2 : s_rnge("btexp", i__2, 
-			    "pckbsr_", (ftnlen)2377)];
+			    i__1 : s_rnge(&__global_state->f2c, "btexp", i__1,
+			     "pckbsr_", (ftnlen)2377)] = __state->btexp[(i__2 
+			    = __state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "btexp", i__2, "pck"
+			    "bsr_", (ftnlen)2377)];
 		    __state->bthfs[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)
-			    2378)] = __state->bthfs[(i__2 = __state->nbt - 1) 
-			    < 20 && 0 <= i__2 ? i__2 : s_rnge("bthfs", i__2, 
-			    "pckbsr_", (ftnlen)2378)];
+			    i__1 : s_rnge(&__global_state->f2c, "bthfs", i__1,
+			     "pckbsr_", (ftnlen)2378)] = __state->bthfs[(i__2 
+			    = __state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "bthfs", i__2, "pck"
+			    "bsr_", (ftnlen)2378)];
 		    __state->btlfs[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)
-			    2379)] = __state->btlfs[(i__2 = __state->nbt - 1) 
-			    < 20 && 0 <= i__2 ? i__2 : s_rnge("btlfs", i__2, 
-			    "pckbsr_", (ftnlen)2379)];
+			    i__1 : s_rnge(&__global_state->f2c, "btlfs", i__1,
+			     "pckbsr_", (ftnlen)2379)] = __state->btlfs[(i__2 
+			    = __state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "btlfs", i__2, "pck"
+			    "bsr_", (ftnlen)2379)];
 		    __state->btbeg[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)
-			    2380)] = __state->btbeg[(i__2 = __state->nbt - 1) 
-			    < 20 && 0 <= i__2 ? i__2 : s_rnge("btbeg", i__2, 
-			    "pckbsr_", (ftnlen)2380)];
+			    i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1,
+			     "pckbsr_", (ftnlen)2380)] = __state->btbeg[(i__2 
+			    = __state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "btbeg", i__2, "pck"
+			    "bsr_", (ftnlen)2380)];
 		    __state->btlb[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 
-			    : s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2381)] =
-			     __state->btlb[(i__2 = __state->nbt - 1) < 20 && 
-			    0 <= i__2 ? i__2 : s_rnge("btlb", i__2, "pckbsr_",
-			     (ftnlen)2381)];
+			    : s_rnge(&__global_state->f2c, "btlb", i__1, 
+			    "pckbsr_", (ftnlen)2381)] = __state->btlb[(i__2 = 
+			    __state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "btlb", i__2, "pckb"
+			    "sr_", (ftnlen)2381)];
 		    __state->btub[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 
-			    : s_rnge("btub", i__1, "pckbsr_", (ftnlen)2382)] =
-			     __state->btub[(i__2 = __state->nbt - 1) < 20 && 
-			    0 <= i__2 ? i__2 : s_rnge("btub", i__2, "pckbsr_",
-			     (ftnlen)2382)];
+			    : s_rnge(&__global_state->f2c, "btub", i__1, 
+			    "pckbsr_", (ftnlen)2382)] = __state->btub[(i__2 = 
+			    __state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "btub", i__2, "pckb"
+			    "sr_", (ftnlen)2382)];
 		    __state->btprvh[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btprvh", i__1, "pckbsr_", (ftnlen)
-			    2383)] = __state->btprvh[(i__2 = __state->nbt - 1)
-			     < 20 && 0 <= i__2 ? i__2 : s_rnge("btprvh", i__2,
-			     "pckbsr_", (ftnlen)2383)];
-		    s_copy(__state->btprvi + ((i__1 = cheap - 1) < 20 && 0 <= 
-			    i__1 ? i__1 : s_rnge("btprvi", i__1, "pckbsr_", (
+			    i__1 : s_rnge(&__global_state->f2c, "btprvh", 
+			    i__1, "pckbsr_", (ftnlen)2383)] = __state->btprvh[
+			    (i__2 = __state->nbt - 1) < 20 && 0 <= i__2 ? 
+			    i__2 : s_rnge(&__global_state->f2c, "btprvh", 
+			    i__2, "pckbsr_", (ftnlen)2383)];
+		    s_copy(&__global_state->f2c, __state->btprvi + ((i__1 = 
+			    cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "btprvi", i__1, "pckbsr_", (
 			    ftnlen)2384)) * 40, __state->btprvi + ((i__2 = 
 			    __state->nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btprvi", i__2, "pckbsr_", (ftnlen)2384)) *
-			     40, (ftnlen)40, (ftnlen)40);
+			    s_rnge(&__global_state->f2c, "btprvi", i__2, 
+			    "pckbsr_", (ftnlen)2384)) * 40, (ftnlen)40, (
+			    ftnlen)40);
 		    __state->btruex[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btruex", i__1, "pckbsr_", (ftnlen)
-			    2385)] = __state->btruex[(i__2 = __state->nbt - 1)
-			     < 20 && 0 <= i__2 ? i__2 : s_rnge("btruex", i__2,
-			     "pckbsr_", (ftnlen)2385)];
+			    i__1 : s_rnge(&__global_state->f2c, "btruex", 
+			    i__1, "pckbsr_", (ftnlen)2385)] = __state->btruex[
+			    (i__2 = __state->nbt - 1) < 20 && 0 <= i__2 ? 
+			    i__2 : s_rnge(&__global_state->f2c, "btruex", 
+			    i__2, "pckbsr_", (ftnlen)2385)];
 		    __state->btchkp[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btchkp", i__1, "pckbsr_", (ftnlen)
-			    2386)] = __state->btchkp[(i__2 = __state->nbt - 1)
-			     < 20 && 0 <= i__2 ? i__2 : s_rnge("btchkp", i__2,
-			     "pckbsr_", (ftnlen)2386)];
-		    moved_(&__state->btprvd[(i__1 = __state->nbt * 5 - 5) < 
-			    100 && 0 <= i__1 ? i__1 : s_rnge("btprvd", i__1, 
+			    i__1 : s_rnge(&__global_state->f2c, "btchkp", 
+			    i__1, "pckbsr_", (ftnlen)2386)] = __state->btchkp[
+			    (i__2 = __state->nbt - 1) < 20 && 0 <= i__2 ? 
+			    i__2 : s_rnge(&__global_state->f2c, "btchkp", 
+			    i__2, "pckbsr_", (ftnlen)2386)];
+		    moved_(__global_state, &__state->btprvd[(i__1 = 
+			    __state->nbt * 5 - 5) < 100 && 0 <= i__1 ? i__1 : 
+			    s_rnge(&__global_state->f2c, "btprvd", i__1, 
 			    "pckbsr_", (ftnlen)2389)], &__state->c__5, &
 			    __state->btprvd[(i__2 = cheap * 5 - 5) < 100 && 0 
-			    <= i__2 ? i__2 : s_rnge("btprvd", i__2, "pckbsr_",
-			     (ftnlen)2389)]);
+			    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			    "btprvd", i__2, "pckbsr_", (ftnlen)2389)]);
 		}
 
 /*              If the final entry in the table happened to be the */
@@ -2457,7 +2581,8 @@ L_pcksfs:
 /*              One less body now. */
 
 		--__state->nbt;
-		s_copy(status, "RESUME", (ftnlen)15, (ftnlen)6);
+		s_copy(&__global_state->f2c, status, "RESUME", (ftnlen)15, (
+			ftnlen)6);
 	    }
 
 /*           Either we made room by freeing a non-empty segment list, */
@@ -2465,8 +2590,8 @@ L_pcksfs:
 /*           latter case, the state is now 'OLD FILES' or */
 /*           'SEARCH W/O BUFF'. */
 
-	} else if (s_cmp(status, "ADD TO FRONT", (ftnlen)15, (ftnlen)12) == 0)
-		 {
+	} else if (s_cmp(&__global_state->f2c, status, "ADD TO FRONT", (
+		ftnlen)15, (ftnlen)12) == 0) {
 
 /*           The current segment information should be linked in at */
 /*           the head of the segment list for the current body, and */
@@ -2476,48 +2601,57 @@ L_pcksfs:
 /*           The only way to get here is from the block NEW SEGMENTS */
 /*           after suspending that task. */
 
-	    if (lnknfn_(__state->stpool) == 0) {
+	    if (lnknfn_(__global_state, __state->stpool) == 0) {
 
 /*              There's no room left in the segment pool.  We must make */
 /*              room before continuing. */
 
-		s_copy(doing, "ADD TO FRONT", (ftnlen)15, (ftnlen)12);
-		s_copy(urgent, "MAKE ROOM", (ftnlen)15, (ftnlen)9);
-		s_copy(status, "SUSPEND", (ftnlen)15, (ftnlen)7);
+		s_copy(&__global_state->f2c, doing, "ADD TO FRONT", (ftnlen)
+			15, (ftnlen)12);
+		s_copy(&__global_state->f2c, urgent, "MAKE ROOM", (ftnlen)15, 
+			(ftnlen)9);
+		s_copy(&__global_state->f2c, status, "SUSPEND", (ftnlen)15, (
+			ftnlen)7);
 	    } else {
 
 /*              Allocate a node and link it to the front of the list */
 /*              for the current body. */
 
-		lnkan_(__state->stpool, &new__);
+		lnkan_(__global_state, __state->stpool, &new__);
 		__state->sthan[(i__1 = new__ - 1) < 5000 && 0 <= i__1 ? i__1 :
-			 s_rnge("sthan", i__1, "pckbsr_", (ftnlen)2443)] = 
-			__state->fthan[(i__2 = findex - 1) < 5000 && 0 <= 
-			i__2 ? i__2 : s_rnge("fthan", i__2, "pckbsr_", (
+			 s_rnge(&__global_state->f2c, "sthan", i__1, "pckbsr_"
+			, (ftnlen)2443)] = __state->fthan[(i__2 = findex - 1) 
+			< 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "fthan", i__2, "pckbsr_", (
 			ftnlen)2443)];
-		moved_(descr, &__state->c__5, &__state->stdes[(i__1 = new__ * 
-			5 - 5) < 25000 && 0 <= i__1 ? i__1 : s_rnge("stdes", 
-			i__1, "pckbsr_", (ftnlen)2444)]);
-		dafgn_(__state->stidnt + ((i__1 = new__ - 1) < 5000 && 0 <= 
-			i__1 ? i__1 : s_rnge("stidnt", i__1, "pckbsr_", (
+		moved_(__global_state, descr, &__state->c__5, &__state->stdes[
+			(i__1 = new__ * 5 - 5) < 25000 && 0 <= i__1 ? i__1 : 
+			s_rnge(&__global_state->f2c, "stdes", i__1, "pckbsr_",
+			 (ftnlen)2444)]);
+		dafgn_(__global_state, __state->stidnt + ((i__1 = new__ - 1) <
+			 5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stidnt", i__1, "pckbsr_", (
 			ftnlen)2445)) * 40, (ftnlen)40);
-		if (failed_()) {
-		    chkout_("PCKSFS", (ftnlen)6);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "PCKSFS", (ftnlen)6);
 		    return 0;
 		}
 
 /*              If the current list is empty, this append operation */
 /*              is a no-op. */
 
-		lnkilb_(&new__, &__state->btbeg[(i__1 = bindex - 1) < 20 && 0 
-			<= i__1 ? i__1 : s_rnge("btbeg", i__1, "pckbsr_", (
+		lnkilb_(__global_state, &new__, &__state->btbeg[(i__1 = 
+			bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "btbeg", i__1, "pckbsr_", (
 			ftnlen)2456)], __state->stpool);
 		__state->btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2457)] = 
-			new__;
-		s_copy(status, "RESUME", (ftnlen)15, (ftnlen)6);
+			s_rnge(&__global_state->f2c, "btbeg", i__1, "pckbsr_",
+			 (ftnlen)2457)] = new__;
+		s_copy(&__global_state->f2c, status, "RESUME", (ftnlen)15, (
+			ftnlen)6);
 	    }
-	} else if (s_cmp(status, "ADD TO END", (ftnlen)15, (ftnlen)10) == 0) {
+	} else if (s_cmp(&__global_state->f2c, status, "ADD TO END", (ftnlen)
+		15, (ftnlen)10) == 0) {
 
 /*           The current segment information should be linked in at */
 /*           the tail of the segment list for the current body. */
@@ -2525,56 +2659,64 @@ L_pcksfs:
 /*           The only way to get to this task is from the OLD SEGMENTS */
 /*           block after suspending that task. */
 
-	    if (lnknfn_(__state->stpool) == 0) {
+	    if (lnknfn_(__global_state, __state->stpool) == 0) {
 
 /*              There's no room left in the segment pool.  We must make */
 /*              room before continuing. */
 
-		s_copy(doing, "ADD TO END", (ftnlen)15, (ftnlen)10);
-		s_copy(urgent, "MAKE ROOM", (ftnlen)15, (ftnlen)9);
-		s_copy(status, "SUSPEND", (ftnlen)15, (ftnlen)7);
+		s_copy(&__global_state->f2c, doing, "ADD TO END", (ftnlen)15, 
+			(ftnlen)10);
+		s_copy(&__global_state->f2c, urgent, "MAKE ROOM", (ftnlen)15, 
+			(ftnlen)9);
+		s_copy(&__global_state->f2c, status, "SUSPEND", (ftnlen)15, (
+			ftnlen)7);
 	    } else {
 
 /*              Allocate a new node in the segment table pool. */
 
-		lnkan_(__state->stpool, &new__);
+		lnkan_(__global_state, __state->stpool, &new__);
 		__state->sthan[(i__1 = new__ - 1) < 5000 && 0 <= i__1 ? i__1 :
-			 s_rnge("sthan", i__1, "pckbsr_", (ftnlen)2488)] = 
-			__state->fthan[(i__2 = findex - 1) < 5000 && 0 <= 
-			i__2 ? i__2 : s_rnge("fthan", i__2, "pckbsr_", (
+			 s_rnge(&__global_state->f2c, "sthan", i__1, "pckbsr_"
+			, (ftnlen)2488)] = __state->fthan[(i__2 = findex - 1) 
+			< 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "fthan", i__2, "pckbsr_", (
 			ftnlen)2488)];
-		moved_(descr, &__state->c__5, &__state->stdes[(i__1 = new__ * 
-			5 - 5) < 25000 && 0 <= i__1 ? i__1 : s_rnge("stdes", 
-			i__1, "pckbsr_", (ftnlen)2489)]);
-		dafgn_(__state->stidnt + ((i__1 = new__ - 1) < 5000 && 0 <= 
-			i__1 ? i__1 : s_rnge("stidnt", i__1, "pckbsr_", (
+		moved_(__global_state, descr, &__state->c__5, &__state->stdes[
+			(i__1 = new__ * 5 - 5) < 25000 && 0 <= i__1 ? i__1 : 
+			s_rnge(&__global_state->f2c, "stdes", i__1, "pckbsr_",
+			 (ftnlen)2489)]);
+		dafgn_(__global_state, __state->stidnt + ((i__1 = new__ - 1) <
+			 5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stidnt", i__1, "pckbsr_", (
 			ftnlen)2490)) * 40, (ftnlen)40);
-		if (failed_()) {
-		    chkout_("PCKSFS", (ftnlen)6);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "PCKSFS", (ftnlen)6);
 		    return 0;
 		}
 		if (__state->btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2497)]
-			 <= 0) {
+			i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1, 
+			"pckbsr_", (ftnlen)2497)] <= 0) {
 
 /*                 This is the first node in the list for this body. */
 
 		    __state->btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)
-			    2501)] = new__;
+			    i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1,
+			     "pckbsr_", (ftnlen)2501)] = new__;
 		} else {
 
 /*                 Link the new node to the tail of the list. */
 
-		    tail = -lnkprv_(&__state->btbeg[(i__1 = bindex - 1) < 20 
-			    && 0 <= i__1 ? i__1 : s_rnge("btbeg", i__1, "pck"
-			    "bsr_", (ftnlen)2507)], __state->stpool);
-		    lnkila_(&tail, &new__, __state->stpool);
+		    tail = -lnkprv_(__global_state, &__state->btbeg[(i__1 = 
+			    bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "btbeg", i__1, "pckbsr_", (
+			    ftnlen)2507)], __state->stpool);
+		    lnkila_(__global_state, &tail, &new__, __state->stpool);
 		}
-		s_copy(status, "RESUME", (ftnlen)15, (ftnlen)6);
+		s_copy(&__global_state->f2c, status, "RESUME", (ftnlen)15, (
+			ftnlen)6);
 	    }
-	} else if (s_cmp(status, "SEARCH W/O BUFF", (ftnlen)15, (ftnlen)15) ==
-		 0) {
+	} else if (s_cmp(&__global_state->f2c, status, "SEARCH W/O BUFF", (
+		ftnlen)15, (ftnlen)15) == 0) {
 
 /*           When the segment table is completely full, continue */
 /*           the search by looking through the unchecked portion */
@@ -2590,7 +2732,8 @@ L_pcksfs:
 /*           the re-use interval. */
 
 	    __state->btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btruex", i__1, "pckbsr_", (ftnlen)2533)] = 0;
+		    s_rnge(&__global_state->f2c, "btruex", i__1, "pckbsr_", (
+		    ftnlen)2533)] = 0;
 
 /*           Need to find the portion of the current body's segment */
 /*           list which comes from the current file of interest.  It */
@@ -2598,22 +2741,25 @@ L_pcksfs:
 /*           remainder of the file's segments can't be added to the list. */
 
 	    crflbg = __state->btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2541)];
+		    i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1, "pckb"
+		    "sr_", (ftnlen)2541)];
 	    fndhan = FALSE_;
 	    while(! fndhan && crflbg > 0) {
 		fndhan = __state->sthan[(i__1 = crflbg - 1) < 5000 && 0 <= 
-			i__1 ? i__1 : s_rnge("sthan", i__1, "pckbsr_", (
-			ftnlen)2546)] == __state->fthan[(i__2 = findex - 1) < 
-			5000 && 0 <= i__2 ? i__2 : s_rnge("fthan", i__2, 
-			"pckbsr_", (ftnlen)2546)];
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "sthan", 
+			i__1, "pckbsr_", (ftnlen)2546)] == __state->fthan[(
+			i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
+			s_rnge(&__global_state->f2c, "fthan", i__2, "pckbsr_",
+			 (ftnlen)2546)];
 		if (! fndhan) {
 
 /*                 Get the next node.  We avoid LNKNXT here in order */
 /*                 to speed up the operation. */
 
 		    crflbg = __state->stpool[(i__1 = (crflbg << 1) + 10) < 
-			    10012 && 0 <= i__1 ? i__1 : s_rnge("stpool", i__1,
-			     "pckbsr_", (ftnlen)2553)];
+			    10012 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stpool", i__1, "pckbsr_", (
+			    ftnlen)2553)];
 		}
 	    }
 	    if (crflbg > 0) {
@@ -2631,21 +2777,23 @@ L_pcksfs:
 /*              a non-positive value to indicate an empty segment list. */
 
 		if (p == __state->btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 
-			? i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)
-			2574)]) {
+			? i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1, 
+			"pckbsr_", (ftnlen)2574)]) {
 		    __state->btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)
-			    2576)] = 0;
+			    i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1,
+			     "pckbsr_", (ftnlen)2576)] = 0;
 
 /*                 Also in this case, we must initialize the re-use */
 /*                 interval for this body. */
 
 		    __state->btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btlb", i__1, "pckbsr_", (ftnlen)
-			    2581)] = dpmin_();
+			    i__1 : s_rnge(&__global_state->f2c, "btlb", i__1, 
+			    "pckbsr_", (ftnlen)2581)] = dpmin_(__global_state)
+			    ;
 		    __state->btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btub", i__1, "pckbsr_", (ftnlen)
-			    2582)] = dpmax_();
+			    i__1 : s_rnge(&__global_state->f2c, "btub", i__1, 
+			    "pckbsr_", (ftnlen)2582)] = dpmax_(__global_state)
+			    ;
 		}
 
 /*              Finish searching through the incomplete list for the */
@@ -2657,127 +2805,144 @@ L_pcksfs:
 /*                 to the expense of the re-use interval. */
 
 		    __state->btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btruex", i__1, "pckbsr_", (ftnlen)
-			    2595)] = __state->btruex[(i__2 = bindex - 1) < 20 
-			    && 0 <= i__2 ? i__2 : s_rnge("btruex", i__2, 
+			    i__1 : s_rnge(&__global_state->f2c, "btruex", 
+			    i__1, "pckbsr_", (ftnlen)2595)] = __state->btruex[
+			    (i__2 = bindex - 1) < 20 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "btruex", i__2, 
 			    "pckbsr_", (ftnlen)2595)] + 1;
 		    if (*et > __state->stdes[(i__1 = crflbg * 5 - 4) < 25000 
-			    && 0 <= i__1 ? i__1 : s_rnge("stdes", i__1, "pck"
-			    "bsr_", (ftnlen)2598)]) {
+			    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+			     "stdes", i__1, "pckbsr_", (ftnlen)2598)]) {
 
 /*                    ET is to the right of the coverage interval of this */
 /*                    segment. */
 
 /* Computing MAX */
 			d__1 = __state->btlb[(i__2 = bindex - 1) < 20 && 0 <= 
-				i__2 ? i__2 : s_rnge("btlb", i__2, "pckbsr_", 
-				(ftnlen)2603)], d__2 = __state->stdes[(i__3 = 
-				crflbg * 5 - 4) < 25000 && 0 <= i__3 ? i__3 : 
-				s_rnge("stdes", i__3, "pckbsr_", (ftnlen)2603)
-				];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"btlb", i__2, "pckbsr_", (ftnlen)2603)], d__2 
+				= __state->stdes[(i__3 = crflbg * 5 - 4) < 
+				25000 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "stdes", i__3, "pckbsr_",
+				 (ftnlen)2603)];
 			__state->btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-				i__1 : s_rnge("btlb", i__1, "pckbsr_", (
-				ftnlen)2603)] = max(d__1,d__2);
+				i__1 : s_rnge(&__global_state->f2c, "btlb", 
+				i__1, "pckbsr_", (ftnlen)2603)] = max(d__1,
+				d__2);
 		    } else if (*et < __state->stdes[(i__1 = crflbg * 5 - 5) < 
-			    25000 && 0 <= i__1 ? i__1 : s_rnge("stdes", i__1, 
-			    "pckbsr_", (ftnlen)2606)]) {
+			    25000 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stdes", i__1, "pckbsr_", (
+			    ftnlen)2606)]) {
 
 /*                    ET is to the left of the coverage interval of this */
 /*                    segment. */
 
 /* Computing MIN */
 			d__1 = __state->btub[(i__2 = bindex - 1) < 20 && 0 <= 
-				i__2 ? i__2 : s_rnge("btub", i__2, "pckbsr_", 
-				(ftnlen)2611)], d__2 = __state->stdes[(i__3 = 
-				crflbg * 5 - 5) < 25000 && 0 <= i__3 ? i__3 : 
-				s_rnge("stdes", i__3, "pckbsr_", (ftnlen)2611)
-				];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"btub", i__2, "pckbsr_", (ftnlen)2611)], d__2 
+				= __state->stdes[(i__3 = crflbg * 5 - 5) < 
+				25000 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "stdes", i__3, "pckbsr_",
+				 (ftnlen)2611)];
 			__state->btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-				i__1 : s_rnge("btub", i__1, "pckbsr_", (
-				ftnlen)2611)] = min(d__1,d__2);
+				i__1 : s_rnge(&__global_state->f2c, "btub", 
+				i__1, "pckbsr_", (ftnlen)2611)] = min(d__1,
+				d__2);
 		    } else {
 
 /*                    The segment coverage interval includes ET. */
 
-			moved_(&__state->stdes[(i__1 = crflbg * 5 - 5) < 
-				25000 && 0 <= i__1 ? i__1 : s_rnge("stdes", 
-				i__1, "pckbsr_", (ftnlen)2617)], &
-				__state->c__5, descr);
-			s_copy(ident, __state->stidnt + ((i__1 = crflbg - 1) <
-				 5000 && 0 <= i__1 ? i__1 : s_rnge("stidnt", 
+			moved_(__global_state, &__state->stdes[(i__1 = crflbg 
+				* 5 - 5) < 25000 && 0 <= i__1 ? i__1 : s_rnge(
+				&__global_state->f2c, "stdes", i__1, "pckbsr_"
+				, (ftnlen)2617)], &__state->c__5, descr);
+			s_copy(&__global_state->f2c, ident, __state->stidnt + 
+				((i__1 = crflbg - 1) < 5000 && 0 <= i__1 ? 
+				i__1 : s_rnge(&__global_state->f2c, "stidnt", 
 				i__1, "pckbsr_", (ftnlen)2619)) * 40, 
 				ident_len, (ftnlen)40);
 			*handle = __state->sthan[(i__1 = crflbg - 1) < 5000 &&
-				 0 <= i__1 ? i__1 : s_rnge("sthan", i__1, 
-				"pckbsr_", (ftnlen)2620)];
+				 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "sthan", i__1, "pckbsr_",
+				 (ftnlen)2620)];
 			*found = TRUE_;
 
 /*                    Set the re-use interval for the current body. */
 
 /* Computing MAX */
 			d__1 = __state->btlb[(i__2 = bindex - 1) < 20 && 0 <= 
-				i__2 ? i__2 : s_rnge("btlb", i__2, "pckbsr_", 
-				(ftnlen)2626)], d__2 = __state->stdes[(i__3 = 
-				crflbg * 5 - 5) < 25000 && 0 <= i__3 ? i__3 : 
-				s_rnge("stdes", i__3, "pckbsr_", (ftnlen)2626)
-				];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"btlb", i__2, "pckbsr_", (ftnlen)2626)], d__2 
+				= __state->stdes[(i__3 = crflbg * 5 - 5) < 
+				25000 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "stdes", i__3, "pckbsr_",
+				 (ftnlen)2626)];
 			__state->btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-				i__1 : s_rnge("btlb", i__1, "pckbsr_", (
-				ftnlen)2626)] = max(d__1,d__2);
+				i__1 : s_rnge(&__global_state->f2c, "btlb", 
+				i__1, "pckbsr_", (ftnlen)2626)] = max(d__1,
+				d__2);
 /* Computing MIN */
 			d__1 = __state->btub[(i__2 = bindex - 1) < 20 && 0 <= 
-				i__2 ? i__2 : s_rnge("btub", i__2, "pckbsr_", 
-				(ftnlen)2627)], d__2 = __state->stdes[(i__3 = 
-				crflbg * 5 - 4) < 25000 && 0 <= i__3 ? i__3 : 
-				s_rnge("stdes", i__3, "pckbsr_", (ftnlen)2627)
-				];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"btub", i__2, "pckbsr_", (ftnlen)2627)], d__2 
+				= __state->stdes[(i__3 = crflbg * 5 - 4) < 
+				25000 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "stdes", i__3, "pckbsr_",
+				 (ftnlen)2627)];
 			__state->btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-				i__1 : s_rnge("btub", i__1, "pckbsr_", (
-				ftnlen)2627)] = min(d__1,d__2);
+				i__1 : s_rnge(&__global_state->f2c, "btub", 
+				i__1, "pckbsr_", (ftnlen)2627)] = min(d__1,
+				d__2);
 
 /*                    Save the output items, in case this */
 /*                    segment may be satisfy the next request. */
 
 			__state->btprvh[(i__1 = bindex - 1) < 20 && 0 <= i__1 
-				? i__1 : s_rnge("btprvh", i__1, "pckbsr_", (
-				ftnlen)2633)] = *handle;
-			s_copy(__state->btprvi + ((i__1 = bindex - 1) < 20 && 
-				0 <= i__1 ? i__1 : s_rnge("btprvi", i__1, 
+				? i__1 : s_rnge(&__global_state->f2c, "btprvh"
+				, i__1, "pckbsr_", (ftnlen)2633)] = *handle;
+			s_copy(&__global_state->f2c, __state->btprvi + ((i__1 
+				= bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
+				s_rnge(&__global_state->f2c, "btprvi", i__1, 
 				"pckbsr_", (ftnlen)2634)) * 40, ident, (
 				ftnlen)40, ident_len);
-			moved_(descr, &__state->c__5, &__state->btprvd[(i__1 =
-				 bindex * 5 - 5) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("btprvd", i__1, "pckbsr_", (ftnlen)
-				2635)]);
+			moved_(__global_state, descr, &__state->c__5, &
+				__state->btprvd[(i__1 = bindex * 5 - 5) < 100 
+				&& 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "btprvd", i__1, "pckbsr_"
+				, (ftnlen)2635)]);
 			__state->btchkp[(i__1 = bindex - 1) < 20 && 0 <= i__1 
-				? i__1 : s_rnge("btchkp", i__1, "pckbsr_", (
-				ftnlen)2636)] = TRUE_;
+				? i__1 : s_rnge(&__global_state->f2c, "btchkp"
+				, i__1, "pckbsr_", (ftnlen)2636)] = TRUE_;
 
 /*                    Update the expense of the list to reflect */
 /*                    the cost of locating this segment. */
 
 			__state->btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ?
-				 i__1 : s_rnge("btexp", i__1, "pckbsr_", (
-				ftnlen)2642)] = __state->btexp[(i__2 = bindex 
-				- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("btexp"
-				, i__2, "pckbsr_", (ftnlen)2642)] + 
+				 i__1 : s_rnge(&__global_state->f2c, "btexp", 
+				i__1, "pckbsr_", (ftnlen)2642)] = 
+				__state->btexp[(i__2 = bindex - 1) < 20 && 0 
+				<= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"btexp", i__2, "pckbsr_", (ftnlen)2642)] + 
 				__state->btruex[(i__3 = bindex - 1) < 20 && 0 
-				<= i__3 ? i__3 : s_rnge("btruex", i__3, "pck"
-				"bsr_", (ftnlen)2642)];
+				<= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+				"btruex", i__3, "pckbsr_", (ftnlen)2642)];
 
 /*                    Free the sub-list we were searching. */
 
-			tail = lnktl_(&crflbg, __state->stpool);
-			lnkfsl_(&p, &tail, __state->stpool);
-			chkout_("PCKSFS", (ftnlen)6);
+			tail = lnktl_(__global_state, &crflbg, 
+				__state->stpool);
+			lnkfsl_(__global_state, &p, &tail, __state->stpool);
+			chkout_(__global_state, "PCKSFS", (ftnlen)6);
 			return 0;
 		    }
 /*                 Get the next node.  We avoid LNKNXT here in order */
 /*                 to speed up the operation. */
 
 		    crflbg = __state->stpool[(i__1 = (crflbg << 1) + 10) < 
-			    10012 && 0 <= i__1 ? i__1 : s_rnge("stpool", i__1,
-			     "pckbsr_", (ftnlen)2658)];
+			    10012 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stpool", i__1, "pckbsr_", (
+			    ftnlen)2658)];
 		}
 
 /*              Return the sub-list to the segment table pool. */
@@ -2789,8 +2954,8 @@ L_pcksfs:
 /*              Note the list is always non-empty. */
 
 		i__1 = -crflbg;
-		tail = -lnkprv_(&i__1, __state->stpool);
-		lnkfsl_(&p, &tail, __state->stpool);
+		tail = -lnkprv_(__global_state, &i__1, __state->stpool);
+		lnkfsl_(__global_state, &p, &tail, __state->stpool);
 	    }
 
 /*           Search through the remaining files without buffering. */
@@ -2804,14 +2969,16 @@ L_pcksfs:
 /*                 re-use interval. */
 
 		    __state->btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btruex", i__1, "pckbsr_", (ftnlen)
-			    2689)] = __state->btruex[(i__2 = bindex - 1) < 20 
-			    && 0 <= i__2 ? i__2 : s_rnge("btruex", i__2, 
+			    i__1 : s_rnge(&__global_state->f2c, "btruex", 
+			    i__1, "pckbsr_", (ftnlen)2689)] = __state->btruex[
+			    (i__2 = bindex - 1) < 20 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "btruex", i__2, 
 			    "pckbsr_", (ftnlen)2689)] + 1;
-		    dafgs_(descr);
-		    dafus_(descr, &__state->c__2, &__state->c__5, dcd, icd);
-		    if (failed_()) {
-			chkout_("PCKSFS", (ftnlen)6);
+		    dafgs_(__global_state, descr);
+		    dafus_(__global_state, descr, &__state->c__2, &
+			    __state->c__5, dcd, icd);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "PCKSFS", (ftnlen)6);
 			return 0;
 		    }
 		    if (*body == icd[0]) {
@@ -2826,11 +2993,13 @@ L_pcksfs:
 
 /* Computing MAX */
 			    d__1 = __state->btlb[(i__2 = bindex - 1) < 20 && 
-				    0 <= i__2 ? i__2 : s_rnge("btlb", i__2, 
-				    "pckbsr_", (ftnlen)2709)];
+				    0 <= i__2 ? i__2 : s_rnge(&
+				    __global_state->f2c, "btlb", i__2, "pckb"
+				    "sr_", (ftnlen)2709)];
 			    __state->btlb[(i__1 = bindex - 1) < 20 && 0 <= 
-				    i__1 ? i__1 : s_rnge("btlb", i__1, "pckb"
-				    "sr_", (ftnlen)2709)] = max(d__1,dcd[1]);
+				    i__1 ? i__1 : s_rnge(&__global_state->f2c,
+				     "btlb", i__1, "pckbsr_", (ftnlen)2709)] =
+				     max(d__1,dcd[1]);
 			} else if (*et < dcd[0]) {
 
 /*                       ET is to the left of the coverage interval */
@@ -2838,79 +3007,91 @@ L_pcksfs:
 
 /* Computing MIN */
 			    d__1 = __state->btub[(i__2 = bindex - 1) < 20 && 
-				    0 <= i__2 ? i__2 : s_rnge("btub", i__2, 
-				    "pckbsr_", (ftnlen)2717)];
+				    0 <= i__2 ? i__2 : s_rnge(&
+				    __global_state->f2c, "btub", i__2, "pckb"
+				    "sr_", (ftnlen)2717)];
 			    __state->btub[(i__1 = bindex - 1) < 20 && 0 <= 
-				    i__1 ? i__1 : s_rnge("btub", i__1, "pckb"
-				    "sr_", (ftnlen)2717)] = min(d__1,dcd[0]);
+				    i__1 ? i__1 : s_rnge(&__global_state->f2c,
+				     "btub", i__1, "pckbsr_", (ftnlen)2717)] =
+				     min(d__1,dcd[0]);
 			} else {
 
 /*                       The segment coverage interval includes ET. */
 
-			    dafgn_(ident, ident_len);
-			    if (failed_()) {
-				chkout_("PCKSFS", (ftnlen)6);
+			    dafgn_(__global_state, ident, ident_len);
+			    if (failed_(__global_state)) {
+				chkout_(__global_state, "PCKSFS", (ftnlen)6);
 				return 0;
 			    }
 			    *handle = __state->fthan[(i__1 = findex - 1) < 
-				    5000 && 0 <= i__1 ? i__1 : s_rnge("fthan",
-				     i__1, "pckbsr_", (ftnlen)2730)];
+				    5000 && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "fthan", i__1, "pck"
+				    "bsr_", (ftnlen)2730)];
 			    *found = TRUE_;
 
 /*                       Set the re-use interval for the current body. */
 
 /* Computing MAX */
 			    d__1 = __state->btlb[(i__2 = bindex - 1) < 20 && 
-				    0 <= i__2 ? i__2 : s_rnge("btlb", i__2, 
-				    "pckbsr_", (ftnlen)2736)];
+				    0 <= i__2 ? i__2 : s_rnge(&
+				    __global_state->f2c, "btlb", i__2, "pckb"
+				    "sr_", (ftnlen)2736)];
 			    __state->btlb[(i__1 = bindex - 1) < 20 && 0 <= 
-				    i__1 ? i__1 : s_rnge("btlb", i__1, "pckb"
-				    "sr_", (ftnlen)2736)] = max(d__1,dcd[0]);
+				    i__1 ? i__1 : s_rnge(&__global_state->f2c,
+				     "btlb", i__1, "pckbsr_", (ftnlen)2736)] =
+				     max(d__1,dcd[0]);
 /* Computing MIN */
 			    d__1 = __state->btub[(i__2 = bindex - 1) < 20 && 
-				    0 <= i__2 ? i__2 : s_rnge("btub", i__2, 
-				    "pckbsr_", (ftnlen)2737)];
+				    0 <= i__2 ? i__2 : s_rnge(&
+				    __global_state->f2c, "btub", i__2, "pckb"
+				    "sr_", (ftnlen)2737)];
 			    __state->btub[(i__1 = bindex - 1) < 20 && 0 <= 
-				    i__1 ? i__1 : s_rnge("btub", i__1, "pckb"
-				    "sr_", (ftnlen)2737)] = min(d__1,dcd[1]);
+				    i__1 ? i__1 : s_rnge(&__global_state->f2c,
+				     "btub", i__1, "pckbsr_", (ftnlen)2737)] =
+				     min(d__1,dcd[1]);
 
 /*                       Save the output items, in case this */
 /*                       segment may satisfy the next request. */
 
 			    __state->btprvh[(i__1 = bindex - 1) < 20 && 0 <= 
-				    i__1 ? i__1 : s_rnge("btprvh", i__1, 
-				    "pckbsr_", (ftnlen)2743)] = *handle;
-			    s_copy(__state->btprvi + ((i__1 = bindex - 1) < 
-				    20 && 0 <= i__1 ? i__1 : s_rnge("btprvi", 
-				    i__1, "pckbsr_", (ftnlen)2744)) * 40, 
-				    ident, (ftnlen)40, ident_len);
-			    moved_(descr, &__state->c__5, &__state->btprvd[(
-				    i__1 = bindex * 5 - 5) < 100 && 0 <= i__1 
-				    ? i__1 : s_rnge("btprvd", i__1, "pckbsr_",
-				     (ftnlen)2745)]);
+				    i__1 ? i__1 : s_rnge(&__global_state->f2c,
+				     "btprvh", i__1, "pckbsr_", (ftnlen)2743)]
+				     = *handle;
+			    s_copy(&__global_state->f2c, __state->btprvi + ((
+				    i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
+				    i__1 : s_rnge(&__global_state->f2c, "btp"
+				    "rvi", i__1, "pckbsr_", (ftnlen)2744)) * 
+				    40, ident, (ftnlen)40, ident_len);
+			    moved_(__global_state, descr, &__state->c__5, &
+				    __state->btprvd[(i__1 = bindex * 5 - 5) < 
+				    100 && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "btprvd", i__1, 
+				    "pckbsr_", (ftnlen)2745)]);
 			    __state->btchkp[(i__1 = bindex - 1) < 20 && 0 <= 
-				    i__1 ? i__1 : s_rnge("btchkp", i__1, 
-				    "pckbsr_", (ftnlen)2746)] = TRUE_;
+				    i__1 ? i__1 : s_rnge(&__global_state->f2c,
+				     "btchkp", i__1, "pckbsr_", (ftnlen)2746)]
+				     = TRUE_;
 
 /*                       Update the expense of the list to reflect */
 /*                       the cost of locating this segment. */
 
 			    __state->btexp[(i__1 = bindex - 1) < 20 && 0 <= 
-				    i__1 ? i__1 : s_rnge("btexp", i__1, "pck"
-				    "bsr_", (ftnlen)2752)] = __state->btexp[(
-				    i__2 = bindex - 1) < 20 && 0 <= i__2 ? 
-				    i__2 : s_rnge("btexp", i__2, "pckbsr_", (
-				    ftnlen)2752)] + __state->btruex[(i__3 = 
-				    bindex - 1) < 20 && 0 <= i__3 ? i__3 : 
-				    s_rnge("btruex", i__3, "pckbsr_", (ftnlen)
-				    2752)];
-			    chkout_("PCKSFS", (ftnlen)6);
+				    i__1 ? i__1 : s_rnge(&__global_state->f2c,
+				     "btexp", i__1, "pckbsr_", (ftnlen)2752)] 
+				    = __state->btexp[(i__2 = bindex - 1) < 20 
+				    && 0 <= i__2 ? i__2 : s_rnge(&
+				    __global_state->f2c, "btexp", i__2, "pck"
+				    "bsr_", (ftnlen)2752)] + __state->btruex[(
+				    i__3 = bindex - 1) < 20 && 0 <= i__3 ? 
+				    i__3 : s_rnge(&__global_state->f2c, "btr"
+				    "uex", i__3, "pckbsr_", (ftnlen)2752)];
+			    chkout_(__global_state, "PCKSFS", (ftnlen)6);
 			    return 0;
 			}
 		    }
-		    daffpa_(&fnd);
-		    if (failed_()) {
-			chkout_("PCKSFS", (ftnlen)6);
+		    daffpa_(__global_state, &fnd);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "PCKSFS", (ftnlen)6);
 			return 0;
 		    }
 		}
@@ -2919,12 +3100,13 @@ L_pcksfs:
 
 		--findex;
 		if (findex > 0) {
-		    dafbbs_(&__state->fthan[(i__1 = findex - 1) < 5000 && 0 <=
-			     i__1 ? i__1 : s_rnge("fthan", i__1, "pckbsr_", (
+		    dafbbs_(__global_state, &__state->fthan[(i__1 = findex - 
+			    1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "fthan", i__1, "pckbsr_", (
 			    ftnlen)2777)]);
-		    daffpa_(&fnd);
-		    if (failed_()) {
-			chkout_("PCKSFS", (ftnlen)6);
+		    daffpa_(__global_state, &fnd);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "PCKSFS", (ftnlen)6);
 			return 0;
 		    }
 		}
@@ -2933,26 +3115,33 @@ L_pcksfs:
 /*           If you get to here, sorry. */
 
 	    __state->btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btruex", i__1, "pckbsr_", (ftnlen)2792)] = 0;
-	    s_copy(status, "HOPELESS", (ftnlen)15, (ftnlen)8);
+		    s_rnge(&__global_state->f2c, "btruex", i__1, "pckbsr_", (
+		    ftnlen)2792)] = 0;
+	    s_copy(&__global_state->f2c, status, "HOPELESS", (ftnlen)15, (
+		    ftnlen)8);
 
 /*        When a task is suspended, the current activity is placed on */
 /*        a stack, to be restored later. Two levels are provided, since */
 /*        some interrupts can be interrupted by others. */
 
-	} else if (s_cmp(status, "SUSPEND", (ftnlen)15, (ftnlen)7) == 0) {
+	} else if (s_cmp(&__global_state->f2c, status, "SUSPEND", (ftnlen)15, 
+		(ftnlen)7) == 0) {
 	    ++top;
-	    s_copy(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "pckbsr_", (ftnlen)2803)) * 15, doing, (
-		    ftnlen)15, (ftnlen)15);
-	    s_copy(status, urgent, (ftnlen)15, (ftnlen)15);
-	} else if (s_cmp(status, "RESUME", (ftnlen)15, (ftnlen)6) == 0) {
+	    s_copy(&__global_state->f2c, stack + ((i__1 = top - 1) < 2 && 0 <=
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "stack", i__1,
+		     "pckbsr_", (ftnlen)2803)) * 15, doing, (ftnlen)15, (
+		    ftnlen)15);
+	    s_copy(&__global_state->f2c, status, urgent, (ftnlen)15, (ftnlen)
+		    15);
+	} else if (s_cmp(&__global_state->f2c, status, "RESUME", (ftnlen)15, (
+		ftnlen)6) == 0) {
 
 /*           Pop the status stack. */
 
-	    s_copy(status, stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 :
-		     s_rnge("stack", i__1, "pckbsr_", (ftnlen)2810)) * 15, (
-		    ftnlen)15, (ftnlen)15);
+	    s_copy(&__global_state->f2c, status, stack + ((i__1 = top - 1) < 
+		    2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "stack", i__1, "pckbsr_", (ftnlen)2810)) * 15, (ftnlen)15,
+		     (ftnlen)15);
 	    --top;
 	}
     }
@@ -2964,36 +3153,40 @@ L_pcksfs:
 
     if (bindex > 0) {
 	__state->btchkp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"btchkp", i__1, "pckbsr_", (ftnlen)2825)] = FALSE_;
+		&__global_state->f2c, "btchkp", i__1, "pckbsr_", (ftnlen)2825)
+		] = FALSE_;
 	__state->btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"btruex", i__1, "pckbsr_", (ftnlen)2826)] = 0;
+		&__global_state->f2c, "btruex", i__1, "pckbsr_", (ftnlen)2826)
+		] = 0;
     }
-    chkout_("PCKSFS", (ftnlen)6);
+    chkout_(__global_state, "PCKSFS", (ftnlen)6);
     return 0;
 } /* pckbsr_ */
 
-/* Subroutine */ int pckbsr_(char *fname, integer *handle, integer *body, 
-	doublereal *et, doublereal *descr, char *ident, logical *found, 
-	ftnlen fname_len, ftnlen ident_len)
+/* Subroutine */ int pckbsr_(cspice_t* __global_state, char *fname, integer *
+	handle, integer *body, doublereal *et, doublereal *descr, char *ident,
+	 logical *found, ftnlen fname_len, ftnlen ident_len)
 {
     return pckbsr_0_(0, fname, handle, body, et, descr, ident, found, 
 	    fname_len, ident_len);
     }
 
-/* Subroutine */ int pcklof_(char *fname, integer *handle, ftnlen fname_len)
+/* Subroutine */ int pcklof_(cspice_t* __global_state, char *fname, integer *
+	handle, ftnlen fname_len)
 {
     return pckbsr_0_(1, fname, handle, (integer *)0, (doublereal *)0, (
 	    doublereal *)0, (char *)0, (logical *)0, fname_len, (ftnint)0);
     }
 
-/* Subroutine */ int pckuof_(integer *handle)
+/* Subroutine */ int pckuof_(cspice_t* __global_state, integer *handle)
 {
     return pckbsr_0_(2, (char *)0, handle, (integer *)0, (doublereal *)0, (
 	    doublereal *)0, (char *)0, (logical *)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int pcksfs_(integer *body, doublereal *et, integer *handle, 
-	doublereal *descr, char *ident, logical *found, ftnlen ident_len)
+/* Subroutine */ int pcksfs_(cspice_t* __global_state, integer *body, 
+	doublereal *et, integer *handle, doublereal *descr, char *ident, 
+	logical *found, ftnlen ident_len)
 {
     return pckbsr_0_(3, (char *)0, handle, body, et, descr, ident, found, (
 	    ftnint)0, ident_len);

@@ -8,8 +8,7 @@
 
 
 extern ckr05_init_t __ckr05_init;
-static ckr05_state_t* get_ckr05_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckr05_state_t* get_ckr05_state(cspice_t* state) {
 	if (!state->ckr05)
 		state->ckr05 = __cspice_allocate_module(sizeof(ckr05_state_t),
 	 &__ckr05_init, sizeof(__ckr05_init));
@@ -18,9 +17,9 @@ static ckr05_state_t* get_ckr05_state() {
 }
 
 /* $Procedure      CKR05 ( Read CK record from segment, type 05 ) */
-/* Subroutine */ int ckr05_(integer *handle, doublereal *descr, doublereal *
-	sclkdp, doublereal *tol, logical *needav, doublereal *record, logical 
-	*found)
+/* Subroutine */ int ckr05_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *
+	needav, doublereal *record, logical *found)
 {
     /* Initialized data */
 
@@ -30,7 +29,8 @@ static ckr05_state_t* get_ckr05_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer high;
@@ -42,29 +42,32 @@ static ckr05_state_t* get_ckr05_state() {
     integer n;
     doublereal t;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer nidir;
-    extern doublereal dpmax_(void);
+    extern doublereal dpmax_(cspice_t*);
     integer npdir;
     integer nsrch;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer lsize;
     integer first;
     integer nints;
     integer rsize;
     doublereal start;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer bufbas;
     integer dirbas;
     doublereal hepoch;
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal lepoch;
     integer npread;
     integer nsread;
@@ -73,33 +76,33 @@ static ckr05_state_t* get_ckr05_state() {
     integer sbegix;
     integer timbas;
     doublereal pbuffr[101];
-    extern integer lstled_(doublereal *, integer *, doublereal *);
+    extern integer lstled_(cspice_t*, doublereal *, integer *, doublereal *);
     doublereal sbuffr[103];
     integer pendix;
     integer sendix;
     integer packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer maxwnd;
     doublereal contrl[5];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer lstltd_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lstltd_(cspice_t*, doublereal *, integer *, doublereal *);
     doublereal nstart;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer pgroup;
     integer sgroup;
     integer wndsiz;
     integer wstart;
     integer subtyp;
     doublereal nnstrt;
-    extern logical odd_(integer *);
+    extern logical odd_(cspice_t*, integer *);
     integer end;
     integer low;
 
 
     /* Module state */
-    ckr05_state_t* __state = get_ckr05_state();
+    ckr05_state_t* __state = get_ckr05_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single CK data record from a segment of type 05 */
@@ -625,10 +628,10 @@ static ckr05_state_t* get_ckr05_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKR05", (ftnlen)5);
+    chkin_(__global_state, "CKR05", (ftnlen)5);
 
 /*     No pointing found so far. */
 
@@ -637,7 +640,7 @@ static ckr05_state_t* get_ckr05_state() {
 /*     Unpack the segment descriptor, and get the start and end addresses */
 /*     of the segment. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[2];
     begin = ic[4];
     end = ic[5];
@@ -645,22 +648,22 @@ static ckr05_state_t* get_ckr05_state() {
 /*     Make sure that this really is a type 05 data segment. */
 
     if (type__ != 5) {
-	setmsg_("You are attempting to locate type * data in a type 5 data s"
-		"egment.", (ftnlen)66);
-	errint_("*", &type__, (ftnlen)1);
-	sigerr_("SPICE(WRONGCKTYPE)", (ftnlen)18);
-	chkout_("CKR05", (ftnlen)5);
+	setmsg_(__global_state, "You are attempting to locate type * data in"
+		" a type 5 data segment.", (ftnlen)66);
+	errint_(__global_state, "*", &type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGCKTYPE)", (ftnlen)18);
+	chkout_(__global_state, "CKR05", (ftnlen)5);
 	return 0;
     }
 
 /*     Check the tolerance value. */
 
     if (*tol < 0.) {
-	setmsg_("Tolerance must be non-negative but was actually *.", (ftnlen)
-		50);
-	errdp_("*", tol, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("CKR05", (ftnlen)5);
+	setmsg_(__global_state, "Tolerance must be non-negative but was actu"
+		"ally *.", (ftnlen)50);
+	errdp_(__global_state, "*", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "CKR05", (ftnlen)5);
 	return 0;
     }
 
@@ -672,13 +675,13 @@ static ckr05_state_t* get_ckr05_state() {
 /*        The request time is too far outside the segment's coverage */
 /*        interval for any pointing to satisfy the request. */
 
-	chkout_("CKR05", (ftnlen)5);
+	chkout_(__global_state, "CKR05", (ftnlen)5);
 	return 0;
     }
 
 /*     Set the request time to use for searching. */
 
-    t = brcktd_(sclkdp, dc, &dc[1]);
+    t = brcktd_(__global_state, sclkdp, dc, &dc[1]);
 
 /*     From this point onward, we assume the segment was constructed */
 /*     correctly.  In particular, we assume: */
@@ -699,21 +702,21 @@ static ckr05_state_t* get_ckr05_state() {
 
 
     i__1 = end - 4;
-    dafgda_(handle, &i__1, &end, contrl);
+    dafgda_(__global_state, handle, &i__1, &end, contrl);
 
 /*     Check the FAILED flag just in case HANDLE is not attached to */
 /*     any DAF file and the error action is not set to ABORT.  We */
 /*     do this only after the first call to DAFGDA, as in CKR03. */
 
-    if (failed_()) {
-	chkout_("CKR05", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKR05", (ftnlen)5);
 	return 0;
     }
     rate = contrl[0];
-    subtyp = i_dnnt(&contrl[1]);
-    wndsiz = i_dnnt(&contrl[2]);
-    nints = i_dnnt(&contrl[3]);
-    n = i_dnnt(&contrl[4]);
+    subtyp = i_dnnt(&__global_state->f2c, &contrl[1]);
+    wndsiz = i_dnnt(&__global_state->f2c, &contrl[2]);
+    nints = i_dnnt(&__global_state->f2c, &contrl[3]);
+    n = i_dnnt(&__global_state->f2c, &contrl[4]);
 
 /*     Set the packet size, which is a function of the subtype. */
 
@@ -726,22 +729,22 @@ static ckr05_state_t* get_ckr05_state() {
     } else if (subtyp == 3) {
 	packsz = 7;
     } else {
-	setmsg_("Unexpected CK type 5 subtype # found in type 5 segment.", (
-		ftnlen)55);
-	errint_("#", &subtyp, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("CKR05", (ftnlen)5);
+	setmsg_(__global_state, "Unexpected CK type 5 subtype # found in typ"
+		"e 5 segment.", (ftnlen)55);
+	errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "CKR05", (ftnlen)5);
 	return 0;
     }
 
 /*     Check the window size. */
 
     if (wndsiz <= 0) {
-	setmsg_("Window size in type 05 segment was #; must be positive.", (
-		ftnlen)55);
-	errint_("#", &wndsiz, (ftnlen)1);
-	sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	chkout_("CKR05", (ftnlen)5);
+	setmsg_(__global_state, "Window size in type 05 segment was #; must "
+		"be positive.", (ftnlen)55);
+	errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	chkout_(__global_state, "CKR05", (ftnlen)5);
 	return 0;
     }
     if (subtyp == 0 || subtyp == 2) {
@@ -750,22 +753,22 @@ static ckr05_state_t* get_ckr05_state() {
 
 	maxwnd = 12;
 	if (wndsiz > maxwnd) {
-	    setmsg_("Window size in type 05 segment was #; max allowed value"
-		    " is # for subtypes 0 and 2 (Hermite, 8 or 14-element pac"
-		    "kets).", (ftnlen)117);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    errint_("#", &maxwnd, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("CKR05", (ftnlen)5);
+	    setmsg_(__global_state, "Window size in type 05 segment was #; m"
+		    "ax allowed value is # for subtypes 0 and 2 (Hermite, 8 o"
+		    "r 14-element packets).", (ftnlen)117);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    errint_(__global_state, "#", &maxwnd, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "CKR05", (ftnlen)5);
 	    return 0;
 	}
-	if (odd_(&wndsiz)) {
-	    setmsg_("Window size in type 05 segment was #; must be even for "
-		    "subtypes 0 and 2 (Hermite, 8 or 14-element packets).", (
-		    ftnlen)107);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("CKR05", (ftnlen)5);
+	if (odd_(__global_state, &wndsiz)) {
+	    setmsg_(__global_state, "Window size in type 05 segment was #; m"
+		    "ust be even for subtypes 0 and 2 (Hermite, 8 or 14-eleme"
+		    "nt packets).", (ftnlen)107);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "CKR05", (ftnlen)5);
 	    return 0;
 	}
     } else if (subtyp == 1 || subtyp == 3) {
@@ -774,31 +777,31 @@ static ckr05_state_t* get_ckr05_state() {
 
 	maxwnd = 24;
 	if (wndsiz > maxwnd) {
-	    setmsg_("Window size in type 05 segment was #; max allowed value"
-		    " is # for subtypes 1 and 3 (Lagrange, 4 or 7-element pac"
-		    "kets).", (ftnlen)117);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    errint_("#", &maxwnd, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("CKR05", (ftnlen)5);
+	    setmsg_(__global_state, "Window size in type 05 segment was #; m"
+		    "ax allowed value is # for subtypes 1 and 3 (Lagrange, 4 "
+		    "or 7-element packets).", (ftnlen)117);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    errint_(__global_state, "#", &maxwnd, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "CKR05", (ftnlen)5);
 	    return 0;
 	}
-	if (odd_(&wndsiz)) {
-	    setmsg_("Window size in type 05 segment was #; must be even for "
-		    "subtypes 1 and 3 (Lagrange, 4 or 7-element packets).", (
-		    ftnlen)107);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("CKR05", (ftnlen)5);
+	if (odd_(__global_state, &wndsiz)) {
+	    setmsg_(__global_state, "Window size in type 05 segment was #; m"
+		    "ust be even for subtypes 1 and 3 (Lagrange, 4 or 7-eleme"
+		    "nt packets).", (ftnlen)107);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "CKR05", (ftnlen)5);
 	    return 0;
 	}
     } else {
-	setmsg_("This point should not be reached. Getting here may indicate"
-		" that the code needs to updated to handle the new subtype #", 
-		(ftnlen)118);
-	errint_("#", &subtyp, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("CKR05", (ftnlen)5);
+	setmsg_(__global_state, "This point should not be reached. Getting h"
+		"ere may indicate that the code needs to updated to handle th"
+		"e new subtype #", (ftnlen)118);
+	errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "CKR05", (ftnlen)5);
 	return 0;
     }
 
@@ -837,10 +840,11 @@ static ckr05_state_t* get_ckr05_state() {
 	npread = min(npdir,100);
 	i__1 = bufbas + 1;
 	i__2 = bufbas + npread;
-	dafgda_(handle, &i__1, &i__2, pbuffr);
+	dafgda_(__global_state, handle, &i__1, &i__2, pbuffr);
 	remain = npdir - npread;
-	while(pbuffr[(i__1 = npread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"pbuffr", i__1, "ckr05_", (ftnlen)639)] < t && remain > 0) {
+	while(pbuffr[(i__1 = npread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "pbuffr", i__1, "ckr05_", (ftnlen)639)] <
+		 t && remain > 0) {
 	    bufbas += npread;
 	    npread = min(remain,100);
 
@@ -848,7 +852,7 @@ static ckr05_state_t* get_ckr05_state() {
 
 	    i__1 = bufbas + 1;
 	    i__2 = bufbas + npread;
-	    dafgda_(handle, &i__1, &i__2, pbuffr);
+	    dafgda_(__global_state, handle, &i__1, &i__2, pbuffr);
 	    remain -= npread;
 	}
 
@@ -858,7 +862,8 @@ static ckr05_state_t* get_ckr05_state() {
 /*        PGROUP is one more than the number of directories we've */
 /*        passed by. */
 
-	pgroup = bufbas - dirbas + lstltd_(&t, &npread, pbuffr) + 1;
+	pgroup = bufbas - dirbas + lstltd_(__global_state, &t, &npread, 
+		pbuffr) + 1;
     }
 
 /*     PGROUP now indicates the set of epochs in which to search for the */
@@ -920,7 +925,7 @@ static ckr05_state_t* get_ckr05_state() {
     timbas = dirbas - n;
     i__1 = timbas + pbegix;
     i__2 = timbas + pendix;
-    dafgda_(handle, &i__1, &i__2, pbuffr);
+    dafgda_(__global_state, handle, &i__1, &i__2, pbuffr);
     npread = pendix - pbegix + 1;
 
 /*     At this point, we'll deal with the cases where T lies outside */
@@ -933,7 +938,7 @@ static ckr05_state_t* get_ckr05_state() {
 /*        the low side, we're done. */
 
 	if (*sclkdp + *tol < pbuffr[0]) {
-	    chkout_("CKR05", (ftnlen)5);
+	    chkout_(__global_state, "CKR05", (ftnlen)5);
 	    return 0;
 	}
 
@@ -941,20 +946,22 @@ static ckr05_state_t* get_ckr05_state() {
 
 	t = pbuffr[0];
     } else if (t > pbuffr[(i__1 = npread - 1) < 101 && 0 <= i__1 ? i__1 : 
-	    s_rnge("pbuffr", i__1, "ckr05_", (ftnlen)754)]) {
+	    s_rnge(&__global_state->f2c, "pbuffr", i__1, "ckr05_", (ftnlen)
+	    754)]) {
 
 /*        This can happen only if T follows all epochs. */
 
 	if (*sclkdp - *tol > pbuffr[(i__1 = npread - 1) < 101 && 0 <= i__1 ? 
-		i__1 : s_rnge("pbuffr", i__1, "ckr05_", (ftnlen)758)]) {
-	    chkout_("CKR05", (ftnlen)5);
+		i__1 : s_rnge(&__global_state->f2c, "pbuffr", i__1, "ckr05_", 
+		(ftnlen)758)]) {
+	    chkout_(__global_state, "CKR05", (ftnlen)5);
 	    return 0;
 	}
 
 /*        Bracket T to move it within the range of buffered epochs. */
 
-	t = pbuffr[(i__1 = npread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"pbuffr", i__1, "ckr05_", (ftnlen)768)];
+	t = pbuffr[(i__1 = npread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "pbuffr", i__1, "ckr05_", (ftnlen)768)];
     }
 
 /*     At this point, */
@@ -975,7 +982,7 @@ static ckr05_state_t* get_ckr05_state() {
 /*     request time cannot be greater than all of time tags in the */
 /*     group, and it cannot precede the first element of the group. */
 
-    i__ = lstltd_(&t, &npread, pbuffr);
+    i__ = lstltd_(__global_state, &t, &npread, pbuffr);
 
 /*     The variables LOW and HIGH are the indices of a pair of time */
 /*     tags that bracket the request time.  Remember that NPREAD could */
@@ -992,15 +999,15 @@ static ckr05_state_t* get_ckr05_state() {
 	} else {
 	    high = 2;
 	}
-	hepoch = pbuffr[(i__1 = high - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"pbuffr", i__1, "ckr05_", (ftnlen)811)];
+	hepoch = pbuffr[(i__1 = high - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "pbuffr", i__1, "ckr05_", (ftnlen)811)];
     } else {
 	low = pbegix + i__ - 1;
-	lepoch = pbuffr[(i__1 = i__ - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"pbuffr", i__1, "ckr05_", (ftnlen)816)];
+	lepoch = pbuffr[(i__1 = i__ - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "pbuffr", i__1, "ckr05_", (ftnlen)816)];
 	high = low + 1;
-	hepoch = pbuffr[(i__1 = i__) < 101 && 0 <= i__1 ? i__1 : s_rnge("pbu"
-		"ffr", i__1, "ckr05_", (ftnlen)819)];
+	hepoch = pbuffr[(i__1 = i__) < 101 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "pbuffr", i__1, "ckr05_", (ftnlen)819)];
     }
 
 /*     We now need to find the interpolation interval containing */
@@ -1061,10 +1068,10 @@ static ckr05_state_t* get_ckr05_state() {
 	    remain = nidir - nsread;
 	    i__1 = bufbas + 1;
 	    i__2 = bufbas + nsread;
-	    dafgda_(handle, &i__1, &i__2, sbuffr);
+	    dafgda_(__global_state, handle, &i__1, &i__2, sbuffr);
 	    while(sbuffr[(i__1 = nsread - 1) < 103 && 0 <= i__1 ? i__1 : 
-		    s_rnge("sbuffr", i__1, "ckr05_", (ftnlen)891)] < t && 
-		    remain > 0) {
+		    s_rnge(&__global_state->f2c, "sbuffr", i__1, "ckr05_", (
+		    ftnlen)891)] < t && remain > 0) {
 		bufbas += nsread;
 		nsread = min(remain,100);
 		remain -= nsread;
@@ -1073,7 +1080,7 @@ static ckr05_state_t* get_ckr05_state() {
 
 		i__1 = bufbas + 1;
 		i__2 = bufbas + nsread;
-		dafgda_(handle, &i__1, &i__2, sbuffr);
+		dafgda_(__global_state, handle, &i__1, &i__2, sbuffr);
 	    }
 
 /*           At this point, BUFBAS - DIRBAS is the number of directory */
@@ -1082,7 +1089,8 @@ static ckr05_state_t* get_ckr05_state() {
 /*           SGROUP is one more than the number of directories we've */
 /*           passed by. */
 
-	    sgroup = bufbas - dirbas + lstltd_(&t, &nsread, sbuffr) + 1;
+	    sgroup = bufbas - dirbas + lstltd_(__global_state, &t, &nsread, 
+		    sbuffr) + 1;
 	}
 
 /*        SGROUP now indicates the set of interval start times in which */
@@ -1114,7 +1122,7 @@ static ckr05_state_t* get_ckr05_state() {
 	timbas = dirbas - nints;
 	i__1 = timbas + sbegix;
 	i__2 = timbas + sendix;
-	dafgda_(handle, &i__1, &i__2, sbuffr);
+	dafgda_(__global_state, handle, &i__1, &i__2, sbuffr);
 	nsread = sendix - sbegix + 1;
 
 /*        Find the last interval start time less than or equal to the */
@@ -1122,26 +1130,28 @@ static ckr05_state_t* get_ckr05_state() {
 /*        first start time, so I will be > 0. */
 
 	nsrch = min(101,nsread);
-	i__ = lstled_(&t, &nsrch, sbuffr);
-	start = sbuffr[(i__1 = i__ - 1) < 103 && 0 <= i__1 ? i__1 : s_rnge(
-		"sbuffr", i__1, "ckr05_", (ftnlen)962)];
+	i__ = lstled_(__global_state, &t, &nsrch, sbuffr);
+	start = sbuffr[(i__1 = i__ - 1) < 103 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "sbuffr", i__1, "ckr05_", (ftnlen)962)];
 
 /*        Let NSTART ("next start") be the start time that follows */
 /*        START, if START is not the last start time.  If NSTART */
 /*        has a successor, let NNSTRT be that start time. */
 
 	if (i__ < nsread) {
-	    nstart = sbuffr[(i__1 = i__) < 103 && 0 <= i__1 ? i__1 : s_rnge(
-		    "sbuffr", i__1, "ckr05_", (ftnlen)971)];
+	    nstart = sbuffr[(i__1 = i__) < 103 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "sbuffr", i__1, "ckr05_", (ftnlen)
+		    971)];
 	    if (i__ + 1 < nsread) {
 		nnstrt = sbuffr[(i__1 = i__ + 1) < 103 && 0 <= i__1 ? i__1 : 
-			s_rnge("sbuffr", i__1, "ckr05_", (ftnlen)975)];
+			s_rnge(&__global_state->f2c, "sbuffr", i__1, "ckr05_",
+			 (ftnlen)975)];
 	    } else {
-		nnstrt = dpmax_();
+		nnstrt = dpmax_(__global_state);
 	    }
 	} else {
-	    nstart = dpmax_();
-	    nnstrt = dpmax_();
+	    nstart = dpmax_(__global_state);
+	    nnstrt = dpmax_(__global_state);
 	}
     }
 
@@ -1170,7 +1180,7 @@ static ckr05_state_t* get_ckr05_state() {
 
 /*              ...But T is too far from the interval. */
 
-		chkout_("CKR05", (ftnlen)5);
+		chkout_(__global_state, "CKR05", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1187,7 +1197,7 @@ static ckr05_state_t* get_ckr05_state() {
 
 /*              ...But T is too far from the interval. */
 
-		chkout_("CKR05", (ftnlen)5);
+		chkout_(__global_state, "CKR05", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1261,20 +1271,20 @@ static ckr05_state_t* get_ckr05_state() {
 
     wstart = begin + n * packsz + first - 1;
     i__1 = wstart + wndsiz - 1;
-    dafgda_(handle, &wstart, &i__1, pbuffr);
+    dafgda_(__global_state, handle, &wstart, &i__1, pbuffr);
 
 /*     Discard any epochs less than START or greater than or equal */
 /*     to NSTART.  The set of epochs we want ranges from indices */
 /*     I+1 to J.  This range is non-empty unless START and NSTART */
 /*     are both DPMAX(). */
 
-    i__ = lstltd_(&start, &wndsiz, pbuffr);
-    j = lstltd_(&nstart, &wndsiz, pbuffr);
+    i__ = lstltd_(__global_state, &start, &wndsiz, pbuffr);
+    j = lstltd_(__global_state, &nstart, &wndsiz, pbuffr);
     if (i__ == j) {
 
 /*        Fuggedaboudit. */
 
-	chkout_("CKR05", (ftnlen)5);
+	chkout_(__global_state, "CKR05", (ftnlen)5);
 	return 0;
     }
 
@@ -1297,14 +1307,14 @@ static ckr05_state_t* get_ckr05_state() {
 
     i__1 = begin + (first - 1) * packsz;
     i__2 = begin + last * packsz - 1;
-    dafgda_(handle, &i__1, &i__2, &record[4]);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[4]);
 
 /*     Finally, add the epochs to the output record. */
 
     i__2 = j - i__;
-    moved_(&pbuffr[(i__1 = i__) < 101 && 0 <= i__1 ? i__1 : s_rnge("pbuffr", 
-	    i__1, "ckr05_", (ftnlen)1164)], &i__2, &record[wndsiz * packsz + 
-	    4]);
+    moved_(__global_state, &pbuffr[(i__1 = i__) < 101 && 0 <= i__1 ? i__1 : 
+	    s_rnge(&__global_state->f2c, "pbuffr", i__1, "ckr05_", (ftnlen)
+	    1164)], &i__2, &record[wndsiz * packsz + 4]);
 
 /*     Save the information about the interval and segment. */
 
@@ -1318,7 +1328,7 @@ static ckr05_state_t* get_ckr05_state() {
 /*     Indicate pointing was found. */
 
     *found = TRUE_;
-    chkout_("CKR05", (ftnlen)5);
+    chkout_(__global_state, "CKR05", (ftnlen)5);
     return 0;
 } /* ckr05_ */
 

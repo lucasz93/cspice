@@ -8,24 +8,25 @@
 
 
 typedef int ekopw_state_t;
-static ekopw_state_t* get_ekopw_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekopw_state_t* get_ekopw_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   EKOPW ( EK, open file for writing ) */
-/* Subroutine */ int ekopw_(char *fname, integer *handle, ftnlen fname_len)
+/* Subroutine */ int ekopw_(cspice_t* __global_state, char *fname, integer *
+	handle, ftnlen fname_len)
 {
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasopw_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasopw_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ekopw_state_t* __state = get_ekopw_state();
+    ekopw_state_t* __state = get_ekopw_state(__global_state);
 /* $ Abstract */
 
 /*     Open an existing E-kernel file for writing. */
@@ -202,25 +203,25 @@ static ekopw_state_t* get_ekopw_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKOPW", (ftnlen)5);
+	chkin_(__global_state, "EKOPW", (ftnlen)5);
     }
 
 /*     Open the file as a DAS file. */
 
-    dasopw_(fname, handle, fname_len);
-    if (failed_()) {
-	chkout_("EKOPW", (ftnlen)5);
+    dasopw_(__global_state, fname, handle, fname_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKOPW", (ftnlen)5);
 	return 0;
     }
 
 /*     Nothing doing unless the architecture is correct.  This file */
 /*     should be a paged DAS EK. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    chkout_("EKOPW", (ftnlen)5);
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    chkout_(__global_state, "EKOPW", (ftnlen)5);
     return 0;
 } /* ekopw_ */
 

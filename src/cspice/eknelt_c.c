@@ -312,7 +312,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "eknelt_c" );
+   chkin_c ( naif_state, "eknelt_c" );
 
    /*
    Convert the SELECT clause index and row number to Fortran-style.

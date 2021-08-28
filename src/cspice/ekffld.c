@@ -8,28 +8,30 @@
 
 
 typedef int ekffld_state_t;
-static ekffld_state_t* get_ekffld_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekffld_state_t* get_ekffld_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      EKFFLD ( EK, finish fast write ) */
-/* Subroutine */ int ekffld_(integer *handle, integer *segno, integer *rcptrs)
+/* Subroutine */ int ekffld_(cspice_t* __global_state, integer *handle, 
+	integer *segno, integer *rcptrs)
 {
-    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer stype;
     integer segdsc[24];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int zzekff01_(integer *, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzekff01_(cspice_t*, integer *, integer *, 
+	    integer *);
 
 
     /* Module state */
-    ekffld_state_t* __state = get_ekffld_state();
+    ekffld_state_t* __state = get_ekffld_state(__global_state);
 /* $ Abstract */
 
 /*     Complete a fast write operation on a new E-kernel segment. */
@@ -460,34 +462,35 @@ static ekffld_state_t* get_ekffld_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKFFLD", (ftnlen)6);
+	chkin_(__global_state, "EKFFLD", (ftnlen)6);
     }
 
 /*     Read in the segment descriptor, and get the segment's type. */
 
-    zzeksdsc_(handle, segno, segdsc);
+    zzeksdsc_(__global_state, handle, segno, segdsc);
     stype = segdsc[0];
 
 /*     Complete the fast write preparations appropriate to the segment's */
 /*     type. */
 
     if (stype == 1) {
-	zzekff01_(handle, segno, rcptrs);
+	zzekff01_(__global_state, handle, segno, rcptrs);
     } else if (stype == 2) {
 
 /*        Currently, no actions are taken to complete a type 2 segment. */
 
     } else {
-	setmsg_("Segment type # is not currently supported.", (ftnlen)42);
-	errint_("#", &stype, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("EKFFLD", (ftnlen)6);
+	setmsg_(__global_state, "Segment type # is not currently supported.", 
+		(ftnlen)42);
+	errint_(__global_state, "#", &stype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "EKFFLD", (ftnlen)6);
 	return 0;
     }
-    chkout_("EKFFLD", (ftnlen)6);
+    chkout_(__global_state, "EKFFLD", (ftnlen)6);
     return 0;
 } /* ekffld_ */
 

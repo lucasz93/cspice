@@ -8,22 +8,21 @@
 
 
 typedef int recrad_state_t;
-static recrad_state_t* get_recrad_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline recrad_state_t* get_recrad_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RECRAD ( Rectangular coordinates to RA and DEC ) */
-/* Subroutine */ int recrad_(doublereal *rectan, doublereal *range, 
-	doublereal *ra, doublereal *dec)
+/* Subroutine */ int recrad_(cspice_t* __global_state, doublereal *rectan, 
+	doublereal *range, doublereal *ra, doublereal *dec)
 {
-    extern doublereal twopi_(void);
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern doublereal twopi_(cspice_t*);
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
 
 
     /* Module state */
-    recrad_state_t* __state = get_recrad_state();
+    recrad_state_t* __state = get_recrad_state(__global_state);
 /* $ Abstract */
 
 /*     Convert rectangular coordinates to range, right ascension, */
@@ -203,9 +202,9 @@ static recrad_state_t* get_recrad_state() {
 /*     two pi radians, whenever RA is negative two pi must be added to */
 /*     it. */
 
-    reclat_(rectan, range, ra, dec);
+    reclat_(__global_state, rectan, range, ra, dec);
     if (*ra < 0.) {
-	*ra += twopi_();
+	*ra += twopi_(__global_state);
     }
     return 0;
 } /* recrad_ */

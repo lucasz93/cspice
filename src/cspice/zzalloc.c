@@ -440,7 +440,7 @@ SpiceChar * alloc_SpiceString ( int length )
 
    SpiceChar           * str;
 
-   chkin_c ( "alloc_SpiceString" );
+   chkin_c ( naif_state, "alloc_SpiceString" );
 
    /* Allocate the needed memory for the double array. Check for errors. */
    str = (SpiceChar *) alloc_SpiceMemory ( length * sizeof(SpiceChar) );
@@ -566,7 +566,7 @@ SpiceInt * alloc_SpiceInt_C_array ( int rows, int cols )
 
    SpiceInt            * mat;
 
-   chkin_c ( "alloc_SpiceInt_C_array" );
+   chkin_c ( naif_state, "alloc_SpiceInt_C_array" );
 
    if ( rows*cols < 1 )
       {
@@ -710,7 +710,7 @@ SpiceBoolean * alloc_SpiceBoolean_C_array ( int rows, int cols )
 
    SpiceBoolean            * mat;
 
-   chkin_c ( "alloc_SpiceBoolean_C_array" );
+   chkin_c ( naif_state, "alloc_SpiceBoolean_C_array" );
 
    if ( rows*cols < 1 )
       {
@@ -867,7 +867,7 @@ SpiceDouble * alloc_SpiceDouble_C_array ( int rows, int cols )
 
    SpiceDouble         * mat;
 
-   chkin_c ( "alloc_SpiceDouble_C_array" );
+   chkin_c ( naif_state, "alloc_SpiceDouble_C_array" );
 
    if ( (rows < 1) || (cols < 1) )
       {
@@ -1039,7 +1039,7 @@ SpiceChar ** alloc_SpiceString_C_array ( int string_length, int string_count )
 
    SpiceChar          ** cvals;
 
-   chkin_c ( "alloc_SpiceString_C_array" );
+   chkin_c ( naif_state, "alloc_SpiceString_C_array" );
 
    /*
    Sanity checks.
@@ -1218,7 +1218,7 @@ SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len,
    SpiceChar          ** str_array;
    int                   i;
 
-   chkin_c ( "alloc_SpiceString_C_Copy_array" );
+   chkin_c ( naif_state, "alloc_SpiceString_C_Copy_array" );
 
    /*
    Sanity checks.
@@ -1394,7 +1394,7 @@ SpiceChar ** alloc_SpiceString_Pointer_array( int array_len )
 
    SpiceChar          ** ptr_array;
 
-   chkin_c ( "alloc_SpiceString_Pointer_array" );
+   chkin_c ( naif_state, "alloc_SpiceString_Pointer_array" );
 
    /*
    Sanity checks.

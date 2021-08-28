@@ -8,8 +8,7 @@
 
 
 extern tpartv_init_t __tpartv_init;
-static tpartv_state_t* get_tpartv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline tpartv_state_t* get_tpartv_state(cspice_t* state) {
 	if (!state->tpartv)
 		state->tpartv = __cspice_allocate_module(sizeof(
 	tpartv_state_t), &__tpartv_init, sizeof(__tpartv_init));
@@ -18,10 +17,11 @@ static tpartv_state_t* get_tpartv_state() {
 }
 
 /* $Procedure      TPARTV ( Time string ---parse to a time vector) */
-/* Subroutine */ int tpartv_(char *string, doublereal *tvec, integer *ntvec, 
-	char *type__, char *modify, logical *mods, logical *yabbrv, logical *
-	succes, char *pictur, char *error, ftnlen string_len, ftnlen type_len,
-	 ftnlen modify_len, ftnlen pictur_len, ftnlen error_len)
+/* Subroutine */ int tpartv_(cspice_t* __global_state, char *string, 
+	doublereal *tvec, integer *ntvec, char *type__, char *modify, logical 
+	*mods, logical *yabbrv, logical *succes, char *pictur, char *error, 
+	ftnlen string_len, ftnlen type_len, ftnlen modify_len, ftnlen 
+	pictur_len, ftnlen error_len)
 {
     /* Initialized data */
 
@@ -30,43 +30,51 @@ static tpartv_state_t* get_tpartv_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_indx(char *, char *, ftnlen, ftnlen), s_cmp(char *, char *, 
-	    ftnlen, ftnlen), s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_indx(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(f2c_state_t*
+	    , char *, integer, char *, integer);
 
     /* Local variables */
-    extern logical zztokns_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzinssub_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern logical zzist_(char *, ftnlen);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
+    extern logical zztokns_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzinssub_(cspice_t*, char *, char *, integer *
+	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern integer intmax_(void);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern logical zzist_(cspice_t*, char *, ftnlen);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    extern logical zzcmbt_(char *, char *, logical *, ftnlen, ftnlen);
-    extern logical zzgrep_(char *, ftnlen);
-    extern logical zznote_(char *, integer *, integer *, ftnlen);
-    extern logical zzvalt_(char *, integer *, integer *, char *, ftnlen, 
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    extern logical zzremt_(char *, ftnlen);
-    extern logical zzrept_(char *, char *, logical *, ftnlen, ftnlen);
-    extern logical zzsubt_(char *, char *, logical *, ftnlen, ftnlen);
-    extern logical zzispt_(char *, integer *, integer *, ftnlen);
-    extern logical zzunpck_(char *, logical *, doublereal *, integer *, char *
-	    , char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern logical zztpats_(integer *, integer *, char *, char *, ftnlen, 
+    extern /* Subroutine */ int prefix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern integer intmax_(cspice_t*);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern logical zzcmbt_(cspice_t*, char *, char *, logical *, ftnlen, 
 	    ftnlen);
+    extern logical zzgrep_(cspice_t*, char *, ftnlen);
+    extern logical zznote_(cspice_t*, char *, integer *, integer *, ftnlen);
+    extern logical zzvalt_(cspice_t*, char *, integer *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern logical zzremt_(cspice_t*, char *, ftnlen);
+    extern logical zzrept_(cspice_t*, char *, char *, logical *, ftnlen, 
+	    ftnlen);
+    extern logical zzsubt_(cspice_t*, char *, char *, logical *, ftnlen, 
+	    ftnlen);
+    extern logical zzispt_(cspice_t*, char *, integer *, integer *, ftnlen);
+    extern logical zzunpck_(cspice_t*, char *, logical *, doublereal *, 
+	    integer *, char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen)
+	    ;
+    extern logical zztpats_(cspice_t*, integer *, integer *, char *, char *, 
+	    ftnlen, ftnlen);
 
 
     /* Module state */
-    tpartv_state_t* __state = get_tpartv_state();
+    tpartv_state_t* __state = get_tpartv_state(__global_state);
 /* $ Abstract */
 
 /*     This routine returns the components of a time supplied */
@@ -641,23 +649,23 @@ static tpartv_state_t* get_tpartv_state() {
     *mods = FALSE_;
     *yabbrv = FALSE_;
     for (__state->i__ = 1; __state->i__ <= 5; ++__state->i__) {
-	s_copy(modify + (__state->i__ - 1) * modify_len, " ", modify_len, (
-		ftnlen)1);
+	s_copy(&__global_state->f2c, modify + (__state->i__ - 1) * modify_len,
+		 " ", modify_len, (ftnlen)1);
     }
 
 /*     On the first call to this routine we load the built in */
 /*     representation patterns. */
 
     if (__state->first) {
-	if (zztpats_(&__state->c__300, &__state->nknown, __state->known, 
-		__state->meanng, (ftnlen)12, (ftnlen)12)) {
+	if (zztpats_(__global_state, &__state->c__300, &__state->nknown, 
+		__state->known, __state->meanng, (ftnlen)12, (ftnlen)12)) {
 	    __state->first = FALSE_;
 	} else {
-	    s_copy(pictur, " ", pictur_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, pictur, " ", pictur_len, (ftnlen)1);
 	    *succes = FALSE_;
-	    s_copy(error, "There is an incompatibility between ZZTPATS and t"
-		    "he room allocated for KNOWN in TPARTV.", error_len, (
-		    ftnlen)87);
+	    s_copy(&__global_state->f2c, error, "There is an incompatibility"
+		    " between ZZTPATS and the room allocated for KNOWN in TPA"
+		    "RTV.", error_len, (ftnlen)87);
 	    return 0;
 	}
     }
@@ -665,12 +673,13 @@ static tpartv_state_t* get_tpartv_state() {
 /*     First step is to tokenize the string.  The new representation */
 /*     is maintained in ZZTIME.  We'll get it later if we need it. */
 
-    __state->resolv = zztokns_(string, error, string_len, error_len);
+    __state->resolv = zztokns_(__global_state, string, error, string_len, 
+	    error_len);
     if (! __state->resolv) {
 	*succes = FALSE_;
 	*ntvec = 0;
-	s_copy(type__, " ", type_len, (ftnlen)1);
-	s_copy(pictur, " ", pictur_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, type__, " ", type_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, pictur, " ", pictur_len, (ftnlen)1);
 	return 0;
     }
 
@@ -799,39 +808,43 @@ static tpartv_state_t* get_tpartv_state() {
 
     __state->l2r = TRUE_;
     __state->r2l = ! __state->l2r;
-    if (zzcmbt_("Oi", "z", &__state->l2r, (ftnlen)2, (ftnlen)1)) {
-	__state->resolv = zzcmbt_("z:i", "Z", &__state->l2r, (ftnlen)3, (
-		ftnlen)1);
-	__state->resolv = zzsubt_("z", "Z", &__state->l2r, (ftnlen)1, (ftnlen)
-		1);
+    if (zzcmbt_(__global_state, "Oi", "z", &__state->l2r, (ftnlen)2, (ftnlen)
+	    1)) {
+	__state->resolv = zzcmbt_(__global_state, "z:i", "Z", &__state->l2r, (
+		ftnlen)3, (ftnlen)1);
+	__state->resolv = zzsubt_(__global_state, "z", "Z", &__state->l2r, (
+		ftnlen)1, (ftnlen)1);
     }
-    if (zzcmbt_("oi", "z", &__state->l2r, (ftnlen)2, (ftnlen)1)) {
-	__state->resolv = zzcmbt_("z:i", "Z", &__state->l2r, (ftnlen)3, (
-		ftnlen)1);
-	__state->resolv = zzsubt_("z", "Z", &__state->l2r, (ftnlen)1, (ftnlen)
-		1);
+    if (zzcmbt_(__global_state, "oi", "z", &__state->l2r, (ftnlen)2, (ftnlen)
+	    1)) {
+	__state->resolv = zzcmbt_(__global_state, "z:i", "Z", &__state->l2r, (
+		ftnlen)3, (ftnlen)1);
+	__state->resolv = zzsubt_(__global_state, "z", "Z", &__state->l2r, (
+		ftnlen)1, (ftnlen)1);
     }
 
 /*     Next we resolve any months, or weekdays that are followed */
 /*     by periods. */
 
-    __state->resolv = zzrept_("m.", "m*", &__state->l2r, (ftnlen)2, (ftnlen)2)
-	    ;
-    __state->resolv = zzrept_("w.", "w*", &__state->l2r, (ftnlen)2, (ftnlen)2)
-	    ;
-    __state->resolv = zzrept_("w,", "w*", &__state->l2r, (ftnlen)2, (ftnlen)2)
-	    ;
+    __state->resolv = zzrept_(__global_state, "m.", "m*", &__state->l2r, (
+	    ftnlen)2, (ftnlen)2);
+    __state->resolv = zzrept_(__global_state, "w.", "w*", &__state->l2r, (
+	    ftnlen)2, (ftnlen)2);
+    __state->resolv = zzrept_(__global_state, "w,", "w*", &__state->l2r, (
+	    ftnlen)2, (ftnlen)2);
 
 /*     Now convert the right most integer-decimal-point pair to the */
 /*     number representation. */
 
-    if (zzcmbt_("i.i", "n", &__state->r2l, (ftnlen)3, (ftnlen)1)) {
+    if (zzcmbt_(__global_state, "i.i", "n", &__state->r2l, (ftnlen)3, (ftnlen)
+	    1)) {
 
 /*        We aren't going to do anything here.  We are simply */
 /*        using the IF-THEN...ELSE IF ... ENDIF  to make sure */
 /*        we only replace one decimal place. */
 
-    } else if (zzcmbt_("i.", "n", &__state->r2l, (ftnlen)2, (ftnlen)1)) {
+    } else if (zzcmbt_(__global_state, "i.", "n", &__state->r2l, (ftnlen)2, (
+	    ftnlen)1)) {
 
 /*        Same as the previous comment. */
 
@@ -839,7 +852,7 @@ static tpartv_state_t* get_tpartv_state() {
 
 /*     Remove any white space from the tokenization. */
 
-    __state->resolv = zzremt_("b", (ftnlen)1);
+    __state->resolv = zzremt_(__global_state, "b", (ftnlen)1);
 
 /*     User Custom Formats (this still needs a modicum of work). */
 /*     ---------------------------------------------------------------- */
@@ -870,42 +883,48 @@ static tpartv_state_t* get_tpartv_state() {
 /*     ---------------------------------------------------------------- */
 /*     ================================================================ */
 
-    if (zzist_("j", (ftnlen)1)) {
+    if (zzist_(__global_state, "j", (ftnlen)1)) {
 
 /*        This is some form of Julian Date. Handle this case */
 /*        right here and return. */
 
-	__state->resolv = zzrept_("[s]", "*s*", &__state->l2r, (ftnlen)3, (
-		ftnlen)3);
-	*mods = *mods || zznote_("s", &__state->b, &__state->e, (ftnlen)1);
+	__state->resolv = zzrept_(__global_state, "[s]", "*s*", &__state->l2r,
+		 (ftnlen)3, (ftnlen)3);
+	*mods = *mods || zznote_(__global_state, "s", &__state->b, &
+		__state->e, (ftnlen)1);
 	if (*mods) {
-	    ucase_(string + (__state->b - 1), modify + (modify_len << 2), 
-		    __state->e - (__state->b - 1), modify_len);
+	    ucase_(__global_state, string + (__state->b - 1), modify + (
+		    modify_len << 2), __state->e - (__state->b - 1), 
+		    modify_len);
 	}
-	__state->resolv = zzrept_("[j]", "*j*", &__state->l2r, (ftnlen)3, (
-		ftnlen)3);
-	__state->resolv = zzremt_("j", (ftnlen)1);
-	if (! zzist_("n", (ftnlen)1)) {
-	    __state->resolv = zzsubt_("i", "n", &__state->l2r, (ftnlen)1, (
-		    ftnlen)1);
+	__state->resolv = zzrept_(__global_state, "[j]", "*j*", &__state->l2r,
+		 (ftnlen)3, (ftnlen)3);
+	__state->resolv = zzremt_(__global_state, "j", (ftnlen)1);
+	if (! zzist_(__global_state, "n", (ftnlen)1)) {
+	    __state->resolv = zzsubt_(__global_state, "i", "n", &__state->l2r,
+		     (ftnlen)1, (ftnlen)1);
 	}
-	__state->resolv = zzcmbt_("-n", "n", &__state->l2r, (ftnlen)2, (
-		ftnlen)1);
-	__state->resolv = zzsubt_("n", "J", &__state->l2r, (ftnlen)1, (ftnlen)
-		1);
+	__state->resolv = zzcmbt_(__global_state, "-n", "n", &__state->l2r, (
+		ftnlen)2, (ftnlen)1);
+	__state->resolv = zzsubt_(__global_state, "n", "J", &__state->l2r, (
+		ftnlen)1, (ftnlen)1);
 
 /*        We let ZZUNPK handle the parsing or diagnosis of any problems. */
 
-	*succes = zzunpck_(string, yabbrv, tvec, ntvec, type__, pictur, error,
-		 string_len, type_len, pictur_len, error_len);
-	if (i_indx(pictur, "JULIAND.", pictur_len, (ftnlen)8) > 0) {
-	    suffix_("::RND", &__state->c__1, pictur, (ftnlen)5, pictur_len);
+	*succes = zzunpck_(__global_state, string, yabbrv, tvec, ntvec, 
+		type__, pictur, error, string_len, type_len, pictur_len, 
+		error_len);
+	if (i_indx(&__global_state->f2c, pictur, "JULIAND.", pictur_len, (
+		ftnlen)8) > 0) {
+	    suffix_(__global_state, "::RND", &__state->c__1, pictur, (ftnlen)
+		    5, pictur_len);
 	}
-	if (s_cmp(modify + (modify_len << 2), " ", modify_len, (ftnlen)1) != 
-		0) {
-	    suffix_("::", &__state->c__1, pictur, (ftnlen)2, pictur_len);
-	    suffix_(modify + (modify_len << 2), &__state->c__0, pictur, 
-		    modify_len, pictur_len);
+	if (s_cmp(&__global_state->f2c, modify + (modify_len << 2), " ", 
+		modify_len, (ftnlen)1) != 0) {
+	    suffix_(__global_state, "::", &__state->c__1, pictur, (ftnlen)2, 
+		    pictur_len);
+	    suffix_(__global_state, modify + (modify_len << 2), &
+		    __state->c__0, pictur, modify_len, pictur_len);
 	}
 	return 0;
     }
@@ -917,51 +936,56 @@ static tpartv_state_t* get_tpartv_state() {
 /*     Replace any integers greater than 1000 by Y. */
 
     __state->b = 1000;
-    __state->e = intmax_();
-    __state->resolv = zzvalt_(string, &__state->b, &__state->e, "Y", 
-	    string_len, (ftnlen)1);
+    __state->e = intmax_(__global_state);
+    __state->resolv = zzvalt_(__global_state, string, &__state->b, &
+	    __state->e, "Y", string_len, (ftnlen)1);
 
 /*     If the ISO time delimiter 't' is present we don't perform */
 /*     any further simplifications. */
 
-    if (zzist_("t", (ftnlen)1)) {
-	__state->resolv = zzgrep_(__state->rep, (ftnlen)12);
-	__state->use = bsrchc_(__state->rep, &__state->nknown, __state->known,
-		 (ftnlen)12, (ftnlen)12);
+    if (zzist_(__global_state, "t", (ftnlen)1)) {
+	__state->resolv = zzgrep_(__global_state, __state->rep, (ftnlen)12);
+	__state->use = bsrchc_(__global_state, __state->rep, &__state->nknown,
+		 __state->known, (ftnlen)12, (ftnlen)12);
 	if (__state->use != 0) {
-	    __state->resolv = zzrept_(__state->known + ((i__1 = __state->use 
-		    - 1) < 300 && 0 <= i__1 ? i__1 : s_rnge("known", i__1, 
-		    "tpartv_", (ftnlen)1011)) * 12, __state->meanng + ((i__2 =
-		     __state->use - 1) < 300 && 0 <= i__2 ? i__2 : s_rnge(
+	    __state->resolv = zzrept_(__global_state, __state->known + ((i__1 
+		    = __state->use - 1) < 300 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "known", i__1, "tpartv_", (ftnlen)
+		    1011)) * 12, __state->meanng + ((i__2 = __state->use - 1) 
+		    < 300 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
 		    "meanng", i__2, "tpartv_", (ftnlen)1011)) * 12, &
 		    __state->l2r, (ftnlen)12, (ftnlen)12);
-	    *succes = zzunpck_(string, yabbrv, tvec, ntvec, type__, pictur, 
-		    error, string_len, type_len, pictur_len, error_len);
-	    if (i_indx(pictur, ".#", pictur_len, (ftnlen)2) != 0) {
-		suffix_("::RND", &__state->c__1, pictur, (ftnlen)5, 
-			pictur_len);
+	    *succes = zzunpck_(__global_state, string, yabbrv, tvec, ntvec, 
+		    type__, pictur, error, string_len, type_len, pictur_len, 
+		    error_len);
+	    if (i_indx(&__global_state->f2c, pictur, ".#", pictur_len, (
+		    ftnlen)2) != 0) {
+		suffix_(__global_state, "::RND", &__state->c__1, pictur, (
+			ftnlen)5, pictur_len);
 	    }
-	    if (s_cmp(modify + (modify_len << 1), " ", modify_len, (ftnlen)1) 
-		    != 0) {
-		suffix_("::", &__state->c__1, pictur, (ftnlen)2, pictur_len);
-		suffix_(modify + (modify_len << 1), &__state->c__0, pictur, 
-			modify_len, pictur_len);
+	    if (s_cmp(&__global_state->f2c, modify + (modify_len << 1), " ", 
+		    modify_len, (ftnlen)1) != 0) {
+		suffix_(__global_state, "::", &__state->c__1, pictur, (ftnlen)
+			2, pictur_len);
+		suffix_(__global_state, modify + (modify_len << 1), &
+			__state->c__0, pictur, modify_len, pictur_len);
 	    }
-	    if (s_cmp(modify + (modify_len << 2), " ", modify_len, (ftnlen)1) 
-		    != 0) {
-		suffix_("::", &__state->c__1, pictur, (ftnlen)2, pictur_len);
-		suffix_(modify + (modify_len << 2), &__state->c__0, pictur, 
-			modify_len, pictur_len);
+	    if (s_cmp(&__global_state->f2c, modify + (modify_len << 2), " ", 
+		    modify_len, (ftnlen)1) != 0) {
+		suffix_(__global_state, "::", &__state->c__1, pictur, (ftnlen)
+			2, pictur_len);
+		suffix_(__global_state, modify + (modify_len << 2), &
+			__state->c__0, pictur, modify_len, pictur_len);
 	    }
 	} else {
 	    *succes = FALSE_;
 	    *ntvec = 0;
 	    *mods = FALSE_;
-	    s_copy(type__, " ", type_len, (ftnlen)1);
-	    s_copy(pictur, " ", pictur_len, (ftnlen)1);
-	    s_copy(error, "The input string uses the ISO  \"T\" date/time de"
-		    "limiter but does not match any of the accepted ISO forma"
-		    "ts. ", error_len, (ftnlen)107);
+	    s_copy(&__global_state->f2c, type__, " ", type_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, pictur, " ", pictur_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, error, "The input string uses the I"
+		    "SO  \"T\" date/time delimiter but does not match any of "
+		    "the accepted ISO formats. ", error_len, (ftnlen)107);
 	}
 	return 0;
     }
@@ -977,113 +1001,128 @@ static tpartv_state_t* get_tpartv_state() {
 
     __state->b = 100;
     __state->e = 1000;
-    __state->resolv = zzvalt_(string, &__state->b, &__state->e, "I", 
-	    string_len, (ftnlen)1);
-    *yabbrv = zzrept_("'i", "*Y", &__state->l2r, (ftnlen)2, (ftnlen)2);
-    while(zzsubt_("I", "i", &__state->l2r, (ftnlen)1, (ftnlen)1)) {
+    __state->resolv = zzvalt_(__global_state, string, &__state->b, &
+	    __state->e, "I", string_len, (ftnlen)1);
+    *yabbrv = zzrept_(__global_state, "'i", "*Y", &__state->l2r, (ftnlen)2, (
+	    ftnlen)2);
+    while(zzsubt_(__global_state, "I", "i", &__state->l2r, (ftnlen)1, (ftnlen)
+	    1)) {
 	++__state->b;
     }
 
 /*     Resolve the system, and other text components. */
 
-    __state->resolv = zzrept_("[e]", "*e*", &__state->l2r, (ftnlen)3, (ftnlen)
-	    3);
-    __state->resolv = zzrept_("[w]", "*w*", &__state->l2r, (ftnlen)3, (ftnlen)
-	    3);
-    __state->resolv = zzrept_("[N]", "*N*", &__state->l2r, (ftnlen)3, (ftnlen)
-	    3);
-    __state->resolv = zzrept_("[Z]", "*Z*", &__state->l2r, (ftnlen)3, (ftnlen)
-	    3);
-    __state->resolv = zzrept_("[s]", "*s*", &__state->l2r, (ftnlen)3, (ftnlen)
-	    3);
-    __state->resolv = zzsubt_("ie", "Ye", &__state->l2r, (ftnlen)2, (ftnlen)2)
-	    ;
+    __state->resolv = zzrept_(__global_state, "[e]", "*e*", &__state->l2r, (
+	    ftnlen)3, (ftnlen)3);
+    __state->resolv = zzrept_(__global_state, "[w]", "*w*", &__state->l2r, (
+	    ftnlen)3, (ftnlen)3);
+    __state->resolv = zzrept_(__global_state, "[N]", "*N*", &__state->l2r, (
+	    ftnlen)3, (ftnlen)3);
+    __state->resolv = zzrept_(__global_state, "[Z]", "*Z*", &__state->l2r, (
+	    ftnlen)3, (ftnlen)3);
+    __state->resolv = zzrept_(__global_state, "[s]", "*s*", &__state->l2r, (
+	    ftnlen)3, (ftnlen)3);
+    __state->resolv = zzsubt_(__global_state, "ie", "Ye", &__state->l2r, (
+	    ftnlen)2, (ftnlen)2);
 
 /*     Note the positions of ERA, WEEKDAY, TIME-ZONE, AMPM marker */
 /*     and time SYSTEM. */
 
-    __state->havera = zznote_("e", __state->begs, __state->ends, (ftnlen)1);
-    __state->havwdy = zznote_("w", &__state->begs[1], &__state->ends[1], (
-	    ftnlen)1);
-    __state->havzon = zznote_("Z", &__state->begs[2], &__state->ends[2], (
-	    ftnlen)1);
-    __state->havapm = zznote_("N", &__state->begs[3], &__state->ends[3], (
-	    ftnlen)1);
-    __state->havsys = zznote_("s", &__state->begs[4], &__state->ends[4], (
-	    ftnlen)1);
+    __state->havera = zznote_(__global_state, "e", __state->begs, 
+	    __state->ends, (ftnlen)1);
+    __state->havwdy = zznote_(__global_state, "w", &__state->begs[1], &
+	    __state->ends[1], (ftnlen)1);
+    __state->havzon = zznote_(__global_state, "Z", &__state->begs[2], &
+	    __state->ends[2], (ftnlen)1);
+    __state->havapm = zznote_(__global_state, "N", &__state->begs[3], &
+	    __state->ends[3], (ftnlen)1);
+    __state->havsys = zznote_(__global_state, "s", &__state->begs[4], &
+	    __state->ends[4], (ftnlen)1);
     *mods = __state->havera || __state->havwdy || __state->havzon || 
 	    __state->havapm || __state->havsys;
     if (*mods) {
 	for (__state->i__ = 1; __state->i__ <= 5; ++__state->i__) {
 	    if (__state->begs[(i__1 = __state->i__ - 1) < 5 && 0 <= i__1 ? 
-		    i__1 : s_rnge("begs", i__1, "tpartv_", (ftnlen)1093)] != 
-		    0) {
+		    i__1 : s_rnge(&__global_state->f2c, "begs", i__1, "tpart"
+		    "v_", (ftnlen)1093)] != 0) {
 		i__1 = __state->begs[(i__2 = __state->i__ - 1) < 5 && 0 <= 
-			i__2 ? i__2 : s_rnge("begs", i__2, "tpartv_", (ftnlen)
-			1094)] - 1;
-		ucase_(string + i__1, modify + (__state->i__ - 1) * 
-			modify_len, __state->ends[(i__3 = __state->i__ - 1) < 
-			5 && 0 <= i__3 ? i__3 : s_rnge("ends", i__3, "tpartv_"
-			, (ftnlen)1094)] - i__1, modify_len);
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "begs", 
+			i__2, "tpartv_", (ftnlen)1094)] - 1;
+		ucase_(__global_state, string + i__1, modify + (__state->i__ 
+			- 1) * modify_len, __state->ends[(i__3 = __state->i__ 
+			- 1) < 5 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "ends", i__3, "tpartv_", (ftnlen)
+			1094)] - i__1, modify_len);
 	    }
 	}
 	if (__state->havera) {
 	    if (*(unsigned char *)&modify[0] == 'A') {
-		s_copy(modify, "A.D.", modify_len, (ftnlen)4);
+		s_copy(&__global_state->f2c, modify, "A.D.", modify_len, (
+			ftnlen)4);
 	    } else {
-		s_copy(modify, "B.C.", modify_len, (ftnlen)4);
+		s_copy(&__global_state->f2c, modify, "B.C.", modify_len, (
+			ftnlen)4);
 	    }
 	}
 	if (__state->havapm) {
 	    if (*(unsigned char *)&modify[modify_len * 3] == 'A') {
-		s_copy(modify + modify_len * 3, "A.M.", modify_len, (ftnlen)4)
-			;
+		s_copy(&__global_state->f2c, modify + modify_len * 3, "A.M.", 
+			modify_len, (ftnlen)4);
 	    } else {
-		s_copy(modify + modify_len * 3, "P.M.", modify_len, (ftnlen)4)
-			;
+		s_copy(&__global_state->f2c, modify + modify_len * 3, "P.M.", 
+			modify_len, (ftnlen)4);
 	    }
 	}
-	s_copy(modify + (modify_len + 3), " ", modify_len - 3, (ftnlen)1);
+	s_copy(&__global_state->f2c, modify + (modify_len + 3), " ", 
+		modify_len - 3, (ftnlen)1);
 	if (__state->havzon) {
-	    __state->mapto = isrchc_(modify + (modify_len << 1), &
-		    __state->c__8, __state->zones, modify_len, (ftnlen)3);
+	    __state->mapto = isrchc_(__global_state, modify + (modify_len << 
+		    1), &__state->c__8, __state->zones, modify_len, (ftnlen)3)
+		    ;
 	    if (__state->mapto != 0) {
-		s_copy(modify + (modify_len << 1), __state->offset + ((i__1 = 
-			__state->mapto - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge(
-			"offset", i__1, "tpartv_", (ftnlen)1121)) * 6, 
-			modify_len, (ftnlen)6);
+		s_copy(&__global_state->f2c, modify + (modify_len << 1), 
+			__state->offset + ((i__1 = __state->mapto - 1) < 8 && 
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "off"
+			"set", i__1, "tpartv_", (ftnlen)1121)) * 6, modify_len,
+			 (ftnlen)6);
 	    }
 	}
     }
 
 /*     Try our built in formats without any further substitution. */
 
-    __state->resolv = zzgrep_(__state->rep, (ftnlen)12);
-    __state->use = bsrchc_(__state->rep, &__state->nknown, __state->known, (
-	    ftnlen)12, (ftnlen)12);
+    __state->resolv = zzgrep_(__global_state, __state->rep, (ftnlen)12);
+    __state->use = bsrchc_(__global_state, __state->rep, &__state->nknown, 
+	    __state->known, (ftnlen)12, (ftnlen)12);
     if (__state->use > 0) {
-	__state->resolv = zzrept_(__state->known + ((i__1 = __state->use - 1) 
-		< 300 && 0 <= i__1 ? i__1 : s_rnge("known", i__1, "tpartv_", (
-		ftnlen)1136)) * 12, __state->meanng + ((i__2 = __state->use - 
-		1) < 300 && 0 <= i__2 ? i__2 : s_rnge("meanng", i__2, "tpart"
-		"v_", (ftnlen)1136)) * 12, &__state->l2r, (ftnlen)12, (ftnlen)
-		12);
-	*succes = zzunpck_(string, yabbrv, tvec, ntvec, type__, pictur, error,
-		 string_len, type_len, pictur_len, error_len);
-	if (i_indx(pictur, ".#", pictur_len, (ftnlen)2) != 0) {
-	    suffix_("::RND", &__state->c__1, pictur, (ftnlen)5, pictur_len);
+	__state->resolv = zzrept_(__global_state, __state->known + ((i__1 = 
+		__state->use - 1) < 300 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "known", i__1, "tpartv_", (ftnlen)1136)) 
+		* 12, __state->meanng + ((i__2 = __state->use - 1) < 300 && 0 
+		<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "meanng", i__2, 
+		"tpartv_", (ftnlen)1136)) * 12, &__state->l2r, (ftnlen)12, (
+		ftnlen)12);
+	*succes = zzunpck_(__global_state, string, yabbrv, tvec, ntvec, 
+		type__, pictur, error, string_len, type_len, pictur_len, 
+		error_len);
+	if (i_indx(&__global_state->f2c, pictur, ".#", pictur_len, (ftnlen)2) 
+		!= 0) {
+	    suffix_(__global_state, "::RND", &__state->c__1, pictur, (ftnlen)
+		    5, pictur_len);
 	}
-	if (s_cmp(modify + (modify_len << 1), " ", modify_len, (ftnlen)1) != 
-		0) {
-	    suffix_("::", &__state->c__1, pictur, (ftnlen)2, pictur_len);
-	    suffix_(modify + (modify_len << 1), &__state->c__0, pictur, 
-		    modify_len, pictur_len);
+	if (s_cmp(&__global_state->f2c, modify + (modify_len << 1), " ", 
+		modify_len, (ftnlen)1) != 0) {
+	    suffix_(__global_state, "::", &__state->c__1, pictur, (ftnlen)2, 
+		    pictur_len);
+	    suffix_(__global_state, modify + (modify_len << 1), &
+		    __state->c__0, pictur, modify_len, pictur_len);
 	}
-	if (s_cmp(modify + (modify_len << 2), " ", modify_len, (ftnlen)1) != 
-		0) {
-	    suffix_("::", &__state->c__1, pictur, (ftnlen)2, pictur_len);
-	    suffix_(modify + (modify_len << 2), &__state->c__0, pictur, 
-		    modify_len, pictur_len);
+	if (s_cmp(&__global_state->f2c, modify + (modify_len << 2), " ", 
+		modify_len, (ftnlen)1) != 0) {
+	    suffix_(__global_state, "::", &__state->c__1, pictur, (ftnlen)2, 
+		    pictur_len);
+	    suffix_(__global_state, modify + (modify_len << 2), &
+		    __state->c__0, pictur, modify_len, pictur_len);
 	}
 	return 0;
     }
@@ -1091,54 +1130,63 @@ static tpartv_state_t* get_tpartv_state() {
 /*     Make sure we don't have a pair of successive delimiters */
 /*     or a delimiter at either end of the input string. */
 
-    if (zzispt_(",/-:d.", &__state->from, &__state->to, (ftnlen)6)) {
+    if (zzispt_(__global_state, ",/-:d.", &__state->from, &__state->to, (
+	    ftnlen)6)) {
 	*succes = FALSE_;
 	*ntvec = 0;
-	s_copy(type__, " ", type_len, (ftnlen)1);
-	s_copy(error, string, error_len, string_len);
+	s_copy(&__global_state->f2c, type__, " ", type_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, error, string, error_len, string_len);
 	i__1 = __state->to + 1;
-	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &__state->from, error, error_len, (ftnlen)1, 
+	zzinssub_(__global_state, error, ">", &i__1, error, error_len, (
+		ftnlen)1, error_len);
+	zzinssub_(__global_state, error, "<", &__state->from, error, 
+		error_len, (ftnlen)1, error_len);
+	prefix_(__global_state, "There are two successive delimiters <#> in "
+		"the input string.  This is an ambiguous input. ' ", &
+		__state->c__0, error, (ftnlen)92, error_len);
+	repmc_(__global_state, error, "#", string + (__state->from - 1), 
+		error, error_len, (ftnlen)1, __state->to - (__state->from - 1)
+		, error_len);
+	suffix_(__global_state, "'", &__state->c__0, error, (ftnlen)1, 
 		error_len);
-	prefix_("There are two successive delimiters <#> in the input string"
-		".  This is an ambiguous input. ' ", &__state->c__0, error, (
-		ftnlen)92, error_len);
-	repmc_(error, "#", string + (__state->from - 1), error, error_len, (
-		ftnlen)1, __state->to - (__state->from - 1), error_len);
-	suffix_("'", &__state->c__0, error, (ftnlen)1, error_len);
-	s_copy(pictur, " ", pictur_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, pictur, " ", pictur_len, (ftnlen)1);
 	return 0;
     }
 
 /*     A delimiter hanging at either end of the string shall be */
 /*     regarded as an error. */
 
-    __state->resolv = zzgrep_(__state->rep, (ftnlen)12);
-    __state->r__ = rtrim_(__state->rep, (ftnlen)12);
-    if (i_indx(",/-:.", __state->rep, (ftnlen)5, (ftnlen)1) > 0) {
-	__state->resolv = zzsubt_(__state->rep, "Q", &__state->l2r, (ftnlen)1,
-		 (ftnlen)1);
-	__state->resolv = FALSE_;
-    } else if (i_indx(",/-:.", __state->rep + (__state->r__ - 1), (ftnlen)5, (
+    __state->resolv = zzgrep_(__global_state, __state->rep, (ftnlen)12);
+    __state->r__ = rtrim_(__global_state, __state->rep, (ftnlen)12);
+    if (i_indx(&__global_state->f2c, ",/-:.", __state->rep, (ftnlen)5, (
 	    ftnlen)1) > 0) {
-	__state->resolv = zzsubt_(__state->rep + (__state->r__ - 1), "Q", &
+	__state->resolv = zzsubt_(__global_state, __state->rep, "Q", &
 		__state->l2r, (ftnlen)1, (ftnlen)1);
+	__state->resolv = FALSE_;
+    } else if (i_indx(&__global_state->f2c, ",/-:.", __state->rep + (
+	    __state->r__ - 1), (ftnlen)5, (ftnlen)1) > 0) {
+	__state->resolv = zzsubt_(__global_state, __state->rep + (
+		__state->r__ - 1), "Q", &__state->l2r, (ftnlen)1, (ftnlen)1);
 	__state->resolv = FALSE_;
     }
     if (! __state->resolv) {
-	__state->resolv = zznote_("Q", &__state->from, &__state->to, (ftnlen)
-		1);
-	s_copy(error, string, error_len, string_len);
+	__state->resolv = zznote_(__global_state, "Q", &__state->from, &
+		__state->to, (ftnlen)1);
+	s_copy(&__global_state->f2c, error, string, error_len, string_len);
 	i__1 = __state->to + 1;
-	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &__state->from, error, error_len, (ftnlen)1, 
+	zzinssub_(__global_state, error, ">", &i__1, error, error_len, (
+		ftnlen)1, error_len);
+	zzinssub_(__global_state, error, "<", &__state->from, error, 
+		error_len, (ftnlen)1, error_len);
+	prefix_(__global_state, "An unexpected delimiter ('#') was encounter"
+		"ed in the input string. ' ", &__state->c__0, error, (ftnlen)
+		69, error_len);
+	suffix_(__global_state, "'", &__state->c__0, error, (ftnlen)1, 
 		error_len);
-	prefix_("An unexpected delimiter ('#') was encountered in the input "
-		"string. ' ", &__state->c__0, error, (ftnlen)69, error_len);
-	suffix_("'", &__state->c__0, error, (ftnlen)1, error_len);
-	repmc_(error, "#", string + (__state->from - 1), error, error_len, (
-		ftnlen)1, __state->to - (__state->from - 1), error_len);
-	s_copy(pictur, " ", pictur_len, (ftnlen)1);
+	repmc_(__global_state, error, "#", string + (__state->from - 1), 
+		error, error_len, (ftnlen)1, __state->to - (__state->from - 1)
+		, error_len);
+	s_copy(&__global_state->f2c, pictur, " ", pictur_len, (ftnlen)1);
 	*succes = FALSE_;
 	return 0;
     }
@@ -1151,36 +1199,42 @@ static tpartv_state_t* get_tpartv_state() {
     *(unsigned char *)&__state->delim[1] = '-';
     *(unsigned char *)&__state->delim[2] = '/';
     for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
-	__state->resolv = zzremt_(__state->delim + ((i__1 = __state->i__ - 1) 
-		< 3 && 0 <= i__1 ? i__1 : s_rnge("delim", i__1, "tpartv_", (
-		ftnlen)1227)), (ftnlen)1);
-	__state->resolv = zzgrep_(__state->rep, (ftnlen)12);
-	__state->use = bsrchc_(__state->rep, &__state->nknown, __state->known,
-		 (ftnlen)12, (ftnlen)12);
+	__state->resolv = zzremt_(__global_state, __state->delim + ((i__1 = 
+		__state->i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "delim", i__1, "tpartv_", (ftnlen)1227)),
+		 (ftnlen)1);
+	__state->resolv = zzgrep_(__global_state, __state->rep, (ftnlen)12);
+	__state->use = bsrchc_(__global_state, __state->rep, &__state->nknown,
+		 __state->known, (ftnlen)12, (ftnlen)12);
 	if (__state->use > 0) {
-	    __state->resolv = zzrept_(__state->known + ((i__1 = __state->use 
-		    - 1) < 300 && 0 <= i__1 ? i__1 : s_rnge("known", i__1, 
-		    "tpartv_", (ftnlen)1234)) * 12, __state->meanng + ((i__2 =
-		     __state->use - 1) < 300 && 0 <= i__2 ? i__2 : s_rnge(
+	    __state->resolv = zzrept_(__global_state, __state->known + ((i__1 
+		    = __state->use - 1) < 300 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "known", i__1, "tpartv_", (ftnlen)
+		    1234)) * 12, __state->meanng + ((i__2 = __state->use - 1) 
+		    < 300 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
 		    "meanng", i__2, "tpartv_", (ftnlen)1234)) * 12, &
 		    __state->l2r, (ftnlen)12, (ftnlen)12);
-	    *succes = zzunpck_(string, yabbrv, tvec, ntvec, type__, pictur, 
-		    error, string_len, type_len, pictur_len, error_len);
-	    if (i_indx(pictur, ".#", pictur_len, (ftnlen)2) != 0) {
-		suffix_("::RND", &__state->c__1, pictur, (ftnlen)5, 
-			pictur_len);
+	    *succes = zzunpck_(__global_state, string, yabbrv, tvec, ntvec, 
+		    type__, pictur, error, string_len, type_len, pictur_len, 
+		    error_len);
+	    if (i_indx(&__global_state->f2c, pictur, ".#", pictur_len, (
+		    ftnlen)2) != 0) {
+		suffix_(__global_state, "::RND", &__state->c__1, pictur, (
+			ftnlen)5, pictur_len);
 	    }
-	    if (s_cmp(modify + (modify_len << 1), " ", modify_len, (ftnlen)1) 
-		    != 0) {
-		suffix_("::", &__state->c__1, pictur, (ftnlen)2, pictur_len);
-		suffix_(modify + (modify_len << 1), &__state->c__0, pictur, 
-			modify_len, pictur_len);
+	    if (s_cmp(&__global_state->f2c, modify + (modify_len << 1), " ", 
+		    modify_len, (ftnlen)1) != 0) {
+		suffix_(__global_state, "::", &__state->c__1, pictur, (ftnlen)
+			2, pictur_len);
+		suffix_(__global_state, modify + (modify_len << 1), &
+			__state->c__0, pictur, modify_len, pictur_len);
 	    }
-	    if (s_cmp(modify + (modify_len << 2), " ", modify_len, (ftnlen)1) 
-		    != 0) {
-		suffix_("::", &__state->c__1, pictur, (ftnlen)2, pictur_len);
-		suffix_(modify + (modify_len << 2), &__state->c__0, pictur, 
-			modify_len, pictur_len);
+	    if (s_cmp(&__global_state->f2c, modify + (modify_len << 2), " ", 
+		    modify_len, (ftnlen)1) != 0) {
+		suffix_(__global_state, "::", &__state->c__1, pictur, (ftnlen)
+			2, pictur_len);
+		suffix_(__global_state, modify + (modify_len << 2), &
+			__state->c__0, pictur, modify_len, pictur_len);
 	    }
 	    return 0;
 	}
@@ -1190,11 +1244,15 @@ static tpartv_state_t* get_tpartv_state() {
 /*     time string.  There are some obvious incompatibilities. We */
 /*     check them now */
 
-    if (zznote_("e", &__state->b, &__state->e, (ftnlen)1)) {
-    } else if (zznote_("s", &__state->b, &__state->e, (ftnlen)1)) {
-    } else if (zznote_("Z", &__state->b, &__state->e, (ftnlen)1)) {
-    } else if (zznote_("w", &__state->b, &__state->e, (ftnlen)1)) {
-    } else if (zznote_("N", &__state->b, &__state->e, (ftnlen)1)) {
+    if (zznote_(__global_state, "e", &__state->b, &__state->e, (ftnlen)1)) {
+    } else if (zznote_(__global_state, "s", &__state->b, &__state->e, (ftnlen)
+	    1)) {
+    } else if (zznote_(__global_state, "Z", &__state->b, &__state->e, (ftnlen)
+	    1)) {
+    } else if (zznote_(__global_state, "w", &__state->b, &__state->e, (ftnlen)
+	    1)) {
+    } else if (zznote_(__global_state, "N", &__state->b, &__state->e, (ftnlen)
+	    1)) {
     }
 
 /*     If B is non-zero the item in question is a duplicate */
@@ -1203,131 +1261,171 @@ static tpartv_state_t* get_tpartv_state() {
     if (__state->b > 0) {
 	*succes = FALSE_;
 	*ntvec = 0;
-	s_copy(type__, " ", type_len, (ftnlen)1);
-	s_copy(error, string, error_len, string_len);
+	s_copy(&__global_state->f2c, type__, " ", type_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, error, string, error_len, string_len);
 	i__1 = __state->e + 1;
-	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &__state->b, error, error_len, (ftnlen)1, 
+	zzinssub_(__global_state, error, ">", &i__1, error, error_len, (
+		ftnlen)1, error_len);
+	zzinssub_(__global_state, error, "<", &__state->b, error, error_len, (
+		ftnlen)1, error_len);
+	prefix_(__global_state, "The substring \"#\" is a duplicate modifier"
+		" of the input string: ' ", &__state->c__0, error, (ftnlen)65, 
 		error_len);
-	prefix_("The substring \"#\" is a duplicate modifier of the input st"
-		"ring: ' ", &__state->c__0, error, (ftnlen)65, error_len);
-	suffix_("'", &__state->c__0, error, (ftnlen)1, error_len);
-	repmc_(error, "#", string + (__state->b - 1), error, error_len, (
-		ftnlen)1, __state->e - (__state->b - 1), error_len);
-	s_copy(pictur, " ", pictur_len, (ftnlen)1);
+	suffix_(__global_state, "'", &__state->c__0, error, (ftnlen)1, 
+		error_len);
+	repmc_(__global_state, error, "#", string + (__state->b - 1), error, 
+		error_len, (ftnlen)1, __state->e - (__state->b - 1), 
+		error_len);
+	s_copy(&__global_state->f2c, pictur, " ", pictur_len, (ftnlen)1);
 	return 0;
     }
 
 /*     Look for unresolved markers */
 
-    if (zznote_("[", &__state->b, &__state->e, (ftnlen)1)) {
-    } else if (zznote_("]", &__state->b, &__state->e, (ftnlen)1)) {
-    } else if (zznote_("O", &__state->b, &__state->e, (ftnlen)1)) {
-    } else if (zznote_("o", &__state->b, &__state->e, (ftnlen)1)) {
-    } else if (zznote_("z", &__state->b, &__state->e, (ftnlen)1)) {
+    if (zznote_(__global_state, "[", &__state->b, &__state->e, (ftnlen)1)) {
+    } else if (zznote_(__global_state, "]", &__state->b, &__state->e, (ftnlen)
+	    1)) {
+    } else if (zznote_(__global_state, "O", &__state->b, &__state->e, (ftnlen)
+	    1)) {
+    } else if (zznote_(__global_state, "o", &__state->b, &__state->e, (ftnlen)
+	    1)) {
+    } else if (zznote_(__global_state, "z", &__state->b, &__state->e, (ftnlen)
+	    1)) {
     }
     if (__state->b > 0) {
 	*succes = FALSE_;
 	*ntvec = 0;
-	s_copy(type__, " ", type_len, (ftnlen)1);
-	s_copy(error, string, error_len, string_len);
+	s_copy(&__global_state->f2c, type__, " ", type_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, error, string, error_len, string_len);
 	i__1 = __state->e + 1;
-	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &__state->b, error, error_len, (ftnlen)1, 
+	zzinssub_(__global_state, error, ">", &i__1, error, error_len, (
+		ftnlen)1, error_len);
+	zzinssub_(__global_state, error, "<", &__state->b, error, error_len, (
+		ftnlen)1, error_len);
+	prefix_(__global_state, "The substring \"#\" could not be resolved i"
+		"n the input string: ' ", &__state->c__0, error, (ftnlen)63, 
 		error_len);
-	prefix_("The substring \"#\" could not be resolved in the input stri"
-		"ng: ' ", &__state->c__0, error, (ftnlen)63, error_len);
-	suffix_("'", &__state->c__0, error, (ftnlen)1, error_len);
-	repmc_(error, "#", string + (__state->b - 1), error, error_len, (
-		ftnlen)1, __state->e - (__state->b - 1), error_len);
-	s_copy(pictur, " ", pictur_len, (ftnlen)1);
+	suffix_(__global_state, "'", &__state->c__0, error, (ftnlen)1, 
+		error_len);
+	repmc_(__global_state, error, "#", string + (__state->b - 1), error, 
+		error_len, (ftnlen)1, __state->e - (__state->b - 1), 
+		error_len);
+	s_copy(&__global_state->f2c, pictur, " ", pictur_len, (ftnlen)1);
 	return 0;
     }
-    if (zzist_("m", (ftnlen)1) && zzist_("d", (ftnlen)1)) {
+    if (zzist_(__global_state, "m", (ftnlen)1) && zzist_(__global_state, 
+	    "d", (ftnlen)1)) {
 	*succes = FALSE_;
 	*ntvec = 0;
-	s_copy(type__, " ", type_len, (ftnlen)1);
-	s_copy(error, string, error_len, string_len);
-	__state->resolv = zznote_("m", &__state->b1, &__state->e1, (ftnlen)1);
-	__state->resolv = zznote_("d", &__state->b2, &__state->e2, (ftnlen)1);
+	s_copy(&__global_state->f2c, type__, " ", type_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, error, string, error_len, string_len);
+	__state->resolv = zznote_(__global_state, "m", &__state->b1, &
+		__state->e1, (ftnlen)1);
+	__state->resolv = zznote_(__global_state, "d", &__state->b2, &
+		__state->e2, (ftnlen)1);
 	__state->b = max(__state->b1,__state->b2);
 	__state->e = max(__state->e1,__state->e2);
 	i__1 = __state->e + 1;
-	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &__state->b, error, error_len, (ftnlen)1, 
-		error_len);
+	zzinssub_(__global_state, error, ">", &i__1, error, error_len, (
+		ftnlen)1, error_len);
+	zzinssub_(__global_state, error, "<", &__state->b, error, error_len, (
+		ftnlen)1, error_len);
 	__state->b = min(__state->b1,__state->b2);
 	__state->e = min(__state->e1,__state->e2);
 	i__1 = __state->e + 1;
-	zzinssub_(error, ">", &i__1, error, error_len, (ftnlen)1, error_len);
-	zzinssub_(error, "<", &__state->b, error, error_len, (ftnlen)1, 
+	zzinssub_(__global_state, error, ">", &i__1, error, error_len, (
+		ftnlen)1, error_len);
+	zzinssub_(__global_state, error, "<", &__state->b, error, error_len, (
+		ftnlen)1, error_len);
+	prefix_(__global_state, "Both a month \"#\" and day of year delimite"
+		"r \"#\" appear in the input string: ' ", &__state->c__0, 
+		error, (ftnlen)77, error_len);
+	suffix_(__global_state, "'", &__state->c__0, error, (ftnlen)1, 
 		error_len);
-	prefix_("Both a month \"#\" and day of year delimiter \"#\" appear i"
-		"n the input string: ' ", &__state->c__0, error, (ftnlen)77, 
+	repmc_(__global_state, error, "#", string + (__state->b1 - 1), error, 
+		error_len, (ftnlen)1, __state->e1 - (__state->b1 - 1), 
 		error_len);
-	suffix_("'", &__state->c__0, error, (ftnlen)1, error_len);
-	repmc_(error, "#", string + (__state->b1 - 1), error, error_len, (
-		ftnlen)1, __state->e1 - (__state->b1 - 1), error_len);
-	repmc_(error, "#", string + (__state->b2 - 1), error, error_len, (
-		ftnlen)1, __state->e2 - (__state->b2 - 1), error_len);
-	s_copy(pictur, " ", pictur_len, (ftnlen)1);
+	repmc_(__global_state, error, "#", string + (__state->b2 - 1), error, 
+		error_len, (ftnlen)1, __state->e2 - (__state->b2 - 1), 
+		error_len);
+	s_copy(&__global_state->f2c, pictur, " ", pictur_len, (ftnlen)1);
 	return 0;
     }
 
 /*     Make the remaining obvious substitutions for hours, */
 /*     minutes, and seconds */
 
-    if (zzrept_("i:i:i:n", "D*H*M*S", &__state->r2l, (ftnlen)7, (ftnlen)7)) {
-    } else if (zzrept_("i:i:i:i", "D*H*M*S", &__state->r2l, (ftnlen)7, (
-	    ftnlen)7)) {
-    } else if (zzrept_("i:i:n", "H*M*S", &__state->r2l, (ftnlen)5, (ftnlen)5))
-	     {
-    } else if (zzrept_("i:i:i", "H*M*S", &__state->r2l, (ftnlen)5, (ftnlen)5))
-	     {
-    } else if (zzrept_("i:n", "H*M", &__state->r2l, (ftnlen)3, (ftnlen)3)) {
-    } else if (zzrept_("i:i", "H*M", &__state->r2l, (ftnlen)3, (ftnlen)3)) {
+    if (zzrept_(__global_state, "i:i:i:n", "D*H*M*S", &__state->r2l, (ftnlen)
+	    7, (ftnlen)7)) {
+    } else if (zzrept_(__global_state, "i:i:i:i", "D*H*M*S", &__state->r2l, (
+	    ftnlen)7, (ftnlen)7)) {
+    } else if (zzrept_(__global_state, "i:i:n", "H*M*S", &__state->r2l, (
+	    ftnlen)5, (ftnlen)5)) {
+    } else if (zzrept_(__global_state, "i:i:i", "H*M*S", &__state->r2l, (
+	    ftnlen)5, (ftnlen)5)) {
+    } else if (zzrept_(__global_state, "i:n", "H*M", &__state->r2l, (ftnlen)3,
+	     (ftnlen)3)) {
+    } else if (zzrept_(__global_state, "i:i", "H*M", &__state->r2l, (ftnlen)3,
+	     (ftnlen)3)) {
     }
-    __state->resolv = zzremt_(":", (ftnlen)1);
+    __state->resolv = zzremt_(__global_state, ":", (ftnlen)1);
 
 /*     Handle the obvious substitutions of an integer next to */
 /*     a Month. */
 
-    if (zzsubt_("<miiH", "mDY", &__state->l2r, (ftnlen)5, (ftnlen)3)) {
-    } else if (zzsubt_("<mi", "mD", &__state->l2r, (ftnlen)3, (ftnlen)2)) {
-    } else if (zzsubt_("Siim>", "SYDm", &__state->l2r, (ftnlen)5, (ftnlen)4)) 
-	    {
-    } else if (zzsubt_("im>", "Dm", &__state->l2r, (ftnlen)3, (ftnlen)2)) {
-    } else if (zzsubt_("miY>", "mDY", &__state->l2r, (ftnlen)4, (ftnlen)3)) {
-    } else if (zzsubt_("Ymi", "YmD", &__state->l2r, (ftnlen)3, (ftnlen)3)) {
-    } else if (zzsubt_("Smi", "SmD", &__state->l2r, (ftnlen)3, (ftnlen)3)) {
-    } else if (zzsubt_("Mmi", "MmD", &__state->l2r, (ftnlen)3, (ftnlen)3)) {
-    } else if (zzsubt_("imY", "DmY", &__state->l2r, (ftnlen)3, (ftnlen)3)) {
-    } else if (zzsubt_("imH", "DmH", &__state->l2r, (ftnlen)3, (ftnlen)3)) {
-    } else if (zzrept_("Yid", "Yy*", &__state->l2r, (ftnlen)3, (ftnlen)3)) {
-    } else if (zzrept_("iYd", "yY*", &__state->l2r, (ftnlen)3, (ftnlen)3)) {
-    } else if (zzrept_("Ydi", "Y*y", &__state->l2r, (ftnlen)3, (ftnlen)3)) {
+    if (zzsubt_(__global_state, "<miiH", "mDY", &__state->l2r, (ftnlen)5, (
+	    ftnlen)3)) {
+    } else if (zzsubt_(__global_state, "<mi", "mD", &__state->l2r, (ftnlen)3, 
+	    (ftnlen)2)) {
+    } else if (zzsubt_(__global_state, "Siim>", "SYDm", &__state->l2r, (
+	    ftnlen)5, (ftnlen)4)) {
+    } else if (zzsubt_(__global_state, "im>", "Dm", &__state->l2r, (ftnlen)3, 
+	    (ftnlen)2)) {
+    } else if (zzsubt_(__global_state, "miY>", "mDY", &__state->l2r, (ftnlen)
+	    4, (ftnlen)3)) {
+    } else if (zzsubt_(__global_state, "Ymi", "YmD", &__state->l2r, (ftnlen)3,
+	     (ftnlen)3)) {
+    } else if (zzsubt_(__global_state, "Smi", "SmD", &__state->l2r, (ftnlen)3,
+	     (ftnlen)3)) {
+    } else if (zzsubt_(__global_state, "Mmi", "MmD", &__state->l2r, (ftnlen)3,
+	     (ftnlen)3)) {
+    } else if (zzsubt_(__global_state, "imY", "DmY", &__state->l2r, (ftnlen)3,
+	     (ftnlen)3)) {
+    } else if (zzsubt_(__global_state, "imH", "DmH", &__state->l2r, (ftnlen)3,
+	     (ftnlen)3)) {
+    } else if (zzrept_(__global_state, "Yid", "Yy*", &__state->l2r, (ftnlen)3,
+	     (ftnlen)3)) {
+    } else if (zzrept_(__global_state, "iYd", "yY*", &__state->l2r, (ftnlen)3,
+	     (ftnlen)3)) {
+    } else if (zzrept_(__global_state, "Ydi", "Y*y", &__state->l2r, (ftnlen)3,
+	     (ftnlen)3)) {
     }
 
 /*     That's it we let ZZUNPCK handle the problem of diagnosing */
 /*     or decoding the current representation. */
 
-    *succes = zzunpck_(string, yabbrv, tvec, ntvec, type__, pictur, error, 
-	    string_len, type_len, pictur_len, error_len);
-    if (s_cmp(pictur, " ", pictur_len, (ftnlen)1) != 0) {
-	if (i_indx(pictur, ".#", pictur_len, (ftnlen)2) != 0) {
-	    suffix_("::RND", &__state->c__1, pictur, (ftnlen)5, pictur_len);
+    *succes = zzunpck_(__global_state, string, yabbrv, tvec, ntvec, type__, 
+	    pictur, error, string_len, type_len, pictur_len, error_len);
+    if (s_cmp(&__global_state->f2c, pictur, " ", pictur_len, (ftnlen)1) != 0) 
+	    {
+	if (i_indx(&__global_state->f2c, pictur, ".#", pictur_len, (ftnlen)2) 
+		!= 0) {
+	    suffix_(__global_state, "::RND", &__state->c__1, pictur, (ftnlen)
+		    5, pictur_len);
 	}
-	if (s_cmp(modify + (modify_len << 1), " ", modify_len, (ftnlen)1) != 
-		0) {
-	    suffix_("::", &__state->c__1, pictur, (ftnlen)2, pictur_len);
-	    suffix_(modify + (modify_len << 1), &__state->c__0, pictur, 
-		    modify_len, pictur_len);
+	if (s_cmp(&__global_state->f2c, modify + (modify_len << 1), " ", 
+		modify_len, (ftnlen)1) != 0) {
+	    suffix_(__global_state, "::", &__state->c__1, pictur, (ftnlen)2, 
+		    pictur_len);
+	    suffix_(__global_state, modify + (modify_len << 1), &
+		    __state->c__0, pictur, modify_len, pictur_len);
 	}
-	if (s_cmp(modify + (modify_len << 2), " ", modify_len, (ftnlen)1) != 
-		0) {
-	    suffix_("::", &__state->c__1, pictur, (ftnlen)2, pictur_len);
-	    suffix_(modify + (modify_len << 2), &__state->c__0, pictur, 
-		    modify_len, pictur_len);
+	if (s_cmp(&__global_state->f2c, modify + (modify_len << 2), " ", 
+		modify_len, (ftnlen)1) != 0) {
+	    suffix_(__global_state, "::", &__state->c__1, pictur, (ftnlen)2, 
+		    pictur_len);
+	    suffix_(__global_state, modify + (modify_len << 2), &
+		    __state->c__0, pictur, modify_len, pictur_len);
 	}
     }
     return 0;

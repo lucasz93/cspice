@@ -8,8 +8,7 @@
 
 
 extern dafwfr_init_t __dafwfr_init;
-static dafwfr_state_t* get_dafwfr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafwfr_state_t* get_dafwfr_state(cspice_t* state) {
 	if (!state->dafwfr)
 		state->dafwfr = __cspice_allocate_module(sizeof(
 	dafwfr_state_t), &__dafwfr_init, sizeof(__dafwfr_init));
@@ -18,38 +17,39 @@ static dafwfr_state_t* get_dafwfr_state() {
 }
 
 /* $Procedure DAFWFR ( DAF write file record ) */
-/* Subroutine */ int dafwfr_(integer *handle, integer *nd, integer *ni, char *
-	ifname, integer *fward, integer *bward, integer *free, ftnlen 
-	ifname_len)
+/* Subroutine */ int dafwfr_(cspice_t* __global_state, integer *handle, 
+	integer *nd, integer *ni, char *ifname, integer *fward, integer *
+	bward, integer *free, ftnlen ifname_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void),
-	     s_wdue(cilist *), e_wdue(void);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rdue(f2c_state_t*), s_wdue(f2c_state_t*, 
+	    cilist *), e_wdue(f2c_state_t*);
 
     /* Local variables */
     char tail[928];
     integer unit;
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer locnd;
     integer locni;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer locffa;
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
     char locifn[60];
     integer locfdr;
     integer locldr;
     char format[8];
     char idword[8];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     char ifn[60];
 
     /* Fortran I/O blocks */
@@ -57,7 +57,7 @@ static dafwfr_state_t* get_dafwfr_state() {
 
 
     /* Module state */
-    dafwfr_state_t* __state = get_dafwfr_state();
+    dafwfr_state_t* __state = get_dafwfr_state(__global_state);
 /* $ Abstract */
 
 /*     Write or rewrite the contents of the file record of a DAF. */
@@ -344,31 +344,32 @@ static dafwfr_state_t* get_dafwfr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFWFR", (ftnlen)6);
+	chkin_(__global_state, "DAFWFR", (ftnlen)6);
     }
 
 /*     Do some initializations */
 
-    s_copy(idword, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, idword, " ", (ftnlen)8, (ftnlen)1);
 
 /*     Check to be sure that HANDLE is attached to a file that is open */
 /*     with write access. If the call fails, check out and return. */
 
-    dafsih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DAFWFR", (ftnlen)6);
+    dafsih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFWFR", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the logical unit for the file, as we know we have a valid DAF */
 /*     handle with the correct access method. */
 
-    zzddhhlu_(handle, "DAF", &__state->c_false, &unit, (ftnlen)3);
-    if (failed_()) {
-	chkout_("DAFWFR", (ftnlen)6);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_false, &unit, (
+	    ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFWFR", (ftnlen)6);
 	return 0;
     }
 
@@ -379,117 +380,124 @@ static dafwfr_state_t* get_dafwfr_state() {
 /*     ignored, since the caller passes new values in for updates. */
 
     __state->io___4.ciunit = unit;
-    iostat = s_rdue(&__state->io___4);
+    iostat = s_rdue(&__global_state->f2c, &__state->io___4);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, idword, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&locnd, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locnd, (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&locni, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locni, (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, locifn, (ftnlen)60);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, locifn, (ftnlen)60);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&locfdr, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locfdr, (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&locldr, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locldr, (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&locffa, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locffa, (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, format, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, format, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, tail, (ftnlen)928);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, tail, (ftnlen)928);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rdue();
+    iostat = e_rdue(&__global_state->f2c);
 L100001:
     if (iostat != 0) {
-	setmsg_("Attempt to read the file record failed for file '#'. IOSTAT"
-		" = #", (ftnlen)63);
-	errfnm_("#", &unit, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-	chkout_("DAFWFR", (ftnlen)6);
+	setmsg_(__global_state, "Attempt to read the file record failed for "
+		"file '#'. IOSTAT = #", (ftnlen)63);
+	errfnm_(__global_state, "#", &unit, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+	chkout_(__global_state, "DAFWFR", (ftnlen)6);
 	return 0;
     }
 
 /*     Set the value of the internal filename before writing. This is to */
 /*     guarantee that its length is ok. */
 
-    s_copy(ifn, ifname, (ftnlen)60, ifname_len);
+    s_copy(&__global_state->f2c, ifn, ifname, (ftnlen)60, ifname_len);
     __state->io___14.ciunit = unit;
-    iostat = s_wdue(&__state->io___14);
+    iostat = s_wdue(&__global_state->f2c, &__state->io___14);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, idword, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*nd), (ftnlen)sizeof(integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*nd), (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*ni), (ftnlen)sizeof(integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*ni), (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, ifn, (ftnlen)60);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, ifn, (ftnlen)60);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*fward), (ftnlen)sizeof(integer)
-	    );
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*fward), (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*bward), (ftnlen)sizeof(integer)
-	    );
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*bward), (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*free), (ftnlen)sizeof(integer))
-	    ;
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*free), (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, format, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, format, (ftnlen)8);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, tail, (ftnlen)928);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, tail, (ftnlen)928);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = e_wdue();
+    iostat = e_wdue(&__global_state->f2c);
 L100002:
     if (iostat != 0) {
-	setmsg_("File record write failed. Value of IOSTAT was #", (ftnlen)47)
-		;
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(DAFWRITEFAIL)", (ftnlen)19);
-	chkout_("DAFWFR", (ftnlen)6);
+	setmsg_(__global_state, "File record write failed. Value of IOSTAT w"
+		"as #", (ftnlen)47);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFWRITEFAIL)", (ftnlen)19);
+	chkout_(__global_state, "DAFWFR", (ftnlen)6);
 	return 0;
     }
-    chkout_("DAFWFR", (ftnlen)6);
+    chkout_(__global_state, "DAFWFR", (ftnlen)6);
     return 0;
 } /* dafwfr_ */
 

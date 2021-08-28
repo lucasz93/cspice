@@ -8,8 +8,7 @@
 
 
 extern texpyr_init_t __texpyr_init;
-static texpyr_state_t* get_texpyr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline texpyr_state_t* get_texpyr_state(cspice_t* state) {
 	if (!state->texpyr)
 		state->texpyr = __cspice_allocate_module(sizeof(
 	texpyr_state_t), &__texpyr_init, sizeof(__texpyr_init));
@@ -18,14 +17,15 @@ static texpyr_state_t* get_texpyr_state() {
 }
 
 /* $Procedure      TEXPYR ( Time --- Expand year ) */
-/* Subroutine */ int texpyr_0_(int n__, integer *year)
+/* Subroutine */ int texpyr_0_(cspice_t* __global_state, int n__, integer *
+	year)
 {
     /* Initialized data */
 
 
 
     /* Module state */
-    texpyr_state_t* __state = get_texpyr_state();
+    texpyr_state_t* __state = get_texpyr_state(__global_state);
 /* $ Abstract */
 
 /*    Expand an abbreviated year to a full year specification. */
@@ -319,12 +319,12 @@ L_tsetyr:
     return 0;
 } /* texpyr_ */
 
-/* Subroutine */ int texpyr_(integer *year)
+/* Subroutine */ int texpyr_(cspice_t* __global_state, integer *year)
 {
     return texpyr_0_(0, year);
     }
 
-/* Subroutine */ int tsetyr_(integer *year)
+/* Subroutine */ int tsetyr_(cspice_t* __global_state, integer *year)
 {
     return texpyr_0_(1, year);
     }

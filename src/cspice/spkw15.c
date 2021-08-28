@@ -8,8 +8,7 @@
 
 
 extern spkw15_init_t __spkw15_init;
-static spkw15_state_t* get_spkw15_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkw15_state_t* get_spkw15_state(cspice_t* state) {
 	if (!state->spkw15)
 		state->spkw15 = __cspice_allocate_module(sizeof(
 	spkw15_state_t), &__spkw15_init, sizeof(__spkw15_init));
@@ -18,50 +17,51 @@ static spkw15_state_t* get_spkw15_state() {
 }
 
 /* $Procedure      SPKW15 ( SPK, write a type 15 segment ) */
-/* Subroutine */ int spkw15_(integer *handle, integer *body, integer *center, 
-	char *frame, doublereal *first, doublereal *last, char *segid, 
-	doublereal *epoch, doublereal *tp, doublereal *pa, doublereal *p, 
-	doublereal *ecc, doublereal *j2flg, doublereal *pv, doublereal *gm, 
-	doublereal *j2, doublereal *radius, ftnlen frame_len, ftnlen 
-	segid_len)
+/* Subroutine */ int spkw15_(cspice_t* __global_state, integer *handle, 
+	integer *body, integer *center, char *frame, doublereal *first, 
+	doublereal *last, char *segid, doublereal *epoch, doublereal *tp, 
+	doublereal *pa, doublereal *p, doublereal *ecc, doublereal *j2flg, 
+	doublereal *pv, doublereal *gm, doublereal *j2, doublereal *radius, 
+	ftnlen frame_len, ftnlen segid_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal mypa[3];
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal mytp[3];
     integer i__;
     doublereal angle;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal descr[5];
     integer value;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
 	    ftnlen);
-    extern /* Subroutine */ int dafena_(void);
-    extern logical failed_(void);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int dafena_(cspice_t*);
+    extern logical failed_(cspice_t*);
     doublereal record[16];
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int spkpds_(integer *, integer *, char *, integer 
-	    *, doublereal *, doublereal *, doublereal *, ftnlen);
-    extern logical return_(void);
-    extern doublereal dpr_(void);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkpds_(cspice_t*, integer *, integer *, char 
+	    *, integer *, doublereal *, doublereal *, doublereal *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern doublereal dpr_(cspice_t*);
     doublereal dot;
 
 
     /* Module state */
-    spkw15_state_t* __state = get_spkw15_state();
+    spkw15_state_t* __state = get_spkw15_state(__global_state);
 /* $ Abstract */
 
 /*     Write an SPK segment of type 15 given a type 15 data record. */
@@ -362,10 +362,10 @@ static spkw15_state_t* get_spkw15_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKW15", (ftnlen)6);
+    chkin_(__global_state, "SPKW15", (ftnlen)6);
 
 /*     Fetch the various entities from the inputs and put them into */
 /*     the data record, first the epoch. */
@@ -374,16 +374,16 @@ static spkw15_state_t* get_spkw15_state() {
 
 /*     Convert TP and PA to unit vectors. */
 
-    vhat_(pa, mypa);
-    vhat_(tp, mytp);
+    vhat_(__global_state, pa, mypa);
+    vhat_(__global_state, tp, mytp);
 
 /*     The trajectory pole vector. */
 
-    vequ_(mytp, &record[1]);
+    vequ_(__global_state, mytp, &record[1]);
 
 /*     The periapsis vector. */
 
-    vequ_(mypa, &record[4]);
+    vequ_(__global_state, mypa, &record[4]);
 
 /*     Semi-latus rectum ( P in the P/(1 + ECC*COS(Nu)  ), */
 /*     and eccentricity. */
@@ -397,7 +397,7 @@ static spkw15_state_t* get_spkw15_state() {
 
 /*     Central body pole vector. */
 
-    vhat_(pv, &record[10]);
+    vhat_(__global_state, pv, &record[10]);
 
 /*     The central mass, J2 and radius of the central body. */
 
@@ -410,56 +410,57 @@ static spkw15_state_t* get_spkw15_state() {
 /*     segment into an SPK file and diagnose it later. */
 
     if (*p <= 0.) {
-	setmsg_("The semi-latus rectum supplied to the SPK type 15 evaluator"
-		" was non-positive.  This value must be positive. The value s"
-		"upplied was #.", (ftnlen)133);
-	errdp_("#", p, (ftnlen)1);
-	sigerr_("SPICE(BADLATUSRECTUM)", (ftnlen)21);
-	chkout_("SPKW15", (ftnlen)6);
+	setmsg_(__global_state, "The semi-latus rectum supplied to the SPK t"
+		"ype 15 evaluator was non-positive.  This value must be posit"
+		"ive. The value supplied was #.", (ftnlen)133);
+	errdp_(__global_state, "#", p, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADLATUSRECTUM)", (ftnlen)21);
+	chkout_(__global_state, "SPKW15", (ftnlen)6);
 	return 0;
     } else if (*ecc < 0.) {
-	setmsg_("The eccentricity supplied for a type 15 segment is negative"
-		".  It must be non-negative. The value supplied to the type 1"
-		"5 evaluator was #. ", (ftnlen)138);
-	errdp_("#", ecc, (ftnlen)1);
-	sigerr_("SPICE(BADECCENTRICITY)", (ftnlen)22);
-	chkout_("SPKW15", (ftnlen)6);
+	setmsg_(__global_state, "The eccentricity supplied for a type 15 seg"
+		"ment is negative.  It must be non-negative. The value suppli"
+		"ed to the type 15 evaluator was #. ", (ftnlen)138);
+	errdp_(__global_state, "#", ecc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADECCENTRICITY)", (ftnlen)22);
+	chkout_(__global_state, "SPKW15", (ftnlen)6);
 	return 0;
     } else if (*gm <= 0.) {
-	setmsg_("The mass supplied for the central body of a type 15 segment"
-		" was non-positive. Masses must be positive.  The value suppl"
-		"ied was #. ", (ftnlen)130);
-	errdp_("#", gm, (ftnlen)1);
-	sigerr_("SPICE(NONPOSITIVEMASS)", (ftnlen)22);
-	chkout_("SPKW15", (ftnlen)6);
+	setmsg_(__global_state, "The mass supplied for the central body of a"
+		" type 15 segment was non-positive. Masses must be positive. "
+		" The value supplied was #. ", (ftnlen)130);
+	errdp_(__global_state, "#", gm, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONPOSITIVEMASS)", (ftnlen)22);
+	chkout_(__global_state, "SPKW15", (ftnlen)6);
 	return 0;
-    } else if (vzero_(tp)) {
-	setmsg_("The trajectory pole vector supplied to SPKW15 had length ze"
-		"ro. The most likely cause of this problem is an uninitialize"
-		"d vector.", (ftnlen)128);
-	sigerr_("SPICE(BADVECTOR)", (ftnlen)16);
-	chkout_("SPKW15", (ftnlen)6);
+    } else if (vzero_(__global_state, tp)) {
+	setmsg_(__global_state, "The trajectory pole vector supplied to SPKW"
+		"15 had length zero. The most likely cause of this problem is"
+		" an uninitialized vector.", (ftnlen)128);
+	sigerr_(__global_state, "SPICE(BADVECTOR)", (ftnlen)16);
+	chkout_(__global_state, "SPKW15", (ftnlen)6);
 	return 0;
-    } else if (vzero_(pa)) {
-	setmsg_("The periapse vector supplied to SPKW15 had length zero. The"
-		" most likely cause of this problem is an uninitialized vecto"
-		"r.", (ftnlen)121);
-	sigerr_("SPICE(BADVECTOR)", (ftnlen)16);
-	chkout_("SPKW15", (ftnlen)6);
+    } else if (vzero_(__global_state, pa)) {
+	setmsg_(__global_state, "The periapse vector supplied to SPKW15 had "
+		"length zero. The most likely cause of this problem is an uni"
+		"nitialized vector.", (ftnlen)121);
+	sigerr_(__global_state, "SPICE(BADVECTOR)", (ftnlen)16);
+	chkout_(__global_state, "SPKW15", (ftnlen)6);
 	return 0;
-    } else if (vzero_(pv)) {
-	setmsg_("The central pole vector supplied to SPKW15 had length zero."
-		" The most likely cause of this problem is an uninitialized v"
-		"ector. ", (ftnlen)126);
-	sigerr_("SPICE(BADVECTOR)", (ftnlen)16);
-	chkout_("SPKW15", (ftnlen)6);
+    } else if (vzero_(__global_state, pv)) {
+	setmsg_(__global_state, "The central pole vector supplied to SPKW15 "
+		"had length zero. The most likely cause of this problem is an"
+		" uninitialized vector. ", (ftnlen)126);
+	sigerr_(__global_state, "SPICE(BADVECTOR)", (ftnlen)16);
+	chkout_(__global_state, "SPKW15", (ftnlen)6);
 	return 0;
     } else if (*radius < 0.) {
-	setmsg_("The central body radius was negative. It must be zero or po"
-		"sitive.  The value supplied was #. ", (ftnlen)94);
-	errdp_("#", radius, (ftnlen)1);
-	sigerr_("SPICE(BADRADIUS)", (ftnlen)16);
-	chkout_("SPKW15", (ftnlen)6);
+	setmsg_(__global_state, "The central body radius was negative. It mu"
+		"st be zero or positive.  The value supplied was #. ", (ftnlen)
+		94);
+	errdp_(__global_state, "#", radius, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADRADIUS)", (ftnlen)16);
+	chkout_(__global_state, "SPKW15", (ftnlen)6);
 	return 0;
     }
 
@@ -467,38 +468,39 @@ static spkw15_state_t* get_spkw15_state() {
 /*     orthogonal. (We will use a very crude check but this should */
 /*     rule out any obvious errors.) */
 
-    dot = vdot_(mypa, mytp);
+    dot = vdot_(__global_state, mypa, mytp);
     if (abs(dot) > 1e-5) {
-	angle = vsep_(pa, tp) * dpr_();
-	setmsg_("The periapsis and trajectory pole vectors are not orthogona"
-		"l. The angle between them is # degrees. ", (ftnlen)99);
-	errdp_("#", &angle, (ftnlen)1);
-	sigerr_("SPICE(BADINITSTATE)", (ftnlen)19);
-	chkout_("SPKW15", (ftnlen)6);
+	angle = vsep_(__global_state, pa, tp) * dpr_(__global_state);
+	setmsg_(__global_state, "The periapsis and trajectory pole vectors a"
+		"re not orthogonal. The angle between them is # degrees. ", (
+		ftnlen)99);
+	errdp_(__global_state, "#", &angle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADINITSTATE)", (ftnlen)19);
+	chkout_(__global_state, "SPKW15", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure the segment identifier is not too long. */
 
-    if (lastnb_(segid, segid_len) > 40) {
-	setmsg_("Segment identifier contains more than 40 characters.", (
-		ftnlen)52);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("SPKW15", (ftnlen)6);
+    if (lastnb_(__global_state, segid, segid_len) > 40) {
+	setmsg_(__global_state, "Segment identifier contains more than 40 ch"
+		"aracters.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "SPKW15", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure it has only printing characters. */
 
-    i__1 = lastnb_(segid, segid_len);
+    i__1 = lastnb_(__global_state, segid, segid_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	value = *(unsigned char *)&segid[i__ - 1];
 	if (value < 32 || value > 126) {
-	    setmsg_("The segment identifier contains the nonprintable charac"
-		    "ter having ascii code #.", (ftnlen)79);
-	    errint_("#", &value, (ftnlen)1);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("SPKW15", (ftnlen)6);
+	    setmsg_(__global_state, "The segment identifier contains the non"
+		    "printable character having ascii code #.", (ftnlen)79);
+	    errint_(__global_state, "#", &value, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "SPKW15", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -507,25 +509,25 @@ static spkw15_state_t* get_spkw15_state() {
 /*     record.  Create the segment descriptor. (FIRST and LAST are */
 /*     checked by SPKPDS as well as consistency between BODY and CENTER). */
 
-    spkpds_(body, center, frame, &__state->c__15, first, last, descr, 
-	    frame_len);
-    if (failed_()) {
-	chkout_("SPKW15", (ftnlen)6);
+    spkpds_(__global_state, body, center, frame, &__state->c__15, first, last,
+	     descr, frame_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKW15", (ftnlen)6);
 	return 0;
     }
 
 /*     Begin a new segment. */
 
-    dafbna_(handle, descr, segid, segid_len);
-    if (failed_()) {
-	chkout_("SPKW15", (ftnlen)6);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKW15", (ftnlen)6);
 	return 0;
     }
-    dafada_(record, &__state->c__16);
-    if (! failed_()) {
-	dafena_();
+    dafada_(__global_state, record, &__state->c__16);
+    if (! failed_(__global_state)) {
+	dafena_(__global_state);
     }
-    chkout_("SPKW15", (ftnlen)6);
+    chkout_(__global_state, "SPKW15", (ftnlen)6);
     return 0;
 } /* spkw15_ */
 

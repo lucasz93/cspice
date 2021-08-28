@@ -8,8 +8,7 @@
 
 
 extern zzekac05_init_t __zzekac05_init;
-static zzekac05_state_t* get_zzekac05_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekac05_state_t* get_zzekac05_state(cspice_t* state) {
 	if (!state->zzekac05)
 		state->zzekac05 = __cspice_allocate_module(sizeof(
 	zzekac05_state_t), &__zzekac05_init, sizeof(__zzekac05_init));
@@ -18,39 +17,42 @@ static zzekac05_state_t* get_zzekac05_state() {
 }
 
 /* $Procedure     ZZEKAC05 ( EK, add class 5 column to segment ) */
-/* Subroutine */ int zzekac05_(integer *handle, integer *segdsc, integer *
-	coldsc, doublereal *dvals, integer *entszs, logical *nlflgs)
+/* Subroutine */ int zzekac05_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, doublereal *dvals, integer *entszs, 
+	logical *nlflgs)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal page[128];
     integer nelt;
     integer from;
     integer size;
-    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekpgwd_(integer *, integer *, doublereal *);
-    extern /* Subroutine */ int zzeksfwd_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekspsh_(integer *, integer *);
+    extern /* Subroutine */ int zzekcnam_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int zzekpgwd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzeksfwd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekspsh_(cspice_t*, integer *, integer *);
     integer i__;
     integer n;
     integer p;
     integer ndata;
     integer pbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer class__;
     integer nlink;
     integer p2;
     integer nrows;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern logical return_(cspice_t*);
     char column[32];
     integer adrbuf[126];
     integer bufptr;
@@ -63,17 +65,17 @@ static zzekac05_state_t* get_zzekac05_state() {
     logical fixsiz;
     logical newreq;
     logical nullok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer row;
-    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
-	    logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekaps_(cspice_t*, integer *, integer *, 
+	    integer *, logical *, integer *, integer *);
 
 
     /* Module state */
-    zzekac05_state_t* __state = get_zzekac05_state();
+    zzekac05_state_t* __state = get_zzekac05_state(__global_state);
 /* $ Abstract */
 
 /*     Add an entire class 5 column to an EK segment. */
@@ -980,10 +982,10 @@ static zzekac05_state_t* get_zzekac05_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKAC05", (ftnlen)8);
+	chkin_(__global_state, "ZZEKAC05", (ftnlen)8);
     }
 
 /*     Grab the column's attributes. */
@@ -998,20 +1000,20 @@ static zzekac05_state_t* get_zzekac05_state() {
 /*     This column had better be class 5. */
 
     if (class__ != 5) {
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	setmsg_("Column class code # found in descriptor for column #.  Clas"
-		"s should be 5.", (ftnlen)73);
-	errint_("#", &class__, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
-	chkout_("ZZEKAC05", (ftnlen)8);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	setmsg_(__global_state, "Column class code # found in descriptor for"
+		" column #.  Class should be 5.", (ftnlen)73);
+	errint_(__global_state, "#", &class__, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	sigerr_(__global_state, "SPICE(NOCLASS)", (ftnlen)14);
+	chkout_(__global_state, "ZZEKAC05", (ftnlen)8);
 	return 0;
     }
 
 /*     Push the column's ordinal index on the stack.  This allows us */
 /*     to identify the column the addresses belong to. */
 
-    zzekspsh_(&__state->c__1, &colidx);
+    zzekspsh_(__global_state, &__state->c__1, &colidx);
 
 /*     Find the number of rows in the segment. */
 
@@ -1051,9 +1053,9 @@ static zzekac05_state_t* get_zzekac05_state() {
 /*        There's some data to write, so allocate a page.  Also */
 /*        prepare a data buffer to be written out as a page. */
 
-	zzekaps_(handle, segdsc, &__state->c__2, &__state->c_false, &p, &
-		pbase);
-	cleard_(&__state->c__128, page);
+	zzekaps_(__global_state, handle, segdsc, &__state->c__2, &
+		__state->c_false, &p, &pbase);
+	cleard_(__global_state, &__state->c__128, page);
     }
 
 /*     Write the input data out to the target file a page at a time. */
@@ -1091,8 +1093,9 @@ static zzekac05_state_t* get_zzekac05_state() {
 		cursiz = entszs[row - 1];
 	    }
 	    from += cursiz;
-	    adrbuf[(i__1 = bufptr - 1) < 126 && 0 <= i__1 ? i__1 : s_rnge(
-		    "adrbuf", i__1, "zzekac05_", (ftnlen)417)] = -2;
+	    adrbuf[(i__1 = bufptr - 1) < 126 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "adrbuf", i__1, "zzekac05_", (ftnlen)
+		    417)] = -2;
 	    ++bufptr;
 	    ++row;
 	    nelt = 1;
@@ -1114,12 +1117,12 @@ static zzekac05_state_t* get_zzekac05_state() {
 		    cursiz = entszs[row - 1];
 		}
 		adrbuf[(i__1 = bufptr - 1) < 126 && 0 <= i__1 ? i__1 : s_rnge(
-			"adrbuf", i__1, "zzekac05_", (ftnlen)443)] = to + 
-			pbase;
+			&__global_state->f2c, "adrbuf", i__1, "zzekac05_", (
+			ftnlen)443)] = to + pbase;
 		++bufptr;
-		page[(i__1 = to - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("page"
-			, i__1, "zzekac05_", (ftnlen)445)] = (doublereal) 
-			cursiz;
+		page[(i__1 = to - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "page", i__1, "zzekac05_", (
+			ftnlen)445)] = (doublereal) cursiz;
 		++to;
 		++n;
 		++nlink;
@@ -1128,8 +1131,9 @@ static zzekac05_state_t* get_zzekac05_state() {
 /*           At this point, there's at least one free space in the */
 /*           current page. */
 
-	    page[(i__1 = to - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("page", 
-		    i__1, "zzekac05_", (ftnlen)456)] = dvals[from - 1];
+	    page[(i__1 = to - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "page", i__1, "zzekac05_", (ftnlen)
+		    456)] = dvals[from - 1];
 	    ++to;
 	    ++n;
 	    ++from;
@@ -1164,7 +1168,7 @@ static zzekac05_state_t* get_zzekac05_state() {
 /*           to look at, so push the buffer contents on the stack. */
 
 	    i__1 = bufptr - 1;
-	    zzekspsh_(&i__1, adrbuf);
+	    zzekspsh_(__global_state, &i__1, adrbuf);
 	    bufptr = 1;
 	}
 	if (cntinu || newreq || row > nrows && ndata > 0) {
@@ -1176,14 +1180,14 @@ static zzekac05_state_t* get_zzekac05_state() {
 
 /*           Write out the data page. */
 
-	    zzekpgwd_(handle, &p, page);
+	    zzekpgwd_(__global_state, handle, &p, page);
 
 /*           If there's more data to write, allocate another page. */
 
 	    if (remain > 0) {
-		zzekaps_(handle, segdsc, &__state->c__2, &__state->c_false, &
-			p2, &pbase);
-		cleard_(&__state->c__128, page);
+		zzekaps_(__global_state, handle, segdsc, &__state->c__2, &
+			__state->c_false, &p2, &pbase);
+		cleard_(__global_state, &__state->c__128, page);
 		n = 0;
 		nlink = 0;
 		to = 1;
@@ -1192,7 +1196,8 @@ static zzekac05_state_t* get_zzekac05_state() {
 /*              link the previous page to the current one. */
 
 		if (cntinu) {
-		    zzeksfwd_(handle, &__state->c__2, &p, &p2);
+		    zzeksfwd_(__global_state, handle, &__state->c__2, &p, &p2)
+			    ;
 		}
 		p = p2;
 	    }
@@ -1207,7 +1212,7 @@ static zzekac05_state_t* get_zzekac05_state() {
 
 /*     We've processed all entries of the input array. */
 
-    chkout_("ZZEKAC05", (ftnlen)8);
+    chkout_(__global_state, "ZZEKAC05", (ftnlen)8);
     return 0;
 } /* zzekac05_ */
 

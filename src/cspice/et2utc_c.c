@@ -333,7 +333,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "et2utc_c" );
+   chkin_c ( naif_state, "et2utc_c" );
 
    /*
    Check the input strings to make sure the pointers are non-null

@@ -8,17 +8,16 @@
 
 
 typedef int latrec_state_t;
-static latrec_state_t* get_latrec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline latrec_state_t* get_latrec_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LATREC ( Latitudinal to rectangular coordinates ) */
-/* Subroutine */ int latrec_(doublereal *radius, doublereal *long__, 
-	doublereal *lat, doublereal *rectan)
+/* Subroutine */ int latrec_(cspice_t* __global_state, doublereal *radius, 
+	doublereal *long__, doublereal *lat, doublereal *rectan)
 {
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal x;
@@ -27,7 +26,7 @@ static latrec_state_t* get_latrec_state() {
 
 
     /* Module state */
-    latrec_state_t* __state = get_latrec_state();
+    latrec_state_t* __state = get_latrec_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from latitudinal coordinates to rectangular coordinates. */
@@ -207,9 +206,11 @@ static latrec_state_t* get_latrec_state() {
 /*     Convert to rectangular coordinates, storing the results in */
 /*     temporary variables. */
 
-    x = *radius * cos(*long__) * cos(*lat);
-    y = *radius * sin(*long__) * cos(*lat);
-    z__ = *radius * sin(*lat);
+    x = *radius * cos(&__global_state->f2c, *long__) * cos(&
+	    __global_state->f2c, *lat);
+    y = *radius * sin(&__global_state->f2c, *long__) * cos(&
+	    __global_state->f2c, *lat);
+    z__ = *radius * sin(&__global_state->f2c, *lat);
 
 /*  Move the results to the output variables. */
 

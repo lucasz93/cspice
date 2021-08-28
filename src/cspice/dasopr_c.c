@@ -157,7 +157,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dasopr_c" );
+   chkin_c ( naif_state, "dasopr_c" );
 
    /*
    Check the input string to make sure the pointer is non-null

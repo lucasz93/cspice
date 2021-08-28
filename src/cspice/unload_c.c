@@ -185,7 +185,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "unload_c" );
+   chkin_c ( naif_state, "unload_c" );
 
 
    /*

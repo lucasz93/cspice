@@ -8,8 +8,7 @@
 
 
 extern wninsd_init_t __wninsd_init;
-static wninsd_state_t* get_wninsd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wninsd_state_t* get_wninsd_state(cspice_t* state) {
 	if (!state->wninsd)
 		state->wninsd = __cspice_allocate_module(sizeof(
 	wninsd_state_t), &__wninsd_init, sizeof(__wninsd_init));
@@ -18,8 +17,8 @@ static wninsd_state_t* get_wninsd_state() {
 }
 
 /* $Procedure      WNINSD ( Insert an interval into a DP window ) */
-/* Subroutine */ int wninsd_(doublereal *left, doublereal *right, doublereal *
-	window)
+/* Subroutine */ int wninsd_(cspice_t* __global_state, doublereal *left, 
+	doublereal *right, doublereal *window)
 {
     /* System generated locals */
     integer i__1;
@@ -30,20 +29,21 @@ static wninsd_state_t* get_wninsd_state() {
     integer size;
     integer i__;
     integer j;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern integer sized_(doublereal *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int excess_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    wninsd_state_t* __state = get_wninsd_state();
+    wninsd_state_t* __state = get_wninsd_state(__global_state);
 /* $ Abstract */
 
 /*      Insert an interval into a double precision window. */
@@ -256,26 +256,27 @@ static wninsd_state_t* get_wninsd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("WNINSD", (ftnlen)6);
+	chkin_(__global_state, "WNINSD", (ftnlen)6);
     }
 
 /*     Get the size and cardinality of the window. */
 
-    size = sized_(window);
-    card = cardd_(window);
+    size = sized_(__global_state, window);
+    card = cardd_(__global_state, window);
 
 /*     Let's try the easy cases first. No input interval? No change. */
 /*     Signal that an error has occurred and set the error message. */
 
     if (*left > *right) {
-	setmsg_("Left endpoint was *. Right endpoint was *.", (ftnlen)42);
-	errdp_("*", left, (ftnlen)1);
-	errdp_("*", right, (ftnlen)1);
-	sigerr_("SPICE(BADENDPOINTS)", (ftnlen)19);
-	chkout_("WNINSD", (ftnlen)6);
+	setmsg_(__global_state, "Left endpoint was *. Right endpoint was *.", 
+		(ftnlen)42);
+	errdp_(__global_state, "*", left, (ftnlen)1);
+	errdp_(__global_state, "*", right, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADENDPOINTS)", (ftnlen)19);
+	chkout_(__global_state, "WNINSD", (ftnlen)6);
 	return 0;
 
 /*     Empty window? Input interval later than the end of the window? */
@@ -284,14 +285,14 @@ static wninsd_state_t* get_wninsd_state() {
     } else if (card == 0 || *left > window[card + 5]) {
 	if (size >= card + 2) {
 	    i__1 = card + 2;
-	    scardd_(&i__1, window);
+	    scardd_(__global_state, &i__1, window);
 	    window[card + 6] = *left;
 	    window[card + 7] = *right;
 	} else {
-	    excess_(&__state->c__2, "window", (ftnlen)6);
-	    sigerr_("SPICE(WINDOWEXCESS)", (ftnlen)19);
+	    excess_(__global_state, &__state->c__2, "window", (ftnlen)6);
+	    sigerr_(__global_state, "SPICE(WINDOWEXCESS)", (ftnlen)19);
 	}
-	chkout_("WNINSD", (ftnlen)6);
+	chkout_(__global_state, "WNINSD", (ftnlen)6);
 	return 0;
     }
 
@@ -328,13 +329,13 @@ static wninsd_state_t* get_wninsd_state() {
 		window[j + 7] = window[j + 5];
 	    }
 	    i__1 = card + 2;
-	    scardd_(&i__1, window);
+	    scardd_(__global_state, &i__1, window);
 	    window[i__ + 4] = *left;
 	    window[i__ + 5] = *right;
 	} else {
-	    excess_(&__state->c__2, "window", (ftnlen)6);
-	    sigerr_("SPICE(WINDOWEXCESS)", (ftnlen)19);
-	    chkout_("WNINSD", (ftnlen)6);
+	    excess_(__global_state, &__state->c__2, "window", (ftnlen)6);
+	    sigerr_(__global_state, "SPICE(WINDOWEXCESS)", (ftnlen)19);
+	    chkout_(__global_state, "WNINSD", (ftnlen)6);
 	    return 0;
 	}
 
@@ -379,9 +380,9 @@ static wninsd_state_t* get_wninsd_state() {
 	    window[i__ + 5] = window[j + 5];
 	    j += 2;
 	}
-	scardd_(&i__, window);
+	scardd_(__global_state, &i__, window);
     }
-    chkout_("WNINSD", (ftnlen)6);
+    chkout_(__global_state, "WNINSD", (ftnlen)6);
     return 0;
 } /* wninsd_ */
 

@@ -8,8 +8,7 @@
 
 
 extern stcc01_init_t __stcc01_init;
-static stcc01_state_t* get_stcc01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline stcc01_state_t* get_stcc01_state(cspice_t* state) {
 	if (!state->stcc01)
 		state->stcc01 = __cspice_allocate_module(sizeof(
 	stcc01_state_t), &__stcc01_init, sizeof(__stcc01_init));
@@ -18,8 +17,9 @@ static stcc01_state_t* get_stcc01_state() {
 }
 
 /* $Procedure   STCC01 ( STAR catalog type 1, check whether type 1 ) */
-/* Subroutine */ int stcc01_(char *catfnm, char *tabnam, logical *istyp1, 
-	char *errmsg, ftnlen catfnm_len, ftnlen tabnam_len, ftnlen errmsg_len)
+/* Subroutine */ int stcc01_(cspice_t* __global_state, char *catfnm, char *
+	tabnam, logical *istyp1, char *errmsg, ftnlen catfnm_len, ftnlen 
+	tabnam_len, ftnlen errmsg_len)
 {
     /* Initialized data */
 
@@ -29,26 +29,28 @@ static stcc01_state_t* get_stcc01_state() {
     integer i__1, i__2, i__3, i__4[4];
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer nblen_(char *, ftnlen);
-    extern /* Subroutine */ int ekcls_(integer *);
-    extern /* Subroutine */ int ekopr_(char *, integer *, ftnlen);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern integer eknseg_(integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ekssum_(integer *, integer *, char *, integer 
-	    *, integer *, char *, char *, integer *, integer *, logical *, 
-	    logical *, ftnlen, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer nblen_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ekcls_(cspice_t*, integer *);
+    extern /* Subroutine */ int ekopr_(cspice_t*, char *, integer *, ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern integer eknseg_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ekssum_(cspice_t*, integer *, integer *, char 
+	    *, integer *, integer *, char *, char *, integer *, integer *, 
+	    logical *, logical *, ftnlen, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    stcc01_state_t* __state = get_stcc01_state();
+    stcc01_state_t* __state = get_stcc01_state(__global_state);
 /* $ Abstract */
 
 /*     Check whether a file is a type 1 star catalog and return the */
@@ -334,32 +336,33 @@ static stcc01_state_t* get_stcc01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("STCC01", (ftnlen)6);
+	chkin_(__global_state, "STCC01", (ftnlen)6);
     }
 
 /*     More initial values. */
 
-    s_copy(tabnam, " ", tabnam_len, (ftnlen)1);
-    s_copy(errmsg, " ", errmsg_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, tabnam, " ", tabnam_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, errmsg, " ", errmsg_len, (ftnlen)1);
     *istyp1 = TRUE_;
 
 /*     Open star catalog file with low level "open for read access" */
 /*     EK routine. */
 
-    ekopr_(catfnm, &__state->tmphnd, catfnm_len);
+    ekopr_(__global_state, catfnm, &__state->tmphnd, catfnm_len);
 
 /*     Get the number of segments in the file and check whether it is */
 /*     greater than 0 (i.e. some data are is present in the file). If */
 /*     not then set an error message and return to the calling routine. */
 
-    __state->numseg = eknseg_(&__state->tmphnd);
+    __state->numseg = eknseg_(__global_state, &__state->tmphnd);
     if (__state->numseg <= 0) {
-	s_copy(errmsg, "File contains no data.", errmsg_len, (ftnlen)22);
+	s_copy(&__global_state->f2c, errmsg, "File contains no data.", 
+		errmsg_len, (ftnlen)22);
 	*istyp1 = FALSE_;
-	chkout_("STCC01", (ftnlen)6);
+	chkout_(__global_state, "STCC01", (ftnlen)6);
 	return 0;
     }
 
@@ -369,22 +372,23 @@ static stcc01_state_t* get_stcc01_state() {
 
     i__1 = __state->numseg;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
-	ekssum_(&__state->tmphnd, &__state->i__, __state->tmptnm, &
-		__state->nrows, &__state->ncols, __state->cnames, 
-		__state->dtypes, __state->sizes, __state->strlns, 
-		__state->indexd, __state->nullok, (ftnlen)64, (ftnlen)32, (
-		ftnlen)4);
+	ekssum_(__global_state, &__state->tmphnd, &__state->i__, 
+		__state->tmptnm, &__state->nrows, &__state->ncols, 
+		__state->cnames, __state->dtypes, __state->sizes, 
+		__state->strlns, __state->indexd, __state->nullok, (ftnlen)64,
+		 (ftnlen)32, (ftnlen)4);
 	if (__state->i__ > 1) {
-	    if (s_cmp(__state->tmptnm, __state->tnmprv, (ftnlen)64, (ftnlen)
-		    64) != 0) {
-		s_copy(errmsg, "File contains more than one data table.", 
-			errmsg_len, (ftnlen)39);
+	    if (s_cmp(&__global_state->f2c, __state->tmptnm, __state->tnmprv, 
+		    (ftnlen)64, (ftnlen)64) != 0) {
+		s_copy(&__global_state->f2c, errmsg, "File contains more tha"
+			"n one data table.", errmsg_len, (ftnlen)39);
 		*istyp1 = FALSE_;
-		chkout_("STCC01", (ftnlen)6);
+		chkout_(__global_state, "STCC01", (ftnlen)6);
 		return 0;
 	    }
 	}
-	s_copy(__state->tnmprv, __state->tmptnm, (ftnlen)64, (ftnlen)64);
+	s_copy(&__global_state->f2c, __state->tnmprv, __state->tmptnm, (
+		ftnlen)64, (ftnlen)64);
     }
 
 /*     Check whether the  number of columns is less than it */
@@ -392,10 +396,10 @@ static stcc01_state_t* get_stcc01_state() {
 /*     an error message and return to a calling routine. */
 
     if (__state->ncols < 7) {
-	s_copy(errmsg, "File contains too few data columns.", errmsg_len, (
-		ftnlen)35);
+	s_copy(&__global_state->f2c, errmsg, "File contains too few data col"
+		"umns.", errmsg_len, (ftnlen)35);
 	*istyp1 = FALSE_;
-	chkout_("STCC01", (ftnlen)6);
+	chkout_(__global_state, "STCC01", (ftnlen)6);
 	return 0;
     }
 
@@ -405,34 +409,39 @@ static stcc01_state_t* get_stcc01_state() {
 
     for (__state->i__ = 1; __state->i__ <= 7; ++__state->i__) {
 	__state->found = FALSE_;
-	__state->j = isrchc_(__state->cat1nm + (((i__1 = __state->i__ - 1) < 
-		7 && 0 <= i__1 ? i__1 : s_rnge("cat1nm", i__1, "stcc01_", (
-		ftnlen)319)) << 5), &__state->ncols, __state->cnames, (ftnlen)
-		32, (ftnlen)32);
+	__state->j = isrchc_(__global_state, __state->cat1nm + (((i__1 = 
+		__state->i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "cat1nm", i__1, "stcc01_", (ftnlen)319)) 
+		<< 5), &__state->ncols, __state->cnames, (ftnlen)32, (ftnlen)
+		32);
 	if (__state->j > 0) {
-	    __state->found = s_cmp(__state->cat1dt + (((i__1 = __state->i__ - 
-		    1) < 7 && 0 <= i__1 ? i__1 : s_rnge("cat1dt", i__1, "stc"
-		    "c01_", (ftnlen)322)) << 2), __state->dtypes + (((i__2 = 
-		    __state->j - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("dtyp"
-		    "es", i__2, "stcc01_", (ftnlen)322)) << 2), (ftnlen)4, (
-		    ftnlen)4) == 0 && ! __state->nullok[(i__3 = __state->j - 
-		    1) < 100 && 0 <= i__3 ? i__3 : s_rnge("nullok", i__3, 
-		    "stcc01_", (ftnlen)322)];
+	    __state->found = s_cmp(&__global_state->f2c, __state->cat1dt + (((
+		    i__1 = __state->i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
+		    &__global_state->f2c, "cat1dt", i__1, "stcc01_", (ftnlen)
+		    322)) << 2), __state->dtypes + (((i__2 = __state->j - 1) <
+		     100 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "dtypes", i__2, "stcc01_", (ftnlen)322)) << 2), (ftnlen)4,
+		     (ftnlen)4) == 0 && ! __state->nullok[(i__3 = __state->j 
+		    - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "nullok", i__3, "stcc01_", (ftnlen)
+		    322)];
 	}
 	if (! __state->found) {
 /* Writing concatenation */
 	    i__4[0] = 8, a__1[0] = " Column ";
-	    i__4[1] = nblen_(__state->cat1nm + (((i__2 = __state->i__ - 1) < 
-		    7 && 0 <= i__2 ? i__2 : s_rnge("cat1nm", i__2, "stcc01_", 
-		    (ftnlen)326)) << 5), (ftnlen)32), a__1[1] = 
-		    __state->cat1nm + (((i__1 = __state->i__ - 1) < 7 && 0 <= 
-		    i__1 ? i__1 : s_rnge("cat1nm", i__1, "stcc01_", (ftnlen)
+	    i__4[1] = nblen_(__global_state, __state->cat1nm + (((i__2 = 
+		    __state->i__ - 1) < 7 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "cat1nm", i__2, "stcc01_", (ftnlen)
+		    326)) << 5), (ftnlen)32), a__1[1] = __state->cat1nm + (((
+		    i__1 = __state->i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
+		    &__global_state->f2c, "cat1nm", i__1, "stcc01_", (ftnlen)
 		    326)) << 5);
 	    i__4[2] = 16, a__1[2] = " is not found or";
 	    i__4[3] = 33, a__1[3] = " improperly declared in the file.";
-	    s_cat(errmsg, a__1, i__4, &__state->c__4, errmsg_len);
+	    s_cat(&__global_state->f2c, errmsg, a__1, i__4, &__state->c__4, 
+		    errmsg_len);
 	    *istyp1 = FALSE_;
-	    chkout_("STCC01", (ftnlen)6);
+	    chkout_(__global_state, "STCC01", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -442,9 +451,10 @@ static stcc01_state_t* get_stcc01_state() {
 /*     "return" the table name and close the file with the EK close */
 /*     routine. */
 
-    s_copy(tabnam, __state->tmptnm, tabnam_len, (ftnlen)64);
-    ekcls_(&__state->tmphnd);
-    chkout_("STCC01", (ftnlen)6);
+    s_copy(&__global_state->f2c, tabnam, __state->tmptnm, tabnam_len, (ftnlen)
+	    64);
+    ekcls_(__global_state, &__state->tmphnd);
+    chkout_(__global_state, "STCC01", (ftnlen)6);
     return 0;
 } /* stcc01_ */
 

@@ -8,24 +8,24 @@
 
 
 typedef int cke06_state_t;
-static cke06_state_t* get_cke06_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cke06_state_t* get_cke06_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CKE06 ( C-Kernel, evaluate, type 6 ) */
-/* Subroutine */ int cke06_(logical *needav, doublereal *record, doublereal *
-	cmat, doublereal *av, doublereal *clkout)
+/* Subroutine */ int cke06_(cspice_t* __global_state, logical *needav, 
+	doublereal *record, doublereal *cmat, doublereal *av, doublereal *
+	clkout)
 {
-    extern /* Subroutine */ int cke05_(logical *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int cke05_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    cke06_state_t* __state = get_cke06_state();
+    cke06_state_t* __state = get_cke06_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single data record from a type 6 CK segment. */
@@ -667,17 +667,17 @@ static cke06_state_t* get_cke06_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKE06", (ftnlen)5);
+    chkin_(__global_state, "CKE06", (ftnlen)5);
 
 /*     Given that our nominally type 6 input record is actually a */
 /*     valid type 5 record, we let the type 5 evaluator do the */
 /*     work. */
 
-    cke05_(needav, record, cmat, av, clkout);
-    chkout_("CKE06", (ftnlen)5);
+    cke05_(__global_state, needav, record, cmat, av, clkout);
+    chkout_(__global_state, "CKE06", (ftnlen)5);
     return 0;
 } /* cke06_ */
 

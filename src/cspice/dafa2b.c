@@ -8,33 +8,33 @@
 
 
 typedef int dafa2b_state_t;
-static dafa2b_state_t* get_dafa2b_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafa2b_state_t* get_dafa2b_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DAFA2B ( DAF, ASCII to binary ) */
-/* Subroutine */ int dafa2b_(char *ascii, char *binary, integer *resv, ftnlen 
-	ascii_len, ftnlen binary_len)
+/* Subroutine */ int dafa2b_(cspice_t* __global_state, char *ascii, char *
+	binary, integer *resv, ftnlen ascii_len, ftnlen binary_len)
 {
     /* System generated locals */
     cllist cl__1;
 
     /* Builtin functions */
-    integer f_clos(cllist *);
+    integer f_clos(f2c_state_t*, cllist *);
 
     /* Local variables */
     integer unit;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int daft2b_(integer *, char *, integer *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int txtopr_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int daft2b_(cspice_t*, integer *, char *, integer 
+	    *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int txtopr_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    dafa2b_state_t* __state = get_dafa2b_state();
+    dafa2b_state_t* __state = get_dafa2b_state(__global_state);
 /* $ Abstract */
 
 /*     Deprecated. The routine DAFTB supersedes this routine. */
@@ -221,19 +221,19 @@ static dafa2b_state_t* get_dafa2b_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFA2B", (ftnlen)6);
+	chkin_(__global_state, "DAFA2B", (ftnlen)6);
     }
 
 /*     Open the ASCII file for reading. If an error occurs, then check */
 /*     out and return. An appropriate error message will have already */
 /*     been set. */
 
-    txtopr_(ascii, &unit, ascii_len);
-    if (failed_()) {
-	chkout_("DAFA2B", (ftnlen)6);
+    txtopr_(__global_state, ascii, &unit, ascii_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFA2B", (ftnlen)6);
 	return 0;
     }
 
@@ -241,13 +241,13 @@ static dafa2b_state_t* get_dafa2b_state() {
 /*     check out and return, as an appropriate error message should have */
 /*     already been set. Also close the text file that we opened. */
 
-    daft2b_(&unit, binary, resv, binary_len);
-    if (failed_()) {
+    daft2b_(__global_state, &unit, binary, resv, binary_len);
+    if (failed_(__global_state)) {
 	cl__1.cerr = 0;
 	cl__1.cunit = unit;
 	cl__1.csta = 0;
-	f_clos(&cl__1);
-	chkout_("DAFA2B", (ftnlen)6);
+	f_clos(&__global_state->f2c, &cl__1);
+	chkout_(__global_state, "DAFA2B", (ftnlen)6);
 	return 0;
     }
 
@@ -256,8 +256,8 @@ static dafa2b_state_t* get_dafa2b_state() {
     cl__1.cerr = 0;
     cl__1.cunit = unit;
     cl__1.csta = 0;
-    f_clos(&cl__1);
-    chkout_("DAFA2B", (ftnlen)6);
+    f_clos(&__global_state->f2c, &cl__1);
+    chkout_(__global_state, "DAFA2B", (ftnlen)6);
     return 0;
 } /* dafa2b_ */
 

@@ -518,7 +518,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekaclc_c" );
+   chkin_c ( naif_state, "ekaclc_c" );
 
 
    /*

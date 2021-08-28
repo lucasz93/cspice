@@ -8,17 +8,17 @@
 
 
 typedef int vsclip_state_t;
-static vsclip_state_t* get_vsclip_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vsclip_state_t* get_vsclip_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VSCLIP ( Vector scaling, 3 dimensions, in place ) */
-/* Subroutine */ int vsclip_(doublereal *s, doublereal *v)
+/* Subroutine */ int vsclip_(cspice_t* __global_state, doublereal *s, 
+	doublereal *v)
 {
 
     /* Module state */
-    vsclip_state_t* __state = get_vsclip_state();
+    vsclip_state_t* __state = get_vsclip_state(__global_state);
 /* $ Abstract */
 
 /*     Multiply a scalar and a 3-dimensional double precision vector, */

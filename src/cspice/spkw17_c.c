@@ -294,7 +294,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkw17_c" );
+   chkin_c ( naif_state, "spkw17_c" );
 
 
    /*

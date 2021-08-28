@@ -977,7 +977,7 @@
       {
       return;
       }
-   chkin_c ( "gfposc_c" );
+   chkin_c ( naif_state, "gfposc_c" );
 
 
    /*

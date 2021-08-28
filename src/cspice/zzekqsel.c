@@ -8,19 +8,18 @@
 
 
 typedef int zzekqsel_state_t;
-static zzekqsel_state_t* get_zzekqsel_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekqsel_state_t* get_zzekqsel_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  ZZEKQSEL ( Private: EK, read SELECT columns from query ) */
-/* Subroutine */ int zzekqsel_(integer *eqryi, char *eqryc, integer *n, 
-	integer *lxbeg, integer *lxend, char *table, integer *tabidx, char *
-	column, integer *colidx, ftnlen eqryc_len, ftnlen table_len, ftnlen 
-	column_len)
+/* Subroutine */ int zzekqsel_(cspice_t* __global_state, integer *eqryi, char 
+	*eqryc, integer *n, integer *lxbeg, integer *lxend, char *table, 
+	integer *tabidx, char *column, integer *colidx, ftnlen eqryc_len, 
+	ftnlen table_len, ftnlen column_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer base;
@@ -29,25 +28,25 @@ static zzekqsel_state_t* get_zzekqsel_state() {
     integer ncns;
     integer nord;
     integer nsel;
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer cb;
     integer ce;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer tb;
     integer te;
     integer buflen;
     integer iparse;
     integer resolv;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzekqsel_state_t* __state = get_zzekqsel_state();
+    zzekqsel_state_t* __state = get_zzekqsel_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -589,32 +588,34 @@ static zzekqsel_state_t* get_zzekqsel_state() {
 
 /*     Use discovery check-in. */
 
-    zzekreqi_(eqryi, "PARSED", &iparse, (ftnlen)6);
-    if (failed_()) {
+    zzekreqi_(__global_state, eqryi, "PARSED", &iparse, (ftnlen)6);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (iparse == -1) {
-	chkin_("ZZEKQSEL", (ftnlen)8);
-	setmsg_("Encoded query has not yet been parsed.", (ftnlen)38);
-	sigerr_("SPICE(UNPARSEDQUERY)", (ftnlen)20);
-	chkout_("ZZEKQSEL", (ftnlen)8);
+	chkin_(__global_state, "ZZEKQSEL", (ftnlen)8);
+	setmsg_(__global_state, "Encoded query has not yet been parsed.", (
+		ftnlen)38);
+	sigerr_(__global_state, "SPICE(UNPARSEDQUERY)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKQSEL", (ftnlen)8);
 	return 0;
     }
-    zzekreqi_(eqryi, "NUM_SELECT_COLS", &nsel, (ftnlen)15);
+    zzekreqi_(__global_state, eqryi, "NUM_SELECT_COLS", &nsel, (ftnlen)15);
     if (*n < 1 || *n > nsel) {
-	chkin_("ZZEKQSEL", (ftnlen)8);
-	setmsg_("Column index # is out of valid range 1:#.", (ftnlen)41);
-	errint_("#", n, (ftnlen)1);
-	errint_("#", &nsel, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKQSEL", (ftnlen)8);
+	chkin_(__global_state, "ZZEKQSEL", (ftnlen)8);
+	setmsg_(__global_state, "Column index # is out of valid range 1:#.", (
+		ftnlen)41);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	errint_(__global_state, "#", &nsel, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKQSEL", (ftnlen)8);
 	return 0;
     }
-    zzekreqi_(eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
-    zzekreqi_(eqryi, "NUM_CONJUNCTIONS", &ncnj, (ftnlen)16);
-    zzekreqi_(eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
-    zzekreqi_(eqryi, "NUM_ORDERBY_COLS", &nord, (ftnlen)16);
-    zzekreqi_(eqryi, "CHR_BUF_SIZE", &buflen, (ftnlen)12);
+    zzekreqi_(__global_state, eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
+    zzekreqi_(__global_state, eqryi, "NUM_CONJUNCTIONS", &ncnj, (ftnlen)16);
+    zzekreqi_(__global_state, eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
+    zzekreqi_(__global_state, eqryi, "NUM_ORDERBY_COLS", &nord, (ftnlen)16);
+    zzekreqi_(__global_state, eqryi, "CHR_BUF_SIZE", &buflen, (ftnlen)12);
 
 /*     The lexeme begin and end values start out as invalid values. */
 /*     We'll set these when we discover what form the SELECT item has. */
@@ -636,7 +637,8 @@ static zzekqsel_state_t* get_zzekqsel_state() {
     cb = eqryi[base + 15];
     ce = eqryi[base + 16];
     if (cb > 0 && ce > 0 && cb <= buflen && ce <= buflen && cb <= ce) {
-	s_copy(column, eqryc + (cb - 1), column_len, ce - (cb - 1));
+	s_copy(&__global_state->f2c, column, eqryc + (cb - 1), column_len, ce 
+		- (cb - 1));
 
 /*        The end of the column name is always the end of the SELECT */
 /*        item, at least until we handle more general expressions. */
@@ -647,13 +649,14 @@ static zzekqsel_state_t* get_zzekqsel_state() {
 /*        We should never see invalid pointers in a parsed, encoded */
 /*        query, but let's not take chances. */
 
-	chkin_("ZZEKQSEL", (ftnlen)8);
-	setmsg_("Invalid string bounds #:# for column #.", (ftnlen)39);
-	errint_("#", &cb, (ftnlen)1);
-	errint_("#", &ce, (ftnlen)1);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKQSEL", (ftnlen)8);
+	chkin_(__global_state, "ZZEKQSEL", (ftnlen)8);
+	setmsg_(__global_state, "Invalid string bounds #:# for column #.", (
+		ftnlen)39);
+	errint_(__global_state, "#", &cb, (ftnlen)1);
+	errint_(__global_state, "#", &ce, (ftnlen)1);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKQSEL", (ftnlen)8);
 	return 0;
     }
 
@@ -664,7 +667,8 @@ static zzekqsel_state_t* get_zzekqsel_state() {
     te = eqryi[base + 10];
     if (tb > 0) {
 	if (te > 0 && tb <= buflen && te <= buflen && tb <= te) {
-	    s_copy(table, eqryc + (tb - 1), table_len, te - (tb - 1));
+	    s_copy(&__global_state->f2c, table, eqryc + (tb - 1), table_len, 
+		    te - (tb - 1));
 
 /*           The start position of the table name is the start of */
 /*           the SELECT item. */
@@ -675,21 +679,21 @@ static zzekqsel_state_t* get_zzekqsel_state() {
 /*           If the first pointer is non-zero, both pointers should have */
 /*           been valid. */
 
-	    chkin_("ZZEKQSEL", (ftnlen)8);
-	    setmsg_("Invalid string bounds #:# for the table qualifying colu"
-		    "mn #.", (ftnlen)60);
-	    errint_("#", &tb, (ftnlen)1);
-	    errint_("#", &te, (ftnlen)1);
-	    errint_("#", n, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZEKQSEL", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKQSEL", (ftnlen)8);
+	    setmsg_(__global_state, "Invalid string bounds #:# for the table"
+		    " qualifying column #.", (ftnlen)60);
+	    errint_(__global_state, "#", &tb, (ftnlen)1);
+	    errint_(__global_state, "#", &te, (ftnlen)1);
+	    errint_(__global_state, "#", n, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZEKQSEL", (ftnlen)8);
 	    return 0;
 	}
     } else {
 
 /*        No table was supplied. */
 
-	s_copy(table, " ", table_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, table, " ", table_len, (ftnlen)1);
 
 /*        The start position of the column name is the start of */
 /*        the SELECT item. */
@@ -700,7 +704,7 @@ static zzekqsel_state_t* get_zzekqsel_state() {
 /*     If names have been resolved already, we can determine the index */
 /*     of the table to which the specified order-by column belongs. */
 
-    zzekreqi_(eqryi, "NAMES_RESOLVED", &resolv, (ftnlen)14);
+    zzekreqi_(__global_state, eqryi, "NAMES_RESOLVED", &resolv, (ftnlen)14);
     if (resolv == 1) {
 
 /*        The qualifying table's index in the FROM clause is available. */

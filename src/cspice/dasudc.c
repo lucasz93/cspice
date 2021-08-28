@@ -8,8 +8,7 @@
 
 
 extern dasudc_init_t __dasudc_init;
-static dasudc_state_t* get_dasudc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasudc_state_t* get_dasudc_state(cspice_t* state) {
 	if (!state->dasudc)
 		state->dasudc = __cspice_allocate_module(sizeof(
 	dasudc_state_t), &__dasudc_init, sizeof(__dasudc_init));
@@ -18,8 +17,9 @@ static dasudc_state_t* get_dasudc_state() {
 }
 
 /* $Procedure      DASUDC ( DAS, update data, character ) */
-/* Subroutine */ int dasudc_(integer *handle, integer *first, integer *last, 
-	integer *bpos, integer *epos, char *data, ftnlen data_len)
+/* Subroutine */ int dasudc_(cspice_t* __global_state, integer *handle, 
+	integer *first, integer *last, integer *bpos, integer *epos, char *
+	data, ftnlen data_len)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -27,37 +27,37 @@ static dasudc_state_t* get_dasudc_state() {
     /* Local variables */
     integer l;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer lastc;
     integer lastd;
     integer recno;
     integer lasti;
     integer nmove;
     integer rcpos;
-    extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dasa2l_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern logical failed_(cspice_t*);
     integer clbase;
-    extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasurc_(integer *, integer *, integer *, 
-	    integer *, char *, ftnlen);
+    extern /* Subroutine */ int daslla_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasurc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, char *, ftnlen);
     integer nmoved;
     integer clsize;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer numchr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer wordno;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer nwritn;
     integer chr;
     integer elt;
 
 
     /* Module state */
-    dasudc_state_t* __state = get_dasudc_state();
+    dasudc_state_t* __state = get_dasudc_state(__global_state);
 /* $ Abstract */
 
 /*     Update character data in a specified range of DAS logical */
@@ -371,25 +371,26 @@ static dasudc_state_t* get_dasudc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASUDC", (ftnlen)6);
+	chkin_(__global_state, "DASUDC", (ftnlen)6);
     }
 
 /*     Get the last logical addresses in use in this DAS file. */
 
-    daslla_(handle, &lastc, &lastd, &lasti);
+    daslla_(__global_state, handle, &lastc, &lastd, &lasti);
 
 /*     Validate the input addresses. */
 
     if (*first < 1 || *first > lastc || *last < 1 || *last > lastc) {
-	setmsg_("FIRST was #. LAST was #. Valid range is [1,#].", (ftnlen)46);
-	errint_("#", first, (ftnlen)1);
-	errint_("#", last, (ftnlen)1);
-	errint_("#", &lastc, (ftnlen)1);
-	sigerr_("SPICE(INVALIDADDRESS)", (ftnlen)21);
-	chkout_("DASUDC", (ftnlen)6);
+	setmsg_(__global_state, "FIRST was #. LAST was #. Valid range is [1,"
+		"#].", (ftnlen)46);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	errint_(__global_state, "#", &lastc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDADDRESS)", (ftnlen)21);
+	chkout_(__global_state, "DASUDC", (ftnlen)6);
 	return 0;
     }
 
@@ -402,7 +403,8 @@ static dasudc_state_t* get_dasudc_state() {
 
 /*     Find out the physical location of the first character to update. */
 
-    dasa2l_(handle, &__state->c__1, first, &clbase, &clsize, &recno, &wordno);
+    dasa2l_(__global_state, handle, &__state->c__1, first, &clbase, &clsize, &
+	    recno, &wordno);
 
 /*     Write as much data into record RECNO as is necessary and possible. */
 
@@ -425,7 +427,7 @@ static dasudc_state_t* get_dasudc_state() {
     chr = *bpos;
     nmoved = 0;
     rcpos = wordno;
-    while(nmoved < numchr && ! failed_()) {
+    while(nmoved < numchr && ! failed_(__global_state)) {
 	if (chr > *epos) {
 	    ++elt;
 	    chr = *bpos;
@@ -441,8 +443,8 @@ static dasudc_state_t* get_dasudc_state() {
 /*        Update the current record. */
 
 	i__1 = rcpos + nmove - 1;
-	dasurc_(handle, &recno, &rcpos, &i__1, data + ((elt - 1) * data_len + 
-		(chr - 1)), chr + nmove - 1 - (chr - 1));
+	dasurc_(__global_state, handle, &recno, &rcpos, &i__1, data + ((elt - 
+		1) * data_len + (chr - 1)), chr + nmove - 1 - (chr - 1));
 	nmoved += nmove;
 	rcpos += nmove;
 	chr += nmove;
@@ -452,7 +454,7 @@ static dasudc_state_t* get_dasudc_state() {
 
 /*     Update as many additional records as necessary. */
 
-    while(nwritn < n && ! failed_()) {
+    while(nwritn < n && ! failed_(__global_state)) {
 
 /*        At this point, RECNO is the correct number of the record to */
 /*        write to next.  CLBASE is the number of the first record of */
@@ -469,7 +471,7 @@ static dasudc_state_t* get_dasudc_state() {
 	    numchr = min(i__1,1024);
 	    nmoved = 0;
 	    rcpos = 1;
-	    while(nmoved < numchr && ! failed_()) {
+	    while(nmoved < numchr && ! failed_(__global_state)) {
 		if (chr > l) {
 		    ++elt;
 		    chr = *bpos;
@@ -482,8 +484,9 @@ static dasudc_state_t* get_dasudc_state() {
 		i__1 = numchr - nmoved, i__2 = *epos - chr + 1;
 		nmove = min(i__1,i__2);
 		i__1 = rcpos + nmove - 1;
-		dasurc_(handle, &recno, &rcpos, &i__1, data + ((elt - 1) * 
-			data_len + (chr - 1)), chr + nmove - 1 - (chr - 1));
+		dasurc_(__global_state, handle, &recno, &rcpos, &i__1, data + 
+			((elt - 1) * data_len + (chr - 1)), chr + nmove - 1 - 
+			(chr - 1));
 		nmoved += nmove;
 		rcpos += nmove;
 		chr += nmove;
@@ -497,11 +500,11 @@ static dasudc_state_t* get_dasudc_state() {
 /*           NWRITN. */
 
 	    i__1 = *first + nwritn;
-	    dasa2l_(handle, &__state->c__1, &i__1, &clbase, &clsize, &recno, &
-		    wordno);
+	    dasa2l_(__global_state, handle, &__state->c__1, &i__1, &clbase, &
+		    clsize, &recno, &wordno);
 	}
     }
-    chkout_("DASUDC", (ftnlen)6);
+    chkout_(__global_state, "DASUDC", (ftnlen)6);
     return 0;
 } /* dasudc_ */
 

@@ -8,27 +8,27 @@
 
 
 typedef int zzekue03_state_t;
-static zzekue03_state_t* get_zzekue03_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekue03_state_t* get_zzekue03_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKUE03 ( EK, update column entry, class 3 ) */
-/* Subroutine */ int zzekue03_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr, char *cval, logical *isnull, ftnlen cval_len)
+/* Subroutine */ int zzekue03_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr, char *cval, 
+	logical *isnull, ftnlen cval_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int zzekad03_(integer *, integer *, integer *, 
-	    integer *, char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzekde03_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzekad03_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzekde03_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
 
 
     /* Module state */
-    zzekue03_state_t* __state = get_zzekue03_state();
+    zzekue03_state_t* __state = get_zzekue03_state(__global_state);
 /* $ Abstract */
 
 /*     Update a specified class 3 column entry in an EK record. */
@@ -720,25 +720,26 @@ static zzekue03_state_t* get_zzekue03_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKUE03", (ftnlen)8);
+	chkin_(__global_state, "ZZEKUE03", (ftnlen)8);
     }
 
 /*     Get rid of the old column entry first. */
 
-    zzekde03_(handle, segdsc, coldsc, recptr);
-    if (failed_()) {
-	chkout_("ZZEKUE03", (ftnlen)8);
+    zzekde03_(__global_state, handle, segdsc, coldsc, recptr);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZEKUE03", (ftnlen)8);
 	return 0;
     }
 
 /*     We've reduced the problem to a solved one:  that of adding */
 /*     a column entry. */
 
-    zzekad03_(handle, segdsc, coldsc, recptr, cval, isnull, cval_len);
-    chkout_("ZZEKUE03", (ftnlen)8);
+    zzekad03_(__global_state, handle, segdsc, coldsc, recptr, cval, isnull, 
+	    cval_len);
+    chkout_(__global_state, "ZZEKUE03", (ftnlen)8);
     return 0;
 } /* zzekue03_ */
 

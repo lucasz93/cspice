@@ -232,7 +232,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "convrt_c" );
+   chkin_c ( naif_state, "convrt_c" );
 
 
    /*

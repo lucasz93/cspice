@@ -248,7 +248,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "badkpv_c" );
+   chkin_c ( naif_state, "badkpv_c" );
 
 
    /*

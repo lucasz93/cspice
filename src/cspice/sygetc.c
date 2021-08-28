@@ -8,35 +8,36 @@
 
 
 typedef int sygetc_state_t;
-static sygetc_state_t* get_sygetc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sygetc_state_t* get_sygetc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SYGETC ( Return all components for a symbol ) */
-/* Subroutine */ int sygetc_(char *name__, char *tabsym, integer *tabptr, 
-	char *tabval, integer *n, char *values, logical *found, ftnlen 
-	name_len, ftnlen tabsym_len, ftnlen tabval_len, ftnlen values_len)
+/* Subroutine */ int sygetc_(cspice_t* __global_state, char *name__, char *
+	tabsym, integer *tabptr, char *tabval, integer *n, char *values, 
+	logical *found, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len,
+	 ftnlen values_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int movec_(char *, integer *, char *, ftnlen, 
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int movec_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    extern integer sumai_(integer *, integer *);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     integer locval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer locsym;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sygetc_state_t* __state = get_sygetc_state();
+    sygetc_state_t* __state = get_sygetc_state(__global_state);
 /* $ Abstract */
 
 /*     Return the dimension and associated values for a particular */
@@ -218,20 +219,20 @@ static sygetc_state_t* get_sygetc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYGETC", (ftnlen)6);
+	chkin_(__global_state, "SYGETC", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
 
 /*     Is this symbol even in the table? */
 
-    locsym = bsrchc_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
+    locsym = bsrchc_(__global_state, name__, &nsym, tabsym + tabsym_len * 6, 
+	    name_len, tabsym_len);
 
 /*     If it's not in the table, it's definitely a problem. */
 
@@ -245,12 +246,12 @@ static sygetc_state_t* get_sygetc_state() {
     } else {
 	*found = TRUE_;
 	i__1 = locsym - 1;
-	locval = sumai_(&tabptr[6], &i__1) + 1;
+	locval = sumai_(__global_state, &tabptr[6], &i__1) + 1;
 	*n = tabptr[locsym + 5];
-	movec_(tabval + (locval + 5) * tabval_len, n, values, tabval_len, 
-		values_len);
+	movec_(__global_state, tabval + (locval + 5) * tabval_len, n, values, 
+		tabval_len, values_len);
     }
-    chkout_("SYGETC", (ftnlen)6);
+    chkout_(__global_state, "SYGETC", (ftnlen)6);
     return 0;
 } /* sygetc_ */
 

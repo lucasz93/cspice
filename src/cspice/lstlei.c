@@ -8,13 +8,13 @@
 
 
 typedef int lstlei_state_t;
-static lstlei_state_t* get_lstlei_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lstlei_state_t* get_lstlei_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   LSTLEI ( Last integer element less than or equal to ) */
-integer lstlei_(integer *x, integer *n, integer *array)
+integer lstlei_(cspice_t* __global_state, integer *x, integer *n, integer *
+	array)
 {
     /* System generated locals */
     integer ret_val;
@@ -28,7 +28,7 @@ integer lstlei_(integer *x, integer *n, integer *array)
 
 
     /* Module state */
-    lstlei_state_t* __state = get_lstlei_state();
+    lstlei_state_t* __state = get_lstlei_state(__global_state);
 /* $ Abstract */
 
 /*      Given a number X and an array of non-decreasing numbers, */

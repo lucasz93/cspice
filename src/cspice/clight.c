@@ -8,20 +8,19 @@
 
 
 typedef int clight_state_t;
-static clight_state_t* get_clight_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline clight_state_t* get_clight_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure CLIGHT ( C, Speed of light in a vacuum ) */
-doublereal clight_(void)
+doublereal clight_(cspice_t* __global_state)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    clight_state_t* __state = get_clight_state();
+    clight_state_t* __state = get_clight_state(__global_state);
 /* $ Abstract */
 
 /*     Return the speed of light in a vacuum (IAU official */

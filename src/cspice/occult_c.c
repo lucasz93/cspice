@@ -753,7 +753,7 @@
    {
       return;
    }
-   chkin_c ( "occult_c" );
+   chkin_c ( naif_state, "occult_c" );
 
    /*
    Check the input strings to make sure the pointers are non-null

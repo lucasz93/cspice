@@ -5,28 +5,25 @@
 #include "__cspice_state.h"
 
  static VOID
-donewrec(Void)
+donewrec(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-
 	if (f2c->f__recpos)
 		(*f2c->f__donewrec)();
 	}
 
  static VOID
 #ifdef KR_headers
-lwrt_I(n) longint n;
+lwrt_I(f2c,n) f2c_state_t *f2c; longint n;
 #else
-lwrt_I(longint n)
+lwrt_I(f2c_state_t *f2c, longint n)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	char *p;
 	int ndigit, sign;
 
 	p = f__icvt(n, &ndigit, &sign, 10);
 	if(f2c->f__recpos + ndigit >= f2c->L_len)
-		donewrec();
+		donewrec(f2c);
 	PUT(f2c, ' ');
 	if (sign)
 		PUT(f2c, '-');
@@ -35,24 +32,22 @@ lwrt_I(longint n)
 }
  static VOID
 #ifdef KR_headers
-lwrt_L(n, len) ftnint n; ftnlen len;
+lwrt_L(f2c, n, len) f2c_state_t *f2c; ftnint n; ftnlen len;
 #else
-lwrt_L(ftnint n, ftnlen len)
+lwrt_L(f2c_state_t *f2c, ftnint n, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if(f2c->f__recpos+LLOGW>=f2c->L_len)
-		donewrec();
+		donewrec(f2c);
 	wrt_L((Uint *)&n,LLOGW, len);
 }
  static VOID
 #ifdef KR_headers
-lwrt_A(p,len) char *p; ftnlen len;
+lwrt_A(f2c,p,len) f2c_state_t *f2c; char *p; ftnlen len;
 #else
-lwrt_A(char *p, ftnlen len)
+lwrt_A(f2c_state_t *f2c, char *p, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int a;
 	char *p1, *pe;
 
@@ -70,7 +65,7 @@ lwrt_A(char *p, ftnlen len)
 				a++;
 		}
 	if(f2c->f__recpos+len+a >= f2c->L_len)
-		donewrec();
+		donewrec(f2c);
 	if (a
 #ifndef OMIT_BLANK_CC
 		|| !f2c->f__recpos
@@ -171,12 +166,11 @@ l_g(char *buf, double n)
 
  static VOID
 #ifdef KR_headers
-l_put(s) register char *s;
+l_put(f2c,s) f2c_state_t *f2c; register char *s;
 #else
-l_put(register char *s)
+l_put(f2c_state_t *f2c, register char *s)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 #ifdef KR_headers
 	register void (*pn)() = f2c->f__putn;
 #else
@@ -190,26 +184,24 @@ l_put(register char *s)
 
  static VOID
 #ifdef KR_headers
-lwrt_F(n) double n;
+lwrt_F(f2c, n) f2c_state_t *f2c; double n;
 #else
-lwrt_F(double n)
+lwrt_F(f2c_state_t *f2c, double n)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	char buf[LEFBL];
 
 	if(f2c->f__recpos + l_g(buf,n) >= f2c->L_len)
-		donewrec();
-	l_put(buf);
+		donewrec(f2c);
+	l_put(f2c,buf);
 }
  static VOID
 #ifdef KR_headers
-lwrt_C(a,b) double a,b;
+lwrt_C(f2c,a,b) f2c_state_t *f2c; double a,b;
 #else
-lwrt_C(double a, double b)
+lwrt_C(f2c_state_t *f2c, double a, double b)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	char *ba, *bb, bufa[LEFBL], bufb[LEFBL];
 	int al, bl;
 
@@ -220,13 +212,13 @@ lwrt_C(double a, double b)
 	for(bb = bufb; *bb == ' '; bb++)
 		--bl;
 	if(f2c->f__recpos + al + bl + 3 >= f2c->L_len)
-		donewrec();
+		donewrec(f2c);
 #ifdef OMIT_BLANK_CC
 	else
 #endif
 	PUT(f2c, ' ');
 	PUT(f2c, '(');
-	l_put(ba);
+	l_put(f2c,ba);
 	PUT(f2c, ',');
 	if (f2c->f__recpos + bl >= f2c->L_len) {
 		(*f2c->f__donewrec)();
@@ -234,13 +226,13 @@ lwrt_C(double a, double b)
 		PUT(f2c, ' ');
 #endif
 		}
-	l_put(bb);
+	l_put(f2c,bb);
 	PUT(f2c, ')');
 }
 #ifdef KR_headers
-l_write(number,ptr,len,type) ftnint *number,type; char *ptr; ftnlen len;
+l_write(f2c,number,ptr,len,type) f2c_state_t *f2c; ftnint *number,type; char *ptr; ftnlen len;
 #else
-l_write(ftnint *number, char *ptr, ftnlen len, ftnint type)
+l_write(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len, ftnint type)
 #endif
 {
 #define Ptr ((flex *)ptr)
@@ -267,14 +259,14 @@ l_write(ftnint *number, char *ptr, ftnlen len, ftnint type)
 #endif
 		case TYLONG:
 			x=Ptr->flint;
-		xint:	lwrt_I(x);
+		xint:	lwrt_I(f2c,x);
 			break;
 		case TYREAL:
 			y=Ptr->flreal;
 			goto xfloat;
 		case TYDREAL:
 			y=Ptr->fldouble;
-		xfloat: lwrt_F(y);
+		xfloat: lwrt_F(f2c,y);
 			break;
 		case TYCOMPLEX:
 			xx= &Ptr->flreal;
@@ -286,7 +278,7 @@ l_write(ftnint *number, char *ptr, ftnlen len, ftnint type)
 			y= *yy++;
 			z = *yy;
 		xcomplex:
-			lwrt_C(y,z);
+			lwrt_C(f2c,y,z);
 			break;
 		case TYLOGICAL1:
 			x = Ptr->flchar;
@@ -296,10 +288,10 @@ l_write(ftnint *number, char *ptr, ftnlen len, ftnint type)
 			goto xlog;
 		case TYLOGICAL:
 			x = Ptr->flint;
-		xlog:	lwrt_L(Ptr->flint, len);
+		xlog:	lwrt_L(f2c, Ptr->flint, len);
 			break;
 		case TYCHAR:
-			lwrt_A(ptr,len);
+			lwrt_A(f2c,ptr,len);
 			break;
 		}
 		ptr += len;

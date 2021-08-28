@@ -4,12 +4,11 @@
 
  static FILE *
 #ifdef KR_headers
-unit_chk(Unit, who) integer Unit; char *who;
+unit_chk(f2c, Unit, who) f2c_state_t *f2c; integer Unit; char *who;
 #else
-unit_chk(integer Unit, char *who)
+unit_chk(f2c_state_t *f2c, integer Unit, char *who)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if (Unit >= MXUNIT || Unit < 0)
 		f__fatal(101, who);
 	return f2c->f__units[Unit].ufd;
@@ -17,20 +16,20 @@ unit_chk(integer Unit, char *who)
 
  integer
 #ifdef KR_headers
-ftell_(Unit) integer *Unit;
+ftell_(f2c, Unit) f2c_state_t *f2c; integer *Unit;
 #else
-ftell_(integer *Unit)
+ftell_(f2c_state_t *f2c, integer *Unit)
 #endif
 {
 	FILE *f;
-	return (f = unit_chk(*Unit, "ftell")) ? ftell(f) : -1L;
+	return (f = unit_chk(f2c, *Unit, "ftell")) ? ftell(f) : -1L;
 	}
 
  int
 #ifdef KR_headers
-fseek_(Unit, offset, whence) integer *Unit, *offset, *whence;
+fseek_(f2c, Unit, offset, whence) f2c_state_t *f2c; integer *Unit, *offset, *whence;
 #else
-fseek_(integer *Unit, integer *offset, integer *whence)
+fseek_(f2c_state_t *f2c, integer *Unit, integer *offset, integer *whence)
 #endif
 {
 	FILE *f;
@@ -44,6 +43,6 @@ fseek_(integer *Unit, integer *offset, integer *whence)
 #ifdef SEEK_SET
 	w = wohin[w];
 #endif
-	return	!(f = unit_chk(*Unit, "fseek"))
+	return	!(f = unit_chk(f2c, *Unit, "fseek"))
 		|| fseek(f, *offset, w) ? 1 : 0;
 	}

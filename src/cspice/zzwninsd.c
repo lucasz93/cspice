@@ -8,8 +8,7 @@
 
 
 extern zzwninsd_init_t __zzwninsd_init;
-static zzwninsd_state_t* get_zzwninsd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzwninsd_state_t* get_zzwninsd_state(cspice_t* state) {
 	if (!state->zzwninsd)
 		state->zzwninsd = __cspice_allocate_module(sizeof(
 	zzwninsd_state_t), &__zzwninsd_init, sizeof(__zzwninsd_init));
@@ -18,8 +17,9 @@ static zzwninsd_state_t* get_zzwninsd_state() {
 }
 
 /* $Procedure ZZWNINSD ( Insert an interval into a DP window ) */
-/* Subroutine */ int zzwninsd_(doublereal *left, doublereal *right, char *
-	context, doublereal *window, ftnlen context_len)
+/* Subroutine */ int zzwninsd_(cspice_t* __global_state, doublereal *left, 
+	doublereal *right, char *context, doublereal *window, ftnlen 
+	context_len)
 {
     /* System generated locals */
     address a__1[3];
@@ -27,30 +27,32 @@ static zzwninsd_state_t* get_zzwninsd_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
 
     /* Local variables */
     integer card;
     integer size;
     integer i__;
     integer j;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern integer sized_(doublereal *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     char msg[1840];
 
 
     /* Module state */
-    zzwninsd_state_t* __state = get_zzwninsd_state();
+    zzwninsd_state_t* __state = get_zzwninsd_state(__global_state);
 /* $ Abstract */
 
 /*      Insert an interval into a double precision window. */
@@ -258,33 +260,36 @@ static zzwninsd_state_t* get_zzwninsd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZWNINSD", (ftnlen)8);
+	chkin_(__global_state, "ZZWNINSD", (ftnlen)8);
     }
 
 /*     Get the size and cardinality of the window. */
 
-    size = sized_(window);
-    card = cardd_(window);
+    size = sized_(__global_state, window);
+    card = cardd_(__global_state, window);
 
 /*     Let's try the easy cases first. No input interval? No change. */
 /*     Signal that an error has occurred and set the error message. */
 
     if (*left > *right) {
-	s_copy(msg, "Left endpoint greather-than right. Left endpoint was #1"
-		". Right endpoint was #2.", (ftnlen)1840, (ftnlen)79);
+	s_copy(&__global_state->f2c, msg, "Left endpoint greather-than right"
+		". Left endpoint was #1. Right endpoint was #2.", (ftnlen)1840,
+		 (ftnlen)79);
 /* Writing concatenation */
-	i__1[0] = lastnb_(msg, (ftnlen)1840), a__1[0] = msg;
+	i__1[0] = lastnb_(__global_state, msg, (ftnlen)1840), a__1[0] = msg;
 	i__1[1] = 1, a__1[1] = " ";
-	i__1[2] = lastnb_(context, context_len), a__1[2] = context;
-	s_cat(msg, a__1, i__1, &__state->c__3, (ftnlen)1840);
-	setmsg_(msg, (ftnlen)1840);
-	errdp_("#1", left, (ftnlen)2);
-	errdp_("#2", right, (ftnlen)2);
-	sigerr_("SPICE(BADENDPOINTS)", (ftnlen)19);
-	chkout_("ZZWNINSD", (ftnlen)8);
+	i__1[2] = lastnb_(__global_state, context, context_len), a__1[2] = 
+		context;
+	s_cat(&__global_state->f2c, msg, a__1, i__1, &__state->c__3, (ftnlen)
+		1840);
+	setmsg_(__global_state, msg, (ftnlen)1840);
+	errdp_(__global_state, "#1", left, (ftnlen)2);
+	errdp_(__global_state, "#2", right, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(BADENDPOINTS)", (ftnlen)19);
+	chkout_(__global_state, "ZZWNINSD", (ftnlen)8);
 	return 0;
     } else if (card == 0 || *left > window[card + 5]) {
 
@@ -293,24 +298,27 @@ static zzwninsd_state_t* get_zzwninsd_state() {
 
 	if (size >= card + 2) {
 	    i__2 = card + 2;
-	    scardd_(&i__2, window);
+	    scardd_(__global_state, &i__2, window);
 	    window[card + 6] = *left;
 	    window[card + 7] = *right;
 	} else {
-	    s_copy(msg, "Window has size, #1, cardinality #2. Cannot insert "
-		    "an additional interval into the window.", (ftnlen)1840, (
-		    ftnlen)90);
+	    s_copy(&__global_state->f2c, msg, "Window has size, #1, cardinal"
+		    "ity #2. Cannot insert an additional interval into the wi"
+		    "ndow.", (ftnlen)1840, (ftnlen)90);
 /* Writing concatenation */
-	    i__1[0] = lastnb_(msg, (ftnlen)1840), a__1[0] = msg;
+	    i__1[0] = lastnb_(__global_state, msg, (ftnlen)1840), a__1[0] = 
+		    msg;
 	    i__1[1] = 1, a__1[1] = " ";
-	    i__1[2] = lastnb_(context, context_len), a__1[2] = context;
-	    s_cat(msg, a__1, i__1, &__state->c__3, (ftnlen)1840);
-	    setmsg_(msg, (ftnlen)1840);
-	    errint_("#1", &size, (ftnlen)2);
-	    errint_("#2", &card, (ftnlen)2);
-	    sigerr_("SPICE(WINDOWEXCESS)", (ftnlen)19);
+	    i__1[2] = lastnb_(__global_state, context, context_len), a__1[2] =
+		     context;
+	    s_cat(&__global_state->f2c, msg, a__1, i__1, &__state->c__3, (
+		    ftnlen)1840);
+	    setmsg_(__global_state, msg, (ftnlen)1840);
+	    errint_(__global_state, "#1", &size, (ftnlen)2);
+	    errint_(__global_state, "#2", &card, (ftnlen)2);
+	    sigerr_(__global_state, "SPICE(WINDOWEXCESS)", (ftnlen)19);
 	}
-	chkout_("ZZWNINSD", (ftnlen)8);
+	chkout_(__global_state, "ZZWNINSD", (ftnlen)8);
 	return 0;
     }
 
@@ -347,24 +355,27 @@ static zzwninsd_state_t* get_zzwninsd_state() {
 		window[j + 7] = window[j + 5];
 	    }
 	    i__2 = card + 2;
-	    scardd_(&i__2, window);
+	    scardd_(__global_state, &i__2, window);
 	    window[i__ + 4] = *left;
 	    window[i__ + 5] = *right;
 	} else {
-	    s_copy(msg, "Window has size, #1, cardinality #2. Cannot insert "
-		    "an additional interval into the window. The new interval"
-		    " lies entirely between the previous interval and thenext."
-		    , (ftnlen)1840, (ftnlen)164);
+	    s_copy(&__global_state->f2c, msg, "Window has size, #1, cardinal"
+		    "ity #2. Cannot insert an additional interval into the wi"
+		    "ndow. The new interval lies entirely between the previou"
+		    "s interval and thenext.", (ftnlen)1840, (ftnlen)164);
 /* Writing concatenation */
-	    i__1[0] = lastnb_(msg, (ftnlen)1840), a__1[0] = msg;
+	    i__1[0] = lastnb_(__global_state, msg, (ftnlen)1840), a__1[0] = 
+		    msg;
 	    i__1[1] = 1, a__1[1] = " ";
-	    i__1[2] = lastnb_(context, context_len), a__1[2] = context;
-	    s_cat(msg, a__1, i__1, &__state->c__3, (ftnlen)1840);
-	    setmsg_(msg, (ftnlen)1840);
-	    errint_("#1", &size, (ftnlen)2);
-	    errint_("#2", &card, (ftnlen)2);
-	    sigerr_("SPICE(WINDOWEXCESS)", (ftnlen)19);
-	    chkout_("ZZWNINSD", (ftnlen)8);
+	    i__1[2] = lastnb_(__global_state, context, context_len), a__1[2] =
+		     context;
+	    s_cat(&__global_state->f2c, msg, a__1, i__1, &__state->c__3, (
+		    ftnlen)1840);
+	    setmsg_(__global_state, msg, (ftnlen)1840);
+	    errint_(__global_state, "#1", &size, (ftnlen)2);
+	    errint_(__global_state, "#2", &card, (ftnlen)2);
+	    sigerr_(__global_state, "SPICE(WINDOWEXCESS)", (ftnlen)19);
+	    chkout_(__global_state, "ZZWNINSD", (ftnlen)8);
 	    return 0;
 	}
 
@@ -409,9 +420,9 @@ static zzwninsd_state_t* get_zzwninsd_state() {
 	    window[i__ + 5] = window[j + 5];
 	    j += 2;
 	}
-	scardd_(&i__, window);
+	scardd_(__global_state, &i__, window);
     }
-    chkout_("ZZWNINSD", (ftnlen)8);
+    chkout_(__global_state, "ZZWNINSD", (ftnlen)8);
     return 0;
 } /* zzwninsd_ */
 

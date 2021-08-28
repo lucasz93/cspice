@@ -8,26 +8,25 @@
 
 
 typedef int lastpc_state_t;
-static lastpc_state_t* get_lastpc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lastpc_state_t* get_lastpc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure             LASTPC ( Last printable character ) */
-integer lastpc_(char *string, ftnlen string_len)
+integer lastpc_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    lastpc_state_t* __state = get_lastpc_state();
+    lastpc_state_t* __state = get_lastpc_state(__global_state);
 /* $ Abstract */
 
 /*     Return the index of the last printable character in a character */
@@ -179,7 +178,8 @@ integer lastpc_(char *string, ftnlen string_len)
 /*     Look for the last character in the range [33,126], and return */
 /*     its index. */
 
-    for (i__ = i_len(string, string_len); i__ >= 1; --i__) {
+    for (i__ = i_len(&__global_state->f2c, string, string_len); i__ >= 1; 
+	    --i__) {
 	if (*(unsigned char *)&string[i__ - 1] >= 33 && *(unsigned char *)&
 		string[i__ - 1] <= 126) {
 	    ret_val = i__;

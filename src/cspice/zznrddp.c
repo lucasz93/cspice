@@ -7,8 +7,7 @@
 #include "__cspice_state.h"
 
 
-static zznrddp_state_t* get_zznrddp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zznrddp_state_t* get_zznrddp_state(cspice_t* state) {
 	if (!state->zznrddp)
 		state->zznrddp = __cspice_allocate_module(sizeof(
 	zznrddp_state_t), 0, 0);
@@ -17,36 +16,38 @@ static zznrddp_state_t* get_zznrddp_state() {
 }
 
 /* $Procedure ZZNRDDP ( Shell for deep space entry points ) */
-/* Subroutine */ int zznrddp_0_(int n__, doublereal *ao, doublereal *elems, 
-	doublereal *em, doublereal *omgasm, doublereal *omgdot, doublereal *t,
-	 doublereal *xinc, doublereal *xll, doublereal *xlldot, doublereal *
-	xn, doublereal *xnodes, doublereal *xnodot, doublereal *xnodp)
+/* Subroutine */ int zznrddp_0_(cspice_t* __global_state, int n__, doublereal 
+	*ao, doublereal *elems, doublereal *em, doublereal *omgasm, 
+	doublereal *omgdot, doublereal *t, doublereal *xinc, doublereal *xll, 
+	doublereal *xlldot, doublereal *xn, doublereal *xnodes, doublereal *
+	xnodot, doublereal *xnodp)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal), sin(doublereal), cos(doublereal), d_mod(
-	    doublereal *, doublereal *), atan2(doublereal, doublereal);
+    double sqrt(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), cos(
+	    f2c_state_t*, doublereal), d_mod(f2c_state_t*, doublereal *, 
+	    doublereal *), atan2(f2c_state_t*, doublereal, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int zzsecprt_(integer *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int zzsecprt_(cspice_t*, integer *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal twopi_(void);
-    extern doublereal pi_(void);
-    extern doublereal j2000_(void);
-    extern doublereal j1950_(void);
-    extern logical return_(void);
-    extern doublereal spd_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal twopi_(cspice_t*);
+    extern doublereal pi_(cspice_t*);
+    extern doublereal j2000_(cspice_t*);
+    extern doublereal j1950_(cspice_t*);
+    extern logical return_(cspice_t*);
+    extern doublereal spd_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
     /* Module state */
-    zznrddp_state_t* __state = get_zznrddp_state();
+    zznrddp_state_t* __state = get_zznrddp_state(__global_state);
 /* $ Abstract */
 
 /*    This subroutine is a shell for the routines needed by DPSPCE */
@@ -328,20 +329,20 @@ static zznrddp_state_t* get_zznrddp_state() {
 	case 3: goto L_zzdpper;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("NRDDP", (ftnlen)5);
+	chkin_(__global_state, "NRDDP", (ftnlen)5);
     }
 
 /*     This routine should never be called. If this routine is called, */
 /*     an error is signalled. */
 
-    setmsg_("NRDDP: You called an entry which performs no run-time function."
-	    " This may indicate a bug. Please check the documentation for the"
-	    " subroutine ZZNRDDP.", (ftnlen)147);
-    sigerr_("SPICE(EVILBOGUSENTRY)", (ftnlen)21);
-    chkout_("NRDDP", (ftnlen)5);
+    setmsg_(__global_state, "NRDDP: You called an entry which performs no ru"
+	    "n-time function. This may indicate a bug. Please check the docum"
+	    "entation for the subroutine ZZNRDDP.", (ftnlen)147);
+    sigerr_(__global_state, "SPICE(EVILBOGUSENTRY)", (ftnlen)21);
+    chkout_(__global_state, "NRDDP", (ftnlen)5);
     return 0;
 /* $Procedure ZZDPINIT (Initialize deep space algorithm and variables ) */
 
@@ -530,8 +531,8 @@ L_zzdpinit:
 /*     two line elements, deep space, initialize */
 
 /* -& */
-    __state->pix1 = pi_();
-    __state->pix2 = twopi_();
+    __state->pix1 = pi_(__global_state);
+    __state->pix2 = twopi_(__global_state);
 
 /*     Unpack the elements array. */
 
@@ -547,14 +548,14 @@ L_zzdpinit:
     d__1 = __state->eo;
     __state->eqsq = d__1 * d__1;
     __state->bsq = 1. - __state->eqsq;
-    __state->rteqsq = sqrt(__state->bsq);
-    __state->siniq = sin(__state->xincl);
-    __state->cosiq = cos(__state->xincl);
+    __state->rteqsq = sqrt(&__global_state->f2c, __state->bsq);
+    __state->siniq = sin(&__global_state->f2c, __state->xincl);
+    __state->cosiq = cos(&__global_state->f2c, __state->xincl);
 /* Computing 2nd power */
     d__1 = __state->cosiq;
     __state->cosq2 = d__1 * d__1;
-    __state->sinomo = sin(__state->omegao);
-    __state->cosomo = cos(__state->omegao);
+    __state->sinomo = sin(&__global_state->f2c, __state->omegao);
+    __state->cosomo = cos(&__global_state->f2c, __state->omegao);
 
 /*     This section of code was previously performed by the THETAG */
 /*     function.  The epoch of the elements is defined in seconds since */
@@ -569,7 +570,8 @@ L_zzdpinit:
 /*     Convert the ET seconds past the J2000 epoch to the Julian */
 /*     date TDB. */
 
-    __state->jdtdb = j2000_() + __state->et / spd_();
+    __state->jdtdb = j2000_(__global_state) + __state->et / spd_(
+	    __global_state);
 
 /*     How many days since the 1950 reference? Using SPICE standard */
 /*     leapseconds the difference between TDB and UTC in 1950 is 32.184 */
@@ -577,7 +579,8 @@ L_zzdpinit:
 /*     epoch.  We call this JDTDB epoch ---JDUT50. Then we get the days */
 /*     since 1950 by simple arithmetic. */
 
-    __state->jdut50 = j1950_() - 1. + 32.184 / spd_();
+    __state->jdut50 = j1950_(__global_state) - 1. + 32.184 / spd_(
+	    __global_state);
     __state->ds50 = __state->jdtdb - __state->jdut50;
 
 /*     What is the Earth's right ascension of the epoch?  We know the */
@@ -587,7 +590,8 @@ L_zzdpinit:
 /*     not be the best way to get this value. */
 
     __state->theta = __state->ds50 * 6.3003880987 + 1.72944494;
-    __state->thgr = d_mod(&__state->theta, &__state->pix2);
+    __state->thgr = d_mod(&__global_state->f2c, &__state->theta, &
+	    __state->pix2);
 
 /*     THGR should have a domain between 0 and 2 Pi. */
 
@@ -602,8 +606,8 @@ L_zzdpinit:
     __state->aqnv = 1. / *ao;
     __state->xqncl = __state->xincl;
     __state->xmao = __state->xmo;
-    __state->sinq = sin(__state->xnodeo);
-    __state->cosq = cos(__state->xnodeo);
+    __state->sinq = sin(&__global_state->f2c, __state->xnodeo);
+    __state->cosq = cos(&__global_state->f2c, __state->xnodeo);
 
 /*     Initialize lunar solar terms */
 
@@ -611,20 +615,20 @@ L_zzdpinit:
     if (__state->day != __state->preep) {
 	__state->preep = __state->day;
 	__state->xnodce = 4.523602 - __state->day * 9.2422029e-4;
-	__state->stem = sin(__state->xnodce);
-	__state->ctem = cos(__state->xnodce);
+	__state->stem = sin(&__global_state->f2c, __state->xnodce);
+	__state->ctem = cos(&__global_state->f2c, __state->xnodce);
 	__state->zcosil = .91375164 - __state->ctem * .03568096;
 /* Computing 2nd power */
 	d__1 = __state->zcosil;
-	__state->zsinil = sqrt(1. - d__1 * d__1);
+	__state->zsinil = sqrt(&__global_state->f2c, 1. - d__1 * d__1);
 	__state->zsinhl = __state->stem * .089683511 / __state->zsinil;
 /* Computing 2nd power */
 	d__1 = __state->zsinhl;
-	__state->zcoshl = sqrt(1. - d__1 * d__1);
+	__state->zcoshl = sqrt(&__global_state->f2c, 1. - d__1 * d__1);
 	__state->c__ = __state->day * .2299715 + 4.7199672;
 	__state->gam = __state->day * .001944368 + 5.8351514;
 	d__1 = __state->c__ - __state->gam;
-	__state->zmol = d_mod(&d__1, &__state->pix2);
+	__state->zmol = d_mod(&__global_state->f2c, &d__1, &__state->pix2);
 	if (__state->zmol < 0.) {
 	    __state->zmol += __state->pix2;
 	}
@@ -635,7 +639,8 @@ L_zzdpinit:
 /*        Compute the angle from the x-axis of the point */
 
 	if (__state->zx != 0. || __state->zy != 0.) {
-	    __state->zx = atan2(__state->zx, __state->zy);
+	    __state->zx = atan2(&__global_state->f2c, __state->zx, 
+		    __state->zy);
 	    if (__state->zx < 0.) {
 		__state->zx += __state->pix2;
 	    }
@@ -643,10 +648,11 @@ L_zzdpinit:
 	    __state->zx = 0.;
 	}
 	__state->zx = __state->gam + __state->zx - __state->xnodce;
-	__state->zcosgl = cos(__state->zx);
-	__state->zsingl = sin(__state->zx);
+	__state->zcosgl = cos(&__global_state->f2c, __state->zx);
+	__state->zsingl = sin(&__global_state->f2c, __state->zx);
 	__state->zmos = __state->day * .017201977 + 6.2565837;
-	__state->zmos = d_mod(&__state->zmos, &__state->pix2);
+	__state->zmos = d_mod(&__global_state->f2c, &__state->zmos, &
+		__state->pix2);
 	if (__state->zmos < 0.) {
 	    __state->zmos += __state->pix2;
 	}
@@ -771,8 +777,8 @@ L_zzdpinit:
 
 /*        Check for, and adust SH, at inclinations near 0 and 180 degs. */
 
-	if (__state->xqncl < .052359877 || __state->xqncl > pi_() - 
-		.052359877) {
+	if (__state->xqncl < .052359877 || __state->xqncl > pi_(
+		__global_state) - .052359877) {
 	    __state->sh = 0.;
 	}
 
@@ -1246,10 +1252,10 @@ L_zzdpsec:
 	    if (*t >= 0.) {
 		__state->delt = __state->stepn;
 	    }
-	    zzsecprt_(&__state->isynfl, __state->dg, __state->del, &
-		    __state->xni, &__state->omegao, &__state->atime, omgdot, &
-		    __state->xli, &__state->xfact, &__state->xldot, &
-		    __state->xndot, &__state->xnddt);
+	    zzsecprt_(__global_state, &__state->isynfl, __state->dg, 
+		    __state->del, &__state->xni, &__state->omegao, &
+		    __state->atime, omgdot, &__state->xli, &__state->xfact, &
+		    __state->xldot, &__state->xndot, &__state->xnddt);
 	    __state->xli = __state->xli + __state->xldot * __state->delt + 
 		    __state->xndot * 259200.;
 	    __state->xni = __state->xni + __state->xndot * __state->delt + 
@@ -1262,10 +1268,10 @@ L_zzdpsec:
 /*     Do this loop while the time interval is greater than STEPP */
 
     while((d__1 = *t - __state->atime, abs(d__1)) >= __state->stepp) {
-	zzsecprt_(&__state->isynfl, __state->dg, __state->del, &__state->xni, 
-		&__state->omegao, &__state->atime, omgdot, &__state->xli, &
-		__state->xfact, &__state->xldot, &__state->xndot, &
-		__state->xnddt);
+	zzsecprt_(__global_state, &__state->isynfl, __state->dg, __state->del,
+		 &__state->xni, &__state->omegao, &__state->atime, omgdot, &
+		__state->xli, &__state->xfact, &__state->xldot, &
+		__state->xndot, &__state->xnddt);
 	__state->xli = __state->xli + __state->xldot * __state->delt + 
 		__state->xndot * 259200.;
 	__state->xni = __state->xni + __state->xndot * __state->delt + 
@@ -1277,10 +1283,10 @@ L_zzdpsec:
 /*     perturbations */
 
     __state->ft = *t - __state->atime;
-    zzsecprt_(&__state->isynfl, __state->dg, __state->del, &__state->xni, &
-	    __state->omegao, &__state->atime, omgdot, &__state->xli, &
-	    __state->xfact, &__state->xldot, &__state->xndot, &__state->xnddt)
-	    ;
+    zzsecprt_(__global_state, &__state->isynfl, __state->dg, __state->del, &
+	    __state->xni, &__state->omegao, &__state->atime, omgdot, &
+	    __state->xli, &__state->xfact, &__state->xldot, &__state->xndot, &
+	    __state->xnddt);
     *xn = __state->xni + __state->xndot * __state->ft + __state->xnddt * 
 	    __state->ft * __state->ft * .5;
     __state->xl = __state->xli + __state->xldot * __state->ft + 
@@ -1469,10 +1475,12 @@ L_zzdpper:
 /*     Update for solar perts at time T. */
 
     __state->zm = __state->zmos + *t * 1.19459e-5;
-    __state->zf = __state->zm + sin(__state->zm) * .033500000000000002;
-    __state->sinzf = sin(__state->zf);
+    __state->zf = __state->zm + sin(&__global_state->f2c, __state->zm) * 
+	    .033500000000000002;
+    __state->sinzf = sin(&__global_state->f2c, __state->zf);
     __state->f2 = __state->sinzf * .5 * __state->sinzf - .25;
-    __state->f3 = __state->sinzf * -.5 * cos(__state->zf);
+    __state->f3 = __state->sinzf * -.5 * cos(&__global_state->f2c, 
+	    __state->zf);
     __state->ses = __state->se2 * __state->f2 + __state->se3 * __state->f3;
     __state->sis = __state->si2 * __state->f2 + __state->si3 * __state->f3;
     __state->sls = __state->sl2 * __state->f2 + __state->sl3 * __state->f3 + 
@@ -1484,10 +1492,12 @@ L_zzdpper:
 /*     Update for lunar perts at time T. */
 
     __state->zm = __state->zmol + *t * 1.5835218e-4;
-    __state->zf = __state->zm + sin(__state->zm) * .10979999999999999;
-    __state->sinzf = sin(__state->zf);
+    __state->zf = __state->zm + sin(&__global_state->f2c, __state->zm) * 
+	    .10979999999999999;
+    __state->sinzf = sin(&__global_state->f2c, __state->zf);
     __state->f2 = __state->sinzf * .5 * __state->sinzf - .25;
-    __state->f3 = __state->sinzf * -.5 * cos(__state->zf);
+    __state->f3 = __state->sinzf * -.5 * cos(&__global_state->f2c, 
+	    __state->zf);
     __state->sel = __state->ee2 * __state->f2 + __state->e3 * __state->f3;
     __state->sil = __state->xi2 * __state->f2 + __state->xi3 * __state->f3;
     __state->sll = __state->xl2 * __state->f2 + __state->xl3 * __state->f3 + 
@@ -1518,8 +1528,8 @@ L_zzdpper:
 /*     Spacetrack 3 report calculated the values before the */
 /*     perturbation. */
 
-    __state->sinis = sin(*xinc);
-    __state->cosis = cos(*xinc);
+    __state->sinis = sin(&__global_state->f2c, *xinc);
+    __state->cosis = cos(&__global_state->f2c, *xinc);
     if (__state->xqncl > .2) {
 	__state->ph /= __state->siniq;
 	__state->pgh -= __state->cosiq * __state->ph;
@@ -1530,8 +1540,8 @@ L_zzdpper:
 
 /*        Apply periodics with Lyddane modification */
 
-	__state->sinok = sin(*xnodes);
-	__state->cosok = cos(*xnodes);
+	__state->sinok = sin(&__global_state->f2c, *xnodes);
+	__state->cosok = cos(&__global_state->f2c, *xnodes);
 	__state->alfdp = __state->sinis * __state->sinok;
 	__state->betdp = __state->sinis * __state->cosok;
 	__state->alfdp = __state->alfdp + __state->ph * __state->cosok + 
@@ -1556,7 +1566,8 @@ L_zzdpper:
 /*           From ALFDP and BETDP */
 
 	    __state->oxnode = *xnodes;
-	    *xnodes = atan2(__state->alfdp, __state->betdp);
+	    *xnodes = atan2(&__global_state->f2c, __state->alfdp, 
+		    __state->betdp);
 
 /*           Force a 0 - 2Pi domain on XNODES */
 
@@ -1582,39 +1593,44 @@ L_zzdpper:
 	    *xnodes = 0.;
 	}
 	*xll += __state->pl;
-	*omgasm = __state->xls - *xll - *xnodes * cos(*xinc);
+	*omgasm = __state->xls - *xll - *xnodes * cos(&__global_state->f2c, *
+		xinc);
     }
     return 0;
 } /* zznrddp_ */
 
-/* Subroutine */ int zznrddp_(doublereal *ao, doublereal *elems, doublereal *
-	em, doublereal *omgasm, doublereal *omgdot, doublereal *t, doublereal 
-	*xinc, doublereal *xll, doublereal *xlldot, doublereal *xn, 
-	doublereal *xnodes, doublereal *xnodot, doublereal *xnodp)
+/* Subroutine */ int zznrddp_(cspice_t* __global_state, doublereal *ao, 
+	doublereal *elems, doublereal *em, doublereal *omgasm, doublereal *
+	omgdot, doublereal *t, doublereal *xinc, doublereal *xll, doublereal *
+	xlldot, doublereal *xn, doublereal *xnodes, doublereal *xnodot, 
+	doublereal *xnodp)
 {
     return zznrddp_0_(0, ao, elems, em, omgasm, omgdot, t, xinc, xll, xlldot, 
 	    xn, xnodes, xnodot, xnodp);
     }
 
-/* Subroutine */ int zzdpinit_(doublereal *ao, doublereal *xlldot, doublereal 
-	*omgdot, doublereal *xnodot, doublereal *xnodp, doublereal *elems)
+/* Subroutine */ int zzdpinit_(cspice_t* __global_state, doublereal *ao, 
+	doublereal *xlldot, doublereal *omgdot, doublereal *xnodot, 
+	doublereal *xnodp, doublereal *elems)
 {
     return zznrddp_0_(1, ao, elems, (doublereal *)0, (doublereal *)0, omgdot, 
 	    (doublereal *)0, (doublereal *)0, (doublereal *)0, xlldot, (
 	    doublereal *)0, (doublereal *)0, xnodot, xnodp);
     }
 
-/* Subroutine */ int zzdpsec_(doublereal *xll, doublereal *omgasm, doublereal 
-	*xnodes, doublereal *em, doublereal *xinc, doublereal *xn, doublereal 
-	*t, doublereal *elems, doublereal *omgdot)
+/* Subroutine */ int zzdpsec_(cspice_t* __global_state, doublereal *xll, 
+	doublereal *omgasm, doublereal *xnodes, doublereal *em, doublereal *
+	xinc, doublereal *xn, doublereal *t, doublereal *elems, doublereal *
+	omgdot)
 {
     return zznrddp_0_(2, (doublereal *)0, elems, em, omgasm, omgdot, t, xinc, 
 	    xll, (doublereal *)0, xn, xnodes, (doublereal *)0, (doublereal *)
 	    0);
     }
 
-/* Subroutine */ int zzdpper_(doublereal *t, doublereal *em, doublereal *xinc,
-	 doublereal *omgasm, doublereal *xnodes, doublereal *xll)
+/* Subroutine */ int zzdpper_(cspice_t* __global_state, doublereal *t, 
+	doublereal *em, doublereal *xinc, doublereal *omgasm, doublereal *
+	xnodes, doublereal *xll)
 {
     return zznrddp_0_(3, (doublereal *)0, (doublereal *)0, em, omgasm, (
 	    doublereal *)0, t, xinc, xll, (doublereal *)0, (doublereal *)0, 

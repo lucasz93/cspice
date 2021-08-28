@@ -8,8 +8,7 @@
 
 
 extern reset_init_t __reset_init;
-static reset_state_t* get_reset_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline reset_state_t* get_reset_state(cspice_t* state) {
 	if (!state->reset)
 		state->reset = __cspice_allocate_module(sizeof(reset_state_t),
 	 &__reset_init, sizeof(__reset_init));
@@ -18,17 +17,17 @@ static reset_state_t* get_reset_state() {
 }
 
 /* $Procedure      RESET ( Reset Error Status ) */
-/* Subroutine */ int reset_(void)
+/* Subroutine */ int reset_(cspice_t* __global_state)
 {
     logical stat;
-    extern logical accept_(logical *);
-    extern logical seterr_(logical *);
-    extern /* Subroutine */ int putlms_(char *, ftnlen);
-    extern /* Subroutine */ int putsms_(char *, ftnlen);
+    extern logical accept_(cspice_t*, logical *);
+    extern logical seterr_(cspice_t*, logical *);
+    extern /* Subroutine */ int putlms_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int putsms_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    reset_state_t* __state = get_reset_state();
+    reset_state_t* __state = get_reset_state(__global_state);
 /* $ Abstract */
 
 /*     Reset the SPICELIB error status to a value of "no error." */
@@ -235,16 +234,16 @@ static reset_state_t* get_reset_state() {
 /*     This odd-looking function reference resets the error */
 /*     status to indicate "no error": */
 
-    stat = seterr_(&__state->c_false);
+    stat = seterr_(__global_state, &__state->c_false);
 
 /*     Wipe out the short and long error messages: */
 
-    putsms_(" ", (ftnlen)1);
-    putlms_(" ", (ftnlen)1);
+    putsms_(__global_state, " ", (ftnlen)1);
+    putlms_(__global_state, " ", (ftnlen)1);
 
 /*     Allow long error message to be updated: */
 
-    stat = accept_(&__state->c_true);
+    stat = accept_(__global_state, &__state->c_true);
     return 0;
 } /* reset_ */
 

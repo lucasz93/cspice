@@ -8,20 +8,19 @@
 
 
 typedef int vzero_state_t;
-static vzero_state_t* get_vzero_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vzero_state_t* get_vzero_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  VZERO    ( Is a vector the zero vector? ) */
-logical vzero_(doublereal *v)
+logical vzero_(cspice_t* __global_state, doublereal *v)
 {
     /* System generated locals */
     logical ret_val;
 
 
     /* Module state */
-    vzero_state_t* __state = get_vzero_state();
+    vzero_state_t* __state = get_vzero_state(__global_state);
 /* $ Abstract */
 
 /*     Indicate whether a 3-vector is the zero vector. */

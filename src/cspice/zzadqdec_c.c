@@ -160,7 +160,7 @@
       {
       return ( 0 );
       }
-   chkin_c ( "zzadqdec_c" );
+   chkin_c ( naif_state, "zzadqdec_c" );
 
    /*
    Retrieve the stored pointer for the passed-in function; cast
@@ -169,7 +169,7 @@
    */
    fPtr = ( void (*) ( void ( * ) ( SpiceDouble, SpiceDouble  *),
                        SpiceDouble, 
-                       SpiceBoolean*) ) zzadget_c ( UDQDEC );
+                       SpiceBoolean*) ) zzadget_c ( naif_state,  ( UDQDEC );
 
    /*
    Retrieve the stored pointer for the user defined scalar function. The
@@ -177,7 +177,7 @@
    the adapter for the scalar function, but the function pointer 
    argument in 'fPtr' requires the non-adapter pointer. Ignore 'udfunc'.
    */
-   fPtr2= ( void (*) (SpiceDouble, SpiceDouble*) ) zzadget_c ( UDFUNC );
+   fPtr2= ( void (*) (SpiceDouble, SpiceDouble*) ) zzadget_c ( naif_state,  ( UDFUNC );
 
    /*
    Call the stored function. 

@@ -8,14 +8,13 @@
 
 
 typedef int minai_state_t;
-static minai_state_t* get_minai_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline minai_state_t* get_minai_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  MINAI  ( Minimum element of array, integer ) */
-/* Subroutine */ int minai_(integer *array, integer *ndim, integer *minval, 
-	integer *loc)
+/* Subroutine */ int minai_(cspice_t* __global_state, integer *array, integer 
+	*ndim, integer *minval, integer *loc)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +24,7 @@ static minai_state_t* get_minai_state() {
 
 
     /* Module state */
-    minai_state_t* __state = get_minai_state();
+    minai_state_t* __state = get_minai_state(__global_state);
 /* $ Abstract */
 
 /*     Locate the minimum element of an integer array. */

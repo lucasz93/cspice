@@ -8,13 +8,13 @@
 
 
 typedef int movei_state_t;
-static movei_state_t* get_movei_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline movei_state_t* get_movei_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  MOVEI  ( Move a integer array to another ) */
-/* Subroutine */ int movei_(integer *arrfrm, integer *ndim, integer *arrto)
+/* Subroutine */ int movei_(cspice_t* __global_state, integer *arrfrm, 
+	integer *ndim, integer *arrto)
 {
     /* System generated locals */
     integer i__1;
@@ -24,7 +24,7 @@ static movei_state_t* get_movei_state() {
 
 
     /* Module state */
-    movei_state_t* __state = get_movei_state();
+    movei_state_t* __state = get_movei_state(__global_state);
 /* $ Abstract */
 
 /*      Copy the elements of one integer array into another */

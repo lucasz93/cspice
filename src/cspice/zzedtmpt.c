@@ -8,8 +8,7 @@
 
 
 extern zzedtmpt_init_t __zzedtmpt_init;
-static zzedtmpt_state_t* get_zzedtmpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzedtmpt_state_t* get_zzedtmpt_state(cspice_t* state) {
 	if (!state->zzedtmpt)
 		state->zzedtmpt = __cspice_allocate_module(sizeof(
 	zzedtmpt_state_t), &__zzedtmpt_init, sizeof(__zzedtmpt_init));
@@ -18,76 +17,77 @@ static zzedtmpt_state_t* get_zzedtmpt_state() {
 }
 
 /* $Procedure ZZEDTMPT ( Ellipsoid terminator point in half-plane ) */
-/* Subroutine */ int zzedtmpt_(logical *umbral, doublereal *a, doublereal *b, 
-	doublereal *c__, doublereal *r__, doublereal *axis, doublereal *
-	plnvec, doublereal *point)
+/* Subroutine */ int zzedtmpt_(cspice_t* __global_state, logical *umbral, 
+	doublereal *a, doublereal *b, doublereal *c__, doublereal *r__, 
+	doublereal *axis, doublereal *plnvec, doublereal *point)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal maxr;
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal proj[3];
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     integer nitr;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal d__;
     doublereal h__;
     doublereal s;
     doublereal angle;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal theta;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal const__;
     doublereal trans[9]	/* was [3][3] */;
     doublereal taxis[3];
-    extern doublereal vdist_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern logical failed_(void);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vperp_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vrotv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal ta;
     doublereal tb;
     doublereal tc;
     doublereal xa;
     doublereal xb;
     doublereal xc;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern doublereal dasine_(doublereal *, doublereal *);
-    extern doublereal halfpi_(void);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern doublereal dasine_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal halfpi_(cspice_t*);
     doublereal angerr;
-    extern doublereal touchd_(doublereal *);
+    extern doublereal touchd_(cspice_t*, doublereal *);
     doublereal normal[3];
     doublereal hplnml[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int ednmpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ednmpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal sgnnml[3];
     doublereal tmpvec[3];
     doublereal targpt[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     doublereal tplnvc[3];
     doublereal srcpnt[3];
     doublereal utaxis[3];
-    extern logical return_(void);
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    zzedtmpt_state_t* __state = get_zzedtmpt_state();
+    zzedtmpt_state_t* __state = get_zzedtmpt_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -290,69 +290,69 @@ static zzedtmpt_state_t* get_zzedtmpt_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZEDTMPT", (ftnlen)8);
+    chkin_(__global_state, "ZZEDTMPT", (ftnlen)8);
 
 /*     Check A, B, C, and R. */
 
     if (*a <= 0. || *b <= 0. || *c__ <= 0.) {
-	setmsg_("Target radii must be strictly positive but were #, #, #.", (
-		ftnlen)56);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(INVALIDAXISLENGTH)", (ftnlen)24);
-	chkout_("ZZEDTMPT", (ftnlen)8);
+	setmsg_(__global_state, "Target radii must be strictly positive but "
+		"were #, #, #.", (ftnlen)56);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDAXISLENGTH)", (ftnlen)24);
+	chkout_(__global_state, "ZZEDTMPT", (ftnlen)8);
 	return 0;
     }
     if (*r__ <= 0.) {
-	setmsg_("Source radius must be strictly positive but was #.", (ftnlen)
-		50);
-	errdp_("#", r__, (ftnlen)1);
-	sigerr_("SPICE(INVALIDRADIUS)", (ftnlen)20);
-	chkout_("ZZEDTMPT", (ftnlen)8);
+	setmsg_(__global_state, "Source radius must be strictly positive but"
+		" was #.", (ftnlen)50);
+	errdp_(__global_state, "#", r__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDRADIUS)", (ftnlen)20);
+	chkout_(__global_state, "ZZEDTMPT", (ftnlen)8);
 	return 0;
     }
 
 /*     Check AXIS and PLNVEC. */
 
-    if (vzero_(axis)) {
-	setmsg_("AXIS must be a non-zero vector but is in fact zero.", (
-		ftnlen)51);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("ZZEDTMPT", (ftnlen)8);
+    if (vzero_(__global_state, axis)) {
+	setmsg_(__global_state, "AXIS must be a non-zero vector but is in fa"
+		"ct zero.", (ftnlen)51);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "ZZEDTMPT", (ftnlen)8);
 	return 0;
     }
 /* Computing MAX */
     d__1 = max(*a,*b);
-    if (*r__ + max(d__1,*c__) >= vnorm_(axis)) {
-	setmsg_("Centers of source and target are too close together; distan"
-		"ce is #. Radius of source is #; semi-axis lengths are #, #, "
-		"#.", (ftnlen)121);
-	d__1 = vnorm_(axis);
-	errdp_("#", &d__1, (ftnlen)1);
-	errdp_("#", r__, (ftnlen)1);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(OBJECTSTOOCLOSE)", (ftnlen)22);
-	chkout_("ZZEDTMPT", (ftnlen)8);
+    if (*r__ + max(d__1,*c__) >= vnorm_(__global_state, axis)) {
+	setmsg_(__global_state, "Centers of source and target are too close "
+		"together; distance is #. Radius of source is #; semi-axis le"
+		"ngths are #, #, #.", (ftnlen)121);
+	d__1 = vnorm_(__global_state, axis);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	errdp_(__global_state, "#", r__, (ftnlen)1);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(OBJECTSTOOCLOSE)", (ftnlen)22);
+	chkout_(__global_state, "ZZEDTMPT", (ftnlen)8);
 	return 0;
     }
-    if (vzero_(plnvec)) {
-	setmsg_("PLNVEC must be a non-zero vector but is in fact zero.", (
-		ftnlen)53);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("ZZEDTMPT", (ftnlen)8);
+    if (vzero_(__global_state, plnvec)) {
+	setmsg_(__global_state, "PLNVEC must be a non-zero vector but is in "
+		"fact zero.", (ftnlen)53);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "ZZEDTMPT", (ftnlen)8);
 	return 0;
     }
 
 /*     Transform the source, target, axis, and plane vector */
 /*     so that the target becomes a unit sphere. */
 
-    cleard_(&__state->c__9, trans);
+    cleard_(__global_state, &__state->c__9, trans);
     ta = 1. / *a;
     tb = 1. / *b;
     tc = 1. / *c__;
@@ -366,19 +366,19 @@ static zzedtmpt_state_t* get_zzedtmpt_state() {
 /*     TNEGAX is the negative of the transformed axis. */
 /*     UTAXIS is the unit vector in the direction of TNEGAX. */
 
-    mxv_(trans, plnvec, tplnvc);
-    mxv_(trans, axis, taxis);
-    vhat_(taxis, utaxis);
+    mxv_(__global_state, trans, plnvec, tplnvc);
+    mxv_(__global_state, trans, axis, taxis);
+    vhat_(__global_state, taxis, utaxis);
 
 /*     Let HPLNML be a normal vector to the plane containing */
 /*     the transformed axis and plane vectors. */
 
-    vcrss_(tplnvc, taxis, hplnml);
-    if (vzero_(hplnml)) {
-	setmsg_("Plane reference vector and axis are linearly dependent.", (
-		ftnlen)55);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("ZZEDTMPT", (ftnlen)8);
+    vcrss_(__global_state, tplnvc, taxis, hplnml);
+    if (vzero_(__global_state, hplnml)) {
+	setmsg_(__global_state, "Plane reference vector and axis are linearl"
+		"y dependent.", (ftnlen)55);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "ZZEDTMPT", (ftnlen)8);
 	return 0;
     }
 
@@ -388,7 +388,7 @@ static zzedtmpt_state_t* get_zzedtmpt_state() {
 /* Computing MAX */
     d__1 = max(xa,xb);
     maxr = max(d__1,xc);
-    d__ = vnorm_(taxis);
+    d__ = vnorm_(__global_state, taxis);
     if (*umbral) {
 
 /*        Find the angle between the negative axis and a ray tangent to */
@@ -400,16 +400,16 @@ static zzedtmpt_state_t* get_zzedtmpt_state() {
 /*        tangent ray does not cross the line containing TNEGAX. */
 
 	d__1 = (maxr - 1.) / d__;
-	angle = dasine_(&d__1, &__state->c_b31);
-	if (failed_()) {
-	    chkout_("ZZEDTMPT", (ftnlen)8);
+	angle = dasine_(__global_state, &d__1, &__state->c_b31);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZEDTMPT", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Create the tangent point on the transformed target. */
 
-	theta = -(halfpi_() + angle);
-	vrotv_(utaxis, hplnml, &theta, targpt);
+	theta = -(halfpi_(__global_state) + angle);
+	vrotv_(__global_state, utaxis, hplnml, &theta, targpt);
 
 /*        S is the sign applied to pi/2 - ANGLE. */
 
@@ -424,16 +424,16 @@ static zzedtmpt_state_t* get_zzedtmpt_state() {
 /*        toward the light source. */
 
 	d__1 = (maxr + 1.) / d__;
-	angle = dasine_(&d__1, &__state->c_b31);
-	if (failed_()) {
-	    chkout_("ZZEDTMPT", (ftnlen)8);
+	angle = dasine_(__global_state, &d__1, &__state->c_b31);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZEDTMPT", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Create the tangent point on the transformed target. */
 
-	theta = angle - halfpi_();
-	vrotv_(utaxis, hplnml, &theta, targpt);
+	theta = angle - halfpi_(__global_state);
+	vrotv_(__global_state, utaxis, hplnml, &theta, targpt);
 	s = -1.;
     }
 
@@ -441,8 +441,8 @@ static zzedtmpt_state_t* get_zzedtmpt_state() {
 /*     tangent to both objects. Get the corresponding unit normal and */
 /*     the plane constant. */
 
-    vhat_(targpt, normal);
-    const__ = vdot_(normal, targpt);
+    vhat_(__global_state, targpt, normal);
+    const__ = vdot_(__global_state, normal, targpt);
 
 /*     Find the height of the plane relative to the transformed source. */
 /*     We'll find the unique point on the transformed source where the */
@@ -452,14 +452,14 @@ static zzedtmpt_state_t* get_zzedtmpt_state() {
 /*     Let SGNNML be the "signed" normal which is parallel to NORMAL */
 /*     in the umbral case and anti-parallel otherwise. */
 
-    vscl_(&s, normal, sgnnml);
-    ednmpt_(&xa, &xb, &xc, sgnnml, srcpnt);
+    vscl_(__global_state, &s, normal, sgnnml);
+    ednmpt_(__global_state, &xa, &xb, &xc, sgnnml, srcpnt);
 
 /*     Express the source point as an offset from the transformed */
 /*     target center. */
 
-    vadd_(srcpnt, taxis, tmpvec);
-    vequ_(tmpvec, srcpnt);
+    vadd_(__global_state, srcpnt, taxis, tmpvec);
+    vequ_(__global_state, tmpvec, srcpnt);
 
 /*     H is the height of the surface point on the source, relative */
 /*     to the plane tangent to the target at TARGPT. ANGERR is the */
@@ -467,9 +467,9 @@ static zzedtmpt_state_t* get_zzedtmpt_state() {
 /*     amount by which TARGPT needs to be rotated in the positive */
 /*     sense about HPLNML to make the plane contain SRCPNT. */
 
-    h__ = vdot_(srcpnt, normal) - const__;
+    h__ = vdot_(__global_state, srcpnt, normal) - const__;
     d__1 = -h__ / d__;
-    angerr = touchd_(&d__1);
+    angerr = touchd_(__global_state, &d__1);
     nitr = 0;
 
 /*     The loop terminates when the angular error magnitude */
@@ -482,35 +482,35 @@ static zzedtmpt_state_t* get_zzedtmpt_state() {
 /*        by the angular error. This should make the tangent plane */
 /*        closer to the source point. */
 
-	vrotv_(targpt, hplnml, &angerr, tmpvec);
-	vequ_(tmpvec, targpt);
-	vhat_(targpt, normal);
+	vrotv_(__global_state, targpt, hplnml, &angerr, tmpvec);
+	vequ_(__global_state, tmpvec, targpt);
+	vhat_(__global_state, targpt, normal);
 
 /*        Re-compute the normal and constant of the tangent plane. */
 
-	const__ = vdot_(normal, targpt);
-	vscl_(&s, normal, sgnnml);
+	const__ = vdot_(__global_state, normal, targpt);
+	vscl_(__global_state, &s, normal, sgnnml);
 
 /*        Find the near point on the source to the tangent plane. */
 
-	ednmpt_(&xa, &xb, &xc, sgnnml, srcpnt);
-	vadd_(srcpnt, taxis, tmpvec);
-	vequ_(tmpvec, srcpnt);
+	ednmpt_(__global_state, &xa, &xb, &xc, sgnnml, srcpnt);
+	vadd_(__global_state, srcpnt, taxis, tmpvec);
+	vequ_(__global_state, tmpvec, srcpnt);
 
 /*        Re-compute the height error and angular error. */
 
-	h__ = vdot_(srcpnt, normal) - const__;
-	vperp_(srcpnt, hplnml, proj);
-	d__ = vdist_(proj, targpt);
+	h__ = vdot_(__global_state, srcpnt, normal) - const__;
+	vperp_(__global_state, srcpnt, hplnml, proj);
+	d__ = vdist_(__global_state, proj, targpt);
 	d__1 = -h__ / d__;
-	angerr = touchd_(&d__1);
+	angerr = touchd_(__global_state, &d__1);
 	++nitr;
 	if (nitr > 20) {
-	    setmsg_("Tangent finding loop failed to converge. Iteration coun"
-		    "t = #.", (ftnlen)61);
-	    errint_("#", &nitr, (ftnlen)1);
-	    sigerr_("SPICE(NOCONVERGENCE)", (ftnlen)20);
-	    chkout_("ZZEDTMPT", (ftnlen)8);
+	    setmsg_(__global_state, "Tangent finding loop failed to converge"
+		    ". Iteration count = #.", (ftnlen)61);
+	    errint_(__global_state, "#", &nitr, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOCONVERGENCE)", (ftnlen)20);
+	    chkout_(__global_state, "ZZEDTMPT", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -521,7 +521,7 @@ static zzedtmpt_state_t* get_zzedtmpt_state() {
     point[0] = *a * targpt[0];
     point[1] = *b * targpt[1];
     point[2] = *c__ * targpt[2];
-    chkout_("ZZEDTMPT", (ftnlen)8);
+    chkout_(__global_state, "ZZEDTMPT", (ftnlen)8);
     return 0;
 } /* zzedtmpt_ */
 

@@ -8,8 +8,7 @@
 
 
 extern ckgr01_init_t __ckgr01_init;
-static ckgr01_state_t* get_ckgr01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckgr01_state_t* get_ckgr01_state(cspice_t* state) {
 	if (!state->ckgr01)
 		state->ckgr01 = __cspice_allocate_module(sizeof(
 	ckgr01_state_t), &__ckgr01_init, sizeof(__ckgr01_init));
@@ -18,8 +17,8 @@ static ckgr01_state_t* get_ckgr01_state() {
 }
 
 /* $Procedure      CKGR01 ( C-kernel, get record, type 01 ) */
-/* Subroutine */ int ckgr01_(integer *handle, doublereal *descr, integer *
-	recno, doublereal *record)
+/* Subroutine */ int ckgr01_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, integer *recno, doublereal *record)
 {
     /* System generated locals */
     integer i__1;
@@ -29,23 +28,23 @@ static ckgr01_state_t* get_ckgr01_state() {
     integer nrec;
     integer psiz;
     doublereal n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer beg;
     integer icd[6];
 
 
     /* Module state */
-    ckgr01_state_t* __state = get_ckgr01_state();
+    ckgr01_state_t* __state = get_ckgr01_state(__global_state);
 /* $ Abstract */
 
 /*     Given the handle and descriptor of a data type 1 segment in a */
@@ -344,10 +343,10 @@ static ckgr01_state_t* get_ckgr01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKGR01", (ftnlen)6);
+	chkin_(__global_state, "CKGR01", (ftnlen)6);
     }
 
 /*     The unpacked descriptor contains the following information */
@@ -371,17 +370,17 @@ static ckgr01_state_t* get_ckgr01_state() {
 /*       4 - The existence of angular velocity data, which determines how */
 /*           big the pointing portion of the returned record will be. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dcd, icd);
     if (icd[2] != 1) {
-	setmsg_("Data type of the segment should be 1: Passed descriptor sho"
-		"ws type = #.", (ftnlen)71);
-	errint_("#", &icd[2], (ftnlen)1);
-	sigerr_("SPICE(CKWRONGDATATYPE)", (ftnlen)22);
-	chkout_("CKGR01", (ftnlen)6);
+	setmsg_(__global_state, "Data type of the segment should be 1: Passe"
+		"d descriptor shows type = #.", (ftnlen)71);
+	errint_(__global_state, "#", &icd[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CKWRONGDATATYPE)", (ftnlen)22);
+	chkout_(__global_state, "CKGR01", (ftnlen)6);
 	return 0;
     }
     beg = icd[4];
-    dafgda_(handle, &icd[5], &icd[5], &n);
+    dafgda_(__global_state, handle, &icd[5], &icd[5], &n);
     nrec = (integer) n;
     if (icd[3] == 1) {
 	psiz = 7;
@@ -393,12 +392,12 @@ static ckgr01_state_t* get_ckgr01_state() {
 /*     signal an error and leave. */
 
     if (*recno < 1 || *recno > nrec) {
-	setmsg_("Requested record number (#) does not exist. There are # rec"
-		"ords in the segment.", (ftnlen)79);
-	errint_("#", recno, (ftnlen)1);
-	errint_("#", &nrec, (ftnlen)1);
-	sigerr_("SPICE(CKNONEXISTREC)", (ftnlen)20);
-	chkout_("CKGR01", (ftnlen)6);
+	setmsg_(__global_state, "Requested record number (#) does not exist."
+		" There are # records in the segment.", (ftnlen)79);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	errint_(__global_state, "#", &nrec, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CKNONEXISTREC)", (ftnlen)20);
+	chkout_(__global_state, "CKGR01", (ftnlen)6);
 	return 0;
     }
 
@@ -406,15 +405,15 @@ static ckgr01_state_t* get_ckgr01_state() {
 
     addr__ = beg + psiz * (*recno - 1);
     i__1 = addr__ + (psiz - 1);
-    dafgda_(handle, &addr__, &i__1, &record[1]);
+    dafgda_(__global_state, handle, &addr__, &i__1, &record[1]);
 
 /*     Next get the SCLK time.  Need to go past all of the NREC pointing */
 /*     records (PSIZ * NREC numbers), and then to the RECNOth SCLK */
 /*     time. */
 
     addr__ = beg + psiz * nrec + *recno - 1;
-    dafgda_(handle, &addr__, &addr__, record);
-    chkout_("CKGR01", (ftnlen)6);
+    dafgda_(__global_state, handle, &addr__, &addr__, record);
+    chkout_(__global_state, "CKGR01", (ftnlen)6);
     return 0;
 } /* ckgr01_ */
 

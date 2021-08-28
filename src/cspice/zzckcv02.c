@@ -8,54 +8,57 @@
 
 
 typedef int zzckcv02_state_t;
-static zzckcv02_state_t* get_zzckcv02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzckcv02_state_t* get_zzckcv02_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZCKCV02 ( Private --- C-kernel segment coverage, type 02 ) */
-/* Subroutine */ int zzckcv02_(integer *handle, integer *arrbeg, integer *
-	arrend, integer *sclkid, doublereal *tol, char *timsys, doublereal *
-	schedl, ftnlen timsys_len)
+/* Subroutine */ int zzckcv02_(cspice_t* __global_state, integer *handle, 
+	integer *arrbeg, integer *arrend, integer *sclkid, doublereal *tol, 
+	char *timsys, doublereal *schedl, ftnlen timsys_len)
 {
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer nrec;
     doublereal last[100];
-    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sct2e_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
     integer i__;
     integer begat;
     doublereal begin;
     integer endat;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical istdb;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal first[100];
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal et;
     doublereal finish;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     integer arrsiz;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer get;
     integer got;
 
 
     /* Module state */
-    zzckcv02_state_t* __state = get_zzckcv02_state();
+    zzckcv02_state_t* __state = get_zzckcv02_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -229,36 +232,36 @@ static zzckcv02_state_t* get_zzckcv02_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZCKCV02", (ftnlen)8);
+	chkin_(__global_state, "ZZCKCV02", (ftnlen)8);
     }
 
 /*     Check tolerance value. */
 
     if (*tol < 0.) {
-	setmsg_("Tolerance must be non-negative; actual value was #.", (
-		ftnlen)51);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZCKCV02", (ftnlen)8);
+	setmsg_(__global_state, "Tolerance must be non-negative; actual valu"
+		"e was #.", (ftnlen)51);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZCKCV02", (ftnlen)8);
 	return 0;
     }
 
 /*     Set a logical flag indicating whether the time systm is SCLK. */
 
-    istdb = eqstr_(timsys, "TDB", timsys_len, (ftnlen)3);
+    istdb = eqstr_(__global_state, timsys, "TDB", timsys_len, (ftnlen)3);
 
 /*     Check time system. */
 
     if (! istdb) {
-	if (! eqstr_(timsys, "SCLK", timsys_len, (ftnlen)4)) {
-	    setmsg_("Time system spec TIMSYS was #; allowed values are SCLK "
-		    "and TDB.", (ftnlen)63);
-	    errch_("#", timsys, (ftnlen)1, timsys_len);
-	    sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	    chkout_("ZZCKCV02", (ftnlen)8);
+	if (! eqstr_(__global_state, timsys, "SCLK", timsys_len, (ftnlen)4)) {
+	    setmsg_(__global_state, "Time system spec TIMSYS was #; allowed "
+		    "values are SCLK and TDB.", (ftnlen)63);
+	    errch_(__global_state, "#", timsys, (ftnlen)1, timsys_len);
+	    sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	    chkout_(__global_state, "ZZCKCV02", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -268,7 +271,7 @@ static zzckcv02_state_t* get_zzckcv02_state() {
 
     arrsiz = *arrend - *arrbeg + 1;
     d__1 = ((doublereal) arrsiz * 100. + 1.) / 1001.;
-    nrec = i_dnnt(&d__1);
+    nrec = i_dnnt(&__global_state->f2c, &d__1);
 
 /*     The variable GOT tells us how many time endpoints we've */
 /*     gotten so far. */
@@ -284,9 +287,9 @@ static zzckcv02_state_t* get_zzckcv02_state() {
 /*        Retrieve the list next list of windows. */
 
 	i__1 = begat + get - 1;
-	dafgda_(handle, &begat, &i__1, first);
+	dafgda_(__global_state, handle, &begat, &i__1, first);
 	i__1 = endat + get - 1;
-	dafgda_(handle, &endat, &i__1, last);
+	dafgda_(__global_state, handle, &endat, &i__1, last);
 
 /*        Insert the coverage intervals into the schedule. */
 
@@ -296,9 +299,11 @@ static zzckcv02_state_t* get_zzckcv02_state() {
 /*           Adjust the interval using the tolerance. */
 
 	    begin = first[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-		    "first", i__2, "zzckcv02_", (ftnlen)295)];
+		    &__global_state->f2c, "first", i__2, "zzckcv02_", (ftnlen)
+		    295)];
 	    finish = last[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-		    "last", i__2, "zzckcv02_", (ftnlen)296)];
+		    &__global_state->f2c, "last", i__2, "zzckcv02_", (ftnlen)
+		    296)];
 	    if (*tol > 0.) {
 /* Computing MAX */
 		d__1 = begin - *tol;
@@ -309,16 +314,16 @@ static zzckcv02_state_t* get_zzckcv02_state() {
 /*           Convert the time to TDB if necessary. */
 
 	    if (istdb) {
-		sct2e_(sclkid, &begin, &et);
+		sct2e_(__global_state, sclkid, &begin, &et);
 		begin = et;
-		sct2e_(sclkid, &finish, &et);
+		sct2e_(__global_state, sclkid, &finish, &et);
 		finish = et;
 	    }
-	    wninsd_(&begin, &finish, schedl);
+	    wninsd_(__global_state, &begin, &finish, schedl);
 	}
 	got += get;
     }
-    chkout_("ZZCKCV02", (ftnlen)8);
+    chkout_(__global_state, "ZZCKCV02", (ftnlen)8);
     return 0;
 } /* zzckcv02_ */
 

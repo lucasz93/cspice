@@ -8,31 +8,31 @@
 
 
 typedef int zzdsksgx_state_t;
-static zzdsksgx_state_t* get_zzdsksgx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdsksgx_state_t* get_zzdsksgx_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZDSKSGX ( DSK, ray-segment intercept ) */
-/* Subroutine */ int zzdsksgx_(integer *handle, integer *dladsc, integer *
-	dtype, doublereal *et, doublereal *vertex, doublereal *raydir, 
-	doublereal *xpt, doublereal *dc, integer *ic, logical *found)
+/* Subroutine */ int zzdsksgx_(cspice_t* __global_state, integer *handle, 
+	integer *dladsc, integer *dtype, doublereal *et, doublereal *vertex, 
+	doublereal *raydir, doublereal *xpt, doublereal *dc, integer *ic, 
+	logical *found)
 {
     integer plid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dskx02_(integer *, integer *, doublereal *, 
-	    doublereal *, integer *, doublereal *, logical *);
-    extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dskx02_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *, integer *, doublereal *, logical *);
+    extern doublereal touchd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     doublereal retval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzdsksgx_state_t* __state = get_zzdsksgx_state();
+    zzdsksgx_state_t* __state = get_zzdsksgx_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -217,34 +217,35 @@ static zzdsksgx_state_t* get_zzdsksgx_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKSGX", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKSGX", (ftnlen)8);
 
 /*     Note: input argument ET is provided to support time-dependent */
 /*     data types. */
 
-    retval = touchd_(et);
-    dc[0] = touchd_(dc);
+    retval = touchd_(__global_state, et);
+    dc[0] = touchd_(__global_state, dc);
     if (*dtype == 2) {
 
 /*        The intercept plate ID is returned in element 1 of */
 /*        IC, if an intercept is found. */
 
-	dskx02_(handle, dladsc, vertex, raydir, &plid, xpt, found);
+	dskx02_(__global_state, handle, dladsc, vertex, raydir, &plid, xpt, 
+		found);
 	if (*found) {
 	    ic[0] = plid;
 	}
     } else {
-	setmsg_("DSK ray-surface intercepts are not supported for DSK data t"
-		"ype #.", (ftnlen)65);
-	errint_("#", dtype, (ftnlen)1);
-	sigerr_("SPICE(TYPENOTSUPPORTED)", (ftnlen)23);
-	chkout_("ZZDSKSGX", (ftnlen)8);
+	setmsg_(__global_state, "DSK ray-surface intercepts are not supporte"
+		"d for DSK data type #.", (ftnlen)65);
+	errint_(__global_state, "#", dtype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TYPENOTSUPPORTED)", (ftnlen)23);
+	chkout_(__global_state, "ZZDSKSGX", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZDSKSGX", (ftnlen)8);
+    chkout_(__global_state, "ZZDSKSGX", (ftnlen)8);
     return 0;
 } /* zzdsksgx_ */
 

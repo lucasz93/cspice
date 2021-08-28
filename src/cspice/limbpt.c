@@ -8,8 +8,7 @@
 
 
 extern limbpt_init_t __limbpt_init;
-static limbpt_state_t* get_limbpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline limbpt_state_t* get_limbpt_state(cspice_t* state) {
 	if (!state->limbpt)
 		state->limbpt = __cspice_allocate_module(sizeof(
 	limbpt_state_t), &__limbpt_init, sizeof(__limbpt_init));
@@ -18,13 +17,13 @@ static limbpt_state_t* get_limbpt_state() {
 }
 
 /* $Procedure LIMBPT ( Limb points on an extended object ) */
-/* Subroutine */ int limbpt_(char *method, char *target, doublereal *et, char 
-	*fixref, char *abcorr, char *corloc, char *obsrvr, doublereal *refvec,
-	 doublereal *rolstp, integer *ncuts, doublereal *schstp, doublereal *
-	soltol, integer *maxn, integer *npts, doublereal *points, doublereal *
-	epochs, doublereal *tangts, ftnlen method_len, ftnlen target_len, 
-	ftnlen fixref_len, ftnlen abcorr_len, ftnlen corloc_len, ftnlen 
-	obsrvr_len)
+/* Subroutine */ int limbpt_(cspice_t* __global_state, char *method, char *
+	target, doublereal *et, char *fixref, char *abcorr, char *corloc, 
+	char *obsrvr, doublereal *refvec, doublereal *rolstp, integer *ncuts, 
+	doublereal *schstp, doublereal *soltol, integer *maxn, integer *npts, 
+	doublereal *points, doublereal *epochs, doublereal *tangts, ftnlen 
+	method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, 
+	ftnlen corloc_len, ftnlen obsrvr_len)
 {
     /* Initialized data */
 
@@ -34,88 +33,92 @@ static limbpt_state_t* get_limbpt_state() {
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
     doublereal edir[3];
     doublereal limb[9];
     doublereal axis[3];
     doublereal roll;
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     integer room;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int zzbodvcd_(integer *, char *, integer *, 
-	    integer *, integer *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int zzmaxrad_(doublereal *);
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zztangnt_(integer *, doublereal *, integer *, 
-	    integer *, integer *, integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzbodvcd_(cspice_t*, integer *, char *, 
+	    integer *, integer *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzcorepc_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzmaxrad_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zztangnt_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, integer *, integer *, integer *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzsudski_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer i__;
     integer j;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
-    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
-	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzraysfx_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int zzsrftrk_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int zzprsmet_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, logical *, integer *, integer *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzraysfx_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal epoch;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal ptarg[3];
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     integer total;
     doublereal ssblt;
     doublereal lterr;
     doublereal stobs[6];
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
     doublereal xform[9]	/* was [3][3] */;
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal prvlt;
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int vrotv_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
+    extern /* Subroutine */ int el2cgv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal cp[3];
-    extern logical failed_(void);
-    extern /* Subroutine */ int edlimb_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int edlimb_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
     doublereal lt;
     integer fxfcde;
     integer obscde;
     integer to;
     integer trgcde;
-    extern doublereal clight_(void);
+    extern doublereal clight_(cspice_t*);
     doublereal maxrad;
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern doublereal touchd_(doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern doublereal touchd_(cspice_t*, doublereal *);
+    extern logical return_(cspice_t*);
     char lmbstr[20];
     char nrmloc[25];
     char shpstr[9];
@@ -147,38 +150,40 @@ static limbpt_state_t* get_limbpt_state() {
     logical attblk[15];
     logical fnd;
     logical surfup;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int ssized_(integer *, doublereal *);
-    extern /* Subroutine */ int spkpos_(char *, doublereal *, char *, char *, 
-	    char *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(cspice_t*, integer *, char *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int ssized_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int spkpos_(cspice_t*, char *, doublereal *, char 
+	    *, char *, char *, doublereal *, doublereal *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
 	    ;
-    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int spkgps_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int surfpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, logical *
+	    );
+    extern /* Subroutine */ int spkssb_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int spkgps_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int stelab_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int pxform_(cspice_t*, char *, char *, doublereal 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
 
 
     /* Module state */
-    limbpt_state_t* __state = get_limbpt_state();
+    limbpt_state_t* __state = get_limbpt_state(__global_state);
 /* $ Abstract */
 
 /*     Find limb points on a target body. The limb is the set of points */
@@ -2776,10 +2781,10 @@ static limbpt_state_t* get_limbpt_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("LIMBPT", (ftnlen)6);
+    chkin_(__global_state, "LIMBPT", (ftnlen)6);
 
 /*     Counter initialization is done separately. */
 
@@ -2787,38 +2792,39 @@ static limbpt_state_t* get_limbpt_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
-	zzctruin_(__state->svctr3);
-	zzctruin_(__state->svctr4);
-	zzctruin_(__state->svctr5);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
+	zzctruin_(__global_state, __state->svctr3);
+	zzctruin_(__global_state, __state->svctr4);
+	zzctruin_(__global_state, __state->svctr5);
     }
-    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    if (__state->first || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        Make sure the results of this block won't be reused */
 /*        if we bail out due to an error. */
 
-	s_copy(__state->prvcor, " ", (ftnlen)5, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->prvcor, " ", (ftnlen)5, (ftnlen)
+		1);
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
 
-	zzvalcor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("LIMBPT", (ftnlen)6);
+	zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 
 /*        In this routine, we don't allow transmission corrections. */
 
 	if (attblk[4]) {
-	    setmsg_("Aberration correction # calls for transmission-style co"
-		    "rrections. These are not supported for limb finding.", (
-		    ftnlen)107);
-	    errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	    sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	    chkout_("LIMBPT", (ftnlen)6);
+	    setmsg_(__global_state, "Aberration correction # calls for trans"
+		    "mission-style corrections. These are not supported for l"
+		    "imb finding.", (ftnlen)107);
+	    errch_(__global_state, "#", abcorr, (ftnlen)1, abcorr_len);
+	    sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -2842,35 +2848,38 @@ static limbpt_state_t* get_limbpt_state() {
 
 /*        The aberration correction flag is valid; save it. */
 
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
-	    __state->svfnd1, target, &trgcde, &fnd, (ftnlen)36, target_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtcde, &__state->svfnd1, target, &trgcde, &fnd, (ftnlen)
+	    36, target_len);
     if (! fnd) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit, or that you failed to lo"
-		"ad a kernel containing a name-ID mapping for this body.", (
-		ftnlen)234);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit, or that "
+		"you failed to load a kernel containing a name-ID mapping for"
+		" this body.", (ftnlen)234);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
-	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svobsr, &
+	    __state->svobsc, &__state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)
+	    36, obsrvr_len);
     if (! fnd) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE Toolkit, or that you failed to "
-		"load a kernel containing a name-ID mapping for this body.", (
-		ftnlen)236);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE Toolkit, or tha"
+		"t you failed to load a kernel containing a name-ID mapping f"
+		"or this body.", (ftnlen)236);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
 
@@ -2878,56 +2887,58 @@ static limbpt_state_t* get_limbpt_state() {
 /*     an error. */
 
     if (obscde == trgcde) {
-	setmsg_("In computing the surface intercept point, the observing bod"
-		"y and target body are the same. Both are #.", (ftnlen)102);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "In computing the surface intercept point, t"
+		"he observing body and target body are the same. Both are #.", 
+		(ftnlen)102);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(__state->svctr3, __state->svfref, &__state->svfxfc, fixref, &
-	    fxfcde, (ftnlen)32, fixref_len);
-    frinfo_(&fxfcde, &fxcent, &fxclss, &fxtyid, &fnd);
-    if (failed_()) {
-	chkout_("LIMBPT", (ftnlen)6);
+    zznamfrm_(__global_state, __state->svctr3, __state->svfref, &
+	    __state->svfxfc, fixref, &fxfcde, (ftnlen)32, fixref_len);
+    frinfo_(__global_state, &fxfcde, &fxcent, &fxclss, &fxtyid, &fnd);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
     if (! fnd) {
-	setmsg_("Reference frame # is not recognized by the SPICE frame subs"
-		"ystem. Possibly a required frame definition kernel has not b"
-		"een loaded.", (ftnlen)130);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not recognized by the "
+		"SPICE frame subsystem. Possibly a required frame definition "
+		"kernel has not been loaded.", (ftnlen)130);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure that FIXREF is centered at the target body's center. */
 
     if (fxcent != trgcde) {
-	setmsg_("Reference frame # is not centered at the target body #. The"
-		" ID code of the frame center is #.", (ftnlen)93);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	errint_("#", &fxcent, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not centered at the ta"
+		"rget body #. The ID code of the frame center is #.", (ftnlen)
+		93);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errint_(__global_state, "#", &fxcent, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(__state->svctr4, &surfup);
+    zzsrftrk_(__global_state, __state->svctr4, &surfup);
 
 /*     Initialize the SINCPT utility package for the next computation. */
 /*     The choice of initialization routine depends on the target */
 /*     surface type. */
 
-    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
-	     (ftnlen)500) != 0) {
+    if (__state->first || surfup || s_cmp(&__global_state->f2c, method, 
+	    __state->prvmth, method_len, (ftnlen)500) != 0) {
 
 /*        Set the previous method string to an invalid value, so it */
 /*        cannot match any future, valid input. This will force this */
@@ -2935,7 +2946,8 @@ static limbpt_state_t* get_limbpt_state() {
 /*        failure occurs in this branch. Once success is assured, we can */
 /*        record the current method in the previous method string. */
 
-	s_copy(__state->prvmth, " ", (ftnlen)500, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->prvmth, " ", (ftnlen)500, (
+		ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -2944,90 +2956,100 @@ static limbpt_state_t* get_limbpt_state() {
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&trgcde, method, &__state->c__100, shpstr, __state->subtyp, 
-		&__state->pri, &__state->nsurf, __state->srflst, lmbstr, 
-		trmstr, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20, (
-		ftnlen)20);
-	if (failed_()) {
-	    chkout_("LIMBPT", (ftnlen)6);
+	zzprsmet_(__global_state, &trgcde, method, &__state->c__100, shpstr, 
+		__state->subtyp, &__state->pri, &__state->nsurf, 
+		__state->srflst, lmbstr, trmstr, method_len, (ftnlen)9, (
+		ftnlen)20, (ftnlen)20, (ftnlen)20);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
-	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
+	if (eqstr_(__global_state, shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9))
+		 {
 	    __state->shape = 1;
-	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
+	} else if (eqstr_(__global_state, shpstr, "DSK", (ftnlen)9, (ftnlen)3)
+		) {
 	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
 
-	    setmsg_("[1] Returned shape value from method string was <#>.", (
-		    ftnlen)52);
-	    errch_("#", shpstr, (ftnlen)1, (ftnlen)9);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("LIMBPT", (ftnlen)6);
+	    setmsg_(__global_state, "[1] Returned shape value from method st"
+		    "ring was <#>.", (ftnlen)52);
+	    errch_(__global_state, "#", shpstr, (ftnlen)1, (ftnlen)9);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
-	if (eqstr_(lmbstr, "TANGENT", (ftnlen)20, (ftnlen)7)) {
+	if (eqstr_(__global_state, lmbstr, "TANGENT", (ftnlen)20, (ftnlen)7)) 
+		{
 	    __state->lmbtyp = 1;
-	} else if (eqstr_(lmbstr, "GUIDED", (ftnlen)20, (ftnlen)6)) {
+	} else if (eqstr_(__global_state, lmbstr, "GUIDED", (ftnlen)20, (
+		ftnlen)6)) {
 	    __state->lmbtyp = 2;
 	} else {
-	    setmsg_("Returned limb type from method string was <#>. Value mu"
-		    "st be TANGENT or GUIDED.", (ftnlen)79);
-	    errch_("#", lmbstr, (ftnlen)1, (ftnlen)20);
-	    sigerr_("SPICE(INVALIDLIMBTYPE)", (ftnlen)22);
-	    chkout_("LIMBPT", (ftnlen)6);
+	    setmsg_(__global_state, "Returned limb type from method string w"
+		    "as <#>. Value must be TANGENT or GUIDED.", (ftnlen)79);
+	    errch_(__global_state, "#", lmbstr, (ftnlen)1, (ftnlen)20);
+	    sigerr_(__global_state, "SPICE(INVALIDLIMBTYPE)", (ftnlen)22);
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 
 /*        There should be no subtype specification in the method */
 /*        string. */
 
-	if (s_cmp(__state->subtyp, " ", (ftnlen)20, (ftnlen)1) != 0) {
-	    setmsg_("Spurious sub-observer point type <#> was present in the"
-		    " method string #. The sub-observer type is valid in the "
-		    "method strings for SUBPNT and SUBSLR, but is not applica"
-		    "ble for LIMBPT.", (ftnlen)182);
-	    errch_("#", __state->subtyp, (ftnlen)1, (ftnlen)20);
-	    errch_("#", method, (ftnlen)1, method_len);
-	    sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	    chkout_("LIMBPT", (ftnlen)6);
+	if (s_cmp(&__global_state->f2c, __state->subtyp, " ", (ftnlen)20, (
+		ftnlen)1) != 0) {
+	    setmsg_(__global_state, "Spurious sub-observer point type <#> wa"
+		    "s present in the method string #. The sub-observer type "
+		    "is valid in the method strings for SUBPNT and SUBSLR, bu"
+		    "t is not applicable for LIMBPT.", (ftnlen)182);
+	    errch_(__global_state, "#", __state->subtyp, (ftnlen)1, (ftnlen)
+		    20);
+	    errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	    sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 
 /*        There should be no terminator specification in the method */
 /*        string. */
 
-	if (s_cmp(trmstr, " ", (ftnlen)20, (ftnlen)1) != 0) {
-	    setmsg_("Spurious terminator shadow type <#> was present in the "
-		    "method string #. The terminator shadow type is valid in "
-		    "the method string for TERMPT, but is not applicable for "
-		    "LIMBPT.", (ftnlen)174);
-	    errch_("#", trmstr, (ftnlen)1, (ftnlen)20);
-	    errch_("#", method, (ftnlen)1, method_len);
-	    sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	    chkout_("LIMBPT", (ftnlen)6);
+	if (s_cmp(&__global_state->f2c, trmstr, " ", (ftnlen)20, (ftnlen)1) !=
+		 0) {
+	    setmsg_(__global_state, "Spurious terminator shadow type <#> was"
+		    " present in the method string #. The terminator shadow t"
+		    "ype is valid in the method string for TERMPT, but is not"
+		    " applicable for LIMBPT.", (ftnlen)174);
+	    errch_(__global_state, "#", trmstr, (ftnlen)1, (ftnlen)20);
+	    errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	    sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
-	s_copy(__state->prvmth, method, (ftnlen)500, method_len);
+	s_copy(&__global_state->f2c, __state->prvmth, method, (ftnlen)500, 
+		method_len);
     }
 
 /*     Identify the aberration correction locus. */
 
-    if (__state->first || s_cmp(corloc, __state->prvloc, corloc_len, (ftnlen)
-	    25) != 0) {
-	ljucrs_(&__state->c__1, corloc, nrmloc, corloc_len, (ftnlen)25);
-	if (s_cmp(nrmloc, "CENTER", (ftnlen)25, (ftnlen)6) == 0) {
+    if (__state->first || s_cmp(&__global_state->f2c, corloc, __state->prvloc,
+	     corloc_len, (ftnlen)25) != 0) {
+	ljucrs_(__global_state, &__state->c__1, corloc, nrmloc, corloc_len, (
+		ftnlen)25);
+	if (s_cmp(&__global_state->f2c, nrmloc, "CENTER", (ftnlen)25, (ftnlen)
+		6) == 0) {
 	    __state->loccde = 1;
-	} else if (s_cmp(nrmloc, "ELLIPSOID LIMB", (ftnlen)25, (ftnlen)14) == 
-		0) {
+	} else if (s_cmp(&__global_state->f2c, nrmloc, "ELLIPSOID LIMB", (
+		ftnlen)25, (ftnlen)14) == 0) {
 	    __state->loccde = 2;
 	} else {
-	    setmsg_("Aberration correction locus <#> was not recognized.", (
-		    ftnlen)51);
-	    errch_("#", corloc, (ftnlen)1, corloc_len);
-	    sigerr_("SPICE(INVALIDLOCUS)", (ftnlen)19);
-	    chkout_("LIMBPT", (ftnlen)6);
+	    setmsg_(__global_state, "Aberration correction locus <#> was not"
+		    " recognized.", (ftnlen)51);
+	    errch_(__global_state, "#", corloc, (ftnlen)1, corloc_len);
+	    sigerr_(__global_state, "SPICE(INVALIDLOCUS)", (ftnlen)19);
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -3035,15 +3057,17 @@ static limbpt_state_t* get_limbpt_state() {
 /*        Save the input locus string so we can check for */
 /*        a change on the next call. */
 
-	s_copy(__state->prvloc, corloc, (ftnlen)25, corloc_len);
+	s_copy(&__global_state->f2c, __state->prvloc, corloc, (ftnlen)25, 
+		corloc_len);
     }
 
 /*     Check the reference vector. */
 
-    if (vzero_(refvec)) {
-	setmsg_("The reference vector was the zero vector.", (ftnlen)41);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("LIMBPT", (ftnlen)6);
+    if (vzero_(__global_state, refvec)) {
+	setmsg_(__global_state, "The reference vector was the zero vector.", (
+		ftnlen)41);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
 
@@ -3054,10 +3078,11 @@ static limbpt_state_t* get_limbpt_state() {
 /*     Check MAXN. */
 
     if (*maxn < 1) {
-	setmsg_("MAXN = #; MAXN is required to be at least 1.", (ftnlen)44);
-	errint_("#", maxn, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "MAXN = #; MAXN is required to be at least 1."
+		, (ftnlen)44);
+	errint_(__global_state, "#", maxn, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
 
@@ -3065,12 +3090,12 @@ static limbpt_state_t* get_limbpt_state() {
 /*     for each cut. NCUTS may not be negative. */
 
     if (*ncuts < 1 || *ncuts > *maxn) {
-	setmsg_("NCUTS = #; MAXN = #; NCUTS is required to be non-negative a"
-		"nd no larger than MAXN.", (ftnlen)82);
-	errint_("#", ncuts, (ftnlen)1);
-	errint_("#", maxn, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "NCUTS = #; MAXN = #; NCUTS is required to b"
+		"e non-negative and no larger than MAXN.", (ftnlen)82);
+	errint_(__global_state, "#", ncuts, (ftnlen)1);
+	errint_(__global_state, "#", maxn, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
 
@@ -3079,19 +3104,19 @@ static limbpt_state_t* get_limbpt_state() {
 
     if (__state->shape == 2) {
 	if (*schstp <= 0.) {
-	    setmsg_("The angular search step SCHSTP = #; SCHSTP is required "
-		    "to be positive.", (ftnlen)70);
-	    errdp_("#", schstp, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDSEARCHSTEP)", (ftnlen)24);
-	    chkout_("LIMBPT", (ftnlen)6);
+	    setmsg_(__global_state, "The angular search step SCHSTP = #; SCH"
+		    "STP is required to be positive.", (ftnlen)70);
+	    errdp_(__global_state, "#", schstp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDSEARCHSTEP)", (ftnlen)24);
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 	if (*soltol <= 0.) {
-	    setmsg_("The angular search tolerance SOLTOL = #; SOLTOL is requ"
-		    "ired to be positive.", (ftnlen)75);
-	    errdp_("#", schstp, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDTOLERANCE)", (ftnlen)23);
-	    chkout_("LIMBPT", (ftnlen)6);
+	    setmsg_(__global_state, "The angular search tolerance SOLTOL = #"
+		    "; SOLTOL is required to be positive.", (ftnlen)75);
+	    errdp_(__global_state, "#", schstp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDTOLERANCE)", (ftnlen)23);
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -3100,11 +3125,12 @@ static limbpt_state_t* get_limbpt_state() {
 /*     there are multiple cutting half-planes. */
 
     if (*ncuts > 1 && *rolstp == 0.) {
-	setmsg_("The angular roll step is 0.D0. NCUTS = #. ROLSTP is require"
-		"d to be non-zero when NCUTS is greater than 1.", (ftnlen)105);
-	errint_("#", ncuts, (ftnlen)1);
-	sigerr_("SPICE(INVALIDROLLSTEP)", (ftnlen)22);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "The angular roll step is 0.D0. NCUTS = #. R"
+		"OLSTP is required to be non-zero when NCUTS is greater than "
+		"1.", (ftnlen)105);
+	errint_(__global_state, "#", ncuts, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDROLLSTEP)", (ftnlen)22);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
     if (__state->shape == 2) {
@@ -3114,29 +3140,31 @@ static limbpt_state_t* get_limbpt_state() {
 /*        Initialize the intercept algorithm to use a DSK */
 /*        model for the surface of the target body. */
 
-	zzsudski_(&trgcde, &__state->nsurf, __state->srflst, &fxfcde);
+	zzsudski_(__global_state, &trgcde, &__state->nsurf, __state->srflst, &
+		fxfcde);
     } else if (__state->shape != 1) {
-	setmsg_("Computation method argument was <#>; this string must speci"
-		"fy a supported shape model and computation type. See the des"
-		"cription of METHOD in the header of SUBPNT for details.", (
-		ftnlen)174);
-	errch_("#", method, (ftnlen)1, method_len);
-	sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "Computation method argument was <#>; this s"
+		"tring must specify a supported shape model and computation t"
+		"ype. See the description of METHOD in the header of SUBPNT f"
+		"or details.", (ftnlen)174);
+	errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
-    if (failed_()) {
-	chkout_("LIMBPT", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Check MAXN. */
 
     if (*maxn < 1) {
-	setmsg_("MAXN = #; MAXN is required to be at least 1.", (ftnlen)44);
-	errint_("#", maxn, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "MAXN = #; MAXN is required to be at least 1."
+		, (ftnlen)44);
+	errint_(__global_state, "#", maxn, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
 
@@ -3144,12 +3172,12 @@ static limbpt_state_t* get_limbpt_state() {
 /*     for each cut. NCUTS may not be negative. */
 
     if (*ncuts < 1 || *ncuts > *maxn) {
-	setmsg_("NCUTS = #; MAXN = #; NCUTS is required to be non-negative a"
-		"nd no larger than MAXN.", (ftnlen)82);
-	errint_("#", ncuts, (ftnlen)1);
-	errint_("#", maxn, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "NCUTS = #; MAXN = #; NCUTS is required to b"
+		"e non-negative and no larger than MAXN.", (ftnlen)82);
+	errint_(__global_state, "#", ncuts, (ftnlen)1);
+	errint_(__global_state, "#", maxn, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
 
@@ -3160,23 +3188,24 @@ static limbpt_state_t* get_limbpt_state() {
 
 /*           Reset counter to force lookup. */
 
-	    zzctruin_(__state->svctr5);
+	    zzctruin_(__global_state, __state->svctr5);
 	}
 
 /*        Look up target radii using counter. */
 
-	zzbodvcd_(&trgcde, "RADII", &__state->c__3, __state->svctr5, &
-		__state->svnrad, __state->svradi, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("LIMBPT", (ftnlen)6);
+	zzbodvcd_(__global_state, &trgcde, "RADII", &__state->c__3, 
+		__state->svctr5, &__state->svnrad, __state->svradi, (ftnlen)5)
+		;
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 	if (__state->svnrad != 3) {
-	    setmsg_("Number of target radii must be 3 but was #.", (ftnlen)43)
-		    ;
-	    errint_("#", &__state->svnrad, (ftnlen)1);
-	    sigerr_("SPICE(BADRADIUSCOUNT)", (ftnlen)21);
-	    chkout_("LIMBPT", (ftnlen)6);
+	    setmsg_(__global_state, "Number of target radii must be 3 but wa"
+		    "s #.", (ftnlen)43);
+	    errint_(__global_state, "#", &__state->svnrad, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADRADIUSCOUNT)", (ftnlen)21);
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 	__state->prvtrg = trgcde;
@@ -3187,25 +3216,25 @@ static limbpt_state_t* get_limbpt_state() {
 
 /*     Find limb points on the target. */
 
-    cleari_(ncuts, npts);
-    ssized_(&__state->c__2000, result);
+    cleari_(__global_state, ncuts, npts);
+    ssized_(__global_state, &__state->c__2000, result);
 
 /*     Get initial observer-target vector, expressed in the target */
 /*     body-fixed frame, evaluated at the target epoch. This vector */
 /*     will be used for all option combinations. */
 
-    spkpos_(target, et, fixref, abcorr, obsrvr, pos, &lt, target_len, 
-	    fixref_len, abcorr_len, obsrvr_len);
-    if (failed_()) {
-	chkout_("LIMBPT", (ftnlen)6);
+    spkpos_(__global_state, target, et, fixref, abcorr, obsrvr, pos, &lt, 
+	    target_len, fixref_len, abcorr_len, obsrvr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
-    if (vzero_(pos)) {
-	setmsg_("The distance between the observer and target at ET # is zer"
-		"o.", (ftnlen)61);
-	errdp_("#", et, (ftnlen)1);
-	sigerr_("SPICE(NOSEPARATION)", (ftnlen)19);
-	chkout_("LIMBPT", (ftnlen)6);
+    if (vzero_(__global_state, pos)) {
+	setmsg_(__global_state, "The distance between the observer and targe"
+		"t at ET # is zero.", (ftnlen)61);
+	errdp_(__global_state, "#", et, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOSEPARATION)", (ftnlen)19);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
 
@@ -3220,22 +3249,22 @@ static limbpt_state_t* get_limbpt_state() {
 
 /*        Compute the epoch associated with the target center. */
 
-	zzcorepc_(abcorr, et, &lt, &trgepc, abcorr_len);
+	zzcorepc_(__global_state, abcorr, et, &lt, &trgepc, abcorr_len);
 
 /*        Compute the central axis, which is also the common ray vertex. */
 /*        The axis points from the target to the observer. */
 
-	vminus_(pos, axis);
+	vminus_(__global_state, pos, axis);
 
 /*        Make sure the reference vector and axis are linearly */
 /*        independent. */
 
-	vcrss_(axis, refvec, cp);
-	if (vzero_(cp)) {
-	    setmsg_("Input reference vector and observer-target vector are l"
-		    "inearly dependent.", (ftnlen)73);
-	    sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	    chkout_("LIMBPT", (ftnlen)6);
+	vcrss_(__global_state, axis, refvec, cp);
+	if (vzero_(__global_state, cp)) {
+	    setmsg_(__global_state, "Input reference vector and observer-tar"
+		    "get vector are linearly dependent.", (ftnlen)73);
+	    sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -3244,27 +3273,27 @@ static limbpt_state_t* get_limbpt_state() {
 /*        limb parameters of the reference ellipsoid. */
 
 	if (__state->shape == 1 || __state->lmbtyp == 2) {
-	    edlimb_(__state->svradi, &__state->svradi[1], &__state->svradi[2],
-		     axis, limb);
-	    el2cgv_(limb, center, smajor, sminor);
-	    if (failed_()) {
-		chkout_("LIMBPT", (ftnlen)6);
+	    edlimb_(__global_state, __state->svradi, &__state->svradi[1], &
+		    __state->svradi[2], axis, limb);
+	    el2cgv_(__global_state, limb, center, smajor, sminor);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		return 0;
 	    }
-	    ucrss_(smajor, sminor, enorml);
+	    ucrss_(__global_state, smajor, sminor, enorml);
 
 /*           Make sure ENORML points into the same half-space as */
 /*           AXIS. */
 
-	    if (vdot_(enorml, axis) < 0.) {
-		vsclip_(&__state->c_b121, enorml);
+	    if (vdot_(__global_state, enorml, axis) < 0.) {
+		vsclip_(__global_state, &__state->c_b121, enorml);
 	    }
 	    if (__state->shape == 2) {
 
 /*              Caution: this requires that ZZSUDSKI has been */
 /*              called first. */
 
-		zzmaxrad_(&maxrad);
+		zzmaxrad_(__global_state, &maxrad);
 	    }
 	}
 	to = 1;
@@ -3281,12 +3310,12 @@ static limbpt_state_t* get_limbpt_state() {
 /*           Rotation of the half-planes is in the positive */
 /*           sense about AXIS. */
 
-	    vrotv_(refvec, axis, &roll, plnvec);
+	    vrotv_(__global_state, refvec, axis, &roll, plnvec);
 
 /*           Let CUTNML be a vector normal to the current cutting */
 /*           half-plane. We'll use this vector later. */
 
-	    ucrss_(axis, plnvec, cutnml);
+	    ucrss_(__global_state, axis, plnvec, cutnml);
 	    if (__state->shape == 2) {
 
 /*              This is the DSK case. */
@@ -3301,20 +3330,21 @@ static limbpt_state_t* get_limbpt_state() {
 
 /*                 Note that RESULT is a cell, not a window. */
 
-		    scardd_(&__state->c__0, result);
+		    scardd_(__global_state, &__state->c__0, result);
 
 /*                 Note that the evaluation epoch for the surface is */
 /*                 optionally corrected for light time. */
 
-		    zztangnt_(&__state->c__0, &__state->c_b124, &
-			    __state->shape, &trgcde, &__state->nsurf, 
-			    __state->srflst, &fxfcde, &trgepc, plnvec, axis, 
-			    schstp, soltol, result, __state->pntbuf);
-		    if (failed_()) {
-			chkout_("LIMBPT", (ftnlen)6);
+		    zztangnt_(__global_state, &__state->c__0, &
+			    __state->c_b124, &__state->shape, &trgcde, &
+			    __state->nsurf, __state->srflst, &fxfcde, &trgepc,
+			     plnvec, axis, schstp, soltol, result, 
+			    __state->pntbuf);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "LIMBPT", (ftnlen)6);
 			return 0;
 		    }
-		    npts[i__ - 1] = cardd_(result);
+		    npts[i__ - 1] = cardd_(__global_state, result);
 		} else if (__state->lmbtyp == 2) {
 
 /*                 This option uses the target's reference ellipsoid for */
@@ -3327,13 +3357,14 @@ static limbpt_state_t* get_limbpt_state() {
 /*                 plane and the cutting half-plane. Let EDIR the */
 /*                 unit direction vector satisfying these constraints. */
 
-		    ucrss_(cutnml, enorml, edir);
-		    if (vzero_(edir)) {
-			setmsg_("Vector defining cutting half plane and elli"
-				"psoid limb normal vector are linearly depend"
-				"ent.", (ftnlen)91);
-			sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-			chkout_("LIMBPT", (ftnlen)6);
+		    ucrss_(__global_state, cutnml, enorml, edir);
+		    if (vzero_(__global_state, edir)) {
+			setmsg_(__global_state, "Vector defining cutting hal"
+				"f plane and ellipsoid limb normal vector are"
+				" linearly dependent.", (ftnlen)91);
+			sigerr_(__global_state, "SPICE(DEGENERATECASE)", (
+				ftnlen)21);
+			chkout_(__global_state, "LIMBPT", (ftnlen)6);
 			return 0;
 		    }
 
@@ -3344,11 +3375,13 @@ static limbpt_state_t* get_limbpt_state() {
 /*                 invisible from the interior of the target. */
 
 		    d__1 = maxrad * 3.;
-		    vlcom_(&__state->c_b129, center, &d__1, edir, rayvtx);
-		    vminus_(edir, raydir);
-		    zzraysfx_(rayvtx, raydir, &trgepc, __state->pntbuf, &fnd);
-		    if (failed_()) {
-			chkout_("LIMBPT", (ftnlen)6);
+		    vlcom_(__global_state, &__state->c_b129, center, &d__1, 
+			    edir, rayvtx);
+		    vminus_(__global_state, edir, raydir);
+		    zzraysfx_(__global_state, rayvtx, raydir, &trgepc, 
+			    __state->pntbuf, &fnd);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "LIMBPT", (ftnlen)6);
 			return 0;
 		    }
 		    if (fnd) {
@@ -3360,10 +3393,11 @@ static limbpt_state_t* get_limbpt_state() {
 
 /*                 This is a backstop case; it should never be reached. */
 
-		    setmsg_("Invalid limb type code: #", (ftnlen)25);
-		    errint_("#", &__state->lmbtyp, (ftnlen)1);
-		    sigerr_("SPICE(BUG)", (ftnlen)10);
-		    chkout_("LIMBPT", (ftnlen)6);
+		    setmsg_(__global_state, "Invalid limb type code: #", (
+			    ftnlen)25);
+		    errint_(__global_state, "#", &__state->lmbtyp, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		    return 0;
 		}
 	    } else if (__state->shape == 1) {
@@ -3374,32 +3408,34 @@ static limbpt_state_t* get_limbpt_state() {
 /*              and the cutting half-plane. Let EDIR be the unit */
 /*              direction vector satisfying these constraints. */
 
-		ucrss_(cutnml, enorml, edir);
-		if (vzero_(edir)) {
-		    setmsg_("Vector defining cutting half plane and ellipsoi"
-			    "d limb normal vector are linearly dependent.", (
-			    ftnlen)91);
-		    sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-		    chkout_("LIMBPT", (ftnlen)6);
+		ucrss_(__global_state, cutnml, enorml, edir);
+		if (vzero_(__global_state, edir)) {
+		    setmsg_(__global_state, "Vector defining cutting half pl"
+			    "ane and ellipsoid limb normal vector are linearl"
+			    "y dependent.", (ftnlen)91);
+		    sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)
+			    21);
+		    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		    return 0;
 		}
 
 /*              Find the intercept on the target surface of the */
 /*              the ray emanating from CENTER in the direction EDIR. */
 
-		surfpt_(center, edir, __state->svradi, &__state->svradi[1], &
-			__state->svradi[2], __state->pntbuf, &fnd);
-		if (failed_()) {
-		    chkout_("LIMBPT", (ftnlen)6);
+		surfpt_(__global_state, center, edir, __state->svradi, &
+			__state->svradi[1], &__state->svradi[2], 
+			__state->pntbuf, &fnd);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		    return 0;
 		}
 		if (! fnd) {
-		    setmsg_("Limb point not found on reference ellipsoid for"
-			    " cutting half plane at index #. The point should"
-			    " always be found.", (ftnlen)112);
-		    errint_("#", &i__, (ftnlen)1);
-		    sigerr_("SPICE(BUG)", (ftnlen)10);
-		    chkout_("LIMBPT", (ftnlen)6);
+		    setmsg_(__global_state, "Limb point not found on referen"
+			    "ce ellipsoid for cutting half plane at index #. "
+			    "The point should always be found.", (ftnlen)112);
+		    errint_(__global_state, "#", &i__, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		    return 0;
 		}
 		npts[i__ - 1] = 1;
@@ -3407,23 +3443,24 @@ static limbpt_state_t* get_limbpt_state() {
 
 /*              This is a backstop case; it should never be reached. */
 
-		setmsg_("Invalid shape code: #", (ftnlen)21);
-		errint_("#", &__state->shape, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("LIMBPT", (ftnlen)6);
+		setmsg_(__global_state, "Invalid shape code: #", (ftnlen)21);
+		errint_(__global_state, "#", &__state->shape, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		return 0;
 	    }
 	    total += npts[i__ - 1];
 	    if (npts[i__ - 1] > room) {
-		setmsg_("Out of room in output arrays. Index of cutting half"
-			"-plane is # out of #. Number of limb points collecte"
-			"d so far is #. Available room is #.", (ftnlen)138);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", ncuts, (ftnlen)1);
-		errint_("#", &total, (ftnlen)1);
-		errint_("#", &room, (ftnlen)1);
-		sigerr_("SPICE(OUTOFROOM)", (ftnlen)16);
-		chkout_("LIMBPT", (ftnlen)6);
+		setmsg_(__global_state, "Out of room in output arrays. Index"
+			" of cutting half-plane is # out of #. Number of limb"
+			" points collected so far is #. Available room is #.", 
+			(ftnlen)138);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", ncuts, (ftnlen)1);
+		errint_(__global_state, "#", &total, (ftnlen)1);
+		errint_(__global_state, "#", &room, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(OUTOFROOM)", (ftnlen)16);
+		chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -3434,12 +3471,14 @@ static limbpt_state_t* get_limbpt_state() {
 
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
-		vequ_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
-			? i__3 : s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)
-			3186)], &points[to * 3 - 3]);
-		vsub_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
-			? i__3 : s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)
-			3187)], axis, &tangts[to * 3 - 3]);
+		vequ_(__global_state, &__state->pntbuf[(i__3 = j * 3 - 3) < 
+			6000 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "pntbuf", i__3, "limbpt_", (
+			ftnlen)3186)], &points[to * 3 - 3]);
+		vsub_(__global_state, &__state->pntbuf[(i__3 = j * 3 - 3) < 
+			6000 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "pntbuf", i__3, "limbpt_", (
+			ftnlen)3187)], axis, &tangts[to * 3 - 3]);
 		epochs[to - 1] = trgepc;
 		++to;
 	    }
@@ -3454,12 +3493,12 @@ static limbpt_state_t* get_limbpt_state() {
 /*        method. */
 
 	if (__state->lmbtyp != 1) {
-	    setmsg_("Limb type <#> is not supported for the # aberration cor"
-		    "rection locus.", (ftnlen)69);
-	    errch_("#", svlstr, (ftnlen)1, (ftnlen)20);
-	    errch_("#", corloc, (ftnlen)1, corloc_len);
-	    sigerr_("SPICE(BADLIMBLOCUSMIX)", (ftnlen)22);
-	    chkout_("LIMBPT", (ftnlen)6);
+	    setmsg_(__global_state, "Limb type <#> is not supported for the "
+		    "# aberration correction locus.", (ftnlen)69);
+	    errch_(__global_state, "#", svlstr, (ftnlen)1, (ftnlen)20);
+	    errch_(__global_state, "#", corloc, (ftnlen)1, corloc_len);
+	    sigerr_(__global_state, "SPICE(BADLIMBLOCUSMIX)", (ftnlen)22);
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -3467,9 +3506,9 @@ static limbpt_state_t* get_limbpt_state() {
 /*        system barycenter. This state is expressed relative to */
 /*        an inertial reference frame. This state is computed once. */
 
-	spkssb_(&obscde, et, "J2000", stobs, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("LIMBPT", (ftnlen)6);
+	spkssb_(__global_state, &obscde, et, "J2000", stobs, (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	    return 0;
 	}
 	to = 1;
@@ -3503,18 +3542,18 @@ static limbpt_state_t* get_limbpt_state() {
 /*                 during the previous loop iteration. */
 
 		    d__1 = *et - lt;
-		    epoch = touchd_(&d__1);
-		    spkgps_(&trgcde, &epoch, "J2000", &__state->c__0, ssbtrg, 
-			    &ssblt, (ftnlen)5);
-		    if (failed_()) {
-			chkout_("LIMBPT", (ftnlen)6);
+		    epoch = touchd_(__global_state, &d__1);
+		    spkgps_(__global_state, &trgcde, &epoch, "J2000", &
+			    __state->c__0, ssbtrg, &ssblt, (ftnlen)5);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "LIMBPT", (ftnlen)6);
 			return 0;
 		    }
 
 /*                 Compute the position of the target center relative to */
 /*                 the observer in the inertial frame. */
 
-		    vsub_(ssbtrg, stobs, ptarg);
+		    vsub_(__global_state, ssbtrg, stobs, ptarg);
 		    if (__state->usestl) {
 
 /*                    Apply a stellar aberration correction to the */
@@ -3526,21 +3565,21 @@ static limbpt_state_t* get_limbpt_state() {
 /*                       correction by using the correction applicable */
 /*                       to the target center. */
 
-			    stelab_(ptarg, &stobs[3], stlpos);
+			    stelab_(__global_state, ptarg, &stobs[3], stlpos);
 			} else {
 
 /*                       We apply the correction found for the previous */
 /*                       limb point estimate. */
 
-			    vadd_(ptarg, stloff, stlpos);
+			    vadd_(__global_state, ptarg, stloff, stlpos);
 			}
 
 /*                    Set CORTRG with the vector corrected for */
 /*                    stellar aberration. */
 
-			vequ_(stlpos, cortrg);
+			vequ_(__global_state, stlpos, cortrg);
 		    } else {
-			vequ_(ptarg, cortrg);
+			vequ_(__global_state, ptarg, cortrg);
 		    }
 
 /*                 CORTRG is inertially referenced and includes the */
@@ -3552,76 +3591,79 @@ static limbpt_state_t* get_limbpt_state() {
 /*                 the target body-fixed frame; negate the result. This */
 /*                 gives us the axis for the limb computation. */
 
-		    pxform_("J2000", fixref, &epoch, xform, (ftnlen)5, 
-			    fixref_len);
-		    if (failed_()) {
-			chkout_("LIMBPT", (ftnlen)6);
+		    pxform_(__global_state, "J2000", fixref, &epoch, xform, (
+			    ftnlen)5, fixref_len);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "LIMBPT", (ftnlen)6);
 			return 0;
 		    }
-		    mxv_(xform, cortrg, tmpvec);
-		    vminus_(tmpvec, axis);
+		    mxv_(__global_state, xform, cortrg, tmpvec);
+		    vminus_(__global_state, tmpvec, axis);
 
 /*                 Rotate the reference vector about the axis by */
 /*                 the current angle to obtain the plane vector. */
 
-		    vrotv_(refvec, axis, &roll, plnvec);
+		    vrotv_(__global_state, refvec, axis, &roll, plnvec);
 
 /*                 Find the limb, the limb center and semi-axes, and */
 /*                 limb plane's normal vector for the current viewing */
 /*                 geometry. */
 
-		    edlimb_(__state->svradi, &__state->svradi[1], &
-			    __state->svradi[2], axis, limb);
-		    el2cgv_(limb, center, smajor, sminor);
-		    if (failed_()) {
-			chkout_("LIMBPT", (ftnlen)6);
+		    edlimb_(__global_state, __state->svradi, &__state->svradi[
+			    1], &__state->svradi[2], axis, limb);
+		    el2cgv_(__global_state, limb, center, smajor, sminor);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "LIMBPT", (ftnlen)6);
 			return 0;
 		    }
-		    ucrss_(smajor, sminor, enorml);
+		    ucrss_(__global_state, smajor, sminor, enorml);
 
 /*                 Make sure ENORML points into the same half-space as */
 /*                 AXIS. */
 
-		    if (vdot_(enorml, axis) < 0.) {
-			vsclip_(&__state->c_b121, enorml);
+		    if (vdot_(__global_state, enorml, axis) < 0.) {
+			vsclip_(__global_state, &__state->c_b121, enorml);
 		    }
 
 /*                 Let CUTNML be a vector normal to the current cutting */
 /*                 half-plane. */
 
-		    ucrss_(axis, plnvec, cutnml);
+		    ucrss_(__global_state, axis, plnvec, cutnml);
 /*                 The limb point we seek must lie in both the limb */
 /*                 plane and the cutting half-plane. Let EDIR be the */
 /*                 unit direction vector satisfying these constraints. */
 
-		    ucrss_(cutnml, enorml, edir);
-		    if (vzero_(edir)) {
-			setmsg_("Vector defining cutting half plane and elli"
-				"psoid limb normal vector are linearly depend"
-				"ent. This error occurred while computing the"
-				" limb point on the reference ellipsoid in ha"
-				"lf plane #.", (ftnlen)186);
-			errint_("#", &i__, (ftnlen)1);
-			sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-			chkout_("LIMBPT", (ftnlen)6);
+		    ucrss_(__global_state, cutnml, enorml, edir);
+		    if (vzero_(__global_state, edir)) {
+			setmsg_(__global_state, "Vector defining cutting hal"
+				"f plane and ellipsoid limb normal vector are"
+				" linearly dependent. This error occurred whi"
+				"le computing the limb point on the reference"
+				" ellipsoid in half plane #.", (ftnlen)186);
+			errint_(__global_state, "#", &i__, (ftnlen)1);
+			sigerr_(__global_state, "SPICE(DEGENERATECASE)", (
+				ftnlen)21);
+			chkout_(__global_state, "LIMBPT", (ftnlen)6);
 			return 0;
 		    }
 
 /*                 Compute the ellipsoid limb point. */
 
-		    surfpt_(center, edir, __state->svradi, &__state->svradi[1]
-			    , &__state->svradi[2], epoint, &fnd);
-		    if (failed_()) {
-			chkout_("LIMBPT", (ftnlen)6);
+		    surfpt_(__global_state, center, edir, __state->svradi, &
+			    __state->svradi[1], &__state->svradi[2], epoint, &
+			    fnd);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "LIMBPT", (ftnlen)6);
 			return 0;
 		    }
 		    if (! fnd) {
-			setmsg_("Limb point not found on reference ellipsoid"
-				" for cutting half plane at index #. The poin"
-				"t should always be found.", (ftnlen)112);
-			errint_("#", &i__, (ftnlen)1);
-			sigerr_("SPICE(BUG)", (ftnlen)10);
-			chkout_("LIMBPT", (ftnlen)6);
+			setmsg_(__global_state, "Limb point not found on ref"
+				"erence ellipsoid for cutting half plane at i"
+				"ndex #. The point should always be found.", (
+				ftnlen)112);
+			errint_(__global_state, "#", &i__, (ftnlen)1);
+			sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+			chkout_(__global_state, "LIMBPT", (ftnlen)6);
 			return 0;
 		    }
 
@@ -3630,8 +3672,8 @@ static limbpt_state_t* get_limbpt_state() {
 /*                 referenced vector from the observer to the light-time */
 /*                 corrected limb point. */
 
-		    mtxv_(xform, epoint, ipoint);
-		    vadd_(ipoint, ptarg, isrfvc);
+		    mtxv_(__global_state, xform, epoint, ipoint);
+		    vadd_(__global_state, ipoint, ptarg, isrfvc);
 		    if (__state->usestl) {
 
 /*                    We're correcting for stellar aberration. Another */
@@ -3642,16 +3684,17 @@ static limbpt_state_t* get_limbpt_state() {
 /*                    frame and compute the stellar aberration */
 /*                    correction that applies to this vector. */
 
-			stelab_(isrfvc, &stobs[3], stlpos);
-			vsub_(stlpos, isrfvc, stloff);
-			mxv_(xform, stloff, tmpvec);
+			stelab_(__global_state, isrfvc, &stobs[3], stlpos);
+			vsub_(__global_state, stlpos, isrfvc, stloff);
+			mxv_(__global_state, xform, stloff, tmpvec);
 		    }
 
 /*                 Compute the light time to the limb point. */
 
 		    prvlt = lt;
-		    d__1 = vnorm_(isrfvc) / clight_();
-		    lt = touchd_(&d__1);
+		    d__1 = vnorm_(__global_state, isrfvc) / clight_(
+			    __global_state);
+		    lt = touchd_(__global_state, &d__1);
 
 /*                 LTERR is the magnitude of the change between the */
 /*                 current estimate of light time and the previous */
@@ -3661,7 +3704,7 @@ static limbpt_state_t* get_limbpt_state() {
 /* Computing MAX */
 		    d__3 = 1., d__4 = abs(epoch);
 		    d__2 = (d__1 = lt - prvlt, abs(d__1)) / max(d__3,d__4);
-		    lterr = touchd_(&d__2);
+		    lterr = touchd_(__global_state, &d__2);
 		    ++j;
 		}
 
@@ -3672,8 +3715,8 @@ static limbpt_state_t* get_limbpt_state() {
 
 /*              Compute the axis in the body-fixed frame. */
 
-		mxv_(xform, cortrg, tmpvec);
-		vminus_(tmpvec, axis);
+		mxv_(__global_state, xform, cortrg, tmpvec);
+		vminus_(__global_state, tmpvec, axis);
 		epoch = *et - lt;
 	    } else {
 
@@ -3686,7 +3729,7 @@ static limbpt_state_t* get_limbpt_state() {
 /*              Compute the central axis, which is the common ray */
 /*              vertex. */
 
-		vminus_(pos, axis);
+		vminus_(__global_state, pos, axis);
 
 /*              The target epoch matches the observer epoch. */
 
@@ -3695,7 +3738,7 @@ static limbpt_state_t* get_limbpt_state() {
 /*              EPOCH and AXIS are set. Reset the plane definition */
 /*              vector PLNVEC based on the new value of AXIS. */
 
-		vrotv_(refvec, axis, &roll, plnvec);
+		vrotv_(__global_state, refvec, axis, &roll, plnvec);
 
 /*              We're ready to compute the limb point in the current */
 /*              half-plane. */
@@ -3705,59 +3748,61 @@ static limbpt_state_t* get_limbpt_state() {
 /*              limb plane's normal vector for the current viewing */
 /*              geometry. */
 
-		edlimb_(__state->svradi, &__state->svradi[1], &
-			__state->svradi[2], axis, limb);
-		el2cgv_(limb, center, smajor, sminor);
-		if (failed_()) {
-		    chkout_("LIMBPT", (ftnlen)6);
+		edlimb_(__global_state, __state->svradi, &__state->svradi[1], 
+			&__state->svradi[2], axis, limb);
+		el2cgv_(__global_state, limb, center, smajor, sminor);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		    return 0;
 		}
-		ucrss_(smajor, sminor, enorml);
+		ucrss_(__global_state, smajor, sminor, enorml);
 
 /*              Make sure ENORML points into the same half-space as */
 /*              AXIS. */
 
-		if (vdot_(enorml, axis) < 0.) {
-		    vsclip_(&__state->c_b121, enorml);
+		if (vdot_(__global_state, enorml, axis) < 0.) {
+		    vsclip_(__global_state, &__state->c_b121, enorml);
 		}
 
 /*              Let CUTNML be a vector normal to the current cutting */
 /*              half-plane. */
 
-		ucrss_(axis, plnvec, cutnml);
+		ucrss_(__global_state, axis, plnvec, cutnml);
 
 /*              The limb point we seek must lie in both the limb */
 /*              plane and the cutting half-plane. Let EDIR be the */
 /*              unit direction vector satisfying these constraints. */
 
-		ucrss_(cutnml, enorml, edir);
-		if (vzero_(edir)) {
-		    setmsg_("Vector defining cutting half plane and ellipsoi"
-			    "d limb normal vector are linearly dependent. Thi"
-			    "s occurred while computing the limb point on the"
-			    " reference ellipsoid in half plane #.", (ftnlen)
-			    180);
-		    errint_("#", &i__, (ftnlen)1);
-		    sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-		    chkout_("LIMBPT", (ftnlen)6);
+		ucrss_(__global_state, cutnml, enorml, edir);
+		if (vzero_(__global_state, edir)) {
+		    setmsg_(__global_state, "Vector defining cutting half pl"
+			    "ane and ellipsoid limb normal vector are linearl"
+			    "y dependent. This occurred while computing the l"
+			    "imb point on the reference ellipsoid in half pla"
+			    "ne #.", (ftnlen)180);
+		    errint_(__global_state, "#", &i__, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)
+			    21);
+		    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		    return 0;
 		}
 
 /*              Compute the ellipsoid limb point. */
 
-		surfpt_(center, edir, __state->svradi, &__state->svradi[1], &
-			__state->svradi[2], epoint, &fnd);
-		if (failed_()) {
-		    chkout_("LIMBPT", (ftnlen)6);
+		surfpt_(__global_state, center, edir, __state->svradi, &
+			__state->svradi[1], &__state->svradi[2], epoint, &fnd)
+			;
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		    return 0;
 		}
 		if (! fnd) {
-		    setmsg_("Limb point not found on reference ellipsoid for"
-			    " cutting half plane at index #. The point should"
-			    " always be found.", (ftnlen)112);
-		    errint_("#", &i__, (ftnlen)1);
-		    sigerr_("SPICE(BUG)", (ftnlen)10);
-		    chkout_("LIMBPT", (ftnlen)6);
+		    setmsg_(__global_state, "Limb point not found on referen"
+			    "ce ellipsoid for cutting half plane at index #. "
+			    "The point should always be found.", (ftnlen)112);
+		    errint_(__global_state, "#", &i__, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		    return 0;
 		}
 	    }
@@ -3767,7 +3812,7 @@ static limbpt_state_t* get_limbpt_state() {
 /*           case. In the DSK case, we'll update the values when we */
 /*           know them. */
 
-	    vequ_(epoint, __state->pntbuf);
+	    vequ_(__global_state, epoint, __state->pntbuf);
 	    npts[i__ - 1] = 1;
 	    if (__state->shape == 2) {
 
@@ -3775,42 +3820,44 @@ static limbpt_state_t* get_limbpt_state() {
 /*              by DSK data. We'll use the axis and epoch we've */
 /*              determined from the ellipsoid approximation. */
 
-		scardd_(&__state->c__0, result);
+		scardd_(__global_state, &__state->c__0, result);
 
 /*              Note that the evaluation epoch for the surface is */
 /*              corrected for light time. */
 
-		zztangnt_(&__state->c__0, &__state->c_b124, &__state->shape, &
-			trgcde, &__state->nsurf, __state->srflst, &fxfcde, &
-			epoch, plnvec, axis, schstp, soltol, result, 
-			__state->pntbuf);
-		if (failed_()) {
-		    chkout_("LIMBPT", (ftnlen)6);
+		zztangnt_(__global_state, &__state->c__0, &__state->c_b124, &
+			__state->shape, &trgcde, &__state->nsurf, 
+			__state->srflst, &fxfcde, &epoch, plnvec, axis, 
+			schstp, soltol, result, __state->pntbuf);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		    return 0;
 		}
 
 /*              Update the limb point count for this cutting */
 /*              half-plane. */
 
-		npts[i__ - 1] = cardd_(result);
+		npts[i__ - 1] = cardd_(__global_state, result);
 	    } else if (__state->shape != 1) {
-		setmsg_("Backstop error: SHAPE = #.", (ftnlen)26);
-		errint_("#", &__state->shape, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("LIMBPT", (ftnlen)6);
+		setmsg_(__global_state, "Backstop error: SHAPE = #.", (ftnlen)
+			26);
+		errint_(__global_state, "#", &__state->shape, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		return 0;
 	    }
 	    total += npts[i__ - 1];
 	    if (npts[i__ - 1] > room) {
-		setmsg_("Out of room in output arrays. Index of cutting half"
-			"-plane is # out of #. Number of limb points collecte"
-			"d so far is #. Available room is #.", (ftnlen)138);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", ncuts, (ftnlen)1);
-		errint_("#", &total, (ftnlen)1);
-		errint_("#", &room, (ftnlen)1);
-		sigerr_("SPICE(OUTOFROOM)", (ftnlen)16);
-		chkout_("LIMBPT", (ftnlen)6);
+		setmsg_(__global_state, "Out of room in output arrays. Index"
+			" of cutting half-plane is # out of #. Number of limb"
+			" points collected so far is #. Available room is #.", 
+			(ftnlen)138);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", ncuts, (ftnlen)1);
+		errint_(__global_state, "#", &total, (ftnlen)1);
+		errint_(__global_state, "#", &room, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(OUTOFROOM)", (ftnlen)16);
+		chkout_(__global_state, "LIMBPT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -3821,12 +3868,14 @@ static limbpt_state_t* get_limbpt_state() {
 
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
-		vequ_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
-			? i__3 : s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)
-			3653)], &points[to * 3 - 3]);
-		vsub_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
-			? i__3 : s_rnge("pntbuf", i__3, "limbpt_", (ftnlen)
-			3654)], axis, &tangts[to * 3 - 3]);
+		vequ_(__global_state, &__state->pntbuf[(i__3 = j * 3 - 3) < 
+			6000 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "pntbuf", i__3, "limbpt_", (
+			ftnlen)3653)], &points[to * 3 - 3]);
+		vsub_(__global_state, &__state->pntbuf[(i__3 = j * 3 - 3) < 
+			6000 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "pntbuf", i__3, "limbpt_", (
+			ftnlen)3654)], axis, &tangts[to * 3 - 3]);
 		epochs[to - 1] = epoch;
 		++to;
 	    }
@@ -3836,14 +3885,14 @@ static limbpt_state_t* get_limbpt_state() {
 
 	}
     } else {
-	setmsg_("Aberration correction locus # is not recognized.", (ftnlen)
-		48);
-	errch_("#", corloc, (ftnlen)1, corloc_len);
-	sigerr_("SPICE(INVALIDLOCUS)", (ftnlen)19);
-	chkout_("LIMBPT", (ftnlen)6);
+	setmsg_(__global_state, "Aberration correction locus # is not recogn"
+		"ized.", (ftnlen)48);
+	errch_(__global_state, "#", corloc, (ftnlen)1, corloc_len);
+	sigerr_(__global_state, "SPICE(INVALIDLOCUS)", (ftnlen)19);
+	chkout_(__global_state, "LIMBPT", (ftnlen)6);
 	return 0;
     }
-    chkout_("LIMBPT", (ftnlen)6);
+    chkout_(__global_state, "LIMBPT", (ftnlen)6);
     return 0;
 } /* limbpt_ */
 

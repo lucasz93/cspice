@@ -169,7 +169,7 @@
    {
       return ( cell->size );
    }
-   chkin_c ( "size_c" );
+   chkin_c ( naif_state, "size_c" );
 
 
    /*

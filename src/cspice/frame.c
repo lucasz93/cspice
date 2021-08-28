@@ -8,20 +8,20 @@
 
 
 typedef int frame_state_t;
-static frame_state_t* get_frame_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline frame_state_t* get_frame_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      FRAME ( Build a right handed coordinate frame ) */
-/* Subroutine */ int frame_(doublereal *x, doublereal *y, doublereal *z__)
+/* Subroutine */ int frame_(cspice_t* __global_state, doublereal *x, 
+	doublereal *y, doublereal *z__)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    double sqrt(doublereal);
-    integer s_rnge(char *, integer, char *, integer);
+    double sqrt(f2c_state_t*, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal a;
@@ -31,11 +31,11 @@ static frame_state_t* get_frame_state() {
     integer s1;
     integer s2;
     integer s3;
-    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    frame_state_t* __state = get_frame_state();
+    frame_state_t* __state = get_frame_state(__global_state);
 /* $ Abstract */
 
 /*      Given a vector X, this routine builds a right handed */
@@ -225,7 +225,7 @@ static frame_state_t* get_frame_state() {
 
 /*     First make X into a unit vector. */
 
-    vhatip_(x);
+    vhatip_(__global_state, x);
 
 /*     We'll need the squares of the components of X in a bit. */
 
@@ -256,17 +256,17 @@ static frame_state_t* get_frame_state() {
 /*     of X, the non-zero components of Y and the length of Y. */
 
     if (a <= b && a <= c__) {
-	f = sqrt(b + c__);
+	f = sqrt(&__global_state->f2c, b + c__);
 	s1 = 1;
 	s2 = 2;
 	s3 = 3;
     } else if (b <= a && b <= c__) {
-	f = sqrt(a + c__);
+	f = sqrt(&__global_state->f2c, a + c__);
 	s1 = 2;
 	s2 = 3;
 	s3 = 1;
     } else {
-	f = sqrt(a + b);
+	f = sqrt(&__global_state->f2c, a + b);
 	s1 = 3;
 	s2 = 1;
 	s3 = 2;
@@ -278,24 +278,28 @@ static frame_state_t* get_frame_state() {
 /*     from the assignment of values to S1, S2 and S3 (they are merely */
 /*     cycled from one case to the next). */
 
-    y[(i__1 = s1 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("y", i__1, "frame_", (
-	    ftnlen)285)] = 0.;
-    y[(i__1 = s2 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("y", i__1, "frame_", (
-	    ftnlen)286)] = -x[(i__2 = s3 - 1) < 3 && 0 <= i__2 ? i__2 : 
-	    s_rnge("x", i__2, "frame_", (ftnlen)286)] / f;
-    y[(i__1 = s3 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("y", i__1, "frame_", (
-	    ftnlen)287)] = x[(i__2 = s2 - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-	    "x", i__2, "frame_", (ftnlen)287)] / f;
-    z__[(i__1 = s1 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("z", i__1, "frame_", 
-	    (ftnlen)289)] = f;
-    z__[(i__1 = s2 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("z", i__1, "frame_", 
-	    (ftnlen)290)] = -x[(i__2 = s1 - 1) < 3 && 0 <= i__2 ? i__2 : 
-	    s_rnge("x", i__2, "frame_", (ftnlen)290)] * y[(i__3 = s3 - 1) < 3 
-	    && 0 <= i__3 ? i__3 : s_rnge("y", i__3, "frame_", (ftnlen)290)];
-    z__[(i__1 = s3 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("z", i__1, "frame_", 
-	    (ftnlen)291)] = x[(i__2 = s1 - 1) < 3 && 0 <= i__2 ? i__2 : 
-	    s_rnge("x", i__2, "frame_", (ftnlen)291)] * y[(i__3 = s2 - 1) < 3 
-	    && 0 <= i__3 ? i__3 : s_rnge("y", i__3, "frame_", (ftnlen)291)];
+    y[(i__1 = s1 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+	    "y", i__1, "frame_", (ftnlen)285)] = 0.;
+    y[(i__1 = s2 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+	    "y", i__1, "frame_", (ftnlen)286)] = -x[(i__2 = s3 - 1) < 3 && 0 
+	    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "x", i__2, "frame_",
+	     (ftnlen)286)] / f;
+    y[(i__1 = s3 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+	    "y", i__1, "frame_", (ftnlen)287)] = x[(i__2 = s2 - 1) < 3 && 0 <=
+	     i__2 ? i__2 : s_rnge(&__global_state->f2c, "x", i__2, "frame_", (
+	    ftnlen)287)] / f;
+    z__[(i__1 = s1 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+	     "z", i__1, "frame_", (ftnlen)289)] = f;
+    z__[(i__1 = s2 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+	     "z", i__1, "frame_", (ftnlen)290)] = -x[(i__2 = s1 - 1) < 3 && 0 
+	    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "x", i__2, "frame_",
+	     (ftnlen)290)] * y[(i__3 = s3 - 1) < 3 && 0 <= i__3 ? i__3 : 
+	    s_rnge(&__global_state->f2c, "y", i__3, "frame_", (ftnlen)290)];
+    z__[(i__1 = s3 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+	     "z", i__1, "frame_", (ftnlen)291)] = x[(i__2 = s1 - 1) < 3 && 0 
+	    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "x", i__2, "frame_",
+	     (ftnlen)291)] * y[(i__3 = s2 - 1) < 3 && 0 <= i__3 ? i__3 : 
+	    s_rnge(&__global_state->f2c, "y", i__3, "frame_", (ftnlen)291)];
     return 0;
 } /* frame_ */
 

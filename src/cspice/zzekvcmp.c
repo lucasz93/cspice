@@ -8,8 +8,7 @@
 
 
 extern zzekvcmp_init_t __zzekvcmp_init;
-static zzekvcmp_state_t* get_zzekvcmp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekvcmp_state_t* get_zzekvcmp_state(cspice_t* state) {
 	if (!state->zzekvcmp)
 		state->zzekvcmp = __cspice_allocate_module(sizeof(
 	zzekvcmp_state_t), &__zzekvcmp_init, sizeof(__zzekvcmp_init));
@@ -18,30 +17,32 @@ static zzekvcmp_state_t* get_zzekvcmp_state() {
 }
 
 /* $Procedure      ZZEKVCMP ( EK, row vector comparison ) */
-logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols, 
-	integer *elts, integer *senses, integer *sthan, integer *stsdsc, 
-	integer *stdtpt, integer *dtpool, integer *dtdscs, integer *sgvec1, 
-	integer *rwvec1, integer *sgvec2, integer *rwvec2)
+logical zzekvcmp_(cspice_t* __global_state, integer *op, integer *ncols, 
+	integer *tabs, integer *cols, integer *elts, integer *senses, integer 
+	*sthan, integer *stsdsc, integer *stdtpt, integer *dtpool, integer *
+	dtdscs, integer *sgvec1, integer *rwvec1, integer *sgvec2, integer *
+	rwvec2)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     logical ret_val;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer hans[2];
     integer segs[2];
     integer rows[2];
-    extern integer zzekecmp_(integer *, integer *, integer *, integer *, 
-	    integer *);
+    extern integer zzekecmp_(cspice_t*, integer *, integer *, integer *, 
+	    integer *, integer *);
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer dtype[2];
-    extern integer lnknxt_(integer *, integer *);
+    extern integer lnknxt_(cspice_t*, integer *, integer *);
     integer cldscs[22]	/* was [11][2] */;
     integer col;
     integer colidx;
@@ -50,14 +51,14 @@ logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols,
     integer rel;
     integer sgdscs[48]	/* was [24][2] */;
     integer tabidx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzekvcmp_state_t* __state = get_zzekvcmp_state();
+    zzekvcmp_state_t* __state = get_zzekvcmp_state(__global_state);
 /* $ Abstract */
 
 /*     Compare two row vectors, using dictionary ordering on a */
@@ -1144,38 +1145,45 @@ logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols,
 /*        COL. */
 
 	for (i__ = 1; i__ <= 2; ++i__) {
-	    hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("hans", 
-		    i__1, "zzekvcmp_", (ftnlen)356)] = sthan[segs[(i__2 = i__ 
-		    - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("segs", i__2, "zze"
-		    "kvcmp_", (ftnlen)356)] - 1];
-	    colptr[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("colptr",
-		     i__1, "zzekvcmp_", (ftnlen)357)] = stdtpt[segs[(i__2 = 
-		    i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("segs", i__2, 
-		    "zzekvcmp_", (ftnlen)357)] - 1];
+	    hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "hans", i__1, "zzekvcmp_", (ftnlen)
+		    356)] = sthan[segs[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "segs", i__2, "zzekv"
+		    "cmp_", (ftnlen)356)] - 1];
+	    colptr[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "colptr", i__1, "zzekvcmp_", (ftnlen)
+		    357)] = stdtpt[segs[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "segs", i__2, "zzekv"
+		    "cmp_", (ftnlen)357)] - 1];
 	    i__1 = colidx;
 	    for (j = 2; j <= i__1; ++j) {
-		colptr[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(
-			"colptr", i__2, "zzekvcmp_", (ftnlen)360)] = lnknxt_(&
-			colptr[(i__3 = i__ - 1) < 2 && 0 <= i__3 ? i__3 : 
-			s_rnge("colptr", i__3, "zzekvcmp_", (ftnlen)360)], 
-			dtpool);
+		colptr[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "colptr", i__2, "zzekvcmp_", (
+			ftnlen)360)] = lnknxt_(__global_state, &colptr[(i__3 =
+			 i__ - 1) < 2 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "colptr", i__3, "zzekvcmp_", (
+			ftnlen)360)], dtpool);
 	    }
-	    movei_(&dtdscs[colptr[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("colptr", i__1, "zzekvcmp_", (ftnlen)363)] * 11 - 
-		    11], &__state->c__11, &cldscs[(i__2 = i__ * 11 - 11) < 22 
-		    && 0 <= i__2 ? i__2 : s_rnge("cldscs", i__2, "zzekvcmp_", 
-		    (ftnlen)363)]);
-	    movei_(&stsdsc[segs[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("segs", i__1, "zzekvcmp_", (ftnlen)364)] * 24 - 24]
-		    , &__state->c__24, &sgdscs[(i__2 = i__ * 24 - 24) < 48 && 
-		    0 <= i__2 ? i__2 : s_rnge("sgdscs", i__2, "zzekvcmp_", (
-		    ftnlen)364)]);
-	    dtype[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("dtype", 
-		    i__1, "zzekvcmp_", (ftnlen)366)] = dtdscs[colptr[(i__2 = 
-		    i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("colptr", i__2, 
-		    "zzekvcmp_", (ftnlen)366)] * 11 - 10];
-	    elidxs[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("elidxs",
-		     i__1, "zzekvcmp_", (ftnlen)367)] = elts[col - 1];
+	    movei_(__global_state, &dtdscs[colptr[(i__1 = i__ - 1) < 2 && 0 <=
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "colptr", 
+		    i__1, "zzekvcmp_", (ftnlen)363)] * 11 - 11], &
+		    __state->c__11, &cldscs[(i__2 = i__ * 11 - 11) < 22 && 0 
+		    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "cldscs", 
+		    i__2, "zzekvcmp_", (ftnlen)363)]);
+	    movei_(__global_state, &stsdsc[segs[(i__1 = i__ - 1) < 2 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "segs", i__1, 
+		    "zzekvcmp_", (ftnlen)364)] * 24 - 24], &__state->c__24, &
+		    sgdscs[(i__2 = i__ * 24 - 24) < 48 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "sgdscs", i__2, "zzekvcmp_", 
+		    (ftnlen)364)]);
+	    dtype[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "dtype", i__1, "zzekvcmp_", (ftnlen)
+		    366)] = dtdscs[colptr[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "colptr", i__2, "zze"
+		    "kvcmp_", (ftnlen)366)] * 11 - 10];
+	    elidxs[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "elidxs", i__1, "zzekvcmp_", (ftnlen)
+		    367)] = elts[col - 1];
 	}
 	if (dtype[0] == dtype[1]) {
 
@@ -1183,7 +1191,8 @@ logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols,
 /*           column having index COL.  If the order sense for this */
 /*           column is descending, adjust REL to reflect this. */
 
-	    rel = zzekecmp_(hans, sgdscs, cldscs, rows, elidxs);
+	    rel = zzekecmp_(__global_state, hans, sgdscs, cldscs, rows, 
+		    elidxs);
 	    if (senses[col - 1] == 1) {
 		if (rel == 5) {
 		    rel = 3;
@@ -1192,17 +1201,17 @@ logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols,
 		}
 	    }
 	} else {
-	    chkin_("ZZEKVCMP", (ftnlen)8);
-	    setmsg_("Data type mismatch for order-by column having index #; "
-		    "type for segment # = #; type for segment # is #", (ftnlen)
-		    102);
-	    errint_("#", &col, (ftnlen)1);
-	    errint_("#", segs, (ftnlen)1);
-	    errint_("#", dtype, (ftnlen)1);
-	    errint_("#", &segs[1], (ftnlen)1);
-	    errint_("#", &dtype[1], (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZEKVCMP", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKVCMP", (ftnlen)8);
+	    setmsg_(__global_state, "Data type mismatch for order-by column "
+		    "having index #; type for segment # = #; type for segment"
+		    " # is #", (ftnlen)102);
+	    errint_(__global_state, "#", &col, (ftnlen)1);
+	    errint_(__global_state, "#", segs, (ftnlen)1);
+	    errint_(__global_state, "#", dtype, (ftnlen)1);
+	    errint_(__global_state, "#", &segs[1], (ftnlen)1);
+	    errint_(__global_state, "#", &dtype[1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZEKVCMP", (ftnlen)8);
 	    return ret_val;
 	}
 	++col;
@@ -1227,11 +1236,12 @@ logical zzekvcmp_(integer *op, integer *ncols, integer *tabs, integer *cols,
 /*        Sorry, we couldn't resist. */
 
 	ret_val = FALSE_;
-	chkin_("ZZEKVCMP", (ftnlen)8);
-	setmsg_("The relational operator # was not recognized.", (ftnlen)45);
-	errint_("#", op, (ftnlen)1);
-	sigerr_("SPICE(UNNATURALRELATION)", (ftnlen)24);
-	chkout_("ZZEKVCMP", (ftnlen)8);
+	chkin_(__global_state, "ZZEKVCMP", (ftnlen)8);
+	setmsg_(__global_state, "The relational operator # was not recognize"
+		"d.", (ftnlen)45);
+	errint_(__global_state, "#", op, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNNATURALRELATION)", (ftnlen)24);
+	chkout_(__global_state, "ZZEKVCMP", (ftnlen)8);
 	return ret_val;
     }
     return ret_val;

@@ -212,7 +212,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "dvnorm_c" );
+   chkin_c ( naif_state, "dvnorm_c" );
 
    /*
    Call the f2c'd Fortran routine.

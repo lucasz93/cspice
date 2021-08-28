@@ -274,7 +274,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekucec_c" );
+   chkin_c ( naif_state, "ekucec_c" );
 
    /*
    Check the column name to make sure the pointer is non-null 

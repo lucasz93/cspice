@@ -8,8 +8,7 @@
 
 
 extern sgfpkt_init_t __sgfpkt_init;
-static sgfpkt_state_t* get_sgfpkt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sgfpkt_state_t* get_sgfpkt_state(cspice_t* state) {
 	if (!state->sgfpkt)
 		state->sgfpkt = __cspice_allocate_module(sizeof(
 	sgfpkt_state_t), &__sgfpkt_init, sizeof(__sgfpkt_init));
@@ -18,8 +17,9 @@ static sgfpkt_state_t* get_sgfpkt_state() {
 }
 
 /* $Procedure      SGFPKT ( Generic Segment: Fetch data packets ) */
-/* Subroutine */ int sgfpkt_(integer *handle, doublereal *descr, integer *
-	first, integer *last, doublereal *values, integer *ends)
+/* Subroutine */ int sgfpkt_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, integer *first, integer *last, doublereal *values, 
+	integer *ends)
 {
     /* System generated locals */
     integer i__1;
@@ -29,25 +29,25 @@ static sgfpkt_state_t* get_sgfpkt_state() {
     integer b;
     integer e;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal dtemp[2];
     integer begin1;
     integer begin2;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int sgmeta_(integer *, doublereal *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sgmeta_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer mypdrb;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer soffst;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer mypktb;
     integer voffst;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer mynpdr;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer mypdrt;
     integer mynpkt;
     integer mypkto;
@@ -55,7 +55,7 @@ static sgfpkt_state_t* get_sgfpkt_state() {
 
 
     /* Module state */
-    sgfpkt_state_t* __state = get_sgfpkt_state();
+    sgfpkt_state_t* __state = get_sgfpkt_state(__global_state);
 /* $ Abstract */
 
 /*     Given the descriptor for a generic segment in a DAF file */
@@ -650,43 +650,44 @@ static sgfpkt_state_t* get_sgfpkt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SGFPKT", (ftnlen)6);
+    chkin_(__global_state, "SGFPKT", (ftnlen)6);
 
 /*     Perform the needed initialization */
 
-    sgmeta_(handle, descr, &__state->c__12, &mynpkt);
-    sgmeta_(handle, descr, &__state->c__10, &mypdrt);
-    sgmeta_(handle, descr, &__state->c__16, &mypkto);
-    sgmeta_(handle, descr, &__state->c__15, &mypksz);
-    sgmeta_(handle, descr, &__state->c__11, &mypktb);
-    if (failed_()) {
-	chkout_("SGFPKT", (ftnlen)6);
+    sgmeta_(__global_state, handle, descr, &__state->c__12, &mynpkt);
+    sgmeta_(__global_state, handle, descr, &__state->c__10, &mypdrt);
+    sgmeta_(__global_state, handle, descr, &__state->c__16, &mypkto);
+    sgmeta_(__global_state, handle, descr, &__state->c__15, &mypksz);
+    sgmeta_(__global_state, handle, descr, &__state->c__11, &mypktb);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGFPKT", (ftnlen)6);
 	return 0;
     }
 
 /*     Perform checks on the inputs for reasonableness. */
 
     if (*first < 1 || *last > mynpkt) {
-	setmsg_("The range of packets requested extends beyond the available"
-		" packet data.  The packet data is available for indexes 1 to"
-		" #.  You've requested data from # to #. ", (ftnlen)159);
-	errint_("#", &mynpkt, (ftnlen)1);
-	errint_("#", first, (ftnlen)1);
-	errint_("#", last, (ftnlen)1);
-	sigerr_("SPICE(REQUESTOUTOFBOUNDS)", (ftnlen)25);
-	chkout_("SGFPKT", (ftnlen)6);
+	setmsg_(__global_state, "The range of packets requested extends beyo"
+		"nd the available packet data.  The packet data is available "
+		"for indexes 1 to #.  You've requested data from # to #. ", (
+		ftnlen)159);
+	errint_(__global_state, "#", &mynpkt, (ftnlen)1);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(REQUESTOUTOFBOUNDS)", (ftnlen)25);
+	chkout_(__global_state, "SGFPKT", (ftnlen)6);
 	return 0;
     }
     if (*last < *first) {
-	setmsg_("The last packet requested, #, is before the first packet re"
-		"quested, #. ", (ftnlen)71);
-	errint_("#", last, (ftnlen)1);
-	errint_("#", first, (ftnlen)1);
-	sigerr_("SPICE(REQUESTOUTOFORDER)", (ftnlen)24);
-	chkout_("SGFPKT", (ftnlen)6);
+	setmsg_(__global_state, "The last packet requested, #, is before the"
+		" first packet requested, #. ", (ftnlen)71);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(REQUESTOUTOFORDER)", (ftnlen)24);
+	chkout_(__global_state, "SGFPKT", (ftnlen)6);
 	return 0;
     }
 
@@ -717,7 +718,7 @@ static sgfpkt_state_t* get_sgfpkt_state() {
 /*           Get the packet data all in one shot since we know it's */
 /*           contiguous. */
 
-	    dafgda_(handle, &b, &e, values);
+	    dafgda_(__global_state, handle, &b, &e, values);
 	} else {
 
 /*           Compute the addresses for the packet data in the generic */
@@ -736,9 +737,9 @@ static sgfpkt_state_t* get_sgfpkt_state() {
 		voffst = (i__ - *first) * mypksz + 1;
 		b = mypktb + soffst + mypkto;
 		e = mypktb + soffst + mypksz;
-		dafgda_(handle, &b, &e, &values[voffst - 1]);
-		if (failed_()) {
-		    chkout_("SGFPKT", (ftnlen)6);
+		dafgda_(__global_state, handle, &b, &e, &values[voffst - 1]);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SGFPKT", (ftnlen)6);
 		    return 0;
 		}
 	    }
@@ -757,10 +758,10 @@ static sgfpkt_state_t* get_sgfpkt_state() {
 /*        In addition to the other meta data items already retrieved, we */
 /*        will also need a few others. */
 
-	sgmeta_(handle, descr, &__state->c__8, &mypdrb);
-	sgmeta_(handle, descr, &__state->c__9, &mynpdr);
-	if (failed_()) {
-	    chkout_("SGFPKT", (ftnlen)6);
+	sgmeta_(__global_state, handle, descr, &__state->c__8, &mypdrb);
+	sgmeta_(__global_state, handle, descr, &__state->c__9, &mynpdr);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGFPKT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -785,9 +786,9 @@ static sgfpkt_state_t* get_sgfpkt_state() {
 /*           Get the beginning addresses for the two data packets and */
 /*           convert them into integers. */
 
-	    dafgda_(handle, &b, &e, dtemp);
-	    if (failed_()) {
-		chkout_("SGFPKT", (ftnlen)6);
+	    dafgda_(__global_state, handle, &b, &e, dtemp);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SGFPKT", (ftnlen)6);
 		return 0;
 	    }
 	    begin1 = (integer) dtemp[0];
@@ -803,9 +804,9 @@ static sgfpkt_state_t* get_sgfpkt_state() {
 
 /*           Get the data for packet I. */
 
-	    dafgda_(handle, &b, &e, &values[voffst - 1]);
-	    if (failed_()) {
-		chkout_("SGFPKT", (ftnlen)6);
+	    dafgda_(__global_state, handle, &b, &e, &values[voffst - 1]);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SGFPKT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -815,7 +816,7 @@ static sgfpkt_state_t* get_sgfpkt_state() {
 	    ends[i__ - 1] = voffst - 1;
 	}
     }
-    chkout_("SGFPKT", (ftnlen)6);
+    chkout_(__global_state, "SGFPKT", (ftnlen)6);
     return 0;
 } /* sgfpkt_ */
 

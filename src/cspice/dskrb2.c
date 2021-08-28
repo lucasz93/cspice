@@ -8,8 +8,7 @@
 
 
 extern dskrb2_init_t __dskrb2_init;
-static dskrb2_state_t* get_dskrb2_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskrb2_state_t* get_dskrb2_state(cspice_t* state) {
 	if (!state->dskrb2)
 		state->dskrb2 = __cspice_allocate_module(sizeof(
 	dskrb2_state_t), &__dskrb2_init, sizeof(__dskrb2_init));
@@ -18,9 +17,9 @@ static dskrb2_state_t* get_dskrb2_state() {
 }
 
 /* $Procedure DSKRB2 ( DSK, determine range bounds for plate set ) */
-/* Subroutine */ int dskrb2_(integer *nv, doublereal *vrtces, integer *np, 
-	integer *plates, integer *corsys, doublereal *corpar, doublereal *
-	mncor3, doublereal *mxcor3)
+/* Subroutine */ int dskrb2_(cspice_t* __global_state, integer *nv, 
+	doublereal *vrtces, integer *np, integer *plates, integer *corsys, 
+	doublereal *corpar, doublereal *mncor3, doublereal *mxcor3)
 {
     /* Initialized data */
 
@@ -34,34 +33,34 @@ static dskrb2_state_t* get_dskrb2_state() {
     doublereal dist;
     doublereal f;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal pnear[3];
-    extern doublereal dpmin_(void);
-    extern doublereal dpmax_(void);
-    extern doublereal vdist_(doublereal *, doublereal *);
-    extern /* Subroutine */ int pltnp_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *, doublereal *);
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
-    extern logical failed_(void);
-    doublereal re;
-    extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
+    extern doublereal dpmin_(cspice_t*);
+    extern doublereal dpmax_(cspice_t*);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int pltnp_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vlcom3_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical failed_(cspice_t*);
+    doublereal re;
+    extern /* Subroutine */ int recgeo_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal center[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal alt;
     doublereal lat;
     doublereal lon;
 
 
     /* Module state */
-    dskrb2_state_t* __state = get_dskrb2_state();
+    dskrb2_state_t* __state = get_dskrb2_state(__global_state);
 /* $ Abstract */
 
 /*     Determine range bounds for a set of triangular plates to */
@@ -714,10 +713,10 @@ static dskrb2_state_t* get_dskrb2_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKRB2", (ftnlen)6);
+    chkin_(__global_state, "DSKRB2", (ftnlen)6);
     if (*corsys == 1) {
 
 /*        The coordinate system is latitudinal. */
@@ -729,18 +728,18 @@ static dskrb2_state_t* get_dskrb2_state() {
 	i__1 = *nv;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */
-	    d__1 = vnorm_(&vrtces[i__ * 3 - 3]);
+	    d__1 = vnorm_(__global_state, &vrtces[i__ * 3 - 3]);
 	    *mxcor3 = max(d__1,*mxcor3);
 	}
 
 /*        Compute the minimum radius of the plate set. */
 
-	*mncor3 = dpmax_();
+	*mncor3 = dpmax_(__global_state);
 	i__1 = *np;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    pltnp_(__state->origin, &vrtces[plates[i__ * 3 - 3] * 3 - 3], &
-		    vrtces[plates[i__ * 3 - 2] * 3 - 3], &vrtces[plates[i__ * 
-		    3 - 1] * 3 - 3], pnear, &dist);
+	    pltnp_(__global_state, __state->origin, &vrtces[plates[i__ * 3 - 
+		    3] * 3 - 3], &vrtces[plates[i__ * 3 - 2] * 3 - 3], &
+		    vrtces[plates[i__ * 3 - 1] * 3 - 3], pnear, &dist);
 	    *mncor3 = min(dist,*mncor3);
 	}
     } else if (*corsys == 3) {
@@ -748,8 +747,8 @@ static dskrb2_state_t* get_dskrb2_state() {
 /*        The coordinate system is rectangular. Compute the range */
 /*        of Z-coordinates of the plates. */
 
-	*mncor3 = dpmax_();
-	*mxcor3 = dpmin_();
+	*mncor3 = dpmax_(__global_state);
+	*mxcor3 = dpmin_(__global_state);
 	i__1 = *nv;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MIN */
@@ -766,16 +765,17 @@ static dskrb2_state_t* get_dskrb2_state() {
 
 	re = corpar[0];
 	f = corpar[1];
-	*mxcor3 = dpmin_();
-	*mncor3 = dpmax_();
+	*mxcor3 = dpmin_(__global_state);
+	*mncor3 = dpmax_(__global_state);
 
 /*        The maximum altitude is attained at a plate vertex. */
 
 	i__1 = *nv;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    recgeo_(&vrtces[i__ * 3 - 3], &re, &f, &lon, &lat, &alt);
-	    if (failed_()) {
-		chkout_("DSKRB2", (ftnlen)6);
+	    recgeo_(__global_state, &vrtces[i__ * 3 - 3], &re, &f, &lon, &lat,
+		     &alt);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DSKRB2", (ftnlen)6);
 		return 0;
 	    }
 	    *mxcor3 = max(*mxcor3,alt);
@@ -793,19 +793,20 @@ static dskrb2_state_t* get_dskrb2_state() {
 
 	i__1 = *np;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    vlcom3_(&__state->c_b4, &vrtces[plates[i__ * 3 - 3] * 3 - 3], &
-		    __state->c_b4, &vrtces[plates[i__ * 3 - 2] * 3 - 3], &
-		    __state->c_b4, &vrtces[plates[i__ * 3 - 1] * 3 - 3], 
-		    center);
+	    vlcom3_(__global_state, &__state->c_b4, &vrtces[plates[i__ * 3 - 
+		    3] * 3 - 3], &__state->c_b4, &vrtces[plates[i__ * 3 - 2] *
+		     3 - 3], &__state->c_b4, &vrtces[plates[i__ * 3 - 1] * 3 
+		    - 3], center);
 /* Computing MAX */
-	    d__1 = vdist_(&vrtces[plates[i__ * 3 - 3] * 3 - 3], center), d__2 
-		    = vdist_(&vrtces[plates[i__ * 3 - 2] * 3 - 3], center), 
-		    d__1 = max(d__1,d__2), d__2 = vdist_(&vrtces[plates[i__ * 
-		    3 - 1] * 3 - 3], center);
+	    d__1 = vdist_(__global_state, &vrtces[plates[i__ * 3 - 3] * 3 - 3]
+		    , center), d__2 = vdist_(__global_state, &vrtces[plates[
+		    i__ * 3 - 2] * 3 - 3], center), d__1 = max(d__1,d__2), 
+		    d__2 = vdist_(__global_state, &vrtces[plates[i__ * 3 - 1] 
+		    * 3 - 3], center);
 	    maxd = max(d__1,d__2);
-	    recgeo_(center, &re, &f, &lon, &lat, &alt);
-	    if (failed_()) {
-		chkout_("DSKRB2", (ftnlen)6);
+	    recgeo_(__global_state, center, &re, &f, &lon, &lat, &alt);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DSKRB2", (ftnlen)6);
 		return 0;
 	    }
 /* Computing MIN */
@@ -813,13 +814,14 @@ static dskrb2_state_t* get_dskrb2_state() {
 	    *mncor3 = min(d__1,d__2);
 	}
     } else {
-	setmsg_("Coordinate system # is not supported.", (ftnlen)37);
-	errint_("#", corsys, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("DSKRB2", (ftnlen)6);
+	setmsg_(__global_state, "Coordinate system # is not supported.", (
+		ftnlen)37);
+	errint_(__global_state, "#", corsys, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "DSKRB2", (ftnlen)6);
 	return 0;
     }
-    chkout_("DSKRB2", (ftnlen)6);
+    chkout_(__global_state, "DSKRB2", (ftnlen)6);
     return 0;
 } /* dskrb2_ */
 

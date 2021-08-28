@@ -8,14 +8,13 @@
 
 
 typedef int maxai_state_t;
-static maxai_state_t* get_maxai_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline maxai_state_t* get_maxai_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  MAXAI  ( Maximum element of array, integer ) */
-/* Subroutine */ int maxai_(integer *array, integer *ndim, integer *maxval, 
-	integer *loc)
+/* Subroutine */ int maxai_(cspice_t* __global_state, integer *array, integer 
+	*ndim, integer *maxval, integer *loc)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +24,7 @@ static maxai_state_t* get_maxai_state() {
 
 
     /* Module state */
-    maxai_state_t* __state = get_maxai_state();
+    maxai_state_t* __state = get_maxai_state(__global_state);
 /* $ Abstract */
 
 /*     Locate the maximum element of an integer array. */

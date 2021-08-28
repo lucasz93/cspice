@@ -8,20 +8,19 @@
 
 
 typedef int dvdot_state_t;
-static dvdot_state_t* get_dvdot_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dvdot_state_t* get_dvdot_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DVDOT  ( Derivative of Vector Dot Product, 3-D ) */
-doublereal dvdot_(doublereal *s1, doublereal *s2)
+doublereal dvdot_(cspice_t* __global_state, doublereal *s1, doublereal *s2)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    dvdot_state_t* __state = get_dvdot_state();
+    dvdot_state_t* __state = get_dvdot_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the derivative of the dot product of two double */

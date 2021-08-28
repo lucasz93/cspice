@@ -8,26 +8,25 @@
 
 
 typedef int dasrfr_state_t;
-static dasrfr_state_t* get_dasrfr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasrfr_state_t* get_dasrfr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DASRFR ( DAS, read file record ) */
-/* Subroutine */ int dasrfr_(integer *handle, char *idword, char *ifname, 
-	integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, 
-	ftnlen idword_len, ftnlen ifname_len)
+/* Subroutine */ int dasrfr_(cspice_t* __global_state, integer *handle, char *
+	idword, char *ifname, integer *nresvr, integer *nresvc, integer *
+	ncomr, integer *ncomc, ftnlen idword_len, ftnlen ifname_len)
 {
-    extern /* Subroutine */ int zzdasrfr_(integer *, char *, char *, integer *
-	    , integer *, integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzdasrfr_(cspice_t*, integer *, char *, char *
+	    , integer *, integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dasrfr_state_t* __state = get_dasrfr_state();
+    dasrfr_state_t* __state = get_dasrfr_state(__global_state);
 /* $ Abstract */
 
 /*     Return the contents of the file record of a specified DAS */
@@ -253,17 +252,17 @@ static dasrfr_state_t* get_dasrfr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASRFR", (ftnlen)6);
-    zzdasrfr_(handle, idword, ifname, nresvr, nresvc, ncomr, ncomc, 
-	    idword_len, ifname_len);
-    if (failed_()) {
-	chkout_("DASRFR", (ftnlen)6);
+    chkin_(__global_state, "DASRFR", (ftnlen)6);
+    zzdasrfr_(__global_state, handle, idword, ifname, nresvr, nresvc, ncomr, 
+	    ncomc, idword_len, ifname_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASRFR", (ftnlen)6);
 	return 0;
     }
-    chkout_("DASRFR", (ftnlen)6);
+    chkout_(__global_state, "DASRFR", (ftnlen)6);
     return 0;
 } /* dasrfr_ */
 

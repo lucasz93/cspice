@@ -6,12 +6,11 @@
 #include "__cspice_state.h"
 
 #ifdef KR_headers
-integer s_wsle(a) cilist *a;
+integer s_wsle(f2c,a) f2c_state_t *f2c; cilist *a;
 #else
-integer s_wsle(cilist *a)
+integer s_wsle(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 	if(n=c_le(a)) return(n);
 	f2c->f__reading=0;
@@ -26,9 +25,8 @@ integer s_wsle(cilist *a)
 	return(0);
 	}
 
-integer e_wsle(Void)
+integer e_wsle(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n = f__putbuf('\n');
 	f2c->f__recpos=0;
 #ifdef ALWAYS_FLUSH

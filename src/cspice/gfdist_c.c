@@ -1052,7 +1052,7 @@
    {
       return;
    }
-   chkin_c ( "gfdist_c" );
+   chkin_c ( naif_state, "gfdist_c" );
 
 
    /*

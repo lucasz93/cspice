@@ -8,8 +8,7 @@
 
 
 extern spkw18_init_t __spkw18_init;
-static spkw18_state_t* get_spkw18_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkw18_state_t* get_spkw18_state(cspice_t* state) {
 	if (!state->spkw18)
 		state->spkw18 = __cspice_allocate_module(sizeof(
 	spkw18_state_t), &__spkw18_init, sizeof(__spkw18_init));
@@ -18,10 +17,11 @@ static spkw18_state_t* get_spkw18_state() {
 }
 
 /* $Procedure      SPKW18 ( Write SPK segment, type 18 ) */
-/* Subroutine */ int spkw18_(integer *handle, integer *subtyp, integer *body, 
-	integer *center, char *frame, doublereal *first, doublereal *last, 
-	char *segid, integer *degree, integer *n, doublereal *packts, 
-	doublereal *epochs, ftnlen frame_len, ftnlen segid_len)
+/* Subroutine */ int spkw18_(cspice_t* __global_state, integer *handle, 
+	integer *subtyp, integer *body, integer *center, char *frame, 
+	doublereal *first, doublereal *last, char *segid, integer *degree, 
+	integer *n, doublereal *packts, doublereal *epochs, ftnlen frame_len, 
+	ftnlen segid_len)
 {
     /* System generated locals */
     integer i__1;
@@ -29,36 +29,38 @@ static spkw18_state_t* get_spkw18_state() {
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    doublereal dc[2];
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    doublereal dc[2];
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
     integer ic[6];
-    extern /* Subroutine */ int dafena_(void);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dafena_(cspice_t*);
+    extern logical failed_(cspice_t*);
     integer chrcod;
     integer refcod;
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern integer lastnb_(char *, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal maxtim;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer winsiz;
-    extern logical odd_(integer *);
+    extern logical odd_(cspice_t*, integer *);
 
 
     /* Module state */
-    spkw18_state_t* __state = get_spkw18_state();
+    spkw18_state_t* __state = get_spkw18_state(__global_state);
 /* $ Abstract */
 
 /*     Write a type 18 segment to an SPK file. */
@@ -401,10 +403,10 @@ static spkw18_state_t* get_spkw18_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKW18", (ftnlen)6);
+	chkin_(__global_state, "SPKW18", (ftnlen)6);
     }
 
 /*     Set the packet size, which is a function of the subtype. */
@@ -414,10 +416,11 @@ static spkw18_state_t* get_spkw18_state() {
     } else if (*subtyp == 1) {
 	packsz = 6;
     } else {
-	setmsg_("Unexpected SPK type 18 subtype requested: #", (ftnlen)43);
-	errint_("#", subtyp, (ftnlen)1);
-	sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	chkout_("SPKW18", (ftnlen)6);
+	setmsg_(__global_state, "Unexpected SPK type 18 subtype requested: #",
+		 (ftnlen)43);
+	errint_(__global_state, "#", subtyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     }
 
@@ -429,46 +432,47 @@ static spkw18_state_t* get_spkw18_state() {
     } else if (*subtyp == 1) {
 	winsiz = *degree + 1;
     } else {
-	setmsg_("This point should not be reached. Getting here may indicate"
-		" that the code needs to updated to handle new subtypes.", (
-		ftnlen)114);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("SPKW18", (ftnlen)6);
+	setmsg_(__global_state, "This point should not be reached. Getting h"
+		"ere may indicate that the code needs to updated to handle ne"
+		"w subtypes.", (ftnlen)114);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the NAIF integer code for the reference frame. */
 
-    namfrm_(frame, &refcod, frame_len);
+    namfrm_(__global_state, frame, &refcod, frame_len);
     if (refcod == 0) {
-	setmsg_("The reference frame # is not supported.", (ftnlen)39);
-	errch_("#", frame, (ftnlen)1, frame_len);
-	sigerr_("SPICE(INVALIDREFFRAME)", (ftnlen)22);
-	chkout_("SPKW18", (ftnlen)6);
+	setmsg_(__global_state, "The reference frame # is not supported.", (
+		ftnlen)39);
+	errch_(__global_state, "#", frame, (ftnlen)1, frame_len);
+	sigerr_(__global_state, "SPICE(INVALIDREFFRAME)", (ftnlen)22);
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     }
 
 /*     Check to see if the segment identifier is too long. */
 
-    if (lastnb_(segid, segid_len) > 40) {
-	setmsg_("Segment identifier contains more than 40 characters.", (
-		ftnlen)52);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("SPKW18", (ftnlen)6);
+    if (lastnb_(__global_state, segid, segid_len) > 40) {
+	setmsg_(__global_state, "Segment identifier contains more than 40 ch"
+		"aracters.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     }
 
 /*     Now check that all the characters in the segment identifier */
 /*     can be printed. */
 
-    i__1 = lastnb_(segid, segid_len);
+    i__1 = lastnb_(__global_state, segid, segid_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	chrcod = *(unsigned char *)&segid[i__ - 1];
 	if (chrcod < 32 || chrcod > 126) {
-	    setmsg_("The segment identifier contains nonprintable characters",
-		     (ftnlen)55);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("SPKW18", (ftnlen)6);
+	    setmsg_(__global_state, "The segment identifier contains nonprin"
+		    "table characters", (ftnlen)55);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "SPKW18", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -477,26 +481,26 @@ static spkw18_state_t* get_spkw18_state() {
 /*     in range. */
 
     if (*degree < 1 || *degree > 15) {
-	setmsg_("The interpolating polynomials have degree #; the valid degr"
-		"ee range is [1, #]", (ftnlen)77);
-	errint_("#", degree, (ftnlen)1);
-	errint_("#", &__state->c__15, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
-	chkout_("SPKW18", (ftnlen)6);
+	setmsg_(__global_state, "The interpolating polynomials have degree #"
+		"; the valid degree range is [1, #]", (ftnlen)77);
+	errint_(__global_state, "#", degree, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__15, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDEGREE)", (ftnlen)20);
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure that the window size is even.  If not, the input */
 /*     DEGREE is incompatible with the subtype. */
 
-    if (odd_(&winsiz)) {
-	setmsg_("The interpolating polynomials have degree #; for SPK type 1"
-		"8, the degree must be equivalent to 3 mod 4 for Hermite inte"
-		"rpolation and odd for for Lagrange interpolation.", (ftnlen)
-		168);
-	errint_("#", degree, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
-	chkout_("SPKW18", (ftnlen)6);
+    if (odd_(__global_state, &winsiz)) {
+	setmsg_(__global_state, "The interpolating polynomials have degree #"
+		"; for SPK type 18, the degree must be equivalent to 3 mod 4 "
+		"for Hermite interpolation and odd for for Lagrange interpola"
+		"tion.", (ftnlen)168);
+	errint_(__global_state, "#", degree, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDEGREE)", (ftnlen)20);
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     }
 
@@ -504,11 +508,11 @@ static spkw18_state_t* get_spkw18_state() {
 /*     polynomial whose degree is DEGREE. */
 
     if (*n < 2) {
-	setmsg_("At least 2 packets are required for SPK type 18.  Number of"
-		" packets supplied:  #", (ftnlen)80);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(TOOFEWSTATES)", (ftnlen)19);
-	chkout_("SPKW18", (ftnlen)6);
+	setmsg_(__global_state, "At least 2 packets are required for SPK typ"
+		"e 18.  Number of packets supplied:  #", (ftnlen)80);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TOOFEWSTATES)", (ftnlen)19);
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     }
 
@@ -516,12 +520,12 @@ static spkw18_state_t* get_spkw18_state() {
 /*     the begin time. */
 
     if (*first > *last) {
-	setmsg_("The segment start time: # is greater then the segment end t"
-		"ime: #", (ftnlen)65);
-	errdp_("#", first, (ftnlen)1);
-	errdp_("#", last, (ftnlen)1);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("SPKW18", (ftnlen)6);
+	setmsg_(__global_state, "The segment start time: # is greater then t"
+		"he segment end time: #", (ftnlen)65);
+	errdp_(__global_state, "#", first, (ftnlen)1);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     }
 
@@ -531,13 +535,13 @@ static spkw18_state_t* get_spkw18_state() {
     i__1 = *n;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	if (epochs[i__ - 1] <= maxtim) {
-	    setmsg_("EPOCH # having index # is not greater than its predeces"
-		    "sor #.", (ftnlen)61);
-	    errdp_("#", &epochs[i__ - 1], (ftnlen)1);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &epochs[i__ - 2], (ftnlen)1);
-	    sigerr_("SPICE(TIMESOUTOFORDER)", (ftnlen)22);
-	    chkout_("SPKW18", (ftnlen)6);
+	    setmsg_(__global_state, "EPOCH # having index # is not greater t"
+		    "han its predecessor #.", (ftnlen)61);
+	    errdp_(__global_state, "#", &epochs[i__ - 1], (ftnlen)1);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &epochs[i__ - 2], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(TIMESOUTOFORDER)", (ftnlen)22);
+	    chkout_(__global_state, "SPKW18", (ftnlen)6);
 	    return 0;
 	} else {
 	    maxtim = epochs[i__ - 1];
@@ -548,18 +552,20 @@ static spkw18_state_t* get_spkw18_state() {
 /*     defined by the segment descriptor. */
 
     if (epochs[0] > *first) {
-	setmsg_("Segment start time # precedes first epoch #.", (ftnlen)44);
-	errdp_("#", first, (ftnlen)1);
-	errdp_("#", epochs, (ftnlen)1);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("SPKW18", (ftnlen)6);
+	setmsg_(__global_state, "Segment start time # precedes first epoch #."
+		, (ftnlen)44);
+	errdp_(__global_state, "#", first, (ftnlen)1);
+	errdp_(__global_state, "#", epochs, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     } else if (epochs[*n - 1] < *last) {
-	setmsg_("Segment end time # follows last epoch #.", (ftnlen)40);
-	errdp_("#", last, (ftnlen)1);
-	errdp_("#", &epochs[*n - 1], (ftnlen)1);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("SPKW18", (ftnlen)6);
+	setmsg_(__global_state, "Segment end time # follows last epoch #.", (
+		ftnlen)40);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	errdp_(__global_state, "#", &epochs[*n - 1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     }
 
@@ -571,21 +577,21 @@ static spkw18_state_t* get_spkw18_state() {
 
     ic[0] = *body;
     ic[1] = *center;
-    namfrm_(frame, &ic[2], frame_len);
-    if (failed_()) {
-	chkout_("SPKW18", (ftnlen)6);
+    namfrm_(__global_state, frame, &ic[2], frame_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     }
     ic[3] = 18;
     dc[0] = *first;
     dc[1] = *last;
-    dafps_(&__state->c__2, &__state->c__6, dc, ic, descr);
+    dafps_(__global_state, &__state->c__2, &__state->c__6, dc, ic, descr);
 
 /*     Begin a new segment. */
 
-    dafbna_(handle, descr, segid, segid_len);
-    if (failed_()) {
-	chkout_("SPKW18", (ftnlen)6);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKW18", (ftnlen)6);
 	return 0;
     }
 
@@ -630,25 +636,25 @@ static spkw18_state_t* get_spkw18_state() {
 
 
     i__1 = *n * packsz;
-    dafada_(packts, &i__1);
-    dafada_(epochs, n);
+    dafada_(__global_state, packts, &i__1);
+    dafada_(__global_state, epochs, n);
     i__1 = (*n - 1) / 100;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&epochs[i__ * 100 - 1], &__state->c__1);
+	dafada_(__global_state, &epochs[i__ * 100 - 1], &__state->c__1);
     }
     d__1 = (doublereal) (*subtyp);
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
     d__1 = (doublereal) winsiz;
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
     d__1 = (doublereal) (*n);
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
 
 /*     As long as nothing went wrong, end the segment. */
 
-    if (! failed_()) {
-	dafena_();
+    if (! failed_(__global_state)) {
+	dafena_(__global_state);
     }
-    chkout_("SPKW18", (ftnlen)6);
+    chkout_(__global_state, "SPKW18", (ftnlen)6);
     return 0;
 } /* spkw18_ */
 

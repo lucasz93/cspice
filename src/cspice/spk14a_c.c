@@ -396,7 +396,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spk14a_c" );
+   chkin_c ( naif_state, "spk14a_c" );
 
 
    spk14a_ ( ( integer    * ) &handle,

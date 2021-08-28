@@ -8,37 +8,36 @@
 
 
 typedef int xposbl_state_t;
-static xposbl_state_t* get_xposbl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline xposbl_state_t* get_xposbl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      XPOSBL ( Transpose a matrix by blocks    ) */
-/* Subroutine */ int xposbl_(doublereal *bmat, integer *nrow, integer *ncol, 
-	integer *bsize, doublereal *btmat)
+/* Subroutine */ int xposbl_(cspice_t* __global_state, doublereal *bmat, 
+	integer *nrow, integer *ncol, integer *bsize, doublereal *btmat)
 {
     /* System generated locals */
     integer bmat_dim1, bmat_dim2, bmat_offset, btmat_dim1, btmat_dim2, 
 	    btmat_offset, i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal temp;
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer cb;
     integer rb;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    xposbl_state_t* __state = get_xposbl_state();
+    xposbl_state_t* __state = get_xposbl_state(__global_state);
 /* $ Abstract */
 
 /*     Transpose the square blocks within a matrix. */
@@ -326,45 +325,46 @@ static xposbl_state_t* get_xposbl_state() {
 
     /* Function Body */
     if (*bsize < 1) {
-	chkin_("XPOSBL", (ftnlen)6);
-	setmsg_("The block size is not positive. The block size is #.", (
-		ftnlen)52);
-	errint_("#", bsize, (ftnlen)1);
-	sigerr_("SPICE(BADBLOCKSIZE)", (ftnlen)19);
-	chkout_("XPOSBL", (ftnlen)6);
+	chkin_(__global_state, "XPOSBL", (ftnlen)6);
+	setmsg_(__global_state, "The block size is not positive. The block s"
+		"ize is #.", (ftnlen)52);
+	errint_(__global_state, "#", bsize, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADBLOCKSIZE)", (ftnlen)19);
+	chkout_(__global_state, "XPOSBL", (ftnlen)6);
 	return 0;
     }
     if (*nrow < 1) {
-	chkin_("XPOSBL", (ftnlen)6);
-	setmsg_("The number of rows in the matrix is not positive. The numbe"
-		"r of rows is #.", (ftnlen)74);
-	errint_("#", nrow, (ftnlen)1);
-	sigerr_("SPICE(BADROWCOUNT)", (ftnlen)18);
-	chkout_("XPOSBL", (ftnlen)6);
+	chkin_(__global_state, "XPOSBL", (ftnlen)6);
+	setmsg_(__global_state, "The number of rows in the matrix is not pos"
+		"itive. The number of rows is #.", (ftnlen)74);
+	errint_(__global_state, "#", nrow, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADROWCOUNT)", (ftnlen)18);
+	chkout_(__global_state, "XPOSBL", (ftnlen)6);
 	return 0;
     }
     if (*ncol < 1) {
-	chkin_("XPOSBL", (ftnlen)6);
-	setmsg_("The number of columns in the matrix is not positive. The nu"
-		"mber of columns is #.", (ftnlen)80);
-	errint_("#", ncol, (ftnlen)1);
-	sigerr_("SPICE(BADCOLUMNCOUNT)", (ftnlen)21);
-	chkout_("XPOSBL", (ftnlen)6);
+	chkin_(__global_state, "XPOSBL", (ftnlen)6);
+	setmsg_(__global_state, "The number of columns in the matrix is not "
+		"positive. The number of columns is #.", (ftnlen)80);
+	errint_(__global_state, "#", ncol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADCOLUMNCOUNT)", (ftnlen)21);
+	chkout_(__global_state, "XPOSBL", (ftnlen)6);
 	return 0;
     }
 
 /*     Is there a whole number of blocks in the matrix. */
 
     if (*ncol % *bsize != 0 || *nrow % *bsize != 0) {
-	chkin_("XPOSBL", (ftnlen)6);
-	setmsg_("The block size does not evenly divide both the number of ro"
-		"ws and the number of columns. The block size is #; the numbe"
-		"r of rows is #; the number of columns is #. ", (ftnlen)163);
-	errint_("#", bsize, (ftnlen)1);
-	errint_("#", nrow, (ftnlen)1);
-	errint_("#", ncol, (ftnlen)1);
-	sigerr_("SPICE(BLOCKSNOTEVEN)", (ftnlen)20);
-	chkout_("XPOSBL", (ftnlen)6);
+	chkin_(__global_state, "XPOSBL", (ftnlen)6);
+	setmsg_(__global_state, "The block size does not evenly divide both "
+		"the number of rows and the number of columns. The block size"
+		" is #; the number of rows is #; the number of columns is #. ",
+		 (ftnlen)163);
+	errint_(__global_state, "#", bsize, (ftnlen)1);
+	errint_(__global_state, "#", nrow, (ftnlen)1);
+	errint_(__global_state, "#", ncol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BLOCKSNOTEVEN)", (ftnlen)20);
+	chkout_(__global_state, "XPOSBL", (ftnlen)6);
 	return 0;
     }
 
@@ -387,27 +387,32 @@ static xposbl_state_t* get_xposbl_state() {
 		    if (i__ == j) {
 			btmat[(i__7 = rb + i__ + (cb + j) * btmat_dim1 - 
 				btmat_offset) < 1 * btmat_dim1 * btmat_dim2 &&
-				 0 <= i__7 ? i__7 : s_rnge("btmat", i__7, 
-				"xposbl_", (ftnlen)370)] = bmat[(i__8 = rb + 
-				i__ + (cb + j) * bmat_dim1 - bmat_offset) < 1 
-				* bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
-				s_rnge("bmat", i__8, "xposbl_", (ftnlen)370)];
+				 0 <= i__7 ? i__7 : s_rnge(&
+				__global_state->f2c, "btmat", i__7, "xposbl_",
+				 (ftnlen)370)] = bmat[(i__8 = rb + i__ + (cb 
+				+ j) * bmat_dim1 - bmat_offset) < 1 * 
+				bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
+				s_rnge(&__global_state->f2c, "bmat", i__8, 
+				"xposbl_", (ftnlen)370)];
 		    } else {
 			temp = bmat[(i__7 = rb + i__ + (cb + j) * bmat_dim1 - 
 				bmat_offset) < 1 * bmat_dim1 * bmat_dim2 && 0 
-				<= i__7 ? i__7 : s_rnge("bmat", i__7, "xposb"
-				"l_", (ftnlen)372)];
+				<= i__7 ? i__7 : s_rnge(&__global_state->f2c, 
+				"bmat", i__7, "xposbl_", (ftnlen)372)];
 			btmat[(i__7 = rb + i__ + (cb + j) * btmat_dim1 - 
 				btmat_offset) < 1 * btmat_dim1 * btmat_dim2 &&
-				 0 <= i__7 ? i__7 : s_rnge("btmat", i__7, 
-				"xposbl_", (ftnlen)373)] = bmat[(i__8 = rb + 
-				j + (cb + i__) * bmat_dim1 - bmat_offset) < 1 
-				* bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
-				s_rnge("bmat", i__8, "xposbl_", (ftnlen)373)];
+				 0 <= i__7 ? i__7 : s_rnge(&
+				__global_state->f2c, "btmat", i__7, "xposbl_",
+				 (ftnlen)373)] = bmat[(i__8 = rb + j + (cb + 
+				i__) * bmat_dim1 - bmat_offset) < 1 * 
+				bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
+				s_rnge(&__global_state->f2c, "bmat", i__8, 
+				"xposbl_", (ftnlen)373)];
 			btmat[(i__7 = rb + j + (cb + i__) * btmat_dim1 - 
 				btmat_offset) < 1 * btmat_dim1 * btmat_dim2 &&
-				 0 <= i__7 ? i__7 : s_rnge("btmat", i__7, 
-				"xposbl_", (ftnlen)374)] = temp;
+				 0 <= i__7 ? i__7 : s_rnge(&
+				__global_state->f2c, "btmat", i__7, "xposbl_",
+				 (ftnlen)374)] = temp;
 		    }
 		}
 	    }

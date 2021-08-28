@@ -886,7 +886,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dskw02_c" );
+   chkin_c ( naif_state, "dskw02_c" );
 
    /*
    Check the input frame string to make sure the pointer is non-null 

@@ -8,32 +8,31 @@
 
 
 typedef int rav2xf_state_t;
-static rav2xf_state_t* get_rav2xf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rav2xf_state_t* get_rav2xf_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RAV2XF ( Rotation and angular velocity to transform ) */
-/* Subroutine */ int rav2xf_(doublereal *rot, doublereal *av, doublereal *
-	xform)
+/* Subroutine */ int rav2xf_(cspice_t* __global_state, doublereal *rot, 
+	doublereal *av, doublereal *xform)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
     integer j;
     doublereal omegat[9]	/* was [3][3] */;
     doublereal drotdt[9]	/* was [3][3] */;
-    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    rav2xf_state_t* __state = get_rav2xf_state();
+    rav2xf_state_t* __state = get_rav2xf_state(__global_state);
 /* $ Abstract */
 
 /*     This routine determines from a state transformation matrix */
@@ -206,16 +205,19 @@ static rav2xf_state_t* get_rav2xf_state() {
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	for (j = 1; j <= 3; ++j) {
-	    xform[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(
-		    "xform", i__1, "rav2xf_", (ftnlen)192)] = rot[(i__2 = i__ 
-		    + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("rot", i__2,
-		     "rav2xf_", (ftnlen)192)];
+	    xform[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "xform", i__1, "rav2xf_", (ftnlen)
+		    192)] = rot[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "rot", i__2, "rav2xf_"
+		    , (ftnlen)192)];
 	    xform[(i__1 = i__ + 3 + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? i__1 
-		    : s_rnge("xform", i__1, "rav2xf_", (ftnlen)193)] = rot[(
-		    i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-		    "rot", i__2, "rav2xf_", (ftnlen)193)];
+		    : s_rnge(&__global_state->f2c, "xform", i__1, "rav2xf_", (
+		    ftnlen)193)] = rot[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "rot", i__2, 
+		    "rav2xf_", (ftnlen)193)];
 	    xform[(i__1 = i__ + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-		    s_rnge("xform", i__1, "rav2xf_", (ftnlen)194)] = 0.;
+		    s_rnge(&__global_state->f2c, "xform", i__1, "rav2xf_", (
+		    ftnlen)194)] = 0.;
 	}
     }
 
@@ -265,13 +267,14 @@ static rav2xf_state_t* get_rav2xf_state() {
     omegat[6] = -av[1];
     omegat[7] = av[0];
     omegat[8] = 0.;
-    mxm_(rot, omegat, drotdt);
+    mxm_(__global_state, rot, omegat, drotdt);
     for (i__ = 1; i__ <= 3; ++i__) {
 	for (j = 1; j <= 3; ++j) {
 	    xform[(i__1 = i__ + 3 + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-		    s_rnge("xform", i__1, "rav2xf_", (ftnlen)252)] = drotdt[(
-		    i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-		    "drotdt", i__2, "rav2xf_", (ftnlen)252)];
+		    s_rnge(&__global_state->f2c, "xform", i__1, "rav2xf_", (
+		    ftnlen)252)] = drotdt[(i__2 = i__ + j * 3 - 4) < 9 && 0 <=
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "drotdt", 
+		    i__2, "rav2xf_", (ftnlen)252)];
 	}
     }
     return 0;

@@ -8,8 +8,7 @@
 
 
 extern inttxt_init_t __inttxt_init;
-static inttxt_state_t* get_inttxt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline inttxt_state_t* get_inttxt_state(cspice_t* state) {
 	if (!state->inttxt)
 		state->inttxt = __cspice_allocate_module(sizeof(
 	inttxt_state_t), &__inttxt_init, sizeof(__inttxt_init));
@@ -18,7 +17,8 @@ static inttxt_state_t* get_inttxt_state() {
 }
 
 /* $Procedure INTTXT ( Convert an integer to text ) */
-/* Subroutine */ int inttxt_(integer *n, char *string, ftnlen string_len)
+/* Subroutine */ int inttxt_(cspice_t* __global_state, integer *n, char *
+	string, ftnlen string_len)
 {
     /* Initialized data */
 
@@ -27,23 +27,23 @@ static inttxt_state_t* get_inttxt_state() {
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     char suff[9];
     integer x;
     integer y;
     integer space;
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
     integer pad;
     integer num;
 
 
     /* Module state */
-    inttxt_state_t* __state = get_inttxt_state();
+    inttxt_state_t* __state = get_inttxt_state(__global_state);
 /* $ Abstract */
 
 /*     Convert an integer to an equivalent written phrase. */
@@ -206,7 +206,7 @@ static inttxt_state_t* get_inttxt_state() {
 /*     Zero is easy. */
 
     if (*n == 0) {
-	s_copy(string, "ZERO", string_len, (ftnlen)4);
+	s_copy(&__global_state->f2c, string, "ZERO", string_len, (ftnlen)4);
 	return 0;
     }
 
@@ -216,10 +216,11 @@ static inttxt_state_t* get_inttxt_state() {
 
     if (*n < 0) {
 	num = -(*n);
-	s_copy(string, "NEGATIVE", string_len, (ftnlen)8);
+	s_copy(&__global_state->f2c, string, "NEGATIVE", string_len, (ftnlen)
+		8);
     } else {
 	num = *n;
-	s_copy(string, " ", string_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, string, " ", string_len, (ftnlen)1);
     }
 
 /*     Construct the number portion, from left to right: billions, */
@@ -235,19 +236,22 @@ static inttxt_state_t* get_inttxt_state() {
 
 	if (num >= 1000000000) {
 	    x = num / 1000000000;
-	    s_copy(suff, "BILLION", (ftnlen)9, (ftnlen)7);
+	    s_copy(&__global_state->f2c, suff, "BILLION", (ftnlen)9, (ftnlen)
+		    7);
 	    num -= x * 1000000000;
 	} else if (num >= 1000000) {
 	    x = num / 1000000;
-	    s_copy(suff, "MILLION", (ftnlen)9, (ftnlen)7);
+	    s_copy(&__global_state->f2c, suff, "MILLION", (ftnlen)9, (ftnlen)
+		    7);
 	    num -= x * 1000000;
 	} else if (num >= 1000) {
 	    x = num / 1000;
-	    s_copy(suff, "THOUSAND", (ftnlen)9, (ftnlen)8);
+	    s_copy(&__global_state->f2c, suff, "THOUSAND", (ftnlen)9, (ftnlen)
+		    8);
 	    num -= x * 1000;
 	} else {
 	    x = num;
-	    s_copy(suff, " ", (ftnlen)9, (ftnlen)1);
+	    s_copy(&__global_state->f2c, suff, " ", (ftnlen)9, (ftnlen)1);
 	    num = 0;
 	}
 
@@ -255,7 +259,8 @@ static inttxt_state_t* get_inttxt_state() {
 
 	space = 1;
 	while(x > 0) {
-	    if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
+	    if (s_cmp(&__global_state->f2c, string, " ", string_len, (ftnlen)
+		    1) == 0) {
 		pad = 0;
 	    } else {
 		pad = 1;
@@ -263,37 +268,42 @@ static inttxt_state_t* get_inttxt_state() {
 	    if (x >= 100) {
 		y = x / 100;
 		x -= y * 100;
-		suffix_(__state->number + ((i__1 = y - 1) < 19 && 0 <= i__1 ? 
-			i__1 : s_rnge("number", i__1, "inttxt_", (ftnlen)290))
-			 * 9, &pad, string, (ftnlen)9, string_len);
-		suffix_("HUNDRED", &__state->c__1, string, (ftnlen)7, 
-			string_len);
+		suffix_(__global_state, __state->number + ((i__1 = y - 1) < 
+			19 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"number", i__1, "inttxt_", (ftnlen)290)) * 9, &pad, 
+			string, (ftnlen)9, string_len);
+		suffix_(__global_state, "HUNDRED", &__state->c__1, string, (
+			ftnlen)7, string_len);
 	    } else if (x >= 20) {
 		y = x / 10;
 		x -= y * 10;
-		suffix_(__state->tens + ((i__1 = y - 1) < 9 && 0 <= i__1 ? 
-			i__1 : s_rnge("tens", i__1, "inttxt_", (ftnlen)298)) *
-			 9, &pad, string, (ftnlen)9, string_len);
+		suffix_(__global_state, __state->tens + ((i__1 = y - 1) < 9 &&
+			 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"tens", i__1, "inttxt_", (ftnlen)298)) * 9, &pad, 
+			string, (ftnlen)9, string_len);
 		if (x != 0) {
-		    suffix_("-", &__state->c__0, string, (ftnlen)1, 
-			    string_len);
+		    suffix_(__global_state, "-", &__state->c__0, string, (
+			    ftnlen)1, string_len);
 		    space = 0;
 		}
 	    } else {
 		y = x;
 		x = 0;
-		if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
+		if (s_cmp(&__global_state->f2c, string, " ", string_len, (
+			ftnlen)1) == 0) {
 		    space = 0;
 		}
-		suffix_(__state->number + ((i__1 = y - 1) < 19 && 0 <= i__1 ? 
-			i__1 : s_rnge("number", i__1, "inttxt_", (ftnlen)314))
-			 * 9, &space, string, (ftnlen)9, string_len);
+		suffix_(__global_state, __state->number + ((i__1 = y - 1) < 
+			19 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"number", i__1, "inttxt_", (ftnlen)314)) * 9, &space, 
+			string, (ftnlen)9, string_len);
 	    }
 	}
 
 /*        ... then add the units. Repeat as necessary. */
 
-	suffix_(suff, &__state->c__1, string, (ftnlen)9, string_len);
+	suffix_(__global_state, suff, &__state->c__1, string, (ftnlen)9, 
+		string_len);
     }
     return 0;
 } /* inttxt_ */

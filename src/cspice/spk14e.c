@@ -8,22 +8,21 @@
 
 
 typedef int spk14e_state_t;
-static spk14e_state_t* get_spk14e_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spk14e_state_t* get_spk14e_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPK14E ( SPK type 14: End a segment. ) */
-/* Subroutine */ int spk14e_(integer *handle)
+/* Subroutine */ int spk14e_(cspice_t* __global_state, integer *handle)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sgwes_(integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgwes_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spk14e_state_t* __state = get_spk14e_state();
+    spk14e_state_t* __state = get_spk14e_state(__global_state);
 /* $ Abstract */
 
 /*     End the type 14 SPK segment currently being written to the SPK */
@@ -328,20 +327,20 @@ static spk14e_state_t* get_spk14e_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPK14E", (ftnlen)6);
+	chkin_(__global_state, "SPK14E", (ftnlen)6);
     }
 
 /*     This is simple, just call the routine which ends a generic */
 /*     segment. */
 
-    sgwes_(handle);
+    sgwes_(__global_state, handle);
 
 /*     No need to check FAILED() here, since all we do is check out. */
 /*     Leave it up to the caller. */
-    chkout_("SPK14E", (ftnlen)6);
+    chkout_(__global_state, "SPK14E", (ftnlen)6);
     return 0;
 } /* spk14e_ */
 

@@ -8,8 +8,7 @@
 
 
 extern etcal_init_t __etcal_init;
-static etcal_state_t* get_etcal_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline etcal_state_t* get_etcal_state(cspice_t* state) {
 	if (!state->etcal)
 		state->etcal = __cspice_allocate_module(sizeof(etcal_state_t),
 	 &__etcal_init, sizeof(__etcal_init));
@@ -18,7 +17,8 @@ static etcal_state_t* get_etcal_state() {
 }
 
 /* $Procedure            ETCAL ( Convert ET to Calendar format ) */
-/* Subroutine */ int etcal_(doublereal *et, char *string, ftnlen string_len)
+/* Subroutine */ int etcal_(cspice_t* __global_state, doublereal *et, char *
+	string, ftnlen string_len)
 {
     /* Initialized data */
 
@@ -29,25 +29,27 @@ static etcal_state_t* get_etcal_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double d_int(doublereal *);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double d_int(f2c_state_t*, doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern integer intmin_(void);
-    extern integer intmax_(void);
-    extern /* Subroutine */ int dpstrf_(doublereal *, integer *, char *, char 
-	    *, ftnlen, ftnlen);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern integer lstlti_(integer *, integer *, integer *);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    extern doublereal spd_(void);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer intmin_(cspice_t*);
+    extern integer intmax_(cspice_t*);
+    extern /* Subroutine */ int dpstrf_(cspice_t*, doublereal *, integer *, 
+	    char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern integer lstlti_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
+    extern doublereal spd_(cspice_t*);
 
     /* Module state */
-    etcal_state_t* __state = get_etcal_state();
+    etcal_state_t* __state = get_etcal_state(__global_state);
 /* $ Abstract */
 
 
@@ -368,20 +370,21 @@ static etcal_state_t* get_etcal_state() {
 
     if (__state->first) {
 	__state->first = FALSE_;
-	__state->halfd = spd_() / 2.;
-	__state->secspd = spd_();
+	__state->halfd = spd_(__global_state) / 2.;
+	__state->secspd = spd_(__global_state);
 	__state->dn2000 = 365 * (__state->c__2000 - 1) + (__state->c__2000 - 
 		1) / 4 - (__state->c__2000 - 1) / 100 + (__state->c__2000 - 1)
 		 / 400 + (__state->dpjan0[(i__1 = __state->c__1 - 1) < 12 && 
-		0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "etcal_", (ftnlen)
-		571)] + __state->extra[(i__2 = __state->c__1 - 1) < 12 && 0 <=
-		 i__2 ? i__2 : s_rnge("extra", i__2, "etcal_", (ftnlen)571)] *
-		 ((__state->c__2000 / 4 << 2) / __state->c__2000 - 
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "dpjan0", 
+		i__1, "etcal_", (ftnlen)571)] + __state->extra[(i__2 = 
+		__state->c__1 - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "extra", i__2, "etcal_", (ftnlen)571)] * 
+		((__state->c__2000 / 4 << 2) / __state->c__2000 - 
 		__state->c__2000 / 100 * 100 / __state->c__2000 + 
 		__state->c__2000 / 400 * 400 / __state->c__2000) + 
 		__state->c__1) - 1;
-	__state->dmxint = (doublereal) intmax_();
-	__state->dmnint = (doublereal) intmin_();
+	__state->dmxint = (doublereal) intmax_(__global_state);
+	__state->dmnint = (doublereal) intmin_(__global_state);
     }
 
 /*     Now we "in-line" compute the following call. */
@@ -400,7 +403,7 @@ static etcal_state_t* get_etcal_state() {
     __state->mydnom = __state->secspd;
     __state->mynum = *et + __state->halfd;
     d__1 = __state->mynum / __state->mydnom;
-    __state->q = d_int(&d__1);
+    __state->q = d_int(&__global_state->f2c, &d__1);
     __state->remd = __state->mynum - __state->q * __state->mydnom;
     if (__state->remd < 0.) {
 	__state->q += -1.;
@@ -414,14 +417,17 @@ static etcal_state_t* get_etcal_state() {
 
     if (__state->dp2000 + __state->dn2000 < __state->dmnint + 1) {
 	__state->dp2000 = __state->dmnint - __state->dn2000 + 1;
-	s_copy(__state->messge, "Epoch before ", (ftnlen)16, (ftnlen)13);
+	s_copy(&__global_state->f2c, __state->messge, "Epoch before ", (
+		ftnlen)16, (ftnlen)13);
 	__state->secs = 0.;
     } else if (__state->dp2000 + __state->dn2000 > __state->dmxint - 1) {
 	__state->dp2000 = __state->dmxint - __state->dn2000 - 1;
-	s_copy(__state->messge, "Epoch after ", (ftnlen)16, (ftnlen)12);
+	s_copy(&__global_state->f2c, __state->messge, "Epoch after ", (ftnlen)
+		16, (ftnlen)12);
 	__state->secs = 0.;
     } else {
-	s_copy(__state->messge, " ", (ftnlen)16, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->messge, " ", (ftnlen)16, (
+		ftnlen)1);
     }
 
 /*     Compute the number of days since 1 .A.D. Jan 1, 00:00:00. */
@@ -489,17 +495,17 @@ static etcal_state_t* get_etcal_state() {
 
     if ((__state->year / 4 << 2) / __state->year - __state->year / 100 * 100 /
 	     __state->year + __state->year / 400 * 400 / __state->year == 0) {
-	__state->month = lstlti_(&__state->dofyr, &__state->c__12, 
-		__state->dpjan0);
+	__state->month = lstlti_(__global_state, &__state->dofyr, &
+		__state->c__12, __state->dpjan0);
 	__state->day = __state->dofyr - __state->dpjan0[(i__1 = 
-		__state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpjan0"
-		, i__1, "etcal_", (ftnlen)698)];
+		__state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "dpjan0", i__1, "etcal_", (ftnlen)698)];
     } else {
-	__state->month = lstlti_(&__state->dofyr, &__state->c__12, 
-		__state->dpbegl);
+	__state->month = lstlti_(__global_state, &__state->dofyr, &
+		__state->c__12, __state->dpbegl);
 	__state->day = __state->dofyr - __state->dpbegl[(i__1 = 
-		__state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpbegl"
-		, i__1, "etcal_", (ftnlen)701)];
+		__state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "dpbegl", i__1, "etcal_", (ftnlen)701)];
     }
 
 /*     If we had to adjust the year to make it positive, we now */
@@ -508,7 +514,8 @@ static etcal_state_t* get_etcal_state() {
     if (__state->adjust) {
 	__state->year += __state->offset * 400;
 	__state->year = -__state->year + 1;
-	s_copy(__state->era, " B.C. ", (ftnlen)16, (ftnlen)6);
+	s_copy(&__global_state->f2c, __state->era, " B.C. ", (ftnlen)16, (
+		ftnlen)6);
     } else {
 
 /*        If the year is less than 1000, we can't just write it */
@@ -516,9 +523,11 @@ static etcal_state_t* get_etcal_state() {
 /*        the dates look very confusing. */
 
 	if (__state->year < 1000) {
-	    s_copy(__state->era, " A.D. ", (ftnlen)16, (ftnlen)6);
+	    s_copy(&__global_state->f2c, __state->era, " A.D. ", (ftnlen)16, (
+		    ftnlen)6);
 	} else {
-	    s_copy(__state->era, " ", (ftnlen)16, (ftnlen)1);
+	    s_copy(&__global_state->f2c, __state->era, " ", (ftnlen)16, (
+		    ftnlen)1);
 	}
     }
 
@@ -546,12 +555,13 @@ static etcal_state_t* get_etcal_state() {
 
 /*     Finally, get the components of our date string. */
 
-    intstr_(&__state->year, __state->ystr, (ftnlen)16);
+    intstr_(__global_state, &__state->year, __state->ystr, (ftnlen)16);
     if (__state->day >= 10) {
-	intstr_(&__state->day, __state->dstr, (ftnlen)16);
+	intstr_(__global_state, &__state->day, __state->dstr, (ftnlen)16);
     } else {
-	s_copy(__state->dstr, "0", (ftnlen)16, (ftnlen)1);
-	intstr_(&__state->day, __state->dstr + 1, (ftnlen)15);
+	s_copy(&__global_state->f2c, __state->dstr, "0", (ftnlen)16, (ftnlen)
+		1);
+	intstr_(__global_state, &__state->day, __state->dstr + 1, (ftnlen)15);
     }
 
 /*     We want to zero pad the hours minutes and seconds. */
@@ -566,20 +576,20 @@ static etcal_state_t* get_etcal_state() {
     } else {
 	__state->bm = 1;
     }
-    s_copy(__state->mstr, "00", (ftnlen)16, (ftnlen)2);
-    s_copy(__state->hstr, "00", (ftnlen)16, (ftnlen)2);
-    s_copy(__state->sstr, " ", (ftnlen)16, (ftnlen)1);
+    s_copy(&__global_state->f2c, __state->mstr, "00", (ftnlen)16, (ftnlen)2);
+    s_copy(&__global_state->f2c, __state->hstr, "00", (ftnlen)16, (ftnlen)2);
+    s_copy(&__global_state->f2c, __state->sstr, " ", (ftnlen)16, (ftnlen)1);
 
 /*     Now construct the string components for hours, minutes and */
 /*     seconds. */
 
     __state->secs = (integer) (__state->secs * 1e3) / 1e3;
-    intstr_(&__state->hours, __state->hstr + (__state->bh - 1), 16 - (
-	    __state->bh - 1));
-    intstr_(&__state->mins, __state->mstr + (__state->bm - 1), 16 - (
-	    __state->bm - 1));
-    dpstrf_(&__state->secs, &__state->c__6, "F", __state->sstr, (ftnlen)1, (
-	    ftnlen)16);
+    intstr_(__global_state, &__state->hours, __state->hstr + (__state->bh - 1)
+	    , 16 - (__state->bh - 1));
+    intstr_(__global_state, &__state->mins, __state->mstr + (__state->bm - 1),
+	     16 - (__state->bm - 1));
+    dpstrf_(__global_state, &__state->secs, &__state->c__6, "F", 
+	    __state->sstr, (ftnlen)1, (ftnlen)16);
 
 /*     The form of the output for SSTR has a leading blank followed by */
 /*     the first significant digit.  If a decimal point is in the */
@@ -593,7 +603,8 @@ static etcal_state_t* get_etcal_state() {
 /*     We don't want any leading spaces in SSTR, (HSTR and MSTR don't */
 /*     have leading spaces by construction. */
 
-    ljust_(__state->sstr, __state->sstr, (ftnlen)16, (ftnlen)16);
+    ljust_(__global_state, __state->sstr, __state->sstr, (ftnlen)16, (ftnlen)
+	    16);
 
 /*     Now form the date string, squeeze out extra spaces and */
 /*     left justify the whole thing. */
@@ -603,8 +614,8 @@ static etcal_state_t* get_etcal_state() {
     i__3[1] = 16, a__1[1] = __state->ystr;
     i__3[2] = 16, a__1[2] = __state->era;
     i__3[3] = 3, a__1[3] = __state->months + ((i__1 = __state->month - 1) < 
-	    12 && 0 <= i__1 ? i__1 : s_rnge("months", i__1, "etcal_", (ftnlen)
-	    810)) * 3;
+	    12 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "months", 
+	    i__1, "etcal_", (ftnlen)810)) * 3;
     i__3[4] = 1, a__1[4] = " ";
     i__3[5] = 3, a__1[5] = __state->dstr;
     i__3[6] = 1, a__1[6] = " ";
@@ -613,11 +624,14 @@ static etcal_state_t* get_etcal_state() {
     i__3[9] = 2, a__1[9] = __state->mstr;
     i__3[10] = 1, a__1[10] = ":";
     i__3[11] = 6, a__1[11] = __state->sstr;
-    s_cat(__state->date, a__1, i__3, &__state->c__12, (ftnlen)180);
-    cmprss_(" ", &__state->c__1, __state->date, __state->date, (ftnlen)1, (
-	    ftnlen)180, (ftnlen)180);
-    ljust_(__state->date, __state->date, (ftnlen)180, (ftnlen)180);
-    s_copy(string, __state->date, string_len, (ftnlen)180);
+    s_cat(&__global_state->f2c, __state->date, a__1, i__3, &__state->c__12, (
+	    ftnlen)180);
+    cmprss_(__global_state, " ", &__state->c__1, __state->date, __state->date,
+	     (ftnlen)1, (ftnlen)180, (ftnlen)180);
+    ljust_(__global_state, __state->date, __state->date, (ftnlen)180, (ftnlen)
+	    180);
+    s_copy(&__global_state->f2c, string, __state->date, string_len, (ftnlen)
+	    180);
     return 0;
 } /* etcal_ */
 

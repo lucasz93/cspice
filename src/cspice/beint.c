@@ -8,30 +8,29 @@
 
 
 typedef int beint_state_t;
-static beint_state_t* get_beint_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline beint_state_t* get_beint_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            BEINT  ( Be an Integer? ) */
-logical beint_(char *string, ftnlen string_len)
+logical beint_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
     integer l;
-    extern logical beuns_(char *, ftnlen);
-    extern integer frstnb_(char *, ftnlen);
+    extern logical beuns_(cspice_t*, char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
     char letter[1];
 
 
     /* Module state */
-    beint_state_t* __state = get_beint_state();
+    beint_state_t* __state = get_beint_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether a string represents an integer. */
@@ -191,8 +190,8 @@ logical beint_(char *string, ftnlen string_len)
 /*     Find the first non-blank character and the length of the */
 /*     string. */
 
-    l = i_len(string, string_len);
-    i__ = frstnb_(string, string_len);
+    l = i_len(&__global_state->f2c, string, string_len);
+    i__ = frstnb_(__global_state, string, string_len);
 
 /*     If there isn't a non-blank character, this isn't an */
 /*     integer. */
@@ -214,7 +213,8 @@ logical beint_(char *string, ftnlen string_len)
 		'-') {
 	    ++i__;
 	    if (*(unsigned char *)&string[i__ - 1] != ' ') {
-		ret_val = beuns_(string + (i__ - 1), string_len - (i__ - 1));
+		ret_val = beuns_(__global_state, string + (i__ - 1), 
+			string_len - (i__ - 1));
 	    } else {
 		ret_val = FALSE_;
 	    }
@@ -224,7 +224,8 @@ logical beint_(char *string, ftnlen string_len)
 /*           the string must be an unsigned integer if its going */
 /*           to be an integer. */
 
-	    ret_val = beuns_(string + (i__ - 1), string_len - (i__ - 1));
+	    ret_val = beuns_(__global_state, string + (i__ - 1), string_len - 
+		    (i__ - 1));
 	}
     } else {
 
@@ -232,7 +233,7 @@ logical beint_(char *string, ftnlen string_len)
 /*        it must be an unsigned integer, for the string to */
 /*        represent an integer. */
 
-	ret_val = beuns_(letter, (ftnlen)1);
+	ret_val = beuns_(__global_state, letter, (ftnlen)1);
     }
     return ret_val;
 } /* beint_ */

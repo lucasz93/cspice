@@ -8,30 +8,29 @@
 
 
 typedef int datanh_state_t;
-static datanh_state_t* get_datanh_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline datanh_state_t* get_datanh_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  DATANH  ( Double precision arc hyperbolic tangent ) */
-doublereal datanh_(doublereal *x)
+doublereal datanh_(cspice_t* __global_state, doublereal *x)
 {
     /* System generated locals */
     doublereal ret_val;
 
     /* Builtin functions */
-    double log(doublereal);
+    double log(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    datanh_state_t* __state = get_datanh_state();
+    datanh_state_t* __state = get_datanh_state(__global_state);
 /* $ Abstract */
 
 /*      Return the inverse hyperbolic tangent of a double */
@@ -166,24 +165,24 @@ doublereal datanh_(doublereal *x)
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0.;
 	return ret_val;
     } else {
-	chkin_("DATANH", (ftnlen)6);
+	chkin_(__global_state, "DATANH", (ftnlen)6);
 	ret_val = 0.;
     }
 
 /*     Check that -1 < X < +1. */
 
     if (abs(*x) >= 1.) {
-	setmsg_("DATANH: Argument out of range.", (ftnlen)30);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("DATANH", (ftnlen)6);
+	setmsg_(__global_state, "DATANH: Argument out of range.", (ftnlen)30);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "DATANH", (ftnlen)6);
 	return ret_val;
     }
-    ret_val = log((*x + 1.) / (1. - *x)) * .5;
-    chkout_("DATANH", (ftnlen)6);
+    ret_val = log(&__global_state->f2c, (*x + 1.) / (1. - *x)) * .5;
+    chkout_(__global_state, "DATANH", (ftnlen)6);
     return ret_val;
 } /* datanh_ */
 

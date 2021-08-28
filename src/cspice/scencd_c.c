@@ -449,7 +449,7 @@
    /*
    Participate in error handling
    */
-   chkin_c ( "scencd_c");
+   chkin_c ( naif_state, "scencd_c");
 
    
    /*

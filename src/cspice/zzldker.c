@@ -8,8 +8,7 @@
 
 
 extern zzldker_init_t __zzldker_init;
-static zzldker_state_t* get_zzldker_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzldker_state_t* get_zzldker_state(cspice_t* state) {
 	if (!state->zzldker)
 		state->zzldker = __cspice_allocate_module(sizeof(
 	zzldker_state_t), &__zzldker_init, sizeof(__zzldker_init));
@@ -18,43 +17,47 @@ static zzldker_state_t* get_zzldker_state() {
 }
 
 /* $Procedure ZZLDKER ( Load a kernel ) */
-/* Subroutine */ int zzldker_(char *file, char *nofile, char *filtyp, integer 
-	*handle, ftnlen file_len, ftnlen nofile_len, ftnlen filtyp_len)
+/* Subroutine */ int zzldker_(cspice_t* __global_state, char *file, char *
+	nofile, char *filtyp, integer *handle, ftnlen file_len, ftnlen 
+	nofile_len, ftnlen filtyp_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char arch[32];
-    extern /* Subroutine */ int zzbodkik_(void);
-    extern /* Subroutine */ int zzdsklsf_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int eklef_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cklpf_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbodkik_(cspice_t*);
+    extern /* Subroutine */ int zzdsklsf_(cspice_t*, char *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int eklef_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cklpf_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char versn[32];
-    extern logical failed_(void);
-    extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int pcklof_(char *, integer *, ftnlen);
-    char kerlin[132];
-    extern /* Subroutine */ int spklef_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ldpool_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    char termin[5];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical exists_(char *, ftnlen);
-    extern logical return_(void);
-    char mytype[32];
-    extern /* Subroutine */ int tkvrsn_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzascii_(char *, char *, logical *, char *, 
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int getfat_(cspice_t*, char *, char *, char *, 
 	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int pcklof_(cspice_t*, char *, integer *, ftnlen);
+    char kerlin[132];
+    extern /* Subroutine */ int spklef_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ldpool_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    char termin[5];
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical exists_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    char mytype[32];
+    extern /* Subroutine */ int tkvrsn_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzascii_(cspice_t*, char *, char *, logical *,
+	     char *, ftnlen, ftnlen, ftnlen);
 
 
     /* Module state */
-    zzldker_state_t* __state = get_zzldker_state();
+    zzldker_state_t* __state = get_zzldker_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -294,19 +297,21 @@ static zzldker_state_t* get_zzldker_state() {
 
 /*     Local Variables. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZLDKER", (ftnlen)7);
-    if (! exists_(file, file_len)) {
-	setmsg_(nofile, nofile_len);
-	errch_("#", file, (ftnlen)1, file_len);
-	errch_("#", "could not be located.", (ftnlen)1, (ftnlen)21);
-	sigerr_("SPICE(NOSUCHFILE)", (ftnlen)17);
-	chkout_("ZZLDKER", (ftnlen)7);
+    chkin_(__global_state, "ZZLDKER", (ftnlen)7);
+    if (! exists_(__global_state, file, file_len)) {
+	setmsg_(__global_state, nofile, nofile_len);
+	errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	errch_(__global_state, "#", "could not be located.", (ftnlen)1, (
+		ftnlen)21);
+	sigerr_(__global_state, "SPICE(NOSUCHFILE)", (ftnlen)17);
+	chkout_(__global_state, "ZZLDKER", (ftnlen)7);
 	return 0;
     }
-    getfat_(file, arch, mytype, file_len, (ftnlen)32, (ftnlen)32);
+    getfat_(__global_state, file, arch, mytype, file_len, (ftnlen)32, (ftnlen)
+	    32);
 
 /*     Possible values for the architecture are: */
 
@@ -322,22 +327,24 @@ static zzldker_state_t* get_zzldker_state() {
 
 /*     Some of these are obviously losers. */
 
-    if (s_cmp(arch, "XFR", (ftnlen)32, (ftnlen)3) == 0 || s_cmp(arch, "DEC", (
-	    ftnlen)32, (ftnlen)3) == 0) {
-	setmsg_(nofile, nofile_len);
-	errch_("#", file, (ftnlen)1, file_len);
-	errch_("#", "is a transfer format file. Transfer format files cannot"
-		" be loaded. ", (ftnlen)1, (ftnlen)67);
-	sigerr_("SPICE(TRANSFERFILE)", (ftnlen)19);
-	chkout_("ZZLDKER", (ftnlen)7);
+    if (s_cmp(&__global_state->f2c, arch, "XFR", (ftnlen)32, (ftnlen)3) == 0 
+	    || s_cmp(&__global_state->f2c, arch, "DEC", (ftnlen)32, (ftnlen)3)
+	     == 0) {
+	setmsg_(__global_state, nofile, nofile_len);
+	errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	errch_(__global_state, "#", "is a transfer format file. Transfer for"
+		"mat files cannot be loaded. ", (ftnlen)1, (ftnlen)67);
+	sigerr_(__global_state, "SPICE(TRANSFERFILE)", (ftnlen)19);
+	chkout_(__global_state, "ZZLDKER", (ftnlen)7);
 	return 0;
-    } else if (s_cmp(arch, "TE1", (ftnlen)32, (ftnlen)3) == 0) {
-	setmsg_(nofile, nofile_len);
-	errch_("#", file, (ftnlen)1, file_len);
-	errch_("#", "is a type 1 text E-kernel.  These files are obsolete an"
-		"d cannot be loaded. ", (ftnlen)1, (ftnlen)75);
-	sigerr_("SPICE(TYPE1TEXTEK)", (ftnlen)18);
-	chkout_("ZZLDKER", (ftnlen)7);
+    } else if (s_cmp(&__global_state->f2c, arch, "TE1", (ftnlen)32, (ftnlen)3)
+	     == 0) {
+	setmsg_(__global_state, nofile, nofile_len);
+	errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	errch_(__global_state, "#", "is a type 1 text E-kernel.  These files"
+		" are obsolete and cannot be loaded. ", (ftnlen)1, (ftnlen)75);
+	sigerr_(__global_state, "SPICE(TYPE1TEXTEK)", (ftnlen)18);
+	chkout_(__global_state, "ZZLDKER", (ftnlen)7);
 	return 0;
     }
 
@@ -345,49 +352,56 @@ static zzldker_state_t* get_zzldker_state() {
 /*     kernel. */
 
     *handle = 0;
-    s_copy(filtyp, " ", filtyp_len, (ftnlen)1);
-    if (s_cmp(arch, "DAF", (ftnlen)32, (ftnlen)3) == 0) {
-	if (s_cmp(mytype, "SPK", (ftnlen)32, (ftnlen)3) == 0) {
-	    spklef_(file, handle, file_len);
-	} else if (s_cmp(mytype, "CK", (ftnlen)32, (ftnlen)2) == 0) {
-	    cklpf_(file, handle, file_len);
-	} else if (s_cmp(mytype, "PCK", (ftnlen)32, (ftnlen)3) == 0) {
-	    pcklof_(file, handle, file_len);
+    s_copy(&__global_state->f2c, filtyp, " ", filtyp_len, (ftnlen)1);
+    if (s_cmp(&__global_state->f2c, arch, "DAF", (ftnlen)32, (ftnlen)3) == 0) 
+	    {
+	if (s_cmp(&__global_state->f2c, mytype, "SPK", (ftnlen)32, (ftnlen)3) 
+		== 0) {
+	    spklef_(__global_state, file, handle, file_len);
+	} else if (s_cmp(&__global_state->f2c, mytype, "CK", (ftnlen)32, (
+		ftnlen)2) == 0) {
+	    cklpf_(__global_state, file, handle, file_len);
+	} else if (s_cmp(&__global_state->f2c, mytype, "PCK", (ftnlen)32, (
+		ftnlen)3) == 0) {
+	    pcklof_(__global_state, file, handle, file_len);
 	} else {
-	    tkvrsn_("TOOLKIT", versn, (ftnlen)7, (ftnlen)32);
-	    setmsg_(nofile, nofile_len);
-	    errch_("#", file, (ftnlen)1, file_len);
-	    errch_("#", "is a \"#\" DAF file. This kind of binary file is no"
-		    "t supported in version # of the SPICE toolkit. Check wit"
-		    "h NAIF to see if your toolkit version is up to date. ", (
-		    ftnlen)1, (ftnlen)158);
-	    errch_("#", mytype, (ftnlen)1, (ftnlen)32);
-	    errch_("#", versn, (ftnlen)1, (ftnlen)32);
-	    sigerr_("SPICE(UNKNOWNKERNELTYPE)", (ftnlen)24);
-	    chkout_("ZZLDKER", (ftnlen)7);
+	    tkvrsn_(__global_state, "TOOLKIT", versn, (ftnlen)7, (ftnlen)32);
+	    setmsg_(__global_state, nofile, nofile_len);
+	    errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	    errch_(__global_state, "#", "is a \"#\" DAF file. This kind of b"
+		    "inary file is not supported in version # of the SPICE to"
+		    "olkit. Check with NAIF to see if your toolkit version is"
+		    " up to date. ", (ftnlen)1, (ftnlen)158);
+	    errch_(__global_state, "#", mytype, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", versn, (ftnlen)1, (ftnlen)32);
+	    sigerr_(__global_state, "SPICE(UNKNOWNKERNELTYPE)", (ftnlen)24);
+	    chkout_(__global_state, "ZZLDKER", (ftnlen)7);
 	    return 0;
 	}
-	s_copy(filtyp, mytype, filtyp_len, (ftnlen)32);
-    } else if (s_cmp(arch, "DAS", (ftnlen)32, (ftnlen)3) == 0) {
-	if (s_cmp(mytype, "EK", (ftnlen)32, (ftnlen)2) == 0) {
-	    eklef_(file, handle, file_len);
-	} else if (s_cmp(mytype, "DSK", (ftnlen)32, (ftnlen)3) == 0) {
-	    zzdsklsf_(file, handle, file_len);
+	s_copy(&__global_state->f2c, filtyp, mytype, filtyp_len, (ftnlen)32);
+    } else if (s_cmp(&__global_state->f2c, arch, "DAS", (ftnlen)32, (ftnlen)3)
+	     == 0) {
+	if (s_cmp(&__global_state->f2c, mytype, "EK", (ftnlen)32, (ftnlen)2) 
+		== 0) {
+	    eklef_(__global_state, file, handle, file_len);
+	} else if (s_cmp(&__global_state->f2c, mytype, "DSK", (ftnlen)32, (
+		ftnlen)3) == 0) {
+	    zzdsklsf_(__global_state, file, handle, file_len);
 	} else {
-	    tkvrsn_("TOOLKIT", versn, (ftnlen)7, (ftnlen)32);
-	    setmsg_(nofile, nofile_len);
-	    errch_("#", file, (ftnlen)1, file_len);
-	    errch_("#", "is a \"#\" DAS file.  This kind of binary file is n"
-		    "ot supported in version # of the SPICE toolkit. Check wi"
-		    "th NAIF to see if your toolkit version is up to date. ", (
-		    ftnlen)1, (ftnlen)159);
-	    errch_("#", mytype, (ftnlen)1, (ftnlen)32);
-	    errch_("#", versn, (ftnlen)1, (ftnlen)32);
-	    sigerr_("SPICE(UNKNOWNKERNELTYPE)", (ftnlen)24);
-	    chkout_("ZZLDKER", (ftnlen)7);
+	    tkvrsn_(__global_state, "TOOLKIT", versn, (ftnlen)7, (ftnlen)32);
+	    setmsg_(__global_state, nofile, nofile_len);
+	    errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	    errch_(__global_state, "#", "is a \"#\" DAS file.  This kind of "
+		    "binary file is not supported in version # of the SPICE t"
+		    "oolkit. Check with NAIF to see if your toolkit version i"
+		    "s up to date. ", (ftnlen)1, (ftnlen)159);
+	    errch_(__global_state, "#", mytype, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", versn, (ftnlen)1, (ftnlen)32);
+	    sigerr_(__global_state, "SPICE(UNKNOWNKERNELTYPE)", (ftnlen)24);
+	    chkout_(__global_state, "ZZLDKER", (ftnlen)7);
 	    return 0;
 	}
-	s_copy(filtyp, mytype, filtyp_len, (ftnlen)32);
+	s_copy(&__global_state->f2c, filtyp, mytype, filtyp_len, (ftnlen)32);
     } else {
 
 /*        Check for line terminator compatibility with this platform. */
@@ -395,23 +409,24 @@ static zzldker_state_t* get_zzldker_state() {
 /*        detected with the one native to this platform and will */
 /*        stop if they don't match. */
 
-	zzascii_(file, kerlin, &__state->c_true, termin, file_len, (ftnlen)
-		132, (ftnlen)5);
+	zzascii_(__global_state, file, kerlin, &__state->c_true, termin, 
+		file_len, (ftnlen)132, (ftnlen)5);
 
 /*        Load the file using the text file loader. */
 
-	ldpool_(file, file_len);
-	if (! failed_()) {
-	    s_copy(filtyp, "TEXT", filtyp_len, (ftnlen)4);
+	ldpool_(__global_state, file, file_len);
+	if (! failed_(__global_state)) {
+	    s_copy(&__global_state->f2c, filtyp, "TEXT", filtyp_len, (ftnlen)
+		    4);
 
 /*           Cause the kernel pool mechanism to perform */
 /*           the standard error checks on the pool */
 /*           data. */
 
-	    zzbodkik_();
+	    zzbodkik_(__global_state);
 	}
     }
-    chkout_("ZZLDKER", (ftnlen)7);
+    chkout_(__global_state, "ZZLDKER", (ftnlen)7);
     return 0;
 } /* zzldker_ */
 

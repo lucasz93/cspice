@@ -8,8 +8,7 @@
 
 
 extern rdenci_init_t __rdenci_init;
-static rdenci_state_t* get_rdenci_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rdenci_state_t* get_rdenci_state(cspice_t* state) {
 	if (!state->rdenci)
 		state->rdenci = __cspice_allocate_module(sizeof(
 	rdenci_state_t), &__rdenci_init, sizeof(__rdenci_init));
@@ -18,39 +17,42 @@ static rdenci_state_t* get_rdenci_state() {
 }
 
 /* $Procedure  RDENCI  ( Read encoded integers from text file ) */
-/* Subroutine */ int rdenci_(integer *unit, integer *n, integer *data)
+/* Subroutine */ int rdenci_(cspice_t* __global_state, integer *unit, integer 
+	*n, integer *data)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rsle(cilist *), s_rnge(char *, integer, char *, integer), 
-	    do_lio(integer *, integer *, char *, ftnlen), e_rsle(void);
+    integer s_rsle(f2c_state_t*, cilist *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer), do_lio(f2c_state_t*, integer *, 
+	    integer *, char *, ftnlen), e_rsle(f2c_state_t*);
 
     /* Local variables */
     char work[64*64];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical error;
     integer nitms;
-    extern /* Subroutine */ int hx2int_(char *, integer *, logical *, char *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int hx2int_(cspice_t*, char *, integer *, logical 
+	    *, char *, ftnlen, ftnlen);
     integer itmbeg;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char errmsg[80];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    rdenci_state_t* __state = get_rdenci_state();
+    rdenci_state_t* __state = get_rdenci_state(__global_state);
 /* $ Abstract */
 
 /*     Read N encoded integers from a text file, decoding them into */
@@ -219,21 +221,21 @@ static rdenci_state_t* get_rdenci_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("RDENCI", (ftnlen)6);
+	chkin_(__global_state, "RDENCI", (ftnlen)6);
     }
 
 /*     Check to see if the number of data items is less than or equal */
 /*     to zero. If it is, signal an error. */
 
     if (*n < 1) {
-	setmsg_("The number of data items to be read was not positive: #.", (
-		ftnlen)56);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("RDENCI", (ftnlen)6);
+	setmsg_(__global_state, "The number of data items to be read was not"
+		" positive: #.", (ftnlen)56);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "RDENCI", (ftnlen)6);
 	return 0;
     }
 
@@ -270,20 +272,21 @@ static rdenci_state_t* get_rdenci_state() {
 /*        Read in a block of data items to be decoded. */
 
 	__state->io___4.ciunit = *unit;
-	iostat = s_rsle(&__state->io___4);
+	iostat = s_rsle(&__global_state->f2c, &__state->io___4);
 	if (iostat != 0) {
 	    goto L100001;
 	}
 	i__1 = nitms;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    iostat = do_lio(&__state->c__9, &__state->c__1, work + (((i__2 = 
-		    i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, 
+	    iostat = do_lio(&__global_state->f2c, &__state->c__9, &
+		    __state->c__1, work + (((i__2 = i__ - 1) < 64 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "work", i__2, 
 		    "rdenci_", (ftnlen)252)) << 6), (ftnlen)64);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
 	}
-	iostat = e_rsle();
+	iostat = e_rsle(&__global_state->f2c);
 L100001:
 
 /*        Check to see if we got a read error: IOSTAT .NE. 0. If we did, */
@@ -291,12 +294,12 @@ L100001:
 /*        since we know exactly how many data items we expect to read. */
 
 	if (iostat != 0) {
-	    setmsg_("Error reading from logical unit #, IOSTAT = #.", (ftnlen)
-		    46);
-	    errint_("#", unit, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("RDENCI", (ftnlen)6);
+	    setmsg_(__global_state, "Error reading from logical unit #, IOST"
+		    "AT = #.", (ftnlen)46);
+	    errint_(__global_state, "#", unit, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "RDENCI", (ftnlen)6);
 	    return 0;
 	}
 
@@ -305,20 +308,21 @@ L100001:
 
 	i__2 = nitms;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    hx2int_(work + (((i__1 = i__ - 1) < 64 && 0 <= i__1 ? i__1 : 
-		    s_rnge("work", i__1, "rdenci_", (ftnlen)275)) << 6), &
-		    data[itmbeg + i__ - 2], &error, errmsg, (ftnlen)64, (
-		    ftnlen)80);
+	    hx2int_(__global_state, work + (((i__1 = i__ - 1) < 64 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "work", i__1, 
+		    "rdenci_", (ftnlen)275)) << 6), &data[itmbeg + i__ - 2], &
+		    error, errmsg, (ftnlen)64, (ftnlen)80);
 	    if (error) {
-		setmsg_("Decoding error occurred while attempting to decode "
-			"item #: #. #", (ftnlen)63);
-		errint_("#", &i__, (ftnlen)1);
-		errch_("#", work + (((i__1 = i__ - 1) < 64 && 0 <= i__1 ? 
-			i__1 : s_rnge("work", i__1, "rdenci_", (ftnlen)281)) 
-			<< 6), (ftnlen)1, (ftnlen)64);
-		errch_("#", errmsg, (ftnlen)1, (ftnlen)80);
-		sigerr_("SPICE(DECODINGERROR)", (ftnlen)20);
-		chkout_("RDENCI", (ftnlen)6);
+		setmsg_(__global_state, "Decoding error occurred while attem"
+			"pting to decode item #: #. #", (ftnlen)63);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errch_(__global_state, "#", work + (((i__1 = i__ - 1) < 64 && 
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "work"
+			, i__1, "rdenci_", (ftnlen)281)) << 6), (ftnlen)1, (
+			ftnlen)64);
+		errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)80);
+		sigerr_(__global_state, "SPICE(DECODINGERROR)", (ftnlen)20);
+		chkout_(__global_state, "RDENCI", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -329,7 +333,7 @@ L100001:
 
 	itmbeg += nitms;
     }
-    chkout_("RDENCI", (ftnlen)6);
+    chkout_(__global_state, "RDENCI", (ftnlen)6);
     return 0;
 } /* rdenci_ */
 

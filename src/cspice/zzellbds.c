@@ -8,29 +8,29 @@
 
 
 typedef int zzellbds_state_t;
-static zzellbds_state_t* get_zzellbds_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzellbds_state_t* get_zzellbds_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZELLBDS ( Create bounding ellipsoids ) */
-/* Subroutine */ int zzellbds_(doublereal *a, doublereal *b, doublereal *hmax,
-	 doublereal *hmin, doublereal *amax, doublereal *bmax, doublereal *
-	amin, doublereal *bmin)
+/* Subroutine */ int zzellbds_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *hmax, doublereal *hmin, doublereal *amax, 
+	doublereal *bmax, doublereal *amin, doublereal *bmin)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzellbds_state_t* __state = get_zzellbds_state();
+    zzellbds_state_t* __state = get_zzellbds_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -380,59 +380,60 @@ static zzellbds_state_t* get_zzellbds_state() {
 /*     Use discovery check-in. */
 
     if (*b <= 0.) {
-	chkin_("ZZELLBDS", (ftnlen)8);
-	setmsg_("This routine requires B > 0, but B = #.", (ftnlen)39);
-	errdp_("#", b, (ftnlen)1);
-	sigerr_("SPICE(NONPOSITIVERADIUS)", (ftnlen)24);
-	chkout_("ZZELLBDS", (ftnlen)8);
+	chkin_(__global_state, "ZZELLBDS", (ftnlen)8);
+	setmsg_(__global_state, "This routine requires B > 0, but B = #.", (
+		ftnlen)39);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONPOSITIVERADIUS)", (ftnlen)24);
+	chkout_(__global_state, "ZZELLBDS", (ftnlen)8);
 	return 0;
     }
     if (*b > *a) {
-	chkin_("ZZELLBDS", (ftnlen)8);
-	setmsg_("This routine requires A >= B, but A = #; B = #.", (ftnlen)47)
-		;
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	sigerr_("SPICE(RADIIOUTOFORDER)", (ftnlen)22);
-	chkout_("ZZELLBDS", (ftnlen)8);
+	chkin_(__global_state, "ZZELLBDS", (ftnlen)8);
+	setmsg_(__global_state, "This routine requires A >= B, but A = #; B "
+		"= #.", (ftnlen)47);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(RADIIOUTOFORDER)", (ftnlen)22);
+	chkout_(__global_state, "ZZELLBDS", (ftnlen)8);
 	return 0;
     }
     if (*b + *hmin <= 0.) {
-	chkin_("ZZELLBDS", (ftnlen)8);
-	setmsg_("This routine requires B + HMIN > 0, but B = #; HMIN = #, B+"
-		"HMIN = #.", (ftnlen)68);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", hmin, (ftnlen)1);
+	chkin_(__global_state, "ZZELLBDS", (ftnlen)8);
+	setmsg_(__global_state, "This routine requires B + HMIN > 0, but B ="
+		" #; HMIN = #, B+HMIN = #.", (ftnlen)68);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", hmin, (ftnlen)1);
 	d__1 = *b + *hmin;
-	errdp_("#", &d__1, (ftnlen)1);
-	sigerr_("SPICE(LOWERBOUNDTOOLOW)", (ftnlen)23);
-	chkout_("ZZELLBDS", (ftnlen)8);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(LOWERBOUNDTOOLOW)", (ftnlen)23);
+	chkout_(__global_state, "ZZELLBDS", (ftnlen)8);
 	return 0;
     }
     if (*hmin < 0.) {
 	if (*b + *a / *b * *hmin <= 0.) {
-	    chkin_("ZZELLBDS", (ftnlen)8);
-	    setmsg_("For oblate spheroids and HMIN < 0, This routine require"
-		    "s B + (A/B)HMIN > 0, but A = #, B = #; HMIN = #, B+(A/B)"
-		    "HMIN = #.", (ftnlen)120);
-	    errdp_("#", a, (ftnlen)1);
-	    errdp_("#", b, (ftnlen)1);
-	    errdp_("#", hmin, (ftnlen)1);
+	    chkin_(__global_state, "ZZELLBDS", (ftnlen)8);
+	    setmsg_(__global_state, "For oblate spheroids and HMIN < 0, This"
+		    " routine requires B + (A/B)HMIN > 0, but A = #, B = #; H"
+		    "MIN = #, B+(A/B)HMIN = #.", (ftnlen)120);
+	    errdp_(__global_state, "#", a, (ftnlen)1);
+	    errdp_(__global_state, "#", b, (ftnlen)1);
+	    errdp_(__global_state, "#", hmin, (ftnlen)1);
 	    d__1 = *b + *a / *b * *hmin;
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(LOWERBOUNDTOOLOW)", (ftnlen)23);
-	    chkout_("ZZELLBDS", (ftnlen)8);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(LOWERBOUNDTOOLOW)", (ftnlen)23);
+	    chkout_(__global_state, "ZZELLBDS", (ftnlen)8);
 	    return 0;
 	}
     }
     if (*hmin > *hmax) {
-	chkin_("ZZELLBDS", (ftnlen)8);
-	setmsg_("This routine requires HMAX >= HMIN, but HMIN = #; HMAX = #.",
-		 (ftnlen)59);
-	errdp_("#", hmin, (ftnlen)1);
-	errdp_("#", hmax, (ftnlen)1);
-	sigerr_("SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
-	chkout_("ZZELLBDS", (ftnlen)8);
+	chkin_(__global_state, "ZZELLBDS", (ftnlen)8);
+	setmsg_(__global_state, "This routine requires HMAX >= HMIN, but HMI"
+		"N = #; HMAX = #.", (ftnlen)59);
+	errdp_(__global_state, "#", hmin, (ftnlen)1);
+	errdp_(__global_state, "#", hmax, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
+	chkout_(__global_state, "ZZELLBDS", (ftnlen)8);
 	return 0;
     }
 

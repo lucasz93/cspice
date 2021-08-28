@@ -243,7 +243,7 @@
       return;
    }
 
-   chkin_c ( "diff_c" );
+   chkin_c ( naif_state, "diff_c" );
 
    /*
    Make sure data types match. 

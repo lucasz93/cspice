@@ -8,8 +8,7 @@
 
 
 extern m2q_init_t __m2q_init;
-static m2q_state_t* get_m2q_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline m2q_state_t* get_m2q_state(cspice_t* state) {
 	if (!state->m2q)
 		state->m2q = __cspice_allocate_module(sizeof(m2q_state_t), &
 	__m2q_init, sizeof(__m2q_init));
@@ -18,32 +17,34 @@ static m2q_state_t* get_m2q_state() {
 }
 
 /* $Procedure      M2Q ( Matrix to quaternion ) */
-/* Subroutine */ int m2q_(doublereal *r__, doublereal *q)
+/* Subroutine */ int m2q_(cspice_t* __global_state, doublereal *r__, 
+	doublereal *q)
 {
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal c__;
     doublereal s[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal trace;
     doublereal l2;
-    extern logical isrot_(doublereal *, doublereal *, doublereal *);
+    extern logical isrot_(cspice_t*, doublereal *, doublereal *, doublereal *)
+	    ;
     doublereal mtrace;
     doublereal factor;
     doublereal cc4;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal polish;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal s114;
     doublereal s224;
     doublereal s334;
 
 
     /* Module state */
-    m2q_state_t* __state = get_m2q_state();
+    m2q_state_t* __state = get_m2q_state(__global_state);
 /* $ Abstract */
 
 /*     Find a unit quaternion corresponding to a specified rotation */
@@ -508,11 +509,12 @@ static m2q_state_t* get_m2q_state() {
 
 /*     If R is not a rotation matrix, we can't proceed. */
 
-    if (! isrot_(r__, &__state->c_b2, &__state->c_b2)) {
-	chkin_("M2Q", (ftnlen)3);
-	setmsg_("Input matrix was not a rotation.", (ftnlen)32);
-	sigerr_("SPICE(NOTAROTATION)", (ftnlen)19);
-	chkout_("M2Q", (ftnlen)3);
+    if (! isrot_(__global_state, r__, &__state->c_b2, &__state->c_b2)) {
+	chkin_(__global_state, "M2Q", (ftnlen)3);
+	setmsg_(__global_state, "Input matrix was not a rotation.", (ftnlen)
+		32);
+	sigerr_(__global_state, "SPICE(NOTAROTATION)", (ftnlen)19);
+	chkout_(__global_state, "M2Q", (ftnlen)3);
 	return 0;
     }
 
@@ -597,25 +599,25 @@ static m2q_state_t* get_m2q_state() {
 /*     you get four. Thus at least one of the 4 terms is greater than 1. */
 
     if (1. <= cc4) {
-	c__ = sqrt(cc4 * .25);
+	c__ = sqrt(&__global_state->f2c, cc4 * .25);
 	factor = 1. / (c__ * 4.);
 	s[0] = (r__[5] - r__[7]) * factor;
 	s[1] = (r__[6] - r__[2]) * factor;
 	s[2] = (r__[1] - r__[3]) * factor;
     } else if (1. <= s114) {
-	s[0] = sqrt(s114 * .25);
+	s[0] = sqrt(&__global_state->f2c, s114 * .25);
 	factor = 1. / (s[0] * 4.);
 	c__ = (r__[5] - r__[7]) * factor;
 	s[1] = (r__[3] + r__[1]) * factor;
 	s[2] = (r__[6] + r__[2]) * factor;
     } else if (1. <= s224) {
-	s[1] = sqrt(s224 * .25);
+	s[1] = sqrt(&__global_state->f2c, s224 * .25);
 	factor = 1. / (s[1] * 4.);
 	c__ = (r__[6] - r__[2]) * factor;
 	s[0] = (r__[3] + r__[1]) * factor;
 	s[2] = (r__[7] + r__[5]) * factor;
     } else {
-	s[2] = sqrt(s334 * .25);
+	s[2] = sqrt(&__global_state->f2c, s334 * .25);
 	factor = 1. / (s[2] * 4.);
 	c__ = (r__[1] - r__[3]) * factor;
 	s[0] = (r__[6] + r__[2]) * factor;
@@ -627,7 +629,7 @@ static m2q_state_t* get_m2q_state() {
 
     l2 = c__ * c__ + s[0] * s[0] + s[1] * s[1] + s[2] * s[2];
     if (l2 != 1.) {
-	polish = 1. / sqrt(l2);
+	polish = 1. / sqrt(&__global_state->f2c, l2);
 	c__ *= polish;
 	s[0] *= polish;
 	s[1] *= polish;

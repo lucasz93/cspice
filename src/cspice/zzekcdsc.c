@@ -8,8 +8,7 @@
 
 
 extern zzekcdsc_init_t __zzekcdsc_init;
-static zzekcdsc_state_t* get_zzekcdsc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekcdsc_state_t* get_zzekcdsc_state(cspice_t* state) {
 	if (!state->zzekcdsc)
 		state->zzekcdsc = __cspice_allocate_module(sizeof(
 	zzekcdsc_state_t), &__zzekcdsc_init, sizeof(__zzekcdsc_init));
@@ -18,8 +17,8 @@ static zzekcdsc_state_t* get_zzekcdsc_state() {
 }
 
 /* $Procedure  ZZEKCDSC ( Private: EK, return column descriptor ) */
-/* Subroutine */ int zzekcdsc_(integer *handle, integer *segdsc, char *column,
-	 integer *coldsc, ftnlen column_len)
+/* Subroutine */ int zzekcdsc_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, char *column, integer *coldsc, ftnlen column_len)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -28,26 +27,27 @@ static zzekcdsc_state_t* get_zzekcdsc_state() {
     integer i__;
     char cname[32];
     integer mbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
     integer ncols;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
     integer dscbas;
-    extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrdc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
     integer nambas;
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzekcdsc_state_t* __state = get_zzekcdsc_state();
+    zzekcdsc_state_t* __state = get_zzekcdsc_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -444,30 +444,30 @@ static zzekcdsc_state_t* get_zzekcdsc_state() {
 
 	i__1 = dscbas + 1;
 	i__2 = dscbas + 11;
-	dasrdi_(handle, &i__1, &i__2, coldsc);
+	dasrdi_(__global_state, handle, &i__1, &i__2, coldsc);
 	nambas = coldsc[4];
 
 /*        Look up the name and compare. */
 
 	i__1 = nambas + 1;
 	i__2 = nambas + 32;
-	dasrdc_(handle, &i__1, &i__2, &__state->c__1, &__state->c__32, cname, 
-		(ftnlen)32);
-	if (eqstr_(cname, column, (ftnlen)32, column_len)) {
+	dasrdc_(__global_state, handle, &i__1, &i__2, &__state->c__1, &
+		__state->c__32, cname, (ftnlen)32);
+	if (eqstr_(__global_state, cname, column, (ftnlen)32, column_len)) {
 	    found = TRUE_;
 	} else {
 	    ++i__;
 	}
     }
     if (! found) {
-	chkin_("ZZEKCDSC", (ftnlen)8);
-	setmsg_("Descriptor for column # was not found. Segment base = #; fi"
-		"le = #.", (ftnlen)66);
-	errch_("#", column, (ftnlen)1, column_len);
-	errint_("#", &mbase, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKCDSC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKCDSC", (ftnlen)8);
+	setmsg_(__global_state, "Descriptor for column # was not found. Segm"
+		"ent base = #; file = #.", (ftnlen)66);
+	errch_(__global_state, "#", column, (ftnlen)1, column_len);
+	errint_(__global_state, "#", &mbase, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKCDSC", (ftnlen)8);
 	return 0;
     }
     return 0;

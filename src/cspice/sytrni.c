@@ -8,38 +8,38 @@
 
 
 typedef int sytrni_state_t;
-static sytrni_state_t* get_sytrni_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sytrni_state_t* get_sytrni_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SYTRNI (Transpose two values associated with a symbol) */
-/* Subroutine */ int sytrni_(char *name__, integer *i__, integer *j, char *
-	tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen 
-	tabsym_len)
+/* Subroutine */ int sytrni_(cspice_t* __global_state, char *name__, integer *
+	i__, integer *j, char *tabsym, integer *tabptr, integer *tabval, 
+	ftnlen name_len, ftnlen tabsym_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sumai_(integer *, integer *);
-    extern /* Subroutine */ int swapi_(integer *, integer *);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int swapi_(cspice_t*, integer *, integer *);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer locval;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer locsym;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sytrni_state_t* __state = get_sytrni_state();
+    sytrni_state_t* __state = get_sytrni_state(__global_state);
 /* $ Abstract */
 
 /*     Transpose two values associated with a particular symbol in an */
@@ -230,20 +230,20 @@ static sytrni_state_t* get_sytrni_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYTRNI", (ftnlen)6);
+	chkin_(__global_state, "SYTRNI", (ftnlen)6);
     }
 
 /*     How many symbols? */
 
-    nsym = cardc_(tabsym, tabsym_len);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
 
 /*     Is this symbol even in the table? */
 
-    locsym = bsrchc_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
+    locsym = bsrchc_(__global_state, name__, &nsym, tabsym + tabsym_len * 6, 
+	    name_len, tabsym_len);
     if (locsym > 0) {
 
 /*        Are there enough values associated with the symbol? */
@@ -258,18 +258,19 @@ static sytrni_state_t* get_sytrni_state() {
 
 	    if (*i__ != *j) {
 		i__1 = locsym - 1;
-		locval = sumai_(&tabptr[6], &i__1) + 1;
-		swapi_(&tabval[locval + *i__ + 4], &tabval[locval + *j + 4]);
+		locval = sumai_(__global_state, &tabptr[6], &i__1) + 1;
+		swapi_(__global_state, &tabval[locval + *i__ + 4], &tabval[
+			locval + *j + 4]);
 	    }
 	} else {
-	    setmsg_("The first index was *. The second index was *.", (ftnlen)
-		    46);
-	    errint_("*", i__, (ftnlen)1);
-	    errint_("*", j, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
+	    setmsg_(__global_state, "The first index was *. The second index"
+		    " was *.", (ftnlen)46);
+	    errint_(__global_state, "*", i__, (ftnlen)1);
+	    errint_(__global_state, "*", j, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
 	}
     }
-    chkout_("SYTRNI", (ftnlen)6);
+    chkout_(__global_state, "SYTRNI", (ftnlen)6);
     return 0;
 } /* sytrni_ */
 

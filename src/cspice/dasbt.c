@@ -8,8 +8,7 @@
 
 
 extern dasbt_init_t __dasbt_init;
-static dasbt_state_t* get_dasbt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasbt_state_t* get_dasbt_state(cspice_t* state) {
 	if (!state->dasbt)
 		state->dasbt = __cspice_allocate_module(sizeof(dasbt_state_t),
 	 &__dasbt_init, sizeof(__dasbt_init));
@@ -18,7 +17,8 @@ static dasbt_state_t* get_dasbt_state() {
 }
 
 /* $Procedure DASBT ( DAS, convert binary file to transfer file ) */
-/* Subroutine */ int dasbt_(char *binfil, integer *xfrlun, ftnlen binfil_len)
+/* Subroutine */ int dasbt_(cspice_t* __global_state, char *binfil, integer *
+	xfrlun, ftnlen binfil_len)
 {
     /* System generated locals */
     address a__1[3];
@@ -27,67 +27,72 @@ static dasbt_state_t* get_dasbt_state() {
     cilist ci__1;
 
     /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe(void);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen),
-	     s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_wsfe(f2c_state_t*, cilist *), do_fio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_wsfe(f2c_state_t*);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen), s_copy(f2c_state_t*, char *, char *, ftnlen, 
+	    ftnlen);
 
     /* Local variables */
     char line[80];
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
     integer recno;
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
     integer ncomr;
-    extern integer rtrim_(char *, ftnlen);
-    extern logical failed_(void);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     integer dtabeg;
     integer ncdata;
     integer handle;
     integer nddata;
     char ifname[60];
     integer nidata;
-    extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int daslla_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     char crecrd[1024];
-    extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasioc_(cspice_t*, char *, integer *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dasrdc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
     char cbuffr[4*1024];
     doublereal dbuffr[1024];
-    extern /* Subroutine */ int dascls_(integer *);
+    extern /* Subroutine */ int dascls_(cspice_t*, integer *);
     integer ibuffr[1024];
-    extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer daslun;
-    extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dasrfr_(cspice_t*, integer *, char *, char *, 
+	    integer *, integer *, integer *, integer *, ftnlen, ftnlen);
     char idword[8];
     integer numblk;
     integer numdta;
-    extern /* Subroutine */ int dasopr_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int dasopr_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
     integer nresvc;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer numlft;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int wrenci_(integer *, integer *, integer *);
-    extern /* Subroutine */ int wrencc_(integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int wrencd_(integer *, integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int wrenci_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int wrencc_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
+    extern /* Subroutine */ int wrencd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern logical return_(cspice_t*);
     integer nresvr;
 
 
     /* Module state */
-    dasbt_state_t* __state = get_dasbt_state();
+    dasbt_state_t* __state = get_dasbt_state(__global_state);
 /* $ Abstract */
 
 /*     Convert the contents of a binary DAS file to an equivalent DAS */
@@ -338,10 +343,10 @@ static dasbt_state_t* get_dasbt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASBT", (ftnlen)5);
+	chkin_(__global_state, "DASBT", (ftnlen)5);
     }
 
 /*     When converting a binary DAS file into its DAS transfer file */
@@ -483,34 +488,35 @@ static dasbt_state_t* get_dasbt_state() {
 /*     We begin by opening the binary DAS file specified by BINFIL for */
 /*     read access, obtaining a file handle. */
 
-    dasopr_(binfil, &handle, binfil_len);
-    if (failed_()) {
+    dasopr_(__global_state, binfil, &handle, binfil_len);
+    if (failed_(__global_state)) {
 
 /*        If an error occurred while opening the file check out and */
 /*        return to the caller. */
 
-	chkout_("DASBT", (ftnlen)5);
+	chkout_(__global_state, "DASBT", (ftnlen)5);
 	return 0;
     }
 
 /*     Get the contents of the DAS file record. */
 
-    dasrfr_(&handle, idword, ifname, &nresvr, &nresvc, &ncomr, &ncomc, (
-	    ftnlen)8, (ftnlen)60);
+    dasrfr_(__global_state, &handle, idword, ifname, &nresvr, &nresvc, &ncomr,
+	     &ncomc, (ftnlen)8, (ftnlen)60);
 
 /*     Convert the DAS file handle into its equivalent Fortran logical */
 /*     unit. We need the logical unit so that we can read the reserved */
 /*     records and the comment records. */
 
-    zzddhhlu_(&handle, "DAS", &__state->c_false, &daslun, (ftnlen)3);
-    if (failed_()) {
+    zzddhhlu_(__global_state, &handle, "DAS", &__state->c_false, &daslun, (
+	    ftnlen)3);
+    if (failed_(__global_state)) {
 
 /*        If an error occurred while converting the DAS file handle to */
 /*        a logical unit, attempt to close the binary file, then check */
 /*        out and return. */
 
-	dascls_(&handle);
-	chkout_("DASBT", (ftnlen)5);
+	dascls_(__global_state, &handle);
+	chkout_(__global_state, "DASBT", (ftnlen)5);
 	return 0;
     }
 
@@ -524,14 +530,14 @@ static dasbt_state_t* get_dasbt_state() {
 /*        Set the error message, close the file, signal the error, and */
 /*        exit. */
 
-	setmsg_("The number of reserved characters was nonzero (#) in file: "
-		"#, but the DAS reserved record area has NOT been implemented"
-		" yet!", (ftnlen)124);
-	errint_("#", &nresvc, (ftnlen)1);
-	errfnm_("#", &daslun, (ftnlen)1);
-	dascls_(&handle);
-	sigerr_("SPICE(BADDASFILE)", (ftnlen)17);
-	chkout_("DASBT", (ftnlen)5);
+	setmsg_(__global_state, "The number of reserved characters was nonze"
+		"ro (#) in file: #, but the DAS reserved record area has NOT "
+		"been implemented yet!", (ftnlen)124);
+	errint_(__global_state, "#", &nresvc, (ftnlen)1);
+	errfnm_(__global_state, "#", &daslun, (ftnlen)1);
+	dascls_(__global_state, &handle);
+	sigerr_(__global_state, "SPICE(BADDASFILE)", (ftnlen)17);
+	chkout_(__global_state, "DASBT", (ftnlen)5);
 	return 0;
     }
     if (nresvr != 0) {
@@ -539,14 +545,14 @@ static dasbt_state_t* get_dasbt_state() {
 /*        Set the error message, close the file, signal the error, and */
 /*        exit. */
 
-	setmsg_("The number of reserved records was nonzero (#) in file: #, "
-		"but the DAS reserved record area has NOT been implemented ye"
-		"t!", (ftnlen)121);
-	errint_("#", &nresvr, (ftnlen)1);
-	errfnm_("#", &daslun, (ftnlen)1);
-	dascls_(&handle);
-	sigerr_("SPICE(BADDASFILE)", (ftnlen)17);
-	chkout_("DASBT", (ftnlen)5);
+	setmsg_(__global_state, "The number of reserved records was nonzero "
+		"(#) in file: #, but the DAS reserved record area has NOT bee"
+		"n implemented yet!", (ftnlen)121);
+	errint_(__global_state, "#", &nresvr, (ftnlen)1);
+	errfnm_(__global_state, "#", &daslun, (ftnlen)1);
+	dascls_(__global_state, &handle);
+	sigerr_(__global_state, "SPICE(BADDASFILE)", (ftnlen)17);
+	chkout_(__global_state, "DASBT", (ftnlen)5);
 	return 0;
     }
 
@@ -560,29 +566,29 @@ static dasbt_state_t* get_dasbt_state() {
     ci__1.cierr = 1;
     ci__1.ciunit = *xfrlun;
     ci__1.cifmt = "(A)";
-    iostat = s_wsfe(&ci__1);
+    iostat = s_wsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&__state->c__1, "DASETF NAIF DAS ENCODED TRANSFER FILE", (
-	    ftnlen)37);
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, "DASETF NAIF DAS E"
+	    "NCODED TRANSFER FILE", (ftnlen)37);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_wsfe();
+    iostat = e_wsfe(&__global_state->f2c);
 L100001:
     if (iostat != 0) {
 
 /*        An error occurred, so close the binary DAS file, set an */
 /*        appropriate error message, and return to the caller. */
 
-	dascls_(&handle);
-	setmsg_("Error writing to the DAS transfer file: #. IOSTAT = #.", (
-		ftnlen)54);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("DASBT", (ftnlen)5);
+	dascls_(__global_state, &handle);
+	setmsg_(__global_state, "Error writing to the DAS transfer file: #. "
+		"IOSTAT = #.", (ftnlen)54);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "DASBT", (ftnlen)5);
 	return 0;
     }
 
@@ -591,7 +597,7 @@ L100001:
     ci__1.cierr = 1;
     ci__1.ciunit = *xfrlun;
     ci__1.cifmt = "(A)";
-    iostat = s_wsfe(&ci__1);
+    iostat = s_wsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100002;
     }
@@ -599,25 +605,26 @@ L100001:
     i__1[0] = 1, a__1[0] = "'";
     i__1[1] = 8, a__1[1] = idword;
     i__1[2] = 1, a__1[2] = "'";
-    s_cat(ch__1, a__1, i__1, &__state->c__3, (ftnlen)10);
-    iostat = do_fio(&__state->c__1, ch__1, (ftnlen)10);
+    s_cat(&__global_state->f2c, ch__1, a__1, i__1, &__state->c__3, (ftnlen)10)
+	    ;
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, ch__1, (ftnlen)10);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = e_wsfe();
+    iostat = e_wsfe(&__global_state->f2c);
 L100002:
     if (iostat != 0) {
 
 /*        An error occurred, so close the binary DAS file, set an */
 /*        appropriate error message, and return to the caller. */
 
-	dascls_(&handle);
-	setmsg_("Error writing to the DAS transfer file: #. IOSTAT = #.", (
-		ftnlen)54);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("DASBT", (ftnlen)5);
+	dascls_(__global_state, &handle);
+	setmsg_(__global_state, "Error writing to the DAS transfer file: #. "
+		"IOSTAT = #.", (ftnlen)54);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "DASBT", (ftnlen)5);
 	return 0;
     }
 
@@ -627,7 +634,7 @@ L100002:
     ci__1.cierr = 1;
     ci__1.ciunit = *xfrlun;
     ci__1.cifmt = "(A)";
-    iostat = s_wsfe(&ci__1);
+    iostat = s_wsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100003;
     }
@@ -635,57 +642,58 @@ L100002:
     i__1[0] = 1, a__1[0] = "'";
     i__1[1] = 60, a__1[1] = ifname;
     i__1[2] = 1, a__1[2] = "'";
-    s_cat(ch__2, a__1, i__1, &__state->c__3, (ftnlen)62);
-    iostat = do_fio(&__state->c__1, ch__2, (ftnlen)62);
+    s_cat(&__global_state->f2c, ch__2, a__1, i__1, &__state->c__3, (ftnlen)62)
+	    ;
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, ch__2, (ftnlen)62);
     if (iostat != 0) {
 	goto L100003;
     }
-    iostat = e_wsfe();
+    iostat = e_wsfe(&__global_state->f2c);
 L100003:
     if (iostat != 0) {
 
 /*        An error occurred, so close the binary DAS file, set an */
 /*        appropriate error message, and return to the caller. */
 
-	dascls_(&handle);
-	setmsg_("Error writing to the DAS transfer file: #. IOSTAT = #.", (
-		ftnlen)54);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("DASBT", (ftnlen)5);
+	dascls_(__global_state, &handle);
+	setmsg_(__global_state, "Error writing to the DAS transfer file: #. "
+		"IOSTAT = #.", (ftnlen)54);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "DASBT", (ftnlen)5);
 	return 0;
     }
 
 /*     Write the number of reserved records and reserved characters to */
 /*     the DAS transfer file. */
 
-    wrenci_(xfrlun, &__state->c__1, &nresvr);
-    wrenci_(xfrlun, &__state->c__1, &nresvc);
-    if (failed_()) {
+    wrenci_(__global_state, xfrlun, &__state->c__1, &nresvr);
+    wrenci_(__global_state, xfrlun, &__state->c__1, &nresvc);
+    if (failed_(__global_state)) {
 
 /*        If an error occurred while writing the number of reserved */
 /*        records or number of reserved characters, attempt to close */
 /*        the binary file, then check out and return. */
 
-	dascls_(&handle);
-	chkout_("DASBT", (ftnlen)5);
+	dascls_(__global_state, &handle);
+	chkout_(__global_state, "DASBT", (ftnlen)5);
 	return 0;
     }
 
 /*     Write the number of comment records and comment characters to */
 /*     the DAS transfer file. */
 
-    wrenci_(xfrlun, &__state->c__1, &ncomr);
-    wrenci_(xfrlun, &__state->c__1, &ncomc);
-    if (failed_()) {
+    wrenci_(__global_state, xfrlun, &__state->c__1, &ncomr);
+    wrenci_(__global_state, xfrlun, &__state->c__1, &ncomc);
+    if (failed_(__global_state)) {
 
 /*        If an error occurred while writing the number of comment */
 /*        records or number of comment characters, attempt to close */
 /*        the binary file, then check out and return. */
 
-	dascls_(&handle);
-	chkout_("DASBT", (ftnlen)5);
+	dascls_(__global_state, &handle);
+	chkout_(__global_state, "DASBT", (ftnlen)5);
 	return 0;
     }
 
@@ -705,7 +713,7 @@ L100003:
 
 /*        Write out the comment records, one at a time. */
 
-	s_copy(crecrd, " ", (ftnlen)1024, (ftnlen)1);
+	s_copy(&__global_state->f2c, crecrd, " ", (ftnlen)1024, (ftnlen)1);
 	numlft = ncomc;
 	numblk = 0;
 	recno = nresvr + 1;
@@ -721,44 +729,47 @@ L100003:
 /*           Write out the begin comment block marker and the number of */
 /*           comment characters. */
 
-	    s_copy(line, "BEGIN_COMMENT_BLOCK # #", (ftnlen)80, (ftnlen)23);
-	    repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
-	    repmi_(line, "#", &numdta, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
+	    s_copy(&__global_state->f2c, line, "BEGIN_COMMENT_BLOCK # #", (
+		    ftnlen)80, (ftnlen)23);
+	    repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
+	    repmi_(__global_state, line, "#", &numdta, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, 
+		    rtrim_(__global_state, line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100004:
 	    if (iostat != 0) {
 
 /*              An error occurred, so close the binary DAS file, set an */
 /*              appropriate error message, and return to the caller. */
 
-		dascls_(&handle);
-		setmsg_("Error writing to the DAS transfer file: #. IOSTAT ="
-			" #.", (ftnlen)54);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error writing to the DAS transfer f"
+			"ile: #. IOSTAT = #.", (ftnlen)54);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Read a comment record and then encode and write it. */
 
-	    dasioc_("READ", &daslun, &recno, crecrd, (ftnlen)4, (ftnlen)1024);
-	    wrencc_(xfrlun, &numdta, crecrd, (ftnlen)1024);
-	    if (failed_()) {
+	    dasioc_(__global_state, "READ", &daslun, &recno, crecrd, (ftnlen)
+		    4, (ftnlen)1024);
+	    wrencc_(__global_state, xfrlun, &numdta, crecrd, (ftnlen)1024);
+	    if (failed_(__global_state)) {
 
 /*              We want to check failed here because were in a loop. */
 /*              We should exit the loop, and the routine, as soon as */
@@ -766,44 +777,46 @@ L100004:
 /*              for a long time. Attempt to close the binary DAS file */
 /*              that we opened and then return to the caller. */
 
-		dascls_(&handle);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Write out the end comment block marker and the number of */
 /*           comment characters. */
 
-	    s_copy(line, "END_COMMENT_BLOCK # #", (ftnlen)80, (ftnlen)21);
-	    repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
-	    repmi_(line, "#", &numdta, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
+	    s_copy(&__global_state->f2c, line, "END_COMMENT_BLOCK # #", (
+		    ftnlen)80, (ftnlen)21);
+	    repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
+	    repmi_(__global_state, line, "#", &numdta, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100005;
 	    }
-	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, 
+		    rtrim_(__global_state, line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100005;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100005:
 	    if (iostat != 0) {
 
 /*              An error occurred, so close the binary DAS file, set an */
 /*              appropriate error message, and return to the caller. */
 
-		dascls_(&handle);
-		setmsg_("Error writing to the DAS transfer file: #. IOSTAT ="
-			" #.", (ftnlen)54);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error writing to the DAS transfer f"
+			"ile: #. IOSTAT = #.", (ftnlen)54);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
@@ -816,34 +829,38 @@ L100005:
 /*        Write out the number of comment blocks processed, and the */
 /*        count of comment characters */
 
-	s_copy(line, "TOTAL_COMMENT_BLOCKS # #", (ftnlen)80, (ftnlen)24);
-	repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)80);
-	repmi_(line, "#", &ncomc, line, (ftnlen)80, (ftnlen)1, (ftnlen)80);
+	s_copy(&__global_state->f2c, line, "TOTAL_COMMENT_BLOCKS # #", (
+		ftnlen)80, (ftnlen)24);
+	repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (ftnlen)
+		1, (ftnlen)80);
+	repmi_(__global_state, line, "#", &ncomc, line, (ftnlen)80, (ftnlen)1,
+		 (ftnlen)80);
 	ci__1.cierr = 1;
 	ci__1.ciunit = *xfrlun;
 	ci__1.cifmt = "(A)";
-	iostat = s_wsfe(&ci__1);
+	iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100006;
 	}
-	iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, rtrim_(
+		__global_state, line, (ftnlen)80));
 	if (iostat != 0) {
 	    goto L100006;
 	}
-	iostat = e_wsfe();
+	iostat = e_wsfe(&__global_state->f2c);
 L100006:
 	if (iostat != 0) {
 
 /*           An error occurred, so close the binary DAS file, set an */
 /*           appropriate error message, and return to the caller. */
 
-	    dascls_(&handle);
-	    setmsg_("Error writing to the DAS transfer file: #. IOSTAT = #.", 
-		    (ftnlen)54);
-	    errfnm_("#", xfrlun, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	    chkout_("DASBT", (ftnlen)5);
+	    dascls_(__global_state, &handle);
+	    setmsg_(__global_state, "Error writing to the DAS transfer file:"
+		    " #. IOSTAT = #.", (ftnlen)54);
+	    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	    chkout_(__global_state, "DASBT", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -851,23 +868,23 @@ L100006:
 /*     Read in the data counts for each of the data types from the binary */
 /*     DAS file. */
 
-    daslla_(&handle, &ncdata, &nddata, &nidata);
+    daslla_(__global_state, &handle, &ncdata, &nddata, &nidata);
 
 /*     Write the data counts to the DAS transfer file. These will be */
 /*     useful in determining which data types to expect in the DAS */
 /*     transfer file when converting it back to binary. */
 
-    wrenci_(xfrlun, &__state->c__1, &ncdata);
-    wrenci_(xfrlun, &__state->c__1, &nddata);
-    wrenci_(xfrlun, &__state->c__1, &nidata);
-    if (failed_()) {
+    wrenci_(__global_state, xfrlun, &__state->c__1, &ncdata);
+    wrenci_(__global_state, xfrlun, &__state->c__1, &nddata);
+    wrenci_(__global_state, xfrlun, &__state->c__1, &nidata);
+    if (failed_(__global_state)) {
 
 /*        If an error occurred while writing any of the data counts to */
 /*        the DAS transfer file, attempt to close the binary file, then */
 /*        check out and return. */
 
-	dascls_(&handle);
-	chkout_("DASBT", (ftnlen)5);
+	dascls_(__global_state, &handle);
+	chkout_(__global_state, "DASBT", (ftnlen)5);
 	return 0;
     }
 
@@ -889,36 +906,38 @@ L100006:
 /*           Write out the begin data block identifier, the block */
 /*           number, and the data count for the block. */
 
-	    s_copy(line, "BEGIN_CHARACTER_BLOCK # #", (ftnlen)80, (ftnlen)25);
-	    repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
-	    repmi_(line, "#", &numdta, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
+	    s_copy(&__global_state->f2c, line, "BEGIN_CHARACTER_BLOCK # #", (
+		    ftnlen)80, (ftnlen)25);
+	    repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
+	    repmi_(__global_state, line, "#", &numdta, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100007;
 	    }
-	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, 
+		    rtrim_(__global_state, line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100007;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100007:
 	    if (iostat != 0) {
 
 /*              An error occurred, so close the binary DAS file, set an */
 /*              appropriate error message, and return to the caller. */
 
-		dascls_(&handle);
-		setmsg_("Error writing to the DAS transfer file: #. IOSTAT ="
-			" #.", (ftnlen)54);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error writing to the DAS transfer f"
+			"ile: #. IOSTAT = #.", (ftnlen)54);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
@@ -927,13 +946,13 @@ L100007:
 /*           the subtraction of 1 in the call. */
 
 	    i__2 = dtabeg + numdta - 1;
-	    dasrdc_(&handle, &dtabeg, &i__2, &__state->c__1, &__state->c__4, 
-		    cbuffr, (ftnlen)4);
+	    dasrdc_(__global_state, &handle, &dtabeg, &i__2, &__state->c__1, &
+		    __state->c__4, cbuffr, (ftnlen)4);
 
 /*           Encode and write out a buffer of characters. */
 
-	    wrencc_(xfrlun, &numdta, cbuffr, (ftnlen)4);
-	    if (failed_()) {
+	    wrencc_(__global_state, xfrlun, &numdta, cbuffr, (ftnlen)4);
+	    if (failed_(__global_state)) {
 
 /*              We want to check failed here because were in a loop. */
 /*              We should exit the loop, and the routine, as soon as */
@@ -941,44 +960,46 @@ L100007:
 /*              for a long time. Attempt to close the binary DAS file */
 /*              that we opened and then return to the caller. */
 
-		dascls_(&handle);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Write out the end data block identifier, the block number, */
 /*           and the data count for the block. */
 
-	    s_copy(line, "END_CHARACTER_BLOCK # #", (ftnlen)80, (ftnlen)23);
-	    repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
-	    repmi_(line, "#", &numdta, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
+	    s_copy(&__global_state->f2c, line, "END_CHARACTER_BLOCK # #", (
+		    ftnlen)80, (ftnlen)23);
+	    repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
+	    repmi_(__global_state, line, "#", &numdta, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100008;
 	    }
-	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, 
+		    rtrim_(__global_state, line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100008;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100008:
 	    if (iostat != 0) {
 
 /*              An error occurred, so close the binary DAS file, set an */
 /*              appropriate error message, and return to the caller. */
 
-		dascls_(&handle);
-		setmsg_("Error writing to the DAS transfer file: #. IOSTAT ="
-			" #.", (ftnlen)54);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error writing to the DAS transfer f"
+			"ile: #. IOSTAT = #.", (ftnlen)54);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
@@ -992,34 +1013,38 @@ L100008:
 /*        Write out the number of character data blocks processed */
 /*        processed, and the count of double precision data items. */
 
-	s_copy(line, "TOTAL_CHARACTER_BLOCKS # #", (ftnlen)80, (ftnlen)26);
-	repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)80);
-	repmi_(line, "#", &ncdata, line, (ftnlen)80, (ftnlen)1, (ftnlen)80);
+	s_copy(&__global_state->f2c, line, "TOTAL_CHARACTER_BLOCKS # #", (
+		ftnlen)80, (ftnlen)26);
+	repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (ftnlen)
+		1, (ftnlen)80);
+	repmi_(__global_state, line, "#", &ncdata, line, (ftnlen)80, (ftnlen)
+		1, (ftnlen)80);
 	ci__1.cierr = 1;
 	ci__1.ciunit = *xfrlun;
 	ci__1.cifmt = "(A)";
-	iostat = s_wsfe(&ci__1);
+	iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100009;
 	}
-	iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, rtrim_(
+		__global_state, line, (ftnlen)80));
 	if (iostat != 0) {
 	    goto L100009;
 	}
-	iostat = e_wsfe();
+	iostat = e_wsfe(&__global_state->f2c);
 L100009:
 	if (iostat != 0) {
 
 /*           An error occurred, so close the binary DAS file, set an */
 /*           appropriate error message, and return to the caller. */
 
-	    dascls_(&handle);
-	    setmsg_("Error writing to the DAS transfer file: #. IOSTAT = #.", 
-		    (ftnlen)54);
-	    errfnm_("#", xfrlun, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	    chkout_("DASBT", (ftnlen)5);
+	    dascls_(__global_state, &handle);
+	    setmsg_(__global_state, "Error writing to the DAS transfer file:"
+		    " #. IOSTAT = #.", (ftnlen)54);
+	    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	    chkout_(__global_state, "DASBT", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -1042,36 +1067,38 @@ L100009:
 /*           Write out the begin data block identifier, the block */
 /*           number, and the data count for the block. */
 
-	    s_copy(line, "BEGIN_DP_BLOCK # #", (ftnlen)80, (ftnlen)18);
-	    repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
-	    repmi_(line, "#", &numdta, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
+	    s_copy(&__global_state->f2c, line, "BEGIN_DP_BLOCK # #", (ftnlen)
+		    80, (ftnlen)18);
+	    repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
+	    repmi_(__global_state, line, "#", &numdta, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100010;
 	    }
-	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, 
+		    rtrim_(__global_state, line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100010;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100010:
 	    if (iostat != 0) {
 
 /*              An error occurred, so close the binary DAS file, set an */
 /*              appropriate error message, and return to the caller. */
 
-		dascls_(&handle);
-		setmsg_("Error writing to the DAS transfer file: #. IOSTAT ="
-			" #.", (ftnlen)54);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error writing to the DAS transfer f"
+			"ile: #. IOSTAT = #.", (ftnlen)54);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1080,12 +1107,12 @@ L100010:
 /*           inclusive: thus the subtraction of 1 in the call. */
 
 	    i__2 = dtabeg + numdta - 1;
-	    dasrdd_(&handle, &dtabeg, &i__2, dbuffr);
+	    dasrdd_(__global_state, &handle, &dtabeg, &i__2, dbuffr);
 
 /*           Encode and write out a buffer of double precision numbers. */
 
-	    wrencd_(xfrlun, &numdta, dbuffr);
-	    if (failed_()) {
+	    wrencd_(__global_state, xfrlun, &numdta, dbuffr);
+	    if (failed_(__global_state)) {
 
 /*              We want to check failed here because were in a loop. */
 /*              We should exit the loop, and the routine, as soon as */
@@ -1093,44 +1120,46 @@ L100010:
 /*              for a long time. Attempt to close the binary DAS file */
 /*              that we opened and then return to the caller. */
 
-		dascls_(&handle);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Write out the end data block identifier, the block number, */
 /*           and the data count for the block. */
 
-	    s_copy(line, "END_DP_BLOCK # #", (ftnlen)80, (ftnlen)16);
-	    repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
-	    repmi_(line, "#", &numdta, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
+	    s_copy(&__global_state->f2c, line, "END_DP_BLOCK # #", (ftnlen)80,
+		     (ftnlen)16);
+	    repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
+	    repmi_(__global_state, line, "#", &numdta, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100011;
 	    }
-	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, 
+		    rtrim_(__global_state, line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100011;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100011:
 	    if (iostat != 0) {
 
 /*              An error occurred, so close the binary DAS file, set an */
 /*              appropriate error message, and return to the caller. */
 
-		dascls_(&handle);
-		setmsg_("Error writing to the DAS transfer file: #. IOSTAT ="
-			" #.", (ftnlen)54);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error writing to the DAS transfer f"
+			"ile: #. IOSTAT = #.", (ftnlen)54);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1144,34 +1173,38 @@ L100011:
 /*        Write out the number of double precision processed data blocks */
 /*        processed, and the count of double precision data items. */
 
-	s_copy(line, "TOTAL_DP_BLOCKS # #", (ftnlen)80, (ftnlen)19);
-	repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)80);
-	repmi_(line, "#", &nddata, line, (ftnlen)80, (ftnlen)1, (ftnlen)80);
+	s_copy(&__global_state->f2c, line, "TOTAL_DP_BLOCKS # #", (ftnlen)80, 
+		(ftnlen)19);
+	repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (ftnlen)
+		1, (ftnlen)80);
+	repmi_(__global_state, line, "#", &nddata, line, (ftnlen)80, (ftnlen)
+		1, (ftnlen)80);
 	ci__1.cierr = 1;
 	ci__1.ciunit = *xfrlun;
 	ci__1.cifmt = "(A)";
-	iostat = s_wsfe(&ci__1);
+	iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100012;
 	}
-	iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, rtrim_(
+		__global_state, line, (ftnlen)80));
 	if (iostat != 0) {
 	    goto L100012;
 	}
-	iostat = e_wsfe();
+	iostat = e_wsfe(&__global_state->f2c);
 L100012:
 	if (iostat != 0) {
 
 /*           An error occurred, so close the binary DAS file, set an */
 /*           appropriate error message, and return to the caller. */
 
-	    dascls_(&handle);
-	    setmsg_("Error writing to the DAS transfer file: #. IOSTAT = #.", 
-		    (ftnlen)54);
-	    errfnm_("#", xfrlun, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	    chkout_("DASBT", (ftnlen)5);
+	    dascls_(__global_state, &handle);
+	    setmsg_(__global_state, "Error writing to the DAS transfer file:"
+		    " #. IOSTAT = #.", (ftnlen)54);
+	    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	    chkout_(__global_state, "DASBT", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -1194,36 +1227,38 @@ L100012:
 /*           Write out the begin data block identifier, the block number, */
 /*           and the data count for the block. */
 
-	    s_copy(line, "BEGIN_INTEGER_BLOCK # #", (ftnlen)80, (ftnlen)23);
-	    repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
-	    repmi_(line, "#", &numdta, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
+	    s_copy(&__global_state->f2c, line, "BEGIN_INTEGER_BLOCK # #", (
+		    ftnlen)80, (ftnlen)23);
+	    repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
+	    repmi_(__global_state, line, "#", &numdta, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100013;
 	    }
-	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, 
+		    rtrim_(__global_state, line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100013;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100013:
 	    if (iostat != 0) {
 
 /*              An error occurred, so close the binary DAS file, set an */
 /*              appropriate error message, and return to the caller. */
 
-		dascls_(&handle);
-		setmsg_("Error writing to the DAS transfer file: #. IOSTAT ="
-			" #.", (ftnlen)54);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error writing to the DAS transfer f"
+			"ile: #. IOSTAT = #.", (ftnlen)54);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1232,12 +1267,12 @@ L100013:
 /*           the subtraction of 1 in the call. */
 
 	    i__2 = dtabeg + numdta - 1;
-	    dasrdi_(&handle, &dtabeg, &i__2, ibuffr);
+	    dasrdi_(__global_state, &handle, &dtabeg, &i__2, ibuffr);
 
 /*           Encode and write out a buffer of integers. */
 
-	    wrenci_(xfrlun, &numdta, ibuffr);
-	    if (failed_()) {
+	    wrenci_(__global_state, xfrlun, &numdta, ibuffr);
+	    if (failed_(__global_state)) {
 
 /*              We want to check failed here because were in a loop. */
 /*              We should exit the loop, and the routine, as soon as */
@@ -1245,44 +1280,46 @@ L100013:
 /*              for a long time. Attempt to close the binary DAS file */
 /*              that we opened and then return to the caller. */
 
-		dascls_(&handle);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Write out the end data block identifier, the block number, */
 /*           and the data count for the block. */
 
-	    s_copy(line, "END_INTEGER_BLOCK # #", (ftnlen)80, (ftnlen)21);
-	    repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
-	    repmi_(line, "#", &numdta, line, (ftnlen)80, (ftnlen)1, (ftnlen)
-		    80);
+	    s_copy(&__global_state->f2c, line, "END_INTEGER_BLOCK # #", (
+		    ftnlen)80, (ftnlen)21);
+	    repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
+	    repmi_(__global_state, line, "#", &numdta, line, (ftnlen)80, (
+		    ftnlen)1, (ftnlen)80);
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100014;
 	    }
-	    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, 
+		    rtrim_(__global_state, line, (ftnlen)80));
 	    if (iostat != 0) {
 		goto L100014;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100014:
 	    if (iostat != 0) {
 
 /*              An error occurred, so close the binary DAS file, set an */
 /*              appropriate error message, and return to the caller. */
 
-		dascls_(&handle);
-		setmsg_("Error writing to the DAS transfer file: #. IOSTAT ="
-			" #.", (ftnlen)54);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("DASBT", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error writing to the DAS transfer f"
+			"ile: #. IOSTAT = #.", (ftnlen)54);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "DASBT", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1296,42 +1333,46 @@ L100014:
 /*        Write out the number of processed integer data blocks */
 /*        processed, and the count of double precision data items. */
 
-	s_copy(line, "TOTAL_INTEGER_BLOCKS # #", (ftnlen)80, (ftnlen)24);
-	repmi_(line, "#", &numblk, line, (ftnlen)80, (ftnlen)1, (ftnlen)80);
-	repmi_(line, "#", &nidata, line, (ftnlen)80, (ftnlen)1, (ftnlen)80);
+	s_copy(&__global_state->f2c, line, "TOTAL_INTEGER_BLOCKS # #", (
+		ftnlen)80, (ftnlen)24);
+	repmi_(__global_state, line, "#", &numblk, line, (ftnlen)80, (ftnlen)
+		1, (ftnlen)80);
+	repmi_(__global_state, line, "#", &nidata, line, (ftnlen)80, (ftnlen)
+		1, (ftnlen)80);
 	ci__1.cierr = 1;
 	ci__1.ciunit = *xfrlun;
 	ci__1.cifmt = "(A)";
-	iostat = s_wsfe(&ci__1);
+	iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100015;
 	}
-	iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)80));
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, rtrim_(
+		__global_state, line, (ftnlen)80));
 	if (iostat != 0) {
 	    goto L100015;
 	}
-	iostat = e_wsfe();
+	iostat = e_wsfe(&__global_state->f2c);
 L100015:
 	if (iostat != 0) {
 
 /*           An error occurred, so close the binary DAS file, set an */
 /*           appropriate error message, and return to the caller. */
 
-	    dascls_(&handle);
-	    setmsg_("Error writing to the DAS transfer file: #. IOSTAT = #.", 
-		    (ftnlen)54);
-	    errfnm_("#", xfrlun, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	    chkout_("DASBT", (ftnlen)5);
+	    dascls_(__global_state, &handle);
+	    setmsg_(__global_state, "Error writing to the DAS transfer file:"
+		    " #. IOSTAT = #.", (ftnlen)54);
+	    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	    chkout_(__global_state, "DASBT", (ftnlen)5);
 	    return 0;
 	}
     }
 
 /*     Close only the binary DAS file. */
 
-    dascls_(&handle);
-    chkout_("DASBT", (ftnlen)5);
+    dascls_(__global_state, &handle);
+    chkout_(__global_state, "DASBT", (ftnlen)5);
     return 0;
 } /* dasbt_ */
 

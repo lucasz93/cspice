@@ -8,40 +8,40 @@
 
 
 typedef int pltnp_state_t;
-static pltnp_state_t* get_pltnp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pltnp_state_t* get_pltnp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PLTNP ( Nearest point on triangular plate ) */
-/* Subroutine */ int pltnp_(doublereal *point, doublereal *v1, doublereal *v2,
-	 doublereal *v3, doublereal *pnear, doublereal *dist)
+/* Subroutine */ int pltnp_(cspice_t* __global_state, doublereal *point, 
+	doublereal *v1, doublereal *v2, doublereal *v3, doublereal *pnear, 
+	doublereal *dist)
 {
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal perp[3];
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     logical degen;
     doublereal pdiff[3];
     doublereal d1;
     doublereal d2;
     doublereal d3;
     doublereal e1[3];
-    extern doublereal vdist_(doublereal *, doublereal *);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
     doublereal e2[3];
     doublereal e3[3];
     doublereal l1;
     doublereal l2;
     doublereal l3;
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical vzero_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vperp_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     doublereal enorm1[3];
     doublereal enorm2[3];
     doublereal enorm3[3];
@@ -49,15 +49,15 @@ static pltnp_state_t* get_pltnp_state() {
     logical in1;
     logical in2;
     logical in3;
-    extern /* Subroutine */ int npsgpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int npsgpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
     doublereal np1[3];
     doublereal np2[3];
 
 
     /* Module state */
-    pltnp_state_t* __state = get_pltnp_state();
+    pltnp_state_t* __state = get_pltnp_state(__global_state);
 /* $ Abstract */
 
 /*     Find the nearest point on a triangular plate to a given point. */
@@ -260,7 +260,7 @@ static pltnp_state_t* get_pltnp_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -269,38 +269,39 @@ static pltnp_state_t* get_pltnp_state() {
 
 /*     Compute the plate's edges. */
 
-    vsub_(v2, v1, e1);
-    vsub_(v3, v2, e2);
-    vsub_(v1, v3, e3);
+    vsub_(__global_state, v2, v1, e1);
+    vsub_(__global_state, v3, v2, e2);
+    vsub_(__global_state, v1, v3, e3);
 
 /*     Compute a normal vector for the plate, if possible. */
 /*     If the plate is degenerate, we'll find out at this point. */
 
-    vcrss_(e1, e2, normal);
+    vcrss_(__global_state, e1, e2, normal);
 
 /*     Compute the outward normals of the plate's edges in the */
 /*     plate containing the plate. */
 
-    vcrss_(e1, normal, enorm1);
-    vcrss_(e2, normal, enorm2);
-    vcrss_(e3, normal, enorm3);
-    degen = vzero_(normal) || vzero_(enorm1) || vzero_(enorm2) || vzero_(
+    vcrss_(__global_state, e1, normal, enorm1);
+    vcrss_(__global_state, e2, normal, enorm2);
+    vcrss_(__global_state, e3, normal, enorm3);
+    degen = vzero_(__global_state, normal) || vzero_(__global_state, enorm1) 
+	    || vzero_(__global_state, enorm2) || vzero_(__global_state, 
 	    enorm3);
     if (degen) {
 
 /*        The "plate" is a line segment or point. Determine */
 /*        which case we have. */
 
-	l1 = vnorm_(e1);
-	l2 = vnorm_(e2);
-	l3 = vnorm_(e3);
+	l1 = vnorm_(__global_state, e1);
+	l2 = vnorm_(__global_state, e2);
+	l3 = vnorm_(__global_state, e3);
 	if (l1 == 0. && l2 == 0.) {
 
 /*           Up to round-off error, the vertices coincide. */
 /*           The vertex V1 for practical purposes is the plate. */
 
-	    vequ_(v1, pnear);
-	    *dist = vdist_(pnear, point);
+	    vequ_(__global_state, v1, pnear);
+	    *dist = vdist_(__global_state, pnear, point);
 	} else {
 
 /*           The plate is a line segment having positive length. */
@@ -311,17 +312,17 @@ static pltnp_state_t* get_pltnp_state() {
 
 /*              The segment is bounded by V1 and V2. */
 
-		npsgpt_(v1, v2, point, pnear, dist);
+		npsgpt_(__global_state, v1, v2, point, pnear, dist);
 	    } else if (l2 > max(l3,l1)) {
 
 /*              The segment is bounded by V2 and V3. */
 
-		npsgpt_(v2, v3, point, pnear, dist);
+		npsgpt_(__global_state, v2, v3, point, pnear, dist);
 	    } else {
 
 /*              The segment is bounded by V3 and V1. */
 
-		npsgpt_(v3, v1, point, pnear, dist);
+		npsgpt_(__global_state, v3, v1, point, pnear, dist);
 	    }
 	}
 
@@ -336,8 +337,8 @@ static pltnp_state_t* get_pltnp_state() {
 /*     the plate. Find the offset of the POINT from V1, and */
 /*     find the component of this offset orthogonal to NORMAL. */
 
-    vsub_(point, v1, pdiff);
-    vperp_(pdiff, normal, perp);
+    vsub_(__global_state, point, v1, pdiff);
+    vperp_(__global_state, pdiff, normal, perp);
 
 /*     Determine whether V1+PERP is inside the plate. */
 
@@ -346,19 +347,20 @@ static pltnp_state_t* get_pltnp_state() {
 /*     constant for edge 2 is that of the offset of V2 */
 /*     from V1; this offset is edge 1. */
 
-    in1 = vdot_(perp, enorm1) <= 0.;
-    in2 = vdot_(perp, enorm2) <= vdot_(e1, enorm2);
-    in3 = vdot_(perp, enorm3) <= 0.;
+    in1 = vdot_(__global_state, perp, enorm1) <= 0.;
+    in2 = vdot_(__global_state, perp, enorm2) <= vdot_(__global_state, e1, 
+	    enorm2);
+    in3 = vdot_(__global_state, perp, enorm3) <= 0.;
     if (in1 && in2 && in3) {
 
 /*        V1+PERP is inside the plate. It is the closest */
 /*        point on the plate to POINT. */
 
-	vadd_(v1, perp, pnear);
+	vadd_(__global_state, v1, perp, pnear);
 
 /*        We have the near point; set the distance. */
 
-	*dist = vdist_(pnear, point);
+	*dist = vdist_(__global_state, pnear, point);
     } else {
 
 /*        PERP is outside the plate. The nearest point */
@@ -371,30 +373,30 @@ static pltnp_state_t* get_pltnp_state() {
 
 /*           The solution must be on the first edge. */
 
-	    npsgpt_(v1, v2, point, pnear, dist);
+	    npsgpt_(__global_state, v1, v2, point, pnear, dist);
 	} else if (! in2 && (in3 && in1)) {
 
 /*           The solution must be on the second edge. */
 
-	    npsgpt_(v2, v3, point, pnear, dist);
+	    npsgpt_(__global_state, v2, v3, point, pnear, dist);
 	} else if (! in3 && (in1 && in2)) {
 
 /*           The solution must be on the third edge. */
 
-	    npsgpt_(v3, v1, point, pnear, dist);
+	    npsgpt_(__global_state, v3, v1, point, pnear, dist);
 	} else {
 
 /*           Compute solutions on all three edges and pick */
 /*           the best one. */
 
-	    npsgpt_(v1, v2, point, np1, &d1);
-	    npsgpt_(v2, v3, point, np2, &d2);
-	    npsgpt_(v3, v1, point, pnear, &d3);
+	    npsgpt_(__global_state, v1, v2, point, np1, &d1);
+	    npsgpt_(__global_state, v2, v3, point, np2, &d2);
+	    npsgpt_(__global_state, v3, v1, point, pnear, &d3);
 	    if (d1 <= min(d2,d3)) {
-		vequ_(np1, pnear);
+		vequ_(__global_state, np1, pnear);
 		*dist = d1;
 	    } else if (d2 <= min(d3,d1)) {
-		vequ_(np2, pnear);
+		vequ_(__global_state, np2, pnear);
 		*dist = d2;
 	    } else {
 

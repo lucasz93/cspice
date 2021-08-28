@@ -8,26 +8,26 @@
 
 
 typedef int wnfltd_state_t;
-static wnfltd_state_t* get_wnfltd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wnfltd_state_t* get_wnfltd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      WNFLTD ( Filter small intervals from a DP window ) */
-/* Subroutine */ int wnfltd_(doublereal *small, doublereal *window)
+/* Subroutine */ int wnfltd_(cspice_t* __global_state, doublereal *small, 
+	doublereal *window)
 {
     integer card;
     integer i__;
     integer j;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    wnfltd_state_t* __state = get_wnfltd_state();
+    wnfltd_state_t* __state = get_wnfltd_state(__global_state);
 /* $ Abstract */
 
 /*     Filter (remove) small intervals from a double precision window. */
@@ -167,16 +167,16 @@ static wnfltd_state_t* get_wnfltd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("WNFLTD", (ftnlen)6);
+	chkin_(__global_state, "WNFLTD", (ftnlen)6);
     }
 
 /*     Get the cardinality of the window. (The size is not important; */
 /*     this routine can't create any new intervals.) */
 
-    card = cardd_(window);
+    card = cardd_(__global_state, window);
 
 /*     Step through the window, looking for the next interval big */
 /*     enough to get stuck in the filter. Keep this up until the last */
@@ -192,8 +192,8 @@ static wnfltd_state_t* get_wnfltd_state() {
 	}
 	j += 2;
     }
-    scardd_(&i__, window);
-    chkout_("WNFLTD", (ftnlen)6);
+    scardd_(__global_state, &i__, window);
+    chkout_(__global_state, "WNFLTD", (ftnlen)6);
     return 0;
 } /* wnfltd_ */
 

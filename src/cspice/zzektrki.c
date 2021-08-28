@@ -8,38 +8,37 @@
 
 
 typedef int zzektrki_state_t;
-static zzektrki_state_t* get_zzektrki_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrki_state_t* get_zzektrki_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKTRKI ( EK tree, look up key by index ) */
-/* Subroutine */ int zzektrki_(integer *handle, integer *tree, integer *
-	nodkey, integer *n, integer *key)
+/* Subroutine */ int zzektrki_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *nodkey, integer *n, integer *key)
 {
     integer base;
     integer node;
     integer size;
-    extern integer zzektrbs_(integer *);
-    extern /* Subroutine */ int zzektrlk_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *);
-    extern integer zzektrnk_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer zzektrbs_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzektrlk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern integer zzektrnk_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer level;
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer addrss;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer noffst;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer idx;
     integer ptr;
 
 
     /* Module state */
-    zzektrki_state_t* __state = get_zzektrki_state();
+    zzektrki_state_t* __state = get_zzektrki_state(__global_state);
 /* $ Abstract */
 
 /*     Get a key from a node by index:  return the key having a specified */
@@ -376,28 +375,30 @@ static zzektrki_state_t* get_zzektrki_state() {
 
 /*     Local variables */
 
-    zzektrlk_(handle, tree, nodkey, &idx, &node, &noffst, &level, &ptr);
-    size = zzektrnk_(handle, tree, &node);
+    zzektrlk_(__global_state, handle, tree, nodkey, &idx, &node, &noffst, &
+	    level, &ptr);
+    size = zzektrnk_(__global_state, handle, tree, &node);
 
 /*     Reject bad indices. */
 
     if (*n < 0 || *n > size) {
-	chkin_("ZZEKTRKI", (ftnlen)8);
-	setmsg_("Key index = #; valid range in node # is 1:#", (ftnlen)43);
-	errint_("#", n, (ftnlen)1);
-	errint_("#", &node, (ftnlen)1);
-	errint_("#", &size, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKTRKI", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRKI", (ftnlen)8);
+	setmsg_(__global_state, "Key index = #; valid range in node # is 1:#",
+		 (ftnlen)43);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	errint_(__global_state, "#", &node, (ftnlen)1);
+	errint_(__global_state, "#", &size, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKTRKI", (ftnlen)8);
 	return 0;
     }
-    base = zzektrbs_(&node);
+    base = zzektrbs_(__global_state, &node);
     if (level == 1) {
 	addrss = base + 5 + *n;
     } else {
 	addrss = base + 1 + *n;
     }
-    dasrdi_(handle, &addrss, &addrss, key);
+    dasrdi_(__global_state, handle, &addrss, &addrss, key);
 
 /*     Map the key from relative to absolute. */
 

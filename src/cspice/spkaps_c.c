@@ -605,7 +605,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkaps_c" );
+   chkin_c ( naif_state, "spkaps_c" );
 
 
    /*

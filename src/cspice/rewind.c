@@ -2,12 +2,11 @@
 #include "fio.h"
 #include "__cspice_state.h"
 #ifdef KR_headers
-integer f_rew(a) alist *a;
+integer f_rew(f2c,a) f2c_state_t *f2c; alist *a;
 #else
-integer f_rew(alist *a)
+integer f_rew(f2c_state_t *f2c, alist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	unit *b;
 	if(a->aunit>=MXUNIT || a->aunit<0)
 		err(a->aerr,101,"rewind");

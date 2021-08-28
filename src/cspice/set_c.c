@@ -253,7 +253,7 @@
    {
       return ( SPICEFALSE );
    }
-   chkin_c ( "set_c" );
+   chkin_c ( naif_state, "set_c" );
 
 
    /*

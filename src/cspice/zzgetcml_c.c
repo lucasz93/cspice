@@ -230,7 +230,7 @@
 
    /* Participate in error tracing. */
 
-   chkin_c ( "zzgetcml_c" );
+   chkin_c ( naif_state, "zzgetcml_c" );
 
 
    /*

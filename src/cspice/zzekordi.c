@@ -8,14 +8,13 @@
 
 
 typedef int zzekordi_state_t;
-static zzekordi_state_t* get_zzekordi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekordi_state_t* get_zzekordi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKORDI ( Order of an integer EK column ) */
-/* Subroutine */ int zzekordi_(integer *ivals, logical *nullok, logical *
-	nlflgs, integer *nvals, integer *iorder)
+/* Subroutine */ int zzekordi_(cspice_t* __global_state, integer *ivals, 
+	logical *nullok, logical *nlflgs, integer *nvals, integer *iorder)
 {
     /* System generated locals */
     integer i__1;
@@ -23,13 +22,13 @@ static zzekordi_state_t* get_zzekordi_state() {
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int swapi_(integer *, integer *);
+    extern /* Subroutine */ int swapi_(cspice_t*, integer *, integer *);
     integer jg;
     integer gap;
 
 
     /* Module state */
-    zzekordi_state_t* __state = get_zzekordi_state();
+    zzekordi_state_t* __state = get_zzekordi_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the order of elements in an integer EK column, using */
@@ -253,7 +252,7 @@ static zzekordi_state_t* get_zzekordi_state() {
 
 		    j = 0;
 		} else {
-		    swapi_(&iorder[j - 1], &iorder[jg - 1]);
+		    swapi_(__global_state, &iorder[j - 1], &iorder[jg - 1]);
 		}
 		j -= gap;
 	    }

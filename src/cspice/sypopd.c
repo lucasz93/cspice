@@ -8,8 +8,7 @@
 
 
 extern sypopd_init_t __sypopd_init;
-static sypopd_state_t* get_sypopd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sypopd_state_t* get_sypopd_state(cspice_t* state) {
 	if (!state->sypopd)
 		state->sypopd = __cspice_allocate_module(sizeof(
 	sypopd_state_t), &__sypopd_init, sizeof(__sypopd_init));
@@ -18,9 +17,9 @@ static sypopd_state_t* get_sypopd_state() {
 }
 
 /* $Procedure      SYPOPD ( Pop a value from a particular symbol ) */
-/* Subroutine */ int sypopd_(char *name__, char *tabsym, integer *tabptr, 
-	doublereal *tabval, doublereal *value, logical *found, ftnlen 
-	name_len, ftnlen tabsym_len)
+/* Subroutine */ int sypopd_(cspice_t* __global_state, char *name__, char *
+	tabsym, integer *tabptr, doublereal *tabval, doublereal *value, 
+	logical *found, ftnlen name_len, ftnlen tabsym_len)
 {
     /* System generated locals */
     integer i__1;
@@ -29,29 +28,30 @@ static sypopd_state_t* get_sypopd_state() {
     integer nval;
     integer nptr;
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
-    extern integer cardd_(doublereal *);
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sumai_(integer *, integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int remlac_(integer *, integer *, char *, integer 
-	    *, ftnlen);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int remlad_(integer *, integer *, doublereal *, 
-	    integer *);
-    extern /* Subroutine */ int scardi_(integer *, integer *);
-    extern /* Subroutine */ int remlai_(integer *, integer *, integer *, 
-	    integer *);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int scardc_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int remlac_(cspice_t*, integer *, integer *, char 
+	    *, integer *, ftnlen);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int remlad_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int remlai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer locval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer locsym;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sypopd_state_t* __state = get_sypopd_state();
+    sypopd_state_t* __state = get_sypopd_state(__global_state);
 /* $ Abstract */
 
 /*     Pop a value associated with a particular symbol in a double */
@@ -236,22 +236,22 @@ static sypopd_state_t* get_sypopd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYPOPD", (ftnlen)6);
+	chkin_(__global_state, "SYPOPD", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
-    nptr = cardi_(tabptr);
-    nval = cardd_(tabval);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
+    nptr = cardi_(__global_state, tabptr);
+    nval = cardd_(__global_state, tabval);
 
 /*     Is this symbol even in the table? */
 
-    locsym = bsrchc_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
+    locsym = bsrchc_(__global_state, name__, &nsym, tabsym + tabsym_len * 6, 
+	    name_len, tabsym_len);
 
 /*     If it's not in the table, it's definitely a problem. */
 
@@ -267,26 +267,27 @@ static sypopd_state_t* get_sypopd_state() {
 /*        symbol from the value table. */
 
 	i__1 = locsym - 1;
-	locval = sumai_(&tabptr[6], &i__1) + 1;
+	locval = sumai_(__global_state, &tabptr[6], &i__1) + 1;
 	*value = tabval[locval + 5];
-	remlad_(&__state->c__1, &locval, &tabval[6], &nval);
-	scardd_(&nval, tabval);
+	remlad_(__global_state, &__state->c__1, &locval, &tabval[6], &nval);
+	scardd_(__global_state, &nval, tabval);
 
 /*        If this was the sole value for the symbol, remove the */
 /*        symbol from the name and pointer tables. Otherwise just */
 /*        decrement the dimension. */
 
 	if (tabptr[locsym + 5] == 1) {
-	    remlac_(&__state->c__1, &locsym, tabsym + tabsym_len * 6, &nsym, 
-		    tabsym_len);
-	    scardc_(&nsym, tabsym, tabsym_len);
-	    remlai_(&__state->c__1, &locsym, &tabptr[6], &nptr);
-	    scardi_(&nptr, tabptr);
+	    remlac_(__global_state, &__state->c__1, &locsym, tabsym + 
+		    tabsym_len * 6, &nsym, tabsym_len);
+	    scardc_(__global_state, &nsym, tabsym, tabsym_len);
+	    remlai_(__global_state, &__state->c__1, &locsym, &tabptr[6], &
+		    nptr);
+	    scardi_(__global_state, &nptr, tabptr);
 	} else {
 	    --tabptr[locsym + 5];
 	}
     }
-    chkout_("SYPOPD", (ftnlen)6);
+    chkout_(__global_state, "SYPOPD", (ftnlen)6);
     return 0;
 } /* sypopd_ */
 

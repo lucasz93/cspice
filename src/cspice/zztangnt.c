@@ -8,8 +8,7 @@
 
 
 extern zztangnt_init_t __zztangnt_init;
-static zztangnt_state_t* get_zztangnt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zztangnt_state_t* get_zztangnt_state(cspice_t* state) {
 	if (!state->zztangnt)
 		state->zztangnt = __cspice_allocate_module(sizeof(
 	zztangnt_state_t), &__zztangnt_init, sizeof(__zztangnt_init));
@@ -18,58 +17,59 @@ static zztangnt_state_t* get_zztangnt_state() {
 }
 
 /* $Procedure ZZTANGNT ( DSK, find target tangent rays in half-plane ) */
-/* Subroutine */ int zztangnt_(integer *curve, doublereal *srcrad, integer *
-	shape, integer *trgcde, integer *nsurf, integer *srflst, integer *
-	fixfid, doublereal *et, doublereal *plnvec, doublereal *axis, 
-	doublereal *schstp, doublereal *soltol, doublereal *result, 
-	doublereal *points)
+/* Subroutine */ int zztangnt_(cspice_t* __global_state, integer *curve, 
+	doublereal *srcrad, integer *shape, integer *trgcde, integer *nsurf, 
+	integer *srflst, integer *fixfid, doublereal *et, doublereal *plnvec, 
+	doublereal *axis, doublereal *schstp, doublereal *soltol, doublereal *
+	result, doublereal *points)
 {
     /* System generated locals */
     integer i__1;
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzmaxrad_(doublereal *);
-    extern /* Subroutine */ int zztanini_(integer *, doublereal *, integer *, 
-	    integer *, integer *, integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int zztansta_();
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzmaxrad_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int zztanini_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, integer *, integer *, integer *, doublereal 
+	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zztansta_(cspice_t*);
     integer i__;
-    extern /* Subroutine */ int zztanslv_(U_fp, U_fp, U_fp, logical *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *);
-    extern integer cardd_(doublereal *);
+    extern /* Subroutine */ int zztanslv_(cspice_t*, U_fp, U_fp, U_fp, 
+	    logical *, doublereal *, doublereal *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, logical *);
+    extern integer cardd_(cspice_t*, doublereal *);
     integer n;
     doublereal r__;
     doublereal alpha;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     logical cstep;
     doublereal start;
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern logical failed_(void);
-    extern doublereal pi_(void);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vrotv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern doublereal pi_(cspice_t*);
     logical endflg[2];
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern doublereal dasine_(doublereal *, doublereal *);
-    extern /* Subroutine */ int gfrefn_();
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern doublereal dasine_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int gfrefn_(cspice_t*);
     doublereal refvec[3];
     doublereal maxrad;
     doublereal finish;
-    extern /* Subroutine */ int gfstep_();
+    extern /* Subroutine */ int gfstep_(cspice_t*);
     doublereal mindst;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zztangnt_state_t* __state = get_zztangnt_state();
+    zztangnt_state_t* __state = get_zztangnt_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -452,29 +452,29 @@ static zztangnt_state_t* get_zztangnt_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZTANGNT", (ftnlen)8);
+    chkin_(__global_state, "ZZTANGNT", (ftnlen)8);
 
 /*     Empty the result window. */
 
-    scardd_(&__state->c__0, result);
+    scardd_(__global_state, &__state->c__0, result);
 
 /*     Rotate the plane definition vector by pi about AXIS if */
 /*     we're generating penumbral terminator points. */
 
     if (*curve == 2) {
-	d__1 = pi_();
-	vrotv_(plnvec, axis, &d__1, refvec);
+	d__1 = pi_(__global_state);
+	vrotv_(__global_state, plnvec, axis, &d__1, refvec);
     } else {
-	vequ_(plnvec, refvec);
+	vequ_(__global_state, plnvec, refvec);
     }
 
 /*     Prepare the tangent finding utilities. */
 
-    zztanini_(curve, srcrad, shape, trgcde, nsurf, srflst, fixfid, et, refvec,
-	     axis);
+    zztanini_(__global_state, curve, srcrad, shape, trgcde, nsurf, srflst, 
+	    fixfid, et, refvec, axis);
 
 /*     Fetch a maximum bounding radius for the target. */
 
@@ -484,20 +484,21 @@ static zztangnt_state_t* get_zztangnt_state() {
 /*        ZZSUELIN */
 /*        ZZSUDSKI */
 
-    zzmaxrad_(&maxrad);
+    zzmaxrad_(__global_state, &maxrad);
 
 /*     Scale up MAXRAD slightly to ensure bracketing. */
 
     maxrad *= 1.001;
-    if (failed_()) {
-	chkout_("ZZTANGNT", (ftnlen)8);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
 	return 0;
     }
     if (maxrad <= 0.) {
-	setmsg_("Target maximum radius # is non-positive.", (ftnlen)40);
-	errdp_("#", &maxrad, (ftnlen)1);
-	sigerr_("SPICE(INVALIDRADIUS)", (ftnlen)20);
-	chkout_("ZZTANGNT", (ftnlen)8);
+	setmsg_(__global_state, "Target maximum radius # is non-positive.", (
+		ftnlen)40);
+	errdp_(__global_state, "#", &maxrad, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDRADIUS)", (ftnlen)20);
+	chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
 	return 0;
     }
     if (*curve == 0) {
@@ -513,45 +514,48 @@ static zztangnt_state_t* get_zztangnt_state() {
 /*        the angular radius of the target, based on */
 /*        its maximum radius. */
 
-	r__ = vnorm_(axis);
+	r__ = vnorm_(__global_state, axis);
 	mindst = maxrad * 1.0000000000010001;
 	if (r__ > mindst) {
 	    d__1 = maxrad / r__;
-	    start = pi_() - dasine_(&d__1, &__state->c_b9);
+	    start = pi_(__global_state) - dasine_(__global_state, &d__1, &
+		    __state->c_b9);
 	}
-	if (failed_()) {
-	    chkout_("ZZTANGNT", (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Set the final ray-axis separation. */
 
-	finish = pi_();
+	finish = pi_(__global_state);
     } else {
 
 /*        For the terminator cases, check for an invalid source radius. */
 
 	if (*srcrad <= 0.) {
-	    setmsg_("Source radius # is non-positive.", (ftnlen)32);
-	    errdp_("#", srcrad, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDRADIUS)", (ftnlen)20);
-	    chkout_("ZZTANGNT", (ftnlen)8);
+	    setmsg_(__global_state, "Source radius # is non-positive.", (
+		    ftnlen)32);
+	    errdp_(__global_state, "#", srcrad, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDRADIUS)", (ftnlen)20);
+	    chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Make sure the source and outer bounding sphere of the */
 /*        target don't intersect. */
 
-	r__ = vnorm_(axis);
+	r__ = vnorm_(__global_state, axis);
 	if (*srcrad + maxrad > r__) {
-	    setmsg_("Source radius # and target maximum radius # sum to #; d"
-		    "istance between source and target centers is #. Source a"
-		    "nd target are too close together.", (ftnlen)144);
-	    errdp_("#", srcrad, (ftnlen)1);
-	    errdp_("#", &maxrad, (ftnlen)1);
-	    errdp_("#", &r__, (ftnlen)1);
-	    sigerr_("SPICE(OBJECTSTOOCLOSE)", (ftnlen)22);
-	    chkout_("ZZTANGNT", (ftnlen)8);
+	    setmsg_(__global_state, "Source radius # and target maximum radi"
+		    "us # sum to #; distance between source and target center"
+		    "s is #. Source and target are too close together.", (
+		    ftnlen)144);
+	    errdp_(__global_state, "#", srcrad, (ftnlen)1);
+	    errdp_(__global_state, "#", &maxrad, (ftnlen)1);
+	    errdp_(__global_state, "#", &r__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(OBJECTSTOOCLOSE)", (ftnlen)22);
+	    chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
 	    return 0;
 	}
 	if (*curve == 1) {
@@ -573,18 +577,20 @@ static zztangnt_state_t* get_zztangnt_state() {
 /*           or not SRCRAD > MAXRAD. */
 
 	    d__1 = (*srcrad - maxrad) / r__;
-	    start = pi_() + dasine_(&d__1, &__state->c_b9);
-	    if (failed_()) {
-		chkout_("ZZTANGNT", (ftnlen)8);
+	    start = pi_(__global_state) + dasine_(__global_state, &d__1, &
+		    __state->c_b9);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
 		return 0;
 	    }
 
 /*           Set the final ray-axis separation. */
 
 	    d__1 = *srcrad / r__;
-	    finish = pi_() + dasine_(&d__1, &__state->c_b9);
-	    if (failed_()) {
-		chkout_("ZZTANGNT", (ftnlen)8);
+	    finish = pi_(__global_state) + dasine_(__global_state, &d__1, &
+		    __state->c_b9);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
 		return 0;
 	    }
 	} else if (*curve == 2) {
@@ -610,25 +616,28 @@ static zztangnt_state_t* get_zztangnt_state() {
 
 	    alpha = *srcrad / (*srcrad + maxrad);
 	    d__1 = *srcrad / (alpha * r__);
-	    start = pi_() - dasine_(&d__1, &__state->c_b9);
-	    if (failed_()) {
-		chkout_("ZZTANGNT", (ftnlen)8);
+	    start = pi_(__global_state) - dasine_(__global_state, &d__1, &
+		    __state->c_b9);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
 		return 0;
 	    }
 
 /*           We stop looking when the ray intersects the target center. */
 
 	    d__1 = *srcrad / r__;
-	    finish = pi_() - dasine_(&d__1, &__state->c_b9);
-	    if (failed_()) {
-		chkout_("ZZTANGNT", (ftnlen)8);
+	    finish = pi_(__global_state) - dasine_(__global_state, &d__1, &
+		    __state->c_b9);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
 		return 0;
 	    }
 	} else {
-	    setmsg_("Input curve code # was not recognized.", (ftnlen)38);
-	    errint_("#", curve, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZTANGNT", (ftnlen)8);
+	    setmsg_(__global_state, "Input curve code # was not recognized.", 
+		    (ftnlen)38);
+	    errint_(__global_state, "#", curve, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -641,10 +650,10 @@ static zztangnt_state_t* get_zztangnt_state() {
 /*     above. */
 
     cstep = TRUE_;
-    zztanslv_((U_fp)zztansta_, (U_fp)gfstep_, (U_fp)gfrefn_, &cstep, schstp, &
-	    start, &finish, soltol, result, points, endflg);
-    if (failed_()) {
-	chkout_("ZZTANGNT", (ftnlen)8);
+    zztanslv_(__global_state, (U_fp)zztansta_, (U_fp)gfstep_, (U_fp)gfrefn_, &
+	    cstep, schstp, &start, &finish, soltol, result, points, endflg);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
 	return 0;
     }
 
@@ -653,16 +662,17 @@ static zztangnt_state_t* get_zztangnt_state() {
 /*     becomes a cell rather than a window. We must delete the */
 /*     corresponding point from the POINTS array as well. */
 
-    if (cardd_(result) > 0) {
+    if (cardd_(__global_state, result) > 0) {
 	if (result[6] == start && ! endflg[0]) {
-	    n = cardd_(result);
+	    n = cardd_(__global_state, result);
 	    i__1 = n;
 	    for (i__ = 2; i__ <= i__1; ++i__) {
 		result[i__ + 4] = result[i__ + 5];
-		vequ_(&points[i__ * 3 - 3], &points[(i__ - 1) * 3 - 3]);
+		vequ_(__global_state, &points[i__ * 3 - 3], &points[(i__ - 1) 
+			* 3 - 3]);
 	    }
 	    i__1 = n - 1;
-	    scardd_(&i__1, result);
+	    scardd_(__global_state, &i__1, result);
 	}
     }
 
@@ -670,14 +680,14 @@ static zztangnt_state_t* get_zztangnt_state() {
 /*     it as well. In this case decrementing the cardinality of */
 /*     RESULT suffices. */
 
-    n = cardd_(result);
+    n = cardd_(__global_state, result);
     if (n > 0) {
 	if (result[n + 5] == finish && ! endflg[1]) {
 	    i__1 = n - 1;
-	    scardd_(&i__1, result);
+	    scardd_(__global_state, &i__1, result);
 	}
     }
-    chkout_("ZZTANGNT", (ftnlen)8);
+    chkout_(__global_state, "ZZTANGNT", (ftnlen)8);
     return 0;
 } /* zztangnt_ */
 

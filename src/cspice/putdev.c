@@ -8,8 +8,7 @@
 
 
 extern putdev_init_t __putdev_init;
-static putdev_state_t* get_putdev_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline putdev_state_t* get_putdev_state(cspice_t* state) {
 	if (!state->putdev)
 		state->putdev = __cspice_allocate_module(sizeof(
 	putdev_state_t), &__putdev_init, sizeof(__putdev_init));
@@ -18,17 +17,18 @@ static putdev_state_t* get_putdev_state() {
 }
 
 /* $Procedure      PUTDEV ( Store Error Output Device Specification ) */
-/* Subroutine */ int putdev_0_(int n__, char *device, ftnlen device_len)
+/* Subroutine */ int putdev_0_(cspice_t* __global_state, int n__, char *
+	device, ftnlen device_len)
 {
     /* Initialized data */
 
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
 
     /* Module state */
-    putdev_state_t* __state = get_putdev_state();
+    putdev_state_t* __state = get_putdev_state(__global_state);
 /* $ Abstract */
 
 /*     PUTDEV is a low-level data structure access routine which stores */
@@ -339,7 +339,8 @@ static putdev_state_t* get_putdev_state() {
 
 /*     Executable Code: */
 
-    s_copy(__state->savdev, device, (ftnlen)255, device_len);
+    s_copy(&__global_state->f2c, __state->savdev, device, (ftnlen)255, 
+	    device_len);
     return 0;
 /* $Procedure      GETDEV ( Get Error Output Device Specification ) */
 
@@ -486,16 +487,19 @@ L_getdev:
 
 /*     Grab saved error output device specification: */
 
-    s_copy(device, __state->savdev, device_len, (ftnlen)255);
+    s_copy(&__global_state->f2c, device, __state->savdev, device_len, (ftnlen)
+	    255);
     return 0;
 } /* putdev_ */
 
-/* Subroutine */ int putdev_(char *device, ftnlen device_len)
+/* Subroutine */ int putdev_(cspice_t* __global_state, char *device, ftnlen 
+	device_len)
 {
     return putdev_0_(0, device, device_len);
     }
 
-/* Subroutine */ int getdev_(char *device, ftnlen device_len)
+/* Subroutine */ int getdev_(cspice_t* __global_state, char *device, ftnlen 
+	device_len)
 {
     return putdev_0_(1, device, device_len);
     }

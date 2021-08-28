@@ -8,8 +8,7 @@
 
 
 extern spkr20_init_t __spkr20_init;
-static spkr20_state_t* get_spkr20_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr20_state_t* get_spkr20_state(cspice_t* state) {
 	if (!state->spkr20)
 		state->spkr20 = __cspice_allocate_module(sizeof(
 	spkr20_state_t), &__spkr20_init, sizeof(__spkr20_init));
@@ -18,14 +17,14 @@ static spkr20_state_t* get_spkr20_state() {
 }
 
 /* $Procedure      SPKR20 ( SPK, read record from segment, type 20 ) */
-/* Subroutine */ int spkr20_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr20_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer nrec;
@@ -33,41 +32,43 @@ static spkr20_state_t* get_spkr20_state() {
     integer size;
     integer i__;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer recno;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
     doublereal recbeg;
     doublereal dscale;
     integer recadr;
-    extern /* Subroutine */ int remlad_(integer *, integer *, doublereal *, 
-	    integer *);
+    extern /* Subroutine */ int remlad_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *);
     doublereal tscale;
     doublereal initjd;
     doublereal radius;
     doublereal intlen;
     doublereal initfr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer recsiz;
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
     integer nterms;
     doublereal intrvl;
-    extern logical return_(void);
-    extern doublereal j2000_(void);
+    extern logical return_(cspice_t*);
+    extern doublereal j2000_(cspice_t*);
     integer end;
     doublereal mid;
     integer loc;
-    extern doublereal spd_(void);
+    extern doublereal spd_(cspice_t*);
     doublereal pos[3];
 
 
     /* Module state */
-    spkr20_state_t* __state = get_spkr20_state();
+    spkr20_state_t* __state = get_spkr20_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 20 */
@@ -250,14 +251,14 @@ static spkr20_state_t* get_spkr20_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKR20", (ftnlen)6);
+    chkin_(__global_state, "SPKR20", (ftnlen)6);
 
 /*     Unpack the segment descriptor. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     begin = ic[4];
     end = ic[5];
 
@@ -275,7 +276,7 @@ static spkr20_state_t* get_spkr20_state() {
 /*     scales in the same call. */
 
     i__1 = end - 6;
-    dafgda_(handle, &i__1, &end, record);
+    dafgda_(__global_state, handle, &i__1, &end, record);
     dscale = record[0];
     tscale = record[1];
     initjd = record[2];
@@ -292,8 +293,8 @@ static spkr20_state_t* get_spkr20_state() {
 /*     Convert the initial epoch and interval length to */
 /*     seconds past J2000 TDB. */
 
-    init = (initjd - j2000_() + initfr) * spd_();
-    intrvl = intlen * spd_();
+    init = (initjd - j2000_(__global_state) + initfr) * spd_(__global_state);
+    intrvl = intlen * spd_(__global_state);
 
 /*     Locate the record containing the coefficients to use. */
 
@@ -312,9 +313,10 @@ static spkr20_state_t* get_spkr20_state() {
 /*     past J2000. We'll account for the fractional part of the */
 /*     start time below when we compute MID. */
 
-    recbeg = (initjd - j2000_() + (recno - 1) * intlen) * spd_();
+    recbeg = (initjd - j2000_(__global_state) + (recno - 1) * intlen) * spd_(
+	    __global_state);
     radius = intrvl / 2.;
-    mid = recbeg + initfr * spd_() + radius;
+    mid = recbeg + initfr * spd_(__global_state) + radius;
 
 /*     Compute the address of the desired record. */
 
@@ -327,15 +329,16 @@ static spkr20_state_t* get_spkr20_state() {
     record[1] = mid;
     record[2] = radius;
     i__1 = recadr + recsiz - 1;
-    dafgda_(handle, &recadr, &i__1, &record[3]);
+    dafgda_(__global_state, handle, &recadr, &i__1, &record[3]);
 
 /*     We're going to re-arrange the record: the position components */
 /*     will be transferred to the end of the record, and the record */
 /*     contents will be left-shifted to fill in the free elements. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	pos[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("pos", i__1, 
-		"spkr20_", (ftnlen)320)] = record[i__ * nterms + 2];
+	pos[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "pos", i__1, "spkr20_", (ftnlen)320)] = 
+		record[i__ * nterms + 2];
     }
     size = recsiz + 3;
 
@@ -348,7 +351,7 @@ static spkr20_state_t* get_spkr20_state() {
 /*        calculating the indices of subsequent elements to be removed. */
 
 	loc = i__ * nterms + 3 - (i__ - 1);
-	remlad_(&__state->c__1, &loc, record, &size);
+	remlad_(__global_state, &__state->c__1, &loc, record, &size);
 
 /*        Note that SIZE is an in-out argument; on output it indicates */
 /*        the size of the array after removal of the indicated */
@@ -358,14 +361,14 @@ static spkr20_state_t* get_spkr20_state() {
 
 /*     Convert the position vector to km. */
 
-    vsclip_(&dscale, pos);
+    vsclip_(__global_state, &dscale, pos);
 
 /*     Append the position to the record. Since we inserted three */
 /*     elements at the start of the record and deleted three position */
 /*     elements, the target index is the same as if we had copied the */
 /*     record directly to the output array. */
 
-    moved_(pos, &__state->c__3, &record[recsiz]);
+    moved_(__global_state, pos, &__state->c__3, &record[recsiz]);
 
 /*     Convert the velocity Chebyshev coefficients to units of km/s. */
 
@@ -373,7 +376,7 @@ static spkr20_state_t* get_spkr20_state() {
     for (i__ = 4; i__ <= i__1; ++i__) {
 	record[i__ - 1] *= dscale / tscale;
     }
-    chkout_("SPKR20", (ftnlen)6);
+    chkout_(__global_state, "SPKR20", (ftnlen)6);
     return 0;
 } /* spkr20_ */
 

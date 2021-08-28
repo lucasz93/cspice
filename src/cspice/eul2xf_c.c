@@ -346,7 +346,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "eul2xf_c" );
+   chkin_c ( naif_state, "eul2xf_c" );
    
    
    eul2xf_ (  ( doublereal * ) eulang,

@@ -8,8 +8,7 @@
 
 
 extern zzgfspu_init_t __zzgfspu_init;
-static zzgfspu_state_t* get_zzgfspu_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfspu_state_t* get_zzgfspu_state(cspice_t* state) {
 	if (!state->zzgfspu)
 		state->zzgfspu = __cspice_allocate_module(sizeof(
 	zzgfspu_state_t), &__zzgfspu_init, sizeof(__zzgfspu_init));
@@ -18,12 +17,13 @@ static zzgfspu_state_t* get_zzgfspu_state() {
 }
 
 /* $Procedure ZZGFSPU ( Private - GF, angular separation routines ) */
-/* Subroutine */ int zzgfspu_0_(int n__, char *of, char *from, char *shape, 
-	char *frame, doublereal *et, U_fp udfunc, char *abcorr, logical *
-	decres, doublereal *sep, char *xabcr, integer *xbod, char *yref, char 
-	*xref, integer *xobs, doublereal *xrad, integer *xshp, ftnlen of_len, 
-	ftnlen from_len, ftnlen shape_len, ftnlen frame_len, ftnlen 
-	abcorr_len, ftnlen xabcr_len, ftnlen yref_len, ftnlen xref_len)
+/* Subroutine */ int zzgfspu_0_(cspice_t* __global_state, int n__, char *of, 
+	char *from, char *shape, char *frame, doublereal *et, U_fp udfunc, 
+	char *abcorr, logical *decres, doublereal *sep, char *xabcr, integer *
+	xbod, char *yref, char *xref, integer *xobs, doublereal *xrad, 
+	integer *xshp, ftnlen of_len, ftnlen from_len, ftnlen shape_len, 
+	ftnlen frame_len, ftnlen abcorr_len, ftnlen xabcr_len, ftnlen 
+	yref_len, ftnlen xref_len)
 {
     /* Initialized data */
 
@@ -32,53 +32,60 @@ static zzgfspu_state_t* get_zzgfspu_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern doublereal dhfa_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzgftreb_(integer *, doublereal *);
+    extern doublereal dhfa_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzgftreb_(cspice_t*, integer *, doublereal *);
     doublereal axes1[3];
     doublereal axes2[3];
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer class__;
     logical found;
-    extern doublereal dvsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
-	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern doublereal dvsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int spkez_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
     integer fcode1;
     integer fcode2;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int bods2c_(cspice_t*, char *, integer *, logical 
+	    *, ftnlen);
+    extern logical failed_(cspice_t*);
     doublereal lt;
     doublereal dtheta;
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     logical attblk[15];
     integer clssid;
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal pv1[6];
     doublereal pv2[6];
     integer ctr1;
     integer ctr2;
-    extern /* Subroutine */ int zzgfspq_(doublereal *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, char *, char *, doublereal 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfspq_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, doublereal *, integer *, char *, char *, 
+	    doublereal *, ftnlen, ftnlen);
 
 
     /* Module state */
-    zzgfspu_state_t* __state = get_zzgfspu_state();
+    zzgfspu_state_t* __state = get_zzgfspu_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -467,9 +474,9 @@ static zzgfspu_state_t* get_zzgfspu_state() {
 
 /*     Never directly call this routine. */
 
-    chkin_("ZZGFSPU", (ftnlen)7);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZGFSPU", (ftnlen)7);
+    chkin_(__global_state, "ZZGFSPU", (ftnlen)7);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZGFSPU", (ftnlen)7);
     return 0;
 /* $Procedure ZZGFSPIN ( Private - GF, angular separation initialization ) */
 
@@ -707,42 +714,42 @@ L_zzgfspin:
 /*     angular separation initialization routine */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZGFSPIN", (ftnlen)8);
+	chkin_(__global_state, "ZZGFSPIN", (ftnlen)8);
     }
-    bods2c_(of, &__state->svbod1, &found, of_len);
+    bods2c_(__global_state, of, &__state->svbod1, &found, of_len);
     if (! found) {
-	setmsg_("The object name for target 1, '#', is not a recognized name"
-		" for an ephemeris object. The cause of this problem may be t"
-		"hat you need an updated version of the SPICE Toolkit.", (
-		ftnlen)172);
-	errch_("#", of, (ftnlen)1, of_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFSPIN", (ftnlen)8);
+	setmsg_(__global_state, "The object name for target 1, '#', is not a"
+		" recognized name for an ephemeris object. The cause of this "
+		"problem may be that you need an updated version of the SPICE"
+		" Toolkit.", (ftnlen)172);
+	errch_(__global_state, "#", of, (ftnlen)1, of_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(of + of_len, &__state->svbod2, &found, of_len);
+    bods2c_(__global_state, of + of_len, &__state->svbod2, &found, of_len);
     if (! found) {
-	setmsg_("The object name for target 2, '#', is not a recognized name"
-		" for an ephemeris object. The cause of this problem may be t"
-		"hat you need an updated version of the SPICE Toolkit.", (
-		ftnlen)172);
-	errch_("#", of + of_len, (ftnlen)1, of_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFSPIN", (ftnlen)8);
+	setmsg_(__global_state, "The object name for target 2, '#', is not a"
+		" recognized name for an ephemeris object. The cause of this "
+		"problem may be that you need an updated version of the SPICE"
+		" Toolkit.", (ftnlen)172);
+	errch_(__global_state, "#", of + of_len, (ftnlen)1, of_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(from, &__state->svobs, &found, from_len);
+    bods2c_(__global_state, from, &__state->svobs, &found, from_len);
     if (! found) {
-	setmsg_("The object name for the observer, '#', is not a recognized "
-		"name for an ephemeris object. The cause of this problem may "
-		"be that you need an updated version of the SPICE Toolkit.", (
-		ftnlen)176);
-	errch_("#", from, (ftnlen)1, from_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFSPIN", (ftnlen)8);
+	setmsg_(__global_state, "The object name for the observer, '#', is n"
+		"ot a recognized name for an ephemeris object. The cause of t"
+		"his problem may be that you need an updated version of the S"
+		"PICE Toolkit.", (ftnlen)176);
+	errch_(__global_state, "#", from, (ftnlen)1, from_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	return 0;
     }
 
@@ -750,59 +757,63 @@ L_zzgfspin:
 
     if (__state->svobs == __state->svbod1 || __state->svobs == 
 	    __state->svbod2 || __state->svbod1 == __state->svbod2) {
-	setmsg_("All three objects associated with an ANGULAR SEPARATION sea"
-		"rch must be distinct. The objects whose angular separation i"
-		"s of interest were # and #. The observer was #.", (ftnlen)166)
-		;
-	errint_("#", &__state->svbod1, (ftnlen)1);
-	errint_("#", &__state->svbod2, (ftnlen)1);
-	errint_("#", &__state->svobs, (ftnlen)1);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("ZZGFSPIN", (ftnlen)8);
+	setmsg_(__global_state, "All three objects associated with an ANGULA"
+		"R SEPARATION search must be distinct. The objects whose angu"
+		"lar separation is of interest were # and #. The observer was"
+		" #.", (ftnlen)166);
+	errint_(__global_state, "#", &__state->svbod1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->svbod2, (ftnlen)1);
+	errint_(__global_state, "#", &__state->svobs, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Squeeze all blanks out of the aberration correction */
 /*     string; ensure the string is in upper case. */
 
-    cmprss_(" ", &__state->c__0, abcorr, __state->svabcr, (ftnlen)1, 
-	    abcorr_len, (ftnlen)32);
-    ucase_(__state->svabcr, __state->svabcr, (ftnlen)32, (ftnlen)32);
+    cmprss_(__global_state, " ", &__state->c__0, abcorr, __state->svabcr, (
+	    ftnlen)1, abcorr_len, (ftnlen)32);
+    ucase_(__global_state, __state->svabcr, __state->svabcr, (ftnlen)32, (
+	    ftnlen)32);
 
 /*     Check the aberration correction. If SPKEZR can't handle it, */
 /*     neither can we. */
 
-    zzvalcor_(__state->svabcr, attblk, (ftnlen)32);
-    if (failed_()) {
-	chkout_("ZZGFSPIN", (ftnlen)8);
+    zzvalcor_(__global_state, __state->svabcr, attblk, (ftnlen)32);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	return 0;
     }
-    s_copy(__state->svref, __state->ref, (ftnlen)32, (ftnlen)5);
-    s_copy(__state->svref1, frame, (ftnlen)32, frame_len);
-    s_copy(__state->svref2, frame + frame_len, (ftnlen)32, frame_len);
+    s_copy(&__global_state->f2c, __state->svref, __state->ref, (ftnlen)32, (
+	    ftnlen)5);
+    s_copy(&__global_state->f2c, __state->svref1, frame, (ftnlen)32, 
+	    frame_len);
+    s_copy(&__global_state->f2c, __state->svref2, frame + frame_len, (ftnlen)
+	    32, frame_len);
 
 /*     Check shapes... */
 
-    ljust_(shape, shape, shape_len, shape_len);
-    ucase_(shape, shape, shape_len, shape_len);
+    ljust_(__global_state, shape, shape, shape_len, shape_len);
+    ucase_(__global_state, shape, shape, shape_len, shape_len);
 
 /*     If we pass the error check, then SHAPE(1) exists in SVSHAP. */
 
-    __state->svshp1 = isrchc_(shape, &__state->c__2, __state->svshap, 
-	    shape_len, (ftnlen)32);
+    __state->svshp1 = isrchc_(__global_state, shape, &__state->c__2, 
+	    __state->svshap, shape_len, (ftnlen)32);
     if (__state->svshp1 == 0) {
-	setmsg_("The body shape, # is not recognized.  Supported quantities "
-		"are: POINT, SPHERE.", (ftnlen)78);
-	errch_("#", shape, (ftnlen)1, shape_len);
-	sigerr_("SPICE(NOTRECOGNIZED)", (ftnlen)20);
-	chkout_("ZZGFSPIN", (ftnlen)8);
+	setmsg_(__global_state, "The body shape, # is not recognized.  Suppo"
+		"rted quantities are: POINT, SPHERE.", (ftnlen)78);
+	errch_(__global_state, "#", shape, (ftnlen)1, shape_len);
+	sigerr_(__global_state, "SPICE(NOTRECOGNIZED)", (ftnlen)20);
+	chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	return 0;
     } else if (__state->svshp1 == 1) {
 	__state->svrad1 = 0.;
     } else if (__state->svshp1 == 2) {
-	zzgftreb_(&__state->svbod1, axes1);
-	if (failed_()) {
-	    chkout_("ZZGFSPIN", (ftnlen)8);
+	zzgftreb_(__global_state, &__state->svbod1, axes1);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	    return 0;
 	}
 /* Computing MAX */
@@ -814,33 +825,35 @@ L_zzgfspin:
 /*        name to SVSHAP then fails to update the SVSHP1 condition */
 /*        block to respond to the name. Fortran needs SWITCH...CASE. */
 
-	setmsg_("Encountered uncoded shape ID for #. This indicates a bug. P"
-		"lease contact NAIF.", (ftnlen)78);
-	errch_("#", shape, (ftnlen)1, shape_len);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZGFSPIN", (ftnlen)8);
+	setmsg_(__global_state, "Encountered uncoded shape ID for #. This in"
+		"dicates a bug. Please contact NAIF.", (ftnlen)78);
+	errch_(__global_state, "#", shape, (ftnlen)1, shape_len);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	return 0;
     }
-    ljust_(shape + shape_len, shape + shape_len, shape_len, shape_len);
-    ucase_(shape + shape_len, shape + shape_len, shape_len, shape_len);
+    ljust_(__global_state, shape + shape_len, shape + shape_len, shape_len, 
+	    shape_len);
+    ucase_(__global_state, shape + shape_len, shape + shape_len, shape_len, 
+	    shape_len);
 
 /*     If we pass the error check, then SHAPE(2) exists in SVSHAP. */
 
-    __state->svshp2 = isrchc_(shape + shape_len, &__state->c__2, 
-	    __state->svshap, shape_len, (ftnlen)32);
+    __state->svshp2 = isrchc_(__global_state, shape + shape_len, &
+	    __state->c__2, __state->svshap, shape_len, (ftnlen)32);
     if (__state->svshp2 == 0) {
-	setmsg_("The body shape, # is not recognized.  Supported quantities "
-		"are: POINT, SPHERE.", (ftnlen)78);
-	errch_("#", shape + shape_len, (ftnlen)1, shape_len);
-	sigerr_("SPICE(NOTRECOGNIZED)", (ftnlen)20);
-	chkout_("ZZGFSPIN", (ftnlen)8);
+	setmsg_(__global_state, "The body shape, # is not recognized.  Suppo"
+		"rted quantities are: POINT, SPHERE.", (ftnlen)78);
+	errch_(__global_state, "#", shape + shape_len, (ftnlen)1, shape_len);
+	sigerr_(__global_state, "SPICE(NOTRECOGNIZED)", (ftnlen)20);
+	chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	return 0;
     } else if (__state->svshp2 == 1) {
 	__state->svrad2 = 0.;
     } else if (__state->svshp2 == 2) {
-	zzgftreb_(&__state->svbod2, axes2);
-	if (failed_()) {
-	    chkout_("ZZGFSPIN", (ftnlen)8);
+	zzgftreb_(__global_state, &__state->svbod2, axes2);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	    return 0;
 	}
 /* Computing MAX */
@@ -852,11 +865,11 @@ L_zzgfspin:
 /*        name to SVSHAP then fails to update the SVSHP2 condition */
 /*        block to respond to the name. Fortran needs SWITCH...CASE. */
 
-	setmsg_("Encountered uncoded shape ID for #. This indicates a bug. P"
-		"lease contact NAIF.", (ftnlen)78);
-	errch_("#", shape + shape_len, (ftnlen)1, shape_len);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZGFSPIN", (ftnlen)8);
+	setmsg_(__global_state, "Encountered uncoded shape ID for #. This in"
+		"dicates a bug. Please contact NAIF.", (ftnlen)78);
+	errch_(__global_state, "#", shape + shape_len, (ftnlen)1, shape_len);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	return 0;
     }
 
@@ -869,48 +882,54 @@ L_zzgfspin:
 /*     This check does not apply to POINT or SPHERE shapes. */
 
     if (__state->svshp1 != 1 && __state->svshp1 != 2) {
-	namfrm_(__state->svref1, &fcode1, (ftnlen)32);
-	frinfo_(&fcode1, &ctr1, &class__, &clssid, &found);
+	namfrm_(__global_state, __state->svref1, &fcode1, (ftnlen)32);
+	frinfo_(__global_state, &fcode1, &ctr1, &class__, &clssid, &found);
 	if (! found) {
-	    setmsg_("Frame system did not recognize frame #.", (ftnlen)39);
-	    errch_("#", __state->svref1, (ftnlen)1, (ftnlen)32);
-	    sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	    chkout_("ZZGFSPIN", (ftnlen)8);
+	    setmsg_(__global_state, "Frame system did not recognize frame #.",
+		     (ftnlen)39);
+	    errch_(__global_state, "#", __state->svref1, (ftnlen)1, (ftnlen)
+		    32);
+	    sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	    chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	    return 0;
 	}
 	if (__state->svbod1 != ctr1) {
-	    setmsg_("The reference frame #1 associated with target body #2 i"
-		    "s not centered on #2. The frame must be centered on the "
-		    "target body.", (ftnlen)123);
-	    errch_("#1", __state->svref1, (ftnlen)2, (ftnlen)32);
-	    errch_("#2", of, (ftnlen)2, of_len);
-	    sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	    chkout_("ZZGFSPIN", (ftnlen)8);
+	    setmsg_(__global_state, "The reference frame #1 associated with "
+		    "target body #2 is not centered on #2. The frame must be "
+		    "centered on the target body.", (ftnlen)123);
+	    errch_(__global_state, "#1", __state->svref1, (ftnlen)2, (ftnlen)
+		    32);
+	    errch_(__global_state, "#2", of, (ftnlen)2, of_len);
+	    sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	    chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	    return 0;
 	}
     }
     if (__state->svshp2 != 1 && __state->svshp2 != 2) {
-	namfrm_(__state->svref2, &fcode2, (ftnlen)32);
-	frinfo_(&fcode2, &ctr2, &class__, &clssid, &found);
+	namfrm_(__global_state, __state->svref2, &fcode2, (ftnlen)32);
+	frinfo_(__global_state, &fcode2, &ctr2, &class__, &clssid, &found);
 	if (! found) {
-	    setmsg_("Frame system did not recognize frame #.", (ftnlen)39);
-	    errch_("#", __state->svref2, (ftnlen)1, (ftnlen)32);
-	    sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	    chkout_("ZZGFSPIN", (ftnlen)8);
+	    setmsg_(__global_state, "Frame system did not recognize frame #.",
+		     (ftnlen)39);
+	    errch_(__global_state, "#", __state->svref2, (ftnlen)1, (ftnlen)
+		    32);
+	    sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	    chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	    return 0;
 	}
 	if (__state->svbod2 != ctr2) {
-	    setmsg_("The reference frame #1 associated with target body #2 i"
-		    "s not centered on #2. The frame must be centered on the "
-		    "target body.", (ftnlen)123);
-	    errch_("#1", __state->svref2, (ftnlen)2, (ftnlen)32);
-	    errch_("#2", of + of_len, (ftnlen)2, of_len);
-	    sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	    chkout_("ZZGFSPIN", (ftnlen)8);
+	    setmsg_(__global_state, "The reference frame #1 associated with "
+		    "target body #2 is not centered on #2. The frame must be "
+		    "centered on the target body.", (ftnlen)123);
+	    errch_(__global_state, "#1", __state->svref2, (ftnlen)2, (ftnlen)
+		    32);
+	    errch_(__global_state, "#2", of + of_len, (ftnlen)2, of_len);
+	    sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	    chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
 	    return 0;
 	}
     }
-    chkout_("ZZGFSPIN", (ftnlen)8);
+    chkout_(__global_state, "ZZGFSPIN", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFSPDC ( Private - GF, angular separation decreasing) */
 
@@ -1052,21 +1071,23 @@ L_zzgfspdc:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZGFSPDC", (ftnlen)8);
+	chkin_(__global_state, "ZZGFSPDC", (ftnlen)8);
     }
-    spkez_(&__state->svbod1, et, __state->svref, __state->svabcr, &
-	    __state->svobs, pv1, &lt, (ftnlen)32, (ftnlen)32);
-    if (failed_()) {
-	chkout_("ZZGFSPDC", (ftnlen)8);
+    spkez_(__global_state, &__state->svbod1, et, __state->svref, 
+	    __state->svabcr, &__state->svobs, pv1, &lt, (ftnlen)32, (ftnlen)
+	    32);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFSPDC", (ftnlen)8);
 	return 0;
     }
-    spkez_(&__state->svbod2, et, __state->svref, __state->svabcr, &
-	    __state->svobs, pv2, &lt, (ftnlen)32, (ftnlen)32);
-    if (failed_()) {
-	chkout_("ZZGFSPDC", (ftnlen)8);
+    spkez_(__global_state, &__state->svbod2, et, __state->svref, 
+	    __state->svabcr, &__state->svobs, pv2, &lt, (ftnlen)32, (ftnlen)
+	    32);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFSPDC", (ftnlen)8);
 	return 0;
     }
 
@@ -1090,23 +1111,23 @@ L_zzgfspdc:
 /*     Note, alpha1, alpha2 and their derivatives have value zero */
 /*     for point objects. */
 
-    dtheta = dvsep_(pv1, pv2);
+    dtheta = dvsep_(__global_state, pv1, pv2);
 
 /*     Check for a failure caused by a numerical event. */
 
-    if (failed_()) {
+    if (failed_(__global_state)) {
 	*decres = TRUE_;
-	chkout_("ZZGFSPDC", (ftnlen)8);
+	chkout_(__global_state, "ZZGFSPDC", (ftnlen)8);
 	return 0;
     }
-    dtheta = dtheta - dhfa_(pv1, &__state->svrad1) - dhfa_(pv2, &
-	    __state->svrad2);
+    dtheta = dtheta - dhfa_(__global_state, pv1, &__state->svrad1) - dhfa_(
+	    __global_state, pv2, &__state->svrad2);
     if (dtheta < 0.) {
 	*decres = TRUE_;
     } else {
 	*decres = FALSE_;
     }
-    chkout_("ZZGFSPDC", (ftnlen)8);
+    chkout_(__global_state, "ZZGFSPDC", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFSPGQ ( Private - GF, calculate angular separation ) */
 
@@ -1226,9 +1247,9 @@ L_zzgfspgq:
 /*     angular separation between two bodies */
 
 /* -& */
-    zzgfspq_(et, &__state->svbod1, &__state->svbod2, &__state->svrad1, &
-	    __state->svrad2, &__state->svobs, __state->svabcr, __state->svref,
-	     sep, (ftnlen)32, (ftnlen)32);
+    zzgfspq_(__global_state, et, &__state->svbod1, &__state->svbod2, &
+	    __state->svrad1, &__state->svrad2, &__state->svobs, 
+	    __state->svabcr, __state->svref, sep, (ftnlen)32, (ftnlen)32);
     return 0;
 /* $Procedure ZZGFSPX ( Private -- GF, retrieve ZZGFSPIN values ) */
 
@@ -1361,12 +1382,14 @@ L_zzgfspx:
 /*     get saved separation angle parameters */
 
 /* -& */
-    s_copy(xabcr, __state->svabcr, xabcr_len, (ftnlen)32);
+    s_copy(&__global_state->f2c, xabcr, __state->svabcr, xabcr_len, (ftnlen)
+	    32);
     xbod[0] = __state->svbod1;
     xbod[1] = __state->svbod2;
-    s_copy(yref, __state->svref, yref_len, (ftnlen)32);
-    s_copy(xref, __state->svref1, xref_len, (ftnlen)32);
-    s_copy(xref + xref_len, __state->svref2, xref_len, (ftnlen)32);
+    s_copy(&__global_state->f2c, yref, __state->svref, yref_len, (ftnlen)32);
+    s_copy(&__global_state->f2c, xref, __state->svref1, xref_len, (ftnlen)32);
+    s_copy(&__global_state->f2c, xref + xref_len, __state->svref2, xref_len, (
+	    ftnlen)32);
     *xobs = __state->svobs;
     xrad[0] = __state->svrad1;
     xrad[1] = __state->svrad2;
@@ -1375,21 +1398,21 @@ L_zzgfspx:
     return 0;
 } /* zzgfspu_ */
 
-/* Subroutine */ int zzgfspu_(char *of, char *from, char *shape, char *frame, 
-	doublereal *et, U_fp udfunc, char *abcorr, logical *decres, 
-	doublereal *sep, char *xabcr, integer *xbod, char *yref, char *xref, 
-	integer *xobs, doublereal *xrad, integer *xshp, ftnlen of_len, ftnlen 
-	from_len, ftnlen shape_len, ftnlen frame_len, ftnlen abcorr_len, 
-	ftnlen xabcr_len, ftnlen yref_len, ftnlen xref_len)
+/* Subroutine */ int zzgfspu_(cspice_t* __global_state, char *of, char *from, 
+	char *shape, char *frame, doublereal *et, U_fp udfunc, char *abcorr, 
+	logical *decres, doublereal *sep, char *xabcr, integer *xbod, char *
+	yref, char *xref, integer *xobs, doublereal *xrad, integer *xshp, 
+	ftnlen of_len, ftnlen from_len, ftnlen shape_len, ftnlen frame_len, 
+	ftnlen abcorr_len, ftnlen xabcr_len, ftnlen yref_len, ftnlen xref_len)
 {
     return zzgfspu_0_(0, of, from, shape, frame, et, udfunc, abcorr, decres, 
 	    sep, xabcr, xbod, yref, xref, xobs, xrad, xshp, of_len, from_len, 
 	    shape_len, frame_len, abcorr_len, xabcr_len, yref_len, xref_len);
     }
 
-/* Subroutine */ int zzgfspin_(char *of, char *from, char *shape, char *frame,
-	 char *abcorr, ftnlen of_len, ftnlen from_len, ftnlen shape_len, 
-	ftnlen frame_len, ftnlen abcorr_len)
+/* Subroutine */ int zzgfspin_(cspice_t* __global_state, char *of, char *from,
+	 char *shape, char *frame, char *abcorr, ftnlen of_len, ftnlen 
+	from_len, ftnlen shape_len, ftnlen frame_len, ftnlen abcorr_len)
 {
     return zzgfspu_0_(1, of, from, shape, frame, (doublereal *)0, (U_fp)0, 
 	    abcorr, (logical *)0, (doublereal *)0, (char *)0, (integer *)0, (
@@ -1398,7 +1421,8 @@ L_zzgfspx:
 	    ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzgfspdc_(U_fp udfunc, doublereal *et, logical *decres)
+/* Subroutine */ int zzgfspdc_(cspice_t* __global_state, U_fp udfunc, 
+	doublereal *et, logical *decres)
 {
     return zzgfspu_0_(2, (char *)0, (char *)0, (char *)0, (char *)0, et, 
 	    udfunc, (char *)0, decres, (doublereal *)0, (char *)0, (integer *)
@@ -1407,7 +1431,8 @@ L_zzgfspx:
 	    ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzgfspgq_(doublereal *et, doublereal *sep)
+/* Subroutine */ int zzgfspgq_(cspice_t* __global_state, doublereal *et, 
+	doublereal *sep)
 {
     return zzgfspu_0_(3, (char *)0, (char *)0, (char *)0, (char *)0, et, (
 	    U_fp)0, (char *)0, (logical *)0, sep, (char *)0, (integer *)0, (
@@ -1416,9 +1441,9 @@ L_zzgfspx:
 	    (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzgfspx_(char *xabcr, integer *xbod, char *yref, char *
-	xref, integer *xobs, doublereal *xrad, integer *xshp, ftnlen 
-	xabcr_len, ftnlen yref_len, ftnlen xref_len)
+/* Subroutine */ int zzgfspx_(cspice_t* __global_state, char *xabcr, integer *
+	xbod, char *yref, char *xref, integer *xobs, doublereal *xrad, 
+	integer *xshp, ftnlen xabcr_len, ftnlen yref_len, ftnlen xref_len)
 {
     return zzgfspu_0_(4, (char *)0, (char *)0, (char *)0, (char *)0, (
 	    doublereal *)0, (U_fp)0, (char *)0, (logical *)0, (doublereal *)0,

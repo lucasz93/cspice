@@ -8,50 +8,52 @@
 
 
 typedef int spke18_state_t;
-static spke18_state_t* get_spke18_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spke18_state_t* get_spke18_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPKE18 ( S/P Kernel, evaluate, type 18 ) */
-/* Subroutine */ int spke18_(doublereal *et, doublereal *record, doublereal *
-	state)
+/* Subroutine */ int spke18_(cspice_t* __global_state, doublereal *et, 
+	doublereal *record, doublereal *state)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer from;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal work[792]	/* was [396][2] */;
     integer i__;
     integer j;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal vbuff[6];
     integer to;
     doublereal locrec[198];
     integer packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern doublereal lgrint_(integer *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int hrmint_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int xpsgip_(integer *, integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern doublereal lgrint_(cspice_t*, integer *, doublereal *, doublereal *
+	    , doublereal *, doublereal *);
+    extern /* Subroutine */ int hrmint_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int xpsgip_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern logical return_(cspice_t*);
     integer xstart;
     integer subtyp;
     integer ystart;
 
 
     /* Module state */
-    spke18_state_t* __state = get_spke18_state();
+    spke18_state_t* __state = get_spke18_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single data record from a type 18 SPK segment. */
@@ -394,31 +396,31 @@ static spke18_state_t* get_spke18_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKE18", (ftnlen)6);
+    chkin_(__global_state, "SPKE18", (ftnlen)6);
 
 /*     Capture the subtype from the record and set the packet size */
 /*     accordingly. */
 
-    subtyp = i_dnnt(record);
+    subtyp = i_dnnt(&__global_state->f2c, record);
     if (subtyp == 0) {
 	packsz = 12;
     } else if (subtyp == 1) {
 	packsz = 6;
     } else {
-	setmsg_("Unexpected SPK type 18 subtype found in type 18 record.", (
-		ftnlen)55);
-	errint_("#", &subtyp, (ftnlen)1);
-	sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	chkout_("SPKE18", (ftnlen)6);
+	setmsg_(__global_state, "Unexpected SPK type 18 subtype found in typ"
+		"e 18 record.", (ftnlen)55);
+	errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	chkout_(__global_state, "SPKE18", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the packet count. */
 
-    n = i_dnnt(&record[1]);
+    n = i_dnnt(&__global_state->f2c, &record[1]);
     if (subtyp == 1) {
 
 /*        This is the easy case:  we perform Lagrange interpolation */
@@ -428,8 +430,8 @@ static spke18_state_t* get_spke18_state() {
 /*        that contiguous pieces of it can be shoved directly into the */
 /*        interpolation routine LGRINT. */
 
-	n = i_dnnt(&record[1]);
-	xpsgip_(&packsz, &n, &record[2]);
+	n = i_dnnt(&__global_state->f2c, &record[1]);
+	xpsgip_(__global_state, &packsz, &n, &record[2]);
 
 /*        We interpolate each state component in turn. */
 
@@ -437,9 +439,10 @@ static spke18_state_t* get_spke18_state() {
 	i__1 = packsz;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ystart = n * (i__ - 1) + 3;
-	    state[(i__2 = i__ - 1) < 6 && 0 <= i__2 ? i__2 : s_rnge("state", 
-		    i__2, "spke18_", (ftnlen)310)] = lgrint_(&n, &record[
-		    xstart - 1], &record[ystart - 1], locrec, et);
+	    state[(i__2 = i__ - 1) < 6 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "state", i__2, "spke18_", (ftnlen)
+		    310)] = lgrint_(__global_state, &n, &record[xstart - 1], &
+		    record[ystart - 1], locrec, et);
 	}
     } else {
 
@@ -456,20 +459,22 @@ static spke18_state_t* get_spke18_state() {
 
 		from = packsz * (j - 1) + 2 + i__;
 		to = (j << 1) - 1;
-		locrec[(i__2 = to - 1) < 198 && 0 <= i__2 ? i__2 : s_rnge(
-			"locrec", i__2, "spke18_", (ftnlen)335)] = record[
-			from - 1];
-		locrec[(i__2 = to) < 198 && 0 <= i__2 ? i__2 : s_rnge("locrec"
-			, i__2, "spke18_", (ftnlen)336)] = record[from + 2];
+		locrec[(i__2 = to - 1) < 198 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "locrec", i__2, "spke18_", (
+			ftnlen)335)] = record[from - 1];
+		locrec[(i__2 = to) < 198 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "locrec", i__2, "spke18_", (
+			ftnlen)336)] = record[from + 2];
 	    }
 
 /*           Interpolate the Ith position and velocity components of the */
 /*           state.  We'll keep the position and overwrite the velocity. */
 
-	    hrmint_(&n, &record[xstart - 1], locrec, et, work, &state[(i__1 = 
-		    i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1, 
-		    "spke18_", (ftnlen)344)], &state[(i__2 = i__ + 2) < 6 && 
-		    0 <= i__2 ? i__2 : s_rnge("state", i__2, "spke18_", (
+	    hrmint_(__global_state, &n, &record[xstart - 1], locrec, et, work,
+		     &state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(
+		    &__global_state->f2c, "state", i__1, "spke18_", (ftnlen)
+		    344)], &state[(i__2 = i__ + 2) < 6 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "state", i__2, "spke18_", (
 		    ftnlen)344)]);
 	}
 
@@ -485,30 +490,32 @@ static spke18_state_t* get_spke18_state() {
 
 		from = packsz * (j - 1) + 2 + packsz / 2 + i__;
 		to = (j << 1) - 1;
-		locrec[(i__2 = to - 1) < 198 && 0 <= i__2 ? i__2 : s_rnge(
-			"locrec", i__2, "spke18_", (ftnlen)368)] = record[
-			from - 1];
-		locrec[(i__2 = to) < 198 && 0 <= i__2 ? i__2 : s_rnge("locrec"
-			, i__2, "spke18_", (ftnlen)369)] = record[from + 2];
+		locrec[(i__2 = to - 1) < 198 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "locrec", i__2, "spke18_", (
+			ftnlen)368)] = record[from - 1];
+		locrec[(i__2 = to) < 198 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "locrec", i__2, "spke18_", (
+			ftnlen)369)] = record[from + 2];
 	    }
 
 /*           Interpolate the Ith velocity and acceleration components of */
 /*           the state.  We'll capture the result in a temporary buffer, */
 /*           then transfer the velocity to the output state array. */
 
-	    hrmint_(&n, &record[xstart - 1], locrec, et, work, &vbuff[(i__1 = 
-		    i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("vbuff", i__1, 
-		    "spke18_", (ftnlen)378)], &vbuff[(i__2 = i__ + 2) < 6 && 
-		    0 <= i__2 ? i__2 : s_rnge("vbuff", i__2, "spke18_", (
+	    hrmint_(__global_state, &n, &record[xstart - 1], locrec, et, work,
+		     &vbuff[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(
+		    &__global_state->f2c, "vbuff", i__1, "spke18_", (ftnlen)
+		    378)], &vbuff[(i__2 = i__ + 2) < 6 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "vbuff", i__2, "spke18_", (
 		    ftnlen)378)]);
 	}
 
 /*        Fill in the velocity in the output state using the results of */
 /*        interpolating velocity and acceleration. */
 
-	vequ_(vbuff, &state[3]);
+	vequ_(__global_state, vbuff, &state[3]);
     }
-    chkout_("SPKE18", (ftnlen)6);
+    chkout_(__global_state, "SPKE18", (ftnlen)6);
     return 0;
 } /* spke18_ */
 

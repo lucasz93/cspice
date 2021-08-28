@@ -8,8 +8,7 @@
 
 
 extern illum_init_t __illum_init;
-static illum_state_t* get_illum_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline illum_state_t* get_illum_state(cspice_t* state) {
 	if (!state->illum)
 		state->illum = __cspice_allocate_module(sizeof(illum_state_t),
 	 &__illum_init, sizeof(__illum_init));
@@ -18,58 +17,62 @@ static illum_state_t* get_illum_state() {
 }
 
 /* $Procedure ILLUM ( Illumination angles ) */
-/* Subroutine */ int illum_(char *target, doublereal *et, char *abcorr, char *
-	obsrvr, doublereal *spoint, doublereal *phase, doublereal *solar, 
-	doublereal *emissn, ftnlen target_len, ftnlen abcorr_len, ftnlen 
-	obsrvr_len)
+/* Subroutine */ int illum_(cspice_t* __global_state, char *target, 
+	doublereal *et, char *abcorr, char *obsrvr, doublereal *spoint, 
+	doublereal *phase, doublereal *solar, doublereal *emissn, ftnlen 
+	target_len, ftnlen abcorr_len, ftnlen obsrvr_len)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer n;
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
-	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkez_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
     integer obscde;
     doublereal lt;
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
     integer frcode;
-    extern /* Subroutine */ int cidfrm_(integer *, integer *, char *, logical 
-	    *, ftnlen);
+    extern /* Subroutine */ int cidfrm_(cspice_t*, integer *, integer *, char 
+	    *, logical *, ftnlen);
     char frname[80];
     integer trgcde;
     doublereal offobs[3];
     doublereal obsvec[3];
     doublereal tepoch;
     doublereal normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal offsun[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal sstate[6];
     doublereal sunvec[3];
     doublereal tstate[6];
-    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern logical return_(void);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int surfnm_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
     doublereal lts;
 
 
     /* Module state */
-    illum_state_t* __state = get_illum_state();
+    illum_state_t* __state = get_illum_state(__global_state);
 /* $ Abstract */
 
 /*     Deprecated: This routine has been superseded by the SPICELIB */
@@ -744,10 +747,10 @@ static illum_state_t* get_illum_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ILLUM", (ftnlen)5);
+	chkin_(__global_state, "ILLUM", (ftnlen)5);
     }
 
 /*     Initialization. */
@@ -756,44 +759,48 @@ static illum_state_t* get_illum_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
 	__state->first = FALSE_;
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
-	    __state->svfnd1, target, &trgcde, &found, (ftnlen)36, target_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtcde, &__state->svfnd1, target, &trgcde, &found, (
+	    ftnlen)36, target_len);
     if (! found) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit. ", (ftnlen)155);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ILLUM", (ftnlen)5);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit. ", (
+		ftnlen)155);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ILLUM", (ftnlen)5);
 	return 0;
     }
-    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
-	    __state->svfnd2, obsrvr, &obscde, &found, (ftnlen)36, obsrvr_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svobsr, &
+	    __state->svobsc, &__state->svfnd2, obsrvr, &obscde, &found, (
+	    ftnlen)36, obsrvr_len);
     if (! found) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE Toolkit. ", (ftnlen)157);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ILLUM", (ftnlen)5);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE Toolkit. ", (
+		ftnlen)157);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ILLUM", (ftnlen)5);
 	return 0;
     }
 
 /*     The observer and target must be distinct. */
 
     if (trgcde == obscde) {
-	setmsg_("Target is #; observer is #.", (ftnlen)27);
-	errch_("#", target, (ftnlen)1, target_len);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("ILLUM", (ftnlen)5);
+	setmsg_(__global_state, "Target is #; observer is #.", (ftnlen)27);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "ILLUM", (ftnlen)5);
 	return 0;
     }
 
@@ -801,14 +808,15 @@ static illum_state_t* get_illum_state() {
 /*     target body.  We'll want the state of the target relative to */
 /*     the observer in this body-fixed frame. */
 
-    cidfrm_(&trgcde, &frcode, frname, &found, (ftnlen)80);
+    cidfrm_(__global_state, &trgcde, &frcode, frname, &found, (ftnlen)80);
     if (! found) {
-	setmsg_("No body-fixed frame is associated with target body #; a fra"
-		"me kernel must be loaded to make this association.  Consult "
-		"the FRAMES Required Reading for details.", (ftnlen)159);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	chkout_("ILLUM", (ftnlen)5);
+	setmsg_(__global_state, "No body-fixed frame is associated with targ"
+		"et body #; a frame kernel must be loaded to make this associ"
+		"ation.  Consult the FRAMES Required Reading for details.", (
+		ftnlen)159);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	chkout_(__global_state, "ILLUM", (ftnlen)5);
 	return 0;
     }
 
@@ -816,12 +824,12 @@ static illum_state_t* get_illum_state() {
 /*     at ET.  The appropriate aberration corrections will be used in */
 /*     evaluating this state. */
 
-    spkez_(&trgcde, et, frname, abcorr, &obscde, tstate, &lt, (ftnlen)80, 
-	    abcorr_len);
+    spkez_(__global_state, &trgcde, et, frname, abcorr, &obscde, tstate, &lt, 
+	    (ftnlen)80, abcorr_len);
 
 /*     Determine the epoch to be used in computing the target-Sun vector. */
 
-    if (eqstr_(abcorr, "NONE", abcorr_len, (ftnlen)4)) {
+    if (eqstr_(__global_state, abcorr, "NONE", abcorr_len, (ftnlen)4)) {
 	tepoch = *et;
     } else {
 	tepoch = *et - lt;
@@ -830,8 +838,8 @@ static illum_state_t* get_illum_state() {
 /*     Find the body-fixed state of the Sun as seen from the target at */
 /*     TEPOCH. */
 
-    spkez_(&__state->c__10, &tepoch, frname, abcorr, &trgcde, sstate, &lts, (
-	    ftnlen)80, abcorr_len);
+    spkez_(__global_state, &__state->c__10, &tepoch, frname, abcorr, &trgcde, 
+	    sstate, &lts, (ftnlen)80, abcorr_len);
 
 /*     Grab the position portions of the states (the first three */
 /*     elements of each state).  Negate the observer-target vector, */
@@ -840,30 +848,31 @@ static illum_state_t* get_illum_state() {
 /*     found point from the target body center to the observer and */
 /*     Sun, and already take light time corrections into account. */
 
-    vminus_(tstate, obsvec);
-    vequ_(sstate, sunvec);
+    vminus_(__global_state, tstate, obsvec);
+    vequ_(__global_state, sstate, sunvec);
 
 /*     Now we'll modify target-observer and target-Sun vectors to */
 /*     take into account the offset between the target center and the */
 /*     surface point of interest; we want the vectors to point from */
 /*     the surface point to the observer and Sun respectively. */
 
-    vsub_(obsvec, spoint, offobs);
-    vsub_(sunvec, spoint, offsun);
+    vsub_(__global_state, obsvec, spoint, offobs);
+    vsub_(__global_state, sunvec, spoint, offsun);
 
 /*     Find the surface normal at SPOINT.  We'll need the radii of the */
 /*     target body. */
 
-    bodvcd_(&trgcde, "RADII", &__state->c__3, &n, radii, (ftnlen)5);
-    surfnm_(radii, &radii[1], &radii[2], spoint, normal);
+    bodvcd_(__global_state, &trgcde, "RADII", &__state->c__3, &n, radii, (
+	    ftnlen)5);
+    surfnm_(__global_state, radii, &radii[1], &radii[2], spoint, normal);
 
 /*     Find the illumination angles.  VSEP will give us angular */
 /*     separation in radians. */
 
-    *phase = vsep_(offsun, offobs);
-    *solar = vsep_(normal, offsun);
-    *emissn = vsep_(normal, offobs);
-    chkout_("ILLUM", (ftnlen)5);
+    *phase = vsep_(__global_state, offsun, offobs);
+    *solar = vsep_(__global_state, normal, offsun);
+    *emissn = vsep_(__global_state, normal, offobs);
+    chkout_(__global_state, "ILLUM", (ftnlen)5);
     return 0;
 } /* illum_ */
 

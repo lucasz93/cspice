@@ -8,25 +8,25 @@
 
 
 typedef int ssized_state_t;
-static ssized_state_t* get_ssized_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ssized_state_t* get_ssized_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SSIZED ( Set the size of a double precision cell ) */
-/* Subroutine */ int ssized_(integer *size, doublereal *cell)
+/* Subroutine */ int ssized_(cspice_t* __global_state, integer *size, 
+	doublereal *cell)
 {
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ssized_state_t* __state = get_ssized_state();
+    ssized_state_t* __state = get_ssized_state(__global_state);
 /* $ Abstract */
 
 /*      Set the size (maximum cardinality) of a double precision cell. */
@@ -201,20 +201,20 @@ static ssized_state_t* get_ssized_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SSIZED", (ftnlen)6);
+	chkin_(__global_state, "SSIZED", (ftnlen)6);
     }
 
 /*     The size must be non-negative.  Other values will be snubbed. */
 
     if (*size < 0) {
-	setmsg_("Attempt to set size of cell to invalid value.  The value wa"
-		"s #.", (ftnlen)63);
-	errint_("#", size, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("SSIZED", (ftnlen)6);
+	setmsg_(__global_state, "Attempt to set size of cell to invalid valu"
+		"e.  The value was #.", (ftnlen)63);
+	errint_(__global_state, "#", size, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "SSIZED", (ftnlen)6);
 	return 0;
     }
 
@@ -225,7 +225,7 @@ static ssized_state_t* get_ssized_state() {
     for (i__ = -5; i__ <= -2; ++i__) {
 	cell[i__ + 5] = 0.;
     }
-    chkout_("SSIZED", (ftnlen)6);
+    chkout_(__global_state, "SSIZED", (ftnlen)6);
     return 0;
 } /* ssized_ */
 

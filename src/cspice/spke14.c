@@ -8,35 +8,34 @@
 
 
 typedef int spke14_state_t;
-static spke14_state_t* get_spke14_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spke14_state_t* get_spke14_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPKE14 ( S/P Kernel, evaluate, type 14 ) */
-/* Subroutine */ int spke14_(doublereal *et, doublereal *record, doublereal *
-	state)
+/* Subroutine */ int spke14_(cspice_t* __global_state, doublereal *et, 
+	doublereal *record, doublereal *state)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer degree;
-    extern /* Subroutine */ int chbval_(doublereal *, integer *, doublereal *,
-	     doublereal *, doublereal *);
+    extern /* Subroutine */ int chbval_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, doublereal *, doublereal *);
     integer ncoeff;
     integer cofloc;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spke14_state_t* __state = get_spke14_state();
+    spke14_state_t* __state = get_spke14_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single data record from a type 14 SPK segment. */
@@ -193,10 +192,10 @@ static spke14_state_t* get_spke14_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKE14", (ftnlen)6);
+	chkin_(__global_state, "SPKE14", (ftnlen)6);
     }
 
 /*     The first number in the record is the number of Chebyshev */
@@ -228,11 +227,11 @@ static spke14_state_t* get_spke14_state() {
 /*        the epoch. We get back the appropriate element of a state */
 /*        vector. */
 
-	chbval_(&record[cofloc - 1], &degree, &record[1], et, &state[(i__1 = 
-		i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1, 
-		"spke14_", (ftnlen)216)]);
+	chbval_(__global_state, &record[cofloc - 1], &degree, &record[1], et, 
+		&state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "state", i__1, "spke14_", (ftnlen)216)]);
     }
-    chkout_("SPKE14", (ftnlen)6);
+    chkout_(__global_state, "SPKE14", (ftnlen)6);
     return 0;
 } /* spke14_ */
 

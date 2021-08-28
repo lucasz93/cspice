@@ -8,8 +8,7 @@
 
 
 extern bedec_init_t __bedec_init;
-static bedec_state_t* get_bedec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bedec_state_t* get_bedec_state(cspice_t* state) {
 	if (!state->bedec)
 		state->bedec = __cspice_allocate_module(sizeof(bedec_state_t),
 	 &__bedec_init, sizeof(__bedec_init));
@@ -18,26 +17,27 @@ static bedec_state_t* get_bedec_state() {
 }
 
 /* $Procedure            BEDEC  ( Be a decimal number? ) */
-logical bedec_(char *string, ftnlen string_len)
+logical bedec_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer c__;
     integer d__;
     integer e;
     integer l;
-    extern logical beint_(char *, ftnlen);
-    extern logical beuns_(char *, ftnlen);
-    extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern logical beint_(cspice_t*, char *, ftnlen);
+    extern logical beuns_(cspice_t*, char *, ftnlen);
+    extern integer pos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen);
 
 
     /* Module state */
-    bedec_state_t* __state = get_bedec_state();
+    bedec_state_t* __state = get_bedec_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether a string represents a decimal number. */
@@ -207,21 +207,22 @@ logical bedec_(char *string, ftnlen string_len)
 
 /*     First determine whether or not a decimal point is present. */
 
-    d__ = pos_(string, ".", &__state->c__1, string_len, (ftnlen)1);
+    d__ = pos_(__global_state, string, ".", &__state->c__1, string_len, (
+	    ftnlen)1);
     c__ = d__ - 1;
     e = d__ + 1;
     if (d__ == 0) {
 
 /*        If there is no decimal point just apply the integer test. */
 
-	ret_val = beint_(string, string_len);
+	ret_val = beint_(__global_state, string, string_len);
     } else {
 
 /*        A decimal point is present, get the length of the string */
 /*        and see where the decimal point is relative to the last */
 /*        character. */
 
-	l = i_len(string, string_len);
+	l = i_len(&__global_state->f2c, string, string_len);
 	if (l == 1) {
 
 /*           The string is one character long and a decimal point. */
@@ -235,7 +236,7 @@ logical bedec_(char *string, ftnlen string_len)
 /*           a non-blank character and be an unsigned integer. */
 
 	    ret_val = *(unsigned char *)&string[e - 1] != ' ' && beuns_(
-		    string + (e - 1), string_len - (e - 1));
+		    __global_state, string + (e - 1), string_len - (e - 1));
 	} else if (d__ == l) {
 
 /*           The decimal point is the last character of the string. */
@@ -243,23 +244,24 @@ logical bedec_(char *string, ftnlen string_len)
 /*           the substring to the left must be an integer. */
 
 	    ret_val = *(unsigned char *)&string[c__ - 1] != ' ' && beint_(
-		    string, c__);
+		    __global_state, string, c__);
 	} else if (*(unsigned char *)&string[c__ - 1] == ' ') {
 
 /*           The decimal point occurs somewhere in the middle of the */
 /*           string and the character preceding it is blank. */
 
-	    ret_val = *(unsigned char *)&string[e - 1] != ' ' && s_cmp(string,
-		     " ", c__, (ftnlen)1) == 0 && beuns_(string + (e - 1), 
-		    string_len - (e - 1));
+	    ret_val = *(unsigned char *)&string[e - 1] != ' ' && s_cmp(&
+		    __global_state->f2c, string, " ", c__, (ftnlen)1) == 0 && 
+		    beuns_(__global_state, string + (e - 1), string_len - (e 
+		    - 1));
 	} else if (*(unsigned char *)&string[e - 1] == ' ') {
 
 /*           Again the decimal point occurs somewhere in the middle of */
 /*           the string and the character following it is blank. */
 
-	    ret_val = s_cmp(string + (e - 1), " ", l - (e - 1), (ftnlen)1) == 
-		    0 && *(unsigned char *)&string[c__ - 1] != ' ' && beint_(
-		    string, c__);
+	    ret_val = s_cmp(&__global_state->f2c, string + (e - 1), " ", l - (
+		    e - 1), (ftnlen)1) == 0 && *(unsigned char *)&string[c__ 
+		    - 1] != ' ' && beint_(__global_state, string, c__);
 	} else if (*(unsigned char *)&string[c__ - 1] == '-' || *(unsigned 
 		char *)&string[c__ - 1] == '+') {
 
@@ -270,10 +272,12 @@ logical bedec_(char *string, ftnlen string_len)
 /*           character following the decimal point is not a blank) */
 
 	    if (c__ == 1) {
-		ret_val = beuns_(string + (e - 1), l - (e - 1));
+		ret_val = beuns_(__global_state, string + (e - 1), l - (e - 1)
+			);
 	    } else {
-		ret_val = beuns_(string + (e - 1), l - (e - 1)) && s_cmp(
-			string, " ", c__ - 1, (ftnlen)1) == 0;
+		ret_val = beuns_(__global_state, string + (e - 1), l - (e - 1)
+			) && s_cmp(&__global_state->f2c, string, " ", c__ - 1,
+			 (ftnlen)1) == 0;
 	    }
 	} else {
 
@@ -284,8 +288,8 @@ logical bedec_(char *string, ftnlen string_len)
 /*            be an integer, the string to the right must be an */
 /*            unsigned integer. */
 
-	    ret_val = beint_(string, c__) && beuns_(string + (e - 1), l - (e 
-		    - 1));
+	    ret_val = beint_(__global_state, string, c__) && beuns_(
+		    __global_state, string + (e - 1), l - (e - 1));
 	}
     }
     return ret_val;

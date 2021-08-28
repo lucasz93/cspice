@@ -8,8 +8,7 @@
 
 
 extern zzgfilu_init_t __zzgfilu_init;
-static zzgfilu_state_t* get_zzgfilu_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfilu_state_t* get_zzgfilu_state(cspice_t* state) {
 	if (!state->zzgfilu)
 		state->zzgfilu = __cspice_allocate_module(sizeof(
 	zzgfilu_state_t), &__zzgfilu_init, sizeof(__zzgfilu_init));
@@ -18,12 +17,12 @@ static zzgfilu_state_t* get_zzgfilu_state() {
 }
 
 /* $Procedure      ZZGFILU ( GF, illumination angle utilities ) */
-/* Subroutine */ int zzgfilu_0_(int n__, char *method, char *angtyp, char *
-	target, char *illum, char *fixref, char *abcorr, char *obsrvr, 
-	doublereal *spoint, doublereal *et, U_fp udfunc, logical *decres, 
-	doublereal *angle, ftnlen method_len, ftnlen angtyp_len, ftnlen 
-	target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen abcorr_len, 
-	ftnlen obsrvr_len)
+/* Subroutine */ int zzgfilu_0_(cspice_t* __global_state, int n__, char *
+	method, char *angtyp, char *target, char *illum, char *fixref, char *
+	abcorr, char *obsrvr, doublereal *spoint, doublereal *et, U_fp udfunc,
+	 logical *decres, doublereal *angle, ftnlen method_len, ftnlen 
+	angtyp_len, ftnlen target_len, ftnlen illum_len, ftnlen fixref_len, 
+	ftnlen abcorr_len, ftnlen obsrvr_len)
 {
     /* Initialized data */
 
@@ -32,29 +31,35 @@ static zzgfilu_state_t* get_zzgfilu_state() {
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal rate;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzilusta_(char *, char *, char *, doublereal *
-	    , char *, char *, char *, doublereal *, doublereal *, doublereal *
-	    , doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzilusta_(cspice_t*, char *, char *, char *, 
+	    doublereal *, char *, char *, char *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen);
     integer n;
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int bods2c_(cspice_t*, char *, integer *, logical 
+	    *, ftnlen);
+    extern logical failed_(cspice_t*);
     integer fxfcde;
-    extern integer esrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer esrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     doublereal angles[3];
     doublereal incsta[2];
     doublereal emista[2];
@@ -65,27 +70,27 @@ static zzgfilu_state_t* get_zzgfilu_state() {
     integer fxclss;
     integer fxtyid;
     integer fxcent;
-    extern logical return_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int bodvrd_(char *, char *, integer *, integer *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int illumg_(char *, char *, char *, doublereal *, 
-	    char *, char *, char *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int bodvrd_(cspice_t*, char *, char *, integer *, 
+	    integer *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int surfnm_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int illumg_(cspice_t*, char *, char *, char *, 
+	    doublereal *, char *, char *, char *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
 
     /* Module state */
-    zzgfilu_state_t* __state = get_zzgfilu_state();
+    zzgfilu_state_t* __state = get_zzgfilu_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -393,9 +398,9 @@ static zzgfilu_state_t* get_zzgfilu_state() {
 
 /*     This routine should never be called directly. */
 
-    chkin_("ZZGFILU", (ftnlen)7);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZGFILU", (ftnlen)7);
+    chkin_(__global_state, "ZZGFILU", (ftnlen)7);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZGFILU", (ftnlen)7);
     return 0;
 /* $Procedure  ZZGFILIN ( GF, illumination angle utility initialization ) */
 
@@ -583,156 +588,166 @@ L_zzgfilin:
 /*     illumination angle initialization routine */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFILIN", (ftnlen)8);
+    chkin_(__global_state, "ZZGFILIN", (ftnlen)8);
 
 /*     Find NAIF IDs for TARGET, OBSRVR, and ILLUM. */
 
-    bods2c_(target, &__state->svtarg, &found, target_len);
-    if (failed_()) {
-	chkout_("ZZGFILIN", (ftnlen)8);
+    bods2c_(__global_state, target, &__state->svtarg, &found, target_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
     if (! found) {
-	setmsg_("The target object, '#', is not a recognized name for an eph"
-		"emeris object. The cause of this problem may be that you nee"
-		"d an updated version of the SPICE Toolkit. ", (ftnlen)162);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFILIN", (ftnlen)8);
+	setmsg_(__global_state, "The target object, '#', is not a recognized"
+		" name for an ephemeris object. The cause of this problem may"
+		" be that you need an updated version of the SPICE Toolkit. ", 
+		(ftnlen)162);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(obsrvr, &__state->svobs, &found, obsrvr_len);
-    if (failed_()) {
-	chkout_("ZZGFILIN", (ftnlen)8);
-	return 0;
-    }
-    if (! found) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE toolkit. ", (ftnlen)157);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFILIN", (ftnlen)8);
-	return 0;
-    }
-    bods2c_(illum, &__state->svilum, &found, illum_len);
-    if (failed_()) {
-	chkout_("ZZGFILIN", (ftnlen)8);
+    bods2c_(__global_state, obsrvr, &__state->svobs, &found, obsrvr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
     if (! found) {
-	setmsg_("The illumination source, '#', is not a recognized name for "
-		"an ephemeris object. The cause of this problem may be that y"
-		"ou need an updated version of the SPICE toolkit. ", (ftnlen)
-		168);
-	errch_("#", illum, (ftnlen)1, illum_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFILIN", (ftnlen)8);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE toolkit. ", (
+		ftnlen)157);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
+	return 0;
+    }
+    bods2c_(__global_state, illum, &__state->svilum, &found, illum_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
+	return 0;
+    }
+    if (! found) {
+	setmsg_(__global_state, "The illumination source, '#', is not a reco"
+		"gnized name for an ephemeris object. The cause of this probl"
+		"em may be that you need an updated version of the SPICE tool"
+		"kit. ", (ftnlen)168);
+	errch_(__global_state, "#", illum, (ftnlen)1, illum_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure the observer and target are distinct. */
 
     if (__state->svtarg == __state->svobs) {
-	setmsg_("The observer and target must be distinct objects, but are n"
-		"ot: OBSRVR = #; TARGET = #.", (ftnlen)86);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("ZZGFILIN", (ftnlen)8);
+	setmsg_(__global_state, "The observer and target must be distinct ob"
+		"jects, but are not: OBSRVR = #; TARGET = #.", (ftnlen)86);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure the target and illumination source are distinct. */
 
     if (__state->svtarg == __state->svilum) {
-	setmsg_("The target and illumination source must be distinct objects"
-		", but are not: TARGET = #; ILLUM = #.", (ftnlen)96);
-	errch_("#", target, (ftnlen)1, target_len);
-	errch_("#", illum, (ftnlen)1, illum_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("ZZGFILIN", (ftnlen)8);
+	setmsg_(__global_state, "The target and illumination source must be "
+		"distinct objects, but are not: TARGET = #; ILLUM = #.", (
+		ftnlen)96);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errch_(__global_state, "#", illum, (ftnlen)1, illum_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Save the observer, target, and illumination source names. */
 
-    s_copy(__state->svonam, obsrvr, (ftnlen)36, obsrvr_len);
-    s_copy(__state->svtnam, target, (ftnlen)36, target_len);
-    s_copy(__state->svinam, illum, (ftnlen)36, illum_len);
+    s_copy(&__global_state->f2c, __state->svonam, obsrvr, (ftnlen)36, 
+	    obsrvr_len);
+    s_copy(&__global_state->f2c, __state->svtnam, target, (ftnlen)36, 
+	    target_len);
+    s_copy(&__global_state->f2c, __state->svinam, illum, (ftnlen)36, 
+	    illum_len);
 
 /*     Squeeze all blanks out of the aberration correction */
 /*     string; ensure the string is in upper case. */
 
-    cmprss_(" ", &__state->c__0, abcorr, __state->svcorr, (ftnlen)1, 
-	    abcorr_len, (ftnlen)5);
-    ucase_(__state->svcorr, __state->svcorr, (ftnlen)5, (ftnlen)5);
+    cmprss_(__global_state, " ", &__state->c__0, abcorr, __state->svcorr, (
+	    ftnlen)1, abcorr_len, (ftnlen)5);
+    ucase_(__global_state, __state->svcorr, __state->svcorr, (ftnlen)5, (
+	    ftnlen)5);
 
 /*     Check the aberration correction. If SPKEZR can't handle it, */
 /*     neither can we. */
 
-    zzvalcor_(__state->svcorr, __state->svablk, (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZGFILIN", (ftnlen)8);
+    zzvalcor_(__global_state, __state->svcorr, __state->svablk, (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Reject transmission corrections. */
 
     if (__state->svablk[4]) {
-	setmsg_("Aberration correction was #; transmission corrections are n"
-		"ot allowed by this routine.", (ftnlen)86);
-	errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZGFILIN", (ftnlen)8);
+	setmsg_(__global_state, "Aberration correction was #; transmission c"
+		"orrections are not allowed by this routine.", (ftnlen)86);
+	errch_(__global_state, "#", abcorr, (ftnlen)1, abcorr_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Look up the radii for the target body. */
 
-    bodvrd_(target, "RADII", &__state->c__3, &n, radii, target_len, (ftnlen)5)
-	    ;
-    if (failed_()) {
-	chkout_("ZZGFILIN", (ftnlen)8);
+    bodvrd_(__global_state, target, "RADII", &__state->c__3, &n, radii, 
+	    target_len, (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Find the surface normal at the surface point. Create a */
 /*     body-fixed state vector for the normal. */
 
-    surfnm_(radii, &radii[1], &radii[2], spoint, normal);
-    if (failed_()) {
-	chkout_("ZZGFILIN", (ftnlen)8);
+    surfnm_(__global_state, radii, &radii[1], &radii[2], spoint, normal);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
-    vequ_(normal, __state->svnrml);
+    vequ_(__global_state, normal, __state->svnrml);
 
 /*     Save the surface point in the body-fixed reference frame. */
 
-    vequ_(spoint, __state->svsspt);
+    vequ_(__global_state, spoint, __state->svsspt);
 
 /*     Save a left-justified, upper case copy of the computation method */
 /*     for the illumination angles. */
 
-    ljust_(method, __state->svmeth, method_len, (ftnlen)200);
-    ucase_(__state->svmeth, __state->svmeth, (ftnlen)200, (ftnlen)200);
-    if (s_cmp(__state->svmeth, "ELLIPSOID", (ftnlen)200, (ftnlen)9) != 0) {
-	setmsg_("The only supported computation method is ELLIPSOID; the inp"
-		"ut method was #.", (ftnlen)75);
-	errch_("#", method, (ftnlen)1, method_len);
-	sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	chkout_("ZZGFILIN", (ftnlen)8);
+    ljust_(__global_state, method, __state->svmeth, method_len, (ftnlen)200);
+    ucase_(__global_state, __state->svmeth, __state->svmeth, (ftnlen)200, (
+	    ftnlen)200);
+    if (s_cmp(&__global_state->f2c, __state->svmeth, "ELLIPSOID", (ftnlen)200,
+	     (ftnlen)9) != 0) {
+	setmsg_(__global_state, "The only supported computation method is EL"
+		"LIPSOID; the input method was #.", (ftnlen)75);
+	errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Save a left-justified, upper case copy of the reference frame */
 /*     name. */
 
-    ljust_(fixref, __state->svref, fixref_len, (ftnlen)32);
-    ucase_(__state->svref, __state->svref, (ftnlen)32, (ftnlen)32);
+    ljust_(__global_state, fixref, __state->svref, fixref_len, (ftnlen)32);
+    ucase_(__global_state, __state->svref, __state->svref, (ftnlen)32, (
+	    ftnlen)32);
 
 /*     Look up the frame attributes; make sure the frame is centered */
 /*     on the target body. */
@@ -740,47 +755,49 @@ L_zzgfilin:
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    namfrm_(fixref, &fxfcde, fixref_len);
-    frinfo_(&fxfcde, &fxcent, &fxclss, &fxtyid, &found);
-    if (failed_()) {
-	chkout_("ZZGFILIN", (ftnlen)8);
+    namfrm_(__global_state, fixref, &fxfcde, fixref_len);
+    frinfo_(__global_state, &fxfcde, &fxcent, &fxclss, &fxtyid, &found);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
     if (! found) {
-	setmsg_("Reference frame # is not recognized by the SPICE frame subs"
-		"ystem. Possibly a required frame definition kernel has not b"
-		"een loaded.", (ftnlen)130);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
-	chkout_("ZZGFILIN", (ftnlen)8);
+	setmsg_(__global_state, "Reference frame # is not recognized by the "
+		"SPICE frame subsystem. Possibly a required frame definition "
+		"kernel has not been loaded.", (ftnlen)130);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure that FIXREF is centered at the target body's center. */
 
     if (fxcent != __state->svtarg) {
-	setmsg_("Reference frame # is not centered at the target body #. The"
-		" ID code of the frame center is #.", (ftnlen)93);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	errint_("#", &fxcent, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	chkout_("ZZGFILIN", (ftnlen)8);
+	setmsg_(__global_state, "Reference frame # is not centered at the ta"
+		"rget body #. The ID code of the frame center is #.", (ftnlen)
+		93);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errint_(__global_state, "#", &fxcent, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Save the index of the angle type. */
 
-    __state->svaidx = esrchc_(angtyp, &__state->c__3, __state->angnms, 
-	    angtyp_len, (ftnlen)50);
+    __state->svaidx = esrchc_(__global_state, angtyp, &__state->c__3, 
+	    __state->angnms, angtyp_len, (ftnlen)50);
     if (__state->svaidx == 0) {
-	setmsg_("Illumination angle type # is not recognized.", (ftnlen)44);
-	errch_("#", angtyp, (ftnlen)1, angtyp_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZGFILIN", (ftnlen)8);
+	setmsg_(__global_state, "Illumination angle type # is not recognized."
+		, (ftnlen)44);
+	errch_(__global_state, "#", angtyp, (ftnlen)1, angtyp_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZGFILIN", (ftnlen)8);
+    chkout_(__global_state, "ZZGFILIN", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFILDC ( GF, is illumination angle decreasing? ) */
 
@@ -924,19 +941,20 @@ L_zzgfildc:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFILDC", (ftnlen)8);
+    chkin_(__global_state, "ZZGFILDC", (ftnlen)8);
 
 /*     Compute the rates of change of all of the illumination angles. */
 
-    zzilusta_(__state->svmeth, __state->svtnam, __state->svinam, et, 
-	    __state->svref, __state->svcorr, __state->svonam, __state->svsspt,
-	     __state->svnrml, phssta, incsta, emista, (ftnlen)200, (ftnlen)36,
-	     (ftnlen)36, (ftnlen)32, (ftnlen)5, (ftnlen)36);
-    if (failed_()) {
-	chkout_("ZZGFILDC", (ftnlen)8);
+    zzilusta_(__global_state, __state->svmeth, __state->svtnam, 
+	    __state->svinam, et, __state->svref, __state->svcorr, 
+	    __state->svonam, __state->svsspt, __state->svnrml, phssta, incsta,
+	     emista, (ftnlen)200, (ftnlen)36, (ftnlen)36, (ftnlen)32, (ftnlen)
+	    5, (ftnlen)36);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFILDC", (ftnlen)8);
 	return 0;
     }
     if (__state->svaidx == 1) {
@@ -949,16 +967,16 @@ L_zzgfildc:
 
 /*        We should never get here. */
 
-	setmsg_("Unexpected value of SVAIDX: #.", (ftnlen)30);
-	errint_("#", &__state->svaidx, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
+	setmsg_(__global_state, "Unexpected value of SVAIDX: #.", (ftnlen)30);
+	errint_(__global_state, "#", &__state->svaidx, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
     }
 
 /*     The observer-target illumination angle is decreasing if and only */
 /*     the derivative of the angle with respect to time is negative. */
 
     *decres = rate < 0.;
-    chkout_("ZZGFILDC", (ftnlen)8);
+    chkout_(__global_state, "ZZGFILDC", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFILGQ ( GF, get illumination angle ) */
 
@@ -1087,39 +1105,43 @@ L_zzgfilgq:
 /*     return illumination angle */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFILGQ", (ftnlen)8);
-    illumg_(__state->svmeth, __state->svtnam, __state->svinam, et, 
-	    __state->svref, __state->svcorr, __state->svonam, __state->svsspt,
-	     &ettarg, srfvec, angles, &angles[1], &angles[2], (ftnlen)200, (
-	    ftnlen)36, (ftnlen)36, (ftnlen)32, (ftnlen)5, (ftnlen)36);
-    if (failed_()) {
-	chkout_("ZZGFILGQ", (ftnlen)8);
+    chkin_(__global_state, "ZZGFILGQ", (ftnlen)8);
+    illumg_(__global_state, __state->svmeth, __state->svtnam, __state->svinam,
+	     et, __state->svref, __state->svcorr, __state->svonam, 
+	    __state->svsspt, &ettarg, srfvec, angles, &angles[1], &angles[2], 
+	    (ftnlen)200, (ftnlen)36, (ftnlen)36, (ftnlen)32, (ftnlen)5, (
+	    ftnlen)36);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFILGQ", (ftnlen)8);
 	return 0;
     }
     *angle = angles[(i__1 = __state->svaidx - 1) < 3 && 0 <= i__1 ? i__1 : 
-	    s_rnge("angles", i__1, "zzgfilu_", (ftnlen)1098)];
-    chkout_("ZZGFILGQ", (ftnlen)8);
+	    s_rnge(&__global_state->f2c, "angles", i__1, "zzgfilu_", (ftnlen)
+	    1098)];
+    chkout_(__global_state, "ZZGFILGQ", (ftnlen)8);
     return 0;
 } /* zzgfilu_ */
 
-/* Subroutine */ int zzgfilu_(char *method, char *angtyp, char *target, char *
-	illum, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, 
-	doublereal *et, U_fp udfunc, logical *decres, doublereal *angle, 
-	ftnlen method_len, ftnlen angtyp_len, ftnlen target_len, ftnlen 
-	illum_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int zzgfilu_(cspice_t* __global_state, char *method, char *
+	angtyp, char *target, char *illum, char *fixref, char *abcorr, char *
+	obsrvr, doublereal *spoint, doublereal *et, U_fp udfunc, logical *
+	decres, doublereal *angle, ftnlen method_len, ftnlen angtyp_len, 
+	ftnlen target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen 
+	abcorr_len, ftnlen obsrvr_len)
 {
     return zzgfilu_0_(0, method, angtyp, target, illum, fixref, abcorr, 
 	    obsrvr, spoint, et, udfunc, decres, angle, method_len, angtyp_len,
 	     target_len, illum_len, fixref_len, abcorr_len, obsrvr_len);
     }
 
-/* Subroutine */ int zzgfilin_(char *method, char *angtyp, char *target, char 
-	*illum, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, 
-	ftnlen method_len, ftnlen angtyp_len, ftnlen target_len, ftnlen 
-	illum_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int zzgfilin_(cspice_t* __global_state, char *method, char *
+	angtyp, char *target, char *illum, char *fixref, char *abcorr, char *
+	obsrvr, doublereal *spoint, ftnlen method_len, ftnlen angtyp_len, 
+	ftnlen target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen 
+	abcorr_len, ftnlen obsrvr_len)
 {
     return zzgfilu_0_(1, method, angtyp, target, illum, fixref, abcorr, 
 	    obsrvr, spoint, (doublereal *)0, (U_fp)0, (logical *)0, (
@@ -1127,7 +1149,8 @@ L_zzgfilgq:
 	    fixref_len, abcorr_len, obsrvr_len);
     }
 
-/* Subroutine */ int zzgfildc_(U_fp udfunc, doublereal *et, logical *decres)
+/* Subroutine */ int zzgfildc_(cspice_t* __global_state, U_fp udfunc, 
+	doublereal *et, logical *decres)
 {
     return zzgfilu_0_(2, (char *)0, (char *)0, (char *)0, (char *)0, (char *)
 	    0, (char *)0, (char *)0, (doublereal *)0, et, udfunc, decres, (
@@ -1135,7 +1158,8 @@ L_zzgfilgq:
 	    ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzgfilgq_(doublereal *et, doublereal *angle)
+/* Subroutine */ int zzgfilgq_(cspice_t* __global_state, doublereal *et, 
+	doublereal *angle)
 {
     return zzgfilu_0_(3, (char *)0, (char *)0, (char *)0, (char *)0, (char *)
 	    0, (char *)0, (char *)0, (doublereal *)0, et, (U_fp)0, (logical *)

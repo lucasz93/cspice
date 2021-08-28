@@ -591,7 +591,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekifld_c" );
+   chkin_c ( naif_state, "ekifld_c" );
 
 
    /*

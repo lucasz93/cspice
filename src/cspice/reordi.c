@@ -8,13 +8,13 @@
 
 
 typedef int reordi_state_t;
-static reordi_state_t* get_reordi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline reordi_state_t* get_reordi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      REORDI ( Reorder an integer array ) */
-/* Subroutine */ int reordi_(integer *iorder, integer *ndim, integer *array)
+/* Subroutine */ int reordi_(cspice_t* __global_state, integer *iorder, 
+	integer *ndim, integer *array)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -27,7 +27,7 @@ static reordi_state_t* get_reordi_state() {
 
 
     /* Module state */
-    reordi_state_t* __state = get_reordi_state();
+    reordi_state_t* __state = get_reordi_state(__global_state);
 /* $ Abstract */
 
 /*      Re-order the elements of an integer array according to */

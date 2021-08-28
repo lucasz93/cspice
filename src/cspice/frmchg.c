@@ -8,8 +8,7 @@
 
 
 extern frmchg_init_t __frmchg_init;
-static frmchg_state_t* get_frmchg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline frmchg_state_t* get_frmchg_state(cspice_t* state) {
 	if (!state->frmchg)
 		state->frmchg = __cspice_allocate_module(sizeof(
 	frmchg_state_t), &__frmchg_init, sizeof(__frmchg_init));
@@ -18,60 +17,61 @@ static frmchg_state_t* get_frmchg_state() {
 }
 
 /* $Procedure      FRMCHG (Frame Change) */
-/* Subroutine */ int frmchg_(integer *frame1, integer *frame2, doublereal *et,
-	 doublereal *xform)
+/* Subroutine */ int frmchg_(cspice_t* __global_state, integer *frame1, 
+	integer *frame2, doublereal *et, doublereal *xform)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8, i__9, i__10, 
 	    i__11, i__12, i__13;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer node;
     logical done;
     integer cent;
     integer this__;
-    extern /* Subroutine */ int zznofcon_(doublereal *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int zznofcon_(cspice_t*, doublereal *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
     integer i__;
     integer j;
     integer k;
     integer l;
     integer frame[10];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer class__;
     logical found;
     integer relto;
     doublereal trans[504]	/* was [6][6][14] */;
     doublereal trans2[72]	/* was [6][6][2] */;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer cmnode;
-    extern integer isrchi_(integer *, integer *, integer *);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
     integer clssid;
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int frmget_(integer *, doublereal *, doublereal *,
-	     integer *, logical *);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int frmget_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, integer *, logical *);
     logical gotone;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char errmsg[1840];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal tempxf[36]	/* was [6][6] */;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzmsxf_(doublereal *, integer *, doublereal *)
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int invstm_(cspice_t*, doublereal *, doublereal *)
 	    ;
+    extern /* Subroutine */ int zzmsxf_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer inc;
     integer get;
     integer put;
 
 
     /* Module state */
-    frmchg_state_t* __state = get_frmchg_state();
+    frmchg_state_t* __state = get_frmchg_state(__global_state);
 /* $ Abstract */
 
 /*     Return the state transformation matrix from one */
@@ -510,10 +510,10 @@ static frmchg_state_t* get_frmchg_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("FRMCHG", (ftnlen)6);
+    chkin_(__global_state, "FRMCHG", (ftnlen)6);
 
 /*     Do the obvious thing first.  If FRAME1 and FRAME2 are the */
 /*     same then we simply return the identity matrix. */
@@ -521,62 +521,68 @@ static frmchg_state_t* get_frmchg_state() {
     if (*frame1 == *frame2) {
 	for (i__ = 1; i__ <= 6; ++i__) {
 	    xform[(i__1 = i__ + i__ * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-		    s_rnge("xform", i__1, "frmchg_", (ftnlen)376)] = 1.;
+		    s_rnge(&__global_state->f2c, "xform", i__1, "frmchg_", (
+		    ftnlen)376)] = 1.;
 	    i__1 = i__ - 1;
 	    for (j = 1; j <= i__1; ++j) {
 		xform[(i__2 = i__ + j * 6 - 7) < 36 && 0 <= i__2 ? i__2 : 
-			s_rnge("xform", i__2, "frmchg_", (ftnlen)379)] = 0.;
+			s_rnge(&__global_state->f2c, "xform", i__2, "frmchg_",
+			 (ftnlen)379)] = 0.;
 		xform[(i__2 = j + i__ * 6 - 7) < 36 && 0 <= i__2 ? i__2 : 
-			s_rnge("xform", i__2, "frmchg_", (ftnlen)380)] = 0.;
+			s_rnge(&__global_state->f2c, "xform", i__2, "frmchg_",
+			 (ftnlen)380)] = 0.;
 	    }
 	}
-	chkout_("FRMCHG", (ftnlen)6);
+	chkout_(__global_state, "FRMCHG", (ftnlen)6);
 	return 0;
     }
 
 /*     Now perform the obvious check to make sure that both */
 /*     frames are recognized. */
 
-    frinfo_(frame1, &cent, &class__, &clssid, &found);
+    frinfo_(__global_state, frame1, &cent, &class__, &clssid, &found);
     if (! found) {
-	setmsg_("The number # is not a recognized id-code for a reference fr"
-		"ame. ", (ftnlen)64);
-	errint_("#", frame1, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
-	chkout_("FRMCHG", (ftnlen)6);
+	setmsg_(__global_state, "The number # is not a recognized id-code fo"
+		"r a reference frame. ", (ftnlen)64);
+	errint_(__global_state, "#", frame1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	chkout_(__global_state, "FRMCHG", (ftnlen)6);
 	return 0;
     }
-    frinfo_(frame2, &cent, &class__, &clssid, &found);
+    frinfo_(__global_state, frame2, &cent, &class__, &clssid, &found);
     if (! found) {
-	setmsg_("The number # is not a recognized id-code for a reference fr"
-		"ame. ", (ftnlen)64);
-	errint_("#", frame2, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
-	chkout_("FRMCHG", (ftnlen)6);
+	setmsg_(__global_state, "The number # is not a recognized id-code fo"
+		"r a reference frame. ", (ftnlen)64);
+	errint_(__global_state, "#", frame2, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	chkout_(__global_state, "FRMCHG", (ftnlen)6);
 	return 0;
     }
     node = 1;
-    frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", i__1, 
-	    "frmchg_", (ftnlen)423)] = *frame1;
+    frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "frame", i__1, "frmchg_", (ftnlen)423)] = *
+	    frame1;
     found = TRUE_;
 
 /*     Follow the chain of transformations until we run into */
 /*     one that transforms to J2000 (frame id = 1) or we hit FRAME2. */
 
-    while(frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", 
-	    i__1, "frmchg_", (ftnlen)429)] != 1 && node < 10 && frame[(i__2 = 
-	    node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("frame", i__2, "frmc"
-	    "hg_", (ftnlen)429)] != *frame2 && found) {
+    while(frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "frame", i__1, "frmchg_", (ftnlen)429)] != 1 
+	    && node < 10 && frame[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 :
+	     s_rnge(&__global_state->f2c, "frame", i__2, "frmchg_", (ftnlen)
+	    429)] != *frame2 && found) {
 
 /*        Find out what transformation is available for this */
 /*        frame. */
 
-	frmget_(&frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"frame", i__1, "frmchg_", (ftnlen)437)], et, &trans[(i__2 = (
-		node * 6 + 1) * 6 - 42) < 504 && 0 <= i__2 ? i__2 : s_rnge(
-		"trans", i__2, "frmchg_", (ftnlen)437)], &frame[(i__3 = node) 
-		< 10 && 0 <= i__3 ? i__3 : s_rnge("frame", i__3, "frmchg_", (
-		ftnlen)437)], &found);
+	frmget_(__global_state, &frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? 
+		i__1 : s_rnge(&__global_state->f2c, "frame", i__1, "frmchg_", 
+		(ftnlen)437)], et, &trans[(i__2 = (node * 6 + 1) * 6 - 42) < 
+		504 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "trans"
+		, i__2, "frmchg_", (ftnlen)437)], &frame[(i__3 = node) < 10 &&
+		 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "frame", 
+		i__3, "frmchg_", (ftnlen)437)], &found);
 	if (found) {
 
 /*           We found a transformation matrix.  TRANS(1,1,NODE) */
@@ -587,10 +593,11 @@ static frmchg_state_t* get_frmchg_state() {
 	    ++node;
 	}
     }
-    done = frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", 
-	    i__1, "frmchg_", (ftnlen)453)] == 1 || frame[(i__2 = node - 1) < 
-	    10 && 0 <= i__2 ? i__2 : s_rnge("frame", i__2, "frmchg_", (ftnlen)
-	    453)] == *frame2 || ! found;
+    done = frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "frame", i__1, "frmchg_", (ftnlen)453)] == 1 
+	    || frame[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "frame", i__2, "frmchg_", (ftnlen)453)] == *
+	    frame2 || ! found;
     while(! done) {
 
 /*        The only way to get to this point is to have run out of */
@@ -600,10 +607,11 @@ static frmchg_state_t* get_frmchg_state() {
 /*        chain is.  We'll do this until we get to one of the */
 /*        root classes or we run into FRAME2. */
 
-	frmget_(&frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"frame", i__1, "frmchg_", (ftnlen)467)], et, &trans[(i__2 = (
-		node * 6 + 1) * 6 - 42) < 504 && 0 <= i__2 ? i__2 : s_rnge(
-		"trans", i__2, "frmchg_", (ftnlen)467)], &relto, &found);
+	frmget_(__global_state, &frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? 
+		i__1 : s_rnge(&__global_state->f2c, "frame", i__1, "frmchg_", 
+		(ftnlen)467)], et, &trans[(i__2 = (node * 6 + 1) * 6 - 42) < 
+		504 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "trans"
+		, i__2, "frmchg_", (ftnlen)467)], &relto, &found);
 	if (found) {
 
 /*           Recall that TRANS(1,1,NODE-1) contains the transformation */
@@ -612,18 +620,21 @@ static frmchg_state_t* get_frmchg_state() {
 /*           that TRANS(1,1,NODE-1) should be replaced with the */
 /*           transformation from FRAME(NODE) to RELTO. */
 
-	    frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame",
-		     i__1, "frmchg_", (ftnlen)478)] = relto;
-	    zzmsxf_(&trans[(i__1 = ((node - 1) * 6 + 1) * 6 - 42) < 504 && 0 
-		    <= i__1 ? i__1 : s_rnge("trans", i__1, "frmchg_", (ftnlen)
+	    frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "frame", i__1, "frmchg_", (ftnlen)
+		    478)] = relto;
+	    zzmsxf_(__global_state, &trans[(i__1 = ((node - 1) * 6 + 1) * 6 - 
+		    42) < 504 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "trans", i__1, "frmchg_", (ftnlen)
 		    479)], &__state->c__2, tempxf);
 	    for (i__ = 1; i__ <= 6; ++i__) {
 		for (j = 1; j <= 6; ++j) {
 		    trans[(i__1 = i__ + (j + (node - 1) * 6) * 6 - 43) < 504 
-			    && 0 <= i__1 ? i__1 : s_rnge("trans", i__1, "frm"
-			    "chg_", (ftnlen)483)] = tempxf[(i__2 = i__ + j * 6 
-			    - 7) < 36 && 0 <= i__2 ? i__2 : s_rnge("tempxf", 
-			    i__2, "frmchg_", (ftnlen)483)];
+			    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+			     "trans", i__1, "frmchg_", (ftnlen)483)] = tempxf[
+			    (i__2 = i__ + j * 6 - 7) < 36 && 0 <= i__2 ? i__2 
+			    : s_rnge(&__global_state->f2c, "tempxf", i__2, 
+			    "frmchg_", (ftnlen)483)];
 		}
 	    }
 	}
@@ -632,10 +643,11 @@ static frmchg_state_t* get_frmchg_state() {
 /*        or if the last frame is FRAME2 or if we simply couldn't get */
 /*        another transformation. */
 
-	done = frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"frame", i__1, "frmchg_", (ftnlen)493)] == 1 || frame[(i__2 = 
-		node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("frame", i__2, 
-		"frmchg_", (ftnlen)493)] == *frame2 || ! found;
+	done = frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "frame", i__1, "frmchg_", (ftnlen)493)] 
+		== 1 || frame[(i__2 = node - 1) < 10 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "frame", i__2, "frmchg_", (
+		ftnlen)493)] == *frame2 || ! found;
     }
 
 /*     Right now we have the following situation.  We have in hand */
@@ -668,16 +680,17 @@ static frmchg_state_t* get_frmchg_state() {
 
 /*     We now have to do essentially the same thing for FRAME2. */
 
-    if (frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", 
-	    i__1, "frmchg_", (ftnlen)531)] == *frame2) {
+    if (frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "frame", i__1, "frmchg_", (ftnlen)531)] == *
+	    frame2) {
 
 /*        We can handle this one immediately with the private routine */
 /*        ZZMSXF which multiplies a series of state transformation */
 /*        matrices. */
 
 	i__1 = node - 1;
-	zzmsxf_(trans, &i__1, xform);
-	chkout_("FRMCHG", (ftnlen)6);
+	zzmsxf_(__global_state, trans, &i__1, xform);
+	chkout_(__global_state, "FRMCHG", (ftnlen)6);
 	return 0;
     }
 
@@ -703,8 +716,8 @@ static frmchg_state_t* get_frmchg_state() {
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		for (j = 4; j <= 6; ++j) {
 		    trans2[(i__1 = i__ + (j + k * 6) * 6 - 43) < 72 && 0 <= 
-			    i__1 ? i__1 : s_rnge("trans2", i__1, "frmchg_", (
-			    ftnlen)568)] = 0.;
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "tran"
+			    "s2", i__1, "frmchg_", (ftnlen)568)] = 0.;
 		}
 	    }
 	}
@@ -730,22 +743,23 @@ static frmchg_state_t* get_frmchg_state() {
 /*           This is the first pass, just put the transformation */
 /*           directly into TRANS2(,,PUT). */
 
-	    frmget_(&this__, et, &trans2[(i__1 = (put * 6 + 1) * 6 - 42) < 72 
-		    && 0 <= i__1 ? i__1 : s_rnge("trans2", i__1, "frmchg_", (
-		    ftnlen)597)], &relto, &found);
+	    frmget_(__global_state, &this__, et, &trans2[(i__1 = (put * 6 + 1)
+		     * 6 - 42) < 72 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "trans2", i__1, "frmchg_", (ftnlen)
+		    597)], &relto, &found);
 	    if (found) {
 		this__ = relto;
 		get = put;
 		put += inc;
 		inc = -inc;
-		cmnode = isrchi_(&this__, &node, frame);
+		cmnode = isrchi_(__global_state, &this__, &node, frame);
 		gotone = cmnode > 0;
 	    }
 	} else {
 
 /*           Fetch the transformation into a temporary spot TEMPXF */
 
-	    frmget_(&this__, et, tempxf, &relto, &found);
+	    frmget_(__global_state, &this__, et, tempxf, &relto, &found);
 	    if (found) {
 
 /*              Next multiply TEMPXF on the right by the last partial */
@@ -757,59 +771,71 @@ static frmchg_state_t* get_frmchg_state() {
 		for (i__ = 1; i__ <= 3; ++i__) {
 		    for (j = 1; j <= 3; ++j) {
 			trans2[(i__1 = i__ + (j + put * 6) * 6 - 43) < 72 && 
-				0 <= i__1 ? i__1 : s_rnge("trans2", i__1, 
-				"frmchg_", (ftnlen)626)] = tempxf[(i__2 = i__ 
-				- 1) < 36 && 0 <= i__2 ? i__2 : s_rnge("temp"
-				"xf", i__2, "frmchg_", (ftnlen)626)] * trans2[(
-				i__3 = (j + get * 6) * 6 - 42) < 72 && 0 <= 
-				i__3 ? i__3 : s_rnge("trans2", i__3, "frmchg_"
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "trans2", i__1, "frmchg_"
+				, (ftnlen)626)] = tempxf[(i__2 = i__ - 1) < 
+				36 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "tempxf", i__2, "frmchg_"
+				, (ftnlen)626)] * trans2[(i__3 = (j + get * 6)
+				 * 6 - 42) < 72 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "trans2", i__3, "frmchg_"
 				, (ftnlen)626)] + tempxf[(i__4 = i__ + 5) < 
-				36 && 0 <= i__4 ? i__4 : s_rnge("tempxf", 
-				i__4, "frmchg_", (ftnlen)626)] * trans2[(i__5 
-				= (j + get * 6) * 6 - 41) < 72 && 0 <= i__5 ? 
-				i__5 : s_rnge("trans2", i__5, "frmchg_", (
-				ftnlen)626)] + tempxf[(i__6 = i__ + 11) < 36 
-				&& 0 <= i__6 ? i__6 : s_rnge("tempxf", i__6, 
-				"frmchg_", (ftnlen)626)] * trans2[(i__7 = (j 
-				+ get * 6) * 6 - 40) < 72 && 0 <= i__7 ? i__7 
-				: s_rnge("trans2", i__7, "frmchg_", (ftnlen)
-				626)];
+				36 && 0 <= i__4 ? i__4 : s_rnge(&
+				__global_state->f2c, "tempxf", i__4, "frmchg_"
+				, (ftnlen)626)] * trans2[(i__5 = (j + get * 6)
+				 * 6 - 41) < 72 && 0 <= i__5 ? i__5 : s_rnge(&
+				__global_state->f2c, "trans2", i__5, "frmchg_"
+				, (ftnlen)626)] + tempxf[(i__6 = i__ + 11) < 
+				36 && 0 <= i__6 ? i__6 : s_rnge(&
+				__global_state->f2c, "tempxf", i__6, "frmchg_"
+				, (ftnlen)626)] * trans2[(i__7 = (j + get * 6)
+				 * 6 - 40) < 72 && 0 <= i__7 ? i__7 : s_rnge(&
+				__global_state->f2c, "trans2", i__7, "frmchg_"
+				, (ftnlen)626)];
 		    }
 		}
 		for (i__ = 4; i__ <= 6; ++i__) {
 		    for (j = 1; j <= 3; ++j) {
 			trans2[(i__1 = i__ + (j + put * 6) * 6 - 43) < 72 && 
-				0 <= i__1 ? i__1 : s_rnge("trans2", i__1, 
-				"frmchg_", (ftnlen)635)] = tempxf[(i__2 = i__ 
-				- 1) < 36 && 0 <= i__2 ? i__2 : s_rnge("temp"
-				"xf", i__2, "frmchg_", (ftnlen)635)] * trans2[(
-				i__3 = (j + get * 6) * 6 - 42) < 72 && 0 <= 
-				i__3 ? i__3 : s_rnge("trans2", i__3, "frmchg_"
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "trans2", i__1, "frmchg_"
+				, (ftnlen)635)] = tempxf[(i__2 = i__ - 1) < 
+				36 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "tempxf", i__2, "frmchg_"
+				, (ftnlen)635)] * trans2[(i__3 = (j + get * 6)
+				 * 6 - 42) < 72 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "trans2", i__3, "frmchg_"
 				, (ftnlen)635)] + tempxf[(i__4 = i__ + 5) < 
-				36 && 0 <= i__4 ? i__4 : s_rnge("tempxf", 
-				i__4, "frmchg_", (ftnlen)635)] * trans2[(i__5 
-				= (j + get * 6) * 6 - 41) < 72 && 0 <= i__5 ? 
-				i__5 : s_rnge("trans2", i__5, "frmchg_", (
-				ftnlen)635)] + tempxf[(i__6 = i__ + 11) < 36 
-				&& 0 <= i__6 ? i__6 : s_rnge("tempxf", i__6, 
-				"frmchg_", (ftnlen)635)] * trans2[(i__7 = (j 
-				+ get * 6) * 6 - 40) < 72 && 0 <= i__7 ? i__7 
-				: s_rnge("trans2", i__7, "frmchg_", (ftnlen)
-				635)] + tempxf[(i__8 = i__ + 17) < 36 && 0 <= 
-				i__8 ? i__8 : s_rnge("tempxf", i__8, "frmchg_"
+				36 && 0 <= i__4 ? i__4 : s_rnge(&
+				__global_state->f2c, "tempxf", i__4, "frmchg_"
+				, (ftnlen)635)] * trans2[(i__5 = (j + get * 6)
+				 * 6 - 41) < 72 && 0 <= i__5 ? i__5 : s_rnge(&
+				__global_state->f2c, "trans2", i__5, "frmchg_"
+				, (ftnlen)635)] + tempxf[(i__6 = i__ + 11) < 
+				36 && 0 <= i__6 ? i__6 : s_rnge(&
+				__global_state->f2c, "tempxf", i__6, "frmchg_"
+				, (ftnlen)635)] * trans2[(i__7 = (j + get * 6)
+				 * 6 - 40) < 72 && 0 <= i__7 ? i__7 : s_rnge(&
+				__global_state->f2c, "trans2", i__7, "frmchg_"
+				, (ftnlen)635)] + tempxf[(i__8 = i__ + 17) < 
+				36 && 0 <= i__8 ? i__8 : s_rnge(&
+				__global_state->f2c, "tempxf", i__8, "frmchg_"
 				, (ftnlen)635)] * trans2[(i__9 = (j + get * 6)
-				 * 6 - 39) < 72 && 0 <= i__9 ? i__9 : s_rnge(
-				"trans2", i__9, "frmchg_", (ftnlen)635)] + 
-				tempxf[(i__10 = i__ + 23) < 36 && 0 <= i__10 ?
-				 i__10 : s_rnge("tempxf", i__10, "frmchg_", (
-				ftnlen)635)] * trans2[(i__11 = (j + get * 6) *
-				 6 - 38) < 72 && 0 <= i__11 ? i__11 : s_rnge(
-				"trans2", i__11, "frmchg_", (ftnlen)635)] + 
-				tempxf[(i__12 = i__ + 29) < 36 && 0 <= i__12 ?
-				 i__12 : s_rnge("tempxf", i__12, "frmchg_", (
-				ftnlen)635)] * trans2[(i__13 = (j + get * 6) *
-				 6 - 37) < 72 && 0 <= i__13 ? i__13 : s_rnge(
-				"trans2", i__13, "frmchg_", (ftnlen)635)];
+				 * 6 - 39) < 72 && 0 <= i__9 ? i__9 : s_rnge(&
+				__global_state->f2c, "trans2", i__9, "frmchg_"
+				, (ftnlen)635)] + tempxf[(i__10 = i__ + 23) < 
+				36 && 0 <= i__10 ? i__10 : s_rnge(&
+				__global_state->f2c, "tempxf", i__10, "frmch"
+				"g_", (ftnlen)635)] * trans2[(i__11 = (j + get 
+				* 6) * 6 - 38) < 72 && 0 <= i__11 ? i__11 : 
+				s_rnge(&__global_state->f2c, "trans2", i__11, 
+				"frmchg_", (ftnlen)635)] + tempxf[(i__12 = 
+				i__ + 29) < 36 && 0 <= i__12 ? i__12 : s_rnge(
+				&__global_state->f2c, "tempxf", i__12, "frmc"
+				"hg_", (ftnlen)635)] * trans2[(i__13 = (j + 
+				get * 6) * 6 - 37) < 72 && 0 <= i__13 ? i__13 
+				: s_rnge(&__global_state->f2c, "trans2", 
+				i__13, "frmchg_", (ftnlen)635)];
 		    }
 		}
 
@@ -824,11 +850,12 @@ static frmchg_state_t* get_frmchg_state() {
 		    for (j = 4; j <= 6; ++j) {
 			l = j - 3;
 			trans2[(i__1 = i__ + (j + put * 6) * 6 - 43) < 72 && 
-				0 <= i__1 ? i__1 : s_rnge("trans2", i__1, 
-				"frmchg_", (ftnlen)654)] = trans2[(i__2 = k + 
-				(l + put * 6) * 6 - 43) < 72 && 0 <= i__2 ? 
-				i__2 : s_rnge("trans2", i__2, "frmchg_", (
-				ftnlen)654)];
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "trans2", i__1, "frmchg_"
+				, (ftnlen)654)] = trans2[(i__2 = k + (l + put 
+				* 6) * 6 - 43) < 72 && 0 <= i__2 ? i__2 : 
+				s_rnge(&__global_state->f2c, "trans2", i__2, 
+				"frmchg_", (ftnlen)654)];
 		    }
 		}
 
@@ -841,7 +868,7 @@ static frmchg_state_t* get_frmchg_state() {
 		put += inc;
 		inc = -inc;
 		this__ = relto;
-		cmnode = isrchi_(&this__, &node, frame);
+		cmnode = isrchi_(__global_state, &this__, &node, frame);
 		gotone = cmnode > 0;
 	    }
 	}
@@ -860,25 +887,26 @@ static frmchg_state_t* get_frmchg_state() {
 /*     get from FRAME1 to FRAME2. */
 
     if (! gotone) {
-	zznofcon_(et, frame1, &frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("frame", i__1, "frmchg_", (ftnlen)697)], frame2,
-		 &this__, errmsg, (ftnlen)1840);
-	if (failed_()) {
+	zznofcon_(__global_state, et, frame1, &frame[(i__1 = node - 1) < 10 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "frame", 
+		i__1, "frmchg_", (ftnlen)697)], frame2, &this__, errmsg, (
+		ftnlen)1840);
+	if (failed_(__global_state)) {
 
 /*           We were unable to create the error message. This */
 /*           unfortunate situation could arise if a frame kernel */
 /*           is corrupted. */
 
-	    chkout_("FRMCHG", (ftnlen)6);
+	    chkout_(__global_state, "FRMCHG", (ftnlen)6);
 	    return 0;
 	}
 
 /*        The normal case: signal an error with a descriptive long */
 /*        error message. */
 
-	setmsg_(errmsg, (ftnlen)1840);
-	sigerr_("SPICE(NOFRAMECONNECT)", (ftnlen)21);
-	chkout_("FRMCHG", (ftnlen)6);
+	setmsg_(__global_state, errmsg, (ftnlen)1840);
+	sigerr_(__global_state, "SPICE(NOFRAMECONNECT)", (ftnlen)21);
+	chkout_(__global_state, "FRMCHG", (ftnlen)6);
 	return 0;
     }
 
@@ -901,12 +929,13 @@ static frmchg_state_t* get_frmchg_state() {
 /*     sequence of transformation matrices together to get the */
 /*     result from FRAME1 to FRAME2. */
 
-    invstm_(&trans2[(i__1 = (get * 6 + 1) * 6 - 42) < 72 && 0 <= i__1 ? i__1 :
-	     s_rnge("trans2", i__1, "frmchg_", (ftnlen)740)], &trans[(i__2 = (
-	    cmnode * 6 + 1) * 6 - 42) < 504 && 0 <= i__2 ? i__2 : s_rnge(
+    invstm_(__global_state, &trans2[(i__1 = (get * 6 + 1) * 6 - 42) < 72 && 0 
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "trans2", i__1, 
+	    "frmchg_", (ftnlen)740)], &trans[(i__2 = (cmnode * 6 + 1) * 6 - 
+	    42) < 504 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
 	    "trans", i__2, "frmchg_", (ftnlen)740)]);
-    zzmsxf_(trans, &cmnode, xform);
-    chkout_("FRMCHG", (ftnlen)6);
+    zzmsxf_(__global_state, trans, &cmnode, xform);
+    chkout_(__global_state, "FRMCHG", (ftnlen)6);
     return 0;
 } /* frmchg_ */
 

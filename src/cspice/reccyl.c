@@ -8,30 +8,30 @@
 
 
 typedef int reccyl_state_t;
-static reccyl_state_t* get_reccyl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline reccyl_state_t* get_reccyl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RECCYL ( Rectangular to cylindrical coordinates ) */
-/* Subroutine */ int reccyl_(doublereal *rectan, doublereal *r__, doublereal *
-	long__, doublereal *z__)
+/* Subroutine */ int reccyl_(cspice_t* __global_state, doublereal *rectan, 
+	doublereal *r__, doublereal *long__, doublereal *z__)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal), atan2(doublereal, doublereal);
+    double sqrt(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
+	    doublereal);
 
     /* Local variables */
     doublereal x;
     doublereal y;
-    extern doublereal twopi_(void);
+    extern doublereal twopi_(cspice_t*);
     doublereal big;
 
 
     /* Module state */
-    reccyl_state_t* __state = get_reccyl_state();
+    reccyl_state_t* __state = get_reccyl_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from rectangular to cylindrical coordinates. */
@@ -204,11 +204,11 @@ static reccyl_state_t* get_reccyl_state() {
     } else {
 	x = rectan[0] / big;
 	y = rectan[1] / big;
-	*r__ = big * sqrt(x * x + y * y);
-	*long__ = atan2(y, x);
+	*r__ = big * sqrt(&__global_state->f2c, x * x + y * y);
+	*long__ = atan2(&__global_state->f2c, y, x);
     }
     if (*long__ < 0.) {
-	*long__ += twopi_();
+	*long__ += twopi_(__global_state);
     }
     return 0;
 } /* reccyl_ */

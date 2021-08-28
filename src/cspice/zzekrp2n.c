@@ -8,33 +8,34 @@
 
 
 typedef int zzekrp2n_state_t;
-static zzekrp2n_state_t* get_zzekrp2n_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrp2n_state_t* get_zzekrp2n_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKRP2N ( EK, record pointer to number ) */
-integer zzekrp2n_(integer *handle, integer *segno, integer *recptr)
+integer zzekrp2n_(cspice_t* __global_state, integer *handle, integer *segno, 
+	integer *recptr)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Local variables */
-    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
-    extern integer zzektrls_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer zzektrls_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer stype;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer segdsc[24];
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzekrp2n_state_t* __state = get_zzekrp2n_state();
+    zzekrp2n_state_t* __state = get_zzekrp2n_state(__global_state);
 /* $ Abstract */
 
 /*     Find the EK record number corresponding to a specified record */
@@ -279,34 +280,34 @@ integer zzekrp2n_(integer *handle, integer *segno, integer *recptr)
 /*     Use discovery check-in. */
 
     ret_val = 0;
-    zzeksdsc_(handle, segno, segdsc);
-    if (failed_()) {
+    zzeksdsc_(__global_state, handle, segno, segdsc);
+    if (failed_(__global_state)) {
 	return ret_val;
     }
     stype = segdsc[0];
     if (stype == 1) {
-	ret_val = zzektrls_(handle, &segdsc[6], recptr);
+	ret_val = zzektrls_(__global_state, handle, &segdsc[6], recptr);
 	if (ret_val == 0) {
-	    chkin_("ZZEKRP2N", (ftnlen)8);
-	    setmsg_("Record having pointer # not found in segment # of file #"
-		    , (ftnlen)56);
-	    errint_("#", recptr, (ftnlen)1);
-	    errint_("#", segno, (ftnlen)1);
-	    errhan_("#", handle, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZEKRP2N", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKRP2N", (ftnlen)8);
+	    setmsg_(__global_state, "Record having pointer # not found in se"
+		    "gment # of file #", (ftnlen)56);
+	    errint_(__global_state, "#", recptr, (ftnlen)1);
+	    errint_(__global_state, "#", segno, (ftnlen)1);
+	    errhan_(__global_state, "#", handle, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZEKRP2N", (ftnlen)8);
 	}
     } else if (stype == 2) {
 	ret_val = *recptr;
     } else {
-	chkin_("ZZEKRP2N", (ftnlen)8);
-	setmsg_("Segment type # is not supported.  SEGNO = #. File = #.", (
-		ftnlen)54);
-	errint_("#", &stype, (ftnlen)1);
-	errint_("#", segno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKRP2N", (ftnlen)8);
+	chkin_(__global_state, "ZZEKRP2N", (ftnlen)8);
+	setmsg_(__global_state, "Segment type # is not supported.  SEGNO = #"
+		". File = #.", (ftnlen)54);
+	errint_(__global_state, "#", &stype, (ftnlen)1);
+	errint_(__global_state, "#", segno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKRP2N", (ftnlen)8);
     }
     return ret_val;
 } /* zzekrp2n_ */

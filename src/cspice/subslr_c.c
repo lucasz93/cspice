@@ -1120,7 +1120,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "subslr_c" );
+   chkin_c ( naif_state, "subslr_c" );
 
    /*
    Check the input strings: method, target, fixref, abcorr, and obsrvr.

@@ -8,41 +8,42 @@
 
 
 typedef int zzinrec_state_t;
-static zzinrec_state_t* get_zzinrec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzinrec_state_t* get_zzinrec_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZINREC ( DSK, in rectangular element? ) */
-/* Subroutine */ int zzinrec_(doublereal *p, doublereal *bounds, doublereal *
-	margin, integer *exclud, logical *inside)
+/* Subroutine */ int zzinrec_(cspice_t* __global_state, doublereal *p, 
+	doublereal *bounds, doublereal *margin, integer *exclud, logical *
+	inside)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
     doublereal l[3];
     doublereal delta[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal amncor[3];
     doublereal mincor[3];
     doublereal amxcor[3];
     doublereal maxcor[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzinrec_state_t* __state = get_zzinrec_state();
+    zzinrec_state_t* __state = get_zzinrec_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -232,7 +233,7 @@ static zzinrec_state_t* get_zzinrec_state() {
 
 /*     Check-in is discovery style. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -245,54 +246,61 @@ static zzinrec_state_t* get_zzinrec_state() {
 /*     Reject negative margins. */
 
     if (*margin < 0.) {
-	chkin_("ZZINREC", (ftnlen)7);
-	setmsg_("Margin must be non-negative but was #.", (ftnlen)38);
-	errdp_("#", margin, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZINREC", (ftnlen)7);
+	chkin_(__global_state, "ZZINREC", (ftnlen)7);
+	setmsg_(__global_state, "Margin must be non-negative but was #.", (
+		ftnlen)38);
+	errdp_(__global_state, "#", margin, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZINREC", (ftnlen)7);
 	return 0;
     }
 
 /*     Check the exclusion index. */
 
     if (*exclud < 0 || *exclud > 3) {
-	chkin_("ZZINREC", (ftnlen)7);
-	setmsg_("EXCLUD was #; allowed range is 0:3.", (ftnlen)35);
-	errint_("#", exclud, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZINREC", (ftnlen)7);
+	chkin_(__global_state, "ZZINREC", (ftnlen)7);
+	setmsg_(__global_state, "EXCLUD was #; allowed range is 0:3.", (
+		ftnlen)35);
+	errint_(__global_state, "#", exclud, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZINREC", (ftnlen)7);
 	return 0;
     }
 
 /*     Get local copies of the coordinate bounds. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	mincor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("mincor", 
-		i__1, "zzinrec_", (ftnlen)272)] = bounds[(i__2 = (i__ << 1) - 
-		2) < 6 && 0 <= i__2 ? i__2 : s_rnge("bounds", i__2, "zzinrec_"
-		, (ftnlen)272)];
-	maxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("maxcor", 
-		i__1, "zzinrec_", (ftnlen)273)] = bounds[(i__2 = (i__ << 1) - 
-		1) < 6 && 0 <= i__2 ? i__2 : s_rnge("bounds", i__2, "zzinrec_"
-		, (ftnlen)273)];
-	l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, "zzin"
-		"rec_", (ftnlen)274)] = maxcor[(i__2 = i__ - 1) < 3 && 0 <= 
-		i__2 ? i__2 : s_rnge("maxcor", i__2, "zzinrec_", (ftnlen)274)]
-		 - mincor[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(
-		"mincor", i__3, "zzinrec_", (ftnlen)274)];
-	if (l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zzinrec_", (ftnlen)276)] < 0.) {
-	    chkin_("ZZINREC", (ftnlen)7);
-	    setmsg_("Bounds are out of order for index #; bounds are #:#.", (
-		    ftnlen)52);
-	    errdp_("#", &bounds[(i__1 = (i__ << 1) - 2) < 6 && 0 <= i__1 ? 
-		    i__1 : s_rnge("bounds", i__1, "zzinrec_", (ftnlen)281)], (
-		    ftnlen)1);
-	    errdp_("#", &bounds[(i__1 = (i__ << 1) - 1) < 6 && 0 <= i__1 ? 
-		    i__1 : s_rnge("bounds", i__1, "zzinrec_", (ftnlen)282)], (
-		    ftnlen)1);
-	    sigerr_("SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
-	    chkout_("ZZINREC", (ftnlen)7);
+	mincor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "mincor", i__1, "zzinrec_", (ftnlen)272)]
+		 = bounds[(i__2 = (i__ << 1) - 2) < 6 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "bounds", i__2, "zzinrec_", (
+		ftnlen)272)];
+	maxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "maxcor", i__1, "zzinrec_", (ftnlen)273)]
+		 = bounds[(i__2 = (i__ << 1) - 1) < 6 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "bounds", i__2, "zzinrec_", (
+		ftnlen)273)];
+	l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "l", i__1, "zzinrec_", (ftnlen)274)] = 
+		maxcor[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "maxcor", i__2, "zzinrec_", (ftnlen)274)]
+		 - mincor[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "mincor", i__3, "zzinrec_", (ftnlen)274)]
+		;
+	if (l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "l", i__1, "zzinrec_", (ftnlen)276)] < 
+		0.) {
+	    chkin_(__global_state, "ZZINREC", (ftnlen)7);
+	    setmsg_(__global_state, "Bounds are out of order for index #; bo"
+		    "unds are #:#.", (ftnlen)52);
+	    errdp_(__global_state, "#", &bounds[(i__1 = (i__ << 1) - 2) < 6 &&
+		     0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bounds",
+		     i__1, "zzinrec_", (ftnlen)281)], (ftnlen)1);
+	    errdp_(__global_state, "#", &bounds[(i__1 = (i__ << 1) - 1) < 6 &&
+		     0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bounds",
+		     i__1, "zzinrec_", (ftnlen)282)], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
+	    chkout_(__global_state, "ZZINREC", (ftnlen)7);
 	    return 0;
 	}
     }
@@ -305,29 +313,34 @@ static zzinrec_state_t* get_zzinrec_state() {
 
 /*           Create adjusted bounds for the Ith coordinate. */
 
-	    delta[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("delta", 
-		    i__2, "zzinrec_", (ftnlen)301)] = *margin * (d__1 = l[(
-		    i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", 
-		    i__1, "zzinrec_", (ftnlen)301)], abs(d__1));
-	    amncor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("amncor",
-		     i__1, "zzinrec_", (ftnlen)303)] = mincor[(i__2 = i__ - 1)
-		     < 3 && 0 <= i__2 ? i__2 : s_rnge("mincor", i__2, "zzinr"
-		    "ec_", (ftnlen)303)] - delta[(i__3 = i__ - 1) < 3 && 0 <= 
-		    i__3 ? i__3 : s_rnge("delta", i__3, "zzinrec_", (ftnlen)
-		    303)];
-	    amxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("amxcor",
-		     i__1, "zzinrec_", (ftnlen)304)] = maxcor[(i__2 = i__ - 1)
-		     < 3 && 0 <= i__2 ? i__2 : s_rnge("maxcor", i__2, "zzinr"
-		    "ec_", (ftnlen)304)] + delta[(i__3 = i__ - 1) < 3 && 0 <= 
-		    i__3 ? i__3 : s_rnge("delta", i__3, "zzinrec_", (ftnlen)
-		    304)];
-	    if (p[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("p", i__1,
-		     "zzinrec_", (ftnlen)306)] < amncor[(i__2 = i__ - 1) < 3 
-		    && 0 <= i__2 ? i__2 : s_rnge("amncor", i__2, "zzinrec_", (
+	    delta[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "delta", i__2, "zzinrec_", (ftnlen)
+		    301)] = *margin * (d__1 = l[(i__1 = i__ - 1) < 3 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "l", i__1, 
+		    "zzinrec_", (ftnlen)301)], abs(d__1));
+	    amncor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "amncor", i__1, "zzinrec_", (ftnlen)
+		    303)] = mincor[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "mincor", i__2, "zzinrec_", (
+		    ftnlen)303)] - delta[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
+		    i__3 : s_rnge(&__global_state->f2c, "delta", i__3, "zzin"
+		    "rec_", (ftnlen)303)];
+	    amxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "amxcor", i__1, "zzinrec_", (ftnlen)
+		    304)] = maxcor[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "maxcor", i__2, "zzinrec_", (
+		    ftnlen)304)] + delta[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
+		    i__3 : s_rnge(&__global_state->f2c, "delta", i__3, "zzin"
+		    "rec_", (ftnlen)304)];
+	    if (p[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "p", i__1, "zzinrec_", (ftnlen)306)] 
+		    < amncor[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "amncor", i__2, "zzinrec_", (
 		    ftnlen)306)] || p[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		    i__3 : s_rnge("p", i__3, "zzinrec_", (ftnlen)306)] > 
-		    amxcor[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge(
-		    "amxcor", i__4, "zzinrec_", (ftnlen)306)]) {
+		    i__3 : s_rnge(&__global_state->f2c, "p", i__3, "zzinrec_",
+		     (ftnlen)306)] > amxcor[(i__4 = i__ - 1) < 3 && 0 <= i__4 
+		    ? i__4 : s_rnge(&__global_state->f2c, "amxcor", i__4, 
+		    "zzinrec_", (ftnlen)306)]) {
 		return 0;
 	    }
 	}

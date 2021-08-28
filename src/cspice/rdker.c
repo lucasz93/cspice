@@ -8,8 +8,7 @@
 
 
 extern rdker_init_t __rdker_init;
-static rdker_state_t* get_rdker_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rdker_state_t* get_rdker_state(cspice_t* state) {
 	if (!state->rdker)
 		state->rdker = __cspice_allocate_module(sizeof(rdker_state_t),
 	 &__rdker_init, sizeof(__rdker_init));
@@ -18,8 +17,9 @@ static rdker_state_t* get_rdker_state() {
 }
 
 /* $Procedure      RDKER ( Read a kernel file ) */
-/* Subroutine */ int rdker_0_(int n__, char *kernel, char *line, integer *
-	number, logical *eof, ftnlen kernel_len, ftnlen line_len)
+/* Subroutine */ int rdker_0_(cspice_t* __global_state, int n__, char *kernel,
+	 char *line, integer *number, logical *eof, ftnlen kernel_len, ftnlen 
+	line_len)
 {
     /* Initialized data */
 
@@ -28,24 +28,25 @@ static rdker_state_t* get_rdker_state() {
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int cltext_(char *, ftnlen);
-    extern /* Subroutine */ int rdtext_(char *, char *, logical *, ftnlen, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern logical return_(void);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cltext_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int rdtext_(cspice_t*, char *, char *, logical *, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    rdker_state_t* __state = get_rdker_state();
+    rdker_state_t* __state = get_rdker_state(__global_state);
 /* $ Abstract */
 
 /*     Open and read the contents of a SPICE ASCII kernel file. */
@@ -366,20 +367,20 @@ static rdker_state_t* get_rdker_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("RDKER", (ftnlen)5);
+	chkin_(__global_state, "RDKER", (ftnlen)5);
     }
 
 /*     Calling RDKER directly is a serious breach of protocol. */
 /*     If RDKER is called, an error is signalled. */
 
-    setmsg_("RDKER: You have called an entry which performs no run-time func"
-	    "tion. This may indicate a bug. Please check the documentation fo"
-	    "r the subroutine RDKER.", (ftnlen)150);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("RDKER", (ftnlen)5);
+    setmsg_(__global_state, "RDKER: You have called an entry which performs "
+	    "no run-time function. This may indicate a bug. Please check the "
+	    "documentation for the subroutine RDKER.", (ftnlen)150);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "RDKER", (ftnlen)5);
     return 0;
 /* $Procedure RDKNEW ( Open and initialize a new kernel file ) */
 
@@ -566,29 +567,31 @@ L_rdknew:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("RDKNEW", (ftnlen)6);
+	chkin_(__global_state, "RDKNEW", (ftnlen)6);
     }
 
 /*     Initialize the data delimiters if it hasn't been done already. */
 
     if (__state->frstim) {
-	s_copy(__state->begdat, "\\begindata", (ftnlen)10, (ftnlen)10);
-	s_copy(__state->begtxt, "\\begintext", (ftnlen)10, (ftnlen)10);
+	s_copy(&__global_state->f2c, __state->begdat, "\\begindata", (ftnlen)
+		10, (ftnlen)10);
+	s_copy(&__global_state->f2c, __state->begtxt, "\\begintext", (ftnlen)
+		10, (ftnlen)10);
 	__state->frstim = FALSE_;
     } else {
 
 /*        Close the previous file, if it hasn't been closed already. */
 
-	cltext_(__state->file, (ftnlen)255);
+	cltext_(__global_state, __state->file, (ftnlen)255);
     }
 
 /*     Close the new file, too, in case they are the same. No sense */
 /*     burning up logical units. */
 
-    cltext_(kernel, kernel_len);
+    cltext_(__global_state, kernel, kernel_len);
 
 /*     Read the first line of the file. It can't possibly be a data */
 /*     line, since data must be preceded by a \begindata marker, so */
@@ -598,18 +601,20 @@ L_rdknew:
 /*     the line number of the last line read and can return this */
 /*     information from RDKLIN. */
 
-    rdtext_(kernel, __state->first, &__state->end, kernel_len, (ftnlen)80);
+    rdtext_(__global_state, kernel, __state->first, &__state->end, kernel_len,
+	     (ftnlen)80);
 
 /*     Replace any tab characters with blanks. */
 
-    __state->r__ = rtrim_(__state->first, (ftnlen)80);
+    __state->r__ = rtrim_(__global_state, __state->first, (ftnlen)80);
     i__1 = __state->r__;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	if (*(unsigned char *)&__state->first[__state->i__ - 1] == 9) {
 	    *(unsigned char *)&__state->first[__state->i__ - 1] = ' ';
 	}
     }
-    ljust_(__state->first, __state->first, (ftnlen)80, (ftnlen)80);
+    ljust_(__global_state, __state->first, __state->first, (ftnlen)80, (
+	    ftnlen)80);
     __state->linnum = 1;
 
 /*     The first line is enough to set the status for subsequent */
@@ -617,9 +622,9 @@ L_rdknew:
 
     if (__state->end) {
 	__state->status = 3;
-	cltext_(kernel, kernel_len);
-    } else if (s_cmp(__state->first, __state->begdat, (ftnlen)80, (ftnlen)10) 
-	    == 0) {
+	cltext_(__global_state, kernel, kernel_len);
+    } else if (s_cmp(&__global_state->f2c, __state->first, __state->begdat, (
+	    ftnlen)80, (ftnlen)10) == 0) {
 	__state->status = 2;
     } else {
 	__state->status = 1;
@@ -627,8 +632,9 @@ L_rdknew:
 
 /*     Save the name of the file for future reference. */
 
-    s_copy(__state->file, kernel, (ftnlen)255, kernel_len);
-    chkout_("RDKNEW", (ftnlen)6);
+    s_copy(&__global_state->f2c, __state->file, kernel, (ftnlen)255, 
+	    kernel_len);
+    chkout_(__global_state, "RDKNEW", (ftnlen)6);
     return 0;
 /* $Procedure RDKDAT ( Read the next data line from a kernel file ) */
 
@@ -838,10 +844,10 @@ L_rdkdat:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("RDKDAT", (ftnlen)6);
+	chkin_(__global_state, "RDKDAT", (ftnlen)6);
     }
 
 /*     If the previous call detected the end of the file, */
@@ -849,7 +855,7 @@ L_rdkdat:
 
     if (__state->status == 3) {
 	*eof = TRUE_;
-	chkout_("RDKDAT", (ftnlen)6);
+	chkout_(__global_state, "RDKDAT", (ftnlen)6);
 	return 0;
     }
 
@@ -861,35 +867,38 @@ L_rdkdat:
 /*     the line number of the last line read and can return this */
 /*     information from RDKLIN. */
 
-    s_copy(line, " ", line_len, (ftnlen)1);
-    while(! failed_() && (__state->status == 1 || s_cmp(line, " ", line_len, (
-	    ftnlen)1) == 0)) {
-	rdtext_(__state->file, line, eof, (ftnlen)255, line_len);
+    s_copy(&__global_state->f2c, line, " ", line_len, (ftnlen)1);
+    while(! failed_(__global_state) && (__state->status == 1 || s_cmp(&
+	    __global_state->f2c, line, " ", line_len, (ftnlen)1) == 0)) {
+	rdtext_(__global_state, __state->file, line, eof, (ftnlen)255, 
+		line_len);
 
 /*        Replace any tab characters with blanks. */
 
-	__state->r__ = rtrim_(line, line_len);
+	__state->r__ = rtrim_(__global_state, line, line_len);
 	i__1 = __state->r__;
 	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	    if (*(unsigned char *)&line[__state->i__ - 1] == 9) {
 		*(unsigned char *)&line[__state->i__ - 1] = ' ';
 	    }
 	}
-	ljust_(line, line, line_len, line_len);
+	ljust_(__global_state, line, line, line_len, line_len);
 	++__state->linnum;
 	if (*eof) {
 	    __state->status = 3;
-	    cltext_(__state->file, (ftnlen)255);
-	    chkout_("RDKDAT", (ftnlen)6);
+	    cltext_(__global_state, __state->file, (ftnlen)255);
+	    chkout_(__global_state, "RDKDAT", (ftnlen)6);
 	    return 0;
-	} else if (s_cmp(line, __state->begtxt, line_len, (ftnlen)10) == 0) {
+	} else if (s_cmp(&__global_state->f2c, line, __state->begtxt, 
+		line_len, (ftnlen)10) == 0) {
 	    __state->status = 1;
-	} else if (s_cmp(line, __state->begdat, line_len, (ftnlen)10) == 0) {
+	} else if (s_cmp(&__global_state->f2c, line, __state->begdat, 
+		line_len, (ftnlen)10) == 0) {
 	    __state->status = 2;
-	    s_copy(line, " ", line_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, line, " ", line_len, (ftnlen)1);
 	}
     }
-    chkout_("RDKDAT", (ftnlen)6);
+    chkout_(__global_state, "RDKDAT", (ftnlen)6);
     return 0;
 /* $Procedure      RDKLIN ( Reading kernel at line number ) */
 
@@ -1041,30 +1050,35 @@ L_rdklin:
 
 /*     Not much to do here.  Just copy the information and return. */
 
-    s_copy(kernel, __state->file, kernel_len, (ftnlen)255);
+    s_copy(&__global_state->f2c, kernel, __state->file, kernel_len, (ftnlen)
+	    255);
     *number = __state->linnum;
     return 0;
 } /* rdker_ */
 
-/* Subroutine */ int rdker_(char *kernel, char *line, integer *number, 
-	logical *eof, ftnlen kernel_len, ftnlen line_len)
+/* Subroutine */ int rdker_(cspice_t* __global_state, char *kernel, char *
+	line, integer *number, logical *eof, ftnlen kernel_len, ftnlen 
+	line_len)
 {
     return rdker_0_(0, kernel, line, number, eof, kernel_len, line_len);
     }
 
-/* Subroutine */ int rdknew_(char *kernel, ftnlen kernel_len)
+/* Subroutine */ int rdknew_(cspice_t* __global_state, char *kernel, ftnlen 
+	kernel_len)
 {
     return rdker_0_(1, kernel, (char *)0, (integer *)0, (logical *)0, 
 	    kernel_len, (ftnint)0);
     }
 
-/* Subroutine */ int rdkdat_(char *line, logical *eof, ftnlen line_len)
+/* Subroutine */ int rdkdat_(cspice_t* __global_state, char *line, logical *
+	eof, ftnlen line_len)
 {
     return rdker_0_(2, (char *)0, line, (integer *)0, eof, (ftnint)0, 
 	    line_len);
     }
 
-/* Subroutine */ int rdklin_(char *kernel, integer *number, ftnlen kernel_len)
+/* Subroutine */ int rdklin_(cspice_t* __global_state, char *kernel, integer *
+	number, ftnlen kernel_len)
 {
     return rdker_0_(3, kernel, (char *)0, number, (logical *)0, kernel_len, (
 	    ftnint)0);

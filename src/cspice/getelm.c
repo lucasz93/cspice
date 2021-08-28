@@ -8,29 +8,29 @@
 
 
 typedef int getelm_state_t;
-static getelm_state_t* get_getelm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline getelm_state_t* get_getelm_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure GETELM ( Get the components from two-line elements) */
-/* Subroutine */ int getelm_(integer *frstyr, char *lines, doublereal *epoch, 
-	doublereal *elems, ftnlen lines_len)
+/* Subroutine */ int getelm_(cspice_t* __global_state, integer *frstyr, char *
+	lines, doublereal *epoch, doublereal *elems, ftnlen lines_len)
 {
-    extern /* Subroutine */ int zzgetelm_(integer *, char *, doublereal *, 
-	    doublereal *, logical *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgetelm_(cspice_t*, integer *, char *, 
+	    doublereal *, doublereal *, logical *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char error[256];
     logical ok;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    getelm_state_t* __state = get_getelm_state();
+    getelm_state_t* __state = get_getelm_state(__global_state);
 /* $ Abstract */
 
 /*    Given a the "lines" of a two-line element set, parse the */
@@ -293,27 +293,27 @@ static getelm_state_t* get_getelm_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("GETELM", (ftnlen)6);
+    chkin_(__global_state, "GETELM", (ftnlen)6);
 
 /*     Pass the input to the parse routine... */
 
-    zzgetelm_(frstyr, lines, epoch, elems, &ok, error, lines_len, (ftnlen)256)
-	    ;
+    zzgetelm_(__global_state, frstyr, lines, epoch, elems, &ok, error, 
+	    lines_len, (ftnlen)256);
 
 /*     ...check for an error parsing the TLE pair. Signal an */
 /*     error if OK equals .FALSE. */
 
     if (! ok) {
-	setmsg_("Error in TLE set. #", (ftnlen)19);
-	errch_("#", error, (ftnlen)1, (ftnlen)256);
-	sigerr_("SPICE(BADTLE)", (ftnlen)13);
-	chkout_("GETELM", (ftnlen)6);
+	setmsg_(__global_state, "Error in TLE set. #", (ftnlen)19);
+	errch_(__global_state, "#", error, (ftnlen)1, (ftnlen)256);
+	sigerr_(__global_state, "SPICE(BADTLE)", (ftnlen)13);
+	chkout_(__global_state, "GETELM", (ftnlen)6);
 	return 0;
     }
-    chkout_("GETELM", (ftnlen)6);
+    chkout_(__global_state, "GETELM", (ftnlen)6);
     return 0;
 } /* getelm_ */
 

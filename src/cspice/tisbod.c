@@ -8,8 +8,7 @@
 
 
 extern tisbod_init_t __tisbod_init;
-static tisbod_state_t* get_tisbod_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline tisbod_state_t* get_tisbod_state(cspice_t* state) {
 	if (!state->tisbod)
 		state->tisbod = __cspice_allocate_module(sizeof(
 	tisbod_state_t), &__tisbod_init, sizeof(__tisbod_init));
@@ -18,8 +17,8 @@ static tisbod_state_t* get_tisbod_state() {
 }
 
 /* $Procedure      TISBOD ( Transformation, inertial state to bodyfixed ) */
-/* Subroutine */ int tisbod_(char *ref, integer *body, doublereal *et, 
-	doublereal *tsipm, ftnlen ref_len)
+/* Subroutine */ int tisbod_(cspice_t* __global_state, char *ref, integer *
+	body, doublereal *et, doublereal *tsipm, ftnlen ref_len)
 {
     /* Initialized data */
 
@@ -29,66 +28,73 @@ static tisbod_state_t* get_tisbod_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_dnnt(doublereal *);
-    double sin(doublereal), cos(doublereal), d_mod(doublereal *, doublereal *)
-	    ;
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_dnnt(f2c_state_t*, doublereal *);
+    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal), 
+	    d_mod(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int zzhsiadd_(integer *, integer *, integer *, 
-	    integer *, integer *, logical *);
-    extern /* Subroutine */ int zzhsichk_(integer *, integer *, integer *, 
-	    integer *, integer *);
-    extern integer zzbodbry_(integer *);
-    extern /* Subroutine */ int zzhsiini_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzpctrck_(integer *, logical *);
-    extern /* Subroutine */ int zzhsiavl_(integer *, integer *);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal vdotg_(doublereal *, doublereal *, integer *);
-    extern doublereal twopi_(void);
-    extern /* Subroutine */ int eul2xf_(doublereal *, integer *, integer *, 
-	    integer *, doublereal *);
-    extern logical failed_(void);
-    extern logical bodfnd_(integer *, char *, ftnlen);
-    extern doublereal halfpi_(void);
-    extern /* Subroutine */ int pckmat_(integer *, doublereal *, integer *, 
-	    doublereal *, logical *);
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int ccifrm_(integer *, integer *, integer *, char 
-	    *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int zzhsiadd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, logical *);
+    extern /* Subroutine */ int zzhsichk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern integer zzbodbry_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzhsiini_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzpctrck_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int zzhsiavl_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int etcal_(cspice_t*, doublereal *, char *, 
 	    ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
-	    *, doublereal *, logical *, ftnlen);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
-    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
-    extern doublereal j2000_(void);
-    extern doublereal rpd_(void);
-    extern doublereal spd_(void);
-    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal vdotg_(cspice_t*, doublereal *, doublereal *, integer *)
 	    ;
+    extern doublereal twopi_(cspice_t*);
+    extern /* Subroutine */ int eul2xf_(cspice_t*, doublereal *, integer *, 
+	    integer *, integer *, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern logical bodfnd_(cspice_t*, integer *, char *, ftnlen);
+    extern doublereal halfpi_(cspice_t*);
+    extern /* Subroutine */ int pckmat_(cspice_t*, integer *, doublereal *, 
+	    integer *, doublereal *, logical *);
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ccifrm_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int gdpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int irfrot_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern doublereal j2000_(cspice_t*);
+    extern doublereal rpd_(cspice_t*);
+    extern doublereal spd_(cspice_t*);
+    extern /* Subroutine */ int mxm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
     /* Module state */
-    tisbod_state_t* __state = get_tisbod_state();
+    tisbod_state_t* __state = get_tisbod_state(__global_state);
 /* $ Abstract */
 
 /*     Return a 6x6 matrix that transforms states in inertial */
@@ -922,10 +928,10 @@ static tisbod_state_t* get_tisbod_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("TISBOD", (ftnlen)6);
+	chkin_(__global_state, "TISBOD", (ftnlen)6);
     }
 
 /*     Perform any needed first pass initializations. */
@@ -934,28 +940,30 @@ static tisbod_state_t* get_tisbod_state() {
 
 /*        Initialize POOL state counter to the user value. */
 
-	zzctruin_(__state->pulctr);
+	zzctruin_(__global_state, __state->pulctr);
 
 /*        Initialize kernel POOL frame hashes. */
 
-	zzhsiini_(&__state->c__157, __state->bidlst, __state->bidpol);
+	zzhsiini_(__global_state, &__state->c__157, __state->bidlst, 
+		__state->bidpol);
 
 /*        Get the code for the J2000 frame. */
 
-	irfnum_("J2000", &__state->j2code, (ftnlen)5);
+	irfnum_(__global_state, "J2000", &__state->j2code, (ftnlen)5);
 
 /*        Set seconds per day and per century. */
 
-	__state->d__ = spd_();
+	__state->d__ = spd_(__global_state);
 	__state->t = __state->d__ * 36525.;
 	__state->first = FALSE_;
     }
-    irfnum_(ref, &__state->reqref, ref_len);
+    irfnum_(__global_state, ref, &__state->reqref, ref_len);
 
 /*     Get state transformation matrix from high precision PCK file, if */
 /*     available. */
 
-    pckmat_(body, et, &__state->pcref, tsipm, &__state->found);
+    pckmat_(__global_state, body, et, &__state->pcref, tsipm, &__state->found)
+	    ;
     if (! __state->found) {
 
 /*        The data for the frame of interest are not available in a */
@@ -965,22 +973,23 @@ static tisbod_state_t* get_tisbod_state() {
 /*        Check the POOL counter. If it changed, dump all buffered */
 /*        constants data. */
 
-	zzpctrck_(__state->pulctr, &__state->update);
+	zzpctrck_(__global_state, __state->pulctr, &__state->update);
 	if (__state->update) {
-	    zzhsiini_(&__state->c__157, __state->bidlst, __state->bidpol);
+	    zzhsiini_(__global_state, &__state->c__157, __state->bidlst, 
+		    __state->bidpol);
 	}
 
 /*        Check if we have data for this body in our buffers. */
 
-	zzhsichk_(__state->bidlst, __state->bidpol, __state->bidids, body, &
-		__state->at);
+	zzhsichk_(__global_state, __state->bidlst, __state->bidpol, 
+		__state->bidids, body, &__state->at);
 	if (__state->at != 0) {
 
 /*           Set PCREF as it is used after the text PCK "IF". */
 
 	    __state->pcref = __state->bpcref[(i__1 = __state->at - 1) < 157 &&
-		     0 <= i__1 ? i__1 : s_rnge("bpcref", i__1, "tisbod_", (
-		    ftnlen)867)];
+		     0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bpcref",
+		     i__1, "tisbod_", (ftnlen)867)];
 	} else {
 
 /*           Conduct a non-error-signaling check for the presence of a */
@@ -990,11 +999,12 @@ static tisbod_state_t* get_tisbod_state() {
 /*           error; we want to issue the error signal locally, with a */
 /*           better error message. */
 
-	    s_copy(__state->item, "BODY#_PM", (ftnlen)32, (ftnlen)8);
-	    repmi_(__state->item, "#", body, __state->item, (ftnlen)32, (
-		    ftnlen)1, (ftnlen)32);
-	    dtpool_(__state->item, &__state->found, &__state->nw, 
-		    __state->dtype, (ftnlen)32, (ftnlen)1);
+	    s_copy(&__global_state->f2c, __state->item, "BODY#_PM", (ftnlen)
+		    32, (ftnlen)8);
+	    repmi_(__global_state, __state->item, "#", body, __state->item, (
+		    ftnlen)32, (ftnlen)1, (ftnlen)32);
+	    dtpool_(__global_state, __state->item, &__state->found, &
+		    __state->nw, __state->dtype, (ftnlen)32, (ftnlen)1);
 	    if (! __state->found) {
 
 /*              Now we do have an error. */
@@ -1007,20 +1017,21 @@ static tisbod_state_t* get_tisbod_state() {
 /*              really identified by a PCK frame class ID code, though */
 /*              most of the documentation just calls it a body ID code. */
 
-		ccifrm_(&__state->c__2, body, &__state->frcode, 
-			__state->fixfrm, &__state->cent, &__state->found, (
-			ftnlen)32);
-		etcal_(et, __state->timstr, (ftnlen)35);
-		s_copy(__state->errmsg, "PCK data required to compute the or"
-			"ientation of the # # for epoch # TDB were not found."
-			" If these data were to be provided by a binary PCK f"
-			"ile, then it is possible that the PCK file does not "
-			"have coverage for the specified body-fixed frame at "
-			"the time of interest. If the data were to be provide"
-			"d by a text PCK file, then possibly the file does no"
-			"t contain data for the specified body-fixed frame. I"
-			"n either case it is possible that a required PCK fil"
-			"e was not loaded at all.", (ftnlen)1840, (ftnlen)475);
+		ccifrm_(__global_state, &__state->c__2, body, &
+			__state->frcode, __state->fixfrm, &__state->cent, &
+			__state->found, (ftnlen)32);
+		etcal_(__global_state, et, __state->timstr, (ftnlen)35);
+		s_copy(&__global_state->f2c, __state->errmsg, "PCK data requ"
+			"ired to compute the orientation of the # # for epoch"
+			" # TDB were not found. If these data were to be prov"
+			"ided by a binary PCK file, then it is possible that "
+			"the PCK file does not have coverage for the specifie"
+			"d body-fixed frame at the time of interest. If the d"
+			"ata were to be provided by a text PCK file, then pos"
+			"sibly the file does not contain data for the specifi"
+			"ed body-fixed frame. In either case it is possible t"
+			"hat a required PCK file was not loaded at all.", (
+			ftnlen)1840, (ftnlen)475);
 
 /*              Fill in the variable data in the error message. */
 
@@ -1029,30 +1040,35 @@ static tisbod_state_t* get_tisbod_state() {
 /*                 The frame system knows the name of the body-fixed */
 /*                 frame. */
 
-		    setmsg_(__state->errmsg, (ftnlen)1840);
-		    errch_("#", "body-fixed frame", (ftnlen)1, (ftnlen)16);
-		    errch_("#", __state->fixfrm, (ftnlen)1, (ftnlen)32);
-		    errch_("#", __state->timstr, (ftnlen)1, (ftnlen)35);
+		    setmsg_(__global_state, __state->errmsg, (ftnlen)1840);
+		    errch_(__global_state, "#", "body-fixed frame", (ftnlen)1,
+			     (ftnlen)16);
+		    errch_(__global_state, "#", __state->fixfrm, (ftnlen)1, (
+			    ftnlen)32);
+		    errch_(__global_state, "#", __state->timstr, (ftnlen)1, (
+			    ftnlen)35);
 		} else {
 
 /*                 The frame system doesn't know the name of the */
 /*                 body-fixed frame, most likely due to a missing */
 /*                 frame kernel. */
 
-		    suffix_("#", &__state->c__1, __state->errmsg, (ftnlen)1, (
-			    ftnlen)1840);
-		    setmsg_(__state->errmsg, (ftnlen)1840);
-		    errch_("#", "body-fixed frame associated with the ID code"
-			    , (ftnlen)1, (ftnlen)44);
-		    errint_("#", body, (ftnlen)1);
-		    errch_("#", __state->timstr, (ftnlen)1, (ftnlen)35);
-		    errch_("#", "Also, a frame kernel defining the body-fixe"
-			    "d frame associated with body # may need to be lo"
-			    "aded.", (ftnlen)1, (ftnlen)96);
-		    errint_("#", body, (ftnlen)1);
+		    suffix_(__global_state, "#", &__state->c__1, 
+			    __state->errmsg, (ftnlen)1, (ftnlen)1840);
+		    setmsg_(__global_state, __state->errmsg, (ftnlen)1840);
+		    errch_(__global_state, "#", "body-fixed frame associated"
+			    " with the ID code", (ftnlen)1, (ftnlen)44);
+		    errint_(__global_state, "#", body, (ftnlen)1);
+		    errch_(__global_state, "#", __state->timstr, (ftnlen)1, (
+			    ftnlen)35);
+		    errch_(__global_state, "#", "Also, a frame kernel defini"
+			    "ng the body-fixed frame associated with body # m"
+			    "ay need to be loaded.", (ftnlen)1, (ftnlen)96);
+		    errint_(__global_state, "#", body, (ftnlen)1);
 		}
-		sigerr_("SPICE(FRAMEDATANOTFOUND)", (ftnlen)24);
-		chkout_("TISBOD", (ftnlen)6);
+		sigerr_(__global_state, "SPICE(FRAMEDATANOTFOUND)", (ftnlen)
+			24);
+		chkout_(__global_state, "TISBOD", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1065,35 +1081,36 @@ static tisbod_state_t* get_tisbod_state() {
 /*           any other bodies, (the Sun or asteroids, for example) the */
 /*           body's own code is used as the label. */
 
-	    __state->refid = zzbodbry_(body);
+	    __state->refid = zzbodbry_(__global_state, body);
 
 /*           Look up the epoch of the constants. The epoch is specified */
 /*           as a Julian ephemeris date. The epoch defaults to J2000. */
 
-	    s_copy(__state->item, "BODY#_CONSTANTS_JED_EPOCH", (ftnlen)32, (
-		    ftnlen)25);
-	    repmi_(__state->item, "#", &__state->refid, __state->item, (
-		    ftnlen)32, (ftnlen)1, (ftnlen)32);
-	    gdpool_(__state->item, &__state->c__1, &__state->c__1, &
-		    __state->dim, &__state->pckepc, &__state->found, (ftnlen)
-		    32);
+	    s_copy(&__global_state->f2c, __state->item, "BODY#_CONSTANTS_JED"
+		    "_EPOCH", (ftnlen)32, (ftnlen)25);
+	    repmi_(__global_state, __state->item, "#", &__state->refid, 
+		    __state->item, (ftnlen)32, (ftnlen)1, (ftnlen)32);
+	    gdpool_(__global_state, __state->item, &__state->c__1, &
+		    __state->c__1, &__state->dim, &__state->pckepc, &
+		    __state->found, (ftnlen)32);
 	    if (! __state->found) {
-		__state->pckepc = j2000_();
+		__state->pckepc = j2000_(__global_state);
 	    }
 
 /*           Look up the reference frame of the constants. The reference */
 /*           frame is specified by a code recognized by CHGIRF. The */
 /*           default frame is J2000, symbolized by the code J2CODE. */
 
-	    s_copy(__state->item, "BODY#_CONSTANTS_REF_FRAME", (ftnlen)32, (
-		    ftnlen)25);
-	    repmi_(__state->item, "#", &__state->refid, __state->item, (
-		    ftnlen)32, (ftnlen)1, (ftnlen)32);
-	    gdpool_(__state->item, &__state->c__1, &__state->c__1, &
-		    __state->dim, &__state->pckref, &__state->found, (ftnlen)
-		    32);
+	    s_copy(&__global_state->f2c, __state->item, "BODY#_CONSTANTS_REF"
+		    "_FRAME", (ftnlen)32, (ftnlen)25);
+	    repmi_(__global_state, __state->item, "#", &__state->refid, 
+		    __state->item, (ftnlen)32, (ftnlen)1, (ftnlen)32);
+	    gdpool_(__global_state, __state->item, &__state->c__1, &
+		    __state->c__1, &__state->dim, &__state->pckref, &
+		    __state->found, (ftnlen)32);
 	    if (__state->found) {
-		__state->pcref = i_dnnt(&__state->pckref);
+		__state->pcref = i_dnnt(&__global_state->f2c, &
+			__state->pckref);
 	    } else {
 		__state->pcref = __state->j2code;
 	    }
@@ -1102,28 +1119,31 @@ static tisbod_state_t* get_tisbod_state() {
 /*           the RA and Dec of the pole, and for the rotation of the */
 /*           Prime Meridian. */
 
-	    s_copy(__state->item, "POLE_RA", (ftnlen)32, (ftnlen)7);
-	    cleard_(&__state->c__3, __state->rcoef);
-	    bodvcd_(body, __state->item, &__state->c__3, &__state->na, 
-		    __state->rcoef, (ftnlen)32);
-	    if (failed_()) {
-		chkout_("TISBOD", (ftnlen)6);
+	    s_copy(&__global_state->f2c, __state->item, "POLE_RA", (ftnlen)32,
+		     (ftnlen)7);
+	    cleard_(__global_state, &__state->c__3, __state->rcoef);
+	    bodvcd_(__global_state, body, __state->item, &__state->c__3, &
+		    __state->na, __state->rcoef, (ftnlen)32);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "TISBOD", (ftnlen)6);
 		return 0;
 	    }
-	    s_copy(__state->item, "POLE_DEC", (ftnlen)32, (ftnlen)8);
-	    cleard_(&__state->c__3, __state->dcoef);
-	    bodvcd_(body, __state->item, &__state->c__3, &__state->nd, 
-		    __state->dcoef, (ftnlen)32);
-	    if (failed_()) {
-		chkout_("TISBOD", (ftnlen)6);
+	    s_copy(&__global_state->f2c, __state->item, "POLE_DEC", (ftnlen)
+		    32, (ftnlen)8);
+	    cleard_(__global_state, &__state->c__3, __state->dcoef);
+	    bodvcd_(__global_state, body, __state->item, &__state->c__3, &
+		    __state->nd, __state->dcoef, (ftnlen)32);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "TISBOD", (ftnlen)6);
 		return 0;
 	    }
-	    s_copy(__state->item, "PM", (ftnlen)32, (ftnlen)2);
-	    cleard_(&__state->c__3, __state->wcoef);
-	    bodvcd_(body, __state->item, &__state->c__3, &__state->nw, 
-		    __state->wcoef, (ftnlen)32);
-	    if (failed_()) {
-		chkout_("TISBOD", (ftnlen)6);
+	    s_copy(&__global_state->f2c, __state->item, "PM", (ftnlen)32, (
+		    ftnlen)2);
+	    cleard_(__global_state, &__state->c__3, __state->wcoef);
+	    bodvcd_(__global_state, body, __state->item, &__state->c__3, &
+		    __state->nw, __state->wcoef, (ftnlen)32);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "TISBOD", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1135,7 +1155,8 @@ static tisbod_state_t* get_tisbod_state() {
 	    __state->na = 0;
 	    __state->nd = 0;
 	    __state->nw = 0;
-	    s_copy(__state->item, "NUT_PREC_ANGLES", (ftnlen)32, (ftnlen)15);
+	    s_copy(&__global_state->f2c, __state->item, "NUT_PREC_ANGLES", (
+		    ftnlen)32, (ftnlen)15);
 
 /*           There is something a bit obscure going on below. We are */
 /*           passing a two dimensional array ( TCOEF(2, MAXANG) ). But */
@@ -1148,11 +1169,13 @@ static tisbod_state_t* get_tisbod_state() {
 /*           loaded, but we will need the actual limit on the second */
 /*           dimension. That is --- NTHETA / 2. */
 
-	    if (bodfnd_(&__state->refid, __state->item, (ftnlen)32)) {
-		bodvcd_(&__state->refid, __state->item, &__state->c__200, &
-			__state->ntheta, __state->tcoef, (ftnlen)32);
-		if (failed_()) {
-		    chkout_("TISBOD", (ftnlen)6);
+	    if (bodfnd_(__global_state, &__state->refid, __state->item, (
+		    ftnlen)32)) {
+		bodvcd_(__global_state, &__state->refid, __state->item, &
+			__state->c__200, &__state->ntheta, __state->tcoef, (
+			ftnlen)32);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "TISBOD", (ftnlen)6);
 		    return 0;
 		}
 		__state->npairs = __state->ntheta / 2;
@@ -1162,12 +1185,13 @@ static tisbod_state_t* get_tisbod_state() {
 /*           the pole. NA is the number of Ascension coefficients. AC */
 /*           are the Ascension coefficients. */
 
-	    s_copy(__state->item, "NUT_PREC_RA", (ftnlen)32, (ftnlen)11);
-	    if (bodfnd_(body, __state->item, (ftnlen)32)) {
-		bodvcd_(body, __state->item, &__state->c__100, &__state->na, 
-			__state->ac, (ftnlen)32);
-		if (failed_()) {
-		    chkout_("TISBOD", (ftnlen)6);
+	    s_copy(&__global_state->f2c, __state->item, "NUT_PREC_RA", (
+		    ftnlen)32, (ftnlen)11);
+	    if (bodfnd_(__global_state, body, __state->item, (ftnlen)32)) {
+		bodvcd_(__global_state, body, __state->item, &__state->c__100,
+			 &__state->na, __state->ac, (ftnlen)32);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "TISBOD", (ftnlen)6);
 		    return 0;
 		}
 	    }
@@ -1176,12 +1200,13 @@ static tisbod_state_t* get_tisbod_state() {
 /*           pole. ND is the number of Declination coefficients. DC are */
 /*           the Declination coefficients. */
 
-	    s_copy(__state->item, "NUT_PREC_DEC", (ftnlen)32, (ftnlen)12);
-	    if (bodfnd_(body, __state->item, (ftnlen)32)) {
-		bodvcd_(body, __state->item, &__state->c__100, &__state->nd, 
-			__state->dc, (ftnlen)32);
-		if (failed_()) {
-		    chkout_("TISBOD", (ftnlen)6);
+	    s_copy(&__global_state->f2c, __state->item, "NUT_PREC_DEC", (
+		    ftnlen)32, (ftnlen)12);
+	    if (bodfnd_(__global_state, body, __state->item, (ftnlen)32)) {
+		bodvcd_(__global_state, body, __state->item, &__state->c__100,
+			 &__state->nd, __state->dc, (ftnlen)32);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "TISBOD", (ftnlen)6);
 		    return 0;
 		}
 	    }
@@ -1189,12 +1214,13 @@ static tisbod_state_t* get_tisbod_state() {
 /*           Finally look up the prime meridian nutations. NW is the */
 /*           number of coefficients. WC is the array of coefficients. */
 
-	    s_copy(__state->item, "NUT_PREC_PM", (ftnlen)32, (ftnlen)11);
-	    if (bodfnd_(body, __state->item, (ftnlen)32)) {
-		bodvcd_(body, __state->item, &__state->c__100, &__state->nw, 
-			__state->wc, (ftnlen)32);
-		if (failed_()) {
-		    chkout_("TISBOD", (ftnlen)6);
+	    s_copy(&__global_state->f2c, __state->item, "NUT_PREC_PM", (
+		    ftnlen)32, (ftnlen)11);
+	    if (bodfnd_(__global_state, body, __state->item, (ftnlen)32)) {
+		bodvcd_(__global_state, body, __state->item, &__state->c__100,
+			 &__state->nw, __state->wc, (ftnlen)32);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "TISBOD", (ftnlen)6);
 		    return 0;
 		}
 	    }
@@ -1206,12 +1232,13 @@ static tisbod_state_t* get_tisbod_state() {
 /* Computing MAX */
 	    i__1 = max(__state->na,__state->nd);
 	    if (max(i__1,__state->nw) > __state->npairs) {
-		setmsg_("Insufficient number of nutation/precession angles f"
-			"or body * at time #.", (ftnlen)71);
-		errint_("*", body, (ftnlen)1);
-		errdp_("#", et, (ftnlen)1);
-		sigerr_("SPICE(INSUFFICIENTANGLES)", (ftnlen)25);
-		chkout_("TISBOD", (ftnlen)6);
+		setmsg_(__global_state, "Insufficient number of nutation/pre"
+			"cession angles for body * at time #.", (ftnlen)71);
+		errint_(__global_state, "*", body, (ftnlen)1);
+		errdp_(__global_state, "#", et, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INSUFFICIENTANGLES)", (ftnlen)
+			25);
+		chkout_(__global_state, "TISBOD", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1219,63 +1246,73 @@ static tisbod_state_t* get_tisbod_state() {
 /*           the buffers. First check if there is room. If not, dump the */
 /*           buffers to make room. */
 
-	    zzhsiavl_(__state->bidpol, &__state->avail);
+	    zzhsiavl_(__global_state, __state->bidpol, &__state->avail);
 	    if (__state->avail <= 0) {
-		zzhsiini_(&__state->c__157, __state->bidlst, __state->bidpol);
+		zzhsiini_(__global_state, &__state->c__157, __state->bidlst, 
+			__state->bidpol);
 	    }
 
 /*           Add this body to the hash and save its data in the buffers. */
 
-	    zzhsiadd_(__state->bidlst, __state->bidpol, __state->bidids, body,
-		     &__state->at, &__state->new__);
+	    zzhsiadd_(__global_state, __state->bidlst, __state->bidpol, 
+		    __state->bidids, body, &__state->at, &__state->new__);
 	    __state->bpckep[(i__1 = __state->at - 1) < 157 && 0 <= i__1 ? 
-		    i__1 : s_rnge("bpckep", i__1, "tisbod_", (ftnlen)1147)] = 
-		    __state->pckepc;
+		    i__1 : s_rnge(&__global_state->f2c, "bpckep", i__1, "tis"
+		    "bod_", (ftnlen)1147)] = __state->pckepc;
 	    __state->bpcref[(i__1 = __state->at - 1) < 157 && 0 <= i__1 ? 
-		    i__1 : s_rnge("bpcref", i__1, "tisbod_", (ftnlen)1148)] = 
-		    __state->pcref;
+		    i__1 : s_rnge(&__global_state->f2c, "bpcref", i__1, "tis"
+		    "bod_", (ftnlen)1148)] = __state->pcref;
 	    __state->bnpair[(i__1 = __state->at - 1) < 157 && 0 <= i__1 ? 
-		    i__1 : s_rnge("bnpair", i__1, "tisbod_", (ftnlen)1149)] = 
-		    __state->npairs;
+		    i__1 : s_rnge(&__global_state->f2c, "bnpair", i__1, "tis"
+		    "bod_", (ftnlen)1149)] = __state->npairs;
 	    __state->bna[(i__1 = __state->at - 1) < 157 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bna", i__1, "tisbod_", (ftnlen)1150)] = 
-		    __state->na;
+		    s_rnge(&__global_state->f2c, "bna", i__1, "tisbod_", (
+		    ftnlen)1150)] = __state->na;
 	    __state->bnd[(i__1 = __state->at - 1) < 157 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bnd", i__1, "tisbod_", (ftnlen)1151)] = 
-		    __state->nd;
+		    s_rnge(&__global_state->f2c, "bnd", i__1, "tisbod_", (
+		    ftnlen)1151)] = __state->nd;
 	    __state->bnw[(i__1 = __state->at - 1) < 157 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bnw", i__1, "tisbod_", (ftnlen)1152)] = 
-		    __state->nw;
-	    moved_(__state->rcoef, &__state->c__3, &__state->brcoef[(i__1 = 
-		    __state->at * 3 - 3) < 471 && 0 <= i__1 ? i__1 : s_rnge(
-		    "brcoef", i__1, "tisbod_", (ftnlen)1154)]);
-	    moved_(__state->dcoef, &__state->c__3, &__state->bdcoef[(i__1 = 
-		    __state->at * 3 - 3) < 471 && 0 <= i__1 ? i__1 : s_rnge(
-		    "bdcoef", i__1, "tisbod_", (ftnlen)1155)]);
-	    moved_(__state->wcoef, &__state->c__3, &__state->bwcoef[(i__1 = 
-		    __state->at * 3 - 3) < 471 && 0 <= i__1 ? i__1 : s_rnge(
-		    "bwcoef", i__1, "tisbod_", (ftnlen)1156)]);
-	    moved_(__state->tcoef, &__state->c__200, &__state->btcoef[(i__1 = 
-		    (__state->at * 100 + 1 << 1) - 202) < 31400 && 0 <= i__1 ?
-		     i__1 : s_rnge("btcoef", i__1, "tisbod_", (ftnlen)1157)]);
-	    moved_(__state->ac, &__state->c__100, &__state->bac[(i__1 = 
-		    __state->at * 100 - 100) < 15700 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bac", i__1, "tisbod_", (ftnlen)1158)]);
-	    moved_(__state->dc, &__state->c__100, &__state->bdc[(i__1 = 
-		    __state->at * 100 - 100) < 15700 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bdc", i__1, "tisbod_", (ftnlen)1159)]);
-	    moved_(__state->wc, &__state->c__100, &__state->bwc[(i__1 = 
-		    __state->at * 100 - 100) < 15700 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bwc", i__1, "tisbod_", (ftnlen)1160)]);
+		    s_rnge(&__global_state->f2c, "bnw", i__1, "tisbod_", (
+		    ftnlen)1152)] = __state->nw;
+	    moved_(__global_state, __state->rcoef, &__state->c__3, &
+		    __state->brcoef[(i__1 = __state->at * 3 - 3) < 471 && 0 <=
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "brcoef", 
+		    i__1, "tisbod_", (ftnlen)1154)]);
+	    moved_(__global_state, __state->dcoef, &__state->c__3, &
+		    __state->bdcoef[(i__1 = __state->at * 3 - 3) < 471 && 0 <=
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "bdcoef", 
+		    i__1, "tisbod_", (ftnlen)1155)]);
+	    moved_(__global_state, __state->wcoef, &__state->c__3, &
+		    __state->bwcoef[(i__1 = __state->at * 3 - 3) < 471 && 0 <=
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "bwcoef", 
+		    i__1, "tisbod_", (ftnlen)1156)]);
+	    moved_(__global_state, __state->tcoef, &__state->c__200, &
+		    __state->btcoef[(i__1 = (__state->at * 100 + 1 << 1) - 
+		    202) < 31400 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "btcoef", i__1, "tisbod_", (ftnlen)
+		    1157)]);
+	    moved_(__global_state, __state->ac, &__state->c__100, &
+		    __state->bac[(i__1 = __state->at * 100 - 100) < 15700 && 
+		    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bac", 
+		    i__1, "tisbod_", (ftnlen)1158)]);
+	    moved_(__global_state, __state->dc, &__state->c__100, &
+		    __state->bdc[(i__1 = __state->at * 100 - 100) < 15700 && 
+		    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bdc", 
+		    i__1, "tisbod_", (ftnlen)1159)]);
+	    moved_(__global_state, __state->wc, &__state->c__100, &
+		    __state->bwc[(i__1 = __state->at * 100 - 100) < 15700 && 
+		    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bwc", 
+		    i__1, "tisbod_", (ftnlen)1160)]);
 	}
 
 /*        The reference epoch in the PCK is given as JED. Convert to */
 /*        ephemeris seconds past J2000. Then convert the input ET to */
 /*        seconds past the reference epoch. */
 
-	__state->tmpepc = spd_() * (__state->bpckep[(i__1 = __state->at - 1) <
-		 157 && 0 <= i__1 ? i__1 : s_rnge("bpckep", i__1, "tisbod_", (
-		ftnlen)1169)] - j2000_());
+	__state->tmpepc = spd_(__global_state) * (__state->bpckep[(i__1 = 
+		__state->at - 1) < 157 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "bpckep", i__1, "tisbod_", (ftnlen)1169)]
+		 - j2000_(__global_state));
 	__state->epoch = *et - __state->tmpepc;
 
 /*        Evaluate the time polynomials and their derivatives w.r.t. */
@@ -1284,143 +1321,156 @@ static tisbod_state_t* get_tisbod_state() {
 /*        Evaluate the time polynomials at EPOCH. */
 
 	__state->ra = __state->brcoef[(i__1 = __state->at * 3 - 3) < 471 && 0 
-		<= i__1 ? i__1 : s_rnge("brcoef", i__1, "tisbod_", (ftnlen)
-		1178)] + __state->epoch / __state->t * (__state->brcoef[(i__2 
-		= __state->at * 3 - 2) < 471 && 0 <= i__2 ? i__2 : s_rnge(
-		"brcoef", i__2, "tisbod_", (ftnlen)1178)] + __state->epoch / 
-		__state->t * __state->brcoef[(i__3 = __state->at * 3 - 1) < 
-		471 && 0 <= i__3 ? i__3 : s_rnge("brcoef", i__3, "tisbod_", (
-		ftnlen)1178)]);
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "brcoef", i__1, 
+		"tisbod_", (ftnlen)1178)] + __state->epoch / __state->t * (
+		__state->brcoef[(i__2 = __state->at * 3 - 2) < 471 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "brcoef", i__2, 
+		"tisbod_", (ftnlen)1178)] + __state->epoch / __state->t * 
+		__state->brcoef[(i__3 = __state->at * 3 - 1) < 471 && 0 <= 
+		i__3 ? i__3 : s_rnge(&__global_state->f2c, "brcoef", i__3, 
+		"tisbod_", (ftnlen)1178)]);
 	__state->dec = __state->bdcoef[(i__1 = __state->at * 3 - 3) < 471 && 
-		0 <= i__1 ? i__1 : s_rnge("bdcoef", i__1, "tisbod_", (ftnlen)
-		1180)] + __state->epoch / __state->t * (__state->bdcoef[(i__2 
-		= __state->at * 3 - 2) < 471 && 0 <= i__2 ? i__2 : s_rnge(
-		"bdcoef", i__2, "tisbod_", (ftnlen)1180)] + __state->epoch / 
-		__state->t * __state->bdcoef[(i__3 = __state->at * 3 - 1) < 
-		471 && 0 <= i__3 ? i__3 : s_rnge("bdcoef", i__3, "tisbod_", (
-		ftnlen)1180)]);
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bdcoef", 
+		i__1, "tisbod_", (ftnlen)1180)] + __state->epoch / __state->t 
+		* (__state->bdcoef[(i__2 = __state->at * 3 - 2) < 471 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "bdcoef", i__2, 
+		"tisbod_", (ftnlen)1180)] + __state->epoch / __state->t * 
+		__state->bdcoef[(i__3 = __state->at * 3 - 1) < 471 && 0 <= 
+		i__3 ? i__3 : s_rnge(&__global_state->f2c, "bdcoef", i__3, 
+		"tisbod_", (ftnlen)1180)]);
 	__state->w = __state->bwcoef[(i__1 = __state->at * 3 - 3) < 471 && 0 
-		<= i__1 ? i__1 : s_rnge("bwcoef", i__1, "tisbod_", (ftnlen)
-		1182)] + __state->epoch / __state->d__ * (__state->bwcoef[(
-		i__2 = __state->at * 3 - 2) < 471 && 0 <= i__2 ? i__2 : 
-		s_rnge("bwcoef", i__2, "tisbod_", (ftnlen)1182)] + 
-		__state->epoch / __state->d__ * __state->bwcoef[(i__3 = 
-		__state->at * 3 - 1) < 471 && 0 <= i__3 ? i__3 : s_rnge("bwc"
-		"oef", i__3, "tisbod_", (ftnlen)1182)]);
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bwcoef", i__1, 
+		"tisbod_", (ftnlen)1182)] + __state->epoch / __state->d__ * (
+		__state->bwcoef[(i__2 = __state->at * 3 - 2) < 471 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "bwcoef", i__2, 
+		"tisbod_", (ftnlen)1182)] + __state->epoch / __state->d__ * 
+		__state->bwcoef[(i__3 = __state->at * 3 - 1) < 471 && 0 <= 
+		i__3 ? i__3 : s_rnge(&__global_state->f2c, "bwcoef", i__3, 
+		"tisbod_", (ftnlen)1182)]);
 	__state->dra = (__state->brcoef[(i__1 = __state->at * 3 - 2) < 471 && 
-		0 <= i__1 ? i__1 : s_rnge("brcoef", i__1, "tisbod_", (ftnlen)
-		1185)] + __state->epoch / __state->t * 2. * __state->brcoef[(
-		i__2 = __state->at * 3 - 1) < 471 && 0 <= i__2 ? i__2 : 
-		s_rnge("brcoef", i__2, "tisbod_", (ftnlen)1185)]) / 
-		__state->t;
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "brcoef", 
+		i__1, "tisbod_", (ftnlen)1185)] + __state->epoch / __state->t 
+		* 2. * __state->brcoef[(i__2 = __state->at * 3 - 1) < 471 && 
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "brcoef", 
+		i__2, "tisbod_", (ftnlen)1185)]) / __state->t;
 	__state->ddec = (__state->bdcoef[(i__1 = __state->at * 3 - 2) < 471 &&
-		 0 <= i__1 ? i__1 : s_rnge("bdcoef", i__1, "tisbod_", (ftnlen)
-		1186)] + __state->epoch / __state->t * 2. * __state->bdcoef[(
-		i__2 = __state->at * 3 - 1) < 471 && 0 <= i__2 ? i__2 : 
-		s_rnge("bdcoef", i__2, "tisbod_", (ftnlen)1186)]) / 
-		__state->t;
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bdcoef", 
+		i__1, "tisbod_", (ftnlen)1186)] + __state->epoch / __state->t 
+		* 2. * __state->bdcoef[(i__2 = __state->at * 3 - 1) < 471 && 
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "bdcoef", 
+		i__2, "tisbod_", (ftnlen)1186)]) / __state->t;
 	__state->dw = (__state->bwcoef[(i__1 = __state->at * 3 - 2) < 471 && 
-		0 <= i__1 ? i__1 : s_rnge("bwcoef", i__1, "tisbod_", (ftnlen)
-		1187)] + __state->epoch / __state->d__ * 2. * __state->bwcoef[
-		(i__2 = __state->at * 3 - 1) < 471 && 0 <= i__2 ? i__2 : 
-		s_rnge("bwcoef", i__2, "tisbod_", (ftnlen)1187)]) / 
-		__state->d__;
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bwcoef", 
+		i__1, "tisbod_", (ftnlen)1187)] + __state->epoch / 
+		__state->d__ * 2. * __state->bwcoef[(i__2 = __state->at * 3 - 
+		1) < 471 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		"bwcoef", i__2, "tisbod_", (ftnlen)1187)]) / __state->d__;
 
 /*        Compute the nutations and librations (and their derivatives) */
 /*        as appropriate. */
 
 	i__2 = __state->bnpair[(i__1 = __state->at - 1) < 157 && 0 <= i__1 ? 
-		i__1 : s_rnge("bnpair", i__1, "tisbod_", (ftnlen)1194)];
+		i__1 : s_rnge(&__global_state->f2c, "bnpair", i__1, "tisbod_",
+		 (ftnlen)1194)];
 	for (__state->i__ = 1; __state->i__ <= i__2; ++__state->i__) {
 	    __state->theta = (__state->btcoef[(i__1 = (__state->i__ + 
 		    __state->at * 100 << 1) - 202) < 31400 && 0 <= i__1 ? 
-		    i__1 : s_rnge("btcoef", i__1, "tisbod_", (ftnlen)1196)] + 
-		    __state->epoch / __state->t * __state->btcoef[(i__3 = (
-		    __state->i__ + __state->at * 100 << 1) - 201) < 31400 && 
-		    0 <= i__3 ? i__3 : s_rnge("btcoef", i__3, "tisbod_", (
-		    ftnlen)1196)]) * rpd_();
+		    i__1 : s_rnge(&__global_state->f2c, "btcoef", i__1, "tis"
+		    "bod_", (ftnlen)1196)] + __state->epoch / __state->t * 
+		    __state->btcoef[(i__3 = (__state->i__ + __state->at * 100 
+		    << 1) - 201) < 31400 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "btcoef", i__3, "tisbod_", (ftnlen)
+		    1196)]) * rpd_(__global_state);
 	    __state->dtheta = __state->btcoef[(i__1 = (__state->i__ + 
 		    __state->at * 100 << 1) - 201) < 31400 && 0 <= i__1 ? 
-		    i__1 : s_rnge("btcoef", i__1, "tisbod_", (ftnlen)1198)] / 
-		    __state->t * rpd_();
-	    __state->sintmp = sin(__state->theta);
-	    __state->costmp = cos(__state->theta);
+		    i__1 : s_rnge(&__global_state->f2c, "btcoef", i__1, "tis"
+		    "bod_", (ftnlen)1198)] / __state->t * rpd_(__global_state);
+	    __state->sintmp = sin(&__global_state->f2c, __state->theta);
+	    __state->costmp = cos(&__global_state->f2c, __state->theta);
 	    __state->sinth[(i__1 = __state->i__ - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("sinth", i__1, "tisbod_", (ftnlen)1203)] = 
-		    __state->sintmp;
+		    i__1 : s_rnge(&__global_state->f2c, "sinth", i__1, "tisb"
+		    "od_", (ftnlen)1203)] = __state->sintmp;
 	    __state->costh[(i__1 = __state->i__ - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("costh", i__1, "tisbod_", (ftnlen)1204)] = 
-		    __state->costmp;
+		    i__1 : s_rnge(&__global_state->f2c, "costh", i__1, "tisb"
+		    "od_", (ftnlen)1204)] = __state->costmp;
 	    __state->dsinth[(i__1 = __state->i__ - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dsinth", i__1, "tisbod_", (ftnlen)1205)] = 
-		    __state->costmp * __state->dtheta;
+		    i__1 : s_rnge(&__global_state->f2c, "dsinth", i__1, "tis"
+		    "bod_", (ftnlen)1205)] = __state->costmp * __state->dtheta;
 	    __state->dcosth[(i__1 = __state->i__ - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("dcosth", i__1, "tisbod_", (ftnlen)1206)] = 
-		    -__state->sintmp * __state->dtheta;
+		    i__1 : s_rnge(&__global_state->f2c, "dcosth", i__1, "tis"
+		    "bod_", (ftnlen)1206)] = -__state->sintmp * 
+		    __state->dtheta;
 	}
 
 /*        Adjust RA, DEC, W and their derivatives by the librations */
 /*        and nutations. */
 
-	__state->ra += vdotg_(&__state->bac[(i__2 = __state->at * 100 - 100) <
-		 15700 && 0 <= i__2 ? i__2 : s_rnge("bac", i__2, "tisbod_", (
-		ftnlen)1214)], __state->sinth, &__state->bna[(i__1 = 
-		__state->at - 1) < 157 && 0 <= i__1 ? i__1 : s_rnge("bna", 
+	__state->ra += vdotg_(__global_state, &__state->bac[(i__2 = 
+		__state->at * 100 - 100) < 15700 && 0 <= i__2 ? i__2 : s_rnge(
+		&__global_state->f2c, "bac", i__2, "tisbod_", (ftnlen)1214)], 
+		__state->sinth, &__state->bna[(i__1 = __state->at - 1) < 157 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bna", 
 		i__1, "tisbod_", (ftnlen)1214)]);
-	__state->dec += vdotg_(&__state->bdc[(i__2 = __state->at * 100 - 100) 
-		< 15700 && 0 <= i__2 ? i__2 : s_rnge("bdc", i__2, "tisbod_", (
-		ftnlen)1215)], __state->costh, &__state->bnd[(i__1 = 
-		__state->at - 1) < 157 && 0 <= i__1 ? i__1 : s_rnge("bnd", 
+	__state->dec += vdotg_(__global_state, &__state->bdc[(i__2 = 
+		__state->at * 100 - 100) < 15700 && 0 <= i__2 ? i__2 : s_rnge(
+		&__global_state->f2c, "bdc", i__2, "tisbod_", (ftnlen)1215)], 
+		__state->costh, &__state->bnd[(i__1 = __state->at - 1) < 157 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bnd", 
 		i__1, "tisbod_", (ftnlen)1215)]);
-	__state->w += vdotg_(&__state->bwc[(i__2 = __state->at * 100 - 100) < 
-		15700 && 0 <= i__2 ? i__2 : s_rnge("bwc", i__2, "tisbod_", (
-		ftnlen)1216)], __state->sinth, &__state->bnw[(i__1 = 
-		__state->at - 1) < 157 && 0 <= i__1 ? i__1 : s_rnge("bnw", 
+	__state->w += vdotg_(__global_state, &__state->bwc[(i__2 = 
+		__state->at * 100 - 100) < 15700 && 0 <= i__2 ? i__2 : s_rnge(
+		&__global_state->f2c, "bwc", i__2, "tisbod_", (ftnlen)1216)], 
+		__state->sinth, &__state->bnw[(i__1 = __state->at - 1) < 157 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bnw", 
 		i__1, "tisbod_", (ftnlen)1216)]);
-	__state->dra += vdotg_(&__state->bac[(i__2 = __state->at * 100 - 100) 
-		< 15700 && 0 <= i__2 ? i__2 : s_rnge("bac", i__2, "tisbod_", (
-		ftnlen)1218)], __state->dsinth, &__state->bna[(i__1 = 
-		__state->at - 1) < 157 && 0 <= i__1 ? i__1 : s_rnge("bna", 
+	__state->dra += vdotg_(__global_state, &__state->bac[(i__2 = 
+		__state->at * 100 - 100) < 15700 && 0 <= i__2 ? i__2 : s_rnge(
+		&__global_state->f2c, "bac", i__2, "tisbod_", (ftnlen)1218)], 
+		__state->dsinth, &__state->bna[(i__1 = __state->at - 1) < 157 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bna", 
 		i__1, "tisbod_", (ftnlen)1218)]);
-	__state->ddec += vdotg_(&__state->bdc[(i__2 = __state->at * 100 - 100)
-		 < 15700 && 0 <= i__2 ? i__2 : s_rnge("bdc", i__2, "tisbod_", 
-		(ftnlen)1219)], __state->dcosth, &__state->bnd[(i__1 = 
-		__state->at - 1) < 157 && 0 <= i__1 ? i__1 : s_rnge("bnd", 
+	__state->ddec += vdotg_(__global_state, &__state->bdc[(i__2 = 
+		__state->at * 100 - 100) < 15700 && 0 <= i__2 ? i__2 : s_rnge(
+		&__global_state->f2c, "bdc", i__2, "tisbod_", (ftnlen)1219)], 
+		__state->dcosth, &__state->bnd[(i__1 = __state->at - 1) < 157 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bnd", 
 		i__1, "tisbod_", (ftnlen)1219)]);
-	__state->dw += vdotg_(&__state->bwc[(i__2 = __state->at * 100 - 100) <
-		 15700 && 0 <= i__2 ? i__2 : s_rnge("bwc", i__2, "tisbod_", (
-		ftnlen)1220)], __state->dsinth, &__state->bnw[(i__1 = 
-		__state->at - 1) < 157 && 0 <= i__1 ? i__1 : s_rnge("bnw", 
+	__state->dw += vdotg_(__global_state, &__state->bwc[(i__2 = 
+		__state->at * 100 - 100) < 15700 && 0 <= i__2 ? i__2 : s_rnge(
+		&__global_state->f2c, "bwc", i__2, "tisbod_", (ftnlen)1220)], 
+		__state->dsinth, &__state->bnw[(i__1 = __state->at - 1) < 157 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bnw", 
 		i__1, "tisbod_", (ftnlen)1220)]);
 
 /*        Convert from degrees to radians */
 
-	__state->ra *= rpd_();
-	__state->dec *= rpd_();
-	__state->w *= rpd_();
-	__state->dra *= rpd_();
-	__state->ddec *= rpd_();
-	__state->dw *= rpd_();
+	__state->ra *= rpd_(__global_state);
+	__state->dec *= rpd_(__global_state);
+	__state->w *= rpd_(__global_state);
+	__state->dra *= rpd_(__global_state);
+	__state->ddec *= rpd_(__global_state);
+	__state->dw *= rpd_(__global_state);
 
 /*        Convert to Euler angles. */
 
-	d__1 = twopi_();
-	__state->w = d_mod(&__state->w, &d__1);
-	__state->phi = __state->ra + halfpi_();
-	__state->delta = halfpi_() - __state->dec;
+	d__1 = twopi_(__global_state);
+	__state->w = d_mod(&__global_state->f2c, &__state->w, &d__1);
+	__state->phi = __state->ra + halfpi_(__global_state);
+	__state->delta = halfpi_(__global_state) - __state->dec;
 	__state->dphi = __state->dra;
 	__state->ddelta = -__state->ddec;
-	if (failed_()) {
-	    chkout_("TISBOD", (ftnlen)6);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "TISBOD", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Pack the Euler angles and their derivatives into */
 /*        a state vector. */
 
-	vpack_(&__state->w, &__state->delta, &__state->phi, __state->eulsta);
-	vpack_(&__state->dw, &__state->ddelta, &__state->dphi, &
-		__state->eulsta[3]);
+	vpack_(__global_state, &__state->w, &__state->delta, &__state->phi, 
+		__state->eulsta);
+	vpack_(__global_state, &__state->dw, &__state->ddelta, &__state->dphi,
+		 &__state->eulsta[3]);
 
 /*        Find the state transformation defined by the Euler angle */
 /*        state vector. The transformation matrix TSIPM has the */
@@ -1435,8 +1485,8 @@ static tisbod_state_t* get_tisbod_state() {
 /*           |       :      | */
 /*            -            - */
 
-	eul2xf_(__state->eulsta, &__state->c__3, &__state->c__1, &
-		__state->c__3, tsipm);
+	eul2xf_(__global_state, __state->eulsta, &__state->c__3, &
+		__state->c__1, &__state->c__3, tsipm);
     }
 
 /*     At this point the base frame PCREF has been determined. */
@@ -1450,9 +1500,10 @@ static tisbod_state_t* get_tisbod_state() {
 /*        Next get the position transformation from the user specified */
 /*        inertial frame to the native PCK inertial frame. */
 
-	irfrot_(&__state->reqref, &__state->pcref, __state->req2pc);
-	if (failed_()) {
-	    chkout_("TISBOD", (ftnlen)6);
+	irfrot_(__global_state, &__state->reqref, &__state->pcref, 
+		__state->req2pc);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "TISBOD", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1465,22 +1516,25 @@ static tisbod_state_t* get_tisbod_state() {
 	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
 	    for (__state->j = 1; __state->j <= 3; ++__state->j) {
 		__state->tipm[(i__2 = __state->i__ + __state->j * 3 - 4) < 9 
-			&& 0 <= i__2 ? i__2 : s_rnge("tipm", i__2, "tisbod_", 
-			(ftnlen)1304)] = tsipm[(i__1 = __state->i__ + 
-			__state->j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(
-			"tsipm", i__1, "tisbod_", (ftnlen)1304)];
+			&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			"tipm", i__2, "tisbod_", (ftnlen)1304)] = tsipm[(i__1 
+			= __state->i__ + __state->j * 6 - 7) < 36 && 0 <= 
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "tsipm", 
+			i__1, "tisbod_", (ftnlen)1304)];
 		__state->dtipm[(i__2 = __state->i__ + __state->j * 3 - 4) < 9 
-			&& 0 <= i__2 ? i__2 : s_rnge("dtipm", i__2, "tisbod_",
-			 (ftnlen)1305)] = tsipm[(i__1 = __state->i__ + 3 + 
-			__state->j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(
-			"tsipm", i__1, "tisbod_", (ftnlen)1305)];
+			&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			"dtipm", i__2, "tisbod_", (ftnlen)1305)] = tsipm[(
+			i__1 = __state->i__ + 3 + __state->j * 6 - 7) < 36 && 
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tsi"
+			"pm", i__1, "tisbod_", (ftnlen)1305)];
 	    }
 	}
 
 /*        Rotate the blocks. Note this is a right multiplication. */
 
-	mxm_(__state->tipm, __state->req2pc, __state->xtipm);
-	mxm_(__state->dtipm, __state->req2pc, __state->xdtipm);
+	mxm_(__global_state, __state->tipm, __state->req2pc, __state->xtipm);
+	mxm_(__global_state, __state->dtipm, __state->req2pc, __state->xdtipm)
+		;
 
 /*        Replace the non-zero blocks of TSIPM. This gives us the */
 /*        transformation from the requested frame to the */
@@ -1489,28 +1543,32 @@ static tisbod_state_t* get_tisbod_state() {
 	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
 	    for (__state->j = 1; __state->j <= 3; ++__state->j) {
 		tsipm[(i__2 = __state->i__ + __state->j * 6 - 7) < 36 && 0 <= 
-			i__2 ? i__2 : s_rnge("tsipm", i__2, "tisbod_", (
-			ftnlen)1326)] = __state->xtipm[(i__1 = __state->i__ + 
-			__state->j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-			"xtipm", i__1, "tisbod_", (ftnlen)1326)];
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "tsipm", 
+			i__2, "tisbod_", (ftnlen)1326)] = __state->xtipm[(
+			i__1 = __state->i__ + __state->j * 3 - 4) < 9 && 0 <= 
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "xtipm", 
+			i__1, "tisbod_", (ftnlen)1326)];
 		tsipm[(i__2 = __state->i__ + 3 + (__state->j + 3) * 6 - 7) < 
-			36 && 0 <= i__2 ? i__2 : s_rnge("tsipm", i__2, "tisb"
-			"od_", (ftnlen)1327)] = __state->xtipm[(i__1 = 
-			__state->i__ + __state->j * 3 - 4) < 9 && 0 <= i__1 ? 
-			i__1 : s_rnge("xtipm", i__1, "tisbod_", (ftnlen)1327)]
-			;
+			36 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			"tsipm", i__2, "tisbod_", (ftnlen)1327)] = 
+			__state->xtipm[(i__1 = __state->i__ + __state->j * 3 
+			- 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "xtipm", i__1, "tisbod_", (
+			ftnlen)1327)];
 		tsipm[(i__2 = __state->i__ + 3 + __state->j * 6 - 7) < 36 && 
-			0 <= i__2 ? i__2 : s_rnge("tsipm", i__2, "tisbod_", (
-			ftnlen)1328)] = __state->xdtipm[(i__1 = __state->i__ 
-			+ __state->j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-			s_rnge("xdtipm", i__1, "tisbod_", (ftnlen)1328)];
+			0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "tsi"
+			"pm", i__2, "tisbod_", (ftnlen)1328)] = 
+			__state->xdtipm[(i__1 = __state->i__ + __state->j * 3 
+			- 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "xdtipm", i__1, "tisbod_", (
+			ftnlen)1328)];
 	    }
 	}
     }
 
 /*     That's all folks. Check out and get out. */
 
-    chkout_("TISBOD", (ftnlen)6);
+    chkout_(__global_state, "TISBOD", (ftnlen)6);
     return 0;
 } /* tisbod_ */
 

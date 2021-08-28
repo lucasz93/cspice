@@ -251,7 +251,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "hrmint_c" );
+   chkin_c ( naif_state, "hrmint_c" );
 
    /*
    The f2c'd routine does the work.

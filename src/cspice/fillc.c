@@ -8,27 +8,26 @@
 
 
 typedef int fillc_state_t;
-static fillc_state_t* get_fillc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline fillc_state_t* get_fillc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      FILLC ( Fill a character array ) */
-/* Subroutine */ int fillc_(char *value, integer *ndim, char *array, ftnlen 
-	value_len, ftnlen array_len)
+/* Subroutine */ int fillc_(cspice_t* __global_state, char *value, integer *
+	ndim, char *array, ftnlen value_len, ftnlen array_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    fillc_state_t* __state = get_fillc_state();
+    fillc_state_t* __state = get_fillc_state(__global_state);
 /* $ Abstract */
 
 /*      Fill a character string array with a specified string. */
@@ -149,7 +148,8 @@ static fillc_state_t* get_fillc_state() {
 
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	s_copy(array + (i__ - 1) * array_len, value, array_len, value_len);
+	s_copy(&__global_state->f2c, array + (i__ - 1) * array_len, value, 
+		array_len, value_len);
     }
     return 0;
 } /* fillc_ */

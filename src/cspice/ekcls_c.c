@@ -140,7 +140,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekcls_c" );
+   chkin_c ( naif_state, "ekcls_c" );
 
 
    ekcls_ ( ( integer * ) &handle );

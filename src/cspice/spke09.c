@@ -8,8 +8,7 @@
 
 
 extern spke09_init_t __spke09_init;
-static spke09_state_t* get_spke09_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spke09_state_t* get_spke09_state(cspice_t* state) {
 	if (!state->spke09)
 		state->spke09 = __cspice_allocate_module(sizeof(
 	spke09_state_t), &__spke09_init, sizeof(__spke09_init));
@@ -18,31 +17,33 @@ static spke09_state_t* get_spke09_state() {
 }
 
 /* $Procedure      SPKE09 ( S/P Kernel, evaluate, type 9 ) */
-/* Subroutine */ int spke09_(doublereal *et, doublereal *record, doublereal *
-	state)
+/* Subroutine */ int spke09_(cspice_t* __global_state, doublereal *et, 
+	doublereal *record, doublereal *state)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer i__;
     integer n;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    doublereal locrec[198];
-    extern doublereal lgrint_(integer *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int xposeg_(doublereal *, integer *, integer *, 
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
-    extern logical return_(void);
+    doublereal locrec[198];
+    extern doublereal lgrint_(cspice_t*, integer *, doublereal *, doublereal *
+	    , doublereal *, doublereal *);
+    extern /* Subroutine */ int xposeg_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *);
+    extern logical return_(cspice_t*);
     integer xstart;
     integer ystart;
 
 
     /* Module state */
-    spke09_state_t* __state = get_spke09_state();
+    spke09_state_t* __state = get_spke09_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 9 */
@@ -312,7 +313,7 @@ static spke09_state_t* get_spke09_state() {
 
 /*     Discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -323,19 +324,20 @@ static spke09_state_t* get_spke09_state() {
 /*     and does no harm.  (See the header of LGRINT for a description of */
 /*     its work space usage.) */
 
-    n = i_dnnt(record);
-    xposeg_(&record[1], &__state->c__6, &n, locrec);
+    n = i_dnnt(&__global_state->f2c, record);
+    xposeg_(__global_state, &record[1], &__state->c__6, &n, locrec);
     i__1 = n * 6;
-    moved_(locrec, &i__1, &record[1]);
+    moved_(__global_state, locrec, &i__1, &record[1]);
 
 /*     We interpolate each state component in turn. */
 
     xstart = n * 6 + 2;
     for (i__ = 1; i__ <= 6; ++i__) {
 	ystart = n * (i__ - 1) + 2;
-	state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
-		 "spke09_", (ftnlen)261)] = lgrint_(&n, &record[xstart - 1], &
-		record[ystart - 1], locrec, et);
+	state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "state", i__1, "spke09_", (ftnlen)261)] =
+		 lgrint_(__global_state, &n, &record[xstart - 1], &record[
+		ystart - 1], locrec, et);
     }
     return 0;
 } /* spke09_ */

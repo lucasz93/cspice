@@ -49,7 +49,7 @@
    #include "SpiceZad.h"
    #undef   zzadbail_c
 
-   logical zzadbail_c ()
+   logical zzadbail_c ( void *         naif_state)
 
  
 /*
@@ -156,7 +156,7 @@
    {
       return ( (logical)SPICEFALSE );
    }
-   chkin_c ( "zzadbail_c" );
+   chkin_c ( naif_state, "zzadbail_c" );
 
 
    /*
@@ -165,7 +165,7 @@
    list matches that of gfbail_c.
    */
 
-   fPtr = (  SpiceBoolean (*) ()  )  zzadget_c ( UDBAIL );
+   fPtr = (  SpiceBoolean (*) ()  )  zzadget_c ( naif_state,  ( UDBAIL );
  
    /*
    Call the CSPICE-style bail-out function. 

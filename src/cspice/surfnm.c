@@ -8,8 +8,7 @@
 
 
 extern surfnm_init_t __surfnm_init;
-static surfnm_state_t* get_surfnm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline surfnm_state_t* get_surfnm_state(cspice_t* state) {
 	if (!state->surfnm)
 		state->surfnm = __cspice_allocate_module(sizeof(
 	surfnm_state_t), &__surfnm_init, sizeof(__surfnm_init));
@@ -18,8 +17,8 @@ static surfnm_state_t* get_surfnm_state() {
 }
 
 /* $Procedure      SURFNM ( Surface normal vector on an ellipsoid ) */
-/* Subroutine */ int surfnm_(doublereal *a, doublereal *b, doublereal *c__, 
-	doublereal *point, doublereal *normal)
+/* Subroutine */ int surfnm_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *c__, doublereal *point, doublereal *normal)
 {
     /* Initialized data */
 
@@ -31,21 +30,24 @@ static surfnm_state_t* get_surfnm_state() {
     char ch__1[35];
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int vhatip_(doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    surfnm_state_t* __state = get_surfnm_state();
+    surfnm_state_t* __state = get_surfnm_state(__global_state);
 /* $ Abstract */
 
 /*     This routine computes the outward-pointing, unit normal vector */
@@ -236,10 +238,10 @@ static surfnm_state_t* get_surfnm_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SURFNM", (ftnlen)6);
+	chkin_(__global_state, "SURFNM", (ftnlen)6);
     }
 
 /*     Check the axes to make sure that none of them is less than or */
@@ -258,18 +260,19 @@ static surfnm_state_t* get_surfnm_state() {
     if (__state->bad > 0) {
 /* Writing concatenation */
 	i__2[0] = 32, a__1[0] = __state->mssg + (((i__1 = __state->bad - 1) < 
-		7 && 0 <= i__1 ? i__1 : s_rnge("mssg", i__1, "surfnm_", (
-		ftnlen)251)) << 5);
+		7 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "mssg", 
+		i__1, "surfnm_", (ftnlen)251)) << 5);
 	i__2[1] = 3, a__1[1] = " ? ";
-	s_cat(ch__1, a__1, i__2, &__state->c__2, (ftnlen)35);
-	setmsg_(ch__1, (ftnlen)35);
-	errch_(" ? ", "The A,B, and C axes were #, #, and # respectively.", (
-		ftnlen)3, (ftnlen)50);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
-	chkout_("SURFNM", (ftnlen)6);
+	s_cat(&__global_state->f2c, ch__1, a__1, i__2, &__state->c__2, (
+		ftnlen)35);
+	setmsg_(__global_state, ch__1, (ftnlen)35);
+	errch_(__global_state, " ? ", "The A,B, and C axes were #, #, and # "
+		"respectively.", (ftnlen)3, (ftnlen)50);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADAXISLENGTH)", (ftnlen)20);
+	chkout_(__global_state, "SURFNM", (ftnlen)6);
 	return 0;
     }
 
@@ -297,8 +300,8 @@ static surfnm_state_t* get_surfnm_state() {
     normal[0] = point[0] * (__state->a1 * __state->a1);
     normal[1] = point[1] * (__state->b1 * __state->b1);
     normal[2] = point[2] * (__state->c1 * __state->c1);
-    vhatip_(normal);
-    chkout_("SURFNM", (ftnlen)6);
+    vhatip_(__global_state, normal);
+    chkout_(__global_state, "SURFNM", (ftnlen)6);
     return 0;
 } /* surfnm_ */
 

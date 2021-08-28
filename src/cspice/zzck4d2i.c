@@ -8,20 +8,19 @@
 
 
 typedef int zzck4d2i_state_t;
-static zzck4d2i_state_t* get_zzck4d2i_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzck4d2i_state_t* get_zzck4d2i_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZCK4D2I ( Unpack a set of integers from DP number ) */
-/* Subroutine */ int zzck4d2i_(doublereal *dpcoef, integer *nsets, doublereal 
-	*parcod, integer *i__)
+/* Subroutine */ int zzck4d2i_(cspice_t* __global_state, doublereal *dpcoef, 
+	integer *nsets, doublereal *parcod, integer *i__)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    double pow_di(doublereal *, integer *);
+    double pow_di(f2c_state_t*, doublereal *, integer *);
 
     /* Local variables */
     integer k;
@@ -29,7 +28,7 @@ static zzck4d2i_state_t* get_zzck4d2i_state() {
 
 
     /* Module state */
-    zzck4d2i_state_t* __state = get_zzck4d2i_state();
+    zzck4d2i_state_t* __state = get_zzck4d2i_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -159,7 +158,7 @@ static zzck4d2i_state_t* get_zzck4d2i_state() {
 /*     Let's unpack it! */
 
     i__1 = *nsets - 1;
-    x = pow_di(parcod, &i__1);
+    x = pow_di(&__global_state->f2c, parcod, &i__1);
     i__1 = *nsets - 1;
     for (k = 0; k <= i__1; ++k) {
 	i__[*nsets - k - 1] = (integer) (*dpcoef / x);

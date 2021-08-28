@@ -8,13 +8,12 @@
 
 
 typedef int notru_state_t;
-static notru_state_t* get_notru_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline notru_state_t* get_notru_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      NOTRU ( No true entries? ) */
-logical notru_(logical *logcls, integer *n)
+logical notru_(cspice_t* __global_state, logical *logcls, integer *n)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +24,7 @@ logical notru_(logical *logcls, integer *n)
 
 
     /* Module state */
-    notru_state_t* __state = get_notru_state();
+    notru_state_t* __state = get_notru_state(__global_state);
 /* $ Abstract */
 
 /*     Determine if none the entries in an array of logicals are .TRUE. */

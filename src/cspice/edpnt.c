@@ -8,36 +8,36 @@
 
 
 typedef int edpnt_state_t;
-static edpnt_state_t* get_edpnt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline edpnt_state_t* get_edpnt_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure EDPNT ( Ellipsoid point  ) */
-/* Subroutine */ int edpnt_(doublereal *p, doublereal *a, doublereal *b, 
-	doublereal *c__, doublereal *ep)
+/* Subroutine */ int edpnt_(cspice_t* __global_state, doublereal *p, 
+	doublereal *a, doublereal *b, doublereal *c__, doublereal *ep)
 {
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal level;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern logical vzero_(doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal sq;
-    extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern doublereal touchd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    edpnt_state_t* __state = get_edpnt_state();
+    edpnt_state_t* __state = get_edpnt_state(__global_state);
 /* $ Abstract */
 
 /*     Scale a point so that it lies on the surface of a specified */
@@ -224,30 +224,30 @@ static edpnt_state_t* get_edpnt_state() {
 
 /*     Use discovery check-in. */
 
-    if (failed_()) {
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (*a <= 0. || *b <= 0. || *c__ <= 0.) {
-	chkin_("EDPNT", (ftnlen)5);
-	setmsg_("Ellipsoid radii must be strictly positive but are (#, #, #)."
-		, (ftnlen)60);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(INVALIDRADII)", (ftnlen)19);
-	chkout_("EDPNT", (ftnlen)5);
+	chkin_(__global_state, "EDPNT", (ftnlen)5);
+	setmsg_(__global_state, "Ellipsoid radii must be strictly positive b"
+		"ut are (#, #, #).", (ftnlen)60);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDRADII)", (ftnlen)19);
+	chkout_(__global_state, "EDPNT", (ftnlen)5);
 	return 0;
     }
 
 /*     The input point must be non-zero, or we can't scale it */
 /*     to the ellipsoid. */
 
-    if (vzero_(p)) {
-	chkin_("EDPNT", (ftnlen)5);
-	setmsg_("Input point was the zero vector. A non-zero vector is requi"
-		"red.", (ftnlen)63);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("EDPNT", (ftnlen)5);
+    if (vzero_(__global_state, p)) {
+	chkin_(__global_state, "EDPNT", (ftnlen)5);
+	setmsg_(__global_state, "Input point was the zero vector. A non-zero"
+		" vector is required.", (ftnlen)63);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "EDPNT", (ftnlen)5);
 	return 0;
     }
 
@@ -261,27 +261,27 @@ static edpnt_state_t* get_edpnt_state() {
 /* Computing 2nd power */
     d__4 = p[2] / *c__;
     d__1 = d__2 * d__2 + d__3 * d__3 + d__4 * d__4;
-    level = touchd_(&d__1);
+    level = touchd_(__global_state, &d__1);
     if (level <= 0.) {
 
 /*        We expect that LEVEL will be non-negative, but it could */
 /*        be zero. We check for negative values as a precaution. */
 
-	chkin_("EDPNT", (ftnlen)5);
-	setmsg_("Input point's level surface parameter was non-positive. The"
-		" point is too close to the origin to be scaled to the ellips"
-		"oid. The point was (#, #, #).", (ftnlen)148);
-	errdp_("#", p, (ftnlen)1);
-	errdp_("#", &p[1], (ftnlen)1);
-	errdp_("#", &p[2], (ftnlen)1);
-	sigerr_("SPICE(POINTTOOSMALL)", (ftnlen)20);
-	chkout_("EDPNT", (ftnlen)5);
+	chkin_(__global_state, "EDPNT", (ftnlen)5);
+	setmsg_(__global_state, "Input point's level surface parameter was n"
+		"on-positive. The point is too close to the origin to be scal"
+		"ed to the ellipsoid. The point was (#, #, #).", (ftnlen)148);
+	errdp_(__global_state, "#", p, (ftnlen)1);
+	errdp_(__global_state, "#", &p[1], (ftnlen)1);
+	errdp_(__global_state, "#", &p[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(POINTTOOSMALL)", (ftnlen)20);
+	chkout_(__global_state, "EDPNT", (ftnlen)5);
 	return 0;
     }
 
 /*     Scale the point to one for which the level surface parameter is 1. */
 
-    sq = sqrt(level);
+    sq = sqrt(&__global_state->f2c, level);
     ep[0] = p[0] / sq;
     ep[1] = p[1] / sq;
     ep[2] = p[2] / sq;

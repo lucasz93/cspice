@@ -157,7 +157,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "pcklof_c" );
+   chkin_c ( naif_state, "pcklof_c" );
 
 
    /*

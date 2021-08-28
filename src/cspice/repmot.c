@@ -8,46 +8,49 @@
 
 
 typedef int repmot_state_t;
-static repmot_state_t* get_repmot_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline repmot_state_t* get_repmot_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  REPMOT  ( Replace marker with ordinal text ) */
-/* Subroutine */ int repmot_(char *in, char *marker, integer *value, char *
-	case__, char *out, ftnlen in_len, ftnlen marker_len, ftnlen case_len, 
-	ftnlen out_len)
+/* Subroutine */ int repmot_(cspice_t* __global_state, char *in, char *marker,
+	 integer *value, char *case__, char *out, ftnlen in_len, ftnlen 
+	marker_len, ftnlen case_len, ftnlen out_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_indx(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_indx(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int lcase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int lcase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer mrknbf;
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer mrknbl;
     char tmpcas[1];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern integer frstnb_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
     integer mrkpsb;
     integer mrkpse;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int intord_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int repsub_(char *, integer *, integer *, char *, 
-	    char *, ftnlen, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int intord_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int repsub_(cspice_t*, char *, integer *, integer 
+	    *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
     char ord[147];
 
 
     /* Module state */
-    repmot_state_t* __state = get_repmot_state();
+    repmot_state_t* __state = get_repmot_state(__global_state);
 /* $ Abstract */
 
 /*     Replace a marker with the text representation of an */
@@ -299,30 +302,31 @@ static repmot_state_t* get_repmot_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("REPMOT", (ftnlen)6);
+	chkin_(__global_state, "REPMOT", (ftnlen)6);
     }
 
 /*     Bail out if CASE is not recognized. */
 
-    ljust_(case__, tmpcas, (ftnlen)1, (ftnlen)1);
-    ucase_(tmpcas, tmpcas, (ftnlen)1, (ftnlen)1);
+    ljust_(__global_state, case__, tmpcas, (ftnlen)1, (ftnlen)1);
+    ucase_(__global_state, tmpcas, tmpcas, (ftnlen)1, (ftnlen)1);
     if (*(unsigned char *)tmpcas != 'U' && *(unsigned char *)tmpcas != 'L' && 
 	    *(unsigned char *)tmpcas != 'C') {
-	setmsg_("Case (#) must be U, L, or C.", (ftnlen)28);
-	errch_("#", case__, (ftnlen)1, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCASE)", (ftnlen)18);
-	chkout_("REPMOT", (ftnlen)6);
+	setmsg_(__global_state, "Case (#) must be U, L, or C.", (ftnlen)28);
+	errch_(__global_state, "#", case__, (ftnlen)1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCASE)", (ftnlen)18);
+	chkout_(__global_state, "REPMOT", (ftnlen)6);
 	return 0;
     }
 
 /*     If MARKER is blank, no substitution is possible. */
 
-    if (s_cmp(marker, " ", marker_len, (ftnlen)1) == 0) {
-	s_copy(out, in, out_len, in_len);
-	chkout_("REPMOT", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, marker, " ", marker_len, (ftnlen)1) == 0) 
+	    {
+	s_copy(&__global_state->f2c, out, in, out_len, in_len);
+	chkout_(__global_state, "REPMOT", (ftnlen)6);
 	return 0;
     }
 
@@ -330,12 +334,13 @@ static repmot_state_t* get_repmot_state() {
 /*     (ignoring leading and trailing blanks). If MARKER is not */
 /*     a substring of IN, no substitution can be performed. */
 
-    mrknbf = frstnb_(marker, marker_len);
-    mrknbl = lastnb_(marker, marker_len);
-    mrkpsb = i_indx(in, marker + (mrknbf - 1), in_len, mrknbl - (mrknbf - 1));
+    mrknbf = frstnb_(__global_state, marker, marker_len);
+    mrknbl = lastnb_(__global_state, marker, marker_len);
+    mrkpsb = i_indx(&__global_state->f2c, in, marker + (mrknbf - 1), in_len, 
+	    mrknbl - (mrknbf - 1));
     if (mrkpsb == 0) {
-	s_copy(out, in, out_len, in_len);
-	chkout_("REPMOT", (ftnlen)6);
+	s_copy(&__global_state->f2c, out, in, out_len, in_len);
+	chkout_(__global_state, "REPMOT", (ftnlen)6);
 	return 0;
     }
     mrkpse = mrkpsb + mrknbl - mrknbf;
@@ -343,22 +348,22 @@ static repmot_state_t* get_repmot_state() {
 /*     Okay, CASE is recognized and MARKER has been found. */
 /*     Generate the ordinal text corresponding to VALUE. */
 
-    intord_(value, ord, (ftnlen)147);
+    intord_(__global_state, value, ord, (ftnlen)147);
 
 /*     CARD is always returned in upper case; change to the specified */
 /*     case, if required. */
 
     if (*(unsigned char *)tmpcas == 'L') {
-	lcase_(ord, ord, (ftnlen)147, (ftnlen)147);
+	lcase_(__global_state, ord, ord, (ftnlen)147, (ftnlen)147);
     } else if (*(unsigned char *)tmpcas == 'C') {
-	lcase_(ord + 1, ord + 1, (ftnlen)146, (ftnlen)146);
+	lcase_(__global_state, ord + 1, ord + 1, (ftnlen)146, (ftnlen)146);
     }
 
 /*     Replace MARKER with CARD. */
 
-    repsub_(in, &mrkpsb, &mrkpse, ord, out, in_len, lastnb_(ord, (ftnlen)147),
-	     out_len);
-    chkout_("REPMOT", (ftnlen)6);
+    repsub_(__global_state, in, &mrkpsb, &mrkpse, ord, out, in_len, lastnb_(
+	    __global_state, ord, (ftnlen)147), out_len);
+    chkout_(__global_state, "REPMOT", (ftnlen)6);
     return 0;
 } /* repmot_ */
 

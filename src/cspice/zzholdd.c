@@ -8,8 +8,7 @@
 
 
 extern zzholdd_init_t __zzholdd_init;
-static zzholdd_state_t* get_zzholdd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzholdd_state_t* get_zzholdd_state(cspice_t* state) {
 	if (!state->zzholdd)
 		state->zzholdd = __cspice_allocate_module(sizeof(
 	zzholdd_state_t), &__zzholdd_init, sizeof(__zzholdd_init));
@@ -18,8 +17,8 @@ static zzholdd_state_t* get_zzholdd_state() {
 }
 
 /* $Procedure ZZHOLDD ( Private --- hold a scalar DP ) */
-/* Subroutine */ int zzholdd_(integer *op, integer *id, logical *ok, 
-	doublereal *value)
+/* Subroutine */ int zzholdd_(cspice_t* __global_state, integer *op, integer *
+	id, logical *ok, doublereal *value)
 {
     /* Initialized data */
 
@@ -28,21 +27,21 @@ static zzholdd_state_t* get_zzholdd_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer brckti_(integer *, integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer brckti_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzholdd_state_t* __state = get_zzholdd_state();
+    zzholdd_state_t* __state = get_zzholdd_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -427,23 +426,23 @@ static zzholdd_state_t* get_zzholdd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Confirm a proper ID value. */
 
-    if (brckti_(id, &__state->c__1, &__state->c__4) != *id) {
+    if (brckti_(__global_state, id, &__state->c__1, &__state->c__4) != *id) {
 	*value = 0.;
 	*ok = FALSE_;
-	chkin_("ZZHOLDD", (ftnlen)7);
-	setmsg_("ID value unknown. ID value #1 not an element of [1, #2]. Co"
-		"nfirmthe ID value exists in the zzholdd.inc parameter file.", 
-		(ftnlen)118);
-	errint_("#1", id, (ftnlen)2);
-	errint_("#2", &__state->c__4, (ftnlen)2);
-	sigerr_("SPICE(UNKNOWNID)", (ftnlen)16);
-	chkout_("ZZHOLDD", (ftnlen)7);
+	chkin_(__global_state, "ZZHOLDD", (ftnlen)7);
+	setmsg_(__global_state, "ID value unknown. ID value #1 not an elemen"
+		"t of [1, #2]. Confirmthe ID value exists in the zzholdd.inc "
+		"parameter file.", (ftnlen)118);
+	errint_(__global_state, "#1", id, (ftnlen)2);
+	errint_(__global_state, "#2", &__state->c__4, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(UNKNOWNID)", (ftnlen)16);
+	chkout_(__global_state, "ZZHOLDD", (ftnlen)7);
 	return 0;
     }
 
@@ -451,8 +450,9 @@ static zzholdd_state_t* get_zzholdd_state() {
 
     if (__state->init) {
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    __state->first[(i__1 = i__ - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		    "first", i__1, "zzholdd_", (ftnlen)318)] = TRUE_;
+	    __state->first[(i__1 = i__ - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "first", i__1, "zzholdd_", (ftnlen)
+		    318)] = TRUE_;
 	}
 	__state->init = FALSE_;
     }
@@ -469,8 +469,9 @@ static zzholdd_state_t* get_zzholdd_state() {
 /*          - If no previous set to this ID, return value as zero and */
 /*            OK as false. */
 
-	if (__state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		"first", i__1, "zzholdd_", (ftnlen)341)]) {
+	if (__state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "first", i__1, "zzholdd_", (ftnlen)341)])
+		 {
 	    *value = 0.;
 	    *ok = FALSE_;
 	} else {
@@ -478,7 +479,8 @@ static zzholdd_state_t* get_zzholdd_state() {
 /*           Return the stored value. */
 
 	    *value = __state->svalue[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 
-		    : s_rnge("svalue", i__1, "zzholdd_", (ftnlen)351)];
+		    : s_rnge(&__global_state->f2c, "svalue", i__1, "zzholdd_",
+		     (ftnlen)351)];
 	    *ok = TRUE_;
 	}
     } else if (*op == -2) {
@@ -486,31 +488,35 @@ static zzholdd_state_t* get_zzholdd_state() {
 /*        Store a value for later use. Set FIRST to false */
 /*        so subsequent get calls will work. */
 
-	if (__state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		"first", i__1, "zzholdd_", (ftnlen)363)]) {
-	    __state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		    "first", i__1, "zzholdd_", (ftnlen)365)] = FALSE_;
+	if (__state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "first", i__1, "zzholdd_", (ftnlen)363)])
+		 {
+	    __state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "first", i__1, "zzholdd_", (ftnlen)
+		    365)] = FALSE_;
 	}
-	__state->svalue[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		"svalue", i__1, "zzholdd_", (ftnlen)369)] = *value;
+	__state->svalue[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "svalue", i__1, "zzholdd_", (ftnlen)369)]
+		 = *value;
     } else if (*op == -3) {
 
 /*        Reset FIRST( ID ) forcing a put before a get. */
 
-	__state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-		"first", i__1, "zzholdd_", (ftnlen)376)] = TRUE_;
+	__state->first[(i__1 = *id - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "first", i__1, "zzholdd_", (ftnlen)376)] 
+		= TRUE_;
     } else {
 
 /*        Unknown value for 'OP'. Signal an error. */
 
 	*value = 0.;
 	*ok = FALSE_;
-	chkin_("ZZHOLDD", (ftnlen)7);
-	setmsg_("Unknown operation. Confirm the OP value # exists in the zzh"
-		"oldd.inc parameter file.", (ftnlen)83);
-	errint_("#", op, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNOP)", (ftnlen)16);
-	chkout_("ZZHOLDD", (ftnlen)7);
+	chkin_(__global_state, "ZZHOLDD", (ftnlen)7);
+	setmsg_(__global_state, "Unknown operation. Confirm the OP value # e"
+		"xists in the zzholdd.inc parameter file.", (ftnlen)83);
+	errint_(__global_state, "#", op, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNOP)", (ftnlen)16);
+	chkout_(__global_state, "ZZHOLDD", (ftnlen)7);
 	return 0;
     }
     return 0;

@@ -8,8 +8,7 @@
 
 
 extern dasrdd_init_t __dasrdd_init;
-static dasrdd_state_t* get_dasrdd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasrdd_state_t* get_dasrdd_state(cspice_t* state) {
 	if (!state->dasrdd)
 		state->dasrdd = __cspice_allocate_module(sizeof(
 	dasrdd_state_t), &__dasrdd_init, sizeof(__dasrdd_init));
@@ -18,8 +17,8 @@ static dasrdd_state_t* get_dasrdd_state() {
 }
 
 /* $Procedure      DASRDD ( DAS, read data, double precision ) */
-/* Subroutine */ int dasrdd_(integer *handle, integer *first, integer *last, 
-	doublereal *data)
+/* Subroutine */ int dasrdd_(cspice_t* __global_state, integer *handle, 
+	integer *first, integer *last, doublereal *data)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -29,18 +28,18 @@ static dasrdd_state_t* get_dasrdd_state() {
     integer nread;
     integer recno;
     integer numdp;
-    extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dasa2l_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern logical failed_(cspice_t*);
     integer clbase;
-    extern /* Subroutine */ int dasrrd_(integer *, integer *, integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int dasrrd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *);
     integer clsize;
     integer wordno;
 
 
     /* Module state */
-    dasrdd_state_t* __state = get_dasrdd_state();
+    dasrdd_state_t* __state = get_dasrdd_state(__global_state);
 /* $ Abstract */
 
 /*     Read double precision data from a range of DAS logical addresses. */
@@ -287,7 +286,8 @@ static dasrdd_state_t* get_dasrdd_state() {
 /*     number.  If FIRST is invalid, DASA2L will take care of the */
 /*     problem. */
 
-    dasa2l_(handle, &__state->c__2, first, &clbase, &clsize, &recno, &wordno);
+    dasa2l_(__global_state, handle, &__state->c__2, first, &clbase, &clsize, &
+	    recno, &wordno);
 
 /*     Decide how many double precision numbers to read. */
 
@@ -300,14 +300,14 @@ static dasrdd_state_t* get_dasrdd_state() {
     i__1 = numdp, i__2 = 128 - wordno + 1;
     n = min(i__1,i__2);
     i__1 = wordno + n - 1;
-    dasrrd_(handle, &recno, &wordno, &i__1, data);
+    dasrrd_(__global_state, handle, &recno, &wordno, &i__1, data);
     nread = n;
     ++recno;
 
 /*     Read from as many additional records as necessary. */
 
     while(nread < numdp) {
-	if (failed_()) {
+	if (failed_(__global_state)) {
 	    return 0;
 	}
 
@@ -324,7 +324,8 @@ static dasrdd_state_t* get_dasrdd_state() {
 /* Computing MIN */
 	    i__1 = numdp - nread;
 	    n = min(i__1,128);
-	    dasrrd_(handle, &recno, &__state->c__1, &n, &data[nread]);
+	    dasrrd_(__global_state, handle, &recno, &__state->c__1, &n, &data[
+		    nread]);
 	    nread += n;
 	    ++recno;
 	} else {
@@ -334,8 +335,8 @@ static dasrdd_state_t* get_dasrdd_state() {
 /*           cluster has address FIRST + NREAD. */
 
 	    i__1 = *first + nread;
-	    dasa2l_(handle, &__state->c__2, &i__1, &clbase, &clsize, &recno, &
-		    wordno);
+	    dasa2l_(__global_state, handle, &__state->c__2, &i__1, &clbase, &
+		    clsize, &recno, &wordno);
 	}
     }
     return 0;

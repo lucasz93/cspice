@@ -492,7 +492,7 @@
    {
       return; 
    }
-   chkin_c ( "pgrrec_c" );
+   chkin_c ( naif_state, "pgrrec_c" );
 
 
    /*

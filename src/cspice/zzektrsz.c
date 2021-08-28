@@ -8,26 +8,25 @@
 
 
 typedef int zzektrsz_state_t;
-static zzektrsz_state_t* get_zzektrsz_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrsz_state_t* get_zzektrsz_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKTRSZ ( EK, tree size ) */
-integer zzektrsz_(integer *handle, integer *tree)
+integer zzektrsz_(cspice_t* __global_state, integer *handle, integer *tree)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Local variables */
-    extern integer zzektrbs_(integer *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern integer zzektrbs_(cspice_t*, integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer addrss;
 
 
     /* Module state */
-    zzektrsz_state_t* __state = get_zzektrsz_state();
+    zzektrsz_state_t* __state = get_zzektrsz_state(__global_state);
 /* $ Abstract */
 
 /*     Return the number of keys in a tree. */
@@ -349,8 +348,8 @@ integer zzektrsz_(integer *handle, integer *tree)
 
 /*     Go straight to the address at which the key count is stored. */
 
-    addrss = zzektrbs_(tree) + 3;
-    dasrdi_(handle, &addrss, &addrss, &ret_val);
+    addrss = zzektrbs_(__global_state, tree) + 3;
+    dasrdi_(__global_state, handle, &addrss, &addrss, &ret_val);
     return ret_val;
 } /* zzektrsz_ */
 

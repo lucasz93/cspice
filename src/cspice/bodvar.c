@@ -8,8 +8,7 @@
 
 
 extern bodvar_init_t __bodvar_init;
-static bodvar_state_t* get_bodvar_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bodvar_state_t* get_bodvar_state(cspice_t* state) {
 	if (!state->bodvar)
 		state->bodvar = __cspice_allocate_module(sizeof(
 	bodvar_state_t), &__bodvar_init, sizeof(__bodvar_init));
@@ -18,31 +17,32 @@ static bodvar_state_t* get_bodvar_state() {
 }
 
 /* $Procedure      BODVAR ( Return values from the kernel pool ) */
-/* Subroutine */ int bodvar_(integer *body, char *item, integer *dim, 
-	doublereal *values, ftnlen item_len)
+/* Subroutine */ int bodvar_(cspice_t* __global_state, integer *body, char *
+	item, integer *dim, doublereal *values, ftnlen item_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char code[16];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
     char varnam[32];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int rtpool_(char *, integer *, doublereal *, 
-	    logical *, ftnlen);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int rtpool_(cspice_t*, char *, integer *, 
+	    doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    bodvar_state_t* __state = get_bodvar_state();
+    bodvar_state_t* __state = get_bodvar_state(__global_state);
 /* $ Abstract */
 
 /*     Deprecated: This routine has been superseded by BODVCD and */
@@ -201,30 +201,33 @@ static bodvar_state_t* get_bodvar_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("BODVAR", (ftnlen)6);
+	chkin_(__global_state, "BODVAR", (ftnlen)6);
     }
 
 /*     Construct the variable name from BODY and ITEM. */
 
-    s_copy(varnam, "BODY", (ftnlen)32, (ftnlen)4);
-    intstr_(body, code, (ftnlen)16);
-    suffix_(code, &__state->c__0, varnam, (ftnlen)16, (ftnlen)32);
-    suffix_("_", &__state->c__0, varnam, (ftnlen)1, (ftnlen)32);
-    suffix_(item, &__state->c__0, varnam, item_len, (ftnlen)32);
+    s_copy(&__global_state->f2c, varnam, "BODY", (ftnlen)32, (ftnlen)4);
+    intstr_(__global_state, body, code, (ftnlen)16);
+    suffix_(__global_state, code, &__state->c__0, varnam, (ftnlen)16, (ftnlen)
+	    32);
+    suffix_(__global_state, "_", &__state->c__0, varnam, (ftnlen)1, (ftnlen)
+	    32);
+    suffix_(__global_state, item, &__state->c__0, varnam, item_len, (ftnlen)
+	    32);
 
 /*     Grab the items. Complain if they aren't there. */
 
-    rtpool_(varnam, dim, values, &found, (ftnlen)32);
+    rtpool_(__global_state, varnam, dim, values, &found, (ftnlen)32);
     if (! found) {
-	setmsg_("The variable # could not be found in the kernel pool.", (
-		ftnlen)53);
-	errch_("#", varnam, (ftnlen)1, (ftnlen)32);
-	sigerr_("SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
+	setmsg_(__global_state, "The variable # could not be found in the ke"
+		"rnel pool.", (ftnlen)53);
+	errch_(__global_state, "#", varnam, (ftnlen)1, (ftnlen)32);
+	sigerr_(__global_state, "SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
     }
-    chkout_("BODVAR", (ftnlen)6);
+    chkout_(__global_state, "BODVAR", (ftnlen)6);
     return 0;
 } /* bodvar_ */
 

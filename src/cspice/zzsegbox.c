@@ -8,40 +8,39 @@
 
 
 typedef int zzsegbox_state_t;
-static zzsegbox_state_t* get_zzsegbox_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzsegbox_state_t* get_zzsegbox_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZSEGBOX (Bounding box for DSK segment volume element) */
-/* Subroutine */ int zzsegbox_(doublereal *dskdsc, doublereal *boxctr, 
-	doublereal *maxr)
+/* Subroutine */ int zzsegbox_(cspice_t* __global_state, doublereal *dskdsc, 
+	doublereal *boxctr, doublereal *maxr)
 {
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int zzrecbox_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzlatbox_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzpdtbox_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int zzrecbox_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzlatbox_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzpdtbox_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal l1;
     doublereal l2;
     doublereal l3;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer corsys;
 
 
     /* Module state */
-    zzsegbox_state_t* __state = get_zzsegbox_state();
+    zzsegbox_state_t* __state = get_zzsegbox_state(__global_state);
 /* $ Abstract */
 
 /*     Create a bounding box for a DSK segment volume element. */
@@ -347,25 +346,27 @@ static zzsegbox_state_t* get_zzsegbox_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSEGBOX", (ftnlen)8);
-    corsys = i_dnnt(&dskdsc[5]);
+    chkin_(__global_state, "ZZSEGBOX", (ftnlen)8);
+    corsys = i_dnnt(&__global_state->f2c, &dskdsc[5]);
     if (corsys == 1) {
-	zzlatbox_(&dskdsc[16], boxctr, &l1, &l2, &l3, maxr);
+	zzlatbox_(__global_state, &dskdsc[16], boxctr, &l1, &l2, &l3, maxr);
     } else if (corsys == 3) {
-	zzrecbox_(&dskdsc[16], boxctr, &l1, &l2, &l3, maxr);
+	zzrecbox_(__global_state, &dskdsc[16], boxctr, &l1, &l2, &l3, maxr);
     } else if (corsys == 4) {
-	zzpdtbox_(&dskdsc[16], &dskdsc[6], boxctr, &l1, &l2, &l3, maxr);
+	zzpdtbox_(__global_state, &dskdsc[16], &dskdsc[6], boxctr, &l1, &l2, &
+		l3, maxr);
     } else {
-	setmsg_("Coordinate system # is not supported.", (ftnlen)37);
-	errint_("#", &corsys, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZSEGBOX", (ftnlen)8);
+	setmsg_(__global_state, "Coordinate system # is not supported.", (
+		ftnlen)37);
+	errint_(__global_state, "#", &corsys, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZSEGBOX", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZSEGBOX", (ftnlen)8);
+    chkout_(__global_state, "ZZSEGBOX", (ftnlen)8);
     return 0;
 } /* zzsegbox_ */
 

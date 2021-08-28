@@ -8,22 +8,22 @@
 
 
 typedef int sphlat_state_t;
-static sphlat_state_t* get_sphlat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sphlat_state_t* get_sphlat_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPHLAT ( Spherical to latitudinal coordinates ) */
-/* Subroutine */ int sphlat_(doublereal *r__, doublereal *colat, doublereal *
-	longs, doublereal *radius, doublereal *long__, doublereal *lat)
+/* Subroutine */ int sphlat_(cspice_t* __global_state, doublereal *r__, 
+	doublereal *colat, doublereal *longs, doublereal *radius, doublereal *
+	long__, doublereal *lat)
 {
-    extern doublereal halfpi_(void);
+    extern doublereal halfpi_(cspice_t*);
     doublereal rr;
     doublereal lattud;
 
 
     /* Module state */
-    sphlat_state_t* __state = get_sphlat_state();
+    sphlat_state_t* __state = get_sphlat_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from spherical coordinates to latitudinal coordinates. */
@@ -184,7 +184,7 @@ static sphlat_state_t* get_sphlat_state() {
 /*     temporary variables */
 
     rr = *r__;
-    lattud = halfpi_() - *colat;
+    lattud = halfpi_(__global_state) - *colat;
 
 /*     Move the results to the output variables. */
 

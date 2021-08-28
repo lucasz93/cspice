@@ -8,8 +8,7 @@
 
 
 extern qdq2av_init_t __qdq2av_init;
-static qdq2av_state_t* get_qdq2av_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline qdq2av_state_t* get_qdq2av_state(cspice_t* state) {
 	if (!state->qdq2av)
 		state->qdq2av = __cspice_allocate_module(sizeof(
 	qdq2av_state_t), &__qdq2av_init, sizeof(__qdq2av_init));
@@ -18,21 +17,24 @@ static qdq2av_state_t* get_qdq2av_state() {
 }
 
 /* $Procedure QDQ2AV (Quaternion and quaternion derivative to a.v.) */
-/* Subroutine */ int qdq2av_(doublereal *q, doublereal *dq, doublereal *av)
+/* Subroutine */ int qdq2av_(cspice_t* __global_state, doublereal *q, 
+	doublereal *dq, doublereal *av)
 {
     doublereal qhat[4];
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vhatg_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vhatg_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     doublereal qtemp[4];
     doublereal qstar[4];
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    extern /* Subroutine */ int qxq_(doublereal *, doublereal *, doublereal *)
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
 	    ;
+    extern /* Subroutine */ int qxq_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    qdq2av_state_t* __state = get_qdq2av_state();
+    qdq2av_state_t* __state = get_qdq2av_state(__global_state);
 /* $ Abstract */
 
 /*     Derive angular velocity from a unit quaternion and its derivative */
@@ -716,20 +718,20 @@ static qdq2av_state_t* get_qdq2av_state() {
 
 /*     Get a unitized copy of the input quaternion. */
 
-    vhatg_(q, &__state->c__4, qhat);
+    vhatg_(__global_state, q, &__state->c__4, qhat);
 
 /*     Get the conjugate QSTAR of QHAT. */
 
     qstar[0] = qhat[0];
-    vminus_(&qhat[1], &qstar[1]);
+    vminus_(__global_state, &qhat[1], &qstar[1]);
 
 /*     Compute the angular velocity via the relationship */
 
 /*                       * */
 /*           AV  = -2 * Q  * DQ */
 
-    qxq_(qstar, dq, qtemp);
-    vscl_(&__state->c_b3, &qtemp[1], av);
+    qxq_(__global_state, qstar, dq, qtemp);
+    vscl_(__global_state, &__state->c_b3, &qtemp[1], av);
     return 0;
 } /* qdq2av_ */
 

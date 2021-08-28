@@ -401,7 +401,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekffld_c" );
+   chkin_c ( naif_state, "ekffld_c" );
 
 
    fSegno = segno + 1;

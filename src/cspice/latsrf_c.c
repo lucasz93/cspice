@@ -793,7 +793,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "latsrf_c" );
+   chkin_c ( naif_state, "latsrf_c" );
 
 
    /*

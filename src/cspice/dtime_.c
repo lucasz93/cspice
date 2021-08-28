@@ -102,13 +102,11 @@
 
  double
 #ifdef KR_headers
-dtime_(tarray) float *tarray;
+dtime_(f2c, tarray) f2c_state_t *f2c; float *tarray;
 #else
-dtime_(float *tarray)
+dtime_(f2c_state_t *f2c, float *tarray)
 #endif
-{
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-   
+{   
 #ifdef USE_CLOCK
 #ifndef CLOCKS_PER_SECOND
 #define CLOCKS_PER_SECOND Hz

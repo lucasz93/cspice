@@ -8,8 +8,7 @@
 
 
 extern rpd_init_t __rpd_init;
-static rpd_state_t* get_rpd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rpd_state_t* get_rpd_state(cspice_t* state) {
 	if (!state->rpd)
 		state->rpd = __cspice_allocate_module(sizeof(rpd_state_t), &
 	__rpd_init, sizeof(__rpd_init));
@@ -18,7 +17,7 @@ static rpd_state_t* get_rpd_state() {
 }
 
 /* $Procedure                     RPD ( Radians per degree ) */
-doublereal rpd_(void)
+doublereal rpd_(cspice_t* __global_state)
 {
     /* Initialized data */
 
@@ -27,11 +26,11 @@ doublereal rpd_(void)
     doublereal ret_val;
 
     /* Builtin functions */
-    double acos(doublereal);
+    double acos(f2c_state_t*, doublereal);
 
 
     /* Module state */
-    rpd_state_t* __state = get_rpd_state();
+    rpd_state_t* __state = get_rpd_state(__global_state);
 /* $ Abstract */
 
 /*     Return the number of radians per degree. */
@@ -164,7 +163,7 @@ doublereal rpd_(void)
 /*     What is there to say? */
 
     if (__state->value == 0.) {
-	__state->value = acos(-1.) / 180.;
+	__state->value = acos(&__global_state->f2c, -1.) / 180.;
     }
     ret_val = __state->value;
     return ret_val;

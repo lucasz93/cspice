@@ -8,8 +8,7 @@
 
 
 extern ckr04_init_t __ckr04_init;
-static ckr04_state_t* get_ckr04_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckr04_state_t* get_ckr04_state(cspice_t* state) {
 	if (!state->ckr04)
 		state->ckr04 = __cspice_allocate_module(sizeof(ckr04_state_t),
 	 &__ckr04_init, sizeof(__ckr04_init));
@@ -18,15 +17,15 @@ static ckr04_state_t* get_ckr04_state() {
 }
 
 /* $Procedure      CKR04 ( C-kernel, read pointing record, data type 4 ) */
-/* Subroutine */ int ckr04_(integer *handle, doublereal *descr, doublereal *
-	sclkdp, doublereal *tol, logical *needav, doublereal *record, logical 
-	*found)
+/* Subroutine */ int ckr04_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *
+	needav, doublereal *record, logical *found)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer nrec;
@@ -36,37 +35,38 @@ static ckr04_state_t* get_ckr04_state() {
     doublereal lbnd2;
     doublereal rbnd1;
     integer k;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cknr04_(integer *, doublereal *, integer *);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cknr04_(cspice_t*, integer *, doublereal *, 
+	    integer *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     doublereal value;
     logical exist;
     doublereal midpt1;
     doublereal midpt2;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer numall;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer numcft[7];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *, integer *);
-    extern /* Subroutine */ int sgfrvi_(integer *, doublereal *, doublereal *,
-	     doublereal *, integer *, logical *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgfpkt_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int sgfrvi_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, integer *, logical *);
     doublereal clkout;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer icd[6];
-    extern /* Subroutine */ int zzck4d2i_(doublereal *, integer *, doublereal 
-	    *, integer *);
+    extern /* Subroutine */ int zzck4d2i_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, integer *);
     doublereal rad1;
     doublereal rad2;
 
 
     /* Module state */
-    ckr04_state_t* __state = get_ckr04_state();
+    ckr04_state_t* __state = get_ckr04_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single data record from a type 4 CK segment. */
@@ -605,10 +605,10 @@ static ckr04_state_t* get_ckr04_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKR04", (ftnlen)5);
+	chkin_(__global_state, "CKR04", (ftnlen)5);
     }
 
 /*     Set initial value of the found flag to "NOT FOUND". */
@@ -628,16 +628,16 @@ static ckr04_state_t* get_ckr04_state() {
 /*        ICD(5)  Initial address of segment data */
 /*        ICD(6)  Final address of segment data */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dcd, icd);
 
 /*     Check if the segment is type 4. Signal an error if it's not. */
 
     if (icd[2] != 4) {
-	setmsg_("The segment is not a type 4 segment.  Type is #", (ftnlen)47)
-		;
-	errint_("#", &icd[2], (ftnlen)1);
-	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
-	chkout_("CKR04", (ftnlen)5);
+	setmsg_(__global_state, "The segment is not a type 4 segment.  Type "
+		"is #", (ftnlen)47);
+	errint_(__global_state, "#", &icd[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGDATATYPE)", (ftnlen)20);
+	chkout_(__global_state, "CKR04", (ftnlen)5);
 	return 0;
     }
     if (*needav) {
@@ -646,24 +646,24 @@ static ckr04_state_t* get_ckr04_state() {
 /*        they are not present in the segment. */
 
 	if (icd[3] != 1) {
-	    setmsg_("Segment does not contain angular velocity data.", (
-		    ftnlen)47);
-	    sigerr_("SPICE(NOAVDATA)", (ftnlen)15);
-	    chkout_("CKR04", (ftnlen)5);
+	    setmsg_(__global_state, "Segment does not contain angular veloci"
+		    "ty data.", (ftnlen)47);
+	    sigerr_(__global_state, "SPICE(NOAVDATA)", (ftnlen)15);
+	    chkout_(__global_state, "CKR04", (ftnlen)5);
 	    return 0;
 	}
     }
 
 /*     Get number of records (packets) in the segment. */
 
-    cknr04_(handle, descr, &nrec);
+    cknr04_(__global_state, handle, descr, &nrec);
 
 /*     Locate the last time in the set of reference epochs less than or */
 /*     equal to the input SCLKDP. */
 
-    sgfrvi_(handle, descr, sclkdp, &value, &indx, &exist);
-    if (failed_()) {
-	chkout_("CKR04", (ftnlen)5);
+    sgfrvi_(__global_state, handle, descr, sclkdp, &value, &indx, &exist);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKR04", (ftnlen)5);
 	return 0;
     }
     if (! exist) {
@@ -673,9 +673,9 @@ static ckr04_state_t* get_ckr04_state() {
 /*        Fetch the first record. */
 
 	indx = 1;
-	sgfpkt_(handle, descr, &indx, &indx, record, &ends);
-	if (failed_()) {
-	    chkout_("CKR04", (ftnlen)5);
+	sgfpkt_(__global_state, handle, descr, &indx, &indx, record, &ends);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKR04", (ftnlen)5);
 	    return 0;
 	}
 	midpt1 = record[0];
@@ -699,9 +699,10 @@ static ckr04_state_t* get_ckr04_state() {
 /*           interpolation interval. Fetch the last record. */
 
 	    indx = nrec;
-	    sgfpkt_(handle, descr, &indx, &indx, record, &ends);
-	    if (failed_()) {
-		chkout_("CKR04", (ftnlen)5);
+	    sgfpkt_(__global_state, handle, descr, &indx, &indx, record, &
+		    ends);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "CKR04", (ftnlen)5);
 		return 0;
 	    }
 	    midpt1 = record[0];
@@ -733,9 +734,10 @@ static ckr04_state_t* get_ckr04_state() {
 /*           and the right bound of the interval before the last */
 /*           interval. Fetch the found record. */
 
-	    sgfpkt_(handle, descr, &indx, &indx, record, &ends);
-	    if (failed_()) {
-		chkout_("CKR04", (ftnlen)5);
+	    sgfpkt_(__global_state, handle, descr, &indx, &indx, record, &
+		    ends);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "CKR04", (ftnlen)5);
 		return 0;
 	    }
 	    midpt1 = record[0];
@@ -754,9 +756,10 @@ static ckr04_state_t* get_ckr04_state() {
 
 		i__1 = indx + 1;
 		i__2 = indx + 1;
-		sgfpkt_(handle, descr, &i__1, &i__2, record, &ends);
-		if (failed_()) {
-		    chkout_("CKR04", (ftnlen)5);
+		sgfpkt_(__global_state, handle, descr, &i__1, &i__2, record, &
+			ends);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "CKR04", (ftnlen)5);
 		    return 0;
 		}
 		midpt2 = record[0];
@@ -782,7 +785,8 @@ static ckr04_state_t* get_ckr04_state() {
 /*                    fetched this packet successfully one call to */
 /*                    SGFPKT ago. */
 
-			sgfpkt_(handle, descr, &indx, &indx, record, &ends);
+			sgfpkt_(__global_state, handle, descr, &indx, &indx, 
+				record, &ends);
 		    }
 		} else {
 
@@ -806,14 +810,16 @@ static ckr04_state_t* get_ckr04_state() {
 
 /*        Decode numbers of polynomial coefficients. */
 
-	zzck4d2i_(&record[2], &__state->c__7, &__state->c_b18, numcft);
+	zzck4d2i_(__global_state, &record[2], &__state->c__7, &__state->c_b18,
+		 numcft);
 
 /*        Count total number of coefficients. */
 
 	numall = 0;
 	for (k = 1; k <= 7; ++k) {
-	    numall += numcft[(i__1 = k - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		    "numcft", i__1, "ckr04_", (ftnlen)668)];
+	    numall += numcft[(i__1 = k - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "numcft", i__1, "ckr04_", (ftnlen)
+		    668)];
 	}
 
 /*        Move coefficients to the right and insert numbers of */
@@ -824,8 +830,8 @@ static ckr04_state_t* get_ckr04_state() {
 	}
 	for (k = 1; k <= 7; ++k) {
 	    record[k + 2] = (doublereal) numcft[(i__1 = k - 1) < 7 && 0 <= 
-		    i__1 ? i__1 : s_rnge("numcft", i__1, "ckr04_", (ftnlen)
-		    680)];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "numcft", i__1,
+		     "ckr04_", (ftnlen)680)];
 	}
 	record[2] = record[1];
 	record[1] = record[0];
@@ -837,7 +843,7 @@ static ckr04_state_t* get_ckr04_state() {
 
 /*     All done. */
 
-    chkout_("CKR04", (ftnlen)5);
+    chkout_(__global_state, "CKR04", (ftnlen)5);
     return 0;
 } /* ckr04_ */
 

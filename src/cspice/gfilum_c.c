@@ -1174,7 +1174,7 @@
    {
       return;
    }
-   chkin_c ( "gfilum_c" );
+   chkin_c ( naif_state, "gfilum_c" );
 
 
    /*

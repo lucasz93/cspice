@@ -273,7 +273,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "inedpl_c" );
+   chkin_c ( naif_state, "inedpl_c" );
 
 
    /*

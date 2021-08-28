@@ -8,8 +8,7 @@
 
 
 extern spkr14_init_t __spkr14_init;
-static spkr14_state_t* get_spkr14_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr14_state_t* get_spkr14_state(cspice_t* state) {
 	if (!state->spkr14)
 		state->spkr14 = __cspice_allocate_module(sizeof(
 	spkr14_state_t), &__spkr14_init, sizeof(__spkr14_init));
@@ -18,29 +17,30 @@ static spkr14_state_t* get_spkr14_state() {
 }
 
 /* $Procedure      SPKR14 ( Read SPK record from segment, type 14 ) */
-/* Subroutine */ int spkr14_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr14_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
     integer ends;
     integer indx;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found;
     doublereal value;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sgfcon_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *, integer *);
-    extern /* Subroutine */ int sgfrvi_(integer *, doublereal *, doublereal *,
-	     doublereal *, integer *, logical *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int sgfcon_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgfpkt_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int sgfrvi_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spkr14_state_t* __state = get_spkr14_state();
+    spkr14_state_t* __state = get_spkr14_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single data record from a type 14 SPK segment. */
@@ -209,10 +209,10 @@ static spkr14_state_t* get_spkr14_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKR14", (ftnlen)6);
+	chkin_(__global_state, "SPKR14", (ftnlen)6);
     }
 
 /*     Check the request time against the time bounds in the segment */
@@ -224,31 +224,32 @@ static spkr14_state_t* get_spkr14_state() {
 /*     respectively. */
 
     if (*et < descr[0] || *et > descr[1]) {
-	setmsg_("Request time # is outside of descriptor bounds # : #.", (
-		ftnlen)53);
-	errdp_("#", et, (ftnlen)1);
-	errdp_("#", descr, (ftnlen)1);
-	errdp_("#", &descr[1], (ftnlen)1);
-	sigerr_("SPICE(TIMEOUTOFBOUNDS)", (ftnlen)22);
-	chkout_("SPKR14", (ftnlen)6);
+	setmsg_(__global_state, "Request time # is outside of descriptor bou"
+		"nds # : #.", (ftnlen)53);
+	errdp_(__global_state, "#", et, (ftnlen)1);
+	errdp_(__global_state, "#", descr, (ftnlen)1);
+	errdp_(__global_state, "#", &descr[1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TIMEOUTOFBOUNDS)", (ftnlen)22);
+	chkout_(__global_state, "SPKR14", (ftnlen)6);
 	return 0;
     }
 
 /*     Fetch the constants and store them in the first part of */
 /*     the output RECORD. */
 
-    sgfcon_(handle, descr, &__state->c__1, &__state->c__1, record);
+    sgfcon_(__global_state, handle, descr, &__state->c__1, &__state->c__1, 
+	    record);
 
 /*     Locate the time in the file less than or equal to the input ET, */
 /*     obtaining its index. This will allow us to retrieve the proper */
 /*     record. */
 
-    sgfrvi_(handle, descr, et, &value, &indx, &found);
+    sgfrvi_(__global_state, handle, descr, et, &value, &indx, &found);
 
 /*     Fetch the appropriate record from the segment. */
 
-    sgfpkt_(handle, descr, &indx, &indx, &record[1], &ends);
-    chkout_("SPKR14", (ftnlen)6);
+    sgfpkt_(__global_state, handle, descr, &indx, &indx, &record[1], &ends);
+    chkout_(__global_state, "SPKR14", (ftnlen)6);
     return 0;
 } /* spkr14_ */
 

@@ -8,8 +8,7 @@
 
 
 extern zzekwpai_init_t __zzekwpai_init;
-static zzekwpai_state_t* get_zzekwpai_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekwpai_state_t* get_zzekwpai_state(cspice_t* state) {
 	if (!state->zzekwpai)
 		state->zzekwpai = __cspice_allocate_module(sizeof(
 	zzekwpai_state_t), &__zzekwpai_init, sizeof(__zzekwpai_init));
@@ -18,31 +17,33 @@ static zzekwpai_state_t* get_zzekwpai_state() {
 }
 
 /* $Procedure     ZZEKWPAI ( EK, write paged array, integer ) */
-/* Subroutine */ int zzekwpai_(integer *handle, integer *segdsc, integer *
-	nvals, integer *ivals, integer *p, integer *base)
+/* Subroutine */ int zzekwpai_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *nvals, integer *ivals, integer *p, integer *
+	base)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer page[256];
     integer from;
-    extern /* Subroutine */ int zzekacps_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekacps_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer npage;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
     integer to;
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzekwpai_state_t* __state = get_zzekwpai_state();
+    zzekwpai_state_t* __state = get_zzekwpai_state(__global_state);
 /* $ Abstract */
 
 /*     Write an integer array out to a contiguous set of EK pages. */
@@ -570,31 +571,33 @@ static zzekwpai_state_t* get_zzekwpai_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKWPAI", (ftnlen)8);
+	chkin_(__global_state, "ZZEKWPAI", (ftnlen)8);
     }
 
 /*     Decide how many pages are required to hold the array, and */
 /*     allocate that many new, contiguous pages. */
 
     npage = (*nvals + 253) / 254;
-    zzekacps_(handle, segdsc, &__state->c__3, &npage, p, base);
+    zzekacps_(__global_state, handle, segdsc, &__state->c__3, &npage, p, base)
+	    ;
 
 /*     We'll use FROM to indicate the element of IVALS we're */
 /*     considering and TO to indicate the element of PAGE to write */
 /*     to. */
 
     to = 1;
-    cleari_(&__state->c__256, page);
+    cleari_(__global_state, &__state->c__256, page);
     i__1 = *nvals;
     for (from = 1; from <= i__1; ++from) {
 
 /*        The Assignment. */
 
-	page[(i__2 = to - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("page", i__2, 
-		"zzekwpai_", (ftnlen)192)] = ivals[from - 1];
+	page[(i__2 = to - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "page", i__2, "zzekwpai_", (ftnlen)192)] 
+		= ivals[from - 1];
 	++to;
 	if (to > 254 || from == *nvals) {
 
@@ -606,7 +609,7 @@ static zzekwpai_state_t* get_zzekwpai_state() {
 
 /*           Write out the data page. */
 
-	    zzekpgwi_(handle, p, page);
+	    zzekpgwi_(__global_state, handle, p, page);
 
 /*           Next page. */
 
@@ -614,7 +617,7 @@ static zzekwpai_state_t* get_zzekwpai_state() {
 	    to = 1;
 	}
     }
-    chkout_("ZZEKWPAI", (ftnlen)8);
+    chkout_(__global_state, "ZZEKWPAI", (ftnlen)8);
     return 0;
 } /* zzekwpai_ */
 

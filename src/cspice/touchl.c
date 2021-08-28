@@ -8,20 +8,19 @@
 
 
 typedef int touchl_state_t;
-static touchl_state_t* get_touchl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline touchl_state_t* get_touchl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      TOUCHL ( Touch a variable ) */
-logical touchl_(logical *log__)
+logical touchl_(cspice_t* __global_state, logical *log__)
 {
     /* System generated locals */
     logical ret_val;
 
 
     /* Module state */
-    touchl_state_t* __state = get_touchl_state();
+    touchl_state_t* __state = get_touchl_state(__global_state);
 /* $ Abstract */
 
 /*     Return the value of the input logical */

@@ -8,8 +8,7 @@
 
 
 extern dpr_init_t __dpr_init;
-static dpr_state_t* get_dpr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dpr_state_t* get_dpr_state(cspice_t* state) {
 	if (!state->dpr)
 		state->dpr = __cspice_allocate_module(sizeof(dpr_state_t), &
 	__dpr_init, sizeof(__dpr_init));
@@ -18,7 +17,7 @@ static dpr_state_t* get_dpr_state() {
 }
 
 /* $Procedure                     DPR ( Degrees per radian ) */
-doublereal dpr_(void)
+doublereal dpr_(cspice_t* __global_state)
 {
     /* Initialized data */
 
@@ -27,11 +26,11 @@ doublereal dpr_(void)
     doublereal ret_val;
 
     /* Builtin functions */
-    double acos(doublereal);
+    double acos(f2c_state_t*, doublereal);
 
 
     /* Module state */
-    dpr_state_t* __state = get_dpr_state();
+    dpr_state_t* __state = get_dpr_state(__global_state);
 /* $ Abstract */
 
 /*     Return the number of degrees per radian. */
@@ -164,7 +163,7 @@ doublereal dpr_(void)
 /*     What is there to say? */
 
     if (__state->value == 0.) {
-	__state->value = 180. / acos(-1.);
+	__state->value = 180. / acos(&__global_state->f2c, -1.);
     }
     ret_val = __state->value;
     return ret_val;

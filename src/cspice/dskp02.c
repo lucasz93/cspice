@@ -8,8 +8,7 @@
 
 
 extern dskp02_init_t __dskp02_init;
-static dskp02_state_t* get_dskp02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskp02_state_t* get_dskp02_state(cspice_t* state) {
 	if (!state->dskp02)
 		state->dskp02 = __cspice_allocate_module(sizeof(
 	dskp02_state_t), &__dskp02_init, sizeof(__dskp02_init));
@@ -18,33 +17,35 @@ static dskp02_state_t* get_dskp02_state() {
 }
 
 /* $Procedure DSKP02 ( DSK, fetch type 2 plate data ) */
-/* Subroutine */ int dskp02_(integer *handle, integer *dladsc, integer *start,
-	 integer *room, integer *n, integer *plates)
+/* Subroutine */ int dskp02_(cspice_t* __global_state, integer *handle, 
+	integer *dladsc, integer *start, integer *room, integer *n, integer *
+	plates)
 {
     integer unit;
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dskgd_(integer *, integer *, doublereal *);
-    extern /* Subroutine */ int dski02_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int dskz02_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dskgd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int dski02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dskz02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer np;
     integer nv;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal dskdsc[24];
     integer lcroom;
     integer lcstrt;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    dskp02_state_t* __state = get_dskp02_state();
+    dskp02_state_t* __state = get_dskp02_state(__global_state);
 /* $ Abstract */
 
 /*     Fetch triangular plates from a type 2 DSK segment. */
@@ -931,37 +932,38 @@ static dskp02_state_t* get_dskp02_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKP02", (ftnlen)6);
+    chkin_(__global_state, "DSKP02", (ftnlen)6);
 
 /*     Look up the DSK descriptor for this segment. */
 
-    dskgd_(handle, dladsc, dskdsc);
+    dskgd_(__global_state, handle, dladsc, dskdsc);
 
 /*     Get the plate model size parameters for this segment. */
 /*     Note that we get a segment data type check for free from */
 /*     DSKZ02. */
 
-    dskz02_(handle, dladsc, &nv, &np);
+    dskz02_(__global_state, handle, dladsc, &nv, &np);
 
 /*     Check START. */
 
     if (*start < 1 || *start > np) {
-	zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
-	setmsg_("Segment in DSK file # with DAS base addresses INT = #, DP ="
-		" #, CHR = # contains # plates, so START must be in the range"
-		" 1:#; actual value was #.", (ftnlen)144);
-	errfnm_("#", &unit, (ftnlen)1);
-	errint_("#", &dladsc[2], (ftnlen)1);
-	errint_("#", &dladsc[4], (ftnlen)1);
-	errint_("#", &dladsc[6], (ftnlen)1);
-	errint_("#", &np, (ftnlen)1);
-	errint_("#", &np, (ftnlen)1);
-	errint_("#", start, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKP02", (ftnlen)6);
+	zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &unit, (
+		ftnlen)3);
+	setmsg_(__global_state, "Segment in DSK file # with DAS base address"
+		"es INT = #, DP = #, CHR = # contains # plates, so START must"
+		" be in the range 1:#; actual value was #.", (ftnlen)144);
+	errfnm_(__global_state, "#", &unit, (ftnlen)1);
+	errint_(__global_state, "#", &dladsc[2], (ftnlen)1);
+	errint_(__global_state, "#", &dladsc[4], (ftnlen)1);
+	errint_(__global_state, "#", &dladsc[6], (ftnlen)1);
+	errint_(__global_state, "#", &np, (ftnlen)1);
+	errint_(__global_state, "#", &np, (ftnlen)1);
+	errint_(__global_state, "#", start, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKP02", (ftnlen)6);
 	return 0;
     }
 
@@ -972,12 +974,13 @@ static dskp02_state_t* get_dskp02_state() {
 
     lcstrt = (*start - 1) * 3 + 1;
     lcroom = *room * 3;
-    dski02_(handle, dladsc, &__state->c__9, &lcstrt, &lcroom, n, plates);
+    dski02_(__global_state, handle, dladsc, &__state->c__9, &lcstrt, &lcroom, 
+	    n, plates);
 
 /*     Change the output count from one of integers to one of plates. */
 
     *n /= 3;
-    chkout_("DSKP02", (ftnlen)6);
+    chkout_(__global_state, "DSKP02", (ftnlen)6);
     return 0;
 } /* dskp02_ */
 

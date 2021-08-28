@@ -8,8 +8,7 @@
 
 
 extern spkcpt_init_t __spkcpt_init;
-static spkcpt_state_t* get_spkcpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkcpt_state_t* get_spkcpt_state(cspice_t* state) {
 	if (!state->spkcpt)
 		state->spkcpt = __cspice_allocate_module(sizeof(
 	spkcpt_state_t), &__spkcpt_init, sizeof(__spkcpt_init));
@@ -18,26 +17,27 @@ static spkcpt_state_t* get_spkcpt_state() {
 }
 
 /* $Procedure SPKCPT ( SPK, constant position target state ) */
-/* Subroutine */ int spkcpt_(doublereal *trgpos, char *trgctr, char *trgref, 
-	doublereal *et, char *outref, char *refloc, char *abcorr, char *
-	obsrvr, doublereal *state, doublereal *lt, ftnlen trgctr_len, ftnlen 
-	trgref_len, ftnlen outref_len, ftnlen refloc_len, ftnlen abcorr_len, 
-	ftnlen obsrvr_len)
+/* Subroutine */ int spkcpt_(cspice_t* __global_state, doublereal *trgpos, 
+	char *trgctr, char *trgref, doublereal *et, char *outref, char *
+	refloc, char *abcorr, char *obsrvr, doublereal *state, doublereal *lt,
+	 ftnlen trgctr_len, ftnlen trgref_len, ftnlen outref_len, ftnlen 
+	refloc_len, ftnlen abcorr_len, ftnlen obsrvr_len)
 {
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     doublereal trgepc;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal trgsta[6];
-    extern /* Subroutine */ int spkcvt_(doublereal *, doublereal *, char *, 
-	    char *, doublereal *, char *, char *, char *, char *, doublereal *
-	    , doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int spkcvt_(cspice_t*, doublereal *, doublereal *,
+	     char *, char *, doublereal *, char *, char *, char *, char *, 
+	    doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spkcpt_state_t* __state = get_spkcpt_state();
+    spkcpt_state_t* __state = get_spkcpt_state(__global_state);
 /* $ Abstract */
 
 /*     Return the state, relative to a specified observer, of a target */
@@ -1180,25 +1180,25 @@ static spkcpt_state_t* get_spkcpt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKCPT", (ftnlen)6);
+    chkin_(__global_state, "SPKCPT", (ftnlen)6);
 
 /*     Create a state vector for the target. The velocity */
 /*     portion of the state is zero. */
 
-    vequ_(trgpos, trgsta);
-    cleard_(&__state->c__3, &trgsta[3]);
+    vequ_(__global_state, trgpos, trgsta);
+    cleard_(__global_state, &__state->c__3, &trgsta[3]);
 
 /*     Set the target epoch; the value is arbitrary, since */
 /*     the target's velocity is zero. */
 
     trgepc = 0.;
-    spkcvt_(trgsta, &trgepc, trgctr, trgref, et, outref, refloc, abcorr, 
-	    obsrvr, state, lt, trgctr_len, trgref_len, outref_len, refloc_len,
-	     abcorr_len, obsrvr_len);
-    chkout_("SPKCPT", (ftnlen)6);
+    spkcvt_(__global_state, trgsta, &trgepc, trgctr, trgref, et, outref, 
+	    refloc, abcorr, obsrvr, state, lt, trgctr_len, trgref_len, 
+	    outref_len, refloc_len, abcorr_len, obsrvr_len);
+    chkout_(__global_state, "SPKCPT", (ftnlen)6);
     return 0;
 } /* spkcpt_ */
 

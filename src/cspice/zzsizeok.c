@@ -8,25 +8,25 @@
 
 
 typedef int zzsizeok_state_t;
-static zzsizeok_state_t* get_zzsizeok_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzsizeok_state_t* get_zzsizeok_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZSIZEOK ( Determine if the size of a segment is ok ) */
-/* Subroutine */ int zzsizeok_(integer *size, integer *psize, integer *dsize, 
-	integer *offset, logical *ok, integer *n)
+/* Subroutine */ int zzsizeok_(cspice_t* __global_state, integer *size, 
+	integer *psize, integer *dsize, integer *offset, logical *ok, integer 
+	*n)
 {
     integer a;
     integer q;
     integer r__;
-    extern /* Subroutine */ int rmaini_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int rmaini_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer pd1;
 
 
     /* Module state */
-    zzsizeok_state_t* __state = get_zzsizeok_state();
+    zzsizeok_state_t* __state = get_zzsizeok_state(__global_state);
 /* $ Abstract */
 
 
@@ -212,7 +212,7 @@ static zzsizeok_state_t* get_zzsizeok_state() {
 	return 0;
     }
     pd1 = *psize * *dsize + 1;
-    rmaini_(size, &pd1, &q, &a);
+    rmaini_(__global_state, size, &pd1, &q, &a);
     if (*offset * *psize > a) {
 	*n = 0;
 	*ok = FALSE_;

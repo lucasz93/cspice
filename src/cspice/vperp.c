@@ -8,13 +8,13 @@
 
 
 typedef int vperp_state_t;
-static vperp_state_t* get_vperp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vperp_state_t* get_vperp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure VPERP ( Perpendicular component of a 3-vector ) */
-/* Subroutine */ int vperp_(doublereal *a, doublereal *b, doublereal *p)
+/* Subroutine */ int vperp_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *p)
 {
     /* System generated locals */
     doublereal d__1, d__2;
@@ -22,18 +22,19 @@ static vperp_state_t* get_vperp_state() {
     /* Local variables */
     doublereal biga;
     doublereal bigb;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal r__[3];
     doublereal t[3];
     doublereal v[3];
-    extern /* Subroutine */ int vproj_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vproj_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
 
 
     /* Module state */
-    vperp_state_t* __state = get_vperp_state();
+    vperp_state_t* __state = get_vperp_state(__global_state);
 /* $ Abstract */
 
 /*     Find the component of a vector that is perpendicular to a second */
@@ -211,9 +212,9 @@ static vperp_state_t* get_vperp_state() {
     r__[0] = b[0] / bigb;
     r__[1] = b[1] / bigb;
     r__[2] = b[2] / bigb;
-    vproj_(t, r__, v);
-    vsub_(t, v, p);
-    vsclip_(&biga, p);
+    vproj_(__global_state, t, r__, v);
+    vsub_(__global_state, t, v, p);
+    vsclip_(__global_state, &biga, p);
     return 0;
 } /* vperp_ */
 

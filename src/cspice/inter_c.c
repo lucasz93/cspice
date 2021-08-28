@@ -238,7 +238,7 @@
       return;
    }
 
-   chkin_c ( "inter_c" );
+   chkin_c ( naif_state, "inter_c" );
 
    /*
    Make sure data types match. 

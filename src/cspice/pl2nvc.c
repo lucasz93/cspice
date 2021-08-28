@@ -8,20 +8,19 @@
 
 
 typedef int pl2nvc_state_t;
-static pl2nvc_state_t* get_pl2nvc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pl2nvc_state_t* get_pl2nvc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PL2NVC ( Plane to normal vector and constant ) */
-/* Subroutine */ int pl2nvc_(doublereal *plane, doublereal *normal, 
-	doublereal *const__)
+/* Subroutine */ int pl2nvc_(cspice_t* __global_state, doublereal *plane, 
+	doublereal *normal, doublereal *const__)
 {
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
 
 
     /* Module state */
-    pl2nvc_state_t* __state = get_pl2nvc_state();
+    pl2nvc_state_t* __state = get_pl2nvc_state(__global_state);
 /* $ Abstract */
 
 /*     Return a unit normal vector and constant that define a specified */
@@ -232,7 +231,7 @@ static pl2nvc_state_t* get_pl2nvc_state() {
 
 /*     Unpack the plane. */
 
-    vequ_(plane, normal);
+    vequ_(__global_state, plane, normal);
     *const__ = plane[3];
     return 0;
 } /* pl2nvc_ */

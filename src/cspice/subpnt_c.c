@@ -1517,7 +1517,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "subpnt_c" );
+   chkin_c ( naif_state, "subpnt_c" );
 
    /*
    Check the input strings: method, target, fixref, abcorr, and obsrvr.

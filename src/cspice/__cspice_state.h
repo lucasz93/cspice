@@ -17098,9 +17098,9 @@ char strbff[8*4];
 integer smlint;
 } zzxlatei_state_t;
 
-
-typedef struct cspice_s {
-	struct cspice_s* prev;
+/* -------------------------------------------------------------------------- */
+typedef struct {
+    f2c_state_t f2c;
 	accept_state_t* accept;
 	ana_state_t* ana;
 	bedec_state_t* bedec;
@@ -17859,9 +17859,5 @@ typedef struct cspice_s {
 	cspice_user_state_t user;
 #endif
 } cspice_t;
-
-extern cspice_t* __cspice_get_state(void);
-
-extern void __cspice_set_state(cspice_t* state);
 
 extern void* __cspice_allocate_module(int state_sz, void* init, int init_sz);

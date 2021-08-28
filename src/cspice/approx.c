@@ -8,13 +8,13 @@
 
 
 typedef int approx_state_t;
-static approx_state_t* get_approx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline approx_state_t* get_approx_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            APPROX ( Approximate equality ) */
-logical approx_(doublereal *x, doublereal *y, doublereal *tol)
+logical approx_(cspice_t* __global_state, doublereal *x, doublereal *y, 
+	doublereal *tol)
 {
     /* System generated locals */
     doublereal d__1;
@@ -22,7 +22,7 @@ logical approx_(doublereal *x, doublereal *y, doublereal *tol)
 
 
     /* Module state */
-    approx_state_t* __state = get_approx_state();
+    approx_state_t* __state = get_approx_state(__global_state);
 /* $ Abstract */
 
 /*     True if two double precision numbers are equal to within some */

@@ -190,7 +190,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekdelr_c" );
+   chkin_c ( naif_state, "ekdelr_c" );
 
    /*
    Convert indices to Fortran style.

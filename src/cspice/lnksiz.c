@@ -8,20 +8,19 @@
 
 
 typedef int lnksiz_state_t;
-static lnksiz_state_t* get_lnksiz_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lnksiz_state_t* get_lnksiz_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LNKSIZ ( LNK, size ) */
-integer lnksiz_(integer *pool)
+integer lnksiz_(cspice_t* __global_state, integer *pool)
 {
     /* System generated locals */
     integer ret_val;
 
 
     /* Module state */
-    lnksiz_state_t* __state = get_lnksiz_state();
+    lnksiz_state_t* __state = get_lnksiz_state(__global_state);
 /* $ Abstract */
 
 /*     Return the size of a doubly linked list pool. */

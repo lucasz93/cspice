@@ -8,20 +8,20 @@
 
 
 typedef int setmsg_state_t;
-static setmsg_state_t* get_setmsg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline setmsg_state_t* get_setmsg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure     SETMSG  ( Set Long Error Message ) */
-/* Subroutine */ int setmsg_(char *msg, ftnlen msg_len)
+/* Subroutine */ int setmsg_(cspice_t* __global_state, char *msg, ftnlen 
+	msg_len)
 {
-    extern logical allowd_(void);
-    extern /* Subroutine */ int putlms_(char *, ftnlen);
+    extern logical allowd_(cspice_t*);
+    extern /* Subroutine */ int putlms_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    setmsg_state_t* __state = get_setmsg_state();
+    setmsg_state_t* __state = get_setmsg_state(__global_state);
 /* $ Abstract */
 
 /*     Set the value of the current long error message. */
@@ -210,8 +210,8 @@ static setmsg_state_t* get_setmsg_state() {
 /*     We store the long error message only when updates */
 /*     of the long message are allowed: */
 
-    if (allowd_()) {
-	putlms_(msg, msg_len);
+    if (allowd_(__global_state)) {
+	putlms_(__global_state, msg, msg_len);
     }
     return 0;
 } /* setmsg_ */

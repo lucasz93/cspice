@@ -8,20 +8,19 @@
 
 
 typedef int tyear_state_t;
-static tyear_state_t* get_tyear_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline tyear_state_t* get_tyear_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      TYEAR ( Seconds per tropical year ) */
-doublereal tyear_(void)
+doublereal tyear_(cspice_t* __global_state)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    tyear_state_t* __state = get_tyear_state();
+    tyear_state_t* __state = get_tyear_state(__global_state);
 /* $ Abstract */
 
 /*     Return the number of seconds in a tropical year. */

@@ -225,9 +225,8 @@ int f__canseek(FILE *f) /*SYSDEP*/
 }
 
 
-void f__fatal(int n, char *s)
+void f__fatal(f2c_state_t *f2c, int n, char *s)
 {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    if(n<100 && n>=0) perror(s); /*SYSDEP*/
    else if(n >= (int)MAXERR || n < -1)
    {   fprintf(stderr,"%s: illegal error number %d\n",s,n);
@@ -261,9 +260,8 @@ void f__fatal(int n, char *s)
 
 
 /*initialization routine*/
-VOID f_init(Void)
-{  f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-   unit *p;
+VOID f_init(f2c_state_t *f2c)
+{  unit *p;
 
    f2c->f__init=1;
    p= &f2c->f__units[0];
@@ -287,7 +285,7 @@ VOID f_init(Void)
 /*
 Added type identifier for routine.  29-OCT-2015 (EDW)
 */
-int f__nowreading(unit *x)
+int f__nowreading(f2c_state_t *f2c, unit *x)
 {
    long loc;
    int ufmt, urw;
@@ -319,9 +317,8 @@ int f__nowreading(unit *x)
 /*
 Added type identifier for routine.  29-OCT-2015 (EDW)
 */
-int f__nowwriting(unit *x)
+int f__nowwriting(f2c_state_t *f2c, unit *x)
 {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    long loc;
    int ufmt;
    extern char *f__w_mode[];
@@ -356,11 +353,10 @@ int f__nowwriting(unit *x)
 }
 
 
-int err__fl(int f, int m, char *s)
+int err__fl(f2c_state_t *f2c, int f, int m, char *s)
 {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    if (!f)
-      f__fatal(m, s);
+      f__fatal(f2c, m, s);
    if (f2c->f__doend)
       (*f2c->f__doend)();
    return errno = m;

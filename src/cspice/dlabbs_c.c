@@ -248,7 +248,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dlabbs_c" );
+   chkin_c ( naif_state, "dlabbs_c" );
 
 
    dlabbs_ ( (integer   *) &handle,

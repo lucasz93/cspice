@@ -8,33 +8,33 @@
 
 
 typedef int lun2fn_state_t;
-static lun2fn_state_t* get_lun2fn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lun2fn_state_t* get_lun2fn_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LUN2FN ( Map logical unit of open file to its name. ) */
-/* Subroutine */ int lun2fn_(integer *lunit, char *filnam, ftnlen filnam_len)
+/* Subroutine */ int lun2fn_(cspice_t* __global_state, integer *lunit, char *
+	filnam, ftnlen filnam_len)
 {
     /* System generated locals */
     inlist ioin__1;
 
     /* Builtin functions */
-    integer f_inqu(inlist *);
+    integer f_inqu(f2c_state_t*, inlist *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical opened;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    lun2fn_state_t* __state = get_lun2fn_state();
+    lun2fn_state_t* __state = get_lun2fn_state(__global_state);
 /* $ Abstract */
 
 /*     Map the logical unit of an open file to its associated filename. */
@@ -159,19 +159,20 @@ static lun2fn_state_t* get_lun2fn_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("LUN2FN", (ftnlen)6);
+	chkin_(__global_state, "LUN2FN", (ftnlen)6);
     }
 
 /*     First we test to see if the filename is blank. */
 
     if (*lunit <= 0) {
-	setmsg_("The Fortran logical unit was not positive: #.", (ftnlen)45);
-	errint_("#", lunit, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("LUN2FN", (ftnlen)6);
+	setmsg_(__global_state, "The Fortran logical unit was not positive: "
+		"#.", (ftnlen)45);
+	errint_(__global_state, "#", lunit, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "LUN2FN", (ftnlen)6);
 	return 0;
     }
 
@@ -195,14 +196,14 @@ static lun2fn_state_t* get_lun2fn_state() {
     ioin__1.inrecl = 0;
     ioin__1.innrec = 0;
     ioin__1.inblank = 0;
-    iostat = f_inqu(&ioin__1);
+    iostat = f_inqu(&__global_state->f2c, &ioin__1);
     if (iostat != 0) {
-	setmsg_("An error occurred while INQUIRing on unit #. The IOSTAT val"
-		"ue is #.", (ftnlen)67);
-	errint_("#", lunit, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(INQUIREFAILED)", (ftnlen)20);
-	chkout_("LUN2FN", (ftnlen)6);
+	setmsg_(__global_state, "An error occurred while INQUIRing on unit #"
+		". The IOSTAT value is #.", (ftnlen)67);
+	errint_(__global_state, "#", lunit, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	chkout_(__global_state, "LUN2FN", (ftnlen)6);
 	return 0;
     }
 
@@ -210,17 +211,17 @@ static lun2fn_state_t* get_lun2fn_state() {
 /*     we cannot get a filename. So signal an error. */
 
     if (! opened) {
-	setmsg_("There was no open file associated with the logical unit #.", 
-		(ftnlen)58);
-	errint_("#", lunit, (ftnlen)1);
-	sigerr_("SPICE(FILENOTOPEN)", (ftnlen)18);
-	chkout_("LUN2FN", (ftnlen)6);
+	setmsg_(__global_state, "There was no open file associated with the "
+		"logical unit #.", (ftnlen)58);
+	errint_(__global_state, "#", lunit, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILENOTOPEN)", (ftnlen)18);
+	chkout_(__global_state, "LUN2FN", (ftnlen)6);
 	return 0;
     }
 
 /*     If we made it to here, we are done. Just check out and return. */
 
-    chkout_("LUN2FN", (ftnlen)6);
+    chkout_(__global_state, "LUN2FN", (ftnlen)6);
     return 0;
 } /* lun2fn_ */
 

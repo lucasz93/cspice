@@ -909,7 +909,7 @@
    {
       return;
    }
-   chkin_c ( "subsol_pl02" );
+   chkin_c ( naif_state, "subsol_pl02" );
  
    /*
    Check the input strings: method, target, abcorr, and obsrvr.  Make

@@ -3,9 +3,8 @@
 #include "fmt.h"
 #include "__cspice_state.h"
 
-y_rsk(Void)
+y_rsk(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if(f2c->f__curunit->uend || f2c->f__curunit->url <= f2c->f__recpos
 		|| f2c->f__curunit->url == 1) return 0;
 	do {
@@ -13,9 +12,8 @@ y_rsk(Void)
 	} while(++f2c->f__recpos < f2c->f__curunit->url);
 	return 0;
 }
-y_getc(Void)
+y_getc(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int ch;
 	if(f2c->f__curunit->uend) return(-1);
 	if((ch=getc(f2c->f__cf))!=EOF)
@@ -36,9 +34,8 @@ y_getc(Void)
 }
 
  static int
-y_rev(Void)
+y_rev(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if (f2c->f__recpos < f2c->f__hiwater)
 		f2c->f__recpos = f2c->f__hiwater;
 	if (f2c->f__curunit->url > 1)
@@ -51,28 +48,25 @@ y_rev(Void)
 }
 
  static int
-y_err(Void)
+y_err(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	err(f2c->f__elist->cierr, 110, "dfe");
 }
 
  static int
-y_newrec(Void)
+y_newrec(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	y_rev();
+	y_rev(f2c);
 	f2c->f__hiwater = f2c->f__cursor = 0;
 	return(1);
 }
 
 #ifdef KR_headers
-c_dfe(a) cilist *a;
+c_dfe(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-c_dfe(cilist *a)
+c_dfe(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	f2c->f__sequential=0;
 	f2c->f__formatted=f2c->f__external=1;
 	f2c->f__elist=a;
@@ -93,16 +87,15 @@ c_dfe(cilist *a)
 	return(0);
 }
 #ifdef KR_headers
-integer s_rdfe(a) cilist *a;
+integer s_rdfe(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-integer s_rdfe(cilist *a)
+integer s_rdfe(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 	if(!f2c->f__init) f_init();
 	f2c->f__reading=1;
-	if(n=c_dfe(a))return(n);
+	if(n=c_dfe(f2c, a))return(n);
 	if(f2c->f__curunit->uwrt && f__nowreading(f2c->f__curunit))
 		err(a->cierr,errno,"read start");
 	f2c->f__getn = y_getc;
@@ -116,16 +109,15 @@ integer s_rdfe(cilist *a)
 	return(0);
 }
 #ifdef KR_headers
-integer s_wdfe(a) cilist *a;
+integer s_wdfe(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-integer s_wdfe(cilist *a)
+integer s_wdfe(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 	if(!f2c->f__init) f_init();
 	f2c->f__reading=0;
-	if(n=c_dfe(a)) return(n);
+	if(n=c_dfe(f2c, a)) return(n);
 	if(f2c->f__curunit->uwrt != 1 && f__nowwriting(f2c->f__curunit))
 		err(a->cierr,errno,"startwrt");
 	f2c->f__putn = x_putc;
@@ -139,12 +131,12 @@ integer s_wdfe(cilist *a)
 	fmt_bg();
 	return(0);
 }
-integer e_rdfe(Void)
+integer e_rdfe(f2c_state_t *f2c)
 {
 	en_fio();
 	return 0;
 }
-integer e_wdfe(Void)
+integer e_wdfe(f2c_state_t *f2c)
 {
 	return en_fio();
 }

@@ -8,8 +8,7 @@
 
 
 extern vrotv_init_t __vrotv_init;
-static vrotv_state_t* get_vrotv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vrotv_state_t* get_vrotv_state(cspice_t* state) {
 	if (!state->vrotv)
 		state->vrotv = __cspice_allocate_module(sizeof(vrotv_state_t),
 	 &__vrotv_init, sizeof(__vrotv_init));
@@ -18,37 +17,38 @@ static vrotv_state_t* get_vrotv_state() {
 }
 
 /* $Procedure      VROTV ( Vector rotation about an axis ) */
-/* Subroutine */ int vrotv_(doublereal *v, doublereal *axis, doublereal *
-	theta, doublereal *r__)
+/* Subroutine */ int vrotv_(cspice_t* __global_state, doublereal *v, 
+	doublereal *axis, doublereal *theta, doublereal *r__)
 {
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal c__;
     doublereal p[3];
     doublereal s;
     doublereal x[3];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern /* Subroutine */ int vproj_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vproj_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal v1[3];
     doublereal v2[3];
     doublereal rplane[3];
 
 
     /* Module state */
-    vrotv_state_t* __state = get_vrotv_state();
+    vrotv_state_t* __state = get_vrotv_state(__global_state);
 /* $ Abstract */
 
 /*     Rotate a vector about a specified axis vector by a specified */
@@ -227,39 +227,39 @@ static vrotv_state_t* get_vrotv_state() {
 /*     Just in case the user tries to rotate about the zero vector - */
 /*     check, and if so return the input vector */
 
-    if (vnorm_(axis) == 0.) {
-	moved_(v, &__state->c__3, r__);
+    if (vnorm_(__global_state, axis) == 0.) {
+	moved_(__global_state, v, &__state->c__3, r__);
 	return 0;
     }
 
 /*     Compute the unit vector that lies in the direction of the */
 /*     AXIS.  Call it X. */
 
-    vhat_(axis, x);
+    vhat_(__global_state, axis, x);
 
 /*     Compute the projection of V onto AXIS.  Call it P. */
 
-    vproj_(v, x, p);
+    vproj_(__global_state, v, x, p);
 
 /*     Compute the component of V orthogonal to the AXIS.  Call it V1. */
 
-    vsub_(v, p, v1);
+    vsub_(__global_state, v, p, v1);
 
 /*     Rotate V1 by 90 degrees about the AXIS and call the result V2. */
 
-    vcrss_(x, v1, v2);
+    vcrss_(__global_state, x, v1, v2);
 
 /*     Compute COS(THETA)*V1 + SIN(THETA)*V2. This is V1 rotated about */
 /*     the AXIS in the plane normal to the axis, call the result RPLANE */
 
-    c__ = cos(*theta);
-    s = sin(*theta);
-    vlcom_(&c__, v1, &s, v2, rplane);
+    c__ = cos(&__global_state->f2c, *theta);
+    s = sin(&__global_state->f2c, *theta);
+    vlcom_(__global_state, &c__, v1, &s, v2, rplane);
 
 /*     Add the rotated component in the normal plane to AXIS to the */
 /*     projection of V onto AXIS (P) to obtain R. */
 
-    vadd_(rplane, p, r__);
+    vadd_(__global_state, rplane, p, r__);
 
     return 0;
 } /* vrotv_ */

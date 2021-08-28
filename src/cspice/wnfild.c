@@ -8,26 +8,26 @@
 
 
 typedef int wnfild_state_t;
-static wnfild_state_t* get_wnfild_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wnfild_state_t* get_wnfild_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      WNFILD ( Fill small gaps in a DP window ) */
-/* Subroutine */ int wnfild_(doublereal *small, doublereal *window)
+/* Subroutine */ int wnfild_(cspice_t* __global_state, doublereal *small, 
+	doublereal *window)
 {
     integer card;
     integer i__;
     integer j;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    wnfild_state_t* __state = get_wnfild_state();
+    wnfild_state_t* __state = get_wnfild_state(__global_state);
 /* $ Abstract */
 
 /*     Fill small gaps between adjacent intervals of a double precision */
@@ -182,16 +182,16 @@ static wnfild_state_t* get_wnfild_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("WNFILD", (ftnlen)6);
+	chkin_(__global_state, "WNFILD", (ftnlen)6);
     }
 
 /*     Get the cardinality of the window. (The size is not important; */
 /*     this routine can't create any new intervals.) */
 
-    card = cardd_(window);
+    card = cardd_(__global_state, window);
 
 /*     Step through the window, looking for the next right endpoint */
 /*     more than SMALL away from the following left endpoint. This marks */
@@ -211,9 +211,9 @@ static wnfild_state_t* get_wnfild_state() {
 	    j += 2;
 	}
 	window[i__ + 5] = window[j + 5];
-	scardd_(&i__, window);
+	scardd_(__global_state, &i__, window);
     }
-    chkout_("WNFILD", (ftnlen)6);
+    chkout_(__global_state, "WNFILD", (ftnlen)6);
     return 0;
 } /* wnfild_ */
 

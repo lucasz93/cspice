@@ -8,20 +8,19 @@
 
 
 typedef int zzbodbry_state_t;
-static zzbodbry_state_t* get_zzbodbry_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzbodbry_state_t* get_zzbodbry_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZBODBRY ( Return barycenter code for a body ) */
-integer zzbodbry_(integer *body)
+integer zzbodbry_(cspice_t* __global_state, integer *body)
 {
     /* System generated locals */
     integer ret_val;
 
 
     /* Module state */
-    zzbodbry_state_t* __state = get_zzbodbry_state();
+    zzbodbry_state_t* __state = get_zzbodbry_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

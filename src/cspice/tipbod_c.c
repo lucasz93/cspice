@@ -322,7 +322,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "tipbod_c" );
+   chkin_c ( naif_state, "tipbod_c" );
 
    /*
    Check the input string ref to make sure the pointer is non-null 

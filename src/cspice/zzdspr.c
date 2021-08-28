@@ -8,30 +8,30 @@
 
 
 typedef int zzdspr_state_t;
-static zzdspr_state_t* get_zzdspr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdspr_state_t* get_zzdspr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZDSPR ( SGP4 deep space long period ) */
-/* Subroutine */ int zzdspr_(integer *opmode, doublereal *e3, doublereal *ee2,
-	 doublereal *peo, doublereal *pgho, doublereal *pho, doublereal *
-	pinco, doublereal *plo, doublereal *se2, doublereal *se3, doublereal *
-	sgh2, doublereal *sgh3, doublereal *sgh4, doublereal *sh2, doublereal 
-	*sh3, doublereal *si2, doublereal *si3, doublereal *sl2, doublereal *
-	sl3, doublereal *sl4, doublereal *t, doublereal *xgh2, doublereal *
-	xgh3, doublereal *xgh4, doublereal *xh2, doublereal *xh3, doublereal *
-	xi2, doublereal *xi3, doublereal *xl2, doublereal *xl3, doublereal *
-	xl4, doublereal *zmol, doublereal *zmos, doublereal *inclo, logical *
-	doinit, doublereal *eccp, doublereal *inclp, doublereal *nodep, 
-	doublereal *argpp, doublereal *mp)
+/* Subroutine */ int zzdspr_(cspice_t* __global_state, integer *opmode, 
+	doublereal *e3, doublereal *ee2, doublereal *peo, doublereal *pgho, 
+	doublereal *pho, doublereal *pinco, doublereal *plo, doublereal *se2, 
+	doublereal *se3, doublereal *sgh2, doublereal *sgh3, doublereal *sgh4,
+	 doublereal *sh2, doublereal *sh3, doublereal *si2, doublereal *si3, 
+	doublereal *sl2, doublereal *sl3, doublereal *sl4, doublereal *t, 
+	doublereal *xgh2, doublereal *xgh3, doublereal *xgh4, doublereal *xh2,
+	 doublereal *xh3, doublereal *xi2, doublereal *xi3, doublereal *xl2, 
+	doublereal *xl3, doublereal *xl4, doublereal *zmol, doublereal *zmos, 
+	doublereal *inclo, logical *doinit, doublereal *eccp, doublereal *
+	inclp, doublereal *nodep, doublereal *argpp, doublereal *mp)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    double sin(doublereal), cos(doublereal), d_mod(doublereal *, doublereal *)
-	    , atan2(doublereal, doublereal);
+    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal), 
+	    d_mod(f2c_state_t*, doublereal *, doublereal *), atan2(
+	    f2c_state_t*, doublereal, doublereal);
 
     /* Local variables */
     doublereal dalf;
@@ -41,7 +41,7 @@ static zzdspr_state_t* get_zzdspr_state() {
     doublereal sghs;
     doublereal xnoh;
     doublereal alfdp;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal betdp;
     doublereal cosip;
     doublereal sinip;
@@ -50,15 +50,15 @@ static zzdspr_state_t* get_zzdspr_state() {
     doublereal f3;
     doublereal sinop;
     doublereal sinzf;
-    extern doublereal twopi_(void);
+    extern doublereal twopi_(cspice_t*);
     doublereal pe;
     doublereal ph;
-    extern doublereal pi_(void);
+    extern doublereal pi_(cspice_t*);
     doublereal pl;
     doublereal zf;
     doublereal zm;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal pgh;
     doublereal dls;
     doublereal sel;
@@ -77,7 +77,7 @@ static zzdspr_state_t* get_zzdspr_state() {
 
 
     /* Module state */
-    zzdspr_state_t* __state = get_zzdspr_state();
+    zzdspr_state_t* __state = get_zzdspr_state(__global_state);
 /* $ Abstract */
 
 /*     This subroutine provides deep space long period periodic */
@@ -449,10 +449,10 @@ static zzdspr_state_t* get_zzdspr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSPR", (ftnlen)6);
+    chkin_(__global_state, "ZZDSPR", (ftnlen)6);
 
 /*     Local constants. */
 
@@ -467,10 +467,10 @@ static zzdspr_state_t* get_zzdspr_state() {
     if (*doinit) {
 	zm = *zmos;
     }
-    zf = zm + zes * 2. * sin(zm);
-    sinzf = sin(zf);
+    zf = zm + zes * 2. * sin(&__global_state->f2c, zm);
+    sinzf = sin(&__global_state->f2c, zf);
     f2 = sinzf * .5 * sinzf - .25;
-    f3 = sinzf * -.5 * cos(zf);
+    f3 = sinzf * -.5 * cos(&__global_state->f2c, zf);
     ses = *se2 * f2 + *se3 * f3;
     sis = *si2 * f2 + *si3 * f3;
     sls = *sl2 * f2 + *sl3 * f3 + *sl4 * sinzf;
@@ -480,10 +480,10 @@ static zzdspr_state_t* get_zzdspr_state() {
     if (*doinit) {
 	zm = *zmol;
     }
-    zf = zm + zel * 2. * sin(zm);
-    sinzf = sin(zf);
+    zf = zm + zel * 2. * sin(&__global_state->f2c, zm);
+    sinzf = sin(&__global_state->f2c, zf);
     f2 = sinzf * .5 * sinzf - .25;
-    f3 = sinzf * -.5 * cos(zf);
+    f3 = sinzf * -.5 * cos(&__global_state->f2c, zf);
     sel = *ee2 * f2 + *e3 * f3;
     sil = *xi2 * f2 + *xi3 * f3;
     sll = *xl2 * f2 + *xl3 * f3 + *xl4 * sinzf;
@@ -502,8 +502,8 @@ static zzdspr_state_t* get_zzdspr_state() {
 	ph -= *pho;
 	*inclp += pinc;
 	*eccp += pe;
-	sinip = sin(*inclp);
-	cosip = cos(*inclp);
+	sinip = sin(&__global_state->f2c, *inclp);
+	cosip = cos(&__global_state->f2c, *inclp);
 
 /*        Apply periodics directly. */
 
@@ -535,47 +535,47 @@ static zzdspr_state_t* get_zzdspr_state() {
 
 /*           Apply periodics with Lyddane modification. */
 
-	    sinop = sin(*nodep);
-	    cosop = cos(*nodep);
+	    sinop = sin(&__global_state->f2c, *nodep);
+	    cosop = cos(&__global_state->f2c, *nodep);
 	    alfdp = sinip * sinop;
 	    betdp = sinip * cosop;
 	    dalf = ph * cosop + pinc * cosip * sinop;
 	    dbet = -ph * sinop + pinc * cosip * cosop;
 	    alfdp += dalf;
 	    betdp += dbet;
-	    d__1 = twopi_();
-	    *nodep = d_mod(nodep, &d__1);
+	    d__1 = twopi_(__global_state);
+	    *nodep = d_mod(&__global_state->f2c, nodep, &d__1);
 
 /*           sgp4fix for afspc written intrinsic functions */
 /*           NODEP used without a trigonometric function ahead */
 
 	    if (*nodep < 0. && *opmode == 1) {
-		*nodep += twopi_();
+		*nodep += twopi_(__global_state);
 	    }
 	    xls = *mp + *argpp + cosip * *nodep;
 	    dls = pl + pgh - pinc * *nodep * sinip;
 	    xls += dls;
 	    xnoh = *nodep;
-	    *nodep = atan2(alfdp, betdp);
+	    *nodep = atan2(&__global_state->f2c, alfdp, betdp);
 
 /*           sgp4fix for afspc written intrinsic functions */
 /*           NODEP used without a trigonometric function ahead */
 
 	    if (*nodep < 0. && *opmode == 1) {
-		*nodep += twopi_();
+		*nodep += twopi_(__global_state);
 	    }
-	    if ((d__1 = xnoh - *nodep, abs(d__1)) > pi_()) {
+	    if ((d__1 = xnoh - *nodep, abs(d__1)) > pi_(__global_state)) {
 		if (*nodep < xnoh) {
-		    *nodep += twopi_();
+		    *nodep += twopi_(__global_state);
 		} else {
-		    *nodep -= twopi_();
+		    *nodep -= twopi_(__global_state);
 		}
 	    }
 	    *mp += pl;
 	    *argpp = xls - *mp - cosip * *nodep;
 	}
     }
-    chkout_("ZZDSPR", (ftnlen)6);
+    chkout_(__global_state, "ZZDSPR", (ftnlen)6);
     return 0;
 } /* zzdspr_ */
 

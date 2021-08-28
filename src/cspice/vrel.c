@@ -8,26 +8,25 @@
 
 
 typedef int vrel_state_t;
-static vrel_state_t* get_vrel_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vrel_state_t* get_vrel_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  VREL ( Vector relative difference, 3 dimensions ) */
-doublereal vrel_(doublereal *v1, doublereal *v2)
+doublereal vrel_(cspice_t* __global_state, doublereal *v1, doublereal *v2)
 {
     /* System generated locals */
     doublereal ret_val, d__1, d__2;
 
     /* Local variables */
-    extern doublereal vdist_(doublereal *, doublereal *);
-    extern doublereal vnorm_(doublereal *);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal denorm;
     doublereal nunorm;
 
 
     /* Module state */
-    vrel_state_t* __state = get_vrel_state();
+    vrel_state_t* __state = get_vrel_state(__global_state);
 /* $ Abstract */
 
 /*   Return the relative difference between two 3-dimensional vectors. */
@@ -218,12 +217,12 @@ doublereal vrel_(doublereal *v1, doublereal *v2)
 /*     This handles the case where both vectors are zero vectors since */
 /*     the distance between them will be zero. */
 
-    nunorm = vdist_(v1, v2);
+    nunorm = vdist_(__global_state, v1, v2);
     if (nunorm == 0.) {
 	ret_val = 0.;
     } else {
 /* Computing MAX */
-	d__1 = vnorm_(v1), d__2 = vnorm_(v2);
+	d__1 = vnorm_(__global_state, v1), d__2 = vnorm_(__global_state, v2);
 	denorm = max(d__1,d__2);
 	ret_val = nunorm / denorm;
     }

@@ -8,8 +8,7 @@
 
 
 extern twovec_init_t __twovec_init;
-static twovec_state_t* get_twovec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline twovec_state_t* get_twovec_state(cspice_t* state) {
 	if (!state->twovec)
 		state->twovec = __cspice_allocate_module(sizeof(
 	twovec_state_t), &__twovec_init, sizeof(__twovec_init));
@@ -18,8 +17,9 @@ static twovec_state_t* get_twovec_state() {
 }
 
 /* $Procedure      TWOVEC ( Two vectors defining an orthonormal frame ) */
-/* Subroutine */ int twovec_(doublereal *axdef, integer *indexa, doublereal *
-	plndef, integer *indexp, doublereal *mout)
+/* Subroutine */ int twovec_(cspice_t* __global_state, doublereal *axdef, 
+	integer *indexa, doublereal *plndef, integer *indexp, doublereal *
+	mout)
 {
     /* Initialized data */
 
@@ -28,28 +28,29 @@ static twovec_state_t* get_twovec_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     doublereal mtemp[9]	/* was [3][3] */;
     integer i1;
     integer i2;
     integer i3;
-    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int xpose_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    twovec_state_t* __state = get_twovec_state();
+    twovec_state_t* __state = get_twovec_state(__global_state);
 /* $ Abstract */
 
 /*     Find the transformation to the right-handed frame having a */
@@ -247,29 +248,30 @@ static twovec_state_t* get_twovec_state() {
 
 /*     Standard SPICE error handling */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("TWOVEC", (ftnlen)6);
+	chkin_(__global_state, "TWOVEC", (ftnlen)6);
     }
 
 /*     Check for obvious bad inputs. */
 
     if (max(*indexp,*indexa) > 3 || min(*indexp,*indexa) < 1) {
-	setmsg_("The definition indexs must lie in the range from 1 to 3.  T"
-		"he value of INDEXA was #. The value of INDEXP was #. ", (
-		ftnlen)112);
-	errint_("#", indexa, (ftnlen)1);
-	errint_("#", indexp, (ftnlen)1);
-	sigerr_("SPICE(BADINDEX)", (ftnlen)15);
-	chkout_("TWOVEC", (ftnlen)6);
+	setmsg_(__global_state, "The definition indexs must lie in the range"
+		" from 1 to 3.  The value of INDEXA was #. The value of INDEX"
+		"P was #. ", (ftnlen)112);
+	errint_(__global_state, "#", indexa, (ftnlen)1);
+	errint_(__global_state, "#", indexp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADINDEX)", (ftnlen)15);
+	chkout_(__global_state, "TWOVEC", (ftnlen)6);
 	return 0;
     } else if (*indexa == *indexp) {
-	setmsg_("The values of INDEXA and INDEXP were the same, namely #.  T"
-		"hey are required to be different.", (ftnlen)92);
-	errint_("#", indexa, (ftnlen)1);
-	sigerr_("SPICE(UNDEFINEDFRAME)", (ftnlen)21);
-	chkout_("TWOVEC", (ftnlen)6);
+	setmsg_(__global_state, "The values of INDEXA and INDEXP were the sa"
+		"me, namely #.  They are required to be different.", (ftnlen)
+		92);
+	errint_(__global_state, "#", indexa, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNDEFINEDFRAME)", (ftnlen)21);
+	chkout_(__global_state, "TWOVEC", (ftnlen)6);
 	return 0;
     }
 
@@ -281,33 +283,39 @@ static twovec_state_t* get_twovec_state() {
 
 /*     ... then the other two. */
 
-    i2 = __state->seqnce[(i__1 = *indexa) < 5 && 0 <= i__1 ? i__1 : s_rnge(
-	    "seqnce", i__1, "twovec_", (ftnlen)270)];
+    i2 = __state->seqnce[(i__1 = *indexa) < 5 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "seqnce", i__1, "twovec_", (ftnlen)270)];
     i3 = __state->seqnce[(i__1 = *indexa + 1) < 5 && 0 <= i__1 ? i__1 : 
-	    s_rnge("seqnce", i__1, "twovec_", (ftnlen)271)];
+	    s_rnge(&__global_state->f2c, "seqnce", i__1, "twovec_", (ftnlen)
+	    271)];
 
 /*     Row I1 contains normalized AXDEF (store in columns for now) */
 
-    vhat_(axdef, &mout[(i__1 = i1 * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-	    "mout", i__1, "twovec_", (ftnlen)276)]);
+    vhat_(__global_state, axdef, &mout[(i__1 = i1 * 3 - 3) < 9 && 0 <= i__1 ? 
+	    i__1 : s_rnge(&__global_state->f2c, "mout", i__1, "twovec_", (
+	    ftnlen)276)]);
 
 /*     Obtain rows I2 and I3 using cross products.  Which order to use */
 /*     depends on whether INDEXP = I2 (next axis in right-handed order) */
 /*     or INDEXP = I3 (previous axis in right-handed order). */
 
     if (*indexp == i2) {
-	ucrss_(axdef, plndef, &mout[(i__1 = i3 * 3 - 3) < 9 && 0 <= i__1 ? 
-		i__1 : s_rnge("mout", i__1, "twovec_", (ftnlen)285)]);
-	ucrss_(&mout[(i__1 = i3 * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"mout", i__1, "twovec_", (ftnlen)286)], axdef, &mout[(i__2 = 
-		i2 * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge("mout", i__2, 
+	ucrss_(__global_state, axdef, plndef, &mout[(i__1 = i3 * 3 - 3) < 9 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "mout", i__1,
+		 "twovec_", (ftnlen)285)]);
+	ucrss_(__global_state, &mout[(i__1 = i3 * 3 - 3) < 9 && 0 <= i__1 ? 
+		i__1 : s_rnge(&__global_state->f2c, "mout", i__1, "twovec_", (
+		ftnlen)286)], axdef, &mout[(i__2 = i2 * 3 - 3) < 9 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "mout", i__2, 
 		"twovec_", (ftnlen)286)]);
     } else {
-	ucrss_(plndef, axdef, &mout[(i__1 = i2 * 3 - 3) < 9 && 0 <= i__1 ? 
-		i__1 : s_rnge("mout", i__1, "twovec_", (ftnlen)290)]);
-	ucrss_(axdef, &mout[(i__1 = i2 * 3 - 3) < 9 && 0 <= i__1 ? i__1 : 
-		s_rnge("mout", i__1, "twovec_", (ftnlen)291)], &mout[(i__2 = 
-		i3 * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge("mout", i__2, 
+	ucrss_(__global_state, plndef, axdef, &mout[(i__1 = i2 * 3 - 3) < 9 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "mout", i__1,
+		 "twovec_", (ftnlen)290)]);
+	ucrss_(__global_state, axdef, &mout[(i__1 = i2 * 3 - 3) < 9 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "mout", i__1, 
+		"twovec_", (ftnlen)291)], &mout[(i__2 = i3 * 3 - 3) < 9 && 0 
+		<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "mout", i__2, 
 		"twovec_", (ftnlen)291)]);
     }
 
@@ -315,21 +323,23 @@ static twovec_state_t* get_twovec_state() {
 /*     in one of the one columns of MOUT(1,I2) and MOUT(1,I3) (we need */
 /*     only check one of them since they are related by a cross product). */
 
-    if (mout[(i__1 = i2 * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge("mout", 
-	    i__1, "twovec_", (ftnlen)300)] == 0. && mout[(i__2 = i2 * 3 - 2) <
-	     9 && 0 <= i__2 ? i__2 : s_rnge("mout", i__2, "twovec_", (ftnlen)
-	    300)] == 0. && mout[(i__3 = i2 * 3 - 1) < 9 && 0 <= i__3 ? i__3 : 
-	    s_rnge("mout", i__3, "twovec_", (ftnlen)300)] == 0.) {
-	setmsg_("The input vectors AXDEF and PLNDEF are linearly dependent.", 
-		(ftnlen)58);
-	sigerr_("SPICE(DEPENDENTVECTORS)", (ftnlen)23);
+    if (mout[(i__1 = i2 * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "mout", i__1, "twovec_", (ftnlen)300)] == 0. 
+	    && mout[(i__2 = i2 * 3 - 2) < 9 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "mout", i__2, "twovec_", (ftnlen)300)] == 0. 
+	    && mout[(i__3 = i2 * 3 - 1) < 9 && 0 <= i__3 ? i__3 : s_rnge(&
+	    __global_state->f2c, "mout", i__3, "twovec_", (ftnlen)300)] == 0.)
+	     {
+	setmsg_(__global_state, "The input vectors AXDEF and PLNDEF are line"
+		"arly dependent.", (ftnlen)58);
+	sigerr_(__global_state, "SPICE(DEPENDENTVECTORS)", (ftnlen)23);
     }
 
 /*     Transpose MOUT. */
 
-    xpose_(mout, mtemp);
-    moved_(mtemp, &__state->c__9, mout);
-    chkout_("TWOVEC", (ftnlen)6);
+    xpose_(__global_state, mout, mtemp);
+    moved_(__global_state, mtemp, &__state->c__9, mout);
+    chkout_(__global_state, "TWOVEC", (ftnlen)6);
     return 0;
 } /* twovec_ */
 

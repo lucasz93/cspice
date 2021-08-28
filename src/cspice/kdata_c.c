@@ -290,7 +290,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "kdata_c" );
+   chkin_c ( naif_state, "kdata_c" );
 
 
    /*

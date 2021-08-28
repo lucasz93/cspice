@@ -8,26 +8,26 @@
 
 
 typedef int lastnb_state_t;
-static lastnb_state_t* get_lastnb_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lastnb_state_t* get_lastnb_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure             LASTNB ( Last non-blank character ) */
-integer lastnb_(char *string, ftnlen string_len)
+integer lastnb_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), i_len(char *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), i_len(
+	    f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    lastnb_state_t* __state = get_lastnb_state();
+    lastnb_state_t* __state = get_lastnb_state(__global_state);
 /* $ Abstract */
 
 /*      Return the index of the last non-blank character in */
@@ -158,10 +158,12 @@ integer lastnb_(char *string, ftnlen string_len)
 
 /*     Just like it says in the header. */
 
-    if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, string, " ", string_len, (ftnlen)1) == 0) 
+	    {
 	ret_val = 0;
     } else {
-	for (i__ = i_len(string, string_len); i__ >= 1; --i__) {
+	for (i__ = i_len(&__global_state->f2c, string, string_len); i__ >= 1; 
+		--i__) {
 	    if (*(unsigned char *)&string[i__ - 1] != 32) {
 		ret_val = i__;
 		return ret_val;

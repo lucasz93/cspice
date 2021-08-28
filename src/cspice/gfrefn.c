@@ -8,21 +8,21 @@
 
 
 typedef int gfrefn_state_t;
-static gfrefn_state_t* get_gfrefn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gfrefn_state_t* get_gfrefn_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure GFREFN ( GF, default refinement estimator) */
-/* Subroutine */ int gfrefn_(doublereal *t1, doublereal *t2, logical *s1, 
-	logical *s2, doublereal *t)
+/* Subroutine */ int gfrefn_(cspice_t* __global_state, doublereal *t1, 
+	doublereal *t2, logical *s1, logical *s2, doublereal *t)
 {
     doublereal x;
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    gfrefn_state_t* __state = get_gfrefn_state();
+    gfrefn_state_t* __state = get_gfrefn_state(__global_state);
 /* $ Abstract */
 
 /*     For those times when we can't do better, we use a bisection */
@@ -173,7 +173,7 @@ static gfrefn_state_t* get_gfrefn_state() {
 /*     Local variables. */
 
     x = *t1 * .5 + *t2 * .5;
-    *t = brcktd_(&x, t1, t2);
+    *t = brcktd_(__global_state, &x, t1, t2);
     return 0;
 } /* gfrefn_ */
 

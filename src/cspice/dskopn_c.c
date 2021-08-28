@@ -197,7 +197,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "dskopn_c" );
+   chkin_c ( naif_state, "dskopn_c" );
 
    /*
    Check the input string fname to make sure the pointer is non-null 

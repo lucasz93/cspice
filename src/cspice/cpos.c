@@ -8,20 +8,20 @@
 
 
 typedef int cpos_state_t;
-static cpos_state_t* get_cpos_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cpos_state_t* get_cpos_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            CPOS ( Character position ) */
-integer cpos_(char *str, char *chars, integer *start, ftnlen str_len, ftnlen 
-	chars_len)
+integer cpos_(cspice_t* __global_state, char *str, char *chars, integer *
+	start, ftnlen str_len, ftnlen chars_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), i_indx(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), i_indx(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer b;
@@ -30,7 +30,7 @@ integer cpos_(char *str, char *chars, integer *start, ftnlen str_len, ftnlen
 
 
     /* Module state */
-    cpos_state_t* __state = get_cpos_state();
+    cpos_state_t* __state = get_cpos_state(__global_state);
 /* $ Abstract */
 
 /*     Find the first occurrence in a string of a character belonging */
@@ -218,14 +218,15 @@ integer cpos_(char *str, char *chars, integer *start, ftnlen str_len, ftnlen
 
 /*     Local variables */
 
-    lenstr = i_len(str, str_len);
+    lenstr = i_len(&__global_state->f2c, str, str_len);
     b = max(1,*start);
     found = FALSE_;
     ret_val = 0;
     while(! found) {
 	if (b > lenstr) {
 	    return ret_val;
-	} else if (i_indx(chars, str + (b - 1), chars_len, (ftnlen)1) != 0) {
+	} else if (i_indx(&__global_state->f2c, chars, str + (b - 1), 
+		chars_len, (ftnlen)1) != 0) {
 	    ret_val = b;
 	    return ret_val;
 	} else {

@@ -423,7 +423,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "srfcss_c" );
+   chkin_c ( naif_state, "srfcss_c" );
 
    /*
    Check the input string to make sure the pointer is non-null and

@@ -8,8 +8,7 @@
 
 
 extern ekinsr_init_t __ekinsr_init;
-static ekinsr_state_t* get_ekinsr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekinsr_state_t* get_ekinsr_state(cspice_t* state) {
 	if (!state->ekinsr)
 		state->ekinsr = __cspice_allocate_module(sizeof(
 	ekinsr_state_t), &__ekinsr_init, sizeof(__ekinsr_init));
@@ -18,7 +17,8 @@ static ekinsr_state_t* get_ekinsr_state() {
 }
 
 /* $Procedure      EKINSR ( EK, insert record into segment ) */
-/* Subroutine */ int ekinsr_(integer *handle, integer *segno, integer *recno)
+/* Subroutine */ int ekinsr_(cspice_t* __global_state, integer *handle, 
+	integer *segno, integer *recno)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -28,46 +28,49 @@ static ekinsr_state_t* get_ekinsr_state() {
     integer nrec;
     integer size;
     integer room;
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int zzekrbck_(char *, integer *, integer *, 
-	    integer *, integer *, ftnlen);
-    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekrbck_(cspice_t*, char *, integer *, 
+	    integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekmloc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgbs_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrin_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzektrin_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer p;
     integer mbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int filli_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int filli_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer ncols;
     integer lastp;
     integer lastw;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer coldsc[11];
     integer mp;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer nlinks;
     integer recbas;
     integer recptr[254];
     integer segdsc[24];
     logical isshad;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int ekshdw_(integer *, logical *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
-	    logical *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int ekshdw_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekaps_(cspice_t*, integer *, integer *, 
+	    integer *, logical *, integer *, integer *);
 
 
     /* Module state */
-    ekinsr_state_t* __state = get_ekinsr_state();
+    ekinsr_state_t* __state = get_ekinsr_state(__global_state);
 /* $ Abstract */
 
 /*     Add a new, empty record to a specified E-kernel segment at */
@@ -952,10 +955,10 @@ static ekinsr_state_t* get_ekinsr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKINSR", (ftnlen)6);
+	chkin_(__global_state, "EKINSR", (ftnlen)6);
     }
 
 /*     Before trying to actually write anything, do every error */
@@ -964,9 +967,9 @@ static ekinsr_state_t* get_ekinsr_state() {
 /*     Is this file handle valid--is the file open for paged write */
 /*     access?  Signal an error if not. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("EKINSR", (ftnlen)6);
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKINSR", (ftnlen)6);
 	return 0;
     }
 
@@ -974,14 +977,14 @@ static ekinsr_state_t* get_ekinsr_state() {
 /*     Given the base address, we can read the pertinent metadata in */
 /*     one shot. */
 
-    zzekmloc_(handle, segno, &mp, &mbase);
-    if (failed_()) {
-	chkout_("EKINSR", (ftnlen)6);
+    zzekmloc_(__global_state, handle, segno, &mp, &mbase);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKINSR", (ftnlen)6);
 	return 0;
     }
     i__1 = mbase + 1;
     i__2 = mbase + 24;
-    dasrdi_(handle, &i__1, &i__2, segdsc);
+    dasrdi_(__global_state, handle, &i__1, &i__2, segdsc);
 
 /*     We'll need to know how many columns the segment has in order to */
 /*     compute the size of the record pointer.  The record pointer */
@@ -994,13 +997,13 @@ static ekinsr_state_t* get_ekinsr_state() {
 /*     If this is not the case, we've got a bug. */
 
     if (size > 254) {
-	setmsg_("Record pointer requires # integer words; EK software assume"
-		"s size is <= #.  This is an EK software bug.  Contact NAIF.", 
-		(ftnlen)118);
-	errint_("#", &size, (ftnlen)1);
-	errint_("#", &__state->c__254, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("EKINSR", (ftnlen)6);
+	setmsg_(__global_state, "Record pointer requires # integer words; EK"
+		" software assumes size is <= #.  This is an EK software bug."
+		"  Contact NAIF.", (ftnlen)118);
+	errint_(__global_state, "#", &size, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__254, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "EKINSR", (ftnlen)6);
 	return 0;
     }
 
@@ -1009,12 +1012,13 @@ static ekinsr_state_t* get_ekinsr_state() {
 
     nrec = segdsc[5];
     if (*recno < 1 || *recno > nrec + 1) {
-	setmsg_("Record number = #; valid range is 1:#.", (ftnlen)38);
-	errint_("#", recno, (ftnlen)1);
+	setmsg_(__global_state, "Record number = #; valid range is 1:#.", (
+		ftnlen)38);
+	errint_(__global_state, "#", recno, (ftnlen)1);
 	i__1 = nrec + 1;
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKINSR", (ftnlen)6);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKINSR", (ftnlen)6);
 	return 0;
     }
 
@@ -1031,9 +1035,9 @@ static ekinsr_state_t* get_ekinsr_state() {
 /*     determine the status, we must know whether the parent file is */
 /*     shadowed. */
 
-    cleari_(&__state->c__254, recptr);
-    filli_(&__state->c_n1, &__state->c__252, recptr);
-    ekshdw_(handle, &isshad);
+    cleari_(__global_state, &__state->c__254, recptr);
+    filli_(__global_state, &__state->c_n1, &__state->c__252, recptr);
+    ekshdw_(__global_state, handle, &isshad);
     if (isshad) {
 	recptr[0] = 3;
     } else {
@@ -1046,22 +1050,22 @@ static ekinsr_state_t* get_ekinsr_state() {
 
 /*        Just write the record pointer into the current integer page. */
 
-	zzekpgbs_(&__state->c__3, &lastp, &base);
+	zzekpgbs_(__global_state, &__state->c__3, &lastp, &base);
 	recbas = base + lastw;
 	i__1 = recbas + 1;
 	i__2 = recbas + size;
-	dasudi_(handle, &i__1, &i__2, recptr);
+	dasudi_(__global_state, handle, &i__1, &i__2, recptr);
 
 /*        Update the page's metadata to reflect the addition.  The */
 /*        page gains a link. */
 
 	i__1 = base + 256;
 	i__2 = base + 256;
-	dasrdi_(handle, &i__1, &i__2, &nlinks);
+	dasrdi_(__global_state, handle, &i__1, &i__2, &nlinks);
 	i__1 = base + 256;
 	i__2 = base + 256;
 	i__3 = nlinks + 1;
-	dasudi_(handle, &i__1, &i__2, &i__3);
+	dasudi_(__global_state, handle, &i__1, &i__2, &i__3);
 
 /*        The last integer word in use has changed too. */
 
@@ -1070,21 +1074,21 @@ static ekinsr_state_t* get_ekinsr_state() {
 
 /*        Allocate an integer page. */
 
-	zzekaps_(handle, segdsc, &__state->c__3, &__state->c_false, &p, &
-		recbas);
+	zzekaps_(__global_state, handle, segdsc, &__state->c__3, &
+		__state->c_false, &p, &recbas);
 
 /*        Write out the record pointer. */
 
 	i__1 = recbas + 1;
 	i__2 = recbas + size;
-	dasudi_(handle, &i__1, &i__2, recptr);
+	dasudi_(__global_state, handle, &i__1, &i__2, recptr);
 
 /*        Update the page's metadata to reflect the addition.  The */
 /*        page starts out with one link. */
 
 	i__1 = recbas + 256;
 	i__2 = recbas + 256;
-	dasudi_(handle, &i__1, &i__2, &__state->c__1);
+	dasudi_(__global_state, handle, &i__1, &i__2, &__state->c__1);
 
 /*        Update the segment's metadata to reflect the addition of a */
 /*        data page.  The last page in use is the one we just wrote to. */
@@ -1099,7 +1103,7 @@ static ekinsr_state_t* get_ekinsr_state() {
 /*     the data record tree at index RECNO.  The record count gets */
 /*     incremented. */
 
-    zzektrin_(handle, &segdsc[6], recno, &recbas);
+    zzektrin_(__global_state, handle, &segdsc[6], recno, &recbas);
     ++segdsc[5];
 
 /*     If the segment is shadowed but no backup segment exists yet, we */
@@ -1107,14 +1111,15 @@ static ekinsr_state_t* get_ekinsr_state() {
 /*     Note that for data additions, the input argument COLDSC is */
 /*     ignored. */
 
-    zzekrbck_("ADD", handle, segdsc, coldsc, recno, (ftnlen)3);
+    zzekrbck_(__global_state, "ADD", handle, segdsc, coldsc, recno, (ftnlen)3)
+	    ;
 
 /*     Write out the updated segment descriptor. */
 
     i__1 = mbase + 1;
     i__2 = mbase + 24;
-    dasudi_(handle, &i__1, &i__2, segdsc);
-    chkout_("EKINSR", (ftnlen)6);
+    dasudi_(__global_state, handle, &i__1, &i__2, segdsc);
+    chkout_(__global_state, "EKINSR", (ftnlen)6);
     return 0;
 } /* ekinsr_ */
 

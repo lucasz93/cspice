@@ -232,7 +232,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkw05_c" );
+   chkin_c ( naif_state, "spkw05_c" );
 
  
    /*

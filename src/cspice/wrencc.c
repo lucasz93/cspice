@@ -8,8 +8,7 @@
 
 
 extern wrencc_init_t __wrencc_init;
-static wrencc_state_t* get_wrencc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wrencc_state_t* get_wrencc_state(cspice_t* state) {
 	if (!state->wrencc)
 		state->wrencc = __cspice_allocate_module(sizeof(
 	wrencc_state_t), &__wrencc_init, sizeof(__wrencc_init));
@@ -18,8 +17,8 @@ static wrencc_state_t* get_wrencc_state() {
 }
 
 /* $Procedure WRENCC ( Write characters to text file encoded ) */
-/* Subroutine */ int wrencc_(integer *unit, integer *n, char *data, ftnlen 
-	data_len)
+/* Subroutine */ int wrencc_(cspice_t* __global_state, integer *unit, integer 
+	*n, char *data, ftnlen data_len)
 {
     /* Initialized data */
 
@@ -31,15 +30,18 @@ static wrencc_state_t* get_wrencc_state() {
     cilist ci__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_wsfe(cilist *);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
-    integer do_fio(integer *, char *, ftnlen), e_wsfe(void);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_wsfe(
+	    f2c_state_t*, cilist *);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
+    integer do_fio(f2c_state_t*, integer *, char *, ftnlen), e_wsfe(
+	    f2c_state_t*);
 
     /* Local variables */
     integer room;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer intch;
     char ch[1];
     char encchr[64];
@@ -49,18 +51,18 @@ static wrencc_state_t* get_wrencc_state() {
     integer hibits;
     integer encpos;
     integer dtapos;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer lobits;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer nchout;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     char lftovr[2];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    wrencc_state_t* __state = get_wrencc_state();
+    wrencc_state_t* __state = get_wrencc_state(__global_state);
 /* $ Abstract */
 
 /*     Encode and write characters to a text file. */
@@ -537,10 +539,10 @@ static wrencc_state_t* get_wrencc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("WRENCC", (ftnlen)6);
+	chkin_(__global_state, "WRENCC", (ftnlen)6);
     }
     if (__state->first) {
 
@@ -575,22 +577,22 @@ static wrencc_state_t* get_wrencc_state() {
 
 /*     Get the length of a data ``line'' in the data buffer DATA. */
 
-    dtalen = i_len(data, data_len);
+    dtalen = i_len(&__global_state->f2c, data, data_len);
 
 /*     Make sure that the encoding character string is empty when we */
 /*     start. */
 
-    s_copy(encchr, " ", (ftnlen)64, (ftnlen)1);
+    s_copy(&__global_state->f2c, encchr, " ", (ftnlen)64, (ftnlen)1);
 
 /*     Check to see if the number of data items is less than or equal */
 /*     to zero. If it is, signal an error. */
 
     if (*n < 1) {
-	setmsg_("The number of data items to be written was not positive: #.",
-		 (ftnlen)59);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("WRENCC", (ftnlen)6);
+	setmsg_(__global_state, "The number of data items to be written was "
+		"not positive: #.", (ftnlen)59);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "WRENCC", (ftnlen)6);
 	return 0;
     }
 
@@ -665,30 +667,35 @@ static wrencc_state_t* get_wrencc_state() {
 	    room = 64 - encpos;
 	    if (room >= 2) {
 		i__1 = encpos;
-		s_copy(encchr + i__1, __state->hexdig + ((i__2 = hibits) < 16 
-			&& 0 <= i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_"
-			, (ftnlen)664)), encpos + 1 - i__1, (ftnlen)1);
+		s_copy(&__global_state->f2c, encchr + i__1, __state->hexdig + 
+			((i__2 = hibits) < 16 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "hexdig", i__2, "wrencc_", (
+			ftnlen)664)), encpos + 1 - i__1, (ftnlen)1);
 		i__1 = encpos + 1;
-		s_copy(encchr + i__1, __state->hexdig + ((i__2 = lobits) < 16 
-			&& 0 <= i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_"
-			, (ftnlen)665)), encpos + 2 - i__1, (ftnlen)1);
+		s_copy(&__global_state->f2c, encchr + i__1, __state->hexdig + 
+			((i__2 = lobits) < 16 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "hexdig", i__2, "wrencc_", (
+			ftnlen)665)), encpos + 2 - i__1, (ftnlen)1);
 	    } else if (room == 1) {
 		i__1 = encpos;
-		s_copy(encchr + i__1, __state->hexdig + ((i__2 = hibits) < 16 
-			&& 0 <= i__2 ? i__2 : s_rnge("hexdig", i__2, "wrencc_"
-			, (ftnlen)669)), encpos + 1 - i__1, (ftnlen)1);
+		s_copy(&__global_state->f2c, encchr + i__1, __state->hexdig + 
+			((i__2 = hibits) < 16 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "hexdig", i__2, "wrencc_", (
+			ftnlen)669)), encpos + 1 - i__1, (ftnlen)1);
 		*(unsigned char *)lftovr = *(unsigned char *)&__state->hexdig[
-			(i__1 = lobits) < 16 && 0 <= i__1 ? i__1 : s_rnge(
-			"hexdig", i__1, "wrencc_", (ftnlen)670)];
+			(i__1 = lobits) < 16 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "hexdig", i__1, "wrencc_", (
+			ftnlen)670)];
 		*(unsigned char *)&lftovr[1] = ' ';
 	    } else {
 		*(unsigned char *)lftovr = *(unsigned char *)&__state->hexdig[
-			(i__1 = hibits) < 16 && 0 <= i__1 ? i__1 : s_rnge(
-			"hexdig", i__1, "wrencc_", (ftnlen)675)];
+			(i__1 = hibits) < 16 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "hexdig", i__1, "wrencc_", (
+			ftnlen)675)];
 		*(unsigned char *)&lftovr[1] = *(unsigned char *)&
 			__state->hexdig[(i__1 = lobits) < 16 && 0 <= i__1 ? 
-			i__1 : s_rnge("hexdig", i__1, "wrencc_", (ftnlen)676)]
-			;
+			i__1 : s_rnge(&__global_state->f2c, "hexdig", i__1, 
+			"wrencc_", (ftnlen)676)];
 	    }
 
 /*           Increment the character buffer pointers, including the */
@@ -725,7 +732,7 @@ static wrencc_state_t* get_wrencc_state() {
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *unit;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
@@ -733,20 +740,22 @@ static wrencc_state_t* get_wrencc_state() {
 	    i__5[0] = 1, a__1[0] = "'";
 	    i__5[1] = 64, a__1[1] = encchr;
 	    i__5[2] = 1, a__1[2] = "'";
-	    s_cat(ch__2, a__1, i__5, &__state->c__3, (ftnlen)66);
-	    iostat = do_fio(&__state->c__1, ch__2, (ftnlen)66);
+	    s_cat(&__global_state->f2c, ch__2, a__1, i__5, &__state->c__3, (
+		    ftnlen)66);
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, ch__2, (
+		    ftnlen)66);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100001:
 	    if (iostat != 0) {
-		setmsg_("Error writing to logical unit #, IOSTAT = #.", (
-			ftnlen)44);
-		errint_("#", unit, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("WRENCC", (ftnlen)6);
+		setmsg_(__global_state, "Error writing to logical unit #, IO"
+			"STAT = #.", (ftnlen)44);
+		errint_(__global_state, "#", unit, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "WRENCC", (ftnlen)6);
 		return 0;
 	    }
 
@@ -756,11 +765,13 @@ L100001:
 
 	    nchout += -64;
 	    if (nchout > 0) {
-		s_copy(encchr, lftovr, (ftnlen)2, (ftnlen)2);
+		s_copy(&__global_state->f2c, encchr, lftovr, (ftnlen)2, (
+			ftnlen)2);
 	    }
 	    encpos = nchout + 1;
-	    s_copy(encchr + (encpos - 1), " ", 64 - (encpos - 1), (ftnlen)1);
-	    s_copy(lftovr, " ", (ftnlen)2, (ftnlen)1);
+	    s_copy(&__global_state->f2c, encchr + (encpos - 1), " ", 64 - (
+		    encpos - 1), (ftnlen)1);
+	    s_copy(&__global_state->f2c, lftovr, " ", (ftnlen)2, (ftnlen)1);
 	}
 
 /*        If we have reached the end of the current data ``line'' in the */
@@ -792,7 +803,7 @@ L100001:
 	ci__1.cierr = 1;
 	ci__1.ciunit = *unit;
 	ci__1.cifmt = "(A)";
-	iostat = s_wsfe(&ci__1);
+	iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100002;
 	}
@@ -800,24 +811,26 @@ L100001:
 	i__5[0] = 1, a__1[0] = "'";
 	i__5[1] = 64, a__1[1] = encchr;
 	i__5[2] = 1, a__1[2] = "'";
-	s_cat(ch__2, a__1, i__5, &__state->c__3, (ftnlen)66);
-	iostat = do_fio(&__state->c__1, ch__2, (ftnlen)66);
+	s_cat(&__global_state->f2c, ch__2, a__1, i__5, &__state->c__3, (
+		ftnlen)66);
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, ch__2, (ftnlen)
+		66);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = e_wsfe();
+	iostat = e_wsfe(&__global_state->f2c);
 L100002:
 	if (iostat != 0) {
-	    setmsg_("Error writing to logical unit #, IOSTAT = #.", (ftnlen)
-		    44);
-	    errint_("#", unit, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	    chkout_("WRENCC", (ftnlen)6);
+	    setmsg_(__global_state, "Error writing to logical unit #, IOSTAT"
+		    " = #.", (ftnlen)44);
+	    errint_(__global_state, "#", unit, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	    chkout_(__global_state, "WRENCC", (ftnlen)6);
 	    return 0;
 	}
     }
-    chkout_("WRENCC", (ftnlen)6);
+    chkout_(__global_state, "WRENCC", (ftnlen)6);
     return 0;
 } /* wrencc_ */
 

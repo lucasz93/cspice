@@ -8,22 +8,23 @@
 
 
 typedef int parsqs_state_t;
-static parsqs_state_t* get_parsqs_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline parsqs_state_t* get_parsqs_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  PARSQS ( Parse quoted string token ) */
-/* Subroutine */ int parsqs_(char *string, char *qchar, char *value, integer *
-	length, logical *error, char *errmsg, integer *ptr, ftnlen string_len,
-	 ftnlen qchar_len, ftnlen value_len, ftnlen errmsg_len)
+/* Subroutine */ int parsqs_(cspice_t* __global_state, char *string, char *
+	qchar, char *value, integer *length, logical *error, char *errmsg, 
+	integer *ptr, ftnlen string_len, ftnlen qchar_len, ftnlen value_len, 
+	ftnlen errmsg_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer last;
@@ -31,14 +32,14 @@ static parsqs_state_t* get_parsqs_state() {
     integer opos;
     integer inlen;
     integer first;
-    extern integer lastnb_(char *, ftnlen);
-    extern integer frstnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
     integer outlen;
     char chr[1];
 
 
     /* Module state */
-    parsqs_state_t* __state = get_parsqs_state();
+    parsqs_state_t* __state = get_parsqs_state(__global_state);
 /* $ Abstract */
 
 /*     Parse a quoted string token. */
@@ -284,7 +285,7 @@ static parsqs_state_t* get_parsqs_state() {
 /*     No characters in the parsed string to start with. */
 
     *error = FALSE_;
-    s_copy(errmsg, " ", errmsg_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, errmsg, " ", errmsg_len, (ftnlen)1);
     *ptr = 0;
     *length = 0;
 
@@ -292,24 +293,25 @@ static parsqs_state_t* get_parsqs_state() {
 
     if (*(unsigned char *)qchar == ' ') {
 	*error = TRUE_;
-	s_copy(errmsg, "The quote character must be non-blank, but isn't", 
-		errmsg_len, (ftnlen)48);
+	s_copy(&__global_state->f2c, errmsg, "The quote character must be no"
+		"n-blank, but isn't", errmsg_len, (ftnlen)48);
 	*ptr = 1;
     }
 
 /*     Grab the lengths of the string arguments. */
 
-    inlen = i_len(string, string_len);
-    outlen = i_len(value, value_len);
+    inlen = i_len(&__global_state->f2c, string, string_len);
+    outlen = i_len(&__global_state->f2c, value, value_len);
 
 /*     The token to be parsed extends from the first non-blank */
 /*     character to the last non-blank character of STRING. */
 
-    first = frstnb_(string, string_len);
-    last = lastnb_(string, string_len);
+    first = frstnb_(__global_state, string, string_len);
+    last = lastnb_(__global_state, string, string_len);
     if (first == 0) {
 	*error = TRUE_;
-	s_copy(errmsg, "Blank input string", errmsg_len, (ftnlen)18);
+	s_copy(&__global_state->f2c, errmsg, "Blank input string", errmsg_len,
+		 (ftnlen)18);
 	*ptr = inlen;
 	return 0;
     }
@@ -318,15 +320,15 @@ static parsqs_state_t* get_parsqs_state() {
 
     if (*(unsigned char *)&string[first - 1] != *(unsigned char *)qchar) {
 	*error = TRUE_;
-	s_copy(errmsg, "String token does not start with quote character", 
-		errmsg_len, (ftnlen)48);
+	s_copy(&__global_state->f2c, errmsg, "String token does not start wi"
+		"th quote character", errmsg_len, (ftnlen)48);
 	*ptr = first;
 	return 0;
     } else if (*(unsigned char *)&string[last - 1] != *(unsigned char *)qchar)
 	     {
 	*error = TRUE_;
-	s_copy(errmsg, "String token does not end with quote character", 
-		errmsg_len, (ftnlen)46);
+	s_copy(&__global_state->f2c, errmsg, "String token does not end with"
+		" quote character", errmsg_len, (ftnlen)46);
 	*ptr = last;
 	return 0;
     }
@@ -335,8 +337,8 @@ static parsqs_state_t* get_parsqs_state() {
 
     if (first == last - 1) {
 	*error = TRUE_;
-	s_copy(errmsg, "Null (zero length) string token", errmsg_len, (ftnlen)
-		31);
+	s_copy(&__global_state->f2c, errmsg, "Null (zero length) string token"
+		, errmsg_len, (ftnlen)31);
 	*ptr = last;
 	return 0;
     }
@@ -378,18 +380,18 @@ static parsqs_state_t* get_parsqs_state() {
 /*              character. */
 
 		*error = TRUE_;
-		s_copy(errmsg, "Quote character is unmatched or else string "
-			"ends without final quote; take your pick", errmsg_len,
-			 (ftnlen)84);
+		s_copy(&__global_state->f2c, errmsg, "Quote character is unm"
+			"atched or else string ends without final quote; take"
+			" your pick", errmsg_len, (ftnlen)84);
 		*ptr = ipos;
 		return 0;
 	    } else /* if(complicated condition) */ {
 		i__1 = ipos;
-		if (s_cmp(string + i__1, qchar, ipos + 1 - i__1, (ftnlen)1) !=
-			 0) {
+		if (s_cmp(&__global_state->f2c, string + i__1, qchar, ipos + 
+			1 - i__1, (ftnlen)1) != 0) {
 		    *error = TRUE_;
-		    s_copy(errmsg, "Interior quote character is not doubled", 
-			    errmsg_len, (ftnlen)39);
+		    s_copy(&__global_state->f2c, errmsg, "Interior quote cha"
+			    "racter is not doubled", errmsg_len, (ftnlen)39);
 		    *ptr = ipos;
 		    return 0;
 		} else {
@@ -413,8 +415,8 @@ static parsqs_state_t* get_parsqs_state() {
 /*        because we ran out of room. */
 
 	*error = TRUE_;
-	s_copy(errmsg, "Output string too short, truncated on right", 
-		errmsg_len, (ftnlen)43);
+	s_copy(&__global_state->f2c, errmsg, "Output string too short, trunc"
+		"ated on right", errmsg_len, (ftnlen)43);
 	*ptr = ipos;
 	return 0;
     }
@@ -422,7 +424,8 @@ static parsqs_state_t* get_parsqs_state() {
 
 /*        Blank-pad the trailing portion of the output string. */
 
-	s_copy(value + (opos - 1), " ", value_len - (opos - 1), (ftnlen)1);
+	s_copy(&__global_state->f2c, value + (opos - 1), " ", value_len - (
+		opos - 1), (ftnlen)1);
     }
     return 0;
 } /* parsqs_ */

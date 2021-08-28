@@ -8,26 +8,26 @@
 
 
 typedef int vequg_state_t;
-static vequg_state_t* get_vequg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vequg_state_t* get_vequg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VEQUG ( Vector equality, general dimension ) */
-/* Subroutine */ int vequg_(doublereal *vin, integer *ndim, doublereal *vout)
+/* Subroutine */ int vequg_(cspice_t* __global_state, doublereal *vin, 
+	integer *ndim, doublereal *vout)
 {
     /* System generated locals */
     integer vin_dim1, vout_dim1, i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    vequg_state_t* __state = get_vequg_state();
+    vequg_state_t* __state = get_vequg_state(__global_state);
 /* $ Abstract */
 
 /*      Make one double precision vector of arbitrary dimension equal */
@@ -151,10 +151,11 @@ static vequg_state_t* get_vequg_state() {
     /* Function Body */
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		"vout", i__2, "vequg_", (ftnlen)131)] = vin[(i__3 = i__ - 1) <
-		 1 * vin_dim1 && 0 <= i__3 ? i__3 : s_rnge("vin", i__3, "veq"
-		"ug_", (ftnlen)131)];
+	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "vout", i__2, "vequg_", (ftnlen)131)] = 
+		vin[(i__3 = i__ - 1) < 1 * vin_dim1 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "vin", i__3, "vequg_", (ftnlen)
+		131)];
     }
     return 0;
 } /* vequg_ */

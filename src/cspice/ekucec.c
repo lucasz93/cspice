@@ -8,46 +8,47 @@
 
 
 typedef int ekucec_state_t;
-static ekucec_state_t* get_ekucec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekucec_state_t* get_ekucec_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure     EKUCEC ( EK, update character column entry ) */
-/* Subroutine */ int ekucec_(integer *handle, integer *segno, integer *recno, 
-	char *column, integer *nvals, char *cvals, logical *isnull, ftnlen 
-	column_len, ftnlen cvals_len)
+/* Subroutine */ int ekucec_(cspice_t* __global_state, integer *handle, 
+	integer *segno, integer *recno, char *column, integer *nvals, char *
+	cvals, logical *isnull, ftnlen column_len, ftnlen cvals_len)
 {
-    extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzekrbck_(char *, integer *, integer *, 
-	    integer *, integer *, ftnlen);
-    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekcdsc_(cspice_t*, integer *, integer *, 
+	    char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekrbck_(cspice_t*, char *, integer *, 
+	    integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzektrdp_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer class__;
     integer dtype;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer coldsc[11];
     integer segdsc[24];
     logical isshad;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     integer recptr;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ekshdw_(integer *, logical *);
-    extern /* Subroutine */ int zzekue03_(integer *, integer *, integer *, 
-	    integer *, char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzekue06_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ekshdw_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int zzekue03_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzekue06_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, logical *, ftnlen);
 
 
     /* Module state */
-    ekucec_state_t* __state = get_ekucec_state();
+    ekucec_state_t* __state = get_ekucec_state(__global_state);
 /* $ Abstract */
 
 /*     Update a character column entry in a specified EK record. */
@@ -545,9 +546,9 @@ static ekucec_state_t* get_ekucec_state() {
 /*     First step:  find the descriptor for the named segment.  Using */
 /*     this descriptor, get the column descriptor. */
 
-    zzeksdsc_(handle, segno, segdsc);
-    zzekcdsc_(handle, segdsc, column, coldsc, column_len);
-    if (failed_()) {
+    zzeksdsc_(__global_state, handle, segno, segdsc);
+    zzekcdsc_(__global_state, handle, segdsc, column, coldsc, column_len);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -555,33 +556,35 @@ static ekucec_state_t* get_ekucec_state() {
 
     dtype = coldsc[1];
     if (dtype != 1) {
-	chkin_("EKUCEC", (ftnlen)6);
-	setmsg_("Column # is of type #; EKUCEC only works with character col"
-		"umns.  RECNO = #; SEGNO = #; EK = #.", (ftnlen)95);
-	errch_("#", column, (ftnlen)1, column_len);
-	errint_("#", &dtype, (ftnlen)1);
-	errint_("#", recno, (ftnlen)1);
-	errint_("#", segno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
-	chkout_("EKUCEC", (ftnlen)6);
+	chkin_(__global_state, "EKUCEC", (ftnlen)6);
+	setmsg_(__global_state, "Column # is of type #; EKUCEC only works wi"
+		"th character columns.  RECNO = #; SEGNO = #; EK = #.", (
+		ftnlen)95);
+	errch_(__global_state, "#", column, (ftnlen)1, column_len);
+	errint_(__global_state, "#", &dtype, (ftnlen)1);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	errint_(__global_state, "#", segno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGDATATYPE)", (ftnlen)20);
+	chkout_(__global_state, "EKUCEC", (ftnlen)6);
 	return 0;
     }
 
 /*     Look up the record pointer for the target record. */
 
-    zzektrdp_(handle, &segdsc[6], recno, &recptr);
+    zzektrdp_(__global_state, handle, &segdsc[6], recno, &recptr);
 
 /*     Determine whether the EK is shadowed. */
 
-    ekshdw_(handle, &isshad);
+    ekshdw_(__global_state, handle, &isshad);
 
 /*     If the EK is shadowed, we must back up the current column entry */
 /*     if the entry has not already been backed up.  ZZEKRBCK will */
 /*     handle this task. */
 
     if (isshad) {
-	zzekrbck_("UPDATE", handle, segdsc, coldsc, recno, (ftnlen)6);
+	zzekrbck_(__global_state, "UPDATE", handle, segdsc, coldsc, recno, (
+		ftnlen)6);
     }
 
 /*     Now it's time to carry out the replacement. */
@@ -591,29 +594,30 @@ static ekucec_state_t* get_ekucec_state() {
 
 /*        Class 3 columns contain scalar character data. */
 
-	zzekue03_(handle, segdsc, coldsc, &recptr, cvals, isnull, cvals_len);
+	zzekue03_(__global_state, handle, segdsc, coldsc, &recptr, cvals, 
+		isnull, cvals_len);
     } else if (class__ == 6) {
 
 /*        Class 6 columns contain array-valued character data. */
 
-	zzekue06_(handle, segdsc, coldsc, &recptr, nvals, cvals, isnull, 
-		cvals_len);
+	zzekue06_(__global_state, handle, segdsc, coldsc, &recptr, nvals, 
+		cvals, isnull, cvals_len);
     } else {
 
 /*        This is an unsupported character column class. */
 
 	*segno = segdsc[1];
-	chkin_("EKUCEC", (ftnlen)6);
-	setmsg_("Class # from input column descriptor is not a supported cha"
-		"racter class.  COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (
-		ftnlen)115);
-	errint_("#", &class__, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, column_len);
-	errint_("#", recno, (ftnlen)1);
-	errint_("#", segno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
-	chkout_("EKUCEC", (ftnlen)6);
+	chkin_(__global_state, "EKUCEC", (ftnlen)6);
+	setmsg_(__global_state, "Class # from input column descriptor is not"
+		" a supported character class.  COLUMN = #; RECNO = #; SEGNO "
+		"= #; EK = #.", (ftnlen)115);
+	errint_(__global_state, "#", &class__, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, column_len);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	errint_(__global_state, "#", segno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOCLASS)", (ftnlen)14);
+	chkout_(__global_state, "EKUCEC", (ftnlen)6);
 	return 0;
     }
     return 0;

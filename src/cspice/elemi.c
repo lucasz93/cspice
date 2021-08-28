@@ -8,28 +8,27 @@
 
 
 typedef int elemi_state_t;
-static elemi_state_t* get_elemi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline elemi_state_t* get_elemi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            ELEMI ( Element of an integer set ) */
-logical elemi_(integer *item, integer *a)
+logical elemi_(cspice_t* __global_state, integer *item, integer *a)
 {
     /* System generated locals */
     integer i__1;
     logical ret_val;
 
     /* Local variables */
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer bsrchi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer bsrchi_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    elemi_state_t* __state = get_elemi_state();
+    elemi_state_t* __state = get_elemi_state(__global_state);
 /* $ Abstract */
 
 /*      Determine whether an item is an element of an integer set. */
@@ -184,18 +183,18 @@ logical elemi_(integer *item, integer *a)
 
 /*     Standard error handling: */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = FALSE_;
 	return ret_val;
     } else {
-	chkin_("ELEMI", (ftnlen)5);
+	chkin_(__global_state, "ELEMI", (ftnlen)5);
     }
 
 /*     Just a binary search. */
 
-    i__1 = cardi_(a);
-    ret_val = bsrchi_(item, &i__1, &a[6]) != 0;
-    chkout_("ELEMI", (ftnlen)5);
+    i__1 = cardi_(__global_state, a);
+    ret_val = bsrchi_(__global_state, item, &i__1, &a[6]) != 0;
+    chkout_(__global_state, "ELEMI", (ftnlen)5);
     return ret_val;
 } /* elemi_ */
 

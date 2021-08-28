@@ -8,8 +8,7 @@
 
 
 extern daffa_init_t __daffa_init;
-static daffa_state_t* get_daffa_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline daffa_state_t* get_daffa_state(cspice_t* state) {
 	if (!state->daffa)
 		state->daffa = __cspice_allocate_module(sizeof(daffa_state_t),
 	 &__daffa_init, sizeof(__daffa_init));
@@ -18,8 +17,9 @@ static daffa_state_t* get_daffa_state() {
 }
 
 /* $Procedure DAFFA ( DAF, find array ) */
-/* Subroutine */ int daffa_0_(int n__, integer *handle, doublereal *sum, char 
-	*name__, logical *found, ftnlen name_len)
+/* Subroutine */ int daffa_0_(cspice_t* __global_state, int n__, integer *
+	handle, doublereal *sum, char *name__, logical *found, ftnlen 
+	name_len)
 {
     /* Initialized data */
 
@@ -28,40 +28,47 @@ static daffa_state_t* get_daffa_state() {
     integer i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern logical elemi_(integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafhof_(integer *);
-    extern /* Subroutine */ int dafhfn_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int dafhsf_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int dafrcr_(integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int dafgsr_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *);
-    extern /* Subroutine */ int dafwdr_(integer *, integer *, doublereal *);
-    extern /* Subroutine */ int dafwcr_(integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
-    extern logical return_(void);
+    extern logical elemi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafhof_(cspice_t*, integer *);
+    extern /* Subroutine */ int dafhfn_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafhsf_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafrcr_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafgsr_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int dafwdr_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int dafwcr_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    daffa_state_t* __state = get_daffa_state();
+    daffa_state_t* __state = get_daffa_state(__global_state);
 /* $ Abstract */
 
 /*     Find arrays in a DAF. */
@@ -1204,12 +1211,12 @@ static daffa_state_t* get_daffa_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFFA", (ftnlen)5);
-	sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-	chkout_("DAFFA", (ftnlen)5);
+	chkin_(__global_state, "DAFFA", (ftnlen)5);
+	sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+	chkout_(__global_state, "DAFFA", (ftnlen)5);
     }
     return 0;
 /* $Procedure DAFBFS ( DAF, begin forward search ) */
@@ -1468,17 +1475,17 @@ L_dafbfs:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFBFS", (ftnlen)6);
+	chkin_(__global_state, "DAFBFS", (ftnlen)6);
     }
 
 /*     Check out the file handle before going any further. */
 
-    dafsih_(handle, "READ", (ftnlen)4);
-    if (failed_()) {
-	chkout_("DAFBFS", (ftnlen)6);
+    dafsih_(__global_state, handle, "READ", (ftnlen)4);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFBFS", (ftnlen)6);
 	return 0;
     }
 
@@ -1487,11 +1494,11 @@ L_dafbfs:
 /*     open DAFs. */
 
     if (__state->first) {
-	ssizei_(&__state->c__5000, __state->opnset);
+	ssizei_(__global_state, &__state->c__5000, __state->opnset);
 	for (__state->i__ = 1; __state->i__ <= 4999; ++__state->i__) {
 	    __state->stpool[(i__1 = __state->i__ - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stpool", i__1, "daffa_", (ftnlen)1256)] = 
-		    __state->i__ + 1;
+		    i__1 : s_rnge(&__global_state->f2c, "stpool", i__1, "daf"
+		    "fa_", (ftnlen)1256)] = __state->i__ + 1;
 	}
 	__state->stpool[4999] = -1;
 	__state->stfptr = 1;
@@ -1506,13 +1513,14 @@ L_dafbfs:
     __state->fnd = FALSE_;
     while(__state->p != -1 && ! __state->fnd) {
 	if (__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 :
-		 s_rnge("stfh", i__1, "daffa_", (ftnlen)1275)] == *handle) {
+		 s_rnge(&__global_state->f2c, "stfh", i__1, "daffa_", (ftnlen)
+		1275)] == *handle) {
 	    __state->fnd = TRUE_;
 	} else {
 	    __state->prev = __state->p;
 	    __state->p = __state->stpool[(i__1 = __state->p - 1) < 5000 && 0 
-		    <= i__1 ? i__1 : s_rnge("stpool", i__1, "daffa_", (ftnlen)
-		    1279)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpool", 
+		    i__1, "daffa_", (ftnlen)1279)];
 	}
     }
 
@@ -1549,13 +1557,14 @@ L_dafbfs:
 /*           the predecessor of P is not NIL. */
 
 	    __state->stpool[(i__1 = __state->prev - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stpool", i__1, "daffa_", (ftnlen)1317)] = 
-		    __state->stpool[(i__2 = __state->p - 1) < 5000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("stpool", i__2, "daffa_", (ftnlen)
+		    i__1 : s_rnge(&__global_state->f2c, "stpool", i__1, "daf"
+		    "fa_", (ftnlen)1317)] = __state->stpool[(i__2 = __state->p 
+		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "stpool", i__2, "daffa_", (ftnlen)
 		    1317)];
 	    __state->stpool[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stpool", i__1, "daffa_", (ftnlen)1318)] = 
-		    __state->sthead;
+		    i__1 : s_rnge(&__global_state->f2c, "stpool", i__1, "daf"
+		    "fa_", (ftnlen)1318)] = __state->sthead;
 	    __state->sthead = __state->p;
 	}
     } else {
@@ -1572,7 +1581,7 @@ L_dafbfs:
 /*           that is still open. DAFHOF will tell us which handles */
 /*           point to open DAFs. */
 
-	    dafhof_(__state->opnset);
+	    dafhof_(__global_state, __state->opnset);
 	    __state->p = __state->sthead;
 	    __state->prev = -1;
 
@@ -1582,16 +1591,18 @@ L_dafbfs:
 /*           file handle as we go. */
 
 	    while(__state->p != -1) {
-		if (elemi_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 
-			<= i__1 ? i__1 : s_rnge("stfh", i__1, "daffa_", (
-			ftnlen)1350)], __state->opnset)) {
+		if (elemi_(__global_state, &__state->stfh[(i__1 = __state->p 
+			- 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stfh", i__1, "daffa_", (ftnlen)
+			1350)], __state->opnset)) {
 
 /*                 The file is open. Have a look at the next node. */
 
 		    __state->prev = __state->p;
 		    __state->p = __state->stpool[(i__1 = __state->p - 1) < 
-			    5000 && 0 <= i__1 ? i__1 : s_rnge("stpool", i__1, 
-			    "daffa_", (ftnlen)1355)];
+			    5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stpool", i__1, "daffa_", (
+			    ftnlen)1355)];
 		} else {
 
 /*                 This file handle is not on the list, so free the */
@@ -1615,8 +1626,9 @@ L_dafbfs:
 
 
 		    __state->nextp = __state->stpool[(i__1 = __state->p - 1) <
-			     5000 && 0 <= i__1 ? i__1 : s_rnge("stpool", i__1,
-			     "daffa_", (ftnlen)1379)];
+			     5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stpool", i__1, "daffa_", (
+			    ftnlen)1379)];
 		    if (__state->p == __state->sthead) {
 
 /*                    Re-assign STHEAD so that we don't lose the head */
@@ -1632,12 +1644,14 @@ L_dafbfs:
 /*                    pointer of node PREV. */
 
 			__state->stpool[(i__1 = __state->prev - 1) < 5000 && 
-				0 <= i__1 ? i__1 : s_rnge("stpool", i__1, 
-				"daffa_", (ftnlen)1397)] = __state->nextp;
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "stpool", i__1, "daffa_",
+				 (ftnlen)1397)] = __state->nextp;
 		    }
 		    __state->stpool[(i__1 = __state->p - 1) < 5000 && 0 <= 
-			    i__1 ? i__1 : s_rnge("stpool", i__1, "daffa_", (
-			    ftnlen)1401)] = __state->stfptr;
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpo"
+			    "ol", i__1, "daffa_", (ftnlen)1401)] = 
+			    __state->stfptr;
 		    __state->stfptr = __state->p;
 		    __state->p = __state->nextp;
 		}
@@ -1662,11 +1676,11 @@ L_dafbfs:
 /*        of the active list, and make P the head of the active list. */
 
 	__state->stfptr = __state->stpool[(i__1 = __state->p - 1) < 5000 && 0 
-		<= i__1 ? i__1 : s_rnge("stpool", i__1, "daffa_", (ftnlen)
-		1429)];
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpool", i__1, 
+		"daffa_", (ftnlen)1429)];
 	__state->stpool[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("stpool", i__1, "daffa_", (ftnlen)1430)] = 
-		__state->sthead;
+		s_rnge(&__global_state->f2c, "stpool", i__1, "daffa_", (
+		ftnlen)1430)] = __state->sthead;
 	__state->sthead = __state->p;
     }
 
@@ -1679,25 +1693,26 @@ L_dafbfs:
 /*     corresponding name record until necessary. In most searches, */
 /*     names are of no interest. */
 
-    dafrfr_(handle, &__state->nd, &__state->ni, __state->ifname, &
-	    __state->fward, &__state->bward, &__state->free, (ftnlen)60);
-    dafgsr_(handle, &__state->fward, &__state->c__1, &__state->c__128, &
-	    __state->stsr[(i__1 = (__state->p << 7) - 128) < 640000 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)1447)], &
-	    __state->fnd);
+    dafrfr_(__global_state, handle, &__state->nd, &__state->ni, 
+	    __state->ifname, &__state->fward, &__state->bward, &__state->free,
+	     (ftnlen)60);
+    dafgsr_(__global_state, handle, &__state->fward, &__state->c__1, &
+	    __state->c__128, &__state->stsr[(i__1 = (__state->p << 7) - 128) <
+	     640000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stsr",
+	     i__1, "daffa_", (ftnlen)1447)], &__state->fnd);
     if (! __state->fnd) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)1451)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("Attempt to read descriptor record # of DAF '#' failed; reco"
-		"rd was not found. This condition may indicate a corrupted DA"
-		"F.", (ftnlen)121);
-	errint_("#", &__state->stnext[(i__1 = __state->p - 1) < 5000 && 0 <= 
-		i__1 ? i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)1457)],
-		 (ftnlen)1);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
-	chkout_("DAFBFS", (ftnlen)6);
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)1451)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "Attempt to read descriptor record # of DAF "
+		"'#' failed; record was not found. This condition may indicat"
+		"e a corrupted DAF.", (ftnlen)121);
+	errint_(__global_state, "#", &__state->stnext[(i__1 = __state->p - 1) 
+		< 5000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"stnext", i__1, "daffa_", (ftnlen)1457)], (ftnlen)1);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(RECORDNOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "DAFBFS", (ftnlen)6);
 	return 0;
     }
 
@@ -1706,30 +1721,37 @@ L_dafbfs:
 /*     yet. */
 
     __state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stfh", i__1, "daffa_", (ftnlen)1470)] = *handle;
+	    &__global_state->f2c, "stfh", i__1, "daffa_", (ftnlen)1470)] = *
+	    handle;
     __state->stthis[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stthis", i__1, "daffa_", (ftnlen)1471)] = __state->fward;
+	    s_rnge(&__global_state->f2c, "stthis", i__1, "daffa_", (ftnlen)
+	    1471)] = __state->fward;
     __state->stnext[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stnext", i__1, "daffa_", (ftnlen)1472)] = (integer) 
-	    __state->stsr[(i__2 = (__state->p << 7) - 128) < 640000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (ftnlen)1472)];
+	    s_rnge(&__global_state->f2c, "stnext", i__1, "daffa_", (ftnlen)
+	    1472)] = (integer) __state->stsr[(i__2 = (__state->p << 7) - 128) 
+	    < 640000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stsr"
+	    , i__2, "daffa_", (ftnlen)1472)];
     __state->stprev[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stprev", i__1, "daffa_", (ftnlen)1473)] = (integer) 
-	    __state->stsr[(i__2 = (__state->p << 7) - 127) < 640000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (ftnlen)1473)];
+	    s_rnge(&__global_state->f2c, "stprev", i__1, "daffa_", (ftnlen)
+	    1473)] = (integer) __state->stsr[(i__2 = (__state->p << 7) - 127) 
+	    < 640000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stsr"
+	    , i__2, "daffa_", (ftnlen)1473)];
     __state->stnseg[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stnseg", i__1, "daffa_", (ftnlen)1474)] = (integer) 
-	    __state->stsr[(i__2 = (__state->p << 7) - 126) < 640000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (ftnlen)1474)];
+	    s_rnge(&__global_state->f2c, "stnseg", i__1, "daffa_", (ftnlen)
+	    1474)] = (integer) __state->stsr[(i__2 = (__state->p << 7) - 126) 
+	    < 640000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stsr"
+	    , i__2, "daffa_", (ftnlen)1474)];
     __state->sthvnr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("sthvnr", i__1, "daffa_", (ftnlen)1475)] = FALSE_;
+	    s_rnge(&__global_state->f2c, "sthvnr", i__1, "daffa_", (ftnlen)
+	    1475)] = FALSE_;
 
 /*     The arrays are returned in forward order within each summary */
 /*     record. */
 
     __state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stcurr", i__1, "daffa_", (ftnlen)1481)] = 0;
-    chkout_("DAFBFS", (ftnlen)6);
+	    s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (ftnlen)
+	    1481)] = 0;
+    chkout_(__global_state, "DAFBFS", (ftnlen)6);
     return 0;
 /* $Procedure DAFFNA ( DAF, find next array ) */
 
@@ -1994,10 +2016,10 @@ L_daffna:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFFNA", (ftnlen)6);
+	chkin_(__global_state, "DAFFNA", (ftnlen)6);
     }
 
 /*     FOUND will be false until we make it past the error checks. */
@@ -2011,19 +2033,20 @@ L_daffna:
 /*     Make sure that a search has been started in this DAF. */
 
     if (__state->p == -1) {
-	setmsg_("No DAF is currently being searched.", (ftnlen)35);
-	sigerr_("SPICE(DAFNOSEARCH)", (ftnlen)18);
-	chkout_("DAFFNA", (ftnlen)6);
+	setmsg_(__global_state, "No DAF is currently being searched.", (
+		ftnlen)35);
+	sigerr_(__global_state, "SPICE(DAFNOSEARCH)", (ftnlen)18);
+	chkout_(__global_state, "DAFFNA", (ftnlen)6);
 	return 0;
 
 /*     Make sure that the `current' DAF is still open. */
 
     } else {
-	dafsih_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)1788)], "READ", 
-		(ftnlen)4);
-	if (failed_()) {
-	    chkout_("DAFFNA", (ftnlen)6);
+	dafsih_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)1788)], "READ", (ftnlen)4);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFFNA", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2041,15 +2064,18 @@ L_daffna:
 /*     no more arrays to be found.) */
 
     __state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stcurr", i__1, "daffa_", (ftnlen)1814)] = __state->stcurr[
-	    (i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stc"
-	    "urr", i__2, "daffa_", (ftnlen)1814)] + 1;
+	    s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (ftnlen)
+	    1814)] = __state->stcurr[(i__2 = __state->p - 1) < 5000 && 0 <= 
+	    i__2 ? i__2 : s_rnge(&__global_state->f2c, "stcurr", i__2, "daff"
+	    "a_", (ftnlen)1814)] + 1;
     if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stcurr", i__1, "daffa_", (ftnlen)1816)] > __state->stnseg[
-	    (i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stn"
-	    "seg", i__2, "daffa_", (ftnlen)1816)]) {
+	    s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (ftnlen)
+	    1816)] > __state->stnseg[(i__2 = __state->p - 1) < 5000 && 0 <= 
+	    i__2 ? i__2 : s_rnge(&__global_state->f2c, "stnseg", i__2, "daff"
+	    "a_", (ftnlen)1816)]) {
 	if (__state->stnext[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)1818)] == 0) {
+		i__1 : s_rnge(&__global_state->f2c, "stnext", i__1, "daffa_", 
+		(ftnlen)1818)] == 0) {
 
 /*           There are no more arrays in the list. */
 
@@ -2061,9 +2087,10 @@ L_daffna:
 /*           the list. */
 
 	    __state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)1829)] = 
-		    __state->stnseg[(i__2 = __state->p - 1) < 5000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)
+		    i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daf"
+		    "fa_", (ftnlen)1829)] = __state->stnseg[(i__2 = __state->p 
+		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "stnseg", i__2, "daffa_", (ftnlen)
 		    1829)] + 1;
 
 /*           The careful reader may note that we're not updating any */
@@ -2078,27 +2105,31 @@ L_daffna:
 /*           DAFFPA, the values we have right now will be correct. */
 
 	} else {
-	    dafgsr_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= 
-		    i__1 ? i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)1844)
-		    ], &__state->stnext[(i__2 = __state->p - 1) < 5000 && 0 <=
-		     i__2 ? i__2 : s_rnge("stnext", i__2, "daffa_", (ftnlen)
-		    1844)], &__state->c__1, &__state->c__128, &__state->stsr[(
-		    i__3 = (__state->p << 7) - 128) < 640000 && 0 <= i__3 ? 
-		    i__3 : s_rnge("stsr", i__3, "daffa_", (ftnlen)1844)], &
-		    __state->fnd);
+	    dafgsr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 
+		    5000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "stfh", i__1, "daffa_", (ftnlen)1844)], &__state->stnext[(
+		    i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "stnext", i__2, "daffa_", (
+		    ftnlen)1844)], &__state->c__1, &__state->c__128, &
+		    __state->stsr[(i__3 = (__state->p << 7) - 128) < 640000 &&
+		     0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "stsr", 
+		    i__3, "daffa_", (ftnlen)1844)], &__state->fnd);
 	    if (! __state->fnd) {
-		dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= 
-			i__1 ? i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)
+		dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1)
+			 < 5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stfh", i__1, "daffa_", (ftnlen)
 			1848)], __state->dafnam, (ftnlen)255);
-		setmsg_("Attempt to read descriptor record # of DAF '#' fail"
-			"ed; record was not found. This condition may indicat"
-			"e a corrupted DAF.", (ftnlen)121);
-		errint_("#", &__state->stnext[(i__1 = __state->p - 1) < 5000 
-			&& 0 <= i__1 ? i__1 : s_rnge("stnext", i__1, "daffa_",
-			 (ftnlen)1854)], (ftnlen)1);
-		errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-		sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
-		chkout_("DAFFNA", (ftnlen)6);
+		setmsg_(__global_state, "Attempt to read descriptor record #"
+			" of DAF '#' failed; record was not found. This condi"
+			"tion may indicate a corrupted DAF.", (ftnlen)121);
+		errint_(__global_state, "#", &__state->stnext[(i__1 = 
+			__state->p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stnext", i__1, "daffa_", (
+			ftnlen)1854)], (ftnlen)1);
+		errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (
+			ftnlen)255);
+		sigerr_(__global_state, "SPICE(RECORDNOTFOUND)", (ftnlen)21);
+		chkout_(__global_state, "DAFFNA", (ftnlen)6);
 		return 0;
 	    }
 
@@ -2107,37 +2138,41 @@ L_daffna:
 /*           the summary record, so the summary record remains valid. */
 
 	    __state->sthvnr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("sthvnr", i__1, "daffa_", (ftnlen)1867)] = 
-		    FALSE_;
+		    i__1 : s_rnge(&__global_state->f2c, "sthvnr", i__1, "daf"
+		    "fa_", (ftnlen)1867)] = FALSE_;
 	    __state->stthis[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stthis", i__1, "daffa_", (ftnlen)1869)] = 
-		    __state->stnext[(i__2 = __state->p - 1) < 5000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("stnext", i__2, "daffa_", (ftnlen)
+		    i__1 : s_rnge(&__global_state->f2c, "stthis", i__1, "daf"
+		    "fa_", (ftnlen)1869)] = __state->stnext[(i__2 = __state->p 
+		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "stnext", i__2, "daffa_", (ftnlen)
 		    1869)];
 	    __state->stnext[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)1870)] = (
-		    integer) __state->stsr[(i__2 = (__state->p << 7) - 128) < 
-		    640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_"
-		    , (ftnlen)1870)];
+		    i__1 : s_rnge(&__global_state->f2c, "stnext", i__1, "daf"
+		    "fa_", (ftnlen)1870)] = (integer) __state->stsr[(i__2 = (
+		    __state->p << 7) - 128) < 640000 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "stsr", i__2, "daffa_", (
+		    ftnlen)1870)];
 	    __state->stprev[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stprev", i__1, "daffa_", (ftnlen)1871)] = (
-		    integer) __state->stsr[(i__2 = (__state->p << 7) - 127) < 
-		    640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_"
-		    , (ftnlen)1871)];
+		    i__1 : s_rnge(&__global_state->f2c, "stprev", i__1, "daf"
+		    "fa_", (ftnlen)1871)] = (integer) __state->stsr[(i__2 = (
+		    __state->p << 7) - 127) < 640000 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "stsr", i__2, "daffa_", (
+		    ftnlen)1871)];
 	    __state->stnseg[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stnseg", i__1, "daffa_", (ftnlen)1872)] = (
-		    integer) __state->stsr[(i__2 = (__state->p << 7) - 126) < 
-		    640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_"
-		    , (ftnlen)1872)];
+		    i__1 : s_rnge(&__global_state->f2c, "stnseg", i__1, "daf"
+		    "fa_", (ftnlen)1872)] = (integer) __state->stsr[(i__2 = (
+		    __state->p << 7) - 126) < 640000 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "stsr", i__2, "daffa_", (
+		    ftnlen)1872)];
 	    __state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)1873)] = 
-		    1;
+		    i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daf"
+		    "fa_", (ftnlen)1873)] = 1;
 	    *found = __state->stnseg[(i__1 = __state->p - 1) < 5000 && 0 <= 
-		    i__1 ? i__1 : s_rnge("stnseg", i__1, "daffa_", (ftnlen)
-		    1875)] > 0;
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stnseg", i__1,
+		     "daffa_", (ftnlen)1875)] > 0;
 	}
     }
-    chkout_("DAFFNA", (ftnlen)6);
+    chkout_(__global_state, "DAFFNA", (ftnlen)6);
     return 0;
 /* $Procedure DAFBBS ( DAF, begin backward search ) */
 
@@ -2395,17 +2430,17 @@ L_dafbbs:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFBBS", (ftnlen)6);
+	chkin_(__global_state, "DAFBBS", (ftnlen)6);
     }
 
 /*     Check out the file handle before going any further. */
 
-    dafsih_(handle, "READ", (ftnlen)4);
-    if (failed_()) {
-	chkout_("DAFBBS", (ftnlen)6);
+    dafsih_(__global_state, handle, "READ", (ftnlen)4);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFBBS", (ftnlen)6);
 	return 0;
     }
 
@@ -2414,11 +2449,11 @@ L_dafbbs:
 /*     open DAFs. */
 
     if (__state->first) {
-	ssizei_(&__state->c__5000, __state->opnset);
+	ssizei_(__global_state, &__state->c__5000, __state->opnset);
 	for (__state->i__ = 1; __state->i__ <= 4999; ++__state->i__) {
 	    __state->stpool[(i__1 = __state->i__ - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stpool", i__1, "daffa_", (ftnlen)2172)] = 
-		    __state->i__ + 1;
+		    i__1 : s_rnge(&__global_state->f2c, "stpool", i__1, "daf"
+		    "fa_", (ftnlen)2172)] = __state->i__ + 1;
 	}
 	__state->stpool[4999] = -1;
 	__state->stfptr = 1;
@@ -2433,13 +2468,14 @@ L_dafbbs:
     __state->fnd = FALSE_;
     while(__state->p != -1 && ! __state->fnd) {
 	if (__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 :
-		 s_rnge("stfh", i__1, "daffa_", (ftnlen)2191)] == *handle) {
+		 s_rnge(&__global_state->f2c, "stfh", i__1, "daffa_", (ftnlen)
+		2191)] == *handle) {
 	    __state->fnd = TRUE_;
 	} else {
 	    __state->prev = __state->p;
 	    __state->p = __state->stpool[(i__1 = __state->p - 1) < 5000 && 0 
-		    <= i__1 ? i__1 : s_rnge("stpool", i__1, "daffa_", (ftnlen)
-		    2195)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpool", 
+		    i__1, "daffa_", (ftnlen)2195)];
 	}
     }
 
@@ -2476,13 +2512,14 @@ L_dafbbs:
 /*           the predecessor of P is not NIL. */
 
 	    __state->stpool[(i__1 = __state->prev - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stpool", i__1, "daffa_", (ftnlen)2233)] = 
-		    __state->stpool[(i__2 = __state->p - 1) < 5000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("stpool", i__2, "daffa_", (ftnlen)
+		    i__1 : s_rnge(&__global_state->f2c, "stpool", i__1, "daf"
+		    "fa_", (ftnlen)2233)] = __state->stpool[(i__2 = __state->p 
+		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "stpool", i__2, "daffa_", (ftnlen)
 		    2233)];
 	    __state->stpool[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stpool", i__1, "daffa_", (ftnlen)2234)] = 
-		    __state->sthead;
+		    i__1 : s_rnge(&__global_state->f2c, "stpool", i__1, "daf"
+		    "fa_", (ftnlen)2234)] = __state->sthead;
 	    __state->sthead = __state->p;
 	}
     } else {
@@ -2499,7 +2536,7 @@ L_dafbbs:
 /*           that is still open. DAFHOF will tell us which handles */
 /*           point to open DAFs. */
 
-	    dafhof_(__state->opnset);
+	    dafhof_(__global_state, __state->opnset);
 	    __state->p = __state->sthead;
 	    __state->prev = -1;
 
@@ -2509,16 +2546,18 @@ L_dafbbs:
 /*           file handle as we go. */
 
 	    while(__state->p != -1) {
-		if (elemi_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 
-			<= i__1 ? i__1 : s_rnge("stfh", i__1, "daffa_", (
-			ftnlen)2266)], __state->opnset)) {
+		if (elemi_(__global_state, &__state->stfh[(i__1 = __state->p 
+			- 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stfh", i__1, "daffa_", (ftnlen)
+			2266)], __state->opnset)) {
 
 /*                 The file is open. Have a look at the next node. */
 
 		    __state->prev = __state->p;
 		    __state->p = __state->stpool[(i__1 = __state->p - 1) < 
-			    5000 && 0 <= i__1 ? i__1 : s_rnge("stpool", i__1, 
-			    "daffa_", (ftnlen)2271)];
+			    5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stpool", i__1, "daffa_", (
+			    ftnlen)2271)];
 		} else {
 
 /*                 This file handle is not on the list, so free the */
@@ -2542,8 +2581,9 @@ L_dafbbs:
 
 
 		    __state->nextp = __state->stpool[(i__1 = __state->p - 1) <
-			     5000 && 0 <= i__1 ? i__1 : s_rnge("stpool", i__1,
-			     "daffa_", (ftnlen)2295)];
+			     5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stpool", i__1, "daffa_", (
+			    ftnlen)2295)];
 		    if (__state->p == __state->sthead) {
 
 /*                    Re-assign STHEAD so that we don't lose the head */
@@ -2559,12 +2599,14 @@ L_dafbbs:
 /*                    pointer of node PREV. */
 
 			__state->stpool[(i__1 = __state->prev - 1) < 5000 && 
-				0 <= i__1 ? i__1 : s_rnge("stpool", i__1, 
-				"daffa_", (ftnlen)2313)] = __state->nextp;
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "stpool", i__1, "daffa_",
+				 (ftnlen)2313)] = __state->nextp;
 		    }
 		    __state->stpool[(i__1 = __state->p - 1) < 5000 && 0 <= 
-			    i__1 ? i__1 : s_rnge("stpool", i__1, "daffa_", (
-			    ftnlen)2318)] = __state->stfptr;
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpo"
+			    "ol", i__1, "daffa_", (ftnlen)2318)] = 
+			    __state->stfptr;
 		    __state->stfptr = __state->p;
 		    __state->p = __state->nextp;
 		}
@@ -2589,11 +2631,11 @@ L_dafbbs:
 /*        of the active list, and make P the head of the active list. */
 
 	__state->stfptr = __state->stpool[(i__1 = __state->p - 1) < 5000 && 0 
-		<= i__1 ? i__1 : s_rnge("stpool", i__1, "daffa_", (ftnlen)
-		2345)];
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpool", i__1, 
+		"daffa_", (ftnlen)2345)];
 	__state->stpool[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("stpool", i__1, "daffa_", (ftnlen)2346)] = 
-		__state->sthead;
+		s_rnge(&__global_state->f2c, "stpool", i__1, "daffa_", (
+		ftnlen)2346)] = __state->sthead;
 	__state->sthead = __state->p;
     }
 
@@ -2606,54 +2648,62 @@ L_dafbbs:
 /*     corresponding name record until necessary. In most searches, */
 /*     names are of no interest. */
 
-    dafrfr_(handle, &__state->nd, &__state->ni, __state->ifname, &
-	    __state->fward, &__state->bward, &__state->free, (ftnlen)60);
-    dafgsr_(handle, &__state->bward, &__state->c__1, &__state->c__128, &
-	    __state->stsr[(i__1 = (__state->p << 7) - 128) < 640000 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)2363)], &
-	    __state->fnd);
+    dafrfr_(__global_state, handle, &__state->nd, &__state->ni, 
+	    __state->ifname, &__state->fward, &__state->bward, &__state->free,
+	     (ftnlen)60);
+    dafgsr_(__global_state, handle, &__state->bward, &__state->c__1, &
+	    __state->c__128, &__state->stsr[(i__1 = (__state->p << 7) - 128) <
+	     640000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stsr",
+	     i__1, "daffa_", (ftnlen)2363)], &__state->fnd);
     if (! __state->fnd) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)2367)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("Attempt to read descriptor record # of DAF '#' failed; reco"
-		"rd was not found. This condition may indicate a corrupted DA"
-		"F.", (ftnlen)121);
-	errint_("#", &__state->stnext[(i__1 = __state->p - 1) < 5000 && 0 <= 
-		i__1 ? i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)2373)],
-		 (ftnlen)1);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
-	chkout_("DAFBBS", (ftnlen)6);
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)2367)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "Attempt to read descriptor record # of DAF "
+		"'#' failed; record was not found. This condition may indicat"
+		"e a corrupted DAF.", (ftnlen)121);
+	errint_(__global_state, "#", &__state->stnext[(i__1 = __state->p - 1) 
+		< 5000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"stnext", i__1, "daffa_", (ftnlen)2373)], (ftnlen)1);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(RECORDNOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "DAFBBS", (ftnlen)6);
 	return 0;
     }
     __state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stfh", i__1, "daffa_", (ftnlen)2381)] = *handle;
+	    &__global_state->f2c, "stfh", i__1, "daffa_", (ftnlen)2381)] = *
+	    handle;
     __state->stthis[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stthis", i__1, "daffa_", (ftnlen)2382)] = __state->bward;
+	    s_rnge(&__global_state->f2c, "stthis", i__1, "daffa_", (ftnlen)
+	    2382)] = __state->bward;
     __state->stnext[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stnext", i__1, "daffa_", (ftnlen)2383)] = (integer) 
-	    __state->stsr[(i__2 = (__state->p << 7) - 128) < 640000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (ftnlen)2383)];
+	    s_rnge(&__global_state->f2c, "stnext", i__1, "daffa_", (ftnlen)
+	    2383)] = (integer) __state->stsr[(i__2 = (__state->p << 7) - 128) 
+	    < 640000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stsr"
+	    , i__2, "daffa_", (ftnlen)2383)];
     __state->stprev[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stprev", i__1, "daffa_", (ftnlen)2384)] = (integer) 
-	    __state->stsr[(i__2 = (__state->p << 7) - 127) < 640000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (ftnlen)2384)];
+	    s_rnge(&__global_state->f2c, "stprev", i__1, "daffa_", (ftnlen)
+	    2384)] = (integer) __state->stsr[(i__2 = (__state->p << 7) - 127) 
+	    < 640000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stsr"
+	    , i__2, "daffa_", (ftnlen)2384)];
     __state->stnseg[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stnseg", i__1, "daffa_", (ftnlen)2385)] = (integer) 
-	    __state->stsr[(i__2 = (__state->p << 7) - 126) < 640000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (ftnlen)2385)];
+	    s_rnge(&__global_state->f2c, "stnseg", i__1, "daffa_", (ftnlen)
+	    2385)] = (integer) __state->stsr[(i__2 = (__state->p << 7) - 126) 
+	    < 640000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stsr"
+	    , i__2, "daffa_", (ftnlen)2385)];
     __state->sthvnr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("sthvnr", i__1, "daffa_", (ftnlen)2386)] = FALSE_;
+	    s_rnge(&__global_state->f2c, "sthvnr", i__1, "daffa_", (ftnlen)
+	    2386)] = FALSE_;
 
 /*     The arrays are returned in backward order from each summary */
 /*     record. */
 
     __state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stcurr", i__1, "daffa_", (ftnlen)2392)] = __state->stnseg[
-	    (i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stn"
-	    "seg", i__2, "daffa_", (ftnlen)2392)] + 1;
-    chkout_("DAFBBS", (ftnlen)6);
+	    s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (ftnlen)
+	    2392)] = __state->stnseg[(i__2 = __state->p - 1) < 5000 && 0 <= 
+	    i__2 ? i__2 : s_rnge(&__global_state->f2c, "stnseg", i__2, "daff"
+	    "a_", (ftnlen)2392)] + 1;
+    chkout_(__global_state, "DAFBBS", (ftnlen)6);
     return 0;
 /* $Procedure DAFFPA ( DAF, find previous array ) */
 
@@ -2933,10 +2983,10 @@ L_daffpa:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFFPA", (ftnlen)6);
+	chkin_(__global_state, "DAFFPA", (ftnlen)6);
     }
 
 /*     Operate on the last DAF in which a search has been started. */
@@ -2950,19 +3000,20 @@ L_daffpa:
 /*     Make sure that a search has been started in this DAF. */
 
     if (__state->p == -1) {
-	setmsg_("No DAF is currently being searched.", (ftnlen)35);
-	sigerr_("SPICE(DAFNOSEARCH)", (ftnlen)18);
-	chkout_("DAFFPA", (ftnlen)6);
+	setmsg_(__global_state, "No DAF is currently being searched.", (
+		ftnlen)35);
+	sigerr_(__global_state, "SPICE(DAFNOSEARCH)", (ftnlen)18);
+	chkout_(__global_state, "DAFFPA", (ftnlen)6);
 	return 0;
 
 /*     Make sure that the `current' DAF is still open. */
 
     } else {
-	dafsih_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)2714)], "READ", 
-		(ftnlen)4);
-	if (failed_()) {
-	    chkout_("DAFFPA", (ftnlen)6);
+	dafsih_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)2714)], "READ", (ftnlen)4);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFFPA", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2980,13 +3031,16 @@ L_daffpa:
 /*     no more arrays to be found.) */
 
     __state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stcurr", i__1, "daffa_", (ftnlen)2737)] = __state->stcurr[
-	    (i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stc"
-	    "urr", i__2, "daffa_", (ftnlen)2737)] - 1;
+	    s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (ftnlen)
+	    2737)] = __state->stcurr[(i__2 = __state->p - 1) < 5000 && 0 <= 
+	    i__2 ? i__2 : s_rnge(&__global_state->f2c, "stcurr", i__2, "daff"
+	    "a_", (ftnlen)2737)] - 1;
     if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stcurr", i__1, "daffa_", (ftnlen)2739)] <= 0) {
+	    s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (ftnlen)
+	    2739)] <= 0) {
 	if (__state->stprev[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stprev", i__1, "daffa_", (ftnlen)2741)] == 0) {
+		i__1 : s_rnge(&__global_state->f2c, "stprev", i__1, "daffa_", 
+		(ftnlen)2741)] == 0) {
 
 /*           There is no predecessor of the current array in the list. */
 
@@ -2998,8 +3052,8 @@ L_daffpa:
 /*           the list. */
 
 	    __state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)2752)] = 
-		    0;
+		    i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daf"
+		    "fa_", (ftnlen)2752)] = 0;
 
 /*           The careful reader may note that we're not updating any */
 /*           of the pointers */
@@ -3013,27 +3067,31 @@ L_daffpa:
 /*           DAFFNA, the values we have right now will be correct. */
 
 	} else {
-	    dafgsr_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= 
-		    i__1 ? i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)2767)
-		    ], &__state->stprev[(i__2 = __state->p - 1) < 5000 && 0 <=
-		     i__2 ? i__2 : s_rnge("stprev", i__2, "daffa_", (ftnlen)
-		    2767)], &__state->c__1, &__state->c__128, &__state->stsr[(
-		    i__3 = (__state->p << 7) - 128) < 640000 && 0 <= i__3 ? 
-		    i__3 : s_rnge("stsr", i__3, "daffa_", (ftnlen)2767)], &
-		    __state->fnd);
+	    dafgsr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 
+		    5000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "stfh", i__1, "daffa_", (ftnlen)2767)], &__state->stprev[(
+		    i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "stprev", i__2, "daffa_", (
+		    ftnlen)2767)], &__state->c__1, &__state->c__128, &
+		    __state->stsr[(i__3 = (__state->p << 7) - 128) < 640000 &&
+		     0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "stsr", 
+		    i__3, "daffa_", (ftnlen)2767)], &__state->fnd);
 	    if (! __state->fnd) {
-		dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= 
-			i__1 ? i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)
+		dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1)
+			 < 5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stfh", i__1, "daffa_", (ftnlen)
 			2771)], __state->dafnam, (ftnlen)255);
-		setmsg_("Attempt to read descriptor record # of DAF '#' fail"
-			"ed; record was not found. This condition may indicat"
-			"e a corrupted DAF.", (ftnlen)121);
-		errint_("#", &__state->stnext[(i__1 = __state->p - 1) < 5000 
-			&& 0 <= i__1 ? i__1 : s_rnge("stnext", i__1, "daffa_",
-			 (ftnlen)2777)], (ftnlen)1);
-		errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-		sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
-		chkout_("DAFFPA", (ftnlen)6);
+		setmsg_(__global_state, "Attempt to read descriptor record #"
+			" of DAF '#' failed; record was not found. This condi"
+			"tion may indicate a corrupted DAF.", (ftnlen)121);
+		errint_(__global_state, "#", &__state->stnext[(i__1 = 
+			__state->p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stnext", i__1, "daffa_", (
+			ftnlen)2777)], (ftnlen)1);
+		errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (
+			ftnlen)255);
+		sigerr_(__global_state, "SPICE(RECORDNOTFOUND)", (ftnlen)21);
+		chkout_(__global_state, "DAFFPA", (ftnlen)6);
 		return 0;
 	    }
 
@@ -3042,39 +3100,44 @@ L_daffpa:
 /*           the summary record, so the summary record remains valid. */
 
 	    __state->sthvnr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("sthvnr", i__1, "daffa_", (ftnlen)2790)] = 
-		    FALSE_;
+		    i__1 : s_rnge(&__global_state->f2c, "sthvnr", i__1, "daf"
+		    "fa_", (ftnlen)2790)] = FALSE_;
 	    __state->stthis[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stthis", i__1, "daffa_", (ftnlen)2792)] = 
-		    __state->stprev[(i__2 = __state->p - 1) < 5000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("stprev", i__2, "daffa_", (ftnlen)
+		    i__1 : s_rnge(&__global_state->f2c, "stthis", i__1, "daf"
+		    "fa_", (ftnlen)2792)] = __state->stprev[(i__2 = __state->p 
+		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "stprev", i__2, "daffa_", (ftnlen)
 		    2792)];
 	    __state->stnext[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)2793)] = (
-		    integer) __state->stsr[(i__2 = (__state->p << 7) - 128) < 
-		    640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_"
-		    , (ftnlen)2793)];
+		    i__1 : s_rnge(&__global_state->f2c, "stnext", i__1, "daf"
+		    "fa_", (ftnlen)2793)] = (integer) __state->stsr[(i__2 = (
+		    __state->p << 7) - 128) < 640000 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "stsr", i__2, "daffa_", (
+		    ftnlen)2793)];
 	    __state->stprev[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stprev", i__1, "daffa_", (ftnlen)2794)] = (
-		    integer) __state->stsr[(i__2 = (__state->p << 7) - 127) < 
-		    640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_"
-		    , (ftnlen)2794)];
+		    i__1 : s_rnge(&__global_state->f2c, "stprev", i__1, "daf"
+		    "fa_", (ftnlen)2794)] = (integer) __state->stsr[(i__2 = (
+		    __state->p << 7) - 127) < 640000 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "stsr", i__2, "daffa_", (
+		    ftnlen)2794)];
 	    __state->stnseg[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stnseg", i__1, "daffa_", (ftnlen)2795)] = (
-		    integer) __state->stsr[(i__2 = (__state->p << 7) - 126) < 
-		    640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_"
-		    , (ftnlen)2795)];
+		    i__1 : s_rnge(&__global_state->f2c, "stnseg", i__1, "daf"
+		    "fa_", (ftnlen)2795)] = (integer) __state->stsr[(i__2 = (
+		    __state->p << 7) - 126) < 640000 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "stsr", i__2, "daffa_", (
+		    ftnlen)2795)];
 	    __state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)2796)] = 
-		    __state->stnseg[(i__2 = __state->p - 1) < 5000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)
+		    i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daf"
+		    "fa_", (ftnlen)2796)] = __state->stnseg[(i__2 = __state->p 
+		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "stnseg", i__2, "daffa_", (ftnlen)
 		    2796)];
 	    *found = __state->stnseg[(i__1 = __state->p - 1) < 5000 && 0 <= 
-		    i__1 ? i__1 : s_rnge("stnseg", i__1, "daffa_", (ftnlen)
-		    2798)] > 0;
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stnseg", i__1,
+		     "daffa_", (ftnlen)2798)] > 0;
 	}
     }
-    chkout_("DAFFPA", (ftnlen)6);
+    chkout_(__global_state, "DAFFPA", (ftnlen)6);
     return 0;
 /* $Procedure DAFGS ( DAF, get summary ) */
 
@@ -3340,10 +3403,10 @@ L_dafgs:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFGS", (ftnlen)5);
+	chkin_(__global_state, "DAFGS", (ftnlen)5);
     }
 
 /*     Operate on the last DAF in which a search has been started. */
@@ -3353,19 +3416,20 @@ L_dafgs:
 /*     Make sure that a search has been started in this DAF. */
 
     if (__state->p == -1) {
-	setmsg_("No DAF is currently being searched.", (ftnlen)35);
-	sigerr_("SPICE(DAFNOSEARCH)", (ftnlen)18);
-	chkout_("DAFGS", (ftnlen)5);
+	setmsg_(__global_state, "No DAF is currently being searched.", (
+		ftnlen)35);
+	sigerr_(__global_state, "SPICE(DAFNOSEARCH)", (ftnlen)18);
+	chkout_(__global_state, "DAFGS", (ftnlen)5);
 	return 0;
 
 /*     Make sure that the `current' DAF is still open. */
 
     } else {
-	dafsih_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3104)], "READ", 
-		(ftnlen)4);
-	if (failed_()) {
-	    chkout_("DAFGS", (ftnlen)5);
+	dafsih_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)3104)], "READ", (ftnlen)4);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFGS", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -3377,45 +3441,48 @@ L_dafgs:
 /*     current array was the first. */
 
     if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stcurr", i__1, "daffa_", (ftnlen)3120)] == 0) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3122)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("No array is current; the `next' array is the first array of"
-		" DAF #", (ftnlen)65);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(NOCURRENTARRAY)", (ftnlen)21);
-	chkout_("DAFGS", (ftnlen)5);
+	    s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (ftnlen)
+	    3120)] == 0) {
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)3122)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No array is current; the `next' array is th"
+		"e first array of DAF #", (ftnlen)65);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(NOCURRENTARRAY)", (ftnlen)21);
+	chkout_(__global_state, "DAFGS", (ftnlen)5);
 	return 0;
     } else if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)3131)] > 
-	    __state->stnseg[(i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? 
-	    i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)3131)]) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3133)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("No array is current; the `previous' array is the last array"
-		" of DAF #", (ftnlen)68);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(NOCURRENTARRAY)", (ftnlen)21);
-	chkout_("DAFGS", (ftnlen)5);
+	    i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (
+	    ftnlen)3131)] > __state->stnseg[(i__2 = __state->p - 1) < 5000 && 
+	    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stnseg", i__2, 
+	    "daffa_", (ftnlen)3131)]) {
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)3133)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No array is current; the `previous' array i"
+		"s the last array of DAF #", (ftnlen)68);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(NOCURRENTARRAY)", (ftnlen)21);
+	chkout_(__global_state, "DAFGS", (ftnlen)5);
 	return 0;
     }
 
 /*     The location of the summary depends on the current pointer */
 /*     position. */
 
-    dafhsf_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 
-	    : s_rnge("stfh", i__1, "daffa_", (ftnlen)3148)], &__state->nd, &
-	    __state->ni);
+    dafhsf_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, 
+	    "daffa_", (ftnlen)3148)], &__state->nd, &__state->ni);
     __state->sumsiz = __state->nd + (__state->ni + 1) / 2;
     __state->offset = (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)3152)] - 1)
-	     * __state->sumsiz + 3;
-    moved_(&__state->stsr[(i__1 = __state->offset + 1 + (__state->p << 7) - 
-	    129) < 640000 && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_",
-	     (ftnlen)3154)], &__state->sumsiz, sum);
-    chkout_("DAFGS", (ftnlen)5);
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daff"
+	    "a_", (ftnlen)3152)] - 1) * __state->sumsiz + 3;
+    moved_(__global_state, &__state->stsr[(i__1 = __state->offset + 1 + (
+	    __state->p << 7) - 129) < 640000 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "stsr", i__1, "daffa_", (ftnlen)3154)], &
+	    __state->sumsiz, sum);
+    chkout_(__global_state, "DAFGS", (ftnlen)5);
     return 0;
 /* $Procedure DAFGN ( DAF, get array name ) */
 
@@ -3566,10 +3633,10 @@ L_dafgn:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFGN", (ftnlen)5);
+	chkin_(__global_state, "DAFGN", (ftnlen)5);
     }
 
 /*     Operate on the last DAF in which a search has been started. */
@@ -3579,19 +3646,20 @@ L_dafgn:
 /*     Make sure that a search has been started in this DAF. */
 
     if (__state->p == -1) {
-	setmsg_("No DAF is currently being searched.", (ftnlen)35);
-	sigerr_("SPICE(DAFNOSEARCH)", (ftnlen)18);
-	chkout_("DAFGN", (ftnlen)5);
+	setmsg_(__global_state, "No DAF is currently being searched.", (
+		ftnlen)35);
+	sigerr_(__global_state, "SPICE(DAFNOSEARCH)", (ftnlen)18);
+	chkout_(__global_state, "DAFGN", (ftnlen)5);
 	return 0;
 
 /*     Make sure that the `current' DAF is still open. */
 
     } else {
-	dafsih_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3342)], "READ", 
-		(ftnlen)4);
-	if (failed_()) {
-	    chkout_("DAFGN", (ftnlen)5);
+	dafsih_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)3342)], "READ", (ftnlen)4);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFGN", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -3603,28 +3671,30 @@ L_dafgn:
 /*     called when the current array was the first. */
 
     if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stcurr", i__1, "daffa_", (ftnlen)3358)] == 0) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3360)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("No array is current; the `next' array is the first array of"
-		" DAF #", (ftnlen)65);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(NOCURRENTARRAY)", (ftnlen)21);
-	chkout_("DAFGN", (ftnlen)5);
+	    s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (ftnlen)
+	    3358)] == 0) {
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)3360)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No array is current; the `next' array is th"
+		"e first array of DAF #", (ftnlen)65);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(NOCURRENTARRAY)", (ftnlen)21);
+	chkout_(__global_state, "DAFGN", (ftnlen)5);
 	return 0;
     } else if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)3369)] > 
-	    __state->stnseg[(i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? 
-	    i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)3369)]) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3371)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("No array is current; the `previous' array is the last array"
-		" of DAF #", (ftnlen)68);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(NOCURRENTARRAY)", (ftnlen)21);
-	chkout_("DAFGN", (ftnlen)5);
+	    i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (
+	    ftnlen)3369)] > __state->stnseg[(i__2 = __state->p - 1) < 5000 && 
+	    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stnseg", i__2, 
+	    "daffa_", (ftnlen)3369)]) {
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)3371)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No array is current; the `previous' array i"
+		"s the last array of DAF #", (ftnlen)68);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(NOCURRENTARRAY)", (ftnlen)21);
+	chkout_(__global_state, "DAFGN", (ftnlen)5);
 	return 0;
     }
 
@@ -3632,34 +3702,39 @@ L_dafgn:
 /*     already. */
 
     if (! __state->sthvnr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 :
-	     s_rnge("sthvnr", i__1, "daffa_", (ftnlen)3387)]) {
+	     s_rnge(&__global_state->f2c, "sthvnr", i__1, "daffa_", (ftnlen)
+	    3387)]) {
 	i__4 = __state->stthis[(i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? 
-		i__2 : s_rnge("stthis", i__2, "daffa_", (ftnlen)3389)] + 1;
-	dafrcr_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3389)], &i__4, 
-		__state->stnr + ((i__3 = __state->p - 1) < 5000 && 0 <= i__3 ?
-		 i__3 : s_rnge("stnr", i__3, "daffa_", (ftnlen)3389)) * 1000, 
-		(ftnlen)1000);
+		i__2 : s_rnge(&__global_state->f2c, "stthis", i__2, "daffa_", 
+		(ftnlen)3389)] + 1;
+	dafrcr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)3389)], &i__4, __state->stnr + ((i__3 
+		= __state->p - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "stnr", i__3, "daffa_", (ftnlen)3389)) * 
+		1000, (ftnlen)1000);
 	__state->sthvnr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("sthvnr", i__1, "daffa_", (ftnlen)3391)] = TRUE_;
+		s_rnge(&__global_state->f2c, "sthvnr", i__1, "daffa_", (
+		ftnlen)3391)] = TRUE_;
     }
 
 /*     The location of the name depends on the current pointer */
 /*     position. */
 
-    dafhsf_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 
-	    : s_rnge("stfh", i__1, "daffa_", (ftnlen)3400)], &__state->nd, &
-	    __state->ni);
+    dafhsf_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, 
+	    "daffa_", (ftnlen)3400)], &__state->nd, &__state->ni);
     __state->sumsiz = __state->nd + (__state->ni + 1) / 2;
     __state->namsiz = __state->sumsiz << 3;
     __state->offset = (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)3406)] - 1)
-	     * __state->namsiz;
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daff"
+	    "a_", (ftnlen)3406)] - 1) * __state->namsiz;
     i__2 = __state->offset;
-    s_copy(name__, __state->stnr + (((i__1 = __state->p - 1) < 5000 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stnr", i__1, "daffa_", (ftnlen)3408)) * 
-	    1000 + i__2), name_len, __state->offset + __state->namsiz - i__2);
-    chkout_("DAFGN", (ftnlen)5);
+    s_copy(&__global_state->f2c, name__, __state->stnr + (((i__1 = __state->p 
+	    - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+	    "stnr", i__1, "daffa_", (ftnlen)3408)) * 1000 + i__2), name_len, 
+	    __state->offset + __state->namsiz - i__2);
+    chkout_(__global_state, "DAFGN", (ftnlen)5);
     return 0;
 /* $Procedure DAFGH ( DAF, get handle ) */
 
@@ -3850,10 +3925,10 @@ L_dafgh:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFGH", (ftnlen)5);
+	chkin_(__global_state, "DAFGH", (ftnlen)5);
     }
 
 /*     Operate on the last DAF in which a search has been started. */
@@ -3863,25 +3938,27 @@ L_dafgh:
 /*     Make sure that a search has been started in this DAF. */
 
     if (__state->p == -1) {
-	setmsg_("No DAF is currently being searched.", (ftnlen)35);
-	sigerr_("SPICE(DAFNOSEARCH)", (ftnlen)18);
-	chkout_("DAFGH", (ftnlen)5);
+	setmsg_(__global_state, "No DAF is currently being searched.", (
+		ftnlen)35);
+	sigerr_(__global_state, "SPICE(DAFNOSEARCH)", (ftnlen)18);
+	chkout_(__global_state, "DAFGH", (ftnlen)5);
 	return 0;
 
 /*     Make sure that the `current' DAF is still open. */
 
     } else {
-	dafsih_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3636)], "READ", 
-		(ftnlen)4);
-	if (failed_()) {
-	    chkout_("DAFGH", (ftnlen)5);
+	dafsih_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)3636)], "READ", (ftnlen)4);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFGH", (ftnlen)5);
 	    return 0;
 	}
     }
     *handle = __state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3645)];
-    chkout_("DAFGH", (ftnlen)5);
+	    i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, "daffa_", (
+	    ftnlen)3645)];
+    chkout_(__global_state, "DAFGH", (ftnlen)5);
     return 0;
 /* $Procedure DAFRS ( DAF, replace summary ) */
 
@@ -4038,10 +4115,10 @@ L_dafrs:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFRS", (ftnlen)5);
+	chkin_(__global_state, "DAFRS", (ftnlen)5);
     }
 
 /*     Operate on the last DAF in which a search has been started. */
@@ -4051,20 +4128,21 @@ L_dafrs:
 /*     Make sure that a search has been started in this DAF. */
 
     if (__state->p == -1) {
-	setmsg_("No DAF is currently being searched.", (ftnlen)35);
-	sigerr_("SPICE(DAFNOSEARCH)", (ftnlen)18);
-	chkout_("DAFRS", (ftnlen)5);
+	setmsg_(__global_state, "No DAF is currently being searched.", (
+		ftnlen)35);
+	sigerr_(__global_state, "SPICE(DAFNOSEARCH)", (ftnlen)18);
+	chkout_(__global_state, "DAFRS", (ftnlen)5);
 	return 0;
 
 /*     Make sure that the `current' DAF is still open, and that it */
 /*     is open for writing. */
 
     } else {
-	dafsih_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3840)], "WRITE",
-		 (ftnlen)5);
-	if (failed_()) {
-	    chkout_("DAFRS", (ftnlen)5);
+	dafsih_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)3840)], "WRITE", (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFRS", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -4076,70 +4154,76 @@ L_dafrs:
 /*     the current array was the first. */
 
     if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stcurr", i__1, "daffa_", (ftnlen)3856)] == 0) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3858)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("No array is current; the `next' array is the first array of"
-		" DAF #", (ftnlen)65);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(NOCURRENTARRAY)", (ftnlen)21);
-	chkout_("DAFRS", (ftnlen)5);
+	    s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (ftnlen)
+	    3856)] == 0) {
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)3858)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No array is current; the `next' array is th"
+		"e first array of DAF #", (ftnlen)65);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(NOCURRENTARRAY)", (ftnlen)21);
+	chkout_(__global_state, "DAFRS", (ftnlen)5);
 	return 0;
     } else if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)3867)] > 
-	    __state->stnseg[(i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? 
-	    i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)3867)]) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)3869)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("No array is current; the `previous' array is the last array"
-		" of DAF #", (ftnlen)68);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(NOCURRENTARRAY)", (ftnlen)21);
-	chkout_("DAFRS", (ftnlen)5);
+	    i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (
+	    ftnlen)3867)] > __state->stnseg[(i__2 = __state->p - 1) < 5000 && 
+	    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stnseg", i__2, 
+	    "daffa_", (ftnlen)3867)]) {
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)3869)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No array is current; the `previous' array i"
+		"s the last array of DAF #", (ftnlen)68);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(NOCURRENTARRAY)", (ftnlen)21);
+	chkout_(__global_state, "DAFRS", (ftnlen)5);
 	return 0;
     }
 
 /*     The location of the summary depends on the current pointer */
 /*     position. */
 
-    dafhsf_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 
-	    : s_rnge("stfh", i__1, "daffa_", (ftnlen)3884)], &__state->nd, &
-	    __state->ni);
+    dafhsf_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, 
+	    "daffa_", (ftnlen)3884)], &__state->nd, &__state->ni);
     __state->sumsiz = __state->nd + (__state->ni + 1) / 2;
     __state->offset = (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)3888)] - 1)
-	     * __state->sumsiz + 3;
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daff"
+	    "a_", (ftnlen)3888)] - 1) * __state->sumsiz + 3;
 
 /*     Get the existing summary, and unpack it. Replace everything */
 /*     but the addresses (the final two integer components), and */
 /*     repack. Then replace the existing summary within the record. */
 
-    moved_(&__state->stsr[(i__1 = __state->offset + 1 + (__state->p << 7) - 
-	    129) < 640000 && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_",
-	     (ftnlen)3895)], &__state->sumsiz, __state->exsum);
-    dafus_(__state->exsum, &__state->nd, &__state->ni, __state->exdc, 
-	    __state->exic);
-    dafus_(sum, &__state->nd, &__state->ni, __state->newdc, __state->newic);
-    moved_(__state->newdc, &__state->nd, __state->exdc);
+    moved_(__global_state, &__state->stsr[(i__1 = __state->offset + 1 + (
+	    __state->p << 7) - 129) < 640000 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "stsr", i__1, "daffa_", (ftnlen)3895)], &
+	    __state->sumsiz, __state->exsum);
+    dafus_(__global_state, __state->exsum, &__state->nd, &__state->ni, 
+	    __state->exdc, __state->exic);
+    dafus_(__global_state, sum, &__state->nd, &__state->ni, __state->newdc, 
+	    __state->newic);
+    moved_(__global_state, __state->newdc, &__state->nd, __state->exdc);
     i__1 = __state->ni - 2;
-    movei_(__state->newic, &i__1, __state->exic);
-    dafps_(&__state->nd, &__state->ni, __state->exdc, __state->exic, 
-	    __state->exsum);
-    moved_(__state->exsum, &__state->sumsiz, &__state->stsr[(i__1 = 
-	    __state->offset + 1 + (__state->p << 7) - 129) < 640000 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)3904)]);
+    movei_(__global_state, __state->newic, &i__1, __state->exic);
+    dafps_(__global_state, &__state->nd, &__state->ni, __state->exdc, 
+	    __state->exic, __state->exsum);
+    moved_(__global_state, __state->exsum, &__state->sumsiz, &__state->stsr[(
+	    i__1 = __state->offset + 1 + (__state->p << 7) - 129) < 640000 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stsr", i__1, 
+	    "daffa_", (ftnlen)3904)]);
 
 /*     Rewrite the modified summary record. */
 
-    dafwdr_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 
-	    : s_rnge("stfh", i__1, "daffa_", (ftnlen)3909)], &__state->stthis[
-	    (i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stt"
-	    "his", i__2, "daffa_", (ftnlen)3909)], &__state->stsr[(i__3 = (
-	    __state->p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : s_rnge(
-	    "stsr", i__3, "daffa_", (ftnlen)3909)]);
-    chkout_("DAFRS", (ftnlen)5);
+    dafwdr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, 
+	    "daffa_", (ftnlen)3909)], &__state->stthis[(i__2 = __state->p - 1)
+	     < 5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stth"
+	    "is", i__2, "daffa_", (ftnlen)3909)], &__state->stsr[(i__3 = (
+	    __state->p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : s_rnge(&
+	    __global_state->f2c, "stsr", i__3, "daffa_", (ftnlen)3909)]);
+    chkout_(__global_state, "DAFRS", (ftnlen)5);
     return 0;
 /* $Procedure DAFRN ( DAF, change array name ) */
 
@@ -4293,10 +4377,10 @@ L_dafrn:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFRN", (ftnlen)5);
+	chkin_(__global_state, "DAFRN", (ftnlen)5);
     }
 
 /*     Operate on the last DAF in which a search has been started. */
@@ -4306,20 +4390,21 @@ L_dafrn:
 /*     Make sure that a search has been started in this DAF. */
 
     if (__state->p == -1) {
-	setmsg_("No DAF is currently being searched.", (ftnlen)35);
-	sigerr_("SPICE(DAFNOSEARCH)", (ftnlen)18);
-	chkout_("DAFRN", (ftnlen)5);
+	setmsg_(__global_state, "No DAF is currently being searched.", (
+		ftnlen)35);
+	sigerr_(__global_state, "SPICE(DAFNOSEARCH)", (ftnlen)18);
+	chkout_(__global_state, "DAFRN", (ftnlen)5);
 	return 0;
 
 /*     Make sure that the `current' DAF is still open, and that it */
 /*     is open for writing. */
 
     } else {
-	dafsih_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)4100)], "WRITE",
-		 (ftnlen)5);
-	if (failed_()) {
-	    chkout_("DAFRN", (ftnlen)5);
+	dafsih_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)4100)], "WRITE", (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFRN", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -4331,28 +4416,30 @@ L_dafrn:
 /*     called when the current array was the first. */
 
     if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stcurr", i__1, "daffa_", (ftnlen)4116)] == 0) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)4118)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("No array is current; the `next' array is the first array of"
-		" DAF #", (ftnlen)65);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(NOCURRENTARRAY)", (ftnlen)21);
-	chkout_("DAFRN", (ftnlen)5);
+	    s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (ftnlen)
+	    4116)] == 0) {
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)4118)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No array is current; the `next' array is th"
+		"e first array of DAF #", (ftnlen)65);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(NOCURRENTARRAY)", (ftnlen)21);
+	chkout_(__global_state, "DAFRN", (ftnlen)5);
 	return 0;
     } else if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)4127)] > 
-	    __state->stnseg[(i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? 
-	    i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)4127)]) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)4129)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("No array is current; the `previous' array is the last array"
-		" of DAF #", (ftnlen)68);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(NOCURRENTARRAY)", (ftnlen)21);
-	chkout_("DAFRN", (ftnlen)5);
+	    i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (
+	    ftnlen)4127)] > __state->stnseg[(i__2 = __state->p - 1) < 5000 && 
+	    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stnseg", i__2, 
+	    "daffa_", (ftnlen)4127)]) {
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)4129)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No array is current; the `previous' array i"
+		"s the last array of DAF #", (ftnlen)68);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(NOCURRENTARRAY)", (ftnlen)21);
+	chkout_(__global_state, "DAFRN", (ftnlen)5);
 	return 0;
     }
 
@@ -4360,45 +4447,51 @@ L_dafrn:
 /*     already. */
 
     if (! __state->sthvnr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 :
-	     s_rnge("sthvnr", i__1, "daffa_", (ftnlen)4146)]) {
+	     s_rnge(&__global_state->f2c, "sthvnr", i__1, "daffa_", (ftnlen)
+	    4146)]) {
 	i__4 = __state->stthis[(i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? 
-		i__2 : s_rnge("stthis", i__2, "daffa_", (ftnlen)4148)] + 1;
-	dafrcr_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)4148)], &i__4, 
-		__state->stnr + ((i__3 = __state->p - 1) < 5000 && 0 <= i__3 ?
-		 i__3 : s_rnge("stnr", i__3, "daffa_", (ftnlen)4148)) * 1000, 
-		(ftnlen)1000);
+		i__2 : s_rnge(&__global_state->f2c, "stthis", i__2, "daffa_", 
+		(ftnlen)4148)] + 1;
+	dafrcr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)4148)], &i__4, __state->stnr + ((i__3 
+		= __state->p - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "stnr", i__3, "daffa_", (ftnlen)4148)) * 
+		1000, (ftnlen)1000);
 	__state->sthvnr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("sthvnr", i__1, "daffa_", (ftnlen)4150)] = TRUE_;
+		s_rnge(&__global_state->f2c, "sthvnr", i__1, "daffa_", (
+		ftnlen)4150)] = TRUE_;
     }
 
 /*     The location of the name depends on the current pointer */
 /*     position. */
 
-    dafhsf_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 
-	    : s_rnge("stfh", i__1, "daffa_", (ftnlen)4159)], &__state->nd, &
-	    __state->ni);
+    dafhsf_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, 
+	    "daffa_", (ftnlen)4159)], &__state->nd, &__state->ni);
     __state->sumsiz = __state->nd + (__state->ni + 1) / 2;
     __state->namsiz = __state->sumsiz << 3;
     __state->offset = (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)4165)] - 1)
-	     * __state->namsiz;
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daff"
+	    "a_", (ftnlen)4165)] - 1) * __state->namsiz;
     i__2 = __state->offset;
-    s_copy(__state->stnr + (((i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stnr", i__1, "daffa_", (ftnlen)4167)) * 1000 + 
-	    i__2), name__, __state->offset + __state->namsiz - i__2, name_len)
-	    ;
+    s_copy(&__global_state->f2c, __state->stnr + (((i__1 = __state->p - 1) < 
+	    5000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stnr", 
+	    i__1, "daffa_", (ftnlen)4167)) * 1000 + i__2), name__, 
+	    __state->offset + __state->namsiz - i__2, name_len);
 
 /*     Rewrite the character record. */
 
     i__4 = __state->stthis[(i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? i__2 
-	    : s_rnge("stthis", i__2, "daffa_", (ftnlen)4172)] + 1;
-    dafwcr_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 
-	    : s_rnge("stfh", i__1, "daffa_", (ftnlen)4172)], &i__4, 
-	    __state->stnr + ((i__3 = __state->p - 1) < 5000 && 0 <= i__3 ? 
-	    i__3 : s_rnge("stnr", i__3, "daffa_", (ftnlen)4172)) * 1000, (
-	    ftnlen)1000);
-    chkout_("DAFRN", (ftnlen)5);
+	    : s_rnge(&__global_state->f2c, "stthis", i__2, "daffa_", (ftnlen)
+	    4172)] + 1;
+    dafwcr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, 
+	    "daffa_", (ftnlen)4172)], &i__4, __state->stnr + ((i__3 = 
+	    __state->p - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge(&
+	    __global_state->f2c, "stnr", i__3, "daffa_", (ftnlen)4172)) * 
+	    1000, (ftnlen)1000);
+    chkout_(__global_state, "DAFRN", (ftnlen)5);
     return 0;
 /* $Procedure DAFWS ( DAF, write summary ) */
 
@@ -4555,10 +4648,10 @@ L_dafws:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFWS", (ftnlen)5);
+	chkin_(__global_state, "DAFWS", (ftnlen)5);
     }
 
 /*     Operate on the last DAF in which a search has been started. */
@@ -4568,20 +4661,21 @@ L_dafws:
 /*     Make sure that a search has been started in this DAF. */
 
     if (__state->p == -1) {
-	setmsg_("No DAF is currently being searched.", (ftnlen)35);
-	sigerr_("SPICE(DAFNOSEARCH)", (ftnlen)18);
-	chkout_("DAFWS", (ftnlen)5);
+	setmsg_(__global_state, "No DAF is currently being searched.", (
+		ftnlen)35);
+	sigerr_(__global_state, "SPICE(DAFNOSEARCH)", (ftnlen)18);
+	chkout_(__global_state, "DAFWS", (ftnlen)5);
 	return 0;
 
 /*     Make sure that the `current' DAF is still open, and that it is */
 /*     open for writing. */
 
     } else {
-	dafsih_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)4366)], "READ", 
-		(ftnlen)4);
-	if (failed_()) {
-	    chkout_("DAFWS", (ftnlen)5);
+	dafsih_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)4366)], "READ", (ftnlen)4);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFWS", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -4593,54 +4687,58 @@ L_dafws:
 /*     when the current array was the first. */
 
     if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stcurr", i__1, "daffa_", (ftnlen)4382)] == 0) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)4384)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("No array is current; the `next' array is the first array of"
-		" DAF #", (ftnlen)65);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(NOCURRENTARRAY)", (ftnlen)21);
-	chkout_("DAFWS", (ftnlen)5);
+	    s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (ftnlen)
+	    4382)] == 0) {
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)4384)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No array is current; the `next' array is th"
+		"e first array of DAF #", (ftnlen)65);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(NOCURRENTARRAY)", (ftnlen)21);
+	chkout_(__global_state, "DAFWS", (ftnlen)5);
 	return 0;
     } else if (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)4393)] > 
-	    __state->stnseg[(i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? 
-	    i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)4393)]) {
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "daffa_", (ftnlen)4395)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("No array is current; the `previous' array is the last array"
-		" of DAF #", (ftnlen)68);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(NOCURRENTARRAY)", (ftnlen)21);
-	chkout_("DAFWS", (ftnlen)5);
+	    i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daffa_", (
+	    ftnlen)4393)] > __state->stnseg[(i__2 = __state->p - 1) < 5000 && 
+	    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stnseg", i__2, 
+	    "daffa_", (ftnlen)4393)]) {
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 
+		&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", 
+		i__1, "daffa_", (ftnlen)4395)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No array is current; the `previous' array i"
+		"s the last array of DAF #", (ftnlen)68);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(NOCURRENTARRAY)", (ftnlen)21);
+	chkout_(__global_state, "DAFWS", (ftnlen)5);
 	return 0;
     }
 
 /*     The location of the summary depends on the current pointer */
 /*     position. */
 
-    dafhsf_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 
-	    : s_rnge("stfh", i__1, "daffa_", (ftnlen)4412)], &__state->nd, &
-	    __state->ni);
+    dafhsf_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, 
+	    "daffa_", (ftnlen)4412)], &__state->nd, &__state->ni);
     __state->sumsiz = __state->nd + (__state->ni + 1) / 2;
     __state->offset = (__state->stcurr[(i__1 = __state->p - 1) < 5000 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stcurr", i__1, "daffa_", (ftnlen)4416)] - 1)
-	     * __state->sumsiz + 3;
-    moved_(sum, &__state->sumsiz, &__state->stsr[(i__1 = __state->offset + 1 
-	    + (__state->p << 7) - 129) < 640000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stsr", i__1, "daffa_", (ftnlen)4418)]);
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stcurr", i__1, "daff"
+	    "a_", (ftnlen)4416)] - 1) * __state->sumsiz + 3;
+    moved_(__global_state, sum, &__state->sumsiz, &__state->stsr[(i__1 = 
+	    __state->offset + 1 + (__state->p << 7) - 129) < 640000 && 0 <= 
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stsr", i__1, "daffa_",
+	     (ftnlen)4418)]);
 
 /*     Rewrite the modified summary record. */
 
-    dafwdr_(&__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 
-	    : s_rnge("stfh", i__1, "daffa_", (ftnlen)4423)], &__state->stthis[
-	    (i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stt"
-	    "his", i__2, "daffa_", (ftnlen)4423)], &__state->stsr[(i__3 = (
-	    __state->p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : s_rnge(
-	    "stsr", i__3, "daffa_", (ftnlen)4423)]);
-    chkout_("DAFWS", (ftnlen)5);
+    dafwdr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 5000 && 
+	    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, 
+	    "daffa_", (ftnlen)4423)], &__state->stthis[(i__2 = __state->p - 1)
+	     < 5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stth"
+	    "is", i__2, "daffa_", (ftnlen)4423)], &__state->stsr[(i__3 = (
+	    __state->p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : s_rnge(&
+	    __global_state->f2c, "stsr", i__3, "daffa_", (ftnlen)4423)]);
+    chkout_(__global_state, "DAFWS", (ftnlen)5);
     return 0;
 /* $Procedure DAFCS ( DAF, continue search ) */
 
@@ -4768,18 +4866,18 @@ L_dafcs:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFCS", (ftnlen)5);
+	chkin_(__global_state, "DAFCS", (ftnlen)5);
     }
 
 /*     Validate the DAF's handle before going any further. DAFSIH will */
 /*     signal an error if HANDLE doesn't designate an open DAF. */
 
-    dafsih_(handle, "READ", (ftnlen)4);
-    if (failed_()) {
-	chkout_("DAFCS", (ftnlen)5);
+    dafsih_(__global_state, handle, "READ", (ftnlen)4);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFCS", (ftnlen)5);
 	return 0;
     }
 
@@ -4791,13 +4889,14 @@ L_dafcs:
     __state->fnd = FALSE_;
     while(__state->p != -1 && ! __state->fnd) {
 	if (__state->stfh[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 :
-		 s_rnge("stfh", i__1, "daffa_", (ftnlen)4588)] == *handle) {
+		 s_rnge(&__global_state->f2c, "stfh", i__1, "daffa_", (ftnlen)
+		4588)] == *handle) {
 	    __state->fnd = TRUE_;
 	} else {
 	    __state->prev = __state->p;
 	    __state->p = __state->stpool[(i__1 = __state->p - 1) < 5000 && 0 
-		    <= i__1 ? i__1 : s_rnge("stpool", i__1, "daffa_", (ftnlen)
-		    4592)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpool", 
+		    i__1, "daffa_", (ftnlen)4592)];
 	}
     }
 
@@ -4809,9 +4908,10 @@ L_dafcs:
 /*     searching. */
 
     if (! __state->fnd) {
-	setmsg_("No DAF is currently being searched.", (ftnlen)35);
-	sigerr_("SPICE(DAFNOSEARCH)", (ftnlen)18);
-	chkout_("DAFCS", (ftnlen)5);
+	setmsg_(__global_state, "No DAF is currently being searched.", (
+		ftnlen)35);
+	sigerr_(__global_state, "SPICE(DAFNOSEARCH)", (ftnlen)18);
+	chkout_(__global_state, "DAFCS", (ftnlen)5);
 	return 0;
     }
 
@@ -4830,83 +4930,86 @@ L_dafcs:
 /*        the predecessor of P is not NIL. */
 
 	__state->stpool[(i__1 = __state->prev - 1) < 5000 && 0 <= i__1 ? i__1 
-		: s_rnge("stpool", i__1, "daffa_", (ftnlen)4632)] = 
-		__state->stpool[(i__2 = __state->p - 1) < 5000 && 0 <= i__2 ? 
-		i__2 : s_rnge("stpool", i__2, "daffa_", (ftnlen)4632)];
+		: s_rnge(&__global_state->f2c, "stpool", i__1, "daffa_", (
+		ftnlen)4632)] = __state->stpool[(i__2 = __state->p - 1) < 
+		5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stp"
+		"ool", i__2, "daffa_", (ftnlen)4632)];
 	__state->stpool[(i__1 = __state->p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("stpool", i__1, "daffa_", (ftnlen)4633)] = 
-		__state->sthead;
+		s_rnge(&__global_state->f2c, "stpool", i__1, "daffa_", (
+		ftnlen)4633)] = __state->sthead;
 	__state->sthead = __state->p;
     }
-    chkout_("DAFCS", (ftnlen)5);
+    chkout_(__global_state, "DAFCS", (ftnlen)5);
     return 0;
 } /* daffa_ */
 
-/* Subroutine */ int daffa_(integer *handle, doublereal *sum, char *name__, 
-	logical *found, ftnlen name_len)
+/* Subroutine */ int daffa_(cspice_t* __global_state, integer *handle, 
+	doublereal *sum, char *name__, logical *found, ftnlen name_len)
 {
     return daffa_0_(0, handle, sum, name__, found, name_len);
     }
 
-/* Subroutine */ int dafbfs_(integer *handle)
+/* Subroutine */ int dafbfs_(cspice_t* __global_state, integer *handle)
 {
     return daffa_0_(1, handle, (doublereal *)0, (char *)0, (logical *)0, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int daffna_(logical *found)
+/* Subroutine */ int daffna_(cspice_t* __global_state, logical *found)
 {
     return daffa_0_(2, (integer *)0, (doublereal *)0, (char *)0, found, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int dafbbs_(integer *handle)
+/* Subroutine */ int dafbbs_(cspice_t* __global_state, integer *handle)
 {
     return daffa_0_(3, handle, (doublereal *)0, (char *)0, (logical *)0, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int daffpa_(logical *found)
+/* Subroutine */ int daffpa_(cspice_t* __global_state, logical *found)
 {
     return daffa_0_(4, (integer *)0, (doublereal *)0, (char *)0, found, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int dafgs_(doublereal *sum)
+/* Subroutine */ int dafgs_(cspice_t* __global_state, doublereal *sum)
 {
     return daffa_0_(5, (integer *)0, sum, (char *)0, (logical *)0, (ftnint)0);
     }
 
-/* Subroutine */ int dafgn_(char *name__, ftnlen name_len)
+/* Subroutine */ int dafgn_(cspice_t* __global_state, char *name__, ftnlen 
+	name_len)
 {
     return daffa_0_(6, (integer *)0, (doublereal *)0, name__, (logical *)0, 
 	    name_len);
     }
 
-/* Subroutine */ int dafgh_(integer *handle)
+/* Subroutine */ int dafgh_(cspice_t* __global_state, integer *handle)
 {
     return daffa_0_(7, handle, (doublereal *)0, (char *)0, (logical *)0, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int dafrs_(doublereal *sum)
+/* Subroutine */ int dafrs_(cspice_t* __global_state, doublereal *sum)
 {
     return daffa_0_(8, (integer *)0, sum, (char *)0, (logical *)0, (ftnint)0);
     }
 
-/* Subroutine */ int dafrn_(char *name__, ftnlen name_len)
+/* Subroutine */ int dafrn_(cspice_t* __global_state, char *name__, ftnlen 
+	name_len)
 {
     return daffa_0_(9, (integer *)0, (doublereal *)0, name__, (logical *)0, 
 	    name_len);
     }
 
-/* Subroutine */ int dafws_(doublereal *sum)
+/* Subroutine */ int dafws_(cspice_t* __global_state, doublereal *sum)
 {
     return daffa_0_(10, (integer *)0, sum, (char *)0, (logical *)0, (ftnint)0)
 	    ;
     }
 
-/* Subroutine */ int dafcs_(integer *handle)
+/* Subroutine */ int dafcs_(cspice_t* __global_state, integer *handle)
 {
     return daffa_0_(11, handle, (doublereal *)0, (char *)0, (logical *)0, (
 	    ftnint)0);

@@ -8,24 +8,24 @@
 
 
 typedef int mequg_state_t;
-static mequg_state_t* get_mequg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline mequg_state_t* get_mequg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      MEQUG  ( Matrix equal to another, general dimension ) */
-/* Subroutine */ int mequg_(doublereal *m1, integer *nr, integer *nc, 
-	doublereal *mout)
+/* Subroutine */ int mequg_(cspice_t* __global_state, doublereal *m1, integer 
+	*nr, integer *nc, doublereal *mout)
 {
     /* System generated locals */
     integer m1_dim1, m1_offset, mout_dim1, mout_offset, i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
 
 
     /* Module state */
-    mequg_state_t* __state = get_mequg_state();
+    mequg_state_t* __state = get_mequg_state(__global_state);
 /* $ Abstract */
 
 /*      Set one double precision matrix of arbitrary size equal to */
@@ -161,7 +161,7 @@ static mequg_state_t* get_mequg_state() {
 
     /* Function Body */
     i__1 = *nr * *nc;
-    moved_(m1, &i__1, mout);
+    moved_(__global_state, m1, &i__1, mout);
 
     return 0;
 } /* mequg_ */

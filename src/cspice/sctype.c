@@ -8,8 +8,7 @@
 
 
 extern sctype_init_t __sctype_init;
-static sctype_state_t* get_sctype_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sctype_state_t* get_sctype_state(cspice_t* state) {
 	if (!state->sctype)
 		state->sctype = __cspice_allocate_module(sizeof(
 	sctype_state_t), &__sctype_init, sizeof(__sctype_init));
@@ -18,7 +17,7 @@ static sctype_state_t* get_sctype_state() {
 }
 
 /* $Procedure      SCTYPE ( SCLK type ) */
-integer sctype_(integer *sc)
+integer sctype_(cspice_t* __global_state, integer *sc)
 {
     /* Initialized data */
 
@@ -27,31 +26,31 @@ integer sctype_(integer *sc)
     integer ret_val, i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzcvpool_(cspice_t*, char *, integer *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer n;
-    extern /* Subroutine */ int scli01_(char *, integer *, integer *, integer 
-	    *, integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int scli01_(cspice_t*, char *, integer *, integer 
+	    *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
     char kvname[60];
     logical update;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int swpool_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
 
 
     /* Module state */
-    sctype_state_t* __state = get_sctype_state();
+    sctype_state_t* __state = get_sctype_state(__global_state);
 /* $ Abstract */
 
 /*     Return the spacecraft clock type for a specified spacecraft. */
@@ -296,11 +295,11 @@ integer sctype_(integer *sc)
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0;
 	return ret_val;
     }
-    chkin_("SCTYPE", (ftnlen)6);
+    chkin_(__global_state, "SCTYPE", (ftnlen)6);
 
 /*     On the first pass through the subroutine, or if the spacecraft */
 /*     ID code changes, set a watch on the SCLK kernel variable for */
@@ -310,14 +309,18 @@ integer sctype_(integer *sc)
 
 /*        Construct the name of the kernel variable that is needed. */
 
-	s_copy(kvname, "SCLK_DATA_TYPE", (ftnlen)60, (ftnlen)14);
-	suffix_("_#", &__state->c__0, kvname, (ftnlen)2, (ftnlen)60);
+	s_copy(&__global_state->f2c, kvname, "SCLK_DATA_TYPE", (ftnlen)60, (
+		ftnlen)14);
+	suffix_(__global_state, "_#", &__state->c__0, kvname, (ftnlen)2, (
+		ftnlen)60);
 	i__1 = -(*sc);
-	repmi_(kvname, "#", &i__1, kvname, (ftnlen)60, (ftnlen)1, (ftnlen)60);
+	repmi_(__global_state, kvname, "#", &i__1, kvname, (ftnlen)60, (
+		ftnlen)1, (ftnlen)60);
 
 /*        Set a watch on the kernel variable needed. */
 
-	swpool_("SCTYPE", &__state->c__1, kvname, (ftnlen)6, (ftnlen)60);
+	swpool_(__global_state, "SCTYPE", &__state->c__1, kvname, (ftnlen)6, (
+		ftnlen)60);
 
 /*        Keep track of the last spacecraft ID encountered. */
 
@@ -325,7 +328,7 @@ integer sctype_(integer *sc)
 
 /*        Initialize the local POOL counter to user value. */
 
-	zzctruin_(__state->usrctr);
+	zzctruin_(__global_state, __state->usrctr);
 	__state->first = FALSE_;
     }
 
@@ -333,24 +336,24 @@ integer sctype_(integer *sc)
 /*     been updated, or if the spacecraft id code changes, look */
 /*     up the new value from the kernel pool. */
 
-    zzcvpool_("SCTYPE", __state->usrctr, &update, (ftnlen)6);
+    zzcvpool_(__global_state, "SCTYPE", __state->usrctr, &update, (ftnlen)6);
     if (update || __state->nodata) {
 
 /*        Find the clock type for the specified mission. */
 
 	__state->type__ = 0;
-	scli01_("SCLK_DATA_TYPE", sc, &__state->c__1, &n, &__state->type__, (
-		ftnlen)14);
-	if (failed_()) {
+	scli01_(__global_state, "SCLK_DATA_TYPE", sc, &__state->c__1, &n, &
+		__state->type__, (ftnlen)14);
+	if (failed_(__global_state)) {
 	    __state->nodata = TRUE_;
 	    ret_val = 0;
-	    chkout_("SCTYPE", (ftnlen)6);
+	    chkout_(__global_state, "SCTYPE", (ftnlen)6);
 	    return ret_val;
 	}
 	__state->nodata = FALSE_;
     }
     ret_val = __state->type__;
-    chkout_("SCTYPE", (ftnlen)6);
+    chkout_(__global_state, "SCTYPE", (ftnlen)6);
     return ret_val;
 } /* sctype_ */
 

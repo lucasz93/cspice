@@ -8,8 +8,7 @@
 
 
 extern zzspkfat_init_t __zzspkfat_init;
-static zzspkfat_state_t* get_zzspkfat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzspkfat_state_t* get_zzspkfat_state(cspice_t* state) {
 	if (!state->zzspkfat)
 		state->zzspkfat = __cspice_allocate_module(sizeof(
 	zzspkfat_state_t), &__zzspkfat_init, sizeof(__zzspkfat_init));
@@ -18,9 +17,10 @@ static zzspkfat_state_t* get_zzspkfat_state() {
 }
 
 /* $Procedure ZZSPKFAT (SPK function, aberration corrected state, target) */
-/* Subroutine */ int zzspkfat_(U_fp trgsub, doublereal *et, char *ref, char *
-	abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *
-	dlt, ftnlen ref_len, ftnlen abcorr_len)
+/* Subroutine */ int zzspkfat_(cspice_t* __global_state, U_fp trgsub, 
+	doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *
+	starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen 
+	abcorr_len)
 {
     /* Initialized data */
 
@@ -29,41 +29,43 @@ static zzspkfat_state_t* get_zzspkfat_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzspkfap_(U_fp, doublereal *, char *, char *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzspkfap_(cspice_t*, U_fp, doublereal *, char 
+	    *, char *, doublereal *, doublereal *, doublereal *, doublereal *,
+	     doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
     integer i__;
     doublereal t;
     integer refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal ltssb;
     doublereal ssblt;
     doublereal stobs[12]	/* was [6][2] */;
-    extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     logical attblk[15];
-    extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int qderiv_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *);
+    extern /* Subroutine */ int spkgeo_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int qderiv_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal ssbobs[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal acc[3];
 
 
     /* Module state */
-    zzspkfat_state_t* __state = get_zzspkfat_state();
+    zzspkfat_state_t* __state = get_zzspkfat_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -539,25 +541,26 @@ static zzspkfat_state_t* get_zzspkfat_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSPKFAT", (ftnlen)8);
-    if (__state->pass1 || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    chkin_(__global_state, "ZZSPKFAT", (ftnlen)8);
+    if (__state->pass1 || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
 
-	zzvalcor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("ZZSPKFAT", (ftnlen)8);
+	zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKFAT", (ftnlen)8);
 	    return 0;
 	}
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -574,13 +577,13 @@ static zzspkfat_state_t* get_zzspkfat_state() {
 
 /*     See if the reference frame is a recognized inertial frame. */
 
-    irfnum_(ref, &refid, ref_len);
+    irfnum_(__global_state, ref, &refid, ref_len);
     if (refid == 0) {
-	setmsg_("The requested frame '#' is not a recognized inertial frame. "
-		, (ftnlen)60);
-	errch_("#", ref, (ftnlen)1, ref_len);
-	sigerr_("SPICE(BADFRAME)", (ftnlen)15);
-	chkout_("ZZSPKFAT", (ftnlen)8);
+	setmsg_(__global_state, "The requested frame '#' is not a recognized"
+		" inertial frame. ", (ftnlen)60);
+	errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	sigerr_(__global_state, "SPICE(BADFRAME)", (ftnlen)15);
+	chkout_(__global_state, "ZZSPKFAT", (ftnlen)8);
 	return 0;
     }
 
@@ -594,9 +597,10 @@ static zzspkfat_state_t* get_zzspkfat_state() {
 /*     Get the geometric state of the observer relative to the SSB, */
 /*     which we'll call SSBOBS. */
 
-    spkgeo_(obs, et, ref, &__state->c__0, ssbobs, &ssblt, ref_len);
-    if (failed_()) {
-	chkout_("ZZSPKFAT", (ftnlen)8);
+    spkgeo_(__global_state, obs, et, ref, &__state->c__0, ssbobs, &ssblt, 
+	    ref_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSPKFAT", (ftnlen)8);
 	return 0;
     }
     if (__state->usestl) {
@@ -607,25 +611,27 @@ static zzspkfat_state_t* get_zzspkfat_state() {
 /*        barycenter at ET +/- DELTA. */
 	for (i__ = 1; i__ <= 2; ++i__) {
 	    t = *et + ((i__ << 1) - 3) * 1.;
-	    spkgeo_(obs, &t, ref, &__state->c__0, &stobs[(i__1 = i__ * 6 - 6) 
-		    < 12 && 0 <= i__1 ? i__1 : s_rnge("stobs", i__1, "zzspkf"
-		    "at_", (ftnlen)512)], &ltssb, ref_len);
-	    if (failed_()) {
-		chkout_("ZZSPKFAT", (ftnlen)8);
+	    spkgeo_(__global_state, obs, &t, ref, &__state->c__0, &stobs[(
+		    i__1 = i__ * 6 - 6) < 12 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "stobs", i__1, "zzspkfat_", (ftnlen)
+		    512)], &ltssb, ref_len);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZSPKFAT", (ftnlen)8);
 		return 0;
 	    }
 	}
-	qderiv_(&__state->c__3, &stobs[3], &stobs[9], &__state->c_b15, acc);
+	qderiv_(__global_state, &__state->c__3, &stobs[3], &stobs[9], &
+		__state->c_b15, acc);
     } else {
-	cleard_(&__state->c__3, acc);
+	cleard_(__global_state, &__state->c__3, acc);
     }
 
 /*     Look up the apparent state. The light time and light */
 /*     rate are returned as well. */
 
-    zzspkfap_((U_fp)trgsub, et, ref, abcorr, ssbobs, acc, starg, lt, dlt, 
-	    ref_len, abcorr_len);
-    chkout_("ZZSPKFAT", (ftnlen)8);
+    zzspkfap_(__global_state, (U_fp)trgsub, et, ref, abcorr, ssbobs, acc, 
+	    starg, lt, dlt, ref_len, abcorr_len);
+    chkout_(__global_state, "ZZSPKFAT", (ftnlen)8);
     return 0;
 } /* zzspkfat_ */
 

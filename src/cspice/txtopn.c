@@ -8,34 +8,36 @@
 
 
 typedef int txtopn_state_t;
-static txtopn_state_t* get_txtopn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline txtopn_state_t* get_txtopn_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      TXTOPN ( Text file, open new ) */
-/* Subroutine */ int txtopn_(char *fname, integer *unit, ftnlen fname_len)
+/* Subroutine */ int txtopn_(cspice_t* __global_state, char *fname, integer *
+	unit, ftnlen fname_len)
 {
     /* System generated locals */
     olist o__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), f_open(olist *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), f_open(
+	    f2c_state_t*, olist *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int getlun_(integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int getlun_(cspice_t*, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    txtopn_state_t* __state = get_txtopn_state();
+    txtopn_state_t* __state = get_txtopn_state(__global_state);
 /* $ Abstract */
 
 /*     Open a new text file for subsequent write access. */
@@ -347,18 +349,19 @@ static txtopn_state_t* get_txtopn_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("TXTOPN", (ftnlen)6);
+	chkin_(__global_state, "TXTOPN", (ftnlen)6);
     }
-    if (s_cmp(fname, " ", fname_len, (ftnlen)1) == 0) {
-	setmsg_("A blank string is unacceptable as a file name", (ftnlen)45);
-	sigerr_("SPICE(BLANKFILENAME)", (ftnlen)20);
-	chkout_("TXTOPN", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, fname, " ", fname_len, (ftnlen)1) == 0) {
+	setmsg_(__global_state, "A blank string is unacceptable as a file na"
+		"me", (ftnlen)45);
+	sigerr_(__global_state, "SPICE(BLANKFILENAME)", (ftnlen)20);
+	chkout_(__global_state, "TXTOPN", (ftnlen)6);
 	return 0;
     }
-    getlun_(unit);
+    getlun_(__global_state, unit);
     o__1.oerr = 1;
     o__1.ounit = *unit;
     o__1.ofnmlen = fname_len;
@@ -368,16 +371,17 @@ static txtopn_state_t* get_txtopn_state() {
     o__1.oacc = "SEQUENTIAL";
     o__1.ofm = "FORMATTED";
     o__1.oblnk = 0;
-    iostat = f_open(&o__1);
+    iostat = f_open(&__global_state->f2c, &o__1);
     if (iostat != 0) {
-	setmsg_("Could not open file #. IOSTAT was #. ", (ftnlen)37);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEOPENFAILED)", (ftnlen)21);
-	chkout_("TXTOPN", (ftnlen)6);
+	setmsg_(__global_state, "Could not open file #. IOSTAT was #. ", (
+		ftnlen)37);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEOPENFAILED)", (ftnlen)21);
+	chkout_(__global_state, "TXTOPN", (ftnlen)6);
 	return 0;
     }
-    chkout_("TXTOPN", (ftnlen)6);
+    chkout_(__global_state, "TXTOPN", (ftnlen)6);
     return 0;
 } /* txtopn_ */
 

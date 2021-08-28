@@ -8,13 +8,12 @@
 
 
 typedef int alltru_state_t;
-static alltru_state_t* get_alltru_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline alltru_state_t* get_alltru_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ALLTRU ( All entries true? ) */
-logical alltru_(logical *logcls, integer *n)
+logical alltru_(cspice_t* __global_state, logical *logcls, integer *n)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +24,7 @@ logical alltru_(logical *logcls, integer *n)
 
 
     /* Module state */
-    alltru_state_t* __state = get_alltru_state();
+    alltru_state_t* __state = get_alltru_state(__global_state);
 /* $ Abstract */
 
 /*     Determine if all the entries in an array of logicals are .TRUE. */

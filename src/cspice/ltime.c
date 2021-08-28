@@ -8,42 +8,43 @@
 
 
 typedef int ltime_state_t;
-static ltime_state_t* get_ltime_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ltime_state_t* get_ltime_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LTIME ( Light Time ) */
-/* Subroutine */ int ltime_(doublereal *etobs, integer *obs, char *dir, 
-	integer *targ, doublereal *ettarg, doublereal *elapsd, ftnlen dir_len)
+/* Subroutine */ int ltime_(cspice_t* __global_state, doublereal *etobs, 
+	integer *obs, char *dir, integer *targ, doublereal *ettarg, 
+	doublereal *elapsd, ftnlen dir_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal sobs[6];
     doublereal myet;
     doublereal c__;
     integer r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal starg[6];
-    extern doublereal vdist_(doublereal *, doublereal *);
-    extern integer rtrim_(char *, ftnlen);
-    extern logical failed_(void);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     doublereal lt;
-    extern doublereal clight_(void);
+    extern doublereal clight_(cspice_t*);
     integer bcentr;
-    extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int spkgeo_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ltime_state_t* __state = get_ltime_state();
+    ltime_state_t* __state = get_ltime_state(__global_state);
 /* $ Abstract */
 
 /*     This routine computes the transmit (or receive) time */
@@ -307,37 +308,40 @@ static ltime_state_t* get_ltime_state() {
 
 /*     Local Variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("LTIME", (ftnlen)5);
+    chkin_(__global_state, "LTIME", (ftnlen)5);
 
 /*     First perform the obvious error check. */
 
-    if (s_cmp(dir, "->", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(dir, "<-", (
-	    ftnlen)2, (ftnlen)2) != 0) {
-	setmsg_("The direction specifier for the signal was '#'  it must be "
-		"either '->' or '<-'. ", (ftnlen)80);
-	r__ = rtrim_(dir, (ftnlen)2);
-	errch_("#", dir, (ftnlen)1, r__);
-	sigerr_("SPICE(BADDIRECTION)", (ftnlen)19);
-	chkout_("LTIME", (ftnlen)5);
+    if (s_cmp(&__global_state->f2c, dir, "->", (ftnlen)2, (ftnlen)2) != 0 && 
+	    s_cmp(&__global_state->f2c, dir, "<-", (ftnlen)2, (ftnlen)2) != 0)
+	     {
+	setmsg_(__global_state, "The direction specifier for the signal was "
+		"'#'  it must be either '->' or '<-'. ", (ftnlen)80);
+	r__ = rtrim_(__global_state, dir, (ftnlen)2);
+	errch_(__global_state, "#", dir, (ftnlen)1, r__);
+	sigerr_(__global_state, "SPICE(BADDIRECTION)", (ftnlen)19);
+	chkout_(__global_state, "LTIME", (ftnlen)5);
 	return 0;
     }
 
 /*     We need two constants, the speed of light and the id-code */
 /*     for the solar system barycenter. */
 
-    c__ = clight_();
+    c__ = clight_(__global_state);
     bcentr = 0;
     myet = *etobs;
 
 /*     First get the barycenter relative states of the observer */
 /*     and target. */
 
-    spkgeo_(obs, &myet, "J2000", &bcentr, sobs, &lt, (ftnlen)5);
-    spkgeo_(targ, &myet, "J2000", &bcentr, starg, &lt, (ftnlen)5);
-    *elapsd = vdist_(sobs, starg) / c__;
+    spkgeo_(__global_state, obs, &myet, "J2000", &bcentr, sobs, &lt, (ftnlen)
+	    5);
+    spkgeo_(__global_state, targ, &myet, "J2000", &bcentr, starg, &lt, (
+	    ftnlen)5);
+    *elapsd = vdist_(__global_state, sobs, starg) / c__;
 
 /*     The rest is straight forward.  We either add the elapsed */
 /*     time to get the next state or subtract the elapsed time. */
@@ -349,34 +353,40 @@ static ltime_state_t* get_ltime_state() {
 /*     known objects in the solar system.  The ephemeris */
 /*     is certain to be much worse than this. */
 
-    if (s_cmp(dir, "->", (ftnlen)2, (ftnlen)2) == 0) {
+    if (s_cmp(&__global_state->f2c, dir, "->", (ftnlen)2, (ftnlen)2) == 0) {
 	*ettarg = myet + *elapsd;
-	spkgeo_(targ, ettarg, "J2000", &bcentr, starg, &lt, (ftnlen)5);
-	*elapsd = vdist_(sobs, starg) / c__;
+	spkgeo_(__global_state, targ, ettarg, "J2000", &bcentr, starg, &lt, (
+		ftnlen)5);
+	*elapsd = vdist_(__global_state, sobs, starg) / c__;
 	*ettarg = myet + *elapsd;
-	spkgeo_(targ, ettarg, "J2000", &bcentr, starg, &lt, (ftnlen)5);
-	*elapsd = vdist_(sobs, starg) / c__;
+	spkgeo_(__global_state, targ, ettarg, "J2000", &bcentr, starg, &lt, (
+		ftnlen)5);
+	*elapsd = vdist_(__global_state, sobs, starg) / c__;
 	*ettarg = myet + *elapsd;
-	spkgeo_(targ, ettarg, "J2000", &bcentr, starg, &lt, (ftnlen)5);
-	*elapsd = vdist_(sobs, starg) / c__;
+	spkgeo_(__global_state, targ, ettarg, "J2000", &bcentr, starg, &lt, (
+		ftnlen)5);
+	*elapsd = vdist_(__global_state, sobs, starg) / c__;
 	*ettarg = myet + *elapsd;
     } else {
 	*ettarg = myet - *elapsd;
-	spkgeo_(targ, ettarg, "J2000", &bcentr, starg, &lt, (ftnlen)5);
-	*elapsd = vdist_(sobs, starg) / c__;
+	spkgeo_(__global_state, targ, ettarg, "J2000", &bcentr, starg, &lt, (
+		ftnlen)5);
+	*elapsd = vdist_(__global_state, sobs, starg) / c__;
 	*ettarg = myet - *elapsd;
-	spkgeo_(targ, ettarg, "J2000", &bcentr, starg, &lt, (ftnlen)5);
-	*elapsd = vdist_(sobs, starg) / c__;
+	spkgeo_(__global_state, targ, ettarg, "J2000", &bcentr, starg, &lt, (
+		ftnlen)5);
+	*elapsd = vdist_(__global_state, sobs, starg) / c__;
 	*ettarg = myet - *elapsd;
-	spkgeo_(targ, ettarg, "J2000", &bcentr, starg, &lt, (ftnlen)5);
-	*elapsd = vdist_(sobs, starg) / c__;
+	spkgeo_(__global_state, targ, ettarg, "J2000", &bcentr, starg, &lt, (
+		ftnlen)5);
+	*elapsd = vdist_(__global_state, sobs, starg) / c__;
 	*ettarg = myet - *elapsd;
     }
-    if (failed_()) {
+    if (failed_(__global_state)) {
 	*ettarg = myet;
 	*elapsd = 0.;
     }
-    chkout_("LTIME", (ftnlen)5);
+    chkout_(__global_state, "LTIME", (ftnlen)5);
     return 0;
 } /* ltime_ */
 

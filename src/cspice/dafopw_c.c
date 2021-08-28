@@ -285,7 +285,7 @@
    {
       return; 
    }
-   chkin_c ( "dafopw_c" );
+   chkin_c ( naif_state, "dafopw_c" );
 
    /*
    Check the file name to make sure the pointer is non-null 

@@ -3,9 +3,8 @@
 #include "fmt.h"
 #include "__cspice_state.h"
 
-z_getc(Void)
+z_getc(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if(f2c->f__recpos++ < f2c->f__svic->icirlen) {
 		if(f2c->f__icptr >= f2c->f__icend) err(f2c->f__svic->iciend,(EOF),"endfile");
 		return(*(unsigned char *)f2c->f__icptr++);
@@ -15,19 +14,16 @@ z_getc(Void)
 
  void
 #ifdef KR_headers
-z_putc(c)
+z_putc(f2c, c) f2c_state_t *f2c;
 #else
-z_putc(int c)
+z_putc(f2c_state_t *f2c, int c)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if (f2c->f__icptr < f2c->f__icend && f2c->f__recpos++ < f2c->f__svic->icirlen)
 		*f2c->f__icptr++ = c;
 }
-z_rnew(Void)
+z_rnew(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-
 	f2c->f__icptr = f2c->f__svic->iciunit + (++f2c->f__icnum)*f2c->f__svic->icirlen;
 	f2c->f__recpos = 0;
 	f2c->f__cursor = 0;
@@ -36,21 +32,18 @@ z_rnew(Void)
 }
 
  static int
-z_endp(Void)
+z_endp(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	(*f2c->f__donewrec)();
 	return 0;
 	}
 
 #ifdef KR_headers
-c_si(a) icilist *a;
+c_si(f2c, a) f2c_state_t *f2c; icilist *a;
 #else
-c_si(icilist *a)
+c_si(f2c_state_t *f2c, icilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-
 	f2c->f__elist = (cilist *)a;
 	f2c->f__fmtbuf=a->icifmt;
 	f2c->f__curunit = 0;
@@ -71,23 +64,21 @@ c_si(icilist *a)
 }
 
  int
-iw_rev(Void)
+iw_rev(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if(f2c->f__workdone)
-		z_endp();
+		z_endp(f2c);
 	f2c->f__hiwater = f2c->f__recpos = f2c->f__cursor = 0;
 	return(f2c->f__workdone=0);
 	}
 
 #ifdef KR_headers
-integer s_rsfi(a) icilist *a;
+integer s_rsfi(f2c, a) f2c_state_t *f2c; icilist *a;
 #else
-integer s_rsfi(icilist *a)
+integer s_rsfi(f2c_state_t *f2c, icilist *a)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int n;
-	if(n=c_si(a)) return(n);
+{	int n;
+	if(n=c_si(f2c, a)) return(n);
 	f2c->f__reading=1;
 	f2c->f__doed=rd_ed;
 	f2c->f__doned=rd_ned;
@@ -98,10 +89,8 @@ integer s_rsfi(icilist *a)
 	return(0);
 }
 
-z_wnew(Void)
+z_wnew(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-
 	if (f2c->f__recpos < f2c->f__hiwater) {
 		f2c->f__icptr += f2c->f__hiwater - f2c->f__recpos;
 		f2c->f__recpos = f2c->f__hiwater;
@@ -115,13 +104,12 @@ z_wnew(Void)
 	return 1;
 }
 #ifdef KR_headers
-integer s_wsfi(a) icilist *a;
+integer s_wsfi(f2c, a) f2c_state_t *f2c; icilist *a;
 #else
-integer s_wsfi(icilist *a)
+integer s_wsfi(f2c_state_t *f2c, icilist *a)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int n;
-	if(n=c_si(a)) return(n);
+{	int n;
+	if(n=c_si(f2c, a)) return(n);
 	f2c->f__reading=0;
 	f2c->f__doed=w_ed;
 	f2c->f__doned=w_ned;
@@ -131,16 +119,13 @@ integer s_wsfi(icilist *a)
 	f2c->f__doend = z_endp;
 	return(0);
 }
-integer e_rsfi(Void)
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int n = en_fio();
+integer e_rsfi(f2c_state_t *f2c)
+{	int n = en_fio();
 	f2c->f__fmtbuf = NULL;
 	return(n);
 }
-integer e_wsfi(Void)
+integer e_wsfi(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-
 	int n;
 	n = en_fio();
 	f2c->f__fmtbuf = NULL;

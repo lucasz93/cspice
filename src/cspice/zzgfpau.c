@@ -8,8 +8,7 @@
 
 
 extern zzgfpau_init_t __zzgfpau_init;
-static zzgfpau_state_t* get_zzgfpau_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfpau_state_t* get_zzgfpau_state(cspice_t* state) {
 	if (!state->zzgfpau)
 		state->zzgfpau = __cspice_allocate_module(sizeof(
 	zzgfpau_state_t), &__zzgfpau_init, sizeof(__zzgfpau_init));
@@ -18,54 +17,61 @@ static zzgfpau_state_t* get_zzgfpau_state() {
 }
 
 /* $Procedure ZZGFPAU ( Private --- GF, phase angle utility routine ) */
-/* Subroutine */ int zzgfpau_0_(int n__, char *target, char *illmn, char *
-	abcorr, char *obsrvr, U_fp udfunc, doublereal *et, logical *decres, 
-	doublereal *rvl, integer *xtarg, integer *xillmn, char *xabcor, 
-	integer *xobs, logical *xablk, ftnlen target_len, ftnlen illmn_len, 
-	ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen xabcor_len)
+/* Subroutine */ int zzgfpau_0_(cspice_t* __global_state, int n__, char *
+	target, char *illmn, char *abcorr, char *obsrvr, U_fp udfunc, 
+	doublereal *et, logical *decres, doublereal *rvl, integer *xtarg, 
+	integer *xillmn, char *xabcor, integer *xobs, logical *xablk, ftnlen 
+	target_len, ftnlen illmn_len, ftnlen abcorr_len, ftnlen obsrvr_len, 
+	ftnlen xabcor_len)
 {
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal dsep;
     doublereal uvec[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern doublereal dvsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
-	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern doublereal dvsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int spkez_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
     doublereal s1[6];
     doublereal s2[6];
-    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int bods2c_(cspice_t*, char *, integer *, logical 
+	    *, ftnlen);
+    extern logical failed_(cspice_t*);
     doublereal lt;
-    extern doublereal clight_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern doublereal clight_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dlt;
-    extern /* Subroutine */ int zzgfpaq_(doublereal *, integer *, integer *, 
-	    integer *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzgfpaq_(cspice_t*, doublereal *, integer *, 
+	    integer *, integer *, char *, doublereal *, ftnlen);
 
 
     /* Module state */
-    zzgfpau_state_t* __state = get_zzgfpau_state();
+    zzgfpau_state_t* __state = get_zzgfpau_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -406,9 +412,9 @@ static zzgfpau_state_t* get_zzgfpau_state() {
 	case 4: goto L_zzgfpax;
 	}
 
-    chkin_("ZZGFPAU", (ftnlen)7);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZGFPAU", (ftnlen)7);
+    chkin_(__global_state, "ZZGFPAU", (ftnlen)7);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZGFPAU", (ftnlen)7);
     return 0;
 /* $Procedure  ZZGFPAIN ( Private --- GF, phase angle initialization ) */
 
@@ -593,42 +599,44 @@ L_zzgfpain:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFPAIN", (ftnlen)8);
+    chkin_(__global_state, "ZZGFPAIN", (ftnlen)8);
 
 /*     Find NAIF IDs for TARGET, ILLMN, and OBSRVR. */
 
-    bods2c_(target, &__state->svtarg, &found, target_len);
+    bods2c_(__global_state, target, &__state->svtarg, &found, target_len);
     if (! found) {
-	setmsg_("The target object, '#', is not a recognized name for an eph"
-		"emeris object. The cause of this problem may be that you nee"
-		"d an updated version of the SPICE Toolkit. ", (ftnlen)162);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFPAIN", (ftnlen)8);
+	setmsg_(__global_state, "The target object, '#', is not a recognized"
+		" name for an ephemeris object. The cause of this problem may"
+		" be that you need an updated version of the SPICE Toolkit. ", 
+		(ftnlen)162);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFPAIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(illmn, &__state->svillm, &found, illmn_len);
+    bods2c_(__global_state, illmn, &__state->svillm, &found, illmn_len);
     if (! found) {
-	setmsg_("The illuminator object, '#', is not a recognized name for a"
-		"n ephemeris object. The cause of this problem may be that yo"
-		"u need an updated version of the SPICE toolkit. ", (ftnlen)
-		167);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFPAIN", (ftnlen)8);
+	setmsg_(__global_state, "The illuminator object, '#', is not a recog"
+		"nized name for an ephemeris object. The cause of this proble"
+		"m may be that you need an updated version of the SPICE toolk"
+		"it. ", (ftnlen)167);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFPAIN", (ftnlen)8);
 	return 0;
     }
-    bods2c_(obsrvr, &__state->svobs, &found, obsrvr_len);
+    bods2c_(__global_state, obsrvr, &__state->svobs, &found, obsrvr_len);
     if (! found) {
-	setmsg_("The observer object, '#', is not a recognized name for an e"
-		"phemeris object. The cause of this problem may be that you n"
-		"eed an updated version of the SPICE toolkit. ", (ftnlen)164);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFPAIN", (ftnlen)8);
+	setmsg_(__global_state, "The observer object, '#', is not a recogniz"
+		"ed name for an ephemeris object. The cause of this problem m"
+		"ay be that you need an updated version of the SPICE toolkit. "
+		, (ftnlen)164);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFPAIN", (ftnlen)8);
 	return 0;
     }
 
@@ -636,45 +644,46 @@ L_zzgfpain:
 
     if (__state->svtarg == __state->svobs || __state->svtarg == 
 	    __state->svillm || __state->svobs == __state->svillm) {
-	setmsg_("The observer, illuminator, and target must be distinct obje"
-		"cts, but are not: OBSRVR = #, TARGET = #, are not: ILLMN= #.",
-		 (ftnlen)119);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	errch_("#", illmn, (ftnlen)1, illmn_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("ZZGFPAIN", (ftnlen)8);
+	setmsg_(__global_state, "The observer, illuminator, and target must "
+		"be distinct objects, but are not: OBSRVR = #, TARGET = #, ar"
+		"e not: ILLMN= #.", (ftnlen)119);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errch_(__global_state, "#", illmn, (ftnlen)1, illmn_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "ZZGFPAIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Squeeze all blanks out of the aberration correction */
 /*     string; ensure the string is in upper case. */
 
-    cmprss_(" ", &__state->c__0, abcorr, __state->svabco, (ftnlen)1, 
-	    abcorr_len, (ftnlen)5);
-    ucase_(__state->svabco, __state->svabco, (ftnlen)5, (ftnlen)5);
+    cmprss_(__global_state, " ", &__state->c__0, abcorr, __state->svabco, (
+	    ftnlen)1, abcorr_len, (ftnlen)5);
+    ucase_(__global_state, __state->svabco, __state->svabco, (ftnlen)5, (
+	    ftnlen)5);
 
 /*     Check the aberration correction. If SPKEZR can't handle it, */
 /*     neither can we. */
 
-    zzvalcor_(__state->svabco, __state->svablk, (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZGFPAIN", (ftnlen)8);
+    zzvalcor_(__global_state, __state->svabco, __state->svablk, (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFPAIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Restrict correction to reception cases. */
 
     if (__state->svablk[4]) {
-	setmsg_("Invalid aberration correction '#'. Phase angle geometry cal"
-		"culations currently restricted to reception cases.", (ftnlen)
-		109);
-	errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	chkout_("ZZGFPAIN", (ftnlen)8);
+	setmsg_(__global_state, "Invalid aberration correction '#'. Phase an"
+		"gle geometry calculations currently restricted to reception "
+		"cases.", (ftnlen)109);
+	errch_(__global_state, "#", abcorr, (ftnlen)1, abcorr_len);
+	sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	chkout_(__global_state, "ZZGFPAIN", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZGFPAIN", (ftnlen)8);
+    chkout_(__global_state, "ZZGFPAIN", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFPADC ( Private --- GF, when phase angle is decreasing ) */
 
@@ -804,17 +813,17 @@ L_zzgfpadc:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFPADC", (ftnlen)8);
+    chkin_(__global_state, "ZZGFPADC", (ftnlen)8);
 
 /*     Get the state of the TARG object relative to OBS at ET. */
 
-    spkez_(&__state->svtarg, et, "J2000", __state->svabco, &__state->svobs, 
-	    s1, &lt, (ftnlen)5, (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZGFPADC", (ftnlen)8);
+    spkez_(__global_state, &__state->svtarg, et, "J2000", __state->svabco, &
+	    __state->svobs, s1, &lt, (ftnlen)5, (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFPADC", (ftnlen)8);
 	return 0;
     }
 
@@ -825,14 +834,15 @@ L_zzgfpadc:
 
 /*        No correction, geometric. */
 
-	spkez_(&__state->svillm, et, "J2000", __state->svabco, &
-		__state->svtarg, s2, &lt, (ftnlen)5, (ftnlen)5);
+	spkez_(__global_state, &__state->svillm, et, "J2000", __state->svabco,
+		 &__state->svtarg, s2, &lt, (ftnlen)5, (ftnlen)5);
     } else {
 	d__1 = *et - lt;
-	spkez_(&__state->svillm, &d__1, "J2000", __state->svabco, &
-		__state->svtarg, s2, &lt, (ftnlen)5, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("ZZGFPADC", (ftnlen)8);
+	spkez_(__global_state, &__state->svillm, &d__1, "J2000", 
+		__state->svabco, &__state->svtarg, s2, &lt, (ftnlen)5, (
+		ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFPADC", (ftnlen)8);
 	    return 0;
 	}
 
@@ -853,16 +863,16 @@ L_zzgfpadc:
 /*        dt        C   dt         C */
 
 
-	vhat_(s1, uvec);
-	dlt = vdot_(uvec, &s1[3]) / clight_();
+	vhat_(__global_state, s1, uvec);
+	dlt = vdot_(__global_state, uvec, &s1[3]) / clight_(__global_state);
 
 /*        Apply the correction to the velocity vector components. */
 
 	d__1 = 1. - dlt;
-	vsclip_(&d__1, &s2[3]);
+	vsclip_(__global_state, &d__1, &s2[3]);
     }
-    if (failed_()) {
-	chkout_("ZZGFPADC", (ftnlen)8);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFPADC", (ftnlen)8);
 	return 0;
     }
 
@@ -889,9 +899,9 @@ L_zzgfpadc:
 /*        ------ = - ---- */
 /*         dt         dt */
 
-    dsep = dvsep_(s1, s2);
+    dsep = dvsep_(__global_state, s1, s2);
     *decres = -dsep < 0.;
-    chkout_("ZZGFPADC", (ftnlen)8);
+    chkout_(__global_state, "ZZGFPADC", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFPAGQ ( Private --- GF, phase angle between two bodies ) */
 
@@ -1002,8 +1012,8 @@ L_zzgfpagq:
 /*     get phase angle between two bodies */
 
 /* -& */
-    zzgfpaq_(et, &__state->svtarg, &__state->svillm, &__state->svobs, 
-	    __state->svabco, rvl, (ftnlen)5);
+    zzgfpaq_(__global_state, et, &__state->svtarg, &__state->svillm, &
+	    __state->svobs, __state->svabco, rvl, (ftnlen)5);
     return 0;
 /* $Procedure ZZGFPAX ( Private -- GF, retrieve ZZGFPAIN values ) */
 
@@ -1126,31 +1136,34 @@ L_zzgfpax:
 /* -& */
     *xtarg = __state->svtarg;
     *xillmn = __state->svillm;
-    s_copy(xabcor, __state->svabco, xabcor_len, (ftnlen)5);
+    s_copy(&__global_state->f2c, xabcor, __state->svabco, xabcor_len, (ftnlen)
+	    5);
     *xobs = __state->svobs;
     for (i__ = 1; i__ <= 6; ++i__) {
-	xablk[(i__1 = i__ - 1) < 15 && 0 <= i__1 ? i__1 : s_rnge("xablk", 
-		i__1, "zzgfpau_", (ftnlen)1083)] = __state->svablk[(i__2 = 
-		i__ - 1) < 15 && 0 <= i__2 ? i__2 : s_rnge("svablk", i__2, 
-		"zzgfpau_", (ftnlen)1083)];
+	xablk[(i__1 = i__ - 1) < 15 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "xablk", i__1, "zzgfpau_", (ftnlen)1083)]
+		 = __state->svablk[(i__2 = i__ - 1) < 15 && 0 <= i__2 ? i__2 :
+		 s_rnge(&__global_state->f2c, "svablk", i__2, "zzgfpau_", (
+		ftnlen)1083)];
     }
     return 0;
 } /* zzgfpau_ */
 
-/* Subroutine */ int zzgfpau_(char *target, char *illmn, char *abcorr, char *
-	obsrvr, U_fp udfunc, doublereal *et, logical *decres, doublereal *rvl,
-	 integer *xtarg, integer *xillmn, char *xabcor, integer *xobs, 
-	logical *xablk, ftnlen target_len, ftnlen illmn_len, ftnlen 
-	abcorr_len, ftnlen obsrvr_len, ftnlen xabcor_len)
+/* Subroutine */ int zzgfpau_(cspice_t* __global_state, char *target, char *
+	illmn, char *abcorr, char *obsrvr, U_fp udfunc, doublereal *et, 
+	logical *decres, doublereal *rvl, integer *xtarg, integer *xillmn, 
+	char *xabcor, integer *xobs, logical *xablk, ftnlen target_len, 
+	ftnlen illmn_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen 
+	xabcor_len)
 {
     return zzgfpau_0_(0, target, illmn, abcorr, obsrvr, udfunc, et, decres, 
 	    rvl, xtarg, xillmn, xabcor, xobs, xablk, target_len, illmn_len, 
 	    abcorr_len, obsrvr_len, xabcor_len);
     }
 
-/* Subroutine */ int zzgfpain_(char *target, char *illmn, char *abcorr, char *
-	obsrvr, ftnlen target_len, ftnlen illmn_len, ftnlen abcorr_len, 
-	ftnlen obsrvr_len)
+/* Subroutine */ int zzgfpain_(cspice_t* __global_state, char *target, char *
+	illmn, char *abcorr, char *obsrvr, ftnlen target_len, ftnlen 
+	illmn_len, ftnlen abcorr_len, ftnlen obsrvr_len)
 {
     return zzgfpau_0_(1, target, illmn, abcorr, obsrvr, (U_fp)0, (doublereal *
 	    )0, (logical *)0, (doublereal *)0, (integer *)0, (integer *)0, (
@@ -1158,7 +1171,8 @@ L_zzgfpax:
 	    abcorr_len, obsrvr_len, (ftnint)0);
     }
 
-/* Subroutine */ int zzgfpadc_(U_fp udfunc, doublereal *et, logical *decres)
+/* Subroutine */ int zzgfpadc_(cspice_t* __global_state, U_fp udfunc, 
+	doublereal *et, logical *decres)
 {
     return zzgfpau_0_(2, (char *)0, (char *)0, (char *)0, (char *)0, udfunc, 
 	    et, decres, (doublereal *)0, (integer *)0, (integer *)0, (char *)
@@ -1166,7 +1180,8 @@ L_zzgfpax:
 	    ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzgfpagq_(doublereal *et, doublereal *rvl)
+/* Subroutine */ int zzgfpagq_(cspice_t* __global_state, doublereal *et, 
+	doublereal *rvl)
 {
     return zzgfpau_0_(3, (char *)0, (char *)0, (char *)0, (char *)0, (U_fp)0, 
 	    et, (logical *)0, rvl, (integer *)0, (integer *)0, (char *)0, (
@@ -1174,8 +1189,9 @@ L_zzgfpax:
 	    ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzgfpax_(integer *xtarg, integer *xillmn, char *xabcor, 
-	integer *xobs, logical *xablk, ftnlen xabcor_len)
+/* Subroutine */ int zzgfpax_(cspice_t* __global_state, integer *xtarg, 
+	integer *xillmn, char *xabcor, integer *xobs, logical *xablk, ftnlen 
+	xabcor_len)
 {
     return zzgfpau_0_(4, (char *)0, (char *)0, (char *)0, (char *)0, (U_fp)0, 
 	    (doublereal *)0, (logical *)0, (doublereal *)0, xtarg, xillmn, 

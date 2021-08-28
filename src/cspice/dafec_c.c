@@ -261,7 +261,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafec_c" );
+   chkin_c ( naif_state, "dafec_c" );
 
    /*
    Make sure the string pointer for the buffer array is non-null 

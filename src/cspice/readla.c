@@ -8,29 +8,29 @@
 
 
 typedef int readla_state_t;
-static readla_state_t* get_readla_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline readla_state_t* get_readla_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   READLA   ( Read array of lines from a logical unit ) */
-/* Subroutine */ int readla_(integer *unit, integer *maxlin, integer *numlin, 
-	char *array, logical *eof, ftnlen array_len)
+/* Subroutine */ int readla_(cspice_t* __global_state, integer *unit, integer 
+	*maxlin, integer *numlin, char *array, logical *eof, ftnlen array_len)
 {
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical myeof;
-    extern logical failed_(void);
-    extern /* Subroutine */ int readln_(integer *, char *, logical *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int readln_(cspice_t*, integer *, char *, logical 
+	    *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    readla_state_t* __state = get_readla_state();
+    readla_state_t* __state = get_readla_state(__global_state);
 /* $ Abstract */
 
 /*     This routine reads lines from a Fortran logical unit placing */
@@ -293,20 +293,20 @@ static readla_state_t* get_readla_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("READLA", (ftnlen)6);
+	chkin_(__global_state, "READLA", (ftnlen)6);
     }
 
 /*     Check to see if the maximum number of lines is positive. */
 
     if (*maxlin <= 0) {
-	setmsg_("The maximum number of lines for the output line array was n"
-		"ot positive. It was: #.", (ftnlen)82);
-	errint_("#", maxlin, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("READLA", (ftnlen)6);
+	setmsg_(__global_state, "The maximum number of lines for the output "
+		"line array was not positive. It was: #.", (ftnlen)82);
+	errint_(__global_state, "#", maxlin, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "READLA", (ftnlen)6);
 	return 0;
     }
 
@@ -318,14 +318,15 @@ static readla_state_t* get_readla_state() {
     *numlin = 0;
     i__ = 1;
     while(i__ <= *maxlin && ! myeof) {
-	readln_(unit, array + (i__ - 1) * array_len, &myeof, array_len);
-	if (failed_()) {
+	readln_(__global_state, unit, array + (i__ - 1) * array_len, &myeof, 
+		array_len);
+	if (failed_(__global_state)) {
 
 /*           If the read failed, an appropriate error message has already */
 /*           been set, so we need to set the number of lines that have */
 /*           been correctly read from the file and return. */
 
-	    chkout_("READLA", (ftnlen)6);
+	    chkout_(__global_state, "READLA", (ftnlen)6);
 	    return 0;
 	}
 	*numlin = i__;
@@ -341,7 +342,7 @@ static readla_state_t* get_readla_state() {
 	--(*numlin);
     }
     *eof = myeof;
-    chkout_("READLA", (ftnlen)6);
+    chkout_(__global_state, "READLA", (ftnlen)6);
     return 0;
 } /* readla_ */
 

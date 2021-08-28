@@ -8,8 +8,7 @@
 
 
 extern wnvald_init_t __wnvald_init;
-static wnvald_state_t* get_wnvald_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wnvald_state_t* get_wnvald_state(cspice_t* state) {
 	if (!state->wnvald)
 		state->wnvald = __cspice_allocate_module(sizeof(
 	wnvald_state_t), &__wnvald_init, sizeof(__wnvald_init));
@@ -18,25 +17,26 @@ static wnvald_state_t* get_wnvald_state() {
 }
 
 /* $Procedure      WNVALD ( Validate a DP window ) */
-/* Subroutine */ int wnvald_(integer *size, integer *n, doublereal *a)
+/* Subroutine */ int wnvald_(cspice_t* __global_state, integer *size, integer 
+	*n, doublereal *a)
 {
     doublereal left;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal right;
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ssized_(integer *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern logical return_(void);
-    extern logical odd_(integer *);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ssized_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern logical return_(cspice_t*);
+    extern logical odd_(cspice_t*, integer *);
 
 
     /* Module state */
-    wnvald_state_t* __state = get_wnvald_state();
+    wnvald_state_t* __state = get_wnvald_state(__global_state);
 /* $ Abstract */
 
 /*     Form a valid double precision window from the contents */
@@ -248,23 +248,24 @@ static wnvald_state_t* get_wnvald_state() {
 
 /*     Setting up error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("WNVALD", (ftnlen)6);
+    chkin_(__global_state, "WNVALD", (ftnlen)6);
 
 /*     First, some error checks. The number of endpoints must be even, */
 /*     and smaller than the reported size of the window. */
 
-    if (odd_(n)) {
-	setmsg_("WNVALD: Unmatched endpoints", (ftnlen)27);
-	sigerr_("SPICE(UNMATCHENDPTS)", (ftnlen)20);
-	chkout_("WNVALD", (ftnlen)6);
+    if (odd_(__global_state, n)) {
+	setmsg_(__global_state, "WNVALD: Unmatched endpoints", (ftnlen)27);
+	sigerr_(__global_state, "SPICE(UNMATCHENDPTS)", (ftnlen)20);
+	chkout_(__global_state, "WNVALD", (ftnlen)6);
 	return 0;
     } else if (*n > *size) {
-	setmsg_("WNVALD: Inconsistent value for SIZE.", (ftnlen)36);
-	sigerr_("SPICE(WINDOWTOOSMALL)", (ftnlen)21);
-	chkout_("WNVALD", (ftnlen)6);
+	setmsg_(__global_state, "WNVALD: Inconsistent value for SIZE.", (
+		ftnlen)36);
+	sigerr_(__global_state, "SPICE(WINDOWTOOSMALL)", (ftnlen)21);
+	chkout_(__global_state, "WNVALD", (ftnlen)6);
 	return 0;
     }
 
@@ -276,23 +277,23 @@ static wnvald_state_t* get_wnvald_state() {
 /*     the corresponding left endpoint. This is a boo-boo, and should be */
 /*     reported. */
 
-    ssized_(size, a);
-    scardd_(&__state->c__0, a);
+    ssized_(__global_state, size, a);
+    scardd_(__global_state, &__state->c__0, a);
     i__ = 1;
     while(i__ < *n) {
 	left = a[i__ + 5];
 	right = a[i__ + 6];
 	if (left > right) {
-	    setmsg_("WNVALD: Left endpoint may not exceed right endpoint.", (
-		    ftnlen)52);
-	    sigerr_("SPICE(BADENDPOINTS)", (ftnlen)19);
-	    chkout_("WNVALD", (ftnlen)6);
+	    setmsg_(__global_state, "WNVALD: Left endpoint may not exceed ri"
+		    "ght endpoint.", (ftnlen)52);
+	    sigerr_(__global_state, "SPICE(BADENDPOINTS)", (ftnlen)19);
+	    chkout_(__global_state, "WNVALD", (ftnlen)6);
 	    return 0;
 	}
-	wninsd_(&left, &right, a);
+	wninsd_(__global_state, &left, &right, a);
 	i__ += 2;
     }
-    chkout_("WNVALD", (ftnlen)6);
+    chkout_(__global_state, "WNVALD", (ftnlen)6);
     return 0;
 } /* wnvald_ */
 

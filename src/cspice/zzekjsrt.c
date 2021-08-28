@@ -8,8 +8,7 @@
 
 
 extern zzekjsrt_init_t __zzekjsrt_init;
-static zzekjsrt_state_t* get_zzekjsrt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekjsrt_state_t* get_zzekjsrt_state(cspice_t* state) {
 	if (!state->zzekjsrt)
 		state->zzekjsrt = __cspice_allocate_module(sizeof(
 	zzekjsrt_state_t), &__zzekjsrt_init, sizeof(__zzekjsrt_init));
@@ -18,36 +17,38 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 }
 
 /* $Procedure      ZZEKJSRT ( EK, join row set union sort ) */
-/* Subroutine */ int zzekjsrt_(integer *njrs, integer *ubases, integer *
-	norder, integer *otabs, integer *ocols, integer *oelts, integer *
-	senses, integer *sthan, integer *stsdsc, integer *stdtpt, integer *
-	dtpool, integer *dtdscs, integer *ordbas)
+/* Subroutine */ int zzekjsrt_(cspice_t* __global_state, integer *njrs, 
+	integer *ubases, integer *norder, integer *otabs, integer *ocols, 
+	integer *oelts, integer *senses, integer *sthan, integer *stsdsc, 
+	integer *stdtpt, integer *dtpool, integer *dtdscs, integer *ordbas)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     char ch__1[32], ch__2[32];
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer ntab;
     logical nfjg;
     logical null;
-    extern /* Subroutine */ int zzekvcal_(integer *, integer *, integer *);
-    extern logical zzekvcmp_(integer *, integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekvcal_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern logical zzekvcmp_(cspice_t*, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekspsh_(integer *, integer *);
-    extern /* Subroutine */ int zzekvset_(integer *, integer *);
-    extern /* Subroutine */ int zzekstop_(integer *);
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzeksupd_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekspsh_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzekvset_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzekstop_(cspice_t*, integer *);
     integer i__;
     integer j;
     integer addrj;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer cvlen;
     integer rvecj[11];
     integer svecj[10];
@@ -56,15 +57,15 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
     logical brute;
     integer dtype;
     logical trunc;
-    extern /* Subroutine */ int swapi_(integer *, integer *);
+    extern /* Subroutine */ int swapi_(cspice_t*, integer *, integer *);
     integer nrows;
     integer jg;
     integer addrjg;
     integer handle;
     integer nr;
     integer rj;
-    extern integer lnknxt_(integer *, integer *);
-    extern logical return_(void);
+    extern integer lnknxt_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
     integer cprime;
     integer colptr;
     integer eltidx;
@@ -85,23 +86,25 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
     integer tprime;
     logical jle;
     logical nfj;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int zzekrsc_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, char *, logical *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekrsd_(integer *, integer *, integer *, 
-	    integer *, integer *, doublereal *, logical *, logical *);
-    extern /* Subroutine */ int zzekrsi_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *, logical *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekrsc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, char *, logical *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzeksrd_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekrsd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, doublereal *, logical *, logical 
+	    *);
+    extern /* Subroutine */ int zzekrsi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, logical *, logical *);
 
 
     /* Module state */
-    zzekjsrt_state_t* __state = get_zzekjsrt_state();
+    zzekjsrt_state_t* __state = get_zzekjsrt_state(__global_state);
 /* $ Abstract */
 
 /*     Sort the row vectors of a join row set union, given an order */
@@ -1334,20 +1337,20 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKJSRT", (ftnlen)8);
+	chkin_(__global_state, "ZZEKJSRT", (ftnlen)8);
     }
 
 /*     If there are no order-by columns, that's an error. */
 
     if (*norder < 1) {
-	setmsg_("Number of order-by columns must be positive but was #.", (
-		ftnlen)54);
-	errint_("#", norder, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKJSRT", (ftnlen)8);
+	setmsg_(__global_state, "Number of order-by columns must be positive"
+		" but was #.", (ftnlen)54);
+	errint_(__global_state, "#", norder, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKJSRT", (ftnlen)8);
 	return 0;
     }
 
@@ -1370,7 +1373,7 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
     i__1 = *njrs;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	nrloc = ubases[i__ - 1] + 2;
-	zzeksrd_(&nrloc, &nrloc, &nr);
+	zzeksrd_(__global_state, &nrloc, &nrloc, &nr);
 	nrows += nr;
     }
 
@@ -1379,7 +1382,7 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 /*     join row set suffices. */
 
     tabloc = ubases[0] + 3;
-    zzeksrd_(&tabloc, &tabloc, &ntab);
+    zzeksrd_(__global_state, &tabloc, &tabloc, &ntab);
     svsize = ntab;
     rvsize = ntab + 1;
 
@@ -1388,19 +1391,19 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 /*     Initialize addressing in the join row set union so we can look up */
 /*     the locations of these vectors. */
 
-    zzekvset_(njrs, ubases);
-    zzekvcal_(&__state->c__1, &rwvbas, &sgvbas);
+    zzekvset_(__global_state, njrs, ubases);
+    zzekvcal_(__global_state, &__state->c__1, &rwvbas, &sgvbas);
     i__1 = sgvbas + 1;
     i__2 = sgvbas + svsize;
-    zzeksrd_(&i__1, &i__2, segvec);
+    zzeksrd_(__global_state, &i__1, &i__2, segvec);
     tprime = otabs[0];
     cprime = ocols[0];
-    seg = segvec[(i__1 = tprime - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("segv"
-	    "ec", i__1, "zzekjsrt_", (ftnlen)534)];
+    seg = segvec[(i__1 = tprime - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "segvec", i__1, "zzekjsrt_", (ftnlen)534)];
     colptr = stdtpt[seg - 1];
     i__1 = cprime;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	colptr = lnknxt_(&colptr, dtpool);
+	colptr = lnknxt_(__global_state, &colptr, dtpool);
     }
     dtype = dtdscs[colptr * 11 - 10];
     if (nrows <= 250000) {
@@ -1435,88 +1438,99 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 	prvbas = -1;
 	i__1 = nrows;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    zzekvcal_(&i__, &rwvbas, &sgvbas);
+	    zzekvcal_(__global_state, &i__, &rwvbas, &sgvbas);
 	    if (i__ == 1 || sgvbas != prvbas) {
 		i__2 = sgvbas + 1;
 		i__3 = sgvbas + svsize;
-		zzeksrd_(&i__2, &i__3, segvec);
+		zzeksrd_(__global_state, &i__2, &i__3, segvec);
 		seg = segvec[(i__2 = tprime - 1) < 10 && 0 <= i__2 ? i__2 : 
-			s_rnge("segvec", i__2, "zzekjsrt_", (ftnlen)585)];
+			s_rnge(&__global_state->f2c, "segvec", i__2, "zzekjs"
+			"rt_", (ftnlen)585)];
 		handle = sthan[seg - 1];
 		colptr = stdtpt[seg - 1];
 		i__2 = cprime;
 		for (j = 2; j <= i__2; ++j) {
-		    colptr = lnknxt_(&colptr, dtpool);
+		    colptr = lnknxt_(__global_state, &colptr, dtpool);
 		}
 	    }
 	    i__2 = rwvbas + 1;
 	    i__3 = rwvbas + rvsize;
-	    zzeksrd_(&i__2, &i__3, rowvec);
+	    zzeksrd_(__global_state, &i__2, &i__3, rowvec);
 	    row = rowvec[(i__2 = tprime - 1) < 11 && 0 <= i__2 ? i__2 : 
-		    s_rnge("rowvec", i__2, "zzekjsrt_", (ftnlen)598)];
+		    s_rnge(&__global_state->f2c, "rowvec", i__2, "zzekjsrt_", 
+		    (ftnlen)598)];
 	    eltidx = oelts[cprime - 1];
 	    if (dtype == 1) {
-		zzekrsc_(&handle, &stsdsc[seg * 24 - 24], &dtdscs[colptr * 11 
-			- 11], &row, &eltidx, &cvlen, __state->cdat + (((i__2 
-			= i__ - 1) < 250000 && 0 <= i__2 ? i__2 : s_rnge(
-			"cdat", i__2, "zzekjsrt_", (ftnlen)604)) << 5), &null,
-			 &found, (ftnlen)32);
+		zzekrsc_(__global_state, &handle, &stsdsc[seg * 24 - 24], &
+			dtdscs[colptr * 11 - 11], &row, &eltidx, &cvlen, 
+			__state->cdat + (((i__2 = i__ - 1) < 250000 && 0 <= 
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "cdat", 
+			i__2, "zzekjsrt_", (ftnlen)604)) << 5), &null, &found,
+			 (ftnlen)32);
 		if (! found) {
-		    setmsg_("EK = #; SEG = #; ROW = #; COLIDX = #; ELT = #; "
-			    "column entry elt was not found.", (ftnlen)78);
-		    errhan_("#", &handle, (ftnlen)1);
-		    errint_("#", &seg, (ftnlen)1);
-		    errint_("#", &row, (ftnlen)1);
-		    errint_("#", &dtdscs[colptr * 11 - 3], (ftnlen)1);
-		    errint_("#", &eltidx, (ftnlen)1);
-		    sigerr_("SPICE(BUG)", (ftnlen)10);
-		    chkout_("ZZEKJSRT", (ftnlen)8);
+		    setmsg_(__global_state, "EK = #; SEG = #; ROW = #; COLID"
+			    "X = #; ELT = #; column entry elt was not found.", 
+			    (ftnlen)78);
+		    errhan_(__global_state, "#", &handle, (ftnlen)1);
+		    errint_(__global_state, "#", &seg, (ftnlen)1);
+		    errint_(__global_state, "#", &row, (ftnlen)1);
+		    errint_(__global_state, "#", &dtdscs[colptr * 11 - 3], (
+			    ftnlen)1);
+		    errint_(__global_state, "#", &eltidx, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		    chkout_(__global_state, "ZZEKJSRT", (ftnlen)8);
 		    return 0;
 		}
 		trunc = trunc || cvlen > 32;
 	    } else if (dtype == 2 || dtype == 4) {
-		zzekrsd_(&handle, &stsdsc[seg * 24 - 24], &dtdscs[colptr * 11 
-			- 11], &row, &eltidx, &__state->ddat[(i__2 = i__ - 1) 
-			< 250000 && 0 <= i__2 ? i__2 : s_rnge("ddat", i__2, 
+		zzekrsd_(__global_state, &handle, &stsdsc[seg * 24 - 24], &
+			dtdscs[colptr * 11 - 11], &row, &eltidx, &
+			__state->ddat[(i__2 = i__ - 1) < 250000 && 0 <= i__2 ?
+			 i__2 : s_rnge(&__global_state->f2c, "ddat", i__2, 
 			"zzekjsrt_", (ftnlen)636)], &null, &found);
 		if (! found) {
-		    setmsg_("EK = #; SEG = #; ROW = #; COLIDX = #; ELT = #; "
-			    "column entry elt was not found.", (ftnlen)78);
-		    errhan_("#", &handle, (ftnlen)1);
-		    errint_("#", &seg, (ftnlen)1);
-		    errint_("#", &row, (ftnlen)1);
-		    errint_("#", &dtdscs[colptr * 11 - 3], (ftnlen)1);
-		    errint_("#", &eltidx, (ftnlen)1);
-		    sigerr_("SPICE(BUG)", (ftnlen)10);
-		    chkout_("ZZEKJSRT", (ftnlen)8);
+		    setmsg_(__global_state, "EK = #; SEG = #; ROW = #; COLID"
+			    "X = #; ELT = #; column entry elt was not found.", 
+			    (ftnlen)78);
+		    errhan_(__global_state, "#", &handle, (ftnlen)1);
+		    errint_(__global_state, "#", &seg, (ftnlen)1);
+		    errint_(__global_state, "#", &row, (ftnlen)1);
+		    errint_(__global_state, "#", &dtdscs[colptr * 11 - 3], (
+			    ftnlen)1);
+		    errint_(__global_state, "#", &eltidx, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		    chkout_(__global_state, "ZZEKJSRT", (ftnlen)8);
 		    return 0;
 		}
 	    } else if (dtype == 3) {
-		zzekrsi_(&handle, &stsdsc[seg * 24 - 24], &dtdscs[colptr * 11 
-			- 11], &row, &eltidx, &__state->idat[(i__2 = i__ - 1) 
-			< 250000 && 0 <= i__2 ? i__2 : s_rnge("idat", i__2, 
+		zzekrsi_(__global_state, &handle, &stsdsc[seg * 24 - 24], &
+			dtdscs[colptr * 11 - 11], &row, &eltidx, &
+			__state->idat[(i__2 = i__ - 1) < 250000 && 0 <= i__2 ?
+			 i__2 : s_rnge(&__global_state->f2c, "idat", i__2, 
 			"zzekjsrt_", (ftnlen)666)], &null, &found);
 		if (! found) {
-		    setmsg_("EK = #; SEG = #; ROW = #; COLIDX = #; ELT = #; "
-			    "column entry elt was not found.", (ftnlen)78);
-		    errhan_("#", &handle, (ftnlen)1);
-		    errint_("#", &seg, (ftnlen)1);
-		    errint_("#", &row, (ftnlen)1);
-		    errint_("#", &dtdscs[colptr * 11 - 3], (ftnlen)1);
-		    errint_("#", &eltidx, (ftnlen)1);
-		    sigerr_("SPICE(BUG)", (ftnlen)10);
-		    chkout_("ZZEKJSRT", (ftnlen)8);
+		    setmsg_(__global_state, "EK = #; SEG = #; ROW = #; COLID"
+			    "X = #; ELT = #; column entry elt was not found.", 
+			    (ftnlen)78);
+		    errhan_(__global_state, "#", &handle, (ftnlen)1);
+		    errint_(__global_state, "#", &seg, (ftnlen)1);
+		    errint_(__global_state, "#", &row, (ftnlen)1);
+		    errint_(__global_state, "#", &dtdscs[colptr * 11 - 3], (
+			    ftnlen)1);
+		    errint_(__global_state, "#", &eltidx, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		    chkout_(__global_state, "ZZEKJSRT", (ftnlen)8);
 		    return 0;
 		}
 	    } else {
 
 /*              We must have a bogus column descriptor. */
 
-		setmsg_("Unrecognized data type # for first column.", (ftnlen)
-			42);
-		errint_("#", &dtype, (ftnlen)1);
-		sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-		chkout_("ZZEKJSRT", (ftnlen)8);
+		setmsg_(__global_state, "Unrecognized data type # for first "
+			"column.", (ftnlen)42);
+		errint_(__global_state, "#", &dtype, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+		chkout_(__global_state, "ZZEKJSRT", (ftnlen)8);
 		return 0;
 	    }
 
@@ -1524,12 +1538,12 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 
 	    if (null) {
 		*(unsigned char *)&__state->nf[(i__2 = i__ - 1) < 250000 && 0 
-			<= i__2 ? i__2 : s_rnge("nf", i__2, "zzekjsrt_", (
-			ftnlen)710)] = 'T';
+			<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "nf", 
+			i__2, "zzekjsrt_", (ftnlen)710)] = 'T';
 	    } else {
 		*(unsigned char *)&__state->nf[(i__2 = i__ - 1) < 250000 && 0 
-			<= i__2 ? i__2 : s_rnge("nf", i__2, "zzekjsrt_", (
-			ftnlen)712)] = 'F';
+			<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "nf", 
+			i__2, "zzekjsrt_", (ftnlen)712)] = 'F';
 	    }
 	    prvbas = sgvbas;
 	}
@@ -1539,7 +1553,8 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 	i__1 = nrows;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    __state->ordvec[(i__2 = i__ - 1) < 250000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ordvec", i__2, "zzekjsrt_", (ftnlen)724)] = i__;
+		    s_rnge(&__global_state->f2c, "ordvec", i__2, "zzekjsrt_", 
+		    (ftnlen)724)] = i__;
 	}
 
 /*        At this point, we've read in the data for the primary order-by */
@@ -1566,17 +1581,19 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 /*                 elements, as indicated by the order vector. */
 
 		    rj = __state->ordvec[(i__2 = j - 1) < 250000 && 0 <= i__2 
-			    ? i__2 : s_rnge("ordvec", i__2, "zzekjsrt_", (
-			    ftnlen)755)];
+			    ? i__2 : s_rnge(&__global_state->f2c, "ordvec", 
+			    i__2, "zzekjsrt_", (ftnlen)755)];
 		    rjg = __state->ordvec[(i__2 = jg - 1) < 250000 && 0 <= 
-			    i__2 ? i__2 : s_rnge("ordvec", i__2, "zzekjsrt_", 
-			    (ftnlen)756)];
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "ordv"
+			    "ec", i__2, "zzekjsrt_", (ftnlen)756)];
 		    nfj = *(unsigned char *)&__state->nf[(i__2 = rj - 1) < 
-			    250000 && 0 <= i__2 ? i__2 : s_rnge("nf", i__2, 
-			    "zzekjsrt_", (ftnlen)758)] == 'T';
+			    250000 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "nf", i__2, "zzekjsrt_", (
+			    ftnlen)758)] == 'T';
 		    nfjg = *(unsigned char *)&__state->nf[(i__2 = rjg - 1) < 
-			    250000 && 0 <= i__2 ? i__2 : s_rnge("nf", i__2, 
-			    "zzekjsrt_", (ftnlen)759)] == 'T';
+			    250000 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "nf", i__2, "zzekjsrt_", (
+			    ftnlen)759)] == 'T';
 
 /*                 Start out hoping for the best:  that we won't have */
 /*                 to do a brute-force comparison. */
@@ -1591,28 +1608,30 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 			    if (senses[0] == 0) {
 				jle = nfj || ! (nfj || nfjg) && __state->idat[
 					(i__2 = rj - 1) < 250000 && 0 <= i__2 
-					? i__2 : s_rnge("idat", i__2, "zzekj"
-					"srt_", (ftnlen)777)] <= __state->idat[
-					(i__3 = rjg - 1) < 250000 && 0 <= 
-					i__3 ? i__3 : s_rnge("idat", i__3, 
-					"zzekjsrt_", (ftnlen)777)];
+					? i__2 : s_rnge(&__global_state->f2c, 
+					"idat", i__2, "zzekjsrt_", (ftnlen)
+					777)] <= __state->idat[(i__3 = rjg - 
+					1) < 250000 && 0 <= i__3 ? i__3 : 
+					s_rnge(&__global_state->f2c, "idat", 
+					i__3, "zzekjsrt_", (ftnlen)777)];
 			    } else {
 				jle = nfjg || ! (nfj || nfjg) && 
 					__state->idat[(i__2 = rj - 1) < 
-					250000 && 0 <= i__2 ? i__2 : s_rnge(
-					"idat", i__2, "zzekjsrt_", (ftnlen)
-					779)] >= __state->idat[(i__3 = rjg - 
-					1) < 250000 && 0 <= i__3 ? i__3 : 
-					s_rnge("idat", i__3, "zzekjsrt_", (
-					ftnlen)779)];
+					250000 && 0 <= i__2 ? i__2 : s_rnge(&
+					__global_state->f2c, "idat", i__2, 
+					"zzekjsrt_", (ftnlen)779)] >= 
+					__state->idat[(i__3 = rjg - 1) < 
+					250000 && 0 <= i__3 ? i__3 : s_rnge(&
+					__global_state->f2c, "idat", i__3, 
+					"zzekjsrt_", (ftnlen)779)];
 			    }
 			} else if (! (nfj && nfjg || ! (nfj || nfjg) && 
 				__state->idat[(i__2 = rj - 1) < 250000 && 0 <=
-				 i__2 ? i__2 : s_rnge("idat", i__2, "zzekjsr"
-				"t_", (ftnlen)783)] == __state->idat[(i__3 = 
-				rjg - 1) < 250000 && 0 <= i__3 ? i__3 : 
-				s_rnge("idat", i__3, "zzekjsrt_", (ftnlen)783)
-				])) {
+				 i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"idat", i__2, "zzekjsrt_", (ftnlen)783)] == 
+				__state->idat[(i__3 = rjg - 1) < 250000 && 0 
+				<= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+				"idat", i__3, "zzekjsrt_", (ftnlen)783)])) {
 
 /*                       If the items we're comparing are unequal, we can */
 /*                       still make a decision. */
@@ -1620,20 +1639,22 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 			    if (senses[0] == 0) {
 				jle = nfj || ! (nfj || nfjg) && __state->idat[
 					(i__2 = rj - 1) < 250000 && 0 <= i__2 
-					? i__2 : s_rnge("idat", i__2, "zzekj"
-					"srt_", (ftnlen)791)] <= __state->idat[
-					(i__3 = rjg - 1) < 250000 && 0 <= 
-					i__3 ? i__3 : s_rnge("idat", i__3, 
-					"zzekjsrt_", (ftnlen)791)];
+					? i__2 : s_rnge(&__global_state->f2c, 
+					"idat", i__2, "zzekjsrt_", (ftnlen)
+					791)] <= __state->idat[(i__3 = rjg - 
+					1) < 250000 && 0 <= i__3 ? i__3 : 
+					s_rnge(&__global_state->f2c, "idat", 
+					i__3, "zzekjsrt_", (ftnlen)791)];
 			    } else {
 				jle = nfjg || ! (nfj || nfjg) && 
 					__state->idat[(i__2 = rj - 1) < 
-					250000 && 0 <= i__2 ? i__2 : s_rnge(
-					"idat", i__2, "zzekjsrt_", (ftnlen)
-					793)] >= __state->idat[(i__3 = rjg - 
-					1) < 250000 && 0 <= i__3 ? i__3 : 
-					s_rnge("idat", i__3, "zzekjsrt_", (
-					ftnlen)793)];
+					250000 && 0 <= i__2 ? i__2 : s_rnge(&
+					__global_state->f2c, "idat", i__2, 
+					"zzekjsrt_", (ftnlen)793)] >= 
+					__state->idat[(i__3 = rjg - 1) < 
+					250000 && 0 <= i__3 ? i__3 : s_rnge(&
+					__global_state->f2c, "idat", i__3, 
+					"zzekjsrt_", (ftnlen)793)];
 			    }
 			} else {
 
@@ -1651,45 +1672,49 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 			    if (senses[0] == 0) {
 				jle = nfj || ! (nfj || nfjg) && __state->ddat[
 					(i__2 = rj - 1) < 250000 && 0 <= i__2 
-					? i__2 : s_rnge("ddat", i__2, "zzekj"
-					"srt_", (ftnlen)819)] <= __state->ddat[
-					(i__3 = rjg - 1) < 250000 && 0 <= 
-					i__3 ? i__3 : s_rnge("ddat", i__3, 
-					"zzekjsrt_", (ftnlen)819)];
+					? i__2 : s_rnge(&__global_state->f2c, 
+					"ddat", i__2, "zzekjsrt_", (ftnlen)
+					819)] <= __state->ddat[(i__3 = rjg - 
+					1) < 250000 && 0 <= i__3 ? i__3 : 
+					s_rnge(&__global_state->f2c, "ddat", 
+					i__3, "zzekjsrt_", (ftnlen)819)];
 			    } else {
 				jle = nfjg || ! (nfj || nfjg) && 
 					__state->ddat[(i__2 = rj - 1) < 
-					250000 && 0 <= i__2 ? i__2 : s_rnge(
-					"ddat", i__2, "zzekjsrt_", (ftnlen)
-					821)] >= __state->ddat[(i__3 = rjg - 
-					1) < 250000 && 0 <= i__3 ? i__3 : 
-					s_rnge("ddat", i__3, "zzekjsrt_", (
-					ftnlen)821)];
+					250000 && 0 <= i__2 ? i__2 : s_rnge(&
+					__global_state->f2c, "ddat", i__2, 
+					"zzekjsrt_", (ftnlen)821)] >= 
+					__state->ddat[(i__3 = rjg - 1) < 
+					250000 && 0 <= i__3 ? i__3 : s_rnge(&
+					__global_state->f2c, "ddat", i__3, 
+					"zzekjsrt_", (ftnlen)821)];
 			    }
 			} else if (! (nfj && nfjg || ! (nfj || nfjg) && 
 				__state->ddat[(i__2 = rj - 1) < 250000 && 0 <=
-				 i__2 ? i__2 : s_rnge("ddat", i__2, "zzekjsr"
-				"t_", (ftnlen)825)] == __state->ddat[(i__3 = 
-				rjg - 1) < 250000 && 0 <= i__3 ? i__3 : 
-				s_rnge("ddat", i__3, "zzekjsrt_", (ftnlen)825)
-				])) {
+				 i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"ddat", i__2, "zzekjsrt_", (ftnlen)825)] == 
+				__state->ddat[(i__3 = rjg - 1) < 250000 && 0 
+				<= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+				"ddat", i__3, "zzekjsrt_", (ftnlen)825)])) {
 			    if (senses[0] == 0) {
 				jle = nfj || ! (nfj || nfjg) && __state->ddat[
 					(i__2 = rj - 1) < 250000 && 0 <= i__2 
-					? i__2 : s_rnge("ddat", i__2, "zzekj"
-					"srt_", (ftnlen)830)] <= __state->ddat[
-					(i__3 = rjg - 1) < 250000 && 0 <= 
-					i__3 ? i__3 : s_rnge("ddat", i__3, 
-					"zzekjsrt_", (ftnlen)830)];
+					? i__2 : s_rnge(&__global_state->f2c, 
+					"ddat", i__2, "zzekjsrt_", (ftnlen)
+					830)] <= __state->ddat[(i__3 = rjg - 
+					1) < 250000 && 0 <= i__3 ? i__3 : 
+					s_rnge(&__global_state->f2c, "ddat", 
+					i__3, "zzekjsrt_", (ftnlen)830)];
 			    } else {
 				jle = nfjg || ! (nfj || nfjg) && 
 					__state->ddat[(i__2 = rj - 1) < 
-					250000 && 0 <= i__2 ? i__2 : s_rnge(
-					"ddat", i__2, "zzekjsrt_", (ftnlen)
-					832)] >= __state->ddat[(i__3 = rjg - 
-					1) < 250000 && 0 <= i__3 ? i__3 : 
-					s_rnge("ddat", i__3, "zzekjsrt_", (
-					ftnlen)832)];
+					250000 && 0 <= i__2 ? i__2 : s_rnge(&
+					__global_state->f2c, "ddat", i__2, 
+					"zzekjsrt_", (ftnlen)832)] >= 
+					__state->ddat[(i__3 = rjg - 1) < 
+					250000 && 0 <= i__3 ? i__3 : s_rnge(&
+					__global_state->f2c, "ddat", i__3, 
+					"zzekjsrt_", (ftnlen)832)];
 			    }
 			} else {
 
@@ -1707,76 +1732,92 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 
 			if (*norder == 1 && ! trunc) {
 			    if (senses[0] == 0) {
-				s_copy(ch__1, __state->cdat + (((i__2 = rj - 
-					1) < 250000 && 0 <= i__2 ? i__2 : 
-					s_rnge("cdat", i__2, "zzekjsrt_", (
-					ftnlen)858)) << 5), (ftnlen)32, (
-					ftnlen)32);
-				s_copy(ch__2, __state->cdat + (((i__3 = rjg - 
-					1) < 250000 && 0 <= i__3 ? i__3 : 
-					s_rnge("cdat", i__3, "zzekjsrt_", (
-					ftnlen)858)) << 5), (ftnlen)32, (
-					ftnlen)32);
-				jle = nfj || ! (nfj || nfjg) && s_cmp(ch__1, 
-					ch__2, (ftnlen)32, (ftnlen)32) <= 0;
+				s_copy(&__global_state->f2c, ch__1, 
+					__state->cdat + (((i__2 = rj - 1) < 
+					250000 && 0 <= i__2 ? i__2 : s_rnge(&
+					__global_state->f2c, "cdat", i__2, 
+					"zzekjsrt_", (ftnlen)858)) << 5), (
+					ftnlen)32, (ftnlen)32);
+				s_copy(&__global_state->f2c, ch__2, 
+					__state->cdat + (((i__3 = rjg - 1) < 
+					250000 && 0 <= i__3 ? i__3 : s_rnge(&
+					__global_state->f2c, "cdat", i__3, 
+					"zzekjsrt_", (ftnlen)858)) << 5), (
+					ftnlen)32, (ftnlen)32);
+				jle = nfj || ! (nfj || nfjg) && s_cmp(&
+					__global_state->f2c, ch__1, ch__2, (
+					ftnlen)32, (ftnlen)32) <= 0;
 			    } else {
-				s_copy(ch__1, __state->cdat + (((i__2 = rj - 
-					1) < 250000 && 0 <= i__2 ? i__2 : 
-					s_rnge("cdat", i__2, "zzekjsrt_", (
-					ftnlen)860)) << 5), (ftnlen)32, (
-					ftnlen)32);
-				s_copy(ch__2, __state->cdat + (((i__3 = rjg - 
-					1) < 250000 && 0 <= i__3 ? i__3 : 
-					s_rnge("cdat", i__3, "zzekjsrt_", (
-					ftnlen)860)) << 5), (ftnlen)32, (
-					ftnlen)32);
-				jle = nfjg || ! (nfj || nfjg) && s_cmp(ch__1, 
-					ch__2, (ftnlen)32, (ftnlen)32) >= 0;
+				s_copy(&__global_state->f2c, ch__1, 
+					__state->cdat + (((i__2 = rj - 1) < 
+					250000 && 0 <= i__2 ? i__2 : s_rnge(&
+					__global_state->f2c, "cdat", i__2, 
+					"zzekjsrt_", (ftnlen)860)) << 5), (
+					ftnlen)32, (ftnlen)32);
+				s_copy(&__global_state->f2c, ch__2, 
+					__state->cdat + (((i__3 = rjg - 1) < 
+					250000 && 0 <= i__3 ? i__3 : s_rnge(&
+					__global_state->f2c, "cdat", i__3, 
+					"zzekjsrt_", (ftnlen)860)) << 5), (
+					ftnlen)32, (ftnlen)32);
+				jle = nfjg || ! (nfj || nfjg) && s_cmp(&
+					__global_state->f2c, ch__1, ch__2, (
+					ftnlen)32, (ftnlen)32) >= 0;
 			    }
 			} else /* if(complicated condition) */ {
-			    s_copy(ch__1, __state->cdat + (((i__2 = rj - 1) < 
-				    250000 && 0 <= i__2 ? i__2 : s_rnge("cdat"
-				    , i__2, "zzekjsrt_", (ftnlen)864)) << 5), 
-				    (ftnlen)32, (ftnlen)32);
-			    s_copy(ch__2, __state->cdat + (((i__3 = rjg - 1) <
-				     250000 && 0 <= i__3 ? i__3 : s_rnge(
-				    "cdat", i__3, "zzekjsrt_", (ftnlen)864)) 
+			    s_copy(&__global_state->f2c, ch__1, __state->cdat 
+				    + (((i__2 = rj - 1) < 250000 && 0 <= i__2 
+				    ? i__2 : s_rnge(&__global_state->f2c, 
+				    "cdat", i__2, "zzekjsrt_", (ftnlen)864)) 
 				    << 5), (ftnlen)32, (ftnlen)32);
-			    if (! (nfj && nfjg || ! (nfj || nfjg) && s_cmp(
-				    ch__1, ch__2, (ftnlen)32, (ftnlen)32) == 
-				    0)) {
+			    s_copy(&__global_state->f2c, ch__2, __state->cdat 
+				    + (((i__3 = rjg - 1) < 250000 && 0 <= 
+				    i__3 ? i__3 : s_rnge(&__global_state->f2c,
+				     "cdat", i__3, "zzekjsrt_", (ftnlen)864)) 
+				    << 5), (ftnlen)32, (ftnlen)32);
+			    if (! (nfj && nfjg || ! (nfj || nfjg) && s_cmp(&
+				    __global_state->f2c, ch__1, ch__2, (
+				    ftnlen)32, (ftnlen)32) == 0)) {
 
 /*                       If the items we're comparing are unequal, we can */
 /*                       still make a decision. */
 
 				if (senses[0] == 0) {
-				    s_copy(ch__1, __state->cdat + (((i__2 = 
-					    rj - 1) < 250000 && 0 <= i__2 ? 
-					    i__2 : s_rnge("cdat", i__2, "zze"
-					    "kjsrt_", (ftnlen)872)) << 5), (
-					    ftnlen)32, (ftnlen)32);
-				    s_copy(ch__2, __state->cdat + (((i__3 = 
-					    rjg - 1) < 250000 && 0 <= i__3 ? 
-					    i__3 : s_rnge("cdat", i__3, "zze"
-					    "kjsrt_", (ftnlen)872)) << 5), (
-					    ftnlen)32, (ftnlen)32);
-				    jle = nfj || ! (nfj || nfjg) && s_cmp(
-					    ch__1, ch__2, (ftnlen)32, (ftnlen)
-					    32) <= 0;
+				    s_copy(&__global_state->f2c, ch__1, 
+					    __state->cdat + (((i__2 = rj - 1) 
+					    < 250000 && 0 <= i__2 ? i__2 : 
+					    s_rnge(&__global_state->f2c, 
+					    "cdat", i__2, "zzekjsrt_", (
+					    ftnlen)872)) << 5), (ftnlen)32, (
+					    ftnlen)32);
+				    s_copy(&__global_state->f2c, ch__2, 
+					    __state->cdat + (((i__3 = rjg - 1)
+					     < 250000 && 0 <= i__3 ? i__3 : 
+					    s_rnge(&__global_state->f2c, 
+					    "cdat", i__3, "zzekjsrt_", (
+					    ftnlen)872)) << 5), (ftnlen)32, (
+					    ftnlen)32);
+				    jle = nfj || ! (nfj || nfjg) && s_cmp(&
+					    __global_state->f2c, ch__1, ch__2,
+					     (ftnlen)32, (ftnlen)32) <= 0;
 				} else {
-				    s_copy(ch__1, __state->cdat + (((i__2 = 
-					    rj - 1) < 250000 && 0 <= i__2 ? 
-					    i__2 : s_rnge("cdat", i__2, "zze"
-					    "kjsrt_", (ftnlen)874)) << 5), (
-					    ftnlen)32, (ftnlen)32);
-				    s_copy(ch__2, __state->cdat + (((i__3 = 
-					    rjg - 1) < 250000 && 0 <= i__3 ? 
-					    i__3 : s_rnge("cdat", i__3, "zze"
-					    "kjsrt_", (ftnlen)874)) << 5), (
-					    ftnlen)32, (ftnlen)32);
-				    jle = nfjg || ! (nfj || nfjg) && s_cmp(
-					    ch__1, ch__2, (ftnlen)32, (ftnlen)
-					    32) >= 0;
+				    s_copy(&__global_state->f2c, ch__1, 
+					    __state->cdat + (((i__2 = rj - 1) 
+					    < 250000 && 0 <= i__2 ? i__2 : 
+					    s_rnge(&__global_state->f2c, 
+					    "cdat", i__2, "zzekjsrt_", (
+					    ftnlen)874)) << 5), (ftnlen)32, (
+					    ftnlen)32);
+				    s_copy(&__global_state->f2c, ch__2, 
+					    __state->cdat + (((i__3 = rjg - 1)
+					     < 250000 && 0 <= i__3 ? i__3 : 
+					    s_rnge(&__global_state->f2c, 
+					    "cdat", i__3, "zzekjsrt_", (
+					    ftnlen)874)) << 5), (ftnlen)32, (
+					    ftnlen)32);
+				    jle = nfjg || ! (nfj || nfjg) && s_cmp(&
+					    __global_state->f2c, ch__1, ch__2,
+					     (ftnlen)32, (ftnlen)32) >= 0;
 				}
 			    } else {
 
@@ -1789,23 +1830,24 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 			}
 		    }
 		    if (brute) {
-			zzekvcal_(&rj, &rwvbas, &sgvbas);
+			zzekvcal_(__global_state, &rj, &rwvbas, &sgvbas);
 			i__2 = sgvbas + 1;
 			i__3 = sgvbas + svsize;
-			zzeksrd_(&i__2, &i__3, svecj);
+			zzeksrd_(__global_state, &i__2, &i__3, svecj);
 			i__2 = rwvbas + 1;
 			i__3 = rwvbas + rvsize;
-			zzeksrd_(&i__2, &i__3, rvecj);
-			zzekvcal_(&rjg, &rwvbas, &sgvbas);
+			zzeksrd_(__global_state, &i__2, &i__3, rvecj);
+			zzekvcal_(__global_state, &rjg, &rwvbas, &sgvbas);
 			i__2 = sgvbas + 1;
 			i__3 = sgvbas + svsize;
-			zzeksrd_(&i__2, &i__3, svecjg);
+			zzeksrd_(__global_state, &i__2, &i__3, svecjg);
 			i__2 = rwvbas + 1;
 			i__3 = rwvbas + rvsize;
-			zzeksrd_(&i__2, &i__3, rvecjg);
-			jle = zzekvcmp_(&__state->c__4, norder, otabs, ocols, 
-				oelts, senses, sthan, stsdsc, stdtpt, dtpool, 
-				dtdscs, svecj, rvecj, svecjg, rvecjg);
+			zzeksrd_(__global_state, &i__2, &i__3, rvecjg);
+			jle = zzekvcmp_(__global_state, &__state->c__4, 
+				norder, otabs, ocols, oelts, senses, sthan, 
+				stsdsc, stdtpt, dtpool, dtdscs, svecj, rvecj, 
+				svecjg, rvecjg);
 		    }
 
 /*                 At this point, JLE is set. */
@@ -1816,12 +1858,13 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 
 /*                    Swap the Jth and JGth elements of the order vector. */
 
-			swapi_(&__state->ordvec[(i__2 = j - 1) < 250000 && 0 
-				<= i__2 ? i__2 : s_rnge("ordvec", i__2, "zze"
-				"kjsrt_", (ftnlen)920)], &__state->ordvec[(
-				i__3 = jg - 1) < 250000 && 0 <= i__3 ? i__3 : 
-				s_rnge("ordvec", i__3, "zzekjsrt_", (ftnlen)
-				920)]);
+			swapi_(__global_state, &__state->ordvec[(i__2 = j - 1)
+				 < 250000 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "ordvec", i__2, "zzekjs"
+				"rt_", (ftnlen)920)], &__state->ordvec[(i__3 = 
+				jg - 1) < 250000 && 0 <= i__3 ? i__3 : s_rnge(
+				&__global_state->f2c, "ordvec", i__3, "zzekj"
+				"srt_", (ftnlen)920)]);
 		    }
 		    j -= gap;
 		}
@@ -1836,8 +1879,8 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 /*        We've sorted the row numbers in Case 1.  Push the order vector */
 /*        onto the scratch area stack. */
 
-	zzekstop_(ordbas);
-	zzekspsh_(&nrows, __state->ordvec);
+	zzekstop_(__global_state, ordbas);
+	zzekspsh_(__global_state, &nrows, __state->ordvec);
     } else {
 
 /*        Case 2. */
@@ -1845,10 +1888,10 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 /*        Well, we really have a lot of data.  Don't try to read it into */
 /*        memory.  Build the order vector in the scratch area. */
 
-	zzekstop_(ordbas);
+	zzekstop_(__global_state, ordbas);
 	i__1 = nrows;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    zzekspsh_(&__state->c__1, &i__);
+	    zzekspsh_(__global_state, &__state->c__1, &i__);
 	}
 
 /*        Re-order the order vector elements to reflect the order of the */
@@ -1869,30 +1912,31 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 
 		    i__2 = *ordbas + j;
 		    i__3 = *ordbas + j;
-		    zzeksrd_(&i__2, &i__3, &rj);
+		    zzeksrd_(__global_state, &i__2, &i__3, &rj);
 		    i__2 = *ordbas + jg;
 		    i__3 = *ordbas + jg;
-		    zzeksrd_(&i__2, &i__3, &rjg);
+		    zzeksrd_(__global_state, &i__2, &i__3, &rjg);
 
 /*                 Compare the two row vectors. */
 
-		    zzekvcal_(&rj, &rwvbas, &sgvbas);
+		    zzekvcal_(__global_state, &rj, &rwvbas, &sgvbas);
 		    i__2 = sgvbas + 1;
 		    i__3 = sgvbas + svsize;
-		    zzeksrd_(&i__2, &i__3, svecj);
+		    zzeksrd_(__global_state, &i__2, &i__3, svecj);
 		    i__2 = rwvbas + 1;
 		    i__3 = rwvbas + rvsize;
-		    zzeksrd_(&i__2, &i__3, rvecj);
-		    zzekvcal_(&rjg, &rwvbas, &sgvbas);
+		    zzeksrd_(__global_state, &i__2, &i__3, rvecj);
+		    zzekvcal_(__global_state, &rjg, &rwvbas, &sgvbas);
 		    i__2 = sgvbas + 1;
 		    i__3 = sgvbas + svsize;
-		    zzeksrd_(&i__2, &i__3, svecjg);
+		    zzeksrd_(__global_state, &i__2, &i__3, svecjg);
 		    i__2 = rwvbas + 1;
 		    i__3 = rwvbas + rvsize;
-		    zzeksrd_(&i__2, &i__3, rvecjg);
-		    if (zzekvcmp_(&__state->c__4, norder, otabs, ocols, oelts,
-			     senses, sthan, stsdsc, stdtpt, dtpool, dtdscs, 
-			    svecj, rvecj, svecjg, rvecjg)) {
+		    zzeksrd_(__global_state, &i__2, &i__3, rvecjg);
+		    if (zzekvcmp_(__global_state, &__state->c__4, norder, 
+			    otabs, ocols, oelts, senses, sthan, stsdsc, 
+			    stdtpt, dtpool, dtdscs, svecj, rvecj, svecjg, 
+			    rvecjg)) {
 			j = 0;
 		    } else {
 
@@ -1900,8 +1944,8 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 
 			addrj = *ordbas + j;
 			addrjg = *ordbas + jg;
-			zzeksupd_(&addrj, &addrj, &rjg);
-			zzeksupd_(&addrjg, &addrjg, &rj);
+			zzeksupd_(__global_state, &addrj, &addrj, &rjg);
+			zzeksupd_(__global_state, &addrjg, &addrjg, &rj);
 		    }
 		    j -= gap;
 		}
@@ -1919,7 +1963,7 @@ static zzekjsrt_state_t* get_zzekjsrt_state() {
 
 /*     We've sorted the row numbers, no matter how many there were. */
 
-    chkout_("ZZEKJSRT", (ftnlen)8);
+    chkout_(__global_state, "ZZEKJSRT", (ftnlen)8);
     return 0;
 } /* zzekjsrt_ */
 

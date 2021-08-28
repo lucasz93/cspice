@@ -8,13 +8,12 @@
 
 
 typedef int prodai_state_t;
-static prodai_state_t* get_prodai_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline prodai_state_t* get_prodai_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure             PRODAI ( Product of an integer array ) */
-integer prodai_(integer *array, integer *n)
+integer prodai_(cspice_t* __global_state, integer *array, integer *n)
 {
     /* System generated locals */
     integer ret_val, i__1;
@@ -25,7 +24,7 @@ integer prodai_(integer *array, integer *n)
 
 
     /* Module state */
-    prodai_state_t* __state = get_prodai_state();
+    prodai_state_t* __state = get_prodai_state(__global_state);
 /* $ Abstract */
 
 /*      Return the product of the elements of an integer array. */

@@ -8,8 +8,7 @@
 
 
 extern accept_init_t __accept_init;
-static accept_state_t* get_accept_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline accept_state_t* get_accept_state(cspice_t* state) {
 	if (!state->accept)
 		state->accept = __cspice_allocate_module(sizeof(
 	accept_state_t), &__accept_init, sizeof(__accept_init));
@@ -18,7 +17,7 @@ static accept_state_t* get_accept_state() {
 }
 
 /* $Procedure      ACCEPT ( Accept New Long Error Message ) */
-logical accept_0_(int n__, logical *ok)
+logical accept_0_(cspice_t* __global_state, int n__, logical *ok)
 {
     /* Initialized data */
 
@@ -28,7 +27,7 @@ logical accept_0_(int n__, logical *ok)
 
 
     /* Module state */
-    accept_state_t* __state = get_accept_state();
+    accept_state_t* __state = get_accept_state(__global_state);
 /* $ Abstract */
 
 /*      Indicate to the SPICELIB error handling mechanism whether or not */
@@ -320,12 +319,12 @@ L_allowd:
     return ret_val;
 } /* accept_ */
 
-logical accept_(logical *ok)
+logical accept_(cspice_t* __global_state, logical *ok)
 {
     return accept_0_(0, ok);
     }
 
-logical allowd_(void)
+logical allowd_(cspice_t* __global_state)
 {
     return accept_0_(1, (logical *)0);
     }

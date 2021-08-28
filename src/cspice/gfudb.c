@@ -8,8 +8,7 @@
 
 
 extern gfudb_init_t __gfudb_init;
-static gfudb_state_t* get_gfudb_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gfudb_state_t* get_gfudb_state(cspice_t* state) {
 	if (!state->gfudb)
 		state->gfudb = __cspice_allocate_module(sizeof(gfudb_state_t),
 	 &__gfudb_init, sizeof(__gfudb_init));
@@ -18,40 +17,40 @@ static gfudb_state_t* get_gfudb_state() {
 }
 
 /* $Procedure GFUDB ( GF, user defined boolean ) */
-/* Subroutine */ int gfudb_(U_fp udfuns, U_fp udfunb, doublereal *step, 
-	doublereal *cnfine, doublereal *result)
+/* Subroutine */ int gfudb_(cspice_t* __global_state, U_fp udfuns, U_fp 
+	udfunb, doublereal *step, doublereal *cnfine, doublereal *result)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sized_(doublereal *);
-    extern logical gfbail_();
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern logical gfbail_(cspice_t*);
     logical ok;
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int gfrefn_();
-    extern /* Subroutine */ int gfrepf_();
-    extern /* Subroutine */ int gfrepi_();
-    extern /* Subroutine */ int gfrepu_();
-    extern /* Subroutine */ int gfstep_();
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int gfsstp_(doublereal *);
-    extern logical odd_(integer *);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int gfrefn_(cspice_t*);
+    extern /* Subroutine */ int gfrepf_(cspice_t*);
+    extern /* Subroutine */ int gfrepi_(cspice_t*);
+    extern /* Subroutine */ int gfrepu_(cspice_t*);
+    extern /* Subroutine */ int gfstep_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int gfsstp_(cspice_t*, doublereal *);
+    extern logical odd_(cspice_t*, integer *);
     doublereal tol;
-    extern /* Subroutine */ int zzgfudb_(U_fp, U_fp, doublereal *, U_fp, U_fp,
-	     logical *, U_fp, U_fp, U_fp, logical *, L_fp, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
-	    doublereal *);
+    extern /* Subroutine */ int zzgfudb_(cspice_t*, U_fp, U_fp, doublereal *, 
+	    U_fp, U_fp, logical *, U_fp, U_fp, U_fp, logical *, L_fp, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzholdd_(cspice_t*, integer *, integer *, 
+	    logical *, doublereal *);
 
 
     /* Module state */
-    gfudb_state_t* __state = get_gfudb_state();
+    gfudb_state_t* __state = get_gfudb_state(__global_state);
 /* $ Abstract */
 
 /*     Perform a GF search on a user defined boolean quantity. */
@@ -1366,31 +1365,31 @@ static gfudb_state_t* get_gfudb_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("GFUDB", (ftnlen)5);
+    chkin_(__global_state, "GFUDB", (ftnlen)5);
 
 /*     Check the result window size. */
 
-    i__1 = sized_(result);
-    if (sized_(result) < 2 || odd_(&i__1)) {
-	setmsg_("Result window size was #; size must be at least 2 and an ev"
-		"en value.", (ftnlen)68);
-	i__1 = sized_(result);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
-	chkout_("GFUDB", (ftnlen)5);
+    i__1 = sized_(__global_state, result);
+    if (sized_(__global_state, result) < 2 || odd_(__global_state, &i__1)) {
+	setmsg_(__global_state, "Result window size was #; size must be at l"
+		"east 2 and an even value.", (ftnlen)68);
+	i__1 = sized_(__global_state, result);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDIMENSION)", (ftnlen)23);
+	chkout_(__global_state, "GFUDB", (ftnlen)5);
 	return 0;
     }
 
 /*     Set the step size. */
 
-    gfsstp_(step);
+    gfsstp_(__global_state, step);
 
 /*     Retrieve the convergence tolerance, if set. */
 
-    zzholdd_(&__state->c_n1, &__state->c__3, &ok, &tol);
+    zzholdd_(__global_state, &__state->c_n1, &__state->c__3, &ok, &tol);
 
 /*     Use the default value CNVTOL if no stored tolerance value. */
 
@@ -1400,11 +1399,11 @@ static gfudb_state_t* get_gfudb_state() {
 
 /*     Initialize the RESULT window to empty. */
 
-    scardd_(&__state->c__0, result);
-    zzgfudb_((U_fp)udfuns, (U_fp)udfunb, &tol, (U_fp)gfstep_, (U_fp)gfrefn_, &
-	    __state->c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (U_fp)gfrepf_, &
-	    __state->c_false, (L_fp)gfbail_, cnfine, result);
-    chkout_("GFUDB", (ftnlen)5);
+    scardd_(__global_state, &__state->c__0, result);
+    zzgfudb_(__global_state, (U_fp)udfuns, (U_fp)udfunb, &tol, (U_fp)gfstep_, 
+	    (U_fp)gfrefn_, &__state->c_false, (U_fp)gfrepi_, (U_fp)gfrepu_, (
+	    U_fp)gfrepf_, &__state->c_false, (L_fp)gfbail_, cnfine, result);
+    chkout_(__global_state, "GFUDB", (ftnlen)5);
     return 0;
 } /* gfudb_ */
 

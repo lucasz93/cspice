@@ -8,8 +8,7 @@
 
 
 extern errint_init_t __errint_init;
-static errint_state_t* get_errint_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline errint_state_t* get_errint_state(cspice_t* state) {
 	if (!state->errint)
 		state->errint = __cspice_allocate_module(sizeof(
 	errint_state_t), &__errint_init, sizeof(__errint_init));
@@ -18,32 +17,34 @@ static errint_state_t* get_errint_state() {
 }
 
 /* $Procedure      ERRINT ( Insert Integer into Error Message Text ) */
-/* Subroutine */ int errint_(char *marker, integer *integr, ftnlen marker_len)
+/* Subroutine */ int errint_(cspice_t* __global_state, char *marker, integer *
+	integr, ftnlen marker_len)
 {
     /* System generated locals */
     address a__1[3], a__2[2];
     integer i__1, i__2[3], i__3[2];
 
     /* Builtin functions */
-    integer i_indx(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen),
-	     s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_indx(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen), s_copy(f2c_state_t*, char *, char *, ftnlen, 
+	    ftnlen);
 
     /* Local variables */
-    extern logical allowd_(void);
-    extern integer lastnb_(char *, ftnlen);
+    extern logical allowd_(cspice_t*);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     char lngmsg[1840];
-    extern /* Subroutine */ int getlms_(char *, ftnlen);
-    extern integer frstnb_(char *, ftnlen);
+    extern /* Subroutine */ int getlms_(cspice_t*, char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
     char istrng[11];
     char tmpmsg[1840];
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int putlms_(char *, ftnlen);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int putlms_(cspice_t*, char *, ftnlen);
     integer strpos;
 
 
     /* Module state */
-    errint_state_t* __state = get_errint_state();
+    errint_state_t* __state = get_errint_state(__global_state);
 /* $ Abstract */
 
 /*      Substitute an integer for the first occurrence of a marker found */
@@ -285,28 +286,28 @@ static errint_state_t* get_errint_state() {
 /*     Changes to the long error message have to be allowed, or we */
 /*     do nothing. */
 
-    if (! allowd_()) {
+    if (! allowd_(__global_state)) {
 	return 0;
     }
 
 /*     MARKER has to have some non-blank characters, or we do nothing. */
 
-    if (lastnb_(marker, marker_len) == 0) {
+    if (lastnb_(__global_state, marker, marker_len) == 0) {
 	return 0;
     }
 
 /*     Get a copy of the current long error message.  Convert INTEGR */
 /*     to a character string. */
 
-    getlms_(lngmsg, (ftnlen)1840);
-    intstr_(integr, istrng, (ftnlen)11);
+    getlms_(__global_state, lngmsg, (ftnlen)1840);
+    intstr_(__global_state, integr, istrng, (ftnlen)11);
 
 /*     Locate the leftmost occurrence of MARKER, if there is one */
 /*     (ignoring leading and trailing blanks): */
 
-    i__1 = frstnb_(marker, marker_len) - 1;
-    strpos = i_indx(lngmsg, marker + i__1, (ftnlen)1840, lastnb_(marker, 
-	    marker_len) - i__1);
+    i__1 = frstnb_(__global_state, marker, marker_len) - 1;
+    strpos = i_indx(&__global_state->f2c, lngmsg, marker + i__1, (ftnlen)1840,
+	     lastnb_(__global_state, marker, marker_len) - i__1);
     if (strpos == 0) {
 	return 0;
     } else {
@@ -315,50 +316,59 @@ static errint_state_t* get_errint_state() {
 /*        replaced by the character representation of INTEGR: */
 
 	if (strpos > 1) {
-	    if (strpos + lastnb_(marker, marker_len) - frstnb_(marker, 
-		    marker_len) < lastnb_(lngmsg, (ftnlen)1840)) {
+	    if (strpos + lastnb_(__global_state, marker, marker_len) - 
+		    frstnb_(__global_state, marker, marker_len) < lastnb_(
+		    __global_state, lngmsg, (ftnlen)1840)) {
 
 /*              There's more of the long message after the marker... */
 
-		i__1 = strpos + lastnb_(marker, marker_len) - frstnb_(marker, 
-			marker_len);
+		i__1 = strpos + lastnb_(__global_state, marker, marker_len) - 
+			frstnb_(__global_state, marker, marker_len);
 /* Writing concatenation */
 		i__2[0] = strpos - 1, a__1[0] = lngmsg;
-		i__2[1] = lastnb_(istrng, (ftnlen)11), a__1[1] = istrng;
+		i__2[1] = lastnb_(__global_state, istrng, (ftnlen)11), a__1[1]
+			 = istrng;
 		i__2[2] = 1840 - i__1, a__1[2] = lngmsg + i__1;
-		s_cat(tmpmsg, a__1, i__2, &__state->c__3, (ftnlen)1840);
+		s_cat(&__global_state->f2c, tmpmsg, a__1, i__2, &
+			__state->c__3, (ftnlen)1840);
 	    } else {
 /* Writing concatenation */
 		i__3[0] = strpos - 1, a__2[0] = lngmsg;
-		i__3[1] = lastnb_(istrng, (ftnlen)11), a__2[1] = istrng;
-		s_cat(tmpmsg, a__2, i__3, &__state->c__2, (ftnlen)1840);
+		i__3[1] = lastnb_(__global_state, istrng, (ftnlen)11), a__2[1]
+			 = istrng;
+		s_cat(&__global_state->f2c, tmpmsg, a__2, i__3, &
+			__state->c__2, (ftnlen)1840);
 	    }
 	} else {
 
 /*           We're starting with the integer, so we know it fits... */
 
-	    if (lastnb_(marker, marker_len) - frstnb_(marker, marker_len) < 
-		    lastnb_(lngmsg, (ftnlen)1840)) {
+	    if (lastnb_(__global_state, marker, marker_len) - frstnb_(
+		    __global_state, marker, marker_len) < lastnb_(
+		    __global_state, lngmsg, (ftnlen)1840)) {
 
 /*              There's more of the long message after the marker... */
 
-		i__1 = strpos + lastnb_(marker, marker_len) - frstnb_(marker, 
-			marker_len);
+		i__1 = strpos + lastnb_(__global_state, marker, marker_len) - 
+			frstnb_(__global_state, marker, marker_len);
 /* Writing concatenation */
-		i__3[0] = lastnb_(istrng, (ftnlen)11), a__2[0] = istrng;
+		i__3[0] = lastnb_(__global_state, istrng, (ftnlen)11), a__2[0]
+			 = istrng;
 		i__3[1] = 1840 - i__1, a__2[1] = lngmsg + i__1;
-		s_cat(tmpmsg, a__2, i__3, &__state->c__2, (ftnlen)1840);
+		s_cat(&__global_state->f2c, tmpmsg, a__2, i__3, &
+			__state->c__2, (ftnlen)1840);
 	    } else {
 
 /*              The marker's the whole string: */
 
-		s_copy(tmpmsg, istrng, (ftnlen)1840, (ftnlen)11);
+		s_copy(&__global_state->f2c, tmpmsg, istrng, (ftnlen)1840, (
+			ftnlen)11);
 	    }
 	}
 
 /*        Update the long message: */
 
-	putlms_(tmpmsg, (ftnlen)1840);
+	putlms_(__global_state, tmpmsg, (ftnlen)1840);
     }
     return 0;
 } /* errint_ */

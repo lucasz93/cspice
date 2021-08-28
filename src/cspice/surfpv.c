@@ -8,8 +8,7 @@
 
 
 extern surfpv_init_t __surfpv_init;
-static surfpv_state_t* get_surfpv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline surfpv_state_t* get_surfpv_state(cspice_t* state) {
 	if (!state->surfpv)
 		state->surfpv = __cspice_allocate_module(sizeof(
 	surfpv_state_t), &__surfpv_init, sizeof(__surfpv_init));
@@ -18,57 +17,58 @@ static surfpv_state_t* get_surfpv_state() {
 }
 
 /* $Procedure      SURFPV ( Surface point and velocity ) */
-/* Subroutine */ int surfpv_(doublereal *stvrtx, doublereal *stdir, 
-	doublereal *a, doublereal *b, doublereal *c__, doublereal *stx, 
-	logical *found)
+/* Subroutine */ int surfpv_(cspice_t* __global_state, doublereal *stvrtx, 
+	doublereal *stdir, doublereal *a, doublereal *b, doublereal *c__, 
+	doublereal *stx, logical *found)
 {
     /* System generated locals */
     doublereal d__1, d__2, d__3;
 
     /* Local variables */
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal m;
     doublereal n[3];
     doublereal r__;
     doublereal u[3];
     doublereal v[3];
     doublereal x[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dvhat_(cspice_t*, doublereal *, doublereal *);
     doublereal level;
-    extern doublereal dpmax_(void);
+    extern doublereal dpmax_(cspice_t*);
     doublereal third[3];
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal dsnum;
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vlcom3_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal du[3];
     doublereal dv[3];
     doublereal second[3];
     doublereal stdhat[6];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern logical return_(void);
-    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
-	    ;
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int surfnm_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int surfpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, logical *
+	    );
     doublereal udn;
     doublereal vmx[3];
 
 
     /* Module state */
-    surfpv_state_t* __state = get_surfpv_state();
+    surfpv_state_t* __state = get_surfpv_state(__global_state);
 /* $ Abstract */
 
 /*     Find the state (position and velocity) of the surface intercept */
@@ -536,10 +536,10 @@ static surfpv_state_t* get_surfpv_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SURFPV", (ftnlen)6);
+    chkin_(__global_state, "SURFPV", (ftnlen)6);
 
 /*     Determine the ellipsoid surface intercept point of the ray */
 /*     emanating from the observer in the direction of D. We'll call it */
@@ -550,9 +550,9 @@ static surfpv_state_t* get_surfpv_state() {
 /*     SURFPT takes care of some error checking too. It signals an error */
 /*     if D is the zero vector or if A, B, or C are bad axis lengths. */
 
-    surfpt_(stvrtx, stdir, a, b, c__, x, found);
-    if (failed_() || ! (*found)) {
-	chkout_("SURFPV", (ftnlen)6);
+    surfpt_(__global_state, stvrtx, stdir, a, b, c__, x, found);
+    if (failed_(__global_state) || ! (*found)) {
+	chkout_(__global_state, "SURFPV", (ftnlen)6);
 	return 0;
     }
 
@@ -565,7 +565,7 @@ static surfpv_state_t* get_surfpv_state() {
 /*     direction "D." We know that the norm of D is not zero because */
 /*     SURFPT checked it. */
 
-    dvhat_(stdir, stdhat);
+    dvhat_(__global_state, stdir, stdhat);
 
 /*     The velocity vector of the intercept point goes in the last three */
 /*     elements of STX. Let */
@@ -588,12 +588,12 @@ static surfpv_state_t* get_surfpv_state() {
 /*     Compute the unit normal at the intercept point, and unpack */
 /*     the input states into V, U, DV, and DU. Let V-X = VMX. */
 
-    surfnm_(a, b, c__, x, n);
-    vequ_(stvrtx, v);
-    vequ_(stdhat, u);
-    vequ_(&stvrtx[3], dv);
-    vequ_(&stdhat[3], du);
-    vsub_(v, x, vmx);
+    surfnm_(__global_state, a, b, c__, x, n);
+    vequ_(__global_state, stvrtx, v);
+    vequ_(__global_state, stdhat, u);
+    vequ_(__global_state, &stvrtx[3], dv);
+    vequ_(__global_state, &stdhat[3], du);
+    vsub_(__global_state, v, x, vmx);
 
 /*     Reject the vertex if it's on the ellipsoid. */
 /*     We check this by determining whether the transformed */
@@ -607,14 +607,14 @@ static surfpv_state_t* get_surfpv_state() {
     d__3 = v[2] / *c__;
     level = d__1 * d__1 + d__2 * d__2 + d__3 * d__3;
     if (level == 1.) {
-	setmsg_("Ray's vertex (# # #) has level surface parameter #. Vertex "
-		"must not be on the ellipsoid.", (ftnlen)88);
-	errdp_("#", v, (ftnlen)1);
-	errdp_("#", &v[1], (ftnlen)1);
-	errdp_("#", &v[2], (ftnlen)1);
-	errdp_("#", &level, (ftnlen)1);
-	sigerr_("SPICE(INVALIDVERTEX)", (ftnlen)20);
-	chkout_("SURFPV", (ftnlen)6);
+	setmsg_(__global_state, "Ray's vertex (# # #) has level surface para"
+		"meter #. Vertex must not be on the ellipsoid.", (ftnlen)88);
+	errdp_(__global_state, "#", v, (ftnlen)1);
+	errdp_(__global_state, "#", &v[1], (ftnlen)1);
+	errdp_(__global_state, "#", &v[2], (ftnlen)1);
+	errdp_(__global_state, "#", &level, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDVERTEX)", (ftnlen)20);
+	chkout_(__global_state, "SURFPV", (ftnlen)6);
 	return 0;
     }
 
@@ -625,33 +625,35 @@ static surfpv_state_t* get_surfpv_state() {
 /*     would result in a number that is greater than the maximum double */
 /*     precision number for the computer. */
 
-    udn = vdot_(u, n);
+    udn = vdot_(__global_state, u, n);
     if (udn == 0.) {
 
 /*        The intercept point is on the limb, so its velocity */
 /*        is not defined. This means we can't "find" the state */
 /*        of the intercept point. */
 
-	chkout_("SURFPV", (ftnlen)6);
+	chkout_(__global_state, "SURFPV", (ftnlen)6);
 	return 0;
     }
 
 /*     Evaluate the second term of the equation for DX, but don't */
 /*     divide by < U,N > just yet. */
 
-    d__1 = vdot_(vmx, n);
-    vscl_(&d__1, du, second);
+    d__1 = vdot_(__global_state, vmx, n);
+    vscl_(__global_state, &d__1, du, second);
 
 /*                                                         2 */
 /*     Evaluate the third term, but don't divide by < U,N >  just yet. */
 
-    dsnum = udn * vdot_(dv, n) - vdot_(vmx, n) * vdot_(du, n);
-    vscl_(&dsnum, u, third);
+    dsnum = udn * vdot_(__global_state, dv, n) - vdot_(__global_state, vmx, n)
+	     * vdot_(__global_state, du, n);
+    vscl_(__global_state, &dsnum, u, third);
 
 /*     We'll use the following test. */
 
 /* Computing MAX */
-    d__1 = vnorm_(second), d__2 = vnorm_(third), d__1 = max(d__1,d__2);
+    d__1 = vnorm_(__global_state, second), d__2 = vnorm_(__global_state, 
+	    third), d__1 = max(d__1,d__2);
     m = max(d__1,1.);
 
 /*     If */
@@ -675,8 +677,8 @@ static surfpv_state_t* get_surfpv_state() {
 
 /* Computing 2nd power */
     d__1 = udn;
-    if (m > dpmax_() / 10. * (d__1 * d__1)) {
-	chkout_("SURFPV", (ftnlen)6);
+    if (m > dpmax_(__global_state) / 10. * (d__1 * d__1)) {
+	chkout_(__global_state, "SURFPV", (ftnlen)6);
 	return 0;
     }
 
@@ -692,14 +694,15 @@ static surfpv_state_t* get_surfpv_state() {
 /* Computing 2nd power */
     d__3 = r__;
     d__2 = -(d__3 * d__3);
-    vlcom3_(&__state->c_b13, dv, &d__1, second, &d__2, third, &stx[3]);
+    vlcom3_(__global_state, &__state->c_b13, dv, &d__1, second, &d__2, third, 
+	    &stx[3]);
 
 /*     Since we could compute the velocity, we can assign the */
 /*     intercept point, and set the found flag to .TRUE. */
 
-    vequ_(x, stx);
+    vequ_(__global_state, x, stx);
     *found = TRUE_;
-    chkout_("SURFPV", (ftnlen)6);
+    chkout_(__global_state, "SURFPV", (ftnlen)6);
     return 0;
 } /* surfpv_ */
 

@@ -8,13 +8,13 @@
 
 
 typedef int insrti_state_t;
-static insrti_state_t* get_insrti_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline insrti_state_t* get_insrti_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      INSRTI ( Insert an item into an integer set ) */
-/* Subroutine */ int insrti_(integer *item, integer *a)
+/* Subroutine */ int insrti_(cspice_t* __global_state, integer *item, integer 
+	*a)
 {
     /* System generated locals */
     integer i__1;
@@ -24,21 +24,21 @@ static insrti_state_t* get_insrti_state() {
     integer last;
     integer size;
     integer i__;
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sizei_(integer *);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sizei_(cspice_t*, integer *);
     logical in;
-    extern /* Subroutine */ int scardi_(integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern integer lstlei_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern integer lstlei_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    insrti_state_t* __state = get_insrti_state();
+    insrti_state_t* __state = get_insrti_state(__global_state);
 /* $ Abstract */
 
 /*      Insert an item into an integer set. */
@@ -201,21 +201,21 @@ static insrti_state_t* get_insrti_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("INSRTI", (ftnlen)6);
+    chkin_(__global_state, "INSRTI", (ftnlen)6);
 
 /*     What are the size and cardinality of the set? */
 
-    size = sizei_(a);
-    card = cardi_(a);
+    size = sizei_(__global_state, a);
+    card = cardi_(__global_state, a);
 
 /*     Find the last element of the set which would come before the */
 /*     input item. This will be the item itself, if it is already an */
 /*     element of the set. */
 
-    last = lstlei_(item, &card, &a[6]);
+    last = lstlei_(__global_state, item, &card, &a[6]);
 
 /*     Is the item already in the set? If not, it needs to be inserted. */
 
@@ -237,15 +237,15 @@ static insrti_state_t* get_insrti_state() {
 	    }
 	    a[last + 6] = *item;
 	    i__1 = card + 1;
-	    scardi_(&i__1, a);
+	    scardi_(__global_state, &i__1, a);
 	} else {
-	    setmsg_("An element could not be inserted into the set due to la"
-		    "ck of space; set size is #.", (ftnlen)82);
-	    errint_("#", &size, (ftnlen)1);
-	    sigerr_("SPICE(SETEXCESS)", (ftnlen)16);
+	    setmsg_(__global_state, "An element could not be inserted into t"
+		    "he set due to lack of space; set size is #.", (ftnlen)82);
+	    errint_(__global_state, "#", &size, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(SETEXCESS)", (ftnlen)16);
 	}
     }
-    chkout_("INSRTI", (ftnlen)6);
+    chkout_(__global_state, "INSRTI", (ftnlen)6);
     return 0;
 } /* insrti_ */
 

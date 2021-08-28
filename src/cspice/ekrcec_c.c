@@ -237,7 +237,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekrcec_c" );
+   chkin_c ( naif_state, "ekrcec_c" );
 
 
    /*

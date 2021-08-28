@@ -8,34 +8,35 @@
 
 
 typedef int zztpats_state_t;
-static zztpats_state_t* get_zztpats_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zztpats_state_t* get_zztpats_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZTPATS (Private, Time --- Time Patterns) */
-logical zztpats_(integer *room, integer *nknown, char *known, char *meanng, 
-	ftnlen known_len, ftnlen meanng_len)
+logical zztpats_(cspice_t* __global_state, integer *room, integer *nknown, 
+	char *known, char *meanng, ftnlen known_len, ftnlen meanng_len)
 {
     /* System generated locals */
     integer i__1, i__2;
     logical ret_val;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int orderc_(char *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int reordc_(integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int orderc_(cspice_t*, char *, integer *, integer 
+	    *, ftnlen);
+    extern /* Subroutine */ int reordc_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
     integer ordvec[203];
     char mymnng[32*203];
     char myknwn[32*203];
 
 
     /* Module state */
-    zztpats_state_t* __state = get_zztpats_state();
+    zztpats_state_t* __state = get_zztpats_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -183,431 +184,787 @@ logical zztpats_(integer *room, integer *nknown, char *known, char *meanng,
 /* -    SPICELIB Version 1.0.0, 02-APR-1996 (WLT) */
 
 /* -& */
-    s_copy(myknwn, "Y-i-it", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng, "Y*m*D*", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 32, "Y-i-iti:i", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 32, "Y*m*D*H*M", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 64, "Y-i-iti:i:i", (ftnlen)32, (ftnlen)11);
-    s_copy(mymnng + 64, "Y*m*D*H*M*S", (ftnlen)32, (ftnlen)11);
-    s_copy(myknwn + 96, "Y-i-iti:i:n", (ftnlen)32, (ftnlen)11);
-    s_copy(mymnng + 96, "Y*m*D*H*M*S", (ftnlen)32, (ftnlen)11);
-    s_copy(myknwn + 128, "Y-i-iti:n", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 128, "Y*m*D*H*M", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 160, "Y-i/", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 160, "Y*y*", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 192, "Y-i/i:i", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 192, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 224, "Y-i/i:i:i", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 224, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 256, "Y-i/i:i:n", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 256, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 288, "Y-i/i:n", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 288, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 320, "Y-id", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 320, "Y*y*", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 352, "Y-idi:i", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 352, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 384, "Y-idi:i:i", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 384, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 416, "Y-idi:i:n", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 416, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 448, "Y-idi:n", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 448, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 480, "Y-it", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 480, "Y*y*", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 512, "Y-iti:i", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 512, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 544, "Y-iti:i:i", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 544, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 576, "Y-iti:i:n", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 576, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 608, "Y-iti:n", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 608, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 640, "Yid", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 640, "Yy*", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 672, "Yidi:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 672, "Yy*H*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 704, "Yidi:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 704, "Yy*H*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 736, "Yidi:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 736, "Yy*H*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 768, "Yidi:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 768, "Yy*H*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 800, "Yii", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 800, "YmD", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 832, "Yiii", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 832, "YmDH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 864, "Yiii:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 864, "YmDH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 896, "Yiii:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 896, "YmDH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 928, "Yiii:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 928, "YmDH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 960, "Yiii:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 960, "YmDH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 992, "Yiiii", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 992, "YmDHM", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 1024, "Yiiiii", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 1024, "YmDHMS", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 1056, "Yiiiin", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 1056, "YmDHMS", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 1088, "Yiiin", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 1088, "YmDHM", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 1120, "Yiin", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 1120, "YmDH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 1152, "Yim", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 1152, "YDm", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 1184, "Yimi", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 1184, "YDmH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 1216, "Yimi:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 1216, "YDmH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 1248, "Yimi:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 1248, "YDmH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 1280, "Yimi:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 1280, "YDmH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 1312, "Yimi:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 1312, "YDmH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 1344, "Yimn", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 1344, "YDmH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 1376, "Yin", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 1376, "YmD", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 1408, "Ymi", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 1408, "YmD", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 1440, "Ymii", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 1440, "YmDH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 1472, "Ymii:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 1472, "YmDH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 1504, "Ymii:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 1504, "YmDH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 1536, "Ymii:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 1536, "YmDH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 1568, "Ymii:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 1568, "YmDH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 1600, "Ymin", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 1600, "YmDH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 1632, "Ymn", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 1632, "YmD", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 1664, "Ynm", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 1664, "YDm", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 1696, "i-Y/", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 1696, "y*Y*", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 1728, "i-Y/i:i", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 1728, "y*Y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 1760, "i-Y/i:i:i", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 1760, "y*Y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 1792, "i-Y/i:i:n", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 1792, "y*Y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 1824, "i-Y/i:n", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 1824, "y*Y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 1856, "i-Yd", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 1856, "y*Y*", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 1888, "i-Ydi:i", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 1888, "y*Y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 1920, "i-Ydi:i:i", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 1920, "y*Y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 1952, "i-Ydi:i:n", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 1952, "y*Y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 1984, "i-Ydi:n", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 1984, "y*Y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 2016, "i-i-it", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 2016, "Y*m*D*", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 2048, "i-i-iti:i", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 2048, "Y*m*D*H*M", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 2080, "i-i-iti:i:i", (ftnlen)32, (ftnlen)11);
-    s_copy(mymnng + 2080, "Y*m*D*H*M*S", (ftnlen)32, (ftnlen)11);
-    s_copy(myknwn + 2112, "i-i-iti:i:n", (ftnlen)32, (ftnlen)11);
-    s_copy(mymnng + 2112, "Y*m*D*H*M*S", (ftnlen)32, (ftnlen)11);
-    s_copy(myknwn + 2144, "i-i-iti:n", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 2144, "Y*m*D*H*M", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 2176, "i-i/i:i", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 2176, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 2208, "i-i/i:i:i", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 2208, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 2240, "i-i/i:i:n", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 2240, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 2272, "i-i/i:n", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 2272, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 2304, "i-idi:i", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 2304, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 2336, "i-idi:i:i", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 2336, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 2368, "i-idi:i:n", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 2368, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 2400, "i-idi:n", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 2400, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 2432, "i-it", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 2432, "Y*y*", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 2464, "i-iti:i", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 2464, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 2496, "i-iti:i:i", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 2496, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 2528, "i-iti:i:n", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 2528, "Y*y*H*M*S", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 2560, "i-iti:n", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 2560, "Y*y*H*M", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 2592, "i:i:iimY", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 2592, "H*M*SDmY", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 2624, "i:i:imiY", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 2624, "H*M*SmDY", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 2656, "i:i:nimY", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 2656, "H*M*SDmY", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 2688, "i:i:nmiY", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 2688, "H*M*SmDY", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 2720, "i:iimY", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 2720, "H*MDmY", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 2752, "i:imiY", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 2752, "H*MmDY", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 2784, "i:nimY", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 2784, "H*MDmY", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 2816, "i:nmiY", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 2816, "H*MmDY", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 2848, "iYd", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 2848, "yY*", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 2880, "iYdi:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 2880, "yY*H*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 2912, "iYdi:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 2912, "yY*H*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 2944, "iYdi:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 2944, "yY*H*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 2976, "iYdi:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 2976, "yY*H*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 3008, "iiY", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 3008, "mDY", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 3040, "iiYi", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 3040, "mDYH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 3072, "iiYi:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 3072, "mDYH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 3104, "iiYi:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 3104, "mDYH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 3136, "iiYi:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 3136, "mDYH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 3168, "iiYi:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 3168, "mDYH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 3200, "iiYn", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 3200, "mDYH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 3232, "iid", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 3232, "Yy*", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 3264, "iidi:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 3264, "Yy*H*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 3296, "iidi:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 3296, "Yy*H*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 3328, "iidi:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 3328, "Yy*H*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 3360, "iidi:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 3360, "Yy*H*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 3392, "iim", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 3392, "YDm", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 3424, "iimi", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 3424, "YDmH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 3456, "iimi:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 3456, "YDmH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 3488, "iimi:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 3488, "YDmH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 3520, "iimi:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 3520, "YDmH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 3552, "iimi:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 3552, "YDmH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 3584, "iimii", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 3584, "YDmHM", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 3616, "iimiii", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 3616, "YDmHMS", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 3648, "iimiin", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 3648, "YDmHMS", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 3680, "iimin", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 3680, "YDmHM", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 3712, "iimn", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 3712, "YDmH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 3744, "imY", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 3744, "DmY", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 3776, "imYi", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 3776, "DmYH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 3808, "imYi:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 3808, "DmYH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 3840, "imYi:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 3840, "DmYH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 3872, "imYi:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 3872, "DmYH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 3904, "imYi:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 3904, "DmYH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 3936, "imYn", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 3936, "DmYH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 3968, "imi", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 3968, "YmD", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 4000, "imi:i:iY", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 4000, "DmH*M*SY", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 4032, "imi:i:nY", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 4032, "DmH*M*SY", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 4064, "imi:iY", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 4064, "DmH*MY", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 4096, "imi:nY", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 4096, "DmH*MY", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 4128, "imii", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 4128, "YmDH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 4160, "imii:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 4160, "YmDH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 4192, "imii:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 4192, "YmDH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 4224, "imii:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 4224, "YmDH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 4256, "imii:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 4256, "YmDH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 4288, "imiii", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 4288, "YmDHM", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 4320, "imiiii", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 4320, "YmDHMS", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 4352, "imiiin", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 4352, "YmDHMS", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 4384, "imiin", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 4384, "YmDHM", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 4416, "imin", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 4416, "YmDH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 4448, "imn", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 4448, "YmD", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 4480, "inY", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 4480, "mDY", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 4512, "inm", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 4512, "YDm", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 4544, "miY", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 4544, "mDY", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 4576, "miYi", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 4576, "mDYH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 4608, "miYi:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 4608, "mDYH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 4640, "miYi:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 4640, "mDYH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 4672, "miYi:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 4672, "mDYH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 4704, "miYi:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 4704, "mDYH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 4736, "miYn", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 4736, "mDYH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 4768, "mii", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 4768, "mDY", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 4800, "mii:i:iY", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 4800, "mDH*M*SY", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 4832, "mii:i:nY", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 4832, "mDH*M*SY", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 4864, "mii:iY", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 4864, "mDH*MY", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 4896, "mii:nY", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 4896, "mDH*MY", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 4928, "miii", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 4928, "mDYH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 4960, "miii:i", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 4960, "mDYH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 4992, "miii:i:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 4992, "mDYH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 5024, "miii:i:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 5024, "mDYH*M*S", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 5056, "miii:n", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 5056, "mDYH*M", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 5088, "miiii", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 5088, "mDYHM", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 5120, "miiiii", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 5120, "mDYHMS", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 5152, "miiiin", (ftnlen)32, (ftnlen)6);
-    s_copy(mymnng + 5152, "mDYHMS", (ftnlen)32, (ftnlen)6);
-    s_copy(myknwn + 5184, "miiin", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 5184, "mDYHM", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 5216, "miin", (ftnlen)32, (ftnlen)4);
-    s_copy(mymnng + 5216, "mDYH", (ftnlen)32, (ftnlen)4);
-    s_copy(myknwn + 5248, "mnY", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 5248, "mDY", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 5280, "mni", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 5280, "mDY", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 5312, "nmY", (ftnlen)32, (ftnlen)3);
-    s_copy(mymnng + 5312, "DmY", (ftnlen)32, (ftnlen)3);
-    s_copy(myknwn + 5344, "i/i/i", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 5344, "m*D*Y", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 5376, "i/i/ii:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 5376, "m*D*YH*M", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 5408, "i/i/ii:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 5408, "m*D*YH*M", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 5440, "i/i/ii:i:n", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 5440, "m*D*YH*M*S", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 5472, "i/i/ii:i:i", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 5472, "m*D*YH*M*S", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 5504, "i/i/Y", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 5504, "m*D*Y", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 5536, "i/i/Yi:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 5536, "m*D*YH*M", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 5568, "i/i/ii:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 5568, "m*D*YH*M", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 5600, "i/i/Yi:i:n", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 5600, "m*D*YH*M*S", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 5632, "i/i/Yi:i:i", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 5632, "m*D*YH*M*S", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 5664, "Y-i-iti", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 5664, "Y*m*D*H", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 5696, "Y-iti", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 5696, "Y*y*H", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 5728, "Y-i-itn", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 5728, "Y*m*D*H", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 5760, "Y-itn", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 5760, "Y*y*H", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 5792, "i-i-iti", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 5792, "Y*m*D*H", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 5824, "i-i-itn", (ftnlen)32, (ftnlen)7);
-    s_copy(mymnng + 5824, "Y*m*D*H", (ftnlen)32, (ftnlen)7);
-    s_copy(myknwn + 5856, "i-iti", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 5856, "Y*y*H", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 5888, "i-itn", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 5888, "Y*y*H", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 5920, "i:ii/i/i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 5920, "H*Mm*D*Y", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 5952, "i:ni/i/i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 5952, "H*Mm*D*Y", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 5984, "i:i:ii/i/i", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 5984, "H*M*Sm*D*Y", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 6016, "i:i:ni/i/i", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 6016, "H*M*Sm*D*Y", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 6048, "i:ii/i/Y", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 6048, "H*Mm*D*Y", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 6080, "i:ni/i/Y", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 6080, "H*Mm*D*Y", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 6112, "i:i:ii/i/Y", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 6112, "H*M*Sm*D*Y", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 6144, "i:i:ni/i/Y", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 6144, "H*M*Sm*D*Y", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 6176, "i:ii-i-Y", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 6176, "H*Mm*D*Y", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 6208, "i:ni-i-Y", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 6208, "H*Mm*D*Y", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 6240, "i:i:ii-i-Y", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 6240, "H*M*Sm*D*Y", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 6272, "i:i:ni-i-Y", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 6272, "H*M*Sm*D*Y", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 6304, "i/i/Y/i:n", (ftnlen)32, (ftnlen)9);
-    s_copy(mymnng + 6304, "m*D*Y*H*M", (ftnlen)32, (ftnlen)9);
-    s_copy(myknwn + 6336, "i-i-Y", (ftnlen)32, (ftnlen)5);
-    s_copy(mymnng + 6336, "m*D*Y", (ftnlen)32, (ftnlen)5);
-    s_copy(myknwn + 6368, "i-i-Yi:n", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 6368, "m*D*YH*M", (ftnlen)32, (ftnlen)8);
-    s_copy(myknwn + 6400, "i-i-Yi:i:n", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 6400, "m*D*YH*M*S", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 6432, "i-i-Yi:i:i", (ftnlen)32, (ftnlen)10);
-    s_copy(mymnng + 6432, "m*D*YH*M*S", (ftnlen)32, (ftnlen)10);
-    s_copy(myknwn + 6464, "i-i-Yi:i", (ftnlen)32, (ftnlen)8);
-    s_copy(mymnng + 6464, "m*D*YH*M", (ftnlen)32, (ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn, "Y-i-it", (ftnlen)32, (ftnlen)6);
+    s_copy(&__global_state->f2c, mymnng, "Y*m*D*", (ftnlen)32, (ftnlen)6);
+    s_copy(&__global_state->f2c, myknwn + 32, "Y-i-iti:i", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 32, "Y*m*D*H*M", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 64, "Y-i-iti:i:i", (ftnlen)32, (
+	    ftnlen)11);
+    s_copy(&__global_state->f2c, mymnng + 64, "Y*m*D*H*M*S", (ftnlen)32, (
+	    ftnlen)11);
+    s_copy(&__global_state->f2c, myknwn + 96, "Y-i-iti:i:n", (ftnlen)32, (
+	    ftnlen)11);
+    s_copy(&__global_state->f2c, mymnng + 96, "Y*m*D*H*M*S", (ftnlen)32, (
+	    ftnlen)11);
+    s_copy(&__global_state->f2c, myknwn + 128, "Y-i-iti:n", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 128, "Y*m*D*H*M", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 160, "Y-i/", (ftnlen)32, (ftnlen)4);
+    s_copy(&__global_state->f2c, mymnng + 160, "Y*y*", (ftnlen)32, (ftnlen)4);
+    s_copy(&__global_state->f2c, myknwn + 192, "Y-i/i:i", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, mymnng + 192, "Y*y*H*M", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, myknwn + 224, "Y-i/i:i:i", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 224, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 256, "Y-i/i:i:n", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 256, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 288, "Y-i/i:n", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, mymnng + 288, "Y*y*H*M", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, myknwn + 320, "Y-id", (ftnlen)32, (ftnlen)4);
+    s_copy(&__global_state->f2c, mymnng + 320, "Y*y*", (ftnlen)32, (ftnlen)4);
+    s_copy(&__global_state->f2c, myknwn + 352, "Y-idi:i", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, mymnng + 352, "Y*y*H*M", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, myknwn + 384, "Y-idi:i:i", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 384, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 416, "Y-idi:i:n", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 416, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 448, "Y-idi:n", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, mymnng + 448, "Y*y*H*M", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, myknwn + 480, "Y-it", (ftnlen)32, (ftnlen)4);
+    s_copy(&__global_state->f2c, mymnng + 480, "Y*y*", (ftnlen)32, (ftnlen)4);
+    s_copy(&__global_state->f2c, myknwn + 512, "Y-iti:i", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, mymnng + 512, "Y*y*H*M", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, myknwn + 544, "Y-iti:i:i", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 544, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 576, "Y-iti:i:n", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 576, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 608, "Y-iti:n", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, mymnng + 608, "Y*y*H*M", (ftnlen)32, (ftnlen)
+	    7);
+    s_copy(&__global_state->f2c, myknwn + 640, "Yid", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 640, "Yy*", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 672, "Yidi:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 672, "Yy*H*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 704, "Yidi:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 704, "Yy*H*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 736, "Yidi:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 736, "Yy*H*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 768, "Yidi:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 768, "Yy*H*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 800, "Yii", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 800, "YmD", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 832, "Yiii", (ftnlen)32, (ftnlen)4);
+    s_copy(&__global_state->f2c, mymnng + 832, "YmDH", (ftnlen)32, (ftnlen)4);
+    s_copy(&__global_state->f2c, myknwn + 864, "Yiii:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 864, "YmDH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 896, "Yiii:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 896, "YmDH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 928, "Yiii:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 928, "YmDH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 960, "Yiii:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 960, "YmDH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 992, "Yiiii", (ftnlen)32, (ftnlen)5)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 992, "YmDHM", (ftnlen)32, (ftnlen)5)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 1024, "Yiiiii", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 1024, "YmDHMS", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 1056, "Yiiiin", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 1056, "YmDHMS", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 1088, "Yiiin", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 1088, "YmDHM", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 1120, "Yiin", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 1120, "YmDH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 1152, "Yim", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 1152, "YDm", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 1184, "Yimi", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 1184, "YDmH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 1216, "Yimi:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 1216, "YDmH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 1248, "Yimi:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 1248, "YDmH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 1280, "Yimi:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 1280, "YDmH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 1312, "Yimi:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 1312, "YDmH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 1344, "Yimn", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 1344, "YDmH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 1376, "Yin", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 1376, "YmD", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 1408, "Ymi", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 1408, "YmD", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 1440, "Ymii", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 1440, "YmDH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 1472, "Ymii:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 1472, "YmDH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 1504, "Ymii:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 1504, "YmDH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 1536, "Ymii:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 1536, "YmDH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 1568, "Ymii:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 1568, "YmDH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 1600, "Ymin", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 1600, "YmDH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 1632, "Ymn", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 1632, "YmD", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 1664, "Ynm", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 1664, "YDm", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 1696, "i-Y/", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 1696, "y*Y*", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 1728, "i-Y/i:i", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 1728, "y*Y*H*M", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 1760, "i-Y/i:i:i", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 1760, "y*Y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 1792, "i-Y/i:i:n", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 1792, "y*Y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 1824, "i-Y/i:n", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 1824, "y*Y*H*M", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 1856, "i-Yd", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 1856, "y*Y*", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 1888, "i-Ydi:i", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 1888, "y*Y*H*M", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 1920, "i-Ydi:i:i", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 1920, "y*Y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 1952, "i-Ydi:i:n", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 1952, "y*Y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 1984, "i-Ydi:n", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 1984, "y*Y*H*M", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 2016, "i-i-it", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 2016, "Y*m*D*", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 2048, "i-i-iti:i", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 2048, "Y*m*D*H*M", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 2080, "i-i-iti:i:i", (ftnlen)32, (
+	    ftnlen)11);
+    s_copy(&__global_state->f2c, mymnng + 2080, "Y*m*D*H*M*S", (ftnlen)32, (
+	    ftnlen)11);
+    s_copy(&__global_state->f2c, myknwn + 2112, "i-i-iti:i:n", (ftnlen)32, (
+	    ftnlen)11);
+    s_copy(&__global_state->f2c, mymnng + 2112, "Y*m*D*H*M*S", (ftnlen)32, (
+	    ftnlen)11);
+    s_copy(&__global_state->f2c, myknwn + 2144, "i-i-iti:n", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 2144, "Y*m*D*H*M", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 2176, "i-i/i:i", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 2176, "Y*y*H*M", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 2208, "i-i/i:i:i", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 2208, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 2240, "i-i/i:i:n", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 2240, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 2272, "i-i/i:n", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 2272, "Y*y*H*M", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 2304, "i-idi:i", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 2304, "Y*y*H*M", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 2336, "i-idi:i:i", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 2336, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 2368, "i-idi:i:n", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 2368, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 2400, "i-idi:n", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 2400, "Y*y*H*M", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 2432, "i-it", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 2432, "Y*y*", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 2464, "i-iti:i", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 2464, "Y*y*H*M", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 2496, "i-iti:i:i", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 2496, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 2528, "i-iti:i:n", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 2528, "Y*y*H*M*S", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 2560, "i-iti:n", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 2560, "Y*y*H*M", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 2592, "i:i:iimY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 2592, "H*M*SDmY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 2624, "i:i:imiY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 2624, "H*M*SmDY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 2656, "i:i:nimY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 2656, "H*M*SDmY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 2688, "i:i:nmiY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 2688, "H*M*SmDY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 2720, "i:iimY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 2720, "H*MDmY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 2752, "i:imiY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 2752, "H*MmDY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 2784, "i:nimY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 2784, "H*MDmY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 2816, "i:nmiY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 2816, "H*MmDY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 2848, "iYd", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 2848, "yY*", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 2880, "iYdi:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 2880, "yY*H*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 2912, "iYdi:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 2912, "yY*H*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 2944, "iYdi:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 2944, "yY*H*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 2976, "iYdi:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 2976, "yY*H*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 3008, "iiY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 3008, "mDY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 3040, "iiYi", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 3040, "mDYH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 3072, "iiYi:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 3072, "mDYH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 3104, "iiYi:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 3104, "mDYH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 3136, "iiYi:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 3136, "mDYH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 3168, "iiYi:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 3168, "mDYH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 3200, "iiYn", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 3200, "mDYH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 3232, "iid", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 3232, "Yy*", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 3264, "iidi:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 3264, "Yy*H*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 3296, "iidi:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 3296, "Yy*H*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 3328, "iidi:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 3328, "Yy*H*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 3360, "iidi:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 3360, "Yy*H*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 3392, "iim", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 3392, "YDm", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 3424, "iimi", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 3424, "YDmH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 3456, "iimi:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 3456, "YDmH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 3488, "iimi:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 3488, "YDmH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 3520, "iimi:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 3520, "YDmH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 3552, "iimi:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 3552, "YDmH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 3584, "iimii", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 3584, "YDmHM", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 3616, "iimiii", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 3616, "YDmHMS", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 3648, "iimiin", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 3648, "YDmHMS", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 3680, "iimin", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 3680, "YDmHM", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 3712, "iimn", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 3712, "YDmH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 3744, "imY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 3744, "DmY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 3776, "imYi", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 3776, "DmYH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 3808, "imYi:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 3808, "DmYH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 3840, "imYi:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 3840, "DmYH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 3872, "imYi:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 3872, "DmYH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 3904, "imYi:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 3904, "DmYH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 3936, "imYn", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 3936, "DmYH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 3968, "imi", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 3968, "YmD", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 4000, "imi:i:iY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 4000, "DmH*M*SY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 4032, "imi:i:nY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 4032, "DmH*M*SY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 4064, "imi:iY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 4064, "DmH*MY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 4096, "imi:nY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 4096, "DmH*MY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 4128, "imii", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 4128, "YmDH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 4160, "imii:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 4160, "YmDH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 4192, "imii:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 4192, "YmDH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 4224, "imii:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 4224, "YmDH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 4256, "imii:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 4256, "YmDH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 4288, "imiii", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 4288, "YmDHM", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 4320, "imiiii", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 4320, "YmDHMS", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 4352, "imiiin", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 4352, "YmDHMS", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 4384, "imiin", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 4384, "YmDHM", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 4416, "imin", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 4416, "YmDH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 4448, "imn", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 4448, "YmD", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 4480, "inY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 4480, "mDY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 4512, "inm", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 4512, "YDm", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 4544, "miY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 4544, "mDY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 4576, "miYi", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 4576, "mDYH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 4608, "miYi:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 4608, "mDYH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 4640, "miYi:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 4640, "mDYH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 4672, "miYi:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 4672, "mDYH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 4704, "miYi:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 4704, "mDYH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 4736, "miYn", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 4736, "mDYH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 4768, "mii", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 4768, "mDY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 4800, "mii:i:iY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 4800, "mDH*M*SY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 4832, "mii:i:nY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 4832, "mDH*M*SY", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 4864, "mii:iY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 4864, "mDH*MY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 4896, "mii:nY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 4896, "mDH*MY", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 4928, "miii", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 4928, "mDYH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 4960, "miii:i", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 4960, "mDYH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 4992, "miii:i:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 4992, "mDYH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 5024, "miii:i:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 5024, "mDYH*M*S", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 5056, "miii:n", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 5056, "mDYH*M", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 5088, "miiii", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 5088, "mDYHM", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 5120, "miiiii", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 5120, "mDYHMS", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 5152, "miiiin", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, mymnng + 5152, "mDYHMS", (ftnlen)32, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, myknwn + 5184, "miiin", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 5184, "mDYHM", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 5216, "miin", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, mymnng + 5216, "mDYH", (ftnlen)32, (ftnlen)4)
+	    ;
+    s_copy(&__global_state->f2c, myknwn + 5248, "mnY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 5248, "mDY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 5280, "mni", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 5280, "mDY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 5312, "nmY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, mymnng + 5312, "DmY", (ftnlen)32, (ftnlen)3);
+    s_copy(&__global_state->f2c, myknwn + 5344, "i/i/i", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 5344, "m*D*Y", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 5376, "i/i/ii:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 5376, "m*D*YH*M", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 5408, "i/i/ii:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 5408, "m*D*YH*M", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 5440, "i/i/ii:i:n", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 5440, "m*D*YH*M*S", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 5472, "i/i/ii:i:i", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 5472, "m*D*YH*M*S", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 5504, "i/i/Y", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 5504, "m*D*Y", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 5536, "i/i/Yi:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 5536, "m*D*YH*M", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 5568, "i/i/ii:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 5568, "m*D*YH*M", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 5600, "i/i/Yi:i:n", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 5600, "m*D*YH*M*S", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 5632, "i/i/Yi:i:i", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 5632, "m*D*YH*M*S", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 5664, "Y-i-iti", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 5664, "Y*m*D*H", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 5696, "Y-iti", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 5696, "Y*y*H", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 5728, "Y-i-itn", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 5728, "Y*m*D*H", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 5760, "Y-itn", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 5760, "Y*y*H", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 5792, "i-i-iti", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 5792, "Y*m*D*H", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 5824, "i-i-itn", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, mymnng + 5824, "Y*m*D*H", (ftnlen)32, (
+	    ftnlen)7);
+    s_copy(&__global_state->f2c, myknwn + 5856, "i-iti", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 5856, "Y*y*H", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 5888, "i-itn", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 5888, "Y*y*H", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 5920, "i:ii/i/i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 5920, "H*Mm*D*Y", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 5952, "i:ni/i/i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 5952, "H*Mm*D*Y", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 5984, "i:i:ii/i/i", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 5984, "H*M*Sm*D*Y", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 6016, "i:i:ni/i/i", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 6016, "H*M*Sm*D*Y", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 6048, "i:ii/i/Y", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 6048, "H*Mm*D*Y", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 6080, "i:ni/i/Y", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 6080, "H*Mm*D*Y", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 6112, "i:i:ii/i/Y", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 6112, "H*M*Sm*D*Y", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 6144, "i:i:ni/i/Y", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 6144, "H*M*Sm*D*Y", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 6176, "i:ii-i-Y", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 6176, "H*Mm*D*Y", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 6208, "i:ni-i-Y", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 6208, "H*Mm*D*Y", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 6240, "i:i:ii-i-Y", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 6240, "H*M*Sm*D*Y", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 6272, "i:i:ni-i-Y", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 6272, "H*M*Sm*D*Y", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 6304, "i/i/Y/i:n", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, mymnng + 6304, "m*D*Y*H*M", (ftnlen)32, (
+	    ftnlen)9);
+    s_copy(&__global_state->f2c, myknwn + 6336, "i-i-Y", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, mymnng + 6336, "m*D*Y", (ftnlen)32, (ftnlen)
+	    5);
+    s_copy(&__global_state->f2c, myknwn + 6368, "i-i-Yi:n", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 6368, "m*D*YH*M", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, myknwn + 6400, "i-i-Yi:i:n", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 6400, "m*D*YH*M*S", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 6432, "i-i-Yi:i:i", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, mymnng + 6432, "m*D*YH*M*S", (ftnlen)32, (
+	    ftnlen)10);
+    s_copy(&__global_state->f2c, myknwn + 6464, "i-i-Yi:i", (ftnlen)32, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, mymnng + 6464, "m*D*YH*M", (ftnlen)32, (
+	    ftnlen)8);
 
 /*     Copy as many patterns and meanings as the input arrays allow. */
 
     *nknown = min(203,*room);
     i__1 = *nknown;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	s_copy(known + (i__ - 1) * known_len, myknwn + (((i__2 = i__ - 1) < 
-		203 && 0 <= i__2 ? i__2 : s_rnge("myknwn", i__2, "zztpats_", (
-		ftnlen)984)) << 5), known_len, (ftnlen)32);
-	s_copy(meanng + (i__ - 1) * meanng_len, mymnng + (((i__2 = i__ - 1) < 
-		203 && 0 <= i__2 ? i__2 : s_rnge("mymnng", i__2, "zztpats_", (
-		ftnlen)985)) << 5), meanng_len, (ftnlen)32);
+	s_copy(&__global_state->f2c, known + (i__ - 1) * known_len, myknwn + (
+		((i__2 = i__ - 1) < 203 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "myknwn", i__2, "zztpats_", (ftnlen)984))
+		 << 5), known_len, (ftnlen)32);
+	s_copy(&__global_state->f2c, meanng + (i__ - 1) * meanng_len, mymnng 
+		+ (((i__2 = i__ - 1) < 203 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "mymnng", i__2, "zztpats_", (ftnlen)985))
+		 << 5), meanng_len, (ftnlen)32);
     }
 
 /*     Make sure everything is in the proper order. */
 
-    orderc_(known, nknown, ordvec, known_len);
-    reordc_(ordvec, nknown, known, known_len);
-    reordc_(ordvec, nknown, meanng, meanng_len);
+    orderc_(__global_state, known, nknown, ordvec, known_len);
+    reordc_(__global_state, ordvec, nknown, known, known_len);
+    reordc_(__global_state, ordvec, nknown, meanng, meanng_len);
 
 /*     If there wasn't sufficient room to get all of the patterns */
 /*     and meanings, return FALSE. */

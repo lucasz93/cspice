@@ -1,6 +1,6 @@
 /*
 
--Procedure chkin_c ( module Check In )
+-Procedure chkin_c ( naif_state, module Check In )
 
 -Abstract
 
@@ -48,7 +48,7 @@
    #include "SpiceZmc.h"
 
 
-   void chkin_c ( ConstSpiceChar * module )
+   void chkin_c ( void *naif_state, ConstSpiceChar * module )
 
 /*
 -Brief_I/O
@@ -117,7 +117,7 @@
          }
       else
          {
-         chkin_c ( module );
+         chkin_c ( naif_state, module );
          }
 
 
@@ -210,7 +210,8 @@
    /*
    Call the f2c'd Fortran routine.
    */
-   chkin_ ( ( char    * ) module,
+   chkin_ ( naif_state,
+            ( char    * ) module,
             ( ftnlen    ) strlen(module) );
 
 

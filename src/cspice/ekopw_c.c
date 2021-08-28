@@ -190,7 +190,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekopw_c" );
+   chkin_c ( naif_state, "ekopw_c" );
 
 
    /*

@@ -8,28 +8,28 @@
 
 
 typedef int appndi_state_t;
-static appndi_state_t* get_appndi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline appndi_state_t* get_appndi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      APPNDI ( Append an item to an integer cell ) */
-/* Subroutine */ int appndi_(integer *item, integer *cell)
+/* Subroutine */ int appndi_(cspice_t* __global_state, integer *item, integer 
+	*cell)
 {
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sizei_(integer *);
-    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sizei_(cspice_t*, integer *);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
     integer nwcard;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    appndi_state_t* __state = get_appndi_state();
+    appndi_state_t* __state = get_appndi_state(__global_state);
 /* $ Abstract */
 
 /*     Append an item to an integer cell. */
@@ -171,10 +171,10 @@ static appndi_state_t* get_appndi_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("APPNDI", (ftnlen)6);
+	chkin_(__global_state, "APPNDI", (ftnlen)6);
     }
 
 /*     Check to see if the cell can accommodate the addition of a */
@@ -182,17 +182,17 @@ static appndi_state_t* get_appndi_state() {
 /*     reset the cardinality. If the cell cannot accommodate the */
 /*     addition of a new item, signal an error. */
 
-    nwcard = cardi_(cell) + 1;
-    if (nwcard <= sizei_(cell)) {
+    nwcard = cardi_(__global_state, cell) + 1;
+    if (nwcard <= sizei_(__global_state, cell)) {
 	cell[nwcard + 5] = *item;
-	scardi_(&nwcard, cell);
+	scardi_(__global_state, &nwcard, cell);
     } else {
-	setmsg_("The cell cannot accommodate the addition of the element *. ",
-		 (ftnlen)59);
-	errint_("*", item, (ftnlen)1);
-	sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);
+	setmsg_(__global_state, "The cell cannot accommodate the addition of"
+		" the element *. ", (ftnlen)59);
+	errint_(__global_state, "*", item, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CELLTOOSMALL)", (ftnlen)19);
     }
-    chkout_("APPNDI", (ftnlen)6);
+    chkout_(__global_state, "APPNDI", (ftnlen)6);
     return 0;
 } /* appndi_ */
 

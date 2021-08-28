@@ -8,49 +8,49 @@
 
 
 typedef int zzdscm_state_t;
-static zzdscm_state_t* get_zzdscm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdscm_state_t* get_zzdscm_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZDSCM ( SGP4 deep space common calculations ) */
-/* Subroutine */ int zzdscm_(doublereal *epoch, doublereal *eccp, doublereal *
-	argpp, doublereal *tc, doublereal *inclp, doublereal *nodep, 
-	doublereal *np, doublereal *snodm, doublereal *cnodm, doublereal *
-	sinim, doublereal *cosim, doublereal *sinomm, doublereal *cosomm, 
-	doublereal *day, doublereal *e3, doublereal *ee2, doublereal *eccm, 
-	doublereal *emsq, doublereal *gam, doublereal *peo, doublereal *pgho, 
-	doublereal *pho, doublereal *pinco, doublereal *plo, doublereal *
-	rtemsq, doublereal *se2, doublereal *se3, doublereal *sgh2, 
-	doublereal *sgh3, doublereal *sgh4, doublereal *sh2, doublereal *sh3, 
-	doublereal *si2, doublereal *si3, doublereal *sl2, doublereal *sl3, 
-	doublereal *sl4, doublereal *s1, doublereal *s2, doublereal *s3, 
-	doublereal *s4, doublereal *s5, doublereal *s6, doublereal *s7, 
-	doublereal *ss1, doublereal *ss2, doublereal *ss3, doublereal *ss4, 
-	doublereal *ss5, doublereal *ss6, doublereal *ss7, doublereal *sz1, 
-	doublereal *sz2, doublereal *sz3, doublereal *sz11, doublereal *sz12, 
-	doublereal *sz13, doublereal *sz21, doublereal *sz22, doublereal *
-	sz23, doublereal *sz31, doublereal *sz32, doublereal *sz33, 
-	doublereal *xgh2, doublereal *xgh3, doublereal *xgh4, doublereal *xh2,
-	 doublereal *xh3, doublereal *xi2, doublereal *xi3, doublereal *xl2, 
-	doublereal *xl3, doublereal *xl4, doublereal *xn, doublereal *z1, 
-	doublereal *z2, doublereal *z3, doublereal *z11, doublereal *z12, 
-	doublereal *z13, doublereal *z21, doublereal *z22, doublereal *z23, 
-	doublereal *z31, doublereal *z32, doublereal *z33, doublereal *zmol, 
-	doublereal *zmos)
+/* Subroutine */ int zzdscm_(cspice_t* __global_state, doublereal *epoch, 
+	doublereal *eccp, doublereal *argpp, doublereal *tc, doublereal *
+	inclp, doublereal *nodep, doublereal *np, doublereal *snodm, 
+	doublereal *cnodm, doublereal *sinim, doublereal *cosim, doublereal *
+	sinomm, doublereal *cosomm, doublereal *day, doublereal *e3, 
+	doublereal *ee2, doublereal *eccm, doublereal *emsq, doublereal *gam, 
+	doublereal *peo, doublereal *pgho, doublereal *pho, doublereal *pinco,
+	 doublereal *plo, doublereal *rtemsq, doublereal *se2, doublereal *
+	se3, doublereal *sgh2, doublereal *sgh3, doublereal *sgh4, doublereal 
+	*sh2, doublereal *sh3, doublereal *si2, doublereal *si3, doublereal *
+	sl2, doublereal *sl3, doublereal *sl4, doublereal *s1, doublereal *s2,
+	 doublereal *s3, doublereal *s4, doublereal *s5, doublereal *s6, 
+	doublereal *s7, doublereal *ss1, doublereal *ss2, doublereal *ss3, 
+	doublereal *ss4, doublereal *ss5, doublereal *ss6, doublereal *ss7, 
+	doublereal *sz1, doublereal *sz2, doublereal *sz3, doublereal *sz11, 
+	doublereal *sz12, doublereal *sz13, doublereal *sz21, doublereal *
+	sz22, doublereal *sz23, doublereal *sz31, doublereal *sz32, 
+	doublereal *sz33, doublereal *xgh2, doublereal *xgh3, doublereal *
+	xgh4, doublereal *xh2, doublereal *xh3, doublereal *xi2, doublereal *
+	xi3, doublereal *xl2, doublereal *xl3, doublereal *xl4, doublereal *
+	xn, doublereal *z1, doublereal *z2, doublereal *z3, doublereal *z11, 
+	doublereal *z12, doublereal *z13, doublereal *z21, doublereal *z22, 
+	doublereal *z23, doublereal *z31, doublereal *z32, doublereal *z33, 
+	doublereal *zmol, doublereal *zmos)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sin(doublereal), cos(doublereal), sqrt(doublereal), d_mod(
-	    doublereal *, doublereal *), atan2(doublereal, doublereal);
+    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal), sqrt(
+	    f2c_state_t*, doublereal), d_mod(f2c_state_t*, doublereal *, 
+	    doublereal *), atan2(f2c_state_t*, doublereal, doublereal);
 
     /* Local variables */
     doublereal ctem;
     doublereal stem;
     doublereal xnoi;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer lsflg;
     doublereal a1;
     doublereal a2;
@@ -67,7 +67,7 @@ static zzdscm_state_t* get_zzdscm_state() {
     doublereal zsing;
     doublereal zsinh;
     doublereal zsini;
-    extern doublereal twopi_(void);
+    extern doublereal twopi_(cspice_t*);
     doublereal x1;
     doublereal x2;
     doublereal x3;
@@ -82,7 +82,7 @@ static zzdscm_state_t* get_zzdscm_state() {
     doublereal xnodce;
     doublereal zx;
     doublereal zy;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal c1l;
     doublereal zcosgl;
     doublereal zcoshl;
@@ -94,14 +94,14 @@ static zzdscm_state_t* get_zzdscm_state() {
     doublereal zcosis;
     doublereal zsings;
     doublereal zsinis;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal zel;
     doublereal zes;
     doublereal c1ss;
 
 
     /* Module state */
-    zzdscm_state_t* __state = get_zzdscm_state();
+    zzdscm_state_t* __state = get_zzdscm_state(__global_state);
 /* $ Abstract */
 
 /*     This subroutine provides deep space common items used by both the */
@@ -408,10 +408,10 @@ static zzdscm_state_t* get_zzdscm_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSCM", (ftnlen)6);
+    chkin_(__global_state, "ZZDSCM", (ftnlen)6);
 
 /*     Constants */
 
@@ -428,15 +428,15 @@ static zzdscm_state_t* get_zzdscm_state() {
 
     *xn = *np;
     *eccm = *eccp;
-    *snodm = sin(*nodep);
-    *cnodm = cos(*nodep);
-    *sinomm = sin(*argpp);
-    *cosomm = cos(*argpp);
-    *sinim = sin(*inclp);
-    *cosim = cos(*inclp);
+    *snodm = sin(&__global_state->f2c, *nodep);
+    *cnodm = cos(&__global_state->f2c, *nodep);
+    *sinomm = sin(&__global_state->f2c, *argpp);
+    *cosomm = cos(&__global_state->f2c, *argpp);
+    *sinim = sin(&__global_state->f2c, *inclp);
+    *cosim = cos(&__global_state->f2c, *inclp);
     *emsq = *eccm * *eccm;
     betasq = 1. - *emsq;
-    *rtemsq = sqrt(betasq);
+    *rtemsq = sqrt(&__global_state->f2c, betasq);
 
 /*     INITIALIZE LUNAR SOLAR TERMS */
 
@@ -450,21 +450,21 @@ static zzdscm_state_t* get_zzdscm_state() {
     *pho = 0.;
     *day = *epoch + 18261.5 + *tc / 1440.;
     d__1 = 4.523602 - *day * 9.2422029e-4;
-    d__2 = twopi_();
-    xnodce = d_mod(&d__1, &d__2);
-    stem = sin(xnodce);
-    ctem = cos(xnodce);
+    d__2 = twopi_(__global_state);
+    xnodce = d_mod(&__global_state->f2c, &d__1, &d__2);
+    stem = sin(&__global_state->f2c, xnodce);
+    ctem = cos(&__global_state->f2c, xnodce);
     zcosil = .91375164 - ctem * .03568096;
-    zsinil = sqrt(1. - zcosil * zcosil);
+    zsinil = sqrt(&__global_state->f2c, 1. - zcosil * zcosil);
     zsinhl = stem * .089683511 / zsinil;
-    zcoshl = sqrt(1. - zsinhl * zsinhl);
+    zcoshl = sqrt(&__global_state->f2c, 1. - zsinhl * zsinhl);
     *gam = *day * .001944368 + 5.8351514;
     zx = stem * .39785416 / zsinil;
     zy = zcoshl * ctem + zsinhl * .91744867 * stem;
-    zx = atan2(zx, zy);
+    zx = atan2(&__global_state->f2c, zx, zy);
     zx = *gam + zx - xnodce;
-    zcosgl = cos(zx);
-    zsingl = sin(zx);
+    zcosgl = cos(&__global_state->f2c, zx);
+    zsingl = sin(&__global_state->f2c, zx);
 
 /*     DO SOLAR TERMS */
 
@@ -555,11 +555,11 @@ static zzdscm_state_t* get_zzdscm_state() {
 	}
     }
     d__1 = *day * .2299715 + 4.7199672 - *gam;
-    d__2 = twopi_();
-    *zmol = d_mod(&d__1, &d__2);
+    d__2 = twopi_(__global_state);
+    *zmol = d_mod(&__global_state->f2c, &d__1, &d__2);
     d__1 = *day * .017201977 + 6.2565837;
-    d__2 = twopi_();
-    *zmos = d_mod(&d__1, &d__2);
+    d__2 = twopi_(__global_state);
+    *zmos = d_mod(&__global_state->f2c, &d__1, &d__2);
 
 /*     DO SOLAR TERMS */
 
@@ -590,7 +590,7 @@ static zzdscm_state_t* get_zzdscm_state() {
     *xgh4 = *s4 * -18. * zel;
     *xh2 = *s2 * -2. * *z22;
     *xh3 = *s2 * -2. * (*z23 - *z21);
-    chkout_("ZZDSCM", (ftnlen)6);
+    chkout_(__global_state, "ZZDSCM", (ftnlen)6);
     return 0;
 } /* zzdscm_ */
 

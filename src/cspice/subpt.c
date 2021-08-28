@@ -8,8 +8,7 @@
 
 
 extern subpt_init_t __subpt_init;
-static subpt_state_t* get_subpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline subpt_state_t* get_subpt_state(cspice_t* state) {
 	if (!state->subpt)
 		state->subpt = __cspice_allocate_module(sizeof(subpt_state_t),
 	 &__subpt_init, sizeof(__subpt_init));
@@ -18,50 +17,55 @@ static subpt_state_t* get_subpt_state() {
 }
 
 /* $Procedure      SUBPT ( Sub-observer point ) */
-/* Subroutine */ int subpt_(char *method, char *target, doublereal *et, char *
-	abcorr, char *obsrvr, doublereal *spoint, doublereal *alt, ftnlen 
-	method_len, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int subpt_(cspice_t* __global_state, char *method, char *
+	target, doublereal *et, char *abcorr, char *obsrvr, doublereal *
+	spoint, doublereal *alt, ftnlen method_len, ftnlen target_len, ftnlen 
+	abcorr_len, ftnlen obsrvr_len)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern doublereal vdist_(doublereal *, doublereal *);
-    extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
-	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int spkez_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
     integer obscde;
     doublereal lt;
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
     integer frcode;
-    extern /* Subroutine */ int cidfrm_(integer *, integer *, char *, logical 
-	    *, ftnlen);
+    extern /* Subroutine */ int cidfrm_(cspice_t*, integer *, integer *, char 
+	    *, logical *, ftnlen);
     integer nradii;
     char frname[80];
     integer trgcde;
-    extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int nearpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal tstate[6];
-    extern logical return_(void);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
 	    ;
+    extern /* Subroutine */ int surfpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, logical *
+	    );
     doublereal pos[3];
 
 
     /* Module state */
-    subpt_state_t* __state = get_subpt_state();
+    subpt_state_t* __state = get_subpt_state(__global_state);
 /* $ Abstract */
 
 /*     Deprecated: This routine has been superseded by the SPICELIB */
@@ -613,10 +617,10 @@ static subpt_state_t* get_subpt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SUBPT", (ftnlen)5);
+	chkin_(__global_state, "SUBPT", (ftnlen)5);
     }
 
 /*     Initialization. */
@@ -625,8 +629,8 @@ static subpt_state_t* get_subpt_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
 	__state->first = FALSE_;
     }
 
@@ -634,29 +638,33 @@ static subpt_state_t* get_subpt_state() {
 
 /*     Target... */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
-	    __state->svfnd1, target, &trgcde, &found, (ftnlen)36, target_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtcde, &__state->svfnd1, target, &trgcde, &found, (
+	    ftnlen)36, target_len);
     if (! found) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit. ", (ftnlen)155);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SUBPT", (ftnlen)5);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit. ", (
+		ftnlen)155);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SUBPT", (ftnlen)5);
 	return 0;
     }
 
 /*     ...observer. */
 
-    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
-	    __state->svfnd2, obsrvr, &obscde, &found, (ftnlen)36, obsrvr_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svobsr, &
+	    __state->svobsc, &__state->svfnd2, obsrvr, &obscde, &found, (
+	    ftnlen)36, obsrvr_len);
     if (! found) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE Toolkit. ", (ftnlen)157);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SUBPT", (ftnlen)5);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE Toolkit. ", (
+		ftnlen)157);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SUBPT", (ftnlen)5);
 	return 0;
     }
 
@@ -664,30 +672,33 @@ static subpt_state_t* get_subpt_state() {
 /*     an error. */
 
     if (obscde == trgcde) {
-	setmsg_("In computing the sub-observer point, the observing body and"
-		" target body are the same. Both are #.", (ftnlen)97);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("SUBPT", (ftnlen)5);
+	setmsg_(__global_state, "In computing the sub-observer point, the ob"
+		"serving body and target body are the same. Both are #.", (
+		ftnlen)97);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "SUBPT", (ftnlen)5);
 	return 0;
     }
 
 /*     Get the radii of the target body from the kernel pool. */
 
-    bodvcd_(&trgcde, "RADII", &__state->c__3, &nradii, radii, (ftnlen)5);
+    bodvcd_(__global_state, &trgcde, "RADII", &__state->c__3, &nradii, radii, 
+	    (ftnlen)5);
 
 /*     Find the name of the body-fixed frame associated with the */
 /*     target body.  We'll want the state of the target relative to */
 /*     the observer in this body-fixed frame. */
 
-    cidfrm_(&trgcde, &frcode, frname, &found, (ftnlen)80);
+    cidfrm_(__global_state, &trgcde, &frcode, frname, &found, (ftnlen)80);
     if (! found) {
-	setmsg_("No body-fixed frame is associated with target body #; a fra"
-		"me kernel must be loaded to make this association.  Consult "
-		"the FRAMES Required Reading for details.", (ftnlen)159);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	chkout_("SUBPT", (ftnlen)5);
+	setmsg_(__global_state, "No body-fixed frame is associated with targ"
+		"et body #; a frame kernel must be loaded to make this associ"
+		"ation.  Consult the FRAMES Required Reading for details.", (
+		ftnlen)159);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	chkout_(__global_state, "SUBPT", (ftnlen)5);
 	return 0;
     }
 
@@ -715,51 +726,55 @@ static subpt_state_t* get_subpt_state() {
 /*            corrections (if requested).  Now we need the inverse of */
 /*            that corrected vector in order to compute the sub-point. */
 
-    spkez_(&trgcde, et, frname, abcorr, &obscde, tstate, &lt, (ftnlen)80, 
-	    abcorr_len);
+    spkez_(__global_state, &trgcde, et, frname, abcorr, &obscde, tstate, &lt, 
+	    (ftnlen)80, abcorr_len);
 
 /*     Negate the target's state to obtain the position of the observer */
 /*     relative to the target. */
 
-    vminus_(tstate, pos);
+    vminus_(__global_state, tstate, pos);
 
 /*     Find the sub-point and "altitude" (distance from observer to */
 /*     sub-point) using the specified geometric definition. */
 
-    if (eqstr_(method, "Near point", method_len, (ftnlen)10)) {
+    if (eqstr_(__global_state, method, "Near point", method_len, (ftnlen)10)) 
+	    {
 
 /*        Locate the nearest point to the observer on the target. */
 
-	nearpt_(pos, radii, &radii[1], &radii[2], spoint, alt);
-    } else if (eqstr_(method, "Intercept", method_len, (ftnlen)9)) {
-	surfpt_(__state->origin, pos, radii, &radii[1], &radii[2], spoint, &
-		found);
+	nearpt_(__global_state, pos, radii, &radii[1], &radii[2], spoint, alt)
+		;
+    } else if (eqstr_(__global_state, method, "Intercept", method_len, (
+	    ftnlen)9)) {
+	surfpt_(__global_state, __state->origin, pos, radii, &radii[1], &
+		radii[2], spoint, &found);
 
 /*        Since the line in question passes through the center of the */
 /*        target, there will always be a surface intercept.  So we should */
 /*        never have FOUND = .FALSE. */
 
 	if (! found) {
-	    setmsg_("Call to SURFPT returned FOUND=FALSE even though vertex "
-		    "of ray is at target center. This indicates a bug. Please"
-		    " contact NAIF.", (ftnlen)125);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("SUBPT", (ftnlen)5);
+	    setmsg_(__global_state, "Call to SURFPT returned FOUND=FALSE eve"
+		    "n though vertex of ray is at target center. This indicat"
+		    "es a bug. Please contact NAIF.", (ftnlen)125);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "SUBPT", (ftnlen)5);
 	    return 0;
 	}
 
 /*        SURFPT doesn't compute altitude, so do it here. */
 
-	*alt = vdist_(pos, spoint);
+	*alt = vdist_(__global_state, pos, spoint);
     } else {
-	setmsg_("The computation method # was not recognized. Allowed values"
-		" are \"Near point\" and \"Intercept.\"", (ftnlen)93);
-	errch_("#", method, (ftnlen)1, method_len);
-	sigerr_("SPICE(DUBIOUSMETHOD)", (ftnlen)20);
-	chkout_("SUBPT", (ftnlen)5);
+	setmsg_(__global_state, "The computation method # was not recognized"
+		". Allowed values are \"Near point\" and \"Intercept.\"", (
+		ftnlen)93);
+	errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	sigerr_(__global_state, "SPICE(DUBIOUSMETHOD)", (ftnlen)20);
+	chkout_(__global_state, "SUBPT", (ftnlen)5);
 	return 0;
     }
-    chkout_("SUBPT", (ftnlen)5);
+    chkout_(__global_state, "SUBPT", (ftnlen)5);
     return 0;
 } /* subpt_ */
 

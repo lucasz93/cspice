@@ -363,7 +363,7 @@
       return;
    }
       
-   chkin_c ( "erract_c" );
+   chkin_c ( naif_state, "erract_c" );
 
 
    /*

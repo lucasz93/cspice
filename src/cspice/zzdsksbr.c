@@ -8,8 +8,7 @@
 
 
 extern zzdsksbr_init_t __zzdsksbr_init;
-static zzdsksbr_state_t* get_zzdsksbr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdsksbr_state_t* get_zzdsksbr_state(cspice_t* state) {
 	if (!state->zzdsksbr)
 		state->zzdsksbr = __cspice_allocate_module(sizeof(
 	zzdsksbr_state_t), &__zzdsksbr_init, sizeof(__zzdsksbr_init));
@@ -18,10 +17,11 @@ static zzdsksbr_state_t* get_zzdsksbr_state() {
 }
 
 /* $Procedure ZZDSKSBR ( DSK, remove entries from API segment buffer ) */
-/* Subroutine */ int zzdsksbr_(integer *needed, integer *maxbod, integer *
-	stsize, integer *btbody, integer *btnbod, integer *btsegp, integer *
-	btstsz, integer *sthan, doublereal *stdscr, integer *stdlad, integer *
-	stfree, doublereal *stoff, doublereal *stctr, doublereal *strad)
+/* Subroutine */ int zzdsksbr_(cspice_t* __global_state, integer *needed, 
+	integer *maxbod, integer *stsize, integer *btbody, integer *btnbod, 
+	integer *btsegp, integer *btstsz, integer *sthan, doublereal *stdscr, 
+	integer *stdlad, integer *stfree, doublereal *stoff, doublereal *
+	stctr, doublereal *strad)
 {
     /* System generated locals */
     integer i__1;
@@ -30,20 +30,22 @@ static zzdsksbr_state_t* get_zzdsksbr_state() {
     integer i__;
     integer j;
     integer avail;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer nbtdel;
     integer nstdel;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzdsksbr_state_t* __state = get_zzdsksbr_state();
+    zzdsksbr_state_t* __state = get_zzdsksbr_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -584,32 +586,33 @@ static zzdsksbr_state_t* get_zzdsksbr_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKSBR", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKSBR", (ftnlen)8);
     if (*needed > *stsize) {
 
 /*        There's not enough room in the entire segment table. */
 
-	setmsg_("Size of segment table is #; number of entries requested is "
-		"#. The segment table is supposed to be declared with suffici"
-		"ent size to accommodate all loaded DSK segments.", (ftnlen)
-		167);
-	errint_("#", stsize, (ftnlen)1);
-	errint_("#", needed, (ftnlen)1);
-	sigerr_("SPICE(SEGTABLETOOSMALL)", (ftnlen)23);
-	chkout_("ZZDSKSBR", (ftnlen)8);
+	setmsg_(__global_state, "Size of segment table is #; number of entri"
+		"es requested is #. The segment table is supposed to be decla"
+		"red with sufficient size to accommodate all loaded DSK segme"
+		"nts.", (ftnlen)167);
+	errint_(__global_state, "#", stsize, (ftnlen)1);
+	errint_(__global_state, "#", needed, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SEGTABLETOOSMALL)", (ftnlen)23);
+	chkout_(__global_state, "ZZDSKSBR", (ftnlen)8);
 	return 0;
     }
 
 /*     We can't make room in a body table of zero size. */
 
     if (*maxbod < 1) {
-	setmsg_("Body table size must be at least 1 but is #.", (ftnlen)44);
-	errint_("#", maxbod, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTABLESIZE)", (ftnlen)23);
-	chkout_("ZZDSKSBR", (ftnlen)8);
+	setmsg_(__global_state, "Body table size must be at least 1 but is #."
+		, (ftnlen)44);
+	errint_(__global_state, "#", maxbod, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTABLESIZE)", (ftnlen)23);
+	chkout_(__global_state, "ZZDSKSBR", (ftnlen)8);
 	return 0;
     }
 
@@ -641,13 +644,14 @@ static zzdsksbr_state_t* get_zzdsksbr_state() {
 /*        table at this point. */
 
 	if (avail < *needed) {
-	    setmsg_("The requested number of segment entries is #; the size "
-		    "STSIZE of the input segment  table is #. This error shou"
-		    "ld have been trapped before this point.", (ftnlen)150);
-	    errint_("#", needed, (ftnlen)1);
-	    errint_("#", stsize, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZDSKSBR", (ftnlen)8);
+	    setmsg_(__global_state, "The requested number of segment entries"
+		    " is #; the size STSIZE of the input segment  table is #."
+		    " This error should have been trapped before this point.", 
+		    (ftnlen)150);
+	    errint_(__global_state, "#", needed, (ftnlen)1);
+	    errint_(__global_state, "#", stsize, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZDSKSBR", (ftnlen)8);
 	    return 0;
 	}
 
@@ -682,20 +686,20 @@ static zzdsksbr_state_t* get_zzdsksbr_state() {
 	    for (i__ = nstdel + 1; i__ <= i__1; ++i__) {
 		j = i__ - nstdel;
 		sthan[j - 1] = sthan[i__ - 1];
-		moved_(&stdscr[i__ * 24 - 24], &__state->c__24, &stdscr[j * 
-			24 - 24]);
-		movei_(&stdlad[(i__ << 3) - 8], &__state->c__8, &stdlad[(j << 
-			3) - 8]);
-		moved_(&stoff[i__ * 3 - 3], &__state->c__3, &stoff[j * 3 - 3])
-			;
-		moved_(&stctr[i__ * 3 - 3], &__state->c__3, &stctr[j * 3 - 3])
-			;
+		moved_(__global_state, &stdscr[i__ * 24 - 24], &
+			__state->c__24, &stdscr[j * 24 - 24]);
+		movei_(__global_state, &stdlad[(i__ << 3) - 8], &
+			__state->c__8, &stdlad[(j << 3) - 8]);
+		moved_(__global_state, &stoff[i__ * 3 - 3], &__state->c__3, &
+			stoff[j * 3 - 3]);
+		moved_(__global_state, &stctr[i__ * 3 - 3], &__state->c__3, &
+			stctr[j * 3 - 3]);
 		strad[j - 1] = strad[i__ - 1];
 	    }
 	    *stfree -= nstdel;
 	}
     }
-    chkout_("ZZDSKSBR", (ftnlen)8);
+    chkout_(__global_state, "ZZDSKSBR", (ftnlen)8);
     return 0;
 } /* zzdsksbr_ */
 

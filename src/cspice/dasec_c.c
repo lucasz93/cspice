@@ -273,7 +273,7 @@
    {
       return;
    }
-   chkin_c ( "dasec_c" );
+   chkin_c ( naif_state, "dasec_c" );
 
 
    /*

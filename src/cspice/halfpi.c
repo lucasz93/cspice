@@ -8,8 +8,7 @@
 
 
 extern halfpi_init_t __halfpi_init;
-static halfpi_state_t* get_halfpi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline halfpi_state_t* get_halfpi_state(cspice_t* state) {
 	if (!state->halfpi)
 		state->halfpi = __cspice_allocate_module(sizeof(
 	halfpi_state_t), &__halfpi_init, sizeof(__halfpi_init));
@@ -18,7 +17,7 @@ static halfpi_state_t* get_halfpi_state() {
 }
 
 /* $Procedure                     HALFPI ( Half the value of pi ) */
-doublereal halfpi_(void)
+doublereal halfpi_(cspice_t* __global_state)
 {
     /* Initialized data */
 
@@ -27,11 +26,11 @@ doublereal halfpi_(void)
     doublereal ret_val;
 
     /* Builtin functions */
-    double acos(doublereal);
+    double acos(f2c_state_t*, doublereal);
 
 
     /* Module state */
-    halfpi_state_t* __state = get_halfpi_state();
+    halfpi_state_t* __state = get_halfpi_state(__global_state);
 /* $ Abstract */
 
 /*     Return half the value of pi (the ratio of the circumference of */
@@ -186,7 +185,7 @@ doublereal halfpi_(void)
 /*     What is there to say? */
 
     if (__state->value == 0.) {
-	__state->value = acos(-1.) * .5;
+	__state->value = acos(&__global_state->f2c, -1.) * .5;
     }
     ret_val = __state->value;
     return ret_val;

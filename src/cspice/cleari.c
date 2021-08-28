@@ -8,13 +8,13 @@
 
 
 typedef int cleari_state_t;
-static cleari_state_t* get_cleari_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cleari_state_t* get_cleari_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CLEARI ( Clear an integer array ) */
-/* Subroutine */ int cleari_(integer *ndim, integer *array)
+/* Subroutine */ int cleari_(cspice_t* __global_state, integer *ndim, integer 
+	*array)
 {
     /* System generated locals */
     integer i__1;
@@ -24,7 +24,7 @@ static cleari_state_t* get_cleari_state() {
 
 
     /* Module state */
-    cleari_state_t* __state = get_cleari_state();
+    cleari_state_t* __state = get_cleari_state(__global_state);
 /* $ Abstract */
 
 /*      Fill an integer array with zeros. */

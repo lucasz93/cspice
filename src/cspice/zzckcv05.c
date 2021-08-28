@@ -8,60 +8,63 @@
 
 
 typedef int zzckcv05_state_t;
-static zzckcv05_state_t* get_zzckcv05_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzckcv05_state_t* get_zzckcv05_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZCKCV05 ( Private --- C-kernel segment coverage, type 05 ) */
-/* Subroutine */ int zzckcv05_(integer *handle, integer *arrbeg, integer *
-	arrend, integer *sclkid, doublereal *dc, doublereal *tol, char *
-	timsys, doublereal *schedl, ftnlen timsys_len)
+/* Subroutine */ int zzckcv05_(cspice_t* __global_state, integer *handle, 
+	integer *arrbeg, integer *arrend, integer *sclkid, doublereal *dc, 
+	doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len)
 {
     /* System generated locals */
     integer i__1;
     doublereal d__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
     logical bail;
     integer nrec;
     doublereal tick;
     integer ndir;
-    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sct2e_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
     doublereal begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical istdb;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer intat;
     integer invls;
     integer rsize;
     doublereal start;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal et;
     integer intbeg;
     doublereal buffer[4];
     integer tickat;
     doublereal finish;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int wninsd_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     integer lsttik;
     integer lstint;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer subtyp;
 
 
     /* Module state */
-    zzckcv05_state_t* __state = get_zzckcv05_state();
+    zzckcv05_state_t* __state = get_zzckcv05_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -350,36 +353,36 @@ static zzckcv05_state_t* get_zzckcv05_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZCKCV05", (ftnlen)8);
+	chkin_(__global_state, "ZZCKCV05", (ftnlen)8);
     }
 
 /*     Check tolerance value. */
 
     if (*tol < 0.) {
-	setmsg_("Tolerance must be non-negative; actual value was #.", (
-		ftnlen)51);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZCKCV05", (ftnlen)8);
+	setmsg_(__global_state, "Tolerance must be non-negative; actual valu"
+		"e was #.", (ftnlen)51);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZCKCV05", (ftnlen)8);
 	return 0;
     }
 
 /*     Set a logical flag indicating whether the time systm is SCLK. */
 
-    istdb = eqstr_(timsys, "TDB", timsys_len, (ftnlen)3);
+    istdb = eqstr_(__global_state, timsys, "TDB", timsys_len, (ftnlen)3);
 
 /*     Check time system. */
 
     if (! istdb) {
-	if (! eqstr_(timsys, "SCLK", timsys_len, (ftnlen)4)) {
-	    setmsg_("Time system spec TIMSYS was #; allowed values are SCLK "
-		    "and TDB.", (ftnlen)63);
-	    errch_("#", timsys, (ftnlen)1, timsys_len);
-	    sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	    chkout_("ZZCKCV05", (ftnlen)8);
+	if (! eqstr_(__global_state, timsys, "SCLK", timsys_len, (ftnlen)4)) {
+	    setmsg_(__global_state, "Time system spec TIMSYS was #; allowed "
+		    "values are SCLK and TDB.", (ftnlen)63);
+	    errch_(__global_state, "#", timsys, (ftnlen)1, timsys_len);
+	    sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	    chkout_(__global_state, "ZZCKCV05", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -393,10 +396,10 @@ static zzckcv05_state_t* get_zzckcv05_state() {
 /*     BUFFER(4) = Number of Packets */
 
     i__1 = *arrend - 3;
-    dafgda_(handle, &i__1, arrend, buffer);
-    subtyp = i_dnnt(buffer);
-    invls = i_dnnt(&buffer[2]);
-    nrec = i_dnnt(&buffer[3]);
+    dafgda_(__global_state, handle, &i__1, arrend, buffer);
+    subtyp = i_dnnt(&__global_state->f2c, buffer);
+    invls = i_dnnt(&__global_state->f2c, &buffer[2]);
+    nrec = i_dnnt(&__global_state->f2c, &buffer[3]);
     ndir = (nrec - 1) / 100;
 
 /*     Compute the packet size.  This requires parameters listed */
@@ -411,10 +414,11 @@ static zzckcv05_state_t* get_zzckcv05_state() {
     } else if (subtyp == 3) {
 	rsize = 7;
     } else {
-	setmsg_("CK type 5 subtype <#> is not supported.", (ftnlen)39);
-	errint_("#", buffer, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZCKCV05", (ftnlen)8);
+	setmsg_(__global_state, "CK type 5 subtype <#> is not supported.", (
+		ftnlen)39);
+	errint_(__global_state, "#", buffer, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZCKCV05", (ftnlen)8);
 	return 0;
     }
 
@@ -463,18 +467,18 @@ static zzckcv05_state_t* get_zzckcv05_state() {
     intbeg = *arrbeg + rsize * nrec + nrec + ndir;
     intat = intbeg;
     lstint = intbeg + invls - 1;
-    dafgda_(handle, &intat, &intat, &start);
-    dafgda_(handle, &tickat, &tickat, &tick);
+    dafgda_(__global_state, handle, &intat, &intat, &start);
+    dafgda_(__global_state, handle, &tickat, &tickat, &tick);
     while(tick < start && tickat < lsttik) {
 	++tickat;
-	dafgda_(handle, &tickat, &tickat, &tick);
+	dafgda_(__global_state, handle, &tickat, &tickat, &tick);
     }
 
 /*     If we did not find a TICK at least as big as START, we can */
 /*     just return now. */
 
     if (tick < start) {
-	chkout_("ZZCKCV05", (ftnlen)8);
+	chkout_(__global_state, "ZZCKCV05", (ftnlen)8);
 	return 0;
     }
     bail = FALSE_;
@@ -491,7 +495,7 @@ static zzckcv05_state_t* get_zzckcv05_state() {
 /*        reads. */
 
 	if (intat == lstint) {
-	    dafgda_(handle, &lsttik, &lsttik, &finish);
+	    dafgda_(__global_state, handle, &lsttik, &lsttik, &finish);
 	    bail = TRUE_;
 
 /*           The routine will return at the end of this loop */
@@ -505,7 +509,7 @@ static zzckcv05_state_t* get_zzckcv05_state() {
 /*           interval. */
 
 	    ++intat;
-	    dafgda_(handle, &intat, &intat, &start);
+	    dafgda_(__global_state, handle, &intat, &intat, &start);
 
 /*           Read forward from the last tick until we reach the */
 /*           START of the next interval or until we run out of TICKS. */
@@ -513,7 +517,7 @@ static zzckcv05_state_t* get_zzckcv05_state() {
 	    while(tick < start && tickat < lsttik) {
 		finish = tick;
 		++tickat;
-		dafgda_(handle, &tickat, &tickat, &tick);
+		dafgda_(__global_state, handle, &tickat, &tickat, &tick);
 	    }
 
 /*           A structurally correct CK-5 segment should never allow the */
@@ -548,19 +552,19 @@ static zzckcv05_state_t* get_zzckcv05_state() {
 /*        Convert the time to TDB if necessary. */
 
 	if (istdb) {
-	    sct2e_(sclkid, &begin, &et);
+	    sct2e_(__global_state, sclkid, &begin, &et);
 	    begin = et;
-	    sct2e_(sclkid, &finish, &et);
+	    sct2e_(__global_state, sclkid, &finish, &et);
 	    finish = et;
 	}
 
 /*        Insert the interval into the window. */
 
 	if (begin <= finish) {
-	    wninsd_(&begin, &finish, schedl);
+	    wninsd_(__global_state, &begin, &finish, schedl);
 	}
     }
-    chkout_("ZZCKCV05", (ftnlen)8);
+    chkout_(__global_state, "ZZCKCV05", (ftnlen)8);
     return 0;
 } /* zzckcv05_ */
 

@@ -8,17 +8,17 @@
 
 
 typedef int udf_state_t;
-static udf_state_t* get_udf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline udf_state_t* get_udf_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure UDF ( Dummy function for UDFUNS ) */
-/* Subroutine */ int udf_(doublereal *x, doublereal *value)
+/* Subroutine */ int udf_(cspice_t* __global_state, doublereal *x, doublereal 
+	*value)
 {
 
     /* Module state */
-    udf_state_t* __state = get_udf_state();
+    udf_state_t* __state = get_udf_state(__global_state);
 /* $ Abstract */
 
 /*     No-op routine for with an argument signature matching UDFUNS. */

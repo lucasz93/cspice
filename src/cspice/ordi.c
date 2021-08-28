@@ -8,27 +8,26 @@
 
 
 typedef int ordi_state_t;
-static ordi_state_t* get_ordi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ordi_state_t* get_ordi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ORDI ( The ordinal position of an element in a set ) */
-integer ordi_(integer *item, integer *set)
+integer ordi_(cspice_t* __global_state, integer *item, integer *set)
 {
     /* System generated locals */
     integer ret_val, i__1;
 
     /* Local variables */
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer bsrchi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer bsrchi_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ordi_state_t* __state = get_ordi_state();
+    ordi_state_t* __state = get_ordi_state(__global_state);
 /* $ Abstract */
 
 /*     The function returns the ordinal position of any given item in a */
@@ -215,18 +214,18 @@ integer ordi_(integer *item, integer *set)
 
 /*     Standard error handling: */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0;
 	return ret_val;
     } else {
-	chkin_("ORDI", (ftnlen)4);
+	chkin_(__global_state, "ORDI", (ftnlen)4);
     }
 
 /*     Given the structure of sets, there's not much to do. */
 
-    i__1 = cardi_(set);
-    ret_val = bsrchi_(item, &i__1, &set[6]);
-    chkout_("ORDI", (ftnlen)4);
+    i__1 = cardi_(__global_state, set);
+    ret_val = bsrchi_(__global_state, item, &i__1, &set[6]);
+    chkout_(__global_state, "ORDI", (ftnlen)4);
     return ret_val;
 } /* ordi_ */
 

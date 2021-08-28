@@ -8,20 +8,20 @@
 
 
 typedef int pos_state_t;
-static pos_state_t* get_pos_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pos_state_t* get_pos_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            POS ( Position of substring ) */
-integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen 
-	substr_len)
+integer pos_(cspice_t* __global_state, char *str, char *substr, integer *
+	start, ftnlen str_len, ftnlen substr_len)
 {
     /* System generated locals */
     integer ret_val, i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer b;
@@ -32,7 +32,7 @@ integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
 
 
     /* Module state */
-    pos_state_t* __state = get_pos_state();
+    pos_state_t* __state = get_pos_state(__global_state);
 /* $ Abstract */
 
 /*     Find the first occurrence in a string of a substring, starting at */
@@ -205,9 +205,9 @@ integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
 
 /*     Let's find out how big every body is. */
 
-    lenstr = i_len(str, str_len);
+    lenstr = i_len(&__global_state->f2c, str, str_len);
 /* Computing MAX */
-    i__1 = 0, i__2 = i_len(substr, substr_len) - 1;
+    i__1 = 0, i__2 = i_len(&__global_state->f2c, substr, substr_len) - 1;
     offset = max(i__1,i__2);
     lchnce = lenstr - offset;
     b = max(1,*start);
@@ -220,8 +220,8 @@ integer pos_(char *str, char *substr, integer *start, ftnlen str_len, ftnlen
     while(! found) {
 	if (b > lchnce) {
 	    return ret_val;
-	} else if (s_cmp(str + (b - 1), substr, b + offset - (b - 1), 
-		substr_len) == 0) {
+	} else if (s_cmp(&__global_state->f2c, str + (b - 1), substr, b + 
+		offset - (b - 1), substr_len) == 0) {
 	    ret_val = b;
 	    return ret_val;
 	} else {

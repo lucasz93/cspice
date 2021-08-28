@@ -8,30 +8,29 @@
 
 
 typedef int packai_state_t;
-static packai_state_t* get_packai_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline packai_state_t* get_packai_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PACKAI ( Pack an integer array ) */
-/* Subroutine */ int packai_(integer *in, integer *pack, integer *npack, 
-	integer *maxout, integer *nout, integer *out)
+/* Subroutine */ int packai_(cspice_t* __global_state, integer *in, integer *
+	pack, integer *npack, integer *maxout, integer *nout, integer *out)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    packai_state_t* __state = get_packai_state();
+    packai_state_t* __state = get_packai_state(__global_state);
 /* $ Abstract */
 
 /*     Pack the contents of an integer array. That is, */
@@ -227,10 +226,10 @@ static packai_state_t* get_packai_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PACKAI", (ftnlen)6);
+	chkin_(__global_state, "PACKAI", (ftnlen)6);
     }
 
 /*     First, determine how many items to transfer. */
@@ -242,11 +241,12 @@ static packai_state_t* get_packai_state() {
     i__1 = *nout;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (pack[i__ - 1] < 1) {
-	    setmsg_("Element number * contains index *.", (ftnlen)34);
-	    errint_("*", &i__, (ftnlen)1);
-	    errint_("*", &pack[i__ - 1], (ftnlen)1);
-	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	    chkout_("PACKAI", (ftnlen)6);
+	    setmsg_(__global_state, "Element number * contains index *.", (
+		    ftnlen)34);
+	    errint_(__global_state, "*", &i__, (ftnlen)1);
+	    errint_(__global_state, "*", &pack[i__ - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	    chkout_(__global_state, "PACKAI", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -257,7 +257,7 @@ static packai_state_t* get_packai_state() {
     for (i__ = 1; i__ <= i__1; ++i__) {
 	out[i__ - 1] = in[pack[i__ - 1] - 1];
     }
-    chkout_("PACKAI", (ftnlen)6);
+    chkout_(__global_state, "PACKAI", (ftnlen)6);
     return 0;
 } /* packai_ */
 

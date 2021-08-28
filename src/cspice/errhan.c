@@ -8,8 +8,7 @@
 
 
 extern errhan_init_t __errhan_init;
-static errhan_state_t* get_errhan_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline errhan_state_t* get_errhan_state(cspice_t* state) {
 	if (!state->errhan)
 		state->errhan = __cspice_allocate_module(sizeof(
 	errhan_state_t), &__errhan_init, sizeof(__errhan_init));
@@ -18,28 +17,30 @@ static errhan_state_t* get_errhan_state() {
 }
 
 /* $Procedure ERRHAN ( Insert DAF/DAS file name into long error message ) */
-/* Subroutine */ int errhan_(char *marker, integer *handle, ftnlen marker_len)
+/* Subroutine */ int errhan_(cspice_t* __global_state, char *marker, integer *
+	handle, ftnlen marker_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzddhnfo_(integer *, char *, integer *, 
-	    integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzddhnfo_(cspice_t*, integer *, char *, 
+	    integer *, integer *, integer *, logical *, ftnlen);
     char fname[255];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
     integer intbff;
     integer intarc;
     integer intamh;
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
     char numstr[32];
 
 
     /* Module state */
-    errhan_state_t* __state = get_errhan_state();
+    errhan_state_t* __state = get_errhan_state(__global_state);
 /* $ Abstract */
 
 /*     Substitute the first occurrence of a marker in the current long */
@@ -460,17 +461,21 @@ static errhan_state_t* get_errhan_state() {
 
 /*     Get the name of the file designated by the input handle. */
 
-    zzddhnfo_(handle, fname, &intarc, &intbff, &intamh, &found, (ftnlen)255);
+    zzddhnfo_(__global_state, handle, fname, &intarc, &intbff, &intamh, &
+	    found, (ftnlen)255);
     if (! found) {
-	intstr_(handle, numstr, (ftnlen)32);
-	s_copy(fname, "<No name found for handle ", (ftnlen)255, (ftnlen)26);
-	suffix_(numstr, &__state->c__1, fname, (ftnlen)32, (ftnlen)255);
-	suffix_(">", &__state->c__0, fname, (ftnlen)1, (ftnlen)255);
+	intstr_(__global_state, handle, numstr, (ftnlen)32);
+	s_copy(&__global_state->f2c, fname, "<No name found for handle ", (
+		ftnlen)255, (ftnlen)26);
+	suffix_(__global_state, numstr, &__state->c__1, fname, (ftnlen)32, (
+		ftnlen)255);
+	suffix_(__global_state, ">", &__state->c__0, fname, (ftnlen)1, (
+		ftnlen)255);
     }
 
 /*     Insert the file name string into the long error message. */
 
-    errch_(marker, fname, marker_len, (ftnlen)255);
+    errch_(__global_state, marker, fname, marker_len, (ftnlen)255);
     return 0;
 } /* errhan_ */
 

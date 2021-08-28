@@ -404,7 +404,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dski02_c" );
+   chkin_c ( naif_state, "dski02_c" );
 
    /*
    Populate the Fortran DLA descriptor array fCurrent with the contents

@@ -260,7 +260,7 @@
       return;
    }
    
-   chkin_c ( "vprjpi_c" );
+   chkin_c ( naif_state, "vprjpi_c" );
 
  
    /*

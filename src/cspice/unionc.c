@@ -8,47 +8,46 @@
 
 
 typedef int unionc_state_t;
-static unionc_state_t* get_unionc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline unionc_state_t* get_unionc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      UNIONC ( Union two character sets ) */
-/* Subroutine */ int unionc_(char *a, char *b, char *c__, ftnlen a_len, 
-	ftnlen b_len, ftnlen c_len)
+/* Subroutine */ int unionc_(cspice_t* __global_state, char *a, char *b, char 
+	*c__, ftnlen a_len, ftnlen b_len, ftnlen c_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    logical l_lt(char *, char *, ftnlen, ftnlen), l_gt(char *, char *, ftnlen,
-	     ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    logical l_lt(f2c_state_t*, char *, char *, ftnlen, ftnlen), l_gt(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer over;
     integer acard;
     integer bcard;
-    extern integer cardc_(char *, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
     integer ccard;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sizec_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sizec_(cspice_t*, char *, ftnlen);
     integer csize;
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int scardc_(cspice_t*, integer *, char *, ftnlen);
     integer apoint;
     integer bpoint;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int excess_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    unionc_state_t* __state = get_unionc_state();
+    unionc_state_t* __state = get_unionc_state(__global_state);
 /* $ Abstract */
 
 /*      Union two character sets to form a third set. */
@@ -219,35 +218,37 @@ static unionc_state_t* get_unionc_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("UNIONC", (ftnlen)6);
+    chkin_(__global_state, "UNIONC", (ftnlen)6);
 
 /*     Make sure output set elements are long enough. */
 
 /* Computing MAX */
-    i__1 = i_len(a, a_len), i__2 = i_len(b, b_len);
-    if (i_len(c__, c_len) < max(i__1,i__2)) {
-	setmsg_("Length of output cell is #.  Length required to contain res"
-		"ult is #.", (ftnlen)68);
-	i__1 = i_len(c__, c_len);
-	errint_("#", &i__1, (ftnlen)1);
+    i__1 = i_len(&__global_state->f2c, a, a_len), i__2 = i_len(&
+	    __global_state->f2c, b, b_len);
+    if (i_len(&__global_state->f2c, c__, c_len) < max(i__1,i__2)) {
+	setmsg_(__global_state, "Length of output cell is #.  Length require"
+		"d to contain result is #.", (ftnlen)68);
+	i__1 = i_len(&__global_state->f2c, c__, c_len);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
 /* Computing MAX */
-	i__2 = i_len(a, a_len), i__3 = i_len(b, b_len);
+	i__2 = i_len(&__global_state->f2c, a, a_len), i__3 = i_len(&
+		__global_state->f2c, b, b_len);
 	i__1 = max(i__2,i__3);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(ELEMENTSTOOSHORT)", (ftnlen)23);
-	chkout_("UNIONC", (ftnlen)6);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ELEMENTSTOOSHORT)", (ftnlen)23);
+	chkout_(__global_state, "UNIONC", (ftnlen)6);
 	return 0;
     }
 
 /*     Find the cardinality of the input sets, and the allowed size */
 /*     of the output set. */
 
-    acard = cardc_(a, a_len);
-    bcard = cardc_(b, b_len);
-    csize = sizec_(c__, c_len);
+    acard = cardc_(__global_state, a, a_len);
+    bcard = cardc_(__global_state, b, b_len);
+    csize = sizec_(__global_state, c__, c_len);
 
 /*     Begin with the input pointers at the first elements of the */
 /*     input sets. The cardinality of the output set is zero. */
@@ -268,32 +269,32 @@ static unionc_state_t* get_unionc_state() {
 	if (ccard < csize) {
 	    if (apoint > acard) {
 		++ccard;
-		s_copy(c__ + (ccard + 5) * c_len, b + (bpoint + 5) * b_len, 
-			c_len, b_len);
+		s_copy(&__global_state->f2c, c__ + (ccard + 5) * c_len, b + (
+			bpoint + 5) * b_len, c_len, b_len);
 		++bpoint;
 	    } else if (bpoint > bcard) {
 		++ccard;
-		s_copy(c__ + (ccard + 5) * c_len, a + (apoint + 5) * a_len, 
-			c_len, a_len);
+		s_copy(&__global_state->f2c, c__ + (ccard + 5) * c_len, a + (
+			apoint + 5) * a_len, c_len, a_len);
 		++apoint;
-	    } else if (s_cmp(a + (apoint + 5) * a_len, b + (bpoint + 5) * 
-		    b_len, a_len, b_len) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, a + (apoint + 5) * a_len, 
+		    b + (bpoint + 5) * b_len, a_len, b_len) == 0) {
 		++ccard;
-		s_copy(c__ + (ccard + 5) * c_len, a + (apoint + 5) * a_len, 
-			c_len, a_len);
+		s_copy(&__global_state->f2c, c__ + (ccard + 5) * c_len, a + (
+			apoint + 5) * a_len, c_len, a_len);
 		++apoint;
 		++bpoint;
-	    } else if (l_lt(a + (apoint + 5) * a_len, b + (bpoint + 5) * 
-		    b_len, a_len, b_len)) {
+	    } else if (l_lt(&__global_state->f2c, a + (apoint + 5) * a_len, b 
+		    + (bpoint + 5) * b_len, a_len, b_len)) {
 		++ccard;
-		s_copy(c__ + (ccard + 5) * c_len, a + (apoint + 5) * a_len, 
-			c_len, a_len);
+		s_copy(&__global_state->f2c, c__ + (ccard + 5) * c_len, a + (
+			apoint + 5) * a_len, c_len, a_len);
 		++apoint;
-	    } else if (l_gt(a + (apoint + 5) * a_len, b + (bpoint + 5) * 
-		    b_len, a_len, b_len)) {
+	    } else if (l_gt(&__global_state->f2c, a + (apoint + 5) * a_len, b 
+		    + (bpoint + 5) * b_len, a_len, b_len)) {
 		++ccard;
-		s_copy(c__ + (ccard + 5) * c_len, b + (bpoint + 5) * b_len, 
-			c_len, b_len);
+		s_copy(&__global_state->f2c, c__ + (ccard + 5) * c_len, b + (
+			bpoint + 5) * b_len, c_len, b_len);
 		++bpoint;
 	    }
 
@@ -307,17 +308,17 @@ static unionc_state_t* get_unionc_state() {
 	    } else if (bpoint > bcard) {
 		++over;
 		++apoint;
-	    } else if (s_cmp(a + (apoint + 5) * a_len, b + (bpoint + 5) * 
-		    b_len, a_len, b_len) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, a + (apoint + 5) * a_len, 
+		    b + (bpoint + 5) * b_len, a_len, b_len) == 0) {
 		++over;
 		++apoint;
 		++bpoint;
-	    } else if (l_lt(a + (apoint + 5) * a_len, b + (bpoint + 5) * 
-		    b_len, a_len, b_len)) {
+	    } else if (l_lt(&__global_state->f2c, a + (apoint + 5) * a_len, b 
+		    + (bpoint + 5) * b_len, a_len, b_len)) {
 		++over;
 		++apoint;
-	    } else if (l_gt(a + (apoint + 5) * a_len, b + (bpoint + 5) * 
-		    b_len, a_len, b_len)) {
+	    } else if (l_gt(&__global_state->f2c, a + (apoint + 5) * a_len, b 
+		    + (bpoint + 5) * b_len, a_len, b_len)) {
 		++over;
 		++bpoint;
 	    }
@@ -326,15 +327,15 @@ static unionc_state_t* get_unionc_state() {
 
 /*     Set the cardinality of the output set. */
 
-    scardc_(&ccard, c__, c_len);
+    scardc_(__global_state, &ccard, c__, c_len);
 
 /*     Report any excess. */
 
     if (over > 0) {
-	excess_(&over, "set", (ftnlen)3);
-	sigerr_("SPICE(SETEXCESS)", (ftnlen)16);
+	excess_(__global_state, &over, "set", (ftnlen)3);
+	sigerr_(__global_state, "SPICE(SETEXCESS)", (ftnlen)16);
     }
-    chkout_("UNIONC", (ftnlen)6);
+    chkout_(__global_state, "UNIONC", (ftnlen)6);
     return 0;
 } /* unionc_ */
 

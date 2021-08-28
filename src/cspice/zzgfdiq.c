@@ -8,28 +8,29 @@
 
 
 typedef int zzgfdiq_state_t;
-static zzgfdiq_state_t* get_zzgfdiq_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfdiq_state_t* get_zzgfdiq_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZGFDIQ ( GF, return distance between objects ) */
-/* Subroutine */ int zzgfdiq_(integer *targid, doublereal *et, char *abcorr, 
-	integer *obsid, doublereal *dist, ftnlen abcorr_len)
+/* Subroutine */ int zzgfdiq_(cspice_t* __global_state, integer *targid, 
+	doublereal *et, char *abcorr, integer *obsid, doublereal *dist, 
+	ftnlen abcorr_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal vnorm_(doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal lt;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int spkezp_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern logical return_(cspice_t*);
     doublereal pos[3];
 
 
     /* Module state */
-    zzgfdiq_state_t* __state = get_zzgfdiq_state();
+    zzgfdiq_state_t* __state = get_zzgfdiq_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -193,21 +194,21 @@ static zzgfdiq_state_t* get_zzgfdiq_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFDIQ", (ftnlen)7);
+    chkin_(__global_state, "ZZGFDIQ", (ftnlen)7);
 
 /*     Get the position of the target relative to the observer. */
 
-    spkezp_(targid, et, "J2000", abcorr, obsid, pos, &lt, (ftnlen)5, 
-	    abcorr_len);
-    if (failed_()) {
-	chkout_("ZZGFDIQ", (ftnlen)7);
+    spkezp_(__global_state, targid, et, "J2000", abcorr, obsid, pos, &lt, (
+	    ftnlen)5, abcorr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFDIQ", (ftnlen)7);
 	return 0;
     }
-    *dist = vnorm_(pos);
-    chkout_("ZZGFDIQ", (ftnlen)7);
+    *dist = vnorm_(__global_state, pos);
+    chkout_(__global_state, "ZZGFDIQ", (ftnlen)7);
     return 0;
 } /* zzgfdiq_ */
 

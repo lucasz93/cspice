@@ -8,8 +8,7 @@
 
 
 extern invstm_init_t __invstm_init;
-static invstm_state_t* get_invstm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline invstm_state_t* get_invstm_state(cspice_t* state) {
 	if (!state->invstm)
 		state->invstm = __cspice_allocate_module(sizeof(
 	invstm_state_t), &__invstm_init, sizeof(__invstm_init));
@@ -18,17 +17,18 @@ static invstm_state_t* get_invstm_state() {
 }
 
 /* $Procedure      INVSTM ( Inverse of state transformation matrix) */
-/* Subroutine */ int invstm_(doublereal *mat, doublereal *invmat)
+/* Subroutine */ int invstm_(cspice_t* __global_state, doublereal *mat, 
+	doublereal *invmat)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int xposbl_(doublereal *, integer *, integer *, 
-	    integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int xposbl_(cspice_t*, doublereal *, integer *, 
+	    integer *, integer *, doublereal *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    invstm_state_t* __state = get_invstm_state();
+    invstm_state_t* __state = get_invstm_state(__global_state);
 /* $ Abstract */
 
 /*     Return the inverse of a state transformation matrix. */
@@ -212,19 +212,20 @@ static invstm_state_t* get_invstm_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("INVSTM", (ftnlen)6);
+	chkin_(__global_state, "INVSTM", (ftnlen)6);
     }
 
 /*     Not much to this.  Just call the more general routine XPOSBL. */
 
-    xposbl_(mat, &__state->c__6, &__state->c__6, &__state->c__3, invmat);
+    xposbl_(__global_state, mat, &__state->c__6, &__state->c__6, &
+	    __state->c__3, invmat);
 
 /*     That's all folks. */
 
-    chkout_("INVSTM", (ftnlen)6);
+    chkout_(__global_state, "INVSTM", (ftnlen)6);
     return 0;
 } /* invstm_ */
 

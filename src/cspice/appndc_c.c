@@ -245,7 +245,7 @@
 
    if ( card == cell->size )
    {
-      chkin_c  ( "appndc_c"                                        );
+      chkin_c  ( naif_state, "appndc_c"                                        );
       setmsg_c ( "The cell cannot accommodate the addition of the "
                  "element *"                                       );
       errch_c  ( "*", item                                         );

@@ -8,8 +8,7 @@
 
 
 extern zztanslv_init_t __zztanslv_init;
-static zztanslv_state_t* get_zztanslv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zztanslv_state_t* get_zztanslv_state(cspice_t* state) {
 	if (!state->zztanslv)
 		state->zztanslv = __cspice_allocate_module(sizeof(
 	zztanslv_state_t), &__zztanslv_init, sizeof(__zztanslv_init));
@@ -18,50 +17,52 @@ static zztanslv_state_t* get_zztanslv_state() {
 }
 
 /* $Procedure ZZTANSLV ( Private --- tangent point solver ) */
-/* Subroutine */ int zztanslv_(S_fp udcond, S_fp udstep, S_fp udrefn, logical 
-	*cstep, doublereal *step, doublereal *start, doublereal *finish, 
-	doublereal *tol, doublereal *result, doublereal *points, logical *
-	endflg)
+/* Subroutine */ int zztanslv_(cspice_t* __global_state, S_fp udcond, S_fp 
+	udstep, S_fp udrefn, logical *cstep, doublereal *step, doublereal *
+	start, doublereal *finish, doublereal *tol, doublereal *result, 
+	doublereal *points, logical *endflg)
 {
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer room;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal curx;
     doublereal svdx;
-    extern /* Subroutine */ int zzwninsd_(doublereal *, doublereal *, char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzwninsd_(cspice_t*, doublereal *, doublereal 
+	    *, char *, doublereal *, ftnlen);
     logical s;
     doublereal begin;
     doublereal t;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern integer sized_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
     integer nloop;
     doublereal xstep;
     doublereal x1;
     doublereal x2;
     logical state1;
     logical state2;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer to;
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal maxmag;
-    extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern doublereal touchd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     logical cursta;
     logical instat;
     logical savsta;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     char contxt[256];
     doublereal xpoint[3];
     logical prvset;
@@ -70,7 +71,7 @@ static zztanslv_state_t* get_zztanslv_state() {
 
 
     /* Module state */
-    zztanslv_state_t* __state = get_zztanslv_state();
+    zztanslv_state_t* __state = get_zztanslv_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -465,18 +466,19 @@ static zztanslv_state_t* get_zztanslv_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZTANSLV", (ftnlen)8);
+    chkin_(__global_state, "ZZTANSLV", (ftnlen)8);
 
 /*     Check the convergence tolerance. */
 
     if (*tol <= 0.) {
-	setmsg_("Tolerance must be positive but was #.", (ftnlen)37);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTOLERANCE)", (ftnlen)23);
-	chkout_("ZZTANSLV", (ftnlen)8);
+	setmsg_(__global_state, "Tolerance must be positive but was #.", (
+		ftnlen)37);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTOLERANCE)", (ftnlen)23);
+	chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 	return 0;
     }
 
@@ -484,11 +486,12 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*     error for START > FINISH. */
 
     if (*start > *finish) {
-	setmsg_("Bad input interval: START = # > FINISH = #.", (ftnlen)43);
-	errdp_("#", start, (ftnlen)1);
-	errdp_("#", finish, (ftnlen)1);
-	sigerr_("SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
-	chkout_("ZZTANSLV", (ftnlen)8);
+	setmsg_(__global_state, "Bad input interval: START = # > FINISH = #.",
+		 (ftnlen)43);
+	errdp_(__global_state, "#", start, (ftnlen)1);
+	errdp_(__global_state, "#", finish, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
+	chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 	return 0;
     }
 
@@ -497,13 +500,15 @@ static zztanslv_state_t* get_zztanslv_state() {
 
     d__1 = *start - *tol;
     d__2 = *start + *tol;
-    if (touchd_(&d__1) == *start || touchd_(&d__2) == *start) {
-	setmsg_("TOL has value #1. This value is too small to distinguish ST"
-		"ART - TOL or START + TOL from START, #2.", (ftnlen)99);
-	errdp_("#1", tol, (ftnlen)2);
-	errdp_("#2", start, (ftnlen)2);
-	sigerr_("SPICE(INVALIDTOLERANCE)", (ftnlen)23);
-	chkout_("ZZTANSLV", (ftnlen)8);
+    if (touchd_(__global_state, &d__1) == *start || touchd_(__global_state, &
+	    d__2) == *start) {
+	setmsg_(__global_state, "TOL has value #1. This value is too small t"
+		"o distinguish START - TOL or START + TOL from START, #2.", (
+		ftnlen)99);
+	errdp_(__global_state, "#1", tol, (ftnlen)2);
+	errdp_(__global_state, "#2", start, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(INVALIDTOLERANCE)", (ftnlen)23);
+	chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 	return 0;
     }
 
@@ -512,13 +517,15 @@ static zztanslv_state_t* get_zztanslv_state() {
 
     d__1 = *finish - *tol;
     d__2 = *finish + *tol;
-    if (touchd_(&d__1) == *finish || touchd_(&d__2) == *finish) {
-	setmsg_("TOL has value #1. This value is too small to distinguish FI"
-		"NISH - TOL or FINISH + TOL from FINISH, #2.", (ftnlen)102);
-	errdp_("#1", tol, (ftnlen)2);
-	errdp_("#2", finish, (ftnlen)2);
-	sigerr_("SPICE(INVALIDTOLERANCE)", (ftnlen)23);
-	chkout_("ZZTANSLV", (ftnlen)8);
+    if (touchd_(__global_state, &d__1) == *finish || touchd_(__global_state, &
+	    d__2) == *finish) {
+	setmsg_(__global_state, "TOL has value #1. This value is too small t"
+		"o distinguish FINISH - TOL or FINISH + TOL from FINISH, #2.", 
+		(ftnlen)102);
+	errdp_(__global_state, "#1", tol, (ftnlen)2);
+	errdp_(__global_state, "#2", finish, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(INVALIDTOLERANCE)", (ftnlen)23);
+	chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 	return 0;
     }
 
@@ -527,23 +534,24 @@ static zztanslv_state_t* get_zztanslv_state() {
 
     if (*cstep) {
 	if (*step <= 0.) {
-	    setmsg_("STEP has value #1. The search step must be positive.", (
-		    ftnlen)52);
-	    errdp_("#1", step, (ftnlen)2);
-	    sigerr_("SPICE(INVALIDCONSTSTEP)", (ftnlen)23);
-	    chkout_("ZZTANSLV", (ftnlen)8);
+	    setmsg_(__global_state, "STEP has value #1. The search step must"
+		    " be positive.", (ftnlen)52);
+	    errdp_(__global_state, "#1", step, (ftnlen)2);
+	    sigerr_(__global_state, "SPICE(INVALIDCONSTSTEP)", (ftnlen)23);
+	    chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 	    return 0;
 	}
 /* Computing MAX */
 	d__1 = abs(*start), d__2 = abs(*finish);
 	maxmag = max(d__1,d__2);
 	d__1 = maxmag + *step;
-	if (touchd_(&d__1) == maxmag) {
-	    setmsg_("STEP has value #1. This value is too small to guarantee"
-		    " that the search will advance.", (ftnlen)85);
-	    errdp_("#1", step, (ftnlen)2);
-	    sigerr_("SPICE(INVALIDCONSTSTEP)", (ftnlen)23);
-	    chkout_("ZZTANSLV", (ftnlen)8);
+	if (touchd_(__global_state, &d__1) == maxmag) {
+	    setmsg_(__global_state, "STEP has value #1. This value is too sm"
+		    "all to guarantee that the search will advance.", (ftnlen)
+		    85);
+	    errdp_(__global_state, "#1", step, (ftnlen)2);
+	    sigerr_(__global_state, "SPICE(INVALIDCONSTSTEP)", (ftnlen)23);
+	    chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -568,19 +576,19 @@ static zztanslv_state_t* get_zztanslv_state() {
 
     curx = *start;
     to = 1;
-    room = sized_(result);
+    room = sized_(__global_state, result);
     prvset = FALSE_;
 
 /*     Determine if the state at the current X value satisfies the */
 /*     constraint. */
 
-    (*udcond)(&curx, &cursta, xpoint);
-    if (failed_()) {
-	chkout_("ZZTANSLV", (ftnlen)8);
+    (*udcond)(__global_state, &curx, &cursta, xpoint);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 	return 0;
     }
     if (cursta) {
-	vequ_(xpoint, prvpnt);
+	vequ_(__global_state, xpoint, prvpnt);
 	prvset = TRUE_;
     }
 
@@ -633,9 +641,9 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*        about the current state, select a new current X. */
 
 	if (! (*cstep)) {
-	    (*udstep)(&curx, &xstep);
-	    if (failed_()) {
-		chkout_("ZZTANSLV", (ftnlen)8);
+	    (*udstep)(__global_state, &curx, &xstep);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -645,18 +653,18 @@ static zztanslv_state_t* get_zztanslv_state() {
 
 /* Computing MIN */
 	d__2 = curx + xstep;
-	d__1 = touchd_(&d__2);
+	d__1 = touchd_(__global_state, &d__2);
 	curx = min(d__1,*finish);
 
 /*        Compute the state at CURX. */
 
-	(*udcond)(&curx, &cursta, xpoint);
-	if (failed_()) {
-	    chkout_("ZZTANSLV", (ftnlen)8);
+	(*udcond)(__global_state, &curx, &cursta, xpoint);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 	    return 0;
 	}
 	if (cursta) {
-	    vequ_(xpoint, prvpnt);
+	    vequ_(__global_state, xpoint, prvpnt);
 	    prvset = TRUE_;
 	}
 
@@ -674,22 +682,22 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*           past the end of the interval. */
 
 	    if (! (*cstep)) {
-		(*udstep)(&curx, &xstep);
-		if (failed_()) {
-		    chkout_("ZZTANSLV", (ftnlen)8);
+		(*udstep)(__global_state, &curx, &xstep);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 		    return 0;
 		}
 	    }
 /* Computing MIN */
 	    d__2 = curx + xstep;
-	    d__1 = touchd_(&d__2);
+	    d__1 = touchd_(__global_state, &d__2);
 	    curx = min(d__1,*finish);
 
 /*           Compute the current state. */
 
-	    (*udcond)(&curx, &cursta, xpoint);
-	    if (failed_()) {
-		chkout_("ZZTANSLV", (ftnlen)8);
+	    (*udcond)(__global_state, &curx, &cursta, xpoint);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 		return 0;
 	    }
 	    if (cursta) {
@@ -697,7 +705,7 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*              Save the associated vector for the X value CURX. In */
 /*              normal usage, XPOINT is a surface intercept point. */
 
-		vequ_(xpoint, prvpnt);
+		vequ_(__global_state, xpoint, prvpnt);
 		prvset = TRUE_;
 	    }
 
@@ -731,12 +739,12 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*           error for X1 > X2. */
 
 	    if (x1 > x2) {
-		setmsg_("Bad x interval result: X1 = # > X2 = #.", (ftnlen)39)
-			;
-		errdp_("#", &x1, (ftnlen)1);
-		errdp_("#", &x2, (ftnlen)1);
-		sigerr_("SPICE(INVALIDSTEP)", (ftnlen)18);
-		chkout_("ZZTANSLV", (ftnlen)8);
+		setmsg_(__global_state, "Bad x interval result: X1 = # > X2 "
+			"= #.", (ftnlen)39);
+		errdp_(__global_state, "#", &x1, (ftnlen)1);
+		errdp_(__global_state, "#", &x2, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDSTEP)", (ftnlen)18);
+		chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 		return 0;
 	    }
 
@@ -758,7 +766,7 @@ static zztanslv_state_t* get_zztanslv_state() {
 	    nloop = 0;
 	    for(;;) { /* while(complicated condition) */
 		d__1 = x2 - x1;
-		if (!(touchd_(&d__1) > *tol))
+		if (!(touchd_(__global_state, &d__1) > *tol))
 			break;
 		++nloop;
 
@@ -771,26 +779,28 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*              probably use bisection. */
 
 		if (nloop >= 1000) {
-		    setmsg_("Loop run exceeds maximum loop count. Unable to "
-			    "converge to TOL value #1 within MXLOOP value #2 "
-			    "iterations.", (ftnlen)106);
-		    errdp_("#1", tol, (ftnlen)2);
-		    errint_("#2", &__state->c__1000, (ftnlen)2);
-		    sigerr_("SPICE(NOCONVERGENCE)", (ftnlen)20);
-		    chkout_("ZZTANSLV", (ftnlen)8);
+		    setmsg_(__global_state, "Loop run exceeds maximum loop c"
+			    "ount. Unable to converge to TOL value #1 within "
+			    "MXLOOP value #2 iterations.", (ftnlen)106);
+		    errdp_(__global_state, "#1", tol, (ftnlen)2);
+		    errint_(__global_state, "#2", &__state->c__1000, (ftnlen)
+			    2);
+		    sigerr_(__global_state, "SPICE(NOCONVERGENCE)", (ftnlen)
+			    20);
+		    chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 		    return 0;
 		}
 
 /*              Select an X value T, between X1 and X2 (possibly based */
 /*              on the state values). */
 
-		(*udrefn)(&x1, &x2, &state1, &state2, &t);
+		(*udrefn)(__global_state, &x1, &x2, &state1, &state2, &t);
 
 /*              Check for an error signal. The default refinement */
 /*              routine, GFREFN, does not include error checks. */
 
-		if (failed_()) {
-		    chkout_("ZZTANSLV", (ftnlen)8);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 		    return 0;
 		}
 
@@ -799,7 +809,7 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*              we can in refining our estimate of the transition */
 /*              point. Set X1 and X2 equal to T. */
 
-		t = brcktd_(&t, &x1, &x2);
+		t = brcktd_(__global_state, &t, &x1, &x2);
 		if (t == x1) {
 
 /*                 This assignment may break the invariant that */
@@ -818,13 +828,13 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*                 Compute the state at X value T. If this state, S, */
 /*                 equals STATE1, set X1 to T, otherwise set X2 to T. */
 
-		    (*udcond)(&t, &s, xpoint);
+		    (*udcond)(__global_state, &t, &s, xpoint);
 		    if (s) {
 
 /*                    Save the latest point associated with a */
 /*                    .TRUE. state. */
 
-			vequ_(xpoint, prvpnt);
+			vequ_(__global_state, xpoint, prvpnt);
 			prvset = TRUE_;
 		    }
 
@@ -846,7 +856,7 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*           STATE2. */
 
 	    d__1 = (x1 + x2) * .5;
-	    trnstn = brcktd_(&d__1, &x1, &x2);
+	    trnstn = brcktd_(__global_state, &d__1, &x1, &x2);
 
 /*           In state-of-interest or not? INSTAT indicates that STATE1 */
 /*           was .TRUE. We record intervals where the state is .TRUE. */
@@ -862,12 +872,14 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*              Add an interval starting at BEGIN and ending at TRNSTN */
 /*              to the result window. */
 
-		s_copy(contxt, "Adding interval [BEGIN,TRNSTN] to RESULT. TR"
-			"NSTN represents time of passage out of the state-of-"
-			"interest.", (ftnlen)256, (ftnlen)105);
-		zzwninsd_(&begin, &trnstn, contxt, result, (ftnlen)256);
-		if (failed_()) {
-		    chkout_("ZZTANSLV", (ftnlen)8);
+		s_copy(&__global_state->f2c, contxt, "Adding interval [BEGIN"
+			",TRNSTN] to RESULT. TRNSTN represents time of passag"
+			"e out of the state-of-interest.", (ftnlen)256, (
+			ftnlen)105);
+		zzwninsd_(__global_state, &begin, &trnstn, contxt, result, (
+			ftnlen)256);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 		    return 0;
 		}
 	    } else {
@@ -895,18 +907,18 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*              the POINTS array. */
 
 		if (prvset) {
-		    vequ_(prvpnt, &points[to * 3 - 3]);
+		    vequ_(__global_state, prvpnt, &points[to * 3 - 3]);
 		    ++to;
 		    --room;
 		    prvset = FALSE_;
 		} else {
-		    setmsg_("PRVPNT should always be set when a transition i"
-			    "s detected. We found a transition at #, but PRVS"
-			    "ET indicates we don't have a previous point save"
-			    "d.", (ftnlen)145);
-		    errdp_("#", &trnstn, (ftnlen)1);
-		    sigerr_("SPICE(BUG)", (ftnlen)10);
-		    chkout_("ZZTANSLV", (ftnlen)8);
+		    setmsg_(__global_state, "PRVPNT should always be set whe"
+			    "n a transition is detected. We found a transitio"
+			    "n at #, but PRVSET indicates we don't have a pre"
+			    "vious point saved.", (ftnlen)145);
+		    errdp_(__global_state, "#", &trnstn, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		    chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 		    return 0;
 		}
 	    } else {
@@ -916,13 +928,13 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*              fails, since that insertion takes place when the state */
 /*              becomes .FALSE. */
 
-		setmsg_("Out of room in the POINTS array. Room is assumed to"
-			" be adequate for SIZED(RESULT) 3-vectors; this size "
-			"is #.", (ftnlen)108);
-		i__1 = sized_(result);
-		errint_("#", &i__1, (ftnlen)1);
-		sigerr_("SPICE(ARRAYTOOSMALL)", (ftnlen)20);
-		chkout_("ZZTANSLV", (ftnlen)8);
+		setmsg_(__global_state, "Out of room in the POINTS array. Ro"
+			"om is assumed to be adequate for SIZED(RESULT) 3-vec"
+			"tors; this size is #.", (ftnlen)108);
+		i__1 = sized_(__global_state, result);
+		errint_(__global_state, "#", &i__1, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(ARRAYTOOSMALL)", (ftnlen)20);
+		chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
 		return 0;
 	    }
 
@@ -948,15 +960,16 @@ static zztanslv_state_t* get_zztanslv_state() {
 /*        Add an interval starting at BEGIN and ending at FINISH to the */
 /*        window. */
 
-	s_copy(contxt, "Adding interval [BEGIN,FINISH] to RESULT. FINISH rep"
-		"resents end of the search interval.", (ftnlen)256, (ftnlen)87)
+	s_copy(&__global_state->f2c, contxt, "Adding interval [BEGIN,FINISH]"
+		" to RESULT. FINISH represents end of the search interval.", (
+		ftnlen)256, (ftnlen)87);
+	zzwninsd_(__global_state, &begin, finish, contxt, result, (ftnlen)256)
 		;
-	zzwninsd_(&begin, finish, contxt, result, (ftnlen)256);
 	endflg[1] = FALSE_;
     } else {
 	endflg[1] = TRUE_;
     }
-    chkout_("ZZTANSLV", (ftnlen)8);
+    chkout_(__global_state, "ZZTANSLV", (ftnlen)8);
     return 0;
 } /* zztanslv_ */
 

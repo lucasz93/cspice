@@ -8,8 +8,7 @@
 
 
 extern mtxm_init_t __mtxm_init;
-static mtxm_state_t* get_mtxm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline mtxm_state_t* get_mtxm_state(cspice_t* state) {
 	if (!state->mtxm)
 		state->mtxm = __cspice_allocate_module(sizeof(mtxm_state_t), &
 	__mtxm_init, sizeof(__mtxm_init));
@@ -18,23 +17,25 @@ static mtxm_state_t* get_mtxm_state() {
 }
 
 /* $Procedure      MTXM  ( Matrix transpose times matrix, 3x3 ) */
-/* Subroutine */ int mtxm_(doublereal *m1, doublereal *m2, doublereal *mout)
+/* Subroutine */ int mtxm_(cspice_t* __global_state, doublereal *m1, 
+	doublereal *m2, doublereal *mout)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     doublereal prodm[9]	/* was [3][3] */;
 
 
     /* Module state */
-    mtxm_state_t* __state = get_mtxm_state();
+    mtxm_state_t* __state = get_mtxm_state(__global_state);
 /* $ Abstract */
 
 /*     Multiply the transpose of a 3x3 matrix and a 3x3 matrix. */
@@ -192,24 +193,27 @@ static mtxm_state_t* get_mtxm_state() {
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	for (j = 1; j <= 3; ++j) {
-	    prodm[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "prodm", i__1, "mtxm_", (ftnlen)175)] = m1[(i__2 = i__ * 
-		    3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge("m1", i__2, "mtx"
-		    "m_", (ftnlen)175)] * m2[(i__3 = j * 3 - 3) < 9 && 0 <= 
-		    i__3 ? i__3 : s_rnge("m2", i__3, "mtxm_", (ftnlen)175)] + 
-		    m1[(i__4 = i__ * 3 - 2) < 9 && 0 <= i__4 ? i__4 : s_rnge(
-		    "m1", i__4, "mtxm_", (ftnlen)175)] * m2[(i__5 = j * 3 - 2)
-		     < 9 && 0 <= i__5 ? i__5 : s_rnge("m2", i__5, "mtxm_", (
-		    ftnlen)175)] + m1[(i__6 = i__ * 3 - 1) < 9 && 0 <= i__6 ? 
-		    i__6 : s_rnge("m1", i__6, "mtxm_", (ftnlen)175)] * m2[(
-		    i__7 = j * 3 - 1) < 9 && 0 <= i__7 ? i__7 : s_rnge("m2", 
-		    i__7, "mtxm_", (ftnlen)175)];
+	    prodm[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "prodm", i__1, "mtxm_", (ftnlen)175)]
+		     = m1[(i__2 = i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "m1", i__2, "mtxm_", (ftnlen)
+		    175)] * m2[(i__3 = j * 3 - 3) < 9 && 0 <= i__3 ? i__3 : 
+		    s_rnge(&__global_state->f2c, "m2", i__3, "mtxm_", (ftnlen)
+		    175)] + m1[(i__4 = i__ * 3 - 2) < 9 && 0 <= i__4 ? i__4 : 
+		    s_rnge(&__global_state->f2c, "m1", i__4, "mtxm_", (ftnlen)
+		    175)] * m2[(i__5 = j * 3 - 2) < 9 && 0 <= i__5 ? i__5 : 
+		    s_rnge(&__global_state->f2c, "m2", i__5, "mtxm_", (ftnlen)
+		    175)] + m1[(i__6 = i__ * 3 - 1) < 9 && 0 <= i__6 ? i__6 : 
+		    s_rnge(&__global_state->f2c, "m1", i__6, "mtxm_", (ftnlen)
+		    175)] * m2[(i__7 = j * 3 - 1) < 9 && 0 <= i__7 ? i__7 : 
+		    s_rnge(&__global_state->f2c, "m2", i__7, "mtxm_", (ftnlen)
+		    175)];
 	}
     }
 
 /*  Move the result into MOUT */
 
-    moved_(prodm, &__state->c__9, mout);
+    moved_(__global_state, prodm, &__state->c__9, mout);
     return 0;
 } /* mtxm_ */
 

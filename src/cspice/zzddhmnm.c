@@ -8,8 +8,7 @@
 
 
 extern zzddhmnm_init_t __zzddhmnm_init;
-static zzddhmnm_state_t* get_zzddhmnm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzddhmnm_state_t* get_zzddhmnm_state(cspice_t* state) {
 	if (!state->zzddhmnm)
 		state->zzddhmnm = __cspice_allocate_module(sizeof(
 	zzddhmnm_state_t), &__zzddhmnm_init, sizeof(__zzddhmnm_init));
@@ -18,7 +17,7 @@ static zzddhmnm_state_t* get_zzddhmnm_state() {
 }
 
 /* $Procedure ZZDDHMNM ( Return unique enough DP number for a file ) */
-doublereal zzddhmnm_(integer *unit)
+doublereal zzddhmnm_(cspice_t* __global_state, integer *unit)
 {
     /* Initialized data */
 
@@ -28,34 +27,36 @@ doublereal zzddhmnm_(integer *unit)
     doublereal ret_val;
 
     /* Builtin functions */
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void),
-	     s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
+    integer s_rdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rdue(f2c_state_t*), s_cmp(f2c_state_t*, char *,
+	     char *, ftnlen, ftnlen), s_rnge(f2c_state_t*, char *, integer, 
 	    char *, integer);
 
     /* Local variables */
     char arch[8];
     char type__[8];
-    extern /* Subroutine */ int zzddhini_(integer *, integer *, integer *, 
-	    char *, char *, char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzddhppf_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzxlatei_(integer *, char *, integer *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int zzddhini_(cspice_t*, integer *, integer *, 
+	    integer *, char *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzddhppf_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzxlatei_(cspice_t*, integer *, char *, 
+	    integer *, integer *, ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern integer isrchi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int idw2at_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
     char idword[8];
     char strbff[8*4];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char stramh[8*4];
     char strarc[8*2];
     integer intarr[20];
     integer iostat;
     char strbuf[80];
     integer supidx;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer bff;
     doublereal mnm;
 
@@ -64,7 +65,7 @@ doublereal zzddhmnm_(integer *unit)
 
 
     /* Module state */
-    zzddhmnm_state_t* __state = get_zzddhmnm_state();
+    zzddhmnm_state_t* __state = get_zzddhmnm_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -510,23 +511,24 @@ doublereal zzddhmnm_(integer *unit)
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return ret_val;
     } else {
-	chkin_("ZZDDHMNM", (ftnlen)8);
+	chkin_(__global_state, "ZZDDHMNM", (ftnlen)8);
     }
 
 /*     Perform some initialization tasks. */
 
     if (__state->first) {
-	zzddhini_(&__state->natbff, __state->supbff, &__state->numsup, stramh,
-		 strarc, strbff, (ftnlen)8, (ftnlen)8, (ftnlen)8);
+	zzddhini_(__global_state, &__state->natbff, __state->supbff, &
+		__state->numsup, stramh, strarc, strbff, (ftnlen)8, (ftnlen)8,
+		 (ftnlen)8);
 
 /*        Check FAILED() to handle the unlikely event that */
 /*        ZZDDHINI signaled SPICE(BUG). */
 
-	if (failed_()) {
-	    chkout_("ZZDDHMNM", (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDDHMNM", (ftnlen)8);
 	    return ret_val;
 	}
 
@@ -539,20 +541,20 @@ doublereal zzddhmnm_(integer *unit)
 /*     record of the file. */
 
     __state->io___10.ciunit = *unit;
-    iostat = s_rdue(&__state->io___10);
+    iostat = s_rdue(&__global_state->f2c, &__state->io___10);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, idword, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__20, (char *)&intarr[0], (ftnlen)sizeof(
-	    integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__20, (char *)&intarr[0],
+	     (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rdue();
+    iostat = e_rdue(&__global_state->f2c);
 L100001:
     if (iostat == 0) {
 
@@ -568,17 +570,19 @@ L100001:
 		*(unsigned char *)&idword[i__ - 1] = ' ';
 	    }
 	}
-	idw2at_(idword, arch, type__, (ftnlen)8, (ftnlen)8, (ftnlen)8);
+	idw2at_(__global_state, idword, arch, type__, (ftnlen)8, (ftnlen)8, (
+		ftnlen)8);
 
 /*        Compute the output value based on the file architecture. */
 
-	if (s_cmp(arch, "DAF", (ftnlen)8, (ftnlen)3) == 0) {
+	if (s_cmp(&__global_state->f2c, arch, "DAF", (ftnlen)8, (ftnlen)3) == 
+		0) {
 
 /*           For DAF files, try to get the file's binary format. */
 
-	    zzddhppf_(unit, &__state->c__1, &bff);
-	    if (failed_()) {
-		chkout_("ZZDDHMNM", (ftnlen)8);
+	    zzddhppf_(__global_state, unit, &__state->c__1, &bff);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZDDHMNM", (ftnlen)8);
 		return ret_val;
 	    }
 
@@ -595,32 +599,36 @@ L100001:
 /*              is not supported, simply get out (note that the default */
 /*              return value was set to zero at the start.) */
 
-		supidx = isrchi_(&bff, &__state->numsup, __state->supbff);
+		supidx = isrchi_(__global_state, &bff, &__state->numsup, 
+			__state->supbff);
 		if (supidx == 0) {
-		    chkout_("ZZDDHMNM", (ftnlen)8);
+		    chkout_(__global_state, "ZZDDHMNM", (ftnlen)8);
 		    return ret_val;
 		}
 
 /*              Read the first record as characters and do translation. */
 
 		__state->io___18.ciunit = *unit;
-		iostat = s_rdue(&__state->io___18);
+		iostat = s_rdue(&__global_state->f2c, &__state->io___18);
 		if (iostat != 0) {
 		    goto L100002;
 		}
-		iostat = do_uio(&__state->c__1, idword, (ftnlen)8);
+		iostat = do_uio(&__global_state->f2c, &__state->c__1, idword, 
+			(ftnlen)8);
 		if (iostat != 0) {
 		    goto L100002;
 		}
-		iostat = do_uio(&__state->c__1, strbuf, (ftnlen)80);
+		iostat = do_uio(&__global_state->f2c, &__state->c__1, strbuf, 
+			(ftnlen)80);
 		if (iostat != 0) {
 		    goto L100002;
 		}
-		iostat = e_rdue();
+		iostat = e_rdue(&__global_state->f2c);
 L100002:
-		zzxlatei_(&bff, strbuf, &__state->c__20, intarr, (ftnlen)80);
-		if (failed_()) {
-		    chkout_("ZZDDHMNM", (ftnlen)8);
+		zzxlatei_(__global_state, &bff, strbuf, &__state->c__20, 
+			intarr, (ftnlen)80);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZDDHMNM", (ftnlen)8);
 		    return ret_val;
 		}
 	    }
@@ -629,7 +637,8 @@ L100002:
 
 	    for (i__ = 1; i__ <= 20; ++i__) {
 		mnm += intarr[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("intarr", i__1, "zzddhmnm_", (ftnlen)354)];
+			s_rnge(&__global_state->f2c, "intarr", i__1, "zzddhm"
+			"nm_", (ftnlen)354)];
 	    }
 
 /*           Read more integers from the start of the first descriptor */
@@ -638,31 +647,34 @@ L100002:
 
 	    __state->io___20.ciunit = *unit;
 	    __state->io___20.cirec = intarr[17];
-	    iostat = s_rdue(&__state->io___20);
+	    iostat = s_rdue(&__global_state->f2c, &__state->io___20);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = do_uio(&__state->c__20, (char *)&intarr[0], (ftnlen)
-		    sizeof(integer));
+	    iostat = do_uio(&__global_state->f2c, &__state->c__20, (char *)&
+		    intarr[0], (ftnlen)sizeof(integer));
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = e_rdue();
+	    iostat = e_rdue(&__global_state->f2c);
 L100003:
 	    if (iostat == 0) {
 		for (i__ = 1; i__ <= 20; ++i__) {
 		    mnm += intarr[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("intarr", i__1, "zzddhmnm_", (ftnlen)367)];
+			    s_rnge(&__global_state->f2c, "intarr", i__1, 
+			    "zzddhmnm_", (ftnlen)367)];
 		}
 	    }
-	} else if (s_cmp(arch, "DAS", (ftnlen)8, (ftnlen)3) == 0) {
+	} else if (s_cmp(&__global_state->f2c, arch, "DAS", (ftnlen)8, (
+		ftnlen)3) == 0) {
 
 /*           For DAS files, for now, add up integers from the first */
 /*           record to get the output value. */
 
 	    for (i__ = 1; i__ <= 20; ++i__) {
 		mnm += intarr[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("intarr", i__1, "zzddhmnm_", (ftnlen)379)];
+			s_rnge(&__global_state->f2c, "intarr", i__1, "zzddhm"
+			"nm_", (ftnlen)379)];
 	    }
 	} else {
 
@@ -671,7 +683,8 @@ L100003:
 
 	    for (i__ = 1; i__ <= 20; ++i__) {
 		mnm += intarr[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("intarr", i__1, "zzddhmnm_", (ftnlen)389)];
+			s_rnge(&__global_state->f2c, "intarr", i__1, "zzddhm"
+			"nm_", (ftnlen)389)];
 	    }
 	}
     } else {
@@ -681,7 +694,7 @@ L100003:
 
     }
     ret_val = mnm;
-    chkout_("ZZDDHMNM", (ftnlen)8);
+    chkout_(__global_state, "ZZDDHMNM", (ftnlen)8);
     return ret_val;
 } /* zzddhmnm_ */
 

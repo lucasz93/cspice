@@ -8,8 +8,7 @@
 
 
 extern pck03b_init_t __pck03b_init;
-static pck03b_state_t* get_pck03b_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pck03b_state_t* get_pck03b_state(cspice_t* state) {
 	if (!state->pck03b)
 		state->pck03b = __cspice_allocate_module(sizeof(
 	pck03b_state_t), &__pck03b_init, sizeof(__pck03b_init));
@@ -18,29 +17,29 @@ static pck03b_state_t* get_pck03b_state() {
 }
 
 /* $Procedure PCK03B ( PCK, begin a type 3 segment ) */
-/* Subroutine */ int pck03b_(integer *handle, char *segid, integer *body, 
-	char *frame, doublereal *first, doublereal *last, integer *chbdeg, 
-	ftnlen segid_len, ftnlen frame_len)
+/* Subroutine */ int pck03b_(cspice_t* __global_state, integer *handle, char *
+	segid, integer *body, char *frame, doublereal *first, doublereal *
+	last, integer *chbdeg, ftnlen segid_len, ftnlen frame_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal descr[5];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal dcoeff;
     integer ncoeff;
-    extern /* Subroutine */ int pckpds_(integer *, char *, integer *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sgbwfs_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int pckpds_(cspice_t*, integer *, char *, integer 
+	    *, doublereal *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgbwfs_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer pktsiz;
 
 
     /* Module state */
-    pck03b_state_t* __state = get_pck03b_state();
+    pck03b_state_t* __state = get_pck03b_state(__global_state);
 /* $ Abstract */
 
 /*     Begin a type 03 PCK segment in the binary PCK file associated with */
@@ -799,30 +798,31 @@ static pck03b_state_t* get_pck03b_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PCK03B", (ftnlen)6);
+	chkin_(__global_state, "PCK03B", (ftnlen)6);
     }
 
 /*     First, check the degree of the polynomial to be sure that it is */
 /*     not negative. */
 
     if (*chbdeg < 0) {
-	setmsg_("The degree of the Chebyshev Polynomial was negative, #. The"
-		" degree of the polynomial must be greater than or equal to z"
-		"ero.", (ftnlen)123);
-	errint_("#", chbdeg, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("PCK03B", (ftnlen)6);
+	setmsg_(__global_state, "The degree of the Chebyshev Polynomial was "
+		"negative, #. The degree of the polynomial must be greater th"
+		"an or equal to zero.", (ftnlen)123);
+	errint_(__global_state, "#", chbdeg, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "PCK03B", (ftnlen)6);
 	return 0;
     }
 
 /*     Create a descriptor for the segment we are about to write. */
 
-    pckpds_(body, frame, &__state->c__3, first, last, descr, frame_len);
-    if (failed_()) {
-	chkout_("PCK03B", (ftnlen)6);
+    pckpds_(__global_state, body, frame, &__state->c__3, first, last, descr, 
+	    frame_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "PCK03B", (ftnlen)6);
 	return 0;
     }
 
@@ -840,9 +840,9 @@ static pck03b_state_t* get_pck03b_state() {
 /*     epoch. These characteristics are prescribed by the mnemonic EXPLE. */
 /*     See the include file 'sgparam.inc' for more details. */
 
-    sgbwfs_(handle, descr, segid, &__state->c__1, &dcoeff, &pktsiz, &
-	    __state->c__3, segid_len);
-    chkout_("PCK03B", (ftnlen)6);
+    sgbwfs_(__global_state, handle, descr, segid, &__state->c__1, &dcoeff, &
+	    pktsiz, &__state->c__3, segid_len);
+    chkout_(__global_state, "PCK03B", (ftnlen)6);
     return 0;
 } /* pck03b_ */
 

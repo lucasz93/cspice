@@ -8,20 +8,19 @@
 
 
 typedef int vdot_state_t;
-static vdot_state_t* get_vdot_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vdot_state_t* get_vdot_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VDOT  ( Vector dot product, 3 dimensions ) */
-doublereal vdot_(doublereal *v1, doublereal *v2)
+doublereal vdot_(cspice_t* __global_state, doublereal *v1, doublereal *v2)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    vdot_state_t* __state = get_vdot_state();
+    vdot_state_t* __state = get_vdot_state(__global_state);
 /* $ Abstract */
 
 /*      Compute the dot product of two double precision, 3-dimensional */

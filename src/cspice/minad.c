@@ -8,14 +8,13 @@
 
 
 typedef int minad_state_t;
-static minad_state_t* get_minad_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline minad_state_t* get_minad_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  MINAD  ( Minimum element of array, DP ) */
-/* Subroutine */ int minad_(doublereal *array, integer *ndim, doublereal *
-	minval, integer *loc)
+/* Subroutine */ int minad_(cspice_t* __global_state, doublereal *array, 
+	integer *ndim, doublereal *minval, integer *loc)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +24,7 @@ static minad_state_t* get_minad_state() {
 
 
     /* Module state */
-    minad_state_t* __state = get_minad_state();
+    minad_state_t* __state = get_minad_state(__global_state);
 /* $ Abstract */
 
 /*     Locate the minimum element of a DP array. */

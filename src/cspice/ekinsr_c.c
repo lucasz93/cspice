@@ -277,7 +277,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekinsr_c" );
+   chkin_c ( naif_state, "ekinsr_c" );
 
    /*
    Map segment and record numbers to their Fortran ranges.

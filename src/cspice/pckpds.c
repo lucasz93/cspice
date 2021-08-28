@@ -8,8 +8,7 @@
 
 
 extern pckpds_init_t __pckpds_init;
-static pckpds_state_t* get_pckpds_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pckpds_state_t* get_pckpds_state(cspice_t* state) {
 	if (!state->pckpds)
 		state->pckpds = __cspice_allocate_module(sizeof(
 	pckpds_state_t), &__pckpds_init, sizeof(__pckpds_init));
@@ -18,31 +17,34 @@ static pckpds_state_t* get_pckpds_state() {
 }
 
 /* $Procedure PCKPDS ( PCK, pack descriptor ) */
-/* Subroutine */ int pckpds_(integer *body, char *frame, integer *type__, 
-	doublereal *first, doublereal *last, doublereal *descr, ftnlen 
-	frame_len)
+/* Subroutine */ int pckpds_(cspice_t* __global_state, integer *body, char *
+	frame, integer *type__, doublereal *first, doublereal *last, 
+	doublereal *descr, ftnlen frame_len)
 {
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int etcal_(cspice_t*, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer ipart[5];
     integer refcod;
     char calfst[40];
     char callst[40];
     doublereal dppart[2];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    pckpds_state_t* __state = get_pckpds_state();
+    pckpds_state_t* __state = get_pckpds_state(__global_state);
 /* $ Abstract */
 
 /*     Perform routine error checks and if all checks pass, pack the */
@@ -206,30 +208,32 @@ static pckpds_state_t* get_pckpds_state() {
 
 /*     Standard SPICLEIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PCKPDS", (ftnlen)6);
+	chkin_(__global_state, "PCKPDS", (ftnlen)6);
     }
 
 /*     We do not support orientation models for barycenters. */
 
     if (*body >= 0 && *body <= 9) {
-	setmsg_("You have attempted to create a segment  for for a barycente"
-		"r, and the PCK system does not support this.", (ftnlen)103);
-	sigerr_("SPICE(BARYCENTERIDCODE)", (ftnlen)23);
-	chkout_("PCKPDS", (ftnlen)6);
+	setmsg_(__global_state, "You have attempted to create a segment  for"
+		" for a barycenter, and the PCK system does not support this.",
+		 (ftnlen)103);
+	sigerr_(__global_state, "SPICE(BARYCENTERIDCODE)", (ftnlen)23);
+	chkout_(__global_state, "PCKPDS", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the NAIF integer code for the reference frame. */
 
-    irfnum_(frame, &refcod, frame_len);
+    irfnum_(__global_state, frame, &refcod, frame_len);
     if (refcod == 0) {
-	setmsg_("The reference frame # is not supported.", (ftnlen)39);
-	errch_("#", frame, (ftnlen)1, frame_len);
-	sigerr_("SPICE(INVALIDREFFRAME)", (ftnlen)22);
-	chkout_("PCKPDS", (ftnlen)6);
+	setmsg_(__global_state, "The reference frame # is not supported.", (
+		ftnlen)39);
+	errch_(__global_state, "#", frame, (ftnlen)1, frame_len);
+	sigerr_(__global_state, "SPICE(INVALIDREFFRAME)", (ftnlen)22);
+	chkout_(__global_state, "PCKPDS", (ftnlen)6);
 	return 0;
     }
 
@@ -240,16 +244,16 @@ static pckpds_state_t* get_pckpds_state() {
 /*        We've got an error. Get the calendar string for the first */
 /*        and last epochs. */
 
-	etcal_(first, calfst, (ftnlen)40);
-	etcal_(last, callst, (ftnlen)40);
-	setmsg_("The segment start time: # (#) is at orafter the segment sto"
-		"p time # (#). ", (ftnlen)73);
-	errdp_("#", first, (ftnlen)1);
-	errch_("#", calfst, (ftnlen)1, (ftnlen)40);
-	errdp_("#", last, (ftnlen)1);
-	errch_("#", callst, (ftnlen)1, (ftnlen)40);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("PCKPDS", (ftnlen)6);
+	etcal_(__global_state, first, calfst, (ftnlen)40);
+	etcal_(__global_state, last, callst, (ftnlen)40);
+	setmsg_(__global_state, "The segment start time: # (#) is at orafter"
+		" the segment stop time # (#). ", (ftnlen)73);
+	errdp_(__global_state, "#", first, (ftnlen)1);
+	errch_(__global_state, "#", calfst, (ftnlen)1, (ftnlen)40);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	errch_(__global_state, "#", callst, (ftnlen)1, (ftnlen)40);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "PCKPDS", (ftnlen)6);
 	return 0;
     }
 
@@ -257,11 +261,11 @@ static pckpds_state_t* get_pckpds_state() {
 /*     2 to 1000 is what we are calling reasonable these days. */
 
     if (*type__ <= 1 || *type__ > 1000) {
-	setmsg_("The type specified, #, is not supported within the PCK syst"
-		"em. ", (ftnlen)63);
-	errint_("#", type__, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNPCKTYPE)", (ftnlen)21);
-	chkout_("PCKPDS", (ftnlen)6);
+	setmsg_(__global_state, "The type specified, #, is not supported wit"
+		"hin the PCK system. ", (ftnlen)63);
+	errint_(__global_state, "#", type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNPCKTYPE)", (ftnlen)21);
+	chkout_(__global_state, "PCKPDS", (ftnlen)6);
 	return 0;
     }
 
@@ -275,8 +279,9 @@ static pckpds_state_t* get_pckpds_state() {
     ipart[4] = 0;
     dppart[0] = *first;
     dppart[1] = *last;
-    dafps_(&__state->c__2, &__state->c__5, dppart, ipart, descr);
-    chkout_("PCKPDS", (ftnlen)6);
+    dafps_(__global_state, &__state->c__2, &__state->c__5, dppart, ipart, 
+	    descr);
+    chkout_(__global_state, "PCKPDS", (ftnlen)6);
     return 0;
 } /* pckpds_ */
 

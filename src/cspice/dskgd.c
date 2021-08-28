@@ -8,33 +8,32 @@
 
 
 typedef int dskgd_state_t;
-static dskgd_state_t* get_dskgd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskgd_state_t* get_dskgd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DSKGD ( DSK, return DSK segment descriptor  ) */
-/* Subroutine */ int dskgd_(integer *handle, integer *dladsc, doublereal *
-	dskdsc)
+/* Subroutine */ int dskgd_(cspice_t* __global_state, integer *handle, 
+	integer *dladsc, doublereal *dskdsc)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer dpbase;
-    extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int dasrdd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer dpsize;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dskgd_state_t* __state = get_dskgd_state();
+    dskgd_state_t* __state = get_dskgd_state(__global_state);
 /* $ Abstract */
 
 /*     Return the DSK descriptor from a DSK segment identified */
@@ -889,10 +888,10 @@ static dskgd_state_t* get_dskgd_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKGD", (ftnlen)5);
+    chkin_(__global_state, "DSKGD", (ftnlen)5);
 
 /*     Fetch the base address and size of the DP component of the */
 /*     indicated segment. */
@@ -904,12 +903,12 @@ static dskgd_state_t* get_dskgd_state() {
 /*     something's wrong. */
 
     if (dpsize < 24) {
-	setmsg_("Size of d.p. component of segment is #; cannot extract desc"
-		"riptor.  This is a file format error which may be indicative"
-		" of a corrupted file.", (ftnlen)140);
-	errint_("#", &dpsize, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
-	chkout_("DSKGD", (ftnlen)5);
+	setmsg_(__global_state, "Size of d.p. component of segment is #; can"
+		"not extract descriptor.  This is a file format error which m"
+		"ay be indicative of a corrupted file.", (ftnlen)140);
+	errint_(__global_state, "#", &dpsize, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFORMAT)", (ftnlen)20);
+	chkout_(__global_state, "DSKGD", (ftnlen)5);
 	return 0;
     }
 
@@ -917,8 +916,8 @@ static dskgd_state_t* get_dskgd_state() {
 
     i__1 = dpbase + 1;
     i__2 = dpbase + 24;
-    dasrdd_(handle, &i__1, &i__2, dskdsc);
-    chkout_("DSKGD", (ftnlen)5);
+    dasrdd_(__global_state, handle, &i__1, &i__2, dskdsc);
+    chkout_(__global_state, "DSKGD", (ftnlen)5);
     return 0;
 } /* dskgd_ */
 

@@ -8,8 +8,7 @@
 
 
 extern zzddhgsd_init_t __zzddhgsd_init;
-static zzddhgsd_state_t* get_zzddhgsd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzddhgsd_state_t* get_zzddhgsd_state(cspice_t* state) {
 	if (!state->zzddhgsd)
 		state->zzddhgsd = __cspice_allocate_module(sizeof(
 	zzddhgsd_state_t), &__zzddhgsd_init, sizeof(__zzddhgsd_init));
@@ -18,8 +17,8 @@ static zzddhgsd_state_t* get_zzddhgsd_state() {
 }
 
 /* $Procedure ZZDDHGSD ( Private --- DDH Get String Definitions ) */
-/* Subroutine */ int zzddhgsd_(char *class__, integer *id, char *label, 
-	ftnlen class_len, ftnlen label_len)
+/* Subroutine */ int zzddhgsd_(cspice_t* __global_state, char *class__, 
+	integer *id, char *label, ftnlen class_len, ftnlen label_len)
 {
     /* Initialized data */
 
@@ -28,19 +27,22 @@ static zzddhgsd_state_t* get_zzddhgsd_state() {
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer clsid;
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     char tmpstr[8];
 
 
     /* Module state */
-    zzddhgsd_state_t* __state = get_zzddhgsd_state();
+    zzddhgsd_state_t* __state = get_zzddhgsd_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -450,30 +452,33 @@ static zzddhgsd_state_t* get_zzddhgsd_state() {
 
 /*     Left justify and convert the input to upper case. */
 
-    ljust_(class__, tmpstr, class_len, (ftnlen)8);
-    ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-    clsid = isrchc_(tmpstr, &__state->c__3, __state->clslst, (ftnlen)8, (
-	    ftnlen)8);
+    ljust_(__global_state, class__, tmpstr, class_len, (ftnlen)8);
+    ucase_(__global_state, tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
+    clsid = isrchc_(__global_state, tmpstr, &__state->c__3, __state->clslst, (
+	    ftnlen)8, (ftnlen)8);
 
 /*     Initialize LABEL to the default response. */
 
-    s_copy(label, " ", label_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, label, " ", label_len, (ftnlen)1);
 
 /*     Branch on CLSID and return the appropriate label as requested */
 /*     by ID. */
 
     if (clsid == 1 && *id >= 1 && *id <= 4) {
-	s_copy(label, __state->stramh + (((i__1 = *id - 1) < 4 && 0 <= i__1 ? 
-		i__1 : s_rnge("stramh", i__1, "zzddhgsd_", (ftnlen)216)) << 3)
-		, label_len, (ftnlen)8);
+	s_copy(&__global_state->f2c, label, __state->stramh + (((i__1 = *id - 
+		1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"stramh", i__1, "zzddhgsd_", (ftnlen)216)) << 3), label_len, (
+		ftnlen)8);
     } else if (clsid == 2 && *id >= 1 && *id <= 2) {
-	s_copy(label, __state->strarc + (((i__1 = *id - 1) < 2 && 0 <= i__1 ? 
-		i__1 : s_rnge("strarc", i__1, "zzddhgsd_", (ftnlen)222)) << 3)
-		, label_len, (ftnlen)8);
+	s_copy(&__global_state->f2c, label, __state->strarc + (((i__1 = *id - 
+		1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"strarc", i__1, "zzddhgsd_", (ftnlen)222)) << 3), label_len, (
+		ftnlen)8);
     } else if (clsid == 3 && *id >= 1 && *id <= 4) {
-	s_copy(label, __state->strbff + (((i__1 = *id - 1) < 4 && 0 <= i__1 ? 
-		i__1 : s_rnge("strbff", i__1, "zzddhgsd_", (ftnlen)228)) << 3)
-		, label_len, (ftnlen)8);
+	s_copy(&__global_state->f2c, label, __state->strbff + (((i__1 = *id - 
+		1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"strbff", i__1, "zzddhgsd_", (ftnlen)228)) << 3), label_len, (
+		ftnlen)8);
     }
     return 0;
 } /* zzddhgsd_ */

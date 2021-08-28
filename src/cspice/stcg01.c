@@ -8,8 +8,7 @@
 
 
 extern stcg01_init_t __stcg01_init;
-static stcg01_state_t* get_stcg01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline stcg01_state_t* get_stcg01_state(cspice_t* state) {
 	if (!state->stcg01)
 		state->stcg01 = __cspice_allocate_module(sizeof(
 	stcg01_state_t), &__stcg01_init, sizeof(__stcg01_init));
@@ -18,29 +17,30 @@ static stcg01_state_t* get_stcg01_state() {
 }
 
 /* $Procedure   STCG01 ( STAR catalog type 1, get star data ) */
-/* Subroutine */ int stcg01_(integer *index, doublereal *ra, doublereal *dec, 
-	doublereal *rasig, doublereal *decsig, integer *catnum, char *sptype, 
-	doublereal *vmag, ftnlen sptype_len)
+/* Subroutine */ int stcg01_(cspice_t* __global_state, integer *index, 
+	doublereal *ra, doublereal *dec, doublereal *rasig, doublereal *
+	decsig, integer *catnum, char *sptype, doublereal *vmag, ftnlen 
+	sptype_len)
 {
-    extern /* Subroutine */ int ekgc_(integer *, integer *, integer *, char *,
-	     logical *, logical *, ftnlen);
-    extern /* Subroutine */ int ekgd_(integer *, integer *, integer *, 
-	    doublereal *, logical *, logical *);
-    extern /* Subroutine */ int ekgi_(integer *, integer *, integer *, 
-	    integer *, logical *, logical *);
+    extern /* Subroutine */ int ekgc_(cspice_t*, integer *, integer *, 
+	    integer *, char *, logical *, logical *, ftnlen);
+    extern /* Subroutine */ int ekgd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, logical *, logical *);
+    extern /* Subroutine */ int ekgi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *, logical *);
     logical null;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern doublereal rpd_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern doublereal rpd_(cspice_t*);
 
 
     /* Module state */
-    stcg01_state_t* __state = get_stcg01_state();
+    stcg01_state_t* __state = get_stcg01_state(__global_state);
 /* $ Abstract */
 
 /*     Get data for a single star from a SPICE type 1 star catalog. */
@@ -243,10 +243,10 @@ static stcg01_state_t* get_stcg01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("STCG01", (ftnlen)6);
+	chkin_(__global_state, "STCG01", (ftnlen)6);
     }
 
 /*     Fetch data from the catalog in the following order */
@@ -260,71 +260,84 @@ static stcg01_state_t* get_stcg01_state() {
 /*     Since NULLs are not allowed in any of the star catalog */
 /*     columns, no check for NULLs is performed. */
 
-    ekgd_(&__state->c__1, index, &__state->c__1, ra, &null, &found);
+    ekgd_(__global_state, &__state->c__1, index, &__state->c__1, ra, &null, &
+	    found);
     if (! found) {
-	setmsg_("RA value for star # not found. ", (ftnlen)31);
-	errint_("#", index, (ftnlen)1);
-	sigerr_("SPICE(BADSTARINDEX)", (ftnlen)19);
-	chkout_("STCG01", (ftnlen)6);
+	setmsg_(__global_state, "RA value for star # not found. ", (ftnlen)31)
+		;
+	errint_(__global_state, "#", index, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSTARINDEX)", (ftnlen)19);
+	chkout_(__global_state, "STCG01", (ftnlen)6);
 	return 0;
     }
-    ekgd_(&__state->c__2, index, &__state->c__1, dec, &null, &found);
+    ekgd_(__global_state, &__state->c__2, index, &__state->c__1, dec, &null, &
+	    found);
     if (! found) {
-	setmsg_("DEC value for star # not found. ", (ftnlen)32);
-	errint_("#", index, (ftnlen)1);
-	sigerr_("SPICE(BADSTARINDEX)", (ftnlen)19);
-	chkout_("STCG01", (ftnlen)6);
+	setmsg_(__global_state, "DEC value for star # not found. ", (ftnlen)
+		32);
+	errint_(__global_state, "#", index, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSTARINDEX)", (ftnlen)19);
+	chkout_(__global_state, "STCG01", (ftnlen)6);
 	return 0;
     }
-    ekgd_(&__state->c__3, index, &__state->c__1, rasig, &null, &found);
+    ekgd_(__global_state, &__state->c__3, index, &__state->c__1, rasig, &null,
+	     &found);
     if (! found) {
-	setmsg_("RASIG value for star # not found. ", (ftnlen)34);
-	errint_("#", index, (ftnlen)1);
-	sigerr_("SPICE(BADSTARINDEX)", (ftnlen)19);
-	chkout_("STCG01", (ftnlen)6);
+	setmsg_(__global_state, "RASIG value for star # not found. ", (ftnlen)
+		34);
+	errint_(__global_state, "#", index, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSTARINDEX)", (ftnlen)19);
+	chkout_(__global_state, "STCG01", (ftnlen)6);
 	return 0;
     }
-    ekgd_(&__state->c__4, index, &__state->c__1, decsig, &null, &found);
+    ekgd_(__global_state, &__state->c__4, index, &__state->c__1, decsig, &
+	    null, &found);
     if (! found) {
-	setmsg_("DECSIG value for star # not found.", (ftnlen)34);
-	errint_("#", index, (ftnlen)1);
-	sigerr_("SPICE(BADSTARINDEX)", (ftnlen)19);
-	chkout_("STCG01", (ftnlen)6);
+	setmsg_(__global_state, "DECSIG value for star # not found.", (ftnlen)
+		34);
+	errint_(__global_state, "#", index, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSTARINDEX)", (ftnlen)19);
+	chkout_(__global_state, "STCG01", (ftnlen)6);
 	return 0;
     }
-    ekgi_(&__state->c__5, index, &__state->c__1, catnum, &null, &found);
+    ekgi_(__global_state, &__state->c__5, index, &__state->c__1, catnum, &
+	    null, &found);
     if (! found) {
-	setmsg_("CATNUM value for star # not found.", (ftnlen)34);
-	errint_("#", index, (ftnlen)1);
-	sigerr_("SPICE(BADSTARINDEX)", (ftnlen)19);
-	chkout_("STCG01", (ftnlen)6);
+	setmsg_(__global_state, "CATNUM value for star # not found.", (ftnlen)
+		34);
+	errint_(__global_state, "#", index, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSTARINDEX)", (ftnlen)19);
+	chkout_(__global_state, "STCG01", (ftnlen)6);
 	return 0;
     }
-    ekgc_(&__state->c__6, index, &__state->c__1, sptype, &null, &found, 
-	    sptype_len);
+    ekgc_(__global_state, &__state->c__6, index, &__state->c__1, sptype, &
+	    null, &found, sptype_len);
     if (! found) {
-	setmsg_("SPTYPE value for star # not found.", (ftnlen)34);
-	errint_("#", index, (ftnlen)1);
-	sigerr_("SPICE(BADSTARINDEX)", (ftnlen)19);
-	chkout_("STCG01", (ftnlen)6);
+	setmsg_(__global_state, "SPTYPE value for star # not found.", (ftnlen)
+		34);
+	errint_(__global_state, "#", index, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSTARINDEX)", (ftnlen)19);
+	chkout_(__global_state, "STCG01", (ftnlen)6);
 	return 0;
     }
-    ekgd_(&__state->c__7, index, &__state->c__1, vmag, &null, &found);
+    ekgd_(__global_state, &__state->c__7, index, &__state->c__1, vmag, &null, 
+	    &found);
     if (! found) {
-	setmsg_("VMAG value for star # not found. ", (ftnlen)33);
-	errint_("#", index, (ftnlen)1);
-	sigerr_("SPICE(BADSTARINDEX)", (ftnlen)19);
-	chkout_("STCG01", (ftnlen)6);
+	setmsg_(__global_state, "VMAG value for star # not found. ", (ftnlen)
+		33);
+	errint_(__global_state, "#", index, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSTARINDEX)", (ftnlen)19);
+	chkout_(__global_state, "STCG01", (ftnlen)6);
 	return 0;
     }
 
 /*     Convert angles to radians before return. */
 
-    *ra *= rpd_();
-    *dec *= rpd_();
-    *rasig *= rpd_();
-    *decsig *= rpd_();
-    chkout_("STCG01", (ftnlen)6);
+    *ra *= rpd_(__global_state);
+    *dec *= rpd_(__global_state);
+    *rasig *= rpd_(__global_state);
+    *decsig *= rpd_(__global_state);
+    chkout_(__global_state, "STCG01", (ftnlen)6);
     return 0;
 } /* stcg01_ */
 

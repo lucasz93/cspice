@@ -8,26 +8,25 @@
 
 
 typedef int vdist_state_t;
-static vdist_state_t* get_vdist_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vdist_state_t* get_vdist_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VDIST ( Vector distance ) */
-doublereal vdist_(doublereal *v1, doublereal *v2)
+doublereal vdist_(cspice_t* __global_state, doublereal *v1, doublereal *v2)
 {
     /* System generated locals */
     doublereal ret_val;
 
     /* Local variables */
     doublereal diff[3];
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern doublereal vnorm_(doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    vdist_state_t* __state = get_vdist_state();
+    vdist_state_t* __state = get_vdist_state(__global_state);
 /* $ Abstract */
 
 /*     Return the distance between two three-dimensional vectors. */
@@ -196,8 +195,8 @@ doublereal vdist_(doublereal *v1, doublereal *v2)
 
 /*     No surprises. */
 
-    vsub_(v1, v2, diff);
-    ret_val = vnorm_(diff);
+    vsub_(__global_state, v1, v2, diff);
+    ret_val = vnorm_(__global_state, diff);
     return ret_val;
 } /* vdist_ */
 

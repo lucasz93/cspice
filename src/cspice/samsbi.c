@@ -8,30 +8,30 @@
 
 
 typedef int samsbi_state_t;
-static samsbi_state_t* get_samsbi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline samsbi_state_t* get_samsbi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SAMSBI (Same substrings, case insensitive) */
-logical samsbi_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
-	 integer *e2, ftnlen str1_len, ftnlen str2_len)
+logical samsbi_(cspice_t* __global_state, char *str1, integer *b1, integer *
+	e1, char *str2, integer *b2, integer *e2, ftnlen str1_len, ftnlen 
+	str2_len)
 {
     /* System generated locals */
     integer i__1;
     logical ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
     integer j;
-    extern logical nechr_(char *, char *, ftnlen, ftnlen);
+    extern logical nechr_(cspice_t*, char *, char *, ftnlen, ftnlen);
 
 
     /* Module state */
-    samsbi_state_t* __state = get_samsbi_state();
+    samsbi_state_t* __state = get_samsbi_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether or not two substrings are the same up to */
@@ -229,9 +229,9 @@ logical samsbi_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
 /*     Check case insensitive equality of two substrings. */
 
 /* -& */
-    if (*e1 < *b1 || *e2 < *b2 || *b1 < 1 || *b2 < 1 || *e1 > i_len(str1, 
-	    str1_len) || *e2 > i_len(str2, str2_len) || *e1 - *b1 != *e2 - *
-	    b2) {
+    if (*e1 < *b1 || *e2 < *b2 || *b1 < 1 || *b2 < 1 || *e1 > i_len(&
+	    __global_state->f2c, str1, str1_len) || *e2 > i_len(&
+	    __global_state->f2c, str2, str2_len) || *e1 - *b1 != *e2 - *b2) {
 	ret_val = FALSE_;
 	return ret_val;
     }
@@ -239,7 +239,8 @@ logical samsbi_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
     ret_val = FALSE_;
     i__1 = *e1;
     for (i__ = *b1; i__ <= i__1; ++i__) {
-	if (nechr_(str1 + (i__ - 1), str2 + (j - 1), (ftnlen)1, (ftnlen)1)) {
+	if (nechr_(__global_state, str1 + (i__ - 1), str2 + (j - 1), (ftnlen)
+		1, (ftnlen)1)) {
 	    return ret_val;
 	}
 	++j;

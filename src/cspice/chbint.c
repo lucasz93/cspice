@@ -8,14 +8,14 @@
 
 
 typedef int chbint_state_t;
-static chbint_state_t* get_chbint_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline chbint_state_t* get_chbint_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CHBINT ( Interpolate a Chebyshev expansion ) */
-/* Subroutine */ int chbint_(doublereal *cp, integer *degp, doublereal *x2s, 
-	doublereal *x, doublereal *p, doublereal *dpdx)
+/* Subroutine */ int chbint_(cspice_t* __global_state, doublereal *cp, 
+	integer *degp, doublereal *x2s, doublereal *x, doublereal *p, 
+	doublereal *dpdx)
 {
     integer j;
     doublereal s;
@@ -25,7 +25,7 @@ static chbint_state_t* get_chbint_state() {
 
 
     /* Module state */
-    chbint_state_t* __state = get_chbint_state();
+    chbint_state_t* __state = get_chbint_state(__global_state);
 /* $ Abstract */
 
 /*     Given the coefficients for the Chebyshev expansion of a */

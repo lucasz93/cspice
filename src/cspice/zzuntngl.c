@@ -8,14 +8,14 @@
 
 
 typedef int zzuntngl_state_t;
-static zzuntngl_state_t* get_zzuntngl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzuntngl_state_t* get_zzuntngl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZUNTNGL ( Untangle an AB linked-cell list  ) */
-/* Subroutine */ int zzuntngl_(integer *nptr, integer *maxcel, integer *cells,
-	 integer *maxb, integer *pntrs, integer *nout, integer *outlst)
+/* Subroutine */ int zzuntngl_(cspice_t* __global_state, integer *nptr, 
+	integer *maxcel, integer *cells, integer *maxb, integer *pntrs, 
+	integer *nout, integer *outlst)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -23,21 +23,21 @@ static zzuntngl_state_t* get_zzuntngl_state() {
     /* Local variables */
     integer aval;
     integer room;
-    extern /* Subroutine */ int zztrvlnk_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int zztrvlnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     integer nfound;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer ptrdex;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzuntngl_state_t* __state = get_zzuntngl_state();
+    zzuntngl_state_t* __state = get_zzuntngl_state(__global_state);
 /* $ Abstract */
 
 /*     Untangle an unsorted AB linked-cell list into an A-index and */
@@ -248,17 +248,18 @@ static zzuntngl_state_t* get_zzuntngl_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZUNTNGL", (ftnlen)8);
+    chkin_(__global_state, "ZZUNTNGL", (ftnlen)8);
     if (*nptr > *maxcel) {
-	setmsg_("Input pointer array is larger than cell array. Pointer arra"
-		"y size = #1. Cell array size = #2.", (ftnlen)93);
-	errint_("#1", nptr, (ftnlen)2);
-	errint_("#2", maxcel, (ftnlen)2);
-	sigerr_("SPICE(BARRAYTOOSMALL)", (ftnlen)21);
-	chkout_("ZZUNTNGL", (ftnlen)8);
+	setmsg_(__global_state, "Input pointer array is larger than cell arr"
+		"ay. Pointer array size = #1. Cell array size = #2.", (ftnlen)
+		93);
+	errint_(__global_state, "#1", nptr, (ftnlen)2);
+	errint_(__global_state, "#2", maxcel, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(BARRAYTOOSMALL)", (ftnlen)21);
+	chkout_(__global_state, "ZZUNTNGL", (ftnlen)8);
 	return 0;
     }
 
@@ -284,31 +285,31 @@ static zzuntngl_state_t* get_zzuntngl_state() {
 /*        Make sure the output pointers below are in range. */
 
 	if (ptrdex + 2 > *maxb) {
-	    setmsg_("Index larger than output array. Index = #1. Array size "
-		    "= #2.", (ftnlen)60);
+	    setmsg_(__global_state, "Index larger than output array. Index ="
+		    " #1. Array size = #2.", (ftnlen)60);
 	    i__2 = ptrdex + 2;
-	    errint_("#1", &i__2, (ftnlen)2);
-	    errint_("#2", maxb, (ftnlen)2);
-	    sigerr_("SPICE(BARRAYTOOSMALL)", (ftnlen)21);
-	    chkout_("ZZUNTNGL", (ftnlen)8);
+	    errint_(__global_state, "#1", &i__2, (ftnlen)2);
+	    errint_(__global_state, "#2", maxb, (ftnlen)2);
+	    sigerr_(__global_state, "SPICE(BARRAYTOOSMALL)", (ftnlen)21);
+	    chkout_(__global_state, "ZZUNTNGL", (ftnlen)8);
 	    return 0;
 	}
 	if (room <= 0) {
-	    setmsg_("Remaining room in output array is #1. Current input poi"
-		    "nter index = #2. Output array size = #3. Output pointer "
-		    "index is #4.", (ftnlen)123);
-	    errint_("#1", &room, (ftnlen)2);
-	    errint_("#2", &aval, (ftnlen)2);
-	    errint_("#3", maxb, (ftnlen)2);
-	    errint_("#4", &ptrdex, (ftnlen)2);
-	    sigerr_("SPICE(BARRAYTOOSMALL)", (ftnlen)21);
-	    chkout_("ZZUNTNGL", (ftnlen)8);
+	    setmsg_(__global_state, "Remaining room in output array is #1. C"
+		    "urrent input pointer index = #2. Output array size = #3."
+		    " Output pointer index is #4.", (ftnlen)123);
+	    errint_(__global_state, "#1", &room, (ftnlen)2);
+	    errint_(__global_state, "#2", &aval, (ftnlen)2);
+	    errint_(__global_state, "#3", maxb, (ftnlen)2);
+	    errint_(__global_state, "#4", &ptrdex, (ftnlen)2);
+	    sigerr_(__global_state, "SPICE(BARRAYTOOSMALL)", (ftnlen)21);
+	    chkout_(__global_state, "ZZUNTNGL", (ftnlen)8);
 	    return 0;
 	}
-	zztrvlnk_(&aval, nptr, pntrs, maxcel, cells, &room, &outlst[ptrdex], &
-		outlst[ptrdex + 1]);
-	if (failed_()) {
-	    chkout_("ZZUNTNGL", (ftnlen)8);
+	zztrvlnk_(__global_state, &aval, nptr, pntrs, maxcel, cells, &room, &
+		outlst[ptrdex], &outlst[ptrdex + 1]);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZUNTNGL", (ftnlen)8);
 	    return 0;
 	}
 
@@ -348,7 +349,7 @@ static zzuntngl_state_t* get_zzuntngl_state() {
 
 /*     Standard SPICE error handling. */
 
-    chkout_("ZZUNTNGL", (ftnlen)8);
+    chkout_(__global_state, "ZZUNTNGL", (ftnlen)8);
     return 0;
 } /* zzuntngl_ */
 

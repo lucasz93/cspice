@@ -3,7 +3,7 @@
 #include "string.h"
 #include "__cspice_state.h"
 #ifdef KR_headers
-integer f_inqu(a) inlist *a;
+integer f_inqu(f2c, a) f2c_state_t *f2c; inlist *a;
 #else
 #ifdef MSDOS
 #undef abs
@@ -11,10 +11,9 @@ integer f_inqu(a) inlist *a;
 #undef max
 #include "io.h"
 #endif
-integer f_inqu(inlist *a)
+integer f_inqu(f2c_state_t *f2c, inlist *a)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	flag byfile;
+{	flag byfile;
 	int i, n;
 	unit *p;
 	char buf[256];

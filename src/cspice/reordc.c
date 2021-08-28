@@ -8,20 +8,19 @@
 
 
 typedef int reordc_state_t;
-static reordc_state_t* get_reordc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline reordc_state_t* get_reordc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      REORDC ( Reorder a character array ) */
-/* Subroutine */ int reordc_(integer *iorder, integer *ndim, char *array, 
-	ftnlen array_len)
+/* Subroutine */ int reordc_(cspice_t* __global_state, integer *iorder, 
+	integer *ndim, char *array, ftnlen array_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer hold;
@@ -32,7 +31,7 @@ static reordc_state_t* get_reordc_state() {
 
 
     /* Module state */
-    reordc_state_t* __state = get_reordc_state();
+    reordc_state_t* __state = get_reordc_state(__global_state);
 /* $ Abstract */
 
 /*      Re-order the elements of an array of character strings */
@@ -192,7 +191,7 @@ static reordc_state_t* get_reordc_state() {
 /*     looks messy as hell, but the same number of operations are */
 /*     involved (more or less). */
 
-    i__1 = i_len(array, array_len);
+    i__1 = i_len(&__global_state->f2c, array, array_len);
     for (c__ = 1; c__ <= i__1; ++c__) {
 
 /*        START is the position in the order vector that begins the */

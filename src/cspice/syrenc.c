@@ -8,8 +8,7 @@
 
 
 extern syrenc_init_t __syrenc_init;
-static syrenc_state_t* get_syrenc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline syrenc_state_t* get_syrenc_state(cspice_t* state) {
 	if (!state->syrenc)
 		state->syrenc = __cspice_allocate_module(sizeof(
 	syrenc_state_t), &__syrenc_init, sizeof(__syrenc_init));
@@ -18,44 +17,47 @@ static syrenc_state_t* get_syrenc_state() {
 }
 
 /* $Procedure      SYRENC ( Rename an existing symbol ) */
-/* Subroutine */ int syrenc_(char *old, char *new__, char *tabsym, integer *
-	tabptr, char *tabval, ftnlen old_len, ftnlen new_len, ftnlen 
-	tabsym_len, ftnlen tabval_len)
+/* Subroutine */ int syrenc_(cspice_t* __global_state, char *old, char *new__,
+	 char *tabsym, integer *tabptr, char *tabval, ftnlen old_len, ftnlen 
+	new_len, ftnlen tabsym_len, ftnlen tabval_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer sumai_(integer *, integer *);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer olddim;
     integer oldloc;
-    extern /* Subroutine */ int swapac_(integer *, integer *, integer *, 
-	    integer *, char *, ftnlen);
+    extern /* Subroutine */ int swapac_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, char *, ftnlen);
     integer oldval;
-    extern /* Subroutine */ int sydelc_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int swapai_(integer *, integer *, integer *, 
-	    integer *, integer *);
-    extern integer lstlec_(char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sydelc_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int swapai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern integer lstlec_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer newloc;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer newval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    syrenc_state_t* __state = get_syrenc_state();
+    syrenc_state_t* __state = get_syrenc_state(__global_state);
 /* $ Abstract */
 
 /*     Rename an existing symbol in a character symbol table. */
@@ -252,64 +254,66 @@ static syrenc_state_t* get_syrenc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYRENC", (ftnlen)6);
+	chkin_(__global_state, "SYRENC", (ftnlen)6);
     }
 
 /*     Where was the old symbol? */
 
-    nsym = cardc_(tabsym, tabsym_len);
-    oldloc = bsrchc_(old, &nsym, tabsym + tabsym_len * 6, old_len, tabsym_len)
-	    ;
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
+    oldloc = bsrchc_(__global_state, old, &nsym, tabsym + tabsym_len * 6, 
+	    old_len, tabsym_len);
 
 /*     An overflow is simply not possible here. The only thing that can */
 /*     go wrong is that the old symbol does not exist. */
 
     if (oldloc == 0) {
-	setmsg_("SYRENC: The symbol # is not in the symbol table.", (ftnlen)
-		48);
-	errch_("#", old, (ftnlen)1, old_len);
-	sigerr_("SPICE(NOSUCHSYMBOL)", (ftnlen)19);
+	setmsg_(__global_state, "SYRENC: The symbol # is not in the symbol t"
+		"able.", (ftnlen)48);
+	errch_(__global_state, "#", old, (ftnlen)1, old_len);
+	sigerr_(__global_state, "SPICE(NOSUCHSYMBOL)", (ftnlen)19);
 
 /*     Are these the same symbol? */
 
-    } else if (s_cmp(new__, old, new_len, old_len) != 0) {
+    } else if (s_cmp(&__global_state->f2c, new__, old, new_len, old_len) != 0)
+	     {
 
 /*        If the new symbol already exists, delete it. */
 
-	sydelc_(new__, tabsym, tabptr, tabval, new_len, tabsym_len, 
-		tabval_len);
-	nsym = cardc_(tabsym, tabsym_len);
-	oldloc = bsrchc_(old, &nsym, tabsym + tabsym_len * 6, old_len, 
-		tabsym_len);
+	sydelc_(__global_state, new__, tabsym, tabptr, tabval, new_len, 
+		tabsym_len, tabval_len);
+	nsym = cardc_(__global_state, tabsym, tabsym_len);
+	oldloc = bsrchc_(__global_state, old, &nsym, tabsym + tabsym_len * 6, 
+		old_len, tabsym_len);
 
 /*        Swap N elements at the old location with zero elements */
 /*        at the new location. */
 
-	newloc = lstlec_(new__, &nsym, tabsym + tabsym_len * 6, new_len, 
-		tabsym_len) + 1;
+	newloc = lstlec_(__global_state, new__, &nsym, tabsym + tabsym_len * 
+		6, new_len, tabsym_len) + 1;
 	i__1 = oldloc - 1;
-	oldval = sumai_(&tabptr[6], &i__1) + 1;
+	oldval = sumai_(__global_state, &tabptr[6], &i__1) + 1;
 	i__1 = newloc - 1;
-	newval = sumai_(&tabptr[6], &i__1) + 1;
+	newval = sumai_(__global_state, &tabptr[6], &i__1) + 1;
 	olddim = tabptr[oldloc + 5];
-	swapac_(&olddim, &oldval, &__state->c__0, &newval, tabval + 
-		tabval_len * 6, tabval_len);
+	swapac_(__global_state, &olddim, &oldval, &__state->c__0, &newval, 
+		tabval + tabval_len * 6, tabval_len);
 
 /*        Move the name and dimension the same way. */
 
-	swapac_(&__state->c__1, &oldloc, &__state->c__0, &newloc, tabsym + 
-		tabsym_len * 6, tabsym_len);
-	swapai_(&__state->c__1, &oldloc, &__state->c__0, &newloc, &tabptr[6]);
+	swapac_(__global_state, &__state->c__1, &oldloc, &__state->c__0, &
+		newloc, tabsym + tabsym_len * 6, tabsym_len);
+	swapai_(__global_state, &__state->c__1, &oldloc, &__state->c__0, &
+		newloc, &tabptr[6]);
 	if (oldloc < newloc) {
 	    --newloc;
 	}
-	s_copy(tabsym + (newloc + 5) * tabsym_len, new__, tabsym_len, new_len)
-		;
+	s_copy(&__global_state->f2c, tabsym + (newloc + 5) * tabsym_len, 
+		new__, tabsym_len, new_len);
     }
-    chkout_("SYRENC", (ftnlen)6);
+    chkout_(__global_state, "SYRENC", (ftnlen)6);
     return 0;
 } /* syrenc_ */
 

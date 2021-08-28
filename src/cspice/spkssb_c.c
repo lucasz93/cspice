@@ -191,7 +191,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkssb_c" );
+   chkin_c ( naif_state, "spkssb_c" );
 
 
    /*

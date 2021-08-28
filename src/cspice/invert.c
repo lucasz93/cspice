@@ -8,8 +8,7 @@
 
 
 extern invert_init_t __invert_init;
-static invert_state_t* get_invert_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline invert_state_t* get_invert_state(cspice_t* state) {
 	if (!state->invert)
 		state->invert = __cspice_allocate_module(sizeof(
 	invert_state_t), &__invert_init, sizeof(__invert_init));
@@ -18,19 +17,21 @@ static invert_state_t* get_invert_state() {
 }
 
 /* $Procedure      INVERT ( Invert a 3x3 matrix ) */
-/* Subroutine */ int invert_(doublereal *m1, doublereal *mout)
+/* Subroutine */ int invert_(cspice_t* __global_state, doublereal *m1, 
+	doublereal *mout)
 {
     doublereal mdet;
-    extern /* Subroutine */ int filld_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int vsclg_(doublereal *, doublereal *, integer *, 
+    extern /* Subroutine */ int filld_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
+    extern /* Subroutine */ int vsclg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
     doublereal mtemp[9]	/* was [3][3] */;
     doublereal invdet;
-    extern doublereal det_(doublereal *);
+    extern doublereal det_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    invert_state_t* __state = get_invert_state();
+    invert_state_t* __state = get_invert_state(__global_state);
 /* $ Abstract */
 
 /*      Generate the inverse of a 3x3 matrix. */
@@ -179,9 +180,9 @@ static invert_state_t* get_invert_state() {
 
 /*  Find the determinant of M1 and check for singularity */
 
-    mdet = det_(m1);
+    mdet = det_(__global_state, m1);
     if (abs(mdet) < 1e-16) {
-	filld_(&__state->c_b2, &__state->c__9, mout);
+	filld_(__global_state, &__state->c_b2, &__state->c__9, mout);
 	return 0;
     }
 
@@ -200,7 +201,7 @@ static invert_state_t* get_invert_state() {
 /*  Multiply the cofactor matrix by 1/MDET to obtain the inverse */
 
     invdet = 1. / mdet;
-    vsclg_(&invdet, mtemp, &__state->c__9, mout);
+    vsclg_(__global_state, &invdet, mtemp, &__state->c__9, mout);
 
     return 0;
 } /* invert_ */

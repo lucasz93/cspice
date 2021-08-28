@@ -8,33 +8,33 @@
 
 
 typedef int nextwd_state_t;
-static nextwd_state_t* get_nextwd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline nextwd_state_t* get_nextwd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      NEXTWD ( Next word in a character string ) */
-/* Subroutine */ int nextwd_(char *string, char *next, char *rest, ftnlen 
-	string_len, ftnlen next_len, ftnlen rest_len)
+/* Subroutine */ int nextwd_(cspice_t* __global_state, char *string, char *
+	next, char *rest, ftnlen string_len, ftnlen next_len, ftnlen rest_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
     integer begin;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical inword;
     integer end;
 
 
     /* Module state */
-    nextwd_state_t* __state = get_nextwd_state();
+    nextwd_state_t* __state = get_nextwd_state(__global_state);
 /* $ Abstract */
 
 /*      Return the next word in a given character string, and */
@@ -202,9 +202,10 @@ static nextwd_state_t* get_nextwd_state() {
 
 /*     The trivial case. */
 
-    if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
-	s_copy(next, " ", next_len, (ftnlen)1);
-	s_copy(rest, " ", rest_len, (ftnlen)1);
+    if (s_cmp(&__global_state->f2c, string, " ", string_len, (ftnlen)1) == 0) 
+	    {
+	s_copy(&__global_state->f2c, next, " ", next_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, rest, " ", rest_len, (ftnlen)1);
 
 /*     The non-trivial case. */
 
@@ -212,7 +213,7 @@ static nextwd_state_t* get_nextwd_state() {
 
 /*        Get the length of the string. */
 
-	end = i_len(string, string_len);
+	end = i_len(&__global_state->f2c, string, string_len);
 
 /*        Skip leading blanks and set flags indicating that we are */
 /*        not in a word and that we do not have a word. */
@@ -258,12 +259,14 @@ static nextwd_state_t* get_nextwd_state() {
 /*        the right thing if STRING and REST overlap. If we do not have */
 /*        a word, the NEXT and REST are both blank. */
 
-	s_copy(next, string + (begin - 1), next_len, i__ - (begin - 1));
+	s_copy(&__global_state->f2c, next, string + (begin - 1), next_len, 
+		i__ - (begin - 1));
 	if (i__ < end) {
 	    i__1 = i__;
-	    ljust_(string + i__1, rest, string_len - i__1, rest_len);
+	    ljust_(__global_state, string + i__1, rest, string_len - i__1, 
+		    rest_len);
 	} else {
-	    s_copy(rest, " ", rest_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, rest, " ", rest_len, (ftnlen)1);
 	}
     }
     return 0;

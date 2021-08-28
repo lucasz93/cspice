@@ -8,14 +8,14 @@
 
 
 typedef int cyclad_state_t;
-static cyclad_state_t* get_cyclad_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cyclad_state_t* get_cyclad_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CYCLAD ( Cycle the elements of a DP array ) */
-/* Subroutine */ int cyclad_(doublereal *array, integer *nelt, char *dir, 
-	integer *ncycle, doublereal *out, ftnlen dir_len)
+/* Subroutine */ int cyclad_(cspice_t* __global_state, doublereal *array, 
+	integer *nelt, char *dir, integer *ncycle, doublereal *out, ftnlen 
+	dir_len)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -29,18 +29,20 @@ static cyclad_state_t* get_cyclad_state() {
     integer k;
     integer l;
     integer m;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern integer gcd_(integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern integer gcd_(cspice_t*, integer *, integer *);
 
 
     /* Module state */
-    cyclad_state_t* __state = get_cyclad_state();
+    cyclad_state_t* __state = get_cyclad_state(__global_state);
 /* $ Abstract */
 
 /*     Cycle the elements of a double precision array forward */
@@ -222,16 +224,16 @@ static cyclad_state_t* get_cyclad_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CYCLAD", (ftnlen)6);
+	chkin_(__global_state, "CYCLAD", (ftnlen)6);
     }
 
 /*     Don't even screw around if there are no elements in the array. */
 
     if (*nelt < 1) {
-	chkout_("CYCLAD", (ftnlen)6);
+	chkout_(__global_state, "CYCLAD", (ftnlen)6);
 	return 0;
     }
 
@@ -245,17 +247,17 @@ static cyclad_state_t* get_cyclad_state() {
     } else if (*(unsigned char *)dir == 'F' || *(unsigned char *)dir == 'F') {
 	k = *ncycle % *nelt;
     } else {
-	setmsg_("Cycling direction was *.", (ftnlen)24);
-	errch_("*", dir, (ftnlen)1, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDIRECTION)", (ftnlen)23);
-	chkout_("CYCLAD", (ftnlen)6);
+	setmsg_(__global_state, "Cycling direction was *.", (ftnlen)24);
+	errch_(__global_state, "*", dir, (ftnlen)1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDIRECTION)", (ftnlen)23);
+	chkout_(__global_state, "CYCLAD", (ftnlen)6);
 	return 0;
     }
     if (k < 0) {
 	k += *nelt;
     } else if (k == 0) {
-	moved_(array, nelt, out);
-	chkout_("CYCLAD", (ftnlen)6);
+	moved_(__global_state, array, nelt, out);
+	chkout_(__global_state, "CYCLAD", (ftnlen)6);
 	return 0;
     }
 
@@ -263,7 +265,7 @@ static cyclad_state_t* get_cyclad_state() {
 /*     to cycle character strings in CYCLEC. We won't repeat the (rather */
 /*     lengthy) description here. */
 
-    g = gcd_(&k, nelt);
+    g = gcd_(__global_state, &k, nelt);
     m = *nelt / g;
     i__1 = g;
     for (i__ = 1; i__ <= i__1; ++i__) {
@@ -280,7 +282,7 @@ static cyclad_state_t* get_cyclad_state() {
 	    last = temp;
 	}
     }
-    chkout_("CYCLAD", (ftnlen)6);
+    chkout_(__global_state, "CYCLAD", (ftnlen)6);
     return 0;
 } /* cyclad_ */
 

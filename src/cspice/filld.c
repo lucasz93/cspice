@@ -8,14 +8,13 @@
 
 
 typedef int filld_state_t;
-static filld_state_t* get_filld_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline filld_state_t* get_filld_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      FILLD ( Fill a double precision array ) */
-/* Subroutine */ int filld_(doublereal *value, integer *ndim, doublereal *
-	array)
+/* Subroutine */ int filld_(cspice_t* __global_state, doublereal *value, 
+	integer *ndim, doublereal *array)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +24,7 @@ static filld_state_t* get_filld_state() {
 
 
     /* Module state */
-    filld_state_t* __state = get_filld_state();
+    filld_state_t* __state = get_filld_state(__global_state);
 /* $ Abstract */
 
 /*      Fill a double precision array with a specified value. */

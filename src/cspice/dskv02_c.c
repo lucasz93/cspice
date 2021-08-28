@@ -401,7 +401,7 @@
    {
       return;
    }
-   chkin_c ( "dskv02_c" );
+   chkin_c ( naif_state, "dskv02_c" );
 
    
    /*

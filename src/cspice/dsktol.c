@@ -8,8 +8,7 @@
 
 
 extern dsktol_init_t __dsktol_init;
-static dsktol_state_t* get_dsktol_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dsktol_state_t* get_dsktol_state(cspice_t* state) {
 	if (!state->dsktol)
 		state->dsktol = __cspice_allocate_module(sizeof(
 	dsktol_state_t), &__dsktol_init, sizeof(__dsktol_init));
@@ -18,7 +17,8 @@ static dsktol_state_t* get_dsktol_state() {
 }
 
 /* $Procedure DSKTOL ( DSK, tolerance umbrella ) */
-/* Subroutine */ int dsktol_0_(int n__, integer *keywrd, doublereal *dpval)
+/* Subroutine */ int dsktol_0_(cspice_t* __global_state, int n__, integer *
+	keywrd, doublereal *dpval)
 {
     /* Initialized data */
 
@@ -27,20 +27,21 @@ static dsktol_state_t* get_dsktol_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dsktol_state_t* __state = get_dsktol_state();
+    dsktol_state_t* __state = get_dsktol_state(__global_state);
 /* $ Abstract */
 
 /*     Umbrella routine for DSK tolerance and margin parameter access */
@@ -364,9 +365,9 @@ static dsktol_state_t* get_dsktol_state() {
 	case 2: goto L_dskstl;
 	}
 
-    chkin_("DSKTOL", (ftnlen)6);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("DSKTOL", (ftnlen)6);
+    chkin_(__global_state, "DSKTOL", (ftnlen)6);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "DSKTOL", (ftnlen)6);
     return 0;
 /* $Procedure DSKGTL ( DSK, get tolerance ) */
 
@@ -511,16 +512,18 @@ L_dskgtl:
 /*     Use discovery check-in. */
 
     if (*keywrd < 1 || *keywrd > 6) {
-	chkin_("DSKGTL", (ftnlen)6);
-	setmsg_("Valid keyword range is 1:#; keyword was #.", (ftnlen)42);
-	errint_("#", &__state->c__6, (ftnlen)1);
-	errint_("#", keywrd, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKGTL", (ftnlen)6);
+	chkin_(__global_state, "DSKGTL", (ftnlen)6);
+	setmsg_(__global_state, "Valid keyword range is 1:#; keyword was #.", 
+		(ftnlen)42);
+	errint_(__global_state, "#", &__state->c__6, (ftnlen)1);
+	errint_(__global_state, "#", keywrd, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKGTL", (ftnlen)6);
 	return 0;
     }
     *dpval = __state->dppars[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : 
-	    s_rnge("dppars", i__1, "dsktol_", (ftnlen)366)];
+	    s_rnge(&__global_state->f2c, "dppars", i__1, "dsktol_", (ftnlen)
+	    366)];
     return 0;
 /* $Procedure DSKSTL ( DSK, set tolerance ) */
 
@@ -671,26 +674,28 @@ L_dskstl:
 /*     set dsk tolerance or margin parameters */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKSTL", (ftnlen)6);
+    chkin_(__global_state, "DSKSTL", (ftnlen)6);
     if (*keywrd < 1 || *keywrd > 6) {
-	setmsg_("Valid keyword range is 1:#; keyword was #.", (ftnlen)42);
-	errint_("#", &__state->c__6, (ftnlen)1);
-	errint_("#", keywrd, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKSTL", (ftnlen)6);
+	setmsg_(__global_state, "Valid keyword range is 1:#; keyword was #.", 
+		(ftnlen)42);
+	errint_(__global_state, "#", &__state->c__6, (ftnlen)1);
+	errint_(__global_state, "#", keywrd, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKSTL", (ftnlen)6);
 	return 0;
     }
     if (__state->isfixd[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(
-	    "isfixd", i__1, "dsktol_", (ftnlen)543)]) {
-	setmsg_("The parameter # cannot be modified.", (ftnlen)35);
-	errch_("#", __state->names + ((i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? 
-		i__1 : s_rnge("names", i__1, "dsktol_", (ftnlen)546)) * 6, (
-		ftnlen)1, (ftnlen)6);
-	sigerr_("SPICE(IMMUTABLEVALUE)", (ftnlen)21);
-	chkout_("DSKSTL", (ftnlen)6);
+	    &__global_state->f2c, "isfixd", i__1, "dsktol_", (ftnlen)543)]) {
+	setmsg_(__global_state, "The parameter # cannot be modified.", (
+		ftnlen)35);
+	errch_(__global_state, "#", __state->names + ((i__1 = *keywrd - 1) < 
+		6 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "names", 
+		i__1, "dsktol_", (ftnlen)546)) * 6, (ftnlen)1, (ftnlen)6);
+	sigerr_(__global_state, "SPICE(IMMUTABLEVALUE)", (ftnlen)21);
+	chkout_(__global_state, "DSKSTL", (ftnlen)6);
 	return 0;
     }
 
@@ -698,23 +703,27 @@ L_dskstl:
 /*     the new parameter value; the user presumably knows */
 /*     the reason for change. */
 
-    __state->dppars[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(
-	    "dppars", i__1, "dsktol_", (ftnlen)558)] = *dpval;
-    chkout_("DSKSTL", (ftnlen)6);
+    __state->dppars[(i__1 = *keywrd - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "dppars", i__1, "dsktol_", (ftnlen)558)] = *
+	    dpval;
+    chkout_(__global_state, "DSKSTL", (ftnlen)6);
     return 0;
 } /* dsktol_ */
 
-/* Subroutine */ int dsktol_(integer *keywrd, doublereal *dpval)
+/* Subroutine */ int dsktol_(cspice_t* __global_state, integer *keywrd, 
+	doublereal *dpval)
 {
     return dsktol_0_(0, keywrd, dpval);
     }
 
-/* Subroutine */ int dskgtl_(integer *keywrd, doublereal *dpval)
+/* Subroutine */ int dskgtl_(cspice_t* __global_state, integer *keywrd, 
+	doublereal *dpval)
 {
     return dsktol_0_(1, keywrd, dpval);
     }
 
-/* Subroutine */ int dskstl_(integer *keywrd, doublereal *dpval)
+/* Subroutine */ int dskstl_(cspice_t* __global_state, integer *keywrd, 
+	doublereal *dpval)
 {
     return dsktol_0_(2, keywrd, dpval);
     }

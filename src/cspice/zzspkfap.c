@@ -8,8 +8,7 @@
 
 
 extern zzspkfap_init_t __zzspkfap_init;
-static zzspkfap_state_t* get_zzspkfap_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzspkfap_state_t* get_zzspkfap_state(cspice_t* state) {
 	if (!state->zzspkfap)
 		state->zzspkfap = __cspice_allocate_module(sizeof(
 	zzspkfap_state_t), &__zzspkfap_init, sizeof(__zzspkfap_init));
@@ -18,44 +17,47 @@ static zzspkfap_state_t* get_zzspkfap_state() {
 }
 
 /* $Procedure ZZSPKFAP ( SPK function, apparent inertial state ) */
-/* Subroutine */ int zzspkfap_(U_fp trgsub, doublereal *et, char *ref, char *
-	abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, 
-	doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len)
+/* Subroutine */ int zzspkfap_(cspice_t* __global_state, U_fp trgsub, 
+	doublereal *et, char *ref, char *abcorr, doublereal *stobs, 
+	doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *
+	dlt, ftnlen ref_len, ftnlen abcorr_len)
 {
     /* Initialized data */
 
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzstelab_(logical *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzspkflt_(U_fp, doublereal *, char *, char *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen, 
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzstelab_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
 	    ftnlen);
+    extern /* Subroutine */ int zzspkflt_(cspice_t*, U_fp, doublereal *, char 
+	    *, char *, doublereal *, doublereal *, doublereal *, doublereal *,
+	     ftnlen, ftnlen);
     integer refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal pcorr[3];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     logical attblk[15];
     doublereal dpcorr[3];
     doublereal corvel[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal corpos[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    zzspkfap_state_t* __state = get_zzspkfap_state();
+    zzspkfap_state_t* __state = get_zzspkfap_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -560,25 +562,26 @@ static zzspkfap_state_t* get_zzspkfap_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSPKFAP", (ftnlen)8);
-    if (__state->pass1 || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    chkin_(__global_state, "ZZSPKFAP", (ftnlen)8);
+    if (__state->pass1 || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
 
-	zzvalcor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("ZZSPKFAP", (ftnlen)8);
+	zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKFAP", (ftnlen)8);
 	    return 0;
 	}
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -602,23 +605,23 @@ static zzspkfap_state_t* get_zzspkfap_state() {
 
 /*     See if the reference frame is a recognized inertial frame. */
 
-    irfnum_(ref, &refid, ref_len);
+    irfnum_(__global_state, ref, &refid, ref_len);
     if (refid == 0) {
-	setmsg_("The requested frame '#' is not a recognized inertial frame. "
-		, (ftnlen)60);
-	errch_("#", ref, (ftnlen)1, ref_len);
-	sigerr_("SPICE(BADFRAME)", (ftnlen)15);
-	chkout_("ZZSPKFAP", (ftnlen)8);
+	setmsg_(__global_state, "The requested frame '#' is not a recognized"
+		" inertial frame. ", (ftnlen)60);
+	errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	sigerr_(__global_state, "SPICE(BADFRAME)", (ftnlen)15);
+	chkout_(__global_state, "ZZSPKFAP", (ftnlen)8);
 	return 0;
     }
 
 /*     Get the state of the target relative to the observer, */
 /*     optionally corrected for light time. */
 
-    zzspkflt_((U_fp)trgsub, et, ref, abcorr, stobs, starg, lt, dlt, ref_len, 
-	    abcorr_len);
-    if (failed_()) {
-	chkout_("ZZSPKFAP", (ftnlen)8);
+    zzspkflt_(__global_state, (U_fp)trgsub, et, ref, abcorr, stobs, starg, lt,
+	     dlt, ref_len, abcorr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSPKFAP", (ftnlen)8);
 	return 0;
     }
 
@@ -626,26 +629,27 @@ static zzspkfap_state_t* get_zzspkfap_state() {
 /*     already done. */
 
     if (! __state->usestl) {
-	chkout_("ZZSPKFAP", (ftnlen)8);
+	chkout_(__global_state, "ZZSPKFAP", (ftnlen)8);
 	return 0;
     }
 
 /*     Get the stellar aberration correction and its time derivative. */
 
-    zzstelab_(&__state->xmit, accobs, &stobs[3], starg, pcorr, dpcorr);
+    zzstelab_(__global_state, &__state->xmit, accobs, &stobs[3], starg, pcorr,
+	     dpcorr);
 
 /*     Adding the stellar aberration correction to the light */
 /*     time-corrected target position yields the position corrected for */
 /*     both light time and stellar aberration. */
 
-    vadd_(pcorr, starg, corpos);
-    vequ_(corpos, starg);
+    vadd_(__global_state, pcorr, starg, corpos);
+    vequ_(__global_state, corpos, starg);
 
 /*     Velocity is treated in an analogous manner. */
 
-    vadd_(dpcorr, &starg[3], corvel);
-    vequ_(corvel, &starg[3]);
-    chkout_("ZZSPKFAP", (ftnlen)8);
+    vadd_(__global_state, dpcorr, &starg[3], corvel);
+    vequ_(__global_state, corvel, &starg[3]);
+    chkout_(__global_state, "ZZSPKFAP", (ftnlen)8);
     return 0;
 } /* zzspkfap_ */
 

@@ -407,7 +407,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "srfs2c_c" );
+   chkin_c ( naif_state, "srfs2c_c" );
 
    /*
    Check the input strings to make sure the pointers are non-null and

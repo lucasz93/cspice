@@ -837,7 +837,7 @@
       {
       return;
       }
-   chkin_c ( "gfpa_c" );
+   chkin_c ( naif_state, "gfpa_c" );
 
 
    /*

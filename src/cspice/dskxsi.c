@@ -8,8 +8,7 @@
 
 
 extern dskxsi_init_t __dskxsi_init;
-static dskxsi_state_t* get_dskxsi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskxsi_state_t* get_dskxsi_state(cspice_t* state) {
 	if (!state->dskxsi)
 		state->dskxsi = __cspice_allocate_module(sizeof(
 	dskxsi_state_t), &__dskxsi_init, sizeof(__dskxsi_init));
@@ -18,51 +17,54 @@ static dskxsi_state_t* get_dskxsi_state() {
 }
 
 /* $Procedure DSKXSI (DSK, ray-surface intercept with source information) */
-/* Subroutine */ int dskxsi_(logical *pri, char *target, integer *nsurf, 
-	integer *srflst, doublereal *et, char *fixref, doublereal *vertex, 
-	doublereal *raydir, integer *maxd, integer *maxi, doublereal *xpt, 
-	integer *handle, integer *dladsc, doublereal *dskdsc, doublereal *dc, 
-	integer *ic, logical *found, ftnlen target_len, ftnlen fixref_len)
+/* Subroutine */ int dskxsi_(cspice_t* __global_state, logical *pri, char *
+	target, integer *nsurf, integer *srflst, doublereal *et, char *fixref,
+	 doublereal *vertex, doublereal *raydir, integer *maxd, integer *maxi,
+	 doublereal *xpt, integer *handle, integer *dladsc, doublereal *
+	dskdsc, doublereal *dc, integer *ic, logical *found, ftnlen 
+	target_len, ftnlen fixref_len)
 {
     /* Initialized data */
 
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzpctrck_(integer *, logical *);
-    extern /* Subroutine */ int zzsbfxri_(integer *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
-	     integer *, integer *, doublereal *, doublereal *, integer *, 
-	    logical *);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzpctrck_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int zzsbfxri_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, doublereal *, doublereal *, 
+	    doublereal *, integer *, integer *, doublereal *, doublereal *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
     logical frmfnd;
     logical trgfnd;
     integer fxcent;
     integer fxtpid;
     integer fxclss;
     logical newfrm;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     logical newtrg;
     logical update;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
 
 
     /* Module state */
-    dskxsi_state_t* __state = get_dskxsi_state();
+    dskxsi_state_t* __state = get_dskxsi_state(__global_state);
 /* $ Abstract */
 
 /*     Compute a ray-surface intercept using data provided by */
@@ -1229,18 +1231,18 @@ static dskxsi_state_t* get_dskxsi_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKXSI", (ftnlen)6);
+    chkin_(__global_state, "DSKXSI", (ftnlen)6);
     if (__state->first) {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->trgctr);
-	zzctruin_(__state->frmctr);
-	if (failed_()) {
-	    chkout_("DSKXSI", (ftnlen)6);
+	zzctruin_(__global_state, __state->trgctr);
+	zzctruin_(__global_state, __state->frmctr);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DSKXSI", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -1248,118 +1250,122 @@ static dskxsi_state_t* get_dskxsi_state() {
 /*     Reject PRI if not set properly. */
 
     if (*pri) {
-	setmsg_("In the N0066 SPICE Toolkit, PRI must be set to .FALSE., ind"
-		"icating that an unprioritized search is to be performed.", (
-		ftnlen)115);
-	sigerr_("SPICE(BADPRIORITYSPEC)", (ftnlen)22);
-	chkout_("DSKXSI", (ftnlen)6);
+	setmsg_(__global_state, "In the N0066 SPICE Toolkit, PRI must be set"
+		" to .FALSE., indicating that an unprioritized search is to b"
+		"e performed.", (ftnlen)115);
+	sigerr_(__global_state, "SPICE(BADPRIORITYSPEC)", (ftnlen)22);
+	chkout_(__global_state, "DSKXSI", (ftnlen)6);
 	return 0;
     }
 
 /*     Reject NSURF if not set properly. Zero is a valid value. */
 
     if (*nsurf < 0) {
-	setmsg_("The surface count NSURF must be non-negative but was #.", (
-		ftnlen)55);
-	errint_("#", nsurf, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("DSKXSI", (ftnlen)6);
+	setmsg_(__global_state, "The surface count NSURF must be non-negativ"
+		"e but was #.", (ftnlen)55);
+	errint_(__global_state, "#", nsurf, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "DSKXSI", (ftnlen)6);
 	return 0;
     }
 
 /*     Check output array sizes. */
 
     if (*maxd < 1 || *maxi < 1) {
-	setmsg_("Output array size MAXD must be at least #; output array siz"
-		"e MAXI must be at least #. Actual sizes were # and # respect"
-		"ively.", (ftnlen)125);
-	errint_("#", &__state->c__1, (ftnlen)1);
-	errint_("#", &__state->c__1, (ftnlen)1);
-	errint_("#", maxd, (ftnlen)1);
-	errint_("#", maxi, (ftnlen)1);
-	sigerr_("SPICE(ARRAYTOOSMALL)", (ftnlen)20);
-	chkout_("DSKXSI", (ftnlen)6);
+	setmsg_(__global_state, "Output array size MAXD must be at least #; "
+		"output array size MAXI must be at least #. Actual sizes were"
+		" # and # respectively.", (ftnlen)125);
+	errint_(__global_state, "#", &__state->c__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__1, (ftnlen)1);
+	errint_(__global_state, "#", maxd, (ftnlen)1);
+	errint_(__global_state, "#", maxi, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ARRAYTOOSMALL)", (ftnlen)20);
+	chkout_(__global_state, "DSKXSI", (ftnlen)6);
 	return 0;
     }
 
 /*     Obtain integer codes for the target and reference frame. */
 
-    zzbods2c_(__state->trgctr, __state->svtnam, &__state->svtcde, &
-	    __state->svtfnd, target, &__state->trgcde, &trgfnd, (ftnlen)36, 
-	    target_len);
-    if (failed_()) {
-	chkout_("DSKXSI", (ftnlen)6);
+    zzbods2c_(__global_state, __state->trgctr, __state->svtnam, &
+	    __state->svtcde, &__state->svtfnd, target, &__state->trgcde, &
+	    trgfnd, (ftnlen)36, target_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DSKXSI", (ftnlen)6);
 	return 0;
     }
     if (! trgfnd) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit, or that you failed to lo"
-		"ad a kernel containing a name-ID mapping for this body.", (
-		ftnlen)234);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("DSKXSI", (ftnlen)6);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit, or that "
+		"you failed to load a kernel containing a name-ID mapping for"
+		" this body.", (ftnlen)234);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "DSKXSI", (ftnlen)6);
 	return 0;
     }
-    newfrm = s_cmp(fixref, __state->prvfrm, fixref_len, (ftnlen)32) != 0 || 
-	    __state->first;
+    newfrm = s_cmp(&__global_state->f2c, fixref, __state->prvfrm, fixref_len, 
+	    (ftnlen)32) != 0 || __state->first;
     newtrg = __state->trgcde != __state->prvtcd || __state->first;
 
 /*     Get the frame ID if the pool state has changed. The */
 /*     first call to ZZPCKTRCK will indicate an update. */
 
-    zzpctrck_(__state->frmctr, &update);
+    zzpctrck_(__global_state, __state->frmctr, &update);
     if (update || newfrm || newtrg) {
-	namfrm_(fixref, &__state->fixfid, fixref_len);
-	if (failed_()) {
-	    chkout_("DSKXSI", (ftnlen)6);
+	namfrm_(__global_state, fixref, &__state->fixfid, fixref_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DSKXSI", (ftnlen)6);
 	    return 0;
 	}
 	if (__state->fixfid == 0) {
-	    setmsg_("Reference frame # is not recognized by the SPICE frame "
-		    "subsystem. Possibly a required frame definition kernel h"
-		    "as not been loaded.", (ftnlen)130);
-	    errch_("#", fixref, (ftnlen)1, fixref_len);
-	    sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	    chkout_("DSKXSI", (ftnlen)6);
+	    setmsg_(__global_state, "Reference frame # is not recognized by "
+		    "the SPICE frame subsystem. Possibly a required frame def"
+		    "inition kernel has not been loaded.", (ftnlen)130);
+	    errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	    sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	    chkout_(__global_state, "DSKXSI", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Determine the attributes of the frame designated by FIXREF. */
 
-	frinfo_(&__state->fixfid, &fxcent, &fxclss, &fxtpid, &frmfnd);
-	if (failed_()) {
-	    chkout_("DSKXSI", (ftnlen)6);
+	frinfo_(__global_state, &__state->fixfid, &fxcent, &fxclss, &fxtpid, &
+		frmfnd);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DSKXSI", (ftnlen)6);
 	    return 0;
 	}
 	if (! frmfnd) {
-	    setmsg_("Attributes for reference frame # could not be obtained "
-		    "from the SPICE frame subsystem. Possibly a required fram"
-		    "e definition kernel has not been loaded.", (ftnlen)151);
-	    errch_("#", fixref, (ftnlen)1, fixref_len);
-	    sigerr_("SPICE(NOFRAMEINFO)", (ftnlen)18);
-	    chkout_("DSKXSI", (ftnlen)6);
+	    setmsg_(__global_state, "Attributes for reference frame # could "
+		    "not be obtained from the SPICE frame subsystem. Possibly"
+		    " a required frame definition kernel has not been loaded.",
+		     (ftnlen)151);
+	    errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	    sigerr_(__global_state, "SPICE(NOFRAMEINFO)", (ftnlen)18);
+	    chkout_(__global_state, "DSKXSI", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Make sure that FIXREF is centered at the target body's center. */
 
 	if (fxcent != __state->trgcde) {
-	    setmsg_("Reference frame # is not centered at the target body #."
-		    " The ID code of the frame center is #.", (ftnlen)93);
-	    errch_("#", fixref, (ftnlen)1, fixref_len);
-	    errch_("#", target, (ftnlen)1, target_len);
-	    errint_("#", &fxcent, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	    chkout_("DSKXSI", (ftnlen)6);
+	    setmsg_(__global_state, "Reference frame # is not centered at th"
+		    "e target body #. The ID code of the frame center is #.", (
+		    ftnlen)93);
+	    errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	    errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	    errint_(__global_state, "#", &fxcent, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	    chkout_(__global_state, "DSKXSI", (ftnlen)6);
 	    return 0;
 	}
 
 /*        We have a valid frame at this point. Save the name. */
 
 	__state->first = FALSE_;
-	s_copy(__state->prvfrm, fixref, (ftnlen)32, fixref_len);
+	s_copy(&__global_state->f2c, __state->prvfrm, fixref, (ftnlen)32, 
+		fixref_len);
 
 /*        Update the previous target ID code as well. */
 
@@ -1371,9 +1377,10 @@ static dskxsi_state_t* get_dskxsi_state() {
 
 /*     Perform the intercept computation. */
 
-    zzsbfxri_(&__state->trgcde, nsurf, srflst, et, &__state->fixfid, vertex, 
-	    raydir, xpt, handle, dladsc, dskdsc, dc, ic, found);
-    chkout_("DSKXSI", (ftnlen)6);
+    zzsbfxri_(__global_state, &__state->trgcde, nsurf, srflst, et, &
+	    __state->fixfid, vertex, raydir, xpt, handle, dladsc, dskdsc, dc, 
+	    ic, found);
+    chkout_(__global_state, "DSKXSI", (ftnlen)6);
     return 0;
 } /* dskxsi_ */
 

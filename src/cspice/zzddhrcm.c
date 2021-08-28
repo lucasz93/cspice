@@ -8,24 +8,24 @@
 
 
 typedef int zzddhrcm_state_t;
-static zzddhrcm_state_t* get_zzddhrcm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzddhrcm_state_t* get_zzddhrcm_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZDDHRCM ( Private --- DDH Request Count ) */
-/* Subroutine */ int zzddhrcm_(integer *nut, integer *utcst, integer *reqcnt)
+/* Subroutine */ int zzddhrcm_(cspice_t* __global_state, integer *nut, 
+	integer *utcst, integer *reqcnt)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Local variables */
     integer i__;
-    extern integer intmax_(void);
+    extern integer intmax_(cspice_t*);
 
 
     /* Module state */
-    zzddhrcm_state_t* __state = get_zzddhrcm_state();
+    zzddhrcm_state_t* __state = get_zzddhrcm_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -164,8 +164,8 @@ static zzddhrcm_state_t* get_zzddhrcm_state() {
 /*     Check to see if REQCNT is INTMAX, otherwise just increment */
 /*     REQCNT. */
 
-    if (*reqcnt == intmax_()) {
-	*reqcnt = intmax_() / 2 + 1;
+    if (*reqcnt == intmax_(__global_state)) {
+	*reqcnt = intmax_(__global_state) / 2 + 1;
 	i__1 = *nut;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */

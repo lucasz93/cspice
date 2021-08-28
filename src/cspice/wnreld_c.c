@@ -273,7 +273,7 @@
    {
       return ( SPICEFALSE );
    }
-   chkin_c ( "wnreld_c" );
+   chkin_c ( naif_state, "wnreld_c" );
 
 
    /*

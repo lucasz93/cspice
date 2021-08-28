@@ -8,42 +8,43 @@
 
 
 typedef int inssub_state_t;
-static inssub_state_t* get_inssub_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline inssub_state_t* get_inssub_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      INSSUB ( Insert a substring ) */
-/* Subroutine */ int inssub_(char *in, char *sub, integer *loc, char *out, 
-	ftnlen in_len, ftnlen sub_len, ftnlen out_len)
+/* Subroutine */ int inssub_(cspice_t* __global_state, char *in, char *sub, 
+	integer *loc, char *out, ftnlen in_len, ftnlen sub_len, ftnlen 
+	out_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     logical same;
     integer from;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer inlen;
     integer nmove;
     integer to;
     integer subend;
     integer sublen;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer outlen;
     char chr[1];
 
 
     /* Module state */
-    inssub_state_t* __state = get_inssub_state();
+    inssub_state_t* __state = get_inssub_state(__global_state);
 /* $ Abstract */
 
 /*     Insert a substring into a character string at a specified */
@@ -235,19 +236,19 @@ static inssub_state_t* get_inssub_state() {
 /*     Capture the lengths of the input, output, and substitution */
 /*     strings. */
 
-    inlen = i_len(in, in_len);
-    outlen = i_len(out, out_len);
-    sublen = i_len(sub, sub_len);
+    inlen = i_len(&__global_state->f2c, in, in_len);
+    outlen = i_len(&__global_state->f2c, out, out_len);
+    sublen = i_len(&__global_state->f2c, sub, sub_len);
 
 /*     If insertion occurs before the beginning of the string */
 /*     or after INLEN + 1, signal an error. */
 
     if (*loc < 1 || *loc > inlen + 1) {
-	chkin_("INSSUB", (ftnlen)6);
-	setmsg_("Location was *.", (ftnlen)15);
-	errint_("*", loc, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("INSSUB", (ftnlen)6);
+	chkin_(__global_state, "INSSUB", (ftnlen)6);
+	setmsg_(__global_state, "Location was *.", (ftnlen)15);
+	errint_(__global_state, "*", loc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "INSSUB", (ftnlen)6);
 	return 0;
     }
 
@@ -257,10 +258,10 @@ static inssub_state_t* get_inssub_state() {
 /*     is not needed in this cause and could cause a run-time error if */
 /*     OUT and IN refer to the same memory. */
 
-    same = s_cmp(out, in, out_len, in_len) == 0;
+    same = s_cmp(&__global_state->f2c, out, in, out_len, in_len) == 0;
     if (*loc > outlen) {
 	if (! same) {
-	    s_copy(out, in, out_len, in_len);
+	    s_copy(&__global_state->f2c, out, in, out_len, in_len);
 	}
 	return 0;
     }
@@ -284,7 +285,7 @@ static inssub_state_t* get_inssub_state() {
 /*        Again, do the assignment only if it's required. */
 
 	if (! same) {
-	    s_copy(out, in, *loc - 1, in_len);
+	    s_copy(&__global_state->f2c, out, in, *loc - 1, in_len);
 	}
     }
 
@@ -307,13 +308,15 @@ static inssub_state_t* get_inssub_state() {
 
 /*     And the new word is dropped into the middle. */
 
-    s_copy(out + (*loc - 1), sub, min(subend,outlen) - (*loc - 1), sub_len);
+    s_copy(&__global_state->f2c, out + (*loc - 1), sub, min(subend,outlen) - (
+	    *loc - 1), sub_len);
 
 /*     Blank-pad the output string if necessary. */
 
     if (outlen > inlen + sublen) {
 	i__1 = inlen + sublen;
-	s_copy(out + i__1, " ", out_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, out + i__1, " ", out_len - i__1, (ftnlen)
+		1);
     }
     return 0;
 } /* inssub_ */

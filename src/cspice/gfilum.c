@@ -8,8 +8,7 @@
 
 
 extern gfilum_init_t __gfilum_init;
-static gfilum_state_t* get_gfilum_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gfilum_state_t* get_gfilum_state(cspice_t* state) {
 	if (!state->gfilum)
 		state->gfilum = __cspice_allocate_module(sizeof(
 	gfilum_state_t), &__gfilum_init, sizeof(__gfilum_init));
@@ -18,56 +17,58 @@ static gfilum_state_t* get_gfilum_state() {
 }
 
 /* $Procedure GFILUM ( GF, illumination angle search ) */
-/* Subroutine */ int gfilum_(char *method, char *angtyp, char *target, char *
-	illmn, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, 
-	char *relate, doublereal *refval, doublereal *adjust, doublereal *
-	step, doublereal *cnfine, integer *mw, integer *nw, doublereal *work, 
-	doublereal *result, ftnlen method_len, ftnlen angtyp_len, ftnlen 
-	target_len, ftnlen illmn_len, ftnlen fixref_len, ftnlen abcorr_len, 
-	ftnlen obsrvr_len, ftnlen relate_len)
+/* Subroutine */ int gfilum_(cspice_t* __global_state, char *method, char *
+	angtyp, char *target, char *illmn, char *fixref, char *abcorr, char *
+	obsrvr, doublereal *spoint, char *relate, doublereal *refval, 
+	doublereal *adjust, doublereal *step, doublereal *cnfine, integer *mw,
+	 integer *nw, doublereal *work, doublereal *result, ftnlen method_len,
+	 ftnlen angtyp_len, ftnlen target_len, ftnlen illmn_len, ftnlen 
+	fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen relate_len)
 {
     /* System generated locals */
     integer work_dim1, work_offset, i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern integer sized_(doublereal *);
-    extern logical gfbail_();
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern logical gfbail_(cspice_t*);
     logical ok;
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int gfrefn_();
-    extern /* Subroutine */ int gfrepi_();
-    extern logical return_(void);
-    extern /* Subroutine */ int gfrepu_();
-    extern /* Subroutine */ int gfrepf_();
-    extern /* Subroutine */ int gfstep_();
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int gfrefn_(cspice_t*);
+    extern /* Subroutine */ int gfrepi_(cspice_t*);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int gfrepu_(cspice_t*);
+    extern /* Subroutine */ int gfrepf_(cspice_t*);
+    extern /* Subroutine */ int gfstep_(cspice_t*);
     char qcpars[80*8];
     char qpnams[80*8];
     doublereal qdpars[8];
     integer qipars[8];
     logical qlpars[8];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int gfsstp_(doublereal *);
-    extern /* Subroutine */ int gfevnt_(U_fp, U_fp, char *, integer *, char *,
-	     char *, doublereal *, integer *, logical *, char *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, logical *, U_fp, U_fp, 
-	    U_fp, integer *, integer *, doublereal *, logical *, L_fp, 
-	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int gfsstp_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int gfevnt_(cspice_t*, U_fp, U_fp, char *, 
+	    integer *, char *, char *, doublereal *, integer *, logical *, 
+	    char *, doublereal *, doublereal *, doublereal *, doublereal *, 
+	    logical *, U_fp, U_fp, U_fp, integer *, integer *, doublereal *, 
+	    logical *, L_fp, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen);
     doublereal tol;
-    extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
-	    doublereal *);
+    extern /* Subroutine */ int zzholdd_(cspice_t*, integer *, integer *, 
+	    logical *, doublereal *);
 
 
     /* Module state */
-    gfilum_state_t* __state = get_gfilum_state();
+    gfilum_state_t* __state = get_gfilum_state(__global_state);
 /* $ Abstract */
 
 /*     Determine time intervals over which a specified constraint on */
@@ -1685,79 +1686,91 @@ static gfilum_state_t* get_gfilum_state() {
     work_offset = -5 + work_dim1 * 1;
 
     /* Function Body */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("GFILUM", (ftnlen)6);
+    chkin_(__global_state, "GFILUM", (ftnlen)6);
 
 /*     Check the result window's size. */
 
-    if (sized_(result) < 2) {
-	setmsg_("Result window size must be at least 2 but was #.", (ftnlen)
-		48);
-	i__1 = sized_(result);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
-	chkout_("GFILUM", (ftnlen)6);
+    if (sized_(__global_state, result) < 2) {
+	setmsg_(__global_state, "Result window size must be at least 2 but w"
+		"as #.", (ftnlen)48);
+	i__1 = sized_(__global_state, result);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDIMENSION)", (ftnlen)23);
+	chkout_(__global_state, "GFILUM", (ftnlen)6);
 	return 0;
     }
 
 /*     Check the workspace window dimensions. */
 
     if (*mw < 2) {
-	setmsg_("Workspace window size was #; size must be at least 2.", (
-		ftnlen)53);
-	errint_("#", mw, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
-	chkout_("GFILUM", (ftnlen)6);
+	setmsg_(__global_state, "Workspace window size was #; size must be a"
+		"t least 2.", (ftnlen)53);
+	errint_(__global_state, "#", mw, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDIMENSION)", (ftnlen)23);
+	chkout_(__global_state, "GFILUM", (ftnlen)6);
 	return 0;
     }
     if (*nw < 5) {
-	setmsg_("Workspace window count was #; count must be at least #.", (
-		ftnlen)55);
-	errint_("#", nw, (ftnlen)1);
-	errint_("#", &__state->c__5, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
-	chkout_("GFILUM", (ftnlen)6);
+	setmsg_(__global_state, "Workspace window count was #; count must be"
+		" at least #.", (ftnlen)55);
+	errint_(__global_state, "#", nw, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__5, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDIMENSION)", (ftnlen)23);
+	chkout_(__global_state, "GFILUM", (ftnlen)6);
 	return 0;
     }
 
 /*     Set up a call to GFEVNT, which will handle the search. */
 
-    s_copy(qpnams, "TARGET", (ftnlen)80, (ftnlen)6);
-    s_copy(qcpars, target, (ftnlen)80, target_len);
-    s_copy(qpnams + 80, "ILLUM", (ftnlen)80, (ftnlen)5);
-    s_copy(qcpars + 80, illmn, (ftnlen)80, illmn_len);
-    s_copy(qpnams + 160, "OBSERVER", (ftnlen)80, (ftnlen)8);
-    s_copy(qcpars + 160, obsrvr, (ftnlen)80, obsrvr_len);
-    s_copy(qpnams + 240, "ABCORR", (ftnlen)80, (ftnlen)6);
-    s_copy(qcpars + 240, abcorr, (ftnlen)80, abcorr_len);
-    s_copy(qpnams + 320, "REFERENCE FRAME", (ftnlen)80, (ftnlen)15);
-    s_copy(qcpars + 320, fixref, (ftnlen)80, fixref_len);
-    s_copy(qpnams + 400, "ANGTYP", (ftnlen)80, (ftnlen)6);
-    s_copy(qcpars + 400, angtyp, (ftnlen)80, angtyp_len);
-    s_copy(qpnams + 480, "METHOD", (ftnlen)80, (ftnlen)6);
-    s_copy(qcpars + 480, method, (ftnlen)80, method_len);
+    s_copy(&__global_state->f2c, qpnams, "TARGET", (ftnlen)80, (ftnlen)6);
+    s_copy(&__global_state->f2c, qcpars, target, (ftnlen)80, target_len);
+    s_copy(&__global_state->f2c, qpnams + 80, "ILLUM", (ftnlen)80, (ftnlen)5);
+    s_copy(&__global_state->f2c, qcpars + 80, illmn, (ftnlen)80, illmn_len);
+    s_copy(&__global_state->f2c, qpnams + 160, "OBSERVER", (ftnlen)80, (
+	    ftnlen)8);
+    s_copy(&__global_state->f2c, qcpars + 160, obsrvr, (ftnlen)80, obsrvr_len)
+	    ;
+    s_copy(&__global_state->f2c, qpnams + 240, "ABCORR", (ftnlen)80, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, qcpars + 240, abcorr, (ftnlen)80, abcorr_len)
+	    ;
+    s_copy(&__global_state->f2c, qpnams + 320, "REFERENCE FRAME", (ftnlen)80, 
+	    (ftnlen)15);
+    s_copy(&__global_state->f2c, qcpars + 320, fixref, (ftnlen)80, fixref_len)
+	    ;
+    s_copy(&__global_state->f2c, qpnams + 400, "ANGTYP", (ftnlen)80, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, qcpars + 400, angtyp, (ftnlen)80, angtyp_len)
+	    ;
+    s_copy(&__global_state->f2c, qpnams + 480, "METHOD", (ftnlen)80, (ftnlen)
+	    6);
+    s_copy(&__global_state->f2c, qcpars + 480, method, (ftnlen)80, method_len)
+	    ;
 
 /*     Copy SPOINT to elements 1-3 of the QDPARS array. */
 
-    s_copy(qpnams + 560, "SPOINT", (ftnlen)80, (ftnlen)6);
-    moved_(spoint, &__state->c__3, qdpars);
+    s_copy(&__global_state->f2c, qpnams + 560, "SPOINT", (ftnlen)80, (ftnlen)
+	    6);
+    moved_(__global_state, spoint, &__state->c__3, qdpars);
 
 /*     Set the step size. */
 
     if (*step <= 0.) {
-	setmsg_("Step size was #; step size must be positive.", (ftnlen)44);
-	errdp_("#", step, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSTEP)", (ftnlen)18);
-	chkout_("GFILUM", (ftnlen)6);
+	setmsg_(__global_state, "Step size was #; step size must be positive."
+		, (ftnlen)44);
+	errdp_(__global_state, "#", step, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSTEP)", (ftnlen)18);
+	chkout_(__global_state, "GFILUM", (ftnlen)6);
 	return 0;
     }
-    gfsstp_(step);
+    gfsstp_(__global_state, step);
 
 /*     Retrieve the convergence tolerance, if set. */
 
-    zzholdd_(&__state->c_n1, &__state->c__3, &ok, &tol);
+    zzholdd_(__global_state, &__state->c_n1, &__state->c__3, &ok, &tol);
 
 /*     Use the default value CNVTOL if there's no stored tolerance */
 /*     value. */
@@ -1768,19 +1781,19 @@ static gfilum_state_t* get_gfilum_state() {
 
 /*     Initialize the RESULT window. */
 
-    scardd_(&__state->c__0, result);
+    scardd_(__global_state, &__state->c__0, result);
 
 /*     Look for solutions. */
 
 /*     Progress report and bail-out options are set to .FALSE. */
 
-    gfevnt_((U_fp)gfstep_, (U_fp)gfrefn_, "ILLUMINATION ANGLE", &
-	    __state->c__8, qpnams, qcpars, qdpars, qipars, qlpars, relate, 
+    gfevnt_(__global_state, (U_fp)gfstep_, (U_fp)gfrefn_, "ILLUMINATION ANGLE"
+	    , &__state->c__8, qpnams, qcpars, qdpars, qipars, qlpars, relate, 
 	    refval, &tol, adjust, cnfine, &__state->c_false, (U_fp)gfrepi_, (
 	    U_fp)gfrepu_, (U_fp)gfrepf_, mw, &__state->c__5, work, &
 	    __state->c_false, (L_fp)gfbail_, result, (ftnlen)18, (ftnlen)80, (
 	    ftnlen)80, relate_len);
-    chkout_("GFILUM", (ftnlen)6);
+    chkout_(__global_state, "GFILUM", (ftnlen)6);
     return 0;
 } /* gfilum_ */
 

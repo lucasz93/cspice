@@ -612,7 +612,7 @@
    {
       return;
    }
-   chkin_c ( "fovtrg_c" );
+   chkin_c ( naif_state, "fovtrg_c" );
 
    /*
    Check the input strings to make sure the pointers are non-null

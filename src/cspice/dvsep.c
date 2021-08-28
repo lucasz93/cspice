@@ -8,37 +8,36 @@
 
 
 typedef int dvsep_state_t;
-static dvsep_state_t* get_dvsep_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dvsep_state_t* get_dvsep_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DVSEP ( Derivative of separation angle ) */
-doublereal dvsep_(doublereal *s1, doublereal *s2)
+doublereal dvsep_(cspice_t* __global_state, doublereal *s1, doublereal *s2)
 {
     /* System generated locals */
     doublereal ret_val, d__1;
 
     /* Local variables */
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     doublereal numr;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal denom;
-    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
-    extern doublereal zzdiv_(doublereal *, doublereal *);
-    extern logical vzero_(doublereal *);
+    extern /* Subroutine */ int dvhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern doublereal zzdiv_(cspice_t*, doublereal *, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     doublereal u1[6];
     doublereal u2[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal pcross[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dvsep_state_t* __state = get_dvsep_state();
+    dvsep_state_t* __state = get_dvsep_state(__global_state);
 /* $ Abstract */
 
 /*     Calculate the time derivative of the separation angle between */
@@ -304,29 +303,29 @@ doublereal dvsep_(doublereal *s1, doublereal *s2)
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0.;
 	return ret_val;
     }
-    chkin_("DVSEP", (ftnlen)5);
+    chkin_(__global_state, "DVSEP", (ftnlen)5);
 
 /*     Compute the unit vectors and corresponding time derivatives */
 /*     for the input state vectors. */
 
-    dvhat_(s1, u1);
-    dvhat_(s2, u2);
+    dvhat_(__global_state, s1, u1);
+    dvhat_(__global_state, s2, u2);
 
 /*     Calculate the cross product vector of U1 and U2. As both vectors */
 /*     have magnitude one, the magnitude of the cross product equals */
 /*     sin(THETA), with THETA the angle between S1 and S2. */
 
-    vcrss_(u1, u2, pcross);
+    vcrss_(__global_state, u1, u2, pcross);
 
 /*     Handle the parallel and anti-parallel cases. */
 
-    if (vzero_(pcross)) {
+    if (vzero_(__global_state, pcross)) {
 	ret_val = 0.;
-	chkout_("DVSEP", (ftnlen)5);
+	chkout_(__global_state, "DVSEP", (ftnlen)5);
 	return ret_val;
     }
 
@@ -336,19 +335,20 @@ doublereal dvsep_(doublereal *s1, doublereal *s2)
 
 /*     Separately calculate the numerator and denominator. */
 
-    numr = vdot_(u1, &u2[3]) + vdot_(&u1[3], u2);
-    denom = vnorm_(pcross);
+    numr = vdot_(__global_state, u1, &u2[3]) + vdot_(__global_state, &u1[3], 
+	    u2);
+    denom = vnorm_(__global_state, pcross);
 
 /*     ZZDIV checks for over- or underflow. Finite precision */
 /*     arithmetic is a pain. */
 
     d__1 = -numr;
-    ret_val = zzdiv_(&d__1, &denom);
+    ret_val = zzdiv_(__global_state, &d__1, &denom);
 
 /*     Return, the expectation exists that a FAILED() call */
 /*     follows the DVSEP call. */
 
-    chkout_("DVSEP", (ftnlen)5);
+    chkout_(__global_state, "DVSEP", (ftnlen)5);
     return ret_val;
 } /* dvsep_ */
 

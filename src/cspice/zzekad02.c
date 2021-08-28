@@ -8,8 +8,7 @@
 
 
 extern zzekad02_init_t __zzekad02_init;
-static zzekad02_state_t* get_zzekad02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekad02_state_t* get_zzekad02_state(cspice_t* state) {
 	if (!state->zzekad02)
 		state->zzekad02 = __cspice_allocate_module(sizeof(
 	zzekad02_state_t), &__zzekad02_init, sizeof(__zzekad02_init));
@@ -18,49 +17,51 @@ static zzekad02_state_t* get_zzekad02_state() {
 }
 
 /* $Procedure     ZZEKAD02 ( EK, add data to class 2 column ) */
-/* Subroutine */ int zzekad02_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr, doublereal *dval, logical *isnull)
+/* Subroutine */ int zzekad02_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr, doublereal *dval, 
+	logical *isnull)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
-    extern /* Subroutine */ int zzekiid1_(integer *, integer *, integer *, 
-	    doublereal *, integer *, logical *);
-    extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekglnk_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekiid1_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, logical *);
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgbs_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekglnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekslnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer p;
     integer mbase;
     integer pbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
     integer ncols;
     integer itype;
     integer lastw;
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer colidx;
     integer datptr;
     integer nlinks;
     integer ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dasudd_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
-	    logical *, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasudd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int zzekaps_(cspice_t*, integer *, integer *, 
+	    integer *, logical *, integer *, integer *);
 
 
     /* Module state */
-    zzekad02_state_t* __state = get_zzekad02_state();
+    zzekad02_state_t* __state = get_zzekad02_state(__global_state);
 /* $ Abstract */
 
 /*     Add a column entry to a specified record in a class 2 column. */
@@ -774,12 +775,13 @@ static zzekad02_state_t* get_zzekad02_state() {
     ncols = segdsc[4];
     colidx = coldsc[8];
     if (colidx < 1 || colidx > ncols) {
-	chkin_("ZZEKAD02", (ftnlen)8);
-	setmsg_("Column index = #; valid range is 1:#.", (ftnlen)37);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &ncols, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKAD02", (ftnlen)8);
+	chkin_(__global_state, "ZZEKAD02", (ftnlen)8);
+	setmsg_(__global_state, "Column index = #; valid range is 1:#.", (
+		ftnlen)37);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &ncols, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKAD02", (ftnlen)8);
 	return 0;
     }
 
@@ -787,15 +789,15 @@ static zzekad02_state_t* get_zzekad02_state() {
 /*     in this column. */
 
     if (*isnull && coldsc[7] != 1) {
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKAD02", (ftnlen)8);
-	setmsg_("Column having index # in segment # does not allow nulls, bu"
-		"t a null value was supplied for the element in record #.", (
-		ftnlen)115);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	sigerr_("SPICE(BADATTRIBUTE)", (ftnlen)19);
-	chkout_("ZZEKAD02", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKAD02", (ftnlen)8);
+	setmsg_(__global_state, "Column having index # in segment # does not"
+		" allow nulls, but a null value was supplied for the element "
+		"in record #.", (ftnlen)115);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADATTRIBUTE)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKAD02", (ftnlen)8);
 	return 0;
     }
 
@@ -803,17 +805,17 @@ static zzekad02_state_t* get_zzekad02_state() {
 /*     make sure the column entry we're writing to is uninitialized. */
 
     ptrloc = *recptr + 2 + colidx;
-    dasrdi_(handle, &ptrloc, &ptrloc, &datptr);
+    dasrdi_(__global_state, handle, &ptrloc, &ptrloc, &datptr);
     if (datptr != -1 && datptr != -3) {
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKAD02", (ftnlen)8);
-	setmsg_("Column having index # in segment # has non-empty element in"
-		" record #.", (ftnlen)69);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	sigerr_("SPICE(NONEMPTYENTRY)", (ftnlen)20);
-	chkout_("ZZEKAD02", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKAD02", (ftnlen)8);
+	setmsg_(__global_state, "Column having index # in segment # has non-"
+		"empty element in record #.", (ftnlen)69);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONEMPTYENTRY)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKAD02", (ftnlen)8);
 	return 0;
     }
     if (*isnull) {
@@ -821,7 +823,7 @@ static zzekad02_state_t* get_zzekad02_state() {
 /*        All we need do is set the data pointer.  The segment's */
 /*        metadata are not affected. */
 
-	dasudi_(handle, &ptrloc, &ptrloc, &__state->c_n2);
+	dasudi_(__global_state, handle, &ptrloc, &ptrloc, &__state->c_n2);
     } else {
 
 /*        Decide where to write the data value.  If there's room left */
@@ -835,13 +837,13 @@ static zzekad02_state_t* get_zzekad02_state() {
 /*           location. */
 
 	    p = segdsc[16];
-	    zzekpgbs_(&__state->c__2, &p, &pbase);
+	    zzekpgbs_(__global_state, &__state->c__2, &p, &pbase);
 	    datptr = pbase + lastw + 1;
-	    dasudi_(handle, &ptrloc, &ptrloc, &datptr);
-	    dasudd_(handle, &datptr, &datptr, dval);
-	    zzekglnk_(handle, &__state->c__2, &p, &nlinks);
+	    dasudi_(__global_state, handle, &ptrloc, &ptrloc, &datptr);
+	    dasudd_(__global_state, handle, &datptr, &datptr, dval);
+	    zzekglnk_(__global_state, handle, &__state->c__2, &p, &nlinks);
 	    i__1 = nlinks + 1;
-	    zzekslnk_(handle, &__state->c__2, &p, &i__1);
+	    zzekslnk_(__global_state, handle, &__state->c__2, &p, &i__1);
 
 /*           The last double precision word in use must be updated. */
 
@@ -851,15 +853,16 @@ static zzekad02_state_t* get_zzekad02_state() {
 /*           Allocate a data page.  Write the data value into the */
 /*           first word of the new page. */
 
-	    zzekaps_(handle, segdsc, &__state->c__2, &__state->c_false, &p, &
-		    pbase);
+	    zzekaps_(__global_state, handle, segdsc, &__state->c__2, &
+		    __state->c_false, &p, &pbase);
 	    i__1 = pbase + 1;
 	    i__2 = pbase + 1;
-	    dasudd_(handle, &i__1, &i__2, dval);
+	    dasudd_(__global_state, handle, &i__1, &i__2, dval);
 
 /*           The page containing the data item now has one link. */
 
-	    zzekslnk_(handle, &__state->c__2, &p, &__state->c__1);
+	    zzekslnk_(__global_state, handle, &__state->c__2, &p, &
+		    __state->c__1);
 
 /*           The last d.p. page and word in use must be updated. */
 
@@ -869,7 +872,7 @@ static zzekad02_state_t* get_zzekad02_state() {
 /*           The record pointer must point to this data item. */
 
 	    i__1 = pbase + 1;
-	    dasudi_(handle, &ptrloc, &ptrloc, &i__1);
+	    dasudi_(__global_state, handle, &ptrloc, &ptrloc, &i__1);
 	}
     }
 
@@ -878,7 +881,7 @@ static zzekad02_state_t* get_zzekad02_state() {
     mbase = segdsc[2];
     i__1 = mbase + 1;
     i__2 = mbase + 24;
-    dasudi_(handle, &i__1, &i__2, segdsc);
+    dasudi_(__global_state, handle, &i__1, &i__2, segdsc);
 
 /*     If the column is indexed, we must update the index to account */
 /*     for the new element. */
@@ -893,16 +896,17 @@ static zzekad02_state_t* get_zzekad02_state() {
 /*           The column has a type 1 index.  Insert the record number */
 /*           of the current element at the appropriate location. */
 
-	    zzekiid1_(handle, segdsc, coldsc, dval, recptr, isnull);
+	    zzekiid1_(__global_state, handle, segdsc, coldsc, dval, recptr, 
+		    isnull);
 	} else {
-	    chkin_("ZZEKAD02", (ftnlen)8);
-	    setmsg_("Column having index # in segment # has index type #.", (
-		    ftnlen)52);
-	    errint_("#", &colidx, (ftnlen)1);
-	    errint_("#", &segdsc[1], (ftnlen)1);
-	    errint_("#", &itype, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	    chkout_("ZZEKAD02", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKAD02", (ftnlen)8);
+	    setmsg_(__global_state, "Column having index # in segment # has "
+		    "index type #.", (ftnlen)52);
+	    errint_(__global_state, "#", &colidx, (ftnlen)1);
+	    errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	    errint_(__global_state, "#", &itype, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	    chkout_(__global_state, "ZZEKAD02", (ftnlen)8);
 	    return 0;
 	}
     }

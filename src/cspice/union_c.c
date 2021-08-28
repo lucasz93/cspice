@@ -264,7 +264,7 @@
       return;
    }
 
-   chkin_c ( "union_c" );
+   chkin_c ( naif_state, "union_c" );
 
    /*
    Make sure data types match. 

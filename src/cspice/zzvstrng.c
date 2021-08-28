@@ -8,8 +8,7 @@
 
 
 extern zzvstrng_init_t __zzvstrng_init;
-static zzvstrng_state_t* get_zzvstrng_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzvstrng_state_t* get_zzvstrng_state(cspice_t* state) {
 	if (!state->zzvstrng)
 		state->zzvstrng = __cspice_allocate_module(sizeof(
 	zzvstrng_state_t), &__zzvstrng_init, sizeof(__zzvstrng_init));
@@ -18,9 +17,10 @@ static zzvstrng_state_t* get_zzvstrng_state() {
 }
 
 /* $Procedure       ZZVSTRNG ( Virtual String ) */
-/* Subroutine */ int zzvstrng_0_(int n__, doublereal *x, char *fill, integer *
-	from, integer *to, logical *rnd, integer *expont, char *substr, 
-	logical *did, ftnlen fill_len, ftnlen substr_len)
+/* Subroutine */ int zzvstrng_0_(cspice_t* __global_state, int n__, 
+	doublereal *x, char *fill, integer *from, integer *to, logical *rnd, 
+	integer *expont, char *substr, logical *did, ftnlen fill_len, ftnlen 
+	substr_len)
 {
     /* Initialized data */
 
@@ -29,16 +29,16 @@ static zzvstrng_state_t* get_zzvstrng_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    logical l_ge(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    logical l_ge(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int dpstr_(doublereal *, integer *, char *, 
-	    ftnlen);
+    extern /* Subroutine */ int dpstr_(cspice_t*, doublereal *, integer *, 
+	    char *, ftnlen);
 
     /* Module state */
-    zzvstrng_state_t* __state = get_zzvstrng_state();
+    zzvstrng_state_t* __state = get_zzvstrng_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -357,7 +357,7 @@ L_zzvststr:
 
 /* -& */
     *(unsigned char *)&__state->myfill[0] = *(unsigned char *)fill;
-    dpstr_(x, &__state->c__14, __state->string, (ftnlen)30);
+    dpstr_(__global_state, x, &__state->c__14, __state->string, (ftnlen)30);
 
 /*     Parse the exponent, string looks like the pattern presented */
 /*     below: */
@@ -590,13 +590,14 @@ L_zzvsbstr:
 /*     significant portion of SUBSTR that we will manipulate. */
 
     __state->j = *to - *from + 1;
-    __state->lsub = i_len(substr, substr_len);
+    __state->lsub = i_len(&__global_state->f2c, substr, substr_len);
 
 /*     Blank pad to the right of J (if there's anything to pad). */
 
     if (__state->j < __state->lsub) {
 	i__1 = __state->j;
-	s_copy(substr + i__1, " ", substr_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, substr + i__1, " ", substr_len - i__1, (
+		ftnlen)1);
     }
 
 /*     If we need to round the output string, locate the first numeric */
@@ -629,12 +630,13 @@ L_zzvsbstr:
 		    __state->string[1];
 	} else if (__state->i__ < 14) {
 	    i__1 = __state->i__ + 2;
-	    s_copy(__state->letter, __state->string + i__1, (ftnlen)1, 
-		    __state->i__ + 3 - i__1);
+	    s_copy(&__global_state->f2c, __state->letter, __state->string + 
+		    i__1, (ftnlen)1, __state->i__ + 3 - i__1);
 	} else {
 	    *(unsigned char *)__state->letter = '0';
 	}
-	__state->incr = l_ge(__state->letter, "5", (ftnlen)1, (ftnlen)1);
+	__state->incr = l_ge(&__global_state->f2c, __state->letter, "5", (
+		ftnlen)1, (ftnlen)1);
     } else {
 	__state->incr = FALSE_;
     }
@@ -708,8 +710,8 @@ L_zzvsbstr:
 /*              letter from STRING. */
 
 		i__2 = __state->i__ + 2;
-		s_copy(__state->letter, __state->string + i__2, (ftnlen)1, 
-			__state->i__ + 3 - i__2);
+		s_copy(&__global_state->f2c, __state->letter, __state->string 
+			+ i__2, (ftnlen)1, __state->i__ + 3 - i__2);
 		if (__state->incr) {
 		    __state->value = *(unsigned char *)__state->letter - 
 			    __state->code0 + 1;
@@ -736,23 +738,24 @@ L_zzvsbstr:
     return 0;
 } /* zzvstrng_ */
 
-/* Subroutine */ int zzvstrng_(doublereal *x, char *fill, integer *from, 
-	integer *to, logical *rnd, integer *expont, char *substr, logical *
-	did, ftnlen fill_len, ftnlen substr_len)
+/* Subroutine */ int zzvstrng_(cspice_t* __global_state, doublereal *x, char *
+	fill, integer *from, integer *to, logical *rnd, integer *expont, char 
+	*substr, logical *did, ftnlen fill_len, ftnlen substr_len)
 {
     return zzvstrng_0_(0, x, fill, from, to, rnd, expont, substr, did, 
 	    fill_len, substr_len);
     }
 
-/* Subroutine */ int zzvststr_(doublereal *x, char *fill, integer *expont, 
-	ftnlen fill_len)
+/* Subroutine */ int zzvststr_(cspice_t* __global_state, doublereal *x, char *
+	fill, integer *expont, ftnlen fill_len)
 {
     return zzvstrng_0_(1, x, fill, (integer *)0, (integer *)0, (logical *)0, 
 	    expont, (char *)0, (logical *)0, fill_len, (ftnint)0);
     }
 
-/* Subroutine */ int zzvsbstr_(integer *from, integer *to, logical *rnd, char 
-	*substr, logical *did, ftnlen substr_len)
+/* Subroutine */ int zzvsbstr_(cspice_t* __global_state, integer *from, 
+	integer *to, logical *rnd, char *substr, logical *did, ftnlen 
+	substr_len)
 {
     return zzvstrng_0_(2, (doublereal *)0, (char *)0, from, to, rnd, (integer 
 	    *)0, substr, did, (ftnint)0, substr_len);

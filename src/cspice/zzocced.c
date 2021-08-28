@@ -8,8 +8,7 @@
 
 
 extern zzocced_init_t __zzocced_init;
-static zzocced_state_t* get_zzocced_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzocced_state_t* get_zzocced_state(cspice_t* state) {
 	if (!state->zzocced)
 		state->zzocced = __cspice_allocate_module(sizeof(
 	zzocced_state_t), &__zzocced_init, sizeof(__zzocced_init));
@@ -18,77 +17,80 @@ static zzocced_state_t* get_zzocced_state() {
 }
 
 /* $Procedure      ZZOCCED ( Occultation of ellipsoidal bodies ) */
-integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1, 
-	doublereal *centr2, doublereal *semax2)
+integer zzocced_(cspice_t* __global_state, doublereal *viewpt, doublereal *
+	centr1, doublereal *semax1, doublereal *centr2, doublereal *semax2)
 {
     /* System generated locals */
     integer ret_val, i__1, i__2, i__3, i__4, i__5, i__6;
     doublereal d__1, d__2, d__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double atan2(doublereal, doublereal), cos(doublereal), sin(doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double atan2(f2c_state_t*, doublereal, doublereal), cos(f2c_state_t*, 
+	    doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal bigr;
     doublereal limb[9];
     doublereal dist[2];
     doublereal rmat[18]	/* was [3][3][2] */;
     doublereal view[3];
     doublereal ctrs[6]	/* was [3][2] */;
-    extern doublereal vsep_(doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
     doublereal tilt;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal tpos[6]	/* was [3][2] */;
-    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int mtxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal t2sep;
-    extern /* Subroutine */ int zzasryel_(char *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzasryel_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
     integer i__;
     doublereal r__[6]	/* was [3][2] */;
     integer s;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal level;
     doublereal xlimb[9];
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal xasep;
     doublereal minpt[3];
     doublereal t12pos[3];
-    extern doublereal vdist_(doublereal *, doublereal *);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
     doublereal maxpt[3];
     doublereal xdist[2];
-    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical isrot_(doublereal *, doublereal *, doublereal *);
-    extern doublereal vnorm_(doublereal *);
+    extern /* Subroutine */ int xpose_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical isrot_(cspice_t*, doublereal *, doublereal *, doublereal *)
+	    ;
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal xview[3];
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int vprjp_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vprjp_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal smlvu[3];
     doublereal xtpos[6]	/* was [3][2] */;
-    extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int cgv2el_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int el2cgv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int cgv2el_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal t1opos[3];
-    extern /* Subroutine */ int psv2pl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern doublereal pi_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int edlimb_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int psv2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern doublereal pi_(cspice_t*);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int edlimb_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
     doublereal lmbmaj[3];
-    extern doublereal dasine_(doublereal *, doublereal *);
-    extern doublereal halfpi_(void);
+    extern doublereal dasine_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal halfpi_(cspice_t*);
     doublereal angcmp;
     doublereal majlen;
     integer bigidx;
@@ -105,8 +107,8 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
     doublereal lmbctr[3];
     doublereal sclmat[9]	/* was [3][3] */;
     doublereal smlmaj[3];
-    extern /* Subroutine */ int saelgv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int saelgv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal tmpmaj[3];
     doublereal raydir[3];
     doublereal minsep;
@@ -127,25 +129,26 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
     integer smlidx;
     doublereal ttdist;
     logical sfront;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal vpproj[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
     doublereal xsmlvu[3];
     doublereal xvwtrg[3];
-    extern doublereal det_(doublereal *);
+    extern doublereal det_(cspice_t*, doublereal *);
     doublereal vph;
-    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
-	    ;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    zzocced_state_t* __state = get_zzocced_state();
+    zzocced_state_t* __state = get_zzocced_state(__global_state);
 /* $ Abstract */
 
 /*     Indicate whether one triaxial ellipsoid is occulted by another as */
@@ -701,49 +704,57 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return ret_val;
     }
-    chkin_("ZZOCCED", (ftnlen)7);
+    chkin_(__global_state, "ZZOCCED", (ftnlen)7);
 
 /*     Extract the radii of the targets from the semi-axis vectors. */
 /*     At the same time, create rotation matrices that map vectors */
 /*     from the principal axis frames of the targets to the base frame. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	unorm_(&semax1[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"semax1", i__1, "zzocced_", (ftnlen)587)], &rmat[(i__2 = (i__ 
-		+ 3) * 3 - 12) < 18 && 0 <= i__2 ? i__2 : s_rnge("rmat", i__2,
-		 "zzocced_", (ftnlen)587)], &r__[(i__3 = i__ - 1) < 6 && 0 <= 
-		i__3 ? i__3 : s_rnge("r", i__3, "zzocced_", (ftnlen)587)]);
-	unorm_(&semax2[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"semax2", i__1, "zzocced_", (ftnlen)588)], &rmat[(i__2 = (i__ 
-		+ 6) * 3 - 12) < 18 && 0 <= i__2 ? i__2 : s_rnge("rmat", i__2,
-		 "zzocced_", (ftnlen)588)], &r__[(i__3 = i__ + 2) < 6 && 0 <= 
-		i__3 ? i__3 : s_rnge("r", i__3, "zzocced_", (ftnlen)588)]);
+	unorm_(__global_state, &semax1[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ?
+		 i__1 : s_rnge(&__global_state->f2c, "semax1", i__1, "zzocce"
+		"d_", (ftnlen)587)], &rmat[(i__2 = (i__ + 3) * 3 - 12) < 18 && 
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "rmat", i__2, 
+		"zzocced_", (ftnlen)587)], &r__[(i__3 = i__ - 1) < 6 && 0 <= 
+		i__3 ? i__3 : s_rnge(&__global_state->f2c, "r", i__3, "zzocc"
+		"ed_", (ftnlen)587)]);
+	unorm_(__global_state, &semax2[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ?
+		 i__1 : s_rnge(&__global_state->f2c, "semax2", i__1, "zzocce"
+		"d_", (ftnlen)588)], &rmat[(i__2 = (i__ + 6) * 3 - 12) < 18 && 
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "rmat", i__2, 
+		"zzocced_", (ftnlen)588)], &r__[(i__3 = i__ + 2) < 6 && 0 <= 
+		i__3 ? i__3 : s_rnge(&__global_state->f2c, "r", i__3, "zzocc"
+		"ed_", (ftnlen)588)]);
     }
 
 /*     Find the minimum and maximum radii of both targets. */
 
     for (i__ = 1; i__ <= 2; ++i__) {
 /* Computing MIN */
-	d__1 = r__[(i__2 = i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge(
-		"r", i__2, "zzocced_", (ftnlen)596)], d__2 = r__[(i__3 = i__ *
-		 3 - 2) < 6 && 0 <= i__3 ? i__3 : s_rnge("r", i__3, "zzocced_"
-		, (ftnlen)596)], d__1 = min(d__1,d__2), d__2 = r__[(i__4 = 
-		i__ * 3 - 1) < 6 && 0 <= i__4 ? i__4 : s_rnge("r", i__4, 
-		"zzocced_", (ftnlen)596)];
-	minrad[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("minrad", 
-		i__1, "zzocced_", (ftnlen)596)] = min(d__1,d__2);
+	d__1 = r__[(i__2 = i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "r", i__2, "zzocced_", (ftnlen)596)], 
+		d__2 = r__[(i__3 = i__ * 3 - 2) < 6 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "r", i__3, "zzocced_", (ftnlen)
+		596)], d__1 = min(d__1,d__2), d__2 = r__[(i__4 = i__ * 3 - 1) 
+		< 6 && 0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c, "r", 
+		i__4, "zzocced_", (ftnlen)596)];
+	minrad[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "minrad", i__1, "zzocced_", (ftnlen)596)]
+		 = min(d__1,d__2);
 /* Computing MAX */
-	d__1 = r__[(i__2 = i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge(
-		"r", i__2, "zzocced_", (ftnlen)597)], d__2 = r__[(i__3 = i__ *
-		 3 - 2) < 6 && 0 <= i__3 ? i__3 : s_rnge("r", i__3, "zzocced_"
-		, (ftnlen)597)], d__1 = max(d__1,d__2), d__2 = r__[(i__4 = 
-		i__ * 3 - 1) < 6 && 0 <= i__4 ? i__4 : s_rnge("r", i__4, 
-		"zzocced_", (ftnlen)597)];
-	maxrad[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("maxrad", 
-		i__1, "zzocced_", (ftnlen)597)] = max(d__1,d__2);
+	d__1 = r__[(i__2 = i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "r", i__2, "zzocced_", (ftnlen)597)], 
+		d__2 = r__[(i__3 = i__ * 3 - 2) < 6 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "r", i__3, "zzocced_", (ftnlen)
+		597)], d__1 = max(d__1,d__2), d__2 = r__[(i__4 = i__ * 3 - 1) 
+		< 6 && 0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c, "r", 
+		i__4, "zzocced_", (ftnlen)597)];
+	maxrad[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "maxrad", i__1, "zzocced_", (ftnlen)597)]
+		 = max(d__1,d__2);
     }
 
 /*     Make sure the input target radii are positive.  We'll actually do */
@@ -751,36 +762,39 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*     errors at this point. */
 
     if (minrad[0] <= 0. || minrad[1] <= 0.) {
-	setmsg_("Minimum radii of bodies 1 and 2 are #, #. Target radii must"
-		" be positive.", (ftnlen)72);
-	errdp_("#", minrad, (ftnlen)1);
-	errdp_("#", &minrad[1], (ftnlen)1);
-	sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
-	chkout_("ZZOCCED", (ftnlen)7);
+	setmsg_(__global_state, "Minimum radii of bodies 1 and 2 are #, #. T"
+		"arget radii must be positive.", (ftnlen)72);
+	errdp_(__global_state, "#", minrad, (ftnlen)1);
+	errdp_(__global_state, "#", &minrad[1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADAXISLENGTH)", (ftnlen)20);
+	chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	return ret_val;
     }
 
 /*     Compute view point-to-target vectors and ranges for both */
 /*     target bodies. */
 
-    vequ_(centr1, ctrs);
-    vequ_(centr2, &ctrs[3]);
+    vequ_(__global_state, centr1, ctrs);
+    vequ_(__global_state, centr2, &ctrs[3]);
     for (i__ = 1; i__ <= 2; ++i__) {
-	vsub_(&ctrs[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : s_rnge(
-		"ctrs", i__1, "zzocced_", (ftnlen)626)], viewpt, &tpos[(i__2 =
-		 i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge("tpos", i__2, 
+	vsub_(__global_state, &ctrs[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? 
+		i__1 : s_rnge(&__global_state->f2c, "ctrs", i__1, "zzocced_", 
+		(ftnlen)626)], viewpt, &tpos[(i__2 = i__ * 3 - 3) < 6 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "tpos", i__2, 
 		"zzocced_", (ftnlen)626)]);
-	dist[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("dist", i__1, 
-		"zzocced_", (ftnlen)628)] = vnorm_(&tpos[(i__2 = i__ * 3 - 3) 
-		< 6 && 0 <= i__2 ? i__2 : s_rnge("tpos", i__2, "zzocced_", (
-		ftnlen)628)]);
-	if (dist[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("dist", 
-		i__1, "zzocced_", (ftnlen)631)] == 0.) {
-	    setmsg_("Center of object # coincides with the viewing point.", (
-		    ftnlen)52);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(NOTDISJOINT)", (ftnlen)18);
-	    chkout_("ZZOCCED", (ftnlen)7);
+	dist[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "dist", i__1, "zzocced_", (ftnlen)628)] =
+		 vnorm_(__global_state, &tpos[(i__2 = i__ * 3 - 3) < 6 && 0 <=
+		 i__2 ? i__2 : s_rnge(&__global_state->f2c, "tpos", i__2, 
+		"zzocced_", (ftnlen)628)]);
+	if (dist[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "dist", i__1, "zzocced_", (ftnlen)631)] 
+		== 0.) {
+	    setmsg_(__global_state, "Center of object # coincides with the v"
+		    "iewing point.", (ftnlen)52);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOTDISJOINT)", (ftnlen)18);
+	    chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	    return ret_val;
 	}
     }
@@ -790,35 +804,36 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*     the resulting matrices are supposed to be rotations. */
 
     for (i__ = 1; i__ <= 2; ++i__) {
-	if (! isrot_(&rmat[(i__1 = (i__ * 3 + 1) * 3 - 12) < 18 && 0 <= i__1 ?
-		 i__1 : s_rnge("rmat", i__1, "zzocced_", (ftnlen)651)], &
-		__state->c_b50, &__state->c_b51)) {
-	    setmsg_("Matrix derived by unitizing columns of semi-axis matrix"
-		    " SEMAX# is not a rotation matrix.  The determinant of th"
-		    "is matrix is #.", (ftnlen)126);
-	    errint_("#", &i__, (ftnlen)1);
-	    d__1 = det_(&rmat[(i__1 = (i__ * 3 + 1) * 3 - 12) < 18 && 0 <= 
-		    i__1 ? i__1 : s_rnge("rmat", i__1, "zzocced_", (ftnlen)
-		    658)]);
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(NOTAROTATION)", (ftnlen)19);
-	    chkout_("ZZOCCED", (ftnlen)7);
+	if (! isrot_(__global_state, &rmat[(i__1 = (i__ * 3 + 1) * 3 - 12) < 
+		18 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "rmat", 
+		i__1, "zzocced_", (ftnlen)651)], &__state->c_b50, &
+		__state->c_b51)) {
+	    setmsg_(__global_state, "Matrix derived by unitizing columns of "
+		    "semi-axis matrix SEMAX# is not a rotation matrix.  The d"
+		    "eterminant of this matrix is #.", (ftnlen)126);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    d__1 = det_(__global_state, &rmat[(i__1 = (i__ * 3 + 1) * 3 - 12) 
+		    < 18 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "rmat", i__1, "zzocced_", (ftnlen)658)]);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOTAROTATION)", (ftnlen)19);
+	    chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	    return ret_val;
 	}
     }
 
 /*     Find the position of the second target relative to the first. */
 
-    vsub_(&tpos[3], tpos, t12pos);
-    ttdist = vnorm_(t12pos);
+    vsub_(__global_state, &tpos[3], tpos, t12pos);
+    ttdist = vnorm_(__global_state, t12pos);
 
 /*     Make sure the targets are non-intersecting. */
 
     if (ttdist <= minrad[0] + minrad[1]) {
-	setmsg_("Targets must be non-intersecting, but  spheres inscribed in"
-		" the targets intersect.", (ftnlen)82);
-	sigerr_("SPICE(NOTDISJOINT)", (ftnlen)18);
-	chkout_("ZZOCCED", (ftnlen)7);
+	setmsg_(__global_state, "Targets must be non-intersecting, but  sphe"
+		"res inscribed in the targets intersect.", (ftnlen)82);
+	sigerr_(__global_state, "SPICE(NOTDISJOINT)", (ftnlen)18);
+	chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	return ret_val;
     }
 
@@ -830,40 +845,41 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*        Transform the Ith target position into the frame of the */
 /*        Ith target. */
 
-	mtxv_(&rmat[(i__1 = (i__ * 3 + 1) * 3 - 12) < 18 && 0 <= i__1 ? i__1 :
-		 s_rnge("rmat", i__1, "zzocced_", (ftnlen)696)], &tpos[(i__2 =
-		 i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge("tpos", i__2, 
+	mtxv_(__global_state, &rmat[(i__1 = (i__ * 3 + 1) * 3 - 12) < 18 && 0 
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "rmat", i__1, 
+		"zzocced_", (ftnlen)696)], &tpos[(i__2 = i__ * 3 - 3) < 6 && 
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "tpos", i__2, 
 		"zzocced_", (ftnlen)696)], &xtpos[(i__3 = i__ * 3 - 3) < 6 && 
-		0 <= i__3 ? i__3 : s_rnge("xtpos", i__3, "zzocced_", (ftnlen)
-		696)]);
+		0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "xtpos", i__3,
+		 "zzocced_", (ftnlen)696)]);
 
 /*        The viewpoint position is the negative of the target position. */
 /*        Since we're squaring the terms involving the target position, */
 /*        we omit the minus signs. */
 
 /* Computing 2nd power */
-	d__1 = xtpos[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : s_rnge(
-		"xtpos", i__1, "zzocced_", (ftnlen)703)] / r__[(i__2 = i__ * 
-		3 - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge("r", i__2, "zzocced_",
-		 (ftnlen)703)];
+	d__1 = xtpos[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "xtpos", i__1, "zzocced_", (ftnlen)703)] 
+		/ r__[(i__2 = i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "r", i__2, "zzocced_", (ftnlen)703)];
 /* Computing 2nd power */
-	d__2 = xtpos[(i__3 = i__ * 3 - 2) < 6 && 0 <= i__3 ? i__3 : s_rnge(
-		"xtpos", i__3, "zzocced_", (ftnlen)703)] / r__[(i__4 = i__ * 
-		3 - 2) < 6 && 0 <= i__4 ? i__4 : s_rnge("r", i__4, "zzocced_",
-		 (ftnlen)703)];
+	d__2 = xtpos[(i__3 = i__ * 3 - 2) < 6 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "xtpos", i__3, "zzocced_", (ftnlen)703)] 
+		/ r__[(i__4 = i__ * 3 - 2) < 6 && 0 <= i__4 ? i__4 : s_rnge(&
+		__global_state->f2c, "r", i__4, "zzocced_", (ftnlen)703)];
 /* Computing 2nd power */
-	d__3 = xtpos[(i__5 = i__ * 3 - 1) < 6 && 0 <= i__5 ? i__5 : s_rnge(
-		"xtpos", i__5, "zzocced_", (ftnlen)703)] / r__[(i__6 = i__ * 
-		3 - 1) < 6 && 0 <= i__6 ? i__6 : s_rnge("r", i__6, "zzocced_",
-		 (ftnlen)703)];
+	d__3 = xtpos[(i__5 = i__ * 3 - 1) < 6 && 0 <= i__5 ? i__5 : s_rnge(&
+		__global_state->f2c, "xtpos", i__5, "zzocced_", (ftnlen)703)] 
+		/ r__[(i__6 = i__ * 3 - 1) < 6 && 0 <= i__6 ? i__6 : s_rnge(&
+		__global_state->f2c, "r", i__6, "zzocced_", (ftnlen)703)];
 	level = d__1 * d__1 + d__2 * d__2 + d__3 * d__3;
 	if (level < 1.) {
-	    setmsg_("Viewpoint is inside target #; level surface parameter ="
-		    " #.", (ftnlen)58);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &level, (ftnlen)1);
-	    sigerr_("SPICE(NOTDISJOINT)", (ftnlen)18);
-	    chkout_("ZZOCCED", (ftnlen)7);
+	    setmsg_(__global_state, "Viewpoint is inside target #; level sur"
+		    "face parameter = #.", (ftnlen)58);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &level, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOTDISJOINT)", (ftnlen)18);
+	    chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	    return ret_val;
 	}
     }
@@ -873,15 +889,15 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*     positive at this point. */
 
     for (i__ = 1; i__ <= 2; ++i__) {
-	d__1 = minrad[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("min"
-		"rad", i__2, "zzocced_", (ftnlen)728)] / dist[(i__3 = i__ - 1) 
-		< 2 && 0 <= i__3 ? i__3 : s_rnge("dist", i__3, "zzocced_", (
-		ftnlen)728)];
-	minang[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("minang", 
-		i__1, "zzocced_", (ftnlen)728)] = dasine_(&d__1, &
-		__state->c_b51);
-	if (failed_()) {
-	    chkout_("ZZOCCED", (ftnlen)7);
+	d__1 = minrad[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "minrad", i__2, "zzocced_", (ftnlen)728)]
+		 / dist[(i__3 = i__ - 1) < 2 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "dist", i__3, "zzocced_", (ftnlen)728)];
+	minang[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "minang", i__1, "zzocced_", (ftnlen)728)]
+		 = dasine_(__global_state, &d__1, &__state->c_b51);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	    return ret_val;
 	}
 
@@ -890,23 +906,25 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*        ellipsoids but inside one or both maximum bounding spheres. */
 /*        We handle that special case separately. */
 
-	if (dist[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("dist", 
-		i__1, "zzocced_", (ftnlen)741)] >= maxrad[(i__2 = i__ - 1) < 
-		2 && 0 <= i__2 ? i__2 : s_rnge("maxrad", i__2, "zzocced_", (
-		ftnlen)741)]) {
+	if (dist[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "dist", i__1, "zzocced_", (ftnlen)741)] 
+		>= maxrad[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "maxrad", i__2, "zzocced_", (ftnlen)741)]
+		) {
 
 /*           The viewing point is outside the sphere; we use the sphere */
 /*           to define the maximum angular radius. */
 
-	    d__1 = maxrad[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(
-		    "maxrad", i__2, "zzocced_", (ftnlen)746)] / dist[(i__3 = 
-		    i__ - 1) < 2 && 0 <= i__3 ? i__3 : s_rnge("dist", i__3, 
-		    "zzocced_", (ftnlen)746)];
-	    maxang[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("maxang",
-		     i__1, "zzocced_", (ftnlen)746)] = dasine_(&d__1, &
-		    __state->c_b51);
-	    if (failed_()) {
-		chkout_("ZZOCCED", (ftnlen)7);
+	    d__1 = maxrad[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "maxrad", i__2, "zzocced_", (ftnlen)
+		    746)] / dist[(i__3 = i__ - 1) < 2 && 0 <= i__3 ? i__3 : 
+		    s_rnge(&__global_state->f2c, "dist", i__3, "zzocced_", (
+		    ftnlen)746)];
+	    maxang[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "maxang", i__1, "zzocced_", (ftnlen)
+		    746)] = dasine_(__global_state, &d__1, &__state->c_b51);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 		return ret_val;
 	    }
 	} else {
@@ -945,33 +963,36 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*           relative to the center of the Ith target, in the principal */
 /*           axis frame of the Ith target. */
 
-	    vminus_(&xtpos[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : 
-		    s_rnge("xtpos", i__1, "zzocced_", (ftnlen)789)], xvwtrg);
-	    edlimb_(&r__[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : 
-		    s_rnge("r", i__1, "zzocced_", (ftnlen)791)], &r__[(i__2 = 
-		    i__ * 3 - 2) < 6 && 0 <= i__2 ? i__2 : s_rnge("r", i__2, 
-		    "zzocced_", (ftnlen)791)], &r__[(i__3 = i__ * 3 - 1) < 6 
-		    && 0 <= i__3 ? i__3 : s_rnge("r", i__3, "zzocced_", (
-		    ftnlen)791)], xvwtrg, limb);
+	    vminus_(__global_state, &xtpos[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "xtpos", i__1, 
+		    "zzocced_", (ftnlen)789)], xvwtrg);
+	    edlimb_(__global_state, &r__[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "r", i__1, 
+		    "zzocced_", (ftnlen)791)], &r__[(i__2 = i__ * 3 - 2) < 6 
+		    && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "r", 
+		    i__2, "zzocced_", (ftnlen)791)], &r__[(i__3 = i__ * 3 - 1)
+		     < 6 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "r", i__3, "zzocced_", (ftnlen)791)], xvwtrg, limb);
 
 /*           Extract the limb's center and semi-axis vectors. */
 
-	    el2cgv_(limb, lmbctr, lmbmaj, lmbmin);
+	    el2cgv_(__global_state, limb, lmbctr, lmbmaj, lmbmin);
 
 /*           Create the limb plane. */
 
-	    psv2pl_(lmbctr, lmbmaj, lmbmin, lplane);
+	    psv2pl_(__global_state, lmbctr, lmbmaj, lmbmin, lplane);
 
 /*           Project the viewing point onto the limb plane.  Find */
 /*           the height of the viewing point relative to this plane. */
 
-	    vprjp_(xvwtrg, lplane, vpproj);
-	    vph = vdist_(xvwtrg, vpproj);
+	    vprjp_(__global_state, xvwtrg, lplane, vpproj);
+	    vph = vdist_(__global_state, xvwtrg, vpproj);
 
 /*           Find an upper bound on the distance of any limb point from */
 /*           VPPROJ. */
 
-	    ubdist = vdist_(vpproj, lmbctr) + vnorm_(lmbmaj);
+	    ubdist = vdist_(__global_state, vpproj, lmbctr) + vnorm_(
+		    __global_state, lmbmaj);
 
 /*           Find the angular size of the maximum bounding cone.  We */
 /*           use the 2-argument arctangent to avoid divide-by-zero */
@@ -979,8 +1000,9 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*           zero, which gives us a degenerate cone of angular radius */
 /*           pi/2. */
 
-	    maxang[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("maxang",
-		     i__1, "zzocced_", (ftnlen)824)] = atan2(ubdist, vph);
+	    maxang[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "maxang", i__1, "zzocced_", (ftnlen)
+		    824)] = atan2(&__global_state->f2c, ubdist, vph);
 	}
 
 /*        At this point MAXANG(I) and MINANG(I) are both set for the */
@@ -991,14 +1013,14 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*     Find the angular separation of the centers of the targets */
 /*     seen by the observer. */
 
-    trgsep = vsep_(tpos, &tpos[3]);
+    trgsep = vsep_(__global_state, tpos, &tpos[3]);
 
 /*     If bounding cones defined by the maximum radii don't intersect, */
 /*     we're done. */
 
     if (trgsep > maxang[0] + maxang[1]) {
 	ret_val = 0;
-	chkout_("ZZOCCED", (ftnlen)7);
+	chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	return ret_val;
     }
 
@@ -1046,20 +1068,20 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 
 /*        Let T1OPOS be the vector from the first target to the observer. */
 
-	vminus_(tpos, t1opos);
+	vminus_(__global_state, tpos, t1opos);
 
 /*        ANGCMP is the angle between a vector from the first target's */
 /*        center to its limb and the plane containing the center and */
 /*        orthogonal to the vector from the first target's center to the */
 /*        observer. */
 
-	angcmp = halfpi_() - minang[0];
+	angcmp = halfpi_(__global_state) - minang[0];
 
 /*        T2SEP is the angle between the vector from the first target's */
 /*        center to the observer and the vector from the first target */
 /*        to the second target. */
 
-	t2sep = vsep_(t1opos, t12pos);
+	t2sep = vsep_(__global_state, t1opos, t12pos);
 	if (t2sep < angcmp) {
 
 /*           The second target is "in front" of the first. */
@@ -1084,10 +1106,11 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*           (The subscript 3-I used below is 2 if I is 1 and vice */
 /*           versa.) */
 
-	    if (minang[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "minang", i__1, "zzocced_", (ftnlen)948)] >= maxang[(i__2 
-		    = 3 - i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge("maxang", 
-		    i__2, "zzocced_", (ftnlen)948)] + trgsep) {
+	    if (minang[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "minang", i__1, "zzocced_", (ftnlen)
+		    948)] >= maxang[(i__2 = 3 - i__ - 1) < 2 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "maxang", i__2, "zzo"
+		    "cced_", (ftnlen)948)] + trgsep) {
 
 /*              If target I is in front, it totally occults the other */
 /*              target.  Otherwise, the other target is in annular */
@@ -1101,7 +1124,7 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 
 /*              We've found the occultation type, so we're done. */
 
-		chkout_("ZZOCCED", (ftnlen)7);
+		chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 		return ret_val;
 	    }
 	}
@@ -1120,7 +1143,7 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*           the first target is in front. */
 
 	    ret_val = s;
-	    chkout_("ZZOCCED", (ftnlen)7);
+	    chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	    return ret_val;
 	}
 
@@ -1151,40 +1174,45 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*     into the principal axis frame of the smaller ellipsoid first. */
 /*     Let SMLMAT be the rotation matrix that effects this mapping. */
 
-    xpose_(&rmat[(i__1 = (smlidx * 3 + 1) * 3 - 12) < 18 && 0 <= i__1 ? i__1 :
-	     s_rnge("rmat", i__1, "zzocced_", (ftnlen)1019)], smlmat);
+    xpose_(__global_state, &rmat[(i__1 = (smlidx * 3 + 1) * 3 - 12) < 18 && 0 
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "rmat", i__1, "zzo"
+	    "cced_", (ftnlen)1019)], smlmat);
 
 /*     Apply SMLMAT to the vector from the center of the smaller */
 /*     ellipsoid to the viewing point. */
 
-    vsub_(viewpt, &ctrs[(i__1 = smlidx * 3 - 3) < 6 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ctrs", i__1, "zzocced_", (ftnlen)1025)], smlvu);
-    mxv_(smlmat, smlvu, view);
+    vsub_(__global_state, viewpt, &ctrs[(i__1 = smlidx * 3 - 3) < 6 && 0 <= 
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ctrs", i__1, "zzocce"
+	    "d_", (ftnlen)1025)], smlvu);
+    mxv_(__global_state, smlmat, smlvu, view);
 
 /*     Find the limb of the smaller ellipsoid as seen from VIEW. */
 
-    edlimb_(&r__[(i__1 = smlidx * 3 - 3) < 6 && 0 <= i__1 ? i__1 : s_rnge(
-	    "r", i__1, "zzocced_", (ftnlen)1032)], &r__[(i__2 = smlidx * 3 - 
-	    2) < 6 && 0 <= i__2 ? i__2 : s_rnge("r", i__2, "zzocced_", (
+    edlimb_(__global_state, &r__[(i__1 = smlidx * 3 - 3) < 6 && 0 <= i__1 ? 
+	    i__1 : s_rnge(&__global_state->f2c, "r", i__1, "zzocced_", (
+	    ftnlen)1032)], &r__[(i__2 = smlidx * 3 - 2) < 6 && 0 <= i__2 ? 
+	    i__2 : s_rnge(&__global_state->f2c, "r", i__2, "zzocced_", (
 	    ftnlen)1032)], &r__[(i__3 = smlidx * 3 - 1) < 6 && 0 <= i__3 ? 
-	    i__3 : s_rnge("r", i__3, "zzocced_", (ftnlen)1032)], view, limb);
+	    i__3 : s_rnge(&__global_state->f2c, "r", i__3, "zzocced_", (
+	    ftnlen)1032)], view, limb);
 
 /*     Unpack the limb and map it from the principal axis frame of the */
 /*     small ellipsoid back into the original frame. */
 
-    el2cgv_(limb, tmpctr, tmpmaj, tmpmin);
-    mtxv_(smlmat, tmpctr, smlctr);
-    mtxv_(smlmat, tmpmaj, smlmaj);
-    mtxv_(smlmat, tmpmin, smlmin);
+    el2cgv_(__global_state, limb, tmpctr, tmpmaj, tmpmin);
+    mtxv_(__global_state, smlmat, tmpctr, smlctr);
+    mtxv_(__global_state, smlmat, tmpmaj, smlmaj);
+    mtxv_(__global_state, smlmat, tmpmin, smlmin);
 
 /*     At this point SMLCTR is the position of the center of the limb */
 /*     relative to the center of the small ellipsoid.  We want to express */
 /*     this center relative to the origin; we use the vector SMLCTR for */
 /*     this. */
 
-    vadd_(&ctrs[(i__1 = smlidx * 3 - 3) < 6 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ctrs", i__1, "zzocced_", (ftnlen)1050)], smlctr, tmpctr);
-    vequ_(tmpctr, smlctr);
+    vadd_(__global_state, &ctrs[(i__1 = smlidx * 3 - 3) < 6 && 0 <= i__1 ? 
+	    i__1 : s_rnge(&__global_state->f2c, "ctrs", i__1, "zzocced_", (
+	    ftnlen)1050)], smlctr, tmpctr);
+    vequ_(__global_state, tmpctr, smlctr);
 
 /*     Create the transformation matrix that maps the larger ellipsoid */
 /*     to the unit sphere. */
@@ -1193,13 +1221,16 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*     components by the reciprocals of the respective semi-axis */
 /*     lengths of the large ellipsoid. */
 
-    cleard_(&__state->c__9, sclmat);
+    cleard_(__global_state, &__state->c__9, sclmat);
     sclmat[0] = 1. / r__[(i__1 = bigidx * 3 - 3) < 6 && 0 <= i__1 ? i__1 : 
-	    s_rnge("r", i__1, "zzocced_", (ftnlen)1063)];
+	    s_rnge(&__global_state->f2c, "r", i__1, "zzocced_", (ftnlen)1063)]
+	    ;
     sclmat[4] = 1. / r__[(i__1 = bigidx * 3 - 2) < 6 && 0 <= i__1 ? i__1 : 
-	    s_rnge("r", i__1, "zzocced_", (ftnlen)1064)];
+	    s_rnge(&__global_state->f2c, "r", i__1, "zzocced_", (ftnlen)1064)]
+	    ;
     sclmat[8] = 1. / r__[(i__1 = bigidx * 3 - 1) < 6 && 0 <= i__1 ? i__1 : 
-	    s_rnge("r", i__1, "zzocced_", (ftnlen)1065)];
+	    s_rnge(&__global_state->f2c, "r", i__1, "zzocced_", (ftnlen)1065)]
+	    ;
 
 /*     Compose the row-scaling matrix SCLMAT with the frame */
 /*     transformation required to map vectors to the principal axis */
@@ -1208,9 +1239,10 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 
 /*     We use one matrix SCLROT to perform these composed operations. */
 
-    xpose_(&rmat[(i__1 = (bigidx * 3 + 1) * 3 - 12) < 18 && 0 <= i__1 ? i__1 :
-	     s_rnge("rmat", i__1, "zzocced_", (ftnlen)1075)], xr);
-    mxm_(sclmat, xr, sclrot);
+    xpose_(__global_state, &rmat[(i__1 = (bigidx * 3 + 1) * 3 - 12) < 18 && 0 
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "rmat", i__1, "zzo"
+	    "cced_", (ftnlen)1075)], xr);
+    mxm_(__global_state, sclmat, xr, sclrot);
 
 /*     Transform the viewing point, the large ellipsoid's center vector, */
 /*     and vectors defining the limb of the smaller ellipsoid using the */
@@ -1218,55 +1250,57 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 
 /*     Map the viewing point to XVIEW. */
 
-    mxv_(sclrot, viewpt, xview);
+    mxv_(__global_state, sclrot, viewpt, xview);
 
 /*     Map the center of the large ellipsoid to BIGCTR. */
 
-    mxv_(sclrot, &ctrs[(i__1 = bigidx * 3 - 3) < 6 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ctrs", i__1, "zzocced_", (ftnlen)1090)], bigctr);
+    mxv_(__global_state, sclrot, &ctrs[(i__1 = bigidx * 3 - 3) < 6 && 0 <= 
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ctrs", i__1, "zzocce"
+	    "d_", (ftnlen)1090)], bigctr);
 
 /*     Map the limb vectors of the smaller ellipsoid. */
 
-    mxv_(sclrot, smlctr, tmpctr);
-    vequ_(tmpctr, smlctr);
-    mxv_(sclrot, smlmaj, tmpmaj);
-    mxv_(sclrot, smlmin, tmpmin);
+    mxv_(__global_state, sclrot, smlctr, tmpctr);
+    vequ_(__global_state, tmpctr, smlctr);
+    mxv_(__global_state, sclrot, smlmaj, tmpmaj);
+    mxv_(__global_state, sclrot, smlmin, tmpmin);
 
 /*     Find the semi-axes of the transformed limb of the smaller */
 /*     ellipsoid. Pack these vectors into the transformed limb data */
 /*     structure XLIMB. */
 
-    saelgv_(tmpmaj, tmpmin, smlmaj, smlmin);
-    cgv2el_(smlctr, smlmaj, smlmin, xlimb);
+    saelgv_(__global_state, tmpmaj, tmpmin, smlmaj, smlmin);
+    cgv2el_(__global_state, smlctr, smlmaj, smlmin, xlimb);
 
 /*     Find the direction vector of the ray from the viewing point */
 /*     to the transformed center of the large ellipsoid. */
 
-    vsub_(bigctr, xview, raydir);
+    vsub_(__global_state, bigctr, xview, raydir);
 
 /*     Find the angular separation of the ray and the transformed */
 /*     limb of the small ellipsoid.  The output MINPT is the limb */
 /*     point at which the minimum angular separation is attained. */
 
-    zzasryel_("MIN", xlimb, xview, raydir, &minsep, minpt, (ftnlen)3);
-    if (failed_()) {
-	chkout_("ZZOCCED", (ftnlen)7);
+    zzasryel_(__global_state, "MIN", xlimb, xview, raydir, &minsep, minpt, (
+	    ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	return ret_val;
     }
 
 /*     Find the angular radius of the unit sphere centered at */
 /*     BIGCTR, as seen from XVIEW. */
 
-    bigr = vnorm_(raydir);
+    bigr = vnorm_(__global_state, raydir);
 
 /*     Although previous error checks should ensure that BIGR is */
 /*     greater than or equal to 1, we'll use a safe arcsine */
 /*     computation. */
 
     d__1 = 1. / bigr;
-    uasize = dasine_(&d__1, &__state->c_b51);
-    if (failed_()) {
-	chkout_("ZZOCCED", (ftnlen)7);
+    uasize = dasine_(__global_state, &d__1, &__state->c_b51);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	return ret_val;
     }
 
@@ -1281,7 +1315,7 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*        There's no overlap. */
 
 	ret_val = 0;
-	chkout_("ZZOCCED", (ftnlen)7);
+	chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	return ret_val;
     }
 
@@ -1292,11 +1326,11 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 
 /*     Find the vector from the center of the sphere to MINPT. */
 
-    vsub_(minpt, bigctr, minvec);
+    vsub_(__global_state, minpt, bigctr, minvec);
 
 /*     Get the inverse of the ray's direction vector. */
 
-    vminus_(raydir, invray);
+    vminus_(__global_state, raydir, invray);
 
 /*     Now we can apply the criterion from the spherical occultation */
 /*     algorithm to determine whether MINPT is in front of or behind */
@@ -1305,7 +1339,8 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 
 /*     Set the sign S used later to set the return code as well. */
 
-    if (vsep_(minvec, invray) <= halfpi_() - uasize) {
+    if (vsep_(__global_state, minvec, invray) <= halfpi_(__global_state) - 
+	    uasize) {
 
 /*        MINPT is in front. */
 
@@ -1379,18 +1414,20 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*        not preserve distances, so we must re-compute the distance */
 /*        from the viewing point to the center of the small ellipsoid. */
 
-	vsub_(xview, smlctr, xsmlvu);
-	xdist[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("xdist", 
-		i__1, "zzocced_", (ftnlen)1271)] = vnorm_(xsmlvu);
+	vsub_(__global_state, xview, smlctr, xsmlvu);
+	xdist[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "xdist", i__1, "zzocced_", (ftnlen)1271)]
+		 = vnorm_(__global_state, xsmlvu);
 
 /*        Compute angular radii of bounding cones for the transformed */
 /*        limb of the small ellipsoid.  First, capture the semi-axis */
 /*        lengths of the limb. */
 
-	majlen = vnorm_(smlmaj);
-	minlen = vnorm_(smlmin);
-	if (xdist[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("xdist"
-		, i__1, "zzocced_", (ftnlen)1281)] >= majlen) {
+	majlen = vnorm_(__global_state, smlmaj);
+	minlen = vnorm_(__global_state, smlmin);
+	if (xdist[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "xdist", i__1, "zzocced_", (ftnlen)1281)]
+		 >= majlen) {
 
 /*           The viewing point is outside a sphere of radius MAJLEN */
 /*           centered at the limb's center.  We use this sphere to */
@@ -1400,12 +1437,13 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*           ellipsoid. */
 
 	    d__1 = majlen / xdist[(i__2 = smlidx - 1) < 2 && 0 <= i__2 ? i__2 
-		    : s_rnge("xdist", i__2, "zzocced_", (ftnlen)1290)];
-	    maxang[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("max"
-		    "ang", i__1, "zzocced_", (ftnlen)1290)] = dasine_(&d__1, &
-		    __state->c_b51);
-	    if (failed_()) {
-		chkout_("ZZOCCED", (ftnlen)7);
+		    : s_rnge(&__global_state->f2c, "xdist", i__2, "zzocced_", 
+		    (ftnlen)1290)];
+	    maxang[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "maxang", i__1, "zzocced_", (ftnlen)
+		    1290)] = dasine_(__global_state, &d__1, &__state->c_b51);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 		return ret_val;
 	    }
 	} else {
@@ -1417,18 +1455,18 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 
 /*           Create the limb plane. */
 
-	    psv2pl_(smlctr, smlmaj, smlmin, lplane);
+	    psv2pl_(__global_state, smlctr, smlmaj, smlmin, lplane);
 
 /*           Project the viewing point onto the limb plane.  Find */
 /*           the height of the viewing point relative to this plane. */
 
-	    vprjp_(xview, lplane, vpproj);
-	    vph = vdist_(xview, vpproj);
+	    vprjp_(__global_state, xview, lplane, vpproj);
+	    vph = vdist_(__global_state, xview, vpproj);
 
 /*           Find an upper bound on the distance of any limb point from */
 /*           VPPROJ. */
 
-	    ubdist = vdist_(vpproj, smlctr) + majlen;
+	    ubdist = vdist_(__global_state, vpproj, smlctr) + majlen;
 
 /*           Find the angular size of the maximum bounding cone.  We */
 /*           use the 2-argument arctangent to avoid divide-by-zero */
@@ -1436,9 +1474,9 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*           zero, which gives us a degenerate cone of angular radius */
 /*           pi/2. */
 
-	    maxang[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("max"
-		    "ang", i__1, "zzocced_", (ftnlen)1329)] = atan2(ubdist, 
-		    vph);
+	    maxang[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "maxang", i__1, "zzocced_", (ftnlen)
+		    1329)] = atan2(&__global_state->f2c, ubdist, vph);
 	}
 
 /*        Now find the minimum bounding cone.  The situation is slightly */
@@ -1465,13 +1503,13 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 
 /*        Start out by constructing a normal to the limb plane. */
 
-	ucrss_(smlmaj, smlmin, lnorml);
+	ucrss_(__global_state, smlmaj, smlmin, lnorml);
 
 /*        Choose a value of TILT not exceeding pi/2. */
 
-	tilt = vsep_(lnorml, xsmlvu);
-	if (tilt > halfpi_()) {
-	    tilt = pi_() - tilt;
+	tilt = vsep_(__global_state, lnorml, xsmlvu);
+	if (tilt > halfpi_(__global_state)) {
+	    tilt = pi_(__global_state) - tilt;
 	}
 
 /*        Now we have a right triangle whose base is the distance from */
@@ -1482,22 +1520,25 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*        associated with the viewing point.  This is the angular */
 /*        radius of our minimum bounding cone. */
 
-	minang[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("minang", 
-		i__1, "zzocced_", (ftnlen)1380)] = atan2(cos(tilt) * minlen, 
-		sin(tilt) * minlen + xdist[(i__2 = smlidx - 1) < 2 && 0 <= 
-		i__2 ? i__2 : s_rnge("xdist", i__2, "zzocced_", (ftnlen)1380)]
+	minang[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "minang", i__1, "zzocced_", (ftnlen)1380)
+		] = atan2(&__global_state->f2c, cos(&__global_state->f2c, 
+		tilt) * minlen, sin(&__global_state->f2c, tilt) * minlen + 
+		xdist[(i__2 = smlidx - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "xdist", i__2, "zzocced_", (ftnlen)1380)]
 		);
 
 /*        Compute angular separation of the transformed centers. */
 
-	vsub_(smlctr, xview, smldir);
-	xasep = vsep_(raydir, smldir);
+	vsub_(__global_state, smlctr, xview, smldir);
+	xasep = vsep_(__global_state, raydir, smldir);
 
 /*        Test for inclusion of the maximum bounding cone of the small */
 /*        ellipsoid in the circumscribing cone of the sphere. */
 
 	if (xasep + maxang[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : 
-		s_rnge("maxang", i__1, "zzocced_", (ftnlen)1394)] <= uasize) {
+		s_rnge(&__global_state->f2c, "maxang", i__1, "zzocced_", (
+		ftnlen)1394)] <= uasize) {
 
 /*           The small ellipsoid is either in total occultation or */
 /*           in annular transit across the sphere. */
@@ -1515,7 +1556,7 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 
 		ret_val = s * 3;
 	    }
-	    chkout_("ZZOCCED", (ftnlen)7);
+	    chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	    return ret_val;
 	}
 
@@ -1523,13 +1564,14 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*        small ellipsoid by the circumscribing cone of the sphere. */
 
 	if (xasep + minang[(i__1 = smlidx - 1) < 2 && 0 <= i__1 ? i__1 : 
-		s_rnge("minang", i__1, "zzocced_", (ftnlen)1424)] > uasize) {
+		s_rnge(&__global_state->f2c, "minang", i__1, "zzocced_", (
+		ftnlen)1424)] > uasize) {
 
 /*           The small ellipsoid is either in partial occultation or */
 /*           in partial transit across the sphere. */
 
 	    ret_val = s;
-	    chkout_("ZZOCCED", (ftnlen)7);
+	    chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	    return ret_val;
 	}
 
@@ -1539,9 +1581,10 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 /*        emanating from the viewing point and passing through the */
 /*        center of the sphere. */
 
-	zzasryel_("MAX", xlimb, xview, raydir, &maxsep, maxpt, (ftnlen)3);
-	if (failed_()) {
-	    chkout_("ZZOCCED", (ftnlen)7);
+	zzasryel_(__global_state, "MAX", xlimb, xview, raydir, &maxsep, maxpt,
+		 (ftnlen)3);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZOCCED", (ftnlen)7);
 	    return ret_val;
 	}
 	if (abs(maxsep) <= uasize) {
@@ -1594,7 +1637,7 @@ integer zzocced_(doublereal *viewpt, doublereal *centr1, doublereal *semax1,
 
 /*     ZZOCCED has been set. */
 
-    chkout_("ZZOCCED", (ftnlen)7);
+    chkout_(__global_state, "ZZOCCED", (ftnlen)7);
     return ret_val;
 } /* zzocced_ */
 

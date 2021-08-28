@@ -8,29 +8,31 @@
 
 
 typedef int errfnm_state_t;
-static errfnm_state_t* get_errfnm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline errfnm_state_t* get_errfnm_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ERRFNM ( Insert filename into long error message text ) */
-/* Subroutine */ int errfnm_(char *marker, integer *unit, ftnlen marker_len)
+/* Subroutine */ int errfnm_(cspice_t* __global_state, char *marker, integer *
+	unit, ftnlen marker_len)
 {
     /* System generated locals */
     inlist ioin__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer f_inqu(inlist *), s_cmp(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer f_inqu(f2c_state_t*, inlist *), s_cmp(f2c_state_t*, char *, char *
+	    , ftnlen, ftnlen);
 
     /* Local variables */
     char name__[128];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer iostat;
 
 
     /* Module state */
-    errfnm_state_t* __state = get_errfnm_state();
+    errfnm_state_t* __state = get_errfnm_state(__global_state);
 /* $ Abstract */
 
 /*     Substitute the first occurrence of a marker in the current long */
@@ -236,7 +238,7 @@ static errfnm_state_t* get_errfnm_state() {
 
 /*     Initialize the variables. */
 
-    s_copy(name__, " ", (ftnlen)128, (ftnlen)1);
+    s_copy(&__global_state->f2c, name__, " ", (ftnlen)128, (ftnlen)1);
 
 /*     Get the name of the file attached to the logical unit number. */
 
@@ -258,7 +260,7 @@ static errfnm_state_t* get_errfnm_state() {
     ioin__1.inrecl = 0;
     ioin__1.innrec = 0;
     ioin__1.inblank = 0;
-    iostat = f_inqu(&ioin__1);
+    iostat = f_inqu(&__global_state->f2c, &ioin__1);
 
 /*     If the INQUIRE statement executed successfully and the unit */
 /*     was attached to a file, we have a filename. */
@@ -269,14 +271,15 @@ static errfnm_state_t* get_errfnm_state() {
 /*     are true, we must construct a string indicating that the */
 /*     filename was unavailable from the system. */
 
-    if (iostat != 0 || s_cmp(name__, " ", (ftnlen)128, (ftnlen)1) == 0) {
-	s_copy(name__, "<unavailable from the system>", (ftnlen)128, (ftnlen)
-		29);
+    if (iostat != 0 || s_cmp(&__global_state->f2c, name__, " ", (ftnlen)128, (
+	    ftnlen)1) == 0) {
+	s_copy(&__global_state->f2c, name__, "<unavailable from the system>", 
+		(ftnlen)128, (ftnlen)29);
     }
 
 /*     Let the error handling routine take it from here. */
 
-    errch_(marker, name__, marker_len, (ftnlen)128);
+    errch_(__global_state, marker, name__, marker_len, (ftnlen)128);
     return 0;
 } /* errfnm_ */
 

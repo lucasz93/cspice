@@ -8,29 +8,30 @@
 
 
 typedef int zznwpool_state_t;
-static zznwpool_state_t* get_zznwpool_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zznwpool_state_t* get_zznwpool_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZNWPOOL ( Private: notify watchers of update ) */
-/* Subroutine */ int zznwpool_(char *varnam, char *wtvars, integer *wtptrs, 
-	integer *wtpool, char *wtagnt, char *agtwrk, char *notify, char *
-	agents, ftnlen varnam_len, ftnlen wtvars_len, ftnlen wtagnt_len, 
-	ftnlen agtwrk_len, ftnlen notify_len, ftnlen agents_len)
+/* Subroutine */ int zznwpool_(cspice_t* __global_state, char *varnam, char *
+	wtvars, integer *wtptrs, integer *wtpool, char *wtagnt, char *agtwrk, 
+	char *notify, char *agents, ftnlen varnam_len, ftnlen wtvars_len, 
+	ftnlen wtagnt_len, ftnlen agtwrk_len, ftnlen notify_len, ftnlen 
+	agents_len)
 {
-    extern /* Subroutine */ int zzgapool_(char *, char *, integer *, integer *
-	    , char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int copyc_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int unionc_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzgapool_(cspice_t*, char *, char *, integer *
+	    , integer *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int copyc_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int unionc_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zznwpool_state_t* __state = get_zznwpool_state();
+    zznwpool_state_t* __state = get_zznwpool_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -193,23 +194,24 @@ static zznwpool_state_t* get_zznwpool_state() {
 
 /*     SPICELIB functions */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZNWPOOL", (ftnlen)8);
+    chkin_(__global_state, "ZZNWPOOL", (ftnlen)8);
 
 /*     Fetch the agents watching VARNAM into the set NOTIFY. */
 
-    zzgapool_(varnam, wtvars, wtptrs, wtpool, wtagnt, notify, varnam_len, 
-	    wtvars_len, wtagnt_len, notify_len);
+    zzgapool_(__global_state, varnam, wtvars, wtptrs, wtpool, wtagnt, notify, 
+	    varnam_len, wtvars_len, wtagnt_len, notify_len);
 
 /*     Compute the union of NOTIFY and the agent list AGENTS. */
 /*     Place the result in the workspace set AGTWRK; then copy */
 /*     the result to AGENTS. */
 
-    unionc_(notify, agents, agtwrk, notify_len, agents_len, agtwrk_len);
-    copyc_(agtwrk, agents, agtwrk_len, agents_len);
-    chkout_("ZZNWPOOL", (ftnlen)8);
+    unionc_(__global_state, notify, agents, agtwrk, notify_len, agents_len, 
+	    agtwrk_len);
+    copyc_(__global_state, agtwrk, agents, agtwrk_len, agents_len);
+    chkout_(__global_state, "ZZNWPOOL", (ftnlen)8);
     return 0;
 } /* zznwpool_ */
 

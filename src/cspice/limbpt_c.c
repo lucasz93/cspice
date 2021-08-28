@@ -2024,7 +2024,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "limbpt_c" );
+   chkin_c ( naif_state, "limbpt_c" );
 
    /*
    Check the input string arguments:

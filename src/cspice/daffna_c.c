@@ -397,7 +397,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "daffna_c" );
+   chkin_c ( naif_state, "daffna_c" );
 
 
    daffna_ ( ( logical * ) &fnd );

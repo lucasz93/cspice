@@ -8,8 +8,7 @@
 
 
 extern zzdasnfr_init_t __zzdasnfr_init;
-static zzdasnfr_state_t* get_zzdasnfr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdasnfr_state_t* get_zzdasnfr_state(cspice_t* state) {
 	if (!state->zzdasnfr)
 		state->zzdasnfr = __cspice_allocate_module(sizeof(
 	zzdasnfr_state_t), &__zzdasnfr_init, sizeof(__zzdasnfr_init));
@@ -18,9 +17,10 @@ static zzdasnfr_state_t* get_zzdasnfr_state() {
 }
 
 /* $Procedure ZZDASNFR ( Private --- DAS write New File Record ) */
-/* Subroutine */ int zzdasnfr_(integer *lun, char *idword, char *ifname, 
-	integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, 
-	char *format, ftnlen idword_len, ftnlen ifname_len, ftnlen format_len)
+/* Subroutine */ int zzdasnfr_(cspice_t* __global_state, integer *lun, char *
+	idword, char *ifname, integer *nresvr, integer *nresvc, integer *
+	ncomr, integer *ncomc, char *format, ftnlen idword_len, ftnlen 
+	ifname_len, ftnlen format_len)
 {
     /* Initialized data */
 
@@ -31,31 +31,33 @@ static zzdasnfr_state_t* get_zzdasnfr_state() {
     cllist cl__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen),
-	     s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_wdue(cilist *), do_uio(integer *, char *, ftnlen), e_wdue(void),
-	     f_clos(cllist *);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen), s_copy(f2c_state_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    integer s_wdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_wdue(f2c_state_t*), f_clos(f2c_state_t*, 
+	    cllist *);
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int zzftpstr_(char *, char *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzftpstr_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     char delim[1];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
     char locifn[60];
     char locidw[8];
     char locfmt[8];
     char nullch[1];
     char lftbkt[6];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     char rgtbkt[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     char tststr[16];
 
     /* Fortran I/O blocks */
@@ -63,7 +65,7 @@ static zzdasnfr_state_t* get_zzdasnfr_state() {
 
 
     /* Module state */
-    zzdasnfr_state_t* __state = get_zzdasnfr_state();
+    zzdasnfr_state_t* __state = get_zzdasnfr_state(__global_state);
 /* $ Abstract */
 
 /*     Write the file record to a new DAS file. */
@@ -295,10 +297,10 @@ static zzdasnfr_state_t* get_zzdasnfr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZDASNFR", (ftnlen)8);
+	chkin_(__global_state, "ZZDASNFR", (ftnlen)8);
     }
 
 /*     On the first pass, format the PRENUL and PSTNUL strings, */
@@ -339,13 +341,15 @@ static zzdasnfr_state_t* get_zzdasnfr_state() {
 /*        which are assembled into the FTP string as it appears in */
 /*        the DAS file record. */
 
-	zzftpstr_(tststr, lftbkt, rgtbkt, delim, (ftnlen)16, (ftnlen)6, (
-		ftnlen)6, (ftnlen)1);
+	zzftpstr_(__global_state, tststr, lftbkt, rgtbkt, delim, (ftnlen)16, (
+		ftnlen)6, (ftnlen)6, (ftnlen)1);
 /* Writing concatenation */
-	i__1[0] = rtrim_(lftbkt, (ftnlen)6), a__1[0] = lftbkt;
-	i__1[1] = rtrim_(tststr, (ftnlen)16), a__1[1] = tststr;
-	i__1[2] = rtrim_(rgtbkt, (ftnlen)6), a__1[2] = rgtbkt;
-	s_cat(__state->ftpstr, a__1, i__1, &__state->c__3, (ftnlen)28);
+	i__1[0] = rtrim_(__global_state, lftbkt, (ftnlen)6), a__1[0] = lftbkt;
+	i__1[1] = rtrim_(__global_state, tststr, (ftnlen)16), a__1[1] = 
+		tststr;
+	i__1[2] = rtrim_(__global_state, rgtbkt, (ftnlen)6), a__1[2] = rgtbkt;
+	s_cat(&__global_state->f2c, __state->ftpstr, a__1, i__1, &
+		__state->c__3, (ftnlen)28);
 
 /*        Stop this block from executing except on the first pass. */
 
@@ -356,63 +360,66 @@ static zzdasnfr_state_t* get_zzdasnfr_state() {
 /*     maintain the proper sizes for each of the string objects, in */
 /*     the event larger or smaller strings are passed in. */
 
-    s_copy(locidw, idword, (ftnlen)8, idword_len);
-    s_copy(locifn, ifname, (ftnlen)60, ifname_len);
-    s_copy(locfmt, format, (ftnlen)8, format_len);
+    s_copy(&__global_state->f2c, locidw, idword, (ftnlen)8, idword_len);
+    s_copy(&__global_state->f2c, locifn, ifname, (ftnlen)60, ifname_len);
+    s_copy(&__global_state->f2c, locfmt, format, (ftnlen)8, format_len);
 
 /*     Write the file record components out to the first record of the */
 /*     file. */
 
     __state->io___15.ciunit = *lun;
-    iostat = s_wdue(&__state->io___15);
+    iostat = s_wdue(&__global_state->f2c, &__state->io___15);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, locidw, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, locidw, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, locifn, (ftnlen)60);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, locifn, (ftnlen)60);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*nresvr), (ftnlen)sizeof(
-	    integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*nresvr), 
+	    (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*nresvc), (ftnlen)sizeof(
-	    integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*nresvc), 
+	    (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*ncomr), (ftnlen)sizeof(integer)
-	    );
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*ncomr), (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*ncomc), (ftnlen)sizeof(integer)
-	    );
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*ncomc), (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, locfmt, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, locfmt, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, __state->prenul, (ftnlen)607);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, __state->prenul, (
+	    ftnlen)607);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, __state->ftpstr, (ftnlen)28);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, __state->ftpstr, (
+	    ftnlen)28);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, __state->pstnul, (ftnlen)297);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, __state->pstnul, (
+	    ftnlen)297);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_wdue();
+    iostat = e_wdue(&__global_state->f2c);
 L100001:
 
 /*     Check IOSTAT for errors. */
@@ -422,19 +429,19 @@ L100001:
 /*        Since we are unable to write to the file record, make */
 /*        certain the output file is destroyed. */
 
-	setmsg_("Attempt to write file '#' failed. Value of IOSTAT was #. Th"
-		"e file has been deleted.", (ftnlen)83);
-	errfnm_("#", lun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
+	setmsg_(__global_state, "Attempt to write file '#' failed. Value of "
+		"IOSTAT was #. The file has been deleted.", (ftnlen)83);
+	errfnm_(__global_state, "#", lun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
 	cl__1.cerr = 0;
 	cl__1.cunit = *lun;
 	cl__1.csta = "DELETE";
-	f_clos(&cl__1);
-	sigerr_("SPICE(DASWRITEFAIL)", (ftnlen)19);
-	chkout_("ZZDASNFR", (ftnlen)8);
+	f_clos(&__global_state->f2c, &cl__1);
+	sigerr_(__global_state, "SPICE(DASWRITEFAIL)", (ftnlen)19);
+	chkout_(__global_state, "ZZDASNFR", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZDASNFR", (ftnlen)8);
+    chkout_(__global_state, "ZZDASNFR", (ftnlen)8);
     return 0;
 } /* zzdasnfr_ */
 

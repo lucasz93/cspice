@@ -192,7 +192,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "zzcputim_" );
+   chkin_c ( naif_state, "zzcputim_" );
 
    /*
    Get the local time.  The returned status will be TIME_ERROR if

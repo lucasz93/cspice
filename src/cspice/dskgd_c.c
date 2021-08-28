@@ -603,7 +603,7 @@
    {
       return;
    }
-   chkin_c ( "dskgd_c" );
+   chkin_c ( naif_state, "dskgd_c" );
 
 
    /*

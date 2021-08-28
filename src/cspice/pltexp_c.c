@@ -241,7 +241,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "pltexp_c" );
+   chkin_c ( naif_state, "pltexp_c" );
 
 
    pltexp_ ( ( doublereal * ) iverts,

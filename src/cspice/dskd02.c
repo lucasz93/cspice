@@ -8,8 +8,7 @@
 
 
 extern dskd02_init_t __dskd02_init;
-static dskd02_state_t* get_dskd02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskd02_state_t* get_dskd02_state(cspice_t* state) {
 	if (!state->dskd02)
 		state->dskd02 = __cspice_allocate_module(sizeof(
 	dskd02_state_t), &__dskd02_init, sizeof(__dskd02_init));
@@ -18,8 +17,9 @@ static dskd02_state_t* get_dskd02_state() {
 }
 
 /* $Procedure DSKD02 ( DSK, fetch d.p. type 2 data ) */
-/* Subroutine */ int dskd02_(integer *handle, integer *dladsc, integer *item, 
-	integer *start, integer *room, integer *n, doublereal *values)
+/* Subroutine */ int dskd02_(cspice_t* __global_state, integer *handle, 
+	integer *dladsc, integer *item, integer *start, integer *room, 
+	integer *n, doublereal *values)
 {
     /* Initialized data */
 
@@ -33,20 +33,20 @@ static dskd02_state_t* get_dskd02_state() {
     integer e;
     integer dbase;
     integer ibase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasrdd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    dskd02_state_t* __state = get_dskd02_state();
+    dskd02_state_t* __state = get_dskd02_state(__global_state);
 /* $ Abstract */
 
 /*     Fetch double precision data from a type 2 DSK segment. */
@@ -1026,11 +1026,11 @@ static dskd02_state_t* get_dskd02_state() {
 	__state->first = FALSE_;
     }
     if (*room <= 0) {
-	chkin_("DSKD02", (ftnlen)6);
-	setmsg_("ROOM was #; must be positive.", (ftnlen)29);
-	errint_("#", room, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKD02", (ftnlen)6);
+	chkin_(__global_state, "DSKD02", (ftnlen)6);
+	setmsg_(__global_state, "ROOM was #; must be positive.", (ftnlen)29);
+	errint_(__global_state, "#", room, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKD02", (ftnlen)6);
 	return 0;
     }
     ibase = dladsc[2];
@@ -1056,8 +1056,8 @@ static dskd02_state_t* get_dskd02_state() {
 
 	i__1 = ibase + 1;
 	i__2 = ibase + 1;
-	dasrdi_(handle, &i__1, &i__2, &__state->nv);
-	if (failed_()) {
+	dasrdi_(__global_state, handle, &i__1, &i__2, &__state->nv);
+	if (failed_(__global_state)) {
 	    return 0;
 	}
 
@@ -1107,26 +1107,27 @@ static dskd02_state_t* get_dskd02_state() {
 	size = 1;
 	b = dbase + 34 + *start - 1;
     } else {
-	chkin_("DSKD02", (ftnlen)6);
-	setmsg_("Keyword parameter # was not recognized.", (ftnlen)39);
-	errint_("#", item, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("DSKD02", (ftnlen)6);
+	chkin_(__global_state, "DSKD02", (ftnlen)6);
+	setmsg_(__global_state, "Keyword parameter # was not recognized.", (
+		ftnlen)39);
+	errint_(__global_state, "#", item, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "DSKD02", (ftnlen)6);
 	return 0;
     }
 
 /*     The valid range for START is 1:SIZE. */
 
     if (*start < 1 || *start > size) {
-	chkin_("DSKD02", (ftnlen)6);
-	setmsg_("START must be in the range defined by the size of the data "
-		"associated with the keyword parameter #, namely 1:#.  Actual"
-		" value of START was #.", (ftnlen)141);
-	errint_("#", item, (ftnlen)1);
-	errint_("#", &size, (ftnlen)1);
-	errint_("#", start, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKD02", (ftnlen)6);
+	chkin_(__global_state, "DSKD02", (ftnlen)6);
+	setmsg_(__global_state, "START must be in the range defined by the s"
+		"ize of the data associated with the keyword parameter #, nam"
+		"ely 1:#.  Actual value of START was #.", (ftnlen)141);
+	errint_(__global_state, "#", item, (ftnlen)1);
+	errint_(__global_state, "#", &size, (ftnlen)1);
+	errint_(__global_state, "#", start, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKD02", (ftnlen)6);
 	return 0;
     }
 
@@ -1136,7 +1137,7 @@ static dskd02_state_t* get_dskd02_state() {
     i__1 = *room, i__2 = size - *start + 1;
     *n = min(i__1,i__2);
     e = b + *n - 1;
-    dasrdd_(handle, &b, &e, values);
+    dasrdd_(__global_state, handle, &b, &e, values);
     return 0;
 } /* dskd02_ */
 

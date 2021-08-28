@@ -8,8 +8,7 @@
 
 
 extern dasadd_init_t __dasadd_init;
-static dasadd_state_t* get_dasadd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasadd_state_t* get_dasadd_state(cspice_t* state) {
 	if (!state->dasadd)
 		state->dasadd = __cspice_allocate_module(sizeof(
 	dasadd_state_t), &__dasadd_init, sizeof(__dasadd_init));
@@ -18,45 +17,50 @@ static dasadd_state_t* get_dasadd_state() {
 }
 
 /* $Procedure      DASADD ( DAS, add data, double precision ) */
-/* Subroutine */ int dasadd_(integer *handle, integer *n, doublereal *data)
+/* Subroutine */ int dasadd_(cspice_t* __global_state, integer *handle, 
+	integer *n, doublereal *data)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     integer free;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
     integer recno;
     integer lastd;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer ncomr;
     integer numdp;
-    extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dasa2l_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern logical failed_(cspice_t*);
     integer clbase;
-    extern /* Subroutine */ int dascud_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dascud_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dashfs_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *);
     doublereal record[128];
     integer lastla[3];
-    extern /* Subroutine */ int dasurd_(integer *, integer *, integer *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int daswrd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int dasurd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *);
+    extern /* Subroutine */ int daswrd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
     integer lastrc[3];
     integer clsize;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer lastwd[3];
     integer nresvc;
     integer wordno;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer nresvr;
     integer nwritn;
 
 
     /* Module state */
-    dasadd_state_t* __state = get_dasadd_state();
+    dasadd_state_t* __state = get_dasadd_state(__global_state);
 /* $ Abstract */
 
 /*     Add an array of double precision numbers to a DAS file. */
@@ -335,16 +339,16 @@ static dasadd_state_t* get_dasadd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASADD", (ftnlen)6);
+	chkin_(__global_state, "DASADD", (ftnlen)6);
     }
 
 /*     Get the file summary for this DAS. */
 
-    dashfs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 
-	    lastwd);
+    dashfs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, 
+	    lastla, lastrc, lastwd);
     lastd = lastla[1];
 
 /*     We will keep track of the location that we wish to write to */
@@ -362,8 +366,8 @@ static dasadd_state_t* get_dasadd_state() {
 /*     first record available for double precision data. */
 
     if (lastd >= 1) {
-	dasa2l_(handle, &__state->c__2, &lastd, &clbase, &clsize, &recno, &
-		wordno);
+	dasa2l_(__global_state, handle, &__state->c__2, &lastd, &clbase, &
+		clsize, &recno, &wordno);
     } else {
 	recno = free;
 	wordno = 0;
@@ -377,7 +381,7 @@ static dasadd_state_t* get_dasadd_state() {
 
 
     nwritn = 0;
-    while(nwritn < *n && ! failed_()) {
+    while(nwritn < *n && ! failed_(__global_state)) {
 
 /*        Write as much data as we can (or need to) into the current */
 /*        record.  We assume that RECNO, WORDNO, and NWRITN have been */
@@ -396,12 +400,13 @@ static dasadd_state_t* get_dasadd_state() {
 /*           the part we're interested in. */
 
 	    if (wordno == 0) {
-		moved_(&data[nwritn], &numdp, record);
-		daswrd_(handle, &recno, record);
+		moved_(__global_state, &data[nwritn], &numdp, record);
+		daswrd_(__global_state, handle, &recno, record);
 	    } else {
 		i__1 = wordno + 1;
 		i__2 = wordno + numdp;
-		dasurd_(handle, &recno, &i__1, &i__2, &data[nwritn]);
+		dasurd_(__global_state, handle, &recno, &i__1, &i__2, &data[
+			nwritn]);
 	    }
 	    nwritn += numdp;
 	    wordno += numdp;
@@ -431,8 +436,8 @@ static dasadd_state_t* get_dasadd_state() {
 /*     double precision words.  DASCUD will also update the file summary */
 /*     accordingly. */
 
-    dascud_(handle, &__state->c__2, n);
-    chkout_("DASADD", (ftnlen)6);
+    dascud_(__global_state, handle, &__state->c__2, n);
+    chkout_(__global_state, "DASADD", (ftnlen)6);
     return 0;
 } /* dasadd_ */
 

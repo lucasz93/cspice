@@ -8,32 +8,31 @@
 
 
 typedef int enchar_state_t;
-static enchar_state_t* get_enchar_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline enchar_state_t* get_enchar_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ENCHAR ( Encode a character string ) */
-/* Subroutine */ int enchar_0_(int n__, integer *number, char *string, ftnlen 
-	string_len)
+/* Subroutine */ int enchar_0_(cspice_t* __global_state, int n__, integer *
+	number, char *string, ftnlen string_len)
 {
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer base;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer chbase_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer chbase_(cspice_t*);
     integer remain;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer num;
 
 
     /* Module state */
-    enchar_state_t* __state = get_enchar_state();
+    enchar_state_t* __state = get_enchar_state(__global_state);
 /* $ Abstract */
 
 /*     Encode a nonnegative integer number into a character string */
@@ -205,23 +204,23 @@ static enchar_state_t* get_enchar_state() {
 	case 1: goto L_dechar;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
-    } else if (i_len(string, string_len) < 5) {
-	chkin_("ENCHAR", (ftnlen)6);
-	sigerr_("SPICE(INSUFFLEN)", (ftnlen)16);
-	chkout_("ENCHAR", (ftnlen)6);
+    } else if (i_len(&__global_state->f2c, string, string_len) < 5) {
+	chkin_(__global_state, "ENCHAR", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(INSUFFLEN)", (ftnlen)16);
+	chkout_(__global_state, "ENCHAR", (ftnlen)6);
 	return 0;
     } else if (*number < 0) {
-	chkin_("ENCHAR", (ftnlen)6);
-	sigerr_("SPICE(OUTOFRANGE)", (ftnlen)17);
-	chkout_("ENCHAR", (ftnlen)6);
+	chkin_(__global_state, "ENCHAR", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(OUTOFRANGE)", (ftnlen)17);
+	chkout_(__global_state, "ENCHAR", (ftnlen)6);
 	return 0;
     }
 
 /*     Generate the digits from right to left. */
 
-    base = chbase_();
+    base = chbase_(__global_state);
     num = *number;
     for (i__ = 5; i__ >= 1; --i__) {
 	remain = num % base;
@@ -232,9 +231,9 @@ static enchar_state_t* get_enchar_state() {
 /*     More error handling. */
 
     if (num > 0) {
-	chkin_("ENCHAR", (ftnlen)6);
-	sigerr_("SPICE(OUTOFRANGE)", (ftnlen)17);
-	chkout_("ENCHAR", (ftnlen)6);
+	chkin_(__global_state, "ENCHAR", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(OUTOFRANGE)", (ftnlen)17);
+	chkout_(__global_state, "ENCHAR", (ftnlen)6);
     }
     return 0;
 /* $Procedure      DECHAR ( Decode a character string ) */
@@ -380,19 +379,19 @@ L_dechar:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
-    } else if (i_len(string, string_len) < 5) {
-	chkin_("DECHAR", (ftnlen)6);
-	sigerr_("SPICE(INSUFFLEN)", (ftnlen)16);
-	chkout_("DECHAR", (ftnlen)6);
+    } else if (i_len(&__global_state->f2c, string, string_len) < 5) {
+	chkin_(__global_state, "DECHAR", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(INSUFFLEN)", (ftnlen)16);
+	chkout_(__global_state, "DECHAR", (ftnlen)6);
 	return 0;
     }
 
 /*     Sum the products of the 'digits' and the corresponding powers */
 /*     of NDCHAR, just like any other base conversion. */
 
-    base = chbase_();
+    base = chbase_(__global_state);
     *number = 0;
     for (i__ = 1; i__ <= 5; ++i__) {
 	*number = base * *number + *(unsigned char *)&string[i__ - 1];
@@ -400,12 +399,14 @@ L_dechar:
     return 0;
 } /* enchar_ */
 
-/* Subroutine */ int enchar_(integer *number, char *string, ftnlen string_len)
+/* Subroutine */ int enchar_(cspice_t* __global_state, integer *number, char *
+	string, ftnlen string_len)
 {
     return enchar_0_(0, number, string, string_len);
     }
 
-/* Subroutine */ int dechar_(char *string, integer *number, ftnlen string_len)
+/* Subroutine */ int dechar_(cspice_t* __global_state, char *string, integer *
+	number, ftnlen string_len)
 {
     return enchar_0_(1, number, string, string_len);
     }

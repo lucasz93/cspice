@@ -11,13 +11,12 @@
 #endif
 
 #ifdef KR_headers
-char *f__icvt(value,ndigit,sign, base) longint value; int *ndigit,*sign;
+char *f__icvt(f2c,value,ndigit,sign, base) f2c_state_t *f2c; longint value; int *ndigit,*sign;
  register int base;
 #else
-char *f__icvt(longint value, int *ndigit, int *sign, int base)
+char *f__icvt(f2c_state_t *f2c, longint value, int *ndigit, int *sign, int base)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	char* buf = f2c->buf;
+{	char* buf = f2c->buf;
 	register int i;
 	ulongint uvalue;
 

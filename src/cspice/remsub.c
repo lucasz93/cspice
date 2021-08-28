@@ -8,40 +8,39 @@
 
 
 typedef int remsub_state_t;
-static remsub_state_t* get_remsub_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline remsub_state_t* get_remsub_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      REMSUB ( Remove a substring ) */
-/* Subroutine */ int remsub_(char *in, integer *left, integer *right, char *
-	out, ftnlen in_len, ftnlen out_len)
+/* Subroutine */ int remsub_(cspice_t* __global_state, char *in, integer *
+	left, integer *right, char *out, ftnlen in_len, ftnlen out_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
     integer j;
     integer l;
     integer r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer inlen;
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer outlen;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    remsub_state_t* __state = get_remsub_state();
+    remsub_state_t* __state = get_remsub_state(__global_state);
 /* $ Abstract */
 
 /*      Remove the substring (LEFT:RIGHT) from a character string. */
@@ -198,21 +197,23 @@ static remsub_state_t* get_remsub_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("REMSUB", (ftnlen)6);
+	chkin_(__global_state, "REMSUB", (ftnlen)6);
     }
 
 /*     If a character position is out of range, signal an error. */
 
-    if (*left > *right || *right < 1 || *left < 1 || *right > i_len(in, 
-	    in_len) || *left > i_len(in, in_len)) {
-	setmsg_("Left location was *. Right location was *.", (ftnlen)42);
-	errint_("*", left, (ftnlen)1);
-	errint_("*", right, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("REMSUB", (ftnlen)6);
+    if (*left > *right || *right < 1 || *left < 1 || *right > i_len(&
+	    __global_state->f2c, in, in_len) || *left > i_len(&
+	    __global_state->f2c, in, in_len)) {
+	setmsg_(__global_state, "Left location was *. Right location was *.", 
+		(ftnlen)42);
+	errint_(__global_state, "*", left, (ftnlen)1);
+	errint_(__global_state, "*", right, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "REMSUB", (ftnlen)6);
 	return 0;
     } else {
 	l = *left;
@@ -222,8 +223,8 @@ static remsub_state_t* get_remsub_state() {
 /*     How much of the input string will we use? And how big is the */
 /*     output string? */
 
-    inlen = lastnb_(in, in_len);
-    outlen = i_len(out, out_len);
+    inlen = lastnb_(__global_state, in, in_len);
+    outlen = i_len(&__global_state->f2c, out, out_len);
 
 /*     Copy the first part of the input string. (One character at a */
 /*     time, in case this is being done in place.) */
@@ -248,9 +249,10 @@ static remsub_state_t* get_remsub_state() {
 /*     Pad with blanks, if necessary. */
 
     if (i__ <= outlen) {
-	s_copy(out + (i__ - 1), " ", out_len - (i__ - 1), (ftnlen)1);
+	s_copy(&__global_state->f2c, out + (i__ - 1), " ", out_len - (i__ - 1)
+		, (ftnlen)1);
     }
-    chkout_("REMSUB", (ftnlen)6);
+    chkout_(__global_state, "REMSUB", (ftnlen)6);
     return 0;
 } /* remsub_ */
 

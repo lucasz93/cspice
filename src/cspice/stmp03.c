@@ -8,8 +8,7 @@
 
 
 extern stmp03_init_t __stmp03_init;
-static stmp03_state_t* get_stmp03_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline stmp03_state_t* get_stmp03_state(cspice_t* state) {
 	if (!state->stmp03)
 		state->stmp03 = __cspice_allocate_module(sizeof(
 	stmp03_state_t), &__stmp03_init, sizeof(__stmp03_init));
@@ -18,8 +17,8 @@ static stmp03_state_t* get_stmp03_state() {
 }
 
 /* $Procedure      STMP03 ( Stumpff functions 0 through 3 ) */
-/* Subroutine */ int stmp03_(doublereal *x, doublereal *c0, doublereal *c1, 
-	doublereal *c2, doublereal *c3)
+/* Subroutine */ int stmp03_(cspice_t* __global_state, doublereal *x, 
+	doublereal *c0, doublereal *c1, doublereal *c2, doublereal *c3)
 {
     /* Initialized data */
 
@@ -28,24 +27,26 @@ static stmp03_state_t* get_stmp03_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double log(doublereal), sqrt(doublereal), cosh(doublereal), sinh(
-	    doublereal), cos(doublereal), sin(doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double log(f2c_state_t*, doublereal), sqrt(f2c_state_t*, doublereal), 
+	    cosh(f2c_state_t*, doublereal), sinh(f2c_state_t*, doublereal), 
+	    cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
     integer i__;
     doublereal y;
     doublereal z__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    stmp03_state_t* __state = get_stmp03_state();
+    stmp03_state_t* __state = get_stmp03_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the values of the Stumpff functions C_0 through C_3 at */
@@ -580,10 +581,11 @@ static stmp03_state_t* get_stmp03_state() {
 	__state->first = FALSE_;
 	for (i__ = 1; i__ <= 20; ++i__) {
 	    __state->pairs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "pairs", i__1, "stmp03_", (ftnlen)589)] = 1. / ((
-		    doublereal) i__ * (doublereal) (i__ + 1));
+		    &__global_state->f2c, "pairs", i__1, "stmp03_", (ftnlen)
+		    589)] = 1. / ((doublereal) i__ * (doublereal) (i__ + 1));
 	}
-	y = log(2.) + log(dpmax_());
+	y = log(&__global_state->f2c, 2.) + log(&__global_state->f2c, dpmax_(
+		__global_state));
 	__state->lbound = -y * y;
     }
 
@@ -592,13 +594,13 @@ static stmp03_state_t* get_stmp03_state() {
 /*     functions. */
 
     if (*x <= __state->lbound) {
-	chkin_("STMP03", (ftnlen)6);
-	setmsg_("The input value of X must be greater than #.  The input val"
-		"ue was #", (ftnlen)67);
-	errdp_("#", &__state->lbound, (ftnlen)1);
-	errdp_("#", x, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("STMP03", (ftnlen)6);
+	chkin_(__global_state, "STMP03", (ftnlen)6);
+	setmsg_(__global_state, "The input value of X must be greater than #"
+		".  The input value was #", (ftnlen)67);
+	errdp_(__global_state, "#", &__state->lbound, (ftnlen)1);
+	errdp_(__global_state, "#", x, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "STMP03", (ftnlen)6);
 	return 0;
     }
 
@@ -667,17 +669,17 @@ static stmp03_state_t* get_stmp03_state() {
 
 
     if (*x < -1.) {
-	z__ = sqrt(-(*x));
-	*c0 = cosh(z__);
-	*c1 = sinh(z__) / z__;
+	z__ = sqrt(&__global_state->f2c, -(*x));
+	*c0 = cosh(&__global_state->f2c, z__);
+	*c1 = sinh(&__global_state->f2c, z__) / z__;
 	*c2 = (1 - *c0) / *x;
 	*c3 = (1 - *c1) / *x;
 	return 0;
     }
     if (*x > 1.) {
-	z__ = sqrt(*x);
-	*c0 = cos(z__);
-	*c1 = sin(z__) / z__;
+	z__ = sqrt(&__global_state->f2c, *x);
+	*c0 = cos(&__global_state->f2c, z__);
+	*c1 = sin(&__global_state->f2c, z__) / z__;
 	*c2 = (1 - *c0) / *x;
 	*c3 = (1 - *c1) / *x;
 	return 0;
@@ -711,7 +713,8 @@ static stmp03_state_t* get_stmp03_state() {
     *c3 = 1.;
     for (i__ = 20; i__ >= 4; i__ += -2) {
 	*c3 = 1. - *x * __state->pairs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("pairs", i__1, "stmp03_", (ftnlen)733)] * *c3;
+		i__1 : s_rnge(&__global_state->f2c, "pairs", i__1, "stmp03_", 
+		(ftnlen)733)] * *c3;
     }
     *c3 = __state->pairs[1] * *c3;
 
@@ -739,7 +742,8 @@ static stmp03_state_t* get_stmp03_state() {
     *c2 = 1.;
     for (i__ = 19; i__ >= 3; i__ += -2) {
 	*c2 = 1. - *x * __state->pairs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("pairs", i__1, "stmp03_", (ftnlen)764)] * *c2;
+		i__1 : s_rnge(&__global_state->f2c, "pairs", i__1, "stmp03_", 
+		(ftnlen)764)] * *c2;
     }
     *c2 = __state->pairs[0] * *c2;
 

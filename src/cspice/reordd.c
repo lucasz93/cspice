@@ -8,14 +8,13 @@
 
 
 typedef int reordd_state_t;
-static reordd_state_t* get_reordd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline reordd_state_t* get_reordd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      REORDD ( Reorder a double precision array ) */
-/* Subroutine */ int reordd_(integer *iorder, integer *ndim, doublereal *
-	array)
+/* Subroutine */ int reordd_(cspice_t* __global_state, integer *iorder, 
+	integer *ndim, doublereal *array)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -28,7 +27,7 @@ static reordd_state_t* get_reordd_state() {
 
 
     /* Module state */
-    reordd_state_t* __state = get_reordd_state();
+    reordd_state_t* __state = get_reordd_state(__global_state);
 /* $ Abstract */
 
 /*      Re-order the elements of a double precision array according to */

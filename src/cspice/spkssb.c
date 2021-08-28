@@ -8,26 +8,25 @@
 
 
 typedef int spkssb_state_t;
-static spkssb_state_t* get_spkssb_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkssb_state_t* get_spkssb_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure SPKSSB ( S/P Kernel, solar system barycenter ) */
-/* Subroutine */ int spkssb_(integer *targ, doublereal *et, char *ref, 
-	doublereal *starg, ftnlen ref_len)
+/* Subroutine */ int spkssb_(cspice_t* __global_state, integer *targ, 
+	doublereal *et, char *ref, doublereal *starg, ftnlen ref_len)
 {
     integer bary;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal lt;
-    extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int spkgeo_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spkssb_state_t* __state = get_spkssb_state();
+    spkssb_state_t* __state = get_spkssb_state(__global_state);
 /* $ Abstract */
 
 /*     Return the state (position and velocity) of a target body */
@@ -218,14 +217,14 @@ static spkssb_state_t* get_spkssb_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKSSB", (ftnlen)6);
+	chkin_(__global_state, "SPKSSB", (ftnlen)6);
     }
     bary = 0;
-    spkgeo_(targ, et, ref, &bary, starg, &lt, ref_len);
-    chkout_("SPKSSB", (ftnlen)6);
+    spkgeo_(__global_state, targ, et, ref, &bary, starg, &lt, ref_len);
+    chkout_(__global_state, "SPKSSB", (ftnlen)6);
     return 0;
 } /* spkssb_ */
 

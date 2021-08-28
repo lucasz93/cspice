@@ -8,26 +8,25 @@
 
 
 typedef int frstpc_state_t;
-static frstpc_state_t* get_frstpc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline frstpc_state_t* get_frstpc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            FRSTPC ( First printable character ) */
-integer frstpc_(char *string, ftnlen string_len)
+integer frstpc_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     integer ret_val, i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    frstpc_state_t* __state = get_frstpc_state();
+    frstpc_state_t* __state = get_frstpc_state(__global_state);
 /* $ Abstract */
 
 /*     Return the index of the first printable character in a character */
@@ -179,7 +178,7 @@ integer frstpc_(char *string, ftnlen string_len)
 /*     Look for the first character in the range [33,126], and return */
 /*     its index. */
 
-    i__1 = i_len(string, string_len);
+    i__1 = i_len(&__global_state->f2c, string, string_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (*(unsigned char *)&string[i__ - 1] >= 33 && *(unsigned char *)&
 		string[i__ - 1] <= 126) {

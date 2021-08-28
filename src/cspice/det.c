@@ -8,20 +8,19 @@
 
 
 typedef int det_state_t;
-static det_state_t* get_det_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline det_state_t* get_det_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  DET  ( Determinant of a double precision 3x3 matrix ) */
-doublereal det_(doublereal *m1)
+doublereal det_(cspice_t* __global_state, doublereal *m1)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    det_state_t* __state = get_det_state();
+    det_state_t* __state = get_det_state(__global_state);
 /* $ Abstract */
 
 /*      Compute the determinant of a double precision 3x3 matrix. */

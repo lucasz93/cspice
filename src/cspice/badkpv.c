@@ -8,42 +8,42 @@
 
 
 typedef int badkpv_state_t;
-static badkpv_state_t* get_badkpv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline badkpv_state_t* get_badkpv_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure BADKPV ( Bad Kernel Pool Variable ) */
-logical badkpv_(char *caller, char *name__, char *comp, integer *size, 
-	integer *divby, char *type__, ftnlen caller_len, ftnlen name_len, 
-	ftnlen comp_len, ftnlen type_len)
+logical badkpv_(cspice_t* __global_state, char *caller, char *name__, char *
+	comp, integer *size, integer *divby, char *type__, ftnlen caller_len, 
+	ftnlen name_len, ftnlen comp_len, ftnlen type_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical eqchr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical eqchr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char class__[1];
     logical found;
     integer ratio;
     logical ok;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer dim;
 
 
     /* Module state */
-    badkpv_state_t* __state = get_badkpv_state();
+    badkpv_state_t* __state = get_badkpv_state(__global_state);
 /* $ Abstract */
 
 /*     Determine if a kernel pool variable is present and if so */
@@ -287,48 +287,53 @@ logical badkpv_(char *caller, char *name__, char *comp, integer *size,
 /*     a bad kernel pool variable. */
 
     ret_val = TRUE_;
-    if (return_()) {
+    if (return_(__global_state)) {
 	return ret_val;
     }
-    chkin_("BADKPV", (ftnlen)6);
+    chkin_(__global_state, "BADKPV", (ftnlen)6);
 
 /*     Look up the attributes of this variable in the kernel pool. */
 
-    dtpool_(name__, &found, &dim, class__, name_len, (ftnlen)1);
+    dtpool_(__global_state, name__, &found, &dim, class__, name_len, (ftnlen)
+	    1);
     if (! found) {
-	setmsg_("#: The kernel pool variable '#' is not currently present in"
-		" the kernel pool. Possible reasons are that the appropriate "
-		"text kernel file has not been loaded via a call to FURNSH or"
-		" that the routine CLPOOL has been called after loading the a"
-		"ppropriate file. ", (ftnlen)256);
-	errch_("#", caller, (ftnlen)1, caller_len);
-	errch_("#", name__, (ftnlen)1, name_len);
-	sigerr_("SPICE(VARIABLENOTFOUND)", (ftnlen)23);
-	chkout_("BADKPV", (ftnlen)6);
+	setmsg_(__global_state, "#: The kernel pool variable '#' is not curr"
+		"ently present in the kernel pool. Possible reasons are that "
+		"the appropriate text kernel file has not been loaded via a c"
+		"all to FURNSH or that the routine CLPOOL has been called aft"
+		"er loading the appropriate file. ", (ftnlen)256);
+	errch_(__global_state, "#", caller, (ftnlen)1, caller_len);
+	errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	sigerr_(__global_state, "SPICE(VARIABLENOTFOUND)", (ftnlen)23);
+	chkout_(__global_state, "BADKPV", (ftnlen)6);
 	return ret_val;
     }
 
 /*     Compare the dimension of the specified variable with the */
 /*     input SIZE. */
 
-    if (s_cmp(comp, "=", comp_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, comp, "=", comp_len, (ftnlen)1) == 0) {
 	ok = dim == *size;
-    } else if (s_cmp(comp, "<", comp_len, (ftnlen)1) == 0) {
+    } else if (s_cmp(&__global_state->f2c, comp, "<", comp_len, (ftnlen)1) == 
+	    0) {
 	ok = dim < *size;
-    } else if (s_cmp(comp, ">", comp_len, (ftnlen)1) == 0) {
+    } else if (s_cmp(&__global_state->f2c, comp, ">", comp_len, (ftnlen)1) == 
+	    0) {
 	ok = dim > *size;
-    } else if (s_cmp(comp, "<=", comp_len, (ftnlen)2) == 0) {
+    } else if (s_cmp(&__global_state->f2c, comp, "<=", comp_len, (ftnlen)2) ==
+	     0) {
 	ok = dim <= *size;
-    } else if (s_cmp(comp, "=>", comp_len, (ftnlen)2) == 0) {
+    } else if (s_cmp(&__global_state->f2c, comp, "=>", comp_len, (ftnlen)2) ==
+	     0) {
 	ok = dim >= *size;
     } else {
-	setmsg_("#: The comparison operator '#' is not a recognized value.  "
-		"The recognized values are '<', '<=', '=', '=>', '>'. ", (
-		ftnlen)112);
-	errch_("#", caller, (ftnlen)1, caller_len);
-	errch_("#", comp, (ftnlen)1, comp_len);
-	sigerr_("SPICE(UNKNOWNCOMPARE)", (ftnlen)21);
-	chkout_("BADKPV", (ftnlen)6);
+	setmsg_(__global_state, "#: The comparison operator '#' is not a rec"
+		"ognized value.  The recognized values are '<', '<=', '=', '="
+		">', '>'. ", (ftnlen)112);
+	errch_(__global_state, "#", caller, (ftnlen)1, caller_len);
+	errch_(__global_state, "#", comp, (ftnlen)1, comp_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNCOMPARE)", (ftnlen)21);
+	chkout_(__global_state, "BADKPV", (ftnlen)6);
 	return ret_val;
     }
 
@@ -336,18 +341,18 @@ logical badkpv_(char *caller, char *name__, char *comp, integer *size,
 /*     and return. */
 
     if (! ok) {
-	setmsg_("#: The kernel pool variable '#' is expected to have a numbe"
-		"r of components DIM such that the comparison DIM # # is TRUE"
-		".  However, the current number of components for '#' is #. ", 
-		(ftnlen)178);
-	errch_("#", caller, (ftnlen)1, caller_len);
-	errch_("#", name__, (ftnlen)1, name_len);
-	errch_("#", comp, (ftnlen)1, comp_len);
-	errint_("#", size, (ftnlen)1);
-	errch_("#", name__, (ftnlen)1, name_len);
-	errint_("#", &dim, (ftnlen)1);
-	sigerr_("SPICE(BADVARIABLESIZE)", (ftnlen)22);
-	chkout_("BADKPV", (ftnlen)6);
+	setmsg_(__global_state, "#: The kernel pool variable '#' is expected"
+		" to have a number of components DIM such that the comparison"
+		" DIM # # is TRUE.  However, the current number of components"
+		" for '#' is #. ", (ftnlen)178);
+	errch_(__global_state, "#", caller, (ftnlen)1, caller_len);
+	errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	errch_(__global_state, "#", comp, (ftnlen)1, comp_len);
+	errint_(__global_state, "#", size, (ftnlen)1);
+	errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	errint_(__global_state, "#", &dim, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADVARIABLESIZE)", (ftnlen)22);
+	chkout_(__global_state, "BADKPV", (ftnlen)6);
 	return ret_val;
     }
 
@@ -360,47 +365,47 @@ logical badkpv_(char *caller, char *name__, char *comp, integer *size,
 	ratio = 1;
     }
     if (*divby * ratio != dim) {
-	setmsg_("#: The number of components of the kernel pool variable '#'"
-		" is required to be divisible by #.  However, the actual numb"
-		"er of components is # which is not evenly divisible by #. ", (
-		ftnlen)177);
-	errch_("#", caller, (ftnlen)1, caller_len);
-	errch_("#", name__, (ftnlen)1, name_len);
-	errint_("#", divby, (ftnlen)1);
-	errint_("#", &dim, (ftnlen)1);
-	errint_("#", divby, (ftnlen)1);
-	sigerr_("SPICE(BADVARIABLESIZE)", (ftnlen)22);
-	chkout_("BADKPV", (ftnlen)6);
+	setmsg_(__global_state, "#: The number of components of the kernel p"
+		"ool variable '#' is required to be divisible by #.  However,"
+		" the actual number of components is # which is not evenly di"
+		"visible by #. ", (ftnlen)177);
+	errch_(__global_state, "#", caller, (ftnlen)1, caller_len);
+	errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	errint_(__global_state, "#", divby, (ftnlen)1);
+	errint_(__global_state, "#", &dim, (ftnlen)1);
+	errint_(__global_state, "#", divby, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADVARIABLESIZE)", (ftnlen)22);
+	chkout_(__global_state, "BADKPV", (ftnlen)6);
 	return ret_val;
     }
 
 /*     Finally check the type of the variable. */
 
-    if (eqchr_(type__, "C", type_len, (ftnlen)1)) {
+    if (eqchr_(__global_state, type__, "C", type_len, (ftnlen)1)) {
 	if (*(unsigned char *)class__ != 'C') {
-	    setmsg_("#: The kernel pool variable '#' must be of type \"CHARA"
-		    "CTER\". However, the current type is numeric. ", (ftnlen)
-		    99);
-	    errch_("#", caller, (ftnlen)1, caller_len);
-	    errch_("#", name__, (ftnlen)1, name_len);
-	    sigerr_("SPICE(BADVARIABLETYPE)", (ftnlen)22);
-	    chkout_("BADKPV", (ftnlen)6);
+	    setmsg_(__global_state, "#: The kernel pool variable '#' must be"
+		    " of type \"CHARACTER\". However, the current type is num"
+		    "eric. ", (ftnlen)99);
+	    errch_(__global_state, "#", caller, (ftnlen)1, caller_len);
+	    errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	    sigerr_(__global_state, "SPICE(BADVARIABLETYPE)", (ftnlen)22);
+	    chkout_(__global_state, "BADKPV", (ftnlen)6);
 	    return ret_val;
 	}
-    } else if (eqchr_(type__, "N", type_len, (ftnlen)1)) {
+    } else if (eqchr_(__global_state, type__, "N", type_len, (ftnlen)1)) {
 	if (*(unsigned char *)class__ != 'N') {
-	    setmsg_("#: The kernel pool variable '#' must be of type \"NUMER"
-		    "IC\".  However, the current type is character. ", (ftnlen)
-		    100);
-	    errch_("#", caller, (ftnlen)1, caller_len);
-	    errch_("#", name__, (ftnlen)1, name_len);
-	    sigerr_("SPICE(BADVARIABLETYPE)", (ftnlen)22);
-	    chkout_("BADKPV", (ftnlen)6);
+	    setmsg_(__global_state, "#: The kernel pool variable '#' must be"
+		    " of type \"NUMERIC\".  However, the current type is char"
+		    "acter. ", (ftnlen)100);
+	    errch_(__global_state, "#", caller, (ftnlen)1, caller_len);
+	    errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	    sigerr_(__global_state, "SPICE(BADVARIABLETYPE)", (ftnlen)22);
+	    chkout_(__global_state, "BADKPV", (ftnlen)6);
 	    return ret_val;
 	}
     }
     ret_val = FALSE_;
-    chkout_("BADKPV", (ftnlen)6);
+    chkout_(__global_state, "BADKPV", (ftnlen)6);
     return ret_val;
 } /* badkpv_ */
 

@@ -8,8 +8,7 @@
 
 
 extern zzekrd03_init_t __zzekrd03_init;
-static zzekrd03_state_t* get_zzekrd03_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrd03_state_t* get_zzekrd03_state(cspice_t* state) {
 	if (!state->zzekrd03)
 		state->zzekrd03 = __cspice_allocate_module(sizeof(
 	zzekrd03_state_t), &__zzekrd03_init, sizeof(__zzekrd03_init));
@@ -18,26 +17,27 @@ static zzekrd03_state_t* get_zzekrd03_state() {
 }
 
 /* $Procedure   ZZEKRD03 ( EK, read class 3 column entry elements ) */
-/* Subroutine */ int zzekrd03_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr, integer *cvlen, char *cval, logical *isnull, 
-	ftnlen cval_len)
+/* Subroutine */ int zzekrd03_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr, integer *cvlen, 
+	char *cval, logical *isnull, ftnlen cval_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer bpos;
-    extern integer zzekrp2n_(integer *, integer *, integer *);
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
     integer epos;
-    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekcnam_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int zzekpgbs_(cspice_t*, integer *, integer *, 
 	    integer *);
+    extern /* Subroutine */ int zzekpgpg_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer b;
     integer e;
     integer l;
@@ -45,29 +45,31 @@ static zzekrd03_state_t* get_zzekrd03_state() {
     integer p;
     integer pbase;
     integer avail;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer recno;
     integer ncols;
-    extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     char column[32];
     integer colidx;
     integer datptr;
     integer relptr;
     integer ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int zzekgei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzekgei_(cspice_t*, integer *, integer *, 
+	    integer *);
 
 
     /* Module state */
-    zzekrd03_state_t* __state = get_zzekrd03_state();
+    zzekrd03_state_t* __state = get_zzekrd03_state(__global_state);
 /* $ Abstract */
 
 /*     Read a column entry from a specified record in a class 3 column. */
@@ -860,17 +862,17 @@ static zzekrd03_state_t* get_zzekrd03_state() {
     ncols = segdsc[4];
     colidx = coldsc[8];
     if (colidx < 1 || colidx > ncols) {
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKRD03", (ftnlen)8);
-	setmsg_("Column index = #; valid range is 1:#.SEGNO = #; RECNO = #; "
-		"EK = #", (ftnlen)65);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &ncols, (ftnlen)1);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKRD03", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKRD03", (ftnlen)8);
+	setmsg_(__global_state, "Column index = #; valid range is 1:#.SEGNO "
+		"= #; RECNO = #; EK = #", (ftnlen)65);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &ncols, (ftnlen)1);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKRD03", (ftnlen)8);
 	return 0;
     }
 
@@ -878,7 +880,7 @@ static zzekrd03_state_t* get_zzekrd03_state() {
 /*     and the stored string size. */
 
     ptrloc = *recptr + 2 + colidx;
-    dasrdi_(handle, &ptrloc, &ptrloc, &datptr);
+    dasrdi_(__global_state, handle, &ptrloc, &ptrloc, &datptr);
     if (datptr > 0) {
 
 /*        Read the value.  This is slightly more complicated than */
@@ -890,19 +892,19 @@ static zzekrd03_state_t* get_zzekrd03_state() {
 /*        of the string is stored.  This page contains at least one */
 /*        character of the data value. */
 
-	zzekgei_(handle, &datptr, cvlen);
+	zzekgei_(__global_state, handle, &datptr, cvlen);
 
 /*        Set the data pointer to the start of the string data, skipping */
 /*        over the encoded string length. */
 
 	datptr += 5;
 /* Computing MIN */
-	i__1 = *cvlen, i__2 = i_len(cval, cval_len);
+	i__1 = *cvlen, i__2 = i_len(&__global_state->f2c, cval, cval_len);
 	n = min(i__1,i__2);
 
 /*        Read the available data from the page under consideration. */
 
-	zzekpgpg_(&__state->c__1, &datptr, &p, &pbase);
+	zzekpgpg_(__global_state, &__state->c__1, &datptr, &p, &pbase);
 	relptr = datptr - pbase;
 /* Computing MIN */
 	i__1 = n, i__2 = 1014 - relptr + 1;
@@ -912,7 +914,7 @@ static zzekrd03_state_t* get_zzekrd03_state() {
 	bpos = 1;
 	epos = avail;
 	l = epos - bpos + 1;
-	dasrdc_(handle, &b, &e, &bpos, &epos, cval, cval_len);
+	dasrdc_(__global_state, handle, &b, &e, &bpos, &epos, cval, cval_len);
 	n -= l;
 	while(n > 0) {
 
@@ -920,23 +922,25 @@ static zzekrd03_state_t* get_zzekrd03_state() {
 /*           the base address of the referenced page. */
 
 	    i__1 = pbase + 1015;
-	    zzekgei_(handle, &i__1, &p);
-	    zzekpgbs_(&__state->c__1, &p, &pbase);
+	    zzekgei_(__global_state, handle, &i__1, &p);
+	    zzekpgbs_(__global_state, &__state->c__1, &p, &pbase);
 	    avail = min(n,1014);
 	    b = pbase + 1;
 	    e = pbase + avail;
 	    bpos = epos + 1;
 	    epos += avail;
-	    dasrdc_(handle, &b, &e, &bpos, &epos, cval, cval_len);
+	    dasrdc_(__global_state, handle, &b, &e, &bpos, &epos, cval, 
+		    cval_len);
 	    n -= avail;
 	    bpos = epos + 1;
 	}
 
 /*        Blank-pad CVAL if required. */
 
-	if (i_len(cval, cval_len) > epos) {
+	if (i_len(&__global_state->f2c, cval, cval_len) > epos) {
 	    i__1 = epos;
-	    s_copy(cval + i__1, " ", cval_len - i__1, (ftnlen)1);
+	    s_copy(&__global_state->f2c, cval + i__1, " ", cval_len - i__1, (
+		    ftnlen)1);
 	}
 	*isnull = FALSE_;
     } else if (datptr == -2) {
@@ -949,33 +953,33 @@ static zzekrd03_state_t* get_zzekrd03_state() {
 
 /*        The data value is absent.  This is an error. */
 
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	chkin_("ZZEKRD03", (ftnlen)8);
-	setmsg_("Attempted to read uninitialized column entry.  SEGNO = #; C"
-		"OLUMN = #; RECNO = #; EK = #", (ftnlen)87);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	errint_("#", &recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(UNINITIALIZED)", (ftnlen)20);
-	chkout_("ZZEKRD03", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	chkin_(__global_state, "ZZEKRD03", (ftnlen)8);
+	setmsg_(__global_state, "Attempted to read uninitialized column entr"
+		"y.  SEGNO = #; COLUMN = #; RECNO = #; EK = #", (ftnlen)87);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNINITIALIZED)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKRD03", (ftnlen)8);
 	return 0;
     } else {
 
 /*        The data pointer is corrupted. */
 
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	chkin_("ZZEKRD03", (ftnlen)8);
-	setmsg_("Data pointer is corrupted. SEGNO = #; COLUMN =  #; RECNO = "
-		"#; EK = #", (ftnlen)68);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	errint_("#", &recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKRD03", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	chkin_(__global_state, "ZZEKRD03", (ftnlen)8);
+	setmsg_(__global_state, "Data pointer is corrupted. SEGNO = #; COLUM"
+		"N =  #; RECNO = #; EK = #", (ftnlen)68);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKRD03", (ftnlen)8);
 	return 0;
     }
     return 0;

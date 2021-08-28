@@ -8,36 +8,35 @@
 
 
 typedef int astrip_state_t;
-static astrip_state_t* get_astrip_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline astrip_state_t* get_astrip_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure     ASTRIP ( STRIP Ascii characters from a string ) */
-/* Subroutine */ int astrip_(char *instr, char *asciib, char *asciie, char *
-	outstr, ftnlen instr_len, ftnlen asciib_len, ftnlen asciie_len, 
-	ftnlen outstr_len)
+/* Subroutine */ int astrip_(cspice_t* __global_state, char *instr, char *
+	asciib, char *asciie, char *outstr, ftnlen instr_len, ftnlen 
+	asciib_len, ftnlen asciie_len, ftnlen outstr_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer last;
     integer i__;
     integer j;
     integer k;
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer lwrbnd;
     integer uprbnd;
     integer outlen;
 
 
     /* Module state */
-    astrip_state_t* __state = get_astrip_state();
+    astrip_state_t* __state = get_astrip_state(__global_state);
 /* $ Abstract */
 
 /*      Remove from a character string all characters which fall */
@@ -206,11 +205,11 @@ static astrip_state_t* get_astrip_state() {
 /*     Find the length of the output string. We don't want to */
 /*     exceed it. */
 
-    outlen = i_len(outstr, outstr_len);
+    outlen = i_len(&__global_state->f2c, outstr, outstr_len);
 
 /*     Find the last non-blank character of the input string. */
 
-    last = lastnb_(instr, instr_len);
+    last = lastnb_(__global_state, instr, instr_len);
 
 /*     Get the numeric representation of ASCIIB and ASCIIE. */
 
@@ -248,7 +247,8 @@ static astrip_state_t* get_astrip_state() {
 
     if (j < outlen) {
 	i__1 = j;
-	s_copy(outstr + i__1, " ", outstr_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, outstr + i__1, " ", outstr_len - i__1, (
+		ftnlen)1);
     }
     return 0;
 } /* astrip_ */

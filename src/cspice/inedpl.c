@@ -8,8 +8,7 @@
 
 
 extern inedpl_init_t __inedpl_init;
-static inedpl_state_t* get_inedpl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline inedpl_state_t* get_inedpl_state(cspice_t* state) {
 	if (!state->inedpl)
 		state->inedpl = __cspice_allocate_module(sizeof(
 	inedpl_state_t), &__inedpl_init, sizeof(__inedpl_init));
@@ -18,55 +17,59 @@ static inedpl_state_t* get_inedpl_state() {
 }
 
 /* $Procedure      INEDPL ( Intersection of ellipsoid and plane ) */
-/* Subroutine */ int inedpl_(doublereal *a, doublereal *b, doublereal *c__, 
-	doublereal *plane, doublereal *ellips, logical *found)
+/* Subroutine */ int inedpl_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *c__, doublereal *plane, doublereal *ellips,
+	 logical *found)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double sqrt(doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal dist;
     doublereal span1[3];
     doublereal span2[3];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal const__;
     doublereal point[3];
-    extern doublereal vnorm_(doublereal *);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int cgv2el_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int pl2psv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int psv2pl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int cgv2el_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int pl2nvc_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int pl2psv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int psv2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal dplane[4];
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal maxrad;
     doublereal rcircl;
     doublereal center[3];
     doublereal normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal invdst[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal dstort[3];
     doublereal vec1[3];
     doublereal vec2[3];
 
 
     /* Module state */
-    inedpl_state_t* __state = get_inedpl_state();
+    inedpl_state_t* __state = get_inedpl_state(__global_state);
 /* $ Abstract */
 
 /*     Find the intersection of a triaxial ellipsoid and a plane. */
@@ -356,33 +359,34 @@ static inedpl_state_t* get_inedpl_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("INEDPL", (ftnlen)6);
+	chkin_(__global_state, "INEDPL", (ftnlen)6);
     }
 
 /*     We don't want to worry about flat ellipsoids: */
 
     if (*a <= 0. || *b <= 0. || *c__ <= 0.) {
 	*found = FALSE_;
-	setmsg_("Semi-axes: A = #,  B = #,  C = #.", (ftnlen)33);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("INEDPL", (ftnlen)6);
+	setmsg_(__global_state, "Semi-axes: A = #,  B = #,  C = #.", (ftnlen)
+		33);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "INEDPL", (ftnlen)6);
 	return 0;
     }
 
 /*     Check input plane for zero normal vector. */
 
-    pl2nvc_(plane, normal, &const__);
-    if (vzero_(normal)) {
-	setmsg_("Normal vector of the input PLANE is the zero vector.", (
-		ftnlen)52);
-	sigerr_("SPICE(INVALIDPLANE)", (ftnlen)19);
-	chkout_("INEDPL", (ftnlen)6);
+    pl2nvc_(__global_state, plane, normal, &const__);
+    if (vzero_(__global_state, normal)) {
+	setmsg_(__global_state, "Normal vector of the input PLANE is the zer"
+		"o vector.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(INVALIDPLANE)", (ftnlen)19);
+	chkout_(__global_state, "INEDPL", (ftnlen)6);
 	return 0;
     }
 
@@ -417,13 +421,13 @@ static inedpl_state_t* get_inedpl_state() {
 /*     to the origin, so its norm gives the distance of the plane */
 /*     from the origin. */
 
-    pl2psv_(plane, point, span1, span2);
+    pl2psv_(__global_state, plane, point, span1, span2);
 /* Computing MAX */
     d__1 = abs(*a), d__2 = abs(*b), d__1 = max(d__1,d__2), d__2 = abs(*c__);
     maxrad = max(d__1,d__2);
-    if (vnorm_(point) > maxrad) {
+    if (vnorm_(__global_state, point) > maxrad) {
 	*found = FALSE_;
-	chkout_("INEDPL", (ftnlen)6);
+	chkout_(__global_state, "INEDPL", (ftnlen)6);
 	return 0;
     }
 
@@ -451,23 +455,26 @@ static inedpl_state_t* get_inedpl_state() {
 /*     that define the distorted plane. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("point", i__1,
-		 "inedpl_", (ftnlen)449)] = dstort[(i__2 = i__ - 1) < 3 && 0 
-		<= i__2 ? i__2 : s_rnge("dstort", i__2, "inedpl_", (ftnlen)
-		449)] * point[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
-		s_rnge("point", i__3, "inedpl_", (ftnlen)449)];
-	span1[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("span1", i__1,
-		 "inedpl_", (ftnlen)450)] = dstort[(i__2 = i__ - 1) < 3 && 0 
-		<= i__2 ? i__2 : s_rnge("dstort", i__2, "inedpl_", (ftnlen)
-		450)] * span1[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
-		s_rnge("span1", i__3, "inedpl_", (ftnlen)450)];
-	span2[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("span2", i__1,
-		 "inedpl_", (ftnlen)451)] = dstort[(i__2 = i__ - 1) < 3 && 0 
-		<= i__2 ? i__2 : s_rnge("dstort", i__2, "inedpl_", (ftnlen)
-		451)] * span2[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
-		s_rnge("span2", i__3, "inedpl_", (ftnlen)451)];
+	point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "point", i__1, "inedpl_", (ftnlen)449)] =
+		 dstort[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "dstort", i__2, "inedpl_", (ftnlen)449)] 
+		* point[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "point", i__3, "inedpl_", (ftnlen)449)];
+	span1[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "span1", i__1, "inedpl_", (ftnlen)450)] =
+		 dstort[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "dstort", i__2, "inedpl_", (ftnlen)450)] 
+		* span1[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "span1", i__3, "inedpl_", (ftnlen)450)];
+	span2[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "span2", i__1, "inedpl_", (ftnlen)451)] =
+		 dstort[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "dstort", i__2, "inedpl_", (ftnlen)451)] 
+		* span2[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "span2", i__3, "inedpl_", (ftnlen)451)];
     }
-    psv2pl_(point, span1, span2, dplane);
+    psv2pl_(__global_state, point, span1, span2, dplane);
 
 /*     Step 2: */
 
@@ -492,11 +499,11 @@ static inedpl_state_t* get_inedpl_state() {
 /*     the center and these scaled vectors define the intersection */
 /*     circle. */
 
-    pl2psv_(dplane, center, vec1, vec2);
-    dist = vnorm_(center);
+    pl2psv_(__global_state, dplane, center, vec1, vec2);
+    dist = vnorm_(__global_state, center);
     if (dist > 1.) {
 	*found = FALSE_;
-	chkout_("INEDPL", (ftnlen)6);
+	chkout_(__global_state, "INEDPL", (ftnlen)6);
 	return 0;
     }
 
@@ -506,9 +513,10 @@ static inedpl_state_t* get_inedpl_state() {
 /* Computing 2nd power */
     d__2 = dist;
     d__1 = 1. - d__2 * d__2;
-    rcircl = sqrt(brcktd_(&d__1, &__state->c_b32, &__state->c_b33));
-    vsclip_(&rcircl, vec1);
-    vsclip_(&rcircl, vec2);
+    rcircl = sqrt(&__global_state->f2c, brcktd_(__global_state, &d__1, &
+	    __state->c_b32, &__state->c_b33));
+    vsclip_(__global_state, &rcircl, vec1);
+    vsclip_(__global_state, &rcircl, vec2);
 
 /*     Step 3: */
 
@@ -516,28 +524,31 @@ static inedpl_state_t* get_inedpl_state() {
 /*     the actual intersection ellipse. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	center[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("center", 
-		i__1, "inedpl_", (ftnlen)511)] = invdst[(i__2 = i__ - 1) < 3 
-		&& 0 <= i__2 ? i__2 : s_rnge("invdst", i__2, "inedpl_", (
-		ftnlen)511)] * center[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		i__3 : s_rnge("center", i__3, "inedpl_", (ftnlen)511)];
-	vec1[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vec1", i__1, 
-		"inedpl_", (ftnlen)512)] = invdst[(i__2 = i__ - 1) < 3 && 0 <=
-		 i__2 ? i__2 : s_rnge("invdst", i__2, "inedpl_", (ftnlen)512)]
-		 * vec1[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(
-		"vec1", i__3, "inedpl_", (ftnlen)512)];
-	vec2[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vec2", i__1, 
-		"inedpl_", (ftnlen)513)] = invdst[(i__2 = i__ - 1) < 3 && 0 <=
-		 i__2 ? i__2 : s_rnge("invdst", i__2, "inedpl_", (ftnlen)513)]
-		 * vec2[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(
-		"vec2", i__3, "inedpl_", (ftnlen)513)];
+	center[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "center", i__1, "inedpl_", (ftnlen)511)] 
+		= invdst[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "invdst", i__2, "inedpl_", (ftnlen)511)] 
+		* center[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "center", i__3, "inedpl_", (ftnlen)511)];
+	vec1[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "vec1", i__1, "inedpl_", (ftnlen)512)] = 
+		invdst[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "invdst", i__2, "inedpl_", (ftnlen)512)] 
+		* vec1[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "vec1", i__3, "inedpl_", (ftnlen)512)];
+	vec2[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "vec2", i__1, "inedpl_", (ftnlen)513)] = 
+		invdst[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "invdst", i__2, "inedpl_", (ftnlen)513)] 
+		* vec2[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "vec2", i__3, "inedpl_", (ftnlen)513)];
     }
 
 /*     Make an ellipse from the center and generating vectors. */
 
-    cgv2el_(center, vec1, vec2, ellips);
+    cgv2el_(__global_state, center, vec1, vec2, ellips);
     *found = TRUE_;
-    chkout_("INEDPL", (ftnlen)6);
+    chkout_(__global_state, "INEDPL", (ftnlen)6);
     return 0;
 } /* inedpl_ */
 

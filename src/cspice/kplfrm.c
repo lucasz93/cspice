@@ -8,8 +8,7 @@
 
 
 extern kplfrm_init_t __kplfrm_init;
-static kplfrm_state_t* get_kplfrm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline kplfrm_state_t* get_kplfrm_state(cspice_t* state) {
 	if (!state->kplfrm)
 		state->kplfrm = __cspice_allocate_module(sizeof(
 	kplfrm_state_t), &__kplfrm_init, sizeof(__kplfrm_init));
@@ -18,14 +17,15 @@ static kplfrm_state_t* get_kplfrm_state() {
 }
 
 /* $Procedure KPLFRM ( Kernel pool frame IDs ) */
-/* Subroutine */ int kplfrm_(integer *frmcls, integer *idset)
+/* Subroutine */ int kplfrm_(cspice_t* __global_state, integer *frmcls, 
+	integer *idset)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
@@ -33,41 +33,42 @@ static kplfrm_state_t* get_kplfrm_state() {
     integer m;
     integer n;
     integer w;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     logical found;
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern integer sizei_(integer *);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern integer sizei_(cspice_t*, integer *);
     integer total;
     integer idcode;
     integer to;
-    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
     char frname[32];
-    extern /* Subroutine */ int validi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int validi_(cspice_t*, integer *, integer *, 
+	    integer *);
     char kvcode[32];
     integer fclass;
     char kvname[32];
     char kvbuff[32*100];
     char kvclas[32];
-    extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
-	    *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int gcpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gipool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, integer *, logical *, ftnlen);
     char tmpnam[32];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     char kvtemp[32];
-    extern /* Subroutine */ int gnpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int gnpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, char *, logical *, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    kplfrm_state_t* __state = get_kplfrm_state();
+    kplfrm_state_t* __state = get_kplfrm_state(__global_state);
 /* $ Abstract */
 
 /*     Return a SPICE set containing the frame IDs of all reference */
@@ -767,25 +768,25 @@ static kplfrm_state_t* get_kplfrm_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("KPLFRM", (ftnlen)6);
+    chkin_(__global_state, "KPLFRM", (ftnlen)6);
 
 /*     The output set starts out empty. */
 
-    scardi_(&__state->c__0, idset);
+    scardi_(__global_state, &__state->c__0, idset);
 
 /*     Check the input frame class. */
 
 /*     This block of code must be kept in sync with frmtyp.inc. */
 
     if (*frmcls > 5 || *frmcls == 0 || *frmcls < -1) {
-	setmsg_("Frame class specifier FRMCLS was #; this value is not suppo"
-		"rted.", (ftnlen)64);
-	errint_("#", frmcls, (ftnlen)1);
-	sigerr_("SPICE(BADFRAMECLASS)", (ftnlen)20);
-	chkout_("KPLFRM", (ftnlen)6);
+	setmsg_(__global_state, "Frame class specifier FRMCLS was #; this va"
+		"lue is not supported.", (ftnlen)64);
+	errint_(__global_state, "#", frmcls, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADFRAMECLASS)", (ftnlen)20);
+	chkout_(__global_state, "KPLFRM", (ftnlen)6);
 	return 0;
     }
 
@@ -808,9 +809,10 @@ static kplfrm_state_t* get_kplfrm_state() {
 /*     by looking the corresponding frame ID and frame class */
 /*     assignments. */
 
-    s_copy(kvtemp, "FRAME_*_NAME", (ftnlen)32, (ftnlen)12);
-    gnpool_(kvtemp, &__state->c__1, &__state->c__100, &n, kvbuff, &found, (
-	    ftnlen)32, (ftnlen)32);
+    s_copy(&__global_state->f2c, kvtemp, "FRAME_*_NAME", (ftnlen)32, (ftnlen)
+	    12);
+    gnpool_(__global_state, kvtemp, &__state->c__1, &__state->c__100, &n, 
+	    kvbuff, &found, (ftnlen)32, (ftnlen)32);
     total = 0;
     while(n > 0) {
 	total += n;
@@ -826,10 +828,11 @@ static kplfrm_state_t* get_kplfrm_state() {
 /*           the Ith kernel variable found on the previous */
 /*           GNPOOL call. */
 
-	    gcpool_(kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("kvbuff", i__2, "kplfrm_", (ftnlen)536)) << 5), &
-		    __state->c__1, &__state->c__1, &m, frname, &found, (
-		    ftnlen)32, (ftnlen)32);
+	    gcpool_(__global_state, kvbuff + (((i__2 = i__ - 1) < 100 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "kvbuff", i__2,
+		     "kplfrm_", (ftnlen)536)) << 5), &__state->c__1, &
+		    __state->c__1, &m, frname, &found, (ftnlen)32, (ftnlen)32)
+		    ;
 	    if (found) {
 
 /*              We found a possible frame name. Attempt to look */
@@ -841,14 +844,15 @@ static kplfrm_state_t* get_kplfrm_state() {
 /*              Create the kernel variable name on the left hand */
 /*              side of the assignment. */
 
-		s_copy(kvcode, "FRAME_<name>", (ftnlen)32, (ftnlen)12);
-		repmc_(kvcode, "<name>", frname, kvcode, (ftnlen)32, (ftnlen)
-			6, (ftnlen)32, (ftnlen)32);
+		s_copy(&__global_state->f2c, kvcode, "FRAME_<name>", (ftnlen)
+			32, (ftnlen)12);
+		repmc_(__global_state, kvcode, "<name>", frname, kvcode, (
+			ftnlen)32, (ftnlen)6, (ftnlen)32, (ftnlen)32);
 
 /*              Try to fetch the ID code. */
 
-		gipool_(kvcode, &__state->c__1, &__state->c__1, &l, &idcode, &
-			found, (ftnlen)32);
+		gipool_(__global_state, kvcode, &__state->c__1, &
+			__state->c__1, &l, &idcode, &found, (ftnlen)32);
 		if (found) {
 
 /*                 We found an integer on the right hand side */
@@ -861,12 +865,13 @@ static kplfrm_state_t* get_kplfrm_state() {
 /*                 is present in the kernel pool and maps to */
 /*                 the name FRNAME. */
 
-		    s_copy(kvname, "FRAME_<code>_NAME", (ftnlen)32, (ftnlen)
-			    17);
-		    repmi_(kvname, "<code>", &idcode, kvname, (ftnlen)32, (
-			    ftnlen)6, (ftnlen)32);
-		    gcpool_(kvname, &__state->c__1, &__state->c__1, &w, 
-			    tmpnam, &found, (ftnlen)32, (ftnlen)32);
+		    s_copy(&__global_state->f2c, kvname, "FRAME_<code>_NAME", 
+			    (ftnlen)32, (ftnlen)17);
+		    repmi_(__global_state, kvname, "<code>", &idcode, kvname, 
+			    (ftnlen)32, (ftnlen)6, (ftnlen)32);
+		    gcpool_(__global_state, kvname, &__state->c__1, &
+			    __state->c__1, &w, tmpnam, &found, (ftnlen)32, (
+			    ftnlen)32);
 		    if (found) {
 
 /*                    Try to look up the frame class using a */
@@ -877,15 +882,16 @@ static kplfrm_state_t* get_kplfrm_state() {
 /*                    Create the kernel variable name on the left */
 /*                    hand side of the frame class assignment. */
 
-			s_copy(kvclas, "FRAME_<integer>_CLASS", (ftnlen)32, (
-				ftnlen)21);
-			repmi_(kvclas, "<integer>", &idcode, kvclas, (ftnlen)
-				32, (ftnlen)9, (ftnlen)32);
+			s_copy(&__global_state->f2c, kvclas, "FRAME_<integer"
+				">_CLASS", (ftnlen)32, (ftnlen)21);
+			repmi_(__global_state, kvclas, "<integer>", &idcode, 
+				kvclas, (ftnlen)32, (ftnlen)9, (ftnlen)32);
 
 /*                    Look for the frame class. */
 
-			gipool_(kvclas, &__state->c__1, &__state->c__1, &w, &
-				fclass, &found, (ftnlen)32);
+			gipool_(__global_state, kvclas, &__state->c__1, &
+				__state->c__1, &w, &fclass, &found, (ftnlen)
+				32);
 			if (! found) {
 
 /*                       Try to look up the frame class using a kernel */
@@ -893,12 +899,14 @@ static kplfrm_state_t* get_kplfrm_state() {
 
 /*                          FRAME_<frame name>_CLASS */
 
-			    s_copy(kvclas, "FRAME_<name>_CLASS", (ftnlen)32, (
-				    ftnlen)18);
-			    repmc_(kvclas, "<name>", frname, kvclas, (ftnlen)
-				    32, (ftnlen)6, (ftnlen)32, (ftnlen)32);
-			    gipool_(kvclas, &__state->c__1, &__state->c__1, &
-				    w, &fclass, &found, (ftnlen)32);
+			    s_copy(&__global_state->f2c, kvclas, "FRAME_<nam"
+				    "e>_CLASS", (ftnlen)32, (ftnlen)18);
+			    repmc_(__global_state, kvclas, "<name>", frname, 
+				    kvclas, (ftnlen)32, (ftnlen)6, (ftnlen)32,
+				     (ftnlen)32);
+			    gipool_(__global_state, kvclas, &__state->c__1, &
+				    __state->c__1, &w, &fclass, &found, (
+				    ftnlen)32);
 			}
 
 /*                    At this point FOUND indicates whether we found */
@@ -916,18 +924,23 @@ static kplfrm_state_t* get_kplfrm_state() {
 /*                          First make sure the set is large enough to */
 /*                          hold another element. */
 
-				if (to == sizei_(idset)) {
-				    setmsg_("Frame ID set argument IDSET has"
-					    " size #; required size is at lea"
-					    "st #. Make sure that the caller "
-					    "of this routine has initialized "
-					    "IDSET via SSIZEI.", (ftnlen)144);
-				    i__2 = sizei_(idset);
-				    errint_("#", &i__2, (ftnlen)1);
+				if (to == sizei_(__global_state, idset)) {
+				    setmsg_(__global_state, "Frame ID set ar"
+					    "gument IDSET has size #; require"
+					    "d size is at least #. Make sure "
+					    "that the caller of this routine "
+					    "has initialized IDSET via SSIZEI."
+					    , (ftnlen)144);
+				    i__2 = sizei_(__global_state, idset);
+				    errint_(__global_state, "#", &i__2, (
+					    ftnlen)1);
 				    i__2 = to + 1;
-				    errint_("#", &i__2, (ftnlen)1);
-				    sigerr_("SPICE(SETTOOSMALL)", (ftnlen)18);
-				    chkout_("KPLFRM", (ftnlen)6);
+				    errint_(__global_state, "#", &i__2, (
+					    ftnlen)1);
+				    sigerr_(__global_state, "SPICE(SETTOOSMA"
+					    "LL)", (ftnlen)18);
+				    chkout_(__global_state, "KPLFRM", (ftnlen)
+					    6);
 				    return 0;
 				}
 				++to;
@@ -962,8 +975,8 @@ static kplfrm_state_t* get_kplfrm_state() {
 /*        Fetch next batch of potential frame names. */
 
 	i__1 = total + 1;
-	gnpool_(kvtemp, &i__1, &__state->c__100, &n, kvbuff, &found, (ftnlen)
-		32, (ftnlen)32);
+	gnpool_(__global_state, kvtemp, &i__1, &__state->c__100, &n, kvbuff, &
+		found, (ftnlen)32, (ftnlen)32);
     }
 
 /*     At this point all kernel variables that matched the frame name */
@@ -974,9 +987,9 @@ static kplfrm_state_t* get_kplfrm_state() {
 
 /*     Turn IDSET into a set. VALIDI sorts and removes duplicates. */
 
-    i__1 = sizei_(idset);
-    validi_(&i__1, &to, idset);
-    chkout_("KPLFRM", (ftnlen)6);
+    i__1 = sizei_(__global_state, idset);
+    validi_(__global_state, &i__1, &to, idset);
+    chkout_(__global_state, "KPLFRM", (ftnlen)6);
     return 0;
 } /* kplfrm_ */
 

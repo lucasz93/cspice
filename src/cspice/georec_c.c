@@ -242,7 +242,7 @@
    Participate in error handling
    */
 
-   chkin_c ( "georec_c");
+   chkin_c ( naif_state, "georec_c");
 
 
    /*

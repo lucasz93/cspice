@@ -8,8 +8,7 @@
 
 
 extern lnknxt_init_t __lnknxt_init;
-static lnknxt_state_t* get_lnknxt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lnknxt_state_t* get_lnknxt_state(cspice_t* state) {
 	if (!state->lnknxt)
 		state->lnknxt = __cspice_allocate_module(sizeof(
 	lnknxt_state_t), &__lnknxt_init, sizeof(__lnknxt_init));
@@ -18,21 +17,21 @@ static lnknxt_state_t* get_lnknxt_state() {
 }
 
 /* $Procedure      LNKNXT ( LNK, next node ) */
-integer lnknxt_(integer *node, integer *pool)
+integer lnknxt_(cspice_t* __global_state, integer *node, integer *pool)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    lnknxt_state_t* __state = get_lnknxt_state();
+    lnknxt_state_t* __state = get_lnknxt_state(__global_state);
 /* $ Abstract */
 
 /*     Find the node following a specified node in a doubly linked list */
@@ -236,27 +235,28 @@ integer lnknxt_(integer *node, integer *pool)
 
     if (*node < 1 || *node > pool[10]) {
 	ret_val = 0;
-	chkin_("LNKNXT", (ftnlen)6);
-	setmsg_("NODE was #; valid range is 1 to #.", (ftnlen)34);
-	errint_("#", node, (ftnlen)1);
-	errint_("#", &pool[10], (ftnlen)1);
-	sigerr_("SPICE(INVALIDNODE)", (ftnlen)18);
-	chkout_("LNKNXT", (ftnlen)6);
+	chkin_(__global_state, "LNKNXT", (ftnlen)6);
+	setmsg_(__global_state, "NODE was #; valid range is 1 to #.", (ftnlen)
+		34);
+	errint_(__global_state, "#", node, (ftnlen)1);
+	errint_(__global_state, "#", &pool[10], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDNODE)", (ftnlen)18);
+	chkout_(__global_state, "LNKNXT", (ftnlen)6);
 	return ret_val;
 
 /*     We don't do free nodes. */
 
     } else if (pool[(*node << 1) + 11] == 0) {
 	ret_val = 0;
-	chkin_("LNKNXT", (ftnlen)6);
-	setmsg_("NODE was #; backward pointer = #; forward pointer = #. \"FR"
-		"EE\" is #)", (ftnlen)67);
-	errint_("#", node, (ftnlen)1);
-	errint_("#", &pool[(*node << 1) + 11], (ftnlen)1);
-	errint_("#", &pool[(*node << 1) + 10], (ftnlen)1);
-	errint_("#", &__state->c__0, (ftnlen)1);
-	sigerr_("SPICE(UNALLOCATEDNODE)", (ftnlen)22);
-	chkout_("LNKNXT", (ftnlen)6);
+	chkin_(__global_state, "LNKNXT", (ftnlen)6);
+	setmsg_(__global_state, "NODE was #; backward pointer = #; forward p"
+		"ointer = #. \"FREE\" is #)", (ftnlen)67);
+	errint_(__global_state, "#", node, (ftnlen)1);
+	errint_(__global_state, "#", &pool[(*node << 1) + 11], (ftnlen)1);
+	errint_(__global_state, "#", &pool[(*node << 1) + 10], (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__0, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNALLOCATEDNODE)", (ftnlen)22);
+	chkout_(__global_state, "LNKNXT", (ftnlen)6);
 	return ret_val;
     }
 

@@ -8,31 +8,30 @@
 
 
 typedef int orderc_state_t;
-static orderc_state_t* get_orderc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline orderc_state_t* get_orderc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ORDERC ( Order of a character array ) */
-/* Subroutine */ int orderc_(char *array, integer *ndim, integer *iorder, 
-	ftnlen array_len)
+/* Subroutine */ int orderc_(cspice_t* __global_state, char *array, integer *
+	ndim, integer *iorder, ftnlen array_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    logical l_le(char *, char *, ftnlen, ftnlen);
+    logical l_le(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int swapi_(integer *, integer *);
+    extern /* Subroutine */ int swapi_(cspice_t*, integer *, integer *);
     integer jg;
     integer gap;
 
 
     /* Module state */
-    orderc_state_t* __state = get_orderc_state();
+    orderc_state_t* __state = get_orderc_state(__global_state);
 /* $ Abstract */
 
 /*      Determine the order of elements in an array of character strings. */
@@ -182,12 +181,12 @@ static orderc_state_t* get_orderc_state() {
 	    j = i__ - gap;
 	    while(j > 0) {
 		jg = j + gap;
-		if (l_le(array + (iorder[j - 1] - 1) * array_len, array + (
-			iorder[jg - 1] - 1) * array_len, array_len, array_len)
-			) {
+		if (l_le(&__global_state->f2c, array + (iorder[j - 1] - 1) * 
+			array_len, array + (iorder[jg - 1] - 1) * array_len, 
+			array_len, array_len)) {
 		    j = 0;
 		} else {
-		    swapi_(&iorder[j - 1], &iorder[jg - 1]);
+		    swapi_(__global_state, &iorder[j - 1], &iorder[jg - 1]);
 		}
 		j -= gap;
 	    }

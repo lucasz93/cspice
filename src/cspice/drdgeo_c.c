@@ -232,7 +232,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "drdgeo_c" );
+   chkin_c ( naif_state, "drdgeo_c" );
 
 
    drdgeo_ ( (doublereal *) &lon,

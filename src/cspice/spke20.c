@@ -8,42 +8,41 @@
 
 
 typedef int spke20_state_t;
-static spke20_state_t* get_spke20_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spke20_state_t* get_spke20_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPKE20 ( SPK, evaluate Chebyshev polynomials, type 20 ) */
-/* Subroutine */ int spke20_(doublereal *et, doublereal *record, doublereal *
-	xyzdot)
+/* Subroutine */ int spke20_(cspice_t* __global_state, doublereal *et, 
+	doublereal *record, doublereal *xyzdot)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     integer degp;
     integer ncof;
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chbigr_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chbigr_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal intgrl[3];
     integer posloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spke20_state_t* __state = get_spke20_state();
+    spke20_state_t* __state = get_spke20_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single data record from an SPK or PCK segment of type */
@@ -247,10 +246,10 @@ static spke20_state_t* get_spke20_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKE20", (ftnlen)6);
+    chkin_(__global_state, "SPKE20", (ftnlen)6);
 
 /*     The first number in the record is the record size. This is the */
 /*     number of elements in the record, excluding the size itself. */
@@ -266,11 +265,11 @@ static spke20_state_t* get_spke20_state() {
 
     ncof = ((integer) record[0] - 5) / 3;
     if (ncof < 1) {
-	setmsg_("The input record's coefficient count NCOF should be positiv"
-		"e but was #.", (ftnlen)71);
-	errint_("#", &ncof, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("SPKE20", (ftnlen)6);
+	setmsg_(__global_state, "The input record's coefficient count NCOF s"
+		"hould be positive but was #.", (ftnlen)71);
+	errint_(__global_state, "#", &ncof, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "SPKE20", (ftnlen)6);
 	return 0;
     }
 
@@ -286,18 +285,20 @@ static spke20_state_t* get_spke20_state() {
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	j = (i__ - 1) * ncof + 4;
-	chbigr_(&degp, &record[j - 1], &record[1], et, &xyzdot[(i__1 = i__ + 
-		2) < 6 && 0 <= i__1 ? i__1 : s_rnge("xyzdot", i__1, "spke20_",
-		 (ftnlen)273)], &intgrl[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
-		i__2 : s_rnge("intgrl", i__2, "spke20_", (ftnlen)273)]);
+	chbigr_(__global_state, &degp, &record[j - 1], &record[1], et, &
+		xyzdot[(i__1 = i__ + 2) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "xyzdot", i__1, "spke20_", (ftnlen)273)],
+		 &intgrl[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "intgrl", i__2, "spke20_", (ftnlen)273)])
+		;
     }
 
 /*     Add the position vector or Euler angles at the interval midpoint */
 /*     to the integral. */
 
     posloc = ncof * 3 + 4;
-    vadd_(&record[posloc - 1], intgrl, xyzdot);
-    chkout_("SPKE20", (ftnlen)6);
+    vadd_(__global_state, &record[posloc - 1], intgrl, xyzdot);
+    chkout_(__global_state, "SPKE20", (ftnlen)6);
     return 0;
 } /* spke20_ */
 

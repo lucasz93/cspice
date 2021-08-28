@@ -382,7 +382,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "xf2eul_c" );
+   chkin_c ( naif_state, "xf2eul_c" );
 
 
    /*

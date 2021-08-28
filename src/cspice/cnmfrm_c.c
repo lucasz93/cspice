@@ -186,7 +186,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "cnmfrm_c" );
+   chkin_c ( naif_state, "cnmfrm_c" );
 
    /*
    Check the input object's name string to make sure the pointer

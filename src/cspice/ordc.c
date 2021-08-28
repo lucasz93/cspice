@@ -8,27 +8,28 @@
 
 
 typedef int ordc_state_t;
-static ordc_state_t* get_ordc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ordc_state_t* get_ordc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   ORDC ( The ordinal position of an element in a set ) */
-integer ordc_(char *item, char *set, ftnlen item_len, ftnlen set_len)
+integer ordc_(cspice_t* __global_state, char *item, char *set, ftnlen 
+	item_len, ftnlen set_len)
 {
     /* System generated locals */
     integer ret_val, i__1;
 
     /* Local variables */
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ordc_state_t* __state = get_ordc_state();
+    ordc_state_t* __state = get_ordc_state(__global_state);
 /* $ Abstract */
 
 /*     The function returns the ordinal position of any given item in a */
@@ -215,18 +216,19 @@ integer ordc_(char *item, char *set, ftnlen item_len, ftnlen set_len)
 
 /*     Standard error handling: */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0;
 	return ret_val;
     } else {
-	chkin_("ORDC", (ftnlen)4);
+	chkin_(__global_state, "ORDC", (ftnlen)4);
     }
 
 /*     Given the structure of sets, there's not much to do. */
 
-    i__1 = cardc_(set, set_len);
-    ret_val = bsrchc_(item, &i__1, set + set_len * 6, item_len, set_len);
-    chkout_("ORDC", (ftnlen)4);
+    i__1 = cardc_(__global_state, set, set_len);
+    ret_val = bsrchc_(__global_state, item, &i__1, set + set_len * 6, 
+	    item_len, set_len);
+    chkout_(__global_state, "ORDC", (ftnlen)4);
     return ret_val;
 } /* ordc_ */
 

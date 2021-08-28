@@ -8,8 +8,7 @@
 
 
 extern zzektrin_init_t __zzektrin_init;
-static zzektrin_state_t* get_zzektrin_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrin_state_t* get_zzektrin_state(cspice_t* state) {
 	if (!state->zzektrin)
 		state->zzektrin = __cspice_allocate_module(sizeof(
 	zzektrin_state_t), &__zzektrin_init, sizeof(__zzektrin_init));
@@ -18,8 +17,8 @@ static zzektrin_state_t* get_zzektrin_state() {
 }
 
 /* $Procedure      ZZEKTRIN ( EK tree, insert value ) */
-/* Subroutine */ int zzektrin_(integer *handle, integer *tree, integer *key, 
-	integer *value)
+/* Subroutine */ int zzektrin_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *key, integer *value)
 {
     integer node;
     integer left;
@@ -27,18 +26,18 @@ static zzektrin_state_t* get_zzektrin_state() {
     integer lkey;
     integer pkey;
     integer root;
-    extern /* Subroutine */ int zzektrbn_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzektrbn_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrki_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrki_(integer *, integer *, integer *, 
-	    integer *, integer *);
-    extern /* Subroutine */ int zzektrlk_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *);
-    extern integer zzektrnk_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrpi_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzektrlk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern integer zzektrnk_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrpi_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrui_(integer *, integer *, integer *, 
-	    integer *, logical *);
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrui_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
     integer lnode;
     integer level;
     integer rnode;
@@ -52,19 +51,19 @@ static zzektrin_state_t* get_zzektrin_state() {
     integer rpidx;
     integer rpkey;
     integer trust;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer parent;
     logical overfl;
     integer noffst;
     integer poffst;
     integer idx;
-    extern /* Subroutine */ int zzektr13_(integer *, integer *);
-    extern /* Subroutine */ int zzektr23_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *);
+    extern /* Subroutine */ int zzektr13_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzektr23_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, logical *);
 
 
     /* Module state */
-    zzektrin_state_t* __state = get_zzektrin_state();
+    zzektrin_state_t* __state = get_zzektrin_state(__global_state);
 /* $ Abstract */
 
 /*     Insert a value into an EK tree at a specified location. */
@@ -581,8 +580,8 @@ static zzektrin_state_t* get_zzektrin_state() {
 /*     overflow is low:  each overflow creates at least one new node, */
 /*     but the ratio of nodes to keys is very small. */
 
-    zzektrui_(handle, tree, &lkey, &lval, &overfl);
-    if (failed_()) {
+    zzektrui_(__global_state, handle, tree, &lkey, &lval, &overfl);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -600,8 +599,8 @@ static zzektrin_state_t* get_zzektrin_state() {
 
 /*           Look up the node containing LKEY. */
 
-	    zzektrlk_(handle, tree, &lkey, &idx, &node, &noffst, &level, &
-		    lval);
+	    zzektrlk_(__global_state, handle, tree, &lkey, &idx, &node, &
+		    noffst, &level, &lval);
 	    if (node == root) {
 		state = 6;
 	    } else {
@@ -610,10 +609,11 @@ static zzektrin_state_t* get_zzektrin_state() {
 /*              there must be a left sibling in order for there to be */
 /*              room. */
 
-		zzektrpi_(handle, tree, &lkey, &parent, &pkey, &poffst, &
-			lpidx, &lpkey, &left, &rpidx, &rpkey, &right);
+		zzektrpi_(__global_state, handle, tree, &lkey, &parent, &pkey,
+			 &poffst, &lpidx, &lpkey, &left, &rpidx, &rpkey, &
+			right);
 		if (left > 0) {
-		    nkeys = zzektrnk_(handle, tree, &left);
+		    nkeys = zzektrnk_(__global_state, handle, tree, &left);
 		    if (nkeys < 62) {
 			lnode = left;
 			rnode = node;
@@ -633,7 +633,7 @@ static zzektrin_state_t* get_zzektrin_state() {
 /*           checked and found wanting. */
 
 	    if (right > 0) {
-		nkeys = zzektrnk_(handle, tree, &right);
+		nkeys = zzektrnk_(__global_state, handle, tree, &right);
 		if (nkeys < 62) {
 		    lnode = node;
 		    rnode = right;
@@ -660,7 +660,8 @@ static zzektrin_state_t* get_zzektrin_state() {
 /*           there's enough room to accommodate the overflow.  After */
 /*           balancing these nodes, we're done. */
 
-	    zzektrbn_(handle, tree, &lnode, &rnode, &parent, &pkidx);
+	    zzektrbn_(__global_state, handle, tree, &lnode, &rnode, &parent, &
+		    pkidx);
 	    state = 1;
 	} else if (state == 5) {
 
@@ -685,15 +686,18 @@ static zzektrin_state_t* get_zzektrin_state() {
 
 /*              Save the first key from NODE. */
 
-		zzektrki_(handle, tree, &lkey, &__state->c__1, &trust);
+		zzektrki_(__global_state, handle, tree, &lkey, &__state->c__1,
+			 &trust);
 	    } else {
 
 /*              Save the last key from NODE. */
 
-		nsize = zzektrnk_(handle, tree, &node);
-		zzektrki_(handle, tree, &lkey, &nsize, &trust);
+		nsize = zzektrnk_(__global_state, handle, tree, &node);
+		zzektrki_(__global_state, handle, tree, &lkey, &nsize, &trust)
+			;
 	    }
-	    zzektr23_(handle, tree, &lnode, &rnode, &parent, &pkidx, &overfl);
+	    zzektr23_(__global_state, handle, tree, &lnode, &rnode, &parent, &
+		    pkidx, &overfl);
 	    if (overfl) {
 		if (parent == root) {
 		    state = 6;
@@ -703,8 +707,9 @@ static zzektrin_state_t* get_zzektrin_state() {
 /*                 The parent should be correctly identified by the */
 /*                 parent of TRUST. */
 
-		    zzektrpi_(handle, tree, &trust, &parent, &pkey, &poffst, &
-			    lpidx, &lpkey, &left, &rpidx, &rpkey, &right);
+		    zzektrpi_(__global_state, handle, tree, &trust, &parent, &
+			    pkey, &poffst, &lpidx, &lpkey, &left, &rpidx, &
+			    rpkey, &right);
 		    lkey = pkey;
 		    state = 2;
 		}
@@ -717,7 +722,7 @@ static zzektrin_state_t* get_zzektrin_state() {
 /*           creating two new children.  The root contains a single */
 /*           key after this split. */
 
-	    zzektr13_(handle, tree);
+	    zzektr13_(__global_state, handle, tree);
 	    state = 1;
 	}
     }

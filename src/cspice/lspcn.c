@@ -8,8 +8,7 @@
 
 
 extern lspcn_init_t __lspcn_init;
-static lspcn_state_t* get_lspcn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lspcn_state_t* get_lspcn_state(cspice_t* state) {
 	if (!state->lspcn)
 		state->lspcn = __cspice_allocate_module(sizeof(lspcn_state_t),
 	 &__lspcn_init, sizeof(__lspcn_init));
@@ -18,8 +17,8 @@ static lspcn_state_t* get_lspcn_state() {
 }
 
 /* $Procedure    LSPCN  ( Longitude of the sun, planetocentric ) */
-doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len, 
-	ftnlen abcorr_len)
+doublereal lspcn_(cspice_t* __global_state, char *body, doublereal *et, char *
+	abcorr, ftnlen body_len, ftnlen abcorr_len)
 {
     /* Initialized data */
 
@@ -29,51 +28,53 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
     doublereal ret_val;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
     doublereal tipm[9]	/* was [3][3] */;
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
     doublereal uavel[3];
     doublereal npole[3];
     doublereal trans[9]	/* was [3][3] */;
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical failed_(cspice_t*);
     integer idcode;
     doublereal lt;
-    extern /* Subroutine */ int recrad_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int tipbod_(char *, integer *, doublereal *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int recrad_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int tipbod_(cspice_t*, char *, integer *, 
+	    doublereal *, doublereal *, ftnlen);
     doublereal bstate[6];
     doublereal radius;
-    extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int spkgeo_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal sstate[6];
-    extern /* Subroutine */ int twovec_(doublereal *, integer *, doublereal *,
-	     integer *, doublereal *);
-    extern logical return_(void);
-    extern /* Subroutine */ int spkezr_(char *, doublereal *, char *, char *, 
-	    char *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int twovec_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int spkezr_(cspice_t*, char *, doublereal *, char 
+	    *, char *, char *, doublereal *, doublereal *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen);
     doublereal lat;
     doublereal pos[3];
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    lspcn_state_t* __state = get_lspcn_state();
+    lspcn_state_t* __state = get_lspcn_state(__global_state);
 /* $ Abstract */
 
 /*     Compute L_s, the planetocentric longitude of the sun, as seen */
@@ -415,10 +416,10 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return ret_val;
     }
-    chkin_("LSPCN", (ftnlen)5);
+    chkin_(__global_state, "LSPCN", (ftnlen)5);
 
 /*     Initialization. */
 
@@ -426,43 +427,46 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 
 /*        Initialize counters */
 
-	zzctruin_(__state->svctr1);
+	zzctruin_(__global_state, __state->svctr1);
 	__state->first = FALSE_;
     }
 
 /*     Map the body name to an ID code. */
 
-    zzbods2c_(__state->svctr1, __state->svbody, &__state->svidcd, &
-	    __state->svfnd1, body, &idcode, &found, (ftnlen)36, body_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svbody, &
+	    __state->svidcd, &__state->svfnd1, body, &idcode, &found, (ftnlen)
+	    36, body_len);
     if (! found) {
-	setmsg_("The body name # could not be translated to a NAIF ID code. "
-		" The cause of this problem may be that you need an updated v"
-		"ersion of the SPICE Toolkit.", (ftnlen)147);
-	errch_("#", body, (ftnlen)1, body_len);
-	sigerr_("SPICE(NOTRANSLATION)", (ftnlen)20);
-	chkout_("LSPCN", (ftnlen)5);
+	setmsg_(__global_state, "The body name # could not be translated to "
+		"a NAIF ID code.  The cause of this problem may be that you n"
+		"eed an updated version of the SPICE Toolkit.", (ftnlen)147);
+	errch_(__global_state, "#", body, (ftnlen)1, body_len);
+	sigerr_(__global_state, "SPICE(NOTRANSLATION)", (ftnlen)20);
+	chkout_(__global_state, "LSPCN", (ftnlen)5);
 	return ret_val;
     }
 
 /*     Look up the direction of the North pole of the central body. */
 /*     Note that TIPBOD does make use of binary PCK data if available. */
 
-    tipbod_("J2000", &idcode, et, tipm, (ftnlen)5);
+    tipbod_(__global_state, "J2000", &idcode, et, tipm, (ftnlen)5);
     for (i__ = 1; i__ <= 3; ++i__) {
-	npole[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("npole", i__1,
-		 "lspcn_", (ftnlen)397)] = tipm[(i__2 = i__ * 3 - 1) < 9 && 0 
-		<= i__2 ? i__2 : s_rnge("tipm", i__2, "lspcn_", (ftnlen)397)];
+	npole[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "npole", i__1, "lspcn_", (ftnlen)397)] = 
+		tipm[(i__2 = i__ * 3 - 1) < 9 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "tipm", i__2, "lspcn_", (ftnlen)397)];
     }
 
 /*     Get the geometric state of the body relative to the sun. */
 
-    spkgeo_(&idcode, et, "J2000", &__state->c__10, bstate, &lt, (ftnlen)5);
+    spkgeo_(__global_state, &idcode, et, "J2000", &__state->c__10, bstate, &
+	    lt, (ftnlen)5);
 
 /*     Get the unit direction vector parallel to the angular velocity */
 /*     vector of the orbit.  This is just the unitized cross product of */
 /*     position and velocity. */
 
-    ucrss_(bstate, &bstate[3], uavel);
+    ucrss_(__global_state, bstate, &bstate[3], uavel);
 
 /*     We want to create a transformation matrix that maps vectors from */
 /*     basis REF to the following frame: */
@@ -478,9 +482,10 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 /*     vector is associated with the +Z axis; the secondary vector */
 /*     is associated with the +Y axis. */
 
-    twovec_(uavel, &__state->c__3, npole, &__state->c__2, trans);
-    if (failed_()) {
-	chkout_("LSPCN", (ftnlen)5);
+    twovec_(__global_state, uavel, &__state->c__3, npole, &__state->c__2, 
+	    trans);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "LSPCN", (ftnlen)5);
 	return ret_val;
     }
 
@@ -490,21 +495,21 @@ doublereal lspcn_(char *body, doublereal *et, char *abcorr, ftnlen body_len,
 /*     aberration corrections, this is not necessarily the negative of */
 /*     the state we've just found. */
 
-    spkezr_("SUN", et, "J2000", abcorr, body, sstate, &lt, (ftnlen)3, (ftnlen)
-	    5, abcorr_len, body_len);
+    spkezr_(__global_state, "SUN", et, "J2000", abcorr, body, sstate, &lt, (
+	    ftnlen)3, (ftnlen)5, abcorr_len, body_len);
 
 /*     Now transform the position of the Sun into the "orbit plane */
 /*     and equinox" frame. */
 
-    mxv_(trans, sstate, pos);
+    mxv_(__global_state, trans, sstate, pos);
 
 /*     Let RECRAD find the longitude LS for us.  RECRAD performs */
 /*     the same coordinate transformation as the more commonly used */
 /*     RECLAT, but the range of right ascension is 0:2*pi, which is */
 /*     what we want for Ls. */
 
-    recrad_(pos, &radius, &ret_val, &lat);
-    chkout_("LSPCN", (ftnlen)5);
+    recrad_(__global_state, pos, &radius, &ret_val, &lat);
+    chkout_(__global_state, "LSPCN", (ftnlen)5);
     return ret_val;
 } /* lspcn_ */
 

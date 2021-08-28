@@ -8,8 +8,7 @@
 
 
 extern daftb_init_t __daftb_init;
-static daftb_state_t* get_daftb_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline daftb_state_t* get_daftb_state(cspice_t* state) {
 	if (!state->daftb)
 		state->daftb = __cspice_allocate_module(sizeof(daftb_state_t),
 	 &__daftb_init, sizeof(__daftb_init));
@@ -18,17 +17,20 @@ static daftb_state_t* get_daftb_state() {
 }
 
 /* $Procedure DAFTB ( DAF, convert transfer file to binary file ) */
-/* Subroutine */ int daftb_(integer *xfrlun, char *binfil, ftnlen binfil_len)
+/* Subroutine */ int daftb_(cspice_t* __global_state, integer *xfrlun, char *
+	binfil, ftnlen binfil_len)
 {
     /* System generated locals */
     integer i__1;
     cilist ci__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_rsle(void), s_cmp(char *, char *, ftnlen, ftnlen), s_rsfe(
-	    cilist *), do_fio(integer *, char *, ftnlen), e_rsfe(void);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rsle(f2c_state_t*, cilist *), do_lio(f2c_state_t*, integer *, 
+	    integer *, char *, ftnlen), e_rsle(f2c_state_t*), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rsfe(f2c_state_t*
+	    , cilist *), do_fio(f2c_state_t*, integer *, char *, ftnlen), 
+	    e_rsfe(f2c_state_t*);
 
     /* Local variables */
     char name__[1000];
@@ -40,52 +42,55 @@ static daftb_state_t* get_daftb_state() {
     logical more;
     char word[255];
     char rest[255];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
     char tarch[8];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical inarr;
     char ttype[8];
-    extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
-	    ftnlen);
-    extern /* Subroutine */ int dafena_(void);
+    extern /* Subroutine */ int idw2at_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int dafena_(cspice_t*);
     integer nd;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer ni;
-    extern /* Subroutine */ int dafcls_(integer *);
+    extern /* Subroutine */ int dafcls_(cspice_t*, integer *);
     char ifname[60];
     integer binhdl;
-    extern /* Subroutine */ int rdencd_(integer *, integer *, doublereal *);
-    extern /* Subroutine */ int rdenci_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dafopn_(char *, integer *, integer *, char *, 
-	    integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int rdencd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int rdenci_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dafopn_(cspice_t*, char *, integer *, integer 
+	    *, char *, integer *, integer *, ftnlen, ftnlen);
     doublereal buffer[1024];
     integer dtacnt;
-    extern /* Subroutine */ int dafonw_(char *, char *, integer *, integer *, 
-	    char *, integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafonw_(cspice_t*, char *, char *, integer *, 
+	    integer *, char *, integer *, integer *, ftnlen, ftnlen, ftnlen);
     char idword[8];
     integer arrcnt;
     integer numdta;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
     integer snmlen;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char errmsg[320];
-    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int nparsi_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
     integer iostat;
     integer numarr;
     integer numlft;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int nextwd_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     integer lftovr;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer errptr;
     doublereal dsumry[125];
     integer isumry[250];
@@ -96,7 +101,7 @@ static daftb_state_t* get_daftb_state() {
 
 
     /* Module state */
-    daftb_state_t* __state = get_daftb_state();
+    daftb_state_t* __state = get_daftb_state(__global_state);
 /* $ Abstract */
 
 /*     Convert the contents of an DAF transfer file into an equivalent */
@@ -346,10 +351,10 @@ static daftb_state_t* get_daftb_state() {
 
 /*     Standard/ SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFTB", (ftnlen)5);
+	chkin_(__global_state, "DAFTB", (ftnlen)5);
     }
 
 /*     A brief description of the DAF transfer file format and its */
@@ -463,9 +468,9 @@ static daftb_state_t* get_daftb_state() {
 
 /*     Initialize a few things. */
 
-    s_copy(tarch, " ", (ftnlen)8, (ftnlen)1);
-    s_copy(ttype, " ", (ftnlen)8, (ftnlen)1);
-    s_copy(idword, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, tarch, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, ttype, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, idword, " ", (ftnlen)8, (ftnlen)1);
 
 /*     We begin by reading the DAF file ID word from the DAF transfer */
 /*     file. We should have been positioned ready to read this. If an */
@@ -473,23 +478,24 @@ static daftb_state_t* get_daftb_state() {
 /*     error. */
 
     __state->io___5.ciunit = *xfrlun;
-    iostat = s_rsle(&__state->io___5);
+    iostat = s_rsle(&__global_state->f2c, &__state->io___5);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_lio(&__state->c__9, &__state->c__1, idword, (ftnlen)8);
+    iostat = do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+	    idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rsle();
+    iostat = e_rsle(&__global_state->f2c);
 L100001:
     if (iostat != 0) {
-	setmsg_("Error reading the file ID word from the DAF transfer file '"
-		"#'. IOSTAT = #.", (ftnlen)74);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("DAFTB", (ftnlen)5);
+	setmsg_(__global_state, "Error reading the file ID word from the DAF"
+		" transfer file '#'. IOSTAT = #.", (ftnlen)74);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "DAFTB", (ftnlen)5);
 	return 0;
     }
 
@@ -497,12 +503,15 @@ L100001:
 /*     looking at a DAF transfer file. If we're not, then this routine */
 /*     should not be used. */
 
-    idw2at_(idword, tarch, ttype, (ftnlen)8, (ftnlen)8, (ftnlen)8);
-    if (s_cmp(tarch, "DAF", (ftnlen)8, (ftnlen)3) != 0) {
-	setmsg_("File architecture is not 'DAF' for file '#'", (ftnlen)43);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	sigerr_("SPICE(NOTADAFFILE)", (ftnlen)18);
-	chkout_("DAFTB", (ftnlen)5);
+    idw2at_(__global_state, idword, tarch, ttype, (ftnlen)8, (ftnlen)8, (
+	    ftnlen)8);
+    if (s_cmp(&__global_state->f2c, tarch, "DAF", (ftnlen)8, (ftnlen)3) != 0) 
+	    {
+	setmsg_(__global_state, "File architecture is not 'DAF' for file '#'",
+		 (ftnlen)43);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTADAFFILE)", (ftnlen)18);
+	chkout_(__global_state, "DAFTB", (ftnlen)5);
 	return 0;
     }
 
@@ -512,9 +521,9 @@ L100001:
 
 /*     Read in the ND and NI values for the DAF file. */
 
-    rdenci_(xfrlun, &__state->c__2, isumry);
-    if (failed_()) {
-	chkout_("DAFTB", (ftnlen)5);
+    rdenci_(__global_state, xfrlun, &__state->c__2, isumry);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFTB", (ftnlen)5);
 	return 0;
     }
     nd = isumry[0];
@@ -523,38 +532,39 @@ L100001:
 /*     Read the internal filename for the DAF file. */
 
     __state->io___9.ciunit = *xfrlun;
-    iostat = s_rsle(&__state->io___9);
+    iostat = s_rsle(&__global_state->f2c, &__state->io___9);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&__state->c__9, &__state->c__1, ifname, (ftnlen)60);
+    iostat = do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+	    ifname, (ftnlen)60);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = e_rsle();
+    iostat = e_rsle(&__global_state->f2c);
 L100002:
     if (iostat != 0) {
-	setmsg_("Error reading the internal filename from the DAF transfer f"
-		"ile '#'. IOSTAT = #.", (ftnlen)79);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("DAFTB", (ftnlen)5);
+	setmsg_(__global_state, "Error reading the internal filename from th"
+		"e DAF transfer file '#'. IOSTAT = #.", (ftnlen)79);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "DAFTB", (ftnlen)5);
 	return 0;
     }
 
 /*     Open a new binary DAF file. Call the proper open routine, */
 /*     depending on whether it's a new file or an old file. */
 
-    if (s_cmp(ttype, "?", (ftnlen)8, (ftnlen)1) != 0) {
-	dafonw_(binfil, ttype, &nd, &ni, ifname, &__state->c__0, &binhdl, 
-		binfil_len, (ftnlen)8, (ftnlen)60);
+    if (s_cmp(&__global_state->f2c, ttype, "?", (ftnlen)8, (ftnlen)1) != 0) {
+	dafonw_(__global_state, binfil, ttype, &nd, &ni, ifname, &
+		__state->c__0, &binhdl, binfil_len, (ftnlen)8, (ftnlen)60);
     } else {
-	dafopn_(binfil, &nd, &ni, ifname, &__state->c__0, &binhdl, binfil_len,
-		 (ftnlen)60);
+	dafopn_(__global_state, binfil, &nd, &ni, ifname, &__state->c__0, &
+		binhdl, binfil_len, (ftnlen)60);
     }
-    if (failed_()) {
-	chkout_("DAFTB", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFTB", (ftnlen)5);
 	return 0;
     }
 
@@ -583,23 +593,24 @@ L100002:
 	ci__1.ciend = 1;
 	ci__1.ciunit = *xfrlun;
 	ci__1.cifmt = "(A)";
-	iostat = s_rsfe(&ci__1);
+	iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = do_fio(&__state->c__1, line, (ftnlen)255);
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, (ftnlen)
+		255);
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = e_rsfe();
+	iostat = e_rsfe(&__global_state->f2c);
 L100003:
 	if (iostat != 0) {
-	    setmsg_("Error reading from the DAF transfer file '#'. IOSTAT = "
-		    "#.", (ftnlen)57);
-	    errfnm_("#", xfrlun, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("DAFTB", (ftnlen)5);
+	    setmsg_(__global_state, "Error reading from the DAF transfer fil"
+		    "e '#'. IOSTAT = #.", (ftnlen)57);
+	    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "DAFTB", (ftnlen)5);
 	    return 0;
 	}
 
@@ -607,35 +618,46 @@ L100003:
 /*        array, or scanning for the total number of arrays. So look */
 /*        for the appropriate keyword. */
 
-	nextwd_(line, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)255);
-	if (s_cmp(word, "BEGIN_ARRAY", (ftnlen)255, (ftnlen)11) == 0) {
+	nextwd_(__global_state, line, word, rest, (ftnlen)255, (ftnlen)255, (
+		ftnlen)255);
+	if (s_cmp(&__global_state->f2c, word, "BEGIN_ARRAY", (ftnlen)255, (
+		ftnlen)11) == 0) {
 
 /*           Get the array number. */
 
-	    nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)255);
-	    nparsi_(word, &barr, errmsg, &errptr, (ftnlen)255, (ftnlen)320);
-	    if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
-		setmsg_("Begin array error, could not parse array number. Er"
-			"ror: # File: #", (ftnlen)65);
-		errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDAFTRANSFERFILE)", (ftnlen)25);
-		chkout_("DAFTB", (ftnlen)5);
+	    nextwd_(__global_state, rest, word, rest, (ftnlen)255, (ftnlen)
+		    255, (ftnlen)255);
+	    nparsi_(__global_state, word, &barr, errmsg, &errptr, (ftnlen)255,
+		     (ftnlen)320);
+	    if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (ftnlen)
+		    1) != 0) {
+		setmsg_(__global_state, "Begin array error, could not parse "
+			"array number. Error: # File: #", (ftnlen)65);
+		errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)320);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDAFTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Parse the count of double precision numbers in the array. */
 
-	    nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)255);
-	    nparsi_(word, &bcnt, errmsg, &errptr, (ftnlen)255, (ftnlen)320);
-	    if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
-		setmsg_("Begin array error, could not parse the data count f"
-			"or array: #. Error: # File: #", (ftnlen)80);
-		errint_("#", &barr, (ftnlen)1);
-		errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDAFTRANSFERFILE)", (ftnlen)25);
-		chkout_("DAFTB", (ftnlen)5);
+	    nextwd_(__global_state, rest, word, rest, (ftnlen)255, (ftnlen)
+		    255, (ftnlen)255);
+	    nparsi_(__global_state, word, &bcnt, errmsg, &errptr, (ftnlen)255,
+		     (ftnlen)320);
+	    if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (ftnlen)
+		    1) != 0) {
+		setmsg_(__global_state, "Begin array error, could not parse "
+			"the data count for array: #. Error: # File: #", (
+			ftnlen)80);
+		errint_(__global_state, "#", &barr, (ftnlen)1);
+		errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)320);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDAFTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -645,34 +667,44 @@ L100003:
 
 	    inarr = TRUE_;
 	    ++arrcnt;
-	} else if (s_cmp(word, "END_ARRAY", (ftnlen)255, (ftnlen)9) == 0) {
+	} else if (s_cmp(&__global_state->f2c, word, "END_ARRAY", (ftnlen)255,
+		 (ftnlen)9) == 0) {
 
 /*           Get the array number. */
 
-	    nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)255);
-	    nparsi_(word, &earr, errmsg, &errptr, (ftnlen)255, (ftnlen)320);
-	    if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
-		setmsg_("End array error, could not parse array number. Erro"
-			"r: # File: #", (ftnlen)63);
-		errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDAFTRANSFERFILE)", (ftnlen)25);
-		chkout_("DAFTB", (ftnlen)5);
+	    nextwd_(__global_state, rest, word, rest, (ftnlen)255, (ftnlen)
+		    255, (ftnlen)255);
+	    nparsi_(__global_state, word, &earr, errmsg, &errptr, (ftnlen)255,
+		     (ftnlen)320);
+	    if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (ftnlen)
+		    1) != 0) {
+		setmsg_(__global_state, "End array error, could not parse ar"
+			"ray number. Error: # File: #", (ftnlen)63);
+		errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)320);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDAFTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Parse the count of double precision numbers in the array. */
 
-	    nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)255);
-	    nparsi_(word, &ecnt, errmsg, &errptr, (ftnlen)255, (ftnlen)320);
-	    if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
-		setmsg_("End array error, could not parse the data count for"
-			" array: #. Error: # File: #", (ftnlen)78);
-		errint_("#", &earr, (ftnlen)1);
-		errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDAFTRANSFERFILE)", (ftnlen)25);
-		chkout_("DAFTB", (ftnlen)5);
+	    nextwd_(__global_state, rest, word, rest, (ftnlen)255, (ftnlen)
+		    255, (ftnlen)255);
+	    nparsi_(__global_state, word, &ecnt, errmsg, &errptr, (ftnlen)255,
+		     (ftnlen)320);
+	    if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (ftnlen)
+		    1) != 0) {
+		setmsg_(__global_state, "End array error, could not parse th"
+			"e data count for array: #. Error: # File: #", (ftnlen)
+			78);
+		errint_(__global_state, "#", &earr, (ftnlen)1);
+		errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)320);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDAFTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -680,13 +712,14 @@ L100003:
 /*           match. If not, signal an appropriate error. */
 
 	    if (earr != barr) {
-		setmsg_("Data array number mismatch: Beginning number: #; En"
-			"ding number: #. File: #", (ftnlen)74);
-		errint_("#", &barr, (ftnlen)1);
-		errint_("#", &earr, (ftnlen)1);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDAFTRANSFERFILE)", (ftnlen)25);
-		chkout_("DAFTB", (ftnlen)5);
+		setmsg_(__global_state, "Data array number mismatch: Beginni"
+			"ng number: #; Ending number: #. File: #", (ftnlen)74);
+		errint_(__global_state, "#", &barr, (ftnlen)1);
+		errint_(__global_state, "#", &earr, (ftnlen)1);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDAFTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -694,13 +727,14 @@ L100003:
 /*           match. If not, signal an appropriate error. */
 
 	    if (ecnt != bcnt) {
-		setmsg_("Data array count mismatch: Beginning count: #; Endi"
-			"ng count: #. File: #", (ftnlen)71);
-		errint_("#", &bcnt, (ftnlen)1);
-		errint_("#", &ecnt, (ftnlen)1);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDAFTRANSFERFILE)", (ftnlen)25);
-		chkout_("DAFTB", (ftnlen)5);
+		setmsg_(__global_state, "Data array count mismatch: Beginnin"
+			"g count: #; Ending count: #. File: #", (ftnlen)71);
+		errint_(__global_state, "#", &bcnt, (ftnlen)1);
+		errint_(__global_state, "#", &ecnt, (ftnlen)1);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDAFTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -709,32 +743,38 @@ L100003:
 /*           to  .FALSE.. */
 
 	    inarr = FALSE_;
-	} else if (s_cmp(word, "TOTAL_ARRAYS", (ftnlen)255, (ftnlen)12) == 0) 
-		{
+	} else if (s_cmp(&__global_state->f2c, word, "TOTAL_ARRAYS", (ftnlen)
+		255, (ftnlen)12) == 0) {
 
 /*           We have the total arrays keyword to parse, so get */
 /*           the total number of arrays processed. */
 
-	    nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)255);
-	    nparsi_(word, &numarr, errmsg, &errptr, (ftnlen)255, (ftnlen)320);
-	    if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
-		setmsg_("Array count error, could not parse the total number"
-			" of arrays: #. File: #", (ftnlen)73);
-		errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDAFTRANSFERFILE)", (ftnlen)25);
-		chkout_("DAFTB", (ftnlen)5);
+	    nextwd_(__global_state, rest, word, rest, (ftnlen)255, (ftnlen)
+		    255, (ftnlen)255);
+	    nparsi_(__global_state, word, &numarr, errmsg, &errptr, (ftnlen)
+		    255, (ftnlen)320);
+	    if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (ftnlen)
+		    1) != 0) {
+		setmsg_(__global_state, "Array count error, could not parse "
+			"the total number of arrays: #. File: #", (ftnlen)73);
+		errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)320);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDAFTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 	    if (arrcnt != numarr) {
-		setmsg_("The number of data arrays processed (#) was not equ"
-			"al to the number of data arrays placed in the DAF tr"
-			"ansfer file (#). File: #", (ftnlen)127);
-		errint_("#", &arrcnt, (ftnlen)1);
-		errint_("#", &numarr, (ftnlen)1);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDAFTRANSFERFILE)", (ftnlen)25);
-		chkout_("DAFTB", (ftnlen)5);
+		setmsg_(__global_state, "The number of data arrays processed"
+			" (#) was not equal to the number of data arrays plac"
+			"ed in the DAF transfer file (#). File: #", (ftnlen)
+			127);
+		errint_(__global_state, "#", &arrcnt, (ftnlen)1);
+		errint_(__global_state, "#", &numarr, (ftnlen)1);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDAFTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -744,12 +784,12 @@ L100003:
 
 	    more = FALSE_;
 	} else {
-	    setmsg_("Unknown keyword '#' encountered while processing the DA"
-		    "F transfer file #.", (ftnlen)73);
-	    errch_("#", word, (ftnlen)1, (ftnlen)255);
-	    errfnm_("#", xfrlun, (ftnlen)1);
-	    sigerr_("SPICE(BADDAFTRANSFERFILE)", (ftnlen)25);
-	    chkout_("DAFTB", (ftnlen)5);
+	    setmsg_(__global_state, "Unknown keyword '#' encountered while p"
+		    "rocessing the DAF transfer file #.", (ftnlen)73);
+	    errch_(__global_state, "#", word, (ftnlen)1, (ftnlen)255);
+	    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADDAFTRANSFERFILE)", (ftnlen)25);
+	    chkout_(__global_state, "DAFTB", (ftnlen)5);
 	    return 0;
 	}
 
@@ -759,31 +799,32 @@ L100003:
 	if (inarr) {
 	    dtacnt = 0;
 	    __state->io___27.ciunit = *xfrlun;
-	    iostat = s_rsle(&__state->io___27);
+	    iostat = s_rsle(&__global_state->f2c, &__state->io___27);
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = do_lio(&__state->c__9, &__state->c__1, name__, snmlen);
+	    iostat = do_lio(&__global_state->f2c, &__state->c__9, &
+		    __state->c__1, name__, snmlen);
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = e_rsle();
+	    iostat = e_rsle(&__global_state->f2c);
 L100004:
 	    if (iostat != 0) {
-		setmsg_("Error reading the array name from the DAF transfer "
-			"file #. IOSTAT = #.", (ftnlen)70);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		chkout_("DAFTB", (ftnlen)5);
+		setmsg_(__global_state, "Error reading the array name from t"
+			"he DAF transfer file #. IOSTAT = #.", (ftnlen)70);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Read in the double precision part of the summary. */
 
-	    rdencd_(xfrlun, &nd, dsumry);
-	    if (failed_()) {
-		chkout_("DAFTB", (ftnlen)5);
+	    rdencd_(__global_state, xfrlun, &nd, dsumry);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -793,21 +834,21 @@ L100004:
 /*           the array is actually written to the DAF file. */
 
 	    i__1 = ni - 2;
-	    rdenci_(xfrlun, &i__1, isumry);
-	    if (failed_()) {
-		chkout_("DAFTB", (ftnlen)5);
+	    rdenci_(__global_state, xfrlun, &i__1, isumry);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Pack the summary information into the DAF array summary. */
 
-	    dafps_(&nd, &ni, dsumry, isumry, summry);
+	    dafps_(__global_state, &nd, &ni, dsumry, isumry, summry);
 
 /*           Begin a new array in the binary DAF file. */
 
-	    dafbna_(&binhdl, summry, name__, snmlen);
-	    if (failed_()) {
-		chkout_("DAFTB", (ftnlen)5);
+	    dafbna_(__global_state, &binhdl, summry, name__, snmlen);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -823,24 +864,26 @@ L100004:
 /*              current data block. */
 
 		__state->io___32.ciunit = *xfrlun;
-		iostat = s_rsle(&__state->io___32);
+		iostat = s_rsle(&__global_state->f2c, &__state->io___32);
 		if (iostat != 0) {
 		    goto L100005;
 		}
-		iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&
-			numdta, (ftnlen)sizeof(integer));
+		iostat = do_lio(&__global_state->f2c, &__state->c__3, &
+			__state->c__1, (char *)&numdta, (ftnlen)sizeof(
+			integer));
 		if (iostat != 0) {
 		    goto L100005;
 		}
-		iostat = e_rsle();
+		iostat = e_rsle(&__global_state->f2c);
 L100005:
 		if (iostat != 0) {
-		    setmsg_("Error reading array data from the DAF transfer "
-			    "file #. IOSTAT = #.", (ftnlen)66);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    errint_("#", &iostat, (ftnlen)1);
-		    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		    chkout_("DAFTB", (ftnlen)5);
+		    setmsg_(__global_state, "Error reading array data from t"
+			    "he DAF transfer file #. IOSTAT = #.", (ftnlen)66);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    errint_(__global_state, "#", &iostat, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)
+			    21);
+		    chkout_(__global_state, "DAFTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -859,18 +902,18 @@ L100005:
 /*                 Read and decode a buffer of encoded double precision */
 /*                 data from the DAF transfer file. */
 
-		    rdencd_(xfrlun, &numdta, buffer);
-		    if (failed_()) {
-			chkout_("DAFTB", (ftnlen)5);
+		    rdencd_(__global_state, xfrlun, &numdta, buffer);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "DAFTB", (ftnlen)5);
 			return 0;
 		    }
 
 /*                 Write the double precision data to the current array */
 /*                 in the binary DAF file. */
 
-		    dafada_(buffer, &numdta);
-		    if (failed_()) {
-			chkout_("DAFTB", (ftnlen)5);
+		    dafada_(__global_state, buffer, &numdta);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "DAFTB", (ftnlen)5);
 			return 0;
 		    }
 
@@ -898,9 +941,9 @@ L100005:
 /*           If we got to here, we have successfully written an array */
 /*           to the binary file, so we need to end it. */
 
-	    dafena_();
-	    if (failed_()) {
-		chkout_("DAFTB", (ftnlen)5);
+	    dafena_(__global_state);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DAFTB", (ftnlen)5);
 		return 0;
 	    }
 	}
@@ -908,8 +951,8 @@ L100005:
 
 /*     Close only the binary file. */
 
-    dafcls_(&binhdl);
-    chkout_("DAFTB", (ftnlen)5);
+    dafcls_(__global_state, &binhdl);
+    chkout_(__global_state, "DAFTB", (ftnlen)5);
     return 0;
 } /* daftb_ */
 

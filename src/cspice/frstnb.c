@@ -8,26 +8,26 @@
 
 
 typedef int frstnb_state_t;
-static frstnb_state_t* get_frstnb_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline frstnb_state_t* get_frstnb_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            FRSTNB ( First non-blank character ) */
-integer frstnb_(char *string, ftnlen string_len)
+integer frstnb_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     integer ret_val, i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), i_len(char *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), i_len(
+	    f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    frstnb_state_t* __state = get_frstnb_state();
+    frstnb_state_t* __state = get_frstnb_state(__global_state);
 /* $ Abstract */
 
 /*      Return the index of the first non-blank character in */
@@ -154,10 +154,11 @@ integer frstnb_(char *string, ftnlen string_len)
 
 /*     Just like it says in the header. */
 
-    if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, string, " ", string_len, (ftnlen)1) == 0) 
+	    {
 	ret_val = 0;
     } else {
-	i__1 = i_len(string, string_len);
+	i__1 = i_len(&__global_state->f2c, string, string_len);
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (*(unsigned char *)&string[i__ - 1] != 32) {
 		ret_val = i__;

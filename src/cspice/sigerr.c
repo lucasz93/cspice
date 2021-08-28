@@ -8,8 +8,7 @@
 
 
 extern sigerr_init_t __sigerr_init;
-static sigerr_state_t* get_sigerr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sigerr_state_t* get_sigerr_state(cspice_t* state) {
 	if (!state->sigerr)
 		state->sigerr = __cspice_allocate_module(sizeof(
 	sigerr_state_t), &__sigerr_init, sizeof(__sigerr_init));
@@ -18,23 +17,24 @@ static sigerr_state_t* get_sigerr_state() {
 }
 
 /* $Procedure      SIGERR ( Signal Error Condition ) */
-/* Subroutine */ int sigerr_(char *msg, ftnlen msg_len)
+/* Subroutine */ int sigerr_(cspice_t* __global_state, char *msg, ftnlen 
+	msg_len)
 {
     /* Initialized data */
 
 
-    extern logical failed_(void);
-    extern logical accept_(logical *);
-    extern /* Subroutine */ int getact_(integer *);
-    extern /* Subroutine */ int byebye_(char *, ftnlen);
-    extern /* Subroutine */ int freeze_(void);
-    extern logical seterr_(logical *);
-    extern /* Subroutine */ int outmsg_(char *, ftnlen);
-    extern /* Subroutine */ int putsms_(char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern logical accept_(cspice_t*, logical *);
+    extern /* Subroutine */ int getact_(cspice_t*, integer *);
+    extern /* Subroutine */ int byebye_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int freeze_(cspice_t*);
+    extern logical seterr_(cspice_t*, logical *);
+    extern /* Subroutine */ int outmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int putsms_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    sigerr_state_t* __state = get_sigerr_state();
+    sigerr_state_t* __state = get_sigerr_state(__global_state);
 /* $ Abstract */
 
 /*     Inform the SPICELIB error processing mechanism that an error has */
@@ -318,9 +318,9 @@ static sigerr_state_t* get_sigerr_state() {
 /*         user's program has reset the error status via */
 /*         a call to RESET. */
 
-    getact_(&__state->action);
+    getact_(__global_state, &__state->action);
     if (__state->action != 4) {
-	if (__state->action != 3 || ! failed_()) {
+	if (__state->action != 3 || ! failed_(__global_state)) {
 
 /*           This one's for real.  Indicate an error condition, and */
 /*           store the short error message. */
@@ -329,12 +329,12 @@ static sigerr_state_t* get_sigerr_state() {
 /*           reference sets the toolkit error status.  STAT */
 /*           doesn't have any meaning. */
 
-	    __state->stat = seterr_(&__state->c_true);
-	    putsms_(msg, msg_len);
+	    __state->stat = seterr_(__global_state, &__state->c_true);
+	    putsms_(__global_state, msg, msg_len);
 
 /*           Create a frozen copy of the traceback: */
 
-	    freeze_();
+	    freeze_(__global_state);
 
 /*           Now we output the error data that are available at this */
 /*           time, and whose output has been enabled.  The choice of */
@@ -352,9 +352,9 @@ static sigerr_state_t* get_sigerr_state() {
 /*           default message selection applies. */
 
 	    if (__state->action != 5) {
-		outmsg_(__state->errmsg, (ftnlen)40);
+		outmsg_(__global_state, __state->errmsg, (ftnlen)40);
 	    } else {
-		outmsg_(__state->defmsg, (ftnlen)40);
+		outmsg_(__global_state, __state->defmsg, (ftnlen)40);
 	    }
 	    if (__state->action == 3) {
 
@@ -362,19 +362,19 @@ static sigerr_state_t* get_sigerr_state() {
 /*              to current long error message: */
 /*              (STAT has no meaning). */
 
-		__state->stat = accept_(&__state->c_false);
+		__state->stat = accept_(__global_state, &__state->c_false);
 	    } else {
-		__state->stat = accept_(&__state->c_true);
+		__state->stat = accept_(__global_state, &__state->c_true);
 	    }
 	} else {
-	    __state->stat = accept_(&__state->c_false);
+	    __state->stat = accept_(__global_state, &__state->c_false);
 	}
     }
 
 /*     We could be in ABORT or DEFAULT mode. */
 
     if (__state->action == 5 || __state->action == 1) {
-	byebye_("FAILURE", (ftnlen)7);
+	byebye_(__global_state, "FAILURE", (ftnlen)7);
     }
 
 /*     That's all, folks! */

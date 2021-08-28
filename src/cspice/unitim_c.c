@@ -199,7 +199,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "unitim_c");
+   chkin_c ( naif_state, "unitim_c");
 
 
    /*

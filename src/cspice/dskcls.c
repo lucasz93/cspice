@@ -8,30 +8,30 @@
 
 
 typedef int dskcls_state_t;
-static dskcls_state_t* get_dskcls_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskcls_state_t* get_dskcls_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DSKCLS ( DSK, close file ) */
-/* Subroutine */ int dskcls_(integer *handle, logical *optmiz)
+/* Subroutine */ int dskcls_(cspice_t* __global_state, integer *handle, 
+	logical *optmiz)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dasham_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int dasllc_(integer *);
-    extern /* Subroutine */ int dascls_(integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasham_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasllc_(cspice_t*, integer *);
+    extern /* Subroutine */ int dascls_(cspice_t*, integer *);
     char method[10];
-    extern /* Subroutine */ int daswbr_(integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int daswbr_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dskcls_state_t* __state = get_dskcls_state();
+    dskcls_state_t* __state = get_dskcls_state(__global_state);
 /* $ Abstract */
 
 /*     Close a DSK file. */
@@ -297,17 +297,17 @@ static dskcls_state_t* get_dskcls_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKCLS", (ftnlen)6);
+    chkin_(__global_state, "DSKCLS", (ftnlen)6);
     if (*optmiz) {
 
 /*        Segregate the file to enable fast read access.  This is */
 /*        the "normal" way to close a DSK.  Segregating a large file */
 /*        can be slow, however. */
 
-	dascls_(handle);
+	dascls_(__global_state, handle);
     } else {
 
 /*        Close the file without first segregating it; this allows */
@@ -317,20 +317,21 @@ static dskcls_state_t* get_dskcls_state() {
 /*        Any buffered data to be written must be explicitly flushed */
 /*        to the file, if the file is open for write access. */
 
-	dasham_(handle, method, (ftnlen)10);
-	if (s_cmp(method, "WRITE ", (ftnlen)10, (ftnlen)6) == 0) {
+	dasham_(__global_state, handle, method, (ftnlen)10);
+	if (s_cmp(&__global_state->f2c, method, "WRITE ", (ftnlen)10, (ftnlen)
+		6) == 0) {
 
 /*           Write out any buffered records belonging to the */
 /*           indicated file. */
 
-	    daswbr_(handle);
+	    daswbr_(__global_state, handle);
 	}
 
 /*        Close the file without segregating records. */
 
-	dasllc_(handle);
+	dasllc_(__global_state, handle);
     }
-    chkout_("DSKCLS", (ftnlen)6);
+    chkout_(__global_state, "DSKCLS", (ftnlen)6);
     return 0;
 } /* dskcls_ */
 

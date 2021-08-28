@@ -8,28 +8,29 @@
 
 
 typedef int appndd_state_t;
-static appndd_state_t* get_appndd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline appndd_state_t* get_appndd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure APPNDD ( Append an item to a double precision cell ) */
-/* Subroutine */ int appndd_(doublereal *item, doublereal *cell)
+/* Subroutine */ int appndd_(cspice_t* __global_state, doublereal *item, 
+	doublereal *cell)
 {
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern integer sized_(doublereal *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
     integer nwcard;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    appndd_state_t* __state = get_appndd_state();
+    appndd_state_t* __state = get_appndd_state(__global_state);
 /* $ Abstract */
 
 /*      Append an item to a double precision cell. */
@@ -173,10 +174,10 @@ static appndd_state_t* get_appndd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("APPNDD", (ftnlen)6);
+	chkin_(__global_state, "APPNDD", (ftnlen)6);
     }
 
 /*     Check to see if the cell can accomodate the addition of a */
@@ -184,17 +185,17 @@ static appndd_state_t* get_appndd_state() {
 /*     reset the cardinality. If the cell cannot accomodate the */
 /*     addition of a new item, signal an error. */
 
-    nwcard = cardd_(cell) + 1;
-    if (nwcard <= sized_(cell)) {
+    nwcard = cardd_(__global_state, cell) + 1;
+    if (nwcard <= sized_(__global_state, cell)) {
 	cell[nwcard + 5] = *item;
-	scardd_(&nwcard, cell);
+	scardd_(__global_state, &nwcard, cell);
     } else {
-	setmsg_("The cell cannot accomodate the addition of the element *. ", 
-		(ftnlen)58);
-	errdp_("*", item, (ftnlen)1);
-	sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);
+	setmsg_(__global_state, "The cell cannot accomodate the addition of "
+		"the element *. ", (ftnlen)58);
+	errdp_(__global_state, "*", item, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CELLTOOSMALL)", (ftnlen)19);
     }
-    chkout_("APPNDD", (ftnlen)6);
+    chkout_(__global_state, "APPNDD", (ftnlen)6);
     return 0;
 } /* appndd_ */
 

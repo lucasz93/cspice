@@ -8,8 +8,7 @@
 
 
 extern zzekpcol_init_t __zzekpcol_init;
-static zzekpcol_state_t* get_zzekpcol_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekpcol_state_t* get_zzekpcol_state(cspice_t* state) {
 	if (!state->zzekpcol)
 		state->zzekpcol = __cspice_allocate_module(sizeof(
 	zzekpcol_state_t), &__zzekpcol_init, sizeof(__zzekpcol_init));
@@ -18,46 +17,48 @@ static zzekpcol_state_t* get_zzekpcol_state() {
 }
 
 /* $Procedure  ZZEKPCOL ( Private: EK, parse column name ) */
-/* Subroutine */ int zzekpcol_(char *qcol, integer *eqryi, char *eqryc, char *
-	table, char *alias, integer *tabidx, char *column, integer *colidx, 
-	logical *error, char *errmsg, ftnlen qcol_len, ftnlen eqryc_len, 
-	ftnlen table_len, ftnlen alias_len, ftnlen column_len, ftnlen 
-	errmsg_len)
+/* Subroutine */ int zzekpcol_(cspice_t* __global_state, char *qcol, integer *
+	eqryi, char *eqryc, char *table, char *alias, integer *tabidx, char *
+	column, integer *colidx, logical *error, char *errmsg, ftnlen 
+	qcol_len, ftnlen eqryc_len, ftnlen table_len, ftnlen alias_len, 
+	ftnlen column_len, ftnlen errmsg_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer ntab;
     logical qual;
-    extern /* Subroutine */ int zzekscan_(char *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, doublereal 
-	    *, char *, integer *, integer *, logical *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekqtab_(integer *, char *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int zzekscan_(cspice_t*, char *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    doublereal *, char *, integer *, integer *, logical *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqtab_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
     integer i__;
     integer j;
-    extern /* Subroutine */ int ekcii_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int ekcii_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer cc;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer icheck;
     integer chbegs[3];
     integer chends[3];
     char chrbuf[160];
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     char alslst[64*10];
     char tablst[64*10];
     char tmpcol[32];
@@ -71,14 +72,14 @@ static zzekpcol_state_t* get_zzekpcol_state() {
     integer tokens[3];
     integer values[3];
     logical fnd;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ekccnt_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ekccnt_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzekpcol_state_t* __state = get_zzekpcol_state();
+    zzekpcol_state_t* __state = get_zzekpcol_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -978,20 +979,20 @@ static zzekpcol_state_t* get_zzekpcol_state() {
 /*     Use discovery check-in. */
 
     *error = FALSE_;
-    s_copy(errmsg, " ", errmsg_len, (ftnlen)1);
-    zzekreqi_(eqryi, "SEM_CHECKED", &icheck, (ftnlen)11);
-    if (failed_()) {
+    s_copy(&__global_state->f2c, errmsg, " ", errmsg_len, (ftnlen)1);
+    zzekreqi_(__global_state, eqryi, "SEM_CHECKED", &icheck, (ftnlen)11);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
 /*     Make sure the encoded query is in order before proceeding. */
 
     if (icheck == -1) {
-	chkin_("ZZEKPCOL", (ftnlen)8);
-	setmsg_("Encoded query has not yet been semantically checked.", (
-		ftnlen)52);
-	sigerr_("SPICE(NOTSEMCHECKED)", (ftnlen)20);
-	chkout_("ZZEKPCOL", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPCOL", (ftnlen)8);
+	setmsg_(__global_state, "Encoded query has not yet been semantically"
+		" checked.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(NOTSEMCHECKED)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKPCOL", (ftnlen)8);
 	return 0;
     }
 
@@ -1004,56 +1005,63 @@ static zzekpcol_state_t* get_zzekpcol_state() {
 
 /*     ZZEKSCAN should therefore return 1 or 3 tokens. */
 
-    zzekscan_(qcol, &__state->c__3, &__state->c__0, &ntoken, tokens, lxbegs, 
-	    lxends, values, numvls, chrbuf, chbegs, chends, error, errmsg, 
-	    qcol_len, (ftnlen)160, errmsg_len);
+    zzekscan_(__global_state, qcol, &__state->c__3, &__state->c__0, &ntoken, 
+	    tokens, lxbegs, lxends, values, numvls, chrbuf, chbegs, chends, 
+	    error, errmsg, qcol_len, (ftnlen)160, errmsg_len);
     if (*error) {
 	return 0;
     }
     if (ntoken == 1) {
 	if (tokens[0] != 2) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Invalid column name; name should consist of an i"
-		    "dentifier.", errmsg_len, (ftnlen)58);
+	    s_copy(&__global_state->f2c, errmsg, "Invalid column name; name "
+		    "should consist of an identifier.", errmsg_len, (ftnlen)58)
+		    ;
 	    return 0;
 	}
-	ucase_(qcol, column, qcol_len, column_len);
+	ucase_(__global_state, qcol, column, qcol_len, column_len);
 	qual = FALSE_;
     } else if (ntoken == 3) {
 	if (tokens[0] != 2) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Invalid table name; name should consist of an id"
-		    "entifier.", errmsg_len, (ftnlen)57);
+	    s_copy(&__global_state->f2c, errmsg, "Invalid table name; name s"
+		    "hould consist of an identifier.", errmsg_len, (ftnlen)57);
 	    return 0;
 	} else if (tokens[1] != 9) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Invalid qualified column name; table name should"
-		    " be followed by a period.", errmsg_len, (ftnlen)73);
+	    s_copy(&__global_state->f2c, errmsg, "Invalid qualified column n"
+		    "ame; table name should be followed by a period.", 
+		    errmsg_len, (ftnlen)73);
 	    return 0;
 	} else if (tokens[2] != 2) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Invalid column name; name should consist of an i"
-		    "dentifier.", errmsg_len, (ftnlen)58);
+	    s_copy(&__global_state->f2c, errmsg, "Invalid column name; name "
+		    "should consist of an identifier.", errmsg_len, (ftnlen)58)
+		    ;
 	    return 0;
 	}
 	i__ = values[0];
 	j = values[2];
-	i__1 = chbegs[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("chb"
-		"egs", i__2, "zzekpcol_", (ftnlen)346)] - 1;
-	s_copy(tmptab, chrbuf + i__1, (ftnlen)64, chends[(i__3 = i__ - 1) < 3 
-		&& 0 <= i__3 ? i__3 : s_rnge("chends", i__3, "zzekpcol_", (
-		ftnlen)346)] - i__1);
-	i__1 = chbegs[(i__2 = j - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("chbegs"
-		, i__2, "zzekpcol_", (ftnlen)347)] - 1;
-	s_copy(column, chrbuf + i__1, column_len, chends[(i__3 = j - 1) < 3 &&
-		 0 <= i__3 ? i__3 : s_rnge("chends", i__3, "zzekpcol_", (
-		ftnlen)347)] - i__1);
+	i__1 = chbegs[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "chbegs", i__2, "zzekpcol_", (ftnlen)346)
+		] - 1;
+	s_copy(&__global_state->f2c, tmptab, chrbuf + i__1, (ftnlen)64, 
+		chends[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "chends", i__3, "zzekpcol_", (ftnlen)346)
+		] - i__1);
+	i__1 = chbegs[(i__2 = j - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "chbegs", i__2, "zzekpcol_", (ftnlen)347)
+		] - 1;
+	s_copy(&__global_state->f2c, column, chrbuf + i__1, column_len, 
+		chends[(i__3 = j - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "chends", i__3, "zzekpcol_", (ftnlen)347)
+		] - i__1);
 	qual = TRUE_;
     } else {
 	*error = TRUE_;
-	s_copy(errmsg, "Invalid tokens present in qualified column name. Val"
-		"id syntax is <column> or <table>.<column>", errmsg_len, (
-		ftnlen)93);
+	s_copy(&__global_state->f2c, errmsg, "Invalid tokens present in qual"
+		"ified column name. Valid syntax is <column> or <table>.<colu"
+		"mn>", errmsg_len, (ftnlen)93);
 	return 0;
     }
 
@@ -1064,23 +1072,26 @@ static zzekpcol_state_t* get_zzekpcol_state() {
 /*     If we got this far, we'll need to look up the table names and */
 /*     aliases from the query. */
 
-    zzekreqi_(eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
+    zzekreqi_(__global_state, eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
     i__1 = ntab;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	zzekqtab_(eqryi, eqryc, &i__, tablst + (((i__2 = i__ - 1) < 10 && 0 <=
-		 i__2 ? i__2 : s_rnge("tablst", i__2, "zzekpcol_", (ftnlen)
-		371)) << 6), alslst + (((i__3 = i__ - 1) < 10 && 0 <= i__3 ? 
-		i__3 : s_rnge("alslst", i__3, "zzekpcol_", (ftnlen)371)) << 6)
-		, eqryc_len, (ftnlen)64, (ftnlen)64);
+	zzekqtab_(__global_state, eqryi, eqryc, &i__, tablst + (((i__2 = i__ 
+		- 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		"tablst", i__2, "zzekpcol_", (ftnlen)371)) << 6), alslst + (((
+		i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "alslst", i__3, "zzekpcol_", (ftnlen)371)
+		) << 6), eqryc_len, (ftnlen)64, (ftnlen)64);
     }
 
 /*     If QCOL contains a table name, look for that name in the */
 /*     table list, and if necessary, in the alias list. */
 
     if (qual) {
-	*tabidx = isrchc_(tmptab, &ntab, tablst, (ftnlen)64, (ftnlen)64);
+	*tabidx = isrchc_(__global_state, tmptab, &ntab, tablst, (ftnlen)64, (
+		ftnlen)64);
 	if (*tabidx == 0) {
-	    *tabidx = isrchc_(tmptab, &ntab, alslst, (ftnlen)64, (ftnlen)64);
+	    *tabidx = isrchc_(__global_state, tmptab, &ntab, alslst, (ftnlen)
+		    64, (ftnlen)64);
 	}
 
 /*        If we didn't find the table name in either list, it's just */
@@ -1088,29 +1099,31 @@ static zzekpcol_state_t* get_zzekpcol_state() {
 
 	if (*tabidx == 0) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Table name <#> does not match table or alias fro"
-		    "m query.", errmsg_len, (ftnlen)56);
-	    repmc_(errmsg, "#", tmptab, errmsg, errmsg_len, (ftnlen)1, (
-		    ftnlen)64, errmsg_len);
+	    s_copy(&__global_state->f2c, errmsg, "Table name <#> does not ma"
+		    "tch table or alias from query.", errmsg_len, (ftnlen)56);
+	    repmc_(__global_state, errmsg, "#", tmptab, errmsg, errmsg_len, (
+		    ftnlen)1, (ftnlen)64, errmsg_len);
 	    return 0;
 	}
 
 /*        At this point, TABIDX is valid.  Locate the column within */
 /*        the table. */
 
-	ekccnt_(tablst + (((i__1 = *tabidx - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("tablst", i__1, "zzekpcol_", (ftnlen)402)) << 6), &cc, 
-		(ftnlen)64);
-	if (failed_()) {
+	ekccnt_(__global_state, tablst + (((i__1 = *tabidx - 1) < 10 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "tablst", i__1, 
+		"zzekpcol_", (ftnlen)402)) << 6), &cc, (ftnlen)64);
+	if (failed_(__global_state)) {
 	    return 0;
 	}
 	fnd = FALSE_;
 	j = 1;
 	while(j <= cc && ! fnd) {
-	    ekcii_(tablst + (((i__1 = *tabidx - 1) < 10 && 0 <= i__1 ? i__1 : 
-		    s_rnge("tablst", i__1, "zzekpcol_", (ftnlen)414)) << 6), &
-		    j, tmpcol, attdsc, (ftnlen)64, (ftnlen)32);
-	    if (s_cmp(tmpcol, column, (ftnlen)32, column_len) == 0) {
+	    ekcii_(__global_state, tablst + (((i__1 = *tabidx - 1) < 10 && 0 
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tablst", 
+		    i__1, "zzekpcol_", (ftnlen)414)) << 6), &j, tmpcol, 
+		    attdsc, (ftnlen)64, (ftnlen)32);
+	    if (s_cmp(&__global_state->f2c, tmpcol, column, (ftnlen)32, 
+		    column_len) == 0) {
 		*colidx = j;
 		fnd = TRUE_;
 	    } else {
@@ -1119,12 +1132,13 @@ static zzekpcol_state_t* get_zzekpcol_state() {
 	}
 	if (! fnd) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Column name <#> does not appear in the qualifyin"
-		    "g table <#>.", errmsg_len, (ftnlen)60);
-	    repmc_(errmsg, "#", column, errmsg, errmsg_len, (ftnlen)1, 
-		    column_len, errmsg_len);
-	    repmc_(errmsg, "#", tmptab, errmsg, errmsg_len, (ftnlen)1, (
-		    ftnlen)64, errmsg_len);
+	    s_copy(&__global_state->f2c, errmsg, "Column name <#> does not a"
+		    "ppear in the qualifying table <#>.", errmsg_len, (ftnlen)
+		    60);
+	    repmc_(__global_state, errmsg, "#", column, errmsg, errmsg_len, (
+		    ftnlen)1, column_len, errmsg_len);
+	    repmc_(__global_state, errmsg, "#", tmptab, errmsg, errmsg_len, (
+		    ftnlen)1, (ftnlen)64, errmsg_len);
 	    return 0;
 	}
 
@@ -1141,20 +1155,23 @@ static zzekpcol_state_t* get_zzekpcol_state() {
 	nmatch = 0;
 	i__1 = ntab;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    ekccnt_(tablst + (((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
-		    s_rnge("tablst", i__2, "zzekpcol_", (ftnlen)452)) << 6), &
-		    cc, (ftnlen)64);
-	    if (failed_()) {
+	    ekccnt_(__global_state, tablst + (((i__2 = i__ - 1) < 10 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "tablst", i__2,
+		     "zzekpcol_", (ftnlen)452)) << 6), &cc, (ftnlen)64);
+	    if (failed_(__global_state)) {
 		return 0;
 	    }
 	    i__2 = cc;
 	    for (j = 1; j <= i__2; ++j) {
-		ekcii_(tablst + (((i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : 
-			s_rnge("tablst", i__3, "zzekpcol_", (ftnlen)460)) << 
-			6), &j, tmpcol, attdsc, (ftnlen)64, (ftnlen)32);
-		if (s_cmp(tmpcol, column, (ftnlen)32, column_len) == 0) {
+		ekcii_(__global_state, tablst + (((i__3 = i__ - 1) < 10 && 0 
+			<= i__3 ? i__3 : s_rnge(&__global_state->f2c, "tablst"
+			, i__3, "zzekpcol_", (ftnlen)460)) << 6), &j, tmpcol, 
+			attdsc, (ftnlen)64, (ftnlen)32);
+		if (s_cmp(&__global_state->f2c, tmpcol, column, (ftnlen)32, 
+			column_len) == 0) {
 		    ++nmatch;
-		    s_copy(column, tmpcol, column_len, (ftnlen)32);
+		    s_copy(&__global_state->f2c, column, tmpcol, column_len, (
+			    ftnlen)32);
 		    *colidx = j;
 		    *tabidx = i__;
 		}
@@ -1166,17 +1183,19 @@ static zzekpcol_state_t* get_zzekpcol_state() {
 
 	if (nmatch == 0) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Column name <#> does not appear in any table in "
-		    "FROM clause of query.", errmsg_len, (ftnlen)69);
-	    repmc_(errmsg, "#", column, errmsg, errmsg_len, (ftnlen)1, 
-		    column_len, errmsg_len);
+	    s_copy(&__global_state->f2c, errmsg, "Column name <#> does not a"
+		    "ppear in any table in FROM clause of query.", errmsg_len, 
+		    (ftnlen)69);
+	    repmc_(__global_state, errmsg, "#", column, errmsg, errmsg_len, (
+		    ftnlen)1, column_len, errmsg_len);
 	    return 0;
 	} else if (nmatch > 1) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Column name <#> is ambiguous without a qualifyin"
-		    "g table name.", errmsg_len, (ftnlen)61);
-	    repmc_(errmsg, "#", column, errmsg, errmsg_len, (ftnlen)1, 
-		    column_len, errmsg_len);
+	    s_copy(&__global_state->f2c, errmsg, "Column name <#> is ambiguo"
+		    "us without a qualifying table name.", errmsg_len, (ftnlen)
+		    61);
+	    repmc_(__global_state, errmsg, "#", column, errmsg, errmsg_len, (
+		    ftnlen)1, column_len, errmsg_len);
 	    return 0;
 	}
 
@@ -1188,12 +1207,12 @@ static zzekpcol_state_t* get_zzekpcol_state() {
 /*     regardless of whether the input name was qualified.  Fill the rest */
 /*     of our output variables. */
 
-    s_copy(table, tablst + (((i__1 = *tabidx - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("tablst", i__1, "zzekpcol_", (ftnlen)504)) << 6), 
-	    table_len, (ftnlen)64);
-    s_copy(alias, alslst + (((i__1 = *tabidx - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("alslst", i__1, "zzekpcol_", (ftnlen)505)) << 6), 
-	    alias_len, (ftnlen)64);
+    s_copy(&__global_state->f2c, table, tablst + (((i__1 = *tabidx - 1) < 10 
+	    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tablst", i__1,
+	     "zzekpcol_", (ftnlen)504)) << 6), table_len, (ftnlen)64);
+    s_copy(&__global_state->f2c, alias, alslst + (((i__1 = *tabidx - 1) < 10 
+	    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "alslst", i__1,
+	     "zzekpcol_", (ftnlen)505)) << 6), alias_len, (ftnlen)64);
     return 0;
 } /* zzekpcol_ */
 

@@ -8,28 +8,29 @@
 
 
 typedef int elemc_state_t;
-static elemc_state_t* get_elemc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline elemc_state_t* get_elemc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            ELEMC ( Element of a character set ) */
-logical elemc_(char *item, char *a, ftnlen item_len, ftnlen a_len)
+logical elemc_(cspice_t* __global_state, char *item, char *a, ftnlen item_len,
+	 ftnlen a_len)
 {
     /* System generated locals */
     integer i__1;
     logical ret_val;
 
     /* Local variables */
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    elemc_state_t* __state = get_elemc_state();
+    elemc_state_t* __state = get_elemc_state(__global_state);
 /* $ Abstract */
 
 /*      Determine whether an item is an element of a character set. */
@@ -184,18 +185,19 @@ logical elemc_(char *item, char *a, ftnlen item_len, ftnlen a_len)
 
 /*     Standard error handling: */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = FALSE_;
 	return ret_val;
     } else {
-	chkin_("ELEMC", (ftnlen)5);
+	chkin_(__global_state, "ELEMC", (ftnlen)5);
     }
 
 /*     Just a binary search. */
 
-    i__1 = cardc_(a, a_len);
-    ret_val = bsrchc_(item, &i__1, a + a_len * 6, item_len, a_len) != 0;
-    chkout_("ELEMC", (ftnlen)5);
+    i__1 = cardc_(__global_state, a, a_len);
+    ret_val = bsrchc_(__global_state, item, &i__1, a + a_len * 6, item_len, 
+	    a_len) != 0;
+    chkout_(__global_state, "ELEMC", (ftnlen)5);
     return ret_val;
 } /* elemc_ */
 

@@ -8,21 +8,20 @@
 
 
 typedef int radrec_state_t;
-static radrec_state_t* get_radrec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline radrec_state_t* get_radrec_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RADREC ( Range, RA and DEC to rectangular coordinates ) */
-/* Subroutine */ int radrec_(doublereal *range, doublereal *ra, doublereal *
-	dec, doublereal *rectan)
+/* Subroutine */ int radrec_(cspice_t* __global_state, doublereal *range, 
+	doublereal *ra, doublereal *dec, doublereal *rectan)
 {
-    extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int latrec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
 
 
     /* Module state */
-    radrec_state_t* __state = get_radrec_state();
+    radrec_state_t* __state = get_radrec_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from range, right ascension, and declination to */
@@ -202,7 +201,7 @@ static radrec_state_t* get_radrec_state() {
 /*     Convert from range, right ascension, and declination to */
 /*     rectangular coordinates by calling the routine LATREC. */
 
-    latrec_(range, ra, dec, rectan);
+    latrec_(__global_state, range, ra, dec, rectan);
     return 0;
 } /* radrec_ */
 

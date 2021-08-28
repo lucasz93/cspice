@@ -3,12 +3,11 @@
 #include "__cspice_state.h"
 
 #ifdef KR_headers
-do_us(number,ptr,len) ftnint *number; char *ptr; ftnlen len;
+do_us(f2c,number,ptr,len) f2c_state_t *f2c; ftnint *number; char *ptr; ftnlen len;
 #else
-do_us(ftnint *number, char *ptr, ftnlen len)
+do_us(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if(f2c->f__reading)
 	{
 		f2c->f__recpos += (int)(*number * len);
@@ -26,12 +25,11 @@ do_us(ftnint *number, char *ptr, ftnlen len)
 	}
 }
 #ifdef KR_headers
-integer do_ud(number,ptr,len) ftnint *number; char *ptr; ftnlen len;
+integer do_ud(f2c,number,ptr,len) f2c_state_t *f2c; ftnint *number; char *ptr; ftnlen len;
 #else
-integer do_ud(ftnint *number, char *ptr, ftnlen len)
+integer do_ud(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	f2c->f__recpos += (int)(*number * len);
 	if(f2c->f__recpos > f2c->f__curunit->url && f2c->f__curunit->url!=1)
 		err(f2c->f__elist->cierr,110,"do_ud");
@@ -59,13 +57,12 @@ integer do_ud(ftnint *number, char *ptr, ftnlen len)
 	return(0);
 }
 #ifdef KR_headers
-integer do_uio(number,ptr,len) ftnint *number; char *ptr; ftnlen len;
+integer do_uio(f2c,number,ptr,len) f2c_state_t *f2c; ftnint *number; char *ptr; ftnlen len;
 #else
-integer do_uio(ftnint *number, char *ptr, ftnlen len)
+integer do_uio(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if(f2c->f__sequential)
-		return(do_us(number,ptr,len));
-	else	return(do_ud(number,ptr,len));
+		return(do_us(f2c,number,ptr,len));
+	else	return(do_ud(f2c,number,ptr,len));
 }

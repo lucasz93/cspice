@@ -8,8 +8,7 @@
 
 
 extern spcec_init_t __spcec_init;
-static spcec_state_t* get_spcec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spcec_state_t* get_spcec_state(cspice_t* state) {
 	if (!state->spcec)
 		state->spcec = __cspice_allocate_module(sizeof(spcec_state_t),
 	 &__spcec_init, sizeof(__spcec_init));
@@ -18,44 +17,47 @@ static spcec_state_t* get_spcec_state() {
 }
 
 /* $Procedure SPCEC ( SPK and CK, extract comments ) */
-/* Subroutine */ int spcec_(integer *handle, integer *unit)
+/* Subroutine */ int spcec_(cspice_t* __global_state, integer *handle, 
+	integer *unit)
 {
     /* System generated locals */
     integer i__1;
     cilist ci__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void),
-	     s_wsle(cilist *), e_wsle(void), s_wsfe(cilist *), do_fio(integer 
-	    *, char *, ftnlen), e_wsfe(void);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rdue(f2c_state_t*), s_wsle(f2c_state_t*, 
+	    cilist *), e_wsle(f2c_state_t*), s_wsfe(f2c_state_t*, cilist *), 
+	    do_fio(f2c_state_t*, integer *, char *, ftnlen), e_wsfe(
+	    f2c_state_t*);
 
     /* Local variables */
     integer dafu;
     integer free;
     char line[1000];
     char null[1];
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
     integer c__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer bward;
     integer fward;
     integer nd;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer ni;
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
     char ifname[60];
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
     char record[1000];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer rec;
     char eot[1];
     integer nrr;
@@ -66,7 +68,7 @@ static spcec_state_t* get_spcec_state() {
 
 
     /* Module state */
-    spcec_state_t* __state = get_spcec_state();
+    spcec_state_t* __state = get_spcec_state(__global_state);
 /* $ Abstract */
 
 /*     Extract the text from the comment area of a binary SPK or CK file */
@@ -270,17 +272,17 @@ static spcec_state_t* get_spcec_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPCEC", (ftnlen)5);
+	chkin_(__global_state, "SPCEC", (ftnlen)5);
     }
 
 /*     First, check to see if HANDLE is a legitimate DAF handle. */
 
-    dafsih_(handle, "READ", (ftnlen)4);
-    if (failed_()) {
-	chkout_("SPCEC", (ftnlen)5);
+    dafsih_(__global_state, handle, "READ", (ftnlen)4);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPCEC", (ftnlen)5);
 	return 0;
     }
 
@@ -291,19 +293,21 @@ static spcec_state_t* get_spcec_state() {
 /*     record, and NRR is the number of reserved records in the file. */
 /*     If there are no reserved records, there's nothing to be done. */
 
-    dafrfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
+    dafrfr_(__global_state, handle, &nd, &ni, ifname, &fward, &bward, &free, (
+	    ftnlen)60);
     nrr = fward - 2;
     if (nrr == 0) {
-	chkout_("SPCEC", (ftnlen)5);
+	chkout_(__global_state, "SPCEC", (ftnlen)5);
 	return 0;
     }
 
 /*     We need to read directly from the SPK or CK file, using a logical */
 /*     unit instead of a handle. */
 
-    zzddhhlu_(handle, "DAF", &__state->c_false, &dafu, (ftnlen)3);
-    if (failed_()) {
-	chkout_("SPCEC", (ftnlen)5);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_false, &dafu, (
+	    ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPCEC", (ftnlen)5);
 	return 0;
     }
 
@@ -317,30 +321,31 @@ static spcec_state_t* get_spcec_state() {
 
     *(unsigned char *)null = '\0';
     *(unsigned char *)eot = '\4';
-    s_copy(line, " ", (ftnlen)1000, (ftnlen)1);
-    s_copy(record, " ", (ftnlen)1000, (ftnlen)1);
+    s_copy(&__global_state->f2c, line, " ", (ftnlen)1000, (ftnlen)1);
+    s_copy(&__global_state->f2c, record, " ", (ftnlen)1000, (ftnlen)1);
     pos = 0;
     i__1 = nrr;
     for (rec = 1; rec <= i__1; ++rec) {
 	__state->io___16.ciunit = dafu;
 	__state->io___16.cirec = rec + 1;
-	iostat = s_rdue(&__state->io___16);
+	iostat = s_rdue(&__global_state->f2c, &__state->io___16);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, record, (ftnlen)1000);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, record, (ftnlen)
+		1000);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = e_rdue();
+	iostat = e_rdue(&__global_state->f2c);
 L100001:
 	if (iostat != 0) {
-	    setmsg_("Error reading comment area of the binary file named FNM"
-		    ".  Value of IOSTAT is #.", (ftnlen)79);
-	    errint_("#", &iostat, (ftnlen)1);
-	    errfnm_("FNM", &dafu, (ftnlen)3);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("SPCEC", (ftnlen)5);
+	    setmsg_(__global_state, "Error reading comment area of the binar"
+		    "y file named FNM.  Value of IOSTAT is #.", (ftnlen)79);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    errfnm_(__global_state, "FNM", &dafu, (ftnlen)3);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "SPCEC", (ftnlen)5);
 	    return 0;
 	}
 	for (c__ = 1; c__ <= 1000; ++c__) {
@@ -348,7 +353,7 @@ L100001:
 /*           End-of-transmission means we're done. */
 
 	    if (*(unsigned char *)&record[c__ - 1] == *(unsigned char *)eot) {
-		chkout_("SPCEC", (ftnlen)5);
+		chkout_(__global_state, "SPCEC", (ftnlen)5);
 		return 0;
 
 /*           NULL means that the current line is ready to be written to */
@@ -360,38 +365,41 @@ L100001:
 		    )null) {
 		if (pos == 0) {
 		    __state->io___18.ciunit = *unit;
-		    iostat = s_wsle(&__state->io___18);
+		    iostat = s_wsle(&__global_state->f2c, &__state->io___18);
 		    if (iostat != 0) {
 			goto L100002;
 		    }
-		    iostat = e_wsle();
+		    iostat = e_wsle(&__global_state->f2c);
 L100002:
 		    ;
 		} else {
 		    ci__1.cierr = 1;
 		    ci__1.ciunit = *unit;
 		    ci__1.cifmt = "(A)";
-		    iostat = s_wsfe(&ci__1);
+		    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 		    if (iostat != 0) {
 			goto L100003;
 		    }
-		    iostat = do_fio(&__state->c__1, line, pos);
+		    iostat = do_fio(&__global_state->f2c, &__state->c__1, 
+			    line, pos);
 		    if (iostat != 0) {
 			goto L100003;
 		    }
-		    iostat = e_wsfe();
+		    iostat = e_wsfe(&__global_state->f2c);
 L100003:
 		    ;
 		}
 		if (iostat != 0) {
-		    setmsg_("Error writing to the text file named FNM.  Valu"
-			    "e of IOSTAT is #.", (ftnlen)64);
-		    errint_("#", &iostat, (ftnlen)1);
-		    sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		    chkout_("SPCEC", (ftnlen)5);
+		    setmsg_(__global_state, "Error writing to the text file "
+			    "named FNM.  Value of IOSTAT is #.", (ftnlen)64);
+		    errint_(__global_state, "#", &iostat, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)
+			    22);
+		    chkout_(__global_state, "SPCEC", (ftnlen)5);
 		    return 0;
 		}
-		s_copy(line, " ", (ftnlen)1000, (ftnlen)1);
+		s_copy(&__global_state->f2c, line, " ", (ftnlen)1000, (ftnlen)
+			1);
 		pos = 0;
 
 /*           If this a normal character, add it to the current line. */
@@ -403,7 +411,7 @@ L100003:
 	    }
 	}
     }
-    chkout_("SPCEC", (ftnlen)5);
+    chkout_(__global_state, "SPCEC", (ftnlen)5);
     return 0;
 } /* spcec_ */
 

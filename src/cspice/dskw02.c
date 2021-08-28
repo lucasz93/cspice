@@ -8,8 +8,7 @@
 
 
 extern dskw02_init_t __dskw02_init;
-static dskw02_state_t* get_dskw02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskw02_state_t* get_dskw02_state(cspice_t* state) {
 	if (!state->dskw02)
 		state->dskw02 = __cspice_allocate_module(sizeof(
 	dskw02_state_t), &__dskw02_init, sizeof(__dskw02_init));
@@ -18,25 +17,25 @@ static dskw02_state_t* get_dskw02_state() {
 }
 
 /* $Procedure DSKW02 ( DSK, write type 2 segment ) */
-/* Subroutine */ int dskw02_(integer *handle, integer *center, integer *
-	surfid, integer *dclass, char *frame, integer *corsys, doublereal *
-	corpar, doublereal *mncor1, doublereal *mxcor1, doublereal *mncor2, 
-	doublereal *mxcor2, doublereal *mncor3, doublereal *mxcor3, 
-	doublereal *first, doublereal *last, integer *nv, doublereal *vrtces, 
-	integer *np, integer *plates, doublereal *spaixd, integer *spaixi, 
-	ftnlen frame_len)
+/* Subroutine */ int dskw02_(cspice_t* __global_state, integer *handle, 
+	integer *center, integer *surfid, integer *dclass, char *frame, 
+	integer *corsys, doublereal *corpar, doublereal *mncor1, doublereal *
+	mxcor1, doublereal *mncor2, doublereal *mxcor2, doublereal *mncor3, 
+	doublereal *mxcor3, doublereal *first, doublereal *last, integer *nv, 
+	doublereal *vrtces, integer *np, integer *plates, doublereal *spaixd, 
+	integer *spaixi, ftnlen frame_len)
 {
     /* System generated locals */
     integer plates_dim2, i__1, i__2;
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double pow_dd(doublereal *, doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     integer ncgr;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal a;
     doublereal b;
     integer i__;
@@ -44,30 +43,36 @@ static dskw02_state_t* get_dskw02_state() {
     integer k;
     integer q;
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal descr[24];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern doublereal twopi_(void);
-    extern /* Subroutine */ int dasadd_(integer *, integer *, doublereal *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern doublereal twopi_(cspice_t*);
+    extern /* Subroutine */ int dasadd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasadi_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     integer frmcde;
-    extern doublereal halfpi_(void);
-    extern /* Subroutine */ int dlabns_(integer *);
+    extern doublereal halfpi_(cspice_t*);
+    extern /* Subroutine */ int dlabns_(cspice_t*, integer *);
     doublereal segbds[4]	/* was [2][2] */;
-    extern /* Subroutine */ int dlaens_(integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int dlaens_(cspice_t*, integer *);
+    extern logical return_(cspice_t*);
     doublereal altlim;
     doublereal voxori[3];
     doublereal voxsiz;
     doublereal vtxbds[6]	/* was [2][3] */;
     integer cgrscl;
     integer nvxtot;
-    extern doublereal dpr_(void);
+    extern doublereal dpr_(cspice_t*);
     integer pvoxpl;
     integer pvoxpt;
     integer pvtxpl;
@@ -76,15 +81,15 @@ static dskw02_state_t* get_dskw02_state() {
     integer voxnpt;
     integer voxnpl;
     integer vtxnpl;
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    dskw02_state_t* __state = get_dskw02_state();
+    dskw02_state_t* __state = get_dskw02_state(__global_state);
 /* $ Abstract */
 
 /*     Write a type 2 segment to a DSK file. */
@@ -1547,33 +1552,33 @@ static dskw02_state_t* get_dskw02_state() {
     plates_dim2 = *np;
 
     /* Function Body */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKW02", (ftnlen)6);
+    chkin_(__global_state, "DSKW02", (ftnlen)6);
 
 /*     Map the input reference frame name to an ID code. */
 
-    namfrm_(frame, &frmcde, frame_len);
+    namfrm_(__global_state, frame, &frmcde, frame_len);
     if (frmcde == 0) {
-	setmsg_("Input reference frame # could not be mapped to an ID code. "
-		"The frame name might be misspelled, or possibly a required f"
-		"rame kernel was not loaded. ", (ftnlen)147);
-	errch_("#", frame, (ftnlen)1, frame_len);
-	sigerr_("SPICE(FRAMEIDNOTFOUND)", (ftnlen)22);
-	chkout_("DSKW02", (ftnlen)6);
+	setmsg_(__global_state, "Input reference frame # could not be mapped"
+		" to an ID code. The frame name might be misspelled, or possi"
+		"bly a required frame kernel was not loaded. ", (ftnlen)147);
+	errch_(__global_state, "#", frame, (ftnlen)1, frame_len);
+	sigerr_(__global_state, "SPICE(FRAMEIDNOTFOUND)", (ftnlen)22);
+	chkout_(__global_state, "DSKW02", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure the time bounds are in order. */
 
     if (*last <= *first) {
-	setmsg_("Segment time bounds must be increasing; bounds were #:#.", (
-		ftnlen)56);
-	errdp_("#", first, (ftnlen)1);
-	errdp_("#", last, (ftnlen)1);
-	sigerr_("SPICE(TIMESOUTOFORDER)", (ftnlen)22);
-	chkout_("DSKW02", (ftnlen)6);
+	setmsg_(__global_state, "Segment time bounds must be increasing; bou"
+		"nds were #:#.", (ftnlen)56);
+	errdp_(__global_state, "#", first, (ftnlen)1);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TIMESOUTOFORDER)", (ftnlen)22);
+	chkout_(__global_state, "DSKW02", (ftnlen)6);
 	return 0;
     }
 
@@ -1588,27 +1593,29 @@ static dskw02_state_t* get_dskw02_state() {
 /*        Longitude bounds must be distinct. */
 
 	if (*mncor1 == *mxcor1) {
-	    setmsg_("Minimum longitude # radians (# degrees) was equal to ma"
-		    "ximum longitude. Longitude bounds must be distinct.", (
-		    ftnlen)106);
-	    errdp_("#", mncor1, (ftnlen)1);
-	    d__1 = *mncor1 * dpr_();
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(ZEROBOUNDSEXTENT)", (ftnlen)23);
-	    chkout_("DSKW02", (ftnlen)6);
+	    setmsg_(__global_state, "Minimum longitude # radians (# degrees)"
+		    " was equal to maximum longitude. Longitude bounds must b"
+		    "e distinct.", (ftnlen)106);
+	    errdp_(__global_state, "#", mncor1, (ftnlen)1);
+	    d__1 = *mncor1 * dpr_(__global_state);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(ZEROBOUNDSEXTENT)", (ftnlen)23);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Check minimum longitude. */
 
-	if (*mncor1 < -twopi_() - 1e-12 || *mncor1 > twopi_() - 1e-12) {
-	    setmsg_("Minimum longitude # radians (# degrees) was outside of "
-		    "valid range [-2*pi, 2*pi - ANGMRG]", (ftnlen)89);
-	    errdp_("#", mncor1, (ftnlen)1);
-	    d__1 = *mncor1 * dpr_();
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("DSKW02", (ftnlen)6);
+	if (*mncor1 < -twopi_(__global_state) - 1e-12 || *mncor1 > twopi_(
+		__global_state) - 1e-12) {
+	    setmsg_(__global_state, "Minimum longitude # radians (# degrees)"
+		    " was outside of valid range [-2*pi, 2*pi - ANGMRG]", (
+		    ftnlen)89);
+	    errdp_(__global_state, "#", mncor1, (ftnlen)1);
+	    d__1 = *mncor1 * dpr_(__global_state);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1616,19 +1623,21 @@ static dskw02_state_t* get_dskw02_state() {
 /*        Make it greater than or equal to -2*pi. */
 
 /* Computing MAX */
-	d__1 = -twopi_();
+	d__1 = -twopi_(__global_state);
 	segbds[0] = max(d__1,*mncor1);
 
 /*        Check maximum longitude. */
 
-	if (*mxcor1 < -twopi_() + 1e-12 || *mxcor1 > twopi_() + 1e-12) {
-	    setmsg_("Maximum longitude # radians (# degrees) was outside of "
-		    "valid range [-2*pi+ANGMRG, 2*pi]", (ftnlen)87);
-	    errdp_("#", mxcor1, (ftnlen)1);
-	    d__1 = *mxcor1 * dpr_();
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("DSKW02", (ftnlen)6);
+	if (*mxcor1 < -twopi_(__global_state) + 1e-12 || *mxcor1 > twopi_(
+		__global_state) + 1e-12) {
+	    setmsg_(__global_state, "Maximum longitude # radians (# degrees)"
+		    " was outside of valid range [-2*pi+ANGMRG, 2*pi]", (
+		    ftnlen)87);
+	    errdp_(__global_state, "#", mxcor1, (ftnlen)1);
+	    d__1 = *mxcor1 * dpr_(__global_state);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1636,35 +1645,35 @@ static dskw02_state_t* get_dskw02_state() {
 /*        Make it less than or equal to 2*pi. */
 
 /* Computing MIN */
-	d__1 = twopi_();
+	d__1 = twopi_(__global_state);
 	segbds[1] = min(d__1,*mxcor1);
 
 /*        The longitude extent cannot exceed 2*pi. */
 
-	if (*mxcor1 > *mncor1 + twopi_() + 1e-12) {
-	    setmsg_("Longitude bounds #:# radians (#:# degrees) are too far "
-		    "apart.", (ftnlen)61);
-	    errdp_("#", mxcor1, (ftnlen)1);
-	    errdp_("#", mxcor2, (ftnlen)1);
-	    d__1 = *mxcor1 * dpr_();
-	    errdp_("#", &d__1, (ftnlen)1);
-	    d__1 = *mxcor2 * dpr_();
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDLONEXTENT)", (ftnlen)23);
-	    chkout_("DSKW02", (ftnlen)6);
+	if (*mxcor1 > *mncor1 + twopi_(__global_state) + 1e-12) {
+	    setmsg_(__global_state, "Longitude bounds #:# radians (#:# degre"
+		    "es) are too far apart.", (ftnlen)61);
+	    errdp_(__global_state, "#", mxcor1, (ftnlen)1);
+	    errdp_(__global_state, "#", mxcor2, (ftnlen)1);
+	    d__1 = *mxcor1 * dpr_(__global_state);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    d__1 = *mxcor2 * dpr_(__global_state);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDLONEXTENT)", (ftnlen)23);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
-	if (*mxcor1 < *mncor1 - twopi_() - 1e-12) {
-	    setmsg_("Longitude bounds #:# radians (#:# degrees) are too far "
-		    "apart.", (ftnlen)61);
-	    errdp_("#", mxcor1, (ftnlen)1);
-	    errdp_("#", mxcor2, (ftnlen)1);
-	    d__1 = *mxcor1 * dpr_();
-	    errdp_("#", &d__1, (ftnlen)1);
-	    d__1 = *mxcor2 * dpr_();
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDLONEXTENT)", (ftnlen)23);
-	    chkout_("DSKW02", (ftnlen)6);
+	if (*mxcor1 < *mncor1 - twopi_(__global_state) - 1e-12) {
+	    setmsg_(__global_state, "Longitude bounds #:# radians (#:# degre"
+		    "es) are too far apart.", (ftnlen)61);
+	    errdp_(__global_state, "#", mxcor1, (ftnlen)1);
+	    errdp_(__global_state, "#", mxcor2, (ftnlen)1);
+	    d__1 = *mxcor1 * dpr_(__global_state);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    d__1 = *mxcor2 * dpr_(__global_state);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDLONEXTENT)", (ftnlen)23);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
 	if (segbds[1] > segbds[0]) {
@@ -1674,7 +1683,7 @@ static dskw02_state_t* get_dskw02_state() {
 /*           2*pi. */
 
 /* Computing MIN */
-	    d__1 = segbds[1], d__2 = segbds[0] + twopi_();
+	    d__1 = segbds[1], d__2 = segbds[0] + twopi_(__global_state);
 	    segbds[1] = min(d__1,d__2);
 	} else if (segbds[1] < segbds[0]) {
 
@@ -1683,7 +1692,7 @@ static dskw02_state_t* get_dskw02_state() {
 /*           difference no more than 2*pi. */
 
 /* Computing MAX */
-	    d__1 = segbds[1], d__2 = segbds[0] - twopi_();
+	    d__1 = segbds[1], d__2 = segbds[0] - twopi_(__global_state);
 	    segbds[1] = max(d__1,d__2);
 	}
 
@@ -1693,67 +1702,73 @@ static dskw02_state_t* get_dskw02_state() {
 /*        greater than the upper bound, then the difference between */
 /*        the bounds must not be an integer multiple of 2*pi. */
 
-	if (segbds[1] == segbds[0] || segbds[1] == segbds[0] - twopi_()) {
-	    setmsg_("After adjustment, minimum longitude # radians (# degree"
-		    "s) was equal to maximum longitude. Longitude bounds must"
-		    " be distinct.", (ftnlen)124);
-	    errdp_("#", segbds, (ftnlen)1);
-	    d__1 = *mncor1 * dpr_();
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(ZEROBOUNDSEXTENT)", (ftnlen)23);
-	    chkout_("DSKW02", (ftnlen)6);
+	if (segbds[1] == segbds[0] || segbds[1] == segbds[0] - twopi_(
+		__global_state)) {
+	    setmsg_(__global_state, "After adjustment, minimum longitude # r"
+		    "adians (# degrees) was equal to maximum longitude. Longi"
+		    "tude bounds must be distinct.", (ftnlen)124);
+	    errdp_(__global_state, "#", segbds, (ftnlen)1);
+	    d__1 = *mncor1 * dpr_(__global_state);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(ZEROBOUNDSEXTENT)", (ftnlen)23);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Check minimum latitude. */
 
-	if (*mncor2 < -halfpi_() - 1e-12 || *mncor2 > halfpi_() - 1e-12) {
-	    setmsg_("Minimum latitude # radians (# degrees) was outside of v"
-		    "alid range [-pi/2, pi/2 - ANGMRG]", (ftnlen)88);
-	    errdp_("#", mncor2, (ftnlen)1);
-	    d__1 = *mncor2 * dpr_();
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("DSKW02", (ftnlen)6);
+	if (*mncor2 < -halfpi_(__global_state) - 1e-12 || *mncor2 > halfpi_(
+		__global_state) - 1e-12) {
+	    setmsg_(__global_state, "Minimum latitude # radians (# degrees) "
+		    "was outside of valid range [-pi/2, pi/2 - ANGMRG]", (
+		    ftnlen)88);
+	    errdp_(__global_state, "#", mncor2, (ftnlen)1);
+	    d__1 = *mncor2 * dpr_(__global_state);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Trim the lower latitude bound to make it at least -pi/2. */
 
 /* Computing MAX */
-	d__1 = -halfpi_();
+	d__1 = -halfpi_(__global_state);
 	segbds[2] = max(d__1,*mncor2);
 
 /*        Check maximum latitude. */
 
-	if (*mxcor2 < -halfpi_() + 1e-12 || *mxcor2 > halfpi_() + 1e-12) {
-	    setmsg_("Maximum latitude # radians (# degrees) was outside of v"
-		    "alid range [-pi/2+ANGMRG, pi/2]", (ftnlen)86);
-	    errdp_("#", mxcor2, (ftnlen)1);
-	    d__1 = *mxcor2 * dpr_();
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("DSKW02", (ftnlen)6);
+	if (*mxcor2 < -halfpi_(__global_state) + 1e-12 || *mxcor2 > halfpi_(
+		__global_state) + 1e-12) {
+	    setmsg_(__global_state, "Maximum latitude # radians (# degrees) "
+		    "was outside of valid range [-pi/2+ANGMRG, pi/2]", (ftnlen)
+		    86);
+	    errdp_(__global_state, "#", mxcor2, (ftnlen)1);
+	    d__1 = *mxcor2 * dpr_(__global_state);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Trim the upper latitude bound to make it no more than -pi/2. */
 
 /* Computing MAX */
-	d__1 = -halfpi_();
+	d__1 = -halfpi_(__global_state);
 	segbds[2] = max(d__1,*mncor2);
 /* Computing MIN */
-	d__1 = halfpi_();
+	d__1 = halfpi_(__global_state);
 	segbds[3] = min(d__1,*mxcor2);
 
 /*        The latitude bounds must be in order. */
 
 	if (*mxcor2 < *mncor2) {
-	    setmsg_("Latitude bounds # and # are out of order.", (ftnlen)41);
-	    errdp_("#", mncor2, (ftnlen)1);
-	    errdp_("#", mxcor2, (ftnlen)1);
-	    sigerr_("SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
-	    chkout_("DSKW02", (ftnlen)6);
+	    setmsg_(__global_state, "Latitude bounds # and # are out of orde"
+		    "r.", (ftnlen)41);
+	    errdp_(__global_state, "#", mncor2, (ftnlen)1);
+	    errdp_(__global_state, "#", mxcor2, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
 	if (*corsys == 1) {
@@ -1762,19 +1777,19 @@ static dskw02_state_t* get_dskw02_state() {
 /*           bounds. */
 
 	    if (*mncor3 < 0.) {
-		setmsg_("Radius lower bound must be non-negative but was #.", 
-			(ftnlen)50);
-		errdp_("#", mncor3, (ftnlen)1);
-		sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-		chkout_("DSKW02", (ftnlen)6);
+		setmsg_(__global_state, "Radius lower bound must be non-nega"
+			"tive but was #.", (ftnlen)50);
+		errdp_(__global_state, "#", mncor3, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+		chkout_(__global_state, "DSKW02", (ftnlen)6);
 		return 0;
 	    }
 	    if (*mxcor3 <= 0.) {
-		setmsg_("Radius upper bound must be strictly positive but wa"
-			"s #.", (ftnlen)55);
-		errdp_("#", mxcor3, (ftnlen)1);
-		sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-		chkout_("DSKW02", (ftnlen)6);
+		setmsg_(__global_state, "Radius upper bound must be strictly"
+			" positive but was #.", (ftnlen)55);
+		errdp_(__global_state, "#", mxcor3, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+		chkout_(__global_state, "DSKW02", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1784,19 +1799,19 @@ static dskw02_state_t* get_dskw02_state() {
 /*           parameters as well. */
 
 	    if (corpar[0] <= 0.) {
-		setmsg_("Equatorial radius was #; this radius must be strict"
-			"ly positive.", (ftnlen)63);
-		errdp_("#", corpar, (ftnlen)1);
-		sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-		chkout_("DSKW02", (ftnlen)6);
+		setmsg_(__global_state, "Equatorial radius was #; this radiu"
+			"s must be strictly positive.", (ftnlen)63);
+		errdp_(__global_state, "#", corpar, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+		chkout_(__global_state, "DSKW02", (ftnlen)6);
 		return 0;
 	    }
 	    if (corpar[1] >= 1.) {
-		setmsg_("Flattening coefficient was #; this value must be st"
-			"rictly less than 1.", (ftnlen)70);
-		errdp_("#", &corpar[1], (ftnlen)1);
-		sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-		chkout_("DSKW02", (ftnlen)6);
+		setmsg_(__global_state, "Flattening coefficient was #; this "
+			"value must be strictly less than 1.", (ftnlen)70);
+		errdp_(__global_state, "#", &corpar[1], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+		chkout_(__global_state, "DSKW02", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1813,16 +1828,18 @@ static dskw02_state_t* get_dskw02_state() {
 	    d__1 = -(d__3 * d__3) / b, d__2 = -(d__4 * d__4) / a;
 	    altlim = max(d__1,d__2);
 	    if (*mncor3 <= altlim) {
-		setmsg_("Reference ellipsoid has semi-axis lengths # and #. "
-			"The minimum altitude was #. The minimum altitude is "
-			"required to be greater than the maximum of {-(A**2)/"
-			"B, -(B**2)/A}, which is #.", (ftnlen)181);
-		errdp_("#", &a, (ftnlen)1);
-		errdp_("#", &b, (ftnlen)1);
-		errdp_("#", mncor3, (ftnlen)1);
-		errdp_("#", &altlim, (ftnlen)1);
-		sigerr_("SPICE(DEGENERATESURFACE)", (ftnlen)24);
-		chkout_("DSKW02", (ftnlen)6);
+		setmsg_(__global_state, "Reference ellipsoid has semi-axis l"
+			"engths # and #. The minimum altitude was #. The mini"
+			"mum altitude is required to be greater than the maxi"
+			"mum of {-(A**2)/B, -(B**2)/A}, which is #.", (ftnlen)
+			181);
+		errdp_(__global_state, "#", &a, (ftnlen)1);
+		errdp_(__global_state, "#", &b, (ftnlen)1);
+		errdp_(__global_state, "#", mncor3, (ftnlen)1);
+		errdp_(__global_state, "#", &altlim, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(DEGENERATESURFACE)", (ftnlen)
+			24);
+		chkout_(__global_state, "DSKW02", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1832,29 +1849,30 @@ static dskw02_state_t* get_dskw02_state() {
 
 	if (*mxcor3 < *mncor3) {
 	    if (*corsys == 1) {
-		setmsg_("Radius bounds # and # are out of order", (ftnlen)38);
+		setmsg_(__global_state, "Radius bounds # and # are out of or"
+			"der", (ftnlen)38);
 	    } else {
-		setmsg_("Altitude bounds # and # are out of order.", (ftnlen)
-			41);
+		setmsg_(__global_state, "Altitude bounds # and # are out of "
+			"order.", (ftnlen)41);
 	    }
-	    errdp_("#", mncor3, (ftnlen)1);
-	    errdp_("#", mxcor3, (ftnlen)1);
-	    sigerr_("SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
-	    chkout_("DSKW02", (ftnlen)6);
+	    errdp_(__global_state, "#", mncor3, (ftnlen)1);
+	    errdp_(__global_state, "#", mxcor3, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
 	if (*mxcor3 == *mncor3) {
 	    if (*corsys == 1) {
-		setmsg_("Radius bounds # and # must have positive extent but"
-			" are equal.", (ftnlen)62);
+		setmsg_(__global_state, "Radius bounds # and # must have pos"
+			"itive extent but are equal.", (ftnlen)62);
 	    } else {
-		setmsg_("Altitude bounds # and # must have positive extent b"
-			"ut are equal.", (ftnlen)64);
+		setmsg_(__global_state, "Altitude bounds # and # must have p"
+			"ositive extent but are equal.", (ftnlen)64);
 	    }
-	    errdp_("#", mncor3, (ftnlen)1);
-	    errdp_("#", mxcor3, (ftnlen)1);
-	    sigerr_("SPICE(ZEROBOUNDSEXTENT)", (ftnlen)23);
-	    chkout_("DSKW02", (ftnlen)6);
+	    errdp_(__global_state, "#", mncor3, (ftnlen)1);
+	    errdp_(__global_state, "#", mxcor3, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(ZEROBOUNDSEXTENT)", (ftnlen)23);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
     } else if (*corsys == 3) {
@@ -1862,17 +1880,17 @@ static dskw02_state_t* get_dskw02_state() {
 /*        All coordinate bounds must be in strictly increasing order. */
 
 	if (*mxcor1 <= *mncor1 || *mxcor2 <= *mncor2 || *mxcor3 <= *mncor3) {
-	    setmsg_("Rectangular coordinate bounds must be strictly increasi"
-		    "ng in each dimension. The bounds were:  X = #:#; Y = #:#"
-		    "; Z = #:#.", (ftnlen)121);
-	    errdp_("#", mncor1, (ftnlen)1);
-	    errdp_("#", mxcor1, (ftnlen)1);
-	    errdp_("#", mncor2, (ftnlen)1);
-	    errdp_("#", mxcor2, (ftnlen)1);
-	    errdp_("#", mncor3, (ftnlen)1);
-	    errdp_("#", mxcor3, (ftnlen)1);
-	    sigerr_("SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
-	    chkout_("DSKW02", (ftnlen)6);
+	    setmsg_(__global_state, "Rectangular coordinate bounds must be s"
+		    "trictly increasing in each dimension. The bounds were:  "
+		    "X = #:#; Y = #:#; Z = #:#.", (ftnlen)121);
+	    errdp_(__global_state, "#", mncor1, (ftnlen)1);
+	    errdp_(__global_state, "#", mxcor1, (ftnlen)1);
+	    errdp_(__global_state, "#", mncor2, (ftnlen)1);
+	    errdp_(__global_state, "#", mxcor2, (ftnlen)1);
+	    errdp_(__global_state, "#", mncor3, (ftnlen)1);
+	    errdp_(__global_state, "#", mxcor3, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
 	segbds[0] = *mncor1;
@@ -1880,20 +1898,22 @@ static dskw02_state_t* get_dskw02_state() {
 	segbds[2] = *mncor2;
 	segbds[3] = *mxcor2;
     } else {
-	setmsg_("Coordinate system code # is not recognized.", (ftnlen)43);
-	errint_("#", corsys, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("DSKW02", (ftnlen)6);
+	setmsg_(__global_state, "Coordinate system code # is not recognized.",
+		 (ftnlen)43);
+	errint_(__global_state, "#", corsys, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "DSKW02", (ftnlen)6);
 	return 0;
     }
 
 /*     Check the data class. */
 
     if (*dclass < 1 || *dclass > 2) {
-	setmsg_("Data class # is not recognized.", (ftnlen)31);
-	errint_("#", dclass, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("DSKW02", (ftnlen)6);
+	setmsg_(__global_state, "Data class # is not recognized.", (ftnlen)31)
+		;
+	errint_(__global_state, "#", dclass, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "DSKW02", (ftnlen)6);
 	return 0;
     }
 
@@ -1903,21 +1923,21 @@ static dskw02_state_t* get_dskw02_state() {
 /*     set need not represent a complete surface. */
 
     if (*nv < 1 || *nv > 16000002) {
-	setmsg_("Vertex count NV = #; count must be in the range 1:#.", (
-		ftnlen)52);
-	errint_("#", nv, (ftnlen)1);
-	errint_("#", &__state->c_b116, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKW02", (ftnlen)6);
+	setmsg_(__global_state, "Vertex count NV = #; count must be in the r"
+		"ange 1:#.", (ftnlen)52);
+	errint_(__global_state, "#", nv, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c_b116, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKW02", (ftnlen)6);
 	return 0;
     }
     if (*np < 1 || *np > 32000000) {
-	setmsg_("Plate count NP = #; count must be in the range 1:#.", (
-		ftnlen)51);
-	errint_("#", np, (ftnlen)1);
-	errint_("#", &__state->c_b122, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKW02", (ftnlen)6);
+	setmsg_(__global_state, "Plate count NP = #; count must be in the ra"
+		"nge 1:#.", (ftnlen)51);
+	errint_(__global_state, "#", np, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c_b122, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKW02", (ftnlen)6);
 	return 0;
     }
 
@@ -1927,18 +1947,18 @@ static dskw02_state_t* get_dskw02_state() {
     for (i__ = 1; i__ <= i__1; ++i__) {
 	for (j = 1; j <= 3; ++j) {
 	    k = plates[(i__2 = j + i__ * 3 - 4) < 3 * plates_dim2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("plates", i__2, "dskw02_", (ftnlen)
-		    1404)];
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "plates", i__2,
+		     "dskw02_", (ftnlen)1404)];
 	    if (k < 1 || k > *nv) {
-		setmsg_("Vertex index # of plate # was #; vertex indices mus"
-			"t be in the range 1:NV. The input NV = #.", (ftnlen)
-			92);
-		errint_("#", &j, (ftnlen)1);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", &k, (ftnlen)1);
-		errint_("#", nv, (ftnlen)1);
-		sigerr_("SPICE(BADVERTEXINDEX)", (ftnlen)21);
-		chkout_("DSKW02", (ftnlen)6);
+		setmsg_(__global_state, "Vertex index # of plate # was #; ve"
+			"rtex indices must be in the range 1:NV. The input NV"
+			" = #.", (ftnlen)92);
+		errint_(__global_state, "#", &j, (ftnlen)1);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", &k, (ftnlen)1);
+		errint_(__global_state, "#", nv, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADVERTEXINDEX)", (ftnlen)21);
+		chkout_(__global_state, "DSKW02", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -2005,8 +2025,8 @@ static dskw02_state_t* get_dskw02_state() {
 
 /*     Extract double precision elements of the spatial index. */
 
-    moved_(spaixd, &__state->c__6, vtxbds);
-    vequ_(&spaixd[6], voxori);
+    moved_(__global_state, spaixd, &__state->c__6, vtxbds);
+    vequ_(__global_state, &spaixd[6], voxori);
     voxsiz = spaixd[9];
 
 /*     Extract scalars and small fixed-size arrays from the integer */
@@ -2014,7 +2034,7 @@ static dskw02_state_t* get_dskw02_state() {
 
 /*     Fetch grid extents (in units of whole voxels): */
 
-    movei_(spaixi, &__state->c__3, vgrext);
+    movei_(__global_state, spaixi, &__state->c__3, vgrext);
 
 /*     Fetch coarse grid scale, voxel pointer count, and voxel-plate */
 /*     list count. */
@@ -2050,18 +2070,19 @@ static dskw02_state_t* get_dskw02_state() {
 /*     Make sure the voxel grid extents are within range. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	if (vgrext[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vgrext",
-		 i__1, "dskw02_", (ftnlen)1542)] < 1 || vgrext[(i__2 = i__ - 
-		1) < 3 && 0 <= i__2 ? i__2 : s_rnge("vgrext", i__2, "dskw02_",
-		 (ftnlen)1542)] > 100000000) {
-	    setmsg_("Voxel grid extents are = (#, #, #); all be in the range"
-		    " 1:#.", (ftnlen)60);
-	    errint_("#", vgrext, (ftnlen)1);
-	    errint_("#", &vgrext[1], (ftnlen)1);
-	    errint_("#", &vgrext[2], (ftnlen)1);
-	    errint_("#", &__state->c_b145, (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("DSKW02", (ftnlen)6);
+	if (vgrext[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "vgrext", i__1, "dskw02_", (ftnlen)1542)]
+		 < 1 || vgrext[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "vgrext", i__2, "dskw02_", (
+		ftnlen)1542)] > 100000000) {
+	    setmsg_(__global_state, "Voxel grid extents are = (#, #, #); all"
+		    " be in the range 1:#.", (ftnlen)60);
+	    errint_(__global_state, "#", vgrext, (ftnlen)1);
+	    errint_(__global_state, "#", &vgrext[1], (ftnlen)1);
+	    errint_(__global_state, "#", &vgrext[2], (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c_b145, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "DSKW02", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2070,12 +2091,12 @@ static dskw02_state_t* get_dskw02_state() {
 
     nvxtot = vgrext[0] * vgrext[1] * vgrext[2];
     if (nvxtot > 100000000) {
-	setmsg_("Fine voxel count NVXTOT = #; count must be in the range 1:#."
-		, (ftnlen)60);
-	errint_("#", &nvxtot, (ftnlen)1);
-	errint_("#", &__state->c_b145, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKW02", (ftnlen)6);
+	setmsg_(__global_state, "Fine voxel count NVXTOT = #; count must be "
+		"in the range 1:#.", (ftnlen)60);
+	errint_(__global_state, "#", &nvxtot, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c_b145, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKW02", (ftnlen)6);
 	return 0;
     }
 
@@ -2083,14 +2104,15 @@ static dskw02_state_t* get_dskw02_state() {
 /*     cube must not exceed the fine voxel count. */
 
     d__1 = (doublereal) nvxtot;
-    if (cgrscl < 1 || (doublereal) cgrscl > pow_dd(&d__1, &__state->c_b154)) {
-	setmsg_("Coarse voxel scale = #; scale must be in the range 1:NVXTOT"
-		"**3, where NVXTOT is the total fine voxel count. In this cas"
-		"e, NVXTOT = #.", (ftnlen)133);
-	errint_("#", &cgrscl, (ftnlen)1);
-	errint_("#", &nvxtot, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKW02", (ftnlen)6);
+    if (cgrscl < 1 || (doublereal) cgrscl > pow_dd(&__global_state->f2c, &
+	    d__1, &__state->c_b154)) {
+	setmsg_(__global_state, "Coarse voxel scale = #; scale must be in th"
+		"e range 1:NVXTOT**3, where NVXTOT is the total fine voxel co"
+		"unt. In this case, NVXTOT = #.", (ftnlen)133);
+	errint_(__global_state, "#", &cgrscl, (ftnlen)1);
+	errint_(__global_state, "#", &nvxtot, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKW02", (ftnlen)6);
 	return 0;
     }
 
@@ -2104,13 +2126,13 @@ static dskw02_state_t* get_dskw02_state() {
     i__1 = cgrscl;
     r__ = (doublereal) (nvxtot - q * (i__1 * (i__1 * i__1)));
     if (r__ != 0.) {
-	setmsg_("Coarse voxel scale = #; the cube of the scale must divide N"
-		"VXTOT evenly, where NVXTOT is the total  fine voxel count. I"
-		"n this case, NVXTOT = #.", (ftnlen)143);
-	errint_("#", &cgrscl, (ftnlen)1);
-	errint_("#", &nvxtot, (ftnlen)1);
-	sigerr_("SPICE(INCOMPATIBLESCALE)", (ftnlen)24);
-	chkout_("DSKW02", (ftnlen)6);
+	setmsg_(__global_state, "Coarse voxel scale = #; the cube of the sca"
+		"le must divide NVXTOT evenly, where NVXTOT is the total  fin"
+		"e voxel count. In this case, NVXTOT = #.", (ftnlen)143);
+	errint_(__global_state, "#", &cgrscl, (ftnlen)1);
+	errint_(__global_state, "#", &nvxtot, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INCOMPATIBLESCALE)", (ftnlen)24);
+	chkout_(__global_state, "DSKW02", (ftnlen)6);
 	return 0;
     }
 
@@ -2127,20 +2149,20 @@ static dskw02_state_t* get_dskw02_state() {
 /*     Make sure NCGR is within range. */
 
     if (ncgr < 1 || ncgr > 100000) {
-	setmsg_("Coarse voxel count = #; count must be in the range 1:#.", (
-		ftnlen)55);
-	errint_("#", &ncgr, (ftnlen)1);
-	errint_("#", &__state->c_b168, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKW02", (ftnlen)6);
+	setmsg_(__global_state, "Coarse voxel count = #; count must be in th"
+		"e range 1:#.", (ftnlen)55);
+	errint_(__global_state, "#", &ncgr, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c_b168, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKW02", (ftnlen)6);
 	return 0;
     }
 
 /*     Start a new DLA segment. */
 
-    dlabns_(handle);
-    if (failed_()) {
-	chkout_("DSKW02", (ftnlen)6);
+    dlabns_(__global_state, handle);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DSKW02", (ftnlen)6);
 	return 0;
     }
 
@@ -2151,14 +2173,14 @@ static dskw02_state_t* get_dskw02_state() {
 
 /*     First, fill in the DSK segment descriptor. */
 
-    cleard_(&__state->c__24, descr);
+    cleard_(__global_state, &__state->c__24, descr);
     descr[0] = (doublereal) (*surfid);
     descr[1] = (doublereal) (*center);
     descr[2] = (doublereal) (*dclass);
     descr[3] = 2.;
     descr[4] = (doublereal) frmcde;
     descr[5] = (doublereal) (*corsys);
-    moved_(corpar, &__state->c__10, &descr[6]);
+    moved_(__global_state, corpar, &__state->c__10, &descr[6]);
     descr[16] = segbds[0];
     descr[17] = segbds[1];
     descr[18] = segbds[2];
@@ -2170,16 +2192,16 @@ static dskw02_state_t* get_dskw02_state() {
 
 /*     Now write the descriptor into the segment. */
 
-    dasadd_(handle, &__state->c__24, descr);
+    dasadd_(__global_state, handle, &__state->c__24, descr);
 
 /*     Add the voxel grid origin and voxel size. */
 /*     Finish with the vertex data. */
 
-    dasadd_(handle, &__state->c__6, vtxbds);
-    dasadd_(handle, &__state->c__3, voxori);
-    dasadd_(handle, &__state->c__1, &voxsiz);
+    dasadd_(__global_state, handle, &__state->c__6, vtxbds);
+    dasadd_(__global_state, handle, &__state->c__3, voxori);
+    dasadd_(__global_state, handle, &__state->c__1, &voxsiz);
     i__1 = *nv * 3;
-    dasadd_(handle, &i__1, vrtces);
+    dasadd_(__global_state, handle, &i__1, vrtces);
 
 /*     Next add the integer data to the segment. */
 
@@ -2187,26 +2209,26 @@ static dskw02_state_t* get_dskw02_state() {
 /*     NP is the number of plates. */
 /*     NVXTOT is the number of voxels in the spatial index. */
 
-    dasadi_(handle, &__state->c__1, nv);
-    dasadi_(handle, &__state->c__1, np);
-    dasadi_(handle, &__state->c__1, &nvxtot);
-    dasadi_(handle, &__state->c__3, vgrext);
-    dasadi_(handle, &__state->c__1, &cgrscl);
-    dasadi_(handle, &__state->c__1, &voxnpt);
-    dasadi_(handle, &__state->c__1, &voxnpl);
-    dasadi_(handle, &__state->c__1, &vtxnpl);
+    dasadi_(__global_state, handle, &__state->c__1, nv);
+    dasadi_(__global_state, handle, &__state->c__1, np);
+    dasadi_(__global_state, handle, &__state->c__1, &nvxtot);
+    dasadi_(__global_state, handle, &__state->c__3, vgrext);
+    dasadi_(__global_state, handle, &__state->c__1, &cgrscl);
+    dasadi_(__global_state, handle, &__state->c__1, &voxnpt);
+    dasadi_(__global_state, handle, &__state->c__1, &voxnpl);
+    dasadi_(__global_state, handle, &__state->c__1, &vtxnpl);
     i__1 = *np * 3;
-    dasadi_(handle, &i__1, plates);
-    dasadi_(handle, &voxnpt, &spaixi[pvoxpt - 1]);
-    dasadi_(handle, &voxnpl, &spaixi[pvoxpl - 1]);
-    dasadi_(handle, nv, &spaixi[pvtxpt - 1]);
-    dasadi_(handle, &vtxnpl, &spaixi[pvtxpl - 1]);
-    dasadi_(handle, &ncgr, &spaixi[7]);
+    dasadi_(__global_state, handle, &i__1, plates);
+    dasadi_(__global_state, handle, &voxnpt, &spaixi[pvoxpt - 1]);
+    dasadi_(__global_state, handle, &voxnpl, &spaixi[pvoxpl - 1]);
+    dasadi_(__global_state, handle, nv, &spaixi[pvtxpt - 1]);
+    dasadi_(__global_state, handle, &vtxnpl, &spaixi[pvtxpl - 1]);
+    dasadi_(__global_state, handle, &ncgr, &spaixi[7]);
 
 /*     End the segment. */
 
-    dlaens_(handle);
-    chkout_("DSKW02", (ftnlen)6);
+    dlaens_(__global_state, handle);
+    chkout_(__global_state, "DSKW02", (ftnlen)6);
     return 0;
 } /* dskw02_ */
 

@@ -327,7 +327,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "scfmt_c");
+   chkin_c ( naif_state, "scfmt_c");
    
    
    /*

@@ -8,8 +8,7 @@
 
 
 extern ckw04a_init_t __ckw04a_init;
-static ckw04a_state_t* get_ckw04a_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckw04a_state_t* get_ckw04a_state(cspice_t* state) {
 	if (!state->ckw04a)
 		state->ckw04a = __cspice_allocate_module(sizeof(
 	ckw04a_state_t), &__ckw04a_init, sizeof(__ckw04a_init));
@@ -18,36 +17,37 @@ static ckw04a_state_t* get_ckw04a_state() {
 }
 
 /* $Procedure      CKW04A ( CK type 04: Add data to a segment ) */
-/* Subroutine */ int ckw04a_(integer *handle, integer *npkts, integer *pktsiz,
-	 doublereal *pktdat, doublereal *sclkdp)
+/* Subroutine */ int ckw04a_(cspice_t* __global_state, integer *handle, 
+	integer *npkts, integer *pktsiz, doublereal *pktdat, doublereal *
+	sclkdp)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer k;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer dispm;
     integer kk;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     integer displm;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer numcft[7];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int sgwvpk_(integer *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int zzck4i2d_(integer *, integer *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int sgwvpk_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int zzck4i2d_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
 
 
     /* Module state */
-    ckw04a_state_t* __state = get_ckw04a_state();
+    ckw04a_state_t* __state = get_ckw04a_state(__global_state);
 /* $ Abstract */
 
 /*     Add data to a type 4 CK segment currently being written to */
@@ -720,10 +720,10 @@ static ckw04a_state_t* get_ckw04a_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKW04A", (ftnlen)6);
+	chkin_(__global_state, "CKW04A", (ftnlen)6);
     }
 
 /*     First, check if the number of coefficient sets and epochs */
@@ -733,15 +733,15 @@ static ckw04a_state_t* get_ckw04a_state() {
     i__1 = *npkts;
     for (k = 1; k <= i__1; ++k) {
 	if (pktsiz[k - 1] <= 0) {
-	    setmsg_("The number of coefficient sets and epochs in the # data"
-		    " packet (record) to be added to the DAF segment in the f"
-		    "ile '#' was not positive. Its value was: #.", (ftnlen)154)
-		    ;
-	    errint_("#", &k, (ftnlen)1);
-	    errhan_("#", handle, (ftnlen)1);
-	    errint_("#", &pktsiz[k - 1], (ftnlen)1);
-	    sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	    chkout_("CKW04A", (ftnlen)6);
+	    setmsg_(__global_state, "The number of coefficient sets and epoc"
+		    "hs in the # data packet (record) to be added to the DAF "
+		    "segment in the file '#' was not positive. Its value was:"
+		    " #.", (ftnlen)154);
+	    errint_(__global_state, "#", &k, (ftnlen)1);
+	    errhan_(__global_state, "#", handle, (ftnlen)1);
+	    errint_(__global_state, "#", &pktsiz[k - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	    chkout_(__global_state, "CKW04A", (ftnlen)6);
 	    return 0;
 	}
 
@@ -750,16 +750,16 @@ static ckw04a_state_t* get_ckw04a_state() {
 /*        the pointing will be evaluated. */
 
 	if (pktsiz[k - 1] >= 143) {
-	    setmsg_("The total size of the # data packet (record) to be adde"
-		    "d to the DAF segment in the file '#' is greater than the"
-		    " maximum allowed type 4 record size #. Its value was: #.",
-		     (ftnlen)167);
-	    errint_("#", &k, (ftnlen)1);
-	    errhan_("#", handle, (ftnlen)1);
-	    errint_("#", &__state->c__142, (ftnlen)1);
-	    errint_("#", &pktsiz[k - 1], (ftnlen)1);
-	    sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	    chkout_("CKW04A", (ftnlen)6);
+	    setmsg_(__global_state, "The total size of the # data packet (re"
+		    "cord) to be added to the DAF segment in the file '#' is "
+		    "greater than the maximum allowed type 4 record size #. I"
+		    "ts value was: #.", (ftnlen)167);
+	    errint_(__global_state, "#", &k, (ftnlen)1);
+	    errhan_(__global_state, "#", handle, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c__142, (ftnlen)1);
+	    errint_(__global_state, "#", &pktsiz[k - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	    chkout_(__global_state, "CKW04A", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -778,12 +778,12 @@ static ckw04a_state_t* get_ckw04a_state() {
 /*        to single double precision variable */
 
 	for (kk = 1; kk <= 7; ++kk) {
-	    numcft[(i__2 = kk - 1) < 7 && 0 <= i__2 ? i__2 : s_rnge("numcft", 
-		    i__2, "ckw04a_", (ftnlen)580)] = (integer) pktdat[kk + 2 
-		    + displm - 1];
+	    numcft[(i__2 = kk - 1) < 7 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "numcft", i__2, "ckw04a_", (ftnlen)
+		    580)] = (integer) pktdat[kk + 2 + displm - 1];
 	}
-	zzck4i2d_(numcft, &__state->c__7, &__state->c_b20, &pktdat[dispm + 2])
-		;
+	zzck4i2d_(__global_state, numcft, &__state->c__7, &__state->c_b20, &
+		pktdat[dispm + 2]);
 
 /*        Shift coefficients sets to the left to overwrite numbers of */
 /*        packets */
@@ -810,12 +810,12 @@ static ckw04a_state_t* get_ckw04a_state() {
 
 /*     Add the data. */
 
-    sgwvpk_(handle, npkts, pktsiz, pktdat, npkts, sclkdp);
+    sgwvpk_(__global_state, handle, npkts, pktsiz, pktdat, npkts, sclkdp);
 
 /*     No need to check FAILED() here, since all we do is check out. */
 /*     Leave it up to the caller. */
 
-    chkout_("CKW04A", (ftnlen)6);
+    chkout_(__global_state, "CKW04A", (ftnlen)6);
     return 0;
 } /* ckw04a_ */
 

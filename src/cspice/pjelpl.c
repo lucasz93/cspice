@@ -8,40 +8,39 @@
 
 
 typedef int pjelpl_state_t;
-static pjelpl_state_t* get_pjelpl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pjelpl_state_t* get_pjelpl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PJELPL ( Project ellipse onto plane ) */
-/* Subroutine */ int pjelpl_(doublereal *elin, doublereal *plane, doublereal *
-	elout)
+/* Subroutine */ int pjelpl_(cspice_t* __global_state, doublereal *elin, 
+	doublereal *plane, doublereal *elout)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal const__;
-    extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int vprjp_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int cgv2el_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int vperp_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
+    extern /* Subroutine */ int vprjp_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int el2cgv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int cgv2el_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int pl2nvc_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal prjvc1[3];
     doublereal prjvc2[3];
     doublereal center[3];
     doublereal normal[3];
     doublereal smajor[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal prjctr[3];
     doublereal sminor[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    pjelpl_state_t* __state = get_pjelpl_state();
+    pjelpl_state_t* __state = get_pjelpl_state(__global_state);
 /* $ Abstract */
 
 /*     Project an ellipse onto a plane, orthogonally. */
@@ -307,26 +306,26 @@ static pjelpl_state_t* get_pjelpl_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PJELPL", (ftnlen)6);
+	chkin_(__global_state, "PJELPL", (ftnlen)6);
     }
 
 /*     Find generating vectors of the input ellipse. */
 
-    el2cgv_(elin, center, smajor, sminor);
+    el2cgv_(__global_state, elin, center, smajor, sminor);
 
 /*     Find a normal vector for the input plane. */
 
-    pl2nvc_(plane, normal, &const__);
+    pl2nvc_(__global_state, plane, normal, &const__);
 
 /*     Find the components of the semi-axes that are orthogonal to the */
 /*     input plane's normal vector.  The components are generating */
 /*     vectors for the projected plane. */
 
-    vperp_(smajor, normal, prjvc1);
-    vperp_(sminor, normal, prjvc2);
+    vperp_(__global_state, smajor, normal, prjvc1);
+    vperp_(__global_state, sminor, normal, prjvc2);
 
 /*     Find the projection of the ellipse's center onto the input plane. */
 /*     This is the center of the projected ellipse. */
@@ -377,12 +376,12 @@ static pjelpl_state_t* get_pjelpl_state() {
 /*     as claimed. */
 
 
-    vprjp_(center, plane, prjctr);
+    vprjp_(__global_state, center, plane, prjctr);
 
 /*     Put together the projected ellipse. */
 
-    cgv2el_(prjctr, prjvc1, prjvc2, elout);
-    chkout_("PJELPL", (ftnlen)6);
+    cgv2el_(__global_state, prjctr, prjvc1, prjvc2, elout);
+    chkout_(__global_state, "PJELPL", (ftnlen)6);
     return 0;
 } /* pjelpl_ */
 

@@ -8,8 +8,7 @@
 
 
 extern ucase_init_t __ucase_init;
-static ucase_state_t* get_ucase_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ucase_state_t* get_ucase_state(cspice_t* state) {
 	if (!state->ucase)
 		state->ucase = __cspice_allocate_module(sizeof(ucase_state_t),
 	 &__ucase_init, sizeof(__ucase_init));
@@ -18,8 +17,8 @@ static ucase_state_t* get_ucase_state() {
 }
 
 /* $Procedure      UCASE ( Convert to uppercase ) */
-/* Subroutine */ int ucase_(char *in, char *out, ftnlen in_len, ftnlen 
-	out_len)
+/* Subroutine */ int ucase_(cspice_t* __global_state, char *in, char *out, 
+	ftnlen in_len, ftnlen out_len)
 {
     /* Initialized data */
 
@@ -28,8 +27,8 @@ static ucase_state_t* get_ucase_state() {
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
@@ -37,7 +36,7 @@ static ucase_state_t* get_ucase_state() {
 
 
     /* Module state */
-    ucase_state_t* __state = get_ucase_state();
+    ucase_state_t* __state = get_ucase_state(__global_state);
 /* $ Abstract */
 
 /*      Convert the characters in a string to uppercase. */
@@ -184,8 +183,8 @@ static ucase_state_t* get_ucase_state() {
 /*     Move the string from IN to OUT. Step through OUT one character */
 /*     at a time, translating letters between 'a' and 'z' to uppercase. */
 
-    s_copy(out, in, out_len, in_len);
-    i__1 = i_len(out, out_len);
+    s_copy(&__global_state->f2c, out, in, out_len, in_len);
+    i__1 = i_len(&__global_state->f2c, out, out_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ich = *(unsigned char *)&out[i__ - 1];
 	if (ich >= __state->lowa && ich <= __state->lowz) {

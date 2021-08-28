@@ -8,8 +8,7 @@
 
 
 extern vprjp_init_t __vprjp_init;
-static vprjp_state_t* get_vprjp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vprjp_state_t* get_vprjp_state(cspice_t* state) {
 	if (!state->vprjp)
 		state->vprjp = __cspice_allocate_module(sizeof(vprjp_state_t),
 	 &__vprjp_init, sizeof(__vprjp_init));
@@ -18,27 +17,27 @@ static vprjp_state_t* get_vprjp_state() {
 }
 
 /* $Procedure      VPRJP ( Vector projection onto plane ) */
-/* Subroutine */ int vprjp_(doublereal *vin, doublereal *plane, doublereal *
-	vout)
+/* Subroutine */ int vprjp_(cspice_t* __global_state, doublereal *vin, 
+	doublereal *plane, doublereal *vout)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal const__;
-    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int pl2nvc_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal normal[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    vprjp_state_t* __state = get_vprjp_state();
+    vprjp_state_t* __state = get_vprjp_state(__global_state);
 /* $ Abstract */
 
 /*     Project a vector onto a specified plane, orthogonally. */
@@ -176,16 +175,16 @@ static vprjp_state_t* get_vprjp_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("VPRJP", (ftnlen)5);
+	chkin_(__global_state, "VPRJP", (ftnlen)5);
     }
 
 /*     Obtain a unit vector normal to the input plane, and a constant */
 /*     for the plane. */
 
-    pl2nvc_(plane, normal, &const__);
+    pl2nvc_(__global_state, plane, normal, &const__);
 
 /*     Let the notation < a, b > indicate the inner product of vectors */
 /*     a and b. */
@@ -203,9 +202,9 @@ static vprjp_state_t* get_vprjp_state() {
 
 /*     Subtracting this multiple of NORMAL from VIN yields VOUT. */
 
-    d__1 = const__ - vdot_(vin, normal);
-    vlcom_(&__state->c_b3, vin, &d__1, normal, vout);
-    chkout_("VPRJP", (ftnlen)5);
+    d__1 = const__ - vdot_(__global_state, vin, normal);
+    vlcom_(__global_state, &__state->c_b3, vin, &d__1, normal, vout);
+    chkout_(__global_state, "VPRJP", (ftnlen)5);
     return 0;
 } /* vprjp_ */
 

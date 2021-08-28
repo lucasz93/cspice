@@ -8,42 +8,43 @@
 
 
 typedef int repmf_state_t;
-static repmf_state_t* get_repmf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline repmf_state_t* get_repmf_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  REPMF  ( Replace marker with formatted d.p. value ) */
-/* Subroutine */ int repmf_(char *in, char *marker, doublereal *value, 
-	integer *sigdig, char *format, char *out, ftnlen in_len, ftnlen 
-	marker_len, ftnlen format_len, ftnlen out_len)
+/* Subroutine */ int repmf_(cspice_t* __global_state, char *in, char *marker, 
+	doublereal *value, integer *sigdig, char *format, char *out, ftnlen 
+	in_len, ftnlen marker_len, ftnlen format_len, ftnlen out_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_indx(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_indx(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzrepsub_(char *, integer *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzrepsub_(cspice_t*, char *, integer *, 
+	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char gdfmt[1];
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer mrknbf;
     integer subnbf;
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer mrknbl;
     integer subnbl;
-    extern integer frstnb_(char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
     integer mrkpsb;
     integer mrkpse;
-    extern /* Subroutine */ int dpstrf_(doublereal *, integer *, char *, char 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dpstrf_(cspice_t*, doublereal *, integer *, 
+	    char *, char *, ftnlen, ftnlen);
     char substr[56];
 
 
     /* Module state */
-    repmf_state_t* __state = get_repmf_state();
+    repmf_state_t* __state = get_repmf_state(__global_state);
 /* $ Abstract */
 
 /*     Replace a marker in a string with a formatted double precision */
@@ -338,8 +339,9 @@ static repmf_state_t* get_repmf_state() {
 
 /*     If MARKER is blank, no substitution is possible. */
 
-    if (s_cmp(marker, " ", marker_len, (ftnlen)1) == 0) {
-	s_copy(out, in, out_len, in_len);
+    if (s_cmp(&__global_state->f2c, marker, " ", marker_len, (ftnlen)1) == 0) 
+	    {
+	s_copy(&__global_state->f2c, out, in, out_len, in_len);
 	return 0;
     }
 
@@ -347,11 +349,12 @@ static repmf_state_t* get_repmf_state() {
 /*     (ignoring leading and trailing blanks). If MARKER is not */
 /*     a substring of IN, no substitution can be performed. */
 
-    mrknbf = frstnb_(marker, marker_len);
-    mrknbl = lastnb_(marker, marker_len);
-    mrkpsb = i_indx(in, marker + (mrknbf - 1), in_len, mrknbl - (mrknbf - 1));
+    mrknbf = frstnb_(__global_state, marker, marker_len);
+    mrknbl = lastnb_(__global_state, marker, marker_len);
+    mrkpsb = i_indx(&__global_state->f2c, in, marker + (mrknbf - 1), in_len, 
+	    mrknbl - (mrknbf - 1));
     if (mrkpsb == 0) {
-	s_copy(out, in, out_len, in_len);
+	s_copy(&__global_state->f2c, out, in, out_len, in_len);
 	return 0;
     }
     mrkpse = mrkpsb + mrknbl - mrknbf;
@@ -359,14 +362,15 @@ static repmf_state_t* get_repmf_state() {
 /*     Okay, MARKER is non-blank and has been found. Convert the */
 /*     number to text, and substitute the text for the marker. */
 
-    ljust_(format, gdfmt, format_len, (ftnlen)1);
-    ucase_(gdfmt, gdfmt, (ftnlen)1, (ftnlen)1);
-    dpstrf_(value, sigdig, gdfmt, substr, (ftnlen)1, (ftnlen)56);
-    subnbf = frstnb_(substr, (ftnlen)56);
-    subnbl = lastnb_(substr, (ftnlen)56);
+    ljust_(__global_state, format, gdfmt, format_len, (ftnlen)1);
+    ucase_(__global_state, gdfmt, gdfmt, (ftnlen)1, (ftnlen)1);
+    dpstrf_(__global_state, value, sigdig, gdfmt, substr, (ftnlen)1, (ftnlen)
+	    56);
+    subnbf = frstnb_(__global_state, substr, (ftnlen)56);
+    subnbl = lastnb_(__global_state, substr, (ftnlen)56);
     if (subnbf != 0 && subnbl != 0) {
-	zzrepsub_(in, &mrkpsb, &mrkpse, substr + (subnbf - 1), out, in_len, 
-		subnbl - (subnbf - 1), out_len);
+	zzrepsub_(__global_state, in, &mrkpsb, &mrkpse, substr + (subnbf - 1),
+		 out, in_len, subnbl - (subnbf - 1), out_len);
     }
     return 0;
 } /* repmf_ */

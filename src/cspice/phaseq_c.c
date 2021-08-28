@@ -465,7 +465,7 @@
       return ( retval );
       }
 
-   chkin_c ( "phaseq_c" );
+   chkin_c ( naif_state, "phaseq_c" );
 
    /*
    Check the input strings to make sure the pointer is non-null

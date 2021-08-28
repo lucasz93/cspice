@@ -8,19 +8,18 @@
 
 
 typedef int swapi_state_t;
-static swapi_state_t* get_swapi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline swapi_state_t* get_swapi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SWAPI ( Swap integer values ) */
-/* Subroutine */ int swapi_(integer *a, integer *b)
+/* Subroutine */ int swapi_(cspice_t* __global_state, integer *a, integer *b)
 {
     integer temp;
 
 
     /* Module state */
-    swapi_state_t* __state = get_swapi_state();
+    swapi_state_t* __state = get_swapi_state(__global_state);
 /* $ Abstract */
 
 /*      Swap the contents of two integer variables. */

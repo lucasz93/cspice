@@ -8,8 +8,7 @@
 
 
 extern zzinlat_init_t __zzinlat_init;
-static zzinlat_state_t* get_zzinlat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzinlat_state_t* get_zzinlat_state(cspice_t* state) {
 	if (!state->zzinlat)
 		state->zzinlat = __cspice_allocate_module(sizeof(
 	zzinlat_state_t), &__zzinlat_init, sizeof(__zzinlat_init));
@@ -18,8 +17,9 @@ static zzinlat_state_t* get_zzinlat_state() {
 }
 
 /* $Procedure ZZINLAT ( DSK, in latitudinal element? ) */
-/* Subroutine */ int zzinlat_(doublereal *p, doublereal *bounds, doublereal *
-	margin, integer *exclud, logical *inside)
+/* Subroutine */ int zzinlat_(cspice_t* __global_state, doublereal *p, 
+	doublereal *bounds, doublereal *margin, integer *exclud, logical *
+	inside)
 {
     /* Initialized data */
 
@@ -28,27 +28,28 @@ static zzinlat_state_t* get_zzinlat_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double cos(doublereal);
+    double cos(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int zzinlat0_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzinlat0_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, integer *, logical *);
     doublereal dlon;
     doublereal minr;
     doublereal smin;
     doublereal maxr;
     doublereal smax;
-    extern /* Subroutine */ int zznrmlon_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zznrmlon_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *);
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal aminr;
     doublereal amaxr;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal twopi_(void);
-    extern doublereal halfpi_(void);
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal twopi_(cspice_t*);
+    extern doublereal halfpi_(cspice_t*);
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal amaxlo;
     doublereal amaxlt;
     doublereal aminlt;
@@ -58,17 +59,17 @@ static zzinlat_state_t* get_zzinlat_state() {
     doublereal maxlon;
     doublereal minlat;
     doublereal minlon;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal lat;
     doublereal lon;
 
 
     /* Module state */
-    zzinlat_state_t* __state = get_zzinlat_state();
+    zzinlat_state_t* __state = get_zzinlat_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -500,38 +501,40 @@ static zzinlat_state_t* get_zzinlat_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
     if (__state->first) {
-	__state->pi2 = twopi_();
-	__state->hpi = halfpi_();
+	__state->pi2 = twopi_(__global_state);
+	__state->hpi = halfpi_(__global_state);
 	__state->first = FALSE_;
     }
 
 /*     Get the latitudinal coordinates of the input point. */
 
-    reclat_(p, &r__, &lon, &lat);
+    reclat_(__global_state, p, &r__, &lon, &lat);
 
 /*     Handle the simpler zero-margin case separately. */
 
     if (*margin == 0.) {
-	zzinlat0_(&r__, &lon, &lat, bounds, exclud, inside);
+	zzinlat0_(__global_state, &r__, &lon, &lat, bounds, exclud, inside);
 	return 0;
     } else if (*margin < 0.) {
-	chkin_("ZZINLAT", (ftnlen)7);
-	setmsg_("Margin must be non-negative but was #.", (ftnlen)38);
-	errdp_("#", margin, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZINLAT", (ftnlen)7);
+	chkin_(__global_state, "ZZINLAT", (ftnlen)7);
+	setmsg_(__global_state, "Margin must be non-negative but was #.", (
+		ftnlen)38);
+	errdp_(__global_state, "#", margin, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZINLAT", (ftnlen)7);
 	return 0;
     }
     if (*exclud < 0 || *exclud > 3) {
-	chkin_("ZZINLAT", (ftnlen)7);
-	setmsg_("EXCLUD must be in the range 0:3 but was #.", (ftnlen)42);
-	errint_("#", exclud, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZINLAT", (ftnlen)7);
+	chkin_(__global_state, "ZZINLAT", (ftnlen)7);
+	setmsg_(__global_state, "EXCLUD must be in the range 0:3 but was #.", 
+		(ftnlen)42);
+	errint_(__global_state, "#", exclud, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZINLAT", (ftnlen)7);
 	return 0;
     }
 
@@ -600,7 +603,8 @@ static zzinlat_state_t* get_zzinlat_state() {
 /*     caller. */
 
     if (*exclud != 1) {
-	zznrmlon_(bounds, &bounds[1], &__state->c_b12, &minlon, &maxlon);
+	zznrmlon_(__global_state, bounds, &bounds[1], &__state->c_b12, &
+		minlon, &maxlon);
 
 /*        Set the margin to be used for longitude interval */
 /*        inclusion tests. */
@@ -631,7 +635,7 @@ static zzinlat_state_t* get_zzinlat_state() {
 /*              DLON << 1 */
 
 /* Computing MAX */
-	    d__2 = (d__1 = cos(lat), abs(d__1));
+	    d__2 = (d__1 = cos(&__global_state->f2c, lat), abs(d__1));
 	    dlon = lonmrg / max(d__2,1e-8);
 	    aminlo = minlon - dlon;
 	    amaxlo = maxlon + dlon;

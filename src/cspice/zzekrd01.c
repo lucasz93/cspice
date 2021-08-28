@@ -8,33 +8,33 @@
 
 
 typedef int zzekrd01_state_t;
-static zzekrd01_state_t* get_zzekrd01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrd01_state_t* get_zzekrd01_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   ZZEKRD01 ( EK, read class 1 column entry ) */
-/* Subroutine */ int zzekrd01_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr, integer *ival, logical *isnull)
+/* Subroutine */ int zzekrd01_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr, integer *ival, 
+	logical *isnull)
 {
-    extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
     integer ncols;
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer colidx;
     integer datptr;
     integer ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzekrd01_state_t* __state = get_zzekrd01_state();
+    zzekrd01_state_t* __state = get_zzekrd01_state(__global_state);
 /* $ Abstract */
 
 /*     Read a column entry from a specified record in a class 1 column. */
@@ -730,29 +730,29 @@ static zzekrd01_state_t* get_zzekrd01_state() {
     ncols = segdsc[4];
     colidx = coldsc[8];
     if (colidx < 1 || colidx > ncols) {
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKRD01", (ftnlen)8);
-	setmsg_("Column index = #; valid range is 1:#.SEGNO = #; RECNO = #; "
-		"EK = #", (ftnlen)65);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &ncols, (ftnlen)1);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKRD01", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKRD01", (ftnlen)8);
+	setmsg_(__global_state, "Column index = #; valid range is 1:#.SEGNO "
+		"= #; RECNO = #; EK = #", (ftnlen)65);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &ncols, (ftnlen)1);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKRD01", (ftnlen)8);
 	return 0;
     }
 
 /*     Compute the data pointer location, and read the pointer. */
 
     ptrloc = *recptr + 2 + colidx;
-    dasrdi_(handle, &ptrloc, &ptrloc, &datptr);
+    dasrdi_(__global_state, handle, &ptrloc, &ptrloc, &datptr);
     if (datptr > 0) {
 
 /*        Just read the value. */
 
-	dasrdi_(handle, &datptr, &datptr, ival);
+	dasrdi_(__global_state, handle, &datptr, &datptr, ival);
 	*isnull = FALSE_;
     } else if (datptr == -2) {
 
@@ -763,31 +763,31 @@ static zzekrd01_state_t* get_zzekrd01_state() {
 
 /*        The data value is absent.  This is an error. */
 
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKRD01", (ftnlen)8);
-	setmsg_("Attempted to read uninitialized column entry.  SEGNO = #; C"
-		"OLIDX = #; RECNO = #; EK = #", (ftnlen)87);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(UNINITIALIZEDVALUE)", (ftnlen)25);
-	chkout_("ZZEKRD01", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKRD01", (ftnlen)8);
+	setmsg_(__global_state, "Attempted to read uninitialized column entr"
+		"y.  SEGNO = #; COLIDX = #; RECNO = #; EK = #", (ftnlen)87);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNINITIALIZEDVALUE)", (ftnlen)25);
+	chkout_(__global_state, "ZZEKRD01", (ftnlen)8);
 	return 0;
     } else {
 
 /*        The data pointer is corrupted. */
 
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKRD01", (ftnlen)8);
-	setmsg_("Data pointer is corrupted. SEGNO = #; COLIDX =  #; RECNO = "
-		"#; EK = #", (ftnlen)68);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKRD01", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKRD01", (ftnlen)8);
+	setmsg_(__global_state, "Data pointer is corrupted. SEGNO = #; COLID"
+		"X =  #; RECNO = #; EK = #", (ftnlen)68);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKRD01", (ftnlen)8);
 	return 0;
     }
     return 0;

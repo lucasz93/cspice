@@ -16,12 +16,11 @@ extern FILE *tmpfile();
 extern char *f__r_mode[], *f__w_mode[];
 
 #ifdef KR_headers
-integer f_end(a) alist *a;
+integer f_end(f2c, a) f2c_state_t *f2c; alist *a;
 #else
-integer f_end(alist *a)
+integer f_end(f2c_state_t *f2c, alist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	unit *b;
 	FILE *tf;
 
@@ -35,7 +34,7 @@ integer f_end(alist *a)
 		return(0);
 		}
 	b->uend=1;
-	return(b->useek ? t_runc(a) : 0);
+	return(b->useek ? t_runc(f2c, a) : 0);
 }
 
  static int
@@ -59,12 +58,11 @@ copy(FILE *from, register long len, FILE *to)
 
  int
 #ifdef KR_headers
-t_runc(a) alist *a;
+t_runc(f2c, a) f2c_state_t *f2c; alist *a;
 #else
-t_runc(alist *a)
+t_runc(f2c_state_t *f2c, alist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	long loc, len;
 	unit *b;
 	FILE *bf, *tf;

@@ -8,43 +8,44 @@
 
 
 typedef int kxtrct_state_t;
-static kxtrct_state_t* get_kxtrct_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline kxtrct_state_t* get_kxtrct_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      KXTRCT ( Extract a substring starting with a keyword ) */
-/* Subroutine */ int kxtrct_(char *keywd, char *terms, integer *nterms, char *
-	string, logical *found, char *substr, ftnlen keywd_len, ftnlen 
-	terms_len, ftnlen string_len, ftnlen substr_len)
+/* Subroutine */ int kxtrct_(cspice_t* __global_state, char *keywd, char *
+	terms, integer *nterms, char *string, logical *found, char *substr, 
+	ftnlen keywd_len, ftnlen terms_len, ftnlen string_len, ftnlen 
+	substr_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer b;
     integer e;
-    extern integer nblen_(char *, ftnlen);
+    extern integer nblen_(cspice_t*, char *, ftnlen);
     integer start;
     integer berase;
     integer eerase;
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer delims;
-    extern /* Subroutine */ int fndnwd_(char *, integer *, integer *, integer 
-	    *, ftnlen);
+    extern /* Subroutine */ int fndnwd_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
     integer begstr;
-    extern /* Subroutine */ int shiftl_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern integer wdindx_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int shiftl_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern integer wdindx_(cspice_t*, char *, char *, ftnlen, ftnlen);
     integer endstr;
     integer positn;
 
 
     /* Module state */
-    kxtrct_state_t* __state = get_kxtrct_state();
+    kxtrct_state_t* __state = get_kxtrct_state(__global_state);
 /* $ Abstract */
 
 /*     Locate a keyword in a string and extract the substring from */
@@ -273,13 +274,13 @@ static kxtrct_state_t* get_kxtrct_state() {
 
 /*     Locate the keyword within the string. */
 
-    positn = wdindx_(string, keywd, string_len, keywd_len);
+    positn = wdindx_(__global_state, string, keywd, string_len, keywd_len);
 
 /*     If the keyword wasn't found, set the outputs and head for home. */
 
     if (positn == 0) {
 	*found = FALSE_;
-	s_copy(substr, " ", substr_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, substr, " ", substr_len, (ftnlen)1);
 	return 0;
     } else {
 	*found = TRUE_;
@@ -289,19 +290,19 @@ static kxtrct_state_t* get_kxtrct_state() {
 /*     Set the end   erase marker to the end   of the current word */
 
     berase = positn;
-    eerase = positn + nblen_(keywd, keywd_len) - 1;
+    eerase = positn + nblen_(__global_state, keywd, keywd_len) - 1;
     start = eerase + 1;
 
 /*     Find the begin and end of the next word. */
 
-    fndnwd_(string, &start, &b, &e, string_len);
+    fndnwd_(__global_state, string, &start, &b, &e, string_len);
 
 /*     If there is a next word ( E came back non-zero ) see if its a */
 /*     terminator. */
 
     if (e != 0) {
-	delims = isrchc_(string + (b - 1), nterms, terms, e - (b - 1), 
-		terms_len);
+	delims = isrchc_(__global_state, string + (b - 1), nterms, terms, e - 
+		(b - 1), terms_len);
     }
 
 /*     If we found a terminator, or were already at the end of the */
@@ -310,10 +311,10 @@ static kxtrct_state_t* get_kxtrct_state() {
 
     if (e == 0 || delims != 0) {
 	i__1 = eerase - berase + 1;
-	shiftl_(string + (berase - 1), &i__1, " ", string + (berase - 1), 
-		string_len - (berase - 1), (ftnlen)1, string_len - (berase - 
-		1));
-	s_copy(substr, " ", substr_len, (ftnlen)1);
+	shiftl_(__global_state, string + (berase - 1), &i__1, " ", string + (
+		berase - 1), string_len - (berase - 1), (ftnlen)1, string_len 
+		- (berase - 1));
+	s_copy(&__global_state->f2c, substr, " ", substr_len, (ftnlen)1);
 	return 0;
     }
 
@@ -330,10 +331,10 @@ static kxtrct_state_t* get_kxtrct_state() {
 	endstr = e;
 	eerase = e;
 	start = e + 1;
-	fndnwd_(string, &start, &b, &e, string_len);
+	fndnwd_(__global_state, string, &start, &b, &e, string_len);
 	if (e != 0) {
-	    delims = isrchc_(string + (b - 1), nterms, terms, e - (b - 1), 
-		    terms_len);
+	    delims = isrchc_(__global_state, string + (b - 1), nterms, terms, 
+		    e - (b - 1), terms_len);
 	}
     }
 
@@ -341,10 +342,12 @@ static kxtrct_state_t* get_kxtrct_state() {
 /*     and words up to the terminator or end of the string --- whichever */
 /*     came first. */
 
-    s_copy(substr, string + (begstr - 1), substr_len, endstr - (begstr - 1));
+    s_copy(&__global_state->f2c, substr, string + (begstr - 1), substr_len, 
+	    endstr - (begstr - 1));
     i__1 = eerase - berase + 1;
-    shiftl_(string + (berase - 1), &i__1, " ", string + (berase - 1), 
-	    string_len - (berase - 1), (ftnlen)1, string_len - (berase - 1));
+    shiftl_(__global_state, string + (berase - 1), &i__1, " ", string + (
+	    berase - 1), string_len - (berase - 1), (ftnlen)1, string_len - (
+	    berase - 1));
     return 0;
 } /* kxtrct_ */
 

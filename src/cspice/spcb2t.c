@@ -8,8 +8,7 @@
 
 
 extern spcb2t_init_t __spcb2t_init;
-static spcb2t_state_t* get_spcb2t_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spcb2t_state_t* get_spcb2t_state(cspice_t* state) {
 	if (!state->spcb2t)
 		state->spcb2t = __cspice_allocate_module(sizeof(
 	spcb2t_state_t), &__spcb2t_init, sizeof(__spcb2t_init));
@@ -18,33 +17,34 @@ static spcb2t_state_t* get_spcb2t_state() {
 }
 
 /* $Procedure SPCB2T ( SPK and CK, binary to text ) */
-/* Subroutine */ int spcb2t_(char *binary, integer *unit, ftnlen binary_len)
+/* Subroutine */ int spcb2t_(cspice_t* __global_state, char *binary, integer *
+	unit, ftnlen binary_len)
 {
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle(void);
+    integer s_wsle(f2c_state_t*, cilist *), do_lio(f2c_state_t*, integer *, 
+	    integer *, char *, ftnlen), e_wsle(f2c_state_t*);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int spcec_(integer *, integer *);
-    extern /* Subroutine */ int dafb2t_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int spcec_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int dafb2t_(cspice_t*, char *, integer *, ftnlen);
     integer handle;
-    extern /* Subroutine */ int dafcls_(integer *);
-    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int dafcls_(cspice_t*, integer *);
+    extern /* Subroutine */ int dafopr_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    spcb2t_state_t* __state = get_spcb2t_state();
+    spcb2t_state_t* __state = get_spcb2t_state(__global_state);
 /* $ Abstract */
 
 /*     Convert the contents of a binary SPK or CK file to text, */
@@ -237,38 +237,38 @@ static spcb2t_state_t* get_spcb2t_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPCB2T", (ftnlen)6);
+	chkin_(__global_state, "SPCB2T", (ftnlen)6);
     }
 
 /*     First, convert the binary data to text and write it to */
 /*     the text file. */
 
-    dafb2t_(binary, unit, binary_len);
+    dafb2t_(__global_state, binary, unit, binary_len);
 
 /*     Next, write the begin comments marker. */
 
     __state->io___2.ciunit = *unit;
-    iostat = s_wsle(&__state->io___2);
+    iostat = s_wsle(&__global_state->f2c, &__state->io___2);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_lio(&__state->c__9, &__state->c__1, "~NAIF/SPC BEGIN COMMENT"
-	    "S~", (ftnlen)25);
+    iostat = do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+	    "~NAIF/SPC BEGIN COMMENTS~", (ftnlen)25);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_wsle();
+    iostat = e_wsle(&__global_state->f2c);
 L100001:
     if (iostat != 0) {
-	setmsg_("Error writing the begin comments marker to the text file na"
-		"med FNM.  IOSTAT = #.", (ftnlen)80);
-	errfnm_("FNM", unit, (ftnlen)3);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("SPCB2T", (ftnlen)6);
+	setmsg_(__global_state, "Error writing the begin comments marker to "
+		"the text file named FNM.  IOSTAT = #.", (ftnlen)80);
+	errfnm_(__global_state, "FNM", unit, (ftnlen)3);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "SPCB2T", (ftnlen)6);
 	return 0;
     }
 
@@ -278,34 +278,34 @@ L100001:
 /*     writes nothing to the text file, but even so, we still */
 /*     want the markers. */
 
-    dafopr_(binary, &handle, binary_len);
-    spcec_(&handle, unit);
-    dafcls_(&handle);
+    dafopr_(__global_state, binary, &handle, binary_len);
+    spcec_(__global_state, &handle, unit);
+    dafcls_(__global_state, &handle);
 
 /*     Finally, write the end comments marker. */
 
     __state->io___4.ciunit = *unit;
-    iostat = s_wsle(&__state->io___4);
+    iostat = s_wsle(&__global_state->f2c, &__state->io___4);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&__state->c__9, &__state->c__1, "~NAIF/SPC END COMMENTS~",
-	     (ftnlen)23);
+    iostat = do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+	    "~NAIF/SPC END COMMENTS~", (ftnlen)23);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = e_wsle();
+    iostat = e_wsle(&__global_state->f2c);
 L100002:
     if (iostat != 0) {
-	setmsg_("Error writing the end comments marker to the text file name"
-		"d FNM.  IOSTAT = #.", (ftnlen)78);
-	errfnm_("FNM", unit, (ftnlen)3);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("SPCB2T", (ftnlen)6);
+	setmsg_(__global_state, "Error writing the end comments marker to th"
+		"e text file named FNM.  IOSTAT = #.", (ftnlen)78);
+	errfnm_(__global_state, "FNM", unit, (ftnlen)3);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "SPCB2T", (ftnlen)6);
 	return 0;
     }
-    chkout_("SPCB2T", (ftnlen)6);
+    chkout_(__global_state, "SPCB2T", (ftnlen)6);
     return 0;
 } /* spcb2t_ */
 

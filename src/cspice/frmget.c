@@ -8,8 +8,7 @@
 
 
 extern frmget_init_t __frmget_init;
-static frmget_state_t* get_frmget_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline frmget_state_t* get_frmget_state(cspice_t* state) {
 	if (!state->frmget)
 		state->frmget = __cspice_allocate_module(sizeof(
 	frmget_state_t), &__frmget_init, sizeof(__frmget_init));
@@ -18,50 +17,53 @@ static frmget_state_t* get_frmget_state() {
 }
 
 /* $Procedure      FRMGET ( Frame get transformation ) */
-/* Subroutine */ int frmget_(integer *infrm, doublereal *et, doublereal *
-	xform, integer *outfrm, logical *found)
+/* Subroutine */ int frmget_(cspice_t* __global_state, integer *infrm, 
+	doublereal *et, doublereal *xform, integer *outfrm, logical *found)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer type__;
-    extern /* Subroutine */ int zzdynfrm_(integer *, integer *, doublereal *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int zzdynfrm_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *, integer *);
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal tsipm[36]	/* was [6][6] */;
     char versn[6];
-    extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int ckfxfm_(integer *, doublereal *, doublereal *,
-	     integer *, logical *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int ckfxfm_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, integer *, logical *);
     integer center;
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int tisbod_(cspice_t*, char *, integer *, 
+	    doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int tkfram_(cspice_t*, integer *, doublereal *, 
 	    integer *, logical *);
-    extern /* Subroutine */ int tisbod_(char *, integer *, doublereal *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int tkfram_(integer *, doublereal *, integer *, 
-	    logical *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer typeid;
     doublereal rotate[9]	/* was [3][3] */;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
-    extern logical return_(void);
-    extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int irfrot_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int invstm_(cspice_t*, doublereal *, doublereal *)
+	    ;
 
 
     /* Module state */
-    frmget_state_t* __state = get_frmget_state();
+    frmget_state_t* __state = get_frmget_state(__global_state);
 /* $ Abstract */
 
 /*     Find the transformation from a user specified frame to */
@@ -312,23 +314,23 @@ static frmget_state_t* get_frmget_state() {
 
 /*     Set version and output flag. */
 
-    s_copy(versn, "4.0.0", (ftnlen)6, (ftnlen)5);
+    s_copy(&__global_state->f2c, versn, "4.0.0", (ftnlen)6, (ftnlen)5);
     *found = FALSE_;
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("FRMGET", (ftnlen)6);
+    chkin_(__global_state, "FRMGET", (ftnlen)6);
 
 /*     Get all the needed information about this frame. */
 
-    frinfo_(infrm, &center, &type__, &typeid, found);
+    frinfo_(__global_state, infrm, &center, &type__, &typeid, found);
     if (! (*found)) {
-	cleard_(&__state->c__36, xform);
+	cleard_(__global_state, &__state->c__36, xform);
 	*outfrm = 0;
-	chkout_("FRMGET", (ftnlen)6);
+	chkout_(__global_state, "FRMGET", (ftnlen)6);
 	return 0;
     }
 
@@ -336,59 +338,63 @@ static frmget_state_t* get_frmget_state() {
 /*     based on the frame class. */
 
     if (type__ == 1) {
-	irfrot_(infrm, &__state->c__1, rotate);
-	if (! failed_()) {
+	irfrot_(__global_state, infrm, &__state->c__1, rotate);
+	if (! failed_(__global_state)) {
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		for (j = 1; j <= 3; ++j) {
 		    xform[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			    s_rnge("xform", i__1, "frmget_", (ftnlen)233)] = 
-			    rotate[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ?
-			     i__2 : s_rnge("rotate", i__2, "frmget_", (ftnlen)
-			    233)];
+			    s_rnge(&__global_state->f2c, "xform", i__1, "frm"
+			    "get_", (ftnlen)233)] = rotate[(i__2 = i__ + j * 3 
+			    - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "rotate", i__2, "frmget_", (
+			    ftnlen)233)];
 		    xform[(i__1 = i__ + 3 + (j + 3) * 6 - 7) < 36 && 0 <= 
-			    i__1 ? i__1 : s_rnge("xform", i__1, "frmget_", (
-			    ftnlen)234)] = rotate[(i__2 = i__ + j * 3 - 4) < 
-			    9 && 0 <= i__2 ? i__2 : s_rnge("rotate", i__2, 
-			    "frmget_", (ftnlen)234)];
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "xform"
+			    , i__1, "frmget_", (ftnlen)234)] = rotate[(i__2 = 
+			    i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(
+			    &__global_state->f2c, "rotate", i__2, "frmget_", (
+			    ftnlen)234)];
 		    xform[(i__1 = i__ + 3 + j * 6 - 7) < 36 && 0 <= i__1 ? 
-			    i__1 : s_rnge("xform", i__1, "frmget_", (ftnlen)
-			    235)] = 0.;
+			    i__1 : s_rnge(&__global_state->f2c, "xform", i__1,
+			     "frmget_", (ftnlen)235)] = 0.;
 		    xform[(i__1 = i__ + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? 
-			    i__1 : s_rnge("xform", i__1, "frmget_", (ftnlen)
-			    236)] = 0.;
+			    i__1 : s_rnge(&__global_state->f2c, "xform", i__1,
+			     "frmget_", (ftnlen)236)] = 0.;
 		}
 	    }
 	    *outfrm = 1;
 	}
     } else if (type__ == 2) {
-	tisbod_("J2000", &typeid, et, tsipm, (ftnlen)5);
-	if (! failed_()) {
-	    invstm_(tsipm, xform);
+	tisbod_(__global_state, "J2000", &typeid, et, tsipm, (ftnlen)5);
+	if (! failed_(__global_state)) {
+	    invstm_(__global_state, tsipm, xform);
 	    *outfrm = 1;
 	}
     } else if (type__ == 3) {
-	ckfxfm_(&typeid, et, xform, outfrm, found);
+	ckfxfm_(__global_state, &typeid, et, xform, outfrm, found);
     } else if (type__ == 4) {
-	tkfram_(&typeid, rotate, outfrm, found);
-	if (! failed_()) {
+	tkfram_(__global_state, &typeid, rotate, outfrm, found);
+	if (! failed_(__global_state)) {
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		for (j = 1; j <= 3; ++j) {
 		    xform[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			    s_rnge("xform", i__1, "frmget_", (ftnlen)271)] = 
-			    rotate[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ?
-			     i__2 : s_rnge("rotate", i__2, "frmget_", (ftnlen)
-			    271)];
+			    s_rnge(&__global_state->f2c, "xform", i__1, "frm"
+			    "get_", (ftnlen)271)] = rotate[(i__2 = i__ + j * 3 
+			    - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "rotate", i__2, "frmget_", (
+			    ftnlen)271)];
 		    xform[(i__1 = i__ + 3 + (j + 3) * 6 - 7) < 36 && 0 <= 
-			    i__1 ? i__1 : s_rnge("xform", i__1, "frmget_", (
-			    ftnlen)272)] = rotate[(i__2 = i__ + j * 3 - 4) < 
-			    9 && 0 <= i__2 ? i__2 : s_rnge("rotate", i__2, 
-			    "frmget_", (ftnlen)272)];
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "xform"
+			    , i__1, "frmget_", (ftnlen)272)] = rotate[(i__2 = 
+			    i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(
+			    &__global_state->f2c, "rotate", i__2, "frmget_", (
+			    ftnlen)272)];
 		    xform[(i__1 = i__ + 3 + j * 6 - 7) < 36 && 0 <= i__1 ? 
-			    i__1 : s_rnge("xform", i__1, "frmget_", (ftnlen)
-			    273)] = 0.;
+			    i__1 : s_rnge(&__global_state->f2c, "xform", i__1,
+			     "frmget_", (ftnlen)273)] = 0.;
 		    xform[(i__1 = i__ + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? 
-			    i__1 : s_rnge("xform", i__1, "frmget_", (ftnlen)
-			    274)] = 0.;
+			    i__1 : s_rnge(&__global_state->f2c, "xform", i__1,
+			     "frmget_", (ftnlen)274)] = 0.;
 		}
 	    }
 	}
@@ -398,37 +404,38 @@ static frmget_state_t* get_frmget_state() {
 /*        routine ZZDYNFRM requires the input frame ID rather than the */
 /*        dynamic frame class ID. ZZDYNFRM also requires the center ID */
 /*        we found via the FRINFO call. */
-	zzdynfrm_(infrm, &center, et, xform, outfrm);
+	zzdynfrm_(__global_state, infrm, &center, et, xform, outfrm);
 
 /*        The FOUND flag was set by FRINFO earlier; we don't touch */
 /*        it here. If ZZDYNFRM signaled an error, FOUND will be set */
 /*        to .FALSE. at end of this routine. */
 
     } else {
-	cleard_(&__state->c__36, xform);
+	cleard_(__global_state, &__state->c__36, xform);
 	*outfrm = 0;
 	*found = FALSE_;
-	setmsg_("The reference frame # has class id-code #. This form of ref"
-		"erence frame is not supported in version # of FRMGET. You ne"
-		"ed to update your version of SPICELIB to the latest version "
-		"in order to support this frame. ", (ftnlen)211);
-	errint_("#", infrm, (ftnlen)1);
-	errint_("#", &type__, (ftnlen)1);
-	errch_("#", versn, (ftnlen)1, (ftnlen)6);
-	sigerr_("SPICE(UNKNOWNFRAMETYPE)", (ftnlen)23);
-	chkout_("FRMGET", (ftnlen)6);
+	setmsg_(__global_state, "The reference frame # has class id-code #. "
+		"This form of reference frame is not supported in version # o"
+		"f FRMGET. You need to update your version of SPICELIB to the"
+		" latest version in order to support this frame. ", (ftnlen)
+		211);
+	errint_(__global_state, "#", infrm, (ftnlen)1);
+	errint_(__global_state, "#", &type__, (ftnlen)1);
+	errch_(__global_state, "#", versn, (ftnlen)1, (ftnlen)6);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAMETYPE)", (ftnlen)23);
+	chkout_(__global_state, "FRMGET", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure to clear outputs in case of a failure as defined in */
 /*     in the header. */
 
-    if (failed_() || ! (*found)) {
-	cleard_(&__state->c__36, xform);
+    if (failed_(__global_state) || ! (*found)) {
+	cleard_(__global_state, &__state->c__36, xform);
 	*outfrm = 0;
 	*found = FALSE_;
     }
-    chkout_("FRMGET", (ftnlen)6);
+    chkout_(__global_state, "FRMGET", (ftnlen)6);
     return 0;
 } /* frmget_ */
 

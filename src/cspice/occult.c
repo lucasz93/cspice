@@ -8,8 +8,7 @@
 
 
 extern occult_init_t __occult_init;
-static occult_state_t* get_occult_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline occult_state_t* get_occult_state(cspice_t* state) {
 	if (!state->occult)
 		state->occult = __cspice_allocate_module(sizeof(
 	occult_state_t), &__occult_init, sizeof(__occult_init));
@@ -18,11 +17,12 @@ static occult_state_t* get_occult_state() {
 }
 
 /* $Procedure      OCCULT ( find occultation type at time ) */
-/* Subroutine */ int occult_(char *targ1, char *shape1, char *frame1, char *
-	targ2, char *shape2, char *frame2, char *abcorr, char *obsrvr, 
-	doublereal *et, integer *ocltid, ftnlen targ1_len, ftnlen shape1_len, 
-	ftnlen frame1_len, ftnlen targ2_len, ftnlen shape2_len, ftnlen 
-	frame2_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int occult_(cspice_t* __global_state, char *targ1, char *
+	shape1, char *frame1, char *targ2, char *shape2, char *frame2, char *
+	abcorr, char *obsrvr, doublereal *et, integer *ocltid, ftnlen 
+	targ1_len, ftnlen shape1_len, ftnlen frame1_len, ftnlen targ2_len, 
+	ftnlen shape2_len, ftnlen frame2_len, ftnlen abcorr_len, ftnlen 
+	obsrvr_len)
 {
     /* Initialized data */
 
@@ -31,37 +31,41 @@ static occult_state_t* get_occult_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     char back[36];
-    extern /* Subroutine */ int zzgfocin_(char *, char *, char *, char *, 
-	    char *, char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfocin_(cspice_t*, char *, char *, char *, 
+	    char *, char *, char *, char *, char *, char *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     char shap1[500];
     char shap2[500];
-    extern /* Subroutine */ int zzgfocst_(doublereal *, logical *);
+    extern /* Subroutine */ int zzgfocst_(cspice_t*, doublereal *, logical *);
     integer i__;
-    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
-	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzprsmet_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, logical *, integer *, integer *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     char bname[36];
     char fname[36];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer index;
     logical found;
     char front[36];
     integer nsurf;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int bods2c_(cspice_t*, char *, integer *, logical 
+	    *, ftnlen);
     logical ellps2;
     char prshp1[9];
     char prshp2[9];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     char bframe[32];
     char fframe[32];
     char bshape[500];
@@ -70,22 +74,22 @@ static occult_state_t* get_occult_state() {
     char fshape[500];
     integer mltfac;
     char pntdef[20];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     char subtyp[20];
     integer id1;
     integer id2;
     integer srflst[100];
     logical ocstat;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char trmtyp[20];
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     logical pri;
 
 
     /* Module state */
-    occult_state_t* __state = get_occult_state();
+    occult_state_t* __state = get_occult_state(__global_state);
 /* $ Abstract */
 
 /*     Determines the occultation condition (not occulted, partially, */
@@ -1263,68 +1267,71 @@ static occult_state_t* get_occult_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("OCCULT", (ftnlen)6);
+    chkin_(__global_state, "OCCULT", (ftnlen)6);
 
 /*     Left justify the shapes and target names and make them upper case. */
 
-    ljust_(shape1, shap1, shape1_len, (ftnlen)500);
-    ucase_(shap1, shap1, (ftnlen)500, (ftnlen)500);
-    ljust_(shape2, shap2, shape2_len, (ftnlen)500);
-    ucase_(shap2, shap2, (ftnlen)500, (ftnlen)500);
-    ljust_(targ1, fname, targ1_len, (ftnlen)36);
-    ucase_(fname, fname, (ftnlen)36, (ftnlen)36);
-    ljust_(targ2, bname, targ2_len, (ftnlen)36);
-    ucase_(bname, bname, (ftnlen)36, (ftnlen)36);
+    ljust_(__global_state, shape1, shap1, shape1_len, (ftnlen)500);
+    ucase_(__global_state, shap1, shap1, (ftnlen)500, (ftnlen)500);
+    ljust_(__global_state, shape2, shap2, shape2_len, (ftnlen)500);
+    ucase_(__global_state, shap2, shap2, (ftnlen)500, (ftnlen)500);
+    ljust_(__global_state, targ1, fname, targ1_len, (ftnlen)36);
+    ucase_(__global_state, fname, fname, (ftnlen)36, (ftnlen)36);
+    ljust_(__global_state, targ2, bname, targ2_len, (ftnlen)36);
+    ucase_(__global_state, bname, bname, (ftnlen)36, (ftnlen)36);
 
 /*     The variable ELLPS2 is a flag that indicates whether both targets */
 /*     are represented as ellipsoids. */
 
-    ellps2 = s_cmp(shap1, "ELLIPSOID", (ftnlen)500, (ftnlen)9) == 0 && s_cmp(
-	    shap2, "ELLIPSOID", (ftnlen)500, (ftnlen)9) == 0;
+    ellps2 = s_cmp(&__global_state->f2c, shap1, "ELLIPSOID", (ftnlen)500, (
+	    ftnlen)9) == 0 && s_cmp(&__global_state->f2c, shap2, "ELLIPSOID", 
+	    (ftnlen)500, (ftnlen)9) == 0;
 
 /*     Parse the input shapes. We need the target ID codes */
 /*     for this. */
 
-    if (s_cmp(shap1, "POINT", (ftnlen)500, (ftnlen)5) == 0) {
-	s_copy(prshp1, shap1, (ftnlen)9, (ftnlen)9);
+    if (s_cmp(&__global_state->f2c, shap1, "POINT", (ftnlen)500, (ftnlen)5) ==
+	     0) {
+	s_copy(&__global_state->f2c, prshp1, shap1, (ftnlen)9, (ftnlen)9);
     } else {
-	bods2c_(fname, &id1, &found, (ftnlen)36);
+	bods2c_(__global_state, fname, &id1, &found, (ftnlen)36);
 	if (! found) {
-	    setmsg_("First target name # could not be mapped to an ID code.", 
-		    (ftnlen)54);
-	    errch_("#", fname, (ftnlen)1, (ftnlen)36);
-	    sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	    chkout_("OCCULT", (ftnlen)6);
+	    setmsg_(__global_state, "First target name # could not be mapped"
+		    " to an ID code.", (ftnlen)54);
+	    errch_(__global_state, "#", fname, (ftnlen)1, (ftnlen)36);
+	    sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	    chkout_(__global_state, "OCCULT", (ftnlen)6);
 	    return 0;
 	}
-	zzprsmet_(&id1, shap1, &__state->c__100, prshp1, subtyp, &pri, &nsurf,
-		 srflst, pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (
-		ftnlen)20, (ftnlen)20);
-	if (failed_()) {
-	    chkout_("OCCULT", (ftnlen)6);
+	zzprsmet_(__global_state, &id1, shap1, &__state->c__100, prshp1, 
+		subtyp, &pri, &nsurf, srflst, pntdef, trmtyp, (ftnlen)500, (
+		ftnlen)9, (ftnlen)20, (ftnlen)20, (ftnlen)20);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "OCCULT", (ftnlen)6);
 	    return 0;
 	}
     }
-    if (s_cmp(shap2, "POINT", (ftnlen)500, (ftnlen)5) == 0) {
-	s_copy(prshp2, shap2, (ftnlen)9, (ftnlen)9);
+    if (s_cmp(&__global_state->f2c, shap2, "POINT", (ftnlen)500, (ftnlen)5) ==
+	     0) {
+	s_copy(&__global_state->f2c, prshp2, shap2, (ftnlen)9, (ftnlen)9);
     } else {
-	bods2c_(bname, &id2, &found, (ftnlen)36);
+	bods2c_(__global_state, bname, &id2, &found, (ftnlen)36);
 	if (! found) {
-	    setmsg_("Second target name # could not be mapped to an ID code.",
-		     (ftnlen)55);
-	    errch_("#", bname, (ftnlen)1, (ftnlen)36);
-	    sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	    chkout_("OCCULT", (ftnlen)6);
+	    setmsg_(__global_state, "Second target name # could not be mappe"
+		    "d to an ID code.", (ftnlen)55);
+	    errch_(__global_state, "#", bname, (ftnlen)1, (ftnlen)36);
+	    sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	    chkout_(__global_state, "OCCULT", (ftnlen)6);
 	    return 0;
 	}
-	zzprsmet_(&id2, shap2, &__state->c__100, prshp2, subtyp, &pri, &nsurf,
-		 srflst, pntdef, trmtyp, (ftnlen)500, (ftnlen)9, (ftnlen)20, (
-		ftnlen)20, (ftnlen)20);
-	if (failed_()) {
-	    chkout_("OCCULT", (ftnlen)6);
+	zzprsmet_(__global_state, &id2, shap2, &__state->c__100, prshp2, 
+		subtyp, &pri, &nsurf, srflst, pntdef, trmtyp, (ftnlen)500, (
+		ftnlen)9, (ftnlen)20, (ftnlen)20, (ftnlen)20);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "OCCULT", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -1345,24 +1352,38 @@ static occult_state_t* get_occult_state() {
 /*        explanation of the OCCTYP variable near the start of the code. */
 
 	if (i__ == 1) {
-	    s_copy(front, fname, (ftnlen)36, (ftnlen)36);
-	    s_copy(fmethd, shap1, (ftnlen)500, (ftnlen)500);
-	    s_copy(bmethd, shap2, (ftnlen)500, (ftnlen)500);
-	    s_copy(fshape, prshp1, (ftnlen)500, (ftnlen)9);
-	    s_copy(fframe, frame1, (ftnlen)32, frame1_len);
-	    s_copy(back, bname, (ftnlen)36, (ftnlen)36);
-	    s_copy(bshape, prshp2, (ftnlen)500, (ftnlen)9);
-	    s_copy(bframe, frame2, (ftnlen)32, frame2_len);
+	    s_copy(&__global_state->f2c, front, fname, (ftnlen)36, (ftnlen)36)
+		    ;
+	    s_copy(&__global_state->f2c, fmethd, shap1, (ftnlen)500, (ftnlen)
+		    500);
+	    s_copy(&__global_state->f2c, bmethd, shap2, (ftnlen)500, (ftnlen)
+		    500);
+	    s_copy(&__global_state->f2c, fshape, prshp1, (ftnlen)500, (ftnlen)
+		    9);
+	    s_copy(&__global_state->f2c, fframe, frame1, (ftnlen)32, 
+		    frame1_len);
+	    s_copy(&__global_state->f2c, back, bname, (ftnlen)36, (ftnlen)36);
+	    s_copy(&__global_state->f2c, bshape, prshp2, (ftnlen)500, (ftnlen)
+		    9);
+	    s_copy(&__global_state->f2c, bframe, frame2, (ftnlen)32, 
+		    frame2_len);
 	    mltfac = 1;
 	} else {
-	    s_copy(front, bname, (ftnlen)36, (ftnlen)36);
-	    s_copy(fmethd, shap2, (ftnlen)500, (ftnlen)500);
-	    s_copy(bmethd, shap1, (ftnlen)500, (ftnlen)500);
-	    s_copy(fshape, prshp2, (ftnlen)500, (ftnlen)9);
-	    s_copy(fframe, frame2, (ftnlen)32, frame2_len);
-	    s_copy(back, fname, (ftnlen)36, (ftnlen)36);
-	    s_copy(bshape, prshp1, (ftnlen)500, (ftnlen)9);
-	    s_copy(bframe, frame1, (ftnlen)32, frame1_len);
+	    s_copy(&__global_state->f2c, front, bname, (ftnlen)36, (ftnlen)36)
+		    ;
+	    s_copy(&__global_state->f2c, fmethd, shap2, (ftnlen)500, (ftnlen)
+		    500);
+	    s_copy(&__global_state->f2c, bmethd, shap1, (ftnlen)500, (ftnlen)
+		    500);
+	    s_copy(&__global_state->f2c, fshape, prshp2, (ftnlen)500, (ftnlen)
+		    9);
+	    s_copy(&__global_state->f2c, fframe, frame2, (ftnlen)32, 
+		    frame2_len);
+	    s_copy(&__global_state->f2c, back, fname, (ftnlen)36, (ftnlen)36);
+	    s_copy(&__global_state->f2c, bshape, prshp1, (ftnlen)500, (ftnlen)
+		    9);
+	    s_copy(&__global_state->f2c, bframe, frame1, (ftnlen)32, 
+		    frame1_len);
 	    mltfac = -1;
 	}
 
@@ -1371,12 +1392,13 @@ static occult_state_t* get_occult_state() {
 /*        returns a true/false logical indicating if there is an */
 /*        occultation. */
 
-	zzgfocin_("ANY", front, fmethd, fframe, back, bmethd, bframe, obsrvr, 
-		abcorr, (ftnlen)3, (ftnlen)36, (ftnlen)500, (ftnlen)32, (
-		ftnlen)36, (ftnlen)500, (ftnlen)32, obsrvr_len, abcorr_len);
-	zzgfocst_(et, &ocstat);
-	if (failed_()) {
-	    chkout_("OCCULT", (ftnlen)6);
+	zzgfocin_(__global_state, "ANY", front, fmethd, fframe, back, bmethd, 
+		bframe, obsrvr, abcorr, (ftnlen)3, (ftnlen)36, (ftnlen)500, (
+		ftnlen)32, (ftnlen)36, (ftnlen)500, (ftnlen)32, obsrvr_len, 
+		abcorr_len);
+	zzgfocst_(__global_state, et, &ocstat);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "OCCULT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1395,15 +1417,16 @@ static occult_state_t* get_occult_state() {
 /*              Both shapes are ellipsoids. */
 
 		for (index = 1; index <= 3; ++index) {
-		    zzgfocin_(__state->occtyp + ((i__1 = index - 1) < 3 && 0 
-			    <= i__1 ? i__1 : s_rnge("occtyp", i__1, "occult_",
-			     (ftnlen)1070)) * 9, front, fshape, fframe, back, 
+		    zzgfocin_(__global_state, __state->occtyp + ((i__1 = 
+			    index - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "occtyp", i__1, "occult_", (
+			    ftnlen)1070)) * 9, front, fshape, fframe, back, 
 			    bshape, bframe, obsrvr, abcorr, (ftnlen)9, (
 			    ftnlen)36, (ftnlen)500, (ftnlen)32, (ftnlen)36, (
 			    ftnlen)500, (ftnlen)32, obsrvr_len, abcorr_len);
-		    zzgfocst_(et, &ocstat);
-		    if (failed_()) {
-			chkout_("OCCULT", (ftnlen)6);
+		    zzgfocst_(__global_state, et, &ocstat);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "OCCULT", (ftnlen)6);
 			return 0;
 		    }
 
@@ -1412,30 +1435,32 @@ static occult_state_t* get_occult_state() {
 
 		    if (ocstat) {
 			*ocltid = mltfac * index;
-			chkout_("OCCULT", (ftnlen)6);
+			chkout_(__global_state, "OCCULT", (ftnlen)6);
 			return 0;
 		    }
 
 /*                 End the DO loop that checks the occultation type. */
 
 		}
-	    } else if (s_cmp(fshape, "ELLIPSOID", (ftnlen)500, (ftnlen)9) == 
-		    0 || s_cmp(fshape, "DSK", (ftnlen)500, (ftnlen)3) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, fshape, "ELLIPSOID", (
+		    ftnlen)500, (ftnlen)9) == 0 || s_cmp(&__global_state->f2c,
+		     fshape, "DSK", (ftnlen)500, (ftnlen)3) == 0) {
 
 /*              The front target is an ellipsoid or DSK shape: this */
 /*              is a total occultation. (Other target is a point). */
 
 		*ocltid = mltfac * 3;
-		chkout_("OCCULT", (ftnlen)6);
+		chkout_(__global_state, "OCCULT", (ftnlen)6);
 		return 0;
-	    } else if (s_cmp(bshape, "ELLIPSOID", (ftnlen)500, (ftnlen)9) == 
-		    0 || s_cmp(bshape, "DSK", (ftnlen)500, (ftnlen)3) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, bshape, "ELLIPSOID", (
+		    ftnlen)500, (ftnlen)9) == 0 || s_cmp(&__global_state->f2c,
+		     bshape, "DSK", (ftnlen)500, (ftnlen)3) == 0) {
 
 /*              The back target is an ellipsoid or DSK shape: this is an */
 /*              annular occultation. (Other target is a point). */
 
 		*ocltid = mltfac << 1;
-		chkout_("OCCULT", (ftnlen)6);
+		chkout_(__global_state, "OCCULT", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1452,14 +1477,14 @@ static occult_state_t* get_occult_state() {
 /*     has occurred. */
 
     if (*ocltid != 0) {
-	setmsg_("This error should never be reached; the occultation code re"
-		"sult # is invalid.", (ftnlen)77);
-	errint_("#", ocltid, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("OCCULT", (ftnlen)6);
+	setmsg_(__global_state, "This error should never be reached; the occ"
+		"ultation code result # is invalid.", (ftnlen)77);
+	errint_(__global_state, "#", ocltid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "OCCULT", (ftnlen)6);
 	return 0;
     }
-    chkout_("OCCULT", (ftnlen)6);
+    chkout_(__global_state, "OCCULT", (ftnlen)6);
     return 0;
 } /* occult_ */
 

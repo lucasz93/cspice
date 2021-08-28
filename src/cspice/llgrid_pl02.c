@@ -522,7 +522,7 @@
    {
       return;
    }
-   chkin_c ( "llgrid_pl02" );
+   chkin_c ( naif_state, "llgrid_pl02" );
 
    /*
    Fetch and examine the DSK descriptor of the segment from which we're

@@ -249,7 +249,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "surfpt_c");
+   chkin_c ( naif_state, "surfpt_c");
 
    
    /*

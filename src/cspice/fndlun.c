@@ -8,8 +8,7 @@
 
 
 extern fndlun_init_t __fndlun_init;
-static fndlun_state_t* get_fndlun_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline fndlun_state_t* get_fndlun_state(cspice_t* state) {
 	if (!state->fndlun)
 		state->fndlun = __cspice_allocate_module(sizeof(
 	fndlun_state_t), &__fndlun_init, sizeof(__fndlun_init));
@@ -18,7 +17,8 @@ static fndlun_state_t* get_fndlun_state() {
 }
 
 /* $Procedure      FNDLUN ( Find a free logical unit ) */
-/* Subroutine */ int fndlun_0_(int n__, integer *unit)
+/* Subroutine */ int fndlun_0_(cspice_t* __global_state, int n__, integer *
+	unit)
 {
     /* Initialized data */
 
@@ -28,12 +28,13 @@ static fndlun_state_t* get_fndlun_state() {
     inlist ioin__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), f_inqu(inlist *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), f_inqu(
+	    f2c_state_t*, inlist *);
 
     /* Local variables */
 
     /* Module state */
-    fndlun_state_t* __state = get_fndlun_state();
+    fndlun_state_t* __state = get_fndlun_state(__global_state);
 /* $ Abstract */
 
 /*     Return the number of a free logical unit, if one is available. */
@@ -531,13 +532,15 @@ static fndlun_state_t* get_fndlun_state() {
     if (__state->first) {
 	for (__state->i__ = 1; __state->i__ <= 99; ++__state->i__) {
 	    __state->resvd[(i__1 = __state->i__ - 1) < 99 && 0 <= i__1 ? i__1 
-		    : s_rnge("resvd", i__1, "fndlun_", (ftnlen)533)] = FALSE_;
+		    : s_rnge(&__global_state->f2c, "resvd", i__1, "fndlun_", (
+		    ftnlen)533)] = FALSE_;
 	}
 	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
 	    __state->resvd[(i__2 = __state->resnum[(i__1 = __state->i__ - 1) <
-		     3 && 0 <= i__1 ? i__1 : s_rnge("resnum", i__1, "fndlun_",
-		     (ftnlen)537)] - 1) < 99 && 0 <= i__2 ? i__2 : s_rnge(
-		    "resvd", i__2, "fndlun_", (ftnlen)537)] = TRUE_;
+		     3 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "resnum", i__1, "fndlun_", (ftnlen)537)] - 1) < 99 && 0 <=
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "resvd", i__2,
+		     "fndlun_", (ftnlen)537)] = TRUE_;
 	}
 	__state->first = FALSE_;
     }
@@ -549,7 +552,8 @@ static fndlun_state_t* get_fndlun_state() {
     for (__state->i__ = __state->last + 1; __state->i__ <= 99; ++__state->i__)
 	     {
 	if (__state->resvd[(i__1 = __state->i__ - 1) < 99 && 0 <= i__1 ? i__1 
-		: s_rnge("resvd", i__1, "fndlun_", (ftnlen)551)]) {
+		: s_rnge(&__global_state->f2c, "resvd", i__1, "fndlun_", (
+		ftnlen)551)]) {
 	    __state->opened = TRUE_;
 	} else {
 	    ioin__1.inerr = 1;
@@ -569,7 +573,7 @@ static fndlun_state_t* get_fndlun_state() {
 	    ioin__1.inrecl = 0;
 	    ioin__1.innrec = 0;
 	    ioin__1.inblank = 0;
-	    __state->iostat = f_inqu(&ioin__1);
+	    __state->iostat = f_inqu(&__global_state->f2c, &ioin__1);
 	    if (__state->iostat > 0) {
 		*unit = -__state->iostat;
 		return 0;
@@ -589,7 +593,8 @@ static fndlun_state_t* get_fndlun_state() {
     i__1 = __state->last;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	if (__state->resvd[(i__2 = __state->i__ - 1) < 99 && 0 <= i__2 ? i__2 
-		: s_rnge("resvd", i__2, "fndlun_", (ftnlen)578)]) {
+		: s_rnge(&__global_state->f2c, "resvd", i__2, "fndlun_", (
+		ftnlen)578)]) {
 	    __state->opened = TRUE_;
 	} else {
 	    ioin__1.inerr = 1;
@@ -609,7 +614,7 @@ static fndlun_state_t* get_fndlun_state() {
 	    ioin__1.inrecl = 0;
 	    ioin__1.innrec = 0;
 	    ioin__1.inblank = 0;
-	    __state->iostat = f_inqu(&ioin__1);
+	    __state->iostat = f_inqu(&__global_state->f2c, &ioin__1);
 	    if (__state->iostat > 0) {
 		*unit = -__state->iostat;
 		return 0;
@@ -812,13 +817,15 @@ L_reslun:
     if (__state->first) {
 	for (__state->i__ = 1; __state->i__ <= 99; ++__state->i__) {
 	    __state->resvd[(i__1 = __state->i__ - 1) < 99 && 0 <= i__1 ? i__1 
-		    : s_rnge("resvd", i__1, "fndlun_", (ftnlen)801)] = FALSE_;
+		    : s_rnge(&__global_state->f2c, "resvd", i__1, "fndlun_", (
+		    ftnlen)801)] = FALSE_;
 	}
 	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
 	    __state->resvd[(i__2 = __state->resnum[(i__1 = __state->i__ - 1) <
-		     3 && 0 <= i__1 ? i__1 : s_rnge("resnum", i__1, "fndlun_",
-		     (ftnlen)805)] - 1) < 99 && 0 <= i__2 ? i__2 : s_rnge(
-		    "resvd", i__2, "fndlun_", (ftnlen)805)] = TRUE_;
+		     3 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "resnum", i__1, "fndlun_", (ftnlen)805)] - 1) < 99 && 0 <=
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "resvd", i__2,
+		     "fndlun_", (ftnlen)805)] = TRUE_;
 	}
 	__state->first = FALSE_;
     }
@@ -827,8 +834,9 @@ L_reslun:
 /*     to TRUE. */
 
     if (*unit >= 1 && *unit <= 99) {
-	__state->resvd[(i__1 = *unit - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge(
-		"resvd", i__1, "fndlun_", (ftnlen)817)] = TRUE_;
+	__state->resvd[(i__1 = *unit - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "resvd", i__1, "fndlun_", (ftnlen)817)] =
+		 TRUE_;
     }
     return 0;
 /* $Procedure FRELUN ( Free a reserved logical unit ) */
@@ -1022,14 +1030,15 @@ L_frelun:
     if (__state->first) {
 	for (__state->i__ = 1; __state->i__ <= 99; ++__state->i__) {
 	    __state->resvd[(i__1 = __state->i__ - 1) < 99 && 0 <= i__1 ? i__1 
-		    : s_rnge("resvd", i__1, "fndlun_", (ftnlen)1022)] = 
-		    FALSE_;
+		    : s_rnge(&__global_state->f2c, "resvd", i__1, "fndlun_", (
+		    ftnlen)1022)] = FALSE_;
 	}
 	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
 	    __state->resvd[(i__2 = __state->resnum[(i__1 = __state->i__ - 1) <
-		     3 && 0 <= i__1 ? i__1 : s_rnge("resnum", i__1, "fndlun_",
-		     (ftnlen)1026)] - 1) < 99 && 0 <= i__2 ? i__2 : s_rnge(
-		    "resvd", i__2, "fndlun_", (ftnlen)1026)] = TRUE_;
+		     3 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "resnum", i__1, "fndlun_", (ftnlen)1026)] - 1) < 99 && 0 
+		    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "resvd", 
+		    i__2, "fndlun_", (ftnlen)1026)] = TRUE_;
 	}
 	__state->first = FALSE_;
     }
@@ -1040,28 +1049,29 @@ L_frelun:
     if (*unit >= 1 && *unit <= 99) {
 	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
 	    if (*unit == __state->resnum[(i__1 = __state->i__ - 1) < 3 && 0 <=
-		     i__1 ? i__1 : s_rnge("resnum", i__1, "fndlun_", (ftnlen)
-		    1040)]) {
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "resnum", 
+		    i__1, "fndlun_", (ftnlen)1040)]) {
 		return 0;
 	    }
 	}
-	__state->resvd[(i__1 = *unit - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge(
-		"resvd", i__1, "fndlun_", (ftnlen)1045)] = FALSE_;
+	__state->resvd[(i__1 = *unit - 1) < 99 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "resvd", i__1, "fndlun_", (ftnlen)1045)] 
+		= FALSE_;
     }
     return 0;
 } /* fndlun_ */
 
-/* Subroutine */ int fndlun_(integer *unit)
+/* Subroutine */ int fndlun_(cspice_t* __global_state, integer *unit)
 {
     return fndlun_0_(0, unit);
     }
 
-/* Subroutine */ int reslun_(integer *unit)
+/* Subroutine */ int reslun_(cspice_t* __global_state, integer *unit)
 {
     return fndlun_0_(1, unit);
     }
 
-/* Subroutine */ int frelun_(integer *unit)
+/* Subroutine */ int frelun_(cspice_t* __global_state, integer *unit)
 {
     return fndlun_0_(2, unit);
     }

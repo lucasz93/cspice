@@ -8,29 +8,28 @@
 
 
 typedef int syfeti_state_t;
-static syfeti_state_t* get_syfeti_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline syfeti_state_t* get_syfeti_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SYFETI ( Fetch the Nth symbol in the table ) */
-/* Subroutine */ int syfeti_(integer *nth, char *tabsym, integer *tabptr, 
-	integer *tabval, char *name__, logical *found, ftnlen tabsym_len, 
-	ftnlen name_len)
+/* Subroutine */ int syfeti_(cspice_t* __global_state, integer *nth, char *
+	tabsym, integer *tabptr, integer *tabval, char *name__, logical *
+	found, ftnlen tabsym_len, ftnlen name_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    syfeti_state_t* __state = get_syfeti_state();
+    syfeti_state_t* __state = get_syfeti_state(__global_state);
 /* $ Abstract */
 
 /*     Fetch the Nth symbol in an integer symbol table. */
@@ -188,15 +187,15 @@ static syfeti_state_t* get_syfeti_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYFETI", (ftnlen)6);
+	chkin_(__global_state, "SYFETI", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
 
 /*     If the value of NTH is out of range, that's a problem. */
 
@@ -208,10 +207,10 @@ static syfeti_state_t* get_syfeti_state() {
 
     } else {
 	*found = TRUE_;
-	s_copy(name__, tabsym + (*nth + 5) * tabsym_len, name_len, tabsym_len)
-		;
+	s_copy(&__global_state->f2c, name__, tabsym + (*nth + 5) * tabsym_len,
+		 name_len, tabsym_len);
     }
-    chkout_("SYFETI", (ftnlen)6);
+    chkout_(__global_state, "SYFETI", (ftnlen)6);
     return 0;
 } /* syfeti_ */
 

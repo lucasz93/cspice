@@ -8,8 +8,7 @@
 
 
 extern zzekvmch_init_t __zzekvmch_init;
-static zzekvmch_state_t* get_zzekvmch_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekvmch_state_t* get_zzekvmch_state(cspice_t* state) {
 	if (!state->zzekvmch)
 		state->zzekvmch = __cspice_allocate_module(sizeof(
 	zzekvmch_state_t), &__zzekvmch_init, sizeof(__zzekvmch_init));
@@ -18,17 +17,17 @@ static zzekvmch_state_t* get_zzekvmch_state() {
 }
 
 /* $Procedure      ZZEKVMCH ( EK, vector match ) */
-logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
-	lsdscs, integer *lcdscs, integer *lrows, integer *lelts, integer *ops,
-	 integer *rhans, integer *rsdscs, integer *rcdscs, integer *rrows, 
-	integer *relts)
+logical zzekvmch_(cspice_t* __global_state, integer *ncnstr, logical *active, 
+	integer *lhans, integer *lsdscs, integer *lcdscs, integer *lrows, 
+	integer *lelts, integer *ops, integer *rhans, integer *rsdscs, 
+	integer *rcdscs, integer *rrows, integer *relts)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
     logical ret_val;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     char cval[1024*2];
@@ -36,32 +35,33 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
     integer elts[2];
     logical null[2];
     integer rows[2];
-    extern integer zzekecmp_(integer *, integer *, integer *, integer *, 
-	    integer *);
+    extern integer zzekecmp_(cspice_t*, integer *, integer *, integer *, 
+	    integer *, integer *);
     integer i__;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer cvlen[2];
     logical found;
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern logical matchi_(char *, char *, char *, char *, ftnlen, ftnlen, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern logical matchi_(cspice_t*, char *, char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen, ftnlen);
     integer cldscs[22]	/* was [11][2] */;
     integer cmplen[2];
     integer sgdscs[48]	/* was [24][2] */;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer rel;
-    extern /* Subroutine */ int zzekrsc_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, char *, logical *, logical *, 
-	    ftnlen);
+    extern /* Subroutine */ int zzekrsc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, char *, logical *, 
+	    logical *, ftnlen);
 
 
     /* Module state */
-    zzekvmch_state_t* __state = get_zzekvmch_state();
+    zzekvmch_state_t* __state = get_zzekvmch_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether a vector of constraints involving comparisons of */
@@ -906,15 +906,19 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
 
 	    hans[0] = lhans[n - 1];
 	    hans[1] = rhans[n - 1];
-	    movei_(&lsdscs[n * 24 - 24], &__state->c__24, sgdscs);
-	    movei_(&rsdscs[n * 24 - 24], &__state->c__24, &sgdscs[24]);
+	    movei_(__global_state, &lsdscs[n * 24 - 24], &__state->c__24, 
+		    sgdscs);
+	    movei_(__global_state, &rsdscs[n * 24 - 24], &__state->c__24, &
+		    sgdscs[24]);
 	    rows[0] = lrows[n - 1];
 	    rows[1] = rrows[n - 1];
 	    elts[0] = lelts[n - 1];
 	    elts[1] = relts[n - 1];
-	    movei_(&lcdscs[n * 11 - 11], &__state->c__11, cldscs);
-	    movei_(&rcdscs[n * 11 - 11], &__state->c__11, &cldscs[11]);
-	    rel = zzekecmp_(hans, sgdscs, cldscs, rows, elts);
+	    movei_(__global_state, &lcdscs[n * 11 - 11], &__state->c__11, 
+		    cldscs);
+	    movei_(__global_state, &rcdscs[n * 11 - 11], &__state->c__11, &
+		    cldscs[11]);
+	    rel = zzekecmp_(__global_state, hans, sgdscs, cldscs, rows, elts);
 
 /*           Determine the truth of the Nth input relational expression, */
 /*           and set ZZEKVMCH accordingly. */
@@ -933,133 +937,152 @@ logical zzekvmch_(integer *ncnstr, logical *active, integer *lhans, integer *
 		ret_val = rel != 1;
 	    } else if (ops[n - 1] == 7 && cldscs[1] == 1) {
 		for (i__ = 1; i__ <= 2; ++i__) {
-		    zzekrsc_(&hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-			    s_rnge("hans", i__1, "zzekvmch_", (ftnlen)402)], &
-			    sgdscs[(i__2 = i__ * 24 - 24) < 48 && 0 <= i__2 ? 
-			    i__2 : s_rnge("sgdscs", i__2, "zzekvmch_", (
-			    ftnlen)402)], &cldscs[(i__3 = i__ * 11 - 11) < 22 
-			    && 0 <= i__3 ? i__3 : s_rnge("cldscs", i__3, 
-			    "zzekvmch_", (ftnlen)402)], &rows[(i__4 = i__ - 1)
-			     < 2 && 0 <= i__4 ? i__4 : s_rnge("rows", i__4, 
-			    "zzekvmch_", (ftnlen)402)], &elts[(i__5 = i__ - 1)
-			     < 2 && 0 <= i__5 ? i__5 : s_rnge("elts", i__5, 
-			    "zzekvmch_", (ftnlen)402)], &cvlen[(i__6 = i__ - 
-			    1) < 2 && 0 <= i__6 ? i__6 : s_rnge("cvlen", i__6,
-			     "zzekvmch_", (ftnlen)402)], cval + (((i__7 = i__ 
-			    - 1) < 2 && 0 <= i__7 ? i__7 : s_rnge("cval", 
-			    i__7, "zzekvmch_", (ftnlen)402)) << 10), &null[(
-			    i__8 = i__ - 1) < 2 && 0 <= i__8 ? i__8 : s_rnge(
+		    zzekrsc_(__global_state, &hans[(i__1 = i__ - 1) < 2 && 0 
+			    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			    "hans", i__1, "zzekvmch_", (ftnlen)402)], &sgdscs[
+			    (i__2 = i__ * 24 - 24) < 48 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "sgdscs", i__2, 
+			    "zzekvmch_", (ftnlen)402)], &cldscs[(i__3 = i__ * 
+			    11 - 11) < 22 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "cldscs", i__3, "zzekvmch_", 
+			    (ftnlen)402)], &rows[(i__4 = i__ - 1) < 2 && 0 <= 
+			    i__4 ? i__4 : s_rnge(&__global_state->f2c, "rows",
+			     i__4, "zzekvmch_", (ftnlen)402)], &elts[(i__5 = 
+			    i__ - 1) < 2 && 0 <= i__5 ? i__5 : s_rnge(&
+			    __global_state->f2c, "elts", i__5, "zzekvmch_", (
+			    ftnlen)402)], &cvlen[(i__6 = i__ - 1) < 2 && 0 <= 
+			    i__6 ? i__6 : s_rnge(&__global_state->f2c, "cvlen"
+			    , i__6, "zzekvmch_", (ftnlen)402)], cval + (((
+			    i__7 = i__ - 1) < 2 && 0 <= i__7 ? i__7 : s_rnge(&
+			    __global_state->f2c, "cval", i__7, "zzekvmch_", (
+			    ftnlen)402)) << 10), &null[(i__8 = i__ - 1) < 2 &&
+			     0 <= i__8 ? i__8 : s_rnge(&__global_state->f2c, 
 			    "null", i__8, "zzekvmch_", (ftnlen)402)], &found, 
 			    (ftnlen)1024);
 		    if (! found) {
-			chkin_("ZZEKVMCH", (ftnlen)8);
-			setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.  "
-				"Column entry  element was not found.", (
-				ftnlen)79);
-			errhan_("#", &hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
-				 i__1 : s_rnge("hans", i__1, "zzekvmch_", (
-				ftnlen)419)], (ftnlen)1);
-			errint_("#", &cldscs[(i__1 = i__ * 11 - 3) < 22 && 0 
-				<= i__1 ? i__1 : s_rnge("cldscs", i__1, "zze"
-				"kvmch_", (ftnlen)420)], (ftnlen)1);
-			errint_("#", &rows[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
-				 i__1 : s_rnge("rows", i__1, "zzekvmch_", (
-				ftnlen)421)], (ftnlen)1);
-			errint_("#", &elts[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
-				 i__1 : s_rnge("elts", i__1, "zzekvmch_", (
-				ftnlen)422)], (ftnlen)1);
-			sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-			chkout_("ZZEKVMCH", (ftnlen)8);
+			chkin_(__global_state, "ZZEKVMCH", (ftnlen)8);
+			setmsg_(__global_state, "EK = #; COLIDX = #; ROW = #"
+				"; ELTIDX  = #.  Column entry  element was no"
+				"t found.", (ftnlen)79);
+			errhan_(__global_state, "#", &hans[(i__1 = i__ - 1) < 
+				2 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "hans", i__1, "zzekvmch_"
+				, (ftnlen)419)], (ftnlen)1);
+			errint_(__global_state, "#", &cldscs[(i__1 = i__ * 11 
+				- 3) < 22 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "cldscs", i__1, "zzekvm"
+				"ch_", (ftnlen)420)], (ftnlen)1);
+			errint_(__global_state, "#", &rows[(i__1 = i__ - 1) < 
+				2 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "rows", i__1, "zzekvmch_"
+				, (ftnlen)421)], (ftnlen)1);
+			errint_(__global_state, "#", &elts[(i__1 = i__ - 1) < 
+				2 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "elts", i__1, "zzekvmch_"
+				, (ftnlen)422)], (ftnlen)1);
+			sigerr_(__global_state, "SPICE(INVALIDINDEX)", (
+				ftnlen)19);
+			chkout_(__global_state, "ZZEKVMCH", (ftnlen)8);
 			return ret_val;
 		    }
 		    if (found && ! null[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-			    i__1 : s_rnge("null", i__1, "zzekvmch_", (ftnlen)
-			    429)]) {
+			    i__1 : s_rnge(&__global_state->f2c, "null", i__1, 
+			    "zzekvmch_", (ftnlen)429)]) {
 /* Computing MIN */
 			i__3 = cvlen[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 
-				: s_rnge("cvlen", i__2, "zzekvmch_", (ftnlen)
-				431)];
+				: s_rnge(&__global_state->f2c, "cvlen", i__2, 
+				"zzekvmch_", (ftnlen)431)];
 			cmplen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				s_rnge("cmplen", i__1, "zzekvmch_", (ftnlen)
-				431)] = min(i__3,1024);
+				s_rnge(&__global_state->f2c, "cmplen", i__1, 
+				"zzekvmch_", (ftnlen)431)] = min(i__3,1024);
 		    } else {
 			cmplen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				s_rnge("cmplen", i__1, "zzekvmch_", (ftnlen)
-				433)] = 0;
+				s_rnge(&__global_state->f2c, "cmplen", i__1, 
+				"zzekvmch_", (ftnlen)433)] = 0;
 		    }
 		}
-		ret_val = matchi_(cval, cval + 1024, "*", "%", cmplen[0], 
-			cmplen[1], (ftnlen)1, (ftnlen)1);
+		ret_val = matchi_(__global_state, cval, cval + 1024, "*", 
+			"%", cmplen[0], cmplen[1], (ftnlen)1, (ftnlen)1);
 	    } else if (ops[n - 1] == 8 && cldscs[1] == 1) {
 		for (i__ = 1; i__ <= 2; ++i__) {
-		    zzekrsc_(&hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-			    s_rnge("hans", i__1, "zzekvmch_", (ftnlen)451)], &
-			    sgdscs[(i__2 = i__ * 24 - 24) < 48 && 0 <= i__2 ? 
-			    i__2 : s_rnge("sgdscs", i__2, "zzekvmch_", (
-			    ftnlen)451)], &cldscs[(i__3 = i__ * 11 - 11) < 22 
-			    && 0 <= i__3 ? i__3 : s_rnge("cldscs", i__3, 
-			    "zzekvmch_", (ftnlen)451)], &rows[(i__4 = i__ - 1)
-			     < 2 && 0 <= i__4 ? i__4 : s_rnge("rows", i__4, 
-			    "zzekvmch_", (ftnlen)451)], &elts[(i__5 = i__ - 1)
-			     < 2 && 0 <= i__5 ? i__5 : s_rnge("elts", i__5, 
-			    "zzekvmch_", (ftnlen)451)], &cvlen[(i__6 = i__ - 
-			    1) < 2 && 0 <= i__6 ? i__6 : s_rnge("cvlen", i__6,
-			     "zzekvmch_", (ftnlen)451)], cval + (((i__7 = i__ 
-			    - 1) < 2 && 0 <= i__7 ? i__7 : s_rnge("cval", 
-			    i__7, "zzekvmch_", (ftnlen)451)) << 10), &null[(
-			    i__8 = i__ - 1) < 2 && 0 <= i__8 ? i__8 : s_rnge(
+		    zzekrsc_(__global_state, &hans[(i__1 = i__ - 1) < 2 && 0 
+			    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			    "hans", i__1, "zzekvmch_", (ftnlen)451)], &sgdscs[
+			    (i__2 = i__ * 24 - 24) < 48 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "sgdscs", i__2, 
+			    "zzekvmch_", (ftnlen)451)], &cldscs[(i__3 = i__ * 
+			    11 - 11) < 22 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "cldscs", i__3, "zzekvmch_", 
+			    (ftnlen)451)], &rows[(i__4 = i__ - 1) < 2 && 0 <= 
+			    i__4 ? i__4 : s_rnge(&__global_state->f2c, "rows",
+			     i__4, "zzekvmch_", (ftnlen)451)], &elts[(i__5 = 
+			    i__ - 1) < 2 && 0 <= i__5 ? i__5 : s_rnge(&
+			    __global_state->f2c, "elts", i__5, "zzekvmch_", (
+			    ftnlen)451)], &cvlen[(i__6 = i__ - 1) < 2 && 0 <= 
+			    i__6 ? i__6 : s_rnge(&__global_state->f2c, "cvlen"
+			    , i__6, "zzekvmch_", (ftnlen)451)], cval + (((
+			    i__7 = i__ - 1) < 2 && 0 <= i__7 ? i__7 : s_rnge(&
+			    __global_state->f2c, "cval", i__7, "zzekvmch_", (
+			    ftnlen)451)) << 10), &null[(i__8 = i__ - 1) < 2 &&
+			     0 <= i__8 ? i__8 : s_rnge(&__global_state->f2c, 
 			    "null", i__8, "zzekvmch_", (ftnlen)451)], &found, 
 			    (ftnlen)1024);
 		    if (! found) {
-			chkin_("ZZEKVMCH", (ftnlen)8);
-			setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.  "
-				"Column entry  element was not found.", (
-				ftnlen)79);
-			errhan_("#", &hans[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
-				 i__1 : s_rnge("hans", i__1, "zzekvmch_", (
-				ftnlen)468)], (ftnlen)1);
-			errint_("#", &cldscs[(i__1 = i__ * 11 - 3) < 22 && 0 
-				<= i__1 ? i__1 : s_rnge("cldscs", i__1, "zze"
-				"kvmch_", (ftnlen)469)], (ftnlen)1);
-			errint_("#", &rows[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
-				 i__1 : s_rnge("rows", i__1, "zzekvmch_", (
-				ftnlen)470)], (ftnlen)1);
-			errint_("#", &elts[(i__1 = i__ - 1) < 2 && 0 <= i__1 ?
-				 i__1 : s_rnge("elts", i__1, "zzekvmch_", (
-				ftnlen)471)], (ftnlen)1);
-			sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-			chkout_("ZZEKVMCH", (ftnlen)8);
+			chkin_(__global_state, "ZZEKVMCH", (ftnlen)8);
+			setmsg_(__global_state, "EK = #; COLIDX = #; ROW = #"
+				"; ELTIDX  = #.  Column entry  element was no"
+				"t found.", (ftnlen)79);
+			errhan_(__global_state, "#", &hans[(i__1 = i__ - 1) < 
+				2 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "hans", i__1, "zzekvmch_"
+				, (ftnlen)468)], (ftnlen)1);
+			errint_(__global_state, "#", &cldscs[(i__1 = i__ * 11 
+				- 3) < 22 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "cldscs", i__1, "zzekvm"
+				"ch_", (ftnlen)469)], (ftnlen)1);
+			errint_(__global_state, "#", &rows[(i__1 = i__ - 1) < 
+				2 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "rows", i__1, "zzekvmch_"
+				, (ftnlen)470)], (ftnlen)1);
+			errint_(__global_state, "#", &elts[(i__1 = i__ - 1) < 
+				2 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "elts", i__1, "zzekvmch_"
+				, (ftnlen)471)], (ftnlen)1);
+			sigerr_(__global_state, "SPICE(INVALIDINDEX)", (
+				ftnlen)19);
+			chkout_(__global_state, "ZZEKVMCH", (ftnlen)8);
 			return ret_val;
 		    }
 		    if (found && ! null[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-			    i__1 : s_rnge("null", i__1, "zzekvmch_", (ftnlen)
-			    479)]) {
+			    i__1 : s_rnge(&__global_state->f2c, "null", i__1, 
+			    "zzekvmch_", (ftnlen)479)]) {
 /* Computing MIN */
 			i__3 = cvlen[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 
-				: s_rnge("cvlen", i__2, "zzekvmch_", (ftnlen)
-				481)];
+				: s_rnge(&__global_state->f2c, "cvlen", i__2, 
+				"zzekvmch_", (ftnlen)481)];
 			cmplen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				s_rnge("cmplen", i__1, "zzekvmch_", (ftnlen)
-				481)] = min(i__3,1024);
+				s_rnge(&__global_state->f2c, "cmplen", i__1, 
+				"zzekvmch_", (ftnlen)481)] = min(i__3,1024);
 		    } else {
 			cmplen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				s_rnge("cmplen", i__1, "zzekvmch_", (ftnlen)
-				483)] = 0;
+				s_rnge(&__global_state->f2c, "cmplen", i__1, 
+				"zzekvmch_", (ftnlen)483)] = 0;
 		    }
 		}
-		ret_val = ! matchi_(cval, cval + 1024, "*", "%", cmplen[0], 
-			cmplen[1], (ftnlen)1, (ftnlen)1);
+		ret_val = ! matchi_(__global_state, cval, cval + 1024, "*", 
+			"%", cmplen[0], cmplen[1], (ftnlen)1, (ftnlen)1);
 	    } else {
 
 /*              Sorry, we couldn't resist. */
 
 		ret_val = FALSE_;
-		chkin_("ZZEKVMCH", (ftnlen)8);
-		setmsg_("The relational operator # was not recognized.", (
-			ftnlen)45);
-		errint_("#", &ops[n - 1], (ftnlen)1);
-		sigerr_("SPICE(UNNATURALRELATION)", (ftnlen)24);
-		chkout_("ZZEKVMCH", (ftnlen)8);
+		chkin_(__global_state, "ZZEKVMCH", (ftnlen)8);
+		setmsg_(__global_state, "The relational operator # was not r"
+			"ecognized.", (ftnlen)45);
+		errint_(__global_state, "#", &ops[n - 1], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(UNNATURALRELATION)", (ftnlen)
+			24);
+		chkout_(__global_state, "ZZEKVMCH", (ftnlen)8);
 		return ret_val;
 	    }
 	}

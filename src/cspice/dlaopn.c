@@ -8,8 +8,7 @@
 
 
 extern dlaopn_init_t __dlaopn_init;
-static dlaopn_state_t* get_dlaopn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dlaopn_state_t* get_dlaopn_state(cspice_t* state) {
 	if (!state->dlaopn)
 		state->dlaopn = __cspice_allocate_module(sizeof(
 	dlaopn_state_t), &__dlaopn_init, sizeof(__dlaopn_init));
@@ -18,24 +17,25 @@ static dlaopn_state_t* get_dlaopn_state() {
 }
 
 /* $Procedure DLAOPN ( DLA, open new file ) */
-/* Subroutine */ int dlaopn_(char *fname, char *ftype, char *ifname, integer *
-	ncomch, integer *handle, ftnlen fname_len, ftnlen ftype_len, ftnlen 
-	ifname_len)
+/* Subroutine */ int dlaopn_(cspice_t* __global_state, char *fname, char *
+	ftype, char *ifname, integer *ncomch, integer *handle, ftnlen 
+	fname_len, ftnlen ftype_len, ftnlen ifname_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomr;
-    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int dasonw_(char *, char *, char *, integer *, 
-	    integer *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int dasadi_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasonw_(cspice_t*, char *, char *, char *, 
+	    integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dlaopn_state_t* __state = get_dlaopn_state();
+    dlaopn_state_t* __state = get_dlaopn_state(__global_state);
 /* $ Abstract */
 
 /*     Open a new DLA file and set the file type. */
@@ -365,10 +365,10 @@ static dlaopn_state_t* get_dlaopn_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DLAOPN", (ftnlen)6);
+    chkin_(__global_state, "DLAOPN", (ftnlen)6);
 
 /*     Compute the number of comment records required. */
 
@@ -377,33 +377,33 @@ static dlaopn_state_t* get_dlaopn_state() {
     } else if (*ncomch == 0) {
 	ncomr = 0;
     } else {
-	setmsg_("Requested number of comment characters must be non-negative"
-		" but was #.", (ftnlen)70);
-	errint_("#", ncomch, (ftnlen)1);
-	sigerr_("SPICE(BADRECORDCOUNT)", (ftnlen)21);
-	chkout_("DLAOPN", (ftnlen)6);
+	setmsg_(__global_state, "Requested number of comment characters must"
+		" be non-negative but was #.", (ftnlen)70);
+	errint_(__global_state, "#", ncomch, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADRECORDCOUNT)", (ftnlen)21);
+	chkout_(__global_state, "DLAOPN", (ftnlen)6);
 	return 0;
     }
 
 /*     Let the DAS "open new" routine do the work. */
 
-    dasonw_(fname, ftype, ifname, &ncomr, handle, fname_len, ftype_len, 
-	    ifname_len);
+    dasonw_(__global_state, fname, ftype, ifname, &ncomr, handle, fname_len, 
+	    ftype_len, ifname_len);
 
 /*     Write the format version. */
 
-    dasadi_(handle, &__state->c__1, &__state->c_b8);
+    dasadi_(__global_state, handle, &__state->c__1, &__state->c_b8);
 
 /*     Initialize the forward and backward segment list pointers. */
 
-    dasadi_(handle, &__state->c__1, &__state->c_n1);
-    dasadi_(handle, &__state->c__1, &__state->c_n1);
+    dasadi_(__global_state, handle, &__state->c__1, &__state->c_n1);
+    dasadi_(__global_state, handle, &__state->c__1, &__state->c_n1);
 
 /*     We leave the file open, since further writes to the file */
 /*     should occur next.  The file will eventually be closed */
 /*     by a call to DASCLS or DASLLC, if all goes well. */
 
-    chkout_("DLAOPN", (ftnlen)6);
+    chkout_(__global_state, "DLAOPN", (ftnlen)6);
     return 0;
 } /* dlaopn_ */
 

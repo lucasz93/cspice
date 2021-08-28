@@ -8,29 +8,28 @@
 
 
 typedef int replch_state_t;
-static replch_state_t* get_replch_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline replch_state_t* get_replch_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      REPLCH ( Replace characters in a string ) */
-/* Subroutine */ int replch_(char *instr, char *old, char *new__, char *
-	outstr, ftnlen instr_len, ftnlen old_len, ftnlen new_len, ftnlen 
-	outstr_len)
+/* Subroutine */ int replch_(cspice_t* __global_state, char *instr, char *old,
+	 char *new__, char *outstr, ftnlen instr_len, ftnlen old_len, ftnlen 
+	new_len, ftnlen outstr_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    replch_state_t* __state = get_replch_state();
+    replch_state_t* __state = get_replch_state(__global_state);
 /* $ Abstract */
 
 /*      Replace all occurrences of a single character with a second */
@@ -168,11 +167,11 @@ static replch_state_t* get_replch_state() {
 /*     Move the input string to the output string. If it's too long, */
 /*     this will truncate it. */
 
-    s_copy(outstr, instr, outstr_len, instr_len);
+    s_copy(&__global_state->f2c, outstr, instr, outstr_len, instr_len);
 
 /*     Check each character of OUTSTR and replace as necessary. */
 
-    i__1 = i_len(outstr, outstr_len);
+    i__1 = i_len(&__global_state->f2c, outstr, outstr_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (*(unsigned char *)&outstr[i__ - 1] == *(unsigned char *)old) {
 	    *(unsigned char *)&outstr[i__ - 1] = *(unsigned char *)new__;

@@ -257,7 +257,7 @@
    Participate in error handling
    */
 
-   chkin_c ( "recgeo_c");
+   chkin_c ( naif_state, "recgeo_c");
 
 
    /*

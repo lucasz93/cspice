@@ -8,8 +8,7 @@
 
 
 extern zzekcnam_init_t __zzekcnam_init;
-static zzekcnam_state_t* get_zzekcnam_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekcnam_state_t* get_zzekcnam_state(cspice_t* state) {
 	if (!state->zzekcnam)
 		state->zzekcnam = __cspice_allocate_module(sizeof(
 	zzekcnam_state_t), &__zzekcnam_init, sizeof(__zzekcnam_init));
@@ -18,20 +17,20 @@ static zzekcnam_state_t* get_zzekcnam_state() {
 }
 
 /* $Procedure      ZZEKCNAM ( EK, get column name ) */
-/* Subroutine */ int zzekcnam_(integer *handle, integer *coldsc, char *column,
-	 ftnlen column_len)
+/* Subroutine */ int zzekcnam_(cspice_t* __global_state, integer *handle, 
+	integer *coldsc, char *column, ftnlen column_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
-    extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrdc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
     integer nambas;
 
 
     /* Module state */
-    zzekcnam_state_t* __state = get_zzekcnam_state();
+    zzekcnam_state_t* __state = get_zzekcnam_state(__global_state);
 /* $ Abstract */
 
 /*     Look up the name of a column, given the column's descriptor. */
@@ -396,8 +395,8 @@ static zzekcnam_state_t* get_zzekcnam_state() {
     nambas = coldsc[4];
     i__1 = nambas + 1;
     i__2 = nambas + 32;
-    dasrdc_(handle, &i__1, &i__2, &__state->c__1, &__state->c__32, column, 
-	    column_len);
+    dasrdc_(__global_state, handle, &i__1, &i__2, &__state->c__1, &
+	    __state->c__32, column, column_len);
     return 0;
 } /* zzekcnam_ */
 

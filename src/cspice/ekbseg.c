@@ -8,8 +8,7 @@
 
 
 extern ekbseg_init_t __ekbseg_init;
-static ekbseg_state_t* get_ekbseg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekbseg_state_t* get_ekbseg_state(cspice_t* state) {
 	if (!state->ekbseg)
 		state->ekbseg = __cspice_allocate_module(sizeof(
 	ekbseg_state_t), &__ekbseg_init, sizeof(__ekbseg_init));
@@ -18,9 +17,9 @@ static ekbseg_state_t* get_ekbseg_state() {
 }
 
 /* $Procedure      EKBSEG ( EK, start new segment ) */
-/* Subroutine */ int ekbseg_(integer *handle, char *tabnam, integer *ncols, 
-	char *cnames, char *decls, integer *segno, ftnlen tabnam_len, ftnlen 
-	cnames_len, ftnlen decls_len)
+/* Subroutine */ int ekbseg_(cspice_t* __global_state, integer *handle, char *
+	tabnam, integer *ncols, char *cnames, char *decls, integer *segno, 
+	ftnlen tabnam_len, ftnlen cnames_len, ftnlen decls_len)
 {
     /* Initialized data */
 
@@ -29,40 +28,43 @@ static ekbseg_state_t* get_ekbseg_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzekpdec_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    integer i__;
-    extern integer zzekstyp_(integer *, integer *);
-    integer idend;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    integer stype;
-    extern logical failed_(void);
-    extern /* Subroutine */ int chckid_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int zzekpdec_(cspice_t*, char *, integer *, 
 	    ftnlen);
-    extern integer lastnb_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
+	    ftnlen);
+    integer i__;
+    extern integer zzekstyp_(cspice_t*, integer *, integer *);
+    integer idend;
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    integer stype;
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int chckid_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer cdscrs[1100]	/* was [11][100] */;
     integer nchars;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
-    extern /* Subroutine */ int lxdfid_(integer *);
-    extern /* Subroutine */ int lxidnt_(integer *, char *, integer *, integer 
-	    *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int zzekbs01_(integer *, char *, integer *, char *
-	    , integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekbs02_(integer *, char *, integer *, char *
-	    , integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int lxdfid_(cspice_t*, integer *);
+    extern /* Subroutine */ int lxidnt_(cspice_t*, integer *, char *, integer 
+	    *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekbs01_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekbs02_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, integer *, ftnlen, ftnlen);
 
 
     /* Module state */
-    ekbseg_state_t* __state = get_ekbseg_state();
+    ekbseg_state_t* __state = get_ekbseg_state(__global_state);
 /* $ Abstract */
 
 /*     Start a new segment in an E-kernel. */
@@ -1268,10 +1270,10 @@ static ekbseg_state_t* get_ekbseg_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKBSEG", (ftnlen)6);
+	chkin_(__global_state, "EKBSEG", (ftnlen)6);
     }
 
 /*     Before trying to actually write anything, do every error */
@@ -1280,50 +1282,53 @@ static ekbseg_state_t* get_ekbseg_state() {
 /*     Is this file handle valid--is the file open for paged write */
 /*     access?  Signal an error if not. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("EKBSEG", (ftnlen)6);
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKBSEG", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the default identifier specification the first time through. */
 
     if (__state->first) {
-	ssizei_(&__state->c__512, __state->idspec);
-	lxdfid_(__state->idspec);
+	ssizei_(__global_state, &__state->c__512, __state->idspec);
+	lxdfid_(__global_state, __state->idspec);
 	__state->first = FALSE_;
     }
 
 /*     The table name must not be too long, and all of its characters */
 /*     must be printable (it's ok for it to unprintable). */
 
-    chckid_("EK table name", &__state->c__32, tabnam, (ftnlen)13, tabnam_len);
-    if (failed_()) {
-	chkout_("EKBSEG", (ftnlen)6);
+    chckid_(__global_state, "EK table name", &__state->c__32, tabnam, (ftnlen)
+	    13, tabnam_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKBSEG", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure the table name satisfies all of our restrictions on */
 /*     allowed characters. */
 
-    lxidnt_(__state->idspec, tabnam, &__state->c__1, &idend, &nchars, 
-	    tabnam_len);
-    if (nchars == 0 || nchars < lastnb_(tabnam, tabnam_len)) {
-	setmsg_("Table name <#> violates syntax rules.", (ftnlen)37);
-	errch_("#", tabnam, (ftnlen)1, tabnam_len);
-	sigerr_("SPICE(INVALIDNAME)", (ftnlen)18);
-	chkout_("EKBSEG", (ftnlen)6);
+    lxidnt_(__global_state, __state->idspec, tabnam, &__state->c__1, &idend, &
+	    nchars, tabnam_len);
+    if (nchars == 0 || nchars < lastnb_(__global_state, tabnam, tabnam_len)) {
+	setmsg_(__global_state, "Table name <#> violates syntax rules.", (
+		ftnlen)37);
+	errch_(__global_state, "#", tabnam, (ftnlen)1, tabnam_len);
+	sigerr_(__global_state, "SPICE(INVALIDNAME)", (ftnlen)18);
+	chkout_(__global_state, "EKBSEG", (ftnlen)6);
 	return 0;
     }
 
 /*     Check out NCOLS. */
 
     if (*ncols < 1 || *ncols > 100) {
-	setmsg_("Number of columns must be in range 1:#, was #.", (ftnlen)46);
-	errint_("#", &__state->c__100, (ftnlen)1);
-	errint_("#", ncols, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("EKBSEG", (ftnlen)6);
+	setmsg_(__global_state, "Number of columns must be in range 1:#, was"
+		" #.", (ftnlen)46);
+	errint_(__global_state, "#", &__state->c__100, (ftnlen)1);
+	errint_(__global_state, "#", ncols, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "EKBSEG", (ftnlen)6);
 	return 0;
     }
 
@@ -1331,25 +1336,26 @@ static ekbseg_state_t* get_ekbseg_state() {
 
     i__1 = *ncols;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	chckid_("EK column name", &__state->c__32, cnames + (i__ - 1) * 
-		cnames_len, (ftnlen)14, cnames_len);
-	if (failed_()) {
-	    chkout_("EKBSEG", (ftnlen)6);
+	chckid_(__global_state, "EK column name", &__state->c__32, cnames + (
+		i__ - 1) * cnames_len, (ftnlen)14, cnames_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "EKBSEG", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Make sure each column name satisfies all of our restrictions on */
 /*        allowed characters. */
 
-	lxidnt_(__state->idspec, cnames + (i__ - 1) * cnames_len, &
-		__state->c__1, &idend, &nchars, cnames_len);
-	if (nchars == 0 || nchars < lastnb_(cnames + (i__ - 1) * cnames_len, 
-		cnames_len)) {
-	    setmsg_("Column name <#> violates syntax rules.", (ftnlen)38);
-	    errch_("#", cnames + (i__ - 1) * cnames_len, (ftnlen)1, 
-		    cnames_len);
-	    sigerr_("SPICE(INVALIDNAME)", (ftnlen)18);
-	    chkout_("EKBSEG", (ftnlen)6);
+	lxidnt_(__global_state, __state->idspec, cnames + (i__ - 1) * 
+		cnames_len, &__state->c__1, &idend, &nchars, cnames_len);
+	if (nchars == 0 || nchars < lastnb_(__global_state, cnames + (i__ - 1)
+		 * cnames_len, cnames_len)) {
+	    setmsg_(__global_state, "Column name <#> violates syntax rules.", 
+		    (ftnlen)38);
+	    errch_(__global_state, "#", cnames + (i__ - 1) * cnames_len, (
+		    ftnlen)1, cnames_len);
+	    sigerr_(__global_state, "SPICE(INVALIDNAME)", (ftnlen)18);
+	    chkout_(__global_state, "EKBSEG", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -1362,35 +1368,37 @@ static ekbseg_state_t* get_ekbseg_state() {
 /*        Parse the declaration of the Ith column.  The descriptor is */
 /*        returned with all elements other than pointers initialized. */
 
-	zzekpdec_(decls + (i__ - 1) * decls_len, &cdscrs[(i__2 = i__ * 11 - 
-		11) < 1100 && 0 <= i__2 ? i__2 : s_rnge("cdscrs", i__2, "ekb"
-		"seg_", (ftnlen)549)], decls_len);
-	if (failed_()) {
-	    chkout_("EKBSEG", (ftnlen)6);
+	zzekpdec_(__global_state, decls + (i__ - 1) * decls_len, &cdscrs[(
+		i__2 = i__ * 11 - 11) < 1100 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "cdscrs", i__2, "ekbseg_", (ftnlen)549)],
+		 decls_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "EKBSEG", (ftnlen)6);
 	    return 0;
 	}
     }
 
 /*     Determine the segment type. */
 
-    stype = zzekstyp_(ncols, cdscrs);
+    stype = zzekstyp_(__global_state, ncols, cdscrs);
 
 /*     Create the segment metadata according to the segment's type. */
 
     if (stype == 1) {
-	zzekbs01_(handle, tabnam, ncols, cnames, cdscrs, segno, tabnam_len, 
-		cnames_len);
+	zzekbs01_(__global_state, handle, tabnam, ncols, cnames, cdscrs, 
+		segno, tabnam_len, cnames_len);
     } else if (stype == 2) {
-	zzekbs02_(handle, tabnam, ncols, cnames, cdscrs, segno, tabnam_len, 
-		cnames_len);
+	zzekbs02_(__global_state, handle, tabnam, ncols, cnames, cdscrs, 
+		segno, tabnam_len, cnames_len);
     } else {
-	setmsg_("Segment type # is not currently supported.", (ftnlen)42);
-	errint_("#", &stype, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("EKBSEG", (ftnlen)6);
+	setmsg_(__global_state, "Segment type # is not currently supported.", 
+		(ftnlen)42);
+	errint_(__global_state, "#", &stype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "EKBSEG", (ftnlen)6);
 	return 0;
     }
-    chkout_("EKBSEG", (ftnlen)6);
+    chkout_(__global_state, "EKBSEG", (ftnlen)6);
     return 0;
 } /* ekbseg_ */
 

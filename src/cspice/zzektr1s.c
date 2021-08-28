@@ -8,8 +8,7 @@
 
 
 extern zzektr1s_init_t __zzektr1s_init;
-static zzektr1s_state_t* get_zzektr1s_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektr1s_state_t* get_zzektr1s_state(cspice_t* state) {
 	if (!state->zzektr1s)
 		state->zzektr1s = __cspice_allocate_module(sizeof(
 	zzektr1s_state_t), &__zzektr1s_init, sizeof(__zzektr1s_init));
@@ -18,14 +17,14 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 }
 
 /* $Procedure      ZZEKTR1S ( EK tree, one-shot load ) */
-/* Subroutine */ int zzektr1s_(integer *handle, integer *tree, integer *size, 
-	integer *values)
+/* Subroutine */ int zzektr1s_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *size, integer *values)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer base;
@@ -34,38 +33,40 @@ static zzektr1s_state_t* get_zzektr1s_state() {
     integer node;
     integer subd;
     integer next;
-    extern /* Subroutine */ int zzekpgal_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekpgal_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgri_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
-    extern integer zzektrbs_(integer *);
+    extern /* Subroutine */ int zzekpgwi_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer zzektrbs_(cspice_t*, integer *);
     integer d__;
     integer i__;
     integer n;
     integer q;
     integer child;
     integer s;
-    extern integer zzektrsz_(integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer zzektrsz_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer level;
     integer nkids;
     integer npred;
     integer nkeys;
     integer tsize;
     integer kidbas;
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer basidx;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     integer bigsiz;
     integer nnodes;
     integer nsmall;
     integer stnbig[10];
     integer stnbas[10];
     integer stnode[10];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer maxsiz;
     integer reqsiz;
     integer stlsiz[10];
@@ -73,15 +74,15 @@ static zzektr1s_state_t* get_zzektr1s_state() {
     integer stnkey[10];
     integer subsiz;
     integer totnod;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer div;
     integer key;
 
 
     /* Module state */
-    zzektr1s_state_t* __state = get_zzektr1s_state();
+    zzektr1s_state_t* __state = get_zzektr1s_state(__global_state);
 /* $ Abstract */
 
 /*     One-shot tree load:  insert an entire array into an empty */
@@ -615,22 +616,22 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZEKTR1S", (ftnlen)8);
+    chkin_(__global_state, "ZZEKTR1S", (ftnlen)8);
 
 /*     Make sure the input tree is empty. */
 
-    tsize = zzektrsz_(handle, tree);
+    tsize = zzektrsz_(__global_state, handle, tree);
     if (tsize > 0) {
-	setmsg_("Tree has size #; should be empty.EK = #; TREE = #.", (ftnlen)
-		50);
-	errint_("#", &tsize, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", tree, (ftnlen)1);
-	sigerr_("SPICE(NONEMPTYTREE)", (ftnlen)19);
-	chkout_("ZZEKTR1S", (ftnlen)8);
+	setmsg_(__global_state, "Tree has size #; should be empty.EK = #; TR"
+		"EE = #.", (ftnlen)50);
+	errint_(__global_state, "#", &tsize, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", tree, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONEMPTYTREE)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKTR1S", (ftnlen)8);
 	return 0;
     }
 
@@ -696,14 +697,14 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 /*     If the tree must be deeper than we expected, we've a problem. */
 
     if (d__ > 10) {
-	setmsg_("Tree has depth #; max supported depth is #.EK = #; TREE = #."
-		, (ftnlen)60);
-	errint_("#", &d__, (ftnlen)1);
-	errint_("#", &__state->c__10, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", tree, (ftnlen)1);
-	sigerr_("SPICE(COUNTTOOLARGE)", (ftnlen)20);
-	chkout_("ZZEKTR1S", (ftnlen)8);
+	setmsg_(__global_state, "Tree has depth #; max supported depth is #."
+		"EK = #; TREE = #.", (ftnlen)60);
+	errint_(__global_state, "#", &d__, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__10, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", tree, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(COUNTTOOLARGE)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKTR1S", (ftnlen)8);
 	return 0;
     }
 
@@ -833,7 +834,7 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 
 /*              Read in the root page. */
 
-		zzekpgri_(handle, tree, page);
+		zzekpgri_(__global_state, handle, tree, page);
 
 /*              We have enough information to fill in the root node. */
 /*              We'll allocate nodes for the immediate children. */
@@ -850,8 +851,8 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 			npred = 0;
 		    } else {
 			npred = page[(i__2 = i__ + 3) < 256 && 0 <= i__2 ? 
-				i__2 : s_rnge("page", i__2, "zzektr1s_", (
-				ftnlen)480)];
+				i__2 : s_rnge(&__global_state->f2c, "page", 
+				i__2, "zzektr1s_", (ftnlen)480)];
 		    }
 		    if (d__ > 1) {
 
@@ -865,11 +866,12 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 		    } else {
 			key = i__;
 		    }
-		    page[(i__2 = i__ + 4) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			    "page", i__2, "zzektr1s_", (ftnlen)499)] = key;
+		    page[(i__2 = i__ + 4) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "page", i__2, "zzektr1s_", (
+			    ftnlen)499)] = key;
 		    page[(i__2 = i__ + 171) < 256 && 0 <= i__2 ? i__2 : 
-			    s_rnge("page", i__2, "zzektr1s_", (ftnlen)500)] = 
-			    values[key - 1];
+			    s_rnge(&__global_state->f2c, "page", i__2, "zzek"
+			    "tr1s_", (ftnlen)500)] = values[key - 1];
 		}
 		totnod = 1;
 		i__1 = nkids;
@@ -878,9 +880,11 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 /*                 Allocate a node for the Ith child.  Store pointers */
 /*                 to these nodes. */
 
-		    zzekpgal_(handle, &__state->c__3, &child, &base);
+		    zzekpgal_(__global_state, handle, &__state->c__3, &child, 
+			    &base);
 		    page[(i__2 = i__ + 87) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			    "page", i__2, "zzektr1s_", (ftnlen)513)] = child;
+			    &__global_state->f2c, "page", i__2, "zzektr1s_", (
+			    ftnlen)513)] = child;
 		    ++totnod;
 		}
 
@@ -896,12 +900,12 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 
 /*              Write out the root. */
 
-		zzekpgwi_(handle, tree, page);
+		zzekpgwi_(__global_state, handle, tree, page);
 	    } else if (level < d__) {
 
 /*              The current node is a non-leaf child node. */
 
-		cleari_(&__state->c__256, page);
+		cleari_(__global_state, &__state->c__256, page);
 
 /*              The tree headed by this node has depth D-LEVEL+1 and */
 /*              must hold SUBSIZ keys.  We must figure out the size */
@@ -1006,20 +1010,20 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 			npred = basidx;
 		    } else {
 			npred = basidx + page[(i__2 = i__ - 1) < 256 && 0 <= 
-				i__2 ? i__2 : s_rnge("page", i__2, "zzektr1s_"
-				, (ftnlen)652)];
+				i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"page", i__2, "zzektr1s_", (ftnlen)652)];
 		    }
 		    if (i__ <= nbig) {
 			key = npred + bigsiz + 1;
 		    } else {
 			key = npred + bigsiz;
 		    }
-		    page[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			    "page", i__2, "zzektr1s_", (ftnlen)661)] = key - 
-			    basidx;
+		    page[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "page", i__2, "zzektr1s_", (
+			    ftnlen)661)] = key - basidx;
 		    page[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : 
-			    s_rnge("page", i__2, "zzektr1s_", (ftnlen)662)] = 
-			    values[key - 1];
+			    s_rnge(&__global_state->f2c, "page", i__2, "zzek"
+			    "tr1s_", (ftnlen)662)] = values[key - 1];
 		}
 		i__1 = nkids;
 		for (i__ = 1; i__ <= i__1; ++i__) {
@@ -1027,16 +1031,18 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 /*                 Allocate a node for the Ith child.  Store pointers */
 /*                 to these nodes. */
 
-		    zzekpgal_(handle, &__state->c__3, &child, &base);
+		    zzekpgal_(__global_state, handle, &__state->c__3, &child, 
+			    &base);
 		    page[(i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			    "page", i__2, "zzektr1s_", (ftnlen)674)] = child;
+			    &__global_state->f2c, "page", i__2, "zzektr1s_", (
+			    ftnlen)674)] = child;
 		    ++totnod;
 		}
 
 /*              We can now fill in the metadata for the current node. */
 
 		page[0] = nkeys;
-		zzekpgwi_(handle, &node, page);
+		zzekpgwi_(__global_state, handle, &node, page);
 	    }
 
 /*           Unless the current node is a leaf node, prepare to visit */
@@ -1046,18 +1052,24 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 
 /*              Push our current state. */
 
-		stnode[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stnode", i__1, "zzektr1s_", (ftnlen)696)] = node;
-		stnkey[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stnkey", i__1, "zzektr1s_", (ftnlen)697)] = nkeys;
-		stlsiz[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stlsiz", i__1, "zzektr1s_", (ftnlen)698)] = bigsiz;
-		stnbig[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stnbig", i__1, "zzektr1s_", (ftnlen)699)] = nbig;
-		stnext[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stnext", i__1, "zzektr1s_", (ftnlen)700)] = 2;
-		stnbas[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stnbas", i__1, "zzektr1s_", (ftnlen)701)] = basidx;
+		stnode[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stnode", i__1, "zzektr1s_", (
+			ftnlen)696)] = node;
+		stnkey[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stnkey", i__1, "zzektr1s_", (
+			ftnlen)697)] = nkeys;
+		stlsiz[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stlsiz", i__1, "zzektr1s_", (
+			ftnlen)698)] = bigsiz;
+		stnbig[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stnbig", i__1, "zzektr1s_", (
+			ftnlen)699)] = nbig;
+		stnext[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stnext", i__1, "zzektr1s_", (
+			ftnlen)700)] = 2;
+		stnbas[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stnbas", i__1, "zzektr1s_", (
+			ftnlen)701)] = basidx;
 
 /*              NEXT is already set to 1.  BASIDX is set, since the */
 /*              base index of the first child is that of the parent. */
@@ -1069,7 +1081,8 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 		}
 		++level;
 		node = page[(i__1 = kidbas) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("page", i__1, "zzektr1s_", (ftnlen)714)];
+			s_rnge(&__global_state->f2c, "page", i__1, "zzektr1s_"
+			, (ftnlen)714)];
 		subsiz = bigsiz;
 	    } else if (level > 1) {
 
@@ -1081,17 +1094,18 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 		i__1 = nkeys;
 		for (i__ = 1; i__ <= i__1; ++i__) {
 		    key = basidx + i__;
-		    page[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			    "page", i__2, "zzektr1s_", (ftnlen)729)] = i__;
+		    page[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "page", i__2, "zzektr1s_", (
+			    ftnlen)729)] = i__;
 		    page[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : 
-			    s_rnge("page", i__2, "zzektr1s_", (ftnlen)730)] = 
-			    values[key - 1];
+			    s_rnge(&__global_state->f2c, "page", i__2, "zzek"
+			    "tr1s_", (ftnlen)730)] = values[key - 1];
 		}
 
 /*              We can now fill in the metadata for the current node. */
 
 		page[0] = nkeys;
-		zzekpgwi_(handle, &node, page);
+		zzekpgwi_(__global_state, handle, &node, page);
 
 /*              A leaf node is a subtree unto itself, and we're */
 /*              done with this subtree.  Pop our state. */
@@ -1099,28 +1113,28 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 		--level;
 		if (level >= 1) {
 		    node = stnode[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnode", i__1, "zzektr1s_", (ftnlen)749)
-			    ];
+			    : s_rnge(&__global_state->f2c, "stnode", i__1, 
+			    "zzektr1s_", (ftnlen)749)];
 		    nkeys = stnkey[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
-			    i__1 : s_rnge("stnkey", i__1, "zzektr1s_", (
-			    ftnlen)750)];
+			    i__1 : s_rnge(&__global_state->f2c, "stnkey", 
+			    i__1, "zzektr1s_", (ftnlen)750)];
 		    bigsiz = stlsiz[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
-			    i__1 : s_rnge("stlsiz", i__1, "zzektr1s_", (
-			    ftnlen)751)];
+			    i__1 : s_rnge(&__global_state->f2c, "stlsiz", 
+			    i__1, "zzektr1s_", (ftnlen)751)];
 		    nbig = stnbig[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnbig", i__1, "zzektr1s_", (ftnlen)752)
-			    ];
+			    : s_rnge(&__global_state->f2c, "stnbig", i__1, 
+			    "zzektr1s_", (ftnlen)752)];
 		    next = stnext[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnext", i__1, "zzektr1s_", (ftnlen)753)
-			    ];
+			    : s_rnge(&__global_state->f2c, "stnext", i__1, 
+			    "zzektr1s_", (ftnlen)753)];
 		    basidx = stnbas[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
-			    i__1 : s_rnge("stnbas", i__1, "zzektr1s_", (
-			    ftnlen)754)];
+			    i__1 : s_rnge(&__global_state->f2c, "stnbas", 
+			    i__1, "zzektr1s_", (ftnlen)754)];
 		    nkids = nkeys + 1;
 
 /*                 Read in the current node. */
 
-		    zzekpgri_(handle, &node, page);
+		    zzekpgri_(__global_state, handle, &node, page);
 		}
 	    } else {
 
@@ -1141,40 +1155,44 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 
 /*              Prepare to visit the next child of the current node. */
 
-		stnext[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-			"stnext", i__1, "zzektr1s_", (ftnlen)786)] = next + 1;
+		stnext[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stnext", i__1, "zzektr1s_", (
+			ftnlen)786)] = next + 1;
 		if (level == 1) {
 		    kidbas = 88;
 		} else {
 		    kidbas = 64;
 		}
 		node = page[(i__1 = kidbas + next - 1) < 256 && 0 <= i__1 ? 
-			i__1 : s_rnge("page", i__1, "zzektr1s_", (ftnlen)796)]
-			;
+			i__1 : s_rnge(&__global_state->f2c, "page", i__1, 
+			"zzektr1s_", (ftnlen)796)];
 		if (next <= nbig) {
 		    subsiz = stlsiz[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
-			    i__1 : s_rnge("stlsiz", i__1, "zzektr1s_", (
-			    ftnlen)800)];
+			    i__1 : s_rnge(&__global_state->f2c, "stlsiz", 
+			    i__1, "zzektr1s_", (ftnlen)800)];
 		} else {
 		    subsiz = stlsiz[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
-			    i__1 : s_rnge("stlsiz", i__1, "zzektr1s_", (
-			    ftnlen)802)] - 1;
+			    i__1 : s_rnge(&__global_state->f2c, "stlsiz", 
+			    i__1, "zzektr1s_", (ftnlen)802)] - 1;
 		}
 		if (next <= nbig + 1) {
 		    basidx = stnbas[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
-			    i__1 : s_rnge("stnbas", i__1, "zzektr1s_", (
-			    ftnlen)808)] + (next - 1) * stlsiz[(i__2 = level 
-			    - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("stlsiz", 
+			    i__1 : s_rnge(&__global_state->f2c, "stnbas", 
+			    i__1, "zzektr1s_", (ftnlen)808)] + (next - 1) * 
+			    stlsiz[(i__2 = level - 1) < 10 && 0 <= i__2 ? 
+			    i__2 : s_rnge(&__global_state->f2c, "stlsiz", 
 			    i__2, "zzektr1s_", (ftnlen)808)] + (next - 1);
 		} else {
 		    basidx = stnbas[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
-			    i__1 : s_rnge("stnbas", i__1, "zzektr1s_", (
-			    ftnlen)814)] + nbig * stlsiz[(i__2 = level - 1) < 
-			    10 && 0 <= i__2 ? i__2 : s_rnge("stlsiz", i__2, 
+			    i__1 : s_rnge(&__global_state->f2c, "stnbas", 
+			    i__1, "zzektr1s_", (ftnlen)814)] + nbig * stlsiz[(
+			    i__2 = level - 1) < 10 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "stlsiz", i__2, 
 			    "zzektr1s_", (ftnlen)814)] + (next - nbig - 1) * (
 			    stlsiz[(i__3 = level - 1) < 10 && 0 <= i__3 ? 
-			    i__3 : s_rnge("stlsiz", i__3, "zzektr1s_", (
-			    ftnlen)814)] - 1) + (next - 1);
+			    i__3 : s_rnge(&__global_state->f2c, "stlsiz", 
+			    i__3, "zzektr1s_", (ftnlen)814)] - 1) + (next - 1)
+			    ;
 		}
 		++level;
 		next = 1;
@@ -1188,28 +1206,28 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 		--level;
 		if (level >= 1) {
 		    node = stnode[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnode", i__1, "zzektr1s_", (ftnlen)835)
-			    ];
+			    : s_rnge(&__global_state->f2c, "stnode", i__1, 
+			    "zzektr1s_", (ftnlen)835)];
 		    nkeys = stnkey[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
-			    i__1 : s_rnge("stnkey", i__1, "zzektr1s_", (
-			    ftnlen)836)];
+			    i__1 : s_rnge(&__global_state->f2c, "stnkey", 
+			    i__1, "zzektr1s_", (ftnlen)836)];
 		    bigsiz = stlsiz[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
-			    i__1 : s_rnge("stlsiz", i__1, "zzektr1s_", (
-			    ftnlen)837)];
+			    i__1 : s_rnge(&__global_state->f2c, "stlsiz", 
+			    i__1, "zzektr1s_", (ftnlen)837)];
 		    nbig = stnbig[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnbig", i__1, "zzektr1s_", (ftnlen)838)
-			    ];
+			    : s_rnge(&__global_state->f2c, "stnbig", i__1, 
+			    "zzektr1s_", (ftnlen)838)];
 		    next = stnext[(i__1 = level - 1) < 10 && 0 <= i__1 ? i__1 
-			    : s_rnge("stnext", i__1, "zzektr1s_", (ftnlen)839)
-			    ];
+			    : s_rnge(&__global_state->f2c, "stnext", i__1, 
+			    "zzektr1s_", (ftnlen)839)];
 		    basidx = stnbas[(i__1 = level - 1) < 10 && 0 <= i__1 ? 
-			    i__1 : s_rnge("stnbas", i__1, "zzektr1s_", (
-			    ftnlen)840)];
+			    i__1 : s_rnge(&__global_state->f2c, "stnbas", 
+			    i__1, "zzektr1s_", (ftnlen)840)];
 		    nkids = nkeys + 1;
 
 /*                 Read in the current node. */
 
-		    zzekpgri_(handle, &node, page);
+		    zzekpgri_(__global_state, handle, &node, page);
 		}
 	    }
 	}
@@ -1230,11 +1248,11 @@ static zzektr1s_state_t* get_zzektr1s_state() {
 
 /*     The last chore is setting the total number of nodes in the root. */
 
-    base = zzektrbs_(tree);
+    base = zzektrbs_(__global_state, tree);
     i__1 = base + 2;
     i__2 = base + 2;
-    dasudi_(handle, &i__1, &i__2, &totnod);
-    chkout_("ZZEKTR1S", (ftnlen)8);
+    dasudi_(__global_state, handle, &i__1, &i__2, &totnod);
+    chkout_(__global_state, "ZZEKTR1S", (ftnlen)8);
     return 0;
 } /* zzektr1s_ */
 

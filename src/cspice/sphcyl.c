@@ -8,18 +8,17 @@
 
 
 typedef int sphcyl_state_t;
-static sphcyl_state_t* get_sphcyl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sphcyl_state_t* get_sphcyl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPHCYL ( Spherical to cylindrical coordinates ) */
-/* Subroutine */ int sphcyl_(doublereal *radius, doublereal *colat, 
-	doublereal *slong, doublereal *r__, doublereal *long__, doublereal *
-	z__)
+/* Subroutine */ int sphcyl_(cspice_t* __global_state, doublereal *radius, 
+	doublereal *colat, doublereal *slong, doublereal *r__, doublereal *
+	long__, doublereal *z__)
 {
     /* Builtin functions */
-    double sin(doublereal), cos(doublereal);
+    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal rr;
@@ -27,7 +26,7 @@ static sphcyl_state_t* get_sphcyl_state() {
 
 
     /* Module state */
-    sphcyl_state_t* __state = get_sphcyl_state();
+    sphcyl_state_t* __state = get_sphcyl_state(__global_state);
 /* $ Abstract */
 
 /*     This routine converts from spherical coordinates to cylindrical */
@@ -173,8 +172,8 @@ static sphcyl_state_t* get_sphcyl_state() {
 /*     Convert to cylindrical coordinates, storing the results in */
 /*     temporary variables. */
 
-    rr = *radius * sin(*colat);
-    zz = *radius * cos(*colat);
+    rr = *radius * sin(&__global_state->f2c, *colat);
+    zz = *radius * cos(&__global_state->f2c, *colat);
 
 /*     Move the results to the output variables. */
 

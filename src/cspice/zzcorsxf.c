@@ -8,8 +8,7 @@
 
 
 extern zzcorsxf_init_t __zzcorsxf_init;
-static zzcorsxf_state_t* get_zzcorsxf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzcorsxf_state_t* get_zzcorsxf_state(cspice_t* state) {
 	if (!state->zzcorsxf)
 		state->zzcorsxf = __cspice_allocate_module(sizeof(
 	zzcorsxf_state_t), &__zzcorsxf_init, sizeof(__zzcorsxf_init));
@@ -18,25 +17,27 @@ static zzcorsxf_state_t* get_zzcorsxf_state() {
 }
 
 /* $Procedure ZZCORSXF ( Correct state transformation matrix ) */
-/* Subroutine */ int zzcorsxf_(logical *xmit, doublereal *dlt, doublereal *
-	xform, doublereal *corxfm)
+/* Subroutine */ int zzcorsxf_(cspice_t* __global_state, logical *xmit, 
+	doublereal *dlt, doublereal *xform, doublereal *corxfm)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal scale;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     doublereal ltsign;
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
     integer col;
 
 
     /* Module state */
-    zzcorsxf_state_t* __state = get_zzcorsxf_state();
+    zzcorsxf_state_t* __state = get_zzcorsxf_state(__global_state);
 /* $ Abstract */
 
 /*     Correct a state transformation matrix for the rate of change of */
@@ -444,7 +445,7 @@ static zzcorsxf_state_t* get_zzcorsxf_state() {
 /*     the lower left, first copy the input matrix */
 /*     to the output matrix. */
 
-    moved_(xform, &__state->c__36, corxfm);
+    moved_(__global_state, xform, &__state->c__36, corxfm);
 
 /*     Adjust the rotation derivative block for */
 /*     the rate of change of light time. All */
@@ -459,8 +460,9 @@ static zzcorsxf_state_t* get_zzcorsxf_state() {
 /*        Scale the vector starting at index */
 /*        (4,COL) in place. */
 
-	vsclip_(&scale, &corxfm[(i__1 = col * 6 - 3) < 36 && 0 <= i__1 ? i__1 
-		: s_rnge("corxfm", i__1, "zzcorsxf_", (ftnlen)447)]);
+	vsclip_(__global_state, &scale, &corxfm[(i__1 = col * 6 - 3) < 36 && 
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "corxfm", 
+		i__1, "zzcorsxf_", (ftnlen)447)]);
     }
     return 0;
 } /* zzcorsxf_ */

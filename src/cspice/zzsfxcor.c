@@ -8,8 +8,7 @@
 
 
 extern zzsfxcor_init_t __zzsfxcor_init;
-static zzsfxcor_state_t* get_zzsfxcor_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzsfxcor_state_t* get_zzsfxcor_state(cspice_t* state) {
 	if (!state->zzsfxcor)
 		state->zzsfxcor = __cspice_allocate_module(sizeof(
 	zzsfxcor_state_t), &__zzsfxcor_init, sizeof(__zzsfxcor_init));
@@ -18,12 +17,13 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 }
 
 /* $Procedure ZZSFXCOR ( Ray-surface intercept core algorithm ) */
-/* Subroutine */ int zzsfxcor_(S_fp udnear, S_fp udmaxr, S_fp udrayx, integer 
-	*trgcde, doublereal *et, char *abcorr, logical *uselt, logical *usecn,
-	 logical *usestl, logical *xmit, char *fixref, integer *obscde, 
-	integer *dfrcde, integer *dclass, integer *dcentr, doublereal *dvec, 
-	doublereal *spoint, doublereal *trgepc, doublereal *srfvec, logical *
-	found, ftnlen abcorr_len, ftnlen fixref_len)
+/* Subroutine */ int zzsfxcor_(cspice_t* __global_state, S_fp udnear, S_fp 
+	udmaxr, S_fp udrayx, integer *trgcde, doublereal *et, char *abcorr, 
+	logical *uselt, logical *usecn, logical *usestl, logical *xmit, char *
+	fixref, integer *obscde, integer *dfrcde, integer *dclass, integer *
+	dcentr, doublereal *dvec, doublereal *spoint, doublereal *trgepc, 
+	doublereal *srfvec, logical *found, ftnlen abcorr_len, ftnlen 
+	fixref_len)
 {
     /* Initialized data */
 
@@ -32,21 +32,21 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal dist;
     doublereal udir[3];
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     integer nitr;
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal rpos[3];
     doublereal tpos[3];
     doublereal j2dir[3];
@@ -55,25 +55,25 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
     integer i__;
     doublereal s;
     doublereal range;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal pnear[3];
-    extern doublereal vdist_(doublereal *, doublereal *);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
     doublereal xform[9]	/* was [3][3] */;
-    extern doublereal vnorm_(doublereal *);
-    extern logical vzero_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     doublereal j2geom[3];
     doublereal r2jmat[9]	/* was [3][3] */;
     doublereal j2tmat[9]	/* was [3][3] */;
-    extern logical failed_(void);
-    extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
-	    doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int refchg_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
     doublereal etdiff;
     doublereal lt;
-    extern doublereal dasine_(doublereal *, doublereal *);
+    extern doublereal dasine_(cspice_t*, doublereal *, doublereal *);
     doublereal refepc;
-    extern doublereal clight_(void);
+    extern doublereal clight_(cspice_t*);
     doublereal ltdiff;
-    extern doublereal touchd_(doublereal *);
+    extern doublereal touchd_(cspice_t*, doublereal *);
     doublereal ltcent;
     doublereal maxrad;
     doublereal negpos[3];
@@ -85,36 +85,38 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
     doublereal srflen;
     doublereal stldir[3];
     doublereal trgdir[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal prevlt;
     doublereal ssbost[6];
     doublereal ssbtst[6];
     doublereal stlerr[3];
     doublereal stltmp[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int spkezp_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int stlabx_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int vhatip_(doublereal *);
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
 	    ;
+    extern /* Subroutine */ int pxform_(cspice_t*, char *, char *, doublereal 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkssb_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int stelab_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int stlabx_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    zzsfxcor_state_t* __state = get_zzsfxcor_state();
+    zzsfxcor_state_t* __state = get_zzsfxcor_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -810,10 +812,10 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSFXCOR", (ftnlen)8);
+    chkin_(__global_state, "ZZSFXCOR", (ftnlen)8);
 
 /*     Nothing found yet. */
 
@@ -821,11 +823,11 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 
 /*     Check for a zero ray direction vector. */
 
-    if (vzero_(dvec)) {
-	setmsg_("Input ray direction was the zero vector; this vector must b"
-		"e non-zero.", (ftnlen)70);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("ZZSFXCOR", (ftnlen)8);
+    if (vzero_(__global_state, dvec)) {
+	setmsg_(__global_state, "Input ray direction was the zero vector; th"
+		"is vector must be non-zero.", (ftnlen)70);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	return 0;
     }
 
@@ -842,29 +844,33 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
     } else {
 	s = 0.;
     }
-    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    if (__state->first || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        Construct aberration correction string without stellar */
 /*        aberration specification. */
 
 	if (*uselt) {
 	    if (*xmit) {
-		s_copy(__state->loccor, "X", (ftnlen)5, (ftnlen)1);
+		s_copy(&__global_state->f2c, __state->loccor, "X", (ftnlen)5, 
+			(ftnlen)1);
 	    } else {
-		s_copy(__state->loccor, " ", (ftnlen)5, (ftnlen)1);
+		s_copy(&__global_state->f2c, __state->loccor, " ", (ftnlen)5, 
+			(ftnlen)1);
 	    }
 	    if (*usecn) {
-		suffix_("CN", &__state->c__0, __state->loccor, (ftnlen)2, (
-			ftnlen)5);
+		suffix_(__global_state, "CN", &__state->c__0, __state->loccor,
+			 (ftnlen)2, (ftnlen)5);
 	    } else {
-		suffix_("LT", &__state->c__0, __state->loccor, (ftnlen)2, (
-			ftnlen)5);
+		suffix_(__global_state, "LT", &__state->c__0, __state->loccor,
+			 (ftnlen)2, (ftnlen)5);
 	    }
 	} else {
-	    s_copy(__state->loccor, "NONE", (ftnlen)5, (ftnlen)4);
+	    s_copy(&__global_state->f2c, __state->loccor, "NONE", (ftnlen)5, (
+		    ftnlen)4);
 	}
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
 	__state->first = FALSE_;
     }
 
@@ -892,17 +898,17 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*            that corrected vector in order to compute the intercept */
 /*            point. */
 
-    spkezp_(trgcde, et, fixref, __state->loccor, obscde, tpos, &lt, 
-	    fixref_len, (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZSFXCOR", (ftnlen)8);
+    spkezp_(__global_state, trgcde, et, fixref, __state->loccor, obscde, tpos,
+	     &lt, fixref_len, (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	return 0;
     }
 
 /*     Negate the target's position to obtain the position of the */
 /*     observer relative to the target. */
 
-    vminus_(tpos, obspos);
+    vminus_(__global_state, tpos, obspos);
 
 /*     We now need to convert the direction vector into the */
 /*     body fixed frame associated with the target. The target */
@@ -946,10 +952,10 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*        Find the light time from the observer to the center of */
 /*        frame DREF. */
 
-	spkezp_(dcentr, et, "J2000", abcorr, obscde, rpos, &ltcent, (ftnlen)5,
-		 abcorr_len);
-	if (failed_()) {
-	    chkout_("ZZSFXCOR", (ftnlen)8);
+	spkezp_(__global_state, dcentr, et, "J2000", abcorr, obscde, rpos, &
+		ltcent, (ftnlen)5, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	    return 0;
 	}
 	refepc = *et + s * ltcent;
@@ -972,28 +978,29 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*     other hand, so we don't have to recompute J2DIR. We need TRGDIR */
 /*     in all cases. */
 
-    refchg_(dfrcde, &__state->c__1, &refepc, r2jmat);
-    if (failed_()) {
-	chkout_("ZZSFXCOR", (ftnlen)8);
+    refchg_(__global_state, dfrcde, &__state->c__1, &refepc, r2jmat);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	return 0;
     }
-    mxv_(r2jmat, dvec, j2dir);
+    mxv_(__global_state, r2jmat, dvec, j2dir);
 
 /*     Save this version of J2DIR as J2GEOM. Later we'll */
 /*     modify J2DIR, if necessary, to account for stellar */
 /*     aberration. */
 
-    vequ_(j2dir, j2geom);
+    vequ_(__global_state, j2dir, j2geom);
 
 /*     Map J2DIR (in the J2000 frame) to the target body-fixed */
 /*     frame. */
 
-    pxform_("J2000", fixref, trgepc, j2tmat, (ftnlen)5, fixref_len);
-    if (failed_()) {
-	chkout_("ZZSFXCOR", (ftnlen)8);
+    pxform_(__global_state, "J2000", fixref, trgepc, j2tmat, (ftnlen)5, 
+	    fixref_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	return 0;
     }
-    mxv_(j2tmat, j2dir, trgdir);
+    mxv_(__global_state, j2tmat, j2dir, trgdir);
 
 /*     At this point, */
 
@@ -1006,9 +1013,9 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*     the solar system barycenter at ET. We'll use this in */
 /*     several places later. */
 
-    spkssb_(obscde, et, "J2000", ssbost, (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZSFXCOR", (ftnlen)8);
+    spkssb_(__global_state, obscde, et, "J2000", ssbost, (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	return 0;
     }
 
@@ -1039,7 +1046,7 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*           of the transmission stellar aberration correction */
 /*           mapping to J2DIR. */
 
-	    stelab_(j2dir, &ssbost[3], stldir);
+	    stelab_(__global_state, j2dir, &ssbost[3], stldir);
 
 /*           Now improve our estimate. */
 
@@ -1051,15 +1058,16 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*              by applying the reception stellar aberration */
 /*              to STLDIR and finding the difference with J2DIR. */
 
-		stlabx_(stldir, &ssbost[3], j2est);
-		vsub_(j2dir, j2est, stlerr);
+		stlabx_(__global_state, stldir, &ssbost[3], j2est);
+		vsub_(__global_state, j2dir, j2est, stlerr);
 
 /*              Adding the error in the reception mapping to STLDIR */
 /*              will give us an improved estimate of the inverse. */
 
-		vadd_(stlerr, stldir, stltmp);
-		vequ_(stltmp, stldir);
-		relerr = vnorm_(stlerr) / vnorm_(stldir);
+		vadd_(__global_state, stlerr, stldir, stltmp);
+		vequ_(__global_state, stltmp, stldir);
+		relerr = vnorm_(__global_state, stlerr) / vnorm_(
+			__global_state, stldir);
 		++i__;
 	    }
 
@@ -1074,7 +1082,7 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*           the direction vector after stellar aberration */
 /*           has been "removed." */
 
-	    stlabx_(j2dir, &ssbost[3], stldir);
+	    stlabx_(__global_state, j2dir, &ssbost[3], stldir);
 
 /*           Now improve our estimate. */
 
@@ -1086,15 +1094,16 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*              by applying the reception stellar aberration */
 /*              to STLDIR and finding the difference with J2DIR. */
 
-		stelab_(stldir, &ssbost[3], j2est);
-		vsub_(j2dir, j2est, stlerr);
+		stelab_(__global_state, stldir, &ssbost[3], j2est);
+		vsub_(__global_state, j2dir, j2est, stlerr);
 
 /*              Adding the error in the reception mapping to STLDIR */
 /*              will give us an improved estimate of the inverse. */
 
-		vadd_(stlerr, stldir, stltmp);
-		vequ_(stltmp, stldir);
-		relerr = vnorm_(stlerr) / vnorm_(stldir);
+		vadd_(__global_state, stlerr, stldir, stltmp);
+		vequ_(__global_state, stltmp, stldir);
+		relerr = vnorm_(__global_state, stlerr) / vnorm_(
+			__global_state, stldir);
 		++i__;
 	    }
 
@@ -1107,8 +1116,8 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*        Replace the J2000-relative ray direction with the corrected */
 /*        direction. */
 
-	vequ_(stldir, j2dir);
-	mxv_(j2tmat, j2dir, trgdir);
+	vequ_(__global_state, stldir, j2dir);
+	mxv_(__global_state, j2tmat, j2dir, trgdir);
     }
 
 /*     Find the surface intercept point and distance from observer to */
@@ -1126,19 +1135,19 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*     target radius), we're done. Let REJECT be the angular */
 /*     separation limit. */
 
-    (*udmaxr)(&maxrad);
-    range = vnorm_(obspos);
+    (*udmaxr)(__global_state, &maxrad);
+    range = vnorm_(__global_state, obspos);
     if (range == 0.) {
 
 /*        We've already ensured that observer and target are */
 /*        distinct, so this should be a very unusual occurrence. */
 
-	setmsg_("Observer-target distance is zero. Observer ID is #; target "
-		"ID is #.", (ftnlen)67);
-	errint_("#", obscde, (ftnlen)1);
-	errint_("#", trgcde, (ftnlen)1);
-	sigerr_("SPICE(NOSEPARATION)", (ftnlen)19);
-	chkout_("ZZSFXCOR", (ftnlen)8);
+	setmsg_(__global_state, "Observer-target distance is zero. Observer "
+		"ID is #; target ID is #.", (ftnlen)67);
+	errint_(__global_state, "#", obscde, (ftnlen)1);
+	errint_(__global_state, "#", trgcde, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOSEPARATION)", (ftnlen)19);
+	chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	return 0;
     }
     if (range > maxrad * 1.01) {
@@ -1146,15 +1155,15 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*        Compute the arc sine with SPICE error checking. */
 
 	d__1 = maxrad * 1.01 / range;
-	reject = dasine_(&d__1, &__state->c_b27);
-	vminus_(obspos, negpos);
-	if (vsep_(negpos, trgdir) > reject) {
+	reject = dasine_(__global_state, &d__1, &__state->c_b27);
+	vminus_(__global_state, obspos, negpos);
+	if (vsep_(__global_state, negpos, trgdir) > reject) {
 
 /*           The angular separation of ray and target is too great */
 /*           for a solution to exist, even with a better light time */
 /*           estimate. */
 
-	    chkout_("ZZSFXCOR", (ftnlen)8);
+	    chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -1162,9 +1171,9 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*     Locate the intercept of the ray with the target; if there's no */
 /*     intercept, find the closest point on the target to the ray. */
 
-    (*udrayx)(obspos, trgdir, trgepc, spoint, found);
-    if (failed_()) {
-	chkout_("ZZSFXCOR", (ftnlen)8);
+    (*udrayx)(__global_state, obspos, trgdir, trgepc, spoint, found);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	return 0;
     }
 
@@ -1173,8 +1182,8 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*     SPOINT, TRGEPC, and FOUND have already been set. */
 
     if (*found && ! (*uselt)) {
-	vsub_(spoint, obspos, srfvec);
-	chkout_("ZZSFXCOR", (ftnlen)8);
+	vsub_(__global_state, spoint, obspos, srfvec);
+	chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	return 0;
     }
 
@@ -1202,12 +1211,13 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 	}
 	i__ = 1;
 	while(i__ <= nitr && ! (*found)) {
-	    (*udnear)(obspos, trgdir, et, pnear, &rayalt);
-	    if (failed_()) {
-		chkout_("ZZSFXCOR", (ftnlen)8);
+	    (*udnear)(__global_state, obspos, trgdir, et, pnear, &rayalt);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 		return 0;
 	    }
-	    lt = vdist_(obspos, pnear) / clight_();
+	    lt = vdist_(__global_state, obspos, pnear) / clight_(
+		    __global_state);
 
 /*           Use the new light time estimate to repeat the intercept */
 /*           computation. */
@@ -1217,9 +1227,10 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*           Get the J2000-relative state of the target relative to */
 /*           the solar system barycenter at the target epoch. */
 
-	    spkssb_(trgcde, trgepc, "J2000", ssbtst, (ftnlen)5);
-	    if (failed_()) {
-		chkout_("ZZSFXCOR", (ftnlen)8);
+	    spkssb_(__global_state, trgcde, trgepc, "J2000", ssbtst, (ftnlen)
+		    5);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 		return 0;
 	    }
 
@@ -1227,10 +1238,11 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*           Convert this vector from the J2000 frame to the target */
 /*           frame at TRGEPC. */
 
-	    vsub_(ssbost, ssbtst, j2pos);
-	    pxform_("J2000", fixref, trgepc, xform, (ftnlen)5, fixref_len);
-	    if (failed_()) {
-		chkout_("ZZSFXCOR", (ftnlen)8);
+	    vsub_(__global_state, ssbost, ssbtst, j2pos);
+	    pxform_(__global_state, "J2000", fixref, trgepc, xform, (ftnlen)5,
+		     fixref_len);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 		return 0;
 	    }
 
@@ -1238,18 +1250,18 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*           from the J2000 frame to the target frame at the target */
 /*           epoch. */
 
-	    mxv_(xform, j2pos, obspos);
+	    mxv_(__global_state, xform, j2pos, obspos);
 
 /*           Convert the ray's direction vector from the J2000 frame */
 /*           to the target frame at the target epoch. */
 
-	    mxv_(xform, j2dir, trgdir);
+	    mxv_(__global_state, xform, j2dir, trgdir);
 
 /*           Repeat the intercept computation. */
 
-	    (*udrayx)(obspos, trgdir, trgepc, spoint, found);
-	    if (failed_()) {
-		chkout_("ZZSFXCOR", (ftnlen)8);
+	    (*udrayx)(__global_state, obspos, trgdir, trgepc, spoint, found);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 		return 0;
 	    }
 	    ++i__;
@@ -1258,7 +1270,7 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*        If there's still no intercept, we're done. */
 
 	if (! (*found)) {
-	    chkout_("ZZSFXCOR", (ftnlen)8);
+	    chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -1278,8 +1290,8 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 
 /*     Compute new light time estimate and new target epoch. */
 
-    dist = vdist_(obspos, spoint);
-    lt = dist / clight_();
+    dist = vdist_(__global_state, obspos, spoint);
+    lt = dist / clight_(__global_state);
     *trgepc = *et + s * lt;
     prevlt = 0.;
     prevet = *trgepc;
@@ -1291,9 +1303,9 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*        Get the J2000-relative state of the target relative to */
 /*        the solar system barycenter at the target epoch. */
 
-	spkssb_(trgcde, trgepc, "J2000", ssbtst, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("ZZSFXCOR", (ftnlen)8);
+	spkssb_(__global_state, trgcde, trgepc, "J2000", ssbtst, (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1304,46 +1316,47 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*        Note that SSBOST contains the J2000-relative state of the */
 /*        observer relative to the solar system barycenter at ET. */
 
-	vsub_(ssbost, ssbtst, j2pos);
-	pxform_("J2000", fixref, trgepc, xform, (ftnlen)5, fixref_len);
-	if (failed_()) {
-	    chkout_("ZZSFXCOR", (ftnlen)8);
+	vsub_(__global_state, ssbost, ssbtst, j2pos);
+	pxform_(__global_state, "J2000", fixref, trgepc, xform, (ftnlen)5, 
+		fixref_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Convert the observer's position relative to the target from */
 /*        the J2000 frame to the target frame at the target epoch. */
 
-	mxv_(xform, j2pos, obspos);
-	vminus_(obspos, negpos);
+	mxv_(__global_state, xform, j2pos, obspos);
+	vminus_(__global_state, obspos, negpos);
 
 /*        Convert the ray's direction vector from the J2000 frame */
 /*        to the target frame at the target epoch. */
 
-	mxv_(xform, j2dir, trgdir);
+	mxv_(__global_state, xform, j2dir, trgdir);
 
 /*        Repeat the intercept computation. */
 
-	(*udrayx)(obspos, trgdir, trgepc, spoint, found);
-	if (failed_()) {
-	    chkout_("ZZSFXCOR", (ftnlen)8);
+	(*udrayx)(__global_state, obspos, trgdir, trgepc, spoint, found);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	    return 0;
 	}
 
 /*        If there's no intercept, we're done. */
 
 	if (! (*found)) {
-	    chkout_("ZZSFXCOR", (ftnlen)8);
+	    chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Compute the distance between intercept and observer. */
 
-	dist = vdist_(obspos, spoint);
+	dist = vdist_(__global_state, obspos, spoint);
 
 /*        Compute a new light time estimate and a new target epoch. */
 
-	lt = dist / clight_();
+	lt = dist / clight_(__global_state);
 	*trgepc = *et + s * lt;
 
 /*        We use the d.p. identity function TOUCHD to force the compiler */
@@ -1356,9 +1369,9 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*        existence. */
 
 	d__2 = lt - prevlt;
-	ltdiff = (d__1 = touchd_(&d__2), abs(d__1));
+	ltdiff = (d__1 = touchd_(__global_state, &d__2), abs(d__1));
 	d__2 = *trgepc - prevet;
-	etdiff = (d__1 = touchd_(&d__2), abs(d__1));
+	etdiff = (d__1 = touchd_(__global_state, &d__2), abs(d__1));
 	prevlt = lt;
 	prevet = *trgepc;
 	++i__;
@@ -1372,20 +1385,20 @@ static zzsfxcor_state_t* get_zzsfxcor_state() {
 /*     the J2000 frame. We use XFORM, which is computed in the loop */
 /*     above, to convert J2GEOM to FIXREF, evaluated at TRGEPC. */
 
-    mxv_(xform, j2geom, udir);
-    vhatip_(udir);
+    mxv_(__global_state, xform, j2geom, udir);
+    vhatip_(__global_state, udir);
 
 /*     Let SRFLEN be the length of SRFVEC; we CAN get this */
 /*     length from OBSPOS and SPOINT, since stellar */
 /*     aberration correction (as implemented in SPICE) */
 /*     doesn't change the length of the vector SPOINT-OBSPOS. */
 
-    srflen = vdist_(spoint, obspos);
+    srflen = vdist_(__global_state, spoint, obspos);
 
 /*     Scale UDIR to obtain the desired value of SRFVEC. */
 
-    vscl_(&srflen, udir, srfvec);
-    chkout_("ZZSFXCOR", (ftnlen)8);
+    vscl_(__global_state, &srflen, udir, srfvec);
+    chkout_(__global_state, "ZZSFXCOR", (ftnlen)8);
     return 0;
 } /* zzsfxcor_ */
 

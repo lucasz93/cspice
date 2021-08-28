@@ -8,8 +8,7 @@
 
 
 extern zzutcpm_init_t __zzutcpm_init;
-static zzutcpm_state_t* get_zzutcpm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzutcpm_state_t* get_zzutcpm_state(cspice_t* state) {
 	if (!state->zzutcpm)
 		state->zzutcpm = __cspice_allocate_module(sizeof(
 	zzutcpm_state_t), &__zzutcpm_init, sizeof(__zzutcpm_init));
@@ -18,36 +17,37 @@ static zzutcpm_state_t* get_zzutcpm_state() {
 }
 
 /* $Procedure      ZZUTCPM ( UTC Plus or Minus Parse ) */
-/* Subroutine */ int zzutcpm_(char *string, integer *start, doublereal *hoff, 
-	doublereal *moff, integer *last, logical *succes, ftnlen string_len)
+/* Subroutine */ int zzutcpm_(cspice_t* __global_state, char *string, integer 
+	*start, doublereal *hoff, doublereal *moff, integer *last, logical *
+	succes, ftnlen string_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer need;
     doublereal sign;
     doublereal x;
-    extern logical samch_(char *, integer *, char *, integer *, ftnlen, 
-	    ftnlen);
+    extern logical samch_(cspice_t*, char *, integer *, char *, integer *, 
+	    ftnlen, ftnlen);
     integer nchar;
     char error[80];
     integer unsat;
     integer unsto;
-    extern /* Subroutine */ int lx4uns_(char *, integer *, integer *, integer 
-	    *, ftnlen);
+    extern /* Subroutine */ int lx4uns_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
     integer length;
     integer signat;
-    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int nparsd_(cspice_t*, char *, doublereal *, char 
+	    *, integer *, ftnlen, ftnlen);
     integer ptr;
 
 
     /* Module state */
-    zzutcpm_state_t* __state = get_zzutcpm_state();
+    zzutcpm_state_t* __state = get_zzutcpm_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -194,7 +194,7 @@ static zzutcpm_state_t* get_zzutcpm_state() {
 /*     Note that NEED   = START + LEN('::UTC+x') - 1 */
 /*               SIGNAT = START + LEN('::UTC+' ) - 1 */
 
-    length = i_len(string, string_len);
+    length = i_len(&__global_state->f2c, string, string_len);
     need = *start + 6;
     signat = *start + 5;
     unsat = need;
@@ -212,10 +212,10 @@ static zzutcpm_state_t* get_zzutcpm_state() {
 /*     So far everything looks fine, "lex" the string starting at */
 /*     SIGNAT + 1 for an unsigned integer. */
 
-    lx4uns_(string, &unsat, &unsto, &nchar, string_len);
+    lx4uns_(__global_state, string, &unsat, &unsto, &nchar, string_len);
     if (nchar > 0 && nchar < 3) {
-	nparsd_(string + (unsat - 1), &x, error, &ptr, unsto - (unsat - 1), (
-		ftnlen)80);
+	nparsd_(__global_state, string + (unsat - 1), &x, error, &ptr, unsto 
+		- (unsat - 1), (ftnlen)80);
 	if (x >= 13.) {
 	    return 0;
 	}
@@ -231,15 +231,16 @@ static zzutcpm_state_t* get_zzutcpm_state() {
 
     *succes = TRUE_;
     i__1 = unsto + 1;
-    if (samch_(string, &i__1, ":", &__state->c__1, string_len, (ftnlen)1)) {
+    if (samch_(__global_state, string, &i__1, ":", &__state->c__1, string_len,
+	     (ftnlen)1)) {
 	unsat = unsto + 2;
     } else {
 	return 0;
     }
-    lx4uns_(string, &unsat, &unsto, &nchar, string_len);
+    lx4uns_(__global_state, string, &unsat, &unsto, &nchar, string_len);
     if (nchar > 0 && nchar < 3) {
-	nparsd_(string + (unsat - 1), &x, error, &ptr, unsto - (unsat - 1), (
-		ftnlen)80);
+	nparsd_(__global_state, string + (unsat - 1), &x, error, &ptr, unsto 
+		- (unsat - 1), (ftnlen)80);
 	if (x > 59.) {
 	    return 0;
 	}

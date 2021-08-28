@@ -8,8 +8,7 @@
 
 
 extern zzektr32_init_t __zzektr32_init;
-static zzektr32_state_t* get_zzektr32_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektr32_state_t* get_zzektr32_state(cspice_t* state) {
 	if (!state->zzektr32)
 		state->zzektr32 = __cspice_allocate_module(sizeof(
 	zzektr32_state_t), &__zzektr32_init, sizeof(__zzektr32_init));
@@ -18,32 +17,36 @@ static zzektr32_state_t* get_zzektr32_state() {
 }
 
 /* $Procedure      ZZEKTR32 ( EK tree, 3-2 merge ) */
-/* Subroutine */ int zzektr32_(integer *handle, integer *tree, integer *left, 
-	integer *middle, integer *right, integer *parent, integer *lpkidx, 
-	logical *undrfl)
+/* Subroutine */ int zzektr32_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *left, integer *middle, integer *right, 
+	integer *parent, integer *lpkidx, logical *undrfl)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer lsib;
     integer msib;
     integer rsib;
     integer root;
-    extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
-    extern integer zzektrbs_(integer *);
+    extern /* Subroutine */ int zzekpgfr_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgri_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgwi_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer zzektrbs_(cspice_t*, integer *);
     integer i__;
     integer n;
     integer ppage[256];
     integer rbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer nnode;
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer lpkey;
     integer psize;
     integer rpkey;
@@ -52,13 +55,13 @@ static zzektr32_state_t* get_zzektr32_state() {
     integer c3page[256];
     integer datbas;
     integer kidbas;
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer keybas;
     integer sizbas;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer leftsz;
     integer lmidsz;
     integer midsiz;
@@ -68,14 +71,14 @@ static zzektr32_state_t* get_zzektr32_state() {
     integer nrkeys;
     integer rmidsz;
     integer rshift;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer sum;
 
 
     /* Module state */
-    zzektr32_state_t* __state = get_zzektr32_state();
+    zzektr32_state_t* __state = get_zzektr32_state(__global_state);
 /* $ Abstract */
 
 /*     Execute a 3-2 merge:  merge three neighboring sibling nodes, two */
@@ -804,10 +807,10 @@ static zzektr32_state_t* get_zzektr32_state() {
 
 /*     All right, read in the child and parent pages. */
 
-    zzekpgri_(handle, left, c1page);
-    zzekpgri_(handle, middle, c2page);
-    zzekpgri_(handle, right, c3page);
-    zzekpgri_(handle, parent, ppage);
+    zzekpgri_(__global_state, handle, left, c1page);
+    zzekpgri_(__global_state, handle, middle, c2page);
+    zzekpgri_(__global_state, handle, right, c3page);
+    zzekpgri_(__global_state, handle, parent, ppage);
 
 /*     The actual addresses in the parent node depend on whether the */
 /*     parent is the root.  Compute the necessary bases to avoid a lot */
@@ -828,51 +831,56 @@ static zzektr32_state_t* get_zzektr32_state() {
 
 /*     Check the left parent key of the middle child. */
 
-    psize = ppage[(i__1 = sizbas - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)439)];
+    psize = ppage[(i__1 = sizbas - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ppage", i__1, "zzektr32_", (ftnlen)439)];
     if (*lpkidx < 1 || *lpkidx > psize - 1) {
-	chkin_("ZZEKTR32", (ftnlen)8);
-	setmsg_("Left parent key of MIDDLE is out of range.  Value is #; val"
-		"id range is 1:#", (ftnlen)74);
-	errint_("#", lpkidx, (ftnlen)1);
+	chkin_(__global_state, "ZZEKTR32", (ftnlen)8);
+	setmsg_(__global_state, "Left parent key of MIDDLE is out of range. "
+		" Value is #; valid range is 1:#", (ftnlen)74);
+	errint_(__global_state, "#", lpkidx, (ftnlen)1);
 	i__1 = psize - 1;
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKTR32", (ftnlen)8);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKTR32", (ftnlen)8);
 	return 0;
     }
 
 /*     Retain the left and right parent key values of the middle child. */
 
     lpkey = ppage[(i__1 = keybas + *lpkidx - 1) < 256 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)457)];
+	    s_rnge(&__global_state->f2c, "ppage", i__1, "zzektr32_", (ftnlen)
+	    457)];
     rpkey = ppage[(i__1 = keybas + *lpkidx) < 256 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)458)];
+	    s_rnge(&__global_state->f2c, "ppage", i__1, "zzektr32_", (ftnlen)
+	    458)];
 
 /*     Verify that LEFT, MIDDLE, and RIGHT are siblings, and that PARENT */
 /*     is their common parent. */
 
     lsib = ppage[(i__1 = kidbas + *lpkidx - 1) < 256 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)464)];
+	    s_rnge(&__global_state->f2c, "ppage", i__1, "zzektr32_", (ftnlen)
+	    464)];
     msib = ppage[(i__1 = kidbas + *lpkidx) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)465)];
+	    &__global_state->f2c, "ppage", i__1, "zzektr32_", (ftnlen)465)];
     rsib = ppage[(i__1 = kidbas + *lpkidx + 1) < 256 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)466)];
+	    s_rnge(&__global_state->f2c, "ppage", i__1, "zzektr32_", (ftnlen)
+	    466)];
     if (lsib != *left || msib != *middle || rsib != *right) {
-	chkin_("ZZEKTR32", (ftnlen)8);
-	setmsg_("LEFT, RIGHT, MIDDLE, PARENT, and PKIDX are inconsistent. LE"
-		"FT = #; MIDDLE = #; RIGHT = #; PARENT = #; LPKIDX = #; LSIB "
-		"derived from PARENT = #; MSIB = #; RSIB = #.", (ftnlen)163);
-	errint_("#", left, (ftnlen)1);
-	errint_("#", middle, (ftnlen)1);
-	errint_("#", right, (ftnlen)1);
-	errint_("#", parent, (ftnlen)1);
-	errint_("#", lpkidx, (ftnlen)1);
-	errint_("#", &lsib, (ftnlen)1);
-	errint_("#", &msib, (ftnlen)1);
-	errint_("#", &rsib, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKTR32", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTR32", (ftnlen)8);
+	setmsg_(__global_state, "LEFT, RIGHT, MIDDLE, PARENT, and PKIDX are "
+		"inconsistent. LEFT = #; MIDDLE = #; RIGHT = #; PARENT = #; L"
+		"PKIDX = #; LSIB derived from PARENT = #; MSIB = #; RSIB = #.",
+		 (ftnlen)163);
+	errint_(__global_state, "#", left, (ftnlen)1);
+	errint_(__global_state, "#", middle, (ftnlen)1);
+	errint_(__global_state, "#", right, (ftnlen)1);
+	errint_(__global_state, "#", parent, (ftnlen)1);
+	errint_(__global_state, "#", lpkidx, (ftnlen)1);
+	errint_(__global_state, "#", &lsib, (ftnlen)1);
+	errint_(__global_state, "#", &msib, (ftnlen)1);
+	errint_(__global_state, "#", &rsib, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKTR32", (ftnlen)8);
 	return 0;
     }
 
@@ -895,15 +903,16 @@ static zzektr32_state_t* get_zzektr32_state() {
 /*     sum exactly to value representing an underflow level of 1 key. */
 
     if (sum != 122) {
-	chkin_("ZZEKTR32", (ftnlen)8);
-	setmsg_("Number of keys in nodes LEFT = #; in MIDDLE = #; in RIGHT ="
-		" #; counts summing to # were expected.", (ftnlen)97);
-	errint_("#", &nlkeys, (ftnlen)1);
-	errint_("#", &nmkeys, (ftnlen)1);
-	errint_("#", &nrkeys, (ftnlen)1);
-	errint_("#", &__state->c__122, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKTR32", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTR32", (ftnlen)8);
+	setmsg_(__global_state, "Number of keys in nodes LEFT = #; in MIDDLE"
+		" = #; in RIGHT = #; counts summing to # were expected.", (
+		ftnlen)97);
+	errint_(__global_state, "#", &nlkeys, (ftnlen)1);
+	errint_(__global_state, "#", &nmkeys, (ftnlen)1);
+	errint_(__global_state, "#", &nrkeys, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__122, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKTR32", (ftnlen)8);
 	return 0;
     }
 
@@ -953,12 +962,13 @@ static zzektr32_state_t* get_zzektr32_state() {
 	leftsz = lpkey - 1;
     } else {
 	leftsz = lpkey - ppage[(i__1 = keybas + *lpkidx - 2) < 256 && 0 <= 
-		i__1 ? i__1 : s_rnge("ppage", i__1, "zzektr32_", (ftnlen)577)]
-		 - 1;
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "ppage", i__1, 
+		"zzektr32_", (ftnlen)577)] - 1;
     }
     n = 61 - (nlkeys + 1) + 1;
-    lmidsz = c2page[(i__1 = n) < 256 && 0 <= i__1 ? i__1 : s_rnge("c2page", 
-	    i__1, "zzektr32_", (ftnlen)582)] - 1;
+    lmidsz = c2page[(i__1 = n) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "c2page", i__1, "zzektr32_", (ftnlen)582)] - 
+	    1;
     midsiz = rpkey - lpkey - 1;
     rmidsz = midsiz - lmidsz - 1;
 
@@ -967,12 +977,14 @@ static zzektr32_state_t* get_zzektr32_state() {
 /*     data pointer is copied, however.  The child pointer at location */
 /*     LSIZE+1 is unaffected by this move. */
 
-    c1page[(i__1 = nlkeys + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge("c1page", 
-	    i__1, "zzektr32_", (ftnlen)592)] = leftsz + 1;
-    c1page[(i__1 = nlkeys + 128) < 256 && 0 <= i__1 ? i__1 : s_rnge("c1page", 
-	    i__1, "zzektr32_", (ftnlen)593)] = ppage[(i__2 = datbas + *lpkidx 
-	    - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("ppage", i__2, "zzektr32_"
-	    , (ftnlen)593)];
+    c1page[(i__1 = nlkeys + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "c1page", i__1, "zzektr32_", (ftnlen)592)] = 
+	    leftsz + 1;
+    c1page[(i__1 = nlkeys + 128) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "c1page", i__1, "zzektr32_", (ftnlen)593)] = 
+	    ppage[(i__2 = datbas + *lpkidx - 1) < 256 && 0 <= i__2 ? i__2 : 
+	    s_rnge(&__global_state->f2c, "ppage", i__2, "zzektr32_", (ftnlen)
+	    593)];
 
 /*     Move the first N-1 keys and data pointers, and the first N */
 /*     child pointers, from the middle child into the left */
@@ -981,15 +993,18 @@ static zzektr32_state_t* get_zzektr32_state() {
     i__1 = n - 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	c1page[(i__2 = nlkeys + 2 + i__ - 1) < 256 && 0 <= i__2 ? i__2 : 
-		s_rnge("c1page", i__2, "zzektr32_", (ftnlen)601)] = c2page[(
-		i__3 = i__) < 256 && 0 <= i__3 ? i__3 : s_rnge("c2page", i__3,
-		 "zzektr32_", (ftnlen)601)] + leftsz + 1;
+		s_rnge(&__global_state->f2c, "c1page", i__2, "zzektr32_", (
+		ftnlen)601)] = c2page[(i__3 = i__) < 256 && 0 <= i__3 ? i__3 :
+		 s_rnge(&__global_state->f2c, "c2page", i__3, "zzektr32_", (
+		ftnlen)601)] + leftsz + 1;
     }
     i__2 = n - 1;
-    movei_(&c2page[128], &i__2, &c1page[(i__1 = nlkeys + 129) < 256 && 0 <= 
-	    i__1 ? i__1 : s_rnge("c1page", i__1, "zzektr32_", (ftnlen)604)]);
-    movei_(&c2page[64], &n, &c1page[(i__1 = nlkeys + 65) < 256 && 0 <= i__1 ? 
-	    i__1 : s_rnge("c1page", i__1, "zzektr32_", (ftnlen)605)]);
+    movei_(__global_state, &c2page[128], &i__2, &c1page[(i__1 = nlkeys + 129) 
+	    < 256 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "c1page",
+	     i__1, "zzektr32_", (ftnlen)604)]);
+    movei_(__global_state, &c2page[64], &n, &c1page[(i__1 = nlkeys + 65) < 
+	    256 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "c1page", 
+	    i__1, "zzektr32_", (ftnlen)605)]);
 
 /*     Set the key count in the left child. */
 
@@ -1004,21 +1019,24 @@ static zzektr32_state_t* get_zzektr32_state() {
     rshift = nmkeys - n + 1;
     for (i__ = nrkeys; i__ >= 1; --i__) {
 	c3page[(i__1 = rshift + 1 + i__ - 1) < 256 && 0 <= i__1 ? i__1 : 
-		s_rnge("c3page", i__1, "zzektr32_", (ftnlen)622)] = c3page[(
-		i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("c3page", i__2,
-		 "zzektr32_", (ftnlen)622)] + rmidsz + 1;
+		s_rnge(&__global_state->f2c, "c3page", i__1, "zzektr32_", (
+		ftnlen)622)] = c3page[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 :
+		 s_rnge(&__global_state->f2c, "c3page", i__2, "zzektr32_", (
+		ftnlen)622)] + rmidsz + 1;
     }
     for (i__ = nrkeys; i__ >= 1; --i__) {
 	c3page[(i__1 = rshift + 128 + i__ - 1) < 256 && 0 <= i__1 ? i__1 : 
-		s_rnge("c3page", i__1, "zzektr32_", (ftnlen)626)] = c3page[(
-		i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge("c3page",
-		 i__2, "zzektr32_", (ftnlen)626)];
+		s_rnge(&__global_state->f2c, "c3page", i__1, "zzektr32_", (
+		ftnlen)626)] = c3page[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "c3page", i__2, "zzektr3"
+		"2_", (ftnlen)626)];
     }
     for (i__ = nrkeys + 1; i__ >= 1; --i__) {
 	c3page[(i__1 = rshift + 64 + i__ - 1) < 256 && 0 <= i__1 ? i__1 : 
-		s_rnge("c3page", i__1, "zzektr32_", (ftnlen)630)] = c3page[(
-		i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge("c3page", 
-		i__2, "zzektr32_", (ftnlen)630)];
+		s_rnge(&__global_state->f2c, "c3page", i__1, "zzektr32_", (
+		ftnlen)630)] = c3page[(i__2 = i__ + 63) < 256 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "c3page", i__2, "zzektr3"
+		"2_", (ftnlen)630)];
     }
 
 /*     The key at location RSHIFT receives the former right parent key */
@@ -1026,12 +1044,14 @@ static zzektr32_state_t* get_zzektr32_state() {
 /*     data pointer is copied.  The child pointer at location RSHIFT */
 /*     will be set later. */
 
-    c3page[(i__1 = rshift) < 256 && 0 <= i__1 ? i__1 : s_rnge("c3page", i__1, 
-	    "zzektr32_", (ftnlen)639)] = rmidsz + 1;
-    c3page[(i__1 = rshift + 127) < 256 && 0 <= i__1 ? i__1 : s_rnge("c3page", 
-	    i__1, "zzektr32_", (ftnlen)640)] = ppage[(i__2 = datbas + *lpkidx)
-	     < 256 && 0 <= i__2 ? i__2 : s_rnge("ppage", i__2, "zzektr32_", (
-	    ftnlen)640)];
+    c3page[(i__1 = rshift) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "c3page", i__1, "zzektr32_", (ftnlen)639)] = 
+	    rmidsz + 1;
+    c3page[(i__1 = rshift + 127) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "c3page", i__1, "zzektr32_", (ftnlen)640)] = 
+	    ppage[(i__2 = datbas + *lpkidx) < 256 && 0 <= i__2 ? i__2 : 
+	    s_rnge(&__global_state->f2c, "ppage", i__2, "zzektr32_", (ftnlen)
+	    640)];
 
 /*     The first RSHIFT-1 locations in the right child are filled in */
 /*     with data from the middle child.  The moved keys lose LMIDSZ+1 */
@@ -1039,16 +1059,19 @@ static zzektr32_state_t* get_zzektr32_state() {
 
     i__1 = rshift - 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	c3page[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("c3page", i__2,
-		 "zzektr32_", (ftnlen)648)] = c2page[(i__3 = n + 1 + i__ - 1) 
-		< 256 && 0 <= i__3 ? i__3 : s_rnge("c2page", i__3, "zzektr32_"
-		, (ftnlen)648)] - lmidsz - 1;
+	c3page[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "c3page", i__2, "zzektr32_", (ftnlen)648)
+		] = c2page[(i__3 = n + 1 + i__ - 1) < 256 && 0 <= i__3 ? i__3 
+		: s_rnge(&__global_state->f2c, "c2page", i__3, "zzektr32_", (
+		ftnlen)648)] - lmidsz - 1;
     }
     i__2 = rshift - 1;
-    movei_(&c2page[(i__1 = n + 128) < 256 && 0 <= i__1 ? i__1 : s_rnge("c2pa"
-	    "ge", i__1, "zzektr32_", (ftnlen)651)], &i__2, &c3page[128]);
-    movei_(&c2page[(i__1 = n + 64) < 256 && 0 <= i__1 ? i__1 : s_rnge("c2page"
-	    , i__1, "zzektr32_", (ftnlen)652)], &rshift, &c3page[64]);
+    movei_(__global_state, &c2page[(i__1 = n + 128) < 256 && 0 <= i__1 ? i__1 
+	    : s_rnge(&__global_state->f2c, "c2page", i__1, "zzektr32_", (
+	    ftnlen)651)], &i__2, &c3page[128]);
+    movei_(__global_state, &c2page[(i__1 = n + 64) < 256 && 0 <= i__1 ? i__1 :
+	     s_rnge(&__global_state->f2c, "c2page", i__1, "zzektr32_", (
+	    ftnlen)652)], &rshift, &c3page[64]);
 
 /*     Update the key count in the right child. */
 
@@ -1061,12 +1084,13 @@ static zzektr32_state_t* get_zzektr32_state() {
 /*     move.  The left parent key increases by the number of keys moved */
 /*     into the subtree headed by the left child. */
 
-    ppage[(i__1 = keybas + *lpkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)667)] = lpkey + lmidsz + 1;
-    ppage[(i__1 = datbas + *lpkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)668)] = c2page[(i__2 = n + 
-	    127) < 256 && 0 <= i__2 ? i__2 : s_rnge("c2page", i__2, "zzektr3"
-	    "2_", (ftnlen)668)];
+    ppage[(i__1 = keybas + *lpkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ppage", i__1, "zzektr32_", (ftnlen)667)] = 
+	    lpkey + lmidsz + 1;
+    ppage[(i__1 = datbas + *lpkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ppage", i__1, "zzektr32_", (ftnlen)668)] = 
+	    c2page[(i__2 = n + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "c2page", i__2, "zzektr32_", (ftnlen)668)];
 
 /*     The parent keys, data pointers, and child pointers at locations */
 /*     LPKIDX+2 onward get shifted left by one position.  The keys lose */
@@ -1074,34 +1098,40 @@ static zzektr32_state_t* get_zzektr32_state() {
 
     i__1 = npkeys - 1;
     for (i__ = *lpkidx + 1; i__ <= i__1; ++i__) {
-	ppage[(i__2 = keybas + i__ - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-		"ppage", i__2, "zzektr32_", (ftnlen)676)] = ppage[(i__3 = 
-		keybas + i__) < 256 && 0 <= i__3 ? i__3 : s_rnge("ppage", 
-		i__3, "zzektr32_", (ftnlen)676)];
+	ppage[(i__2 = keybas + i__ - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ppage", i__2, "zzektr32_", (ftnlen)676)]
+		 = ppage[(i__3 = keybas + i__) < 256 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ppage", i__3, "zzektr32_", (
+		ftnlen)676)];
     }
     i__1 = npkeys - 1;
     for (i__ = *lpkidx + 1; i__ <= i__1; ++i__) {
-	ppage[(i__2 = datbas + i__ - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-		"ppage", i__2, "zzektr32_", (ftnlen)680)] = ppage[(i__3 = 
-		datbas + i__) < 256 && 0 <= i__3 ? i__3 : s_rnge("ppage", 
-		i__3, "zzektr32_", (ftnlen)680)];
+	ppage[(i__2 = datbas + i__ - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ppage", i__2, "zzektr32_", (ftnlen)680)]
+		 = ppage[(i__3 = datbas + i__) < 256 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ppage", i__3, "zzektr32_", (
+		ftnlen)680)];
     }
     i__1 = npkeys;
     for (i__ = *lpkidx + 1; i__ <= i__1; ++i__) {
-	ppage[(i__2 = kidbas + i__ - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-		"ppage", i__2, "zzektr32_", (ftnlen)684)] = ppage[(i__3 = 
-		kidbas + i__) < 256 && 0 <= i__3 ? i__3 : s_rnge("ppage", 
-		i__3, "zzektr32_", (ftnlen)684)];
+	ppage[(i__2 = kidbas + i__ - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ppage", i__2, "zzektr32_", (ftnlen)684)]
+		 = ppage[(i__3 = kidbas + i__) < 256 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ppage", i__3, "zzektr32_", (
+		ftnlen)684)];
     }
 
 /*     Zero out the freed locations. */
 
-    ppage[(i__1 = keybas + npkeys - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)690)] = 0;
-    ppage[(i__1 = datbas + npkeys - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)691)] = 0;
-    ppage[(i__1 = kidbas + npkeys) < 256 && 0 <= i__1 ? i__1 : s_rnge("ppage",
-	     i__1, "zzektr32_", (ftnlen)692)] = 0;
+    ppage[(i__1 = keybas + npkeys - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ppage", i__1, "zzektr32_", (ftnlen)690)] = 
+	    0;
+    ppage[(i__1 = datbas + npkeys - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ppage", i__1, "zzektr32_", (ftnlen)691)] = 
+	    0;
+    ppage[(i__1 = kidbas + npkeys) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ppage", i__1, "zzektr32_", (ftnlen)692)] = 
+	    0;
 
 /*     The only required change to the parent's metadata is */
 /*     updating the key count.  At this point, we can set the */
@@ -1125,25 +1155,25 @@ static zzektr32_state_t* get_zzektr32_state() {
 /*        We won't read in the whole root page; we'll just get the */
 /*        base address of the root and update the affected location. */
 
-	rbase = zzektrbs_(&root);
+	rbase = zzektrbs_(__global_state, &root);
 	i__1 = rbase + 2;
 	i__2 = rbase + 2;
-	dasrdi_(handle, &i__1, &i__2, &nnode);
+	dasrdi_(__global_state, handle, &i__1, &i__2, &nnode);
 	i__1 = rbase + 2;
 	i__2 = rbase + 2;
 	i__3 = nnode - 1;
-	dasudi_(handle, &i__1, &i__2, &i__3);
+	dasudi_(__global_state, handle, &i__1, &i__2, &i__3);
     }
 
 /*     Write out our updates. */
 
-    zzekpgwi_(handle, parent, ppage);
-    zzekpgwi_(handle, left, c1page);
-    zzekpgwi_(handle, right, c3page);
+    zzekpgwi_(__global_state, handle, parent, ppage);
+    zzekpgwi_(__global_state, handle, left, c1page);
+    zzekpgwi_(__global_state, handle, right, c3page);
 
 /*     Free the page used by the middle child. */
 
-    zzekpgfr_(handle, &__state->c__3, middle);
+    zzekpgfr_(__global_state, handle, &__state->c__3, middle);
     return 0;
 } /* zzektr32_ */
 

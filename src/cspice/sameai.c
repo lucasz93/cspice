@@ -8,13 +8,13 @@
 
 
 typedef int sameai_state_t;
-static sameai_state_t* get_sameai_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sameai_state_t* get_sameai_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            SAMEAI ( Are two integer arrays the same? ) */
-logical sameai_(integer *a1, integer *a2, integer *ndim)
+logical sameai_(cspice_t* __global_state, integer *a1, integer *a2, integer *
+	ndim)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +25,7 @@ logical sameai_(integer *a1, integer *a2, integer *ndim)
 
 
     /* Module state */
-    sameai_state_t* __state = get_sameai_state();
+    sameai_state_t* __state = get_sameai_state(__global_state);
 /* $ Abstract */
 
 /*     Indicate whether two integer arrays are equal. */

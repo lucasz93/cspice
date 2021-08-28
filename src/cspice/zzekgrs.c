@@ -8,22 +8,21 @@
 
 
 typedef int zzekgrs_state_t;
-static zzekgrs_state_t* get_zzekgrs_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekgrs_state_t* get_zzekgrs_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKGRS ( EK, get record status ) */
-/* Subroutine */ int zzekgrs_(integer *handle, integer *recptr, integer *
-	status)
+/* Subroutine */ int zzekgrs_(cspice_t* __global_state, integer *handle, 
+	integer *recptr, integer *status)
 {
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer loc;
 
 
     /* Module state */
-    zzekgrs_state_t* __state = get_zzekgrs_state();
+    zzekgrs_state_t* __state = get_zzekgrs_state(__global_state);
 /* $ Abstract */
 
 /*     Return the status of a specified EK record. */
@@ -255,7 +254,7 @@ static zzekgrs_state_t* get_zzekgrs_state() {
 /*     Compute the status word location, and read the status. */
 
     loc = *recptr + 1;
-    dasrdi_(handle, &loc, &loc, status);
+    dasrdi_(__global_state, handle, &loc, &loc, status);
     return 0;
 } /* zzekgrs_ */
 

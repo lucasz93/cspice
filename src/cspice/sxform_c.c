@@ -204,7 +204,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "sxform_c");
+   chkin_c ( naif_state, "sxform_c");
    
 
    /*

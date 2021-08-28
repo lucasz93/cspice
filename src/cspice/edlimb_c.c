@@ -240,7 +240,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "edlimb_c" );
+   chkin_c ( naif_state, "edlimb_c" );
 
    if (         ( a <= 0. )            
           ||    ( b <= 0. )            

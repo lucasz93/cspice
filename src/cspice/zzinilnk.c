@@ -8,30 +8,29 @@
 
 
 typedef int zzinilnk_state_t;
-static zzinilnk_state_t* get_zzinilnk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzinilnk_state_t* get_zzinilnk_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZINILNK ( Initialize an AB cell linked-list ) */
-/* Subroutine */ int zzinilnk_(integer *maxp, integer *maxc, integer *ncell, 
-	integer *pntrs, integer *cells)
+/* Subroutine */ int zzinilnk_(cspice_t* __global_state, integer *maxp, 
+	integer *maxc, integer *ncell, integer *pntrs, integer *cells)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzinilnk_state_t* __state = get_zzinilnk_state();
+    zzinilnk_state_t* __state = get_zzinilnk_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -186,25 +185,25 @@ static zzinilnk_state_t* get_zzinilnk_state() {
 /*     initialize an AB cell linked-list */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZINILNK", (ftnlen)8);
+    chkin_(__global_state, "ZZINILNK", (ftnlen)8);
     if (*maxp < 1) {
-	setmsg_("Pointer array size MAXP = #; size must be positive.", (
-		ftnlen)51);
-	errint_("#", maxp, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZINILNK", (ftnlen)8);
+	setmsg_(__global_state, "Pointer array size MAXP = #; size must be p"
+		"ositive.", (ftnlen)51);
+	errint_(__global_state, "#", maxp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZINILNK", (ftnlen)8);
 	return 0;
     }
     if (*maxc < *maxp) {
-	setmsg_("Cell array size MAXC = #; size must be at least as large as"
-		" pointer array size #.", (ftnlen)81);
-	errint_("#", maxc, (ftnlen)1);
-	errint_("#", maxp, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZINILNK", (ftnlen)8);
+	setmsg_(__global_state, "Cell array size MAXC = #; size must be at l"
+		"east as large as pointer array size #.", (ftnlen)81);
+	errint_(__global_state, "#", maxc, (ftnlen)1);
+	errint_(__global_state, "#", maxp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZINILNK", (ftnlen)8);
 	return 0;
     }
 
@@ -224,7 +223,7 @@ static zzinilnk_state_t* get_zzinilnk_state() {
 /*     of the calling routine. */
 
     *ncell = 0;
-    chkout_("ZZINILNK", (ftnlen)8);
+    chkout_(__global_state, "ZZINILNK", (ftnlen)8);
     return 0;
 } /* zzinilnk_ */
 

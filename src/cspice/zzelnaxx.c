@@ -8,36 +8,36 @@
 
 
 typedef int zzelnaxx_state_t;
-static zzelnaxx_state_t* get_zzelnaxx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzelnaxx_state_t* get_zzelnaxx_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZELNAXX ( ellipse normal axis intercepts ) */
-/* Subroutine */ int zzelnaxx_(doublereal *a, doublereal *b, doublereal *lat, 
-	doublereal *xxpt, doublereal *yxpt)
+/* Subroutine */ int zzelnaxx_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *lat, doublereal *xxpt, doublereal *yxpt)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int ednmpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int ednmpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
     doublereal normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal ept[3];
 
 
     /* Module state */
-    zzelnaxx_state_t* __state = get_zzelnaxx_state();
+    zzelnaxx_state_t* __state = get_zzelnaxx_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -256,17 +256,17 @@ static zzelnaxx_state_t* get_zzelnaxx_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
     if (*a <= 0. || *b <= 0.) {
-	chkin_("ZZELNAXX", (ftnlen)8);
-	setmsg_("Semi-axis lengths were A = #; B = #. Both must be positive.",
-		 (ftnlen)59);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	sigerr_("SPICE(NONPOSITIVEAXIS)", (ftnlen)22);
-	chkout_("ZZELNAXX", (ftnlen)8);
+	chkin_(__global_state, "ZZELNAXX", (ftnlen)8);
+	setmsg_(__global_state, "Semi-axis lengths were A = #; B = #. Both m"
+		"ust be positive.", (ftnlen)59);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONPOSITIVEAXIS)", (ftnlen)22);
+	chkout_(__global_state, "ZZELNAXX", (ftnlen)8);
 	return 0;
     }
 
@@ -278,10 +278,10 @@ static zzelnaxx_state_t* get_zzelnaxx_state() {
 /*     order to take advantage of existing code. The third coordinates */
 /*     of all participating vectors will be zero. */
 
-    normal[0] = cos(*lat);
-    normal[1] = sin(*lat);
+    normal[0] = cos(&__global_state->f2c, *lat);
+    normal[1] = sin(&__global_state->f2c, *lat);
     normal[2] = 0.;
-    ednmpt_(a, b, b, normal, ept);
+    ednmpt_(__global_state, a, b, b, normal, ept);
 
 /*     Compute the X-axis and Y-axis intercepts of the line */
 /*     passing through EPT and parallel to a normal vector */

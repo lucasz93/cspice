@@ -8,8 +8,7 @@
 
 
 extern dlabfs_init_t __dlabfs_init;
-static dlabfs_state_t* get_dlabfs_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dlabfs_state_t* get_dlabfs_state(cspice_t* state) {
 	if (!state->dlabfs)
 		state->dlabfs = __cspice_allocate_module(sizeof(
 	dlabfs_state_t), &__dlabfs_init, sizeof(__dlabfs_init));
@@ -18,23 +17,24 @@ static dlabfs_state_t* get_dlabfs_state() {
 }
 
 /* $Procedure DLABFS ( DLA, begin forward search ) */
-/* Subroutine */ int dlabfs_(integer *handle, integer *descr, logical *found)
+/* Subroutine */ int dlabfs_(cspice_t* __global_state, integer *handle, 
+	integer *descr, logical *found)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer this__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dlabfs_state_t* __state = get_dlabfs_state();
+    dlabfs_state_t* __state = get_dlabfs_state(__global_state);
 /* $ Abstract */
 
 /*     Begin a forward segment search in a DLA file. */
@@ -412,10 +412,10 @@ static dlabfs_state_t* get_dlabfs_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DLABFS", (ftnlen)6);
+    chkin_(__global_state, "DLABFS", (ftnlen)6);
 
 /*     Nothing found yet. */
 
@@ -424,22 +424,22 @@ static dlabfs_state_t* get_dlabfs_state() {
 /*     Look up the pointer to the first DLA segment descriptor in the */
 /*     file.  Then look up the segment descriptor itself. */
 
-    dasrdi_(handle, &__state->c__2, &__state->c__2, &this__);
-    if (failed_() || this__ == -1) {
+    dasrdi_(__global_state, handle, &__state->c__2, &__state->c__2, &this__);
+    if (failed_(__global_state) || this__ == -1) {
 
 /*        If the pointer THIS is null, there are no segments in the */
 /*        file. */
 
-	chkout_("DLABFS", (ftnlen)6);
+	chkout_(__global_state, "DLABFS", (ftnlen)6);
 	return 0;
     }
 
 /*     Return the first descriptor. */
 
     i__1 = this__ + 7;
-    dasrdi_(handle, &this__, &i__1, descr);
+    dasrdi_(__global_state, handle, &this__, &i__1, descr);
     *found = TRUE_;
-    chkout_("DLABFS", (ftnlen)6);
+    chkout_(__global_state, "DLABFS", (ftnlen)6);
     return 0;
 } /* dlabfs_ */
 

@@ -544,7 +544,7 @@
    {
       return; 
    }
-   chkin_c ( "drdpgr_c" );
+   chkin_c ( naif_state, "drdpgr_c" );
 
 
    /*

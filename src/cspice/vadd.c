@@ -8,17 +8,17 @@
 
 
 typedef int vadd_state_t;
-static vadd_state_t* get_vadd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vadd_state_t* get_vadd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VADD ( Vector addition, 3 dimensional ) */
-/* Subroutine */ int vadd_(doublereal *v1, doublereal *v2, doublereal *vout)
+/* Subroutine */ int vadd_(cspice_t* __global_state, doublereal *v1, 
+	doublereal *v2, doublereal *vout)
 {
 
     /* Module state */
-    vadd_state_t* __state = get_vadd_state();
+    vadd_state_t* __state = get_vadd_state(__global_state);
 /* $ Abstract */
 
 /*      Add two 3 dimensional vectors. */

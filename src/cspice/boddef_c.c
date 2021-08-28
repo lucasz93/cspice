@@ -296,7 +296,7 @@
    /*
    Participate in error handling
    */
-   chkin_c ( "boddef_c");
+   chkin_c ( naif_state, "boddef_c");
 
 
    /*

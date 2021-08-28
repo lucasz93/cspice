@@ -357,7 +357,7 @@
    {
       return;
    }
-   chkin_c ( "dskn02_c" );
+   chkin_c ( naif_state, "dskn02_c" );
 
    /*
    Populate the Fortran DLA descriptor array fDLADescr with the contents

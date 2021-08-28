@@ -272,7 +272,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkgeo_c" );
+   chkin_c ( naif_state, "spkgeo_c" );
 
 
    /*

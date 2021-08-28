@@ -8,26 +8,25 @@
 
 
 typedef int uddc_state_t;
-static uddc_state_t* get_uddc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline uddc_state_t* get_uddc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure UDDC ( Derivative of function less than zero, df(x)/dx < 0 ) */
-/* Subroutine */ int uddc_(U_fp udfunc, doublereal *x, doublereal *dx, 
-	logical *isdecr)
+/* Subroutine */ int uddc_(cspice_t* __global_state, U_fp udfunc, doublereal *
+	x, doublereal *dx, logical *isdecr)
 {
-    extern /* Subroutine */ int uddf_(U_fp, doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int uddf_(cspice_t*, U_fp, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal deriv;
-    extern logical failed_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    uddc_state_t* __state = get_uddc_state();
+    uddc_state_t* __state = get_uddc_state(__global_state);
 /* $ Abstract */
 
 /*    This routine calculates the derivative of UDFUNC with respect */
@@ -193,21 +192,21 @@ static uddc_state_t* get_uddc_state() {
 
 /*     Local Variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("UDDC", (ftnlen)4);
+    chkin_(__global_state, "UDDC", (ftnlen)4);
     *isdecr = FALSE_;
 
 /*     Numerically calculate the derivative of UDFUNC at X. */
 
-    uddf_((U_fp)udfunc, x, dx, &deriv);
-    if (failed_()) {
-	chkout_("UDDC", (ftnlen)4);
+    uddf_(__global_state, (U_fp)udfunc, x, dx, &deriv);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "UDDC", (ftnlen)4);
 	return 0;
     }
     *isdecr = deriv < 0.;
-    chkout_("UDDC", (ftnlen)4);
+    chkout_(__global_state, "UDDC", (ftnlen)4);
     return 0;
 } /* uddc_ */
 

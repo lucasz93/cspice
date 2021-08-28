@@ -8,8 +8,7 @@
 
 
 extern writln_init_t __writln_init;
-static writln_state_t* get_writln_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline writln_state_t* get_writln_state(cspice_t* state) {
 	if (!state->writln)
 		state->writln = __cspice_allocate_module(sizeof(
 	writln_state_t), &__writln_init, sizeof(__writln_init));
@@ -18,27 +17,29 @@ static writln_state_t* get_writln_state() {
 }
 
 /* $Procedure      WRITLN ( Write a text line to a logical unit ) */
-/* Subroutine */ int writln_(char *line, integer *unit, ftnlen line_len)
+/* Subroutine */ int writln_(cspice_t* __global_state, char *line, integer *
+	unit, ftnlen line_len)
 {
     /* System generated locals */
     cilist ci__1;
 
     /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe(void);
+    integer s_wsfe(f2c_state_t*, cilist *), do_fio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_wsfe(f2c_state_t*);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    writln_state_t* __state = get_writln_state();
+    writln_state_t* __state = get_writln_state(__global_state);
 /* $ Abstract */
 
 /*     Write a single line of text to the Fortran logical unit UNIT. */
@@ -402,27 +403,29 @@ static writln_state_t* get_writln_state() {
     ci__1.cierr = 1;
     ci__1.ciunit = *unit;
     ci__1.cifmt = "(A)";
-    iostat = s_wsfe(&ci__1);
+    iostat = s_wsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&__state->c__1, line, rtrim_(line, line_len));
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, rtrim_(
+	    __global_state, line, line_len));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_wsfe();
+    iostat = e_wsfe(&__global_state->f2c);
 L100001:
 
 /*     Check to see if we got a write error, and signal it if we did. */
 /*     Also check in and check out. */
 
     if (iostat != 0) {
-	chkin_("WRITLN", (ftnlen)6);
-	setmsg_("Error Writing to file: #. IOSTAT = #.", (ftnlen)37);
-	errfnm_("#", unit, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("WRITLN", (ftnlen)6);
+	chkin_(__global_state, "WRITLN", (ftnlen)6);
+	setmsg_(__global_state, "Error Writing to file: #. IOSTAT = #.", (
+		ftnlen)37);
+	errfnm_(__global_state, "#", unit, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "WRITLN", (ftnlen)6);
 	return 0;
     }
     return 0;

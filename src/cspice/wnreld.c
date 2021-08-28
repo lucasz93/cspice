@@ -8,39 +8,41 @@
 
 
 typedef int wnreld_state_t;
-static wnreld_state_t* get_wnreld_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wnreld_state_t* get_wnreld_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      WNRELD ( Compare two DP windows ) */
-logical wnreld_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
+logical wnreld_(cspice_t* __global_state, doublereal *a, char *op, doublereal 
+	*b, ftnlen op_len)
 {
     /* System generated locals */
     integer i__1;
     logical ret_val;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
     integer acard;
     integer bcard;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical equal;
-    extern logical wnincd_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern logical wnincd_(cspice_t*, doublereal *, doublereal *, doublereal *
+	    );
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     logical subset;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    wnreld_state_t* __state = get_wnreld_state();
+    wnreld_state_t* __state = get_wnreld_state(__global_state);
 /* $ Abstract */
 
 /*      Compare two double precision windows. */
@@ -297,18 +299,18 @@ logical wnreld_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = FALSE_;
 	return ret_val;
     } else {
-	chkin_("WNRELD", (ftnlen)6);
+	chkin_(__global_state, "WNRELD", (ftnlen)6);
 	ret_val = FALSE_;
     }
 
 /*     Find the cardinality of the input windows. */
 
-    acard = cardd_(a);
-    bcard = cardd_(b);
+    acard = cardd_(__global_state, a);
+    bcard = cardd_(__global_state, b);
 
 /*     A and B are equal if they contain exactly the same intervals. */
 /*     We need to know this for nearly every relationship, so find out */
@@ -326,23 +328,25 @@ logical wnreld_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
 
 /*     Simple equality and inequality are trivial at this point. */
 
-    if (s_cmp(op, "=", op_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, op, "=", op_len, (ftnlen)1) == 0) {
 	ret_val = equal;
-    } else if (s_cmp(op, "<>", op_len, (ftnlen)2) == 0) {
+    } else if (s_cmp(&__global_state->f2c, op, "<>", op_len, (ftnlen)2) == 0) 
+	    {
 	ret_val = ! equal;
 
 /*     Subsets are a little trickier. A is a subset of B if every */
 /*     interval in A is included in B. In addition, A is a proper */
 /*     subset if A and B are not equal. */
 
-    } else if (s_cmp(op, "<=", op_len, (ftnlen)2) == 0 || s_cmp(op, "<", 
-	    op_len, (ftnlen)1) == 0) {
+    } else if (s_cmp(&__global_state->f2c, op, "<=", op_len, (ftnlen)2) == 0 
+	    || s_cmp(&__global_state->f2c, op, "<", op_len, (ftnlen)1) == 0) {
 	subset = TRUE_;
 	i__1 = acard;
 	for (i__ = 1; i__ <= i__1; i__ += 2) {
-	    subset = subset && wnincd_(&a[i__ + 5], &a[i__ + 6], b);
+	    subset = subset && wnincd_(__global_state, &a[i__ + 5], &a[i__ + 
+		    6], b);
 	}
-	if (s_cmp(op, "<=", op_len, (ftnlen)2) == 0) {
+	if (s_cmp(&__global_state->f2c, op, "<=", op_len, (ftnlen)2) == 0) {
 	    ret_val = subset;
 	} else {
 	    ret_val = subset && ! equal;
@@ -350,14 +354,15 @@ logical wnreld_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
 
 /*     A and B change places here... */
 
-    } else if (s_cmp(op, ">=", op_len, (ftnlen)2) == 0 || s_cmp(op, ">", 
-	    op_len, (ftnlen)1) == 0) {
+    } else if (s_cmp(&__global_state->f2c, op, ">=", op_len, (ftnlen)2) == 0 
+	    || s_cmp(&__global_state->f2c, op, ">", op_len, (ftnlen)1) == 0) {
 	subset = TRUE_;
 	i__1 = bcard;
 	for (i__ = 1; i__ <= i__1; i__ += 2) {
-	    subset = subset && wnincd_(&b[i__ + 5], &b[i__ + 6], a);
+	    subset = subset && wnincd_(__global_state, &b[i__ + 5], &b[i__ + 
+		    6], a);
 	}
-	if (s_cmp(op, ">=", op_len, (ftnlen)2) == 0) {
+	if (s_cmp(&__global_state->f2c, op, ">=", op_len, (ftnlen)2) == 0) {
 	    ret_val = subset;
 	} else {
 	    ret_val = subset && ! equal;
@@ -366,13 +371,14 @@ logical wnreld_(doublereal *a, char *op, doublereal *b, ftnlen op_len)
 /*     An unrecognized operator always fails. */
 
     } else {
-	setmsg_("Relational operator, *, is not recognized.", (ftnlen)42);
-	errch_("*", op, (ftnlen)1, op_len);
-	sigerr_("SPICE(INVALIDOPERATION)", (ftnlen)23);
-	chkout_("WNRELD", (ftnlen)6);
+	setmsg_(__global_state, "Relational operator, *, is not recognized.", 
+		(ftnlen)42);
+	errch_(__global_state, "*", op, (ftnlen)1, op_len);
+	sigerr_(__global_state, "SPICE(INVALIDOPERATION)", (ftnlen)23);
+	chkout_(__global_state, "WNRELD", (ftnlen)6);
 	return ret_val;
     }
-    chkout_("WNRELD", (ftnlen)6);
+    chkout_(__global_state, "WNRELD", (ftnlen)6);
     return ret_val;
 } /* wnreld_ */
 

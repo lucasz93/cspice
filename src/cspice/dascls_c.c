@@ -187,7 +187,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "dascls_c" );
+   chkin_c ( naif_state, "dascls_c" );
 
    /*
    Call the f2c'd Fortran routine.  Use explicit type casts for every

@@ -8,8 +8,7 @@
 
 
 extern dasrdi_init_t __dasrdi_init;
-static dasrdi_state_t* get_dasrdi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasrdi_state_t* get_dasrdi_state(cspice_t* state) {
 	if (!state->dasrdi)
 		state->dasrdi = __cspice_allocate_module(sizeof(
 	dasrdi_state_t), &__dasrdi_init, sizeof(__dasrdi_init));
@@ -18,8 +17,8 @@ static dasrdi_state_t* get_dasrdi_state() {
 }
 
 /* $Procedure      DASRDI ( DAS, read data, integer ) */
-/* Subroutine */ int dasrdi_(integer *handle, integer *first, integer *last, 
-	integer *data)
+/* Subroutine */ int dasrdi_(cspice_t* __global_state, integer *handle, 
+	integer *first, integer *last, integer *data)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -28,19 +27,19 @@ static dasrdi_state_t* get_dasrdi_state() {
     integer n;
     integer nread;
     integer recno;
-    extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dasa2l_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern logical failed_(cspice_t*);
     integer clbase;
-    extern /* Subroutine */ int dasrri_(integer *, integer *, integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int dasrri_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
     integer clsize;
     integer wordno;
     integer numint;
 
 
     /* Module state */
-    dasrdi_state_t* __state = get_dasrdi_state();
+    dasrdi_state_t* __state = get_dasrdi_state(__global_state);
 /* $ Abstract */
 
 /*     Read integer data from a range of DAS logical addresses. */
@@ -284,7 +283,8 @@ static dasrdi_state_t* get_dasrdi_state() {
 /*     Find out the physical location of the first integer.  If FIRST */
 /*     is invalid, DASA2L will take care of the problem. */
 
-    dasa2l_(handle, &__state->c__3, first, &clbase, &clsize, &recno, &wordno);
+    dasa2l_(__global_state, handle, &__state->c__3, first, &clbase, &clsize, &
+	    recno, &wordno);
 
 /*     Decide how many integers to read. */
 
@@ -297,14 +297,14 @@ static dasrdi_state_t* get_dasrdi_state() {
     i__1 = numint, i__2 = 256 - wordno + 1;
     n = min(i__1,i__2);
     i__1 = wordno + n - 1;
-    dasrri_(handle, &recno, &wordno, &i__1, data);
+    dasrri_(__global_state, handle, &recno, &wordno, &i__1, data);
     nread = n;
     ++recno;
 
 /*     Read from as many additional records as necessary. */
 
     while(nread < numint) {
-	if (failed_()) {
+	if (failed_(__global_state)) {
 	    return 0;
 	}
 
@@ -321,7 +321,8 @@ static dasrdi_state_t* get_dasrdi_state() {
 /* Computing MIN */
 	    i__1 = numint - nread;
 	    n = min(i__1,256);
-	    dasrri_(handle, &recno, &__state->c__1, &n, &data[nread]);
+	    dasrri_(__global_state, handle, &recno, &__state->c__1, &n, &data[
+		    nread]);
 	    nread += n;
 	    ++recno;
 	} else {
@@ -331,8 +332,8 @@ static dasrdi_state_t* get_dasrdi_state() {
 /*           cluster has address FIRST + NREAD. */
 
 	    i__1 = *first + nread;
-	    dasa2l_(handle, &__state->c__3, &i__1, &clbase, &clsize, &recno, &
-		    wordno);
+	    dasa2l_(__global_state, handle, &__state->c__3, &i__1, &clbase, &
+		    clsize, &recno, &wordno);
 	}
     }
     return 0;

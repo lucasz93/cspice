@@ -8,35 +8,35 @@
 
 
 typedef int isopen_state_t;
-static isopen_state_t* get_isopen_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline isopen_state_t* get_isopen_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure             ISOPEN ( Is a file currently open? ) */
-logical isopen_(char *file, ftnlen file_len)
+logical isopen_(cspice_t* __global_state, char *file, ftnlen file_len)
 {
     /* System generated locals */
     logical ret_val;
     inlist ioin__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), f_inqu(inlist *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), f_inqu(
+	    f2c_state_t*, inlist *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     logical myopen;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     logical exists;
 
 
     /* Module state */
-    isopen_state_t* __state = get_isopen_state();
+    isopen_state_t* __state = get_isopen_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether a named file is currently open. */
@@ -163,20 +163,20 @@ logical isopen_(char *file, ftnlen file_len)
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = FALSE_;
 	return ret_val;
     } else {
-	chkin_("ISOPEN", (ftnlen)6);
+	chkin_(__global_state, "ISOPEN", (ftnlen)6);
     }
 
 /*     First we test to see if the filename is blank. */
 
-    if (s_cmp(file, " ", file_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, file, " ", file_len, (ftnlen)1) == 0) {
 	ret_val = FALSE_;
-	setmsg_("The file name is blank. ", (ftnlen)24);
-	sigerr_("SPICE(BLANKFILENAME)", (ftnlen)20);
-	chkout_("ISOPEN", (ftnlen)6);
+	setmsg_(__global_state, "The file name is blank. ", (ftnlen)24);
+	sigerr_(__global_state, "SPICE(BLANKFILENAME)", (ftnlen)20);
+	chkout_(__global_state, "ISOPEN", (ftnlen)6);
 	return ret_val;
     }
 
@@ -199,13 +199,13 @@ logical isopen_(char *file, ftnlen file_len)
     ioin__1.inrecl = 0;
     ioin__1.innrec = 0;
     ioin__1.inblank = 0;
-    iostat = f_inqu(&ioin__1);
+    iostat = f_inqu(&__global_state->f2c, &ioin__1);
     if (iostat != 0) {
 	ret_val = FALSE_;
-	setmsg_("Value of IOSTAT was *.", (ftnlen)22);
-	errint_("*", &iostat, (ftnlen)1);
-	sigerr_("SPICE(INQUIREFAILED)", (ftnlen)20);
-	chkout_("ISOPEN", (ftnlen)6);
+	setmsg_(__global_state, "Value of IOSTAT was *.", (ftnlen)22);
+	errint_(__global_state, "*", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	chkout_(__global_state, "ISOPEN", (ftnlen)6);
 	return ret_val;
     }
 
@@ -220,7 +220,7 @@ logical isopen_(char *file, ftnlen file_len)
 /*     Set the function value, check out, and return. */
 
     ret_val = myopen;
-    chkout_("ISOPEN", (ftnlen)6);
+    chkout_(__global_state, "ISOPEN", (ftnlen)6);
     return ret_val;
 } /* isopen_ */
 

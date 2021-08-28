@@ -8,8 +8,7 @@
 
 
 extern dskz02_init_t __dskz02_init;
-static dskz02_state_t* get_dskz02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskz02_state_t* get_dskz02_state(cspice_t* state) {
 	if (!state->dskz02)
 		state->dskz02 = __cspice_allocate_module(sizeof(
 	dskz02_state_t), &__dskz02_init, sizeof(__dskz02_init));
@@ -18,19 +17,19 @@ static dskz02_state_t* get_dskz02_state() {
 }
 
 /* $Procedure DSKZ02 ( DSK, fetch type 2 model size parameters ) */
-/* Subroutine */ int dskz02_(integer *handle, integer *dladsc, integer *nv, 
-	integer *np)
+/* Subroutine */ int dskz02_(cspice_t* __global_state, integer *handle, 
+	integer *dladsc, integer *nv, integer *np)
 {
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dski02_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dski02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    dskz02_state_t* __state = get_dskz02_state();
+    dskz02_state_t* __state = get_dskz02_state(__global_state);
 /* $ Abstract */
 
 /*     Return plate model size parameters---plate count and */
@@ -867,15 +866,15 @@ static dskz02_state_t* get_dskz02_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKZ02", (ftnlen)6);
-    dski02_(handle, dladsc, &__state->c__1, &__state->c__1, &__state->c__1, &
-	    n, nv);
-    dski02_(handle, dladsc, &__state->c__2, &__state->c__1, &__state->c__1, &
-	    n, np);
-    chkout_("DSKZ02", (ftnlen)6);
+    chkin_(__global_state, "DSKZ02", (ftnlen)6);
+    dski02_(__global_state, handle, dladsc, &__state->c__1, &__state->c__1, &
+	    __state->c__1, &n, nv);
+    dski02_(__global_state, handle, dladsc, &__state->c__2, &__state->c__1, &
+	    __state->c__1, &n, np);
+    chkout_(__global_state, "DSKZ02", (ftnlen)6);
     return 0;
 } /* dskz02_ */
 

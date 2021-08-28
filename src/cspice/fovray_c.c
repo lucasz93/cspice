@@ -466,7 +466,7 @@
    {
       return;
    }
-   chkin_c ( "fovray_c" );
+   chkin_c ( naif_state, "fovray_c" );
 
    /*
    Check the input strings to make sure the pointers are non-null

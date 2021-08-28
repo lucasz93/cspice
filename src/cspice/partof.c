@@ -8,31 +8,31 @@
 
 
 typedef int partof_state_t;
-static partof_state_t* get_partof_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline partof_state_t* get_partof_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PARTOF ( Parabolic time of flight ) */
-/* Subroutine */ int partof_(doublereal *ma, doublereal *d__)
+/* Subroutine */ int partof_(cspice_t* __global_state, doublereal *ma, 
+	doublereal *d__)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
     doublereal m;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dcbrt_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dcbrt_(cspice_t*, doublereal *);
     doublereal deriv;
     doublereal deriv2;
     doublereal fn;
     doublereal change;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    partof_state_t* __state = get_partof_state();
+    partof_state_t* __state = get_partof_state(__global_state);
 /* $ Abstract */
 
 /*     Solve the time of flight equation MA = D + (D**3) / 3 */
@@ -177,10 +177,10 @@ static partof_state_t* get_partof_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PARTOF", (ftnlen)6);
+	chkin_(__global_state, "PARTOF", (ftnlen)6);
     }
 
 /*     If the mean anomaly is zero, the eccentric anomaly is also zero */
@@ -189,7 +189,7 @@ static partof_state_t* get_partof_state() {
 
     if (*ma == 0.) {
 	*d__ = 0.;
-	chkout_("PARTOF", (ftnlen)6);
+	chkout_(__global_state, "PARTOF", (ftnlen)6);
 	return 0;
     } else {
 	m = abs(*ma);
@@ -199,7 +199,7 @@ static partof_state_t* get_partof_state() {
 /*     is well behaved, so just about any guess will do. */
 
     d__1 = m * 3.;
-    *d__ = dcbrt_(&d__1);
+    *d__ = dcbrt_(__global_state, &d__1);
 
 /*     Use the Newton second-order method, */
 
@@ -235,7 +235,7 @@ static partof_state_t* get_partof_state() {
     if (*ma < 0.) {
 	*d__ = -(*d__);
     }
-    chkout_("PARTOF", (ftnlen)6);
+    chkout_(__global_state, "PARTOF", (ftnlen)6);
     return 0;
 } /* partof_ */
 

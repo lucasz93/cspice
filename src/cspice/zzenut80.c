@@ -8,8 +8,7 @@
 
 
 extern zzenut80_init_t __zzenut80_init;
-static zzenut80_state_t* get_zzenut80_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzenut80_state_t* get_zzenut80_state(cspice_t* state) {
 	if (!state->zzenut80)
 		state->zzenut80 = __cspice_allocate_module(sizeof(
 	zzenut80_state_t), &__zzenut80_init, sizeof(__zzenut80_init));
@@ -18,24 +17,26 @@ static zzenut80_state_t* get_zzenut80_state() {
 }
 
 /* $Procedure ZZENUT80 ( Earth nutation transformation, IAU 1980 model ) */
-/* Subroutine */ int zzenut80_(doublereal *et, doublereal *nutxf)
+/* Subroutine */ int zzenut80_(cspice_t* __global_state, doublereal *et, 
+	doublereal *nutxf)
 {
     doublereal dmob;
-    extern /* Subroutine */ int zzmobliq_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzmobliq_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal dvnut[4];
-    extern /* Subroutine */ int eul2xf_(doublereal *, integer *, integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int eul2xf_(cspice_t*, doublereal *, integer *, 
+	    integer *, integer *, doublereal *);
     doublereal eulang[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int zzwahr_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzwahr_(cspice_t*, doublereal *, doublereal *)
+	    ;
     doublereal mob;
 
 
     /* Module state */
-    zzenut80_state_t* __state = get_zzenut80_state();
+    zzenut80_state_t* __state = get_zzenut80_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -159,10 +160,10 @@ static zzenut80_state_t* get_zzenut80_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZENUT80", (ftnlen)8);
+    chkin_(__global_state, "ZZENUT80", (ftnlen)8);
 
 /*      Get nutation angles and their rates.  We're expecting */
 
@@ -171,7 +172,7 @@ static zzenut80_state_t* get_zzenut80_state() {
 /*         DVNUT(3) = dPsi/dt     (radians/second) */
 /*         DVNUT(4) = dEpsilon/dt (radians/second) */
 
-    zzwahr_(et, dvnut);
+    zzwahr_(__global_state, et, dvnut);
 
 /*     Get the mean obliquity of date. */
 
@@ -185,7 +186,7 @@ static zzenut80_state_t* get_zzenut80_state() {
 
 /*         DMOB     is the time derivative of MOB at ET, expressed */
 /*                        in radians per second. */
-    zzmobliq_(et, &mob, &dmob);
+    zzmobliq_(__global_state, et, &mob, &dmob);
 
 /*     The nutation rotation N is defined by */
 
@@ -214,8 +215,9 @@ static zzenut80_state_t* get_zzenut80_state() {
     eulang[3] = -dmob - dvnut[3];
     eulang[4] = -dvnut[2];
     eulang[5] = dmob;
-    eul2xf_(eulang, &__state->c__1, &__state->c__3, &__state->c__1, nutxf);
-    chkout_("ZZENUT80", (ftnlen)8);
+    eul2xf_(__global_state, eulang, &__state->c__1, &__state->c__3, &
+	    __state->c__1, nutxf);
+    chkout_(__global_state, "ZZENUT80", (ftnlen)8);
     return 0;
 } /* zzenut80_ */
 

@@ -214,7 +214,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "rdtext_c" );
+   chkin_c ( naif_state, "rdtext_c" );
 
 
    /*

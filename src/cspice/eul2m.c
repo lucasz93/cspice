@@ -8,32 +8,31 @@
 
 
 typedef int eul2m_state_t;
-static eul2m_state_t* get_eul2m_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline eul2m_state_t* get_eul2m_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      EUL2M ( Euler angles to matrix ) */
-/* Subroutine */ int eul2m_(doublereal *angle3, doublereal *angle2, 
-	doublereal *angle1, integer *axis3, integer *axis2, integer *axis1, 
-	doublereal *r__)
+/* Subroutine */ int eul2m_(cspice_t* __global_state, doublereal *angle3, 
+	doublereal *angle2, doublereal *angle1, integer *axis3, integer *
+	axis2, integer *axis1, doublereal *r__)
 {
     logical badax;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal r1[9]	/* was [3][3] */;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int rotate_(doublereal *, integer *, doublereal *)
-	    ;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int rotmat_(doublereal *, doublereal *, integer *,
-	     doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int rotate_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int rotmat_(cspice_t*, doublereal *, doublereal *,
+	     integer *, doublereal *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    eul2m_state_t* __state = get_eul2m_state();
+    eul2m_state_t* __state = get_eul2m_state(__global_state);
 /* $ Abstract */
 
 /*     Construct a rotation matrix from a set of Euler angles. */
@@ -467,10 +466,10 @@ static eul2m_state_t* get_eul2m_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EUL2M", (ftnlen)5);
+	chkin_(__global_state, "EUL2M", (ftnlen)5);
     }
 
 /*     Make sure the axis numbers are all right:  They must belong to */
@@ -479,21 +478,21 @@ static eul2m_state_t* get_eul2m_state() {
     badax = *axis3 < 1 || *axis3 > 3 || (*axis2 < 1 || *axis2 > 3) || (*axis1 
 	    < 1 || *axis1 > 3);
     if (badax) {
-	setmsg_("Axis numbers are #,  #,  #. ", (ftnlen)28);
-	errint_("#", axis3, (ftnlen)1);
-	errint_("#", axis2, (ftnlen)1);
-	errint_("#", axis1, (ftnlen)1);
-	sigerr_("SPICE(BADAXISNUMBERS)", (ftnlen)21);
-	chkout_("EUL2M", (ftnlen)5);
+	setmsg_(__global_state, "Axis numbers are #,  #,  #. ", (ftnlen)28);
+	errint_(__global_state, "#", axis3, (ftnlen)1);
+	errint_(__global_state, "#", axis2, (ftnlen)1);
+	errint_(__global_state, "#", axis1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADAXISNUMBERS)", (ftnlen)21);
+	chkout_(__global_state, "EUL2M", (ftnlen)5);
 	return 0;
     }
 
 /*     Just do it. */
 
-    rotate_(angle1, axis1, r__);
-    rotmat_(r__, angle2, axis2, r1);
-    rotmat_(r1, angle3, axis3, r__);
-    chkout_("EUL2M", (ftnlen)5);
+    rotate_(__global_state, angle1, axis1, r__);
+    rotmat_(__global_state, r__, angle2, axis2, r1);
+    rotmat_(__global_state, r1, angle3, axis3, r__);
+    chkout_(__global_state, "EUL2M", (ftnlen)5);
     return 0;
 } /* eul2m_ */
 

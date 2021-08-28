@@ -8,13 +8,13 @@
 
 
 typedef int ucrss_state_t;
-static ucrss_state_t* get_ucrss_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ucrss_state_t* get_ucrss_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      UCRSS ( Unitized cross product, 3x3 ) */
-/* Subroutine */ int ucrss_(doublereal *v1, doublereal *v2, doublereal *vout)
+/* Subroutine */ int ucrss_(cspice_t* __global_state, doublereal *v1, 
+	doublereal *v2, doublereal *vout)
 {
     /* System generated locals */
     doublereal d__1, d__2;
@@ -23,14 +23,14 @@ static ucrss_state_t* get_ucrss_state() {
     doublereal vmag;
     doublereal maxv1;
     doublereal maxv2;
-    extern doublereal vnorm_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal vcross[3];
     doublereal tv1[3];
     doublereal tv2[3];
 
 
     /* Module state */
-    ucrss_state_t* __state = get_ucrss_state();
+    ucrss_state_t* __state = get_ucrss_state(__global_state);
 /* $ Abstract */
 
 /*      Compute the normalized cross product of two 3-vectors. */
@@ -191,7 +191,7 @@ static ucrss_state_t* get_ucrss_state() {
 
 /*  Get the magnitude of VCROSS and normalize it */
 
-    vmag = vnorm_(vcross);
+    vmag = vnorm_(__global_state, vcross);
     if (vmag > 0.) {
 	vout[0] = vcross[0] / vmag;
 	vout[1] = vcross[1] / vmag;

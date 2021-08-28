@@ -2,12 +2,11 @@
 #include "fio.h"
 #include "__cspice_state.h"
 #ifdef KR_headers
-integer f_back(a) alist *a;
+integer f_back(f2c, a) f2c_state_t *f2c; alist *a;
 #else
-integer f_back(alist *a)
+integer f_back(f2c_state_t *f2c, alist *a)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	unit *b;
+{	unit *b;
 	long v, w, x, y, z;
 	uiolen n;
 	FILE *f;

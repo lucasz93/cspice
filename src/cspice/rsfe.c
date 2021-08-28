@@ -47,8 +47,8 @@
 #include "fmt.h"
 #include "__cspice_state.h"
 
-logical zzcheckeol ( int ch );
-void    zzsetnnread_( logical * on );
+logical zzcheckeol ( f2c_state_t *f2c, int ch );
+void    zzsetnnread_( f2c_state_t *f2c, logical * on );
 
 /*
 
@@ -107,9 +107,8 @@ void    zzsetnnread_( logical * on );
 -&
 */
 
-xrd_SL(Void)
+xrd_SL(f2c_state_t *f2c)
    {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    int ch;
    
    if(!f2c->f__curunit->uend)
@@ -134,9 +133,8 @@ xrd_SL(Void)
    }
 
 
-x_getc(Void)
+x_getc(f2c_state_t *f2c)
    {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    int ch;
 
    if( f2c->f__curunit->uend)
@@ -178,27 +176,25 @@ x_getc(Void)
    }
 
 
-x_endp(Void)
+x_endp(f2c_state_t *f2c)
    {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-   xrd_SL();
+   xrd_SL(f2c);
    return f2c->f__curunit->uend == 1 ? EOF : 0;
    }
 
-x_rev(Void)
+x_rev(f2c_state_t *f2c)
    {
-   (void) xrd_SL();
+   (void) xrd_SL(f2c);
    return(0);
    }
 
 
 #ifdef KR_headers
-integer s_rsfe(a) cilist *a;
+integer s_rsfe(f2c,a) f2c_state_t *f2c; scilist *a;
 #else
-integer s_rsfe(cilist *a)
+integer s_rsfe(f2c_state_t *f2c, cilist *a)
 #endif
    {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    int n;
    
    if(!f2c->f__init) 
@@ -253,9 +249,8 @@ integer s_rsfe(cilist *a)
    }
 
 
-logical zzcheckeol ( int ch )
+logical zzcheckeol ( f2c_state_t *f2c, int ch )
    {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    if ( f2c->read_non_native )
       {
 
@@ -410,9 +405,8 @@ logical zzcheckeol ( int ch )
 -&
 */
 
-void zzsetnnread_( logical * on )
+void zzsetnnread_( f2c_state_t *f2c, logical * on )
    {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    f2c->read_non_native = *on;
    }
 

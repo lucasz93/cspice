@@ -8,8 +8,7 @@
 
 
 extern zzddhini_init_t __zzddhini_init;
-static zzddhini_state_t* get_zzddhini_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzddhini_state_t* get_zzddhini_state(cspice_t* state) {
 	if (!state->zzddhini)
 		state->zzddhini = __cspice_allocate_module(sizeof(
 	zzddhini_state_t), &__zzddhini_init, sizeof(__zzddhini_init));
@@ -18,35 +17,39 @@ static zzddhini_state_t* get_zzddhini_state() {
 }
 
 /* $Procedure ZZDDHINI ( Private --- DDH Initialize Structures ) */
-/* Subroutine */ int zzddhini_(integer *natbff, integer *supbff, integer *
-	numsup, char *stramh, char *strarc, char *strbff, ftnlen stramh_len, 
-	ftnlen strarc_len, ftnlen strbff_len)
+/* Subroutine */ int zzddhini_(cspice_t* __global_state, integer *natbff, 
+	integer *supbff, integer *numsup, char *stramh, char *strarc, char *
+	strbff, ftnlen stramh_len, ftnlen strarc_len, ftnlen strbff_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     logical done;
-    extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int zzddhgsd_(cspice_t*, char *, integer *, char *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzplatfm_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int nextwd_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     char linstr[36];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     char tmpstr[8];
 
 
     /* Module state */
-    zzddhini_state_t* __state = get_zzddhini_state();
+    zzddhini_state_t* __state = get_zzddhini_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -451,44 +454,45 @@ static zzddhini_state_t* get_zzddhini_state() {
 
 /*     Standard SPICE error handling with discovery check in/out. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Populate the STR### arrays. */
 
     for (i__ = 1; i__ <= 4; ++i__) {
-	zzddhgsd_("METHOD", &i__, stramh + (i__ - 1) * stramh_len, (ftnlen)6, 
-		stramh_len);
+	zzddhgsd_(__global_state, "METHOD", &i__, stramh + (i__ - 1) * 
+		stramh_len, (ftnlen)6, stramh_len);
     }
     for (i__ = 1; i__ <= 2; ++i__) {
-	zzddhgsd_("ARCH", &i__, strarc + (i__ - 1) * strarc_len, (ftnlen)4, 
-		strarc_len);
+	zzddhgsd_(__global_state, "ARCH", &i__, strarc + (i__ - 1) * 
+		strarc_len, (ftnlen)4, strarc_len);
     }
     for (i__ = 1; i__ <= 4; ++i__) {
-	zzddhgsd_("BFF", &i__, strbff + (i__ - 1) * strbff_len, (ftnlen)3, 
-		strbff_len);
+	zzddhgsd_(__global_state, "BFF", &i__, strbff + (i__ - 1) * 
+		strbff_len, (ftnlen)3, strbff_len);
     }
 
 /*     Get the native binary file format. */
 
-    zzplatfm_("FILE_FORMAT", tmpstr, (ftnlen)11, (ftnlen)8);
-    ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-    *natbff = isrchc_(tmpstr, &__state->c__4, strbff, (ftnlen)8, strbff_len);
+    zzplatfm_(__global_state, "FILE_FORMAT", tmpstr, (ftnlen)11, (ftnlen)8);
+    ucase_(__global_state, tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
+    *natbff = isrchc_(__global_state, tmpstr, &__state->c__4, strbff, (ftnlen)
+	    8, strbff_len);
     if (*natbff == 0) {
-	chkin_("ZZDDHINI", (ftnlen)8);
-	setmsg_("The binary file format, '#', is not supported by this veris"
-		"on of the toolkit. This is a serious problem, contact NAIF.", 
-		(ftnlen)118);
-	errch_("#", tmpstr, (ftnlen)1, (ftnlen)8);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZDDHINI", (ftnlen)8);
+	chkin_(__global_state, "ZZDDHINI", (ftnlen)8);
+	setmsg_(__global_state, "The binary file format, '#', is not support"
+		"ed by this verison of the toolkit. This is a serious problem"
+		", contact NAIF.", (ftnlen)118);
+	errch_(__global_state, "#", tmpstr, (ftnlen)1, (ftnlen)8);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZDDHINI", (ftnlen)8);
 	return 0;
     }
 
 /*     Now fetch the list of supported binary file formats. */
 
-    zzplatfm_("READS_BFF", linstr, (ftnlen)9, (ftnlen)36);
+    zzplatfm_(__global_state, "READS_BFF", linstr, (ftnlen)9, (ftnlen)36);
 
 /*     Parse the wordlist that is sitting in LINSTR. */
 
@@ -500,30 +504,33 @@ static zzddhini_state_t* get_zzddhini_state() {
 /*        off. */
 
 	++i__;
-	nextwd_(linstr, tmpstr, linstr, (ftnlen)36, (ftnlen)8, (ftnlen)36);
+	nextwd_(__global_state, linstr, tmpstr, linstr, (ftnlen)36, (ftnlen)8,
+		 (ftnlen)36);
 
 /*        See if we're done. */
 
-	done = i__ > 4 || s_cmp(tmpstr, " ", (ftnlen)8, (ftnlen)1) == 0;
+	done = i__ > 4 || s_cmp(&__global_state->f2c, tmpstr, " ", (ftnlen)8, 
+		(ftnlen)1) == 0;
 
 /*        If we're not done, then convert this string to the */
 /*        appropriate integer code. */
 
 	if (! done) {
-	    supbff[i__ - 1] = isrchc_(tmpstr, &__state->c__4, strbff, (ftnlen)
-		    8, strbff_len);
+	    supbff[i__ - 1] = isrchc_(__global_state, tmpstr, &__state->c__4, 
+		    strbff, (ftnlen)8, strbff_len);
 
 /*           Check to see if the binary file format listed */
 /*           is properly supported. */
 
 	    if (supbff[i__ - 1] == 0) {
-		chkin_("ZZDDHINI", (ftnlen)8);
-		setmsg_("The binary file format, '#', is not supported by th"
-			"is verison of the toolkit. This is a serious problem"
-			", contact NAIF.            ", (ftnlen)130);
-		errch_("#", tmpstr, (ftnlen)1, (ftnlen)8);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZDDHINI", (ftnlen)8);
+		chkin_(__global_state, "ZZDDHINI", (ftnlen)8);
+		setmsg_(__global_state, "The binary file format, '#', is not"
+			" supported by this verison of the toolkit. This is a"
+			" serious problem, contact NAIF.            ", (ftnlen)
+			130);
+		errch_(__global_state, "#", tmpstr, (ftnlen)1, (ftnlen)8);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZDDHINI", (ftnlen)8);
 		return 0;
 	    }
 	}

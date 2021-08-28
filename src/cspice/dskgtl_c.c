@@ -156,7 +156,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dskgtl_c" );
+   chkin_c ( naif_state, "dskgtl_c" );
 
 
    dskgtl_ ( (integer     *) &keywrd,

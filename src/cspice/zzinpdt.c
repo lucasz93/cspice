@@ -8,8 +8,7 @@
 
 
 extern zzinpdt_init_t __zzinpdt_init;
-static zzinpdt_state_t* get_zzinpdt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzinpdt_state_t* get_zzinpdt_state(cspice_t* state) {
 	if (!state->zzinpdt)
 		state->zzinpdt = __cspice_allocate_module(sizeof(
 	zzinpdt_state_t), &__zzinpdt_init, sizeof(__zzinpdt_init));
@@ -18,8 +17,9 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 }
 
 /* $Procedure ZZINPDT ( DSK, in planetodetic element? ) */
-/* Subroutine */ int zzinpdt_(doublereal *p, doublereal *bounds, doublereal *
-	corpar, doublereal *margin, integer *exclud, logical *inside)
+/* Subroutine */ int zzinpdt_(cspice_t* __global_state, doublereal *p, 
+	doublereal *bounds, doublereal *corpar, doublereal *margin, integer *
+	exclud, logical *inside)
 {
     /* Initialized data */
 
@@ -28,25 +28,26 @@ static zzinpdt_state_t* get_zzinpdt_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double cos(doublereal);
+    double cos(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal dlon;
-    extern /* Subroutine */ int zzinpdt0_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, logical *);
-    extern /* Subroutine */ int zzpdcmpl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *);
+    extern /* Subroutine */ int zzinpdt0_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzpdcmpl_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, integer *);
     doublereal f;
-    extern /* Subroutine */ int zznrmlon_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zznrmlon_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *);
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal twopi_(void);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal twopi_(cspice_t*);
+    extern logical failed_(cspice_t*);
     doublereal re;
-    extern doublereal pi_(void);
-    extern doublereal halfpi_(void);
+    extern doublereal pi_(cspice_t*);
+    extern doublereal halfpi_(cspice_t*);
     doublereal amnalt;
     doublereal amnlat;
     doublereal amnlon;
@@ -62,20 +63,20 @@ static zzinpdt_state_t* get_zzinpdt_state() {
     doublereal minlon;
     doublereal pcnlat;
     integer relmin;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer relmax;
     logical alpass;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal lon;
 
 
     /* Module state */
-    zzinpdt_state_t* __state = get_zzinpdt_state();
+    zzinpdt_state_t* __state = get_zzinpdt_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -528,29 +529,30 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZINPDT", (ftnlen)7);
+    chkin_(__global_state, "ZZINPDT", (ftnlen)7);
     if (__state->first) {
-	__state->hpi = halfpi_();
-	__state->pi2 = twopi_();
+	__state->hpi = halfpi_(__global_state);
+	__state->pi2 = twopi_(__global_state);
 
 /*        Initialize the local array used for altitude checks. */
 
-	__state->altbds[2] = -halfpi_();
-	__state->altbds[3] = halfpi_();
-	__state->altbds[0] = -pi_();
-	__state->altbds[1] = pi_();
+	__state->altbds[2] = -halfpi_(__global_state);
+	__state->altbds[3] = halfpi_(__global_state);
+	__state->altbds[0] = -pi_(__global_state);
+	__state->altbds[1] = pi_(__global_state);
 	__state->altbds[4] = 0.;
 	__state->altbds[5] = 0.;
 	__state->first = FALSE_;
     }
     if (*exclud < 0 || *exclud > 3) {
-	setmsg_("EXCLUD must be in the range 0:3 but was #.", (ftnlen)42);
-	errint_("#", exclud, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZINPDT", (ftnlen)7);
+	setmsg_(__global_state, "EXCLUD must be in the range 0:3 but was #.", 
+		(ftnlen)42);
+	errint_(__global_state, "#", exclud, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZINPDT", (ftnlen)7);
 	return 0;
     }
 
@@ -558,7 +560,7 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 /*     latitude we obtain will be planetocentric. To emphasize this, we */
 /*     use the name "PCNLAT." */
 
-    reclat_(p, &r__, &lon, &pcnlat);
+    reclat_(__global_state, p, &r__, &lon, &pcnlat);
 
 /*     RECLAT is error free, so we don't call FAILED() here. */
 
@@ -567,14 +569,15 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 /*        ZZINPDT0 contains the logic required to determine whether */
 /*        the input point is contained in the element. */
 
-	zzinpdt0_(p, &lon, bounds, corpar, exclud, inside);
-	chkout_("ZZINPDT", (ftnlen)7);
+	zzinpdt0_(__global_state, p, &lon, bounds, corpar, exclud, inside);
+	chkout_(__global_state, "ZZINPDT", (ftnlen)7);
 	return 0;
     } else if (*margin < 0.) {
-	setmsg_("Margin must be non-negative but was #.", (ftnlen)38);
-	errdp_("#", margin, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZINPDT", (ftnlen)7);
+	setmsg_(__global_state, "Margin must be non-negative but was #.", (
+		ftnlen)38);
+	errdp_(__global_state, "#", margin, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZINPDT", (ftnlen)7);
 	return 0;
     }
 
@@ -616,10 +619,10 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 
 /*        Compare the latitude of the input point to the bounds. */
 
-	zzpdcmpl_(&re, &f, p, &amnlat, &relmin);
-	zzpdcmpl_(&re, &f, p, &amxlat, &relmax);
-	if (failed_()) {
-	    chkout_("ZZINPDT", (ftnlen)7);
+	zzpdcmpl_(__global_state, &re, &f, p, &amnlat, &relmin);
+	zzpdcmpl_(__global_state, &re, &f, p, &amxlat, &relmax);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZINPDT", (ftnlen)7);
 	    return 0;
 	}
 	if (relmin == -1 || relmax == 1) {
@@ -627,7 +630,7 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 /*           The latitude of P is strictly outside of the element's */
 /*           latitude bounds. */
 
-	    chkout_("ZZINPDT", (ftnlen)7);
+	    chkout_(__global_state, "ZZINPDT", (ftnlen)7);
 	    return 0;
 	}
     }
@@ -654,9 +657,10 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 
 	__state->altbds[4] = amnalt;
 	__state->altbds[5] = amxalt;
-	zzinpdt0_(p, &lon, __state->altbds, corpar, &__state->c__1, &alpass);
+	zzinpdt0_(__global_state, p, &lon, __state->altbds, corpar, &
+		__state->c__1, &alpass);
 	if (! alpass) {
-	    chkout_("ZZINPDT", (ftnlen)7);
+	    chkout_(__global_state, "ZZINPDT", (ftnlen)7);
 	    return 0;
 	}
     }
@@ -672,9 +676,10 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 
 /*        Start out by normalizing the element's longitude bounds. */
 
-	zznrmlon_(bounds, &bounds[1], &__state->c_b16, &minlon, &maxlon);
-	if (failed_()) {
-	    chkout_("ZZINPDT", (ftnlen)7);
+	zznrmlon_(__global_state, bounds, &bounds[1], &__state->c_b16, &
+		minlon, &maxlon);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZINPDT", (ftnlen)7);
 	    return 0;
 	}
 
@@ -696,11 +701,11 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 /*        is "close" to a pole. */
 
 	d__1 = __state->hpi - 1e-8;
-	zzpdcmpl_(&re, &f, p, &d__1, &relmax);
+	zzpdcmpl_(__global_state, &re, &f, p, &d__1, &relmax);
 	d__1 = -__state->hpi + 1e-8;
-	zzpdcmpl_(&re, &f, p, &d__1, &relmin);
-	if (failed_()) {
-	    chkout_("ZZINPDT", (ftnlen)7);
+	zzpdcmpl_(__global_state, &re, &f, p, &d__1, &relmin);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZINPDT", (ftnlen)7);
 	    return 0;
 	}
 	if (relmax != 1 && relmin != -1) {
@@ -723,7 +728,7 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 /*           latitude) is adequate for this purpose. */
 
 /* Computing MAX */
-	    d__2 = (d__1 = cos(pcnlat), abs(d__1));
+	    d__2 = (d__1 = cos(&__global_state->f2c, pcnlat), abs(d__1));
 	    dlon = lonmrg / max(d__2,1e-8);
 	    amnlon = minlon - dlon;
 	    amxlon = maxlon + dlon;
@@ -758,7 +763,7 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 		}
 	    }
 	    if (lon < amnlon || lon > amxlon) {
-		chkout_("ZZINPDT", (ftnlen)7);
+		chkout_(__global_state, "ZZINPDT", (ftnlen)7);
 		return 0;
 	    }
 	} else {
@@ -802,7 +807,7 @@ static zzinpdt_state_t* get_zzinpdt_state() {
 /*     element. */
 
     *inside = TRUE_;
-    chkout_("ZZINPDT", (ftnlen)7);
+    chkout_(__global_state, "ZZINPDT", (ftnlen)7);
     return 0;
 } /* zzinpdt_ */
 

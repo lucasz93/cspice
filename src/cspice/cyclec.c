@@ -8,20 +8,20 @@
 
 
 typedef int cyclec_state_t;
-static cyclec_state_t* get_cyclec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cyclec_state_t* get_cyclec_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CYCLEC ( Cycle a character string ) */
-/* Subroutine */ int cyclec_(char *instr, char *dir, integer *ncycle, char *
-	outstr, ftnlen instr_len, ftnlen dir_len, ftnlen outstr_len)
+/* Subroutine */ int cyclec_(cspice_t* __global_state, char *instr, char *dir,
+	 integer *ncycle, char *outstr, ftnlen instr_len, ftnlen dir_len, 
+	ftnlen outstr_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     char last[1];
@@ -33,18 +33,19 @@ static cyclec_state_t* get_cyclec_state() {
     integer l;
     integer m;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer limit;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern integer gcd_(integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern integer gcd_(cspice_t*, integer *, integer *);
 
 
     /* Module state */
-    cyclec_state_t* __state = get_cyclec_state();
+    cyclec_state_t* __state = get_cyclec_state(__global_state);
 /* $ Abstract */
 
 /*      Cycle the contents of a character string to the left or right. */
@@ -201,16 +202,16 @@ static cyclec_state_t* get_cyclec_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CYCLEC", (ftnlen)6);
+	chkin_(__global_state, "CYCLEC", (ftnlen)6);
     }
 
 /*     Get the length of the input string. */
 
-    n = i_len(instr, instr_len);
-    limit = i_len(outstr, outstr_len);
+    n = i_len(&__global_state->f2c, instr, instr_len);
+    limit = i_len(&__global_state->f2c, outstr, outstr_len);
 
 /*     A left cycle is the same as a right cycle by the opposite of */
 /*     NCYCLE.  Moreover a cycle by K is the same as a cycle by */
@@ -222,17 +223,17 @@ static cyclec_state_t* get_cyclec_state() {
     } else if (*(unsigned char *)dir == 'R' || *(unsigned char *)dir == 'r') {
 	k = *ncycle % n;
     } else {
-	setmsg_("The direction flag should be one of the following: 'r', 'R'"
-		", 'l', 'L'.  It was #.", (ftnlen)81);
-	errch_("#", dir, (ftnlen)1, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDIRECTION)", (ftnlen)23);
-	chkout_("CYCLEC", (ftnlen)6);
+	setmsg_(__global_state, "The direction flag should be one of the fol"
+		"lowing: 'r', 'R', 'l', 'L'.  It was #.", (ftnlen)81);
+	errch_(__global_state, "#", dir, (ftnlen)1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDIRECTION)", (ftnlen)23);
+	chkout_(__global_state, "CYCLEC", (ftnlen)6);
 	return 0;
     }
     if (k < 0) {
 	k += n;
     } else if (k == 0) {
-	chkout_("CYCLEC", (ftnlen)6);
+	chkout_(__global_state, "CYCLEC", (ftnlen)6);
 	return 0;
     }
 
@@ -312,7 +313,7 @@ static cyclec_state_t* get_cyclec_state() {
 
 /*     In this case the code is much shorter than its explanation. */
 
-    g = gcd_(&k, &n);
+    g = gcd_(__global_state, &k, &n);
     m = n / g;
     i__1 = g;
     for (i__ = 1; i__ <= i__1; ++i__) {
@@ -338,7 +339,7 @@ static cyclec_state_t* get_cyclec_state() {
 	    *(unsigned char *)last = *(unsigned char *)temp;
 	}
     }
-    chkout_("CYCLEC", (ftnlen)6);
+    chkout_(__global_state, "CYCLEC", (ftnlen)6);
     return 0;
 } /* cyclec_ */
 

@@ -263,7 +263,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "oscelt_c" );
+   chkin_c ( naif_state, "oscelt_c" );
 
 
    /*

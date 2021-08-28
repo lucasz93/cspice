@@ -8,22 +8,21 @@
 
 
 typedef int kpsolv_state_t;
-static kpsolv_state_t* get_kpsolv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline kpsolv_state_t* get_kpsolv_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      KPSOLV ( Solve Keplers Equation --- Vector Form ) */
-doublereal kpsolv_(doublereal *evec)
+doublereal kpsolv_(cspice_t* __global_state, doublereal *evec)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
     doublereal ret_val, d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    double sqrt(doublereal);
-    integer i_dnnt(doublereal *);
-    double cos(doublereal), sin(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
+    integer i_dnnt(f2c_state_t*, doublereal *);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal cosx;
@@ -32,17 +31,18 @@ doublereal kpsolv_(doublereal *evec)
     integer i__;
     doublereal k;
     doublereal x;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer maxit;
     doublereal y0;
     doublereal xl;
     doublereal xm;
     doublereal xu;
     doublereal yx;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal ecc;
     doublereal ecc2;
     doublereal yxm;
@@ -50,7 +50,7 @@ doublereal kpsolv_(doublereal *evec)
 
 
     /* Module state */
-    kpsolv_state_t* __state = get_kpsolv_state();
+    kpsolv_state_t* __state = get_kpsolv_state(__global_state);
 /* $ Abstract */
 
 /*    This routine solves the equation X = < EVEC, U(X) > where */
@@ -204,16 +204,16 @@ doublereal kpsolv_(doublereal *evec)
     k = evec[1];
     ecc2 = h__ * h__ + k * k;
     if (ecc2 >= 1.) {
-	chkin_("KPSOLV", (ftnlen)6);
-	setmsg_("The magnitude of the vector EVEC = ( #, # ) must be less th"
-		"an 1.  However, the magnitude of this vector is #.", (ftnlen)
-		109);
-	errdp_("#", &h__, (ftnlen)1);
-	errdp_("#", &k, (ftnlen)1);
-	d__1 = sqrt(ecc2);
-	errdp_("#", &d__1, (ftnlen)1);
-	sigerr_("SPICE(EVECOUTOFRANGE)", (ftnlen)21);
-	chkout_("KPSOLV", (ftnlen)6);
+	chkin_(__global_state, "KPSOLV", (ftnlen)6);
+	setmsg_(__global_state, "The magnitude of the vector EVEC = ( #, # )"
+		" must be less than 1.  However, the magnitude of this vector"
+		" is #.", (ftnlen)109);
+	errdp_(__global_state, "#", &h__, (ftnlen)1);
+	errdp_(__global_state, "#", &k, (ftnlen)1);
+	d__1 = sqrt(&__global_state->f2c, ecc2);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(EVECOUTOFRANGE)", (ftnlen)21);
+	chkout_(__global_state, "KPSOLV", (ftnlen)6);
 	return ret_val;
     }
 
@@ -236,7 +236,7 @@ doublereal kpsolv_(doublereal *evec)
 
     y0 = -h__;
     xm = 0.;
-    ecc = sqrt(ecc2);
+    ecc = sqrt(&__global_state->f2c, ecc2);
     if (y0 > 0.) {
 	xu = 0.;
 	xl = -ecc;
@@ -255,7 +255,7 @@ doublereal kpsolv_(doublereal *evec)
 /* Computing MIN */
 /* Computing MAX */
     d__1 = 1. / (1. - ecc);
-    i__3 = 1, i__4 = i_dnnt(&d__1);
+    i__3 = 1, i__4 = i_dnnt(&__global_state->f2c, &d__1);
     i__1 = 32, i__2 = max(i__3,i__4);
     maxit = min(i__1,i__2);
     i__1 = maxit;
@@ -273,7 +273,8 @@ doublereal kpsolv_(doublereal *evec)
 
 /*        Compute Y at the midpoint of XU and XL */
 
-	yxm = xm - h__ * cos(xm) - k * sin(xm);
+	yxm = xm - h__ * cos(&__global_state->f2c, xm) - k * sin(&
+		__global_state->f2c, xm);
 
 /*        Determine the new upper and lower bounds. */
 
@@ -289,8 +290,8 @@ doublereal kpsolv_(doublereal *evec)
 
     x = xm;
     for (i__ = 1; i__ <= 5; ++i__) {
-	cosx = cos(x);
-	sinx = sin(x);
+	cosx = cos(&__global_state->f2c, x);
+	sinx = sin(&__global_state->f2c, x);
 
 /*        Compute Y and Y' at X.  Use these to get the next */
 /*        iteration for X. */

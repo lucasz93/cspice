@@ -8,19 +8,19 @@
 
 
 typedef int pcwid_state_t;
-static pcwid_state_t* get_pcwid_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pcwid_state_t* get_pcwid_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            PCWID ( Printable width of a character array ) */
-integer pcwid_(char *array, integer *nelt, ftnlen array_len)
+integer pcwid_(cspice_t* __global_state, char *array, integer *nelt, ftnlen 
+	array_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
@@ -29,7 +29,7 @@ integer pcwid_(char *array, integer *nelt, ftnlen array_len)
 
 
     /* Module state */
-    pcwid_state_t* __state = get_pcwid_state();
+    pcwid_state_t* __state = get_pcwid_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the printable width of a character array. */
@@ -180,7 +180,7 @@ integer pcwid_(char *array, integer *nelt, ftnlen array_len)
 /*     any elements. */
 
     } else {
-	strlen = i_len(array, array_len);
+	strlen = i_len(&__global_state->f2c, array, array_len);
 	ret_val = 0;
 	i__ = 0;
 

@@ -8,8 +8,7 @@
 
 
 extern illumf_init_t __illumf_init;
-static illumf_state_t* get_illumf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline illumf_state_t* get_illumf_state(cspice_t* state) {
 	if (!state->illumf)
 		state->illumf = __cspice_allocate_module(sizeof(
 	illumf_state_t), &__illumf_init, sizeof(__illumf_init));
@@ -18,60 +17,64 @@ static illumf_state_t* get_illumf_state() {
 }
 
 /* $Procedure ILLUMF ( Illumination angles, general source, return flags ) */
-/* Subroutine */ int illumf_(char *method, char *target, char *ilusrc, 
-	doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *
-	spoint, doublereal *trgepc, doublereal *srfvec, doublereal *phase, 
-	doublereal *incdnc, doublereal *emissn, logical *visibl, logical *lit,
-	 ftnlen method_len, ftnlen target_len, ftnlen ilusrc_len, ftnlen 
-	fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int illumf_(cspice_t* __global_state, char *method, char *
+	target, char *ilusrc, doublereal *et, char *fixref, char *abcorr, 
+	char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *
+	srfvec, doublereal *phase, doublereal *incdnc, doublereal *emissn, 
+	logical *visibl, logical *lit, ftnlen method_len, ftnlen target_len, 
+	ftnlen ilusrc_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen 
+	obsrvr_len)
 {
     /* Initialized data */
 
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     integer type__;
-    extern /* Subroutine */ int zzmaxrad_(doublereal *);
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzsbfnrm_(integer *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
-	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzmaxrad_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzsbfnrm_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzsudski_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzprsmet_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, logical *, integer *, integer *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     integer n;
-    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
-    extern /* Subroutine */ int zzraysfx_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int zzsrftrk_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int zzraysfx_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, logical *);
     doublereal s;
     doublereal scale;
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
     doublereal lt;
     integer obscde;
-    extern doublereal halfpi_(void);
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
+    extern doublereal halfpi_(cspice_t*);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
     integer fixfid;
     doublereal maxrad;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     char pntdef[20];
     char shpstr[9];
     char subtyp[20];
@@ -86,28 +89,29 @@ static illumf_state_t* get_illumf_state() {
     logical attblk[15];
     logical surfup;
     logical fnd;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int spkcpt_(doublereal *, char *, char *, 
-	    doublereal *, char *, char *, char *, char *, doublereal *, 
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkcpt_(cspice_t*, doublereal *, char *, char 
+	    *, doublereal *, char *, char *, char *, char *, doublereal *, 
 	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int spkcpo_(char *, doublereal *, char *, char *, 
-	    char *, doublereal *, char *, char *, doublereal *, doublereal *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int spkcpo_(cspice_t*, char *, doublereal *, char 
+	    *, char *, char *, doublereal *, char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int surfnm_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
     doublereal lti;
     doublereal xpt[3];
 
 
     /* Module state */
-    illumf_state_t* __state = get_illumf_state();
+    illumf_state_t* __state = get_illumf_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the illumination angles---phase, incidence, and */
@@ -1757,10 +1761,10 @@ static illumf_state_t* get_illumf_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ILLUMF", (ftnlen)6);
+    chkin_(__global_state, "ILLUMF", (ftnlen)6);
 
 /*     Counter initialization is done separately. */
 
@@ -1768,27 +1772,28 @@ static illumf_state_t* get_illumf_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
-	zzctruin_(__state->svctr3);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
+	zzctruin_(__global_state, __state->svctr3);
     }
 
 /*     If necessary, parse the aberration correction flag. */
 
-    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    if (__state->first || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        Make sure the results of this block won't be reused */
 /*        if we bail out due to an error. */
 
-	s_copy(__state->prvcor, " ", (ftnlen)5, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->prvcor, " ", (ftnlen)5, (ftnlen)
+		1);
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
 
-	zzvalcor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("ILLUMF", (ftnlen)6);
+	zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	    return 0;
 	}
 /*        Set logical flags indicating the attributes of the requested */
@@ -1811,7 +1816,8 @@ static illumf_state_t* get_illumf_state() {
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
 
 /*        We do NOT set FIRST to .FALSE. here, since we're not */
 /*        yet done with it. */
@@ -1821,32 +1827,32 @@ static illumf_state_t* get_illumf_state() {
 /*     Get the target ID code here, since it will be needed */
 /*     for the initialization calls below. */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
-	    __state->svfnd1, target, &__state->trgcde, &fnd, (ftnlen)36, 
-	    target_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtcde, &__state->svfnd1, target, &__state->trgcde, &fnd,
+	     (ftnlen)36, target_len);
     if (! fnd) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit, or that you failed to lo"
-		"ad a kernel containing a name-ID mapping for this body.", (
-		ftnlen)234);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ILLUMF", (ftnlen)6);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit, or that "
+		"you failed to load a kernel containing a name-ID mapping for"
+		" this body.", (ftnlen)234);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	return 0;
     }
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(__state->svctr4, &surfup);
+    zzsrftrk_(__global_state, __state->svctr4, &surfup);
 
 /*     If necessary, parse the method specification. PRVMTH */
 /*     and the derived flags NEAR and ELIPSD start out with */
 /*     valid values. PRVMTH records the last valid value of */
 /*     METHOD; ELIPSD is the corresponding shape flag. */
 
-    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
-	     (ftnlen)500) != 0) {
+    if (__state->first || surfup || s_cmp(&__global_state->f2c, method, 
+	    __state->prvmth, method_len, (ftnlen)500) != 0) {
 
 /*        Set the previous method string to an invalid value, so it */
 /*        cannot match any future, valid input. This will force this */
@@ -1854,7 +1860,8 @@ static illumf_state_t* get_illumf_state() {
 /*        failure occurs in this branch. Once success is assured, we can */
 /*        record the current method in the previous method string. */
 
-	s_copy(__state->prvmth, " ", (ftnlen)500, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->prvmth, " ", (ftnlen)500, (
+		ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -1863,45 +1870,49 @@ static illumf_state_t* get_illumf_state() {
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&__state->trgcde, method, &__state->c__100, shpstr, subtyp, 
-		&__state->pri, &__state->nsurf, __state->srflst, pntdef, 
-		trmstr, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20, (
-		ftnlen)20);
-	if (failed_()) {
-	    chkout_("ILLUMF", (ftnlen)6);
+	zzprsmet_(__global_state, &__state->trgcde, method, &__state->c__100, 
+		shpstr, subtyp, &__state->pri, &__state->nsurf, 
+		__state->srflst, pntdef, trmstr, method_len, (ftnlen)9, (
+		ftnlen)20, (ftnlen)20, (ftnlen)20);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	    return 0;
 	}
-	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
+	if (eqstr_(__global_state, shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9))
+		 {
 	    __state->shape = 1;
-	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
+	} else if (eqstr_(__global_state, shpstr, "DSK", (ftnlen)9, (ftnlen)3)
+		) {
 	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
 
-	    setmsg_("Returned shape value from method string was <#>.", (
-		    ftnlen)48);
-	    errch_("#", shpstr, (ftnlen)1, (ftnlen)9);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ILLUMF", (ftnlen)6);
+	    setmsg_(__global_state, "Returned shape value from method string"
+		    " was <#>.", (ftnlen)48);
+	    errch_(__global_state, "#", shpstr, (ftnlen)1, (ftnlen)9);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	    return 0;
 	}
 
 /*        There should be no subtype specification in the method */
 /*        string. */
 
-	if (s_cmp(subtyp, " ", (ftnlen)20, (ftnlen)1) != 0) {
-	    setmsg_("Spurious sub-observer point type <#> was present in the"
-		    " method string #. The sub-observer type is valid in the "
-		    "method strings for SUBPNT and SUBSLR, but is not applica"
-		    "ble for ILLUMF.", (ftnlen)182);
-	    errch_("#", subtyp, (ftnlen)1, (ftnlen)20);
-	    errch_("#", method, (ftnlen)1, method_len);
-	    sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	    chkout_("ILLUMF", (ftnlen)6);
+	if (s_cmp(&__global_state->f2c, subtyp, " ", (ftnlen)20, (ftnlen)1) !=
+		 0) {
+	    setmsg_(__global_state, "Spurious sub-observer point type <#> wa"
+		    "s present in the method string #. The sub-observer type "
+		    "is valid in the method strings for SUBPNT and SUBSLR, bu"
+		    "t is not applicable for ILLUMF.", (ftnlen)182);
+	    errch_(__global_state, "#", subtyp, (ftnlen)1, (ftnlen)20);
+	    errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	    sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	    chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	    return 0;
 	}
-	s_copy(__state->prvmth, method, (ftnlen)500, method_len);
+	s_copy(&__global_state->f2c, __state->prvmth, method, (ftnlen)500, 
+		method_len);
     }
 
 /*     We're done with all tasks that must be executed on the first */
@@ -1912,17 +1923,18 @@ static illumf_state_t* get_illumf_state() {
 /*     Obtain integer codes for the observer and */
 /*     illumination source. */
 
-    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
-	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svobsr, &
+	    __state->svobsc, &__state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)
+	    36, obsrvr_len);
     if (! fnd) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE Toolkit, or that you failed to "
-		"load a kernel containing a name-ID mapping for this body.", (
-		ftnlen)236);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ILLUMF", (ftnlen)6);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE Toolkit, or tha"
+		"t you failed to load a kernel containing a name-ID mapping f"
+		"or this body.", (ftnlen)236);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	return 0;
     }
 
@@ -1930,43 +1942,46 @@ static illumf_state_t* get_illumf_state() {
 /*     signal an error. */
 
     if (obscde == __state->trgcde) {
-	setmsg_("In computing illumination angles, the observing body and ta"
-		"rget body are the same. Both are #.", (ftnlen)94);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("ILLUMF", (ftnlen)6);
+	setmsg_(__global_state, "In computing illumination angles, the obser"
+		"ving body and target body are the same. Both are #.", (ftnlen)
+		94);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	return 0;
     }
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(__state->svctr3, __state->svfref, &__state->svrefc, fixref, &
-	    fixfid, (ftnlen)32, fixref_len);
-    frinfo_(&fixfid, &__state->center, &type__, &typeid, &fnd);
-    if (failed_()) {
-	chkout_("ILLUMF", (ftnlen)6);
+    zznamfrm_(__global_state, __state->svctr3, __state->svfref, &
+	    __state->svrefc, fixref, &fixfid, (ftnlen)32, fixref_len);
+    frinfo_(__global_state, &fixfid, &__state->center, &type__, &typeid, &fnd)
+	    ;
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	return 0;
     }
     if (! fnd) {
-	setmsg_("Reference frame # is not recognized by the SPICE frame subs"
-		"ystem. Possibly a required frame definition kernel has not b"
-		"een loaded.", (ftnlen)130);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	chkout_("ILLUMF", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not recognized by the "
+		"SPICE frame subsystem. Possibly a required frame definition "
+		"kernel has not been loaded.", (ftnlen)130);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure that FIXREF is centered at the target body's center. */
 
     if (__state->center != __state->trgcde) {
-	setmsg_("Reference frame # is not centered at the target body #. The"
-		" ID code of the frame center is #.", (ftnlen)93);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	errint_("#", &__state->center, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	chkout_("ILLUMF", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not centered at the ta"
+		"rget body #. The ID code of the frame center is #.", (ftnlen)
+		93);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errint_(__global_state, "#", &__state->center, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	return 0;
     }
 
@@ -1990,11 +2005,11 @@ static illumf_state_t* get_illumf_state() {
 /*     center of the frame; we indicate this by setting the input */
 /*     argument REFLOC to 'TARGET'. */
 
-    spkcpt_(spoint, target, fixref, et, fixref, "TARGET", abcorr, obsrvr, 
-	    opstat, &lt, target_len, fixref_len, fixref_len, (ftnlen)6, 
-	    abcorr_len, obsrvr_len);
-    if (failed_()) {
-	chkout_("ILLUMF", (ftnlen)6);
+    spkcpt_(__global_state, spoint, target, fixref, et, fixref, "TARGET", 
+	    abcorr, obsrvr, opstat, &lt, target_len, fixref_len, fixref_len, (
+	    ftnlen)6, abcorr_len, obsrvr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	return 0;
     }
 
@@ -2011,11 +2026,11 @@ static illumf_state_t* get_illumf_state() {
 /*     with the frame's center;  we indicate this by setting the input */
 /*     argument REFLOC to 'OBSERVER'. */
 
-    spkcpo_(ilusrc, trgepc, fixref, "OBSERVER", abcorr, spoint, target, 
-	    fixref, tistat, &lti, ilusrc_len, fixref_len, (ftnlen)8, 
-	    abcorr_len, target_len, fixref_len);
-    if (failed_()) {
-	chkout_("ILLUMF", (ftnlen)6);
+    spkcpo_(__global_state, ilusrc, trgepc, fixref, "OBSERVER", abcorr, 
+	    spoint, target, fixref, tistat, &lti, ilusrc_len, fixref_len, (
+	    ftnlen)8, abcorr_len, target_len, fixref_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	return 0;
     }
 
@@ -2023,8 +2038,8 @@ static illumf_state_t* get_illumf_state() {
 /*     for the following angle computation. Set the output SRFVEC while */
 /*     we're at it. */
 
-    vequ_(opstat, srfvec);
-    vminus_(srfvec, obspos);
+    vequ_(__global_state, opstat, srfvec);
+    vminus_(__global_state, srfvec, obspos);
 
 /*     Find the surface normal at SPOINT. This computation depends */
 /*     on target body shape model. */
@@ -2033,11 +2048,11 @@ static illumf_state_t* get_illumf_state() {
 
 /*        We'll need the radii of the target body. */
 
-	bodvcd_(&__state->trgcde, "RADII", &__state->c__3, &n, radii, (ftnlen)
-		5);
-	surfnm_(radii, &radii[1], &radii[2], spoint, normal);
-	if (failed_()) {
-	    chkout_("ILLUMF", (ftnlen)6);
+	bodvcd_(__global_state, &__state->trgcde, "RADII", &__state->c__3, &n,
+		 radii, (ftnlen)5);
+	surfnm_(__global_state, radii, &radii[1], &radii[2], spoint, normal);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	    return 0;
 	}
     } else if (__state->shape == 2) {
@@ -2047,28 +2062,30 @@ static illumf_state_t* get_illumf_state() {
 /*        required to enable later use of ZZRAYSFX and ZZMAXRAD. */
 
 	svnsrf = 0;
-	zzsudski_(&__state->trgcde, &svnsrf, __state->srflst, &fixfid);
+	zzsudski_(__global_state, &__state->trgcde, &svnsrf, __state->srflst, 
+		&fixfid);
 
 /*        Compute the outward unit normal at SPOINT on the surface */
 /*        defined by the designated DSK data. */
 
-	zzsbfnrm_(&__state->trgcde, &svnsrf, __state->srflst, trgepc, &fixfid,
-		 spoint, normal);
-	if (failed_()) {
-	    chkout_("ILLUMF", (ftnlen)6);
+	zzsbfnrm_(__global_state, &__state->trgcde, &svnsrf, __state->srflst, 
+		trgepc, &fixfid, spoint, normal);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	    return 0;
 	}
-	vhatip_(normal);
+	vhatip_(__global_state, normal);
     } else {
 
 /*        We've already checked the computation method input argument, */
 /*        so we don't expect to arrive here. This code is present for */
 /*        safety. */
 
-	setmsg_("The computation method # was not recognized. ", (ftnlen)45);
-	errch_("#", method, (ftnlen)1, method_len);
-	sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	chkout_("ILLUMF", (ftnlen)6);
+	setmsg_(__global_state, "The computation method # was not recognized"
+		". ", (ftnlen)45);
+	errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	chkout_(__global_state, "ILLUMF", (ftnlen)6);
 	return 0;
     }
 
@@ -2078,17 +2095,17 @@ static illumf_state_t* get_illumf_state() {
 /*     Find the illumination angles. VSEP will give us angular */
 /*     separation in radians. */
 
-    *phase = vsep_(obspos, tistat);
-    *incdnc = vsep_(normal, tistat);
-    *emissn = vsep_(normal, obspos);
+    *phase = vsep_(__global_state, obspos, tistat);
+    *incdnc = vsep_(__global_state, normal, tistat);
+    *emissn = vsep_(__global_state, normal, obspos);
 
 /*     Set the visibility and illumination flags. */
 
 
 /*     Set default values of VISIBL and LIT. */
 
-    *visibl = *emissn <= halfpi_();
-    *lit = *incdnc <= halfpi_();
+    *visibl = *emissn <= halfpi_(__global_state);
+    *lit = *incdnc <= halfpi_(__global_state);
     if (__state->shape == 2) {
 
 /*        There is a possibility that the surface-observer vector */
@@ -2108,9 +2125,9 @@ static illumf_state_t* get_illumf_state() {
 
 /*           Obtain an upper bound on the target body radius. */
 
-	    zzmaxrad_(&maxrad);
-	    if (failed_()) {
-		chkout_("ILLUMF", (ftnlen)6);
+	    zzmaxrad_(__global_state, &maxrad);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ILLUMF", (ftnlen)6);
 		return 0;
 	    }
 
@@ -2119,13 +2136,15 @@ static illumf_state_t* get_illumf_state() {
 /*           point. NORMAL is a unit vector here. */
 
 	    scale = maxrad * 1e-10;
-	    vlcom_(&__state->c_b56, spoint, &scale, normal, vertex);
+	    vlcom_(__global_state, &__state->c_b56, spoint, &scale, normal, 
+		    vertex);
 	    if (*visibl) {
 
 /*              Find the surface intercept, if any, of a ray emanating */
 /*              from VERTEX and pointing toward the observer. */
 
-		zzraysfx_(vertex, obspos, trgepc, xpt, &found);
+		zzraysfx_(__global_state, vertex, obspos, trgepc, xpt, &found)
+			;
 		*visibl = ! found;
 	    }
 	    if (*lit) {
@@ -2133,7 +2152,8 @@ static illumf_state_t* get_illumf_state() {
 /*              Find the surface intercept, if any, of a ray emanating */
 /*              from VERTEX and pointing toward the illumination source. */
 
-		zzraysfx_(vertex, tistat, trgepc, xpt, &found);
+		zzraysfx_(__global_state, vertex, tistat, trgepc, xpt, &found)
+			;
 		*lit = ! found;
 	    }
 	}
@@ -2142,7 +2162,7 @@ static illumf_state_t* get_illumf_state() {
 /*     TRGEPC and SRVFEC were already set before the illumination */
 /*     angle computation. */
 
-    chkout_("ILLUMF", (ftnlen)6);
+    chkout_(__global_state, "ILLUMF", (ftnlen)6);
     return 0;
 } /* illumf_ */
 

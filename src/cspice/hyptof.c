@@ -8,8 +8,7 @@
 
 
 extern hyptof_init_t __hyptof_init;
-static hyptof_state_t* get_hyptof_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline hyptof_state_t* get_hyptof_state(cspice_t* state) {
 	if (!state->hyptof)
 		state->hyptof = __cspice_allocate_module(sizeof(
 	hyptof_state_t), &__hyptof_init, sizeof(__hyptof_init));
@@ -18,7 +17,8 @@ static hyptof_state_t* get_hyptof_state() {
 }
 
 /* $Procedure      HYPTOF ( Hyperbolic time of flight ) */
-/* Subroutine */ int hyptof_(doublereal *ma, doublereal *ecc, doublereal *f)
+/* Subroutine */ int hyptof_(cspice_t* __global_state, doublereal *ma, 
+	doublereal *ecc, doublereal *f)
 {
     /* Initialized data */
 
@@ -27,28 +27,29 @@ static hyptof_state_t* get_hyptof_state() {
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    double log(doublereal), sqrt(doublereal), sinh(doublereal);
+    double log(f2c_state_t*, doublereal), sqrt(f2c_state_t*, doublereal), 
+	    sinh(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal diff;
     doublereal m;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dcbrt_(doublereal *);
-    extern doublereal dpmax_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dcbrt_(cspice_t*, doublereal *);
+    extern doublereal dpmax_(cspice_t*);
     integer count;
     doublereal lower;
     doublereal upper;
     doublereal middle;
     doublereal midval;
     doublereal lastdf;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer mcount;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    hyptof_state_t* __state = get_hyptof_state();
+    hyptof_state_t* __state = get_hyptof_state(__global_state);
 /* $ Abstract */
 
 /*     Solve the time of flight equation MA = e sinh(F) - F for the */
@@ -247,18 +248,18 @@ static hyptof_state_t* get_hyptof_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("HYPTOF", (ftnlen)6);
+	chkin_(__global_state, "HYPTOF", (ftnlen)6);
     }
     if (__state->first) {
 	__state->first = FALSE_;
-	__state->maxlog = log(dpmax_());
+	__state->maxlog = log(&__global_state->f2c, dpmax_(__global_state));
     }
     if (*ecc < 1.) {
-	sigerr_("SPICE(WRONGCONIC)", (ftnlen)17);
-	chkout_("HYPTOF", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(WRONGCONIC)", (ftnlen)17);
+	chkout_(__global_state, "HYPTOF", (ftnlen)6);
 	return 0;
     }
 
@@ -274,7 +275,7 @@ static hyptof_state_t* get_hyptof_state() {
 
     if (*ma == 0.) {
 	*f = 0.;
-	chkout_("HYPTOF", (ftnlen)6);
+	chkout_(__global_state, "HYPTOF", (ftnlen)6);
 	return 0;
     } else {
 	m = abs(*ma);
@@ -369,10 +370,12 @@ static hyptof_state_t* get_hyptof_state() {
 
 /* Computing 2nd power */
     d__1 = m / *ecc;
-    lower = log(m / *ecc + sqrt(d__1 * d__1 + 1.));
+    lower = log(&__global_state->f2c, m / *ecc + sqrt(&__global_state->f2c, 
+	    d__1 * d__1 + 1.));
 /* Computing MIN */
     d__3 = m * 6. / *ecc;
-    d__1 = dcbrt_(&d__3), d__2 = __state->maxlog - log(*ecc);
+    d__1 = dcbrt_(__global_state, &d__3), d__2 = __state->maxlog - log(&
+	    __global_state->f2c, *ecc);
     upper = min(d__1,d__2);
     upper = max(lower,upper);
 
@@ -391,7 +394,7 @@ static hyptof_state_t* get_hyptof_state() {
     d__3 = upper, d__4 = upper * .5 + lower * .5;
     d__1 = lower, d__2 = min(d__3,d__4);
     middle = max(d__1,d__2);
-    midval = *ecc * sinh(middle) - middle - m;
+    midval = *ecc * sinh(&__global_state->f2c, middle) - middle - m;
     diff = upper - lower;
 
 /*     Finally pick a reasonable upper bound on the number of loop */
@@ -428,7 +431,7 @@ static hyptof_state_t* get_hyptof_state() {
 	    diff = 0.;
 	} else {
 	    diff = upper - lower;
-	    midval = *ecc * sinh(middle) - middle - m;
+	    midval = *ecc * sinh(&__global_state->f2c, middle) - middle - m;
 	}
     }
 
@@ -439,7 +442,7 @@ static hyptof_state_t* get_hyptof_state() {
     } else {
 	*f = middle;
     }
-    chkout_("HYPTOF", (ftnlen)6);
+    chkout_(__global_state, "HYPTOF", (ftnlen)6);
     return 0;
 } /* hyptof_ */
 

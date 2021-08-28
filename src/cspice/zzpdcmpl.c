@@ -8,8 +8,7 @@
 
 
 extern zzpdcmpl_init_t __zzpdcmpl_init;
-static zzpdcmpl_state_t* get_zzpdcmpl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzpdcmpl_state_t* get_zzpdcmpl_state(cspice_t* state) {
 	if (!state->zzpdcmpl)
 		state->zzpdcmpl = __cspice_allocate_module(sizeof(
 	zzpdcmpl_state_t), &__zzpdcmpl_init, sizeof(__zzpdcmpl_init));
@@ -18,34 +17,34 @@ static zzpdcmpl_state_t* get_zzpdcmpl_state() {
 }
 
 /* $Procedure ZZPDCMPL (Planetodetic coordinates, compare latitudes ) */
-/* Subroutine */ int zzpdcmpl_(doublereal *re, doublereal *f, doublereal *p, 
-	doublereal *lat, integer *rel)
+/* Subroutine */ int zzpdcmpl_(cspice_t* __global_state, doublereal *re, 
+	doublereal *f, doublereal *p, doublereal *lat, integer *rel)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int zzelnaxx_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzelnaxx_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *);
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     doublereal rp;
-    extern doublereal halfpi_(void);
+    extern doublereal halfpi_(cspice_t*);
     doublereal offpcl;
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal offset[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal xincpt;
     doublereal yincpt;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal lon;
 
 
     /* Module state */
-    zzpdcmpl_state_t* __state = get_zzpdcmpl_state();
+    zzpdcmpl_state_t* __state = get_zzpdcmpl_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -218,10 +217,10 @@ static zzpdcmpl_state_t* get_zzpdcmpl_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZPDCMPL", (ftnlen)8);
+    chkin_(__global_state, "ZZPDCMPL", (ftnlen)8);
 
 /*     Treat points on the Z axis as a special case. The */
 /*     computations performed in the general case may introduce */
@@ -230,7 +229,7 @@ static zzpdcmpl_state_t* get_zzpdcmpl_state() {
 
     if (p[0] == 0. && p[1] == 0.) {
 	if (p[2] > 0.) {
-	    if (*lat == halfpi_()) {
+	    if (*lat == halfpi_(__global_state)) {
 		*rel = 0;
 	    } else {
 		*rel = 1;
@@ -250,13 +249,13 @@ static zzpdcmpl_state_t* get_zzpdcmpl_state() {
 
 /*           P(3) < 0. */
 
-	    if (*lat == -halfpi_()) {
+	    if (*lat == -halfpi_(__global_state)) {
 		*rel = 0;
 	    } else {
 		*rel = -1;
 	    }
 	}
-	chkout_("ZZPDCMPL", (ftnlen)8);
+	chkout_(__global_state, "ZZPDCMPL", (ftnlen)8);
 	return 0;
     }
 
@@ -268,9 +267,9 @@ static zzpdcmpl_state_t* get_zzpdcmpl_state() {
 /*     Get the y-intercept of the latitude cone for LAT. Note that a */
 /*     result is defined for LAT = +/- pi/2. */
 
-    zzelnaxx_(re, &rp, lat, &xincpt, &yincpt);
-    if (failed_()) {
-	chkout_("ZZPDCMPL", (ftnlen)8);
+    zzelnaxx_(__global_state, re, &rp, lat, &xincpt, &yincpt);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZPDCMPL", (ftnlen)8);
 	return 0;
     }
 
@@ -285,7 +284,7 @@ static zzpdcmpl_state_t* get_zzpdcmpl_state() {
 	} else {
 	    *rel = -1;
 	}
-	chkout_("ZZPDCMPL", (ftnlen)8);
+	chkout_(__global_state, "ZZPDCMPL", (ftnlen)8);
 	return 0;
     }
 
@@ -295,11 +294,11 @@ static zzpdcmpl_state_t* get_zzpdcmpl_state() {
 /*     Create a unit-length copy of the offset vector. */
 
     __state->apex[2] = yincpt;
-    vsub_(p, __state->apex, offset);
+    vsub_(__global_state, p, __state->apex, offset);
 /*     We'll use the planetocentric [sic] latitude of the offset */
 /*     vector for comparison. */
 
-    reclat_(offset, &r__, &lon, &offpcl);
+    reclat_(__global_state, offset, &r__, &lon, &offpcl);
     if (*lat > 0.) {
 	if (yincpt > 0.) {
 
@@ -377,7 +376,7 @@ static zzpdcmpl_state_t* get_zzpdcmpl_state() {
 	    }
 	}
     }
-    chkout_("ZZPDCMPL", (ftnlen)8);
+    chkout_(__global_state, "ZZPDCMPL", (ftnlen)8);
     return 0;
 } /* zzpdcmpl_ */
 

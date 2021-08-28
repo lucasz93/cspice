@@ -8,39 +8,39 @@
 
 
 typedef int zzdsin_state_t;
-static zzdsin_state_t* get_zzdsin_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdsin_state_t* get_zzdsin_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZDSIN ( SGP4 deep space initialization ) */
-/* Subroutine */ int zzdsin_(doublereal *geophs, doublereal *cosim, 
-	doublereal *emsq, doublereal *argpo, doublereal *s1, doublereal *s2, 
-	doublereal *s3, doublereal *s4, doublereal *s5, doublereal *sinim, 
-	doublereal *ss1, doublereal *ss2, doublereal *ss3, doublereal *ss4, 
-	doublereal *ss5, doublereal *sz1, doublereal *sz3, doublereal *sz11, 
-	doublereal *sz13, doublereal *sz21, doublereal *sz23, doublereal *
-	sz31, doublereal *sz33, doublereal *t, doublereal *tc, doublereal *
-	gsto, doublereal *mo, doublereal *mdot, doublereal *no, doublereal *
-	nodeo, doublereal *nodedot, doublereal *xpidot, doublereal *z1, 
-	doublereal *z3, doublereal *z11, doublereal *z13, doublereal *z21, 
-	doublereal *z23, doublereal *z31, doublereal *z33, doublereal *ecco, 
-	doublereal *eccsq, doublereal *eccm, doublereal *argpm, doublereal *
-	inclm, doublereal *mm, doublereal *xn, doublereal *nodem, integer *
-	irez, doublereal *atime, doublereal *d2201, doublereal *d2211, 
-	doublereal *d3210, doublereal *d3222, doublereal *d4410, doublereal *
-	d4422, doublereal *d5220, doublereal *d5232, doublereal *d5421, 
-	doublereal *d5433, doublereal *dedt, doublereal *didt, doublereal *
-	dmdt, doublereal *dndt, doublereal *dnodt, doublereal *domdt, 
-	doublereal *del1, doublereal *del2, doublereal *del3, doublereal *
-	xfact, doublereal *xlamo, doublereal *xli, doublereal *xni)
+/* Subroutine */ int zzdsin_(cspice_t* __global_state, doublereal *geophs, 
+	doublereal *cosim, doublereal *emsq, doublereal *argpo, doublereal *
+	s1, doublereal *s2, doublereal *s3, doublereal *s4, doublereal *s5, 
+	doublereal *sinim, doublereal *ss1, doublereal *ss2, doublereal *ss3, 
+	doublereal *ss4, doublereal *ss5, doublereal *sz1, doublereal *sz3, 
+	doublereal *sz11, doublereal *sz13, doublereal *sz21, doublereal *
+	sz23, doublereal *sz31, doublereal *sz33, doublereal *t, doublereal *
+	tc, doublereal *gsto, doublereal *mo, doublereal *mdot, doublereal *
+	no, doublereal *nodeo, doublereal *nodedot, doublereal *xpidot, 
+	doublereal *z1, doublereal *z3, doublereal *z11, doublereal *z13, 
+	doublereal *z21, doublereal *z23, doublereal *z31, doublereal *z33, 
+	doublereal *ecco, doublereal *eccsq, doublereal *eccm, doublereal *
+	argpm, doublereal *inclm, doublereal *mm, doublereal *xn, doublereal *
+	nodem, integer *irez, doublereal *atime, doublereal *d2201, 
+	doublereal *d2211, doublereal *d3210, doublereal *d3222, doublereal *
+	d4410, doublereal *d4422, doublereal *d5220, doublereal *d5232, 
+	doublereal *d5421, doublereal *d5433, doublereal *dedt, doublereal *
+	didt, doublereal *dmdt, doublereal *dndt, doublereal *dnodt, 
+	doublereal *domdt, doublereal *del1, doublereal *del2, doublereal *
+	del3, doublereal *xfact, doublereal *xlamo, doublereal *xli, 
+	doublereal *xni)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double d_mod(doublereal *, doublereal *), pow_dd(doublereal *, doublereal 
-	    *);
+    double d_mod(f2c_state_t*, doublereal *, doublereal *), pow_dd(
+	    f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     doublereal sghl;
@@ -50,7 +50,7 @@ static zzdsin_state_t* get_zzdsin_state() {
     doublereal ainv2;
     doublereal sini2;
     doublereal temp1;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal theta;
     doublereal emsqo;
     doublereal root22;
@@ -59,11 +59,11 @@ static zzdsin_state_t* get_zzdsin_state() {
     doublereal root44;
     doublereal root54;
     doublereal rptim;
-    extern doublereal twopi_(void);
+    extern doublereal twopi_(cspice_t*);
     doublereal q22;
     doublereal q31;
     doublereal q33;
-    extern doublereal pi_(void);
+    extern doublereal pi_(cspice_t*);
     doublereal g200;
     doublereal f220;
     doublereal f221;
@@ -89,8 +89,8 @@ static zzdsin_state_t* get_zzdsin_state() {
     doublereal g521;
     doublereal g532;
     doublereal g533;
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal eoc;
     doublereal emo;
     doublereal shl;
@@ -107,7 +107,7 @@ static zzdsin_state_t* get_zzdsin_state() {
 
 
     /* Module state */
-    zzdsin_state_t* __state = get_zzdsin_state();
+    zzdsin_state_t* __state = get_zzdsin_state(__global_state);
 /* $ Abstract */
 
 /*     This Subroutine provides Deep Space contributions to Mean */
@@ -557,10 +557,10 @@ static zzdsin_state_t* get_zzdsin_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSIN", (ftnlen)6);
+    chkin_(__global_state, "ZZDSIN", (ftnlen)6);
 
 /*     Constants */
 
@@ -610,7 +610,7 @@ static zzdsin_state_t* get_zzdsin_state() {
 
 /*       sgp4fix for 180 deg incl */
 
-    if (*inclm < .052359877 || *inclm > pi_() - .052359877) {
+    if (*inclm < .052359877 || *inclm > pi_(__global_state) - .052359877) {
 	shs = 0.;
     }
     if (*sinim != 0.) {
@@ -628,7 +628,7 @@ static zzdsin_state_t* get_zzdsin_state() {
 
 /*       sgp4fix for 180 deg incl */
 
-    if (*inclm < .052359877 || *inclm > pi_() - .052359877) {
+    if (*inclm < .052359877 || *inclm > pi_(__global_state) - .052359877) {
 	shl = 0.;
     }
     *domdt = sgs + sghl;
@@ -642,8 +642,8 @@ static zzdsin_state_t* get_zzdsin_state() {
 
     *dndt = 0.;
     d__1 = *gsto + *tc * rptim;
-    d__2 = twopi_();
-    theta = d_mod(&d__1, &d__2);
+    d__2 = twopi_(__global_state);
+    theta = d_mod(&__global_state->f2c, &d__1, &d__2);
     *eccm += *dedt * *t;
 /* Computing 2nd power */
     d__1 = *eccm;
@@ -667,7 +667,7 @@ static zzdsin_state_t* get_zzdsin_state() {
 
     if (*irez != 0) {
 	d__1 = *xn / xke;
-	aonv = pow_dd(&d__1, &x2o3);
+	aonv = pow_dd(&__global_state->f2c, &d__1, &x2o3);
 
 /*           GEOPOTENTIAL RESONANCE FOR 12 HOUR ORBITS */
 
@@ -761,8 +761,8 @@ static zzdsin_state_t* get_zzdsin_state() {
 	    *d5421 = temp * f542 * g521;
 	    *d5433 = temp * f543 * g533;
 	    d__1 = *mo + *nodeo + *nodeo - theta - theta;
-	    d__2 = twopi_();
-	    *xlamo = d_mod(&d__1, &d__2);
+	    d__2 = twopi_(__global_state);
+	    *xlamo = d_mod(&__global_state->f2c, &d__1, &d__2);
 	    *xfact = *mdot + *dmdt + (*nodedot + *dnodt - rptim) * 2. - *no;
 	    *eccm = emo;
 	    *emsq = emsqo;
@@ -784,8 +784,8 @@ static zzdsin_state_t* get_zzdsin_state() {
 	    *del3 = *del1 * 3. * f330 * g300 * q33 * aonv;
 	    *del1 = *del1 * f311 * g310 * q31 * aonv;
 	    d__1 = *mo + *nodeo + *argpo - theta;
-	    d__2 = twopi_();
-	    *xlamo = d_mod(&d__1, &d__2);
+	    d__2 = twopi_(__global_state);
+	    *xlamo = d_mod(&__global_state->f2c, &d__1, &d__2);
 	    *xfact = *mdot + *xpidot - rptim + *dmdt + *domdt + *dnodt - *no;
 	}
 
@@ -796,7 +796,7 @@ static zzdsin_state_t* get_zzdsin_state() {
 	*atime = 0.;
 	*xn = *no + *dndt;
     }
-    chkout_("ZZDSIN", (ftnlen)6);
+    chkout_(__global_state, "ZZDSIN", (ftnlen)6);
     return 0;
 } /* zzdsin_ */
 

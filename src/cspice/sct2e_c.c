@@ -273,7 +273,7 @@
    /*
    Participate in error handling
    */
-   chkin_c ( "sct2e_c");
+   chkin_c ( naif_state, "sct2e_c");
 
    
    /*

@@ -8,13 +8,13 @@
 
 
 typedef int isrchi_state_t;
-static isrchi_state_t* get_isrchi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline isrchi_state_t* get_isrchi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure             ISRCHI  ( Search in an integer array ) */
-integer isrchi_(integer *value, integer *ndim, integer *array)
+integer isrchi_(cspice_t* __global_state, integer *value, integer *ndim, 
+	integer *array)
 {
     /* System generated locals */
     integer ret_val, i__1;
@@ -24,7 +24,7 @@ integer isrchi_(integer *value, integer *ndim, integer *array)
 
 
     /* Module state */
-    isrchi_state_t* __state = get_isrchi_state();
+    isrchi_state_t* __state = get_isrchi_state(__global_state);
 /* $ Abstract */
 
 /*      Search for a given value within a integer array. Return */

@@ -8,8 +8,7 @@
 
 
 extern spks20_init_t __spks20_init;
-static spks20_state_t* get_spks20_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spks20_state_t* get_spks20_state(cspice_t* state) {
 	if (!state->spks20)
 		state->spks20 = __cspice_allocate_module(sizeof(
 	spks20_state_t), &__spks20_init, sizeof(__spks20_init));
@@ -18,14 +17,14 @@ static spks20_state_t* get_spks20_state() {
 }
 
 /* $Procedure      SPKS20 ( S/P Kernel, subset, type 20 ) */
-/* Subroutine */ int spks20_(integer *handle, integer *baddr, integer *eaddr, 
-	doublereal *begin, doublereal *end)
+/* Subroutine */ int spks20_(cspice_t* __global_state, integer *handle, 
+	integer *baddr, integer *eaddr, doublereal *begin, doublereal *end)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    double d_int(doublereal *);
+    double d_int(f2c_state_t*, doublereal *);
 
     /* Local variables */
     doublereal data[100];
@@ -33,12 +32,12 @@ static spks20_state_t* get_spks20_state() {
     integer nrec;
     integer last;
     integer move;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal btime;
     integer first;
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dscale;
     doublereal subbeg;
     doublereal tscale;
@@ -48,16 +47,16 @@ static spks20_state_t* get_spks20_state() {
     doublereal intlen;
     doublereal subifr;
     doublereal initfr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer recsiz;
     doublereal intrvl;
-    extern logical return_(void);
-    extern doublereal j2000_(void);
-    extern doublereal spd_(void);
+    extern logical return_(cspice_t*);
+    extern doublereal j2000_(cspice_t*);
+    extern doublereal spd_(cspice_t*);
 
 
     /* Module state */
-    spks20_state_t* __state = get_spks20_state();
+    spks20_state_t* __state = get_spks20_state(__global_state);
 /* $ Abstract */
 
 /*     Extract a subset of the data in a SPK segment of type 20 */
@@ -189,10 +188,10 @@ static spks20_state_t* get_spks20_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKS20", (ftnlen)6);
+    chkin_(__global_state, "SPKS20", (ftnlen)6);
 
 /*     The segment is made up of a number of logical records, each */
 /*     having the same size, and covering the same length of time. */
@@ -208,7 +207,7 @@ static spks20_state_t* get_spks20_state() {
 /*     scales in the same call. */
 
     i__1 = *eaddr - 6;
-    dafgda_(handle, &i__1, eaddr, data);
+    dafgda_(__global_state, handle, &i__1, eaddr, data);
     dscale = data[0];
     tscale = data[1];
     initjd = data[2];
@@ -216,8 +215,8 @@ static spks20_state_t* get_spks20_state() {
     intlen = data[4];
     recsiz = (integer) data[5];
     nrec = (integer) data[6];
-    btime = (initjd - j2000_() + initfr) * spd_();
-    intrvl = intlen * spd_();
+    btime = (initjd - j2000_(__global_state) + initfr) * spd_(__global_state);
+    intrvl = intlen * spd_(__global_state);
     first = (integer) ((*begin - btime) / intrvl) + 1;
 /* Computing MAX */
     i__1 = 1, i__2 = min(first,nrec);
@@ -241,8 +240,8 @@ static spks20_state_t* get_spks20_state() {
     move = min(100,remain);
     while(remain > 0) {
 	i__1 = addr__ + move - 1;
-	dafgda_(handle, &addr__, &i__1, data);
-	dafada_(data, &move);
+	dafgda_(__global_state, handle, &addr__, &i__1, data);
+	dafada_(__global_state, data, &move);
 	remain -= move;
 	addr__ += move;
 	move = min(100,remain);
@@ -267,8 +266,9 @@ static spks20_state_t* get_spks20_state() {
 /*     Let SUBBEG be the subset begin time expressed as a TDB Julian */
 /*     date. */
 
-    subbeg = j2000_() + (btime + (first - 1) * intrvl) / spd_();
-    subijd = d_int(&subbeg);
+    subbeg = j2000_(__global_state) + (btime + (first - 1) * intrvl) / spd_(
+	    __global_state);
+    subijd = d_int(&__global_state->f2c, &subbeg);
     subifr = subbeg - subijd;
     data[0] = dscale;
     data[1] = tscale;
@@ -277,8 +277,8 @@ static spks20_state_t* get_spks20_state() {
     data[4] = intlen;
     data[5] = (doublereal) recsiz;
     data[6] = (doublereal) nrec;
-    dafada_(data, &__state->c__7);
-    chkout_("SPKS20", (ftnlen)6);
+    dafada_(__global_state, data, &__state->c__7);
+    chkout_(__global_state, "SPKS20", (ftnlen)6);
     return 0;
 } /* spks20_ */
 

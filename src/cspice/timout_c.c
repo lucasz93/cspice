@@ -490,7 +490,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "timout_c");
+   chkin_c ( naif_state, "timout_c");
 
 
    /*

@@ -8,22 +8,22 @@
 
 
 typedef int scanit_state_t;
-static scanit_state_t* get_scanit_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline scanit_state_t* get_scanit_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SCANIT ( Scan a character string ) */
-/* Subroutine */ int scanit_0_(int n__, char *string, integer *start, integer 
-	*room, integer *nmarks, char *marks, integer *mrklen, integer *pnters,
-	 integer *ntokns, integer *ident, integer *beg, integer *end, ftnlen 
-	string_len, ftnlen marks_len)
+/* Subroutine */ int scanit_0_(cspice_t* __global_state, int n__, char *
+	string, integer *start, integer *room, integer *nmarks, char *marks, 
+	integer *mrklen, integer *pnters, integer *ntokns, integer *ident, 
+	integer *beg, integer *end, ftnlen string_len, ftnlen marks_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer last;
@@ -39,29 +39,31 @@ static scanit_state_t* get_scanit_state() {
     integer n;
     integer fchar;
     integer lchar;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical equal;
-    extern integer ncpos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern integer ncpos_(cspice_t*, char *, char *, integer *, ftnlen, 
+	    ftnlen);
     logical known;
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer eblock;
     integer backup;
     integer finish;
     integer lbound;
     integer offset;
-    extern /* Subroutine */ int rmdupc_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int rmdupc_(cspice_t*, integer *, char *, ftnlen);
     integer ubound;
     integer intval;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     char letter[1];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    scanit_state_t* __state = get_scanit_state();
+    scanit_state_t* __state = get_scanit_state(__global_state);
 /* $ Abstract */
 
 /*     This routine serves as an umbrella routine for routines */
@@ -458,12 +460,13 @@ static scanit_state_t* get_scanit_state() {
 	case 2: goto L_scan;
 	}
 
-    if (! return_()) {
-	chkin_("SCANIT", (ftnlen)6);
-	setmsg_("Your program has referenced the umbrella subroutine SCANIT."
-		"  This may indicate a programming error.", (ftnlen)99);
-	sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-	chkout_("SCANIT", (ftnlen)6);
+    if (! return_(__global_state)) {
+	chkin_(__global_state, "SCANIT", (ftnlen)6);
+	setmsg_(__global_state, "Your program has referenced the umbrella su"
+		"broutine SCANIT.  This may indicate a programming error.", (
+		ftnlen)99);
+	sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+	chkout_(__global_state, "SCANIT", (ftnlen)6);
     }
     return 0;
 /* $Procedure SCANPR ( Scanning preparation ) */
@@ -870,14 +873,14 @@ L_scanpr:
 
     i__1 = *nmarks;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	ljust_(marks + (i__ - 1) * marks_len, marks + (i__ - 1) * marks_len, 
-		marks_len, marks_len);
+	ljust_(__global_state, marks + (i__ - 1) * marks_len, marks + (i__ - 
+		1) * marks_len, marks_len, marks_len);
     }
     n = *nmarks;
 
 /*     Sort and remove duplicates from the array MARKS. */
 
-    rmdupc_(&n, marks, marks_len);
+    rmdupc_(__global_state, &n, marks, marks_len);
 
 /*     All of the MARKS have the same declared length. */
 /*     However, since all of your marks may not have */
@@ -945,7 +948,8 @@ L_scanpr:
     slot = 3;
     i__1 = n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	mrklen[i__ - 1] = rtrim_(marks + (i__ - 1) * marks_len, marks_len);
+	mrklen[i__ - 1] = rtrim_(__global_state, marks + (i__ - 1) * 
+		marks_len, marks_len);
 	this1 = *(unsigned char *)&marks[(i__ - 1) * marks_len];
 	if (this1 != last1) {
 
@@ -1444,7 +1448,7 @@ L_scan:
     offset = pnters[0] - 4;
     lbound = pnters[0] - 1;
     ubound = pnters[1] + 1;
-    last = i_len(string, string_len);
+    last = i_len(&__global_state->f2c, string, string_len);
     *ntokns = 0;
     backup = *start - 1;
     known = TRUE_;
@@ -1487,8 +1491,9 @@ L_scan:
 /*              OK. The substring reference STRING(START:STOP) is */
 /*              legal.  See if it is equal to the current test mark. */
 
-		equal = s_cmp(marks + (test - 1) * marks_len, string + (*
-			start - 1), l, stop - (*start - 1)) == 0;
+		equal = s_cmp(&__global_state->f2c, marks + (test - 1) * 
+			marks_len, string + (*start - 1), l, stop - (*start - 
+			1)) == 0;
 
 /*              If it isn't equal, just set up to test the next mark. */
 
@@ -1510,10 +1515,10 @@ L_scan:
 /*                 is a space, we need to collect all of the consecutive */
 /*                 blanks beginning with the one at the START position. */
 
-		    if (s_cmp(marks + (test - 1) * marks_len, " ", marks_len, 
-			    (ftnlen)1) == 0) {
-			stop = ncpos_(string, " ", start, string_len, (ftnlen)
-				1) - 1;
+		    if (s_cmp(&__global_state->f2c, marks + (test - 1) * 
+			    marks_len, " ", marks_len, (ftnlen)1) == 0) {
+			stop = ncpos_(__global_state, string, " ", start, 
+				string_len, (ftnlen)1) - 1;
 			if (stop < 0) {
 			    stop = last;
 			}
@@ -1579,27 +1584,27 @@ L_scan:
     return 0;
 } /* scanit_ */
 
-/* Subroutine */ int scanit_(char *string, integer *start, integer *room, 
-	integer *nmarks, char *marks, integer *mrklen, integer *pnters, 
-	integer *ntokns, integer *ident, integer *beg, integer *end, ftnlen 
-	string_len, ftnlen marks_len)
+/* Subroutine */ int scanit_(cspice_t* __global_state, char *string, integer *
+	start, integer *room, integer *nmarks, char *marks, integer *mrklen, 
+	integer *pnters, integer *ntokns, integer *ident, integer *beg, 
+	integer *end, ftnlen string_len, ftnlen marks_len)
 {
     return scanit_0_(0, string, start, room, nmarks, marks, mrklen, pnters, 
 	    ntokns, ident, beg, end, string_len, marks_len);
     }
 
-/* Subroutine */ int scanpr_(integer *nmarks, char *marks, integer *mrklen, 
-	integer *pnters, ftnlen marks_len)
+/* Subroutine */ int scanpr_(cspice_t* __global_state, integer *nmarks, char *
+	marks, integer *mrklen, integer *pnters, ftnlen marks_len)
 {
     return scanit_0_(1, (char *)0, (integer *)0, (integer *)0, nmarks, marks, 
 	    mrklen, pnters, (integer *)0, (integer *)0, (integer *)0, (
 	    integer *)0, (ftnint)0, marks_len);
     }
 
-/* Subroutine */ int scan_(char *string, char *marks, integer *mrklen, 
-	integer *pnters, integer *room, integer *start, integer *ntokns, 
-	integer *ident, integer *beg, integer *end, ftnlen string_len, ftnlen 
-	marks_len)
+/* Subroutine */ int scan_(cspice_t* __global_state, char *string, char *
+	marks, integer *mrklen, integer *pnters, integer *room, integer *
+	start, integer *ntokns, integer *ident, integer *beg, integer *end, 
+	ftnlen string_len, ftnlen marks_len)
 {
     return scanit_0_(2, string, start, room, (integer *)0, marks, mrklen, 
 	    pnters, ntokns, ident, beg, end, string_len, marks_len);

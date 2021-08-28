@@ -8,8 +8,7 @@
 
 
 extern ducrss_init_t __ducrss_init;
-static ducrss_state_t* get_ducrss_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ducrss_state_t* get_ducrss_state(cspice_t* state) {
 	if (!state->ducrss)
 		state->ducrss = __cspice_allocate_module(sizeof(
 	ducrss_state_t), &__ducrss_init, sizeof(__ducrss_init));
@@ -18,7 +17,8 @@ static ducrss_state_t* get_ducrss_state() {
 }
 
 /* $Procedure      DUCRSS ( Unit Normalized Cross Product and Derivative ) */
-/* Subroutine */ int ducrss_(doublereal *s1, doublereal *s2, doublereal *sout)
+/* Subroutine */ int ducrss_(cspice_t* __global_state, doublereal *s1, 
+	doublereal *s2, doublereal *sout)
 {
     /* System generated locals */
     doublereal d__1, d__2;
@@ -26,19 +26,20 @@ static ducrss_state_t* get_ducrss_state() {
     /* Local variables */
     doublereal scls1[6];
     doublereal scls2[6];
-    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int vsclg_(doublereal *, doublereal *, integer *, 
+    extern /* Subroutine */ int dvhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
+    extern /* Subroutine */ int vsclg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
     doublereal f1;
     doublereal f2;
-    extern /* Subroutine */ int dvcrss_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int dvcrss_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal tmpsta[6];
 
 
     /* Module state */
-    ducrss_state_t* __state = get_ducrss_state();
+    ducrss_state_t* __state = get_ducrss_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the unit vector parallel to the cross product of */
@@ -223,22 +224,22 @@ static ducrss_state_t* get_ducrss_state() {
     f2 = max(d__1,d__2);
     if (f1 > 0.) {
 	d__1 = 1. / f1;
-	vsclg_(&d__1, s1, &__state->c__6, scls1);
+	vsclg_(__global_state, &d__1, s1, &__state->c__6, scls1);
     } else {
-	moved_(s1, &__state->c__6, scls1);
+	moved_(__global_state, s1, &__state->c__6, scls1);
     }
     if (f2 > 0.) {
 	d__1 = 1. / f2;
-	vsclg_(&d__1, s2, &__state->c__6, scls2);
+	vsclg_(__global_state, &d__1, s2, &__state->c__6, scls2);
     } else {
-	moved_(s2, &__state->c__6, scls2);
+	moved_(__global_state, s2, &__state->c__6, scls2);
     }
 
 /*     Not much to this.  Just get the cross product and its derivative. */
 /*     Using that, get the associated unit vector and its derivative. */
 
-    dvcrss_(scls1, scls2, tmpsta);
-    dvhat_(tmpsta, sout);
+    dvcrss_(__global_state, scls1, scls2, tmpsta);
+    dvhat_(__global_state, tmpsta, sout);
     return 0;
 } /* ducrss_ */
 

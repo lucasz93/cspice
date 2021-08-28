@@ -8,8 +8,7 @@
 
 
 extern edlimb_init_t __edlimb_init;
-static edlimb_state_t* get_edlimb_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline edlimb_state_t* get_edlimb_state(cspice_t* state) {
 	if (!state->edlimb)
 		state->edlimb = __cspice_allocate_module(sizeof(
 	edlimb_state_t), &__edlimb_init, sizeof(__edlimb_init));
@@ -18,8 +17,8 @@ static edlimb_state_t* get_edlimb_state() {
 }
 
 /* $Procedure  EDLIMB   ( Ellipsoid Limb ) */
-/* Subroutine */ int edlimb_(doublereal *a, doublereal *b, doublereal *c__, 
-	doublereal *viewpt, doublereal *limb)
+/* Subroutine */ int edlimb_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *c__, doublereal *viewpt, doublereal *limb)
 {
     /* System generated locals */
     doublereal d__1, d__2, d__3;
@@ -28,35 +27,37 @@ static edlimb_state_t* get_edlimb_state() {
     doublereal scla;
     doublereal sclb;
     doublereal sclc;
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal scla2;
     doublereal sclb2;
     doublereal sclc2;
     doublereal v[3];
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal level;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vsclg_(doublereal *, doublereal *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vsclg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
     doublereal tmpel[9];
-    extern /* Subroutine */ int nvc2pl_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int nvc2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal lplane[4];
-    extern /* Subroutine */ int inedpl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int inedpl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, logical *);
     doublereal normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    edlimb_state_t* __state = get_edlimb_state();
+    edlimb_state_t* __state = get_edlimb_state(__global_state);
 /* $ Abstract */
 
 /*     Find the limb of a triaxial ellipsoid, viewed from a specified */
@@ -310,21 +311,22 @@ static edlimb_state_t* get_edlimb_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EDLIMB", (ftnlen)6);
+	chkin_(__global_state, "EDLIMB", (ftnlen)6);
     }
 
 /*     The semi-axes must have positive length. */
 
     if (*a <= 0. || *b <= 0. || *c__ <= 0.) {
-	setmsg_("Semi-axis lengths:  A = #, B = #, C = #. ", (ftnlen)41);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(INVALIDAXISLENGTH)", (ftnlen)24);
-	chkout_("EDLIMB", (ftnlen)6);
+	setmsg_(__global_state, "Semi-axis lengths:  A = #, B = #, C = #. ", (
+		ftnlen)41);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDAXISLENGTH)", (ftnlen)24);
+	chkout_(__global_state, "EDLIMB", (ftnlen)6);
 	return 0;
     }
 
@@ -349,16 +351,17 @@ static edlimb_state_t* get_edlimb_state() {
     d__1 = sclc;
     sclc2 = d__1 * d__1;
     if (scla2 == 0. || sclb2 == 0. || sclc2 == 0.) {
-	setmsg_("Semi-axis too small:  A = #, B = #, C = #. ", (ftnlen)43);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("EDLIMB", (ftnlen)6);
+	setmsg_(__global_state, "Semi-axis too small:  A = #, B = #, C = #. ",
+		 (ftnlen)43);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "EDLIMB", (ftnlen)6);
 	return 0;
     }
     d__1 = 1. / scale;
-    vscl_(&d__1, viewpt, v);
+    vscl_(__global_state, &d__1, viewpt, v);
 
 /*     The viewing point must be outside of the ellipsoid.  LEVEL is the */
 /*     constant of the level surface that V lies on.  The ellipsoid */
@@ -372,9 +375,10 @@ static edlimb_state_t* get_edlimb_state() {
     d__3 = v[2];
     level = d__1 * d__1 / scla2 + d__2 * d__2 / sclb2 + d__3 * d__3 / sclc2;
     if (level < 1.) {
-	setmsg_("Viewing point is inside the ellipsoid.", (ftnlen)38);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("EDLIMB", (ftnlen)6);
+	setmsg_(__global_state, "Viewing point is inside the ellipsoid.", (
+		ftnlen)38);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "EDLIMB", (ftnlen)6);
 	return 0;
     }
 
@@ -438,27 +442,27 @@ static edlimb_state_t* get_edlimb_state() {
     normal[0] = v[0] / scla2;
     normal[1] = v[1] / sclb2;
     normal[2] = v[2] / sclc2;
-    nvc2pl_(normal, &__state->c_b18, lplane);
+    nvc2pl_(__global_state, normal, &__state->c_b18, lplane);
 
 /*     Find the limb by intersecting the limb plane with the ellipsoid. */
 
-    inedpl_(&scla, &sclb, &sclc, lplane, limb, &found);
+    inedpl_(__global_state, &scla, &sclb, &sclc, lplane, limb, &found);
 
 /*     FOUND should be true unless we've encountered numerical problems. */
 
     if (! found) {
-	setmsg_("Ellipsoid shape and viewing geometry are too extreme; the l"
-		"imb was not found. ", (ftnlen)78);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("EDLIMB", (ftnlen)6);
+	setmsg_(__global_state, "Ellipsoid shape and viewing geometry are to"
+		"o extreme; the limb was not found. ", (ftnlen)78);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "EDLIMB", (ftnlen)6);
 	return 0;
     }
 
 /*     Undo the scaling before returning the limb. */
 
-    vsclg_(&scale, limb, &__state->c__9, tmpel);
-    moved_(tmpel, &__state->c__9, limb);
-    chkout_("EDLIMB", (ftnlen)6);
+    vsclg_(__global_state, &scale, limb, &__state->c__9, tmpel);
+    moved_(__global_state, tmpel, &__state->c__9, limb);
+    chkout_(__global_state, "EDLIMB", (ftnlen)6);
     return 0;
 } /* edlimb_ */
 

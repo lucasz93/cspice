@@ -195,7 +195,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "spkuds_c" );
+   chkin_c ( naif_state, "spkuds_c" );
 
 
    spkuds_ (  ( doublereal  * ) descr,

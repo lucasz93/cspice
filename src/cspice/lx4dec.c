@@ -8,17 +8,16 @@
 
 
 typedef int lx4dec_state_t;
-static lx4dec_state_t* get_lx4dec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lx4dec_state_t* get_lx4dec_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LX4DEC (Scan for signed integer) */
-/* Subroutine */ int lx4dec_(char *string, integer *first, integer *last, 
-	integer *nchar, ftnlen string_len)
+/* Subroutine */ int lx4dec_(cspice_t* __global_state, char *string, integer *
+	first, integer *last, integer *nchar, ftnlen string_len)
 {
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer next;
@@ -27,14 +26,14 @@ static lx4dec_state_t* get_lx4dec_state() {
     integer j;
     integer l;
     integer n;
-    extern /* Subroutine */ int lx4sgn_(char *, integer *, integer *, integer 
-	    *, ftnlen);
-    extern /* Subroutine */ int lx4uns_(char *, integer *, integer *, integer 
-	    *, ftnlen);
+    extern /* Subroutine */ int lx4sgn_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
+    extern /* Subroutine */ int lx4uns_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
 
 
     /* Module state */
-    lx4dec_state_t* __state = get_lx4dec_state();
+    lx4dec_state_t* __state = get_lx4dec_state(__global_state);
 /* $ Abstract */
 
 /*     Scan a string from a specified starting position for the */
@@ -209,7 +208,7 @@ static lx4dec_state_t* get_lx4dec_state() {
 /* -& */
     *last = *first - 1;
     next = *first + 1;
-    l = i_len(string, string_len);
+    l = i_len(&__global_state->f2c, string, string_len);
 
 /*     If start is beyond the ends of the string, we  can quit now. */
 
@@ -233,7 +232,7 @@ static lx4dec_state_t* get_lx4dec_state() {
 /*        There must be an unsigned integer following. */
 
 	f = *first + 1;
-	lx4uns_(string, &f, last, nchar, string_len);
+	lx4uns_(__global_state, string, &f, last, nchar, string_len);
 	if (*nchar == 0) {
 	    *last = *first - 1;
 	} else {
@@ -245,7 +244,7 @@ static lx4dec_state_t* get_lx4dec_state() {
 /*        a decimal point. There must be an unsigned integer following. */
 
 	f = next + 1;
-	lx4uns_(string, &f, last, nchar, string_len);
+	lx4uns_(__global_state, string, &f, last, nchar, string_len);
 	if (*nchar == 0) {
 	    *last = *first - 1;
 	} else {
@@ -257,7 +256,7 @@ static lx4dec_state_t* get_lx4dec_state() {
 /*        a decimal point. There must be an unsigned integer following. */
 
 	f = next + 1;
-	lx4uns_(string, &f, last, nchar, string_len);
+	lx4uns_(__global_state, string, &f, last, nchar, string_len);
 	if (*nchar == 0) {
 	    *last = *first - 1;
 	} else {
@@ -268,7 +267,7 @@ static lx4dec_state_t* get_lx4dec_state() {
 /*        Case 3.  The leading character is not a decimal point. */
 /*        First check to see how much signed integer we have. */
 
-	lx4sgn_(string, first, last, nchar, string_len);
+	lx4sgn_(__global_state, string, first, last, nchar, string_len);
 
 /*        If we got some part of a signed integer, we next see */
 /*        if there is a decimal point followed by an unsigned */
@@ -283,7 +282,7 @@ static lx4dec_state_t* get_lx4dec_state() {
 
 /*              After the decimal point we may have an unsigned integer. */
 
-		lx4uns_(string, &f, last, &n, string_len);
+		lx4uns_(__global_state, string, &f, last, &n, string_len);
 
 /*              LAST is either pointing to the decimal point or the */
 /*              end of an unsigned integer.  In either case we need */

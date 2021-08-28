@@ -8,37 +8,36 @@
 
 
 typedef int dafrfr_state_t;
-static dafrfr_state_t* get_dafrfr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafrfr_state_t* get_dafrfr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DAFRFR ( DAF, read file record ) */
-/* Subroutine */ int dafrfr_(integer *handle, integer *nd, integer *ni, char *
-	ifname, integer *fward, integer *bward, integer *free, ftnlen 
-	ifname_len)
+/* Subroutine */ int dafrfr_(cspice_t* __global_state, integer *handle, 
+	integer *nd, integer *ni, char *ifname, integer *fward, integer *
+	bward, integer *free, ftnlen ifname_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzdafgfr_(integer *, char *, integer *, 
-	    integer *, char *, integer *, integer *, integer *, logical *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzdafgfr_(cspice_t*, integer *, char *, 
+	    integer *, integer *, char *, integer *, integer *, integer *, 
+	    logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found;
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
     char idword[8];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dafrfr_state_t* __state = get_dafrfr_state();
+    dafrfr_state_t* __state = get_dafrfr_state(__global_state);
 /* $ Abstract */
 
 /*     Read the contents of the file record of a DAF. */
@@ -252,22 +251,22 @@ static dafrfr_state_t* get_dafrfr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFRFR", (ftnlen)6);
+	chkin_(__global_state, "DAFRFR", (ftnlen)6);
     }
 
 /*     Do some initializations */
 
-    s_copy(idword, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, idword, " ", (ftnlen)8, (ftnlen)1);
 
 /*     Check to be sure that HANDLE is attached to a file that is open */
 /*     with read access. If the call fails, check out and return. */
 
-    dafsih_(handle, "READ", (ftnlen)4);
-    if (failed_()) {
-	chkout_("DAFRFR", (ftnlen)6);
+    dafsih_(__global_state, handle, "READ", (ftnlen)4);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFRFR", (ftnlen)6);
 	return 0;
     }
 
@@ -275,19 +274,19 @@ static dafrfr_state_t* get_dafrfr_state() {
 /*     file record.  Read the internal file name into a temporary */
 /*     string, to be sure of the length. Check FOUND. */
 
-    zzdafgfr_(handle, idword, nd, ni, ifname, fward, bward, free, &found, (
-	    ftnlen)8, ifname_len);
+    zzdafgfr_(__global_state, handle, idword, nd, ni, ifname, fward, bward, 
+	    free, &found, (ftnlen)8, ifname_len);
     if (! found) {
-	setmsg_("File record not found for file handle #1. Check if program "
-		"code uses handle #2 for a read or write operation.", (ftnlen)
-		109);
-	errint_("#1", handle, (ftnlen)2);
-	errint_("#2", handle, (ftnlen)2);
-	sigerr_("SPICE(DAFFRNOTFOUND)", (ftnlen)20);
-	chkout_("DAFRFR", (ftnlen)6);
+	setmsg_(__global_state, "File record not found for file handle #1. C"
+		"heck if program code uses handle #2 for a read or write oper"
+		"ation.", (ftnlen)109);
+	errint_(__global_state, "#1", handle, (ftnlen)2);
+	errint_(__global_state, "#2", handle, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(DAFFRNOTFOUND)", (ftnlen)20);
+	chkout_(__global_state, "DAFRFR", (ftnlen)6);
 	return 0;
     }
-    chkout_("DAFRFR", (ftnlen)6);
+    chkout_(__global_state, "DAFRFR", (ftnlen)6);
     return 0;
 } /* dafrfr_ */
 

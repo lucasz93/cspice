@@ -8,17 +8,17 @@
 
 
 typedef int vscl_state_t;
-static vscl_state_t* get_vscl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vscl_state_t* get_vscl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VSCL ( Vector scaling, 3 dimensions ) */
-/* Subroutine */ int vscl_(doublereal *s, doublereal *v1, doublereal *vout)
+/* Subroutine */ int vscl_(cspice_t* __global_state, doublereal *s, 
+	doublereal *v1, doublereal *vout)
 {
 
     /* Module state */
-    vscl_state_t* __state = get_vscl_state();
+    vscl_state_t* __state = get_vscl_state(__global_state);
 /* $ Abstract */
 
 /*     Multiply a scalar and a 3-dimensional double precision vector. */

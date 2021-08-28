@@ -8,8 +8,7 @@
 
 
 extern zzspkflt_init_t __zzspkflt_init;
-static zzspkflt_state_t* get_zzspkflt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzspkflt_state_t* get_zzspkflt_state(cspice_t* state) {
 	if (!state->zzspkflt)
 		state->zzspkflt = __cspice_allocate_module(sizeof(
 	zzspkflt_state_t), &__zzspkflt_init, sizeof(__zzspkflt_init));
@@ -18,9 +17,10 @@ static zzspkflt_state_t* get_zzspkflt_state() {
 }
 
 /* $Procedure ZZSPKFLT ( SPK function, light time and rate ) */
-/* Subroutine */ int zzspkflt_(S_fp trgsub, doublereal *et, char *ref, char *
-	abcorr, doublereal *stobs, doublereal *starg, doublereal *lt, 
-	doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len)
+/* Subroutine */ int zzspkflt_(cspice_t* __global_state, S_fp trgsub, 
+	doublereal *et, char *ref, char *abcorr, doublereal *stobs, 
+	doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, 
+	ftnlen abcorr_len)
 {
     /* Initialized data */
 
@@ -29,52 +29,54 @@ static zzspkflt_state_t* get_zzspkflt_state() {
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal dist;
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
     doublereal a;
     doublereal b;
     doublereal c__;
     integer i__;
-    extern /* Subroutine */ int vaddg_(doublereal *, doublereal *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int vaddg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
     integer refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal epoch;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsubg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
     doublereal lterr;
-    extern doublereal vnorm_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal prvlt;
-    extern logical failed_(void);
-    extern doublereal clight_(void);
+    extern logical failed_(cspice_t*);
+    extern doublereal clight_(cspice_t*);
     logical attblk[15];
-    extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern doublereal touchd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal ctrssb[6];
     integer ltsign;
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal ssbtrg[6];
     integer trgctr;
-    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int spkssb_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, ftnlen);
     integer numitr;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     logical usestl;
     doublereal sttctr[6];
 
 
     /* Module state */
-    zzspkflt_state_t* __state = get_zzspkflt_state();
+    zzspkflt_state_t* __state = get_zzspkflt_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -559,25 +561,26 @@ static zzspkflt_state_t* get_zzspkflt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSPKFLT", (ftnlen)8);
-    if (__state->pass1 || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    chkin_(__global_state, "ZZSPKFLT", (ftnlen)8);
+    if (__state->pass1 || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
 
-	zzvalcor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("ZZSPKFLT", (ftnlen)8);
+	zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKFLT", (ftnlen)8);
 	    return 0;
 	}
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -602,13 +605,13 @@ static zzspkflt_state_t* get_zzspkflt_state() {
 
 /*     See if the reference frame is a recognized inertial frame. */
 
-    irfnum_(ref, &refid, ref_len);
+    irfnum_(__global_state, ref, &refid, ref_len);
     if (refid == 0) {
-	setmsg_("The requested frame '#' is not a recognized inertial frame. "
-		, (ftnlen)60);
-	errch_("#", ref, (ftnlen)1, ref_len);
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
-	chkout_("ZZSPKFLT", (ftnlen)8);
+	setmsg_(__global_state, "The requested frame '#' is not a recognized"
+		" inertial frame. ", (ftnlen)60);
+	errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	chkout_(__global_state, "ZZSPKFLT", (ftnlen)8);
 	return 0;
     }
 
@@ -617,16 +620,16 @@ static zzspkflt_state_t* get_zzspkflt_state() {
 /*     observer to get the relative state. Use this to compute the */
 /*     one-way light time. */
 
-    (*trgsub)(et, ref, &trgctr, sttctr, ref_len);
-    spkssb_(&trgctr, et, ref, ctrssb, ref_len);
-    if (failed_()) {
-	chkout_("ZZSPKFLT", (ftnlen)8);
+    (*trgsub)(__global_state, et, ref, &trgctr, sttctr, ref_len);
+    spkssb_(__global_state, &trgctr, et, ref, ctrssb, ref_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSPKFLT", (ftnlen)8);
 	return 0;
     }
-    vaddg_(ctrssb, sttctr, &__state->c__6, ssbtrg);
-    vsubg_(ssbtrg, stobs, &__state->c__6, starg);
-    dist = vnorm_(starg);
-    *lt = dist / clight_();
+    vaddg_(__global_state, ctrssb, sttctr, &__state->c__6, ssbtrg);
+    vsubg_(__global_state, ssbtrg, stobs, &__state->c__6, starg);
+    dist = vnorm_(__global_state, starg);
+    *lt = dist / clight_(__global_state);
     if (*lt == 0.) {
 
 /*        This can happen only if the observer and target are at the */
@@ -634,7 +637,7 @@ static zzspkflt_state_t* get_zzspkflt_state() {
 /*        going to compute the light time derivative. */
 
 	*dlt = 0.;
-	chkout_("ZZSPKFLT", (ftnlen)8);
+	chkout_(__global_state, "ZZSPKFLT", (ftnlen)8);
 	return 0;
     }
     if (! __state->uselt) {
@@ -645,11 +648,12 @@ static zzspkflt_state_t* get_zzspkflt_state() {
 
 /*           (1/c) * d(VNORM(STARG))/dt */
 
-	*dlt = vdot_(starg, &starg[3]) / (dist * clight_());
+	*dlt = vdot_(__global_state, starg, &starg[3]) / (dist * clight_(
+		__global_state));
 
 /*        LT and DLT are both set, so we can return. */
 
-	chkout_("ZZSPKFLT", (ftnlen)8);
+	chkout_(__global_state, "ZZSPKFLT", (ftnlen)8);
 	return 0;
     }
 
@@ -681,18 +685,18 @@ static zzspkflt_state_t* get_zzspkflt_state() {
 /*        during the previous loop iteration. */
 
 	d__1 = *et + ltsign * *lt;
-	epoch = touchd_(&d__1);
-	(*trgsub)(&epoch, ref, &trgctr, sttctr, ref_len);
-	spkssb_(&trgctr, &epoch, ref, ctrssb, ref_len);
-	if (failed_()) {
-	    chkout_("ZZSPKFLT", (ftnlen)8);
+	epoch = touchd_(__global_state, &d__1);
+	(*trgsub)(__global_state, &epoch, ref, &trgctr, sttctr, ref_len);
+	spkssb_(__global_state, &trgctr, &epoch, ref, ctrssb, ref_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKFLT", (ftnlen)8);
 	    return 0;
 	}
-	vaddg_(ctrssb, sttctr, &__state->c__6, ssbtrg);
-	vsubg_(ssbtrg, stobs, &__state->c__6, starg);
+	vaddg_(__global_state, ctrssb, sttctr, &__state->c__6, ssbtrg);
+	vsubg_(__global_state, ssbtrg, stobs, &__state->c__6, starg);
 	prvlt = *lt;
-	d__1 = vnorm_(starg) / clight_();
-	*lt = touchd_(&d__1);
+	d__1 = vnorm_(__global_state, starg) / clight_(__global_state);
+	*lt = touchd_(__global_state, &d__1);
 
 /*        LTERR is the magnitude of the change between the current */
 /*        estimate of light time and the previous estimate, relative to */
@@ -701,7 +705,7 @@ static zzspkflt_state_t* get_zzspkflt_state() {
 /* Computing MAX */
 	d__3 = 1., d__4 = abs(epoch);
 	d__2 = (d__1 = *lt - prvlt, abs(d__1)) / max(d__3,d__4);
-	lterr = touchd_(&d__2);
+	lterr = touchd_(__global_state, &d__2);
 	++i__;
     }
 
@@ -787,19 +791,19 @@ static zzspkflt_state_t* get_zzspkflt_state() {
 
 
 
-    a = 1. / (clight_() * vnorm_(starg));
-    b = vdot_(starg, &starg[3]);
-    c__ = vdot_(starg, &ssbtrg[3]);
+    a = 1. / (clight_(__global_state) * vnorm_(__global_state, starg));
+    b = vdot_(__global_state, starg, &starg[3]);
+    c__ = vdot_(__global_state, starg, &ssbtrg[3]);
 
 /*     For physically realistic target velocities, S*C*A cannot equal 1. */
 /*     We'll check for this case anyway. */
 
     if (ltsign * c__ * a > .99999999989999999) {
-	setmsg_("Target range rate magnitude is approximately the speed of l"
-		"ight. The light time derivative cannot be computed.", (ftnlen)
-		110);
-	sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-	chkout_("ZZSPKFLT", (ftnlen)8);
+	setmsg_(__global_state, "Target range rate magnitude is approximatel"
+		"y the speed of light. The light time derivative cannot be co"
+		"mputed.", (ftnlen)110);
+	sigerr_(__global_state, "SPICE(DIVIDEBYZERO)", (ftnlen)19);
+	chkout_(__global_state, "ZZSPKFLT", (ftnlen)8);
 	return 0;
     }
 
@@ -811,8 +815,9 @@ static zzspkflt_state_t* get_zzspkflt_state() {
 /*     with the light-time corrected velocity. */
 
     d__1 = ltsign * *dlt + 1.;
-    vlcom_(&d__1, &ssbtrg[3], &__state->c_b19, &stobs[3], &starg[3]);
-    chkout_("ZZSPKFLT", (ftnlen)8);
+    vlcom_(__global_state, &d__1, &ssbtrg[3], &__state->c_b19, &stobs[3], &
+	    starg[3]);
+    chkout_(__global_state, "ZZSPKFLT", (ftnlen)8);
     return 0;
 } /* zzspkflt_ */
 

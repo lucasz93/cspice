@@ -8,8 +8,7 @@
 
 
 extern zzekwpac_init_t __zzekwpac_init;
-static zzekwpac_state_t* get_zzekwpac_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekwpac_state_t* get_zzekwpac_state(cspice_t* state) {
 	if (!state->zzekwpac)
 		state->zzekwpac = __cspice_allocate_module(sizeof(
 	zzekwpac_state_t), &__zzekwpac_init, sizeof(__zzekwpac_init));
@@ -18,39 +17,39 @@ static zzekwpac_state_t* get_zzekwpac_state() {
 }
 
 /* $Procedure     ZZEKWPAC ( EK, write paged array, character ) */
-/* Subroutine */ int zzekwpac_(integer *handle, integer *segdsc, integer *
-	nvals, integer *l, char *cvals, integer *p, integer *base, ftnlen 
-	cvals_len)
+/* Subroutine */ int zzekwpac_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *nvals, integer *l, char *cvals, integer *p, 
+	integer *base, ftnlen cvals_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char page[1024];
     integer from;
-    extern /* Subroutine */ int zzekacps_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgwc_(integer *, integer *, char *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekacps_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwc_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int zzekslnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer npage;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer to;
-    extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer spp;
 
 
     /* Module state */
-    zzekwpac_state_t* __state = get_zzekwpac_state();
+    zzekwpac_state_t* __state = get_zzekwpac_state(__global_state);
 /* $ Abstract */
 
 /*     Write a character array out to a contiguous set of EK pages. */
@@ -598,19 +597,21 @@ static zzekwpac_state_t* get_zzekwpac_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKWPAC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKWPAC", (ftnlen)8);
     }
 
 /*     Check the input string length. */
 
-    if (*l < 0 || *l > i_len(cvals, cvals_len) || *l > 1014) {
-	setmsg_("String length # is just plain wrong.", (ftnlen)36);
-	errint_("#", l, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("ZZEKWPAC", (ftnlen)8);
+    if (*l < 0 || *l > i_len(&__global_state->f2c, cvals, cvals_len) || *l > 
+	    1014) {
+	setmsg_(__global_state, "String length # is just plain wrong.", (
+		ftnlen)36);
+	errint_(__global_state, "#", l, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKWPAC", (ftnlen)8);
 	return 0;
     }
 
@@ -622,21 +623,22 @@ static zzekwpac_state_t* get_zzekwpac_state() {
 /*     allocate that many new, contiguous pages. */
 
     npage = (*nvals + spp - 1) / spp;
-    zzekacps_(handle, segdsc, &__state->c__1, &npage, p, base);
+    zzekacps_(__global_state, handle, segdsc, &__state->c__1, &npage, p, base)
+	    ;
 
 /*     We'll use FROM to indicate the element of CVALS we're */
 /*     considering and TO to indicate the element of PAGE to write */
 /*     to. */
 
     to = 1;
-    s_copy(page, " ", (ftnlen)1024, (ftnlen)1);
+    s_copy(&__global_state->f2c, page, " ", (ftnlen)1024, (ftnlen)1);
     i__1 = *nvals;
     for (from = 1; from <= i__1; ++from) {
 
 /*        The Assignment. */
 
-	s_copy(page + (to - 1), cvals + (from - 1) * cvals_len, to + *l - 1 - 
-		(to - 1), cvals_len);
+	s_copy(&__global_state->f2c, page + (to - 1), cvals + (from - 1) * 
+		cvals_len, to + *l - 1 - (to - 1), cvals_len);
 	to += *l;
 	if (to > 1014 - *l + 1 || from == *nvals) {
 
@@ -644,12 +646,12 @@ static zzekwpac_state_t* get_zzekwpac_state() {
 /*           the last of the available data.  It's time to write out the */
 /*           current page. */
 
-	    zzekpgwc_(handle, p, page, (ftnlen)1024);
+	    zzekpgwc_(__global_state, handle, p, page, (ftnlen)1024);
 
 /*           Set the link count. */
 
 	    i__2 = (to - *l) / *l;
-	    zzekslnk_(handle, &__state->c__1, p, &i__2);
+	    zzekslnk_(__global_state, handle, &__state->c__1, p, &i__2);
 
 /*           Next page. */
 
@@ -657,7 +659,7 @@ static zzekwpac_state_t* get_zzekwpac_state() {
 	    to = 1;
 	}
     }
-    chkout_("ZZEKWPAC", (ftnlen)8);
+    chkout_(__global_state, "ZZEKWPAC", (ftnlen)8);
     return 0;
 } /* zzekwpac_ */
 

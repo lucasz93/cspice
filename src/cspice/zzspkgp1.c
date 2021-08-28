@@ -8,8 +8,7 @@
 
 
 extern zzspkgp1_init_t __zzspkgp1_init;
-static zzspkgp1_state_t* get_zzspkgp1_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzspkgp1_state_t* get_zzspkgp1_state(cspice_t* state) {
 	if (!state->zzspkgp1)
 		state->zzspkgp1 = __cspice_allocate_module(sizeof(
 	zzspkgp1_state_t), &__zzspkgp1_init, sizeof(__zzspkgp1_init));
@@ -18,8 +17,9 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 }
 
 /* $Procedure ZZSPKGP1 ( S/P Kernel, geometric position ) */
-/* Subroutine */ int zzspkgp1_(integer *targ, doublereal *et, char *ref, 
-	integer *obs, doublereal *pos, doublereal *lt, ftnlen ref_len)
+/* Subroutine */ int zzspkgp1_(cspice_t* __global_state, integer *targ, 
+	doublereal *et, char *ref, integer *obs, doublereal *pos, doublereal *
+	lt, ftnlen ref_len)
 {
     /* Initialized data */
 
@@ -28,78 +28,83 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzrefch1_(integer *, integer *, doublereal *, 
+    extern /* Subroutine */ int zzrefch1_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
     integer cobs;
     integer legs;
     doublereal sobs[6];
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer i__;
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
+    extern /* Subroutine */ int etcal_(cspice_t*, doublereal *, char *, 
+	    ftnlen);
     integer refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     char oname[40];
     doublereal descr[5];
     integer ctarg[20];
     char ident[40];
     char tname[40];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     logical found;
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
     doublereal starg[120]	/* was [6][20] */;
     logical nofrm;
     doublereal stemp[6];
     integer ctpos;
     doublereal vtemp[6];
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int bodc2n_(integer *, char *, logical *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int bodc2n_(cspice_t*, integer *, char *, logical 
+	    *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     integer handle;
     integer cframe;
-    extern doublereal clight_(void);
+    extern doublereal clight_(cspice_t*);
     integer tframe[20];
-    extern integer isrchi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int prefix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
     integer tmpfrm;
-    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
-    extern /* Subroutine */ int spksfs_(integer *, doublereal *, integer *, 
-	    doublereal *, char *, logical *, ftnlen);
-    extern integer frstnp_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int irfrot_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int spksfs_(cspice_t*, integer *, doublereal *, 
+	    integer *, doublereal *, char *, logical *, ftnlen);
+    extern integer frstnp_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal psxfrm[9]	/* was [3][3] */;
-    extern /* Subroutine */ int spkpvn_(integer *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int spkpvn_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
     integer nct;
     doublereal rot[9]	/* was [3][3] */;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     char tstring[80];
 
 
     /* Module state */
-    zzspkgp1_state_t* __state = get_zzspkgp1_state();
+    zzspkgp1_state_t* __state = get_zzspkgp1_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -561,10 +566,10 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZSPKGP1", (ftnlen)8);
+	chkin_(__global_state, "ZZSPKGP1", (ftnlen)8);
     }
 
 /*     Initialization. */
@@ -573,7 +578,7 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 
 /*        Initialize counter. */
 
-	zzctruin_(__state->svctr1);
+	zzctruin_(__global_state, __state->svctr1);
 	__state->first = FALSE_;
     }
 
@@ -582,8 +587,8 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 
     if (*targ == *obs) {
 	*lt = 0.;
-	cleard_(&__state->c__3, pos);
-	chkout_("ZZSPKGP1", (ftnlen)8);
+	cleard_(__global_state, &__state->c__3, pos);
+	chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 	return 0;
     }
 
@@ -651,34 +656,35 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*     up) and calls IRFNUM again to reset the 'DEFAULT's frame ID */
 /*     should it change between the calls. */
 
-    zznamfrm_(__state->svctr1, __state->svref, &__state->svrefi, ref, &refid, 
-	    (ftnlen)32, ref_len);
+    zznamfrm_(__global_state, __state->svctr1, __state->svref, &
+	    __state->svrefi, ref, &refid, (ftnlen)32, ref_len);
     if (refid == 0) {
-	irfnum_(ref, &refid, ref_len);
+	irfnum_(__global_state, ref, &refid, ref_len);
     }
     if (refid == 0) {
-	if (frstnp_(ref, ref_len) > 0) {
-	    setmsg_("The string supplied to specify the reference frame, ('#"
-		    "') contains non-printing characters.  The two most commo"
-		    "n causes for this kind of error are: 1. an error in the "
-		    "call to ZZSPKGP1; 2. an uninitialized variable. ", (
-		    ftnlen)215);
-	    errch_("#", ref, (ftnlen)1, ref_len);
-	} else if (s_cmp(ref, " ", ref_len, (ftnlen)1) == 0) {
-	    setmsg_("The string supplied to specify the reference frame is b"
-		    "lank.  The most common cause for this kind of error is a"
-		    "n uninitialized variable. ", (ftnlen)137);
+	if (frstnp_(__global_state, ref, ref_len) > 0) {
+	    setmsg_(__global_state, "The string supplied to specify the refe"
+		    "rence frame, ('#') contains non-printing characters.  Th"
+		    "e two most common causes for this kind of error are: 1. "
+		    "an error in the call to ZZSPKGP1; 2. an uninitialized va"
+		    "riable. ", (ftnlen)215);
+	    errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	} else if (s_cmp(&__global_state->f2c, ref, " ", ref_len, (ftnlen)1) 
+		== 0) {
+	    setmsg_(__global_state, "The string supplied to specify the refe"
+		    "rence frame is blank.  The most common cause for this ki"
+		    "nd of error is an uninitialized variable. ", (ftnlen)137);
 	} else {
-	    setmsg_("The string supplied to specify the reference frame was "
-		    "'#'.  This frame is not recognized. Possible causes for "
-		    "this error are: 1. failure to load the frame definition "
-		    "into the kernel pool; 2. An out-of-date edition of the t"
-		    "oolkit. ", (ftnlen)231);
-	    errch_("#", ref, (ftnlen)1, ref_len);
+	    setmsg_(__global_state, "The string supplied to specify the refe"
+		    "rence frame was '#'.  This frame is not recognized. Poss"
+		    "ible causes for this error are: 1. failure to load the f"
+		    "rame definition into the kernel pool; 2. An out-of-date "
+		    "edition of the toolkit. ", (ftnlen)231);
+	    errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
 	}
-	sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
-	if (failed_()) {
-	    chkout_("ZZSPKGP1", (ftnlen)8);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -700,22 +706,26 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*     to itself. */
 
     i__ = 1;
-    ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ctarg", i__1, 
-	    "zzspkgp1_", (ftnlen)610)] = *targ;
+    ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ctarg", i__1, "zzspkgp1_", (ftnlen)610)] = *
+	    targ;
     found = TRUE_;
-    cleard_(&__state->c__6, &starg[(i__1 = i__ * 6 - 6) < 120 && 0 <= i__1 ? 
-	    i__1 : s_rnge("starg", i__1, "zzspkgp1_", (ftnlen)613)]);
+    cleard_(__global_state, &__state->c__6, &starg[(i__1 = i__ * 6 - 6) < 120 
+	    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "starg", i__1, 
+	    "zzspkgp1_", (ftnlen)613)]);
     while(found && i__ < 20 && ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ctarg", i__1, "zzspkgp1_", (ftnlen)615)] != *obs &&
-	     ctarg[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ctarg",
-	     i__2, "zzspkgp1_", (ftnlen)615)] != 0) {
+	    i__1 : s_rnge(&__global_state->f2c, "ctarg", i__1, "zzspkgp1_", (
+	    ftnlen)615)] != *obs && ctarg[(i__2 = i__ - 1) < 20 && 0 <= i__2 ?
+	     i__2 : s_rnge(&__global_state->f2c, "ctarg", i__2, "zzspkgp1_", (
+	    ftnlen)615)] != 0) {
 
 /*        Find a file and segment that has position */
 /*        data for CTARG(I). */
 
-	spksfs_(&ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"ctarg", i__1, "zzspkgp1_", (ftnlen)624)], et, &handle, descr,
-		 ident, &found, (ftnlen)40);
+	spksfs_(__global_state, &ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
+		i__1 : s_rnge(&__global_state->f2c, "ctarg", i__1, "zzspkgp1_"
+		, (ftnlen)624)], et, &handle, descr, ident, &found, (ftnlen)
+		40);
 	if (found) {
 
 /*           Get the position of CTARG(I) relative to some */
@@ -723,12 +733,14 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*           CTARG(I+1) and the position is called STEMP. */
 
 	    ++i__;
-	    spkpvn_(&handle, descr, et, &tframe[(i__1 = i__ - 1) < 20 && 0 <= 
-		    i__1 ? i__1 : s_rnge("tframe", i__1, "zzspkgp1_", (ftnlen)
-		    634)], &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? 
-		    i__2 : s_rnge("starg", i__2, "zzspkgp1_", (ftnlen)634)], &
-		    ctarg[(i__3 = i__ - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge(
-		    "ctarg", i__3, "zzspkgp1_", (ftnlen)634)]);
+	    spkpvn_(__global_state, &handle, descr, et, &tframe[(i__1 = i__ - 
+		    1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+		     "tframe", i__1, "zzspkgp1_", (ftnlen)634)], &starg[(i__2 
+		    = i__ * 6 - 6) < 120 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "starg", i__2, "zzspkgp1_", (ftnlen)
+		    634)], &ctarg[(i__3 = i__ - 1) < 20 && 0 <= i__3 ? i__3 : 
+		    s_rnge(&__global_state->f2c, "ctarg", i__3, "zzspkgp1_", (
+		    ftnlen)634)]);
 
 /*           Here's what we have.  STARG is the position of CTARG(I-1) */
 /*           relative to CTARG(I) in reference frame TFRAME(I) */
@@ -736,8 +748,8 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*           If one of the routines above failed during */
 /*           execution, we just give up and check out. */
 
-	    if (failed_()) {
-		chkout_("ZZSPKGP1", (ftnlen)8);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -761,8 +773,8 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*           Find a file and segment that has position */
 /*           data for CTARG(CHLEN). */
 
-	    spksfs_(&ctarg[19], et, &handle, descr, ident, &found, (ftnlen)40)
-		    ;
+	    spksfs_(__global_state, &ctarg[19], et, &handle, descr, ident, &
+		    found, (ftnlen)40);
 	    if (found) {
 
 /*              Get the position of CTARG(CHLEN) relative to */
@@ -770,7 +782,8 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*              overwrites the old.  The position is called */
 /*              STEMP. */
 
-		spkpvn_(&handle, descr, et, &tmpfrm, stemp, &ctarg[19]);
+		spkpvn_(__global_state, &handle, descr, et, &tmpfrm, stemp, &
+			ctarg[19]);
 
 /*              Add STEMP to the position of TARG relative to */
 /*              the old center to get the position of TARG */
@@ -778,27 +791,29 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*              the last element of STARG. */
 
 		if (tframe[19] == tmpfrm) {
-		    moved_(&starg[114], &__state->c__3, vtemp);
+		    moved_(__global_state, &starg[114], &__state->c__3, vtemp)
+			    ;
 		} else if (tmpfrm > 0 && tmpfrm <= 21 && tframe[19] > 0 && 
 			tframe[19] <= 21) {
-		    irfrot_(&tframe[19], &tmpfrm, rot);
-		    mxv_(rot, &starg[114], vtemp);
+		    irfrot_(__global_state, &tframe[19], &tmpfrm, rot);
+		    mxv_(__global_state, rot, &starg[114], vtemp);
 		} else {
-		    zzrefch1_(&tframe[19], &tmpfrm, et, psxfrm);
-		    if (failed_()) {
-			chkout_("ZZSPKGP1", (ftnlen)8);
+		    zzrefch1_(__global_state, &tframe[19], &tmpfrm, et, 
+			    psxfrm);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 			return 0;
 		    }
-		    mxv_(psxfrm, &starg[114], vtemp);
+		    mxv_(__global_state, psxfrm, &starg[114], vtemp);
 		}
-		vadd_(vtemp, stemp, &starg[114]);
+		vadd_(__global_state, vtemp, stemp, &starg[114]);
 		tframe[19] = tmpfrm;
 
 /*              If one of the routines above failed during */
 /*              execution, we just give up and check out. */
 
-		if (failed_()) {
-		    chkout_("ZZSPKGP1", (ftnlen)8);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 		    return 0;
 		}
 	    }
@@ -825,7 +840,7 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*     the first values for COBS and SOBS. */
 
     cobs = *obs;
-    cleard_(&__state->c__6, sobs);
+    cleard_(__global_state, &__state->c__6, sobs);
 
 /*     Perhaps we have a common node already. */
 /*     If so it will be the last node on the */
@@ -835,11 +850,13 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*     node in CTARG if one is found.  It will */
 /*     be zero if COBS is not found in CTARG. */
 
-    if (ctarg[(i__1 = nct - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ctarg", 
-	    i__1, "zzspkgp1_", (ftnlen)769)] == cobs) {
+    if (ctarg[(i__1 = nct - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ctarg", i__1, "zzspkgp1_", (ftnlen)769)] == 
+	    cobs) {
 	ctpos = nct;
-	cframe = tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"tframe", i__1, "zzspkgp1_", (ftnlen)771)];
+	cframe = tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tframe", i__1, "zzspkgp1_", (ftnlen)771)
+		];
     } else {
 	ctpos = 0;
     }
@@ -864,7 +881,8 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*        Find a file and segment that has position */
 /*        data for COBS. */
 
-	spksfs_(&cobs, et, &handle, descr, ident, &found, (ftnlen)40);
+	spksfs_(__global_state, &cobs, et, &handle, descr, ident, &found, (
+		ftnlen)40);
 	if (found) {
 
 /*           Get the position of COBS; call it STEMP. */
@@ -872,9 +890,11 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*           new COBS. */
 
 	    if (legs == 0) {
-		spkpvn_(&handle, descr, et, &tmpfrm, sobs, &cobs);
+		spkpvn_(__global_state, &handle, descr, et, &tmpfrm, sobs, &
+			cobs);
 	    } else {
-		spkpvn_(&handle, descr, et, &tmpfrm, stemp, &cobs);
+		spkpvn_(__global_state, &handle, descr, et, &tmpfrm, stemp, &
+			cobs);
 	    }
 	    if (nofrm) {
 		nofrm = FALSE_;
@@ -894,31 +914,31 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*              greater. */
 
 		if (legs > 0) {
-		    vadd_(sobs, stemp, vtemp);
-		    vequ_(vtemp, sobs);
+		    vadd_(__global_state, sobs, stemp, vtemp);
+		    vequ_(__global_state, vtemp, sobs);
 		}
 	    } else if (tmpfrm > 0 && tmpfrm <= 21 && cframe > 0 && cframe <= 
 		    21) {
-		irfrot_(&cframe, &tmpfrm, rot);
-		mxv_(rot, sobs, vtemp);
-		vadd_(vtemp, stemp, sobs);
+		irfrot_(__global_state, &cframe, &tmpfrm, rot);
+		mxv_(__global_state, rot, sobs, vtemp);
+		vadd_(__global_state, vtemp, stemp, sobs);
 		cframe = tmpfrm;
 	    } else {
-		zzrefch1_(&cframe, &tmpfrm, et, psxfrm);
-		if (failed_()) {
-		    chkout_("ZZSPKGP1", (ftnlen)8);
+		zzrefch1_(__global_state, &cframe, &tmpfrm, et, psxfrm);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 		    return 0;
 		}
-		mxv_(psxfrm, sobs, vtemp);
-		vadd_(vtemp, stemp, sobs);
+		mxv_(__global_state, psxfrm, sobs, vtemp);
+		vadd_(__global_state, vtemp, stemp, sobs);
 		cframe = tmpfrm;
 	    }
 
 /*           Check failed.  We don't want to loop */
 /*           indefinitely. */
 
-	    if (failed_()) {
-		chkout_("ZZSPKGP1", (ftnlen)8);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 		return 0;
 	    }
 
@@ -927,7 +947,7 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*           is a common node. If not, repeat the loop. */
 
 	    ++legs;
-	    ctpos = isrchi_(&cobs, &nct, ctarg);
+	    ctpos = isrchi_(__global_state, &cobs, &nct, ctarg);
 	}
     }
 
@@ -936,32 +956,37 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*     searched through all the available data. */
 
     if (ctpos == 0) {
-	bodc2n_(targ, tname, &found, (ftnlen)40);
+	bodc2n_(__global_state, targ, tname, &found, (ftnlen)40);
 	if (found) {
-	    prefix_("# (", &__state->c__0, tname, (ftnlen)3, (ftnlen)40);
-	    suffix_(")", &__state->c__0, tname, (ftnlen)1, (ftnlen)40);
-	    repmi_(tname, "#", targ, tname, (ftnlen)40, (ftnlen)1, (ftnlen)40)
-		    ;
+	    prefix_(__global_state, "# (", &__state->c__0, tname, (ftnlen)3, (
+		    ftnlen)40);
+	    suffix_(__global_state, ")", &__state->c__0, tname, (ftnlen)1, (
+		    ftnlen)40);
+	    repmi_(__global_state, tname, "#", targ, tname, (ftnlen)40, (
+		    ftnlen)1, (ftnlen)40);
 	} else {
-	    intstr_(targ, tname, (ftnlen)40);
+	    intstr_(__global_state, targ, tname, (ftnlen)40);
 	}
-	bodc2n_(obs, oname, &found, (ftnlen)40);
+	bodc2n_(__global_state, obs, oname, &found, (ftnlen)40);
 	if (found) {
-	    prefix_("# (", &__state->c__0, oname, (ftnlen)3, (ftnlen)40);
-	    suffix_(")", &__state->c__0, oname, (ftnlen)1, (ftnlen)40);
-	    repmi_(oname, "#", obs, oname, (ftnlen)40, (ftnlen)1, (ftnlen)40);
+	    prefix_(__global_state, "# (", &__state->c__0, oname, (ftnlen)3, (
+		    ftnlen)40);
+	    suffix_(__global_state, ")", &__state->c__0, oname, (ftnlen)1, (
+		    ftnlen)40);
+	    repmi_(__global_state, oname, "#", obs, oname, (ftnlen)40, (
+		    ftnlen)1, (ftnlen)40);
 	} else {
-	    intstr_(obs, oname, (ftnlen)40);
+	    intstr_(__global_state, obs, oname, (ftnlen)40);
 	}
-	setmsg_("Insufficient ephemeris data has been loaded to compute the "
-		"position of TARG relative to OBS at the ephemeris epoch #. ", 
-		(ftnlen)118);
-	etcal_(et, tstring, (ftnlen)80);
-	errch_("TARG", tname, (ftnlen)4, (ftnlen)40);
-	errch_("OBS", oname, (ftnlen)3, (ftnlen)40);
-	errch_("#", tstring, (ftnlen)1, (ftnlen)80);
-	sigerr_("SPICE(SPKINSUFFDATA)", (ftnlen)20);
-	chkout_("ZZSPKGP1", (ftnlen)8);
+	setmsg_(__global_state, "Insufficient ephemeris data has been loaded"
+		" to compute the position of TARG relative to OBS at the ephe"
+		"meris epoch #. ", (ftnlen)118);
+	etcal_(__global_state, et, tstring, (ftnlen)80);
+	errch_(__global_state, "TARG", tname, (ftnlen)4, (ftnlen)40);
+	errch_(__global_state, "OBS", oname, (ftnlen)3, (ftnlen)40);
+	errch_(__global_state, "#", tstring, (ftnlen)1, (ftnlen)80);
+	sigerr_(__global_state, "SPICE(SPKINSUFFDATA)", (ftnlen)20);
+	chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 	return 0;
     }
 
@@ -1006,55 +1031,65 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
     }
     i__1 = ctpos - 1;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	if (tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("tframe"
-		, i__2, "zzspkgp1_", (ftnlen)967)] == tframe[(i__3 = i__) < 
-		20 && 0 <= i__3 ? i__3 : s_rnge("tframe", i__3, "zzspkgp1_", (
-		ftnlen)967)]) {
-	    vadd_(&starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? i__2 : 
-		    s_rnge("starg", i__2, "zzspkgp1_", (ftnlen)969)], &starg[(
-		    i__3 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__3 ? i__3 : 
-		    s_rnge("starg", i__3, "zzspkgp1_", (ftnlen)969)], stemp);
-	    moved_(stemp, &__state->c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 
-		    120 && 0 <= i__2 ? i__2 : s_rnge("starg", i__2, "zzspkgp"
-		    "1_", (ftnlen)970)]);
-	} else if (tframe[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge(
-		"tframe", i__3, "zzspkgp1_", (ftnlen)972)] > 0 && tframe[(
-		i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("tframe", i__3, 
-		"zzspkgp1_", (ftnlen)972)] <= 21 && tframe[(i__2 = i__ - 1) < 
-		20 && 0 <= i__2 ? i__2 : s_rnge("tframe", i__2, "zzspkgp1_", (
-		ftnlen)972)] > 0 && tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 
-		? i__2 : s_rnge("tframe", i__2, "zzspkgp1_", (ftnlen)972)] <= 
-		21) {
-	    irfrot_(&tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("tframe", i__2, "zzspkgp1_", (ftnlen)974)], &
-		    tframe[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge(
-		    "tframe", i__3, "zzspkgp1_", (ftnlen)974)], rot);
-	    mxv_(rot, &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? i__2 : 
-		    s_rnge("starg", i__2, "zzspkgp1_", (ftnlen)975)], stemp);
-	    vadd_(stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__2 
-		    ? i__2 : s_rnge("starg", i__2, "zzspkgp1_", (ftnlen)976)],
-		     vtemp);
-	    moved_(vtemp, &__state->c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 
-		    120 && 0 <= i__2 ? i__2 : s_rnge("starg", i__2, "zzspkgp"
-		    "1_", (ftnlen)977)]);
+	if (tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "tframe", i__2, "zzspkgp1_", (ftnlen)967)
+		] == tframe[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "tframe", i__3, "zzspkgp1_", (ftnlen)967)
+		]) {
+	    vadd_(__global_state, &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "starg", i__2, 
+		    "zzspkgp1_", (ftnlen)969)], &starg[(i__3 = (i__ + 1) * 6 
+		    - 6) < 120 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "starg", i__3, "zzspkgp1_", (ftnlen)
+		    969)], stemp);
+	    moved_(__global_state, stemp, &__state->c__3, &starg[(i__2 = (i__ 
+		    + 1) * 6 - 6) < 120 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "starg", i__2, "zzspkgp1_", (ftnlen)
+		    970)]);
+	} else if (tframe[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "tframe", i__3, "zzspkgp1_", (ftnlen)972)
+		] > 0 && tframe[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "tframe", i__3, "zzspkgp1_", (
+		ftnlen)972)] <= 21 && tframe[(i__2 = i__ - 1) < 20 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "tframe", i__2, 
+		"zzspkgp1_", (ftnlen)972)] > 0 && tframe[(i__2 = i__ - 1) < 
+		20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "tframe"
+		, i__2, "zzspkgp1_", (ftnlen)972)] <= 21) {
+	    irfrot_(__global_state, &tframe[(i__2 = i__ - 1) < 20 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "tframe", i__2,
+		     "zzspkgp1_", (ftnlen)974)], &tframe[(i__3 = i__) < 20 && 
+		    0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "tframe", 
+		    i__3, "zzspkgp1_", (ftnlen)974)], rot);
+	    mxv_(__global_state, rot, &starg[(i__2 = i__ * 6 - 6) < 120 && 0 
+		    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "starg", 
+		    i__2, "zzspkgp1_", (ftnlen)975)], stemp);
+	    vadd_(__global_state, stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 
+		    120 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "starg", i__2, "zzspkgp1_", (ftnlen)976)], vtemp);
+	    moved_(__global_state, vtemp, &__state->c__3, &starg[(i__2 = (i__ 
+		    + 1) * 6 - 6) < 120 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "starg", i__2, "zzspkgp1_", (ftnlen)
+		    977)]);
 	} else {
-	    zzrefch1_(&tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("tframe", i__2, "zzspkgp1_", (ftnlen)981)], &
-		    tframe[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge(
-		    "tframe", i__3, "zzspkgp1_", (ftnlen)981)], et, psxfrm);
-	    if (failed_()) {
-		chkout_("ZZSPKGP1", (ftnlen)8);
+	    zzrefch1_(__global_state, &tframe[(i__2 = i__ - 1) < 20 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "tframe", i__2,
+		     "zzspkgp1_", (ftnlen)981)], &tframe[(i__3 = i__) < 20 && 
+		    0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "tframe", 
+		    i__3, "zzspkgp1_", (ftnlen)981)], et, psxfrm);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 		return 0;
 	    }
-	    mxv_(psxfrm, &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? 
-		    i__2 : s_rnge("starg", i__2, "zzspkgp1_", (ftnlen)988)], 
-		    stemp);
-	    vadd_(stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__2 
-		    ? i__2 : s_rnge("starg", i__2, "zzspkgp1_", (ftnlen)989)],
-		     vtemp);
-	    moved_(vtemp, &__state->c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 
-		    120 && 0 <= i__2 ? i__2 : s_rnge("starg", i__2, "zzspkgp"
-		    "1_", (ftnlen)990)]);
+	    mxv_(__global_state, psxfrm, &starg[(i__2 = i__ * 6 - 6) < 120 && 
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "starg", 
+		    i__2, "zzspkgp1_", (ftnlen)988)], stemp);
+	    vadd_(__global_state, stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 
+		    120 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "starg", i__2, "zzspkgp1_", (ftnlen)989)], vtemp);
+	    moved_(__global_state, vtemp, &__state->c__3, &starg[(i__2 = (i__ 
+		    + 1) * 6 - 6) < 120 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "starg", i__2, "zzspkgp1_", (ftnlen)
+		    990)]);
 	}
     }
 
@@ -1063,12 +1098,15 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*     faster to make logical checks than it is to compute */
 /*     frame transformations. */
 
-    if (tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tframe", 
-	    i__1, "zzspkgp1_", (ftnlen)1003)] == cframe) {
-	vsub_(&starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-		s_rnge("starg", i__1, "zzspkgp1_", (ftnlen)1005)], sobs, pos);
-    } else if (tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-	    "tframe", i__1, "zzspkgp1_", (ftnlen)1007)] == refid) {
+    if (tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "tframe", i__1, "zzspkgp1_", (ftnlen)1003)] 
+	    == cframe) {
+	vsub_(__global_state, &starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "starg", i__1, 
+		"zzspkgp1_", (ftnlen)1005)], sobs, pos);
+    } else if (tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "tframe", i__1, "zzspkgp1_", (ftnlen)1007)] 
+	    == refid) {
 
 /*        If the last frame associated with the target is already */
 /*        in the requested output frame, we convert the position of */
@@ -1076,52 +1114,56 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*        of the observer from the position of the target. */
 
 	if (refid > 0 && refid <= 21 && cframe > 0 && cframe <= 21) {
-	    irfrot_(&cframe, &refid, rot);
-	    mxv_(rot, sobs, stemp);
+	    irfrot_(__global_state, &cframe, &refid, rot);
+	    mxv_(__global_state, rot, sobs, stemp);
 	} else {
-	    zzrefch1_(&cframe, &refid, et, psxfrm);
-	    if (failed_()) {
-		chkout_("ZZSPKGP1", (ftnlen)8);
+	    zzrefch1_(__global_state, &cframe, &refid, et, psxfrm);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 		return 0;
 	    }
-	    mxv_(psxfrm, sobs, stemp);
+	    mxv_(__global_state, psxfrm, sobs, stemp);
 	}
 
 /*        We've now transformed SOBS into the requested reference frame. */
 /*        Set CFRAME to reflect this. */
 
 	cframe = refid;
-	vsub_(&starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-		s_rnge("starg", i__1, "zzspkgp1_", (ftnlen)1038)], stemp, pos)
-		;
+	vsub_(__global_state, &starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "starg", i__1, 
+		"zzspkgp1_", (ftnlen)1038)], stemp, pos);
     } else if (cframe > 0 && cframe <= 21 && tframe[(i__1 = ctpos - 1) < 20 &&
-	     0 <= i__1 ? i__1 : s_rnge("tframe", i__1, "zzspkgp1_", (ftnlen)
-	    1041)] > 0 && tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 :
-	     s_rnge("tframe", i__1, "zzspkgp1_", (ftnlen)1041)] <= 21) {
+	     0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tframe", i__1, 
+	    "zzspkgp1_", (ftnlen)1041)] > 0 && tframe[(i__1 = ctpos - 1) < 20 
+	    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tframe", i__1,
+	     "zzspkgp1_", (ftnlen)1041)] <= 21) {
 
 /*        If both frames are inertial we use IRFROT instead of */
 /*        ZZREFCH1 to get things into a common frame. */
 
-	irfrot_(&tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"tframe", i__1, "zzspkgp1_", (ftnlen)1047)], &cframe, rot);
-	mxv_(rot, &starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-		s_rnge("starg", i__1, "zzspkgp1_", (ftnlen)1048)], stemp);
-	vsub_(stemp, sobs, pos);
+	irfrot_(__global_state, &tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ?
+		 i__1 : s_rnge(&__global_state->f2c, "tframe", i__1, "zzspkg"
+		"p1_", (ftnlen)1047)], &cframe, rot);
+	mxv_(__global_state, rot, &starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "starg", i__1, 
+		"zzspkgp1_", (ftnlen)1048)], stemp);
+	vsub_(__global_state, stemp, sobs, pos);
     } else {
 
 /*        Use the more general routine ZZREFCH1 to make the */
 /*        transformation. */
 
-	zzrefch1_(&tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("tframe", i__1, "zzspkgp1_", (ftnlen)1056)], &cframe, 
-		et, psxfrm);
-	if (failed_()) {
-	    chkout_("ZZSPKGP1", (ftnlen)8);
+	zzrefch1_(__global_state, &tframe[(i__1 = ctpos - 1) < 20 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "tframe", i__1, 
+		"zzspkgp1_", (ftnlen)1056)], &cframe, et, psxfrm);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 	    return 0;
 	}
-	mxv_(psxfrm, &starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 :
-		 s_rnge("starg", i__1, "zzspkgp1_", (ftnlen)1063)], stemp);
-	vsub_(stemp, sobs, pos);
+	mxv_(__global_state, psxfrm, &starg[(i__1 = ctpos * 6 - 6) < 120 && 0 
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "starg", i__1, 
+		"zzspkgp1_", (ftnlen)1063)], stemp);
+	vsub_(__global_state, stemp, sobs, pos);
     }
 
 /*     Finally, rotate as needed into the requested frame. */
@@ -1135,20 +1177,20 @@ static zzspkgp1_state_t* get_zzspkgp1_state() {
 /*        Since both frames are inertial, we use the more direct */
 /*        routine IRFROT to get the transformation to REFID. */
 
-	irfrot_(&cframe, &refid, rot);
-	mxv_(rot, pos, stemp);
-	moved_(stemp, &__state->c__3, pos);
+	irfrot_(__global_state, &cframe, &refid, rot);
+	mxv_(__global_state, rot, pos, stemp);
+	moved_(__global_state, stemp, &__state->c__3, pos);
     } else {
-	zzrefch1_(&cframe, &refid, et, psxfrm);
-	if (failed_()) {
-	    chkout_("ZZSPKGP1", (ftnlen)8);
+	zzrefch1_(__global_state, &cframe, &refid, et, psxfrm);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
 	    return 0;
 	}
-	mxv_(psxfrm, pos, stemp);
-	moved_(stemp, &__state->c__3, pos);
+	mxv_(__global_state, psxfrm, pos, stemp);
+	moved_(__global_state, stemp, &__state->c__3, pos);
     }
-    *lt = vnorm_(pos) / clight_();
-    chkout_("ZZSPKGP1", (ftnlen)8);
+    *lt = vnorm_(__global_state, pos) / clight_(__global_state);
+    chkout_(__global_state, "ZZSPKGP1", (ftnlen)8);
     return 0;
 } /* zzspkgp1_ */
 

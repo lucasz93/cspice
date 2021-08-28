@@ -8,25 +8,24 @@
 
 
 typedef int pltnrm_state_t;
-static pltnrm_state_t* get_pltnrm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pltnrm_state_t* get_pltnrm_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure PLTNRM ( DSK, compute outward normal of plate ) */
-/* Subroutine */ int pltnrm_(doublereal *v1, doublereal *v2, doublereal *v3, 
-	doublereal *normal)
+/* Subroutine */ int pltnrm_(cspice_t* __global_state, doublereal *v1, 
+	doublereal *v2, doublereal *v3, doublereal *normal)
 {
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal edge1[3];
     doublereal edge2[3];
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    pltnrm_state_t* __state = get_pltnrm_state();
+    pltnrm_state_t* __state = get_pltnrm_state(__global_state);
 /* $ Abstract */
 
 /*     Compute an outward normal vector of a triangular plate. */
@@ -186,9 +185,9 @@ static pltnrm_state_t* get_pltnrm_state() {
 /*     Type 2 plate vertices are ordered in the positive */
 /*     (right-handed) sense about the outward normal. */
 
-    vsub_(v2, v1, edge1);
-    vsub_(v3, v2, edge2);
-    vcrss_(edge1, edge2, normal);
+    vsub_(__global_state, v2, v1, edge1);
+    vsub_(__global_state, v3, v2, edge2);
+    vcrss_(__global_state, edge1, edge2, normal);
     return 0;
 } /* pltnrm_ */
 

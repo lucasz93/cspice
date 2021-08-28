@@ -8,8 +8,7 @@
 
 
 extern zzekwpal_init_t __zzekwpal_init;
-static zzekwpal_state_t* get_zzekwpal_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekwpal_state_t* get_zzekwpal_state(cspice_t* state) {
 	if (!state->zzekwpal)
 		state->zzekwpal = __cspice_allocate_module(sizeof(
 	zzekwpal_state_t), &__zzekwpal_init, sizeof(__zzekwpal_init));
@@ -18,33 +17,34 @@ static zzekwpal_state_t* get_zzekwpal_state() {
 }
 
 /* $Procedure     ZZEKWPAL ( EK, write paged array, logical ) */
-/* Subroutine */ int zzekwpal_(integer *handle, integer *segdsc, integer *
-	nvals, logical *lvals, integer *p, integer *base)
+/* Subroutine */ int zzekwpal_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *nvals, logical *lvals, integer *p, integer *
+	base)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char page[1024];
     integer from;
-    extern /* Subroutine */ int zzekacps_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgwc_(integer *, integer *, char *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekacps_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwc_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int zzekslnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer npage;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer to;
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzekwpal_state_t* __state = get_zzekwpal_state();
+    zzekwpal_state_t* __state = get_zzekwpal_state(__global_state);
 /* $ Abstract */
 
 /*     Write a logical array out to a contiguous set of EK pages. */
@@ -623,17 +623,18 @@ static zzekwpal_state_t* get_zzekwpal_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKWPAL", (ftnlen)8);
+	chkin_(__global_state, "ZZEKWPAL", (ftnlen)8);
     }
 
 /*     Decide how many pages are required to hold the array, and */
 /*     allocate that many new, contiguous pages. */
 
     npage = (*nvals + 1013) / 1014;
-    zzekacps_(handle, segdsc, &__state->c__1, &npage, p, base);
+    zzekacps_(__global_state, handle, segdsc, &__state->c__1, &npage, p, base)
+	    ;
 
 /*     Write the input data out to the target file a page at a time. */
 
@@ -642,7 +643,7 @@ static zzekwpal_state_t* get_zzekwpal_state() {
 /*     to. */
 
     to = 1;
-    s_copy(page, " ", (ftnlen)1024, (ftnlen)1);
+    s_copy(&__global_state->f2c, page, " ", (ftnlen)1024, (ftnlen)1);
     i__1 = *nvals;
     for (from = 1; from <= i__1; ++from) {
 
@@ -662,12 +663,12 @@ static zzekwpal_state_t* get_zzekwpal_state() {
 
 /*           Write out the data page. */
 
-	    zzekpgwc_(handle, p, page, (ftnlen)1024);
+	    zzekpgwc_(__global_state, handle, p, page, (ftnlen)1024);
 
 /*           Set the link count. */
 
 	    i__2 = to - 1;
-	    zzekslnk_(handle, &__state->c__1, p, &i__2);
+	    zzekslnk_(__global_state, handle, &__state->c__1, p, &i__2);
 
 /*           Next page. */
 
@@ -675,7 +676,7 @@ static zzekwpal_state_t* get_zzekwpal_state() {
 	    to = 1;
 	}
     }
-    chkout_("ZZEKWPAL", (ftnlen)8);
+    chkout_(__global_state, "ZZEKWPAL", (ftnlen)8);
     return 0;
 } /* zzekwpal_ */
 

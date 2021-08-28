@@ -8,14 +8,13 @@
 
 
 typedef int scanrj_state_t;
-static scanrj_state_t* get_scanrj_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline scanrj_state_t* get_scanrj_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SCANRJ ( Scan --- reject tokens ) */
-/* Subroutine */ int scanrj_(integer *ids, integer *n, integer *ntokns, 
-	integer *ident, integer *beg, integer *end)
+/* Subroutine */ int scanrj_(cspice_t* __global_state, integer *ids, integer *
+	n, integer *ntokns, integer *ident, integer *beg, integer *end)
 {
     /* System generated locals */
     integer i__1;
@@ -23,11 +22,11 @@ static scanrj_state_t* get_scanrj_state() {
     /* Local variables */
     integer i__;
     integer j;
-    extern integer isrchi_(integer *, integer *, integer *);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
 
 
     /* Module state */
-    scanrj_state_t* __state = get_scanrj_state();
+    scanrj_state_t* __state = get_scanrj_state(__global_state);
 /* $ Abstract */
 
 /*     Reject those tokens descriptors whose identities are among those */
@@ -201,7 +200,7 @@ static scanrj_state_t* get_scanrj_state() {
     j = 0;
     i__1 = *ntokns;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if (isrchi_(&ident[i__ - 1], n, ids) == 0) {
+	if (isrchi_(__global_state, &ident[i__ - 1], n, ids) == 0) {
 	    ++j;
 	    ident[j - 1] = ident[i__ - 1];
 	    beg[j - 1] = beg[i__ - 1];

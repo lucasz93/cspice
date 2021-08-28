@@ -8,21 +8,21 @@
 
 
 typedef int lstlec_state_t;
-static lstlec_state_t* get_lstlec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lstlec_state_t* get_lstlec_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   LSTLEC ( Last character element less than or equal to. ) */
-integer lstlec_(char *string, integer *n, char *array, ftnlen string_len, 
-	ftnlen array_len)
+integer lstlec_(cspice_t* __global_state, char *string, integer *n, char *
+	array, ftnlen string_len, ftnlen array_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    logical l_lt(char *, char *, ftnlen, ftnlen), l_ge(char *, char *, ftnlen,
-	     ftnlen), l_le(char *, char *, ftnlen, ftnlen);
+    logical l_lt(f2c_state_t*, char *, char *, ftnlen, ftnlen), l_ge(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen), l_le(f2c_state_t*, 
+	    char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer j;
@@ -33,7 +33,7 @@ integer lstlec_(char *string, integer *n, char *array, ftnlen string_len,
 
 
     /* Module state */
-    lstlec_state_t* __state = get_lstlec_state();
+    lstlec_state_t* __state = get_lstlec_state(__global_state);
 /* $ Abstract */
 
 /*      Given a character string and an ordered array of character */
@@ -246,14 +246,14 @@ integer lstlec_(char *string, integer *n, char *array, ftnlen string_len,
 /*        to compare against.  Zero is the only sensible thing to return. */
 
 	ret_val = 0;
-    } else if (l_lt(string, array + (begin - 1) * array_len, string_len, 
-	    array_len)) {
+    } else if (l_lt(&__global_state->f2c, string, array + (begin - 1) * 
+	    array_len, string_len, array_len)) {
 
 /*        None of the array elements are less than or equal to STRING */
 
 	ret_val = 0;
-    } else if (l_ge(string, array + (end - 1) * array_len, string_len, 
-	    array_len)) {
+    } else if (l_ge(&__global_state->f2c, string, array + (end - 1) * 
+	    array_len, string_len, array_len)) {
 
 /*        STRING is greater than or equal to all elements of the array. */
 /*        Thus the last element of the array is the last item less than */
@@ -267,8 +267,8 @@ integer lstlec_(char *string, integer *n, char *array, ftnlen string_len,
 	while(items > 2) {
 	    j = items / 2;
 	    middle = begin + j;
-	    if (l_le(array + (middle - 1) * array_len, string, array_len, 
-		    string_len)) {
+	    if (l_le(&__global_state->f2c, array + (middle - 1) * array_len, 
+		    string, array_len, string_len)) {
 		begin = middle;
 	    } else {
 		end = middle;

@@ -8,19 +8,18 @@
 
 
 typedef int zzsecprt_state_t;
-static zzsecprt_state_t* get_zzsecprt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzsecprt_state_t* get_zzsecprt_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZSECPRT ( Calculate dot terms for DPSPCE perturbation ) */
-/* Subroutine */ int zzsecprt_(integer *isynfl, doublereal *dg, doublereal *
-	del, doublereal *xni, doublereal *omegao, doublereal *atime, 
-	doublereal *omgdot, doublereal *xli, doublereal *xfact, doublereal *
-	xldot, doublereal *xndot, doublereal *xnddt)
+/* Subroutine */ int zzsecprt_(cspice_t* __global_state, integer *isynfl, 
+	doublereal *dg, doublereal *del, doublereal *xni, doublereal *omegao, 
+	doublereal *atime, doublereal *omgdot, doublereal *xli, doublereal *
+	xfact, doublereal *xldot, doublereal *xndot, doublereal *xnddt)
 {
     /* Builtin functions */
-    double sin(doublereal), cos(doublereal);
+    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal xomi;
@@ -29,7 +28,7 @@ static zzsecprt_state_t* get_zzsecprt_state() {
 
 
     /* Module state */
-    zzsecprt_state_t* __state = get_zzsecprt_state();
+    zzsecprt_state_t* __state = get_zzsecprt_state(__global_state);
 /* $ Abstract */
 
 /*    Routine to calculate the dot terms for the secular perturbation */
@@ -191,28 +190,37 @@ static zzsecprt_state_t* get_zzsecprt_state() {
 	xomi = *omegao + *omgdot * *atime;
 	x2omi = xomi + xomi;
 	x2li = *xli + *xli;
-	*xndot = dg[0] * sin(x2omi + *xli - 5.7686396) + dg[1] * sin(*xli - 
-		5.7686396) + dg[2] * sin(xomi + *xli - .95240898) + dg[3] * 
-		sin(-xomi + *xli - .95240898) + dg[4] * sin(x2omi + x2li - 
-		1.8014998) + dg[5] * sin(x2li - 1.8014998) + dg[6] * sin(xomi 
-		+ *xli - 1.050833) + dg[7] * sin(-xomi + *xli - 1.050833) + 
-		dg[8] * sin(xomi + x2li - 4.4108898) + dg[9] * sin(-xomi + 
-		x2li - 4.4108898);
-	*xnddt = dg[0] * cos(x2omi + *xli - 5.7686396) + dg[1] * cos(*xli - 
-		5.7686396) + dg[2] * cos(xomi + *xli - .95240898) + dg[3] * 
-		cos(-xomi + *xli - .95240898) + dg[6] * cos(xomi + *xli - 
-		1.050833) + dg[7] * cos(-xomi + *xli - 1.050833) + (dg[4] * 
-		cos(x2omi + x2li - 1.8014998) + dg[5] * cos(x2li - 1.8014998) 
-		+ dg[8] * cos(xomi + x2li - 4.4108898) + dg[9] * cos(xomi + 
-		x2li - 4.4108898)) * 2.;
+	*xndot = dg[0] * sin(&__global_state->f2c, x2omi + *xli - 5.7686396) 
+		+ dg[1] * sin(&__global_state->f2c, *xli - 5.7686396) + dg[2] 
+		* sin(&__global_state->f2c, xomi + *xli - .95240898) + dg[3] *
+		 sin(&__global_state->f2c, -xomi + *xli - .95240898) + dg[4] *
+		 sin(&__global_state->f2c, x2omi + x2li - 1.8014998) + dg[5] *
+		 sin(&__global_state->f2c, x2li - 1.8014998) + dg[6] * sin(&
+		__global_state->f2c, xomi + *xli - 1.050833) + dg[7] * sin(&
+		__global_state->f2c, -xomi + *xli - 1.050833) + dg[8] * sin(&
+		__global_state->f2c, xomi + x2li - 4.4108898) + dg[9] * sin(&
+		__global_state->f2c, -xomi + x2li - 4.4108898);
+	*xnddt = dg[0] * cos(&__global_state->f2c, x2omi + *xli - 5.7686396) 
+		+ dg[1] * cos(&__global_state->f2c, *xli - 5.7686396) + dg[2] 
+		* cos(&__global_state->f2c, xomi + *xli - .95240898) + dg[3] *
+		 cos(&__global_state->f2c, -xomi + *xli - .95240898) + dg[6] *
+		 cos(&__global_state->f2c, xomi + *xli - 1.050833) + dg[7] * 
+		cos(&__global_state->f2c, -xomi + *xli - 1.050833) + (dg[4] * 
+		cos(&__global_state->f2c, x2omi + x2li - 1.8014998) + dg[5] * 
+		cos(&__global_state->f2c, x2li - 1.8014998) + dg[8] * cos(&
+		__global_state->f2c, xomi + x2li - 4.4108898) + dg[9] * cos(&
+		__global_state->f2c, xomi + x2li - 4.4108898)) * 2.;
     } else {
 
 /*        Resonance flag not set */
 
-	*xndot = del[0] * sin(*xli - .13130908) + del[1] * sin((*xli - 
-		2.8843198) * 2.) + del[2] * sin((*xli - .37448087) * 3.);
-	*xnddt = del[0] * cos(*xli - .13130908) + del[1] * 2. * cos((*xli - 
-		2.8843198) * 2.) + del[2] * 3. * cos((*xli - .37448087) * 3.);
+	*xndot = del[0] * sin(&__global_state->f2c, *xli - .13130908) + del[1]
+		 * sin(&__global_state->f2c, (*xli - 2.8843198) * 2.) + del[2]
+		 * sin(&__global_state->f2c, (*xli - .37448087) * 3.);
+	*xnddt = del[0] * cos(&__global_state->f2c, *xli - .13130908) + del[1]
+		 * 2. * cos(&__global_state->f2c, (*xli - 2.8843198) * 2.) + 
+		del[2] * 3. * cos(&__global_state->f2c, (*xli - .37448087) * 
+		3.);
     }
     *xldot = *xni + *xfact;
     *xnddt *= *xldot;

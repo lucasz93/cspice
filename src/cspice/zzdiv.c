@@ -8,8 +8,7 @@
 
 
 extern zzdiv_init_t __zzdiv_init;
-static zzdiv_state_t* get_zzdiv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdiv_state_t* get_zzdiv_state(cspice_t* state) {
 	if (!state->zzdiv)
 		state->zzdiv = __cspice_allocate_module(sizeof(zzdiv_state_t),
 	 &__zzdiv_init, sizeof(__zzdiv_init));
@@ -18,7 +17,8 @@ static zzdiv_state_t* get_zzdiv_state() {
 }
 
 /* $Procedure ZZDIV ( Safer division ) */
-doublereal zzdiv_(doublereal *numr, doublereal *denom)
+doublereal zzdiv_(cspice_t* __global_state, doublereal *numr, doublereal *
+	denom)
 {
     /* Initialized data */
 
@@ -27,20 +27,21 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
     doublereal ret_val, d__1;
 
     /* Builtin functions */
-    double d_lg10(doublereal *);
+    double d_lg10(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzdiv_state_t* __state = get_zzdiv_state();
+    zzdiv_state_t* __state = get_zzdiv_state(__global_state);
 /* $ Abstract */
 
 /*     Safely calculate the value NUMR/DENOM, avoiding the possibility */
@@ -350,14 +351,14 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
 
 /*     Return on error. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0.;
 	return ret_val;
     }
 
 /*     Participate in error tracing. */
 
-    chkin_("ZZDIV", (ftnlen)5);
+    chkin_(__global_state, "ZZDIV", (ftnlen)5);
 
 /*     Calculate the bounds parameter on first entry. */
 /*     The double precision maximum value has the form */
@@ -368,8 +369,9 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
 
 /*        A "floor" evaluation. */
 
-	d__1 = dpmax_();
-	__state->expnt = (doublereal) ((integer) d_lg10(&d__1));
+	d__1 = dpmax_(__global_state);
+	__state->expnt = (doublereal) ((integer) d_lg10(&__global_state->f2c, 
+		&d__1));
     }
 
 /*     If the denominator is zero, return zero and signal an error. */
@@ -378,11 +380,11 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
 
     if (*denom == 0.) {
 	ret_val = 0.;
-	setmsg_("Numerical divide by zero event. Numerator value #1.", (
-		ftnlen)51);
-	errdp_("#1", numr, (ftnlen)2);
-	sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-	chkout_("ZZDIV", (ftnlen)5);
+	setmsg_(__global_state, "Numerical divide by zero event. Numerator v"
+		"alue #1.", (ftnlen)51);
+	errdp_(__global_state, "#1", numr, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(DIVIDEBYZERO)", (ftnlen)19);
+	chkout_(__global_state, "ZZDIV", (ftnlen)5);
 	return ret_val;
     }
 
@@ -391,7 +393,7 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
 
     if (*numr == 0.) {
 	ret_val = 0.;
-	chkout_("ZZDIV", (ftnlen)5);
+	chkout_(__global_state, "ZZDIV", (ftnlen)5);
 	return ret_val;
     }
 
@@ -405,20 +407,20 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
 /*     return value defeats the purpose of this routine. */
 
     d__1 = abs(*numr);
-    __state->lognum = d_lg10(&d__1);
+    __state->lognum = d_lg10(&__global_state->f2c, &d__1);
     d__1 = abs(*denom);
-    __state->logden = d_lg10(&d__1);
+    __state->logden = d_lg10(&__global_state->f2c, &d__1);
 
 /*     Local possible overflow check. */
 
     if (__state->lognum - __state->logden > __state->expnt) {
 	ret_val = 0.;
-	setmsg_("Numerical overflow event. Numerator value #1, denominator v"
-		"alue #2.", (ftnlen)67);
-	errdp_("#1", numr, (ftnlen)2);
-	errdp_("#2", denom, (ftnlen)2);
-	sigerr_("SPICE(NUMERICOVERFLOW)", (ftnlen)22);
-	chkout_("ZZDIV", (ftnlen)5);
+	setmsg_(__global_state, "Numerical overflow event. Numerator value #"
+		"1, denominator value #2.", (ftnlen)67);
+	errdp_(__global_state, "#1", numr, (ftnlen)2);
+	errdp_(__global_state, "#2", denom, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(NUMERICOVERFLOW)", (ftnlen)22);
+	chkout_(__global_state, "ZZDIV", (ftnlen)5);
 	return ret_val;
     }
 
@@ -427,14 +429,14 @@ doublereal zzdiv_(doublereal *numr, doublereal *denom)
 
     if (__state->lognum - __state->logden < -(__state->expnt - 1.)) {
 	ret_val = 0.;
-	chkout_("ZZDIV", (ftnlen)5);
+	chkout_(__global_state, "ZZDIV", (ftnlen)5);
 	return ret_val;
     }
 
 /*     This operation should be safe. Probably. */
 
     ret_val = *numr / *denom;
-    chkout_("ZZDIV", (ftnlen)5);
+    chkout_(__global_state, "ZZDIV", (ftnlen)5);
     return ret_val;
 } /* zzdiv_ */
 

@@ -8,27 +8,26 @@
 
 
 typedef int vsubg_state_t;
-static vsubg_state_t* get_vsubg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vsubg_state_t* get_vsubg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VSUBG ( Vector subtraction, general dimension ) */
-/* Subroutine */ int vsubg_(doublereal *v1, doublereal *v2, integer *ndim, 
-	doublereal *vout)
+/* Subroutine */ int vsubg_(cspice_t* __global_state, doublereal *v1, 
+	doublereal *v2, integer *ndim, doublereal *vout)
 {
     /* System generated locals */
     integer v1_dim1, v2_dim1, vout_dim1, i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    vsubg_state_t* __state = get_vsubg_state();
+    vsubg_state_t* __state = get_vsubg_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the difference between two double precision vectors of */
@@ -173,11 +172,13 @@ static vsubg_state_t* get_vsubg_state() {
     /* Function Body */
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		"vout", i__2, "vsubg_", (ftnlen)152)] = v1[(i__3 = i__ - 1) < 
-		1 * v1_dim1 && 0 <= i__3 ? i__3 : s_rnge("v1", i__3, "vsubg_",
-		 (ftnlen)152)] - v2[(i__4 = i__ - 1) < 1 * v2_dim1 && 0 <= 
-		i__4 ? i__4 : s_rnge("v2", i__4, "vsubg_", (ftnlen)152)];
+	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "vout", i__2, "vsubg_", (ftnlen)152)] = 
+		v1[(i__3 = i__ - 1) < 1 * v1_dim1 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "v1", i__3, "vsubg_", (ftnlen)
+		152)] - v2[(i__4 = i__ - 1) < 1 * v2_dim1 && 0 <= i__4 ? i__4 
+		: s_rnge(&__global_state->f2c, "v2", i__4, "vsubg_", (ftnlen)
+		152)];
     }
     return 0;
 } /* vsubg_ */

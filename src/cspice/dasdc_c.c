@@ -143,7 +143,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dasdc_c" );
+   chkin_c ( naif_state, "dasdc_c" );
 
 
    dasdc_ ( (integer *) &handle );

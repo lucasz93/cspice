@@ -8,41 +8,43 @@
 
 
 typedef int ekaclc_state_t;
-static ekaclc_state_t* get_ekaclc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekaclc_state_t* get_ekaclc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure     EKACLC ( EK, add character column to segment ) */
-/* Subroutine */ int ekaclc_(integer *handle, integer *segno, char *column, 
-	char *cvals, integer *entszs, logical *nlflgs, integer *rcptrs, 
-	integer *wkindx, ftnlen column_len, ftnlen cvals_len)
+/* Subroutine */ int ekaclc_(cspice_t* __global_state, integer *handle, 
+	integer *segno, char *column, char *cvals, integer *entszs, logical *
+	nlflgs, integer *rcptrs, integer *wkindx, ftnlen column_len, ftnlen 
+	cvals_len)
 {
-    extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekcdsc_(cspice_t*, integer *, integer *, 
+	    char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer class__;
     integer dtype;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer coldsc[11];
     integer segdsc[24];
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int zzekac03_(integer *, integer *, integer *, 
-	    char *, logical *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int zzekac06_(integer *, integer *, integer *, 
-	    char *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int zzekac09_(integer *, integer *, integer *, 
-	    char *, logical *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzekac03_(cspice_t*, integer *, integer *, 
+	    integer *, char *, logical *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekac06_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzekac09_(cspice_t*, integer *, integer *, 
+	    integer *, char *, logical *, integer *, ftnlen);
 
 
     /* Module state */
-    ekaclc_state_t* __state = get_ekaclc_state();
+    ekaclc_state_t* __state = get_ekaclc_state(__global_state);
 /* $ Abstract */
 
 /*     Add an entire character column to an EK segment. */
@@ -682,18 +684,18 @@ static ekaclc_state_t* get_ekaclc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKACLC", (ftnlen)6);
+	chkin_(__global_state, "EKACLC", (ftnlen)6);
     }
 
 /*     Find the descriptors for the specified segment and column. */
 
-    zzeksdsc_(handle, segno, segdsc);
-    zzekcdsc_(handle, segdsc, column, coldsc, column_len);
-    if (failed_()) {
-	chkout_("EKACLC", (ftnlen)6);
+    zzeksdsc_(__global_state, handle, segno, segdsc);
+    zzekcdsc_(__global_state, handle, segdsc, column, coldsc, column_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKACLC", (ftnlen)6);
 	return 0;
     }
 
@@ -702,12 +704,12 @@ static ekaclc_state_t* get_ekaclc_state() {
     class__ = coldsc[0];
     dtype = coldsc[1];
     if (dtype != 1) {
-	setmsg_("Column # is of type #; EKACLC only works with character col"
-		"umns.", (ftnlen)64);
-	errch_("#", column, (ftnlen)1, column_len);
-	errint_("#", &dtype, (ftnlen)1);
-	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
-	chkout_("EKACLC", (ftnlen)6);
+	setmsg_(__global_state, "Column # is of type #; EKACLC only works wi"
+		"th character columns.", (ftnlen)64);
+	errch_(__global_state, "#", column, (ftnlen)1, column_len);
+	errint_(__global_state, "#", &dtype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGDATATYPE)", (ftnlen)20);
+	chkout_(__global_state, "EKACLC", (ftnlen)6);
 	return 0;
     }
 
@@ -717,32 +719,34 @@ static ekaclc_state_t* get_ekaclc_state() {
 
 /*        Class 3 columns contain character scalars. */
 
-	zzekac03_(handle, segdsc, coldsc, cvals, nlflgs, rcptrs, wkindx, 
-		cvals_len);
+	zzekac03_(__global_state, handle, segdsc, coldsc, cvals, nlflgs, 
+		rcptrs, wkindx, cvals_len);
     } else if (class__ == 6) {
 
 /*        Class 6 columns contain character arrays. */
 
-	zzekac06_(handle, segdsc, coldsc, cvals, entszs, nlflgs, cvals_len);
+	zzekac06_(__global_state, handle, segdsc, coldsc, cvals, entszs, 
+		nlflgs, cvals_len);
     } else if (class__ == 9) {
 
 /*        Class 9 columns contain fixed-count, fixed-length character */
 /*        scalars. */
 
-	zzekac09_(handle, segdsc, coldsc, cvals, nlflgs, wkindx, cvals_len);
+	zzekac09_(__global_state, handle, segdsc, coldsc, cvals, nlflgs, 
+		wkindx, cvals_len);
     } else {
 
 /*        This is an unsupported column class. */
 
-	setmsg_("Unsupported column class code # found in descriptor for col"
-		"umn #.", (ftnlen)65);
-	errint_("#", &class__, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, column_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("EKACLC", (ftnlen)6);
+	setmsg_(__global_state, "Unsupported column class code # found in de"
+		"scriptor for column #.", (ftnlen)65);
+	errint_(__global_state, "#", &class__, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, column_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "EKACLC", (ftnlen)6);
 	return 0;
     }
-    chkout_("EKACLC", (ftnlen)6);
+    chkout_(__global_state, "EKACLC", (ftnlen)6);
     return 0;
 } /* ekaclc_ */
 

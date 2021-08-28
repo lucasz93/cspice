@@ -8,30 +8,30 @@
 
 
 typedef int sydimi_state_t;
-static sydimi_state_t* get_sydimi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sydimi_state_t* get_sydimi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            SYDIMI ( Return the dimension of a symbol ) */
-integer sydimi_(char *name__, char *tabsym, integer *tabptr, integer *tabval, 
-	ftnlen name_len, ftnlen tabsym_len)
+integer sydimi_(cspice_t* __global_state, char *name__, char *tabsym, integer 
+	*tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Local variables */
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer locsym;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sydimi_state_t* __state = get_sydimi_state();
+    sydimi_state_t* __state = get_sydimi_state(__global_state);
 /* $ Abstract */
 
 /*     Return the dimension of a particular symbol in an integer symbol */
@@ -197,21 +197,21 @@ integer sydimi_(char *name__, char *tabsym, integer *tabptr, integer *tabval,
 
 /*     Standard SPICE error handling */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0;
 	return ret_val;
     } else {
-	chkin_("SYDIMI", (ftnlen)6);
+	chkin_(__global_state, "SYDIMI", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
 
 /*     Is this symbol even in the table? */
 
-    locsym = bsrchc_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
+    locsym = bsrchc_(__global_state, name__, &nsym, tabsym + tabsym_len * 6, 
+	    name_len, tabsym_len);
 
 /*     If it's not in the table, return zero. Otherwise, look up */
 /*     the dimension directly. */
@@ -221,7 +221,7 @@ integer sydimi_(char *name__, char *tabsym, integer *tabptr, integer *tabval,
     } else {
 	ret_val = tabptr[locsym + 5];
     }
-    chkout_("SYDIMI", (ftnlen)6);
+    chkout_(__global_state, "SYDIMI", (ftnlen)6);
     return ret_val;
 } /* sydimi_ */
 

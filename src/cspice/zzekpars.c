@@ -8,8 +8,7 @@
 
 
 extern zzekpars_init_t __zzekpars_init;
-static zzekpars_state_t* get_zzekpars_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekpars_state_t* get_zzekpars_state(cspice_t* state) {
 	if (!state->zzekpars)
 		state->zzekpars = __cspice_allocate_module(sizeof(
 	zzekpars_state_t), &__zzekpars_init, sizeof(__zzekpars_init));
@@ -18,52 +17,55 @@ static zzekpars_state_t* get_zzekpars_state() {
 }
 
 /* $Procedure      ZZEKPARS ( EK, parse tokenized EK query ) */
-/* Subroutine */ int zzekpars_(char *query, integer *ntoken, integer *lxbegs, 
-	integer *lxends, integer *tokens, integer *values, doublereal *numvls,
-	 char *chrbuf, integer *chbegs, integer *chends, integer *eqryi, char 
-	*eqryc, doublereal *eqryd, logical *error, char *prserr, ftnlen 
-	query_len, ftnlen chrbuf_len, ftnlen eqryc_len, ftnlen prserr_len)
+/* Subroutine */ int zzekpars_(cspice_t* __global_state, char *query, integer 
+	*ntoken, integer *lxbegs, integer *lxends, integer *tokens, integer *
+	values, doublereal *numvls, char *chrbuf, integer *chbegs, integer *
+	chends, integer *eqryi, char *eqryc, doublereal *eqryd, logical *
+	error, char *prserr, ftnlen query_len, ftnlen chrbuf_len, ftnlen 
+	eqryc_len, ftnlen prserr_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer nsel;
-    extern /* Subroutine */ int zzekinqc_(char *, integer *, integer *, 
-	    integer *, integer *, char *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekqini_(integer *, integer *, integer *, 
-	    char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zzektloc_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *);
-    extern /* Subroutine */ int zzekweqi_(char *, integer *, integer *, 
+    extern /* Subroutine */ int zzekinqc_(cspice_t*, char *, integer *, 
+	    integer *, integer *, integer *, char *, integer *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzeknrml_(char *, integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *, char *, integer *, 
-	    integer *, integer *, char *, doublereal *, logical *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqini_(cspice_t*, integer *, integer *, 
+	    integer *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzektloc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, logical *);
+    extern /* Subroutine */ int zzekweqi_(cspice_t*, char *, integer *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzeknrml_(cspice_t*, char *, integer *, 
+	    integer *, integer *, integer *, integer *, doublereal *, char *, 
+	    integer *, integer *, integer *, char *, doublereal *, logical *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer b;
     integer e;
     integer i__;
     integer j;
     integer l;
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer ntabs;
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
     integer state;
     integer token;
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern logical failed_(cspice_t*);
     integer tabdsc[6];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     char errtyp[32];
     char expkey[32];
     integer alsdsc[6];
@@ -76,13 +78,13 @@ static zzekpars_state_t* get_zzekpars_state() {
     integer toknum;
     integer valdsc[6];
     logical fnd;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int appndi_(integer *, integer *);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int appndi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
 
 
     /* Module state */
-    zzekpars_state_t* __state = get_zzekpars_state();
+    zzekpars_state_t* __state = get_zzekpars_state(__global_state);
 /* $ Abstract */
 
 /*     Parse an EK query that has been scanned and tokenized. */
@@ -1097,21 +1099,21 @@ static zzekpars_state_t* get_zzekpars_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKPARS", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPARS", (ftnlen)8);
     }
 
 /*     Initialize the encoded query each time, for safety. */
 
-    zzekqini_(&__state->c__27869, &__state->c__100, eqryi, eqryc, eqryd, 
-	    eqryc_len);
-    if (failed_()) {
+    zzekqini_(__global_state, &__state->c__27869, &__state->c__100, eqryi, 
+	    eqryc, eqryd, eqryc_len);
+    if (failed_(__global_state)) {
 	*error = TRUE_;
-	s_copy(prserr, "SPICE(BUG):  encoded query init failed.", prserr_len, 
-		(ftnlen)39);
-	chkout_("ZZEKPARS", (ftnlen)8);
+	s_copy(&__global_state->f2c, prserr, "SPICE(BUG):  encoded query ini"
+		"t failed.", prserr_len, (ftnlen)39);
+	chkout_(__global_state, "ZZEKPARS", (ftnlen)8);
 	return 0;
     }
 
@@ -1162,11 +1164,12 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*        SELECT */
 
 
-    zzektloc_(&__state->c__1, &__state->c__11, ntoken, tokens, values, &
-	    toknum, &fnd);
+    zzektloc_(__global_state, &__state->c__1, &__state->c__11, ntoken, tokens,
+	     values, &toknum, &fnd);
     if (! fnd) {
 	*error = TRUE_;
-	s_copy(errtyp, "FROM_NOT_FOUND", (ftnlen)32, (ftnlen)14);
+	s_copy(&__global_state->f2c, errtyp, "FROM_NOT_FOUND", (ftnlen)32, (
+		ftnlen)14);
 	state = 16;
     } else {
 	state = 0;
@@ -1175,8 +1178,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 	ncnstr = 0;
 	norder = 0;
 	*error = FALSE_;
-	s_copy(prserr, " ", prserr_len, (ftnlen)1);
-	s_copy(errtyp, " ", (ftnlen)32, (ftnlen)1);
+	s_copy(&__global_state->f2c, prserr, " ", prserr_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, errtyp, " ", (ftnlen)32, (ftnlen)1);
     }
     while(state != 16) {
 
@@ -1210,7 +1213,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 		++ntabs;
 		if (ntabs > 10) {
 		    *error = TRUE_;
-		    s_copy(errtyp, "TOO_MANY_TABLES", (ftnlen)32, (ftnlen)15);
+		    s_copy(&__global_state->f2c, errtyp, "TOO_MANY_TABLES", (
+			    ftnlen)32, (ftnlen)15);
 		    state = 16;
 		} else {
 		    i__ = values[toknum - 1];
@@ -1219,16 +1223,18 @@ static zzekpars_state_t* get_zzekpars_state() {
 		    l = e - b + 1;
 		    lxb = lxbegs[toknum - 1];
 		    lxe = lxends[toknum - 1];
-		    zzekinqc_(chrbuf + (b - 1), &l, &lxb, &lxe, eqryi, eqryc, 
-			    tabdsc, e - (b - 1), eqryc_len);
+		    zzekinqc_(__global_state, chrbuf + (b - 1), &l, &lxb, &
+			    lxe, eqryi, eqryc, tabdsc, e - (b - 1), eqryc_len)
+			    ;
 
 /*                 Append the table descriptor to the integer part of the */
 /*                 query. */
 
 		    for (j = 1; j <= 6; ++j) {
-			appndi_(&tabdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? 
-				i__1 : s_rnge("tabdsc", i__1, "zzekpars_", (
-				ftnlen)554)], eqryi);
+			appndi_(__global_state, &tabdsc[(i__1 = j - 1) < 6 && 
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "tabdsc", i__1, "zzekpa"
+				"rs_", (ftnlen)554)], eqryi);
 		    }
 
 /*                 Add a place-holder value descriptor to reserve */
@@ -1236,29 +1242,33 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*                 actual alias is supplied, we'll update this */
 /*                 descriptor. */
 
-		    cleari_(&__state->c__6, alsdsc);
+		    cleari_(__global_state, &__state->c__6, alsdsc);
 		    alsdsc[0] = 1;
 		    for (j = 1; j <= 6; ++j) {
-			appndi_(&alsdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? 
-				i__1 : s_rnge("alsdsc", i__1, "zzekpars_", (
-				ftnlen)567)], eqryi);
+			appndi_(__global_state, &alsdsc[(i__1 = j - 1) < 6 && 
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "alsdsc", i__1, "zzekpa"
+				"rs_", (ftnlen)567)], eqryi);
 		    }
 
 /*                 Update the table count in the encoded query. */
 
-		    zzekweqi_("NUM_TABLES", &ntabs, eqryi, (ftnlen)10);
+		    zzekweqi_(__global_state, "NUM_TABLES", &ntabs, eqryi, (
+			    ftnlen)10);
 		    state = 1;
 		}
 	    } else if (token == 11) {
 		*error = TRUE_;
-		s_copy(errtyp, "MORE_TOKENS_EXP", (ftnlen)32, (ftnlen)15);
+		s_copy(&__global_state->f2c, errtyp, "MORE_TOKENS_EXP", (
+			ftnlen)32, (ftnlen)15);
 		state = 16;
 	    } else {
 
 /*              We've got the wrong kind of token here. */
 
 		*error = TRUE_;
-		s_copy(errtyp, "TABLE_EXP", (ftnlen)32, (ftnlen)9);
+		s_copy(&__global_state->f2c, errtyp, "TABLE_EXP", (ftnlen)32, 
+			(ftnlen)9);
 		state = 16;
 	    }
 
@@ -1291,13 +1301,14 @@ static zzekpars_state_t* get_zzekpars_state() {
 		l = e - b + 1;
 		lxb = lxbegs[toknum - 1];
 		lxe = lxends[toknum - 1];
-		zzekinqc_(chrbuf + (b - 1), &l, &lxb, &lxe, eqryi, eqryc, 
-			alsdsc, e - (b - 1), eqryc_len);
+		zzekinqc_(__global_state, chrbuf + (b - 1), &l, &lxb, &lxe, 
+			eqryi, eqryc, alsdsc, e - (b - 1), eqryc_len);
 
 /*              Update the place-holder alias descriptor in the integer */
 /*              part of the query. */
 
-		movei_(alsdsc, &__state->c__6, &eqryi[cardi_(eqryi)]);
+		movei_(__global_state, alsdsc, &__state->c__6, &eqryi[cardi_(
+			__global_state, eqryi)]);
 		state = 3;
 	    } else if (token == 1) {
 
@@ -1311,7 +1322,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*                 We've got a keyword we don't want here. */
 
 		    *error = TRUE_;
-		    s_copy(errtyp, "BAD_KEYWORD", (ftnlen)32, (ftnlen)11);
+		    s_copy(&__global_state->f2c, errtyp, "BAD_KEYWORD", (
+			    ftnlen)32, (ftnlen)11);
 		    state = 16;
 		} else {
 
@@ -1324,7 +1336,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              We've got the wrong kind of token altogether. */
 
 		*error = TRUE_;
-		s_copy(errtyp, "ALIAS_EXP", (ftnlen)32, (ftnlen)9);
+		s_copy(&__global_state->f2c, errtyp, "ALIAS_EXP", (ftnlen)32, 
+			(ftnlen)9);
 		state = 16;
 	    }
 
@@ -1358,7 +1371,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*                 We've got a keyword we don't want here. */
 
 		    *error = TRUE_;
-		    s_copy(errtyp, "BAD_KEYWORD", (ftnlen)32, (ftnlen)11);
+		    s_copy(&__global_state->f2c, errtyp, "BAD_KEYWORD", (
+			    ftnlen)32, (ftnlen)11);
 		    state = 16;
 		} else {
 
@@ -1371,7 +1385,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              We've got the wrong kind of token altogether. */
 
 		*error = TRUE_;
-		s_copy(errtyp, "COMMA_OR_KEY_EXP", (ftnlen)32, (ftnlen)16);
+		s_copy(&__global_state->f2c, errtyp, "COMMA_OR_KEY_EXP", (
+			ftnlen)32, (ftnlen)16);
 		state = 16;
 	    }
 
@@ -1382,11 +1397,12 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*           It's time to parse the SELECT clause.  We'll need to */
 /*           locate the SELECT keyword. */
 
-	    zzektloc_(&__state->c__1, &__state->c__27, ntoken, tokens, values,
-		     &toknum, &fnd);
+	    zzektloc_(__global_state, &__state->c__1, &__state->c__27, ntoken,
+		     tokens, values, &toknum, &fnd);
 	    if (! fnd) {
 		*error = TRUE_;
-		s_copy(errtyp, "SELECT_NOT_FOUND", (ftnlen)32, (ftnlen)16);
+		s_copy(&__global_state->f2c, errtyp, "SELECT_NOT_FOUND", (
+			ftnlen)32, (ftnlen)16);
 		state = 16;
 	    } else {
 		state = 12;
@@ -1412,8 +1428,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 		++nsel;
 		if (nsel > 50) {
 		    *error = TRUE_;
-		    s_copy(errtyp, "TOO_MANY_SEL_COLS", (ftnlen)32, (ftnlen)
-			    17);
+		    s_copy(&__global_state->f2c, errtyp, "TOO_MANY_SEL_COLS", 
+			    (ftnlen)32, (ftnlen)17);
 		    state = 16;
 		} else {
 		    i__ = values[toknum - 1];
@@ -1422,37 +1438,42 @@ static zzekpars_state_t* get_zzekpars_state() {
 		    l = e - b + 1;
 		    lxb = lxbegs[toknum - 1];
 		    lxe = lxends[toknum - 1];
-		    zzekinqc_(chrbuf + (b - 1), &l, &lxb, &lxe, eqryi, eqryc, 
-			    namdsc, e - (b - 1), eqryc_len);
+		    zzekinqc_(__global_state, chrbuf + (b - 1), &l, &lxb, &
+			    lxe, eqryi, eqryc, namdsc, e - (b - 1), eqryc_len)
+			    ;
 
 /*                 Add a place-holder value descriptor to reserve */
 /*                 space for a table descriptor for this name.  If it */
 /*                 turns out that the current name is a table name, we'll */
 /*                 update this descriptor. */
 
-		    cleari_(&__state->c__6, valdsc);
+		    cleari_(__global_state, &__state->c__6, valdsc);
 		    valdsc[0] = 1;
 		    for (j = 1; j <= 6; ++j) {
-			appndi_(&valdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? 
-				i__1 : s_rnge("valdsc", i__1, "zzekpars_", (
-				ftnlen)828)], eqryi);
+			appndi_(__global_state, &valdsc[(i__1 = j - 1) < 6 && 
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "valdsc", i__1, "zzekpa"
+				"rs_", (ftnlen)828)], eqryi);
 		    }
 
 /*                 Update the SELECT column count in the encoded query. */
 
-		    zzekweqi_("NUM_SELECT_COLS", &nsel, eqryi, (ftnlen)15);
+		    zzekweqi_(__global_state, "NUM_SELECT_COLS", &nsel, eqryi,
+			     (ftnlen)15);
 		    state = 14;
 		}
 	    } else if (token == 11) {
 		*error = TRUE_;
-		s_copy(errtyp, "MORE_TOKENS_EXP", (ftnlen)32, (ftnlen)15);
+		s_copy(&__global_state->f2c, errtyp, "MORE_TOKENS_EXP", (
+			ftnlen)32, (ftnlen)15);
 		state = 16;
 	    } else {
 
 /*              We've got the wrong kind of token here. */
 
 		*error = TRUE_;
-		s_copy(errtyp, "TABLE_OR_COLUMN_EXP", (ftnlen)32, (ftnlen)19);
+		s_copy(&__global_state->f2c, errtyp, "TABLE_OR_COLUMN_EXP", (
+			ftnlen)32, (ftnlen)19);
 		state = 16;
 	    }
 
@@ -1470,9 +1491,9 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              query. */
 
 		for (j = 1; j <= 6; ++j) {
-		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)875)],
-			     eqryi);
+		    appndi_(__global_state, &namdsc[(i__1 = j - 1) < 6 && 0 <=
+			     i__1 ? i__1 : s_rnge(&__global_state->f2c, "nam"
+			    "dsc", i__1, "zzekpars_", (ftnlen)875)], eqryi);
 		}
 		state = 16;
 	    } else if (token == 8) {
@@ -1482,9 +1503,9 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              query.  Another name should follow. */
 
 		for (j = 1; j <= 6; ++j) {
-		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)888)],
-			     eqryi);
+		    appndi_(__global_state, &namdsc[(i__1 = j - 1) < 6 && 0 <=
+			     i__1 ? i__1 : s_rnge(&__global_state->f2c, "nam"
+			    "dsc", i__1, "zzekpars_", (ftnlen)888)], eqryi);
 		}
 		state = 12;
 	    } else if (token == 9) {
@@ -1501,9 +1522,9 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              query. */
 
 		for (j = 1; j <= 6; ++j) {
-		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)910)],
-			     eqryi);
+		    appndi_(__global_state, &namdsc[(i__1 = j - 1) < 6 && 0 <=
+			     i__1 ? i__1 : s_rnge(&__global_state->f2c, "nam"
+			    "dsc", i__1, "zzekpars_", (ftnlen)910)], eqryi);
 		}
 
 /*              The last column name in the SELECT clause is followed by */
@@ -1521,7 +1542,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*                 We've got a keyword we don't want here. */
 
 		    *error = TRUE_;
-		    s_copy(errtyp, "BAD_KEYWORD", (ftnlen)32, (ftnlen)11);
+		    s_copy(&__global_state->f2c, errtyp, "BAD_KEYWORD", (
+			    ftnlen)32, (ftnlen)11);
 		    state = 16;
 		}
 	    } else {
@@ -1529,7 +1551,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              We've got the wrong kind of token here. */
 
 		*error = TRUE_;
-		s_copy(errtyp, "BAD_TOKEN", (ftnlen)32, (ftnlen)9);
+		s_copy(&__global_state->f2c, errtyp, "BAD_TOKEN", (ftnlen)32, 
+			(ftnlen)9);
 		state = 16;
 	    }
 
@@ -1545,7 +1568,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              Update the place-holder table name descriptor in the */
 /*              encoded query. */
 
-		movei_(namdsc, &__state->c__6, &eqryi[cardi_(eqryi)]);
+		movei_(__global_state, namdsc, &__state->c__6, &eqryi[cardi_(
+			__global_state, eqryi)]);
 
 /*              Add the column name to the character part of the */
 /*              encoded query. */
@@ -1556,25 +1580,27 @@ static zzekpars_state_t* get_zzekpars_state() {
 		l = e - b + 1;
 		lxb = lxbegs[toknum - 1];
 		lxe = lxends[toknum - 1];
-		zzekinqc_(chrbuf + (b - 1), &l, &lxb, &lxe, eqryi, eqryc, 
-			coldsc, e - (b - 1), eqryc_len);
+		zzekinqc_(__global_state, chrbuf + (b - 1), &l, &lxb, &lxe, 
+			eqryi, eqryc, coldsc, e - (b - 1), eqryc_len);
 
 /*              Add the descriptor for the column name to the encoded */
 /*              query. */
 
 		for (j = 1; j <= 6; ++j) {
-		    appndi_(&coldsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("coldsc", i__1, "zzekpars_", (ftnlen)988)],
-			     eqryi);
+		    appndi_(__global_state, &coldsc[(i__1 = j - 1) < 6 && 0 <=
+			     i__1 ? i__1 : s_rnge(&__global_state->f2c, "col"
+			    "dsc", i__1, "zzekpars_", (ftnlen)988)], eqryi);
 		}
 		state = 15;
 	    } else if (token == 11) {
 		*error = TRUE_;
-		s_copy(errtyp, "MORE_TOKENS_EXP", (ftnlen)32, (ftnlen)15);
+		s_copy(&__global_state->f2c, errtyp, "MORE_TOKENS_EXP", (
+			ftnlen)32, (ftnlen)15);
 		state = 16;
 	    } else {
 		*error = TRUE_;
-		s_copy(errtyp, "COLUMN_EXP", (ftnlen)32, (ftnlen)10);
+		s_copy(&__global_state->f2c, errtyp, "COLUMN_EXP", (ftnlen)32,
+			 (ftnlen)10);
 		state = 16;
 	    }
 
@@ -1603,7 +1629,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*                 We've got a keyword we don't want here. */
 
 		    *error = TRUE_;
-		    s_copy(errtyp, "BAD_KEYWORD", (ftnlen)32, (ftnlen)11);
+		    s_copy(&__global_state->f2c, errtyp, "BAD_KEYWORD", (
+			    ftnlen)32, (ftnlen)11);
 		    state = 16;
 		}
 	    } else if (token == 8) {
@@ -1618,7 +1645,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 		state = 16;
 	    } else {
 		*error = TRUE_;
-		s_copy(errtyp, "COMMA_OR_KEY_EXP", (ftnlen)32, (ftnlen)16);
+		s_copy(&__global_state->f2c, errtyp, "COMMA_OR_KEY_EXP", (
+			ftnlen)32, (ftnlen)16);
 		state = 16;
 	    }
 
@@ -1629,8 +1657,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*           The WHERE clause is optional.  See whether we have one.  The */
 /*           clause is started by a WHERE keyword. */
 
-	    zzektloc_(&__state->c__1, &__state->c__29, ntoken, tokens, values,
-		     &toknum, &fnd);
+	    zzektloc_(__global_state, &__state->c__1, &__state->c__29, ntoken,
+		     tokens, values, &toknum, &fnd);
 	    if (fnd) {
 
 /*              We're going to hand off the list of tokens that comprise */
@@ -1640,12 +1668,13 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              is check the validity of the column names and the values */
 /*              used in the constraints. */
 
-		zzeknrml_(query, ntoken, lxbegs, lxends, tokens, values, 
-			numvls, chrbuf, chbegs, chends, eqryi, eqryc, eqryd, 
-			error, prserr, query_len, chrbuf_len, eqryc_len, 
-			prserr_len);
+		zzeknrml_(__global_state, query, ntoken, lxbegs, lxends, 
+			tokens, values, numvls, chrbuf, chbegs, chends, eqryi,
+			 eqryc, eqryd, error, prserr, query_len, chrbuf_len, 
+			eqryc_len, prserr_len);
 		if (*error) {
-		    s_copy(errtyp, "WHERE_ERROR", (ftnlen)32, (ftnlen)11);
+		    s_copy(&__global_state->f2c, errtyp, "WHERE_ERROR", (
+			    ftnlen)32, (ftnlen)11);
 		    state = 16;
 		} else {
 
@@ -1667,8 +1696,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*           The ORDER BY clause is optional.  See whether we have one. */
 /*           The clause is started by an ORDER keyword. */
 
-	    zzektloc_(&__state->c__1, &__state->c__26, ntoken, tokens, values,
-		     &toknum, &fnd);
+	    zzektloc_(__global_state, &__state->c__1, &__state->c__26, ntoken,
+		     tokens, values, &toknum, &fnd);
 	    if (fnd) {
 
 /*              The BY keyword should follow the ORDER keyword. */
@@ -1685,7 +1714,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*                    No BY keyword followed the ORDER keyword. */
 
 			*error = TRUE_;
-			s_copy(errtyp, "BY_EXPECTED", (ftnlen)32, (ftnlen)11);
+			s_copy(&__global_state->f2c, errtyp, "BY_EXPECTED", (
+				ftnlen)32, (ftnlen)11);
 			state = 16;
 		    }
 		} else {
@@ -1693,7 +1723,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*                 We're out of tokens where we shouldn't be. */
 
 		    *error = TRUE_;
-		    s_copy(errtyp, "BY_EXPECTED", (ftnlen)32, (ftnlen)11);
+		    s_copy(&__global_state->f2c, errtyp, "BY_EXPECTED", (
+			    ftnlen)32, (ftnlen)11);
 		    state = 16;
 		}
 	    } else {
@@ -1723,8 +1754,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 		++norder;
 		if (norder > 10) {
 		    *error = TRUE_;
-		    s_copy(errtyp, "TOO_MANY_ORD_COLS", (ftnlen)32, (ftnlen)
-			    17);
+		    s_copy(&__global_state->f2c, errtyp, "TOO_MANY_ORD_COLS", 
+			    (ftnlen)32, (ftnlen)17);
 		    state = 16;
 		} else {
 		    i__ = values[toknum - 1];
@@ -1733,37 +1764,42 @@ static zzekpars_state_t* get_zzekpars_state() {
 		    l = e - b + 1;
 		    lxb = lxbegs[toknum - 1];
 		    lxe = lxends[toknum - 1];
-		    zzekinqc_(chrbuf + (b - 1), &l, &lxb, &lxe, eqryi, eqryc, 
-			    namdsc, e - (b - 1), eqryc_len);
+		    zzekinqc_(__global_state, chrbuf + (b - 1), &l, &lxb, &
+			    lxe, eqryi, eqryc, namdsc, e - (b - 1), eqryc_len)
+			    ;
 
 /*                 Add a place-holder value descriptor to reserve */
 /*                 space for a table descriptor for this name.  If it */
 /*                 turns out that the current name is a table name, we'll */
 /*                 update this descriptor. */
 
-		    cleari_(&__state->c__6, valdsc);
+		    cleari_(__global_state, &__state->c__6, valdsc);
 		    valdsc[0] = 1;
 		    for (j = 1; j <= 6; ++j) {
-			appndi_(&valdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? 
-				i__1 : s_rnge("valdsc", i__1, "zzekpars_", (
-				ftnlen)1240)], eqryi);
+			appndi_(__global_state, &valdsc[(i__1 = j - 1) < 6 && 
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "valdsc", i__1, "zzekpa"
+				"rs_", (ftnlen)1240)], eqryi);
 		    }
 
 /*                 Update the order-by column count in the encoded query. */
 
-		    zzekweqi_("NUM_ORDERBY_COLS", &norder, eqryi, (ftnlen)16);
+		    zzekweqi_(__global_state, "NUM_ORDERBY_COLS", &norder, 
+			    eqryi, (ftnlen)16);
 		    state = 8;
 		}
 	    } else if (token == 11) {
 		*error = TRUE_;
-		s_copy(errtyp, "MORE_TOKENS_EXP", (ftnlen)32, (ftnlen)15);
+		s_copy(&__global_state->f2c, errtyp, "MORE_TOKENS_EXP", (
+			ftnlen)32, (ftnlen)15);
 		state = 16;
 	    } else {
 
 /*              We've got the wrong kind of token here. */
 
 		*error = TRUE_;
-		s_copy(errtyp, "TABLE_OR_COLUMN_EXP", (ftnlen)32, (ftnlen)19);
+		s_copy(&__global_state->f2c, errtyp, "TABLE_OR_COLUMN_EXP", (
+			ftnlen)32, (ftnlen)19);
 		state = 16;
 	    }
 
@@ -1781,16 +1817,16 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              query. */
 
 		for (j = 1; j <= 6; ++j) {
-		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)1287)]
-			    , eqryi);
+		    appndi_(__global_state, &namdsc[(i__1 = j - 1) < 6 && 0 <=
+			     i__1 ? i__1 : s_rnge(&__global_state->f2c, "nam"
+			    "dsc", i__1, "zzekpars_", (ftnlen)1287)], eqryi);
 		}
 
 /*              Since no ASCENDING or DESCENDING sense keyword was */
 /*              supplied, append the default value ASCENDING to the */
 /*              order-by column descriptor in the encoded query. */
 
-		appndi_(&__state->c__0, eqryi);
+		appndi_(__global_state, &__state->c__0, eqryi);
 
 /*              We're done with the ORDER BY clause; go on to parse the */
 /*              SELECT clause. */
@@ -1803,16 +1839,16 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              query.  Another name should follow. */
 
 		for (j = 1; j <= 6; ++j) {
-		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)1311)]
-			    , eqryi);
+		    appndi_(__global_state, &namdsc[(i__1 = j - 1) < 6 && 0 <=
+			     i__1 ? i__1 : s_rnge(&__global_state->f2c, "nam"
+			    "dsc", i__1, "zzekpars_", (ftnlen)1311)], eqryi);
 		}
 
 /*              Since no ASCENDING or DESCENDING sense keyword was */
 /*              supplied, append the default value ASCENDING to the */
 /*              order-by column descriptor in the encoded query. */
 
-		appndi_(&__state->c__0, eqryi);
+		appndi_(__global_state, &__state->c__0, eqryi);
 		state = 6;
 	    } else if (token == 9) {
 
@@ -1830,9 +1866,9 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              query. */
 
 		for (j = 1; j <= 6; ++j) {
-		    appndi_(&namdsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("namdsc", i__1, "zzekpars_", (ftnlen)1342)]
-			    , eqryi);
+		    appndi_(__global_state, &namdsc[(i__1 = j - 1) < 6 && 0 <=
+			     i__1 ? i__1 : s_rnge(&__global_state->f2c, "nam"
+			    "dsc", i__1, "zzekpars_", (ftnlen)1342)], eqryi);
 		}
 
 /*              Set the sense descriptor according to the keyword we've */
@@ -1840,10 +1876,10 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              order-by column. */
 
 		if (values[toknum - 1] == 3) {
-		    appndi_(&__state->c__0, eqryi);
+		    appndi_(__global_state, &__state->c__0, eqryi);
 		    state = 10;
 		} else if (values[toknum - 1] == 8) {
-		    appndi_(&__state->c__1, eqryi);
+		    appndi_(__global_state, &__state->c__1, eqryi);
 		    state = 10;
 		} else if (values[toknum - 1] == 29 || values[toknum - 1] == 
 			11 || values[toknum - 1] == 27) {
@@ -1852,7 +1888,7 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*                 supplied, append the default value ASCENDING to the */
 /*                 order-by column descriptor in the encoded query. */
 
-		    appndi_(&__state->c__0, eqryi);
+		    appndi_(__global_state, &__state->c__0, eqryi);
 
 /*                 We're done with the ORDER BY clause.  Go on to */
 /*                 parse the SELECT clause. */
@@ -1863,7 +1899,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*                 We've got a keyword we don't want here. */
 
 		    *error = TRUE_;
-		    s_copy(errtyp, "BAD_KEYWORD", (ftnlen)32, (ftnlen)11);
+		    s_copy(&__global_state->f2c, errtyp, "BAD_KEYWORD", (
+			    ftnlen)32, (ftnlen)11);
 		    state = 16;
 		}
 	    } else {
@@ -1871,7 +1908,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              We've got the wrong kind of token here. */
 
 		*error = TRUE_;
-		s_copy(errtyp, "BAD_TOKEN", (ftnlen)32, (ftnlen)9);
+		s_copy(&__global_state->f2c, errtyp, "BAD_TOKEN", (ftnlen)32, 
+			(ftnlen)9);
 		state = 16;
 	    }
 
@@ -1887,7 +1925,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*              Update the place-holder table name descriptor in the */
 /*              encoded query. */
 
-		movei_(namdsc, &__state->c__6, &eqryi[cardi_(eqryi)]);
+		movei_(__global_state, namdsc, &__state->c__6, &eqryi[cardi_(
+			__global_state, eqryi)]);
 
 /*              Add the column name to the character part of the */
 /*              encoded query. */
@@ -1898,25 +1937,27 @@ static zzekpars_state_t* get_zzekpars_state() {
 		l = e - b + 1;
 		lxb = lxbegs[toknum - 1];
 		lxe = lxends[toknum - 1];
-		zzekinqc_(chrbuf + (b - 1), &l, &lxb, &lxe, eqryi, eqryc, 
-			coldsc, e - (b - 1), eqryc_len);
+		zzekinqc_(__global_state, chrbuf + (b - 1), &l, &lxb, &lxe, 
+			eqryi, eqryc, coldsc, e - (b - 1), eqryc_len);
 
 /*              Add the descriptor for the column name to the encoded */
 /*              query. */
 
 		for (j = 1; j <= 6; ++j) {
-		    appndi_(&coldsc[(i__1 = j - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("coldsc", i__1, "zzekpars_", (ftnlen)1444)]
-			    , eqryi);
+		    appndi_(__global_state, &coldsc[(i__1 = j - 1) < 6 && 0 <=
+			     i__1 ? i__1 : s_rnge(&__global_state->f2c, "col"
+			    "dsc", i__1, "zzekpars_", (ftnlen)1444)], eqryi);
 		}
 		state = 9;
 	    } else if (token == 11) {
 		*error = TRUE_;
-		s_copy(errtyp, "MORE_TOKENS_EXP", (ftnlen)32, (ftnlen)15);
+		s_copy(&__global_state->f2c, errtyp, "MORE_TOKENS_EXP", (
+			ftnlen)32, (ftnlen)15);
 		state = 16;
 	    } else {
 		*error = TRUE_;
-		s_copy(errtyp, "COLUMN_EXP", (ftnlen)32, (ftnlen)10);
+		s_copy(&__global_state->f2c, errtyp, "COLUMN_EXP", (ftnlen)32,
+			 (ftnlen)10);
 		state = 16;
 	    }
 
@@ -1934,14 +1975,14 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*                 The ASCENDING keyword has been supplied.  After this, */
 /*                 look for another column. */
 
-		    appndi_(&__state->c__0, eqryi);
+		    appndi_(__global_state, &__state->c__0, eqryi);
 		    state = 10;
 		} else if (values[toknum - 1] == 8) {
 
 /*                 The DESCENDING keyword has been supplied.  After this, */
 /*                 look for another column. */
 
-		    appndi_(&__state->c__1, eqryi);
+		    appndi_(__global_state, &__state->c__1, eqryi);
 		    state = 10;
 		} else if (values[toknum - 1] == 29 || values[toknum - 1] == 
 			11 || values[toknum - 1] == 27) {
@@ -1952,20 +1993,21 @@ static zzekpars_state_t* get_zzekpars_state() {
 		    state = 11;
 		} else {
 		    *error = TRUE_;
-		    s_copy(errtyp, "BAD_KEYWORD", (ftnlen)32, (ftnlen)11);
+		    s_copy(&__global_state->f2c, errtyp, "BAD_KEYWORD", (
+			    ftnlen)32, (ftnlen)11);
 		    state = 16;
 		}
 	    } else if (token == 8) {
 
 /*              The ASCENDING keyword is implied. */
 
-		appndi_(&__state->c__0, eqryi);
+		appndi_(__global_state, &__state->c__0, eqryi);
 		state = 6;
 	    } else if (token == 11) {
 
 /*              The ASCENDING keyword is implied. */
 
-		appndi_(&__state->c__0, eqryi);
+		appndi_(__global_state, &__state->c__0, eqryi);
 
 /*              We're done with the ORDER BY clause.  Parse the SELECT */
 /*              clause. */
@@ -1973,7 +2015,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 		state = 11;
 	    } else {
 		*error = TRUE_;
-		s_copy(errtyp, "COMMA_OR_KEY_EXP", (ftnlen)32, (ftnlen)16);
+		s_copy(&__global_state->f2c, errtyp, "COMMA_OR_KEY_EXP", (
+			ftnlen)32, (ftnlen)16);
 		state = 16;
 	    }
 
@@ -2006,12 +2049,14 @@ static zzekpars_state_t* get_zzekpars_state() {
 		    state = 11;
 		} else {
 		    *error = TRUE_;
-		    s_copy(errtyp, "BAD_KEYWORD", (ftnlen)32, (ftnlen)11);
+		    s_copy(&__global_state->f2c, errtyp, "BAD_KEYWORD", (
+			    ftnlen)32, (ftnlen)11);
 		    state = 16;
 		}
 	    } else {
 		*error = TRUE_;
-		s_copy(errtyp, "COMMA_EXP", (ftnlen)32, (ftnlen)9);
+		s_copy(&__global_state->f2c, errtyp, "COMMA_EXP", (ftnlen)32, 
+			(ftnlen)9);
 		state = 16;
 	    }
 
@@ -2022,8 +2067,8 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*           Somehow, we've reached an invalid state. */
 
 	    *error = TRUE_;
-	    s_copy(prserr, "SPICE(BUG) -- Invalid state reached in EK parser."
-		    , prserr_len, (ftnlen)49);
+	    s_copy(&__global_state->f2c, prserr, "SPICE(BUG) -- Invalid stat"
+		    "e reached in EK parser.", prserr_len, (ftnlen)49);
 	    state = 16;
 	}
 
@@ -2040,138 +2085,151 @@ static zzekpars_state_t* get_zzekpars_state() {
 /*     section. */
 
     if (*error) {
-	if (s_cmp(errtyp, "FROM_NOT_FOUND", (ftnlen)32, (ftnlen)14) == 0) {
-	    s_copy(prserr, "Every query must contain a FROM clause. The FROM"
-		    " keyword was not found.", prserr_len, (ftnlen)71);
-	} else if (s_cmp(errtyp, "SELECT_NOT_FOUND", (ftnlen)32, (ftnlen)16) 
-		== 0) {
-	    s_copy(prserr, "Every query must contain a SELECT clause. The SE"
-		    "LECT keyword was not found.", prserr_len, (ftnlen)75);
-	} else if (s_cmp(errtyp, "BY_EXPECTED", (ftnlen)32, (ftnlen)11) == 0) 
-		{
-	    s_copy(prserr, "The BY keyword was not found following the ORDER"
-		    " keyword.", prserr_len, (ftnlen)57);
-	} else if (s_cmp(errtyp, "BAD_KEYWORD", (ftnlen)32, (ftnlen)11) == 0) 
-		{
+	if (s_cmp(&__global_state->f2c, errtyp, "FROM_NOT_FOUND", (ftnlen)32, 
+		(ftnlen)14) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "Every query must contain a"
+		    " FROM clause. The FROM keyword was not found.", 
+		    prserr_len, (ftnlen)71);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "SELECT_NOT_FOUND", (
+		ftnlen)32, (ftnlen)16) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "Every query must contain a"
+		    " SELECT clause. The SELECT keyword was not found.", 
+		    prserr_len, (ftnlen)75);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "BY_EXPECTED", (ftnlen)
+		32, (ftnlen)11) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "The BY keyword was not fou"
+		    "nd following the ORDER keyword.", prserr_len, (ftnlen)57);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "BAD_KEYWORD", (ftnlen)
+		32, (ftnlen)11) == 0) {
 	    lxb = lxbegs[toknum - 1];
 	    lxe = lxends[toknum - 1];
-	    s_copy(prserr, "Invalid keyword at location #. Actual token was:"
-		    " #", prserr_len, (ftnlen)50);
-	    repmi_(prserr, "#", &lxb, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
-	    repmc_(prserr, "#", query + (lxb - 1), prserr, prserr_len, (
-		    ftnlen)1, lxe - (lxb - 1), prserr_len);
-	} else if (s_cmp(errtyp, "TABLE_OR_COLUMN_EXP", (ftnlen)32, (ftnlen)
-		19) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "Invalid keyword at locatio"
+		    "n #. Actual token was: #", prserr_len, (ftnlen)50);
+	    repmi_(__global_state, prserr, "#", &lxb, prserr, prserr_len, (
+		    ftnlen)1, prserr_len);
+	    repmc_(__global_state, prserr, "#", query + (lxb - 1), prserr, 
+		    prserr_len, (ftnlen)1, lxe - (lxb - 1), prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "TABLE_OR_COLUMN_EXP", 
+		(ftnlen)32, (ftnlen)19) == 0) {
 	    lxb = lxbegs[toknum - 1];
 	    lxe = lxends[toknum - 1];
-	    s_copy(prserr, "Table or column name expected at location #. Act"
-		    "ual token was: #", prserr_len, (ftnlen)64);
-	    repmi_(prserr, "#", &lxb, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
-	    repmc_(prserr, "#", query + (lxb - 1), prserr, prserr_len, (
-		    ftnlen)1, lxe - (lxb - 1), prserr_len);
-	} else if (s_cmp(errtyp, "TABLE_EXP", (ftnlen)32, (ftnlen)9) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "Table or column name expec"
+		    "ted at location #. Actual token was: #", prserr_len, (
+		    ftnlen)64);
+	    repmi_(__global_state, prserr, "#", &lxb, prserr, prserr_len, (
+		    ftnlen)1, prserr_len);
+	    repmc_(__global_state, prserr, "#", query + (lxb - 1), prserr, 
+		    prserr_len, (ftnlen)1, lxe - (lxb - 1), prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "TABLE_EXP", (ftnlen)
+		32, (ftnlen)9) == 0) {
 	    lxb = lxbegs[toknum - 1];
 	    lxe = lxends[toknum - 1];
-	    s_copy(prserr, "Table name expected at location #. Actual token "
-		    "was: #", prserr_len, (ftnlen)54);
-	    repmi_(prserr, "#", &lxb, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
-	    repmc_(prserr, "#", query + (lxb - 1), prserr, prserr_len, (
-		    ftnlen)1, lxe - (lxb - 1), prserr_len);
-	} else if (s_cmp(errtyp, "COLUMN_EXP", (ftnlen)32, (ftnlen)10) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "Table name expected at loc"
+		    "ation #. Actual token was: #", prserr_len, (ftnlen)54);
+	    repmi_(__global_state, prserr, "#", &lxb, prserr, prserr_len, (
+		    ftnlen)1, prserr_len);
+	    repmc_(__global_state, prserr, "#", query + (lxb - 1), prserr, 
+		    prserr_len, (ftnlen)1, lxe - (lxb - 1), prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "COLUMN_EXP", (ftnlen)
+		32, (ftnlen)10) == 0) {
 	    lxb = lxbegs[toknum - 1];
 	    lxe = lxends[toknum - 1];
-	    s_copy(prserr, "Column name expected at location #. Actual token"
-		    " was: #", prserr_len, (ftnlen)55);
-	    repmi_(prserr, "#", &lxb, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
-	    repmc_(prserr, "#", query + (lxb - 1), prserr, prserr_len, (
-		    ftnlen)1, lxe - (lxb - 1), prserr_len);
-	} else if (s_cmp(errtyp, "ALIAS_EXP", (ftnlen)32, (ftnlen)9) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "Column name expected at lo"
+		    "cation #. Actual token was: #", prserr_len, (ftnlen)55);
+	    repmi_(__global_state, prserr, "#", &lxb, prserr, prserr_len, (
+		    ftnlen)1, prserr_len);
+	    repmc_(__global_state, prserr, "#", query + (lxb - 1), prserr, 
+		    prserr_len, (ftnlen)1, lxe - (lxb - 1), prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "ALIAS_EXP", (ftnlen)
+		32, (ftnlen)9) == 0) {
 	    lxb = lxbegs[toknum - 1];
 	    lxe = lxends[toknum - 1];
-	    s_copy(prserr, "Table alias, comma, or keyword expected at locat"
-		    "ion #. Actual token was: #", prserr_len, (ftnlen)74);
-	    repmi_(prserr, "#", &lxb, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
-	    repmc_(prserr, "#", query + (lxb - 1), prserr, prserr_len, (
-		    ftnlen)1, lxe - (lxb - 1), prserr_len);
-	} else if (s_cmp(errtyp, "COMMA_OR_KEY_EXP", (ftnlen)32, (ftnlen)16) 
-		== 0) {
+	    s_copy(&__global_state->f2c, prserr, "Table alias, comma, or key"
+		    "word expected at location #. Actual token was: #", 
+		    prserr_len, (ftnlen)74);
+	    repmi_(__global_state, prserr, "#", &lxb, prserr, prserr_len, (
+		    ftnlen)1, prserr_len);
+	    repmc_(__global_state, prserr, "#", query + (lxb - 1), prserr, 
+		    prserr_len, (ftnlen)1, lxe - (lxb - 1), prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "COMMA_OR_KEY_EXP", (
+		ftnlen)32, (ftnlen)16) == 0) {
 	    lxb = lxbegs[toknum - 1];
 	    lxe = lxends[toknum - 1];
-	    s_copy(prserr, "Comma or keyword expected at location #. Actual "
-		    "token was: #", prserr_len, (ftnlen)60);
-	    repmi_(prserr, "#", &lxb, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
-	    repmc_(prserr, "#", query + (lxb - 1), prserr, prserr_len, (
-		    ftnlen)1, lxe - (lxb - 1), prserr_len);
-	} else if (s_cmp(errtyp, "COMMA_EXP", (ftnlen)32, (ftnlen)9) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "Comma or keyword expected "
+		    "at location #. Actual token was: #", prserr_len, (ftnlen)
+		    60);
+	    repmi_(__global_state, prserr, "#", &lxb, prserr, prserr_len, (
+		    ftnlen)1, prserr_len);
+	    repmc_(__global_state, prserr, "#", query + (lxb - 1), prserr, 
+		    prserr_len, (ftnlen)1, lxe - (lxb - 1), prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "COMMA_EXP", (ftnlen)
+		32, (ftnlen)9) == 0) {
 	    lxb = lxbegs[toknum - 1];
 	    lxe = lxends[toknum - 1];
-	    s_copy(prserr, "Comma expected at location #. Actual token was: #"
-		    , prserr_len, (ftnlen)49);
-	    repmi_(prserr, "#", &lxb, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
-	    repmc_(prserr, "#", query + (lxb - 1), prserr, prserr_len, (
-		    ftnlen)1, lxe - (lxb - 1), prserr_len);
-	} else if (s_cmp(errtyp, "MORE_TOKENS_EXP", (ftnlen)32, (ftnlen)15) ==
-		 0) {
-	    s_copy(prserr, "More tokens were expected in query.", prserr_len, 
-		    (ftnlen)35);
-	} else if (s_cmp(errtyp, "KEYWORD_EXP", (ftnlen)32, (ftnlen)11) == 0) 
-		{
-	    s_copy(prserr, "The keyword # was expected at location #. Actual"
-		    " token was: #", prserr_len, (ftnlen)61);
-	    repmc_(prserr, "#", expkey, prserr, prserr_len, (ftnlen)1, (
-		    ftnlen)32, prserr_len);
-	    repmi_(prserr, "#", &lxb, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
-	    repmc_(prserr, "#", query + (lxb - 1), prserr, prserr_len, (
-		    ftnlen)1, lxe - (lxb - 1), prserr_len);
-	} else if (s_cmp(errtyp, "BAD_TOKEN", (ftnlen)32, (ftnlen)9) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "Comma expected at location"
+		    " #. Actual token was: #", prserr_len, (ftnlen)49);
+	    repmi_(__global_state, prserr, "#", &lxb, prserr, prserr_len, (
+		    ftnlen)1, prserr_len);
+	    repmc_(__global_state, prserr, "#", query + (lxb - 1), prserr, 
+		    prserr_len, (ftnlen)1, lxe - (lxb - 1), prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "MORE_TOKENS_EXP", (
+		ftnlen)32, (ftnlen)15) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "More tokens were expected "
+		    "in query.", prserr_len, (ftnlen)35);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "KEYWORD_EXP", (ftnlen)
+		32, (ftnlen)11) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "The keyword # was expected"
+		    " at location #. Actual token was: #", prserr_len, (ftnlen)
+		    61);
+	    repmc_(__global_state, prserr, "#", expkey, prserr, prserr_len, (
+		    ftnlen)1, (ftnlen)32, prserr_len);
+	    repmi_(__global_state, prserr, "#", &lxb, prserr, prserr_len, (
+		    ftnlen)1, prserr_len);
+	    repmc_(__global_state, prserr, "#", query + (lxb - 1), prserr, 
+		    prserr_len, (ftnlen)1, lxe - (lxb - 1), prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "BAD_TOKEN", (ftnlen)
+		32, (ftnlen)9) == 0) {
 	    lxb = lxbegs[toknum - 1];
 	    lxe = lxends[toknum - 1];
-	    s_copy(prserr, "Invalid token at location #. Token was: #", 
-		    prserr_len, (ftnlen)41);
-	    repmi_(prserr, "#", &lxb, prserr, prserr_len, (ftnlen)1, 
-		    prserr_len);
-	    repmc_(prserr, "#", query + (lxb - 1), prserr, prserr_len, (
-		    ftnlen)1, lxe - (lxb - 1), prserr_len);
-	} else if (s_cmp(errtyp, "TOO_MANY_TABLES", (ftnlen)32, (ftnlen)15) ==
-		 0) {
-	    s_copy(prserr, "Number of tables in \"FROM\" clause exceeds allo"
-		    "wed maximum of #.", prserr_len, (ftnlen)63);
-	    repmi_(prserr, "#", &__state->c__10, prserr, prserr_len, (ftnlen)
-		    1, prserr_len);
-	} else if (s_cmp(errtyp, "TOO_MANY_ORD_COLS", (ftnlen)32, (ftnlen)17) 
-		== 0) {
-	    s_copy(prserr, "Number of order-by columns exceeds allowed maxim"
-		    "um of #.", prserr_len, (ftnlen)56);
-	    repmi_(prserr, "#", &__state->c__10, prserr, prserr_len, (ftnlen)
-		    1, prserr_len);
-	} else if (s_cmp(errtyp, "TOO_MANY_SEL_COLS", (ftnlen)32, (ftnlen)17) 
-		== 0) {
-	    s_copy(prserr, "Number of SELECT columns exceeds allowed maximum"
-		    " of #.", prserr_len, (ftnlen)54);
-	    repmi_(prserr, "#", &__state->c__50, prserr, prserr_len, (ftnlen)
-		    1, prserr_len);
-	} else if (s_cmp(errtyp, "WHERE_ERROR", (ftnlen)32, (ftnlen)11) != 0) 
-		{
-	    s_copy(prserr, "SPICE(BUG)--Unrecognized error type.  Type was #."
-		    , prserr_len, (ftnlen)49);
-	    repmc_(prserr, "#", errtyp, prserr, prserr_len, (ftnlen)1, (
-		    ftnlen)32, prserr_len);
+	    s_copy(&__global_state->f2c, prserr, "Invalid token at location "
+		    "#. Token was: #", prserr_len, (ftnlen)41);
+	    repmi_(__global_state, prserr, "#", &lxb, prserr, prserr_len, (
+		    ftnlen)1, prserr_len);
+	    repmc_(__global_state, prserr, "#", query + (lxb - 1), prserr, 
+		    prserr_len, (ftnlen)1, lxe - (lxb - 1), prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "TOO_MANY_TABLES", (
+		ftnlen)32, (ftnlen)15) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "Number of tables in \"FRO"
+		    "M\" clause exceeds allowed maximum of #.", prserr_len, (
+		    ftnlen)63);
+	    repmi_(__global_state, prserr, "#", &__state->c__10, prserr, 
+		    prserr_len, (ftnlen)1, prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "TOO_MANY_ORD_COLS", (
+		ftnlen)32, (ftnlen)17) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "Number of order-by columns"
+		    " exceeds allowed maximum of #.", prserr_len, (ftnlen)56);
+	    repmi_(__global_state, prserr, "#", &__state->c__10, prserr, 
+		    prserr_len, (ftnlen)1, prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "TOO_MANY_SEL_COLS", (
+		ftnlen)32, (ftnlen)17) == 0) {
+	    s_copy(&__global_state->f2c, prserr, "Number of SELECT columns e"
+		    "xceeds allowed maximum of #.", prserr_len, (ftnlen)54);
+	    repmi_(__global_state, prserr, "#", &__state->c__50, prserr, 
+		    prserr_len, (ftnlen)1, prserr_len);
+	} else if (s_cmp(&__global_state->f2c, errtyp, "WHERE_ERROR", (ftnlen)
+		32, (ftnlen)11) != 0) {
+	    s_copy(&__global_state->f2c, prserr, "SPICE(BUG)--Unrecognized e"
+		    "rror type.  Type was #.", prserr_len, (ftnlen)49);
+	    repmc_(__global_state, prserr, "#", errtyp, prserr, prserr_len, (
+		    ftnlen)1, (ftnlen)32, prserr_len);
 	}
     } else {
 
 /*        Indicate that parsing is complete. */
 
-	zzekweqi_("PARSED", &__state->c__1, eqryi, (ftnlen)6);
+	zzekweqi_(__global_state, "PARSED", &__state->c__1, eqryi, (ftnlen)6);
     }
-    chkout_("ZZEKPARS", (ftnlen)8);
+    chkout_(__global_state, "ZZEKPARS", (ftnlen)8);
     return 0;
 } /* zzekpars_ */
 

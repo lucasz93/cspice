@@ -8,27 +8,26 @@
 
 
 typedef int isrchc_state_t;
-static isrchc_state_t* get_isrchc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline isrchc_state_t* get_isrchc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure             ISRCHC  ( Search in a character array ) */
-integer isrchc_(char *value, integer *ndim, char *array, ftnlen value_len, 
-	ftnlen array_len)
+integer isrchc_(cspice_t* __global_state, char *value, integer *ndim, char *
+	array, ftnlen value_len, ftnlen array_len)
 {
     /* System generated locals */
     integer ret_val, i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    isrchc_state_t* __state = get_isrchc_state();
+    isrchc_state_t* __state = get_isrchc_state(__global_state);
 /* $ Abstract */
 
 /*      Search for a given value within a character string array. Return */
@@ -155,8 +154,8 @@ integer isrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
     ret_val = 0;
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if (s_cmp(array + (i__ - 1) * array_len, value, array_len, value_len) 
-		== 0) {
+	if (s_cmp(&__global_state->f2c, array + (i__ - 1) * array_len, value, 
+		array_len, value_len) == 0) {
 	    ret_val = i__;
 	    return ret_val;
 	}

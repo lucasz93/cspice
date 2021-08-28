@@ -8,8 +8,7 @@
 
 
 extern zzryxsph_init_t __zzryxsph_init;
-static zzryxsph_state_t* get_zzryxsph_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzryxsph_state_t* get_zzryxsph_state(cspice_t* state) {
 	if (!state->zzryxsph)
 		state->zzryxsph = __cspice_allocate_module(sizeof(
 	zzryxsph_state_t), &__zzryxsph_init, sizeof(__zzryxsph_init));
@@ -18,29 +17,29 @@ static zzryxsph_state_t* get_zzryxsph_state() {
 }
 
 /* $Procedure ZZRYXSPH ( Intersection of ray and sphere ) */
-/* Subroutine */ int zzryxsph_(doublereal *vertex, doublereal *udir, 
-	doublereal *r__, doublereal *xpt, logical *found)
+/* Subroutine */ int zzryxsph_(cspice_t* __global_state, doublereal *vertex, 
+	doublereal *udir, doublereal *r__, doublereal *xpt, logical *found)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal cpar;
     doublereal perp[3];
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     doublereal pmag2;
     doublereal vmag2;
     doublereal s;
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal r2;
 
 
     /* Module state */
-    zzryxsph_state_t* __state = get_zzryxsph_state();
+    zzryxsph_state_t* __state = get_zzryxsph_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -180,10 +179,10 @@ static zzryxsph_state_t* get_zzryxsph_state() {
 /*     Find the component of VERTEX orthogonal to UDIR. If the magnitude */
 /*     of this component exceeds R, there's no intercept. */
 
-    cpar = vdot_(vertex, udir);
+    cpar = vdot_(__global_state, vertex, udir);
     d__1 = -cpar;
-    vlcom_(&__state->c_b2, vertex, &d__1, udir, perp);
-    pmag2 = vdot_(perp, perp);
+    vlcom_(__global_state, &__state->c_b2, vertex, &d__1, udir, perp);
+    pmag2 = vdot_(__global_state, perp, perp);
     r2 = *r__ * *r__;
 
 /*     Compare squares of magnitudes, rather than magnitudes, for */
@@ -194,8 +193,8 @@ static zzryxsph_state_t* get_zzryxsph_state() {
     }
 /* Computing MAX */
     d__1 = 0., d__2 = r2 - pmag2;
-    s = sqrt((max(d__1,d__2)));
-    vmag2 = vdot_(vertex, vertex);
+    s = sqrt(&__global_state->f2c, (max(d__1,d__2)));
+    vmag2 = vdot_(__global_state, vertex, vertex);
     if (vmag2 > r2) {
 
 /*        If the magnitude of the vertex exceeds R, the vertex is */

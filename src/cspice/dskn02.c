@@ -8,8 +8,7 @@
 
 
 extern dskn02_init_t __dskn02_init;
-static dskn02_state_t* get_dskn02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskn02_state_t* get_dskn02_state(cspice_t* state) {
 	if (!state->dskn02)
 		state->dskn02 = __cspice_allocate_module(sizeof(
 	dskn02_state_t), &__dskn02_init, sizeof(__dskn02_init));
@@ -18,52 +17,53 @@ static dskn02_state_t* get_dskn02_state() {
 }
 
 /* $Procedure DSKN02 ( DSK, type 2, compute normal vector for plate ) */
-/* Subroutine */ int dskn02_(integer *handle, integer *dladsc, integer *plid, 
-	doublereal *normal)
+/* Subroutine */ int dskn02_(cspice_t* __global_state, integer *handle, 
+	integer *dladsc, integer *plid, doublereal *normal)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer unit;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal edge1[3];
     doublereal edge2[3];
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
     integer i__;
     integer n;
-    extern /* Subroutine */ int dskd02_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dskgd_(integer *, integer *, doublereal *);
-    extern /* Subroutine */ int dski02_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dskd02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dskgd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int dski02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
     integer plate[3];
-    extern /* Subroutine */ int dskz02_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dskz02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer start;
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal verts[9]	/* was [3][3] */;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer np;
     integer nv;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal dskdsc[24];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    dskn02_state_t* __state = get_dskn02_state();
+    dskn02_state_t* __state = get_dskn02_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the unit normal vector for a specified plate from a type */
@@ -923,64 +923,67 @@ static dskn02_state_t* get_dskn02_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKN02", (ftnlen)6);
+    chkin_(__global_state, "DSKN02", (ftnlen)6);
 
 /*     Look up the DSK descriptor for this segment. */
 
-    dskgd_(handle, dladsc, dskdsc);
+    dskgd_(__global_state, handle, dladsc, dskdsc);
 
 /*     Get the plate model size parameters for this segment. */
 /*     Note that we get a segment data type check for free from */
 /*     DSKZ02. */
 
-    dskz02_(handle, dladsc, &nv, &np);
+    dskz02_(__global_state, handle, dladsc, &nv, &np);
 
 /*     Check START. */
 
     if (*plid < 1 || *plid > np) {
-	zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
-	setmsg_("Segment in DSK file # with DAS base addresses INT = #, DP ="
-		" #, CHR = # contains # plates, so PLID must be in the range "
-		"1:#; actual value was #.", (ftnlen)143);
-	errfnm_("#", &unit, (ftnlen)1);
-	errint_("#", &dladsc[2], (ftnlen)1);
-	errint_("#", &dladsc[4], (ftnlen)1);
-	errint_("#", &dladsc[6], (ftnlen)1);
-	errint_("#", &np, (ftnlen)1);
-	errint_("#", &np, (ftnlen)1);
-	errint_("#", plid, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKN02", (ftnlen)6);
+	zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &unit, (
+		ftnlen)3);
+	setmsg_(__global_state, "Segment in DSK file # with DAS base address"
+		"es INT = #, DP = #, CHR = # contains # plates, so PLID must "
+		"be in the range 1:#; actual value was #.", (ftnlen)143);
+	errfnm_(__global_state, "#", &unit, (ftnlen)1);
+	errint_(__global_state, "#", &dladsc[2], (ftnlen)1);
+	errint_(__global_state, "#", &dladsc[4], (ftnlen)1);
+	errint_(__global_state, "#", &dladsc[6], (ftnlen)1);
+	errint_(__global_state, "#", &np, (ftnlen)1);
+	errint_(__global_state, "#", &np, (ftnlen)1);
+	errint_(__global_state, "#", plid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKN02", (ftnlen)6);
 	return 0;
     }
 
 /*     Look up the plate and its vertices. */
 
     start = (*plid - 1) * 3 + 1;
-    dski02_(handle, dladsc, &__state->c__9, &start, &__state->c__3, &n, plate)
-	    ;
+    dski02_(__global_state, handle, dladsc, &__state->c__9, &start, &
+	    __state->c__3, &n, plate);
     for (i__ = 1; i__ <= 3; ++i__) {
-	start = (plate[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"plate", i__1, "dskn02_", (ftnlen)406)] - 1) * 3 + 1;
-	dskd02_(handle, dladsc, &__state->c__19, &start, &__state->c__3, &n, &
-		verts[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"verts", i__1, "dskn02_", (ftnlen)408)]);
+	start = (plate[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "plate", i__1, "dskn02_", (ftnlen)406)] 
+		- 1) * 3 + 1;
+	dskd02_(__global_state, handle, dladsc, &__state->c__19, &start, &
+		__state->c__3, &n, &verts[(i__1 = i__ * 3 - 3) < 9 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "verts", i__1, 
+		"dskn02_", (ftnlen)408)]);
     }
-    if (failed_()) {
-	chkout_("DSKN02", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DSKN02", (ftnlen)6);
 	return 0;
     }
 
 /*     Use the right-handed order of the vertices to determine the */
 /*     correct choice of normal direction. */
 
-    vsub_(&verts[3], verts, edge1);
-    vsub_(&verts[6], verts, edge2);
-    ucrss_(edge1, edge2, normal);
-    chkout_("DSKN02", (ftnlen)6);
+    vsub_(__global_state, &verts[3], verts, edge1);
+    vsub_(__global_state, &verts[6], verts, edge2);
+    ucrss_(__global_state, edge1, edge2, normal);
+    chkout_(__global_state, "DSKN02", (ftnlen)6);
     return 0;
 } /* dskn02_ */
 

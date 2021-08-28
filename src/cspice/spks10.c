@@ -8,8 +8,7 @@
 
 
 extern spks10_init_t __spks10_init;
-static spks10_state_t* get_spks10_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spks10_state_t* get_spks10_state(cspice_t* state) {
 	if (!state->spks10)
 		state->spks10 = __cspice_allocate_module(sizeof(
 	spks10_state_t), &__spks10_init, sizeof(__spks10_init));
@@ -18,8 +17,9 @@ static spks10_state_t* get_spks10_state() {
 }
 
 /* $Procedure      SPKS10 ( S/P Kernel, subset, type 10 ) */
-/* Subroutine */ int spks10_(integer *srchan, doublereal *srcdsc, integer *
-	dsthan, doublereal *dstdsc, char *dstsid, ftnlen dstsid_len)
+/* Subroutine */ int spks10_(cspice_t* __global_state, integer *srchan, 
+	doublereal *srcdsc, integer *dsthan, doublereal *dstdsc, char *dstsid,
+	 ftnlen dstsid_len)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -27,47 +27,49 @@ static spks10_state_t* get_spks10_state() {
     /* Local variables */
     char time[40];
     integer i__;
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int etcal_(cspice_t*, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal dtemp[2];
     logical found;
     integer itemp[6];
     doublereal myref;
-    extern /* Subroutine */ int sgwes_(integer *);
+    extern /* Subroutine */ int sgwes_(cspice_t*, integer *);
     integer dummy;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer begidx;
     doublereal begtim;
     doublereal packet[14];
     integer endidx;
     integer nepoch;
     doublereal endtim;
-    extern /* Subroutine */ int sgfcon_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int sgbwfs_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int sgfrvi_(integer *, doublereal *, doublereal *,
-	     doublereal *, integer *, logical *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sgmeta_(integer *, doublereal *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *, integer *);
-    extern /* Subroutine */ int sgfref_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int sgfcon_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *);
+    extern /* Subroutine */ int sgbwfs_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgfrvi_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgmeta_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int sgfpkt_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int sgfref_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *);
     doublereal consts[8];
-    extern /* Subroutine */ int sgwfpk_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int sgwfpk_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spks10_state_t* __state = get_spks10_state();
+    spks10_state_t* __state = get_spks10_state(__global_state);
 /* $ Abstract */
 
 /*     Extract a subset of the data in a type 10 SPK segment into a new */
@@ -593,27 +595,29 @@ static spks10_state_t* get_spks10_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKS10", (ftnlen)6);
+	chkin_(__global_state, "SPKS10", (ftnlen)6);
     }
 
 /*     First, unpack the destination segment descriptor and set some */
 /*     local variables. */
 
-    dafus_(dstdsc, &__state->c__2, &__state->c__6, dtemp, itemp);
+    dafus_(__global_state, dstdsc, &__state->c__2, &__state->c__6, dtemp, 
+	    itemp);
     begtim = dtemp[0];
     endtim = dtemp[1];
 
 /*     Get the constants for the input segment and send them to the */
 /*     output segment by beginning a fixed packet size segment. */
 
-    sgfcon_(srchan, srcdsc, &__state->c__1, &__state->c__8, consts);
-    sgbwfs_(dsthan, dstdsc, dstsid, &__state->c__8, consts, &__state->c__14, &
-	    __state->c__4, dstsid_len);
-    if (failed_()) {
-	chkout_("SPKS10", (ftnlen)6);
+    sgfcon_(__global_state, srchan, srcdsc, &__state->c__1, &__state->c__8, 
+	    consts);
+    sgbwfs_(__global_state, dsthan, dstdsc, dstsid, &__state->c__8, consts, &
+	    __state->c__14, &__state->c__4, dstsid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKS10", (ftnlen)6);
 	return 0;
     }
 
@@ -622,16 +626,16 @@ static spks10_state_t* get_spks10_state() {
 /*     and succeeding packets (if there are any) corresponding to the */
 /*     start and end times of the output segments */
 
-    sgfrvi_(srchan, srcdsc, &begtim, &myref, &begidx, &found);
+    sgfrvi_(__global_state, srchan, srcdsc, &begtim, &myref, &begidx, &found);
     if (! found) {
-	etcal_(&begtim, time, (ftnlen)40);
-	setmsg_("An error has occurred while attempting to subset the a type"
-		" 10 SPK segment. The error occurred while attempting to loca"
-		"te a packet for the epoch #.  There does not appear to be su"
-		"ch a packet. ", (ftnlen)192);
-	errch_("#", time, (ftnlen)1, (ftnlen)40);
-	sigerr_("SPICE(CANNOTGETPACKET)", (ftnlen)22);
-	chkout_("SPKS10", (ftnlen)6);
+	etcal_(__global_state, &begtim, time, (ftnlen)40);
+	setmsg_(__global_state, "An error has occurred while attempting to s"
+		"ubset the a type 10 SPK segment. The error occurred while at"
+		"tempting to locate a packet for the epoch #.  There does not"
+		" appear to be such a packet. ", (ftnlen)192);
+	errch_(__global_state, "#", time, (ftnlen)1, (ftnlen)40);
+	sigerr_(__global_state, "SPICE(CANNOTGETPACKET)", (ftnlen)22);
+	chkout_(__global_state, "SPKS10", (ftnlen)6);
 	return 0;
     }
     if (myref > begtim) {
@@ -639,22 +643,22 @@ static spks10_state_t* get_spks10_state() {
 	i__1 = 1, i__2 = begidx - 1;
 	begidx = max(i__1,i__2);
     }
-    sgfrvi_(srchan, srcdsc, &endtim, &myref, &endidx, &found);
+    sgfrvi_(__global_state, srchan, srcdsc, &endtim, &myref, &endidx, &found);
     if (! found) {
-	etcal_(&endtim, time, (ftnlen)40);
-	setmsg_("An error has occurred while attempting to subset the a type"
-		" 10 SPK segment. The error occurred while attempting to loca"
-		"te a packet for the epoch #.  There does not appear to be su"
-		"ch a packet. ", (ftnlen)192);
-	errch_("#", time, (ftnlen)1, (ftnlen)40);
-	sigerr_("SPICE(CANNOTGETPACKET)", (ftnlen)22);
-	chkout_("SPKS10", (ftnlen)6);
+	etcal_(__global_state, &endtim, time, (ftnlen)40);
+	setmsg_(__global_state, "An error has occurred while attempting to s"
+		"ubset the a type 10 SPK segment. The error occurred while at"
+		"tempting to locate a packet for the epoch #.  There does not"
+		" appear to be such a packet. ", (ftnlen)192);
+	errch_(__global_state, "#", time, (ftnlen)1, (ftnlen)40);
+	sigerr_(__global_state, "SPICE(CANNOTGETPACKET)", (ftnlen)22);
+	chkout_(__global_state, "SPKS10", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the total number of epochs. */
 
-    sgmeta_(srchan, srcdsc, &__state->c__7, &nepoch);
+    sgmeta_(__global_state, srchan, srcdsc, &__state->c__7, &nepoch);
     if (myref < endtim) {
 /* Computing MIN */
 	i__1 = nepoch, i__2 = endidx + 1;
@@ -666,15 +670,16 @@ static spks10_state_t* get_spks10_state() {
 
     i__1 = endidx;
     for (i__ = begidx; i__ <= i__1; ++i__) {
-	sgfpkt_(srchan, srcdsc, &i__, &i__, packet, &dummy);
-	sgfref_(srchan, srcdsc, &i__, &i__, &myref);
-	sgwfpk_(dsthan, &__state->c__1, packet, &__state->c__1, &myref);
+	sgfpkt_(__global_state, srchan, srcdsc, &i__, &i__, packet, &dummy);
+	sgfref_(__global_state, srchan, srcdsc, &i__, &i__, &myref);
+	sgwfpk_(__global_state, dsthan, &__state->c__1, packet, &
+		__state->c__1, &myref);
     }
 
 /*     Now all we need to do is end the segment. */
 
-    sgwes_(dsthan);
-    chkout_("SPKS10", (ftnlen)6);
+    sgwes_(__global_state, dsthan);
+    chkout_(__global_state, "SPKS10", (ftnlen)6);
     return 0;
 } /* spks10_ */
 

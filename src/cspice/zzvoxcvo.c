@@ -8,33 +8,33 @@
 
 
 typedef int zzvoxcvo_state_t;
-static zzvoxcvo_state_t* get_zzvoxcvo_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzvoxcvo_state_t* get_zzvoxcvo_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  ZZVOXCVO ( Voxel to coarse voxel offset ) */
-/* Subroutine */ int zzvoxcvo_(integer *vixyz, integer *nvox, integer *cgrscl,
-	 integer *cgxyz, integer *cgoff, integer *cgof1d)
+/* Subroutine */ int zzvoxcvo_(cspice_t* __global_state, integer *vixyz, 
+	integer *nvox, integer *cgrscl, integer *cgxyz, integer *cgoff, 
+	integer *cgof1d)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzvoxcvo_state_t* __state = get_zzvoxcvo_state();
+    zzvoxcvo_state_t* __state = get_zzvoxcvo_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -176,50 +176,54 @@ static zzvoxcvo_state_t* get_zzvoxcvo_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
     for (i__ = 1; i__ <= 3; ++i__) {
-	if (nvox[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("nvox", 
-		i__1, "zzvoxcvo_", (ftnlen)169)] < 1) {
-	    chkin_("ZZVOXCVO", (ftnlen)8);
-	    setmsg_("Voxel grid dimensions must be positive but were # # #.", 
-		    (ftnlen)54);
-	    errint_("#", nvox, (ftnlen)1);
-	    errint_("#", &nvox[1], (ftnlen)1);
-	    errint_("#", &nvox[2], (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("ZZVOXCVO", (ftnlen)8);
+	if (nvox[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "nvox", i__1, "zzvoxcvo_", (ftnlen)169)] 
+		< 1) {
+	    chkin_(__global_state, "ZZVOXCVO", (ftnlen)8);
+	    setmsg_(__global_state, "Voxel grid dimensions must be positive "
+		    "but were # # #.", (ftnlen)54);
+	    errint_(__global_state, "#", nvox, (ftnlen)1);
+	    errint_(__global_state, "#", &nvox[1], (ftnlen)1);
+	    errint_(__global_state, "#", &nvox[2], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "ZZVOXCVO", (ftnlen)8);
 	    return 0;
 	}
     }
     for (i__ = 1; i__ <= 3; ++i__) {
-	if (vixyz[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vixyz", 
-		i__1, "zzvoxcvo_", (ftnlen)190)] < 1 || vixyz[(i__2 = i__ - 1)
-		 < 3 && 0 <= i__2 ? i__2 : s_rnge("vixyz", i__2, "zzvoxcvo_", 
-		(ftnlen)190)] > nvox[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 
-		: s_rnge("nvox", i__3, "zzvoxcvo_", (ftnlen)190)]) {
-	    chkin_("ZZVOXCVO", (ftnlen)8);
-	    setmsg_("Voxel grid coordinates must be inside grid having dimen"
-		    "sions # x # x # but were # # #.", (ftnlen)86);
-	    errint_("#", nvox, (ftnlen)1);
-	    errint_("#", &nvox[1], (ftnlen)1);
-	    errint_("#", &nvox[2], (ftnlen)1);
-	    errint_("#", vixyz, (ftnlen)1);
-	    errint_("#", &vixyz[1], (ftnlen)1);
-	    errint_("#", &vixyz[2], (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("ZZVOXCVO", (ftnlen)8);
+	if (vixyz[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "vixyz", i__1, "zzvoxcvo_", (ftnlen)190)]
+		 < 1 || vixyz[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "vixyz", i__2, "zzvoxcvo_", (
+		ftnlen)190)] > nvox[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 :
+		 s_rnge(&__global_state->f2c, "nvox", i__3, "zzvoxcvo_", (
+		ftnlen)190)]) {
+	    chkin_(__global_state, "ZZVOXCVO", (ftnlen)8);
+	    setmsg_(__global_state, "Voxel grid coordinates must be inside g"
+		    "rid having dimensions # x # x # but were # # #.", (ftnlen)
+		    86);
+	    errint_(__global_state, "#", nvox, (ftnlen)1);
+	    errint_(__global_state, "#", &nvox[1], (ftnlen)1);
+	    errint_(__global_state, "#", &nvox[2], (ftnlen)1);
+	    errint_(__global_state, "#", vixyz, (ftnlen)1);
+	    errint_(__global_state, "#", &vixyz[1], (ftnlen)1);
+	    errint_(__global_state, "#", &vixyz[2], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "ZZVOXCVO", (ftnlen)8);
 	    return 0;
 	}
     }
     if (*cgrscl < 1) {
-	chkin_("ZZVOXCVO", (ftnlen)8);
-	setmsg_("Coarse voxel grid scale must be positive but was #.", (
-		ftnlen)51);
-	errint_("#", nvox, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZVOXCVO", (ftnlen)8);
+	chkin_(__global_state, "ZZVOXCVO", (ftnlen)8);
+	setmsg_(__global_state, "Coarse voxel grid scale must be positive bu"
+		"t was #.", (ftnlen)51);
+	errint_(__global_state, "#", nvox, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZVOXCVO", (ftnlen)8);
 	return 0;
     }
     for (i__ = 1; i__ <= 3; ++i__) {
@@ -227,19 +231,22 @@ static zzvoxcvo_state_t* get_zzvoxcvo_state() {
 /*        Set the Ith coarse grid coordinate. Recall these coordinates */
 /*        are 1-based. */
 
-	cgxyz[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("cgxyz", i__1,
-		 "zzvoxcvo_", (ftnlen)232)] = (vixyz[(i__2 = i__ - 1) < 3 && 
-		0 <= i__2 ? i__2 : s_rnge("vixyz", i__2, "zzvoxcvo_", (ftnlen)
-		232)] - 1) / *cgrscl + 1;
+	cgxyz[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "cgxyz", i__1, "zzvoxcvo_", (ftnlen)232)]
+		 = (vixyz[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "vixyz", i__2, "zzvoxcvo_", (ftnlen)232)]
+		 - 1) / *cgrscl + 1;
 
 /*        Set the Ith coarse grid coordinate offset. These offsets */
 /*        are 1-based as well. */
 
-	cgoff[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("cgoff", i__1,
-		 "zzvoxcvo_", (ftnlen)238)] = vixyz[(i__2 = i__ - 1) < 3 && 0 
-		<= i__2 ? i__2 : s_rnge("vixyz", i__2, "zzvoxcvo_", (ftnlen)
-		238)] - *cgrscl * (cgxyz[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		i__3 : s_rnge("cgxyz", i__3, "zzvoxcvo_", (ftnlen)238)] - 1);
+	cgoff[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "cgoff", i__1, "zzvoxcvo_", (ftnlen)238)]
+		 = vixyz[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "vixyz", i__2, "zzvoxcvo_", (ftnlen)238)]
+		 - *cgrscl * (cgxyz[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 :
+		 s_rnge(&__global_state->f2c, "cgxyz", i__3, "zzvoxcvo_", (
+		ftnlen)238)] - 1);
     }
 
 /*     Convert the coarse grid-relative offset to a relative */

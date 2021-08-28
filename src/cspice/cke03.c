@@ -8,8 +8,7 @@
 
 
 extern cke03_init_t __cke03_init;
-static cke03_state_t* get_cke03_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cke03_state_t* get_cke03_state(cspice_t* state) {
 	if (!state->cke03)
 		state->cke03 = __cspice_allocate_module(sizeof(cke03_state_t),
 	 &__cke03_init, sizeof(__cke03_init));
@@ -18,8 +17,9 @@ static cke03_state_t* get_cke03_state() {
 }
 
 /* $Procedure CKE03  ( C-kernel, evaluate pointing record, data type 3 ) */
-/* Subroutine */ int cke03_(logical *needav, doublereal *record, doublereal *
-	cmat, doublereal *av, doublereal *clkout)
+/* Subroutine */ int cke03_(cspice_t* __global_state, logical *needav, 
+	doublereal *record, doublereal *cmat, doublereal *av, doublereal *
+	clkout)
 {
     /* System generated locals */
     doublereal d__1;
@@ -27,39 +27,40 @@ static cke03_state_t* get_cke03_state() {
     /* Local variables */
     doublereal frac;
     doublereal axis[3];
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int mtxm_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int mxmt_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int mxmt_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal cmat1[9]	/* was [3][3] */;
     doublereal cmat2[9]	/* was [3][3] */;
     doublereal t;
     doublereal angle;
     doublereal delta[9]	/* was [3][3] */;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal q1[4];
     doublereal q2[4];
     doublereal t1;
     doublereal t2;
-    extern logical failed_(void);
-    extern /* Subroutine */ int raxisa_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int axisar_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int raxisa_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int axisar_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal av1[3];
     doublereal av2[3];
-    extern logical return_(void);
-    extern /* Subroutine */ int q2m_(doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int q2m_(cspice_t*, doublereal *, doublereal *);
     doublereal rot[9]	/* was [3][3] */;
 
 
     /* Module state */
-    cke03_state_t* __state = get_cke03_state();
+    cke03_state_t* __state = get_cke03_state(__global_state);
 /* $ Abstract */
 
 /*   Evaluate a pointing record returned by CKR03 from a CK type 3 */
@@ -472,10 +473,10 @@ static cke03_state_t* get_cke03_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKE03", (ftnlen)5);
+	chkin_(__global_state, "CKE03", (ftnlen)5);
     }
 
 /*     Unpack the record, for easier reading. */
@@ -483,22 +484,22 @@ static cke03_state_t* get_cke03_state() {
     t = record[16];
     t1 = record[0];
     t2 = record[8];
-    moved_(&record[1], &__state->c__4, q1);
-    moved_(&record[5], &__state->c__3, av1);
-    moved_(&record[9], &__state->c__4, q2);
-    moved_(&record[13], &__state->c__3, av2);
+    moved_(__global_state, &record[1], &__state->c__4, q1);
+    moved_(__global_state, &record[5], &__state->c__3, av1);
+    moved_(__global_state, &record[9], &__state->c__4, q2);
+    moved_(__global_state, &record[13], &__state->c__3, av2);
 
 /*     If T1 and T2 are the same then no interpolation or extrapolation */
 /*     is performed.  Simply convert the quaternion to a C-matrix and */
 /*     return. */
 
     if (t1 == t2) {
-	q2m_(q1, cmat);
+	q2m_(__global_state, q1, cmat);
 	*clkout = t1;
 	if (*needav) {
-	    vequ_(av1, av);
+	    vequ_(__global_state, av1, av);
 	}
-	chkout_("CKE03", (ftnlen)5);
+	chkout_(__global_state, "CKE03", (ftnlen)5);
 	return 0;
     }
 
@@ -513,8 +514,8 @@ static cke03_state_t* get_cke03_state() {
 
 /*     Convert the left and right quaternions to C-matrices. */
 
-    q2m_(q1, cmat1);
-    q2m_(q2, cmat2);
+    q2m_(__global_state, q1, cmat1);
+    q2m_(__global_state, q2, cmat2);
 
 /*     Find the matrix that rotates the spacecraft instrument frame from */
 /*     the orientation specified by CMAT1 to that specified by CMAT2. */
@@ -526,10 +527,10 @@ static cke03_state_t* get_cke03_state() {
 /*                          T */
 /*        ROT     =    CMAT2  *  CMAT1 */
 
-    mtxm_(cmat2, cmat1, rot);
-    raxisa_(rot, axis, &angle);
-    if (failed_()) {
-	chkout_("CKE03", (ftnlen)5);
+    mtxm_(__global_state, cmat2, cmat1, rot);
+    raxisa_(__global_state, rot, axis, &angle);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKE03", (ftnlen)5);
 	return 0;
     }
 
@@ -537,7 +538,7 @@ static cke03_state_t* get_cke03_state() {
 /*     by the angle ANGLE * FRAC. */
 
     d__1 = angle * frac;
-    axisar_(axis, &d__1, delta);
+    axisar_(__global_state, axis, &d__1, delta);
 
 /*     The interpolated pointing at the request time is given by CMAT */
 /*     where: */
@@ -549,7 +550,7 @@ static cke03_state_t* get_cke03_state() {
 /*                                   T */
 /*          CMAT   =  CMAT1  *  DELTA */
 
-    mxmt_(cmat1, delta, cmat);
+    mxmt_(__global_state, cmat1, delta, cmat);
 
 /*     Set CLKOUT equal to the time that pointing is being returned. */
 
@@ -560,9 +561,9 @@ static cke03_state_t* get_cke03_state() {
 
     if (*needav) {
 	d__1 = 1. - frac;
-	vlcom_(&d__1, av1, &frac, av2, av);
+	vlcom_(__global_state, &d__1, av1, &frac, av2, av);
     }
-    chkout_("CKE03", (ftnlen)5);
+    chkout_(__global_state, "CKE03", (ftnlen)5);
     return 0;
 } /* cke03_ */
 

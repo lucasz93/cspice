@@ -8,37 +8,38 @@
 
 
 typedef int zzmkpc_state_t;
-static zzmkpc_state_t* get_zzmkpc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzmkpc_state_t* get_zzmkpc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZMKPC ( Make a time format picture mark ) */
-/* Subroutine */ int zzmkpc_(char *pictur, integer *b, integer *e, char *mark,
-	 char *pattrn, ftnlen pictur_len, ftnlen mark_len, ftnlen pattrn_len)
+/* Subroutine */ int zzmkpc_(cspice_t* __global_state, char *pictur, integer *
+	b, integer *e, char *mark, char *pattrn, ftnlen pictur_len, ftnlen 
+	mark_len, ftnlen pattrn_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen), i_indx(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), i_indx(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer lpat;
     integer last;
     integer lmrk;
-    extern /* Subroutine */ int zzrepsub_(char *, integer *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzrepsub_(cspice_t*, char *, integer *, 
+	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);
     integer point;
     char places[14];
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     char mymark[26];
     integer use;
 
 
     /* Module state */
-    zzmkpc_state_t* __state = get_zzmkpc_state();
+    zzmkpc_state_t* __state = get_zzmkpc_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -156,20 +157,21 @@ static zzmkpc_state_t* get_zzmkpc_state() {
 
 
 /* -& */
-    s_copy(places, "##############", (ftnlen)14, (ftnlen)14);
+    s_copy(&__global_state->f2c, places, "##############", (ftnlen)14, (
+	    ftnlen)14);
 
 /*     Construct the replacement marker.  First the unmodified */
 /*     portion of the marker.  (We use LAST as the pointer to the */
 /*     last valid character of the marker). */
 
-    lmrk = lastnb_(mark, mark_len);
-    lpat = i_len(pattrn, pattrn_len);
-    s_copy(mymark, mark, (ftnlen)26, mark_len);
+    lmrk = lastnb_(__global_state, mark, mark_len);
+    lpat = i_len(&__global_state->f2c, pattrn, pattrn_len);
+    s_copy(&__global_state->f2c, mymark, mark, (ftnlen)26, mark_len);
     last = lmrk;
 
 /*     Is there a decimal point in the pattern? */
 
-    point = i_indx(pattrn, ".", pattrn_len, (ftnlen)1);
+    point = i_indx(&__global_state->f2c, pattrn, ".", pattrn_len, (ftnlen)1);
     if (point > 0) {
 
 /*        We've got a decimal point.  We have to at least put this */
@@ -187,7 +189,8 @@ static zzmkpc_state_t* get_zzmkpc_state() {
 	    i__1 = 14, i__2 = lpat - point;
 	    use = min(i__1,i__2);
 	    i__1 = last;
-	    s_copy(mymark + i__1, places, 26 - i__1, use);
+	    s_copy(&__global_state->f2c, mymark + i__1, places, 26 - i__1, 
+		    use);
 	    last += use;
 	}
     }
@@ -195,7 +198,8 @@ static zzmkpc_state_t* get_zzmkpc_state() {
 /*     We now let REPSUB do the work of replacing the substring */
 /*     PICTUR(B:E) with the marker we've constructed. */
 
-    zzrepsub_(pictur, b, e, mymark, pictur, pictur_len, last, pictur_len);
+    zzrepsub_(__global_state, pictur, b, e, mymark, pictur, pictur_len, last, 
+	    pictur_len);
     return 0;
 } /* zzmkpc_ */
 

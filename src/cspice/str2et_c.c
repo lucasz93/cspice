@@ -619,7 +619,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "str2et_c" );
+   chkin_c ( naif_state, "str2et_c" );
 
 
    /*

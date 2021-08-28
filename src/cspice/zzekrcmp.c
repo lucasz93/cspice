@@ -8,8 +8,7 @@
 
 
 extern zzekrcmp_init_t __zzekrcmp_init;
-static zzekrcmp_state_t* get_zzekrcmp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrcmp_state_t* get_zzekrcmp_state(cspice_t* state) {
 	if (!state->zzekrcmp)
 		state->zzekrcmp = __cspice_allocate_module(sizeof(
 	zzekrcmp_state_t), &__zzekrcmp_init, sizeof(__zzekrcmp_init));
@@ -18,9 +17,10 @@ static zzekrcmp_state_t* get_zzekrcmp_state() {
 }
 
 /* $Procedure ZZEKRCMP ( EK, row comparison ) */
-logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
-	 integer *cdlst1, integer *row1, integer *elts1, integer *han2, 
-	integer *sgdsc2, integer *cdlst2, integer *row2, integer *elts2)
+logical zzekrcmp_(cspice_t* __global_state, integer *op, integer *ncols, 
+	integer *han1, integer *sgdsc1, integer *cdlst1, integer *row1, 
+	integer *elts1, integer *han2, integer *sgdsc2, integer *cdlst2, 
+	integer *row2, integer *elts2)
 {
     /* System generated locals */
     logical ret_val;
@@ -29,22 +29,23 @@ logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
     integer hans[2];
     integer elts[2];
     integer rows[2];
-    extern integer zzekecmp_(integer *, integer *, integer *, integer *, 
+    extern integer zzekecmp_(cspice_t*, integer *, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
     integer cldscs[22]	/* was [11][2] */;
     integer sgdscs[48]	/* was [24][2] */;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer col;
     integer rel;
 
 
     /* Module state */
-    zzekrcmp_state_t* __state = get_zzekrcmp_state();
+    zzekrcmp_state_t* __state = get_zzekrcmp_state(__global_state);
 /* $ Abstract */
 
 /*     Compare two EK rows, using as the order relation dictionary */
@@ -760,8 +761,8 @@ logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
 
     hans[0] = *han1;
     hans[1] = *han2;
-    movei_(sgdsc1, &__state->c__24, sgdscs);
-    movei_(sgdsc2, &__state->c__24, &sgdscs[24]);
+    movei_(__global_state, sgdsc1, &__state->c__24, sgdscs);
+    movei_(__global_state, sgdsc2, &__state->c__24, &sgdscs[24]);
     rows[0] = *row1;
     rows[1] = *row2;
     rel = 1;
@@ -771,11 +772,13 @@ logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
 /*        Compare the entries in the two rows in the columns indicated */
 /*        by the Nth column descriptor pair. */
 
-	movei_(&cdlst1[col * 11 - 11], &__state->c__11, cldscs);
-	movei_(&cdlst2[col * 11 - 11], &__state->c__11, &cldscs[11]);
+	movei_(__global_state, &cdlst1[col * 11 - 11], &__state->c__11, 
+		cldscs);
+	movei_(__global_state, &cdlst2[col * 11 - 11], &__state->c__11, &
+		cldscs[11]);
 	elts[0] = elts1[col - 1];
 	elts[1] = elts2[col - 1];
-	rel = zzekecmp_(hans, sgdscs, cldscs, rows, elts);
+	rel = zzekecmp_(__global_state, hans, sgdscs, cldscs, rows, elts);
 
 /*        We've completed the comparison for the column numbered COL. */
 
@@ -801,11 +804,12 @@ logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
 /*        Sorry, we couldn't resist. */
 
 	ret_val = FALSE_;
-	chkin_("ZZEKRCMP", (ftnlen)8);
-	setmsg_("The relational operator # was not recognized.", (ftnlen)45);
-	errint_("#", op, (ftnlen)1);
-	sigerr_("SPICE(UNNATURALRELATION)", (ftnlen)24);
-	chkout_("ZZEKRCMP", (ftnlen)8);
+	chkin_(__global_state, "ZZEKRCMP", (ftnlen)8);
+	setmsg_(__global_state, "The relational operator # was not recognize"
+		"d.", (ftnlen)45);
+	errint_(__global_state, "#", op, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNNATURALRELATION)", (ftnlen)24);
+	chkout_(__global_state, "ZZEKRCMP", (ftnlen)8);
 	return ret_val;
     }
     return ret_val;

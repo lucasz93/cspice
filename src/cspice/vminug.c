@@ -8,26 +8,26 @@
 
 
 typedef int vminug_state_t;
-static vminug_state_t* get_vminug_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vminug_state_t* get_vminug_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VMINUG ( Minus V, "-V", general dimension ) */
-/* Subroutine */ int vminug_(doublereal *vin, integer *ndim, doublereal *vout)
+/* Subroutine */ int vminug_(cspice_t* __global_state, doublereal *vin, 
+	integer *ndim, doublereal *vout)
 {
     /* System generated locals */
     integer vin_dim1, vout_dim1, i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    vminug_state_t* __state = get_vminug_state();
+    vminug_state_t* __state = get_vminug_state(__global_state);
 /* $ Abstract */
 
 /*     Negate a double precision vector of arbitrary dimension. */
@@ -159,10 +159,11 @@ static vminug_state_t* get_vminug_state() {
     /* Function Body */
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		"vout", i__2, "vminug_", (ftnlen)138)] = -vin[(i__3 = i__ - 1)
-		 < 1 * vin_dim1 && 0 <= i__3 ? i__3 : s_rnge("vin", i__3, 
-		"vminug_", (ftnlen)138)];
+	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "vout", i__2, "vminug_", (ftnlen)138)] = 
+		-vin[(i__3 = i__ - 1) < 1 * vin_dim1 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "vin", i__3, "vminug_", (ftnlen)
+		138)];
     }
     return 0;
 } /* vminug_ */

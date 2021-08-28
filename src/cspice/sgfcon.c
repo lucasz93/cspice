@@ -8,8 +8,7 @@
 
 
 extern sgfcon_init_t __sgfcon_init;
-static sgfcon_state_t* get_sgfcon_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sgfcon_state_t* get_sgfcon_state(cspice_t* state) {
 	if (!state->sgfcon)
 		state->sgfcon = __cspice_allocate_module(sizeof(
 	sgfcon_state_t), &__sgfcon_init, sizeof(__sgfcon_init));
@@ -18,28 +17,28 @@ static sgfcon_state_t* get_sgfcon_state() {
 }
 
 /* $Procedure      SGFCON ( Generic Segments: Fetch constants ) */
-/* Subroutine */ int sgfcon_(integer *handle, doublereal *descr, integer *
-	first, integer *last, doublereal *values)
+/* Subroutine */ int sgfcon_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, integer *first, integer *last, doublereal *values)
 {
     integer base;
     integer b;
     integer e;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int sgmeta_(integer *, doublereal *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sgmeta_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer myncon;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sgfcon_state_t* __state = get_sgfcon_state();
+    sgfcon_state_t* __state = get_sgfcon_state(__global_state);
 /* $ Abstract */
 
 /*     Given the descriptor for a generic segment in a DAF file */
@@ -590,41 +589,42 @@ static sgfcon_state_t* get_sgfcon_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SGFCON", (ftnlen)6);
+    chkin_(__global_state, "SGFCON", (ftnlen)6);
 
 /*     Get the value for the base of the constants and the number of */
 /*     constants in the generic segment. */
 
-    sgmeta_(handle, descr, &__state->c__1, &base);
-    sgmeta_(handle, descr, &__state->c__2, &myncon);
-    if (failed_()) {
-	chkout_("SGFCON", (ftnlen)6);
+    sgmeta_(__global_state, handle, descr, &__state->c__1, &base);
+    sgmeta_(__global_state, handle, descr, &__state->c__2, &myncon);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGFCON", (ftnlen)6);
 	return 0;
     }
 
 /*     Perform checks on the inputs for reasonableness. */
 
     if (*first < 1 || *last > myncon) {
-	setmsg_("The range of constants requested extends beyond the availab"
-		"le constant data.  Constants are available for indices 1 to "
-		"#.  You have requested data from # to #. ", (ftnlen)160);
-	errint_("#", &myncon, (ftnlen)1);
-	errint_("#", first, (ftnlen)1);
-	errint_("#", last, (ftnlen)1);
-	sigerr_("SPICE(REQUESTOUTOFBOUNDS)", (ftnlen)25);
-	chkout_("SGFCON", (ftnlen)6);
+	setmsg_(__global_state, "The range of constants requested extends be"
+		"yond the available constant data.  Constants are available f"
+		"or indices 1 to #.  You have requested data from # to #. ", (
+		ftnlen)160);
+	errint_(__global_state, "#", &myncon, (ftnlen)1);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(REQUESTOUTOFBOUNDS)", (ftnlen)25);
+	chkout_(__global_state, "SGFCON", (ftnlen)6);
 	return 0;
     }
     if (*last < *first) {
-	setmsg_("The last constant item requested, #, is before the first co"
-		"nstant item requested, #.", (ftnlen)84);
-	errint_("#", last, (ftnlen)1);
-	errint_("#", first, (ftnlen)1);
-	sigerr_("SPICE(REQUESTOUTOFORDER)", (ftnlen)24);
-	chkout_("SGFCON", (ftnlen)6);
+	setmsg_(__global_state, "The last constant item requested, #, is bef"
+		"ore the first constant item requested, #.", (ftnlen)84);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(REQUESTOUTOFORDER)", (ftnlen)24);
+	chkout_(__global_state, "SGFCON", (ftnlen)6);
 	return 0;
     }
 
@@ -633,8 +633,8 @@ static sgfcon_state_t* get_sgfcon_state() {
 
     b = base + *first;
     e = base + *last;
-    dafgda_(handle, &b, &e, values);
-    chkout_("SGFCON", (ftnlen)6);
+    dafgda_(__global_state, handle, &b, &e, values);
+    chkout_(__global_state, "SGFCON", (ftnlen)6);
     return 0;
 } /* sgfcon_ */
 

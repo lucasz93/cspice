@@ -8,8 +8,7 @@
 
 
 extern dasadc_init_t __dasadc_init;
-static dasadc_state_t* get_dasadc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasadc_state_t* get_dasadc_state(cspice_t* state) {
 	if (!state->dasadc)
 		state->dasadc = __cspice_allocate_module(sizeof(
 	dasadc_state_t), &__dasadc_init, sizeof(__dasadc_init));
@@ -18,49 +17,52 @@ static dasadc_state_t* get_dasadc_state() {
 }
 
 /* $Procedure      DASADC ( DAS, add data, character ) */
-/* Subroutine */ int dasadc_(integer *handle, integer *n, integer *bpos, 
-	integer *epos, char *data, ftnlen data_len)
+/* Subroutine */ int dasadc_(cspice_t* __global_state, integer *handle, 
+	integer *n, integer *bpos, integer *epos, char *data, ftnlen data_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer free;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
     integer lastc;
     integer recno;
     integer ncomr;
     integer nmove;
     integer rcpos;
-    extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dasa2l_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern logical failed_(cspice_t*);
     integer clbase;
-    extern /* Subroutine */ int dascud_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dascud_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dashfs_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *);
     char record[1024];
     integer lastla[3];
-    extern /* Subroutine */ int dasurc_(integer *, integer *, integer *, 
-	    integer *, char *, ftnlen);
-    extern /* Subroutine */ int daswrc_(integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasurc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int daswrc_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
     integer lastrc[3];
     integer clsize;
     integer nmoved;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer numchr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer lastwd[3];
     integer nresvc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer wordno;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer nresvr;
     integer nwritn;
     integer chr;
@@ -68,7 +70,7 @@ static dasadc_state_t* get_dasadc_state() {
 
 
     /* Module state */
-    dasadc_state_t* __state = get_dasadc_state();
+    dasadc_state_t* __state = get_dasadc_state(__global_state);
 /* $ Abstract */
 
 /*     Add character data to a DAS file. */
@@ -393,39 +395,41 @@ static dasadc_state_t* get_dasadc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASADC", (ftnlen)6);
+	chkin_(__global_state, "DASADC", (ftnlen)6);
     }
 
 /*     Make sure BPOS and EPOS are OK; stop here if not. */
 
-    if (*bpos < 1 || *epos < 1 || *bpos > i_len(data, data_len) || *epos > 
-	    i_len(data, data_len)) {
-	setmsg_("Substring bounds must be in range [1,#]. Actual range [BPOS"
-		",EPOS] was [#,#].", (ftnlen)76);
-	i__1 = i_len(data, data_len);
-	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", bpos, (ftnlen)1);
-	errint_("#", epos, (ftnlen)1);
-	sigerr_("SPICE(BADSUBSTRINGBOUNDS)", (ftnlen)25);
-	chkout_("DASADC", (ftnlen)6);
+    if (*bpos < 1 || *epos < 1 || *bpos > i_len(&__global_state->f2c, data, 
+	    data_len) || *epos > i_len(&__global_state->f2c, data, data_len)) 
+	    {
+	setmsg_(__global_state, "Substring bounds must be in range [1,#]. Ac"
+		"tual range [BPOS,EPOS] was [#,#].", (ftnlen)76);
+	i__1 = i_len(&__global_state->f2c, data, data_len);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	errint_(__global_state, "#", bpos, (ftnlen)1);
+	errint_(__global_state, "#", epos, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSUBSTRINGBOUNDS)", (ftnlen)25);
+	chkout_(__global_state, "DASADC", (ftnlen)6);
 	return 0;
     } else if (*epos < *bpos) {
-	setmsg_("Substring upper bound must not be less than lower bound.  A"
-		"ctual range [BPOS,EPOS] was [#,#].", (ftnlen)93);
-	errint_("#", bpos, (ftnlen)1);
-	errint_("#", epos, (ftnlen)1);
-	sigerr_("SPICE(BADSUBSTRINGBOUNDS)", (ftnlen)25);
-	chkout_("DASADC", (ftnlen)6);
+	setmsg_(__global_state, "Substring upper bound must not be less than"
+		" lower bound.  Actual range [BPOS,EPOS] was [#,#].", (ftnlen)
+		93);
+	errint_(__global_state, "#", bpos, (ftnlen)1);
+	errint_(__global_state, "#", epos, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSUBSTRINGBOUNDS)", (ftnlen)25);
+	chkout_(__global_state, "DASADC", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the file summary for this DAS. */
 
-    dashfs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 
-	    lastwd);
+    dashfs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, 
+	    lastla, lastrc, lastwd);
     lastc = lastla[0];
 
 /*     We will keep track of the location that we wish to write to */
@@ -443,8 +447,8 @@ static dasadc_state_t* get_dasadc_state() {
 /*     character data. */
 
     if (lastc >= 1) {
-	dasa2l_(handle, &__state->c__1, &lastc, &clbase, &clsize, &recno, &
-		wordno);
+	dasa2l_(__global_state, handle, &__state->c__1, &lastc, &clbase, &
+		clsize, &recno, &wordno);
     } else {
 	recno = free;
 	wordno = 0;
@@ -463,7 +467,7 @@ static dasadc_state_t* get_dasadc_state() {
     nwritn = 0;
     elt = 1;
     chr = *bpos;
-    while(nwritn < *n && ! failed_()) {
+    while(nwritn < *n && ! failed_(__global_state)) {
 
 /*        Write as much data as we can (or need to) into the current */
 /*        record.  We assume that RECNO, WORDNO, and NWRITN have */
@@ -502,8 +506,9 @@ static dasadc_state_t* get_dasadc_state() {
 		i__1 = numchr - nmoved, i__2 = *epos - chr + 1;
 		nmove = min(i__1,i__2);
 		i__1 = rcpos;
-		s_copy(record + i__1, data + ((elt - 1) * data_len + (chr - 1)
-			), rcpos + nmove - i__1, data_len - (chr - 1));
+		s_copy(&__global_state->f2c, record + i__1, data + ((elt - 1) 
+			* data_len + (chr - 1)), rcpos + nmove - i__1, 
+			data_len - (chr - 1));
 		nmoved += nmove;
 		rcpos += nmove;
 		chr += nmove;
@@ -516,7 +521,7 @@ static dasadc_state_t* get_dasadc_state() {
 /*              The record has not yet been written, so write out the */
 /*              entire record. */
 
-		daswrc_(handle, &recno, record, (ftnlen)1024);
+		daswrc_(__global_state, handle, &recno, record, (ftnlen)1024);
 	    } else {
 
 /*              Update elements WORDNO+1 through WORDNO+NUMCHR. */
@@ -524,8 +529,8 @@ static dasadc_state_t* get_dasadc_state() {
 		i__1 = wordno;
 		i__2 = wordno + 1;
 		i__3 = wordno + numchr;
-		dasurc_(handle, &recno, &i__2, &i__3, record + i__1, wordno + 
-			numchr - i__1);
+		dasurc_(__global_state, handle, &recno, &i__2, &i__3, record 
+			+ i__1, wordno + numchr - i__1);
 	    }
 	    nwritn += numchr;
 	    wordno += numchr;
@@ -555,8 +560,8 @@ static dasadc_state_t* get_dasadc_state() {
 /*     character words.  DASCUD will also update the file summary */
 /*     accordingly. */
 
-    dascud_(handle, &__state->c__1, n);
-    chkout_("DASADC", (ftnlen)6);
+    dascud_(__global_state, handle, &__state->c__1, n);
+    chkout_(__global_state, "DASADC", (ftnlen)6);
     return 0;
 } /* dasadc_ */
 

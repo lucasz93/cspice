@@ -8,8 +8,7 @@
 
 
 extern zzgfrpwk_init_t __zzgfrpwk_init;
-static zzgfrpwk_state_t* get_zzgfrpwk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfrpwk_state_t* get_zzgfrpwk_state(cspice_t* state) {
 	if (!state->zzgfrpwk)
 		state->zzgfrpwk = __cspice_allocate_module(sizeof(
 	zzgfrpwk_state_t), &__zzgfrpwk_init, sizeof(__zzgfrpwk_init));
@@ -18,9 +17,9 @@ static zzgfrpwk_state_t* get_zzgfrpwk_state() {
 }
 
 /* $Procedure    ZZGFRPWK ( Geometry finder report work done on a task ) */
-/* Subroutine */ int zzgfrpwk_0_(int n__, integer *unit, doublereal *total, 
-	doublereal *freq, integer *tcheck, char *begin, char *end, doublereal 
-	*incr, ftnlen begin_len, ftnlen end_len)
+/* Subroutine */ int zzgfrpwk_0_(cspice_t* __global_state, int n__, integer *
+	unit, doublereal *total, doublereal *freq, integer *tcheck, char *
+	begin, char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len)
 {
     /* Initialized data */
 
@@ -31,32 +30,34 @@ static zzgfrpwk_state_t* get_zzgfrpwk_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
 
     /* Local variables */
     doublereal tvec[6];
-    extern /* Subroutine */ int zzgfdsps_(integer *, char *, char *, integer *
+    extern /* Subroutine */ int zzgfdsps_(cspice_t*, integer *, char *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzcputim_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dpfmt_(cspice_t*, doublereal *, char *, char *
 	    , ftnlen, ftnlen);
-    extern /* Subroutine */ int zzcputim_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dpfmt_(doublereal *, char *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int stdio_(char *, integer *, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int stdio_(cspice_t*, char *, integer *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal fractn;
     char messge[78];
     doublereal cursec;
     char prcent[10];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int writln_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int writln_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzgfrpwk_state_t* __state = get_zzgfrpwk_state();
+    zzgfrpwk_state_t* __state = get_zzgfrpwk_state(__global_state);
 /* $ Abstract */
 
 /*     The entry points under this routine allows one to easily monitor */
@@ -404,9 +405,9 @@ static zzgfrpwk_state_t* get_zzgfrpwk_state() {
 	case 5: goto L_zzgfwkmo;
 	}
 
-    chkin_("ZZGFRPWK", (ftnlen)8);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZGFRPWK", (ftnlen)8);
+    chkin_(__global_state, "ZZGFRPWK", (ftnlen)8);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZGFRPWK", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFTSWK ( Geometry finder total sum of work to be done. ) */
 
@@ -577,16 +578,16 @@ L_zzgftswk:
 /*     GF low-level initialize progress report */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFTSWK", (ftnlen)8);
+    chkin_(__global_state, "ZZGFTSWK", (ftnlen)8);
 
 /*     On the first pass, obtain the logical unit for */
 /*     standard output. */
 
     if (__state->first) {
-	stdio_("STDOUT", &__state->stdout, (ftnlen)6);
+	stdio_(__global_state, "STDOUT", &__state->stdout, (ftnlen)6);
 
 /*        The output unit is STDOUT unless the caller */
 /*        sets it to something else. */
@@ -602,13 +603,14 @@ L_zzgftswk:
     d__1 = 3600., d__2 = max(0.,*freq);
     __state->step = min(d__1,d__2);
     __state->check = max(1,*tcheck);
-    s_copy(__state->start, begin, (ftnlen)55, begin_len);
-    s_copy(__state->finish, end, (ftnlen)13, end_len);
+    s_copy(&__global_state->f2c, __state->start, begin, (ftnlen)55, begin_len)
+	    ;
+    s_copy(&__global_state->f2c, __state->finish, end, (ftnlen)13, end_len);
     __state->done = 0.;
 
 /*     Set the timer. */
 
-    zzcputim_(tvec);
+    zzcputim_(__global_state, tvec);
     __state->lstsec = tvec[3] * 3600. + tvec[4] * 60. + tvec[5];
 
 /*     Set the increment counter */
@@ -617,30 +619,31 @@ L_zzgftswk:
 
 /*     Compose the output message. */
 
-    __state->ls = rtrim_(__state->start, (ftnlen)55);
+    __state->ls = rtrim_(__global_state, __state->start, (ftnlen)55);
 /* Writing concatenation */
     i__1[0] = __state->ls, a__1[0] = __state->start;
     i__1[1] = 1, a__1[1] = " ";
     i__1[2] = 7, a__1[2] = "  0.00%";
     i__1[3] = 1, a__1[3] = " ";
     i__1[4] = 13, a__1[4] = __state->finish;
-    s_cat(messge, a__1, i__1, &__state->c__5, (ftnlen)78);
+    s_cat(&__global_state->f2c, messge, a__1, i__1, &__state->c__5, (ftnlen)
+	    78);
 
 /*     Display a blank line, make sure we don't overwrite anything */
 /*     at the bottom of the screen. The display the message. */
 
     if (__state->svunit == __state->stdout) {
-	zzgfdsps_(&__state->c__1, messge, "A", &__state->c__0, (ftnlen)78, (
-		ftnlen)1);
+	zzgfdsps_(__global_state, &__state->c__1, messge, "A", &__state->c__0,
+		 (ftnlen)78, (ftnlen)1);
     } else {
 
 /*        Write the message without special carriage control. */
 
-	writln_(" ", &__state->svunit, (ftnlen)1);
-	writln_(" ", &__state->svunit, (ftnlen)1);
-	writln_(messge, &__state->svunit, (ftnlen)78);
+	writln_(__global_state, " ", &__state->svunit, (ftnlen)1);
+	writln_(__global_state, " ", &__state->svunit, (ftnlen)1);
+	writln_(__global_state, messge, &__state->svunit, (ftnlen)78);
     }
-    chkout_("ZZGFTSWK", (ftnlen)8);
+    chkout_(__global_state, "ZZGFTSWK", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFWKIN ( Geometry finder work finished increment ) */
 
@@ -753,20 +756,20 @@ L_zzgfwkin:
 /*     ZZGF low-level progress report increment */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFWKIN", (ftnlen)8);
+    chkin_(__global_state, "ZZGFWKIN", (ftnlen)8);
     __state->svincr = *incr;
     __state->done += *incr;
     ++__state->calls;
     if (__state->entire == 0.) {
-	chkout_("ZZGFWKIN", (ftnlen)8);
+	chkout_(__global_state, "ZZGFWKIN", (ftnlen)8);
 	return 0;
     }
     if (__state->calls >= __state->check) {
 	__state->calls = 0;
-	zzcputim_(tvec);
+	zzcputim_(__global_state, tvec);
 	cursec = tvec[3] * 3600. + tvec[4] * 60. + tvec[5];
 	if ((d__1 = cursec - __state->lstsec, abs(d__1)) >= __state->step) {
 	    __state->lstsec = cursec;
@@ -774,29 +777,32 @@ L_zzgfwkin:
 /*           Report how much work has been done. */
 
 	    d__1 = __state->done / __state->entire * 100.;
-	    fractn = brcktd_(&d__1, &__state->c_b19, &__state->c_b20);
-	    dpfmt_(&fractn, "xxx.xx", prcent, (ftnlen)6, (ftnlen)10);
+	    fractn = brcktd_(__global_state, &d__1, &__state->c_b19, &
+		    __state->c_b20);
+	    dpfmt_(__global_state, &fractn, "xxx.xx", prcent, (ftnlen)6, (
+		    ftnlen)10);
 	    *(unsigned char *)&prcent[6] = '%';
 /* Writing concatenation */
 	    i__1[0] = __state->ls, a__1[0] = __state->start;
 	    i__1[1] = 1, a__1[1] = " ";
 	    i__1[2] = 7, a__1[2] = prcent;
 	    i__1[3] = 1, a__1[3] = " ";
-	    i__1[4] = rtrim_(__state->finish, (ftnlen)13), a__1[4] = 
-		    __state->finish;
-	    s_cat(messge, a__1, i__1, &__state->c__5, (ftnlen)78);
+	    i__1[4] = rtrim_(__global_state, __state->finish, (ftnlen)13), 
+		    a__1[4] = __state->finish;
+	    s_cat(&__global_state->f2c, messge, a__1, i__1, &__state->c__5, (
+		    ftnlen)78);
 	    if (__state->svunit == __state->stdout) {
-		zzgfdsps_(&__state->c__0, messge, "A", &__state->c__0, (
-			ftnlen)78, (ftnlen)1);
+		zzgfdsps_(__global_state, &__state->c__0, messge, "A", &
+			__state->c__0, (ftnlen)78, (ftnlen)1);
 	    } else {
 
 /*              Write the message without special carriage control. */
 
-		writln_(messge, &__state->svunit, (ftnlen)78);
+		writln_(__global_state, messge, &__state->svunit, (ftnlen)78);
 	    }
 	}
     }
-    chkout_("ZZGFWKIN", (ftnlen)8);
+    chkout_(__global_state, "ZZGFWKIN", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFWKAD ( Geometry finder work reporting adjustment ) */
 
@@ -968,8 +974,9 @@ L_zzgfwkad:
     d__1 = 3600., d__2 = max(0.,*freq);
     __state->step = min(d__1,d__2);
     __state->check = max(1,*tcheck);
-    s_copy(__state->start, begin, (ftnlen)55, begin_len);
-    s_copy(__state->finish, end, (ftnlen)13, end_len);
+    s_copy(&__global_state->f2c, __state->start, begin, (ftnlen)55, begin_len)
+	    ;
+    s_copy(&__global_state->f2c, __state->finish, end, (ftnlen)13, end_len);
     return 0;
 /* $Procedure ZZGFWUN ( Geometry finder set work report output unit ) */
 
@@ -1090,7 +1097,7 @@ L_zzgfwkun:
 /*     standard output. */
 
     if (__state->first) {
-	stdio_("STDOUT", &__state->stdout, (ftnlen)6);
+	stdio_(__global_state, "STDOUT", &__state->stdout, (ftnlen)6);
 	__state->first = FALSE_;
     }
     __state->svunit = *unit;
@@ -1229,49 +1236,52 @@ L_zzgfwkmo:
     *total = __state->entire;
     *freq = __state->step;
     *tcheck = __state->check;
-    s_copy(begin, __state->start, begin_len, (ftnlen)55);
-    s_copy(end, __state->finish, end_len, (ftnlen)13);
+    s_copy(&__global_state->f2c, begin, __state->start, begin_len, (ftnlen)55)
+	    ;
+    s_copy(&__global_state->f2c, end, __state->finish, end_len, (ftnlen)13);
     *incr = __state->svincr;
     return 0;
 } /* zzgfrpwk_ */
 
-/* Subroutine */ int zzgfrpwk_(integer *unit, doublereal *total, doublereal *
-	freq, integer *tcheck, char *begin, char *end, doublereal *incr, 
-	ftnlen begin_len, ftnlen end_len)
+/* Subroutine */ int zzgfrpwk_(cspice_t* __global_state, integer *unit, 
+	doublereal *total, doublereal *freq, integer *tcheck, char *begin, 
+	char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len)
 {
     return zzgfrpwk_0_(0, unit, total, freq, tcheck, begin, end, incr, 
 	    begin_len, end_len);
     }
 
-/* Subroutine */ int zzgftswk_(doublereal *total, doublereal *freq, integer *
-	tcheck, char *begin, char *end, ftnlen begin_len, ftnlen end_len)
+/* Subroutine */ int zzgftswk_(cspice_t* __global_state, doublereal *total, 
+	doublereal *freq, integer *tcheck, char *begin, char *end, ftnlen 
+	begin_len, ftnlen end_len)
 {
     return zzgfrpwk_0_(1, (integer *)0, total, freq, tcheck, begin, end, (
 	    doublereal *)0, begin_len, end_len);
     }
 
-/* Subroutine */ int zzgfwkin_(doublereal *incr)
+/* Subroutine */ int zzgfwkin_(cspice_t* __global_state, doublereal *incr)
 {
     return zzgfrpwk_0_(2, (integer *)0, (doublereal *)0, (doublereal *)0, (
 	    integer *)0, (char *)0, (char *)0, incr, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzgfwkad_(doublereal *freq, integer *tcheck, char *begin,
-	 char *end, ftnlen begin_len, ftnlen end_len)
+/* Subroutine */ int zzgfwkad_(cspice_t* __global_state, doublereal *freq, 
+	integer *tcheck, char *begin, char *end, ftnlen begin_len, ftnlen 
+	end_len)
 {
     return zzgfrpwk_0_(3, (integer *)0, (doublereal *)0, freq, tcheck, begin, 
 	    end, (doublereal *)0, begin_len, end_len);
     }
 
-/* Subroutine */ int zzgfwkun_(integer *unit)
+/* Subroutine */ int zzgfwkun_(cspice_t* __global_state, integer *unit)
 {
     return zzgfrpwk_0_(4, unit, (doublereal *)0, (doublereal *)0, (integer *)
 	    0, (char *)0, (char *)0, (doublereal *)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzgfwkmo_(integer *unit, doublereal *total, doublereal *
-	freq, integer *tcheck, char *begin, char *end, doublereal *incr, 
-	ftnlen begin_len, ftnlen end_len)
+/* Subroutine */ int zzgfwkmo_(cspice_t* __global_state, integer *unit, 
+	doublereal *total, doublereal *freq, integer *tcheck, char *begin, 
+	char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len)
 {
     return zzgfrpwk_0_(5, unit, total, freq, tcheck, begin, end, incr, 
 	    begin_len, end_len);

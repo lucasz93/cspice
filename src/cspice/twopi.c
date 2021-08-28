@@ -8,8 +8,7 @@
 
 
 extern twopi_init_t __twopi_init;
-static twopi_state_t* get_twopi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline twopi_state_t* get_twopi_state(cspice_t* state) {
 	if (!state->twopi)
 		state->twopi = __cspice_allocate_module(sizeof(twopi_state_t),
 	 &__twopi_init, sizeof(__twopi_init));
@@ -18,7 +17,7 @@ static twopi_state_t* get_twopi_state() {
 }
 
 /* $Procedure                     TWOPI ( Twice the value of pi ) */
-doublereal twopi_(void)
+doublereal twopi_(cspice_t* __global_state)
 {
     /* Initialized data */
 
@@ -27,11 +26,11 @@ doublereal twopi_(void)
     doublereal ret_val;
 
     /* Builtin functions */
-    double acos(doublereal);
+    double acos(f2c_state_t*, doublereal);
 
 
     /* Module state */
-    twopi_state_t* __state = get_twopi_state();
+    twopi_state_t* __state = get_twopi_state(__global_state);
 /* $ Abstract */
 
 /*     Return twice the value of pi (the ratio of the circumference of */
@@ -166,7 +165,7 @@ doublereal twopi_(void)
 /*     What is there to say? */
 
     if (__state->value == 0.) {
-	__state->value = acos(-1.) * 2.;
+	__state->value = acos(&__global_state->f2c, -1.) * 2.;
     }
     ret_val = __state->value;
     return ret_val;

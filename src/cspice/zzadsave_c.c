@@ -54,7 +54,8 @@
 
 
 
-   void zzadsave_c ( SpicePassedInFunc    funcID,
+   void zzadsave_c ( void               * naif_state,
+                     SpicePassedInFunc    funcID,
                      void               * funcPtr ) 
 /*
 
@@ -140,7 +141,7 @@
             /.
             Store a pointer to the GF default step function. 
             ./
-            zzadsave_c ( UDSTEP, gfstep_c );
+            zzadsave_c ( naif_state, UDSTEP, gfstep_c );
 
             /.
             Set step size to 5 minutes (units are seconds).
@@ -152,7 +153,7 @@
             step function: 
             ./
             userstepPtr = ( void (*)(SpiceDouble, 
-                                     SpiceDouble*) ) zzadget_c( UDSTEP );
+                                     SpiceDouble*) ) zzadget_c ( naif_state, ( UDSTEP );
 
             /.
             Call the function for a given ET and retrieve the step size: 
@@ -197,13 +198,13 @@
 */
 
 { /* Begin zzadsave_c */
-   cspice_user_state_t* user = &__cspice_get_state()->user;
+   cspice_user_state_t* user = &((cspice_t *)naif_state)->user;
   
 
    /*
    Participate in error tracing.
    */
-   chkin_c ( "zzadsave_c" );
+   chkin_c ( naif_state, "zzadsave_c" );
 
 
    /*
@@ -285,7 +286,8 @@
  
 */
 
-   void * zzadget_c ( SpicePassedInFunc    funcID )
+   void * zzadget_c ( void *               naif_state,  
+                      SpicePassedInFunc    funcID )
  
 /*
 
@@ -367,7 +369,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "zzadget_c" );
+   chkin_c ( naif_state, "zzadget_c" );
 
    /*
    Make sure function ID is in range.

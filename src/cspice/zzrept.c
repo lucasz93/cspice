@@ -8,26 +8,26 @@
 
 
 typedef int zzrept_state_t;
-static zzrept_state_t* get_zzrept_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzrept_state_t* get_zzrept_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZREPT ( Private --- replace tokens ) */
-logical zzrept_(char *sub, char *replac, logical *l2r, ftnlen sub_len, ftnlen 
-	replac_len)
+logical zzrept_(cspice_t* __global_state, char *sub, char *replac, logical *
+	l2r, ftnlen sub_len, ftnlen replac_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Local variables */
     logical ok;
-    extern logical zzremt_(char *, ftnlen);
-    extern logical zzsubt_(char *, char *, logical *, ftnlen, ftnlen);
+    extern logical zzremt_(cspice_t*, char *, ftnlen);
+    extern logical zzsubt_(cspice_t*, char *, char *, logical *, ftnlen, 
+	    ftnlen);
 
 
     /* Module state */
-    zzrept_state_t* __state = get_zzrept_state();
+    zzrept_state_t* __state = get_zzrept_state(__global_state);
 /* $ Abstract */
 
 /*    SPICE Private routine intended solely for the support of SPICE */
@@ -141,8 +141,8 @@ logical zzrept_(char *sub, char *replac, logical *l2r, ftnlen sub_len, ftnlen
 
 
 /* -& */
-    ret_val = zzsubt_(sub, replac, l2r, sub_len, replac_len);
-    ok = zzremt_("*", (ftnlen)1);
+    ret_val = zzsubt_(__global_state, sub, replac, l2r, sub_len, replac_len);
+    ok = zzremt_(__global_state, "*", (ftnlen)1);
     return ret_val;
 } /* zzrept_ */
 

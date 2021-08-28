@@ -8,8 +8,7 @@
 
 
 extern zzdsksbf_init_t __zzdsksbf_init;
-static zzdsksbf_state_t* get_zzdsksbf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdsksbf_state_t* get_zzdsksbf_state(cspice_t* state) {
 	if (!state->zzdsksbf)
 		state->zzdsksbf = __cspice_allocate_module(sizeof(
 	zzdsksbf_state_t), &__zzdsksbf_init, sizeof(__zzdsksbf_init));
@@ -18,11 +17,11 @@ static zzdsksbf_state_t* get_zzdsksbf_state() {
 }
 
 /* $Procedure ZZDSKSBF ( DSK, manage the API segment buffer ) */
-/* Subroutine */ int zzdsksbf_0_(int n__, integer *bodyid, integer *nsurf, 
-	integer *srflst, doublereal *et, integer *fixfid, doublereal *vertex, 
-	doublereal *raydir, doublereal *point, doublereal *xpt, integer *
-	handle, integer *dladsc, doublereal *dskdsc, doublereal *dc, integer *
-	ic, logical *found, doublereal *normal)
+/* Subroutine */ int zzdsksbf_0_(cspice_t* __global_state, int n__, integer *
+	bodyid, integer *nsurf, integer *srflst, doublereal *et, integer *
+	fixfid, doublereal *vertex, doublereal *raydir, doublereal *point, 
+	doublereal *xpt, integer *handle, integer *dladsc, doublereal *dskdsc,
+	 doublereal *dc, integer *ic, logical *found, doublereal *normal)
 {
     /* Initialized data */
 
@@ -31,47 +30,50 @@ static zzdsksbf_state_t* get_zzdsksbf_state() {
     integer i__1, i__2, i__3, i__4, i__5, i__6;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer nseg;
-    extern /* Subroutine */ int zzdskbbl_(integer *);
-    extern /* Subroutine */ int zzdskchk_(integer *, logical *);
-    extern /* Subroutine */ int zzdsksba_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzdskbbl_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzdskchk_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int zzdsksba_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    doublereal *, integer *, integer *, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzdsksbi_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, doublereal 
 	    *, integer *, integer *, doublereal *, doublereal *, doublereal *)
 	    ;
-    extern /* Subroutine */ int zzdsksbi_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, doublereal *, integer 
-	    *, integer *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzdskbun_(integer *, integer *, integer *, 
-	    doublereal *, integer *, integer *, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int zzdskbun_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, integer *, integer *, integer 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    extern /* Subroutine */ int zzdskbux_(integer *, integer *, integer *, 
-	    doublereal *, integer *, integer *, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int zzdskbux_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, integer *, integer *, integer 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, integer *, doublereal *,
 	     integer *, logical *);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer j;
     doublereal locdc[1];
     integer locic[1];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern logical failed_(void);
-    extern integer isrchi_(integer *, integer *, integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern logical failed_(cspice_t*);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
+    extern logical return_(cspice_t*);
     integer segidx;
     logical update;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer bix;
 
 
     /* Module state */
-    zzdsksbf_state_t* __state = get_zzdsksbf_state();
+    zzdsksbf_state_t* __state = get_zzdsksbf_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -657,12 +659,12 @@ static zzdsksbf_state_t* get_zzdsksbf_state() {
 	case 3: goto L_zzsbfnrm;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKSBF", (ftnlen)8);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZDSKSBF", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKSBF", (ftnlen)8);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZDSKSBF", (ftnlen)8);
     return 0;
 /* $Procedure ZZSBFXR ( DSK, prepare and perform unprioritized intercept ) */
 
@@ -832,60 +834,60 @@ L_zzsbfxr:
 /*     prepare unprioritized ray surface intercept */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSBFXR", (ftnlen)7);
+    chkin_(__global_state, "ZZSBFXR", (ftnlen)7);
     if (__state->first) {
 
 /*        Initialize BSR counter. */
 
-	zzctruin_(__state->bsrctr);
+	zzctruin_(__global_state, __state->bsrctr);
 	__state->first = FALSE_;
     }
 
 /*     See whether the state of the loaded DSK set has changed */
 /*     since the last call. */
 
-    zzdskchk_(__state->bsrctr, &update);
+    zzdskchk_(__global_state, __state->bsrctr, &update);
     if (update) {
 
 /*        Make sure the ZZDSKBSR subsystem has completed the segment */
 /*        list for the input body since the last time the BSR loaded */
 /*        kernel state changed. */
 
-	zzdskbbl_(bodyid);
+	zzdskbbl_(__global_state, bodyid);
 
 /*        Initialize the local buffers. We restart from scratch */
 /*        each time the BSR loaded kernel state changes. */
 
-	zzdsksbi_(&__state->c__10, &__state->c__10000, __state->btbody, &
-		__state->btnbod, __state->btsegp, __state->btstsz, 
-		__state->sthan, __state->stdscr, __state->stdlad, &
-		__state->stfree, __state->stoff, __state->stctr, 
-		__state->strad);
+	zzdsksbi_(__global_state, &__state->c__10, &__state->c__10000, 
+		__state->btbody, &__state->btnbod, __state->btsegp, 
+		__state->btstsz, __state->sthan, __state->stdscr, 
+		__state->stdlad, &__state->stfree, __state->stoff, 
+		__state->stctr, __state->strad);
     }
-    if (failed_()) {
-	chkout_("ZZSBFXR", (ftnlen)7);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSBFXR", (ftnlen)7);
 	return 0;
     }
 
 /*     Find the index of the input body ID in the body table. If */
 /*     we re-initialized the tables, the index will be zero. */
 
-    bix = isrchi_(bodyid, &__state->btnbod, __state->btbody);
+    bix = isrchi_(__global_state, bodyid, &__state->btnbod, __state->btbody);
     if (bix == 0) {
 
 /*        We don't have buffered information for this body. Update */
 /*        the body and segment tables to store data for it. */
 
-	zzdsksba_(bodyid, &__state->c__10, &__state->c__10000, 
-		__state->btbody, &__state->btnbod, __state->btsegp, 
+	zzdsksba_(__global_state, bodyid, &__state->c__10, &__state->c__10000,
+		 __state->btbody, &__state->btnbod, __state->btsegp, 
 		__state->btstsz, __state->sthan, __state->stdscr, 
 		__state->stdlad, &__state->stfree, __state->stoff, 
 		__state->stctr, __state->strad);
-	if (failed_()) {
-	    chkout_("ZZSBFXR", (ftnlen)7);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSBFXR", (ftnlen)7);
 	    return 0;
 	}
 
@@ -897,24 +899,26 @@ L_zzsbfxr:
 /*     Find the ray-surface intercept, using the buffered segment */
 /*     data. */
 
-    j = __state->btsegp[(i__1 = bix - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "btsegp", i__1, "zzdsksbf_", (ftnlen)584)];
+    j = __state->btsegp[(i__1 = bix - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "btsegp", i__1, "zzdsksbf_", (ftnlen)584)];
     nseg = __state->btstsz[(i__1 = bix - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "btstsz", i__1, "zzdsksbf_", (ftnlen)585)];
-    zzdskbux_(bodyid, nsurf, srflst, et, fixfid, &nseg, &__state->sthan[(i__1 
-	    = j - 1) < 10000 && 0 <= i__1 ? i__1 : s_rnge("sthan", i__1, 
-	    "zzdsksbf_", (ftnlen)587)], &__state->stdlad[(i__2 = (j << 3) - 8)
-	     < 80000 && 0 <= i__2 ? i__2 : s_rnge("stdlad", i__2, "zzdsksbf_",
-	     (ftnlen)587)], &__state->stdscr[(i__3 = j * 24 - 24) < 240000 && 
-	    0 <= i__3 ? i__3 : s_rnge("stdscr", i__3, "zzdsksbf_", (ftnlen)
-	    587)], &__state->stoff[(i__4 = j * 3 - 3) < 30000 && 0 <= i__4 ? 
-	    i__4 : s_rnge("stoff", i__4, "zzdsksbf_", (ftnlen)587)], &
-	    __state->stctr[(i__5 = j * 3 - 3) < 30000 && 0 <= i__5 ? i__5 : 
-	    s_rnge("stctr", i__5, "zzdsksbf_", (ftnlen)587)], &__state->strad[
-	    (i__6 = j - 1) < 10000 && 0 <= i__6 ? i__6 : s_rnge("strad", i__6,
-	     "zzdsksbf_", (ftnlen)587)], vertex, raydir, xpt, &segidx, locdc, 
-	    locic, found);
-    chkout_("ZZSBFXR", (ftnlen)7);
+	    &__global_state->f2c, "btstsz", i__1, "zzdsksbf_", (ftnlen)585)];
+    zzdskbux_(__global_state, bodyid, nsurf, srflst, et, fixfid, &nseg, &
+	    __state->sthan[(i__1 = j - 1) < 10000 && 0 <= i__1 ? i__1 : 
+	    s_rnge(&__global_state->f2c, "sthan", i__1, "zzdsksbf_", (ftnlen)
+	    587)], &__state->stdlad[(i__2 = (j << 3) - 8) < 80000 && 0 <= 
+	    i__2 ? i__2 : s_rnge(&__global_state->f2c, "stdlad", i__2, "zzds"
+	    "ksbf_", (ftnlen)587)], &__state->stdscr[(i__3 = j * 24 - 24) < 
+	    240000 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "stdscr"
+	    , i__3, "zzdsksbf_", (ftnlen)587)], &__state->stoff[(i__4 = j * 3 
+	    - 3) < 30000 && 0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c, 
+	    "stoff", i__4, "zzdsksbf_", (ftnlen)587)], &__state->stctr[(i__5 =
+	     j * 3 - 3) < 30000 && 0 <= i__5 ? i__5 : s_rnge(&
+	    __global_state->f2c, "stctr", i__5, "zzdsksbf_", (ftnlen)587)], &
+	    __state->strad[(i__6 = j - 1) < 10000 && 0 <= i__6 ? i__6 : 
+	    s_rnge(&__global_state->f2c, "strad", i__6, "zzdsksbf_", (ftnlen)
+	    587)], vertex, raydir, xpt, &segidx, locdc, locic, found);
+    chkout_(__global_state, "ZZSBFXR", (ftnlen)7);
     return 0;
 /* $Procedure ZZSBFXRI ( DSK, unprioritized intercept with info ) */
 
@@ -1115,60 +1119,60 @@ L_zzsbfxri:
 /*     unprioritized ray surface intercept with info */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSBFXRI", (ftnlen)8);
+    chkin_(__global_state, "ZZSBFXRI", (ftnlen)8);
     if (__state->first) {
 
 /*        Initialize BSR counter. */
 
-	zzctruin_(__state->bsrctr);
+	zzctruin_(__global_state, __state->bsrctr);
 	__state->first = FALSE_;
     }
 
 /*     See whether the state of the loaded DSK set has changed */
 /*     since the last call. */
 
-    zzdskchk_(__state->bsrctr, &update);
+    zzdskchk_(__global_state, __state->bsrctr, &update);
     if (update) {
 
 /*        Make sure the ZZDSKBSR subsystem has completed the segment */
 /*        list for the input body since the last time the BSR loaded */
 /*        kernel state changed. */
 
-	zzdskbbl_(bodyid);
+	zzdskbbl_(__global_state, bodyid);
 
 /*        Initialize the local buffers. We restart from scratch */
 /*        each time the BSR loaded kernel state changes. */
 
-	zzdsksbi_(&__state->c__10, &__state->c__10000, __state->btbody, &
-		__state->btnbod, __state->btsegp, __state->btstsz, 
-		__state->sthan, __state->stdscr, __state->stdlad, &
-		__state->stfree, __state->stoff, __state->stctr, 
-		__state->strad);
+	zzdsksbi_(__global_state, &__state->c__10, &__state->c__10000, 
+		__state->btbody, &__state->btnbod, __state->btsegp, 
+		__state->btstsz, __state->sthan, __state->stdscr, 
+		__state->stdlad, &__state->stfree, __state->stoff, 
+		__state->stctr, __state->strad);
     }
-    if (failed_()) {
-	chkout_("ZZSBFXRI", (ftnlen)8);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSBFXRI", (ftnlen)8);
 	return 0;
     }
 
 /*     Find the index of the input body ID in the body table. If */
 /*     we re-initialized the tables, the index will be zero. */
 
-    bix = isrchi_(bodyid, &__state->btnbod, __state->btbody);
+    bix = isrchi_(__global_state, bodyid, &__state->btnbod, __state->btbody);
     if (bix == 0) {
 
 /*        We don't have buffered information for this body. Update */
 /*        the body and segment tables to store data for it. */
 
-	zzdsksba_(bodyid, &__state->c__10, &__state->c__10000, 
-		__state->btbody, &__state->btnbod, __state->btsegp, 
+	zzdsksba_(__global_state, bodyid, &__state->c__10, &__state->c__10000,
+		 __state->btbody, &__state->btnbod, __state->btsegp, 
 		__state->btstsz, __state->sthan, __state->stdscr, 
 		__state->stdlad, &__state->stfree, __state->stoff, 
 		__state->stctr, __state->strad);
-	if (failed_()) {
-	    chkout_("ZZSBFXRI", (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSBFXRI", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1180,25 +1184,27 @@ L_zzsbfxri:
 /*     Find the ray-surface intercept, using the buffered segment */
 /*     data. */
 
-    j = __state->btsegp[(i__1 = bix - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "btsegp", i__1, "zzdsksbf_", (ftnlen)882)];
+    j = __state->btsegp[(i__1 = bix - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "btsegp", i__1, "zzdsksbf_", (ftnlen)882)];
     nseg = __state->btstsz[(i__1 = bix - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "btstsz", i__1, "zzdsksbf_", (ftnlen)883)];
-    zzdskbux_(bodyid, nsurf, srflst, et, fixfid, &nseg, &__state->sthan[(i__1 
-	    = j - 1) < 10000 && 0 <= i__1 ? i__1 : s_rnge("sthan", i__1, 
-	    "zzdsksbf_", (ftnlen)885)], &__state->stdlad[(i__2 = (j << 3) - 8)
-	     < 80000 && 0 <= i__2 ? i__2 : s_rnge("stdlad", i__2, "zzdsksbf_",
-	     (ftnlen)885)], &__state->stdscr[(i__3 = j * 24 - 24) < 240000 && 
-	    0 <= i__3 ? i__3 : s_rnge("stdscr", i__3, "zzdsksbf_", (ftnlen)
-	    885)], &__state->stoff[(i__4 = j * 3 - 3) < 30000 && 0 <= i__4 ? 
-	    i__4 : s_rnge("stoff", i__4, "zzdsksbf_", (ftnlen)885)], &
-	    __state->stctr[(i__5 = j * 3 - 3) < 30000 && 0 <= i__5 ? i__5 : 
-	    s_rnge("stctr", i__5, "zzdsksbf_", (ftnlen)885)], &__state->strad[
-	    (i__6 = j - 1) < 10000 && 0 <= i__6 ? i__6 : s_rnge("strad", i__6,
-	     "zzdsksbf_", (ftnlen)885)], vertex, raydir, xpt, &segidx, dc, ic,
-	     found);
-    if (failed_()) {
-	chkout_("ZZSBFXRI", (ftnlen)8);
+	    &__global_state->f2c, "btstsz", i__1, "zzdsksbf_", (ftnlen)883)];
+    zzdskbux_(__global_state, bodyid, nsurf, srflst, et, fixfid, &nseg, &
+	    __state->sthan[(i__1 = j - 1) < 10000 && 0 <= i__1 ? i__1 : 
+	    s_rnge(&__global_state->f2c, "sthan", i__1, "zzdsksbf_", (ftnlen)
+	    885)], &__state->stdlad[(i__2 = (j << 3) - 8) < 80000 && 0 <= 
+	    i__2 ? i__2 : s_rnge(&__global_state->f2c, "stdlad", i__2, "zzds"
+	    "ksbf_", (ftnlen)885)], &__state->stdscr[(i__3 = j * 24 - 24) < 
+	    240000 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "stdscr"
+	    , i__3, "zzdsksbf_", (ftnlen)885)], &__state->stoff[(i__4 = j * 3 
+	    - 3) < 30000 && 0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c, 
+	    "stoff", i__4, "zzdsksbf_", (ftnlen)885)], &__state->stctr[(i__5 =
+	     j * 3 - 3) < 30000 && 0 <= i__5 ? i__5 : s_rnge(&
+	    __global_state->f2c, "stctr", i__5, "zzdsksbf_", (ftnlen)885)], &
+	    __state->strad[(i__6 = j - 1) < 10000 && 0 <= i__6 ? i__6 : 
+	    s_rnge(&__global_state->f2c, "strad", i__6, "zzdsksbf_", (ftnlen)
+	    885)], vertex, raydir, xpt, &segidx, dc, ic, found);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSBFXRI", (ftnlen)8);
 	return 0;
     }
     if (*found) {
@@ -1208,15 +1214,18 @@ L_zzsbfxri:
 
 	segidx = segidx + j - 1;
 	*handle = __state->sthan[(i__1 = segidx - 1) < 10000 && 0 <= i__1 ? 
-		i__1 : s_rnge("sthan", i__1, "zzdsksbf_", (ftnlen)903)];
-	movei_(&__state->stdlad[(i__1 = (segidx << 3) - 8) < 80000 && 0 <= 
-		i__1 ? i__1 : s_rnge("stdlad", i__1, "zzdsksbf_", (ftnlen)905)
-		], &__state->c__8, dladsc);
-	moved_(&__state->stdscr[(i__1 = segidx * 24 - 24) < 240000 && 0 <= 
-		i__1 ? i__1 : s_rnge("stdscr", i__1, "zzdsksbf_", (ftnlen)906)
-		], &__state->c__24, dskdsc);
+		i__1 : s_rnge(&__global_state->f2c, "sthan", i__1, "zzdsksbf_"
+		, (ftnlen)903)];
+	movei_(__global_state, &__state->stdlad[(i__1 = (segidx << 3) - 8) < 
+		80000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"stdlad", i__1, "zzdsksbf_", (ftnlen)905)], &__state->c__8, 
+		dladsc);
+	moved_(__global_state, &__state->stdscr[(i__1 = segidx * 24 - 24) < 
+		240000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"stdscr", i__1, "zzdsksbf_", (ftnlen)906)], &__state->c__24, 
+		dskdsc);
     }
-    chkout_("ZZSBFXRI", (ftnlen)8);
+    chkout_(__global_state, "ZZSBFXRI", (ftnlen)8);
     return 0;
 /* $Procedure ZZSBFNRM ( DSK, prepare and compute unprioritized normal ) */
 
@@ -1381,10 +1390,10 @@ L_zzsbfnrm:
 /*     prepare unprioritized normal vector computation */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSBFNRM", (ftnlen)8);
+    chkin_(__global_state, "ZZSBFNRM", (ftnlen)8);
 
 /*     The following block of code is straight cut-and-paste from */
 /*     ZZSBFXR. (We need to consider packaging this code in a */
@@ -1394,52 +1403,52 @@ L_zzsbfnrm:
 
 /*        Initialize BSR counter. */
 
-	zzctruin_(__state->bsrctr);
+	zzctruin_(__global_state, __state->bsrctr);
 	__state->first = FALSE_;
     }
 
 /*     See whether the state of the loaded DSK set has changed */
 /*     since the last call. */
 
-    zzdskchk_(__state->bsrctr, &update);
+    zzdskchk_(__global_state, __state->bsrctr, &update);
     if (update) {
 
 /*        Make sure the ZZDSKBSR subsystem has completed the segment */
 /*        list for the input body since the last time the BSR loaded */
 /*        kernel state changed. */
 
-	zzdskbbl_(bodyid);
+	zzdskbbl_(__global_state, bodyid);
 
 /*        Initialize the local buffers. We restart from scratch */
 /*        each time the BSR loaded kernel state changes. */
 
-	zzdsksbi_(&__state->c__10, &__state->c__10000, __state->btbody, &
-		__state->btnbod, __state->btsegp, __state->btstsz, 
-		__state->sthan, __state->stdscr, __state->stdlad, &
-		__state->stfree, __state->stoff, __state->stctr, 
-		__state->strad);
+	zzdsksbi_(__global_state, &__state->c__10, &__state->c__10000, 
+		__state->btbody, &__state->btnbod, __state->btsegp, 
+		__state->btstsz, __state->sthan, __state->stdscr, 
+		__state->stdlad, &__state->stfree, __state->stoff, 
+		__state->stctr, __state->strad);
     }
-    if (failed_()) {
-	chkout_("ZZSBFNRM", (ftnlen)8);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSBFNRM", (ftnlen)8);
 	return 0;
     }
 
 /*     Find the index of the input body ID in the body table. If */
 /*     we re-initialized the tables, the index will be zero. */
 
-    bix = isrchi_(bodyid, &__state->btnbod, __state->btbody);
+    bix = isrchi_(__global_state, bodyid, &__state->btnbod, __state->btbody);
     if (bix == 0) {
 
 /*        We don't have buffered information for this body. Update */
 /*        the body and segment tables to store data for it. */
 
-	zzdsksba_(bodyid, &__state->c__10, &__state->c__10000, 
-		__state->btbody, &__state->btnbod, __state->btsegp, 
+	zzdsksba_(__global_state, bodyid, &__state->c__10, &__state->c__10000,
+		 __state->btbody, &__state->btnbod, __state->btsegp, 
 		__state->btstsz, __state->sthan, __state->stdscr, 
 		__state->stdlad, &__state->stfree, __state->stoff, 
 		__state->stctr, __state->strad);
-	if (failed_()) {
-	    chkout_("ZZSBFNRM", (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSBFNRM", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1451,58 +1460,63 @@ L_zzsbfnrm:
 /*     Find the outward unit normal vector, using the buffered segment */
 /*     data. */
 
-    j = __state->btsegp[(i__1 = bix - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "btsegp", i__1, "zzdsksbf_", (ftnlen)1165)];
+    j = __state->btsegp[(i__1 = bix - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "btsegp", i__1, "zzdsksbf_", (ftnlen)1165)];
     nseg = __state->btstsz[(i__1 = bix - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-	    "btstsz", i__1, "zzdsksbf_", (ftnlen)1166)];
-    zzdskbun_(bodyid, nsurf, srflst, et, fixfid, &nseg, &__state->sthan[(i__1 
-	    = j - 1) < 10000 && 0 <= i__1 ? i__1 : s_rnge("sthan", i__1, 
-	    "zzdsksbf_", (ftnlen)1168)], &__state->stdlad[(i__2 = (j << 3) - 
-	    8) < 80000 && 0 <= i__2 ? i__2 : s_rnge("stdlad", i__2, "zzdsksb"
-	    "f_", (ftnlen)1168)], &__state->stdscr[(i__3 = j * 24 - 24) < 
-	    240000 && 0 <= i__3 ? i__3 : s_rnge("stdscr", i__3, "zzdsksbf_", (
-	    ftnlen)1168)], &__state->stoff[(i__4 = j * 3 - 3) < 30000 && 0 <= 
-	    i__4 ? i__4 : s_rnge("stoff", i__4, "zzdsksbf_", (ftnlen)1168)], &
-	    __state->stctr[(i__5 = j * 3 - 3) < 30000 && 0 <= i__5 ? i__5 : 
-	    s_rnge("stctr", i__5, "zzdsksbf_", (ftnlen)1168)], &
+	    &__global_state->f2c, "btstsz", i__1, "zzdsksbf_", (ftnlen)1166)];
+    zzdskbun_(__global_state, bodyid, nsurf, srflst, et, fixfid, &nseg, &
+	    __state->sthan[(i__1 = j - 1) < 10000 && 0 <= i__1 ? i__1 : 
+	    s_rnge(&__global_state->f2c, "sthan", i__1, "zzdsksbf_", (ftnlen)
+	    1168)], &__state->stdlad[(i__2 = (j << 3) - 8) < 80000 && 0 <= 
+	    i__2 ? i__2 : s_rnge(&__global_state->f2c, "stdlad", i__2, "zzds"
+	    "ksbf_", (ftnlen)1168)], &__state->stdscr[(i__3 = j * 24 - 24) < 
+	    240000 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "stdscr"
+	    , i__3, "zzdsksbf_", (ftnlen)1168)], &__state->stoff[(i__4 = j * 
+	    3 - 3) < 30000 && 0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c, 
+	    "stoff", i__4, "zzdsksbf_", (ftnlen)1168)], &__state->stctr[(i__5 
+	    = j * 3 - 3) < 30000 && 0 <= i__5 ? i__5 : s_rnge(&
+	    __global_state->f2c, "stctr", i__5, "zzdsksbf_", (ftnlen)1168)], &
 	    __state->strad[(i__6 = j - 1) < 10000 && 0 <= i__6 ? i__6 : 
-	    s_rnge("strad", i__6, "zzdsksbf_", (ftnlen)1168)], point, normal);
-    chkout_("ZZSBFNRM", (ftnlen)8);
+	    s_rnge(&__global_state->f2c, "strad", i__6, "zzdsksbf_", (ftnlen)
+	    1168)], point, normal);
+    chkout_(__global_state, "ZZSBFNRM", (ftnlen)8);
     return 0;
 } /* zzdsksbf_ */
 
-/* Subroutine */ int zzdsksbf_(integer *bodyid, integer *nsurf, integer *
-	srflst, doublereal *et, integer *fixfid, doublereal *vertex, 
-	doublereal *raydir, doublereal *point, doublereal *xpt, integer *
-	handle, integer *dladsc, doublereal *dskdsc, doublereal *dc, integer *
-	ic, logical *found, doublereal *normal)
+/* Subroutine */ int zzdsksbf_(cspice_t* __global_state, integer *bodyid, 
+	integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, 
+	doublereal *vertex, doublereal *raydir, doublereal *point, doublereal 
+	*xpt, integer *handle, integer *dladsc, doublereal *dskdsc, 
+	doublereal *dc, integer *ic, logical *found, doublereal *normal)
 {
     return zzdsksbf_0_(0, bodyid, nsurf, srflst, et, fixfid, vertex, raydir, 
 	    point, xpt, handle, dladsc, dskdsc, dc, ic, found, normal);
     }
 
-/* Subroutine */ int zzsbfxr_(integer *bodyid, integer *nsurf, integer *
-	srflst, doublereal *et, integer *fixfid, doublereal *vertex, 
-	doublereal *raydir, doublereal *xpt, logical *found)
+/* Subroutine */ int zzsbfxr_(cspice_t* __global_state, integer *bodyid, 
+	integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, 
+	doublereal *vertex, doublereal *raydir, doublereal *xpt, logical *
+	found)
 {
     return zzdsksbf_0_(1, bodyid, nsurf, srflst, et, fixfid, vertex, raydir, (
 	    doublereal *)0, xpt, (integer *)0, (integer *)0, (doublereal *)0, 
 	    (doublereal *)0, (integer *)0, found, (doublereal *)0);
     }
 
-/* Subroutine */ int zzsbfxri_(integer *bodyid, integer *nsurf, integer *
-	srflst, doublereal *et, integer *fixfid, doublereal *vertex, 
-	doublereal *raydir, doublereal *xpt, integer *handle, integer *dladsc,
-	 doublereal *dskdsc, doublereal *dc, integer *ic, logical *found)
+/* Subroutine */ int zzsbfxri_(cspice_t* __global_state, integer *bodyid, 
+	integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, 
+	doublereal *vertex, doublereal *raydir, doublereal *xpt, integer *
+	handle, integer *dladsc, doublereal *dskdsc, doublereal *dc, integer *
+	ic, logical *found)
 {
     return zzdsksbf_0_(2, bodyid, nsurf, srflst, et, fixfid, vertex, raydir, (
 	    doublereal *)0, xpt, handle, dladsc, dskdsc, dc, ic, found, (
 	    doublereal *)0);
     }
 
-/* Subroutine */ int zzsbfnrm_(integer *bodyid, integer *nsurf, integer *
-	srflst, doublereal *et, integer *fixfid, doublereal *point, 
-	doublereal *normal)
+/* Subroutine */ int zzsbfnrm_(cspice_t* __global_state, integer *bodyid, 
+	integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, 
+	doublereal *point, doublereal *normal)
 {
     return zzdsksbf_0_(3, bodyid, nsurf, srflst, et, fixfid, (doublereal *)0, 
 	    (doublereal *)0, point, (doublereal *)0, (integer *)0, (integer *)

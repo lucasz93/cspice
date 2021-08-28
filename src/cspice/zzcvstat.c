@@ -8,8 +8,7 @@
 
 
 extern zzcvstat_init_t __zzcvstat_init;
-static zzcvstat_state_t* get_zzcvstat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzcvstat_state_t* get_zzcvstat_state(cspice_t* state) {
 	if (!state->zzcvstat)
 		state->zzcvstat = __cspice_allocate_module(sizeof(
 	zzcvstat_state_t), &__zzcvstat_init, sizeof(__zzcvstat_init));
@@ -18,32 +17,34 @@ static zzcvstat_state_t* get_zzcvstat_state() {
 }
 
 /* $Procedure ZZCVSTAT ( Constant velocity state ) */
-/* Subroutine */ int zzcvstat_0_(int n__, doublereal *et, char *ref, integer *
-	center, doublereal *state, ftnlen ref_len)
+/* Subroutine */ int zzcvstat_0_(cspice_t* __global_state, int n__, 
+	doublereal *et, char *ref, integer *center, doublereal *state, ftnlen 
+	ref_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int mxvg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, integer *, doublereal *);
     doublereal delta;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal xf[36]	/* was [6][6] */;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal xstate[6];
-    extern /* Subroutine */ int sxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sxform_(cspice_t*, char *, char *, doublereal 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    zzcvstat_state_t* __state = get_zzcvstat_state();
+    zzcvstat_state_t* __state = get_zzcvstat_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -182,9 +183,9 @@ static zzcvstat_state_t* get_zzcvstat_state() {
 	case 2: goto L_zzcvssta;
 	}
 
-    chkin_("ZZCVSTAT", (ftnlen)8);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZCVSTAT", (ftnlen)8);
+    chkin_(__global_state, "ZZCVSTAT", (ftnlen)8);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZCVSTAT", (ftnlen)8);
     return 0;
 /* $Procedure ZZCVXSTA ( Constant velocity state, fetch state ) */
 
@@ -361,32 +362,32 @@ L_zzcvxsta:
 /* -    SPICELIB Version 2.0.0, 11-JAN-2012 (NJB) */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZCVXSTA", (ftnlen)8);
+    chkin_(__global_state, "ZZCVXSTA", (ftnlen)8);
 
 /*     Extrapolate the saved state to the input time. */
 
     delta = *et - __state->svet;
-    vlcom_(&__state->c_b6, __state->svstat, &delta, &__state->svstat[3], 
-	    xstate);
-    vequ_(&__state->svstat[3], &xstate[3]);
+    vlcom_(__global_state, &__state->c_b6, __state->svstat, &delta, &
+	    __state->svstat[3], xstate);
+    vequ_(__global_state, &__state->svstat[3], &xstate[3]);
 
 /*     Convert the extrapolated state to the requested frame */
 /*     at ET. */
 
-    sxform_(__state->svref, ref, et, xf, (ftnlen)32, ref_len);
-    if (failed_()) {
-	chkout_("ZZCVXSTA", (ftnlen)8);
+    sxform_(__global_state, __state->svref, ref, et, xf, (ftnlen)32, ref_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZCVXSTA", (ftnlen)8);
 	return 0;
     }
-    mxvg_(xf, xstate, &__state->c__6, &__state->c__6, state);
+    mxvg_(__global_state, xf, xstate, &__state->c__6, &__state->c__6, state);
 
 /*     Set the output center of motion argument as well. */
 
     *center = __state->svctr;
-    chkout_("ZZCVXSTA", (ftnlen)8);
+    chkout_(__global_state, "ZZCVXSTA", (ftnlen)8);
     return 0;
 /* $Procedure ZZCVSSTA ( Constant velocity state, store parameters ) */
 
@@ -515,7 +516,7 @@ L_zzcvssta:
 /* -    SPICELIB Version 2.0.0, 11-JAN-2012 (NJB) */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -524,27 +525,27 @@ L_zzcvssta:
 
 /*     Save all inputs. */
 
-    moved_(state, &__state->c__6, __state->svstat);
+    moved_(__global_state, state, &__state->c__6, __state->svstat);
     __state->svctr = *center;
     __state->svet = *et;
-    s_copy(__state->svref, ref, (ftnlen)32, ref_len);
+    s_copy(&__global_state->f2c, __state->svref, ref, (ftnlen)32, ref_len);
     return 0;
 } /* zzcvstat_ */
 
-/* Subroutine */ int zzcvstat_(doublereal *et, char *ref, integer *center, 
-	doublereal *state, ftnlen ref_len)
+/* Subroutine */ int zzcvstat_(cspice_t* __global_state, doublereal *et, char 
+	*ref, integer *center, doublereal *state, ftnlen ref_len)
 {
     return zzcvstat_0_(0, et, ref, center, state, ref_len);
     }
 
-/* Subroutine */ int zzcvxsta_(doublereal *et, char *ref, integer *center, 
-	doublereal *state, ftnlen ref_len)
+/* Subroutine */ int zzcvxsta_(cspice_t* __global_state, doublereal *et, char 
+	*ref, integer *center, doublereal *state, ftnlen ref_len)
 {
     return zzcvstat_0_(1, et, ref, center, state, ref_len);
     }
 
-/* Subroutine */ int zzcvssta_(doublereal *state, integer *center, doublereal 
-	*et, char *ref, ftnlen ref_len)
+/* Subroutine */ int zzcvssta_(cspice_t* __global_state, doublereal *state, 
+	integer *center, doublereal *et, char *ref, ftnlen ref_len)
 {
     return zzcvstat_0_(2, et, ref, center, state, ref_len);
     }

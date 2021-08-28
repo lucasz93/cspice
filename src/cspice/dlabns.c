@@ -8,8 +8,7 @@
 
 
 extern dlabns_init_t __dlabns_init;
-static dlabns_state_t* get_dlabns_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dlabns_state_t* get_dlabns_state(cspice_t* state) {
 	if (!state->dlabns)
 		state->dlabns = __cspice_allocate_module(sizeof(
 	dlabns_state_t), &__dlabns_init, sizeof(__dlabns_init));
@@ -18,32 +17,34 @@ static dlabns_state_t* get_dlabns_state() {
 }
 
 /* $Procedure DLABNS ( DLA, begin new segment ) */
-/* Subroutine */ int dlabns_(integer *handle)
+/* Subroutine */ int dlabns_(cspice_t* __global_state, integer *handle)
 {
     integer addr__;
     integer this__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int filli_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int filli_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer descr[8];
     integer lastc;
     integer lastd;
     integer lasti;
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasadi_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int daslla_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dassih_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer sgptrs[2];
 
 
     /* Module state */
-    dlabns_state_t* __state = get_dlabns_state();
+    dlabns_state_t* __state = get_dlabns_state(__global_state);
 /* $ Abstract */
 
 /*     Begin a new segment in a DLA file. */
@@ -512,17 +513,17 @@ static dlabns_state_t* get_dlabns_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DLABNS", (ftnlen)6);
+    chkin_(__global_state, "DLABNS", (ftnlen)6);
 
 /*     Make sure the input handle refers to a DAS file that */
 /*     is open for write access. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DLABNS", (ftnlen)6);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DLABNS", (ftnlen)6);
 	return 0;
     }
 
@@ -530,11 +531,11 @@ static dlabns_state_t* get_dlabns_state() {
 /*     descriptors in the file.  If no segments are present, */
 /*     the pointers will contain the value NULPTR. */
 
-    dasrdi_(handle, &__state->c__2, &__state->c__3, sgptrs);
+    dasrdi_(__global_state, handle, &__state->c__2, &__state->c__3, sgptrs);
 
 /*     Find the last DAS logical addresses in use for each data type. */
 
-    daslla_(handle, &lastc, &lastd, &lasti);
+    daslla_(__global_state, handle, &lastc, &lastd, &lasti);
 
 /*     Initialize a DLA descriptor with null values.  If this */
 /*     is not the first segment in the file, the backward pointer */
@@ -543,7 +544,7 @@ static dlabns_state_t* get_dlabns_state() {
 /*     due to the initialization of the file's last segment pointer */
 /*     to NULPTR. */
 
-    filli_(&__state->c_n1, &__state->c__8, descr);
+    filli_(__global_state, &__state->c_n1, &__state->c__8, descr);
     descr[0] = sgptrs[1];
 
 /*     Set the descriptor's component base addresses now.  The */
@@ -563,7 +564,7 @@ static dlabns_state_t* get_dlabns_state() {
 
 /*     Append the descriptor to the file. */
 
-    dasadi_(handle, &__state->c__8, descr);
+    dasadi_(__global_state, handle, &__state->c__8, descr);
 
 /*     THIS is the pointer to the current descriptor. */
 
@@ -574,7 +575,7 @@ static dlabns_state_t* get_dlabns_state() {
 
     if (sgptrs[1] != -1) {
 	addr__ = sgptrs[1] + 1;
-	dasudi_(handle, &addr__, &addr__, &this__);
+	dasudi_(__global_state, handle, &addr__, &addr__, &this__);
     }
 
 /*     Update the segment list pointers in the file. The begin pointer */
@@ -582,15 +583,16 @@ static dlabns_state_t* get_dlabns_state() {
 /*     this segment. */
 
     if (sgptrs[0] == -1) {
-	dasudi_(handle, &__state->c__2, &__state->c__2, &this__);
+	dasudi_(__global_state, handle, &__state->c__2, &__state->c__2, &
+		this__);
     }
-    dasudi_(handle, &__state->c__3, &__state->c__3, &this__);
+    dasudi_(__global_state, handle, &__state->c__3, &__state->c__3, &this__);
 
 /*     Leave the file open.  The segment is now ready to be */
 /*     populated with data.  The routines DASADC, DASADD, and */
 /*     DASADI should be used to append data to the segment. */
 
-    chkout_("DLABNS", (ftnlen)6);
+    chkout_(__global_state, "DLABNS", (ftnlen)6);
     return 0;
 } /* dlabns_ */
 

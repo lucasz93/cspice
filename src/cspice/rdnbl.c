@@ -8,30 +8,29 @@
 
 
 typedef int rdnbl_state_t;
-static rdnbl_state_t* get_rdnbl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rdnbl_state_t* get_rdnbl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure RDNBL ( Read non-blank line ) */
-/* Subroutine */ int rdnbl_(char *file, char *line, logical *eof, ftnlen 
-	file_len, ftnlen line_len)
+/* Subroutine */ int rdnbl_(cspice_t* __global_state, char *file, char *line, 
+	logical *eof, ftnlen file_len, ftnlen line_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int rdtext_(char *, char *, logical *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int rdtext_(cspice_t*, char *, char *, logical *, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    rdnbl_state_t* __state = get_rdnbl_state();
+    rdnbl_state_t* __state = get_rdnbl_state(__global_state);
 /* $ Abstract */
 
 /*     Read the next non-blank line of text from a text file. */
@@ -197,30 +196,31 @@ static rdnbl_state_t* get_rdnbl_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("RDNBL", (ftnlen)5);
+	chkin_(__global_state, "RDNBL", (ftnlen)5);
     }
 
 /*     Return as soon as a non-blank line is found. Otherwise, keep */
 /*     looking until either the end of the file is reached or RDTEXT */
 /*     manages to fail. */
 
-    rdtext_(file, line, eof, file_len, line_len);
-    while(! (*eof) && ! failed_()) {
-	if (s_cmp(line, " ", line_len, (ftnlen)1) != 0) {
-	    chkout_("RDNBL", (ftnlen)5);
+    rdtext_(__global_state, file, line, eof, file_len, line_len);
+    while(! (*eof) && ! failed_(__global_state)) {
+	if (s_cmp(&__global_state->f2c, line, " ", line_len, (ftnlen)1) != 0) 
+		{
+	    chkout_(__global_state, "RDNBL", (ftnlen)5);
 	    return 0;
 	} else {
-	    rdtext_(file, line, eof, file_len, line_len);
+	    rdtext_(__global_state, file, line, eof, file_len, line_len);
 	}
     }
 
 /*     Didn't find anything? */
 
-    s_copy(line, " ", line_len, (ftnlen)1);
-    chkout_("RDNBL", (ftnlen)5);
+    s_copy(&__global_state->f2c, line, " ", line_len, (ftnlen)1);
+    chkout_(__global_state, "RDNBL", (ftnlen)5);
     return 0;
 } /* rdnbl_ */
 

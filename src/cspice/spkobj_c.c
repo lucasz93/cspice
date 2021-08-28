@@ -308,7 +308,7 @@
    {
       return; 
    }
-   chkin_c ( "spkobj_c" );
+   chkin_c ( naif_state, "spkobj_c" );
 
 
    /*

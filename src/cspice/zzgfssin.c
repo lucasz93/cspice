@@ -8,8 +8,7 @@
 
 
 extern zzgfssin_init_t __zzgfssin_init;
-static zzgfssin_state_t* get_zzgfssin_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfssin_state_t* get_zzgfssin_state(cspice_t* state) {
 	if (!state->zzgfssin)
 		state->zzgfssin = __cspice_allocate_module(sizeof(
 	zzgfssin_state_t), &__zzgfssin_init, sizeof(__zzgfssin_init));
@@ -18,11 +17,11 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 }
 
 /* $Procedure      ZZGFSSIN ( GF, state of surface intercept point ) */
-/* Subroutine */ int zzgfssin_(char *method, integer *trgid, doublereal *et, 
-	char *fixref, char *abcorr, integer *obsid, char *dref, integer *dctr,
-	 doublereal *dvec, doublereal *radii, doublereal *state, logical *
-	found, ftnlen method_len, ftnlen fixref_len, ftnlen abcorr_len, 
-	ftnlen dref_len)
+/* Subroutine */ int zzgfssin_(cspice_t* __global_state, char *method, 
+	integer *trgid, doublereal *et, char *fixref, char *abcorr, integer *
+	obsid, char *dref, integer *dctr, doublereal *dvec, doublereal *radii,
+	 doublereal *state, logical *found, ftnlen method_len, ftnlen 
+	fixref_len, ftnlen abcorr_len, ftnlen dref_len)
 {
     /* Initialized data */
 
@@ -31,50 +30,53 @@ static zzgfssin_state_t* get_zzgfssin_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     logical geom;
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     logical xmit;
-    extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int mxvg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, integer *, doublereal *);
     doublereal upos[3];
-    extern /* Subroutine */ int zzstelab_(logical *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzcorsxf_(logical *, doublereal *, doublereal 
-	    *, doublereal *);
+    extern /* Subroutine */ int zzstelab_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzcorsxf_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *);
     integer i__;
-    extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzprscor_(cspice_t*, char *, logical *, 
+	    ftnlen);
     doublereal t;
-    extern /* Subroutine */ int vaddg_(doublereal *, doublereal *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int vaddg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal savel[3];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
+    extern /* Subroutine */ int vsubg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
     doublereal ltctr;
     doublereal stemp[6];
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
     doublereal xform[36]	/* was [6][6] */;
     logical uselt;
-    extern /* Subroutine */ int bodc2s_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int bodc2s_(cspice_t*, integer *, char *, ftnlen);
     doublereal j2dsta[6];
     doublereal ssbtg0[6];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal sa[3];
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     doublereal lt;
     doublereal drfepc;
     integer frcode;
-    extern doublereal clight_(void);
-    extern logical return_(void);
+    extern doublereal clight_(cspice_t*);
+    extern logical return_(cspice_t*);
     doublereal corxfi[36]	/* was [6][6] */;
     doublereal corxfm[36]	/* was [6][6] */;
     doublereal ctrsta[6];
@@ -104,39 +106,40 @@ static zzgfssin_state_t* get_zzgfssin_state() {
     logical attblk[6];
     logical fnd;
     logical usestl;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sxform_(cspice_t*, char *, char *, doublereal 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     doublereal dlt;
-    extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vminug_(doublereal *, integer *, doublereal *)
+    extern /* Subroutine */ int spkgeo_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int vminug_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int surfpv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, logical *
+	    );
+    extern /* Subroutine */ int spkacs_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, doublereal 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sincpt_(cspice_t*, char *, char *, doublereal 
+	    *, char *, char *, char *, char *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *, ftnlen, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkssb_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int qderiv_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int invstm_(cspice_t*, doublereal *, doublereal *)
 	    ;
-    extern /* Subroutine */ int surfpv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
-	    ;
-    extern /* Subroutine */ int spkacs_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, doublereal *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int sincpt_(char *, char *, doublereal *, char *, 
-	    char *, char *, char *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int qderiv_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *);
-    extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
 
 
     /* Module state */
-    zzgfssin_state_t* __state = get_zzgfssin_state();
+    zzgfssin_state_t* __state = get_zzgfssin_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -906,27 +909,27 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFSSIN", (ftnlen)8);
+    chkin_(__global_state, "ZZGFSSIN", (ftnlen)8);
 
 /*     No result has been found. */
 
     *found = FALSE_;
     if (__state->first || *trgid != __state->prvtrg) {
-	bodc2s_(trgid, __state->svtarg, (ftnlen)36);
+	bodc2s_(__global_state, trgid, __state->svtarg, (ftnlen)36);
 	__state->prvtrg = *trgid;
     }
     if (__state->first || *obsid != __state->prvobs) {
-	bodc2s_(obsid, __state->svobs, (ftnlen)36);
+	bodc2s_(__global_state, obsid, __state->svobs, (ftnlen)36);
 	__state->prvobs = *obsid;
     }
     __state->first = FALSE_;
 
 /*     Parse the aberration correction specifier. */
 
-    zzprscor_(abcorr, attblk, abcorr_len);
+    zzprscor_(__global_state, abcorr, attblk, abcorr_len);
     geom = attblk[0];
     uselt = attblk[1];
     usestl = attblk[2];
@@ -944,12 +947,13 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*     the "near point" or "surface intercept" method. Only */
 /*     ellipsoids may be used a shape models for this computation. */
 
-    if (! eqstr_(method, "Ellipsoid", method_len, (ftnlen)9)) {
-	setmsg_("Surface intercept point computation method # is not support"
-		"ed by this routine.", (ftnlen)78);
-	errch_("#", method, (ftnlen)1, method_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZGFSSIN", (ftnlen)8);
+    if (! eqstr_(__global_state, method, "Ellipsoid", method_len, (ftnlen)9)) 
+	    {
+	setmsg_(__global_state, "Surface intercept point computation method "
+		"# is not supported by this routine.", (ftnlen)78);
+	errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 	return 0;
     }
     if (geom) {
@@ -961,39 +965,41 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 
 /*        Compute the state transformation from DREF to J2000. */
 
-	sxform_(dref, "J2000", et, dcorxf, dref_len, (ftnlen)5);
+	sxform_(__global_state, dref, "J2000", et, dcorxf, dref_len, (ftnlen)
+		5);
 
 /*        Transform the ray's direction vector from DREF to the J2000 */
 /*        frame. The velocity of DVEC in frame DREF is zero. */
 
-	moved_(dvec, &__state->c__3, stemp);
-	cleard_(&__state->c__3, &stemp[3]);
-	mxvg_(dcorxf, stemp, &__state->c__6, &__state->c__6, j2dsta);
+	moved_(__global_state, dvec, &__state->c__3, stemp);
+	cleard_(__global_state, &__state->c__3, &stemp[3]);
+	mxvg_(__global_state, dcorxf, stemp, &__state->c__6, &__state->c__6, 
+		j2dsta);
 
 /*        We need to check the body-fixed reference frame here. */
 
-	namfrm_(fixref, &frcode, fixref_len);
-	frinfo_(&frcode, &center, &frclss, &clssid, &fnd);
-	if (failed_()) {
-	    chkout_("ZZGFSSIN", (ftnlen)8);
+	namfrm_(__global_state, fixref, &frcode, fixref_len);
+	frinfo_(__global_state, &frcode, &center, &frclss, &clssid, &fnd);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 	    return 0;
 	}
 	if (! fnd) {
-	    setmsg_("Input reference frame # was not recognized.", (ftnlen)43)
-		    ;
-	    errch_("#", fixref, (ftnlen)1, fixref_len);
-	    sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	    chkout_("ZZGFSSIN", (ftnlen)8);
+	    setmsg_(__global_state, "Input reference frame # was not recogni"
+		    "zed.", (ftnlen)43);
+	    errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	    sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	    chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 	    return 0;
 	}
 	if (center != *trgid) {
-	    setmsg_("Input reference frame # is centered on body # instead o"
-		    "f body #.", (ftnlen)64);
-	    errch_("#", fixref, (ftnlen)1, fixref_len);
-	    errint_("#", &center, (ftnlen)1);
-	    errint_("#", trgid, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	    chkout_("ZZGFSSIN", (ftnlen)8);
+	    setmsg_(__global_state, "Input reference frame # is centered on "
+		    "body # instead of body #.", (ftnlen)64);
+	    errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	    errint_(__global_state, "#", &center, (ftnlen)1);
+	    errint_(__global_state, "#", trgid, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	    chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 	    return 0;
 	}
 /*        Get the state of the target with respect to the observer, */
@@ -1001,36 +1007,40 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*        need to propagate states to the solar system barycenter in */
 /*        this case. */
 
-	spkgeo_(trgid, et, fixref, obsid, fxtsta, &lt, fixref_len);
-	if (failed_()) {
-	    chkout_("ZZGFSSIN", (ftnlen)8);
+	spkgeo_(__global_state, trgid, et, fixref, obsid, fxtsta, &lt, 
+		fixref_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Compute the state of the observer with respect to the target */
 /*        in the body-fixed frame. */
 
-	vminug_(fxtsta, &__state->c__6, fxosta);
+	vminug_(__global_state, fxtsta, &__state->c__6, fxosta);
 
 /*        Transform the state of the direction vector from the J2000 */
 /*        frame to the target body-fixed frame at TRGEPC. Since no */
 /*        light time corrections are involved, the state transformation */
 /*        matrix from SXFORM works just fine. */
 
-	sxform_("J2000", fixref, et, xform, (ftnlen)5, fixref_len);
-	mxvg_(xform, j2dsta, &__state->c__6, &__state->c__6, fxdsta);
+	sxform_(__global_state, "J2000", fixref, et, xform, (ftnlen)5, 
+		fixref_len);
+	mxvg_(__global_state, xform, j2dsta, &__state->c__6, &__state->c__6, 
+		fxdsta);
 
 /*        Now we can obtain the surface velocity of the surface intercept */
 /*        point. */
 
-	surfpv_(fxosta, fxdsta, radii, &radii[1], &radii[2], fxpsta, found);
+	surfpv_(__global_state, fxosta, fxdsta, radii, &radii[1], &radii[2], 
+		fxpsta, found);
 
 /*        It's not an error for SURFPV to be unable to compute an */
 /*        intercept state; return now if the state was not */
 /*        computable. */
 
 	if (! (*found)) {
-	    chkout_("ZZGFSSIN", (ftnlen)8);
+	    chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 	    return 0;
 	}
     } else if (uselt) {
@@ -1045,7 +1055,8 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*           DREF is centered on the observer, so there's no light time */
 /*           correction. */
 
-	    sxform_(dref, "J2000", et, dcorxf, dref_len, (ftnlen)5);
+	    sxform_(__global_state, dref, "J2000", et, dcorxf, dref_len, (
+		    ftnlen)5);
 	} else {
 
 /*           Find the epoch DRFEPC associated with the input direction */
@@ -1058,10 +1069,10 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*           Find the light time from the observer to the center of */
 /*           frame DREF. */
 
-	    spkacs_(dctr, et, "J2000", abcorr, obsid, ctrsta, &ltctr, &dltctr,
-		     (ftnlen)5, abcorr_len);
-	    if (failed_()) {
-		chkout_("ZZGFSSIN", (ftnlen)8);
+	    spkacs_(__global_state, dctr, et, "J2000", abcorr, obsid, ctrsta, 
+		    &ltctr, &dltctr, (ftnlen)5, abcorr_len);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 		return 0;
 	    }
 	    drfepc = *et + ltsign * ltctr;
@@ -1070,15 +1081,17 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*           J2000 frame at DRFEPC. Correct the state transformation for */
 /*           the rate of change of light time. */
 
-	    sxform_(dref, "J2000", &drfepc, drxfrm, dref_len, (ftnlen)5);
-	    zzcorsxf_(&xmit, &dltctr, drxfrm, dcorxf);
+	    sxform_(__global_state, dref, "J2000", &drfepc, drxfrm, dref_len, 
+		    (ftnlen)5);
+	    zzcorsxf_(__global_state, &xmit, &dltctr, drxfrm, dcorxf);
 	}
 
 /*        The velocity of DVEC in frame DREF is zero. */
 
-	moved_(dvec, &__state->c__3, stemp);
-	cleard_(&__state->c__3, &stemp[3]);
-	mxvg_(dcorxf, stemp, &__state->c__6, &__state->c__6, j2dsta);
+	moved_(__global_state, dvec, &__state->c__3, stemp);
+	cleard_(__global_state, &__state->c__3, &stemp[3]);
+	mxvg_(__global_state, dcorxf, stemp, &__state->c__6, &__state->c__6, 
+		j2dsta);
 
 /*        We'll transform J2DSTA to the target body-fixed frame at */
 /*        the target epoch once we've computed the required */
@@ -1137,15 +1150,16 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*        Note that SINCPT will signal an error if FIXREF is not */
 /*        actually centered on the target body. */
 
-	sincpt_(method, __state->svtarg, et, fixref, abcorr, __state->svobs, 
-		dref, dvec, spoint, &trgepc, srfvec, found, method_len, (
-		ftnlen)36, fixref_len, abcorr_len, (ftnlen)36, dref_len);
+	sincpt_(__global_state, method, __state->svtarg, et, fixref, abcorr, 
+		__state->svobs, dref, dvec, spoint, &trgepc, srfvec, found, 
+		method_len, (ftnlen)36, fixref_len, abcorr_len, (ftnlen)36, 
+		dref_len);
 
 /*        It's not an error for SINCPT to be unable to compute an */
 /*        intercept point; return now if the intercept was not found. */
 
 	if (! (*found)) {
-	    chkout_("ZZGFSSIN", (ftnlen)8);
+	    chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1153,15 +1167,16 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*        to the solar system barycenter at their respective epochs of */
 /*        participation. */
 
-	spkssb_(obsid, et, "J2000", ssbobs, (ftnlen)5);
-	spkssb_(trgid, &trgepc, "J2000", ssbtg0, (ftnlen)5);
+	spkssb_(__global_state, obsid, et, "J2000", ssbobs, (ftnlen)5);
+	spkssb_(__global_state, trgid, &trgepc, "J2000", ssbtg0, (ftnlen)5);
 
 /*        Get the uncorrected J2000 to body-fixed to state */
 /*        transformation at TRGEPC. */
 
-	sxform_("J2000", fixref, &trgepc, xform, (ftnlen)5, fixref_len);
-	if (failed_()) {
-	    chkout_("ZZGFSSIN", (ftnlen)8);
+	sxform_(__global_state, "J2000", fixref, &trgepc, xform, (ftnlen)5, 
+		fixref_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1169,8 +1184,8 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*        body-fixed frame. At this point we don't know the point's */
 /*        velocity; set it to zero. */
 
-	moved_(spoint, &__state->c__3, fxpsta);
-	cleard_(&__state->c__3, &fxpsta[3]);
+	moved_(__global_state, spoint, &__state->c__3, fxpsta);
+	cleard_(__global_state, &__state->c__3, &fxpsta[3]);
 	if (usestl) {
 
 /*           We're going to need the acceleration of the observer */
@@ -1181,20 +1196,21 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*              The epoch is ET -/+ TDELTA. */
 
 		t = *et + ((i__ << 1) - 3) * 1.;
-		spkssb_(obsid, &t, "J2000", &obssta[(i__1 = i__ * 6 - 6) < 12 
-			&& 0 <= i__1 ? i__1 : s_rnge("obssta", i__1, "zzgfss"
-			"in_", (ftnlen)793)], (ftnlen)5);
+		spkssb_(__global_state, obsid, &t, "J2000", &obssta[(i__1 = 
+			i__ * 6 - 6) < 12 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "obssta", i__1, "zzgfssin_", (
+			ftnlen)793)], (ftnlen)5);
 	    }
-	    if (failed_()) {
-		chkout_("ZZGFSSIN", (ftnlen)8);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 		return 0;
 	    }
 
 /*           Compute the observer's acceleration using a quadratic */
 /*           approximation. */
 
-	    qderiv_(&__state->c__3, &obssta[3], &obssta[9], &__state->c_b50, 
-		    acc);
+	    qderiv_(__global_state, &__state->c__3, &obssta[3], &obssta[9], &
+		    __state->c_b50, acc);
 	}
 
 /*        The rest of the algorithm is iterative. On the first */
@@ -1206,7 +1222,7 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*        pass yields a reasonable estimate. On the second pass, */
 /*        we'll use the velocity derived on the first pass. */
 
-	cleard_(&__state->c__3, fxpvel);
+	cleard_(__global_state, &__state->c__3, fxpvel);
 
 /*        We'll also estimate the rate of change of light time */
 /*        as zero on the first pass. */
@@ -1227,78 +1243,82 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*           correct the velocity for the rate of change of light */
 /*           time. */
 
-	    moved_(ssbtg0, &__state->c__3, ssbtrg);
-	    vscl_(&scale, &ssbtg0[3], &ssbtrg[3]);
+	    moved_(__global_state, ssbtg0, &__state->c__3, ssbtrg);
+	    vscl_(__global_state, &scale, &ssbtg0[3], &ssbtrg[3]);
 
 /*           Get the state of the target with respect to the observer. */
 
-	    vsubg_(ssbtrg, ssbobs, &__state->c__6, obstrg);
+	    vsubg_(__global_state, ssbtrg, ssbobs, &__state->c__6, obstrg);
 
 /*           Correct the J2000 to body-fixed state transformation matrix */
 /*           for the rate of change of light time. */
 
-	    zzcorsxf_(&xmit, &dlt, xform, corxfm);
+	    zzcorsxf_(__global_state, &xmit, &dlt, xform, corxfm);
 
 /*           Invert CORXFM to obtain the corrected */
 /*           body-fixed to J2000 state transformation. */
 
-	    invstm_(corxfm, corxfi);
+	    invstm_(__global_state, corxfm, corxfi);
 
 /*           Convert the surface intercept point state to the J2000 */
 /*           frame. */
 
-	    mxvg_(corxfi, fxpsta, &__state->c__6, &__state->c__6, pntsta);
+	    mxvg_(__global_state, corxfi, fxpsta, &__state->c__6, &
+		    __state->c__6, pntsta);
 
 /*           Find the J2000-relative state of the surface intercept */
 /*           point with respect to the target. */
 
-	    vaddg_(obstrg, pntsta, &__state->c__6, obspnt);
+	    vaddg_(__global_state, obstrg, pntsta, &__state->c__6, obspnt);
 	    if (usestl) {
 
 /*              Now compute the stellar aberration correction */
 /*              applicable to OBSPNT. We need the velocity of */
 /*              this correction as well. */
 
-		zzstelab_(&xmit, acc, &ssbobs[3], obspnt, sa, savel);
-		moved_(sa, &__state->c__3, sastat);
-		moved_(savel, &__state->c__3, &sastat[3]);
+		zzstelab_(__global_state, &xmit, acc, &ssbobs[3], obspnt, sa, 
+			savel);
+		moved_(__global_state, sa, &__state->c__3, sastat);
+		moved_(__global_state, savel, &__state->c__3, &sastat[3]);
 
 /*              Adding the stellar aberration state to the target center */
 /*              state gives us the state of the target center with */
 /*              respect to the observer, corrected for the aberrations */
 /*              applicable to the surface intercept point. */
 
-		vaddg_(obstrg, sastat, &__state->c__6, stemp);
+		vaddg_(__global_state, obstrg, sastat, &__state->c__6, stemp);
 	    } else {
-		moved_(obstrg, &__state->c__6, stemp);
+		moved_(__global_state, obstrg, &__state->c__6, stemp);
 	    }
 
 /*           Convert STEMP to the body-fixed reference frame. */
 
-	    mxvg_(corxfm, stemp, &__state->c__6, &__state->c__6, fxtsta);
+	    mxvg_(__global_state, corxfm, stemp, &__state->c__6, &
+		    __state->c__6, fxtsta);
 
 /*           At long last, compute the state of the observer */
 /*           with respect to the target in the body-fixed frame. */
 
-	    vminug_(fxtsta, &__state->c__6, fxosta);
+	    vminug_(__global_state, fxtsta, &__state->c__6, fxosta);
 
 /*           Transform the state of the direction vector from the */
 /*           J2000 frame to the target body-fixed frame at TRGEPC. */
 
-	    mxvg_(corxfm, j2dsta, &__state->c__6, &__state->c__6, fxdsta);
+	    mxvg_(__global_state, corxfm, j2dsta, &__state->c__6, &
+		    __state->c__6, fxdsta);
 
 /*           Now we can obtain the surface velocity of the */
 /*           surface intercept point. */
 
-	    surfpv_(fxosta, fxdsta, radii, &radii[1], &radii[2], fxpsta, 
-		    found);
+	    surfpv_(__global_state, fxosta, fxdsta, radii, &radii[1], &radii[
+		    2], fxpsta, found);
 
 /*           It's not an error for SURFPV to be unable to compute an */
 /*           intercept state; return now if the state was not */
 /*           computable. */
 
 	    if (! (*found)) {
-		chkout_("ZZGFSSIN", (ftnlen)8);
+		chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 		return 0;
 	    }
 
@@ -1312,8 +1332,9 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*           add the result to the state of the target center */
 /*           with respect to the observer. */
 
-	    mxvg_(corxfi, fxpsta, &__state->c__6, &__state->c__6, pntsta);
-	    vaddg_(obstrg, pntsta, &__state->c__6, obspnt);
+	    mxvg_(__global_state, corxfi, fxpsta, &__state->c__6, &
+		    __state->c__6, pntsta);
+	    vaddg_(__global_state, obstrg, pntsta, &__state->c__6, obspnt);
 
 /*           Now that we have an improved estimate of the */
 /*           surface intercept state, we can estimate the rate of */
@@ -1331,8 +1352,9 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 /*           made by including stellar aberration is too small to make */
 /*           it worthwhile to make this adjustment. */
 
-	    vhat_(obspnt, upos);
-	    dlt = vdot_(&obspnt[3], upos) / clight_();
+	    vhat_(__global_state, obspnt, upos);
+	    dlt = vdot_(__global_state, &obspnt[3], upos) / clight_(
+		    __global_state);
 
 /*           With FXPVEL and DLT updated, we'll repeat our */
 /*           computations. */
@@ -1342,18 +1364,19 @@ static zzgfssin_state_t* get_zzgfssin_state() {
 
 /*        We should never get here. */
 
-	setmsg_("Aberration correction # was not recognized.", (ftnlen)43);
-	errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZGFSSIN", (ftnlen)8);
+	setmsg_(__global_state, "Aberration correction # was not recognized.",
+		 (ftnlen)43);
+	errch_(__global_state, "#", abcorr, (ftnlen)1, abcorr_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Copy the computed state to the output argument STATE. */
 /*     FOUND has already been set to .TRUE. by SURFPV. */
 
-    moved_(fxpsta, &__state->c__6, state);
-    chkout_("ZZGFSSIN", (ftnlen)8);
+    moved_(__global_state, fxpsta, &__state->c__6, state);
+    chkout_(__global_state, "ZZGFSSIN", (ftnlen)8);
     return 0;
 } /* zzgfssin_ */
 

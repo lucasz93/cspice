@@ -159,7 +159,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekopn_c" );
+   chkin_c ( naif_state, "ekopn_c" );
 
    /*
    Check the file name to make sure the pointer is non-null 

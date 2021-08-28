@@ -8,19 +8,19 @@
 
 
 typedef int ekshdw_state_t;
-static ekshdw_state_t* get_ekshdw_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekshdw_state_t* get_ekshdw_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure     EKSHDW ( EK, return shadowing status <STUB> ) */
-/* Subroutine */ int ekshdw_(integer *handle, logical *isshad)
+/* Subroutine */ int ekshdw_(cspice_t* __global_state, integer *handle, 
+	logical *isshad)
 {
     integer i__;
 
 
     /* Module state */
-    ekshdw_state_t* __state = get_ekshdw_state();
+    ekshdw_state_t* __state = get_ekshdw_state(__global_state);
 /* $ Abstract */
 
 /*     Return shadowing status of a specified EK file.  THIS IS A */

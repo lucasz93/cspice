@@ -400,7 +400,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "stpool_c" );
+   chkin_c ( naif_state, "stpool_c" );
 
 
    /*

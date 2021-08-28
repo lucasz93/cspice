@@ -8,8 +8,7 @@
 
 
 extern zzwahr_init_t __zzwahr_init;
-static zzwahr_state_t* get_zzwahr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzwahr_state_t* get_zzwahr_state(cspice_t* state) {
 	if (!state->zzwahr)
 		state->zzwahr = __cspice_allocate_module(sizeof(
 	zzwahr_state_t), &__zzwahr_init, sizeof(__zzwahr_init));
@@ -18,7 +17,8 @@ static zzwahr_state_t* get_zzwahr_state() {
 }
 
 /* $Procedure      ZZWAHR ( SPICELIB private version of Newhalls' WAHR ) */
-/* Subroutine */ int zzwahr_(doublereal *et, doublereal *dvnut)
+/* Subroutine */ int zzwahr_(cspice_t* __global_state, doublereal *et, 
+	doublereal *dvnut)
 {
     /* Initialized data */
 
@@ -27,18 +27,18 @@ static zzwahr_state_t* get_zzwahr_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double d_mod(doublereal *, doublereal *), cos(doublereal), sin(doublereal)
-	    ;
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double d_mod(f2c_state_t*, doublereal *, doublereal *), cos(f2c_state_t*, 
+	    doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern doublereal twopi_(void);
-    extern doublereal pi_(void);
-    extern doublereal spd_(void);
+    extern doublereal twopi_(cspice_t*);
+    extern doublereal pi_(cspice_t*);
+    extern doublereal spd_(cspice_t*);
 
 
     /* Module state */
-    zzwahr_state_t* __state = get_zzwahr_state();
+    zzwahr_state_t* __state = get_zzwahr_state(__global_state);
 /* $ Abstract */
 
 /*     Calculates nutation angles delta psi and delta epsilon,  and */
@@ -243,12 +243,12 @@ static zzwahr_state_t* get_zzwahr_state() {
 /*              27.3 */
     if (__state->first) {
 	__state->first = FALSE_;
-	__state->dpi = pi_();
-	__state->dtwopi = twopi_();
+	__state->dpi = pi_(__global_state);
+	__state->dtwopi = twopi_(__global_state);
 	__state->radian = 180. / __state->dpi;
 	__state->rasec = __state->radian * 3600.;
 	__state->factr = __state->rasec * 1e4;
-	__state->oneday = spd_();
+	__state->oneday = spd_(__global_state);
 
 /*        The following values are direct conversions to degrees from */
 /*        page 114 of the Explanatory Supplement to the Astronomical */
@@ -372,32 +372,35 @@ static zzwahr_state_t* get_zzwahr_state() {
 
     for (__state->j = 1; __state->j <= 5; ++__state->j) {
 	__state->angle[(i__1 = __state->j - 1) < 5 && 0 <= i__1 ? i__1 : 
-		s_rnge("angle", i__1, "zzwahr_", (ftnlen)570)] = d_mod(&
-		__state->angle[(i__2 = __state->j - 1) < 5 && 0 <= i__2 ? 
-		i__2 : s_rnge("angle", i__2, "zzwahr_", (ftnlen)570)], &
-		__state->c_b2);
+		s_rnge(&__global_state->f2c, "angle", i__1, "zzwahr_", (
+		ftnlen)570)] = d_mod(&__global_state->f2c, &__state->angle[(
+		i__2 = __state->j - 1) < 5 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "angle", i__2, "zzwahr_", (ftnlen)570)], 
+		&__state->c_b2);
 	__state->angrt[(i__1 = __state->j - 1) < 5 && 0 <= i__1 ? i__1 : 
-		s_rnge("angrt", i__1, "zzwahr_", (ftnlen)571)] = d_mod(&
-		__state->angrt[(i__2 = __state->j - 1) < 5 && 0 <= i__2 ? 
-		i__2 : s_rnge("angrt", i__2, "zzwahr_", (ftnlen)571)], &
-		__state->c_b2);
+		s_rnge(&__global_state->f2c, "angrt", i__1, "zzwahr_", (
+		ftnlen)571)] = d_mod(&__global_state->f2c, &__state->angrt[(
+		i__2 = __state->j - 1) < 5 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "angrt", i__2, "zzwahr_", (ftnlen)571)], 
+		&__state->c_b2);
 	__state->angle[(i__1 = __state->j - 1) < 5 && 0 <= i__1 ? i__1 : 
-		s_rnge("angle", i__1, "zzwahr_", (ftnlen)573)] = 
-		__state->angle[(i__2 = __state->j - 1) < 5 && 0 <= i__2 ? 
-		i__2 : s_rnge("angle", i__2, "zzwahr_", (ftnlen)573)] / 
-		__state->radian;
+		s_rnge(&__global_state->f2c, "angle", i__1, "zzwahr_", (
+		ftnlen)573)] = __state->angle[(i__2 = __state->j - 1) < 5 && 
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "angle", i__2,
+		 "zzwahr_", (ftnlen)573)] / __state->radian;
 	__state->angrt[(i__1 = __state->j - 1) < 5 && 0 <= i__1 ? i__1 : 
-		s_rnge("angrt", i__1, "zzwahr_", (ftnlen)574)] = 
-		__state->angrt[(i__2 = __state->j - 1) < 5 && 0 <= i__2 ? 
-		i__2 : s_rnge("angrt", i__2, "zzwahr_", (ftnlen)574)] / 
-		__state->radian;
+		s_rnge(&__global_state->f2c, "angrt", i__1, "zzwahr_", (
+		ftnlen)574)] = __state->angrt[(i__2 = __state->j - 1) < 5 && 
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "angrt", i__2,
+		 "zzwahr_", (ftnlen)574)] / __state->radian;
     }
 
 /*     Zero out the components of the nutation array */
 
     for (__state->j = 1; __state->j <= 4; ++__state->j) {
-	dvnut[(i__1 = __state->j - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("dvnut"
-		, i__1, "zzwahr_", (ftnlen)580)] = 0.;
+	dvnut[(i__1 = __state->j - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "dvnut", i__1, "zzwahr_", (ftnlen)580)] =
+		 0.;
     }
 
 /*     Now we accumulate the various terms of Delta Psi and Delta */
@@ -409,45 +412,48 @@ static zzwahr_state_t* get_zzwahr_state() {
 	__state->argrt = 0.;
 	for (__state->j = 1; __state->j <= 5; ++__state->j) {
 	    if (__state->matrix[(i__1 = __state->j + __state->i__ * 9 - 10) < 
-		    954 && 0 <= i__1 ? i__1 : s_rnge("matrix", i__1, "zzwahr_"
-		    , (ftnlen)593)] != 0) {
+		    954 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "matrix", i__1, "zzwahr_", (ftnlen)593)] != 0) {
 		__state->arg += __state->matrix[(i__1 = __state->j + 
 			__state->i__ * 9 - 10) < 954 && 0 <= i__1 ? i__1 : 
-			s_rnge("matrix", i__1, "zzwahr_", (ftnlen)594)] * 
-			__state->angle[(i__2 = __state->j - 1) < 5 && 0 <= 
-			i__2 ? i__2 : s_rnge("angle", i__2, "zzwahr_", (
+			s_rnge(&__global_state->f2c, "matrix", i__1, "zzwahr_"
+			, (ftnlen)594)] * __state->angle[(i__2 = __state->j - 
+			1) < 5 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "angle", i__2, "zzwahr_", (
 			ftnlen)594)];
 		__state->argrt += __state->matrix[(i__1 = __state->j + 
 			__state->i__ * 9 - 10) < 954 && 0 <= i__1 ? i__1 : 
-			s_rnge("matrix", i__1, "zzwahr_", (ftnlen)595)] * 
-			__state->angrt[(i__2 = __state->j - 1) < 5 && 0 <= 
-			i__2 ? i__2 : s_rnge("angrt", i__2, "zzwahr_", (
+			s_rnge(&__global_state->f2c, "matrix", i__1, "zzwahr_"
+			, (ftnlen)595)] * __state->angrt[(i__2 = __state->j - 
+			1) < 5 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "angrt", i__2, "zzwahr_", (
 			ftnlen)595)];
-		__state->arg = d_mod(&__state->arg, &__state->dtwopi);
+		__state->arg = d_mod(&__global_state->f2c, &__state->arg, &
+			__state->dtwopi);
 	    }
 	}
 	__state->cl = (doublereal) __state->matrix[(i__1 = __state->i__ * 9 - 
-		4) < 954 && 0 <= i__1 ? i__1 : s_rnge("matrix", i__1, "zzwah"
-		"r_", (ftnlen)600)];
+		4) < 954 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"matrix", i__1, "zzwahr_", (ftnlen)600)];
 	if (__state->matrix[(i__1 = __state->i__ * 9 - 3) < 954 && 0 <= i__1 ?
-		 i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)602)] != 0) 
-		{
+		 i__1 : s_rnge(&__global_state->f2c, "matrix", i__1, "zzwahr_"
+		, (ftnlen)602)] != 0) {
 	    __state->cl += __state->matrix[(i__1 = __state->i__ * 9 - 3) < 
-		    954 && 0 <= i__1 ? i__1 : s_rnge("matrix", i__1, "zzwahr_"
-		    , (ftnlen)603)] * __state->t;
+		    954 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "matrix", i__1, "zzwahr_", (ftnlen)603)] * __state->t;
 	}
 	__state->ce = (doublereal) __state->matrix[(i__1 = __state->i__ * 9 - 
-		2) < 954 && 0 <= i__1 ? i__1 : s_rnge("matrix", i__1, "zzwah"
-		"r_", (ftnlen)606)];
+		2) < 954 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"matrix", i__1, "zzwahr_", (ftnlen)606)];
 	if (__state->matrix[(i__1 = __state->i__ * 9 - 1) < 954 && 0 <= i__1 ?
-		 i__1 : s_rnge("matrix", i__1, "zzwahr_", (ftnlen)608)] != 0) 
-		{
+		 i__1 : s_rnge(&__global_state->f2c, "matrix", i__1, "zzwahr_"
+		, (ftnlen)608)] != 0) {
 	    __state->ce += __state->matrix[(i__1 = __state->i__ * 9 - 1) < 
-		    954 && 0 <= i__1 ? i__1 : s_rnge("matrix", i__1, "zzwahr_"
-		    , (ftnlen)609)] * __state->t;
+		    954 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "matrix", i__1, "zzwahr_", (ftnlen)609)] * __state->t;
 	}
-	__state->cosang = cos(__state->arg);
-	__state->sinang = sin(__state->arg);
+	__state->cosang = cos(&__global_state->f2c, __state->arg);
+	__state->sinang = sin(&__global_state->f2c, __state->arg);
 	dvnut[0] += __state->cl * __state->sinang / __state->factr;
 	dvnut[1] += __state->ce * __state->cosang / __state->factr;
 	dvnut[2] += __state->cl * __state->cosang * __state->argrt / 

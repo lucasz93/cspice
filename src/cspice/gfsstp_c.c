@@ -161,7 +161,7 @@
       return;
    }
 
-   chkin_c ( "gfsstp_c" );
+   chkin_c ( naif_state, "gfsstp_c" );
 
    /*
    Let the f2c'd routine do the work.

@@ -8,8 +8,7 @@
 
 
 extern qxq_init_t __qxq_init;
-static qxq_state_t* get_qxq_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline qxq_state_t* get_qxq_state(cspice_t* state) {
 	if (!state->qxq)
 		state->qxq = __cspice_allocate_module(sizeof(qxq_state_t), &
 	__qxq_init, sizeof(__qxq_init));
@@ -18,19 +17,20 @@ static qxq_state_t* get_qxq_state() {
 }
 
 /* $Procedure QXQ (Quaternion times quaternion) */
-/* Subroutine */ int qxq_(doublereal *q1, doublereal *q2, doublereal *qout)
+/* Subroutine */ int qxq_(cspice_t* __global_state, doublereal *q1, 
+	doublereal *q2, doublereal *qout)
 {
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     doublereal cross[3];
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vlcom3_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
 
 
     /* Module state */
-    qxq_state_t* __state = get_qxq_state();
+    qxq_state_t* __state = get_qxq_state(__global_state);
 /* $ Abstract */
 
 /*     Multiply two quaternions. */
@@ -442,13 +442,14 @@ static qxq_state_t* get_qxq_state() {
 
 /*     Compute the scalar part of the product. */
 
-    qout[0] = q1[0] * q2[0] - vdot_(&q1[1], &q2[1]);
+    qout[0] = q1[0] * q2[0] - vdot_(__global_state, &q1[1], &q2[1]);
 
 /*     And now the vector part.  The SPICELIB routine VLCOM3 computes */
 /*     a linear combination of three 3-vectors. */
 
-    vcrss_(&q1[1], &q2[1], cross);
-    vlcom3_(q1, &q2[1], q2, &q1[1], &__state->c_b2, cross, &qout[1]);
+    vcrss_(__global_state, &q1[1], &q2[1], cross);
+    vlcom3_(__global_state, q1, &q2[1], q2, &q1[1], &__state->c_b2, cross, &
+	    qout[1]);
     return 0;
 } /* qxq_ */
 

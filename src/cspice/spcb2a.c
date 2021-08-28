@@ -8,32 +8,31 @@
 
 
 typedef int spcb2a_state_t;
-static spcb2a_state_t* get_spcb2a_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spcb2a_state_t* get_spcb2a_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure SPCB2A ( SPK and CK, binary to ASCII ) */
-/* Subroutine */ int spcb2a_(char *binary, char *text, ftnlen binary_len, 
-	ftnlen text_len)
+/* Subroutine */ int spcb2a_(cspice_t* __global_state, char *binary, char *
+	text, ftnlen binary_len, ftnlen text_len)
 {
     /* System generated locals */
     cllist cl__1;
 
     /* Builtin functions */
-    integer f_clos(cllist *);
+    integer f_clos(f2c_state_t*, cllist *);
 
     /* Local variables */
     integer unit;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int spcb2t_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int txtopn_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int spcb2t_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int txtopn_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    spcb2a_state_t* __state = get_spcb2a_state();
+    spcb2a_state_t* __state = get_spcb2a_state(__global_state);
 /* $ Abstract */
 
 /*     Convert a binary SPK or CK file to an equivalent text (ASCII) */
@@ -206,22 +205,22 @@ static spcb2a_state_t* get_spcb2a_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPCB2A", (ftnlen)6);
+	chkin_(__global_state, "SPCB2A", (ftnlen)6);
     }
 
 /*     Open the new text file.  Call SPCB2T to write the data */
 /*     and comments.  Then close the text file and we're done. */
 
-    txtopn_(text, &unit, text_len);
-    spcb2t_(binary, &unit, binary_len);
+    txtopn_(__global_state, text, &unit, text_len);
+    spcb2t_(__global_state, binary, &unit, binary_len);
     cl__1.cerr = 0;
     cl__1.cunit = unit;
     cl__1.csta = 0;
-    f_clos(&cl__1);
-    chkout_("SPCB2A", (ftnlen)6);
+    f_clos(&__global_state->f2c, &cl__1);
+    chkout_(__global_state, "SPCB2A", (ftnlen)6);
     return 0;
 } /* spcb2a_ */
 

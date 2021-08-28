@@ -164,7 +164,7 @@
    {
       return;
    }
-   chkin_c ( "wndifd_c" );
+   chkin_c ( naif_state, "wndifd_c" );
 
 
    /*

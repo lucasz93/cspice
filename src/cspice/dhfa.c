@@ -8,39 +8,40 @@
 
 
 typedef int dhfa_state_t;
-static dhfa_state_t* get_dhfa_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dhfa_state_t* get_dhfa_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DHFA ( Time derivative of half angle ) */
-doublereal dhfa_(doublereal *state, doublereal *bodyr)
+doublereal dhfa_(cspice_t* __global_state, doublereal *state, doublereal *
+	bodyr)
 {
     /* System generated locals */
     doublereal ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal base;
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     doublereal p[3];
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     doublereal rngrat;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dhfa_state_t* __state = get_dhfa_state();
+    dhfa_state_t* __state = get_dhfa_state(__global_state);
 /* $ Abstract */
 
 /*     Calculate the value of the time derivative of the */
@@ -290,11 +291,11 @@ doublereal dhfa_(doublereal *state, doublereal *bodyr)
 
 /*     SPICELIB functions */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0.;
 	return ret_val;
     } else {
-	chkin_("DHFA", (ftnlen)4);
+	chkin_(__global_state, "DHFA", (ftnlen)4);
     }
 
 /*     A zero body radius (point object) returns a zero for the */
@@ -303,33 +304,33 @@ doublereal dhfa_(doublereal *state, doublereal *bodyr)
 
     if (*bodyr == 0.) {
 	ret_val = 0.;
-	chkout_("DHFA", (ftnlen)4);
+	chkout_(__global_state, "DHFA", (ftnlen)4);
 	return ret_val;
     } else if (*bodyr < 0.) {
 	ret_val = 0.;
-	setmsg_("Non physical case. The input body radius has a negative val"
-		"ue.", (ftnlen)62);
-	sigerr_("SPICE(BADRADIUS)", (ftnlen)16);
-	chkout_("DHFA", (ftnlen)4);
+	setmsg_(__global_state, "Non physical case. The input body radius ha"
+		"s a negative value.", (ftnlen)62);
+	sigerr_(__global_state, "SPICE(BADRADIUS)", (ftnlen)16);
+	chkout_(__global_state, "DHFA", (ftnlen)4);
 	return ret_val;
     }
 
 /*     Normalize the position component of STATE. Store the unit vector */
 /*     in P. */
 
-    unorm_(state, p, &r__);
-    if (vzero_(p)) {
+    unorm_(__global_state, state, p, &r__);
+    if (vzero_(__global_state, p)) {
 	ret_val = 0.;
-	setmsg_("The position component of the input state vector equals the"
-		" zero vector.", (ftnlen)72);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("DHFA", (ftnlen)4);
+	setmsg_(__global_state, "The position component of the input state v"
+		"ector equals the zero vector.", (ftnlen)72);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "DHFA", (ftnlen)4);
 	return ret_val;
     }
 
 /*     Calculate the range rate. */
 
-    rngrat = vdot_(p, &state[3]);
+    rngrat = vdot_(__global_state, p, &state[3]);
 
 /*     Confirm R > BODYR. */
 
@@ -340,20 +341,20 @@ doublereal dhfa_(doublereal *state, doublereal *bodyr)
     base = d__1 * d__1 - d__2 * d__2;
     if (base <= 0.) {
 	ret_val = 0.;
-	setmsg_("Invalid case. The body radius, #1, equals or exceeds the ra"
-		"nge to the target, #2.", (ftnlen)81);
-	errdp_("#1", bodyr, (ftnlen)2);
-	errdp_("#2", &r__, (ftnlen)2);
-	sigerr_("SPICE(BADGEOMETRY)", (ftnlen)18);
-	chkout_("DHFA", (ftnlen)4);
+	setmsg_(__global_state, "Invalid case. The body radius, #1, equals o"
+		"r exceeds the range to the target, #2.", (ftnlen)81);
+	errdp_(__global_state, "#1", bodyr, (ftnlen)2);
+	errdp_(__global_state, "#2", &r__, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(BADGEOMETRY)", (ftnlen)18);
+	chkout_(__global_state, "DHFA", (ftnlen)4);
 	return ret_val;
     }
 
 /*     Now we safely take the square root of BASE. */
 
-    base = sqrt(base);
+    base = sqrt(&__global_state->f2c, base);
     ret_val = -(rngrat * *bodyr) / (base * r__);
-    chkout_("DHFA", (ftnlen)4);
+    chkout_(__global_state, "DHFA", (ftnlen)4);
     return ret_val;
 } /* dhfa_ */
 

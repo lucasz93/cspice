@@ -8,33 +8,32 @@
 
 
 typedef int raxisa_state_t;
-static raxisa_state_t* get_raxisa_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline raxisa_state_t* get_raxisa_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RAXISA ( Rotation axis of a matrix ) */
-/* Subroutine */ int raxisa_(doublereal *matrix, doublereal *axis, doublereal 
-	*angle)
+/* Subroutine */ int raxisa_(cspice_t* __global_state, doublereal *matrix, 
+	doublereal *axis, doublereal *angle)
 {
     /* Builtin functions */
-    double atan2(doublereal, doublereal);
+    double atan2(f2c_state_t*, doublereal, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal q[4];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal vnorm_(doublereal *);
-    extern logical vzero_(doublereal *);
-    extern logical failed_(void);
-    extern doublereal pi_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int m2q_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern doublereal pi_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int m2q_(cspice_t*, doublereal *, doublereal *);
 
 
     /* Module state */
-    raxisa_state_t* __state = get_raxisa_state();
+    raxisa_state_t* __state = get_raxisa_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the axis of the rotation given by an input matrix */
@@ -316,21 +315,21 @@ static raxisa_state_t* get_raxisa_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("RAXISA", (ftnlen)6);
+	chkin_(__global_state, "RAXISA", (ftnlen)6);
     }
 
 /*     Construct the quaternion corresponding to the input rotation */
 /*     matrix */
 
-    m2q_(matrix, q);
+    m2q_(__global_state, matrix, q);
 
 /*     Check FAILED and return if an error has occurred. */
 
-    if (failed_()) {
-	chkout_("RAXISA", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "RAXISA", (ftnlen)6);
 	return 0;
     }
 
@@ -341,21 +340,22 @@ static raxisa_state_t* get_raxisa_state() {
 /*     We take a few precautions to handle the case of an identity */
 /*     rotation. */
 
-    if (vzero_(&q[1])) {
+    if (vzero_(__global_state, &q[1])) {
 	*angle = 0.;
 	axis[0] = 0.;
 	axis[1] = 0.;
 	axis[2] = 1.;
     } else if (q[0] == 0.) {
-	*angle = pi_();
+	*angle = pi_(__global_state);
 	axis[0] = q[1];
 	axis[1] = q[2];
 	axis[2] = q[3];
     } else {
-	vhat_(&q[1], axis);
-	*angle = atan2(vnorm_(&q[1]), q[0]) * 2.;
+	vhat_(__global_state, &q[1], axis);
+	*angle = atan2(&__global_state->f2c, vnorm_(__global_state, &q[1]), q[
+		0]) * 2.;
     }
-    chkout_("RAXISA", (ftnlen)6);
+    chkout_(__global_state, "RAXISA", (ftnlen)6);
     return 0;
 } /* raxisa_ */
 

@@ -8,8 +8,7 @@
 
 
 extern phaseq_init_t __phaseq_init;
-static phaseq_state_t* get_phaseq_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline phaseq_state_t* get_phaseq_state(cspice_t* state) {
 	if (!state->phaseq)
 		state->phaseq = __cspice_allocate_module(sizeof(
 	phaseq_state_t), &__phaseq_init, sizeof(__phaseq_init));
@@ -18,9 +17,9 @@ static phaseq_state_t* get_phaseq_state() {
 }
 
 /* $Procedure PHASEQ ( Phase angle quantity between bodies centers ) */
-doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr, 
-	char *abcorr, ftnlen target_len, ftnlen illmn_len, ftnlen obsrvr_len, 
-	ftnlen abcorr_len)
+doublereal phaseq_(cspice_t* __global_state, doublereal *et, char *target, 
+	char *illmn, char *obsrvr, char *abcorr, ftnlen target_len, ftnlen 
+	illmn_len, ftnlen obsrvr_len, ftnlen abcorr_len)
 {
     /* Initialized data */
 
@@ -29,31 +28,34 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
     doublereal ret_val;
 
     /* Local variables */
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    integer targ;
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    integer illum;
-    extern logical failed_(void);
-    logical attblk[15];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    char xbcorr[32];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
 	    ftnlen);
-    extern logical return_(void);
+    integer targ;
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    integer illum;
+    extern logical failed_(cspice_t*);
+    logical attblk[15];
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    char xbcorr[32];
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(cspice_t*, integer *, char *, char *, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
     logical fnd;
     integer obs;
-    extern /* Subroutine */ int zzgfpaq_(doublereal *, integer *, integer *, 
-	    integer *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzgfpaq_(cspice_t*, doublereal *, integer *, 
+	    integer *, integer *, char *, doublereal *, ftnlen);
 
 
     /* Module state */
-    phaseq_state_t* __state = get_phaseq_state();
+    phaseq_state_t* __state = get_phaseq_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the apparent phase angle for a target, observer, */
@@ -706,10 +708,10 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return ret_val;
     }
-    chkin_("PHASEQ", (ftnlen)6);
+    chkin_(__global_state, "PHASEQ", (ftnlen)6);
 
 /*     Initialization. */
 
@@ -717,59 +719,66 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
-	zzctruin_(__state->svctr3);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
+	zzctruin_(__global_state, __state->svctr3);
 	__state->first = FALSE_;
     }
 
 /*     Obtain integer codes for the target, illuminator, and observer. */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtgid, &
-	    __state->svfnd1, target, &targ, &fnd, (ftnlen)36, target_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtgid, &__state->svfnd1, target, &targ, &fnd, (ftnlen)
+	    36, target_len);
     if (! fnd) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit. ", (ftnlen)155);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("PHASEQ", (ftnlen)6);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit. ", (
+		ftnlen)155);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "PHASEQ", (ftnlen)6);
 	return ret_val;
     }
-    zzbods2c_(__state->svctr2, __state->svilmn, &__state->svicde, &
-	    __state->svfnd2, illmn, &illum, &fnd, (ftnlen)36, illmn_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svilmn, &
+	    __state->svicde, &__state->svfnd2, illmn, &illum, &fnd, (ftnlen)
+	    36, illmn_len);
     if (! fnd) {
-	setmsg_("The illuminator, '#', is not a recognized name for an ephem"
-		"eris object. The cause of this problem may be that you need "
-		"an updated version of the SPICE Toolkit. ", (ftnlen)160);
-	errch_("#", illmn, (ftnlen)1, illmn_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("PHASEQ", (ftnlen)6);
+	setmsg_(__global_state, "The illuminator, '#', is not a recognized n"
+		"ame for an ephemeris object. The cause of this problem may b"
+		"e that you need an updated version of the SPICE Toolkit. ", (
+		ftnlen)160);
+	errch_(__global_state, "#", illmn, (ftnlen)1, illmn_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "PHASEQ", (ftnlen)6);
 	return ret_val;
     }
-    zzbods2c_(__state->svctr3, __state->svobsr, &__state->svobsn, &
-	    __state->svfnd3, obsrvr, &obs, &fnd, (ftnlen)36, obsrvr_len);
+    zzbods2c_(__global_state, __state->svctr3, __state->svobsr, &
+	    __state->svobsn, &__state->svfnd3, obsrvr, &obs, &fnd, (ftnlen)36,
+	     obsrvr_len);
     if (! fnd) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE Toolkit. ", (ftnlen)157);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("PHASEQ", (ftnlen)6);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE Toolkit. ", (
+		ftnlen)157);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "PHASEQ", (ftnlen)6);
 	return ret_val;
     }
 
 /*     Squeeze all blanks out of the aberration correction */
 /*     string; ensure the string is in upper case. */
 
-    ljucrs_(&__state->c__0, abcorr, xbcorr, abcorr_len, (ftnlen)32);
+    ljucrs_(__global_state, &__state->c__0, abcorr, xbcorr, abcorr_len, (
+	    ftnlen)32);
 
 /*     Check the aberration correction. If SPKEZR can't handle it, */
 /*     neither can we. */
 
-    zzvalcor_(xbcorr, attblk, (ftnlen)32);
-    if (failed_()) {
-	chkout_("PHASEQ", (ftnlen)6);
+    zzvalcor_(__global_state, xbcorr, attblk, (ftnlen)32);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "PHASEQ", (ftnlen)6);
 	return ret_val;
     }
 
@@ -777,36 +786,37 @@ doublereal phaseq_(doublereal *et, char *target, char *illmn, char *obsrvr,
 /*     for transmit corrections is XMTIDX. */
 
     if (attblk[4]) {
-	setmsg_("Invalid aberration correction '#'. Phase angle geometry cal"
-		"culations currently restricted to reception cases.", (ftnlen)
-		109);
-	errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	chkout_("PHASEQ", (ftnlen)6);
+	setmsg_(__global_state, "Invalid aberration correction '#'. Phase an"
+		"gle geometry calculations currently restricted to reception "
+		"cases.", (ftnlen)109);
+	errch_(__global_state, "#", abcorr, (ftnlen)1, abcorr_len);
+	sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	chkout_(__global_state, "PHASEQ", (ftnlen)6);
 	return ret_val;
     }
 
 /*     Make sure the observer, illuminator, and target are distinct. */
 
     if (targ == obs || targ == illum || obs == illum) {
-	setmsg_("The observer, illuminator, and target must be distinct obje"
-		"cts, but are not: OBSRVR = #, TARGET = #, are not: ILLMN= #.",
-		 (ftnlen)119);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	errch_("#", illmn, (ftnlen)1, illmn_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("PHASEQ", (ftnlen)6);
+	setmsg_(__global_state, "The observer, illuminator, and target must "
+		"be distinct objects, but are not: OBSRVR = #, TARGET = #, ar"
+		"e not: ILLMN= #.", (ftnlen)119);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errch_(__global_state, "#", illmn, (ftnlen)1, illmn_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "PHASEQ", (ftnlen)6);
 	return ret_val;
     }
 
 /*     Call the routine to calculate the phase angle */
 
-    zzgfpaq_(et, &targ, &illum, &obs, xbcorr, &ret_val, (ftnlen)32);
+    zzgfpaq_(__global_state, et, &targ, &illum, &obs, xbcorr, &ret_val, (
+	    ftnlen)32);
 
 /*     All done. */
 
-    chkout_("PHASEQ", (ftnlen)6);
+    chkout_(__global_state, "PHASEQ", (ftnlen)6);
     return ret_val;
 } /* phaseq_ */
 

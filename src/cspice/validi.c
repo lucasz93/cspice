@@ -8,28 +8,28 @@
 
 
 typedef int validi_state_t;
-static validi_state_t* get_validi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline validi_state_t* get_validi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VALIDI ( Validate an integer set ) */
-/* Subroutine */ int validi_(integer *size, integer *n, integer *a)
+/* Subroutine */ int validi_(cspice_t* __global_state, integer *size, integer 
+	*n, integer *a)
 {
     integer card;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int scardi_(integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int rmdupi_(integer *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int rmdupi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    validi_state_t* __state = get_validi_state();
+    validi_state_t* __state = get_validi_state(__global_state);
 /* $ Abstract */
 
 /*      Create a valid set from an integer set array. */
@@ -206,34 +206,34 @@ static validi_state_t* get_validi_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("VALIDI", (ftnlen)6);
+	chkin_(__global_state, "VALIDI", (ftnlen)6);
     }
 
 /*     Is the set size big enough? */
 
     if (*n > *size) {
-	setmsg_("Size of un-validated set is too small.  Size is #, size req"
-		"uired is #. ", (ftnlen)71);
-	errint_("#", size, (ftnlen)1);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("VALIDI", (ftnlen)6);
+	setmsg_(__global_state, "Size of un-validated set is too small.  Siz"
+		"e is #, size required is #. ", (ftnlen)71);
+	errint_(__global_state, "#", size, (ftnlen)1);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "VALIDI", (ftnlen)6);
 	return 0;
     }
 
 /*     Just like it says above. Order the array, and remove duplicates. */
 
     card = *n;
-    rmdupi_(&card, &a[6]);
+    rmdupi_(__global_state, &card, &a[6]);
 
 /*     Set the size and cardinality of the input set. */
 
-    ssizei_(size, a);
-    scardi_(&card, a);
-    chkout_("VALIDI", (ftnlen)6);
+    ssizei_(__global_state, size, a);
+    scardi_(__global_state, &card, a);
+    chkout_(__global_state, "VALIDI", (ftnlen)6);
     return 0;
 } /* validi_ */
 

@@ -371,7 +371,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "getelm_c" );
+   chkin_c ( naif_state, "getelm_c" );
 
 
    /*

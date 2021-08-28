@@ -8,8 +8,7 @@
 
 
 extern zzektrdl_init_t __zzektrdl_init;
-static zzektrdl_state_t* get_zzektrdl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrdl_state_t* get_zzektrdl_state(cspice_t* state) {
 	if (!state->zzektrdl)
 		state->zzektrdl = __cspice_allocate_module(sizeof(
 	zzektrdl_state_t), &__zzektrdl_init, sizeof(__zzektrdl_init));
@@ -18,7 +17,8 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 }
 
 /* $Procedure      ZZEKTRDL ( EK tree, delete value ) */
-/* Subroutine */ int zzektrdl_(integer *handle, integer *tree, integer *key)
+/* Subroutine */ int zzektrdl_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *key)
 {
     integer node;
     integer lsib;
@@ -28,22 +28,22 @@ static zzektrdl_state_t* get_zzektrdl_state() {
     integer pkey;
     integer rkey;
     integer root;
-    extern /* Subroutine */ int zzektrbn_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrki_(integer *, integer *, integer *, 
-	    integer *, integer *);
-    extern /* Subroutine */ int zzektrsb_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzektrbn_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrlk_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzektrki_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrsb_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *);
-    extern integer zzektrnk_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrud_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int zzektrpi_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzektrlk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern integer zzektrnk_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrud_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int zzektrpi_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrrk_(integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrrk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
     integer lnode;
     integer mnode;
     integer level;
@@ -65,7 +65,7 @@ static zzektrdl_state_t* get_zzektrdl_state() {
     integer state;
     integer rrkey;
     integer trust;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer parent;
     logical undrfl;
     integer noffst;
@@ -73,13 +73,13 @@ static zzektrdl_state_t* get_zzektrdl_state() {
     integer trgkey;
     integer idx;
     integer ptr;
-    extern /* Subroutine */ int zzektr31_(integer *, integer *);
-    extern /* Subroutine */ int zzektr32_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, logical *);
+    extern /* Subroutine */ int zzektr31_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzektr32_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, logical *);
 
 
     /* Module state */
-    zzektrdl_state_t* __state = get_zzektrdl_state();
+    zzektrdl_state_t* __state = get_zzektrdl_state(__global_state);
 /* $ Abstract */
 
 /*     Delete a value from an EK tree at a specified location. */
@@ -612,8 +612,8 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 /*     balancing.  This step may cause a node to underflow.  We'll */
 /*     handle the underflow later. */
 
-    zzektrud_(handle, tree, &lkey, &trgkey, &undrfl);
-    if (failed_()) {
+    zzektrud_(__global_state, handle, tree, &lkey, &trgkey, &undrfl);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -657,16 +657,17 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 /*           is where the underflow occurred; note that this node may */
 /*           be different from the one that contained LKEY. */
 
-	    zzektrlk_(handle, tree, &trgkey, &idx, &node, &noffst, &level, &
-		    ptr);
+	    zzektrlk_(__global_state, handle, tree, &trgkey, &idx, &node, &
+		    noffst, &level, &ptr);
 
 /*           Look up the siblings of NODE.  If either sibling exists */
 /*           and has a surplus of keys, we can remove the underflow */
 /*           by balancing. */
 
-	    zzektrsb_(handle, tree, &trgkey, &lsib, &lkey, &rsib, &rkey);
+	    zzektrsb_(__global_state, handle, tree, &trgkey, &lsib, &lkey, &
+		    rsib, &rkey);
 	    if (lsib > 0) {
-		nkeys = zzektrnk_(handle, tree, &lsib);
+		nkeys = zzektrnk_(__global_state, handle, tree, &lsib);
 		if (nkeys > 41) {
 
 /*                 The left sibling can contribute a key. */
@@ -702,7 +703,7 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 /*           The left sibling has already been checked and found wanting, */
 /*           or wasn't found at all. */
 
-	    nkeys = zzektrnk_(handle, tree, &rsib);
+	    nkeys = zzektrnk_(__global_state, handle, tree, &rsib);
 	    if (nkeys > 41) {
 
 /*              The right sibling can contribute a key. */
@@ -731,9 +732,10 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 
 /*           See whether the left sibling has its own left sibling. */
 
-	    zzektrsb_(handle, tree, &lkey, &llsib, &llkey, &lrsib, &lrkey);
+	    zzektrsb_(__global_state, handle, tree, &lkey, &llsib, &llkey, &
+		    lrsib, &lrkey);
 	    if (llsib > 0) {
-		nkeys = zzektrnk_(handle, tree, &llsib);
+		nkeys = zzektrnk_(__global_state, handle, tree, &llsib);
 		if (nkeys > 41) {
 
 /*                 The left**2 sibling can contribute a key.  Rotate */
@@ -741,10 +743,11 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 /*                 parent and index of left parent key of LSIB in order */
 /*                 to do this rotation. */
 
-		    zzektrpi_(handle, tree, &lkey, &parent, &pkey, &poffst, &
-			    lpidx, &lpkey, &llsib, &rpidx, &rpkey, &lrsib);
-		    zzektrrk_(handle, tree, &llsib, &lsib, &parent, &lpidx, &
-			    __state->c__1);
+		    zzektrpi_(__global_state, handle, tree, &lkey, &parent, &
+			    pkey, &poffst, &lpidx, &lpkey, &llsib, &rpidx, &
+			    rpkey, &lrsib);
+		    zzektrrk_(__global_state, handle, tree, &llsib, &lsib, &
+			    parent, &lpidx, &__state->c__1);
 
 /*                 Now LSIB has a one-key surplus, so we can balance */
 /*                 LSIB and NODE. */
@@ -780,9 +783,10 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 
 /*           See whether the right sibling has its own right sibling. */
 
-	    zzektrsb_(handle, tree, &rkey, &rlsib, &rlkey, &rrsib, &rrkey);
+	    zzektrsb_(__global_state, handle, tree, &rkey, &rlsib, &rlkey, &
+		    rrsib, &rrkey);
 	    if (rrsib > 0) {
-		nkeys = zzektrnk_(handle, tree, &rrsib);
+		nkeys = zzektrnk_(__global_state, handle, tree, &rrsib);
 		if (nkeys > 41) {
 
 /*                 The right**2 sibling can contribute a key.  Rotate */
@@ -790,10 +794,11 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 /*                 parent and index of the right parent key of RSIB in */
 /*                 order to do this rotation. */
 
-		    zzektrpi_(handle, tree, &rkey, &parent, &pkey, &poffst, &
-			    lpidx, &lpkey, &rlsib, &rpidx, &rpkey, &rrsib);
-		    zzektrrk_(handle, tree, &rsib, &rrsib, &parent, &rpidx, &
-			    __state->c_n1);
+		    zzektrpi_(__global_state, handle, tree, &rkey, &parent, &
+			    pkey, &poffst, &lpidx, &lpkey, &rlsib, &rpidx, &
+			    rpkey, &rrsib);
+		    zzektrrk_(__global_state, handle, tree, &rsib, &rrsib, &
+			    parent, &rpidx, &__state->c_n1);
 
 /*                 Now RSIB has a one-key surplus, so we can balance */
 /*                 RSIB and NODE. */
@@ -831,14 +836,15 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 /*           there are enough keys to accommodate the underflow.  After */
 /*           balancing these nodes, we're done. */
 
-	    zzektrpi_(handle, tree, &lnkey, &parent, &pkey, &poffst, &lpidx, &
-		    lpkey, &rlsib, &rpidx, &rpkey, &rrsib);
+	    zzektrpi_(__global_state, handle, tree, &lnkey, &parent, &pkey, &
+		    poffst, &lpidx, &lpkey, &rlsib, &rpidx, &rpkey, &rrsib);
 
 /*           The common parent of the nodes is PARENT.  The right parent */
 /*           key of the left node is at location RPIDX.  We're ready to */
 /*           balance the nodes. */
 
-	    zzektrbn_(handle, tree, &lnode, &rnode, &parent, &rpidx);
+	    zzektrbn_(__global_state, handle, tree, &lnode, &rnode, &parent, &
+		    rpidx);
 	    state = 1;
 	} else if (state == 5) {
 
@@ -855,16 +861,17 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 /*           leftmost node LNODE.  The first key of LNODE won't be */
 /*           touched by the merge. */
 
-	    zzektrki_(handle, tree, &lnkey, &__state->c__1, &trust);
-	    zzektrpi_(handle, tree, &lnkey, &parent, &pkey, &poffst, &lpidx, &
-		    lpkey, &rlsib, &rpidx, &rpkey, &rrsib);
+	    zzektrki_(__global_state, handle, tree, &lnkey, &__state->c__1, &
+		    trust);
+	    zzektrpi_(__global_state, handle, tree, &lnkey, &parent, &pkey, &
+		    poffst, &lpidx, &lpkey, &rlsib, &rpidx, &rpkey, &rrsib);
 
 /*           The right parent key of the left node is the left parent */
 /*           key of the middle node.  The index of this key is required */
 /*           by ZZEKTR32. */
 
-	    zzektr32_(handle, tree, &lnode, &mnode, &rnode, &parent, &rpidx, &
-		    undrfl);
+	    zzektr32_(__global_state, handle, tree, &lnode, &mnode, &rnode, &
+		    parent, &rpidx, &undrfl);
 	    if (undrfl) {
 
 /*              We'll need to handle underflow in the parent. */
@@ -875,8 +882,9 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 /*              the parent if the parent is the root:  the parent */
 /*              contains at least one key after this merge. */
 
-		zzektrpi_(handle, tree, &trust, &parent, &pkey, &poffst, &
-			lpidx, &lpkey, &left, &rpidx, &rpkey, &right);
+		zzektrpi_(__global_state, handle, tree, &trust, &parent, &
+			pkey, &poffst, &lpidx, &lpkey, &left, &rpidx, &rpkey, 
+			&right);
 		trgkey = pkey;
 		state = 2;
 	    } else {
@@ -889,7 +897,7 @@ static zzektrdl_state_t* get_zzektrdl_state() {
 /*           The root contains the maximum allowed number of keys */
 /*           after this merge. */
 
-	    zzektr31_(handle, tree);
+	    zzektr31_(__global_state, handle, tree);
 	    state = 1;
 	}
     }

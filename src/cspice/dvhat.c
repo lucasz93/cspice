@@ -8,29 +8,30 @@
 
 
 typedef int dvhat_state_t;
-static dvhat_state_t* get_dvhat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dvhat_state_t* get_dvhat_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DVHAT ( Derivative and unit vector "V-hat" of a state) */
-/* Subroutine */ int dvhat_(doublereal *s1, doublereal *sout)
+/* Subroutine */ int dvhat_(cspice_t* __global_state, doublereal *s1, 
+	doublereal *sout)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vperp_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal length;
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
 
 
     /* Module state */
-    dvhat_state_t* __state = get_dvhat_state();
+    dvhat_state_t* __state = get_dvhat_state(__global_state);
 /* $ Abstract */
 
 /*     Find the unit vector corresponding to a state vector and the */
@@ -239,13 +240,13 @@ static dvhat_state_t* get_dvhat_state() {
 /*     Get the position portion of the output state and the length of */
 /*     the input position. */
 
-    unorm_(s1, sout, &length);
+    unorm_(__global_state, s1, sout, &length);
     if (length == 0.) {
 
 /*        If the length of the input position is zero, just copy */
 /*        the input velocity to the output velocity. */
 
-	vequ_(&s1[3], &sout[3]);
+	vequ_(__global_state, &s1[3], &sout[3]);
     } else {
 
 /*        Otherwise the derivative of the unit vector is just the */
@@ -253,9 +254,9 @@ static dvhat_state_t* get_dvhat_state() {
 /*        position, scaled by the reciprocal of the length of the */
 /*        input position. */
 
-	vperp_(&s1[3], sout, &sout[3]);
+	vperp_(__global_state, &s1[3], sout, &sout[3]);
 	d__1 = 1. / length;
-	vsclip_(&d__1, &sout[3]);
+	vsclip_(__global_state, &d__1, &sout[3]);
     }
     return 0;
 } /* dvhat_ */

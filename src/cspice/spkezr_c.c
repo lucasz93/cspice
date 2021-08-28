@@ -852,7 +852,7 @@
    /*
    Participate in tracing.
    */
-   chkin_c ( "spkezr_c" );
+   chkin_c ( naif_state, "spkezr_c" );
  
  
    /*

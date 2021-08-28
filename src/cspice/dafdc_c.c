@@ -141,7 +141,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafdc_c" );
+   chkin_c ( naif_state, "dafdc_c" );
 
 
    /*

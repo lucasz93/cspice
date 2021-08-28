@@ -8,41 +8,42 @@
 
 
 typedef int recgeo_state_t;
-static recgeo_state_t* get_recgeo_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline recgeo_state_t* get_recgeo_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RECGEO ( Rectangular to geodetic ) */
-/* Subroutine */ int recgeo_(doublereal *rectan, doublereal *re, doublereal *
-	f, doublereal *long__, doublereal *lat, doublereal *alt)
+/* Subroutine */ int recgeo_(cspice_t* __global_state, doublereal *rectan, 
+	doublereal *re, doublereal *f, doublereal *long__, doublereal *lat, 
+	doublereal *alt)
 {
     /* Builtin functions */
-    double atan2(doublereal, doublereal);
+    double atan2(f2c_state_t*, doublereal, doublereal);
 
     /* Local variables */
     doublereal base[3];
     doublereal a;
     doublereal b;
     doublereal c__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal radius;
     doublereal normal[3];
-    extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int nearpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int surfnm_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    recgeo_state_t* __state = get_recgeo_state();
+    recgeo_state_t* __state = get_recgeo_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from rectangular coordinates to geodetic coordinates. */
@@ -298,20 +299,20 @@ static recgeo_state_t* get_recgeo_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("RECGEO", (ftnlen)6);
+	chkin_(__global_state, "RECGEO", (ftnlen)6);
     }
 
 /*     The equatorial radius must be positive. If not, signal an error */
 /*     and check out. */
 
     if (*re <= 0.) {
-	setmsg_("Equatorial radius was *.", (ftnlen)24);
-	errdp_("*", re, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("RECGEO", (ftnlen)6);
+	setmsg_(__global_state, "Equatorial radius was *.", (ftnlen)24);
+	errdp_(__global_state, "*", re, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "RECGEO", (ftnlen)6);
 	return 0;
     }
 
@@ -321,10 +322,10 @@ static recgeo_state_t* get_recgeo_state() {
 /*     signal an error and check out. */
 
     if (*f >= 1.) {
-	setmsg_("Flattening coefficient was *.", (ftnlen)29);
-	errdp_("*", f, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("RECGEO", (ftnlen)6);
+	setmsg_(__global_state, "Flattening coefficient was *.", (ftnlen)29);
+	errdp_(__global_state, "*", f, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "RECGEO", (ftnlen)6);
 	return 0;
     }
 
@@ -337,22 +338,22 @@ static recgeo_state_t* get_recgeo_state() {
 /*     Find the point on the reference spheroid closest to the input */
 /*     point. From this closest point determine the surface normal. */
 
-    nearpt_(rectan, &a, &b, &c__, base, alt);
-    surfnm_(&a, &b, &c__, base, normal);
+    nearpt_(__global_state, rectan, &a, &b, &c__, base, alt);
+    surfnm_(__global_state, &a, &b, &c__, base, normal);
 
 /*     Using the surface normal, determine the latitude and longitude */
 /*     of the input point. */
 
-    reclat_(normal, &radius, long__, lat);
+    reclat_(__global_state, normal, &radius, long__, lat);
 
 /*     Compute longitude directly rather than from the normal vector. */
 
     if (rectan[0] == 0. && rectan[1] == 0.) {
 	*long__ = 0.;
     } else {
-	*long__ = atan2(rectan[1], rectan[0]);
+	*long__ = atan2(&__global_state->f2c, rectan[1], rectan[0]);
     }
-    chkout_("RECGEO", (ftnlen)6);
+    chkout_(__global_state, "RECGEO", (ftnlen)6);
     return 0;
 } /* recgeo_ */
 

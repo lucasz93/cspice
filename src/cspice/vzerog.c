@@ -8,13 +8,12 @@
 
 
 typedef int vzerog_state_t;
-static vzerog_state_t* get_vzerog_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vzerog_state_t* get_vzerog_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  VZEROG ( Is a vector the zero vector?---general dim. ) */
-logical vzerog_(doublereal *v, integer *ndim)
+logical vzerog_(cspice_t* __global_state, doublereal *v, integer *ndim)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +24,7 @@ logical vzerog_(doublereal *v, integer *ndim)
 
 
     /* Module state */
-    vzerog_state_t* __state = get_vzerog_state();
+    vzerog_state_t* __state = get_vzerog_state(__global_state);
 /* $ Abstract */
 
 /*     Indicate whether a general-dimensional vector is the zero vector. */

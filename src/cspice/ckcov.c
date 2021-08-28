@@ -8,8 +8,7 @@
 
 
 extern ckcov_init_t __ckcov_init;
-static ckcov_state_t* get_ckcov_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckcov_state_t* get_ckcov_state(cspice_t* state) {
 	if (!state->ckcov)
 		state->ckcov = __cspice_allocate_module(sizeof(ckcov_state_t),
 	 &__ckcov_init, sizeof(__ckcov_init));
@@ -18,77 +17,81 @@ static ckcov_state_t* get_ckcov_state() {
 }
 
 /* $Procedure      CKCOV ( CK coverage ) */
-/* Subroutine */ int ckcov_(char *ck, integer *idcode, logical *needav, char *
-	level, doublereal *tol, char *timsys, doublereal *cover, ftnlen 
-	ck_len, ftnlen level_len, ftnlen timsys_len)
+/* Subroutine */ int ckcov_(cspice_t* __global_state, char *ck, integer *
+	idcode, logical *needav, char *level, doublereal *tol, char *timsys, 
+	doublereal *cover, ftnlen ck_len, ftnlen level_len, ftnlen timsys_len)
 {
     /* System generated locals */
     integer i__1;
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     char arch[80];
     logical avok;
-    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sct2e_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
     integer i__;
-    extern /* Subroutine */ int dafgs_(doublereal *);
+    extern /* Subroutine */ int dafgs_(cspice_t*, doublereal *);
     integer clkid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal descr[5];
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal dctol[2];
     logical istdb;
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer dtype;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
     doublereal dc[2];
     integer ic[6];
-    extern /* Subroutine */ int daffna_(logical *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *);
+    extern /* Subroutine */ int daffna_(cspice_t*, logical *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafbfs_(cspice_t*, integer *);
     doublereal et;
     integer handle;
     integer segbeg;
-    extern /* Subroutine */ int dafcls_(integer *);
-    extern /* Subroutine */ int ckmeta_(integer *, char *, integer *, ftnlen);
+    extern /* Subroutine */ int dafcls_(cspice_t*, integer *);
+    extern /* Subroutine */ int ckmeta_(cspice_t*, integer *, char *, integer 
+	    *, ftnlen);
     integer segend;
-    extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int getfat_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafopr_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     logical seglvl;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     char kertyp[80];
-    extern logical return_(void);
-    extern /* Subroutine */ int zzckcv01_(integer *, integer *, integer *, 
-	    integer *, doublereal *, char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zzckcv02_(integer *, integer *, integer *, 
-	    integer *, doublereal *, char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zzckcv03_(integer *, integer *, integer *, 
-	    integer *, doublereal *, char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zzckcv04_(integer *, integer *, integer *, 
-	    integer *, doublereal *, char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zzckcv05_(integer *, integer *, integer *, 
-	    integer *, doublereal *, doublereal *, char *, doublereal *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzckcv06_(integer *, integer *, integer *, 
-	    integer *, doublereal *, doublereal *, char *, doublereal *, 
-	    ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzckcv01_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzckcv02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzckcv03_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzckcv04_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzckcv05_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, doublereal *, char *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzckcv06_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, doublereal *, char *, 
+	    doublereal *, ftnlen);
 
 
     /* Module state */
-    ckcov_state_t* __state = get_ckcov_state();
+    ckcov_state_t* __state = get_ckcov_state(__global_state);
 /* $ Abstract */
 
 /*     Find the coverage window for a specified object in a specified CK */
@@ -697,92 +700,97 @@ static ckcov_state_t* get_ckcov_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKCOV", (ftnlen)5);
+    chkin_(__global_state, "CKCOV", (ftnlen)5);
 
 /*     Check tolerance value. */
 
     if (*tol < 0.) {
-	setmsg_("Tolerance must be non-negative; actual value was #.", (
-		ftnlen)51);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("CKCOV", (ftnlen)5);
+	setmsg_(__global_state, "Tolerance must be non-negative; actual valu"
+		"e was #.", (ftnlen)51);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "CKCOV", (ftnlen)5);
 	return 0;
     }
 
 /*     Use a logical flag to indicate whether this is a segment-level */
 /*     coverage description. */
 
-    seglvl = eqstr_(level, "SEGMENT", level_len, (ftnlen)7);
+    seglvl = eqstr_(__global_state, level, "SEGMENT", level_len, (ftnlen)7);
 
 /*     Check coverage level keyword. */
 
-    if (! (seglvl || eqstr_(level, "INTERVAL", level_len, (ftnlen)8))) {
-	setmsg_("Allowed values of LEVEL are # and #; actual value was #.", (
-		ftnlen)56);
-	errch_("#", "SEGMENT", (ftnlen)1, (ftnlen)7);
-	errch_("#", "INTERVAL", (ftnlen)1, (ftnlen)8);
-	errch_("#", level, (ftnlen)1, level_len);
-	sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	chkout_("CKCOV", (ftnlen)5);
+    if (! (seglvl || eqstr_(__global_state, level, "INTERVAL", level_len, (
+	    ftnlen)8))) {
+	setmsg_(__global_state, "Allowed values of LEVEL are # and #; actual"
+		" value was #.", (ftnlen)56);
+	errch_(__global_state, "#", "SEGMENT", (ftnlen)1, (ftnlen)7);
+	errch_(__global_state, "#", "INTERVAL", (ftnlen)1, (ftnlen)8);
+	errch_(__global_state, "#", level, (ftnlen)1, level_len);
+	sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	chkout_(__global_state, "CKCOV", (ftnlen)5);
 	return 0;
     }
 
 /*     See whether GETFAT thinks we've got a CK file. */
 
-    getfat_(ck, arch, kertyp, ck_len, (ftnlen)80, (ftnlen)80);
-    if (s_cmp(arch, "XFR", (ftnlen)80, (ftnlen)3) == 0) {
-	setmsg_("Input file # has architecture #. The file must be a binary "
-		"CK file to be readable by this routine.  If the input file i"
-		"s an CK file in transfer format, run TOBIN on the file to co"
-		"nvert it to binary format.", (ftnlen)205);
-	errch_("#", ck, (ftnlen)1, ck_len);
-	errch_("#", arch, (ftnlen)1, (ftnlen)80);
-	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
-	chkout_("CKCOV", (ftnlen)5);
+    getfat_(__global_state, ck, arch, kertyp, ck_len, (ftnlen)80, (ftnlen)80);
+    if (s_cmp(&__global_state->f2c, arch, "XFR", (ftnlen)80, (ftnlen)3) == 0) 
+	    {
+	setmsg_(__global_state, "Input file # has architecture #. The file m"
+		"ust be a binary CK file to be readable by this routine.  If "
+		"the input file is an CK file in transfer format, run TOBIN o"
+		"n the file to convert it to binary format.", (ftnlen)205);
+	errch_(__global_state, "#", ck, (ftnlen)1, ck_len);
+	errch_(__global_state, "#", arch, (ftnlen)1, (ftnlen)80);
+	sigerr_(__global_state, "SPICE(INVALIDFORMAT)", (ftnlen)20);
+	chkout_(__global_state, "CKCOV", (ftnlen)5);
 	return 0;
-    } else if (s_cmp(arch, "DAF", (ftnlen)80, (ftnlen)3) != 0) {
-	setmsg_("Input file # has architecture #. The file must be a binary "
-		"CK file to be readable by this routine.  Binary CK files hav"
-		"e DAF architecture.  If you expected the file to be a binary"
-		" CK file, the problem may be due to the file being an old no"
-		"n-native file lacking binary file format information. It's a"
-		"lso possible the file has been corrupted.", (ftnlen)340);
-	errch_("#", ck, (ftnlen)1, ck_len);
-	errch_("#", arch, (ftnlen)1, (ftnlen)80);
-	sigerr_("SPICE(INVALIDARCHTYPE)", (ftnlen)22);
-	chkout_("CKCOV", (ftnlen)5);
-	return 0;
-    } else if (s_cmp(kertyp, "CK", (ftnlen)80, (ftnlen)2) != 0) {
-	setmsg_("Input file # has file type #. The file must be a binary CK "
-		"file to be readable by this routine. If you expected the fil"
+    } else if (s_cmp(&__global_state->f2c, arch, "DAF", (ftnlen)80, (ftnlen)3)
+	     != 0) {
+	setmsg_(__global_state, "Input file # has architecture #. The file m"
+		"ust be a binary CK file to be readable by this routine.  Bin"
+		"ary CK files have DAF architecture.  If you expected the fil"
 		"e to be a binary CK file, the problem may be due to the file"
 		" being an old non-native file lacking binary file format inf"
 		"ormation. It's also possible the file has been corrupted.", (
-		ftnlen)296);
-	errch_("#", ck, (ftnlen)1, ck_len);
-	errch_("#", kertyp, (ftnlen)1, (ftnlen)80);
-	sigerr_("SPICE(INVALIDFILETYPE)", (ftnlen)22);
-	chkout_("CKCOV", (ftnlen)5);
+		ftnlen)340);
+	errch_(__global_state, "#", ck, (ftnlen)1, ck_len);
+	errch_(__global_state, "#", arch, (ftnlen)1, (ftnlen)80);
+	sigerr_(__global_state, "SPICE(INVALIDARCHTYPE)", (ftnlen)22);
+	chkout_(__global_state, "CKCOV", (ftnlen)5);
+	return 0;
+    } else if (s_cmp(&__global_state->f2c, kertyp, "CK", (ftnlen)80, (ftnlen)
+	    2) != 0) {
+	setmsg_(__global_state, "Input file # has file type #. The file must"
+		" be a binary CK file to be readable by this routine. If you "
+		"expected the file to be a binary CK file, the problem may be"
+		" due to the file being an old non-native file lacking binary"
+		" file format information. It's also possible the file has be"
+		"en corrupted.", (ftnlen)296);
+	errch_(__global_state, "#", ck, (ftnlen)1, ck_len);
+	errch_(__global_state, "#", kertyp, (ftnlen)1, (ftnlen)80);
+	sigerr_(__global_state, "SPICE(INVALIDFILETYPE)", (ftnlen)22);
+	chkout_(__global_state, "CKCOV", (ftnlen)5);
 	return 0;
     }
 
 /*     Set a logical flag indicating whether the time system is SCLK. */
 
-    istdb = eqstr_(timsys, "TDB", timsys_len, (ftnlen)3);
+    istdb = eqstr_(__global_state, timsys, "TDB", timsys_len, (ftnlen)3);
 
 /*     Check time system. */
 
     if (! istdb) {
-	if (! eqstr_(timsys, "SCLK", timsys_len, (ftnlen)4)) {
-	    setmsg_("Time system spec TIMSYS was #; allowed values are SCLK "
-		    "and TDB.", (ftnlen)63);
-	    errch_("#", timsys, (ftnlen)1, timsys_len);
-	    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	    chkout_("CKCOV", (ftnlen)5);
+	if (! eqstr_(__global_state, timsys, "SCLK", timsys_len, (ftnlen)4)) {
+	    setmsg_(__global_state, "Time system spec TIMSYS was #; allowed "
+		    "values are SCLK and TDB.", (ftnlen)63);
+	    errch_(__global_state, "#", timsys, (ftnlen)1, timsys_len);
+	    sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	    chkout_(__global_state, "CKCOV", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -791,18 +799,18 @@ static ckcov_state_t* get_ckcov_state() {
 /*     with IDCODE. */
 
     if (istdb) {
-	ckmeta_(idcode, "SCLK", &clkid, (ftnlen)4);
-	if (failed_()) {
-	    chkout_("CKCOV", (ftnlen)5);
+	ckmeta_(__global_state, idcode, "SCLK", &clkid, (ftnlen)4);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKCOV", (ftnlen)5);
 	    return 0;
 	}
     }
 
 /*     Open the file for reading. */
 
-    dafopr_(ck, &handle, ck_len);
-    if (failed_()) {
-	chkout_("CKCOV", (ftnlen)5);
+    dafopr_(__global_state, ck, &handle, ck_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKCOV", (ftnlen)5);
 	return 0;
     }
 
@@ -818,11 +826,11 @@ static ckcov_state_t* get_ckcov_state() {
 
 /*     Start a forward search. */
 
-    dafbfs_(&handle);
+    dafbfs_(__global_state, &handle);
 
 /*     Find the next DAF array. */
 
-    daffna_(&found);
+    daffna_(__global_state, &found);
     while(found) {
 
 /*        Note:  we check FAILED() at the bottom of this loop; this */
@@ -830,8 +838,8 @@ static ckcov_state_t* get_ckcov_state() {
 
 /*        Fetch and unpack the segment descriptor. */
 
-	dafgs_(descr);
-	dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+	dafgs_(__global_state, descr);
+	dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
 
 /*        Let AVOK indicate whether the segment satisfies the */
 /*        angular velocity restriction. */
@@ -862,16 +870,17 @@ static ckcov_state_t* get_ckcov_state() {
 /*                 into the window. */
 
 		    for (i__ = 1; i__ <= 2; ++i__) {
-			sct2e_(&clkid, &dctol[(i__1 = i__ - 1) < 2 && 0 <= 
-				i__1 ? i__1 : s_rnge("dctol", i__1, "ckcov_", 
+			sct2e_(__global_state, &clkid, &dctol[(i__1 = i__ - 1)
+				 < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "dctol", i__1, "ckcov_", 
 				(ftnlen)880)], &et);
 			dctol[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				s_rnge("dctol", i__1, "ckcov_", (ftnlen)881)] 
-				= et;
+				s_rnge(&__global_state->f2c, "dctol", i__1, 
+				"ckcov_", (ftnlen)881)] = et;
 		    }
 		}
 		if (dctol[0] <= dctol[1]) {
-		    wninsd_(dctol, &dctol[1], cover);
+		    wninsd_(__global_state, dctol, &dctol[1], cover);
 		}
 	    } else {
 
@@ -885,38 +894,39 @@ static ckcov_state_t* get_ckcov_state() {
 		segbeg = ic[4];
 		segend = ic[5];
 		if (dtype == 1) {
-		    zzckcv01_(&handle, &segbeg, &segend, &clkid, tol, timsys, 
-			    cover, timsys_len);
+		    zzckcv01_(__global_state, &handle, &segbeg, &segend, &
+			    clkid, tol, timsys, cover, timsys_len);
 		} else if (dtype == 2) {
-		    zzckcv02_(&handle, &segbeg, &segend, &clkid, tol, timsys, 
-			    cover, timsys_len);
+		    zzckcv02_(__global_state, &handle, &segbeg, &segend, &
+			    clkid, tol, timsys, cover, timsys_len);
 		} else if (dtype == 3) {
-		    zzckcv03_(&handle, &segbeg, &segend, &clkid, tol, timsys, 
-			    cover, timsys_len);
+		    zzckcv03_(__global_state, &handle, &segbeg, &segend, &
+			    clkid, tol, timsys, cover, timsys_len);
 		} else if (dtype == 4) {
-		    zzckcv04_(&handle, &segbeg, &segend, &clkid, tol, timsys, 
-			    cover, timsys_len);
+		    zzckcv04_(__global_state, &handle, &segbeg, &segend, &
+			    clkid, tol, timsys, cover, timsys_len);
 		} else if (dtype == 5) {
-		    zzckcv05_(&handle, &segbeg, &segend, &clkid, dc, tol, 
-			    timsys, cover, timsys_len);
+		    zzckcv05_(__global_state, &handle, &segbeg, &segend, &
+			    clkid, dc, tol, timsys, cover, timsys_len);
 		} else if (dtype == 6) {
-		    zzckcv06_(&handle, &segbeg, &segend, &clkid, dc, tol, 
-			    timsys, cover, timsys_len);
+		    zzckcv06_(__global_state, &handle, &segbeg, &segend, &
+			    clkid, dc, tol, timsys, cover, timsys_len);
 		} else {
-		    setmsg_("Supported CK data types are 1, 2, 3, 4, 5.  Dat"
-			    "a type of segment: #. This problem may indicate "
-			    "that you need to update your SPICE Toolkit.", (
-			    ftnlen)138);
-		    errint_("#", &dtype, (ftnlen)1);
-		    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-		    chkout_("CKCOV", (ftnlen)5);
+		    setmsg_(__global_state, "Supported CK data types are 1, "
+			    "2, 3, 4, 5.  Data type of segment: #. This probl"
+			    "em may indicate that you need to update your SPI"
+			    "CE Toolkit.", (ftnlen)138);
+		    errint_(__global_state, "#", &dtype, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19)
+			    ;
+		    chkout_(__global_state, "CKCOV", (ftnlen)5);
 		    return 0;
 		}
 	    }
 	}
-	daffna_(&found);
-	if (failed_()) {
-	    chkout_("CKCOV", (ftnlen)5);
+	daffna_(__global_state, &found);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKCOV", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -927,8 +937,8 @@ static ckcov_state_t* get_ckcov_state() {
 
 /*     Release the file. */
 
-    dafcls_(&handle);
-    chkout_("CKCOV", (ftnlen)5);
+    dafcls_(__global_state, &handle);
+    chkout_(__global_state, "CKCOV", (ftnlen)5);
     return 0;
 } /* ckcov_ */
 

@@ -8,8 +8,7 @@
 
 
 extern getfov_init_t __getfov_init;
-static getfov_state_t* get_getfov_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline getfov_state_t* get_getfov_state(cspice_t* state) {
 	if (!state->getfov)
 		state->getfov = __cspice_allocate_module(sizeof(
 	getfov_state_t), &__getfov_init, sizeof(__getfov_init));
@@ -18,9 +17,9 @@ static getfov_state_t* get_getfov_state() {
 }
 
 /* $Procedure GETFOV ( Get instrument FOV parameters ) */
-/* Subroutine */ int getfov_(integer *instid, integer *room, char *shape, 
-	char *frame, doublereal *bsight, integer *n, doublereal *bounds, 
-	ftnlen shape_len, ftnlen frame_len)
+/* Subroutine */ int getfov_(cspice_t* __global_state, integer *instid, 
+	integer *room, char *shape, char *frame, doublereal *bsight, integer *
+	n, doublereal *bounds, ftnlen shape_len, ftnlen frame_len)
 {
     /* Initialized data */
 
@@ -29,56 +28,60 @@ static getfov_state_t* get_getfov_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    double cos(doublereal), sin(doublereal);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal bmag;
     char spec[80];
     doublereal vmag;
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     char type__[1];
     doublereal b[3];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal b1[3];
     doublereal b2[3];
     integer mxcmp;
     char kword[32];
-    extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern integer rtrim_(char *, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
+    extern /* Subroutine */ int vperp_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vrotv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     doublereal refang;
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     doublereal coscan;
     char kwcang[32];
     doublereal refvec[3];
     doublereal sincan;
     doublereal crsang;
-    extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
-	    *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int gcpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gdpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, doublereal *, logical *, ftnlen);
     doublereal cosran;
     doublereal tmpang;
     char kwfram[32];
@@ -93,21 +96,21 @@ static getfov_state_t* get_getfov_state() {
     doublereal sinran;
     char kwaunt[32];
     doublereal tmpvec[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
 	    ftnlen, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int convrt_(doublereal *, char *, char *, 
-	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int convrt_(cspice_t*, doublereal *, char *, char 
+	    *, doublereal *, ftnlen, ftnlen);
 
 
     /* Module state */
-    getfov_state_t* __state = get_getfov_state();
+    getfov_state_t* __state = get_getfov_state(__global_state);
 /* $ Abstract */
 
 /*     Return the field-of-view (FOV) parameters for a specified */
@@ -762,95 +765,115 @@ static getfov_state_t* get_getfov_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("GETFOV", (ftnlen)6);
-    s_copy(kwboun, "INS#_FOV_BOUNDARY", (ftnlen)32, (ftnlen)17);
-    s_copy(kwbore, "INS#_BORESIGHT", (ftnlen)32, (ftnlen)14);
-    s_copy(kwshap, "INS#_FOV_SHAPE", (ftnlen)32, (ftnlen)14);
-    s_copy(kwfram, "INS#_FOV_FRAME", (ftnlen)32, (ftnlen)14);
-    s_copy(kwspec, "INS#_FOV_CLASS_SPEC", (ftnlen)32, (ftnlen)19);
-    s_copy(kwrvec, "INS#_FOV_REF_VECTOR", (ftnlen)32, (ftnlen)19);
-    s_copy(kwrang, "INS#_FOV_REF_ANGLE", (ftnlen)32, (ftnlen)18);
-    s_copy(kwcang, "INS#_FOV_CROSS_ANGLE", (ftnlen)32, (ftnlen)20);
-    s_copy(kwaunt, "INS#_FOV_ANGLE_UNITS", (ftnlen)32, (ftnlen)20);
+    chkin_(__global_state, "GETFOV", (ftnlen)6);
+    s_copy(&__global_state->f2c, kwboun, "INS#_FOV_BOUNDARY", (ftnlen)32, (
+	    ftnlen)17);
+    s_copy(&__global_state->f2c, kwbore, "INS#_BORESIGHT", (ftnlen)32, (
+	    ftnlen)14);
+    s_copy(&__global_state->f2c, kwshap, "INS#_FOV_SHAPE", (ftnlen)32, (
+	    ftnlen)14);
+    s_copy(&__global_state->f2c, kwfram, "INS#_FOV_FRAME", (ftnlen)32, (
+	    ftnlen)14);
+    s_copy(&__global_state->f2c, kwspec, "INS#_FOV_CLASS_SPEC", (ftnlen)32, (
+	    ftnlen)19);
+    s_copy(&__global_state->f2c, kwrvec, "INS#_FOV_REF_VECTOR", (ftnlen)32, (
+	    ftnlen)19);
+    s_copy(&__global_state->f2c, kwrang, "INS#_FOV_REF_ANGLE", (ftnlen)32, (
+	    ftnlen)18);
+    s_copy(&__global_state->f2c, kwcang, "INS#_FOV_CROSS_ANGLE", (ftnlen)32, (
+	    ftnlen)20);
+    s_copy(&__global_state->f2c, kwaunt, "INS#_FOV_ANGLE_UNITS", (ftnlen)32, (
+	    ftnlen)20);
     mxcmp = *room * 3;
 
 /*     Look for the frame keyword and get frame name if found, */
 /*     complain if not. */
 
-    repmi_(kwfram, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-    gcpool_(kword, &__state->c__1, &__state->c__1, &i__, frame, &found, (
-	    ftnlen)32, frame_len);
+    repmi_(__global_state, kwfram, "#", instid, kword, (ftnlen)32, (ftnlen)1, 
+	    (ftnlen)32);
+    gcpool_(__global_state, kword, &__state->c__1, &__state->c__1, &i__, 
+	    frame, &found, (ftnlen)32, frame_len);
     if (! found) {
-	setmsg_("The variable, '#', specifying the frame which instrument # "
-		"FOV components are defined relative to was not found in the "
-		"kernel pool. Check whether IK file for the instrument was lo"
-		"aded into the program and whether this variable is specified"
-		" in that file.", (ftnlen)253);
-	errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	errint_("#", instid, (ftnlen)1);
-	sigerr_("SPICE(FRAMEMISSING)", (ftnlen)19);
-	chkout_("GETFOV", (ftnlen)6);
+	setmsg_(__global_state, "The variable, '#', specifying the frame whi"
+		"ch instrument # FOV components are defined relative to was n"
+		"ot found in the kernel pool. Check whether IK file for the i"
+		"nstrument was loaded into the program and whether this varia"
+		"ble is specified in that file.", (ftnlen)253);
+	errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(__global_state, 
+		kword, (ftnlen)32));
+	errint_(__global_state, "#", instid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FRAMEMISSING)", (ftnlen)19);
+	chkout_(__global_state, "GETFOV", (ftnlen)6);
 	return 0;
     }
 
 /*     Look for the shape keyword and get shape identifier if found, */
 /*     complain if not. */
 
-    repmi_(kwshap, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-    gcpool_(kword, &__state->c__1, &__state->c__1, &i__, shape, &found, (
-	    ftnlen)32, shape_len);
+    repmi_(__global_state, kwshap, "#", instid, kword, (ftnlen)32, (ftnlen)1, 
+	    (ftnlen)32);
+    gcpool_(__global_state, kword, &__state->c__1, &__state->c__1, &i__, 
+	    shape, &found, (ftnlen)32, shape_len);
     if (! found) {
-	setmsg_("The variable, '#', specifying the shape of the instrument #"
-		" FOV was not found in the kernel pool. Check whether IK file"
-		" for the instrument was loaded into the program and whether "
-		"this variable is specified in that file.", (ftnlen)219);
-	errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	errint_("#", instid, (ftnlen)1);
-	sigerr_("SPICE(SHAPEMISSING)", (ftnlen)19);
-	chkout_("GETFOV", (ftnlen)6);
+	setmsg_(__global_state, "The variable, '#', specifying the shape of "
+		"the instrument # FOV was not found in the kernel pool. Check"
+		" whether IK file for the instrument was loaded into the prog"
+		"ram and whether this variable is specified in that file.", (
+		ftnlen)219);
+	errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(__global_state, 
+		kword, (ftnlen)32));
+	errint_(__global_state, "#", instid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SHAPEMISSING)", (ftnlen)19);
+	chkout_(__global_state, "GETFOV", (ftnlen)6);
 	return 0;
     }
 
 /*     Create an upper case, left justified value for SHAPE.  This will */
 /*     provide the desired case-insensitivity to the keyword value. */
 
-    ucase_(shape, shape, shape_len, shape_len);
-    ljust_(shape, shape, shape_len, shape_len);
+    ucase_(__global_state, shape, shape, shape_len, shape_len);
+    ljust_(__global_state, shape, shape, shape_len, shape_len);
 
 /*     Check whether shape identified that we got is one from the list */
 /*     of supported, complain if not. */
 
-    if (bsrchc_(shape, &__state->c__4, __state->shapid, rtrim_(shape, 
-	    shape_len), (ftnlen)32) == 0) {
-	setmsg_("The FOV shape, '#', specified in the keyword, '#', for the "
-		"instrument # is not supported. See GETFOV subroutine header "
-		"for the list of supported instrument FOV shapes.", (ftnlen)
-		167);
-	errch_("#", shape, (ftnlen)1, rtrim_(shape, shape_len));
-	errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	errint_("#", instid, (ftnlen)1);
-	sigerr_("SPICE(SHAPENOTSUPPORTED)", (ftnlen)24);
-	chkout_("GETFOV", (ftnlen)6);
+    if (bsrchc_(__global_state, shape, &__state->c__4, __state->shapid, 
+	    rtrim_(__global_state, shape, shape_len), (ftnlen)32) == 0) {
+	setmsg_(__global_state, "The FOV shape, '#', specified in the keywor"
+		"d, '#', for the instrument # is not supported. See GETFOV su"
+		"broutine header for the list of supported instrument FOV sha"
+		"pes.", (ftnlen)167);
+	errch_(__global_state, "#", shape, (ftnlen)1, rtrim_(__global_state, 
+		shape, shape_len));
+	errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(__global_state, 
+		kword, (ftnlen)32));
+	errint_(__global_state, "#", instid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SHAPENOTSUPPORTED)", (ftnlen)24);
+	chkout_(__global_state, "GETFOV", (ftnlen)6);
 	return 0;
     }
 
 /*     Look for the boresight keyword and get boresight vector if found, */
 /*     complain if not. */
 
-    repmi_(kwbore, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-    dtpool_(kword, &found, &i__, type__, (ftnlen)32, (ftnlen)1);
+    repmi_(__global_state, kwbore, "#", instid, kword, (ftnlen)32, (ftnlen)1, 
+	    (ftnlen)32);
+    dtpool_(__global_state, kword, &found, &i__, type__, (ftnlen)32, (ftnlen)
+	    1);
     if (! found) {
-	setmsg_("The variable, '#', specifying the boresight of the instrume"
-		"nt # was not found in the kernel pool. Check whether IK file"
-		" for the instrument was loaded into the program and whether "
-		"this variable is specified in that file.", (ftnlen)219);
-	errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	errint_("#", instid, (ftnlen)1);
-	sigerr_("SPICE(BORESIGHTMISSING)", (ftnlen)23);
-	chkout_("GETFOV", (ftnlen)6);
+	setmsg_(__global_state, "The variable, '#', specifying the boresight"
+		" of the instrument # was not found in the kernel pool. Check"
+		" whether IK file for the instrument was loaded into the prog"
+		"ram and whether this variable is specified in that file.", (
+		ftnlen)219);
+	errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(__global_state, 
+		kword, (ftnlen)32));
+	errint_(__global_state, "#", instid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BORESIGHTMISSING)", (ftnlen)23);
+	chkout_(__global_state, "GETFOV", (ftnlen)6);
 	return 0;
     }
 
@@ -858,57 +881,67 @@ static getfov_state_t* get_getfov_state() {
 /*     complain if not. */
 
     if (i__ != 3) {
-	setmsg_("The number of the boresight vector components specified in "
-		"the '#' variable is not 3, it is #. Correct it in the corres"
-		"ponding IK file to be a 3-dimensional vector. ", (ftnlen)165);
-	errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	errint_("#", &i__, (ftnlen)1);
-	sigerr_("SPICE(BADBORESIGHTSPEC)", (ftnlen)23);
-	chkout_("GETFOV", (ftnlen)6);
+	setmsg_(__global_state, "The number of the boresight vector componen"
+		"ts specified in the '#' variable is not 3, it is #. Correct "
+		"it in the corresponding IK file to be a 3-dimensional vector"
+		". ", (ftnlen)165);
+	errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(__global_state, 
+		kword, (ftnlen)32));
+	errint_(__global_state, "#", &i__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADBORESIGHTSPEC)", (ftnlen)23);
+	chkout_(__global_state, "GETFOV", (ftnlen)6);
 	return 0;
     } else if (*(unsigned char *)type__ != 'N') {
-	setmsg_("The boresight vector, stored in the '#' variable, has not b"
-		"een stored as a vector of three numbers.  It has been stored"
-		" as a vector of three strings. ", (ftnlen)150);
-	errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	sigerr_("SPICE(BADBORESIGHTSPEC)", (ftnlen)23);
-	chkout_("GETFOV", (ftnlen)6);
+	setmsg_(__global_state, "The boresight vector, stored in the '#' var"
+		"iable, has not been stored as a vector of three numbers.  It"
+		" has been stored as a vector of three strings. ", (ftnlen)150)
+		;
+	errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(__global_state, 
+		kword, (ftnlen)32));
+	sigerr_(__global_state, "SPICE(BADBORESIGHTSPEC)", (ftnlen)23);
+	chkout_(__global_state, "GETFOV", (ftnlen)6);
 	return 0;
     }
-    gdpool_(kword, &__state->c__1, &__state->c__3, &i__, bsight, &found, (
-	    ftnlen)32);
+    gdpool_(__global_state, kword, &__state->c__1, &__state->c__3, &i__, 
+	    bsight, &found, (ftnlen)32);
 
 /*     At this point we have gotten all the specification independent */
 /*     information.  Now check for the presence of the FOV class */
 /*     specification keyword.  If it's absent, we default to CORNERS. */
 
-    s_copy(spec, "CORNERS", (ftnlen)80, (ftnlen)7);
-    repmi_(kwspec, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-    gcpool_(kword, &__state->c__1, &__state->c__1, &i__, spec, &found, (
-	    ftnlen)32, (ftnlen)80);
-    if (eqstr_("CORNERS", spec, (ftnlen)7, (ftnlen)80)) {
+    s_copy(&__global_state->f2c, spec, "CORNERS", (ftnlen)80, (ftnlen)7);
+    repmi_(__global_state, kwspec, "#", instid, kword, (ftnlen)32, (ftnlen)1, 
+	    (ftnlen)32);
+    gcpool_(__global_state, kword, &__state->c__1, &__state->c__1, &i__, spec,
+	     &found, (ftnlen)32, (ftnlen)80);
+    if (eqstr_(__global_state, "CORNERS", spec, (ftnlen)7, (ftnlen)80)) {
 
 /*        Look for the FOV boundary vectors, check whether output array */
 /*        is big enough to hold them; complain if not. */
 
-	repmi_(kwboun, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-	dtpool_(kword, &found, n, type__, (ftnlen)32, (ftnlen)1);
+	repmi_(__global_state, kwboun, "#", instid, kword, (ftnlen)32, (
+		ftnlen)1, (ftnlen)32);
+	dtpool_(__global_state, kword, &found, n, type__, (ftnlen)32, (ftnlen)
+		1);
 	if (! found) {
-	    suffix_("_CORNERS", &__state->c__0, kword, (ftnlen)8, (ftnlen)32);
-	    dtpool_(kword, &found, n, type__, (ftnlen)32, (ftnlen)1);
+	    suffix_(__global_state, "_CORNERS", &__state->c__0, kword, (
+		    ftnlen)8, (ftnlen)32);
+	    dtpool_(__global_state, kword, &found, n, type__, (ftnlen)32, (
+		    ftnlen)1);
 	}
 	if (! found) {
-	    repmi_(kwboun, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)
-		    32);
-	    setmsg_("The variable, '#', specifying the boundary vectors of t"
-		    "he instrument # FOV was not found in the kernel pool. Ch"
-		    "eck whether IK file for the instrument was loaded into t"
-		    "he program and whether this variable is specified in tha"
-		    "t file.", (ftnlen)230);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    errint_("#", instid, (ftnlen)1);
-	    sigerr_("SPICE(BOUNDARYMISSING)", (ftnlen)22);
-	    chkout_("GETFOV", (ftnlen)6);
+	    repmi_(__global_state, kwboun, "#", instid, kword, (ftnlen)32, (
+		    ftnlen)1, (ftnlen)32);
+	    setmsg_(__global_state, "The variable, '#', specifying the bound"
+		    "ary vectors of the instrument # FOV was not found in the"
+		    " kernel pool. Check whether IK file for the instrument w"
+		    "as loaded into the program and whether this variable is "
+		    "specified in that file.", (ftnlen)230);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    errint_(__global_state, "#", instid, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDARYMISSING)", (ftnlen)22);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	}
 
@@ -916,13 +949,14 @@ static getfov_state_t* get_getfov_state() {
 /*        complain if not. */
 
 	if (*n > mxcmp) {
-	    setmsg_("The number of boundary vector components specified in t"
-		    "he '#' pool variable is bigger than room to hold them in"
-		    " output array specified by the ROOM input variable of th"
-		    "e GETFOV subroutine.", (ftnlen)187);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    sigerr_("SPICE(BOUNDARYTOOBIG)", (ftnlen)21);
-	    chkout_("GETFOV", (ftnlen)6);
+	    setmsg_(__global_state, "The number of boundary vector component"
+		    "s specified in the '#' pool variable is bigger than room"
+		    " to hold them in output array specified by the ROOM inpu"
+		    "t variable of the GETFOV subroutine.", (ftnlen)187);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    sigerr_(__global_state, "SPICE(BOUNDARYTOOBIG)", (ftnlen)21);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	}
 
@@ -930,80 +964,94 @@ static getfov_state_t* get_getfov_state() {
 /*        without reminder. */
 
 	if (*n % 3 != 0) {
-	    setmsg_("The boundary vector components specified in the '#' poo"
-		    "l variable do  not represent a set of 3-dimensional vect"
-		    "ors. Number of components assigned to the variable canno"
-		    "t be divided by 3 without reminder. ", (ftnlen)203);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    sigerr_("SPICE(BADBOUNDARY)", (ftnlen)18);
-	    chkout_("GETFOV", (ftnlen)6);
+	    setmsg_(__global_state, "The boundary vector components specifie"
+		    "d in the '#' pool variable do  not represent a set of 3-"
+		    "dimensional vectors. Number of components assigned to th"
+		    "e variable cannot be divided by 3 without reminder. ", (
+		    ftnlen)203);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    sigerr_(__global_state, "SPICE(BADBOUNDARY)", (ftnlen)18);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Boundaries are OK. Get them. */
 
-	gdpool_(kword, &__state->c__1, &mxcmp, n, bounds, &found, (ftnlen)32);
+	gdpool_(__global_state, kword, &__state->c__1, &mxcmp, n, bounds, &
+		found, (ftnlen)32);
 	*n /= 3;
-	if (s_cmp(shape, "CIRCLE", shape_len, (ftnlen)6) == 0 && *n != 1) {
-	    setmsg_("The boundary is specified to be circular, and as such, "
-		    "the values associated with keyword, '#', should contain "
-		    "one vector.  There are #.", (ftnlen)136);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    errint_("#", n, (ftnlen)1);
-	    sigerr_("SPICE(BADBOUNDARY)", (ftnlen)18);
-	    chkout_("GETFOV", (ftnlen)6);
+	if (s_cmp(&__global_state->f2c, shape, "CIRCLE", shape_len, (ftnlen)6)
+		 == 0 && *n != 1) {
+	    setmsg_(__global_state, "The boundary is specified to be circula"
+		    "r, and as such, the values associated with keyword, '#',"
+		    " should contain one vector.  There are #.", (ftnlen)136);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    errint_(__global_state, "#", n, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADBOUNDARY)", (ftnlen)18);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
-	} else if (s_cmp(shape, "ELLIPSE", shape_len, (ftnlen)7) == 0 && *n !=
-		 2) {
-	    setmsg_("The boundary is specified to be elliptical, and as such"
-		    ", the values associated with keyword, '#', should contai"
-		    "n two vectors.  There are #.", (ftnlen)139);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    errint_("#", n, (ftnlen)1);
-	    sigerr_("SPICE(BADBOUNDARY)", (ftnlen)18);
-	    chkout_("GETFOV", (ftnlen)6);
+	} else if (s_cmp(&__global_state->f2c, shape, "ELLIPSE", shape_len, (
+		ftnlen)7) == 0 && *n != 2) {
+	    setmsg_(__global_state, "The boundary is specified to be ellipti"
+		    "cal, and as such, the values associated with keyword, '#"
+		    "', should contain two vectors.  There are #.", (ftnlen)
+		    139);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    errint_(__global_state, "#", n, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADBOUNDARY)", (ftnlen)18);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
-	} else if (s_cmp(shape, "RECTANGLE", shape_len, (ftnlen)9) == 0 && *n 
-		!= 4) {
-	    setmsg_("The boundary is specified to be rectangular, and as suc"
-		    "h, the values associated with keyword, '#', should conta"
-		    "in four vectors.  There are #.", (ftnlen)141);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    errint_("#", n, (ftnlen)1);
-	    sigerr_("SPICE(BADBOUNDARY)", (ftnlen)18);
-	    chkout_("GETFOV", (ftnlen)6);
+	} else if (s_cmp(&__global_state->f2c, shape, "RECTANGLE", shape_len, 
+		(ftnlen)9) == 0 && *n != 4) {
+	    setmsg_(__global_state, "The boundary is specified to be rectang"
+		    "ular, and as such, the values associated with keyword, '"
+		    "#', should contain four vectors.  There are #.", (ftnlen)
+		    141);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    errint_(__global_state, "#", n, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADBOUNDARY)", (ftnlen)18);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
-	} else if (s_cmp(shape, "POLYGON", shape_len, (ftnlen)7) == 0 && *n < 
-		3) {
-	    setmsg_("The boundary is specified to be polygonal, and as such,"
-		    " the values associated with keyword, '#', should contain"
-		    " at least three vectors.  There are #.", (ftnlen)149);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    errint_("#", n, (ftnlen)1);
-	    sigerr_("SPICE(BADBOUNDARY)", (ftnlen)18);
-	    chkout_("GETFOV", (ftnlen)6);
+	} else if (s_cmp(&__global_state->f2c, shape, "POLYGON", shape_len, (
+		ftnlen)7) == 0 && *n < 3) {
+	    setmsg_(__global_state, "The boundary is specified to be polygon"
+		    "al, and as such, the values associated with keyword, '#'"
+		    ", should contain at least three vectors.  There are #.", (
+		    ftnlen)149);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    errint_(__global_state, "#", n, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADBOUNDARY)", (ftnlen)18);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	}
 
 /*     Now check to see if the FOV specification is ANGLES and */
 /*     compute the boundary corner vectors. */
 
-    } else if (eqstr_("ANGLES", spec, (ftnlen)6, (ftnlen)80)) {
+    } else if (eqstr_(__global_state, "ANGLES", spec, (ftnlen)6, (ftnlen)80)) 
+	    {
 
 /*        Check whether shape identified that we got is one from the list */
 /*        of supported shapes for the ANGLE specification; complain */
 /*        if not. */
 
-	if (bsrchc_(shape, &__state->c__3, __state->angshp, rtrim_(shape, 
-		shape_len), (ftnlen)32) == 0) {
-	    setmsg_("The FOV shape, '#', specified in the keyword, '#', for "
-		    "the instrument # is not supported for the ANGLES specifi"
-		    "cation.", (ftnlen)118);
-	    errch_("#", shape, (ftnlen)1, rtrim_(shape, shape_len));
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    errint_("#", instid, (ftnlen)1);
-	    sigerr_("SPICE(SHAPENOTSUPPORTED)", (ftnlen)24);
-	    chkout_("GETFOV", (ftnlen)6);
+	if (bsrchc_(__global_state, shape, &__state->c__3, __state->angshp, 
+		rtrim_(__global_state, shape, shape_len), (ftnlen)32) == 0) {
+	    setmsg_(__global_state, "The FOV shape, '#', specified in the ke"
+		    "yword, '#', for the instrument # is not supported for th"
+		    "e ANGLES specification.", (ftnlen)118);
+	    errch_(__global_state, "#", shape, (ftnlen)1, rtrim_(
+		    __global_state, shape, shape_len));
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    errint_(__global_state, "#", instid, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(SHAPENOTSUPPORTED)", (ftnlen)24);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1011,18 +1059,21 @@ static getfov_state_t* get_getfov_state() {
 /*        ANGLES specification.  Start by looking for the reference */
 /*        vector keyword.  If found, fetch it otherwise complain. */
 
-	repmi_(kwrvec, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-	dtpool_(kword, &found, &i__, type__, (ftnlen)32, (ftnlen)1);
+	repmi_(__global_state, kwrvec, "#", instid, kword, (ftnlen)32, (
+		ftnlen)1, (ftnlen)32);
+	dtpool_(__global_state, kword, &found, &i__, type__, (ftnlen)32, (
+		ftnlen)1);
 	if (! found) {
-	    setmsg_("The variable, '#', specifying the FOV reference vector "
-		    "of the instrument # was not found in the kernel pool. Ch"
-		    "eck whether IK file for the instrument was loaded into t"
-		    "he program and whether this variable is specified in tha"
-		    "t file.", (ftnlen)230);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    errint_("#", instid, (ftnlen)1);
-	    sigerr_("SPICE(REFVECTORMISSING)", (ftnlen)23);
-	    chkout_("GETFOV", (ftnlen)6);
+	    setmsg_(__global_state, "The variable, '#', specifying the FOV r"
+		    "eference vector of the instrument # was not found in the"
+		    " kernel pool. Check whether IK file for the instrument w"
+		    "as loaded into the program and whether this variable is "
+		    "specified in that file.", (ftnlen)230);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    errint_(__global_state, "#", instid, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(REFVECTORMISSING)", (ftnlen)23);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1030,98 +1081,111 @@ static getfov_state_t* get_getfov_state() {
 /*        coordinates; complain if not. */
 
 	if (i__ != 3) {
-	    setmsg_("The number of the reference vector components specified"
-		    " in the '#' keyword is not 3, it is #. Check the corresp"
-		    "onding IK FOV definition for errors.", (ftnlen)147);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(BADREFVECTORSPEC)", (ftnlen)23);
-	    chkout_("GETFOV", (ftnlen)6);
+	    setmsg_(__global_state, "The number of the reference vector comp"
+		    "onents specified in the '#' keyword is not 3, it is #. C"
+		    "heck the corresponding IK FOV definition for errors.", (
+		    ftnlen)147);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADREFVECTORSPEC)", (ftnlen)23);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	} else if (*(unsigned char *)type__ != 'N') {
-	    setmsg_("The reference vector, stored in '#', has not been store"
-		    "d as a vector of three numbers.  It has been stored as a"
-		    " vector of three strings. ", (ftnlen)137);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    sigerr_("SPICE(BADREFVECTORSPEC)", (ftnlen)23);
-	    chkout_("GETFOV", (ftnlen)6);
+	    setmsg_(__global_state, "The reference vector, stored in '#', ha"
+		    "s not been stored as a vector of three numbers.  It has "
+		    "been stored as a vector of three strings. ", (ftnlen)137);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    sigerr_(__global_state, "SPICE(BADREFVECTORSPEC)", (ftnlen)23);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	}
-	gdpool_(kword, &__state->c__1, &__state->c__3, &i__, refvec, &found, (
-		ftnlen)32);
+	gdpool_(__global_state, kword, &__state->c__1, &__state->c__3, &i__, 
+		refvec, &found, (ftnlen)32);
 
 /*        We require that the reference vector is not parallel */
 /*        to the boresight vector. Use NORMAL(1,1) to temporarily */
 /*        store the result of the cross product. */
 
-	vcrss_(bsight, refvec, normal);
-	if (vnorm_(normal) == 0.) {
-	    setmsg_("The reference vector, stored in '#', is parallel to the"
-		    " instrument boresight vector.  This is not allowed by th"
-		    "e ANGLES FOV specification.", (ftnlen)138);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    sigerr_("SPICE(BADREFVECTORSPEC)", (ftnlen)23);
-	    chkout_("GETFOV", (ftnlen)6);
+	vcrss_(__global_state, bsight, refvec, normal);
+	if (vnorm_(__global_state, normal) == 0.) {
+	    setmsg_(__global_state, "The reference vector, stored in '#', is"
+		    " parallel to the instrument boresight vector.  This is n"
+		    "ot allowed by the ANGLES FOV specification.", (ftnlen)138)
+		    ;
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    sigerr_(__global_state, "SPICE(BADREFVECTORSPEC)", (ftnlen)23);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Retrieve the reference angle from the kernel pool. */
 
-	repmi_(kwrang, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-	gdpool_(kword, &__state->c__1, &__state->c__1, &i__, &refang, &found, 
-		(ftnlen)32);
+	repmi_(__global_state, kwrang, "#", instid, kword, (ftnlen)32, (
+		ftnlen)1, (ftnlen)32);
+	gdpool_(__global_state, kword, &__state->c__1, &__state->c__1, &i__, &
+		refang, &found, (ftnlen)32);
 	if (! found) {
-	    setmsg_("The variable, '#', specifying the reference angle which"
-		    " describes instrument # FOV angular extent was not found"
-		    " in the kernel pool. Check whether IK file for the instr"
-		    "ument was loaded into the program and whether this varia"
-		    "ble is specified in that file.", (ftnlen)253);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    errint_("#", instid, (ftnlen)1);
-	    sigerr_("SPICE(REFANGLEMISSING)", (ftnlen)22);
-	    chkout_("GETFOV", (ftnlen)6);
+	    setmsg_(__global_state, "The variable, '#', specifying the refer"
+		    "ence angle which describes instrument # FOV angular exte"
+		    "nt was not found in the kernel pool. Check whether IK fi"
+		    "le for the instrument was loaded into the program and wh"
+		    "ether this variable is specified in that file.", (ftnlen)
+		    253);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    errint_(__global_state, "#", instid, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(REFANGLEMISSING)", (ftnlen)22);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Retrieve the angle units from the kernel pool. */
 
-	repmi_(kwaunt, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-	gcpool_(kword, &__state->c__1, &__state->c__1, &i__, angunt, &found, (
-		ftnlen)32, (ftnlen)80);
+	repmi_(__global_state, kwaunt, "#", instid, kword, (ftnlen)32, (
+		ftnlen)1, (ftnlen)32);
+	gcpool_(__global_state, kword, &__state->c__1, &__state->c__1, &i__, 
+		angunt, &found, (ftnlen)32, (ftnlen)80);
 	if (! found) {
-	    setmsg_("The variable, '#', specifying the angular units in whic"
-		    "h instrument # FOV extent is defined was not found in th"
-		    "e kernel pool. Check whether IK file for the instrument "
-		    "was loaded into the program and whether this variable is"
-		    " specified in that file.", (ftnlen)247);
-	    errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-	    errint_("#", instid, (ftnlen)1);
-	    sigerr_("SPICE(UNITSMISSING)", (ftnlen)19);
-	    chkout_("GETFOV", (ftnlen)6);
+	    setmsg_(__global_state, "The variable, '#', specifying the angul"
+		    "ar units in which instrument # FOV extent is defined was"
+		    " not found in the kernel pool. Check whether IK file for"
+		    " the instrument was loaded into the program and whether "
+		    "this variable is specified in that file.", (ftnlen)247);
+	    errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+		    __global_state, kword, (ftnlen)32));
+	    errint_(__global_state, "#", instid, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(UNITSMISSING)", (ftnlen)19);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Convert the reference angle to radians. */
 
-	convrt_(&refang, angunt, "RADIANS", &tmpang, (ftnlen)80, (ftnlen)7);
+	convrt_(__global_state, &refang, angunt, "RADIANS", &tmpang, (ftnlen)
+		80, (ftnlen)7);
 	refang = tmpang;
 
 /*        Branch to shape specific code. */
 
-	if (s_cmp(shape, "CIRCLE", shape_len, (ftnlen)6) == 0) {
+	if (s_cmp(&__global_state->f2c, shape, "CIRCLE", shape_len, (ftnlen)6)
+		 == 0) {
 
 /*           First check to see that the caller left enough room */
 /*           to store the required number of boundary corner */
 /*           vectors. */
 
 	    if (*room < 1) {
-		setmsg_("The FOV shape for instrument # is specified to be c"
-			"ircular.  There should be room for at least one boun"
-			"dary vector.  There is room for #. ", (ftnlen)138);
-		errint_("#", instid, (ftnlen)1);
-		errint_("#", room, (ftnlen)1);
-		sigerr_("SPICE(BOUNDARYTOOBIG)", (ftnlen)21);
-		chkout_("GETFOV", (ftnlen)6);
+		setmsg_(__global_state, "The FOV shape for instrument # is s"
+			"pecified to be circular.  There should be room for a"
+			"t least one boundary vector.  There is room for #. ", 
+			(ftnlen)138);
+		errint_(__global_state, "#", instid, (ftnlen)1);
+		errint_(__global_state, "#", room, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BOUNDARYTOOBIG)", (ftnlen)21);
+		chkout_(__global_state, "GETFOV", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1129,45 +1193,48 @@ static getfov_state_t* get_getfov_state() {
 /*           rotate the BSIGHT by REFANG towards REFVEC.  To do */
 /*           this first compute the axis we need to rotate about. */
 
-	    vcrss_(bsight, refvec, normal);
+	    vcrss_(__global_state, bsight, refvec, normal);
 
 /*           Now rotate by REFANG about NORMAL(1,1) using the routine */
 /*           VROTV. */
 
-	    vrotv_(bsight, normal, &refang, bounds);
+	    vrotv_(__global_state, bsight, normal, &refang, bounds);
 
 /*           Lastly, since we computed a single boundary corner vector, */
 /*           set N = 1. */
 
 	    *n = 1;
-	} else if (s_cmp(shape, "ELLIPSE", shape_len, (ftnlen)7) == 0) {
+	} else if (s_cmp(&__global_state->f2c, shape, "ELLIPSE", shape_len, (
+		ftnlen)7) == 0) {
 
 /*           The elliptical case requires the additional cross angle */
 /*           keyword's presence in the kernel pool. Attempt to */
 /*           retrieve it. */
 
-	    repmi_(kwcang, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)
-		    32);
-	    gdpool_(kword, &__state->c__1, &__state->c__1, &i__, &crsang, &
-		    found, (ftnlen)32);
+	    repmi_(__global_state, kwcang, "#", instid, kword, (ftnlen)32, (
+		    ftnlen)1, (ftnlen)32);
+	    gdpool_(__global_state, kword, &__state->c__1, &__state->c__1, &
+		    i__, &crsang, &found, (ftnlen)32);
 	    if (! found) {
-		setmsg_("The variable, '#', specifying the cross angle which"
-			" describes instrument # FOV angular extent was not f"
-			"ound in the kernel pool. Check whether IK file for t"
-			"he instrument was loaded into the program and whethe"
-			"r this variable is specified in that file.", (ftnlen)
-			249);
-		errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-		errint_("#", instid, (ftnlen)1);
-		sigerr_("SPICE(CROSSANGLEMISSING)", (ftnlen)24);
-		chkout_("GETFOV", (ftnlen)6);
+		setmsg_(__global_state, "The variable, '#', specifying the c"
+			"ross angle which describes instrument # FOV angular "
+			"extent was not found in the kernel pool. Check wheth"
+			"er IK file for the instrument was loaded into the pr"
+			"ogram and whether this variable is specified in that"
+			" file.", (ftnlen)249);
+		errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+			__global_state, kword, (ftnlen)32));
+		errint_(__global_state, "#", instid, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(CROSSANGLEMISSING)", (ftnlen)
+			24);
+		chkout_(__global_state, "GETFOV", (ftnlen)6);
 		return 0;
 	    }
 
 /*           Convert the cross angle to radians. */
 
-	    convrt_(&crsang, angunt, "RADIANS", &tmpang, (ftnlen)80, (ftnlen)
-		    7);
+	    convrt_(__global_state, &crsang, angunt, "RADIANS", &tmpang, (
+		    ftnlen)80, (ftnlen)7);
 	    crsang = tmpang;
 
 /*           Now check to see that the caller left enough room */
@@ -1175,13 +1242,14 @@ static getfov_state_t* get_getfov_state() {
 /*           vectors. */
 
 	    if (*room < 2) {
-		setmsg_("The FOV shape for instrument # is specified to be e"
-			"lliptical.  There should be room for at least two bo"
-			"undary vectors.  There is room for #. ", (ftnlen)141);
-		errint_("#", instid, (ftnlen)1);
-		errint_("#", room, (ftnlen)1);
-		sigerr_("SPICE(BOUNDARYTOOBIG)", (ftnlen)21);
-		chkout_("GETFOV", (ftnlen)6);
+		setmsg_(__global_state, "The FOV shape for instrument # is s"
+			"pecified to be elliptical.  There should be room for"
+			" at least two boundary vectors.  There is room for #"
+			". ", (ftnlen)141);
+		errint_(__global_state, "#", instid, (ftnlen)1);
+		errint_(__global_state, "#", room, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BOUNDARYTOOBIG)", (ftnlen)21);
+		chkout_(__global_state, "GETFOV", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1189,12 +1257,12 @@ static getfov_state_t* get_getfov_state() {
 /*           to rotate the BSIGHT by REFANG towards REFVEC.  To */
 /*           do this first compute the axis we need to rotate about. */
 
-	    vcrss_(bsight, refvec, normal);
+	    vcrss_(__global_state, bsight, refvec, normal);
 
 /*           Now rotate by REFANG about NORMAL(1,1) using the routine */
 /*           VROTV. */
 
-	    vrotv_(bsight, normal, &refang, bounds);
+	    vrotv_(__global_state, bsight, normal, &refang, bounds);
 
 /*           At this point we have one boundary vector.  We need the */
 /*           second and final one.  The strategy we will use is the */
@@ -1202,46 +1270,49 @@ static getfov_state_t* get_getfov_state() {
 /*           This will give us boundary corner vectors listed in a */
 /*           counter-clockwise fashion about the boresight. */
 
-	    vcrss_(bsight, normal, tmpvec);
-	    vequ_(tmpvec, &normal[3]);
+	    vcrss_(__global_state, bsight, normal, tmpvec);
+	    vequ_(__global_state, tmpvec, &normal[3]);
 
 /*           Now rotate BSIGHT by CRSANG about the NORMAL(1,2) using */
 /*           the routine VROTV. */
 
-	    vrotv_(bsight, &normal[3], &crsang, &bounds[3]);
+	    vrotv_(__global_state, bsight, &normal[3], &crsang, &bounds[3]);
 
 /*           Lastly, since we computed two boundary corner vectors, */
 /*           set N = 2. */
 
 	    *n = 2;
-	} else if (s_cmp(shape, "RECTANGLE", shape_len, (ftnlen)9) == 0) {
+	} else if (s_cmp(&__global_state->f2c, shape, "RECTANGLE", shape_len, 
+		(ftnlen)9) == 0) {
 
 /*           The rectangular case requires the additional cross angle */
 /*           keyword's presence in the kernel pool. Attempt to */
 /*           retrieve it. */
 
-	    repmi_(kwcang, "#", instid, kword, (ftnlen)32, (ftnlen)1, (ftnlen)
-		    32);
-	    gdpool_(kword, &__state->c__1, &__state->c__1, &i__, &crsang, &
-		    found, (ftnlen)32);
+	    repmi_(__global_state, kwcang, "#", instid, kword, (ftnlen)32, (
+		    ftnlen)1, (ftnlen)32);
+	    gdpool_(__global_state, kword, &__state->c__1, &__state->c__1, &
+		    i__, &crsang, &found, (ftnlen)32);
 	    if (! found) {
-		setmsg_("The variable, '#', specifying the cross angle which"
-			" describes instrument # FOV angular extent was not f"
-			"ound in the kernel pool. Check whether IK file for t"
-			"he instrument was loaded into the program and whethe"
-			"r this variable is specified in that file.", (ftnlen)
-			249);
-		errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
-		errint_("#", instid, (ftnlen)1);
-		sigerr_("SPICE(CROSSANGLEMISSING)", (ftnlen)24);
-		chkout_("GETFOV", (ftnlen)6);
+		setmsg_(__global_state, "The variable, '#', specifying the c"
+			"ross angle which describes instrument # FOV angular "
+			"extent was not found in the kernel pool. Check wheth"
+			"er IK file for the instrument was loaded into the pr"
+			"ogram and whether this variable is specified in that"
+			" file.", (ftnlen)249);
+		errch_(__global_state, "#", kword, (ftnlen)1, rtrim_(
+			__global_state, kword, (ftnlen)32));
+		errint_(__global_state, "#", instid, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(CROSSANGLEMISSING)", (ftnlen)
+			24);
+		chkout_(__global_state, "GETFOV", (ftnlen)6);
 		return 0;
 	    }
 
 /*           Convert the cross angle to radians. */
 
-	    convrt_(&crsang, angunt, "RADIANS", &tmpang, (ftnlen)80, (ftnlen)
-		    7);
+	    convrt_(__global_state, &crsang, angunt, "RADIANS", &tmpang, (
+		    ftnlen)80, (ftnlen)7);
 	    crsang = tmpang;
 
 /*           Now check to see that the caller left enough room */
@@ -1249,14 +1320,14 @@ static getfov_state_t* get_getfov_state() {
 /*           vectors. */
 
 	    if (*room < 4) {
-		setmsg_("The FOV shape for instrument # is specified to be r"
-			"ectangular.  There should be room for at least four "
-			"boundary vectors.  There is room for #. ", (ftnlen)
-			143);
-		errint_("#", instid, (ftnlen)1);
-		errint_("#", room, (ftnlen)1);
-		sigerr_("SPICE(BOUNDARYTOOBIG)", (ftnlen)21);
-		chkout_("GETFOV", (ftnlen)6);
+		setmsg_(__global_state, "The FOV shape for instrument # is s"
+			"pecified to be rectangular.  There should be room fo"
+			"r at least four boundary vectors.  There is room for"
+			" #. ", (ftnlen)143);
+		errint_(__global_state, "#", instid, (ftnlen)1);
+		errint_(__global_state, "#", room, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BOUNDARYTOOBIG)", (ftnlen)21);
+		chkout_(__global_state, "GETFOV", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1293,22 +1364,22 @@ static getfov_state_t* get_getfov_state() {
 
 /*           Start with step (1). */
 
-	    unorm_(bsight, b, &bmag);
+	    unorm_(__global_state, bsight, b, &bmag);
 
 /*           Now proceed to (2). Since we already know that REFVEC */
 /*           and BSIGHT are not parallel, the following yields a */
 /*           non-zero vector: */
 
-	    vperp_(refvec, bsight, b1);
+	    vperp_(__global_state, refvec, bsight, b1);
 
 /*           Unitize B1. */
 
-	    vhat_(b1, tmpvec);
-	    vequ_(tmpvec, b1);
+	    vhat_(__global_state, b1, tmpvec);
+	    vequ_(__global_state, tmpvec, b1);
 
 /*           Step (3), compute B2 by crossing B and B1. */
 
-	    vcrss_(b, b1, b2);
+	    vcrss_(__global_state, b, b1, b2);
 
 /*           Before proceeding onto step (4), verify that the */
 /*           results of the calculations in step (4) will make */
@@ -1316,45 +1387,45 @@ static getfov_state_t* get_getfov_state() {
 /*           Signal an error if both are not positive numbers. */
 /*           Use MINCOS as a tolerance. */
 
-	    cosran = cos(refang);
-	    coscan = cos(crsang);
+	    cosran = cos(&__global_state->f2c, refang);
+	    coscan = cos(&__global_state->f2c, crsang);
 	    if (cosran < 1e-15 || coscan < 1e-15) {
-		setmsg_("The angular extents specified in the FOV definition"
-			" for instrument # result in degenerate or improper b"
-			"oundary corner vectors.  This usually is the case wh"
-			"en one or both of the angles specified is 90 degrees."
-			, (ftnlen)208);
-		errint_("#", instid, (ftnlen)1);
-		sigerr_("SPICE(BADBOUNDARY)", (ftnlen)18);
-		chkout_("GETFOV", (ftnlen)6);
+		setmsg_(__global_state, "The angular extents specified in th"
+			"e FOV definition for instrument # result in degenera"
+			"te or improper boundary corner vectors.  This usuall"
+			"y is the case when one or both of the angles specifi"
+			"ed is 90 degrees.", (ftnlen)208);
+		errint_(__global_state, "#", instid, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADBOUNDARY)", (ftnlen)18);
+		chkout_(__global_state, "GETFOV", (ftnlen)6);
 		return 0;
 	    }
 
 /*           Compute the NORMAL vectors to complete step (4). */
 
-	    sinran = sin(refang);
-	    sincan = sin(crsang);
+	    sinran = sin(&__global_state->f2c, refang);
+	    sincan = sin(&__global_state->f2c, crsang);
 	    d__1 = -cosran;
-	    vlcom_(&d__1, b1, &sinran, b, normal);
+	    vlcom_(__global_state, &d__1, b1, &sinran, b, normal);
 	    d__1 = -coscan;
-	    vlcom_(&d__1, b2, &sincan, b, &normal[3]);
-	    vlcom_(&cosran, b1, &sinran, b, &normal[6]);
-	    vlcom_(&coscan, b2, &sincan, b, &normal[9]);
+	    vlcom_(__global_state, &d__1, b2, &sincan, b, &normal[3]);
+	    vlcom_(__global_state, &cosran, b1, &sinran, b, &normal[6]);
+	    vlcom_(__global_state, &coscan, b2, &sincan, b, &normal[9]);
 
 /*           We are almost finished. Compute the boundary corner */
 /*           vectors completing step (5). */
 
-	    vcrss_(normal, &normal[3], bounds);
-	    vcrss_(&normal[3], &normal[6], &bounds[3]);
-	    vcrss_(&normal[6], &normal[9], &bounds[6]);
-	    vcrss_(&normal[9], normal, &bounds[9]);
+	    vcrss_(__global_state, normal, &normal[3], bounds);
+	    vcrss_(__global_state, &normal[3], &normal[6], &bounds[3]);
+	    vcrss_(__global_state, &normal[6], &normal[9], &bounds[6]);
+	    vcrss_(__global_state, &normal[9], normal, &bounds[9]);
 
 /*           Step (6), normalize the boundary corner vectors */
 /*           and scale by BMAG, the magnitude of BSIGHT. */
 
 	    for (i__ = 1; i__ <= 4; ++i__) {
-		unorm_(&bounds[i__ * 3 - 3], tmpvec, &vmag);
-		vscl_(&bmag, tmpvec, &bounds[i__ * 3 - 3]);
+		unorm_(__global_state, &bounds[i__ * 3 - 3], tmpvec, &vmag);
+		vscl_(__global_state, &bmag, tmpvec, &bounds[i__ * 3 - 3]);
 	    }
 
 /*           Lastly since we are returning 4 boundary corner vectors, */
@@ -1366,26 +1437,26 @@ static getfov_state_t* get_getfov_state() {
 /*           If we end up here something is terribly wrong with */
 /*           this module or SPICE in general. */
 
-	    setmsg_("This error is never supposed to occur. We have an undef"
-		    "ined shape for the ANGLES specification that passed the "
-		    "shape check.", (ftnlen)123);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("GETFOV", (ftnlen)6);
+	    setmsg_(__global_state, "This error is never supposed to occur. "
+		    "We have an undefined shape for the ANGLES specification "
+		    "that passed the shape check.", (ftnlen)123);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "GETFOV", (ftnlen)6);
 	    return 0;
 	}
     } else {
-	setmsg_("The FOV class specification is set to '#' which is currentl"
-		"y unsupported. See the GETFOV subroutine header for more inf"
-		"ormation.", (ftnlen)128);
-	errch_("#", spec, (ftnlen)1, (ftnlen)80);
-	sigerr_("SPICE(UNSUPPORTEDSPEC)", (ftnlen)22);
-	chkout_("GETFOV", (ftnlen)6);
+	setmsg_(__global_state, "The FOV class specification is set to '#' w"
+		"hich is currently unsupported. See the GETFOV subroutine hea"
+		"der for more information.", (ftnlen)128);
+	errch_(__global_state, "#", spec, (ftnlen)1, (ftnlen)80);
+	sigerr_(__global_state, "SPICE(UNSUPPORTEDSPEC)", (ftnlen)22);
+	chkout_(__global_state, "GETFOV", (ftnlen)6);
 	return 0;
     }
 
 /*     Standard SPICE error handling. */
 
-    chkout_("GETFOV", (ftnlen)6);
+    chkout_(__global_state, "GETFOV", (ftnlen)6);
     return 0;
 } /* getfov_ */
 

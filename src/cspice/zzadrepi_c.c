@@ -196,7 +196,7 @@
    {
       return ( 0 );
    }
-   chkin_c ( "zzadrepi_c" );
+   chkin_c ( naif_state, "zzadrepi_c" );
 
 
    /*
@@ -281,7 +281,7 @@
 
    fPtr = (  void (*) ( ConstSpiceCell *, 
                         ConstSpiceChar *,
-                        ConstSpiceChar *  )  )  zzadget_c ( UDREPI );
+                        ConstSpiceChar *  )  )  zzadget_c ( naif_state,  ( UDREPI );
    /*
    At this point we have the inputs required by the saved
    GF progress report initialization function.

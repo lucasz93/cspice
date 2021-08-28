@@ -8,28 +8,29 @@
 
 
 typedef int srfcss_state_t;
-static srfcss_state_t* get_srfcss_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline srfcss_state_t* get_srfcss_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure SRFCSS ( Surface ID and body string to surface string ) */
-/* Subroutine */ int srfcss_(integer *code, char *bodstr, char *srfstr, 
-	logical *isname, ftnlen bodstr_len, ftnlen srfstr_len)
+/* Subroutine */ int srfcss_(cspice_t* __global_state, integer *code, char *
+	bodstr, char *srfstr, logical *isname, ftnlen bodstr_len, ftnlen 
+	srfstr_len)
 {
-    extern /* Subroutine */ int zzsrfc2n_(integer *, integer *, char *, 
-	    logical *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int zzsrfc2n_(cspice_t*, integer *, integer *, 
+	    char *, logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int bods2c_(cspice_t*, char *, integer *, logical 
+	    *, ftnlen);
+    extern logical failed_(cspice_t*);
     integer bodyid;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    srfcss_state_t* __state = get_srfcss_state();
+    srfcss_state_t* __state = get_srfcss_state(__global_state);
 /* $ Abstract */
 
 /*     Translate a surface ID code, together with a body string, to the */
@@ -388,10 +389,10 @@ static srfcss_state_t* get_srfcss_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SRFCSS", (ftnlen)6);
+    chkin_(__global_state, "SRFCSS", (ftnlen)6);
 
 /*     No name has been found yet. */
 
@@ -399,9 +400,9 @@ static srfcss_state_t* get_srfcss_state() {
 
 /*     Convert the body string to an ID code. */
 
-    bods2c_(bodstr, &bodyid, isname, bodstr_len);
-    if (failed_()) {
-	chkout_("SRFCSS", (ftnlen)6);
+    bods2c_(__global_state, bodstr, &bodyid, isname, bodstr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SRFCSS", (ftnlen)6);
 	return 0;
     }
     if (*isname) {
@@ -409,9 +410,9 @@ static srfcss_state_t* get_srfcss_state() {
 /*        Try to translate the surface and body codes to a known surface */
 /*        name. */
 
-	zzsrfc2n_(code, &bodyid, srfstr, isname, srfstr_len);
-	if (failed_()) {
-	    chkout_("SRFCSS", (ftnlen)6);
+	zzsrfc2n_(__global_state, code, &bodyid, srfstr, isname, srfstr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SRFCSS", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -421,9 +422,9 @@ static srfcss_state_t* get_srfcss_state() {
 /*     representation. */
 
     if (! (*isname)) {
-	intstr_(code, srfstr, srfstr_len);
+	intstr_(__global_state, code, srfstr, srfstr_len);
     }
-    chkout_("SRFCSS", (ftnlen)6);
+    chkout_(__global_state, "SRFCSS", (ftnlen)6);
     return 0;
 } /* srfcss_ */
 

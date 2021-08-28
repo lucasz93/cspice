@@ -8,8 +8,7 @@
 
 
 extern spkcpo_init_t __spkcpo_init;
-static spkcpo_state_t* get_spkcpo_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkcpo_state_t* get_spkcpo_state(cspice_t* state) {
 	if (!state->spkcpo)
 		state->spkcpo = __cspice_allocate_module(sizeof(
 	spkcpo_state_t), &__spkcpo_init, sizeof(__spkcpo_init));
@@ -18,26 +17,27 @@ static spkcpo_state_t* get_spkcpo_state() {
 }
 
 /* $Procedure SPKCPO ( SPK, constant position observer state ) */
-/* Subroutine */ int spkcpo_(char *target, doublereal *et, char *outref, char 
-	*refloc, char *abcorr, doublereal *obspos, char *obsctr, char *obsref,
-	 doublereal *state, doublereal *lt, ftnlen target_len, ftnlen 
-	outref_len, ftnlen refloc_len, ftnlen abcorr_len, ftnlen obsctr_len, 
-	ftnlen obsref_len)
+/* Subroutine */ int spkcpo_(cspice_t* __global_state, char *target, 
+	doublereal *et, char *outref, char *refloc, char *abcorr, doublereal *
+	obspos, char *obsctr, char *obsref, doublereal *state, doublereal *lt,
+	 ftnlen target_len, ftnlen outref_len, ftnlen refloc_len, ftnlen 
+	abcorr_len, ftnlen obsctr_len, ftnlen obsref_len)
 {
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     doublereal obsepc;
     doublereal obssta[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int spkcvo_(char *, doublereal *, char *, char *, 
-	    char *, doublereal *, doublereal *, char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int spkcvo_(cspice_t*, char *, doublereal *, char 
+	    *, char *, char *, doublereal *, doublereal *, char *, char *, 
+	    doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spkcpo_state_t* __state = get_spkcpo_state();
+    spkcpo_state_t* __state = get_spkcpo_state(__global_state);
 /* $ Abstract */
 
 /*     Return the state of a specified target relative to an "observer," */
@@ -1502,16 +1502,16 @@ static spkcpo_state_t* get_spkcpo_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKCPO", (ftnlen)6);
+    chkin_(__global_state, "SPKCPO", (ftnlen)6);
 
 /*     Create a state vector for the observer. The velocity */
 /*     portion of the state is zero. */
 
-    vequ_(obspos, obssta);
-    cleard_(&__state->c__3, &obssta[3]);
+    vequ_(__global_state, obspos, obssta);
+    cleard_(__global_state, &__state->c__3, &obssta[3]);
 
 /*     Set the observation epoch; the value is arbitrary, since */
 /*     the observer's velocity is zero. */
@@ -1520,10 +1520,10 @@ static spkcpo_state_t* get_spkcpo_state() {
 
 /*     Compute the observer-target state vector. */
 
-    spkcvo_(target, et, outref, refloc, abcorr, obssta, &obsepc, obsctr, 
-	    obsref, state, lt, target_len, outref_len, refloc_len, abcorr_len,
-	     obsctr_len, obsref_len);
-    chkout_("SPKCPO", (ftnlen)6);
+    spkcvo_(__global_state, target, et, outref, refloc, abcorr, obssta, &
+	    obsepc, obsctr, obsref, state, lt, target_len, outref_len, 
+	    refloc_len, abcorr_len, obsctr_len, obsref_len);
+    chkout_(__global_state, "SPKCPO", (ftnlen)6);
     return 0;
 } /* spkcpo_ */
 

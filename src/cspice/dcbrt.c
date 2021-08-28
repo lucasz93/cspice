@@ -8,8 +8,7 @@
 
 
 extern dcbrt_init_t __dcbrt_init;
-static dcbrt_state_t* get_dcbrt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dcbrt_state_t* get_dcbrt_state(cspice_t* state) {
 	if (!state->dcbrt)
 		state->dcbrt = __cspice_allocate_module(sizeof(dcbrt_state_t),
 	 &__dcbrt_init, sizeof(__dcbrt_init));
@@ -18,18 +17,18 @@ static dcbrt_state_t* get_dcbrt_state() {
 }
 
 /* $Procedure  DCBRT ( Double precision cube root ) */
-doublereal dcbrt_(doublereal *x)
+doublereal dcbrt_(cspice_t* __global_state, doublereal *x)
 {
     /* System generated locals */
     doublereal ret_val, d__1, d__2;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *), d_sign(doublereal *, 
-	    doublereal *);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *), d_sign(
+	    f2c_state_t*, doublereal *, doublereal *);
 
 
     /* Module state */
-    dcbrt_state_t* __state = get_dcbrt_state();
+    dcbrt_state_t* __state = get_dcbrt_state(__global_state);
 /* $ Abstract */
 
 /*      Return the cube root of a double precision number. */
@@ -145,8 +144,8 @@ doublereal dcbrt_(doublereal *x)
 /* -& */
 
     d__2 = abs(*x);
-    d__1 = pow_dd(&d__2, &__state->c_b2);
-    ret_val = d_sign(&d__1, x);
+    d__1 = pow_dd(&__global_state->f2c, &d__2, &__state->c_b2);
+    ret_val = d_sign(&__global_state->f2c, &d__1, x);
 
     return ret_val;
 } /* dcbrt_ */

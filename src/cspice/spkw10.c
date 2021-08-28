@@ -8,8 +8,7 @@
 
 
 extern spkw10_init_t __spkw10_init;
-static spkw10_state_t* get_spkw10_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkw10_state_t* get_spkw10_state(cspice_t* state) {
 	if (!state->spkw10)
 		state->spkw10 = __cspice_allocate_module(sizeof(
 	spkw10_state_t), &__spkw10_init, sizeof(__spkw10_init));
@@ -18,10 +17,11 @@ static spkw10_state_t* get_spkw10_state() {
 }
 
 /* $Procedure      SPKW10 (SPK - write a type 10 segment ) */
-/* Subroutine */ int spkw10_(integer *handle, integer *body, integer *center, 
-	char *frame, doublereal *first, doublereal *last, char *segid, 
-	doublereal *consts, integer *n, doublereal *elems, doublereal *epochs,
-	 ftnlen frame_len, ftnlen segid_len)
+/* Subroutine */ int spkw10_(cspice_t* __global_state, integer *handle, 
+	integer *body, integer *center, char *frame, doublereal *first, 
+	doublereal *last, char *segid, doublereal *consts, integer *n, 
+	doublereal *elems, doublereal *epochs, ftnlen frame_len, ftnlen 
+	segid_len)
 {
     /* System generated locals */
     integer i__1;
@@ -30,27 +30,29 @@ static spkw10_state_t* get_spkw10_state() {
     integer base;
     doublereal dnut[4];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal descr[6];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int sgwes_(integer *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int sgwes_(cspice_t*, integer *);
     integer npkts;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal packet[14];
     integer nepoch;
-    extern /* Subroutine */ int sgbwfs_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sgwfpk_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int spkpds_(integer *, integer *, char *, integer 
-	    *, doublereal *, doublereal *, doublereal *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int zzwahr_(doublereal *, doublereal *);
+    extern /* Subroutine */ int sgbwfs_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgwfpk_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int spkpds_(cspice_t*, integer *, integer *, char 
+	    *, integer *, doublereal *, doublereal *, doublereal *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzwahr_(cspice_t*, doublereal *, doublereal *)
+	    ;
 
 
     /* Module state */
-    spkw10_state_t* __state = get_spkw10_state();
+    spkw10_state_t* __state = get_spkw10_state(__global_state);
 /* $ Abstract */
 
 /*     Write an SPK type 10 segment to the DAF open and attached to */
@@ -671,18 +673,18 @@ static spkw10_state_t* get_spkw10_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKW10", (ftnlen)6);
+    chkin_(__global_state, "SPKW10", (ftnlen)6);
 
 /*     First we need to create a descriptor for the segment */
 /*     we are about to write. */
 
-    spkpds_(body, center, frame, &__state->c__10, first, last, descr, 
-	    frame_len);
-    if (failed_()) {
-	chkout_("SPKW10", (ftnlen)6);
+    spkpds_(__global_state, body, center, frame, &__state->c__10, first, last,
+	     descr, frame_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKW10", (ftnlen)6);
 	return 0;
     }
 
@@ -691,20 +693,20 @@ static spkw10_state_t* get_spkw10_state() {
 
     npkts = *n;
     nepoch = *n;
-    sgbwfs_(handle, descr, segid, &__state->c__8, consts, &__state->c__14, &
-	    __state->c__4, segid_len);
+    sgbwfs_(__global_state, handle, descr, segid, &__state->c__8, consts, &
+	    __state->c__14, &__state->c__4, segid_len);
     i__1 = nepoch;
     for (i__ = 1; i__ <= i__1; ++i__) {
 
 /*        Move the elements into the next packet. */
 
 	base = (i__ - 1) * 10;
-	moved_(&elems[base], &__state->c__10, packet);
+	moved_(__global_state, &elems[base], &__state->c__10, packet);
 
 /*        For each epoch, we need to get the nutation in obliquity, */
 /*        nutation in longitude and mean obliquity. */
 
-	zzwahr_(&epochs[i__ - 1], dnut);
+	zzwahr_(__global_state, &epochs[i__ - 1], dnut);
 	packet[11] = dnut[0];
 	packet[10] = dnut[1];
 	packet[13] = dnut[2];
@@ -712,11 +714,11 @@ static spkw10_state_t* get_spkw10_state() {
 
 /*        Now write the packet into the generic segment. */
 
-	sgwfpk_(handle, &__state->c__1, packet, &__state->c__1, &epochs[i__ - 
-		1]);
+	sgwfpk_(__global_state, handle, &__state->c__1, packet, &
+		__state->c__1, &epochs[i__ - 1]);
     }
-    sgwes_(handle);
-    chkout_("SPKW10", (ftnlen)6);
+    sgwes_(__global_state, handle);
+    chkout_(__global_state, "SPKW10", (ftnlen)6);
     return 0;
 } /* spkw10_ */
 

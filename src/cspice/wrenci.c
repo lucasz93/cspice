@@ -8,8 +8,7 @@
 
 
 extern wrenci_init_t __wrenci_init;
-static wrenci_state_t* get_wrenci_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wrenci_state_t* get_wrenci_state(cspice_t* state) {
 	if (!state->wrenci)
 		state->wrenci = __cspice_allocate_module(sizeof(
 	wrenci_state_t), &__wrenci_init, sizeof(__wrenci_init));
@@ -18,7 +17,8 @@ static wrenci_state_t* get_wrenci_state() {
 }
 
 /* $Procedure  WRENCI  ( Write encoded integers to text file ) */
-/* Subroutine */ int wrenci_(integer *unit, integer *n, integer *data)
+/* Subroutine */ int wrenci_(cspice_t* __global_state, integer *unit, integer 
+	*n, integer *data)
 {
     /* System generated locals */
     address a__1[3];
@@ -27,28 +27,32 @@ static wrenci_state_t* get_wrenci_state() {
     cilist ci__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_wsfe(cilist *);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
-    integer do_fio(integer *, char *, ftnlen), e_wsfe(void);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_wsfe(
+	    f2c_state_t*, cilist *);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
+    integer do_fio(f2c_state_t*, integer *, char *, ftnlen), e_wsfe(
+	    f2c_state_t*);
 
     /* Local variables */
     char work[64*64];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer nitms;
-    extern /* Subroutine */ int int2hx_(integer *, char *, integer *, ftnlen);
+    extern /* Subroutine */ int int2hx_(cspice_t*, integer *, char *, integer 
+	    *, ftnlen);
     integer itmbeg;
     integer length[64];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    wrenci_state_t* __state = get_wrenci_state();
+    wrenci_state_t* __state = get_wrenci_state(__global_state);
 /* $ Abstract */
 
 /*     Encode and write integers to a text file. */
@@ -293,21 +297,21 @@ static wrenci_state_t* get_wrenci_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("WRENCI", (ftnlen)6);
+	chkin_(__global_state, "WRENCI", (ftnlen)6);
     }
 
 /*     Check to see if the number of data items is less than or equal */
 /*     to zero. If it is, signal an error. */
 
     if (*n < 1) {
-	setmsg_("The number of data items to be written was not positive: #.",
-		 (ftnlen)59);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("WRENCI", (ftnlen)6);
+	setmsg_(__global_state, "The number of data items to be written was "
+		"not positive: #.", (ftnlen)59);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "WRENCI", (ftnlen)6);
 	return 0;
     }
 
@@ -335,11 +339,12 @@ static wrenci_state_t* get_wrenci_state() {
 
 	i__1 = nitms;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    int2hx_(&data[itmbeg + i__ - 2], work + (((i__2 = i__ - 1) < 64 &&
-		     0 <= i__2 ? i__2 : s_rnge("work", i__2, "wrenci_", (
-		    ftnlen)319)) << 6), &length[(i__3 = i__ - 1) < 64 && 0 <= 
-		    i__3 ? i__3 : s_rnge("length", i__3, "wrenci_", (ftnlen)
-		    319)], (ftnlen)64);
+	    int2hx_(__global_state, &data[itmbeg + i__ - 2], work + (((i__2 = 
+		    i__ - 1) < 64 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "work", i__2, "wrenci_", (ftnlen)319)
+		    ) << 6), &length[(i__3 = i__ - 1) < 64 && 0 <= i__3 ? 
+		    i__3 : s_rnge(&__global_state->f2c, "length", i__3, "wre"
+		    "nci_", (ftnlen)319)], (ftnlen)64);
 	}
 
 /*        Write out the current workspace, placing single quotes around */
@@ -352,36 +357,39 @@ static wrenci_state_t* get_wrenci_state() {
 	    ci__1.cierr = 1;
 	    ci__1.ciunit = *unit;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_wsfe(&ci__1);
+	    iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
 /* Writing concatenation */
 	    i__4[0] = 1, a__1[0] = "'";
 	    i__4[1] = length[(i__3 = i__ - 1) < 64 && 0 <= i__3 ? i__3 : 
-		    s_rnge("length", i__3, "wrenci_", (ftnlen)330)], a__1[1] =
-		     work + (((i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : 
-		    s_rnge("work", i__2, "wrenci_", (ftnlen)330)) << 6);
+		    s_rnge(&__global_state->f2c, "length", i__3, "wrenci_", (
+		    ftnlen)330)], a__1[1] = work + (((i__2 = i__ - 1) < 64 && 
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "work", 
+		    i__2, "wrenci_", (ftnlen)330)) << 6);
 	    i__4[2] = 1, a__1[2] = "'";
-	    s_cat(ch__1, a__1, i__4, &__state->c__3, (ftnlen)66);
-	    iostat = do_fio(&__state->c__1, ch__1, length[(i__3 = i__ - 1) < 
-		    64 && 0 <= i__3 ? i__3 : s_rnge("length", i__3, "wrenci_",
-		     (ftnlen)330)] + 2);
+	    s_cat(&__global_state->f2c, ch__1, a__1, i__4, &__state->c__3, (
+		    ftnlen)66);
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, ch__1, 
+		    length[(i__3 = i__ - 1) < 64 && 0 <= i__3 ? i__3 : s_rnge(
+		    &__global_state->f2c, "length", i__3, "wrenci_", (ftnlen)
+		    330)] + 2);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
-	    iostat = e_wsfe();
+	    iostat = e_wsfe(&__global_state->f2c);
 L100001:
 
 /*           Check to see if we got a write error, IOSTAT .NE. 0. */
 
 	    if (iostat != 0) {
-		setmsg_("Error writing to logical unit #, IOSTAT = #.", (
-			ftnlen)44);
-		errint_("#", unit, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		chkout_("WRENCI", (ftnlen)6);
+		setmsg_(__global_state, "Error writing to logical unit #, IO"
+			"STAT = #.", (ftnlen)44);
+		errint_(__global_state, "#", unit, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+		chkout_(__global_state, "WRENCI", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -392,7 +400,7 @@ L100001:
 
 	itmbeg += nitms;
     }
-    chkout_("WRENCI", (ftnlen)6);
+    chkout_(__global_state, "WRENCI", (ftnlen)6);
     return 0;
 } /* wrenci_ */
 

@@ -8,8 +8,7 @@
 
 
 extern zzpdtbox_init_t __zzpdtbox_init;
-static zzpdtbox_state_t* get_zzpdtbox_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzpdtbox_state_t* get_zzpdtbox_state(cspice_t* state) {
 	if (!state->zzpdtbox)
 		state->zzpdtbox = __cspice_allocate_module(sizeof(
 	zzpdtbox_state_t), &__zzpdtbox_init, sizeof(__zzpdtbox_init));
@@ -18,15 +17,15 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
 }
 
 /* $Procedure ZZPDTBOX (Bounding box for planetodetic volume element) */
-/* Subroutine */ int zzpdtbox_(doublereal *bounds, doublereal *corpar, 
-	doublereal *center, doublereal *lr, doublereal *lt, doublereal *lz, 
-	doublereal *radius)
+/* Subroutine */ int zzpdtbox_(cspice_t* __global_state, doublereal *bounds, 
+	doublereal *corpar, doublereal *center, doublereal *lr, doublereal *
+	lt, doublereal *lz, doublereal *radius)
 {
     /* System generated locals */
     doublereal d__1, d__2, d__3;
 
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal diag[3];
@@ -38,18 +37,19 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
     doublereal maxz;
     doublereal topv[3];
     doublereal f;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal inrad;
     doublereal hdlon;
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal vnorm_(doublereal *);
-    extern doublereal twopi_(void);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern doublereal twopi_(cspice_t*);
     doublereal re;
-    extern doublereal halfpi_(void);
-    extern /* Subroutine */ int georec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern doublereal halfpi_(cspice_t*);
+    extern /* Subroutine */ int georec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal maxabs;
     doublereal midlon;
     doublereal minalt;
@@ -59,16 +59,16 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
     doublereal maxlon;
     doublereal minlon;
     doublereal outrad;
-    extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int cylrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cylrec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
 
 
     /* Module state */
-    zzpdtbox_state_t* __state = get_zzpdtbox_state();
+    zzpdtbox_state_t* __state = get_zzpdtbox_state(__global_state);
 /* $ Abstract */
 
 /*     Create a bounding box for a planetodetic volume element. */
@@ -579,7 +579,7 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
 /*     This routine uses discovery check-in. We check RETURN in order to */
 /*     avoid performing math operations using invalid operands. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
     re = corpar[0];
@@ -588,11 +588,12 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
 /*     The equatorial radius must be greater than zero. */
 
     if (re <= 0.) {
-	chkin_("ZZPDTBOX", (ftnlen)8);
-	setmsg_("Equatorial radius from CORPAR array was #.", (ftnlen)42);
-	errdp_("#", &re, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZPDTBOX", (ftnlen)8);
+	chkin_(__global_state, "ZZPDTBOX", (ftnlen)8);
+	setmsg_(__global_state, "Equatorial radius from CORPAR array was #.", 
+		(ftnlen)42);
+	errdp_(__global_state, "#", &re, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZPDTBOX", (ftnlen)8);
 	return 0;
     }
 
@@ -602,12 +603,12 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
 /*     error and check out. */
 
     if (f >= 1.) {
-	chkin_("ZZPDTBOX", (ftnlen)8);
-	setmsg_("Flattening coefficient from CORPAR array was #.", (ftnlen)47)
-		;
-	errdp_("*", &f, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZPDTBOX", (ftnlen)8);
+	chkin_(__global_state, "ZZPDTBOX", (ftnlen)8);
+	setmsg_(__global_state, "Flattening coefficient from CORPAR array wa"
+		"s #.", (ftnlen)47);
+	errdp_(__global_state, "*", &f, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZPDTBOX", (ftnlen)8);
 	return 0;
     }
 
@@ -616,16 +617,16 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
     minlon = bounds[0];
     maxlon = bounds[1];
     if (maxlon <= minlon) {
-	maxlon += twopi_();
+	maxlon += twopi_(__global_state);
     }
     if (maxlon <= minlon) {
-	chkin_("ZZPDTBOX", (ftnlen)8);
-	setmsg_("Longitude bounds are #:#. Minimum longitude exceeds maximum"
-		" by more than 2 pi.", (ftnlen)78);
-	errdp_("#", &minlon, (ftnlen)1);
-	errdp_("#", &bounds[1], (ftnlen)1);
-	sigerr_("SPICE(BADLONGITUDERANGE)", (ftnlen)24);
-	chkout_("ZZPDTBOX", (ftnlen)8);
+	chkin_(__global_state, "ZZPDTBOX", (ftnlen)8);
+	setmsg_(__global_state, "Longitude bounds are #:#. Minimum longitude"
+		" exceeds maximum by more than 2 pi.", (ftnlen)78);
+	errdp_(__global_state, "#", &minlon, (ftnlen)1);
+	errdp_(__global_state, "#", &bounds[1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADLONGITUDERANGE)", (ftnlen)24);
+	chkout_(__global_state, "ZZPDTBOX", (ftnlen)8);
 	return 0;
     }
     minlat = bounds[2];
@@ -633,35 +634,38 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
     minalt = bounds[4];
     maxalt = bounds[5];
     if (minlat > maxlat) {
-	chkin_("ZZPDTBOX", (ftnlen)8);
-	setmsg_("Latitude bounds #:# are out of order.", (ftnlen)37);
-	errdp_("#", &minlat, (ftnlen)1);
-	errdp_("#", &maxlat, (ftnlen)1);
-	sigerr_("SPICE(BADLATITUDEBOUNDS)", (ftnlen)24);
-	chkout_("ZZPDTBOX", (ftnlen)8);
+	chkin_(__global_state, "ZZPDTBOX", (ftnlen)8);
+	setmsg_(__global_state, "Latitude bounds #:# are out of order.", (
+		ftnlen)37);
+	errdp_(__global_state, "#", &minlat, (ftnlen)1);
+	errdp_(__global_state, "#", &maxlat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADLATITUDEBOUNDS)", (ftnlen)24);
+	chkout_(__global_state, "ZZPDTBOX", (ftnlen)8);
 	return 0;
     }
-    if (minlat < -halfpi_() - 1e-12) {
-	chkin_("ZZPDTBOX", (ftnlen)8);
-	setmsg_("Minimum latitude # is less than -pi/2.", (ftnlen)38);
-	errdp_("#", &minlat, (ftnlen)1);
-	sigerr_("SPICE(BADLATITUDERANGE)", (ftnlen)23);
-	chkout_("ZZPDTBOX", (ftnlen)8);
+    if (minlat < -halfpi_(__global_state) - 1e-12) {
+	chkin_(__global_state, "ZZPDTBOX", (ftnlen)8);
+	setmsg_(__global_state, "Minimum latitude # is less than -pi/2.", (
+		ftnlen)38);
+	errdp_(__global_state, "#", &minlat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADLATITUDERANGE)", (ftnlen)23);
+	chkout_(__global_state, "ZZPDTBOX", (ftnlen)8);
 	return 0;
     }
-    if (maxlat > halfpi_() + 1e-12) {
-	chkin_("ZZPDTBOX", (ftnlen)8);
-	setmsg_("Maximum latitude # is more than -pi/2.", (ftnlen)38);
-	errdp_("#", &maxlat, (ftnlen)1);
-	sigerr_("SPICE(BADLATITUDERANGE)", (ftnlen)23);
-	chkout_("ZZPDTBOX", (ftnlen)8);
+    if (maxlat > halfpi_(__global_state) + 1e-12) {
+	chkin_(__global_state, "ZZPDTBOX", (ftnlen)8);
+	setmsg_(__global_state, "Maximum latitude # is more than -pi/2.", (
+		ftnlen)38);
+	errdp_(__global_state, "#", &maxlat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADLATITUDERANGE)", (ftnlen)23);
+	chkout_(__global_state, "ZZPDTBOX", (ftnlen)8);
 	return 0;
     }
 /* Computing MAX */
-    d__1 = minlat, d__2 = -halfpi_();
+    d__1 = minlat, d__2 = -halfpi_(__global_state);
     minlat = max(d__1,d__2);
 /* Computing MIN */
-    d__1 = maxlat, d__2 = halfpi_();
+    d__1 = maxlat, d__2 = halfpi_(__global_state);
     maxlat = min(d__1,d__2);
 
 /*     Let INRAD and OUTRAD be, respectively, the radii of the */
@@ -683,27 +687,32 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
 /*     latitude is maximum. */
 
     if (minlat >= 0.) {
-	georec_(&__state->c_b34, &minlat, &maxalt, &re, &f, maxv);
-	georec_(&__state->c_b34, &maxlat, &minalt, &re, &f, minv);
+	georec_(__global_state, &__state->c_b34, &minlat, &maxalt, &re, &f, 
+		maxv);
+	georec_(__global_state, &__state->c_b34, &maxlat, &minalt, &re, &f, 
+		minv);
 	maxv[2] = 0.;
 	minv[2] = 0.;
-	outrad = vnorm_(maxv);
-	inrad = vnorm_(minv);
+	outrad = vnorm_(__global_state, maxv);
+	inrad = vnorm_(__global_state, minv);
     } else if (maxlat <= 0.) {
-	georec_(&__state->c_b34, &maxlat, &maxalt, &re, &f, maxv);
-	georec_(&__state->c_b34, &minlat, &minalt, &re, &f, minv);
+	georec_(__global_state, &__state->c_b34, &maxlat, &maxalt, &re, &f, 
+		maxv);
+	georec_(__global_state, &__state->c_b34, &minlat, &minalt, &re, &f, 
+		minv);
 	maxv[2] = 0.;
 	minv[2] = 0.;
-	outrad = vnorm_(maxv);
-	inrad = vnorm_(minv);
+	outrad = vnorm_(__global_state, maxv);
+	inrad = vnorm_(__global_state, minv);
     } else {
 	outrad = re + maxalt;
 /* Computing MAX */
 	d__1 = abs(maxlat), d__2 = abs(minlat);
 	maxabs = max(d__1,d__2);
-	georec_(&__state->c_b34, &maxabs, &minalt, &re, &f, minv);
+	georec_(__global_state, &__state->c_b34, &maxabs, &minalt, &re, &f, 
+		minv);
 	minv[2] = 0.;
-	inrad = vnorm_(minv);
+	inrad = vnorm_(__global_state, minv);
     }
 
 /*     Let MIDLON be the longitude of the midpoint of the element's */
@@ -716,34 +725,40 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
 /*     LR is the length of the bounding box in the radial direction, */
 /*     where "radius" is defined as the distance from the Z axis. */
 
-    if (hdlon <= halfpi_()) {
-	*lr = outrad - inrad * cos(hdlon);
+    if (hdlon <= halfpi_(__global_state)) {
+	*lr = outrad - inrad * cos(&__global_state->f2c, hdlon);
     } else {
-	*lr = (1. - cos(hdlon)) * outrad;
+	*lr = (1. - cos(&__global_state->f2c, hdlon)) * outrad;
     }
 
 /*     The tangential length of bounding box depends on the longitude */
 /*     extent. For any extent larger than Pi radians, the width */
 /*     is just that of the outer radius. */
 
-    if (hdlon > halfpi_()) {
+    if (hdlon > halfpi_(__global_state)) {
 	*lt = outrad * 2.;
     } else {
-	*lt = outrad * 2. * sin(hdlon);
+	*lt = outrad * 2. * sin(&__global_state->f2c, hdlon);
     }
 
 /*     The height bounds are derived from the lowest and highest points */
 /*     on the element. */
 
     if (minlat >= 0.) {
-	georec_(&__state->c_b34, &maxlat, &maxalt, &re, &f, topv);
-	georec_(&__state->c_b34, &minlat, &minalt, &re, &f, botv);
+	georec_(__global_state, &__state->c_b34, &maxlat, &maxalt, &re, &f, 
+		topv);
+	georec_(__global_state, &__state->c_b34, &minlat, &minalt, &re, &f, 
+		botv);
     } else if (maxlat < 0.) {
-	georec_(&__state->c_b34, &maxlat, &minalt, &re, &f, topv);
-	georec_(&__state->c_b34, &minlat, &maxalt, &re, &f, botv);
+	georec_(__global_state, &__state->c_b34, &maxlat, &minalt, &re, &f, 
+		topv);
+	georec_(__global_state, &__state->c_b34, &minlat, &maxalt, &re, &f, 
+		botv);
     } else {
-	georec_(&__state->c_b34, &maxlat, &maxalt, &re, &f, topv);
-	georec_(&__state->c_b34, &minlat, &maxalt, &re, &f, botv);
+	georec_(__global_state, &__state->c_b34, &maxlat, &maxalt, &re, &f, 
+		topv);
+	georec_(__global_state, &__state->c_b34, &minlat, &maxalt, &re, &f, 
+		botv);
     }
     maxz = topv[2];
     minz = botv[2];
@@ -763,7 +778,7 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
 
     midr = outrad - *lr / 2;
     d__1 = minz + *lz / 2;
-    cylrec_(&midr, &midlon, &d__1, center);
+    cylrec_(__global_state, &midr, &midlon, &d__1, center);
 
 /*     The radius is the distance from the center of the box */
 /*     to any corner. */
@@ -771,8 +786,8 @@ static zzpdtbox_state_t* get_zzpdtbox_state() {
     d__1 = *lr / 2;
     d__2 = *lt / 2;
     d__3 = *lz / 2;
-    vpack_(&d__1, &d__2, &d__3, diag);
-    *radius = vnorm_(diag);
+    vpack_(__global_state, &d__1, &d__2, &d__3, diag);
+    *radius = vnorm_(__global_state, diag);
     return 0;
 } /* zzpdtbox_ */
 

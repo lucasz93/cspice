@@ -354,7 +354,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dskb02_c" );
+   chkin_c ( naif_state, "dskb02_c" );
 
 
    /*

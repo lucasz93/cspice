@@ -157,7 +157,7 @@
    {
       return;
    }
-   chkin_c ( "wnunid_c" );
+   chkin_c ( naif_state, "wnunid_c" );
 
 
    /*

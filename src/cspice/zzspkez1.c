@@ -8,8 +8,7 @@
 
 
 extern zzspkez1_init_t __zzspkez1_init;
-static zzspkez1_state_t* get_zzspkez1_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzspkez1_state_t* get_zzspkez1_state(cspice_t* state) {
 	if (!state->zzspkez1)
 		state->zzspkez1 = __cspice_allocate_module(sizeof(
 	zzspkez1_state_t), &__zzspkez1_init, sizeof(__zzspkez1_init));
@@ -18,9 +17,9 @@ static zzspkez1_state_t* get_zzspkez1_state() {
 }
 
 /* $Procedure ZZSPKEZ1 ( S/P Kernel, easy reader ) */
-/* Subroutine */ int zzspkez1_(integer *targ, doublereal *et, char *ref, char 
-	*abcorr, integer *obs, doublereal *starg, doublereal *lt, ftnlen 
-	ref_len, ftnlen abcorr_len)
+/* Subroutine */ int zzspkez1_(cspice_t* __global_state, integer *targ, 
+	doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *
+	starg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len)
 {
     /* Initialized data */
 
@@ -30,43 +29,46 @@ static zzspkez1_state_t* get_zzspkez1_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzfrmch1_(integer *, integer *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int zzspkac1_(integer *, doublereal *, char *, 
-	    char *, integer *, doublereal *, doublereal *, doublereal *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int zzspksb1_(integer *, doublereal *, char *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int zzspkgo1_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zzspklt1_(integer *, doublereal *, char *, 
-	    char *, doublereal *, doublereal *, doublereal *, doublereal *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzfrmch1_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzspkac1_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, doublereal 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzspksb1_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzspkgo1_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzspklt1_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int mxvg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, integer *, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    zzspkez1_state_t* __state = get_zzspkez1_state();
+    zzspkez1_state_t* __state = get_zzspkez1_state(__global_state);
 /* $ Abstract */
 
 /*     Return the state (position and velocity) of a target body */
@@ -1351,10 +1353,10 @@ static zzspkez1_state_t* get_zzspkez1_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSPKEZ1", (ftnlen)8);
+    chkin_(__global_state, "ZZSPKEZ1", (ftnlen)8);
 
 /*     Counter initialization is done separately. */
 
@@ -1362,23 +1364,24 @@ static zzspkez1_state_t* get_zzspkez1_state() {
 
 /*        Initialize counter. */
 
-	zzctruin_(__state->svctr1);
+	zzctruin_(__global_state, __state->svctr1);
     }
-    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    if (__state->first || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
 
-	zzvalcor_(abcorr, __state->attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("ZZSPKEZ1", (ftnlen)8);
+	zzvalcor_(__global_state, abcorr, __state->attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKEZ1", (ftnlen)8);
 	    return 0;
 	}
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -1397,7 +1400,7 @@ static zzspkez1_state_t* get_zzspkez1_state() {
 /*        Get the frame ID for J2000 on the first call to this routine. */
 
 	if (__state->first) {
-	    namfrm_("J2000", &__state->fj2000, (ftnlen)5);
+	    namfrm_(__global_state, "J2000", &__state->fj2000, (ftnlen)5);
 	    __state->first = FALSE_;
 	}
     }
@@ -1411,38 +1414,40 @@ static zzspkez1_state_t* get_zzspkez1_state() {
 /*     to the frame designated by REF. */
 
     if (__state->usegeo) {
-	zzspkgo1_(targ, et, ref, obs, starg, lt, ref_len);
+	zzspkgo1_(__global_state, targ, et, ref, obs, starg, lt, ref_len);
     } else {
 
 /*        Get the auxiliary information about the requested output */
 /*        frame. */
 
-	zznamfrm_(__state->svctr1, __state->svref, &__state->svreqf, ref, &
-		__state->reqfrm, (ftnlen)32, ref_len);
+	zznamfrm_(__global_state, __state->svctr1, __state->svref, &
+		__state->svreqf, ref, &__state->reqfrm, (ftnlen)32, ref_len);
 	if (__state->reqfrm == 0) {
-	    setmsg_("The requested output frame '#' is not recognized by the"
-		    " reference frame subsystem. Please check that the approp"
-		    "riate kernels have been loaded and that you have correct"
-		    "ly entered the name of the output frame. ", (ftnlen)208);
-	    errch_("#", ref, (ftnlen)1, ref_len);
-	    sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
-	    chkout_("ZZSPKEZ1", (ftnlen)8);
+	    setmsg_(__global_state, "The requested output frame '#' is not r"
+		    "ecognized by the reference frame subsystem. Please check"
+		    " that the appropriate kernels have been loaded and that "
+		    "you have correctly entered the name of the output frame. "
+		    , (ftnlen)208);
+	    errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	    sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	    chkout_(__global_state, "ZZSPKEZ1", (ftnlen)8);
 	    return 0;
 	}
-	frinfo_(&__state->reqfrm, &__state->center, &__state->type__, &
-		__state->typeid, &__state->found);
-	if (failed_()) {
-	    chkout_("ZZSPKEZ1", (ftnlen)8);
+	frinfo_(__global_state, &__state->reqfrm, &__state->center, &
+		__state->type__, &__state->typeid, &__state->found);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKEZ1", (ftnlen)8);
 	    return 0;
 	}
 	if (! __state->found) {
-	    setmsg_("The requested output frame '#' is not recognized by the"
-		    " reference frame subsystem. Please check that the approp"
-		    "riate kernels have been loaded and that you have correct"
-		    "ly entered the name of the output frame. ", (ftnlen)208);
-	    errch_("#", ref, (ftnlen)1, ref_len);
-	    sigerr_("SPICE(UNKNOWNFRAME2)", (ftnlen)20);
-	    chkout_("ZZSPKEZ1", (ftnlen)8);
+	    setmsg_(__global_state, "The requested output frame '#' is not r"
+		    "ecognized by the reference frame subsystem. Please check"
+		    " that the appropriate kernels have been loaded and that "
+		    "you have correctly entered the name of the output frame. "
+		    , (ftnlen)208);
+	    errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	    sigerr_(__global_state, "SPICE(UNKNOWNFRAME2)", (ftnlen)20);
+	    chkout_(__global_state, "ZZSPKEZ1", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1450,9 +1455,9 @@ static zzspkez1_state_t* get_zzspkez1_state() {
 /*        call SPKACS and return. */
 
 	if (__state->type__ == 1) {
-	    zzspkac1_(targ, et, ref, abcorr, obs, starg, lt, &__state->dlt, 
-		    ref_len, abcorr_len);
-	    chkout_("ZZSPKEZ1", (ftnlen)8);
+	    zzspkac1_(__global_state, targ, et, ref, abcorr, obs, starg, lt, &
+		    __state->dlt, ref_len, abcorr_len);
+	    chkout_(__global_state, "ZZSPKEZ1", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1468,10 +1473,10 @@ static zzspkez1_state_t* get_zzspkez1_state() {
 /*        variable STATE when we compute the inertial apparent state */
 /*        of the target relative to the observer. */
 
-	zzspkac1_(targ, et, "J2000", abcorr, obs, __state->state, lt, &
-		__state->dlt, (ftnlen)5, abcorr_len);
-	if (failed_()) {
-	    chkout_("ZZSPKEZ1", (ftnlen)8);
+	zzspkac1_(__global_state, targ, et, "J2000", abcorr, obs, 
+		__state->state, lt, &__state->dlt, (ftnlen)5, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKEZ1", (ftnlen)8);
 	    return 0;
 	}
 	if (__state->center == *obs) {
@@ -1481,17 +1486,18 @@ static zzspkez1_state_t* get_zzspkez1_state() {
 	    __state->ltcent = *lt;
 	    __state->dltctr = __state->dlt;
 	} else {
-	    zzspksb1_(obs, et, "J2000", __state->stobs, (ftnlen)5);
-	    zzspklt1_(&__state->center, et, "J2000", abcorr, __state->stobs, 
-		    __state->temp, &__state->ltcent, &__state->dltctr, (
-		    ftnlen)5, abcorr_len);
+	    zzspksb1_(__global_state, obs, et, "J2000", __state->stobs, (
+		    ftnlen)5);
+	    zzspklt1_(__global_state, &__state->center, et, "J2000", abcorr, 
+		    __state->stobs, __state->temp, &__state->ltcent, &
+		    __state->dltctr, (ftnlen)5, abcorr_len);
 	}
 
 /*        If something went wrong (like we couldn't get the state of */
 /*        the center relative to the observer) now it is time to quit. */
 
-	if (failed_()) {
-	    chkout_("ZZSPKEZ1", (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKEZ1", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1510,9 +1516,10 @@ static zzspkez1_state_t* get_zzspkez1_state() {
 /*        and convert the state. */
 
 	d__1 = *et + __state->ltsign * __state->ltcent;
-	zzfrmch1_(&__state->fj2000, &__state->reqfrm, &d__1, __state->xform);
-	if (failed_()) {
-	    chkout_("ZZSPKEZ1", (ftnlen)8);
+	zzfrmch1_(__global_state, &__state->fj2000, &__state->reqfrm, &d__1, 
+		__state->xform);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKEZ1", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1540,18 +1547,19 @@ static zzspkez1_state_t* get_zzspkez1_state() {
 
 	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
 	    d__1 = __state->ltsign * __state->dltctr + 1.;
-	    vsclip_(&d__1, &__state->xform[(i__1 = __state->i__ * 6 - 3) < 36 
-		    && 0 <= i__1 ? i__1 : s_rnge("xform", i__1, "zzspkez1_", (
-		    ftnlen)1330)]);
+	    vsclip_(__global_state, &d__1, &__state->xform[(i__1 = 
+		    __state->i__ * 6 - 3) < 36 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "xform", i__1, "zzspkez1_", (ftnlen)
+		    1330)]);
 	}
 
 /*        Now apply the frame transformation XFORM to produce the */
 /*        state expressed relative to the request frame REQFRM. */
 
-	mxvg_(__state->xform, __state->state, &__state->c__6, &__state->c__6, 
-		starg);
+	mxvg_(__global_state, __state->xform, __state->state, &__state->c__6, 
+		&__state->c__6, starg);
     }
-    chkout_("ZZSPKEZ1", (ftnlen)8);
+    chkout_(__global_state, "ZZSPKEZ1", (ftnlen)8);
     return 0;
 } /* zzspkez1_ */
 

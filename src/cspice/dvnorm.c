@@ -8,26 +8,25 @@
 
 
 typedef int dvnorm_state_t;
-static dvnorm_state_t* get_dvnorm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dvnorm_state_t* get_dvnorm_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DVNORM ( Derivative of vector norm ) */
-doublereal dvnorm_(doublereal *state)
+doublereal dvnorm_(cspice_t* __global_state, doublereal *state)
 {
     /* System generated locals */
     doublereal ret_val;
 
     /* Local variables */
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal xhat[3];
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern doublereal vnorm_(doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    dvnorm_state_t* __state = get_dvnorm_state();
+    dvnorm_state_t* __state = get_dvnorm_state(__global_state);
 /* $ Abstract */
 
 /*     Function to calculate the derivative of the norm of a 3-vector. */
@@ -244,7 +243,7 @@ doublereal dvnorm_(doublereal *state)
 /*     If "x" describes the zero vector, return zero as the derivative */
 /*     of the vector norm. */
 
-    if (vnorm_(state) == 0.) {
+    if (vnorm_(__global_state, state) == 0.) {
 	ret_val = 0.;
 	return ret_val;
     }
@@ -252,7 +251,7 @@ doublereal dvnorm_(doublereal *state)
 /*     Construct a unit vector from the x vector data */
 /*     in STATE. */
 
-    vhat_(state, xhat);
+    vhat_(__global_state, state, xhat);
 
 /*     Project the velocity components onto the XHAT vector. */
 
@@ -260,7 +259,7 @@ doublereal dvnorm_(doublereal *state)
 /*      -------  = v . ----- */
 /*        ds           ||x|| */
 
-    ret_val = vdot_(&state[3], xhat);
+    ret_val = vdot_(__global_state, &state[3], xhat);
     return ret_val;
 } /* dvnorm_ */
 

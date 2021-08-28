@@ -8,8 +8,7 @@
 
 
 extern spkpv_init_t __spkpv_init;
-static spkpv_state_t* get_spkpv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkpv_state_t* get_spkpv_state(cspice_t* state) {
 	if (!state->spkpv)
 		state->spkpv = __cspice_allocate_module(sizeof(spkpv_state_t),
 	 &__spkpv_init, sizeof(__spkpv_init));
@@ -18,39 +17,41 @@ static spkpv_state_t* get_spkpv_state() {
 }
 
 /* $Procedure SPKPV ( S/P Kernel, position and velocity ) */
-/* Subroutine */ int spkpv_(integer *handle, doublereal *descr, doublereal *
-	et, char *ref, doublereal *state, integer *center, ftnlen ref_len)
+/* Subroutine */ int spkpv_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, char *ref, doublereal *state, 
+	integer *center, ftnlen ref_len)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int mxvg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, integer *, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal xform[36]	/* was [6][6] */;
     doublereal dc[2];
     integer ic[6];
-    extern /* Subroutine */ int frmchg_(integer *, integer *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int frmchg_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
     integer irfreq;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal tstate[6];
-    extern logical return_(void);
-    extern /* Subroutine */ int spkpvn_(integer *, doublereal *, doublereal *,
-	     integer *, doublereal *, integer *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int spkpvn_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, integer *, doublereal *, integer *);
     integer irf;
 
 
     /* Module state */
-    spkpv_state_t* __state = get_spkpv_state();
+    spkpv_state_t* __state = get_spkpv_state(__global_state);
 /* $ Abstract */
 
 /*     Return the state (position and velocity) of a target body */
@@ -354,10 +355,10 @@ static spkpv_state_t* get_spkpv_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKPV", (ftnlen)5);
+	chkin_(__global_state, "SPKPV", (ftnlen)5);
     }
 
 /*     Initialization. */
@@ -366,30 +367,31 @@ static spkpv_state_t* get_spkpv_state() {
 
 /*        Initialize counter. */
 
-	zzctruin_(__state->svctr1);
+	zzctruin_(__global_state, __state->svctr1);
 	__state->first = FALSE_;
     }
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     *center = ic[1];
     irf = ic[2];
 
 /*     Rotate the raw state from its native frame to the one requested */
 /*     by the user only if the two frames differ. */
 
-    zznamfrm_(__state->svctr1, __state->svref, &__state->svirfr, ref, &irfreq,
-	     (ftnlen)32, ref_len);
+    zznamfrm_(__global_state, __state->svctr1, __state->svref, &
+	    __state->svirfr, ref, &irfreq, (ftnlen)32, ref_len);
     if (irfreq == 0) {
-	setmsg_("No support for frame #.", (ftnlen)23);
-	errch_("#", ref, (ftnlen)1, ref_len);
-	sigerr_("SPICE(SPKREFNOTSUPP)", (ftnlen)20);
+	setmsg_(__global_state, "No support for frame #.", (ftnlen)23);
+	errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	sigerr_(__global_state, "SPICE(SPKREFNOTSUPP)", (ftnlen)20);
     } else if (irfreq != irf) {
-	spkpvn_(handle, descr, et, &irf, tstate, center);
-	frmchg_(&irf, &irfreq, et, xform);
-	mxvg_(xform, tstate, &__state->c__6, &__state->c__6, state);
+	spkpvn_(__global_state, handle, descr, et, &irf, tstate, center);
+	frmchg_(__global_state, &irf, &irfreq, et, xform);
+	mxvg_(__global_state, xform, tstate, &__state->c__6, &__state->c__6, 
+		state);
     } else {
-	spkpvn_(handle, descr, et, &irf, state, center);
+	spkpvn_(__global_state, handle, descr, et, &irf, state, center);
     }
-    chkout_("SPKPV", (ftnlen)5);
+    chkout_(__global_state, "SPKPV", (ftnlen)5);
     return 0;
 } /* spkpv_ */
 

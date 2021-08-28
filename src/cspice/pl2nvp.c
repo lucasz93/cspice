@@ -8,24 +8,23 @@
 
 
 typedef int pl2nvp_state_t;
-static pl2nvp_state_t* get_pl2nvp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pl2nvp_state_t* get_pl2nvp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PL2NVP ( Plane to normal vector and point ) */
-/* Subroutine */ int pl2nvp_(doublereal *plane, doublereal *normal, 
-	doublereal *point)
+/* Subroutine */ int pl2nvp_(cspice_t* __global_state, doublereal *plane, 
+	doublereal *normal, doublereal *point)
 {
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
-    doublereal const__;
-    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
+    doublereal const__;
+    extern /* Subroutine */ int pl2nvc_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
 
 
     /* Module state */
-    pl2nvp_state_t* __state = get_pl2nvp_state();
+    pl2nvp_state_t* __state = get_pl2nvp_state(__global_state);
 /* $ Abstract */
 
 /*     Return a unit normal vector and point that define a specified */
@@ -179,8 +178,8 @@ static pl2nvp_state_t* get_pl2nvp_state() {
 /*     unit normal by the constant gives us the closest point in */
 /*     the plane to the origin. */
 
-    pl2nvc_(plane, normal, &const__);
-    vscl_(&const__, normal, point);
+    pl2nvc_(__global_state, plane, normal, &const__);
+    vscl_(__global_state, &const__, normal, point);
     return 0;
 } /* pl2nvp_ */
 

@@ -18,12 +18,11 @@
 #include "__cspice_state.h"
 
 #ifdef KR_headers
-wrt_E(p,w,d,e,len) ufloat *p; ftnlen len;
+wrt_E(f2c,p,w,d,e,len) f2c_state_t *f2c; ufloat *p; ftnlen len;
 #else
-wrt_E(ufloat *p, int w, int d, int e, ftnlen len)
+wrt_E(f2c_state_t *f2c, ufloat *p, int w, int d, int e, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	char buf[FMAX+EXPMAXDIGS+4], *s, *se;
 	int d1, delta, e1, i, sign, signspace;
 	double dd;
@@ -195,12 +194,11 @@ nogood:
 	}
 
 #ifdef KR_headers
-wrt_F(p,w,d,len) ufloat *p; ftnlen len;
+wrt_F(f2c,p,w,d,len) f2c_state_t *f2c; ufloat *p; ftnlen len;
 #else
-wrt_F(ufloat *p, int w, int d, ftnlen len)
+wrt_F(f2c_state_t *f2c, ufloat *p, int w, int d, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int d1, sign, n;
 	double x;
 	char *b, buf[MAXINTDIGS+MAXFRACDIGS+4], *s;

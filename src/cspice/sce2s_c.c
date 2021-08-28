@@ -357,7 +357,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "sce2s_c");
+   chkin_c ( naif_state, "sce2s_c");
 
 
    /*

@@ -134,7 +134,7 @@
    /*
    Participate in error handling
    */
-   chkin_c( "spkuef_c");
+   chkin_c ( naif_state,"spkuef_c");
 
 
    /*

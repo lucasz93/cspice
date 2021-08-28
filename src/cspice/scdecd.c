@@ -8,8 +8,7 @@
 
 
 extern scdecd_init_t __scdecd_init;
-static scdecd_state_t* get_scdecd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline scdecd_state_t* get_scdecd_state(cspice_t* state) {
 	if (!state->scdecd)
 		state->scdecd = __cspice_allocate_module(sizeof(
 	scdecd_state_t), &__scdecd_init, sizeof(__scdecd_init));
@@ -18,52 +17,54 @@ static scdecd_state_t* get_scdecd_state() {
 }
 
 /* $Procedure      SCDECD ( Decode spacecraft clock ) */
-/* Subroutine */ int scdecd_(integer *sc, doublereal *sclkdp, char *sclkch, 
-	ftnlen sclkch_len)
+/* Subroutine */ int scdecd_(cspice_t* __global_state, integer *sc, 
+	doublereal *sclkdp, char *sclkch, ftnlen sclkch_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
 
     /* Builtin functions */
-    double d_nint(doublereal *);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), i_len(char *, ftnlen);
+    double d_nint(f2c_state_t*, doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), i_len(
+	    f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer part;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal ticks;
-    extern /* Subroutine */ int scfmt_(integer *, doublereal *, char *, 
-	    ftnlen);
+    extern /* Subroutine */ int scfmt_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
     doublereal pstop[9999];
-    extern logical failed_(void);
-    extern integer lastnb_(char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer prelen;
-    extern integer lstled_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern integer lstled_(cspice_t*, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer suflen;
-    extern /* Subroutine */ int scpart_(integer *, integer *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int scpart_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int prefix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
     integer nparts;
     doublereal pstart[9999];
-    extern logical return_(void);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
     doublereal ptotls[9999];
     char prtstr[5];
 
 
     /* Module state */
-    scdecd_state_t* __state = get_scdecd_state();
+    scdecd_state_t* __state = get_scdecd_state(__global_state);
 /* $ Abstract */
 
 /*     Convert double precision encoding of spacecraft clock time into */
@@ -566,35 +567,35 @@ static scdecd_state_t* get_scdecd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCDECD", (ftnlen)6);
+	chkin_(__global_state, "SCDECD", (ftnlen)6);
     }
 
 /*     Use a working copy of the input. */
 
-    ticks = d_nint(sclkdp);
-    s_copy(sclkch, " ", sclkch_len, (ftnlen)1);
+    ticks = d_nint(&__global_state->f2c, sclkdp);
+    s_copy(&__global_state->f2c, sclkch, " ", sclkch_len, (ftnlen)1);
 
 /*     Read the partition start and stop times (in ticks) for this */
 /*     mission. Error if there are too many of them.  Also need to */
 /*     check FAILED in case error handling is not in ABORT or */
 /*     DEFAULT mode. */
 
-    scpart_(sc, &nparts, pstart, pstop);
-    if (failed_()) {
-	chkout_("SCDECD", (ftnlen)6);
+    scpart_(__global_state, sc, &nparts, pstart, pstop);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SCDECD", (ftnlen)6);
 	return 0;
     }
     if (nparts > 9999) {
-	setmsg_("The number of partitions, #, for spacecraft # exceeds the v"
-		"alue for parameter MXPART, #.", (ftnlen)88);
-	errint_("#", &nparts, (ftnlen)1);
-	errint_("#", sc, (ftnlen)1);
-	errint_("#", &__state->c__9999, (ftnlen)1);
-	sigerr_("SPICE(TOOMANYPARTS)", (ftnlen)19);
-	chkout_("SCDECD", (ftnlen)6);
+	setmsg_(__global_state, "The number of partitions, #, for spacecraft"
+		" # exceeds the value for parameter MXPART, #.", (ftnlen)88);
+	errint_(__global_state, "#", &nparts, (ftnlen)1);
+	errint_(__global_state, "#", sc, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__9999, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TOOMANYPARTS)", (ftnlen)19);
+	chkout_(__global_state, "SCDECD", (ftnlen)6);
 	return 0;
     }
 
@@ -602,16 +603,19 @@ static scdecd_state_t* get_scdecd_state() {
 /*     partition plus all preceding partitions. */
 
     d__1 = pstop[0] - pstart[0];
-    ptotls[0] = d_nint(&d__1);
+    ptotls[0] = d_nint(&__global_state->f2c, &d__1);
     i__1 = nparts;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	d__1 = ptotls[(i__3 = i__ - 2) < 9999 && 0 <= i__3 ? i__3 : s_rnge(
-		"ptotls", i__3, "scdecd_", (ftnlen)495)] + pstop[(i__4 = i__ 
-		- 1) < 9999 && 0 <= i__4 ? i__4 : s_rnge("pstop", i__4, "scd"
-		"ecd_", (ftnlen)495)] - pstart[(i__5 = i__ - 1) < 9999 && 0 <= 
-		i__5 ? i__5 : s_rnge("pstart", i__5, "scdecd_", (ftnlen)495)];
-	ptotls[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge("ptotls", 
-		i__2, "scdecd_", (ftnlen)495)] = d_nint(&d__1);
+	d__1 = ptotls[(i__3 = i__ - 2) < 9999 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "ptotls", i__3, "scdecd_", (ftnlen)495)] 
+		+ pstop[(i__4 = i__ - 1) < 9999 && 0 <= i__4 ? i__4 : s_rnge(&
+		__global_state->f2c, "pstop", i__4, "scdecd_", (ftnlen)495)] 
+		- pstart[(i__5 = i__ - 1) < 9999 && 0 <= i__5 ? i__5 : s_rnge(
+		&__global_state->f2c, "pstart", i__5, "scdecd_", (ftnlen)495)]
+		;
+	ptotls[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ptotls", i__2, "scdecd_", (ftnlen)495)] 
+		= d_nint(&__global_state->f2c, &d__1);
     }
 
 /*     The partition corresponding to the input ticks is the first one */
@@ -624,18 +628,19 @@ static scdecd_state_t* get_scdecd_state() {
 /*     negative), or after the last one. */
 
     if (ticks == ptotls[(i__1 = nparts - 1) < 9999 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ptotls", i__1, "scdecd_", (ftnlen)510)]) {
+	    s_rnge(&__global_state->f2c, "ptotls", i__1, "scdecd_", (ftnlen)
+	    510)]) {
 	part = nparts;
     } else {
-	part = lstled_(&ticks, &nparts, ptotls) + 1;
+	part = lstled_(__global_state, &ticks, &nparts, ptotls) + 1;
     }
     if (ticks < 0. || part > nparts) {
-	setmsg_("Value for ticks, #, does not fall in any partition for spac"
-		"ecraft #.", (ftnlen)68);
-	errdp_("#", &ticks, (ftnlen)1);
-	errint_("#", sc, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("SCDECD", (ftnlen)6);
+	setmsg_(__global_state, "Value for ticks, #, does not fall in any pa"
+		"rtition for spacecraft #.", (ftnlen)68);
+	errdp_(__global_state, "#", &ticks, (ftnlen)1);
+	errint_(__global_state, "#", sc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "SCDECD", (ftnlen)6);
 	return 0;
     }
 
@@ -645,42 +650,46 @@ static scdecd_state_t* get_scdecd_state() {
 
     if (part == 1) {
 	ticks += pstart[(i__1 = part - 1) < 9999 && 0 <= i__1 ? i__1 : s_rnge(
-		"pstart", i__1, "scdecd_", (ftnlen)535)];
+		&__global_state->f2c, "pstart", i__1, "scdecd_", (ftnlen)535)]
+		;
     } else {
 	ticks = ticks + pstart[(i__1 = part - 1) < 9999 && 0 <= i__1 ? i__1 : 
-		s_rnge("pstart", i__1, "scdecd_", (ftnlen)537)] - ptotls[(
-		i__2 = part - 2) < 9999 && 0 <= i__2 ? i__2 : s_rnge("ptotls",
-		 i__2, "scdecd_", (ftnlen)537)];
+		s_rnge(&__global_state->f2c, "pstart", i__1, "scdecd_", (
+		ftnlen)537)] - ptotls[(i__2 = part - 2) < 9999 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "ptotls", i__2, "scdecd_",
+		 (ftnlen)537)];
     }
 
 /*     Now create the output SCLK clock string. */
 
 /*     First convert from ticks to clock string format. */
 
-    scfmt_(sc, &ticks, sclkch, sclkch_len);
+    scfmt_(__global_state, sc, &ticks, sclkch, sclkch_len);
 
 /*     Now convert the partition number to a character string and prefix */
 /*     it to the output string. */
 
-    intstr_(&part, prtstr, (ftnlen)5);
-    suffix_("/", &__state->c__0, prtstr, (ftnlen)1, (ftnlen)5);
-    prelen = lastnb_(prtstr, (ftnlen)5);
-    suflen = lastnb_(sclkch, sclkch_len);
-    if (i_len(sclkch, sclkch_len) - suflen < prelen) {
-	setmsg_("Output string too short to contain clock string. Input tick"
-		" value: #, requires string of length #, but declared length "
-		"is #.", (ftnlen)124);
-	errdp_("#", sclkdp, (ftnlen)1);
+    intstr_(__global_state, &part, prtstr, (ftnlen)5);
+    suffix_(__global_state, "/", &__state->c__0, prtstr, (ftnlen)1, (ftnlen)5)
+	    ;
+    prelen = lastnb_(__global_state, prtstr, (ftnlen)5);
+    suflen = lastnb_(__global_state, sclkch, sclkch_len);
+    if (i_len(&__global_state->f2c, sclkch, sclkch_len) - suflen < prelen) {
+	setmsg_(__global_state, "Output string too short to contain clock st"
+		"ring. Input tick value: #, requires string of length #, but "
+		"declared length is #.", (ftnlen)124);
+	errdp_(__global_state, "#", sclkdp, (ftnlen)1);
 	i__1 = prelen + suflen;
-	errint_("#", &i__1, (ftnlen)1);
-	i__1 = i_len(sclkch, sclkch_len);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(SCLKTRUNCATED)", (ftnlen)20);
-	chkout_("SCDECD", (ftnlen)6);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	i__1 = i_len(&__global_state->f2c, sclkch, sclkch_len);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SCLKTRUNCATED)", (ftnlen)20);
+	chkout_(__global_state, "SCDECD", (ftnlen)6);
 	return 0;
     }
-    prefix_(prtstr, &__state->c__0, sclkch, (ftnlen)5, sclkch_len);
-    chkout_("SCDECD", (ftnlen)6);
+    prefix_(__global_state, prtstr, &__state->c__0, sclkch, (ftnlen)5, 
+	    sclkch_len);
+    chkout_(__global_state, "SCDECD", (ftnlen)6);
     return 0;
 } /* scdecd_ */
 

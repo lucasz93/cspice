@@ -8,8 +8,7 @@
 
 
 extern rdtext_init_t __rdtext_init;
-static rdtext_state_t* get_rdtext_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rdtext_state_t* get_rdtext_state(cspice_t* state) {
 	if (!state->rdtext)
 		state->rdtext = __cspice_allocate_module(sizeof(
 	rdtext_state_t), &__rdtext_init, sizeof(__rdtext_init));
@@ -18,8 +17,8 @@ static rdtext_state_t* get_rdtext_state() {
 }
 
 /* $Procedure      RDTEXT ( Read a line from a text file ) */
-/* Subroutine */ int rdtext_0_(int n__, char *file, char *line, logical *eof, 
-	ftnlen file_len, ftnlen line_len)
+/* Subroutine */ int rdtext_0_(cspice_t* __global_state, int n__, char *file, 
+	char *line, logical *eof, ftnlen file_len, ftnlen line_len)
 {
     /* Initialized data */
 
@@ -32,30 +31,33 @@ static rdtext_state_t* get_rdtext_state() {
     inlist ioin__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), f_inqu(inlist *), f_open(
-	    olist *), s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rsfe(cilist *), do_fio(integer *, char *, ftnlen), e_rsfe(void),
-	     f_clos(cllist *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), f_inqu(
+	    f2c_state_t*, inlist *), f_open(f2c_state_t*, olist *), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rsfe(f2c_state_t*, cilist *), do_fio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rsfe(f2c_state_t*), f_clos(f2c_state_t*, 
+	    cllist *);
 
     /* Local variables */
     logical same;
     integer unit;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer isrchi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
     integer number;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int getlun_(integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int getlun_(cspice_t*, integer *);
     integer iostat;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    rdtext_state_t* __state = get_rdtext_state();
+    rdtext_state_t* __state = get_rdtext_state(__global_state);
 /* $ Abstract */
 
 /*     Read the next line of text from a text file. */
@@ -567,10 +569,10 @@ static rdtext_state_t* get_rdtext_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("RDTEXT", (ftnlen)6);
+	chkin_(__global_state, "RDTEXT", (ftnlen)6);
     }
 
 /*     We will keep track of which files are open by storing the unit */
@@ -586,8 +588,9 @@ static rdtext_state_t* get_rdtext_state() {
 
 /*     Are we reading the same file? */
 
-    same = s_cmp(__state->lstfil, file, (ftnlen)255, file_len) == 0 && s_cmp(
-	    __state->lstfil, " ", (ftnlen)255, (ftnlen)1) != 0;
+    same = s_cmp(&__global_state->f2c, __state->lstfil, file, (ftnlen)255, 
+	    file_len) == 0 && s_cmp(&__global_state->f2c, __state->lstfil, 
+	    " ", (ftnlen)255, (ftnlen)1) != 0;
     if (! same) {
 
 /*        We still might have the same file. For example these three */
@@ -621,20 +624,22 @@ static rdtext_state_t* get_rdtext_state() {
 	ioin__1.inrecl = 0;
 	ioin__1.innrec = 0;
 	ioin__1.inblank = 0;
-	iostat = f_inqu(&ioin__1);
+	iostat = f_inqu(&__global_state->f2c, &ioin__1);
 	if (iostat != 0) {
 
 /*           This is weird.  How can an INQUIRE statement fail, */
 /*           if the syntax is correct?  But just in case... */
 
-	    setmsg_("INQUIRE error.  File = #, IOSTAT = #.", (ftnlen)37);
-	    errch_("#", file, (ftnlen)1, file_len);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(INQUIREFAILED)", (ftnlen)20);
-	    chkout_("RDTEXT", (ftnlen)6);
+	    setmsg_(__global_state, "INQUIRE error.  File = #, IOSTAT = #.", (
+		    ftnlen)37);
+	    errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	    chkout_(__global_state, "RDTEXT", (ftnlen)6);
 	    return 0;
 	}
-	__state->index = isrchi_(&number, &__state->n, __state->units);
+	__state->index = isrchi_(__global_state, &number, &__state->n, 
+		__state->units);
 	if (__state->index == 0) {
 
 /*           Well, we will treat it as a new file then.  We will */
@@ -642,12 +647,14 @@ static rdtext_state_t* get_rdtext_state() {
 /*           have too many files open already. */
 
 	    if (__state->n == 96) {
-		setmsg_("Too many files open already.", (ftnlen)28);
-		sigerr_("SPICE(TOOMANYFILESOPEN)", (ftnlen)23);
-		chkout_("RDTEXT", (ftnlen)6);
+		setmsg_(__global_state, "Too many files open already.", (
+			ftnlen)28);
+		sigerr_(__global_state, "SPICE(TOOMANYFILESOPEN)", (ftnlen)23)
+			;
+		chkout_(__global_state, "RDTEXT", (ftnlen)6);
 		return 0;
 	    } else {
-		getlun_(&unit);
+		getlun_(__global_state, &unit);
 	    }
 
 /*           Okay, we have a unit. Open the file, and hope nothing */
@@ -663,12 +670,12 @@ static rdtext_state_t* get_rdtext_state() {
 	    o__1.oacc = 0;
 	    o__1.ofm = 0;
 	    o__1.oblnk = 0;
-	    iostat = f_open(&o__1);
+	    iostat = f_open(&__global_state->f2c, &o__1);
 	    if (iostat != 0) {
-		setmsg_("Could not open #.", (ftnlen)17);
-		errch_("#", file, (ftnlen)1, file_len);
-		sigerr_("SPICE(FILEOPENFAILED)", (ftnlen)21);
-		chkout_("RDTEXT", (ftnlen)6);
+		setmsg_(__global_state, "Could not open #.", (ftnlen)17);
+		errch_(__global_state, "#", file, (ftnlen)1, file_len);
+		sigerr_(__global_state, "SPICE(FILEOPENFAILED)", (ftnlen)21);
+		chkout_(__global_state, "RDTEXT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -681,13 +688,15 @@ static rdtext_state_t* get_rdtext_state() {
 
 	    ++__state->n;
 	    __state->units[(i__1 = __state->n - 1) < 96 && 0 <= i__1 ? i__1 : 
-		    s_rnge("units", i__1, "rdtext_", (ftnlen)659)] = unit;
+		    s_rnge(&__global_state->f2c, "units", i__1, "rdtext_", (
+		    ftnlen)659)] = unit;
 	    __state->index = __state->n;
 	}
-	s_copy(__state->lstfil, file, (ftnlen)255, file_len);
+	s_copy(&__global_state->f2c, __state->lstfil, file, (ftnlen)255, 
+		file_len);
 	__state->lstunt = __state->units[(i__1 = __state->index - 1) < 96 && 
-		0 <= i__1 ? i__1 : s_rnge("units", i__1, "rdtext_", (ftnlen)
-		665)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "units", i__1,
+		 "rdtext_", (ftnlen)665)];
     }
 
 /*     This is the easy part. Read the next line from the file. */
@@ -696,15 +705,15 @@ static rdtext_state_t* get_rdtext_state() {
     ci__1.ciend = 1;
     ci__1.ciunit = __state->lstunt;
     ci__1.cifmt = "(A)";
-    iostat = s_rsfe(&ci__1);
+    iostat = s_rsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&__state->c__1, line, line_len);
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, line_len);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rsfe();
+    iostat = e_rsfe(&__global_state->f2c);
 L100001:
 
 /*     Well, what happened? An end-of-file condition is indicated by */
@@ -717,38 +726,41 @@ L100001:
     if (iostat != 0) {
 	cl__1.cerr = 0;
 	cl__1.cunit = __state->units[(i__1 = __state->index - 1) < 96 && 0 <= 
-		i__1 ? i__1 : s_rnge("units", i__1, "rdtext_", (ftnlen)689)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "units", i__1, 
+		"rdtext_", (ftnlen)689)];
 	cl__1.csta = 0;
-	f_clos(&cl__1);
+	f_clos(&__global_state->f2c, &cl__1);
 	i__1 = __state->n;
 	for (i__ = __state->index + 1; i__ <= i__1; ++i__) {
 	    __state->units[(i__2 = i__ - 2) < 96 && 0 <= i__2 ? i__2 : s_rnge(
-		    "units", i__2, "rdtext_", (ftnlen)692)] = __state->units[(
-		    i__3 = i__ - 1) < 96 && 0 <= i__3 ? i__3 : s_rnge("units",
-		     i__3, "rdtext_", (ftnlen)692)];
+		    &__global_state->f2c, "units", i__2, "rdtext_", (ftnlen)
+		    692)] = __state->units[(i__3 = i__ - 1) < 96 && 0 <= i__3 
+		    ? i__3 : s_rnge(&__global_state->f2c, "units", i__3, 
+		    "rdtext_", (ftnlen)692)];
 	}
 	--__state->n;
 
 /*        Fill LINE with blanks. */
 
-	s_copy(line, " ", line_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, line, " ", line_len, (ftnlen)1);
 
 /*        LSTFIL is no longer valid */
 
-	s_copy(__state->lstfil, " ", (ftnlen)255, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->lstfil, " ", (ftnlen)255, (
+		ftnlen)1);
 
 /*        If this is just the end of the file, don't report an error. */
 /*        (All files have to end sometime.) */
 
 	if (! (*eof)) {
-	    setmsg_("Could not read from #.", (ftnlen)22);
-	    errch_("#", file, (ftnlen)1, file_len);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("RDTEXT", (ftnlen)6);
+	    setmsg_(__global_state, "Could not read from #.", (ftnlen)22);
+	    errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "RDTEXT", (ftnlen)6);
 	    return 0;
 	}
     }
-    chkout_("RDTEXT", (ftnlen)6);
+    chkout_(__global_state, "RDTEXT", (ftnlen)6);
     return 0;
 /* $Procedure  CLTEXT ( Close a text file opened by RDTEXT) */
 
@@ -938,7 +950,7 @@ L_cltext:
 
 /*     Set up the error processing. */
 
-    chkin_("CLTEXT", (ftnlen)6);
+    chkin_(__global_state, "CLTEXT", (ftnlen)6);
 
 /*     Which file? */
 
@@ -960,30 +972,34 @@ L_cltext:
     ioin__1.inrecl = 0;
     ioin__1.innrec = 0;
     ioin__1.inblank = 0;
-    iostat = f_inqu(&ioin__1);
+    iostat = f_inqu(&__global_state->f2c, &ioin__1);
     if (iostat != 0) {
 
 /*        This is weird.  How can an INQUIRE statement fail, */
 /*        if the syntax is correct?  But just in case... */
 
-	setmsg_("INQUIRE error.  File = #, IOSTAT = #.", (ftnlen)37);
-	errch_("#", file, (ftnlen)1, file_len);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(INQUIREFAILED)", (ftnlen)20);
-	chkout_("CLTEXT", (ftnlen)6);
+	setmsg_(__global_state, "INQUIRE error.  File = #, IOSTAT = #.", (
+		ftnlen)37);
+	errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	chkout_(__global_state, "CLTEXT", (ftnlen)6);
 	return 0;
     }
-    __state->index = isrchi_(&number, &__state->n, __state->units);
+    __state->index = isrchi_(__global_state, &number, &__state->n, 
+	    __state->units);
     if (__state->index > 0) {
 	cl__1.cerr = 0;
 	cl__1.cunit = __state->units[(i__1 = __state->index - 1) < 96 && 0 <= 
-		i__1 ? i__1 : s_rnge("units", i__1, "rdtext_", (ftnlen)952)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "units", i__1, 
+		"rdtext_", (ftnlen)952)];
 	cl__1.csta = 0;
-	f_clos(&cl__1);
+	f_clos(&__global_state->f2c, &cl__1);
 	if (__state->units[(i__1 = __state->index - 1) < 96 && 0 <= i__1 ? 
-		i__1 : s_rnge("units", i__1, "rdtext_", (ftnlen)954)] == 
-		__state->lstunt) {
-	    s_copy(__state->lstfil, " ", (ftnlen)255, (ftnlen)1);
+		i__1 : s_rnge(&__global_state->f2c, "units", i__1, "rdtext_", 
+		(ftnlen)954)] == __state->lstunt) {
+	    s_copy(&__global_state->f2c, __state->lstfil, " ", (ftnlen)255, (
+		    ftnlen)1);
 	}
 
 /*        Remember all that salient information about the file? */
@@ -992,23 +1008,25 @@ L_cltext:
 	i__1 = __state->n;
 	for (i__ = __state->index + 1; i__ <= i__1; ++i__) {
 	    __state->units[(i__2 = i__ - 2) < 96 && 0 <= i__2 ? i__2 : s_rnge(
-		    "units", i__2, "rdtext_", (ftnlen)963)] = __state->units[(
-		    i__3 = i__ - 1) < 96 && 0 <= i__3 ? i__3 : s_rnge("units",
-		     i__3, "rdtext_", (ftnlen)963)];
+		    &__global_state->f2c, "units", i__2, "rdtext_", (ftnlen)
+		    963)] = __state->units[(i__3 = i__ - 1) < 96 && 0 <= i__3 
+		    ? i__3 : s_rnge(&__global_state->f2c, "units", i__3, 
+		    "rdtext_", (ftnlen)963)];
 	}
 	--__state->n;
     }
-    chkout_("CLTEXT", (ftnlen)6);
+    chkout_(__global_state, "CLTEXT", (ftnlen)6);
     return 0;
 } /* rdtext_ */
 
-/* Subroutine */ int rdtext_(char *file, char *line, logical *eof, ftnlen 
-	file_len, ftnlen line_len)
+/* Subroutine */ int rdtext_(cspice_t* __global_state, char *file, char *line,
+	 logical *eof, ftnlen file_len, ftnlen line_len)
 {
     return rdtext_0_(0, file, line, eof, file_len, line_len);
     }
 
-/* Subroutine */ int cltext_(char *file, ftnlen file_len)
+/* Subroutine */ int cltext_(cspice_t* __global_state, char *file, ftnlen 
+	file_len)
 {
     return rdtext_0_(1, file, (char *)0, (logical *)0, file_len, (ftnint)0);
     }

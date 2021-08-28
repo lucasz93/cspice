@@ -8,8 +8,7 @@
 
 
 extern zzekerd1_init_t __zzekerd1_init;
-static zzekerd1_state_t* get_zzekerd1_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekerd1_state_t* get_zzekerd1_state(cspice_t* state) {
 	if (!state->zzekerd1)
 		state->zzekerd1 = __cspice_allocate_module(sizeof(
 	zzekerd1_state_t), &__zzekerd1_init, sizeof(__zzekerd1_init));
@@ -18,36 +17,36 @@ static zzekerd1_state_t* get_zzekerd1_state() {
 }
 
 /* $Procedure ZZEKERD1 ( EK, LLE using record pointers, d.p., type 1 ) */
-/* Subroutine */ int zzekerd1_(integer *handle, integer *segdsc, integer *
-	coldsc, doublereal *dkey, integer *recptr, logical *null, integer *
-	prvidx, integer *prvptr)
+/* Subroutine */ int zzekerd1_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, doublereal *dkey, integer *recptr, 
+	logical *null, integer *prvidx, integer *prvptr)
 {
     integer nrec;
     integer tree;
-    extern logical zzekscmp_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, char *, doublereal *, integer *, 
-	    logical *, ftnlen);
-    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
-	    integer *);
+    extern logical zzekscmp_(cspice_t*, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, char *, doublereal *, 
+	    integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzektrdp_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer begin;
-    extern integer zzektrsz_(integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer zzektrsz_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer tsize;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer middle;
     integer begptr;
     integer endptr;
     integer midptr;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer end;
     logical leq;
 
 
     /* Module state */
-    zzekerd1_state_t* __state = get_zzekerd1_state();
+    zzekerd1_state_t* __state = get_zzekerd1_state(__global_state);
 /* $ Abstract */
 
 /*     Find the last column value less than or equal to a specified key, */
@@ -567,7 +566,7 @@ static zzekerd1_state_t* get_zzekerd1_state() {
 
 /*     Use discovery check-in. */
 
-    if (failed_()) {
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -576,15 +575,16 @@ static zzekerd1_state_t* get_zzekerd1_state() {
 /*     up any entries that don't exist! */
 
     tree = coldsc[6];
-    tsize = zzektrsz_(handle, &tree);
+    tsize = zzektrsz_(__global_state, handle, &tree);
     nrec = segdsc[5];
     if (tsize > nrec) {
-	chkin_("ZZEKERD1", (ftnlen)8);
-	setmsg_("Index size = # but column contains # records.", (ftnlen)45);
-	errint_("#", &tsize, (ftnlen)1);
-	errint_("#", &nrec, (ftnlen)1);
-	sigerr_("SPICE(SIZEMISMATCH)", (ftnlen)19);
-	chkout_("ZZEKERD1", (ftnlen)8);
+	chkin_(__global_state, "ZZEKERD1", (ftnlen)8);
+	setmsg_(__global_state, "Index size = # but column contains # record"
+		"s.", (ftnlen)45);
+	errint_(__global_state, "#", &tsize, (ftnlen)1);
+	errint_(__global_state, "#", &nrec, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SIZEMISMATCH)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKERD1", (ftnlen)8);
 	return 0;
     }
 
@@ -604,14 +604,14 @@ static zzekerd1_state_t* get_zzekerd1_state() {
 /*     Get the record pointers BEGPTR and ENDPTR of the least and */
 /*     greatest elements in the column. */
 
-    zzektrdp_(handle, &tree, &begin, &begptr);
-    zzektrdp_(handle, &tree, &end, &endptr);
+    zzektrdp_(__global_state, handle, &tree, &begin, &begptr);
+    zzektrdp_(__global_state, handle, &tree, &end, &endptr);
 
 /*     Compare the input value to the smallest value in the column. */
 
-    if (zzekscmp_(&__state->c__3, handle, segdsc, coldsc, &begptr, &
-	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, null, (
-	    ftnlen)1)) {
+    if (zzekscmp_(__global_state, &__state->c__3, handle, segdsc, coldsc, &
+	    begptr, &__state->c__1, &__state->c__2, " ", dkey, &__state->c__0,
+	     null, (ftnlen)1)) {
 
 /*        The smallest entry of the column is greater than the input */
 /*        value, so none of the entries are less than or equal to the */
@@ -620,9 +620,9 @@ static zzekerd1_state_t* get_zzekerd1_state() {
 	*prvidx = 0;
 	*prvptr = 0;
 	return 0;
-    } else if (zzekscmp_(&__state->c__1, handle, segdsc, coldsc, &begptr, &
-	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, null, (
-	    ftnlen)1) && *recptr < begptr) {
+    } else if (zzekscmp_(__global_state, &__state->c__1, handle, segdsc, 
+	    coldsc, &begptr, &__state->c__1, &__state->c__2, " ", dkey, &
+	    __state->c__0, null, (ftnlen)1) && *recptr < begptr) {
 
 /*        The smallest entry of the column is greater than the input */
 /*        value, based on a comparison of record pointers, so none of the */
@@ -638,19 +638,19 @@ static zzekerd1_state_t* get_zzekerd1_state() {
 
 /*     Compare the input value to the greatest value in the column. */
 
-    if (zzekscmp_(&__state->c__5, handle, segdsc, coldsc, &endptr, &
-	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, null, (
-	    ftnlen)1)) {
+    if (zzekscmp_(__global_state, &__state->c__5, handle, segdsc, coldsc, &
+	    endptr, &__state->c__1, &__state->c__2, " ", dkey, &__state->c__0,
+	     null, (ftnlen)1)) {
 
 /*        The last element of the column is less than the */
 /*        input value. */
 
 	*prvidx = tsize;
-	zzektrdp_(handle, &tree, prvidx, prvptr);
+	zzektrdp_(__global_state, handle, &tree, prvidx, prvptr);
 	return 0;
-    } else if (zzekscmp_(&__state->c__1, handle, segdsc, coldsc, &endptr, &
-	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, null, (
-	    ftnlen)1) && endptr <= *recptr) {
+    } else if (zzekscmp_(__global_state, &__state->c__1, handle, segdsc, 
+	    coldsc, &endptr, &__state->c__1, &__state->c__2, " ", dkey, &
+	    __state->c__0, null, (ftnlen)1) && endptr <= *recptr) {
 
 /*        The last element of the column is less than or equal to the */
 /*        input value, based on a comparison of record pointers. */
@@ -674,22 +674,22 @@ static zzekerd1_state_t* get_zzekerd1_state() {
 /*        is halfway between BEGIN and END. */
 
 	middle = (begin + end) / 2;
-	zzektrdp_(handle, &tree, &middle, &midptr);
+	zzektrdp_(__global_state, handle, &tree, &middle, &midptr);
 
 /*        Determine the order relation between DKEY and the column */
 /*        entry at record MIDPTR. */
 
-	if (zzekscmp_(&__state->c__5, handle, segdsc, coldsc, &midptr, &
-		__state->c__1, &__state->c__2, " ", dkey, &__state->c__0, 
-		null, (ftnlen)1)) {
+	if (zzekscmp_(__global_state, &__state->c__5, handle, segdsc, coldsc, 
+		&midptr, &__state->c__1, &__state->c__2, " ", dkey, &
+		__state->c__0, null, (ftnlen)1)) {
 
 /*           The column element at record MIDPTR is strictly less than */
 /*           IKEY, based on data values. */
 
 	    leq = TRUE_;
-	} else if (zzekscmp_(&__state->c__1, handle, segdsc, coldsc, &midptr, 
-		&__state->c__1, &__state->c__2, " ", dkey, &__state->c__0, 
-		null, (ftnlen)1)) {
+	} else if (zzekscmp_(__global_state, &__state->c__1, handle, segdsc, 
+		coldsc, &midptr, &__state->c__1, &__state->c__2, " ", dkey, &
+		__state->c__0, null, (ftnlen)1)) {
 
 /*           The column entry's value matches DKEY.  We must */
 /*           compare record pointers at this point. */
@@ -717,7 +717,7 @@ static zzekerd1_state_t* get_zzekerd1_state() {
 
     }
     *prvidx = begin;
-    zzektrdp_(handle, &tree, prvidx, prvptr);
+    zzektrdp_(__global_state, handle, &tree, prvidx, prvptr);
     return 0;
 } /* zzekerd1_ */
 

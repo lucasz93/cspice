@@ -8,8 +8,7 @@
 
 
 extern zzdskbsr_init_t __zzdskbsr_init;
-static zzdskbsr_state_t* get_zzdskbsr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdskbsr_state_t* get_zzdskbsr_state(cspice_t* state) {
 	if (!state->zzdskbsr)
 		state->zzdskbsr = __cspice_allocate_module(sizeof(
 	zzdskbsr_state_t), &__zzdskbsr_init, sizeof(__zzdskbsr_init));
@@ -18,9 +17,10 @@ static zzdskbsr_state_t* get_zzdskbsr_state() {
 }
 
 /* $Procedure      ZZDSKBSR ( DSK, buffer segments for readers ) */
-/* Subroutine */ int zzdskbsr_0_(int n__, char *fname, integer *bodyid, 
-	integer *handle, L_fp cmpfun, integer *usrctr, logical *update, 
-	integer *dladsc, doublereal *dskdsc, logical *found, ftnlen fname_len)
+/* Subroutine */ int zzdskbsr_0_(cspice_t* __global_state, int n__, char *
+	fname, integer *bodyid, integer *handle, L_fp cmpfun, integer *usrctr,
+	 logical *update, integer *dladsc, doublereal *dskdsc, logical *found,
+	 ftnlen fname_len)
 {
     /* Initialized data */
 
@@ -29,41 +29,48 @@ static zzdskbsr_state_t* get_zzdskbsr_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen), i_dnnt(doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen), i_dnnt(f2c_state_t*
+	    , doublereal *);
 
     /* Local variables */
     integer head;
     integer node;
     integer tail;
     integer cost;
-    extern /* Subroutine */ int zzctrchk_(integer *, integer *, logical *);
-    extern /* Subroutine */ int zzctrinc_(integer *);
-    extern /* Subroutine */ int zzctrsin_(integer *);
+    extern /* Subroutine */ int zzctrchk_(cspice_t*, integer *, integer *, 
+	    logical *);
+    extern /* Subroutine */ int zzctrinc_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzctrsin_(cspice_t*, integer *);
     integer i__;
     integer j;
     integer cheap;
     integer p;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dskgd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dskgd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
     char doing[40];
-    extern /* Subroutine */ int lnkan_(integer *, integer *);
+    extern /* Subroutine */ int lnkan_(cspice_t*, integer *, integer *);
     char stack[40*2];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dlabbs_(integer *, integer *, logical *);
-    extern /* Subroutine */ int dlabfs_(integer *, integer *, logical *);
-    integer dlalds[8];
-    extern /* Subroutine */ int dlafns_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dlabbs_(cspice_t*, integer *, integer *, 
 	    logical *);
-    extern integer intmax_(void);
-    extern integer isrchi_(integer *, integer *, integer *);
-    extern integer lnknfn_(integer *);
-    extern integer lnknxt_(integer *, integer *);
-    extern integer lnkprv_(integer *, integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int dlabfs_(cspice_t*, integer *, integer *, 
+	    logical *);
+    integer dlalds[8];
+    extern /* Subroutine */ int dlafns_(cspice_t*, integer *, integer *, 
+	    integer *, logical *);
+    extern integer intmax_(cspice_t*);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
+    extern integer lnknfn_(cspice_t*, integer *);
+    extern integer lnknxt_(cspice_t*, integer *, integer *);
+    extern integer lnkprv_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
     char urgent[40];
     doublereal dsklds[24];
     integer dlanxt[8];
@@ -71,22 +78,25 @@ static zzdskbsr_state_t* get_zzdskbsr_state() {
     integer minexp;
     integer nxtseg;
     integer prvnod;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int lnkini_(integer *, integer *);
-    extern /* Subroutine */ int dasopr_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int dascls_(integer *);
-    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int dlafps_(integer *, integer *, integer *, 
-	    logical *);
-    extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *);
-    extern /* Subroutine */ int lnkila_(integer *, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int lnkini_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int dasopr_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int dascls_(cspice_t*, integer *);
+    extern /* Subroutine */ int lnkfsl_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int dlafps_(cspice_t*, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int lnkilb_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int lnkila_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer new__;
 
     /* Module state */
-    zzdskbsr_state_t* __state = get_zzdskbsr_state();
+    zzdskbsr_state_t* __state = get_zzdskbsr_state(__global_state);
 /* $ Abstract */
 
 /*     Load and unload DSK files for use by the readers. Buffer segments */
@@ -764,12 +774,12 @@ static zzdskbsr_state_t* get_zzdskbsr_state() {
 
 /*     Nobody has any business calling ZZDSKBSR directly. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKBSR", (ftnlen)8);
-    sigerr_("SPICE(DSKBOGUSENTRY)", (ftnlen)20);
-    chkout_("ZZDSKBSR", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKBSR", (ftnlen)8);
+    sigerr_(__global_state, "SPICE(DSKBOGUSENTRY)", (ftnlen)20);
+    chkout_(__global_state, "ZZDSKBSR", (ftnlen)8);
     return 0;
 /* $Procedure ZZDSKLSF ( DSK, load shape file ) */
 
@@ -932,53 +942,55 @@ L_zzdsklsf:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKLSF", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKLSF", (ftnlen)8);
     if (__state->pass1) {
 
 /*        Initialize the BSR counter. */
 
-	zzctrsin_(__state->dskctr);
+	zzctrsin_(__global_state, __state->dskctr);
 	__state->pass1 = FALSE_;
     }
 
 /*     Increment the BSR counter regardless of whether */
 /*     the load operation is successful. */
 
-    zzctrinc_(__state->dskctr);
+    zzctrinc_(__global_state, __state->dskctr);
 
 /*     Don't allow a search to continue after loading a file; a new */
 /*     search should be re-started. */
 
-    s_copy(__state->status, "BOGUS ENTRY", (ftnlen)40, (ftnlen)11);
+    s_copy(&__global_state->f2c, __state->status, "BOGUS ENTRY", (ftnlen)40, (
+	    ftnlen)11);
 
 /*     Nothing works unless at least one file has been loaded, so */
 /*     this is as good a place as any to initialize the free list */
 /*     whenever the body table is empty. */
 
     if (__state->nbt == 0) {
-	lnkini_(&__state->c__10000, __state->stpool);
+	lnkini_(__global_state, &__state->c__10000, __state->stpool);
     }
 
 /*     To load a new file, first try to open it for reading. */
 
-    dasopr_(fname, handle, fname_len);
-    if (failed_()) {
-	chkout_("ZZDSKLSF", (ftnlen)8);
+    dasopr_(__global_state, fname, handle, fname_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZDSKLSF", (ftnlen)8);
 	return 0;
     }
 
 /*     Determine if the file is already in the table. */
 
-    __state->findex = isrchi_(handle, &__state->nft, __state->fthan);
+    __state->findex = isrchi_(__global_state, handle, &__state->nft, 
+	    __state->fthan);
     if (__state->findex > 0) {
 
 /*        The last call we made to DASOPR added another DAS link to */
 /*        the DSK file.  Remove this link. */
 
-	dascls_(handle);
+	dascls_(__global_state, handle);
 
 /*        Handle is already in the table.  Remove it. */
 
@@ -986,13 +998,15 @@ L_zzdsklsf:
 	i__1 = __state->nft;
 	for (i__ = __state->findex; i__ <= i__1; ++i__) {
 	    __state->fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("fthan", i__2, "zzdskbsr_", (ftnlen)720)] = 
-		    __state->fthan[(i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : 
-		    s_rnge("fthan", i__3, "zzdskbsr_", (ftnlen)720)];
+		    s_rnge(&__global_state->f2c, "fthan", i__2, "zzdskbsr_", (
+		    ftnlen)720)] = __state->fthan[(i__3 = i__) < 5000 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "fthan", i__3, 
+		    "zzdskbsr_", (ftnlen)720)];
 	    __state->ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)721)] = 
-		    __state->ftnum[(i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : 
-		    s_rnge("ftnum", i__3, "zzdskbsr_", (ftnlen)721)];
+		    s_rnge(&__global_state->f2c, "ftnum", i__2, "zzdskbsr_", (
+		    ftnlen)721)] = __state->ftnum[(i__3 = i__) < 5000 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "ftnum", i__3, 
+		    "zzdskbsr_", (ftnlen)721)];
 	}
 
 /*        Unlink any segments that came from this file. */
@@ -1000,15 +1014,16 @@ L_zzdsklsf:
 	i__ = 1;
 	while(i__ <= __state->nbt) {
 	    p = __state->btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)731)];
+		    s_rnge(&__global_state->f2c, "btbeg", i__1, "zzdskbsr_", (
+		    ftnlen)731)];
 	    while(p > 0) {
 
 /*              Find the successor of P, if any. */
 
-		nxtseg = lnknxt_(&p, __state->stpool);
+		nxtseg = lnknxt_(__global_state, &p, __state->stpool);
 		if (__state->sthan[(i__1 = p - 1) < 10000 && 0 <= i__1 ? i__1 
-			: s_rnge("sthan", i__1, "zzdskbsr_", (ftnlen)739)] == 
-			*handle) {
+			: s_rnge(&__global_state->f2c, "sthan", i__1, "zzdsk"
+			"bsr_", (ftnlen)739)] == *handle) {
 
 /*                 The segment corresponding to node P came from */
 /*                 the file we're unloading.  Delete the node for */
@@ -1016,13 +1031,13 @@ L_zzdsklsf:
 /*                 to be the head node for body I's segment list, */
 /*                 make the successor of P the head of the list. */
 
-		    lnkfsl_(&p, &p, __state->stpool);
+		    lnkfsl_(__global_state, &p, &p, __state->stpool);
 		    if (p == __state->btbeg[(i__1 = i__ - 1) < 100 && 0 <= 
-			    i__1 ? i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (
-			    ftnlen)749)]) {
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "btbeg"
+			    , i__1, "zzdskbsr_", (ftnlen)749)]) {
 			__state->btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? 
-				i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (
-				ftnlen)750)] = nxtseg;
+				i__1 : s_rnge(&__global_state->f2c, "btbeg", 
+				i__1, "zzdskbsr_", (ftnlen)750)] = nxtseg;
 		    }
 		}
 
@@ -1037,31 +1052,37 @@ L_zzdsklsf:
 /*           one we've deleted. */
 
 	    if (__state->btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)767)] <= 0) {
+		    s_rnge(&__global_state->f2c, "btbeg", i__1, "zzdskbsr_", (
+		    ftnlen)767)] <= 0) {
 		__state->btbod[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbod", i__1, "zzdskbsr_", (ftnlen)769)] = 
-			__state->btbod[(i__2 = __state->nbt - 1) < 100 && 0 <=
-			 i__2 ? i__2 : s_rnge("btbod", i__2, "zzdskbsr_", (
+			s_rnge(&__global_state->f2c, "btbod", i__1, "zzdskbs"
+			"r_", (ftnlen)769)] = __state->btbod[(i__2 = 
+			__state->nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btbod", i__2, "zzdskbsr_", (
 			ftnlen)769)];
 		__state->btexp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btexp", i__1, "zzdskbsr_", (ftnlen)770)] = 
-			__state->btexp[(i__2 = __state->nbt - 1) < 100 && 0 <=
-			 i__2 ? i__2 : s_rnge("btexp", i__2, "zzdskbsr_", (
+			s_rnge(&__global_state->f2c, "btexp", i__1, "zzdskbs"
+			"r_", (ftnlen)770)] = __state->btexp[(i__2 = 
+			__state->nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btexp", i__2, "zzdskbsr_", (
 			ftnlen)770)];
 		__state->bthfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)771)] = 
-			__state->bthfs[(i__2 = __state->nbt - 1) < 100 && 0 <=
-			 i__2 ? i__2 : s_rnge("bthfs", i__2, "zzdskbsr_", (
+			s_rnge(&__global_state->f2c, "bthfs", i__1, "zzdskbs"
+			"r_", (ftnlen)771)] = __state->bthfs[(i__2 = 
+			__state->nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "bthfs", i__2, "zzdskbsr_", (
 			ftnlen)771)];
 		__state->btlfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)772)] = 
-			__state->btlfs[(i__2 = __state->nbt - 1) < 100 && 0 <=
-			 i__2 ? i__2 : s_rnge("btlfs", i__2, "zzdskbsr_", (
+			s_rnge(&__global_state->f2c, "btlfs", i__1, "zzdskbs"
+			"r_", (ftnlen)772)] = __state->btlfs[(i__2 = 
+			__state->nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btlfs", i__2, "zzdskbsr_", (
 			ftnlen)772)];
 		__state->btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)773)] = 
-			__state->btbeg[(i__2 = __state->nbt - 1) < 100 && 0 <=
-			 i__2 ? i__2 : s_rnge("btbeg", i__2, "zzdskbsr_", (
+			s_rnge(&__global_state->f2c, "btbeg", i__1, "zzdskbs"
+			"r_", (ftnlen)773)] = __state->btbeg[(i__2 = 
+			__state->nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btbeg", i__2, "zzdskbsr_", (
 			ftnlen)773)];
 		--__state->nbt;
 	    } else {
@@ -1074,14 +1095,14 @@ L_zzdsklsf:
 /*        in the file table. */
 
 	if (__state->nft == 5000) {
-	    dascls_(handle);
-	    setmsg_("Number of files loaded is at a maximum, as specified by"
-		    " the parameter FTSIZE, the value of which is #. You will"
-		    " need to load fewer files. Consider unloading any files "
-		    "that are not needed.", (ftnlen)187);
-	    errint_("#", &__state->c__5000, (ftnlen)1);
-	    sigerr_("SPICE(DSKTOOMANYFILES)", (ftnlen)22);
-	    chkout_("ZZDSKLSF", (ftnlen)8);
+	    dascls_(__global_state, handle);
+	    setmsg_(__global_state, "Number of files loaded is at a maximum,"
+		    " as specified by the parameter FTSIZE, the value of whic"
+		    "h is #. You will need to load fewer files. Consider unlo"
+		    "ading any files that are not needed.", (ftnlen)187);
+	    errint_(__global_state, "#", &__state->c__5000, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DSKTOOMANYFILES)", (ftnlen)22);
+	    chkout_(__global_state, "ZZDSKLSF", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -1092,7 +1113,7 @@ L_zzdsklsf:
 /*     It should be tested by temporarily setting the comparison */
 /*     value to a smaller number, for example 2*FTSIZE. */
 
-    if (__state->next < intmax_() - 1) {
+    if (__state->next < intmax_(__global_state) - 1) {
 	++__state->next;
     } else {
 
@@ -1112,9 +1133,10 @@ L_zzdsklsf:
 
 /*           Re-map the HFS table for the Ith body. */
 
-	    j = isrchi_(&__state->bthfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-		    i__2 : s_rnge("bthfs", i__2, "zzdskbsr_", (ftnlen)836)], &
-		    __state->nft, __state->ftnum);
+	    j = isrchi_(__global_state, &__state->bthfs[(i__2 = i__ - 1) < 
+		    100 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "bthfs", i__2, "zzdskbsr_", (ftnlen)836)], &__state->nft, 
+		    __state->ftnum);
 
 /*           Either the highest file searched for body I is the Jth */
 /*           file in the file table, or the file is not in the table. */
@@ -1122,7 +1144,8 @@ L_zzdsklsf:
 /*           BTHFS(I). */
 
 	    __state->bthfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("bthfs", i__2, "zzdskbsr_", (ftnlen)844)] = j;
+		    s_rnge(&__global_state->f2c, "bthfs", i__2, "zzdskbsr_", (
+		    ftnlen)844)] = j;
 
 /*           When the highest file searched for body I is not in the */
 /*           file table, the highest file searched has been unloaded. */
@@ -1131,16 +1154,18 @@ L_zzdsklsf:
 
 /*           Re-map the LFS table for the Ith body. */
 
-	    j = isrchi_(&__state->btlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-		    i__2 : s_rnge("btlfs", i__2, "zzdskbsr_", (ftnlen)854)], &
-		    __state->nft, __state->ftnum);
+	    j = isrchi_(__global_state, &__state->btlfs[(i__2 = i__ - 1) < 
+		    100 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "btlfs", i__2, "zzdskbsr_", (ftnlen)854)], &__state->nft, 
+		    __state->ftnum);
 	    if (j > 0) {
 
 /*              The lowest file searched for body I is the Jth file */
 /*              in the file table. */
 
 		__state->btlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("btlfs", i__2, "zzdskbsr_", (ftnlen)861)] = j;
+			s_rnge(&__global_state->f2c, "btlfs", i__2, "zzdskbs"
+			"r_", (ftnlen)861)] = j;
 	    } else {
 
 /*              The lowest file searched for body I is not in the */
@@ -1150,9 +1175,11 @@ L_zzdsklsf:
 /*              list. */
 
 		__state->btlfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("btlfs", i__2, "zzdskbsr_", (ftnlen)871)] = 0;
+			s_rnge(&__global_state->f2c, "btlfs", i__2, "zzdskbs"
+			"r_", (ftnlen)871)] = 0;
 		__state->bthfs[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("bthfs", i__2, "zzdskbsr_", (ftnlen)872)] = 0;
+			s_rnge(&__global_state->f2c, "bthfs", i__2, "zzdskbs"
+			"r_", (ftnlen)872)] = 0;
 	    }
 	}
 
@@ -1161,7 +1188,8 @@ L_zzdsklsf:
 	i__1 = __state->nft;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    __state->ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)883)] = i__;
+		    s_rnge(&__global_state->f2c, "ftnum", i__2, "zzdskbsr_", (
+		    ftnlen)883)] = i__;
 	}
 
 /*        Assign a new file number. */
@@ -1173,10 +1201,12 @@ L_zzdsklsf:
 
     ++__state->nft;
     __state->fthan[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)898)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "zzdskbsr_", (ftnlen)
+	    898)] = *handle;
     __state->ftnum[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnum", i__1, "zzdskbsr_", (ftnlen)899)] = __state->next;
-    chkout_("ZZDSKLSF", (ftnlen)8);
+	    s_rnge(&__global_state->f2c, "ftnum", i__1, "zzdskbsr_", (ftnlen)
+	    899)] = __state->next;
+    chkout_(__global_state, "ZZDSKLSF", (ftnlen)8);
     return 0;
 /* $Procedure ZZDSKUSF ( DSK, Unload shape file ) */
 
@@ -1309,27 +1339,28 @@ L_zzdskusf:
 /*     None. */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKUSF", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKUSF", (ftnlen)8);
     if (__state->pass1) {
 
 /*        Initialize the BSR counter. */
 
-	zzctrsin_(__state->dskctr);
+	zzctrsin_(__global_state, __state->dskctr);
 	__state->pass1 = FALSE_;
     }
 
 /*     Increment the BSR counter regardless of whether */
 /*     the load operation is successful. */
 
-    zzctrinc_(__state->dskctr);
+    zzctrinc_(__global_state, __state->dskctr);
 
 /*     Don't allow a search to continue after unloading a file; a new */
 /*     search should be re-started. */
 
-    s_copy(__state->status, "BOGUS ENTRY", (ftnlen)40, (ftnlen)11);
+    s_copy(&__global_state->f2c, __state->status, "BOGUS ENTRY", (ftnlen)40, (
+	    ftnlen)11);
 
 /*     All of the stored segments from the file must be removed */
 /*     from the segment table (by returning the corresponding nodes */
@@ -1337,9 +1368,10 @@ L_zzdskusf:
 
 /*     Don't do anything if the given handle is not in the file table. */
 
-    __state->findex = isrchi_(handle, &__state->nft, __state->fthan);
+    __state->findex = isrchi_(__global_state, handle, &__state->nft, 
+	    __state->fthan);
     if (__state->findex == 0) {
-	chkout_("ZZDSKUSF", (ftnlen)8);
+	chkout_(__global_state, "ZZDSKUSF", (ftnlen)8);
 	return 0;
     }
 
@@ -1347,19 +1379,22 @@ L_zzdskusf:
 /*     First get rid of the entry in the file table. Close the file */
 /*     before wiping out the handle. */
 
-    dascls_(&__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ?
-	     i__1 : s_rnge("fthan", i__1, "zzdskbsr_", (ftnlen)1091)]);
+    dascls_(__global_state, &__state->fthan[(i__1 = __state->findex - 1) < 
+	    5000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "fthan", 
+	    i__1, "zzdskbsr_", (ftnlen)1091)]);
     --__state->nft;
     i__1 = __state->nft;
     for (i__ = __state->findex; i__ <= i__1; ++i__) {
-	__state->fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		"fthan", i__2, "zzdskbsr_", (ftnlen)1097)] = __state->fthan[(
-		i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : s_rnge("fthan", i__3,
-		 "zzdskbsr_", (ftnlen)1097)];
-	__state->ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		"ftnum", i__2, "zzdskbsr_", (ftnlen)1098)] = __state->ftnum[(
-		i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : s_rnge("ftnum", i__3,
-		 "zzdskbsr_", (ftnlen)1098)];
+	__state->fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "fthan", i__2, "zzdskbsr_", (ftnlen)1097)
+		] = __state->fthan[(i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "fthan", i__3, "zzdskbsr_", (
+		ftnlen)1097)];
+	__state->ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ftnum", i__2, "zzdskbsr_", (ftnlen)1098)
+		] = __state->ftnum[(i__3 = i__) < 5000 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftnum", i__3, "zzdskbsr_", (
+		ftnlen)1098)];
     }
 
 /*     Check each body list individually. Note that the first */
@@ -1369,23 +1404,24 @@ L_zzdskusf:
     i__ = 1;
     while(i__ <= __state->nbt) {
 	p = __state->btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1110)];
+		s_rnge(&__global_state->f2c, "btbeg", i__1, "zzdskbsr_", (
+		ftnlen)1110)];
 	while(p > 0) {
-	    nxtseg = lnknxt_(&p, __state->stpool);
+	    nxtseg = lnknxt_(__global_state, &p, __state->stpool);
 	    if (__state->sthan[(i__1 = p - 1) < 10000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("sthan", i__1, "zzdskbsr_", (ftnlen)1116)] == *
-		    handle) {
+		    s_rnge(&__global_state->f2c, "sthan", i__1, "zzdskbsr_", (
+		    ftnlen)1116)] == *handle) {
 		if (p == __state->btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? 
-			i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)
-			1118)]) {
+			i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1, 
+			"zzdskbsr_", (ftnlen)1118)]) {
 		    __state->btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 
-			    : s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1119)
-			    ] = nxtseg;
+			    : s_rnge(&__global_state->f2c, "btbeg", i__1, 
+			    "zzdskbsr_", (ftnlen)1119)] = nxtseg;
 		}
 
 /*              Free this segment table entry. */
 
-		lnkfsl_(&p, &p, __state->stpool);
+		lnkfsl_(__global_state, &p, &p, __state->stpool);
 	    }
 	    p = nxtseg;
 	}
@@ -1396,32 +1432,38 @@ L_zzdskusf:
 /*        one we've deleted. */
 
 	if (__state->btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1138)] <= 0) {
+		s_rnge(&__global_state->f2c, "btbeg", i__1, "zzdskbsr_", (
+		ftnlen)1138)] <= 0) {
 	    if (i__ != __state->nbt) {
 		__state->btbod[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbod", i__1, "zzdskbsr_", (ftnlen)1142)] = 
-			__state->btbod[(i__2 = __state->nbt - 1) < 100 && 0 <=
-			 i__2 ? i__2 : s_rnge("btbod", i__2, "zzdskbsr_", (
+			s_rnge(&__global_state->f2c, "btbod", i__1, "zzdskbs"
+			"r_", (ftnlen)1142)] = __state->btbod[(i__2 = 
+			__state->nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btbod", i__2, "zzdskbsr_", (
 			ftnlen)1142)];
 		__state->btexp[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btexp", i__1, "zzdskbsr_", (ftnlen)1143)] = 
-			__state->btexp[(i__2 = __state->nbt - 1) < 100 && 0 <=
-			 i__2 ? i__2 : s_rnge("btexp", i__2, "zzdskbsr_", (
+			s_rnge(&__global_state->f2c, "btexp", i__1, "zzdskbs"
+			"r_", (ftnlen)1143)] = __state->btexp[(i__2 = 
+			__state->nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btexp", i__2, "zzdskbsr_", (
 			ftnlen)1143)];
 		__state->bthfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)1144)] = 
-			__state->bthfs[(i__2 = __state->nbt - 1) < 100 && 0 <=
-			 i__2 ? i__2 : s_rnge("bthfs", i__2, "zzdskbsr_", (
+			s_rnge(&__global_state->f2c, "bthfs", i__1, "zzdskbs"
+			"r_", (ftnlen)1144)] = __state->bthfs[(i__2 = 
+			__state->nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "bthfs", i__2, "zzdskbsr_", (
 			ftnlen)1144)];
 		__state->btlfs[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)1145)] = 
-			__state->btlfs[(i__2 = __state->nbt - 1) < 100 && 0 <=
-			 i__2 ? i__2 : s_rnge("btlfs", i__2, "zzdskbsr_", (
+			s_rnge(&__global_state->f2c, "btlfs", i__1, "zzdskbs"
+			"r_", (ftnlen)1145)] = __state->btlfs[(i__2 = 
+			__state->nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btlfs", i__2, "zzdskbsr_", (
 			ftnlen)1145)];
 		__state->btbeg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1146)] = 
-			__state->btbeg[(i__2 = __state->nbt - 1) < 100 && 0 <=
-			 i__2 ? i__2 : s_rnge("btbeg", i__2, "zzdskbsr_", (
+			s_rnge(&__global_state->f2c, "btbeg", i__1, "zzdskbs"
+			"r_", (ftnlen)1146)] = __state->btbeg[(i__2 = 
+			__state->nbt - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "btbeg", i__2, "zzdskbsr_", (
 			ftnlen)1146)];
 	    }
 	    --__state->nbt;
@@ -1429,7 +1471,7 @@ L_zzdskusf:
 	    ++i__;
 	}
     }
-    chkout_("ZZDSKUSF", (ftnlen)8);
+    chkout_(__global_state, "ZZDSKUSF", (ftnlen)8);
     return 0;
 /* $Procedure ZZDSKBSS ( DSK, begin search for segment ) */
 
@@ -1573,15 +1615,15 @@ L_zzdskbss:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKBSS", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKBSS", (ftnlen)8);
     if (__state->pass1) {
 
 /*        Initialize the BSR counter. */
 
-	zzctrsin_(__state->dskctr);
+	zzctrsin_(__global_state, __state->dskctr);
 	__state->pass1 = FALSE_;
     }
 
@@ -1592,10 +1634,10 @@ L_zzdskbss:
 /*     There must be at least one file loaded. */
 
     if (__state->nft == 0) {
-	setmsg_("At least one DSK file needs must be loaded by ZZDSKLSF befo"
-		"re beginning a search.", (ftnlen)81);
-	sigerr_("SPICE(NOLOADEDDSKFILES)", (ftnlen)23);
-	chkout_("ZZDSKBSS", (ftnlen)8);
+	setmsg_(__global_state, "At least one DSK file needs must be loaded "
+		"by ZZDSKLSF before beginning a search.", (ftnlen)81);
+	sigerr_(__global_state, "SPICE(NOLOADEDDSKFILES)", (ftnlen)23);
+	chkout_(__global_state, "ZZDSKBSS", (ftnlen)8);
 	return 0;
     }
 
@@ -1606,22 +1648,24 @@ L_zzdskbss:
 /*     Is the body already in the body table?  The answer */
 /*     determines what the first task for ZZDSKSNS will be. */
 
-    __state->bindex = isrchi_(&__state->svbody, &__state->nbt, __state->btbod)
-	    ;
+    __state->bindex = isrchi_(__global_state, &__state->svbody, &__state->nbt,
+	     __state->btbod);
     if (__state->bindex == 0) {
-	s_copy(__state->status, "NEW BODY", (ftnlen)40, (ftnlen)8);
+	s_copy(&__global_state->f2c, __state->status, "NEW BODY", (ftnlen)40, 
+		(ftnlen)8);
     } else {
 
 /*        Set the status so that ZZDSKSNS will determine whether to check */
 /*        the segment list or search new files. */
 
-	s_copy(__state->status, "?", (ftnlen)40, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->status, "?", (ftnlen)40, (
+		ftnlen)1);
     }
 
 /*     The saved segment list pointer is no longer valid. */
 
     __state->savep = -1;
-    chkout_("ZZDSKBSS", (ftnlen)8);
+    chkout_(__global_state, "ZZDSKBSS", (ftnlen)8);
     return 0;
 /* $Procedure ZZDSKSNS ( DSK, Select next segment ) */
 
@@ -1823,15 +1867,15 @@ L_zzdsksns:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKSNS", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKSNS", (ftnlen)8);
     if (__state->pass1) {
 
 /*        Initialize the BSR counter. */
 
-	zzctrsin_(__state->dskctr);
+	zzctrsin_(__global_state, __state->dskctr);
 	__state->pass1 = FALSE_;
     }
 
@@ -1989,18 +2033,22 @@ L_zzdsksns:
 /*        call to ZZDSKBSS was ever made. If this is the case then an */
 /*        error will be signaled. */
 
-    if (s_cmp(__state->status, "BOGUS ENTRY", (ftnlen)40, (ftnlen)11) == 0) {
-	setmsg_("Must begin a search by calling ZZDSKBSS first.", (ftnlen)46);
-	sigerr_("SPICE(CALLZZDSKBSSFIRST)", (ftnlen)24);
-	chkout_("ZZDSKSNS", (ftnlen)8);
+    if (s_cmp(&__global_state->f2c, __state->status, "BOGUS ENTRY", (ftnlen)
+	    40, (ftnlen)11) == 0) {
+	setmsg_(__global_state, "Must begin a search by calling ZZDSKBSS fir"
+		"st.", (ftnlen)46);
+	sigerr_(__global_state, "SPICE(CALLZZDSKBSSFIRST)", (ftnlen)24);
+	chkout_(__global_state, "ZZDSKSNS", (ftnlen)8);
 	return 0;
     }
-    while(s_cmp(__state->status, "HOPELESS", (ftnlen)40, (ftnlen)8) != 0) {
+    while(s_cmp(&__global_state->f2c, __state->status, "HOPELESS", (ftnlen)40,
+	     (ftnlen)8) != 0) {
 
 /*        If new files have been added, they have to be searched. */
 /*        Otherwise, go right to the list of stored segments. */
 
-	if (s_cmp(__state->status, "?", (ftnlen)40, (ftnlen)1) == 0) {
+	if (s_cmp(&__global_state->f2c, __state->status, "?", (ftnlen)40, (
+		ftnlen)1) == 0) {
 
 /*           There are two ways to get to this point. */
 
@@ -2011,33 +2059,36 @@ L_zzdsksns:
 /*               a new file. */
 
 	    if (__state->bthfs[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-		    i__1 ? i__1 : s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)
-		    1796)] < __state->ftnum[(i__2 = __state->nft - 1) < 5000 
-		    && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, "zzdskbsr_", (
-		    ftnlen)1796)]) {
-		s_copy(__state->status, "NEW FILES", (ftnlen)40, (ftnlen)9);
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "bthfs", i__1, 
+		    "zzdskbsr_", (ftnlen)1796)] < __state->ftnum[(i__2 = 
+		    __state->nft - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ftnum", i__2, "zzdskbsr_", (ftnlen)
+		    1796)]) {
+		s_copy(&__global_state->f2c, __state->status, "NEW FILES", (
+			ftnlen)40, (ftnlen)9);
 	    } else {
 /*              If the segment list for this body is empty, make */
 /*              sure the expense is set to 0. */
 
 		if (__state->btbeg[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (
-			ftnlen)1805)] <= 0) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "btbeg", 
+			i__1, "zzdskbsr_", (ftnlen)1805)] <= 0) {
 		    __state->btexp[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			    i__1 ? i__1 : s_rnge("btexp", i__1, "zzdskbsr_", (
-			    ftnlen)1806)] = 0;
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "btexp"
+			    , i__1, "zzdskbsr_", (ftnlen)1806)] = 0;
 		}
 
 /*              Prepare to look at the first segment in the list for */
 /*              this body. */
 
 		p = __state->btbeg[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (
-			ftnlen)1813)];
-		s_copy(__state->status, "CHECK LIST", (ftnlen)40, (ftnlen)10);
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "btbeg", 
+			i__1, "zzdskbsr_", (ftnlen)1813)];
+		s_copy(&__global_state->f2c, __state->status, "CHECK LIST", (
+			ftnlen)40, (ftnlen)10);
 	    }
-	} else if (s_cmp(__state->status, "NEW BODY", (ftnlen)40, (ftnlen)8) 
-		== 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->status, "NEW BODY", (
+		ftnlen)40, (ftnlen)8) == 0) {
 
 /*           New bodies are added to the end of the body */
 /*           table. If the table is full, one of the current occupants */
@@ -2076,12 +2127,12 @@ L_zzdsksns:
 		i__1 = __state->nbt;
 		for (i__ = 2; i__ <= i__1; ++i__) {
 		    if (__state->btexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-			    i__2 : s_rnge("btexp", i__2, "zzdskbsr_", (ftnlen)
-			    1859)] < minexp) {
+			    i__2 : s_rnge(&__global_state->f2c, "btexp", i__2,
+			     "zzdskbsr_", (ftnlen)1859)] < minexp) {
 			cheap = i__;
 			minexp = __state->btexp[(i__2 = i__ - 1) < 100 && 0 <=
-				 i__2 ? i__2 : s_rnge("btexp", i__2, "zzdskb"
-				"sr_", (ftnlen)1861)];
+				 i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"btexp", i__2, "zzdskbsr_", (ftnlen)1861)];
 		    }
 		}
 
@@ -2090,41 +2141,44 @@ L_zzdsksns:
 /*              list. */
 
 		head = __state->btbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
-			i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)
-			1871)];
+			i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1, 
+			"zzdskbsr_", (ftnlen)1871)];
 		if (head > 0) {
-		    tail = -lnkprv_(&head, __state->stpool);
-		    lnkfsl_(&head, &tail, __state->stpool);
+		    tail = -lnkprv_(__global_state, &head, __state->stpool);
+		    lnkfsl_(__global_state, &head, &tail, __state->stpool);
 		}
 	    }
 
 /*           Set up a table entry for the new body. */
 
 	    __state->btbod[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btbod", i__1, "zzdskbsr_", (ftnlen)1885)] = 
-		    __state->svbody;
+		    s_rnge(&__global_state->f2c, "btbod", i__1, "zzdskbsr_", (
+		    ftnlen)1885)] = __state->svbody;
 	    __state->btexp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btexp", i__1, "zzdskbsr_", (ftnlen)1886)] = 0;
+		    s_rnge(&__global_state->f2c, "btexp", i__1, "zzdskbsr_", (
+		    ftnlen)1886)] = 0;
 	    __state->bthfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)1887)] = 
-		    __state->ftnum[(i__2 = __state->nft - 1) < 5000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)
-		    1887)];
+		    s_rnge(&__global_state->f2c, "bthfs", i__1, "zzdskbsr_", (
+		    ftnlen)1887)] = __state->ftnum[(i__2 = __state->nft - 1) <
+		     5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "ftnum", i__2, "zzdskbsr_", (ftnlen)1887)];
 	    __state->btlfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)1888)] = 
-		    __state->ftnum[(i__2 = __state->nft - 1) < 5000 && 0 <= 
-		    i__2 ? i__2 : s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)
-		    1888)] + 1;
+		    s_rnge(&__global_state->f2c, "btlfs", i__1, "zzdskbsr_", (
+		    ftnlen)1888)] = __state->ftnum[(i__2 = __state->nft - 1) <
+		     5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "ftnum", i__2, "zzdskbsr_", (ftnlen)1888)] + 1;
 	    __state->btbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)1889)] = 0;
+		    s_rnge(&__global_state->f2c, "btbeg", i__1, "zzdskbsr_", (
+		    ftnlen)1889)] = 0;
 	    __state->bindex = cheap;
 
 /*           Now search all of the files for segments relating to */
 /*           this body. */
 
-	    s_copy(__state->status, "OLD FILES", (ftnlen)40, (ftnlen)9);
-	} else if (s_cmp(__state->status, "NEW FILES", (ftnlen)40, (ftnlen)9) 
-		== 0) {
+	    s_copy(&__global_state->f2c, __state->status, "OLD FILES", (
+		    ftnlen)40, (ftnlen)9);
+	} else if (s_cmp(&__global_state->f2c, __state->status, "NEW FILES", (
+		ftnlen)40, (ftnlen)9) == 0) {
 
 /*           When new files exist, they should be searched in forward */
 /*           order, beginning with the oldest new file not yet searched. */
@@ -2143,36 +2197,40 @@ L_zzdsksns:
 /*           corresponding file table entry. */
 	    __state->findex = 1;
 	    while(__state->bthfs[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-		    i__1 ? i__1 : s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)
-		    1919)] >= __state->ftnum[(i__2 = __state->findex - 1) < 
-		    5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, "zzdskb"
-		    "sr_", (ftnlen)1919)]) {
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "bthfs", i__1, 
+		    "zzdskbsr_", (ftnlen)1919)] >= __state->ftnum[(i__2 = 
+		    __state->findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ftnum", i__2, "zzdskbsr_", (ftnlen)
+		    1919)]) {
 		++__state->findex;
 	    }
 	    __state->bthfs[(i__1 = __state->bindex - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)1925)] =
-		     __state->ftnum[(i__2 = __state->findex - 1) < 5000 && 0 
-		    <= i__2 ? i__2 : s_rnge("ftnum", i__2, "zzdskbsr_", (
-		    ftnlen)1925)];
+		    i__1 : s_rnge(&__global_state->f2c, "bthfs", i__1, "zzds"
+		    "kbsr_", (ftnlen)1925)] = __state->ftnum[(i__2 = 
+		    __state->findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ftnum", i__2, "zzdskbsr_", (ftnlen)
+		    1925)];
 
 /*           Start a forward search through the current file. */
 
 	    __state->begsch = TRUE_;
-	    dlabfs_(&__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 
-		    <= i__1 ? i__1 : s_rnge("fthan", i__1, "zzdskbsr_", (
-		    ftnlen)1931)], dlalds, &__state->fnd);
-	    if (failed_()) {
-		chkout_("ZZDSKSNS", (ftnlen)8);
+	    dlabfs_(__global_state, &__state->fthan[(i__1 = __state->findex - 
+		    1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "fthan", i__1, "zzdskbsr_", (ftnlen)
+		    1931)], dlalds, &__state->fnd);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZDSKSNS", (ftnlen)8);
 		return 0;
 	    }
-	    s_copy(__state->status, "NEW SEGMENTS", (ftnlen)40, (ftnlen)12);
+	    s_copy(&__global_state->f2c, __state->status, "NEW SEGMENTS", (
+		    ftnlen)40, (ftnlen)12);
 
 /*           The cost of the list contributed by the new file is */
 /*           zero so far. */
 
 	    cost = 0;
-	} else if (s_cmp(__state->status, "NEW SEGMENTS", (ftnlen)40, (ftnlen)
-		12) == 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->status, "NEW SEGMENTS"
+		, (ftnlen)40, (ftnlen)12) == 0) {
 
 /*           New files are searched in forward order. Segments, when */
 /*           found, are inserted at the front of the list. */
@@ -2199,15 +2257,16 @@ L_zzdsksns:
 
 /*              Use the current DLA descriptor to look up the next one. */
 
-		dlafns_(&__state->fthan[(i__1 = __state->findex - 1) < 5000 &&
-			 0 <= i__1 ? i__1 : s_rnge("fthan", i__1, "zzdskbsr_",
-			 (ftnlen)1975)], dlalds, dlanxt, &__state->fnd);
+		dlafns_(__global_state, &__state->fthan[(i__1 = 
+			__state->findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge(&__global_state->f2c, "fthan", i__1, "zzdskbs"
+			"r_", (ftnlen)1975)], dlalds, dlanxt, &__state->fnd);
 		if (__state->fnd) {
-		    movei_(dlanxt, &__state->c__8, dlalds);
+		    movei_(__global_state, dlanxt, &__state->c__8, dlalds);
 		}
 	    }
-	    if (failed_()) {
-		chkout_("ZZDSKSNS", (ftnlen)8);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZDSKSNS", (ftnlen)8);
 		return 0;
 	    }
 	    if (! __state->fnd) {
@@ -2216,29 +2275,35 @@ L_zzdsksns:
 /*              whether we need to examine another new file, or */
 /*              whether we're ready to check the list. */
 
-		s_copy(__state->status, "?", (ftnlen)40, (ftnlen)1);
+		s_copy(&__global_state->f2c, __state->status, "?", (ftnlen)40,
+			 (ftnlen)1);
 		__state->btexp[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("btexp", i__1, "zzdskbsr_", (
-			ftnlen)1995)] = __state->btexp[(i__2 = 
-			__state->bindex - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("btexp", i__2, "zzdskbsr_", (ftnlen)1995)] + 
-			cost;
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "btexp", 
+			i__1, "zzdskbsr_", (ftnlen)1995)] = __state->btexp[(
+			i__2 = __state->bindex - 1) < 100 && 0 <= i__2 ? i__2 
+			: s_rnge(&__global_state->f2c, "btexp", i__2, "zzdsk"
+			"bsr_", (ftnlen)1995)] + cost;
 	    } else {
 
 /*              Get the DSK segment descriptor for the current */
 /*              segment. */
 
-		dskgd_(&__state->fthan[(i__1 = __state->findex - 1) < 5000 && 
-			0 <= i__1 ? i__1 : s_rnge("fthan", i__1, "zzdskbsr_", 
-			(ftnlen)2002)], dlalds, dsklds);
-		if (i_dnnt(&dsklds[1]) == __state->svbody) {
+		dskgd_(__global_state, &__state->fthan[(i__1 = 
+			__state->findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge(&__global_state->f2c, "fthan", i__1, "zzdskbs"
+			"r_", (ftnlen)2002)], dlalds, dsklds);
+		if (i_dnnt(&__global_state->f2c, &dsklds[1]) == 
+			__state->svbody) {
 
 /*                 The segment is for the body of interest. Add this */
 /*                 segment to the front of the list. */
 
-		    s_copy(doing, "NEW SEGMENTS", (ftnlen)40, (ftnlen)12);
-		    s_copy(urgent, "ADD TO FRONT", (ftnlen)40, (ftnlen)12);
-		    s_copy(__state->status, "SUSPEND", (ftnlen)40, (ftnlen)7);
+		    s_copy(&__global_state->f2c, doing, "NEW SEGMENTS", (
+			    ftnlen)40, (ftnlen)12);
+		    s_copy(&__global_state->f2c, urgent, "ADD TO FRONT", (
+			    ftnlen)40, (ftnlen)12);
+		    s_copy(&__global_state->f2c, __state->status, "SUSPEND", (
+			    ftnlen)40, (ftnlen)7);
 		}
 		++cost;
 	    }
@@ -2246,8 +2311,8 @@ L_zzdsksns:
 /*           If we haven't reset the status, we'll return for another */
 /*           'NEW SEGMENTS' pass. */
 
-	} else if (s_cmp(__state->status, "OLD FILES", (ftnlen)40, (ftnlen)9) 
-		== 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->status, "OLD FILES", (
+		ftnlen)40, (ftnlen)9) == 0) {
 
 /*           When old files must be searched (because the segments in */
 /*           the list are inadequate), they should be searched in */
@@ -2269,21 +2334,24 @@ L_zzdsksns:
 /*              have some files left that have not been searched. */
 	    __state->findex = __state->nft;
 	    while(__state->btlfs[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-		    i__1 ? i__1 : s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)
-		    2046)] <= __state->ftnum[(i__2 = __state->findex - 1) < 
-		    5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, "zzdskb"
-		    "sr_", (ftnlen)2046)]) {
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "btlfs", i__1, 
+		    "zzdskbsr_", (ftnlen)2046)] <= __state->ftnum[(i__2 = 
+		    __state->findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ftnum", i__2, "zzdskbsr_", (ftnlen)
+		    2046)]) {
 		--__state->findex;
 	    }
 	    __state->begsch = TRUE_;
-	    dlabbs_(&__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 
-		    <= i__1 ? i__1 : s_rnge("fthan", i__1, "zzdskbsr_", (
-		    ftnlen)2051)], dlalds, &__state->fnd);
-	    if (failed_()) {
-		chkout_("ZZDSKSNS", (ftnlen)8);
+	    dlabbs_(__global_state, &__state->fthan[(i__1 = __state->findex - 
+		    1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "fthan", i__1, "zzdskbsr_", (ftnlen)
+		    2051)], dlalds, &__state->fnd);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZDSKSNS", (ftnlen)8);
 		return 0;
 	    }
-	    s_copy(__state->status, "OLD SEGMENTS", (ftnlen)40, (ftnlen)12);
+	    s_copy(&__global_state->f2c, __state->status, "OLD SEGMENTS", (
+		    ftnlen)40, (ftnlen)12);
 
 /*           The next thing we'll do is search through all the segments */
 /*           of this file for those that applicable to this body. */
@@ -2298,8 +2366,8 @@ L_zzdsksns:
 /*        Each segment examined, whether applicable or not, adds to */
 /*        the expense of the list. */
 
-	} else if (s_cmp(__state->status, "OLD SEGMENTS", (ftnlen)40, (ftnlen)
-		12) == 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->status, "OLD SEGMENTS"
+		, (ftnlen)40, (ftnlen)12) == 0) {
 
 /*           There is only one way to get here---from the */
 /*           block 'OLD FILES'.  Note we do not add to the */
@@ -2316,15 +2384,16 @@ L_zzdsksns:
 
 /*              Look up the previous segment from this file. */
 
-		dlafps_(&__state->fthan[(i__1 = __state->findex - 1) < 5000 &&
-			 0 <= i__1 ? i__1 : s_rnge("fthan", i__1, "zzdskbsr_",
-			 (ftnlen)2093)], dlalds, dlaprv, &__state->fnd);
+		dlafps_(__global_state, &__state->fthan[(i__1 = 
+			__state->findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge(&__global_state->f2c, "fthan", i__1, "zzdskbs"
+			"r_", (ftnlen)2093)], dlalds, dlaprv, &__state->fnd);
 		if (__state->fnd) {
-		    movei_(dlaprv, &__state->c__8, dlalds);
+		    movei_(__global_state, dlaprv, &__state->c__8, dlalds);
 		}
 	    }
-	    if (failed_()) {
-		chkout_("ZZDSKSNS", (ftnlen)8);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZDSKSNS", (ftnlen)8);
 		return 0;
 	    }
 	    if (! __state->fnd) {
@@ -2335,43 +2404,50 @@ L_zzdsksns:
 /*              current list. */
 
 		__state->btlfs[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("btlfs", i__1, "zzdskbsr_", (
-			ftnlen)2116)] = __state->ftnum[(i__2 = 
-			__state->findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
-			s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)2116)];
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "btlfs", 
+			i__1, "zzdskbsr_", (ftnlen)2116)] = __state->ftnum[(
+			i__2 = __state->findex - 1) < 5000 && 0 <= i__2 ? 
+			i__2 : s_rnge(&__global_state->f2c, "ftnum", i__2, 
+			"zzdskbsr_", (ftnlen)2116)];
 		__state->btexp[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("btexp", i__1, "zzdskbsr_", (
-			ftnlen)2117)] = __state->btexp[(i__2 = 
-			__state->bindex - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("btexp", i__2, "zzdskbsr_", (ftnlen)2117)] + 
-			cost;
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "btexp", 
+			i__1, "zzdskbsr_", (ftnlen)2117)] = __state->btexp[(
+			i__2 = __state->bindex - 1) < 100 && 0 <= i__2 ? i__2 
+			: s_rnge(&__global_state->f2c, "btexp", i__2, "zzdsk"
+			"bsr_", (ftnlen)2117)] + cost;
 		p = __state->btbeg[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (
-			ftnlen)2118)];
-		s_copy(__state->status, "CHECK LIST", (ftnlen)40, (ftnlen)10);
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "btbeg", 
+			i__1, "zzdskbsr_", (ftnlen)2118)];
+		s_copy(&__global_state->f2c, __state->status, "CHECK LIST", (
+			ftnlen)40, (ftnlen)10);
 	    } else {
 
 /*              Get the DSK descriptor for this segment. */
 
-		dskgd_(&__state->fthan[(i__1 = __state->findex - 1) < 5000 && 
-			0 <= i__1 ? i__1 : s_rnge("fthan", i__1, "zzdskbsr_", 
-			(ftnlen)2125)], dlalds, dsklds);
-		if (failed_()) {
-		    chkout_("ZZDSKSNS", (ftnlen)8);
+		dskgd_(__global_state, &__state->fthan[(i__1 = 
+			__state->findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
+			s_rnge(&__global_state->f2c, "fthan", i__1, "zzdskbs"
+			"r_", (ftnlen)2125)], dlalds, dsklds);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZDSKSNS", (ftnlen)8);
 		    return 0;
 		}
-		if (i_dnnt(&dsklds[1]) == __state->svbody) {
+		if (i_dnnt(&__global_state->f2c, &dsklds[1]) == 
+			__state->svbody) {
 
 /*                 This is a segment for the body of interest. */
 
-		    s_copy(doing, "OLD SEGMENTS", (ftnlen)40, (ftnlen)12);
-		    s_copy(urgent, "ADD TO END", (ftnlen)40, (ftnlen)10);
-		    s_copy(__state->status, "SUSPEND", (ftnlen)40, (ftnlen)7);
+		    s_copy(&__global_state->f2c, doing, "OLD SEGMENTS", (
+			    ftnlen)40, (ftnlen)12);
+		    s_copy(&__global_state->f2c, urgent, "ADD TO END", (
+			    ftnlen)40, (ftnlen)10);
+		    s_copy(&__global_state->f2c, __state->status, "SUSPEND", (
+			    ftnlen)40, (ftnlen)7);
 		}
 		++cost;
 	    }
-	} else if (s_cmp(__state->status, "CHECK LIST", (ftnlen)40, (ftnlen)
-		10) == 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->status, "CHECK LIST", 
+		(ftnlen)40, (ftnlen)10) == 0) {
 
 /*           Okay, all the new files (and maybe an old file or two) */
 /*           have been searched. Time to look at the list of segments */
@@ -2395,22 +2471,27 @@ L_zzdsksns:
 
 
 	    while(p > 0) {
-		if ((*cmpfun)(&__state->sthan[(i__1 = p - 1) < 10000 && 0 <= 
-			i__1 ? i__1 : s_rnge("sthan", i__1, "zzdskbsr_", (
+		if ((*cmpfun)(__global_state, &__state->sthan[(i__1 = p - 1) <
+			 10000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "sthan", i__1, "zzdskbsr_", (
 			ftnlen)2171)], &__state->stdlad[(i__2 = (p << 3) - 8) 
-			< 80000 && 0 <= i__2 ? i__2 : s_rnge("stdlad", i__2, 
-			"zzdskbsr_", (ftnlen)2171)], &__state->stdskd[(i__3 = 
-			p * 24 - 24) < 240000 && 0 <= i__3 ? i__3 : s_rnge(
-			"stdskd", i__3, "zzdskbsr_", (ftnlen)2171)])) {
-		    movei_(&__state->stdlad[(i__1 = (p << 3) - 8) < 80000 && 
-			    0 <= i__1 ? i__1 : s_rnge("stdlad", i__1, "zzdsk"
-			    "bsr_", (ftnlen)2173)], &__state->c__8, dladsc);
-		    moved_(&__state->stdskd[(i__1 = p * 24 - 24) < 240000 && 
-			    0 <= i__1 ? i__1 : s_rnge("stdskd", i__1, "zzdsk"
-			    "bsr_", (ftnlen)2175)], &__state->c__24, dskdsc);
+			< 80000 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "stdlad", i__2, "zzdskbsr_", (
+			ftnlen)2171)], &__state->stdskd[(i__3 = p * 24 - 24) <
+			 240000 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "stdskd", i__3, "zzdskbsr_", (
+			ftnlen)2171)])) {
+		    movei_(__global_state, &__state->stdlad[(i__1 = (p << 3) 
+			    - 8) < 80000 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stdlad", i__1, "zzdskbsr_", 
+			    (ftnlen)2173)], &__state->c__8, dladsc);
+		    moved_(__global_state, &__state->stdskd[(i__1 = p * 24 - 
+			    24) < 240000 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stdskd", i__1, "zzdskbsr_", 
+			    (ftnlen)2175)], &__state->c__24, dskdsc);
 		    *handle = __state->sthan[(i__1 = p - 1) < 10000 && 0 <= 
-			    i__1 ? i__1 : s_rnge("sthan", i__1, "zzdskbsr_", (
-			    ftnlen)2177)];
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "sthan"
+			    , i__1, "zzdskbsr_", (ftnlen)2177)];
 		    *found = TRUE_;
 
 /*                 Go ahead and move the pointer up before returning */
@@ -2418,9 +2499,10 @@ L_zzdsksns:
 /*                 will start at the right place. */
 
 		    __state->savep = __state->stpool[(i__1 = (p << 1) + 10) < 
-			    20012 && 0 <= i__1 ? i__1 : s_rnge("stpool", i__1,
-			     "zzdskbsr_", (ftnlen)2184)];
-		    chkout_("ZZDSKSNS", (ftnlen)8);
+			    20012 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stpool", i__1, "zzdskbsr_", 
+			    (ftnlen)2184)];
+		    chkout_(__global_state, "ZZDSKSNS", (ftnlen)8);
 		    return 0;
 		}
 
@@ -2428,8 +2510,8 @@ L_zzdsksns:
 /*              to speed up the operation. */
 
 		p = __state->stpool[(i__1 = (p << 1) + 10) < 20012 && 0 <= 
-			i__1 ? i__1 : s_rnge("stpool", i__1, "zzdskbsr_", (
-			ftnlen)2196)];
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpool", 
+			i__1, "zzdskbsr_", (ftnlen)2196)];
 	    }
 
 /*           If we're still here we didn't have information for this */
@@ -2439,14 +2521,16 @@ L_zzdsksns:
 /*           Otherwise, things are hopeless, set the status that way. */
 
 	    if (__state->btlfs[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-		    i__1 ? i__1 : s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)
-		    2207)] > __state->ftnum[0]) {
-		s_copy(__state->status, "OLD FILES", (ftnlen)40, (ftnlen)9);
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "btlfs", i__1, 
+		    "zzdskbsr_", (ftnlen)2207)] > __state->ftnum[0]) {
+		s_copy(&__global_state->f2c, __state->status, "OLD FILES", (
+			ftnlen)40, (ftnlen)9);
 	    } else {
-		s_copy(__state->status, "HOPELESS", (ftnlen)40, (ftnlen)8);
+		s_copy(&__global_state->f2c, __state->status, "HOPELESS", (
+			ftnlen)40, (ftnlen)8);
 	    }
-	} else if (s_cmp(__state->status, "MAKE ROOM", (ftnlen)40, (ftnlen)9) 
-		== 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->status, "MAKE ROOM", (
+		ftnlen)40, (ftnlen)9) == 0) {
 
 /*           When adding a new segment to a full table, one of the */
 /*           current bodies must be dropped.  The ideal */
@@ -2480,14 +2564,15 @@ L_zzdsksns:
 /*           be the index of the "cheapest" segment list in the */
 /*           body table. */
 
-	    minexp = intmax_();
+	    minexp = intmax_(__global_state);
 	    cheap = 0;
 	    i__1 = __state->nbt;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 		if (i__ != __state->bindex) {
 		    if (__state->btexp[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-			    i__2 : s_rnge("btexp", i__2, "zzdskbsr_", (ftnlen)
-			    2257)] < minexp || cheap == 0) {
+			    i__2 : s_rnge(&__global_state->f2c, "btexp", i__2,
+			     "zzdskbsr_", (ftnlen)2257)] < minexp || cheap == 
+			    0) {
 
 /*                    This list is the cheapest seen so far, */
 /*                    possibly because it's the first one */
@@ -2496,8 +2581,8 @@ L_zzdsksns:
 
 			cheap = i__;
 			minexp = __state->btexp[(i__2 = i__ - 1) < 100 && 0 <=
-				 i__2 ? i__2 : s_rnge("btexp", i__2, "zzdskb"
-				"sr_", (ftnlen)2266)];
+				 i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+				"btexp", i__2, "zzdskbsr_", (ftnlen)2266)];
 		    }
 		}
 	    }
@@ -2507,10 +2592,11 @@ L_zzdsksns:
 /*              Do depends on the task that was suspended before */
 /*              entering MAKE ROOM. */
 
-		if (s_cmp(stack + ((i__1 = __state->top - 1) < 2 && 0 <= i__1 
-			? i__1 : s_rnge("stack", i__1, "zzdskbsr_", (ftnlen)
-			2281)) * 40, "ADD TO END", (ftnlen)40, (ftnlen)10) == 
-			0) {
+		if (s_cmp(&__global_state->f2c, stack + ((i__1 = __state->top 
+			- 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stack", i__1, "zzdskbsr_", (
+			ftnlen)2281)) * 40, "ADD TO END", (ftnlen)40, (ftnlen)
+			10) == 0) {
 
 /*                 The segment meta-data from the current file cannot */
 /*                 be buffered. */
@@ -2531,27 +2617,30 @@ L_zzdsksns:
 /*                 deleted from the body table. */
 
 		    head = __state->btbeg[(i__1 = __state->bindex - 1) < 100 
-			    && 0 <= i__1 ? i__1 : s_rnge("btbeg", i__1, "zzd"
-			    "skbsr_", (ftnlen)2301)];
-		    tail = -lnkprv_(&head, __state->stpool);
+			    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+			     "btbeg", i__1, "zzdskbsr_", (ftnlen)2301)];
+		    tail = -lnkprv_(__global_state, &head, __state->stpool);
 		    node = tail;
 		    while(node > 0) {
 
 /*                    Let PRVNOD be the predecessor of NODE. PRVNOD may */
 /*                    be negative (actually, a pointer to the list tail). */
 
-			prvnod = lnkprv_(&node, __state->stpool);
+			prvnod = lnkprv_(__global_state, &node, 
+				__state->stpool);
 			if (__state->sthan[(i__1 = node - 1) < 10000 && 0 <= 
-				i__1 ? i__1 : s_rnge("sthan", i__1, "zzdskbs"
-				"r_", (ftnlen)2313)] == __state->fthan[(i__2 = 
-				__state->findex - 1) < 5000 && 0 <= i__2 ? 
-				i__2 : s_rnge("fthan", i__2, "zzdskbsr_", (
-				ftnlen)2313)]) {
+				i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"sthan", i__1, "zzdskbsr_", (ftnlen)2313)] == 
+				__state->fthan[(i__2 = __state->findex - 1) < 
+				5000 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "fthan", i__2, "zzdskbs"
+				"r_", (ftnlen)2313)]) {
 
 /*                       This segment is from the file we were */
 /*                       searching when we ran out of room. Free */
 /*                       the segment list entry at index NODE. */
-			    lnkfsl_(&node, &node, __state->stpool);
+			    lnkfsl_(__global_state, &node, &node, 
+				    __state->stpool);
 			    if (node == head) {
 
 /*                          We just deleted the last remaining node in */
@@ -2587,19 +2676,20 @@ L_zzdsksns:
 /*                 Make sure that a new search is started before this */
 /*                 routine is called again. */
 
-		    s_copy(__state->status, "HOPELESS", (ftnlen)40, (ftnlen)8)
-			    ;
+		    s_copy(&__global_state->f2c, __state->status, "HOPELESS", 
+			    (ftnlen)40, (ftnlen)8);
 		    __state->top = 0;
 
 /*                 It's finally time to signal the error. */
 
-		    setmsg_("ZZDSKSNS ran out of segment table room while tr"
-			    "ying to append to the tail of the segment list f"
-			    "or body #. Current state is ADD TO END.", (ftnlen)
-			    134);
-		    errint_("#", &__state->svbody, (ftnlen)1);
-		    sigerr_("SPICE(BUFFEROVERFLOW)", (ftnlen)21);
-		    chkout_("ZZDSKSNS", (ftnlen)8);
+		    setmsg_(__global_state, "ZZDSKSNS ran out of segment tab"
+			    "le room while trying to append to the tail of th"
+			    "e segment list for body #. Current state is ADD "
+			    "TO END.", (ftnlen)134);
+		    errint_(__global_state, "#", &__state->svbody, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUFFEROVERFLOW)", (ftnlen)
+			    21);
+		    chkout_(__global_state, "ZZDSKSNS", (ftnlen)8);
 		    return 0;
 		} else {
 
@@ -2614,31 +2704,32 @@ L_zzdsksns:
 /*                 Note this list is non-empty. */
 
 		    p = __state->btbeg[(i__1 = __state->bindex - 1) < 100 && 
-			    0 <= i__1 ? i__1 : s_rnge("btbeg", i__1, "zzdskb"
-			    "sr_", (ftnlen)2384)];
-		    tail = -lnkprv_(&p, __state->stpool);
-		    lnkfsl_(&p, &tail, __state->stpool);
+			    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			    "btbeg", i__1, "zzdskbsr_", (ftnlen)2384)];
+		    tail = -lnkprv_(__global_state, &p, __state->stpool);
+		    lnkfsl_(__global_state, &p, &tail, __state->stpool);
 
 /*                 Re-initialize the table for this body, and */
 /*                 initiate an 'OLD FILES' search, just as in 'NEW */
 /*                 BODY'. */
 
 		    __state->btexp[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			    i__1 ? i__1 : s_rnge("btexp", i__1, "zzdskbsr_", (
-			    ftnlen)2393)] = 0;
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "btexp"
+			    , i__1, "zzdskbsr_", (ftnlen)2393)] = 0;
 		    __state->bthfs[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			    i__1 ? i__1 : s_rnge("bthfs", i__1, "zzdskbsr_", (
-			    ftnlen)2394)] = __state->ftnum[(i__2 = 
-			    __state->nft - 1) < 5000 && 0 <= i__2 ? i__2 : 
-			    s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)2394)];
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "bthfs"
+			    , i__1, "zzdskbsr_", (ftnlen)2394)] = 
+			    __state->ftnum[(i__2 = __state->nft - 1) < 5000 &&
+			     0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			    "ftnum", i__2, "zzdskbsr_", (ftnlen)2394)];
 		    __state->btlfs[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			    i__1 ? i__1 : s_rnge("btlfs", i__1, "zzdskbsr_", (
-			    ftnlen)2395)] = __state->ftnum[(i__2 = 
-			    __state->nft - 1) < 5000 && 0 <= i__2 ? i__2 : 
-			    s_rnge("ftnum", i__2, "zzdskbsr_", (ftnlen)2395)] 
-			    + 1;
-		    s_copy(__state->status, "OLD FILES", (ftnlen)40, (ftnlen)
-			    9);
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "btlfs"
+			    , i__1, "zzdskbsr_", (ftnlen)2395)] = 
+			    __state->ftnum[(i__2 = __state->nft - 1) < 5000 &&
+			     0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			    "ftnum", i__2, "zzdskbsr_", (ftnlen)2395)] + 1;
+		    s_copy(&__global_state->f2c, __state->status, "OLD FILES",
+			     (ftnlen)40, (ftnlen)9);
 		}
 
 /*              Unwind the stack; we've set the target states already. */
@@ -2650,11 +2741,11 @@ L_zzdsksns:
 /*              list could be empty. */
 
 		head = __state->btbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
-			i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)
-			2411)];
+			i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1, 
+			"zzdskbsr_", (ftnlen)2411)];
 		if (head > 0) {
-		    tail = -lnkprv_(&head, __state->stpool);
-		    lnkfsl_(&head, &tail, __state->stpool);
+		    tail = -lnkprv_(__global_state, &head, __state->stpool);
+		    lnkfsl_(__global_state, &head, &tail, __state->stpool);
 		}
 
 /*              Fill the deleted body's space in the table with */
@@ -2662,30 +2753,35 @@ L_zzdsksns:
 
 		if (cheap != __state->nbt) {
 		    __state->btbod[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btbod", i__1, "zzdskbsr_", (ftnlen)
-			    2427)] = __state->btbod[(i__2 = __state->nbt - 1) 
-			    < 100 && 0 <= i__2 ? i__2 : s_rnge("btbod", i__2, 
-			    "zzdskbsr_", (ftnlen)2427)];
+			    i__1 : s_rnge(&__global_state->f2c, "btbod", i__1,
+			     "zzdskbsr_", (ftnlen)2427)] = __state->btbod[(
+			    i__2 = __state->nbt - 1) < 100 && 0 <= i__2 ? 
+			    i__2 : s_rnge(&__global_state->f2c, "btbod", i__2,
+			     "zzdskbsr_", (ftnlen)2427)];
 		    __state->btexp[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btexp", i__1, "zzdskbsr_", (ftnlen)
-			    2428)] = __state->btexp[(i__2 = __state->nbt - 1) 
-			    < 100 && 0 <= i__2 ? i__2 : s_rnge("btexp", i__2, 
-			    "zzdskbsr_", (ftnlen)2428)];
+			    i__1 : s_rnge(&__global_state->f2c, "btexp", i__1,
+			     "zzdskbsr_", (ftnlen)2428)] = __state->btexp[(
+			    i__2 = __state->nbt - 1) < 100 && 0 <= i__2 ? 
+			    i__2 : s_rnge(&__global_state->f2c, "btexp", i__2,
+			     "zzdskbsr_", (ftnlen)2428)];
 		    __state->bthfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
-			    i__1 : s_rnge("bthfs", i__1, "zzdskbsr_", (ftnlen)
-			    2429)] = __state->bthfs[(i__2 = __state->nbt - 1) 
-			    < 100 && 0 <= i__2 ? i__2 : s_rnge("bthfs", i__2, 
-			    "zzdskbsr_", (ftnlen)2429)];
+			    i__1 : s_rnge(&__global_state->f2c, "bthfs", i__1,
+			     "zzdskbsr_", (ftnlen)2429)] = __state->bthfs[(
+			    i__2 = __state->nbt - 1) < 100 && 0 <= i__2 ? 
+			    i__2 : s_rnge(&__global_state->f2c, "bthfs", i__2,
+			     "zzdskbsr_", (ftnlen)2429)];
 		    __state->btlfs[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btlfs", i__1, "zzdskbsr_", (ftnlen)
-			    2430)] = __state->btlfs[(i__2 = __state->nbt - 1) 
-			    < 100 && 0 <= i__2 ? i__2 : s_rnge("btlfs", i__2, 
-			    "zzdskbsr_", (ftnlen)2430)];
+			    i__1 : s_rnge(&__global_state->f2c, "btlfs", i__1,
+			     "zzdskbsr_", (ftnlen)2430)] = __state->btlfs[(
+			    i__2 = __state->nbt - 1) < 100 && 0 <= i__2 ? 
+			    i__2 : s_rnge(&__global_state->f2c, "btlfs", i__2,
+			     "zzdskbsr_", (ftnlen)2430)];
 		    __state->btbeg[(i__1 = cheap - 1) < 100 && 0 <= i__1 ? 
-			    i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (ftnlen)
-			    2431)] = __state->btbeg[(i__2 = __state->nbt - 1) 
-			    < 100 && 0 <= i__2 ? i__2 : s_rnge("btbeg", i__2, 
-			    "zzdskbsr_", (ftnlen)2431)];
+			    i__1 : s_rnge(&__global_state->f2c, "btbeg", i__1,
+			     "zzdskbsr_", (ftnlen)2431)] = __state->btbeg[(
+			    i__2 = __state->nbt - 1) < 100 && 0 <= i__2 ? 
+			    i__2 : s_rnge(&__global_state->f2c, "btbeg", i__2,
+			     "zzdskbsr_", (ftnlen)2431)];
 		}
 		if (__state->bindex == __state->nbt) {
 		    __state->bindex = cheap;
@@ -2694,7 +2790,8 @@ L_zzdsksns:
 /*              One less body now. */
 
 		--__state->nbt;
-		s_copy(__state->status, "RESUME", (ftnlen)40, (ftnlen)6);
+		s_copy(&__global_state->f2c, __state->status, "RESUME", (
+			ftnlen)40, (ftnlen)6);
 	    }
 
 /*           At this point, we either made room by freeing a non-empty */
@@ -2703,8 +2800,8 @@ L_zzdsksns:
 /*           In the former case, the state is 'RESUME'; in the latter, */
 /*           it's 'OLD FILES'. */
 
-	} else if (s_cmp(__state->status, "ADD TO FRONT", (ftnlen)40, (ftnlen)
-		12) == 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->status, "ADD TO FRONT"
+		, (ftnlen)40, (ftnlen)12) == 0) {
 
 /*           The current segment information should be linked in at */
 /*           the head of the segment list for the current body, */
@@ -2713,49 +2810,57 @@ L_zzdsksns:
 
 /*           The only way to get here is from the block NEW SEGMENTS */
 /*           after suspending that task. */
-	    if (lnknfn_(__state->stpool) == 0) {
-		s_copy(doing, "ADD TO FRONT", (ftnlen)40, (ftnlen)12);
-		s_copy(urgent, "MAKE ROOM", (ftnlen)40, (ftnlen)9);
-		s_copy(__state->status, "SUSPEND", (ftnlen)40, (ftnlen)7);
+	    if (lnknfn_(__global_state, __state->stpool) == 0) {
+		s_copy(&__global_state->f2c, doing, "ADD TO FRONT", (ftnlen)
+			40, (ftnlen)12);
+		s_copy(&__global_state->f2c, urgent, "MAKE ROOM", (ftnlen)40, 
+			(ftnlen)9);
+		s_copy(&__global_state->f2c, __state->status, "SUSPEND", (
+			ftnlen)40, (ftnlen)7);
 	    } else {
 
 /*              Allocate a node and link it to the front of the list */
 /*              for the current body. */
 
-		lnkan_(__state->stpool, &new__);
+		lnkan_(__global_state, __state->stpool, &new__);
 		__state->sthan[(i__1 = new__ - 1) < 10000 && 0 <= i__1 ? i__1 
-			: s_rnge("sthan", i__1, "zzdskbsr_", (ftnlen)2478)] = 
-			__state->fthan[(i__2 = __state->findex - 1) < 5000 && 
-			0 <= i__2 ? i__2 : s_rnge("fthan", i__2, "zzdskbsr_", 
-			(ftnlen)2478)];
+			: s_rnge(&__global_state->f2c, "sthan", i__1, "zzdsk"
+			"bsr_", (ftnlen)2478)] = __state->fthan[(i__2 = 
+			__state->findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
+			s_rnge(&__global_state->f2c, "fthan", i__2, "zzdskbs"
+			"r_", (ftnlen)2478)];
 
 /*              Store the DLA and DSK descriptors for this segment in */
 /*              the segment table. */
 
-		movei_(dlalds, &__state->c__8, &__state->stdlad[(i__1 = (
-			new__ << 3) - 8) < 80000 && 0 <= i__1 ? i__1 : s_rnge(
-			"stdlad", i__1, "zzdskbsr_", (ftnlen)2483)]);
-		moved_(dsklds, &__state->c__24, &__state->stdskd[(i__1 = 
-			new__ * 24 - 24) < 240000 && 0 <= i__1 ? i__1 : 
-			s_rnge("stdskd", i__1, "zzdskbsr_", (ftnlen)2484)]);
-		if (failed_()) {
-		    chkout_("ZZDSKSNS", (ftnlen)8);
+		movei_(__global_state, dlalds, &__state->c__8, &
+			__state->stdlad[(i__1 = (new__ << 3) - 8) < 80000 && 
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "std"
+			"lad", i__1, "zzdskbsr_", (ftnlen)2483)]);
+		moved_(__global_state, dsklds, &__state->c__24, &
+			__state->stdskd[(i__1 = new__ * 24 - 24) < 240000 && 
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "std"
+			"skd", i__1, "zzdskbsr_", (ftnlen)2484)]);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZDSKSNS", (ftnlen)8);
 		    return 0;
 		}
 
 /*              If the current list is empty, this append operation */
 /*              is a no-op. */
 
-		lnkilb_(&new__, &__state->btbeg[(i__1 = __state->bindex - 1) <
-			 100 && 0 <= i__1 ? i__1 : s_rnge("btbeg", i__1, 
-			"zzdskbsr_", (ftnlen)2495)], __state->stpool);
+		lnkilb_(__global_state, &new__, &__state->btbeg[(i__1 = 
+			__state->bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge(&__global_state->f2c, "btbeg", i__1, "zzdskbs"
+			"r_", (ftnlen)2495)], __state->stpool);
 		__state->btbeg[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (
-			ftnlen)2496)] = new__;
-		s_copy(__state->status, "RESUME", (ftnlen)40, (ftnlen)6);
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "btbeg", 
+			i__1, "zzdskbsr_", (ftnlen)2496)] = new__;
+		s_copy(&__global_state->f2c, __state->status, "RESUME", (
+			ftnlen)40, (ftnlen)6);
 	    }
-	} else if (s_cmp(__state->status, "ADD TO END", (ftnlen)40, (ftnlen)
-		10) == 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->status, "ADD TO END", 
+		(ftnlen)40, (ftnlen)10) == 0) {
 
 /*           The current segment information should be linked in at */
 /*           the tail of the segment list for the current body. */
@@ -2763,73 +2868,83 @@ L_zzdsksns:
 /*           The only way to get to this task is from the OLD SEGMENTS */
 /*           block after suspending that task. */
 
-	    if (lnknfn_(__state->stpool) == 0) {
-		s_copy(doing, "ADD TO END", (ftnlen)40, (ftnlen)10);
-		s_copy(urgent, "MAKE ROOM", (ftnlen)40, (ftnlen)9);
-		s_copy(__state->status, "SUSPEND", (ftnlen)40, (ftnlen)7);
+	    if (lnknfn_(__global_state, __state->stpool) == 0) {
+		s_copy(&__global_state->f2c, doing, "ADD TO END", (ftnlen)40, 
+			(ftnlen)10);
+		s_copy(&__global_state->f2c, urgent, "MAKE ROOM", (ftnlen)40, 
+			(ftnlen)9);
+		s_copy(&__global_state->f2c, __state->status, "SUSPEND", (
+			ftnlen)40, (ftnlen)7);
 	    } else {
 
 /*              Allocate a new node in the segment table pool. */
 
-		lnkan_(__state->stpool, &new__);
+		lnkan_(__global_state, __state->stpool, &new__);
 		__state->sthan[(i__1 = new__ - 1) < 10000 && 0 <= i__1 ? i__1 
-			: s_rnge("sthan", i__1, "zzdskbsr_", (ftnlen)2523)] = 
-			__state->fthan[(i__2 = __state->findex - 1) < 5000 && 
-			0 <= i__2 ? i__2 : s_rnge("fthan", i__2, "zzdskbsr_", 
-			(ftnlen)2523)];
+			: s_rnge(&__global_state->f2c, "sthan", i__1, "zzdsk"
+			"bsr_", (ftnlen)2523)] = __state->fthan[(i__2 = 
+			__state->findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
+			s_rnge(&__global_state->f2c, "fthan", i__2, "zzdskbs"
+			"r_", (ftnlen)2523)];
 
 /*              Store the DLA and DSK descriptors for this segment in */
 /*              the segment table. */
 
-		movei_(dlalds, &__state->c__8, &__state->stdlad[(i__1 = (
-			new__ << 3) - 8) < 80000 && 0 <= i__1 ? i__1 : s_rnge(
-			"stdlad", i__1, "zzdskbsr_", (ftnlen)2529)]);
-		moved_(dsklds, &__state->c__24, &__state->stdskd[(i__1 = 
-			new__ * 24 - 24) < 240000 && 0 <= i__1 ? i__1 : 
-			s_rnge("stdskd", i__1, "zzdskbsr_", (ftnlen)2530)]);
-		if (failed_()) {
-		    chkout_("ZZDSKSNS", (ftnlen)8);
+		movei_(__global_state, dlalds, &__state->c__8, &
+			__state->stdlad[(i__1 = (new__ << 3) - 8) < 80000 && 
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "std"
+			"lad", i__1, "zzdskbsr_", (ftnlen)2529)]);
+		moved_(__global_state, dsklds, &__state->c__24, &
+			__state->stdskd[(i__1 = new__ * 24 - 24) < 240000 && 
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "std"
+			"skd", i__1, "zzdskbsr_", (ftnlen)2530)]);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZDSKSNS", (ftnlen)8);
 		    return 0;
 		}
 		if (__state->btbeg[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (
-			ftnlen)2537)] <= 0) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "btbeg", 
+			i__1, "zzdskbsr_", (ftnlen)2537)] <= 0) {
 
 /*                 This is the first node in the list for this */
 /*                 body. */
 
 		    __state->btbeg[(i__1 = __state->bindex - 1) < 100 && 0 <= 
-			    i__1 ? i__1 : s_rnge("btbeg", i__1, "zzdskbsr_", (
-			    ftnlen)2542)] = new__;
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "btbeg"
+			    , i__1, "zzdskbsr_", (ftnlen)2542)] = new__;
 		} else {
 
 /*                 Link the new node to the tail of the list. */
 
-		    tail = -lnkprv_(&__state->btbeg[(i__1 = __state->bindex - 
-			    1) < 100 && 0 <= i__1 ? i__1 : s_rnge("btbeg", 
-			    i__1, "zzdskbsr_", (ftnlen)2548)], 
-			    __state->stpool);
-		    lnkila_(&tail, &new__, __state->stpool);
+		    tail = -lnkprv_(__global_state, &__state->btbeg[(i__1 = 
+			    __state->bindex - 1) < 100 && 0 <= i__1 ? i__1 : 
+			    s_rnge(&__global_state->f2c, "btbeg", i__1, "zzd"
+			    "skbsr_", (ftnlen)2548)], __state->stpool);
+		    lnkila_(__global_state, &tail, &new__, __state->stpool);
 		}
-		s_copy(__state->status, "RESUME", (ftnlen)40, (ftnlen)6);
+		s_copy(&__global_state->f2c, __state->status, "RESUME", (
+			ftnlen)40, (ftnlen)6);
 	    }
-	} else if (s_cmp(__state->status, "SUSPEND", (ftnlen)40, (ftnlen)7) ==
-		 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->status, "SUSPEND", (
+		ftnlen)40, (ftnlen)7) == 0) {
 
 /*           When a task is suspended, the current activity is placed on */
 /*           a stack, to be restored later. Two levels are provided, */
 /*           since some interrupts can be interrupted by others. */
 
 	    ++__state->top;
-	    s_copy(stack + ((i__1 = __state->top - 1) < 2 && 0 <= i__1 ? i__1 
-		    : s_rnge("stack", i__1, "zzdskbsr_", (ftnlen)2565)) * 40, 
-		    doing, (ftnlen)40, (ftnlen)40);
-	    s_copy(__state->status, urgent, (ftnlen)40, (ftnlen)40);
-	} else if (s_cmp(__state->status, "RESUME", (ftnlen)40, (ftnlen)6) == 
-		0) {
-	    s_copy(__state->status, stack + ((i__1 = __state->top - 1) < 2 && 
-		    0 <= i__1 ? i__1 : s_rnge("stack", i__1, "zzdskbsr_", (
-		    ftnlen)2570)) * 40, (ftnlen)40, (ftnlen)40);
+	    s_copy(&__global_state->f2c, stack + ((i__1 = __state->top - 1) < 
+		    2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "stack", i__1, "zzdskbsr_", (ftnlen)2565)) * 40, doing, (
+		    ftnlen)40, (ftnlen)40);
+	    s_copy(&__global_state->f2c, __state->status, urgent, (ftnlen)40, 
+		    (ftnlen)40);
+	} else if (s_cmp(&__global_state->f2c, __state->status, "RESUME", (
+		ftnlen)40, (ftnlen)6) == 0) {
+	    s_copy(&__global_state->f2c, __state->status, stack + ((i__1 = 
+		    __state->top - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "stack", i__1, "zzdskbsr_", (ftnlen)
+		    2570)) * 40, (ftnlen)40, (ftnlen)40);
 	    --__state->top;
 	}
     }
@@ -2838,7 +2953,7 @@ L_zzdsksns:
 /*     segment was not found. */
 
     *found = FALSE_;
-    chkout_("ZZDSKSNS", (ftnlen)8);
+    chkout_(__global_state, "ZZDSKSNS", (ftnlen)8);
     return 0;
 /* $Procedure ZZDSKCHK ( DSK, check for file updates ) */
 
@@ -2987,52 +3102,55 @@ L_zzdskchk:
 /*     None. */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKCHK", (ftnlen)8);
-    zzctrchk_(__state->dskctr, usrctr, update);
-    chkout_("ZZDSKCHK", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKCHK", (ftnlen)8);
+    zzctrchk_(__global_state, __state->dskctr, usrctr, update);
+    chkout_(__global_state, "ZZDSKCHK", (ftnlen)8);
     return 0;
 } /* zzdskbsr_ */
 
-/* Subroutine */ int zzdskbsr_(char *fname, integer *bodyid, integer *handle, 
-	L_fp cmpfun, integer *usrctr, logical *update, integer *dladsc, 
-	doublereal *dskdsc, logical *found, ftnlen fname_len)
+/* Subroutine */ int zzdskbsr_(cspice_t* __global_state, char *fname, integer 
+	*bodyid, integer *handle, L_fp cmpfun, integer *usrctr, logical *
+	update, integer *dladsc, doublereal *dskdsc, logical *found, ftnlen 
+	fname_len)
 {
     return zzdskbsr_0_(0, fname, bodyid, handle, cmpfun, usrctr, update, 
 	    dladsc, dskdsc, found, fname_len);
     }
 
-/* Subroutine */ int zzdsklsf_(char *fname, integer *handle, ftnlen fname_len)
+/* Subroutine */ int zzdsklsf_(cspice_t* __global_state, char *fname, integer 
+	*handle, ftnlen fname_len)
 {
     return zzdskbsr_0_(1, fname, (integer *)0, handle, (L_fp)0, (integer *)0, 
 	    (logical *)0, (integer *)0, (doublereal *)0, (logical *)0, 
 	    fname_len);
     }
 
-/* Subroutine */ int zzdskusf_(integer *handle)
+/* Subroutine */ int zzdskusf_(cspice_t* __global_state, integer *handle)
 {
     return zzdskbsr_0_(2, (char *)0, (integer *)0, handle, (L_fp)0, (integer *
 	    )0, (logical *)0, (integer *)0, (doublereal *)0, (logical *)0, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int zzdskbss_(integer *bodyid)
+/* Subroutine */ int zzdskbss_(cspice_t* __global_state, integer *bodyid)
 {
     return zzdskbsr_0_(3, (char *)0, bodyid, (integer *)0, (L_fp)0, (integer *
 	    )0, (logical *)0, (integer *)0, (doublereal *)0, (logical *)0, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int zzdsksns_(L_fp cmpfun, integer *handle, integer *dladsc, 
-	doublereal *dskdsc, logical *found)
+/* Subroutine */ int zzdsksns_(cspice_t* __global_state, L_fp cmpfun, integer 
+	*handle, integer *dladsc, doublereal *dskdsc, logical *found)
 {
     return zzdskbsr_0_(4, (char *)0, (integer *)0, handle, cmpfun, (integer *)
 	    0, (logical *)0, dladsc, dskdsc, found, (ftnint)0);
     }
 
-/* Subroutine */ int zzdskchk_(integer *usrctr, logical *update)
+/* Subroutine */ int zzdskchk_(cspice_t* __global_state, integer *usrctr, 
+	logical *update)
 {
     return zzdskbsr_0_(5, (char *)0, (integer *)0, (integer *)0, (L_fp)0, 
 	    usrctr, update, (integer *)0, (doublereal *)0, (logical *)0, (

@@ -8,33 +8,34 @@
 
 
 typedef int zzgfrrq_state_t;
-static zzgfrrq_state_t* get_zzgfrrq_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfrrq_state_t* get_zzgfrrq_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZGFRRQ ( Private - GF, range rate between objects ) */
-/* Subroutine */ int zzgfrrq_(doublereal *et, integer *targ, integer *obs, 
-	char *abcorr, doublereal *value, ftnlen abcorr_len)
+/* Subroutine */ int zzgfrrq_(cspice_t* __global_state, doublereal *et, 
+	integer *targ, integer *obs, char *abcorr, doublereal *value, ftnlen 
+	abcorr_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal state[6];
-    extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
-	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int spkez_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
     doublereal lt;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern doublereal dvnorm_(doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern doublereal dvnorm_(cspice_t*, doublereal *);
+    extern logical return_(cspice_t*);
     char ref[5];
 
 
     /* Module state */
-    zzgfrrq_state_t* __state = get_zzgfrrq_state();
+    zzgfrrq_state_t* __state = get_zzgfrrq_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -210,30 +211,31 @@ static zzgfrrq_state_t* get_zzgfrrq_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZGFRRQ", (ftnlen)7);
+	chkin_(__global_state, "ZZGFRRQ", (ftnlen)7);
     }
 
 /*     We just want the range rate of TARG relative to OBS. */
 /*     This calculation is invariant with respect to reference */
 /*     frame; we use 'J2000'. */
 
-    s_copy(ref, "J2000", (ftnlen)5, (ftnlen)5);
-    spkez_(targ, et, ref, abcorr, obs, state, &lt, (ftnlen)5, abcorr_len);
-    if (failed_()) {
-	chkout_("ZZGFRRQ", (ftnlen)7);
+    s_copy(&__global_state->f2c, ref, "J2000", (ftnlen)5, (ftnlen)5);
+    spkez_(__global_state, targ, et, ref, abcorr, obs, state, &lt, (ftnlen)5, 
+	    abcorr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFRRQ", (ftnlen)7);
 	return 0;
     }
 
 /*     Calculate the derivative from the STATE vector. */
 
-    *value = dvnorm_(state);
+    *value = dvnorm_(__global_state, state);
 
 /*     All done. */
 
-    chkout_("ZZGFRRQ", (ftnlen)7);
+    chkout_(__global_state, "ZZGFRRQ", (ftnlen)7);
     return 0;
 } /* zzgfrrq_ */
 

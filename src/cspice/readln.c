@@ -8,8 +8,7 @@
 
 
 extern readln_init_t __readln_init;
-static readln_state_t* get_readln_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline readln_state_t* get_readln_state(cspice_t* state) {
 	if (!state->readln)
 		state->readln = __cspice_allocate_module(sizeof(
 	readln_state_t), &__readln_init, sizeof(__readln_init));
@@ -18,27 +17,28 @@ static readln_state_t* get_readln_state() {
 }
 
 /* $Procedure      READLN ( Read a text line from a logical unit ) */
-/* Subroutine */ int readln_(integer *unit, char *line, logical *eof, ftnlen 
-	line_len)
+/* Subroutine */ int readln_(cspice_t* __global_state, integer *unit, char *
+	line, logical *eof, ftnlen line_len)
 {
     /* System generated locals */
     cilist ci__1;
 
     /* Builtin functions */
-    integer s_rsfe(cilist *), do_fio(integer *, char *, ftnlen), e_rsfe(void);
+    integer s_rsfe(f2c_state_t*, cilist *), do_fio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rsfe(f2c_state_t*);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    readln_state_t* __state = get_readln_state();
+    readln_state_t* __state = get_readln_state(__global_state);
 /* $ Abstract */
 
 /*     This routine will read a single line of text from the Fortran */
@@ -194,26 +194,27 @@ static readln_state_t* get_readln_state() {
     ci__1.ciend = 1;
     ci__1.ciunit = *unit;
     ci__1.cifmt = "(A)";
-    iostat = s_rsfe(&ci__1);
+    iostat = s_rsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&__state->c__1, line, line_len);
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, line_len);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rsfe();
+    iostat = e_rsfe(&__global_state->f2c);
 L100001:
 
 /*     Check to see if we got a read error, and signal it if we did. */
 
     if (iostat > 0) {
-	chkin_("READLN", (ftnlen)6);
-	setmsg_("Error reading from file: #. IOSTAT = #.", (ftnlen)39);
-	errfnm_("#", unit, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("READLN", (ftnlen)6);
+	chkin_(__global_state, "READLN", (ftnlen)6);
+	setmsg_(__global_state, "Error reading from file: #. IOSTAT = #.", (
+		ftnlen)39);
+	errfnm_(__global_state, "#", unit, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "READLN", (ftnlen)6);
 	return 0;
     }
 

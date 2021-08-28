@@ -8,8 +8,7 @@
 
 
 extern benum_init_t __benum_init;
-static benum_state_t* get_benum_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline benum_state_t* get_benum_state(cspice_t* state) {
 	if (!state->benum)
 		state->benum = __cspice_allocate_module(sizeof(benum_state_t),
 	 &__benum_init, sizeof(__benum_init));
@@ -18,26 +17,27 @@ static benum_state_t* get_benum_state() {
 }
 
 /* $Procedure            BENUM  ( Be a number? ) */
-logical benum_(char *string, ftnlen string_len)
+logical benum_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
-    extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
-    extern logical bedec_(char *, ftnlen);
+    extern integer cpos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen)
+	    ;
+    extern logical bedec_(cspice_t*, char *, ftnlen);
     integer d__;
     integer e;
     integer f;
     integer l;
-    extern logical beint_(char *, ftnlen);
+    extern logical beint_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    benum_state_t* __state = get_benum_state();
+    benum_state_t* __state = get_benum_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether a string represents a number. */
@@ -204,8 +204,9 @@ logical benum_(char *string, ftnlen string_len)
 /*     Determine whether or not there is an exponent character in the */
 /*     string. */
 
-    l = i_len(string, string_len);
-    e = cpos_(string, "EeDd", &__state->c__1, string_len, (ftnlen)4);
+    l = i_len(&__global_state->f2c, string, string_len);
+    e = cpos_(__global_state, string, "EeDd", &__state->c__1, string_len, (
+	    ftnlen)4);
     d__ = e - 1;
     f = e + 1;
     if (e == 0) {
@@ -213,15 +214,15 @@ logical benum_(char *string, ftnlen string_len)
 /*        There is no exponent character, this is a number if it */
 /*        is a decimal number. */
 
-	ret_val = bedec_(string, string_len);
+	ret_val = bedec_(__global_state, string, string_len);
     } else if (e == 1 || e == l) {
 	ret_val = FALSE_;
     } else if (*(unsigned char *)&string[d__ - 1] == ' ' || *(unsigned char *)
 	    &string[f - 1] == ' ') {
 	ret_val = FALSE_;
     } else {
-	ret_val = bedec_(string, d__) && beint_(string + (f - 1), l - (f - 1))
-		;
+	ret_val = bedec_(__global_state, string, d__) && beint_(
+		__global_state, string + (f - 1), l - (f - 1));
     }
     return ret_val;
 } /* benum_ */

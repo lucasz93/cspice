@@ -8,25 +8,25 @@
 
 
 typedef int ssizei_state_t;
-static ssizei_state_t* get_ssizei_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ssizei_state_t* get_ssizei_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SSIZEI ( Set the size of an integer cell ) */
-/* Subroutine */ int ssizei_(integer *size, integer *cell)
+/* Subroutine */ int ssizei_(cspice_t* __global_state, integer *size, integer 
+	*cell)
 {
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ssizei_state_t* __state = get_ssizei_state();
+    ssizei_state_t* __state = get_ssizei_state(__global_state);
 /* $ Abstract */
 
 /*      Set the size (maximum cardinality) of an integer cell. */
@@ -201,20 +201,20 @@ static ssizei_state_t* get_ssizei_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SSIZEI", (ftnlen)6);
+	chkin_(__global_state, "SSIZEI", (ftnlen)6);
     }
 
 /*     The size must be non-negative.  Other values will be snubbed. */
 
     if (*size < 0) {
-	setmsg_("Attempt to set size of cell to invalid value.  The value wa"
-		"s #.", (ftnlen)63);
-	errint_("#", size, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("SSIZEI", (ftnlen)6);
+	setmsg_(__global_state, "Attempt to set size of cell to invalid valu"
+		"e.  The value was #.", (ftnlen)63);
+	errint_(__global_state, "#", size, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "SSIZEI", (ftnlen)6);
 	return 0;
     }
 
@@ -225,7 +225,7 @@ static ssizei_state_t* get_ssizei_state() {
     for (i__ = -5; i__ <= -2; ++i__) {
 	cell[i__ + 5] = 0;
     }
-    chkout_("SSIZEI", (ftnlen)6);
+    chkout_(__global_state, "SSIZEI", (ftnlen)6);
     return 0;
 } /* ssizei_ */
 

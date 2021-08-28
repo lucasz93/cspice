@@ -8,30 +8,29 @@
 
 
 typedef int dacosh_state_t;
-static dacosh_state_t* get_dacosh_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dacosh_state_t* get_dacosh_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  DACOSH ( Double precision arc hyperbolic cosine ) */
-doublereal dacosh_(doublereal *x)
+doublereal dacosh_(cspice_t* __global_state, doublereal *x)
 {
     /* System generated locals */
     doublereal ret_val;
 
     /* Builtin functions */
-    double sqrt(doublereal), log(doublereal);
+    double sqrt(f2c_state_t*, doublereal), log(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dacosh_state_t* __state = get_dacosh_state();
+    dacosh_state_t* __state = get_dacosh_state(__global_state);
 /* $ Abstract */
 
 /*      Return the inverse hyperbolic cosine of a double */
@@ -162,20 +161,21 @@ doublereal dacosh_(doublereal *x)
 
 /*   Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0.;
 	return ret_val;
     } else {
-	chkin_("DACOSH", (ftnlen)6);
+	chkin_(__global_state, "DACOSH", (ftnlen)6);
 	ret_val = 0.;
     }
 
 /*  Check that X >= 1. */
 
     if (*x < 1.) {
-	setmsg_("DACOSH: Invalid argument, X is less than one.", (ftnlen)45);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("DACOSH", (ftnlen)6);
+	setmsg_(__global_state, "DACOSH: Invalid argument, X is less than on"
+		"e.", (ftnlen)45);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "DACOSH", (ftnlen)6);
 	return ret_val;
     }
 
@@ -184,8 +184,9 @@ doublereal dacosh_(doublereal *x)
 /*  large values of X if the equivalent expression, 1.0D0/(X*X), were */
 /*  used. */
 
-    ret_val = log(*x + *x * sqrt(1. - 1. / *x / *x));
-    chkout_("DACOSH", (ftnlen)6);
+    ret_val = log(&__global_state->f2c, *x + *x * sqrt(&__global_state->f2c, 
+	    1. - 1. / *x / *x));
+    chkout_(__global_state, "DACOSH", (ftnlen)6);
     return ret_val;
 } /* dacosh_ */
 

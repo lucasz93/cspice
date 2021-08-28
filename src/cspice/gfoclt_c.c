@@ -1618,7 +1618,7 @@
    {
       return;
    }
-   chkin_c ( "gfoclt_c" );
+   chkin_c ( naif_state, "gfoclt_c" );
 
 
    /*

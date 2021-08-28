@@ -8,24 +8,25 @@
 
 
 typedef int zzcln_state_t;
-static zzcln_state_t* get_zzcln_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzcln_state_t* get_zzcln_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZCLN ( Private --- clean up ) */
-/* Subroutine */ int zzcln_(integer *lookat, integer *nameat, integer *namlst,
-	 integer *datlst, integer *nmpool, integer *chpool, integer *dppool)
+/* Subroutine */ int zzcln_(cspice_t* __global_state, integer *lookat, 
+	integer *nameat, integer *namlst, integer *datlst, integer *nmpool, 
+	integer *chpool, integer *dppool)
 {
     integer head;
     integer tail;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int lnkfsl_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzcln_state_t* __state = get_zzcln_state();
+    zzcln_state_t* __state = get_zzcln_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -178,15 +179,15 @@ static zzcln_state_t* get_zzcln_state() {
 
 /*     First remove the data... */
 
-    chkin_("ZZCLN", (ftnlen)5);
+    chkin_(__global_state, "ZZCLN", (ftnlen)5);
     head = datlst[*nameat - 1];
     if (head < 0) {
 	head = -head;
 	tail = -chpool[(head << 1) + 11];
-	lnkfsl_(&head, &tail, chpool);
+	lnkfsl_(__global_state, &head, &tail, chpool);
     } else if (head > 0) {
 	tail = -dppool[(head << 1) + 11];
-	lnkfsl_(&head, &tail, dppool);
+	lnkfsl_(__global_state, &head, &tail, dppool);
     }
 
 /*     Remove the sub-list head from the data list. */
@@ -208,8 +209,8 @@ static zzcln_state_t* get_zzcln_state() {
 
     head = *nameat;
     tail = *nameat;
-    lnkfsl_(&head, &tail, nmpool);
-    chkout_("ZZCLN", (ftnlen)5);
+    lnkfsl_(__global_state, &head, &tail, nmpool);
+    chkout_(__global_state, "ZZCLN", (ftnlen)5);
     return 0;
 } /* zzcln_ */
 

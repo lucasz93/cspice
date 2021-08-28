@@ -255,7 +255,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "saelgv_c" );
+   chkin_c ( naif_state, "saelgv_c" );
 
 
  

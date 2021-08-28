@@ -8,30 +8,30 @@
 
 
 typedef int zznamfrm_state_t;
-static zznamfrm_state_t* get_zznamfrm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zznamfrm_state_t* get_zznamfrm_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZNAMFRM ( Frame name to ID translation, with bypass ) */
-/* Subroutine */ int zznamfrm_(integer *usrctr, char *savnam, integer *savcde,
-	 char *frname, integer *frcode, ftnlen savnam_len, ftnlen frname_len)
+/* Subroutine */ int zznamfrm_(cspice_t* __global_state, integer *usrctr, 
+	char *savnam, integer *savcde, char *frname, integer *frcode, ftnlen 
+	savnam_len, ftnlen frname_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzpctrck_(integer *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzpctrck_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
     logical update;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zznamfrm_state_t* __state = get_zznamfrm_state();
+    zznamfrm_state_t* __state = get_zznamfrm_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -318,18 +318,18 @@ static zznamfrm_state_t* get_zznamfrm_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Check/update POOL state counter. */
 
-    zzpctrck_(usrctr, &update);
+    zzpctrck_(__global_state, usrctr, &update);
 
 /*     Check update flag, saved ID, and saved name against the input. */
 
-    if (! update && *savcde != 0 && s_cmp(savnam, frname, savnam_len, 
-	    frname_len) == 0) {
+    if (! update && *savcde != 0 && s_cmp(&__global_state->f2c, savnam, 
+	    frname, savnam_len, frname_len) == 0) {
 
 /*        No change in the POOL state, the saved name was successfully */
 /*        resolved earlier, and input and saved names are the same. */
@@ -340,19 +340,19 @@ static zznamfrm_state_t* get_zznamfrm_state() {
 
 /*        Check in because NAMFRM may fail. */
 
-	chkin_("ZZNAMFRM", (ftnlen)8);
+	chkin_(__global_state, "ZZNAMFRM", (ftnlen)8);
 
 /*        POOL state changed, or the saved name was never successfully */
 /*        resolved earlier, or input and saved names are different. Call */
 /*        NAMFRM to look up ID and reset saved values. */
 
-	namfrm_(frname, frcode, frname_len);
-	s_copy(savnam, frname, savnam_len, frname_len);
+	namfrm_(__global_state, frname, frcode, frname_len);
+	s_copy(&__global_state->f2c, savnam, frname, savnam_len, frname_len);
 	*savcde = *frcode;
 
 /*        Check out. */
 
-	chkout_("ZZNAMFRM", (ftnlen)8);
+	chkout_(__global_state, "ZZNAMFRM", (ftnlen)8);
     }
     return 0;
 } /* zznamfrm_ */

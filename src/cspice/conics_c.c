@@ -191,7 +191,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "conics_c");
+   chkin_c ( naif_state, "conics_c");
 
    conics_ ( ( doublereal * ) elts,
              ( doublereal * ) &et,

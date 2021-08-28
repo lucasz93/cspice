@@ -8,20 +8,20 @@
 
 
 typedef int brckti_state_t;
-static brckti_state_t* get_brckti_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline brckti_state_t* get_brckti_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  BRCKTI ( Bracket an integer value within an interval. ) */
-integer brckti_(integer *number, integer *end1, integer *end2)
+integer brckti_(cspice_t* __global_state, integer *number, integer *end1, 
+	integer *end2)
 {
     /* System generated locals */
     integer ret_val, i__1, i__2;
 
 
     /* Module state */
-    brckti_state_t* __state = get_brckti_state();
+    brckti_state_t* __state = get_brckti_state(__global_state);
 /* $ Abstract */
 
 /*      Bracket a number. That is, given a number and an acceptable */

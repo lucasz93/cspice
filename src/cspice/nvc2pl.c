@@ -8,30 +8,30 @@
 
 
 typedef int nvc2pl_state_t;
-static nvc2pl_state_t* get_nvc2pl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline nvc2pl_state_t* get_nvc2pl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      NVC2PL ( Normal vector and constant to plane ) */
-/* Subroutine */ int nvc2pl_(doublereal *normal, doublereal *const__, 
-	doublereal *plane)
+/* Subroutine */ int nvc2pl_(cspice_t* __global_state, doublereal *normal, 
+	doublereal *const__, doublereal *plane)
 {
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal tmpvec[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
     doublereal mag;
 
 
     /* Module state */
-    nvc2pl_state_t* __state = get_nvc2pl_state();
+    nvc2pl_state_t* __state = get_nvc2pl_state(__global_state);
 /* $ Abstract */
 
 /*     Make a SPICELIB plane from a normal vector and a constant. */
@@ -246,18 +246,19 @@ static nvc2pl_state_t* get_nvc2pl_state() {
 
 /*     This routine checks in only if an error is discovered. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    unorm_(normal, plane, &mag);
+    unorm_(__global_state, normal, plane, &mag);
 
 /*     The normal vector must be non-zero. */
 
     if (mag == 0.) {
-	chkin_("NVC2PL", (ftnlen)6);
-	setmsg_("Plane's normal must be non-zero.", (ftnlen)32);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("NVC2PL", (ftnlen)6);
+	chkin_(__global_state, "NVC2PL", (ftnlen)6);
+	setmsg_(__global_state, "Plane's normal must be non-zero.", (ftnlen)
+		32);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "NVC2PL", (ftnlen)6);
 	return 0;
     }
 
@@ -279,8 +280,8 @@ static nvc2pl_state_t* get_nvc2pl_state() {
 
     if (plane[3] < 0.) {
 	plane[3] = -plane[3];
-	vminus_(plane, tmpvec);
-	vequ_(tmpvec, plane);
+	vminus_(__global_state, plane, tmpvec);
+	vequ_(__global_state, tmpvec, plane);
     }
     return 0;
 } /* nvc2pl_ */

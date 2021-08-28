@@ -8,8 +8,7 @@
 
 
 extern spks14_init_t __spks14_init;
-static spks14_state_t* get_spks14_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spks14_state_t* get_spks14_state(cspice_t* state) {
 	if (!state->spks14)
 		state->spks14 = __cspice_allocate_module(sizeof(
 	spks14_state_t), &__spks14_init, sizeof(__spks14_init));
@@ -18,8 +17,9 @@ static spks14_state_t* get_spks14_state() {
 }
 
 /* $Procedure      SPKS14 ( S/P Kernel, subset, type 14 ) */
-/* Subroutine */ int spks14_(integer *srchan, doublereal *srcdsc, integer *
-	dsthan, doublereal *dstdsc, char *dstsid, ftnlen dstsid_len)
+/* Subroutine */ int spks14_(cspice_t* __global_state, integer *srchan, 
+	doublereal *srcdsc, integer *dsthan, doublereal *dstdsc, char *dstsid,
+	 ftnlen dstsid_len)
 {
     /* System generated locals */
     integer i__1;
@@ -27,48 +27,49 @@ static spks14_state_t* get_spks14_state() {
     /* Local variables */
     integer body;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int spk14a_(integer *, integer *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int spk14b_(integer *, char *, integer *, integer 
-	    *, char *, doublereal *, doublereal *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int spk14e_(integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int spk14a_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int spk14b_(cspice_t*, integer *, char *, integer 
+	    *, integer *, char *, doublereal *, doublereal *, integer *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int spk14e_(cspice_t*, integer *);
     doublereal dtemp[2];
     logical found;
     integer itemp[6];
     doublereal myref;
     integer dummy;
     integer chbdeg;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer begidx;
     integer iframe;
     doublereal begtim;
     integer endidx;
-    extern /* Subroutine */ int irfnam_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int sgfref_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int irfnam_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int sgfref_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *);
     doublereal endtim;
     doublereal record[128];
     integer center;
-    extern /* Subroutine */ int sgfcon_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int sgfcon_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *);
     char myfram[16];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer recsiz;
-    extern /* Subroutine */ int sgfrvi_(integer *, doublereal *, doublereal *,
-	     doublereal *, integer *, logical *);
-    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sgfrvi_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int sgfpkt_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spks14_state_t* __state = get_spks14_state();
+    spks14_state_t* __state = get_spks14_state(__global_state);
 /* $ Abstract */
 
 /*     Extract a subset of the data in a type 14 SPK segment into a new */
@@ -211,35 +212,37 @@ static spks14_state_t* get_spks14_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKS14", (ftnlen)6);
+	chkin_(__global_state, "SPKS14", (ftnlen)6);
     }
 
 /*     First, unpack the destination segment descriptor and set some */
 /*     local variables. */
 
-    dafus_(dstdsc, &__state->c__2, &__state->c__6, dtemp, itemp);
+    dafus_(__global_state, dstdsc, &__state->c__2, &__state->c__6, dtemp, 
+	    itemp);
     begtim = dtemp[0];
     endtim = dtemp[1];
     body = itemp[0];
     center = itemp[1];
     iframe = itemp[2];
-    irfnam_(&iframe, myfram, (ftnlen)16);
+    irfnam_(__global_state, &iframe, myfram, (ftnlen)16);
 
 /*     If we can't find the code, it can't be an SPK file. */
 
-    if (failed_()) {
-	chkout_("SPKS14", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKS14", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the constants for this segment. There is only one. */
 
-    sgfcon_(srchan, srcdsc, &__state->c__1, &__state->c__1, dtemp);
-    if (failed_()) {
-	chkout_("SPKS14", (ftnlen)6);
+    sgfcon_(__global_state, srchan, srcdsc, &__state->c__1, &__state->c__1, 
+	    dtemp);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKS14", (ftnlen)6);
 	return 0;
     }
 
@@ -254,29 +257,29 @@ static spks14_state_t* get_spks14_state() {
 
     recsiz = (chbdeg + 1) * 6 + 2;
     if (recsiz > 128) {
-	setmsg_("Storage for # double precision numbers is needed for an SPK"
-		" data record and only # locations were available. Update the"
-		" parameter MAXREC in the subroutine SPKS14 and notify the NA"
-		"IF group of this problem.", (ftnlen)204);
-	errint_("#", &recsiz, (ftnlen)1);
-	errint_("#", &__state->c__128, (ftnlen)1);
-	sigerr_("SPICE(SPKRECTOOLARGE)", (ftnlen)21);
-	chkout_("SPKS14", (ftnlen)6);
+	setmsg_(__global_state, "Storage for # double precision numbers is n"
+		"eeded for an SPK data record and only # locations were avail"
+		"able. Update the parameter MAXREC in the subroutine SPKS14 a"
+		"nd notify the NAIF group of this problem.", (ftnlen)204);
+	errint_(__global_state, "#", &recsiz, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__128, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SPKRECTOOLARGE)", (ftnlen)21);
+	chkout_(__global_state, "SPKS14", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the beginning and ending indices for the packets we need for */
 /*     the destination segment. */
 
-    sgfrvi_(srchan, srcdsc, &begtim, &myref, &begidx, &found);
-    sgfrvi_(srchan, srcdsc, &endtim, &myref, &endidx, &found);
+    sgfrvi_(__global_state, srchan, srcdsc, &begtim, &myref, &begidx, &found);
+    sgfrvi_(__global_state, srchan, srcdsc, &endtim, &myref, &endidx, &found);
 
 /*     Begin the destination segment. */
 
-    spk14b_(dsthan, dstsid, &body, &center, myfram, &begtim, &endtim, &chbdeg,
-	     dstsid_len, (ftnlen)16);
-    if (failed_()) {
-	chkout_("SPKS14", (ftnlen)6);
+    spk14b_(__global_state, dsthan, dstsid, &body, &center, myfram, &begtim, &
+	    endtim, &chbdeg, dstsid_len, (ftnlen)16);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKS14", (ftnlen)6);
 	return 0;
     }
 
@@ -285,19 +288,19 @@ static spks14_state_t* get_spks14_state() {
 
     i__1 = endidx;
     for (i__ = begidx; i__ <= i__1; ++i__) {
-	sgfpkt_(srchan, srcdsc, &i__, &i__, record, &dummy);
-	sgfref_(srchan, srcdsc, &i__, &i__, &myref);
-	spk14a_(dsthan, &__state->c__1, record, &myref);
-	if (failed_()) {
-	    chkout_("SPKS14", (ftnlen)6);
+	sgfpkt_(__global_state, srchan, srcdsc, &i__, &i__, record, &dummy);
+	sgfref_(__global_state, srchan, srcdsc, &i__, &i__, &myref);
+	spk14a_(__global_state, dsthan, &__state->c__1, record, &myref);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKS14", (ftnlen)6);
 	    return 0;
 	}
     }
 
 /*     Now all we need to do is end the segment. */
 
-    spk14e_(dsthan);
-    chkout_("SPKS14", (ftnlen)6);
+    spk14e_(__global_state, dsthan);
+    chkout_(__global_state, "SPKS14", (ftnlen)6);
     return 0;
 } /* spks14_ */
 

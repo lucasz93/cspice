@@ -8,27 +8,26 @@
 
 
 typedef int vsclg_state_t;
-static vsclg_state_t* get_vsclg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vsclg_state_t* get_vsclg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VSCLG ( Vector scaling, general dimension ) */
-/* Subroutine */ int vsclg_(doublereal *s, doublereal *v1, integer *ndim, 
-	doublereal *vout)
+/* Subroutine */ int vsclg_(cspice_t* __global_state, doublereal *s, 
+	doublereal *v1, integer *ndim, doublereal *vout)
 {
     /* System generated locals */
     integer v1_dim1, vout_dim1, i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    vsclg_state_t* __state = get_vsclg_state();
+    vsclg_state_t* __state = get_vsclg_state(__global_state);
 /* $ Abstract */
 
 /*     Multiply a scalar and a double precision vector of arbitrary */
@@ -164,10 +163,11 @@ static vsclg_state_t* get_vsclg_state() {
     /* Function Body */
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		"vout", i__2, "vsclg_", (ftnlen)145)] = *s * v1[(i__3 = i__ - 
-		1) < 1 * v1_dim1 && 0 <= i__3 ? i__3 : s_rnge("v1", i__3, 
-		"vsclg_", (ftnlen)145)];
+	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "vout", i__2, "vsclg_", (ftnlen)145)] = *
+		s * v1[(i__3 = i__ - 1) < 1 * v1_dim1 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "v1", i__3, "vsclg_", (ftnlen)
+		145)];
     }
     return 0;
 } /* vsclg_ */

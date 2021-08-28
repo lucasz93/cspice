@@ -8,35 +8,36 @@
 
 
 typedef int spkopa_state_t;
-static spkopa_state_t* get_spkopa_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkopa_state_t* get_spkopa_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPKOPA ( SPK open for addition ) */
-/* Subroutine */ int spkopa_(char *file, integer *handle, ftnlen file_len)
+/* Subroutine */ int spkopa_(cspice_t* __global_state, char *file, integer *
+	handle, ftnlen file_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char arch[8];
     char type__[8];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int dafopw_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical exists_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int getfat_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafopw_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical exists_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spkopa_state_t* __state = get_spkopa_state();
+    spkopa_state_t* __state = get_spkopa_state(__global_state);
 /* $ Abstract */
 
 /*    Open an existing SPK file for subsequent write. */
@@ -188,10 +189,10 @@ static spkopa_state_t* get_spkopa_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKOPA", (ftnlen)6);
+    chkin_(__global_state, "SPKOPA", (ftnlen)6);
 
 /*     Until we get a legitimate handle we set HANDLE to zero. */
 
@@ -199,43 +200,45 @@ static spkopa_state_t* get_spkopa_state() {
 
 /*     First make sure the file exists. */
 
-    if (! exists_(file, file_len)) {
-	setmsg_("The file '#' is not recognized as an existing file. ", (
-		ftnlen)52);
-	errch_("#", file, (ftnlen)1, file_len);
-	sigerr_("SPICE(FILENOTFOUND)", (ftnlen)19);
-	chkout_("SPKOPA", (ftnlen)6);
+    if (! exists_(__global_state, file, file_len)) {
+	setmsg_(__global_state, "The file '#' is not recognized as an existi"
+		"ng file. ", (ftnlen)52);
+	errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	sigerr_(__global_state, "SPICE(FILENOTFOUND)", (ftnlen)19);
+	chkout_(__global_state, "SPKOPA", (ftnlen)6);
 	return 0;
     }
 
 /*     Next make sure it is an SPK file. */
 
-    getfat_(file, arch, type__, file_len, (ftnlen)8, (ftnlen)8);
-    if (failed_()) {
-	chkout_("SPKOPA", (ftnlen)6);
+    getfat_(__global_state, file, arch, type__, file_len, (ftnlen)8, (ftnlen)
+	    8);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKOPA", (ftnlen)6);
 	return 0;
     }
-    if (s_cmp(arch, "DAF", (ftnlen)8, (ftnlen)3) != 0 || s_cmp(type__, "SPK", 
-	    (ftnlen)8, (ftnlen)3) != 0) {
-	setmsg_("The file '#' was not an SPK file.  The architecture and typ"
-		"e of the file were found to be '#' and '#' respectively. ", (
-		ftnlen)116);
-	errch_("#", file, (ftnlen)1, file_len);
-	errch_("#", arch, (ftnlen)1, (ftnlen)8);
-	errch_("#", type__, (ftnlen)1, (ftnlen)8);
-	sigerr_("SPICE(FILEISNOTSPK)", (ftnlen)19);
-	chkout_("SPKOPA", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, arch, "DAF", (ftnlen)8, (ftnlen)3) != 0 ||
+	     s_cmp(&__global_state->f2c, type__, "SPK", (ftnlen)8, (ftnlen)3) 
+	    != 0) {
+	setmsg_(__global_state, "The file '#' was not an SPK file.  The arch"
+		"itecture and type of the file were found to be '#' and '#' r"
+		"espectively. ", (ftnlen)116);
+	errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	errch_(__global_state, "#", arch, (ftnlen)1, (ftnlen)8);
+	errch_(__global_state, "#", type__, (ftnlen)1, (ftnlen)8);
+	sigerr_(__global_state, "SPICE(FILEISNOTSPK)", (ftnlen)19);
+	chkout_(__global_state, "SPKOPA", (ftnlen)6);
 	return 0;
     }
 
 /*     That's the limit of the checks performed here.  We let DAFOPW */
 /*     handle the remaining checks. */
 
-    dafopw_(file, handle, file_len);
-    if (failed_()) {
+    dafopw_(__global_state, file, handle, file_len);
+    if (failed_(__global_state)) {
 	*handle = 0;
     }
-    chkout_("SPKOPA", (ftnlen)6);
+    chkout_(__global_state, "SPKOPA", (ftnlen)6);
     return 0;
 } /* spkopa_ */
 

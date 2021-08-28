@@ -8,8 +8,7 @@
 
 
 extern npedln_init_t __npedln_init;
-static npedln_state_t* get_npedln_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline npedln_state_t* get_npedln_state(cspice_t* state) {
 	if (!state->npedln)
 		state->npedln = __cspice_allocate_module(sizeof(
 	npedln_state_t), &__npedln_init, sizeof(__npedln_init));
@@ -18,17 +17,17 @@ static npedln_state_t* get_npedln_state() {
 }
 
 /* $Procedure    NPEDLN ( Nearest point on ellipsoid to line ) */
-/* Subroutine */ int npedln_(doublereal *a, doublereal *b, doublereal *c__, 
-	doublereal *linept, doublereal *linedr, doublereal *pnear, doublereal 
-	*dist)
+/* Subroutine */ int npedln_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *c__, doublereal *linept, doublereal *
+	linedr, doublereal *pnear, doublereal *dist)
 {
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *);
-    integer s_rnge(char *, integer, char *, integer);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal cand[9];
@@ -36,53 +35,56 @@ static npedln_state_t* get_npedln_state() {
     doublereal sclb;
     doublereal sclc;
     doublereal udir[3];
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     integer i__;
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found[2];
     doublereal prjel[9];
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal sclpt[3];
     doublereal prjpl[4];
     doublereal prjpt[3];
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int vprjp_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int nvc2pl_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int vprjp_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int nvc2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal candpl[4];
     doublereal pt[6]	/* was [3][2] */;
-    extern /* Subroutine */ int inedpl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int inedpl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, logical *);
     logical ifound;
-    extern /* Subroutine */ int pjelpl_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int pjelpl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     doublereal oppdir[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    logical xfound;
-    extern /* Subroutine */ int npelpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int vprjpi_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *);
-    doublereal prjnpt[3];
-    extern logical return_(void);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
 	    ;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    logical xfound;
+    extern /* Subroutine */ int npelpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int vprjpi_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, logical *);
+    doublereal prjnpt[3];
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int surfpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, logical *
+	    );
     doublereal mag;
 
 
     /* Module state */
-    npedln_state_t* __state = get_npedln_state();
+    npedln_state_t* __state = get_npedln_state(__global_state);
 /* $ Abstract */
 
 /*     Find nearest point on a triaxial ellipsoid to a specified line, */
@@ -392,10 +394,10 @@ static npedln_state_t* get_npedln_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("NPEDLN", (ftnlen)6);
+	chkin_(__global_state, "NPEDLN", (ftnlen)6);
     }
 
 /*     The algorithm used in this routine has two parts.  The first */
@@ -481,22 +483,24 @@ static npedln_state_t* get_npedln_state() {
 
 /*     We need a valid normal vector. */
 
-    unorm_(linedr, udir, &mag);
+    unorm_(__global_state, linedr, udir, &mag);
     if (mag == 0.) {
-	setmsg_("Line direction vector is the zero vector. ", (ftnlen)42);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("NPEDLN", (ftnlen)6);
+	setmsg_(__global_state, "Line direction vector is the zero vector. ", 
+		(ftnlen)42);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "NPEDLN", (ftnlen)6);
 	return 0;
 
 /*     The ellipsoid's semi-axes must have positive length. */
 
     } else if (*a <= 0. || *b <= 0. || *c__ <= 0.) {
-	setmsg_("Semi-axes: A = #,  B = #,  C = #.", (ftnlen)33);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(INVALIDAXISLENGTH)", (ftnlen)24);
-	chkout_("NPEDLN", (ftnlen)6);
+	setmsg_(__global_state, "Semi-axes: A = #,  B = #,  C = #.", (ftnlen)
+		33);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDAXISLENGTH)", (ftnlen)24);
+	chkout_(__global_state, "NPEDLN", (ftnlen)6);
 	return 0;
     }
 
@@ -511,14 +515,16 @@ static npedln_state_t* get_npedln_state() {
     scla = *a / scale;
     sclb = *b / scale;
     sclc = *c__ / scale;
-    if (pow_dd(&scla, &__state->c_b12) == 0. || pow_dd(&sclb, &__state->c_b12)
-	     == 0. || pow_dd(&sclc, &__state->c_b12) == 0.) {
-	setmsg_("Semi-axis too small:  A = #, B = #, C = #. ", (ftnlen)43);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("NPEDLN", (ftnlen)6);
+    if (pow_dd(&__global_state->f2c, &scla, &__state->c_b12) == 0. || pow_dd(&
+	    __global_state->f2c, &sclb, &__state->c_b12) == 0. || pow_dd(&
+	    __global_state->f2c, &sclc, &__state->c_b12) == 0.) {
+	setmsg_(__global_state, "Semi-axis too small:  A = #, B = #, C = #. ",
+		 (ftnlen)43);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "NPEDLN", (ftnlen)6);
 	return 0;
     }
 
@@ -533,16 +539,19 @@ static npedln_state_t* get_npedln_state() {
 /*     whether rays intersect a body, so we treat the line as a pair */
 /*     of rays. */
 
-    vminus_(udir, oppdir);
-    surfpt_(sclpt, udir, &scla, &sclb, &sclc, pt, found);
-    surfpt_(sclpt, oppdir, &scla, &sclb, &sclc, &pt[3], &found[1]);
+    vminus_(__global_state, udir, oppdir);
+    surfpt_(__global_state, sclpt, udir, &scla, &sclb, &sclc, pt, found);
+    surfpt_(__global_state, sclpt, oppdir, &scla, &sclb, &sclc, &pt[3], &
+	    found[1]);
     for (i__ = 1; i__ <= 2; ++i__) {
-	if (found[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("found", 
-		i__1, "npedln_", (ftnlen)527)]) {
+	if (found[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "found", i__1, "npedln_", (ftnlen)527)]) 
+		{
 	    *dist = 0.;
-	    vscl_(&scale, &pt[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : 
-		    s_rnge("pt", i__1, "npedln_", (ftnlen)531)], pnear);
-	    chkout_("NPEDLN", (ftnlen)6);
+	    vscl_(__global_state, &scale, &pt[(i__1 = i__ * 3 - 3) < 6 && 0 <=
+		     i__1 ? i__1 : s_rnge(&__global_state->f2c, "pt", i__1, 
+		    "npedln_", (ftnlen)531)], pnear);
+	    chkout_(__global_state, "NPEDLN", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -565,20 +574,21 @@ static npedln_state_t* get_npedln_state() {
 /* Computing 2nd power */
     d__1 = sclc;
     normal[2] = udir[2] / (d__1 * d__1);
-    nvc2pl_(normal, &__state->c_b26, candpl);
-    inedpl_(&scla, &sclb, &sclc, candpl, cand, &xfound);
+    nvc2pl_(__global_state, normal, &__state->c_b26, candpl);
+    inedpl_(__global_state, &scla, &sclb, &sclc, candpl, cand, &xfound);
     if (! xfound) {
-	setmsg_("Candidate ellipse could not be found.", (ftnlen)37);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("NPEDLN", (ftnlen)6);
+	setmsg_(__global_state, "Candidate ellipse could not be found.", (
+		ftnlen)37);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "NPEDLN", (ftnlen)6);
 	return 0;
     }
 
 /*     Project the candidate ellipse onto a plane orthogonal to the */
 /*     line.  We'll call the plane PRJPL and the projected ellipse PRJEL. */
 
-    nvc2pl_(udir, &__state->c_b26, prjpl);
-    pjelpl_(cand, prjpl, prjel);
+    nvc2pl_(__global_state, udir, &__state->c_b26, prjpl);
+    pjelpl_(__global_state, cand, prjpl, prjel);
 
 /*     Find the point on the line lying in the projection plane, and */
 /*     then find the near point PRJNPT on the projected ellipse.  Here */
@@ -586,10 +596,10 @@ static npedln_state_t* get_npedln_state() {
 /*     The distance between PRJPT and PRJNPT is DIST. */
 
 
-    vprjp_(sclpt, prjpl, prjpt);
-    npelpt_(prjpt, prjel, prjnpt, dist);
-    if (failed_()) {
-	chkout_("NPEDLN", (ftnlen)6);
+    vprjp_(__global_state, sclpt, prjpl, prjpt);
+    npelpt_(__global_state, prjpt, prjel, prjnpt, dist);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "NPEDLN", (ftnlen)6);
 	return 0;
     }
 
@@ -602,19 +612,20 @@ static npedln_state_t* get_npedln_state() {
 /*     be calculable due to numerical problems (this can only happen */
 /*     when the input ellipsoid is extremely flat or needle-shaped). */
 
-    vprjpi_(prjnpt, prjpl, candpl, pnear, &ifound);
+    vprjpi_(__global_state, prjnpt, prjpl, candpl, pnear, &ifound);
     if (! ifound) {
-	setmsg_("Inverse projection could not be found.", (ftnlen)38);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("NPEDLN", (ftnlen)6);
+	setmsg_(__global_state, "Inverse projection could not be found.", (
+		ftnlen)38);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "NPEDLN", (ftnlen)6);
 	return 0;
     }
 
 /*     Undo the scaling. */
 
-    vsclip_(&scale, pnear);
+    vsclip_(__global_state, &scale, pnear);
     *dist = scale * *dist;
-    chkout_("NPEDLN", (ftnlen)6);
+    chkout_(__global_state, "NPEDLN", (ftnlen)6);
     return 0;
 } /* npedln_ */
 

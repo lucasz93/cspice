@@ -8,8 +8,7 @@
 
 
 extern xdda_init_t __xdda_init;
-static xdda_state_t* get_xdda_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline xdda_state_t* get_xdda_state(cspice_t* state) {
 	if (!state->xdda)
 		state->xdda = __cspice_allocate_module(sizeof(xdda_state_t), &
 	__xdda_init, sizeof(__xdda_init));
@@ -18,8 +17,9 @@ static xdda_state_t* get_xdda_state() {
 }
 
 /* $Procedure  XDDA  ( list voxels intersected by a ray ) */
-/* Subroutine */ int xdda_(doublereal *vertex, doublereal *raydir, integer *
-	grdext, integer *maxnvx, integer *nvx, integer *voxlst)
+/* Subroutine */ int xdda_(cspice_t* __global_state, doublereal *vertex, 
+	doublereal *raydir, integer *grdext, integer *maxnvx, integer *nvx, 
+	integer *voxlst)
 {
     /* Initialized data */
 
@@ -29,37 +29,39 @@ static xdda_state_t* get_xdda_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer step[3];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer iaxis[3];
     doublereal limit;
-    extern logical vzero_(doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     doublereal ax2err;
     doublereal ax3err;
     doublereal s12;
     doublereal s13;
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    extern integer brckti_(integer *, integer *, integer *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern integer brckti_(cspice_t*, integer *, integer *, integer *);
     integer icoord[3];
     doublereal maxcmp;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     doublereal vtxoff[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer intvtx[3];
-    extern logical zzingrd_(integer *, integer *);
+    extern logical zzingrd_(cspice_t*, integer *, integer *);
 
 
     /* Module state */
-    xdda_state_t* __state = get_xdda_state();
+    xdda_state_t* __state = get_xdda_state(__global_state);
 /* $ Abstract */
 
 /*     Given a ray and a voxel grid, return a list of voxels the ray */
@@ -300,7 +302,7 @@ static xdda_state_t* get_xdda_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -390,11 +392,11 @@ static xdda_state_t* get_xdda_state() {
 
 /*     Check if ray direction vector is a zero vector. */
 
-    if (vzero_(raydir)) {
-	chkin_("XDDA", (ftnlen)4);
-	setmsg_("Ray is the zero vector.", (ftnlen)23);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("XDDA", (ftnlen)4);
+    if (vzero_(__global_state, raydir)) {
+	chkin_(__global_state, "XDDA", (ftnlen)4);
+	setmsg_(__global_state, "Ray is the zero vector.", (ftnlen)23);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "XDDA", (ftnlen)4);
 	return 0;
     }
 
@@ -403,38 +405,40 @@ static xdda_state_t* get_xdda_state() {
 /* Computing MIN */
     i__1 = min(grdext[0],grdext[1]);
     if (min(i__1,grdext[2]) < 1) {
-	chkin_("XDDA", (ftnlen)4);
-	setmsg_("Voxel grid dimensions must be strictly positive but are # #"
-		" #.", (ftnlen)62);
-	errint_("#", grdext, (ftnlen)1);
-	errint_("#", &grdext[1], (ftnlen)1);
-	errint_("#", &grdext[2], (ftnlen)1);
-	sigerr_("SPICE(BADDIMENSIONS)", (ftnlen)20);
-	chkout_("XDDA", (ftnlen)4);
+	chkin_(__global_state, "XDDA", (ftnlen)4);
+	setmsg_(__global_state, "Voxel grid dimensions must be strictly posi"
+		"tive but are # # #.", (ftnlen)62);
+	errint_(__global_state, "#", grdext, (ftnlen)1);
+	errint_(__global_state, "#", &grdext[1], (ftnlen)1);
+	errint_(__global_state, "#", &grdext[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDIMENSIONS)", (ftnlen)20);
+	chkout_(__global_state, "XDDA", (ftnlen)4);
 	return 0;
     }
 
 /*     Make sure the vertex is not too far from the voxel grid. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	if (vertex[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vertex",
-		 i__1, "xdda_", (ftnlen)416)] < grdext[(i__2 = i__ - 1) < 3 &&
-		 0 <= i__2 ? i__2 : s_rnge("grdext", i__2, "xdda_", (ftnlen)
-		416)] * -1e-12 || vertex[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		i__3 : s_rnge("vertex", i__3, "xdda_", (ftnlen)416)] > grdext[
-		(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge("grdext", 
-		i__4, "xdda_", (ftnlen)416)] * 1.0000000000010001) {
-	    chkin_("XDDA", (ftnlen)4);
-	    setmsg_("Vertex # # # is outside of voxel grid defined by extent"
-		    "s # # #.", (ftnlen)63);
-	    errdp_("#", vertex, (ftnlen)1);
-	    errdp_("#", &vertex[1], (ftnlen)1);
-	    errdp_("#", &vertex[2], (ftnlen)1);
-	    errint_("#", grdext, (ftnlen)1);
-	    errint_("#", &grdext[1], (ftnlen)1);
-	    errint_("#", &grdext[2], (ftnlen)1);
-	    sigerr_("SPICE(VERTEXNOTINGRID)", (ftnlen)22);
-	    chkout_("XDDA", (ftnlen)4);
+	if (vertex[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "vertex", i__1, "xdda_", (ftnlen)416)] < 
+		grdext[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "grdext", i__2, "xdda_", (ftnlen)416)] * 
+		-1e-12 || vertex[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "vertex", i__3, "xdda_", (ftnlen)
+		416)] > grdext[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : 
+		s_rnge(&__global_state->f2c, "grdext", i__4, "xdda_", (ftnlen)
+		416)] * 1.0000000000010001) {
+	    chkin_(__global_state, "XDDA", (ftnlen)4);
+	    setmsg_(__global_state, "Vertex # # # is outside of voxel grid d"
+		    "efined by extents # # #.", (ftnlen)63);
+	    errdp_(__global_state, "#", vertex, (ftnlen)1);
+	    errdp_(__global_state, "#", &vertex[1], (ftnlen)1);
+	    errdp_(__global_state, "#", &vertex[2], (ftnlen)1);
+	    errint_(__global_state, "#", grdext, (ftnlen)1);
+	    errint_(__global_state, "#", &grdext[1], (ftnlen)1);
+	    errint_(__global_state, "#", &grdext[2], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VERTEXNOTINGRID)", (ftnlen)22);
+	    chkout_(__global_state, "XDDA", (ftnlen)4);
 	    return 0;
 	}
     }
@@ -442,12 +446,12 @@ static xdda_state_t* get_xdda_state() {
 /*     The maximum output voxel array size must be positive. */
 
     if (*maxnvx < 1) {
-	chkin_("XDDA", (ftnlen)4);
-	setmsg_("Maximum voxel list size must be positive but was #.", (
-		ftnlen)51);
-	errint_("#", maxnvx, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("XDDA", (ftnlen)4);
+	chkin_(__global_state, "XDDA", (ftnlen)4);
+	setmsg_(__global_state, "Maximum voxel list size must be positive bu"
+		"t was #.", (ftnlen)51);
+	errint_(__global_state, "#", maxnvx, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "XDDA", (ftnlen)4);
 	return 0;
     }
 
@@ -456,12 +460,13 @@ static xdda_state_t* get_xdda_state() {
     iaxis[0] = 1;
     maxcmp = abs(raydir[0]);
     for (i__ = 2; i__ <= 3; ++i__) {
-	if ((d__1 = raydir[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"raydir", i__1, "xdda_", (ftnlen)459)], abs(d__1)) > maxcmp) {
+	if ((d__1 = raydir[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)459)], 
+		abs(d__1)) > maxcmp) {
 	    iaxis[0] = i__;
 	    maxcmp = (d__1 = raydir[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 :
-		     s_rnge("raydir", i__1, "xdda_", (ftnlen)461)], abs(d__1))
-		    ;
+		     s_rnge(&__global_state->f2c, "raydir", i__1, "xdda_", (
+		    ftnlen)461)], abs(d__1));
 	}
     }
 
@@ -471,35 +476,39 @@ static xdda_state_t* get_xdda_state() {
 /*     the cross product of the first and second. */
 
     iaxis[1] = __state->next[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : 
-	    s_rnge("next", i__1, "xdda_", (ftnlen)472)];
+	    s_rnge(&__global_state->f2c, "next", i__1, "xdda_", (ftnlen)472)];
     iaxis[2] = __state->next[(i__1 = iaxis[1] - 1) < 3 && 0 <= i__1 ? i__1 : 
-	    s_rnge("next", i__1, "xdda_", (ftnlen)473)];
+	    s_rnge(&__global_state->f2c, "next", i__1, "xdda_", (ftnlen)473)];
 
 /*     Which voxel contains the vertex? Truncate the vertex */
 /*     coordinates to integers. Add 1 to each coord to compensate */
 /*     for 1 based counting. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	intvtx[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("intvtx", 
-		i__1, "xdda_", (ftnlen)482)] = (integer) vertex[(i__3 = iaxis[
-		(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("iaxis", 
-		i__2, "xdda_", (ftnlen)482)] - 1) < 3 && 0 <= i__3 ? i__3 : 
-		s_rnge("vertex", i__3, "xdda_", (ftnlen)482)];
-	icoord[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("icoord", 
-		i__1, "xdda_", (ftnlen)484)] = intvtx[(i__2 = i__ - 1) < 3 && 
-		0 <= i__2 ? i__2 : s_rnge("intvtx", i__2, "xdda_", (ftnlen)
-		484)] + 1;
-	icoord[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("icoord", 
-		i__1, "xdda_", (ftnlen)486)] = brckti_(&icoord[(i__2 = i__ - 
-		1) < 3 && 0 <= i__2 ? i__2 : s_rnge("icoord", i__2, "xdda_", (
-		ftnlen)486)], &__state->c__1, &grdext[(i__4 = iaxis[(i__3 = 
-		i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("iaxis", i__3, 
-		"xdda_", (ftnlen)486)] - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge(
+	intvtx[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "intvtx", i__1, "xdda_", (ftnlen)482)] = 
+		(integer) vertex[(i__3 = iaxis[(i__2 = i__ - 1) < 3 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "iaxis", i__2, 
+		"xdda_", (ftnlen)482)] - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "vertex", i__3, "xdda_", (ftnlen)482)];
+	icoord[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "icoord", i__1, "xdda_", (ftnlen)484)] = 
+		intvtx[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "intvtx", i__2, "xdda_", (ftnlen)484)] + 
+		1;
+	icoord[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "icoord", i__1, "xdda_", (ftnlen)486)] = 
+		brckti_(__global_state, &icoord[(i__2 = i__ - 1) < 3 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "icoord", i__2, 
+		"xdda_", (ftnlen)486)], &__state->c__1, &grdext[(i__4 = iaxis[
+		(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "iaxis", i__3, "xdda_", (ftnlen)486)] - 
+		1) < 3 && 0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c, 
 		"grdext", i__4, "xdda_", (ftnlen)486)]);
-	voxlst[iaxis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("iaxis"
-		, i__1, "xdda_", (ftnlen)488)] - 1] = icoord[(i__2 = i__ - 1) 
-		< 3 && 0 <= i__2 ? i__2 : s_rnge("icoord", i__2, "xdda_", (
-		ftnlen)488)];
+	voxlst[iaxis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "iaxis", i__1, "xdda_", (ftnlen)488)] - 
+		1] = icoord[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+		&__global_state->f2c, "icoord", i__2, "xdda_", (ftnlen)488)];
     }
 
 /*     Initialize the counter for number of voxels the ray intercepts. */
@@ -520,13 +529,16 @@ static xdda_state_t* get_xdda_state() {
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	d__1 = vertex[(i__3 = iaxis[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 :
-		 s_rnge("iaxis", i__2, "xdda_", (ftnlen)513)] - 1) < 3 && 0 <=
-		 i__3 ? i__3 : s_rnge("vertex", i__3, "xdda_", (ftnlen)513)] 
-		- (icoord[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge(
-		"icoord", i__4, "xdda_", (ftnlen)513)] - 1);
-	vtxoff[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vtxoff", 
-		i__1, "xdda_", (ftnlen)513)] = brcktd_(&d__1, &__state->c_b67,
-		 &__state->c_b68);
+		 s_rnge(&__global_state->f2c, "iaxis", i__2, "xdda_", (ftnlen)
+		513)] - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "vertex", i__3, "xdda_", (ftnlen)513)] - 
+		(icoord[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge(&
+		__global_state->f2c, "icoord", i__4, "xdda_", (ftnlen)513)] - 
+		1);
+	vtxoff[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "vtxoff", i__1, "xdda_", (ftnlen)513)] = 
+		brcktd_(__global_state, &d__1, &__state->c_b67, &
+		__state->c_b68);
     }
 
 /*     Compute the lower limit on the magnitudes of RAYDIR( IAXIS(2) ) */
@@ -534,9 +546,10 @@ static xdda_state_t* get_xdda_state() {
 /*     of the direction vector as non-zero. */
 
     limit = 1e-20 / grdext[(i__2 = iaxis[0] - 1) < 3 && 0 <= i__2 ? i__2 : 
-	    s_rnge("grdext", i__2, "xdda_", (ftnlen)523)] * (d__1 = raydir[(
-	    i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("raydir", 
-	    i__1, "xdda_", (ftnlen)523)], abs(d__1));
+	    s_rnge(&__global_state->f2c, "grdext", i__2, "xdda_", (ftnlen)523)
+	    ] * (d__1 = raydir[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 :
+	     s_rnge(&__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)
+	    523)], abs(d__1));
 
 /*     If the magnitude of RAYDIR( IAXIS(J) ), J = 2 or 3, is below */
 /*     LIMIT, then the ray can pass through the entire grid in the */
@@ -548,7 +561,7 @@ static xdda_state_t* get_xdda_state() {
 /*     Determine the error term initial values and increments. */
 
 
-    ax2err = dpmax_();
+    ax2err = dpmax_(__global_state);
     ax3err = ax2err;
     s12 = 0.;
     s13 = 0.;
@@ -557,18 +570,21 @@ static xdda_state_t* get_xdda_state() {
 /*     for the non-primary axis IAXIS(2). */
 
     if ((d__1 = raydir[(i__1 = iaxis[1] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "raydir", i__1, "xdda_", (ftnlen)544)], abs(d__1)) > limit) {
+	    &__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)544)], abs(
+	    d__1)) > limit) {
 
 /*        For any line segment along the ray, S12 is the ratio of the */
 /*        magnitudes of the projections of the segment in the primary */
 /*        and the IAXIS(2) directions. */
 
 	s12 = (d__1 = raydir[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("raydir", i__1, "xdda_", (ftnlen)550)] / raydir[(i__2 =
-		 iaxis[1] - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("raydir", 
-		i__2, "xdda_", (ftnlen)550)], abs(d__1));
-	if (raydir[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"raydir", i__1, "xdda_", (ftnlen)553)] > 0.) {
+		s_rnge(&__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)
+		550)] / raydir[(i__2 = iaxis[1] - 1) < 3 && 0 <= i__2 ? i__2 :
+		 s_rnge(&__global_state->f2c, "raydir", i__2, "xdda_", (
+		ftnlen)550)], abs(d__1));
+	if (raydir[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)553)] > 
+		0.) {
 
 /*           The primary component of the ray's direction is positive. */
 /*           The distance to the next boundary plane in the primary */
@@ -577,7 +593,8 @@ static xdda_state_t* get_xdda_state() {
 /*              1.D0 - VTXOFF( IAXIS(1) ) */
 
 	    if (raydir[(i__1 = iaxis[1] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "raydir", i__1, "xdda_", (ftnlen)561)] > 0.) {
+		    &__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)
+		    561)] > 0.) {
 
 /*              The IAXIS(2) component of the ray's direction is */
 /*              positive. The distance to the next boundary plane for */
@@ -620,7 +637,8 @@ static xdda_state_t* get_xdda_state() {
 
 /*              VTXOFF( IAXIS(1) ) */
 	    if (raydir[(i__1 = iaxis[1] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "raydir", i__1, "xdda_", (ftnlen)607)] > 0.) {
+		    &__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)
+		    607)] > 0.) {
 
 /*              The IAXIS(2) component of the ray's direction is */
 /*              positive. The distance to the next boundary plane for */
@@ -660,27 +678,32 @@ static xdda_state_t* get_xdda_state() {
 /*     See the comments above. */
 
     if ((d__1 = raydir[(i__1 = iaxis[2] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "raydir", i__1, "xdda_", (ftnlen)654)], abs(d__1)) > limit) {
+	    &__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)654)], abs(
+	    d__1)) > limit) {
 
 /*        For any line segment along the ray, S13 is the ratio of the */
 /*        magnitudes of the projections of the segment in the primary */
 /*        and the IAXIS(3) directions. */
 
 	s13 = (d__1 = raydir[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("raydir", i__1, "xdda_", (ftnlen)660)] / raydir[(i__2 =
-		 iaxis[2] - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("raydir", 
-		i__2, "xdda_", (ftnlen)660)], abs(d__1));
-	if (raydir[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"raydir", i__1, "xdda_", (ftnlen)662)] > 0.) {
+		s_rnge(&__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)
+		660)] / raydir[(i__2 = iaxis[2] - 1) < 3 && 0 <= i__2 ? i__2 :
+		 s_rnge(&__global_state->f2c, "raydir", i__2, "xdda_", (
+		ftnlen)660)], abs(d__1));
+	if (raydir[(i__1 = iaxis[0] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)662)] > 
+		0.) {
 	    if (raydir[(i__1 = iaxis[2] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "raydir", i__1, "xdda_", (ftnlen)664)] > 0.) {
+		    &__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)
+		    664)] > 0.) {
 		ax3err = s13 * (1. - vtxoff[2]) + vtxoff[0] - 1.;
 	    } else {
 		ax3err = s13 * vtxoff[2] + vtxoff[0] - 1.;
 	    }
 	} else {
 	    if (raydir[(i__1 = iaxis[2] - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "raydir", i__1, "xdda_", (ftnlen)672)] > 0.) {
+		    &__global_state->f2c, "raydir", i__1, "xdda_", (ftnlen)
+		    672)] > 0.) {
 		ax3err = s13 * (1. - vtxoff[2]) - vtxoff[0];
 	    } else {
 		ax3err = s13 * vtxoff[2] - vtxoff[0];
@@ -700,35 +723,40 @@ static xdda_state_t* get_xdda_state() {
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (raydir[(i__2 = iaxis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("iaxis", i__1, "xdda_", (ftnlen)695)] - 1) < 3 && 0 <= 
-		i__2 ? i__2 : s_rnge("raydir", i__2, "xdda_", (ftnlen)695)] > 
+		s_rnge(&__global_state->f2c, "iaxis", i__1, "xdda_", (ftnlen)
+		695)] - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "raydir", i__2, "xdda_", (ftnlen)695)] > 
 		limit) {
 
 /*           Positive component direction, positive step. */
 
-	    step[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("step", 
-		    i__1, "xdda_", (ftnlen)699)] = 1;
+	    step[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "step", i__1, "xdda_", (ftnlen)699)] 
+		    = 1;
 	} else if (raydir[(i__2 = iaxis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? 
-		i__1 : s_rnge("iaxis", i__1, "xdda_", (ftnlen)701)] - 1) < 3 
-		&& 0 <= i__2 ? i__2 : s_rnge("raydir", i__2, "xdda_", (ftnlen)
-		701)] < -limit) {
+		i__1 : s_rnge(&__global_state->f2c, "iaxis", i__1, "xdda_", (
+		ftnlen)701)] - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "raydir", i__2, "xdda_", (ftnlen)701)] < 
+		-limit) {
 
 /*           Negative component direction, negative step. */
 
-	    step[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("step", 
-		    i__1, "xdda_", (ftnlen)705)] = -1;
+	    step[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "step", i__1, "xdda_", (ftnlen)705)] 
+		    = -1;
 	} else {
 
 /*           No component in this direction, no step. */
 
-	    step[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("step", 
-		    i__1, "xdda_", (ftnlen)711)] = 0;
+	    step[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "step", i__1, "xdda_", (ftnlen)711)] 
+		    = 0;
 	}
     }
 
 /*     Follow the ray until it exits the voxel grid. */
 
-    while(zzingrd_(grdext, &voxlst[*nvx * 3 - 3])) {
+    while(zzingrd_(__global_state, grdext, &voxlst[*nvx * 3 - 3])) {
 	if (ax2err < 0. || ax3err < 0.) {
 
 /*           Ray has crossed over into the next voxel in IAXIS(2) or */
@@ -766,13 +794,13 @@ static xdda_state_t* get_xdda_state() {
 /*        Check we have room in VOXLST. */
 
 	if (*nvx > *maxnvx) {
-	    chkin_("XDDA", (ftnlen)4);
-	    setmsg_("Index larger than array. Index = #1. Array size = #2.", (
-		    ftnlen)53);
-	    errint_("#1", nvx, (ftnlen)2);
-	    errint_("#2", maxnvx, (ftnlen)2);
-	    sigerr_("SPICE(ARRAYTOOSMALL)", (ftnlen)20);
-	    chkout_("XDDA", (ftnlen)4);
+	    chkin_(__global_state, "XDDA", (ftnlen)4);
+	    setmsg_(__global_state, "Index larger than array. Index = #1. Ar"
+		    "ray size = #2.", (ftnlen)53);
+	    errint_(__global_state, "#1", nvx, (ftnlen)2);
+	    errint_(__global_state, "#2", maxnvx, (ftnlen)2);
+	    sigerr_(__global_state, "SPICE(ARRAYTOOSMALL)", (ftnlen)20);
+	    chkout_(__global_state, "XDDA", (ftnlen)4);
 	    return 0;
 	}
 
@@ -780,10 +808,11 @@ static xdda_state_t* get_xdda_state() {
 /*        the values calculated in this loop pass. */
 
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    voxlst[iaxis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "iaxis", i__1, "xdda_", (ftnlen)784)] + *nvx * 3 - 4] = 
-		    icoord[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-		    "icoord", i__2, "xdda_", (ftnlen)784)];
+	    voxlst[iaxis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "iaxis", i__1, "xdda_", (ftnlen)784)]
+		     + *nvx * 3 - 4] = icoord[(i__2 = i__ - 1) < 3 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "icoord", i__2,
+		     "xdda_", (ftnlen)784)];
 	}
     }
 

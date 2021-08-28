@@ -8,8 +8,7 @@
 
 
 extern ekqmgr_init_t __ekqmgr_init;
-static ekqmgr_state_t* get_ekqmgr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekqmgr_state_t* get_ekqmgr_state(cspice_t* state) {
 	if (!state->ekqmgr)
 		state->ekqmgr = __cspice_allocate_module(sizeof(
 	ekqmgr_state_t), &__ekqmgr_init, sizeof(__ekqmgr_init));
@@ -18,14 +17,14 @@ static ekqmgr_state_t* get_ekqmgr_state() {
 }
 
 /* $Procedure EKQMGR  ( EK, query manager ) */
-/* Subroutine */ int ekqmgr_0_(int n__, integer *cindex, integer *elment, 
-	char *eqryc, doublereal *eqryd, integer *eqryi, char *fname, integer *
-	row, integer *selidx, char *column, integer *handle, integer *n, char 
-	*table, integer *attdsc, integer *ccount, logical *found, integer *
-	nelt, integer *nmrows, logical *semerr, char *errmsg, char *cdata, 
-	doublereal *ddata, integer *idata, logical *null, ftnlen eqryc_len, 
-	ftnlen fname_len, ftnlen column_len, ftnlen table_len, ftnlen 
-	errmsg_len, ftnlen cdata_len)
+/* Subroutine */ int ekqmgr_0_(cspice_t* __global_state, int n__, integer *
+	cindex, integer *elment, char *eqryc, doublereal *eqryd, integer *
+	eqryi, char *fname, integer *row, integer *selidx, char *column, 
+	integer *handle, integer *n, char *table, integer *attdsc, integer *
+	ccount, logical *found, integer *nelt, integer *nmrows, logical *
+	semerr, char *errmsg, char *cdata, doublereal *ddata, integer *idata, 
+	logical *null, ftnlen eqryc_len, ftnlen fname_len, ftnlen column_len, 
+	ftnlen table_len, ftnlen errmsg_len, ftnlen cdata_len)
 {
     /* Initialized data */
 
@@ -35,103 +34,118 @@ static ekqmgr_state_t* get_ekqmgr_state() {
 	    i__11, i__12, i__13, i__14;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int lnkini_(integer *, integer *);
-    extern /* Subroutine */ int dascls_(integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int validc_(integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical zzekrmch_(integer *, logical *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, char *, 
-	    integer *, integer *, doublereal *, integer *, ftnlen);
-    extern /* Subroutine */ int zzekqtab_(integer *, char *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen);
-    extern logical zzekvmch_(integer *, logical *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
-    extern /* Subroutine */ int zzeksinf_(integer *, integer *, char *, 
-	    integer *, char *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int lnkini_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int dascls_(cspice_t*, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int lnkilb_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
 	    ftnlen);
-    extern /* Subroutine */ int appndc_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int appndi_(integer *, integer *);
-    extern /* Subroutine */ int zzeksdec_(integer *);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int zzekqcnj_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekqcon_(integer *, char *, doublereal *, 
-	    integer *, integer *, char *, integer *, char *, integer *, 
-	    integer *, char *, integer *, char *, integer *, integer *, 
-	    integer *, integer *, doublereal *, integer *, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekkey_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, char *, 
-	    integer *, integer *, doublereal *, integer *, logical *, integer 
-	    *, integer *, integer *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int zzekixlk_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int ssizec_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int validc_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
+    extern /* Subroutine */ int lnkfsl_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzekrplk_(integer *, integer *, integer *, 
-	    integer *);
-    extern integer zzekesiz_(integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekjoin_(integer *, integer *, integer *, 
-	    logical *, integer *, integer *, integer *, integer *, integer *, 
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical zzekrmch_(cspice_t*, integer *, logical *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekspsh_(integer *, integer *);
-    extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekweed_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekqsel_(integer *, char *, integer *, 
-	    integer *, integer *, char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekvset_(integer *, integer *);
-    extern /* Subroutine */ int zzekqord_(integer *, char *, integer *, char *
-	    , integer *, char *, integer *, integer *, ftnlen, ftnlen, ftnlen)
-	    ;
-    extern /* Subroutine */ int zzekjsrt_(integer *, integer *, integer *, 
+	    char *, integer *, integer *, doublereal *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekqtab_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern logical zzekvmch_(cspice_t*, integer *, logical *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekstop_(integer *);
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ekcls_(integer *);
-    extern integer lnktl_(integer *, integer *);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int ekopr_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int lnkan_(integer *, integer *);
-    extern /* Subroutine */ int movec_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzeksinf_(cspice_t*, integer *, integer *, 
+	    char *, integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int appndc_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekjsqz_(integer *);
-    extern /* Subroutine */ int zzekvcal_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekrsc_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, char *, logical *, logical *, 
+    extern /* Subroutine */ int appndi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzeksdec_(cspice_t*, integer *);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzekqcnj_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekqcon_(cspice_t*, integer *, char *, 
+	    doublereal *, integer *, integer *, char *, integer *, char *, 
+	    integer *, integer *, char *, integer *, char *, integer *, 
+	    integer *, integer *, integer *, doublereal *, integer *, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekkey_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    char *, integer *, integer *, doublereal *, integer *, logical *, 
+	    integer *, integer *, integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzekixlk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekrplk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern integer zzekesiz_(cspice_t*, integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzeksupd_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekjoin_(cspice_t*, integer *, integer *, 
+	    integer *, logical *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekspsh_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzeksrd_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekweed_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekqsel_(cspice_t*, integer *, char *, 
+	    integer *, integer *, integer *, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekvset_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int zzekqord_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, char *, integer *, integer *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekjsrt_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekstop_(cspice_t*, integer *);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ekcls_(cspice_t*, integer *);
+    extern integer lnktl_(cspice_t*, integer *, integer *);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ekopr_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int lnkan_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int movec_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzekrsd_(integer *, integer *, integer *, 
-	    integer *, integer *, doublereal *, logical *, logical *);
-    extern /* Subroutine */ int zzekrsi_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *, logical *);
-    extern logical failed_(void);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern logical return_(void);
-    extern integer eknseg_(integer *);
-    extern integer lnknxt_(integer *, integer *);
-    extern integer lnknfn_(integer *);
+    extern /* Subroutine */ int zzekjsqz_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzekvcal_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekrsc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, char *, logical *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzekrsd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, doublereal *, logical *, logical 
+	    *);
+    extern /* Subroutine */ int zzekrsi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, logical *, logical *);
+    extern logical failed_(cspice_t*);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern logical return_(cspice_t*);
+    extern integer eknseg_(cspice_t*, integer *);
+    extern integer lnknxt_(cspice_t*, integer *, integer *);
+    extern integer lnknfn_(cspice_t*, integer *);
 
     /* Module state */
-    ekqmgr_state_t* __state = get_ekqmgr_state();
+    ekqmgr_state_t* __state = get_ekqmgr_state(__global_state);
 /* $ Abstract */
 
 /*     Manage query operations on EK files. */
@@ -1860,16 +1874,16 @@ static ekqmgr_state_t* get_ekqmgr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKQMGR", (ftnlen)6);
+	chkin_(__global_state, "EKQMGR", (ftnlen)6);
     }
 
 /*     Never come here. */
 
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("EKQMGR", (ftnlen)6);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "EKQMGR", (ftnlen)6);
     return 0;
 /* $Procedure     EKLEF  ( EK, load event file ) */
 
@@ -2072,10 +2086,10 @@ L_eklef:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKLEF", (ftnlen)5);
+	chkin_(__global_state, "EKLEF", (ftnlen)5);
     }
 
 /*     Here's a brief overview of what follows: */
@@ -2130,11 +2144,11 @@ L_eklef:
 /*        Initialize the file table pool, segment table pool, column */
 /*        descriptor pool, column table pool, and table list pool. */
 
-	lnkini_(&__state->c__20, __state->ftpool);
-	lnkini_(&__state->c__200, __state->stpool);
-	lnkini_(&__state->c__10000, __state->dtpool);
-	lnkini_(&__state->c__500, __state->ctpool);
-	lnkini_(&__state->c__100, __state->tbpool);
+	lnkini_(__global_state, &__state->c__20, __state->ftpool);
+	lnkini_(__global_state, &__state->c__200, __state->stpool);
+	lnkini_(__global_state, &__state->c__10000, __state->dtpool);
+	lnkini_(__global_state, &__state->c__500, __state->ctpool);
+	lnkini_(__global_state, &__state->c__100, __state->tbpool);
 	__state->fthead = 0;
 	__state->tbhead = 0;
 	__state->first = FALSE_;
@@ -2144,9 +2158,9 @@ L_eklef:
 /*     work.  This retreat will protect the various tables from */
 /*     corruption. */
 
-    ekopr_(fname, handle, fname_len);
-    if (failed_()) {
-	chkout_("EKLEF", (ftnlen)5);
+    ekopr_(__global_state, fname, handle, fname_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKLEF", (ftnlen)5);
 	return 0;
     }
 
@@ -2157,23 +2171,24 @@ L_eklef:
     __state->i__ = __state->fthead;
     while(__state->i__ > 0) {
 	if (*handle == __state->fthan[(i__1 = __state->i__ - 1) < 20 && 0 <= 
-		i__1 ? i__1 : s_rnge("fthan", i__1, "ekqmgr_", (ftnlen)1214)])
-		 {
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, 
+		"ekqmgr_", (ftnlen)1214)]) {
 
 /*           The last call we made to EKOPR added another link to */
 /*           the EK file.  Remove this link. */
 
-	    dascls_(handle);
-	    chkout_("EKLEF", (ftnlen)5);
+	    dascls_(__global_state, handle);
+	    chkout_(__global_state, "EKLEF", (ftnlen)5);
 	    return 0;
 	}
-	__state->i__ = lnknxt_(&__state->i__, __state->ftpool);
+	__state->i__ = lnknxt_(__global_state, &__state->i__, __state->ftpool)
+		;
     }
 
 /*     Nothing doing unless the architecture is correct.  This file */
 /*     should be a paged DAS EK. */
 
-    zzekpgch_(handle, "READ", (ftnlen)4);
+    zzekpgch_(__global_state, handle, "READ", (ftnlen)4);
 
 /*     Before getting too involved with this new EK file, let's check it */
 /*     out.  We must have enough room to accommodate it in the file */
@@ -2181,45 +2196,48 @@ L_eklef:
 
 /*     Make sure there's enough room in the file table. */
 
-    if (lnknfn_(__state->ftpool) == 0) {
+    if (lnknfn_(__global_state, __state->ftpool) == 0) {
 
 /*        Sorry, there are no free file table entries left. */
 
 /*        We close the EK AFTER setting the long error message. */
 
-	setmsg_("The EK file # could not be loaded; the maximum number of lo"
-		"aded EKs has already been reached.", (ftnlen)93);
-	errhan_("#", handle, (ftnlen)1);
-	ekcls_(handle);
-	sigerr_("SPICE(EKFILETABLEFULL)", (ftnlen)22);
-	chkout_("EKLEF", (ftnlen)5);
+	setmsg_(__global_state, "The EK file # could not be loaded; the maxi"
+		"mum number of loaded EKs has already been reached.", (ftnlen)
+		93);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	ekcls_(__global_state, handle);
+	sigerr_(__global_state, "SPICE(EKFILETABLEFULL)", (ftnlen)22);
+	chkout_(__global_state, "EKLEF", (ftnlen)5);
 	return 0;
     }
 
 /*     Find out how many segments are in the new kernel, and make */
 /*     sure there's enough room in the segment table. */
 
-    __state->nseg = eknseg_(handle);
-    if (__state->nseg > lnknfn_(__state->stpool)) {
+    __state->nseg = eknseg_(__global_state, handle);
+    if (__state->nseg > lnknfn_(__global_state, __state->stpool)) {
 
 /*        There are too many segments for the amount of space we've got */
 /*        left. */
 
 /*        We close the EK AFTER setting the long error message. */
 
-	setmsg_("The EK file # could not be loaded; the maximum number of lo"
-		"aded segments has already been reached.", (ftnlen)98);
-	errhan_("#", handle, (ftnlen)1);
-	ekcls_(handle);
-	sigerr_("SPICE(EKSEGTABLEFULL)", (ftnlen)21);
-	chkout_("EKLEF", (ftnlen)5);
+	setmsg_(__global_state, "The EK file # could not be loaded; the maxi"
+		"mum number of loaded segments has already been reached.", (
+		ftnlen)98);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	ekcls_(__global_state, handle);
+	sigerr_(__global_state, "SPICE(EKSEGTABLEFULL)", (ftnlen)21);
+	chkout_(__global_state, "EKLEF", (ftnlen)5);
 	return 0;
     } else if (__state->nseg < 1) {
-	setmsg_("The EK file # contains no segments.", (ftnlen)35);
-	errhan_("#", handle, (ftnlen)1);
-	ekcls_(handle);
-	sigerr_("SPICE(EKNOSEGMENTS)", (ftnlen)19);
-	chkout_("EKLEF", (ftnlen)5);
+	setmsg_(__global_state, "The EK file # contains no segments.", (
+		ftnlen)35);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	ekcls_(__global_state, handle);
+	sigerr_(__global_state, "SPICE(EKNOSEGMENTS)", (ftnlen)19);
+	chkout_(__global_state, "EKLEF", (ftnlen)5);
 	return 0;
     }
 
@@ -2229,63 +2247,72 @@ L_eklef:
 /*     introduced in this file. */
 
     __state->seg = 1;
-    s_copy(__state->state, "LOAD_FILE_TABLE", (ftnlen)80, (ftnlen)15);
-    while(s_cmp(__state->state, "DONE", (ftnlen)80, (ftnlen)4) != 0) {
-	if (s_cmp(__state->state, "LOAD_FILE_TABLE", (ftnlen)80, (ftnlen)15) 
-		== 0) {
+    s_copy(&__global_state->f2c, __state->state, "LOAD_FILE_TABLE", (ftnlen)
+	    80, (ftnlen)15);
+    while(s_cmp(&__global_state->f2c, __state->state, "DONE", (ftnlen)80, (
+	    ftnlen)4) != 0) {
+	if (s_cmp(&__global_state->f2c, __state->state, "LOAD_FILE_TABLE", (
+		ftnlen)80, (ftnlen)15) == 0) {
 
 /*           Allocate a file table entry and link the new entry in before */
 /*           the current head of the list.  Update the list head pointer. */
 /*           Record the file handle in the new file table entry. */
 
-	    lnkan_(__state->ftpool, &__state->new__);
-	    lnkilb_(&__state->new__, &__state->fthead, __state->ftpool);
+	    lnkan_(__global_state, __state->ftpool, &__state->new__);
+	    lnkilb_(__global_state, &__state->new__, &__state->fthead, 
+		    __state->ftpool);
 	    __state->fthead = __state->new__;
 	    __state->fthan[(i__1 = __state->new__ - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("fthan", i__1, "ekqmgr_", (ftnlen)1317)] = *
-		    handle;
-	    s_copy(__state->state, "SUMMARIZE_SEGMENT", (ftnlen)80, (ftnlen)
-		    17);
-	} else if (s_cmp(__state->state, "SUMMARIZE_SEGMENT", (ftnlen)80, (
-		ftnlen)17) == 0) {
+		    i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, "ekqm"
+		    "gr_", (ftnlen)1317)] = *handle;
+	    s_copy(&__global_state->f2c, __state->state, "SUMMARIZE_SEGMENT", 
+		    (ftnlen)80, (ftnlen)17);
+	} else if (s_cmp(&__global_state->f2c, __state->state, "SUMMARIZE_SE"
+		"GMENT", (ftnlen)80, (ftnlen)17) == 0) {
 
 /*           Get the summary information for this segment. */
 
-	    zzeksinf_(handle, &__state->seg, __state->tabnam, __state->segdsc,
-		     __state->cnams, __state->cdscrs, (ftnlen)64, (ftnlen)32);
+	    zzeksinf_(__global_state, handle, &__state->seg, __state->tabnam, 
+		    __state->segdsc, __state->cnams, __state->cdscrs, (ftnlen)
+		    64, (ftnlen)32);
 	    __state->ncols = __state->segdsc[4];
 
 /*           Before going further, check the segment for duplicate */
 /*           column names.  Bail out if we find any. */
 
-	    ssizec_(&__state->c__500, __state->cnmset, (ftnlen)32);
-	    movec_(__state->cnams, &__state->ncols, __state->cnmset + 192, (
-		    ftnlen)32, (ftnlen)32);
-	    validc_(&__state->c__500, &__state->ncols, __state->cnmset, (
+	    ssizec_(__global_state, &__state->c__500, __state->cnmset, (
 		    ftnlen)32);
-	    if (cardc_(__state->cnmset, (ftnlen)32) < __state->ncols) {
-		s_copy(__state->state, "ABORT", (ftnlen)80, (ftnlen)5);
-		s_copy(__state->problm, "DUPLICATE_COLUMN_NAMES", (ftnlen)80, 
-			(ftnlen)22);
+	    movec_(__global_state, __state->cnams, &__state->ncols, 
+		    __state->cnmset + 192, (ftnlen)32, (ftnlen)32);
+	    validc_(__global_state, &__state->c__500, &__state->ncols, 
+		    __state->cnmset, (ftnlen)32);
+	    if (cardc_(__global_state, __state->cnmset, (ftnlen)32) < 
+		    __state->ncols) {
+		s_copy(&__global_state->f2c, __state->state, "ABORT", (ftnlen)
+			80, (ftnlen)5);
+		s_copy(&__global_state->f2c, __state->problm, "DUPLICATE_COL"
+			"UMN_NAMES", (ftnlen)80, (ftnlen)22);
 	    } else {
-		s_copy(__state->state, "FIND_TABLE", (ftnlen)80, (ftnlen)10);
+		s_copy(&__global_state->f2c, __state->state, "FIND_TABLE", (
+			ftnlen)80, (ftnlen)10);
 	    }
-	} else if (s_cmp(__state->state, "FIND_TABLE", (ftnlen)80, (ftnlen)10)
-		 == 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->state, "FIND_TABLE", (
+		ftnlen)80, (ftnlen)10) == 0) {
 
 /*           Traverse the table list, checking for a match. */
 
 	    __state->tbcurr = __state->tbhead;
 	    __state->presnt = FALSE_;
 	    while(__state->tbcurr > 0 && ! __state->presnt) {
-		if (s_cmp(__state->tabnam, __state->tbnams + (((i__1 = 
-			__state->tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("tbnams", i__1, "ekqmgr_", (ftnlen)1362)) << 6)
-			, (ftnlen)64, (ftnlen)64) == 0) {
+		if (s_cmp(&__global_state->f2c, __state->tabnam, 
+			__state->tbnams + (((i__1 = __state->tbcurr - 1) < 
+			100 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+			 "tbnams", i__1, "ekqmgr_", (ftnlen)1362)) << 6), (
+			ftnlen)64, (ftnlen)64) == 0) {
 		    __state->presnt = TRUE_;
 		} else {
-		    __state->tbcurr = lnknxt_(&__state->tbcurr, 
-			    __state->tbpool);
+		    __state->tbcurr = lnknxt_(__global_state, &
+			    __state->tbcurr, __state->tbpool);
 		}
 	    }
 
@@ -2301,50 +2328,56 @@ L_eklef:
 /*              parent table. */
 
 		if (__state->ncols != __state->tbncol[(i__1 = __state->tbcurr 
-			- 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("tbncol", 
-			i__1, "ekqmgr_", (ftnlen)1382)]) {
+			- 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "tbncol", i__1, "ekqmgr_", (
+			ftnlen)1382)]) {
 		    __state->npcol = __state->tbncol[(i__1 = __state->tbcurr 
-			    - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("tbncol", 
-			    i__1, "ekqmgr_", (ftnlen)1384)];
-		    s_copy(__state->state, "ABORT", (ftnlen)80, (ftnlen)5);
-		    s_copy(__state->problm, "COLUMN_NUMBER_MISMATCH", (ftnlen)
-			    80, (ftnlen)22);
+			    - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "tbncol", i__1, "ekqmgr_", (
+			    ftnlen)1384)];
+		    s_copy(&__global_state->f2c, __state->state, "ABORT", (
+			    ftnlen)80, (ftnlen)5);
+		    s_copy(&__global_state->f2c, __state->problm, "COLUMN_NU"
+			    "MBER_MISMATCH", (ftnlen)80, (ftnlen)22);
 		} else {
 
 /*                 Add the current file to the list of files containing */
 /*                 the current table. */
 
 		    __state->tbfils[(i__1 = __state->tbcurr * 20 - 20) < 2000 
-			    && 0 <= i__1 ? i__1 : s_rnge("tbfils", i__1, 
-			    "ekqmgr_", (ftnlen)1393)] = *handle;
+			    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+			     "tbfils", i__1, "ekqmgr_", (ftnlen)1393)] = *
+			    handle;
 		    __state->tbflsz[(i__1 = __state->tbcurr - 1) < 100 && 0 <=
-			     i__1 ? i__1 : s_rnge("tbflsz", i__1, "ekqmgr_", (
-			    ftnlen)1394)] = __state->tbflsz[(i__2 = 
-			    __state->tbcurr - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("tbflsz", i__2, "ekqmgr_", (ftnlen)1394)] 
-			    + 1;
-		    s_copy(__state->state, "MAKE_SEGMENT_TABLE_ENTRY", (
-			    ftnlen)80, (ftnlen)24);
+			     i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbf"
+			    "lsz", i__1, "ekqmgr_", (ftnlen)1394)] = 
+			    __state->tbflsz[(i__2 = __state->tbcurr - 1) < 
+			    100 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "tbflsz", i__2, "ekqmgr_", (
+			    ftnlen)1394)] + 1;
+		    s_copy(&__global_state->f2c, __state->state, "MAKE_SEGME"
+			    "NT_TABLE_ENTRY", (ftnlen)80, (ftnlen)24);
 		}
 	    } else {
 
 /*              This segment belongs to a new table. */
 
-		s_copy(__state->state, "MAKE_TABLE_LIST_ENTRY", (ftnlen)80, (
-			ftnlen)21);
+		s_copy(&__global_state->f2c, __state->state, "MAKE_TABLE_LIS"
+			"T_ENTRY", (ftnlen)80, (ftnlen)21);
 	    }
-	} else if (s_cmp(__state->state, "MAKE_TABLE_LIST_ENTRY", (ftnlen)80, 
-		(ftnlen)21) == 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->state, "MAKE_TABLE_L"
+		"IST_ENTRY", (ftnlen)80, (ftnlen)21) == 0) {
 
 /*           Allocate a table list entry, if we can. */
 
-	    if (lnknfn_(__state->tbpool) == 0) {
+	    if (lnknfn_(__global_state, __state->tbpool) == 0) {
 
 /*              Oops, we're out of room. */
 
-		s_copy(__state->state, "ABORT", (ftnlen)80, (ftnlen)5);
-		s_copy(__state->problm, "TABLE_LIST_FULL", (ftnlen)80, (
-			ftnlen)15);
+		s_copy(&__global_state->f2c, __state->state, "ABORT", (ftnlen)
+			80, (ftnlen)5);
+		s_copy(&__global_state->f2c, __state->problm, "TABLE_LIST_FU"
+			"LL", (ftnlen)80, (ftnlen)15);
 	    } else {
 
 /*              We have an entry; link it to the tail of the table list. */
@@ -2354,18 +2387,19 @@ L_eklef:
 /*              If this is the first table in the table list, set the */
 /*              table head pointer. */
 
-		lnkan_(__state->tbpool, &__state->tbcurr);
+		lnkan_(__global_state, __state->tbpool, &__state->tbcurr);
 		if (__state->tbhead <= 0) {
 		    __state->tbhead = __state->tbcurr;
 		} else {
-		    lnkilb_(&__state->tbhead, &__state->tbcurr, 
-			    __state->tbpool);
+		    lnkilb_(__global_state, &__state->tbhead, &
+			    __state->tbcurr, __state->tbpool);
 		}
 
 /*              Fill in the table name. */
 
-		s_copy(__state->tbnams + (((i__1 = __state->tbcurr - 1) < 100 
-			&& 0 <= i__1 ? i__1 : s_rnge("tbnams", i__1, "ekqmgr_"
+		s_copy(&__global_state->f2c, __state->tbnams + (((i__1 = 
+			__state->tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge(&__global_state->f2c, "tbnams", i__1, "ekqmgr_"
 			, (ftnlen)1442)) << 6), __state->tabnam, (ftnlen)64, (
 			ftnlen)64);
 
@@ -2373,33 +2407,33 @@ L_eklef:
 /*              contains only the handle of the current EK. */
 
 		__state->tbfils[(i__1 = __state->tbcurr * 20 - 20) < 2000 && 
-			0 <= i__1 ? i__1 : s_rnge("tbfils", i__1, "ekqmgr_", (
-			ftnlen)1447)] = *handle;
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbf"
+			"ils", i__1, "ekqmgr_", (ftnlen)1447)] = *handle;
 		__state->tbflsz[(i__1 = __state->tbcurr - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("tbflsz", i__1, "ekqmgr_", (
-			ftnlen)1448)] = 1;
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbflsz", 
+			i__1, "ekqmgr_", (ftnlen)1448)] = 1;
 
 /*              Initialize the column count, column table pointer, and */
 /*              segment list pointer for this table. */
 
 		__state->tbncol[(i__1 = __state->tbcurr - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("tbncol", i__1, "ekqmgr_", (
-			ftnlen)1454)] = __state->ncols;
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbncol", 
+			i__1, "ekqmgr_", (ftnlen)1454)] = __state->ncols;
 		__state->tbctpt[(i__1 = __state->tbcurr - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("tbctpt", i__1, "ekqmgr_", (
-			ftnlen)1455)] = 0;
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbctpt", 
+			i__1, "ekqmgr_", (ftnlen)1455)] = 0;
 		__state->tbstpt[(i__1 = __state->tbcurr - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("tbstpt", i__1, "ekqmgr_", (
-			ftnlen)1456)] = 0;
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbstpt", 
+			i__1, "ekqmgr_", (ftnlen)1456)] = 0;
 
 /*              Go on to add a segment table entry for the current */
 /*              segment. */
 
-		s_copy(__state->state, "MAKE_SEGMENT_TABLE_ENTRY", (ftnlen)80,
-			 (ftnlen)24);
+		s_copy(&__global_state->f2c, __state->state, "MAKE_SEGMENT_T"
+			"ABLE_ENTRY", (ftnlen)80, (ftnlen)24);
 	    }
-	} else if (s_cmp(__state->state, "MAKE_SEGMENT_TABLE_ENTRY", (ftnlen)
-		80, (ftnlen)24) == 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->state, "MAKE_SEGMENT"
+		"_TABLE_ENTRY", (ftnlen)80, (ftnlen)24) == 0) {
 
 /*           Add the data for the current segment to the segment */
 /*           table. */
@@ -2407,22 +2441,23 @@ L_eklef:
 /*           Allocate a segment table entry.  We've already verified */
 /*           that there's enough room. */
 
-	    lnkan_(__state->stpool, &__state->stnew);
+	    lnkan_(__global_state, __state->stpool, &__state->stnew);
 
 /*           Link this segment table entry to the tail of the segment */
 /*           list for the parent table, or, if the tail is NIL, just set */
 /*           the segment list pointer to the current segment node. */
 
 	    if (__state->tbstpt[(i__1 = __state->tbcurr - 1) < 100 && 0 <= 
-		    i__1 ? i__1 : s_rnge("tbstpt", i__1, "ekqmgr_", (ftnlen)
-		    1482)] <= 0) {
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbstpt", i__1,
+		     "ekqmgr_", (ftnlen)1482)] <= 0) {
 		__state->tbstpt[(i__1 = __state->tbcurr - 1) < 100 && 0 <= 
-			i__1 ? i__1 : s_rnge("tbstpt", i__1, "ekqmgr_", (
-			ftnlen)1484)] = __state->stnew;
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbstpt", 
+			i__1, "ekqmgr_", (ftnlen)1484)] = __state->stnew;
 	    } else {
-		lnkilb_(&__state->tbstpt[(i__1 = __state->tbcurr - 1) < 100 &&
-			 0 <= i__1 ? i__1 : s_rnge("tbstpt", i__1, "ekqmgr_", 
-			(ftnlen)1488)], &__state->stnew, __state->stpool);
+		lnkilb_(__global_state, &__state->tbstpt[(i__1 = 
+			__state->tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : 
+			s_rnge(&__global_state->f2c, "tbstpt", i__1, "ekqmgr_"
+			, (ftnlen)1488)], &__state->stnew, __state->stpool);
 	    }
 
 /*           At this point, we can fill in all elements of the segment */
@@ -2430,31 +2465,32 @@ L_eklef:
 /*           and the column base addresses. */
 
 	    __state->sthan[(i__1 = __state->stnew - 1) < 200 && 0 <= i__1 ? 
-		    i__1 : s_rnge("sthan", i__1, "ekqmgr_", (ftnlen)1497)] = *
-		    handle;
+		    i__1 : s_rnge(&__global_state->f2c, "sthan", i__1, "ekqm"
+		    "gr_", (ftnlen)1497)] = *handle;
 	    __state->stsidx[(i__1 = __state->stnew - 1) < 200 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stsidx", i__1, "ekqmgr_", (ftnlen)1498)] = 
-		    __state->seg;
+		    i__1 : s_rnge(&__global_state->f2c, "stsidx", i__1, "ekq"
+		    "mgr_", (ftnlen)1498)] = __state->seg;
 	    __state->stnrow[(i__1 = __state->stnew - 1) < 200 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stnrow", i__1, "ekqmgr_", (ftnlen)1499)] = 
-		    __state->segdsc[5];
+		    i__1 : s_rnge(&__global_state->f2c, "stnrow", i__1, "ekq"
+		    "mgr_", (ftnlen)1499)] = __state->segdsc[5];
 	    __state->stncol[(i__1 = __state->stnew - 1) < 200 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stncol", i__1, "ekqmgr_", (ftnlen)1500)] = 
-		    __state->segdsc[4];
+		    i__1 : s_rnge(&__global_state->f2c, "stncol", i__1, "ekq"
+		    "mgr_", (ftnlen)1500)] = __state->segdsc[4];
 	    __state->stdtpt[(i__1 = __state->stnew - 1) < 200 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stdtpt", i__1, "ekqmgr_", (ftnlen)1501)] = 
-		    0;
-	    movei_(__state->segdsc, &__state->c__24, &__state->stdscs[(i__1 = 
-		    __state->stnew * 24 - 24) < 4800 && 0 <= i__1 ? i__1 : 
-		    s_rnge("stdscs", i__1, "ekqmgr_", (ftnlen)1503)]);
+		    i__1 : s_rnge(&__global_state->f2c, "stdtpt", i__1, "ekq"
+		    "mgr_", (ftnlen)1501)] = 0;
+	    movei_(__global_state, __state->segdsc, &__state->c__24, &
+		    __state->stdscs[(i__1 = __state->stnew * 24 - 24) < 4800 
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stds"
+		    "cs", i__1, "ekqmgr_", (ftnlen)1503)]);
 
 /*           The next step is to set up the column attributes and */
 /*           descriptors. */
 
-	    s_copy(__state->state, "MAKE_COLUMN_TABLE_ENTRIES", (ftnlen)80, (
-		    ftnlen)25);
-	} else if (s_cmp(__state->state, "MAKE_COLUMN_TABLE_ENTRIES", (ftnlen)
-		80, (ftnlen)25) == 0) {
+	    s_copy(&__global_state->f2c, __state->state, "MAKE_COLUMN_TABLE_"
+		    "ENTRIES", (ftnlen)80, (ftnlen)25);
+	} else if (s_cmp(&__global_state->f2c, __state->state, "MAKE_COLUMN_"
+		"TABLE_ENTRIES", (ftnlen)80, (ftnlen)25) == 0) {
 	    if (__state->presnt) {
 
 /*              If the current table was present before loading the */
@@ -2472,15 +2508,16 @@ L_eklef:
 /*              looking for a match. */
 
 		__state->j = __state->tbctpt[(i__1 = __state->tbcurr - 1) < 
-			100 && 0 <= i__1 ? i__1 : s_rnge("tbctpt", i__1, 
-			"ekqmgr_", (ftnlen)1532)];
-		while(__state->j > 0 && s_cmp(__state->state, "ABORT", (
-			ftnlen)80, (ftnlen)5) != 0) {
-		    __state->k = isrchc_(__state->ctnams + (((i__1 = 
-			    __state->j - 1) < 500 && 0 <= i__1 ? i__1 : 
-			    s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)1538)) 
-			    << 5), &__state->ncols, __state->cnams, (ftnlen)
-			    32, (ftnlen)32);
+			100 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+			 "tbctpt", i__1, "ekqmgr_", (ftnlen)1532)];
+		while(__state->j > 0 && s_cmp(&__global_state->f2c, 
+			__state->state, "ABORT", (ftnlen)80, (ftnlen)5) != 0) 
+			{
+		    __state->k = isrchc_(__global_state, __state->ctnams + (((
+			    i__1 = __state->j - 1) < 500 && 0 <= i__1 ? i__1 :
+			     s_rnge(&__global_state->f2c, "ctnams", i__1, 
+			    "ekqmgr_", (ftnlen)1538)) << 5), &__state->ncols, 
+			    __state->cnams, (ftnlen)32, (ftnlen)32);
 		    if (__state->k > 0) {
 
 /*                    We have a name match.  At this point, we must */
@@ -2490,42 +2527,49 @@ L_eklef:
 /*                    don't. */
 
 			__state->indexd = __state->cdscrs[(i__1 = __state->k *
-				 11 - 6) < 5500 && 0 <= i__1 ? i__1 : s_rnge(
-				"cdscrs", i__1, "ekqmgr_", (ftnlen)1549)] != 
-				-1;
+				 11 - 6) < 5500 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "cdscrs", i__1, "ekqmgr_"
+				, (ftnlen)1549)] != -1;
 			__state->nulsok = __state->cdscrs[(i__1 = __state->k *
-				 11 - 4) < 5500 && 0 <= i__1 ? i__1 : s_rnge(
-				"cdscrs", i__1, "ekqmgr_", (ftnlen)1550)] != 
-				-1;
+				 11 - 4) < 5500 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "cdscrs", i__1, "ekqmgr_"
+				, (ftnlen)1550)] != -1;
 			__state->attmch = __state->cdscrs[(i__1 = __state->k *
 				 11 - 11) < 5500 && 0 <= i__1 ? i__1 : s_rnge(
-				"cdscrs", i__1, "ekqmgr_", (ftnlen)1551)] == 
-				__state->ctclas[(i__2 = __state->j - 1) < 500 
-				&& 0 <= i__2 ? i__2 : s_rnge("ctclas", i__2, 
+				&__global_state->f2c, "cdscrs", i__1, "ekqmg"
+				"r_", (ftnlen)1551)] == __state->ctclas[(i__2 =
+				 __state->j - 1) < 500 && 0 <= i__2 ? i__2 : 
+				s_rnge(&__global_state->f2c, "ctclas", i__2, 
 				"ekqmgr_", (ftnlen)1551)] && __state->cdscrs[(
 				i__3 = __state->k * 11 - 10) < 5500 && 0 <= 
-				i__3 ? i__3 : s_rnge("cdscrs", i__3, "ekqmgr_"
-				, (ftnlen)1551)] == __state->cttyps[(i__4 = 
-				__state->j - 1) < 500 && 0 <= i__4 ? i__4 : 
-				s_rnge("cttyps", i__4, "ekqmgr_", (ftnlen)
-				1551)] && __state->cdscrs[(i__5 = __state->k *
-				 11 - 9) < 5500 && 0 <= i__5 ? i__5 : s_rnge(
-				"cdscrs", i__5, "ekqmgr_", (ftnlen)1551)] == 
+				i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+				"cdscrs", i__3, "ekqmgr_", (ftnlen)1551)] == 
+				__state->cttyps[(i__4 = __state->j - 1) < 500 
+				&& 0 <= i__4 ? i__4 : s_rnge(&
+				__global_state->f2c, "cttyps", i__4, "ekqmgr_"
+				, (ftnlen)1551)] && __state->cdscrs[(i__5 = 
+				__state->k * 11 - 9) < 5500 && 0 <= i__5 ? 
+				i__5 : s_rnge(&__global_state->f2c, "cdscrs", 
+				i__5, "ekqmgr_", (ftnlen)1551)] == 
 				__state->ctlens[(i__6 = __state->j - 1) < 500 
-				&& 0 <= i__6 ? i__6 : s_rnge("ctlens", i__6, 
-				"ekqmgr_", (ftnlen)1551)] && __state->cdscrs[(
-				i__7 = __state->k * 11 - 8) < 5500 && 0 <= 
-				i__7 ? i__7 : s_rnge("cdscrs", i__7, "ekqmgr_"
-				, (ftnlen)1551)] == __state->ctsizs[(i__8 = 
-				__state->j - 1) < 500 && 0 <= i__8 ? i__8 : 
-				s_rnge("ctsizs", i__8, "ekqmgr_", (ftnlen)
-				1551)] && __state->indexd == __state->ctindx[(
-				i__9 = __state->j - 1) < 500 && 0 <= i__9 ? 
-				i__9 : s_rnge("ctindx", i__9, "ekqmgr_", (
-				ftnlen)1551)] && __state->nulsok == 
+				&& 0 <= i__6 ? i__6 : s_rnge(&
+				__global_state->f2c, "ctlens", i__6, "ekqmgr_"
+				, (ftnlen)1551)] && __state->cdscrs[(i__7 = 
+				__state->k * 11 - 8) < 5500 && 0 <= i__7 ? 
+				i__7 : s_rnge(&__global_state->f2c, "cdscrs", 
+				i__7, "ekqmgr_", (ftnlen)1551)] == 
+				__state->ctsizs[(i__8 = __state->j - 1) < 500 
+				&& 0 <= i__8 ? i__8 : s_rnge(&
+				__global_state->f2c, "ctsizs", i__8, "ekqmgr_"
+				, (ftnlen)1551)] && __state->indexd == 
+				__state->ctindx[(i__9 = __state->j - 1) < 500 
+				&& 0 <= i__9 ? i__9 : s_rnge(&
+				__global_state->f2c, "ctindx", i__9, "ekqmgr_"
+				, (ftnlen)1551)] && __state->nulsok == 
 				__state->ctnull[(i__10 = __state->j - 1) < 
-				500 && 0 <= i__10 ? i__10 : s_rnge("ctnull", 
-				i__10, "ekqmgr_", (ftnlen)1551)];
+				500 && 0 <= i__10 ? i__10 : s_rnge(&
+				__global_state->f2c, "ctnull", i__10, "ekqmg"
+				"r_", (ftnlen)1551)];
 			if (__state->attmch) {
 
 /*                       Great, the attributes match.  Actually, the */
@@ -2540,47 +2584,54 @@ L_eklef:
 /*                       in the descriptor table.  We'll need to */
 /*                       allocate a descriptor table entry first. */
 
-			    if (lnknfn_(__state->dtpool) == 0) {
+			    if (lnknfn_(__global_state, __state->dtpool) == 0)
+				     {
 
 /*                          No free nodes left in the descriptor table. */
 
-				s_copy(__state->state, "ABORT", (ftnlen)80, (
-					ftnlen)5);
-				s_copy(__state->problm, "DESCRIPTOR_TABLE_FU"
-					"LL", (ftnlen)80, (ftnlen)21);
+				s_copy(&__global_state->f2c, __state->state, 
+					"ABORT", (ftnlen)80, (ftnlen)5);
+				s_copy(&__global_state->f2c, __state->problm, 
+					"DESCRIPTOR_TABLE_FULL", (ftnlen)80, (
+					ftnlen)21);
 			    } else {
 
 /*                          A free node is available.  Link it in */
 /*                          at the tail of the descriptor list for */
 /*                          the current segment. */
 
-				lnkan_(__state->dtpool, &__state->dtnew);
+				lnkan_(__global_state, __state->dtpool, &
+					__state->dtnew);
 				if (__state->stdtpt[(i__1 = __state->stnew - 
 					1) < 200 && 0 <= i__1 ? i__1 : s_rnge(
-					"stdtpt", i__1, "ekqmgr_", (ftnlen)
-					1589)] <= 0) {
+					&__global_state->f2c, "stdtpt", i__1, 
+					"ekqmgr_", (ftnlen)1589)] <= 0) {
 				    __state->stdtpt[(i__1 = __state->stnew - 
 					    1) < 200 && 0 <= i__1 ? i__1 : 
-					    s_rnge("stdtpt", i__1, "ekqmgr_", 
-					    (ftnlen)1591)] = __state->dtnew;
+					    s_rnge(&__global_state->f2c, 
+					    "stdtpt", i__1, "ekqmgr_", (
+					    ftnlen)1591)] = __state->dtnew;
 				} else {
-				    lnkilb_(&__state->stdtpt[(i__1 = 
-					    __state->stnew - 1) < 200 && 0 <= 
-					    i__1 ? i__1 : s_rnge("stdtpt", 
+				    lnkilb_(__global_state, &__state->stdtpt[(
+					    i__1 = __state->stnew - 1) < 200 
+					    && 0 <= i__1 ? i__1 : s_rnge(&
+					    __global_state->f2c, "stdtpt", 
 					    i__1, "ekqmgr_", (ftnlen)1595)], &
 					    __state->dtnew, __state->dtpool);
 				}
 
 /*                          Fill in the descriptor. */
 
-				movei_(&__state->cdscrs[(i__1 = __state->k * 
-					11 - 11) < 5500 && 0 <= i__1 ? i__1 : 
-					s_rnge("cdscrs", i__1, "ekqmgr_", (
-					ftnlen)1602)], &__state->c__11, &
-					__state->dtdscs[(i__2 = 
-					__state->dtnew * 11 - 11) < 110000 && 
-					0 <= i__2 ? i__2 : s_rnge("dtdscs", 
-					i__2, "ekqmgr_", (ftnlen)1602)]);
+				movei_(__global_state, &__state->cdscrs[(i__1 
+					= __state->k * 11 - 11) < 5500 && 0 <=
+					 i__1 ? i__1 : s_rnge(&
+					__global_state->f2c, "cdscrs", i__1, 
+					"ekqmgr_", (ftnlen)1602)], &
+					__state->c__11, &__state->dtdscs[(
+					i__2 = __state->dtnew * 11 - 11) < 
+					110000 && 0 <= i__2 ? i__2 : s_rnge(&
+					__global_state->f2c, "dtdscs", i__2, 
+					"ekqmgr_", (ftnlen)1602)]);
 			    }
 
 /*                       We filled in a descriptor table entry, or */
@@ -2594,15 +2645,17 @@ L_eklef:
 /*                       loaded column of the same name in the */
 /*                       current table. */
 
-			    s_copy(__state->colnam, __state->ctnams + (((i__1 
-				    = __state->j - 1) < 500 && 0 <= i__1 ? 
-				    i__1 : s_rnge("ctnams", i__1, "ekqmgr_", (
-				    ftnlen)1620)) << 5), (ftnlen)32, (ftnlen)
-				    32);
-			    s_copy(__state->state, "ABORT", (ftnlen)80, (
-				    ftnlen)5);
-			    s_copy(__state->problm, "MISMATCHED_COLUMN_ATTRI"
-				    "BUTES", (ftnlen)80, (ftnlen)28);
+			    s_copy(&__global_state->f2c, __state->colnam, 
+				    __state->ctnams + (((i__1 = __state->j - 
+				    1) < 500 && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "ctnams", i__1, 
+				    "ekqmgr_", (ftnlen)1620)) << 5), (ftnlen)
+				    32, (ftnlen)32);
+			    s_copy(&__global_state->f2c, __state->state, 
+				    "ABORT", (ftnlen)80, (ftnlen)5);
+			    s_copy(&__global_state->f2c, __state->problm, 
+				    "MISMATCHED_COLUMN_ATTRIBUTES", (ftnlen)
+				    80, (ftnlen)28);
 			}
 		    } else {
 
@@ -2610,14 +2663,16 @@ L_eklef:
 /*                    table is not present in the segment we're looking */
 /*                    at. */
 
-			s_copy(__state->colnam, __state->ctnams + (((i__1 = 
-				__state->j - 1) < 500 && 0 <= i__1 ? i__1 : 
-				s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)
-				1633)) << 5), (ftnlen)32, (ftnlen)32);
-			s_copy(__state->state, "ABORT", (ftnlen)80, (ftnlen)5)
-				;
-			s_copy(__state->problm, "MISSING_COLUMN", (ftnlen)80, 
-				(ftnlen)14);
+			s_copy(&__global_state->f2c, __state->colnam, 
+				__state->ctnams + (((i__1 = __state->j - 1) < 
+				500 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "ctnams", i__1, "ekqmgr_"
+				, (ftnlen)1633)) << 5), (ftnlen)32, (ftnlen)
+				32);
+			s_copy(&__global_state->f2c, __state->state, "ABORT", 
+				(ftnlen)80, (ftnlen)5);
+			s_copy(&__global_state->f2c, __state->problm, "MISSI"
+				"NG_COLUMN", (ftnlen)80, (ftnlen)14);
 		    }
 
 /*                 The current column matched one in the column list */
@@ -2625,9 +2680,10 @@ L_eklef:
 
 /*                 Advance to the next column in the table's column list. */
 
-		    if (s_cmp(__state->state, "ABORT", (ftnlen)80, (ftnlen)5) 
-			    != 0) {
-			__state->j = lnknxt_(&__state->j, __state->ctpool);
+		    if (s_cmp(&__global_state->f2c, __state->state, "ABORT", (
+			    ftnlen)80, (ftnlen)5) != 0) {
+			__state->j = lnknxt_(__global_state, &__state->j, 
+				__state->ctpool);
 		    }
 		}
 
@@ -2643,134 +2699,155 @@ L_eklef:
 /*              the attributes of the columns. */
 
 		__state->k = 1;
-		while(__state->k <= __state->ncols && s_cmp(__state->state, 
-			"ABORT", (ftnlen)80, (ftnlen)5) != 0) {
+		while(__state->k <= __state->ncols && s_cmp(&
+			__global_state->f2c, __state->state, "ABORT", (ftnlen)
+			80, (ftnlen)5) != 0) {
 
 /*                 Allocate a new entry in the column attribute table and */
 /*                 link it to the tail of the column list for the */
 /*                 current table.  If the column list is empty, update */
 /*                 the list head. */
 
-		    if (lnknfn_(__state->ctpool) == 0) {
+		    if (lnknfn_(__global_state, __state->ctpool) == 0) {
 
 /*                    There's no more space to store attribute */
 /*                    descriptors. */
 
-			s_copy(__state->state, "ABORT", (ftnlen)80, (ftnlen)5)
-				;
-			s_copy(__state->problm, "ATTRIBUTE_TABLE_FULL", (
-				ftnlen)80, (ftnlen)20);
+			s_copy(&__global_state->f2c, __state->state, "ABORT", 
+				(ftnlen)80, (ftnlen)5);
+			s_copy(&__global_state->f2c, __state->problm, "ATTRI"
+				"BUTE_TABLE_FULL", (ftnlen)80, (ftnlen)20);
 		    } else {
-			lnkan_(__state->ctpool, &__state->ctnew);
+			lnkan_(__global_state, __state->ctpool, &
+				__state->ctnew);
 			if (__state->tbctpt[(i__1 = __state->tbcurr - 1) < 
-				100 && 0 <= i__1 ? i__1 : s_rnge("tbctpt", 
-				i__1, "ekqmgr_", (ftnlen)1684)] <= 0) {
+				100 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "tbctpt", i__1, "ekqmgr_"
+				, (ftnlen)1684)] <= 0) {
 			    __state->tbctpt[(i__1 = __state->tbcurr - 1) < 
-				    100 && 0 <= i__1 ? i__1 : s_rnge("tbctpt",
-				     i__1, "ekqmgr_", (ftnlen)1686)] = 
+				    100 && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "tbctpt", i__1, 
+				    "ekqmgr_", (ftnlen)1686)] = 
 				    __state->ctnew;
 			} else {
-			    lnkilb_(&__state->tbctpt[(i__1 = __state->tbcurr 
-				    - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-				    "tbctpt", i__1, "ekqmgr_", (ftnlen)1690)],
-				     &__state->ctnew, __state->ctpool);
+			    lnkilb_(__global_state, &__state->tbctpt[(i__1 = 
+				    __state->tbcurr - 1) < 100 && 0 <= i__1 ? 
+				    i__1 : s_rnge(&__global_state->f2c, "tbc"
+				    "tpt", i__1, "ekqmgr_", (ftnlen)1690)], &
+				    __state->ctnew, __state->ctpool);
 			}
 
 /*                    Fill in the new column attribute entry with the */
 /*                    attributes for this column. */
 
-			s_copy(__state->ctnams + (((i__1 = __state->ctnew - 1)
-				 < 500 && 0 <= i__1 ? i__1 : s_rnge("ctnams", 
-				i__1, "ekqmgr_", (ftnlen)1698)) << 5), 
+			s_copy(&__global_state->f2c, __state->ctnams + (((
+				i__1 = __state->ctnew - 1) < 500 && 0 <= i__1 
+				? i__1 : s_rnge(&__global_state->f2c, "ctnams"
+				, i__1, "ekqmgr_", (ftnlen)1698)) << 5), 
 				__state->cnams + (((i__2 = __state->k - 1) < 
-				500 && 0 <= i__2 ? i__2 : s_rnge("cnams", 
-				i__2, "ekqmgr_", (ftnlen)1698)) << 5), (
-				ftnlen)32, (ftnlen)32);
+				500 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "cnams", i__2, "ekqmgr_",
+				 (ftnlen)1698)) << 5), (ftnlen)32, (ftnlen)32)
+				;
 			__state->ctclas[(i__1 = __state->ctnew - 1) < 500 && 
-				0 <= i__1 ? i__1 : s_rnge("ctclas", i__1, 
-				"ekqmgr_", (ftnlen)1699)] = __state->cdscrs[(
-				i__2 = __state->k * 11 - 11) < 5500 && 0 <= 
-				i__2 ? i__2 : s_rnge("cdscrs", i__2, "ekqmgr_"
-				, (ftnlen)1699)];
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "ctclas", i__1, "ekqmgr_"
+				, (ftnlen)1699)] = __state->cdscrs[(i__2 = 
+				__state->k * 11 - 11) < 5500 && 0 <= i__2 ? 
+				i__2 : s_rnge(&__global_state->f2c, "cdscrs", 
+				i__2, "ekqmgr_", (ftnlen)1699)];
 			__state->cttyps[(i__1 = __state->ctnew - 1) < 500 && 
-				0 <= i__1 ? i__1 : s_rnge("cttyps", i__1, 
-				"ekqmgr_", (ftnlen)1700)] = __state->cdscrs[(
-				i__2 = __state->k * 11 - 10) < 5500 && 0 <= 
-				i__2 ? i__2 : s_rnge("cdscrs", i__2, "ekqmgr_"
-				, (ftnlen)1700)];
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "cttyps", i__1, "ekqmgr_"
+				, (ftnlen)1700)] = __state->cdscrs[(i__2 = 
+				__state->k * 11 - 10) < 5500 && 0 <= i__2 ? 
+				i__2 : s_rnge(&__global_state->f2c, "cdscrs", 
+				i__2, "ekqmgr_", (ftnlen)1700)];
 			__state->ctlens[(i__1 = __state->ctnew - 1) < 500 && 
-				0 <= i__1 ? i__1 : s_rnge("ctlens", i__1, 
-				"ekqmgr_", (ftnlen)1701)] = __state->cdscrs[(
-				i__2 = __state->k * 11 - 9) < 5500 && 0 <= 
-				i__2 ? i__2 : s_rnge("cdscrs", i__2, "ekqmgr_"
-				, (ftnlen)1701)];
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "ctlens", i__1, "ekqmgr_"
+				, (ftnlen)1701)] = __state->cdscrs[(i__2 = 
+				__state->k * 11 - 9) < 5500 && 0 <= i__2 ? 
+				i__2 : s_rnge(&__global_state->f2c, "cdscrs", 
+				i__2, "ekqmgr_", (ftnlen)1701)];
 			__state->ctsizs[(i__1 = __state->ctnew - 1) < 500 && 
-				0 <= i__1 ? i__1 : s_rnge("ctsizs", i__1, 
-				"ekqmgr_", (ftnlen)1702)] = __state->cdscrs[(
-				i__2 = __state->k * 11 - 8) < 5500 && 0 <= 
-				i__2 ? i__2 : s_rnge("cdscrs", i__2, "ekqmgr_"
-				, (ftnlen)1702)];
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "ctsizs", i__1, "ekqmgr_"
+				, (ftnlen)1702)] = __state->cdscrs[(i__2 = 
+				__state->k * 11 - 8) < 5500 && 0 <= i__2 ? 
+				i__2 : s_rnge(&__global_state->f2c, "cdscrs", 
+				i__2, "ekqmgr_", (ftnlen)1702)];
 			__state->ctindx[(i__1 = __state->ctnew - 1) < 500 && 
-				0 <= i__1 ? i__1 : s_rnge("ctindx", i__1, 
-				"ekqmgr_", (ftnlen)1703)] = __state->cdscrs[(
-				i__2 = __state->k * 11 - 6) < 5500 && 0 <= 
-				i__2 ? i__2 : s_rnge("cdscrs", i__2, "ekqmgr_"
-				, (ftnlen)1703)] != -1;
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "ctindx", i__1, "ekqmgr_"
+				, (ftnlen)1703)] = __state->cdscrs[(i__2 = 
+				__state->k * 11 - 6) < 5500 && 0 <= i__2 ? 
+				i__2 : s_rnge(&__global_state->f2c, "cdscrs", 
+				i__2, "ekqmgr_", (ftnlen)1703)] != -1;
 			__state->ctfixd[(i__1 = __state->ctnew - 1) < 500 && 
-				0 <= i__1 ? i__1 : s_rnge("ctfixd", i__1, 
-				"ekqmgr_", (ftnlen)1704)] = __state->cdscrs[(
-				i__2 = __state->k * 11 - 8) < 5500 && 0 <= 
-				i__2 ? i__2 : s_rnge("cdscrs", i__2, "ekqmgr_"
-				, (ftnlen)1704)] != -1;
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "ctfixd", i__1, "ekqmgr_"
+				, (ftnlen)1704)] = __state->cdscrs[(i__2 = 
+				__state->k * 11 - 8) < 5500 && 0 <= i__2 ? 
+				i__2 : s_rnge(&__global_state->f2c, "cdscrs", 
+				i__2, "ekqmgr_", (ftnlen)1704)] != -1;
 			__state->ctnull[(i__1 = __state->ctnew - 1) < 500 && 
-				0 <= i__1 ? i__1 : s_rnge("ctnull", i__1, 
-				"ekqmgr_", (ftnlen)1705)] = __state->cdscrs[(
-				i__2 = __state->k * 11 - 4) < 5500 && 0 <= 
-				i__2 ? i__2 : s_rnge("cdscrs", i__2, "ekqmgr_"
-				, (ftnlen)1705)] != -1;
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "ctnull", i__1, "ekqmgr_"
+				, (ftnlen)1705)] = __state->cdscrs[(i__2 = 
+				__state->k * 11 - 4) < 5500 && 0 <= i__2 ? 
+				i__2 : s_rnge(&__global_state->f2c, "cdscrs", 
+				i__2, "ekqmgr_", (ftnlen)1705)] != -1;
 
 /*                    Store the column descriptor for this column */
 /*                    in the descriptor table.  We'll need to */
 /*                    allocate a descriptor table entry first. */
 
-			if (lnknfn_(__state->dtpool) == 0) {
+			if (lnknfn_(__global_state, __state->dtpool) == 0) {
 
 /*                       No free nodes left in the descriptor table. */
 
-			    s_copy(__state->state, "ABORT", (ftnlen)80, (
-				    ftnlen)5);
-			    s_copy(__state->problm, "DESCRIPTOR_TABLE_FULL", (
-				    ftnlen)80, (ftnlen)21);
+			    s_copy(&__global_state->f2c, __state->state, 
+				    "ABORT", (ftnlen)80, (ftnlen)5);
+			    s_copy(&__global_state->f2c, __state->problm, 
+				    "DESCRIPTOR_TABLE_FULL", (ftnlen)80, (
+				    ftnlen)21);
 			} else {
 
 /*                       A free node is available.  Link it in at the */
 /*                       tail of the descriptor list for the current */
 /*                       segment. */
 
-			    lnkan_(__state->dtpool, &__state->dtnew);
+			    lnkan_(__global_state, __state->dtpool, &
+				    __state->dtnew);
 			    if (__state->stdtpt[(i__1 = __state->stnew - 1) < 
-				    200 && 0 <= i__1 ? i__1 : s_rnge("stdtpt",
-				     i__1, "ekqmgr_", (ftnlen)1727)] <= 0) {
+				    200 && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "stdtpt", i__1, 
+				    "ekqmgr_", (ftnlen)1727)] <= 0) {
 				__state->stdtpt[(i__1 = __state->stnew - 1) < 
-					200 && 0 <= i__1 ? i__1 : s_rnge(
-					"stdtpt", i__1, "ekqmgr_", (ftnlen)
-					1729)] = __state->dtnew;
+					200 && 0 <= i__1 ? i__1 : s_rnge(&
+					__global_state->f2c, "stdtpt", i__1, 
+					"ekqmgr_", (ftnlen)1729)] = 
+					__state->dtnew;
 			    } else {
-				lnkilb_(&__state->stdtpt[(i__1 = 
-					__state->stnew - 1) < 200 && 0 <= 
-					i__1 ? i__1 : s_rnge("stdtpt", i__1, 
+				lnkilb_(__global_state, &__state->stdtpt[(
+					i__1 = __state->stnew - 1) < 200 && 0 
+					<= i__1 ? i__1 : s_rnge(&
+					__global_state->f2c, "stdtpt", i__1, 
 					"ekqmgr_", (ftnlen)1733)], &
 					__state->dtnew, __state->dtpool);
 			    }
 
 /*                       Fill in the descriptor. */
 
-			    movei_(&__state->cdscrs[(i__1 = __state->k * 11 - 
-				    11) < 5500 && 0 <= i__1 ? i__1 : s_rnge(
+			    movei_(__global_state, &__state->cdscrs[(i__1 = 
+				    __state->k * 11 - 11) < 5500 && 0 <= i__1 
+				    ? i__1 : s_rnge(&__global_state->f2c, 
 				    "cdscrs", i__1, "ekqmgr_", (ftnlen)1740)],
 				     &__state->c__11, &__state->dtdscs[(i__2 =
 				     __state->dtnew * 11 - 11) < 110000 && 0 
-				    <= i__2 ? i__2 : s_rnge("dtdscs", i__2, 
+				    <= i__2 ? i__2 : s_rnge(&
+				    __global_state->f2c, "dtdscs", i__2, 
 				    "ekqmgr_", (ftnlen)1740)]);
 			}
 		    }
@@ -2778,8 +2855,8 @@ L_eklef:
 /*                 We created attribute and descriptor entries for the */
 /*                 current column, or we encountered an error. */
 
-		    if (s_cmp(__state->state, "ABORT", (ftnlen)80, (ftnlen)5) 
-			    != 0) {
+		    if (s_cmp(&__global_state->f2c, __state->state, "ABORT", (
+			    ftnlen)80, (ftnlen)5) != 0) {
 
 /*                    Consider the next column. */
 
@@ -2796,27 +2873,29 @@ L_eklef:
 /*           We've processed the current segment in the new file, or */
 /*           else we have an error condition. */
 
-	    if (s_cmp(__state->state, "ABORT", (ftnlen)80, (ftnlen)5) != 0) {
+	    if (s_cmp(&__global_state->f2c, __state->state, "ABORT", (ftnlen)
+		    80, (ftnlen)5) != 0) {
 
 /*              We're ready to look at the next segment in the new file. */
 
-		s_copy(__state->state, "NEXT_SEGMENT", (ftnlen)80, (ftnlen)12)
-			;
+		s_copy(&__global_state->f2c, __state->state, "NEXT_SEGMENT", (
+			ftnlen)80, (ftnlen)12);
 	    }
-	} else if (s_cmp(__state->state, "NEXT_SEGMENT", (ftnlen)80, (ftnlen)
-		12) == 0) {
+	} else if (s_cmp(&__global_state->f2c, __state->state, "NEXT_SEGMENT",
+		 (ftnlen)80, (ftnlen)12) == 0) {
 	    if (__state->seg < __state->nseg) {
 		++__state->seg;
-		s_copy(__state->state, "SUMMARIZE_SEGMENT", (ftnlen)80, (
-			ftnlen)17);
+		s_copy(&__global_state->f2c, __state->state, "SUMMARIZE_SEGM"
+			"ENT", (ftnlen)80, (ftnlen)17);
 	    } else {
 
 /*              We're done with all of the segments. */
 
-		s_copy(__state->state, "DONE", (ftnlen)80, (ftnlen)4);
+		s_copy(&__global_state->f2c, __state->state, "DONE", (ftnlen)
+			80, (ftnlen)4);
 	    }
-	} else if (s_cmp(__state->state, "ABORT", (ftnlen)80, (ftnlen)5) == 0)
-		 {
+	} else if (s_cmp(&__global_state->f2c, __state->state, "ABORT", (
+		ftnlen)80, (ftnlen)5) == 0) {
 
 /*           We must clean up all the data structure additions we made to */
 /*           accommodate the new file. */
@@ -2828,16 +2907,17 @@ L_eklef:
 /*           list.  If the file has a successor, that file is now at the */
 /*           head of the list. */
 
-	    __state->fthead = lnknxt_(&__state->new__, __state->ftpool);
+	    __state->fthead = lnknxt_(__global_state, &__state->new__, 
+		    __state->ftpool);
 	    if (__state->fthead < 0) {
 
 /*              There are no files left.  Clean up the whole shebang. */
 
-		lnkini_(&__state->c__20, __state->ftpool);
-		lnkini_(&__state->c__200, __state->stpool);
-		lnkini_(&__state->c__10000, __state->dtpool);
-		lnkini_(&__state->c__500, __state->ctpool);
-		lnkini_(&__state->c__100, __state->tbpool);
+		lnkini_(__global_state, &__state->c__20, __state->ftpool);
+		lnkini_(__global_state, &__state->c__200, __state->stpool);
+		lnkini_(__global_state, &__state->c__10000, __state->dtpool);
+		lnkini_(__global_state, &__state->c__500, __state->ctpool);
+		lnkini_(__global_state, &__state->c__100, __state->tbpool);
 		__state->fthead = 0;
 		__state->tbhead = 0;
 	    } else {
@@ -2850,7 +2930,8 @@ L_eklef:
 /*              node, so we can call the `free sublist' routine to get */
 /*              rid of it. */
 
-		lnkfsl_(&__state->new__, &__state->new__, __state->ftpool);
+		lnkfsl_(__global_state, &__state->new__, &__state->new__, 
+			__state->ftpool);
 
 /*              It's time to clean up the table list, segment table, */
 /*              column attribute table, and column descriptor table.  The */
@@ -2870,12 +2951,13 @@ L_eklef:
 		    __state->i__ = 1;
 		    while(__state->i__ <= __state->tbflsz[(i__1 = 
 			    __state->tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("tbflsz", i__1, "ekqmgr_", (ftnlen)1861)] 
-			    && ! __state->fnd) {
+			    s_rnge(&__global_state->f2c, "tbflsz", i__1, 
+			    "ekqmgr_", (ftnlen)1861)] && ! __state->fnd) {
 			if (__state->tbfils[(i__1 = __state->i__ + 
 				__state->tbcurr * 20 - 21) < 2000 && 0 <= 
-				i__1 ? i__1 : s_rnge("tbfils", i__1, "ekqmgr_"
-				, (ftnlen)1864)] == *handle) {
+				i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"tbfils", i__1, "ekqmgr_", (ftnlen)1864)] == *
+				handle) {
 
 /*                       This table is affected by unloading the file. */
 
@@ -2897,38 +2979,41 @@ L_eklef:
 /*                    table.  Compress this handle out of the list. */
 
 			i__2 = __state->tbflsz[(i__1 = __state->tbcurr - 1) < 
-				100 && 0 <= i__1 ? i__1 : s_rnge("tbflsz", 
-				i__1, "ekqmgr_", (ftnlen)1890)] - 1;
+				100 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "tbflsz", i__1, "ekqmgr_"
+				, (ftnlen)1890)] - 1;
 			for (__state->j = __state->i__; __state->j <= i__2; 
 				++__state->j) {
 			    __state->tbfils[(i__1 = __state->j + 
 				    __state->tbcurr * 20 - 21) < 2000 && 0 <= 
-				    i__1 ? i__1 : s_rnge("tbfils", i__1, 
-				    "ekqmgr_", (ftnlen)1892)] = 
-				    __state->tbfils[(i__3 = __state->j + 1 + 
-				    __state->tbcurr * 20 - 21) < 2000 && 0 <= 
-				    i__3 ? i__3 : s_rnge("tbfils", i__3, 
+				    i__1 ? i__1 : s_rnge(&__global_state->f2c,
+				     "tbfils", i__1, "ekqmgr_", (ftnlen)1892)]
+				     = __state->tbfils[(i__3 = __state->j + 1 
+				    + __state->tbcurr * 20 - 21) < 2000 && 0 
+				    <= i__3 ? i__3 : s_rnge(&
+				    __global_state->f2c, "tbfils", i__3, 
 				    "ekqmgr_", (ftnlen)1892)];
 			}
 			__state->tbflsz[(i__2 = __state->tbcurr - 1) < 100 && 
-				0 <= i__2 ? i__2 : s_rnge("tbflsz", i__2, 
-				"ekqmgr_", (ftnlen)1896)] = __state->tbflsz[(
-				i__1 = __state->tbcurr - 1) < 100 && 0 <= 
-				i__1 ? i__1 : s_rnge("tbflsz", i__1, "ekqmgr_"
-				, (ftnlen)1896)] - 1;
+				0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "tbflsz", i__2, "ekqmgr_"
+				, (ftnlen)1896)] = __state->tbflsz[(i__1 = 
+				__state->tbcurr - 1) < 100 && 0 <= i__1 ? 
+				i__1 : s_rnge(&__global_state->f2c, "tbflsz", 
+				i__1, "ekqmgr_", (ftnlen)1896)] - 1;
 
 /*                    Traverse the segment list for this table, looking */
 /*                    for segments in the specified EK. */
 
 			__state->delseg = __state->tbstpt[(i__2 = 
 				__state->tbcurr - 1) < 100 && 0 <= i__2 ? 
-				i__2 : s_rnge("tbstpt", i__2, "ekqmgr_", (
-				ftnlen)1902)];
+				i__2 : s_rnge(&__global_state->f2c, "tbstpt", 
+				i__2, "ekqmgr_", (ftnlen)1902)];
 			while(__state->delseg > 0) {
 			    if (__state->sthan[(i__2 = __state->delseg - 1) < 
-				    200 && 0 <= i__2 ? i__2 : s_rnge("sthan", 
-				    i__2, "ekqmgr_", (ftnlen)1906)] == *
-				    handle) {
+				    200 && 0 <= i__2 ? i__2 : s_rnge(&
+				    __global_state->f2c, "sthan", i__2, "ekq"
+				    "mgr_", (ftnlen)1906)] == *handle) {
 
 /*                          This segment is aboard the sinking ship.  Put */
 /*                          it out of its misery. */
@@ -2939,13 +3024,14 @@ L_eklef:
 
 				__state->j = __state->stdtpt[(i__2 = 
 					__state->delseg - 1) < 200 && 0 <= 
-					i__2 ? i__2 : s_rnge("stdtpt", i__2, 
+					i__2 ? i__2 : s_rnge(&
+					__global_state->f2c, "stdtpt", i__2, 
 					"ekqmgr_", (ftnlen)1915)];
 				if (__state->j > 0) {
-				    __state->k = lnktl_(&__state->j, 
-					    __state->dtpool);
-				    lnkfsl_(&__state->j, &__state->k, 
-					    __state->dtpool);
+				    __state->k = lnktl_(__global_state, &
+					    __state->j, __state->dtpool);
+				    lnkfsl_(__global_state, &__state->j, &
+					    __state->k, __state->dtpool);
 				}
 
 /*                          Now we can delete the segment table entry */
@@ -2955,18 +3041,21 @@ L_eklef:
 
 				if (__state->delseg == __state->tbstpt[(i__2 =
 					 __state->tbcurr - 1) < 100 && 0 <= 
-					i__2 ? i__2 : s_rnge("tbstpt", i__2, 
+					i__2 ? i__2 : s_rnge(&
+					__global_state->f2c, "tbstpt", i__2, 
 					"ekqmgr_", (ftnlen)1928)]) {
 				    __state->tbstpt[(i__2 = __state->tbcurr - 
 					    1) < 100 && 0 <= i__2 ? i__2 : 
-					    s_rnge("tbstpt", i__2, "ekqmgr_", 
-					    (ftnlen)1930)] = lnknxt_(&
-					    __state->delseg, __state->stpool);
+					    s_rnge(&__global_state->f2c, 
+					    "tbstpt", i__2, "ekqmgr_", (
+					    ftnlen)1930)] = lnknxt_(
+					    __global_state, &__state->delseg, 
+					    __state->stpool);
 				}
-				__state->next = lnknxt_(&__state->delseg, 
-					__state->stpool);
-				lnkfsl_(&__state->delseg, &__state->delseg, 
-					__state->stpool);
+				__state->next = lnknxt_(__global_state, &
+					__state->delseg, __state->stpool);
+				lnkfsl_(__global_state, &__state->delseg, &
+					__state->delseg, __state->stpool);
 
 /*                          The segment we just freed may have been the */
 /*                          last one belonging to this table.  We deal */
@@ -2975,8 +3064,8 @@ L_eklef:
 
 				__state->delseg = __state->next;
 			    } else {
-				__state->delseg = lnknxt_(&__state->delseg, 
-					__state->stpool);
+				__state->delseg = lnknxt_(__global_state, &
+					__state->delseg, __state->stpool);
 			    }
 			}
 
@@ -2994,8 +3083,9 @@ L_eklef:
 /*                    table list. */
 
 			if (__state->tbstpt[(i__2 = __state->tbcurr - 1) < 
-				100 && 0 <= i__2 ? i__2 : s_rnge("tbstpt", 
-				i__2, "ekqmgr_", (ftnlen)1969)] <= 0) {
+				100 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "tbstpt", i__2, "ekqmgr_"
+				, (ftnlen)1969)] <= 0) {
 
 /*                       There are no loaded segments left for this */
 /*                       table. */
@@ -3010,31 +3100,31 @@ L_eklef:
 
 			    __state->j = __state->tbctpt[(i__2 = 
 				    __state->tbcurr - 1) < 100 && 0 <= i__2 ? 
-				    i__2 : s_rnge("tbctpt", i__2, "ekqmgr_", (
-				    ftnlen)1982)];
+				    i__2 : s_rnge(&__global_state->f2c, "tbc"
+				    "tpt", i__2, "ekqmgr_", (ftnlen)1982)];
 			    if (__state->j > 0) {
-				__state->k = lnktl_(&__state->j, 
-					__state->ctpool);
-				lnkfsl_(&__state->j, &__state->k, 
-					__state->ctpool);
+				__state->k = lnktl_(__global_state, &
+					__state->j, __state->ctpool);
+				lnkfsl_(__global_state, &__state->j, &
+					__state->k, __state->ctpool);
 			    }
 			    if (__state->tbcurr == __state->tbhead) {
 
 /*                          The entry for this table is at the head of */
 /*                          the table list.  Update the head of the list. */
 
-				__state->tbhead = lnknxt_(&__state->tbcurr, 
-					__state->tbpool);
+				__state->tbhead = lnknxt_(__global_state, &
+					__state->tbcurr, __state->tbpool);
 				__state->next = __state->tbhead;
 			    } else {
-				__state->next = lnknxt_(&__state->tbcurr, 
-					__state->tbpool);
+				__state->next = lnknxt_(__global_state, &
+					__state->tbcurr, __state->tbpool);
 			    }
 
 /*                       Make the entry for this table go away. */
 
-			    lnkfsl_(&__state->tbcurr, &__state->tbcurr, 
-				    __state->tbpool);
+			    lnkfsl_(__global_state, &__state->tbcurr, &
+				    __state->tbcurr, __state->tbpool);
 
 /*                       Look at the next table. */
 
@@ -3044,8 +3134,8 @@ L_eklef:
 /*                       We're done with the current table.  Look at the */
 /*                       next one. */
 
-			    __state->tbcurr = lnknxt_(&__state->tbcurr, 
-				    __state->tbpool);
+			    __state->tbcurr = lnknxt_(__global_state, &
+				    __state->tbcurr, __state->tbpool);
 			}
 
 /*                    We've cleaned up the table entry for the current */
@@ -3056,8 +3146,8 @@ L_eklef:
 /*                    The current table is not affected by unloading this */
 /*                    file.  Examine the next table. */
 
-			__state->tbcurr = lnknxt_(&__state->tbcurr, 
-				__state->tbpool);
+			__state->tbcurr = lnknxt_(__global_state, &
+				__state->tbcurr, __state->tbpool);
 		    }
 
 /*                 We've processed the current table. */
@@ -3070,78 +3160,89 @@ L_eklef:
 /*           Now that the mess has been arranged, tell the user what the */
 /*           problem was. */
 
-	    if (s_cmp(__state->problm, "TABLE_LIST_FULL", (ftnlen)80, (ftnlen)
-		    15) == 0) {
-		setmsg_("The EK file # could not be loaded; the maximum numb"
-			"er of distinct tables has already been reached.", (
-			ftnlen)98);
-		errhan_("#", handle, (ftnlen)1);
-		sigerr_("SPICE(EKTABLELISTFULL)", (ftnlen)22);
-	    } else if (s_cmp(__state->problm, "DUPLICATE_COLUMN_NAMES", (
-		    ftnlen)80, (ftnlen)22) == 0) {
-		setmsg_("The EK file # could not be loaded; the segment # co"
-			"ntains duplicate column names in table #.", (ftnlen)
-			92);
-		errhan_("#", handle, (ftnlen)1);
-		errint_("#", &__state->seg, (ftnlen)1);
-		errch_("#", __state->tabnam, (ftnlen)1, (ftnlen)64);
-		sigerr_("SPICE(EKCOLNUMMISMATCH)", (ftnlen)23);
-	    } else if (s_cmp(__state->problm, "COLUMN_NUMBER_MISMATCH", (
-		    ftnlen)80, (ftnlen)22) == 0) {
-		setmsg_("The EK file # could not be loaded; the number of co"
-			"lumns (#) in segment # does not match the number of "
-			"columns (#) in the parent table #.", (ftnlen)137);
-		errhan_("#", handle, (ftnlen)1);
-		errint_("#", &__state->ncols, (ftnlen)1);
-		errint_("#", &__state->seg, (ftnlen)1);
-		errint_("#", &__state->npcol, (ftnlen)1);
-		errch_("#", __state->tabnam, (ftnlen)1, (ftnlen)64);
-		sigerr_("SPICE(EKCOLNUMMISMATCH)", (ftnlen)23);
-	    } else if (s_cmp(__state->problm, "MISMATCHED_COLUMN_ATTRIBUTES", 
-		    (ftnlen)80, (ftnlen)28) == 0) {
-		setmsg_("EK file # contains a column whose attributes confli"
-			"ct with a loaded column.  The offending column name "
-			"is #; the column is in segment #* of the file.", (
-			ftnlen)149);
-		errhan_("#", handle, (ftnlen)1);
-		errch_("#", __state->colnam, (ftnlen)1, (ftnlen)32);
-		errint_("*", &__state->seg, (ftnlen)1);
-		sigerr_("SPICE(BADATTRIBUTES)", (ftnlen)20);
-	    } else if (s_cmp(__state->problm, "DESCRIPTOR_TABLE_FULL", (
-		    ftnlen)80, (ftnlen)21) == 0) {
-		setmsg_("The EK file # could not be loaded; themaximum allow"
-			"ed number of loaded columns already been reached.", (
-			ftnlen)100);
-		errhan_("#", handle, (ftnlen)1);
-		sigerr_("SPICE(COLDESCTABLEFULL)", (ftnlen)23);
-	    } else if (s_cmp(__state->problm, "ATTRIBUTE_TABLE_FULL", (ftnlen)
-		    80, (ftnlen)20) == 0) {
-		setmsg_("The EK file # could not be loaded; the maximum numb"
-			"er of columns havingdistinct attributes has already "
-			"been reached.", (ftnlen)116);
-		errhan_("#", handle, (ftnlen)1);
-		sigerr_("SPICE(EKCOLATTRTABLEFULL)", (ftnlen)25);
-	    } else if (s_cmp(__state->problm, "MISSING_COLUMN", (ftnlen)80, (
-		    ftnlen)14) == 0) {
-		setmsg_("The EK file # could not be loaded; the column # in "
-			"already loaded table # is not present in segment # i"
-			"n the EK file.", (ftnlen)117);
-		errhan_("#", handle, (ftnlen)1);
-		errch_("#", __state->colnam, (ftnlen)1, (ftnlen)32);
-		errch_("#", __state->tabnam, (ftnlen)1, (ftnlen)64);
-		errint_("#", &__state->seg, (ftnlen)1);
-		sigerr_("SPICE(EKMISSINGCOLUMN)", (ftnlen)22);
+	    if (s_cmp(&__global_state->f2c, __state->problm, "TABLE_LIST_FULL"
+		    , (ftnlen)80, (ftnlen)15) == 0) {
+		setmsg_(__global_state, "The EK file # could not be loaded; "
+			"the maximum number of distinct tables has already be"
+			"en reached.", (ftnlen)98);
+		errhan_(__global_state, "#", handle, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(EKTABLELISTFULL)", (ftnlen)22);
+	    } else if (s_cmp(&__global_state->f2c, __state->problm, "DUPLICA"
+		    "TE_COLUMN_NAMES", (ftnlen)80, (ftnlen)22) == 0) {
+		setmsg_(__global_state, "The EK file # could not be loaded; "
+			"the segment # contains duplicate column names in tab"
+			"le #.", (ftnlen)92);
+		errhan_(__global_state, "#", handle, (ftnlen)1);
+		errint_(__global_state, "#", &__state->seg, (ftnlen)1);
+		errch_(__global_state, "#", __state->tabnam, (ftnlen)1, (
+			ftnlen)64);
+		sigerr_(__global_state, "SPICE(EKCOLNUMMISMATCH)", (ftnlen)23)
+			;
+	    } else if (s_cmp(&__global_state->f2c, __state->problm, "COLUMN_"
+		    "NUMBER_MISMATCH", (ftnlen)80, (ftnlen)22) == 0) {
+		setmsg_(__global_state, "The EK file # could not be loaded; "
+			"the number of columns (#) in segment # does not matc"
+			"h the number of columns (#) in the parent table #.", (
+			ftnlen)137);
+		errhan_(__global_state, "#", handle, (ftnlen)1);
+		errint_(__global_state, "#", &__state->ncols, (ftnlen)1);
+		errint_(__global_state, "#", &__state->seg, (ftnlen)1);
+		errint_(__global_state, "#", &__state->npcol, (ftnlen)1);
+		errch_(__global_state, "#", __state->tabnam, (ftnlen)1, (
+			ftnlen)64);
+		sigerr_(__global_state, "SPICE(EKCOLNUMMISMATCH)", (ftnlen)23)
+			;
+	    } else if (s_cmp(&__global_state->f2c, __state->problm, "MISMATC"
+		    "HED_COLUMN_ATTRIBUTES", (ftnlen)80, (ftnlen)28) == 0) {
+		setmsg_(__global_state, "EK file # contains a column whose a"
+			"ttributes conflict with a loaded column.  The offend"
+			"ing column name is #; the column is in segment #* of"
+			" the file.", (ftnlen)149);
+		errhan_(__global_state, "#", handle, (ftnlen)1);
+		errch_(__global_state, "#", __state->colnam, (ftnlen)1, (
+			ftnlen)32);
+		errint_(__global_state, "*", &__state->seg, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADATTRIBUTES)", (ftnlen)20);
+	    } else if (s_cmp(&__global_state->f2c, __state->problm, "DESCRIP"
+		    "TOR_TABLE_FULL", (ftnlen)80, (ftnlen)21) == 0) {
+		setmsg_(__global_state, "The EK file # could not be loaded; "
+			"themaximum allowed number of loaded columns already "
+			"been reached.", (ftnlen)100);
+		errhan_(__global_state, "#", handle, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(COLDESCTABLEFULL)", (ftnlen)23)
+			;
+	    } else if (s_cmp(&__global_state->f2c, __state->problm, "ATTRIBU"
+		    "TE_TABLE_FULL", (ftnlen)80, (ftnlen)20) == 0) {
+		setmsg_(__global_state, "The EK file # could not be loaded; "
+			"the maximum number of columns havingdistinct attribu"
+			"tes has already been reached.", (ftnlen)116);
+		errhan_(__global_state, "#", handle, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(EKCOLATTRTABLEFULL)", (ftnlen)
+			25);
+	    } else if (s_cmp(&__global_state->f2c, __state->problm, "MISSING"
+		    "_COLUMN", (ftnlen)80, (ftnlen)14) == 0) {
+		setmsg_(__global_state, "The EK file # could not be loaded; "
+			"the column # in already loaded table # is not presen"
+			"t in segment # in the EK file.", (ftnlen)117);
+		errhan_(__global_state, "#", handle, (ftnlen)1);
+		errch_(__global_state, "#", __state->colnam, (ftnlen)1, (
+			ftnlen)32);
+		errch_(__global_state, "#", __state->tabnam, (ftnlen)1, (
+			ftnlen)64);
+		errint_(__global_state, "#", &__state->seg, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(EKMISSINGCOLUMN)", (ftnlen)22);
 	    } else {
-		setmsg_("The EK file # could not be loaded; the problem \""
-			"#\" occurred while attempting to load the file.  By "
-			"way, there is a bug in EKLEF if you see this message."
-			, (ftnlen)152);
-		errhan_("#", handle, (ftnlen)1);
-		errch_("#", __state->problm, (ftnlen)1, (ftnlen)80);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
+		setmsg_(__global_state, "The EK file # could not be loaded; "
+			"the problem \"#\" occurred while attempting to load "
+			"the file.  By way, there is a bug in EKLEF if you se"
+			"e this message.", (ftnlen)152);
+		errhan_(__global_state, "#", handle, (ftnlen)1);
+		errch_(__global_state, "#", __state->problm, (ftnlen)1, (
+			ftnlen)80);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
 	    }
-	    ekcls_(handle);
-	    chkout_("EKLEF", (ftnlen)5);
+	    ekcls_(__global_state, handle);
+	    chkout_(__global_state, "EKLEF", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -3150,7 +3251,7 @@ L_eklef:
 /*     table, column descriptor table, and column attribute table updates */
 /*     necessary to reflect the presence of the new file. */
 
-    chkout_("EKLEF", (ftnlen)5);
+    chkout_(__global_state, "EKLEF", (ftnlen)5);
     return 0;
 /* $Procedure     EKUEF  ( EK, unload event file ) */
 
@@ -3284,10 +3385,10 @@ L_ekuef:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKUEF", (ftnlen)5);
+	chkin_(__global_state, "EKUEF", (ftnlen)5);
     }
 
 /*     On the first pass through this routine, initialize the tables, */
@@ -3298,11 +3399,11 @@ L_ekuef:
 /*        Initialize the file table pool, segment table pool, column */
 /*        descriptor pool, column table pool, and table list pool. */
 
-	lnkini_(&__state->c__20, __state->ftpool);
-	lnkini_(&__state->c__200, __state->stpool);
-	lnkini_(&__state->c__10000, __state->dtpool);
-	lnkini_(&__state->c__500, __state->ctpool);
-	lnkini_(&__state->c__100, __state->tbpool);
+	lnkini_(__global_state, &__state->c__20, __state->ftpool);
+	lnkini_(__global_state, &__state->c__200, __state->stpool);
+	lnkini_(__global_state, &__state->c__10000, __state->dtpool);
+	lnkini_(__global_state, &__state->c__500, __state->ctpool);
+	lnkini_(__global_state, &__state->c__100, __state->tbpool);
 	__state->fthead = 0;
 	__state->tbhead = 0;
 	__state->first = FALSE_;
@@ -3315,15 +3416,16 @@ L_ekuef:
     __state->fnd = FALSE_;
     while(__state->i__ > 0 && ! __state->fnd) {
 	if (*handle == __state->fthan[(i__2 = __state->i__ - 1) < 20 && 0 <= 
-		i__2 ? i__2 : s_rnge("fthan", i__2, "ekqmgr_", (ftnlen)2342)])
-		 {
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "fthan", i__2, 
+		"ekqmgr_", (ftnlen)2342)]) {
 	    __state->fnd = TRUE_;
 	} else {
-	    __state->i__ = lnknxt_(&__state->i__, __state->ftpool);
+	    __state->i__ = lnknxt_(__global_state, &__state->i__, 
+		    __state->ftpool);
 	}
     }
     if (! __state->fnd) {
-	chkout_("EKUEF", (ftnlen)5);
+	chkout_(__global_state, "EKUEF", (ftnlen)5);
 	return 0;
     }
 
@@ -3338,24 +3440,25 @@ L_ekuef:
 /*        The file is at the head of the list.  If the file has a */
 /*        successor, that file is now at the head of the list. */
 
-	__state->fthead = lnknxt_(&__state->i__, __state->ftpool);
+	__state->fthead = lnknxt_(__global_state, &__state->i__, 
+		__state->ftpool);
 	if (__state->fthead < 0) {
 
 /*           There are no files left.  Clean up the whole shebang. */
 
-	    lnkini_(&__state->c__20, __state->ftpool);
-	    lnkini_(&__state->c__200, __state->stpool);
-	    lnkini_(&__state->c__10000, __state->dtpool);
-	    lnkini_(&__state->c__500, __state->ctpool);
-	    lnkini_(&__state->c__100, __state->tbpool);
+	    lnkini_(__global_state, &__state->c__20, __state->ftpool);
+	    lnkini_(__global_state, &__state->c__200, __state->stpool);
+	    lnkini_(__global_state, &__state->c__10000, __state->dtpool);
+	    lnkini_(__global_state, &__state->c__500, __state->ctpool);
+	    lnkini_(__global_state, &__state->c__100, __state->tbpool);
 	    __state->fthead = 0;
 	    __state->tbhead = 0;
 
 /*           Close the EK file, to keep the DAS system's bookkeeping */
 /*           up to date. */
 
-	    ekcls_(handle);
-	    chkout_("EKUEF", (ftnlen)5);
+	    ekcls_(__global_state, handle);
+	    chkout_(__global_state, "EKUEF", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -3367,7 +3470,7 @@ L_ekuef:
 /*     regarded as a sublist that starts and ends with the Ith node, */
 /*     so we can call the `free sublist' routine to get rid of it. */
 
-    lnkfsl_(&__state->i__, &__state->i__, __state->ftpool);
+    lnkfsl_(__global_state, &__state->i__, &__state->i__, __state->ftpool);
 
 /*     It's time to clean up the table list, segment table, column */
 /*     attribute table, and column descriptor table.  The plan is */
@@ -3384,11 +3487,12 @@ L_ekuef:
 
 	__state->i__ = 1;
 	while(__state->i__ <= __state->tbflsz[(i__2 = __state->tbcurr - 1) < 
-		100 && 0 <= i__2 ? i__2 : s_rnge("tbflsz", i__2, "ekqmgr_", (
-		ftnlen)2422)] && ! __state->fnd) {
+		100 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "tbfl"
+		"sz", i__2, "ekqmgr_", (ftnlen)2422)] && ! __state->fnd) {
 	    if (__state->tbfils[(i__2 = __state->i__ + __state->tbcurr * 20 - 
-		    21) < 2000 && 0 <= i__2 ? i__2 : s_rnge("tbfils", i__2, 
-		    "ekqmgr_", (ftnlen)2424)] == *handle) {
+		    21) < 2000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "tbfils", i__2, "ekqmgr_", (ftnlen)
+		    2424)] == *handle) {
 
 /*              This table is affected by unloading the file. */
 
@@ -3410,33 +3514,35 @@ L_ekuef:
 /*           this handle out of the list. */
 
 	    i__1 = __state->tbflsz[(i__2 = __state->tbcurr - 1) < 100 && 0 <= 
-		    i__2 ? i__2 : s_rnge("tbflsz", i__2, "ekqmgr_", (ftnlen)
-		    2450)] - 1;
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "tbflsz", i__2,
+		     "ekqmgr_", (ftnlen)2450)] - 1;
 	    for (__state->j = __state->i__; __state->j <= i__1; ++__state->j) 
 		    {
 		__state->tbfils[(i__2 = __state->j + __state->tbcurr * 20 - 
-			21) < 2000 && 0 <= i__2 ? i__2 : s_rnge("tbfils", 
-			i__2, "ekqmgr_", (ftnlen)2452)] = __state->tbfils[(
-			i__3 = __state->j + 1 + __state->tbcurr * 20 - 21) < 
-			2000 && 0 <= i__3 ? i__3 : s_rnge("tbfils", i__3, 
+			21) < 2000 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "tbfils", i__2, "ekqmgr_", (
+			ftnlen)2452)] = __state->tbfils[(i__3 = __state->j + 
+			1 + __state->tbcurr * 20 - 21) < 2000 && 0 <= i__3 ? 
+			i__3 : s_rnge(&__global_state->f2c, "tbfils", i__3, 
 			"ekqmgr_", (ftnlen)2452)];
 	    }
 	    __state->tbflsz[(i__1 = __state->tbcurr - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("tbflsz", i__1, "ekqmgr_", (ftnlen)2456)] = 
-		    __state->tbflsz[(i__2 = __state->tbcurr - 1) < 100 && 0 <=
-		     i__2 ? i__2 : s_rnge("tbflsz", i__2, "ekqmgr_", (ftnlen)
+		    i__1 : s_rnge(&__global_state->f2c, "tbflsz", i__1, "ekq"
+		    "mgr_", (ftnlen)2456)] = __state->tbflsz[(i__2 = 
+		    __state->tbcurr - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "tbflsz", i__2, "ekqmgr_", (ftnlen)
 		    2456)] - 1;
 
 /*           Traverse the segment list for this table, looking */
 /*           for segments in the specified EK. */
 
 	    __state->seg = __state->tbstpt[(i__1 = __state->tbcurr - 1) < 100 
-		    && 0 <= i__1 ? i__1 : s_rnge("tbstpt", i__1, "ekqmgr_", (
-		    ftnlen)2462)];
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbst"
+		    "pt", i__1, "ekqmgr_", (ftnlen)2462)];
 	    while(__state->seg > 0) {
 		if (__state->sthan[(i__1 = __state->seg - 1) < 200 && 0 <= 
-			i__1 ? i__1 : s_rnge("sthan", i__1, "ekqmgr_", (
-			ftnlen)2466)] == *handle) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "sthan", 
+			i__1, "ekqmgr_", (ftnlen)2466)] == *handle) {
 
 /*                 This segment is aboard the sinking ship.  Put it */
 /*                 out of its misery. */
@@ -3447,11 +3553,14 @@ L_ekuef:
 /*                 descriptor list is empty. */
 
 		    __state->j = __state->stdtpt[(i__1 = __state->seg - 1) < 
-			    200 && 0 <= i__1 ? i__1 : s_rnge("stdtpt", i__1, 
-			    "ekqmgr_", (ftnlen)2476)];
+			    200 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stdtpt", i__1, "ekqmgr_", (
+			    ftnlen)2476)];
 		    if (__state->j > 0) {
-			__state->k = lnktl_(&__state->j, __state->dtpool);
-			lnkfsl_(&__state->j, &__state->k, __state->dtpool);
+			__state->k = lnktl_(__global_state, &__state->j, 
+				__state->dtpool);
+			lnkfsl_(__global_state, &__state->j, &__state->k, 
+				__state->dtpool);
 		    }
 
 /*                 Now we can delete the segment table entry itself. */
@@ -3460,18 +3569,22 @@ L_ekuef:
 
 		    if (__state->seg == __state->tbstpt[(i__1 = 
 			    __state->tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("tbstpt", i__1, "ekqmgr_", (ftnlen)2488)]) 
-			    {
+			    s_rnge(&__global_state->f2c, "tbstpt", i__1, 
+			    "ekqmgr_", (ftnlen)2488)]) {
 			__state->tbstpt[(i__1 = __state->tbcurr - 1) < 100 && 
-				0 <= i__1 ? i__1 : s_rnge("tbstpt", i__1, 
-				"ekqmgr_", (ftnlen)2490)] = lnknxt_(&
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "tbstpt", i__1, "ekqmgr_"
+				, (ftnlen)2490)] = lnknxt_(__global_state, &
 				__state->seg, __state->stpool);
 		    }
-		    __state->next = lnknxt_(&__state->seg, __state->stpool);
-		    lnkfsl_(&__state->seg, &__state->seg, __state->stpool);
+		    __state->next = lnknxt_(__global_state, &__state->seg, 
+			    __state->stpool);
+		    lnkfsl_(__global_state, &__state->seg, &__state->seg, 
+			    __state->stpool);
 		    __state->seg = __state->next;
 		} else {
-		    __state->seg = lnknxt_(&__state->seg, __state->stpool);
+		    __state->seg = lnknxt_(__global_state, &__state->seg, 
+			    __state->stpool);
 		}
 	    }
 
@@ -3486,8 +3599,8 @@ L_ekuef:
 /*           update the head-of-list pointer for the table list. */
 
 	    if (__state->tbstpt[(i__1 = __state->tbcurr - 1) < 100 && 0 <= 
-		    i__1 ? i__1 : s_rnge("tbstpt", i__1, "ekqmgr_", (ftnlen)
-		    2520)] <= 0) {
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbstpt", i__1,
+		     "ekqmgr_", (ftnlen)2520)] <= 0) {
 
 /*              There are no loaded segments left for this table. */
 
@@ -3499,28 +3612,31 @@ L_ekuef:
 /*              them in one shot. */
 
 		__state->j = __state->tbctpt[(i__1 = __state->tbcurr - 1) < 
-			100 && 0 <= i__1 ? i__1 : s_rnge("tbctpt", i__1, 
-			"ekqmgr_", (ftnlen)2531)];
+			100 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+			 "tbctpt", i__1, "ekqmgr_", (ftnlen)2531)];
 		if (__state->j > 0) {
-		    __state->k = lnktl_(&__state->j, __state->ctpool);
-		    lnkfsl_(&__state->j, &__state->k, __state->ctpool);
+		    __state->k = lnktl_(__global_state, &__state->j, 
+			    __state->ctpool);
+		    lnkfsl_(__global_state, &__state->j, &__state->k, 
+			    __state->ctpool);
 		}
 		if (__state->tbcurr == __state->tbhead) {
 
 /*                 The entry for this table is at the head of the */
 /*                 table list.  Update the head of the list. */
 
-		    __state->tbhead = lnknxt_(&__state->tbcurr, 
-			    __state->tbpool);
+		    __state->tbhead = lnknxt_(__global_state, &
+			    __state->tbcurr, __state->tbpool);
 		    __state->next = __state->tbhead;
 		} else {
-		    __state->next = lnknxt_(&__state->tbcurr, __state->tbpool)
-			    ;
+		    __state->next = lnknxt_(__global_state, &__state->tbcurr, 
+			    __state->tbpool);
 		}
 
 /*              Make the entry for this table go away. */
 
-		lnkfsl_(&__state->tbcurr, &__state->tbcurr, __state->tbpool);
+		lnkfsl_(__global_state, &__state->tbcurr, &__state->tbcurr, 
+			__state->tbpool);
 
 /*              The successor of the current node is the next node to */
 /*              examine. */
@@ -3530,7 +3646,8 @@ L_ekuef:
 
 /*              We're done with the current table.  Look at the next one. */
 
-		__state->tbcurr = lnknxt_(&__state->tbcurr, __state->tbpool);
+		__state->tbcurr = lnknxt_(__global_state, &__state->tbcurr, 
+			__state->tbpool);
 	    }
 
 /*           We've cleaned up the table entry for the current table, */
@@ -3541,7 +3658,8 @@ L_ekuef:
 /*           The current table is not affected by unloading this file. */
 /*           Examine the next table. */
 
-	    __state->tbcurr = lnknxt_(&__state->tbcurr, __state->tbpool);
+	    __state->tbcurr = lnknxt_(__global_state, &__state->tbcurr, 
+		    __state->tbpool);
 	}
 
 /*        We've processed the current table. */
@@ -3550,8 +3668,8 @@ L_ekuef:
 
 /*     Don't forget to unload the EK file from the DAS system. */
 
-    ekcls_(handle);
-    chkout_("EKUEF", (ftnlen)5);
+    ekcls_(__global_state, handle);
+    chkout_(__global_state, "EKUEF", (ftnlen)5);
     return 0;
 /* $Procedure     EKNTAB  ( EK, return number of loaded tables ) */
 
@@ -3697,11 +3815,11 @@ L_ekntab:
 /*        Initialize the file table pool, segment table pool, column */
 /*        descriptor pool, column table pool, and table list pool. */
 
-	lnkini_(&__state->c__20, __state->ftpool);
-	lnkini_(&__state->c__200, __state->stpool);
-	lnkini_(&__state->c__10000, __state->dtpool);
-	lnkini_(&__state->c__500, __state->ctpool);
-	lnkini_(&__state->c__100, __state->tbpool);
+	lnkini_(__global_state, &__state->c__20, __state->ftpool);
+	lnkini_(__global_state, &__state->c__200, __state->stpool);
+	lnkini_(__global_state, &__state->c__10000, __state->dtpool);
+	lnkini_(__global_state, &__state->c__500, __state->ctpool);
+	lnkini_(__global_state, &__state->c__100, __state->tbpool);
 	__state->fthead = 0;
 	__state->tbhead = 0;
 	__state->first = FALSE_;
@@ -3709,7 +3827,7 @@ L_ekntab:
 
 /*     Return the number of loaded tables. */
 
-    *n = 100 - lnknfn_(__state->tbpool);
+    *n = 100 - lnknfn_(__global_state, __state->tbpool);
     return 0;
 /* $Procedure     EKTNAM  ( EK, return name of loaded table ) */
 
@@ -3843,21 +3961,21 @@ L_ektnam:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKTNAM", (ftnlen)6);
+	chkin_(__global_state, "EKTNAM", (ftnlen)6);
     }
     if (__state->first) {
 
 /*        Initialize the file table pool, segment table pool, column */
 /*        descriptor pool, column table pool, and table list pool. */
 
-	lnkini_(&__state->c__20, __state->ftpool);
-	lnkini_(&__state->c__200, __state->stpool);
-	lnkini_(&__state->c__10000, __state->dtpool);
-	lnkini_(&__state->c__500, __state->ctpool);
-	lnkini_(&__state->c__100, __state->tbpool);
+	lnkini_(__global_state, &__state->c__20, __state->ftpool);
+	lnkini_(__global_state, &__state->c__200, __state->stpool);
+	lnkini_(__global_state, &__state->c__10000, __state->dtpool);
+	lnkini_(__global_state, &__state->c__500, __state->ctpool);
+	lnkini_(__global_state, &__state->c__100, __state->tbpool);
 	__state->fthead = 0;
 	__state->tbhead = 0;
 	__state->first = FALSE_;
@@ -3867,9 +3985,10 @@ L_ektnam:
 /*     symptom of this problem is that the file list is empty. */
 
     if (__state->fthead <= 0) {
-	setmsg_("No E-kernels are currently loaded.", (ftnlen)34);
-	sigerr_("SPICE(NOLOADEDFILES)", (ftnlen)20);
-	chkout_("EKTNAM", (ftnlen)6);
+	setmsg_(__global_state, "No E-kernels are currently loaded.", (ftnlen)
+		34);
+	sigerr_(__global_state, "SPICE(NOLOADEDFILES)", (ftnlen)20);
+	chkout_(__global_state, "EKTNAM", (ftnlen)6);
 	return 0;
     }
     __state->tbcurr = __state->tbhead;
@@ -3879,20 +3998,22 @@ L_ektnam:
 	++__state->i__;
 	if (__state->i__ == *n) {
 	    __state->fnd = TRUE_;
-	    s_copy(table, __state->tbnams + (((i__1 = __state->tbcurr - 1) < 
-		    100 && 0 <= i__1 ? i__1 : s_rnge("tbnams", i__1, "ekqmgr_"
-		    , (ftnlen)2956)) << 6), table_len, (ftnlen)64);
+	    s_copy(&__global_state->f2c, table, __state->tbnams + (((i__1 = 
+		    __state->tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "tbnams", i__1, "ekqmgr_", (ftnlen)
+		    2956)) << 6), table_len, (ftnlen)64);
 	} else {
-	    __state->tbcurr = lnknxt_(&__state->tbcurr, __state->tbpool);
+	    __state->tbcurr = lnknxt_(__global_state, &__state->tbcurr, 
+		    __state->tbpool);
 	}
     }
     if (! __state->fnd) {
-	setmsg_("The index # does not correspond to a loaded table.", (ftnlen)
-		50);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
+	setmsg_(__global_state, "The index # does not correspond to a loaded"
+		" table.", (ftnlen)50);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
     }
-    chkout_("EKTNAM", (ftnlen)6);
+    chkout_(__global_state, "EKTNAM", (ftnlen)6);
     return 0;
 /* $Procedure     EKCCNT  ( EK, column count ) */
 
@@ -4103,10 +4224,10 @@ L_ekccnt:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKCCNT", (ftnlen)6);
+	chkin_(__global_state, "EKCCNT", (ftnlen)6);
     }
 
 /*     On the first pass through this routine, initialize the tables, */
@@ -4117,11 +4238,11 @@ L_ekccnt:
 /*        Initialize the file table pool, segment table pool, column */
 /*        descriptor pool, column table pool, and table list pool. */
 
-	lnkini_(&__state->c__20, __state->ftpool);
-	lnkini_(&__state->c__200, __state->stpool);
-	lnkini_(&__state->c__10000, __state->dtpool);
-	lnkini_(&__state->c__500, __state->ctpool);
-	lnkini_(&__state->c__100, __state->tbpool);
+	lnkini_(__global_state, &__state->c__20, __state->ftpool);
+	lnkini_(__global_state, &__state->c__200, __state->stpool);
+	lnkini_(__global_state, &__state->c__10000, __state->dtpool);
+	lnkini_(__global_state, &__state->c__500, __state->ctpool);
+	lnkini_(__global_state, &__state->c__100, __state->tbpool);
 	__state->fthead = 0;
 	__state->tbhead = 0;
 	__state->first = FALSE_;
@@ -4133,20 +4254,23 @@ L_ekccnt:
     __state->tbcurr = __state->tbhead;
     __state->fnd = FALSE_;
     while(__state->tbcurr > 0 && ! __state->fnd) {
-	if (eqstr_(table, __state->tbnams + (((i__1 = __state->tbcurr - 1) < 
-		100 && 0 <= i__1 ? i__1 : s_rnge("tbnams", i__1, "ekqmgr_", (
-		ftnlen)3233)) << 6), table_len, (ftnlen)64)) {
+	if (eqstr_(__global_state, table, __state->tbnams + (((i__1 = 
+		__state->tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tbnams", i__1, "ekqmgr_", (ftnlen)3233))
+		 << 6), table_len, (ftnlen)64)) {
 	    __state->fnd = TRUE_;
 	} else {
-	    __state->tbcurr = lnknxt_(&__state->tbcurr, __state->tbpool);
+	    __state->tbcurr = lnknxt_(__global_state, &__state->tbcurr, 
+		    __state->tbpool);
 	}
     }
     if (! __state->fnd) {
 	*ccount = 0;
-	setmsg_("The table # is not currently loaded.", (ftnlen)36);
-	errch_("#", table, (ftnlen)1, table_len);
-	sigerr_("SPICE(TABLENOTLOADED)", (ftnlen)21);
-	chkout_("EKCCNT", (ftnlen)6);
+	setmsg_(__global_state, "The table # is not currently loaded.", (
+		ftnlen)36);
+	errch_(__global_state, "#", table, (ftnlen)1, table_len);
+	sigerr_(__global_state, "SPICE(TABLENOTLOADED)", (ftnlen)21);
+	chkout_(__global_state, "EKCCNT", (ftnlen)6);
 	return 0;
     } else {
 
@@ -4154,14 +4278,15 @@ L_ekccnt:
 
 	*ccount = 0;
 	__state->col = __state->tbctpt[(i__1 = __state->tbcurr - 1) < 100 && 
-		0 <= i__1 ? i__1 : s_rnge("tbctpt", i__1, "ekqmgr_", (ftnlen)
-		3256)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbctpt", 
+		i__1, "ekqmgr_", (ftnlen)3256)];
 	while(__state->col > 0) {
 	    ++(*ccount);
-	    __state->col = lnknxt_(&__state->col, __state->ctpool);
+	    __state->col = lnknxt_(__global_state, &__state->col, 
+		    __state->ctpool);
 	}
     }
-    chkout_("EKCCNT", (ftnlen)6);
+    chkout_(__global_state, "EKCCNT", (ftnlen)6);
     return 0;
 /* $Procedure     EKCII  ( EK, column info by index ) */
 
@@ -4427,10 +4552,10 @@ L_ekcii:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKCII", (ftnlen)5);
+	chkin_(__global_state, "EKCII", (ftnlen)5);
     }
 
 /*     On the first pass through this routine, initialize the tables, */
@@ -4441,11 +4566,11 @@ L_ekcii:
 /*        Initialize the file table pool, segment table pool, column */
 /*        descriptor pool, column table pool, and table list pool. */
 
-	lnkini_(&__state->c__20, __state->ftpool);
-	lnkini_(&__state->c__200, __state->stpool);
-	lnkini_(&__state->c__10000, __state->dtpool);
-	lnkini_(&__state->c__500, __state->ctpool);
-	lnkini_(&__state->c__100, __state->tbpool);
+	lnkini_(__global_state, &__state->c__20, __state->ftpool);
+	lnkini_(__global_state, &__state->c__200, __state->stpool);
+	lnkini_(__global_state, &__state->c__10000, __state->dtpool);
+	lnkini_(__global_state, &__state->c__500, __state->ctpool);
+	lnkini_(__global_state, &__state->c__100, __state->tbpool);
 	__state->fthead = 0;
 	__state->tbhead = 0;
 	__state->first = FALSE_;
@@ -4457,19 +4582,22 @@ L_ekcii:
     __state->tbcurr = __state->tbhead;
     __state->fnd = FALSE_;
     while(__state->tbcurr > 0 && ! __state->fnd) {
-	if (eqstr_(table, __state->tbnams + (((i__1 = __state->tbcurr - 1) < 
-		100 && 0 <= i__1 ? i__1 : s_rnge("tbnams", i__1, "ekqmgr_", (
-		ftnlen)3580)) << 6), table_len, (ftnlen)64)) {
+	if (eqstr_(__global_state, table, __state->tbnams + (((i__1 = 
+		__state->tbcurr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tbnams", i__1, "ekqmgr_", (ftnlen)3580))
+		 << 6), table_len, (ftnlen)64)) {
 	    __state->fnd = TRUE_;
 	} else {
-	    __state->tbcurr = lnknxt_(&__state->tbcurr, __state->tbpool);
+	    __state->tbcurr = lnknxt_(__global_state, &__state->tbcurr, 
+		    __state->tbpool);
 	}
     }
     if (! __state->fnd) {
-	setmsg_("The table # is not currently loaded.", (ftnlen)36);
-	errch_("#", table, (ftnlen)1, table_len);
-	sigerr_("SPICE(TABLENOTLOADED)", (ftnlen)21);
-	chkout_("EKCII", (ftnlen)5);
+	setmsg_(__global_state, "The table # is not currently loaded.", (
+		ftnlen)36);
+	errch_(__global_state, "#", table, (ftnlen)1, table_len);
+	sigerr_(__global_state, "SPICE(TABLENOTLOADED)", (ftnlen)21);
+	chkout_(__global_state, "EKCII", (ftnlen)5);
 	return 0;
     }
 
@@ -4477,7 +4605,8 @@ L_ekcii:
 
     __state->i__ = 0;
     __state->col = __state->tbctpt[(i__1 = __state->tbcurr - 1) < 100 && 0 <= 
-	    i__1 ? i__1 : s_rnge("tbctpt", i__1, "ekqmgr_", (ftnlen)3604)];
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "tbctpt", i__1, "ekqm"
+	    "gr_", (ftnlen)3604)];
     while(__state->col > 0 && __state->i__ < *cindex) {
 	++__state->i__;
 	if (__state->i__ == *cindex) {
@@ -4485,54 +4614,56 @@ L_ekcii:
 /*           We've found the column.  Set the output arguments using */
 /*           its attributes. */
 
-	    s_copy(column, __state->ctnams + (((i__1 = __state->col - 1) < 
-		    500 && 0 <= i__1 ? i__1 : s_rnge("ctnams", i__1, "ekqmgr_"
-		    , (ftnlen)3615)) << 5), column_len, (ftnlen)32);
+	    s_copy(&__global_state->f2c, column, __state->ctnams + (((i__1 = 
+		    __state->col - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ctnams", i__1, "ekqmgr_", (ftnlen)
+		    3615)) << 5), column_len, (ftnlen)32);
 	    attdsc[0] = __state->ctclas[(i__1 = __state->col - 1) < 500 && 0 
-		    <= i__1 ? i__1 : s_rnge("ctclas", i__1, "ekqmgr_", (
-		    ftnlen)3617)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ctclas", 
+		    i__1, "ekqmgr_", (ftnlen)3617)];
 	    attdsc[1] = __state->cttyps[(i__1 = __state->col - 1) < 500 && 0 
-		    <= i__1 ? i__1 : s_rnge("cttyps", i__1, "ekqmgr_", (
-		    ftnlen)3618)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "cttyps", 
+		    i__1, "ekqmgr_", (ftnlen)3618)];
 	    attdsc[2] = __state->ctlens[(i__1 = __state->col - 1) < 500 && 0 
-		    <= i__1 ? i__1 : s_rnge("ctlens", i__1, "ekqmgr_", (
-		    ftnlen)3619)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ctlens", 
+		    i__1, "ekqmgr_", (ftnlen)3619)];
 	    attdsc[3] = __state->ctsizs[(i__1 = __state->col - 1) < 500 && 0 
-		    <= i__1 ? i__1 : s_rnge("ctsizs", i__1, "ekqmgr_", (
-		    ftnlen)3620)];
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ctsizs", 
+		    i__1, "ekqmgr_", (ftnlen)3620)];
 	    if (__state->ctindx[(i__1 = __state->col - 1) < 500 && 0 <= i__1 ?
-		     i__1 : s_rnge("ctindx", i__1, "ekqmgr_", (ftnlen)3622)]) 
-		    {
+		     i__1 : s_rnge(&__global_state->f2c, "ctindx", i__1, 
+		    "ekqmgr_", (ftnlen)3622)]) {
 		attdsc[4] = 1;
 	    } else {
 		attdsc[4] = -1;
 	    }
 	    if (__state->ctnull[(i__1 = __state->col - 1) < 500 && 0 <= i__1 ?
-		     i__1 : s_rnge("ctnull", i__1, "ekqmgr_", (ftnlen)3628)]) 
-		    {
+		     i__1 : s_rnge(&__global_state->f2c, "ctnull", i__1, 
+		    "ekqmgr_", (ftnlen)3628)]) {
 		attdsc[5] = 1;
 	    } else {
 		attdsc[5] = -1;
 	    }
-	    chkout_("EKCII", (ftnlen)5);
+	    chkout_(__global_state, "EKCII", (ftnlen)5);
 	    return 0;
 	} else {
-	    __state->col = lnknxt_(&__state->col, __state->ctpool);
+	    __state->col = lnknxt_(__global_state, &__state->col, 
+		    __state->ctpool);
 	}
     }
 
 /*     We end up here if we ran out of columns before finding the */
 /*     CINDEXth one, or if CINDEX was non-positive. */
 
-    setmsg_("Column indices for table # range from # to #; requested index w"
-	    "as #.", (ftnlen)68);
-    errch_("#", __state->tabnam, (ftnlen)1, (ftnlen)64);
+    setmsg_(__global_state, "Column indices for table # range from # to #; r"
+	    "equested index was #.", (ftnlen)68);
+    errch_(__global_state, "#", __state->tabnam, (ftnlen)1, (ftnlen)64);
     i__1 = max(1,__state->i__);
-    errint_("#", &i__1, (ftnlen)1);
-    errint_("#", &__state->i__, (ftnlen)1);
-    errint_("#", cindex, (ftnlen)1);
-    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-    chkout_("EKCII", (ftnlen)5);
+    errint_(__global_state, "#", &i__1, (ftnlen)1);
+    errint_(__global_state, "#", &__state->i__, (ftnlen)1);
+    errint_(__global_state, "#", cindex, (ftnlen)1);
+    sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+    chkout_(__global_state, "EKCII", (ftnlen)5);
     return 0;
 /* $Procedure     EKSRCH  ( EK, search for events ) */
 
@@ -4710,37 +4841,38 @@ L_eksrch:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKSRCH", (ftnlen)6);
+	chkin_(__global_state, "EKSRCH", (ftnlen)6);
     }
 
 /*     There nothing to search if no files are loaded.  A sure */
 /*     symptom of this problem is that the file list is empty. */
 
     if (__state->fthead <= 0) {
-	setmsg_("No E-kernels are currently loaded.", (ftnlen)34);
-	sigerr_("SPICE(NOLOADEDFILES)", (ftnlen)20);
-	chkout_("EKSRCH", (ftnlen)6);
+	setmsg_(__global_state, "No E-kernels are currently loaded.", (ftnlen)
+		34);
+	sigerr_(__global_state, "SPICE(NOLOADEDFILES)", (ftnlen)20);
+	chkout_(__global_state, "EKSRCH", (ftnlen)6);
 	return 0;
     }
 
 /*     No error to begin with. */
 
     *semerr = FALSE_;
-    s_copy(errmsg, " ", errmsg_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, errmsg, " ", errmsg_len, (ftnlen)1);
     *nmrows = 0;
     if (__state->first) {
 
 /*        Initialize the file table pool, segment table pool, column */
 /*        descriptor pool, column table pool, and table list pool. */
 
-	lnkini_(&__state->c__20, __state->ftpool);
-	lnkini_(&__state->c__200, __state->stpool);
-	lnkini_(&__state->c__10000, __state->dtpool);
-	lnkini_(&__state->c__500, __state->ctpool);
-	lnkini_(&__state->c__100, __state->tbpool);
+	lnkini_(__global_state, &__state->c__20, __state->ftpool);
+	lnkini_(__global_state, &__state->c__200, __state->stpool);
+	lnkini_(__global_state, &__state->c__10000, __state->dtpool);
+	lnkini_(__global_state, &__state->c__500, __state->ctpool);
+	lnkini_(__global_state, &__state->c__100, __state->tbpool);
 	__state->fthead = 0;
 	__state->tbhead = 0;
 	__state->first = FALSE_;
@@ -4753,24 +4885,28 @@ L_eksrch:
 /*        - the order-by column count */
 /*        - the table and alias list */
 
-    zzekreqi_(eqryi, "NUM_TABLES", &__state->ntab, (ftnlen)10);
-    zzekreqi_(eqryi, "NUM_SELECT_COLS", &__state->nsel, (ftnlen)15);
-    zzekreqi_(eqryi, "NUM_ORDERBY_COLS", &__state->norder, (ftnlen)16);
+    zzekreqi_(__global_state, eqryi, "NUM_TABLES", &__state->ntab, (ftnlen)10)
+	    ;
+    zzekreqi_(__global_state, eqryi, "NUM_SELECT_COLS", &__state->nsel, (
+	    ftnlen)15);
+    zzekreqi_(__global_state, eqryi, "NUM_ORDERBY_COLS", &__state->norder, (
+	    ftnlen)16);
     i__1 = __state->ntab;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
-	zzekqtab_(eqryi, eqryc, &__state->i__, __state->frmtab + (((i__2 = 
-		__state->i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("frmtab", 
-		i__2, "ekqmgr_", (ftnlen)3904)) << 6), __state->frmals + (((
-		i__3 = __state->i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(
-		"frmals", i__3, "ekqmgr_", (ftnlen)3904)) << 6), eqryc_len, (
-		ftnlen)64, (ftnlen)64);
+	zzekqtab_(__global_state, eqryi, eqryc, &__state->i__, 
+		__state->frmtab + (((i__2 = __state->i__ - 1) < 10 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "frmtab", i__2, 
+		"ekqmgr_", (ftnlen)3904)) << 6), __state->frmals + (((i__3 = 
+		__state->i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "frmals", i__3, "ekqmgr_", (ftnlen)3904))
+		 << 6), eqryc_len, (ftnlen)64, (ftnlen)64);
     }
 
 /*     Initialize the table vectors.  Also initialize a vector of column */
 /*     list pointers. */
 
-    ssizec_(&__state->c__10, __state->tabvec, (ftnlen)64);
-    ssizei_(&__state->c__10, __state->tptvec);
+    ssizec_(__global_state, &__state->c__10, __state->tabvec, (ftnlen)64);
+    ssizei_(__global_state, &__state->c__10, __state->tptvec);
 
 /*     Fill in the FROM table vector and corresponding column pointer */
 /*     vector.  It's an error if a table referenced in the FROM clause */
@@ -4784,32 +4920,37 @@ L_eksrch:
 	__state->tbcurr = __state->tbhead;
 	__state->fnd = FALSE_;
 	while(__state->tbcurr > 0 && ! __state->fnd) {
-	    if (s_cmp(__state->tbnams + (((i__2 = __state->tbcurr - 1) < 100 
-		    && 0 <= i__2 ? i__2 : s_rnge("tbnams", i__2, "ekqmgr_", (
-		    ftnlen)3928)) << 6), __state->frmtab + (((i__3 = 
-		    __state->i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("frm"
-		    "tab", i__3, "ekqmgr_", (ftnlen)3928)) << 6), (ftnlen)64, (
-		    ftnlen)64) == 0) {
+	    if (s_cmp(&__global_state->f2c, __state->tbnams + (((i__2 = 
+		    __state->tbcurr - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "tbnams", i__2, "ekqmgr_", (ftnlen)
+		    3928)) << 6), __state->frmtab + (((i__3 = __state->i__ - 
+		    1) < 10 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c,
+		     "frmtab", i__3, "ekqmgr_", (ftnlen)3928)) << 6), (ftnlen)
+		    64, (ftnlen)64) == 0) {
 
 /*              We've found the table list entry for the Ith table. */
 
-		appndc_(__state->frmtab + (((i__2 = __state->i__ - 1) < 10 && 
-			0 <= i__2 ? i__2 : s_rnge("frmtab", i__2, "ekqmgr_", (
+		appndc_(__global_state, __state->frmtab + (((i__2 = 
+			__state->i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "frmtab", i__2, "ekqmgr_", (
 			ftnlen)3932)) << 6), __state->tabvec, (ftnlen)64, (
 			ftnlen)64);
-		appndi_(&__state->tbcurr, __state->tptvec);
+		appndi_(__global_state, &__state->tbcurr, __state->tptvec);
 		__state->fnd = TRUE_;
 	    } else {
-		__state->tbcurr = lnknxt_(&__state->tbcurr, __state->tbpool);
+		__state->tbcurr = lnknxt_(__global_state, &__state->tbcurr, 
+			__state->tbpool);
 	    }
 	}
 	if (! __state->fnd) {
-	    setmsg_("The table # is not currently loaded.", (ftnlen)36);
-	    errch_("#", __state->frmtab + (((i__2 = __state->i__ - 1) < 10 && 
-		    0 <= i__2 ? i__2 : s_rnge("frmtab", i__2, "ekqmgr_", (
-		    ftnlen)3943)) << 6), (ftnlen)1, (ftnlen)64);
-	    sigerr_("SPICE(INVALIDTABLENAME)", (ftnlen)23);
-	    chkout_("EKSRCH", (ftnlen)6);
+	    setmsg_(__global_state, "The table # is not currently loaded.", (
+		    ftnlen)36);
+	    errch_(__global_state, "#", __state->frmtab + (((i__2 = 
+		    __state->i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "frmtab", i__2, "ekqmgr_", (ftnlen)
+		    3943)) << 6), (ftnlen)1, (ftnlen)64);
+	    sigerr_(__global_state, "SPICE(INVALIDTABLENAME)", (ftnlen)23);
+	    chkout_(__global_state, "EKSRCH", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -4817,8 +4958,8 @@ L_eksrch:
 /*     Since this is a new search, re-initialize the stack in the EK */
 /*     scratch area.  Also initialize our total segment list count. */
 
-    zzekstop_(&__state->top);
-    zzeksdec_(&__state->top);
+    zzekstop_(__global_state, &__state->top);
+    zzeksdec_(__global_state, &__state->top);
 
 /*     Initialize the size of the join row set union for the current */
 /*     query.  At this point, no matching rows have been found. */
@@ -4828,13 +4969,15 @@ L_eksrch:
 
 /*     Get the number of conjunctions and the sizes of the conjunctions. */
 
-    zzekreqi_(eqryi, "NUM_CONJUNCTIONS", &__state->nconj, (ftnlen)16);
-    cleari_(&__state->c__1000, __state->sizes);
+    zzekreqi_(__global_state, eqryi, "NUM_CONJUNCTIONS", &__state->nconj, (
+	    ftnlen)16);
+    cleari_(__global_state, &__state->c__1000, __state->sizes);
     i__1 = __state->nconj;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
-	zzekqcnj_(eqryi, &__state->i__, &__state->sizes[(i__2 = __state->i__ 
-		- 1) < 1000 && 0 <= i__2 ? i__2 : s_rnge("sizes", i__2, "ekq"
-		"mgr_", (ftnlen)3972)]);
+	zzekqcnj_(__global_state, eqryi, &__state->i__, &__state->sizes[(i__2 
+		= __state->i__ - 1) < 1000 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "sizes", i__2, "ekqmgr_", (ftnlen)3972)])
+		;
     }
 
 /*     For each conjunction of constraints, we'll build a join row */
@@ -4866,42 +5009,47 @@ L_eksrch:
 	    __state->cjsize = 0;
 	} else {
 	    __state->cjsize = __state->sizes[(i__2 = __state->conj - 1) < 
-		    1000 && 0 <= i__2 ? i__2 : s_rnge("sizes", i__2, "ekqmgr_"
-		    , (ftnlen)4004)];
+		    1000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "sizes", i__2, "ekqmgr_", (ftnlen)4004)];
 	}
 	__state->cjbeg = __state->cjend + 1;
 	__state->cjend += __state->cjsize;
 	i__2 = __state->cjsize;
 	for (__state->i__ = 1; __state->i__ <= i__2; ++__state->i__) {
 	    i__14 = __state->cjbeg + __state->i__ - 1;
-	    zzekqcon_(eqryi, eqryc, eqryd, &i__14, &__state->cnstyp[(i__3 = 
-		    __state->i__ - 1) < 1000 && 0 <= i__3 ? i__3 : s_rnge(
-		    "cnstyp", i__3, "ekqmgr_", (ftnlen)4012)], 
-		    __state->ltname, &__state->ltbidx[(i__4 = __state->i__ - 
-		    1) < 1000 && 0 <= i__4 ? i__4 : s_rnge("ltbidx", i__4, 
-		    "ekqmgr_", (ftnlen)4012)], __state->lcname, &
+	    zzekqcon_(__global_state, eqryi, eqryc, eqryd, &i__14, &
+		    __state->cnstyp[(i__3 = __state->i__ - 1) < 1000 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "cnstyp", i__3,
+		     "ekqmgr_", (ftnlen)4012)], __state->ltname, &
+		    __state->ltbidx[(i__4 = __state->i__ - 1) < 1000 && 0 <= 
+		    i__4 ? i__4 : s_rnge(&__global_state->f2c, "ltbidx", i__4,
+		     "ekqmgr_", (ftnlen)4012)], __state->lcname, &
 		    __state->lcidx[(i__5 = __state->i__ - 1) < 1000 && 0 <= 
-		    i__5 ? i__5 : s_rnge("lcidx", i__5, "ekqmgr_", (ftnlen)
-		    4012)], &__state->ops[(i__6 = __state->i__ - 1) < 1000 && 
-		    0 <= i__6 ? i__6 : s_rnge("ops", i__6, "ekqmgr_", (ftnlen)
-		    4012)], __state->rtname, &__state->rtbidx[(i__7 = 
-		    __state->i__ - 1) < 1000 && 0 <= i__7 ? i__7 : s_rnge(
-		    "rtbidx", i__7, "ekqmgr_", (ftnlen)4012)], 
-		    __state->rcname, &__state->rcidx[(i__8 = __state->i__ - 1)
-		     < 1000 && 0 <= i__8 ? i__8 : s_rnge("rcidx", i__8, "ekq"
-		    "mgr_", (ftnlen)4012)], &__state->dtype[(i__9 = 
-		    __state->i__ - 1) < 1000 && 0 <= i__9 ? i__9 : s_rnge(
-		    "dtype", i__9, "ekqmgr_", (ftnlen)4012)], &__state->cbegs[
-		    (i__10 = __state->i__ - 1) < 1000 && 0 <= i__10 ? i__10 : 
-		    s_rnge("cbegs", i__10, "ekqmgr_", (ftnlen)4012)], &
-		    __state->cends[(i__11 = __state->i__ - 1) < 1000 && 0 <= 
-		    i__11 ? i__11 : s_rnge("cends", i__11, "ekqmgr_", (ftnlen)
-		    4012)], &__state->dvals[(i__12 = __state->i__ - 1) < 1000 
-		    && 0 <= i__12 ? i__12 : s_rnge("dvals", i__12, "ekqmgr_", 
-		    (ftnlen)4012)], &__state->ivals[(i__13 = __state->i__ - 1)
-		     < 1000 && 0 <= i__13 ? i__13 : s_rnge("ivals", i__13, 
-		    "ekqmgr_", (ftnlen)4012)], eqryc_len, (ftnlen)64, (ftnlen)
-		    32, (ftnlen)64, (ftnlen)32);
+		    i__5 ? i__5 : s_rnge(&__global_state->f2c, "lcidx", i__5, 
+		    "ekqmgr_", (ftnlen)4012)], &__state->ops[(i__6 = 
+		    __state->i__ - 1) < 1000 && 0 <= i__6 ? i__6 : s_rnge(&
+		    __global_state->f2c, "ops", i__6, "ekqmgr_", (ftnlen)4012)
+		    ], __state->rtname, &__state->rtbidx[(i__7 = __state->i__ 
+		    - 1) < 1000 && 0 <= i__7 ? i__7 : s_rnge(&
+		    __global_state->f2c, "rtbidx", i__7, "ekqmgr_", (ftnlen)
+		    4012)], __state->rcname, &__state->rcidx[(i__8 = 
+		    __state->i__ - 1) < 1000 && 0 <= i__8 ? i__8 : s_rnge(&
+		    __global_state->f2c, "rcidx", i__8, "ekqmgr_", (ftnlen)
+		    4012)], &__state->dtype[(i__9 = __state->i__ - 1) < 1000 
+		    && 0 <= i__9 ? i__9 : s_rnge(&__global_state->f2c, "dtype"
+		    , i__9, "ekqmgr_", (ftnlen)4012)], &__state->cbegs[(i__10 
+		    = __state->i__ - 1) < 1000 && 0 <= i__10 ? i__10 : s_rnge(
+		    &__global_state->f2c, "cbegs", i__10, "ekqmgr_", (ftnlen)
+		    4012)], &__state->cends[(i__11 = __state->i__ - 1) < 1000 
+		    && 0 <= i__11 ? i__11 : s_rnge(&__global_state->f2c, 
+		    "cends", i__11, "ekqmgr_", (ftnlen)4012)], &
+		    __state->dvals[(i__12 = __state->i__ - 1) < 1000 && 0 <= 
+		    i__12 ? i__12 : s_rnge(&__global_state->f2c, "dvals", 
+		    i__12, "ekqmgr_", (ftnlen)4012)], &__state->ivals[(i__13 =
+		     __state->i__ - 1) < 1000 && 0 <= i__13 ? i__13 : s_rnge(&
+		    __global_state->f2c, "ivals", i__13, "ekqmgr_", (ftnlen)
+		    4012)], eqryc_len, (ftnlen)64, (ftnlen)32, (ftnlen)64, (
+		    ftnlen)32);
 	}
 	i__2 = __state->ntab;
 	for (__state->t = 1; __state->t <= i__2; ++__state->t) {
@@ -4912,56 +5060,61 @@ L_eksrch:
 /*           Initialize the join row set.  Retain the base address.  We */
 /*           can fill in the table count right away; the count is 1. */
 
-	    zzekstop_(&__state->rbas[(i__3 = __state->t - 1) < 10 && 0 <= 
-		    i__3 ? i__3 : s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)
-		    4030)]);
+	    zzekstop_(__global_state, &__state->rbas[(i__3 = __state->t - 1) <
+		     10 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "rbas", i__3, "ekqmgr_", (ftnlen)4030)]);
 	    for (__state->i__ = 1; __state->i__ <= 4; ++__state->i__) {
-		zzekspsh_(&__state->c__1, &__state->c__0);
+		zzekspsh_(__global_state, &__state->c__1, &__state->c__0);
 	    }
 	    i__5 = __state->rbas[(i__3 = __state->t - 1) < 10 && 0 <= i__3 ? 
-		    i__3 : s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)4036)] + 3;
+		    i__3 : s_rnge(&__global_state->f2c, "rbas", i__3, "ekqmg"
+		    "r_", (ftnlen)4036)] + 3;
 	    i__6 = __state->rbas[(i__4 = __state->t - 1) < 10 && 0 <= i__4 ? 
-		    i__4 : s_rnge("rbas", i__4, "ekqmgr_", (ftnlen)4036)] + 3;
-	    zzeksupd_(&i__5, &i__6, &__state->c__1);
+		    i__4 : s_rnge(&__global_state->f2c, "rbas", i__4, "ekqmg"
+		    "r_", (ftnlen)4036)] + 3;
+	    zzeksupd_(__global_state, &i__5, &i__6, &__state->c__1);
 
 /*           Count the loaded segments for the current table.  We'll */
 /*           leave enough room in the join row set for each segment. */
 
 	    __state->tab = __state->tptvec[(i__3 = __state->t + 5) < 16 && 0 
-		    <= i__3 ? i__3 : s_rnge("tptvec", i__3, "ekqmgr_", (
-		    ftnlen)4042)];
+		    <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "tptvec", 
+		    i__3, "ekqmgr_", (ftnlen)4042)];
 	    __state->i__ = __state->tbstpt[(i__3 = __state->tab - 1) < 100 && 
-		    0 <= i__3 ? i__3 : s_rnge("tbstpt", i__3, "ekqmgr_", (
-		    ftnlen)4043)];
+		    0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "tbstpt", 
+		    i__3, "ekqmgr_", (ftnlen)4043)];
 	    __state->nsv = 0;
 	    while(__state->i__ > 0) {
-		zzekspsh_(&__state->c__1, &__state->c__0);
+		zzekspsh_(__global_state, &__state->c__1, &__state->c__0);
 		++__state->nsv;
-		__state->i__ = lnknxt_(&__state->i__, __state->stpool);
+		__state->i__ = lnknxt_(__global_state, &__state->i__, 
+			__state->stpool);
 	    }
 
 /*           Save room for the row vector base addresses and counts. */
 
 	    i__3 = __state->nsv << 1;
 	    for (__state->i__ = 1; __state->i__ <= i__3; ++__state->i__) {
-		zzekspsh_(&__state->c__1, &__state->c__0);
+		zzekspsh_(__global_state, &__state->c__1, &__state->c__0);
 	    }
 
 /*           At this point, we can set the segment vector count in the */
 /*           join row set. */
 
 	    i__5 = __state->rbas[(i__3 = __state->t - 1) < 10 && 0 <= i__3 ? 
-		    i__3 : s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)4066)] + 4;
+		    i__3 : s_rnge(&__global_state->f2c, "rbas", i__3, "ekqmg"
+		    "r_", (ftnlen)4066)] + 4;
 	    i__6 = __state->rbas[(i__4 = __state->t - 1) < 10 && 0 <= i__4 ? 
-		    i__4 : s_rnge("rbas", i__4, "ekqmgr_", (ftnlen)4066)] + 4;
-	    zzeksupd_(&i__5, &i__6, &__state->nsv);
+		    i__4 : s_rnge(&__global_state->f2c, "rbas", i__4, "ekqmg"
+		    "r_", (ftnlen)4066)] + 4;
+	    zzeksupd_(__global_state, &i__5, &i__6, &__state->nsv);
 
 /*           Find the matching rows in the segments belonging to the */
 /*           current table. */
 
 	    __state->seg = __state->tbstpt[(i__3 = __state->tab - 1) < 100 && 
-		    0 <= i__3 ? i__3 : s_rnge("tbstpt", i__3, "ekqmgr_", (
-		    ftnlen)4072)];
+		    0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "tbstpt", 
+		    i__3, "ekqmgr_", (ftnlen)4072)];
 	    __state->nseg = 0;
 	    __state->rtotal = 0;
 	    while(__state->seg > 0) {
@@ -4971,11 +5124,12 @@ L_eksrch:
 /*              just the segment's index in the segment table. */
 
 		__state->sgvbas = __state->rbas[(i__3 = __state->t - 1) < 10 
-			&& 0 <= i__3 ? i__3 : s_rnge("rbas", i__3, "ekqmgr_", 
-			(ftnlen)4083)] + 4 + (__state->nseg - 1);
+			&& 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+			"rbas", i__3, "ekqmgr_", (ftnlen)4083)] + 4 + (
+			__state->nseg - 1);
 		i__3 = __state->sgvbas + 1;
 		i__4 = __state->sgvbas + 1;
-		zzeksupd_(&i__3, &i__4, &__state->seg);
+		zzeksupd_(__global_state, &i__3, &i__4, &__state->seg);
 
 /*              Label as `inactive' any constraints that don't apply to */
 /*              this table.  Join constraints are inactive at this stage */
@@ -4989,17 +5143,17 @@ L_eksrch:
 /*                 Each constraint is active to start with. */
 
 		    __state->activc[(i__4 = __state->i__ - 1) < 1000 && 0 <= 
-			    i__4 ? i__4 : s_rnge("activc", i__4, "ekqmgr_", (
-			    ftnlen)4098)] = __state->cnstyp[(i__5 = 
-			    __state->i__ - 1) < 1000 && 0 <= i__5 ? i__5 : 
-			    s_rnge("cnstyp", i__5, "ekqmgr_", (ftnlen)4098)] 
-			    == 1;
+			    i__4 ? i__4 : s_rnge(&__global_state->f2c, "acti"
+			    "vc", i__4, "ekqmgr_", (ftnlen)4098)] = 
+			    __state->cnstyp[(i__5 = __state->i__ - 1) < 1000 
+			    && 0 <= i__5 ? i__5 : s_rnge(&__global_state->f2c,
+			     "cnstyp", i__5, "ekqmgr_", (ftnlen)4098)] == 1;
 		    __state->activv[(i__4 = __state->i__ - 1) < 1000 && 0 <= 
-			    i__4 ? i__4 : s_rnge("activv", i__4, "ekqmgr_", (
-			    ftnlen)4099)] = __state->cnstyp[(i__5 = 
-			    __state->i__ - 1) < 1000 && 0 <= i__5 ? i__5 : 
-			    s_rnge("cnstyp", i__5, "ekqmgr_", (ftnlen)4099)] 
-			    == 2;
+			    i__4 ? i__4 : s_rnge(&__global_state->f2c, "acti"
+			    "vv", i__4, "ekqmgr_", (ftnlen)4099)] = 
+			    __state->cnstyp[(i__5 = __state->i__ - 1) < 1000 
+			    && 0 <= i__5 ? i__5 : s_rnge(&__global_state->f2c,
+			     "cnstyp", i__5, "ekqmgr_", (ftnlen)4099)] == 2;
 
 /*                 The parent table of the LHS column must be the Tth */
 /*                 table, or this constraint does not apply. */
@@ -5011,29 +5165,35 @@ L_eksrch:
 /*                 column on the left. */
 
 		    if (__state->ltbidx[(i__4 = __state->i__ - 1) < 1000 && 0 
-			    <= i__4 ? i__4 : s_rnge("ltbidx", i__4, "ekqmgr_",
-			     (ftnlen)4111)] != __state->t) {
+			    <= i__4 ? i__4 : s_rnge(&__global_state->f2c, 
+			    "ltbidx", i__4, "ekqmgr_", (ftnlen)4111)] != 
+			    __state->t) {
 			__state->activc[(i__4 = __state->i__ - 1) < 1000 && 0 
-				<= i__4 ? i__4 : s_rnge("activc", i__4, "ekq"
-				"mgr_", (ftnlen)4113)] = FALSE_;
+				<= i__4 ? i__4 : s_rnge(&__global_state->f2c, 
+				"activc", i__4, "ekqmgr_", (ftnlen)4113)] = 
+				FALSE_;
 			__state->activv[(i__4 = __state->i__ - 1) < 1000 && 0 
-				<= i__4 ? i__4 : s_rnge("activv", i__4, "ekq"
-				"mgr_", (ftnlen)4114)] = FALSE_;
+				<= i__4 ? i__4 : s_rnge(&__global_state->f2c, 
+				"activv", i__4, "ekqmgr_", (ftnlen)4114)] = 
+				FALSE_;
 		    } else if (__state->cnstyp[(i__4 = __state->i__ - 1) < 
-			    1000 && 0 <= i__4 ? i__4 : s_rnge("cnstyp", i__4, 
-			    "ekqmgr_", (ftnlen)4117)] == 1) {
+			    1000 && 0 <= i__4 ? i__4 : s_rnge(&
+			    __global_state->f2c, "cnstyp", i__4, "ekqmgr_", (
+			    ftnlen)4117)] == 1) {
 			if (__state->ltbidx[(i__4 = __state->i__ - 1) < 1000 
-				&& 0 <= i__4 ? i__4 : s_rnge("ltbidx", i__4, 
-				"ekqmgr_", (ftnlen)4119)] != __state->rtbidx[(
-				i__5 = __state->i__ - 1) < 1000 && 0 <= i__5 ?
-				 i__5 : s_rnge("rtbidx", i__5, "ekqmgr_", (
-				ftnlen)4119)]) {
+				&& 0 <= i__4 ? i__4 : s_rnge(&
+				__global_state->f2c, "ltbidx", i__4, "ekqmgr_"
+				, (ftnlen)4119)] != __state->rtbidx[(i__5 = 
+				__state->i__ - 1) < 1000 && 0 <= i__5 ? i__5 :
+				 s_rnge(&__global_state->f2c, "rtbidx", i__5, 
+				"ekqmgr_", (ftnlen)4119)]) {
 
 /*                       This is a join constraint; disable it. */
 
 			    __state->activc[(i__4 = __state->i__ - 1) < 1000 
-				    && 0 <= i__4 ? i__4 : s_rnge("activc", 
-				    i__4, "ekqmgr_", (ftnlen)4123)] = FALSE_;
+				    && 0 <= i__4 ? i__4 : s_rnge(&
+				    __global_state->f2c, "activc", i__4, 
+				    "ekqmgr_", (ftnlen)4123)] = FALSE_;
 			}
 		    }
 		}
@@ -5046,49 +5206,54 @@ L_eksrch:
 /*              constraint will be placed in elements LDSCRS(*,I), if */
 /*              the Ith constraint is active. */
 
-		cleari_(&__state->c__11000, __state->ldscrs);
+		cleari_(__global_state, &__state->c__11000, __state->ldscrs);
 		i__3 = __state->cjsize;
 		for (__state->i__ = 1; __state->i__ <= i__3; ++__state->i__) {
 		    if (__state->activv[(i__4 = __state->i__ - 1) < 1000 && 0 
-			    <= i__4 ? i__4 : s_rnge("activv", i__4, "ekqmgr_",
-			     (ftnlen)4147)]) {
+			    <= i__4 ? i__4 : s_rnge(&__global_state->f2c, 
+			    "activv", i__4, "ekqmgr_", (ftnlen)4147)]) {
 
 /*                     Look up the column descriptor for this */
 /*                     constraint. */
 
 			__state->j = __state->stdtpt[(i__4 = __state->seg - 1)
-				 < 200 && 0 <= i__4 ? i__4 : s_rnge("stdtpt", 
-				i__4, "ekqmgr_", (ftnlen)4152)];
+				 < 200 && 0 <= i__4 ? i__4 : s_rnge(&
+				__global_state->f2c, "stdtpt", i__4, "ekqmgr_"
+				, (ftnlen)4152)];
 			i__5 = __state->lcidx[(i__4 = __state->i__ - 1) < 
-				1000 && 0 <= i__4 ? i__4 : s_rnge("lcidx", 
-				i__4, "ekqmgr_", (ftnlen)4154)];
+				1000 && 0 <= i__4 ? i__4 : s_rnge(&
+				__global_state->f2c, "lcidx", i__4, "ekqmgr_",
+				 (ftnlen)4154)];
 			for (__state->k = 2; __state->k <= i__5; ++__state->k)
 				 {
-			    __state->j = lnknxt_(&__state->j, __state->dtpool)
-				    ;
+			    __state->j = lnknxt_(__global_state, &__state->j, 
+				    __state->dtpool);
 			}
-			movei_(&__state->dtdscs[(i__5 = __state->j * 11 - 11) 
-				< 110000 && 0 <= i__5 ? i__5 : s_rnge("dtdscs"
-				, i__5, "ekqmgr_", (ftnlen)4158)], &
+			movei_(__global_state, &__state->dtdscs[(i__5 = 
+				__state->j * 11 - 11) < 110000 && 0 <= i__5 ? 
+				i__5 : s_rnge(&__global_state->f2c, "dtdscs", 
+				i__5, "ekqmgr_", (ftnlen)4158)], &
 				__state->c__11, &__state->ldscrs[(i__4 = 
 				__state->i__ * 11 - 11) < 11000 && 0 <= i__4 ?
-				 i__4 : s_rnge("ldscrs", i__4, "ekqmgr_", (
-				ftnlen)4158)]);
+				 i__4 : s_rnge(&__global_state->f2c, "ldscrs",
+				 i__4, "ekqmgr_", (ftnlen)4158)]);
 		    }
 		}
-		zzekkey_(&__state->sthan[(i__3 = __state->seg - 1) < 200 && 0 
-			<= i__3 ? i__3 : s_rnge("sthan", i__3, "ekqmgr_", (
+		zzekkey_(__global_state, &__state->sthan[(i__3 = __state->seg 
+			- 1) < 200 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "sthan", i__3, "ekqmgr_", (
 			ftnlen)4165)], &__state->stdscs[(i__5 = __state->seg *
-			 24 - 24) < 4800 && 0 <= i__5 ? i__5 : s_rnge("stdscs"
-			, i__5, "ekqmgr_", (ftnlen)4165)], &__state->stnrow[(
-			i__4 = __state->seg - 1) < 200 && 0 <= i__4 ? i__4 : 
-			s_rnge("stnrow", i__4, "ekqmgr_", (ftnlen)4165)], &
-			__state->cjsize, __state->lcidx, __state->ldscrs, 
-			__state->ops, __state->dtype, eqryc, __state->cbegs, 
-			__state->cends, __state->dvals, __state->ivals, 
-			__state->activv, &__state->key, __state->keydsc, &
-			__state->begidx, &__state->endidx, &__state->keyfnd, 
-			eqryc_len);
+			 24 - 24) < 4800 && 0 <= i__5 ? i__5 : s_rnge(&
+			__global_state->f2c, "stdscs", i__5, "ekqmgr_", (
+			ftnlen)4165)], &__state->stnrow[(i__4 = __state->seg 
+			- 1) < 200 && 0 <= i__4 ? i__4 : s_rnge(&
+			__global_state->f2c, "stnrow", i__4, "ekqmgr_", (
+			ftnlen)4165)], &__state->cjsize, __state->lcidx, 
+			__state->ldscrs, __state->ops, __state->dtype, eqryc, 
+			__state->cbegs, __state->cends, __state->dvals, 
+			__state->ivals, __state->activv, &__state->key, 
+			__state->keydsc, &__state->begidx, &__state->endidx, &
+			__state->keyfnd, eqryc_len);
 
 /*              ZZEKKEY has updated ACTIVV to reflect the application */
 /*              of constraints that were used to determine BEGIDX and */
@@ -5105,8 +5270,9 @@ L_eksrch:
 		    __state->indexd = FALSE_;
 		    __state->begidx = 1;
 		    __state->endidx = __state->stnrow[(i__3 = __state->seg - 
-			    1) < 200 && 0 <= i__3 ? i__3 : s_rnge("stnrow", 
-			    i__3, "ekqmgr_", (ftnlen)4193)];
+			    1) < 200 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "stnrow", i__3, "ekqmgr_", (
+			    ftnlen)4193)];
 		}
 
 /*              Whether or not we have any matching rows, we'll need */
@@ -5126,17 +5292,20 @@ L_eksrch:
 /*                 for the current segment. */
 
 		    __state->nmatch = 0;
-		    zzekstop_(&__state->rwvbas);
+		    zzekstop_(__global_state, &__state->rwvbas);
 		    i__6 = __state->rbas[(i__3 = __state->t - 1) < 10 && 0 <= 
-			    i__3 ? i__3 : s_rnge("rbas", i__3, "ekqmgr_", (
-			    ftnlen)4218)] + __state->ptroff;
+			    i__3 ? i__3 : s_rnge(&__global_state->f2c, "rbas",
+			     i__3, "ekqmgr_", (ftnlen)4218)] + 
+			    __state->ptroff;
 		    i__7 = __state->rbas[(i__5 = __state->t - 1) < 10 && 0 <= 
-			    i__5 ? i__5 : s_rnge("rbas", i__5, "ekqmgr_", (
-			    ftnlen)4218)] + __state->ptroff;
+			    i__5 ? i__5 : s_rnge(&__global_state->f2c, "rbas",
+			     i__5, "ekqmgr_", (ftnlen)4218)] + 
+			    __state->ptroff;
 		    i__8 = __state->rwvbas - __state->rbas[(i__4 = __state->t 
-			    - 1) < 10 && 0 <= i__4 ? i__4 : s_rnge("rbas", 
-			    i__4, "ekqmgr_", (ftnlen)4218)];
-		    zzeksupd_(&i__6, &i__7, &i__8);
+			    - 1) < 10 && 0 <= i__4 ? i__4 : s_rnge(&
+			    __global_state->f2c, "rbas", i__4, "ekqmgr_", (
+			    ftnlen)4218)];
+		    zzeksupd_(__global_state, &i__6, &i__7, &i__8);
 
 /*                 Count the active constraints.  While we're at it, */
 /*                 fill in the descriptor lists LDSCRS and RDSCRS */
@@ -5144,58 +5313,69 @@ L_eksrch:
 /*                 on the left hand sides and right hand sides of */
 /*                 these constraints. */
 
-		    cleari_(&__state->c__11000, __state->ldscrs);
-		    cleari_(&__state->c__11000, __state->rdscrs);
+		    cleari_(__global_state, &__state->c__11000, 
+			    __state->ldscrs);
+		    cleari_(__global_state, &__state->c__11000, 
+			    __state->rdscrs);
 		    __state->nact = 0;
 		    i__3 = __state->cjsize;
 		    for (__state->i__ = 1; __state->i__ <= i__3; 
 			    ++__state->i__) {
 			if (__state->activc[(i__5 = __state->i__ - 1) < 1000 
-				&& 0 <= i__5 ? i__5 : s_rnge("activc", i__5, 
-				"ekqmgr_", (ftnlen)4234)] || __state->activv[(
-				i__4 = __state->i__ - 1) < 1000 && 0 <= i__4 ?
-				 i__4 : s_rnge("activv", i__4, "ekqmgr_", (
-				ftnlen)4234)]) {
+				&& 0 <= i__5 ? i__5 : s_rnge(&
+				__global_state->f2c, "activc", i__5, "ekqmgr_"
+				, (ftnlen)4234)] || __state->activv[(i__4 = 
+				__state->i__ - 1) < 1000 && 0 <= i__4 ? i__4 :
+				 s_rnge(&__global_state->f2c, "activv", i__4, 
+				"ekqmgr_", (ftnlen)4234)]) {
 			    ++__state->nact;
 
 /*                       Look up the column descriptor for this */
 /*                       constraint. */
 			    __state->j = __state->stdtpt[(i__5 = __state->seg 
-				    - 1) < 200 && 0 <= i__5 ? i__5 : s_rnge(
-				    "stdtpt", i__5, "ekqmgr_", (ftnlen)4241)];
+				    - 1) < 200 && 0 <= i__5 ? i__5 : s_rnge(&
+				    __global_state->f2c, "stdtpt", i__5, 
+				    "ekqmgr_", (ftnlen)4241)];
 			    i__4 = __state->lcidx[(i__5 = __state->i__ - 1) < 
-				    1000 && 0 <= i__5 ? i__5 : s_rnge("lcidx",
-				     i__5, "ekqmgr_", (ftnlen)4243)];
+				    1000 && 0 <= i__5 ? i__5 : s_rnge(&
+				    __global_state->f2c, "lcidx", i__5, "ekq"
+				    "mgr_", (ftnlen)4243)];
 			    for (__state->k = 2; __state->k <= i__4; 
 				    ++__state->k) {
-				__state->j = lnknxt_(&__state->j, 
-					__state->dtpool);
+				__state->j = lnknxt_(__global_state, &
+					__state->j, __state->dtpool);
 			    }
-			    movei_(&__state->dtdscs[(i__4 = __state->j * 11 - 
-				    11) < 110000 && 0 <= i__4 ? i__4 : s_rnge(
-				    "dtdscs", i__4, "ekqmgr_", (ftnlen)4247)],
-				     &__state->c__11, &__state->ldscrs[(i__5 =
-				     __state->i__ * 11 - 11) < 11000 && 0 <= 
-				    i__5 ? i__5 : s_rnge("ldscrs", i__5, 
-				    "ekqmgr_", (ftnlen)4247)]);
+			    movei_(__global_state, &__state->dtdscs[(i__4 = 
+				    __state->j * 11 - 11) < 110000 && 0 <= 
+				    i__4 ? i__4 : s_rnge(&__global_state->f2c,
+				     "dtdscs", i__4, "ekqmgr_", (ftnlen)4247)]
+				    , &__state->c__11, &__state->ldscrs[(i__5 
+				    = __state->i__ * 11 - 11) < 11000 && 0 <= 
+				    i__5 ? i__5 : s_rnge(&__global_state->f2c,
+				     "ldscrs", i__5, "ekqmgr_", (ftnlen)4247)]
+				    );
 			    __state->j = __state->stdtpt[(i__4 = __state->seg 
-				    - 1) < 200 && 0 <= i__4 ? i__4 : s_rnge(
-				    "stdtpt", i__4, "ekqmgr_", (ftnlen)4250)];
+				    - 1) < 200 && 0 <= i__4 ? i__4 : s_rnge(&
+				    __global_state->f2c, "stdtpt", i__4, 
+				    "ekqmgr_", (ftnlen)4250)];
 			    i__5 = __state->rcidx[(i__4 = __state->i__ - 1) < 
-				    1000 && 0 <= i__4 ? i__4 : s_rnge("rcidx",
-				     i__4, "ekqmgr_", (ftnlen)4252)];
+				    1000 && 0 <= i__4 ? i__4 : s_rnge(&
+				    __global_state->f2c, "rcidx", i__4, "ekq"
+				    "mgr_", (ftnlen)4252)];
 			    for (__state->k = 2; __state->k <= i__5; 
 				    ++__state->k) {
-				__state->j = lnknxt_(&__state->j, 
-					__state->dtpool);
+				__state->j = lnknxt_(__global_state, &
+					__state->j, __state->dtpool);
 			    }
-			    movei_(&__state->dtdscs[(i__5 = __state->j * 11 - 
-				    11) < 110000 && 0 <= i__5 ? i__5 : s_rnge(
-				    "dtdscs", i__5, "ekqmgr_", (ftnlen)4256)],
-				     &__state->c__11, &__state->rdscrs[(i__4 =
-				     __state->i__ * 11 - 11) < 11000 && 0 <= 
-				    i__4 ? i__4 : s_rnge("rdscrs", i__4, 
-				    "ekqmgr_", (ftnlen)4256)]);
+			    movei_(__global_state, &__state->dtdscs[(i__5 = 
+				    __state->j * 11 - 11) < 110000 && 0 <= 
+				    i__5 ? i__5 : s_rnge(&__global_state->f2c,
+				     "dtdscs", i__5, "ekqmgr_", (ftnlen)4256)]
+				    , &__state->c__11, &__state->rdscrs[(i__4 
+				    = __state->i__ * 11 - 11) < 11000 && 0 <= 
+				    i__4 ? i__4 : s_rnge(&__global_state->f2c,
+				     "rdscrs", i__4, "ekqmgr_", (ftnlen)4256)]
+				    );
 			}
 		    }
 		    if (__state->nact > 0) {
@@ -5209,37 +5389,42 @@ L_eksrch:
 			for (__state->r__ = __state->begidx; __state->r__ <= 
 				i__3; ++__state->r__) {
 			    if (__state->indexd) {
-				zzekixlk_(&__state->sthan[(i__5 = 
-					__state->seg - 1) < 200 && 0 <= i__5 ?
-					 i__5 : s_rnge("sthan", i__5, "ekqmg"
-					"r_", (ftnlen)4275)], __state->keydsc, 
-					&__state->r__, &__state->rowidx);
+				zzekixlk_(__global_state, &__state->sthan[(
+					i__5 = __state->seg - 1) < 200 && 0 <=
+					 i__5 ? i__5 : s_rnge(&
+					__global_state->f2c, "sthan", i__5, 
+					"ekqmgr_", (ftnlen)4275)], 
+					__state->keydsc, &__state->r__, &
+					__state->rowidx);
 			    } else {
 
 /*                          Look up the record pointer for row R. */
 
-				zzekrplk_(&__state->sthan[(i__5 = 
-					__state->seg - 1) < 200 && 0 <= i__5 ?
-					 i__5 : s_rnge("sthan", i__5, "ekqmg"
-					"r_", (ftnlen)4283)], &__state->stdscs[
-					(i__4 = __state->seg * 24 - 24) < 
-					4800 && 0 <= i__4 ? i__4 : s_rnge(
-					"stdscs", i__4, "ekqmgr_", (ftnlen)
-					4283)], &__state->r__, &
-					__state->rowidx);
+				zzekrplk_(__global_state, &__state->sthan[(
+					i__5 = __state->seg - 1) < 200 && 0 <=
+					 i__5 ? i__5 : s_rnge(&
+					__global_state->f2c, "sthan", i__5, 
+					"ekqmgr_", (ftnlen)4283)], &
+					__state->stdscs[(i__4 = __state->seg *
+					 24 - 24) < 4800 && 0 <= i__4 ? i__4 :
+					 s_rnge(&__global_state->f2c, "stdscs"
+					, i__4, "ekqmgr_", (ftnlen)4283)], &
+					__state->r__, &__state->rowidx);
 			    }
 
 /*                       Test the row against both value and column */
 /*                       constraints.  For now, we supply an array */
 /*                       of default column entry element indices. */
 
-			    __state->vmtch = zzekrmch_(&__state->cjsize, 
-				    __state->activv, &__state->sthan[(i__5 = 
-				    __state->seg - 1) < 200 && 0 <= i__5 ? 
-				    i__5 : s_rnge("sthan", i__5, "ekqmgr_", (
-				    ftnlen)4294)], &__state->stdscs[(i__4 = 
-				    __state->seg * 24 - 24) < 4800 && 0 <= 
-				    i__4 ? i__4 : s_rnge("stdscs", i__4, 
+			    __state->vmtch = zzekrmch_(__global_state, &
+				    __state->cjsize, __state->activv, &
+				    __state->sthan[(i__5 = __state->seg - 1) <
+				     200 && 0 <= i__5 ? i__5 : s_rnge(&
+				    __global_state->f2c, "sthan", i__5, "ekq"
+				    "mgr_", (ftnlen)4294)], &__state->stdscs[(
+				    i__4 = __state->seg * 24 - 24) < 4800 && 
+				    0 <= i__4 ? i__4 : s_rnge(&
+				    __global_state->f2c, "stdscs", i__4, 
 				    "ekqmgr_", (ftnlen)4294)], 
 				    __state->ldscrs, &__state->rowidx, 
 				    __state->lelts, __state->ops, 
@@ -5257,37 +5442,42 @@ L_eksrch:
 			    i__5 = __state->cjsize;
 			    for (__state->j = 1; __state->j <= i__5; 
 				    ++__state->j) {
-				__state->cmtch = __state->cmtch && zzekvmch_(&
-					__state->c__1, &__state->activc[(i__4 
-					= __state->j - 1) < 1000 && 0 <= i__4 
-					? i__4 : s_rnge("activc", i__4, "ekq"
-					"mgr_", (ftnlen)4313)], &
+				__state->cmtch = __state->cmtch && zzekvmch_(
+					__global_state, &__state->c__1, &
+					__state->activc[(i__4 = __state->j - 
+					1) < 1000 && 0 <= i__4 ? i__4 : 
+					s_rnge(&__global_state->f2c, "activc",
+					 i__4, "ekqmgr_", (ftnlen)4313)], &
 					__state->sthan[(i__6 = __state->seg - 
 					1) < 200 && 0 <= i__6 ? i__6 : s_rnge(
-					"sthan", i__6, "ekqmgr_", (ftnlen)
-					4313)], &__state->stdscs[(i__7 = 
-					__state->seg * 24 - 24) < 4800 && 0 <=
-					 i__7 ? i__7 : s_rnge("stdscs", i__7, 
+					&__global_state->f2c, "sthan", i__6, 
 					"ekqmgr_", (ftnlen)4313)], &
+					__state->stdscs[(i__7 = __state->seg *
+					 24 - 24) < 4800 && 0 <= i__7 ? i__7 :
+					 s_rnge(&__global_state->f2c, "stdscs"
+					, i__7, "ekqmgr_", (ftnlen)4313)], &
 					__state->ldscrs[(i__8 = __state->j * 
 					11 - 11) < 11000 && 0 <= i__8 ? i__8 :
-					 s_rnge("ldscrs", i__8, "ekqmgr_", (
-					ftnlen)4313)], &__state->rowidx, &
-					__state->c__1, &__state->ops[(i__9 = 
-					__state->j - 1) < 1000 && 0 <= i__9 ? 
-					i__9 : s_rnge("ops", i__9, "ekqmgr_", 
-					(ftnlen)4313)], &__state->sthan[(
-					i__10 = __state->seg - 1) < 200 && 0 
-					<= i__10 ? i__10 : s_rnge("sthan", 
+					 s_rnge(&__global_state->f2c, "ldscrs"
+					, i__8, "ekqmgr_", (ftnlen)4313)], &
+					__state->rowidx, &__state->c__1, &
+					__state->ops[(i__9 = __state->j - 1) <
+					 1000 && 0 <= i__9 ? i__9 : s_rnge(&
+					__global_state->f2c, "ops", i__9, 
+					"ekqmgr_", (ftnlen)4313)], &
+					__state->sthan[(i__10 = __state->seg 
+					- 1) < 200 && 0 <= i__10 ? i__10 : 
+					s_rnge(&__global_state->f2c, "sthan", 
 					i__10, "ekqmgr_", (ftnlen)4313)], &
 					__state->stdscs[(i__11 = __state->seg 
 					* 24 - 24) < 4800 && 0 <= i__11 ? 
-					i__11 : s_rnge("stdscs", i__11, "ekq"
-					"mgr_", (ftnlen)4313)], &
-					__state->rdscrs[(i__12 = __state->j * 
-					11 - 11) < 11000 && 0 <= i__12 ? 
-					i__12 : s_rnge("rdscrs", i__12, "ekq"
-					"mgr_", (ftnlen)4313)], &
+					i__11 : s_rnge(&__global_state->f2c, 
+					"stdscs", i__11, "ekqmgr_", (ftnlen)
+					4313)], &__state->rdscrs[(i__12 = 
+					__state->j * 11 - 11) < 11000 && 0 <= 
+					i__12 ? i__12 : s_rnge(&
+					__global_state->f2c, "rdscrs", i__12, 
+					"ekqmgr_", (ftnlen)4313)], &
 					__state->rowidx, &__state->c__1);
 			    }
 			    if (__state->cmtch && __state->vmtch) {
@@ -5300,12 +5490,15 @@ L_eksrch:
 /*                          segment vector. */
 
 				++__state->nmatch;
-				zzekspsh_(&__state->c__1, &__state->rowidx);
+				zzekspsh_(__global_state, &__state->c__1, &
+					__state->rowidx);
 				i__4 = __state->sgvbas - __state->rbas[(i__5 =
 					 __state->t - 1) < 10 && 0 <= i__5 ? 
-					i__5 : s_rnge("rbas", i__5, "ekqmgr_",
-					 (ftnlen)4342)];
-				zzekspsh_(&__state->c__1, &i__4);
+					i__5 : s_rnge(&__global_state->f2c, 
+					"rbas", i__5, "ekqmgr_", (ftnlen)4342)
+					];
+				zzekspsh_(__global_state, &__state->c__1, &
+					i__4);
 			    }
 			}
 		    } else {
@@ -5325,31 +5518,35 @@ L_eksrch:
 /*                          Look up the record pointer for row R */
 /*                          from the column index. */
 
-				zzekixlk_(&__state->sthan[(i__5 = 
-					__state->seg - 1) < 200 && 0 <= i__5 ?
-					 i__5 : s_rnge("sthan", i__5, "ekqmg"
-					"r_", (ftnlen)4366)], __state->keydsc, 
-					&__state->r__, &__state->rowidx);
+				zzekixlk_(__global_state, &__state->sthan[(
+					i__5 = __state->seg - 1) < 200 && 0 <=
+					 i__5 ? i__5 : s_rnge(&
+					__global_state->f2c, "sthan", i__5, 
+					"ekqmgr_", (ftnlen)4366)], 
+					__state->keydsc, &__state->r__, &
+					__state->rowidx);
 			    } else {
 
 /*                          Look up the record pointer for row R. */
 
-				zzekrplk_(&__state->sthan[(i__5 = 
-					__state->seg - 1) < 200 && 0 <= i__5 ?
-					 i__5 : s_rnge("sthan", i__5, "ekqmg"
-					"r_", (ftnlen)4374)], &__state->stdscs[
-					(i__4 = __state->seg * 24 - 24) < 
-					4800 && 0 <= i__4 ? i__4 : s_rnge(
-					"stdscs", i__4, "ekqmgr_", (ftnlen)
-					4374)], &__state->r__, &
-					__state->rowidx);
+				zzekrplk_(__global_state, &__state->sthan[(
+					i__5 = __state->seg - 1) < 200 && 0 <=
+					 i__5 ? i__5 : s_rnge(&
+					__global_state->f2c, "sthan", i__5, 
+					"ekqmgr_", (ftnlen)4374)], &
+					__state->stdscs[(i__4 = __state->seg *
+					 24 - 24) < 4800 && 0 <= i__4 ? i__4 :
+					 s_rnge(&__global_state->f2c, "stdscs"
+					, i__4, "ekqmgr_", (ftnlen)4374)], &
+					__state->r__, &__state->rowidx);
 			    }
-			    zzekspsh_(&__state->c__1, &__state->rowidx);
+			    zzekspsh_(__global_state, &__state->c__1, &
+				    __state->rowidx);
 			    i__4 = __state->sgvbas - __state->rbas[(i__5 = 
 				    __state->t - 1) < 10 && 0 <= i__5 ? i__5 :
-				     s_rnge("rbas", i__5, "ekqmgr_", (ftnlen)
-				    4382)];
-			    zzekspsh_(&__state->c__1, &i__4);
+				     s_rnge(&__global_state->f2c, "rbas", 
+				    i__5, "ekqmgr_", (ftnlen)4382)];
+			    zzekspsh_(__global_state, &__state->c__1, &i__4);
 			}
 		    }
 
@@ -5357,48 +5554,57 @@ L_eksrch:
 /*                 set. */
 
 		    i__4 = __state->rbas[(i__3 = __state->t - 1) < 10 && 0 <= 
-			    i__3 ? i__3 : s_rnge("rbas", i__3, "ekqmgr_", (
-			    ftnlen)4392)] + __state->ptroff + 1;
+			    i__3 ? i__3 : s_rnge(&__global_state->f2c, "rbas",
+			     i__3, "ekqmgr_", (ftnlen)4392)] + 
+			    __state->ptroff + 1;
 		    i__6 = __state->rbas[(i__5 = __state->t - 1) < 10 && 0 <= 
-			    i__5 ? i__5 : s_rnge("rbas", i__5, "ekqmgr_", (
-			    ftnlen)4392)] + __state->ptroff + 1;
-		    zzeksupd_(&i__4, &i__6, &__state->nmatch);
+			    i__5 ? i__5 : s_rnge(&__global_state->f2c, "rbas",
+			     i__5, "ekqmgr_", (ftnlen)4392)] + 
+			    __state->ptroff + 1;
+		    zzeksupd_(__global_state, &i__4, &i__6, &__state->nmatch);
 		}
 
 /*              Take a look at the next segment.  Update the total count */
 /*              of matching rows for this table. */
 
-		__state->seg = lnknxt_(&__state->seg, __state->stpool);
+		__state->seg = lnknxt_(__global_state, &__state->seg, 
+			__state->stpool);
 		__state->rtotal += __state->nmatch;
 	    }
 
 /*           Fill in the size and count information for the join row set. */
 
-	    zzekstop_(&__state->top);
+	    zzekstop_(__global_state, &__state->top);
 	    __state->rsize[(i__3 = __state->t - 1) < 200 && 0 <= i__3 ? i__3 :
-		     s_rnge("rsize", i__3, "ekqmgr_", (ftnlen)4410)] = 
-		    __state->top - __state->rbas[(i__5 = __state->t - 1) < 10 
-		    && 0 <= i__5 ? i__5 : s_rnge("rbas", i__5, "ekqmgr_", (
-		    ftnlen)4410)];
+		     s_rnge(&__global_state->f2c, "rsize", i__3, "ekqmgr_", (
+		    ftnlen)4410)] = __state->top - __state->rbas[(i__5 = 
+		    __state->t - 1) < 10 && 0 <= i__5 ? i__5 : s_rnge(&
+		    __global_state->f2c, "rbas", i__5, "ekqmgr_", (ftnlen)
+		    4410)];
 	    i__6 = __state->rbas[(i__3 = __state->t - 1) < 10 && 0 <= i__3 ? 
-		    i__3 : s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)4412)] + 1;
+		    i__3 : s_rnge(&__global_state->f2c, "rbas", i__3, "ekqmg"
+		    "r_", (ftnlen)4412)] + 1;
 	    i__7 = __state->rbas[(i__5 = __state->t - 1) < 10 && 0 <= i__5 ? 
-		    i__5 : s_rnge("rbas", i__5, "ekqmgr_", (ftnlen)4412)] + 1;
-	    zzeksupd_(&i__6, &i__7, &__state->rsize[(i__4 = __state->t - 1) < 
-		    200 && 0 <= i__4 ? i__4 : s_rnge("rsize", i__4, "ekqmgr_",
-		     (ftnlen)4412)]);
+		    i__5 : s_rnge(&__global_state->f2c, "rbas", i__5, "ekqmg"
+		    "r_", (ftnlen)4412)] + 1;
+	    zzeksupd_(__global_state, &i__6, &i__7, &__state->rsize[(i__4 = 
+		    __state->t - 1) < 200 && 0 <= i__4 ? i__4 : s_rnge(&
+		    __global_state->f2c, "rsize", i__4, "ekqmgr_", (ftnlen)
+		    4412)]);
 	    i__4 = __state->rbas[(i__3 = __state->t - 1) < 10 && 0 <= i__3 ? 
-		    i__3 : s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)4413)] + 2;
+		    i__3 : s_rnge(&__global_state->f2c, "rbas", i__3, "ekqmg"
+		    "r_", (ftnlen)4413)] + 2;
 	    i__6 = __state->rbas[(i__5 = __state->t - 1) < 10 && 0 <= i__5 ? 
-		    i__5 : s_rnge("rbas", i__5, "ekqmgr_", (ftnlen)4413)] + 2;
-	    zzeksupd_(&i__4, &i__6, &__state->rtotal);
+		    i__5 : s_rnge(&__global_state->f2c, "rbas", i__5, "ekqmg"
+		    "r_", (ftnlen)4413)] + 2;
+	    zzeksupd_(__global_state, &i__4, &i__6, &__state->rtotal);
 
 /*           Compress out any empty segment vectors from the join row */
 /*           set. */
 
-	    zzekjsqz_(&__state->rbas[(i__3 = __state->t - 1) < 10 && 0 <= 
-		    i__3 ? i__3 : s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)
-		    4419)]);
+	    zzekjsqz_(__global_state, &__state->rbas[(i__3 = __state->t - 1) <
+		     10 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "rbas", i__3, "ekqmgr_", (ftnlen)4419)]);
 
 /*           At this point, we've filled in the entire join row set for */
 /*           table T. */
@@ -5422,24 +5628,27 @@ L_eksrch:
 	    i__3 = __state->cjsize;
 	    for (__state->i__ = 1; __state->i__ <= i__3; ++__state->i__) {
 		__state->activc[(i__5 = __state->i__ - 1) < 1000 && 0 <= i__5 
-			? i__5 : s_rnge("activc", i__5, "ekqmgr_", (ftnlen)
-			4444)] = FALSE_;
+			? i__5 : s_rnge(&__global_state->f2c, "activc", i__5, 
+			"ekqmgr_", (ftnlen)4444)] = FALSE_;
 		if (__state->cnstyp[(i__5 = __state->i__ - 1) < 1000 && 0 <= 
-			i__5 ? i__5 : s_rnge("cnstyp", i__5, "ekqmgr_", (
-			ftnlen)4446)] == 1) {
+			i__5 ? i__5 : s_rnge(&__global_state->f2c, "cnstyp", 
+			i__5, "ekqmgr_", (ftnlen)4446)] == 1) {
 		    __state->l = __state->ltbidx[(i__5 = __state->i__ - 1) < 
-			    1000 && 0 <= i__5 ? i__5 : s_rnge("ltbidx", i__5, 
-			    "ekqmgr_", (ftnlen)4448)];
+			    1000 && 0 <= i__5 ? i__5 : s_rnge(&
+			    __global_state->f2c, "ltbidx", i__5, "ekqmgr_", (
+			    ftnlen)4448)];
 		    __state->r__ = __state->rtbidx[(i__5 = __state->i__ - 1) <
-			     1000 && 0 <= i__5 ? i__5 : s_rnge("rtbidx", i__5,
-			     "ekqmgr_", (ftnlen)4449)];
+			     1000 && 0 <= i__5 ? i__5 : s_rnge(&
+			    __global_state->f2c, "rtbidx", i__5, "ekqmgr_", (
+			    ftnlen)4449)];
 		    if (__state->l >= 1 && __state->l <= __state->t && 
 			    __state->r__ >= 1 && __state->r__ <= __state->t &&
 			     __state->l != __state->r__ && (__state->r__ == 
 			    __state->t || __state->l == __state->t)) {
 			__state->activc[(i__5 = __state->i__ - 1) < 1000 && 0 
-				<= i__5 ? i__5 : s_rnge("activc", i__5, "ekq"
-				"mgr_", (ftnlen)4459)] = TRUE_;
+				<= i__5 ? i__5 : s_rnge(&__global_state->f2c, 
+				"activc", i__5, "ekqmgr_", (ftnlen)4459)] = 
+				TRUE_;
 		    }
 		}
 	    }
@@ -5454,15 +5663,16 @@ L_eksrch:
 		__state->jbase1 = __state->resbas;
 	    }
 	    __state->jbase2 = __state->rbas[(i__3 = __state->t - 1) < 10 && 0 
-		    <= i__3 ? i__3 : s_rnge("rbas", i__3, "ekqmgr_", (ftnlen)
-		    4478)];
-	    zzekjoin_(&__state->jbase1, &__state->jbase2, &__state->cjsize, 
-		    __state->activc, __state->ltbidx, __state->lcidx, 
-		    __state->lelts, __state->ops, __state->rtbidx, 
-		    __state->rcidx, __state->relts, __state->sthan, 
-		    __state->stdscs, __state->stdtpt, __state->dtpool, 
-		    __state->dtdscs, &__state->resbas, &__state->jsize);
-	    zzekjsqz_(&__state->resbas);
+		    <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "rbas", 
+		    i__3, "ekqmgr_", (ftnlen)4478)];
+	    zzekjoin_(__global_state, &__state->jbase1, &__state->jbase2, &
+		    __state->cjsize, __state->activc, __state->ltbidx, 
+		    __state->lcidx, __state->lelts, __state->ops, 
+		    __state->rtbidx, __state->rcidx, __state->relts, 
+		    __state->sthan, __state->stdscs, __state->stdtpt, 
+		    __state->dtpool, __state->dtdscs, &__state->resbas, &
+		    __state->jsize);
+	    zzekjsqz_(__global_state, &__state->resbas);
 	}
 
 /*        At this point, we've found the matching rows for the current */
@@ -5473,24 +5683,25 @@ L_eksrch:
 
 	++__state->usize;
 	__state->ubase[(i__2 = __state->usize - 1) < 200 && 0 <= i__2 ? i__2 :
-		 s_rnge("ubase", i__2, "ekqmgr_", (ftnlen)4498)] = 
-		__state->resbas;
+		 s_rnge(&__global_state->f2c, "ubase", i__2, "ekqmgr_", (
+		ftnlen)4498)] = __state->resbas;
 	i__2 = __state->resbas + 2;
 	i__3 = __state->resbas + 2;
-	zzeksrd_(&i__2, &i__3, &__state->cjrows);
+	zzeksrd_(__global_state, &i__2, &i__3, &__state->cjrows);
 	__state->unrows += __state->cjrows;
 
 /*        Remove redundant row vectors from the join row set union. */
 /*        These row vectors may arise in the execution of queries whose */
 /*        WHERE clauses contain multiple conjunctions. */
 
-	zzekweed_(&__state->usize, __state->ubase, &__state->unrows);
+	zzekweed_(__global_state, &__state->usize, __state->ubase, &
+		__state->unrows);
 
 /*        Initialize the addressing function for the current join row */
 /*        set union. */
 
 	if (__state->usize > 0) {
-	    zzekvset_(&__state->usize, __state->ubase);
+	    zzekvset_(__global_state, &__state->usize, __state->ubase);
 	}
     }
 
@@ -5506,49 +5717,54 @@ L_eksrch:
 
     i__1 = __state->nsel;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
-	zzekqsel_(eqryi, eqryc, &__state->i__, &__state->lxbeg, &
-		__state->lxend, __state->tabnam, &__state->tabidx, 
-		__state->colnam, &__state->k, eqryc_len, (ftnlen)64, (ftnlen)
-		32);
+	zzekqsel_(__global_state, eqryi, eqryc, &__state->i__, &
+		__state->lxbeg, &__state->lxend, __state->tabnam, &
+		__state->tabidx, __state->colnam, &__state->k, eqryc_len, (
+		ftnlen)64, (ftnlen)32);
 
 /*        Locate the column's attribute information.  Retain the column's */
 /*        index within the parent table's column list. */
 
 	__state->tab = __state->tptvec[(i__2 = __state->tabidx + 5) < 16 && 0 
-		<= i__2 ? i__2 : s_rnge("tptvec", i__2, "ekqmgr_", (ftnlen)
-		4542)];
+		<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "tptvec", i__2, 
+		"ekqmgr_", (ftnlen)4542)];
 	__state->j = __state->tbctpt[(i__2 = __state->tab - 1) < 100 && 0 <= 
-		i__2 ? i__2 : s_rnge("tbctpt", i__2, "ekqmgr_", (ftnlen)4543)]
-		;
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "tbctpt", i__2, 
+		"ekqmgr_", (ftnlen)4543)];
 	__state->col = 0;
 	__state->fnd = FALSE_;
 	while(__state->j > 0 && ! __state->fnd) {
 	    ++__state->col;
-	    if (s_cmp(__state->ctnams + (((i__2 = __state->j - 1) < 500 && 0 
-		    <= i__2 ? i__2 : s_rnge("ctnams", i__2, "ekqmgr_", (
-		    ftnlen)4551)) << 5), __state->colnam, (ftnlen)32, (ftnlen)
-		    32) == 0) {
+	    if (s_cmp(&__global_state->f2c, __state->ctnams + (((i__2 = 
+		    __state->j - 1) < 500 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "ctnams", i__2, "ekqmgr_", (ftnlen)
+		    4551)) << 5), __state->colnam, (ftnlen)32, (ftnlen)32) == 
+		    0) {
 		__state->fnd = TRUE_;
 	    } else {
-		__state->j = lnknxt_(&__state->j, __state->ctpool);
+		__state->j = lnknxt_(__global_state, &__state->j, 
+			__state->ctpool);
 	    }
 	}
 	if (! __state->fnd) {
-	    setmsg_("# is not name of a column in FROM table #.", (ftnlen)42);
-	    errch_("#", __state->colnam, (ftnlen)1, (ftnlen)32);
-	    errint_("#", &__state->tabidx, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("EKSRCH", (ftnlen)6);
+	    setmsg_(__global_state, "# is not name of a column in FROM table"
+		    " #.", (ftnlen)42);
+	    errch_(__global_state, "#", __state->colnam, (ftnlen)1, (ftnlen)
+		    32);
+	    errint_(__global_state, "#", &__state->tabidx, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "EKSRCH", (ftnlen)6);
 	    return 0;
 	}
 	__state->selctp[(i__2 = __state->i__ - 1) < 50 && 0 <= i__2 ? i__2 : 
-		s_rnge("selctp", i__2, "ekqmgr_", (ftnlen)4568)] = __state->j;
+		s_rnge(&__global_state->f2c, "selctp", i__2, "ekqmgr_", (
+		ftnlen)4568)] = __state->j;
 	__state->selcol[(i__2 = __state->i__ - 1) < 50 && 0 <= i__2 ? i__2 : 
-		s_rnge("selcol", i__2, "ekqmgr_", (ftnlen)4569)] = 
-		__state->col;
+		s_rnge(&__global_state->f2c, "selcol", i__2, "ekqmgr_", (
+		ftnlen)4569)] = __state->col;
 	__state->seltab[(i__2 = __state->i__ - 1) < 50 && 0 <= i__2 ? i__2 : 
-		s_rnge("seltab", i__2, "ekqmgr_", (ftnlen)4570)] = 
-		__state->tabidx;
+		s_rnge(&__global_state->f2c, "seltab", i__2, "ekqmgr_", (
+		ftnlen)4570)] = __state->tabidx;
     }
 
 /*     Enable sorting of the matching row vectors, if necessary.  The */
@@ -5559,18 +5775,19 @@ L_eksrch:
     if (__state->dosort) {
 	i__1 = __state->norder;
 	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
-	    zzekqord_(eqryi, eqryc, &__state->i__, __state->tabnam, &
-		    __state->otabs[(i__2 = __state->i__ - 1) < 10 && 0 <= 
-		    i__2 ? i__2 : s_rnge("otabs", i__2, "ekqmgr_", (ftnlen)
-		    4585)], __state->colnam, &__state->ocols[(i__3 = 
-		    __state->i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("oco"
-		    "ls", i__3, "ekqmgr_", (ftnlen)4585)], &__state->sense[(
-		    i__5 = __state->i__ - 1) < 10 && 0 <= i__5 ? i__5 : 
-		    s_rnge("sense", i__5, "ekqmgr_", (ftnlen)4585)], 
-		    eqryc_len, (ftnlen)64, (ftnlen)32);
+	    zzekqord_(__global_state, eqryi, eqryc, &__state->i__, 
+		    __state->tabnam, &__state->otabs[(i__2 = __state->i__ - 1)
+		     < 10 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "otabs", i__2, "ekqmgr_", (ftnlen)4585)], __state->colnam,
+		     &__state->ocols[(i__3 = __state->i__ - 1) < 10 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "ocols", i__3, 
+		    "ekqmgr_", (ftnlen)4585)], &__state->sense[(i__5 = 
+		    __state->i__ - 1) < 10 && 0 <= i__5 ? i__5 : s_rnge(&
+		    __global_state->f2c, "sense", i__5, "ekqmgr_", (ftnlen)
+		    4585)], eqryc_len, (ftnlen)64, (ftnlen)32);
 	}
     }
-    chkout_("EKSRCH", (ftnlen)6);
+    chkout_(__global_state, "EKSRCH", (ftnlen)6);
     return 0;
 /* $Procedure     EKNELT  ( EK, get number of elements in column entry ) */
 
@@ -5876,7 +6093,7 @@ L_eknelt:
 
 /*     Use discovery check-in for speed. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -5884,36 +6101,37 @@ L_eknelt:
 /*     symptom of this problem is that the file list is empty. */
 
     if (__state->fthead <= 0) {
-	chkin_("EKNELT", (ftnlen)6);
-	setmsg_("No E-kernels are currently loaded.", (ftnlen)34);
-	sigerr_("SPICE(NOLOADEDFILES)", (ftnlen)20);
-	chkout_("EKNELT", (ftnlen)6);
+	chkin_(__global_state, "EKNELT", (ftnlen)6);
+	setmsg_(__global_state, "No E-kernels are currently loaded.", (ftnlen)
+		34);
+	sigerr_(__global_state, "SPICE(NOLOADEDFILES)", (ftnlen)20);
+	chkout_(__global_state, "EKNELT", (ftnlen)6);
 	return 0;
     }
 
 /*     The row number must be valid, or we can't proceed. */
 
     if (*row < 1 || *row > __state->unrows) {
-	chkin_("EKNELT", (ftnlen)6);
-	setmsg_("Row indices for query result range from 1 to #; requested r"
-		"ow index was #.", (ftnlen)74);
-	errint_("#", &__state->unrows, (ftnlen)1);
-	errint_("#", row, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKNELT", (ftnlen)6);
+	chkin_(__global_state, "EKNELT", (ftnlen)6);
+	setmsg_(__global_state, "Row indices for query result range from 1 t"
+		"o #; requested row index was #.", (ftnlen)74);
+	errint_(__global_state, "#", &__state->unrows, (ftnlen)1);
+	errint_(__global_state, "#", row, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKNELT", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure the SELECT clause column index is valid. */
 
     if (*selidx < 1 || *selidx > __state->nsel) {
-	chkin_("EKNELT", (ftnlen)6);
-	setmsg_("The SELECT column index # is out of the valid range 1:#", (
-		ftnlen)55);
-	errint_("#", selidx, (ftnlen)1);
-	errint_("#", &__state->ntab, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKNELT", (ftnlen)6);
+	chkin_(__global_state, "EKNELT", (ftnlen)6);
+	setmsg_(__global_state, "The SELECT column index # is out of the val"
+		"id range 1:#", (ftnlen)55);
+	errint_(__global_state, "#", selidx, (ftnlen)1);
+	errint_(__global_state, "#", &__state->ntab, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKNELT", (ftnlen)6);
 	return 0;
     }
 
@@ -5921,11 +6139,11 @@ L_eknelt:
 /*     matching row vectors. */
 
     if (__state->dosort) {
-	zzekjsrt_(&__state->usize, __state->ubase, &__state->norder, 
-		__state->otabs, __state->ocols, __state->oelts, 
-		__state->sense, __state->sthan, __state->stdscs, 
-		__state->stdtpt, __state->dtpool, __state->dtdscs, &
-		__state->ordbas);
+	zzekjsrt_(__global_state, &__state->usize, __state->ubase, &
+		__state->norder, __state->otabs, __state->ocols, 
+		__state->oelts, __state->sense, __state->sthan, 
+		__state->stdscs, __state->stdtpt, __state->dtpool, 
+		__state->dtdscs, &__state->ordbas);
 	__state->dosort = FALSE_;
 	__state->sorted = TRUE_;
     }
@@ -5935,38 +6153,46 @@ L_eknelt:
     if (__state->sorted) {
 	i__1 = __state->ordbas + *row;
 	i__2 = __state->ordbas + *row;
-	zzeksrd_(&i__1, &i__2, &__state->i__);
-	zzekvcal_(&__state->i__, &__state->rwvbas, &__state->sgvbas);
+	zzeksrd_(__global_state, &i__1, &i__2, &__state->i__);
+	zzekvcal_(__global_state, &__state->i__, &__state->rwvbas, &
+		__state->sgvbas);
     } else {
-	zzekvcal_(row, &__state->rwvbas, &__state->sgvbas);
+	zzekvcal_(__global_state, row, &__state->rwvbas, &__state->sgvbas);
     }
     i__1 = __state->rwvbas + 1;
     i__2 = __state->rwvbas + __state->ntab;
-    zzeksrd_(&i__1, &i__2, __state->rowvec);
+    zzeksrd_(__global_state, &i__1, &i__2, __state->rowvec);
     i__1 = __state->sgvbas + 1;
     i__2 = __state->sgvbas + __state->ntab;
-    zzeksrd_(&i__1, &i__2, __state->segvec);
+    zzeksrd_(__global_state, &i__1, &i__2, __state->segvec);
     __state->tabidx = __state->seltab[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ?
-	     i__1 : s_rnge("seltab", i__1, "ekqmgr_", (ftnlen)4983)];
+	     i__1 : s_rnge(&__global_state->f2c, "seltab", i__1, "ekqmgr_", (
+	    ftnlen)4983)];
     __state->rowidx = __state->rowvec[(i__1 = __state->tabidx - 1) < 10 && 0 
-	    <= i__1 ? i__1 : s_rnge("rowvec", i__1, "ekqmgr_", (ftnlen)4984)];
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "rowvec", i__1, 
+	    "ekqmgr_", (ftnlen)4984)];
     __state->seg = __state->segvec[(i__1 = __state->tabidx - 1) < 10 && 0 <= 
-	    i__1 ? i__1 : s_rnge("segvec", i__1, "ekqmgr_", (ftnlen)4985)];
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "segvec", i__1, "ekqm"
+	    "gr_", (ftnlen)4985)];
     __state->col = __state->selcol[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? 
-	    i__1 : s_rnge("selcol", i__1, "ekqmgr_", (ftnlen)4986)];
+	    i__1 : s_rnge(&__global_state->f2c, "selcol", i__1, "ekqmgr_", (
+	    ftnlen)4986)];
     __state->colptr = __state->stdtpt[(i__1 = __state->seg - 1) < 200 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stdtpt", i__1, "ekqmgr_", (ftnlen)4988)];
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stdtpt", i__1, "ekqm"
+	    "gr_", (ftnlen)4988)];
     i__1 = __state->col;
     for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
-	__state->colptr = lnknxt_(&__state->colptr, __state->dtpool);
+	__state->colptr = lnknxt_(__global_state, &__state->colptr, 
+		__state->dtpool);
     }
-    *nelt = zzekesiz_(&__state->sthan[(i__1 = __state->seg - 1) < 200 && 0 <= 
-	    i__1 ? i__1 : s_rnge("sthan", i__1, "ekqmgr_", (ftnlen)4994)], &
-	    __state->stdscs[(i__2 = __state->seg * 24 - 24) < 4800 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stdscs", i__2, "ekqmgr_", (ftnlen)4994)], &
+    *nelt = zzekesiz_(__global_state, &__state->sthan[(i__1 = __state->seg - 
+	    1) < 200 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "sth"
+	    "an", i__1, "ekqmgr_", (ftnlen)4994)], &__state->stdscs[(i__2 = 
+	    __state->seg * 24 - 24) < 4800 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "stdscs", i__2, "ekqmgr_", (ftnlen)4994)], &
 	    __state->dtdscs[(i__3 = __state->colptr * 11 - 11) < 110000 && 0 
-	    <= i__3 ? i__3 : s_rnge("dtdscs", i__3, "ekqmgr_", (ftnlen)4994)],
-	     &__state->rowidx);
+	    <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "dtdscs", i__3, 
+	    "ekqmgr_", (ftnlen)4994)], &__state->rowidx);
     return 0;
 /* $Procedure     EKGC  ( EK, get event data, character ) */
 
@@ -6326,10 +6552,10 @@ L_ekgc:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKGC", (ftnlen)4);
+	chkin_(__global_state, "EKGC", (ftnlen)4);
     }
 
 /*     Nothing found yet. */
@@ -6340,43 +6566,45 @@ L_ekgc:
 /*     symptom of this problem is that the file list is empty. */
 
     if (__state->fthead <= 0) {
-	setmsg_("No E-kernels are currently loaded.", (ftnlen)34);
-	sigerr_("SPICE(NOLOADEDFILES)", (ftnlen)20);
-	chkout_("EKGC", (ftnlen)4);
+	setmsg_(__global_state, "No E-kernels are currently loaded.", (ftnlen)
+		34);
+	sigerr_(__global_state, "SPICE(NOLOADEDFILES)", (ftnlen)20);
+	chkout_(__global_state, "EKGC", (ftnlen)4);
 	return 0;
     }
 
 /*     The row number must be valid, or we can't proceed. */
 
     if (*row < 1 || *row > __state->unrows) {
-	setmsg_("Row indices for query result range from 1 to #; requested r"
-		"ow index was #.", (ftnlen)74);
-	errint_("#", &__state->unrows, (ftnlen)1);
-	errint_("#", row, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKGC", (ftnlen)4);
+	setmsg_(__global_state, "Row indices for query result range from 1 t"
+		"o #; requested row index was #.", (ftnlen)74);
+	errint_(__global_state, "#", &__state->unrows, (ftnlen)1);
+	errint_(__global_state, "#", row, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKGC", (ftnlen)4);
 	return 0;
     }
 
 /*     The element index must be positive. */
 
     if (*elment < 1) {
-	setmsg_("ELMENT must be positive but was #.", (ftnlen)34);
-	errint_("#", elment, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKGC", (ftnlen)4);
+	setmsg_(__global_state, "ELMENT must be positive but was #.", (ftnlen)
+		34);
+	errint_(__global_state, "#", elment, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKGC", (ftnlen)4);
 	return 0;
     }
 
 /*     Make sure the SELECT clause column index is valid. */
 
     if (*selidx < 1 || *selidx > __state->nsel) {
-	setmsg_("The SELECT column index # is out of the valid range 1:#", (
-		ftnlen)55);
-	errint_("#", selidx, (ftnlen)1);
-	errint_("#", &__state->ntab, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKGC", (ftnlen)4);
+	setmsg_(__global_state, "The SELECT column index # is out of the val"
+		"id range 1:#", (ftnlen)55);
+	errint_(__global_state, "#", selidx, (ftnlen)1);
+	errint_(__global_state, "#", &__state->ntab, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKGC", (ftnlen)4);
 	return 0;
     }
 
@@ -6384,29 +6612,36 @@ L_ekgc:
 /*     table's column list. */
 
     __state->tabidx = __state->seltab[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ?
-	     i__1 : s_rnge("seltab", i__1, "ekqmgr_", (ftnlen)5434)];
+	     i__1 : s_rnge(&__global_state->f2c, "seltab", i__1, "ekqmgr_", (
+	    ftnlen)5434)];
     __state->col = __state->selcol[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? 
-	    i__1 : s_rnge("selcol", i__1, "ekqmgr_", (ftnlen)5435)];
+	    i__1 : s_rnge(&__global_state->f2c, "selcol", i__1, "ekqmgr_", (
+	    ftnlen)5435)];
     __state->colptr = __state->selctp[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ?
-	     i__1 : s_rnge("selctp", i__1, "ekqmgr_", (ftnlen)5436)];
+	     i__1 : s_rnge(&__global_state->f2c, "selctp", i__1, "ekqmgr_", (
+	    ftnlen)5436)];
     __state->tab = __state->tptvec[(i__1 = __state->tabidx + 5) < 16 && 0 <= 
-	    i__1 ? i__1 : s_rnge("tptvec", i__1, "ekqmgr_", (ftnlen)5437)];
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "tptvec", i__1, "ekqm"
+	    "gr_", (ftnlen)5437)];
 
 /*     Make sure the column has character type. */
 
     if (__state->cttyps[(i__1 = __state->colptr - 1) < 500 && 0 <= i__1 ? 
-	    i__1 : s_rnge("cttyps", i__1, "ekqmgr_", (ftnlen)5442)] != 1) {
-	setmsg_("Column # has data type #.", (ftnlen)25);
-	errch_("#", __state->ctnams + (((i__1 = __state->colptr - 1) < 500 && 
-		0 <= i__1 ? i__1 : s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)
-		5445)) << 5), (ftnlen)1, (ftnlen)32);
-	errch_("#", __state->chtype + (((i__2 = __state->cttyps[(i__1 = 
-		__state->colptr - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("ctt"
-		"yps", i__1, "ekqmgr_", (ftnlen)5446)] - 1) < 4 && 0 <= i__2 ? 
-		i__2 : s_rnge("chtype", i__2, "ekqmgr_", (ftnlen)5446)) << 2),
-		 (ftnlen)1, (ftnlen)4);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("EKGC", (ftnlen)4);
+	    i__1 : s_rnge(&__global_state->f2c, "cttyps", i__1, "ekqmgr_", (
+	    ftnlen)5442)] != 1) {
+	setmsg_(__global_state, "Column # has data type #.", (ftnlen)25);
+	errch_(__global_state, "#", __state->ctnams + (((i__1 = 
+		__state->colptr - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "ctnams", i__1, "ekqmgr_", (ftnlen)5445))
+		 << 5), (ftnlen)1, (ftnlen)32);
+	errch_(__global_state, "#", __state->chtype + (((i__2 = 
+		__state->cttyps[(i__1 = __state->colptr - 1) < 500 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "cttyps", i__1, 
+		"ekqmgr_", (ftnlen)5446)] - 1) < 4 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "chtype", i__2, "ekqmgr_", (
+		ftnlen)5446)) << 2), (ftnlen)1, (ftnlen)4);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "EKGC", (ftnlen)4);
 	return 0;
     }
 
@@ -6414,11 +6649,11 @@ L_ekgc:
 /*     matching row vectors. */
 
     if (__state->dosort) {
-	zzekjsrt_(&__state->usize, __state->ubase, &__state->norder, 
-		__state->otabs, __state->ocols, __state->oelts, 
-		__state->sense, __state->sthan, __state->stdscs, 
-		__state->stdtpt, __state->dtpool, __state->dtdscs, &
-		__state->ordbas);
+	zzekjsrt_(__global_state, &__state->usize, __state->ubase, &
+		__state->norder, __state->otabs, __state->ocols, 
+		__state->oelts, __state->sense, __state->sthan, 
+		__state->stdscs, __state->stdtpt, __state->dtpool, 
+		__state->dtdscs, &__state->ordbas);
 	__state->dosort = FALSE_;
 	__state->sorted = TRUE_;
     }
@@ -6428,43 +6663,48 @@ L_ekgc:
     if (__state->sorted) {
 	i__1 = __state->ordbas + *row;
 	i__2 = __state->ordbas + *row;
-	zzeksrd_(&i__1, &i__2, &__state->i__);
-	zzekvcal_(&__state->i__, &__state->rwvbas, &__state->sgvbas);
+	zzeksrd_(__global_state, &i__1, &i__2, &__state->i__);
+	zzekvcal_(__global_state, &__state->i__, &__state->rwvbas, &
+		__state->sgvbas);
     } else {
-	zzekvcal_(row, &__state->rwvbas, &__state->sgvbas);
+	zzekvcal_(__global_state, row, &__state->rwvbas, &__state->sgvbas);
     }
     i__1 = __state->rwvbas + 1;
     i__2 = __state->rwvbas + __state->ntab;
-    zzeksrd_(&i__1, &i__2, __state->rowvec);
+    zzeksrd_(__global_state, &i__1, &i__2, __state->rowvec);
     i__1 = __state->sgvbas + 1;
     i__2 = __state->sgvbas + __state->ntab;
-    zzeksrd_(&i__1, &i__2, __state->segvec);
+    zzeksrd_(__global_state, &i__1, &i__2, __state->segvec);
 
 /*     Identify the segment containing the column entry of interest. */
 /*     Obtain the column descriptor for the column. */
 
     __state->rowidx = __state->rowvec[(i__1 = __state->tabidx - 1) < 10 && 0 
-	    <= i__1 ? i__1 : s_rnge("rowvec", i__1, "ekqmgr_", (ftnlen)5484)];
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "rowvec", i__1, 
+	    "ekqmgr_", (ftnlen)5484)];
     __state->seg = __state->segvec[(i__1 = __state->tabidx - 1) < 10 && 0 <= 
-	    i__1 ? i__1 : s_rnge("segvec", i__1, "ekqmgr_", (ftnlen)5485)];
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "segvec", i__1, "ekqm"
+	    "gr_", (ftnlen)5485)];
     __state->j = __state->stdtpt[(i__1 = __state->seg - 1) < 200 && 0 <= i__1 
-	    ? i__1 : s_rnge("stdtpt", i__1, "ekqmgr_", (ftnlen)5487)];
+	    ? i__1 : s_rnge(&__global_state->f2c, "stdtpt", i__1, "ekqmgr_", (
+	    ftnlen)5487)];
     i__1 = __state->col;
     for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
-	__state->j = lnknxt_(&__state->j, __state->dtpool);
+	__state->j = lnknxt_(__global_state, &__state->j, __state->dtpool);
     }
 
 /*     Look up the element. */
 
-    zzekrsc_(&__state->sthan[(i__1 = __state->seg - 1) < 200 && 0 <= i__1 ? 
-	    i__1 : s_rnge("sthan", i__1, "ekqmgr_", (ftnlen)5496)], &
-	    __state->stdscs[(i__2 = __state->seg * 24 - 24) < 4800 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stdscs", i__2, "ekqmgr_", (ftnlen)5496)], &
+    zzekrsc_(__global_state, &__state->sthan[(i__1 = __state->seg - 1) < 200 
+	    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "sthan", i__1, 
+	    "ekqmgr_", (ftnlen)5496)], &__state->stdscs[(i__2 = __state->seg *
+	     24 - 24) < 4800 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "stdscs", i__2, "ekqmgr_", (ftnlen)5496)], &
 	    __state->dtdscs[(i__3 = __state->j * 11 - 11) < 110000 && 0 <= 
-	    i__3 ? i__3 : s_rnge("dtdscs", i__3, "ekqmgr_", (ftnlen)5496)], &
-	    __state->rowidx, elment, &__state->cvlen, cdata, null, found, 
-	    cdata_len);
-    chkout_("EKGC", (ftnlen)4);
+	    i__3 ? i__3 : s_rnge(&__global_state->f2c, "dtdscs", i__3, "ekqm"
+	    "gr_", (ftnlen)5496)], &__state->rowidx, elment, &__state->cvlen, 
+	    cdata, null, found, cdata_len);
+    chkout_(__global_state, "EKGC", (ftnlen)4);
     return 0;
 /* $Procedure     EKGD  ( EK, get event data, double precision ) */
 
@@ -6857,10 +7097,10 @@ L_ekgd:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKGD", (ftnlen)4);
+	chkin_(__global_state, "EKGD", (ftnlen)4);
     }
 
 /*     Nothing found yet. */
@@ -6871,43 +7111,45 @@ L_ekgd:
 /*     symptom of this problem is that the file list is empty. */
 
     if (__state->fthead <= 0) {
-	setmsg_("No E-kernels are currently loaded.", (ftnlen)34);
-	sigerr_("SPICE(NOLOADEDFILES)", (ftnlen)20);
-	chkout_("EKGD", (ftnlen)4);
+	setmsg_(__global_state, "No E-kernels are currently loaded.", (ftnlen)
+		34);
+	sigerr_(__global_state, "SPICE(NOLOADEDFILES)", (ftnlen)20);
+	chkout_(__global_state, "EKGD", (ftnlen)4);
 	return 0;
     }
 
 /*     The row number must be valid, or we can't proceed. */
 
     if (*row < 1 || *row > __state->unrows) {
-	setmsg_("Row indices for query result range from 1 to #; requested r"
-		"ow index was #.", (ftnlen)74);
-	errint_("#", &__state->unrows, (ftnlen)1);
-	errint_("#", row, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKGD", (ftnlen)4);
+	setmsg_(__global_state, "Row indices for query result range from 1 t"
+		"o #; requested row index was #.", (ftnlen)74);
+	errint_(__global_state, "#", &__state->unrows, (ftnlen)1);
+	errint_(__global_state, "#", row, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKGD", (ftnlen)4);
 	return 0;
     }
 
 /*     The element index must be positive. */
 
     if (*elment < 1) {
-	setmsg_("ELMENT must be positive but was #.", (ftnlen)34);
-	errint_("#", elment, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKGD", (ftnlen)4);
+	setmsg_(__global_state, "ELMENT must be positive but was #.", (ftnlen)
+		34);
+	errint_(__global_state, "#", elment, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKGD", (ftnlen)4);
 	return 0;
     }
 
 /*     Make sure the SELECT clause column index is valid. */
 
     if (*selidx < 1 || *selidx > __state->nsel) {
-	setmsg_("The SELECT column index # is out of the valid range 1:#", (
-		ftnlen)55);
-	errint_("#", selidx, (ftnlen)1);
-	errint_("#", &__state->ntab, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKGD", (ftnlen)4);
+	setmsg_(__global_state, "The SELECT column index # is out of the val"
+		"id range 1:#", (ftnlen)55);
+	errint_(__global_state, "#", selidx, (ftnlen)1);
+	errint_(__global_state, "#", &__state->ntab, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKGD", (ftnlen)4);
 	return 0;
     }
 
@@ -6915,31 +7157,38 @@ L_ekgd:
 /*     table's column list. */
 
     __state->tabidx = __state->seltab[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ?
-	     i__1 : s_rnge("seltab", i__1, "ekqmgr_", (ftnlen)5978)];
+	     i__1 : s_rnge(&__global_state->f2c, "seltab", i__1, "ekqmgr_", (
+	    ftnlen)5978)];
     __state->col = __state->selcol[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? 
-	    i__1 : s_rnge("selcol", i__1, "ekqmgr_", (ftnlen)5979)];
+	    i__1 : s_rnge(&__global_state->f2c, "selcol", i__1, "ekqmgr_", (
+	    ftnlen)5979)];
     __state->colptr = __state->selctp[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ?
-	     i__1 : s_rnge("selctp", i__1, "ekqmgr_", (ftnlen)5980)];
+	     i__1 : s_rnge(&__global_state->f2c, "selctp", i__1, "ekqmgr_", (
+	    ftnlen)5980)];
     __state->tab = __state->tptvec[(i__1 = __state->tabidx + 5) < 16 && 0 <= 
-	    i__1 ? i__1 : s_rnge("tptvec", i__1, "ekqmgr_", (ftnlen)5981)];
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "tptvec", i__1, "ekqm"
+	    "gr_", (ftnlen)5981)];
 
 /*     Make sure the column has double precision or `time' type. */
 
     if (__state->cttyps[(i__1 = __state->colptr - 1) < 500 && 0 <= i__1 ? 
-	    i__1 : s_rnge("cttyps", i__1, "ekqmgr_", (ftnlen)5986)] != 2 && 
-	    __state->cttyps[(i__2 = __state->colptr - 1) < 500 && 0 <= i__2 ? 
-	    i__2 : s_rnge("cttyps", i__2, "ekqmgr_", (ftnlen)5986)] != 4) {
-	setmsg_("Column # has data type #.", (ftnlen)25);
-	errch_("#", __state->ctnams + (((i__1 = __state->colptr - 1) < 500 && 
-		0 <= i__1 ? i__1 : s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)
-		5990)) << 5), (ftnlen)1, (ftnlen)32);
-	errch_("#", __state->chtype + (((i__2 = __state->cttyps[(i__1 = 
-		__state->colptr - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("ctt"
-		"yps", i__1, "ekqmgr_", (ftnlen)5991)] - 1) < 4 && 0 <= i__2 ? 
-		i__2 : s_rnge("chtype", i__2, "ekqmgr_", (ftnlen)5991)) << 2),
-		 (ftnlen)1, (ftnlen)4);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("EKGD", (ftnlen)4);
+	    i__1 : s_rnge(&__global_state->f2c, "cttyps", i__1, "ekqmgr_", (
+	    ftnlen)5986)] != 2 && __state->cttyps[(i__2 = __state->colptr - 1)
+	     < 500 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "cttyps"
+	    , i__2, "ekqmgr_", (ftnlen)5986)] != 4) {
+	setmsg_(__global_state, "Column # has data type #.", (ftnlen)25);
+	errch_(__global_state, "#", __state->ctnams + (((i__1 = 
+		__state->colptr - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "ctnams", i__1, "ekqmgr_", (ftnlen)5990))
+		 << 5), (ftnlen)1, (ftnlen)32);
+	errch_(__global_state, "#", __state->chtype + (((i__2 = 
+		__state->cttyps[(i__1 = __state->colptr - 1) < 500 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "cttyps", i__1, 
+		"ekqmgr_", (ftnlen)5991)] - 1) < 4 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "chtype", i__2, "ekqmgr_", (
+		ftnlen)5991)) << 2), (ftnlen)1, (ftnlen)4);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "EKGD", (ftnlen)4);
 	return 0;
     }
 
@@ -6947,11 +7196,11 @@ L_ekgd:
 /*     matching row vectors. */
 
     if (__state->dosort) {
-	zzekjsrt_(&__state->usize, __state->ubase, &__state->norder, 
-		__state->otabs, __state->ocols, __state->oelts, 
-		__state->sense, __state->sthan, __state->stdscs, 
-		__state->stdtpt, __state->dtpool, __state->dtdscs, &
-		__state->ordbas);
+	zzekjsrt_(__global_state, &__state->usize, __state->ubase, &
+		__state->norder, __state->otabs, __state->ocols, 
+		__state->oelts, __state->sense, __state->sthan, 
+		__state->stdscs, __state->stdtpt, __state->dtpool, 
+		__state->dtdscs, &__state->ordbas);
 	__state->dosort = FALSE_;
 	__state->sorted = TRUE_;
     }
@@ -6961,42 +7210,48 @@ L_ekgd:
     if (__state->sorted) {
 	i__1 = __state->ordbas + *row;
 	i__2 = __state->ordbas + *row;
-	zzeksrd_(&i__1, &i__2, &__state->i__);
-	zzekvcal_(&__state->i__, &__state->rwvbas, &__state->sgvbas);
+	zzeksrd_(__global_state, &i__1, &i__2, &__state->i__);
+	zzekvcal_(__global_state, &__state->i__, &__state->rwvbas, &
+		__state->sgvbas);
     } else {
-	zzekvcal_(row, &__state->rwvbas, &__state->sgvbas);
+	zzekvcal_(__global_state, row, &__state->rwvbas, &__state->sgvbas);
     }
     i__1 = __state->rwvbas + 1;
     i__2 = __state->rwvbas + __state->ntab;
-    zzeksrd_(&i__1, &i__2, __state->rowvec);
+    zzeksrd_(__global_state, &i__1, &i__2, __state->rowvec);
     i__1 = __state->sgvbas + 1;
     i__2 = __state->sgvbas + __state->ntab;
-    zzeksrd_(&i__1, &i__2, __state->segvec);
+    zzeksrd_(__global_state, &i__1, &i__2, __state->segvec);
 
 /*     Identify the segment containing the column entry of interest. */
 /*     Obtain the column descriptor for the column. */
 
     __state->rowidx = __state->rowvec[(i__1 = __state->tabidx - 1) < 10 && 0 
-	    <= i__1 ? i__1 : s_rnge("rowvec", i__1, "ekqmgr_", (ftnlen)6029)];
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "rowvec", i__1, 
+	    "ekqmgr_", (ftnlen)6029)];
     __state->seg = __state->segvec[(i__1 = __state->tabidx - 1) < 10 && 0 <= 
-	    i__1 ? i__1 : s_rnge("segvec", i__1, "ekqmgr_", (ftnlen)6030)];
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "segvec", i__1, "ekqm"
+	    "gr_", (ftnlen)6030)];
     __state->j = __state->stdtpt[(i__1 = __state->seg - 1) < 200 && 0 <= i__1 
-	    ? i__1 : s_rnge("stdtpt", i__1, "ekqmgr_", (ftnlen)6032)];
+	    ? i__1 : s_rnge(&__global_state->f2c, "stdtpt", i__1, "ekqmgr_", (
+	    ftnlen)6032)];
     i__1 = __state->col;
     for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
-	__state->j = lnknxt_(&__state->j, __state->dtpool);
+	__state->j = lnknxt_(__global_state, &__state->j, __state->dtpool);
     }
 
 /*     Look up the element. */
 
-    zzekrsd_(&__state->sthan[(i__1 = __state->seg - 1) < 200 && 0 <= i__1 ? 
-	    i__1 : s_rnge("sthan", i__1, "ekqmgr_", (ftnlen)6041)], &
-	    __state->stdscs[(i__2 = __state->seg * 24 - 24) < 4800 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stdscs", i__2, "ekqmgr_", (ftnlen)6041)], &
+    zzekrsd_(__global_state, &__state->sthan[(i__1 = __state->seg - 1) < 200 
+	    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "sthan", i__1, 
+	    "ekqmgr_", (ftnlen)6041)], &__state->stdscs[(i__2 = __state->seg *
+	     24 - 24) < 4800 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "stdscs", i__2, "ekqmgr_", (ftnlen)6041)], &
 	    __state->dtdscs[(i__3 = __state->j * 11 - 11) < 110000 && 0 <= 
-	    i__3 ? i__3 : s_rnge("dtdscs", i__3, "ekqmgr_", (ftnlen)6041)], &
-	    __state->rowidx, elment, ddata, null, found);
-    chkout_("EKGD", (ftnlen)4);
+	    i__3 ? i__3 : s_rnge(&__global_state->f2c, "dtdscs", i__3, "ekqm"
+	    "gr_", (ftnlen)6041)], &__state->rowidx, elment, ddata, null, 
+	    found);
+    chkout_(__global_state, "EKGD", (ftnlen)4);
     return 0;
 /* $Procedure     EKGI  ( EK, get event data, integer ) */
 
@@ -7362,10 +7617,10 @@ L_ekgi:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKGI", (ftnlen)4);
+	chkin_(__global_state, "EKGI", (ftnlen)4);
     }
 
 /*     Nothing found yet. */
@@ -7376,43 +7631,45 @@ L_ekgi:
 /*     symptom of this problem is that the file list is empty. */
 
     if (__state->fthead <= 0) {
-	setmsg_("No E-kernels are currently loaded.", (ftnlen)34);
-	sigerr_("SPICE(NOLOADEDFILES)", (ftnlen)20);
-	chkout_("EKGI", (ftnlen)4);
+	setmsg_(__global_state, "No E-kernels are currently loaded.", (ftnlen)
+		34);
+	sigerr_(__global_state, "SPICE(NOLOADEDFILES)", (ftnlen)20);
+	chkout_(__global_state, "EKGI", (ftnlen)4);
 	return 0;
     }
 
 /*     The row number must be valid, or we can't proceed. */
 
     if (*row < 1 || *row > __state->unrows) {
-	setmsg_("Row indices for query result range from 1 to #; requested r"
-		"ow index was #.", (ftnlen)74);
-	errint_("#", &__state->unrows, (ftnlen)1);
-	errint_("#", row, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKGI", (ftnlen)4);
+	setmsg_(__global_state, "Row indices for query result range from 1 t"
+		"o #; requested row index was #.", (ftnlen)74);
+	errint_(__global_state, "#", &__state->unrows, (ftnlen)1);
+	errint_(__global_state, "#", row, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKGI", (ftnlen)4);
 	return 0;
     }
 
 /*     The element index must be positive. */
 
     if (*elment < 1) {
-	setmsg_("ELMENT must be positive but was #.", (ftnlen)34);
-	errint_("#", elment, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKGI", (ftnlen)4);
+	setmsg_(__global_state, "ELMENT must be positive but was #.", (ftnlen)
+		34);
+	errint_(__global_state, "#", elment, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKGI", (ftnlen)4);
 	return 0;
     }
 
 /*     Make sure the SELECT clause column index is valid. */
 
     if (*selidx < 1 || *selidx > __state->nsel) {
-	setmsg_("The SELECT column index # is out of the valid range 1:#", (
-		ftnlen)55);
-	errint_("#", selidx, (ftnlen)1);
-	errint_("#", &__state->ntab, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKGI", (ftnlen)4);
+	setmsg_(__global_state, "The SELECT column index # is out of the val"
+		"id range 1:#", (ftnlen)55);
+	errint_(__global_state, "#", selidx, (ftnlen)1);
+	errint_(__global_state, "#", &__state->ntab, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKGI", (ftnlen)4);
 	return 0;
     }
 
@@ -7420,29 +7677,36 @@ L_ekgi:
 /*     table's column list. */
 
     __state->tabidx = __state->seltab[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ?
-	     i__1 : s_rnge("seltab", i__1, "ekqmgr_", (ftnlen)6494)];
+	     i__1 : s_rnge(&__global_state->f2c, "seltab", i__1, "ekqmgr_", (
+	    ftnlen)6494)];
     __state->col = __state->selcol[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ? 
-	    i__1 : s_rnge("selcol", i__1, "ekqmgr_", (ftnlen)6495)];
+	    i__1 : s_rnge(&__global_state->f2c, "selcol", i__1, "ekqmgr_", (
+	    ftnlen)6495)];
     __state->colptr = __state->selctp[(i__1 = *selidx - 1) < 50 && 0 <= i__1 ?
-	     i__1 : s_rnge("selctp", i__1, "ekqmgr_", (ftnlen)6496)];
+	     i__1 : s_rnge(&__global_state->f2c, "selctp", i__1, "ekqmgr_", (
+	    ftnlen)6496)];
     __state->tab = __state->tptvec[(i__1 = __state->tabidx + 5) < 16 && 0 <= 
-	    i__1 ? i__1 : s_rnge("tptvec", i__1, "ekqmgr_", (ftnlen)6497)];
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "tptvec", i__1, "ekqm"
+	    "gr_", (ftnlen)6497)];
 
 /*     Make sure the column has integer type. */
 
     if (__state->cttyps[(i__1 = __state->colptr - 1) < 500 && 0 <= i__1 ? 
-	    i__1 : s_rnge("cttyps", i__1, "ekqmgr_", (ftnlen)6502)] != 3) {
-	setmsg_("Column # has data type #.", (ftnlen)25);
-	errch_("#", __state->ctnams + (((i__1 = __state->colptr - 1) < 500 && 
-		0 <= i__1 ? i__1 : s_rnge("ctnams", i__1, "ekqmgr_", (ftnlen)
-		6505)) << 5), (ftnlen)1, (ftnlen)32);
-	errch_("#", __state->chtype + (((i__2 = __state->cttyps[(i__1 = 
-		__state->colptr - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge("ctt"
-		"yps", i__1, "ekqmgr_", (ftnlen)6506)] - 1) < 4 && 0 <= i__2 ? 
-		i__2 : s_rnge("chtype", i__2, "ekqmgr_", (ftnlen)6506)) << 2),
-		 (ftnlen)1, (ftnlen)4);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("EKGI", (ftnlen)4);
+	    i__1 : s_rnge(&__global_state->f2c, "cttyps", i__1, "ekqmgr_", (
+	    ftnlen)6502)] != 3) {
+	setmsg_(__global_state, "Column # has data type #.", (ftnlen)25);
+	errch_(__global_state, "#", __state->ctnams + (((i__1 = 
+		__state->colptr - 1) < 500 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "ctnams", i__1, "ekqmgr_", (ftnlen)6505))
+		 << 5), (ftnlen)1, (ftnlen)32);
+	errch_(__global_state, "#", __state->chtype + (((i__2 = 
+		__state->cttyps[(i__1 = __state->colptr - 1) < 500 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "cttyps", i__1, 
+		"ekqmgr_", (ftnlen)6506)] - 1) < 4 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "chtype", i__2, "ekqmgr_", (
+		ftnlen)6506)) << 2), (ftnlen)1, (ftnlen)4);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "EKGI", (ftnlen)4);
 	return 0;
     }
 
@@ -7450,11 +7714,11 @@ L_ekgi:
 /*     matching row vectors. */
 
     if (__state->dosort) {
-	zzekjsrt_(&__state->usize, __state->ubase, &__state->norder, 
-		__state->otabs, __state->ocols, __state->oelts, 
-		__state->sense, __state->sthan, __state->stdscs, 
-		__state->stdtpt, __state->dtpool, __state->dtdscs, &
-		__state->ordbas);
+	zzekjsrt_(__global_state, &__state->usize, __state->ubase, &
+		__state->norder, __state->otabs, __state->ocols, 
+		__state->oelts, __state->sense, __state->sthan, 
+		__state->stdscs, __state->stdtpt, __state->dtpool, 
+		__state->dtdscs, &__state->ordbas);
 	__state->dosort = FALSE_;
 	__state->sorted = TRUE_;
     }
@@ -7464,53 +7728,59 @@ L_ekgi:
     if (__state->sorted) {
 	i__1 = __state->ordbas + *row;
 	i__2 = __state->ordbas + *row;
-	zzeksrd_(&i__1, &i__2, &__state->i__);
-	zzekvcal_(&__state->i__, &__state->rwvbas, &__state->sgvbas);
+	zzeksrd_(__global_state, &i__1, &i__2, &__state->i__);
+	zzekvcal_(__global_state, &__state->i__, &__state->rwvbas, &
+		__state->sgvbas);
     } else {
-	zzekvcal_(row, &__state->rwvbas, &__state->sgvbas);
+	zzekvcal_(__global_state, row, &__state->rwvbas, &__state->sgvbas);
     }
     i__1 = __state->rwvbas + 1;
     i__2 = __state->rwvbas + __state->ntab;
-    zzeksrd_(&i__1, &i__2, __state->rowvec);
+    zzeksrd_(__global_state, &i__1, &i__2, __state->rowvec);
     i__1 = __state->sgvbas + 1;
     i__2 = __state->sgvbas + __state->ntab;
-    zzeksrd_(&i__1, &i__2, __state->segvec);
+    zzeksrd_(__global_state, &i__1, &i__2, __state->segvec);
 
 /*     Identify the segment containing the column entry of interest. */
 /*     Obtain the column descriptor for the column. */
 
     __state->rowidx = __state->rowvec[(i__1 = __state->tabidx - 1) < 10 && 0 
-	    <= i__1 ? i__1 : s_rnge("rowvec", i__1, "ekqmgr_", (ftnlen)6544)];
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "rowvec", i__1, 
+	    "ekqmgr_", (ftnlen)6544)];
     __state->seg = __state->segvec[(i__1 = __state->tabidx - 1) < 10 && 0 <= 
-	    i__1 ? i__1 : s_rnge("segvec", i__1, "ekqmgr_", (ftnlen)6545)];
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "segvec", i__1, "ekqm"
+	    "gr_", (ftnlen)6545)];
     __state->j = __state->stdtpt[(i__1 = __state->seg - 1) < 200 && 0 <= i__1 
-	    ? i__1 : s_rnge("stdtpt", i__1, "ekqmgr_", (ftnlen)6547)];
+	    ? i__1 : s_rnge(&__global_state->f2c, "stdtpt", i__1, "ekqmgr_", (
+	    ftnlen)6547)];
     i__1 = __state->col;
     for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
-	__state->j = lnknxt_(&__state->j, __state->dtpool);
+	__state->j = lnknxt_(__global_state, &__state->j, __state->dtpool);
     }
 
 /*     Look up the element. */
 
-    zzekrsi_(&__state->sthan[(i__1 = __state->seg - 1) < 200 && 0 <= i__1 ? 
-	    i__1 : s_rnge("sthan", i__1, "ekqmgr_", (ftnlen)6556)], &
-	    __state->stdscs[(i__2 = __state->seg * 24 - 24) < 4800 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stdscs", i__2, "ekqmgr_", (ftnlen)6556)], &
+    zzekrsi_(__global_state, &__state->sthan[(i__1 = __state->seg - 1) < 200 
+	    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "sthan", i__1, 
+	    "ekqmgr_", (ftnlen)6556)], &__state->stdscs[(i__2 = __state->seg *
+	     24 - 24) < 4800 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "stdscs", i__2, "ekqmgr_", (ftnlen)6556)], &
 	    __state->dtdscs[(i__3 = __state->j * 11 - 11) < 110000 && 0 <= 
-	    i__3 ? i__3 : s_rnge("dtdscs", i__3, "ekqmgr_", (ftnlen)6556)], &
-	    __state->rowidx, elment, idata, null, found);
-    chkout_("EKGI", (ftnlen)4);
+	    i__3 ? i__3 : s_rnge(&__global_state->f2c, "dtdscs", i__3, "ekqm"
+	    "gr_", (ftnlen)6556)], &__state->rowidx, elment, idata, null, 
+	    found);
+    chkout_(__global_state, "EKGI", (ftnlen)4);
     return 0;
 } /* ekqmgr_ */
 
-/* Subroutine */ int ekqmgr_(integer *cindex, integer *elment, char *eqryc, 
-	doublereal *eqryd, integer *eqryi, char *fname, integer *row, integer 
-	*selidx, char *column, integer *handle, integer *n, char *table, 
-	integer *attdsc, integer *ccount, logical *found, integer *nelt, 
-	integer *nmrows, logical *semerr, char *errmsg, char *cdata, 
-	doublereal *ddata, integer *idata, logical *null, ftnlen eqryc_len, 
-	ftnlen fname_len, ftnlen column_len, ftnlen table_len, ftnlen 
-	errmsg_len, ftnlen cdata_len)
+/* Subroutine */ int ekqmgr_(cspice_t* __global_state, integer *cindex, 
+	integer *elment, char *eqryc, doublereal *eqryd, integer *eqryi, char 
+	*fname, integer *row, integer *selidx, char *column, integer *handle, 
+	integer *n, char *table, integer *attdsc, integer *ccount, logical *
+	found, integer *nelt, integer *nmrows, logical *semerr, char *errmsg, 
+	char *cdata, doublereal *ddata, integer *idata, logical *null, ftnlen 
+	eqryc_len, ftnlen fname_len, ftnlen column_len, ftnlen table_len, 
+	ftnlen errmsg_len, ftnlen cdata_len)
 {
     return ekqmgr_0_(0, cindex, elment, eqryc, eqryd, eqryi, fname, row, 
 	    selidx, column, handle, n, table, attdsc, ccount, found, nelt, 
@@ -7518,7 +7788,8 @@ L_ekgi:
 	    fname_len, column_len, table_len, errmsg_len, cdata_len);
     }
 
-/* Subroutine */ int eklef_(char *fname, integer *handle, ftnlen fname_len)
+/* Subroutine */ int eklef_(cspice_t* __global_state, char *fname, integer *
+	handle, ftnlen fname_len)
 {
     return ekqmgr_0_(1, (integer *)0, (integer *)0, (char *)0, (doublereal *)
 	    0, (integer *)0, fname, (integer *)0, (integer *)0, (char *)0, 
@@ -7528,7 +7799,7 @@ L_ekgi:
 	     fname_len, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int ekuef_(integer *handle)
+/* Subroutine */ int ekuef_(cspice_t* __global_state, integer *handle)
 {
     return ekqmgr_0_(2, (integer *)0, (integer *)0, (char *)0, (doublereal *)
 	    0, (integer *)0, (char *)0, (integer *)0, (integer *)0, (char *)0,
@@ -7538,7 +7809,7 @@ L_ekgi:
 	     (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int ekntab_(integer *n)
+/* Subroutine */ int ekntab_(cspice_t* __global_state, integer *n)
 {
     return ekqmgr_0_(3, (integer *)0, (integer *)0, (char *)0, (doublereal *)
 	    0, (integer *)0, (char *)0, (integer *)0, (integer *)0, (char *)0,
@@ -7548,7 +7819,8 @@ L_ekgi:
 	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int ektnam_(integer *n, char *table, ftnlen table_len)
+/* Subroutine */ int ektnam_(cspice_t* __global_state, integer *n, char *
+	table, ftnlen table_len)
 {
     return ekqmgr_0_(4, (integer *)0, (integer *)0, (char *)0, (doublereal *)
 	    0, (integer *)0, (char *)0, (integer *)0, (integer *)0, (char *)0,
@@ -7558,7 +7830,8 @@ L_ekgi:
 	    (ftnint)0, table_len, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int ekccnt_(char *table, integer *ccount, ftnlen table_len)
+/* Subroutine */ int ekccnt_(cspice_t* __global_state, char *table, integer *
+	ccount, ftnlen table_len)
 {
     return ekqmgr_0_(5, (integer *)0, (integer *)0, (char *)0, (doublereal *)
 	    0, (integer *)0, (char *)0, (integer *)0, (integer *)0, (char *)0,
@@ -7568,8 +7841,9 @@ L_ekgi:
 	     (ftnint)0, (ftnint)0, table_len, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int ekcii_(char *table, integer *cindex, char *column, 
-	integer *attdsc, ftnlen table_len, ftnlen column_len)
+/* Subroutine */ int ekcii_(cspice_t* __global_state, char *table, integer *
+	cindex, char *column, integer *attdsc, ftnlen table_len, ftnlen 
+	column_len)
 {
     return ekqmgr_0_(6, cindex, (integer *)0, (char *)0, (doublereal *)0, (
 	    integer *)0, (char *)0, (integer *)0, (integer *)0, column, (
@@ -7579,9 +7853,9 @@ L_ekgi:
 	    ftnint)0, column_len, table_len, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int eksrch_(integer *eqryi, char *eqryc, doublereal *eqryd, 
-	integer *nmrows, logical *semerr, char *errmsg, ftnlen eqryc_len, 
-	ftnlen errmsg_len)
+/* Subroutine */ int eksrch_(cspice_t* __global_state, integer *eqryi, char *
+	eqryc, doublereal *eqryd, integer *nmrows, logical *semerr, char *
+	errmsg, ftnlen eqryc_len, ftnlen errmsg_len)
 {
     return ekqmgr_0_(7, (integer *)0, (integer *)0, eqryc, eqryd, eqryi, (
 	    char *)0, (integer *)0, (integer *)0, (char *)0, (integer *)0, (
@@ -7591,7 +7865,8 @@ L_ekgi:
 	    ftnint)0, errmsg_len, (ftnint)0);
     }
 
-/* Subroutine */ int eknelt_(integer *selidx, integer *row, integer *nelt)
+/* Subroutine */ int eknelt_(cspice_t* __global_state, integer *selidx, 
+	integer *row, integer *nelt)
 {
     return ekqmgr_0_(8, (integer *)0, (integer *)0, (char *)0, (doublereal *)
 	    0, (integer *)0, (char *)0, row, selidx, (char *)0, (integer *)0, 
@@ -7601,8 +7876,9 @@ L_ekgi:
 	    (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int ekgc_(integer *selidx, integer *row, integer *elment, 
-	char *cdata, logical *null, logical *found, ftnlen cdata_len)
+/* Subroutine */ int ekgc_(cspice_t* __global_state, integer *selidx, integer 
+	*row, integer *elment, char *cdata, logical *null, logical *found, 
+	ftnlen cdata_len)
 {
     return ekqmgr_0_(9, (integer *)0, elment, (char *)0, (doublereal *)0, (
 	    integer *)0, (char *)0, row, selidx, (char *)0, (integer *)0, (
@@ -7612,8 +7888,9 @@ L_ekgi:
 	    0, (ftnint)0, (ftnint)0, cdata_len);
     }
 
-/* Subroutine */ int ekgd_(integer *selidx, integer *row, integer *elment, 
-	doublereal *ddata, logical *null, logical *found)
+/* Subroutine */ int ekgd_(cspice_t* __global_state, integer *selidx, integer 
+	*row, integer *elment, doublereal *ddata, logical *null, logical *
+	found)
 {
     return ekqmgr_0_(10, (integer *)0, elment, (char *)0, (doublereal *)0, (
 	    integer *)0, (char *)0, row, selidx, (char *)0, (integer *)0, (
@@ -7623,8 +7900,8 @@ L_ekgi:
 	    ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int ekgi_(integer *selidx, integer *row, integer *elment, 
-	integer *idata, logical *null, logical *found)
+/* Subroutine */ int ekgi_(cspice_t* __global_state, integer *selidx, integer 
+	*row, integer *elment, integer *idata, logical *null, logical *found)
 {
     return ekqmgr_0_(11, (integer *)0, elment, (char *)0, (doublereal *)0, (
 	    integer *)0, (char *)0, row, selidx, (char *)0, (integer *)0, (

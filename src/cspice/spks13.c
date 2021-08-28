@@ -8,24 +8,23 @@
 
 
 typedef int spks13_state_t;
-static spks13_state_t* get_spks13_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spks13_state_t* get_spks13_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure SPKS13 ( S/P Kernel, subset, type 13 ) */
-/* Subroutine */ int spks13_(integer *handle, integer *baddr, integer *eaddr, 
-	doublereal *begin, doublereal *end)
+/* Subroutine */ int spks13_(cspice_t* __global_state, integer *handle, 
+	integer *baddr, integer *eaddr, doublereal *begin, doublereal *end)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int spks09_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int spks09_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spks13_state_t* __state = get_spks13_state();
+    spks13_state_t* __state = get_spks13_state(__global_state);
 /* $ Abstract */
 
 /*     Extract a subset of the data in an SPK segment of type 13 */
@@ -180,16 +179,16 @@ static spks13_state_t* get_spks13_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKS13", (ftnlen)6);
+	chkin_(__global_state, "SPKS13", (ftnlen)6);
     }
 
 /*     The type 9 subsetter knows how to do this job. */
 
-    spks09_(handle, baddr, eaddr, begin, end);
-    chkout_("SPKS13", (ftnlen)6);
+    spks09_(__global_state, handle, baddr, eaddr, begin, end);
+    chkout_(__global_state, "SPKS13", (ftnlen)6);
     return 0;
 } /* spks13_ */
 

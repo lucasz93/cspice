@@ -179,7 +179,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "spkopa_c" );
+   chkin_c ( naif_state, "spkopa_c" );
 
    /*
    Check the input string file to make sure the pointer is non-null 

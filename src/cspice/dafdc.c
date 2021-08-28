@@ -8,33 +8,32 @@
 
 
 typedef int dafdc_state_t;
-static dafdc_state_t* get_dafdc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafdc_state_t* get_dafdc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DAFDC ( DAF delete comments ) */
-/* Subroutine */ int dafdc_(integer *handle)
+/* Subroutine */ int dafdc_(cspice_t* __global_state, integer *handle)
 {
     integer free;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer bward;
     integer fward;
     integer ncomr;
     integer nd;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer ni;
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
     char ifname[60];
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int dafrrr_(integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafrrr_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dafdc_state_t* __state = get_dafdc_state();
+    dafdc_state_t* __state = get_dafdc_state(__global_state);
 /* $ Abstract */
 
 /*     Delete the entire comment area of a previously opened binary */
@@ -173,18 +172,18 @@ static dafdc_state_t* get_dafdc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFDC", (ftnlen)5);
+	chkin_(__global_state, "DAFDC", (ftnlen)5);
     }
 
 /*     Verify that the DAF attached to HANDLE was opened with write */
 /*     access. */
 
-    dafsih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DAFDC", (ftnlen)5);
+    dafsih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFDC", (ftnlen)5);
 	return 0;
     }
 
@@ -192,10 +191,11 @@ static dafdc_state_t* get_dafdc_state() {
 /*     records in the DAF attached to HANDLE. We will also get back some */
 /*     extra stuff that we do not use. */
 
-    dafrfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
+    dafrfr_(__global_state, handle, &nd, &ni, ifname, &fward, &bward, &free, (
+	    ftnlen)60);
     ncomr = fward - 2;
-    if (failed_()) {
-	chkout_("DAFDC", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFDC", (ftnlen)5);
 	return 0;
     }
 
@@ -206,16 +206,16 @@ static dafdc_state_t* get_dafdc_state() {
 
 /*        We have some comment records, so remove them. */
 
-	dafrrr_(handle, &ncomr);
-	if (failed_()) {
-	    chkout_("DAFDC", (ftnlen)5);
+	dafrrr_(__global_state, handle, &ncomr);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFDC", (ftnlen)5);
 	    return 0;
 	}
     }
 
 /*     We're done now, so goodbye. */
 
-    chkout_("DAFDC", (ftnlen)5);
+    chkout_(__global_state, "DAFDC", (ftnlen)5);
     return 0;
 } /* dafdc_ */
 

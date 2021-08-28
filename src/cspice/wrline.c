@@ -8,8 +8,7 @@
 
 
 extern wrline_init_t __wrline_init;
-static wrline_state_t* get_wrline_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wrline_state_t* get_wrline_state(cspice_t* state) {
 	if (!state->wrline)
 		state->wrline = __cspice_allocate_module(sizeof(
 	wrline_state_t), &__wrline_init, sizeof(__wrline_init));
@@ -18,8 +17,8 @@ static wrline_state_t* get_wrline_state() {
 }
 
 /* $Procedure      WRLINE ( Write Output Line to a Device ) */
-/* Subroutine */ int wrline_0_(int n__, char *device, char *line, ftnlen 
-	device_len, ftnlen line_len)
+/* Subroutine */ int wrline_0_(cspice_t* __global_state, int n__, char *
+	device, char *line, ftnlen device_len, ftnlen line_len)
 {
     /* System generated locals */
     integer i__1;
@@ -29,36 +28,40 @@ static wrline_state_t* get_wrline_state() {
     inlist ioin__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_wsfe(cilist *), do_fio(
-	    integer *, char *, ftnlen), e_wsfe(void), f_inqu(inlist *), 
-	    s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle(void), f_open(olist *);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer f_clos(cllist *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_wsfe(
+	    f2c_state_t*, cilist *), do_fio(f2c_state_t*, integer *, char *, 
+	    ftnlen), e_wsfe(f2c_state_t*), f_inqu(f2c_state_t*, inlist *), 
+	    s_wsle(f2c_state_t*, cilist *), do_lio(f2c_state_t*, integer *, 
+	    integer *, char *, ftnlen), e_wsle(f2c_state_t*), f_open(
+	    f2c_state_t*, olist *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer f_clos(f2c_state_t*, cllist *);
 
     /* Local variables */
     integer unit;
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern integer ltrim_(char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer ltrim_(cspice_t*, char *, ftnlen);
     char error[240];
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical opened;
-    extern /* Subroutine */ int fndlun_(integer *);
+    extern /* Subroutine */ int fndlun_(cspice_t*, integer *);
     char tmpnam[255];
     integer iostat;
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
     logical exists;
     char errstr[11];
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    wrline_state_t* __state = get_wrline_state();
+    wrline_state_t* __state = get_wrline_state(__global_state);
 /* $ Abstract */
 
 /*     Write a character string to an output device. */
@@ -585,26 +588,29 @@ static wrline_state_t* get_wrline_state() {
 	case 1: goto L_clline;
 	}
 
-    ljust_(device, tmpnam, device_len, (ftnlen)255);
-    ucase_(tmpnam, tmpnam, (ftnlen)255, (ftnlen)255);
+    ljust_(__global_state, device, tmpnam, device_len, (ftnlen)255);
+    ucase_(__global_state, tmpnam, tmpnam, (ftnlen)255, (ftnlen)255);
 
 /*     TMPNAM is now left justified and is in upper case. */
 
-    if (s_cmp(tmpnam, "NULL", (ftnlen)255, (ftnlen)4) == 0) {
+    if (s_cmp(&__global_state->f2c, tmpnam, "NULL", (ftnlen)255, (ftnlen)4) ==
+	     0) {
 	return 0;
-    } else if (s_cmp(tmpnam, "SCREEN", (ftnlen)255, (ftnlen)6) == 0) {
+    } else if (s_cmp(&__global_state->f2c, tmpnam, "SCREEN", (ftnlen)255, (
+	    ftnlen)6) == 0) {
 	ci__1.cierr = 1;
 	ci__1.ciunit = 6;
 	ci__1.cifmt = "(A)";
-	iostat = s_wsfe(&ci__1);
+	iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_fio(&__state->c__1, line, rtrim_(line, line_len));
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, rtrim_(
+		__global_state, line, line_len));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = e_wsfe();
+	iostat = e_wsfe(&__global_state->f2c);
 L100001:
 	return 0;
     }
@@ -615,7 +621,7 @@ L100001:
 /*     may be (possibly due to a Sun compiler bug) deemed to be OPEN by */
 /*     Sun Fortran. */
 
-    i__1 = ltrim_(device, device_len) - 1;
+    i__1 = ltrim_(__global_state, device, device_len) - 1;
     ioin__1.inerr = 1;
     ioin__1.infilen = device_len - i__1;
     ioin__1.infile = device + i__1;
@@ -633,23 +639,26 @@ L100001:
     ioin__1.inrecl = 0;
     ioin__1.innrec = 0;
     ioin__1.inblank = 0;
-    iostat = f_inqu(&ioin__1);
+    iostat = f_inqu(&__global_state->f2c, &ioin__1);
     if (iostat != 0) {
 
 /*        This is weird.  How can an INQUIRE statement fail, */
 /*        if the syntax is correct?  But just in case... */
 
-	s_wsle(&__state->io___6);
-	do_lio(&__state->c__9, &__state->c__1, "SPICE(INQUIREFAILED)", (
-		ftnlen)20);
-	e_wsle();
-	s_wsle(&__state->io___7);
-	do_lio(&__state->c__9, &__state->c__1, "WRLINE: File = ", (ftnlen)15);
-	do_lio(&__state->c__9, &__state->c__1, device, device_len);
-	do_lio(&__state->c__9, &__state->c__1, "IOSTAT = ", (ftnlen)9);
-	do_lio(&__state->c__3, &__state->c__1, (char *)&iostat, (ftnlen)
-		sizeof(integer));
-	e_wsle();
+	s_wsle(&__global_state->f2c, &__state->io___6);
+	do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, "SPICE("
+		"INQUIREFAILED)", (ftnlen)20);
+	e_wsle(&__global_state->f2c);
+	s_wsle(&__global_state->f2c, &__state->io___7);
+	do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, "WRLINE"
+		": File = ", (ftnlen)15);
+	do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, device, 
+		device_len);
+	do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, "IOSTAT"
+		" = ", (ftnlen)9);
+	do_lio(&__global_state->f2c, &__state->c__3, &__state->c__1, (char *)&
+		iostat, (ftnlen)sizeof(integer));
+	e_wsle(&__global_state->f2c);
 	return 0;
     }
     if (! (opened && exists)) {
@@ -657,20 +666,21 @@ L100001:
 /*        We will need a free logical unit.  There is always the chance */
 /*        that no units are available. */
 
-	fndlun_(&unit);
+	fndlun_(__global_state, &unit);
 	if (unit < 1) {
-	    s_wsle(&__state->io___8);
-	    do_lio(&__state->c__9, &__state->c__1, "SPICE(NOFREELOGICALUNIT)",
-		     (ftnlen)24);
-	    e_wsle();
-	    s_wsle(&__state->io___9);
-	    do_lio(&__state->c__9, &__state->c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    s_wsle(&__state->io___10);
-	    do_lio(&__state->c__9, &__state->c__1, "WRLINE: Maximum number o"
-		    "f logical units that can be allocated by SPICELIB has al"
-		    "ready been reached", (ftnlen)98);
-	    e_wsle();
+	    s_wsle(&__global_state->f2c, &__state->io___8);
+	    do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+		    "SPICE(NOFREELOGICALUNIT)", (ftnlen)24);
+	    e_wsle(&__global_state->f2c);
+	    s_wsle(&__global_state->f2c, &__state->io___9);
+	    do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+		    " ", (ftnlen)1);
+	    e_wsle(&__global_state->f2c);
+	    s_wsle(&__global_state->f2c, &__state->io___10);
+	    do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+		    "WRLINE: Maximum number of logical units that can be all"
+		    "ocated by SPICELIB has already been reached", (ftnlen)98);
+	    e_wsle(&__global_state->f2c);
 	    return 0;
 	}
 
@@ -681,7 +691,7 @@ L100001:
 
 /*        may be inserted into the OPEN statement.) */
 
-	i__1 = ltrim_(device, device_len) - 1;
+	i__1 = ltrim_(__global_state, device, device_len) - 1;
 	o__1.oerr = 1;
 	o__1.ounit = unit;
 	o__1.ofnmlen = device_len - i__1;
@@ -691,28 +701,35 @@ L100001:
 	o__1.oacc = 0;
 	o__1.ofm = 0;
 	o__1.oblnk = 0;
-	iostat = f_open(&o__1);
+	iostat = f_open(&__global_state->f2c, &o__1);
 	if (iostat != 0) {
-	    s_wsle(&__state->io___11);
-	    do_lio(&__state->c__9, &__state->c__1, "SPICE(FILEOPENFAILED)", (
-		    ftnlen)21);
-	    e_wsle();
-	    s_wsle(&__state->io___12);
-	    do_lio(&__state->c__9, &__state->c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    s_copy(error, "WRLINE: An error occurred while attempting to open"
-		    , (ftnlen)240, (ftnlen)50);
-	    suffix_(device, &__state->c__1, error, device_len, (ftnlen)240);
-	    suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
-	    suffix_("The value of IOSTAT returned was", &__state->c__2, error,
-		     (ftnlen)32, (ftnlen)240);
-	    suffix_(":", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
-	    intstr_(&iostat, errstr, (ftnlen)11);
-	    suffix_(errstr, &__state->c__1, error, (ftnlen)11, (ftnlen)240);
-	    suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
-	    s_wsle(&__state->io___15);
-	    do_lio(&__state->c__9, &__state->c__1, error, (ftnlen)240);
-	    e_wsle();
+	    s_wsle(&__global_state->f2c, &__state->io___11);
+	    do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+		    "SPICE(FILEOPENFAILED)", (ftnlen)21);
+	    e_wsle(&__global_state->f2c);
+	    s_wsle(&__global_state->f2c, &__state->io___12);
+	    do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+		    " ", (ftnlen)1);
+	    e_wsle(&__global_state->f2c);
+	    s_copy(&__global_state->f2c, error, "WRLINE: An error occurred w"
+		    "hile attempting to open", (ftnlen)240, (ftnlen)50);
+	    suffix_(__global_state, device, &__state->c__1, error, device_len,
+		     (ftnlen)240);
+	    suffix_(__global_state, ".", &__state->c__0, error, (ftnlen)1, (
+		    ftnlen)240);
+	    suffix_(__global_state, "The value of IOSTAT returned was", &
+		    __state->c__2, error, (ftnlen)32, (ftnlen)240);
+	    suffix_(__global_state, ":", &__state->c__0, error, (ftnlen)1, (
+		    ftnlen)240);
+	    intstr_(__global_state, &iostat, errstr, (ftnlen)11);
+	    suffix_(__global_state, errstr, &__state->c__1, error, (ftnlen)11,
+		     (ftnlen)240);
+	    suffix_(__global_state, ".", &__state->c__0, error, (ftnlen)1, (
+		    ftnlen)240);
+	    s_wsle(&__global_state->f2c, &__state->io___15);
+	    do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+		    error, (ftnlen)240);
+	    e_wsle(&__global_state->f2c);
 	    return 0;
 	}
 
@@ -728,34 +745,41 @@ L100001:
     ci__1.cierr = 1;
     ci__1.ciunit = unit;
     ci__1.cifmt = "(A)";
-    iostat = s_wsfe(&ci__1);
+    iostat = s_wsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_fio(&__state->c__1, line, rtrim_(line, line_len));
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, rtrim_(
+	    __global_state, line, line_len));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = e_wsfe();
+    iostat = e_wsfe(&__global_state->f2c);
 L100002:
 
 /*     Well, what happened? Any non-zero value for IOSTAT indicates */
 /*     an error. */
 
     if (iostat != 0) {
-	s_copy(error, "WRLINE: An error occurred while attempting to WRITE t"
-		"o ", (ftnlen)240, (ftnlen)55);
-	suffix_(device, &__state->c__1, error, device_len, (ftnlen)240);
-	suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
-	suffix_("The value of IOSTAT returned was", &__state->c__2, error, (
-		ftnlen)32, (ftnlen)240);
-	suffix_(":", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
-	intstr_(&iostat, errstr, (ftnlen)11);
-	suffix_(errstr, &__state->c__1, error, (ftnlen)11, (ftnlen)240);
-	suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)240);
-	s_wsle(&__state->io___16);
-	do_lio(&__state->c__9, &__state->c__1, error, (ftnlen)240);
-	e_wsle();
+	s_copy(&__global_state->f2c, error, "WRLINE: An error occurred while"
+		" attempting to WRITE to ", (ftnlen)240, (ftnlen)55);
+	suffix_(__global_state, device, &__state->c__1, error, device_len, (
+		ftnlen)240);
+	suffix_(__global_state, ".", &__state->c__0, error, (ftnlen)1, (
+		ftnlen)240);
+	suffix_(__global_state, "The value of IOSTAT returned was", &
+		__state->c__2, error, (ftnlen)32, (ftnlen)240);
+	suffix_(__global_state, ":", &__state->c__0, error, (ftnlen)1, (
+		ftnlen)240);
+	intstr_(__global_state, &iostat, errstr, (ftnlen)11);
+	suffix_(__global_state, errstr, &__state->c__1, error, (ftnlen)11, (
+		ftnlen)240);
+	suffix_(__global_state, ".", &__state->c__0, error, (ftnlen)1, (
+		ftnlen)240);
+	s_wsle(&__global_state->f2c, &__state->io___16);
+	do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, error, (
+		ftnlen)240);
+	e_wsle(&__global_state->f2c);
 	return 0;
     }
     return 0;
@@ -930,7 +954,7 @@ L_clline:
 
 /*     Find the unit connected to DEVICE. */
 
-    i__1 = ltrim_(device, device_len) - 1;
+    i__1 = ltrim_(__global_state, device, device_len) - 1;
     ioin__1.inerr = 1;
     ioin__1.infilen = device_len - i__1;
     ioin__1.infile = device + i__1;
@@ -948,40 +972,43 @@ L_clline:
     ioin__1.inrecl = 0;
     ioin__1.innrec = 0;
     ioin__1.inblank = 0;
-    iostat = f_inqu(&ioin__1);
+    iostat = f_inqu(&__global_state->f2c, &ioin__1);
     if (iostat != 0) {
 
 /*        This is weird.  How can an INQUIRE statement fail, */
 /*        if the syntax is correct?  But just in case... */
 
-	s_wsle(&__state->io___17);
-	do_lio(&__state->c__9, &__state->c__1, "SPICE(INQUIREFAILED)", (
-		ftnlen)20);
-	e_wsle();
-	s_wsle(&__state->io___18);
-	do_lio(&__state->c__9, &__state->c__1, "CLLINE:  File = ", (ftnlen)16)
-		;
-	do_lio(&__state->c__9, &__state->c__1, device, device_len);
-	do_lio(&__state->c__9, &__state->c__1, "IOSTAT = ", (ftnlen)9);
-	do_lio(&__state->c__3, &__state->c__1, (char *)&iostat, (ftnlen)
-		sizeof(integer));
-	e_wsle();
+	s_wsle(&__global_state->f2c, &__state->io___17);
+	do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, "SPICE("
+		"INQUIREFAILED)", (ftnlen)20);
+	e_wsle(&__global_state->f2c);
+	s_wsle(&__global_state->f2c, &__state->io___18);
+	do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, "CLLINE"
+		":  File = ", (ftnlen)16);
+	do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, device, 
+		device_len);
+	do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, "IOSTAT"
+		" = ", (ftnlen)9);
+	do_lio(&__global_state->f2c, &__state->c__3, &__state->c__1, (char *)&
+		iostat, (ftnlen)sizeof(integer));
+	e_wsle(&__global_state->f2c);
 	return 0;
     }
     cl__1.cerr = 0;
     cl__1.cunit = unit;
     cl__1.csta = 0;
-    f_clos(&cl__1);
+    f_clos(&__global_state->f2c, &cl__1);
     return 0;
 } /* wrline_ */
 
-/* Subroutine */ int wrline_(char *device, char *line, ftnlen device_len, 
-	ftnlen line_len)
+/* Subroutine */ int wrline_(cspice_t* __global_state, char *device, char *
+	line, ftnlen device_len, ftnlen line_len)
 {
     return wrline_0_(0, device, line, device_len, line_len);
     }
 
-/* Subroutine */ int clline_(char *device, ftnlen device_len)
+/* Subroutine */ int clline_(cspice_t* __global_state, char *device, ftnlen 
+	device_len)
 {
     return wrline_0_(1, device, (char *)0, device_len, (ftnint)0);
     }

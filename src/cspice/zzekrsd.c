@@ -8,42 +8,42 @@
 
 
 typedef int zzekrsd_state_t;
-static zzekrsd_state_t* get_zzekrsd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrsd_state_t* get_zzekrsd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   ZZEKRSD ( EK, read scalar, double precision ) */
-/* Subroutine */ int zzekrsd_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr, integer *eltidx, doublereal *dval, logical *
-	isnull, logical *found)
+/* Subroutine */ int zzekrsd_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr, integer *eltidx, 
+	doublereal *dval, logical *isnull, logical *found)
 {
-    extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekcnam_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer class__;
     integer recno;
     integer segno;
     integer dtype;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     char column[32];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int zzekrd02_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *);
-    extern /* Subroutine */ int zzekrd05_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *, logical *, logical 
-	    *);
-    extern /* Subroutine */ int zzekrd08_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzekrd02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int zzekrd05_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, doublereal *, logical 
+	    *, logical *);
+    extern /* Subroutine */ int zzekrd08_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
 
 
     /* Module state */
-    zzekrsd_state_t* __state = get_zzekrsd_state();
+    zzekrsd_state_t* __state = get_zzekrsd_state(__global_state);
 /* $ Abstract */
 
 /*     Read scalar data from a double precision column in a specified EK */
@@ -525,19 +525,20 @@ static zzekrsd_state_t* get_zzekrsd_state() {
 
     dtype = coldsc[1];
     if (dtype != 2 && dtype != 4) {
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
 	segno = segdsc[1];
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKRSD", (ftnlen)7);
-	setmsg_("Column # is of type #; ZZEKRSD only works with DP or TIME c"
-		"olumns.  RECNO = #; SEGNO = #; EK = #.", (ftnlen)97);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	errint_("#", &dtype, (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errint_("#", &segno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
-	chkout_("ZZEKRSD", (ftnlen)7);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKRSD", (ftnlen)7);
+	setmsg_(__global_state, "Column # is of type #; ZZEKRSD only works w"
+		"ith DP or TIME columns.  RECNO = #; SEGNO = #; EK = #.", (
+		ftnlen)97);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", &dtype, (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errint_(__global_state, "#", &segno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGDATATYPE)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKRSD", (ftnlen)7);
 	return 0;
     }
 
@@ -546,35 +547,37 @@ static zzekrsd_state_t* get_zzekrsd_state() {
 
     class__ = coldsc[0];
     if (class__ == 2) {
-	zzekrd02_(handle, segdsc, coldsc, recptr, dval, isnull);
+	zzekrd02_(__global_state, handle, segdsc, coldsc, recptr, dval, 
+		isnull);
 	*found = TRUE_;
     } else if (class__ == 5) {
 
 /*        Class 5 columns contain d.p. array entries. */
 
-	zzekrd05_(handle, segdsc, coldsc, recptr, eltidx, eltidx, dval, 
-		isnull, found);
+	zzekrd05_(__global_state, handle, segdsc, coldsc, recptr, eltidx, 
+		eltidx, dval, isnull, found);
     } else if (class__ == 8) {
-	zzekrd08_(handle, segdsc, coldsc, recptr, dval, isnull);
+	zzekrd08_(__global_state, handle, segdsc, coldsc, recptr, dval, 
+		isnull);
 	*found = TRUE_;
     } else {
 
 /*        This is an unsupported d.p. column class. */
 
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
 	segno = segdsc[1];
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKRSD", (ftnlen)7);
-	setmsg_("Class # from input column descriptor is not a supported d.p"
-		". class.  COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (ftnlen)
-		110);
-	errint_("#", &class__, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	errint_("#", &recno, (ftnlen)1);
-	errint_("#", &segno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
-	chkout_("ZZEKRSD", (ftnlen)7);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKRSD", (ftnlen)7);
+	setmsg_(__global_state, "Class # from input column descriptor is not"
+		" a supported d.p. class.  COLUMN = #; RECNO = #; SEGNO = #; "
+		"EK = #.", (ftnlen)110);
+	errint_(__global_state, "#", &class__, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errint_(__global_state, "#", &segno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOCLASS)", (ftnlen)14);
+	chkout_(__global_state, "ZZEKRSD", (ftnlen)7);
 	return 0;
     }
     return 0;

@@ -8,8 +8,7 @@
 
 
 extern pckmat_init_t __pckmat_init;
-static pckmat_state_t* get_pckmat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pckmat_state_t* get_pckmat_state(cspice_t* state) {
 	if (!state->pckmat)
 		state->pckmat = __cspice_allocate_module(sizeof(
 	pckmat_state_t), &__pckmat_init, sizeof(__pckmat_init));
@@ -18,50 +17,50 @@ static pckmat_state_t* get_pckmat_state() {
 }
 
 /* $Procedure PCKMAT ( PCK, get transformation matrix at time ) */
-/* Subroutine */ int pckmat_(integer *body, doublereal *et, integer *ref, 
-	doublereal *tsipm, logical *found)
+/* Subroutine */ int pckmat_(cspice_t* __global_state, integer *body, 
+	doublereal *et, integer *ref, doublereal *tsipm, logical *found)
 {
     integer type__;
-    extern /* Subroutine */ int pcke02_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int pcke03_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int pcke20_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int pcke02_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int pcke03_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int pcke20_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal descr[5];
-    extern /* Subroutine */ int pckr02_(integer *, doublereal *, doublereal *,
-	     doublereal *);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int pckr02_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     char ident[40];
-    extern /* Subroutine */ int pckr03_(integer *, doublereal *, doublereal *,
-	     doublereal *);
-    extern /* Subroutine */ int pckr20_(integer *, doublereal *, doublereal *,
-	     doublereal *);
-    extern /* Subroutine */ int eul2xf_(doublereal *, integer *, integer *, 
-	    integer *, doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int pckr03_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int pckr20_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int eul2xf_(cspice_t*, doublereal *, integer *, 
+	    integer *, integer *, doublereal *);
+    extern logical failed_(cspice_t*);
     integer handle;
     doublereal eulang[6];
     doublereal record[130];
-    extern /* Subroutine */ int sgfcon_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int sgfcon_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *);
     doublereal estate[6];
-    extern /* Subroutine */ int pcksfs_(integer *, doublereal *, integer *, 
-	    doublereal *, char *, logical *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int pcksfs_(cspice_t*, integer *, doublereal *, 
+	    integer *, doublereal *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer recsiz;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer icd[5];
 
 
     /* Module state */
-    pckmat_state_t* __state = get_pckmat_state();
+    pckmat_state_t* __state = get_pckmat_state(__global_state);
 /* $ Abstract */
 
 /*      Given a body and epoch, return the name of an inertial */
@@ -312,39 +311,41 @@ static pckmat_state_t* get_pckmat_state() {
 
 /*     Standard SPICE Error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("PCKMAT", (ftnlen)6);
+    chkin_(__global_state, "PCKMAT", (ftnlen)6);
 
 /*     Get a segment applicable to a specified body and epoch. */
 
-    pcksfs_(body, et, &handle, descr, ident, found, (ftnlen)40);
-    if (failed_()) {
+    pcksfs_(__global_state, body, et, &handle, descr, ident, found, (ftnlen)
+	    40);
+    if (failed_(__global_state)) {
 	*found = FALSE_;
-	chkout_("PCKMAT", (ftnlen)6);
+	chkout_(__global_state, "PCKMAT", (ftnlen)6);
 	return 0;
     }
     if (*found) {
 
 /*        Look at parts of the descriptor. */
 
-	dafus_(descr, &__state->c__2, &__state->c__5, dcd, icd);
+	dafus_(__global_state, descr, &__state->c__2, &__state->c__5, dcd, 
+		icd);
 	type__ = icd[2];
 	*ref = icd[1];
 	if (type__ == 2) {
 
 /*           Read in Chebyshev coefficients from segment. */
 
-	    pckr02_(&handle, descr, et, record);
+	    pckr02_(__global_state, &handle, descr, et, record);
 
 /*           Call evaluation routine to get Euler angles */
 /*           phi, delta, w. */
 
-	    pcke02_(et, record, eulang);
-	    if (failed_()) {
+	    pcke02_(__global_state, et, record, eulang);
+	    if (failed_(__global_state)) {
 		*found = FALSE_;
-		chkout_("PCKMAT", (ftnlen)6);
+		chkout_(__global_state, "PCKMAT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -364,11 +365,11 @@ static pckmat_state_t* get_pckmat_state() {
 /*           Call routine which takes Euler angles to transformation */
 /*           matrix. */
 
-	    eul2xf_(estate, &__state->c__3, &__state->c__1, &__state->c__3, 
-		    tsipm);
-	    if (failed_()) {
+	    eul2xf_(__global_state, estate, &__state->c__3, &__state->c__1, &
+		    __state->c__3, tsipm);
+	    if (failed_(__global_state)) {
 		*found = FALSE_;
-		chkout_("PCKMAT", (ftnlen)6);
+		chkout_(__global_state, "PCKMAT", (ftnlen)6);
 		return 0;
 	    }
 	} else if (type__ == 3) {
@@ -378,44 +379,45 @@ static pckmat_state_t* get_pckmat_state() {
 /*           enough storage in RECORD. The number of coefficients is the */
 /*           first constant value in the generic segment. */
 
-	    sgfcon_(&handle, descr, &__state->c__1, &__state->c__1, record);
-	    if (failed_()) {
+	    sgfcon_(__global_state, &handle, descr, &__state->c__1, &
+		    __state->c__1, record);
+	    if (failed_(__global_state)) {
 		*found = FALSE_;
-		chkout_("PCKMAT", (ftnlen)6);
+		chkout_(__global_state, "PCKMAT", (ftnlen)6);
 		return 0;
 	    }
 	    recsiz = (integer) record[0] * 6 + 2;
 	    if (recsiz > 130) {
-		setmsg_("Storage for # double precision numbers is needed fo"
-			"r a PCK data record and only # locations were availa"
-			"ble. Notify the NAIF group of this problem.", (ftnlen)
-			146);
-		errint_("#", &recsiz, (ftnlen)1);
-		errint_("#", &__state->c__130, (ftnlen)1);
-		sigerr_("SPICE(PCKKRECTOOLARGE)", (ftnlen)22);
-		chkout_("PCKMAT", (ftnlen)6);
+		setmsg_(__global_state, "Storage for # double precision numb"
+			"ers is needed for a PCK data record and only # locat"
+			"ions were available. Notify the NAIF group of this p"
+			"roblem.", (ftnlen)146);
+		errint_(__global_state, "#", &recsiz, (ftnlen)1);
+		errint_(__global_state, "#", &__state->c__130, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(PCKKRECTOOLARGE)", (ftnlen)22);
+		chkout_(__global_state, "PCKMAT", (ftnlen)6);
 		return 0;
 	    }
-	    pckr03_(&handle, descr, et, record);
-	    pcke03_(et, record, tsipm);
-	    if (failed_()) {
+	    pckr03_(__global_state, &handle, descr, et, record);
+	    pcke03_(__global_state, et, record, tsipm);
+	    if (failed_(__global_state)) {
 		*found = FALSE_;
-		chkout_("PCKMAT", (ftnlen)6);
+		chkout_(__global_state, "PCKMAT", (ftnlen)6);
 		return 0;
 	    }
 	} else if (type__ == 20) {
 
 /*           Read in Chebyshev coefficients from segment. */
 
-	    pckr20_(&handle, descr, et, record);
+	    pckr20_(__global_state, &handle, descr, et, record);
 
 /*           Call evaluation routine to get Euler angles */
 /*           phi, delta, w. */
 
-	    pcke20_(et, record, eulang);
-	    if (failed_()) {
+	    pcke20_(__global_state, et, record, eulang);
+	    if (failed_(__global_state)) {
 		*found = FALSE_;
-		chkout_("PCKMAT", (ftnlen)6);
+		chkout_(__global_state, "PCKMAT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -435,11 +437,11 @@ static pckmat_state_t* get_pckmat_state() {
 /*           Call routine which takes Euler angles to transformation */
 /*           matrix. */
 
-	    eul2xf_(estate, &__state->c__3, &__state->c__1, &__state->c__3, 
-		    tsipm);
-	    if (failed_()) {
+	    eul2xf_(__global_state, estate, &__state->c__3, &__state->c__1, &
+		    __state->c__3, tsipm);
+	    if (failed_(__global_state)) {
 		*found = FALSE_;
-		chkout_("PCKMAT", (ftnlen)6);
+		chkout_(__global_state, "PCKMAT", (ftnlen)6);
 		return 0;
 	    }
 	} else {
@@ -450,7 +452,7 @@ static pckmat_state_t* get_pckmat_state() {
 	    *found = FALSE_;
 	}
     }
-    chkout_("PCKMAT", (ftnlen)6);
+    chkout_(__global_state, "PCKMAT", (ftnlen)6);
     return 0;
 } /* pckmat_ */
 

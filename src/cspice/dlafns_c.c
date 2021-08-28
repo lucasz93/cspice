@@ -277,7 +277,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dlafns_c" );
+   chkin_c ( naif_state, "dlafns_c" );
 
 
    /*

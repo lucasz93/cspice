@@ -8,8 +8,7 @@
 
 
 extern getmsg_init_t __getmsg_init;
-static getmsg_state_t* get_getmsg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline getmsg_state_t* get_getmsg_state(cspice_t* state) {
 	if (!state->getmsg)
 		state->getmsg = __cspice_allocate_module(sizeof(
 	getmsg_state_t), &__getmsg_init, sizeof(__getmsg_init));
@@ -18,8 +17,8 @@ static getmsg_state_t* get_getmsg_state() {
 }
 
 /* $Procedure      GETMSG ( Get Error Message ) */
-/* Subroutine */ int getmsg_(char *option, char *msg, ftnlen option_len, 
-	ftnlen msg_len)
+/* Subroutine */ int getmsg_(cspice_t* __global_state, char *option, char *
+	msg, ftnlen option_len, ftnlen msg_len)
 {
     /* System generated locals */
     address a__1[2];
@@ -27,25 +26,29 @@ static getmsg_state_t* get_getmsg_state() {
     char ch__1[144];
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int expln_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int expln_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char upopt[10];
-    extern /* Subroutine */ int getlms_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int getlms_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     char locopt[10];
-    extern /* Subroutine */ int getsms_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int getsms_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     char shrtms[25];
 
 
     /* Module state */
-    getmsg_state_t* __state = get_getmsg_state();
+    getmsg_state_t* __state = get_getmsg_state(__global_state);
 /* $ Abstract */
 
 /*     Retrieve the current short error message, */
@@ -281,39 +284,43 @@ static getmsg_state_t* get_getmsg_state() {
 /*     string just in case we need to echo it in */
 /*     an error message. */
 
-    ljust_(option, upopt, option_len, (ftnlen)10);
-    ucase_(upopt, upopt, (ftnlen)10, (ftnlen)10);
-    if (s_cmp(upopt, "SHORT", (ftnlen)10, (ftnlen)5) == 0) {
+    ljust_(__global_state, option, upopt, option_len, (ftnlen)10);
+    ucase_(__global_state, upopt, upopt, (ftnlen)10, (ftnlen)10);
+    if (s_cmp(&__global_state->f2c, upopt, "SHORT", (ftnlen)10, (ftnlen)5) == 
+	    0) {
 
 /*        Retrieve short message: */
 
-	getsms_(msg, msg_len);
-    } else if (s_cmp(upopt, "EXPLAIN", (ftnlen)10, (ftnlen)7) == 0) {
+	getsms_(__global_state, msg, msg_len);
+    } else if (s_cmp(&__global_state->f2c, upopt, "EXPLAIN", (ftnlen)10, (
+	    ftnlen)7) == 0) {
 
 /*        Get current short message; then get explanation */
 /*        corresponding to current short error message: */
 
-	getsms_(shrtms, (ftnlen)25);
-	expln_(shrtms, msg, (ftnlen)25, msg_len);
-    } else if (s_cmp(upopt, "LONG", (ftnlen)10, (ftnlen)4) == 0) {
+	getsms_(__global_state, shrtms, (ftnlen)25);
+	expln_(__global_state, shrtms, msg, (ftnlen)25, msg_len);
+    } else if (s_cmp(&__global_state->f2c, upopt, "LONG", (ftnlen)10, (ftnlen)
+	    4) == 0) {
 
 /*        Grab long error message: */
 
-	getlms_(msg, msg_len);
+	getlms_(__global_state, msg, msg_len);
     } else {
 
 /*        Invalid value of OPTION!!  Signal error, and set long */
 /*        error message as well: */
 
-	s_copy(locopt, option, (ftnlen)10, option_len);
+	s_copy(&__global_state->f2c, locopt, option, (ftnlen)10, option_len);
 /* Writing concatenation */
 	i__1[0] = 134, a__1[0] = "GETMSG: An invalid value of OPTION was inp"
 		"ut.  Valid choices are 'SHORT',       'EXPLAIN', or 'LONG'. "
 		" The value that was input was:  ";
 	i__1[1] = 10, a__1[1] = locopt;
-	s_cat(ch__1, a__1, i__1, &__state->c__2, (ftnlen)144);
-	setmsg_(ch__1, (ftnlen)144);
-	sigerr_("SPICE(INVALIDMSGTYPE)", (ftnlen)21);
+	s_cat(&__global_state->f2c, ch__1, a__1, i__1, &__state->c__2, (
+		ftnlen)144);
+	setmsg_(__global_state, ch__1, (ftnlen)144);
+	sigerr_(__global_state, "SPICE(INVALIDMSGTYPE)", (ftnlen)21);
     }
     return 0;
 } /* getmsg_ */

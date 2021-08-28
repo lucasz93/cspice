@@ -8,19 +8,19 @@
 
 
 typedef int wdcnt_state_t;
-static wdcnt_state_t* get_wdcnt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wdcnt_state_t* get_wdcnt_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure WDCNT ( Word Count ) */
-integer wdcnt_(char *string, ftnlen string_len)
+integer wdcnt_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), i_len(char *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), i_len(
+	    f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     logical cont;
@@ -30,7 +30,7 @@ integer wdcnt_(char *string, ftnlen string_len)
 
 
     /* Module state */
-    wdcnt_state_t* __state = get_wdcnt_state();
+    wdcnt_state_t* __state = get_wdcnt_state(__global_state);
 /* $ Abstract */
 
 /*      Return the number of words in a string. */
@@ -166,11 +166,12 @@ integer wdcnt_(char *string, ftnlen string_len)
 
 /*     Trivial case first. */
 
-    if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, string, " ", string_len, (ftnlen)1) == 0) 
+	    {
 	ret_val = 0;
 	return ret_val;
     } else {
-	length = i_len(string, string_len);
+	length = i_len(&__global_state->f2c, string, string_len);
     }
 
 /*     Skip leading blanks. */

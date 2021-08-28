@@ -8,36 +8,37 @@
 
 
 typedef int zzpltchk_state_t;
-static zzpltchk_state_t* get_zzpltchk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzpltchk_state_t* get_zzpltchk_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZPLTCHK ( Private --- Platform Check ) */
-/* Subroutine */ int zzpltchk_(logical *ok)
+/* Subroutine */ int zzpltchk_(cspice_t* __global_state, logical *ok)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzgetbff_(integer *);
-    extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int zzgetbff_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzddhgsd_(cspice_t*, char *, integer *, char *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzplatfm_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char value[32];
     char rtebff[32];
     char strbff[32];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer bff;
 
 
     /* Module state */
-    zzpltchk_state_t* __state = get_zzpltchk_state();
+    zzpltchk_state_t* __state = get_zzpltchk_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -418,51 +419,53 @@ static zzpltchk_state_t* get_zzpltchk_state() {
 
 /*     Standard SPICE error handling */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZPLTCHK", (ftnlen)8);
+	chkin_(__global_state, "ZZPLTCHK", (ftnlen)8);
     }
 
 /*     Verify that the runtime environment's binary file format agrees */
 /*     with the value listed in ZZPLATFM. */
 
-    zzplatfm_("FILE_FORMAT", strbff, (ftnlen)11, (ftnlen)32);
+    zzplatfm_(__global_state, "FILE_FORMAT", strbff, (ftnlen)11, (ftnlen)32);
 
 /*     Determine what the runtime environment binary file format appears */
 /*     to be. */
 
-    zzgetbff_(&bff);
-    zzddhgsd_("BFF", &bff, rtebff, (ftnlen)3, (ftnlen)32);
+    zzgetbff_(__global_state, &bff);
+    zzddhgsd_(__global_state, "BFF", &bff, rtebff, (ftnlen)3, (ftnlen)32);
 
 /*     Check results, signal SPICE(BUG) if a discrepancy appears. */
 
-    if (s_cmp(strbff, rtebff, (ftnlen)32, (ftnlen)32) != 0) {
-	setmsg_("This version of SPICELIB was originally packaged by NAIF fo"
-		"r # hardware using # with the # compiler.  This environment "
-		"has a binary file format of #; however the software is runni"
-		"ng on an environment that has a binary file format of #.  Th"
-		"is is a severe problem and may be because the software packa"
-		"ge was intended for use on a different computer system.  It "
-		"also may be the result of an improper port; please contact N"
-		"AIF.", (ftnlen)423);
-	zzplatfm_("SYSTEM", value, (ftnlen)6, (ftnlen)32);
-	errch_("#", value, (ftnlen)1, (ftnlen)32);
-	zzplatfm_("O/S", value, (ftnlen)3, (ftnlen)32);
-	errch_("#", value, (ftnlen)1, (ftnlen)32);
-	zzplatfm_("COMPILER", value, (ftnlen)8, (ftnlen)32);
-	errch_("#", value, (ftnlen)1, (ftnlen)32);
-	errch_("#", strbff, (ftnlen)1, (ftnlen)32);
-	if (s_cmp(rtebff, " ", (ftnlen)32, (ftnlen)1) == 0) {
-	    errch_("#", "UNKNOWN", (ftnlen)1, (ftnlen)7);
+    if (s_cmp(&__global_state->f2c, strbff, rtebff, (ftnlen)32, (ftnlen)32) !=
+	     0) {
+	setmsg_(__global_state, "This version of SPICELIB was originally pac"
+		"kaged by NAIF for # hardware using # with the # compiler.  T"
+		"his environment has a binary file format of #; however the s"
+		"oftware is running on an environment that has a binary file "
+		"format of #.  This is a severe problem and may be because th"
+		"e software package was intended for use on a different compu"
+		"ter system.  It also may be the result of an improper port; "
+		"please contact NAIF.", (ftnlen)423);
+	zzplatfm_(__global_state, "SYSTEM", value, (ftnlen)6, (ftnlen)32);
+	errch_(__global_state, "#", value, (ftnlen)1, (ftnlen)32);
+	zzplatfm_(__global_state, "O/S", value, (ftnlen)3, (ftnlen)32);
+	errch_(__global_state, "#", value, (ftnlen)1, (ftnlen)32);
+	zzplatfm_(__global_state, "COMPILER", value, (ftnlen)8, (ftnlen)32);
+	errch_(__global_state, "#", value, (ftnlen)1, (ftnlen)32);
+	errch_(__global_state, "#", strbff, (ftnlen)1, (ftnlen)32);
+	if (s_cmp(&__global_state->f2c, rtebff, " ", (ftnlen)32, (ftnlen)1) ==
+		 0) {
+	    errch_(__global_state, "#", "UNKNOWN", (ftnlen)1, (ftnlen)7);
 	} else {
-	    errch_("#", rtebff, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", rtebff, (ftnlen)1, (ftnlen)32);
 	}
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZPLTCHK", (ftnlen)8);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZPLTCHK", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZPLTCHK", (ftnlen)8);
+    chkout_(__global_state, "ZZPLTCHK", (ftnlen)8);
     return 0;
 } /* zzpltchk_ */
 

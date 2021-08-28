@@ -8,14 +8,13 @@
 
 
 typedef int lgrint_state_t;
-static lgrint_state_t* get_lgrint_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lgrint_state_t* get_lgrint_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LGRINT ( Lagrange polynomial interpolation ) */
-doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals, 
-	doublereal *work, doublereal *x)
+doublereal lgrint_(cspice_t* __global_state, integer *n, doublereal *xvals, 
+	doublereal *yvals, doublereal *work, doublereal *x)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -24,20 +23,21 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal denom;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal c1;
     doublereal c2;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    lgrint_state_t* __state = get_lgrint_state();
+    lgrint_state_t* __state = get_lgrint_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a Lagrange interpolating polynomial for a specified */
@@ -270,7 +270,7 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
 
 /*     Check in only if an error is detected. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0.;
 	return ret_val;
     }
@@ -279,11 +279,12 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
 
     if (*n < 1) {
 	ret_val = 0.;
-	chkin_("LGRINT", (ftnlen)6);
-	setmsg_("Array size must be positive; was #.", (ftnlen)35);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("LGRINT", (ftnlen)6);
+	chkin_(__global_state, "LGRINT", (ftnlen)6);
+	setmsg_(__global_state, "Array size must be positive; was #.", (
+		ftnlen)35);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "LGRINT", (ftnlen)6);
 	return ret_val;
     }
 
@@ -389,14 +390,15 @@ doublereal lgrint_(integer *n, doublereal *xvals, doublereal *yvals,
 	    denom = xvals[i__ - 1] - xvals[i__ + j - 1];
 	    if (denom == 0.) {
 		ret_val = 0.;
-		chkin_("LGRINT", (ftnlen)6);
-		setmsg_("XVALS(#) = XVALS(#) = #", (ftnlen)23);
-		errint_("#", &i__, (ftnlen)1);
+		chkin_(__global_state, "LGRINT", (ftnlen)6);
+		setmsg_(__global_state, "XVALS(#) = XVALS(#) = #", (ftnlen)23)
+			;
+		errint_(__global_state, "#", &i__, (ftnlen)1);
 		i__3 = i__ + j;
-		errint_("#", &i__3, (ftnlen)1);
-		errdp_("#", &xvals[i__ - 1], (ftnlen)1);
-		sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-		chkout_("LGRINT", (ftnlen)6);
+		errint_(__global_state, "#", &i__3, (ftnlen)1);
+		errdp_(__global_state, "#", &xvals[i__ - 1], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(DIVIDEBYZERO)", (ftnlen)19);
+		chkout_(__global_state, "LGRINT", (ftnlen)6);
 		return ret_val;
 	    }
 	    c1 = *x - xvals[i__ + j - 1];

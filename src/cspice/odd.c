@@ -8,20 +8,19 @@
 
 
 typedef int odd_state_t;
-static odd_state_t* get_odd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline odd_state_t* get_odd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure             ODD ( Is a number odd? ) */
-logical odd_(integer *i__)
+logical odd_(cspice_t* __global_state, integer *i__)
 {
     /* System generated locals */
     logical ret_val;
 
 
     /* Module state */
-    odd_state_t* __state = get_odd_state();
+    odd_state_t* __state = get_odd_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether an integer is odd. */

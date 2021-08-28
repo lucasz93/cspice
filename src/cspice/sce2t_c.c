@@ -264,7 +264,7 @@
    /*
    Participate in error handling.
    */
-   chkin_c ( "sce2t_c");
+   chkin_c ( naif_state, "sce2t_c");
 
    /*
    Do the conversion.

@@ -8,8 +8,7 @@
 
 
 extern ckr03_init_t __ckr03_init;
-static ckr03_state_t* get_ckr03_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckr03_state_t* get_ckr03_state(cspice_t* state) {
 	if (!state->ckr03)
 		state->ckr03 = __cspice_allocate_module(sizeof(ckr03_state_t),
 	 &__ckr03_init, sizeof(__ckr03_init));
@@ -18,9 +17,9 @@ static ckr03_state_t* get_ckr03_state() {
 }
 
 /* $Procedure      CKR03 ( C-kernel, read pointing record, data type 3 ) */
-/* Subroutine */ int ckr03_(integer *handle, doublereal *descr, doublereal *
-	sclkdp, doublereal *tol, logical *needav, doublereal *record, logical 
-	*found)
+/* Subroutine */ int ckr03_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *
+	needav, doublereal *record, logical *found)
 {
     /* Initialized data */
 
@@ -29,7 +28,8 @@ static ckr03_state_t* get_ckr03_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer addr__;
@@ -41,34 +41,35 @@ static ckr03_state_t* get_ckr03_state() {
     integer laddr;
     doublereal rdiff;
     integer raddr;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer nidir;
     doublereal lsclk;
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer nrdir;
     doublereal rsclk;
     integer group;
     doublereal start;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern logical failed_(cspice_t*);
     integer grpadd;
     doublereal buffer[100];
     integer remain;
     integer dirloc;
-    extern integer lstled_(doublereal *, integer *, doublereal *);
+    extern integer lstled_(cspice_t*, doublereal *, integer *, doublereal *);
     integer numrec;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer lstltd_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lstltd_(cspice_t*, doublereal *, integer *, doublereal *);
     integer numint;
     doublereal nstart;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer beg;
     integer icd[6];
@@ -77,7 +78,7 @@ static ckr03_state_t* get_ckr03_state() {
 
 
     /* Module state */
-    ckr03_state_t* __state = get_ckr03_state();
+    ckr03_state_t* __state = get_ckr03_state(__global_state);
 /* $ Abstract */
 
 /*     Read a pointing record from a CK segment, data type 3. */
@@ -456,10 +457,10 @@ static ckr03_state_t* get_ckr03_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKR03", (ftnlen)5);
+	chkin_(__global_state, "CKR03", (ftnlen)5);
     }
 
 /*     Start off with FOUND equal to false just in case a SPICELIB error */
@@ -481,16 +482,16 @@ static ckr03_state_t* get_ckr03_state() {
 /*        ICD(5)  Initial address of segment data */
 /*        ICD(6)  Final address of segment data */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dcd, icd);
 
 /*     Check to make sure that the segment is type 3. */
 
     if (icd[2] != 3) {
-	setmsg_("The segment is not a type 3 segment.  Type is #", (ftnlen)47)
-		;
-	errint_("#", &icd[2], (ftnlen)1);
-	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
-	chkout_("CKR03", (ftnlen)5);
+	setmsg_(__global_state, "The segment is not a type 3 segment.  Type "
+		"is #", (ftnlen)47);
+	errint_(__global_state, "#", &icd[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGDATATYPE)", (ftnlen)20);
+	chkout_(__global_state, "CKR03", (ftnlen)5);
 	return 0;
     }
 
@@ -501,10 +502,10 @@ static ckr03_state_t* get_ckr03_state() {
     } else {
 	psiz = 4;
 	if (*needav) {
-	    setmsg_("Segment does not contain angular velocity data.", (
-		    ftnlen)47);
-	    sigerr_("SPICE(NOAVDATA)", (ftnlen)15);
-	    chkout_("CKR03", (ftnlen)5);
+	    setmsg_(__global_state, "Segment does not contain angular veloci"
+		    "ty data.", (ftnlen)47);
+	    sigerr_(__global_state, "SPICE(NOAVDATA)", (ftnlen)15);
+	    chkout_(__global_state, "CKR03", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -552,9 +553,9 @@ static ckr03_state_t* get_ckr03_state() {
 /*     directory epochs. */
 
     i__1 = end - 1;
-    dafgda_(handle, &i__1, &end, buffer);
-    numint = i_dnnt(buffer);
-    numrec = i_dnnt(&buffer[1]);
+    dafgda_(__global_state, handle, &i__1, &end, buffer);
+    numint = i_dnnt(&__global_state->f2c, buffer);
+    numrec = i_dnnt(&__global_state->f2c, &buffer[1]);
     nidir = (numint - 1) / 100;
     nrdir = (numrec - 1) / 100;
 
@@ -562,8 +563,8 @@ static ckr03_state_t* get_ckr03_state() {
 /*     any DAF file and the error action is not set to ABORT. You need */
 /*     need to do this only after the first call to DAFGDA. */
 
-    if (failed_()) {
-	chkout_("CKR03", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKR03", (ftnlen)5);
 	return 0;
     }
 
@@ -624,13 +625,13 @@ static ckr03_state_t* get_ckr03_state() {
 
 	    n = min(remain,100);
 	    i__1 = dirloc + n - 1;
-	    dafgda_(handle, &dirloc, &i__1, buffer);
+	    dafgda_(__global_state, handle, &dirloc, &i__1, buffer);
 	    remain -= n;
 
 /*           Determine the last directory element in BUFFER that's less */
 /*           than SCLKDP. */
 
-	    i__ = lstltd_(sclkdp, &n, buffer);
+	    i__ = lstltd_(__global_state, sclkdp, &n, buffer);
 	    if (i__ < n) {
 		group = group + i__ + 1;
 		fnd = TRUE_;
@@ -672,12 +673,12 @@ static ckr03_state_t* get_ckr03_state() {
     i__1 = 100, i__2 = numrec - skip;
     n = min(i__1,i__2);
     i__1 = grpadd + n - 1;
-    dafgda_(handle, &grpadd, &i__1, buffer);
+    dafgda_(__global_state, handle, &grpadd, &i__1, buffer);
 
 /*     Find the largest time in the group less than or equal to the input */
 /*     time. */
 
-    i__ = lstled_(sclkdp, &n, buffer);
+    i__ = lstled_(__global_state, sclkdp, &n, buffer);
 
 /*     Find the pointing instances in the segment that bracket the */
 /*     request time and calculate the addresses for the pointing data */
@@ -704,13 +705,13 @@ static ckr03_state_t* get_ckr03_state() {
 /*              velocity data.  Then read it from the file. */
 
 		i__1 = beg + psiz - 1;
-		dafgda_(handle, &beg, &i__1, buffer);
-		moved_(buffer, &psiz, &record[1]);
-		moved_(buffer, &psiz, &record[9]);
+		dafgda_(__global_state, handle, &beg, &i__1, buffer);
+		moved_(__global_state, buffer, &psiz, &record[1]);
+		moved_(__global_state, buffer, &psiz, &record[9]);
 		record[16] = *sclkdp;
 		*found = TRUE_;
 	    }
-	    chkout_("CKR03", (ftnlen)5);
+	    chkout_(__global_state, "CKR03", (ftnlen)5);
 	    return 0;
 	} else {
 
@@ -722,7 +723,7 @@ static ckr03_state_t* get_ckr03_state() {
 	    raddr = beg + skip * psiz;
 	    i__1 = grpadd - 1;
 	    i__2 = grpadd - 1;
-	    dafgda_(handle, &i__1, &i__2, &lsclk);
+	    dafgda_(__global_state, handle, &i__1, &i__2, &lsclk);
 	    laddr = raddr - psiz;
 	}
     } else if (i__ == n) {
@@ -745,33 +746,36 @@ static ckr03_state_t* get_ckr03_state() {
 /*           SCLKDP - BUFFER(N) will be zero in this case. ) */
 
 	if (*sclkdp - buffer[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-		s_rnge("buffer", i__1, "ckr03_", (ftnlen)826)] <= *tol) {
+		s_rnge(&__global_state->f2c, "buffer", i__1, "ckr03_", (
+		ftnlen)826)] <= *tol) {
 	    record[0] = buffer[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("buffer", i__1, "ckr03_", (ftnlen)828)];
+		    s_rnge(&__global_state->f2c, "buffer", i__1, "ckr03_", (
+		    ftnlen)828)];
 	    record[8] = buffer[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("buffer", i__1, "ckr03_", (ftnlen)829)];
+		    s_rnge(&__global_state->f2c, "buffer", i__1, "ckr03_", (
+		    ftnlen)829)];
 
 /*           Calculate the address of the quaternion and angular */
 /*           velocity data.  Then read it from the file. */
 
 	    addr__ = beg + psiz * (skip + n - 1);
 	    i__1 = addr__ + psiz - 1;
-	    dafgda_(handle, &addr__, &i__1, buffer);
-	    moved_(buffer, &psiz, &record[1]);
-	    moved_(buffer, &psiz, &record[9]);
+	    dafgda_(__global_state, handle, &addr__, &i__1, buffer);
+	    moved_(__global_state, buffer, &psiz, &record[1]);
+	    moved_(__global_state, buffer, &psiz, &record[9]);
 	    record[16] = *sclkdp;
 	    *found = TRUE_;
 	}
-	chkout_("CKR03", (ftnlen)5);
+	chkout_(__global_state, "CKR03", (ftnlen)5);
 	return 0;
     } else {
 
 /*        The bracketing times are contained in this group. */
 
-	lsclk = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		"buffer", i__1, "ckr03_", (ftnlen)855)];
-	rsclk = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge("buff"
-		"er", i__1, "ckr03_", (ftnlen)856)];
+	lsclk = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "buffer", i__1, "ckr03_", (ftnlen)855)];
+	rsclk = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "buffer", i__1, "ckr03_", (ftnlen)856)];
 	laddr = beg + (skip + i__ - 1) * psiz;
 	raddr = laddr + psiz;
     }
@@ -852,13 +856,13 @@ static ckr03_state_t* get_ckr03_state() {
 
 		n = min(remain,100);
 		i__1 = dirloc + n - 1;
-		dafgda_(handle, &dirloc, &i__1, buffer);
+		dafgda_(__global_state, handle, &dirloc, &i__1, buffer);
 		remain -= n;
 
 /*              Determine the last directory element in BUFFER that's */
 /*              less than SCLKDP. */
 
-		i__ = lstltd_(sclkdp, &n, buffer);
+		i__ = lstltd_(__global_state, sclkdp, &n, buffer);
 		if (i__ < n) {
 		    group = group + i__ + 1;
 		    fnd = TRUE_;
@@ -901,12 +905,12 @@ static ckr03_state_t* get_ckr03_state() {
 	i__1 = 100, i__2 = numint - skip;
 	n = min(i__1,i__2);
 	i__1 = grpadd + n - 1;
-	dafgda_(handle, &grpadd, &i__1, buffer);
+	dafgda_(__global_state, handle, &grpadd, &i__1, buffer);
 
 /*        Find the index of the largest time in the group that is less */
 /*        than or equal to the input time. */
 
-	i__ = lstled_(sclkdp, &n, buffer);
+	i__ = lstled_(__global_state, sclkdp, &n, buffer);
 	if (i__ == 0) {
 
 /*           The first start time in the buffer is the start of the */
@@ -918,33 +922,37 @@ static ckr03_state_t* get_ckr03_state() {
 
 	    nstart = buffer[0];
 	    addr__ = grpadd - 1;
-	    dafgda_(handle, &addr__, &addr__, &start);
+	    dafgda_(__global_state, handle, &addr__, &addr__, &start);
 	} else if (i__ == n) {
 	    if (group == nidir + 1) {
 
 /*              This is the last interval in the segment. */
 
 		start = buffer[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("buffer", i__1, "ckr03_", (ftnlen)1040)];
-		nstart = dpmax_();
+			s_rnge(&__global_state->f2c, "buffer", i__1, "ckr03_",
+			 (ftnlen)1040)];
+		nstart = dpmax_(__global_state);
 	    } else {
 
 /*              The last START time in this group is equal to the */
 /*              request time. */
 
 		start = buffer[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("buffer", i__1, "ckr03_", (ftnlen)1049)];
+			s_rnge(&__global_state->f2c, "buffer", i__1, "ckr03_",
+			 (ftnlen)1049)];
 		addr__ = grpadd + n;
-		dafgda_(handle, &addr__, &addr__, &nstart);
+		dafgda_(__global_state, handle, &addr__, &addr__, &nstart);
 	    }
 	} else {
 
 /*           The bracketing START times are contained in this group. */
 
 	    start = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("buffer", i__1, "ckr03_", (ftnlen)1061)];
-	    nstart = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "buffer", i__1, "ckr03_", (ftnlen)1062)];
+		    s_rnge(&__global_state->f2c, "buffer", i__1, "ckr03_", (
+		    ftnlen)1061)];
+	    nstart = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "buffer", i__1, "ckr03_", (ftnlen)
+		    1062)];
 	}
 
 /*        Save the information about the interval and segment. */
@@ -969,10 +977,10 @@ static ckr03_state_t* get_ckr03_state() {
     if (rsclk < nstart) {
 	record[0] = lsclk;
 	i__1 = laddr + psiz - 1;
-	dafgda_(handle, &laddr, &i__1, &record[1]);
+	dafgda_(__global_state, handle, &laddr, &i__1, &record[1]);
 	record[8] = rsclk;
 	i__1 = raddr + psiz - 1;
-	dafgda_(handle, &raddr, &i__1, &record[9]);
+	dafgda_(__global_state, handle, &raddr, &i__1, &record[9]);
 	record[16] = *sclkdp;
 	*found = TRUE_;
     } else {
@@ -989,22 +997,22 @@ static ckr03_state_t* get_ckr03_state() {
 		record[0] = lsclk;
 		record[8] = lsclk;
 		i__1 = laddr + psiz - 1;
-		dafgda_(handle, &laddr, &i__1, buffer);
-		moved_(buffer, &psiz, &record[1]);
-		moved_(buffer, &psiz, &record[9]);
+		dafgda_(__global_state, handle, &laddr, &i__1, buffer);
+		moved_(__global_state, buffer, &psiz, &record[1]);
+		moved_(__global_state, buffer, &psiz, &record[9]);
 	    } else {
 		record[0] = rsclk;
 		record[8] = rsclk;
 		i__1 = raddr + psiz - 1;
-		dafgda_(handle, &raddr, &i__1, buffer);
-		moved_(buffer, &psiz, &record[1]);
-		moved_(buffer, &psiz, &record[9]);
+		dafgda_(__global_state, handle, &raddr, &i__1, buffer);
+		moved_(__global_state, buffer, &psiz, &record[1]);
+		moved_(__global_state, buffer, &psiz, &record[9]);
 	    }
 	    record[16] = *sclkdp;
 	    *found = TRUE_;
 	}
     }
-    chkout_("CKR03", (ftnlen)5);
+    chkout_(__global_state, "CKR03", (ftnlen)5);
     return 0;
 } /* ckr03_ */
 

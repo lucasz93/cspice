@@ -8,8 +8,7 @@
 
 
 extern zzeklled_init_t __zzeklled_init;
-static zzeklled_state_t* get_zzeklled_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzeklled_state_t* get_zzeklled_state(cspice_t* state) {
 	if (!state->zzeklled)
 		state->zzeklled = __cspice_allocate_module(sizeof(
 	zzeklled_state_t), &__zzeklled_init, sizeof(__zzeklled_init));
@@ -18,19 +17,21 @@ static zzeklled_state_t* get_zzeklled_state() {
 }
 
 /* $Procedure ZZEKLLED ( EK, last less than or equal to, d.p. ) */
-/* Subroutine */ int zzeklled_(integer *handle, integer *segdsc, integer *
-	coldsc, doublereal *dkey, integer *prvloc, integer *prvptr)
+/* Subroutine */ int zzeklled_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, doublereal *dkey, integer *prvloc, 
+	integer *prvptr)
 {
-    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen);
-    extern logical zzekscmp_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, char *, doublereal *, integer *, 
-	    logical *, ftnlen);
-    extern /* Subroutine */ int zzekixlk_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekcnam_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern logical zzekscmp_(cspice_t*, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, char *, doublereal *, 
+	    integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzekixlk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer dtype;
     integer nrows;
     integer middle;
@@ -39,15 +40,15 @@ static zzeklled_state_t* get_zzeklled_state() {
     integer begptr;
     integer endptr;
     integer midptr;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer end;
 
 
     /* Module state */
-    zzeklled_state_t* __state = get_zzeklled_state();
+    zzeklled_state_t* __state = get_zzeklled_state(__global_state);
 /* $ Abstract */
 
 /*     Find the last column value less than or equal to a specified key, */
@@ -635,12 +636,12 @@ static zzeklled_state_t* get_zzeklled_state() {
 
     indexd = coldsc[5] != -1;
     if (! indexd) {
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	chkin_("ZZEKLLED", (ftnlen)8);
-	setmsg_("Column # is not indexed.", (ftnlen)24);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	sigerr_("SPICE(NOTINDEXED)", (ftnlen)17);
-	chkout_("ZZEKLLED", (ftnlen)8);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	chkin_(__global_state, "ZZEKLLED", (ftnlen)8);
+	setmsg_(__global_state, "Column # is not indexed.", (ftnlen)24);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	sigerr_(__global_state, "SPICE(NOTINDEXED)", (ftnlen)17);
+	chkout_(__global_state, "ZZEKLLED", (ftnlen)8);
 	return 0;
     }
 
@@ -648,13 +649,14 @@ static zzeklled_state_t* get_zzeklled_state() {
 
     dtype = coldsc[1];
     if (dtype != 2 && dtype != 4) {
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	chkin_("ZZEKLLED", (ftnlen)8);
-	setmsg_("Column # should be DP or TIME but has type #.", (ftnlen)45);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	errint_("#", &dtype, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("ZZEKLLED", (ftnlen)8);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	chkin_(__global_state, "ZZEKLLED", (ftnlen)8);
+	setmsg_(__global_state, "Column # should be DP or TIME but has type "
+		"#.", (ftnlen)45);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", &dtype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKLLED", (ftnlen)8);
 	return 0;
     }
 
@@ -675,11 +677,11 @@ static zzeklled_state_t* get_zzeklled_state() {
 /*     Get the record pointers BEGPTR and ENDPTR of the least and */
 /*     greatest elements in the column. */
 
-    zzekixlk_(handle, coldsc, &begin, &begptr);
-    zzekixlk_(handle, coldsc, &end, &endptr);
-    if (zzekscmp_(&__state->c__3, handle, segdsc, coldsc, &begptr, &
-	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, &
-	    __state->c_false, (ftnlen)1)) {
+    zzekixlk_(__global_state, handle, coldsc, &begin, &begptr);
+    zzekixlk_(__global_state, handle, coldsc, &end, &endptr);
+    if (zzekscmp_(__global_state, &__state->c__3, handle, segdsc, coldsc, &
+	    begptr, &__state->c__1, &__state->c__2, " ", dkey, &__state->c__0,
+	     &__state->c_false, (ftnlen)1)) {
 
 /*        The smallest entry of the column is greater than */
 /*        the input value, so none of the entries */
@@ -687,15 +689,15 @@ static zzeklled_state_t* get_zzeklled_state() {
 
 	*prvloc = 0;
 	*prvptr = 0;
-    } else if (zzekscmp_(&__state->c__4, handle, segdsc, coldsc, &endptr, &
-	    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, &
-	    __state->c_false, (ftnlen)1)) {
+    } else if (zzekscmp_(__global_state, &__state->c__4, handle, segdsc, 
+	    coldsc, &endptr, &__state->c__1, &__state->c__2, " ", dkey, &
+	    __state->c__0, &__state->c_false, (ftnlen)1)) {
 
 /*        The last element of the array is less than or equal to the */
 /*        input value. */
 
 	*prvloc = nrows;
-	zzekixlk_(handle, coldsc, prvloc, prvptr);
+	zzekixlk_(__global_state, handle, coldsc, prvloc, prvptr);
     } else {
 
 /*        The input value lies between some pair of column entries. */
@@ -708,10 +710,10 @@ static zzeklled_state_t* get_zzeklled_state() {
 /*           is halfway between BEGIN and END. */
 
 	    middle = (begin + end) / 2;
-	    zzekixlk_(handle, coldsc, &middle, &midptr);
-	    if (zzekscmp_(&__state->c__4, handle, segdsc, coldsc, &midptr, &
-		    __state->c__1, &__state->c__2, " ", dkey, &__state->c__0, 
-		    &__state->c_false, (ftnlen)1)) {
+	    zzekixlk_(__global_state, handle, coldsc, &middle, &midptr);
+	    if (zzekscmp_(__global_state, &__state->c__4, handle, segdsc, 
+		    coldsc, &midptr, &__state->c__1, &__state->c__2, " ", 
+		    dkey, &__state->c__0, &__state->c_false, (ftnlen)1)) {
 
 /*              The middle value is less than or equal to the input */
 /*              value. */
@@ -727,7 +729,7 @@ static zzeklled_state_t* get_zzeklled_state() {
 
 	}
 	*prvloc = begin;
-	zzekixlk_(handle, coldsc, prvloc, prvptr);
+	zzekixlk_(__global_state, handle, coldsc, prvloc, prvptr);
     }
     return 0;
 } /* zzeklled_ */

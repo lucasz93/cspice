@@ -8,26 +8,27 @@
 
 
 typedef int twovxf_state_t;
-static twovxf_state_t* get_twovxf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline twovxf_state_t* get_twovxf_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure TWOVXF ( Two states defining a frame transformation ) */
-/* Subroutine */ int twovxf_(doublereal *axdef, integer *indexa, doublereal *
-	plndef, integer *indexp, doublereal *xform)
+/* Subroutine */ int twovxf_(cspice_t* __global_state, doublereal *axdef, 
+	integer *indexa, doublereal *plndef, integer *indexp, doublereal *
+	xform)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int zztwovxf_(doublereal *, integer *, doublereal 
-	    *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zztwovxf_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, integer *, doublereal *);
     doublereal xi[36]	/* was [6][6] */;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int invstm_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int invstm_(cspice_t*, doublereal *, doublereal *)
+	    ;
 
 
     /* Module state */
-    twovxf_state_t* __state = get_twovxf_state();
+    twovxf_state_t* __state = get_twovxf_state(__global_state);
 /* $ Abstract */
 
 /*     Find the state transformation from a base frame to the */
@@ -325,20 +326,20 @@ static twovxf_state_t* get_twovxf_state() {
 
 /*     Standard SPICE error handling */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("TWOVXF", (ftnlen)6);
+    chkin_(__global_state, "TWOVXF", (ftnlen)6);
 
 /*     Get the matrix XI that transforms states from the frame */
 /*     defined by AXDEF and PLNDEF to their base frame. */
 
-    zztwovxf_(axdef, indexa, plndef, indexp, xi);
+    zztwovxf_(__global_state, axdef, indexa, plndef, indexp, xi);
 
 /*     Invert XI. */
 
-    invstm_(xi, xform);
-    chkout_("TWOVXF", (ftnlen)6);
+    invstm_(__global_state, xi, xform);
+    chkout_(__global_state, "TWOVXF", (ftnlen)6);
     return 0;
 } /* twovxf_ */
 

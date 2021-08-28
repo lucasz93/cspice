@@ -3,12 +3,11 @@
 #include "__cspice_state.h"
 
 #ifdef KR_headers
-c_due(a) cilist *a;
+c_due(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-c_due(cilist *a)
+c_due(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if(!f2c->f__init) f_init();
 	f2c->f__sequential=f2c->f__formatted=f2c->f__recpos=0;
 	f2c->f__external=1;
@@ -28,36 +27,33 @@ c_due(cilist *a)
 	return(0);
 }
 #ifdef KR_headers
-integer s_rdue(a) cilist *a;
+integer s_rdue(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-integer s_rdue(cilist *a)
+integer s_rdue(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 	f2c->f__reading=1;
-	if(n=c_due(a)) return(n);
+	if(n=c_due(f2c, a)) return(n);
 	if(f2c->f__curunit->uwrt && f__nowreading(f2c->f__curunit))
 		err(a->cierr,errno,"read start");
 	return(0);
 }
 #ifdef KR_headers
-integer s_wdue(a) cilist *a;
+integer s_wdue(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-integer s_wdue(cilist *a)
+integer s_wdue(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 	f2c->f__reading=0;
-	if(n=c_due(a)) return(n);
+	if(n=c_due(f2c, a)) return(n);
 	if(f2c->f__curunit->uwrt != 1 && f__nowwriting(f2c->f__curunit))
 		err(a->cierr,errno,"write start");
 	return(0);
 }
-integer e_rdue(Void)
+integer e_rdue(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if(f2c->f__curunit->url==1 || f2c->f__recpos==f2c->f__curunit->url)
 		return(0);
 	fseek(f2c->f__cf,(long)(f2c->f__curunit->url-f2c->f__recpos),SEEK_CUR);
@@ -65,12 +61,11 @@ integer e_rdue(Void)
 		err(f2c->f__elist->cierr,200,"syserr");
 	return(0);
 }
-integer e_wdue(Void)
+integer e_wdue(f2c_state_t *f2c)
 {
 #ifdef ALWAYS_FLUSH
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	if (fflush(f2c->f__cf))
 		err(f2c->f__elist->cierr,errno,"write end");
 #endif
-	return(e_rdue());
+	return(e_rdue(f2c));
 }

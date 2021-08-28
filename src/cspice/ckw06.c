@@ -8,8 +8,7 @@
 
 
 extern ckw06_init_t __ckw06_init;
-static ckw06_state_t* get_ckw06_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckw06_state_t* get_ckw06_state(cspice_t* state) {
 	if (!state->ckw06)
 		state->ckw06 = __cspice_allocate_module(sizeof(ckw06_state_t),
 	 &__ckw06_init, sizeof(__ckw06_init));
@@ -18,11 +17,12 @@ static ckw06_state_t* get_ckw06_state() {
 }
 
 /* $Procedure      CKW06 ( CK, Write segment, type 6 ) */
-/* Subroutine */ int ckw06_(integer *handle, integer *inst, char *ref, 
-	logical *avflag, doublereal *first, doublereal *last, char *segid, 
-	integer *nmini, integer *npkts, integer *subtps, integer *degres, 
-	doublereal *packts, doublereal *rates, doublereal *sclkdp, doublereal 
-	*ivlbds, logical *sellst, ftnlen ref_len, ftnlen segid_len)
+/* Subroutine */ int ckw06_(cspice_t* __global_state, integer *handle, 
+	integer *inst, char *ref, logical *avflag, doublereal *first, 
+	doublereal *last, char *segid, integer *nmini, integer *npkts, 
+	integer *subtps, integer *degres, doublereal *packts, doublereal *
+	rates, doublereal *sclkdp, doublereal *ivlbds, logical *sellst, 
+	ftnlen ref_len, ftnlen segid_len)
 {
     /* Initialized data */
 
@@ -32,62 +32,66 @@ static ckw06_state_t* get_ckw06_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer addr__;
     doublereal qneg[4];
     integer isel;
-    extern logical even_(integer *);
+    extern logical even_(cspice_t*, integer *);
     integer ndir;
     integer i__;
     integer j;
     integer k;
     doublereal q[4];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer bepix;
     integer eepix;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    doublereal prevq[4];
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    doublereal dc[2];
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
 	    ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    doublereal prevq[4];
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    doublereal dc[2];
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
     integer ic[6];
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafena_(void);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafena_(cspice_t*);
     integer segbeg;
     integer chrcod;
     integer refcod;
     integer segend;
     integer pktbeg;
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern integer lastnb_(char *, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer pktend;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern doublereal vdistg_(doublereal *, doublereal *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int vminug_(doublereal *, integer *, doublereal *)
-	    ;
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern doublereal vdistg_(cspice_t*, doublereal *, doublereal *, integer *
+	    );
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int vminug_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer minisz;
-    extern logical vzerog_(doublereal *, integer *);
-    extern logical return_(void);
+    extern logical vzerog_(cspice_t*, doublereal *, integer *);
+    extern logical return_(cspice_t*);
     integer pktdsz;
     integer winsiz;
     integer pktsiz;
     integer subtyp;
-    extern logical odd_(integer *);
+    extern logical odd_(cspice_t*, integer *);
 
 
     /* Module state */
-    ckw06_state_t* __state = get_ckw06_state();
+    ckw06_state_t* __state = get_ckw06_state(__global_state);
 /* $ Abstract */
 
 /*     Write a type 6 segment to a CK file. */
@@ -1108,20 +1112,20 @@ static ckw06_state_t* get_ckw06_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKW06", (ftnlen)5);
+    chkin_(__global_state, "CKW06", (ftnlen)5);
 
 /*     Start with a parameter compatibility check. */
 
     if (FALSE_) {
-	setmsg_("CK type 6 record size is #, but CKPFS record size is #.is #."
-		, (ftnlen)60);
-	errint_("#", &__state->c__196, (ftnlen)1);
-	errint_("#", &__state->c__340, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("CKW06", (ftnlen)5);
+	setmsg_(__global_state, "CK type 6 record size is #, but CKPFS recor"
+		"d size is #.is #.", (ftnlen)60);
+	errint_(__global_state, "#", &__state->c__196, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__340, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "CKW06", (ftnlen)5);
 	return 0;
     }
 
@@ -1129,47 +1133,48 @@ static ckw06_state_t* get_ckw06_state() {
 /*     correctly ordered. */
 
     if (*last < *first) {
-	setmsg_("Segment start time is #; stop time is #; bounds must be in "
-		"nondecreasing order.", (ftnlen)79);
-	errdp_("#", first, (ftnlen)1);
-	errdp_("#", last, (ftnlen)1);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("CKW06", (ftnlen)5);
+	setmsg_(__global_state, "Segment start time is #; stop time is #; bo"
+		"unds must be in nondecreasing order.", (ftnlen)79);
+	errdp_(__global_state, "#", first, (ftnlen)1);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "CKW06", (ftnlen)5);
 	return 0;
     }
 
 /*     Get the NAIF integer code for the reference frame. */
 
-    namfrm_(ref, &refcod, ref_len);
+    namfrm_(__global_state, ref, &refcod, ref_len);
     if (refcod == 0) {
-	setmsg_("The reference frame # is not supported.", (ftnlen)39);
-	errch_("#", ref, (ftnlen)1, ref_len);
-	sigerr_("SPICE(INVALIDREFFRAME)", (ftnlen)22);
-	chkout_("CKW06", (ftnlen)5);
+	setmsg_(__global_state, "The reference frame # is not supported.", (
+		ftnlen)39);
+	errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	sigerr_(__global_state, "SPICE(INVALIDREFFRAME)", (ftnlen)22);
+	chkout_(__global_state, "CKW06", (ftnlen)5);
 	return 0;
     }
 
 /*     Check to see if the segment identifier is too long. */
 
-    if (lastnb_(segid, segid_len) > 40) {
-	setmsg_("Segment identifier contains more than 40 characters.", (
-		ftnlen)52);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("CKW06", (ftnlen)5);
+    if (lastnb_(__global_state, segid, segid_len) > 40) {
+	setmsg_(__global_state, "Segment identifier contains more than 40 ch"
+		"aracters.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "CKW06", (ftnlen)5);
 	return 0;
     }
 
 /*     Now check that all the characters in the segment identifier */
 /*     can be printed. */
 
-    i__1 = lastnb_(segid, segid_len);
+    i__1 = lastnb_(__global_state, segid, segid_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	chrcod = *(unsigned char *)&segid[i__ - 1];
 	if (chrcod < 32 || chrcod > 126) {
-	    setmsg_("The segment identifier contains nonprintable characters",
-		     (ftnlen)55);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("CKW06", (ftnlen)5);
+	    setmsg_(__global_state, "The segment identifier contains nonprin"
+		    "table characters", (ftnlen)55);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "CKW06", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -1177,11 +1182,11 @@ static ckw06_state_t* get_ckw06_state() {
 /*     The mini-segment count must be positive. */
 
     if (*nmini < 1) {
-	setmsg_("Mini-segment count was #; this count must be positive.", (
-		ftnlen)54);
-	errint_("#", nmini, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("CKW06", (ftnlen)5);
+	setmsg_(__global_state, "Mini-segment count was #; this count must b"
+		"e positive.", (ftnlen)54);
+	errint_(__global_state, "#", nmini, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "CKW06", (ftnlen)5);
 	return 0;
     }
 
@@ -1193,18 +1198,19 @@ static ckw06_state_t* get_ckw06_state() {
     i__1 = *nmini;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (ivlbds[i__ - 1] >= ivlbds[i__]) {
-	    setmsg_("Mini-segment interval bounds at indices # and # are # a"
-		    "nd # respectively. The difference is #. The bounds are r"
-		    "equired to be strictly increasing.", (ftnlen)145);
-	    errint_("#", &i__, (ftnlen)1);
+	    setmsg_(__global_state, "Mini-segment interval bounds at indices"
+		    " # and # are # and # respectively. The difference is #. "
+		    "The bounds are required to be strictly increasing.", (
+		    ftnlen)145);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
 	    i__2 = i__ + 1;
-	    errint_("#", &i__2, (ftnlen)1);
-	    errdp_("#", &ivlbds[i__ - 1], (ftnlen)1);
-	    errdp_("#", &ivlbds[i__], (ftnlen)1);
+	    errint_(__global_state, "#", &i__2, (ftnlen)1);
+	    errdp_(__global_state, "#", &ivlbds[i__ - 1], (ftnlen)1);
+	    errdp_(__global_state, "#", &ivlbds[i__], (ftnlen)1);
 	    d__1 = ivlbds[i__] - ivlbds[i__ - 1];
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
-	    chkout_("CKW06", (ftnlen)5);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
+	    chkout_(__global_state, "CKW06", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -1213,17 +1219,18 @@ static ckw06_state_t* get_ckw06_state() {
 /*     beyond the span of the interval bounds. */
 
     if (*first < ivlbds[0] || *last > ivlbds[*nmini]) {
-	setmsg_("First mini-segment interval start time is #; segment start "
-		"time is #; segment stop time is #; last mini-segment interva"
-		"l stop time is #. This sequence of times is required to be n"
-		"on-decreasing: segment coverage must be contained within the"
-		" union of the mini-segment intervals.", (ftnlen)276);
-	errdp_("#", ivlbds, (ftnlen)1);
-	errdp_("#", first, (ftnlen)1);
-	errdp_("#", last, (ftnlen)1);
-	errdp_("#", &ivlbds[*nmini], (ftnlen)1);
-	sigerr_("SPICE(COVERAGEGAP)", (ftnlen)18);
-	chkout_("CKW06", (ftnlen)5);
+	setmsg_(__global_state, "First mini-segment interval start time is #"
+		"; segment start time is #; segment stop time is #; last mini"
+		"-segment interval stop time is #. This sequence of times is "
+		"required to be non-decreasing: segment coverage must be cont"
+		"ained within the union of the mini-segment intervals.", (
+		ftnlen)276);
+	errdp_(__global_state, "#", ivlbds, (ftnlen)1);
+	errdp_(__global_state, "#", first, (ftnlen)1);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	errdp_(__global_state, "#", &ivlbds[*nmini], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(COVERAGEGAP)", (ftnlen)18);
+	chkout_(__global_state, "CKW06", (ftnlen)5);
 	return 0;
     }
 
@@ -1250,13 +1257,13 @@ static ckw06_state_t* get_ckw06_state() {
 /*        Check the number of packets. */
 
 	if (npkts[i__ - 1] < 2) {
-	    setmsg_("At least 2 packets are required for CK type 6. Number o"
-		    "f packets supplied was # in mini-segment at index #.", (
-		    ftnlen)107);
-	    errint_("#", &npkts[i__ - 1], (ftnlen)1);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(TOOFEWPACKETS)", (ftnlen)20);
-	    chkout_("CKW06", (ftnlen)5);
+	    setmsg_(__global_state, "At least 2 packets are required for CK "
+		    "type 6. Number of packets supplied was # in mini-segment"
+		    " at index #.", (ftnlen)107);
+	    errint_(__global_state, "#", &npkts[i__ - 1], (ftnlen)1);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(TOOFEWPACKETS)", (ftnlen)20);
+	    chkout_(__global_state, "CKW06", (ftnlen)5);
 	    return 0;
 	}
 
@@ -1266,17 +1273,18 @@ static ckw06_state_t* get_ckw06_state() {
 
 	subtyp = subtps[i__ - 1];
 	if (subtyp < 0 || subtyp > 3) {
-	    setmsg_("Unexpected CK type 6 subtype # found in mini-segment #.",
-		     (ftnlen)55);
-	    errint_("#", &subtyp, (ftnlen)1);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDSUBTYPE)", (ftnlen)21);
-	    chkout_("CKW06", (ftnlen)5);
+	    setmsg_(__global_state, "Unexpected CK type 6 subtype # found in"
+		    " mini-segment #.", (ftnlen)55);
+	    errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDSUBTYPE)", (ftnlen)21);
+	    chkout_(__global_state, "CKW06", (ftnlen)5);
 	    return 0;
 	}
 	pktsiz = __state->pktszs[(i__2 = subtyp) < 4 && 0 <= i__2 ? i__2 : 
-		s_rnge("pktszs", i__2, "ckw06_", (ftnlen)1024)];
-	if (odd_(&subtyp)) {
+		s_rnge(&__global_state->f2c, "pktszs", i__2, "ckw06_", (
+		ftnlen)1024)];
+	if (odd_(__global_state, &subtyp)) {
 	    winsiz = degres[i__ - 1] + 1;
 	} else {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
@@ -1285,12 +1293,12 @@ static ckw06_state_t* get_ckw06_state() {
 /*        Make sure the SCLK rates in this mini-segment are positive. */
 
 	if (rates[i__ - 1] <= 0.) {
-	    setmsg_("SCLK rate at index # was #; rate must be positive.", (
-		    ftnlen)50);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &rates[i__ - 1], (ftnlen)1);
-	    sigerr_("SPICE(INVALIDSCLKRATE)", (ftnlen)22);
-	    chkout_("CKW06", (ftnlen)5);
+	    setmsg_(__global_state, "SCLK rate at index # was #; rate must b"
+		    "e positive.", (ftnlen)50);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &rates[i__ - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDSCLKRATE)", (ftnlen)22);
+	    chkout_(__global_state, "CKW06", (ftnlen)5);
 	    return 0;
 	}
 
@@ -1303,30 +1311,32 @@ static ckw06_state_t* get_ckw06_state() {
 /*        in range. */
 
 	if (degres[i__ - 1] < 1 || degres[i__ - 1] > 23) {
-	    setmsg_("The interpolating polynomials of mini-segment # have de"
-		    "gree #; the valid degree range is [1, #]", (ftnlen)95);
-	    errint_("#", &i__, (ftnlen)1);
-	    errint_("#", &degres[i__ - 1], (ftnlen)1);
-	    errint_("#", &__state->c__23, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
-	    chkout_("CKW06", (ftnlen)5);
+	    setmsg_(__global_state, "The interpolating polynomials of mini-s"
+		    "egment # have degree #; the valid degree range is [1, #]",
+		     (ftnlen)95);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errint_(__global_state, "#", &degres[i__ - 1], (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c__23, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDDEGREE)", (ftnlen)20);
+	    chkout_(__global_state, "CKW06", (ftnlen)5);
 	    return 0;
 	}
 
 /*        Make sure that the window size is even. */
 
-	if (odd_(&winsiz)) {
-	    setmsg_("The interpolating polynomials of mini-segment # have wi"
-		    "ndow size # and degree # for CK type 6. The mini-segment"
-		    " subtype is #. The degree must be equivalent to 3 mod 4 "
-		    "for subtypes 0 or 2 (Hermite interpolation) and odd for "
-		    "subtypes 1 or 3 (Lagrange interpolation).", (ftnlen)264);
-	    errint_("#", &i__, (ftnlen)1);
-	    errint_("#", &winsiz, (ftnlen)1);
-	    errint_("#", &degres[i__ - 1], (ftnlen)1);
-	    errint_("#", &subtps[i__ - 1], (ftnlen)1);
-	    sigerr_("SPICE(BADWINDOWSIZE)", (ftnlen)20);
-	    chkout_("CKW06", (ftnlen)5);
+	if (odd_(__global_state, &winsiz)) {
+	    setmsg_(__global_state, "The interpolating polynomials of mini-s"
+		    "egment # have window size # and degree # for CK type 6. "
+		    "The mini-segment subtype is #. The degree must be equiva"
+		    "lent to 3 mod 4 for subtypes 0 or 2 (Hermite interpolati"
+		    "on) and odd for subtypes 1 or 3 (Lagrange interpolation)."
+		    , (ftnlen)264);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errint_(__global_state, "#", &winsiz, (ftnlen)1);
+	    errint_(__global_state, "#", &degres[i__ - 1], (ftnlen)1);
+	    errint_(__global_state, "#", &subtps[i__ - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADWINDOWSIZE)", (ftnlen)20);
+	    chkout_(__global_state, "CKW06", (ftnlen)5);
 	    return 0;
 	}
 
@@ -1343,16 +1353,17 @@ static ckw06_state_t* get_ckw06_state() {
 	for (j = 1; j <= i__2; ++j) {
 	    k = bepix + j - 1;
 	    if (sclkdp[k - 1] >= sclkdp[k]) {
-		setmsg_("In mini-segment #, epoch # having mini-segment-rela"
-			"tive index # and array-relative index # is greater t"
-			"han or equal to its successor #.", (ftnlen)135);
-		errint_("#", &i__, (ftnlen)1);
-		errdp_("#", &sclkdp[k - 1], (ftnlen)1);
-		errint_("#", &j, (ftnlen)1);
-		errint_("#", &k, (ftnlen)1);
-		errdp_("#", &sclkdp[k], (ftnlen)1);
-		sigerr_("SPICE(TIMESOUTOFORDER)", (ftnlen)22);
-		chkout_("CKW06", (ftnlen)5);
+		setmsg_(__global_state, "In mini-segment #, epoch # having m"
+			"ini-segment-relative index # and array-relative inde"
+			"x # is greater than or equal to its successor #.", (
+			ftnlen)135);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errdp_(__global_state, "#", &sclkdp[k - 1], (ftnlen)1);
+		errint_(__global_state, "#", &j, (ftnlen)1);
+		errint_(__global_state, "#", &k, (ftnlen)1);
+		errdp_(__global_state, "#", &sclkdp[k], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(TIMESOUTOFORDER)", (ftnlen)22);
+		chkout_(__global_state, "CKW06", (ftnlen)5);
 		return 0;
 	    }
 	}
@@ -1363,22 +1374,22 @@ static ckw06_state_t* get_ckw06_state() {
 /*        gaps are allowed at the right ends of mini-segment intervals. */
 
 	if (sclkdp[bepix - 1] > ivlbds[i__ - 1]) {
-	    setmsg_("Mini-segment interval # start time # precedes mini-segm"
-		    "ent's first epoch #.", (ftnlen)75);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &ivlbds[i__ - 1], (ftnlen)1);
-	    errdp_("#", &sclkdp[bepix - 1], (ftnlen)1);
-	    sigerr_("SPICE(BOUNDSDISAGREE)", (ftnlen)21);
-	    chkout_("CKW06", (ftnlen)5);
+	    setmsg_(__global_state, "Mini-segment interval # start time # pr"
+		    "ecedes mini-segment's first epoch #.", (ftnlen)75);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &ivlbds[i__ - 1], (ftnlen)1);
+	    errdp_(__global_state, "#", &sclkdp[bepix - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDSDISAGREE)", (ftnlen)21);
+	    chkout_(__global_state, "CKW06", (ftnlen)5);
 	    return 0;
 	} else if (sclkdp[eepix - 1] < ivlbds[i__ - 1]) {
-	    setmsg_("Mini-segment interval # start time # follows mini-segme"
-		    "nt's last epoch #.", (ftnlen)73);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &ivlbds[i__ - 1], (ftnlen)1);
-	    errdp_("#", &sclkdp[eepix - 1], (ftnlen)1);
-	    sigerr_("SPICE(BOUNDSDISAGREE)", (ftnlen)21);
-	    chkout_("CKW06", (ftnlen)5);
+	    setmsg_(__global_state, "Mini-segment interval # start time # fo"
+		    "llows mini-segment's last epoch #.", (ftnlen)73);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &ivlbds[i__ - 1], (ftnlen)1);
+	    errdp_(__global_state, "#", &sclkdp[eepix - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDSDISAGREE)", (ftnlen)21);
+	    chkout_(__global_state, "CKW06", (ftnlen)5);
 	    return 0;
 	}
 
@@ -1395,13 +1406,14 @@ static ckw06_state_t* get_ckw06_state() {
 /*           shape of the packet array is not known at compile time. */
 
 	    addr__ = pktbeg + pktsiz * (j - 1);
-	    if (vzerog_(&packts[addr__ - 1], &__state->c__4)) {
-		setmsg_("The quaternion in packet # within mini-segment # ha"
-			"s magnitude zero.", (ftnlen)68);
-		errint_("#", &j, (ftnlen)1);
-		errint_("#", &i__, (ftnlen)1);
-		sigerr_("SPICE(ZEROQUATERNION)", (ftnlen)21);
-		chkout_("CKW06", (ftnlen)5);
+	    if (vzerog_(__global_state, &packts[addr__ - 1], &__state->c__4)) 
+		    {
+		setmsg_(__global_state, "The quaternion in packet # within m"
+			"ini-segment # has magnitude zero.", (ftnlen)68);
+		errint_(__global_state, "#", &j, (ftnlen)1);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(ZEROQUATERNION)", (ftnlen)21);
+		chkout_(__global_state, "CKW06", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1409,30 +1421,32 @@ static ckw06_state_t* get_ckw06_state() {
 /*           than its negative to its predecessor in the quaternion */
 /*           sequence. */
 
-	    if (j > 1 && even_(&subtyp)) {
+	    if (j > 1 && even_(__global_state, &subtyp)) {
 
 /*              Compare the distance between the current quaternion */
 /*              and its predecessor vs the distance between the */
 /*              negative of the current quaternion and its predecessor. */
 
-		moved_(&packts[addr__ - 1], &__state->c__4, q);
-		moved_(&packts[addr__ - pktsiz - 1], &__state->c__4, prevq);
-		vminug_(q, &__state->c__4, qneg);
-		if (vdistg_(prevq, qneg, &__state->c__4) < vdistg_(prevq, q, &
-			__state->c__4)) {
-		    setmsg_("The quaternion in packet # within mini-segment "
-			    "# is farther than its negative from its predeces"
-			    "sor at index #. This makes the quaternion sequen"
-			    "ce unsuitable for Hermite interpolation. The qua"
-			    "ternions, and if applicable, their derivatives, "
-			    "must be adjusted before they are passed to this "
-			    "routine.", (ftnlen)295);
-		    errint_("#", &j, (ftnlen)1);
-		    errint_("#", &i__, (ftnlen)1);
+		moved_(__global_state, &packts[addr__ - 1], &__state->c__4, q)
+			;
+		moved_(__global_state, &packts[addr__ - pktsiz - 1], &
+			__state->c__4, prevq);
+		vminug_(__global_state, q, &__state->c__4, qneg);
+		if (vdistg_(__global_state, prevq, qneg, &__state->c__4) < 
+			vdistg_(__global_state, prevq, q, &__state->c__4)) {
+		    setmsg_(__global_state, "The quaternion in packet # with"
+			    "in mini-segment # is farther than its negative f"
+			    "rom its predecessor at index #. This makes the q"
+			    "uaternion sequence unsuitable for Hermite interp"
+			    "olation. The quaternions, and if applicable, the"
+			    "ir derivatives, must be adjusted before they are"
+			    " passed to this routine.", (ftnlen)295);
+		    errint_(__global_state, "#", &j, (ftnlen)1);
+		    errint_(__global_state, "#", &i__, (ftnlen)1);
 		    i__3 = j - 1;
-		    errint_("#", &i__3, (ftnlen)1);
-		    sigerr_("SPICE(BADQUATSIGN)", (ftnlen)18);
-		    chkout_("CKW06", (ftnlen)5);
+		    errint_(__global_state, "#", &i__3, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADQUATSIGN)", (ftnlen)18);
+		    chkout_(__global_state, "CKW06", (ftnlen)5);
 		    return 0;
 		}
 	    }
@@ -1541,13 +1555,13 @@ static ckw06_state_t* get_ckw06_state() {
     }
     dc[0] = *first;
     dc[1] = *last;
-    dafps_(&__state->c__2, &__state->c__6, dc, ic, descr);
+    dafps_(__global_state, &__state->c__2, &__state->c__6, dc, ic, descr);
 
 /*     Begin a new segment. */
 
-    dafbna_(handle, descr, segid, segid_len);
-    if (failed_()) {
-	chkout_("CKW06", (ftnlen)5);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKW06", (ftnlen)5);
 	return 0;
     }
 
@@ -1568,8 +1582,9 @@ static ckw06_state_t* get_ckw06_state() {
 
 	subtyp = subtps[i__ - 1];
 	pktsiz = __state->pktszs[(i__2 = subtyp) < 4 && 0 <= i__2 ? i__2 : 
-		s_rnge("pktszs", i__2, "ckw06_", (ftnlen)1367)];
-	if (odd_(&subtyp)) {
+		s_rnge(&__global_state->f2c, "pktszs", i__2, "ckw06_", (
+		ftnlen)1367)];
+	if (odd_(__global_state, &subtyp)) {
 	    winsiz = degres[i__ - 1] + 1;
 	} else {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
@@ -1588,13 +1603,13 @@ static ckw06_state_t* get_ckw06_state() {
 /*        current mini-segment to the file. Start with the */
 /*        packet data. */
 
-	dafada_(&packts[pktbeg - 1], &pktdsz);
+	dafada_(__global_state, &packts[pktbeg - 1], &pktdsz);
 
 /*        Write the epochs for this mini-segment. */
 
 	bepix = eepix + 1;
 	eepix = bepix - 1 + npkts[i__ - 1];
-	dafada_(&sclkdp[bepix - 1], &npkts[i__ - 1]);
+	dafada_(__global_state, &sclkdp[bepix - 1], &npkts[i__ - 1]);
 
 /*        Compute the number of epoch directories for the */
 /*        current mini-segment. */
@@ -1606,21 +1621,21 @@ static ckw06_state_t* get_ckw06_state() {
 	i__2 = ndir;
 	for (j = 1; j <= i__2; ++j) {
 	    k = bepix - 1 + j * 100;
-	    dafada_(&sclkdp[k - 1], &__state->c__1);
+	    dafada_(__global_state, &sclkdp[k - 1], &__state->c__1);
 	}
 
 /*        Write the mini-segment's SCLK rate, subtype, window size, and */
 /*        packet count to the segment. */
 
-	dafada_(&rates[i__ - 1], &__state->c__1);
+	dafada_(__global_state, &rates[i__ - 1], &__state->c__1);
 	d__1 = (doublereal) subtps[i__ - 1];
-	dafada_(&d__1, &__state->c__1);
+	dafada_(__global_state, &d__1, &__state->c__1);
 	d__1 = (doublereal) winsiz;
-	dafada_(&d__1, &__state->c__1);
+	dafada_(__global_state, &d__1, &__state->c__1);
 	d__1 = (doublereal) npkts[i__ - 1];
-	dafada_(&d__1, &__state->c__1);
-	if (failed_()) {
-	    chkout_("CKW06", (ftnlen)5);
+	dafada_(__global_state, &d__1, &__state->c__1);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKW06", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -1630,7 +1645,7 @@ static ckw06_state_t* get_ckw06_state() {
 /*     Next write the mini-segment interval bounds. */
 
     i__1 = *nmini + 1;
-    dafada_(ivlbds, &i__1);
+    dafada_(__global_state, ivlbds, &i__1);
 
 /*     Create and write directories for the interval */
 /*     bounds. */
@@ -1641,7 +1656,7 @@ static ckw06_state_t* get_ckw06_state() {
     ndir = *nmini / 100;
     i__1 = ndir;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&ivlbds[i__ * 100 - 1], &__state->c__1);
+	dafada_(__global_state, &ivlbds[i__ * 100 - 1], &__state->c__1);
     }
 
 /*     Now we compute and write the start/stop pointers */
@@ -1661,7 +1676,8 @@ static ckw06_state_t* get_ckw06_state() {
 /*        used as an array index. */
 
 	pktsiz = __state->pktszs[(i__2 = subtps[i__ - 1]) < 4 && 0 <= i__2 ? 
-		i__2 : s_rnge("pktszs", i__2, "ckw06_", (ftnlen)1472)];
+		i__2 : s_rnge(&__global_state->f2c, "pktszs", i__2, "ckw06_", 
+		(ftnlen)1472)];
 
 /*        In order to compute the end pointer of the current */
 /*        mini-segment, we must compute the size, in terms */
@@ -1688,14 +1704,14 @@ static ckw06_state_t* get_ckw06_state() {
 /*        by 1, will be written. */
 
 	d__1 = (doublereal) segbeg;
-	dafada_(&d__1, &__state->c__1);
+	dafada_(__global_state, &d__1, &__state->c__1);
     }
 
 /*     Write the last mini-segment end pointer, incremented by one. */
 /*     SEGEND was computed on the last iteration of the above loop. */
 
     d__1 = (doublereal) (segend + 1);
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
 
 /*     Write out the interval selection flag. The input */
 /*     boolean value is represented by a numeric constant. */
@@ -1706,17 +1722,17 @@ static ckw06_state_t* get_ckw06_state() {
 	isel = -1;
     }
     d__1 = (doublereal) isel;
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
 
 /*     Write the mini-segment/mini-segment interval count. */
 
     d__1 = (doublereal) (*nmini);
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
 
 /*     End the segment. */
 
-    dafena_();
-    chkout_("CKW06", (ftnlen)5);
+    dafena_(__global_state);
+    chkout_(__global_state, "CKW06", (ftnlen)5);
     return 0;
 } /* ckw06_ */
 

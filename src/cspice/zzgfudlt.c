@@ -8,8 +8,7 @@
 
 
 extern zzgfudlt_init_t __zzgfudlt_init;
-static zzgfudlt_state_t* get_zzgfudlt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfudlt_state_t* get_zzgfudlt_state(cspice_t* state) {
 	if (!state->zzgfudlt)
 		state->zzgfudlt = __cspice_allocate_module(sizeof(
 	zzgfudlt_state_t), &__zzgfudlt_init, sizeof(__zzgfudlt_init));
@@ -18,23 +17,24 @@ static zzgfudlt_state_t* get_zzgfudlt_state() {
 }
 
 /* $Procedure ZZGFUDLT ( Private --- GF, scalar function < ref value ) */
-/* Subroutine */ int zzgfudlt_(S_fp udfunc, doublereal *et, logical *isless)
+/* Subroutine */ int zzgfudlt_(cspice_t* __global_state, S_fp udfunc, 
+	doublereal *et, logical *isless)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal udval;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     logical ok;
     doublereal refval;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
-	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzholdd_(cspice_t*, integer *, integer *, 
+	    logical *, doublereal *);
 
 
     /* Module state */
-    zzgfudlt_state_t* __state = get_zzgfudlt_state();
+    zzgfudlt_state_t* __state = get_zzgfudlt_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -315,10 +315,10 @@ static zzgfudlt_state_t* get_zzgfudlt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFUDLT", (ftnlen)8);
+    chkin_(__global_state, "ZZGFUDLT", (ftnlen)8);
 
 /*     Default value of false for ISLESS. */
 
@@ -326,29 +326,30 @@ static zzgfudlt_state_t* get_zzgfudlt_state() {
 
 /*     Call the routine, return the scalar value corresponding to ET. */
 
-    (*udfunc)(et, &udval);
+    (*udfunc)(__global_state, et, &udval);
 
 /*     Check for an error, return if found. */
 
-    if (failed_()) {
-	chkout_("ZZGFUDLT", (ftnlen)8);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFUDLT", (ftnlen)8);
 	return 0;
     }
 
 /*     Retrieve the stored reference value. Signal an error if a */
 /*     get call fails. */
 
-    zzholdd_(&__state->c_n1, &__state->c__2, &ok, &refval);
+    zzholdd_(__global_state, &__state->c_n1, &__state->c__2, &ok, &refval);
     if (! ok) {
-	setmsg_("ZZHOLDD GET failed. This indicates a logic error in the GF "
-		"code due either to a failure to store the GF reference value"
-		" or a post store reset of ZZHOLDD.", (ftnlen)153);
-	sigerr_("SPICE(ZZHOLDDGETFAILED)", (ftnlen)23);
-	chkout_("ZZGFUDLT", (ftnlen)8);
+	setmsg_(__global_state, "ZZHOLDD GET failed. This indicates a logic "
+		"error in the GF code due either to a failure to store the GF"
+		" reference value or a post store reset of ZZHOLDD.", (ftnlen)
+		153);
+	sigerr_(__global_state, "SPICE(ZZHOLDDGETFAILED)", (ftnlen)23);
+	chkout_(__global_state, "ZZGFUDLT", (ftnlen)8);
 	return 0;
     }
     *isless = udval < refval;
-    chkout_("ZZGFUDLT", (ftnlen)8);
+    chkout_(__global_state, "ZZGFUDLT", (ftnlen)8);
     return 0;
 } /* zzgfudlt_ */
 

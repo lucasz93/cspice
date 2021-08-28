@@ -8,8 +8,7 @@
 
 
 extern zzeksca_init_t __zzeksca_init;
-static zzeksca_state_t* get_zzeksca_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzeksca_state_t* get_zzeksca_state(cspice_t* state) {
 	if (!state->zzeksca)
 		state->zzeksca = __cspice_allocate_module(sizeof(
 	zzeksca_state_t), &__zzeksca_init, sizeof(__zzeksca_init));
@@ -18,8 +17,8 @@ static zzeksca_state_t* get_zzeksca_state() {
 }
 
 /* $Procedure      ZZEKSCA ( EK, scratch area ) */
-/* Subroutine */ int zzeksca_0_(int n__, integer *n, integer *beg, integer *
-	end, integer *idata, integer *top)
+/* Subroutine */ int zzeksca_0_(cspice_t* __global_state, int n__, integer *n,
+	 integer *beg, integer *end, integer *idata, integer *top)
 {
     /* Initialized data */
 
@@ -28,31 +27,32 @@ static zzeksca_state_t* get_zzeksca_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasadi_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int dasllc_(integer *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int daswbr_(integer *);
-    extern /* Subroutine */ int dasops_(integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int daslla_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasllc_(cspice_t*, integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int daswbr_(cspice_t*, integer *);
+    extern /* Subroutine */ int dasops_(cspice_t*, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzeksca_state_t* __state = get_zzeksca_state();
+    zzeksca_state_t* __state = get_zzeksca_state(__global_state);
 /* $ Abstract */
 
 /*     Manage the EK scratch area. */
@@ -332,16 +332,16 @@ static zzeksca_state_t* get_zzeksca_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKSCA", (ftnlen)7);
+	chkin_(__global_state, "ZZEKSCA", (ftnlen)7);
     }
 
 /*     This routine should never be called directly. */
 
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZEKSCA", (ftnlen)7);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZEKSCA", (ftnlen)7);
     return 0;
 /* $Procedure    ZZEKSTOP  ( EK scratch area, stack top ) */
 
@@ -593,8 +593,8 @@ L_zzekspsh:
 
     if (__state->first) {
 	__state->first = FALSE_;
-	dasops_(&__state->scrhan);
-	if (failed_()) {
+	dasops_(__global_state, &__state->scrhan);
+	if (failed_(__global_state)) {
 	    return 0;
 	}
     }
@@ -614,8 +614,9 @@ L_zzekspsh:
 	i__1 = __state->numadd;
 	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	    __state->scrtch[(i__2 = __state->t + __state->i__ - 1) < 2500000 
-		    && 0 <= i__2 ? i__2 : s_rnge("scrtch", i__2, "zzeksca_", (
-		    ftnlen)624)] = idata[__state->i__ - 1];
+		    && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "scrt"
+		    "ch", i__2, "zzeksca_", (ftnlen)624)] = idata[__state->i__ 
+		    - 1];
 	}
 	__state->t += __state->numadd;
 	if (__state->numadd == *n) {
@@ -642,8 +643,8 @@ L_zzekspsh:
 /*     be written to addresses previously written to, and which */
 /*     part will be appended. */
 
-    daslla_(&__state->scrhan, &__state->lastc, &__state->lastd, &
-	    __state->lasti);
+    daslla_(__global_state, &__state->scrhan, &__state->lastc, &
+	    __state->lastd, &__state->lasti);
 
 /*     To simplify our arithmetic, we'll work with a variable RT */
 /*     that represents the stack top measured relative to the base */
@@ -661,8 +662,8 @@ L_zzekspsh:
 /* Computing MIN */
 	i__1 = __state->lasti, i__2 = __state->rt + __state->remain;
 	__state->e = min(i__1,i__2);
-	dasudi_(&__state->scrhan, &__state->b, &__state->e, &idata[
-		__state->start - 1]);
+	dasudi_(__global_state, &__state->scrhan, &__state->b, &__state->e, &
+		idata[__state->start - 1]);
 	__state->numadd = __state->e - __state->b + 1;
 	__state->start += __state->numadd;
 	__state->remain -= __state->numadd;
@@ -676,7 +677,8 @@ L_zzekspsh:
 /*     amount of data we've pushed so far..  The remaining data */
 /*     must be appended to the scratch DAS file. */
 
-    dasadi_(&__state->scrhan, &__state->remain, &idata[__state->start - 1]);
+    dasadi_(__global_state, &__state->scrhan, &__state->remain, &idata[
+	    __state->start - 1]);
     __state->t += __state->remain;
     return 0;
 /* $Procedure    ZZEKSPOP  ( EK scratch area, pop data ) */
@@ -813,8 +815,8 @@ L_zzekspop:
 
     if (__state->first) {
 	__state->first = FALSE_;
-	dasops_(&__state->scrhan);
-	if (failed_()) {
+	dasops_(__global_state, &__state->scrhan);
+	if (failed_(__global_state)) {
 	    return 0;
 	}
     }
@@ -822,25 +824,25 @@ L_zzekspop:
 /*     You can't pop a negative number of elements. */
 
     if (*n < 0) {
-	chkin_("ZZEKSPOP", (ftnlen)8);
-	setmsg_("Pop count must be non-negative; call requests popping # ele"
-		"ments.", (ftnlen)65);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKSPOP", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSPOP", (ftnlen)8);
+	setmsg_(__global_state, "Pop count must be non-negative; call reques"
+		"ts popping # elements.", (ftnlen)65);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKSPOP", (ftnlen)8);
 	return 0;
 
 /*     It's an error to try to pop more data than we have on the */
 /*     stack. */
 
     } else if (*n > __state->t) {
-	chkin_("ZZEKSPOP", (ftnlen)8);
-	setmsg_("EK stack pointer = #; call requests popping # items.", (
-		ftnlen)52);
-	errint_("#", &__state->t, (ftnlen)1);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKSPOP", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSPOP", (ftnlen)8);
+	setmsg_(__global_state, "EK stack pointer = #; call requests popping"
+		" # items.", (ftnlen)52);
+	errint_(__global_state, "#", &__state->t, (ftnlen)1);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKSPOP", (ftnlen)8);
 	return 0;
     }
 
@@ -854,8 +856,9 @@ L_zzekspop:
 	i__1 = __state->numrd;
 	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	    idata[__state->i__ - 1] = __state->scrtch[(i__2 = __state->base + 
-		    __state->i__ - 1) < 2500000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "scrtch", i__2, "zzeksca_", (ftnlen)895)];
+		    __state->i__ - 1) < 2500000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "scrtch", i__2, "zzeksca_", (ftnlen)
+		    895)];
 	}
 	if (__state->numrd == *n) {
 	    __state->t -= __state->numrd;
@@ -877,8 +880,8 @@ L_zzekspop:
     __state->rb = __state->base - 2500000;
     __state->b = __state->rb + 1;
     __state->e = __state->rb + __state->remain;
-    dasrdi_(&__state->scrhan, &__state->b, &__state->e, &idata[__state->start 
-	    - 1]);
+    dasrdi_(__global_state, &__state->scrhan, &__state->b, &__state->e, &
+	    idata[__state->start - 1]);
     __state->t -= *n;
     return 0;
 /* $Procedure    ZZEKSDEC  ( EK scratch area, decrement stack pointer ) */
@@ -1001,8 +1004,8 @@ L_zzeksdec:
 
     if (__state->first) {
 	__state->first = FALSE_;
-	dasops_(&__state->scrhan);
-	if (failed_()) {
+	dasops_(__global_state, &__state->scrhan);
+	if (failed_(__global_state)) {
 	    return 0;
 	}
     }
@@ -1010,25 +1013,25 @@ L_zzeksdec:
 /*     Catch non-positive decrement requests. */
 
     if (*n < 0) {
-	chkin_("ZZEKSDEC", (ftnlen)8);
-	setmsg_("Decrement value must be non-negative; call requests decreme"
-		"nt by #.", (ftnlen)67);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKSDEC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSDEC", (ftnlen)8);
+	setmsg_(__global_state, "Decrement value must be non-negative; call "
+		"requests decrement by #.", (ftnlen)67);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKSDEC", (ftnlen)8);
 	return 0;
 
 /*     It's an error to try to decrement the pointer by more than */
 /*     the current stack depth. */
 
     } else if (*n > __state->t) {
-	chkin_("ZZEKSDEC", (ftnlen)8);
-	setmsg_("EK stack pointer = #; call requests  decrement by #.", (
-		ftnlen)52);
-	errint_("#", &__state->t, (ftnlen)1);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKSDEC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSDEC", (ftnlen)8);
+	setmsg_(__global_state, "EK stack pointer = #; call requests  decrem"
+		"ent by #.", (ftnlen)52);
+	errint_(__global_state, "#", &__state->t, (ftnlen)1);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKSDEC", (ftnlen)8);
 	return 0;
     }
     __state->t -= *n;
@@ -1181,20 +1184,22 @@ L_zzeksupd:
 /*     Validate the addresses. */
 
     if (*beg < 1 || *beg > __state->t) {
-	chkin_("ZZEKSUPD", (ftnlen)8);
-	setmsg_("Start address BEG was #; valid range is 1:#", (ftnlen)43);
-	errint_("#", beg, (ftnlen)1);
-	errint_("#", &__state->t, (ftnlen)1);
-	sigerr_("SPICE(INVALIDADDRESS)", (ftnlen)21);
-	chkout_("ZZEKSUPD", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSUPD", (ftnlen)8);
+	setmsg_(__global_state, "Start address BEG was #; valid range is 1:#",
+		 (ftnlen)43);
+	errint_(__global_state, "#", beg, (ftnlen)1);
+	errint_(__global_state, "#", &__state->t, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDADDRESS)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKSUPD", (ftnlen)8);
 	return 0;
     } else if (*end < 1 || *end > __state->t) {
-	chkin_("ZZEKSUPD", (ftnlen)8);
-	setmsg_("End address END was #; valid range is 1:#", (ftnlen)41);
-	errint_("#", end, (ftnlen)1);
-	errint_("#", &__state->t, (ftnlen)1);
-	sigerr_("SPICE(INVALIDADDRESS)", (ftnlen)21);
-	chkout_("ZZEKSUPD", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSUPD", (ftnlen)8);
+	setmsg_(__global_state, "End address END was #; valid range is 1:#", (
+		ftnlen)41);
+	errint_(__global_state, "#", end, (ftnlen)1);
+	errint_(__global_state, "#", &__state->t, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDADDRESS)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKSUPD", (ftnlen)8);
 	return 0;
     } else if (*beg > *end) {
 	return 0;
@@ -1207,8 +1212,8 @@ L_zzeksupd:
 	i__1 = *end;
 	for (__state->i__ = *beg; __state->i__ <= i__1; ++__state->i__) {
 	    __state->scrtch[(i__2 = __state->i__ - 1) < 2500000 && 0 <= i__2 ?
-		     i__2 : s_rnge("scrtch", i__2, "zzeksca_", (ftnlen)1296)] 
-		    = idata[__state->i__ - *beg];
+		     i__2 : s_rnge(&__global_state->f2c, "scrtch", i__2, 
+		    "zzeksca_", (ftnlen)1296)] = idata[__state->i__ - *beg];
 	}
     } else if (*beg <= 2500000) {
 
@@ -1216,23 +1221,23 @@ L_zzeksupd:
 
 	for (__state->i__ = *beg; __state->i__ <= 2500000; ++__state->i__) {
 	    __state->scrtch[(i__1 = __state->i__ - 1) < 2500000 && 0 <= i__1 ?
-		     i__1 : s_rnge("scrtch", i__1, "zzeksca_", (ftnlen)1305)] 
-		    = idata[__state->i__ - *beg];
+		     i__1 : s_rnge(&__global_state->f2c, "scrtch", i__1, 
+		    "zzeksca_", (ftnlen)1305)] = idata[__state->i__ - *beg];
 	}
 
 /*        Now update the rest of the range, which is in the scratch */
 /*        DAS file. */
 
 	i__1 = *end - 2500000;
-	dasudi_(&__state->scrhan, &__state->c__1, &i__1, &idata[2500000 - *
-		beg + 1]);
+	dasudi_(__global_state, &__state->scrhan, &__state->c__1, &i__1, &
+		idata[2500000 - *beg + 1]);
     } else {
 
 /*        The whole range is in the DAS file. */
 
 	i__1 = *beg - 2500000;
 	i__2 = *end - 2500000;
-	dasudi_(&__state->scrhan, &i__1, &i__2, idata);
+	dasudi_(__global_state, &__state->scrhan, &i__1, &i__2, idata);
     }
     return 0;
 /* $Procedure    ZZEKSRD  ( EK scratch area, read ) */
@@ -1380,20 +1385,22 @@ L_zzeksrd:
 /*     Validate the addresses. */
 
     if (*beg < 1 || *beg > __state->t) {
-	chkin_("ZZEKSRD", (ftnlen)7);
-	setmsg_("Start address BEG was #; valid range is 1:#", (ftnlen)43);
-	errint_("#", beg, (ftnlen)1);
-	errint_("#", &__state->t, (ftnlen)1);
-	sigerr_("SPICE(INVALIDADDRESS)", (ftnlen)21);
-	chkout_("ZZEKSRD", (ftnlen)7);
+	chkin_(__global_state, "ZZEKSRD", (ftnlen)7);
+	setmsg_(__global_state, "Start address BEG was #; valid range is 1:#",
+		 (ftnlen)43);
+	errint_(__global_state, "#", beg, (ftnlen)1);
+	errint_(__global_state, "#", &__state->t, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDADDRESS)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKSRD", (ftnlen)7);
 	return 0;
     } else if (*end < 1 || *end > __state->t) {
-	chkin_("ZZEKSRD", (ftnlen)7);
-	setmsg_("End address END was #; valid range is 1:#", (ftnlen)41);
-	errint_("#", end, (ftnlen)1);
-	errint_("#", &__state->t, (ftnlen)1);
-	sigerr_("SPICE(INVALIDADDRESS)", (ftnlen)21);
-	chkout_("ZZEKSRD", (ftnlen)7);
+	chkin_(__global_state, "ZZEKSRD", (ftnlen)7);
+	setmsg_(__global_state, "End address END was #; valid range is 1:#", (
+		ftnlen)41);
+	errint_(__global_state, "#", end, (ftnlen)1);
+	errint_(__global_state, "#", &__state->t, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDADDRESS)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKSRD", (ftnlen)7);
 	return 0;
     } else if (*beg > *end) {
 	return 0;
@@ -1406,8 +1413,9 @@ L_zzeksrd:
 	i__1 = *end;
 	for (__state->i__ = *beg; __state->i__ <= i__1; ++__state->i__) {
 	    idata[__state->i__ - *beg] = __state->scrtch[(i__2 = __state->i__ 
-		    - 1) < 2500000 && 0 <= i__2 ? i__2 : s_rnge("scrtch", 
-		    i__2, "zzeksca_", (ftnlen)1512)];
+		    - 1) < 2500000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "scrtch", i__2, "zzeksca_", (ftnlen)
+		    1512)];
 	}
     } else if (*beg <= 2500000) {
 
@@ -1415,23 +1423,24 @@ L_zzeksrd:
 
 	for (__state->i__ = *beg; __state->i__ <= 2500000; ++__state->i__) {
 	    idata[__state->i__ - *beg] = __state->scrtch[(i__1 = __state->i__ 
-		    - 1) < 2500000 && 0 <= i__1 ? i__1 : s_rnge("scrtch", 
-		    i__1, "zzeksca_", (ftnlen)1521)];
+		    - 1) < 2500000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "scrtch", i__1, "zzeksca_", (ftnlen)
+		    1521)];
 	}
 
 /*        Now read the rest of the range, which is in the scratch */
 /*        DAS file. */
 
 	i__1 = *end - 2500000;
-	dasrdi_(&__state->scrhan, &__state->c__1, &i__1, &idata[2500000 - *
-		beg + 1]);
+	dasrdi_(__global_state, &__state->scrhan, &__state->c__1, &i__1, &
+		idata[2500000 - *beg + 1]);
     } else {
 
 /*        The whole range is in the DAS file. */
 
 	i__1 = *beg - 2500000;
 	i__2 = *end - 2500000;
-	dasrdi_(&__state->scrhan, &i__1, &i__2, idata);
+	dasrdi_(__global_state, &__state->scrhan, &i__1, &i__2, idata);
     }
     return 0;
 /* $Procedure    ZZEKSCLN  ( EK scratch area, clean up ) */
@@ -1547,7 +1556,7 @@ L_zzekscln:
 
 /*     Clean out the stack buffer. */
 
-    cleari_(&__state->c_b65, __state->scrtch);
+    cleari_(__global_state, &__state->c_b65, __state->scrtch);
     __state->t = 0;
 
 /*     If FIRST has been set to .FALSE., we've an open scratch DAS */
@@ -1558,11 +1567,11 @@ L_zzekscln:
 /*        Write out the buffered records belonging to the scratch file; */
 /*        this will cause them to be returned to the free list. */
 
-	daswbr_(&__state->scrhan);
+	daswbr_(__global_state, &__state->scrhan);
 
 /*        Dump the scratch DAS. */
 
-	dasllc_(&__state->scrhan);
+	dasllc_(__global_state, &__state->scrhan);
     }
 
 /*     Tell the system to re-initialize on the next pass. */
@@ -1571,45 +1580,49 @@ L_zzekscln:
     return 0;
 } /* zzeksca_ */
 
-/* Subroutine */ int zzeksca_(integer *n, integer *beg, integer *end, integer 
-	*idata, integer *top)
+/* Subroutine */ int zzeksca_(cspice_t* __global_state, integer *n, integer *
+	beg, integer *end, integer *idata, integer *top)
 {
     return zzeksca_0_(0, n, beg, end, idata, top);
     }
 
-/* Subroutine */ int zzekstop_(integer *top)
+/* Subroutine */ int zzekstop_(cspice_t* __global_state, integer *top)
 {
     return zzeksca_0_(1, (integer *)0, (integer *)0, (integer *)0, (integer *)
 	    0, top);
     }
 
-/* Subroutine */ int zzekspsh_(integer *n, integer *idata)
+/* Subroutine */ int zzekspsh_(cspice_t* __global_state, integer *n, integer *
+	idata)
 {
     return zzeksca_0_(2, n, (integer *)0, (integer *)0, idata, (integer *)0);
     }
 
-/* Subroutine */ int zzekspop_(integer *n, integer *idata)
+/* Subroutine */ int zzekspop_(cspice_t* __global_state, integer *n, integer *
+	idata)
 {
     return zzeksca_0_(3, n, (integer *)0, (integer *)0, idata, (integer *)0);
     }
 
-/* Subroutine */ int zzeksdec_(integer *n)
+/* Subroutine */ int zzeksdec_(cspice_t* __global_state, integer *n)
 {
     return zzeksca_0_(4, n, (integer *)0, (integer *)0, (integer *)0, (
 	    integer *)0);
     }
 
-/* Subroutine */ int zzeksupd_(integer *beg, integer *end, integer *idata)
+/* Subroutine */ int zzeksupd_(cspice_t* __global_state, integer *beg, 
+	integer *end, integer *idata)
 {
     return zzeksca_0_(5, (integer *)0, beg, end, idata, (integer *)0);
     }
 
-/* Subroutine */ int zzeksrd_(integer *beg, integer *end, integer *idata)
+/* Subroutine */ int zzeksrd_(cspice_t* __global_state, integer *beg, integer 
+	*end, integer *idata)
 {
     return zzeksca_0_(6, (integer *)0, beg, end, idata, (integer *)0);
     }
 
-/* Subroutine */ int zzekscln_(void)
+/* Subroutine */ int zzekscln_(cspice_t* __global_state)
 {
     return zzeksca_0_(7, (integer *)0, (integer *)0, (integer *)0, (integer *)
 	    0, (integer *)0);

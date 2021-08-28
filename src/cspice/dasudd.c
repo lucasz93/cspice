@@ -8,8 +8,7 @@
 
 
 extern dasudd_init_t __dasudd_init;
-static dasudd_state_t* get_dasudd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasudd_state_t* get_dasudd_state(cspice_t* state) {
 	if (!state->dasudd)
 		state->dasudd = __cspice_allocate_module(sizeof(
 	dasudd_state_t), &__dasudd_init, sizeof(__dasudd_init));
@@ -18,40 +17,40 @@ static dasudd_state_t* get_dasudd_state() {
 }
 
 /* $Procedure      DASUDD ( DAS, update data, double precision ) */
-/* Subroutine */ int dasudd_(integer *handle, integer *first, integer *last, 
-	doublereal *data)
+/* Subroutine */ int dasudd_(cspice_t* __global_state, integer *handle, 
+	integer *first, integer *last, doublereal *data)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer lastc;
     integer lastd;
     integer recno;
     integer lasti;
     integer numdp;
-    extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dasa2l_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern logical failed_(cspice_t*);
     integer clbase;
-    extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasurd_(integer *, integer *, integer *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int daslla_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasurd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *);
     integer clsize;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer wordno;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer nwritn;
 
 
     /* Module state */
-    dasudd_state_t* __state = get_dasudd_state();
+    dasudd_state_t* __state = get_dasudd_state(__global_state);
 /* $ Abstract */
 
 /*     Update data in a specified range of double precision addresses */
@@ -327,25 +326,26 @@ static dasudd_state_t* get_dasudd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASUDD", (ftnlen)6);
+	chkin_(__global_state, "DASUDD", (ftnlen)6);
     }
 
 /*     Get the last logical addresses in use in this DAS file. */
 
-    daslla_(handle, &lastc, &lastd, &lasti);
+    daslla_(__global_state, handle, &lastc, &lastd, &lasti);
 
 /*     Validate the input addresses. */
 
     if (*first < 1 || *first > lastd || *last < 1 || *last > lastd) {
-	setmsg_("FIRST was #. LAST was #. Valid range is [1,#].", (ftnlen)46);
-	errint_("#", first, (ftnlen)1);
-	errint_("#", last, (ftnlen)1);
-	errint_("#", &lastd, (ftnlen)1);
-	sigerr_("SPICE(INVALIDADDRESS)", (ftnlen)21);
-	chkout_("DASUDD", (ftnlen)6);
+	setmsg_(__global_state, "FIRST was #. LAST was #. Valid range is [1,"
+		"#].", (ftnlen)46);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	errint_(__global_state, "#", &lastd, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDADDRESS)", (ftnlen)21);
+	chkout_(__global_state, "DASUDD", (ftnlen)6);
 	return 0;
     }
 
@@ -362,7 +362,8 @@ static dasudd_state_t* get_dasudd_state() {
 /*     base record number and size of the cluster of d.p. records that */
 /*     the address FIRST lies within. */
 
-    dasa2l_(handle, &__state->c__2, first, &clbase, &clsize, &recno, &wordno);
+    dasa2l_(__global_state, handle, &__state->c__2, first, &clbase, &clsize, &
+	    recno, &wordno);
 
 /*     Set the number of double precision words already written.  Keep */
 /*     writing to the file until this number equals the number of */
@@ -372,7 +373,7 @@ static dasudd_state_t* get_dasudd_state() {
 
 
     nwritn = 0;
-    while(nwritn < n && ! failed_()) {
+    while(nwritn < n && ! failed_(__global_state)) {
 
 /*        Write as much data as we can (or need to) into the current */
 /*        record.  We assume that CLBASE, RECNO, WORDNO, and NWRITN have */
@@ -389,7 +390,8 @@ static dasudd_state_t* get_dasudd_state() {
 /*           Write NUMDP words into the current record. */
 
 	    i__1 = wordno + numdp - 1;
-	    dasurd_(handle, &recno, &wordno, &i__1, &data[nwritn]);
+	    dasurd_(__global_state, handle, &recno, &wordno, &i__1, &data[
+		    nwritn]);
 	    nwritn += numdp;
 	    wordno += numdp;
 	} else {
@@ -406,12 +408,12 @@ static dasudd_state_t* get_dasudd_state() {
 		wordno = 1;
 	    } else {
 		i__1 = *first + nwritn;
-		dasa2l_(handle, &__state->c__2, &i__1, &clbase, &clsize, &
-			recno, &wordno);
+		dasa2l_(__global_state, handle, &__state->c__2, &i__1, &
+			clbase, &clsize, &recno, &wordno);
 	    }
 	}
     }
-    chkout_("DASUDD", (ftnlen)6);
+    chkout_(__global_state, "DASUDD", (ftnlen)6);
     return 0;
 } /* dasudd_ */
 

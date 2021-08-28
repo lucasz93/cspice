@@ -8,8 +8,7 @@
 
 
 extern zzgfcprx_init_t __zzgfcprx_init;
-static zzgfcprx_state_t* get_zzgfcprx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfcprx_state_t* get_zzgfcprx_state(cspice_t* state) {
 	if (!state->zzgfcprx)
 		state->zzgfcprx = __cspice_allocate_module(sizeof(
 	zzgfcprx_state_t), &__zzgfcprx_init, sizeof(__zzgfcprx_init));
@@ -18,57 +17,60 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 }
 
 /* $Procedure ZZGFCPRX ( GF, coordinate derivative proxy ) */
-/* Subroutine */ int zzgfcprx_(doublereal *state, char *corsys, doublereal *
-	re, doublereal *f, integer *sense, integer *cdsign, ftnlen corsys_len)
+/* Subroutine */ int zzgfcprx_(cspice_t* __global_state, doublereal *state, 
+	char *corsys, doublereal *re, doublereal *f, integer *sense, integer *
+	cdsign, ftnlen corsys_len)
 {
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
-    double d_sign(doublereal *, doublereal *);
-    integer i_dnnt(doublereal *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
+    double d_sign(f2c_state_t*, doublereal *, doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal xmat[9]	/* was [3][3] */;
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzrtnmat_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzrtnmat_(cspice_t*, doublereal *, doublereal 
+	    *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern logical vzero_(doublereal *);
-    extern logical failed_(void);
-    doublereal dp;
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern logical failed_(cspice_t*);
+    doublereal dp;
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int recgeo_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int latrec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     integer dpsign;
     doublereal normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int vhatip_(doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     doublereal rtnvel[3];
     integer rtnsgn[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal alt;
     doublereal lat;
     doublereal vel[3];
     doublereal lon;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    zzgfcprx_state_t* __state = get_zzgfcprx_state();
+    zzgfcprx_state_t* __state = get_zzgfcprx_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -506,19 +508,21 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFCPRX", (ftnlen)8);
+    chkin_(__global_state, "ZZGFCPRX", (ftnlen)8);
 
 /*     For planetographic coordinates, check the longitude sense. */
 
-    if (s_cmp(corsys, "PLANETOGRAPHIC", corsys_len, (ftnlen)14) == 0) {
+    if (s_cmp(&__global_state->f2c, corsys, "PLANETOGRAPHIC", corsys_len, (
+	    ftnlen)14) == 0) {
 	if (*sense != 1 && *sense != -1) {
-	    setmsg_("Longitude sense # should be 1 or -1.", (ftnlen)36);
-	    errint_("#", sense, (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("ZZGFCPRX", (ftnlen)8);
+	    setmsg_(__global_state, "Longitude sense # should be 1 or -1.", (
+		    ftnlen)36);
+	    errint_(__global_state, "#", sense, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "ZZGFCPRX", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -527,32 +531,35 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 /*     velocity coordinate isn't changing and return now. If the */
 /*     velocity vector is non-zero, convert it to a unit vector; this */
 /*     guarantees that overflow can't occur. */
-    if (vzero_(&state[3])) {
+    if (vzero_(__global_state, &state[3])) {
 
 /*        The velocity is zero. Indicate that the coordinates are */
 /*        not changing and return. Returning now simplifies the */
 /*        logic of the rest of the routine, since the case of */
 /*        zero-velocity can be ignored. */
 
-	cleari_(&__state->c__3, cdsign);
-	chkout_("ZZGFCPRX", (ftnlen)8);
+	cleari_(__global_state, &__state->c__3, cdsign);
+	chkout_(__global_state, "ZZGFCPRX", (ftnlen)8);
 	return 0;
     } else {
-	vhat_(&state[3], vel);
+	vhat_(__global_state, &state[3], vel);
     }
 
 /*     The rectangular case is trivial; handle it now. */
 
-    if (s_cmp(corsys, "RECTANGULAR", corsys_len, (ftnlen)11) == 0) {
+    if (s_cmp(&__global_state->f2c, corsys, "RECTANGULAR", corsys_len, (
+	    ftnlen)11) == 0) {
 
 /*        The output system is rectangular. Just indicate the */
 /*        signs of the input velocity. */
 
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    if (vel[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vel", 
-		    i__1, "zzgfcprx_", (ftnlen)403)] == 0.) {
-		cdsign[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"cdsign", i__1, "zzgfcprx_", (ftnlen)405)] = 0;
+	    if (vel[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "vel", i__1, "zzgfcprx_", (ftnlen)
+		    403)] == 0.) {
+		cdsign[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "cdsign", i__1, "zzgfcprx_", (
+			ftnlen)405)] = 0;
 	    } else {
 
 /*              Use the Fortran sign transfer intrinsic function */
@@ -561,18 +568,19 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 /*              is positive or negative. See reference [1] for a */
 /*              discussion of this Fortran intrinsic function. */
 
-		d__1 = d_sign(&__state->c_b15, &vel[(i__2 = i__ - 1) < 3 && 0 
-			<= i__2 ? i__2 : s_rnge("vel", i__2, "zzgfcprx_", (
+		d__1 = d_sign(&__global_state->f2c, &__state->c_b15, &vel[(
+			i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "vel", i__2, "zzgfcprx_", (
 			ftnlen)415)]);
-		cdsign[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"cdsign", i__1, "zzgfcprx_", (ftnlen)415)] = i_dnnt(&
-			d__1);
+		cdsign[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "cdsign", i__1, "zzgfcprx_", (
+			ftnlen)415)] = i_dnnt(&__global_state->f2c, &d__1);
 	    }
 	}
 
 /*        All done. */
 
-	chkout_("ZZGFCPRX", (ftnlen)8);
+	chkout_(__global_state, "ZZGFCPRX", (ftnlen)8);
 	return 0;
     }
 
@@ -620,12 +628,12 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 /*           Compute the dot product used for the range/altitude */
 /*           derivative. */
 
-	    dp = vdot_(state, vel);
+	    dp = vdot_(__global_state, state, vel);
 	    if (dp == 0.) {
 		dpsign = 0;
 	    } else {
-		d__1 = d_sign(&__state->c_b15, &dp);
-		dpsign = i_dnnt(&d__1);
+		d__1 = d_sign(&__global_state->f2c, &__state->c_b15, &dp);
+		dpsign = i_dnnt(&__global_state->f2c, &d__1);
 	    }
 	} else {
 
@@ -655,7 +663,8 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 /*        Planetographic  Longitude, Latitude, Altitude */
 
 
-	if (s_cmp(corsys, "LATITUDINAL", corsys_len, (ftnlen)11) == 0) {
+	if (s_cmp(&__global_state->f2c, corsys, "LATITUDINAL", corsys_len, (
+		ftnlen)11) == 0) {
 
 /*           The radial derivative sign was computed; the */
 /*           other derivative signs are set to zero. */
@@ -663,7 +672,8 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 	    cdsign[0] = dpsign;
 	    cdsign[1] = 0;
 	    cdsign[2] = 0;
-	} else if (s_cmp(corsys, "SPHERICAL", corsys_len, (ftnlen)9) == 0) {
+	} else if (s_cmp(&__global_state->f2c, corsys, "SPHERICAL", 
+		corsys_len, (ftnlen)9) == 0) {
 
 /*           The radial derivative sign was computed; the */
 /*           longitude derivative signs is set to zero. */
@@ -680,7 +690,8 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 /*           case. */
 
 	    cdsign[1] = 0;
-	} else if (s_cmp(corsys, "RA/DEC", corsys_len, (ftnlen)6) == 0) {
+	} else if (s_cmp(&__global_state->f2c, corsys, "RA/DEC", corsys_len, (
+		ftnlen)6) == 0) {
 
 /*           RA/Dec derivatives are assigned in the same manner */
 /*           as latitudinal ones. */
@@ -688,7 +699,8 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 	    cdsign[0] = dpsign;
 	    cdsign[1] = 0;
 	    cdsign[2] = 0;
-	} else if (s_cmp(corsys, "GEODETIC", corsys_len, (ftnlen)8) == 0) {
+	} else if (s_cmp(&__global_state->f2c, corsys, "GEODETIC", corsys_len,
+		 (ftnlen)8) == 0) {
 
 /*           Altitude plays the role of radius for this */
 /*           system. */
@@ -696,8 +708,8 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 	    cdsign[0] = 0;
 	    cdsign[1] = 0;
 	    cdsign[2] = dpsign;
-	} else if (s_cmp(corsys, "PLANETOGRAPHIC", corsys_len, (ftnlen)14) == 
-		0) {
+	} else if (s_cmp(&__global_state->f2c, corsys, "PLANETOGRAPHIC", 
+		corsys_len, (ftnlen)14) == 0) {
 
 /*           Altitude plays the role of radius for this */
 /*           system. */
@@ -705,8 +717,8 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 	    cdsign[0] = 0;
 	    cdsign[1] = 0;
 	    cdsign[2] = dpsign;
-	} else if (s_cmp(corsys, "CYLINDRICAL", corsys_len, (ftnlen)11) == 0) 
-		{
+	} else if (s_cmp(&__global_state->f2c, corsys, "CYLINDRICAL", 
+		corsys_len, (ftnlen)11) == 0) {
 	    cdsign[0] = 0;
 	    cdsign[1] = 0;
 
@@ -716,25 +728,25 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 	    if (vel[2] == 0.) {
 		cdsign[2] = 0;
 	    } else {
-		d__1 = d_sign(&__state->c_b15, &vel[2]);
-		cdsign[2] = i_dnnt(&d__1);
+		d__1 = d_sign(&__global_state->f2c, &__state->c_b15, &vel[2]);
+		cdsign[2] = i_dnnt(&__global_state->f2c, &d__1);
 	    }
 	} else {
 
 /*           If we end up here, we have an invalid coordinate system. */
 
-	    setmsg_("Coordinate system # is not supported. Verify that the c"
-		    "oordinate system specifier matches a value from zzgf.inc."
-		    , (ftnlen)112);
-	    errch_("#", corsys, (ftnlen)1, corsys_len);
-	    sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	    chkout_("ZZGFCPRX", (ftnlen)8);
+	    setmsg_(__global_state, "Coordinate system # is not supported. V"
+		    "erify that the coordinate system specifier matches a val"
+		    "ue from zzgf.inc.", (ftnlen)112);
+	    errch_(__global_state, "#", corsys, (ftnlen)1, corsys_len);
+	    sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	    chkout_(__global_state, "ZZGFCPRX", (ftnlen)8);
 	    return 0;
 	}
 
 /*        We've handled the on-Z-axis cases. Return now. */
 
-	chkout_("ZZGFCPRX", (ftnlen)8);
+	chkout_(__global_state, "ZZGFCPRX", (ftnlen)8);
 	return 0;
     }
 
@@ -744,54 +756,60 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 /*     Planetodetic and planetographic coordinate systems are a special */
 /*     case. */
 
-    if (s_cmp(corsys, "GEODETIC", corsys_len, (ftnlen)8) == 0 || s_cmp(corsys,
-	     "PLANETOGRAPHIC", corsys_len, (ftnlen)14) == 0) {
+    if (s_cmp(&__global_state->f2c, corsys, "GEODETIC", corsys_len, (ftnlen)8)
+	     == 0 || s_cmp(&__global_state->f2c, corsys, "PLANETOGRAPHIC", 
+	    corsys_len, (ftnlen)14) == 0) {
 
 /*        Instead of defining the MRTN frame using the input */
 /*        position vector, we define it using an outward normal vector */
 /*        on the reference ellipsoid at the geodetic latitude */
 /*        and longitude of the input position. */
 
-	recgeo_(state, re, f, &lon, &lat, &alt);
-	if (failed_()) {
-	    chkout_("ZZGFCPRX", (ftnlen)8);
+	recgeo_(__global_state, state, re, f, &lon, &lat, &alt);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFCPRX", (ftnlen)8);
 	    return 0;
 	}
-	latrec_(&__state->c_b15, &lon, &lat, normal);
-    } else if (s_cmp(corsys, "CYLINDRICAL", corsys_len, (ftnlen)11) == 0) {
+	latrec_(__global_state, &__state->c_b15, &lon, &lat, normal);
+    } else if (s_cmp(&__global_state->f2c, corsys, "CYLINDRICAL", corsys_len, 
+	    (ftnlen)11) == 0) {
 
 /*        The normal vector is aligned with the local radial */
 /*        direction; this vector is parallel to the X-Y plane. */
 
-	vpack_(state, &state[1], &__state->c_b39, normal);
-	vhatip_(normal);
+	vpack_(__global_state, state, &state[1], &__state->c_b39, normal);
+	vhatip_(__global_state, normal);
     } else {
 
 /*        The position vector provides the normal direction. */
 
-	vhat_(state, normal);
+	vhat_(__global_state, state, normal);
     }
 /*     Obtain the matrix required to transform the velocity to the MRTN */
 /*     frame; transform the velocity. */
 
-    zzrtnmat_(normal, xmat);
-    mxv_(xmat, vel, rtnvel);
+    zzrtnmat_(__global_state, normal, xmat);
+    mxv_(__global_state, xmat, vel, rtnvel);
 
 /*     We can think of the basis vectors of the MRTN frame as local "up", */
 /*     "East," "North" directions. Compute the signs of the up, East, */
 /*     and North velocity components. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	if (rtnvel[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("rtnvel",
-		 i__1, "zzgfcprx_", (ftnlen)659)] == 0.) {
-	    rtnsgn[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("rtnsgn",
-		     i__1, "zzgfcprx_", (ftnlen)661)] = 0;
+	if (rtnvel[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rtnvel", i__1, "zzgfcprx_", (ftnlen)659)
+		] == 0.) {
+	    rtnsgn[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "rtnsgn", i__1, "zzgfcprx_", (ftnlen)
+		    661)] = 0;
 	} else {
-	    d__1 = d_sign(&__state->c_b15, &rtnvel[(i__2 = i__ - 1) < 3 && 0 
-		    <= i__2 ? i__2 : s_rnge("rtnvel", i__2, "zzgfcprx_", (
-		    ftnlen)663)]);
-	    rtnsgn[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("rtnsgn",
-		     i__1, "zzgfcprx_", (ftnlen)663)] = i_dnnt(&d__1);
+	    d__1 = d_sign(&__global_state->f2c, &__state->c_b15, &rtnvel[(
+		    i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rtnvel", i__2, "zzgfcprx_", (ftnlen)
+		    663)]);
+	    rtnsgn[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "rtnsgn", i__1, "zzgfcprx_", (ftnlen)
+		    663)] = i_dnnt(&__global_state->f2c, &d__1);
 	}
     }
 
@@ -812,11 +830,13 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 /*        Planetographic  Longitude, Latitude, Altitude */
 
 
-    if (s_cmp(corsys, "LATITUDINAL", corsys_len, (ftnlen)11) == 0) {
+    if (s_cmp(&__global_state->f2c, corsys, "LATITUDINAL", corsys_len, (
+	    ftnlen)11) == 0) {
 	cdsign[0] = rtnsgn[0];
 	cdsign[1] = rtnsgn[1];
 	cdsign[2] = rtnsgn[2];
-    } else if (s_cmp(corsys, "SPHERICAL", corsys_len, (ftnlen)9) == 0) {
+    } else if (s_cmp(&__global_state->f2c, corsys, "SPHERICAL", corsys_len, (
+	    ftnlen)9) == 0) {
 
 /*        For spherical coordinate systems, the sign of the */
 /*        derivative of co-latitude is the negative of the */
@@ -825,15 +845,18 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 	cdsign[0] = rtnsgn[0];
 	cdsign[1] = -rtnsgn[2];
 	cdsign[2] = rtnsgn[1];
-    } else if (s_cmp(corsys, "RA/DEC", corsys_len, (ftnlen)6) == 0) {
+    } else if (s_cmp(&__global_state->f2c, corsys, "RA/DEC", corsys_len, (
+	    ftnlen)6) == 0) {
 	cdsign[0] = rtnsgn[0];
 	cdsign[1] = rtnsgn[1];
 	cdsign[2] = rtnsgn[2];
-    } else if (s_cmp(corsys, "GEODETIC", corsys_len, (ftnlen)8) == 0) {
+    } else if (s_cmp(&__global_state->f2c, corsys, "GEODETIC", corsys_len, (
+	    ftnlen)8) == 0) {
 	cdsign[0] = rtnsgn[1];
 	cdsign[1] = rtnsgn[2];
 	cdsign[2] = rtnsgn[0];
-    } else if (s_cmp(corsys, "PLANETOGRAPHIC", corsys_len, (ftnlen)14) == 0) {
+    } else if (s_cmp(&__global_state->f2c, corsys, "PLANETOGRAPHIC", 
+	    corsys_len, (ftnlen)14) == 0) {
 
 /*        For planetographic coordinates, altitude and latitude */
 /*        behave identically to their geodetic counterparts. We */
@@ -843,7 +866,8 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 	cdsign[0] = rtnsgn[1] * *sense;
 	cdsign[1] = rtnsgn[2];
 	cdsign[2] = rtnsgn[0];
-    } else if (s_cmp(corsys, "CYLINDRICAL", corsys_len, (ftnlen)11) == 0) {
+    } else if (s_cmp(&__global_state->f2c, corsys, "CYLINDRICAL", corsys_len, 
+	    (ftnlen)11) == 0) {
 	cdsign[0] = rtnsgn[0];
 	cdsign[1] = rtnsgn[1];
 	cdsign[2] = rtnsgn[2];
@@ -851,15 +875,15 @@ static zzgfcprx_state_t* get_zzgfcprx_state() {
 
 /*        If we end up here, we have an invalid coordinate system. */
 
-	setmsg_("Coordinate system # is not supported. Verify that the coord"
-		"inate system specifier matches a value from zzgf.inc.", (
-		ftnlen)112);
-	errch_("#", corsys, (ftnlen)1, corsys_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZGFCPRX", (ftnlen)8);
+	setmsg_(__global_state, "Coordinate system # is not supported. Verif"
+		"y that the coordinate system specifier matches a value from "
+		"zzgf.inc.", (ftnlen)112);
+	errch_(__global_state, "#", corsys, (ftnlen)1, corsys_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFCPRX", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZGFCPRX", (ftnlen)8);
+    chkout_(__global_state, "ZZGFCPRX", (ftnlen)8);
     return 0;
 } /* zzgfcprx_ */
 

@@ -8,8 +8,7 @@
 
 
 extern zztwovxf_init_t __zztwovxf_init;
-static zztwovxf_state_t* get_zztwovxf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zztwovxf_state_t* get_zztwovxf_state(cspice_t* state) {
 	if (!state->zztwovxf)
 		state->zztwovxf = __cspice_allocate_module(sizeof(
 	zztwovxf_state_t), &__zztwovxf_init, sizeof(__zztwovxf_init));
@@ -18,8 +17,9 @@ static zztwovxf_state_t* get_zztwovxf_state() {
 }
 
 /* $Procedure ZZTWOVXF ( Two states defining a frame transformation ) */
-/* Subroutine */ int zztwovxf_(doublereal *axdef, integer *indexa, doublereal 
-	*plndef, integer *indexp, doublereal *xform)
+/* Subroutine */ int zztwovxf_(cspice_t* __global_state, doublereal *axdef, 
+	integer *indexa, doublereal *plndef, integer *indexp, doublereal *
+	xform)
 {
     /* Initialized data */
 
@@ -28,31 +28,32 @@ static zztwovxf_state_t* get_zztwovxf_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dvhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer i1;
     integer i2;
     integer i3;
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ducrss_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ducrss_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal tmpsta[6];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zztwovxf_state_t* __state = get_zztwovxf_state();
+    zztwovxf_state_t* __state = get_zztwovxf_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -365,28 +366,29 @@ static zztwovxf_state_t* get_zztwovxf_state() {
 
 /*     Standard SPICE error handling */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZTWOVXF", (ftnlen)8);
+    chkin_(__global_state, "ZZTWOVXF", (ftnlen)8);
 
 /*     Check for obvious bad inputs. */
 
     if (max(*indexp,*indexa) > 3 || min(*indexp,*indexa) < 1) {
-	setmsg_("The definition indices must lie in the range from 1 to 3.  "
-		"The value of INDEXA was #. The value of INDEXP was #. ", (
-		ftnlen)113);
-	errint_("#", indexa, (ftnlen)1);
-	errint_("#", indexp, (ftnlen)1);
-	sigerr_("SPICE(BADINDEX)", (ftnlen)15);
-	chkout_("ZZTWOVXF", (ftnlen)8);
+	setmsg_(__global_state, "The definition indices must lie in the rang"
+		"e from 1 to 3.  The value of INDEXA was #. The value of INDE"
+		"XP was #. ", (ftnlen)113);
+	errint_(__global_state, "#", indexa, (ftnlen)1);
+	errint_(__global_state, "#", indexp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADINDEX)", (ftnlen)15);
+	chkout_(__global_state, "ZZTWOVXF", (ftnlen)8);
 	return 0;
     } else if (*indexa == *indexp) {
-	setmsg_("The values of INDEXA and INDEXP were the same, namely #.  T"
-		"hey are required to be different.", (ftnlen)92);
-	errint_("#", indexa, (ftnlen)1);
-	sigerr_("SPICE(UNDEFINEDFRAME)", (ftnlen)21);
-	chkout_("ZZTWOVXF", (ftnlen)8);
+	setmsg_(__global_state, "The values of INDEXA and INDEXP were the sa"
+		"me, namely #.  They are required to be different.", (ftnlen)
+		92);
+	errint_(__global_state, "#", indexa, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNDEFINEDFRAME)", (ftnlen)21);
+	chkout_(__global_state, "ZZTWOVXF", (ftnlen)8);
 	return 0;
     }
 
@@ -398,16 +400,18 @@ static zztwovxf_state_t* get_zztwovxf_state() {
 
 /*     ... then the other two. */
 
-    i2 = __state->seqnce[(i__1 = *indexa) < 5 && 0 <= i__1 ? i__1 : s_rnge(
-	    "seqnce", i__1, "zztwovxf_", (ftnlen)387)];
+    i2 = __state->seqnce[(i__1 = *indexa) < 5 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "seqnce", i__1, "zztwovxf_", (ftnlen)387)];
     i3 = __state->seqnce[(i__1 = *indexa + 1) < 5 && 0 <= i__1 ? i__1 : 
-	    s_rnge("seqnce", i__1, "zztwovxf_", (ftnlen)388)];
+	    s_rnge(&__global_state->f2c, "seqnce", i__1, "zztwovxf_", (ftnlen)
+	    388)];
 
 /*     Column I1 of XFORM contains a unit vector parallel to AXDEF and */
 /*     the derivative of the unit vector. */
 
-    dvhat_(axdef, &xform[(i__1 = i1 * 6 - 6) < 36 && 0 <= i__1 ? i__1 : 
-	    s_rnge("xform", i__1, "zztwovxf_", (ftnlen)394)]);
+    dvhat_(__global_state, axdef, &xform[(i__1 = i1 * 6 - 6) < 36 && 0 <= 
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "xform", i__1, "zztwo"
+	    "vxf_", (ftnlen)394)]);
 
 /*     Obtain columns I2 and I3 of XFORM using cross products. */
 /*     Which order to use depends on whether INDEXP = I2 (next axis in */
@@ -420,21 +424,25 @@ static zztwovxf_state_t* get_zztwovxf_state() {
 
 /*        We compute the third axis in the sequence, then the second. */
 
-	ducrss_(axdef, plndef, &xform[(i__1 = i3 * 6 - 6) < 36 && 0 <= i__1 ? 
-		i__1 : s_rnge("xform", i__1, "zztwovxf_", (ftnlen)408)]);
-	ducrss_(&xform[(i__1 = i3 * 6 - 6) < 36 && 0 <= i__1 ? i__1 : s_rnge(
-		"xform", i__1, "zztwovxf_", (ftnlen)409)], axdef, tmpsta);
-	moved_(tmpsta, &__state->c__6, &xform[(i__1 = i2 * 6 - 6) < 36 && 0 <=
-		 i__1 ? i__1 : s_rnge("xform", i__1, "zztwovxf_", (ftnlen)410)
-		]);
+	ducrss_(__global_state, axdef, plndef, &xform[(i__1 = i3 * 6 - 6) < 
+		36 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "xform",
+		 i__1, "zztwovxf_", (ftnlen)408)]);
+	ducrss_(__global_state, &xform[(i__1 = i3 * 6 - 6) < 36 && 0 <= i__1 ?
+		 i__1 : s_rnge(&__global_state->f2c, "xform", i__1, "zztwovx"
+		"f_", (ftnlen)409)], axdef, tmpsta);
+	moved_(__global_state, tmpsta, &__state->c__6, &xform[(i__1 = i2 * 6 
+		- 6) < 36 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"xform", i__1, "zztwovxf_", (ftnlen)410)]);
     } else {
-	ducrss_(plndef, axdef, &xform[(i__1 = i2 * 6 - 6) < 36 && 0 <= i__1 ? 
-		i__1 : s_rnge("xform", i__1, "zztwovxf_", (ftnlen)412)]);
-	ducrss_(axdef, &xform[(i__1 = i2 * 6 - 6) < 36 && 0 <= i__1 ? i__1 : 
-		s_rnge("xform", i__1, "zztwovxf_", (ftnlen)413)], tmpsta);
-	moved_(tmpsta, &__state->c__6, &xform[(i__1 = i3 * 6 - 6) < 36 && 0 <=
-		 i__1 ? i__1 : s_rnge("xform", i__1, "zztwovxf_", (ftnlen)414)
-		]);
+	ducrss_(__global_state, plndef, axdef, &xform[(i__1 = i2 * 6 - 6) < 
+		36 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "xform",
+		 i__1, "zztwovxf_", (ftnlen)412)]);
+	ducrss_(__global_state, axdef, &xform[(i__1 = i2 * 6 - 6) < 36 && 0 <=
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "xform", i__1, 
+		"zztwovxf_", (ftnlen)413)], tmpsta);
+	moved_(__global_state, tmpsta, &__state->c__6, &xform[(i__1 = i3 * 6 
+		- 6) < 36 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"xform", i__1, "zztwovxf_", (ftnlen)414)]);
     }
 
 /*     ...and compute the output frame's non-principal unit basis */
@@ -446,15 +454,16 @@ static zztwovxf_state_t* get_zztwovxf_state() {
 /*     The upper right block is the 3x3 zero matrix. */
 /*     The lower right block matches the upper left block. */
 
-    cleard_(&__state->c__3, &xform[18]);
-    cleard_(&__state->c__3, &xform[24]);
-    cleard_(&__state->c__3, &xform[30]);
+    cleard_(__global_state, &__state->c__3, &xform[18]);
+    cleard_(__global_state, &__state->c__3, &xform[24]);
+    cleard_(__global_state, &__state->c__3, &xform[30]);
     for (j = 1; j <= 3; ++j) {
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    xform[(i__1 = i__ + 3 + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? i__1 
-		    : s_rnge("xform", i__1, "zztwovxf_", (ftnlen)436)] = 
-		    xform[(i__2 = i__ + j * 6 - 7) < 36 && 0 <= i__2 ? i__2 : 
-		    s_rnge("xform", i__2, "zztwovxf_", (ftnlen)436)];
+		    : s_rnge(&__global_state->f2c, "xform", i__1, "zztwovxf_",
+		     (ftnlen)436)] = xform[(i__2 = i__ + j * 6 - 7) < 36 && 0 
+		    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "xform", 
+		    i__2, "zztwovxf_", (ftnlen)436)];
 	}
     }
 
@@ -463,15 +472,16 @@ static zztwovxf_state_t* get_zztwovxf_state() {
 /*     XFORM(1,I2) and XFORM(1,I3) (we need only check one of them since */
 /*     they are related by a cross product). */
 
-    if (vzero_(&xform[(i__1 = i2 * 6 - 6) < 36 && 0 <= i__1 ? i__1 : s_rnge(
-	    "xform", i__1, "zztwovxf_", (ftnlen)448)])) {
-	setmsg_("The direction vectors associated with states AXDEF and PLND"
-		"EF are linearly dependent.", (ftnlen)85);
-	sigerr_("SPICE(DEPENDENTVECTORS)", (ftnlen)23);
-	chkout_("ZZTWOVXF", (ftnlen)8);
+    if (vzero_(__global_state, &xform[(i__1 = i2 * 6 - 6) < 36 && 0 <= i__1 ? 
+	    i__1 : s_rnge(&__global_state->f2c, "xform", i__1, "zztwovxf_", (
+	    ftnlen)448)])) {
+	setmsg_(__global_state, "The direction vectors associated with state"
+		"s AXDEF and PLNDEF are linearly dependent.", (ftnlen)85);
+	sigerr_(__global_state, "SPICE(DEPENDENTVECTORS)", (ftnlen)23);
+	chkout_(__global_state, "ZZTWOVXF", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZTWOVXF", (ftnlen)8);
+    chkout_(__global_state, "ZZTWOVXF", (ftnlen)8);
     return 0;
 } /* zztwovxf_ */
 

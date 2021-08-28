@@ -266,7 +266,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "kinfo_c" );
+   chkin_c ( naif_state, "kinfo_c" );
 
 
    /*

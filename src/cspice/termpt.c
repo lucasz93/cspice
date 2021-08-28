@@ -8,8 +8,7 @@
 
 
 extern termpt_init_t __termpt_init;
-static termpt_state_t* get_termpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline termpt_state_t* get_termpt_state(cspice_t* state) {
 	if (!state->termpt)
 		state->termpt = __cspice_allocate_module(sizeof(
 	termpt_state_t), &__termpt_init, sizeof(__termpt_init));
@@ -18,13 +17,14 @@ static termpt_state_t* get_termpt_state() {
 }
 
 /* $Procedure TERMPT ( Terminator points on an extended object ) */
-/* Subroutine */ int termpt_(char *method, char *ilusrc, char *target, 
-	doublereal *et, char *fixref, char *abcorr, char *corloc, char *
-	obsrvr, doublereal *refvec, doublereal *rolstp, integer *ncuts, 
-	doublereal *schstp, doublereal *soltol, integer *maxn, integer *npts, 
-	doublereal *points, doublereal *epochs, doublereal *trmvcs, ftnlen 
-	method_len, ftnlen ilusrc_len, ftnlen target_len, ftnlen fixref_len, 
-	ftnlen abcorr_len, ftnlen corloc_len, ftnlen obsrvr_len)
+/* Subroutine */ int termpt_(cspice_t* __global_state, char *method, char *
+	ilusrc, char *target, doublereal *et, char *fixref, char *abcorr, 
+	char *corloc, char *obsrvr, doublereal *refvec, doublereal *rolstp, 
+	integer *ncuts, doublereal *schstp, doublereal *soltol, integer *maxn,
+	 integer *npts, doublereal *points, doublereal *epochs, doublereal *
+	trmvcs, ftnlen method_len, ftnlen ilusrc_len, ftnlen target_len, 
+	ftnlen fixref_len, ftnlen abcorr_len, ftnlen corloc_len, ftnlen 
+	obsrvr_len)
 {
     /* Initialized data */
 
@@ -34,81 +34,85 @@ static termpt_state_t* get_termpt_state() {
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
     doublereal edir[3];
     doublereal axis[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal roll;
     integer room;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int zzbodvcd_(integer *, char *, integer *, 
-	    integer *, integer *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int zzmaxrad_(doublereal *);
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zztangnt_(integer *, doublereal *, integer *, 
-	    integer *, integer *, integer *, integer *, doublereal *, 
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzbodvcd_(cspice_t*, integer *, char *, 
+	    integer *, integer *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzcorepc_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzmaxrad_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zztangnt_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, integer *, integer *, integer *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzedtmpt_(cspice_t*, logical *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    extern /* Subroutine */ int zzedtmpt_(logical *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzsudski_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer i__;
     integer j;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
-    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
-	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzraysfx_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int zzsrftrk_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int zzprsmet_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, logical *, integer *, integer *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzraysfx_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal epoch;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal ptarg[3];
     integer total;
     doublereal ssblt;
     doublereal lterr;
     doublereal stobs[6];
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
     doublereal xform[9]	/* was [3][3] */;
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical vzero_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     doublereal prvlt;
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
+    extern /* Subroutine */ int vrotv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     doublereal cp[3];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal lt;
     integer fxfcde;
     integer obscde;
     integer to;
-    extern doublereal clight_(void);
-    extern doublereal touchd_(doublereal *);
-    extern logical return_(void);
+    extern doublereal clight_(cspice_t*);
+    extern doublereal touchd_(cspice_t*, doublereal *);
+    extern logical return_(cspice_t*);
     char pntdef[20];
     char nrmloc[25];
     char shpstr[9];
@@ -134,37 +138,39 @@ static termpt_state_t* get_termpt_state() {
     logical attblk[15];
     logical fnd;
     logical surfup;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int ssized_(integer *, doublereal *);
-    extern /* Subroutine */ int spkpos_(char *, doublereal *, char *, char *, 
-	    char *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int spkgps_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(cspice_t*, integer *, char *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int ssized_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int spkpos_(cspice_t*, char *, doublereal *, char 
+	    *, char *, char *, doublereal *, doublereal *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
 	    ;
-    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int spkssb_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int spkgps_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int spkezp_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int pxform_(cspice_t*, char *, char *, doublereal 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
+    extern /* Subroutine */ int stelab_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
 
 
     /* Module state */
-    termpt_state_t* __state = get_termpt_state();
+    termpt_state_t* __state = get_termpt_state(__global_state);
 /* $ Abstract */
 
 /*     Find terminator points on a target body. The caller specifies */
@@ -2605,10 +2611,10 @@ static termpt_state_t* get_termpt_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("TERMPT", (ftnlen)6);
+    chkin_(__global_state, "TERMPT", (ftnlen)6);
 
 /*     Counter initialization is done separately. */
 
@@ -2616,39 +2622,40 @@ static termpt_state_t* get_termpt_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
-	zzctruin_(__state->svctr3);
-	zzctruin_(__state->svctr4);
-	zzctruin_(__state->svctr5);
-	zzctruin_(__state->svctr6);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
+	zzctruin_(__global_state, __state->svctr3);
+	zzctruin_(__global_state, __state->svctr4);
+	zzctruin_(__global_state, __state->svctr5);
+	zzctruin_(__global_state, __state->svctr6);
     }
-    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    if (__state->first || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        Make sure the results of this block won't be reused */
 /*        if we bail out due to an error. */
 
-	s_copy(__state->prvcor, " ", (ftnlen)5, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->prvcor, " ", (ftnlen)5, (ftnlen)
+		1);
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
 
-	zzvalcor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("TERMPT", (ftnlen)6);
+	zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
 
 /*        In this routine, we don't allow transmission corrections. */
 
 	if (attblk[4]) {
-	    setmsg_("Aberration correction # calls for transmission-style co"
-		    "rrections. These are not supported for terminator findin"
-		    "g.", (ftnlen)113);
-	    errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	    sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	    chkout_("TERMPT", (ftnlen)6);
+	    setmsg_(__global_state, "Aberration correction # calls for trans"
+		    "mission-style corrections. These are not supported for t"
+		    "erminator finding.", (ftnlen)113);
+	    errch_(__global_state, "#", abcorr, (ftnlen)1, abcorr_len);
+	    sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -2672,53 +2679,55 @@ static termpt_state_t* get_termpt_state() {
 
 /*        The aberration correction flag is valid; save it. */
 
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
-	    __state->svfnd1, target, &__state->trgcde, &fnd, (ftnlen)36, 
-	    target_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtcde, &__state->svfnd1, target, &__state->trgcde, &fnd,
+	     (ftnlen)36, target_len);
     if (! fnd) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit, or that you failed to lo"
-		"ad a kernel containing a name-ID mapping for this body.", (
-		ftnlen)234);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit, or that "
+		"you failed to load a kernel containing a name-ID mapping for"
+		" this body.", (ftnlen)234);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
-	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svobsr, &
+	    __state->svobsc, &__state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)
+	    36, obsrvr_len);
     if (! fnd) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE Toolkit, or that you failed to "
-		"load a kernel containing a name-ID mapping for this body.", (
-		ftnlen)236);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE Toolkit, or tha"
+		"t you failed to load a kernel containing a name-ID mapping f"
+		"or this body.", (ftnlen)236);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Obtain an integer code for the illumination source. */
 
-    zzbods2c_(__state->svctr3, __state->svilum, &__state->svicde, &
-	    __state->svfnd3, ilusrc, &__state->ilucde, &fnd, (ftnlen)36, 
-	    ilusrc_len);
+    zzbods2c_(__global_state, __state->svctr3, __state->svilum, &
+	    __state->svicde, &__state->svfnd3, ilusrc, &__state->ilucde, &fnd,
+	     (ftnlen)36, ilusrc_len);
     if (! fnd) {
-	setmsg_("The illumination source, '#', is not a recognized name for "
-		"an ephemeris object. The cause of this problem may be that y"
-		"ou need an updated version of the SPICE Toolkit, or that you"
-		" failed to load a kernel containing a name-ID mapping for th"
-		"is body.", (ftnlen)247);
-	errch_("#", ilusrc, (ftnlen)1, ilusrc_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "The illumination source, '#', is not a reco"
+		"gnized name for an ephemeris object. The cause of this probl"
+		"em may be that you need an updated version of the SPICE Tool"
+		"kit, or that you failed to load a kernel containing a name-I"
+		"D mapping for this body.", (ftnlen)247);
+	errch_(__global_state, "#", ilusrc, (ftnlen)1, ilusrc_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
 
@@ -2727,64 +2736,66 @@ static termpt_state_t* get_termpt_state() {
 /*     from the target as well. */
 
     if (obscde == __state->trgcde) {
-	setmsg_("In computing the terminator, the observing body and target "
-		"body are the same. Both are #.", (ftnlen)89);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "In computing the terminator, the observing "
+		"body and target body are the same. Both are #.", (ftnlen)89);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
     if (__state->ilucde == __state->trgcde) {
-	setmsg_("In computing the terminator, the observing body and illumin"
-		"ation source are the same. Both are #.", (ftnlen)97);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "In computing the terminator, the observing "
+		"body and illumination source are the same. Both are #.", (
+		ftnlen)97);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(__state->svctr4, __state->svfref, &__state->svfxfc, fixref, &
-	    fxfcde, (ftnlen)32, fixref_len);
-    frinfo_(&fxfcde, &fxcent, &fxclss, &fxtyid, &fnd);
-    if (failed_()) {
-	chkout_("TERMPT", (ftnlen)6);
+    zznamfrm_(__global_state, __state->svctr4, __state->svfref, &
+	    __state->svfxfc, fixref, &fxfcde, (ftnlen)32, fixref_len);
+    frinfo_(__global_state, &fxfcde, &fxcent, &fxclss, &fxtyid, &fnd);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
     if (! fnd) {
-	setmsg_("Reference frame # is not recognized by the SPICE frame subs"
-		"ystem. Possibly a required frame definition kernel has not b"
-		"een loaded.", (ftnlen)130);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not recognized by the "
+		"SPICE frame subsystem. Possibly a required frame definition "
+		"kernel has not been loaded.", (ftnlen)130);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure that FIXREF is centered at the target body's center. */
 
     if (fxcent != __state->trgcde) {
-	setmsg_("Reference frame # is not centered at the target body #. The"
-		" ID code of the frame center is #.", (ftnlen)93);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	errint_("#", &fxcent, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not centered at the ta"
+		"rget body #. The ID code of the frame center is #.", (ftnlen)
+		93);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errint_(__global_state, "#", &fxcent, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(__state->svctr5, &surfup);
+    zzsrftrk_(__global_state, __state->svctr5, &surfup);
 
 /*     Initialize the SINCPT utility package for the next computation. */
 /*     The choice of initialization routine depends on the target */
 /*     surface type. */
 
-    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
-	     (ftnlen)500) != 0) {
+    if (__state->first || surfup || s_cmp(&__global_state->f2c, method, 
+	    __state->prvmth, method_len, (ftnlen)500) != 0) {
 
 /*        Set the previous method string to an invalid value, so it */
 /*        cannot match any future, valid input. This will force this */
@@ -2792,7 +2803,8 @@ static termpt_state_t* get_termpt_state() {
 /*        failure occurs in this branch. Once success is assured, we can */
 /*        record the current method in the previous method string. */
 
-	s_copy(__state->prvmth, " ", (ftnlen)500, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->prvmth, " ", (ftnlen)500, (
+		ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -2801,97 +2813,109 @@ static termpt_state_t* get_termpt_state() {
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&__state->trgcde, method, &__state->c__100, shpstr, 
-		__state->subtyp, &__state->pri, &__state->nsurf, 
+	zzprsmet_(__global_state, &__state->trgcde, method, &__state->c__100, 
+		shpstr, __state->subtyp, &__state->pri, &__state->nsurf, 
 		__state->srflst, pntdef, trmstr, method_len, (ftnlen)9, (
 		ftnlen)20, (ftnlen)20, (ftnlen)20);
-	if (failed_()) {
-	    chkout_("TERMPT", (ftnlen)6);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
-	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
+	if (eqstr_(__global_state, shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9))
+		 {
 	    __state->shape = 1;
-	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
+	} else if (eqstr_(__global_state, shpstr, "DSK", (ftnlen)9, (ftnlen)3)
+		) {
 	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
 
-	    setmsg_("[1] Returned shape value from method string was <#>.", (
-		    ftnlen)52);
-	    errch_("#", shpstr, (ftnlen)1, (ftnlen)9);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("TERMPT", (ftnlen)6);
+	    setmsg_(__global_state, "[1] Returned shape value from method st"
+		    "ring was <#>.", (ftnlen)52);
+	    errch_(__global_state, "#", shpstr, (ftnlen)1, (ftnlen)9);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
-	if (failed_()) {
-	    chkout_("TERMPT", (ftnlen)6);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
-	if (eqstr_(pntdef, "TANGENT", (ftnlen)20, (ftnlen)7)) {
+	if (eqstr_(__global_state, pntdef, "TANGENT", (ftnlen)20, (ftnlen)7)) 
+		{
 	    __state->trmtyp = 1;
-	} else if (eqstr_(pntdef, "GUIDED", (ftnlen)20, (ftnlen)6)) {
+	} else if (eqstr_(__global_state, pntdef, "GUIDED", (ftnlen)20, (
+		ftnlen)6)) {
 	    __state->trmtyp = 2;
 	} else {
-	    setmsg_("Returned point definition from method string was <#>. V"
-		    "alue must be TANGENT or GUIDED.", (ftnlen)86);
-	    errch_("#", pntdef, (ftnlen)1, (ftnlen)20);
-	    sigerr_("SPICE(INVALIDTERMTYPE)", (ftnlen)22);
-	    chkout_("TERMPT", (ftnlen)6);
+	    setmsg_(__global_state, "Returned point definition from method s"
+		    "tring was <#>. Value must be TANGENT or GUIDED.", (ftnlen)
+		    86);
+	    errch_(__global_state, "#", pntdef, (ftnlen)1, (ftnlen)20);
+	    sigerr_(__global_state, "SPICE(INVALIDTERMTYPE)", (ftnlen)22);
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
-	if (eqstr_(trmstr, "UMBRAL", (ftnlen)20, (ftnlen)6)) {
+	if (eqstr_(__global_state, trmstr, "UMBRAL", (ftnlen)20, (ftnlen)6)) {
 	    __state->shadow = 1;
 	    __state->uflag = TRUE_;
-	} else if (eqstr_(trmstr, "PENUMBRAL", (ftnlen)20, (ftnlen)9)) {
+	} else if (eqstr_(__global_state, trmstr, "PENUMBRAL", (ftnlen)20, (
+		ftnlen)9)) {
 	    __state->shadow = 2;
 	    __state->uflag = FALSE_;
 	} else {
-	    setmsg_("Returned shadow type from method string was <#>. Value "
-		    "must be UMBRAL or PENUMBRAL.", (ftnlen)83);
-	    errch_("#", trmstr, (ftnlen)1, (ftnlen)20);
-	    sigerr_("SPICE(INVALIDSHADOW)", (ftnlen)20);
-	    chkout_("TERMPT", (ftnlen)6);
+	    setmsg_(__global_state, "Returned shadow type from method string"
+		    " was <#>. Value must be UMBRAL or PENUMBRAL.", (ftnlen)83)
+		    ;
+	    errch_(__global_state, "#", trmstr, (ftnlen)1, (ftnlen)20);
+	    sigerr_(__global_state, "SPICE(INVALIDSHADOW)", (ftnlen)20);
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
 
 /*        There should be no subtype specification in the method */
 /*        string. */
 
-	if (s_cmp(__state->subtyp, " ", (ftnlen)20, (ftnlen)1) != 0) {
-	    setmsg_("Spurious sub-observer point type <#> was present in the"
-		    " method string #. The sub-observer type is valid in the "
-		    "method strings for SUBPNT and SUBSLR, but is not applica"
-		    "ble for TERMPT.", (ftnlen)182);
-	    errch_("#", __state->subtyp, (ftnlen)1, (ftnlen)20);
-	    errch_("#", method, (ftnlen)1, method_len);
-	    sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	    chkout_("TERMPT", (ftnlen)6);
+	if (s_cmp(&__global_state->f2c, __state->subtyp, " ", (ftnlen)20, (
+		ftnlen)1) != 0) {
+	    setmsg_(__global_state, "Spurious sub-observer point type <#> wa"
+		    "s present in the method string #. The sub-observer type "
+		    "is valid in the method strings for SUBPNT and SUBSLR, bu"
+		    "t is not applicable for TERMPT.", (ftnlen)182);
+	    errch_(__global_state, "#", __state->subtyp, (ftnlen)1, (ftnlen)
+		    20);
+	    errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	    sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Save the current method as the previous method that we've */
 /*        successfully processed the input method. */
 
-	s_copy(__state->prvmth, method, (ftnlen)500, method_len);
+	s_copy(&__global_state->f2c, __state->prvmth, method, (ftnlen)500, 
+		method_len);
     }
 
 /*     Identify the aberration correction locus. */
 
-    if (__state->first || s_cmp(corloc, __state->prvloc, corloc_len, (ftnlen)
-	    25) != 0) {
-	ljucrs_(&__state->c__1, corloc, nrmloc, corloc_len, (ftnlen)25);
-	if (s_cmp(nrmloc, "CENTER", (ftnlen)25, (ftnlen)6) == 0) {
+    if (__state->first || s_cmp(&__global_state->f2c, corloc, __state->prvloc,
+	     corloc_len, (ftnlen)25) != 0) {
+	ljucrs_(__global_state, &__state->c__1, corloc, nrmloc, corloc_len, (
+		ftnlen)25);
+	if (s_cmp(&__global_state->f2c, nrmloc, "CENTER", (ftnlen)25, (ftnlen)
+		6) == 0) {
 	    __state->loccde = 1;
-	} else if (s_cmp(nrmloc, "ELLIPSOID TERMINATOR", (ftnlen)25, (ftnlen)
-		20) == 0) {
+	} else if (s_cmp(&__global_state->f2c, nrmloc, "ELLIPSOID TERMINATOR",
+		 (ftnlen)25, (ftnlen)20) == 0) {
 	    __state->loccde = 2;
 	} else {
-	    setmsg_("Aberration correction locus <#> was not recognized.", (
-		    ftnlen)51);
-	    errch_("#", corloc, (ftnlen)1, corloc_len);
-	    sigerr_("SPICE(INVALIDLOCUS)", (ftnlen)19);
-	    chkout_("TERMPT", (ftnlen)6);
+	    setmsg_(__global_state, "Aberration correction locus <#> was not"
+		    " recognized.", (ftnlen)51);
+	    errch_(__global_state, "#", corloc, (ftnlen)1, corloc_len);
+	    sigerr_(__global_state, "SPICE(INVALIDLOCUS)", (ftnlen)19);
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -2900,15 +2924,17 @@ static termpt_state_t* get_termpt_state() {
 /*        a change on the next call. */
 
 	__state->svlcod = __state->loccde;
-	s_copy(__state->prvloc, corloc, (ftnlen)25, corloc_len);
+	s_copy(&__global_state->f2c, __state->prvloc, corloc, (ftnlen)25, 
+		corloc_len);
     }
 
 /*     Check the reference vector. */
 
-    if (vzero_(refvec)) {
-	setmsg_("The reference vector was the zero vector.", (ftnlen)41);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("TERMPT", (ftnlen)6);
+    if (vzero_(__global_state, refvec)) {
+	setmsg_(__global_state, "The reference vector was the zero vector.", (
+		ftnlen)41);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
 
@@ -2919,10 +2945,11 @@ static termpt_state_t* get_termpt_state() {
 /*     Check MAXN. */
 
     if (*maxn < 1) {
-	setmsg_("MAXN = #; MAXN is required to be at least 1.", (ftnlen)44);
-	errint_("#", maxn, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "MAXN = #; MAXN is required to be at least 1."
+		, (ftnlen)44);
+	errint_(__global_state, "#", maxn, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
 
@@ -2930,12 +2957,12 @@ static termpt_state_t* get_termpt_state() {
 /*     for each cut. NCUTS may not be negative. */
 
     if (*ncuts < 0 || *ncuts > *maxn) {
-	setmsg_("NCUTS = #; MAXN = #; NCUTS is required to be non-negative a"
-		"nd no larger than MAXN.", (ftnlen)82);
-	errint_("#", ncuts, (ftnlen)1);
-	errint_("#", maxn, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "NCUTS = #; MAXN = #; NCUTS is required to b"
+		"e non-negative and no larger than MAXN.", (ftnlen)82);
+	errint_(__global_state, "#", ncuts, (ftnlen)1);
+	errint_(__global_state, "#", maxn, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
 
@@ -2943,12 +2970,12 @@ static termpt_state_t* get_termpt_state() {
 
     if (*ncuts > 1) {
 	if (*rolstp == 0.) {
-	    setmsg_("ROLSTP is zero; NCUTS = #; the roll step is required to"
-		    " be non-zero when more than one cutting half-plane is us"
-		    "ed.", (ftnlen)114);
-	    errint_("#", ncuts, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDROLLSTEP)", (ftnlen)22);
-	    chkout_("TERMPT", (ftnlen)6);
+	    setmsg_(__global_state, "ROLSTP is zero; NCUTS = #; the roll ste"
+		    "p is required to be non-zero when more than one cutting "
+		    "half-plane is used.", (ftnlen)114);
+	    errint_(__global_state, "#", ncuts, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDROLLSTEP)", (ftnlen)22);
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2959,25 +2986,25 @@ static termpt_state_t* get_termpt_state() {
 /*        Initialize the intercept algorithm to use a DSK */
 /*        model for the surface of the target body. */
 
-	zzsudski_(&__state->trgcde, &__state->nsurf, __state->srflst, &fxfcde)
-		;
+	zzsudski_(__global_state, &__state->trgcde, &__state->nsurf, 
+		__state->srflst, &fxfcde);
 
 /*        Save the radius of the outer bounding sphere of */
 /*        the target. */
 
-	zzmaxrad_(&__state->maxrad);
+	zzmaxrad_(__global_state, &__state->maxrad);
     } else if (__state->shape != 1) {
-	setmsg_("Computation method argument was <#>; this string must speci"
-		"fy a supported shape model and computation type. See the des"
-		"cription of METHOD in the header of TERMPT for details.", (
-		ftnlen)174);
-	errch_("#", method, (ftnlen)1, method_len);
-	sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "Computation method argument was <#>; this s"
+		"tring must specify a supported shape model and computation t"
+		"ype. See the description of METHOD in the header of TERMPT f"
+		"or details.", (ftnlen)174);
+	errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
-    if (failed_()) {
-	chkout_("TERMPT", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
 
@@ -2987,27 +3014,27 @@ static termpt_state_t* get_termpt_state() {
 
 /*        Reset counter to force lookup. */
 
-	zzctruin_(__state->svctr7);
+	zzctruin_(__global_state, __state->svctr7);
     }
 
 /*     Look up illumination source radii using counter. */
 
-    zzbodvcd_(&__state->ilucde, "RADII", &__state->c__3, __state->svctr7, &
-	    __state->nrad, __state->svsrad, (ftnlen)5);
-    if (failed_()) {
+    zzbodvcd_(__global_state, &__state->ilucde, "RADII", &__state->c__3, 
+	    __state->svctr7, &__state->nrad, __state->svsrad, (ftnlen)5);
+    if (failed_(__global_state)) {
 
 /*        Make sure we don't reuse the outputs from ZZBODVCD. */
 
 	__state->prvilu = 0;
-	chkout_("TERMPT", (ftnlen)6);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
     if (__state->nrad != 3) {
-	setmsg_("Number of illumination source radii must be 3 but was #.", (
-		ftnlen)56);
-	errint_("#", &__state->nrad, (ftnlen)1);
-	sigerr_("SPICE(BADRADIUSCOUNT)", (ftnlen)21);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "Number of illumination source radii must be"
+		" 3 but was #.", (ftnlen)56);
+	errint_(__global_state, "#", &__state->nrad, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADRADIUSCOUNT)", (ftnlen)21);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
 
@@ -3025,23 +3052,23 @@ static termpt_state_t* get_termpt_state() {
 
 /*           Reset counter to force lookup. */
 
-	    zzctruin_(__state->svctr6);
+	    zzctruin_(__global_state, __state->svctr6);
 	}
 
 /*        Look up target radii using counter. */
 
-	zzbodvcd_(&__state->trgcde, "RADII", &__state->c__3, __state->svctr6, 
-		&__state->nrad, __state->svtrad, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("TERMPT", (ftnlen)6);
+	zzbodvcd_(__global_state, &__state->trgcde, "RADII", &__state->c__3, 
+		__state->svctr6, &__state->nrad, __state->svtrad, (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
 	if (__state->nrad != 3) {
-	    setmsg_("Number of target radii must be 3 but was #.", (ftnlen)43)
-		    ;
-	    errint_("#", &__state->nrad, (ftnlen)1);
-	    sigerr_("SPICE(BADRADIUSCOUNT)", (ftnlen)21);
-	    chkout_("TERMPT", (ftnlen)6);
+	    setmsg_(__global_state, "Number of target radii must be 3 but wa"
+		    "s #.", (ftnlen)43);
+	    errint_(__global_state, "#", &__state->nrad, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADRADIUSCOUNT)", (ftnlen)21);
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
 	__state->prvtrg = __state->trgcde;
@@ -3052,25 +3079,25 @@ static termpt_state_t* get_termpt_state() {
 
 /*     Find terminator points on the target. */
 
-    cleari_(ncuts, npts);
-    ssized_(&__state->c__2000, result);
+    cleari_(__global_state, ncuts, npts);
+    ssized_(__global_state, &__state->c__2000, result);
 
 /*     Get initial observer-target vector, expressed in the target */
 /*     body-fixed frame, evaluated at the target epoch. This vector */
 /*     will be used for all option combinations. */
 
-    spkpos_(target, et, fixref, abcorr, obsrvr, trgpos, &lt, target_len, 
-	    fixref_len, abcorr_len, obsrvr_len);
-    if (failed_()) {
-	chkout_("TERMPT", (ftnlen)6);
+    spkpos_(__global_state, target, et, fixref, abcorr, obsrvr, trgpos, &lt, 
+	    target_len, fixref_len, abcorr_len, obsrvr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
-    if (vzero_(trgpos)) {
-	setmsg_("The distance between the observer and target at ET # is zer"
-		"o.", (ftnlen)61);
-	errdp_("#", et, (ftnlen)1);
-	sigerr_("SPICE(NOSEPARATION)", (ftnlen)19);
-	chkout_("TERMPT", (ftnlen)6);
+    if (vzero_(__global_state, trgpos)) {
+	setmsg_(__global_state, "The distance between the observer and targe"
+		"t at ET # is zero.", (ftnlen)61);
+	errdp_(__global_state, "#", et, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOSEPARATION)", (ftnlen)19);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
 
@@ -3085,15 +3112,15 @@ static termpt_state_t* get_termpt_state() {
 
 /*        Compute the epoch associated with the target center. */
 
-	zzcorepc_(abcorr, et, &lt, &trgepc, abcorr_len);
+	zzcorepc_(__global_state, abcorr, et, &lt, &trgepc, abcorr_len);
 
 /*        Get the vector from the target center to the illumination */
 /*        source. */
 
-	spkpos_(ilusrc, &trgepc, fixref, abcorr, target, axis, &ilumlt, 
-		ilusrc_len, fixref_len, abcorr_len, target_len);
-	if (failed_()) {
-	    chkout_("TERMPT", (ftnlen)6);
+	spkpos_(__global_state, ilusrc, &trgepc, fixref, abcorr, target, axis,
+		 &ilumlt, ilusrc_len, fixref_len, abcorr_len, target_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -3102,12 +3129,13 @@ static termpt_state_t* get_termpt_state() {
 /*        Make sure the reference vector and axis are linearly */
 /*        independent. */
 
-	vcrss_(axis, refvec, cp);
-	if (vzero_(cp)) {
-	    setmsg_("Input reference vector and illumination source-target v"
-		    "ector are linearly  dependent.", (ftnlen)85);
-	    sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	    chkout_("TERMPT", (ftnlen)6);
+	vcrss_(__global_state, axis, refvec, cp);
+	if (vzero_(__global_state, cp)) {
+	    setmsg_(__global_state, "Input reference vector and illumination"
+		    " source-target vector are linearly  dependent.", (ftnlen)
+		    85);
+	    sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
 	to = 1;
@@ -3124,7 +3152,7 @@ static termpt_state_t* get_termpt_state() {
 /*           Rotation of the half-planes is in the positive */
 /*           sense about AXIS. */
 
-	    vrotv_(refvec, axis, &roll, plnvec);
+	    vrotv_(__global_state, refvec, axis, &roll, plnvec);
 	    if (__state->shape == 2) {
 
 /*              This is the DSK case. */
@@ -3139,7 +3167,7 @@ static termpt_state_t* get_termpt_state() {
 
 /*                 Note that RESULT is a cell, not a window. */
 
-		    scardd_(&__state->c__0, result);
+		    scardd_(__global_state, &__state->c__0, result);
 
 /*                 Note that the evaluation epoch for the surface is */
 /*                 optionally corrected for light time. */
@@ -3149,15 +3177,15 @@ static termpt_state_t* get_termpt_state() {
 /*                 The location of the center of the source is passed */
 /*                 to the tangent utilities instead. */
 
-		    zztangnt_(&__state->shadow, &ilurad, &__state->shape, &
-			    __state->trgcde, &__state->nsurf, __state->srflst,
-			     &fxfcde, &trgepc, plnvec, axis, schstp, soltol, 
-			    result, __state->pntbuf);
-		    if (failed_()) {
-			chkout_("TERMPT", (ftnlen)6);
+		    zztangnt_(__global_state, &__state->shadow, &ilurad, &
+			    __state->shape, &__state->trgcde, &__state->nsurf,
+			     __state->srflst, &fxfcde, &trgepc, plnvec, axis, 
+			    schstp, soltol, result, __state->pntbuf);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "TERMPT", (ftnlen)6);
 			return 0;
 		    }
-		    npts[i__ - 1] = cardd_(result);
+		    npts[i__ - 1] = cardd_(__global_state, result);
 		} else if (__state->trmtyp == 2) {
 
 /*                 This option uses the target's reference ellipsoid for */
@@ -3173,15 +3201,16 @@ static termpt_state_t* get_termpt_state() {
 /*                 Find the terminator point on the ellipsoid in the */
 /*                 current cutting half-plane. */
 
-		    zzedtmpt_(&__state->uflag, __state->svtrad, &
-			    __state->svtrad[1], &__state->svtrad[2], &ilurad, 
-			    axis, plnvec, __state->pntbuf);
-		    if (failed_()) {
-			chkout_("TERMPT", (ftnlen)6);
+		    zzedtmpt_(__global_state, &__state->uflag, 
+			    __state->svtrad, &__state->svtrad[1], &
+			    __state->svtrad[2], &ilurad, axis, plnvec, 
+			    __state->pntbuf);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "TERMPT", (ftnlen)6);
 			return 0;
 		    }
 		    npts[i__ - 1] = 1;
-		    vhat_(__state->pntbuf, edir);
+		    vhat_(__global_state, __state->pntbuf, edir);
 
 /*                 Find the intercept on the target surface of the ray */
 /*                 emanating from the target in the direction of EDIR. */
@@ -3190,13 +3219,14 @@ static termpt_state_t* get_termpt_state() {
 /*                 invisible from the interior of the target. */
 
 		    d__1 = __state->maxrad * 3.;
-		    vscl_(&d__1, edir, rayvtx);
-		    vminus_(edir, raydir);
-		    zzsudski_(&__state->trgcde, &__state->nsurf, 
-			    __state->srflst, &fxfcde);
-		    zzraysfx_(rayvtx, raydir, &trgepc, __state->pntbuf, &fnd);
-		    if (failed_()) {
-			chkout_("TERMPT", (ftnlen)6);
+		    vscl_(__global_state, &d__1, edir, rayvtx);
+		    vminus_(__global_state, edir, raydir);
+		    zzsudski_(__global_state, &__state->trgcde, &
+			    __state->nsurf, __state->srflst, &fxfcde);
+		    zzraysfx_(__global_state, rayvtx, raydir, &trgepc, 
+			    __state->pntbuf, &fnd);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "TERMPT", (ftnlen)6);
 			return 0;
 		    }
 		    if (fnd) {
@@ -3208,10 +3238,11 @@ static termpt_state_t* get_termpt_state() {
 
 /*                 This is a backstop case; it should never be reached. */
 
-		    setmsg_("Invalid terminator type code: #", (ftnlen)31);
-		    errint_("#", &__state->trmtyp, (ftnlen)1);
-		    sigerr_("SPICE(BUG)", (ftnlen)10);
-		    chkout_("TERMPT", (ftnlen)6);
+		    setmsg_(__global_state, "Invalid terminator type code: #",
+			     (ftnlen)31);
+		    errint_(__global_state, "#", &__state->trmtyp, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		    chkout_(__global_state, "TERMPT", (ftnlen)6);
 		    return 0;
 		}
 	    } else if (__state->shape == 1) {
@@ -3221,37 +3252,37 @@ static termpt_state_t* get_termpt_state() {
 /*              Find the terminator point in the current cutting */
 /*              half-plane. */
 
-		zzedtmpt_(&__state->uflag, __state->svtrad, &__state->svtrad[
-			1], &__state->svtrad[2], &ilurad, axis, plnvec, 
-			__state->pntbuf);
-		if (failed_()) {
-		    chkout_("TERMPT", (ftnlen)6);
+		zzedtmpt_(__global_state, &__state->uflag, __state->svtrad, &
+			__state->svtrad[1], &__state->svtrad[2], &ilurad, 
+			axis, plnvec, __state->pntbuf);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "TERMPT", (ftnlen)6);
 		    return 0;
 		}
-		scardd_(&__state->c__0, result);
+		scardd_(__global_state, &__state->c__0, result);
 		npts[i__ - 1] = 1;
 	    } else {
 
 /*              This is a backstop case; it should never be reached. */
 
-		setmsg_("Invalid shape code: #", (ftnlen)21);
-		errint_("#", &__state->shape, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("TERMPT", (ftnlen)6);
+		setmsg_(__global_state, "Invalid shape code: #", (ftnlen)21);
+		errint_(__global_state, "#", &__state->shape, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "TERMPT", (ftnlen)6);
 		return 0;
 	    }
 	    total += npts[i__ - 1];
 	    if (npts[i__ - 1] > room) {
-		setmsg_("Out of room in output arrays. Index of cutting half"
-			"-plane is # out of #. Number of terminator points co"
-			"llected so far is #. Available room is #.", (ftnlen)
-			144);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", ncuts, (ftnlen)1);
-		errint_("#", &total, (ftnlen)1);
-		errint_("#", &room, (ftnlen)1);
-		sigerr_("SPICE(OUTOFROOM)", (ftnlen)16);
-		chkout_("TERMPT", (ftnlen)6);
+		setmsg_(__global_state, "Out of room in output arrays. Index"
+			" of cutting half-plane is # out of #. Number of term"
+			"inator points collected so far is #. Available room "
+			"is #.", (ftnlen)144);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", ncuts, (ftnlen)1);
+		errint_(__global_state, "#", &total, (ftnlen)1);
+		errint_(__global_state, "#", &room, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(OUTOFROOM)", (ftnlen)16);
+		chkout_(__global_state, "TERMPT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -3262,12 +3293,14 @@ static termpt_state_t* get_termpt_state() {
 
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
-		vequ_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
-			? i__3 : s_rnge("pntbuf", i__3, "termpt_", (ftnlen)
-			3029)], &points[to * 3 - 3]);
-		vadd_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
-			? i__3 : s_rnge("pntbuf", i__3, "termpt_", (ftnlen)
-			3030)], trgpos, &trmvcs[to * 3 - 3]);
+		vequ_(__global_state, &__state->pntbuf[(i__3 = j * 3 - 3) < 
+			6000 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "pntbuf", i__3, "termpt_", (
+			ftnlen)3029)], &points[to * 3 - 3]);
+		vadd_(__global_state, &__state->pntbuf[(i__3 = j * 3 - 3) < 
+			6000 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "pntbuf", i__3, "termpt_", (
+			ftnlen)3030)], trgpos, &trmvcs[to * 3 - 3]);
 		epochs[to - 1] = trgepc;
 		++to;
 		room -= npts[i__ - 1];
@@ -3283,12 +3316,13 @@ static termpt_state_t* get_termpt_state() {
 /*        point method. */
 
 	if (__state->trmtyp != 1) {
-	    setmsg_("Terminator point definition type <#> is not supported f"
-		    "or the # aberration correction locus.", (ftnlen)92);
-	    errch_("#", pntdef, (ftnlen)1, (ftnlen)20);
-	    errch_("#", corloc, (ftnlen)1, corloc_len);
-	    sigerr_("SPICE(BADTERMLOCUSMIX)", (ftnlen)22);
-	    chkout_("TERMPT", (ftnlen)6);
+	    setmsg_(__global_state, "Terminator point definition type <#> is"
+		    " not supported for the # aberration correction locus.", (
+		    ftnlen)92);
+	    errch_(__global_state, "#", pntdef, (ftnlen)1, (ftnlen)20);
+	    errch_(__global_state, "#", corloc, (ftnlen)1, corloc_len);
+	    sigerr_(__global_state, "SPICE(BADTERMLOCUSMIX)", (ftnlen)22);
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -3296,9 +3330,9 @@ static termpt_state_t* get_termpt_state() {
 /*        system barycenter. This state is expressed relative to */
 /*        an inertial reference frame. This state is computed once. */
 
-	spkssb_(&obscde, et, "J2000", stobs, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("TERMPT", (ftnlen)6);
+	spkssb_(__global_state, &obscde, et, "J2000", stobs, (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "TERMPT", (ftnlen)6);
 	    return 0;
 	}
 	to = 1;
@@ -3332,26 +3366,26 @@ static termpt_state_t* get_termpt_state() {
 /*                 during the previous loop iteration. */
 
 		    epoch = *et - lt;
-		    spkgps_(&__state->trgcde, &epoch, "J2000", &__state->c__0,
-			     ssbtrg, &ssblt, (ftnlen)5);
-		    if (failed_()) {
-			chkout_("TERMPT", (ftnlen)6);
+		    spkgps_(__global_state, &__state->trgcde, &epoch, "J2000",
+			     &__state->c__0, ssbtrg, &ssblt, (ftnlen)5);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "TERMPT", (ftnlen)6);
 			return 0;
 		    }
 
 /*                 Compute the position of the target center relative to */
 /*                 the observer in the inertial frame. */
 
-		    vsub_(ssbtrg, stobs, ptarg);
+		    vsub_(__global_state, ssbtrg, stobs, ptarg);
 
 /*                 Find the position of the illumination source relative */
 /*                 to the target center at EPOCH. */
 
-		    spkezp_(&__state->ilucde, &epoch, fixref, abcorr, &
-			    __state->trgcde, axis, &ilumlt, fixref_len, 
-			    abcorr_len);
-		    if (failed_()) {
-			chkout_("TERMPT", (ftnlen)6);
+		    spkezp_(__global_state, &__state->ilucde, &epoch, fixref, 
+			    abcorr, &__state->trgcde, axis, &ilumlt, 
+			    fixref_len, abcorr_len);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "TERMPT", (ftnlen)6);
 			return 0;
 		    }
 
@@ -3362,16 +3396,17 @@ static termpt_state_t* get_termpt_state() {
 /*                 cutting half-plane. Rotation of the half-planes is in */
 /*                 the positive sense about AXIS. */
 
-		    vrotv_(refvec, axis, &roll, plnvec);
+		    vrotv_(__global_state, refvec, axis, &roll, plnvec);
 
 /*                 Find the terminator point on the reference */
 /*                 ellipsoid, in the cutting half-plane. */
 
-		    zzedtmpt_(&__state->uflag, __state->svtrad, &
-			    __state->svtrad[1], &__state->svtrad[2], &ilurad, 
-			    axis, plnvec, __state->pntbuf);
-		    if (failed_()) {
-			chkout_("TERMPT", (ftnlen)6);
+		    zzedtmpt_(__global_state, &__state->uflag, 
+			    __state->svtrad, &__state->svtrad[1], &
+			    __state->svtrad[2], &ilurad, axis, plnvec, 
+			    __state->pntbuf);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "TERMPT", (ftnlen)6);
 			return 0;
 		    }
 		    npts[i__ - 1] = 1;
@@ -3380,20 +3415,21 @@ static termpt_state_t* get_termpt_state() {
 /*                 Compute the vector from the observer to the terminator */
 /*                 point. */
 
-		    pxform_("J2000", fixref, &epoch, xform, (ftnlen)5, 
-			    fixref_len);
-		    if (failed_()) {
-			chkout_("TERMPT", (ftnlen)6);
+		    pxform_(__global_state, "J2000", fixref, &epoch, xform, (
+			    ftnlen)5, fixref_len);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "TERMPT", (ftnlen)6);
 			return 0;
 		    }
-		    mxv_(xform, ptarg, trgpos);
-		    vadd_(__state->pntbuf, trgpos, srfvec);
+		    mxv_(__global_state, xform, ptarg, trgpos);
+		    vadd_(__global_state, __state->pntbuf, trgpos, srfvec);
 
 /*                 Compute the light time to the terminator point. */
 
 		    prvlt = lt;
-		    d__1 = vnorm_(srfvec) / clight_();
-		    lt = touchd_(&d__1);
+		    d__1 = vnorm_(__global_state, srfvec) / clight_(
+			    __global_state);
+		    lt = touchd_(__global_state, &d__1);
 
 /*                 LTERR is the magnitude of the change between the */
 /*                 current estimate of light time and the previous */
@@ -3403,7 +3439,7 @@ static termpt_state_t* get_termpt_state() {
 /* Computing MAX */
 		    d__3 = 1., d__4 = abs(epoch);
 		    d__2 = (d__1 = lt - prvlt, abs(d__1)) / max(d__3,d__4);
-		    lterr = touchd_(&d__2);
+		    lterr = touchd_(__global_state, &d__2);
 		    ++j;
 		}
 
@@ -3419,25 +3455,25 @@ static termpt_state_t* get_termpt_state() {
 /*              to the observer at ET. This vector is computed in */
 /*              an inertial frame. */
 
-		spkgps_(&__state->trgcde, &epoch, "J2000", &__state->c__0, 
-			ssbtrg, &ssblt, (ftnlen)5);
-		if (failed_()) {
-		    chkout_("TERMPT", (ftnlen)6);
+		spkgps_(__global_state, &__state->trgcde, &epoch, "J2000", &
+			__state->c__0, ssbtrg, &ssblt, (ftnlen)5);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "TERMPT", (ftnlen)6);
 		    return 0;
 		}
 
 /*              Compute the position of the target center relative to */
 /*              the observer in the inertial frame. */
 
-		vsub_(ssbtrg, stobs, ptarg);
+		vsub_(__global_state, ssbtrg, stobs, ptarg);
 
 /*              Transform the observer-target position to the body-fixed */
 /*              frame at EPOCH. */
 
-		pxform_("J2000", fixref, &epoch, xform, (ftnlen)5, fixref_len)
-			;
-		if (failed_()) {
-		    chkout_("TERMPT", (ftnlen)6);
+		pxform_(__global_state, "J2000", fixref, &epoch, xform, (
+			ftnlen)5, fixref_len);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "TERMPT", (ftnlen)6);
 		    return 0;
 		}
 
@@ -3449,23 +3485,23 @@ static termpt_state_t* get_termpt_state() {
 /*                 The vector ICORVC below is the inertially-referenced */
 /*                 stellar aberration correction. */
 
-		    mtxv_(xform, __state->pntbuf, tmpvec);
-		    vadd_(tmpvec, ptarg, itrmvc);
-		    stelab_(itrmvc, &stobs[3], tmpvec);
-		    vsub_(tmpvec, itrmvc, icorvc);
-		    mxv_(xform, icorvc, stloff);
+		    mtxv_(__global_state, xform, __state->pntbuf, tmpvec);
+		    vadd_(__global_state, tmpvec, ptarg, itrmvc);
+		    stelab_(__global_state, itrmvc, &stobs[3], tmpvec);
+		    vsub_(__global_state, tmpvec, itrmvc, icorvc);
+		    mxv_(__global_state, xform, icorvc, stloff);
 		}
-		mxv_(xform, ptarg, tmpvec);
-		vequ_(tmpvec, trgpos);
+		mxv_(__global_state, xform, ptarg, tmpvec);
+		vequ_(__global_state, tmpvec, trgpos);
 
 /*              Find the apparent position of the illumination source */
 /*              relative to the target at EPOCH. */
 
-		spkezp_(&__state->ilucde, &epoch, fixref, abcorr, &
-			__state->trgcde, axis, &ilumlt, fixref_len, 
+		spkezp_(__global_state, &__state->ilucde, &epoch, fixref, 
+			abcorr, &__state->trgcde, axis, &ilumlt, fixref_len, 
 			abcorr_len);
-		if (failed_()) {
-		    chkout_("TERMPT", (ftnlen)6);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "TERMPT", (ftnlen)6);
 		    return 0;
 		}
 	    } else {
@@ -3475,11 +3511,11 @@ static termpt_state_t* get_termpt_state() {
 /*              Get the position of the illumination source */
 /*              as seen from the target at ET. */
 
-		spkezp_(&__state->ilucde, et, fixref, abcorr, &
-			__state->trgcde, axis, &ilumlt, fixref_len, 
+		spkezp_(__global_state, &__state->ilucde, et, fixref, abcorr, 
+			&__state->trgcde, axis, &ilumlt, fixref_len, 
 			abcorr_len);
-		if (failed_()) {
-		    chkout_("TERMPT", (ftnlen)6);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "TERMPT", (ftnlen)6);
 		    return 0;
 		}
 
@@ -3497,7 +3533,7 @@ static termpt_state_t* get_termpt_state() {
 /*           Reset the plane definition vector PLNVEC based on the new */
 /*           value of AXIS. */
 
-	    vrotv_(refvec, axis, &roll, plnvec);
+	    vrotv_(__global_state, refvec, axis, &roll, plnvec);
 
 /*           We're ready to compute the terminator point in the current */
 /*           half-plane. */
@@ -3507,20 +3543,20 @@ static termpt_state_t* get_termpt_state() {
 /*              Find the terminator points on the target surface as */
 /*              modeled by DSK data. */
 
-		scardd_(&__state->c__0, result);
+		scardd_(__global_state, &__state->c__0, result);
 
 /*              Note that the evaluation epoch for the surface is */
 /*              corrected for light time. */
 
-		zztangnt_(&__state->shadow, &ilurad, &__state->shape, &
-			__state->trgcde, &__state->nsurf, __state->srflst, &
-			fxfcde, &epoch, plnvec, axis, schstp, soltol, result, 
-			__state->pntbuf);
-		if (failed_()) {
-		    chkout_("TERMPT", (ftnlen)6);
+		zztangnt_(__global_state, &__state->shadow, &ilurad, &
+			__state->shape, &__state->trgcde, &__state->nsurf, 
+			__state->srflst, &fxfcde, &epoch, plnvec, axis, 
+			schstp, soltol, result, __state->pntbuf);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "TERMPT", (ftnlen)6);
 		    return 0;
 		}
-		npts[i__ - 1] = cardd_(result);
+		npts[i__ - 1] = cardd_(__global_state, result);
 	    } else {
 
 /*              Find the terminator point on the target surface modeled */
@@ -3532,28 +3568,29 @@ static termpt_state_t* get_termpt_state() {
 /*              point. */
 
 		if (! __state->uselt) {
-		    zzedtmpt_(&__state->uflag, __state->svtrad, &
-			    __state->svtrad[1], &__state->svtrad[2], &ilurad, 
-			    axis, plnvec, __state->pntbuf);
+		    zzedtmpt_(__global_state, &__state->uflag, 
+			    __state->svtrad, &__state->svtrad[1], &
+			    __state->svtrad[2], &ilurad, axis, plnvec, 
+			    __state->pntbuf);
 		}
-		if (failed_()) {
-		    chkout_("TERMPT", (ftnlen)6);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "TERMPT", (ftnlen)6);
 		    return 0;
 		}
 		npts[i__ - 1] = 1;
 	    }
 	    total += npts[i__ - 1];
 	    if (npts[i__ - 1] > room) {
-		setmsg_("Out of room in output arrays. Index of cutting half"
-			"-plane is # out of #. Number of terminator points co"
-			"llected so far is #. Available room is #.", (ftnlen)
-			144);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", ncuts, (ftnlen)1);
-		errint_("#", &total, (ftnlen)1);
-		errint_("#", &room, (ftnlen)1);
-		sigerr_("SPICE(OUTOFROOM)", (ftnlen)16);
-		chkout_("TERMPT", (ftnlen)6);
+		setmsg_(__global_state, "Out of room in output arrays. Index"
+			" of cutting half-plane is # out of #. Number of term"
+			"inator points collected so far is #. Available room "
+			"is #.", (ftnlen)144);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", ncuts, (ftnlen)1);
+		errint_(__global_state, "#", &total, (ftnlen)1);
+		errint_(__global_state, "#", &room, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(OUTOFROOM)", (ftnlen)16);
+		chkout_(__global_state, "TERMPT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -3564,20 +3601,23 @@ static termpt_state_t* get_termpt_state() {
 
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
-		vequ_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
-			? i__3 : s_rnge("pntbuf", i__3, "termpt_", (ftnlen)
-			3373)], &points[to * 3 - 3]);
-		vadd_(&__state->pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 
-			? i__3 : s_rnge("pntbuf", i__3, "termpt_", (ftnlen)
-			3374)], trgpos, &trmvcs[to * 3 - 3]);
+		vequ_(__global_state, &__state->pntbuf[(i__3 = j * 3 - 3) < 
+			6000 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "pntbuf", i__3, "termpt_", (
+			ftnlen)3373)], &points[to * 3 - 3]);
+		vadd_(__global_state, &__state->pntbuf[(i__3 = j * 3 - 3) < 
+			6000 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "pntbuf", i__3, "termpt_", (
+			ftnlen)3374)], trgpos, &trmvcs[to * 3 - 3]);
 		if (__state->usestl) {
 
 /*                 Apply the stellar aberration offset for the current */
 /*                 half-plane to each terminator vector in the output */
 /*                 buffer. */
 
-		    vadd_(&trmvcs[to * 3 - 3], stloff, tmpvec);
-		    vequ_(tmpvec, &trmvcs[to * 3 - 3]);
+		    vadd_(__global_state, &trmvcs[to * 3 - 3], stloff, tmpvec)
+			    ;
+		    vequ_(__global_state, tmpvec, &trmvcs[to * 3 - 3]);
 		}
 		epochs[to - 1] = epoch;
 		++to;
@@ -3589,14 +3629,14 @@ static termpt_state_t* get_termpt_state() {
 
 	}
     } else {
-	setmsg_("Aberration correction locus # is not recognized.", (ftnlen)
-		48);
-	errch_("#", corloc, (ftnlen)1, corloc_len);
-	sigerr_("SPICE(INVALIDLOCUS)", (ftnlen)19);
-	chkout_("TERMPT", (ftnlen)6);
+	setmsg_(__global_state, "Aberration correction locus # is not recogn"
+		"ized.", (ftnlen)48);
+	errch_(__global_state, "#", corloc, (ftnlen)1, corloc_len);
+	sigerr_(__global_state, "SPICE(INVALIDLOCUS)", (ftnlen)19);
+	chkout_(__global_state, "TERMPT", (ftnlen)6);
 	return 0;
     }
-    chkout_("TERMPT", (ftnlen)6);
+    chkout_(__global_state, "TERMPT", (ftnlen)6);
     return 0;
 } /* termpt_ */
 

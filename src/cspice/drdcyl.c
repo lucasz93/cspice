@@ -8,21 +8,20 @@
 
 
 typedef int drdcyl_state_t;
-static drdcyl_state_t* get_drdcyl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline drdcyl_state_t* get_drdcyl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DRDCYL (Derivative of rectangular w.r.t. cylindrical) */
-/* Subroutine */ int drdcyl_(doublereal *r__, doublereal *long__, doublereal *
-	z__, doublereal *jacobi)
+/* Subroutine */ int drdcyl_(cspice_t* __global_state, doublereal *r__, 
+	doublereal *long__, doublereal *z__, doublereal *jacobi)
 {
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
 
     /* Module state */
-    drdcyl_state_t* __state = get_drdcyl_state();
+    drdcyl_state_t* __state = get_drdcyl_state(__global_state);
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */
@@ -213,11 +212,11 @@ static drdcyl_state_t* get_drdcyl_state() {
 
 /*     Local parameters */
 
-    jacobi[0] = cos(*long__);
-    jacobi[1] = sin(*long__);
+    jacobi[0] = cos(&__global_state->f2c, *long__);
+    jacobi[1] = sin(&__global_state->f2c, *long__);
     jacobi[2] = 0.;
-    jacobi[3] = -sin(*long__) * *r__;
-    jacobi[4] = cos(*long__) * *r__;
+    jacobi[3] = -sin(&__global_state->f2c, *long__) * *r__;
+    jacobi[4] = cos(&__global_state->f2c, *long__) * *r__;
     jacobi[5] = 0.;
     jacobi[6] = 0.;
     jacobi[7] = 0.;

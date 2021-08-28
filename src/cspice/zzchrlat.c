@@ -8,36 +8,38 @@
 
 
 typedef int zzchrlat_state_t;
-static zzchrlat_state_t* get_zzchrlat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzchrlat_state_t* get_zzchrlat_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZCHRLAT ( Chord latitude  ) */
-/* Subroutine */ int zzchrlat_(doublereal *midlat, doublereal *dlon, 
-	doublereal *eptlat)
+/* Subroutine */ int zzchrlat_(cspice_t* __global_state, doublereal *midlat, 
+	doublereal *dlon, doublereal *eptlat)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sin(doublereal), cos(doublereal), atan2(doublereal, doublereal);
+    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal), 
+	    atan2(f2c_state_t*, doublereal, doublereal);
 
     /* Local variables */
     doublereal mlat;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal pi_(void);
-    extern doublereal halfpi_(void);
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal pi_(cspice_t*);
+    extern doublereal halfpi_(cspice_t*);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzchrlat_state_t* __state = get_zzchrlat_state();
+    zzchrlat_state_t* __state = get_zzchrlat_state(__global_state);
 /* $ Abstract */
 
 /*     Given the latitude of a midpoint of chord on a circle of constant */
@@ -438,34 +440,34 @@ static zzchrlat_state_t* get_zzchrlat_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    if (*dlon < 0. || *dlon >= pi_()) {
-	chkin_("ZZCHRLAT", (ftnlen)8);
-	setmsg_("The input longitude extent was #; this value must be in the"
-		" range [0 : pi ) radians.", (ftnlen)84);
-	errdp_("#", dlon, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZCHRLAT", (ftnlen)8);
+    if (*dlon < 0. || *dlon >= pi_(__global_state)) {
+	chkin_(__global_state, "ZZCHRLAT", (ftnlen)8);
+	setmsg_(__global_state, "The input longitude extent was #; this valu"
+		"e must be in the range [0 : pi ) radians.", (ftnlen)84);
+	errdp_(__global_state, "#", dlon, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZCHRLAT", (ftnlen)8);
 	return 0;
     }
-    if (abs(*midlat) > halfpi_() + 1e-12) {
-	chkin_("ZZCHRLAT", (ftnlen)8);
-	setmsg_("The input latitude was #; this value must be in the interva"
-		"l -pi/2 : pi/2 (radians).", (ftnlen)84);
-	errdp_("#", midlat, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZCHRLAT", (ftnlen)8);
+    if (abs(*midlat) > halfpi_(__global_state) + 1e-12) {
+	chkin_(__global_state, "ZZCHRLAT", (ftnlen)8);
+	setmsg_(__global_state, "The input latitude was #; this value must b"
+		"e in the interval -pi/2 : pi/2 (radians).", (ftnlen)84);
+	errdp_(__global_state, "#", midlat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZCHRLAT", (ftnlen)8);
 	return 0;
     }
 
 /*     The input latitude is, at worst, slightly out of range. */
 /*     Bracket it. */
 
-    d__1 = -halfpi_();
-    d__2 = halfpi_();
-    mlat = brcktd_(midlat, &d__1, &d__2);
+    d__1 = -halfpi_(__global_state);
+    d__2 = halfpi_(__global_state);
+    mlat = brcktd_(__global_state, midlat, &d__1, &d__2);
 
 /*     The endpoint latitude EPTLAT is defined by */
 
@@ -475,7 +477,9 @@ static zzchrlat_state_t* get_zzchrlat_state() {
 /*     the two-argument arctangent function and well-behaved */
 /*     trig functions as input arguments: */
 
-    *eptlat = atan2(sin(mlat) * cos(*dlon / 2), cos(mlat));
+    *eptlat = atan2(&__global_state->f2c, sin(&__global_state->f2c, mlat) * 
+	    cos(&__global_state->f2c, *dlon / 2), cos(&__global_state->f2c, 
+	    mlat));
     return 0;
 } /* zzchrlat_ */
 

@@ -8,13 +8,13 @@
 
 
 typedef int bsrchd_state_t;
-static bsrchd_state_t* get_bsrchd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bsrchd_state_t* get_bsrchd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure        BSRCHD ( Binary search for double precision value ) */
-integer bsrchd_(doublereal *value, integer *ndim, doublereal *array)
+integer bsrchd_(cspice_t* __global_state, doublereal *value, integer *ndim, 
+	doublereal *array)
 {
     /* System generated locals */
     integer ret_val;
@@ -26,7 +26,7 @@ integer bsrchd_(doublereal *value, integer *ndim, doublereal *array)
 
 
     /* Module state */
-    bsrchd_state_t* __state = get_bsrchd_state();
+    bsrchd_state_t* __state = get_bsrchd_state(__global_state);
 /* $ Abstract */
 
 /*      Do a binary search for a given value within a DOUBLE PRECISION */

@@ -8,8 +8,7 @@
 
 
 extern zzekencd_init_t __zzekencd_init;
-static zzekencd_state_t* get_zzekencd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekencd_state_t* get_zzekencd_state(cspice_t* state) {
 	if (!state->zzekencd)
 		state->zzekencd = __cspice_allocate_module(sizeof(
 	zzekencd_state_t), &__zzekencd_init, sizeof(__zzekencd_init));
@@ -18,43 +17,44 @@ static zzekencd_state_t* get_zzekencd_state() {
 }
 
 /* $Procedure      ZZEKENCD ( EK, encode query ) */
-/* Subroutine */ int zzekencd_(char *query, integer *eqryi, char *eqryc, 
-	doublereal *eqryd, logical *error, char *errmsg, integer *errptr, 
-	ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len)
+/* Subroutine */ int zzekencd_(cspice_t* __global_state, char *query, integer 
+	*eqryi, char *eqryc, doublereal *eqryd, logical *error, char *errmsg, 
+	integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen 
+	errmsg_len)
 {
-    extern /* Subroutine */ int zzekscan_(char *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, doublereal 
-	    *, char *, integer *, integer *, logical *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int zzeksemc_(char *, integer *, char *, logical *
-	    , char *, integer *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekqini_(integer *, integer *, integer *, 
-	    char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zzekpars_(char *, integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *, char *, integer *, 
-	    integer *, integer *, char *, doublereal *, logical *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzeknres_(char *, integer *, char *, logical *
-	    , char *, integer *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzektres_(char *, integer *, char *, 
-	    doublereal *, logical *, char *, integer *, ftnlen, ftnlen, 
+    extern /* Subroutine */ int zzekscan_(cspice_t*, char *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    doublereal *, char *, integer *, integer *, logical *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzeksemc_(cspice_t*, char *, integer *, char *
+	    , logical *, char *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqini_(cspice_t*, integer *, integer *, 
+	    integer *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzekpars_(cspice_t*, char *, integer *, 
+	    integer *, integer *, integer *, integer *, doublereal *, char *, 
+	    integer *, integer *, integer *, char *, doublereal *, logical *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzeknres_(cspice_t*, char *, integer *, char *
+	    , logical *, char *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzektres_(cspice_t*, char *, integer *, char *
+	    , doublereal *, logical *, char *, integer *, ftnlen, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer chbegs[500];
     integer chends[500];
     char chrbuf[2000];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal numvls[100];
     integer lxbegs[500];
     integer lxends[500];
     integer ntoken;
     integer tokens[500];
     integer values[500];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzekencd_state_t* __state = get_zzekencd_state();
+    zzekencd_state_t* __state = get_zzekencd_state(__global_state);
 /* $ Abstract */
 
 /*     Convert an EK query to encoded form. */
@@ -775,66 +775,66 @@ static zzekencd_state_t* get_zzekencd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKENCD", (ftnlen)8);
+	chkin_(__global_state, "ZZEKENCD", (ftnlen)8);
     }
 
 /*     Initialize the encoded query each time, for safety. */
 
-    zzekqini_(&__state->c__27869, &__state->c__100, eqryi, eqryc, eqryd, 
-	    eqryc_len);
+    zzekqini_(__global_state, &__state->c__27869, &__state->c__100, eqryi, 
+	    eqryc, eqryd, eqryc_len);
 
 /*     Find the tokens in the input query. */
 
-    zzekscan_(query, &__state->c__500, &__state->c__100, &ntoken, tokens, 
-	    lxbegs, lxends, values, numvls, chrbuf, chbegs, chends, error, 
-	    errmsg, query_len, (ftnlen)2000, errmsg_len);
+    zzekscan_(__global_state, query, &__state->c__500, &__state->c__100, &
+	    ntoken, tokens, lxbegs, lxends, values, numvls, chrbuf, chbegs, 
+	    chends, error, errmsg, query_len, (ftnlen)2000, errmsg_len);
     if (*error) {
 	*errptr = 1;
-	chkout_("ZZEKENCD", (ftnlen)8);
+	chkout_(__global_state, "ZZEKENCD", (ftnlen)8);
 	return 0;
     }
 
 /*     Now parse the query. */
 
-    zzekpars_(query, &ntoken, lxbegs, lxends, tokens, values, numvls, chrbuf, 
-	    chbegs, chends, eqryi, eqryc, eqryd, error, errmsg, query_len, (
-	    ftnlen)2000, eqryc_len, errmsg_len);
+    zzekpars_(__global_state, query, &ntoken, lxbegs, lxends, tokens, values, 
+	    numvls, chrbuf, chbegs, chends, eqryi, eqryc, eqryd, error, 
+	    errmsg, query_len, (ftnlen)2000, eqryc_len, errmsg_len);
     if (*error) {
 	*errptr = 1;
-	chkout_("ZZEKENCD", (ftnlen)8);
+	chkout_(__global_state, "ZZEKENCD", (ftnlen)8);
 	return 0;
     }
 
 /*     Resolve names. */
 
-    zzeknres_(query, eqryi, eqryc, error, errmsg, errptr, query_len, 
-	    eqryc_len, errmsg_len);
+    zzeknres_(__global_state, query, eqryi, eqryc, error, errmsg, errptr, 
+	    query_len, eqryc_len, errmsg_len);
     if (*error) {
-	chkout_("ZZEKENCD", (ftnlen)8);
+	chkout_(__global_state, "ZZEKENCD", (ftnlen)8);
 	return 0;
     }
 
 /*     Resolve time values, if necessary. */
 
-    zzektres_(query, eqryi, eqryc, eqryd, error, errmsg, errptr, query_len, 
-	    eqryc_len, errmsg_len);
+    zzektres_(__global_state, query, eqryi, eqryc, eqryd, error, errmsg, 
+	    errptr, query_len, eqryc_len, errmsg_len);
     if (*error) {
-	chkout_("ZZEKENCD", (ftnlen)8);
+	chkout_(__global_state, "ZZEKENCD", (ftnlen)8);
 	return 0;
     }
 
 /*     Perform semantic checks. */
 
-    zzeksemc_(query, eqryi, eqryc, error, errmsg, errptr, query_len, 
-	    eqryc_len, errmsg_len);
+    zzeksemc_(__global_state, query, eqryi, eqryc, error, errmsg, errptr, 
+	    query_len, eqryc_len, errmsg_len);
     if (*error) {
-	chkout_("ZZEKENCD", (ftnlen)8);
+	chkout_(__global_state, "ZZEKENCD", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZEKENCD", (ftnlen)8);
+    chkout_(__global_state, "ZZEKENCD", (ftnlen)8);
     return 0;
 } /* zzekencd_ */
 

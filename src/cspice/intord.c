@@ -8,8 +8,7 @@
 
 
 extern intord_init_t __intord_init;
-static intord_state_t* get_intord_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline intord_state_t* get_intord_state(cspice_t* state) {
 	if (!state->intord)
 		state->intord = __cspice_allocate_module(sizeof(
 	intord_state_t), &__intord_init, sizeof(__intord_init));
@@ -18,24 +17,25 @@ static intord_state_t* get_intord_state() {
 }
 
 /* $Procedure      INTORD ( Convert an integer to ordinal text ) */
-/* Subroutine */ int intord_(integer *n, char *string, ftnlen string_len)
+/* Subroutine */ int intord_(cspice_t* __global_state, integer *n, char *
+	string, ftnlen string_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer last;
     integer i__;
     char mystr[148];
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int inttxt_(integer *, char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int inttxt_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    intord_state_t* __state = get_intord_state();
+    intord_state_t* __state = get_intord_state(__global_state);
 /* $ Abstract */
 
 /*     Convert an integer to an equivalent written ordinal phrase. */
@@ -190,9 +190,9 @@ static intord_state_t* get_intord_state() {
 
 /*     First get the English equivalent of the cardinal N. */
 
-    s_copy(mystr, " ", (ftnlen)148, (ftnlen)1);
-    inttxt_(n, mystr, (ftnlen)148);
-    last = lastnb_(mystr, (ftnlen)148);
+    s_copy(&__global_state->f2c, mystr, " ", (ftnlen)148, (ftnlen)1);
+    inttxt_(__global_state, n, mystr, (ftnlen)148);
+    last = lastnb_(__global_state, mystr, (ftnlen)148);
     i__ = last;
 
 /*     Find the beginning of the last number of MYSTR. */
@@ -208,35 +208,45 @@ static intord_state_t* get_intord_state() {
 
 /*     Now convert the last cardinal to an ordinal. */
 
-    if (s_cmp(mystr + (i__ - 1), "ONE", last - (i__ - 1), (ftnlen)3) == 0) {
-	s_copy(mystr + (i__ - 1), "FIRST", 148 - (i__ - 1), (ftnlen)5);
-    } else if (s_cmp(mystr + (i__ - 1), "TWO", last - (i__ - 1), (ftnlen)3) ==
-	     0) {
-	s_copy(mystr + (i__ - 1), "SECOND", 148 - (i__ - 1), (ftnlen)6);
-    } else if (s_cmp(mystr + (i__ - 1), "THREE", last - (i__ - 1), (ftnlen)5) 
-	    == 0) {
-	s_copy(mystr + (i__ - 1), "THIRD", 148 - (i__ - 1), (ftnlen)5);
-    } else if (s_cmp(mystr + (i__ - 1), "FIVE", last - (i__ - 1), (ftnlen)4) 
-	    == 0) {
-	s_copy(mystr + (i__ - 1), "FIFTH", 148 - (i__ - 1), (ftnlen)5);
-    } else if (s_cmp(mystr + (i__ - 1), "EIGHT", last - (i__ - 1), (ftnlen)5) 
-	    == 0) {
-	s_copy(mystr + (i__ - 1), "EIGHTH", 148 - (i__ - 1), (ftnlen)6);
-    } else if (s_cmp(mystr + (i__ - 1), "NINE", last - (i__ - 1), (ftnlen)4) 
-	    == 0) {
-	s_copy(mystr + (i__ - 1), "NINTH", 148 - (i__ - 1), (ftnlen)5);
-    } else if (s_cmp(mystr + (i__ - 1), "TWELVE", last - (i__ - 1), (ftnlen)6)
-	     == 0) {
-	s_copy(mystr + (i__ - 1), "TWELFTH", 148 - (i__ - 1), (ftnlen)7);
+    if (s_cmp(&__global_state->f2c, mystr + (i__ - 1), "ONE", last - (i__ - 1)
+	    , (ftnlen)3) == 0) {
+	s_copy(&__global_state->f2c, mystr + (i__ - 1), "FIRST", 148 - (i__ - 
+		1), (ftnlen)5);
+    } else if (s_cmp(&__global_state->f2c, mystr + (i__ - 1), "TWO", last - (
+	    i__ - 1), (ftnlen)3) == 0) {
+	s_copy(&__global_state->f2c, mystr + (i__ - 1), "SECOND", 148 - (i__ 
+		- 1), (ftnlen)6);
+    } else if (s_cmp(&__global_state->f2c, mystr + (i__ - 1), "THREE", last - 
+	    (i__ - 1), (ftnlen)5) == 0) {
+	s_copy(&__global_state->f2c, mystr + (i__ - 1), "THIRD", 148 - (i__ - 
+		1), (ftnlen)5);
+    } else if (s_cmp(&__global_state->f2c, mystr + (i__ - 1), "FIVE", last - (
+	    i__ - 1), (ftnlen)4) == 0) {
+	s_copy(&__global_state->f2c, mystr + (i__ - 1), "FIFTH", 148 - (i__ - 
+		1), (ftnlen)5);
+    } else if (s_cmp(&__global_state->f2c, mystr + (i__ - 1), "EIGHT", last - 
+	    (i__ - 1), (ftnlen)5) == 0) {
+	s_copy(&__global_state->f2c, mystr + (i__ - 1), "EIGHTH", 148 - (i__ 
+		- 1), (ftnlen)6);
+    } else if (s_cmp(&__global_state->f2c, mystr + (i__ - 1), "NINE", last - (
+	    i__ - 1), (ftnlen)4) == 0) {
+	s_copy(&__global_state->f2c, mystr + (i__ - 1), "NINTH", 148 - (i__ - 
+		1), (ftnlen)5);
+    } else if (s_cmp(&__global_state->f2c, mystr + (i__ - 1), "TWELVE", last 
+	    - (i__ - 1), (ftnlen)6) == 0) {
+	s_copy(&__global_state->f2c, mystr + (i__ - 1), "TWELFTH", 148 - (i__ 
+		- 1), (ftnlen)7);
     } else if (*(unsigned char *)&mystr[last - 1] == 'Y') {
-	s_copy(mystr + (last - 1), "IETH", 148 - (last - 1), (ftnlen)4);
+	s_copy(&__global_state->f2c, mystr + (last - 1), "IETH", 148 - (last 
+		- 1), (ftnlen)4);
     } else {
-	suffix_("TH", &__state->c__0, mystr, (ftnlen)2, (ftnlen)148);
+	suffix_(__global_state, "TH", &__state->c__0, mystr, (ftnlen)2, (
+		ftnlen)148);
     }
 
 /*     Now simply put MYSTR into STRING and return. */
 
-    s_copy(string, mystr, string_len, (ftnlen)148);
+    s_copy(&__global_state->f2c, string, mystr, string_len, (ftnlen)148);
     return 0;
 } /* intord_ */
 

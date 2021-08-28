@@ -398,7 +398,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "daffpa_c" );
+   chkin_c ( naif_state, "daffpa_c" );
 
 
    daffpa_ ( ( logical * ) &fnd );

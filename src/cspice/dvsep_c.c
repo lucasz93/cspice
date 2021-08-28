@@ -224,7 +224,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dvsep_c" );
+   chkin_c ( naif_state, "dvsep_c" );
 
    /*
    Call the f2c'd Fortran routine.

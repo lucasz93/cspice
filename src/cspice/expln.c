@@ -8,22 +8,21 @@
 
 
 typedef int expln_state_t;
-static expln_state_t* get_expln_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline expln_state_t* get_expln_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      EXPLN ( Get Explanation for Short Error Message ) */
-/* Subroutine */ int expln_(char *msg, char *expl, ftnlen msg_len, ftnlen 
-	expl_len)
+/* Subroutine */ int expln_(cspice_t* __global_state, char *msg, char *expl, 
+	ftnlen msg_len, ftnlen expl_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
 
     /* Module state */
-    expln_state_t* __state = get_expln_state();
+    expln_state_t* __state = get_expln_state(__global_state);
 /* $ Abstract */
 
 /*      Return the explanation of a short error message. */
@@ -171,176 +170,206 @@ static expln_state_t* get_expln_state() {
 /*     Note: the short error messages should be ordered */
 /*     alphabetically. */
 
-    if (s_cmp(msg, "SPICE(BADENDPOINTS)", msg_len, (ftnlen)19) == 0) {
-	s_copy(expl, "Invalid Endpoints--Left Endpoint Exceeds Right Endpoint"
-		, expl_len, (ftnlen)55);
-    } else if (s_cmp(msg, "SPICE(BADGEFVERSION)", msg_len, (ftnlen)20) == 0) {
-	s_copy(expl, "Version Identification of GEF File is Invalid", 
-		expl_len, (ftnlen)45);
-    } else if (s_cmp(msg, "SPICE(BLANKMODULENAME)", msg_len, (ftnlen)22) == 0)
-	     {
-	s_copy(expl, "A blank string was used as a module name", expl_len, (
-		ftnlen)40);
-    } else if (s_cmp(msg, "SPICE(BOGUSENTRY)", msg_len, (ftnlen)17) == 0) {
-	s_copy(expl, "This Entry Point Contains No Executable Code", expl_len,
-		 (ftnlen)44);
-    } else if (s_cmp(msg, "SPICE(CELLTOOSMALL)", msg_len, (ftnlen)19) == 0) {
-	s_copy(expl, "Cardinality of Output Cell is Too Small", expl_len, (
-		ftnlen)39);
-    } else if (s_cmp(msg, "SPICE(CLUSTERWRITEERROR)", msg_len, (ftnlen)24) == 
-	    0) {
-	s_copy(expl, "Error Writing to Ephemeris File", expl_len, (ftnlen)31);
-    } else if (s_cmp(msg, "SPICE(DATATYPENOTRECOG)", msg_len, (ftnlen)23) == 
-	    0) {
-	s_copy(expl, "Unrecognized Data Type Specification was Encountered", 
-		expl_len, (ftnlen)52);
-    } else if (s_cmp(msg, "SPICE(DATEEXPECTED)", msg_len, (ftnlen)19) == 0) {
-	s_copy(expl, "The Value in the Kernel File was Expected to be a date."
-		, expl_len, (ftnlen)55);
-    } else if (s_cmp(msg, "SPICE(DEVICENAMETOOLONG)", msg_len, (ftnlen)24) == 
-	    0) {
-	s_copy(expl, "Name of Device Exceeds 128-Character Limit", expl_len, (
-		ftnlen)42);
-    } else if (s_cmp(msg, "SPICE(EMBEDDEDBLANK)", msg_len, (ftnlen)20) == 0) {
-	s_copy(expl, "Invalid embedded blank was found in character string", 
-		expl_len, (ftnlen)52);
-    } else if (s_cmp(msg, "SPICE(FILEALREADYOPEN)", msg_len, (ftnlen)22) == 0)
-	     {
-	s_copy(expl, "File Open Failed Because the File was Already Open", 
-		expl_len, (ftnlen)50);
-    } else if (s_cmp(msg, "SPICE(FILEOPENFAILED)", msg_len, (ftnlen)21) == 0) 
-	    {
-	s_copy(expl, "An Attempt to Open a File Failed", expl_len, (ftnlen)32)
-		;
-    } else if (s_cmp(msg, "SPICE(FILEREADFAILED)", msg_len, (ftnlen)21) == 0) 
-	    {
-	s_copy(expl, "An Attempt to Read a File Failed", expl_len, (ftnlen)32)
-		;
-    } else if (s_cmp(msg, "SPICE(FILEWRITEFAILED)", msg_len, (ftnlen)22) == 0)
-	     {
-	s_copy(expl, "An Attempt to Write a File Failed", expl_len, (ftnlen)
-		33);
-    } else if (s_cmp(msg, "SPICE(INCOMPATIBLEUNITS)", msg_len, (ftnlen)24) == 
-	    0) {
-	s_copy(expl, "The Input and Output Units are Incompatible", expl_len, 
-		(ftnlen)43);
-    } else if (s_cmp(msg, "SPICE(INVALIDACTION)", msg_len, (ftnlen)20) == 0) {
-	s_copy(expl, "An Invalid Action Value Was Supplied", expl_len, (
-		ftnlen)36);
-    } else if (s_cmp(msg, "SPICE(INVALIDARGUMENT)", msg_len, (ftnlen)22) == 0)
-	     {
-	s_copy(expl, "An Invalid Function Argument was Supplied", expl_len, (
-		ftnlen)41);
-    } else if (s_cmp(msg, "SPICE(INVALIDCHECKOUT)", msg_len, (ftnlen)22) == 0)
-	     {
-	s_copy(expl, "Checkout Was Attempted When No Routines Were Checked In"
-		, expl_len, (ftnlen)55);
-    } else if (s_cmp(msg, "SPICE(INVALIDCLUSTERNUM)", msg_len, (ftnlen)24) == 
-	    0) {
-	s_copy(expl, "Invalid Cluster Number -- Cluster Numbers Must Exceed "
-		"1 ", expl_len, (ftnlen)56);
-    } else if (s_cmp(msg, "SPICE(INVALIDEPOCH)", msg_len, (ftnlen)19) == 0) {
-	s_copy(expl, "An Invalid Epoch Type Specification Was Supplied", 
-		expl_len, (ftnlen)48);
-    } else if (s_cmp(msg, "SPICE(INVALIDINDEX)", msg_len, (ftnlen)19) == 0) {
-	s_copy(expl, "There Is No Element Corresponding to the Supplied Index"
-		, expl_len, (ftnlen)55);
-    } else if (s_cmp(msg, "SPICE(INVALIDTIMESTRING)", msg_len, (ftnlen)24) == 
-	    0) {
-	s_copy(expl, "Time String Could Not Be Parsed", expl_len, (ftnlen)31);
-    } else if (s_cmp(msg, "SPICE(INVALIDLISTITEM)", msg_len, (ftnlen)22) == 0)
-	     {
-	s_copy(expl, "An Invalid Item Was Found in a List", expl_len, (ftnlen)
-		35);
-    } else if (s_cmp(msg, "SPICE(INVALIDMSGTYPE)", msg_len, (ftnlen)21) == 0) 
-	    {
-	s_copy(expl, "An Invalid Error Message Type Was Specified", expl_len, 
-		(ftnlen)43);
-    } else if (s_cmp(msg, "SPICE(INVALIDOPERATION)", msg_len, (ftnlen)23) == 
-	    0) {
-	s_copy(expl, "An Invalid Operation Value Was Supplied", expl_len, (
-		ftnlen)39);
-    } else if (s_cmp(msg, "SPICE(INVALIDOPTION)", msg_len, (ftnlen)20) == 0) {
-	s_copy(expl, "An Invalid Option Value Was Supplied", expl_len, (
-		ftnlen)36);
-    } else if (s_cmp(msg, "SPICE(INVALIDTIMEFORMAT)", msg_len, (ftnlen)24) == 
-	    0) {
-	s_copy(expl, "Specification of Time String Format Was Not Recognized",
-		 expl_len, (ftnlen)54);
-    } else if (s_cmp(msg, "SPICE(KERNELVARNOTFOUND)", msg_len, (ftnlen)24) == 
-	    0) {
-	s_copy(expl, "The Variable Was not Found in the Kernel Pool.", 
-		expl_len, (ftnlen)46);
-    } else if (s_cmp(msg, "SPICE(NAMETABLEFULL)", msg_len, (ftnlen)20) == 0) {
-	s_copy(expl, "No Further Symbols Can be Inserted; the Name Table is "
-		"Full", expl_len, (ftnlen)58);
-    } else if (s_cmp(msg, "SPICE(NOFREELOGICALUNIT)", msg_len, (ftnlen)24) == 
-	    0) {
-	s_copy(expl, "No More Logical Units are Available for Allocation", 
-		expl_len, (ftnlen)50);
-    } else if (s_cmp(msg, "SPICE(NOINTERVAL)", msg_len, (ftnlen)17) == 0) {
-	s_copy(expl, "Window Does Not Contain Interval Corresponding to the "
-		"Supplied Index", expl_len, (ftnlen)68);
-    } else if (s_cmp(msg, "SPICE(NOSEGMENT)", msg_len, (ftnlen)16) == 0) {
-	s_copy(expl, "No Applicable Segment Found in Ephemeris File", 
-		expl_len, (ftnlen)45);
-    } else if (s_cmp(msg, "SPICE(NOSUCHSYMBOL)", msg_len, (ftnlen)19) == 0) {
-	s_copy(expl, "The Symbol Does Not Exist in the Symbol Table", 
-		expl_len, (ftnlen)45);
-    } else if (s_cmp(msg, "SPICE(NOTDISTINCT)", msg_len, (ftnlen)18) == 0) {
-	s_copy(expl, "The Elements Must Be Distinct", expl_len, (ftnlen)29);
-    } else if (s_cmp(msg, "SPICE(NUMBEREXPECTED)", msg_len, (ftnlen)21) == 0) 
-	    {
-	s_copy(expl, "The Value in the Kernel File was Expected to be a Numb"
-		"er.", expl_len, (ftnlen)57);
-    } else if (s_cmp(msg, "SPICE(POINTERTABLEFULL)", msg_len, (ftnlen)23) == 
-	    0) {
-	s_copy(expl, "No Further Symbols Can be Inserted; the Pointer Table "
-		"is Full", expl_len, (ftnlen)61);
-    } else if (s_cmp(msg, "SPICE(REFNOTREC)", msg_len, (ftnlen)16) == 0) {
-	s_copy(expl, "A Reference Frame Specification was Not Recognized", 
-		expl_len, (ftnlen)50);
-    } else if (s_cmp(msg, "SPICE(SETEXCESS)", msg_len, (ftnlen)16) == 0) {
-	s_copy(expl, "Cardinality of Set Is Too Small to Contain Result of t"
-		"he Requested Operation", expl_len, (ftnlen)76);
-    } else if (s_cmp(msg, "SPICE(TOOMANYFILESOPEN)", msg_len, (ftnlen)23) == 
-	    0) {
-	s_copy(expl, "The SPICELIB Limit for Number of Open Files Has Alread"
-		"y Been Reached", expl_len, (ftnlen)68);
-    } else if (s_cmp(msg, "SPICE(TRACEBACKOVERFLOW)", msg_len, (ftnlen)24) == 
-	    0) {
-	s_copy(expl, "No More Entries Can Be Added to the Traceback Represen"
-		"tation", expl_len, (ftnlen)60);
-    } else if (s_cmp(msg, "SPICE(UNITSNOTREC)", msg_len, (ftnlen)18) == 0) {
-	s_copy(expl, "The Input or Output Units Were Not Recognized", 
-		expl_len, (ftnlen)45);
-    } else if (s_cmp(msg, "SPICE(UNMATCHENDPTS)", msg_len, (ftnlen)20) == 0) {
-	s_copy(expl, "Window Does Not Have an Even Number of Endpoints", 
-		expl_len, (ftnlen)48);
-    } else if (s_cmp(msg, "SPICE(VALUETABLEFULL)", msg_len, (ftnlen)21) == 0) 
-	    {
-	s_copy(expl, "No Further Symbols Can be Inserted; the Value Table is"
-		" Full", expl_len, (ftnlen)59);
-    } else if (s_cmp(msg, "SPICE(WINDOWEXCESS)", msg_len, (ftnlen)19) == 0) {
-	s_copy(expl, "Cardinality of Window Is Too Small to Contain Result o"
-		"f the Requested Operation", expl_len, (ftnlen)79);
-    } else if (s_cmp(msg, "SPICE(WINDOWTOOSMALL)", msg_len, (ftnlen)21) == 0) 
-	    {
-	s_copy(expl, "Cardinality of Output Window is Too Small", expl_len, (
-		ftnlen)41);
-    } else if (s_cmp(msg, "SPICE(WRITEERROR)", msg_len, (ftnlen)17) == 0) {
-	s_copy(expl, "An Attempt to write to a specified unit failed.", 
-		expl_len, (ftnlen)47);
-    } else if (s_cmp(msg, "SPICE(ZERORADIUS)", msg_len, (ftnlen)17) == 0) {
-	s_copy(expl, "Invalid Radius--Equatorial or Polar Radius is Zero", 
-		expl_len, (ftnlen)50);
-    } else if (s_cmp(msg, "SPICE(ZEROVECTOR)", msg_len, (ftnlen)17) == 0) {
-	s_copy(expl, "Input Vector is the Zero Vector", expl_len, (ftnlen)31);
-    } else if (s_cmp(msg, "SPICE(ZEROAXISLENGTH)", msg_len, (ftnlen)21) == 0) 
-	    {
-	s_copy(expl, "Input Axis Length is Zero", expl_len, (ftnlen)25);
+    if (s_cmp(&__global_state->f2c, msg, "SPICE(BADENDPOINTS)", msg_len, (
+	    ftnlen)19) == 0) {
+	s_copy(&__global_state->f2c, expl, "Invalid Endpoints--Left Endpoint"
+		" Exceeds Right Endpoint", expl_len, (ftnlen)55);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(BADGEFVERSION)", 
+	    msg_len, (ftnlen)20) == 0) {
+	s_copy(&__global_state->f2c, expl, "Version Identification of GEF Fi"
+		"le is Invalid", expl_len, (ftnlen)45);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(BLANKMODULENAME)", 
+	    msg_len, (ftnlen)22) == 0) {
+	s_copy(&__global_state->f2c, expl, "A blank string was used as a mod"
+		"ule name", expl_len, (ftnlen)40);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(BOGUSENTRY)", msg_len, 
+	    (ftnlen)17) == 0) {
+	s_copy(&__global_state->f2c, expl, "This Entry Point Contains No Exe"
+		"cutable Code", expl_len, (ftnlen)44);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(CELLTOOSMALL)", 
+	    msg_len, (ftnlen)19) == 0) {
+	s_copy(&__global_state->f2c, expl, "Cardinality of Output Cell is To"
+		"o Small", expl_len, (ftnlen)39);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(CLUSTERWRITEERROR)", 
+	    msg_len, (ftnlen)24) == 0) {
+	s_copy(&__global_state->f2c, expl, "Error Writing to Ephemeris File", 
+		expl_len, (ftnlen)31);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(DATATYPENOTRECOG)", 
+	    msg_len, (ftnlen)23) == 0) {
+	s_copy(&__global_state->f2c, expl, "Unrecognized Data Type Specifica"
+		"tion was Encountered", expl_len, (ftnlen)52);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(DATEEXPECTED)", 
+	    msg_len, (ftnlen)19) == 0) {
+	s_copy(&__global_state->f2c, expl, "The Value in the Kernel File was"
+		" Expected to be a date.", expl_len, (ftnlen)55);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(DEVICENAMETOOLONG)", 
+	    msg_len, (ftnlen)24) == 0) {
+	s_copy(&__global_state->f2c, expl, "Name of Device Exceeds 128-Chara"
+		"cter Limit", expl_len, (ftnlen)42);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(EMBEDDEDBLANK)", 
+	    msg_len, (ftnlen)20) == 0) {
+	s_copy(&__global_state->f2c, expl, "Invalid embedded blank was found"
+		" in character string", expl_len, (ftnlen)52);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(FILEALREADYOPEN)", 
+	    msg_len, (ftnlen)22) == 0) {
+	s_copy(&__global_state->f2c, expl, "File Open Failed Because the Fil"
+		"e was Already Open", expl_len, (ftnlen)50);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(FILEOPENFAILED)", 
+	    msg_len, (ftnlen)21) == 0) {
+	s_copy(&__global_state->f2c, expl, "An Attempt to Open a File Failed",
+		 expl_len, (ftnlen)32);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(FILEREADFAILED)", 
+	    msg_len, (ftnlen)21) == 0) {
+	s_copy(&__global_state->f2c, expl, "An Attempt to Read a File Failed",
+		 expl_len, (ftnlen)32);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(FILEWRITEFAILED)", 
+	    msg_len, (ftnlen)22) == 0) {
+	s_copy(&__global_state->f2c, expl, "An Attempt to Write a File Failed"
+		, expl_len, (ftnlen)33);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INCOMPATIBLEUNITS)", 
+	    msg_len, (ftnlen)24) == 0) {
+	s_copy(&__global_state->f2c, expl, "The Input and Output Units are I"
+		"ncompatible", expl_len, (ftnlen)43);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDACTION)", 
+	    msg_len, (ftnlen)20) == 0) {
+	s_copy(&__global_state->f2c, expl, "An Invalid Action Value Was Supp"
+		"lied", expl_len, (ftnlen)36);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDARGUMENT)", 
+	    msg_len, (ftnlen)22) == 0) {
+	s_copy(&__global_state->f2c, expl, "An Invalid Function Argument was"
+		" Supplied", expl_len, (ftnlen)41);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDCHECKOUT)", 
+	    msg_len, (ftnlen)22) == 0) {
+	s_copy(&__global_state->f2c, expl, "Checkout Was Attempted When No R"
+		"outines Were Checked In", expl_len, (ftnlen)55);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDCLUSTERNUM)", 
+	    msg_len, (ftnlen)24) == 0) {
+	s_copy(&__global_state->f2c, expl, "Invalid Cluster Number -- Cluste"
+		"r Numbers Must Exceed 1 ", expl_len, (ftnlen)56);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDEPOCH)", 
+	    msg_len, (ftnlen)19) == 0) {
+	s_copy(&__global_state->f2c, expl, "An Invalid Epoch Type Specificat"
+		"ion Was Supplied", expl_len, (ftnlen)48);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDINDEX)", 
+	    msg_len, (ftnlen)19) == 0) {
+	s_copy(&__global_state->f2c, expl, "There Is No Element Correspondin"
+		"g to the Supplied Index", expl_len, (ftnlen)55);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDTIMESTRING)", 
+	    msg_len, (ftnlen)24) == 0) {
+	s_copy(&__global_state->f2c, expl, "Time String Could Not Be Parsed", 
+		expl_len, (ftnlen)31);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDLISTITEM)", 
+	    msg_len, (ftnlen)22) == 0) {
+	s_copy(&__global_state->f2c, expl, "An Invalid Item Was Found in a L"
+		"ist", expl_len, (ftnlen)35);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDMSGTYPE)", 
+	    msg_len, (ftnlen)21) == 0) {
+	s_copy(&__global_state->f2c, expl, "An Invalid Error Message Type Wa"
+		"s Specified", expl_len, (ftnlen)43);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDOPERATION)", 
+	    msg_len, (ftnlen)23) == 0) {
+	s_copy(&__global_state->f2c, expl, "An Invalid Operation Value Was S"
+		"upplied", expl_len, (ftnlen)39);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDOPTION)", 
+	    msg_len, (ftnlen)20) == 0) {
+	s_copy(&__global_state->f2c, expl, "An Invalid Option Value Was Supp"
+		"lied", expl_len, (ftnlen)36);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(INVALIDTIMEFORMAT)", 
+	    msg_len, (ftnlen)24) == 0) {
+	s_copy(&__global_state->f2c, expl, "Specification of Time String For"
+		"mat Was Not Recognized", expl_len, (ftnlen)54);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(KERNELVARNOTFOUND)", 
+	    msg_len, (ftnlen)24) == 0) {
+	s_copy(&__global_state->f2c, expl, "The Variable Was not Found in th"
+		"e Kernel Pool.", expl_len, (ftnlen)46);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(NAMETABLEFULL)", 
+	    msg_len, (ftnlen)20) == 0) {
+	s_copy(&__global_state->f2c, expl, "No Further Symbols Can be Insert"
+		"ed; the Name Table is Full", expl_len, (ftnlen)58);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(NOFREELOGICALUNIT)", 
+	    msg_len, (ftnlen)24) == 0) {
+	s_copy(&__global_state->f2c, expl, "No More Logical Units are Availa"
+		"ble for Allocation", expl_len, (ftnlen)50);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(NOINTERVAL)", msg_len, 
+	    (ftnlen)17) == 0) {
+	s_copy(&__global_state->f2c, expl, "Window Does Not Contain Interval"
+		" Corresponding to the Supplied Index", expl_len, (ftnlen)68);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(NOSEGMENT)", msg_len, (
+	    ftnlen)16) == 0) {
+	s_copy(&__global_state->f2c, expl, "No Applicable Segment Found in E"
+		"phemeris File", expl_len, (ftnlen)45);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(NOSUCHSYMBOL)", 
+	    msg_len, (ftnlen)19) == 0) {
+	s_copy(&__global_state->f2c, expl, "The Symbol Does Not Exist in the"
+		" Symbol Table", expl_len, (ftnlen)45);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(NOTDISTINCT)", msg_len,
+	     (ftnlen)18) == 0) {
+	s_copy(&__global_state->f2c, expl, "The Elements Must Be Distinct", 
+		expl_len, (ftnlen)29);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(NUMBEREXPECTED)", 
+	    msg_len, (ftnlen)21) == 0) {
+	s_copy(&__global_state->f2c, expl, "The Value in the Kernel File was"
+		" Expected to be a Number.", expl_len, (ftnlen)57);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(POINTERTABLEFULL)", 
+	    msg_len, (ftnlen)23) == 0) {
+	s_copy(&__global_state->f2c, expl, "No Further Symbols Can be Insert"
+		"ed; the Pointer Table is Full", expl_len, (ftnlen)61);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(REFNOTREC)", msg_len, (
+	    ftnlen)16) == 0) {
+	s_copy(&__global_state->f2c, expl, "A Reference Frame Specification "
+		"was Not Recognized", expl_len, (ftnlen)50);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(SETEXCESS)", msg_len, (
+	    ftnlen)16) == 0) {
+	s_copy(&__global_state->f2c, expl, "Cardinality of Set Is Too Small "
+		"to Contain Result of the Requested Operation", expl_len, (
+		ftnlen)76);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(TOOMANYFILESOPEN)", 
+	    msg_len, (ftnlen)23) == 0) {
+	s_copy(&__global_state->f2c, expl, "The SPICELIB Limit for Number of"
+		" Open Files Has Already Been Reached", expl_len, (ftnlen)68);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(TRACEBACKOVERFLOW)", 
+	    msg_len, (ftnlen)24) == 0) {
+	s_copy(&__global_state->f2c, expl, "No More Entries Can Be Added to "
+		"the Traceback Representation", expl_len, (ftnlen)60);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(UNITSNOTREC)", msg_len,
+	     (ftnlen)18) == 0) {
+	s_copy(&__global_state->f2c, expl, "The Input or Output Units Were N"
+		"ot Recognized", expl_len, (ftnlen)45);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(UNMATCHENDPTS)", 
+	    msg_len, (ftnlen)20) == 0) {
+	s_copy(&__global_state->f2c, expl, "Window Does Not Have an Even Num"
+		"ber of Endpoints", expl_len, (ftnlen)48);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(VALUETABLEFULL)", 
+	    msg_len, (ftnlen)21) == 0) {
+	s_copy(&__global_state->f2c, expl, "No Further Symbols Can be Insert"
+		"ed; the Value Table is Full", expl_len, (ftnlen)59);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(WINDOWEXCESS)", 
+	    msg_len, (ftnlen)19) == 0) {
+	s_copy(&__global_state->f2c, expl, "Cardinality of Window Is Too Sma"
+		"ll to Contain Result of the Requested Operation", expl_len, (
+		ftnlen)79);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(WINDOWTOOSMALL)", 
+	    msg_len, (ftnlen)21) == 0) {
+	s_copy(&__global_state->f2c, expl, "Cardinality of Output Window is "
+		"Too Small", expl_len, (ftnlen)41);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(WRITEERROR)", msg_len, 
+	    (ftnlen)17) == 0) {
+	s_copy(&__global_state->f2c, expl, "An Attempt to write to a specifi"
+		"ed unit failed.", expl_len, (ftnlen)47);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(ZERORADIUS)", msg_len, 
+	    (ftnlen)17) == 0) {
+	s_copy(&__global_state->f2c, expl, "Invalid Radius--Equatorial or Po"
+		"lar Radius is Zero", expl_len, (ftnlen)50);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(ZEROVECTOR)", msg_len, 
+	    (ftnlen)17) == 0) {
+	s_copy(&__global_state->f2c, expl, "Input Vector is the Zero Vector", 
+		expl_len, (ftnlen)31);
+    } else if (s_cmp(&__global_state->f2c, msg, "SPICE(ZEROAXISLENGTH)", 
+	    msg_len, (ftnlen)21) == 0) {
+	s_copy(&__global_state->f2c, expl, "Input Axis Length is Zero", 
+		expl_len, (ftnlen)25);
     } else {
-	s_copy(expl, " ", expl_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, expl, " ", expl_len, (ftnlen)1);
     }
     return 0;
 } /* expln_ */

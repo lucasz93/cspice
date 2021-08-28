@@ -8,41 +8,42 @@
 
 
 typedef int zzhsc_state_t;
-static zzhsc_state_t* get_zzhsc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzhsc_state_t* get_zzhsc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZHSC ( Private---Add-only Character Hash ) */
-/* Subroutine */ int zzhsc_0_(int n__, integer *hashsz, integer *hedlst, 
-	integer *collst, char *items, char *item, integer *itemat, logical *
-	new__, integer *avail, ftnlen items_len, ftnlen item_len)
+/* Subroutine */ int zzhsc_0_(cspice_t* __global_state, int n__, integer *
+	hashsz, integer *hedlst, integer *collst, char *items, char *item, 
+	integer *itemat, logical *new__, integer *avail, ftnlen items_len, 
+	ftnlen item_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer node;
     logical full;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
     logical lfound;
     integer lookat;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern integer zzhash2_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern integer zzhash2_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzhsc_state_t* __state = get_zzhsc_state();
+    zzhsc_state_t* __state = get_zzhsc_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -446,16 +447,16 @@ static zzhsc_state_t* get_zzhsc_state() {
 	case 5: goto L_zzhscinf;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZHSC", (ftnlen)5);
+	chkin_(__global_state, "ZZHSC", (ftnlen)5);
     }
 
 /*     Signal bogus entry error and check out. */
 
-    sigerr_("BOGUSENTRY", (ftnlen)10);
-    chkout_("ZZHSC", (ftnlen)5);
+    sigerr_(__global_state, "BOGUSENTRY", (ftnlen)10);
+    chkout_(__global_state, "ZZHSC", (ftnlen)5);
     return 0;
 /* $Procedure ZZHSCINI ( Private---Initialize Add-only Character Hash ) */
 
@@ -586,17 +587,17 @@ L_zzhscini:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZHSCINI", (ftnlen)8);
+    chkin_(__global_state, "ZZHSCINI", (ftnlen)8);
 
 /*     The requested number of nodes must be in the valid range. If it */
 /*     is not, ZZHASH2 will signal an error. */
 
-    i__ = zzhash2_(" ", hashsz, (ftnlen)1);
-    if (failed_()) {
-	chkout_("ZZHSCINI", (ftnlen)8);
+    i__ = zzhash2_(__global_state, " ", hashsz, (ftnlen)1);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZHSCINI", (ftnlen)8);
 	return 0;
     }
 
@@ -611,7 +612,7 @@ L_zzhscini:
 
     collst[5] = *hashsz;
     collst[4] = 1;
-    chkout_("ZZHSCINI", (ftnlen)8);
+    chkout_(__global_state, "ZZHSCINI", (ftnlen)8);
     return 0;
 /* $Procedure ZZHSCADD ( Private---Add Item to Add-only Character Hash ) */
 
@@ -751,7 +752,7 @@ L_zzhscadd:
 /*     Standard SPICE error handling. No checking-in here. We will do it */
 /*     when we have to. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -761,7 +762,7 @@ L_zzhscadd:
 
 /*     Use hash function to get index of the head node. */
 
-    lookat = zzhash2_(item, &collst[5], item_len);
+    lookat = zzhash2_(__global_state, item, &collst[5], item_len);
     node = hedlst[lookat - 1];
 
 /*     Set initial values. */
@@ -779,8 +780,8 @@ L_zzhscadd:
 /*        this conflict resolution list. */
 
 	while(node > 0 && ! lfound) {
-	    lfound = s_cmp(items + (node - 1) * items_len, item, items_len, 
-		    item_len) == 0;
+	    lfound = s_cmp(&__global_state->f2c, items + (node - 1) * 
+		    items_len, item, items_len, item_len) == 0;
 	    *itemat = node;
 	    node = collst[node + 5];
 	}
@@ -809,7 +810,8 @@ L_zzhscadd:
 
 /*           Save item. */
 
-	    s_copy(items + (node - 1) * items_len, item, items_len, item_len);
+	    s_copy(&__global_state->f2c, items + (node - 1) * items_len, item,
+		     items_len, item_len);
 
 /*           Set output node ID and new and found flags. */
 
@@ -840,7 +842,8 @@ L_zzhscadd:
 
 /*        Save item. */
 
-	s_copy(items + (node - 1) * items_len, item, items_len, item_len);
+	s_copy(&__global_state->f2c, items + (node - 1) * items_len, item, 
+		items_len, item_len);
 
 /*        Set output node ID and new and found flags. */
 
@@ -859,10 +862,11 @@ L_zzhscadd:
 /*     an error. Report it and return. */
 
     if (full && ! lfound) {
-	chkin_("ZZHSCADD", (ftnlen)8);
-	setmsg_("The hash has no room for any more items.", (ftnlen)40);
-	sigerr_("SPICE(HASHISFULL)", (ftnlen)17);
-	chkout_("ZZHSCADD", (ftnlen)8);
+	chkin_(__global_state, "ZZHSCADD", (ftnlen)8);
+	setmsg_(__global_state, "The hash has no room for any more items.", (
+		ftnlen)40);
+	sigerr_(__global_state, "SPICE(HASHISFULL)", (ftnlen)17);
+	chkout_(__global_state, "ZZHSCADD", (ftnlen)8);
 	return 0;
     }
     return 0;
@@ -993,13 +997,13 @@ L_zzhscchk:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Use hash function to get index of the head node. */
 
-    lookat = zzhash2_(item, &collst[5], item_len);
+    lookat = zzhash2_(__global_state, item, &collst[5], item_len);
     node = hedlst[lookat - 1];
 
 /*     Set initial values. */
@@ -1016,8 +1020,8 @@ L_zzhscchk:
 /*        this conflict resolution list. */
 
 	while(node > 0 && ! lfound) {
-	    lfound = s_cmp(items + (node - 1) * items_len, item, items_len, 
-		    item_len) == 0;
+	    lfound = s_cmp(&__global_state->f2c, items + (node - 1) * 
+		    items_len, item, items_len, item_len) == 0;
 	    *itemat = node;
 	    node = collst[node + 5];
 	}
@@ -1280,13 +1284,14 @@ L_zzhscinf:
 
 /*     Get the hash size. */
 
-    if (s_cmp(item, "HASH SIZE", item_len, (ftnlen)9) == 0) {
+    if (s_cmp(&__global_state->f2c, item, "HASH SIZE", item_len, (ftnlen)9) ==
+	     0) {
 	*avail = collst[5];
 
 /*     Get the count of used nodes in the head list. */
 
-    } else if (s_cmp(item, "USED HEADNODE COUNT", item_len, (ftnlen)19) == 0) 
-	    {
+    } else if (s_cmp(&__global_state->f2c, item, "USED HEADNODE COUNT", 
+	    item_len, (ftnlen)19) == 0) {
 	*avail = 0;
 	i__1 = collst[5];
 	for (i__ = 1; i__ <= i__1; ++i__) {
@@ -1297,8 +1302,8 @@ L_zzhscinf:
 
 /*     Get the count of unused nodes in the head list. */
 
-    } else if (s_cmp(item, "UNUSED HEADNODE COUNT", item_len, (ftnlen)21) == 
-	    0) {
+    } else if (s_cmp(&__global_state->f2c, item, "UNUSED HEADNODE COUNT", 
+	    item_len, (ftnlen)21) == 0) {
 	*avail = 0;
 	i__1 = collst[5];
 	for (i__ = 1; i__ <= i__1; ++i__) {
@@ -1309,17 +1314,20 @@ L_zzhscinf:
 
 /*     Get the count of used slots in the item list. */
 
-    } else if (s_cmp(item, "USED ITEM COUNT", item_len, (ftnlen)15) == 0) {
+    } else if (s_cmp(&__global_state->f2c, item, "USED ITEM COUNT", item_len, 
+	    (ftnlen)15) == 0) {
 	*avail = collst[4] - 1;
 
 /*     Get the count of unused slots in the item list. */
 
-    } else if (s_cmp(item, "UNUSED ITEM COUNT", item_len, (ftnlen)17) == 0) {
+    } else if (s_cmp(&__global_state->f2c, item, "UNUSED ITEM COUNT", 
+	    item_len, (ftnlen)17) == 0) {
 	*avail = collst[5] - collst[4] + 1;
 
 /*     Get the size of the longest item list for any hash value. */
 
-    } else if (s_cmp(item, "LONGEST LIST SIZE", item_len, (ftnlen)17) == 0) {
+    } else if (s_cmp(&__global_state->f2c, item, "LONGEST LIST SIZE", 
+	    item_len, (ftnlen)17) == 0) {
 	*avail = 0;
 	i__1 = collst[5];
 	for (i__ = 1; i__ <= i__1; ++i__) {
@@ -1336,53 +1344,58 @@ L_zzhscinf:
 
     } else {
 	*avail = 0;
-	chkin_("ZZHSCINF", (ftnlen)8);
-	setmsg_("Parameter '#' is not recognized.", (ftnlen)32);
-	errch_("#", item, (ftnlen)1, item_len);
-	sigerr_("SPICE(ITEMNOTRECOGNIZED)", (ftnlen)24);
-	chkout_("ZZHSCINF", (ftnlen)8);
+	chkin_(__global_state, "ZZHSCINF", (ftnlen)8);
+	setmsg_(__global_state, "Parameter '#' is not recognized.", (ftnlen)
+		32);
+	errch_(__global_state, "#", item, (ftnlen)1, item_len);
+	sigerr_(__global_state, "SPICE(ITEMNOTRECOGNIZED)", (ftnlen)24);
+	chkout_(__global_state, "ZZHSCINF", (ftnlen)8);
     }
     return 0;
 } /* zzhsc_ */
 
-/* Subroutine */ int zzhsc_(integer *hashsz, integer *hedlst, integer *collst,
-	 char *items, char *item, integer *itemat, logical *new__, integer *
-	avail, ftnlen items_len, ftnlen item_len)
+/* Subroutine */ int zzhsc_(cspice_t* __global_state, integer *hashsz, 
+	integer *hedlst, integer *collst, char *items, char *item, integer *
+	itemat, logical *new__, integer *avail, ftnlen items_len, ftnlen 
+	item_len)
 {
     return zzhsc_0_(0, hashsz, hedlst, collst, items, item, itemat, new__, 
 	    avail, items_len, item_len);
     }
 
-/* Subroutine */ int zzhscini_(integer *hashsz, integer *hedlst, integer *
-	collst)
+/* Subroutine */ int zzhscini_(cspice_t* __global_state, integer *hashsz, 
+	integer *hedlst, integer *collst)
 {
     return zzhsc_0_(1, hashsz, hedlst, collst, (char *)0, (char *)0, (integer 
 	    *)0, (logical *)0, (integer *)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzhscadd_(integer *hedlst, integer *collst, char *items, 
-	char *item, integer *itemat, logical *new__, ftnlen items_len, ftnlen 
-	item_len)
+/* Subroutine */ int zzhscadd_(cspice_t* __global_state, integer *hedlst, 
+	integer *collst, char *items, char *item, integer *itemat, logical *
+	new__, ftnlen items_len, ftnlen item_len)
 {
     return zzhsc_0_(2, (integer *)0, hedlst, collst, items, item, itemat, 
 	    new__, (integer *)0, items_len, item_len);
     }
 
-/* Subroutine */ int zzhscchk_(integer *hedlst, integer *collst, char *items, 
-	char *item, integer *itemat, ftnlen items_len, ftnlen item_len)
+/* Subroutine */ int zzhscchk_(cspice_t* __global_state, integer *hedlst, 
+	integer *collst, char *items, char *item, integer *itemat, ftnlen 
+	items_len, ftnlen item_len)
 {
     return zzhsc_0_(3, (integer *)0, hedlst, collst, items, item, itemat, (
 	    logical *)0, (integer *)0, items_len, item_len);
     }
 
-/* Subroutine */ int zzhscavl_(integer *collst, integer *avail)
+/* Subroutine */ int zzhscavl_(cspice_t* __global_state, integer *collst, 
+	integer *avail)
 {
     return zzhsc_0_(4, (integer *)0, (integer *)0, collst, (char *)0, (char *)
 	    0, (integer *)0, (logical *)0, avail, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzhscinf_(integer *hedlst, integer *collst, char *items, 
-	char *item, integer *avail, ftnlen items_len, ftnlen item_len)
+/* Subroutine */ int zzhscinf_(cspice_t* __global_state, integer *hedlst, 
+	integer *collst, char *items, char *item, integer *avail, ftnlen 
+	items_len, ftnlen item_len)
 {
     return zzhsc_0_(5, (integer *)0, hedlst, collst, items, item, (integer *)
 	    0, (logical *)0, avail, items_len, item_len);

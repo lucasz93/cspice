@@ -524,7 +524,7 @@
    {
       return; 
    }
-   chkin_c ( "dpgrdr_c" );
+   chkin_c ( naif_state, "dpgrdr_c" );
 
    /*
    Check the input string body to make sure the pointer is non-null 

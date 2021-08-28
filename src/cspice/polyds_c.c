@@ -248,7 +248,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "polyds_c" );
+   chkin_c ( naif_state, "polyds_c" );
 
    polyds_( ( doublereal * ) coeffs,
             ( integer    * ) &deg,

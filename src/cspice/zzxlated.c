@@ -8,8 +8,7 @@
 
 
 extern zzxlated_init_t __zzxlated_init;
-static zzxlated_state_t* get_zzxlated_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzxlated_state_t* get_zzxlated_state(cspice_t* state) {
 	if (!state->zzxlated)
 		state->zzxlated = __cspice_allocate_module(sizeof(
 	zzxlated_state_t), &__zzxlated_init, sizeof(__zzxlated_init));
@@ -18,8 +17,8 @@ static zzxlated_state_t* get_zzxlated_state() {
 }
 
 /* $Procedure ZZXLATED ( Private --- Translate Double Precision Numbers ) */
-/* Subroutine */ int zzxlated_(integer *inbff, char *input, integer *space, 
-	doublereal *output, ftnlen input_len)
+/* Subroutine */ int zzxlated_(cspice_t* __global_state, integer *inbff, char 
+	*input, integer *space, doublereal *output, ftnlen input_len)
 {
     /* Initialized data */
 
@@ -29,39 +28,45 @@ static zzxlated_state_t* get_zzxlated_state() {
     char ch__1[1];
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), i_len(
+	    f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int zzddhgsd_(cspice_t*, char *, integer *, char *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzplatfm_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
     integer i__;
     integer j;
     integer k;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer value;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer osign;
     integer numdp;
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
 #define dpbufr (__state->equiv_0)
 #define inbufr ((integer *)__state->equiv_0)
     integer lenipt;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern integer intmin_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern integer intmin_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     char tmpstr[8];
     integer outpos;
 
 
     /* Module state */
-    zzxlated_state_t* __state = get_zzxlated_state();
+    zzxlated_state_t* __state = get_zzxlated_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -619,10 +624,10 @@ static zzxlated_state_t* get_zzxlated_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZXLATED", (ftnlen)8);
+	chkin_(__global_state, "ZZXLATED", (ftnlen)8);
     }
 
 /*     Perform some initialization tasks. */
@@ -632,24 +637,26 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*        Populate STRBFF. */
 
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    zzddhgsd_("BFF", &i__, __state->strbff + (((i__1 = i__ - 1) < 4 &&
-		     0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", (
-		    ftnlen)380)) << 3), (ftnlen)3, (ftnlen)8);
+	    zzddhgsd_(__global_state, "BFF", &i__, __state->strbff + (((i__1 =
+		     i__ - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "strbff", i__1, "zzxlated_", (ftnlen)
+		    380)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format. */
 
-	zzplatfm_("FILE_FORMAT", tmpstr, (ftnlen)11, (ftnlen)8);
-	ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-	__state->natbff = isrchc_(tmpstr, &__state->c__4, __state->strbff, (
-		ftnlen)8, (ftnlen)8);
+	zzplatfm_(__global_state, "FILE_FORMAT", tmpstr, (ftnlen)11, (ftnlen)
+		8);
+	ucase_(__global_state, tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
+	__state->natbff = isrchc_(__global_state, tmpstr, &__state->c__4, 
+		__state->strbff, (ftnlen)8, (ftnlen)8);
 	if (__state->natbff == 0) {
-	    setmsg_("The binary file format, '#', is not supported by this v"
-		    "ersion of the toolkit. This is a serious problem, contac"
-		    "t NAIF.", (ftnlen)118);
-	    errch_("#", tmpstr, (ftnlen)1, (ftnlen)8);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZXLATED", (ftnlen)8);
+	    setmsg_(__global_state, "The binary file format, '#', is not sup"
+		    "ported by this version of the toolkit. This is a serious"
+		    " problem, contact NAIF.", (ftnlen)118);
+	    errch_(__global_state, "#", tmpstr, (ftnlen)1, (ftnlen)8);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZXLATED", (ftnlen)8);
 	    return 0;
 	}
 
@@ -661,7 +668,7 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*        Prepare the smallest value a 32-bit integer can actually */
 /*        store, regardless of what INTMIN returns. */
 
-	__state->smlint = intmin_();
+	__state->smlint = intmin_(__global_state);
 
 /*        Set SMLINT to the appropriate value if INTMIN is too large. */
 
@@ -677,19 +684,19 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*     Check to see if INBFF makes sense. */
 
     if (*inbff < 1 || *inbff > 4) {
-	setmsg_("The integer code used to indicate the binary file format of"
-		" the input integers, #, is out of range.  This error should "
-		"never occur.", (ftnlen)131);
-	errint_("#", inbff, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZXLATED", (ftnlen)8);
+	setmsg_(__global_state, "The integer code used to indicate the binar"
+		"y file format of the input integers, #, is out of range.  Th"
+		"is error should never occur.", (ftnlen)131);
+	errint_(__global_state, "#", inbff, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZXLATED", (ftnlen)8);
 	return 0;
     }
 
 /*     Retrieve the length of the input string, and set the position */
 /*     into the output buffer to the beginning. */
 
-    lenipt = i_len(input, input_len);
+    lenipt = i_len(&__global_state->f2c, input, input_len);
     outpos = 1;
 
 /*     Now branch based on NATBFF. */
@@ -705,18 +712,20 @@ static zzxlated_state_t* get_zzxlated_state() {
 
 	    numdp = lenipt / 8;
 	    if (lenipt - (numdp << 3) != 0) {
-		setmsg_("The input string that is to be translated from the "
-			"binary format # to format # has a length that is not"
-			" a multiple of 4 bytes.  This error should never occ"
-			"ur.", (ftnlen)158);
-		errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 
-			<= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", (
+		setmsg_(__global_state, "The input string that is to be tran"
+			"slated from the binary format # to format # has a le"
+			"ngth that is not a multiple of 4 bytes.  This error "
+			"should never occur.", (ftnlen)158);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = *
+			inbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "strbff", i__1, "zzxlated_", (
 			ftnlen)476)) << 3), (ftnlen)1, (ftnlen)8);
-		errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) <
-			 4 && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzx"
-			"lated_", (ftnlen)477)) << 3), (ftnlen)1, (ftnlen)8);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZXLATED", (ftnlen)8);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = 
+			__state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+			&__global_state->f2c, "strbff", i__1, "zzxlated_", (
+			ftnlen)477)) << 3), (ftnlen)1, (ftnlen)8);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZXLATED", (ftnlen)8);
 		return 0;
 	    }
 
@@ -724,21 +733,23 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*           the translation. */
 
 	    if (numdp > *space) {
-		setmsg_("The caller specified that # double precision number"
-			"s are to be translated from binary format # to #.  H"
-			"owever there is only room to hold # integers in the "
-			"output array.  This error should never occur.", (
-			ftnlen)200);
-		errint_("#", &numdp, (ftnlen)1);
-		errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 
-			<= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", (
+		setmsg_(__global_state, "The caller specified that # double "
+			"precision numbers are to be translated from binary f"
+			"ormat # to #.  However there is only room to hold # "
+			"integers in the output array.  This error should nev"
+			"er occur.", (ftnlen)200);
+		errint_(__global_state, "#", &numdp, (ftnlen)1);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = *
+			inbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "strbff", i__1, "zzxlated_", (
 			ftnlen)497)) << 3), (ftnlen)1, (ftnlen)8);
-		errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) <
-			 4 && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzx"
-			"lated_", (ftnlen)498)) << 3), (ftnlen)1, (ftnlen)8);
-		errint_("#", space, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZXLATED", (ftnlen)8);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = 
+			__state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+			&__global_state->f2c, "strbff", i__1, "zzxlated_", (
+			ftnlen)498)) << 3), (ftnlen)1, (ftnlen)8);
+		errint_(__global_state, "#", space, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZXLATED", (ftnlen)8);
 		return 0;
 	    }
 
@@ -813,40 +824,47 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*              into place through simple multiplication. */
 
 		i__2 = j + 3;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 4 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 4 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
 		i__3 = -1, i__4 = min(i__5,i__6);
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
-		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)580)] = value;
+		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)580)] = value;
 		i__2 = j + 4;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 5 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 5 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
 		i__3 = -1, i__4 = min(i__5,i__6);
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 8;
-		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)584)] = inbufr[(
-			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)584)] + value;
+		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)584)] = inbufr[(i__3 = k - 1) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "inbufr", 
+			i__3, "zzxlated_", (ftnlen)584)] + value;
 		i__2 = j + 5;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 6 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 6 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
 		i__3 = -1, i__4 = min(i__5,i__6);
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 16;
-		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)588)] = inbufr[(
-			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)588)] + value;
+		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)588)] = inbufr[(i__3 = k - 1) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "inbufr", 
+			i__3, "zzxlated_", (ftnlen)588)] + value;
 		i__2 = j + 6;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 7 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 7 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
@@ -868,10 +886,11 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*              positions and combine them with INBUFR(K). */
 
 		value <<= 24;
-		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)610)] = inbufr[(
-			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)610)] + value;
+		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)610)] = inbufr[(i__3 = k - 1) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "inbufr", 
+			i__3, "zzxlated_", (ftnlen)610)] + value;
 
 /*              Install the sign bit.  At the moment in INBUFR(K) */
 /*              the bits are precisely as they need to be arranged. */
@@ -904,26 +923,29 @@ static zzxlated_state_t* get_zzxlated_state() {
 
 		if (osign == 1) {
 		    if (inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
-			    s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)643)] 
-			    == 0) {
+			    s_rnge(&__global_state->f2c, "inbufr", i__2, 
+			    "zzxlated_", (ftnlen)643)] == 0) {
 			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
-				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
-				644)] = __state->smlint;
+				s_rnge(&__global_state->f2c, "inbufr", i__2, 
+				"zzxlated_", (ftnlen)644)] = __state->smlint;
 		    } else {
 			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
-				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
-				646)] = __state->bigint - inbufr[(i__3 = k - 
-				1) < 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr"
-				, i__3, "zzxlated_", (ftnlen)646)];
+				s_rnge(&__global_state->f2c, "inbufr", i__2, 
+				"zzxlated_", (ftnlen)646)] = __state->bigint 
+				- inbufr[(i__3 = k - 1) < 256 && 0 <= i__3 ? 
+				i__3 : s_rnge(&__global_state->f2c, "inbufr", 
+				i__3, "zzxlated_", (ftnlen)646)];
 			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
-				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
-				647)] = inbufr[(i__3 = k - 1) < 256 && 0 <= 
-				i__3 ? i__3 : s_rnge("inbufr", i__3, "zzxlat"
+				s_rnge(&__global_state->f2c, "inbufr", i__2, 
+				"zzxlated_", (ftnlen)647)] = inbufr[(i__3 = k 
+				- 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "inbufr", i__3, "zzxlat"
 				"ed_", (ftnlen)647)] + 1;
 			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
-				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
-				648)] = -inbufr[(i__3 = k - 1) < 256 && 0 <= 
-				i__3 ? i__3 : s_rnge("inbufr", i__3, "zzxlat"
+				s_rnge(&__global_state->f2c, "inbufr", i__2, 
+				"zzxlated_", (ftnlen)648)] = -inbufr[(i__3 = 
+				k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "inbufr", i__3, "zzxlat"
 				"ed_", (ftnlen)648)];
 		    }
 		}
@@ -933,34 +955,40 @@ static zzxlated_state_t* get_zzxlated_state() {
 		i__4 = 0, i__5 = *(unsigned char *)&ch__1[0];
 		i__2 = -1, i__3 = min(i__4,i__5);
 		value = *(unsigned char *)&ch__1[0] - (max(i__2,i__3) << 8);
-		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)653)] = value;
+		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)653)] = value;
 		i__2 = j;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 1 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 1 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
 		i__3 = -1, i__4 = min(i__5,i__6);
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 8;
-		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)657)] = inbufr[(i__3 = k) 
-			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
+		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)657)] = inbufr[(i__3 = k) < 256 && 0 <= i__3 ? 
+			i__3 : s_rnge(&__global_state->f2c, "inbufr", i__3, 
 			"zzxlated_", (ftnlen)657)] + value;
 		i__2 = j + 1;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 2 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 2 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
 		i__3 = -1, i__4 = min(i__5,i__6);
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 16;
-		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)661)] = inbufr[(i__3 = k) 
-			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
+		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)661)] = inbufr[(i__3 = k) < 256 && 0 <= i__3 ? 
+			i__3 : s_rnge(&__global_state->f2c, "inbufr", i__3, 
 			"zzxlated_", (ftnlen)661)] + value;
 		i__2 = j + 2;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 3 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 3 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
@@ -982,9 +1010,10 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*              positions and combine them with INBUFR(K). */
 
 		value <<= 24;
-		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)683)] = inbufr[(i__3 = k) 
-			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
+		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)683)] = inbufr[(i__3 = k) < 256 && 0 <= i__3 ? 
+			i__3 : s_rnge(&__global_state->f2c, "inbufr", i__3, 
 			"zzxlated_", (ftnlen)683)] + value;
 
 /*              Install the sign bit.  At the moment in INBUFR(K+1) */
@@ -993,27 +1022,31 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*              previous integer. */
 
 		if (osign == 1) {
-		    if (inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			    "inbufr", i__2, "zzxlated_", (ftnlen)692)] == 0) {
-			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-				"inbufr", i__2, "zzxlated_", (ftnlen)693)] = 
-				__state->smlint;
+		    if (inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "inbufr", i__2, "zzxlated_", 
+			    (ftnlen)692)] == 0) {
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "inbufr", i__2, "zzxlat"
+				"ed_", (ftnlen)693)] = __state->smlint;
 		    } else {
-			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-				"inbufr", i__2, "zzxlated_", (ftnlen)695)] = 
-				__state->bigint - inbufr[(i__3 = k) < 256 && 
-				0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-				"zzxlated_", (ftnlen)695)];
-			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-				"inbufr", i__2, "zzxlated_", (ftnlen)696)] = 
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "inbufr", i__2, "zzxlat"
+				"ed_", (ftnlen)695)] = __state->bigint - 
 				inbufr[(i__3 = k) < 256 && 0 <= i__3 ? i__3 : 
-				s_rnge("inbufr", i__3, "zzxlated_", (ftnlen)
-				696)] + 1;
-			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-				"inbufr", i__2, "zzxlated_", (ftnlen)697)] = 
-				-inbufr[(i__3 = k) < 256 && 0 <= i__3 ? i__3 :
-				 s_rnge("inbufr", i__3, "zzxlated_", (ftnlen)
-				697)];
+				s_rnge(&__global_state->f2c, "inbufr", i__3, 
+				"zzxlated_", (ftnlen)695)];
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "inbufr", i__2, "zzxlat"
+				"ed_", (ftnlen)696)] = inbufr[(i__3 = k) < 256 
+				&& 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "inbufr", i__3, "zzxlat"
+				"ed_", (ftnlen)696)] + 1;
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "inbufr", i__2, "zzxlat"
+				"ed_", (ftnlen)697)] = -inbufr[(i__3 = k) < 
+				256 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "inbufr", i__3, "zzxlat"
+				"ed_", (ftnlen)697)];
 		    }
 		}
 
@@ -1022,7 +1055,8 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*              next block of OUTPUT. */
 
 		if (k == 255) {
-		    moved_(dpbufr, &__state->c__128, &output[outpos - 1]);
+		    moved_(__global_state, dpbufr, &__state->c__128, &output[
+			    outpos - 1]);
 		    outpos += 128;
 		    k = 1;
 
@@ -1038,20 +1072,23 @@ static zzxlated_state_t* get_zzxlated_state() {
 
 	    if (k != 1) {
 		i__1 = k / 2;
-		moved_(dpbufr, &i__1, &output[outpos - 1]);
+		moved_(__global_state, dpbufr, &i__1, &output[outpos - 1]);
 	    }
 	} else {
-	    setmsg_("Unable to translate double precision values from binary"
-		    " file format # to #. This error should never occur and i"
-		    "s indicative of a bug.  Contact NAIF.", (ftnlen)148);
-	    errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 <= 
-		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-		    736)) << 3), (ftnlen)1, (ftnlen)8);
-	    errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) < 4 
-		    && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", 
-		    (ftnlen)737)) << 3), (ftnlen)1, (ftnlen)8);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZXLATED", (ftnlen)8);
+	    setmsg_(__global_state, "Unable to translate double precision va"
+		    "lues from binary file format # to #. This error should n"
+		    "ever occur and is indicative of a bug.  Contact NAIF.", (
+		    ftnlen)148);
+	    errch_(__global_state, "#", __state->strbff + (((i__1 = *inbff - 
+		    1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "strbff", i__1, "zzxlated_", (ftnlen)736)) << 3), (ftnlen)
+		    1, (ftnlen)8);
+	    errch_(__global_state, "#", __state->strbff + (((i__1 = 
+		    __state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "strbff", i__1, "zzxlated_", (ftnlen)
+		    737)) << 3), (ftnlen)1, (ftnlen)8);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZXLATED", (ftnlen)8);
 	    return 0;
 	}
     } else if (__state->natbff == 2) {
@@ -1065,18 +1102,20 @@ static zzxlated_state_t* get_zzxlated_state() {
 
 	    numdp = lenipt / 8;
 	    if (lenipt - (numdp << 3) != 0) {
-		setmsg_("The input string that is to be translated from the "
-			"binary format # to format # has a length that is not"
-			" a multiple of 4 bytes.  This error should never occ"
-			"ur.", (ftnlen)158);
-		errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 
-			<= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", (
+		setmsg_(__global_state, "The input string that is to be tran"
+			"slated from the binary format # to format # has a le"
+			"ngth that is not a multiple of 4 bytes.  This error "
+			"should never occur.", (ftnlen)158);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = *
+			inbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "strbff", i__1, "zzxlated_", (
 			ftnlen)764)) << 3), (ftnlen)1, (ftnlen)8);
-		errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) <
-			 4 && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzx"
-			"lated_", (ftnlen)765)) << 3), (ftnlen)1, (ftnlen)8);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZXLATED", (ftnlen)8);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = 
+			__state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+			&__global_state->f2c, "strbff", i__1, "zzxlated_", (
+			ftnlen)765)) << 3), (ftnlen)1, (ftnlen)8);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZXLATED", (ftnlen)8);
 		return 0;
 	    }
 
@@ -1084,21 +1123,23 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*           the translation. */
 
 	    if (numdp > *space) {
-		setmsg_("The caller specified that # double precision number"
-			"s are to be translated from binary format # to #.  H"
-			"owever there is only room to hold # integers in the "
-			"output array.  This error should never occur.", (
-			ftnlen)200);
-		errint_("#", &numdp, (ftnlen)1);
-		errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 
-			<= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", (
+		setmsg_(__global_state, "The caller specified that # double "
+			"precision numbers are to be translated from binary f"
+			"ormat # to #.  However there is only room to hold # "
+			"integers in the output array.  This error should nev"
+			"er occur.", (ftnlen)200);
+		errint_(__global_state, "#", &numdp, (ftnlen)1);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = *
+			inbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "strbff", i__1, "zzxlated_", (
 			ftnlen)785)) << 3), (ftnlen)1, (ftnlen)8);
-		errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) <
-			 4 && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzx"
-			"lated_", (ftnlen)786)) << 3), (ftnlen)1, (ftnlen)8);
-		errint_("#", space, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZXLATED", (ftnlen)8);
+		errch_(__global_state, "#", __state->strbff + (((i__1 = 
+			__state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(
+			&__global_state->f2c, "strbff", i__1, "zzxlated_", (
+			ftnlen)786)) << 3), (ftnlen)1, (ftnlen)8);
+		errint_(__global_state, "#", space, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZXLATED", (ftnlen)8);
 		return 0;
 	    }
 
@@ -1173,40 +1214,47 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*              into place through simple multiplication. */
 
 		i__2 = j + 6;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 7 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 7 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
 		i__3 = -1, i__4 = min(i__5,i__6);
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
-		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)868)] = value;
+		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)868)] = value;
 		i__2 = j + 5;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 6 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 6 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
 		i__3 = -1, i__4 = min(i__5,i__6);
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 8;
-		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)872)] = inbufr[(
-			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)872)] + value;
+		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)872)] = inbufr[(i__3 = k - 1) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "inbufr", 
+			i__3, "zzxlated_", (ftnlen)872)] + value;
 		i__2 = j + 4;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 5 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 5 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
 		i__3 = -1, i__4 = min(i__5,i__6);
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 16;
-		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)876)] = inbufr[(
-			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)876)] + value;
+		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)876)] = inbufr[(i__3 = k - 1) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "inbufr", 
+			i__3, "zzxlated_", (ftnlen)876)] + value;
 		i__2 = j + 3;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 4 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 4 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
@@ -1228,10 +1276,11 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*              positions and combine them with INBUFR(K). */
 
 		value <<= 24;
-		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"inbufr", i__2, "zzxlated_", (ftnlen)898)] = inbufr[(
-			i__3 = k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"inbufr", i__3, "zzxlated_", (ftnlen)898)] + value;
+		inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)898)] = inbufr[(i__3 = k - 1) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "inbufr", 
+			i__3, "zzxlated_", (ftnlen)898)] + value;
 
 /*              Install the sign bit.  At the moment in INBUFR(K) */
 /*              the bits are precisely as they need to be arranged. */
@@ -1264,61 +1313,70 @@ static zzxlated_state_t* get_zzxlated_state() {
 
 		if (osign == 1) {
 		    if (inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
-			    s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)931)] 
-			    == 0) {
+			    s_rnge(&__global_state->f2c, "inbufr", i__2, 
+			    "zzxlated_", (ftnlen)931)] == 0) {
 			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
-				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
-				932)] = __state->smlint;
+				s_rnge(&__global_state->f2c, "inbufr", i__2, 
+				"zzxlated_", (ftnlen)932)] = __state->smlint;
 		    } else {
 			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
-				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
-				934)] = __state->bigint - inbufr[(i__3 = k - 
-				1) < 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr"
-				, i__3, "zzxlated_", (ftnlen)934)];
+				s_rnge(&__global_state->f2c, "inbufr", i__2, 
+				"zzxlated_", (ftnlen)934)] = __state->bigint 
+				- inbufr[(i__3 = k - 1) < 256 && 0 <= i__3 ? 
+				i__3 : s_rnge(&__global_state->f2c, "inbufr", 
+				i__3, "zzxlated_", (ftnlen)934)];
 			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
-				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
-				935)] = inbufr[(i__3 = k - 1) < 256 && 0 <= 
-				i__3 ? i__3 : s_rnge("inbufr", i__3, "zzxlat"
+				s_rnge(&__global_state->f2c, "inbufr", i__2, 
+				"zzxlated_", (ftnlen)935)] = inbufr[(i__3 = k 
+				- 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "inbufr", i__3, "zzxlat"
 				"ed_", (ftnlen)935)] + 1;
 			inbufr[(i__2 = k - 1) < 256 && 0 <= i__2 ? i__2 : 
-				s_rnge("inbufr", i__2, "zzxlated_", (ftnlen)
-				936)] = -inbufr[(i__3 = k - 1) < 256 && 0 <= 
-				i__3 ? i__3 : s_rnge("inbufr", i__3, "zzxlat"
+				s_rnge(&__global_state->f2c, "inbufr", i__2, 
+				"zzxlated_", (ftnlen)936)] = -inbufr[(i__3 = 
+				k - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "inbufr", i__3, "zzxlat"
 				"ed_", (ftnlen)936)];
 		    }
 		}
 		i__2 = j + 2;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 3 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 3 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
 		i__3 = -1, i__4 = min(i__5,i__6);
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
-		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)941)] = value;
+		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)941)] = value;
 		i__2 = j + 1;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 2 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 2 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
 		i__3 = -1, i__4 = min(i__5,i__6);
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 8;
-		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)945)] = inbufr[(i__3 = k) 
-			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
+		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)945)] = inbufr[(i__3 = k) < 256 && 0 <= i__3 ? 
+			i__3 : s_rnge(&__global_state->f2c, "inbufr", i__3, 
 			"zzxlated_", (ftnlen)945)] + value;
 		i__2 = j;
-		s_copy(ch__1, input + i__2, (ftnlen)1, j + 1 - i__2);
+		s_copy(&__global_state->f2c, ch__1, input + i__2, (ftnlen)1, 
+			j + 1 - i__2);
 /* Computing MAX */
 /* Computing MIN */
 		i__5 = 0, i__6 = *(unsigned char *)&ch__1[0];
 		i__3 = -1, i__4 = min(i__5,i__6);
 		value = *(unsigned char *)&ch__1[0] - (max(i__3,i__4) << 8);
 		value <<= 16;
-		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)949)] = inbufr[(i__3 = k) 
-			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
+		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)949)] = inbufr[(i__3 = k) < 256 && 0 <= i__3 ? 
+			i__3 : s_rnge(&__global_state->f2c, "inbufr", i__3, 
 			"zzxlated_", (ftnlen)949)] + value;
 		*(unsigned char *)&ch__1[0] = *(unsigned char *)&input[j - 1];
 /* Computing MAX */
@@ -1342,9 +1400,10 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*              positions and combine them with INBUFR(K). */
 
 		value <<= 24;
-		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge("inbufr",
-			 i__2, "zzxlated_", (ftnlen)971)] = inbufr[(i__3 = k) 
-			< 256 && 0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
+		inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "inbufr", i__2, "zzxlated_", (
+			ftnlen)971)] = inbufr[(i__3 = k) < 256 && 0 <= i__3 ? 
+			i__3 : s_rnge(&__global_state->f2c, "inbufr", i__3, 
 			"zzxlated_", (ftnlen)971)] + value;
 
 /*              Install the sign bit.  At the moment in INBUFR(K+1) */
@@ -1353,27 +1412,31 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*              previous integer. */
 
 		if (osign == 1) {
-		    if (inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			    "inbufr", i__2, "zzxlated_", (ftnlen)980)] == 0) {
-			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-				"inbufr", i__2, "zzxlated_", (ftnlen)981)] = 
-				__state->smlint;
+		    if (inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "inbufr", i__2, "zzxlated_", 
+			    (ftnlen)980)] == 0) {
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "inbufr", i__2, "zzxlat"
+				"ed_", (ftnlen)981)] = __state->smlint;
 		    } else {
-			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-				"inbufr", i__2, "zzxlated_", (ftnlen)983)] = 
-				__state->bigint - inbufr[(i__3 = k) < 256 && 
-				0 <= i__3 ? i__3 : s_rnge("inbufr", i__3, 
-				"zzxlated_", (ftnlen)983)];
-			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-				"inbufr", i__2, "zzxlated_", (ftnlen)984)] = 
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "inbufr", i__2, "zzxlat"
+				"ed_", (ftnlen)983)] = __state->bigint - 
 				inbufr[(i__3 = k) < 256 && 0 <= i__3 ? i__3 : 
-				s_rnge("inbufr", i__3, "zzxlated_", (ftnlen)
-				984)] + 1;
-			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-				"inbufr", i__2, "zzxlated_", (ftnlen)985)] = 
-				-inbufr[(i__3 = k) < 256 && 0 <= i__3 ? i__3 :
-				 s_rnge("inbufr", i__3, "zzxlated_", (ftnlen)
-				985)];
+				s_rnge(&__global_state->f2c, "inbufr", i__3, 
+				"zzxlated_", (ftnlen)983)];
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "inbufr", i__2, "zzxlat"
+				"ed_", (ftnlen)984)] = inbufr[(i__3 = k) < 256 
+				&& 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "inbufr", i__3, "zzxlat"
+				"ed_", (ftnlen)984)] + 1;
+			inbufr[(i__2 = k) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "inbufr", i__2, "zzxlat"
+				"ed_", (ftnlen)985)] = -inbufr[(i__3 = k) < 
+				256 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "inbufr", i__3, "zzxlat"
+				"ed_", (ftnlen)985)];
 		    }
 		}
 
@@ -1382,7 +1445,8 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*              next block of OUTPUT. */
 
 		if (k == 255) {
-		    moved_(dpbufr, &__state->c__128, &output[outpos - 1]);
+		    moved_(__global_state, dpbufr, &__state->c__128, &output[
+			    outpos - 1]);
 		    outpos += 128;
 		    k = 1;
 
@@ -1398,20 +1462,23 @@ static zzxlated_state_t* get_zzxlated_state() {
 
 	    if (k != 1) {
 		i__1 = k / 2;
-		moved_(dpbufr, &i__1, &output[outpos - 1]);
+		moved_(__global_state, dpbufr, &i__1, &output[outpos - 1]);
 	    }
 	} else {
-	    setmsg_("Unable to translate double precision values from binary"
-		    " file format # to #. This error should never occur and i"
-		    "s indicative of a bug.  Contact NAIF.", (ftnlen)148);
-	    errch_("#", __state->strbff + (((i__1 = *inbff - 1) < 4 && 0 <= 
-		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
-		    1024)) << 3), (ftnlen)1, (ftnlen)8);
-	    errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) < 4 
-		    && 0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", 
-		    (ftnlen)1025)) << 3), (ftnlen)1, (ftnlen)8);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZXLATED", (ftnlen)8);
+	    setmsg_(__global_state, "Unable to translate double precision va"
+		    "lues from binary file format # to #. This error should n"
+		    "ever occur and is indicative of a bug.  Contact NAIF.", (
+		    ftnlen)148);
+	    errch_(__global_state, "#", __state->strbff + (((i__1 = *inbff - 
+		    1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "strbff", i__1, "zzxlated_", (ftnlen)1024)) << 3), (
+		    ftnlen)1, (ftnlen)8);
+	    errch_(__global_state, "#", __state->strbff + (((i__1 = 
+		    __state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "strbff", i__1, "zzxlated_", (ftnlen)
+		    1025)) << 3), (ftnlen)1, (ftnlen)8);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZXLATED", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1420,17 +1487,19 @@ static zzxlated_state_t* get_zzxlated_state() {
 /*     of code should never be reached in normal operation. */
 
     } else {
-	setmsg_("The native binary file format of this toolkit build, #, is "
-		"not currently supported for translation of double precision "
-		"numbers from non-native formats.", (ftnlen)151);
-	errch_("#", __state->strbff + (((i__1 = __state->natbff - 1) < 4 && 0 
-		<= i__1 ? i__1 : s_rnge("strbff", i__1, "zzxlated_", (ftnlen)
+	setmsg_(__global_state, "The native binary file format of this toolk"
+		"it build, #, is not currently supported for translation of d"
+		"ouble precision numbers from non-native formats.", (ftnlen)
+		151);
+	errch_(__global_state, "#", __state->strbff + (((i__1 = 
+		__state->natbff - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "strbff", i__1, "zzxlated_", (ftnlen)
 		1043)) << 3), (ftnlen)1, (ftnlen)8);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZXLATED", (ftnlen)8);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZXLATED", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZXLATED", (ftnlen)8);
+    chkout_(__global_state, "ZZXLATED", (ftnlen)8);
     return 0;
 } /* zzxlated_ */
 

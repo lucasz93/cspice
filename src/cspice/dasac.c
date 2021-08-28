@@ -8,8 +8,7 @@
 
 
 extern dasac_init_t __dasac_init;
-static dasac_state_t* get_dasac_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasac_state_t* get_dasac_state(cspice_t* state) {
 	if (!state->dasac)
 		state->dasac = __cspice_allocate_module(sizeof(dasac_state_t),
 	 &__dasac_init, sizeof(__dasac_init));
@@ -18,8 +17,8 @@ static dasac_state_t* get_dasac_state() {
 }
 
 /* $Procedure     DASAC ( DAS add comments ) */
-/* Subroutine */ int dasac_(integer *handle, integer *n, char *buffer, ftnlen 
-	buffer_len)
+/* Subroutine */ int dasac_(cspice_t* __global_state, integer *handle, 
+	integer *n, char *buffer, ftnlen buffer_len)
 {
     /* Initialized data */
 
@@ -28,49 +27,49 @@ static dasac_state_t* get_dasac_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
     integer i__;
     integer j;
     integer space;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
     integer recno;
     integer ncomr;
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasacr_(integer *, integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasacr_(cspice_t*, integer *, integer *);
     char ifname[60];
     char crecrd[1024];
-    extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasioc_(cspice_t*, char *, integer *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dassih_(cspice_t*, integer *, char *, ftnlen);
     integer nchars;
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer length;
     integer newrec;
     integer daslun;
-    extern /* Subroutine */ int dasrfr_(integer *, char *, char *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dasrfr_(cspice_t*, integer *, char *, char *, 
+	    integer *, integer *, integer *, integer *, ftnlen, ftnlen);
     char idword[8];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int daswfr_(integer *, char *, char *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int daswfr_(cspice_t*, integer *, char *, char *, 
+	    integer *, integer *, integer *, integer *, ftnlen, ftnlen);
     integer nresvc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer rinuse;
     integer curpos;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer nresvr;
 
 
     /* Module state */
-    dasac_state_t* __state = get_dasac_state();
+    dasac_state_t* __state = get_dasac_state(__global_state);
 /* $ Abstract */
 
 /*     Add comments from a buffer of character strings to the comment */
@@ -283,10 +282,10 @@ static dasac_state_t* get_dasac_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASAC", (ftnlen)5);
+	chkin_(__global_state, "DASAC", (ftnlen)5);
     }
 
 /*     The lines of text in BUFFER will be ``packed'' into DAS comment */
@@ -308,30 +307,31 @@ static dasac_state_t* get_dasac_state() {
 /*     Verify that the DAS file attached to HANDLE is opened with write */
 /*     access. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DASAC", (ftnlen)5);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASAC", (ftnlen)5);
 	return 0;
     }
 
 /*     Convert the DAS file handle to its corresponding Fortran logical */
 /*     unit number for reading and writing comment records. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &daslun, (ftnlen)3);
-    if (failed_()) {
-	chkout_("DASAC", (ftnlen)5);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &daslun, (
+	    ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASAC", (ftnlen)5);
 	return 0;
     }
 
 /*     Check for a nonpositive number of lines in the buffer. */
 
     if (*n <= 0) {
-	setmsg_("The number of comment lines to be added to the binary DAS f"
-		"ile # was not positive: #.", (ftnlen)85);
-	errfnm_("#", &daslun, (ftnlen)1);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("DASAC", (ftnlen)5);
+	setmsg_(__global_state, "The number of comment lines to be added to "
+		"the binary DAS file # was not positive: #.", (ftnlen)85);
+	errfnm_(__global_state, "#", &daslun, (ftnlen)1);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "DASAC", (ftnlen)5);
 	return 0;
     }
 
@@ -347,7 +347,8 @@ static dasac_state_t* get_dasac_state() {
 
 /*        Get the length of the significant portion of a comment line. */
 
-	length = lastnb_(buffer + (i__ - 1) * buffer_len, buffer_len);
+	length = lastnb_(__global_state, buffer + (i__ - 1) * buffer_len, 
+		buffer_len);
 
 /*        Scan the comment line for non printing characters. */
 
@@ -362,13 +363,14 @@ static dasac_state_t* get_dasac_state() {
 	    if (*(unsigned char *)&buffer[(i__ - 1) * buffer_len + (j - 1)] > 
 		    126 || *(unsigned char *)&buffer[(i__ - 1) * buffer_len + 
 		    (j - 1)] < 32) {
-		setmsg_("A nonprinting character was encountered in the comm"
-			"ent buffer. Value: #", (ftnlen)71);
+		setmsg_(__global_state, "A nonprinting character was encount"
+			"ered in the comment buffer. Value: #", (ftnlen)71);
 		i__3 = *(unsigned char *)&buffer[(i__ - 1) * buffer_len + (j 
 			- 1)];
-		errint_("#", &i__3, (ftnlen)1);
-		sigerr_("SPICE(ILLEGALCHARACTER)", (ftnlen)23);
-		chkout_("DASAC", (ftnlen)5);
+		errint_(__global_state, "#", &i__3, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(ILLEGALCHARACTER)", (ftnlen)23)
+			;
+		chkout_(__global_state, "DASAC", (ftnlen)5);
 		return 0;
 	    }
 	}
@@ -391,10 +393,10 @@ static dasac_state_t* get_dasac_state() {
 /*     from the DAS file attached to HANDLE. We will also get back some */
 /*     extra stuff that we do not use. */
 
-    dasrfr_(handle, idword, ifname, &nresvr, &nresvc, &ncomr, &ncomc, (ftnlen)
-	    8, (ftnlen)60);
-    if (failed_()) {
-	chkout_("DASAC", (ftnlen)5);
+    dasrfr_(__global_state, handle, idword, ifname, &nresvr, &nresvc, &ncomr, 
+	    &ncomc, (ftnlen)8, (ftnlen)60);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASAC", (ftnlen)5);
 	return 0;
     }
 
@@ -430,9 +432,9 @@ static dasac_state_t* get_dasac_state() {
 /*     if we need to add any. */
 
     if (newrec > 0) {
-	dasacr_(handle, &newrec);
-	if (failed_()) {
-	    chkout_("DASAC", (ftnlen)5);
+	dasacr_(__global_state, handle, &newrec);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DASAC", (ftnlen)5);
 	    return 0;
 	}
 
@@ -465,7 +467,7 @@ static dasac_state_t* get_dasac_state() {
 
 	recno = nresvr + 2;
 	curpos = 1;
-	s_copy(crecrd, " ", (ftnlen)1024, (ftnlen)1);
+	s_copy(&__global_state->f2c, crecrd, " ", (ftnlen)1024, (ftnlen)1);
     } else {
 
 /*        If there are comments in the comment area, then we need to skip */
@@ -479,9 +481,10 @@ static dasac_state_t* get_dasac_state() {
 	rinuse = ncomc / 1024 + 1;
 	recno = nresvr + 1 + rinuse;
 	curpos = ncomc - (rinuse - 1 << 10) + 1;
-	dasioc_("READ", &daslun, &recno, crecrd, (ftnlen)4, (ftnlen)1024);
-	if (failed_()) {
-	    chkout_("DASAC", (ftnlen)5);
+	dasioc_(__global_state, "READ", &daslun, &recno, crecrd, (ftnlen)4, (
+		ftnlen)1024);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DASAC", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -495,7 +498,8 @@ static dasac_state_t* get_dasac_state() {
 
 /*        Get the length of the significant portion of a comment line. */
 
-	length = lastnb_(buffer + (i__ - 1) * buffer_len, buffer_len);
+	length = lastnb_(__global_state, buffer + (i__ - 1) * buffer_len, 
+		buffer_len);
 
 /*        Process the comment line. */
 
@@ -508,15 +512,16 @@ static dasac_state_t* get_dasac_state() {
 /*           of the current position and the comment record. */
 
 	    if (curpos > 1024) {
-		dasioc_("WRITE", &daslun, &recno, crecrd, (ftnlen)5, (ftnlen)
-			1024);
-		if (failed_()) {
-		    chkout_("DASAC", (ftnlen)5);
+		dasioc_(__global_state, "WRITE", &daslun, &recno, crecrd, (
+			ftnlen)5, (ftnlen)1024);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "DASAC", (ftnlen)5);
 		    return 0;
 		}
 		++recno;
 		curpos = 1;
-		s_copy(crecrd, " ", (ftnlen)1024, (ftnlen)1);
+		s_copy(&__global_state->f2c, crecrd, " ", (ftnlen)1024, (
+			ftnlen)1);
 	    }
 	    *(unsigned char *)&crecrd[curpos - 1] = *(unsigned char *)&buffer[
 		    (i__ - 1) * buffer_len + (j - 1)];
@@ -531,15 +536,16 @@ static dasac_state_t* get_dasac_state() {
 /*        and the comment record. */
 
 	if (curpos > 1024) {
-	    dasioc_("WRITE", &daslun, &recno, crecrd, (ftnlen)5, (ftnlen)1024)
-		    ;
-	    if (failed_()) {
-		chkout_("DASAC", (ftnlen)5);
+	    dasioc_(__global_state, "WRITE", &daslun, &recno, crecrd, (ftnlen)
+		    5, (ftnlen)1024);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASAC", (ftnlen)5);
 		return 0;
 	    }
 	    ++recno;
 	    curpos = 1;
-	    s_copy(crecrd, " ", (ftnlen)1024, (ftnlen)1);
+	    s_copy(&__global_state->f2c, crecrd, " ", (ftnlen)1024, (ftnlen)1)
+		    ;
 	}
 
 /*        Append the end-of-line marker to the comment line that we just */
@@ -555,9 +561,10 @@ static dasac_state_t* get_dasac_state() {
 /*     record will always contain something, so we always need to write */
 /*     it. */
 
-    dasioc_("WRITE", &daslun, &recno, crecrd, (ftnlen)5, (ftnlen)1024);
-    if (failed_()) {
-	chkout_("DASAC", (ftnlen)5);
+    dasioc_(__global_state, "WRITE", &daslun, &recno, crecrd, (ftnlen)5, (
+	    ftnlen)1024);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASAC", (ftnlen)5);
 	return 0;
     }
 
@@ -565,14 +572,14 @@ static dasac_state_t* get_dasac_state() {
 /*     in the file record by adding NCHARS, and writing the file record. */
 
     ncomc += nchars;
-    daswfr_(handle, idword, ifname, &nresvr, &nresvc, &ncomr, &ncomc, (ftnlen)
-	    8, (ftnlen)60);
+    daswfr_(__global_state, handle, idword, ifname, &nresvr, &nresvc, &ncomr, 
+	    &ncomc, (ftnlen)8, (ftnlen)60);
 
 /*     Check out and leave DASAC. A test of FAILED should be done by */
 /*     the calling routine to catch an error that may occur during */
 /*     the call to DASWFR. */
 
-    chkout_("DASAC", (ftnlen)5);
+    chkout_(__global_state, "DASAC", (ftnlen)5);
     return 0;
 } /* dasac_ */
 

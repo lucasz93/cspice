@@ -8,24 +8,24 @@
 
 
 typedef int zzekjsqz_state_t;
-static zzekjsqz_state_t* get_zzekjsqz_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekjsqz_state_t* get_zzekjsqz_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  ZZEKJSQZ ( Private: EK, join row set squeeze ) */
-/* Subroutine */ int zzekjsqz_(integer *jrsbas)
+/* Subroutine */ int zzekjsqz_(cspice_t* __global_state, integer *jrsbas)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer ntab;
     integer size;
-    extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzeksupd_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer i__;
     integer j;
     integer delta;
@@ -35,7 +35,7 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
     integer ntloc;
     integer rtarg;
     integer vtarg;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer rc;
     integer nr;
     integer segvec[10];
@@ -54,11 +54,12 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
     integer rvsize;
     integer svsize;
     integer nsv;
-    extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzeksrd_(cspice_t*, integer *, integer *, 
+	    integer *);
 
 
     /* Module state */
-    zzekjsqz_state_t* __state = get_zzekjsqz_state();
+    zzekjsqz_state_t* __state = get_zzekjsqz_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -435,10 +436,10 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
     sizloc = *jrsbas + 1;
     nsvloc = *jrsbas + 4;
     ntloc = *jrsbas + 3;
-    zzeksrd_(&sizloc, &sizloc, &size);
-    zzeksrd_(&ntloc, &ntloc, &ntab);
-    zzeksrd_(&nsvloc, &nsvloc, &nsv);
-    if (failed_()) {
+    zzeksrd_(__global_state, &sizloc, &sizloc, &size);
+    zzeksrd_(__global_state, &ntloc, &ntloc, &ntab);
+    zzeksrd_(__global_state, &nsvloc, &nsvloc, &nsv);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -462,7 +463,7 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
 
 	cntloc = *jrsbas + 4 + nsv * svsize + (i__ - 1 << 1) + 2;
 	ptrloc = cntloc - 1;
-	zzeksrd_(&cntloc, &cntloc, &rc);
+	zzeksrd_(__global_state, &cntloc, &cntloc, &rc);
 	if (rc > 0) {
 
 /*           The row vector set for this segment vector is non-empty. */
@@ -470,14 +471,14 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
 /*           update the row count to reflect the number of rows that */
 /*           we're going to keep. */
 
-	    zzeksrd_(&ptrloc, &ptrloc, &setbas);
+	    zzeksrd_(__global_state, &ptrloc, &ptrloc, &setbas);
 	    nrvdel = 0;
 	    i__2 = rc;
 	    for (j = 1; j <= i__2; ++j) {
 		rbase = *jrsbas + setbas + (j - 1) * rvsize;
 		i__3 = rbase + 1;
 		i__4 = rbase + 1;
-		zzeksrd_(&i__3, &i__4, rowvec);
+		zzeksrd_(__global_state, &i__3, &i__4, rowvec);
 		if (rowvec[0] == 0) {
 		    ++nrvdel;
 		}
@@ -500,10 +501,10 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
 
 	    i__2 = svbase + 1;
 	    i__3 = svbase + svsize;
-	    zzeksrd_(&i__2, &i__3, segvec);
+	    zzeksrd_(__global_state, &i__2, &i__3, segvec);
 	    i__2 = vtarg + 1;
 	    i__3 = vtarg + svsize;
-	    zzeksupd_(&i__2, &i__3, segvec);
+	    zzeksupd_(__global_state, &i__2, &i__3, segvec);
 	    vtarg += svsize;
 	} else {
 
@@ -533,7 +534,7 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
 
 	    svsize = ntab;
 	    cntloc = *jrsbas + 4 + nsv * svsize + (i__ - 1 << 1) + 2;
-	    zzeksrd_(&cntloc, &cntloc, &rc);
+	    zzeksrd_(__global_state, &cntloc, &cntloc, &rc);
 	    ptbase = cntloc - 2;
 	    if (rc > 0) {
 
@@ -542,10 +543,10 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
 
 		i__2 = ptbase + 1;
 		i__3 = ptbase + 2;
-		zzeksrd_(&i__2, &i__3, pcpair);
+		zzeksrd_(__global_state, &i__2, &i__3, pcpair);
 		i__2 = ptarg + 1;
 		i__3 = ptarg + 2;
-		zzeksupd_(&i__2, &i__3, pcpair);
+		zzeksupd_(__global_state, &i__2, &i__3, pcpair);
 		ptarg += 2;
 	    }
 	}
@@ -555,7 +556,7 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
 
 /*     Update the segment vector count. */
 
-    zzeksupd_(&nsvloc, &nsvloc, &newnsv);
+    zzeksupd_(__global_state, &nsvloc, &nsvloc, &newnsv);
 
 /*     Remove any gaps that may exist between any of the row vectors, */
 /*     or between the end of the segment vector's row vector counts */
@@ -578,18 +579,18 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
 /*        vector. */
 
 	cntloc = *jrsbas + 4 + newnsv * svsize + (i__ - 1 << 1) + 2;
-	zzeksrd_(&cntloc, &cntloc, &rc);
+	zzeksrd_(__global_state, &cntloc, &cntloc, &rc);
 	ptrloc = cntloc - 1;
 
 /*        Get the row vector set base pointer.  After capturing the */
 /*        current value, we'll update this pointer to account for */
 /*        the shifting of row vectors. */
 
-	zzeksrd_(&ptrloc, &ptrloc, &setbas);
+	zzeksrd_(__global_state, &ptrloc, &ptrloc, &setbas);
 	rbase = *jrsbas + setbas;
 	delta = rtarg - rbase;
 	i__2 = setbas + delta;
-	zzeksupd_(&ptrloc, &ptrloc, &i__2);
+	zzeksupd_(__global_state, &ptrloc, &ptrloc, &i__2);
 
 /*        Shift the row vectors for the current segment vector, */
 /*        leaving behind the row vectors marked for deletion. */
@@ -599,7 +600,7 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
 	for (j = 1; j <= i__2; ++j) {
 	    i__3 = rbase + 1;
 	    i__4 = rbase + rvsize;
-	    zzeksrd_(&i__3, &i__4, rowvec);
+	    zzeksrd_(__global_state, &i__3, &i__4, rowvec);
 	    if (rowvec[0] == 0) {
 
 /*              This row vector is to be deleted; don't copy it. */
@@ -610,12 +611,12 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
 
 /*              The segment vector pointer is base-relative. */
 
-		rowvec[(i__3 = rvsize - 1) < 11 && 0 <= i__3 ? i__3 : s_rnge(
-			"rowvec", i__3, "zzekjsqz_", (ftnlen)415)] = (i__ - 1)
-			 * svsize + 4;
+		rowvec[(i__3 = rvsize - 1) < 11 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "rowvec", i__3, "zzekjsqz_", (
+			ftnlen)415)] = (i__ - 1) * svsize + 4;
 		i__3 = rtarg + 1;
 		i__4 = rtarg + rvsize;
-		zzeksupd_(&i__3, &i__4, rowvec);
+		zzeksupd_(__global_state, &i__3, &i__4, rowvec);
 		rbase += rvsize;
 		rtarg += rvsize;
 	    }
@@ -629,7 +630,7 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
 
 	if (nrvdel > 0) {
 	    i__2 = rc - nrvdel;
-	    zzeksupd_(&cntloc, &cntloc, &i__2);
+	    zzeksupd_(__global_state, &cntloc, &cntloc, &i__2);
 	}
     }
 
@@ -639,13 +640,13 @@ static zzekjsqz_state_t* get_zzekjsqz_state() {
     i__1 = newnsv;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	cntloc = *jrsbas + 4 + newnsv * svsize + (i__ - 1 << 1) + 2;
-	zzeksrd_(&cntloc, &cntloc, &rc);
+	zzeksrd_(__global_state, &cntloc, &cntloc, &rc);
 	nr += rc;
     }
     nrloc = *jrsbas + 2;
     size = newnsv * (svsize + 2) + 4 + nr * rvsize;
-    zzeksupd_(&nrloc, &nrloc, &nr);
-    zzeksupd_(&sizloc, &sizloc, &size);
+    zzeksupd_(__global_state, &nrloc, &nrloc, &nr);
+    zzeksupd_(__global_state, &sizloc, &sizloc, &size);
     return 0;
 } /* zzekjsqz_ */
 

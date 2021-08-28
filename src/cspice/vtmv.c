@@ -8,20 +8,20 @@
 
 
 typedef int vtmv_state_t;
-static vtmv_state_t* get_vtmv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vtmv_state_t* get_vtmv_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  VTMV ( Vector transpose times matrix times vector, 3 dim ) */
-doublereal vtmv_(doublereal *v1, doublereal *matrix, doublereal *v2)
+doublereal vtmv_(cspice_t* __global_state, doublereal *v1, doublereal *matrix,
+	 doublereal *v2)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal ret_val;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer k;
@@ -29,7 +29,7 @@ doublereal vtmv_(doublereal *v1, doublereal *matrix, doublereal *v2)
 
 
     /* Module state */
-    vtmv_state_t* __state = get_vtmv_state();
+    vtmv_state_t* __state = get_vtmv_state(__global_state);
 /* $ Abstract */
 
 /*      Multiply the transpose of a 3-dimensional column vector, */
@@ -172,11 +172,13 @@ doublereal vtmv_(doublereal *v1, doublereal *matrix, doublereal *v2)
     ret_val = 0.;
     for (k = 1; k <= 3; ++k) {
 	for (l = 1; l <= 3; ++l) {
-	    ret_val += v1[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "v1", i__1, "vtmv_", (ftnlen)156)] * matrix[(i__2 = k + l 
-		    * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("matrix", i__2, 
-		    "vtmv_", (ftnlen)156)] * v2[(i__3 = l - 1) < 3 && 0 <= 
-		    i__3 ? i__3 : s_rnge("v2", i__3, "vtmv_", (ftnlen)156)];
+	    ret_val += v1[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "v1", i__1, "vtmv_", (ftnlen)156)] * 
+		    matrix[(i__2 = k + l * 3 - 4) < 9 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "matrix", i__2, "vtmv_", (
+		    ftnlen)156)] * v2[(i__3 = l - 1) < 3 && 0 <= i__3 ? i__3 :
+		     s_rnge(&__global_state->f2c, "v2", i__3, "vtmv_", (
+		    ftnlen)156)];
 	}
     }
     return ret_val;

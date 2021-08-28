@@ -8,18 +8,17 @@
 
 
 typedef int ljust_state_t;
-static ljust_state_t* get_ljust_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ljust_state_t* get_ljust_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure LJUST ( Left justify a character string ) */
-/* Subroutine */ int ljust_(char *input, char *output, ftnlen input_len, 
-	ftnlen output_len)
+/* Subroutine */ int ljust_(cspice_t* __global_state, char *input, char *
+	output, ftnlen input_len, ftnlen output_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
@@ -30,7 +29,7 @@ static ljust_state_t* get_ljust_state() {
 
 
     /* Module state */
-    ljust_state_t* __state = get_ljust_state();
+    ljust_state_t* __state = get_ljust_state(__global_state);
 /* $ Abstract */
 
 /*     Left justify a character string. */
@@ -158,13 +157,13 @@ static ljust_state_t* get_ljust_state() {
 /*     but to assign the input string to the output string. */
 
     if (*(unsigned char *)input != ' ') {
-	s_copy(output, input, output_len, input_len);
+	s_copy(&__global_state->f2c, output, input, output_len, input_len);
     } else {
 
 /*        Get the first non-blank character. Start OUTPUT at that point. */
 
-	li = i_len(input, input_len);
-	lo = i_len(output, output_len);
+	li = i_len(&__global_state->f2c, input, input_len);
+	lo = i_len(&__global_state->f2c, output, output_len);
 	j = 1;
 
 /*        Set I equal to position of first non-blank character of INPUT. */
@@ -183,7 +182,7 @@ static ljust_state_t* get_ljust_state() {
 /*        blank. Set output to blank. */
 
 	if (i__ == 0) {
-	    s_copy(output, " ", output_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, output, " ", output_len, (ftnlen)1);
 	} else {
 
 /*           I is now the index of the first non-blank character of */
@@ -196,8 +195,8 @@ static ljust_state_t* get_ljust_state() {
 		++i__;
 	    }
 	    if (j <= lo) {
-		s_copy(output + (j - 1), " ", output_len - (j - 1), (ftnlen)1)
-			;
+		s_copy(&__global_state->f2c, output + (j - 1), " ", 
+			output_len - (j - 1), (ftnlen)1);
 	    }
 	}
     }

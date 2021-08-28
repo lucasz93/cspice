@@ -338,7 +338,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "chbder_c" );
+   chkin_c ( naif_state, "chbder_c" );
 
    chbder_( (doublereal *) cp,
             (integer    *) &degp,

@@ -379,7 +379,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "srfc2s_c" );
+   chkin_c ( naif_state, "srfc2s_c" );
 
    /*
    Check the output string to make sure the pointer is non-null and

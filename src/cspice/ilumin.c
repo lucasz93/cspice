@@ -8,29 +8,29 @@
 
 
 typedef int ilumin_state_t;
-static ilumin_state_t* get_ilumin_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ilumin_state_t* get_ilumin_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ILUMIN ( Illumination angles ) */
-/* Subroutine */ int ilumin_(char *method, char *target, doublereal *et, char 
-	*fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *
-	trgepc, doublereal *srfvec, doublereal *phase, doublereal *solar, 
-	doublereal *emissn, ftnlen method_len, ftnlen target_len, ftnlen 
-	fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int ilumin_(cspice_t* __global_state, char *method, char *
+	target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, 
+	doublereal *spoint, doublereal *trgepc, doublereal *srfvec, 
+	doublereal *phase, doublereal *solar, doublereal *emissn, ftnlen 
+	method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, 
+	ftnlen obsrvr_len)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int illumg_(char *, char *, char *, doublereal *, 
-	    char *, char *, char *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int illumg_(cspice_t*, char *, char *, char *, 
+	    doublereal *, char *, char *, char *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ilumin_state_t* __state = get_ilumin_state();
+    ilumin_state_t* __state = get_ilumin_state(__global_state);
 /* $ Abstract */
 
 /*     Find the illumination angles (phase, solar incidence, and */
@@ -1190,14 +1190,14 @@ static ilumin_state_t* get_ilumin_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ILUMIN", (ftnlen)6);
-    illumg_(method, target, "10", et, fixref, abcorr, obsrvr, spoint, trgepc, 
-	    srfvec, phase, solar, emissn, method_len, target_len, (ftnlen)2, 
-	    fixref_len, abcorr_len, obsrvr_len);
-    chkout_("ILUMIN", (ftnlen)6);
+    chkin_(__global_state, "ILUMIN", (ftnlen)6);
+    illumg_(__global_state, method, target, "10", et, fixref, abcorr, obsrvr, 
+	    spoint, trgepc, srfvec, phase, solar, emissn, method_len, 
+	    target_len, (ftnlen)2, fixref_len, abcorr_len, obsrvr_len);
+    chkout_(__global_state, "ILUMIN", (ftnlen)6);
     return 0;
 } /* ilumin_ */
 

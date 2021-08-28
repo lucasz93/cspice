@@ -8,13 +8,12 @@
 
 
 typedef int zzddhclu_state_t;
-static zzddhclu_state_t* get_zzddhclu_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzddhclu_state_t* get_zzddhclu_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZDDHCLU ( Private --- DDH Count Locks ) */
-integer zzddhclu_(logical *utlck, integer *nut)
+integer zzddhclu_(cspice_t* __global_state, logical *utlck, integer *nut)
 {
     /* System generated locals */
     integer ret_val, i__1;
@@ -24,7 +23,7 @@ integer zzddhclu_(logical *utlck, integer *nut)
 
 
     /* Module state */
-    zzddhclu_state_t* __state = get_zzddhclu_state();
+    zzddhclu_state_t* __state = get_zzddhclu_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

@@ -8,8 +8,7 @@
 
 
 extern srfxpt_init_t __srfxpt_init;
-static srfxpt_state_t* get_srfxpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline srfxpt_state_t* get_srfxpt_state(cspice_t* state) {
 	if (!state->srfxpt)
 		state->srfxpt = __cspice_allocate_module(sizeof(
 	srfxpt_state_t), &__srfxpt_init, sizeof(__srfxpt_init));
@@ -18,11 +17,11 @@ static srfxpt_state_t* get_srfxpt_state() {
 }
 
 /* $Procedure      SRFXPT ( Surface intercept point ) */
-/* Subroutine */ int srfxpt_(char *method, char *target, doublereal *et, char 
-	*abcorr, char *obsrvr, char *dref, doublereal *dvec, doublereal *
-	spoint, doublereal *dist, doublereal *trgepc, doublereal *obspos, 
-	logical *found, ftnlen method_len, ftnlen target_len, ftnlen 
-	abcorr_len, ftnlen obsrvr_len, ftnlen dref_len)
+/* Subroutine */ int srfxpt_(cspice_t* __global_state, char *method, char *
+	target, doublereal *et, char *abcorr, char *obsrvr, char *dref, 
+	doublereal *dvec, doublereal *spoint, doublereal *dist, doublereal *
+	trgepc, doublereal *obspos, logical *found, ftnlen method_len, ftnlen 
+	target_len, ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len)
 {
     /* Initialized data */
 
@@ -31,73 +30,77 @@ static srfxpt_state_t* get_srfxpt_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer i_indx(char *, char *, ftnlen, ftnlen), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    integer i_indx(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
     integer nitr;
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     integer type__;
     logical xmit;
     doublereal rpos[3];
     doublereal tpos[3];
     doublereal j2dir[3];
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
     doublereal j2est[3];
     doublereal j2pos[3];
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer i__;
     doublereal s;
     doublereal radii[3];
     doublereal range;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern logical eqchr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical eqchr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal pnear[3];
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     logical usecn;
-    extern doublereal vdist_(doublereal *, doublereal *);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
     doublereal xform[9]	/* was [3][3] */;
     logical uselt;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal r2jmat[9]	/* was [3][3] */;
     doublereal j2tmat[9]	/* was [3][3] */;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer refcde;
     doublereal lt;
     doublereal etdiff;
     integer frcode;
-    extern doublereal dasine_(doublereal *, doublereal *);
+    extern doublereal dasine_(cspice_t*, doublereal *, doublereal *);
     doublereal refepc;
     integer obscde;
     integer nradii;
-    extern /* Subroutine */ int cidfrm_(integer *, integer *, char *, logical 
-	    *, ftnlen);
+    extern /* Subroutine */ int cidfrm_(cspice_t*, integer *, integer *, char 
+	    *, logical *, ftnlen);
     char frname[32];
-    extern doublereal clight_(void);
+    extern doublereal clight_(cspice_t*);
     doublereal ltdiff;
     doublereal maxrad;
     doublereal reject;
     integer trgcde;
     char loccor[15];
     integer center;
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern doublereal touchd_(doublereal *);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int stelab_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern doublereal touchd_(cspice_t*, doublereal *);
     doublereal ltcent;
     doublereal negpos[3];
     doublereal rayalt;
@@ -105,40 +108,42 @@ static srfxpt_state_t* get_srfxpt_state() {
     integer typeid;
     doublereal stldir[3];
     doublereal prevet;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal stlerr[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal prevlt;
     doublereal ssbost[6];
     doublereal ssbtst[6];
     doublereal stltmp[3];
     logical usestl;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int stlabx_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
-    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int spkezp_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
 	    ;
-    extern /* Subroutine */ int npedln_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int pxform_(cspice_t*, char *, char *, doublereal 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkssb_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int stlabx_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int surfpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, logical *
+	    );
+    extern /* Subroutine */ int npedln_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
     logical fnd;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    srfxpt_state_t* __state = get_srfxpt_state();
+    srfxpt_state_t* __state = get_srfxpt_state(__global_state);
 /* $ Abstract */
 
 /*     Deprecated: This routine has been superseded by the SPICELIB */
@@ -1300,10 +1305,10 @@ static srfxpt_state_t* get_srfxpt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SRFXPT", (ftnlen)6);
+    chkin_(__global_state, "SRFXPT", (ftnlen)6);
 
 /*     Nothing has been found yet. */
 
@@ -1315,34 +1320,38 @@ static srfxpt_state_t* get_srfxpt_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
-	zzctruin_(__state->svctr3);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
+	zzctruin_(__global_state, __state->svctr3);
 	__state->first = FALSE_;
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
-	    __state->svfnd1, target, &trgcde, &fnd, (ftnlen)36, target_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtcde, &__state->svfnd1, target, &trgcde, &fnd, (ftnlen)
+	    36, target_len);
     if (! fnd) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit. ", (ftnlen)155);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SRFXPT", (ftnlen)6);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit. ", (
+		ftnlen)155);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
-	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svobsr, &
+	    __state->svobsc, &__state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)
+	    36, obsrvr_len);
     if (! fnd) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE Toolkit. ", (ftnlen)157);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SRFXPT", (ftnlen)6);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE Toolkit. ", (
+		ftnlen)157);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	return 0;
     }
 
@@ -1350,42 +1359,46 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*     an error. */
 
     if (obscde == trgcde) {
-	setmsg_("In computing the surface intercept point, the observing bod"
-		"y and target body are the same. Both are #.", (ftnlen)102);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("SRFXPT", (ftnlen)6);
+	setmsg_(__global_state, "In computing the surface intercept point, t"
+		"he observing body and target body are the same. Both are #.", 
+		(ftnlen)102);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Get a left-justified, upper case copy of the aberration */
 /*     correction flag. */
 
-    ljust_(abcorr, loccor, abcorr_len, (ftnlen)15);
-    ucase_(loccor, loccor, (ftnlen)15, (ftnlen)15);
+    ljust_(__global_state, abcorr, loccor, abcorr_len, (ftnlen)15);
+    ucase_(__global_state, loccor, loccor, (ftnlen)15, (ftnlen)15);
 
 /*     Check for stellar aberration in the aberration correction flag. */
 
-    usestl = i_indx(loccor, "+S", (ftnlen)15, (ftnlen)2) > 0;
+    usestl = i_indx(&__global_state->f2c, loccor, "+S", (ftnlen)15, (ftnlen)2)
+	     > 0;
 
 /*     Now remove the stellar aberration component from the aberration */
 /*     correction flag; we'll do our state lookups without stellar */
 /*     aberration correction. */
 
-    repmc_(loccor, "+S", " ", loccor, (ftnlen)15, (ftnlen)2, (ftnlen)1, (
-	    ftnlen)15);
+    repmc_(__global_state, loccor, "+S", " ", loccor, (ftnlen)15, (ftnlen)2, (
+	    ftnlen)1, (ftnlen)15);
 
 /*     Decide whether the aberration correction is for received or */
 /*     transmitted radiation. */
 
-    xmit = eqchr_(loccor, "X", (ftnlen)1, (ftnlen)1);
+    xmit = eqchr_(__global_state, loccor, "X", (ftnlen)1, (ftnlen)1);
 
 /*     Decide what sort of light time correction has been requested. */
 
-    usecn = s_cmp(loccor, "CN", (ftnlen)2, (ftnlen)2) == 0 || s_cmp(loccor, 
-	    "XCN", (ftnlen)3, (ftnlen)3) == 0;
-    uselt = usecn || s_cmp(loccor, "LT", (ftnlen)2, (ftnlen)2) == 0 || s_cmp(
-	    loccor, "XLT", (ftnlen)3, (ftnlen)3) == 0;
+    usecn = s_cmp(&__global_state->f2c, loccor, "CN", (ftnlen)2, (ftnlen)2) ==
+	     0 || s_cmp(&__global_state->f2c, loccor, "XCN", (ftnlen)3, (
+	    ftnlen)3) == 0;
+    uselt = usecn || s_cmp(&__global_state->f2c, loccor, "LT", (ftnlen)2, (
+	    ftnlen)2) == 0 || s_cmp(&__global_state->f2c, loccor, "XLT", (
+	    ftnlen)3, (ftnlen)3) == 0;
 
 /*     Get the sign S prefixing LT in the expression for TRGEPC. */
 /*     When light time correction is not used, setting S = 0 */
@@ -1405,14 +1418,15 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*     target body.  We'll want the state of the target relative to */
 /*     the observer in this body-fixed frame. */
 
-    cidfrm_(&trgcde, &frcode, frname, &fnd, (ftnlen)32);
+    cidfrm_(__global_state, &trgcde, &frcode, frname, &fnd, (ftnlen)32);
     if (! fnd) {
-	setmsg_("No body-fixed frame is associated with target body #; a fra"
-		"me kernel must be loaded to make this association.  Consult "
-		"the FRAMES Required Reading for details.", (ftnlen)159);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	chkout_("SRFXPT", (ftnlen)6);
+	setmsg_(__global_state, "No body-fixed frame is associated with targ"
+		"et body #; a frame kernel must be loaded to make this associ"
+		"ation.  Consult the FRAMES Required Reading for details.", (
+		ftnlen)159);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	return 0;
     }
 
@@ -1438,13 +1452,13 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*            that corrected vector in order to compute the intercept */
 /*            point. */
 
-    spkezp_(&trgcde, et, frname, loccor, &obscde, tpos, &lt, (ftnlen)32, (
-	    ftnlen)15);
+    spkezp_(__global_state, &trgcde, et, frname, loccor, &obscde, tpos, &lt, (
+	    ftnlen)32, (ftnlen)15);
 
 /*     Negate the target's position to obtain the position of the */
 /*     observer relative to the target. */
 
-    vminus_(tpos, obspos);
+    vminus_(__global_state, tpos, obspos);
 
 /*     We now need to convert the direction vector into the */
 /*     body fixed frame associated with the target.  The target */
@@ -1456,20 +1470,20 @@ static srfxpt_state_t* get_srfxpt_state() {
 
 /*     Determine the attributes of the frame designated by DREF. */
 
-    zznamfrm_(__state->svctr3, __state->svdref, &__state->svrefc, dref, &
-	    refcde, (ftnlen)32, dref_len);
-    if (failed_()) {
-	chkout_("SRFXPT", (ftnlen)6);
+    zznamfrm_(__global_state, __state->svctr3, __state->svdref, &
+	    __state->svrefc, dref, &refcde, (ftnlen)32, dref_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	return 0;
     }
-    frinfo_(&refcde, &center, &type__, &typeid, &fnd);
+    frinfo_(__global_state, &refcde, &center, &type__, &typeid, &fnd);
     if (! fnd) {
-	setmsg_("Reference frame # is not recognized by the SPICE frame subs"
-		"ystem.  Possibly a required frame definition kernel has not "
-		"been loaded.", (ftnlen)131);
-	errch_("#", dref, (ftnlen)1, dref_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("SRFXPT", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not recognized by the "
+		"SPICE frame subsystem.  Possibly a required frame definition"
+		" kernel has not been loaded.", (ftnlen)131);
+	errch_(__global_state, "#", dref, (ftnlen)1, dref_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	return 0;
     }
 
@@ -1507,10 +1521,10 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*        Find the light time from the observer to the center of */
 /*        frame DREF. */
 
-	spkezp_(&center, et, "J2000", loccor, &obscde, rpos, &ltcent, (ftnlen)
-		5, (ftnlen)15);
-	if (failed_()) {
-	    chkout_("SRFXPT", (ftnlen)6);
+	spkezp_(__global_state, &center, et, "J2000", loccor, &obscde, rpos, &
+		ltcent, (ftnlen)5, (ftnlen)15);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	    return 0;
 	}
 	refepc = *et + s * ltcent;
@@ -1533,22 +1547,24 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*     other hand, so we don't have to recompute J2DIR.  We need TRGDIR */
 /*     in all cases. */
 
-    pxform_(dref, "J2000", &refepc, r2jmat, dref_len, (ftnlen)5);
-    if (failed_()) {
-	chkout_("SRFXPT", (ftnlen)6);
+    pxform_(__global_state, dref, "J2000", &refepc, r2jmat, dref_len, (ftnlen)
+	    5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	return 0;
     }
-    mxv_(r2jmat, dvec, j2dir);
+    mxv_(__global_state, r2jmat, dvec, j2dir);
 
 /*     Map J2DIR (in the J2000 frame) to the target body-fixed */
 /*     frame. */
 
-    pxform_("J2000", frname, trgepc, j2tmat, (ftnlen)5, (ftnlen)32);
-    if (failed_()) {
-	chkout_("SRFXPT", (ftnlen)6);
+    pxform_(__global_state, "J2000", frname, trgepc, j2tmat, (ftnlen)5, (
+	    ftnlen)32);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	return 0;
     }
-    mxv_(j2tmat, j2dir, trgdir);
+    mxv_(__global_state, j2tmat, j2dir, trgdir);
 
 /*     At this point, */
 
@@ -1561,7 +1577,7 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*     the solar system barycenter at ET.  We'll use this in */
 /*     several places later. */
 
-    spkssb_(&obscde, et, "J2000", ssbost, (ftnlen)5);
+    spkssb_(__global_state, &obscde, et, "J2000", ssbost, (ftnlen)5);
 
 /*     If we're using stellar aberration correction, at this point we'll */
 /*     account for it.  We're going to find a surface point such that */
@@ -1586,20 +1602,20 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*           of the transmission stellar aberration correction */
 /*           mapping to J2DIR. */
 
-	    stelab_(j2dir, &ssbost[3], stldir);
+	    stelab_(__global_state, j2dir, &ssbost[3], stldir);
 
 /*           Estimate the error in our first approximation */
 /*           by applying the transmission stellar aberration */
 /*           to STLDIR and finding the difference with J2DIR. */
 
-	    stlabx_(stldir, &ssbost[3], j2est);
-	    vsub_(j2dir, j2est, stlerr);
+	    stlabx_(__global_state, stldir, &ssbost[3], j2est);
+	    vsub_(__global_state, j2dir, j2est, stlerr);
 
 /*           Adding the error in the transmission mapping to STLDIR */
 /*           will give us a second-order estimate of the inverse. */
 
-	    vadd_(stlerr, stldir, stltmp);
-	    vequ_(stltmp, stldir);
+	    vadd_(__global_state, stlerr, stldir, stltmp);
+	    vequ_(__global_state, stltmp, stldir);
 
 /*           At this point we've found a good estimate of the */
 /*           direction vector under the inverse of the transmission */
@@ -1612,20 +1628,20 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*           the direction vector after stellar aberration */
 /*           has been "removed." */
 
-	    stlabx_(j2dir, &ssbost[3], stldir);
+	    stlabx_(__global_state, j2dir, &ssbost[3], stldir);
 
 /*           Estimate the error in our first approximation */
 /*           by applying the reception stellar aberration */
 /*           to STLDIR and finding the difference with J2DIR. */
 
-	    stelab_(stldir, &ssbost[3], j2est);
-	    vsub_(j2dir, j2est, stlerr);
+	    stelab_(__global_state, stldir, &ssbost[3], j2est);
+	    vsub_(__global_state, j2dir, j2est, stlerr);
 
 /*           Adding the error in the reception mapping to STLDIR */
 /*           will give us a second-order estimate of the inverse. */
 
-	    vadd_(stlerr, stldir, stltmp);
-	    vequ_(stltmp, stldir);
+	    vadd_(__global_state, stlerr, stldir, stltmp);
+	    vequ_(__global_state, stltmp, stldir);
 
 /*           At this point we've found a good estimate of the */
 /*           direction vector under the inverse of the reception */
@@ -1636,14 +1652,14 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*        Replace the J2000-relative ray direction with the corrected */
 /*        direction. */
 
-	vequ_(stldir, j2dir);
-	mxv_(j2tmat, j2dir, trgdir);
+	vequ_(__global_state, stldir, j2dir);
+	mxv_(__global_state, j2tmat, j2dir, trgdir);
     }
 
 /*     Find the surface intercept point and distance from observer to */
 /*     intercept point using the specified geometric definition. */
 
-    if (eqstr_(method, "Ellipsoid", method_len, (ftnlen)9)) {
+    if (eqstr_(__global_state, method, "Ellipsoid", method_len, (ftnlen)9)) {
 
 /*        Find the surface intercept given the target epoch, */
 /*        observer-target position, and target body orientation */
@@ -1654,7 +1670,8 @@ static srfxpt_state_t* get_srfxpt_state() {
 
 /*        Get the radii of the target body from the kernel pool. */
 
-	bodvcd_(&trgcde, "RADII", &__state->c__3, &nradii, radii, (ftnlen)5);
+	bodvcd_(__global_state, &trgcde, "RADII", &__state->c__3, &nradii, 
+		radii, (ftnlen)5);
 
 /*        Make an easy test to see whether we can quit now because */
 /*        an intercept cannot exist.  If the ray is separated from */
@@ -1665,15 +1682,16 @@ static srfxpt_state_t* get_srfxpt_state() {
 /* Computing MAX */
 	d__1 = max(radii[0],radii[1]);
 	maxrad = max(d__1,radii[2]);
-	range = vnorm_(obspos);
+	range = vnorm_(__global_state, obspos);
 	if (range == 0.) {
 
 /*           We've already ensured that observer and target are */
 /*           distinct, so this should be a very unusual occurrence. */
 
-	    setmsg_("Observer-target distance is zero.", (ftnlen)33);
-	    sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-	    chkout_("SRFXPT", (ftnlen)6);
+	    setmsg_(__global_state, "Observer-target distance is zero.", (
+		    ftnlen)33);
+	    sigerr_(__global_state, "SPICE(DIVIDEBYZERO)", (ftnlen)19);
+	    chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	    return 0;
 	}
 	if (range > maxrad * 1.001) {
@@ -1681,24 +1699,25 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*           Compute the arc sine with SPICE error checking. */
 
 	    d__1 = maxrad * 1.001 / range;
-	    reject = dasine_(&d__1, &__state->c_b45);
-	    vminus_(obspos, negpos);
-	    if (vsep_(negpos, trgdir) > reject) {
+	    reject = dasine_(__global_state, &d__1, &__state->c_b45);
+	    vminus_(__global_state, obspos, negpos);
+	    if (vsep_(__global_state, negpos, trgdir) > reject) {
 
 /*              The angular separation of ray and target is too great */
 /*              for a solution to exist, even with a better light time */
 /*              estimate. */
 
-		chkout_("SRFXPT", (ftnlen)6);
+		chkout_(__global_state, "SRFXPT", (ftnlen)6);
 		return 0;
 	    }
 	}
 
 /*        Locate the nearest point to the observer on the target. */
 
-	surfpt_(obspos, trgdir, radii, &radii[1], &radii[2], spoint, found);
-	if (failed_()) {
-	    chkout_("SRFXPT", (ftnlen)6);
+	surfpt_(__global_state, obspos, trgdir, radii, &radii[1], &radii[2], 
+		spoint, found);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1709,9 +1728,9 @@ static srfxpt_state_t* get_srfxpt_state() {
 
 	if (! uselt) {
 	    if (*found) {
-		*dist = vdist_(obspos, spoint);
+		*dist = vdist_(__global_state, obspos, spoint);
 	    }
-	    chkout_("SRFXPT", (ftnlen)6);
+	    chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	    return 0;
 	}
 	if (! (*found)) {
@@ -1735,9 +1754,10 @@ static srfxpt_state_t* get_srfxpt_state() {
 	    }
 	    i__ = 1;
 	    while(i__ <= nitr && ! (*found)) {
-		npedln_(radii, &radii[1], &radii[2], obspos, trgdir, pnear, &
-			rayalt);
-		lt = vdist_(obspos, pnear) / clight_();
+		npedln_(__global_state, radii, &radii[1], &radii[2], obspos, 
+			trgdir, pnear, &rayalt);
+		lt = vdist_(__global_state, obspos, pnear) / clight_(
+			__global_state);
 
 /*              Use the new light time estimate to repeat the intercept */
 /*              computation. */
@@ -1747,9 +1767,10 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*              Get the J2000-relative state of the target relative to */
 /*              the solar system barycenter at the target epoch. */
 
-		spkssb_(&trgcde, trgepc, "J2000", ssbtst, (ftnlen)5);
-		if (failed_()) {
-		    chkout_("SRFXPT", (ftnlen)6);
+		spkssb_(__global_state, &trgcde, trgepc, "J2000", ssbtst, (
+			ftnlen)5);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SRFXPT", (ftnlen)6);
 		    return 0;
 		}
 
@@ -1757,11 +1778,11 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*              Convert this vector from the J2000 frame to the target */
 /*              frame at TRGEPC. */
 
-		vsub_(ssbost, ssbtst, j2pos);
-		pxform_("J2000", frname, trgepc, xform, (ftnlen)5, (ftnlen)32)
-			;
-		if (failed_()) {
-		    chkout_("SRFXPT", (ftnlen)6);
+		vsub_(__global_state, ssbost, ssbtst, j2pos);
+		pxform_(__global_state, "J2000", frname, trgepc, xform, (
+			ftnlen)5, (ftnlen)32);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SRFXPT", (ftnlen)6);
 		    return 0;
 		}
 
@@ -1769,24 +1790,24 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*              from the J2000 frame to the target frame at the target */
 /*              epoch. */
 
-		mxv_(xform, j2pos, obspos);
+		mxv_(__global_state, xform, j2pos, obspos);
 
 /*              Convert the ray's direction vector from the J2000 frame */
 /*              to the target frame at the target epoch. */
 
-		mxv_(xform, j2dir, trgdir);
+		mxv_(__global_state, xform, j2dir, trgdir);
 
 /*              Repeat the intercept computation. */
 
-		surfpt_(obspos, trgdir, radii, &radii[1], &radii[2], spoint, 
-			found);
+		surfpt_(__global_state, obspos, trgdir, radii, &radii[1], &
+			radii[2], spoint, found);
 		++i__;
 	    }
 
 /*           If there's still no intercept, we're done. */
 
 	    if (! (*found)) {
-		chkout_("SRFXPT", (ftnlen)6);
+		chkout_(__global_state, "SRFXPT", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1794,7 +1815,7 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*        We've got an intersection.  SURFPT doesn't compute range, so do */
 /*        it here. */
 
-	*dist = vdist_(obspos, spoint);
+	*dist = vdist_(__global_state, obspos, spoint);
 
 /*        Since we're using light time corrections, we're going to make */
 /*        an estimate of light time to the intercept point, then re-do */
@@ -1810,11 +1831,11 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*        Get the J2000-relative state of the observer relative to */
 /*        the solar system barycenter at ET. */
 
-	spkssb_(&obscde, et, "J2000", ssbost, (ftnlen)5);
+	spkssb_(__global_state, &obscde, et, "J2000", ssbost, (ftnlen)5);
 
 /*        Compute new light time estimate and new target epoch. */
 
-	lt = *dist / clight_();
+	lt = *dist / clight_(__global_state);
 	*trgepc = *et + s * lt;
 	prevlt = 0.;
 	prevet = *trgepc;
@@ -1826,9 +1847,10 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*           Get the J2000-relative state of the target relative to */
 /*           the solar system barycenter at the target epoch. */
 
-	    spkssb_(&trgcde, trgepc, "J2000", ssbtst, (ftnlen)5);
-	    if (failed_()) {
-		chkout_("SRFXPT", (ftnlen)6);
+	    spkssb_(__global_state, &trgcde, trgepc, "J2000", ssbtst, (ftnlen)
+		    5);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SRFXPT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1836,43 +1858,44 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*           Convert this vector from the J2000 frame to the target */
 /*           frame at TRGEPC. */
 
-	    vsub_(ssbost, ssbtst, j2pos);
-	    pxform_("J2000", frname, trgepc, xform, (ftnlen)5, (ftnlen)32);
-	    if (failed_()) {
-		chkout_("SRFXPT", (ftnlen)6);
+	    vsub_(__global_state, ssbost, ssbtst, j2pos);
+	    pxform_(__global_state, "J2000", frname, trgepc, xform, (ftnlen)5,
+		     (ftnlen)32);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SRFXPT", (ftnlen)6);
 		return 0;
 	    }
 
 /*           Convert the observer's position relative to the target from */
 /*           the J2000 frame to the target frame at the target epoch. */
 
-	    mxv_(xform, j2pos, obspos);
-	    vminus_(obspos, negpos);
+	    mxv_(__global_state, xform, j2pos, obspos);
+	    vminus_(__global_state, obspos, negpos);
 
 /*           Convert the ray's direction vector from the J2000 frame */
 /*           to the target frame at the target epoch. */
 
-	    mxv_(xform, j2dir, trgdir);
+	    mxv_(__global_state, xform, j2dir, trgdir);
 
 /*           Repeat the intercept computation. */
 
-	    surfpt_(obspos, trgdir, radii, &radii[1], &radii[2], spoint, 
-		    found);
+	    surfpt_(__global_state, obspos, trgdir, radii, &radii[1], &radii[
+		    2], spoint, found);
 
 /*           If there's no intercept, we're done. */
 
 	    if (! (*found)) {
-		chkout_("SRFXPT", (ftnlen)6);
+		chkout_(__global_state, "SRFXPT", (ftnlen)6);
 		return 0;
 	    }
 
 /*           Compute the distance between intercept and observer. */
 
-	    *dist = vdist_(obspos, spoint);
+	    *dist = vdist_(__global_state, obspos, spoint);
 
 /*           Compute new light time estimate and new target epoch. */
 
-	    lt = *dist / clight_();
+	    lt = *dist / clight_(__global_state);
 	    *trgepc = *et + s * lt;
 
 /*           We use the d.p. identity function TOUCHD to force the */
@@ -1885,24 +1908,25 @@ static srfxpt_state_t* get_srfxpt_state() {
 /*           can be optimized out of existence. */
 
 	    d__2 = lt - prevlt;
-	    ltdiff = (d__1 = touchd_(&d__2), abs(d__1));
+	    ltdiff = (d__1 = touchd_(__global_state, &d__2), abs(d__1));
 	    d__2 = *trgepc - prevet;
-	    etdiff = (d__1 = touchd_(&d__2), abs(d__1));
+	    etdiff = (d__1 = touchd_(__global_state, &d__2), abs(d__1));
 	    prevlt = lt;
 	    prevet = *trgepc;
 	    ++i__;
 	}
     } else {
-	setmsg_("The computation method # was not recognized. ", (ftnlen)45);
-	errch_("#", method, (ftnlen)1, method_len);
-	sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	chkout_("SRFXPT", (ftnlen)6);
+	setmsg_(__global_state, "The computation method # was not recognized"
+		". ", (ftnlen)45);
+	errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	chkout_(__global_state, "SRFXPT", (ftnlen)6);
 	return 0;
     }
 
 /*     FOUND, SPOINT, TRGEPC, and DIST have been set at this point. */
 
-    chkout_("SRFXPT", (ftnlen)6);
+    chkout_(__global_state, "SRFXPT", (ftnlen)6);
     return 0;
 } /* srfxpt_ */
 

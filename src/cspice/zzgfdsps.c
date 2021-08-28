@@ -194,7 +194,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "zzgfdsps_" );
+   chkin_c ( naif_state, "zzgfdsps_" );
 
    /*
    The input strings are Fortran-style; they're not 

@@ -8,13 +8,13 @@
 
 
 typedef int bsrchi_state_t;
-static bsrchi_state_t* get_bsrchi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bsrchi_state_t* get_bsrchi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            BSRCHI ( Binary search for an integer value ) */
-integer bsrchi_(integer *value, integer *ndim, integer *array)
+integer bsrchi_(cspice_t* __global_state, integer *value, integer *ndim, 
+	integer *array)
 {
     /* System generated locals */
     integer ret_val;
@@ -26,7 +26,7 @@ integer bsrchi_(integer *value, integer *ndim, integer *array)
 
 
     /* Module state */
-    bsrchi_state_t* __state = get_bsrchi_state();
+    bsrchi_state_t* __state = get_bsrchi_state(__global_state);
 /* $ Abstract */
 
 /*      Do a binary search for a given value within an INTEGER array, */

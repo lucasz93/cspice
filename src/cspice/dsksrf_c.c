@@ -252,7 +252,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dsksrf_c" );
+   chkin_c ( naif_state, "dsksrf_c" );
 
    /*
    Check the input string to make sure the pointer is non-null and

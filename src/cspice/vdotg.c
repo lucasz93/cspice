@@ -8,13 +8,13 @@
 
 
 typedef int vdotg_state_t;
-static vdotg_state_t* get_vdotg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vdotg_state_t* get_vdotg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VDOTG ( Vector dot product, general dimension ) */
-doublereal vdotg_(doublereal *v1, doublereal *v2, integer *ndim)
+doublereal vdotg_(cspice_t* __global_state, doublereal *v1, doublereal *v2, 
+	integer *ndim)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +25,7 @@ doublereal vdotg_(doublereal *v1, doublereal *v2, integer *ndim)
 
 
     /* Module state */
-    vdotg_state_t* __state = get_vdotg_state();
+    vdotg_state_t* __state = get_vdotg_state(__global_state);
 /* $ Abstract */
 
 /*      Compute the dot product of two vectors of arbitrary dimension. */

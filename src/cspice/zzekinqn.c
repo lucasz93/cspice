@@ -8,8 +8,7 @@
 
 
 extern zzekinqn_init_t __zzekinqn_init;
-static zzekinqn_state_t* get_zzekinqn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekinqn_state_t* get_zzekinqn_state(cspice_t* state) {
 	if (!state->zzekinqn)
 		state->zzekinqn = __cspice_allocate_module(sizeof(
 	zzekinqn_state_t), &__zzekinqn_init, sizeof(__zzekinqn_init));
@@ -18,9 +17,9 @@ static zzekinqn_state_t* get_zzekinqn_state() {
 }
 
 /* $Procedure   ZZEKINQN ( Private: EK, insert into query, numeric ) */
-/* Subroutine */ int zzekinqn_(doublereal *value, integer *type__, integer *
-	lexbeg, integer *lexend, integer *eqryi, doublereal *eqryd, integer *
-	descr)
+/* Subroutine */ int zzekinqn_(cspice_t* __global_state, doublereal *value, 
+	integer *type__, integer *lexbeg, integer *lexend, integer *eqryi, 
+	doublereal *eqryd, integer *descr)
 {
     /* System generated locals */
     integer i__1;
@@ -30,20 +29,20 @@ static zzekinqn_state_t* get_zzekinqn_state() {
     integer init;
     integer size;
     integer room;
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekweqi_(char *, integer *, integer *, 
-	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzekweqi_(cspice_t*, char *, integer *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzekinqn_state_t* __state = get_zzekinqn_state();
+    zzekinqn_state_t* __state = get_zzekinqn_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -629,28 +628,28 @@ static zzekinqn_state_t* get_zzekinqn_state() {
 
 /*     Use discovery check-in. */
 
-    zzekreqi_(eqryi, "INITIALIZED", &init, (ftnlen)11);
+    zzekreqi_(__global_state, eqryi, "INITIALIZED", &init, (ftnlen)11);
     if (init != 1) {
-	chkin_("ZZEKINQN", (ftnlen)8);
-	setmsg_("Encoded query must be initialized before it may be written.",
-		 (ftnlen)59);
-	sigerr_("SPICE(NOTINITIALIZED)", (ftnlen)21);
-	chkout_("ZZEKINQN", (ftnlen)8);
+	chkin_(__global_state, "ZZEKINQN", (ftnlen)8);
+	setmsg_(__global_state, "Encoded query must be initialized before it"
+		" may be written.", (ftnlen)59);
+	sigerr_(__global_state, "SPICE(NOTINITIALIZED)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKINQN", (ftnlen)8);
 	return 0;
     }
 
 /*     Get the numeric free pointer; make sure there's enough room. */
 
-    zzekreqi_(eqryi, "FREE_NUM", &free, (ftnlen)8);
-    zzekreqi_(eqryi, "NUM_BUF_SIZE", &size, (ftnlen)12);
+    zzekreqi_(__global_state, eqryi, "FREE_NUM", &free, (ftnlen)8);
+    zzekreqi_(__global_state, eqryi, "NUM_BUF_SIZE", &size, (ftnlen)12);
     room = size - free + 1;
     if (room <= 0) {
-	chkin_("ZZEKINQN", (ftnlen)8);
-	setmsg_("Out of room in numeric portion of encoded query; only # ele"
-		"ments were available.", (ftnlen)80);
-	errint_("#", &size, (ftnlen)1);
-	sigerr_("SPICE(BUFFERTOOSMALL)", (ftnlen)21);
-	chkout_("ZZEKINQN", (ftnlen)8);
+	chkin_(__global_state, "ZZEKINQN", (ftnlen)8);
+	setmsg_(__global_state, "Out of room in numeric portion of encoded q"
+		"uery; only # elements were available.", (ftnlen)80);
+	errint_(__global_state, "#", &size, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUFFERTOOSMALL)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKINQN", (ftnlen)8);
 	return 0;
     }
 
@@ -661,7 +660,7 @@ static zzekinqn_state_t* get_zzekinqn_state() {
 
 /*     Fill in the descriptor. */
 
-    cleari_(&__state->c__6, descr);
+    cleari_(__global_state, &__state->c__6, descr);
     descr[0] = *type__;
     descr[1] = *lexbeg;
     descr[2] = *lexend;
@@ -670,7 +669,7 @@ static zzekinqn_state_t* get_zzekinqn_state() {
 /*     Update the numeric free pointer. */
 
     i__1 = free + 1;
-    zzekweqi_("FREE_NUM", &i__1, eqryi, (ftnlen)8);
+    zzekweqi_(__global_state, "FREE_NUM", &i__1, eqryi, (ftnlen)8);
     return 0;
 } /* zzekinqn_ */
 

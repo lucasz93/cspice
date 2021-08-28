@@ -8,34 +8,34 @@
 
 
 typedef int nplnpt_state_t;
-static nplnpt_state_t* get_nplnpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline nplnpt_state_t* get_nplnpt_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      NPLNPT ( Nearest point on line to point ) */
-/* Subroutine */ int nplnpt_(doublereal *linpt, doublereal *lindir, 
-	doublereal *point, doublereal *pnear, doublereal *dist)
+/* Subroutine */ int nplnpt_(cspice_t* __global_state, doublereal *linpt, 
+	doublereal *lindir, doublereal *point, doublereal *pnear, doublereal *
+	dist)
 {
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal proj[3];
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal trans[3];
-    extern doublereal vdist_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vproj_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vproj_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    nplnpt_state_t* __state = get_nplnpt_state();
+    nplnpt_state_t* __state = get_nplnpt_state(__global_state);
 /* $ Abstract */
 
 /*     Find the nearest point on a line to a specified point, and find */
@@ -209,17 +209,18 @@ static nplnpt_state_t* get_nplnpt_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     We need a real direction vector to work with. */
 
-    if (vzero_(lindir)) {
-	chkin_("NPLNPT", (ftnlen)6);
-	setmsg_("Direction vector must be non-zero.", (ftnlen)34);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("NPLNPT", (ftnlen)6);
+    if (vzero_(__global_state, lindir)) {
+	chkin_(__global_state, "NPLNPT", (ftnlen)6);
+	setmsg_(__global_state, "Direction vector must be non-zero.", (ftnlen)
+		34);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "NPLNPT", (ftnlen)6);
 	return 0;
     }
 
@@ -227,10 +228,10 @@ static nplnpt_state_t* get_nplnpt_state() {
 /*     the origin.  Then the nearest point on the translated line to the */
 /*     translated point TRANS is the projection of TRANS onto the line. */
 
-    vsub_(point, linpt, trans);
-    vproj_(trans, lindir, proj);
-    vadd_(proj, linpt, pnear);
-    *dist = vdist_(pnear, point);
+    vsub_(__global_state, point, linpt, trans);
+    vproj_(__global_state, trans, lindir, proj);
+    vadd_(__global_state, proj, linpt, pnear);
+    *dist = vdist_(__global_state, pnear, point);
     return 0;
 } /* nplnpt_ */
 

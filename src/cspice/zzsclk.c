@@ -8,8 +8,7 @@
 
 
 extern zzsclk_init_t __zzsclk_init;
-static zzsclk_state_t* get_zzsclk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzsclk_state_t* get_zzsclk_state(cspice_t* state) {
 	if (!state->zzsclk)
 		state->zzsclk = __cspice_allocate_module(sizeof(
 	zzsclk_state_t), &__zzsclk_init, sizeof(__zzsclk_init));
@@ -18,7 +17,7 @@ static zzsclk_state_t* get_zzsclk_state() {
 }
 
 /* $Procedure    ZZSCLK ( Is there and SCLK for a CKID ) */
-logical zzsclk_(integer *ckid, integer *sclkid)
+logical zzsclk_(cspice_t* __global_state, integer *ckid, integer *sclkid)
 {
     /* Initialized data */
 
@@ -29,40 +28,41 @@ logical zzsclk_(integer *ckid, integer *sclkid)
     logical ret_val;
 
     /* Builtin functions */
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char sclk[32];
     char type__[32];
     integer i__;
     integer n;
-    extern integer cardi_(integer *);
-    extern logical elemi_(integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer cardi_(cspice_t*, integer *);
+    extern logical elemi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     char agent[32];
     logical watch;
     logical found;
-    extern integer sizei_(integer *);
+    extern integer sizei_(cspice_t*, integer *);
     logical keepid;
     logical update;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int cvpool_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int cvpool_(cspice_t*, char *, logical *, ftnlen);
     char sclkvr[32*7];
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
-    extern /* Subroutine */ int removi_(integer *, integer *);
-    extern /* Subroutine */ int insrti_(integer *, integer *);
-    extern logical return_(void);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int removi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int insrti_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int swpool_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
 
 
     /* Module state */
-    zzsclk_state_t* __state = get_zzsclk_state();
+    zzsclk_state_t* __state = get_zzsclk_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -189,10 +189,10 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return ret_val;
     }
-    chkin_("ZZSCLK", (ftnlen)6);
+    chkin_(__global_state, "ZZSCLK", (ftnlen)6);
     if (__state->first) {
 	__state->first = FALSE_;
 	__state->dtsize[0] = 1;
@@ -202,8 +202,8 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 	__state->dtsize[4] = 3;
 	__state->dtsize[5] = 1;
 	__state->dtsize[6] = 1;
-	ssizei_(&__state->c__10, __state->known);
-	ssizei_(&__state->c__10, __state->passed);
+	ssizei_(__global_state, &__state->c__10, __state->known);
+	ssizei_(__global_state, &__state->c__10, __state->passed);
     }
 
 /*     We've got a text kernel (or meta kernel). See if there is an */
@@ -211,27 +211,29 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 /*     If not, we'll use the default -CKID/1000 for the SCLK ID. */
 
     i__1 = -(*sclkid);
-    intstr_(&i__1, sclk, (ftnlen)32);
+    intstr_(__global_state, &i__1, sclk, (ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 6, a__1[0] = "ZZSCLK";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(agent, a__1, i__2, &__state->c__2, (ftnlen)32);
+    s_cat(&__global_state->f2c, agent, a__1, i__2, &__state->c__2, (ftnlen)32)
+	    ;
 
 /*     See if this is an ID-code we've encountered before.  If it */
 /*     is we can make use of stored knowledge about this ID-code. */
 
-    if (elemi_(sclkid, __state->known)) {
+    if (elemi_(__global_state, sclkid, __state->known)) {
 	watch = FALSE_;
 	keepid = TRUE_;
-	cvpool_(agent, &update, (ftnlen)32);
-    } else if (cardi_(__state->known) < sizei_(__state->known)) {
+	cvpool_(__global_state, agent, &update, (ftnlen)32);
+    } else if (cardi_(__global_state, __state->known) < sizei_(__global_state,
+	     __state->known)) {
 
 /*        The SCLKID specified is not in the list of SCLKIDs for */
 /*        this routine and there is room left in the pool of */
 /*        SCLKIDs to keep track of one more.  Put this ID into */
 /*        the list of known IDS */
 
-	insrti_(sclkid, __state->known);
+	insrti_(__global_state, sclkid, __state->known);
 	update = TRUE_;
 	watch = TRUE_;
 	keepid = TRUE_;
@@ -245,8 +247,8 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 /*        Nothing has changed in the kernel pool w.r.t this agent. */
 /*        The test for an SCLK will not have changed either. */
 
-	ret_val = elemi_(sclkid, __state->passed);
-	chkout_("ZZSCLK", (ftnlen)6);
+	ret_val = elemi_(__global_state, sclkid, __state->passed);
+	chkout_(__global_state, "ZZSCLK", (ftnlen)6);
 	return ret_val;
     }
 
@@ -259,59 +261,69 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 /* Writing concatenation */
     i__2[0] = 15, a__1[0] = "SCLK_DATA_TYPE_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr, a__1, i__2, &__state->c__2, (ftnlen)32);
+    s_cat(&__global_state->f2c, sclkvr, a__1, i__2, &__state->c__2, (ftnlen)
+	    32);
 /* Writing concatenation */
     i__2[0] = 16, a__1[0] = "SCLK01_N_FIELDS_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 32, a__1, i__2, &__state->c__2, (ftnlen)32);
+    s_cat(&__global_state->f2c, sclkvr + 32, a__1, i__2, &__state->c__2, (
+	    ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 14, a__1[0] = "SCLK01_MODULI_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 64, a__1, i__2, &__state->c__2, (ftnlen)32);
+    s_cat(&__global_state->f2c, sclkvr + 64, a__1, i__2, &__state->c__2, (
+	    ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 15, a__1[0] = "SCLK01_OFFSETS_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 96, a__1, i__2, &__state->c__2, (ftnlen)32);
+    s_cat(&__global_state->f2c, sclkvr + 96, a__1, i__2, &__state->c__2, (
+	    ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 20, a__1[0] = "SCLK01_COEFFICIENTS_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 128, a__1, i__2, &__state->c__2, (ftnlen)32);
+    s_cat(&__global_state->f2c, sclkvr + 128, a__1, i__2, &__state->c__2, (
+	    ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 21, a__1[0] = "SCLK_PARTITION_START_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 160, a__1, i__2, &__state->c__2, (ftnlen)32);
+    s_cat(&__global_state->f2c, sclkvr + 160, a__1, i__2, &__state->c__2, (
+	    ftnlen)32);
 /* Writing concatenation */
     i__2[0] = 19, a__1[0] = "SCLK_PARTITION_END_";
     i__2[1] = 32, a__1[1] = sclk;
-    s_cat(sclkvr + 192, a__1, i__2, &__state->c__2, (ftnlen)32);
+    s_cat(&__global_state->f2c, sclkvr + 192, a__1, i__2, &__state->c__2, (
+	    ftnlen)32);
 
 /*     If we are supposed to watch for this agent, we add him to */
 /*     the list of kernel pool agents. */
 
     if (watch) {
-	swpool_(agent, &__state->c__7, sclkvr, (ftnlen)32, (ftnlen)32);
-	cvpool_(agent, &update, (ftnlen)32);
+	swpool_(__global_state, agent, &__state->c__7, sclkvr, (ftnlen)32, (
+		ftnlen)32);
+	cvpool_(__global_state, agent, &update, (ftnlen)32);
     }
 
 /*     Check for all of the required variables and structure in */
 /*     the kernel pool. */
 
     for (i__ = 1; i__ <= 7; ++i__) {
-	dtpool_(sclkvr + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		"sclkvr", i__1, "zzsclk_", (ftnlen)276)) << 5), &found, &n, 
-		type__, (ftnlen)32, (ftnlen)32);
-	if (! found || s_cmp(type__, "N", (ftnlen)32, (ftnlen)1) != 0 || n / 
-		__state->dtsize[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : 
-		s_rnge("dtsize", i__1, "zzsclk_", (ftnlen)278)] * 
-		__state->dtsize[(i__3 = i__ - 1) < 7 && 0 <= i__3 ? i__3 : 
-		s_rnge("dtsize", i__3, "zzsclk_", (ftnlen)278)] != n) {
+	dtpool_(__global_state, sclkvr + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ?
+		 i__1 : s_rnge(&__global_state->f2c, "sclkvr", i__1, "zzsclk_"
+		, (ftnlen)276)) << 5), &found, &n, type__, (ftnlen)32, (
+		ftnlen)32);
+	if (! found || s_cmp(&__global_state->f2c, type__, "N", (ftnlen)32, (
+		ftnlen)1) != 0 || n / __state->dtsize[(i__1 = i__ - 1) < 7 && 
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "dtsize", 
+		i__1, "zzsclk_", (ftnlen)278)] * __state->dtsize[(i__3 = i__ 
+		- 1) < 7 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		"dtsize", i__3, "zzsclk_", (ftnlen)278)] != n) {
 
 /*           We don't have adequate SCLK data for the specified */
 /*           object.  Remove this AGENT from the list of agents */
 /*           that have passed the test. */
 
-	    removi_(sclkid, __state->passed);
-	    chkout_("ZZSCLK", (ftnlen)6);
+	    removi_(__global_state, sclkid, __state->passed);
+	    chkout_(__global_state, "ZZSCLK", (ftnlen)6);
 	    return ret_val;
 	}
     }
@@ -320,13 +332,13 @@ logical zzsclk_(integer *ckid, integer *sclkid)
 /*     there is room to WATCH for this agent, */
 
     if (keepid) {
-	insrti_(sclkid, __state->passed);
+	insrti_(__global_state, sclkid, __state->passed);
     }
 
 /*     As far as we can tell, everything looks ok. */
 
     ret_val = TRUE_;
-    chkout_("ZZSCLK", (ftnlen)6);
+    chkout_(__global_state, "ZZSCLK", (ftnlen)6);
     return ret_val;
 } /* zzsclk_ */
 

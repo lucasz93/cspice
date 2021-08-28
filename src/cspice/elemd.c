@@ -8,28 +8,27 @@
 
 
 typedef int elemd_state_t;
-static elemd_state_t* get_elemd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline elemd_state_t* get_elemd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            ELEMD ( Element of a double precision set ) */
-logical elemd_(doublereal *item, doublereal *a)
+logical elemd_(cspice_t* __global_state, doublereal *item, doublereal *a)
 {
     /* System generated locals */
     integer i__1;
     logical ret_val;
 
     /* Local variables */
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer bsrchd_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer bsrchd_(cspice_t*, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    elemd_state_t* __state = get_elemd_state();
+    elemd_state_t* __state = get_elemd_state(__global_state);
 /* $ Abstract */
 
 /*      Determine whether an item is an element of a double */
@@ -185,18 +184,18 @@ logical elemd_(doublereal *item, doublereal *a)
 
 /*     Standard error handling: */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = FALSE_;
 	return ret_val;
     } else {
-	chkin_("ELEMD", (ftnlen)5);
+	chkin_(__global_state, "ELEMD", (ftnlen)5);
     }
 
 /*     Just a binary search. */
 
-    i__1 = cardd_(a);
-    ret_val = bsrchd_(item, &i__1, &a[6]) != 0;
-    chkout_("ELEMD", (ftnlen)5);
+    i__1 = cardd_(__global_state, a);
+    ret_val = bsrchd_(__global_state, item, &i__1, &a[6]) != 0;
+    chkout_(__global_state, "ELEMD", (ftnlen)5);
     return ret_val;
 } /* elemd_ */
 

@@ -8,44 +8,46 @@
 
 
 typedef int ekifld_state_t;
-static ekifld_state_t* get_ekifld_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekifld_state_t* get_ekifld_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      EKIFLD ( EK, initialize segment for fast write ) */
-/* Subroutine */ int ekifld_(integer *handle, char *tabnam, integer *ncols, 
-	integer *nrows, char *cnames, char *decls, integer *segno, integer *
-	rcptrs, ftnlen tabnam_len, ftnlen cnames_len, ftnlen decls_len)
+/* Subroutine */ int ekifld_(cspice_t* __global_state, integer *handle, char *
+	tabnam, integer *ncols, integer *nrows, char *cnames, char *decls, 
+	integer *segno, integer *rcptrs, ftnlen tabnam_len, ftnlen cnames_len,
+	 ftnlen decls_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
-    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekmloc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzeksdsc_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
     integer p;
     integer mbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer stype;
-    extern logical failed_(void);
-    extern /* Subroutine */ int ekbseg_(integer *, char *, integer *, char *, 
-	    char *, integer *, ftnlen, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int ekbseg_(cspice_t*, integer *, char *, integer 
+	    *, char *, char *, integer *, ftnlen, ftnlen, ftnlen);
     integer segdsc[24];
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzekif01_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int zzekif01_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekif02_(integer *, integer *);
+    extern /* Subroutine */ int zzekif02_(cspice_t*, integer *, integer *);
 
 
     /* Module state */
-    ekifld_state_t* __state = get_ekifld_state();
+    ekifld_state_t* __state = get_ekifld_state(__global_state);
 /* $ Abstract */
 
 /*     Initialize a new E-kernel segment to allow fast writing. */
@@ -673,58 +675,60 @@ static ekifld_state_t* get_ekifld_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKIFLD", (ftnlen)6);
+	chkin_(__global_state, "EKIFLD", (ftnlen)6);
     }
 
 /*     Check out NROWS. */
 
     if (*nrows < 1) {
-	setmsg_("Number of rows must be > 0, was #. ", (ftnlen)35);
-	errint_("#", nrows, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("EKIFLD", (ftnlen)6);
+	setmsg_(__global_state, "Number of rows must be > 0, was #. ", (
+		ftnlen)35);
+	errint_(__global_state, "#", nrows, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "EKIFLD", (ftnlen)6);
 	return 0;
     }
 
 /*     Create the segment's metadata. */
 
-    ekbseg_(handle, tabnam, ncols, cnames, decls, segno, tabnam_len, 
-	    cnames_len, decls_len);
-    if (failed_()) {
-	chkout_("EKIFLD", (ftnlen)6);
+    ekbseg_(__global_state, handle, tabnam, ncols, cnames, decls, segno, 
+	    tabnam_len, cnames_len, decls_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKIFLD", (ftnlen)6);
 	return 0;
     }
 
 /*     Fill the number of rows into the (file's) segment descriptor. */
 
-    zzekmloc_(handle, segno, &p, &mbase);
+    zzekmloc_(__global_state, handle, segno, &p, &mbase);
     i__1 = mbase + 6;
     i__2 = mbase + 6;
-    dasudi_(handle, &i__1, &i__2, nrows);
+    dasudi_(__global_state, handle, &i__1, &i__2, nrows);
 
 /*     Read in the segment descriptor, and get the segment's type. */
 
-    zzeksdsc_(handle, segno, segdsc);
+    zzeksdsc_(__global_state, handle, segno, segdsc);
     stype = segdsc[0];
 
 /*     Complete the fast write preparations appropriate to the segment's */
 /*     type. */
 
     if (stype == 1) {
-	zzekif01_(handle, segno, rcptrs);
+	zzekif01_(__global_state, handle, segno, rcptrs);
     } else if (stype == 2) {
-	zzekif02_(handle, segno);
+	zzekif02_(__global_state, handle, segno);
     } else {
-	setmsg_("Segment type # is not currently supported.", (ftnlen)42);
-	errint_("#", &stype, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("EKIFLD", (ftnlen)6);
+	setmsg_(__global_state, "Segment type # is not currently supported.", 
+		(ftnlen)42);
+	errint_(__global_state, "#", &stype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "EKIFLD", (ftnlen)6);
 	return 0;
     }
-    chkout_("EKIFLD", (ftnlen)6);
+    chkout_(__global_state, "EKIFLD", (ftnlen)6);
     return 0;
 } /* ekifld_ */
 

@@ -167,7 +167,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "cklpf_c" );
+   chkin_c ( naif_state, "cklpf_c" );
 
 
    /*

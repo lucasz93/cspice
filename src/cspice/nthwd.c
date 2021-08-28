@@ -8,19 +8,19 @@
 
 
 typedef int nthwd_state_t;
-static nthwd_state_t* get_nthwd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline nthwd_state_t* get_nthwd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      NTHWD ( Nth word in a character string ) */
-/* Subroutine */ int nthwd_(char *string, integer *nth, char *word, integer *
-	loc, ftnlen string_len, ftnlen word_len)
+/* Subroutine */ int nthwd_(cspice_t* __global_state, char *string, integer *
+	nth, char *word, integer *loc, ftnlen string_len, ftnlen word_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen), i_indx(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), i_indx(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     logical loop;
@@ -30,7 +30,7 @@ static nthwd_state_t* get_nthwd_state() {
 
 
     /* Module state */
-    nthwd_state_t* __state = get_nthwd_state();
+    nthwd_state_t* __state = get_nthwd_state(__global_state);
 /* $ Abstract */
 
 /*      Return the Nth word in a character string, and its location */
@@ -188,8 +188,9 @@ static nthwd_state_t* get_nthwd_state() {
 
 /*     Trivial cases first. Blank STRING? Nonpositive NTH? */
 
-    if (s_cmp(string, " ", string_len, (ftnlen)1) == 0 || *nth < 1) {
-	s_copy(word, " ", word_len, (ftnlen)1);
+    if (s_cmp(&__global_state->f2c, string, " ", string_len, (ftnlen)1) == 0 
+	    || *nth < 1) {
+	s_copy(&__global_state->f2c, word, " ", word_len, (ftnlen)1);
 	*loc = 0;
 	return 0;
     }
@@ -211,7 +212,7 @@ static nthwd_state_t* get_nthwd_state() {
 
     n = 1;
     i__ = *loc;
-    length = i_len(string, string_len);
+    length = i_len(&__global_state->f2c, string, string_len);
     while(i__ < length && n < *nth) {
 	++i__;
 
@@ -249,21 +250,21 @@ static nthwd_state_t* get_nthwd_state() {
 /*     Couldn't find enough words? Return blank and zero. */
 
     if (n < *nth) {
-	s_copy(word, " ", word_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, word, " ", word_len, (ftnlen)1);
 	*loc = 0;
 
 /*     Otherwise, find the rest of WORD (it continues until the next */
 /*     blank), and return the current LOC. */
 
     } else {
-	i__ = i_indx(string + (*loc - 1), " ", string_len - (*loc - 1), (
-		ftnlen)1);
+	i__ = i_indx(&__global_state->f2c, string + (*loc - 1), " ", 
+		string_len - (*loc - 1), (ftnlen)1);
 	if (i__ == 0) {
-	    s_copy(word, string + (*loc - 1), word_len, string_len - (*loc - 
-		    1));
+	    s_copy(&__global_state->f2c, word, string + (*loc - 1), word_len, 
+		    string_len - (*loc - 1));
 	} else {
-	    s_copy(word, string + (*loc - 1), word_len, *loc + i__ - 1 - (*
-		    loc - 1));
+	    s_copy(&__global_state->f2c, word, string + (*loc - 1), word_len, 
+		    *loc + i__ - 1 - (*loc - 1));
 	}
     }
     return 0;

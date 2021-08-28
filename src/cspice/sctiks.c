@@ -8,29 +8,28 @@
 
 
 typedef int sctiks_state_t;
-static sctiks_state_t* get_sctiks_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sctiks_state_t* get_sctiks_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SCTIKS ( Convert spacecraft clock string to ticks. ) */
-/* Subroutine */ int sctiks_(integer *sc, char *clkstr, doublereal *ticks, 
-	ftnlen clkstr_len)
+/* Subroutine */ int sctiks_(cspice_t* __global_state, integer *sc, char *
+	clkstr, doublereal *ticks, ftnlen clkstr_len)
 {
     integer type__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sctk01_(integer *, char *, doublereal *, 
-	    ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer sctype_(integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sctk01_(cspice_t*, integer *, char *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer sctype_(cspice_t*, integer *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sctiks_state_t* __state = get_sctiks_state();
+    sctiks_state_t* __state = get_sctiks_state(__global_state);
 /* $ Abstract */
 
 /*     Convert a spacecraft clock format string to number of "ticks". */
@@ -335,26 +334,26 @@ static sctiks_state_t* get_sctiks_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCTIKS", (ftnlen)6);
+	chkin_(__global_state, "SCTIKS", (ftnlen)6);
     }
 
 /*     If the spacecraft clock type is supported by NAIF then */
 /*     call TIKSnn to perform the conversion. */
 
-    type__ = sctype_(sc);
+    type__ = sctype_(__global_state, sc);
     if (type__ == 1) {
-	sctk01_(sc, clkstr, ticks, clkstr_len);
+	sctk01_(__global_state, sc, clkstr, ticks, clkstr_len);
     } else {
-	setmsg_("Clock type # is not supported.", (ftnlen)30);
-	errint_("#", &type__, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("SCTIKS", (ftnlen)6);
+	setmsg_(__global_state, "Clock type # is not supported.", (ftnlen)30);
+	errint_(__global_state, "#", &type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "SCTIKS", (ftnlen)6);
 	return 0;
     }
-    chkout_("SCTIKS", (ftnlen)6);
+    chkout_(__global_state, "SCTIKS", (ftnlen)6);
     return 0;
 } /* sctiks_ */
 

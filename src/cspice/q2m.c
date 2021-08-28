@@ -8,13 +8,13 @@
 
 
 typedef int q2m_state_t;
-static q2m_state_t* get_q2m_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline q2m_state_t* get_q2m_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      Q2M ( Quaternion to matrix ) */
-/* Subroutine */ int q2m_(doublereal *q, doublereal *r__)
+/* Subroutine */ int q2m_(cspice_t* __global_state, doublereal *q, doublereal 
+	*r__)
 {
     doublereal l2;
     doublereal q01;
@@ -30,7 +30,7 @@ static q2m_state_t* get_q2m_state() {
 
 
     /* Module state */
-    q2m_state_t* __state = get_q2m_state();
+    q2m_state_t* __state = get_q2m_state(__global_state);
 /* $ Abstract */
 
 /*     Find the rotation matrix corresponding to a specified unit */

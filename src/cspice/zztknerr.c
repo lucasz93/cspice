@@ -8,22 +8,21 @@
 
 
 typedef int zztknerr_state_t;
-static zztknerr_state_t* get_zztknerr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zztknerr_state_t* get_zztknerr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  ZZTKNERR ( Create ZZTOKNS overflow error message ) */
-/* Subroutine */ int zztknerr_(char *templt, char *string, char *token, char *
-	error, logical *status, ftnlen templt_len, ftnlen string_len, ftnlen 
-	token_len, ftnlen error_len)
+/* Subroutine */ int zztknerr_(cspice_t* __global_state, char *templt, char *
+	string, char *token, char *error, logical *status, ftnlen templt_len, 
+	ftnlen string_len, ftnlen token_len, ftnlen error_len)
 {
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
 
 
     /* Module state */
-    zztknerr_state_t* __state = get_zztknerr_state();
+    zztknerr_state_t* __state = get_zztknerr_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -155,10 +154,10 @@ static zztknerr_state_t* get_zztknerr_state() {
 /*     create error message for ZZTOKNS overflow failure */
 
 /* -& */
-    repmc_(templt, "#", string, error, templt_len, (ftnlen)1, string_len, 
-	    error_len);
-    repmc_(error, "#", token, error, error_len, (ftnlen)1, token_len, 
-	    error_len);
+    repmc_(__global_state, templt, "#", string, error, templt_len, (ftnlen)1, 
+	    string_len, error_len);
+    repmc_(__global_state, error, "#", token, error, error_len, (ftnlen)1, 
+	    token_len, error_len);
     *status = FALSE_;
     return 0;
 } /* zztknerr_ */

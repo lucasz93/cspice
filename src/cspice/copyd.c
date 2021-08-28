@@ -8,13 +8,13 @@
 
 
 typedef int copyd_state_t;
-static copyd_state_t* get_copyd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline copyd_state_t* get_copyd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      COPYD ( Copy a double precision cell ) */
-/* Subroutine */ int copyd_(doublereal *cell, doublereal *copy)
+/* Subroutine */ int copyd_(cspice_t* __global_state, doublereal *cell, 
+	doublereal *copy)
 {
     /* System generated locals */
     integer i__1;
@@ -23,19 +23,19 @@ static copyd_state_t* get_copyd_state() {
     integer card;
     integer size;
     integer i__;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer moved;
-    extern integer sized_(doublereal *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int excess_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    copyd_state_t* __state = get_copyd_state();
+    copyd_state_t* __state = get_copyd_state(__global_state);
 /* $ Abstract */
 
 /*      Copy the contents of a double precision cell to another cell. */
@@ -177,16 +177,16 @@ static copyd_state_t* get_copyd_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("COPYD", (ftnlen)5);
+    chkin_(__global_state, "COPYD", (ftnlen)5);
 
 /*     We need the cardinality of the input cell, and the size of */
 /*     the output cell. */
 
-    card = cardd_(cell);
-    size = sized_(copy);
+    card = cardd_(__global_state, cell);
+    size = sized_(__global_state, copy);
 
 /*     Start moving the elements, one by one. Stop if the output */
 /*     cell fills up. */
@@ -199,15 +199,15 @@ static copyd_state_t* get_copyd_state() {
 
 /*     Set the cardinality of the output cell. Report any excess. */
 
-    scardd_(&moved, copy);
+    scardd_(__global_state, &moved, copy);
     if (card > size) {
 	i__1 = card - size;
-	excess_(&i__1, "cell", (ftnlen)4);
-	sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);
-	chkout_("COPYD", (ftnlen)5);
+	excess_(__global_state, &i__1, "cell", (ftnlen)4);
+	sigerr_(__global_state, "SPICE(CELLTOOSMALL)", (ftnlen)19);
+	chkout_(__global_state, "COPYD", (ftnlen)5);
 	return 0;
     }
-    chkout_("COPYD", (ftnlen)5);
+    chkout_(__global_state, "COPYD", (ftnlen)5);
     return 0;
 } /* copyd_ */
 

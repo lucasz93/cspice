@@ -8,30 +8,30 @@
 
 
 typedef int zzddhrmu_state_t;
-static zzddhrmu_state_t* get_zzddhrmu_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzddhrmu_state_t* get_zzddhrmu_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZDDHRMU ( Private --- DDH Remove Unit ) */
-/* Subroutine */ int zzddhrmu_(integer *uindex, integer *nft, integer *utcst, 
-	integer *uthan, logical *utlck, integer *utlun, integer *nut)
+/* Subroutine */ int zzddhrmu_(cspice_t* __global_state, integer *uindex, 
+	integer *nft, integer *utcst, integer *uthan, logical *utlck, integer 
+	*utlun, integer *nut)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int reslun_(integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int reslun_(cspice_t*, integer *);
 
 
     /* Module state */
-    zzddhrmu_state_t* __state = get_zzddhrmu_state();
+    zzddhrmu_state_t* __state = get_zzddhrmu_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -467,13 +467,14 @@ static zzddhrmu_state_t* get_zzddhrmu_state() {
 /*     If not, use discovery check-in, signal an error and return. */
 
     if (*uindex > *nut || *uindex < 1) {
-	chkin_("ZZDDHRMU", (ftnlen)8);
-	setmsg_("Attempt to remove row # from the unit table failed because "
-		"valid row indices range from 1 to NUT.", (ftnlen)97);
-	errint_("#", uindex, (ftnlen)1);
-	errint_("#", nut, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZDDHRMU", (ftnlen)8);
+	chkin_(__global_state, "ZZDDHRMU", (ftnlen)8);
+	setmsg_(__global_state, "Attempt to remove row # from the unit table"
+		" failed because valid row indices range from 1 to NUT.", (
+		ftnlen)97);
+	errint_(__global_state, "#", uindex, (ftnlen)1);
+	errint_(__global_state, "#", nut, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZDDHRMU", (ftnlen)8);
 	return 0;
     }
 
@@ -493,7 +494,7 @@ static zzddhrmu_state_t* get_zzddhrmu_state() {
 /*        Reserve the unit for the handle manager's usage and */
 /*        return. */
 
-	reslun_(&utlun[*uindex - 1]);
+	reslun_(__global_state, &utlun[*uindex - 1]);
 	return 0;
     }
 

@@ -8,8 +8,7 @@
 
 
 extern spkw17_init_t __spkw17_init;
-static spkw17_state_t* get_spkw17_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkw17_state_t* get_spkw17_state(cspice_t* state) {
 	if (!state->spkw17)
 		state->spkw17 = __cspice_allocate_module(sizeof(
 	spkw17_state_t), &__spkw17_init, sizeof(__spkw17_init));
@@ -18,46 +17,49 @@ static spkw17_state_t* get_spkw17_state() {
 }
 
 /* $Procedure      SPKW17 ( SPK, write a type 17 segment ) */
-/* Subroutine */ int spkw17_(integer *handle, integer *body, integer *center, 
-	char *frame, doublereal *first, doublereal *last, char *segid, 
-	doublereal *epoch, doublereal *eqel, doublereal *rapol, doublereal *
-	decpol, ftnlen frame_len, ftnlen segid_len)
+/* Subroutine */ int spkw17_(cspice_t* __global_state, integer *handle, 
+	integer *body, integer *center, char *frame, doublereal *first, 
+	doublereal *last, char *segid, doublereal *epoch, doublereal *eqel, 
+	doublereal *rapol, doublereal *decpol, ftnlen frame_len, ftnlen 
+	segid_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal a;
     doublereal h__;
     integer i__;
     doublereal k;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal descr[5];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer value;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
 	    ftnlen);
-    extern /* Subroutine */ int dafena_(void);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int dafena_(cspice_t*);
+    extern logical failed_(cspice_t*);
     doublereal record[12];
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int spkpds_(integer *, integer *, char *, integer 
-	    *, doublereal *, doublereal *, doublereal *, ftnlen);
-    extern logical return_(void);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkpds_(cspice_t*, integer *, integer *, char 
+	    *, integer *, doublereal *, doublereal *, doublereal *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal ecc;
 
 
     /* Module state */
-    spkw17_state_t* __state = get_spkw17_state();
+    spkw17_state_t* __state = get_spkw17_state(__global_state);
 /* $ Abstract */
 
 /*     Write an SPK segment of type 17 given a type 17 data record. */
@@ -336,10 +338,10 @@ static spkw17_state_t* get_spkw17_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKW17", (ftnlen)6);
+    chkin_(__global_state, "SPKW17", (ftnlen)6);
 
 /*     Fetch the various entities from the inputs and put them into */
 /*     the data record, first the epoch. */
@@ -348,57 +350,57 @@ static spkw17_state_t* get_spkw17_state() {
 
 /*     The trajectory pole vector. */
 
-    moved_(eqel, &__state->c__9, &record[1]);
+    moved_(__global_state, eqel, &__state->c__9, &record[1]);
     record[10] = *rapol;
     record[11] = *decpol;
     a = record[1];
     h__ = record[2];
     k = record[3];
-    ecc = sqrt(h__ * h__ + k * k);
+    ecc = sqrt(&__global_state->f2c, h__ * h__ + k * k);
 
 /*     Check all the inputs here for obvious failures.  It's much */
 /*     better to check them now and quit than it is to get a bogus */
 /*     segment into an SPK file and diagnose it later. */
 
     if (a <= 0.) {
-	setmsg_("The semimajor axis supplied to the SPK type 17 evaluator wa"
-		"s non-positive.  This value must be positive. The value supp"
-		"lied was #.", (ftnlen)130);
-	errdp_("#", &a, (ftnlen)1);
-	sigerr_("SPICE(BADSEMIAXIS)", (ftnlen)18);
-	chkout_("SPKW17", (ftnlen)6);
+	setmsg_(__global_state, "The semimajor axis supplied to the SPK type"
+		" 17 evaluator was non-positive.  This value must be positive"
+		". The value supplied was #.", (ftnlen)130);
+	errdp_(__global_state, "#", &a, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSEMIAXIS)", (ftnlen)18);
+	chkout_(__global_state, "SPKW17", (ftnlen)6);
 	return 0;
     } else if (ecc > .9) {
-	setmsg_("The eccentricity supplied for a type 17 segment is greater "
-		"than 0.9.  It must be less than 0.9.The value supplied to th"
-		"e type 17 evaluator was #. ", (ftnlen)146);
-	errdp_("#", &ecc, (ftnlen)1);
-	sigerr_("SPICE(BADECCENTRICITY)", (ftnlen)22);
-	chkout_("SPKW17", (ftnlen)6);
+	setmsg_(__global_state, "The eccentricity supplied for a type 17 seg"
+		"ment is greater than 0.9.  It must be less than 0.9.The valu"
+		"e supplied to the type 17 evaluator was #. ", (ftnlen)146);
+	errdp_(__global_state, "#", &ecc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADECCENTRICITY)", (ftnlen)22);
+	chkout_(__global_state, "SPKW17", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure the segment identifier is not too long. */
 
-    if (lastnb_(segid, segid_len) > 40) {
-	setmsg_("Segment identifier contains more than 40 characters.", (
-		ftnlen)52);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("SPKW17", (ftnlen)6);
+    if (lastnb_(__global_state, segid, segid_len) > 40) {
+	setmsg_(__global_state, "Segment identifier contains more than 40 ch"
+		"aracters.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "SPKW17", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure the segment identifier has only printing characters. */
 
-    i__1 = lastnb_(segid, segid_len);
+    i__1 = lastnb_(__global_state, segid, segid_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	value = *(unsigned char *)&segid[i__ - 1];
 	if (value < 32 || value > 126) {
-	    setmsg_("The segment identifier contains the nonprintable charac"
-		    "ter having ascii code #.", (ftnlen)79);
-	    errint_("#", &value, (ftnlen)1);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("SPKW17", (ftnlen)6);
+	    setmsg_(__global_state, "The segment identifier contains the non"
+		    "printable character having ascii code #.", (ftnlen)79);
+	    errint_(__global_state, "#", &value, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "SPKW17", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -407,25 +409,25 @@ static spkw17_state_t* get_spkw17_state() {
 /*     record.  Create the segment descriptor. (FIRST and LAST are */
 /*     checked by SPKPDS as well as consistency between BODY and CENTER). */
 
-    spkpds_(body, center, frame, &__state->c__17, first, last, descr, 
-	    frame_len);
-    if (failed_()) {
-	chkout_("SPKW17", (ftnlen)6);
+    spkpds_(__global_state, body, center, frame, &__state->c__17, first, last,
+	     descr, frame_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKW17", (ftnlen)6);
 	return 0;
     }
 
 /*     Begin a new segment. */
 
-    dafbna_(handle, descr, segid, segid_len);
-    if (failed_()) {
-	chkout_("SPKW17", (ftnlen)6);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKW17", (ftnlen)6);
 	return 0;
     }
-    dafada_(record, &__state->c__12);
-    if (! failed_()) {
-	dafena_();
+    dafada_(__global_state, record, &__state->c__12);
+    if (! failed_(__global_state)) {
+	dafena_(__global_state);
     }
-    chkout_("SPKW17", (ftnlen)6);
+    chkout_(__global_state, "SPKW17", (ftnlen)6);
     return 0;
 } /* spkw17_ */
 

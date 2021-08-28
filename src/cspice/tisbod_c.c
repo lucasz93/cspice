@@ -474,7 +474,7 @@
    /*
    Participate in tracing.
    */
-   chkin_c ( "tisbod_c" );
+   chkin_c ( naif_state, "tisbod_c" );
    
    
    /*

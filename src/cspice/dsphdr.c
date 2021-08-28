@@ -8,36 +8,36 @@
 
 
 typedef int dsphdr_state_t;
-static dsphdr_state_t* get_dsphdr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dsphdr_state_t* get_dsphdr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DSPHDR ( Derivative of spherical w.r.t. rectangular ) */
-/* Subroutine */ int dsphdr_(doublereal *x, doublereal *y, doublereal *z__, 
-	doublereal *jacobi)
+/* Subroutine */ int dsphdr_(cspice_t* __global_state, doublereal *x, 
+	doublereal *y, doublereal *z__, doublereal *jacobi)
 {
     doublereal long__;
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal colat;
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     doublereal injacb[9]	/* was [3][3] */;
     doublereal rectan[3];
-    extern /* Subroutine */ int recsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int drdsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int invort_(doublereal *, doublereal *);
+    extern /* Subroutine */ int recsph_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int drdsph_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int invort_(cspice_t*, doublereal *, doublereal *)
+	    ;
 
 
     /* Module state */
-    dsphdr_state_t* __state = get_dsphdr_state();
+    dsphdr_state_t* __state = get_dsphdr_state(__global_state);
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */
@@ -225,20 +225,20 @@ static dsphdr_state_t* get_dsphdr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DSPHDR", (ftnlen)6);
+	chkin_(__global_state, "DSPHDR", (ftnlen)6);
     }
 
 /*     There is a singularity of the jacobian for points on the z-axis. */
 
     if (*x == 0. && *y == 0.) {
-	setmsg_("The Jacobian of the transformation from rectangular to sphe"
-		"rical coordinates is not defined for points on the z-axis.", (
-		ftnlen)117);
-	sigerr_("SPICE(POINTONZAXIS)", (ftnlen)19);
-	chkout_("DSPHDR", (ftnlen)6);
+	setmsg_(__global_state, "The Jacobian of the transformation from rec"
+		"tangular to spherical coordinates is not defined for points "
+		"on the z-axis.", (ftnlen)117);
+	sigerr_(__global_state, "SPICE(POINTONZAXIS)", (ftnlen)19);
+	chkout_(__global_state, "DSPHDR", (ftnlen)6);
 	return 0;
     }
 
@@ -247,22 +247,22 @@ static dsphdr_state_t* get_dsphdr_state() {
 
 /*     First move the X,Y and Z coordinates into a vector. */
 
-    vpack_(x, y, z__, rectan);
+    vpack_(__global_state, x, y, z__, rectan);
 
 /*     Convert from rectangular to spherical coordinates. */
 
-    recsph_(rectan, &r__, &colat, &long__);
+    recsph_(__global_state, rectan, &r__, &colat, &long__);
 
 /*     Get the Jacobian of the transformation from spherical to */
 /*     rectangular coordinates at R, COLAT, LONG. */
 
-    drdsph_(&r__, &colat, &long__, injacb);
+    drdsph_(__global_state, &r__, &colat, &long__, injacb);
 
 /*     Now invert INJACB to get the Jacobian of the transformation from */
 /*     rectangular to spherical coordinates. */
 
-    invort_(injacb, jacobi);
-    chkout_("DSPHDR", (ftnlen)6);
+    invort_(__global_state, injacb, jacobi);
+    chkout_(__global_state, "DSPHDR", (ftnlen)6);
     return 0;
 } /* dsphdr_ */
 

@@ -8,17 +8,17 @@
 
 
 typedef int vsub_state_t;
-static vsub_state_t* get_vsub_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vsub_state_t* get_vsub_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VSUB ( Vector subtraction, 3 dimensions ) */
-/* Subroutine */ int vsub_(doublereal *v1, doublereal *v2, doublereal *vout)
+/* Subroutine */ int vsub_(cspice_t* __global_state, doublereal *v1, 
+	doublereal *v2, doublereal *vout)
 {
 
     /* Module state */
-    vsub_state_t* __state = get_vsub_state();
+    vsub_state_t* __state = get_vsub_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the difference between two 3-dimensional, double */

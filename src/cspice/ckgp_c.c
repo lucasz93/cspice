@@ -685,7 +685,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ckgp_c");
+   chkin_c ( naif_state, "ckgp_c");
    
    /*
    Check the input string ref to make sure the pointer is non-null 

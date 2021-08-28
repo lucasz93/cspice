@@ -8,42 +8,44 @@
 
 
 typedef int zzgfcost_state_t;
-static zzgfcost_state_t* get_zzgfcost_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfcost_state_t* get_zzgfcost_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZGFCOST ( GF, coordinate definition state ) */
-/* Subroutine */ int zzgfcost_(char *vecdef, char *method, integer *trgid, 
-	doublereal *et, char *ref, char *abcorr, integer *obsid, char *dref, 
-	integer *dctr, doublereal *dvec, doublereal *radii, doublereal *state,
-	 logical *found, ftnlen vecdef_len, ftnlen method_len, ftnlen ref_len,
-	 ftnlen abcorr_len, ftnlen dref_len)
+/* Subroutine */ int zzgfcost_(cspice_t* __global_state, char *vecdef, char *
+	method, integer *trgid, doublereal *et, char *ref, char *abcorr, 
+	integer *obsid, char *dref, integer *dctr, doublereal *dvec, 
+	doublereal *radii, doublereal *state, logical *found, ftnlen 
+	vecdef_len, ftnlen method_len, ftnlen ref_len, ftnlen abcorr_len, 
+	ftnlen dref_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzgfssob_(char *, integer *, doublereal *, 
-	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfssin_(char *, integer *, doublereal *, 
-	    char *, char *, integer *, char *, integer *, doublereal *, 
-	    doublereal *, doublereal *, logical *, ftnlen, ftnlen, ftnlen, 
+    extern /* Subroutine */ int zzgfssob_(cspice_t*, char *, integer *, 
+	    doublereal *, char *, char *, integer *, doublereal *, doublereal 
+	    *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfssin_(cspice_t*, char *, integer *, 
+	    doublereal *, char *, char *, integer *, char *, integer *, 
+	    doublereal *, doublereal *, doublereal *, logical *, ftnlen, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
-	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkez_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
     doublereal lt;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzgfcost_state_t* __state = get_zzgfcost_state();
+    zzgfcost_state_t* __state = get_zzgfcost_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -719,43 +721,45 @@ static zzgfcost_state_t* get_zzgfcost_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFCOST", (ftnlen)8);
+    chkin_(__global_state, "ZZGFCOST", (ftnlen)8);
 
 /*     No result was found yet. */
 
     *found = FALSE_;
-    if (s_cmp(vecdef, "POSITION", vecdef_len, (ftnlen)8) == 0) {
+    if (s_cmp(&__global_state->f2c, vecdef, "POSITION", vecdef_len, (ftnlen)8)
+	     == 0) {
 
 /*        Find the observer-target state vector. */
 
-	spkez_(trgid, et, ref, abcorr, obsid, state, &lt, ref_len, abcorr_len)
-		;
+	spkez_(__global_state, trgid, et, ref, abcorr, obsid, state, &lt, 
+		ref_len, abcorr_len);
 	*found = TRUE_;
-    } else if (s_cmp(vecdef, "SUB-OBSERVER POINT", vecdef_len, (ftnlen)18) == 
-	    0) {
+    } else if (s_cmp(&__global_state->f2c, vecdef, "SUB-OBSERVER POINT", 
+	    vecdef_len, (ftnlen)18) == 0) {
 
 /*        The caller has requested the state of a sub-observer point. */
 
-	zzgfssob_(method, trgid, et, ref, abcorr, obsid, radii, state, 
-		method_len, ref_len, abcorr_len);
+	zzgfssob_(__global_state, method, trgid, et, ref, abcorr, obsid, 
+		radii, state, method_len, ref_len, abcorr_len);
 	*found = TRUE_;
-    } else if (s_cmp(vecdef, "SURFACE INTERCEPT POINT", vecdef_len, (ftnlen)
-	    23) == 0) {
+    } else if (s_cmp(&__global_state->f2c, vecdef, "SURFACE INTERCEPT POINT", 
+	    vecdef_len, (ftnlen)23) == 0) {
 
 /*        The caller has requested the state of a surface intercept */
 /*        point. */
 
-	zzgfssin_(method, trgid, et, ref, abcorr, obsid, dref, dctr, dvec, 
-		radii, state, found, method_len, ref_len, abcorr_len, 
-		dref_len);
+	zzgfssin_(__global_state, method, trgid, et, ref, abcorr, obsid, dref,
+		 dctr, dvec, radii, state, found, method_len, ref_len, 
+		abcorr_len, dref_len);
     } else {
-	setmsg_("The coordinate quantity # is not recognized.", (ftnlen)44);
-	errch_("#", vecdef, (ftnlen)1, vecdef_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZGFCOST", (ftnlen)8);
+	setmsg_(__global_state, "The coordinate quantity # is not recognized."
+		, (ftnlen)44);
+	errch_(__global_state, "#", vecdef, (ftnlen)1, vecdef_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFCOST", (ftnlen)8);
 	return 0;
     }
 
@@ -768,7 +772,7 @@ static zzgfcost_state_t* get_zzgfcost_state() {
 
 /*        - a SPICE error occurred */
 
-    chkout_("ZZGFCOST", (ftnlen)8);
+    chkout_(__global_state, "ZZGFCOST", (ftnlen)8);
     return 0;
 } /* zzgfcost_ */
 

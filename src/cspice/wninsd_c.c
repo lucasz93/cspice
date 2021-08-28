@@ -164,7 +164,7 @@
    {
       return;
    }
-   chkin_c ( "wninsd_c" );
+   chkin_c ( naif_state, "wninsd_c" );
 
 
    /*

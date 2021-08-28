@@ -8,14 +8,13 @@
 
 
 typedef int vtmvg_state_t;
-static vtmvg_state_t* get_vtmvg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vtmvg_state_t* get_vtmvg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  VTMVG  ( Vector transpose times matrix times vector ) */
-doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer 
-	*nrow, integer *ncol)
+doublereal vtmvg_(cspice_t* __global_state, doublereal *v1, doublereal *
+	matrix, doublereal *v2, integer *nrow, integer *ncol)
 {
     /* System generated locals */
     integer v1_dim1, matrix_dim1, matrix_dim2, matrix_offset, v2_dim1, i__1, 
@@ -23,7 +22,7 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
     doublereal ret_val;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer k;
@@ -31,7 +30,7 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
 
 
     /* Module state */
-    vtmvg_state_t* __state = get_vtmvg_state();
+    vtmvg_state_t* __state = get_vtmvg_state(__global_state);
 /* $ Abstract */
 
 /*      Multiply the transpose of a n-dimensional column vector, */
@@ -199,12 +198,13 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
 	i__2 = *ncol;
 	for (l = 1; l <= i__2; ++l) {
 	    ret_val += v1[(i__3 = k - 1) < 1 * v1_dim1 && 0 <= i__3 ? i__3 : 
-		    s_rnge("v1", i__3, "vtmvg_", (ftnlen)171)] * matrix[(i__4 
-		    = k + l * matrix_dim1 - matrix_offset) < 1 * matrix_dim1 *
-		     matrix_dim2 && 0 <= i__4 ? i__4 : s_rnge("matrix", i__4, 
-		    "vtmvg_", (ftnlen)171)] * v2[(i__5 = l - 1) < 1 * v2_dim1 
-		    && 0 <= i__5 ? i__5 : s_rnge("v2", i__5, "vtmvg_", (
-		    ftnlen)171)];
+		    s_rnge(&__global_state->f2c, "v1", i__3, "vtmvg_", (
+		    ftnlen)171)] * matrix[(i__4 = k + l * matrix_dim1 - 
+		    matrix_offset) < 1 * matrix_dim1 * matrix_dim2 && 0 <= 
+		    i__4 ? i__4 : s_rnge(&__global_state->f2c, "matrix", i__4,
+		     "vtmvg_", (ftnlen)171)] * v2[(i__5 = l - 1) < 1 * 
+		    v2_dim1 && 0 <= i__5 ? i__5 : s_rnge(&__global_state->f2c,
+		     "v2", i__5, "vtmvg_", (ftnlen)171)];
 	}
     }
     return ret_val;

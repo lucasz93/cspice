@@ -275,7 +275,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "srfrec_c" );
+   chkin_c ( naif_state, "srfrec_c" );
 
    srfrec_ ( (SpiceInt    *) &body,
              (SpiceDouble *) &longitude,

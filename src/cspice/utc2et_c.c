@@ -272,7 +272,7 @@ Ancient Epochs
    /*
    Participate in error tracing.
    */
-   chkin_c ( "utc2et_c" );
+   chkin_c ( naif_state, "utc2et_c" );
 
 
    /*

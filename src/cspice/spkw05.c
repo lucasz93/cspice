@@ -8,8 +8,7 @@
 
 
 extern spkw05_init_t __spkw05_init;
-static spkw05_state_t* get_spkw05_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkw05_state_t* get_spkw05_state(cspice_t* state) {
 	if (!state->spkw05)
 		state->spkw05 = __cspice_allocate_module(sizeof(
 	spkw05_state_t), &__spkw05_init, sizeof(__spkw05_init));
@@ -18,10 +17,10 @@ static spkw05_state_t* get_spkw05_state() {
 }
 
 /* $Procedure  SPKW05 ( Write SPK segment, type 5 ) */
-/* Subroutine */ int spkw05_(integer *handle, integer *body, integer *center, 
-	char *frame, doublereal *first, doublereal *last, char *segid, 
-	doublereal *gm, integer *n, doublereal *states, doublereal *epochs, 
-	ftnlen frame_len, ftnlen segid_len)
+/* Subroutine */ int spkw05_(cspice_t* __global_state, integer *handle, 
+	integer *body, integer *center, char *frame, doublereal *first, 
+	doublereal *last, char *segid, doublereal *gm, integer *n, doublereal 
+	*states, doublereal *epochs, ftnlen frame_len, ftnlen segid_len)
 {
     /* System generated locals */
     integer i__1;
@@ -29,32 +28,34 @@ static spkw05_state_t* get_spkw05_state() {
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    integer value;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int dafena_(void);
-    extern logical failed_(void);
+    integer value;
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int dafena_(cspice_t*);
+    extern logical failed_(cspice_t*);
     integer refcod;
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer icd[6];
 
 
     /* Module state */
-    spkw05_state_t* __state = get_spkw05_state();
+    spkw05_state_t* __state = get_spkw05_state(__global_state);
 /* $ Abstract */
 
 /*     Write an SPK segment of type 5 given a time-ordered set of */
@@ -312,38 +313,40 @@ static spkw05_state_t* get_spkw05_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKW05", (ftnlen)6);
+	chkin_(__global_state, "SPKW05", (ftnlen)6);
     }
     if (*gm <= 0.) {
-	setmsg_("GM = #; Non-positive gravitational parameter", (ftnlen)44);
-	errdp_("#", gm, (ftnlen)1);
-	sigerr_("SPICE(NONPOSITIVEMASS)", (ftnlen)22);
-	chkout_("SPKW05", (ftnlen)6);
+	setmsg_(__global_state, "GM = #; Non-positive gravitational parameter"
+		, (ftnlen)44);
+	errdp_(__global_state, "#", gm, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONPOSITIVEMASS)", (ftnlen)22);
+	chkout_(__global_state, "SPKW05", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the NAIF integer code for the reference frame. */
 
-    namfrm_(frame, &refcod, frame_len);
+    namfrm_(__global_state, frame, &refcod, frame_len);
     if (refcod == 0) {
-	setmsg_("The reference frame # is not supported.", (ftnlen)39);
-	errch_("#", frame, (ftnlen)1, frame_len);
-	sigerr_("SPICE(INVALIDREFFRAME)", (ftnlen)22);
-	chkout_("SPKW05", (ftnlen)6);
+	setmsg_(__global_state, "The reference frame # is not supported.", (
+		ftnlen)39);
+	errch_(__global_state, "#", frame, (ftnlen)1, frame_len);
+	sigerr_(__global_state, "SPICE(INVALIDREFFRAME)", (ftnlen)22);
+	chkout_(__global_state, "SPKW05", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure that the number of states and epochs is positive. */
 
     if (*n <= 0) {
-	setmsg_("The number of states and epochs is not positive. N = #", (
-		ftnlen)54);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(NUMSTATESNOTPOS)", (ftnlen)22);
-	chkout_("SPKW05", (ftnlen)6);
+	setmsg_(__global_state, "The number of states and epochs is not posi"
+		"tive. N = #", (ftnlen)54);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NUMSTATESNOTPOS)", (ftnlen)22);
+	chkout_(__global_state, "SPKW05", (ftnlen)6);
 	return 0;
     }
 
@@ -353,10 +356,10 @@ static spkw05_state_t* get_spkw05_state() {
     i__1 = *n;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	if (epochs[i__ - 1] <= epochs[i__ - 2]) {
-	    setmsg_("Epoch # is out of order. ", (ftnlen)25);
-	    errdp_("#", &epochs[i__ - 1], (ftnlen)1);
-	    sigerr_("SPICE(UNORDEREDTIMES)", (ftnlen)21);
-	    chkout_("SPKW05", (ftnlen)6);
+	    setmsg_(__global_state, "Epoch # is out of order. ", (ftnlen)25);
+	    errdp_(__global_state, "#", &epochs[i__ - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(UNORDEREDTIMES)", (ftnlen)21);
+	    chkout_(__global_state, "SPKW05", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -364,36 +367,36 @@ static spkw05_state_t* get_spkw05_state() {
 /*     The segment stop time should be greater then the begin time. */
 
     if (*first > *last) {
-	setmsg_("The segment start time: # is greater then the segment end t"
-		"ime: #", (ftnlen)65);
-	errdp_("#", first, (ftnlen)1);
-	errdp_("#", last, (ftnlen)1);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("SPKW05", (ftnlen)6);
+	setmsg_(__global_state, "The segment start time: # is greater then t"
+		"he segment end time: #", (ftnlen)65);
+	errdp_(__global_state, "#", first, (ftnlen)1);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "SPKW05", (ftnlen)6);
 	return 0;
     }
 
 /*     Now check that all the characters in the segid can be printed. */
 
-    i__1 = lastnb_(segid, segid_len);
+    i__1 = lastnb_(__global_state, segid, segid_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	value = *(unsigned char *)&segid[i__ - 1];
 	if (value < 32 || value > 126) {
-	    setmsg_("The segment identifier contains nonprintable characters",
-		     (ftnlen)55);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("SPKW05", (ftnlen)6);
+	    setmsg_(__global_state, "The segment identifier contains nonprin"
+		    "table characters", (ftnlen)55);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "SPKW05", (ftnlen)6);
 	    return 0;
 	}
     }
 
 /*     Also check to see if the segment identifier is too long. */
 
-    if (lastnb_(segid, segid_len) > 40) {
-	setmsg_("Segment identifier contains more than 40 characters.", (
-		ftnlen)52);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("SPKW05", (ftnlen)6);
+    if (lastnb_(__global_state, segid, segid_len) > 40) {
+	setmsg_(__global_state, "Segment identifier contains more than 40 ch"
+		"aracters.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "SPKW05", (ftnlen)6);
 	return 0;
     }
 
@@ -412,13 +415,13 @@ static spkw05_state_t* get_spkw05_state() {
 
 /*     Pack the segment descriptor. */
 
-    dafps_(&__state->c__2, &__state->c__6, dcd, icd, descr);
+    dafps_(__global_state, &__state->c__2, &__state->c__6, dcd, icd, descr);
 
 /*     Begin a new segment. */
 
-    dafbna_(handle, descr, segid, segid_len);
-    if (failed_()) {
-	chkout_("SPKW05", (ftnlen)6);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKW05", (ftnlen)6);
 	return 0;
     }
 
@@ -426,30 +429,30 @@ static spkw05_state_t* get_spkw05_state() {
 /*     followed by the epochs. */
 
     i__1 = *n * 6;
-    dafada_(states, &i__1);
-    dafada_(epochs, n);
+    dafada_(__global_state, states, &i__1);
+    dafada_(__global_state, epochs, n);
 
 /*     If there are at least 100 state/epoch pairs, write a directory */
 /*     containing every 100'th epoch. */
 
     i__ = 100;
     while(i__ <= *n) {
-	dafada_(&epochs[i__ - 1], &__state->c__1);
+	dafada_(__global_state, &epochs[i__ - 1], &__state->c__1);
 	i__ += 100;
     }
 
 /*     Store the GM of the central body, and the number of states. */
 
-    dafada_(gm, &__state->c__1);
+    dafada_(__global_state, gm, &__state->c__1);
     d__1 = (doublereal) (*n);
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
 
 /*     If anything went wrong, don't end the segment. */
 
-    if (! failed_()) {
-	dafena_();
+    if (! failed_(__global_state)) {
+	dafena_(__global_state);
     }
-    chkout_("SPKW05", (ftnlen)6);
+    chkout_(__global_state, "SPKW05", (ftnlen)6);
     return 0;
 } /* spkw05_ */
 

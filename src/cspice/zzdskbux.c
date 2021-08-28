@@ -8,8 +8,7 @@
 
 
 extern zzdskbux_init_t __zzdskbux_init;
-static zzdskbux_state_t* get_zzdskbux_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdskbux_state_t* get_zzdskbux_state(cspice_t* state) {
 	if (!state->zzdskbux)
 		state->zzdskbux = __cspice_allocate_module(sizeof(
 	zzdskbux_state_t), &__zzdskbux_init, sizeof(__zzdskbux_init));
@@ -18,60 +17,62 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 }
 
 /* $Procedure ZZDSKBUX ( DSK, buffered unprioritized ray intercept ) */
-/* Subroutine */ int zzdskbux_(integer *bodyid, integer *nsurf, integer *
-	srflst, doublereal *et, integer *fixfid, integer *nseg, integer *
-	hanbuf, integer *dlabuf, doublereal *dskbuf, doublereal *offbuf, 
-	doublereal *ctrbuf, doublereal *radbuf, doublereal *vertex, 
-	doublereal *raydir, doublereal *xpt, integer *segidx, doublereal *dc, 
-	integer *ic, logical *found)
+/* Subroutine */ int zzdskbux_(cspice_t* __global_state, integer *bodyid, 
+	integer *nsurf, integer *srflst, doublereal *et, integer *fixfid, 
+	integer *nseg, integer *hanbuf, integer *dlabuf, doublereal *dskbuf, 
+	doublereal *offbuf, doublereal *ctrbuf, doublereal *radbuf, 
+	doublereal *vertex, doublereal *raydir, doublereal *xpt, integer *
+	segidx, doublereal *dc, integer *ic, logical *found)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     logical done;
     doublereal dmin__;
     logical xfnd;
     integer nhit;
     doublereal dist;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal srfx[3];
-    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int zzdsksph_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int zzdsksgx_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *, logical *);
+    extern /* Subroutine */ int mtxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzdsksph_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzdsksgx_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+	     doublereal *, integer *, logical *);
     integer i__;
     integer j;
     integer k;
-    extern /* Subroutine */ int zzrytelt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzrytelt_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal pnear[3];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer sghit[1000];
     integer dtype;
-    extern doublereal vdist_(doublereal *, doublereal *);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
     doublereal vtemp[3];
     doublereal xform[9]	/* was [3][3] */;
-    extern doublereal vnorm_(doublereal *);
-    extern logical vzero_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     integer nxpts;
-    extern logical failed_(void);
-    extern /* Subroutine */ int refchg_(integer *, integer *, doublereal *, 
-	    doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int refchg_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
     integer segfid;
-    extern integer isrchi_(integer *, integer *, integer *);
-    extern logical return_(void);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
+    extern logical return_(cspice_t*);
     doublereal maxrad;
     doublereal minrad;
     doublereal segdir[3];
@@ -88,23 +89,24 @@ static zzdskbux_state_t* get_zzdskbux_state() {
     logical multfr;
     logical surfok;
     logical timeok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dskgtl_(integer *, doublereal *);
-    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
-	    ;
-    extern /* Subroutine */ int nplnpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int orderd_(doublereal *, integer *, integer *);
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dskgtl_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int surfpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, logical *
+	    );
+    extern /* Subroutine */ int nplnpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int orderd_(cspice_t*, doublereal *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    zzdskbux_state_t* __state = get_zzdskbux_state();
+    zzdskbux_state_t* __state = get_zzdskbux_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -910,19 +912,20 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKBUX", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKBUX", (ftnlen)8);
 
 /*     Check the incoming segment count. */
 
     if (*nseg <= 0) {
-	setmsg_("Input segment list was empty. This may be due to no DSKs co"
-		"ntaining data for body # having been loaded.", (ftnlen)103);
-	errint_("#", bodyid, (ftnlen)1);
-	sigerr_("SPICE(NODSKSEGMENTS)", (ftnlen)20);
-	chkout_("ZZDSKBUX", (ftnlen)8);
+	setmsg_(__global_state, "Input segment list was empty. This may be d"
+		"ue to no DSKs containing data for body # having been loaded.",
+		 (ftnlen)103);
+	errint_(__global_state, "#", bodyid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NODSKSEGMENTS)", (ftnlen)20);
+	chkout_(__global_state, "ZZDSKBUX", (ftnlen)8);
 	return 0;
     }
 
@@ -938,20 +941,20 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 
 /*     Obtain the "greedy" segment margin. */
 
-    dskgtl_(&__state->c__2, &sgmarg);
+    dskgtl_(__global_state, &__state->c__2, &sgmarg);
 
 /*     Make a local copy of the ray. We'll update this copy */
 /*     later if need be. */
 
-    vequ_(vertex, segvtx);
-    vequ_(raydir, segdir);
+    vequ_(__global_state, vertex, segvtx);
+    vequ_(__global_state, raydir, segdir);
 
 /*     Obtain the radius of an outer bounding sphere for the given body */
 /*     and surface list. */
 
-    zzdsksph_(bodyid, nsurf, srflst, &minrad, &maxrad);
-    if (failed_()) {
-	chkout_("ZZDSKBUX", (ftnlen)8);
+    zzdsksph_(__global_state, bodyid, nsurf, srflst, &minrad, &maxrad);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZDSKBUX", (ftnlen)8);
 	return 0;
     }
 
@@ -971,22 +974,23 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*     expansion factor is used. Using an intercept on the outer */
 /*     bounding sphere greatly ameliorates this problem. */
 
-    if (vnorm_(segvtx) > maxrad) {
+    if (vnorm_(__global_state, segvtx) > maxrad) {
 
 /*        Find the intercept of the ray with the outer bounding */
 /*        sphere. We'll use this intercept as the vertex for */
 /*        later computations. */
 
-	surfpt_(segvtx, segdir, &maxrad, &maxrad, &maxrad, sphvtx, &xfnd);
-	if (failed_() || ! xfnd) {
+	surfpt_(__global_state, segvtx, segdir, &maxrad, &maxrad, &maxrad, 
+		sphvtx, &xfnd);
+	if (failed_(__global_state) || ! xfnd) {
 
 /*           It would be highly unusual for the SURFPT call to */
 /*           fail to produce an intercept. Check anyway. */
 
-	    chkout_("ZZDSKBUX", (ftnlen)8);
+	    chkout_(__global_state, "ZZDSKBUX", (ftnlen)8);
 	    return 0;
 	}
-	vequ_(sphvtx, segvtx);
+	vequ_(__global_state, sphvtx, segvtx);
     }
 
 /*     By default, each segment in the input list must be checked */
@@ -1007,7 +1011,8 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 
 	surfok = FALSE_;
 	timeok = FALSE_;
-	bodyok = *bodyid == i_dnnt(&dskbuf[i__ * 24 - 23]);
+	bodyok = *bodyid == i_dnnt(&__global_state->f2c, &dskbuf[i__ * 24 - 
+		23]);
 	if (bodyok) {
 
 /*           See whether the current segment contains a surface we're */
@@ -1017,8 +1022,8 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 
 	    j = 0;
 	    if (*nsurf > 0) {
-		surfce = i_dnnt(&dskbuf[i__ * 24 - 24]);
-		j = isrchi_(&surfce, nsurf, srflst);
+		surfce = i_dnnt(&__global_state->f2c, &dskbuf[i__ * 24 - 24]);
+		j = isrchi_(__global_state, &surfce, nsurf, srflst);
 	    }
 	    surfok = *nsurf == 0 || j > 0;
 
@@ -1037,7 +1042,7 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 
 /*           Get the segment's frame ID. Get the transformation from the */
 /*           input frame to the output frame if needed. */
-	    segfid = i_dnnt(&dskbuf[i__ * 24 - 20]);
+	    segfid = i_dnnt(&__global_state->f2c, &dskbuf[i__ * 24 - 20]);
 	    if (segfid != *fixfid) {
 
 /*              We have a segment that uses a different frame */
@@ -1054,9 +1059,9 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*                 Otherwise, XFORM already contains the correct */
 /*                 transformation. */
 
-		    refchg_(fixfid, &segfid, et, xform);
-		    if (failed_()) {
-			chkout_("ZZDSKBUX", (ftnlen)8);
+		    refchg_(__global_state, fixfid, &segfid, et, xform);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "ZZDSKBUX", (ftnlen)8);
 			return 0;
 		    }
 
@@ -1065,15 +1070,16 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*                 so that it represents an offset relative to center of */
 /*                 the segment's frame. */
 
-		    mxv_(xform, raydir, segdir);
-		    mxv_(xform, vertex, segvtx);
+		    mxv_(__global_state, xform, raydir, segdir);
+		    mxv_(__global_state, xform, vertex, segvtx);
 
 /*                 The direction of the buffered offset is from the body */
 /*                 to the segment frame's center. The offset is */
 /*                 expressed in the segment's frame. */
 
-		    vsub_(segvtx, &offbuf[i__ * 3 - 3], vtemp);
-		    vequ_(vtemp, segvtx);
+		    vsub_(__global_state, segvtx, &offbuf[i__ * 3 - 3], vtemp)
+			    ;
+		    vequ_(__global_state, vtemp, segvtx);
 		}
 	    } else if (multfr) {
 
@@ -1081,24 +1087,25 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*              segment, but the current values of SEGVTX and SEGDIR */
 /*              need to be reset. */
 
-		vequ_(vertex, segvtx);
-		vequ_(raydir, segdir);
+		vequ_(__global_state, vertex, segvtx);
+		vequ_(__global_state, raydir, segdir);
 	    }
 
 /*           Find the distance of the ray from the "center" of the */
 /*           segment's coverage volume. */
 
-	    nplnpt_(segvtx, segdir, &ctrbuf[i__ * 3 - 3], pnear, &dist);
+	    nplnpt_(__global_state, segvtx, segdir, &ctrbuf[i__ * 3 - 3], 
+		    pnear, &dist);
 	    if (dist <= radbuf[i__ - 1]) {
 
 /*              The line containing the ray intersects the bounding */
 /*              surface. We'll check the boundary of the segment for an */
 /*              intersection. */
 
-		zzrytelt_(segvtx, segdir, &dskbuf[i__ * 24 - 24], &sgmarg, &
-			nxpts, xpt);
-		if (failed_()) {
-		    chkout_("ZZDSKBUX", (ftnlen)8);
+		zzrytelt_(__global_state, segvtx, segdir, &dskbuf[i__ * 24 - 
+			24], &sgmarg, &nxpts, xpt);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZDSKBUX", (ftnlen)8);
 		    return 0;
 		}
 		if (nxpts > 0) {
@@ -1108,26 +1115,31 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*                 distance from the ray's vertex to the intercept in */
 /*                 the parallel array SGDIST. */
 		    if (nhit == 1000) {
-			setmsg_("Too many segments were hit by the input ray"
-				". Buffer size is #.", (ftnlen)62);
-			errint_("#", &__state->c__1000, (ftnlen)1);
-			sigerr_("SPICE(BUFFERTOOSMALL)", (ftnlen)21);
-			chkout_("ZZDSKBUX", (ftnlen)8);
+			setmsg_(__global_state, "Too many segments were hit "
+				"by the input ray. Buffer size is #.", (ftnlen)
+				62);
+			errint_(__global_state, "#", &__state->c__1000, (
+				ftnlen)1);
+			sigerr_(__global_state, "SPICE(BUFFERTOOSMALL)", (
+				ftnlen)21);
+			chkout_(__global_state, "ZZDSKBUX", (ftnlen)8);
 			return 0;
 		    }
 		    ++nhit;
 		    sghit[(i__2 = nhit - 1) < 1000 && 0 <= i__2 ? i__2 : 
-			    s_rnge("sghit", i__2, "zzdskbux_", (ftnlen)649)] =
-			     i__;
+			    s_rnge(&__global_state->f2c, "sghit", i__2, "zzd"
+			    "skbux_", (ftnlen)649)] = i__;
 		    sgdist[(i__2 = nhit - 1) < 1000 && 0 <= i__2 ? i__2 : 
-			    s_rnge("sgdist", i__2, "zzdskbux_", (ftnlen)650)] 
-			    = vdist_(segvtx, xpt);
+			    s_rnge(&__global_state->f2c, "sgdist", i__2, 
+			    "zzdskbux_", (ftnlen)650)] = vdist_(
+			    __global_state, segvtx, xpt);
 
 /*                 Save the frame transformation for this segment. */
 
-		    moved_(xform, &__state->c__9, &sgxbuf[(i__2 = (nhit * 3 + 
-			    1) * 3 - 12) < 9000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "sgxbuf", i__2, "zzdskbux_", (ftnlen)654)]);
+		    moved_(__global_state, xform, &__state->c__9, &sgxbuf[(
+			    i__2 = (nhit * 3 + 1) * 3 - 12) < 9000 && 0 <= 
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "sgxb"
+			    "uf", i__2, "zzdskbux_", (ftnlen)654)]);
 		}
 	    }
 
@@ -1143,7 +1155,7 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*     Leave now if no segments were hit. */
 
     if (nhit == 0) {
-	chkout_("ZZDSKBUX", (ftnlen)8);
+	chkout_(__global_state, "ZZDSKBUX", (ftnlen)8);
 	return 0;
     }
 
@@ -1151,7 +1163,7 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*     the metric is the distance of the ray intercepts from */
 /*     the ray's vertex. */
 
-    orderd_(sgdist, &nhit, iorder);
+    orderd_(__global_state, sgdist, &nhit, iorder);
 
 /*     Now process the segments on the hit list in order. If we find a */
 /*     surface intercept (that is, a ray intercept with the surface */
@@ -1171,11 +1183,13 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*        we're considering. K is the index of that segment */
 /*        in the parallel input arrays. */
 
-	j = iorder[(i__1 = i__ - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge("ior"
-		"der", i__1, "zzdskbux_", (ftnlen)707)];
-	k = sghit[(i__1 = j - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge("sghit", 
-		i__1, "zzdskbux_", (ftnlen)708)];
-	segfid = i_dnnt(&dskbuf[k * 24 - 20]);
+	j = iorder[(i__1 = i__ - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "iorder", i__1, "zzdskbux_", (ftnlen)707)
+		];
+	k = sghit[(i__1 = j - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "sghit", i__1, "zzdskbux_", (ftnlen)708)]
+		;
+	segfid = i_dnnt(&__global_state->f2c, &dskbuf[k * 24 - 20]);
 	if (segfid != *fixfid) {
 	    if (segfid != prvfrm) {
 
@@ -1184,27 +1198,28 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*              Here J is an index in the hit list and K is */
 /*              an index in the input arrays. */
 
-		moved_(&sgxbuf[(i__1 = (j * 3 + 1) * 3 - 12) < 9000 && 0 <= 
-			i__1 ? i__1 : s_rnge("sgxbuf", i__1, "zzdskbux_", (
+		moved_(__global_state, &sgxbuf[(i__1 = (j * 3 + 1) * 3 - 12) <
+			 9000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "sgxbuf", i__1, "zzdskbux_", (
 			ftnlen)722)], &__state->c__9, xform);
-		mxv_(xform, vertex, segvtx);
-		mxv_(xform, raydir, segdir);
-		vsub_(segvtx, &offbuf[k * 3 - 3], vtemp);
-		vequ_(vtemp, segvtx);
+		mxv_(__global_state, xform, vertex, segvtx);
+		mxv_(__global_state, xform, raydir, segdir);
+		vsub_(__global_state, segvtx, &offbuf[k * 3 - 3], vtemp);
+		vequ_(__global_state, vtemp, segvtx);
 	    }
 	} else if (multfr) {
-	    vequ_(vertex, segvtx);
-	    vequ_(raydir, segdir);
+	    vequ_(__global_state, vertex, segvtx);
+	    vequ_(__global_state, raydir, segdir);
 	}
 
 /*        Find the surface intercept using the segment topography */
 /*        data. */
 
-	dtype = i_dnnt(&dskbuf[k * 24 - 21]);
-	zzdsksgx_(&hanbuf[k - 1], &dlabuf[(k << 3) - 8], &dtype, et, segvtx, 
-		segdir, srfx, dc, ic, &xfnd);
-	if (failed_()) {
-	    chkout_("ZZDSKBUX", (ftnlen)8);
+	dtype = i_dnnt(&__global_state->f2c, &dskbuf[k * 24 - 21]);
+	zzdsksgx_(__global_state, &hanbuf[k - 1], &dlabuf[(k << 3) - 8], &
+		dtype, et, segvtx, segdir, srfx, dc, ic, &xfnd);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDSKBUX", (ftnlen)8);
 	    return 0;
 	}
 	if (xfnd) {
@@ -1220,8 +1235,8 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*              for this segment. */
 
 		*found = TRUE_;
-		dmin__ = vdist_(srfx, segvtx);
-		vequ_(srfx, xpt);
+		dmin__ = vdist_(__global_state, srfx, segvtx);
+		vequ_(__global_state, srfx, xpt);
 		winner = j;
 	    } else {
 
@@ -1230,14 +1245,14 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*              Compare the vertex-intercept distance for this segment */
 /*              to the best found so far. */
 
-		dist = vdist_(srfx, segvtx);
+		dist = vdist_(__global_state, srfx, segvtx);
 		if (dist < dmin__) {
 
 /*                 This intercept is closer to the ray's vertex than */
 /*                 any we've seen yet. We have a new winner. */
 
 		    dmin__ = dist;
-		    vequ_(srfx, xpt);
+		    vequ_(__global_state, srfx, xpt);
 		    winner = j;
 		}
 	    }
@@ -1254,11 +1269,12 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*              checked to the vertex-boundary distance of the next */
 /*              segment. */
 
-		j = iorder[(i__1 = i__) < 1000 && 0 <= i__1 ? i__1 : s_rnge(
-			"iorder", i__1, "zzdskbux_", (ftnlen)813)];
+		j = iorder[(i__1 = i__) < 1000 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "iorder", i__1, "zzdskbux_", (
+			ftnlen)813)];
 		if (dmin__ <= sgdist[(i__1 = j - 1) < 1000 && 0 <= i__1 ? 
-			i__1 : s_rnge("sgdist", i__1, "zzdskbux_", (ftnlen)
-			815)]) {
+			i__1 : s_rnge(&__global_state->f2c, "sgdist", i__1, 
+			"zzdskbux_", (ftnlen)815)]) {
 
 /*                 The best intercept we've found is closer to the */
 /*                 vertex than any intercept that may exist in the */
@@ -1294,10 +1310,11 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*        K is the index in the input arrays of the "winning" segment. */
 /*        We'll return this index as SEGIDX. */
 
-	k = sghit[(i__1 = winner - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge(
-		"sghit", i__1, "zzdskbux_", (ftnlen)861)];
+	k = sghit[(i__1 = winner - 1) < 1000 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "sghit", i__1, "zzdskbux_", (ftnlen)861)]
+		;
 	*segidx = k;
-	segfid = i_dnnt(&dskbuf[k * 24 - 20]);
+	segfid = i_dnnt(&__global_state->f2c, &dskbuf[k * 24 - 20]);
 	if (segfid != *fixfid) {
 
 /*           The segment frame and input frame differ. The intercept */
@@ -1307,25 +1324,26 @@ static zzdskbux_state_t* get_zzdskbux_state() {
 /*           done before the frame transformation, since the offset */
 /*           is expressed relative to the segment's frame. */
 
-	    if (! vzero_(&offbuf[k * 3 - 3])) {
+	    if (! vzero_(__global_state, &offbuf[k * 3 - 3])) {
 
 /*              OFFBUF(*,K) contains the offset of the segment frame */
 /*              center from the segment's central body. */
 
-		vadd_(xpt, &offbuf[k * 3 - 3], vtemp);
-		vequ_(vtemp, xpt);
+		vadd_(__global_state, xpt, &offbuf[k * 3 - 3], vtemp);
+		vequ_(__global_state, vtemp, xpt);
 	    }
-	    moved_(&sgxbuf[(i__1 = (winner * 3 + 1) * 3 - 12) < 9000 && 0 <= 
-		    i__1 ? i__1 : s_rnge("sgxbuf", i__1, "zzdskbux_", (ftnlen)
-		    885)], &__state->c__9, xform);
-	    mtxv_(xform, xpt, vtemp);
-	    vequ_(vtemp, xpt);
+	    moved_(__global_state, &sgxbuf[(i__1 = (winner * 3 + 1) * 3 - 12) 
+		    < 9000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "sgxbuf", i__1, "zzdskbux_", (ftnlen)885)], &
+		    __state->c__9, xform);
+	    mtxv_(__global_state, xform, xpt, vtemp);
+	    vequ_(__global_state, vtemp, xpt);
 	}
     }
 
 /*     FOUND and XPT are set. */
 
-    chkout_("ZZDSKBUX", (ftnlen)8);
+    chkout_(__global_state, "ZZDSKBUX", (ftnlen)8);
     return 0;
 } /* zzdskbux_ */
 

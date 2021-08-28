@@ -167,7 +167,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ektnam_c" );
+   chkin_c ( naif_state, "ektnam_c" );
 
 
    /*

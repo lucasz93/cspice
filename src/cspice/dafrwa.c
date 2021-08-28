@@ -8,25 +8,24 @@
 
 
 typedef int dafrwa_state_t;
-static dafrwa_state_t* get_dafrwa_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafrwa_state_t* get_dafrwa_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DAFRWA ( DAF, record/word to address ) */
-/* Subroutine */ int dafrwa_0_(int n__, integer *recno, integer *wordno, 
-	integer *addr__)
+/* Subroutine */ int dafrwa_0_(cspice_t* __global_state, int n__, integer *
+	recno, integer *wordno, integer *addr__)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dafrwa_state_t* __state = get_dafrwa_state();
+    dafrwa_state_t* __state = get_dafrwa_state(__global_state);
 /* $ Abstract */
 
 /*     Convert a record/word pair to its equivalent address within */
@@ -154,15 +153,16 @@ static dafrwa_state_t* get_dafrwa_state() {
 	case 1: goto L_dafarw;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else if (*recno <= 0 || *wordno <= 0) {
-	chkin_("DAFRWA", (ftnlen)6);
-	setmsg_("No address for record #, word #.", (ftnlen)32);
-	errint_("#", recno, (ftnlen)1);
-	errint_("#", wordno, (ftnlen)1);
-	sigerr_("SPICE(DAFNOSUCHADDR)", (ftnlen)20);
-	chkout_("DAFRWA", (ftnlen)6);
+	chkin_(__global_state, "DAFRWA", (ftnlen)6);
+	setmsg_(__global_state, "No address for record #, word #.", (ftnlen)
+		32);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	errint_(__global_state, "#", wordno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNOSUCHADDR)", (ftnlen)20);
+	chkout_(__global_state, "DAFRWA", (ftnlen)6);
 	return 0;
     }
 
@@ -299,14 +299,14 @@ L_dafarw:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else if (*addr__ <= 0) {
-	chkin_("DAFARW", (ftnlen)6);
-	setmsg_("No record, word for address #.", (ftnlen)30);
-	errint_("#", addr__, (ftnlen)1);
-	sigerr_("SPICE(DAFNOSUCHADDR)", (ftnlen)20);
-	chkout_("DAFARW", (ftnlen)6);
+	chkin_(__global_state, "DAFARW", (ftnlen)6);
+	setmsg_(__global_state, "No record, word for address #.", (ftnlen)30);
+	errint_(__global_state, "#", addr__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNOSUCHADDR)", (ftnlen)20);
+	chkout_(__global_state, "DAFARW", (ftnlen)6);
 	return 0;
     }
 
@@ -317,12 +317,14 @@ L_dafarw:
     return 0;
 } /* dafrwa_ */
 
-/* Subroutine */ int dafrwa_(integer *recno, integer *wordno, integer *addr__)
+/* Subroutine */ int dafrwa_(cspice_t* __global_state, integer *recno, 
+	integer *wordno, integer *addr__)
 {
     return dafrwa_0_(0, recno, wordno, addr__);
     }
 
-/* Subroutine */ int dafarw_(integer *addr__, integer *recno, integer *wordno)
+/* Subroutine */ int dafarw_(cspice_t* __global_state, integer *addr__, 
+	integer *recno, integer *wordno)
 {
     return dafrwa_0_(1, recno, wordno, addr__);
     }

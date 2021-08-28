@@ -8,8 +8,7 @@
 
 
 extern cke05_init_t __cke05_init;
-static cke05_state_t* get_cke05_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cke05_state_t* get_cke05_state(cspice_t* state) {
 	if (!state->cke05)
 		state->cke05 = __cspice_allocate_module(sizeof(cke05_state_t),
 	 &__cke05_init, sizeof(__cke05_init));
@@ -18,68 +17,79 @@ static cke05_state_t* get_cke05_state() {
 }
 
 /* $Procedure      CKE05 ( C-Kernel, evaluate, type 5 ) */
-/* Subroutine */ int cke05_(logical *needav, doublereal *record, doublereal *
-	cmat, doublereal *av, doublereal *clkout)
+/* Subroutine */ int cke05_(cspice_t* __global_state, logical *needav, 
+	doublereal *record, doublereal *cmat, doublereal *av, doublereal *
+	clkout)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     doublereal mags;
     doublereal qneg[4];
     doublereal rate;
     integer from;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal work[1360]	/* was [680][2] */;
     integer i__;
     integer j;
     integer n;
     doublereal q[4];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal vbuff[6];
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int vhatg_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vsclg_(doublereal *, doublereal *, integer *, 
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
+    extern /* Subroutine */ int vhatg_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vsclg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
     doublereal state[8];
-    extern doublereal vdotg_(doublereal *, doublereal *, integer *);
-    extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int qdq2av_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern doublereal vdotg_(cspice_t*, doublereal *, doublereal *, integer *)
+	    ;
+    extern /* Subroutine */ int vsubg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int qdq2av_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal dq[4];
     doublereal ds[4];
     integer ub;
     integer to;
     doublereal locrec[340];
     doublereal sclddq[4];
-    extern /* Subroutine */ int lgrind_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int lgrind_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal sclkdp;
     doublereal radtrm[4];
     integer packsz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern doublereal lgrint_(integer *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern doublereal vdistg_(doublereal *, doublereal *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int vminug_(doublereal *, integer *, doublereal *)
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern doublereal lgrint_(cspice_t*, integer *, doublereal *, doublereal *
+	    , doublereal *, doublereal *);
+    extern doublereal vdistg_(cspice_t*, doublereal *, doublereal *, integer *
+	    );
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int vminug_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
 	    ;
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int hrmint_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *);
-    extern doublereal vnormg_(doublereal *, integer *);
-    extern /* Subroutine */ int xpsgip_(integer *, integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int hrmint_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnormg_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int xpsgip_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern logical return_(cspice_t*);
     integer newptr;
-    extern /* Subroutine */ int q2m_(doublereal *, doublereal *);
+    extern /* Subroutine */ int q2m_(cspice_t*, doublereal *, doublereal *);
     integer xstart;
     integer subtyp;
     integer ystart;
@@ -87,7 +97,7 @@ static cke05_state_t* get_cke05_state() {
 
 
     /* Module state */
-    cke05_state_t* __state = get_cke05_state();
+    cke05_state_t* __state = get_cke05_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single data record from a type 5 CK segment. */
@@ -770,15 +780,15 @@ static cke05_state_t* get_cke05_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKE05", (ftnlen)5);
+    chkin_(__global_state, "CKE05", (ftnlen)5);
 
 /*     Capture the subtype from the record and set the packet size */
 /*     accordingly. */
 
-    subtyp = i_dnnt(&record[1]);
+    subtyp = i_dnnt(&__global_state->f2c, &record[1]);
     if (subtyp == 0) {
 	packsz = 8;
     } else if (subtyp == 1) {
@@ -788,17 +798,17 @@ static cke05_state_t* get_cke05_state() {
     } else if (subtyp == 3) {
 	packsz = 7;
     } else {
-	setmsg_("Unexpected CK type 5 subtype # found in type 5 segment.", (
-		ftnlen)55);
-	errint_("#", &subtyp, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("CKE05", (ftnlen)5);
+	setmsg_(__global_state, "Unexpected CK type 5 subtype # found in typ"
+		"e 5 segment.", (ftnlen)55);
+	errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "CKE05", (ftnlen)5);
 	return 0;
     }
 
 /*     Get the packet count and epoch. */
 
-    n = i_dnnt(&record[2]);
+    n = i_dnnt(&__global_state->f2c, &record[2]);
     sclkdp = record[0];
 
 /*     Get the nominal clock rate. */
@@ -826,15 +836,17 @@ static cke05_state_t* get_cke05_state() {
 /*           pointed to by PRVPTR. */
 
 	    newptr = packsz * (i__ - 1) + 5;
-	    vminug_(&record[newptr - 1], &__state->c__4, qneg);
+	    vminug_(__global_state, &record[newptr - 1], &__state->c__4, qneg)
+		    ;
 
 /*           Replace the Ith quaternion with QNEG if QNEG is closer */
 /*           than the current quaternion to the previous quaternion. */
 
-	    if (vdistg_(&record[prvptr - 1], qneg, &__state->c__4) < vdistg_(&
-		    record[prvptr - 1], &record[newptr - 1], &__state->c__4)) 
-		    {
-		moved_(qneg, &__state->c__4, &record[newptr - 1]);
+	    if (vdistg_(__global_state, &record[prvptr - 1], qneg, &
+		    __state->c__4) < vdistg_(__global_state, &record[prvptr - 
+		    1], &record[newptr - 1], &__state->c__4)) {
+		moved_(__global_state, qneg, &__state->c__4, &record[newptr - 
+			1]);
 	    }
 	    prvptr = newptr;
 	}
@@ -854,33 +866,34 @@ static cke05_state_t* get_cke05_state() {
 /*           pointed to by PRVPTR. */
 
 	    newptr = packsz * (i__ - 1) + 5;
-	    vminug_(&record[newptr - 1], &__state->c__4, qneg);
+	    vminug_(__global_state, &record[newptr - 1], &__state->c__4, qneg)
+		    ;
 
 /*           Replace the Ith quaternion with QNEG if QNEG is closer */
 /*           than the current quaternion to the previous quaternion. */
 
-	    if (vdistg_(&record[prvptr - 1], qneg, &__state->c__4) < vdistg_(&
-		    record[prvptr - 1], &record[newptr - 1], &__state->c__4)) 
-		    {
-		setmsg_("Quaternion sign error: quaternion at index # in the"
-			" input record is farther than its negative from the "
-			"preceding quaternion in the record. Quaternion is (#"
-			", #, #, #); predecessor is (#, #, #, #). This makes "
-			"the quaternion sequence unsuitable for Hermite inter"
-			"polation. The quaternions, and if applicable, their "
-			"derivatives, must be adjusted before they are passed"
-			" to this routine.", (ftnlen)380);
-		errint_("#", &i__, (ftnlen)1);
-		errdp_("#", &record[newptr - 1], (ftnlen)1);
-		errdp_("#", &record[newptr], (ftnlen)1);
-		errdp_("#", &record[newptr + 1], (ftnlen)1);
-		errdp_("#", &record[newptr + 2], (ftnlen)1);
-		errdp_("#", &record[prvptr - 1], (ftnlen)1);
-		errdp_("#", &record[prvptr], (ftnlen)1);
-		errdp_("#", &record[prvptr + 1], (ftnlen)1);
-		errdp_("#", &record[prvptr + 2], (ftnlen)1);
-		sigerr_("SPICE(BADQUATSIGN)", (ftnlen)18);
-		chkout_("CKE05", (ftnlen)5);
+	    if (vdistg_(__global_state, &record[prvptr - 1], qneg, &
+		    __state->c__4) < vdistg_(__global_state, &record[prvptr - 
+		    1], &record[newptr - 1], &__state->c__4)) {
+		setmsg_(__global_state, "Quaternion sign error: quaternion a"
+			"t index # in the input record is farther than its ne"
+			"gative from the preceding quaternion in the record. "
+			"Quaternion is (#, #, #, #); predecessor is (#, #, #,"
+			" #). This makes the quaternion sequence unsuitable f"
+			"or Hermite interpolation. The quaternions, and if ap"
+			"plicable, their derivatives, must be adjusted before"
+			" they are passed to this routine.", (ftnlen)380);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errdp_(__global_state, "#", &record[newptr - 1], (ftnlen)1);
+		errdp_(__global_state, "#", &record[newptr], (ftnlen)1);
+		errdp_(__global_state, "#", &record[newptr + 1], (ftnlen)1);
+		errdp_(__global_state, "#", &record[newptr + 2], (ftnlen)1);
+		errdp_(__global_state, "#", &record[prvptr - 1], (ftnlen)1);
+		errdp_(__global_state, "#", &record[prvptr], (ftnlen)1);
+		errdp_(__global_state, "#", &record[prvptr + 1], (ftnlen)1);
+		errdp_(__global_state, "#", &record[prvptr + 2], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADQUATSIGN)", (ftnlen)18);
+		chkout_(__global_state, "CKE05", (ftnlen)5);
 		return 0;
 	    }
 	    prvptr = newptr;
@@ -900,8 +913,8 @@ static cke05_state_t* get_cke05_state() {
 /*        storage and does no harm.  (See the header of LGRINT for a */
 /*        description of its work space usage.) */
 
-	n = i_dnnt(&record[2]);
-	xpsgip_(&packsz, &n, &record[4]);
+	n = i_dnnt(&__global_state->f2c, &record[2]);
+	xpsgip_(__global_state, &packsz, &n, &record[4]);
 
 /*        We interpolate each state component in turn. */
 
@@ -909,26 +922,28 @@ static cke05_state_t* get_cke05_state() {
 	i__1 = packsz;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ystart = n * (i__ - 1) + 5;
-	    lgrind_(&n, &record[xstart - 1], &record[ystart - 1], work, &
-		    sclkdp, &state[(i__2 = i__ - 1) < 8 && 0 <= i__2 ? i__2 : 
-		    s_rnge("state", i__2, "cke05_", (ftnlen)657)], &state[(
-		    i__3 = i__ + 3) < 8 && 0 <= i__3 ? i__3 : s_rnge("state", 
+	    lgrind_(__global_state, &n, &record[xstart - 1], &record[ystart - 
+		    1], work, &sclkdp, &state[(i__2 = i__ - 1) < 8 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "state", i__2, 
+		    "cke05_", (ftnlen)657)], &state[(i__3 = i__ + 3) < 8 && 0 
+		    <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "state", 
 		    i__3, "cke05_", (ftnlen)657)]);
 	}
 
 /*        The output quaternion is a unitized version of the */
 /*        interpolated state. */
 
-	mags = vnormg_(state, &__state->c__4);
+	mags = vnormg_(__global_state, state, &__state->c__4);
 	if (mags == 0.) {
-	    setmsg_("Quaternion magnitude at SCLK # was zero.", (ftnlen)40);
-	    errdp_("#", &sclkdp, (ftnlen)1);
-	    sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-	    chkout_("CKE05", (ftnlen)5);
+	    setmsg_(__global_state, "Quaternion magnitude at SCLK # was zero."
+		    , (ftnlen)40);
+	    errdp_(__global_state, "#", &sclkdp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DIVIDEBYZERO)", (ftnlen)19);
+	    chkout_(__global_state, "CKE05", (ftnlen)5);
 	    return 0;
 	}
 	d__1 = 1. / mags;
-	vsclg_(&d__1, state, &__state->c__4, q);
+	vsclg_(__global_state, &d__1, state, &__state->c__4, q);
 	if (*needav) {
 
 /*           Find the time derivative of the unit quaternion: */
@@ -947,21 +962,21 @@ static cke05_state_t* get_cke05_state() {
 /*                          ||S||            ||S|| */
 
 
-	    moved_(&state[4], &__state->c__4, ds);
+	    moved_(__global_state, &state[4], &__state->c__4, ds);
 	    d__1 = 1. / mags;
-	    vsclg_(&d__1, ds, &__state->c__4, sclddq);
-	    d__1 = vdotg_(q, ds, &__state->c__4) / mags;
-	    vsclg_(&d__1, q, &__state->c__4, radtrm);
-	    vsubg_(sclddq, radtrm, &__state->c__4, dq);
+	    vsclg_(__global_state, &d__1, ds, &__state->c__4, sclddq);
+	    d__1 = vdotg_(__global_state, q, ds, &__state->c__4) / mags;
+	    vsclg_(__global_state, &d__1, q, &__state->c__4, radtrm);
+	    vsubg_(__global_state, sclddq, radtrm, &__state->c__4, dq);
 
 /*           Derive angular velocity from Q and dQ/dt: */
 
-	    qdq2av_(q, dq, av);
+	    qdq2av_(__global_state, q, dq, av);
 
 /*           Scale the AV from radians/tick to radians/second. */
 
 	    d__1 = 1. / rate;
-	    vsclip_(&d__1, av);
+	    vsclip_(__global_state, &d__1, av);
 	}
 
 /*        Q and if required AV have been assigned. */
@@ -978,8 +993,8 @@ static cke05_state_t* get_cke05_state() {
 /*        storage and does no harm.  (See the header of LGRINT for a */
 /*        description of its work space usage.) */
 
-	n = i_dnnt(&record[2]);
-	xpsgip_(&packsz, &n, &record[4]);
+	n = i_dnnt(&__global_state->f2c, &record[2]);
+	xpsgip_(__global_state, &packsz, &n, &record[4]);
 
 /*        We interpolate each state component in turn. */
 
@@ -992,20 +1007,21 @@ static cke05_state_t* get_cke05_state() {
 	i__1 = ub;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ystart = n * (i__ - 1) + 5;
-	    state[(i__2 = i__ - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge("state", 
-		    i__2, "cke05_", (ftnlen)759)] = lgrint_(&n, &record[
-		    xstart - 1], &record[ystart - 1], locrec, &sclkdp);
+	    state[(i__2 = i__ - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "state", i__2, "cke05_", (ftnlen)759)
+		    ] = lgrint_(__global_state, &n, &record[xstart - 1], &
+		    record[ystart - 1], locrec, &sclkdp);
 	}
 
 /*        The output quaternion is a unitized version of the */
 /*        interpolated state. */
 
-	vhatg_(state, &__state->c__4, q);
+	vhatg_(__global_state, state, &__state->c__4, q);
 	if (*needav) {
 
 /*           The angular velocity already is in units of radians/second. */
 
-	    vequ_(&state[4], av);
+	    vequ_(__global_state, &state[4], av);
 	}
 
 /*        Q and if required AV have been assigned. */
@@ -1034,37 +1050,39 @@ static cke05_state_t* get_cke05_state() {
 
 		from = packsz * (j - 1) + 4 + i__;
 		to = (j << 1) - 1;
-		locrec[(i__2 = to - 1) < 340 && 0 <= i__2 ? i__2 : s_rnge(
-			"locrec", i__2, "cke05_", (ftnlen)811)] = record[from 
-			- 1];
-		locrec[(i__2 = to) < 340 && 0 <= i__2 ? i__2 : s_rnge("locrec"
-			, i__2, "cke05_", (ftnlen)812)] = record[from + 3] * 
-			rate;
+		locrec[(i__2 = to - 1) < 340 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "locrec", i__2, "cke05_", (
+			ftnlen)811)] = record[from - 1];
+		locrec[(i__2 = to) < 340 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "locrec", i__2, "cke05_", (
+			ftnlen)812)] = record[from + 3] * rate;
 	    }
 
 /*           Interpolate the Ith quaternion and quaternion derivative */
 /*           components. */
 
-	    hrmint_(&n, &record[xstart - 1], locrec, &sclkdp, work, &state[(
-		    i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("state", 
-		    i__1, "cke05_", (ftnlen)820)], &state[(i__2 = i__ + 3) < 
-		    8 && 0 <= i__2 ? i__2 : s_rnge("state", i__2, "cke05_", (
-		    ftnlen)820)]);
+	    hrmint_(__global_state, &n, &record[xstart - 1], locrec, &sclkdp, 
+		    work, &state[(i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : 
+		    s_rnge(&__global_state->f2c, "state", i__1, "cke05_", (
+		    ftnlen)820)], &state[(i__2 = i__ + 3) < 8 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "state", i__2, "cke0"
+		    "5_", (ftnlen)820)]);
 	}
 
 /*        The output quaternion is a unitized version of the */
 /*        interpolated state. */
 
-	mags = vnormg_(state, &__state->c__4);
+	mags = vnormg_(__global_state, state, &__state->c__4);
 	if (mags == 0.) {
-	    setmsg_("Quaternion magnitude at SCLK # was zero.", (ftnlen)40);
-	    errdp_("#", &sclkdp, (ftnlen)1);
-	    sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-	    chkout_("CKE05", (ftnlen)5);
+	    setmsg_(__global_state, "Quaternion magnitude at SCLK # was zero."
+		    , (ftnlen)40);
+	    errdp_(__global_state, "#", &sclkdp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DIVIDEBYZERO)", (ftnlen)19);
+	    chkout_(__global_state, "CKE05", (ftnlen)5);
 	    return 0;
 	}
 	d__1 = 1. / mags;
-	vsclg_(&d__1, state, &__state->c__4, q);
+	vsclg_(__global_state, &d__1, state, &__state->c__4, q);
 	if (*needav) {
 	    if (subtyp == 0) {
 
@@ -1084,21 +1102,21 @@ static cke05_state_t* get_cke05_state() {
 /*                             ||S||            ||S|| */
 
 
-		moved_(&state[4], &__state->c__4, ds);
+		moved_(__global_state, &state[4], &__state->c__4, ds);
 		d__1 = 1. / mags;
-		vsclg_(&d__1, ds, &__state->c__4, sclddq);
-		d__1 = vdotg_(q, ds, &__state->c__4) / mags;
-		vsclg_(&d__1, q, &__state->c__4, radtrm);
-		vsubg_(sclddq, radtrm, &__state->c__4, dq);
+		vsclg_(__global_state, &d__1, ds, &__state->c__4, sclddq);
+		d__1 = vdotg_(__global_state, q, ds, &__state->c__4) / mags;
+		vsclg_(__global_state, &d__1, q, &__state->c__4, radtrm);
+		vsubg_(__global_state, sclddq, radtrm, &__state->c__4, dq);
 
 /*              Derive angular velocity from Q and dQ/dt: */
 
-		qdq2av_(q, dq, av);
+		qdq2av_(__global_state, q, dq, av);
 
 /*              Scale the AV from radians/tick to radians/second. */
 
 		d__1 = 1. / rate;
-		vsclip_(&d__1, av);
+		vsclip_(__global_state, &d__1, av);
 	    } else {
 
 /*              This is subtype 2; we perform Hermite interpolation on */
@@ -1121,11 +1139,11 @@ static cke05_state_t* get_cke05_state() {
 			from = packsz * (j - 1) + 12 + i__;
 			to = (j << 1) - 1;
 			locrec[(i__2 = to - 1) < 340 && 0 <= i__2 ? i__2 : 
-				s_rnge("locrec", i__2, "cke05_", (ftnlen)907)]
-				 = record[from - 1];
+				s_rnge(&__global_state->f2c, "locrec", i__2, 
+				"cke05_", (ftnlen)907)] = record[from - 1];
 			locrec[(i__2 = to) < 340 && 0 <= i__2 ? i__2 : s_rnge(
-				"locrec", i__2, "cke05_", (ftnlen)908)] = 
-				record[from + 2] * rate;
+				&__global_state->f2c, "locrec", i__2, "cke05_"
+				, (ftnlen)908)] = record[from + 2] * rate;
 		    }
 
 /*                 Interpolate the Ith angular velocity and angular */
@@ -1133,11 +1151,13 @@ static cke05_state_t* get_cke05_state() {
 /*                 capture the result in a temporary buffer, then */
 /*                 transfer the velocity to the output argument AV. */
 
-		    hrmint_(&n, &record[xstart - 1], locrec, &sclkdp, work, &
-			    vbuff[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("vbuff", i__1, "cke05_", (ftnlen)918)], &
-			    vbuff[(i__2 = i__ + 2) < 6 && 0 <= i__2 ? i__2 : 
-			    s_rnge("vbuff", i__2, "cke05_", (ftnlen)918)]);
+		    hrmint_(__global_state, &n, &record[xstart - 1], locrec, &
+			    sclkdp, work, &vbuff[(i__1 = i__ - 1) < 6 && 0 <= 
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "vbuff"
+			    , i__1, "cke05_", (ftnlen)918)], &vbuff[(i__2 = 
+			    i__ + 2) < 6 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "vbuff", i__2, "cke05_", (
+			    ftnlen)918)]);
 		}
 
 /*              Fill in the angular velocity in the output angular */
@@ -1147,7 +1167,7 @@ static cke05_state_t* get_cke05_state() {
 /*              The angular velocity is already in units of */
 /*              radians/second. */
 
-		vequ_(vbuff, av);
+		vequ_(__global_state, vbuff, av);
 	    }
 
 /*           We've handled the type 0 and type 2 cases. */
@@ -1164,9 +1184,9 @@ static cke05_state_t* get_cke05_state() {
 
 /*     Produce a C-matrix from the interpolated quaternion. Set CLKOUT. */
 
-    q2m_(q, cmat);
+    q2m_(__global_state, q, cmat);
     *clkout = record[0];
-    chkout_("CKE05", (ftnlen)5);
+    chkout_(__global_state, "CKE05", (ftnlen)5);
     return 0;
 } /* cke05_ */
 

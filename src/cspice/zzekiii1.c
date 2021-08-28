@@ -8,43 +8,44 @@
 
 
 typedef int zzekiii1_state_t;
-static zzekiii1_state_t* get_zzekiii1_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekiii1_state_t* get_zzekiii1_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZEKIII1 ( EK, insert into index, integer, type 1 ) */
-/* Subroutine */ int zzekiii1_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *ikey, integer *recptr, logical *null)
+/* Subroutine */ int zzekiii1_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *ikey, integer *recptr, 
+	logical *null)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer tree;
-    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
+    extern /* Subroutine */ int zzekcnam_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int zzekleri_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, logical *, integer *, integer *);
+    extern /* Subroutine */ int zzektrin_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzekleri_(integer *, integer *, integer *, 
-	    integer *, integer *, logical *, integer *, integer *);
-    extern /* Subroutine */ int zzektrin_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer dtype;
     integer itype;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     logical indexd;
     char column[32];
     integer prvidx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer prvptr;
 
 
     /* Module state */
-    zzekiii1_state_t* __state = get_zzekiii1_state();
+    zzekiii1_state_t* __state = get_zzekiii1_state(__global_state);
 /* $ Abstract */
 
 /*     Insert into a type 1 EK index a record pointer associated with an */
@@ -623,7 +624,7 @@ static zzekiii1_state_t* get_zzekiii1_state() {
 
 /*     Use discovery check-in. */
 
-    if (failed_()) {
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -631,12 +632,12 @@ static zzekiii1_state_t* get_zzekiii1_state() {
 
     indexd = coldsc[5] != -1;
     if (! indexd) {
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	chkin_("ZZEKIII1", (ftnlen)8);
-	setmsg_("Column # is not indexed.", (ftnlen)24);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	sigerr_("SPICE(NOTINDEXED)", (ftnlen)17);
-	chkout_("ZZEKIII1", (ftnlen)8);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	chkin_(__global_state, "ZZEKIII1", (ftnlen)8);
+	setmsg_(__global_state, "Column # is not indexed.", (ftnlen)24);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	sigerr_(__global_state, "SPICE(NOTINDEXED)", (ftnlen)17);
+	chkout_(__global_state, "ZZEKIII1", (ftnlen)8);
 	return 0;
     }
 
@@ -644,13 +645,14 @@ static zzekiii1_state_t* get_zzekiii1_state() {
 
     dtype = coldsc[1];
     if (dtype != 3) {
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	chkin_("ZZEKIII1", (ftnlen)8);
-	setmsg_("Column # should be INT but has type #.", (ftnlen)38);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	errint_("#", &dtype, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("ZZEKIII1", (ftnlen)8);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	chkin_(__global_state, "ZZEKIII1", (ftnlen)8);
+	setmsg_(__global_state, "Column # should be INT but has type #.", (
+		ftnlen)38);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", &dtype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKIII1", (ftnlen)8);
 	return 0;
     }
     itype = coldsc[5];
@@ -662,21 +664,21 @@ static zzekiii1_state_t* get_zzekiii1_state() {
 
 /*        Locate the predecessor of the input key, record pointer pair. */
 
-	zzekleri_(handle, segdsc, coldsc, ikey, recptr, null, &prvidx, &
-		prvptr);
+	zzekleri_(__global_state, handle, segdsc, coldsc, ikey, recptr, null, 
+		&prvidx, &prvptr);
 
 /*        Insert the new record pointer right after the item we've found. */
 
 	i__1 = prvidx + 1;
-	zzektrin_(handle, &tree, &i__1, recptr);
+	zzektrin_(__global_state, handle, &tree, &i__1, recptr);
     } else {
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	chkin_("ZZEKIII1", (ftnlen)8);
-	setmsg_("Column # has index type #.", (ftnlen)26);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	errint_("#", &itype, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("ZZEKIII1", (ftnlen)8);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	chkin_(__global_state, "ZZEKIII1", (ftnlen)8);
+	setmsg_(__global_state, "Column # has index type #.", (ftnlen)26);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", &itype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKIII1", (ftnlen)8);
 	return 0;
     }
     return 0;

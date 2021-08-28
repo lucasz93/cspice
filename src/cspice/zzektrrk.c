@@ -8,8 +8,7 @@
 
 
 extern zzektrrk_init_t __zzektrrk_init;
-static zzektrrk_state_t* get_zzektrrk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrrk_state_t* get_zzektrrk_state(cspice_t* state) {
 	if (!state->zzektrrk)
 		state->zzektrrk = __cspice_allocate_module(sizeof(
 	zzektrrk_state_t), &__zzektrrk_init, sizeof(__zzektrrk_init));
@@ -18,36 +17,40 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 }
 
 /* $Procedure      ZZEKTRRK ( EK tree, rotate keys ) */
-/* Subroutine */ int zzektrrk_(integer *handle, integer *tree, integer *left, 
-	integer *right, integer *parent, integer *pkidx, integer *nrot)
+/* Subroutine */ int zzektrrk_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *left, integer *right, integer *parent, 
+	integer *pkidx, integer *nrot)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer dpar;
     integer lsib;
     integer rsib;
     integer root;
-    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgri_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgwi_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer i__;
     integer lpage[256];
     integer ppage[256];
     integer rpage[256];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern logical failed_(cspice_t*);
     integer datbas;
     integer kidbas;
     integer remain;
     integer keybas;
     integer dshift;
     integer schlep;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer drotat;
     integer futrpk;
     integer lnkeys;
@@ -55,13 +58,13 @@ static zzektrrk_state_t* get_zzektrrk_state() {
     integer nvopar;
     integer rnkeys;
     integer subsiz;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzektrrk_state_t* __state = get_zzektrrk_state();
+    zzektrrk_state_t* __state = get_zzektrrk_state(__global_state);
 /* $ Abstract */
 
 /*     Rotate a specified number of keys from one node, through */
@@ -568,19 +571,19 @@ static zzektrrk_state_t* get_zzektrrk_state() {
     }
     root = *tree;
     if (*left == root || *right == root) {
-	chkin_("ZZEKTRRK", (ftnlen)8);
-	setmsg_("Input node is root; only children are eligible for key rota"
-		"tion.", (ftnlen)64);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKTRRK", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRRK", (ftnlen)8);
+	setmsg_(__global_state, "Input node is root; only children are eligi"
+		"ble for key rotation.", (ftnlen)64);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKTRRK", (ftnlen)8);
     }
 
 /*     Read in the input nodes. */
 
-    zzekpgri_(handle, left, lpage);
-    zzekpgri_(handle, right, rpage);
-    zzekpgri_(handle, parent, ppage);
-    if (failed_()) {
+    zzekpgri_(__global_state, handle, left, lpage);
+    zzekpgri_(__global_state, handle, right, rpage);
+    zzekpgri_(__global_state, handle, parent, ppage);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -602,22 +605,23 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 /*     their common parent. */
 
     lsib = ppage[(i__1 = kidbas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ppage", i__1, "zzektrrk_", (ftnlen)276)];
-    rsib = ppage[(i__1 = kidbas + *pkidx) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektrrk_", (ftnlen)277)];
+	    s_rnge(&__global_state->f2c, "ppage", i__1, "zzektrrk_", (ftnlen)
+	    276)];
+    rsib = ppage[(i__1 = kidbas + *pkidx) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ppage", i__1, "zzektrrk_", (ftnlen)277)];
     if (lsib != *left || rsib != *right) {
-	chkin_("ZZEKTRRK", (ftnlen)8);
-	setmsg_("LEFT, RIGHT, PARENT, and PKIDX are inconsistent. LEFT = #; "
-		"RIGHT = #; PARENT = #; PKIDX = #; LSIB derived from PARENT ="
-		" #; RSIB = #.", (ftnlen)132);
-	errint_("#", left, (ftnlen)1);
-	errint_("#", right, (ftnlen)1);
-	errint_("#", parent, (ftnlen)1);
-	errint_("#", pkidx, (ftnlen)1);
-	errint_("#", &lsib, (ftnlen)1);
-	errint_("#", &rsib, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKTRRK", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRRK", (ftnlen)8);
+	setmsg_(__global_state, "LEFT, RIGHT, PARENT, and PKIDX are inconsis"
+		"tent. LEFT = #; RIGHT = #; PARENT = #; PKIDX = #; LSIB deriv"
+		"ed from PARENT = #; RSIB = #.", (ftnlen)132);
+	errint_(__global_state, "#", left, (ftnlen)1);
+	errint_(__global_state, "#", right, (ftnlen)1);
+	errint_(__global_state, "#", parent, (ftnlen)1);
+	errint_(__global_state, "#", pkidx, (ftnlen)1);
+	errint_(__global_state, "#", &lsib, (ftnlen)1);
+	errint_(__global_state, "#", &rsib, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKTRRK", (ftnlen)8);
 	return 0;
     }
 
@@ -632,37 +636,37 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 
     if (*nrot > 0) {
 	if (lnkeys - *nrot < 40 || rnkeys + *nrot > 63) {
-	    chkin_("ZZEKTRRK", (ftnlen)8);
-	    setmsg_("Node # and right sibling # contain # and # keys respect"
-		    "ively; rotation of # keys to the right will violate the "
-		    "key count bounds of #:#.", (ftnlen)135);
-	    errint_("#", left, (ftnlen)1);
-	    errint_("#", right, (ftnlen)1);
-	    errint_("#", &lnkeys, (ftnlen)1);
-	    errint_("#", &rnkeys, (ftnlen)1);
-	    errint_("#", nrot, (ftnlen)1);
-	    errint_("#", &__state->c__40, (ftnlen)1);
-	    errint_("#", &__state->c__63, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZEKTRRK", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKTRRK", (ftnlen)8);
+	    setmsg_(__global_state, "Node # and right sibling # contain # an"
+		    "d # keys respectively; rotation of # keys to the right w"
+		    "ill violate the key count bounds of #:#.", (ftnlen)135);
+	    errint_(__global_state, "#", left, (ftnlen)1);
+	    errint_(__global_state, "#", right, (ftnlen)1);
+	    errint_(__global_state, "#", &lnkeys, (ftnlen)1);
+	    errint_(__global_state, "#", &rnkeys, (ftnlen)1);
+	    errint_(__global_state, "#", nrot, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c__40, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c__63, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZEKTRRK", (ftnlen)8);
 	    return 0;
 	}
     } else if (*nrot < 0) {
 	if (lnkeys - *nrot > 63 || rnkeys + *nrot < 40) {
-	    chkin_("ZZEKTRRK", (ftnlen)8);
-	    setmsg_("Node # and right sibling # contain # and # keys respect"
-		    "ively; rotation of # keys to the left will violate the k"
-		    "ey count bounds of #:#.", (ftnlen)134);
-	    errint_("#", left, (ftnlen)1);
-	    errint_("#", right, (ftnlen)1);
-	    errint_("#", &lnkeys, (ftnlen)1);
-	    errint_("#", &rnkeys, (ftnlen)1);
+	    chkin_(__global_state, "ZZEKTRRK", (ftnlen)8);
+	    setmsg_(__global_state, "Node # and right sibling # contain # an"
+		    "d # keys respectively; rotation of # keys to the left wi"
+		    "ll violate the key count bounds of #:#.", (ftnlen)134);
+	    errint_(__global_state, "#", left, (ftnlen)1);
+	    errint_(__global_state, "#", right, (ftnlen)1);
+	    errint_(__global_state, "#", &lnkeys, (ftnlen)1);
+	    errint_(__global_state, "#", &rnkeys, (ftnlen)1);
 	    i__1 = -(*nrot);
-	    errint_("#", &i__1, (ftnlen)1);
-	    errint_("#", &__state->c__40, (ftnlen)1);
-	    errint_("#", &__state->c__63, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZEKTRRK", (ftnlen)8);
+	    errint_(__global_state, "#", &i__1, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c__40, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c__63, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZEKTRRK", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -672,13 +676,15 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 /*     difference of the parent key and its predecessor, if any. */
 
     if (*pkidx == 1) {
-	lnsize = ppage[(i__1 = keybas) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"ppage", i__1, "zzektrrk_", (ftnlen)364)] - 1;
+	lnsize = ppage[(i__1 = keybas) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "ppage", i__1, "zzektrrk_", (ftnlen)364)]
+		 - 1;
     } else {
 	lnsize = ppage[(i__1 = keybas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 
-		: s_rnge("ppage", i__1, "zzektrrk_", (ftnlen)366)] - ppage[(
-		i__2 = keybas + *pkidx - 2) < 256 && 0 <= i__2 ? i__2 : 
-		s_rnge("ppage", i__2, "zzektrrk_", (ftnlen)366)] - 1;
+		: s_rnge(&__global_state->f2c, "ppage", i__1, "zzektrrk_", (
+		ftnlen)366)] - ppage[(i__2 = keybas + *pkidx - 2) < 256 && 0 
+		<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ppage", i__2, 
+		"zzektrrk_", (ftnlen)366)] - 1;
     }
 
 /*     Now, the actions we take depend on whether we must schlep keys */
@@ -718,7 +724,8 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 /*        the successor of the subtree left behind. */
 
 	futrpk = lpage[(i__1 = remain + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"lpage", i__1, "zzektrrk_", (ftnlen)407)];
+		&__global_state->f2c, "lpage", i__1, "zzektrrk_", (ftnlen)407)
+		];
 	subsiz = lnsize - futrpk;
 
 /*        The rotated set of keys will no longer be preceded by the */
@@ -756,46 +763,53 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 
 	for (i__ = rnkeys; i__ >= 1; --i__) {
 	    rpage[(i__1 = i__ + 1 + schlep - 1) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rpage", i__1, "zzektrrk_", (ftnlen)449)] = rpage[(
-		    i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage", 
-		    i__2, "zzektrrk_", (ftnlen)449)] + dshift;
+		    s_rnge(&__global_state->f2c, "rpage", i__1, "zzektrrk_", (
+		    ftnlen)449)] = rpage[(i__2 = i__) < 256 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "rpage", i__2, "zzek"
+		    "trrk_", (ftnlen)449)] + dshift;
 	}
 	for (i__ = rnkeys; i__ >= 1; --i__) {
 	    rpage[(i__1 = i__ + 128 + schlep - 1) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rpage", i__1, "zzektrrk_", (ftnlen)453)] = rpage[(
-		    i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-		    "rpage", i__2, "zzektrrk_", (ftnlen)453)];
+		    s_rnge(&__global_state->f2c, "rpage", i__1, "zzektrrk_", (
+		    ftnlen)453)] = rpage[(i__2 = i__ + 127) < 256 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "rpage", i__2, 
+		    "zzektrrk_", (ftnlen)453)];
 	}
 	for (i__ = rnkeys + 1; i__ >= 1; --i__) {
 	    rpage[(i__1 = i__ + 64 + schlep - 1) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rpage", i__1, "zzektrrk_", (ftnlen)457)] = rpage[(
-		    i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpa"
-		    "ge", i__2, "zzektrrk_", (ftnlen)457)];
+		    s_rnge(&__global_state->f2c, "rpage", i__1, "zzektrrk_", (
+		    ftnlen)457)] = rpage[(i__2 = i__ + 63) < 256 && 0 <= i__2 
+		    ? i__2 : s_rnge(&__global_state->f2c, "rpage", i__2, 
+		    "zzektrrk_", (ftnlen)457)];
 	}
 
 /*        `Move' the old parent key to its target destination in the */
 /*        sibling.  Actually, only the data pointer is copied; the key */
 /*        is simply set to its new value. */
 
-	rpage[(i__1 = schlep) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage", 
-		i__1, "zzektrrk_", (ftnlen)465)] = nvopar;
-	rpage[(i__1 = schlep + 127) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage"
-		, i__1, "zzektrrk_", (ftnlen)466)] = ppage[(i__2 = datbas + *
-		pkidx - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("ppage", i__2, 
-		"zzektrrk_", (ftnlen)466)];
+	rpage[(i__1 = schlep) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rpage", i__1, "zzektrrk_", (ftnlen)465)]
+		 = nvopar;
+	rpage[(i__1 = schlep + 127) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rpage", i__1, "zzektrrk_", (ftnlen)466)]
+		 = ppage[(i__2 = datbas + *pkidx - 1) < 256 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "ppage", i__2, "zzektrrk_"
+		, (ftnlen)466)];
 
 /*        `Move' the future parent key to its target destination in the */
 /*        parent.  The data pointer is copied; the key is adjusted by */
 /*        the offset delta we've computed. */
 
 	ppage[(i__1 = datbas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"ppage", i__1, "zzektrrk_", (ftnlen)473)] = lpage[(i__2 = 
-		remain + 128) < 256 && 0 <= i__2 ? i__2 : s_rnge("lpage", 
-		i__2, "zzektrrk_", (ftnlen)473)];
+		&__global_state->f2c, "ppage", i__1, "zzektrrk_", (ftnlen)473)
+		] = lpage[(i__2 = remain + 128) < 256 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "lpage", i__2, "zzektrrk_", (
+		ftnlen)473)];
 	ppage[(i__1 = keybas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"ppage", i__1, "zzektrrk_", (ftnlen)474)] = ppage[(i__2 = 
-		keybas + *pkidx - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("ppa"
-		"ge", i__2, "zzektrrk_", (ftnlen)474)] + dpar;
+		&__global_state->f2c, "ppage", i__1, "zzektrrk_", (ftnlen)474)
+		] = ppage[(i__2 = keybas + *pkidx - 1) < 256 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "ppage", i__2, "zzektrrk_"
+		, (ftnlen)474)] + dpar;
 
 /*        Rotate the subtree following the future parent key to its */
 /*        destination in the sibling.  Update the keys to account for */
@@ -803,18 +817,19 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 
 	i__1 = schlep - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    rpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage", 
-		    i__2, "zzektrrk_", (ftnlen)482)] = lpage[(i__3 = remain + 
-		    2 + i__ - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge("lpage", 
-		    i__3, "zzektrrk_", (ftnlen)482)] + drotat;
+	    rpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rpage", i__2, "zzektrrk_", (ftnlen)
+		    482)] = lpage[(i__3 = remain + 2 + i__ - 1) < 256 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "lpage", i__3, 
+		    "zzektrrk_", (ftnlen)482)] + drotat;
 	}
 	i__2 = schlep - 1;
-	movei_(&lpage[(i__1 = remain + 129) < 256 && 0 <= i__1 ? i__1 : 
-		s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)485)], &i__2, &
-		rpage[128]);
-	movei_(&lpage[(i__1 = remain + 65) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"lpage", i__1, "zzektrrk_", (ftnlen)486)], &schlep, &rpage[64]
-		);
+	movei_(__global_state, &lpage[(i__1 = remain + 129) < 256 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "lpage", i__1, 
+		"zzektrrk_", (ftnlen)485)], &i__2, &rpage[128]);
+	movei_(__global_state, &lpage[(i__1 = remain + 65) < 256 && 0 <= i__1 
+		? i__1 : s_rnge(&__global_state->f2c, "lpage", i__1, "zzektr"
+		"rk_", (ftnlen)486)], &schlep, &rpage[64]);
 
 /*        Update the key counts in both the input node and sibling. */
 
@@ -823,9 +838,9 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 
 /*        Update the pages in the kernel. */
 
-	zzekpgwi_(handle, parent, ppage);
-	zzekpgwi_(handle, left, lpage);
-	zzekpgwi_(handle, right, rpage);
+	zzekpgwi_(__global_state, handle, parent, ppage);
+	zzekpgwi_(__global_state, handle, left, lpage);
+	zzekpgwi_(__global_state, handle, right, rpage);
     } else {
 
 /*        Rotation to the left is almost, but not quite, a mirror image */
@@ -839,8 +854,9 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 /*        SCHLEP and is also the predecessor of the subtree */
 /*        left behind. */
 
-	futrpk = rpage[(i__1 = schlep) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"rpage", i__1, "zzektrrk_", (ftnlen)517)];
+	futrpk = rpage[(i__1 = schlep) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rpage", i__1, "zzektrrk_", (ftnlen)517)]
+		;
 	subsiz = futrpk - 1;
 
 /*        The rotated set of keys will be preceded by the keys already */
@@ -871,47 +887,52 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 /*        input node.  Actually, only the data pointer is copied; the key */
 /*        is simply set to its new value. */
 
-	lpage[(i__1 = lnkeys + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge("lpage", 
-		i__1, "zzektrrk_", (ftnlen)553)] = nvopar;
-	lpage[(i__1 = lnkeys + 128) < 256 && 0 <= i__1 ? i__1 : s_rnge("lpage"
-		, i__1, "zzektrrk_", (ftnlen)554)] = ppage[(i__2 = datbas + *
-		pkidx - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("ppage", i__2, 
-		"zzektrrk_", (ftnlen)554)];
+	lpage[(i__1 = lnkeys + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "lpage", i__1, "zzektrrk_", (ftnlen)553)]
+		 = nvopar;
+	lpage[(i__1 = lnkeys + 128) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "lpage", i__1, "zzektrrk_", (ftnlen)554)]
+		 = ppage[(i__2 = datbas + *pkidx - 1) < 256 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "ppage", i__2, "zzektrrk_"
+		, (ftnlen)554)];
 
 /*        `Move' the future parent key to its target destination in the */
 /*        parent.  The data pointer is copied; the key is adjusted by */
 /*        the offset delta we've computed. */
 
 	ppage[(i__1 = datbas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"ppage", i__1, "zzektrrk_", (ftnlen)561)] = rpage[(i__2 = 
-		schlep + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage", 
-		i__2, "zzektrrk_", (ftnlen)561)];
+		&__global_state->f2c, "ppage", i__1, "zzektrrk_", (ftnlen)561)
+		] = rpage[(i__2 = schlep + 127) < 256 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "rpage", i__2, "zzektrrk_", (
+		ftnlen)561)];
 	ppage[(i__1 = keybas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"ppage", i__1, "zzektrrk_", (ftnlen)562)] = ppage[(i__2 = 
-		keybas + *pkidx - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("ppa"
-		"ge", i__2, "zzektrrk_", (ftnlen)562)] + dpar;
+		&__global_state->f2c, "ppage", i__1, "zzektrrk_", (ftnlen)562)
+		] = ppage[(i__2 = keybas + *pkidx - 1) < 256 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "ppage", i__2, "zzektrrk_"
+		, (ftnlen)562)] + dpar;
 
 /*        Rotate the subtree following the future parent key to its */
 /*        destination in the sibling.  Update the keys to account for */
 /*        their new offset. */
 
 	i__2 = schlep - 1;
-	movei_(&rpage[1], &i__2, &lpage[(i__1 = lnkeys + 2) < 256 && 0 <= 
-		i__1 ? i__1 : s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)569)]
-		);
+	movei_(__global_state, &rpage[1], &i__2, &lpage[(i__1 = lnkeys + 2) < 
+		256 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "lpage"
+		, i__1, "zzektrrk_", (ftnlen)569)]);
 	i__2 = schlep - 1;
-	movei_(&rpage[128], &i__2, &lpage[(i__1 = lnkeys + 129) < 256 && 0 <= 
-		i__1 ? i__1 : s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)570)]
-		);
-	movei_(&rpage[64], &schlep, &lpage[(i__1 = lnkeys + 65) < 256 && 0 <= 
-		i__1 ? i__1 : s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)571)]
-		);
+	movei_(__global_state, &rpage[128], &i__2, &lpage[(i__1 = lnkeys + 
+		129) < 256 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"lpage", i__1, "zzektrrk_", (ftnlen)570)]);
+	movei_(__global_state, &rpage[64], &schlep, &lpage[(i__1 = lnkeys + 
+		65) < 256 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"lpage", i__1, "zzektrrk_", (ftnlen)571)]);
 	i__1 = schlep - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    lpage[(i__2 = lnkeys + 2 + i__ - 1) < 256 && 0 <= i__2 ? i__2 : 
-		    s_rnge("lpage", i__2, "zzektrrk_", (ftnlen)574)] = lpage[(
-		    i__3 = lnkeys + 2 + i__ - 1) < 256 && 0 <= i__3 ? i__3 : 
-		    s_rnge("lpage", i__3, "zzektrrk_", (ftnlen)574)] + drotat;
+		    s_rnge(&__global_state->f2c, "lpage", i__2, "zzektrrk_", (
+		    ftnlen)574)] = lpage[(i__3 = lnkeys + 2 + i__ - 1) < 256 
+		    && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "lpage"
+		    , i__3, "zzektrrk_", (ftnlen)574)] + drotat;
 	}
 
 /*        Shift the remaining elements of the sibling to the left. */
@@ -923,24 +944,27 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 
 	i__1 = remain;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    rpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage", 
-		    i__2, "zzektrrk_", (ftnlen)586)] = rpage[(i__3 = i__ + 1 
-		    + schlep - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge("rpage", 
-		    i__3, "zzektrrk_", (ftnlen)586)] + dshift;
+	    rpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rpage", i__2, "zzektrrk_", (ftnlen)
+		    586)] = rpage[(i__3 = i__ + 1 + schlep - 1) < 256 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "rpage", i__3, 
+		    "zzektrrk_", (ftnlen)586)] + dshift;
 	}
 	i__1 = remain;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    rpage[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpa"
-		    "ge", i__2, "zzektrrk_", (ftnlen)590)] = rpage[(i__3 = i__ 
-		    + 128 + schlep - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-		    "rpage", i__3, "zzektrrk_", (ftnlen)590)];
+	    rpage[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rpage", i__2, "zzektrrk_", (ftnlen)
+		    590)] = rpage[(i__3 = i__ + 128 + schlep - 1) < 256 && 0 
+		    <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "rpage", 
+		    i__3, "zzektrrk_", (ftnlen)590)];
 	}
 	i__1 = remain + 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    rpage[(i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage"
-		    , i__2, "zzektrrk_", (ftnlen)594)] = rpage[(i__3 = i__ + 
-		    64 + schlep - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge("rpa"
-		    "ge", i__3, "zzektrrk_", (ftnlen)594)];
+	    rpage[(i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rpage", i__2, "zzektrrk_", (ftnlen)
+		    594)] = rpage[(i__3 = i__ + 64 + schlep - 1) < 256 && 0 <=
+		     i__3 ? i__3 : s_rnge(&__global_state->f2c, "rpage", i__3,
+		     "zzektrrk_", (ftnlen)594)];
 	}
 
 /*        Update the key counts in both the input node and sibling. */
@@ -950,9 +974,9 @@ static zzektrrk_state_t* get_zzektrrk_state() {
 
 /*        Update the pages in the kernel. */
 
-	zzekpgwi_(handle, parent, ppage);
-	zzekpgwi_(handle, left, lpage);
-	zzekpgwi_(handle, right, rpage);
+	zzekpgwi_(__global_state, handle, parent, ppage);
+	zzekpgwi_(__global_state, handle, left, lpage);
+	zzekpgwi_(__global_state, handle, right, rpage);
     }
     return 0;
 } /* zzektrrk_ */

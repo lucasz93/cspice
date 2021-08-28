@@ -630,7 +630,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "ekpsel_c" );
+   chkin_c ( naif_state, "ekpsel_c" );
 
    /*
    Check the input query string to make sure the pointer is non-null and 

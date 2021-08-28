@@ -67,10 +67,10 @@ extern "C" {
 extern void fmt_bg(void);
 extern int pars_f(char*);
 extern int rd_ed(struct syl*, char*, ftnlen),rd_ned(struct syl*);
-extern int w_ed(struct syl*, char*, ftnlen),w_ned(struct syl*);
+extern int w_ed(f2c_state_t *, struct syl*, char*, ftnlen),w_ned(f2c_state_t *, struct syl*);
 extern int wrt_E(ufloat*, int, int, int, ftnlen);
 extern int wrt_F(ufloat*, int, int, ftnlen);
-extern int wrt_L(Uint*, int, ftnlen);
+extern int wrt_L(f2c_state_t *, Uint*, int, ftnlen);
 #ifdef __cplusplus
 	}
 #endif

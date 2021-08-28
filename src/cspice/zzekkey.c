@@ -8,8 +8,7 @@
 
 
 extern zzekkey_init_t __zzekkey_init;
-static zzekkey_state_t* get_zzekkey_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekkey_state_t* get_zzekkey_state(cspice_t* state) {
 	if (!state->zzekkey)
 		state->zzekkey = __cspice_allocate_module(sizeof(
 	zzekkey_state_t), &__zzekkey_init, sizeof(__zzekkey_init));
@@ -18,39 +17,40 @@ static zzekkey_state_t* get_zzekkey_state() {
 }
 
 /* $Procedure  ZZEKKEY  ( EK, determine key column ) */
-/* Subroutine */ int zzekkey_(integer *handle, integer *segdsc, integer *
-	nrows, integer *ncnstr, integer *clidxs, integer *dsclst, integer *
-	ops, integer *dtypes, char *chrbuf, integer *cbegs, integer *cends, 
-	doublereal *dvals, integer *ivals, logical *active, integer *key, 
-	integer *keydsc, integer *begidx, integer *endidx, logical *found, 
-	ftnlen chrbuf_len)
+/* Subroutine */ int zzekkey_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *nrows, integer *ncnstr, integer *clidxs, 
+	integer *dsclst, integer *ops, integer *dtypes, char *chrbuf, integer 
+	*cbegs, integer *cends, doublereal *dvals, integer *ivals, logical *
+	active, integer *key, integer *keydsc, integer *begidx, integer *
+	endidx, logical *found, ftnlen chrbuf_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     logical elim;
-    extern integer ordi_(integer *, integer *);
+    extern integer ordi_(cspice_t*, integer *, integer *);
     integer best;
-    extern integer zzekille_(integer *, integer *, integer *, integer *, 
-	    integer *, char *, doublereal *, integer *, ftnlen);
-    extern integer zzekillt_(integer *, integer *, integer *, integer *, 
-	    integer *, char *, doublereal *, integer *, ftnlen);
+    extern integer zzekille_(cspice_t*, integer *, integer *, integer *, 
+	    integer *, integer *, char *, doublereal *, integer *, ftnlen);
+    extern integer zzekillt_(cspice_t*, integer *, integer *, integer *, 
+	    integer *, integer *, char *, doublereal *, integer *, ftnlen);
     integer b;
     integer e;
     integer i__;
     integer j;
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer dtype;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer nmatch;
     integer conmap[1000];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer eltidx;
     integer idxset[1006];
     integer lastle;
@@ -58,18 +58,18 @@ static zzekkey_state_t* get_zzekkey_state() {
     integer maxptr;
     integer minptr;
     logical indexd;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
-    extern /* Subroutine */ int insrti_(integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int insrti_(cspice_t*, integer *, integer *);
     logical fnd;
     integer col;
 
 
     /* Module state */
-    zzekkey_state_t* __state = get_zzekkey_state();
+    zzekkey_state_t* __state = get_zzekkey_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the key column to use when searching an EK segment */
@@ -877,22 +877,22 @@ static zzekkey_state_t* get_zzekkey_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKKEY", (ftnlen)7);
+	chkin_(__global_state, "ZZEKKEY", (ftnlen)7);
     }
 
 /*     There's no key column to begin with. */
 
     *found = FALSE_;
     if (*ncnstr < 0 || *ncnstr > 1000) {
-	setmsg_("The number of constraints was #; valid range is 0:#", (
-		ftnlen)51);
-	errint_("#", ncnstr, (ftnlen)1);
-	errint_("#", &__state->c__1000, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKKEY", (ftnlen)7);
+	setmsg_(__global_state, "The number of constraints was #; valid rang"
+		"e is 0:#", (ftnlen)51);
+	errint_(__global_state, "#", ncnstr, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__1000, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKKEY", (ftnlen)7);
 	return 0;
     }
 
@@ -900,27 +900,28 @@ static zzekkey_state_t* get_zzekkey_state() {
 /*     in active constraints.  Maintain a mapping from each column */
 /*     to the index of some constraint that references that column. */
 
-    ssizei_(&__state->c__1000, idxset);
+    ssizei_(__global_state, &__state->c__1000, idxset);
     i__1 = *ncnstr;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (active[i__ - 1]) {
 	    indexd = dsclst[i__ * 11 - 6] != -1;
 	    if (indexd) {
-		insrti_(&clidxs[i__ - 1], idxset);
+		insrti_(__global_state, &clidxs[i__ - 1], idxset);
 	    }
 	}
     }
-    i__1 = cardi_(idxset);
+    i__1 = cardi_(__global_state, idxset);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	fnd = FALSE_;
 	j = 1;
 	while(j <= *ncnstr && ! fnd) {
 	    if (active[j - 1] && clidxs[j - 1] == idxset[(i__2 = i__ + 5) < 
-		    1006 && 0 <= i__2 ? i__2 : s_rnge("idxset", i__2, "zzekk"
-		    "ey_", (ftnlen)427)]) {
+		    1006 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "idxset", i__2, "zzekkey_", (ftnlen)427)]) {
 		fnd = TRUE_;
-		conmap[(i__2 = i__ - 1) < 1000 && 0 <= i__2 ? i__2 : s_rnge(
-			"conmap", i__2, "zzekkey_", (ftnlen)429)] = j;
+		conmap[(i__2 = i__ - 1) < 1000 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "conmap", i__2, "zzekkey_", (
+			ftnlen)429)] = j;
 	    } else {
 		++j;
 	    }
@@ -930,8 +931,8 @@ static zzekkey_state_t* get_zzekkey_state() {
 /*     We finish up now if there are no indexed columns */
 /*     on which there are active constraints. */
 
-    if (cardi_(idxset) == 0) {
-	chkout_("ZZEKKEY", (ftnlen)7);
+    if (cardi_(__global_state, idxset) == 0) {
+	chkout_(__global_state, "ZZEKKEY", (ftnlen)7);
 	return 0;
     }
 
@@ -946,12 +947,13 @@ static zzekkey_state_t* get_zzekkey_state() {
     nmatch = *nrows;
     elim = FALSE_;
     eltidx = 1;
-    while(eltidx <= cardi_(idxset) && ! elim) {
+    while(eltidx <= cardi_(__global_state, idxset) && ! elim) {
 
 /*        Get the attribute list pointer for the current column. */
 
-	col = idxset[(i__1 = eltidx + 5) < 1006 && 0 <= i__1 ? i__1 : s_rnge(
-		"idxset", i__1, "zzekkey_", (ftnlen)468)];
+	col = idxset[(i__1 = eltidx + 5) < 1006 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "idxset", i__1, "zzekkey_", (ftnlen)468)]
+		;
 
 /*        Set the initial values of MINPTR, MAXPTR, and NMATCH */
 
@@ -990,9 +992,10 @@ static zzekkey_state_t* get_zzekkey_state() {
 /*                 whose value in this column is less than the */
 /*                 value cited in the Ith constraint. */
 
-		    lastlt = zzekillt_(handle, segdsc, &dsclst[i__ * 11 - 11],
-			     nrows, &dtypes[i__ - 1], chrbuf + (b - 1), &
-			    dvals[i__ - 1], &ivals[i__ - 1], e - (b - 1));
+		    lastlt = zzekillt_(__global_state, handle, segdsc, &
+			    dsclst[i__ * 11 - 11], nrows, &dtypes[i__ - 1], 
+			    chrbuf + (b - 1), &dvals[i__ - 1], &ivals[i__ - 1]
+			    , e - (b - 1));
 
 /*                 If all column elements were greater than or equal */
 /*                 to the specified value, MAXPTR will be set to zero. */
@@ -1005,9 +1008,10 @@ static zzekkey_state_t* get_zzekkey_state() {
 /*                 whose value in this column is less or equal to */
 /*                 the value cited in the Ith constraint. */
 
-		    lastle = zzekille_(handle, segdsc, &dsclst[i__ * 11 - 11],
-			     nrows, &dtypes[i__ - 1], chrbuf + (b - 1), &
-			    dvals[i__ - 1], &ivals[i__ - 1], e - (b - 1));
+		    lastle = zzekille_(__global_state, handle, segdsc, &
+			    dsclst[i__ * 11 - 11], nrows, &dtypes[i__ - 1], 
+			    chrbuf + (b - 1), &dvals[i__ - 1], &ivals[i__ - 1]
+			    , e - (b - 1));
 		    maxptr = min(lastle,maxptr);
 		    elim = maxptr == 0;
 		} else if (ops[i__ - 1] == 1) {
@@ -1021,12 +1025,14 @@ static zzekkey_state_t* get_zzekkey_state() {
 /*                 the latter pointer, bound the range of pointers */
 /*                 to possible matching rows. */
 
-		    lastlt = zzekillt_(handle, segdsc, &dsclst[i__ * 11 - 11],
-			     nrows, &dtypes[i__ - 1], chrbuf + (b - 1), &
-			    dvals[i__ - 1], &ivals[i__ - 1], e - (b - 1));
-		    lastle = zzekille_(handle, segdsc, &dsclst[i__ * 11 - 11],
-			     nrows, &dtypes[i__ - 1], chrbuf + (b - 1), &
-			    dvals[i__ - 1], &ivals[i__ - 1], e - (b - 1));
+		    lastlt = zzekillt_(__global_state, handle, segdsc, &
+			    dsclst[i__ * 11 - 11], nrows, &dtypes[i__ - 1], 
+			    chrbuf + (b - 1), &dvals[i__ - 1], &ivals[i__ - 1]
+			    , e - (b - 1));
+		    lastle = zzekille_(__global_state, handle, segdsc, &
+			    dsclst[i__ * 11 - 11], nrows, &dtypes[i__ - 1], 
+			    chrbuf + (b - 1), &dvals[i__ - 1], &ivals[i__ - 1]
+			    , e - (b - 1));
 		    if (lastlt < lastle) {
 
 /*                    There is at least one row whose value in the */
@@ -1055,9 +1061,10 @@ static zzekkey_state_t* get_zzekkey_state() {
 /*                 constraints on this column is the successor of */
 /*                 this pointer or a greater pointer. */
 
-		    lastle = zzekille_(handle, segdsc, &dsclst[i__ * 11 - 11],
-			     nrows, &dtypes[i__ - 1], chrbuf + (b - 1), &
-			    dvals[i__ - 1], &ivals[i__ - 1], e - (b - 1));
+		    lastle = zzekille_(__global_state, handle, segdsc, &
+			    dsclst[i__ * 11 - 11], nrows, &dtypes[i__ - 1], 
+			    chrbuf + (b - 1), &dvals[i__ - 1], &ivals[i__ - 1]
+			    , e - (b - 1));
 /* Computing MAX */
 		    i__1 = lastle + 1;
 		    minptr = max(i__1,minptr);
@@ -1071,9 +1078,10 @@ static zzekkey_state_t* get_zzekkey_state() {
 /*                 constraints on this column is the successor of */
 /*                 this pointer or a greater pointer. */
 
-		    lastlt = zzekillt_(handle, segdsc, &dsclst[i__ * 11 - 11],
-			     nrows, &dtypes[i__ - 1], chrbuf + (b - 1), &
-			    dvals[i__ - 1], &ivals[i__ - 1], e - (b - 1));
+		    lastlt = zzekillt_(__global_state, handle, segdsc, &
+			    dsclst[i__ * 11 - 11], nrows, &dtypes[i__ - 1], 
+			    chrbuf + (b - 1), &dvals[i__ - 1], &ivals[i__ - 1]
+			    , e - (b - 1));
 /* Computing MAX */
 		    i__1 = lastlt + 1;
 		    minptr = max(i__1,minptr);
@@ -1095,8 +1103,8 @@ static zzekkey_state_t* get_zzekkey_state() {
 	    if (! elim) {
 		++i__;
 	    }
-	    if (failed_()) {
-		chkout_("ZZEKKEY", (ftnlen)7);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZEKKEY", (ftnlen)7);
 		return 0;
 	    }
 	}
@@ -1136,9 +1144,10 @@ static zzekkey_state_t* get_zzekkey_state() {
 
 	*key = best;
     }
-    i__ = conmap[(i__1 = ordi_(key, idxset) - 1) < 1000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("conmap", i__1, "zzekkey_", (ftnlen)694)];
-    movei_(&dsclst[i__ * 11 - 11], &__state->c__11, keydsc);
+    i__ = conmap[(i__1 = ordi_(__global_state, key, idxset) - 1) < 1000 && 0 
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "conmap", i__1, 
+	    "zzekkey_", (ftnlen)694)];
+    movei_(__global_state, &dsclst[i__ * 11 - 11], &__state->c__11, keydsc);
 
 /*     De-activate constraints on the key column that we've already */
 /*     applied. */
@@ -1160,7 +1169,7 @@ static zzekkey_state_t* get_zzekkey_state() {
 /*     At this point, we've found a key column. */
 
     *found = TRUE_;
-    chkout_("ZZEKKEY", (ftnlen)7);
+    chkout_(__global_state, "ZZEKKEY", (ftnlen)7);
     return 0;
 } /* zzekkey_ */
 

@@ -8,8 +8,7 @@
 
 
 extern spcrfl_init_t __spcrfl_init;
-static spcrfl_state_t* get_spcrfl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spcrfl_state_t* get_spcrfl_state(cspice_t* state) {
 	if (!state->spcrfl)
 		state->spcrfl = __cspice_allocate_module(sizeof(
 	spcrfl_state_t), &__spcrfl_init, sizeof(__spcrfl_init));
@@ -18,36 +17,37 @@ static spcrfl_state_t* get_spcrfl_state() {
 }
 
 /* $Procedure SPCRFL ( SPK and CK, read first line of comments ) */
-/* Subroutine */ int spcrfl_0_(int n__, integer *handle, char *line, logical *
-	eoc, ftnlen line_len)
+/* Subroutine */ int spcrfl_0_(cspice_t* __global_state, int n__, integer *
+	handle, char *line, logical *eoc, ftnlen line_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rdue(f2c_state_t*);
 
     /* Local variables */
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern integer pos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen);
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    spcrfl_state_t* __state = get_spcrfl_state();
+    spcrfl_state_t* __state = get_spcrfl_state(__global_state);
 /* $ Abstract */
 
 /*     Read the first line of text from the comment area */
@@ -279,10 +279,10 @@ static spcrfl_state_t* get_spcrfl_state() {
 	case 1: goto L_spcrnl;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPCRFL", (ftnlen)6);
+	chkin_(__global_state, "SPCRFL", (ftnlen)6);
     }
 
 /*     SPCRFL has been called for this file. */
@@ -297,23 +297,25 @@ static spcrfl_state_t* get_spcrfl_state() {
 
 /*     If there are no reserved records, there are no comments. */
 
-    dafrfr_(handle, &__state->nd, &__state->ni, __state->ifname, &
-	    __state->fward, &__state->bward, &__state->free, (ftnlen)60);
+    dafrfr_(__global_state, handle, &__state->nd, &__state->ni, 
+	    __state->ifname, &__state->fward, &__state->bward, &__state->free,
+	     (ftnlen)60);
     __state->nrr = __state->fward - 2;
     if (__state->nrr == 0) {
-	s_copy(line, " ", line_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, line, " ", line_len, (ftnlen)1);
 	*eoc = TRUE_;
 	__state->eocsav = *eoc;
-	chkout_("SPCRFL", (ftnlen)6);
+	chkout_(__global_state, "SPCRFL", (ftnlen)6);
 	return 0;
     }
 
 /*     We need to read directly from the SPK/CK file, using a logical */
 /*     unit instead of a handle. */
 
-    zzddhhlu_(handle, "DAF", &__state->c_false, &__state->dafu, (ftnlen)3);
-    if (failed_()) {
-	chkout_("SPCRFL", (ftnlen)6);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_false, &
+	    __state->dafu, (ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPCRFL", (ftnlen)6);
 	return 0;
     }
 
@@ -332,32 +334,34 @@ static spcrfl_state_t* get_spcrfl_state() {
     __state->rec = 2;
     __state->io___16.ciunit = __state->dafu;
     __state->io___16.cirec = __state->rec;
-    __state->iostat = s_rdue(&__state->io___16);
+    __state->iostat = s_rdue(&__global_state->f2c, &__state->io___16);
     if (__state->iostat != 0) {
 	goto L100001;
     }
-    __state->iostat = do_uio(&__state->c__1, __state->record, (ftnlen)1000);
+    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+	    __state->record, (ftnlen)1000);
     if (__state->iostat != 0) {
 	goto L100001;
     }
-    __state->iostat = e_rdue();
+    __state->iostat = e_rdue(&__global_state->f2c);
 L100001:
     if (__state->iostat != 0) {
-	setmsg_("Error reading comment area of the binary file named FNM at "
-		"record #.  Value of IOSTAT is #.", (ftnlen)91);
-	errint_("#", &__state->rec, (ftnlen)1);
-	errint_("#", &__state->iostat, (ftnlen)1);
-	errfnm_("FNM", &__state->dafu, (ftnlen)3);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("SPCRFL", (ftnlen)6);
+	setmsg_(__global_state, "Error reading comment area of the binary fi"
+		"le named FNM at record #.  Value of IOSTAT is #.", (ftnlen)91)
+		;
+	errint_(__global_state, "#", &__state->rec, (ftnlen)1);
+	errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+	errfnm_(__global_state, "FNM", &__state->dafu, (ftnlen)3);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "SPCRFL", (ftnlen)6);
 	return 0;
     }
 
 /*     The first line of comments begins with the first character */
 /*     of the record.  A NULL character specifies the end. */
 
-    __state->posnul = pos_(__state->record, __state->null, &__state->c__1, (
-	    ftnlen)1000, (ftnlen)1);
+    __state->posnul = pos_(__global_state, __state->record, __state->null, &
+	    __state->c__1, (ftnlen)1000, (ftnlen)1);
     if (__state->posnul == 0) {
 
 /*        No NULL is in the record, so LINE is just the whole */
@@ -378,13 +382,14 @@ L100001:
 /*     was a NULL, the line is blank. */
 
     if (__state->eol == 0) {
-	s_copy(line, " ", line_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, line, " ", line_len, (ftnlen)1);
     } else {
-	s_copy(line, __state->record, line_len, __state->eol);
+	s_copy(&__global_state->f2c, line, __state->record, line_len, 
+		__state->eol);
     }
     *eoc = FALSE_;
     __state->eocsav = *eoc;
-    chkout_("SPCRFL", (ftnlen)6);
+    chkout_(__global_state, "SPCRFL", (ftnlen)6);
     return 0;
 /* $Procedure SPCRNL ( SPK and CK, read next line of comments ) */
 
@@ -596,20 +601,21 @@ L_spcrnl:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPCRNL", (ftnlen)6);
+	chkin_(__global_state, "SPCRNL", (ftnlen)6);
     }
 
 /*     If SPCRFL hasn't been called, then we don't know which */
 /*     file to read from. */
 
     if (! __state->called) {
-	setmsg_("You must call SPCRFL to read the first line of comments bef"
-		"ore calling SPCRNL to read the next line.", (ftnlen)100);
-	sigerr_("SPICE(SPCRFLNOTCALLED)", (ftnlen)22);
-	chkout_("SPCRNL", (ftnlen)6);
+	setmsg_(__global_state, "You must call SPCRFL to read the first line"
+		" of comments before calling SPCRNL to read the next line.", (
+		ftnlen)100);
+	sigerr_(__global_state, "SPICE(SPCRFLNOTCALLED)", (ftnlen)22);
+	chkout_(__global_state, "SPCRNL", (ftnlen)6);
 	return 0;
     }
 
@@ -617,18 +623,18 @@ L_spcrnl:
 /*     at the end. */
 
     if (__state->eocsav) {
-	s_copy(line, " ", line_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, line, " ", line_len, (ftnlen)1);
 	*eoc = TRUE_;
-	chkout_("SPCRNL", (ftnlen)6);
+	chkout_(__global_state, "SPCRNL", (ftnlen)6);
 	return 0;
     }
 
 /*     Retrieve a logical unit for HANBUF. */
 
-    zzddhhlu_(&__state->hanbuf, "DAF", &__state->c_false, &__state->dafu, (
-	    ftnlen)3);
-    if (failed_()) {
-	chkout_("SPCRNL", (ftnlen)6);
+    zzddhhlu_(__global_state, &__state->hanbuf, "DAF", &__state->c_false, &
+	    __state->dafu, (ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPCRNL", (ftnlen)6);
 	return 0;
     }
 
@@ -650,17 +656,17 @@ L_spcrnl:
 /*        records. */
 
 	if (__state->rec >= __state->fward) {
-	    setmsg_("The comment area of the binary file named FNM is format"
-		    "ted incorrectly. The end of the comments is not marked a"
-		    "s it should be in record #. Calling SPCDC or DAFRRR will"
-		    " remove the comment area and eliminate this format error"
-		    ". Comments should be written ONLY by SPCAC.", (ftnlen)266)
-		    ;
+	    setmsg_(__global_state, "The comment area of the binary file nam"
+		    "ed FNM is formatted incorrectly. The end of the comments"
+		    " is not marked as it should be in record #. Calling SPCD"
+		    "C or DAFRRR will remove the comment area and eliminate t"
+		    "his format error. Comments should be written ONLY by SPC"
+		    "AC.", (ftnlen)266);
 	    i__1 = __state->rec - 1;
-	    errint_("#", &i__1, (ftnlen)1);
-	    errfnm_("FNM", &__state->dafu, (ftnlen)3);
-	    sigerr_("SPICE(FORMATERROR)", (ftnlen)18);
-	    chkout_("SPCRNL", (ftnlen)6);
+	    errint_(__global_state, "#", &i__1, (ftnlen)1);
+	    errfnm_(__global_state, "FNM", &__state->dafu, (ftnlen)3);
+	    sigerr_(__global_state, "SPICE(FORMATERROR)", (ftnlen)18);
+	    chkout_(__global_state, "SPCRNL", (ftnlen)6);
 	    return 0;
 	}
 
@@ -668,25 +674,26 @@ L_spcrnl:
 
 	__state->io___21.ciunit = __state->dafu;
 	__state->io___21.cirec = __state->rec;
-	__state->iostat = s_rdue(&__state->io___21);
+	__state->iostat = s_rdue(&__global_state->f2c, &__state->io___21);
 	if (__state->iostat != 0) {
 	    goto L100002;
 	}
-	__state->iostat = do_uio(&__state->c__1, __state->record, (ftnlen)
-		1000);
+	__state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		__state->record, (ftnlen)1000);
 	if (__state->iostat != 0) {
 	    goto L100002;
 	}
-	__state->iostat = e_rdue();
+	__state->iostat = e_rdue(&__global_state->f2c);
 L100002:
 	if (__state->iostat != 0) {
-	    setmsg_("Error reading comment area of the binary file named FNM"
-		    " at record #.  Value of IOSTAT is #.", (ftnlen)91);
-	    errint_("#", &__state->rec, (ftnlen)1);
-	    errint_("#", &__state->iostat, (ftnlen)1);
-	    errfnm_("FNM", &__state->dafu, (ftnlen)3);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("SPCRNL", (ftnlen)6);
+	    setmsg_(__global_state, "Error reading comment area of the binar"
+		    "y file named FNM at record #.  Value of IOSTAT is #.", (
+		    ftnlen)91);
+	    errint_(__global_state, "#", &__state->rec, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+	    errfnm_(__global_state, "FNM", &__state->dafu, (ftnlen)3);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "SPCRNL", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -701,10 +708,10 @@ L100002:
 /*        There isn't a next line to get.  We're at the end of */
 /*        the comments. */
 
-	s_copy(line, " ", line_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, line, " ", line_len, (ftnlen)1);
 	*eoc = TRUE_;
 	__state->eocsav = *eoc;
-	chkout_("SPCRNL", (ftnlen)6);
+	chkout_(__global_state, "SPCRNL", (ftnlen)6);
 	return 0;
     }
     if (*(unsigned char *)&__state->record[__state->bol - 1] == *(unsigned 
@@ -713,22 +720,22 @@ L100002:
 /*        Just a NULL means a blank line. */
 
 	__state->eol = __state->bol - 1;
-	s_copy(line, " ", line_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, line, " ", line_len, (ftnlen)1);
 	*eoc = FALSE_;
 	__state->eocsav = *eoc;
-	chkout_("SPCRNL", (ftnlen)6);
+	chkout_(__global_state, "SPCRNL", (ftnlen)6);
 	return 0;
     }
 
 /*     The beginning of the next line is a character.  Now we have */
 /*     to find the end.  It precedes the next NULL. */
 
-    __state->posnul = pos_(__state->record, __state->null, &__state->bol, (
-	    ftnlen)1000, (ftnlen)1);
+    __state->posnul = pos_(__global_state, __state->record, __state->null, &
+	    __state->bol, (ftnlen)1000, (ftnlen)1);
     if (__state->posnul != 0) {
 	__state->eol = __state->posnul - 1;
-	s_copy(line, __state->record + (__state->bol - 1), line_len, 
-		__state->eol - (__state->bol - 1));
+	s_copy(&__global_state->f2c, line, __state->record + (__state->bol - 
+		1), line_len, __state->eol - (__state->bol - 1));
 	*eoc = FALSE_;
 	__state->eocsav = *eoc;
     } else {
@@ -737,8 +744,8 @@ L100002:
 /*        read the next record to find it.  Save the first part */
 /*        of the line in TEMP. */
 
-	s_copy(__state->temp, __state->record + (__state->bol - 1), (ftnlen)
-		1000, 1000 - (__state->bol - 1));
+	s_copy(&__global_state->f2c, __state->temp, __state->record + (
+		__state->bol - 1), (ftnlen)1000, 1000 - (__state->bol - 1));
 	__state->tmplen = 1000 - __state->bol + 1;
 	++__state->rec;
 
@@ -748,17 +755,17 @@ L100002:
 /*        records. */
 
 	if (__state->rec >= __state->fward) {
-	    setmsg_("The comment area of the binary file named FNM is format"
-		    "ted incorrectly. The end of the comments is not marked a"
-		    "s it should be in record #. Calling SPCDC or DAFRRR will"
-		    " remove the comment area and eliminate this format error"
-		    ". Comments should be written ONLY by SPCAC.", (ftnlen)266)
-		    ;
+	    setmsg_(__global_state, "The comment area of the binary file nam"
+		    "ed FNM is formatted incorrectly. The end of the comments"
+		    " is not marked as it should be in record #. Calling SPCD"
+		    "C or DAFRRR will remove the comment area and eliminate t"
+		    "his format error. Comments should be written ONLY by SPC"
+		    "AC.", (ftnlen)266);
 	    i__1 = __state->rec - 1;
-	    errint_("#", &i__1, (ftnlen)1);
-	    errfnm_("FNM", &__state->dafu, (ftnlen)3);
-	    sigerr_("SPICE(FORMATERROR)", (ftnlen)18);
-	    chkout_("SPCRNL", (ftnlen)6);
+	    errint_(__global_state, "#", &i__1, (ftnlen)1);
+	    errfnm_(__global_state, "FNM", &__state->dafu, (ftnlen)3);
+	    sigerr_(__global_state, "SPICE(FORMATERROR)", (ftnlen)18);
+	    chkout_(__global_state, "SPCRNL", (ftnlen)6);
 	    return 0;
 	}
 
@@ -766,25 +773,26 @@ L100002:
 
 	__state->io___24.ciunit = __state->dafu;
 	__state->io___24.cirec = __state->rec;
-	__state->iostat = s_rdue(&__state->io___24);
+	__state->iostat = s_rdue(&__global_state->f2c, &__state->io___24);
 	if (__state->iostat != 0) {
 	    goto L100003;
 	}
-	__state->iostat = do_uio(&__state->c__1, __state->record, (ftnlen)
-		1000);
+	__state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		__state->record, (ftnlen)1000);
 	if (__state->iostat != 0) {
 	    goto L100003;
 	}
-	__state->iostat = e_rdue();
+	__state->iostat = e_rdue(&__global_state->f2c);
 L100003:
 	if (__state->iostat != 0) {
-	    setmsg_("Error reading comment area of the binary file named FNM"
-		    " at record #.  Value of IOSTAT is #.", (ftnlen)91);
-	    errint_("#", &__state->rec, (ftnlen)1);
-	    errint_("#", &__state->iostat, (ftnlen)1);
-	    errfnm_("FNM", &__state->dafu, (ftnlen)3);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("SPCRNL", (ftnlen)6);
+	    setmsg_(__global_state, "Error reading comment area of the binar"
+		    "y file named FNM at record #.  Value of IOSTAT is #.", (
+		    ftnlen)91);
+	    errint_(__global_state, "#", &__state->rec, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+	    errfnm_(__global_state, "FNM", &__state->dafu, (ftnlen)3);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "SPCRNL", (ftnlen)6);
 	    return 0;
 	}
 
@@ -793,13 +801,14 @@ L100003:
 /*        MAXCPR characters according to SPCAC.  So BOL and the NULL */
 /*        should be in the same record or in adjacent records. */
 
-	__state->posnul = pos_(__state->record, __state->null, &__state->c__1,
-		 (ftnlen)1000, (ftnlen)1);
+	__state->posnul = pos_(__global_state, __state->record, __state->null,
+		 &__state->c__1, (ftnlen)1000, (ftnlen)1);
 	if (__state->posnul == 0) {
-	    setmsg_("Cannot find the end of the line.  There is something wr"
-		    "ong with the format of thecomments.", (ftnlen)90);
-	    sigerr_("SPICE(FORMATERROR)", (ftnlen)18);
-	    chkout_("SPCRNL", (ftnlen)6);
+	    setmsg_(__global_state, "Cannot find the end of the line.  There"
+		    " is something wrong with the format of thecomments.", (
+		    ftnlen)90);
+	    sigerr_(__global_state, "SPICE(FORMATERROR)", (ftnlen)18);
+	    chkout_(__global_state, "SPCRNL", (ftnlen)6);
 	    return 0;
 	}
 	__state->eol = __state->posnul - 1;
@@ -811,24 +820,26 @@ L100003:
 
 	if (__state->eol != 0) {
 	    i__1 = __state->tmplen;
-	    s_copy(__state->temp + i__1, __state->record, 1000 - i__1, 
-		    __state->eol);
+	    s_copy(&__global_state->f2c, __state->temp + i__1, 
+		    __state->record, 1000 - i__1, __state->eol);
 	}
-	s_copy(line, __state->temp, line_len, (ftnlen)1000);
+	s_copy(&__global_state->f2c, line, __state->temp, line_len, (ftnlen)
+		1000);
 	*eoc = FALSE_;
 	__state->eocsav = *eoc;
     }
-    chkout_("SPCRNL", (ftnlen)6);
+    chkout_(__global_state, "SPCRNL", (ftnlen)6);
     return 0;
 } /* spcrfl_ */
 
-/* Subroutine */ int spcrfl_(integer *handle, char *line, logical *eoc, 
-	ftnlen line_len)
+/* Subroutine */ int spcrfl_(cspice_t* __global_state, integer *handle, char *
+	line, logical *eoc, ftnlen line_len)
 {
     return spcrfl_0_(0, handle, line, eoc, line_len);
     }
 
-/* Subroutine */ int spcrnl_(char *line, logical *eoc, ftnlen line_len)
+/* Subroutine */ int spcrnl_(cspice_t* __global_state, char *line, logical *
+	eoc, ftnlen line_len)
 {
     return spcrfl_0_(1, (integer *)0, line, eoc, line_len);
     }

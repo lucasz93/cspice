@@ -316,7 +316,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafcls_c" );
+   chkin_c ( naif_state, "dafcls_c" );
 
 
    dafcls_ ( ( integer * ) &handle  );

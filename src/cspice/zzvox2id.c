@@ -8,20 +8,19 @@
 
 
 typedef int zzvox2id_state_t;
-static zzvox2id_state_t* get_zzvox2id_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzvox2id_state_t* get_zzvox2id_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZVOX2ID ( Return voxel index from coords ) */
-integer zzvox2id_(integer *vixyz, integer *nvox)
+integer zzvox2id_(cspice_t* __global_state, integer *vixyz, integer *nvox)
 {
     /* System generated locals */
     integer ret_val;
 
 
     /* Module state */
-    zzvox2id_state_t* __state = get_zzvox2id_state();
+    zzvox2id_state_t* __state = get_zzvox2id_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

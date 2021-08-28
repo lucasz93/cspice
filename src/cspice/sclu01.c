@@ -8,8 +8,7 @@
 
 
 extern sclu01_init_t __sclu01_init;
-static sclu01_state_t* get_sclu01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sclu01_state_t* get_sclu01_state(cspice_t* state) {
 	if (!state->sclu01)
 		state->sclu01 = __cspice_allocate_module(sizeof(
 	sclu01_state_t), &__sclu01_init, sizeof(__sclu01_init));
@@ -18,8 +17,9 @@ static sclu01_state_t* get_sclu01_state() {
 }
 
 /* $Procedure      SCLU01 ( SCLK look up, type 1 ) */
-/* Subroutine */ int sclu01_0_(int n__, char *name__, integer *sc, integer *
-	maxnv, integer *n, integer *ival, doublereal *dval, ftnlen name_len)
+/* Subroutine */ int sclu01_0_(cspice_t* __global_state, int n__, char *
+	name__, integer *sc, integer *maxnv, integer *n, integer *ival, 
+	doublereal *dval, ftnlen name_len)
 {
     /* Initialized data */
 
@@ -28,42 +28,44 @@ static sclu01_state_t* get_sclu01_state() {
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     char type__[1];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmd_(char *, char *, doublereal *, integer *
-	    , char *, ftnlen, ftnlen, ftnlen);
-    logical found;
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
-	    *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    char tmpnam[80];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    char errmsg[320];
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
-	    *, doublereal *, logical *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmd_(cspice_t*, char *, char *, doublereal *
+	    , integer *, char *, ftnlen, ftnlen, ftnlen);
+    logical found;
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int gipool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    char tmpnam[80];
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    char errmsg[320];
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int gdpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, doublereal *, logical *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sclu01_state_t* __state = get_sclu01_state();
+    sclu01_state_t* __state = get_sclu01_state(__global_state);
 /* $ Abstract */
 
 /*     Look up type 1 SCLK kernel data. */
@@ -388,13 +390,13 @@ static sclu01_state_t* get_sclu01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCLU01", (ftnlen)6);
+	chkin_(__global_state, "SCLU01", (ftnlen)6);
     }
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("SCLU01", (ftnlen)6);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "SCLU01", (ftnlen)6);
     return 0;
 /* $Procedure      SCLI01 ( SCLK lookup of integer data, type 1 ) */
 
@@ -654,10 +656,10 @@ L_scli01:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCLI01", (ftnlen)6);
+	chkin_(__global_state, "SCLI01", (ftnlen)6);
     }
 
 /*     Form the name of the kernel pool data item, and do the lookup. */
@@ -665,25 +667,29 @@ L_scli01:
 /*     that allows us to specify the maximum number of entries that */
 /*     can be returned. */
 
-    s_copy(tmpnam, name__, (ftnlen)80, name_len);
-    suffix_("_#", &__state->c__0, tmpnam, (ftnlen)2, (ftnlen)80);
+    s_copy(&__global_state->f2c, tmpnam, name__, (ftnlen)80, name_len);
+    suffix_(__global_state, "_#", &__state->c__0, tmpnam, (ftnlen)2, (ftnlen)
+	    80);
     i__1 = -(*sc);
-    repmi_(tmpnam, "#", &i__1, tmpnam, (ftnlen)80, (ftnlen)1, (ftnlen)80);
+    repmi_(__global_state, tmpnam, "#", &i__1, tmpnam, (ftnlen)80, (ftnlen)1, 
+	    (ftnlen)80);
 
 /*     Make sure we have enough room for the item in our output */
 /*     array.  Look up the dimension of the item. */
 
-    dtpool_(tmpnam, &found, n, type__, (ftnlen)80, (ftnlen)1);
+    dtpool_(__global_state, tmpnam, &found, n, type__, (ftnlen)80, (ftnlen)1);
     if (*n > *maxnv) {
-	setmsg_("Item # has size # but output array has size #.", (ftnlen)46);
-	errch_("#", tmpnam, (ftnlen)1, (ftnlen)80);
-	errint_("#", n, (ftnlen)1);
-	errint_("#", maxnv, (ftnlen)1);
-	sigerr_("SPICE(ARRAYTOOSMALL)", (ftnlen)20);
-	chkout_("SCLI01", (ftnlen)6);
+	setmsg_(__global_state, "Item # has size # but output array has size"
+		" #.", (ftnlen)46);
+	errch_(__global_state, "#", tmpnam, (ftnlen)1, (ftnlen)80);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	errint_(__global_state, "#", maxnv, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ARRAYTOOSMALL)", (ftnlen)20);
+	chkout_(__global_state, "SCLI01", (ftnlen)6);
 	return 0;
     }
-    gipool_(tmpnam, &__state->c__1, maxnv, n, ival, &found, (ftnlen)80);
+    gipool_(__global_state, tmpnam, &__state->c__1, maxnv, n, ival, &found, (
+	    ftnlen)80);
 
 /*     Make sure we found what we were looking for, if the item */
 /*     is required. */
@@ -694,14 +700,15 @@ L_scli01:
 /*        system specification.  In any case, no values will be returned. */
 
 	*n = 0;
-	if (s_cmp(name__, __state->namlst + 640, name_len, (ftnlen)80) == 0) {
-	    chkout_("SCLI01", (ftnlen)6);
+	if (s_cmp(&__global_state->f2c, name__, __state->namlst + 640, 
+		name_len, (ftnlen)80) == 0) {
+	    chkout_(__global_state, "SCLI01", (ftnlen)6);
 	    return 0;
 	} else {
-	    setmsg_(__state->nfdmsg, (ftnlen)320);
-	    errch_("#", tmpnam, (ftnlen)1, (ftnlen)80);
-	    sigerr_("SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
-	    chkout_("SCLI01", (ftnlen)6);
+	    setmsg_(__global_state, __state->nfdmsg, (ftnlen)320);
+	    errch_(__global_state, "#", tmpnam, (ftnlen)1, (ftnlen)80);
+	    sigerr_(__global_state, "SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
+	    chkout_(__global_state, "SCLI01", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -725,67 +732,71 @@ L_scli01:
 /*     See if the input name is in the list of items we know about. */
 /*     If it is, perform the bound checks that apply. */
 
-    i__ = isrchc_(name__, &__state->c__9, __state->namlst, name_len, (ftnlen)
-	    80);
+    i__ = isrchc_(__global_state, name__, &__state->c__9, __state->namlst, 
+	    name_len, (ftnlen)80);
     if (i__ != 0) {
 	if (*n < __state->lb[(i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : 
-		s_rnge("lb", i__1, "sclu01_", (ftnlen)681)]) {
-	    repmc_(__state->nummsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)
-		    1, (ftnlen)80, (ftnlen)320);
-	    repmi_(errmsg, "#", n, errmsg, (ftnlen)320, (ftnlen)1, (ftnlen)
-		    320);
-	    setmsg_(errmsg, (ftnlen)320);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("SCLI01", (ftnlen)6);
+		s_rnge(&__global_state->f2c, "lb", i__1, "sclu01_", (ftnlen)
+		681)]) {
+	    repmc_(__global_state, __state->nummsg, "#", tmpnam, errmsg, (
+		    ftnlen)320, (ftnlen)1, (ftnlen)80, (ftnlen)320);
+	    repmi_(__global_state, errmsg, "#", n, errmsg, (ftnlen)320, (
+		    ftnlen)1, (ftnlen)320);
+	    setmsg_(__global_state, errmsg, (ftnlen)320);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "SCLI01", (ftnlen)6);
 	    return 0;
 	}
     }
 
 /*     Check the value of the delimiter code itself. */
 
-    if (s_cmp(name__, __state->namlst + 480, name_len, (ftnlen)80) == 0) {
+    if (s_cmp(&__global_state->f2c, name__, __state->namlst + 480, name_len, (
+	    ftnlen)80) == 0) {
 	if (ival[0] < 1 || ival[0] > 5) {
-	    repmc_(__state->bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)
-		    1, (ftnlen)80, (ftnlen)320);
-	    repmi_(errmsg, "#", ival, errmsg, (ftnlen)320, (ftnlen)1, (ftnlen)
-		    320);
-	    setmsg_(errmsg, (ftnlen)320);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("SCLI01", (ftnlen)6);
+	    repmc_(__global_state, __state->bvlmsg, "#", tmpnam, errmsg, (
+		    ftnlen)320, (ftnlen)1, (ftnlen)80, (ftnlen)320);
+	    repmi_(__global_state, errmsg, "#", ival, errmsg, (ftnlen)320, (
+		    ftnlen)1, (ftnlen)320);
+	    setmsg_(__global_state, errmsg, (ftnlen)320);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "SCLI01", (ftnlen)6);
 	    return 0;
 	}
     }
 
 /*     Check the value of the field count, too. */
 
-    if (s_cmp(name__, __state->namlst + 240, name_len, (ftnlen)80) == 0) {
+    if (s_cmp(&__global_state->f2c, name__, __state->namlst + 240, name_len, (
+	    ftnlen)80) == 0) {
 	if (ival[0] < 1 || ival[0] > 10) {
-	    repmc_(__state->bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)
-		    1, (ftnlen)80, (ftnlen)320);
-	    repmi_(errmsg, "#", ival, errmsg, (ftnlen)320, (ftnlen)1, (ftnlen)
-		    320);
-	    setmsg_(errmsg, (ftnlen)320);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("SCLI01", (ftnlen)6);
+	    repmc_(__global_state, __state->bvlmsg, "#", tmpnam, errmsg, (
+		    ftnlen)320, (ftnlen)1, (ftnlen)80, (ftnlen)320);
+	    repmi_(__global_state, errmsg, "#", ival, errmsg, (ftnlen)320, (
+		    ftnlen)1, (ftnlen)320);
+	    setmsg_(__global_state, errmsg, (ftnlen)320);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "SCLI01", (ftnlen)6);
 	    return 0;
 	}
     }
 
 /*     Check the value of the time system code. */
 
-    if (s_cmp(name__, __state->namlst + 640, name_len, (ftnlen)80) == 0) {
+    if (s_cmp(&__global_state->f2c, name__, __state->namlst + 640, name_len, (
+	    ftnlen)80) == 0) {
 	if (ival[0] < 1 || ival[0] > 2) {
-	    repmc_(__state->bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)
-		    1, (ftnlen)80, (ftnlen)320);
-	    repmi_(errmsg, "#", ival, errmsg, (ftnlen)320, (ftnlen)1, (ftnlen)
-		    320);
-	    setmsg_(errmsg, (ftnlen)320);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("SCLI01", (ftnlen)6);
+	    repmc_(__global_state, __state->bvlmsg, "#", tmpnam, errmsg, (
+		    ftnlen)320, (ftnlen)1, (ftnlen)80, (ftnlen)320);
+	    repmi_(__global_state, errmsg, "#", ival, errmsg, (ftnlen)320, (
+		    ftnlen)1, (ftnlen)320);
+	    setmsg_(__global_state, errmsg, (ftnlen)320);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "SCLI01", (ftnlen)6);
 	    return 0;
 	}
     }
-    chkout_("SCLI01", (ftnlen)6);
+    chkout_(__global_state, "SCLI01", (ftnlen)6);
     return 0;
 /* $Procedure      SCLD01 ( SCLK lookup of double precision data, type 1 ) */
 
@@ -1072,33 +1083,37 @@ L_scld01:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCLD01", (ftnlen)6);
+	chkin_(__global_state, "SCLD01", (ftnlen)6);
     }
 
 /*     Form the name of the kernel pool datum, and do the lookup. */
 
-    s_copy(tmpnam, name__, (ftnlen)80, name_len);
-    suffix_("_#", &__state->c__0, tmpnam, (ftnlen)2, (ftnlen)80);
+    s_copy(&__global_state->f2c, tmpnam, name__, (ftnlen)80, name_len);
+    suffix_(__global_state, "_#", &__state->c__0, tmpnam, (ftnlen)2, (ftnlen)
+	    80);
     i__1 = -(*sc);
-    repmi_(tmpnam, "#", &i__1, tmpnam, (ftnlen)80, (ftnlen)1, (ftnlen)80);
+    repmi_(__global_state, tmpnam, "#", &i__1, tmpnam, (ftnlen)80, (ftnlen)1, 
+	    (ftnlen)80);
 
 /*     Make sure we have enough room for the item in our output */
 /*     array.  Look up the dimension of the item. */
 
-    dtpool_(tmpnam, &found, n, type__, (ftnlen)80, (ftnlen)1);
+    dtpool_(__global_state, tmpnam, &found, n, type__, (ftnlen)80, (ftnlen)1);
     if (*n > *maxnv) {
-	setmsg_("Item # has size # but output array has size #.", (ftnlen)46);
-	errch_("#", tmpnam, (ftnlen)1, (ftnlen)80);
-	errint_("#", n, (ftnlen)1);
-	errint_("#", maxnv, (ftnlen)1);
-	sigerr_("SPICE(ARRAYTOOSMALL)", (ftnlen)20);
-	chkout_("SCLD01", (ftnlen)6);
+	setmsg_(__global_state, "Item # has size # but output array has size"
+		" #.", (ftnlen)46);
+	errch_(__global_state, "#", tmpnam, (ftnlen)1, (ftnlen)80);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	errint_(__global_state, "#", maxnv, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ARRAYTOOSMALL)", (ftnlen)20);
+	chkout_(__global_state, "SCLD01", (ftnlen)6);
 	return 0;
     }
-    gdpool_(tmpnam, &__state->c__1, maxnv, n, dval, &found, (ftnlen)80);
+    gdpool_(__global_state, tmpnam, &__state->c__1, maxnv, n, dval, &found, (
+	    ftnlen)80);
 
 /*     Make sure we found what we were looking for. */
 
@@ -1107,10 +1122,10 @@ L_scld01:
 /*        No values are returned in this case. */
 
 	*n = 0;
-	setmsg_(__state->nfdmsg, (ftnlen)320);
-	errch_("#", tmpnam, (ftnlen)1, (ftnlen)80);
-	sigerr_("SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
-	chkout_("SCLD01", (ftnlen)6);
+	setmsg_(__global_state, __state->nfdmsg, (ftnlen)320);
+	errch_(__global_state, "#", tmpnam, (ftnlen)1, (ftnlen)80);
+	sigerr_(__global_state, "SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
+	chkout_(__global_state, "SCLD01", (ftnlen)6);
 	return 0;
     }
 
@@ -1132,58 +1147,61 @@ L_scld01:
 /*     See if the input name is in the list of items we know about. */
 /*     If it is, perform the bounds checks that apply. */
 
-    i__ = isrchc_(name__, &__state->c__9, __state->namlst, name_len, (ftnlen)
-	    80);
+    i__ = isrchc_(__global_state, name__, &__state->c__9, __state->namlst, 
+	    name_len, (ftnlen)80);
     if (i__ != 0) {
 	if (*n < __state->lb[(i__1 = i__ - 1) < 9 && 0 <= i__1 ? i__1 : 
-		s_rnge("lb", i__1, "sclu01_", (ftnlen)1121)]) {
-	    repmc_(__state->nummsg, "#", tmpnam, errmsg, (ftnlen)320, (ftnlen)
-		    1, (ftnlen)80, (ftnlen)320);
-	    repmi_(errmsg, "#", n, errmsg, (ftnlen)320, (ftnlen)1, (ftnlen)
-		    320);
-	    setmsg_(errmsg, (ftnlen)320);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("SCLD01", (ftnlen)6);
+		s_rnge(&__global_state->f2c, "lb", i__1, "sclu01_", (ftnlen)
+		1121)]) {
+	    repmc_(__global_state, __state->nummsg, "#", tmpnam, errmsg, (
+		    ftnlen)320, (ftnlen)1, (ftnlen)80, (ftnlen)320);
+	    repmi_(__global_state, errmsg, "#", n, errmsg, (ftnlen)320, (
+		    ftnlen)1, (ftnlen)320);
+	    setmsg_(__global_state, errmsg, (ftnlen)320);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "SCLD01", (ftnlen)6);
 	    return 0;
 	}
     }
 
 /*     Check the values of the moduli themselves. */
 
-    if (s_cmp(name__, __state->namlst + 400, name_len, (ftnlen)80) == 0) {
+    if (s_cmp(&__global_state->f2c, name__, __state->namlst + 400, name_len, (
+	    ftnlen)80) == 0) {
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (dval[0] < 1.) {
-		repmc_(__state->bvlmsg, "#", tmpnam, errmsg, (ftnlen)320, (
-			ftnlen)1, (ftnlen)80, (ftnlen)320);
-		repmd_(errmsg, "#", dval, &__state->c__14, errmsg, (ftnlen)
-			320, (ftnlen)1, (ftnlen)320);
-		setmsg_(errmsg, (ftnlen)320);
-		sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-		chkout_("SCLD01", (ftnlen)6);
+		repmc_(__global_state, __state->bvlmsg, "#", tmpnam, errmsg, (
+			ftnlen)320, (ftnlen)1, (ftnlen)80, (ftnlen)320);
+		repmd_(__global_state, errmsg, "#", dval, &__state->c__14, 
+			errmsg, (ftnlen)320, (ftnlen)1, (ftnlen)320);
+		setmsg_(__global_state, errmsg, (ftnlen)320);
+		sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+		chkout_(__global_state, "SCLD01", (ftnlen)6);
 		return 0;
 	    }
 	}
     }
-    chkout_("SCLD01", (ftnlen)6);
+    chkout_(__global_state, "SCLD01", (ftnlen)6);
     return 0;
 } /* sclu01_ */
 
-/* Subroutine */ int sclu01_(char *name__, integer *sc, integer *maxnv, 
-	integer *n, integer *ival, doublereal *dval, ftnlen name_len)
+/* Subroutine */ int sclu01_(cspice_t* __global_state, char *name__, integer *
+	sc, integer *maxnv, integer *n, integer *ival, doublereal *dval, 
+	ftnlen name_len)
 {
     return sclu01_0_(0, name__, sc, maxnv, n, ival, dval, name_len);
     }
 
-/* Subroutine */ int scli01_(char *name__, integer *sc, integer *maxnv, 
-	integer *n, integer *ival, ftnlen name_len)
+/* Subroutine */ int scli01_(cspice_t* __global_state, char *name__, integer *
+	sc, integer *maxnv, integer *n, integer *ival, ftnlen name_len)
 {
     return sclu01_0_(1, name__, sc, maxnv, n, ival, (doublereal *)0, name_len)
 	    ;
     }
 
-/* Subroutine */ int scld01_(char *name__, integer *sc, integer *maxnv, 
-	integer *n, doublereal *dval, ftnlen name_len)
+/* Subroutine */ int scld01_(cspice_t* __global_state, char *name__, integer *
+	sc, integer *maxnv, integer *n, doublereal *dval, ftnlen name_len)
 {
     return sclu01_0_(2, name__, sc, maxnv, n, (integer *)0, dval, name_len);
     }

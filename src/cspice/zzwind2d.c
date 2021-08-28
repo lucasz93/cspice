@@ -8,8 +8,7 @@
 
 
 extern zzwind2d_init_t __zzwind2d_init;
-static zzwind2d_state_t* get_zzwind2d_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzwind2d_state_t* get_zzwind2d_state(cspice_t* state) {
 	if (!state->zzwind2d)
 		state->zzwind2d = __cspice_allocate_module(sizeof(
 	zzwind2d_state_t), &__zzwind2d_init, sizeof(__zzwind2d_init));
@@ -18,39 +17,44 @@ static zzwind2d_state_t* get_zzwind2d_state() {
 }
 
 /* $Procedure  ZZWIND2D ( Find winding number of polygon about point ) */
-integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
+integer zzwind2d_(cspice_t* __global_state, integer *n, doublereal *vertcs, 
+	doublereal *point)
 {
     /* System generated locals */
     integer vertcs_dim2, ret_val, i__1, i__2;
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), i_dnnt(doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), i_dnnt(
+	    f2c_state_t*, doublereal *);
 
     /* Local variables */
     doublereal rvec[2];
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern doublereal vdotg_(doublereal *, doublereal *, integer *);
-    extern doublereal vsepg_(doublereal *, doublereal *, integer *);
-    extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
+    extern doublereal vdotg_(cspice_t*, doublereal *, doublereal *, integer *)
+	    ;
+    extern doublereal vsepg_(cspice_t*, doublereal *, doublereal *, integer *)
+	    ;
+    extern /* Subroutine */ int vsubg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
     doublereal rperp[2];
     doublereal rnext[2];
-    extern doublereal twopi_(void);
+    extern doublereal twopi_(cspice_t*);
     doublereal atotal;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal sep;
 
 
     /* Module state */
-    zzwind2d_state_t* __state = get_zzwind2d_state();
+    zzwind2d_state_t* __state = get_zzwind2d_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -287,26 +291,28 @@ integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
 
     /* Function Body */
     ret_val = 0;
-    if (return_()) {
+    if (return_(__global_state)) {
 	return ret_val;
     }
-    chkin_("ZZWIND2D", (ftnlen)8);
+    chkin_(__global_state, "ZZWIND2D", (ftnlen)8);
 
 /*     Check the number of sides of the polygon. */
 
     if (*n < 3) {
-	setmsg_("Polygon must have at least 3 sides; N = #.", (ftnlen)42);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("ZZWIND2D", (ftnlen)8);
+	setmsg_(__global_state, "Polygon must have at least 3 sides; N = #.", 
+		(ftnlen)42);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "ZZWIND2D", (ftnlen)8);
 	return ret_val;
     }
 
 /*     The total "wrap angle" starts at zero. */
 
     atotal = 0.;
-    vsubg_(&vertcs[(i__1 = 0) < 2 * vertcs_dim2 ? i__1 : s_rnge("vertcs", 
-	    i__1, "zzwind2d_", (ftnlen)285)], point, &__state->c__2, rvec);
+    vsubg_(__global_state, &vertcs[(i__1 = 0) < 2 * vertcs_dim2 ? i__1 : 
+	    s_rnge(&__global_state->f2c, "vertcs", i__1, "zzwind2d_", (ftnlen)
+	    285)], point, &__state->c__2, rvec);
     i__1 = *n + 1;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	if (i__ <= *n) {
@@ -318,10 +324,11 @@ integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
 /*        Find the angular separation of RVEC and the next vector */
 /*        RNEXT. */
 
-	vsubg_(&vertcs[(i__2 = (j << 1) - 2) < 2 * vertcs_dim2 && 0 <= i__2 ? 
-		i__2 : s_rnge("vertcs", i__2, "zzwind2d_", (ftnlen)299)], 
-		point, &__state->c__2, rnext);
-	sep = vsepg_(rnext, rvec, &__state->c__2);
+	vsubg_(__global_state, &vertcs[(i__2 = (j << 1) - 2) < 2 * 
+		vertcs_dim2 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c,
+		 "vertcs", i__2, "zzwind2d_", (ftnlen)299)], point, &
+		__state->c__2, rnext);
+	sep = vsepg_(__global_state, rnext, rvec, &__state->c__2);
 
 /*        Create a normal vector to RVEC by rotating RVEC pi/2 radians */
 /*        counterclockwise.  We'll use this vector RPERP to determine */
@@ -330,7 +337,7 @@ integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
 
 	rperp[0] = -rvec[1];
 	rperp[1] = rvec[0];
-	if (vdotg_(rnext, rperp, &__state->c__2) >= 0.) {
+	if (vdotg_(__global_state, rnext, rperp, &__state->c__2) >= 0.) {
 
 /*           RNEXT is reached by counterclockwise rotation from */
 /*           RVEC.  Note that in the case of zero rotation, the */
@@ -343,15 +350,15 @@ integer zzwind2d_(integer *n, doublereal *vertcs, doublereal *point)
 
 /*        Update RVEC. */
 
-	moved_(rnext, &__state->c__2, rvec);
+	moved_(__global_state, rnext, &__state->c__2, rvec);
     }
 
 /*     The above sum is 2 * pi * <the number of times the polygon */
 /*     wraps around P>.  Let ZZWIND2D be the wrap count. */
 
-    d__1 = atotal / twopi_();
-    ret_val = i_dnnt(&d__1);
-    chkout_("ZZWIND2D", (ftnlen)8);
+    d__1 = atotal / twopi_(__global_state);
+    ret_val = i_dnnt(&__global_state->f2c, &d__1);
+    chkout_(__global_state, "ZZWIND2D", (ftnlen)8);
     return ret_val;
 } /* zzwind2d_ */
 

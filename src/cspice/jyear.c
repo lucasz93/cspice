@@ -8,20 +8,19 @@
 
 
 typedef int jyear_state_t;
-static jyear_state_t* get_jyear_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline jyear_state_t* get_jyear_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      JYEAR ( Seconds per julian year ) */
-doublereal jyear_(void)
+doublereal jyear_(cspice_t* __global_state)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    jyear_state_t* __state = get_jyear_state();
+    jyear_state_t* __state = get_jyear_state(__global_state);
 /* $ Abstract */
 
 /*     Return the number of seconds in a julian year. */

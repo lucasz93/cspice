@@ -8,8 +8,7 @@
 
 
 extern ana_init_t __ana_init;
-static ana_state_t* get_ana_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ana_state_t* get_ana_state(cspice_t* state) {
 	if (!state->ana)
 		state->ana = __cspice_allocate_module(sizeof(ana_state_t), &
 	__ana_init, sizeof(__ana_init));
@@ -18,8 +17,9 @@ static ana_state_t* get_ana_state() {
 }
 
 /* $Procedure ANA ( AN or A ? ) */
-/* Character */ VOID ana_(char *ret_val, ftnlen ret_val_len, char *word, char 
-	*case__, ftnlen word_len, ftnlen case_len)
+/* Character */ VOID ana_(cspice_t* __global_state, char *ret_val, ftnlen 
+	ret_val_len, char *word, char *case__, ftnlen word_len, ftnlen 
+	case_len)
 {
     /* Initialized data */
 
@@ -28,19 +28,22 @@ static ana_state_t* get_ana_state() {
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_indx(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_indx(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int replch_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
 
     /* Module state */
-    ana_state_t* __state = get_ana_state();
+    ana_state_t* __state = get_ana_state(__global_state);
 /* $ Abstract */
 
 /*     Return the correct article "a" or "an" used to modify a word */
@@ -193,14 +196,15 @@ static ana_state_t* get_ana_state() {
 /*     GET THE CORRECT INDEFINITE ARTICLE */
 
 /* -& */
-    ucase_(word, __state->myword, word_len, (ftnlen)32);
-    replch_(__state->myword, "'", " ", __state->myword, (ftnlen)32, (ftnlen)1,
-	     (ftnlen)1, (ftnlen)32);
-    replch_(__state->myword, "\"", " ", __state->myword, (ftnlen)32, (ftnlen)
-	    1, (ftnlen)1, (ftnlen)32);
-    ljust_(__state->myword, __state->myword, (ftnlen)32, (ftnlen)32);
-    ucase_(case__, __state->mycase, case_len, (ftnlen)1);
-    s_copy(ret_val, " ", ret_val_len, (ftnlen)1);
+    ucase_(__global_state, word, __state->myword, word_len, (ftnlen)32);
+    replch_(__global_state, __state->myword, "'", " ", __state->myword, (
+	    ftnlen)32, (ftnlen)1, (ftnlen)1, (ftnlen)32);
+    replch_(__global_state, __state->myword, "\"", " ", __state->myword, (
+	    ftnlen)32, (ftnlen)1, (ftnlen)1, (ftnlen)32);
+    ljust_(__global_state, __state->myword, __state->myword, (ftnlen)32, (
+	    ftnlen)32);
+    ucase_(__global_state, case__, __state->mycase, case_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, ret_val, " ", ret_val_len, (ftnlen)1);
     if (*(unsigned char *)__state->mycase == 'U') {
 	__state->caps = 1;
     } else if (*(unsigned char *)__state->mycase == 'C') {
@@ -212,15 +216,18 @@ static ana_state_t* get_ana_state() {
 /*     Handle the obvious things first. */
 
     *(unsigned char *)__state->begin = *(unsigned char *)__state->myword;
-    if (i_indx("AI", __state->begin, (ftnlen)2, (ftnlen)1) > 0) {
-	s_copy(ret_val, __state->an + (((i__1 = __state->caps - 1) < 3 && 0 <=
-		 i__1 ? i__1 : s_rnge("an", i__1, "ana_", (ftnlen)235)) << 1),
-		 ret_val_len, (ftnlen)2);
+    if (i_indx(&__global_state->f2c, "AI", __state->begin, (ftnlen)2, (ftnlen)
+	    1) > 0) {
+	s_copy(&__global_state->f2c, ret_val, __state->an + (((i__1 = 
+		__state->caps - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "an", i__1, "ana_", (ftnlen)235)) << 1), 
+		ret_val_len, (ftnlen)2);
 	return ;
-    } else if (i_indx("BCDGJKPQTVWYZ", __state->begin, (ftnlen)13, (ftnlen)1) 
-	    > 0) {
-	s_copy(ret_val, __state->a + (((i__1 = __state->caps - 1) < 3 && 0 <= 
-		i__1 ? i__1 : s_rnge("a", i__1, "ana_", (ftnlen)240)) << 1), 
+    } else if (i_indx(&__global_state->f2c, "BCDGJKPQTVWYZ", __state->begin, (
+	    ftnlen)13, (ftnlen)1) > 0) {
+	s_copy(&__global_state->f2c, ret_val, __state->a + (((i__1 = 
+		__state->caps - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "a", i__1, "ana_", (ftnlen)240)) << 1), 
 		ret_val_len, (ftnlen)2);
 	return ;
     }
@@ -231,31 +238,34 @@ static ana_state_t* get_ana_state() {
 /*     Get the beginnings of the input word. */
 
     for (__state->i__ = 1; __state->i__ <= 7; ++__state->i__) {
-	s_copy(__state->start + (((i__1 = __state->i__ - 1) < 7 && 0 <= i__1 ?
-		 i__1 : s_rnge("start", i__1, "ana_", (ftnlen)252)) << 5), 
-		__state->myword, (ftnlen)32, __state->i__);
+	s_copy(&__global_state->f2c, __state->start + (((i__1 = __state->i__ 
+		- 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"start", i__1, "ana_", (ftnlen)252)) << 5), __state->myword, (
+		ftnlen)32, __state->i__);
     }
 
 /*     Now see if the start of the input word belongs to */
 /*     one of the special collections. */
 
     for (__state->i__ = 7; __state->i__ >= 2; --__state->i__) {
-	if (isrchc_(__state->start + (((i__1 = __state->i__ - 1) < 7 && 0 <= 
-		i__1 ? i__1 : s_rnge("start", i__1, "ana_", (ftnlen)261)) << 
-		5), &__state->c__33, __state->aword, (ftnlen)32, (ftnlen)8) !=
-		 0) {
-	    s_copy(ret_val, __state->a + (((i__1 = __state->caps - 1) < 3 && 
-		    0 <= i__1 ? i__1 : s_rnge("a", i__1, "ana_", (ftnlen)263))
-		     << 1), ret_val_len, (ftnlen)2);
+	if (isrchc_(__global_state, __state->start + (((i__1 = __state->i__ - 
+		1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"start", i__1, "ana_", (ftnlen)261)) << 5), &__state->c__33, 
+		__state->aword, (ftnlen)32, (ftnlen)8) != 0) {
+	    s_copy(&__global_state->f2c, ret_val, __state->a + (((i__1 = 
+		    __state->caps - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "a", i__1, "ana_", (ftnlen)263)) << 
+		    1), ret_val_len, (ftnlen)2);
 	    return ;
 	}
-	if (isrchc_(__state->start + (((i__1 = __state->i__ - 1) < 7 && 0 <= 
-		i__1 ? i__1 : s_rnge("start", i__1, "ana_", (ftnlen)268)) << 
-		5), &__state->c__22, __state->anword, (ftnlen)32, (ftnlen)8) 
-		!= 0) {
-	    s_copy(ret_val, __state->an + (((i__1 = __state->caps - 1) < 3 && 
-		    0 <= i__1 ? i__1 : s_rnge("an", i__1, "ana_", (ftnlen)270)
-		    ) << 1), ret_val_len, (ftnlen)2);
+	if (isrchc_(__global_state, __state->start + (((i__1 = __state->i__ - 
+		1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"start", i__1, "ana_", (ftnlen)268)) << 5), &__state->c__22, 
+		__state->anword, (ftnlen)32, (ftnlen)8) != 0) {
+	    s_copy(&__global_state->f2c, ret_val, __state->an + (((i__1 = 
+		    __state->caps - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "an", i__1, "ana_", (ftnlen)270)) << 
+		    1), ret_val_len, (ftnlen)2);
 	    return ;
 	}
     }
@@ -263,13 +273,16 @@ static ana_state_t* get_ana_state() {
 /*     If we got this far we can determine the ANAe by */
 /*     just looking at the beginning of the string. */
 
-    if (i_indx("AEIOU", __state->myword, (ftnlen)5, (ftnlen)1) > 0) {
-	s_copy(ret_val, __state->an + (((i__1 = __state->caps - 1) < 3 && 0 <=
-		 i__1 ? i__1 : s_rnge("an", i__1, "ana_", (ftnlen)282)) << 1),
-		 ret_val_len, (ftnlen)2);
+    if (i_indx(&__global_state->f2c, "AEIOU", __state->myword, (ftnlen)5, (
+	    ftnlen)1) > 0) {
+	s_copy(&__global_state->f2c, ret_val, __state->an + (((i__1 = 
+		__state->caps - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "an", i__1, "ana_", (ftnlen)282)) << 1), 
+		ret_val_len, (ftnlen)2);
     } else {
-	s_copy(ret_val, __state->a + (((i__1 = __state->caps - 1) < 3 && 0 <= 
-		i__1 ? i__1 : s_rnge("a", i__1, "ana_", (ftnlen)286)) << 1), 
+	s_copy(&__global_state->f2c, ret_val, __state->a + (((i__1 = 
+		__state->caps - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "a", i__1, "ana_", (ftnlen)286)) << 1), 
 		ret_val_len, (ftnlen)2);
     }
     return ;

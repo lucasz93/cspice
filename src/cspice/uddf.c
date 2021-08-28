@@ -8,14 +8,13 @@
 
 
 typedef int uddf_state_t;
-static uddf_state_t* get_uddf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline uddf_state_t* get_uddf_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure UDDF ( First derivative of a function, df(x)/dx ) */
-/* Subroutine */ int uddf_(S_fp udfunc, doublereal *x, doublereal *dx, 
-	doublereal *deriv)
+/* Subroutine */ int uddf_(cspice_t* __global_state, S_fp udfunc, doublereal *
+	x, doublereal *dx, doublereal *deriv)
 {
     /* System generated locals */
     doublereal d__1;
@@ -23,17 +22,17 @@ static uddf_state_t* get_uddf_state() {
     /* Local variables */
     doublereal dfdx[1];
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal udval[2];
-    extern logical failed_(void);
-    extern /* Subroutine */ int qderiv_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int qderiv_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    uddf_state_t* __state = get_uddf_state();
+    uddf_state_t* __state = get_uddf_state(__global_state);
 /* $ Abstract */
 
 /*     Routine to calculate the first derivative of a caller-specified */
@@ -281,10 +280,10 @@ static uddf_state_t* get_uddf_state() {
 
 /*     Local Variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("UDDF", (ftnlen)4);
+    chkin_(__global_state, "UDDF", (ftnlen)4);
 
 /*     Apply a three-point estimation of the derivative for */
 /*     UDFUNC at X by evaluating UDFUNC at [X-DX, X+DX]. */
@@ -297,27 +296,27 @@ static uddf_state_t* get_uddf_state() {
 /*     Check for a FAILED event. */
 
     d__1 = *x - *dx;
-    (*udfunc)(&d__1, udval);
-    if (failed_()) {
-	chkout_("UDDF", (ftnlen)4);
+    (*udfunc)(__global_state, &d__1, udval);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "UDDF", (ftnlen)4);
 	return 0;
     }
     d__1 = *x + *dx;
-    (*udfunc)(&d__1, &udval[1]);
-    if (failed_()) {
-	chkout_("UDDF", (ftnlen)4);
+    (*udfunc)(__global_state, &d__1, &udval[1]);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "UDDF", (ftnlen)4);
 	return 0;
     }
 
 /*     Estimate the derivative at X. */
 
-    qderiv_(&n, udval, &udval[1], dx, dfdx);
-    if (failed_()) {
-	chkout_("UDDF", (ftnlen)4);
+    qderiv_(__global_state, &n, udval, &udval[1], dx, dfdx);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "UDDF", (ftnlen)4);
 	return 0;
     }
     *deriv = dfdx[0];
-    chkout_("UDDF", (ftnlen)4);
+    chkout_(__global_state, "UDDF", (ftnlen)4);
     return 0;
 } /* uddf_ */
 

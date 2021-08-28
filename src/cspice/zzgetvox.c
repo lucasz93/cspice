@@ -8,34 +8,35 @@
 
 
 typedef int zzgetvox_state_t;
-static zzgetvox_state_t* get_zzgetvox_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgetvox_state_t* get_zzgetvox_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZGETVOX ( Coordinates of voxel containing a point ) */
-/* Subroutine */ int zzgetvox_(doublereal *voxsiz, doublereal *voxori, 
-	integer *nvox, doublereal *xyz, logical *inbox, integer *voxcor)
+/* Subroutine */ int zzgetvox_(cspice_t* __global_state, doublereal *voxsiz, 
+	doublereal *voxori, integer *nvox, doublereal *xyz, logical *inbox, 
+	integer *voxcor)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal term;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzgetvox_state_t* __state = get_zzgetvox_state();
+    zzgetvox_state_t* __state = get_zzgetvox_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -225,15 +226,16 @@ static zzgetvox_state_t* get_zzgetvox_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
     if (*voxsiz <= 0.) {
-	chkin_("ZZGETVOX", (ftnlen)8);
-	setmsg_("Voxel size was #; must be positive.", (ftnlen)35);
-	errdp_("#", voxsiz, (ftnlen)1);
-	sigerr_("SPICE(NONPOSITIVEVALUE)", (ftnlen)23);
-	chkout_("ZZGETVOX", (ftnlen)8);
+	chkin_(__global_state, "ZZGETVOX", (ftnlen)8);
+	setmsg_(__global_state, "Voxel size was #; must be positive.", (
+		ftnlen)35);
+	errdp_(__global_state, "#", voxsiz, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NONPOSITIVEVALUE)", (ftnlen)23);
+	chkout_(__global_state, "ZZGETVOX", (ftnlen)8);
 	return 0;
     }
 
@@ -256,10 +258,11 @@ static zzgetvox_state_t* get_zzgetvox_state() {
 /*        including the operation here improves ZZGETVOX's */
 /*        runtime performance. */
 
-	term = (xyz[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("xyz", 
-		i__1, "zzgetvox_", (ftnlen)249)] - voxori[(i__2 = i__ - 1) < 
-		3 && 0 <= i__2 ? i__2 : s_rnge("voxori", i__2, "zzgetvox_", (
-		ftnlen)249)]) / *voxsiz;
+	term = (xyz[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "xyz", i__1, "zzgetvox_", (ftnlen)249)] 
+		- voxori[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "voxori", i__2, "zzgetvox_", (ftnlen)249)
+		]) / *voxsiz;
 
 /*        Calculate the voxel index for each degree of freedom */
 /*        corresponding to the voxel coordinate. */
@@ -267,8 +270,8 @@ static zzgetvox_state_t* get_zzgetvox_state() {
 /*        If the point is outside of the grid, return now. */
 
 	if (term < 0. || term > (doublereal) nvox[(i__1 = i__ - 1) < 3 && 0 <=
-		 i__1 ? i__1 : s_rnge("nvox", i__1, "zzgetvox_", (ftnlen)257)]
-		) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "nvox", i__1, 
+		"zzgetvox_", (ftnlen)257)]) {
 	    return 0;
 	}
 
@@ -279,9 +282,11 @@ static zzgetvox_state_t* get_zzgetvox_state() {
 /*        Note that TERM is non-negative at this point. */
 
 	if ((integer) term < nvox[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("nvox", i__1, "zzgetvox_", (ftnlen)270)]) {
-	    voxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("voxcor",
-		     i__1, "zzgetvox_", (ftnlen)272)] = (integer) term + 1;
+		s_rnge(&__global_state->f2c, "nvox", i__1, "zzgetvox_", (
+		ftnlen)270)]) {
+	    voxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "voxcor", i__1, "zzgetvox_", (ftnlen)
+		    272)] = (integer) term + 1;
 	} else {
 
 /*           TERM is NVOX(I), since the cases */
@@ -291,10 +296,11 @@ static zzgetvox_state_t* get_zzgetvox_state() {
 
 /*           have been ruled out. */
 
-	    voxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("voxcor",
-		     i__1, "zzgetvox_", (ftnlen)283)] = nvox[(i__2 = i__ - 1) 
-		    < 3 && 0 <= i__2 ? i__2 : s_rnge("nvox", i__2, "zzgetvox_"
-		    , (ftnlen)283)];
+	    voxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "voxcor", i__1, "zzgetvox_", (ftnlen)
+		    283)] = nvox[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "nvox", i__2, "zzgetvox_", (
+		    ftnlen)283)];
 	}
     }
     *inbox = TRUE_;

@@ -442,7 +442,7 @@
    /*
    Participate in error handling
    */
-   chkin_c ( "scdecd_c");
+   chkin_c ( naif_state, "scdecd_c");
 
    /*
    Make sure the output string has at least enough room for one output

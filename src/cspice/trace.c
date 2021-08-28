@@ -8,20 +8,19 @@
 
 
 typedef int trace_state_t;
-static trace_state_t* get_trace_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline trace_state_t* get_trace_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure                      TRACE ( Trace of a 3x3 matrix ) */
-doublereal trace_(doublereal *matrix)
+doublereal trace_(cspice_t* __global_state, doublereal *matrix)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    trace_state_t* __state = get_trace_state();
+    trace_state_t* __state = get_trace_state(__global_state);
 /* $ Abstract */
 
 /*      Return the trace of a 3x3 matrix. */

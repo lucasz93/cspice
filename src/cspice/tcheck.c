@@ -8,8 +8,7 @@
 
 
 extern tcheck_init_t __tcheck_init;
-static tcheck_state_t* get_tcheck_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline tcheck_state_t* get_tcheck_state(cspice_t* state) {
 	if (!state->tcheck)
 		state->tcheck = __cspice_allocate_module(sizeof(
 	tcheck_state_t), &__tcheck_init, sizeof(__tcheck_init));
@@ -18,9 +17,9 @@ static tcheck_state_t* get_tcheck_state() {
 }
 
 /* $Procedure      TCHECK ( Time Check ) */
-/* Subroutine */ int tcheck_0_(int n__, doublereal *tvec, char *type__, 
-	logical *mods, char *modify, logical *ok, char *error, ftnlen 
-	type_len, ftnlen modify_len, ftnlen error_len)
+/* Subroutine */ int tcheck_0_(cspice_t* __global_state, int n__, doublereal *
+	tvec, char *type__, logical *mods, char *modify, logical *ok, char *
+	error, ftnlen type_len, ftnlen modify_len, ftnlen error_len)
 {
     /* Initialized data */
 
@@ -30,21 +29,22 @@ static tcheck_state_t* get_tcheck_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_dnnt(doublereal *), s_cmp(char *, char *, ftnlen, ftnlen), 
-	    s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen), s_rnge(f2c_state_t*, char *, integer, 
+	    char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmd_(char *, char *, doublereal *, integer *
-	    , char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmd_(cspice_t*, char *, char *, doublereal *
+	    , integer *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
 
     /* Module state */
-    tcheck_state_t* __state = get_tcheck_state();
+    tcheck_state_t* __state = get_tcheck_state(__global_state);
 /* $ Abstract */
 
 /*     If component checking is enabled, this routine */
@@ -333,15 +333,16 @@ static tcheck_state_t* get_tcheck_state() {
 
     if (! __state->dochck) {
 	*ok = TRUE_;
-	s_copy(error, " ", error_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, error, " ", error_len, (ftnlen)1);
 	return 0;
     }
 
 /*     Ok.  Checking has been enabled.  Proceed with the various */
 /*     checks. */
 
-    __state->year = i_dnnt(tvec);
-    if (s_cmp(modify, "B.C.", modify_len, (ftnlen)4) == 0) {
+    __state->year = i_dnnt(&__global_state->f2c, tvec);
+    if (s_cmp(&__global_state->f2c, modify, "B.C.", modify_len, (ftnlen)4) == 
+	    0) {
 	__state->myear = 1 - __state->year;
     } else {
 	__state->myear = __state->year;
@@ -365,32 +366,35 @@ static tcheck_state_t* get_tcheck_state() {
 /*     was specified.  We set up valid range as well as the out */
 /*     of range messages here. */
 
-    if (*mods && s_cmp(modify + modify_len * 3, " ", modify_len, (ftnlen)1) !=
-	     0) {
+    if (*mods && s_cmp(&__global_state->f2c, modify + modify_len * 3, " ", 
+	    modify_len, (ftnlen)1) != 0) {
 	__state->hubnd = 13.;
 	__state->hlbnd = 1.;
-	s_copy(__state->messge, "The hours component of the time specified w"
-		"as #. When either A.M. or P.M. is specified with the time th"
-		"e hours component must be at least 1.0D0 and less than 13.0D"
-		"0. ", (ftnlen)200, (ftnlen)166);
+	s_copy(&__global_state->f2c, __state->messge, "The hours component o"
+		"f the time specified was #. When either A.M. or P.M. is spec"
+		"ified with the time the hours component must be at least 1.0"
+		"D0 and less than 13.0D0. ", (ftnlen)200, (ftnlen)166);
     } else {
 	__state->hubnd = 24.;
 	__state->hlbnd = 0.;
-	s_copy(__state->messge, "The hours component of the time specified w"
-		"as #.  The hours component must be greater than or equal to "
-		"0.0D0 and less than 24.0D0. ", (ftnlen)200, (ftnlen)131);
+	s_copy(&__global_state->f2c, __state->messge, "The hours component o"
+		"f the time specified was #.  The hours component must be gre"
+		"ater than or equal to 0.0D0 and less than 24.0D0. ", (ftnlen)
+		200, (ftnlen)131);
     }
 
 /*     We only check YD and YMD anything else is out of the */
 /*     province of this routine. */
 
-    if (s_cmp(type__, "YD", type_len, (ftnlen)2) != 0 && s_cmp(type__, "YMD", 
-	    type_len, (ftnlen)3) != 0) {
+    if (s_cmp(&__global_state->f2c, type__, "YD", type_len, (ftnlen)2) != 0 &&
+	     s_cmp(&__global_state->f2c, type__, "YMD", type_len, (ftnlen)3) 
+	    != 0) {
 	*ok = FALSE_;
-	s_copy(error, "The type of the time vector specified was #, only 'YD"
-		"' and 'YMD' are recognized. ", error_len, (ftnlen)81);
-	repmc_(error, "#", type__, error, error_len, (ftnlen)1, type_len, 
-		error_len);
+	s_copy(&__global_state->f2c, error, "The type of the time vector spe"
+		"cified was #, only 'YD' and 'YMD' are recognized. ", 
+		error_len, (ftnlen)81);
+	repmc_(__global_state, error, "#", type__, error, error_len, (ftnlen)
+		1, type_len, error_len);
 	return 0;
     }
 
@@ -398,13 +402,13 @@ static tcheck_state_t* get_tcheck_state() {
 
     if (tvec[0] != (doublereal) __state->year) {
 	*ok = FALSE_;
-	s_copy(error, "The year value was #.  This must be an integral value"
-		". ", error_len, (ftnlen)55);
-	repmd_(error, "#", tvec, &__state->c__8, error, error_len, (ftnlen)1, 
-		error_len);
+	s_copy(&__global_state->f2c, error, "The year value was #.  This mus"
+		"t be an integral value. ", error_len, (ftnlen)55);
+	repmd_(__global_state, error, "#", tvec, &__state->c__8, error, 
+		error_len, (ftnlen)1, error_len);
 	return 0;
     }
-    if (s_cmp(type__, "YD", type_len, (ftnlen)2) == 0) {
+    if (s_cmp(&__global_state->f2c, type__, "YD", type_len, (ftnlen)2) == 0) {
 	__state->day = 2;
 	__state->hour = 3;
 	__state->minute = 4;
@@ -412,19 +416,21 @@ static tcheck_state_t* get_tcheck_state() {
 	__state->doy = tvec[1];
 	if (tvec[1] >= __state->dinyr + 1. || tvec[1] < 1.) {
 	    *ok = FALSE_;
-	    s_copy(error, "Day # has been specified for the year #. The corr"
-		    "ect range for the day of year for this year is from 1 to"
-		    " #. ", error_len, (ftnlen)109);
-	    repmd_(error, "#", &tvec[1], &__state->c__8, error, error_len, (
-		    ftnlen)1, error_len);
-	    repmi_(error, "#", &__state->year, error, error_len, (ftnlen)1, 
-		    error_len);
+	    s_copy(&__global_state->f2c, error, "Day # has been specified fo"
+		    "r the year #. The correct range for the day of year for "
+		    "this year is from 1 to #. ", error_len, (ftnlen)109);
+	    repmd_(__global_state, error, "#", &tvec[1], &__state->c__8, 
+		    error, error_len, (ftnlen)1, error_len);
+	    repmi_(__global_state, error, "#", &__state->year, error, 
+		    error_len, (ftnlen)1, error_len);
 	    i__1 = __state->leapdy + 365;
-	    repmi_(error, "#", &i__1, error, error_len, (ftnlen)1, error_len);
+	    repmi_(__global_state, error, "#", &i__1, error, error_len, (
+		    ftnlen)1, error_len);
 	    return 0;
 	}
-    } else if (s_cmp(type__, "YMD", type_len, (ftnlen)3) == 0) {
-	__state->month = i_dnnt(&tvec[1]);
+    } else if (s_cmp(&__global_state->f2c, type__, "YMD", type_len, (ftnlen)3)
+	     == 0) {
+	__state->month = i_dnnt(&__global_state->f2c, &tvec[1]);
 	__state->day = 3;
 	__state->hour = 4;
 	__state->minute = 5;
@@ -432,49 +438,52 @@ static tcheck_state_t* get_tcheck_state() {
 	__state->doy = 0.;
 	if (tvec[1] != (doublereal) __state->month) {
 	    *ok = FALSE_;
-	    s_copy(error, "The month specified, #, was not an integer. The m"
-		    "onth must be an integer in the range from 1 to 12. ", 
-		    error_len, (ftnlen)100);
-	    repmd_(error, "#", &tvec[1], &__state->c__3, error, error_len, (
-		    ftnlen)1, error_len);
+	    s_copy(&__global_state->f2c, error, "The month specified, #, was"
+		    " not an integer. The month must be an integer in the ran"
+		    "ge from 1 to 12. ", error_len, (ftnlen)100);
+	    repmd_(__global_state, error, "#", &tvec[1], &__state->c__3, 
+		    error, error_len, (ftnlen)1, error_len);
 	    return 0;
 	} else if (tvec[1] < 1. || tvec[1] > 12.) {
 	    *ok = FALSE_;
-	    s_copy(error, "The month specified was #.  The month must be an "
-		    "integer in the range from 1 to 12 (inclusive). ", 
-		    error_len, (ftnlen)96);
-	    repmi_(error, "#", &__state->month, error, error_len, (ftnlen)1, 
-		    error_len);
+	    s_copy(&__global_state->f2c, error, "The month specified was #. "
+		    " The month must be an integer in the range from 1 to 12 "
+		    "(inclusive). ", error_len, (ftnlen)96);
+	    repmi_(__global_state, error, "#", &__state->month, error, 
+		    error_len, (ftnlen)1, error_len);
 	    return 0;
 	} else if (tvec[2] < 1. || tvec[2] >= __state->dinmon[(i__1 = 
-		__state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dinmon"
-		, i__1, "tcheck_", (ftnlen)496)] + 1.) {
+		__state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "dinmon", i__1, "tcheck_", (ftnlen)496)] 
+		+ 1.) {
 	    *ok = FALSE_;
-	    s_copy(error, "The day of the month specified for the month of #"
-		    " was #.  For # the day must be at least 1.0D0 and less t"
-		    "han #. ", error_len, (ftnlen)112);
-	    repmc_(error, "#", __state->mnames + ((i__1 = __state->month - 1) 
-		    < 12 && 0 <= i__1 ? i__1 : s_rnge("mnames", i__1, "tchec"
-		    "k_", (ftnlen)503)) * 10, error, error_len, (ftnlen)1, (
-		    ftnlen)10, error_len);
-	    repmd_(error, "#", &tvec[2], &__state->c__3, error, error_len, (
-		    ftnlen)1, error_len);
-	    repmc_(error, "#", __state->mnames + ((i__1 = __state->month - 1) 
-		    < 12 && 0 <= i__1 ? i__1 : s_rnge("mnames", i__1, "tchec"
-		    "k_", (ftnlen)505)) * 10, error, error_len, (ftnlen)1, (
-		    ftnlen)10, error_len);
+	    s_copy(&__global_state->f2c, error, "The day of the month specif"
+		    "ied for the month of # was #.  For # the day must be at "
+		    "least 1.0D0 and less than #. ", error_len, (ftnlen)112);
+	    repmc_(__global_state, error, "#", __state->mnames + ((i__1 = 
+		    __state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "mnames", i__1, "tcheck_", (ftnlen)
+		    503)) * 10, error, error_len, (ftnlen)1, (ftnlen)10, 
+		    error_len);
+	    repmd_(__global_state, error, "#", &tvec[2], &__state->c__3, 
+		    error, error_len, (ftnlen)1, error_len);
+	    repmc_(__global_state, error, "#", __state->mnames + ((i__1 = 
+		    __state->month - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "mnames", i__1, "tcheck_", (ftnlen)
+		    505)) * 10, error, error_len, (ftnlen)1, (ftnlen)10, 
+		    error_len);
 	    d__1 = __state->dinmon[(i__1 = __state->month - 1) < 12 && 0 <= 
-		    i__1 ? i__1 : s_rnge("dinmon", i__1, "tcheck_", (ftnlen)
-		    506)] + 1.;
-	    repmd_(error, "#", &d__1, &__state->c__2, error, error_len, (
-		    ftnlen)1, error_len);
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "dinmon", i__1,
+		     "tcheck_", (ftnlen)506)] + 1.;
+	    repmd_(__global_state, error, "#", &d__1, &__state->c__2, error, 
+		    error_len, (ftnlen)1, error_len);
 	    return 0;
 	}
 	i__1 = __state->month - 1;
 	for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	    __state->doy += __state->dinmon[(i__2 = __state->i__ - 1) < 12 && 
-		    0 <= i__2 ? i__2 : s_rnge("dinmon", i__2, "tcheck_", (
-		    ftnlen)512)];
+		    0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "dinmon", 
+		    i__2, "tcheck_", (ftnlen)512)];
 	}
 	__state->doy += tvec[2];
     }
@@ -484,18 +493,19 @@ static tcheck_state_t* get_tcheck_state() {
     if (tvec[__state->hour - 1] >= __state->hubnd || tvec[__state->hour - 1] <
 	     __state->hlbnd) {
 	*ok = FALSE_;
-	s_copy(error, __state->messge, error_len, (ftnlen)200);
-	repmd_(error, "#", &tvec[__state->hour - 1], &__state->c__2, error, 
-		error_len, (ftnlen)1, error_len);
+	s_copy(&__global_state->f2c, error, __state->messge, error_len, (
+		ftnlen)200);
+	repmd_(__global_state, error, "#", &tvec[__state->hour - 1], &
+		__state->c__2, error, error_len, (ftnlen)1, error_len);
 	return 0;
     } else if (tvec[__state->minute - 1] >= 60. || tvec[__state->minute - 1] <
 	     0.) {
 	*ok = FALSE_;
-	s_copy(error, "The minutes component of the time specified was #. Th"
-		"is value must be greater than or equal to 0.0 and less than "
-		"60.0. ", error_len, (ftnlen)119);
-	repmd_(error, "#", &tvec[__state->minute - 1], &__state->c__2, error, 
-		error_len, (ftnlen)1, error_len);
+	s_copy(&__global_state->f2c, error, "The minutes component of the ti"
+		"me specified was #. This value must be greater than or equal"
+		" to 0.0 and less than 60.0. ", error_len, (ftnlen)119);
+	repmd_(__global_state, error, "#", &tvec[__state->minute - 1], &
+		__state->c__2, error, error_len, (ftnlen)1, error_len);
 	return 0;
     }
     if (tvec[__state->second - 1] >= 60. || tvec[__state->second - 1] < 0.) {
@@ -511,21 +521,21 @@ static tcheck_state_t* get_tcheck_state() {
 
 	} else if (tvec[__state->second - 1] < 61. && tvec[__state->second - 
 		1] > 0. && tvec[__state->minute - 1] == 59. && tvec[
-		__state->hour - 1] == 11. && *mods && s_cmp(modify + 
-		modify_len * 3, "P.M.", modify_len, (ftnlen)4) == 0 && (
-		__state->doy == __state->dinyr || __state->doy == 
-		__state->jun30)) {
+		__state->hour - 1] == 11. && *mods && s_cmp(&
+		__global_state->f2c, modify + modify_len * 3, "P.M.", 
+		modify_len, (ftnlen)4) == 0 && (__state->doy == 
+		__state->dinyr || __state->doy == __state->jun30)) {
 
 /*           Don't do anything. */
 
 	} else {
 	    *ok = FALSE_;
-	    s_copy(error, "The seconds component of time must be at least 0."
-		    "0D0 and less than 60.0D0 (61.0D0 during the last minute "
-		    "of June 30 and December 31). The value supplied was #. ", 
-		    error_len, (ftnlen)160);
-	    repmd_(error, "#", &tvec[__state->second - 1], &__state->c__8, 
-		    error, error_len, (ftnlen)1, error_len);
+	    s_copy(&__global_state->f2c, error, "The seconds component of ti"
+		    "me must be at least 0.0D0 and less than 60.0D0 (61.0D0 d"
+		    "uring the last minute of June 30 and December 31). The v"
+		    "alue supplied was #. ", error_len, (ftnlen)160);
+	    repmd_(__global_state, error, "#", &tvec[__state->second - 1], &
+		    __state->c__8, error, error_len, (ftnlen)1, error_len);
 	    return 0;
 	}
     }
@@ -538,30 +548,32 @@ static tcheck_state_t* get_tcheck_state() {
     for (__state->i__ = __state->day; __state->i__ <= i__1; ++__state->i__) {
 	++__state->comp;
 	__state->k = __state->comp;
-	if (tvec[__state->i__ - 1] != (doublereal) i_dnnt(&tvec[__state->i__ 
-		- 1])) {
+	if (tvec[__state->i__ - 1] != (doublereal) i_dnnt(&
+		__global_state->f2c, &tvec[__state->i__ - 1])) {
 	    i__2 = __state->second;
 	    for (__state->j = __state->i__ + 1; __state->j <= i__2; 
 		    ++__state->j) {
 		++__state->k;
 		if (tvec[__state->j - 1] != 0.) {
 		    *ok = FALSE_;
-		    s_copy(error, "The '#' component of the date has a fract"
-			    "ional component.  This is allowed only if all co"
-			    "mponents of lesser significance have value 0.0D0"
-			    ". However the '#' component has value #. ", 
-			    error_len, (ftnlen)178);
-		    repmc_(error, "#", __state->cname + ((i__3 = 
-			    __state->comp - 1) < 4 && 0 <= i__3 ? i__3 : 
-			    s_rnge("cname", i__3, "tcheck_", (ftnlen)608)) * 
-			    7, error, error_len, (ftnlen)1, (ftnlen)7, 
-			    error_len);
-		    repmc_(error, "#", __state->cname + ((i__3 = __state->k - 
-			    1) < 4 && 0 <= i__3 ? i__3 : s_rnge("cname", i__3,
-			     "tcheck_", (ftnlen)609)) * 7, error, error_len, (
+		    s_copy(&__global_state->f2c, error, "The '#' component o"
+			    "f the date has a fractional component.  This is "
+			    "allowed only if all components of lesser signifi"
+			    "cance have value 0.0D0. However the '#' componen"
+			    "t has value #. ", error_len, (ftnlen)178);
+		    repmc_(__global_state, error, "#", __state->cname + ((
+			    i__3 = __state->comp - 1) < 4 && 0 <= i__3 ? i__3 
+			    : s_rnge(&__global_state->f2c, "cname", i__3, 
+			    "tcheck_", (ftnlen)608)) * 7, error, error_len, (
 			    ftnlen)1, (ftnlen)7, error_len);
-		    repmd_(error, "#", &tvec[__state->j - 1], &__state->c__2, 
-			    error, error_len, (ftnlen)1, error_len);
+		    repmc_(__global_state, error, "#", __state->cname + ((
+			    i__3 = __state->k - 1) < 4 && 0 <= i__3 ? i__3 : 
+			    s_rnge(&__global_state->f2c, "cname", i__3, "tch"
+			    "eck_", (ftnlen)609)) * 7, error, error_len, (
+			    ftnlen)1, (ftnlen)7, error_len);
+		    repmd_(__global_state, error, "#", &tvec[__state->j - 1], 
+			    &__state->c__2, error, error_len, (ftnlen)1, 
+			    error_len);
 		    return 0;
 		}
 	    }
@@ -572,7 +584,7 @@ static tcheck_state_t* get_tcheck_state() {
 /*     tests. */
 
     *ok = TRUE_;
-    s_copy(error, " ", error_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, error, " ", error_len, (ftnlen)1);
     return 0;
 /* $Procedure TPARCH ( Parse check---check format of strings ) */
 
@@ -770,7 +782,8 @@ L_tparch:
 /*     Restrict time strings to proper form */
 
 /* -& */
-    __state->dochck = eqstr_(type__, "YES", type_len, (ftnlen)3);
+    __state->dochck = eqstr_(__global_state, type__, "YES", type_len, (ftnlen)
+	    3);
     return 0;
 /* $Procedure TCHCKD ( Time components are checked ) */
 
@@ -904,28 +917,30 @@ L_tchckd:
 
 /* -& */
     if (__state->dochck) {
-	s_copy(type__, "YES", type_len, (ftnlen)3);
+	s_copy(&__global_state->f2c, type__, "YES", type_len, (ftnlen)3);
     } else {
-	s_copy(type__, "NO", type_len, (ftnlen)2);
+	s_copy(&__global_state->f2c, type__, "NO", type_len, (ftnlen)2);
     }
     return 0;
 } /* tcheck_ */
 
-/* Subroutine */ int tcheck_(doublereal *tvec, char *type__, logical *mods, 
-	char *modify, logical *ok, char *error, ftnlen type_len, ftnlen 
-	modify_len, ftnlen error_len)
+/* Subroutine */ int tcheck_(cspice_t* __global_state, doublereal *tvec, char 
+	*type__, logical *mods, char *modify, logical *ok, char *error, 
+	ftnlen type_len, ftnlen modify_len, ftnlen error_len)
 {
     return tcheck_0_(0, tvec, type__, mods, modify, ok, error, type_len, 
 	    modify_len, error_len);
     }
 
-/* Subroutine */ int tparch_(char *type__, ftnlen type_len)
+/* Subroutine */ int tparch_(cspice_t* __global_state, char *type__, ftnlen 
+	type_len)
 {
     return tcheck_0_(1, (doublereal *)0, type__, (logical *)0, (char *)0, (
 	    logical *)0, (char *)0, type_len, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int tchckd_(char *type__, ftnlen type_len)
+/* Subroutine */ int tchckd_(cspice_t* __global_state, char *type__, ftnlen 
+	type_len)
 {
     return tcheck_0_(2, (doublereal *)0, type__, (logical *)0, (char *)0, (
 	    logical *)0, (char *)0, type_len, (ftnint)0, (ftnint)0);

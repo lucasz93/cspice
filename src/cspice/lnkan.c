@@ -8,22 +8,22 @@
 
 
 typedef int lnkan_state_t;
-static lnkan_state_t* get_lnkan_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lnkan_state_t* get_lnkan_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LNKAN  ( LNK, allocate node ) */
-/* Subroutine */ int lnkan_(integer *pool, integer *new__)
+/* Subroutine */ int lnkan_(cspice_t* __global_state, integer *pool, integer *
+	new__)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    lnkan_state_t* __state = get_lnkan_state();
+    lnkan_state_t* __state = get_lnkan_state(__global_state);
 /* $ Abstract */
 
 /*     Allocate a node in a doubly linked list pool. */
@@ -224,11 +224,11 @@ static lnkan_state_t* get_lnkan_state() {
 /*     handling. */
 
     if (pool[11] == 0) {
-	chkin_("LNKAN", (ftnlen)5);
-	setmsg_("There are no free nodes left for allocating in the supplied"
-		" linked list pool. ", (ftnlen)78);
-	sigerr_("SPICE(NOFREENODES)", (ftnlen)18);
-	chkout_("LNKAN", (ftnlen)5);
+	chkin_(__global_state, "LNKAN", (ftnlen)5);
+	setmsg_(__global_state, "There are no free nodes left for allocating"
+		" in the supplied linked list pool. ", (ftnlen)78);
+	sigerr_(__global_state, "SPICE(NOFREENODES)", (ftnlen)18);
+	chkout_(__global_state, "LNKAN", (ftnlen)5);
 	return 0;
     }
 

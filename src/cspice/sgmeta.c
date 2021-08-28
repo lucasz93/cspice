@@ -8,8 +8,7 @@
 
 
 extern sgmeta_init_t __sgmeta_init;
-static sgmeta_state_t* get_sgmeta_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sgmeta_state_t* get_sgmeta_state(cspice_t* state) {
 	if (!state->sgmeta)
 		state->sgmeta = __cspice_allocate_module(sizeof(
 	sgmeta_state_t), &__sgmeta_init, sizeof(__sgmeta_init));
@@ -18,8 +17,8 @@ static sgmeta_state_t* get_sgmeta_state() {
 }
 
 /* $Procedure      SGMETA ( Generic segments: Fetch meta data value ) */
-/* Subroutine */ int sgmeta_(integer *handle, doublereal *descr, integer *
-	mnemon, integer *value)
+/* Subroutine */ int sgmeta_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, integer *mnemon, integer *value)
 {
     /* Initialized data */
 
@@ -28,38 +27,41 @@ static sgmeta_state_t* get_sgmeta_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), i_dnnt(doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), i_dnnt(
+	    f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer begm1;
     integer i__;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
 #define dtemp (__state->equiv_0)
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     doublereal xmeta[17];
 #define itemp ((integer *)__state->equiv_0)
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     integer niovr2;
     integer nd;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer ni;
-    extern /* Subroutine */ int dafhsf_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dafhsf_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer begmta;
     integer endmta;
     integer ametas;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal dmtasz;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer end;
 
 
     /* Module state */
-    sgmeta_state_t* __state = get_sgmeta_state();
+    sgmeta_state_t* __state = get_sgmeta_state(__global_state);
 /* $ Abstract */
 
 /*     Obtain the value of a specified generic segment meta data item. */
@@ -698,7 +700,7 @@ static sgmeta_state_t* get_sgmeta_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -714,11 +716,13 @@ static sgmeta_state_t* get_sgmeta_state() {
 /*        located in the last two "integer" positions of the descriptor. */
 
 	if (__state->nieven) {
-	    moved_(&descr[__state->ioffst - 1], &__state->c__1, dtemp);
+	    moved_(__global_state, &descr[__state->ioffst - 1], &
+		    __state->c__1, dtemp);
 	    begin = itemp[0];
 	    end = itemp[1];
 	} else {
-	    moved_(&descr[__state->ioffst - 1], &__state->c__2, dtemp);
+	    moved_(__global_state, &descr[__state->ioffst - 1], &
+		    __state->c__2, dtemp);
 	    begin = itemp[1];
 	    end = itemp[2];
 	}
@@ -734,21 +738,22 @@ static sgmeta_state_t* get_sgmeta_state() {
 /*        current segment has no knowledge of these values. */
 
 	    if (*mnemon <= 0 || *mnemon > __state->metasz && *mnemon != 17) {
-		chkin_("SGMETA", (ftnlen)6);
+		chkin_(__global_state, "SGMETA", (ftnlen)6);
 		*value = -1;
-		setmsg_("The item requested, #, is not one of the recognized"
-			" meta data items associated with this generic segmen"
-			"t.", (ftnlen)105);
-		errint_("#", mnemon, (ftnlen)1);
-		sigerr_("SPICE(UNKNOWNMETAITEM)", (ftnlen)22);
-		chkout_("SGMETA", (ftnlen)6);
+		setmsg_(__global_state, "The item requested, #, is not one o"
+			"f the recognized meta data items associated with thi"
+			"s generic segment.", (ftnlen)105);
+		errint_(__global_state, "#", mnemon, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(UNKNOWNMETAITEM)", (ftnlen)22);
+		chkout_(__global_state, "SGMETA", (ftnlen)6);
 		return 0;
 	    }
 
 /*           Set the value for the desired meta data item and return. */
 
 	    *value = __state->meta[(i__1 = *mnemon - 1) < 17 && 0 <= i__1 ? 
-		    i__1 : s_rnge("meta", i__1, "sgmeta_", (ftnlen)364)];
+		    i__1 : s_rnge(&__global_state->f2c, "meta", i__1, "sgmet"
+		    "a_", (ftnlen)364)];
 	    return 0;
 	}
     }
@@ -758,11 +763,11 @@ static sgmeta_state_t* get_sgmeta_state() {
 /*     code has already retrieved the relevant segment addresses. If not */
 /*     we need to fetch them.  First check in. */
 
-    chkin_("SGMETA", (ftnlen)6);
+    chkin_(__global_state, "SGMETA", (ftnlen)6);
     if (*handle != __state->lsthan) {
-	dafhsf_(handle, &nd, &ni);
-	if (failed_()) {
-	    chkout_("SGMETA", (ftnlen)6);
+	dafhsf_(__global_state, handle, &nd, &ni);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGMETA", (ftnlen)6);
 	    return 0;
 	}
 	niovr2 = ni / 2;
@@ -774,11 +779,13 @@ static sgmeta_state_t* get_sgmeta_state() {
 /*        located in the last two "integer" positions of the descriptor. */
 
 	if (__state->nieven) {
-	    moved_(&descr[__state->ioffst - 1], &__state->c__1, dtemp);
+	    moved_(__global_state, &descr[__state->ioffst - 1], &
+		    __state->c__1, dtemp);
 	    begin = itemp[0];
 	    end = itemp[1];
 	} else {
-	    moved_(&descr[__state->ioffst - 1], &__state->c__2, dtemp);
+	    moved_(__global_state, &descr[__state->ioffst - 1], &
+		    __state->c__2, dtemp);
 	    begin = itemp[1];
 	    end = itemp[2];
 	}
@@ -793,12 +800,12 @@ static sgmeta_state_t* get_sgmeta_state() {
 /*     Compute the begin address of the meta data and compute the */
 /*     end address of the number we will be collecting. */
 
-    dafgda_(handle, &end, &end, &dmtasz);
-    if (failed_()) {
-	chkout_("SGMETA", (ftnlen)6);
+    dafgda_(__global_state, handle, &end, &end, &dmtasz);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGMETA", (ftnlen)6);
 	return 0;
     }
-    __state->metasz = i_dnnt(&dmtasz);
+    __state->metasz = i_dnnt(&__global_state->f2c, &dmtasz);
 
 /*     Store the actual meta size in AMETAS, in case METASZ ends up */
 /*     being modified to conform to our current understanding of */
@@ -810,12 +817,13 @@ static sgmeta_state_t* get_sgmeta_state() {
 
     if (__state->metasz < 15) {
 	*value = -1;
-	setmsg_("This segment reports that it has # meta data items. Every g"
-		"eneric segment must have at least #.", (ftnlen)95);
-	errint_("#", &__state->metasz, (ftnlen)1);
-	errint_("#", &__state->c__15, (ftnlen)1);
-	sigerr_("SPICE(INVALIDMETADATA)", (ftnlen)22);
-	chkout_("SGMETA", (ftnlen)6);
+	setmsg_(__global_state, "This segment reports that it has # meta dat"
+		"a items. Every generic segment must have at least #.", (
+		ftnlen)95);
+	errint_(__global_state, "#", &__state->metasz, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__15, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDMETADATA)", (ftnlen)22);
+	chkout_(__global_state, "SGMETA", (ftnlen)6);
 	return 0;
 
 /*     If it is not, we may need to fix a few things to work around some */
@@ -849,9 +857,9 @@ static sgmeta_state_t* get_sgmeta_state() {
 
     begmta = end - ametas + 1;
     endmta = begmta + __state->metasz - 1;
-    dafgda_(handle, &begmta, &endmta, xmeta);
-    if (failed_()) {
-	chkout_("SGMETA", (ftnlen)6);
+    dafgda_(__global_state, handle, &begmta, &endmta, xmeta);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGMETA", (ftnlen)6);
 	return 0;
     }
 
@@ -859,10 +867,11 @@ static sgmeta_state_t* get_sgmeta_state() {
 
     i__1 = __state->metasz;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	__state->meta[(i__2 = i__ - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge(
-		"meta", i__2, "sgmeta_", (ftnlen)503)] = i_dnnt(&xmeta[(i__3 =
-		 i__ - 1) < 17 && 0 <= i__3 ? i__3 : s_rnge("xmeta", i__3, 
-		"sgmeta_", (ftnlen)503)]);
+	__state->meta[(i__2 = i__ - 1) < 17 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "meta", i__2, "sgmeta_", (ftnlen)503)] = 
+		i_dnnt(&__global_state->f2c, &xmeta[(i__3 = i__ - 1) < 17 && 
+		0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "xmeta", i__3,
+		 "sgmeta_", (ftnlen)503)]);
     }
 
 /*     The kludge continues... NMETA and MXMETA are ALWAYS the same */
@@ -872,8 +881,9 @@ static sgmeta_state_t* get_sgmeta_state() {
 
     __state->meta[16] = __state->metasz;
     for (i__ = __state->metasz; i__ <= 16; ++i__) {
-	__state->meta[(i__1 = i__ - 1) < 17 && 0 <= i__1 ? i__1 : s_rnge(
-		"meta", i__1, "sgmeta_", (ftnlen)515)] = 0;
+	__state->meta[(i__1 = i__ - 1) < 17 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "meta", i__1, "sgmeta_", (ftnlen)515)] = 
+		0;
     }
 
 /*     Adjust the bases so that the N'th item of a partition is at */
@@ -894,11 +904,12 @@ static sgmeta_state_t* get_sgmeta_state() {
 
     if (*mnemon <= 0 || *mnemon > __state->metasz && *mnemon != 17) {
 	*value = -1;
-	setmsg_("The item requested, #, is not one of the recognized meta da"
-		"ta items associated with this generic segment.", (ftnlen)105);
-	errint_("#", mnemon, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNMETAITEM)", (ftnlen)22);
-	chkout_("SGMETA", (ftnlen)6);
+	setmsg_(__global_state, "The item requested, #, is not one of the re"
+		"cognized meta data items associated with this generic segmen"
+		"t.", (ftnlen)105);
+	errint_(__global_state, "#", mnemon, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNMETAITEM)", (ftnlen)22);
+	chkout_(__global_state, "SGMETA", (ftnlen)6);
 	return 0;
     }
 
@@ -906,8 +917,9 @@ static sgmeta_state_t* get_sgmeta_state() {
 /*     need to, and return. */
 
     *value = __state->meta[(i__1 = *mnemon - 1) < 17 && 0 <= i__1 ? i__1 : 
-	    s_rnge("meta", i__1, "sgmeta_", (ftnlen)555)];
-    chkout_("SGMETA", (ftnlen)6);
+	    s_rnge(&__global_state->f2c, "meta", i__1, "sgmeta_", (ftnlen)555)
+	    ];
+    chkout_(__global_state, "SGMETA", (ftnlen)6);
     return 0;
 } /* sgmeta_ */
 

@@ -301,7 +301,7 @@
    {
       return;
    }
-   chkin_c ( "spkw18_c" );
+   chkin_c ( naif_state, "spkw18_c" );
 
    /*
    Check the input strings to make sure the pointers

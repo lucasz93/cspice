@@ -204,7 +204,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "prompt_c" );
+   chkin_c ( naif_state, "prompt_c" );
 
 
    /*

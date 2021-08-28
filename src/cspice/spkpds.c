@@ -8,8 +8,7 @@
 
 
 extern spkpds_init_t __spkpds_init;
-static spkpds_state_t* get_spkpds_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkpds_state_t* get_spkpds_state(cspice_t* state) {
 	if (!state->spkpds)
 		state->spkpds = __cspice_allocate_module(sizeof(
 	spkpds_state_t), &__spkpds_init, sizeof(__spkpds_init));
@@ -18,31 +17,34 @@ static spkpds_state_t* get_spkpds_state() {
 }
 
 /* $Procedure      SPKPDS ( SPK pack descriptor ) */
-/* Subroutine */ int spkpds_(integer *body, integer *center, char *frame, 
-	integer *type__, doublereal *first, doublereal *last, doublereal *
-	descr, ftnlen frame_len)
+/* Subroutine */ int spkpds_(cspice_t* __global_state, integer *body, integer 
+	*center, char *frame, integer *type__, doublereal *first, doublereal *
+	last, doublereal *descr, ftnlen frame_len)
 {
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int etcal_(cspice_t*, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer ipart[6];
     integer refcod;
     char calfst[40];
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
     char callst[40];
     doublereal dppart[2];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spkpds_state_t* __state = get_spkpds_state();
+    spkpds_state_t* __state = get_spkpds_state(__global_state);
 /* $ Abstract */
 
 /*     Perform routine error checks and if all check pass, pack the */
@@ -210,21 +212,21 @@ static spkpds_state_t* get_spkpds_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKPDS", (ftnlen)6);
+	chkin_(__global_state, "SPKPDS", (ftnlen)6);
     }
 
 /*     We do not support ephemerides for the solar system barycenter */
 /*     (at least not yet anyway). */
 
     if (*body == 0) {
-	setmsg_("You've attempted to create a segment for the solar system b"
-		"arycenter.  This is not supported by the ephemeris system.", (
-		ftnlen)117);
-	sigerr_("SPICE(BARYCENTEREPHEM)", (ftnlen)22);
-	chkout_("SPKPDS", (ftnlen)6);
+	setmsg_(__global_state, "You've attempted to create a segment for th"
+		"e solar system barycenter.  This is not supported by the eph"
+		"emeris system.", (ftnlen)117);
+	sigerr_(__global_state, "SPICE(BARYCENTEREPHEM)", (ftnlen)22);
+	chkout_(__global_state, "SPKPDS", (ftnlen)6);
 	return 0;
     }
 
@@ -232,22 +234,24 @@ static spkpds_state_t* get_spkpds_state() {
 /*     to itself. */
 
     if (*body == *center) {
-	setmsg_("You've attempted to create a segment for a body relative to"
-		" itself. The body ID code was: #.", (ftnlen)92);
-	errint_("#", body, (ftnlen)1);
-	sigerr_("SPICE(BODYANDCENTERSAME)", (ftnlen)24);
-	chkout_("SPKPDS", (ftnlen)6);
+	setmsg_(__global_state, "You've attempted to create a segment for a "
+		"body relative to itself. The body ID code was: #.", (ftnlen)
+		92);
+	errint_(__global_state, "#", body, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BODYANDCENTERSAME)", (ftnlen)24);
+	chkout_(__global_state, "SPKPDS", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the NAIF integer code for the reference frame. */
 
-    namfrm_(frame, &refcod, frame_len);
+    namfrm_(__global_state, frame, &refcod, frame_len);
     if (refcod == 0) {
-	setmsg_("The reference frame # is not supported.", (ftnlen)39);
-	errch_("#", frame, (ftnlen)1, frame_len);
-	sigerr_("SPICE(INVALIDREFFRAME)", (ftnlen)22);
-	chkout_("SPKPDS", (ftnlen)6);
+	setmsg_(__global_state, "The reference frame # is not supported.", (
+		ftnlen)39);
+	errch_(__global_state, "#", frame, (ftnlen)1, frame_len);
+	sigerr_(__global_state, "SPICE(INVALIDREFFRAME)", (ftnlen)22);
+	chkout_(__global_state, "SPKPDS", (ftnlen)6);
 	return 0;
     }
 
@@ -258,16 +262,16 @@ static spkpds_state_t* get_spkpds_state() {
 /*        We've got an error. Get the calendar string for the first */
 /*        and last epochs. */
 
-	etcal_(first, calfst, (ftnlen)40);
-	etcal_(last, callst, (ftnlen)40);
-	setmsg_("The segment start time: # (#) is at or after the segment st"
-		"op time # (#).", (ftnlen)73);
-	errdp_("#", first, (ftnlen)1);
-	errch_("#", calfst, (ftnlen)1, (ftnlen)40);
-	errdp_("#", last, (ftnlen)1);
-	errch_("#", callst, (ftnlen)1, (ftnlen)40);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("SPKPDS", (ftnlen)6);
+	etcal_(__global_state, first, calfst, (ftnlen)40);
+	etcal_(__global_state, last, callst, (ftnlen)40);
+	setmsg_(__global_state, "The segment start time: # (#) is at or afte"
+		"r the segment stop time # (#).", (ftnlen)73);
+	errdp_(__global_state, "#", first, (ftnlen)1);
+	errch_(__global_state, "#", calfst, (ftnlen)1, (ftnlen)40);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	errch_(__global_state, "#", callst, (ftnlen)1, (ftnlen)40);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "SPKPDS", (ftnlen)6);
 	return 0;
     }
 
@@ -275,11 +279,11 @@ static spkpds_state_t* get_spkpds_state() {
 /*     1 to 1000 is what we are calling reasonable these days. */
 
     if (*type__ <= 0 || *type__ > 1000) {
-	setmsg_("The type specified, #, is not supported within the SPK syst"
-		"em.", (ftnlen)62);
-	errint_("#", type__, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNSPKTYPE)", (ftnlen)21);
-	chkout_("SPKPDS", (ftnlen)6);
+	setmsg_(__global_state, "The type specified, #, is not supported wit"
+		"hin the SPK system.", (ftnlen)62);
+	errint_(__global_state, "#", type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNSPKTYPE)", (ftnlen)21);
+	chkout_(__global_state, "SPKPDS", (ftnlen)6);
 	return 0;
     }
 
@@ -294,8 +298,9 @@ static spkpds_state_t* get_spkpds_state() {
     ipart[5] = 0;
     dppart[0] = *first;
     dppart[1] = *last;
-    dafps_(&__state->c__2, &__state->c__6, dppart, ipart, descr);
-    chkout_("SPKPDS", (ftnlen)6);
+    dafps_(__global_state, &__state->c__2, &__state->c__6, dppart, ipart, 
+	    descr);
+    chkout_(__global_state, "SPKPDS", (ftnlen)6);
     return 0;
 } /* spkpds_ */
 

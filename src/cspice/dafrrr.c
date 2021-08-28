@@ -8,8 +8,7 @@
 
 
 extern dafrrr_init_t __dafrrr_init;
-static dafrrr_state_t* get_dafrrr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafrrr_state_t* get_dafrrr_state(cspice_t* state) {
 	if (!state->dafrrr)
 		state->dafrrr = __cspice_allocate_module(sizeof(
 	dafrrr_state_t), &__dafrrr_init, sizeof(__dafrrr_init));
@@ -18,13 +17,14 @@ static dafrrr_state_t* get_dafrrr_state() {
 }
 
 /* $Procedure DAFRRR ( DAF, remove reserved records ) */
-/* Subroutine */ int dafrrr_(integer *handle, integer *resv)
+/* Subroutine */ int dafrrr_(cspice_t* __global_state, integer *handle, 
+	integer *resv)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     char crec[1000];
@@ -33,46 +33,50 @@ static dafrrr_state_t* get_dafrrr_state() {
     integer free;
     integer word;
     integer next;
-    extern /* Subroutine */ int dafgs_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int dafgs_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
     integer bward;
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer fward;
-    extern /* Subroutine */ int dafws_(doublereal *);
+    extern /* Subroutine */ int dafws_(cspice_t*, doublereal *);
     integer recno;
     logical found;
     doublereal dc[125];
     integer ic[250];
-    extern /* Subroutine */ int daffna_(logical *);
+    extern /* Subroutine */ int daffna_(cspice_t*, logical *);
     integer nd;
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafbfs_(cspice_t*, integer *);
     integer begblk;
     integer ni;
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
     char ifname[60];
     integer endblk;
-    extern /* Subroutine */ int dafrcr_(integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int dafrdr_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *);
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int dafarw_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dafwcr_(integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int dafwdr_(integer *, integer *, doublereal *);
-    extern /* Subroutine */ int dafwfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafrcr_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
+    extern /* Subroutine */ int dafrdr_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafarw_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dafwcr_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
+    extern /* Subroutine */ int dafwdr_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int dafwfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
     integer remove;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal sum[125];
 
 
     /* Module state */
-    dafrrr_state_t* __state = get_dafrrr_state();
+    dafrrr_state_t* __state = get_dafrrr_state(__global_state);
 /* $ Abstract */
 
 /*     Remove a specified number of reserved records from a Double */
@@ -265,18 +269,18 @@ static dafrrr_state_t* get_dafrrr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFRRR", (ftnlen)6);
+	chkin_(__global_state, "DAFRRR", (ftnlen)6);
     }
 
 /*     Before proceeding any further, check that the DAF associated */
 /*     with HANDLE is available for write access. */
 
-    dafsih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DAFRRR", (ftnlen)6);
+    dafsih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFRRR", (ftnlen)6);
 	return 0;
     }
 
@@ -284,9 +288,10 @@ static dafrrr_state_t* get_dafrrr_state() {
 /*     out and return, as an appropriate error message should have */
 /*     already been set. */
 
-    dafrfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
-    if (failed_()) {
-	chkout_("DAFRRR", (ftnlen)6);
+    dafrfr_(__global_state, handle, &nd, &ni, ifname, &fward, &bward, &free, (
+	    ftnlen)60);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFRRR", (ftnlen)6);
 	return 0;
     }
 
@@ -297,7 +302,7 @@ static dafrrr_state_t* get_dafrrr_state() {
     i__1 = *resv, i__2 = fward - 2;
     remove = min(i__1,i__2);
     if (remove < 1) {
-	chkout_("DAFRRR", (ftnlen)6);
+	chkout_(__global_state, "DAFRRR", (ftnlen)6);
 	return 0;
     }
 
@@ -327,7 +332,7 @@ static dafrrr_state_t* get_dafrrr_state() {
 /*     BEGBLK is initially the first summary record location. */
 
     begblk = fward;
-    while(begblk > 0 && ! failed_()) {
+    while(begblk > 0 && ! failed_(__global_state)) {
 
 /*        Move the summary record first. The location of the next */
 /*        summary record determines the end of this block, and the */
@@ -337,13 +342,13 @@ static dafrrr_state_t* get_dafrrr_state() {
 /*        otherwise, we won't be able to find the summaries again. */
 
 	recno = begblk;
-	dafrdr_(handle, &recno, &__state->c__1, &__state->c__128, drec, &
-		found);
+	dafrdr_(__global_state, handle, &recno, &__state->c__1, &
+		__state->c__128, drec, &found);
 	if ((integer) drec[0] > 0) {
 	    endblk = (integer) drec[0] - 1;
 	    next = (integer) drec[0];
 	} else {
-	    dafarw_(&free, &endblk, &word);
+	    dafarw_(__global_state, &free, &endblk, &word);
 	    next = 0;
 	}
 	if ((integer) drec[0] > 0) {
@@ -353,23 +358,23 @@ static dafrrr_state_t* get_dafrrr_state() {
 	    drec[1] -= (doublereal) remove;
 	}
 	i__1 = recno - remove;
-	dafwdr_(handle, &i__1, drec);
+	dafwdr_(__global_state, handle, &i__1, drec);
 
 /*        Then the name record. */
 
 	recno = begblk + 1;
-	dafrcr_(handle, &recno, crec, (ftnlen)1000);
+	dafrcr_(__global_state, handle, &recno, crec, (ftnlen)1000);
 	i__1 = recno - remove;
-	dafwcr_(handle, &i__1, crec, (ftnlen)1000);
+	dafwcr_(__global_state, handle, &i__1, crec, (ftnlen)1000);
 
 /*        Finally, the data records. */
 
 	i__1 = endblk;
 	for (recno = begblk + 2; recno <= i__1; ++recno) {
-	    dafrdr_(handle, &recno, &__state->c__1, &__state->c__128, drec, &
-		    found);
+	    dafrdr_(__global_state, handle, &recno, &__state->c__1, &
+		    __state->c__128, drec, &found);
 	    i__2 = recno - remove;
-	    dafwdr_(handle, &i__2, drec);
+	    dafwdr_(__global_state, handle, &i__2, drec);
 	}
 
 /*        Start the next block, if one exists. */
@@ -383,29 +388,32 @@ static dafrrr_state_t* get_dafrrr_state() {
     fward -= remove;
     bward -= remove;
     free -= decr;
-    dafwfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
+    dafwfr_(__global_state, handle, &nd, &ni, ifname, &fward, &bward, &free, (
+	    ftnlen)60);
 
 /*     Get the summary for each array, decrement the addresses (stored */
 /*     in the final two integer components), and replace the summary. */
 
-    dafbfs_(handle);
-    daffna_(&found);
-    while(found && ! failed_()) {
-	dafgs_(sum);
-	dafus_(sum, &nd, &ni, dc, ic);
-	ic[(i__1 = ni - 2) < 250 && 0 <= i__1 ? i__1 : s_rnge("ic", i__1, 
-		"dafrrr_", (ftnlen)393)] = ic[(i__2 = ni - 2) < 250 && 0 <= 
-		i__2 ? i__2 : s_rnge("ic", i__2, "dafrrr_", (ftnlen)393)] - 
+    dafbfs_(__global_state, handle);
+    daffna_(__global_state, &found);
+    while(found && ! failed_(__global_state)) {
+	dafgs_(__global_state, sum);
+	dafus_(__global_state, sum, &nd, &ni, dc, ic);
+	ic[(i__1 = ni - 2) < 250 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "ic", i__1, "dafrrr_", (ftnlen)393)] = 
+		ic[(i__2 = ni - 2) < 250 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ic", i__2, "dafrrr_", (ftnlen)393)] - 
 		decr;
-	ic[(i__1 = ni - 1) < 250 && 0 <= i__1 ? i__1 : s_rnge("ic", i__1, 
-		"dafrrr_", (ftnlen)394)] = ic[(i__2 = ni - 1) < 250 && 0 <= 
-		i__2 ? i__2 : s_rnge("ic", i__2, "dafrrr_", (ftnlen)394)] - 
+	ic[(i__1 = ni - 1) < 250 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "ic", i__1, "dafrrr_", (ftnlen)394)] = 
+		ic[(i__2 = ni - 1) < 250 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ic", i__2, "dafrrr_", (ftnlen)394)] - 
 		decr;
-	dafps_(&nd, &ni, dc, ic, sum);
-	dafws_(sum);
-	daffna_(&found);
+	dafps_(__global_state, &nd, &ni, dc, ic, sum);
+	dafws_(__global_state, sum);
+	daffna_(__global_state, &found);
     }
-    chkout_("DAFRRR", (ftnlen)6);
+    chkout_(__global_state, "DAFRRR", (ftnlen)6);
     return 0;
 } /* dafrrr_ */
 

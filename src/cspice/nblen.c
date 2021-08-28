@@ -8,27 +8,26 @@
 
 
 typedef int nblen_state_t;
-static nblen_state_t* get_nblen_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline nblen_state_t* get_nblen_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure             NBLEN ( Non blank length of a string ) */
-integer nblen_(char *string, ftnlen string_len)
+integer nblen_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern integer lastnb_(char *, ftnlen);
-    extern integer frstnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    nblen_state_t* __state = get_nblen_state();
+    nblen_state_t* __state = get_nblen_state(__global_state);
 /* $ Abstract */
 
 /*     Return the non-blank length of a character string. (That is, */
@@ -146,11 +145,12 @@ integer nblen_(char *string, ftnlen string_len)
 
 /*     Blank string is easy. */
 
-    if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, string, " ", string_len, (ftnlen)1) == 0) 
+	    {
 	ret_val = 0;
     } else {
-	ret_val = lastnb_(string, string_len) - frstnb_(string, string_len) + 
-		1;
+	ret_val = lastnb_(__global_state, string, string_len) - frstnb_(
+		__global_state, string, string_len) + 1;
     }
     return ret_val;
 } /* nblen_ */

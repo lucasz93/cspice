@@ -8,8 +8,7 @@
 
 
 extern zzektres_init_t __zzektres_init;
-static zzektres_state_t* get_zzektres_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektres_state_t* get_zzektres_state(cspice_t* state) {
 	if (!state->zzektres)
 		state->zzektres = __cspice_allocate_module(sizeof(
 	zzektres_state_t), &__zzektres_init, sizeof(__zzektres_init));
@@ -18,40 +17,42 @@ static zzektres_state_t* get_zzektres_state() {
 }
 
 /* $Procedure  ZZEKTRES ( Private: EK, resolve times in encoded query ) */
-/* Subroutine */ int zzektres_(char *query, integer *eqryi, char *eqryc, 
-	doublereal *eqryd, logical *error, char *errmsg, integer *errptr, 
-	ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len)
+/* Subroutine */ int zzektres_(cspice_t* __global_state, char *query, integer 
+	*eqryi, char *eqryc, doublereal *eqryd, logical *error, char *errmsg, 
+	integer *errptr, ftnlen query_len, ftnlen eqryc_len, ftnlen 
+	errmsg_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer base;
     integer ntab;
     integer ncns;
-    extern /* Subroutine */ int zzekqtab_(integer *, char *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekinqn_(doublereal *, integer *, integer *, 
-	    integer *, integer *, doublereal *, integer *);
-    extern /* Subroutine */ int zzekweqi_(char *, integer *, integer *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzektcnv_(char *, doublereal *, logical *, 
-	    char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqtab_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzekinqn_(cspice_t*, doublereal *, integer *, 
+	    integer *, integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int zzekweqi_(cspice_t*, char *, integer *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzektcnv_(cspice_t*, char *, doublereal *, 
+	    logical *, char *, ftnlen, ftnlen);
     integer i__;
-    extern /* Subroutine */ int ekcii_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int ekcii_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
     char table[64*10];
     char alias[64*10];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer descr[6];
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer dtype;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer sb;
     integer se;
     doublereal et;
@@ -64,15 +65,15 @@ static zzektres_state_t* get_zzektres_state() {
     integer irsolv;
     integer opcode;
     integer tabidx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer lxb;
     integer lxe;
 
 
     /* Module state */
-    zzektres_state_t* __state = get_zzektres_state();
+    zzektres_state_t* __state = get_zzektres_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -1028,30 +1029,31 @@ static zzektres_state_t* get_zzektres_state() {
 /*     No error to start with. */
 
     *error = FALSE_;
-    s_copy(errmsg, " ", errmsg_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, errmsg, " ", errmsg_len, (ftnlen)1);
     *errptr = 0;
     *(unsigned char *)touchc = *(unsigned char *)query;
 
 /*     The query must have had names resolved at this point, or it's no */
 /*     go. */
 
-    zzekreqi_(eqryi, "NAMES_RESOLVED", &irsolv, (ftnlen)14);
-    if (failed_()) {
+    zzekreqi_(__global_state, eqryi, "NAMES_RESOLVED", &irsolv, (ftnlen)14);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (irsolv == -1) {
-	chkin_("ZZEKTRES", (ftnlen)8);
-	setmsg_("Names are not resolved in encoded query.", (ftnlen)40);
-	sigerr_("SPICE(NAMESNOTRESOLVED)", (ftnlen)23);
-	chkout_("ZZEKTRES", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRES", (ftnlen)8);
+	setmsg_(__global_state, "Names are not resolved in encoded query.", (
+		ftnlen)40);
+	sigerr_(__global_state, "SPICE(NAMESNOTRESOLVED)", (ftnlen)23);
+	chkout_(__global_state, "ZZEKTRES", (ftnlen)8);
 	return 0;
     }
 
 /*     Time strings occur only on the right sides of constraints. */
 /*     Examine each constraint that compares a column and a value. */
 
-    zzekreqi_(eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
-    zzekreqi_(eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
+    zzekreqi_(__global_state, eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
+    zzekreqi_(__global_state, eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
     i__1 = ncns;
     for (i__ = 1; i__ <= i__1; ++i__) {
 
@@ -1072,9 +1074,10 @@ static zzektres_state_t* get_zzektres_state() {
 
 	    tabidx = eqryi[base + 12];
 	    colidx = eqryi[base + 18];
-	    zzekqtab_(eqryi, eqryc, &tabidx, table, alias, eqryc_len, (ftnlen)
-		    64, (ftnlen)64);
-	    ekcii_(table, &colidx, colnam, attdsc, (ftnlen)64, (ftnlen)32);
+	    zzekqtab_(__global_state, eqryi, eqryc, &tabidx, table, alias, 
+		    eqryc_len, (ftnlen)64, (ftnlen)64);
+	    ekcii_(__global_state, table, &colidx, colnam, attdsc, (ftnlen)64,
+		     (ftnlen)32);
 	    dtype = attdsc[1];
 	    if (dtype == 4) {
 
@@ -1085,11 +1088,13 @@ static zzektres_state_t* get_zzektres_state() {
 		lxe = eqryi[base + 21];
 		sb = eqryi[base + 23];
 		se = eqryi[base + 24];
-		s_copy(timstr, eqryc + (sb - 1), (ftnlen)32, se - (sb - 1));
+		s_copy(&__global_state->f2c, timstr, eqryc + (sb - 1), (
+			ftnlen)32, se - (sb - 1));
 
 /*              Convert the time to ET, if possible. */
 
-		zzektcnv_(timstr, &et, error, errmsg, (ftnlen)32, errmsg_len);
+		zzektcnv_(__global_state, timstr, &et, error, errmsg, (ftnlen)
+			32, errmsg_len);
 		if (*error) {
 		    *errptr = sb;
 		    return 0;
@@ -1098,9 +1103,10 @@ static zzektres_state_t* get_zzektres_state() {
 /*              Insert the ET value into the query, and replace the */
 /*              value descriptor for the time string. */
 
-		zzekinqn_(&et, &__state->c__4, &lxb, &lxe, eqryi, eqryd, 
-			descr);
-		movei_(descr, &__state->c__6, &eqryi[base + 20]);
+		zzekinqn_(__global_state, &et, &__state->c__4, &lxb, &lxe, 
+			eqryi, eqryd, descr);
+		movei_(__global_state, descr, &__state->c__6, &eqryi[base + 
+			20]);
 	    }
 
 /*           We've parsed a time string, if the current column's type */
@@ -1115,7 +1121,8 @@ static zzektres_state_t* get_zzektres_state() {
 
 /*     Indicate completion of time resolution. */
 
-    zzekweqi_("TIMES_RESOLVED", &__state->c__1, eqryi, (ftnlen)14);
+    zzekweqi_(__global_state, "TIMES_RESOLVED", &__state->c__1, eqryi, (
+	    ftnlen)14);
     return 0;
 } /* zzektres_ */
 

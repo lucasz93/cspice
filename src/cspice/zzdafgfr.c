@@ -8,8 +8,7 @@
 
 
 extern zzdafgfr_init_t __zzdafgfr_init;
-static zzdafgfr_state_t* get_zzdafgfr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdafgfr_state_t* get_zzdafgfr_state(cspice_t* state) {
 	if (!state->zzdafgfr)
 		state->zzdafgfr = __cspice_allocate_module(sizeof(
 	zzdafgfr_state_t), &__zzdafgfr_init, sizeof(__zzdafgfr_init));
@@ -18,9 +17,10 @@ static zzdafgfr_state_t* get_zzdafgfr_state() {
 }
 
 /* $Procedure ZZDAFGFR ( Private --- DAF Get File Record ) */
-/* Subroutine */ int zzdafgfr_(integer *handle, char *idword, integer *nd, 
-	integer *ni, char *ifname, integer *fward, integer *bward, integer *
-	free, logical *found, ftnlen idword_len, ftnlen ifname_len)
+/* Subroutine */ int zzdafgfr_(cspice_t* __global_state, integer *handle, 
+	char *idword, integer *nd, integer *ni, char *ifname, integer *fward, 
+	integer *bward, integer *free, logical *found, ftnlen idword_len, 
+	ftnlen ifname_len)
 {
     /* Initialized data */
 
@@ -29,46 +29,51 @@ static zzdafgfr_state_t* get_zzdafgfr_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_rdue(cilist *), 
-	    do_uio(integer *, char *, ftnlen), e_rdue(void);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_rdue(
+	    f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, char *, 
+	    ftnlen), e_rdue(f2c_state_t*);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer ibff;
     integer iamh;
-    extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int zzddhgsd_(cspice_t*, char *, integer *, char *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzddhnfo_(cspice_t*, integer *, char *, 
+	    integer *, integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int zzplatfm_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzddhnfo_(integer *, char *, integer *, 
-	    integer *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzxlatei_(integer *, char *, integer *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int zzxlatei_(cspice_t*, integer *, char *, 
+	    integer *, integer *, ftnlen);
     integer i__;
     char fname[255];
     integer iarch;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer locnd;
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer locni;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
     logical locfnd;
     char chrbuf[1024];
     char locifn[60];
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer cindex;
     integer locbwd;
     char locidw[8];
     integer locfre;
     integer locfwd;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     char tmpstr[8];
     integer lun;
 
@@ -77,7 +82,7 @@ static zzdafgfr_state_t* get_zzdafgfr_state() {
 
 
     /* Module state */
-    zzdafgfr_state_t* __state = get_zzdafgfr_state();
+    zzdafgfr_state_t* __state = get_zzdafgfr_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -535,10 +540,10 @@ static zzdafgfr_state_t* get_zzdafgfr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZDAFGFR", (ftnlen)8);
+	chkin_(__global_state, "ZZDAFGFR", (ftnlen)8);
     }
 
 /*     Perform some initialization tasks. */
@@ -549,25 +554,27 @@ static zzdafgfr_state_t* get_zzdafgfr_state() {
 /*        for each binary file format. */
 
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    zzddhgsd_("BFF", &i__, __state->strbff + (((i__1 = i__ - 1) < 4 &&
-		     0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzdafgfr_", (
-		    ftnlen)280)) << 3), (ftnlen)3, (ftnlen)8);
+	    zzddhgsd_(__global_state, "BFF", &i__, __state->strbff + (((i__1 =
+		     i__ - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "strbff", i__1, "zzdafgfr_", (ftnlen)
+		    280)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format and determine its */
 /*        integer code. */
 
-	zzplatfm_("FILE_FORMAT", tmpstr, (ftnlen)11, (ftnlen)8);
-	ucase_(tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
-	__state->natbff = isrchc_(tmpstr, &__state->c__4, __state->strbff, (
-		ftnlen)8, (ftnlen)8);
+	zzplatfm_(__global_state, "FILE_FORMAT", tmpstr, (ftnlen)11, (ftnlen)
+		8);
+	ucase_(__global_state, tmpstr, tmpstr, (ftnlen)8, (ftnlen)8);
+	__state->natbff = isrchc_(__global_state, tmpstr, &__state->c__4, 
+		__state->strbff, (ftnlen)8, (ftnlen)8);
 	if (__state->natbff == 0) {
-	    setmsg_("The binary file format, '#', is not supported by this v"
-		    "ersion of the toolkit. This is a serious problem, contac"
-		    "t NAIF.", (ftnlen)118);
-	    errch_("#", tmpstr, (ftnlen)1, (ftnlen)8);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZDAFGFR", (ftnlen)8);
+	    setmsg_(__global_state, "The binary file format, '#', is not sup"
+		    "ported by this version of the toolkit. This is a serious"
+		    " problem, contact NAIF.", (ftnlen)118);
+	    errch_(__global_state, "#", tmpstr, (ftnlen)1, (ftnlen)8);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZDAFGFR", (ftnlen)8);
 	    return 0;
 	}
 
@@ -586,23 +593,25 @@ static zzdafgfr_state_t* get_zzdafgfr_state() {
 /*     all values passed into handle manager entry points will have */
 /*     'DAF' as their architecture arguments. */
 
-    zzddhnfo_(handle, fname, &iarch, &ibff, &iamh, &locfnd, (ftnlen)255);
+    zzddhnfo_(__global_state, handle, fname, &iarch, &ibff, &iamh, &locfnd, (
+	    ftnlen)255);
     if (! locfnd) {
-	setmsg_("Unable to locate file associated with HANDLE, #.  The most "
-		"likely cause of this is the file that you are trying to read"
-		" has been closed.", (ftnlen)136);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(HANDLENOTFOUND)", (ftnlen)21);
-	chkout_("ZZDAFGFR", (ftnlen)8);
+	setmsg_(__global_state, "Unable to locate file associated with HANDL"
+		"E, #.  The most likely cause of this is the file that you ar"
+		"e trying to read has been closed.", (ftnlen)136);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(HANDLENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZDAFGFR", (ftnlen)8);
 	return 0;
     }
 
 /*     Now get a logical unit for the handle.  Check FAILED() in */
 /*     case an error occurs. */
 
-    zzddhhlu_(handle, "DAF", &__state->c_false, &lun, (ftnlen)3);
-    if (failed_()) {
-	chkout_("ZZDAFGFR", (ftnlen)8);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_false, &lun, (ftnlen)
+	    3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZDAFGFR", (ftnlen)8);
 	return 0;
     }
 
@@ -616,51 +625,53 @@ static zzdafgfr_state_t* get_zzdafgfr_state() {
 /*        record from the file. */
 
 	__state->io___13.ciunit = lun;
-	iostat = s_rdue(&__state->io___13);
+	iostat = s_rdue(&__global_state->f2c, &__state->io___13);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, locidw, (ftnlen)8);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, locidw, (ftnlen)
+		8);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, (char *)&locnd, (ftnlen)sizeof(
-		integer));
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locnd, 
+		(ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, (char *)&locni, (ftnlen)sizeof(
-		integer));
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locni, 
+		(ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, locifn, (ftnlen)60);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, locifn, (ftnlen)
+		60);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, (char *)&locfwd, (ftnlen)sizeof(
-		integer));
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locfwd,
+		 (ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, (char *)&locbwd, (ftnlen)sizeof(
-		integer));
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locbwd,
+		 (ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, (char *)&locfre, (ftnlen)sizeof(
-		integer));
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locfre,
+		 (ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = e_rdue();
+	iostat = e_rdue(&__global_state->f2c);
 L100001:
 
 /*        Since this routine does not signal any IOSTAT based */
 /*        errors, return if a non-zero value is assigned to IOSTAT. */
 
 	if (iostat != 0) {
-	    chkout_("ZZDAFGFR", (ftnlen)8);
+	    chkout_(__global_state, "ZZDAFGFR", (ftnlen)8);
 	    return 0;
 	}
 
@@ -671,49 +682,51 @@ L100001:
 /*        Read the data record as characters. */
 
 	__state->io___21.ciunit = lun;
-	iostat = s_rdue(&__state->io___21);
+	iostat = s_rdue(&__global_state->f2c, &__state->io___21);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&__state->c__1, chrbuf, (ftnlen)1024);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, chrbuf, (ftnlen)
+		1024);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = e_rdue();
+	iostat = e_rdue(&__global_state->f2c);
 L100002:
 
 /*        Again, since this routine does not signal any IOSTAT */
 /*        based errors, return if one occurs. */
 
 	if (iostat != 0) {
-	    chkout_("ZZDAFGFR", (ftnlen)8);
+	    chkout_(__global_state, "ZZDAFGFR", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Assign the character components of the file record. */
 
-	s_copy(locidw, chrbuf, (ftnlen)8, (ftnlen)8);
-	s_copy(locifn, chrbuf + 16, (ftnlen)60, (ftnlen)60);
+	s_copy(&__global_state->f2c, locidw, chrbuf, (ftnlen)8, (ftnlen)8);
+	s_copy(&__global_state->f2c, locifn, chrbuf + 16, (ftnlen)60, (ftnlen)
+		60);
 
 /*        Convert the integer components. */
 
 	cindex = 9;
-	zzxlatei_(&ibff, chrbuf + (cindex - 1), &__state->c__1, &locnd, (
-		ftnlen)4);
+	zzxlatei_(__global_state, &ibff, chrbuf + (cindex - 1), &
+		__state->c__1, &locnd, (ftnlen)4);
 	cindex += 4;
-	zzxlatei_(&ibff, chrbuf + (cindex - 1), &__state->c__1, &locni, (
-		ftnlen)4);
+	zzxlatei_(__global_state, &ibff, chrbuf + (cindex - 1), &
+		__state->c__1, &locni, (ftnlen)4);
 	cindex = 77;
-	zzxlatei_(&ibff, chrbuf + (cindex - 1), &__state->c__1, &locfwd, (
-		ftnlen)4);
+	zzxlatei_(__global_state, &ibff, chrbuf + (cindex - 1), &
+		__state->c__1, &locfwd, (ftnlen)4);
 	cindex += 4;
-	zzxlatei_(&ibff, chrbuf + (cindex - 1), &__state->c__1, &locbwd, (
-		ftnlen)4);
+	zzxlatei_(__global_state, &ibff, chrbuf + (cindex - 1), &
+		__state->c__1, &locbwd, (ftnlen)4);
 	cindex += 4;
-	zzxlatei_(&ibff, chrbuf + (cindex - 1), &__state->c__1, &locfre, (
-		ftnlen)4);
-	if (failed_()) {
-	    chkout_("ZZDAFGFR", (ftnlen)8);
+	zzxlatei_(__global_state, &ibff, chrbuf + (cindex - 1), &
+		__state->c__1, &locfre, (ftnlen)4);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDAFGFR", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -722,14 +735,14 @@ L100002:
 /*     and return to the caller. */
 
     *found = TRUE_;
-    s_copy(idword, locidw, idword_len, (ftnlen)8);
+    s_copy(&__global_state->f2c, idword, locidw, idword_len, (ftnlen)8);
     *nd = locnd;
     *ni = locni;
-    s_copy(ifname, locifn, ifname_len, (ftnlen)60);
+    s_copy(&__global_state->f2c, ifname, locifn, ifname_len, (ftnlen)60);
     *fward = locfwd;
     *bward = locbwd;
     *free = locfre;
-    chkout_("ZZDAFGFR", (ftnlen)8);
+    chkout_(__global_state, "ZZDAFGFR", (ftnlen)8);
     return 0;
 } /* zzdafgfr_ */
 

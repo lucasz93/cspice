@@ -8,43 +8,42 @@
 
 
 typedef int dxtrct_state_t;
-static dxtrct_state_t* get_dxtrct_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dxtrct_state_t* get_dxtrct_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DXTRCT (Extract Double Precision Values From A String) */
-/* Subroutine */ int dxtrct_(char *keywd, integer *maxwds, char *string, 
-	integer *nfound, integer *parsed, doublereal *values, ftnlen 
-	keywd_len, ftnlen string_len)
+/* Subroutine */ int dxtrct_(cspice_t* __global_state, char *keywd, integer *
+	maxwds, char *string, integer *nfound, integer *parsed, doublereal *
+	values, ftnlen keywd_len, ftnlen string_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer pntr;
     integer i__;
     integer j;
     doublereal x;
-    extern integer nblen_(char *, ftnlen);
+    extern integer nblen_(cspice_t*, char *, ftnlen);
     char error[80];
     integer start;
     integer fallbk;
     integer berase;
     integer eerase;
-    extern /* Subroutine */ int fndnwd_(char *, integer *, integer *, integer 
-	    *, ftnlen);
+    extern /* Subroutine */ int fndnwd_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
     integer length;
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
-	    *, ftnlen, ftnlen);
-    extern integer wdindx_(char *, char *, ftnlen, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int nparsd_(cspice_t*, char *, doublereal *, char 
+	    *, integer *, ftnlen, ftnlen);
+    extern integer wdindx_(cspice_t*, char *, char *, ftnlen, ftnlen);
     integer positn;
 
 
     /* Module state */
-    dxtrct_state_t* __state = get_dxtrct_state();
+    dxtrct_state_t* __state = get_dxtrct_state(__global_state);
 /* $ Abstract */
 
 /*     Locate a keyword and succeeding numeric words within a string. */
@@ -281,8 +280,8 @@ static dxtrct_state_t* get_dxtrct_state() {
 /*     Locate the keyword within the string and get the length of the */
 /*     string. */
 
-    positn = wdindx_(string, keywd, string_len, keywd_len);
-    length = lastnb_(string, string_len);
+    positn = wdindx_(__global_state, string, keywd, string_len, keywd_len);
+    length = lastnb_(__global_state, string, string_len);
     if (positn == 0) {
 	*nfound = -1;
 	*parsed = 0;
@@ -293,16 +292,17 @@ static dxtrct_state_t* get_dxtrct_state() {
 /*     Set the end   erase marker to the end   of the current word */
 
     berase = positn;
-    eerase = positn + nblen_(keywd, keywd_len) - 1;
+    eerase = positn + nblen_(__global_state, keywd, keywd_len) - 1;
     start = eerase + 1;
     if (start < length) {
 
 /*        Locate the next word and try to parse it ... */
 
-	fndnwd_(string, &start, &i__, &j, string_len);
-	nparsd_(string + (i__ - 1), &x, error, &pntr, j - (i__ - 1), (ftnlen)
-		80);
-	if (s_cmp(error, " ", (ftnlen)80, (ftnlen)1) == 0) {
+	fndnwd_(__global_state, string, &start, &i__, &j, string_len);
+	nparsd_(__global_state, string + (i__ - 1), &x, error, &pntr, j - (
+		i__ - 1), (ftnlen)80);
+	if (s_cmp(&__global_state->f2c, error, " ", (ftnlen)80, (ftnlen)1) == 
+		0) {
 
 /*           ...  mark its starting position as a possible starting */
 /*           point for deletion if we run out of room for parsed numbers. */
@@ -315,22 +315,24 @@ static dxtrct_state_t* get_dxtrct_state() {
 	    values[*parsed - 1] = x;
 	}
     } else {
-	s_copy(string + (berase - 1), " ", string_len - (berase - 1), (ftnlen)
-		1);
+	s_copy(&__global_state->f2c, string + (berase - 1), " ", string_len - 
+		(berase - 1), (ftnlen)1);
 	return 0;
     }
 
 /*     Now find all of the succeeding numeric words until we run out of */
 /*     numeric words or string to look at. */
 
-    while(start < length && s_cmp(error, " ", (ftnlen)80, (ftnlen)1) == 0) {
+    while(start < length && s_cmp(&__global_state->f2c, error, " ", (ftnlen)
+	    80, (ftnlen)1) == 0) {
 
 /*        Find the next word and try to parse it as a number. */
 
-	fndnwd_(string, &start, &i__, &j, string_len);
-	nparsd_(string + (i__ - 1), &x, error, &pntr, j - (i__ - 1), (ftnlen)
-		80);
-	if (s_cmp(error, " ", (ftnlen)80, (ftnlen)1) == 0) {
+	fndnwd_(__global_state, string, &start, &i__, &j, string_len);
+	nparsd_(__global_state, string + (i__ - 1), &x, error, &pntr, j - (
+		i__ - 1), (ftnlen)80);
+	if (s_cmp(&__global_state->f2c, error, " ", (ftnlen)80, (ftnlen)1) == 
+		0) {
 
 /*           It's a number! Congratulations! */
 
@@ -373,7 +375,8 @@ static dxtrct_state_t* get_dxtrct_state() {
 	++i__;
 	++j;
     }
-    s_copy(string + (i__ - 1), " ", string_len - (i__ - 1), (ftnlen)1);
+    s_copy(&__global_state->f2c, string + (i__ - 1), " ", string_len - (i__ - 
+	    1), (ftnlen)1);
     return 0;
 } /* dxtrct_ */
 

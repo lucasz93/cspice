@@ -466,7 +466,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "subsol_c" );
+   chkin_c ( naif_state, "subsol_c" );
 
  
    /*

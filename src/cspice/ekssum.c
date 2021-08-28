@@ -8,8 +8,7 @@
 
 
 extern ekssum_init_t __ekssum_init;
-static ekssum_state_t* get_ekssum_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekssum_state_t* get_ekssum_state(cspice_t* state) {
 	if (!state->ekssum)
 		state->ekssum = __cspice_allocate_module(sizeof(
 	ekssum_state_t), &__ekssum_init, sizeof(__ekssum_init));
@@ -18,10 +17,11 @@ static ekssum_state_t* get_ekssum_state() {
 }
 
 /* $Procedure      EKSSUM ( EK, return segment summary ) */
-/* Subroutine */ int ekssum_(integer *handle, integer *segno, char *tabnam, 
-	integer *nrows, integer *ncols, char *cnames, char *dtypes, integer *
-	sizes, integer *strlns, logical *indexd, logical *nullok, ftnlen 
-	tabnam_len, ftnlen cnames_len, ftnlen dtypes_len)
+/* Subroutine */ int ekssum_(cspice_t* __global_state, integer *handle, 
+	integer *segno, char *tabnam, integer *nrows, integer *ncols, char *
+	cnames, char *dtypes, integer *sizes, integer *strlns, logical *
+	indexd, logical *nullok, ftnlen tabnam_len, ftnlen cnames_len, ftnlen 
+	dtypes_len)
 {
     /* Initialized data */
 
@@ -30,23 +30,23 @@ static ekssum_state_t* get_ekssum_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzeksinf_(integer *, integer *, char *, 
-	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzeksinf_(cspice_t*, integer *, integer *, 
+	    char *, integer *, char *, integer *, ftnlen, ftnlen);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     integer segdsc[24];
     integer cdscrs[1100]	/* was [11][100] */;
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    ekssum_state_t* __state = get_ekssum_state();
+    ekssum_state_t* __state = get_ekssum_state(__global_state);
 /* $ Abstract */
 
 /*     Return summary information for a specified segment in a */
@@ -693,45 +693,50 @@ static ekssum_state_t* get_ekssum_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKSSUM", (ftnlen)6);
+	chkin_(__global_state, "EKSSUM", (ftnlen)6);
     }
 
 /*     Get the info from a knowledgeable source. */
 
-    zzeksinf_(handle, segno, tabnam, segdsc, cnames, cdscrs, tabnam_len, 
-	    cnames_len);
-    if (failed_()) {
-	chkout_("EKSSUM", (ftnlen)6);
+    zzeksinf_(__global_state, handle, segno, tabnam, segdsc, cnames, cdscrs, 
+	    tabnam_len, cnames_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKSSUM", (ftnlen)6);
 	return 0;
     }
     *nrows = segdsc[5];
     *ncols = segdsc[4];
     i__1 = *ncols;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	s_copy(dtypes + (i__ - 1) * dtypes_len, __state->typstr + (((i__3 = 
-		cdscrs[(i__2 = i__ * 11 - 10) < 1100 && 0 <= i__2 ? i__2 : 
-		s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)355)] - 1) < 4 && 0 
-		<= i__3 ? i__3 : s_rnge("typstr", i__3, "ekssum_", (ftnlen)
-		355)) << 2), dtypes_len, (ftnlen)4);
+	s_copy(&__global_state->f2c, dtypes + (i__ - 1) * dtypes_len, 
+		__state->typstr + (((i__3 = cdscrs[(i__2 = i__ * 11 - 10) < 
+		1100 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "cds"
+		"crs", i__2, "ekssum_", (ftnlen)355)] - 1) < 4 && 0 <= i__3 ? 
+		i__3 : s_rnge(&__global_state->f2c, "typstr", i__3, "ekssum_",
+		 (ftnlen)355)) << 2), dtypes_len, (ftnlen)4);
 	sizes[i__ - 1] = cdscrs[(i__2 = i__ * 11 - 8) < 1100 && 0 <= i__2 ? 
-		i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)357)];
+		i__2 : s_rnge(&__global_state->f2c, "cdscrs", i__2, "ekssum_",
+		 (ftnlen)357)];
 	if (cdscrs[(i__2 = i__ * 11 - 10) < 1100 && 0 <= i__2 ? i__2 : s_rnge(
-		"cdscrs", i__2, "ekssum_", (ftnlen)359)] == 1) {
+		&__global_state->f2c, "cdscrs", i__2, "ekssum_", (ftnlen)359)]
+		 == 1) {
 	    strlns[i__ - 1] = cdscrs[(i__2 = i__ * 11 - 9) < 1100 && 0 <= 
-		    i__2 ? i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)
-		    360)];
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "cdscrs", i__2,
+		     "ekssum_", (ftnlen)360)];
 	} else {
 	    strlns[i__ - 1] = 0;
 	}
 	indexd[i__ - 1] = cdscrs[(i__2 = i__ * 11 - 6) < 1100 && 0 <= i__2 ? 
-		i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)365)] != -1;
+		i__2 : s_rnge(&__global_state->f2c, "cdscrs", i__2, "ekssum_",
+		 (ftnlen)365)] != -1;
 	nullok[i__ - 1] = cdscrs[(i__2 = i__ * 11 - 4) < 1100 && 0 <= i__2 ? 
-		i__2 : s_rnge("cdscrs", i__2, "ekssum_", (ftnlen)366)] != -1;
+		i__2 : s_rnge(&__global_state->f2c, "cdscrs", i__2, "ekssum_",
+		 (ftnlen)366)] != -1;
     }
-    chkout_("EKSSUM", (ftnlen)6);
+    chkout_(__global_state, "EKSSUM", (ftnlen)6);
     return 0;
 } /* ekssum_ */
 

@@ -8,8 +8,7 @@
 
 
 extern excess_init_t __excess_init;
-static excess_state_t* get_excess_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline excess_state_t* get_excess_state(cspice_t* state) {
 	if (!state->excess)
 		state->excess = __cspice_allocate_module(sizeof(
 	excess_state_t), &__excess_init, sizeof(__excess_init));
@@ -18,27 +17,27 @@ static excess_state_t* get_excess_state() {
 }
 
 /* $Procedure      EXCESS ( Report an excess of elements in a cell ) */
-/* Subroutine */ int excess_(integer *number, char *struct__, ftnlen 
-	struct_len)
+/* Subroutine */ int excess_(cspice_t* __global_state, integer *number, char *
+	struct__, ftnlen struct_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     char error[320];
-    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int prefix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    excess_state_t* __state = get_excess_state();
+    excess_state_t* __state = get_excess_state(__global_state);
 /* $ Abstract */
 
 /*     Set the long error message so as to indicate the number of excess */
@@ -204,10 +203,10 @@ static excess_state_t* get_excess_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("EXCESS", (ftnlen)6);
+    chkin_(__global_state, "EXCESS", (ftnlen)6);
 
 /*     If there is no excess, don't report one. */
 
@@ -216,42 +215,45 @@ static excess_state_t* get_excess_state() {
 /*        Begin with the number. We will build the rest of the */
 /*        message around it. */
 
-	intstr_(number, error, (ftnlen)320);
+	intstr_(__global_state, number, error, (ftnlen)320);
 
 /*        A short blurb goes in front of the number. */
 
-	prefix_("An excess of", &__state->c__1, error, (ftnlen)12, (ftnlen)
-		320);
+	prefix_(__global_state, "An excess of", &__state->c__1, error, (
+		ftnlen)12, (ftnlen)320);
 
 /*        Singular or plural? */
 
 	if (*number == 1) {
-	    suffix_("element", &__state->c__1, error, (ftnlen)7, (ftnlen)320);
+	    suffix_(__global_state, "element", &__state->c__1, error, (ftnlen)
+		    7, (ftnlen)320);
 	} else {
-	    suffix_("elements", &__state->c__1, error, (ftnlen)8, (ftnlen)320)
-		    ;
+	    suffix_(__global_state, "elements", &__state->c__1, error, (
+		    ftnlen)8, (ftnlen)320);
 	}
 
 /*        Another short blurb. */
 
-	suffix_("could not be accommodated in the output", &__state->c__1, 
-		error, (ftnlen)39, (ftnlen)320);
+	suffix_(__global_state, "could not be accommodated in the output", &
+		__state->c__1, error, (ftnlen)39, (ftnlen)320);
 
 /*        And the name of the structure. */
 
-	suffix_(struct__, &__state->c__1, error, struct_len, (ftnlen)320);
+	suffix_(__global_state, struct__, &__state->c__1, error, struct_len, (
+		ftnlen)320);
 
 /*        And a period at the end, to complete the sentence. */
 
-	suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)320);
+	suffix_(__global_state, ".", &__state->c__0, error, (ftnlen)1, (
+		ftnlen)320);
 
 /*        Set the long error message: */
 
-	setmsg_(error, (ftnlen)320);
+	setmsg_(__global_state, error, (ftnlen)320);
     } else {
-	s_copy(error, " ", (ftnlen)320, (ftnlen)1);
+	s_copy(&__global_state->f2c, error, " ", (ftnlen)320, (ftnlen)1);
     }
-    chkout_("EXCESS", (ftnlen)6);
+    chkout_(__global_state, "EXCESS", (ftnlen)6);
     return 0;
 } /* excess_ */
 

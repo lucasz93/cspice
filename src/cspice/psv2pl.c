@@ -8,31 +8,31 @@
 
 
 typedef int psv2pl_state_t;
-static psv2pl_state_t* get_psv2pl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline psv2pl_state_t* get_psv2pl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PSV2PL ( Point and spanning vectors to plane ) */
-/* Subroutine */ int psv2pl_(doublereal *point, doublereal *span1, doublereal 
-	*span2, doublereal *plane)
+/* Subroutine */ int psv2pl_(cspice_t* __global_state, doublereal *point, 
+	doublereal *span1, doublereal *span2, doublereal *plane)
 {
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal tmpvec[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
 
 
     /* Module state */
-    psv2pl_state_t* __state = get_psv2pl_state();
+    psv2pl_state_t* __state = get_psv2pl_state(__global_state);
 /* $ Abstract */
 
 /*     Make a SPICELIB plane from a point and two spanning vectors. */
@@ -232,26 +232,26 @@ static psv2pl_state_t* get_psv2pl_state() {
 
 /*     This routine checks in only if an error is discovered. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Find the unitized cross product of SPAN1 and SPAN2; this is our */
 /*     unit normal vector, or possibly its inverse. */
 
-    ucrss_(span1, span2, plane);
-    if (vzero_(plane)) {
-	chkin_("PSV2PL", (ftnlen)6);
-	setmsg_("Spanning vectors are parallel.", (ftnlen)30);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("PSV2PL", (ftnlen)6);
+    ucrss_(__global_state, span1, span2, plane);
+    if (vzero_(__global_state, plane)) {
+	chkin_(__global_state, "PSV2PL", (ftnlen)6);
+	setmsg_(__global_state, "Spanning vectors are parallel.", (ftnlen)30);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "PSV2PL", (ftnlen)6);
 	return 0;
     }
 
 /*     Find the plane constant corresponding to the unit normal */
 /*     vector we've found. */
 
-    plane[3] = vdot_(plane, point);
+    plane[3] = vdot_(__global_state, plane, point);
 
 /*     The constant should be the distance of the plane from the */
 /*     origin.  If the constant is negative, negate both it and the */
@@ -259,8 +259,8 @@ static psv2pl_state_t* get_psv2pl_state() {
 
     if (plane[3] < 0.) {
 	plane[3] = -plane[3];
-	vminus_(plane, tmpvec);
-	vequ_(tmpvec, plane);
+	vminus_(__global_state, plane, tmpvec);
+	vequ_(__global_state, tmpvec, plane);
     }
     return 0;
 } /* psv2pl_ */

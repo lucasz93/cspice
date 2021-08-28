@@ -8,20 +8,19 @@
 
 
 typedef int unorm_state_t;
-static unorm_state_t* get_unorm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline unorm_state_t* get_unorm_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      UNORM ( Unit vector and norm, 3 dimensional ) */
-/* Subroutine */ int unorm_(doublereal *v1, doublereal *vout, doublereal *
-	vmag)
+/* Subroutine */ int unorm_(cspice_t* __global_state, doublereal *v1, 
+	doublereal *vout, doublereal *vmag)
 {
-    extern doublereal vnorm_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    unorm_state_t* __state = get_unorm_state();
+    unorm_state_t* __state = get_unorm_state(__global_state);
 /* $ Abstract */
 
 /*     Normalize a double precision 3-vector and return its magnitude. */
@@ -159,7 +158,7 @@ static unorm_state_t* get_unorm_state() {
 
 /*  Obtain the magnitude of V1 */
 
-    *vmag = vnorm_(v1);
+    *vmag = vnorm_(__global_state, v1);
 
 /*   If VMAG is nonzero, then normalize.  Note that this process is */
 /*   numerically stable: overflow could only happen if VMAG were small, */

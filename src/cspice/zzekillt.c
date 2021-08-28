@@ -8,43 +8,42 @@
 
 
 typedef int zzekillt_state_t;
-static zzekillt_state_t* get_zzekillt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekillt_state_t* get_zzekillt_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKILLT ( EK, indirect, last element less than ) */
-integer zzekillt_(integer *handle, integer *segdsc, integer *coldsc, integer *
-	nrows, integer *dtype, char *cval, doublereal *dval, integer *ival, 
-	ftnlen cval_len)
+integer zzekillt_(cspice_t* __global_state, integer *handle, integer *segdsc, 
+	integer *coldsc, integer *nrows, integer *dtype, char *cval, 
+	doublereal *dval, integer *ival, ftnlen cval_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
     doublereal dnum;
     integer inum;
-    extern /* Subroutine */ int zzeklltc_(integer *, integer *, integer *, 
-	    char *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int zzeklltd_(integer *, integer *, integer *, 
-	    doublereal *, integer *, integer *);
-    extern /* Subroutine */ int zzekllti_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzeklltc_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzeklltd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, integer *);
+    extern /* Subroutine */ int zzekllti_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer coltyp;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer rec;
 
 
     /* Module state */
-    zzekillt_state_t* __state = get_zzekillt_state();
+    zzekillt_state_t* __state = get_zzekillt_state(__global_state);
 /* $ Abstract */
 
 /*     Find the ordinal position of the row, in an specified EK segment, */
@@ -545,10 +544,10 @@ integer zzekillt_(integer *handle, integer *segdsc, integer *coldsc, integer *
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return ret_val;
     } else {
-	chkin_("ZZEKILLT", (ftnlen)8);
+	chkin_(__global_state, "ZZEKILLT", (ftnlen)8);
     }
 
 /*     Validate the number of rows in the column. */
@@ -559,10 +558,11 @@ integer zzekillt_(integer *handle, integer *segdsc, integer *coldsc, integer *
 /*        to compare against.  Zero is the only sensible thing to return. */
 
 	ret_val = 0;
-	setmsg_("Number of rows must be positive; was #.", (ftnlen)39);
-	errint_("#", nrows, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("ZZEKILLT", (ftnlen)8);
+	setmsg_(__global_state, "Number of rows must be positive; was #.", (
+		ftnlen)39);
+	errint_(__global_state, "#", nrows, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKILLT", (ftnlen)8);
 	return ret_val;
     }
 
@@ -570,31 +570,36 @@ integer zzekillt_(integer *handle, integer *segdsc, integer *coldsc, integer *
 
     coltyp = coldsc[1];
     if (coltyp == 1) {
-	zzeklltc_(handle, segdsc, coldsc, cval, &ret_val, &rec, cval_len);
+	zzeklltc_(__global_state, handle, segdsc, coldsc, cval, &ret_val, &
+		rec, cval_len);
     } else if (coltyp == 2) {
 	if (*dtype == 2) {
 	    dnum = *dval;
 	} else {
 	    dnum = (doublereal) (*ival);
 	}
-	zzeklltd_(handle, segdsc, coldsc, &dnum, &ret_val, &rec);
+	zzeklltd_(__global_state, handle, segdsc, coldsc, &dnum, &ret_val, &
+		rec);
     } else if (coltyp == 4) {
-	zzeklltd_(handle, segdsc, coldsc, dval, &ret_val, &rec);
+	zzeklltd_(__global_state, handle, segdsc, coldsc, dval, &ret_val, &
+		rec);
     } else if (coltyp == 3) {
 	if (*dtype == 2) {
-	    inum = i_dnnt(dval);
+	    inum = i_dnnt(&__global_state->f2c, dval);
 	} else {
 	    inum = *ival;
 	}
-	zzekllti_(handle, segdsc, coldsc, &inum, &ret_val, &rec);
+	zzekllti_(__global_state, handle, segdsc, coldsc, &inum, &ret_val, &
+		rec);
     } else {
-	setmsg_("The data type # is not supported.", (ftnlen)33);
-	errint_("#", &coltyp, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("ZZEKILLT", (ftnlen)8);
+	setmsg_(__global_state, "The data type # is not supported.", (ftnlen)
+		33);
+	errint_(__global_state, "#", &coltyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKILLT", (ftnlen)8);
 	return ret_val;
     }
-    chkout_("ZZEKILLT", (ftnlen)8);
+    chkout_(__global_state, "ZZEKILLT", (ftnlen)8);
     return ret_val;
 } /* zzekillt_ */
 

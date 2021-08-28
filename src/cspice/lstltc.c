@@ -8,21 +8,20 @@
 
 
 typedef int lstltc_state_t;
-static lstltc_state_t* get_lstltc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lstltc_state_t* get_lstltc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   LSTLTC ( Last character element less than ) */
-integer lstltc_(char *string, integer *n, char *array, ftnlen string_len, 
-	ftnlen array_len)
+integer lstltc_(cspice_t* __global_state, char *string, integer *n, char *
+	array, ftnlen string_len, ftnlen array_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    logical l_le(char *, char *, ftnlen, ftnlen), l_lt(char *, char *, ftnlen,
-	     ftnlen);
+    logical l_le(f2c_state_t*, char *, char *, ftnlen, ftnlen), l_lt(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer j;
@@ -33,7 +32,7 @@ integer lstltc_(char *string, integer *n, char *array, ftnlen string_len,
 
 
     /* Module state */
-    lstltc_state_t* __state = get_lstltc_state();
+    lstltc_state_t* __state = get_lstltc_state(__global_state);
 /* $ Abstract */
 
 /*      Given a character string and an ordered array of character */
@@ -244,14 +243,14 @@ integer lstltc_(char *string, integer *n, char *array, ftnlen string_len,
 /*        to compare against.  Zero is the only sensible thing to return */
 
 	ret_val = 0;
-    } else if (l_le(string, array + (begin - 1) * array_len, string_len, 
-	    array_len)) {
+    } else if (l_le(&__global_state->f2c, string, array + (begin - 1) * 
+	    array_len, string_len, array_len)) {
 
 /*        None of the array elements are less than STRING */
 
 	ret_val = 0;
-    } else if (l_lt(array + (end - 1) * array_len, string, array_len, 
-	    string_len)) {
+    } else if (l_lt(&__global_state->f2c, array + (end - 1) * array_len, 
+	    string, array_len, string_len)) {
 
 /*        STRING is greater than all elements of the array.  Thus the las */
 /*        element of the array is the last item less than STRING. */
@@ -264,8 +263,8 @@ integer lstltc_(char *string, integer *n, char *array, ftnlen string_len,
 	while(items > 2) {
 	    j = items / 2;
 	    middle = begin + j;
-	    if (l_lt(array + (middle - 1) * array_len, string, array_len, 
-		    string_len)) {
+	    if (l_lt(&__global_state->f2c, array + (middle - 1) * array_len, 
+		    string, array_len, string_len)) {
 		begin = middle;
 	    } else {
 		end = middle;

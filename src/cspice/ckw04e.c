@@ -8,8 +8,7 @@
 
 
 extern ckw04e_init_t __ckw04e_init;
-static ckw04e_state_t* get_ckw04e_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckw04e_state_t* get_ckw04e_state(cspice_t* state) {
 	if (!state->ckw04e)
 		state->ckw04e = __cspice_allocate_module(sizeof(
 	ckw04e_state_t), &__ckw04e_init, sizeof(__ckw04e_init));
@@ -18,31 +17,32 @@ static ckw04e_state_t* get_ckw04e_state() {
 }
 
 /* $Procedure      CKW04E ( CK type 04: End a segment ) */
-/* Subroutine */ int ckw04e_(integer *handle, doublereal *endtim)
+/* Subroutine */ int ckw04e_(cspice_t* __global_state, integer *handle, 
+	doublereal *endtim)
 {
-    extern /* Subroutine */ int dafgs_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int dafrs_(doublereal *);
+    extern /* Subroutine */ int dafgs_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int dafrs_(cspice_t*, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     logical found;
-    extern /* Subroutine */ int sgwes_(integer *);
-    extern /* Subroutine */ int dafbbs_(integer *);
-    extern /* Subroutine */ int daffpa_(logical *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sgwes_(cspice_t*, integer *);
+    extern /* Subroutine */ int dafbbs_(cspice_t*, integer *);
+    extern /* Subroutine */ int daffpa_(cspice_t*, logical *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer icd[6];
 
 
     /* Module state */
-    ckw04e_state_t* __state = get_ckw04e_state();
+    ckw04e_state_t* __state = get_ckw04e_state(__global_state);
 /* $ Abstract */
 
 /*     End the type 04 CK segment currently being written to the DAF */
@@ -296,50 +296,50 @@ static ckw04e_state_t* get_ckw04e_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKW04E", (ftnlen)6);
+	chkin_(__global_state, "CKW04E", (ftnlen)6);
     }
 
 /*     This is simple, just call the routine which ends a generic */
 /*     segment. */
 
-    sgwes_(handle);
-    if (failed_()) {
-	chkout_("CKW04E", (ftnlen)6);
+    sgwes_(__global_state, handle);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKW04E", (ftnlen)6);
 	return 0;
     }
 
 /*     Now update the descriptor with the end time. Locate the segment */
 /*     with a backward search. */
 
-    dafbbs_(handle);
-    daffpa_(&found);
+    dafbbs_(__global_state, handle);
+    daffpa_(__global_state, &found);
     if (! found) {
 
 /*        We have a bug. */
 
-	setmsg_("The segment which was just written could not be found by a "
-		"DAF search. This  indicates a serious error.  Contact NAIF.", 
-		(ftnlen)118);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("CKW04E", (ftnlen)6);
+	setmsg_(__global_state, "The segment which was just written could no"
+		"t be found by a DAF search. This  indicates a serious error."
+		"  Contact NAIF.", (ftnlen)118);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "CKW04E", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the descriptor, set the end time, and update the descriptor */
 /*     in the file. */
 
-    dafgs_(descr);
-    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
+    dafgs_(__global_state, descr);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dcd, icd);
     dcd[1] = *endtim;
-    dafps_(&__state->c__2, &__state->c__6, dcd, icd, descr);
-    dafrs_(descr);
+    dafps_(__global_state, &__state->c__2, &__state->c__6, dcd, icd, descr);
+    dafrs_(__global_state, descr);
 
 /*     All done. */
 
-    chkout_("CKW04E", (ftnlen)6);
+    chkout_(__global_state, "CKW04E", (ftnlen)6);
     return 0;
 } /* ckw04e_ */
 

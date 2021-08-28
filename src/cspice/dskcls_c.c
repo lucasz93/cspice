@@ -161,7 +161,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dskcls_c" );
+   chkin_c ( naif_state, "dskcls_c" );
 
    optflg = (logical) optmiz;
 

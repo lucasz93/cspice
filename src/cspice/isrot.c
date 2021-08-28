@@ -8,13 +8,13 @@
 
 
 typedef int isrot_state_t;
-static isrot_state_t* get_isrot_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline isrot_state_t* get_isrot_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure     ISROT ( Indicate whether a matrix is a rotation matrix ) */
-logical isrot_(doublereal *m, doublereal *ntol, doublereal *dtol)
+logical isrot_(cspice_t* __global_state, doublereal *m, doublereal *ntol, 
+	doublereal *dtol)
 {
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4, d__5, d__6;
@@ -23,25 +23,27 @@ logical isrot_(doublereal *m, doublereal *ntol, doublereal *dtol)
     /* Local variables */
     doublereal unit[9]	/* was [3][3] */;
     doublereal d__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical detok;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal n1;
     doublereal n2;
     doublereal n3;
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     logical normok;
-    extern logical return_(void);
-    extern doublereal det_(doublereal *);
+    extern logical return_(cspice_t*);
+    extern doublereal det_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    isrot_state_t* __state = get_isrot_state();
+    isrot_state_t* __state = get_isrot_state(__global_state);
 /* $ Abstract */
 
 /*     Indicate whether a 3x3 matrix is a rotation matrix. */
@@ -252,28 +254,30 @@ logical isrot_(doublereal *m, doublereal *ntol, doublereal *dtol)
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = FALSE_;
 	return ret_val;
     } else {
-	chkin_("ISROT", (ftnlen)5);
+	chkin_(__global_state, "ISROT", (ftnlen)5);
     }
 
 /*     Tolerances must be non-negative. */
 
     if (*ntol < 0.) {
 	ret_val = FALSE_;
-	setmsg_("NTOL should be non-negaitve; it is #.", (ftnlen)37);
-	errdp_("#", ntol, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ISROT", (ftnlen)5);
+	setmsg_(__global_state, "NTOL should be non-negaitve; it is #.", (
+		ftnlen)37);
+	errdp_(__global_state, "#", ntol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ISROT", (ftnlen)5);
 	return ret_val;
     } else if (*dtol < 0.) {
 	ret_val = FALSE_;
-	setmsg_("DTOL should be non-negaitve; it is #.", (ftnlen)37);
-	errdp_("#", dtol, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ISROT", (ftnlen)5);
+	setmsg_(__global_state, "DTOL should be non-negaitve; it is #.", (
+		ftnlen)37);
+	errdp_(__global_state, "#", dtol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ISROT", (ftnlen)5);
 	return ret_val;
     }
 
@@ -285,27 +289,28 @@ logical isrot_(doublereal *m, doublereal *ntol, doublereal *dtol)
 /*     of the matrix UNIT, computed below, whose columns are the */
 /*     unitized columns of M. */
 
-    unorm_(m, unit, &n1);
-    unorm_(&m[3], &unit[3], &n2);
-    unorm_(&m[6], &unit[6], &n3);
-    d__ = det_(unit);
+    unorm_(__global_state, m, unit, &n1);
+    unorm_(__global_state, &m[3], &unit[3], &n2);
+    unorm_(__global_state, &m[6], &unit[6], &n3);
+    d__ = det_(__global_state, unit);
     d__1 = 1. - *ntol;
     d__2 = *ntol + 1.;
     d__3 = 1. - *ntol;
     d__4 = *ntol + 1.;
     d__5 = 1. - *ntol;
     d__6 = *ntol + 1.;
-    normok = n1 == brcktd_(&n1, &d__1, &d__2) && n2 == brcktd_(&n2, &d__3, &
-	    d__4) && n3 == brcktd_(&n3, &d__5, &d__6);
+    normok = n1 == brcktd_(__global_state, &n1, &d__1, &d__2) && n2 == 
+	    brcktd_(__global_state, &n2, &d__3, &d__4) && n3 == brcktd_(
+	    __global_state, &n3, &d__5, &d__6);
     d__1 = 1. - *dtol;
     d__2 = *dtol + 1.;
-    detok = d__ == brcktd_(&d__, &d__1, &d__2);
+    detok = d__ == brcktd_(__global_state, &d__, &d__1, &d__2);
     if (normok && detok) {
 	ret_val = TRUE_;
     } else {
 	ret_val = FALSE_;
     }
-    chkout_("ISROT", (ftnlen)5);
+    chkout_(__global_state, "ISROT", (ftnlen)5);
     return ret_val;
 } /* isrot_ */
 

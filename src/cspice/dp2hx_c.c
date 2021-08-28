@@ -249,7 +249,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dp2hx_c" );
+   chkin_c ( naif_state, "dp2hx_c" );
 
    /*
    Make sure the output string has at least enough room for one

@@ -202,7 +202,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "npelpt_c" );
+   chkin_c ( naif_state, "npelpt_c" );
 
  
    /*

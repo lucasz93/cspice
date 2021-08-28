@@ -250,7 +250,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "pipool_c" );
+   chkin_c ( naif_state, "pipool_c" );
 
 
    /*

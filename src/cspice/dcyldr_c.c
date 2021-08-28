@@ -194,7 +194,7 @@
 
 { /* Begin dcyldr_c */
 
-   chkin_c ( "dcyldr_c" );
+   chkin_c ( naif_state, "dcyldr_c" );
 
 
    dcyldr_ ( (doublereal *) &x,

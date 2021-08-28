@@ -236,7 +236,7 @@
    {
       return;
    }
-   chkin_c ( "wnvald_c" );
+   chkin_c ( naif_state, "wnvald_c" );
 
    /*
    Make sure cell data type is d.p. 

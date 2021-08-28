@@ -168,7 +168,7 @@
    {
       return ( 0 );
    }
-   chkin_c ( "zzadrepu_c" );
+   chkin_c ( naif_state, "zzadrepu_c" );
 
 
    /*
@@ -179,7 +179,7 @@
 
    fPtr = (  void (*) ( SpiceDouble, 
                         SpiceDouble,
-                        SpiceDouble )  )  zzadget_c ( UDREPU );
+                        SpiceDouble )  )  zzadget_c ( naif_state,  ( UDREPU );
  
    /*
    Call the CSPICE-style progress report update function. 

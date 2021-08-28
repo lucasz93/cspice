@@ -8,8 +8,7 @@
 
 
 extern dafwda_init_t __dafwda_init;
-static dafwda_state_t* get_dafwda_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafwda_state_t* get_dafwda_state(cspice_t* state) {
 	if (!state->dafwda)
 		state->dafwda = __cspice_allocate_module(sizeof(
 	dafwda_state_t), &__dafwda_init, sizeof(__dafwda_init));
@@ -18,14 +17,14 @@ static dafwda_state_t* get_dafwda_state() {
 }
 
 /* $Procedure DAFWDA ( DAF, write data to address ) */
-/* Subroutine */ int dafwda_(integer *handle, integer *begin, integer *end, 
-	doublereal *data)
+/* Subroutine */ int dafwda_(cspice_t* __global_state, integer *handle, 
+	integer *begin, integer *end, doublereal *data)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer begr;
@@ -34,26 +33,29 @@ static dafwda_state_t* get_dafwda_state() {
     integer endw;
     integer next;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     logical found;
     integer first;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int dafrdr_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *);
-    extern /* Subroutine */ int dafarw_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dafwdr_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int dafrdr_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int dafarw_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dafwdr_(cspice_t*, integer *, integer *, 
+	    doublereal *);
     doublereal buffer[128];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dafwda_state_t* __state = get_dafwda_state();
+    dafwda_state_t* __state = get_dafwda_state(__global_state);
 /* $ Abstract */
 
 /*     Write or rewrite the double precision data bounded by two */
@@ -213,34 +215,34 @@ static dafwda_state_t* get_dafwda_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFWDA", (ftnlen)6);
+	chkin_(__global_state, "DAFWDA", (ftnlen)6);
     }
 
 /*     Bad addresses? */
 
     if (*begin <= 0) {
-	setmsg_("Negative beginning address: #", (ftnlen)29);
-	errint_("#", begin, (ftnlen)1);
-	sigerr_("SPICE(DAFNEGADDR)", (ftnlen)17);
-	chkout_("DAFWDA", (ftnlen)6);
+	setmsg_(__global_state, "Negative beginning address: #", (ftnlen)29);
+	errint_(__global_state, "#", begin, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNEGADDR)", (ftnlen)17);
+	chkout_(__global_state, "DAFWDA", (ftnlen)6);
 	return 0;
     } else if (*begin > *end) {
-	setmsg_("Beginning address (#) greater than ending address (#)", (
-		ftnlen)53);
-	errint_("#", begin, (ftnlen)1);
-	errint_("#", end, (ftnlen)1);
-	sigerr_("SPICE(DAFBEGGTEND)", (ftnlen)18);
-	chkout_("DAFWDA", (ftnlen)6);
+	setmsg_(__global_state, "Beginning address (#) greater than ending a"
+		"ddress (#)", (ftnlen)53);
+	errint_(__global_state, "#", begin, (ftnlen)1);
+	errint_(__global_state, "#", end, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFBEGGTEND)", (ftnlen)18);
+	chkout_(__global_state, "DAFWDA", (ftnlen)6);
 	return 0;
     }
 
 /*     Convert raw addresses to record/word representations. */
 
-    dafarw_(begin, &begr, &begw);
-    dafarw_(end, &endr, &endw);
+    dafarw_(__global_state, begin, &begr, &begw);
+    dafarw_(__global_state, end, &endr, &endw);
 
 /*     The first and last records may have to be read, updated, and */
 /*     rewritten. Any records in between may be written directly. */
@@ -249,10 +251,10 @@ static dafwda_state_t* get_dafwda_state() {
     i__1 = endr;
     for (recno = begr; recno <= i__1; ++recno) {
 	if (recno == begr || recno == endr) {
-	    dafrdr_(handle, &recno, &__state->c__1, &__state->c__128, buffer, 
-		    &found);
+	    dafrdr_(__global_state, handle, &recno, &__state->c__1, &
+		    __state->c__128, buffer, &found);
 	    if (! found) {
-		cleard_(&__state->c__128, buffer);
+		cleard_(__global_state, &__state->c__128, buffer);
 	    }
 	}
 	if (begr == endr) {
@@ -268,13 +270,13 @@ static dafwda_state_t* get_dafwda_state() {
 	    first = 1;
 	    n = 128;
 	}
-	moved_(&data[next - 1], &n, &buffer[(i__2 = first - 1) < 128 && 0 <= 
-		i__2 ? i__2 : s_rnge("buffer", i__2, "dafwda_", (ftnlen)258)])
-		;
+	moved_(__global_state, &data[next - 1], &n, &buffer[(i__2 = first - 1)
+		 < 128 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		"buffer", i__2, "dafwda_", (ftnlen)258)]);
 	next += n;
-	dafwdr_(handle, &recno, buffer);
+	dafwdr_(__global_state, handle, &recno, buffer);
     }
-    chkout_("DAFWDA", (ftnlen)6);
+    chkout_(__global_state, "DAFWDA", (ftnlen)6);
     return 0;
 } /* dafwda_ */
 

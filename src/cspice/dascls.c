@@ -8,8 +8,7 @@
 
 
 extern dascls_init_t __dascls_init;
-static dascls_state_t* get_dascls_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dascls_state_t* get_dascls_state(cspice_t* state) {
 	if (!state->dascls)
 		state->dascls = __cspice_allocate_module(sizeof(
 	dascls_state_t), &__dascls_init, sizeof(__dascls_init));
@@ -18,7 +17,7 @@ static dascls_state_t* get_dascls_state() {
 }
 
 /* $Procedure      DASCLS ( DAS, close file ) */
-/* Subroutine */ int dascls_(integer *handle)
+/* Subroutine */ int dascls_(cspice_t* __global_state, integer *handle)
 {
     /* Initialized data */
 
@@ -27,33 +26,34 @@ static dascls_state_t* get_dascls_state() {
     inlist ioin__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), f_inqu(inlist *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), f_inqu(
+	    f2c_state_t*, inlist *);
 
     /* Local variables */
     integer unit;
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern logical elemi_(integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasham_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int dasllc_(integer *);
-    extern /* Subroutine */ int dashof_(integer *);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern logical elemi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasham_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasllc_(cspice_t*, integer *);
+    extern /* Subroutine */ int dashof_(cspice_t*, integer *);
     char method[10];
-    extern /* Subroutine */ int dassdr_(integer *);
-    extern /* Subroutine */ int daswbr_(integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int dassdr_(cspice_t*, integer *);
+    extern /* Subroutine */ int daswbr_(cspice_t*, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
     logical notscr;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dascls_state_t* __state = get_dascls_state();
+    dascls_state_t* __state = get_dascls_state(__global_state);
 /* $ Abstract */
 
 /*     Close a DAS file. */
@@ -314,12 +314,12 @@ static dascls_state_t* get_dascls_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASCLS", (ftnlen)6);
+    chkin_(__global_state, "DASCLS", (ftnlen)6);
     if (__state->pass1) {
-	ssizei_(&__state->c__5000, __state->fhset);
+	ssizei_(__global_state, &__state->c__5000, __state->fhset);
 	__state->pass1 = FALSE_;
     }
 
@@ -341,29 +341,31 @@ static dascls_state_t* get_dascls_state() {
 /*     See whether the input handle designates an open DAS file.  If not, */
 /*     return now. */
 
-    dashof_(__state->fhset);
-    if (! elemi_(handle, __state->fhset)) {
-	chkout_("DASCLS", (ftnlen)6);
+    dashof_(__global_state, __state->fhset);
+    if (! elemi_(__global_state, handle, __state->fhset)) {
+	chkout_(__global_state, "DASCLS", (ftnlen)6);
 	return 0;
     }
 
 /*     If the file is open for writing, flush any buffered */
 /*     records that belong to it. */
 
-    dasham_(handle, method, (ftnlen)10);
-    if (s_cmp(method, "WRITE ", (ftnlen)10, (ftnlen)6) == 0) {
+    dasham_(__global_state, handle, method, (ftnlen)10);
+    if (s_cmp(&__global_state->f2c, method, "WRITE ", (ftnlen)10, (ftnlen)6) 
+	    == 0) {
 
 /*        Make sure that all buffered records belonging to the */
 /*        indicated file are written out. */
 
-	daswbr_(handle);
+	daswbr_(__global_state, handle);
 
 /*        We cannot directly test the status of the file, but if */
 /*        the file is unnamed, it must be a scratch file. */
 
-	zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
-	if (failed_()) {
-	    chkout_("DASCLS", (ftnlen)6);
+	zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &unit, (
+		ftnlen)3);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DASCLS", (ftnlen)6);
 	    return 0;
 	}
 	ioin__1.inerr = 1;
@@ -383,16 +385,16 @@ static dascls_state_t* get_dascls_state() {
 	ioin__1.inrecl = 0;
 	ioin__1.innrec = 0;
 	ioin__1.inblank = 0;
-	iostat = f_inqu(&ioin__1);
+	iostat = f_inqu(&__global_state->f2c, &ioin__1);
 	if (iostat != 0) {
-	    setmsg_("Error occurred while performing an  INQUIRE on a DAS fi"
-		    "le about to be closed.  IOSTAT = #. File handle was #.  "
-		    "Logical unit was #.", (ftnlen)130);
-	    errint_("#", &iostat, (ftnlen)1);
-	    errint_("#", handle, (ftnlen)1);
-	    errint_("#", &unit, (ftnlen)1);
-	    sigerr_("SPICE(INQUIREFAILED)", (ftnlen)20);
-	    chkout_("DASCLS", (ftnlen)6);
+	    setmsg_(__global_state, "Error occurred while performing an  INQ"
+		    "UIRE on a DAS file about to be closed.  IOSTAT = #. File"
+		    " handle was #.  Logical unit was #.", (ftnlen)130);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    errint_(__global_state, "#", handle, (ftnlen)1);
+	    errint_(__global_state, "#", &unit, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	    chkout_(__global_state, "DASCLS", (ftnlen)6);
 	    return 0;
 	}
 	if (notscr) {
@@ -400,14 +402,14 @@ static dascls_state_t* get_dascls_state() {
 /*           Segregate the data records in the file according to data */
 /*           type. */
 
-	    dassdr_(handle);
+	    dassdr_(__global_state, handle);
 	}
     }
 
 /*     Close the file. */
 
-    dasllc_(handle);
-    chkout_("DASCLS", (ftnlen)6);
+    dasllc_(__global_state, handle);
+    chkout_(__global_state, "DASCLS", (ftnlen)6);
     return 0;
 } /* dascls_ */
 

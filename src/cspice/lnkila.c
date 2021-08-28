@@ -8,8 +8,7 @@
 
 
 extern lnkila_init_t __lnkila_init;
-static lnkila_state_t* get_lnkila_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lnkila_state_t* get_lnkila_state(cspice_t* state) {
 	if (!state->lnkila)
 		state->lnkila = __cspice_allocate_module(sizeof(
 	lnkila_state_t), &__lnkila_init, sizeof(__lnkila_init));
@@ -18,20 +17,21 @@ static lnkila_state_t* get_lnkila_state() {
 }
 
 /* $Procedure      LNKILA ( LNK, insert list after node ) */
-/* Subroutine */ int lnkila_(integer *prev, integer *list, integer *pool)
+/* Subroutine */ int lnkila_(cspice_t* __global_state, integer *prev, integer 
+	*list, integer *pool)
 {
     integer head;
     integer tail;
     integer next;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    lnkila_state_t* __state = get_lnkila_state();
+    lnkila_state_t* __state = get_lnkila_state(__global_state);
 /* $ Abstract */
 
 /*     Insert the list containing a specified node into a another list, */
@@ -271,29 +271,30 @@ static lnkila_state_t* get_lnkila_state() {
 /*     both PREV and LIST must be allocated as well. */
 
     if (*prev > pool[10] || *list < 1 || *list > pool[10]) {
-	chkin_("LNKILA", (ftnlen)6);
-	setmsg_("PREV was #.  LIST was #. Valid range is 1 to #.", (ftnlen)47)
-		;
-	errint_("#", prev, (ftnlen)1);
-	errint_("#", list, (ftnlen)1);
-	errint_("#", &pool[10], (ftnlen)1);
-	sigerr_("SPICE(INVALIDNODE)", (ftnlen)18);
-	chkout_("LNKILA", (ftnlen)6);
+	chkin_(__global_state, "LNKILA", (ftnlen)6);
+	setmsg_(__global_state, "PREV was #.  LIST was #. Valid range is 1 t"
+		"o #.", (ftnlen)47);
+	errint_(__global_state, "#", prev, (ftnlen)1);
+	errint_(__global_state, "#", list, (ftnlen)1);
+	errint_(__global_state, "#", &pool[10], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDNODE)", (ftnlen)18);
+	chkout_(__global_state, "LNKILA", (ftnlen)6);
 	return 0;
     } else if (pool[(*prev << 1) + 11] == 0 || pool[(*list << 1) + 11] == 0) {
-	chkin_("LNKILA", (ftnlen)6);
-	setmsg_("Node PREV: node number = #; backward pointer = #;  forward "
-		"pointer = #. Node LIST: node number = #; backward pointer = "
-		"#;  forward pointer = #. (\"FREE\" is #)", (ftnlen)157);
-	errint_("#", prev, (ftnlen)1);
-	errint_("#", &pool[(*prev << 1) + 11], (ftnlen)1);
-	errint_("#", &pool[(*prev << 1) + 10], (ftnlen)1);
-	errint_("#", list, (ftnlen)1);
-	errint_("#", &pool[(*list << 1) + 11], (ftnlen)1);
-	errint_("#", &pool[(*list << 1) + 10], (ftnlen)1);
-	errint_("#", &__state->c__0, (ftnlen)1);
-	sigerr_("SPICE(UNALLOCATEDNODE)", (ftnlen)22);
-	chkout_("LNKILA", (ftnlen)6);
+	chkin_(__global_state, "LNKILA", (ftnlen)6);
+	setmsg_(__global_state, "Node PREV: node number = #; backward pointe"
+		"r = #;  forward pointer = #. Node LIST: node number = #; bac"
+		"kward pointer = #;  forward pointer = #. (\"FREE\" is #)", (
+		ftnlen)157);
+	errint_(__global_state, "#", prev, (ftnlen)1);
+	errint_(__global_state, "#", &pool[(*prev << 1) + 11], (ftnlen)1);
+	errint_(__global_state, "#", &pool[(*prev << 1) + 10], (ftnlen)1);
+	errint_(__global_state, "#", list, (ftnlen)1);
+	errint_(__global_state, "#", &pool[(*list << 1) + 11], (ftnlen)1);
+	errint_(__global_state, "#", &pool[(*list << 1) + 10], (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__0, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNALLOCATEDNODE)", (ftnlen)22);
+	chkout_(__global_state, "LNKILA", (ftnlen)6);
 	return 0;
     }
 

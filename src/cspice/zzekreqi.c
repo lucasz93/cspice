@@ -8,8 +8,7 @@
 
 
 extern zzekreqi_init_t __zzekreqi_init;
-static zzekreqi_state_t* get_zzekreqi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekreqi_state_t* get_zzekreqi_state(cspice_t* state) {
 	if (!state->zzekreqi)
 		state->zzekreqi = __cspice_allocate_module(sizeof(
 	zzekreqi_state_t), &__zzekreqi_init, sizeof(__zzekreqi_init));
@@ -18,8 +17,8 @@ static zzekreqi_state_t* get_zzekreqi_state() {
 }
 
 /* $Procedure   ZZEKREQI ( Private: EK, read from encoded query, integer ) */
-/* Subroutine */ int zzekreqi_(integer *eqryi, char *name__, integer *value, 
-	ftnlen name_len)
+/* Subroutine */ int zzekreqi_(cspice_t* __global_state, integer *eqryi, char 
+	*name__, integer *value, ftnlen name_len)
 {
     /* Initialized data */
 
@@ -28,21 +27,25 @@ static zzekreqi_state_t* get_zzekreqi_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzekreqi_state_t* __state = get_zzekreqi_state();
+    zzekreqi_state_t* __state = get_zzekreqi_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -501,24 +504,25 @@ static zzekreqi_state_t* get_zzekreqi_state() {
 
 /*     Find the location of the named item. */
 
-    ljust_(name__, __state->tmpnam, name_len, (ftnlen)32);
-    ucase_(__state->tmpnam, __state->tmpnam, (ftnlen)32, (ftnlen)32);
-    __state->i__ = isrchc_(__state->tmpnam, &__state->c__15, __state->namlst, 
-	    (ftnlen)32, (ftnlen)32);
+    ljust_(__global_state, name__, __state->tmpnam, name_len, (ftnlen)32);
+    ucase_(__global_state, __state->tmpnam, __state->tmpnam, (ftnlen)32, (
+	    ftnlen)32);
+    __state->i__ = isrchc_(__global_state, __state->tmpnam, &__state->c__15, 
+	    __state->namlst, (ftnlen)32, (ftnlen)32);
     if (__state->i__ == 0) {
-	chkin_("ZZEKREQI", (ftnlen)8);
-	setmsg_("Item # not found.", (ftnlen)17);
-	errch_("#", name__, (ftnlen)1, name_len);
-	sigerr_("SPICE(INVALIDNAME)", (ftnlen)18);
-	chkout_("ZZEKREQI", (ftnlen)8);
+	chkin_(__global_state, "ZZEKREQI", (ftnlen)8);
+	setmsg_(__global_state, "Item # not found.", (ftnlen)17);
+	errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	sigerr_(__global_state, "SPICE(INVALIDNAME)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKREQI", (ftnlen)8);
 	return 0;
     }
 
 /*     Do the deed. */
 
     *value = eqryi[__state->namidx[(i__1 = __state->i__ - 1) < 15 && 0 <= 
-	    i__1 ? i__1 : s_rnge("namidx", i__1, "zzekreqi_", (ftnlen)191)] + 
-	    5];
+	    i__1 ? i__1 : s_rnge(&__global_state->f2c, "namidx", i__1, "zzek"
+	    "reqi_", (ftnlen)191)] + 5];
     return 0;
 } /* zzekreqi_ */
 

@@ -8,8 +8,7 @@
 
 
 extern sgfref_init_t __sgfref_init;
-static sgfref_state_t* get_sgfref_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sgfref_state_t* get_sgfref_state(cspice_t* state) {
 	if (!state->sgfref)
 		state->sgfref = __cspice_allocate_module(sizeof(
 	sgfref_state_t), &__sgfref_init, sizeof(__sgfref_init));
@@ -18,39 +17,39 @@ static sgfref_state_t* get_sgfref_state() {
 }
 
 /* $Procedure      SGFREF ( Generic Segments: Fetch references ) */
-/* Subroutine */ int sgfref_(integer *handle, doublereal *descr, integer *
-	first, integer *last, doublereal *values)
+/* Subroutine */ int sgfref_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, integer *first, integer *last, doublereal *values)
 {
     /* System generated locals */
     integer i__1;
     doublereal d__1;
 
     /* Builtin functions */
-    double d_int(doublereal *);
+    double d_int(f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer base;
     integer b;
     integer e;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal buffer[2];
-    extern /* Subroutine */ int sgmeta_(integer *, doublereal *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sgmeta_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer mynref;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer myreft;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sgfref_state_t* __state = get_sgfref_state();
+    sgfref_state_t* __state = get_sgfref_state(__global_state);
 /* $ Abstract */
 
 /*     Given the descriptor for a generic segment in a DAF file */
@@ -596,42 +595,42 @@ static sgfref_state_t* get_sgfref_state() {
 /*     generic segment.  This number is to remain fixed even if more */
 /*     meta data items are added for compatibility with old DAF files. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SGFREF", (ftnlen)6);
+    chkin_(__global_state, "SGFREF", (ftnlen)6);
 
 /*     Perform the needed initialization */
 
-    sgmeta_(handle, descr, &__state->c__6, &base);
-    sgmeta_(handle, descr, &__state->c__5, &myreft);
-    sgmeta_(handle, descr, &__state->c__7, &mynref);
-    if (failed_()) {
-	chkout_("SGFREF", (ftnlen)6);
+    sgmeta_(__global_state, handle, descr, &__state->c__6, &base);
+    sgmeta_(__global_state, handle, descr, &__state->c__5, &myreft);
+    sgmeta_(__global_state, handle, descr, &__state->c__7, &mynref);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGFREF", (ftnlen)6);
 	return 0;
     }
 
 /*     Perform checks on the inputs for reasonableness. */
 
     if (*first < 1 || *last > mynref) {
-	setmsg_("The range of reference items requested extends beyond the a"
-		"vailable range of reference items.  The reference data is av"
-		"ailable for indexes 1 to #.  You've requested data from # to"
-		" #.", (ftnlen)182);
-	errint_("#", &mynref, (ftnlen)1);
-	errint_("#", first, (ftnlen)1);
-	errint_("#", last, (ftnlen)1);
-	sigerr_("SPICE(REQUESTOUTOFBOUNDS)", (ftnlen)25);
-	chkout_("SGFREF", (ftnlen)6);
+	setmsg_(__global_state, "The range of reference items requested exte"
+		"nds beyond the available range of reference items.  The refe"
+		"rence data is available for indexes 1 to #.  You've requeste"
+		"d data from # to #.", (ftnlen)182);
+	errint_(__global_state, "#", &mynref, (ftnlen)1);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(REQUESTOUTOFBOUNDS)", (ftnlen)25);
+	chkout_(__global_state, "SGFREF", (ftnlen)6);
 	return 0;
     }
     if (*last < *first) {
-	setmsg_("The last reference item requested, #, is before the first r"
-		"eference item requested, #.", (ftnlen)86);
-	errint_("#", last, (ftnlen)1);
-	errint_("#", first, (ftnlen)1);
-	sigerr_("SPICE(REQUESTOUTOFORDER)", (ftnlen)24);
-	chkout_("SGFREF", (ftnlen)6);
+	setmsg_(__global_state, "The last reference item requested, #, is be"
+		"fore the first reference item requested, #.", (ftnlen)86);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(REQUESTOUTOFORDER)", (ftnlen)24);
+	chkout_(__global_state, "SGFREF", (ftnlen)6);
 	return 0;
     }
 
@@ -647,9 +646,9 @@ static sgfref_state_t* get_sgfref_state() {
 
 	b = base + 1;
 	e = base + 2;
-	dafgda_(handle, &b, &e, buffer);
-	if (failed_()) {
-	    chkout_("SGFREF", (ftnlen)6);
+	dafgda_(__global_state, handle, &b, &e, buffer);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGFREF", (ftnlen)6);
 	    return 0;
 	}
 
@@ -659,7 +658,7 @@ static sgfref_state_t* get_sgfref_state() {
 	i__1 = *last;
 	for (i__ = *first; i__ <= i__1; ++i__) {
 	    d__1 = (doublereal) (i__ - 1) * buffer[1];
-	    values[i__ - 1] = buffer[0] + d_int(&d__1);
+	    values[i__ - 1] = buffer[0] + d_int(&__global_state->f2c, &d__1);
 	}
     } else if (myreft == 1) {
 
@@ -670,9 +669,9 @@ static sgfref_state_t* get_sgfref_state() {
 
 	b = base + 1;
 	e = base + 2;
-	dafgda_(handle, &b, &e, buffer);
-	if (failed_()) {
-	    chkout_("SGFREF", (ftnlen)6);
+	dafgda_(__global_state, handle, &b, &e, buffer);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGFREF", (ftnlen)6);
 	    return 0;
 	}
 
@@ -682,7 +681,7 @@ static sgfref_state_t* get_sgfref_state() {
 	i__1 = *last;
 	for (i__ = *first; i__ <= i__1; ++i__) {
 	    d__1 = (doublereal) (i__ - 1) * buffer[1];
-	    values[i__ - 1] = buffer[0] + d_int(&d__1);
+	    values[i__ - 1] = buffer[0] + d_int(&__global_state->f2c, &d__1);
 	}
     } else if (myreft == 3 || myreft == 2 || myreft == 4) {
 
@@ -694,20 +693,20 @@ static sgfref_state_t* get_sgfref_state() {
 
 	b = base + *first;
 	e = base + *last;
-	dafgda_(handle, &b, &e, values);
+	dafgda_(__global_state, handle, &b, &e, values);
     } else {
-	setmsg_("The generic DAF segment you attempted to read has an unsupp"
-		"orted reference directory structure. The integer code given "
-		"for this structure is #. The likely cause of this anomoly is"
-		" that your version of SPICELIB needs to be updated. Contact "
-		"your system administrator or NAIF for a toolkit update. ", (
-		ftnlen)295);
-	errint_("#", &myreft, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNREFDIR)", (ftnlen)20);
-	chkout_("SGFREF", (ftnlen)6);
+	setmsg_(__global_state, "The generic DAF segment you attempted to re"
+		"ad has an unsupported reference directory structure. The int"
+		"eger code given for this structure is #. The likely cause of"
+		" this anomoly is that your version of SPICELIB needs to be u"
+		"pdated. Contact your system administrator or NAIF for a tool"
+		"kit update. ", (ftnlen)295);
+	errint_(__global_state, "#", &myreft, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNREFDIR)", (ftnlen)20);
+	chkout_(__global_state, "SGFREF", (ftnlen)6);
 	return 0;
     }
-    chkout_("SGFREF", (ftnlen)6);
+    chkout_(__global_state, "SGFREF", (ftnlen)6);
     return 0;
 } /* sgfref_ */
 

@@ -8,20 +8,21 @@
 
 
 typedef int lxqstr_state_t;
-static lxqstr_state_t* get_lxqstr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lxqstr_state_t* get_lxqstr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LXQSTR ( Lex quoted string ) */
-/* Subroutine */ int lxqstr_(char *string, char *qchar, integer *first, 
-	integer *last, integer *nchar, ftnlen string_len, ftnlen qchar_len)
+/* Subroutine */ int lxqstr_(cspice_t* __global_state, char *string, char *
+	qchar, integer *first, integer *last, integer *nchar, ftnlen 
+	string_len, ftnlen qchar_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), i_indx(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), i_indx(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     logical even;
@@ -31,7 +32,7 @@ static lxqstr_state_t* get_lxqstr_state() {
 
 
     /* Module state */
-    lxqstr_state_t* __state = get_lxqstr_state();
+    lxqstr_state_t* __state = get_lxqstr_state(__global_state);
 /* $ Abstract */
 
 /*     Lex (scan) a quoted string. */
@@ -253,7 +254,7 @@ static lxqstr_state_t* get_lxqstr_state() {
 
 /*     Error free, no check-in required. */
 
-    l = i_len(string, string_len);
+    l = i_len(&__global_state->f2c, string, string_len);
 
 /*     Handle the cases in which we can tell right away that */
 /*     no token can be found. */
@@ -270,7 +271,8 @@ static lxqstr_state_t* get_lxqstr_state() {
 /*     we can safely assume FIRST+1 does not exceed L. */
 
     i__1 = *first;
-    loc = i_indx(string + i__1, qchar, l - i__1, (ftnlen)1);
+    loc = i_indx(&__global_state->f2c, string + i__1, qchar, l - i__1, (
+	    ftnlen)1);
     if (loc == 0) {
 	*last = *first - 1;
 	*nchar = 0;

@@ -8,8 +8,7 @@
 
 
 extern seterr_init_t __seterr_init;
-static seterr_state_t* get_seterr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline seterr_state_t* get_seterr_state(cspice_t* state) {
 	if (!state->seterr)
 		state->seterr = __cspice_allocate_module(sizeof(
 	seterr_state_t), &__seterr_init, sizeof(__seterr_init));
@@ -18,7 +17,7 @@ static seterr_state_t* get_seterr_state() {
 }
 
 /* $Procedure      SETERR ( Set Error Status ) */
-logical seterr_0_(int n__, logical *status)
+logical seterr_0_(cspice_t* __global_state, int n__, logical *status)
 {
     /* Initialized data */
 
@@ -28,7 +27,7 @@ logical seterr_0_(int n__, logical *status)
 
 
     /* Module state */
-    seterr_state_t* __state = get_seterr_state();
+    seterr_state_t* __state = get_seterr_state(__global_state);
 /* $ Abstract */
 
 /*     Set the SPICELIB error status.  DO NOT CALL THIS ROUTINE. */
@@ -430,12 +429,12 @@ L_failed:
     return ret_val;
 } /* seterr_ */
 
-logical seterr_(logical *status)
+logical seterr_(cspice_t* __global_state, logical *status)
 {
     return seterr_0_(0, status);
     }
 
-logical failed_(void)
+logical failed_(cspice_t* __global_state)
 {
     return seterr_0_(1, (logical *)0);
     }

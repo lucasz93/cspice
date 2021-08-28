@@ -8,13 +8,13 @@
 
 
 typedef int insrtd_state_t;
-static insrtd_state_t* get_insrtd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline insrtd_state_t* get_insrtd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      INSRTD ( Insert an item into a double precision set ) */
-/* Subroutine */ int insrtd_(doublereal *item, doublereal *a)
+/* Subroutine */ int insrtd_(cspice_t* __global_state, doublereal *item, 
+	doublereal *a)
 {
     /* System generated locals */
     integer i__1;
@@ -24,21 +24,21 @@ static insrtd_state_t* get_insrtd_state() {
     integer last;
     integer size;
     integer i__;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sized_(doublereal *);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
     logical in;
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern integer lstled_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern integer lstled_(cspice_t*, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    insrtd_state_t* __state = get_insrtd_state();
+    insrtd_state_t* __state = get_insrtd_state(__global_state);
 /* $ Abstract */
 
 /*     Insert an item into a double precision set. */
@@ -201,21 +201,21 @@ static insrtd_state_t* get_insrtd_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("INSRTD", (ftnlen)6);
+    chkin_(__global_state, "INSRTD", (ftnlen)6);
 
 /*     What are the size and cardinality of the set? */
 
-    size = sized_(a);
-    card = cardd_(a);
+    size = sized_(__global_state, a);
+    card = cardd_(__global_state, a);
 
 /*     Find the last element of the set which would come before the */
 /*     input item. This will be the item itself, if it is already an */
 /*     element of the set. */
 
-    last = lstled_(item, &card, &a[6]);
+    last = lstled_(__global_state, item, &card, &a[6]);
 
 /*     Is the item already in the set? If not, it needs to be inserted. */
 
@@ -237,15 +237,15 @@ static insrtd_state_t* get_insrtd_state() {
 	    }
 	    a[last + 6] = *item;
 	    i__1 = card + 1;
-	    scardd_(&i__1, a);
+	    scardd_(__global_state, &i__1, a);
 	} else {
-	    setmsg_("An element could not be inserted into the set due to la"
-		    "ck of space; set size is #.", (ftnlen)82);
-	    errint_("#", &size, (ftnlen)1);
-	    sigerr_("SPICE(SETEXCESS)", (ftnlen)16);
+	    setmsg_(__global_state, "An element could not be inserted into t"
+		    "he set due to lack of space; set size is #.", (ftnlen)82);
+	    errint_(__global_state, "#", &size, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(SETEXCESS)", (ftnlen)16);
 	}
     }
-    chkout_("INSRTD", (ftnlen)6);
+    chkout_(__global_state, "INSRTD", (ftnlen)6);
     return 0;
 } /* insrtd_ */
 

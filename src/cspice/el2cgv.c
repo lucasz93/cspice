@@ -8,20 +8,19 @@
 
 
 typedef int el2cgv_state_t;
-static el2cgv_state_t* get_el2cgv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline el2cgv_state_t* get_el2cgv_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      EL2CGV ( Ellipse to center and generating vectors ) */
-/* Subroutine */ int el2cgv_(doublereal *ellips, doublereal *center, 
-	doublereal *smajor, doublereal *sminor)
+/* Subroutine */ int el2cgv_(cspice_t* __global_state, doublereal *ellips, 
+	doublereal *center, doublereal *smajor, doublereal *sminor)
 {
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
 
 
     /* Module state */
-    el2cgv_state_t* __state = get_el2cgv_state();
+    el2cgv_state_t* __state = get_el2cgv_state(__global_state);
 /* $ Abstract */
 
 /*     Convert a SPICELIB ellipse to a center vector and two generating */
@@ -188,9 +187,9 @@ static el2cgv_state_t* get_el2cgv_state() {
 /*     The center of the ellipse is held in the first three elements. */
 /*     The semi-major and semi-minor axes come next. */
 
-    vequ_(ellips, center);
-    vequ_(&ellips[3], smajor);
-    vequ_(&ellips[6], sminor);
+    vequ_(__global_state, ellips, center);
+    vequ_(__global_state, &ellips[3], smajor);
+    vequ_(__global_state, &ellips[6], sminor);
     return 0;
 } /* el2cgv_ */
 

@@ -8,14 +8,13 @@
 
 
 typedef int zzck4i2d_state_t;
-static zzck4i2d_state_t* get_zzck4i2d_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzck4i2d_state_t* get_zzck4i2d_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZCK4I2D ( Pack set of integers into a single DP ) */
-/* Subroutine */ int zzck4i2d_(integer *i__, integer *nsets, doublereal *
-	parcod, doublereal *dpcoef)
+/* Subroutine */ int zzck4i2d_(cspice_t* __global_state, integer *i__, 
+	integer *nsets, doublereal *parcod, doublereal *dpcoef)
 {
     /* System generated locals */
     integer i__1;
@@ -26,7 +25,7 @@ static zzck4i2d_state_t* get_zzck4i2d_state() {
 
 
     /* Module state */
-    zzck4i2d_state_t* __state = get_zzck4i2d_state();
+    zzck4i2d_state_t* __state = get_zzck4i2d_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

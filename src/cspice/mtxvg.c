@@ -8,21 +8,20 @@
 
 
 typedef int mtxvg_state_t;
-static mtxvg_state_t* get_mtxvg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline mtxvg_state_t* get_mtxvg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  MTXVG ( Matrix transpose times vector, general dimension ) */
-/* Subroutine */ int mtxvg_(doublereal *m1, doublereal *v2, integer *nc1, 
-	integer *nr1r2, doublereal *vout)
+/* Subroutine */ int mtxvg_(cspice_t* __global_state, doublereal *m1, 
+	doublereal *v2, integer *nc1, integer *nr1r2, doublereal *vout)
 {
     /* System generated locals */
     integer m1_dim1, m1_dim2, m1_offset, v2_dim1, vout_dim1, i__1, i__2, i__3,
 	     i__4;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
@@ -31,7 +30,7 @@ static mtxvg_state_t* get_mtxvg_state() {
 
 
     /* Module state */
-    mtxvg_state_t* __state = get_mtxvg_state();
+    mtxvg_state_t* __state = get_mtxvg_state(__global_state);
 /* $ Abstract */
 
 /*      Multiply the transpose of a matrix and a vector of */
@@ -204,12 +203,14 @@ static mtxvg_state_t* get_mtxvg_state() {
 	i__2 = *nr1r2;
 	for (k = 1; k <= i__2; ++k) {
 	    sum += m1[(i__3 = k + i__ * m1_dim1 - m1_offset) < 1 * m1_dim1 * 
-		    m1_dim2 && 0 <= i__3 ? i__3 : s_rnge("m1", i__3, "mtxvg_",
-		     (ftnlen)183)] * v2[(i__4 = k - 1) < 1 * v2_dim1 && 0 <= 
-		    i__4 ? i__4 : s_rnge("v2", i__4, "mtxvg_", (ftnlen)183)];
+		    m1_dim2 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c,
+		     "m1", i__3, "mtxvg_", (ftnlen)183)] * v2[(i__4 = k - 1) <
+		     1 * v2_dim1 && 0 <= i__4 ? i__4 : s_rnge(&
+		    __global_state->f2c, "v2", i__4, "mtxvg_", (ftnlen)183)];
 	}
-	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		"vout", i__2, "mtxvg_", (ftnlen)186)] = sum;
+	vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "vout", i__2, "mtxvg_", (ftnlen)186)] = 
+		sum;
     }
     return 0;
 } /* mtxvg_ */

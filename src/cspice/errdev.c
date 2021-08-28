@@ -8,8 +8,7 @@
 
 
 extern errdev_init_t __errdev_init;
-static errdev_state_t* get_errdev_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline errdev_state_t* get_errdev_state(cspice_t* state) {
 	if (!state->errdev)
 		state->errdev = __cspice_allocate_module(sizeof(
 	errdev_state_t), &__errdev_init, sizeof(__errdev_init));
@@ -18,8 +17,8 @@ static errdev_state_t* get_errdev_state() {
 }
 
 /* $Procedure      ERRDEV ( Get/Set Error Output Device Name ) */
-/* Subroutine */ int errdev_(char *op, char *device, ftnlen op_len, ftnlen 
-	device_len)
+/* Subroutine */ int errdev_(cspice_t* __global_state, char *op, char *device,
+	 ftnlen op_len, ftnlen device_len)
 {
     /* System generated locals */
     address a__1[2];
@@ -27,28 +26,31 @@ static errdev_state_t* get_errdev_state() {
     char ch__1[378], ch__2[65];
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
 
     /* Local variables */
     char upop[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char locop[3];
     char upnam[255];
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char locnam[255];
-    extern /* Subroutine */ int getdev_(char *, ftnlen);
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int putdev_(char *, ftnlen);
+    extern /* Subroutine */ int getdev_(cspice_t*, char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int putdev_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    errdev_state_t* __state = get_errdev_state();
+    errdev_state_t* __state = get_errdev_state(__global_state);
 /* $ Abstract */
 
 /*     Retrieve or set the name of the current output */
@@ -392,63 +394,68 @@ static errdev_state_t* get_errdev_state() {
 
 /*     Executable Code: */
 
-    chkin_("ERRDEV", (ftnlen)6);
+    chkin_(__global_state, "ERRDEV", (ftnlen)6);
 
 /*     We save the operation string as input, and get */
 /*     an upper case version for our own use: */
 
-    ljust_(op, upop, op_len, (ftnlen)3);
-    ucase_(upop, upop, (ftnlen)3, (ftnlen)3);
-    if (s_cmp(upop, "GET", (ftnlen)3, (ftnlen)3) == 0) {
-	getdev_(device, device_len);
-    } else if (s_cmp(upop, "SET", (ftnlen)3, (ftnlen)3) == 0) {
+    ljust_(__global_state, op, upop, op_len, (ftnlen)3);
+    ucase_(__global_state, upop, upop, (ftnlen)3, (ftnlen)3);
+    if (s_cmp(&__global_state->f2c, upop, "GET", (ftnlen)3, (ftnlen)3) == 0) {
+	getdev_(__global_state, device, device_len);
+    } else if (s_cmp(&__global_state->f2c, upop, "SET", (ftnlen)3, (ftnlen)3) 
+	    == 0) {
 
 /*        We want the reserved words to be in upper */
 /*        case for our own use.  So, save the input value */
 /*        and get an upper case version: */
 
-	ljust_(device, upnam, device_len, (ftnlen)255);
-	ucase_(upnam, upnam, (ftnlen)255, (ftnlen)255);
-	if (lastnb_(upnam, (ftnlen)255) > 255) {
-	    s_copy(locnam, device, (ftnlen)255, device_len);
+	ljust_(__global_state, device, upnam, device_len, (ftnlen)255);
+	ucase_(__global_state, upnam, upnam, (ftnlen)255, (ftnlen)255);
+	if (lastnb_(__global_state, upnam, (ftnlen)255) > 255) {
+	    s_copy(&__global_state->f2c, locnam, device, (ftnlen)255, 
+		    device_len);
 /* Writing concatenation */
 	    i__1[0] = 123, a__1[0] = "ERRDEV:  Device name exceeds FILEN cha"
 		    "racters; device selection not updated. The first FILEN c"
 		    "haracters of the name were:  ";
 	    i__1[1] = 255, a__1[1] = locnam;
-	    s_cat(ch__1, a__1, i__1, &__state->c__2, (ftnlen)378);
-	    setmsg_(ch__1, (ftnlen)378);
-	    sigerr_("SPICE(DEVICENAMETOOLONG)", (ftnlen)24);
-	    chkout_("ERRDEV", (ftnlen)6);
+	    s_cat(&__global_state->f2c, ch__1, a__1, i__1, &__state->c__2, (
+		    ftnlen)378);
+	    setmsg_(__global_state, ch__1, (ftnlen)378);
+	    sigerr_(__global_state, "SPICE(DEVICENAMETOOLONG)", (ftnlen)24);
+	    chkout_(__global_state, "ERRDEV", (ftnlen)6);
 	    return 0;
 	}
-	if (s_cmp(upnam, "SCREEN", (ftnlen)255, (ftnlen)6) == 0 || s_cmp(
-		upnam, "NULL", (ftnlen)255, (ftnlen)4) == 0) {
+	if (s_cmp(&__global_state->f2c, upnam, "SCREEN", (ftnlen)255, (ftnlen)
+		6) == 0 || s_cmp(&__global_state->f2c, upnam, "NULL", (ftnlen)
+		255, (ftnlen)4) == 0) {
 
 /*           Store upper case version of DEVICE: */
 
-	    putdev_(upnam, (ftnlen)255);
+	    putdev_(__global_state, upnam, (ftnlen)255);
 	} else {
 
 /*           We assume we've got a file name... */
 /*           Store it as it was input. */
 
-	    putdev_(device, device_len);
+	    putdev_(__global_state, device, device_len);
 	}
     } else {
 
 /*        An invalid value of OP was supplied. */
 
-	s_copy(locop, op, (ftnlen)3, op_len);
+	s_copy(&__global_state->f2c, locop, op, (ftnlen)3, op_len);
 /* Writing concatenation */
 	i__1[0] = 62, a__1[0] = "ERRDEV:  An invalid value of OP was supplie"
 		"d.  The value was: ";
 	i__1[1] = 3, a__1[1] = locop;
-	s_cat(ch__2, a__1, i__1, &__state->c__2, (ftnlen)65);
-	setmsg_(ch__2, (ftnlen)65);
-	sigerr_("SPICE(INVALIDOPERATION)", (ftnlen)23);
+	s_cat(&__global_state->f2c, ch__2, a__1, i__1, &__state->c__2, (
+		ftnlen)65);
+	setmsg_(__global_state, ch__2, (ftnlen)65);
+	sigerr_(__global_state, "SPICE(INVALIDOPERATION)", (ftnlen)23);
     }
-    chkout_("ERRDEV", (ftnlen)6);
+    chkout_(__global_state, "ERRDEV", (ftnlen)6);
     return 0;
 } /* errdev_ */
 

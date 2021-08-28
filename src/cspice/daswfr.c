@@ -8,8 +8,7 @@
 
 
 extern daswfr_init_t __daswfr_init;
-static daswfr_state_t* get_daswfr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline daswfr_state_t* get_daswfr_state(cspice_t* state) {
 	if (!state->daswfr)
 		state->daswfr = __cspice_allocate_module(sizeof(
 	daswfr_state_t), &__daswfr_init, sizeof(__daswfr_init));
@@ -18,31 +17,33 @@ static daswfr_state_t* get_daswfr_state() {
 }
 
 /* $Procedure DASWFR ( DAS write file record ) */
-/* Subroutine */ int daswfr_(integer *handle, char *idword, char *ifname, 
-	integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, 
-	ftnlen idword_len, ftnlen ifname_len)
+/* Subroutine */ int daswfr_(cspice_t* __global_state, integer *handle, char *
+	idword, char *ifname, integer *nresvr, integer *nresvc, integer *
+	ncomr, integer *ncomc, ftnlen idword_len, ftnlen ifname_len)
 {
     /* Builtin functions */
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_wdue(cilist *), e_wdue(void);
+    integer s_rdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rdue(f2c_state_t*);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_wdue(f2c_state_t*, cilist *), e_wdue(f2c_state_t*);
 
     /* Local variables */
     integer free;
     char tail[932];
     integer unit;
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     integer oldcch;
     integer locncc;
     integer oldcrc;
-    extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dashfs_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *);
     char locifn[60];
     integer oldrch;
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dassih_(cspice_t*, integer *, char *, ftnlen);
     integer lastla[3];
     char locidw[8];
     integer locncr;
@@ -50,17 +51,18 @@ static daswfr_state_t* get_daswfr_state() {
     integer oldrrc;
     char format[8];
     integer lastrc[3];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer lastwd[3];
-    extern /* Subroutine */ int dasufs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int dasufs_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
     integer locnvr;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     char ifn[60];
 
     /* Fortran I/O blocks */
@@ -68,7 +70,7 @@ static daswfr_state_t* get_daswfr_state() {
 
 
     /* Module state */
-    daswfr_state_t* __state = get_daswfr_state();
+    daswfr_state_t* __state = get_daswfr_state(__global_state);
 /* $ Abstract */
 
 /*     Update the contents of the file record of a specified DAS file. */
@@ -356,21 +358,22 @@ static daswfr_state_t* get_daswfr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASWFR", (ftnlen)6);
+    chkin_(__global_state, "DASWFR", (ftnlen)6);
 
 /*     Check to be sure that HANDLE is attached to a file that is open */
 /*     with write access.  If the call fails, check out and return. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
 
 /*     Get the logical unit for this DAS file. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
-    if (failed_()) {
-	chkout_("DASWFR", (ftnlen)6);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &unit, (
+	    ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASWFR", (ftnlen)6);
 	return 0;
     }
 
@@ -381,120 +384,124 @@ static daswfr_state_t* get_daswfr_state() {
 /*     ignored, since the caller passes new values in for updates. */
 
     __state->io___3.ciunit = unit;
-    iostat = s_rdue(&__state->io___3);
+    iostat = s_rdue(&__global_state->f2c, &__state->io___3);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, locidw, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, locidw, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, locifn, (ftnlen)60);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, locifn, (ftnlen)60);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&locnvr, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locnvr, (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&locnvc, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locnvc, (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&locncr, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locncr, (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, (char *)&locncc, (ftnlen)sizeof(integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&locncc, (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, format, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, format, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, tail, (ftnlen)932);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, tail, (ftnlen)932);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rdue();
+    iostat = e_rdue(&__global_state->f2c);
 L100001:
     if (iostat != 0) {
-	setmsg_("Attempt to read the file record failed for file '#'. IOSTAT"
-		" = #", (ftnlen)63);
-	errfnm_("#", &unit, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(DASREADFAIL)", (ftnlen)18);
-	chkout_("DASWFR", (ftnlen)6);
+	setmsg_(__global_state, "Attempt to read the file record failed for "
+		"file '#'. IOSTAT = #", (ftnlen)63);
+	errfnm_(__global_state, "#", &unit, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASREADFAIL)", (ftnlen)18);
+	chkout_(__global_state, "DASWFR", (ftnlen)6);
 	return 0;
     }
 
 /*     Set the value of the internal file name and IDWORD before */
 /*     writing.  This is to guarantee that their lengths are ok. */
 
-    s_copy(ifn, ifname, (ftnlen)60, ifname_len);
-    s_copy(locidw, idword, (ftnlen)8, idword_len);
+    s_copy(&__global_state->f2c, ifn, ifname, (ftnlen)60, ifname_len);
+    s_copy(&__global_state->f2c, locidw, idword, (ftnlen)8, idword_len);
     __state->io___13.ciunit = unit;
-    iostat = s_wdue(&__state->io___13);
+    iostat = s_wdue(&__global_state->f2c, &__state->io___13);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, locidw, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, locidw, (ftnlen)8);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, ifn, (ftnlen)60);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, ifn, (ftnlen)60);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*nresvr), (ftnlen)sizeof(
-	    integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*nresvr), 
+	    (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*nresvc), (ftnlen)sizeof(
-	    integer));
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*nresvc), 
+	    (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*ncomr), (ftnlen)sizeof(integer)
-	    );
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*ncomr), (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, (char *)&(*ncomc), (ftnlen)sizeof(integer)
-	    );
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*ncomc), (
+	    ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, format, (ftnlen)8);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, format, (ftnlen)8);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_uio(&__state->c__1, tail, (ftnlen)932);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, tail, (ftnlen)932);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = e_wdue();
+    iostat = e_wdue(&__global_state->f2c);
 L100002:
     if (iostat != 0) {
-	setmsg_("Could not write file record.  File was #.  IOSTAT was #.", (
-		ftnlen)56);
-	errfnm_("#", &unit, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(DASFILEWRITEFAILED)", (ftnlen)25);
-	chkout_("DASWFR", (ftnlen)6);
+	setmsg_(__global_state, "Could not write file record.  File was #.  "
+		"IOSTAT was #.", (ftnlen)56);
+	errfnm_(__global_state, "#", &unit, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASFILEWRITEFAILED)", (ftnlen)25);
+	chkout_(__global_state, "DASWFR", (ftnlen)6);
 	return 0;
     }
 
 /*     Update the file summary, in case the values of the reserved */
 /*     record or comment area counts have changed. */
 
-    dashfs_(handle, &oldrrc, &oldrch, &oldcrc, &oldcch, &free, lastla, lastrc,
-	     lastwd);
-    dasufs_(handle, nresvr, nresvc, ncomr, ncomc, &free, lastla, lastrc, 
-	    lastwd);
-    chkout_("DASWFR", (ftnlen)6);
+    dashfs_(__global_state, handle, &oldrrc, &oldrch, &oldcrc, &oldcch, &free,
+	     lastla, lastrc, lastwd);
+    dasufs_(__global_state, handle, nresvr, nresvc, ncomr, ncomc, &free, 
+	    lastla, lastrc, lastwd);
+    chkout_(__global_state, "DASWFR", (ftnlen)6);
     return 0;
 } /* daswfr_ */
 

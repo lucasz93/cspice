@@ -446,7 +446,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkpvn_c" );
+   chkin_c ( naif_state, "spkpvn_c" );
 
    spkpvn_ ( ( integer     * ) &handle,
              ( doublereal  * ) descr,

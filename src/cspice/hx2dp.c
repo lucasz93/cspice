@@ -8,8 +8,7 @@
 
 
 extern hx2dp_init_t __hx2dp_init;
-static hx2dp_state_t* get_hx2dp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline hx2dp_state_t* get_hx2dp_state(cspice_t* state) {
 	if (!state->hx2dp)
 		state->hx2dp = __cspice_allocate_module(sizeof(hx2dp_state_t),
 	 &__hx2dp_init, sizeof(__hx2dp_init));
@@ -18,8 +17,9 @@ static hx2dp_state_t* get_hx2dp_state() {
 }
 
 /* $Procedure  HX2DP  ( Hexadecimal string to d.p. number ) */
-/* Subroutine */ int hx2dp_(char *string, doublereal *number, logical *error, 
-	char *errmsg, ftnlen string_len, ftnlen errmsg_len)
+/* Subroutine */ int hx2dp_(cspice_t* __global_state, char *string, 
+	doublereal *number, logical *error, char *errmsg, ftnlen string_len, 
+	ftnlen errmsg_len)
 {
     /* Initialized data */
 
@@ -29,21 +29,21 @@ static hx2dp_state_t* get_hx2dp_state() {
     char ch__1[1];
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer ival[32];
     logical more;
     integer i__;
-    extern doublereal dpmin_(void);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int hx2int_(char *, integer *, logical *, char *, 
-	    ftnlen, ftnlen);
+    extern doublereal dpmin_(cspice_t*);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int hx2int_(cspice_t*, char *, integer *, logical 
+	    *, char *, ftnlen, ftnlen);
     integer ndigit;
     logical fndexp;
     integer strbeg;
@@ -56,7 +56,7 @@ static hx2dp_state_t* get_hx2dp_state() {
 
 
     /* Module state */
-    hx2dp_state_t* __state = get_hx2dp_state();
+    hx2dp_state_t* __state = get_hx2dp_state(__global_state);
 /* $ Abstract */
 
 /*     Convert a string representing a double precision number in a */
@@ -442,9 +442,10 @@ static hx2dp_state_t* get_hx2dp_state() {
 	__state->scales[0] = .0625;
 	for (i__ = 2; i__ <= 31; ++i__) {
 	    __state->scales[(i__1 = i__ - 1) < 31 && 0 <= i__1 ? i__1 : 
-		    s_rnge("scales", i__1, "hx2dp_", (ftnlen)473)] = 
-		    __state->scales[(i__2 = i__ - 2) < 31 && 0 <= i__2 ? i__2 
-		    : s_rnge("scales", i__2, "hx2dp_", (ftnlen)473)] * .0625;
+		    s_rnge(&__global_state->f2c, "scales", i__1, "hx2dp_", (
+		    ftnlen)473)] = __state->scales[(i__2 = i__ - 2) < 31 && 0 
+		    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "scales", 
+		    i__2, "hx2dp_", (ftnlen)473)] * .0625;
 	}
 
 /*        Initialize the upper and lower bounds for the decimal digits, */
@@ -473,8 +474,8 @@ static hx2dp_state_t* get_hx2dp_state() {
 /*        is imminent due to the overly large magnitude of a positive */
 /*        or negative number. */
 
-	__state->mindp = dpmin_() * .0625;
-	__state->maxdp = dpmax_() * .0625;
+	__state->mindp = dpmin_(__global_state) * .0625;
+	__state->maxdp = dpmax_(__global_state) * .0625;
     }
 
 /*     There are no errors initially, so set the error flag to */
@@ -484,16 +485,17 @@ static hx2dp_state_t* get_hx2dp_state() {
 
 /*     If the string is blank, set the error flag and return immediately. */
 
-    if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, string, " ", string_len, (ftnlen)1) == 0) 
+	    {
 	*error = TRUE_;
-	s_copy(errmsg, "ERROR: A blank input string is not allowed.", 
-		errmsg_len, (ftnlen)43);
+	s_copy(&__global_state->f2c, errmsg, "ERROR: A blank input string is"
+		" not allowed.", errmsg_len, (ftnlen)43);
 	return 0;
     }
 
 /*     Initialize a few other things. */
 
-    s_copy(errmsg, " ", errmsg_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, errmsg, " ", errmsg_len, (ftnlen)1);
     tmpnum = 0.;
 
 /*     Assume that the number is nonnegative. */
@@ -515,9 +517,9 @@ static hx2dp_state_t* get_hx2dp_state() {
     strend = strbeg + 1;
     more = TRUE_;
     while(more) {
-	if (strend <= i_len(string, string_len)) {
-	    if (s_cmp(string + (strend - 1), " ", string_len - (strend - 1), (
-		    ftnlen)1) != 0) {
+	if (strend <= i_len(&__global_state->f2c, string, string_len)) {
+	    if (s_cmp(&__global_state->f2c, string + (strend - 1), " ", 
+		    string_len - (strend - 1), (ftnlen)1) != 0) {
 		++strend;
 	    } else {
 		more = FALSE_;
@@ -578,20 +580,21 @@ static hx2dp_state_t* get_hx2dp_state() {
 	if (letter >= __state->digbeg && letter <= __state->digend) {
 	    ++positn;
 	    ++ndigit;
-	    ival[(i__1 = ndigit - 1) < 32 && 0 <= i__1 ? i__1 : s_rnge("ival",
-		     i__1, "hx2dp_", (ftnlen)631)] = letter - __state->digbeg;
+	    ival[(i__1 = ndigit - 1) < 32 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ival", i__1, "hx2dp_", (ftnlen)631)]
+		     = letter - __state->digbeg;
 	} else if (letter >= __state->uccbeg && letter <= __state->uccend) {
 	    ++positn;
 	    ++ndigit;
-	    ival[(i__1 = ndigit - 1) < 32 && 0 <= i__1 ? i__1 : s_rnge("ival",
-		     i__1, "hx2dp_", (ftnlen)638)] = letter + 10 - 
-		    __state->uccbeg;
+	    ival[(i__1 = ndigit - 1) < 32 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ival", i__1, "hx2dp_", (ftnlen)638)]
+		     = letter + 10 - __state->uccbeg;
 	} else if (letter >= __state->lccbeg && letter <= __state->lccend) {
 	    ++positn;
 	    ++ndigit;
-	    ival[(i__1 = ndigit - 1) < 32 && 0 <= i__1 ? i__1 : s_rnge("ival",
-		     i__1, "hx2dp_", (ftnlen)645)] = letter + 10 - 
-		    __state->lccbeg;
+	    ival[(i__1 = ndigit - 1) < 32 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ival", i__1, "hx2dp_", (ftnlen)645)]
+		     = letter + 10 - __state->lccbeg;
 	} else if (letter == __state->iexpch) {
 
 /*           We have found the exponent character, so set the */
@@ -601,11 +604,11 @@ static hx2dp_state_t* get_hx2dp_state() {
 	    ++positn;
 	} else {
 	    *error = TRUE_;
-	    s_copy(errmsg, "ERROR: Illegal character '#' encountered.", 
-		    errmsg_len, (ftnlen)41);
+	    s_copy(&__global_state->f2c, errmsg, "ERROR: Illegal character '"
+		    "#' encountered.", errmsg_len, (ftnlen)41);
 	    *(unsigned char *)&ch__1[0] = letter;
-	    repmc_(errmsg, "#", ch__1, errmsg, errmsg_len, (ftnlen)1, (ftnlen)
-		    1, errmsg_len);
+	    repmc_(__global_state, errmsg, "#", ch__1, errmsg, errmsg_len, (
+		    ftnlen)1, (ftnlen)1, errmsg_len);
 	    return 0;
 	}
 
@@ -615,8 +618,8 @@ static hx2dp_state_t* get_hx2dp_state() {
 
 	if (ndigit > 31) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "ERROR: Too many digits in the mantissa.", 
-		    errmsg_len, (ftnlen)39);
+	    s_copy(&__global_state->f2c, errmsg, "ERROR: Too many digits in "
+		    "the mantissa.", errmsg_len, (ftnlen)39);
 	    return 0;
 	}
     }
@@ -634,8 +637,8 @@ static hx2dp_state_t* get_hx2dp_state() {
 /*        If there is at least one significant character left in the */
 /*        string, we need to try and parse it as an exponent. */
 
-	hx2int_(string + (positn - 1), &iexpon, error, errmsg, string_len - (
-		positn - 1), errmsg_len);
+	hx2int_(__global_state, string + (positn - 1), &iexpon, error, errmsg,
+		 string_len - (positn - 1), errmsg_len);
 	if (*error) {
 
 /*           If an error occurred while attempting to parse the */
@@ -646,7 +649,8 @@ static hx2dp_state_t* get_hx2dp_state() {
 	}
     } else {
 	*error = TRUE_;
-	s_copy(errmsg, "ERROR: Missing exponent.", errmsg_len, (ftnlen)24);
+	s_copy(&__global_state->f2c, errmsg, "ERROR: Missing exponent.", 
+		errmsg_len, (ftnlen)24);
 	return 0;
     }
 
@@ -660,21 +664,23 @@ static hx2dp_state_t* get_hx2dp_state() {
     if (negtiv) {
 	while(ndigit > 0) {
 	    tmpnum -= __state->dpval[(i__2 = ival[(i__1 = ndigit - 1) < 32 && 
-		    0 <= i__1 ? i__1 : s_rnge("ival", i__1, "hx2dp_", (ftnlen)
-		    722)]) < 16 && 0 <= i__2 ? i__2 : s_rnge("dpval", i__2, 
-		    "hx2dp_", (ftnlen)722)] * __state->scales[(i__3 = ndigit 
-		    - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge("scales", i__3, 
-		    "hx2dp_", (ftnlen)722)];
+		    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ival", 
+		    i__1, "hx2dp_", (ftnlen)722)]) < 16 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "dpval", i__2, "hx2dp_", (
+		    ftnlen)722)] * __state->scales[(i__3 = ndigit - 1) < 31 &&
+		     0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "scales",
+		     i__3, "hx2dp_", (ftnlen)722)];
 	    --ndigit;
 	}
     } else {
 	while(ndigit > 0) {
 	    tmpnum += __state->dpval[(i__2 = ival[(i__1 = ndigit - 1) < 32 && 
-		    0 <= i__1 ? i__1 : s_rnge("ival", i__1, "hx2dp_", (ftnlen)
-		    731)]) < 16 && 0 <= i__2 ? i__2 : s_rnge("dpval", i__2, 
-		    "hx2dp_", (ftnlen)731)] * __state->scales[(i__3 = ndigit 
-		    - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge("scales", i__3, 
-		    "hx2dp_", (ftnlen)731)];
+		    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ival", 
+		    i__1, "hx2dp_", (ftnlen)731)]) < 16 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "dpval", i__2, "hx2dp_", (
+		    ftnlen)731)] * __state->scales[(i__3 = ndigit - 1) < 31 &&
+		     0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "scales",
+		     i__3, "hx2dp_", (ftnlen)731)];
 	    --ndigit;
 	}
     }
@@ -709,8 +715,9 @@ static hx2dp_state_t* get_hx2dp_state() {
 		    tmpnum *= 16.;
 		} else {
 		    *error = TRUE_;
-		    s_copy(errmsg, "ERROR: Number is too small to be represe"
-			    "nted.", errmsg_len, (ftnlen)45);
+		    s_copy(&__global_state->f2c, errmsg, "ERROR: Number is t"
+			    "oo small to be represented.", errmsg_len, (ftnlen)
+			    45);
 		    return 0;
 		}
 	    }
@@ -721,8 +728,9 @@ static hx2dp_state_t* get_hx2dp_state() {
 		    tmpnum *= 16.;
 		} else {
 		    *error = TRUE_;
-		    s_copy(errmsg, "ERROR: Number is too large to be represe"
-			    "nted.", errmsg_len, (ftnlen)45);
+		    s_copy(&__global_state->f2c, errmsg, "ERROR: Number is t"
+			    "oo large to be represented.", errmsg_len, (ftnlen)
+			    45);
 		    return 0;
 		}
 	    }

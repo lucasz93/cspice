@@ -8,13 +8,13 @@
 
 
 typedef int dafra_state_t;
-static dafra_state_t* get_dafra_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafra_state_t* get_dafra_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DAFRA ( DAF, Re-order arrays ) */
-/* Subroutine */ int dafra_(integer *handle, integer *iorder, integer *n)
+/* Subroutine */ int dafra_(cspice_t* __global_state, integer *handle, 
+	integer *iorder, integer *n)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -22,12 +22,12 @@ static dafra_state_t* get_dafra_state() {
     /* Local variables */
     integer hold;
     integer i__;
-    extern /* Subroutine */ int dafgn_(char *, ftnlen);
-    extern /* Subroutine */ int dafgs_(doublereal *);
-    extern /* Subroutine */ int dafrn_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int dafgn_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafgs_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int dafrn_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     char holdn[1000];
-    extern /* Subroutine */ int dafws_(doublereal *);
+    extern /* Subroutine */ int dafws_(cspice_t*, doublereal *);
     integer index;
     doublereal holds[128];
     logical found;
@@ -35,19 +35,19 @@ static dafra_state_t* get_dafra_state() {
     integer total;
     doublereal temps[128];
     integer start;
-    extern /* Subroutine */ int daffna_(logical *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical isordv_(integer *, integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int daffna_(cspice_t*, logical *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafbfs_(cspice_t*, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical isordv_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dafra_state_t* __state = get_dafra_state();
+    dafra_state_t* __state = get_dafra_state(__global_state);
 /* $ Abstract */
 
 /*     Re-order the arrays in a DAF according to a given order */
@@ -235,25 +235,26 @@ static dafra_state_t* get_dafra_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFRA", (ftnlen)5);
+	chkin_(__global_state, "DAFRA", (ftnlen)5);
     }
 
 /*     If the order vector has fewer than two elements, don't bother. */
 
     if (*n < 2) {
-	chkout_("DAFRA", (ftnlen)5);
+	chkout_(__global_state, "DAFRA", (ftnlen)5);
 	return 0;
     }
 
 /*     If IORDER is not an order vector, complain. */
 
-    if (! isordv_(iorder, n)) {
-	setmsg_("Sorry, IORDER is not an order vector.", (ftnlen)37);
-	sigerr_("SPICE(DISORDER)", (ftnlen)15);
-	chkout_("DAFRA", (ftnlen)5);
+    if (! isordv_(__global_state, iorder, n)) {
+	setmsg_(__global_state, "Sorry, IORDER is not an order vector.", (
+		ftnlen)37);
+	sigerr_(__global_state, "SPICE(DISORDER)", (ftnlen)15);
+	chkout_(__global_state, "DAFRA", (ftnlen)5);
 	return 0;
     }
 
@@ -261,21 +262,22 @@ static dafra_state_t* get_dafra_state() {
 /*     arrays in the file, complain. */
 
     total = 0;
-    dafbfs_(handle);
-    daffna_(&found);
-    while(found && ! failed_()) {
+    dafbfs_(__global_state, handle);
+    daffna_(__global_state, &found);
+    while(found && ! failed_(__global_state)) {
 	++total;
-	daffna_(&found);
+	daffna_(__global_state, &found);
     }
-    if (failed_()) {
-	chkout_("DAFRA", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFRA", (ftnlen)5);
 	return 0;
     } else if (total < *n) {
-	setmsg_("N (#) exceeds number of arrays (#).", (ftnlen)35);
-	errint_("#", n, (ftnlen)1);
-	errint_("#", &total, (ftnlen)1);
-	sigerr_("SPICE(DISARRAY)", (ftnlen)15);
-	chkout_("DAFRA", (ftnlen)5);
+	setmsg_(__global_state, "N (#) exceeds number of arrays (#).", (
+		ftnlen)35);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	errint_(__global_state, "#", &total, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DISARRAY)", (ftnlen)15);
+	chkout_(__global_state, "DAFRA", (ftnlen)5);
 	return 0;
     }
 
@@ -295,7 +297,7 @@ static dafra_state_t* get_dafra_state() {
 /*           being moved from location HOLD to location INDEX. */
 
     start = 1;
-    while(start < *n && ! failed_()) {
+    while(start < *n && ! failed_(__global_state)) {
 
 /*        Start the cycle. One guy (pair of summary and name record) */
 /*        has to sit out (in HOLDS and HOLDN) until the end of the cycle */
@@ -303,13 +305,13 @@ static dafra_state_t* get_dafra_state() {
 
 	index = start;
 	hold = iorder[index - 1];
-	dafbfs_(handle);
+	dafbfs_(__global_state, handle);
 	i__1 = index;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    daffna_(&found);
+	    daffna_(__global_state, &found);
 	}
-	dafgs_(holds);
-	dafgn_(holdn, (ftnlen)1000);
+	dafgs_(__global_state, holds);
+	dafgn_(__global_state, holdn, (ftnlen)1000);
 
 /*        Move guys from HOLD to INDEX; then update HOLD (to point */
 /*        to the next guy to be moved) and INDEX (to point at the */
@@ -322,25 +324,25 @@ static dafra_state_t* get_dafra_state() {
 
 /*           Get the guy in position HOLD. */
 
-	    dafbfs_(handle);
+	    dafbfs_(__global_state, handle);
 	    i__1 = hold;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		daffna_(&found);
+		daffna_(__global_state, &found);
 	    }
-	    dafgs_(temps);
-	    dafgn_(tempn, (ftnlen)1000);
+	    dafgs_(__global_state, temps);
+	    dafgn_(__global_state, tempn, (ftnlen)1000);
 
 /*           Move him to position INDEX. (Note that DAFWS is used to */
 /*           update the summary instead of DAFRS, because the addresses */
 /*           are actually being changed.) */
 
-	    dafbfs_(handle);
+	    dafbfs_(__global_state, handle);
 	    i__1 = index;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
-		daffna_(&found);
+		daffna_(__global_state, &found);
 	    }
-	    dafws_(temps);
-	    dafrn_(tempn, (ftnlen)1000);
+	    dafws_(__global_state, temps);
+	    dafrn_(__global_state, tempn, (ftnlen)1000);
 
 /*           Update HOLD and INDEX. */
 
@@ -351,13 +353,13 @@ static dafra_state_t* get_dafra_state() {
 
 /*        The last element in the cycle is restored from TEMP. */
 
-	dafbfs_(handle);
+	dafbfs_(__global_state, handle);
 	i__1 = index;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    daffna_(&found);
+	    daffna_(__global_state, &found);
 	}
-	dafws_(holds);
-	dafrn_(holdn, (ftnlen)1000);
+	dafws_(__global_state, holds);
+	dafrn_(__global_state, holdn, (ftnlen)1000);
 	iorder[hold - 1] = -iorder[hold - 1];
 
 /*        Begin the next cycle at the next element in the order */
@@ -376,7 +378,7 @@ static dafra_state_t* get_dafra_state() {
     for (index = 1; index <= i__1; ++index) {
 	iorder[index - 1] = (i__2 = iorder[index - 1], abs(i__2));
     }
-    chkout_("DAFRA", (ftnlen)5);
+    chkout_(__global_state, "DAFRA", (ftnlen)5);
     return 0;
 } /* dafra_ */
 

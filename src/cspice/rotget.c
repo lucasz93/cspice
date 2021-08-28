@@ -8,8 +8,7 @@
 
 
 extern rotget_init_t __rotget_init;
-static rotget_state_t* get_rotget_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rotget_state_t* get_rotget_state(cspice_t* state) {
 	if (!state->rotget)
 		state->rotget = __cspice_allocate_module(sizeof(
 	rotget_state_t), &__rotget_init, sizeof(__rotget_init));
@@ -18,43 +17,45 @@ static rotget_state_t* get_rotget_state() {
 }
 
 /* $Procedure      ROTGET ( Frame get rotation ) */
-/* Subroutine */ int rotget_(integer *infrm, doublereal *et, doublereal *
-	rotate, integer *outfrm, logical *found)
+/* Subroutine */ int rotget_(cspice_t* __global_state, integer *infrm, 
+	doublereal *et, doublereal *rotate, integer *outfrm, logical *found)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal tipm[9]	/* was [3][3] */;
     integer type__;
-    extern /* Subroutine */ int zzdynrot_(integer *, integer *, doublereal *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdynrot_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char versn[6];
-    extern /* Subroutine */ int xpose_(doublereal *, doublereal *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int xpose_(cspice_t*, doublereal *, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     integer center;
-    extern /* Subroutine */ int tipbod_(char *, integer *, doublereal *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int tipbod_(cspice_t*, char *, integer *, 
+	    doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int tkfram_(cspice_t*, integer *, doublereal *, 
 	    integer *, logical *);
-    extern /* Subroutine */ int tkfram_(integer *, doublereal *, integer *, 
-	    logical *);
-    extern /* Subroutine */ int ckfrot_(integer *, doublereal *, doublereal *,
-	     integer *, logical *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int ckfrot_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, integer *, logical *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer typeid;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int irfrot_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    rotget_state_t* __state = get_rotget_state();
+    rotget_state_t* __state = get_rotget_state(__global_state);
 /* $ Abstract */
 
 /*     Find the rotation from a user specified frame to another frame at */
@@ -304,23 +305,23 @@ static rotget_state_t* get_rotget_state() {
 
 /*     Set version and output flag. */
 
-    s_copy(versn, "4.0.0", (ftnlen)6, (ftnlen)5);
+    s_copy(&__global_state->f2c, versn, "4.0.0", (ftnlen)6, (ftnlen)5);
     *found = FALSE_;
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ROTGET", (ftnlen)6);
+    chkin_(__global_state, "ROTGET", (ftnlen)6);
 
 /*     Get all the needed information about this frame. */
 
-    frinfo_(infrm, &center, &type__, &typeid, found);
+    frinfo_(__global_state, infrm, &center, &type__, &typeid, found);
     if (! (*found)) {
-	cleard_(&__state->c__9, rotate);
+	cleard_(__global_state, &__state->c__9, rotate);
 	*outfrm = 0;
-	chkout_("ROTGET", (ftnlen)6);
+	chkout_(__global_state, "ROTGET", (ftnlen)6);
 	return 0;
     }
 
@@ -328,57 +329,58 @@ static rotget_state_t* get_rotget_state() {
 /*     on the frame class. */
 
     if (type__ == 1) {
-	irfrot_(infrm, &__state->c__1, rotate);
-	if (! failed_()) {
+	irfrot_(__global_state, infrm, &__state->c__1, rotate);
+	if (! failed_(__global_state)) {
 	    *outfrm = 1;
 	}
     } else if (type__ == 2) {
-	tipbod_("J2000", &typeid, et, tipm, (ftnlen)5);
-	if (! failed_()) {
-	    xpose_(tipm, rotate);
+	tipbod_(__global_state, "J2000", &typeid, et, tipm, (ftnlen)5);
+	if (! failed_(__global_state)) {
+	    xpose_(__global_state, tipm, rotate);
 	    *outfrm = 1;
 	}
     } else if (type__ == 3) {
-	ckfrot_(&typeid, et, rotate, outfrm, found);
+	ckfrot_(__global_state, &typeid, et, rotate, outfrm, found);
     } else if (type__ == 4) {
-	tkfram_(&typeid, rotate, outfrm, found);
+	tkfram_(__global_state, &typeid, rotate, outfrm, found);
     } else if (type__ == 5) {
 
 /*        Unlike the other frame classes, the dynamic frame evaluation */
 /*        routine ZZDYNROT requires the input frame ID rather than the */
 /*        dynamic frame class ID. ZZDYNROT also requires the center ID */
 /*        we found via the FRINFO call. */
-	zzdynrot_(infrm, &center, et, rotate, outfrm);
+	zzdynrot_(__global_state, infrm, &center, et, rotate, outfrm);
 
 /*        The FOUND flag was set by FRINFO earlier; we don't touch */
 /*        it here. If ZZDYNROT signaled an error, FOUND will be set */
 /*        to .FALSE. at end of this routine. */
 
     } else {
-	cleard_(&__state->c__9, rotate);
+	cleard_(__global_state, &__state->c__9, rotate);
 	*outfrm = 0;
 	*found = FALSE_;
-	setmsg_("The reference frame # has class id-code #. This form of ref"
-		"erence frame is not supported in version # of ROTGET. You ne"
-		"ed to update your version of SPICELIB to the latest version "
-		"in order to support this frame. ", (ftnlen)211);
-	errint_("#", infrm, (ftnlen)1);
-	errint_("#", &type__, (ftnlen)1);
-	errch_("#", versn, (ftnlen)1, (ftnlen)6);
-	sigerr_("SPICE(UNKNOWNFRAMETYPE)", (ftnlen)23);
-	chkout_("ROTGET", (ftnlen)6);
+	setmsg_(__global_state, "The reference frame # has class id-code #. "
+		"This form of reference frame is not supported in version # o"
+		"f ROTGET. You need to update your version of SPICELIB to the"
+		" latest version in order to support this frame. ", (ftnlen)
+		211);
+	errint_(__global_state, "#", infrm, (ftnlen)1);
+	errint_(__global_state, "#", &type__, (ftnlen)1);
+	errch_(__global_state, "#", versn, (ftnlen)1, (ftnlen)6);
+	sigerr_(__global_state, "SPICE(UNKNOWNFRAMETYPE)", (ftnlen)23);
+	chkout_(__global_state, "ROTGET", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure to clear outputs in case of a failure as defined in */
 /*     in the header. */
 
-    if (failed_() || ! (*found)) {
-	cleard_(&__state->c__9, rotate);
+    if (failed_(__global_state) || ! (*found)) {
+	cleard_(__global_state, &__state->c__9, rotate);
 	*outfrm = 0;
 	*found = FALSE_;
     }
-    chkout_("ROTGET", (ftnlen)6);
+    chkout_(__global_state, "ROTGET", (ftnlen)6);
     return 0;
 } /* rotget_ */
 

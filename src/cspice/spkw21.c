@@ -8,8 +8,7 @@
 
 
 extern spkw21_init_t __spkw21_init;
-static spkw21_state_t* get_spkw21_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkw21_state_t* get_spkw21_state(cspice_t* state) {
 	if (!state->spkw21)
 		state->spkw21 = __cspice_allocate_module(sizeof(
 	spkw21_state_t), &__spkw21_init, sizeof(__spkw21_init));
@@ -18,50 +17,53 @@ static spkw21_state_t* get_spkw21_state() {
 }
 
 /* $Procedure      SPKW21 ( Write SPK segment, type 21 ) */
-/* Subroutine */ int spkw21_(integer *handle, integer *body, integer *center, 
-	char *frame, doublereal *first, doublereal *last, char *segid, 
-	integer *n, integer *dlsize, doublereal *dlines, doublereal *epochs, 
-	ftnlen frame_len, ftnlen segid_len)
+/* Subroutine */ int spkw21_(cspice_t* __global_state, integer *handle, 
+	integer *body, integer *center, char *frame, doublereal *first, 
+	doublereal *last, char *segid, integer *n, integer *dlsize, 
+	doublereal *dlines, doublereal *epochs, ftnlen frame_len, ftnlen 
+	segid_len)
 {
     /* System generated locals */
     integer dlines_dim1, dlines_offset, i__1, i__2, i__3;
     doublereal d__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    integer kqmax1;
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int dafena_(void);
-    extern logical failed_(void);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    integer kqmax1;
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int dafena_(cspice_t*);
+    extern logical failed_(cspice_t*);
     integer chrcod;
     integer refcod;
     integer maxdim;
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
     integer kqmloc;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal prvepc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer maxdsz;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int spkpds_(integer *, integer *, char *, integer 
-	    *, doublereal *, doublereal *, doublereal *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkpds_(cspice_t*, integer *, integer *, char 
+	    *, integer *, doublereal *, doublereal *, doublereal *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spkw21_state_t* __state = get_spkw21_state();
+    spkw21_state_t* __state = get_spkw21_state(__global_state);
 /* $ Abstract */
 
 /*     Write a type 21 segment to an SPK file. */
@@ -422,69 +424,70 @@ static spkw21_state_t* get_spkw21_state() {
     dlines_offset = 1 + dlines_dim1 * 1;
 
     /* Function Body */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKW21", (ftnlen)6);
+    chkin_(__global_state, "SPKW21", (ftnlen)6);
 
 /*     Make sure the difference line size is within limits. */
 
     maxdsz = 111;
     if (*dlsize > maxdsz) {
-	setmsg_("The input difference line size is #, while the maximum supp"
-		"orted by this routine is #. It is possible that this problem"
-		" is due to your SPICE Toolkit being out of date.", (ftnlen)
-		167);
-	errint_("#", dlsize, (ftnlen)1);
-	errint_("#", &maxdsz, (ftnlen)1);
-	sigerr_("SPICE(DIFFLINETOOLARGE)", (ftnlen)23);
-	chkout_("SPKW21", (ftnlen)6);
+	setmsg_(__global_state, "The input difference line size is #, while "
+		"the maximum supported by this routine is #. It is possible t"
+		"hat this problem is due to your SPICE Toolkit being out of d"
+		"ate.", (ftnlen)167);
+	errint_(__global_state, "#", dlsize, (ftnlen)1);
+	errint_(__global_state, "#", &maxdsz, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DIFFLINETOOLARGE)", (ftnlen)23);
+	chkout_(__global_state, "SPKW21", (ftnlen)6);
 	return 0;
     }
     if (*dlsize < 71) {
-	setmsg_("The input difference line size is #, while the minimum supp"
-		"orted by this routine is #. It is possible that this problem"
-		" is due to your SPICE Toolkit being out of date.", (ftnlen)
-		167);
-	errint_("#", dlsize, (ftnlen)1);
-	errint_("#", &__state->c__71, (ftnlen)1);
-	sigerr_("SPICE(DIFFLINETOOSMALL)", (ftnlen)23);
-	chkout_("SPKW21", (ftnlen)6);
+	setmsg_(__global_state, "The input difference line size is #, while "
+		"the minimum supported by this routine is #. It is possible t"
+		"hat this problem is due to your SPICE Toolkit being out of d"
+		"ate.", (ftnlen)167);
+	errint_(__global_state, "#", dlsize, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__71, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DIFFLINETOOSMALL)", (ftnlen)23);
+	chkout_(__global_state, "SPKW21", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the NAIF integer code for the reference frame. */
 
-    namfrm_(frame, &refcod, frame_len);
+    namfrm_(__global_state, frame, &refcod, frame_len);
     if (refcod == 0) {
-	setmsg_("The reference frame # is not supported.", (ftnlen)39);
-	errch_("#", frame, (ftnlen)1, frame_len);
-	sigerr_("SPICE(INVALIDREFFRAME)", (ftnlen)22);
-	chkout_("SPKW21", (ftnlen)6);
+	setmsg_(__global_state, "The reference frame # is not supported.", (
+		ftnlen)39);
+	errch_(__global_state, "#", frame, (ftnlen)1, frame_len);
+	sigerr_(__global_state, "SPICE(INVALIDREFFRAME)", (ftnlen)22);
+	chkout_(__global_state, "SPKW21", (ftnlen)6);
 	return 0;
     }
 
 /*     Check to see if the segment identifier is too long. */
 
-    if (lastnb_(segid, segid_len) > 40) {
-	setmsg_("Segment identifier contains more than 40 characters.", (
-		ftnlen)52);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("SPKW21", (ftnlen)6);
+    if (lastnb_(__global_state, segid, segid_len) > 40) {
+	setmsg_(__global_state, "Segment identifier contains more than 40 ch"
+		"aracters.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "SPKW21", (ftnlen)6);
 	return 0;
     }
 
 /*     Now check that all the characters in the segment identifier */
 /*     can be printed. */
 
-    i__1 = lastnb_(segid, segid_len);
+    i__1 = lastnb_(__global_state, segid, segid_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	chrcod = *(unsigned char *)&segid[i__ - 1];
 	if (chrcod < 32 || chrcod > 126) {
-	    setmsg_("The segment identifier contains nonprintable characters",
-		     (ftnlen)55);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("SPKW21", (ftnlen)6);
+	    setmsg_(__global_state, "The segment identifier contains nonprin"
+		    "table characters", (ftnlen)55);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "SPKW21", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -492,11 +495,11 @@ static spkw21_state_t* get_spkw21_state() {
 /*     The difference line count must be at least one. */
 
     if (*n < 1) {
-	setmsg_("The difference line count was #; the count must be at least"
-		" one.", (ftnlen)64);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("SPKW21", (ftnlen)6);
+	setmsg_(__global_state, "The difference line count was #; the count "
+		"must be at least one.", (ftnlen)64);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "SPKW21", (ftnlen)6);
 	return 0;
     }
 
@@ -504,12 +507,12 @@ static spkw21_state_t* get_spkw21_state() {
 /*     the begin time. */
 
     if (*first > *last) {
-	setmsg_("The segment start time: # is greater than the segment end t"
-		"ime: #", (ftnlen)65);
-	errdp_("#", first, (ftnlen)1);
-	errdp_("#", last, (ftnlen)1);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("SPKW21", (ftnlen)6);
+	setmsg_(__global_state, "The segment start time: # is greater than t"
+		"he segment end time: #", (ftnlen)65);
+	errdp_(__global_state, "#", first, (ftnlen)1);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "SPKW21", (ftnlen)6);
 	return 0;
     }
 
@@ -519,13 +522,13 @@ static spkw21_state_t* get_spkw21_state() {
     i__1 = *n;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	if (epochs[i__ - 1] <= prvepc) {
-	    setmsg_("EPOCH # having index # is not greater than its predeces"
-		    "sor #.", (ftnlen)61);
-	    errdp_("#", &epochs[i__ - 1], (ftnlen)1);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &epochs[i__ - 2], (ftnlen)1);
-	    sigerr_("SPICE(TIMESOUTOFORDER)", (ftnlen)22);
-	    chkout_("SPKW21", (ftnlen)6);
+	    setmsg_(__global_state, "EPOCH # having index # is not greater t"
+		    "han its predecessor #.", (ftnlen)61);
+	    errdp_(__global_state, "#", &epochs[i__ - 1], (ftnlen)1);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &epochs[i__ - 2], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(TIMESOUTOFORDER)", (ftnlen)22);
+	    chkout_(__global_state, "SPKW21", (ftnlen)6);
 	    return 0;
 	}
 	prvepc = epochs[i__ - 1];
@@ -536,12 +539,12 @@ static spkw21_state_t* get_spkw21_state() {
 /*     descriptor. */
 
     if (epochs[*n - 1] < *last) {
-	setmsg_("Segment has coverage gap: segment end time # follows last e"
-		"poch #.", (ftnlen)66);
-	errdp_("#", last, (ftnlen)1);
-	errdp_("#", &epochs[*n - 1], (ftnlen)1);
-	sigerr_("SPICE(COVERAGEGAP)", (ftnlen)18);
-	chkout_("SPKW21", (ftnlen)6);
+	setmsg_(__global_state, "Segment has coverage gap: segment end time "
+		"# follows last epoch #.", (ftnlen)66);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	errdp_(__global_state, "#", &epochs[*n - 1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(COVERAGEGAP)", (ftnlen)18);
+	chkout_(__global_state, "SPKW21", (ftnlen)6);
 	return 0;
     }
 
@@ -555,17 +558,18 @@ static spkw21_state_t* get_spkw21_state() {
 /*        Check only the first KQMAX1-2 elements of the step size */
 /*        vector. The higher-indexed elements are allowed to be zero. */
 
-	kqmax1 = i_dnnt(&dlines[kqmloc + i__ * dlines_dim1 - dlines_offset]);
+	kqmax1 = i_dnnt(&__global_state->f2c, &dlines[kqmloc + i__ * 
+		dlines_dim1 - dlines_offset]);
 	i__2 = kqmax1 - 1;
 	for (j = 2; j <= i__2; ++j) {
 	    if (dlines[j + i__ * dlines_dim1 - dlines_offset] == 0.) {
-		setmsg_("Step size was zero at step size vector index # with"
-			"in difference line #.", (ftnlen)72);
+		setmsg_(__global_state, "Step size was zero at step size vec"
+			"tor index # within difference line #.", (ftnlen)72);
 		i__3 = j - 1;
-		errint_("#", &i__3, (ftnlen)1);
-		errint_("#", &i__, (ftnlen)1);
-		sigerr_("SPICE(ZEROSTEP)", (ftnlen)15);
-		chkout_("SPKW21", (ftnlen)6);
+		errint_(__global_state, "#", &i__3, (ftnlen)1);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(ZEROSTEP)", (ftnlen)15);
+		chkout_(__global_state, "SPKW21", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -575,14 +579,14 @@ static spkw21_state_t* get_spkw21_state() {
 
 /*     Create the segment descriptor. */
 
-    spkpds_(body, center, frame, &__state->c__21, first, last, descr, 
-	    frame_len);
+    spkpds_(__global_state, body, center, frame, &__state->c__21, first, last,
+	     descr, frame_len);
 
 /*     Begin a new segment. */
 
-    dafbna_(handle, descr, segid, segid_len);
-    if (failed_()) {
-	chkout_("SPKW21", (ftnlen)6);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKW21", (ftnlen)6);
 	return 0;
     }
 
@@ -617,23 +621,23 @@ static spkw21_state_t* get_spkw21_state() {
 /*        +-----------------------+ */
 
     i__1 = *n * *dlsize;
-    dafada_(dlines, &i__1);
-    dafada_(epochs, n);
+    dafada_(__global_state, dlines, &i__1);
+    dafada_(__global_state, epochs, n);
     i__1 = *n / 100;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&epochs[i__ * 100 - 1], &__state->c__1);
+	dafada_(__global_state, &epochs[i__ * 100 - 1], &__state->c__1);
     }
     d__1 = (doublereal) maxdim;
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
     d__1 = (doublereal) (*n);
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
 
 /*     As long as nothing went wrong, end the segment. */
 
-    if (! failed_()) {
-	dafena_();
+    if (! failed_(__global_state)) {
+	dafena_(__global_state);
     }
-    chkout_("SPKW21", (ftnlen)6);
+    chkout_(__global_state, "SPKW21", (ftnlen)6);
     return 0;
 } /* spkw21_ */
 

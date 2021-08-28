@@ -8,8 +8,7 @@
 
 
 extern zzektrfr_init_t __zzektrfr_init;
-static zzektrfr_state_t* get_zzektrfr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrfr_state_t* get_zzektrfr_state(cspice_t* state) {
 	if (!state->zzektrfr)
 		state->zzektrfr = __cspice_allocate_module(sizeof(
 	zzektrfr_state_t), &__zzektrfr_init, sizeof(__zzektrfr_init));
@@ -18,20 +17,23 @@ static zzektrfr_state_t* get_zzektrfr_state() {
 }
 
 /* $Procedure      ZZEKTRFR ( EK tree, free ) */
-/* Subroutine */ int zzektrfr_(integer *handle, integer *tree)
+/* Subroutine */ int zzektrfr_(cspice_t* __global_state, integer *handle, 
+	integer *tree)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer page[256];
     integer node;
-    extern /* Subroutine */ int zzekpgfr_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzekpgfr_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgri_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer depth;
     integer level;
     integer nkids;
@@ -40,16 +42,16 @@ static zzektrfr_state_t* get_zzektrfr_state() {
     integer nkeys;
     integer kidbas;
     integer remain;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzektrfr_state_t* __state = get_zzektrfr_state();
+    zzektrfr_state_t* __state = get_zzektrfr_state(__global_state);
 /* $ Abstract */
 
 /*     Free a tree:  deallocate all pages belonging to the tree. */
@@ -580,28 +582,28 @@ static zzektrfr_state_t* get_zzektrfr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZEKTRFR", (ftnlen)8);
+    chkin_(__global_state, "ZZEKTRFR", (ftnlen)8);
 
 /*     Read in the root node. */
 
-    zzekpgri_(handle, tree, page);
+    zzekpgri_(__global_state, handle, tree, page);
 
 /*     Check the depth of the tree.  If the tree is deeper than */
 /*     we expected, we've a problem. */
 
     depth = page[3];
     if (depth > 10) {
-	setmsg_("Tree has depth #; max supported depth is #.EK = #; TREE = #."
-		, (ftnlen)60);
-	errint_("#", &depth, (ftnlen)1);
-	errint_("#", &__state->c__10, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", tree, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
-	chkout_("ZZEKTRFR", (ftnlen)8);
+	setmsg_(__global_state, "Tree has depth #; max supported depth is #."
+		"EK = #; TREE = #.", (ftnlen)60);
+	errint_(__global_state, "#", &depth, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__10, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", tree, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFORMAT)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKTRFR", (ftnlen)8);
 	return 0;
     }
 
@@ -647,19 +649,23 @@ static zzektrfr_state_t* get_zzektrfr_state() {
 	    } else {
 		kidbas = 64;
 	    }
-	    stack[(i__1 = level * 3 - 3) < 30 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "zzektrfr_", (ftnlen)273)] = node;
-	    stack[(i__1 = level * 3 - 2) < 30 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "zzektrfr_", (ftnlen)274)] = nkids;
-	    stack[(i__1 = level * 3 - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "zzektrfr_", (ftnlen)275)] = first;
+	    stack[(i__1 = level * 3 - 3) < 30 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "stack", i__1, "zzektrfr_", (ftnlen)
+		    273)] = node;
+	    stack[(i__1 = level * 3 - 2) < 30 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "stack", i__1, "zzektrfr_", (ftnlen)
+		    274)] = nkids;
+	    stack[(i__1 = level * 3 - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "stack", i__1, "zzektrfr_", (ftnlen)
+		    275)] = first;
 	    ++level;
 
 /*           Read in the first child node. */
 
 	    node = page[(i__1 = kidbas + first - 1) < 256 && 0 <= i__1 ? i__1 
-		    : s_rnge("page", i__1, "zzektrfr_", (ftnlen)281)];
-	    zzekpgri_(handle, &node, page);
+		    : s_rnge(&__global_state->f2c, "page", i__1, "zzektrfr_", 
+		    (ftnlen)281)];
+	    zzekpgri_(__global_state, handle, &node, page);
 
 /*           We've never visited this node before, so the node's */
 /*           metadata is valid, and the first child pointer, if any, */
@@ -676,7 +682,7 @@ static zzektrfr_state_t* get_zzektrfr_state() {
 
 /*           This node has no children.  We can free this page. */
 
-	    zzekpgfr_(handle, &__state->c__3, &node);
+	    zzekpgfr_(__global_state, handle, &__state->c__3, &node);
 	    --remain;
 
 /*           Obtain the parent node by popping the stack. */
@@ -684,11 +690,14 @@ static zzektrfr_state_t* get_zzektrfr_state() {
 	    --level;
 	    if (level > 0) {
 		node = stack[(i__1 = level * 3 - 3) < 30 && 0 <= i__1 ? i__1 :
-			 s_rnge("stack", i__1, "zzektrfr_", (ftnlen)316)];
+			 s_rnge(&__global_state->f2c, "stack", i__1, "zzektr"
+			"fr_", (ftnlen)316)];
 		first = stack[(i__1 = level * 3 - 1) < 30 && 0 <= i__1 ? i__1 
-			: s_rnge("stack", i__1, "zzektrfr_", (ftnlen)317)];
+			: s_rnge(&__global_state->f2c, "stack", i__1, "zzekt"
+			"rfr_", (ftnlen)317)];
 		nkids = stack[(i__1 = level * 3 - 2) < 30 && 0 <= i__1 ? i__1 
-			: s_rnge("stack", i__1, "zzektrfr_", (ftnlen)318)];
+			: s_rnge(&__global_state->f2c, "stack", i__1, "zzekt"
+			"rfr_", (ftnlen)318)];
 
 /*              The parent has one less child, and the location of the */
 /*              first child is the successor of the stored location. */
@@ -698,7 +707,7 @@ static zzektrfr_state_t* get_zzektrfr_state() {
 
 /*              The parent page has been overwritten; read it back in. */
 
-		zzekpgri_(handle, &node, page);
+		zzekpgri_(__global_state, handle, &node, page);
 	    }
 	}
 
@@ -707,7 +716,7 @@ static zzektrfr_state_t* get_zzektrfr_state() {
 /*        made progress toward loop termination. */
 
     }
-    chkout_("ZZEKTRFR", (ftnlen)8);
+    chkout_(__global_state, "ZZEKTRFR", (ftnlen)8);
     return 0;
 } /* zzektrfr_ */
 

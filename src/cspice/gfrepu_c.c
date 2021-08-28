@@ -224,7 +224,7 @@
    {
       return;
    }
-   chkin_c ( "gfrepu_c" );
+   chkin_c ( naif_state, "gfrepu_c" );
 
    /*
    Let the f2c'd routine do the work.

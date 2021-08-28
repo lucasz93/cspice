@@ -8,36 +8,36 @@
 
 
 typedef int removc_state_t;
-static removc_state_t* get_removc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline removc_state_t* get_removc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      REMOVC ( Remove an item from a character set ) */
-/* Subroutine */ int removc_(char *item, char *a, ftnlen item_len, ftnlen 
-	a_len)
+/* Subroutine */ int removc_(cspice_t* __global_state, char *item, char *a, 
+	ftnlen item_len, ftnlen a_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer card;
     integer i__;
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical in;
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int scardc_(cspice_t*, integer *, char *, ftnlen);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer loc;
 
 
     /* Module state */
-    removc_state_t* __state = get_removc_state();
+    removc_state_t* __state = get_removc_state(__global_state);
 /* $ Abstract */
 
 /*      Remove an item from a character set. */
@@ -185,19 +185,20 @@ static removc_state_t* get_removc_state() {
 
 /*     Standard error handling: */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("REMOVC", (ftnlen)6);
+	chkin_(__global_state, "REMOVC", (ftnlen)6);
     }
 
 /*     What is the cardinality of the set? */
 
-    card = cardc_(a, a_len);
+    card = cardc_(__global_state, a, a_len);
 
 /*     Determine the location (if any) of the item within the set. */
 
-    loc = bsrchc_(item, &card, a + a_len * 6, item_len, a_len);
+    loc = bsrchc_(__global_state, item, &card, a + a_len * 6, item_len, a_len)
+	    ;
 
 /*     Is the item in the set? If so, it needs to be removed. */
 
@@ -210,13 +211,13 @@ static removc_state_t* get_removc_state() {
 
 	i__1 = card - 1;
 	for (i__ = loc; i__ <= i__1; ++i__) {
-	    s_copy(a + (i__ + 5) * a_len, a + (i__ + 6) * a_len, a_len, a_len)
-		    ;
+	    s_copy(&__global_state->f2c, a + (i__ + 5) * a_len, a + (i__ + 6) 
+		    * a_len, a_len, a_len);
 	}
 	i__1 = card - 1;
-	scardc_(&i__1, a, a_len);
+	scardc_(__global_state, &i__1, a, a_len);
     }
-    chkout_("REMOVC", (ftnlen)6);
+    chkout_(__global_state, "REMOVC", (ftnlen)6);
     return 0;
 } /* removc_ */
 

@@ -8,8 +8,7 @@
 
 
 extern ckr02_init_t __ckr02_init;
-static ckr02_state_t* get_ckr02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckr02_state_t* get_ckr02_state(cspice_t* state) {
 	if (!state->ckr02)
 		state->ckr02 = __cspice_allocate_module(sizeof(ckr02_state_t),
 	 &__ckr02_init, sizeof(__ckr02_init));
@@ -18,15 +17,17 @@ static ckr02_state_t* get_ckr02_state() {
 }
 
 /* $Procedure      CKR02 ( C-kernel, read pointing record, data type 2 ) */
-/* Subroutine */ int ckr02_(integer *handle, doublereal *descr, doublereal *
-	sclkdp, doublereal *tol, doublereal *record, logical *found)
+/* Subroutine */ int ckr02_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *sclkdp, doublereal *tol, doublereal *
+	record, logical *found)
 {
     /* System generated locals */
     integer i__1, i__2;
     doublereal d__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer nrec;
@@ -37,29 +38,30 @@ static ckr02_state_t* get_ckr02_state() {
     doublereal diff2;
     integer i__;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer index;
-    extern /* Subroutine */ int vequg_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vequg_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer group;
     doublereal start;
     doublereal stopi;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal buffer[100];
     integer remain;
     integer dirloc;
-    extern integer lstled_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern integer lstled_(cspice_t*, doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal clkout;
     integer grpndx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer stploc;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer arrsiz;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer beg;
     integer icd[6];
@@ -68,7 +70,7 @@ static ckr02_state_t* get_ckr02_state() {
 
 
     /* Module state */
-    ckr02_state_t* __state = get_ckr02_state();
+    ckr02_state_t* __state = get_ckr02_state(__global_state);
 /* $ Abstract */
 
 /*     Read a pointing record from a CK segment, data type 2. */
@@ -356,10 +358,10 @@ static ckr02_state_t* get_ckr02_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKR02", (ftnlen)5);
+	chkin_(__global_state, "CKR02", (ftnlen)5);
     }
 
 /*     To minimize the number of file reads performed during the search, */
@@ -393,16 +395,16 @@ static ckr02_state_t* get_ckr02_state() {
 /*        ICD(5)  Initial address of segment data */
 /*        ICD(6)  Final address of segment data */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dcd, icd);
 
 /*     Check to make sure that the segment is type 2. */
 
     if (icd[2] != 2) {
-	setmsg_("The segment is not a type 2 segment.  Type is #", (ftnlen)47)
-		;
-	errint_("#", &icd[2], (ftnlen)1);
-	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
-	chkout_("CKR02", (ftnlen)5);
+	setmsg_(__global_state, "The segment is not a type 2 segment.  Type "
+		"is #", (ftnlen)47);
+	errint_(__global_state, "#", &icd[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGDATATYPE)", (ftnlen)20);
+	chkout_(__global_state, "CKR02", (ftnlen)5);
 	return 0;
     }
 
@@ -451,7 +453,7 @@ static ckr02_state_t* get_ckr02_state() {
 
     arrsiz = end - beg + 1;
     d__1 = ((doublereal) arrsiz * 100. + 1.) / 1001.;
-    nrec = i_dnnt(&d__1);
+    nrec = i_dnnt(&__global_state->f2c, &d__1);
     ndir = (nrec - 1) / 100;
 
 /*     The directory epochs narrow down the search to a group of DIRSIZ */
@@ -485,7 +487,7 @@ static ckr02_state_t* get_ckr02_state() {
 
 	    n = min(remain,100);
 	    i__1 = dirloc + n - 1;
-	    dafgda_(handle, &dirloc, &i__1, buffer);
+	    dafgda_(__global_state, handle, &dirloc, &i__1, buffer);
 	    remain -= n;
 
 /*           Determine the last directory element in BUFFER that's less */
@@ -497,7 +499,7 @@ static ckr02_state_t* get_ckr02_state() {
 
 /*           Otherwise keep looking. */
 
-	    i__ = lstled_(sclkdp, &n, buffer);
+	    i__ = lstled_(__global_state, sclkdp, &n, buffer);
 	    if (i__ < n) {
 		group = group + i__ + 1;
 		fnd = TRUE_;
@@ -532,12 +534,12 @@ static ckr02_state_t* get_ckr02_state() {
     i__1 = 100, i__2 = nrec - skip;
     n = min(i__1,i__2);
     i__1 = grpndx + n - 1;
-    dafgda_(handle, &grpndx, &i__1, buffer);
+    dafgda_(__global_state, handle, &grpndx, &i__1, buffer);
 
 /*     Find the largest time in the group less than or equal to the input */
 /*     time. */
 
-    i__ = lstled_(sclkdp, &n, buffer);
+    i__ = lstled_(__global_state, sclkdp, &n, buffer);
 
 /*     If the request time does not fall into one of the intervals, then */
 /*     there are several cases in which this routine can return an */
@@ -574,7 +576,7 @@ static ckr02_state_t* get_ckr02_state() {
 	    clkout = buffer[0];
 	    index = 1;
 	} else {
-	    chkout_("CKR02", (ftnlen)5);
+	    chkout_(__global_state, "CKR02", (ftnlen)5);
 	    return 0;
 	}
     } else {
@@ -583,11 +585,12 @@ static ckr02_state_t* get_ckr02_state() {
 /*        within the Ith interval. */
 
 	stploc = beg + nrec * 9 + skip + i__ - 1;
-	dafgda_(handle, &stploc, &stploc, &stopi);
+	dafgda_(__global_state, handle, &stploc, &stploc, &stopi);
 	if (*sclkdp <= stopi) {
 	    *found = TRUE_;
 	    start = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("buffer", i__1, "ckr02_", (ftnlen)619)];
+		    s_rnge(&__global_state->f2c, "buffer", i__1, "ckr02_", (
+		    ftnlen)619)];
 	    clkout = *sclkdp;
 	    index = i__;
 	} else {
@@ -603,11 +606,12 @@ static ckr02_state_t* get_ckr02_state() {
 		if (*sclkdp - *tol <= stopi) {
 		    *found = TRUE_;
 		    start = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 
-			    : s_rnge("buffer", i__1, "ckr02_", (ftnlen)638)];
+			    : s_rnge(&__global_state->f2c, "buffer", i__1, 
+			    "ckr02_", (ftnlen)638)];
 		    clkout = stopi;
 		    index = i__;
 		} else {
-		    chkout_("CKR02", (ftnlen)5);
+		    chkout_(__global_state, "CKR02", (ftnlen)5);
 		    return 0;
 		}
 	    } else {
@@ -617,8 +621,8 @@ static ckr02_state_t* get_ckr02_state() {
 
 		diff1 = *sclkdp - stopi;
 		diff2 = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("buffer", i__1, "ckr02_", (ftnlen)656)] - *
-			sclkdp;
+			s_rnge(&__global_state->f2c, "buffer", i__1, "ckr02_",
+			 (ftnlen)656)] - *sclkdp;
 		if (min(diff1,diff2) <= *tol) {
 		    *found = TRUE_;
 
@@ -627,21 +631,21 @@ static ckr02_state_t* get_ckr02_state() {
 
 		    if (diff2 <= diff1) {
 			start = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 
-				: s_rnge("buffer", i__1, "ckr02_", (ftnlen)
-				667)];
+				: s_rnge(&__global_state->f2c, "buffer", i__1,
+				 "ckr02_", (ftnlen)667)];
 			clkout = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? 
-				i__1 : s_rnge("buffer", i__1, "ckr02_", (
-				ftnlen)668)];
+				i__1 : s_rnge(&__global_state->f2c, "buffer", 
+				i__1, "ckr02_", (ftnlen)668)];
 			index = i__ + 1;
 		    } else {
 			start = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? 
-				i__1 : s_rnge("buffer", i__1, "ckr02_", (
-				ftnlen)673)];
+				i__1 : s_rnge(&__global_state->f2c, "buffer", 
+				i__1, "ckr02_", (ftnlen)673)];
 			clkout = stopi;
 			index = i__;
 		    }
 		} else {
-		    chkout_("CKR02", (ftnlen)5);
+		    chkout_(__global_state, "CKR02", (ftnlen)5);
 		    return 0;
 		}
 	    }
@@ -664,13 +668,13 @@ static ckr02_state_t* get_ckr02_state() {
 
     n = beg + (skip + index - 1 << 3);
     i__1 = n + 7;
-    dafgda_(handle, &n, &i__1, prec);
+    dafgda_(__global_state, handle, &n, &i__1, prec);
     record[2] = prec[7];
-    vequg_(prec, &__state->c__7, &record[3]);
+    vequg_(__global_state, prec, &__state->c__7, &record[3]);
 
 /*     That is all. */
 
-    chkout_("CKR02", (ftnlen)5);
+    chkout_(__global_state, "CKR02", (ftnlen)5);
     return 0;
 } /* ckr02_ */
 

@@ -8,8 +8,7 @@
 
 
 extern spcac_init_t __spcac_init;
-static spcac_state_t* get_spcac_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spcac_state_t* get_spcac_state(cspice_t* state) {
 	if (!state->spcac)
 		state->spcac = __cspice_allocate_module(sizeof(spcac_state_t),
 	 &__spcac_init, sizeof(__spcac_init));
@@ -18,8 +17,9 @@ static spcac_state_t* get_spcac_state() {
 }
 
 /* $Procedure SPCAC ( SPK and CK, add comments ) */
-/* Subroutine */ int spcac_(integer *handle, integer *unit, char *bmark, char 
-	*emark, ftnlen bmark_len, ftnlen emark_len)
+/* Subroutine */ int spcac_(cspice_t* __global_state, integer *handle, 
+	integer *unit, char *bmark, char *emark, ftnlen bmark_len, ftnlen 
+	emark_len)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -27,12 +27,14 @@ static spcac_state_t* get_spcac_state() {
     alist al__1;
 
     /* Builtin functions */
-    integer f_rew(alist *), s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void),
-	     i_indx(char *, char *, ftnlen, ftnlen), s_rsfe(cilist *), do_fio(
-	    integer *, char *, ftnlen), e_rsfe(void), s_wdue(cilist *), 
-	    e_wdue(void);
+    integer f_rew(f2c_state_t*, alist *), s_cmp(f2c_state_t*, char *, char *, 
+	    ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rdue(f2c_state_t*), i_indx(f2c_state_t*, char *
+	    , char *, ftnlen, ftnlen), s_rsfe(f2c_state_t*, cilist *), do_fio(
+	    f2c_state_t*, integer *, char *, ftnlen), e_rsfe(f2c_state_t*), 
+	    s_wdue(f2c_state_t*, cilist *), e_wdue(f2c_state_t*);
 
     /* Local variables */
     char data[1002];
@@ -40,45 +42,46 @@ static spcac_state_t* get_spcac_state() {
     integer free;
     char line[1000];
     char null[1];
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
     integer c__;
     integer i__;
     integer l;
     integer bline;
     integer space;
     integer eline;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer bward;
     integer chars;
     integer fward;
-    extern /* Subroutine */ int locln_(integer *, char *, char *, char *, 
-	    integer *, integer *, logical *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int locln_(cspice_t*, integer *, char *, char *, 
+	    char *, integer *, integer *, logical *, ftnlen, ftnlen, ftnlen);
     integer lines;
     logical found;
     integer total;
     integer start;
     integer nd;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer ni;
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
     char ifname[60];
     integer nr;
-    extern /* Subroutine */ int dafarr_(integer *, integer *);
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafarr_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
     char record[1000];
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern integer countc_(integer *, integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern integer countc_(cspice_t*, integer *, integer *, integer *, char *,
+	     ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer lastrr;
     integer poseot;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer rec;
     integer eol;
     char eot[1];
@@ -90,7 +93,7 @@ static spcac_state_t* get_spcac_state() {
 
 
     /* Module state */
-    spcac_state_t* __state = get_spcac_state();
+    spcac_state_t* __state = get_spcac_state(__global_state);
 /* $ Abstract */
 
 /*     Store text from a text file in the comment area of a binary SPK */
@@ -426,18 +429,18 @@ static spcac_state_t* get_spcac_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPCAC", (ftnlen)5);
+	chkin_(__global_state, "SPCAC", (ftnlen)5);
     }
 
 /*     Before doing anything, determine if the file associated with */
 /*     HANDLE is available for WRITE access. */
 
-    dafsih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("SPCAC", (ftnlen)5);
+    dafsih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPCAC", (ftnlen)5);
 	return 0;
     }
 
@@ -452,15 +455,15 @@ static spcac_state_t* get_spcac_state() {
 
     al__1.aerr = 0;
     al__1.aunit = *unit;
-    f_rew(&al__1);
-    locln_(unit, bmark, emark, line, &bline, &eline, &found, bmark_len, 
-	    emark_len, (ftnlen)1000);
+    f_rew(&__global_state->f2c, &al__1);
+    locln_(__global_state, unit, bmark, emark, line, &bline, &eline, &found, 
+	    bmark_len, emark_len, (ftnlen)1000);
 
 /*     If the markers are not found, or if BMARK and EMARK are on */
 /*     successive lines, there is nothing to put in the comment area. */
 
     if (! found) {
-	chkout_("SPCAC", (ftnlen)5);
+	chkout_(__global_state, "SPCAC", (ftnlen)5);
 	return 0;
     }
 
@@ -468,14 +471,14 @@ static spcac_state_t* get_spcac_state() {
 /*     BETWEEN the markers.  Check and make sure there is at least one */
 /*     line in the group. */
 
-    if (s_cmp(bmark, " ", bmark_len, (ftnlen)1) != 0) {
+    if (s_cmp(&__global_state->f2c, bmark, " ", bmark_len, (ftnlen)1) != 0) {
 	++bline;
     }
-    if (s_cmp(emark, " ", emark_len, (ftnlen)1) != 0) {
+    if (s_cmp(&__global_state->f2c, emark, " ", emark_len, (ftnlen)1) != 0) {
 	--eline;
     }
     if (bline > eline) {
-	chkout_("SPCAC", (ftnlen)5);
+	chkout_(__global_state, "SPCAC", (ftnlen)5);
 	return 0;
     }
 
@@ -484,9 +487,9 @@ static spcac_state_t* get_spcac_state() {
 /*     else COUNTC will signal an error. */
 
     lines = eline - bline + 1;
-    chars = countc_(unit, &bline, &eline, line, (ftnlen)1000);
-    if (failed_()) {
-	chkout_("SPCAC", (ftnlen)5);
+    chars = countc_(__global_state, unit, &bline, &eline, line, (ftnlen)1000);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPCAC", (ftnlen)5);
 	return 0;
     }
 
@@ -497,14 +500,16 @@ static spcac_state_t* get_spcac_state() {
 /*     that first summary record, and NRR is the number of reserved */
 /*     records in the file. */
 
-    dafrfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
+    dafrfr_(__global_state, handle, &nd, &ni, ifname, &fward, &bward, &free, (
+	    ftnlen)60);
     nrr = fward - 2;
 
 /*     Get the logical unit for reading from and writing to the DAF. */
 
-    zzddhhlu_(handle, "DAF", &__state->c_false, &dafu, (ftnlen)3);
-    if (failed_()) {
-	chkout_("SPCAC", (ftnlen)5);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_false, &dafu, (
+	    ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPCAC", (ftnlen)5);
 	return 0;
     }
 
@@ -516,7 +521,7 @@ static spcac_state_t* get_spcac_state() {
     *(unsigned char *)null = '\0';
     *(unsigned char *)eot = '\4';
     space = 0;
-    s_copy(record, " ", (ftnlen)1000, (ftnlen)1);
+    s_copy(&__global_state->f2c, record, " ", (ftnlen)1000, (ftnlen)1);
     start = 0;
     lastrr = 0;
     if (nrr != 0) {
@@ -537,30 +542,32 @@ static spcac_state_t* get_spcac_state() {
 	    --i__;
 	    __state->io___24.ciunit = dafu;
 	    __state->io___24.cirec = i__;
-	    iostat = s_rdue(&__state->io___24);
+	    iostat = s_rdue(&__global_state->f2c, &__state->io___24);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
-	    iostat = do_uio(&__state->c__1, record, (ftnlen)1000);
+	    iostat = do_uio(&__global_state->f2c, &__state->c__1, record, (
+		    ftnlen)1000);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
-	    iostat = e_rdue();
+	    iostat = e_rdue(&__global_state->f2c);
 L100001:
 	    if (iostat != 0) {
-		setmsg_("Error reading comment area of binary file named FIL"
-			"E.  IOSTAT = *.", (ftnlen)66);
-		errint_("*", &iostat, (ftnlen)1);
-		errfnm_("FILE", &dafu, (ftnlen)4);
-		sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		chkout_("SPCAC", (ftnlen)5);
+		setmsg_(__global_state, "Error reading comment area of binar"
+			"y file named FILE.  IOSTAT = *.", (ftnlen)66);
+		errint_(__global_state, "*", &iostat, (ftnlen)1);
+		errfnm_(__global_state, "FILE", &dafu, (ftnlen)4);
+		sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+		chkout_(__global_state, "SPCAC", (ftnlen)5);
 		return 0;
 	    }
 
 /*           Call INDEX. If POSEOT is 0, then RECORD doesn't contain */
 /*           the EOT character. */
 
-	    poseot = i_indx(record, eot, (ftnlen)1000, (ftnlen)1);
+	    poseot = i_indx(&__global_state->f2c, record, eot, (ftnlen)1000, (
+		    ftnlen)1);
 	}
 
 /*        The amount of free space in the reserved records of the */
@@ -627,9 +634,9 @@ L100001:
 /*     point in going on. */
 
     if (nr > 0) {
-	dafarr_(handle, &nr);
-	if (failed_()) {
-	    chkout_("SPCAC", (ftnlen)5);
+	dafarr_(__global_state, handle, &nr);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPCAC", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -648,31 +655,32 @@ L100001:
 
     al__1.aerr = 0;
     al__1.aunit = *unit;
-    f_rew(&al__1);
+    f_rew(&__global_state->f2c, &al__1);
     i__1 = bline - 1;
     for (l = 1; l <= i__1; ++l) {
 	ci__1.cierr = 1;
 	ci__1.ciend = 1;
 	ci__1.ciunit = *unit;
 	ci__1.cifmt = "(A)";
-	iostat = s_rsfe(&ci__1);
+	iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_fio(&__state->c__1, line, (ftnlen)1000);
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, (ftnlen)
+		1000);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = e_rsfe();
+	iostat = e_rsfe(&__global_state->f2c);
 L100002:
 	if (iostat != 0) {
-	    setmsg_("Error reading line # in text file named FILE.  IOSTAT ="
-		    " *.", (ftnlen)58);
-	    errint_("#", &l, (ftnlen)1);
-	    errint_("*", &iostat, (ftnlen)1);
-	    errfnm_("FILE", unit, (ftnlen)4);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("SPCAC", (ftnlen)5);
+	    setmsg_(__global_state, "Error reading line # in text file named"
+		    " FILE.  IOSTAT = *.", (ftnlen)58);
+	    errint_(__global_state, "#", &l, (ftnlen)1);
+	    errint_(__global_state, "*", &iostat, (ftnlen)1);
+	    errfnm_(__global_state, "FILE", unit, (ftnlen)4);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "SPCAC", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -686,32 +694,33 @@ L100002:
 	ci__1.ciend = 1;
 	ci__1.ciunit = *unit;
 	ci__1.cifmt = "(A)";
-	iostat = s_rsfe(&ci__1);
+	iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = do_fio(&__state->c__1, line, (ftnlen)1000);
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, (ftnlen)
+		1000);
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = e_rsfe();
+	iostat = e_rsfe(&__global_state->f2c);
 L100003:
 	if (iostat != 0) {
-	    setmsg_("Error reading line # in text file named FILE.  IOSTAT ="
-		    " *.", (ftnlen)58);
+	    setmsg_(__global_state, "Error reading line # in text file named"
+		    " FILE.  IOSTAT = *.", (ftnlen)58);
 	    i__2 = l + bline - 1;
-	    errint_("#", &i__2, (ftnlen)1);
-	    errint_("*", &iostat, (ftnlen)1);
-	    errfnm_("FILE", unit, (ftnlen)4);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("SPCAC", (ftnlen)5);
+	    errint_(__global_state, "#", &i__2, (ftnlen)1);
+	    errint_(__global_state, "*", &iostat, (ftnlen)1);
+	    errfnm_(__global_state, "FILE", unit, (ftnlen)4);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "SPCAC", (ftnlen)5);
 	    return 0;
 	}
 
 /*        Each line is followed by a null character. */
 
-	s_copy(data, line, (ftnlen)1002, (ftnlen)1000);
-	eol = lastnb_(data, (ftnlen)1002) + 1;
+	s_copy(&__global_state->f2c, data, line, (ftnlen)1002, (ftnlen)1000);
+	eol = lastnb_(__global_state, data, (ftnlen)1002) + 1;
 	*(unsigned char *)&data[eol - 1] = *(unsigned char *)null;
 
 /*        The final line is followed by an additional */
@@ -734,27 +743,31 @@ L100003:
 		++rec;
 		__state->io___33.ciunit = dafu;
 		__state->io___33.cirec = rec;
-		iostat = s_wdue(&__state->io___33);
+		iostat = s_wdue(&__global_state->f2c, &__state->io___33);
 		if (iostat != 0) {
 		    goto L100004;
 		}
-		iostat = do_uio(&__state->c__1, record, (ftnlen)1000);
+		iostat = do_uio(&__global_state->f2c, &__state->c__1, record, 
+			(ftnlen)1000);
 		if (iostat != 0) {
 		    goto L100004;
 		}
-		iostat = e_wdue();
+		iostat = e_wdue(&__global_state->f2c);
 L100004:
 		if (iostat == 0) {
-		    s_copy(record, " ", (ftnlen)1000, (ftnlen)1);
+		    s_copy(&__global_state->f2c, record, " ", (ftnlen)1000, (
+			    ftnlen)1);
 		    pos = 0;
 		} else {
-		    setmsg_("Error writing to record # of the binary file na"
-			    "med FILE. IOSTAT = *.", (ftnlen)68);
-		    errint_("#", &rec, (ftnlen)1);
-		    errint_("*", &iostat, (ftnlen)1);
-		    errfnm_("FILE", &dafu, (ftnlen)4);
-		    sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-		    chkout_("SPCAC", (ftnlen)5);
+		    setmsg_(__global_state, "Error writing to record # of th"
+			    "e binary file named FILE. IOSTAT = *.", (ftnlen)
+			    68);
+		    errint_(__global_state, "#", &rec, (ftnlen)1);
+		    errint_(__global_state, "*", &iostat, (ftnlen)1);
+		    errfnm_(__global_state, "FILE", &dafu, (ftnlen)4);
+		    sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)
+			    22);
+		    chkout_(__global_state, "SPCAC", (ftnlen)5);
 		    return 0;
 		}
 	    }
@@ -772,27 +785,28 @@ L100004:
     ++rec;
     __state->io___34.ciunit = dafu;
     __state->io___34.cirec = rec;
-    iostat = s_wdue(&__state->io___34);
+    iostat = s_wdue(&__global_state->f2c, &__state->io___34);
     if (iostat != 0) {
 	goto L100005;
     }
-    iostat = do_uio(&__state->c__1, record, (ftnlen)1000);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, record, (ftnlen)
+	    1000);
     if (iostat != 0) {
 	goto L100005;
     }
-    iostat = e_wdue();
+    iostat = e_wdue(&__global_state->f2c);
 L100005:
     if (iostat != 0) {
-	setmsg_("Error writing the final record, record #, of the binary fil"
-		"e named FILE.  IOSTAT = *.", (ftnlen)85);
-	errint_("#", &rec, (ftnlen)1);
-	errint_("*", &iostat, (ftnlen)1);
-	errfnm_("FILE", &dafu, (ftnlen)4);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("SPCAC", (ftnlen)5);
+	setmsg_(__global_state, "Error writing the final record, record #, o"
+		"f the binary file named FILE.  IOSTAT = *.", (ftnlen)85);
+	errint_(__global_state, "#", &rec, (ftnlen)1);
+	errint_(__global_state, "*", &iostat, (ftnlen)1);
+	errfnm_(__global_state, "FILE", &dafu, (ftnlen)4);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "SPCAC", (ftnlen)5);
 	return 0;
     }
-    chkout_("SPCAC", (ftnlen)5);
+    chkout_(__global_state, "SPCAC", (ftnlen)5);
     return 0;
 } /* spcac_ */
 

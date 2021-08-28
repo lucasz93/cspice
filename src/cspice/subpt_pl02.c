@@ -937,7 +937,7 @@
    {
       return;
    }
-   chkin_c ( "subpt_pl02" );
+   chkin_c ( naif_state, "subpt_pl02" );
  
 
    /*

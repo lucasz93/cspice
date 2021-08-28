@@ -8,8 +8,7 @@
 
 
 extern inrypl_init_t __inrypl_init;
-static inrypl_state_t* get_inrypl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline inrypl_state_t* get_inrypl_state(cspice_t* state) {
 	if (!state->inrypl)
 		state->inrypl = __cspice_allocate_module(sizeof(
 	inrypl_state_t), &__inrypl_init, sizeof(__inrypl_init));
@@ -18,48 +17,49 @@ static inrypl_state_t* get_inrypl_state() {
 }
 
 /* $Procedure      INRYPL ( Intersection of ray and plane ) */
-/* Subroutine */ int inrypl_(doublereal *vertex, doublereal *dir, doublereal *
-	plane, integer *nxpts, doublereal *xpt)
+/* Subroutine */ int inrypl_(cspice_t* __global_state, doublereal *vertex, 
+	doublereal *dir, doublereal *plane, integer *nxpts, doublereal *xpt)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Local variables */
     doublereal udir[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal const__;
     doublereal prjvn;
-    extern doublereal vnorm_(doublereal *);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int pl2nvc_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     doublereal mscale;
     doublereal prjdif;
     doublereal sclcon;
     doublereal toobig;
     doublereal normal[3];
     doublereal prjdir;
-    extern logical smsgnd_(doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern logical smsgnd_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal sclvtx[3];
 
 
     /* Module state */
-    inrypl_state_t* __state = get_inrypl_state();
+    inrypl_state_t* __state = get_inrypl_state(__global_state);
 /* $ Abstract */
 
 /*     Find the intersection of a ray and a plane. */
@@ -613,7 +613,7 @@ static inrypl_state_t* get_inrypl_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -626,35 +626,38 @@ static inrypl_state_t* get_inrypl_state() {
 
 /*     Check the distance of the ray's vertex from the origin. */
 
-    toobig = dpmax_() / 3.;
-    if (vnorm_(vertex) >= toobig) {
-	chkin_("INRYPL", (ftnlen)6);
-	setmsg_("Ray's vertex is too far from the origin.", (ftnlen)40);
-	sigerr_("SPICE(VECTORTOOBIG)", (ftnlen)19);
-	chkout_("INRYPL", (ftnlen)6);
+    toobig = dpmax_(__global_state) / 3.;
+    if (vnorm_(__global_state, vertex) >= toobig) {
+	chkin_(__global_state, "INRYPL", (ftnlen)6);
+	setmsg_(__global_state, "Ray's vertex is too far from the origin.", (
+		ftnlen)40);
+	sigerr_(__global_state, "SPICE(VECTORTOOBIG)", (ftnlen)19);
+	chkout_(__global_state, "INRYPL", (ftnlen)6);
 	return 0;
     }
 
 /*     Check the distance of the plane from the origin.  (The returned */
 /*     plane constant IS this distance.) */
 
-    pl2nvc_(plane, normal, &const__);
+    pl2nvc_(__global_state, plane, normal, &const__);
     if (const__ >= toobig) {
-	chkin_("INRYPL", (ftnlen)6);
-	setmsg_("Plane is too far from the origin.", (ftnlen)33);
-	sigerr_("SPICE(VECTORTOOBIG)", (ftnlen)19);
-	chkout_("INRYPL", (ftnlen)6);
+	chkin_(__global_state, "INRYPL", (ftnlen)6);
+	setmsg_(__global_state, "Plane is too far from the origin.", (ftnlen)
+		33);
+	sigerr_(__global_state, "SPICE(VECTORTOOBIG)", (ftnlen)19);
+	chkout_(__global_state, "INRYPL", (ftnlen)6);
 	return 0;
     }
 
 /*     Check the ray's direction vector. */
 
-    vhat_(dir, udir);
-    if (vzero_(udir)) {
-	chkin_("INRYPL", (ftnlen)6);
-	setmsg_("Ray's direction vector is the zero vector.", (ftnlen)42);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("INRYPL", (ftnlen)6);
+    vhat_(__global_state, dir, udir);
+    if (vzero_(__global_state, udir)) {
+	chkin_(__global_state, "INRYPL", (ftnlen)6);
+	setmsg_(__global_state, "Ray's direction vector is the zero vector.", 
+		(ftnlen)42);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "INRYPL", (ftnlen)6);
 	return 0;
     }
 
@@ -662,14 +665,14 @@ static inrypl_state_t* get_inrypl_state() {
 /*     and plane to improve numerical behavior. */
 
 /* Computing MAX */
-    d__1 = const__, d__2 = vnorm_(vertex);
+    d__1 = const__, d__2 = vnorm_(__global_state, vertex);
     mscale = max(d__1,d__2);
     if (mscale != 0.) {
 	d__1 = 1. / mscale;
-	vscl_(&d__1, vertex, sclvtx);
+	vscl_(__global_state, &d__1, vertex, sclvtx);
 	sclcon = const__ / mscale;
     } else {
-	vequ_(vertex, sclvtx);
+	vequ_(__global_state, vertex, sclvtx);
 	sclcon = const__;
     }
     if (mscale > 1.) {
@@ -678,7 +681,7 @@ static inrypl_state_t* get_inrypl_state() {
 /*     Find the projection (coefficient) of the ray's vertex along the */
 /*     plane's normal direction. */
 
-    prjvn = vdot_(sclvtx, normal);
+    prjvn = vdot_(__global_state, sclvtx, normal);
 
 /*     If this projection is the plane constant, the ray's vertex lies in */
 /*     the plane.  We have one intersection or an infinite number of */
@@ -693,8 +696,8 @@ static inrypl_state_t* get_inrypl_state() {
 
 /*        XPT is the original, unscaled vertex. */
 
-	vequ_(vertex, xpt);
-	if (vdot_(normal, udir) == 0.) {
+	vequ_(__global_state, vertex, xpt);
+	if (vdot_(__global_state, normal, udir) == 0.) {
 
 /*           The ray's in the plane. */
 
@@ -751,19 +754,19 @@ static inrypl_state_t* get_inrypl_state() {
 /*     Find the projection of the direction vector along the plane's */
 /*     normal vector. */
 
-    prjdir = vdot_(udir, normal);
+    prjdir = vdot_(__global_state, udir, normal);
 
 /*     We're done if the ray doesn't point toward the plane.  PRJDIF */
 /*     has already been found to be non-zero at this point; PRJDIR is */
 /*     zero if the ray and plane are parallel.  The SPICELIB routine */
 /*     SMSGND will return a value of .FALSE. if PRJDIR is zero. */
 
-    if (! smsgnd_(&prjdir, &prjdif)) {
+    if (! smsgnd_(__global_state, &prjdir, &prjdif)) {
 
 /*        The ray is parallel to or points away from the plane. */
 
 	*nxpts = 0;
-	cleard_(&__state->c__3, xpt);
+	cleard_(__global_state, &__state->c__3, xpt);
 	return 0;
     }
 
@@ -790,7 +793,7 @@ static inrypl_state_t* get_inrypl_state() {
 /*        exists. */
 
 	*nxpts = 0;
-	cleard_(&__state->c__3, xpt);
+	cleard_(__global_state, &__state->c__3, xpt);
 	return 0;
     }
 
@@ -801,12 +804,12 @@ static inrypl_state_t* get_inrypl_state() {
 
     *nxpts = 1;
     scale = abs(prjdif) / abs(prjdir);
-    vlcom_(&__state->c_b16, sclvtx, &scale, udir, xpt);
+    vlcom_(__global_state, &__state->c_b16, sclvtx, &scale, udir, xpt);
 
 /*     Re-scale XPT.  This is safe, since TOOBIG has already been */
 /*     scaled to allow for any growth of XPT at this step. */
 
-    vsclip_(&mscale, xpt);
+    vsclip_(__global_state, &mscale, xpt);
     return 0;
 } /* inrypl_ */
 

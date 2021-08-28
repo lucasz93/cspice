@@ -501,7 +501,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkacs_c" );
+   chkin_c ( naif_state, "spkacs_c" );
 
 
    /*

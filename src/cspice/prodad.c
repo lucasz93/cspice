@@ -8,13 +8,12 @@
 
 
 typedef int prodad_state_t;
-static prodad_state_t* get_prodad_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline prodad_state_t* get_prodad_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure PRODAD ( Product of a double precision array ) */
-doublereal prodad_(doublereal *array, integer *n)
+doublereal prodad_(cspice_t* __global_state, doublereal *array, integer *n)
 {
     /* System generated locals */
     integer i__1;
@@ -26,7 +25,7 @@ doublereal prodad_(doublereal *array, integer *n)
 
 
     /* Module state */
-    prodad_state_t* __state = get_prodad_state();
+    prodad_state_t* __state = get_prodad_state(__global_state);
 /* $ Abstract */
 
 /*      Return the product of the elements of a double precision array. */

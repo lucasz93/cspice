@@ -8,8 +8,7 @@
 
 
 extern cke04_init_t __cke04_init;
-static cke04_state_t* get_cke04_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cke04_state_t* get_cke04_state(cspice_t* state) {
 	if (!state->cke04)
 		state->cke04 = __cspice_allocate_module(sizeof(cke04_state_t),
 	 &__cke04_init, sizeof(__cke04_init));
@@ -18,29 +17,31 @@ static cke04_state_t* get_cke04_state() {
 }
 
 /* $Procedure      CKE04 ( C-kernel, evaluate pointing record, type 4 ) */
-/* Subroutine */ int cke04_(logical *needav, doublereal *record, doublereal *
-	cmat, doublereal *av, doublereal *clkout)
+/* Subroutine */ int cke04_(cspice_t* __global_state, logical *needav, 
+	doublereal *record, doublereal *cmat, doublereal *av, doublereal *
+	clkout)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer ideg[7];
     doublereal qout[4];
     integer i__;
     doublereal q[4];
-    extern /* Subroutine */ int vhatg_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int vhatg_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer basadd;
-    extern /* Subroutine */ int chbval_(doublereal *, integer *, doublereal *,
-	     doublereal *, doublereal *);
-    extern /* Subroutine */ int q2m_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chbval_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int q2m_(cspice_t*, doublereal *, doublereal *);
 
 
     /* Module state */
-    cke04_state_t* __state = get_cke04_state();
+    cke04_state_t* __state = get_cke04_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a pointing record returned by CKR04 from a CK type 4 */
@@ -574,8 +575,9 @@ static cke04_state_t* get_cke04_state() {
 /*     local integer array. */
 
     for (i__ = 1; i__ <= 7; ++i__) {
-	ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge("ideg", i__1, 
-		"cke04_", (ftnlen)369)] = (integer) record[i__ + 2];
+	ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "ideg", i__1, "cke04_", (ftnlen)369)] = (
+		integer) record[i__ + 2];
     }
 
 /*     Evaluate polynomial function for quaternion components at time */
@@ -583,22 +585,23 @@ static cke04_state_t* get_cke04_state() {
 
     basadd = 11;
     for (i__ = 1; i__ <= 4; ++i__) {
-	i__3 = ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge("ideg", 
-		i__1, "cke04_", (ftnlen)380)] - 1;
-	chbval_(&record[basadd - 1], &i__3, &record[1], record, &q[(i__2 = 
-		i__ - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge("q", i__2, "cke04_",
-		 (ftnlen)380)]);
-	basadd += ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		"ideg", i__1, "cke04_", (ftnlen)382)];
+	i__3 = ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "ideg", i__1, "cke04_", (ftnlen)380)] - 
+		1;
+	chbval_(__global_state, &record[basadd - 1], &i__3, &record[1], 
+		record, &q[(i__2 = i__ - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "q", i__2, "cke04_", (ftnlen)380)]);
+	basadd += ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "ideg", i__1, "cke04_", (ftnlen)382)];
     }
 
 /*     Normalize quaternion. */
 
-    vhatg_(q, &__state->c__4, qout);
+    vhatg_(__global_state, q, &__state->c__4, qout);
 
 /*     Convert the quaternion to a C-matrix. */
 
-    q2m_(qout, cmat);
+    q2m_(__global_state, qout, cmat);
     *clkout = record[0];
 
 /*     Check if angular velocities have to be evaluated, then */
@@ -606,13 +609,16 @@ static cke04_state_t* get_cke04_state() {
 
     if (*needav) {
 	for (i__ = 5; i__ <= 7; ++i__) {
-	    i__3 = ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ideg", i__1, "cke04_", (ftnlen)406)] - 1;
-	    chbval_(&record[basadd - 1], &i__3, &record[1], record, &av[(i__2 
-		    = i__ - 5) < 3 && 0 <= i__2 ? i__2 : s_rnge("av", i__2, 
-		    "cke04_", (ftnlen)406)]);
-	    basadd += ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ideg", i__1, "cke04_", (ftnlen)408)];
+	    i__3 = ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ideg", i__1, "cke04_", (ftnlen)406)]
+		     - 1;
+	    chbval_(__global_state, &record[basadd - 1], &i__3, &record[1], 
+		    record, &av[(i__2 = i__ - 5) < 3 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "av", i__2, "cke04_", (
+		    ftnlen)406)]);
+	    basadd += ideg[(i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ideg", i__1, "cke04_", (ftnlen)408)]
+		    ;
 	}
     }
 

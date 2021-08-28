@@ -8,8 +8,7 @@
 
 
 extern zzfovaxi_init_t __zzfovaxi_init;
-static zzfovaxi_state_t* get_zzfovaxi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzfovaxi_state_t* get_zzfovaxi_state(cspice_t* state) {
 	if (!state->zzfovaxi)
 		state->zzfovaxi = __cspice_allocate_module(sizeof(
 	zzfovaxi_state_t), &__zzfovaxi_init, sizeof(__zzfovaxi_init));
@@ -18,51 +17,53 @@ static zzfovaxi_state_t* get_zzfovaxi_state() {
 }
 
 /* $Procedure   ZZFOVAXI ( Generate an axis vector for polygonal FOV ) */
-/* Subroutine */ int zzfovaxi_(char *inst, integer *n, doublereal *bounds, 
-	doublereal *axis, ftnlen inst_len)
+/* Subroutine */ int zzfovaxi_(cspice_t* __global_state, char *inst, integer *
+	n, doublereal *bounds, doublereal *axis, ftnlen inst_len)
 {
     /* System generated locals */
     integer bounds_dim2, i__1, i__2, i__3;
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal uvec[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vsep_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
     integer next;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzhullax_(char *, integer *, doublereal *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzhullax_(cspice_t*, char *, integer *, 
+	    doublereal *, doublereal *, ftnlen);
     integer i__;
     doublereal v[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal limit;
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical vzero_(doublereal *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     doublereal cp[3];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     logical ok;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern doublereal halfpi_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int vhatip_(doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern doublereal halfpi_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal sep;
 
 
     /* Module state */
-    zzfovaxi_state_t* __state = get_zzfovaxi_state();
+    zzfovaxi_state_t* __state = get_zzfovaxi_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -299,20 +300,20 @@ static zzfovaxi_state_t* get_zzfovaxi_state() {
     bounds_dim2 = *n;
 
     /* Function Body */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZFOVAXI", (ftnlen)8);
+    chkin_(__global_state, "ZZFOVAXI", (ftnlen)8);
 
 /*     We must have at least 3 boundary vectors. */
 
     if (*n < 3) {
-	setmsg_("Polygonal FOV requires at least 3 boundary vectors but numb"
-		"er supplied for # was #.", (ftnlen)83);
-	errch_("#", inst, (ftnlen)1, inst_len);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZFOVAXI", (ftnlen)8);
+	setmsg_(__global_state, "Polygonal FOV requires at least 3 boundary "
+		"vectors but number supplied for # was #.", (ftnlen)83);
+	errch_(__global_state, "#", inst, (ftnlen)1, inst_len);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZFOVAXI", (ftnlen)8);
 	return 0;
     }
 
@@ -335,24 +336,26 @@ static zzfovaxi_state_t* get_zzfovaxi_state() {
 /*        vectors, this could be an inward or outward normal, */
 /*        in the case the current face is is exterior. */
 
-	vcrss_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? 
-		i__2 : s_rnge("bounds", i__2, "zzfovaxi_", (ftnlen)313)], &
-		bounds[(i__3 = next * 3 - 3) < 3 * bounds_dim2 && 0 <= i__3 ? 
-		i__3 : s_rnge("bounds", i__3, "zzfovaxi_", (ftnlen)313)], cp);
+	vcrss_(__global_state, &bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 
+		&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "bounds", 
+		i__2, "zzfovaxi_", (ftnlen)313)], &bounds[(i__3 = next * 3 - 
+		3) < 3 * bounds_dim2 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "bounds", i__3, "zzfovaxi_", (ftnlen)313)
+		], cp);
 
 /*        We insist on consecutive boundary vectors being */
 /*        linearly independent. */
 
-	if (vzero_(cp)) {
-	    setmsg_("Polygonal FOV must have linearly independent consecutiv"
-		    "e boundary but vectors at indices # and # have cross pro"
-		    "duct equal to the zero vector. Instrument is #.", (ftnlen)
-		    158);
-	    errint_("#", &i__, (ftnlen)1);
-	    errint_("#", &next, (ftnlen)1);
-	    errch_("#", inst, (ftnlen)1, inst_len);
-	    sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	    chkout_("ZZFOVAXI", (ftnlen)8);
+	if (vzero_(__global_state, cp)) {
+	    setmsg_(__global_state, "Polygonal FOV must have linearly indepe"
+		    "ndent consecutive boundary but vectors at indices # and "
+		    "# have cross product equal to the zero vector. Instrumen"
+		    "t is #.", (ftnlen)158);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errint_(__global_state, "#", &next, (ftnlen)1);
+	    errch_(__global_state, "#", inst, (ftnlen)1, inst_len);
+	    sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	    chkout_(__global_state, "ZZFOVAXI", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -361,28 +364,28 @@ static zzfovaxi_state_t* get_zzfovaxi_state() {
 /*     a candidate axis. In many cases, this simple approach */
 /*     does the trick. */
 
-    cleard_(&__state->c__3, axis);
+    cleard_(__global_state, &__state->c__3, axis);
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	vhat_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? 
-		i__2 : s_rnge("bounds", i__2, "zzfovaxi_", (ftnlen)346)], 
-		uvec);
-	vadd_(uvec, axis, v);
-	vequ_(v, axis);
+	vhat_(__global_state, &bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 
+		&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "bounds", 
+		i__2, "zzfovaxi_", (ftnlen)346)], uvec);
+	vadd_(__global_state, uvec, axis, v);
+	vequ_(__global_state, v, axis);
     }
     d__1 = 1. / *n;
-    vsclip_(&d__1, axis);
+    vsclip_(__global_state, &d__1, axis);
 
 /*     If each boundary vector has sufficiently small */
 /*     angular separation from AXIS, we're done. */
 
-    limit = halfpi_() - 1e-12;
+    limit = halfpi_(__global_state) - 1e-12;
     ok = TRUE_;
     i__ = 1;
     while(i__ <= *n && ok) {
-	sep = vsep_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= 
-		i__1 ? i__1 : s_rnge("bounds", i__1, "zzfovaxi_", (ftnlen)365)
-		], axis);
+	sep = vsep_(__global_state, &bounds[(i__1 = i__ * 3 - 3) < 3 * 
+		bounds_dim2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+		 "bounds", i__1, "zzfovaxi_", (ftnlen)365)], axis);
 	if (sep > limit) {
 	    ok = FALSE_;
 	} else {
@@ -396,17 +399,17 @@ static zzfovaxi_state_t* get_zzfovaxi_state() {
 /*        hull of the FOV. ZZHULLAX signals an error */
 /*        if it doesn't succeed. */
 
-	zzhullax_(inst, n, bounds, axis, inst_len);
-	if (failed_()) {
-	    chkout_("ZZFOVAXI", (ftnlen)8);
+	zzhullax_(__global_state, inst, n, bounds, axis, inst_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZFOVAXI", (ftnlen)8);
 	    return 0;
 	}
     }
 
 /*     At this point AXIS is valid. Make the axis vector unit length. */
 
-    vhatip_(axis);
-    chkout_("ZZFOVAXI", (ftnlen)8);
+    vhatip_(__global_state, axis);
+    chkout_(__global_state, "ZZFOVAXI", (ftnlen)8);
     return 0;
 } /* zzfovaxi_ */
 

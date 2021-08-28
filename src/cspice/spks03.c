@@ -8,8 +8,7 @@
 
 
 extern spks03_init_t __spks03_init;
-static spks03_state_t* get_spks03_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spks03_state_t* get_spks03_state(cspice_t* state) {
 	if (!state->spks03)
 		state->spks03 = __cspice_allocate_module(sizeof(
 	spks03_state_t), &__spks03_init, sizeof(__spks03_init));
@@ -18,8 +17,8 @@ static spks03_state_t* get_spks03_state() {
 }
 
 /* $Procedure      SPKS03 ( S/P Kernel, subset, type 3 ) */
-/* Subroutine */ int spks03_(integer *handle, integer *baddr, integer *eaddr, 
-	doublereal *begin, doublereal *end)
+/* Subroutine */ int spks03_(cspice_t* __global_state, integer *handle, 
+	integer *baddr, integer *eaddr, doublereal *begin, doublereal *end)
 {
     /* System generated locals */
     integer i__1;
@@ -31,20 +30,20 @@ static spks03_state_t* get_spks03_state() {
     doublereal init;
     integer last;
     integer move;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer first;
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     integer remain;
     doublereal intlen;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer recsiz;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spks03_state_t* __state = get_spks03_state();
+    spks03_state_t* __state = get_spks03_state(__global_state);
 /* $ Abstract */
 
 /*     Extract a subset of the data in a SPK segment of type 3 (Chebyshev */
@@ -199,10 +198,10 @@ static spks03_state_t* get_spks03_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKS03", (ftnlen)6);
+	chkin_(__global_state, "SPKS03", (ftnlen)6);
     }
 
 /*     The segment is made up of a number of logical records, each */
@@ -215,7 +214,7 @@ static spks03_state_t* get_spks03_state() {
 /*     logical record and the total number of records. */
 
     i__1 = *eaddr - 3;
-    dafgda_(handle, &i__1, eaddr, data);
+    dafgda_(__global_state, handle, &i__1, eaddr, data);
     init = data[0];
     intlen = data[1];
     recsiz = (integer) data[2];
@@ -238,8 +237,8 @@ static spks03_state_t* get_spks03_state() {
     move = min(50,remain);
     while(remain > 0) {
 	i__1 = addr__ + move - 1;
-	dafgda_(handle, &addr__, &i__1, data);
-	dafada_(data, &move);
+	dafgda_(__global_state, handle, &addr__, &i__1, data);
+	dafada_(__global_state, data, &move);
 	remain -= move;
 	addr__ += move;
 	move = min(50,remain);
@@ -261,8 +260,8 @@ static spks03_state_t* get_spks03_state() {
     data[1] = intlen;
     data[2] = (doublereal) recsiz;
     data[3] = (doublereal) nrec;
-    dafada_(data, &__state->c__4);
-    chkout_("SPKS03", (ftnlen)6);
+    dafada_(__global_state, data, &__state->c__4);
+    chkout_(__global_state, "SPKS03", (ftnlen)6);
     return 0;
 } /* spks03_ */
 

@@ -8,27 +8,28 @@
 
 
 typedef int zzvalcor_state_t;
-static zzvalcor_state_t* get_zzvalcor_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzvalcor_state_t* get_zzvalcor_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZVALCOR ( Validate aberration correction ) */
-/* Subroutine */ int zzvalcor_(char *abcorr, logical *attblk, ftnlen 
-	abcorr_len)
+/* Subroutine */ int zzvalcor_(cspice_t* __global_state, char *abcorr, 
+	logical *attblk, ftnlen abcorr_len)
 {
-    extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzprscor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzvalcor_state_t* __state = get_zzvalcor_state();
+    zzvalcor_state_t* __state = get_zzvalcor_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -312,17 +313,17 @@ static zzvalcor_state_t* get_zzvalcor_state() {
 
 /*     SPICELIB functions */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZVALCOR", (ftnlen)8);
+    chkin_(__global_state, "ZZVALCOR", (ftnlen)8);
 
 /*     Parse the aberration correction string and obtain */
 /*     an attribute block. */
 
-    zzprscor_(abcorr, attblk, abcorr_len);
-    if (failed_()) {
-	chkout_("ZZVALCOR", (ftnlen)8);
+    zzprscor_(__global_state, abcorr, attblk, abcorr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZVALCOR", (ftnlen)8);
 	return 0;
     }
 
@@ -330,11 +331,12 @@ static zzvalcor_state_t* get_zzvalcor_state() {
 /*     corrections. */
 
     if (attblk[5]) {
-	setmsg_("Aberration correction specification # calls for relativisti"
-		"c corrections, which are not supported.", (ftnlen)98);
-	errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	chkout_("ZZVALCOR", (ftnlen)8);
+	setmsg_(__global_state, "Aberration correction specification # calls"
+		" for relativistic corrections, which are not supported.", (
+		ftnlen)98);
+	errch_(__global_state, "#", abcorr, (ftnlen)1, abcorr_len);
+	sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	chkout_(__global_state, "ZZVALCOR", (ftnlen)8);
 	return 0;
     }
 
@@ -342,15 +344,15 @@ static zzvalcor_state_t* get_zzvalcor_state() {
 /*     time corrections are specified as well. */
 
     if (attblk[2] && ! attblk[1]) {
-	setmsg_("Aberration correction specification # calls for stellar abe"
-		"rration correction without light time correction; this combi"
-		"nation is not supported.", (ftnlen)143);
-	errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	chkout_("ZZVALCOR", (ftnlen)8);
+	setmsg_(__global_state, "Aberration correction specification # calls"
+		" for stellar aberration correction without light time correc"
+		"tion; this combination is not supported.", (ftnlen)143);
+	errch_(__global_state, "#", abcorr, (ftnlen)1, abcorr_len);
+	sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	chkout_(__global_state, "ZZVALCOR", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZVALCOR", (ftnlen)8);
+    chkout_(__global_state, "ZZVALCOR", (ftnlen)8);
     return 0;
 } /* zzvalcor_ */
 

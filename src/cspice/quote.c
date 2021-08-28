@@ -8,8 +8,7 @@
 
 
 extern quote_init_t __quote_init;
-static quote_state_t* get_quote_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline quote_state_t* get_quote_state(cspice_t* state) {
 	if (!state->quote)
 		state->quote = __cspice_allocate_module(sizeof(quote_state_t),
 	 &__quote_init, sizeof(__quote_init));
@@ -18,27 +17,28 @@ static quote_state_t* get_quote_state() {
 }
 
 /* $Procedure      QUOTE ( Enclose in quotes ) */
-/* Subroutine */ int quote_(char *in, char *left, char *right, char *out, 
-	ftnlen in_len, ftnlen left_len, ftnlen right_len, ftnlen out_len)
+/* Subroutine */ int quote_(cspice_t* __global_state, char *in, char *left, 
+	char *right, char *out, ftnlen in_len, ftnlen left_len, ftnlen 
+	right_len, ftnlen out_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern integer frstnb_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int prefix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
 
 
     /* Module state */
-    quote_state_t* __state = get_quote_state();
+    quote_state_t* __state = get_quote_state(__global_state);
 /* $ Abstract */
 
 /*      Enclose (quote) the non-blank part of a character string */
@@ -179,14 +179,18 @@ static quote_state_t* get_quote_state() {
 
 /*     Check for blank string first. */
 
-    if (s_cmp(in, " ", in_len, (ftnlen)1) == 0) {
-	s_copy(out, left, out_len, (ftnlen)1);
-	suffix_(right, &__state->c__1, out, (ftnlen)1, out_len);
+    if (s_cmp(&__global_state->f2c, in, " ", in_len, (ftnlen)1) == 0) {
+	s_copy(&__global_state->f2c, out, left, out_len, (ftnlen)1);
+	suffix_(__global_state, right, &__state->c__1, out, (ftnlen)1, 
+		out_len);
     } else {
-	i__1 = frstnb_(in, in_len) - 1;
-	s_copy(out, in + i__1, out_len, lastnb_(in, in_len) - i__1);
-	prefix_(left, &__state->c__0, out, (ftnlen)1, out_len);
-	suffix_(right, &__state->c__0, out, (ftnlen)1, out_len);
+	i__1 = frstnb_(__global_state, in, in_len) - 1;
+	s_copy(&__global_state->f2c, out, in + i__1, out_len, lastnb_(
+		__global_state, in, in_len) - i__1);
+	prefix_(__global_state, left, &__state->c__0, out, (ftnlen)1, out_len)
+		;
+	suffix_(__global_state, right, &__state->c__0, out, (ftnlen)1, 
+		out_len);
     }
     return 0;
 } /* quote_ */

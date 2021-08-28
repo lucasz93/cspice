@@ -202,7 +202,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "tpictr_c" );
+   chkin_c ( naif_state, "tpictr_c" );
 
 
    /*

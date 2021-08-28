@@ -8,17 +8,17 @@
 
 
 typedef int latcyl_state_t;
-static latcyl_state_t* get_latcyl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline latcyl_state_t* get_latcyl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LATCYL ( Latitudinal to cylindrical coordinates ) */
-/* Subroutine */ int latcyl_(doublereal *radius, doublereal *long__, 
-	doublereal *lat, doublereal *r__, doublereal *longc, doublereal *z__)
+/* Subroutine */ int latcyl_(cspice_t* __global_state, doublereal *radius, 
+	doublereal *long__, doublereal *lat, doublereal *r__, doublereal *
+	longc, doublereal *z__)
 {
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal rh;
@@ -26,7 +26,7 @@ static latcyl_state_t* get_latcyl_state() {
 
 
     /* Module state */
-    latcyl_state_t* __state = get_latcyl_state();
+    latcyl_state_t* __state = get_latcyl_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from latitudinal coordinates to cylindrical coordinates. */
@@ -175,8 +175,8 @@ static latcyl_state_t* get_latcyl_state() {
 
 /*     Convert to cylindrical, storing in temporary variables */
 
-    rh = *radius * cos(*lat);
-    zz = *radius * sin(*lat);
+    rh = *radius * cos(&__global_state->f2c, *lat);
+    zz = *radius * sin(&__global_state->f2c, *lat);
 
 /*     Move the results to output variables. */
 

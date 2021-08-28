@@ -8,8 +8,7 @@
 
 
 extern spkr05_init_t __spkr05_init;
-static spkr05_state_t* get_spkr05_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr05_state_t* get_spkr05_state(cspice_t* state) {
 	if (!state->spkr05)
 		state->spkr05 = __cspice_allocate_module(sizeof(
 	spkr05_state_t), &__spkr05_init, sizeof(__spkr05_init));
@@ -18,14 +17,15 @@ static spkr05_state_t* get_spkr05_state() {
 }
 
 /* $Procedure  SPKR05 ( Read SPK record from segment, type 5 ) */
-/* Subroutine */ int spkr05_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr05_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     doublereal data[100];
@@ -36,31 +36,32 @@ static spkr05_state_t* get_spkr05_state() {
     integer i__;
     integer n;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    integer group;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
+    integer group;
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
     integer grpadd;
     integer remain;
     integer dirloc;
     integer addrss;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer lstltd_(doublereal *, integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lstltd_(cspice_t*, doublereal *, integer *, doublereal *);
+    extern logical return_(cspice_t*);
     integer end;
     logical fnd;
 
 
     /* Module state */
-    spkr05_state_t* __state = get_spkr05_state();
+    spkr05_state_t* __state = get_spkr05_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 5 */
@@ -255,15 +256,15 @@ static spkr05_state_t* get_spkr05_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKR05", (ftnlen)6);
+	chkin_(__global_state, "SPKR05", (ftnlen)6);
     }
 
 /*     Unpack the segment descriptor. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[3];
     begin = ic[4];
     end = ic[5];
@@ -271,11 +272,11 @@ static spkr05_state_t* get_spkr05_state() {
 /*     Make sure that this really is a type 5 data segment. */
 
     if (type__ != 5) {
-	setmsg_("You are attempting to locate type 5 data in a type # data s"
-		"egment.", (ftnlen)66);
-	errint_("#", &type__, (ftnlen)1);
-	sigerr_("SPICE(WRONGSPKTYPE)", (ftnlen)19);
-	chkout_("SPKR05", (ftnlen)6);
+	setmsg_(__global_state, "You are attempting to locate type 5 data in"
+		" a type # data segment.", (ftnlen)66);
+	errint_(__global_state, "#", &type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGSPKTYPE)", (ftnlen)19);
+	chkout_(__global_state, "SPKR05", (ftnlen)6);
 	return 0;
     }
 
@@ -285,8 +286,8 @@ static spkr05_state_t* get_spkr05_state() {
 /*     end of the output record. */
 
     i__1 = end - 1;
-    dafgda_(handle, &i__1, &end, data);
-    nrec = i_dnnt(&data[1]);
+    dafgda_(__global_state, handle, &i__1, &end, data);
+    nrec = i_dnnt(&__global_state->f2c, &data[1]);
     record[14] = data[0];
 
 /*     From the number of records, we can compute the number of */
@@ -334,7 +335,7 @@ static spkr05_state_t* get_spkr05_state() {
 
 	    n = min(remain,100);
 	    i__1 = dirloc + n - 1;
-	    dafgda_(handle, &dirloc, &i__1, data);
+	    dafgda_(__global_state, handle, &dirloc, &i__1, data);
 	    remain -= n;
 
 /*           Determine the last directory element in DATA that's less */
@@ -347,7 +348,7 @@ static spkr05_state_t* get_spkr05_state() {
 /*           Otherwise keep looking. */
 
 
-	    i__ = lstltd_(et, &n, data);
+	    i__ = lstltd_(__global_state, et, &n, data);
 	    if (i__ < n) {
 		group = group + i__ + 1;
 		fnd = TRUE_;
@@ -387,12 +388,12 @@ static spkr05_state_t* get_spkr05_state() {
     n = min(i__1,i__2);
     if (n != 0) {
 	i__1 = grpadd + n - 1;
-	dafgda_(handle, &grpadd, &i__1, data);
+	dafgda_(__global_state, handle, &grpadd, &i__1, data);
 
 /*        Find the index of the largest time in the group that is less */
 /*        than the input time. */
 
-	i__ = lstltd_(et, &n, data);
+	i__ = lstltd_(__global_state, et, &n, data);
     } else {
 
 /*        If we are here it means that ET is greater then the last */
@@ -425,10 +426,10 @@ static spkr05_state_t* get_spkr05_state() {
 	    record[12] = data[0];
 	    record[13] = data[0];
 	    i__1 = begin + 5;
-	    dafgda_(handle, &begin, &i__1, data);
-	    moved_(data, &__state->c__6, record);
-	    moved_(data, &__state->c__6, &record[6]);
-	    chkout_("SPKR05", (ftnlen)6);
+	    dafgda_(__global_state, handle, &begin, &i__1, data);
+	    moved_(__global_state, data, &__state->c__6, record);
+	    moved_(__global_state, data, &__state->c__6, &record[6]);
+	    chkout_(__global_state, "SPKR05", (ftnlen)6);
 	    return 0;
 	} else {
 
@@ -438,7 +439,7 @@ static spkr05_state_t* get_spkr05_state() {
 /*           be read outside of the IF block. */
 
 	    i__1 = grpadd - 1;
-	    dafgda_(handle, &i__1, &grpadd, data);
+	    dafgda_(__global_state, handle, &i__1, &grpadd, data);
 	    record[12] = data[0];
 	    record[13] = data[1];
 	}
@@ -449,15 +450,17 @@ static spkr05_state_t* get_spkr05_state() {
 /*           the state for the last time twice. */
 
 	    record[12] = data[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("data", i__1, "spkr05_", (ftnlen)481)];
+		    s_rnge(&__global_state->f2c, "data", i__1, "spkr05_", (
+		    ftnlen)481)];
 	    record[13] = data[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("data", i__1, "spkr05_", (ftnlen)482)];
+		    s_rnge(&__global_state->f2c, "data", i__1, "spkr05_", (
+		    ftnlen)482)];
 	    addrss = begin + (nrec - 1) * 6;
 	    i__1 = addrss + 5;
-	    dafgda_(handle, &addrss, &i__1, data);
-	    moved_(data, &__state->c__6, record);
-	    moved_(data, &__state->c__6, &record[6]);
-	    chkout_("SPKR05", (ftnlen)6);
+	    dafgda_(__global_state, handle, &addrss, &i__1, data);
+	    moved_(__global_state, data, &__state->c__6, record);
+	    moved_(__global_state, data, &__state->c__6, &record[6]);
+	    chkout_(__global_state, "SPKR05", (ftnlen)6);
 	    return 0;
 	} else {
 
@@ -468,7 +471,7 @@ static spkr05_state_t* get_spkr05_state() {
 
 	    i__1 = grpadd + n - 1;
 	    i__2 = grpadd + n;
-	    dafgda_(handle, &i__1, &i__2, data);
+	    dafgda_(__global_state, handle, &i__1, &i__2, data);
 	    record[12] = data[0];
 	    record[13] = data[1];
 	}
@@ -478,9 +481,9 @@ static spkr05_state_t* get_spkr05_state() {
 /*        for this case will be read outside of the IF block. */
 
 	record[12] = data[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		"data", i__1, "spkr05_", (ftnlen)513)];
-	record[13] = data[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		"data", i__1, "spkr05_", (ftnlen)514)];
+		&__global_state->f2c, "data", i__1, "spkr05_", (ftnlen)513)];
+	record[13] = data[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "data", i__1, "spkr05_", (ftnlen)514)];
     }
 
 /*     Read the consecutive states for the two epochs found above. */
@@ -489,9 +492,9 @@ static spkr05_state_t* get_spkr05_state() {
 
     addrss = begin + (skip + i__ - 1) * 6;
     i__1 = addrss + 11;
-    dafgda_(handle, &addrss, &i__1, data);
-    moved_(data, &__state->c__12, record);
-    chkout_("SPKR05", (ftnlen)6);
+    dafgda_(__global_state, handle, &addrss, &i__1, data);
+    moved_(__global_state, data, &__state->c__12, record);
+    chkout_(__global_state, "SPKR05", (ftnlen)6);
     return 0;
 } /* spkr05_ */
 

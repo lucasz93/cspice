@@ -8,8 +8,7 @@
 
 
 extern georec_init_t __georec_init;
-static georec_state_t* get_georec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline georec_state_t* get_georec_state(cspice_t* state) {
 	if (!state->georec)
 		state->georec = __cspice_allocate_module(sizeof(
 	georec_state_t), &__georec_init, sizeof(__georec_init));
@@ -18,14 +17,16 @@ static georec_state_t* get_georec_state() {
 }
 
 /* $Procedure      GEOREC ( Geodetic to rectangular coordinates ) */
-/* Subroutine */ int georec_(doublereal *long__, doublereal *lat, doublereal *
-	alt, doublereal *re, doublereal *f, doublereal *rectan)
+/* Subroutine */ int georec_(cspice_t* __global_state, doublereal *long__, 
+	doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, 
+	doublereal *rectan)
 {
     /* System generated locals */
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal), sqrt(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), sqrt(
+	    f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal base[3];
@@ -34,26 +35,27 @@ static georec_state_t* get_georec_state() {
     doublereal scale;
     doublereal x;
     doublereal y;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal clmbda;
     doublereal rp;
     doublereal slmbda;
     doublereal height;
     doublereal normal[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int surfnm_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
     doublereal big;
 
 
     /* Module state */
-    georec_state_t* __state = get_georec_state();
+    georec_state_t* __state = get_georec_state(__global_state);
 /* $ Abstract */
 
 /*     Convert geodetic coordinates to rectangular coordinates. */
@@ -296,19 +298,19 @@ static georec_state_t* get_georec_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("GEOREC", (ftnlen)6);
+	chkin_(__global_state, "GEOREC", (ftnlen)6);
     }
 
 /*     The equatorial radius must be greater than zero. */
 
     if (*re <= 0.) {
-	setmsg_("Equatorial radius was *.", (ftnlen)24);
-	errdp_("*", re, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("GEOREC", (ftnlen)6);
+	setmsg_(__global_state, "Equatorial radius was *.", (ftnlen)24);
+	errdp_(__global_state, "*", re, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "GEOREC", (ftnlen)6);
 	return 0;
     }
 
@@ -318,10 +320,10 @@ static georec_state_t* get_georec_state() {
 /*     error and check out. */
 
     if (*f >= 1.) {
-	setmsg_("Flattening coefficient was *.", (ftnlen)29);
-	errdp_("*", f, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("GEOREC", (ftnlen)6);
+	setmsg_(__global_state, "Flattening coefficient was *.", (ftnlen)29);
+	errdp_(__global_state, "*", f, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "GEOREC", (ftnlen)6);
 	return 0;
     }
 
@@ -337,17 +339,17 @@ static georec_state_t* get_georec_state() {
 /*     coordinates of a point with altitude 0 but the same geodetic */
 /*     latitude and longitude as the input point. */
 
-    cphi = cos(*lat);
-    sphi = sin(*lat);
-    clmbda = cos(*long__);
-    slmbda = sin(*long__);
+    cphi = cos(&__global_state->f2c, *lat);
+    sphi = sin(&__global_state->f2c, *lat);
+    clmbda = cos(&__global_state->f2c, *long__);
+    slmbda = sin(&__global_state->f2c, *long__);
 /* Computing MAX */
     d__3 = (d__1 = *re * cphi, abs(d__1)), d__4 = (d__2 = rp * sphi, abs(d__2)
 	    );
     big = max(d__3,d__4);
     x = *re * cphi / big;
     y = rp * sphi / big;
-    scale = 1. / (big * sqrt(x * x + y * y));
+    scale = 1. / (big * sqrt(&__global_state->f2c, x * x + y * y));
 
 /*     Compute the rectangular coordinates of the point with zero */
 /*     altitude. */
@@ -358,12 +360,12 @@ static georec_state_t* get_georec_state() {
 
 /*     Fetch the normal to the ellipsoid at this point. */
 
-    surfnm_(re, re, &rp, base, normal);
+    surfnm_(__global_state, re, re, &rp, base, normal);
 
 /*     Move along the normal to the input point. */
 
-    vlcom_(&__state->c_b11, base, &height, normal, rectan);
-    chkout_("GEOREC", (ftnlen)6);
+    vlcom_(__global_state, &__state->c_b11, base, &height, normal, rectan);
+    chkout_(__global_state, "GEOREC", (ftnlen)6);
     return 0;
 } /* georec_ */
 

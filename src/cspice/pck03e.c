@@ -8,22 +8,21 @@
 
 
 typedef int pck03e_state_t;
-static pck03e_state_t* get_pck03e_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pck03e_state_t* get_pck03e_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure PCK03E ( PCK, end a type 3 segment ) */
-/* Subroutine */ int pck03e_(integer *handle)
+/* Subroutine */ int pck03e_(cspice_t* __global_state, integer *handle)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sgwes_(integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgwes_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    pck03e_state_t* __state = get_pck03e_state();
+    pck03e_state_t* __state = get_pck03e_state(__global_state);
 /* $ Abstract */
 
 /*     End the type 03 PCK segment currently being written to the binary */
@@ -332,21 +331,21 @@ static pck03e_state_t* get_pck03e_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PCK03E", (ftnlen)6);
+	chkin_(__global_state, "PCK03E", (ftnlen)6);
     }
 
 /*     This is simple, just call the routine which ends a generic */
 /*     segment. */
 
-    sgwes_(handle);
+    sgwes_(__global_state, handle);
 
 /*     No need to check FAILED() since all we do is leave. The caller can */
 /*     check it. */
 
-    chkout_("PCK03E", (ftnlen)6);
+    chkout_(__global_state, "PCK03E", (ftnlen)6);
     return 0;
 } /* pck03e_ */
 

@@ -8,8 +8,7 @@
 
 
 extern stcl01_init_t __stcl01_init;
-static stcl01_state_t* get_stcl01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline stcl01_state_t* get_stcl01_state(cspice_t* state) {
 	if (!state->stcl01)
 		state->stcl01 = __cspice_allocate_module(sizeof(
 	stcl01_state_t), &__stcl01_init, sizeof(__stcl01_init));
@@ -18,8 +17,8 @@ static stcl01_state_t* get_stcl01_state() {
 }
 
 /* $Procedure   STCL01 ( STAR catalog type 1, load catalog file ) */
-/* Subroutine */ int stcl01_(char *catfnm, char *tabnam, integer *handle, 
-	ftnlen catfnm_len, ftnlen tabnam_len)
+/* Subroutine */ int stcl01_(cspice_t* __global_state, char *catfnm, char *
+	tabnam, integer *handle, ftnlen catfnm_len, ftnlen tabnam_len)
 {
     /* System generated locals */
     address a__1[2];
@@ -27,24 +26,26 @@ static stcl01_state_t* get_stcl01_state() {
     char ch__1[295];
 
     /* Builtin functions */
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int eklef_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int stcc01_(char *, char *, logical *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int eklef_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int stcc01_(cspice_t*, char *, char *, logical *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical istyp1;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char errmsg[256];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    stcl01_state_t* __state = get_stcl01_state();
+    stcl01_state_t* __state = get_stcl01_state(__global_state);
 /* $ Abstract */
 
 /*     Load SPICE type 1 star catalog and return the catalog's */
@@ -226,33 +227,34 @@ static stcl01_state_t* get_stcl01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("STCL01", (ftnlen)6);
+	chkin_(__global_state, "STCL01", (ftnlen)6);
     }
 
 /*     Check whether the file is really a type 1 star catalog file. */
 /*     If not then signal an error. */
 
-    stcc01_(catfnm, tabnam, &istyp1, errmsg, catfnm_len, tabnam_len, (ftnlen)
-	    256);
+    stcc01_(__global_state, catfnm, tabnam, &istyp1, errmsg, catfnm_len, 
+	    tabnam_len, (ftnlen)256);
     if (! istyp1) {
 /* Writing concatenation */
 	i__1[0] = 39, a__1[0] = "File # is not type 1 star catalog file.";
 	i__1[1] = 256, a__1[1] = errmsg;
-	s_cat(ch__1, a__1, i__1, &__state->c__2, (ftnlen)295);
-	setmsg_(ch__1, (ftnlen)295);
-	errch_("#", catfnm, (ftnlen)1, catfnm_len);
-	sigerr_("SPICE(BADCATALOGFILE)", (ftnlen)21);
-	chkout_("STCL01", (ftnlen)6);
+	s_cat(&__global_state->f2c, ch__1, a__1, i__1, &__state->c__2, (
+		ftnlen)295);
+	setmsg_(__global_state, ch__1, (ftnlen)295);
+	errch_(__global_state, "#", catfnm, (ftnlen)1, catfnm_len);
+	sigerr_(__global_state, "SPICE(BADCATALOGFILE)", (ftnlen)21);
+	chkout_(__global_state, "STCL01", (ftnlen)6);
 	return 0;
     }
 
 /*     Load the catalog file with the high level EK loader. */
 
-    eklef_(catfnm, handle, catfnm_len);
-    chkout_("STCL01", (ftnlen)6);
+    eklef_(__global_state, catfnm, handle, catfnm_len);
+    chkout_(__global_state, "STCL01", (ftnlen)6);
     return 0;
 } /* stcl01_ */
 

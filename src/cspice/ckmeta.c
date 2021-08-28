@@ -8,8 +8,7 @@
 
 
 extern ckmeta_init_t __ckmeta_init;
-static ckmeta_state_t* get_ckmeta_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckmeta_state_t* get_ckmeta_state(cspice_t* state) {
 	if (!state->ckmeta)
 		state->ckmeta = __cspice_allocate_module(sizeof(
 	ckmeta_state_t), &__ckmeta_init, sizeof(__ckmeta_init));
@@ -18,8 +17,8 @@ static ckmeta_state_t* get_ckmeta_state() {
 }
 
 /* $Procedure      CKMETA ( CK ID to associated SCLK ) */
-/* Subroutine */ int ckmeta_(integer *ckid, char *meta, integer *idcode, 
-	ftnlen meta_len)
+/* Subroutine */ int ckmeta_(cspice_t* __global_state, integer *ckid, char *
+	meta, integer *idcode, ftnlen meta_len)
 {
     /* Initialized data */
 
@@ -29,41 +28,45 @@ static ckmeta_state_t* get_ckmeta_state() {
     integer i__1, i__2, i__3[2];
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen),
-	     s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen), s_copy(f2c_state_t*, char *, char *, ftnlen, 
+	    ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
+    extern /* Subroutine */ int zzcvpool_(cspice_t*, char *, integer *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int clearc_(integer *, char *, ftnlen);
-    extern integer bschoi_(integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int orderi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
-	    *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int cvpool_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int dwpool_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int clearc_(cspice_t*, integer *, char *, ftnlen);
+    extern integer bschoi_(cspice_t*, integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int orderi_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int gipool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int prefix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int ljucrs_(cspice_t*, integer *, char *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int cvpool_(cspice_t*, char *, logical *, ftnlen);
+    extern /* Subroutine */ int dwpool_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int swpool_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
 
     /* Module state */
-    ckmeta_state_t* __state = get_ckmeta_state();
+    ckmeta_state_t* __state = get_ckmeta_state(__global_state);
 /* $ Abstract */
 
 /*     This routine returns (depending upon the users' request) */
@@ -316,63 +319,70 @@ static ckmeta_state_t* get_ckmeta_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKMETA", (ftnlen)6);
+    chkin_(__global_state, "CKMETA", (ftnlen)6);
     if (__state->first) {
 
 /*        Initialize all agent-specific POOL counters to user value. */
 
 	for (__state->n = 1; __state->n <= 30; ++__state->n) {
-	    zzctruin_(&__state->usrctr[(i__1 = (__state->n << 1) - 2) < 60 && 
-		    0 <= i__1 ? i__1 : s_rnge("usrctr", i__1, "ckmeta_", (
-		    ftnlen)275)]);
+	    zzctruin_(__global_state, &__state->usrctr[(i__1 = (__state->n << 
+		    1) - 2) < 60 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "usrctr", i__1, "ckmeta_", (ftnlen)
+		    275)]);
 	}
 
 /*        Clear AGENTS array. We will use a non-blank AGENT value as the */
 /*        flag to delete previously set watchers. */
 
-	clearc_(&__state->c__30, __state->agent, (ftnlen)32);
+	clearc_(__global_state, &__state->c__30, __state->agent, (ftnlen)32);
 	__state->first = FALSE_;
     }
 
 /*     Get an upper-case, left-justified copy of the metadata */
 /*     type ('SCLK' or 'SPK'). */
 
-    ljucrs_(&__state->c__1, meta, __state->mymeta, meta_len, (ftnlen)7);
+    ljucrs_(__global_state, &__state->c__1, meta, __state->mymeta, meta_len, (
+	    ftnlen)7);
 
 /*     See if we already have this CK ID in hand. */
 
-    __state->this__ = bschoi_(ckid, &__state->currnt, __state->cks, 
-	    __state->cksord);
+    __state->this__ = bschoi_(__global_state, ckid, &__state->currnt, 
+	    __state->cks, __state->cksord);
     if (__state->this__ > 0) {
 
 /*        We've got it.  Check to see if its value has been updated. */
 /*        (Note that every CK ID  has its own agent and saved POOL */
 /*        counter.) */
 
-	zzcvpool_(__state->agent + (((i__1 = __state->this__ - 1) < 30 && 0 <=
-		 i__1 ? i__1 : s_rnge("agent", i__1, "ckmeta_", (ftnlen)305)) 
-		<< 5), &__state->usrctr[(i__2 = (__state->this__ << 1) - 2) < 
-		60 && 0 <= i__2 ? i__2 : s_rnge("usrctr", i__2, "ckmeta_", (
-		ftnlen)305)], &__state->update, (ftnlen)32);
+	zzcvpool_(__global_state, __state->agent + (((i__1 = __state->this__ 
+		- 1) < 30 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"agent", i__1, "ckmeta_", (ftnlen)305)) << 5), &
+		__state->usrctr[(i__2 = (__state->this__ << 1) - 2) < 60 && 0 
+		<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "usrctr", i__2, 
+		"ckmeta_", (ftnlen)305)], &__state->update, (ftnlen)32);
 	if (__state->update || __state->nodata) {
-	    gipool_(__state->lookup + (((i__1 = (__state->this__ << 1) - 2) < 
-		    60 && 0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "ckmeta_",
-		     (ftnlen)309)) << 5), &__state->c__1, &__state->c__1, &
+	    gipool_(__global_state, __state->lookup + (((i__1 = (
+		    __state->this__ << 1) - 2) < 60 && 0 <= i__1 ? i__1 : 
+		    s_rnge(&__global_state->f2c, "lookup", i__1, "ckmeta_", (
+		    ftnlen)309)) << 5), &__state->c__1, &__state->c__1, &
 		    __state->n, &__state->sclks[(i__2 = __state->this__ - 1) <
-		     30 && 0 <= i__2 ? i__2 : s_rnge("sclks", i__2, "ckmeta_",
-		     (ftnlen)309)], __state->found, (ftnlen)32);
-	    gipool_(__state->lookup + (((i__1 = (__state->this__ << 1) - 1) < 
-		    60 && 0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "ckmeta_",
-		     (ftnlen)312)) << 5), &__state->c__1, &__state->c__1, &
+		     30 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "sclks", i__2, "ckmeta_", (ftnlen)309)], __state->found, (
+		    ftnlen)32);
+	    gipool_(__global_state, __state->lookup + (((i__1 = (
+		    __state->this__ << 1) - 1) < 60 && 0 <= i__1 ? i__1 : 
+		    s_rnge(&__global_state->f2c, "lookup", i__1, "ckmeta_", (
+		    ftnlen)312)) << 5), &__state->c__1, &__state->c__1, &
 		    __state->n, &__state->spks[(i__2 = __state->this__ - 1) < 
-		    30 && 0 <= i__2 ? i__2 : s_rnge("spks", i__2, "ckmeta_", (
-		    ftnlen)312)], &__state->found[1], (ftnlen)32);
-	    if (failed_()) {
+		    30 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "spks", i__2, "ckmeta_", (ftnlen)312)], &__state->found[1]
+		    , (ftnlen)32);
+	    if (failed_(__global_state)) {
 		__state->nodata = TRUE_;
-		chkout_("CKMETA", (ftnlen)6);
+		chkout_(__global_state, "CKMETA", (ftnlen)6);
 		return 0;
 	    }
 
@@ -408,14 +418,17 @@ static ckmeta_state_t* get_ckmeta_state() {
 /*        we may have an update pending for this watcher, so we will */
 /*        check it first to clear it. */
 
-	if (s_cmp(__state->agent + (((i__1 = __state->this__ - 1) < 30 && 0 <=
-		 i__1 ? i__1 : s_rnge("agent", i__1, "ckmeta_", (ftnlen)370)) 
+	if (s_cmp(&__global_state->f2c, __state->agent + (((i__1 = 
+		__state->this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "agent", i__1, "ckmeta_", (ftnlen)370)) 
 		<< 5), " ", (ftnlen)32, (ftnlen)1) != 0) {
-	    cvpool_(__state->agent + (((i__1 = __state->this__ - 1) < 30 && 0 
-		    <= i__1 ? i__1 : s_rnge("agent", i__1, "ckmeta_", (ftnlen)
+	    cvpool_(__global_state, __state->agent + (((i__1 = 
+		    __state->this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "agent", i__1, "ckmeta_", (ftnlen)
 		    371)) << 5), &__state->update, (ftnlen)32);
-	    dwpool_(__state->agent + (((i__1 = __state->this__ - 1) < 30 && 0 
-		    <= i__1 ? i__1 : s_rnge("agent", i__1, "ckmeta_", (ftnlen)
+	    dwpool_(__global_state, __state->agent + (((i__1 = 
+		    __state->this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "agent", i__1, "ckmeta_", (ftnlen)
 		    372)) << 5), (ftnlen)32);
 	}
 
@@ -423,64 +436,74 @@ static ckmeta_state_t* get_ckmeta_state() {
 /*        kernel pool variable names and the agent name. */
 
 	__state->cks[(i__1 = __state->this__ - 1) < 30 && 0 <= i__1 ? i__1 : 
-		s_rnge("cks", i__1, "ckmeta_", (ftnlen)379)] = *ckid;
-	orderi_(__state->cks, &__state->currnt, __state->cksord);
-	intstr_(ckid, __state->lookup + (((i__1 = (__state->this__ << 1) - 2) 
-		< 60 && 0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "ckmeta_", (
-		ftnlen)383)) << 5), (ftnlen)32);
-	prefix_("CK_", &__state->c__0, __state->lookup + (((i__1 = (
-		__state->this__ << 1) - 2) < 60 && 0 <= i__1 ? i__1 : s_rnge(
-		"lookup", i__1, "ckmeta_", (ftnlen)384)) << 5), (ftnlen)3, (
-		ftnlen)32);
+		s_rnge(&__global_state->f2c, "cks", i__1, "ckmeta_", (ftnlen)
+		379)] = *ckid;
+	orderi_(__global_state, __state->cks, &__state->currnt, 
+		__state->cksord);
+	intstr_(__global_state, ckid, __state->lookup + (((i__1 = (
+		__state->this__ << 1) - 2) < 60 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "lookup", i__1, "ckmeta_", (ftnlen)383)) 
+		<< 5), (ftnlen)32);
+	prefix_(__global_state, "CK_", &__state->c__0, __state->lookup + (((
+		i__1 = (__state->this__ << 1) - 2) < 60 && 0 <= i__1 ? i__1 : 
+		s_rnge(&__global_state->f2c, "lookup", i__1, "ckmeta_", (
+		ftnlen)384)) << 5), (ftnlen)3, (ftnlen)32);
 /* Writing concatenation */
 	i__3[0] = 7, a__1[0] = __state->base;
 	i__3[1] = 32, a__1[1] = __state->lookup + (((i__2 = (__state->this__ 
-		<< 1) - 2) < 60 && 0 <= i__2 ? i__2 : s_rnge("lookup", i__2, 
-		"ckmeta_", (ftnlen)386)) << 5);
-	s_cat(__state->agent + (((i__1 = __state->this__ - 1) < 30 && 0 <= 
-		i__1 ? i__1 : s_rnge("agent", i__1, "ckmeta_", (ftnlen)386)) 
+		<< 1) - 2) < 60 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "lookup", i__2, "ckmeta_", (ftnlen)386)) 
+		<< 5);
+	s_cat(&__global_state->f2c, __state->agent + (((i__1 = 
+		__state->this__ - 1) < 30 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "agent", i__1, "ckmeta_", (ftnlen)386)) 
 		<< 5), a__1, i__3, &__state->c__2, (ftnlen)32);
-	s_copy(__state->lookup + (((i__1 = (__state->this__ << 1) - 1) < 60 &&
-		 0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "ckmeta_", (ftnlen)
-		387)) << 5), __state->lookup + (((i__2 = (__state->this__ << 
-		1) - 2) < 60 && 0 <= i__2 ? i__2 : s_rnge("lookup", i__2, 
-		"ckmeta_", (ftnlen)387)) << 5), (ftnlen)32, (ftnlen)32);
-	suffix_("_SCLK", &__state->c__0, __state->lookup + (((i__1 = (
-		__state->this__ << 1) - 2) < 60 && 0 <= i__1 ? i__1 : s_rnge(
-		"lookup", i__1, "ckmeta_", (ftnlen)389)) << 5), (ftnlen)5, (
+	s_copy(&__global_state->f2c, __state->lookup + (((i__1 = (
+		__state->this__ << 1) - 1) < 60 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "lookup", i__1, "ckmeta_", (ftnlen)387)) 
+		<< 5), __state->lookup + (((i__2 = (__state->this__ << 1) - 2)
+		 < 60 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		"lookup", i__2, "ckmeta_", (ftnlen)387)) << 5), (ftnlen)32, (
 		ftnlen)32);
-	suffix_("_SPK", &__state->c__0, __state->lookup + (((i__1 = (
-		__state->this__ << 1) - 1) < 60 && 0 <= i__1 ? i__1 : s_rnge(
-		"lookup", i__1, "ckmeta_", (ftnlen)390)) << 5), (ftnlen)4, (
-		ftnlen)32);
+	suffix_(__global_state, "_SCLK", &__state->c__0, __state->lookup + (((
+		i__1 = (__state->this__ << 1) - 2) < 60 && 0 <= i__1 ? i__1 : 
+		s_rnge(&__global_state->f2c, "lookup", i__1, "ckmeta_", (
+		ftnlen)389)) << 5), (ftnlen)5, (ftnlen)32);
+	suffix_(__global_state, "_SPK", &__state->c__0, __state->lookup + (((
+		i__1 = (__state->this__ << 1) - 1) < 60 && 0 <= i__1 ? i__1 : 
+		s_rnge(&__global_state->f2c, "lookup", i__1, "ckmeta_", (
+		ftnlen)390)) << 5), (ftnlen)4, (ftnlen)32);
 
 /*        Set a watch for this item and fetch the current value */
 /*        from the kernel pool (if there is a value there). */
 
-	swpool_(__state->agent + (((i__1 = __state->this__ - 1) < 30 && 0 <= 
-		i__1 ? i__1 : s_rnge("agent", i__1, "ckmeta_", (ftnlen)396)) 
-		<< 5), &__state->c__2, __state->lookup + (((i__2 = (
-		__state->this__ << 1) - 2) < 60 && 0 <= i__2 ? i__2 : s_rnge(
-		"lookup", i__2, "ckmeta_", (ftnlen)396)) << 5), (ftnlen)32, (
-		ftnlen)32);
-	cvpool_(__state->agent + (((i__1 = __state->this__ - 1) < 30 && 0 <= 
-		i__1 ? i__1 : s_rnge("agent", i__1, "ckmeta_", (ftnlen)398)) 
-		<< 5), &__state->update, (ftnlen)32);
-	gipool_(__state->lookup + (((i__1 = (__state->this__ << 1) - 2) < 60 
-		&& 0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "ckmeta_", (
-		ftnlen)400)) << 5), &__state->c__1, &__state->c__1, &
-		__state->n, &__state->sclks[(i__2 = __state->this__ - 1) < 30 
-		&& 0 <= i__2 ? i__2 : s_rnge("sclks", i__2, "ckmeta_", (
-		ftnlen)400)], __state->found, (ftnlen)32);
-	gipool_(__state->lookup + (((i__1 = (__state->this__ << 1) - 1) < 60 
-		&& 0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "ckmeta_", (
-		ftnlen)403)) << 5), &__state->c__1, &__state->c__1, &
-		__state->n, &__state->spks[(i__2 = __state->this__ - 1) < 30 
-		&& 0 <= i__2 ? i__2 : s_rnge("spks", i__2, "ckmeta_", (ftnlen)
-		403)], &__state->found[1], (ftnlen)32);
-	if (failed_()) {
+	swpool_(__global_state, __state->agent + (((i__1 = __state->this__ - 
+		1) < 30 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"agent", i__1, "ckmeta_", (ftnlen)396)) << 5), &__state->c__2,
+		 __state->lookup + (((i__2 = (__state->this__ << 1) - 2) < 60 
+		&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "lookup", 
+		i__2, "ckmeta_", (ftnlen)396)) << 5), (ftnlen)32, (ftnlen)32);
+	cvpool_(__global_state, __state->agent + (((i__1 = __state->this__ - 
+		1) < 30 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"agent", i__1, "ckmeta_", (ftnlen)398)) << 5), &
+		__state->update, (ftnlen)32);
+	gipool_(__global_state, __state->lookup + (((i__1 = (__state->this__ 
+		<< 1) - 2) < 60 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "lookup", i__1, "ckmeta_", (ftnlen)400)) 
+		<< 5), &__state->c__1, &__state->c__1, &__state->n, &
+		__state->sclks[(i__2 = __state->this__ - 1) < 30 && 0 <= i__2 
+		? i__2 : s_rnge(&__global_state->f2c, "sclks", i__2, "ckmeta_"
+		, (ftnlen)400)], __state->found, (ftnlen)32);
+	gipool_(__global_state, __state->lookup + (((i__1 = (__state->this__ 
+		<< 1) - 1) < 60 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "lookup", i__1, "ckmeta_", (ftnlen)403)) 
+		<< 5), &__state->c__1, &__state->c__1, &__state->n, &
+		__state->spks[(i__2 = __state->this__ - 1) < 30 && 0 <= i__2 ?
+		 i__2 : s_rnge(&__global_state->f2c, "spks", i__2, "ckmeta_", 
+		(ftnlen)403)], &__state->found[1], (ftnlen)32);
+	if (failed_(__global_state)) {
 	    __state->nodata = TRUE_;
-	    chkout_("CKMETA", (ftnlen)6);
+	    chkout_(__global_state, "CKMETA", (ftnlen)6);
 	    return 0;
 	}
 
@@ -500,52 +523,60 @@ static ckmeta_state_t* get_ckmeta_state() {
 
     if (! __state->found[0]) {
 	if (__state->cks[(i__1 = __state->this__ - 1) < 30 && 0 <= i__1 ? 
-		i__1 : s_rnge("cks", i__1, "ckmeta_", (ftnlen)435)] <= -1000) 
-		{
+		i__1 : s_rnge(&__global_state->f2c, "cks", i__1, "ckmeta_", (
+		ftnlen)435)] <= -1000) {
 	    __state->sclks[(i__1 = __state->this__ - 1) < 30 && 0 <= i__1 ? 
-		    i__1 : s_rnge("sclks", i__1, "ckmeta_", (ftnlen)437)] = 
-		    __state->cks[(i__2 = __state->this__ - 1) < 30 && 0 <= 
-		    i__2 ? i__2 : s_rnge("cks", i__2, "ckmeta_", (ftnlen)437)]
+		    i__1 : s_rnge(&__global_state->f2c, "sclks", i__1, "ckme"
+		    "ta_", (ftnlen)437)] = __state->cks[(i__2 = 
+		    __state->this__ - 1) < 30 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "cks", i__2, "ckmeta_", (ftnlen)437)]
 		     / 1000;
 	} else {
 	    __state->sclks[(i__1 = __state->this__ - 1) < 30 && 0 <= i__1 ? 
-		    i__1 : s_rnge("sclks", i__1, "ckmeta_", (ftnlen)441)] = 0;
+		    i__1 : s_rnge(&__global_state->f2c, "sclks", i__1, "ckme"
+		    "ta_", (ftnlen)441)] = 0;
 	}
     }
     if (! __state->found[1]) {
 	if (__state->cks[(i__1 = __state->this__ - 1) < 30 && 0 <= i__1 ? 
-		i__1 : s_rnge("cks", i__1, "ckmeta_", (ftnlen)449)] <= -1000) 
-		{
+		i__1 : s_rnge(&__global_state->f2c, "cks", i__1, "ckmeta_", (
+		ftnlen)449)] <= -1000) {
 	    __state->spks[(i__1 = __state->this__ - 1) < 30 && 0 <= i__1 ? 
-		    i__1 : s_rnge("spks", i__1, "ckmeta_", (ftnlen)451)] = 
-		    __state->cks[(i__2 = __state->this__ - 1) < 30 && 0 <= 
-		    i__2 ? i__2 : s_rnge("cks", i__2, "ckmeta_", (ftnlen)451)]
+		    i__1 : s_rnge(&__global_state->f2c, "spks", i__1, "ckmet"
+		    "a_", (ftnlen)451)] = __state->cks[(i__2 = __state->this__ 
+		    - 1) < 30 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "cks", i__2, "ckmeta_", (ftnlen)451)]
 		     / 1000;
 	} else {
 	    __state->spks[(i__1 = __state->this__ - 1) < 30 && 0 <= i__1 ? 
-		    i__1 : s_rnge("spks", i__1, "ckmeta_", (ftnlen)455)] = 0;
+		    i__1 : s_rnge(&__global_state->f2c, "spks", i__1, "ckmet"
+		    "a_", (ftnlen)455)] = 0;
 	}
     }
 
 /*     Set output ID. */
 
-    if (s_cmp(__state->mymeta, "SPK", (ftnlen)7, (ftnlen)3) == 0) {
+    if (s_cmp(&__global_state->f2c, __state->mymeta, "SPK", (ftnlen)7, (
+	    ftnlen)3) == 0) {
 	*idcode = __state->spks[(i__1 = __state->this__ - 1) < 30 && 0 <= 
-		i__1 ? i__1 : s_rnge("spks", i__1, "ckmeta_", (ftnlen)466)];
-    } else if (s_cmp(__state->mymeta, "SCLK", (ftnlen)7, (ftnlen)4) == 0) {
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "spks", i__1, 
+		"ckmeta_", (ftnlen)466)];
+    } else if (s_cmp(&__global_state->f2c, __state->mymeta, "SCLK", (ftnlen)7,
+	     (ftnlen)4) == 0) {
 	*idcode = __state->sclks[(i__1 = __state->this__ - 1) < 30 && 0 <= 
-		i__1 ? i__1 : s_rnge("sclks", i__1, "ckmeta_", (ftnlen)470)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "sclks", i__1, 
+		"ckmeta_", (ftnlen)470)];
     } else {
 	*idcode = 0;
-	setmsg_("The CK meta data item \"#\" is not a recognized meta data i"
-		"tem for the routine CKMETA. The recognized value are \"SPK\""
-		" and \"SCLK\". ", (ftnlen)128);
-	errch_("#", meta, (ftnlen)1, meta_len);
-	sigerr_("SPICE(UNKNOWNCKMETA)", (ftnlen)20);
-	chkout_("CKMETA", (ftnlen)6);
+	setmsg_(__global_state, "The CK meta data item \"#\" is not a recogn"
+		"ized meta data item for the routine CKMETA. The recognized v"
+		"alue are \"SPK\" and \"SCLK\". ", (ftnlen)128);
+	errch_(__global_state, "#", meta, (ftnlen)1, meta_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNCKMETA)", (ftnlen)20);
+	chkout_(__global_state, "CKMETA", (ftnlen)6);
 	return 0;
     }
-    chkout_("CKMETA", (ftnlen)6);
+    chkout_(__global_state, "CKMETA", (ftnlen)6);
     return 0;
 } /* ckmeta_ */
 

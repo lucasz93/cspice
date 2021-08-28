@@ -8,8 +8,7 @@
 
 
 extern spke05_init_t __spke05_init;
-static spke05_state_t* get_spke05_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spke05_state_t* get_spke05_state(cspice_t* state) {
 	if (!state->spke05)
 		state->spke05 = __cspice_allocate_module(sizeof(
 	spke05_state_t), &__spke05_init, sizeof(__spke05_init));
@@ -18,48 +17,49 @@ static spke05_state_t* get_spke05_state() {
 }
 
 /* $Procedure SPKE05 ( Evaluate SPK record, type 5 ) */
-/* Subroutine */ int spke05_(doublereal *et, doublereal *record, doublereal *
-	state)
+/* Subroutine */ int spke05_(cspice_t* __global_state, doublereal *et, 
+	doublereal *record, doublereal *state)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal dwdt;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal w;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal denom;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     doublereal vcomp[3];
     doublereal numer;
     doublereal s1[6];
     doublereal s2[6];
     doublereal t1;
     doublereal t2;
-    extern /* Subroutine */ int prop2b_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int prop2b_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal gm;
-    extern doublereal pi_(void);
+    extern doublereal pi_(cspice_t*);
     doublereal dargdt;
     doublereal pv[12]	/* was [6][2] */;
-    extern /* Subroutine */ int vlcomg_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int vlcomg_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal arg;
     doublereal vel[3];
 
 
     /* Module state */
-    spke05_state_t* __state = get_spke05_state();
+    spke05_state_t* __state = get_spke05_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single SPK data record from a segment of type 5 */
@@ -276,15 +276,15 @@ static spke05_state_t* get_spke05_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKE05", (ftnlen)6);
+	chkin_(__global_state, "SPKE05", (ftnlen)6);
     }
 
 /*     Unpack the record, for easier reading. */
 
-    moved_(record, &__state->c__12, pv);
+    moved_(__global_state, record, &__state->c__12, pv);
     t1 = record[12];
     t2 = record[13];
     gm = record[14];
@@ -320,26 +320,26 @@ static spke05_state_t* get_spke05_state() {
 
     if (t1 != t2) {
 	d__1 = *et - t1;
-	prop2b_(&gm, pv, &d__1, s1);
+	prop2b_(__global_state, &gm, pv, &d__1, s1);
 	d__1 = *et - t2;
-	prop2b_(&gm, &pv[6], &d__1, s2);
+	prop2b_(__global_state, &gm, &pv[6], &d__1, s2);
 	numer = *et - t1;
 	denom = t2 - t1;
-	arg = numer * pi_() / denom;
-	dargdt = pi_() / denom;
-	w = cos(arg) * .5 + .5;
-	dwdt = sin(arg) * -.5 * dargdt;
+	arg = numer * pi_(__global_state) / denom;
+	dargdt = pi_(__global_state) / denom;
+	w = cos(&__global_state->f2c, arg) * .5 + .5;
+	dwdt = sin(&__global_state->f2c, arg) * -.5 * dargdt;
 	d__1 = 1. - w;
-	vlcomg_(&__state->c__6, &w, s1, &d__1, s2, state);
+	vlcomg_(__global_state, &__state->c__6, &w, s1, &d__1, s2, state);
 	d__1 = -dwdt;
-	vlcom_(&dwdt, s1, &d__1, s2, vcomp);
-	vadd_(&state[3], vcomp, vel);
-	vequ_(vel, &state[3]);
+	vlcom_(__global_state, &dwdt, s1, &d__1, s2, vcomp);
+	vadd_(__global_state, &state[3], vcomp, vel);
+	vequ_(__global_state, vel, &state[3]);
     } else {
 	d__1 = *et - t1;
-	prop2b_(&gm, pv, &d__1, state);
+	prop2b_(__global_state, &gm, pv, &d__1, state);
     }
-    chkout_("SPKE05", (ftnlen)6);
+    chkout_(__global_state, "SPKE05", (ftnlen)6);
     return 0;
 } /* spke05_ */
 

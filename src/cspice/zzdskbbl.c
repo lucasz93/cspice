@@ -8,8 +8,7 @@
 
 
 extern zzdskbbl_init_t __zzdskbbl_init;
-static zzdskbbl_state_t* get_zzdskbbl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdskbbl_state_t* get_zzdskbbl_state(cspice_t* state) {
 	if (!state->zzdskbbl)
 		state->zzdskbbl = __cspice_allocate_module(sizeof(
 	zzdskbbl_state_t), &__zzdskbbl_init, sizeof(__zzdskbbl_init));
@@ -18,31 +17,31 @@ static zzdskbbl_state_t* get_zzdskbbl_state() {
 }
 
 /* $Procedure ZZDSKBBL ( DSK, build BSR segment list ) */
-/* Subroutine */ int zzdskbbl_(integer *bodyid)
+/* Subroutine */ int zzdskbbl_(cspice_t* __global_state, integer *bodyid)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int zzdskchk_(integer *, logical *);
-    extern /* Subroutine */ int zzdskbss_(integer *);
-    extern /* Subroutine */ int zzdsknot_();
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int zzdsksns_(U_fp, integer *, integer *, 
-	    doublereal *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int zzdskchk_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int zzdskbss_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzdsknot_(cspice_t*);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzdsksns_(cspice_t*, U_fp, integer *, integer 
+	    *, doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     integer dladsc[8];
     integer handle;
     logical segfnd;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal dskdsc[24];
     logical newbod;
     logical update;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzdskbbl_state_t* __state = get_zzdskbbl_state();
+    zzdskbbl_state_t* __state = get_zzdskbbl_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -785,12 +784,12 @@ static zzdskbbl_state_t* get_zzdskbbl_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKBBL", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKBBL", (ftnlen)8);
     if (__state->first) {
-	zzctruin_(__state->ctr);
+	zzctruin_(__global_state, __state->ctr);
 	__state->first = FALSE_;
 	newbod = TRUE_;
     } else {
@@ -804,7 +803,7 @@ static zzdskbbl_state_t* get_zzdskbbl_state() {
 /*     See whether the state of the loaded DSK set has changed */
 /*     since the last call. */
 
-    zzdskchk_(__state->ctr, &update);
+    zzdskchk_(__global_state, __state->ctr, &update);
     if (update || newbod) {
 
 /*        Force the BSR subsystem to build a complete segment list */
@@ -815,13 +814,14 @@ static zzdskbbl_state_t* get_zzdskbbl_state() {
 
 /*        Start a segment search. */
 
-	zzdskbss_(bodyid);
-	zzdsksns_((U_fp)zzdsknot_, &handle, dladsc, dskdsc, &segfnd);
-	if (! failed_()) {
+	zzdskbss_(__global_state, bodyid);
+	zzdsksns_(__global_state, (U_fp)zzdsknot_, &handle, dladsc, dskdsc, &
+		segfnd);
+	if (! failed_(__global_state)) {
 	    __state->prvbod = *bodyid;
 	}
     }
-    chkout_("ZZDSKBBL", (ftnlen)8);
+    chkout_(__global_state, "ZZDSKBBL", (ftnlen)8);
     return 0;
 } /* zzdskbbl_ */
 

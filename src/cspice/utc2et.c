@@ -8,50 +8,52 @@
 
 
 typedef int utc2et_state_t;
-static utc2et_state_t* get_utc2et_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline utc2et_state_t* get_utc2et_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      UTC2ET ( UTC to Ephemeris Time ) */
-/* Subroutine */ int utc2et_(char *utcstr, doublereal *et, ftnlen utcstr_len)
+/* Subroutine */ int utc2et_(cspice_t* __global_state, char *utcstr, 
+	doublereal *et, ftnlen utcstr_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), i_dnnt(doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), i_dnnt(
+	    f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer year;
     doublereal tvec[10];
     logical mods;
     char type__[8];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer ntvec;
     char error[480];
     logical ok;
-    extern /* Subroutine */ int tcheck_(doublereal *, char *, logical *, char 
-	    *, logical *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int tcheck_(cspice_t*, doublereal *, char *, 
+	    logical *, char *, logical *, char *, ftnlen, ftnlen, ftnlen);
     logical succes;
     logical yabbrv;
     char modify[8*5];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     char pictur[80];
-    extern /* Subroutine */ int ttrans_(char *, char *, doublereal *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int tpartv_(char *, doublereal *, integer *, char 
-	    *, char *, logical *, logical *, logical *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int texpyr_(integer *);
+    extern /* Subroutine */ int ttrans_(cspice_t*, char *, char *, doublereal 
+	    *, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int tpartv_(cspice_t*, char *, doublereal *, 
+	    integer *, char *, char *, logical *, logical *, logical *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int texpyr_(cspice_t*, integer *);
 
 
     /* Module state */
-    utc2et_state_t* __state = get_utc2et_state();
+    utc2et_state_t* __state = get_utc2et_state(__global_state);
 /* $ Abstract */
 
 /*      Convert an input time from Calendar or Julian Date format, UTC, */
@@ -324,60 +326,65 @@ static utc2et_state_t* get_utc2et_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("UTC2ET", (ftnlen)6);
+    chkin_(__global_state, "UTC2ET", (ftnlen)6);
 
 /*     So far we have no errors, the type of input is unknown. */
 
-    s_copy(error, " ", (ftnlen)480, (ftnlen)1);
-    s_copy(type__, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, error, " ", (ftnlen)480, (ftnlen)1);
+    s_copy(&__global_state->f2c, type__, " ", (ftnlen)8, (ftnlen)1);
 
 /*     First parse the string and perform the various tests on */
 /*     the validity of its components. */
 
-    tpartv_(utcstr, tvec, &ntvec, type__, modify, &mods, &yabbrv, &succes, 
-	    pictur, error, utcstr_len, (ftnlen)8, (ftnlen)8, (ftnlen)80, (
-	    ftnlen)480);
+    tpartv_(__global_state, utcstr, tvec, &ntvec, type__, modify, &mods, &
+	    yabbrv, &succes, pictur, error, utcstr_len, (ftnlen)8, (ftnlen)8, 
+	    (ftnlen)80, (ftnlen)480);
     if (! succes) {
-	setmsg_(error, (ftnlen)480);
-	sigerr_("SPICE(INVALIDTIMESTRING)", (ftnlen)24);
-	chkout_("UTC2ET", (ftnlen)6);
+	setmsg_(__global_state, error, (ftnlen)480);
+	sigerr_(__global_state, "SPICE(INVALIDTIMESTRING)", (ftnlen)24);
+	chkout_(__global_state, "UTC2ET", (ftnlen)6);
 	return 0;
     }
 
 /*     We are not going to allow most of the modifiers in strings. */
 
     if (mods) {
-	if (s_cmp(modify + 32, " ", (ftnlen)8, (ftnlen)1) != 0 && s_cmp(
-		modify + 32, "UTC", (ftnlen)8, (ftnlen)3) != 0) {
-	    s_copy(error, "UTC2ET does not support the specification of a ti"
-		    "me system in a string.  The time system # was specified."
-		    " Try the routine STR2ET.", (ftnlen)480, (ftnlen)129);
-	    repmc_(error, "#", modify + 32, error, (ftnlen)480, (ftnlen)1, (
-		    ftnlen)8, (ftnlen)480);
-	    setmsg_(error, (ftnlen)480);
-	    sigerr_("SPICE(INVALIDTIMESTRING)", (ftnlen)24);
-	    chkout_("UTC2ET", (ftnlen)6);
+	if (s_cmp(&__global_state->f2c, modify + 32, " ", (ftnlen)8, (ftnlen)
+		1) != 0 && s_cmp(&__global_state->f2c, modify + 32, "UTC", (
+		ftnlen)8, (ftnlen)3) != 0) {
+	    s_copy(&__global_state->f2c, error, "UTC2ET does not support the"
+		    " specification of a time system in a string.  The time s"
+		    "ystem # was specified. Try the routine STR2ET.", (ftnlen)
+		    480, (ftnlen)129);
+	    repmc_(__global_state, error, "#", modify + 32, error, (ftnlen)
+		    480, (ftnlen)1, (ftnlen)8, (ftnlen)480);
+	    setmsg_(__global_state, error, (ftnlen)480);
+	    sigerr_(__global_state, "SPICE(INVALIDTIMESTRING)", (ftnlen)24);
+	    chkout_(__global_state, "UTC2ET", (ftnlen)6);
 	    return 0;
-	} else if (s_cmp(modify + 16, " ", (ftnlen)8, (ftnlen)1) != 0) {
-	    s_copy(error, "UTC2ET does not support the specification of a ti"
-		    "me zone in a time string.  The time zone '#' was specifi"
-		    "ed. Try the routine STR2ET.", (ftnlen)480, (ftnlen)132);
-	    repmc_(error, "#", modify + 16, error, (ftnlen)480, (ftnlen)1, (
-		    ftnlen)8, (ftnlen)480);
-	    setmsg_(error, (ftnlen)480);
-	    sigerr_("SPICE(INVALIDTIMESTRING)", (ftnlen)24);
-	    chkout_("UTC2ET", (ftnlen)6);
+	} else if (s_cmp(&__global_state->f2c, modify + 16, " ", (ftnlen)8, (
+		ftnlen)1) != 0) {
+	    s_copy(&__global_state->f2c, error, "UTC2ET does not support the"
+		    " specification of a time zone in a time string.  The tim"
+		    "e zone '#' was specified. Try the routine STR2ET.", (
+		    ftnlen)480, (ftnlen)132);
+	    repmc_(__global_state, error, "#", modify + 16, error, (ftnlen)
+		    480, (ftnlen)1, (ftnlen)8, (ftnlen)480);
+	    setmsg_(__global_state, error, (ftnlen)480);
+	    sigerr_(__global_state, "SPICE(INVALIDTIMESTRING)", (ftnlen)24);
+	    chkout_(__global_state, "UTC2ET", (ftnlen)6);
 	    return 0;
-	} else if (s_cmp(modify + 24, " ", (ftnlen)8, (ftnlen)1) != 0) {
-	    s_copy(error, "UTC2ET does not support the AM/PM conventions for"
-		    " time strings. Try the routine STR2ET.", (ftnlen)480, (
-		    ftnlen)87);
-	    setmsg_(error, (ftnlen)480);
-	    sigerr_("SPICE(INVALIDTIMESTRING)", (ftnlen)24);
-	    chkout_("UTC2ET", (ftnlen)6);
+	} else if (s_cmp(&__global_state->f2c, modify + 24, " ", (ftnlen)8, (
+		ftnlen)1) != 0) {
+	    s_copy(&__global_state->f2c, error, "UTC2ET does not support the"
+		    " AM/PM conventions for time strings. Try the routine STR"
+		    "2ET.", (ftnlen)480, (ftnlen)87);
+	    setmsg_(__global_state, error, (ftnlen)480);
+	    sigerr_(__global_state, "SPICE(INVALIDTIMESTRING)", (ftnlen)24);
+	    chkout_(__global_state, "UTC2ET", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -385,51 +392,56 @@ static utc2et_state_t* get_utc2et_state() {
 /*     If parsing the time string went well, we let TTRANS handle */
 /*     the problem of transforming the time vector to TDB. */
 
-    if (s_cmp(type__, "YMD", (ftnlen)8, (ftnlen)3) == 0 || s_cmp(type__, 
-	    "YD", (ftnlen)8, (ftnlen)2) == 0) {
+    if (s_cmp(&__global_state->f2c, type__, "YMD", (ftnlen)8, (ftnlen)3) == 0 
+	    || s_cmp(&__global_state->f2c, type__, "YD", (ftnlen)8, (ftnlen)2)
+	     == 0) {
 
 /*        Check the components of the time vector for reasonableness. */
 
-	tcheck_(tvec, type__, &mods, modify, &ok, error, (ftnlen)8, (ftnlen)8,
-		 (ftnlen)480);
+	tcheck_(__global_state, tvec, type__, &mods, modify, &ok, error, (
+		ftnlen)8, (ftnlen)8, (ftnlen)480);
 	if (! ok) {
-	    setmsg_(error, (ftnlen)480);
-	    sigerr_("SPICE(INVALIDTIMESTRING)", (ftnlen)24);
+	    setmsg_(__global_state, error, (ftnlen)480);
+	    sigerr_(__global_state, "SPICE(INVALIDTIMESTRING)", (ftnlen)24);
 	}
 
 /*        Fix up the year as needed. */
 
-	year = i_dnnt(tvec);
-	if (s_cmp(modify, "B.C.", (ftnlen)8, (ftnlen)4) == 0) {
+	year = i_dnnt(&__global_state->f2c, tvec);
+	if (s_cmp(&__global_state->f2c, modify, "B.C.", (ftnlen)8, (ftnlen)4) 
+		== 0) {
 	    year = 1 - year;
-	} else if (s_cmp(modify, "A.D.", (ftnlen)8, (ftnlen)4) == 0) {
+	} else if (s_cmp(&__global_state->f2c, modify, "A.D.", (ftnlen)8, (
+		ftnlen)4) == 0) {
 
 /*           Do nothing. */
 
 	} else if (year < 100) {
-	    texpyr_(&year);
+	    texpyr_(__global_state, &year);
 	}
 	tvec[0] = (doublereal) year;
 
 /*        We are ready for launch, convert the time vector. */
 
-	ttrans_(type__, "TDB", tvec, (ftnlen)8, (ftnlen)3);
+	ttrans_(__global_state, type__, "TDB", tvec, (ftnlen)8, (ftnlen)3);
 	*et = tvec[0];
-    } else if (s_cmp(type__, "JD", (ftnlen)8, (ftnlen)2) == 0) {
-	ttrans_("JDUTC", "TDB", tvec, (ftnlen)5, (ftnlen)3);
+    } else if (s_cmp(&__global_state->f2c, type__, "JD", (ftnlen)8, (ftnlen)2)
+	     == 0) {
+	ttrans_(__global_state, "JDUTC", "TDB", tvec, (ftnlen)5, (ftnlen)3);
 	*et = tvec[0];
     } else {
 
 /*        The only way to get here is if we got some unexpected */
 /*        type of time string. Signal an error. */
 
-	setmsg_("# time strings are not handled by UTC2ET. ", (ftnlen)42);
-	errch_("#", type__, (ftnlen)1, (ftnlen)8);
-	sigerr_("SPICE(INVALIDTIMESTRING)", (ftnlen)24);
-	chkout_("UTC2ET", (ftnlen)6);
+	setmsg_(__global_state, "# time strings are not handled by UTC2ET. ", 
+		(ftnlen)42);
+	errch_(__global_state, "#", type__, (ftnlen)1, (ftnlen)8);
+	sigerr_(__global_state, "SPICE(INVALIDTIMESTRING)", (ftnlen)24);
+	chkout_(__global_state, "UTC2ET", (ftnlen)6);
 	return 0;
     }
-    chkout_("UTC2ET", (ftnlen)6);
+    chkout_(__global_state, "UTC2ET", (ftnlen)6);
     return 0;
 } /* utc2et_ */
 

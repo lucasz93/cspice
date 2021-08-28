@@ -8,32 +8,31 @@
 
 
 typedef int writla_state_t;
-static writla_state_t* get_writla_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline writla_state_t* get_writla_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      WRITLA ( Write array of lines to a logical unit ) */
-/* Subroutine */ int writla_(integer *numlin, char *array, integer *unit, 
-	ftnlen array_len)
+/* Subroutine */ int writla_(cspice_t* __global_state, integer *numlin, char *
+	array, integer *unit, ftnlen array_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int writln_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int writln_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    writla_state_t* __state = get_writla_state();
+    writla_state_t* __state = get_writla_state(__global_state);
 /* $ Abstract */
 
 /*     This routine will write an array of text lines to a Fortran */
@@ -186,20 +185,20 @@ static writla_state_t* get_writla_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("WRITLA", (ftnlen)6);
+	chkin_(__global_state, "WRITLA", (ftnlen)6);
     }
 
 /*     Check to see if the maximum number of lines is positive. */
 
     if (*numlin <= 0) {
-	setmsg_("The number of lines to be written was not positive. It was "
-		"#.", (ftnlen)61);
-	errint_("#", numlin, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("WRITLA", (ftnlen)6);
+	setmsg_(__global_state, "The number of lines to be written was not p"
+		"ositive. It was #.", (ftnlen)61);
+	errint_(__global_state, "#", numlin, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "WRITLA", (ftnlen)6);
 	return 0;
     }
 
@@ -208,17 +207,18 @@ static writla_state_t* get_writla_state() {
 
     i__1 = *numlin;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	writln_(array + (i__ - 1) * array_len, unit, array_len);
-	if (failed_()) {
+	writln_(__global_state, array + (i__ - 1) * array_len, unit, 
+		array_len);
+	if (failed_(__global_state)) {
 
 /*           If the write failed, an appropriate error message has */
 /*           already been set, so we simply need to return. */
 
-	    chkout_("WRITLA", (ftnlen)6);
+	    chkout_(__global_state, "WRITLA", (ftnlen)6);
 	    return 0;
 	}
     }
-    chkout_("WRITLA", (ftnlen)6);
+    chkout_(__global_state, "WRITLA", (ftnlen)6);
     return 0;
 } /* writla_ */
 

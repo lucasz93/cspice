@@ -8,8 +8,7 @@
 
 
 extern zzdsksgr_init_t __zzdsksgr_init;
-static zzdsksgr_state_t* get_zzdsksgr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdsksgr_state_t* get_zzdsksgr_state(cspice_t* state) {
 	if (!state->zzdsksgr)
 		state->zzdsksgr = __cspice_allocate_module(sizeof(
 	zzdsksgr_state_t), &__zzdsksgr_init, sizeof(__zzdsksgr_init));
@@ -18,14 +17,15 @@ static zzdsksgr_state_t* get_zzdsksgr_state() {
 }
 
 /* $Procedure ZZDSKSGR ( DSK, return segment bounding radius ) */
-doublereal zzdsksgr_(doublereal *dskdsc)
+doublereal zzdsksgr_(cspice_t* __global_state, doublereal *dskdsc)
 {
     /* System generated locals */
     integer i__1;
     doublereal ret_val, d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     doublereal minr;
@@ -33,23 +33,25 @@ doublereal zzdsksgr_(doublereal *dskdsc)
     doublereal f;
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal vnorm_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal re;
     doublereal rp;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer corsys;
     doublereal mag[3];
     doublereal bds[6]	/* was [2][3] */;
 
 
     /* Module state */
-    zzdsksgr_state_t* __state = get_zzdsksgr_state();
+    zzdsksgr_state_t* __state = get_zzdsksgr_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -430,18 +432,18 @@ doublereal zzdsksgr_(doublereal *dskdsc)
 
 /*     The radius calculation depends on the coordinate system. */
 
-    corsys = i_dnnt(&dskdsc[5]);
+    corsys = i_dnnt(&__global_state->f2c, &dskdsc[5]);
     if (corsys == 1) {
 
 /*        Fetch the minimum radius from the descriptor. */
 
 	minr = dskdsc[20];
 	if (minr <= 0.) {
-	    chkin_("ZZDSKSGR", (ftnlen)8);
-	    setmsg_("Minimum radius was *.", (ftnlen)21);
-	    errdp_("*", &minr, (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("ZZDSKSGR", (ftnlen)8);
+	    chkin_(__global_state, "ZZDSKSGR", (ftnlen)8);
+	    setmsg_(__global_state, "Minimum radius was *.", (ftnlen)21);
+	    errdp_(__global_state, "*", &minr, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "ZZDSKSGR", (ftnlen)8);
 	    return ret_val;
 	}
 
@@ -455,11 +457,11 @@ doublereal zzdsksgr_(doublereal *dskdsc)
 
 	re = dskdsc[6];
 	if (re <= 0.) {
-	    chkin_("ZZDSKSGR", (ftnlen)8);
-	    setmsg_("Equatorial radius was *.", (ftnlen)24);
-	    errdp_("*", &re, (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("ZZDSKSGR", (ftnlen)8);
+	    chkin_(__global_state, "ZZDSKSGR", (ftnlen)8);
+	    setmsg_(__global_state, "Equatorial radius was *.", (ftnlen)24);
+	    errdp_(__global_state, "*", &re, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "ZZDSKSGR", (ftnlen)8);
 	    return ret_val;
 	}
 
@@ -493,11 +495,12 @@ doublereal zzdsksgr_(doublereal *dskdsc)
 /*           one, the polar radius is zero. Either case is a problem, so */
 /*           signal an error and check out. */
 
-	    chkin_("ZZDSKSGR", (ftnlen)8);
-	    setmsg_("Flattening coefficient was *.", (ftnlen)29);
-	    errdp_("*", &f, (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("ZZDSKSGR", (ftnlen)8);
+	    chkin_(__global_state, "ZZDSKSGR", (ftnlen)8);
+	    setmsg_(__global_state, "Flattening coefficient was *.", (ftnlen)
+		    29);
+	    errdp_(__global_state, "*", &f, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "ZZDSKSGR", (ftnlen)8);
 	    return ret_val;
 	}
     } else if (corsys == 3) {
@@ -508,27 +511,28 @@ doublereal zzdsksgr_(doublereal *dskdsc)
 /*        First copy the bounds into an appropriately dimensioned */
 /*        array. */
 
-	moved_(&dskdsc[16], &__state->c__6, bds);
+	moved_(__global_state, &dskdsc[16], &__state->c__6, bds);
 	b = 16;
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    j = b + (i__ << 1) - 1;
 /* Computing MAX */
 	    d__3 = (d__1 = dskdsc[j - 1], abs(d__1)), d__4 = (d__2 = dskdsc[j]
 		    , abs(d__2));
-	    mag[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("mag", i__1,
-		     "zzdsksgr_", (ftnlen)347)] = max(d__3,d__4);
+	    mag[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "mag", i__1, "zzdsksgr_", (ftnlen)
+		    347)] = max(d__3,d__4);
 	}
-	ret_val = vnorm_(mag);
+	ret_val = vnorm_(__global_state, mag);
     } else {
 
 /*        Never heard of this coordinate system. */
 
-	chkin_("ZZDSKSGR", (ftnlen)8);
-	setmsg_("The coordinate system code # is not recognized.", (ftnlen)47)
-		;
-	errint_("#", &corsys, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZDSKSGR", (ftnlen)8);
+	chkin_(__global_state, "ZZDSKSGR", (ftnlen)8);
+	setmsg_(__global_state, "The coordinate system code # is not recogni"
+		"zed.", (ftnlen)47);
+	errint_(__global_state, "#", &corsys, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZDSKSGR", (ftnlen)8);
 	return ret_val;
     }
     return ret_val;

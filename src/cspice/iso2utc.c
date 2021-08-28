@@ -8,8 +8,7 @@
 
 
 extern iso2utc_init_t __iso2utc_init;
-static iso2utc_state_t* get_iso2utc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline iso2utc_state_t* get_iso2utc_state(cspice_t* state) {
 	if (!state->iso2utc)
 		state->iso2utc = __cspice_allocate_module(sizeof(
 	iso2utc_state_t), &__iso2utc_init, sizeof(__iso2utc_init));
@@ -18,8 +17,9 @@ static iso2utc_state_t* get_iso2utc_state() {
 }
 
 /* $Procedure ISO2UTC ( Convert ISO time strings to UTC strings. ) */
-/* Subroutine */ int iso2utc_(char *tstrng, char *utcstr, char *error, ftnlen 
-	tstrng_len, ftnlen utcstr_len, ftnlen error_len)
+/* Subroutine */ int iso2utc_(cspice_t* __global_state, char *tstrng, char *
+	utcstr, char *error, ftnlen tstrng_len, ftnlen utcstr_len, ftnlen 
+	error_len)
 {
     /* Initialized data */
 
@@ -29,30 +29,33 @@ static iso2utc_state_t* get_iso2utc_state() {
     integer i__1[3], i__2, i__3[5];
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
-    logical l_lt(char *, char *, ftnlen, ftnlen), l_gt(char *, char *, ftnlen,
-	     ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    logical l_lt(f2c_state_t*, char *, char *, ftnlen, ftnlen), l_gt(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer l;
     integer m;
     char ascii[100];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char mystr[128];
     logical change;
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    iso2utc_state_t* __state = get_iso2utc_state();
+    iso2utc_state_t* __state = get_iso2utc_state(__global_state);
 /* $ Abstract */
 
 /*     This routine converts date-time strings represented in */
@@ -251,18 +254,18 @@ static iso2utc_state_t* get_iso2utc_state() {
 
 /*     Standard SPICELIB exception handling */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ISO2UTC", (ftnlen)7);
+	chkin_(__global_state, "ISO2UTC", (ftnlen)7);
     }
 
 /*     Left justify the input time string, and determine the location of */
 /*     it's last non-blank character.  Finally make some local copies. */
 
-    ljust_(tstrng, ascii, tstrng_len, (ftnlen)100);
-    l = rtrim_(ascii, (ftnlen)100);
-    s_copy(mystr, ascii, (ftnlen)128, (ftnlen)100);
+    ljust_(__global_state, tstrng, ascii, tstrng_len, (ftnlen)100);
+    l = rtrim_(__global_state, ascii, (ftnlen)100);
+    s_copy(&__global_state->f2c, mystr, ascii, (ftnlen)128, (ftnlen)100);
     change = FALSE_;
 
 /*     Next check for one of the ISO allowed formats. */
@@ -292,7 +295,8 @@ static iso2utc_state_t* get_iso2utc_state() {
 	    i__1[0] = 5, a__1[0] = ascii;
 	    i__1[1] = 3, a__1[1] = "JAN";
 	    i__1[2] = 96, a__1[2] = ascii + 4;
-	    s_cat(mystr, a__1, i__1, &__state->c__3, (ftnlen)128);
+	    s_cat(&__global_state->f2c, mystr, a__1, i__1, &__state->c__3, (
+		    ftnlen)128);
 	    change = TRUE_;
 	}
     } else if (l == 10) {
@@ -318,15 +322,16 @@ static iso2utc_state_t* get_iso2utc_state() {
 		__state->c__9 - 1] <= '9') && (*(unsigned char *)&ascii[
 		__state->c__10 - 1] >= '0' && *(unsigned char *)&ascii[
 		__state->c__10 - 1] <= '9')) {
-	    m = bsrchc_(ascii + 5, &__state->c__12, __state->imonth, (ftnlen)
-		    2, (ftnlen)2);
+	    m = bsrchc_(__global_state, ascii + 5, &__state->c__12, 
+		    __state->imonth, (ftnlen)2, (ftnlen)2);
 /* Writing concatenation */
 	    i__1[0] = 5, a__1[0] = ascii;
 	    i__1[1] = 3, a__1[1] = __state->months + ((i__2 = m) < 13 && 0 <= 
-		    i__2 ? i__2 : s_rnge("months", i__2, "iso2utc_", (ftnlen)
-		    318)) * 3;
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "months", i__2,
+		     "iso2utc_", (ftnlen)318)) * 3;
 	    i__1[2] = 93, a__1[2] = ascii + 7;
-	    s_cat(mystr, a__1, i__1, &__state->c__3, (ftnlen)128);
+	    s_cat(&__global_state->f2c, mystr, a__1, i__1, &__state->c__3, (
+		    ftnlen)128);
 	    change = TRUE_;
 	}
     } else if (l >= 17) {
@@ -373,7 +378,8 @@ static iso2utc_state_t* get_iso2utc_state() {
 	    i__3[2] = 4, a__2[2] = ascii + 4;
 	    i__3[3] = 1, a__2[3] = " ";
 	    i__3[4] = 91, a__2[4] = ascii + 9;
-	    s_cat(mystr, a__2, i__3, &__state->c__5, (ftnlen)128);
+	    s_cat(&__global_state->f2c, mystr, a__2, i__3, &__state->c__5, (
+		    ftnlen)128);
 	    change = TRUE_;
 	} else if (*(unsigned char *)&ascii[__state->c__1 - 1] >= '0' && *(
 		unsigned char *)&ascii[__state->c__1 - 1] <= '9' && (*(
@@ -409,17 +415,18 @@ static iso2utc_state_t* get_iso2utc_state() {
 		unsigned char *)&ascii[__state->c__18 - 1] <= '9') && (*(
 		unsigned char *)&ascii[__state->c__19 - 1] >= '0' && *(
 		unsigned char *)&ascii[__state->c__19 - 1] <= '9')) {
-	    m = bsrchc_(ascii + 5, &__state->c__12, __state->imonth, (ftnlen)
-		    2, (ftnlen)2);
+	    m = bsrchc_(__global_state, ascii + 5, &__state->c__12, 
+		    __state->imonth, (ftnlen)2, (ftnlen)2);
 /* Writing concatenation */
 	    i__3[0] = 5, a__2[0] = ascii;
 	    i__3[1] = 3, a__2[1] = __state->months + ((i__2 = m) < 13 && 0 <= 
-		    i__2 ? i__2 : s_rnge("months", i__2, "iso2utc_", (ftnlen)
-		    365)) * 3;
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "months", i__2,
+		     "iso2utc_", (ftnlen)365)) * 3;
 	    i__3[2] = 3, a__2[2] = ascii + 7;
 	    i__3[3] = 1, a__2[3] = " ";
 	    i__3[4] = 89, a__2[4] = ascii + 11;
-	    s_cat(mystr, a__2, i__3, &__state->c__5, (ftnlen)128);
+	    s_cat(&__global_state->f2c, mystr, a__2, i__3, &__state->c__5, (
+		    ftnlen)128);
 	    change = TRUE_;
 	}
     }
@@ -428,33 +435,37 @@ static iso2utc_state_t* get_iso2utc_state() {
 /*     an ISO format string. Say so in an error message and return. */
 
     if (! change) {
-	s_copy(error, "The input string does not match the format expected o"
-		"f ISO time strings. The acceptable formats are: yyyy-ddd, yy"
-		"yy-mm-dd, yyyy-dddThh:mm:ss[.ss...], and yyyy-mm-ddThh:mm:ss"
-		"[.ss...].  The input string was #. ", error_len, (ftnlen)208);
-	repmc_(error, "#", mystr, error, error_len, (ftnlen)1, l, error_len);
-	chkout_("ISO2UTC", (ftnlen)7);
+	s_copy(&__global_state->f2c, error, "The input string does not match"
+		" the format expected of ISO time strings. The acceptable for"
+		"mats are: yyyy-ddd, yyyy-mm-dd, yyyy-dddThh:mm:ss[.ss...], a"
+		"nd yyyy-mm-ddThh:mm:ss[.ss...].  The input string was #. ", 
+		error_len, (ftnlen)208);
+	repmc_(__global_state, error, "#", mystr, error, error_len, (ftnlen)1,
+		 l, error_len);
+	chkout_(__global_state, "ISO2UTC", (ftnlen)7);
 	return 0;
     }
 
 /*     Check for a year out of the range from 1000 to 2999 */
 
-    if (change && (l_lt(ascii, "1000", (ftnlen)4, (ftnlen)4) || l_gt(ascii, 
-	    "2999", (ftnlen)4, (ftnlen)4))) {
-	s_copy(error, "Years outside the range from 1000 to 2999 are not sup"
-		"ported in SPICE-ISO format. You've supplied a time string of"
-		" the form # ... ", error_len, (ftnlen)129);
-	repmc_(error, "#", ascii, error, error_len, (ftnlen)1, (ftnlen)7, 
-		error_len);
-	chkout_("ISO2UTC", (ftnlen)7);
+    if (change && (l_lt(&__global_state->f2c, ascii, "1000", (ftnlen)4, (
+	    ftnlen)4) || l_gt(&__global_state->f2c, ascii, "2999", (ftnlen)4, 
+	    (ftnlen)4))) {
+	s_copy(&__global_state->f2c, error, "Years outside the range from 10"
+		"00 to 2999 are not supported in SPICE-ISO format. You've sup"
+		"plied a time string of the form # ... ", error_len, (ftnlen)
+		129);
+	repmc_(__global_state, error, "#", ascii, error, error_len, (ftnlen)1,
+		 (ftnlen)7, error_len);
+	chkout_(__global_state, "ISO2UTC", (ftnlen)7);
 	return 0;
     }
 
 /*     That's it. */
 
-    s_copy(error, " ", error_len, (ftnlen)1);
-    s_copy(utcstr, mystr, utcstr_len, (ftnlen)128);
-    chkout_("ISO2UTC", (ftnlen)7);
+    s_copy(&__global_state->f2c, error, " ", error_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, utcstr, mystr, utcstr_len, (ftnlen)128);
+    chkout_(__global_state, "ISO2UTC", (ftnlen)7);
     return 0;
 } /* iso2utc_ */
 

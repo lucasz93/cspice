@@ -8,30 +8,30 @@
 
 
 typedef int packad_state_t;
-static packad_state_t* get_packad_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline packad_state_t* get_packad_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PACKAD ( Pack a double precision array ) */
-/* Subroutine */ int packad_(doublereal *in, integer *pack, integer *npack, 
-	integer *maxout, integer *nout, doublereal *out)
+/* Subroutine */ int packad_(cspice_t* __global_state, doublereal *in, 
+	integer *pack, integer *npack, integer *maxout, integer *nout, 
+	doublereal *out)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    packad_state_t* __state = get_packad_state();
+    packad_state_t* __state = get_packad_state(__global_state);
 /* $ Abstract */
 
 /*     Pack the contents of a double precision array. That is, */
@@ -225,10 +225,10 @@ static packad_state_t* get_packad_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PACKAD", (ftnlen)6);
+	chkin_(__global_state, "PACKAD", (ftnlen)6);
     }
 
 /*     First, determine how many items to transfer. */
@@ -240,11 +240,12 @@ static packad_state_t* get_packad_state() {
     i__1 = *nout;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (pack[i__ - 1] < 1) {
-	    setmsg_("Element number * contains index *.", (ftnlen)34);
-	    errint_("*", &i__, (ftnlen)1);
-	    errint_("*", &pack[i__ - 1], (ftnlen)1);
-	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	    chkout_("PACKAD", (ftnlen)6);
+	    setmsg_(__global_state, "Element number * contains index *.", (
+		    ftnlen)34);
+	    errint_(__global_state, "*", &i__, (ftnlen)1);
+	    errint_(__global_state, "*", &pack[i__ - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	    chkout_(__global_state, "PACKAD", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -255,7 +256,7 @@ static packad_state_t* get_packad_state() {
     for (i__ = 1; i__ <= i__1; ++i__) {
 	out[i__ - 1] = in[pack[i__ - 1] - 1];
     }
-    chkout_("PACKAD", (ftnlen)6);
+    chkout_(__global_state, "PACKAD", (ftnlen)6);
     return 0;
 } /* packad_ */
 

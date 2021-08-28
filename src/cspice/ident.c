@@ -8,17 +8,16 @@
 
 
 typedef int ident_state_t;
-static ident_state_t* get_ident_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ident_state_t* get_ident_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      IDENT (Return the 3x3 identity matrix) */
-/* Subroutine */ int ident_(doublereal *matrix)
+/* Subroutine */ int ident_(cspice_t* __global_state, doublereal *matrix)
 {
 
     /* Module state */
-    ident_state_t* __state = get_ident_state();
+    ident_state_t* __state = get_ident_state(__global_state);
 /* $ Abstract */
 
 /*    This routine returns the 3x3 identity matrix. */

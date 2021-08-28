@@ -8,27 +8,27 @@
 
 
 typedef int traceg_state_t;
-static traceg_state_t* get_traceg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline traceg_state_t* get_traceg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  TRACEG ( Trace of a matrix, general dimension ) */
-doublereal traceg_(doublereal *matrix, integer *ndim)
+doublereal traceg_(cspice_t* __global_state, doublereal *matrix, integer *
+	ndim)
 {
     /* System generated locals */
     integer matrix_dim1, matrix_dim2, matrix_offset, i__1, i__2;
     doublereal ret_val;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    traceg_state_t* __state = get_traceg_state();
+    traceg_state_t* __state = get_traceg_state(__global_state);
 /* $ Abstract */
 
 /*      Return the trace of a square matrix of arbitrary dimension. */
@@ -157,8 +157,8 @@ doublereal traceg_(doublereal *matrix, integer *ndim)
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ret_val += matrix[(i__2 = i__ + i__ * matrix_dim1 - matrix_offset) < 
-		1 * matrix_dim1 * matrix_dim2 && 0 <= i__2 ? i__2 : s_rnge(
-		"matrix", i__2, "traceg_", (ftnlen)133)];
+		1 * matrix_dim1 * matrix_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "matrix", i__2, "traceg_", (ftnlen)133)];
     }
     return ret_val;
 } /* traceg_ */

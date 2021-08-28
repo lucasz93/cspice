@@ -8,8 +8,7 @@
 
 
 extern gffove_init_t __gffove_init;
-static gffove_state_t* get_gffove_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gffove_state_t* get_gffove_state(cspice_t* state) {
 	if (!state->gffove)
 		state->gffove = __cspice_allocate_module(sizeof(
 	gffove_state_t), &__gffove_init, sizeof(__gffove_init));
@@ -18,45 +17,47 @@ static gffove_state_t* get_gffove_state() {
 }
 
 /* $Procedure      GFFOVE ( GF, is target in FOV? ) */
-/* Subroutine */ int gffove_(char *inst, char *tshape, doublereal *raydir, 
-	char *target, char *tframe, char *abcorr, char *obsrvr, doublereal *
-	tol, U_fp udstep, U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu,
-	 S_fp udrepf, logical *bail, L_fp udbail, doublereal *cnfine, 
-	doublereal *result, ftnlen inst_len, ftnlen tshape_len, ftnlen 
-	target_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int gffove_(cspice_t* __global_state, char *inst, char *
+	tshape, doublereal *raydir, char *target, char *tframe, char *abcorr, 
+	char *obsrvr, doublereal *tol, U_fp udstep, U_fp udrefn, logical *rpt,
+	 S_fp udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, 
+	doublereal *cnfine, doublereal *result, ftnlen inst_len, ftnlen 
+	tshape_len, ftnlen target_len, ftnlen tframe_len, ftnlen abcorr_len, 
+	ftnlen obsrvr_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int zzgffvin_(char *, char *, doublereal *, char *
-	    , char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int zzgffvst_();
-    extern /* Subroutine */ int zzgfsolv_(U_fp, U_fp, U_fp, logical *, L_fp, 
-	    logical *, doublereal *, doublereal *, doublereal *, doublereal *,
-	     logical *, U_fp, doublereal *);
+    extern /* Subroutine */ int zzgffvin_(cspice_t*, char *, char *, 
+	    doublereal *, char *, char *, char *, char *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgffvst_(cspice_t*);
+    extern /* Subroutine */ int zzgfsolv_(cspice_t*, U_fp, U_fp, U_fp, 
+	    logical *, L_fp, logical *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *, U_fp, doublereal *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern integer sized_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
     integer count;
     doublereal start;
-    extern logical failed_(void);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern integer wncard_(doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern integer wncard_(cspice_t*, doublereal *);
     doublereal finish;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int wnfetd_(doublereal *, integer *, doublereal *,
-	     doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wnfetd_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, doublereal *);
 
 
     /* Module state */
-    gffove_state_t* __state = get_gffove_state();
+    gffove_state_t* __state = get_gffove_state(__global_state);
 /* $ Abstract */
 
 /*     Determine time intervals when a specified target body or ray */
@@ -1643,34 +1644,35 @@ static gffove_state_t* get_gffove_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("GFFOVE", (ftnlen)6);
+    chkin_(__global_state, "GFFOVE", (ftnlen)6);
 
 /*     Check the result window's size. */
 
-    if (sized_(result) < 2) {
-	setmsg_("Result window size must be at least 2 but was #.", (ftnlen)
-		48);
-	i__1 = sized_(result);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(WINDOWTOOSMALL)", (ftnlen)21);
-	chkout_("GFFOVE", (ftnlen)6);
+    if (sized_(__global_state, result) < 2) {
+	setmsg_(__global_state, "Result window size must be at least 2 but w"
+		"as #.", (ftnlen)48);
+	i__1 = sized_(__global_state, result);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WINDOWTOOSMALL)", (ftnlen)21);
+	chkout_(__global_state, "GFFOVE", (ftnlen)6);
 	return 0;
     }
 
 /*     Empty the RESULT window. */
 
-    scardd_(&__state->c__0, result);
+    scardd_(__global_state, &__state->c__0, result);
 
 /*     Check the convergence tolerance. */
 
     if (*tol <= 0.) {
-	setmsg_("Tolerance must be positive but was #.", (ftnlen)37);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTOLERANCE)", (ftnlen)23);
-	chkout_("GFFOVE", (ftnlen)6);
+	setmsg_(__global_state, "Tolerance must be positive but was #.", (
+		ftnlen)37);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTOLERANCE)", (ftnlen)23);
+	chkout_(__global_state, "GFFOVE", (ftnlen)6);
 	return 0;
     }
 
@@ -1684,23 +1686,24 @@ static gffove_state_t* get_gffove_state() {
 
 /*     Initialize the visibility calculation. */
 
-    zzgffvin_(inst, tshape, raydir, target, tframe, abcorr, obsrvr, inst_len, 
-	    tshape_len, target_len, tframe_len, abcorr_len, obsrvr_len);
-    if (failed_()) {
-	chkout_("GFFOVE", (ftnlen)6);
+    zzgffvin_(__global_state, inst, tshape, raydir, target, tframe, abcorr, 
+	    obsrvr, inst_len, tshape_len, target_len, tframe_len, abcorr_len, 
+	    obsrvr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "GFFOVE", (ftnlen)6);
 	return 0;
     }
 
 /*     Prepare the progress reporter if appropriate. */
 
     if (*rpt) {
-	(*udrepi)(cnfine, "Target visibility search ", "done.", (ftnlen)25, (
-		ftnlen)5);
+	(*udrepi)(__global_state, cnfine, "Target visibility search ", "done."
+		, (ftnlen)25, (ftnlen)5);
     }
 
 /*     Cycle over the intervals in the confinement window. */
 
-    count = wncard_(cnfine);
+    count = wncard_(__global_state, cnfine);
     i__1 = count;
     for (i__ = 1; i__ <= i__1; ++i__) {
 
@@ -1708,24 +1711,24 @@ static gffove_state_t* get_gffove_state() {
 /*        window. Search this interval for visibility events. Union the */
 /*        result with the contents of the RESULT window. */
 
-	wnfetd_(cnfine, &i__, &start, &finish);
-	zzgfsolv_((U_fp)zzgffvst_, (U_fp)udstep, (U_fp)udrefn, bail, (L_fp)
-		udbail, &__state->c_false, &__state->c_b16, &start, &finish, 
-		tol, rpt, (U_fp)udrepu, result);
-	if (failed_()) {
-	    chkout_("GFFOVE", (ftnlen)6);
+	wnfetd_(__global_state, cnfine, &i__, &start, &finish);
+	zzgfsolv_(__global_state, (U_fp)zzgffvst_, (U_fp)udstep, (U_fp)udrefn,
+		 bail, (L_fp)udbail, &__state->c_false, &__state->c_b16, &
+		start, &finish, tol, rpt, (U_fp)udrepu, result);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "GFFOVE", (ftnlen)6);
 	    return 0;
 	}
 	if (*bail) {
 
 /*           Interrupt handling is enabled. */
 
-	    if ((*udbail)()) {
+	    if ((*udbail)(__global_state)) {
 
 /*              An interrupt has been issued. Return now regardless of */
 /*              whether the search has been completed. */
 
-		chkout_("GFFOVE", (ftnlen)6);
+		chkout_(__global_state, "GFFOVE", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1734,9 +1737,9 @@ static gffove_state_t* get_gffove_state() {
 /*     End the progress report. */
 
     if (*rpt) {
-	(*udrepf)();
+	(*udrepf)(__global_state);
     }
-    chkout_("GFFOVE", (ftnlen)6);
+    chkout_(__global_state, "GFFOVE", (ftnlen)6);
     return 0;
 } /* gffove_ */
 

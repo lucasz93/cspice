@@ -8,20 +8,19 @@
 
 
 typedef int vhatip_state_t;
-static vhatip_state_t* get_vhatip_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vhatip_state_t* get_vhatip_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure VHATIP ( "V-Hat", 3-d unit vector along V, in place ) */
-/* Subroutine */ int vhatip_(doublereal *v)
+/* Subroutine */ int vhatip_(cspice_t* __global_state, doublereal *v)
 {
     doublereal vmag;
-    extern doublereal vnorm_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    vhatip_state_t* __state = get_vhatip_state();
+    vhatip_state_t* __state = get_vhatip_state(__global_state);
 /* $ Abstract */
 
 /*      Scale a three-dimensional vector to unit length. */
@@ -155,7 +154,7 @@ static vhatip_state_t* get_vhatip_state() {
 
 /*     Obtain the magnitude of V. */
 
-    vmag = vnorm_(v);
+    vmag = vnorm_(__global_state, v);
 
 /*     If VMAG is nonzero, then normalize. Note that this process is */
 /*     numerically stable: overflow could only happen if VMAG were */

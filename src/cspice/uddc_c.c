@@ -187,7 +187,7 @@
      {
       return;
       }
-   chkin_c ( "uddc_c" );
+   chkin_c ( naif_state, "uddc_c" );
 
    *isdecr = SPICEFALSE;
 

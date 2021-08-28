@@ -8,8 +8,7 @@
 
 
 extern ekfind_init_t __ekfind_init;
-static ekfind_state_t* get_ekfind_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekfind_state_t* get_ekfind_state(cspice_t* state) {
 	if (!state->ekfind)
 		state->ekfind = __cspice_allocate_module(sizeof(
 	ekfind_state_t), &__ekfind_init, sizeof(__ekfind_init));
@@ -18,34 +17,35 @@ static ekfind_state_t* get_ekfind_state() {
 }
 
 /* $Procedure      EKFIND ( EK, find data ) */
-/* Subroutine */ int ekfind_(char *query, integer *nmrows, logical *error, 
-	char *errmsg, ftnlen query_len, ftnlen errmsg_len)
+/* Subroutine */ int ekfind_(cspice_t* __global_state, char *query, integer *
+	nmrows, logical *error, char *errmsg, ftnlen query_len, ftnlen 
+	errmsg_len)
 {
-    extern /* Subroutine */ int zzekscan_(char *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, doublereal 
-	    *, char *, integer *, integer *, logical *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int zzeksemc_(char *, integer *, char *, logical *
-	    , char *, integer *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekqini_(integer *, integer *, integer *, 
-	    char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zzekpars_(char *, integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *, char *, integer *, 
-	    integer *, integer *, char *, doublereal *, logical *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzeknres_(char *, integer *, char *, logical *
-	    , char *, integer *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzektres_(char *, integer *, char *, 
-	    doublereal *, logical *, char *, integer *, ftnlen, ftnlen, 
+    extern /* Subroutine */ int zzekscan_(cspice_t*, char *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    doublereal *, char *, integer *, integer *, logical *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzeksemc_(cspice_t*, char *, integer *, char *
+	    , logical *, char *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekqini_(cspice_t*, integer *, integer *, 
+	    integer *, char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzekpars_(cspice_t*, char *, integer *, 
+	    integer *, integer *, integer *, integer *, doublereal *, char *, 
+	    integer *, integer *, integer *, char *, doublereal *, logical *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzeknres_(cspice_t*, char *, integer *, char *
+	    , logical *, char *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzektres_(cspice_t*, char *, integer *, char *
+	    , doublereal *, logical *, char *, integer *, ftnlen, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     char eqryc[2000];
     doublereal eqryd[100];
     integer eqryi[27875];
     integer chbegs[500];
     integer chends[500];
     char chrbuf[2000];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal numvls[100];
     integer errptr;
     integer lxbegs[500];
@@ -53,13 +53,13 @@ static ekfind_state_t* get_ekfind_state() {
     integer ntoken;
     integer tokens[500];
     integer values[500];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int eksrch_(integer *, char *, doublereal *, 
-	    integer *, logical *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int eksrch_(cspice_t*, integer *, char *, 
+	    doublereal *, integer *, logical *, char *, ftnlen, ftnlen);
 
 
     /* Module state */
-    ekfind_state_t* __state = get_ekfind_state();
+    ekfind_state_t* __state = get_ekfind_state(__global_state);
 /* $ Abstract */
 
 /*     Find E-kernel data that satisfy a set of constraints. */
@@ -1285,70 +1285,70 @@ static ekfind_state_t* get_ekfind_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKFIND", (ftnlen)6);
+	chkin_(__global_state, "EKFIND", (ftnlen)6);
     }
 
 /*     Initialize the encoded query each time, for safety. */
 
-    zzekqini_(&__state->c__27869, &__state->c__100, eqryi, eqryc, eqryd, (
-	    ftnlen)2000);
+    zzekqini_(__global_state, &__state->c__27869, &__state->c__100, eqryi, 
+	    eqryc, eqryd, (ftnlen)2000);
 
 /*     Find the tokens in the input query. */
 
-    zzekscan_(query, &__state->c__500, &__state->c__100, &ntoken, tokens, 
-	    lxbegs, lxends, values, numvls, chrbuf, chbegs, chends, error, 
-	    errmsg, query_len, (ftnlen)2000, errmsg_len);
+    zzekscan_(__global_state, query, &__state->c__500, &__state->c__100, &
+	    ntoken, tokens, lxbegs, lxends, values, numvls, chrbuf, chbegs, 
+	    chends, error, errmsg, query_len, (ftnlen)2000, errmsg_len);
     if (*error) {
-	chkout_("EKFIND", (ftnlen)6);
+	chkout_(__global_state, "EKFIND", (ftnlen)6);
 	return 0;
     }
 
 /*     Now parse the query. */
 
-    zzekpars_(query, &ntoken, lxbegs, lxends, tokens, values, numvls, chrbuf, 
-	    chbegs, chends, eqryi, eqryc, eqryd, error, errmsg, query_len, (
-	    ftnlen)2000, (ftnlen)2000, errmsg_len);
+    zzekpars_(__global_state, query, &ntoken, lxbegs, lxends, tokens, values, 
+	    numvls, chrbuf, chbegs, chends, eqryi, eqryc, eqryd, error, 
+	    errmsg, query_len, (ftnlen)2000, (ftnlen)2000, errmsg_len);
     if (*error) {
-	chkout_("EKFIND", (ftnlen)6);
+	chkout_(__global_state, "EKFIND", (ftnlen)6);
 	return 0;
     }
 
 /*     Resolve names. */
 
-    zzeknres_(query, eqryi, eqryc, error, errmsg, &errptr, query_len, (ftnlen)
-	    2000, errmsg_len);
+    zzeknres_(__global_state, query, eqryi, eqryc, error, errmsg, &errptr, 
+	    query_len, (ftnlen)2000, errmsg_len);
     if (*error) {
-	chkout_("EKFIND", (ftnlen)6);
+	chkout_(__global_state, "EKFIND", (ftnlen)6);
 	return 0;
     }
 
 /*     Resolve time values, if necessary. */
 
-    zzektres_(query, eqryi, eqryc, eqryd, error, errmsg, &errptr, query_len, (
-	    ftnlen)2000, errmsg_len);
+    zzektres_(__global_state, query, eqryi, eqryc, eqryd, error, errmsg, &
+	    errptr, query_len, (ftnlen)2000, errmsg_len);
     if (*error) {
-	chkout_("EKFIND", (ftnlen)6);
+	chkout_(__global_state, "EKFIND", (ftnlen)6);
 	return 0;
     }
 
 /*     Perform semantic checks. */
 
-    zzeksemc_(query, eqryi, eqryc, error, errmsg, &errptr, query_len, (ftnlen)
-	    2000, errmsg_len);
+    zzeksemc_(__global_state, query, eqryi, eqryc, error, errmsg, &errptr, 
+	    query_len, (ftnlen)2000, errmsg_len);
     if (*error) {
-	chkout_("EKFIND", (ftnlen)6);
+	chkout_(__global_state, "EKFIND", (ftnlen)6);
 	return 0;
     }
 
 /*     If we arrived here, the encoded query is ready for execution. */
 /*     Find the data satisfying the constraints. */
 
-    eksrch_(eqryi, eqryc, eqryd, nmrows, error, errmsg, (ftnlen)2000, 
-	    errmsg_len);
-    chkout_("EKFIND", (ftnlen)6);
+    eksrch_(__global_state, eqryi, eqryc, eqryd, nmrows, error, errmsg, (
+	    ftnlen)2000, errmsg_len);
+    chkout_(__global_state, "EKFIND", (ftnlen)6);
     return 0;
 } /* ekfind_ */
 

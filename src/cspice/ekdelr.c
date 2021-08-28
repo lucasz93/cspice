@@ -8,8 +8,7 @@
 
 
 extern ekdelr_init_t __ekdelr_init;
-static ekdelr_state_t* get_ekdelr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekdelr_state_t* get_ekdelr_state(cspice_t* state) {
 	if (!state->ekdelr)
 		state->ekdelr = __cspice_allocate_module(sizeof(
 	ekdelr_state_t), &__ekdelr_init, sizeof(__ekdelr_init));
@@ -18,7 +17,8 @@ static ekdelr_state_t* get_ekdelr_state() {
 }
 
 /* $Procedure      EKDELR ( EK, delete record from segment ) */
-/* Subroutine */ int ekdelr_(integer *handle, integer *segno, integer *recno)
+/* Subroutine */ int ekdelr_(cspice_t* __global_state, integer *handle, 
+	integer *segno, integer *recno)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
@@ -26,68 +26,71 @@ static ekdelr_state_t* get_ekdelr_state() {
     /* Local variables */
     integer base;
     integer nrec;
-    extern integer zzekrp2n_(integer *, integer *, integer *);
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
     integer unit;
-    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
+    extern /* Subroutine */ int zzekcnam_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
 	    ftnlen);
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int zzekrbck_(char *, integer *, integer *, 
-	    integer *, integer *, ftnlen);
-    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekrbck_(cspice_t*, char *, integer *, 
+	    integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekmloc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekglnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgpg_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzektrdl_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzekglnk_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzektrdl_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekslnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzektrdp_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer i__;
     integer p;
     integer mbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer class__;
     integer ncols;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer mp;
     integer dscbas;
     integer coldsc[11];
     integer segdsc[24];
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dashlu_(integer *, integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dashlu_(cspice_t*, integer *, integer *);
     char column[32];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer nlinks;
     integer recptr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int zzekde01_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekde02_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekde03_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekde04_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekde05_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekde06_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekdps_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekde01_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekde02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekde03_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekde04_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekde05_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekde06_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekdps_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
 
 
     /* Module state */
-    ekdelr_state_t* __state = get_ekdelr_state();
+    ekdelr_state_t* __state = get_ekdelr_state(__global_state);
 /* $ Abstract */
 
 /*     Delete a specified record from a specified E-kernel segment. */
@@ -626,10 +629,10 @@ static ekdelr_state_t* get_ekdelr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKDELR", (ftnlen)6);
+	chkin_(__global_state, "EKDELR", (ftnlen)6);
     }
 
 /*     Before trying to actually modify the file, do every error */
@@ -638,9 +641,9 @@ static ekdelr_state_t* get_ekdelr_state() {
 /*     Is this file handle valid--is the file open for paged write */
 /*     access?  Signal an error if not. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("EKDELR", (ftnlen)6);
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKDELR", (ftnlen)6);
 	return 0;
     }
 
@@ -648,20 +651,21 @@ static ekdelr_state_t* get_ekdelr_state() {
 /*     Given the base address, we can read the pertinent metadata in */
 /*     one shot. */
 
-    zzekmloc_(handle, segno, &mp, &mbase);
-    if (failed_()) {
-	chkout_("EKDELR", (ftnlen)6);
+    zzekmloc_(__global_state, handle, segno, &mp, &mbase);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKDELR", (ftnlen)6);
 	return 0;
     }
     i__1 = mbase + 1;
     i__2 = mbase + 24;
-    dasrdi_(handle, &i__1, &i__2, segdsc);
+    dasrdi_(__global_state, handle, &i__1, &i__2, segdsc);
 
 /*     In case the target EK is shadowed, let the shadow system know */
 /*     about the deletion.  This must be done before the data is */
 /*     deleted.  The argument COLDSC is unused on this call. */
 
-    zzekrbck_("DELETE", handle, segdsc, coldsc, recno, (ftnlen)6);
+    zzekrbck_(__global_state, "DELETE", handle, segdsc, coldsc, recno, (
+	    ftnlen)6);
 
 /*     We'll need to know how many columns the segment has in order to */
 /*     compute the size of the record pointer.  The record pointer */
@@ -674,11 +678,12 @@ static ekdelr_state_t* get_ekdelr_state() {
 
     nrec = segdsc[5];
     if (*recno < 1 || *recno > nrec) {
-	setmsg_("Record number = #; valid range is 1:#.", (ftnlen)38);
-	errint_("#", recno, (ftnlen)1);
-	errint_("#", &nrec, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("EKDELR", (ftnlen)6);
+	setmsg_(__global_state, "Record number = #; valid range is 1:#.", (
+		ftnlen)38);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	errint_(__global_state, "#", &nrec, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "EKDELR", (ftnlen)6);
 	return 0;
     }
 
@@ -686,7 +691,7 @@ static ekdelr_state_t* get_ekdelr_state() {
 /*     routines handle updating column indexes and freeing unlinked */
 /*     pages. */
 
-    zzektrdp_(handle, &segdsc[6], recno, &recptr);
+    zzektrdp_(__global_state, handle, &segdsc[6], recno, &recptr);
     i__1 = ncols;
     for (i__ = 1; i__ <= i__1; ++i__) {
 
@@ -695,39 +700,40 @@ static ekdelr_state_t* get_ekdelr_state() {
 	dscbas = mbase + 24 + (i__ - 1) * 11;
 	i__2 = dscbas + 1;
 	i__3 = dscbas + 11;
-	dasrdi_(handle, &i__2, &i__3, coldsc);
+	dasrdi_(__global_state, handle, &i__2, &i__3, coldsc);
 	class__ = coldsc[0];
 
 /*        Delete the entry in the current column. */
 
 	if (class__ == 1) {
-	    zzekde01_(handle, segdsc, coldsc, &recptr);
+	    zzekde01_(__global_state, handle, segdsc, coldsc, &recptr);
 	} else if (class__ == 2) {
-	    zzekde02_(handle, segdsc, coldsc, &recptr);
+	    zzekde02_(__global_state, handle, segdsc, coldsc, &recptr);
 	} else if (class__ == 3) {
-	    zzekde03_(handle, segdsc, coldsc, &recptr);
+	    zzekde03_(__global_state, handle, segdsc, coldsc, &recptr);
 	} else if (class__ == 4) {
-	    zzekde04_(handle, segdsc, coldsc, &recptr);
+	    zzekde04_(__global_state, handle, segdsc, coldsc, &recptr);
 	} else if (class__ == 5) {
-	    zzekde05_(handle, segdsc, coldsc, &recptr);
+	    zzekde05_(__global_state, handle, segdsc, coldsc, &recptr);
 	} else if (class__ == 6) {
-	    zzekde06_(handle, segdsc, coldsc, &recptr);
+	    zzekde06_(__global_state, handle, segdsc, coldsc, &recptr);
 	} else {
 
 /*           This is an unsupported class. */
 
-	    *recno = zzekrp2n_(handle, &segdsc[1], &recptr);
-	    dashlu_(handle, &unit);
-	    zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	    setmsg_("Class # from input column descriptor is not supported. "
-		    " COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (ftnlen)97);
-	    errint_("#", &class__, (ftnlen)1);
-	    errch_("#", column, (ftnlen)1, (ftnlen)32);
-	    errint_("#", recno, (ftnlen)1);
-	    errint_("#", &segdsc[1], (ftnlen)1);
-	    errfnm_("#", &unit, (ftnlen)1);
-	    sigerr_("SPICE(NOCLASS)", (ftnlen)14);
-	    chkout_("EKDELR", (ftnlen)6);
+	    *recno = zzekrp2n_(__global_state, handle, &segdsc[1], &recptr);
+	    dashlu_(__global_state, handle, &unit);
+	    zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	    setmsg_(__global_state, "Class # from input column descriptor is"
+		    " not supported.  COLUMN = #; RECNO = #; SEGNO = #; EK = "
+		    "#.", (ftnlen)97);
+	    errint_(__global_state, "#", &class__, (ftnlen)1);
+	    errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	    errint_(__global_state, "#", recno, (ftnlen)1);
+	    errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	    errfnm_(__global_state, "#", &unit, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOCLASS)", (ftnlen)14);
+	    chkout_(__global_state, "EKDELR", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -735,39 +741,39 @@ static ekdelr_state_t* get_ekdelr_state() {
 /*     Find the page containing the record pointer. */
 
     i__1 = recptr + 1;
-    zzekpgpg_(&__state->c__3, &i__1, &p, &base);
+    zzekpgpg_(__global_state, &__state->c__3, &i__1, &p, &base);
 
 /*     Get the link count for the page.  If we have more */
 /*     than one link to the page, decrement the link count.  If */
 /*     we're down to one link, this deletion will finish off the */
 /*     page:  we'll deallocate it. */
 
-    zzekglnk_(handle, &__state->c__3, &p, &nlinks);
+    zzekglnk_(__global_state, handle, &__state->c__3, &p, &nlinks);
     if (nlinks > 1) {
 	i__1 = nlinks - 1;
-	zzekslnk_(handle, &__state->c__3, &p, &i__1);
+	zzekslnk_(__global_state, handle, &__state->c__3, &p, &i__1);
     } else {
 
 /*        If we removed the last item from the page, we can delete */
 /*        the page.  ZZEKDPS adjusts the segment's metadata */
 /*        to reflect the deallocation. */
 
-	zzekdps_(handle, segdsc, &__state->c__3, &p);
+	zzekdps_(__global_state, handle, segdsc, &__state->c__3, &p);
     }
 
 /*     The entry corresponding to the record is deleted from */
 /*     the data record tree at index RECNO.  The record count gets */
 /*     decremented. */
 
-    zzektrdl_(handle, &segdsc[6], recno);
+    zzektrdl_(__global_state, handle, &segdsc[6], recno);
     --segdsc[5];
 
 /*     Write out the updated segment descriptor. */
 
     i__1 = mbase + 1;
     i__2 = mbase + 24;
-    dasudi_(handle, &i__1, &i__2, segdsc);
-    chkout_("EKDELR", (ftnlen)6);
+    dasudi_(__global_state, handle, &i__1, &i__2, segdsc);
+    chkout_(__global_state, "EKDELR", (ftnlen)6);
     return 0;
 } /* ekdelr_ */
 

@@ -585,7 +585,7 @@
       return;
    }
    
-   chkin_c ( "inrypl_c" );
+   chkin_c ( naif_state, "inrypl_c" );
 
 
 

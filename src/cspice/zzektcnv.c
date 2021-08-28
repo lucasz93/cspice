@@ -8,8 +8,7 @@
 
 
 extern zzektcnv_init_t __zzektcnv_init;
-static zzektcnv_state_t* get_zzektcnv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektcnv_state_t* get_zzektcnv_state(cspice_t* state) {
 	if (!state->zzektcnv)
 		state->zzektcnv = __cspice_allocate_module(sizeof(
 	zzektcnv_state_t), &__zzektcnv_init, sizeof(__zzektcnv_init));
@@ -18,56 +17,63 @@ static zzektcnv_state_t* get_zzektcnv_state() {
 }
 
 /* $Procedure  ZZEKTCNV ( Private: EK, time conversion ) */
-/* Subroutine */ int zzektcnv_(char *timstr, doublereal *et, logical *error, 
-	char *errmsg, ftnlen timstr_len, ftnlen errmsg_len)
+/* Subroutine */ int zzektcnv_(cspice_t* __global_state, char *timstr, 
+	doublereal *et, logical *error, char *errmsg, ftnlen timstr_len, 
+	ftnlen errmsg_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal tvec[10];
     logical mods;
     char type__[32];
-    extern integer posr_(char *, char *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
+    extern integer posr_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen)
+	    ;
+    extern /* Subroutine */ int sct2e_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
     integer clkid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer ntvec;
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int scn2id_(char *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int str2et_(char *, doublereal *, ftnlen);
-    extern logical failed_(void);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int scn2id_(cspice_t*, char *, integer *, logical 
+	    *, ftnlen);
+    extern /* Subroutine */ int str2et_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
     doublereal sclkdp;
     char modify[32*10];
     char sclmsg[160];
     logical succes;
     logical yabbrv;
-    extern /* Subroutine */ int scpars_(integer *, char *, logical *, char *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int scpars_(cspice_t*, integer *, char *, logical 
+	    *, char *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
     char locstr[80];
     char pictur[80];
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int tpartv_(char *, doublereal *, integer *, char 
-	    *, char *, logical *, logical *, logical *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int tpartv_(cspice_t*, char *, doublereal *, 
+	    integer *, char *, char *, logical *, logical *, logical *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     logical fnd;
     integer loc;
 
 
     /* Module state */
-    zzektcnv_state_t* __state = get_zzektcnv_state();
+    zzektcnv_state_t* __state = get_zzektcnv_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -299,15 +305,15 @@ static zzektcnv_state_t* get_zzektcnv_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZEKTCNV", (ftnlen)8);
+    chkin_(__global_state, "ZZEKTCNV", (ftnlen)8);
 
 /*     No error to start with. */
 
     *error = FALSE_;
-    s_copy(errmsg, " ", errmsg_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, errmsg, " ", errmsg_len, (ftnlen)1);
 
 /*     Get a left-justified, compressed, upper-case copy of */
 /*     the string, so we can easily search it for substrings */
@@ -315,32 +321,34 @@ static zzektcnv_state_t* get_zzektcnv_state() {
 /*     match, remove the identifying substring (of the form */
 /*     'MO SCLK', 'VGR1 SCLK', etc.). */
 
-    cmprss_(" ", &__state->c__1, timstr, locstr, (ftnlen)1, timstr_len, (
-	    ftnlen)80);
-    ljust_(locstr, locstr, (ftnlen)80, (ftnlen)80);
-    ucase_(locstr, locstr, (ftnlen)80, (ftnlen)80);
-    i__1 = rtrim_(locstr, (ftnlen)80);
-    loc = posr_(locstr, "SCLK", &i__1, (ftnlen)80, (ftnlen)4);
+    cmprss_(__global_state, " ", &__state->c__1, timstr, locstr, (ftnlen)1, 
+	    timstr_len, (ftnlen)80);
+    ljust_(__global_state, locstr, locstr, (ftnlen)80, (ftnlen)80);
+    ucase_(__global_state, locstr, locstr, (ftnlen)80, (ftnlen)80);
+    i__1 = rtrim_(__global_state, locstr, (ftnlen)80);
+    loc = posr_(__global_state, locstr, "SCLK", &i__1, (ftnlen)80, (ftnlen)4);
     if (loc > 0) {
 
 /*        It's a SCLK string.  Find the ID code, if we can. */
 
-	scn2id_(locstr, &clkid, &fnd, loc + 3);
+	scn2id_(__global_state, locstr, &clkid, &fnd, loc + 3);
 	if (! fnd) {
 
 /*           We don't recognize this SCLK type. */
 
 	    *error = TRUE_;
 	    if (loc > 1) {
-		s_copy(errmsg, "Time conversion failed; SCLK type <#> was no"
-			"t recognized.", errmsg_len, (ftnlen)57);
-		repmc_(errmsg, "#", timstr, errmsg, errmsg_len, (ftnlen)1, 
-			loc - 1, errmsg_len);
+		s_copy(&__global_state->f2c, errmsg, "Time conversion failed"
+			"; SCLK type <#> was not recognized.", errmsg_len, (
+			ftnlen)57);
+		repmc_(__global_state, errmsg, "#", timstr, errmsg, 
+			errmsg_len, (ftnlen)1, loc - 1, errmsg_len);
 	    } else {
-		s_copy(errmsg, "Time conversion failed; SCLK name was not su"
-			"pplied.", errmsg_len, (ftnlen)51);
+		s_copy(&__global_state->f2c, errmsg, "Time conversion failed"
+			"; SCLK name was not supplied.", errmsg_len, (ftnlen)
+			51);
 	    }
-	    chkout_("ZZEKTCNV", (ftnlen)8);
+	    chkout_(__global_state, "ZZEKTCNV", (ftnlen)8);
 	    return 0;
 	}
 
@@ -348,39 +356,44 @@ static zzektcnv_state_t* get_zzektcnv_state() {
 /*        Convert the time to ET. */
 
 	i__1 = loc + 3;
-	scpars_(&clkid, locstr + i__1, error, sclmsg, &sclkdp, 80 - i__1, (
-		ftnlen)160);
-	if (failed_()) {
+	scpars_(__global_state, &clkid, locstr + i__1, error, sclmsg, &sclkdp,
+		 80 - i__1, (ftnlen)160);
+	if (failed_(__global_state)) {
 
 /*           We'll arrive here if the required SCLK kernel hasn't */
 /*           been loaded. */
 
 	    *error = TRUE_;
-	    s_copy(errmsg, "Unexpected SPICELIB error encountered while atte"
-		    "mpting to parse the string <", errmsg_len, (ftnlen)76);
-	    suffix_(timstr, &__state->c__0, errmsg, timstr_len, errmsg_len);
-	    suffix_(">", &__state->c__0, errmsg, (ftnlen)1, errmsg_len);
-	    chkout_("ZZEKTCNV", (ftnlen)8);
+	    s_copy(&__global_state->f2c, errmsg, "Unexpected SPICELIB error "
+		    "encountered while attempting to parse the string <", 
+		    errmsg_len, (ftnlen)76);
+	    suffix_(__global_state, timstr, &__state->c__0, errmsg, 
+		    timstr_len, errmsg_len);
+	    suffix_(__global_state, ">", &__state->c__0, errmsg, (ftnlen)1, 
+		    errmsg_len);
+	    chkout_(__global_state, "ZZEKTCNV", (ftnlen)8);
 	    return 0;
 	} else if (*error) {
-	    s_copy(errmsg, "The string <#> didn't parse as a spacecraft cloc"
-		    "k string.", errmsg_len, (ftnlen)57);
-	    repmc_(errmsg, "#", timstr, errmsg, errmsg_len, (ftnlen)1, 
-		    timstr_len, errmsg_len);
-	    suffix_(sclmsg, &__state->c__3, errmsg, (ftnlen)160, errmsg_len);
-	    chkout_("ZZEKTCNV", (ftnlen)8);
+	    s_copy(&__global_state->f2c, errmsg, "The string <#> didn't pars"
+		    "e as a spacecraft clock string.", errmsg_len, (ftnlen)57);
+	    repmc_(__global_state, errmsg, "#", timstr, errmsg, errmsg_len, (
+		    ftnlen)1, timstr_len, errmsg_len);
+	    suffix_(__global_state, sclmsg, &__state->c__3, errmsg, (ftnlen)
+		    160, errmsg_len);
+	    chkout_(__global_state, "ZZEKTCNV", (ftnlen)8);
 	    return 0;
 	} else {
-	    sct2e_(&clkid, &sclkdp, et);
-	    if (failed_()) {
+	    sct2e_(__global_state, &clkid, &sclkdp, et);
+	    if (failed_(__global_state)) {
 		*error = TRUE_;
-		s_copy(errmsg, "Unexpected SPICELIB error encountered while "
-			"attempting to parse the string <", errmsg_len, (
-			ftnlen)76);
-		suffix_(timstr, &__state->c__0, errmsg, timstr_len, 
-			errmsg_len);
-		suffix_(">", &__state->c__0, errmsg, (ftnlen)1, errmsg_len);
-		chkout_("ZZEKTCNV", (ftnlen)8);
+		s_copy(&__global_state->f2c, errmsg, "Unexpected SPICELIB er"
+			"ror encountered while attempting to parse the string"
+			" <", errmsg_len, (ftnlen)76);
+		suffix_(__global_state, timstr, &__state->c__0, errmsg, 
+			timstr_len, errmsg_len);
+		suffix_(__global_state, ">", &__state->c__0, errmsg, (ftnlen)
+			1, errmsg_len);
+		chkout_(__global_state, "ZZEKTCNV", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -389,23 +402,24 @@ static zzektcnv_state_t* get_zzektcnv_state() {
 /*        We could have a standard time string.  Make sure that the */
 /*        time string is acceptable before actually calling STR2ET. */
 
-	tpartv_(locstr, tvec, &ntvec, type__, modify, &mods, &yabbrv, &succes,
-		 pictur, errmsg, (ftnlen)80, (ftnlen)32, (ftnlen)32, (ftnlen)
-		80, errmsg_len);
+	tpartv_(__global_state, locstr, tvec, &ntvec, type__, modify, &mods, &
+		yabbrv, &succes, pictur, errmsg, (ftnlen)80, (ftnlen)32, (
+		ftnlen)32, (ftnlen)80, errmsg_len);
 	if (succes) {
 
 /*           It's safe to pass the string to STR2ET. */
 
-	    str2et_(locstr, et, (ftnlen)80);
-	    if (failed_()) {
+	    str2et_(__global_state, locstr, et, (ftnlen)80);
+	    if (failed_(__global_state)) {
 		*error = TRUE_;
-		s_copy(errmsg, "Unexpected SPICELIB error encountered while "
-			"attempting to parse the string <", errmsg_len, (
-			ftnlen)76);
-		suffix_(timstr, &__state->c__0, errmsg, timstr_len, 
-			errmsg_len);
-		suffix_(">", &__state->c__0, errmsg, (ftnlen)1, errmsg_len);
-		chkout_("ZZEKTCNV", (ftnlen)8);
+		s_copy(&__global_state->f2c, errmsg, "Unexpected SPICELIB er"
+			"ror encountered while attempting to parse the string"
+			" <", errmsg_len, (ftnlen)76);
+		suffix_(__global_state, timstr, &__state->c__0, errmsg, 
+			timstr_len, errmsg_len);
+		suffix_(__global_state, ">", &__state->c__0, errmsg, (ftnlen)
+			1, errmsg_len);
+		chkout_(__global_state, "ZZEKTCNV", (ftnlen)8);
 		return 0;
 	    }
 	} else {
@@ -414,7 +428,7 @@ static zzektcnv_state_t* get_zzektcnv_state() {
 /*           was set by TPARTV. */
 
 	    *error = TRUE_;
-	    chkout_("ZZEKTCNV", (ftnlen)8);
+	    chkout_(__global_state, "ZZEKTCNV", (ftnlen)8);
 	    return 0;
 	}
 
@@ -424,7 +438,7 @@ static zzektcnv_state_t* get_zzektcnv_state() {
 
 /*     We've parsed a time string, if it was an SCLK or standard string. */
 
-    chkout_("ZZEKTCNV", (ftnlen)8);
+    chkout_(__global_state, "ZZEKTCNV", (ftnlen)8);
     return 0;
 } /* zzektcnv_ */
 

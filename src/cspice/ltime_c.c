@@ -291,7 +291,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ltime_c" );
+   chkin_c ( naif_state, "ltime_c" );
 
 
    /*

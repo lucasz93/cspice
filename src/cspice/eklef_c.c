@@ -199,7 +199,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "eklef_c" );
+   chkin_c ( naif_state, "eklef_c" );
 
    /*
    Check the file name to make sure the pointer is non-null 

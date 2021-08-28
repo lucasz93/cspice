@@ -8,29 +8,28 @@
 
 
 typedef int scfmt_state_t;
-static scfmt_state_t* get_scfmt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline scfmt_state_t* get_scfmt_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SCFMT ( Convert SCLK "ticks" to character clock format) */
-/* Subroutine */ int scfmt_(integer *sc, doublereal *ticks, char *clkstr, 
-	ftnlen clkstr_len)
+/* Subroutine */ int scfmt_(cspice_t* __global_state, integer *sc, doublereal 
+	*ticks, char *clkstr, ftnlen clkstr_len)
 {
     integer type__;
-    extern /* Subroutine */ int scfm01_(integer *, doublereal *, char *, 
-	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer sctype_(integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int scfm01_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer sctype_(cspice_t*, integer *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    scfmt_state_t* __state = get_scfmt_state();
+    scfmt_state_t* __state = get_scfmt_state(__global_state);
 /* $ Abstract */
 
 /*     Convert encoded spacecraft clock ticks to character clock format. */
@@ -314,25 +313,26 @@ static scfmt_state_t* get_scfmt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCFMT", (ftnlen)5);
+	chkin_(__global_state, "SCFMT", (ftnlen)5);
     }
 
 /*     If the clock type is supported by NAIF then call FMTnn. */
 
-    type__ = sctype_(sc);
+    type__ = sctype_(__global_state, sc);
     if (type__ == 1) {
-	scfm01_(sc, ticks, clkstr, clkstr_len);
+	scfm01_(__global_state, sc, ticks, clkstr, clkstr_len);
     } else {
-	setmsg_("Clock type # is not supported. ", (ftnlen)31);
-	errint_("#", &type__, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("SCFMT", (ftnlen)5);
+	setmsg_(__global_state, "Clock type # is not supported. ", (ftnlen)31)
+		;
+	errint_(__global_state, "#", &type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "SCFMT", (ftnlen)5);
 	return 0;
     }
-    chkout_("SCFMT", (ftnlen)5);
+    chkout_(__global_state, "SCFMT", (ftnlen)5);
     return 0;
 } /* scfmt_ */
 

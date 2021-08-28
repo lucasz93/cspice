@@ -219,7 +219,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafrfr_c" );
+   chkin_c ( naif_state, "dafrfr_c" );
 
    dafrfr_ ( (integer *) &handle,
              (integer *) nd,

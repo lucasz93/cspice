@@ -8,8 +8,7 @@
 
 
 extern dasiod_init_t __dasiod_init;
-static dasiod_state_t* get_dasiod_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasiod_state_t* get_dasiod_state(cspice_t* state) {
 	if (!state->dasiod)
 		state->dasiod = __cspice_allocate_module(sizeof(
 	dasiod_state_t), &__dasiod_init, sizeof(__dasiod_init));
@@ -18,31 +17,33 @@ static dasiod_state_t* get_dasiod_state() {
 }
 
 /* $Procedure      DASIOD ( DAS, Fortran I/O, double precision ) */
-/* Subroutine */ int dasiod_(char *action, integer *unit, integer *recno, 
-	doublereal *record, ftnlen action_len)
+/* Subroutine */ int dasiod_(cspice_t* __global_state, char *action, integer *
+	unit, integer *recno, doublereal *record, ftnlen action_len)
 {
     /* Builtin functions */
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void),
-	     s_wdue(cilist *), e_wdue(void);
+    integer s_rdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rdue(f2c_state_t*), s_wdue(f2c_state_t*, 
+	    cilist *), e_wdue(f2c_state_t*);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    dasiod_state_t* __state = get_dasiod_state();
+    dasiod_state_t* __state = get_dasiod_state(__global_state);
 /* $ Abstract */
 
 /*     Perform Fortran reads and writes of DAS double precision records. */
@@ -247,74 +248,78 @@ static dasiod_state_t* get_dasiod_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    if (eqstr_(action, "READ", action_len, (ftnlen)4)) {
+    if (eqstr_(__global_state, action, "READ", action_len, (ftnlen)4)) {
 
 /*        We're supposed to read the file. */
 
 	__state->io___2.ciunit = *unit;
 	__state->io___2.cirec = *recno;
-	iostat = s_rdue(&__state->io___2);
+	iostat = s_rdue(&__global_state->f2c, &__state->io___2);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__128, (char *)&record[0], (ftnlen)sizeof(
-		doublereal));
+	iostat = do_uio(&__global_state->f2c, &__state->c__128, (char *)&
+		record[0], (ftnlen)sizeof(doublereal));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = e_rdue();
+	iostat = e_rdue(&__global_state->f2c);
 L100001:
 	if (iostat != 0) {
-	    chkin_("DASIOD", (ftnlen)6);
-	    setmsg_("Could not read DAS double precision record. File = # Re"
-		    "cord number = #. IOSTAT = #.", (ftnlen)83);
-	    errfnm_("#", unit, (ftnlen)1);
-	    errint_("#", recno, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DASFILEREADFAILED)", (ftnlen)24);
-	    chkout_("DASIOD", (ftnlen)6);
+	    chkin_(__global_state, "DASIOD", (ftnlen)6);
+	    setmsg_(__global_state, "Could not read DAS double precision rec"
+		    "ord. File = # Record number = #. IOSTAT = #.", (ftnlen)83)
+		    ;
+	    errfnm_(__global_state, "#", unit, (ftnlen)1);
+	    errint_(__global_state, "#", recno, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DASFILEREADFAILED)", (ftnlen)24);
+	    chkout_(__global_state, "DASIOD", (ftnlen)6);
 	    return 0;
 	}
-    } else if (eqstr_(action, "WRITE", action_len, (ftnlen)5)) {
+    } else if (eqstr_(__global_state, action, "WRITE", action_len, (ftnlen)5))
+	     {
 
 /*        We're supposed to write to the file. */
 
 	__state->io___3.ciunit = *unit;
 	__state->io___3.cirec = *recno;
-	iostat = s_wdue(&__state->io___3);
+	iostat = s_wdue(&__global_state->f2c, &__state->io___3);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&__state->c__128, (char *)&record[0], (ftnlen)sizeof(
-		doublereal));
+	iostat = do_uio(&__global_state->f2c, &__state->c__128, (char *)&
+		record[0], (ftnlen)sizeof(doublereal));
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = e_wdue();
+	iostat = e_wdue(&__global_state->f2c);
 L100002:
 	if (iostat != 0) {
-	    chkin_("DASIOD", (ftnlen)6);
-	    setmsg_("Could not write DAS double precision record. File = # R"
-		    "ecord number = #. IOSTAT = #.", (ftnlen)84);
-	    errfnm_("#", unit, (ftnlen)1);
-	    errint_("#", recno, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DASFILEWRITEFAILED)", (ftnlen)25);
-	    chkout_("DASIOD", (ftnlen)6);
+	    chkin_(__global_state, "DASIOD", (ftnlen)6);
+	    setmsg_(__global_state, "Could not write DAS double precision re"
+		    "cord. File = # Record number = #. IOSTAT = #.", (ftnlen)
+		    84);
+	    errfnm_(__global_state, "#", unit, (ftnlen)1);
+	    errint_(__global_state, "#", recno, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DASFILEWRITEFAILED)", (ftnlen)25);
+	    chkout_(__global_state, "DASIOD", (ftnlen)6);
 	    return 0;
 	}
     } else {
 
 /*        The requested action is a little too weird. */
 
-	chkin_("DASIOD", (ftnlen)6);
-	setmsg_("Action was #; should be READ or WRITE", (ftnlen)37);
-	errch_("#", action, (ftnlen)1, action_len);
-	sigerr_("SPICE(UNRECOGNIZEDACTION)", (ftnlen)25);
-	chkout_("DASIOD", (ftnlen)6);
+	chkin_(__global_state, "DASIOD", (ftnlen)6);
+	setmsg_(__global_state, "Action was #; should be READ or WRITE", (
+		ftnlen)37);
+	errch_(__global_state, "#", action, (ftnlen)1, action_len);
+	sigerr_(__global_state, "SPICE(UNRECOGNIZEDACTION)", (ftnlen)25);
+	chkout_(__global_state, "DASIOD", (ftnlen)6);
 	return 0;
     }
     return 0;

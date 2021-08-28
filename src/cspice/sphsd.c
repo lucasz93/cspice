@@ -8,8 +8,7 @@
 
 
 extern sphsd_init_t __sphsd_init;
-static sphsd_state_t* get_sphsd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sphsd_state_t* get_sphsd_state(cspice_t* state) {
 	if (!state->sphsd)
 		state->sphsd = __cspice_allocate_module(sizeof(sphsd_state_t),
 	 &__sphsd_init, sizeof(__sphsd_init));
@@ -18,29 +17,32 @@ static sphsd_state_t* get_sphsd_state() {
 }
 
 /* $Procedure  SPHSD ( Spherical surface distance ) */
-doublereal sphsd_(doublereal *radius, doublereal *long1, doublereal *lat1, 
-	doublereal *long2, doublereal *lat2)
+doublereal sphsd_(cspice_t* __global_state, doublereal *radius, doublereal *
+	long1, doublereal *lat1, doublereal *long2, doublereal *lat2)
 {
     /* System generated locals */
     doublereal ret_val;
 
     /* Builtin functions */
-    double sin(doublereal), cos(doublereal), acos(doublereal);
+    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal), acos(
+	    f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal sl1sl2;
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal cosang;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sphsd_state_t* __state = get_sphsd_state();
+    sphsd_state_t* __state = get_sphsd_state(__global_state);
 /* $ Abstract */
 
 /*     Return the distance between two points on a sphere, measured */
@@ -218,7 +220,7 @@ doublereal sphsd_(doublereal *radius, doublereal *long1, doublereal *lat1,
 
 /*     Check RETURN but do not check in unless an error is detected. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0.;
 	return ret_val;
     }
@@ -227,11 +229,11 @@ doublereal sphsd_(doublereal *radius, doublereal *long1, doublereal *lat1,
 
     if (*radius < 0.) {
 	ret_val = 0.;
-	chkin_("SPHSD", (ftnlen)5);
-	setmsg_("Radius was #.", (ftnlen)13);
-	errdp_("#", radius, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("SPHSD", (ftnlen)5);
+	chkin_(__global_state, "SPHSD", (ftnlen)5);
+	setmsg_(__global_state, "Radius was #.", (ftnlen)13);
+	errdp_(__global_state, "#", radius, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "SPHSD", (ftnlen)5);
 	return ret_val;
     }
 
@@ -257,10 +259,12 @@ doublereal sphsd_(doublereal *radius, doublereal *long1, doublereal *lat1,
 /*     round-off error doesn't take it out of the domain of arc */
 /*     cosine... */
 
-    sl1sl2 = sin(*lat1) * sin(*lat2);
-    cosang = cos(*long1 - *long2) * (cos(*lat1 - *lat2) - sl1sl2) + sl1sl2;
-    ret_val = *radius * acos(brcktd_(&cosang, &__state->c_b7, &__state->c_b8))
-	    ;
+    sl1sl2 = sin(&__global_state->f2c, *lat1) * sin(&__global_state->f2c, *
+	    lat2);
+    cosang = cos(&__global_state->f2c, *long1 - *long2) * (cos(&
+	    __global_state->f2c, *lat1 - *lat2) - sl1sl2) + sl1sl2;
+    ret_val = *radius * acos(&__global_state->f2c, brcktd_(__global_state, &
+	    cosang, &__state->c_b7, &__state->c_b8));
     return ret_val;
 } /* sphsd_ */
 

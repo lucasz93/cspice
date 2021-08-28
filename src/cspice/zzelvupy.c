@@ -8,8 +8,7 @@
 
 
 extern zzelvupy_init_t __zzelvupy_init;
-static zzelvupy_state_t* get_zzelvupy_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzelvupy_state_t* get_zzelvupy_state(cspice_t* state) {
 	if (!state->zzelvupy)
 		state->zzelvupy = __cspice_allocate_module(sizeof(
 	zzelvupy_state_t), &__zzelvupy_init, sizeof(__zzelvupy_init));
@@ -18,8 +17,9 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 }
 
 /* $Procedure      ZZELVUPY ( Is ellipse in polygonal field of view? ) */
-/* Subroutine */ int zzelvupy_(doublereal *ellips, doublereal *vertex, 
-	doublereal *axis, integer *n, doublereal *bounds, logical *found)
+/* Subroutine */ int zzelvupy_(cspice_t* __global_state, doublereal *ellips, 
+	doublereal *vertex, doublereal *axis, integer *n, doublereal *bounds, 
+	logical *found)
 {
     /* Initialized data */
 
@@ -29,18 +29,19 @@ static zzelvupy_state_t* get_zzelvupy_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    double asin(doublereal), pow_dd(doublereal *, doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    double asin(f2c_state_t*, doublereal), pow_dd(f2c_state_t*, doublereal *, 
+	    doublereal *);
 
     /* Local variables */
     doublereal asep;
     doublereal apex[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal edge1[3];
     doublereal edge2[3];
     doublereal a;
@@ -53,68 +54,69 @@ static zzelvupy_state_t* get_zzelvupy_state() {
     doublereal scale;
     doublereal x;
     doublereal y;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal plane[4];
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern doublereal vdist_(doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
     doublereal vtemp[3];
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
-    extern logical vzero_(doublereal *);
-    integer nxpts;
-    extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int cgv2el_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    doublereal hafedg;
-    extern /* Subroutine */ int nvp2pl_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    integer nxpts;
+    extern /* Subroutine */ int el2cgv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int cgv2el_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    doublereal hafedg;
+    extern /* Subroutine */ int nvp2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal cp[3];
-    extern /* Subroutine */ int psv2pl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern doublereal pi_(void);
+    extern /* Subroutine */ int psv2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern doublereal pi_(cspice_t*);
     doublereal hafsec;
     doublereal eplane[4];
     doublereal ellscl[9];
     doublereal center[3];
     doublereal easize;
     doublereal ebsctr[3];
-    extern /* Subroutine */ int saelgv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int inelpl_(doublereal *, doublereal *, integer *,
+    extern /* Subroutine */ int saelgv_(cspice_t*, doublereal *, doublereal *,
 	     doublereal *, doublereal *);
+    extern /* Subroutine */ int inelpl_(cspice_t*, doublereal *, doublereal *,
+	     integer *, doublereal *, doublereal *);
     doublereal ctrvec[3];
     doublereal consep;
     doublereal offset[3];
     doublereal pasize;
     doublereal smajor[3];
     char errmsg[1840];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal fovpln[4];
     doublereal vbsctr[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal sminor[3];
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int repmot_(char *, char *, integer *, char *, 
-	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int repmot_(cspice_t*, char *, char *, integer *, 
+	    char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
     doublereal gv1[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal gv2[3];
-    extern /* Subroutine */ int inrypl_(doublereal *, doublereal *, 
-	    doublereal *, integer *, doublereal *);
-    extern integer zzwind_(doublereal *, integer *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int inrypl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, integer *, doublereal *);
+    extern integer zzwind_(cspice_t*, doublereal *, integer *, doublereal *, 
+	    doublereal *);
     doublereal xpt[3];
     doublereal xpt1[3];
     doublereal xpt2[3];
 
 
     /* Module state */
-    zzelvupy_state_t* __state = get_zzelvupy_state();
+    zzelvupy_state_t* __state = get_zzelvupy_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether a specified ellipse intersects the pyramid */
@@ -461,10 +463,10 @@ static zzelvupy_state_t* get_zzelvupy_state() {
     bounds_dim2 = *n;
 
     /* Function Body */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZELVUPY", (ftnlen)8);
+    chkin_(__global_state, "ZZELVUPY", (ftnlen)8);
 
 /*     We start out by checking the inputs. */
 
@@ -494,8 +496,8 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*     Validate the ellipse.  First find the center and the semi-axes */
 /*     of the ellipse. */
 
-    el2cgv_(ellips, center, gv1, gv2);
-    saelgv_(gv1, gv2, smajor, sminor);
+    el2cgv_(__global_state, ellips, center, gv1, gv2);
+    saelgv_(__global_state, gv1, gv2, smajor, sminor);
 
 /*     Check the semi-axis lengths. */
 
@@ -503,16 +505,16 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*     the semi-minor axis to be the zero vector as well.  But */
 /*     round-off error could conceivably violate this assumption. */
 
-    if (vzero_(smajor) || vzero_(sminor)) {
-	setmsg_("Input ellipse has semi-major axis length # and semi-minor a"
-		"xis length #.  Both vectors are required to be non-zero.", (
-		ftnlen)115);
-	d__1 = vnorm_(smajor);
-	errdp_("#", &d__1, (ftnlen)1);
-	d__1 = vnorm_(sminor);
-	errdp_("#", &d__1, (ftnlen)1);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("ZZELVUPY", (ftnlen)8);
+    if (vzero_(__global_state, smajor) || vzero_(__global_state, sminor)) {
+	setmsg_(__global_state, "Input ellipse has semi-major axis length # "
+		"and semi-minor axis length #.  Both vectors are required to "
+		"be non-zero.", (ftnlen)115);
+	d__1 = vnorm_(__global_state, smajor);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	d__1 = vnorm_(__global_state, sminor);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 	return 0;
     }
 
@@ -520,43 +522,49 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*     pyramid so that the largest of these vectors has unit length. */
 
 /* Computing MAX */
-    d__1 = vnorm_(center), d__2 = vnorm_(smajor), d__1 = max(d__1,d__2), d__2 
-	    = vnorm_(vertex);
+    d__1 = vnorm_(__global_state, center), d__2 = vnorm_(__global_state, 
+	    smajor), d__1 = max(d__1,d__2), d__2 = vnorm_(__global_state, 
+	    vertex);
     scale = 1. / max(d__1,d__2);
     for (i__ = 1; i__ <= 3; ++i__) {
-	center[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("center", 
-		i__1, "zzelvupy_", (ftnlen)452)] = scale * center[(i__2 = i__ 
-		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("center", i__2, "zzelv"
-		"upy_", (ftnlen)452)];
-	smajor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("smajor", 
-		i__1, "zzelvupy_", (ftnlen)453)] = scale * smajor[(i__2 = i__ 
-		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("smajor", i__2, "zzelv"
-		"upy_", (ftnlen)453)];
-	sminor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sminor", 
-		i__1, "zzelvupy_", (ftnlen)454)] = scale * sminor[(i__2 = i__ 
-		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("sminor", i__2, "zzelv"
-		"upy_", (ftnlen)454)];
-	apex[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("apex", i__1, 
-		"zzelvupy_", (ftnlen)455)] = scale * vertex[(i__2 = i__ - 1) <
-		 3 && 0 <= i__2 ? i__2 : s_rnge("vertex", i__2, "zzelvupy_", (
+	center[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "center", i__1, "zzelvupy_", (ftnlen)452)
+		] = scale * center[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "center", i__2, "zzelvupy_", (
+		ftnlen)452)];
+	smajor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "smajor", i__1, "zzelvupy_", (ftnlen)453)
+		] = scale * smajor[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "smajor", i__2, "zzelvupy_", (
+		ftnlen)453)];
+	sminor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "sminor", i__1, "zzelvupy_", (ftnlen)454)
+		] = scale * sminor[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "sminor", i__2, "zzelvupy_", (
+		ftnlen)454)];
+	apex[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "apex", i__1, "zzelvupy_", (ftnlen)455)] 
+		= scale * vertex[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "vertex", i__2, "zzelvupy_", (
 		ftnlen)455)];
     }
 
 /*     Create a scaled ellipse.  We'll perform the FOV side-ellipse */
 /*     intersection computations using this ellipse. */
 
-    cgv2el_(center, smajor, sminor, ellscl);
+    cgv2el_(__global_state, center, smajor, sminor, ellscl);
 
 /*     After scaling, make sure the semi-axes have sufficient length to */
 /*     prevent numerical problems.  Let A and B be the scaled semi-axis */
 /*     lengths of the ellipse. */
 
-    a = vnorm_(smajor);
-    b = vnorm_(sminor);
+    a = vnorm_(__global_state, smajor);
+    b = vnorm_(__global_state, sminor);
     if (b == 0.) {
-	setmsg_("Scaled ellipse's semi-minor axis length = 0.", (ftnlen)44);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("ZZELVUPY", (ftnlen)8);
+	setmsg_(__global_state, "Scaled ellipse's semi-minor axis length = 0."
+		, (ftnlen)44);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 	return 0;
     }
 
@@ -564,33 +572,34 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 
 /*     The axis must not be the zero vector. */
 
-    if (vzero_(axis)) {
-	setmsg_("The pyramid's axis the zero vector.", (ftnlen)35);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("ZZELVUPY", (ftnlen)8);
+    if (vzero_(__global_state, axis)) {
+	setmsg_(__global_state, "The pyramid's axis the zero vector.", (
+		ftnlen)35);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 	return 0;
     }
 
 /*     There must be at least three boundary vectors. */
 
     if (*n < 3) {
-	setmsg_("The number of boundary vectors was #; this number must be a"
-		"t least 3.", (ftnlen)69);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZELVUPY", (ftnlen)8);
+	setmsg_(__global_state, "The number of boundary vectors was #; this "
+		"number must be at least 3.", (ftnlen)69);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 	return 0;
     }
 
 /*     There must be no more than MAXFOV boundary vectors. */
 
     if (*n > 10000) {
-	setmsg_("The number of boundary vectors was #; this number must not "
-		"exceed #.", (ftnlen)68);
-	errint_("#", n, (ftnlen)1);
-	errint_("#", &__state->c__10000, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZELVUPY", (ftnlen)8);
+	setmsg_(__global_state, "The number of boundary vectors was #; this "
+		"number must not exceed #.", (ftnlen)68);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__10000, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 	return 0;
     }
 
@@ -601,7 +610,7 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*     ellipse.  This vector will be used in several places later; */
 /*     it's convenient to compute it here. */
 
-    vsub_(center, apex, ctrvec);
+    vsub_(__global_state, center, apex, ctrvec);
 
 /*     Compute PASIZE:  an upper bound on the angular radius of a */
 /*     circular cone whose axis is the input central axis.  While */
@@ -617,16 +626,17 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*        angular separation PASIZE as we go.  We'll use this variable */
 /*        later in a non-intersection test. */
 
-	asep = vsep_(axis, &bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 
-		0 <= i__2 ? i__2 : s_rnge("bounds", i__2, "zzelvupy_", (
-		ftnlen)550)]);
-	if (asep >= pi_() / 2) {
-	    setmsg_("The angular separation of boundary vector # from the ax"
-		    "is is #. This number must less than pi/2.", (ftnlen)96);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &asep, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDFOV)", (ftnlen)17);
-	    chkout_("ZZELVUPY", (ftnlen)8);
+	asep = vsep_(__global_state, axis, &bounds[(i__2 = i__ * 3 - 3) < 3 * 
+		bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c,
+		 "bounds", i__2, "zzelvupy_", (ftnlen)550)]);
+	if (asep >= pi_(__global_state) / 2) {
+	    setmsg_(__global_state, "The angular separation of boundary vect"
+		    "or # from the axis is #. This number must less than pi/2."
+		    , (ftnlen)96);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &asep, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDFOV)", (ftnlen)17);
+	    chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 	    return 0;
 	}
 	pasize = max(pasize,asep);
@@ -639,40 +649,45 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 	} else {
 	    j = 1;
 	}
-	ucrss_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? 
-		i__2 : s_rnge("bounds", i__2, "zzelvupy_", (ftnlen)577)], &
-		bounds[(i__3 = j * 3 - 3) < 3 * bounds_dim2 && 0 <= i__3 ? 
-		i__3 : s_rnge("bounds", i__3, "zzelvupy_", (ftnlen)577)], cp);
-	if (vzero_(cp)) {
+	ucrss_(__global_state, &bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 
+		&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "bounds", 
+		i__2, "zzelvupy_", (ftnlen)577)], &bounds[(i__3 = j * 3 - 3) <
+		 3 * bounds_dim2 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "bounds", i__3, "zzelvupy_", (ftnlen)577)
+		], cp);
+	if (vzero_(__global_state, cp)) {
 
 /*           The cross product may be zero because one of the */
 /*           boundary vectors is zero.  Check this first. */
 
-	    if (vzero_(&bounds[(i__2 = j * 3 - 3) < 3 * bounds_dim2 && 0 <= 
-		    i__2 ? i__2 : s_rnge("bounds", i__2, "zzelvupy_", (ftnlen)
-		    584)]) || vzero_(&bounds[(i__3 = i__ * 3 - 3) < 3 * 
-		    bounds_dim2 && 0 <= i__3 ? i__3 : s_rnge("bounds", i__3, 
-		    "zzelvupy_", (ftnlen)584)])) {
-		s_copy(errmsg, "The # boundary vector is the zero vector.", (
-			ftnlen)1840, (ftnlen)41);
-		if (vzero_(&bounds[(i__2 = i__ * 3 - 3) < 3 * bounds_dim2 && 
-			0 <= i__2 ? i__2 : s_rnge("bounds", i__2, "zzelvupy_",
-			 (ftnlen)588)])) {
+	    if (vzero_(__global_state, &bounds[(i__2 = j * 3 - 3) < 3 * 
+		    bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "bounds", i__2, "zzelvupy_", (ftnlen)
+		    584)]) || vzero_(__global_state, &bounds[(i__3 = i__ * 3 
+		    - 3) < 3 * bounds_dim2 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "bounds", i__3, "zzelvupy_", (ftnlen)
+		    584)])) {
+		s_copy(&__global_state->f2c, errmsg, "The # boundary vector "
+			"is the zero vector.", (ftnlen)1840, (ftnlen)41);
+		if (vzero_(__global_state, &bounds[(i__2 = i__ * 3 - 3) < 3 * 
+			bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "bounds", i__2, "zzelvupy_", (
+			ftnlen)588)])) {
 		    j = i__;
 		}
-		repmot_(errmsg, "#", &j, "L", errmsg, (ftnlen)1840, (ftnlen)1,
-			 (ftnlen)1, (ftnlen)1840);
-		setmsg_(errmsg, (ftnlen)1840);
-		sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
+		repmot_(__global_state, errmsg, "#", &j, "L", errmsg, (ftnlen)
+			1840, (ftnlen)1, (ftnlen)1, (ftnlen)1840);
+		setmsg_(__global_state, errmsg, (ftnlen)1840);
+		sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
 	    } else {
-		setmsg_("The angular separation of boundary vector # from ve"
-			"ctor # is 0.This number must be positive.", (ftnlen)
-			92);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", &j, (ftnlen)1);
-		sigerr_("SPICE(INVALIDFOV)", (ftnlen)17);
+		setmsg_(__global_state, "The angular separation of boundary "
+			"vector # from vector # is 0.This number must be posi"
+			"tive.", (ftnlen)92);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", &j, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDFOV)", (ftnlen)17);
 	    }
-	    chkout_("ZZELVUPY", (ftnlen)8);
+	    chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -694,9 +709,9 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*     The test can be performed only if the apex of the FOV is outside */
 /*     of the sphere of radius A centered at the ellipse center. */
 
-    d__ = vdist_(center, apex);
+    d__ = vdist_(__global_state, center, apex);
     if (a < d__) {
-	easize = asin(a / d__);
+	easize = asin(&__global_state->f2c, a / d__);
 
 /*        The variable PASIZE already contains the angular radius of a */
 /*        bounding cone of the pyramid as seen from the pyramid's apex. */
@@ -708,9 +723,9 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*        the sum of the angular radii of the ellipse's and pyramid's */
 /*        bounding cones, there can be no intersection. */
 
-	consep = vsep_(ctrvec, axis) - (easize + pasize);
+	consep = vsep_(__global_state, ctrvec, axis) - (easize + pasize);
 	if (consep > 0.) {
-	    chkout_("ZZELVUPY", (ftnlen)8);
+	    chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -729,33 +744,35 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*     The center of the ellipse must lie in the correct half-space */
 /*     for this test to be applicable. */
 
-    if (vdot_(axis, ctrvec) > 0.) {
+    if (vdot_(__global_state, axis, ctrvec) > 0.) {
 
 /*        Construct the plane and find the polygon. */
 
-	nvp2pl_(axis, ctrvec, fovpln);
+	nvp2pl_(__global_state, axis, ctrvec, fovpln);
 
 /*        Create the planar FOV boundary using the intersections */
 /*        of the FOV boundary vectors with FOVPLN. */
 
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    inrypl_(__state->origin, &bounds[(i__2 = i__ * 3 - 3) < 3 * 
-		    bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge("bounds", i__2, 
-		    "zzelvupy_", (ftnlen)686)], fovpln, &nxpts, &
-		    __state->work[(i__3 = i__ * 3 - 3) < 30000 && 0 <= i__3 ? 
-		    i__3 : s_rnge("work", i__3, "zzelvupy_", (ftnlen)686)]);
+	    inrypl_(__global_state, __state->origin, &bounds[(i__2 = i__ * 3 
+		    - 3) < 3 * bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "bounds", i__2, "zzelvupy_", (ftnlen)
+		    686)], fovpln, &nxpts, &__state->work[(i__3 = i__ * 3 - 3)
+		     < 30000 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "work", i__3, "zzelvupy_", (ftnlen)
+		    686)]);
 
 /*           We expect to have a single point of intersection for each */
 /*           boundary vector. */
 
 	    if (nxpts != 1) {
-		setmsg_("NXPTS = # for boundary vector #/FOV plane intersect"
-			"ion.", (ftnlen)55);
-		errint_("#", &nxpts, (ftnlen)1);
-		errint_("#", &i__, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZELVUPY", (ftnlen)8);
+		setmsg_(__global_state, "NXPTS = # for boundary vector #/FOV"
+			" plane intersection.", (ftnlen)55);
+		errint_(__global_state, "#", &nxpts, (ftnlen)1);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -765,13 +782,13 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*        the polygon about the ellipse center is non-zero, we conclude */
 /*        the center is in the pyramid. */
 
-	if (zzwind_(fovpln, n, __state->work, ctrvec) != 0) {
+	if (zzwind_(__global_state, fovpln, n, __state->work, ctrvec) != 0) {
 
 /*           The center of the ellipse is inside the pyramid.  We're */
 /*           done. */
 
 	    *found = TRUE_;
-	    chkout_("ZZELVUPY", (ftnlen)8);
+	    chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -790,9 +807,10 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*     are orthogonal, and because PSV2PL (via a call to UCRSS) */
 /*     does scaling to prevent underflow. */
 
-    psv2pl_(center, smajor, sminor, eplane);
-    inrypl_(apex, &bounds[(i__1 = 0) < 3 * bounds_dim2 ? i__1 : s_rnge("boun"
-	    "ds", i__1, "zzelvupy_", (ftnlen)745)], eplane, &nxpts, xpt);
+    psv2pl_(__global_state, center, smajor, sminor, eplane);
+    inrypl_(__global_state, apex, &bounds[(i__1 = 0) < 3 * bounds_dim2 ? i__1 
+	    : s_rnge(&__global_state->f2c, "bounds", i__1, "zzelvupy_", (
+	    ftnlen)745)], eplane, &nxpts, xpt);
 
 /*     The routine INRYPL can return the NXPTS values 1, 0, or INF---a */
 /*     code indicating an infinite number of intersection points of ray */
@@ -819,19 +837,19 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*        ellipse.  So in this special case, APEX would be in the region */
 /*        bounded by the ellipse. */
 
-	vsub_(xpt, center, offset);
-	x = vdot_(offset, smajor) / a;
-	y = vdot_(offset, sminor) / b;
+	vsub_(__global_state, xpt, center, offset);
+	x = vdot_(__global_state, offset, smajor) / a;
+	y = vdot_(__global_state, offset, sminor) / b;
 	d__1 = x / a;
 	d__2 = y / b;
-	if (pow_dd(&d__1, &__state->c_b79) + pow_dd(&d__2, &__state->c_b79) <=
-		 1.) {
+	if (pow_dd(&__global_state->f2c, &d__1, &__state->c_b79) + pow_dd(&
+		__global_state->f2c, &d__2, &__state->c_b79) <= 1.) {
 
 /*           The boundary-vector-plane intercept lies in the */
 /*           topologically closed region bounded by the ellipse. */
 
 	    *found = TRUE_;
-	    chkout_("ZZELVUPY", (ftnlen)8);
+	    chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -861,15 +879,16 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*        because we've already ensured the cross product of */
 /*        these vectors is non-zero. */
 
-	psv2pl_(apex, &bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= 
-		i__1 ? i__1 : s_rnge("bounds", i__1, "zzelvupy_", (ftnlen)820)
-		], &bounds[(i__2 = j * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ?
-		 i__2 : s_rnge("bounds", i__2, "zzelvupy_", (ftnlen)820)], 
-		plane);
+	psv2pl_(__global_state, apex, &bounds[(i__1 = i__ * 3 - 3) < 3 * 
+		bounds_dim2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+		 "bounds", i__1, "zzelvupy_", (ftnlen)820)], &bounds[(i__2 = 
+		j * 3 - 3) < 3 * bounds_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "bounds", i__2, "zzelvupy_", (ftnlen)820)
+		], plane);
 
 /*        Find the intersection of the plane and the ellipse. */
 
-	inelpl_(ellscl, plane, &nxpts, xpt1, xpt2);
+	inelpl_(__global_state, ellscl, plane, &nxpts, xpt1, xpt2);
 
 /*        If the ellipse-plane intersection is non-empty, test it to see */
 /*        whether it has non-empty intersection with the current side of */
@@ -881,31 +900,34 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*           forming the edges of the currently considered side of the */
 /*           pyramid. */
 
-	    vhat_(&bounds[(i__1 = i__ * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 
-		    ? i__1 : s_rnge("bounds", i__1, "zzelvupy_", (ftnlen)837)]
-		    , edge1);
-	    vhat_(&bounds[(i__1 = j * 3 - 3) < 3 * bounds_dim2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("bounds", i__1, "zzelvupy_", (ftnlen)838)], 
-		    edge2);
+	    vhat_(__global_state, &bounds[(i__1 = i__ * 3 - 3) < 3 * 
+		    bounds_dim2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "bounds", i__1, "zzelvupy_", (ftnlen)
+		    837)], edge1);
+	    vhat_(__global_state, &bounds[(i__1 = j * 3 - 3) < 3 * 
+		    bounds_dim2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "bounds", i__1, "zzelvupy_", (ftnlen)
+		    838)], edge2);
 
 /*           Let EBSCTR ("pyramid edge bisector") be a bisector of the */
 /*           sector bounded by EDGE1 and EDGE2. */
 
-	    vlcom_(&__state->c_b90, edge1, &__state->c_b90, edge2, ebsctr);
+	    vlcom_(__global_state, &__state->c_b90, edge1, &__state->c_b90, 
+		    edge2, ebsctr);
 
 /*           Let HAFEDG be half of the angular measure of this sector. */
 
-	    hafedg = vsep_(edge1, edge2) / 2.;
+	    hafedg = vsep_(__global_state, edge1, edge2) / 2.;
 
 /*           Let VXPT1 and VXPT2 be the unit vectors pointing from the */
 /*           pyramid's apex to the points of intersection of the ellipse */
 /*           and the plane containing the currently considered side of */
 /*           the pyramid. */
 
-	    vsub_(xpt1, apex, vtemp);
-	    vhat_(vtemp, vxpt1);
-	    vsub_(xpt2, apex, vtemp);
-	    vhat_(vtemp, vxpt2);
+	    vsub_(__global_state, xpt1, apex, vtemp);
+	    vhat_(__global_state, vtemp, vxpt1);
+	    vsub_(__global_state, xpt2, apex, vtemp);
+	    vhat_(__global_state, vtemp, vxpt2);
 
 /*           At this point we'll introduce a bit of terminology. We're */
 /*           going to work with plane regions defined by pairs of */
@@ -924,12 +946,13 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*           Let VBSCTR ("VXPT bisector") be a bisector of the sector */
 /*           bounded by VXPT1 and VXPT2. */
 
-	    vlcom_(&__state->c_b90, vxpt1, &__state->c_b90, vxpt2, vbsctr);
+	    vlcom_(__global_state, &__state->c_b90, vxpt1, &__state->c_b90, 
+		    vxpt2, vbsctr);
 
 /*           Let HAFSEC be half of the angular measure of the sector */
 /*           bounded by VXPT1 and VXPT2. */
 
-	    hafsec = vsep_(vxpt1, vxpt2) / 2.;
+	    hafsec = vsep_(__global_state, vxpt1, vxpt2) / 2.;
 
 /*           EDGE1, EDGE2, VXPT1, and VXPT2 are four co-planar vectors */
 /*           emanating from APEX.  We want to find out whether the */
@@ -958,20 +981,20 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*              Case 3:  VBSCTR lies between EDGE1 and EDGE2. */
 /*              Case 4:  EBSCTR lies between VXPT1 and VXPT2. */
 
-	    if (vsep_(vxpt1, ebsctr) <= hafedg) {
+	    if (vsep_(__global_state, vxpt1, ebsctr) <= hafedg) {
 		*found = TRUE_;
-	    } else if (vsep_(vxpt2, ebsctr) <= hafedg) {
+	    } else if (vsep_(__global_state, vxpt2, ebsctr) <= hafedg) {
 		*found = TRUE_;
-	    } else if (vsep_(vbsctr, ebsctr) <= hafedg) {
+	    } else if (vsep_(__global_state, vbsctr, ebsctr) <= hafedg) {
 		*found = TRUE_;
-	    } else if (vsep_(ebsctr, vbsctr) <= hafsec) {
+	    } else if (vsep_(__global_state, ebsctr, vbsctr) <= hafsec) {
 		*found = TRUE_;
 	    }
 	    if (*found) {
 
 /*              We've found an intersection.  We're done. */
 
-		chkout_("ZZELVUPY", (ftnlen)8);
+		chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -985,7 +1008,7 @@ static zzelvupy_state_t* get_zzelvupy_state() {
 /*     If we got this far, the ellipse is not in view.  FOUND has */
 /*     already been set to .FALSE. */
 
-    chkout_("ZZELVUPY", (ftnlen)8);
+    chkout_(__global_state, "ZZELVUPY", (ftnlen)8);
     return 0;
 } /* zzelvupy_ */
 

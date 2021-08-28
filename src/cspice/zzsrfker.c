@@ -8,8 +8,7 @@
 
 
 extern zzsrfker_init_t __zzsrfker_init;
-static zzsrfker_state_t* get_zzsrfker_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzsrfker_state_t* get_zzsrfker_state(cspice_t* state) {
 	if (!state->zzsrfker)
 		state->zzsrfker = __cspice_allocate_module(sizeof(
 	zzsrfker_state_t), &__zzsrfker_init, sizeof(__zzsrfker_init));
@@ -18,10 +17,11 @@ static zzsrfker_state_t* get_zzsrfker_state() {
 }
 
 /* $Procedure ZZSRFKER ( Surface translation, process kernel update ) */
-/* Subroutine */ int zzsrfker_(char *kernam, char *nornam, integer *kersid, 
-	integer *kerbid, logical *extker, integer *nkvar, integer *snmhls, 
-	integer *snmpol, integer *snmidx, integer *sidhls, integer *sidpol, 
-	integer *sididx, ftnlen kernam_len, ftnlen nornam_len)
+/* Subroutine */ int zzsrfker_(cspice_t* __global_state, char *kernam, char *
+	nornam, integer *kersid, integer *kerbid, logical *extker, integer *
+	nkvar, integer *snmhls, integer *snmpol, integer *snmidx, integer *
+	sidhls, integer *sidpol, integer *sididx, ftnlen kernam_len, ftnlen 
+	nornam_len)
 {
     /* Initialized data */
 
@@ -30,44 +30,45 @@ static zzsrfker_state_t* get_zzsrfker_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzsrfini_(char *, integer *, integer *, 
+    extern /* Subroutine */ int zzsrfini_(cspice_t*, char *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, ftnlen);
+	    integer *, integer *, integer *, ftnlen);
     integer i__;
     integer ncode;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer nname;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer nbody;
     logical fndcde;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     logical fndbod;
     logical fndnam;
-    extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gcpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, char *, logical *, ftnlen, ftnlen);
     char bdtype[1];
     char cdtype[1];
-    extern /* Subroutine */ int gipool_(char *, integer *, integer *, integer 
-	    *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int gipool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
     char ndtype[1];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(cspice_t*, integer *, char *, char *, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int swpool_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
 
 
     /* Module state */
-    zzsrfker_state_t* __state = get_zzsrfker_state();
+    zzsrfker_state_t* __state = get_zzsrfker_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -433,10 +434,10 @@ static zzsrfker_state_t* get_zzsrfker_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSRFKER", (ftnlen)8);
+    chkin_(__global_state, "ZZSRFKER", (ftnlen)8);
 
 /*     The primary functions performed inline in this routine are */
 
@@ -453,10 +454,10 @@ static zzsrfker_state_t* get_zzsrfker_state() {
 
 /*        Set watch on kernel variables used for the surface mapping. */
 
-	swpool_("ZZSRFTRN", &__state->c__3, __state->names, (ftnlen)8, (
-		ftnlen)32);
-	if (failed_()) {
-	    chkout_("ZZSRFKER", (ftnlen)8);
+	swpool_(__global_state, "ZZSRFTRN", &__state->c__3, __state->names, (
+		ftnlen)8, (ftnlen)32);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSRFKER", (ftnlen)8);
 	    return 0;
 	}
 	__state->pass1 = FALSE_;
@@ -470,42 +471,45 @@ static zzsrfker_state_t* get_zzsrfker_state() {
 
 /*     Fetch attributes of the surface mapping kernel variables. */
 
-    dtpool_("NAIF_SURFACE_NAME", &fndnam, &nname, ndtype, (ftnlen)17, (ftnlen)
-	    1);
-    dtpool_("NAIF_SURFACE_CODE", &fndcde, &ncode, cdtype, (ftnlen)17, (ftnlen)
-	    1);
-    dtpool_("NAIF_SURFACE_BODY", &fndbod, &nbody, bdtype, (ftnlen)17, (ftnlen)
-	    1);
-    if (failed_()) {
-	chkout_("ZZSRFKER", (ftnlen)8);
+    dtpool_(__global_state, "NAIF_SURFACE_NAME", &fndnam, &nname, ndtype, (
+	    ftnlen)17, (ftnlen)1);
+    dtpool_(__global_state, "NAIF_SURFACE_CODE", &fndcde, &ncode, cdtype, (
+	    ftnlen)17, (ftnlen)1);
+    dtpool_(__global_state, "NAIF_SURFACE_BODY", &fndbod, &nbody, bdtype, (
+	    ftnlen)17, (ftnlen)1);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSRFKER", (ftnlen)8);
 	return 0;
     }
 
 /*     The variables must all be present or all be absent. */
 
     if (fndcde != fndnam || fndbod != fndnam) {
-	setmsg_("Surface mapping kernel variables are in an inconsistent sta"
-		"te. # was #; # was #; # was #.", (ftnlen)89);
-	errch_("#", "NAIF_SURFACE_NAME", (ftnlen)1, (ftnlen)17);
+	setmsg_(__global_state, "Surface mapping kernel variables are in an "
+		"inconsistent state. # was #; # was #; # was #.", (ftnlen)89);
+	errch_(__global_state, "#", "NAIF_SURFACE_NAME", (ftnlen)1, (ftnlen)
+		17);
 	if (fndnam) {
-	    errch_("#", "found", (ftnlen)1, (ftnlen)5);
+	    errch_(__global_state, "#", "found", (ftnlen)1, (ftnlen)5);
 	} else {
-	    errch_("#", "not found", (ftnlen)1, (ftnlen)9);
+	    errch_(__global_state, "#", "not found", (ftnlen)1, (ftnlen)9);
 	}
-	errch_("#", "NAIF_SURFACE_CODE", (ftnlen)1, (ftnlen)17);
+	errch_(__global_state, "#", "NAIF_SURFACE_CODE", (ftnlen)1, (ftnlen)
+		17);
 	if (fndcde) {
-	    errch_("#", "found", (ftnlen)1, (ftnlen)5);
+	    errch_(__global_state, "#", "found", (ftnlen)1, (ftnlen)5);
 	} else {
-	    errch_("#", "not found", (ftnlen)1, (ftnlen)9);
+	    errch_(__global_state, "#", "not found", (ftnlen)1, (ftnlen)9);
 	}
-	errch_("#", "NAIF_SURFACE_BODY", (ftnlen)1, (ftnlen)17);
+	errch_(__global_state, "#", "NAIF_SURFACE_BODY", (ftnlen)1, (ftnlen)
+		17);
 	if (fndbod) {
-	    errch_("#", "found", (ftnlen)1, (ftnlen)5);
+	    errch_(__global_state, "#", "found", (ftnlen)1, (ftnlen)5);
 	} else {
-	    errch_("#", "not found", (ftnlen)1, (ftnlen)9);
+	    errch_(__global_state, "#", "not found", (ftnlen)1, (ftnlen)9);
 	}
-	sigerr_("SPICE(BADSURFACEMAP)", (ftnlen)20);
-	chkout_("ZZSRFKER", (ftnlen)8);
+	sigerr_(__global_state, "SPICE(BADSURFACEMAP)", (ftnlen)20);
+	chkout_(__global_state, "ZZSRFKER", (ftnlen)8);
 	return 0;
     }
 
@@ -513,7 +517,7 @@ static zzsrfker_state_t* get_zzsrfker_state() {
 
     *extker = fndnam && fndcde && fndbod;
     if (! (*extker)) {
-	chkout_("ZZSRFKER", (ftnlen)8);
+	chkout_(__global_state, "ZZSRFKER", (ftnlen)8);
 	return 0;
     }
 
@@ -524,47 +528,56 @@ static zzsrfker_state_t* get_zzsrfker_state() {
 
     if (*(unsigned char *)ndtype != 'C' || *(unsigned char *)cdtype != 'N' || 
 	    *(unsigned char *)bdtype != 'N') {
-	setmsg_("Surface mapping kernel variable types are: # = #; # = #; # "
-		"= #. These types must be, respectively, 'C', 'N', 'N'.", (
-		ftnlen)113);
-	errch_("#", "NAIF_SURFACE_NAME", (ftnlen)1, (ftnlen)17);
-	errch_("#", ndtype, (ftnlen)1, (ftnlen)1);
-	errch_("#", "NAIF_SURFACE_CODE", (ftnlen)1, (ftnlen)17);
-	errch_("#", cdtype, (ftnlen)1, (ftnlen)1);
-	errch_("#", "NAIF_SURFACE_BODY", (ftnlen)1, (ftnlen)17);
-	errch_("#", bdtype, (ftnlen)1, (ftnlen)1);
-	sigerr_("SPICE(BADVARIABLETYPE)", (ftnlen)22);
-	chkout_("ZZSRFKER", (ftnlen)8);
+	setmsg_(__global_state, "Surface mapping kernel variable types are: "
+		"# = #; # = #; # = #. These types must be, respectively, 'C',"
+		" 'N', 'N'.", (ftnlen)113);
+	errch_(__global_state, "#", "NAIF_SURFACE_NAME", (ftnlen)1, (ftnlen)
+		17);
+	errch_(__global_state, "#", ndtype, (ftnlen)1, (ftnlen)1);
+	errch_(__global_state, "#", "NAIF_SURFACE_CODE", (ftnlen)1, (ftnlen)
+		17);
+	errch_(__global_state, "#", cdtype, (ftnlen)1, (ftnlen)1);
+	errch_(__global_state, "#", "NAIF_SURFACE_BODY", (ftnlen)1, (ftnlen)
+		17);
+	errch_(__global_state, "#", bdtype, (ftnlen)1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADVARIABLETYPE)", (ftnlen)22);
+	chkout_(__global_state, "ZZSRFKER", (ftnlen)8);
 	return 0;
     }
 
 /*     Check variable dimensions. */
 
     if (nname > 2000 || ncode > 2000 || nbody > 2000) {
-	setmsg_("Surface mapping kernel variable sizes are: # = #; # = #; # "
-		"= #. Maximum allowed size is #.", (ftnlen)90);
-	errch_("#", "NAIF_SURFACE_NAME", (ftnlen)1, (ftnlen)17);
-	errint_("#", &nname, (ftnlen)1);
-	errch_("#", "NAIF_SURFACE_CODE", (ftnlen)1, (ftnlen)17);
-	errint_("#", &ncode, (ftnlen)1);
-	errch_("#", "NAIF_SURFACE_BODY", (ftnlen)1, (ftnlen)17);
-	errint_("#", &nbody, (ftnlen)1);
-	errint_("#", &__state->c__2000, (ftnlen)1);
-	sigerr_("SPICE(TOOMANYSURFACES)", (ftnlen)22);
-	chkout_("ZZSRFKER", (ftnlen)8);
+	setmsg_(__global_state, "Surface mapping kernel variable sizes are: "
+		"# = #; # = #; # = #. Maximum allowed size is #.", (ftnlen)90);
+	errch_(__global_state, "#", "NAIF_SURFACE_NAME", (ftnlen)1, (ftnlen)
+		17);
+	errint_(__global_state, "#", &nname, (ftnlen)1);
+	errch_(__global_state, "#", "NAIF_SURFACE_CODE", (ftnlen)1, (ftnlen)
+		17);
+	errint_(__global_state, "#", &ncode, (ftnlen)1);
+	errch_(__global_state, "#", "NAIF_SURFACE_BODY", (ftnlen)1, (ftnlen)
+		17);
+	errint_(__global_state, "#", &nbody, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__2000, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TOOMANYSURFACES)", (ftnlen)22);
+	chkout_(__global_state, "ZZSRFKER", (ftnlen)8);
 	return 0;
     }
     if (ncode != nname || nbody != nname) {
-	setmsg_("Surface variable sizes do not match. Size of # is #; size o"
-		"f # is #; size of # is #.", (ftnlen)84);
-	errch_("#", "NAIF_SURFACE_NAME", (ftnlen)1, (ftnlen)17);
-	errint_("#", &nname, (ftnlen)1);
-	errch_("#", "NAIF_SURFACE_CODE", (ftnlen)1, (ftnlen)17);
-	errint_("#", &ncode, (ftnlen)1);
-	errch_("#", "NAIF_SURFACE_BODY", (ftnlen)1, (ftnlen)17);
-	errint_("#", &nbody, (ftnlen)1);
-	sigerr_("SPICE(ARRAYSIZEMISMATCH)", (ftnlen)24);
-	chkout_("ZZSRFKER", (ftnlen)8);
+	setmsg_(__global_state, "Surface variable sizes do not match. Size o"
+		"f # is #; size of # is #; size of # is #.", (ftnlen)84);
+	errch_(__global_state, "#", "NAIF_SURFACE_NAME", (ftnlen)1, (ftnlen)
+		17);
+	errint_(__global_state, "#", &nname, (ftnlen)1);
+	errch_(__global_state, "#", "NAIF_SURFACE_CODE", (ftnlen)1, (ftnlen)
+		17);
+	errint_(__global_state, "#", &ncode, (ftnlen)1);
+	errch_(__global_state, "#", "NAIF_SURFACE_BODY", (ftnlen)1, (ftnlen)
+		17);
+	errint_(__global_state, "#", &nbody, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ARRAYSIZEMISMATCH)", (ftnlen)24);
+	chkout_(__global_state, "ZZSRFKER", (ftnlen)8);
 	return 0;
     }
 
@@ -572,14 +585,15 @@ static zzsrfker_state_t* get_zzsrfker_state() {
 
 /*     Note that we'll check the variable sizes below. */
 
-    gcpool_("NAIF_SURFACE_NAME", &__state->c__1, &__state->c__2000, &nname, 
-	    kernam, &fndnam, (ftnlen)17, (ftnlen)36);
-    gipool_("NAIF_SURFACE_CODE", &__state->c__1, &__state->c__2000, &ncode, 
-	    kersid, &fndcde, (ftnlen)17);
-    gipool_("NAIF_SURFACE_BODY", &__state->c__1, &__state->c__2000, &nbody, 
-	    kerbid, &fndbod, (ftnlen)17);
-    if (failed_()) {
-	chkout_("ZZSRFKER", (ftnlen)8);
+    gcpool_(__global_state, "NAIF_SURFACE_NAME", &__state->c__1, &
+	    __state->c__2000, &nname, kernam, &fndnam, (ftnlen)17, (ftnlen)36)
+	    ;
+    gipool_(__global_state, "NAIF_SURFACE_CODE", &__state->c__1, &
+	    __state->c__2000, &ncode, kersid, &fndcde, (ftnlen)17);
+    gipool_(__global_state, "NAIF_SURFACE_BODY", &__state->c__1, &
+	    __state->c__2000, &nbody, kerbid, &fndbod, (ftnlen)17);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZSRFKER", (ftnlen)8);
 	return 0;
     }
     *nkvar = nname;
@@ -589,24 +603,27 @@ static zzsrfker_state_t* get_zzsrfker_state() {
 
     i__1 = *nkvar;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if (s_cmp(kernam + (i__ - 1) * 36, " ", (ftnlen)36, (ftnlen)1) == 0) {
-	    setmsg_("An attempt to assign the code, #, to a blank string was"
-		    " made.  Check loaded text kernels for a blank string in "
-		    "the NAIF_SURFACE_NAME array.", (ftnlen)139);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(BLANKNAMEASSIGNED)", (ftnlen)24);
-	    chkout_("ZZSRFKER", (ftnlen)8);
+	if (s_cmp(&__global_state->f2c, kernam + (i__ - 1) * 36, " ", (ftnlen)
+		36, (ftnlen)1) == 0) {
+	    setmsg_(__global_state, "An attempt to assign the code, #, to a "
+		    "blank string was made.  Check loaded text kernels for a "
+		    "blank string in the NAIF_SURFACE_NAME array.", (ftnlen)
+		    139);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BLANKNAMEASSIGNED)", (ftnlen)24);
+	    chkout_(__global_state, "ZZSRFKER", (ftnlen)8);
 	    return 0;
 	}
-	ljucrs_(&__state->c__1, kernam + (i__ - 1) * 36, nornam + (i__ - 1) * 
-		36, (ftnlen)36, (ftnlen)36);
+	ljucrs_(__global_state, &__state->c__1, kernam + (i__ - 1) * 36, 
+		nornam + (i__ - 1) * 36, (ftnlen)36, (ftnlen)36);
     }
 
 /*     Initialize hash data structures. */
 
-    zzsrfini_(nornam, kersid, kerbid, nkvar, &__state->c__2003, snmhls, 
-	    snmpol, snmidx, sidhls, sidpol, sididx, (ftnlen)36);
-    chkout_("ZZSRFKER", (ftnlen)8);
+    zzsrfini_(__global_state, nornam, kersid, kerbid, nkvar, &
+	    __state->c__2003, snmhls, snmpol, snmidx, sidhls, sidpol, sididx, 
+	    (ftnlen)36);
+    chkout_(__global_state, "ZZSRFKER", (ftnlen)8);
     return 0;
 } /* zzsrfker_ */
 

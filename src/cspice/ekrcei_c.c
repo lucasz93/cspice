@@ -199,7 +199,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekrcei_c" );
+   chkin_c ( naif_state, "ekrcei_c" );
 
    /*
    Map the segment and record numbers to their Fortran-style

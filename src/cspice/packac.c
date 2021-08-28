@@ -8,33 +8,33 @@
 
 
 typedef int packac_state_t;
-static packac_state_t* get_packac_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline packac_state_t* get_packac_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PACKAC ( Pack a character array ) */
-/* Subroutine */ int packac_(char *in, integer *pack, integer *npack, integer 
-	*maxout, integer *nout, char *out, ftnlen in_len, ftnlen out_len)
+/* Subroutine */ int packac_(cspice_t* __global_state, char *in, integer *
+	pack, integer *npack, integer *maxout, integer *nout, char *out, 
+	ftnlen in_len, ftnlen out_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    packac_state_t* __state = get_packac_state();
+    packac_state_t* __state = get_packac_state(__global_state);
 /* $ Abstract */
 
 /*     Pack the contents of a CHARACTER array. That is, take */
@@ -230,10 +230,10 @@ static packac_state_t* get_packac_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PACKAC", (ftnlen)6);
+	chkin_(__global_state, "PACKAC", (ftnlen)6);
     }
 
 /*     First, determine how many items to transfer. */
@@ -245,11 +245,12 @@ static packac_state_t* get_packac_state() {
     i__1 = *nout;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (pack[i__ - 1] < 1) {
-	    setmsg_("Element number * contains index *.", (ftnlen)34);
-	    errint_("*", &i__, (ftnlen)1);
-	    errint_("*", &pack[i__ - 1], (ftnlen)1);
-	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	    chkout_("PACKAC", (ftnlen)6);
+	    setmsg_(__global_state, "Element number * contains index *.", (
+		    ftnlen)34);
+	    errint_(__global_state, "*", &i__, (ftnlen)1);
+	    errint_(__global_state, "*", &pack[i__ - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	    chkout_(__global_state, "PACKAC", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -258,10 +259,10 @@ static packac_state_t* get_packac_state() {
 
     i__1 = *nout;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	s_copy(out + (i__ - 1) * out_len, in + (pack[i__ - 1] - 1) * in_len, 
-		out_len, in_len);
+	s_copy(&__global_state->f2c, out + (i__ - 1) * out_len, in + (pack[
+		i__ - 1] - 1) * in_len, out_len, in_len);
     }
-    chkout_("PACKAC", (ftnlen)6);
+    chkout_(__global_state, "PACKAC", (ftnlen)6);
     return 0;
 } /* packac_ */
 

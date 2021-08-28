@@ -8,8 +8,7 @@
 
 
 extern stpool_init_t __stpool_init;
-static stpool_state_t* get_stpool_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline stpool_state_t* get_stpool_state(cspice_t* state) {
 	if (!state->stpool)
 		state->stpool = __cspice_allocate_module(sizeof(
 	stpool_state_t), &__stpool_init, sizeof(__stpool_init));
@@ -18,13 +17,14 @@ static stpool_state_t* get_stpool_state() {
 }
 
 /* $Procedure      STPOOL ( String from pool ) */
-/* Subroutine */ int stpool_(char *item, integer *nth, char *contin, char *
-	string, integer *size, logical *found, ftnlen item_len, ftnlen 
-	contin_len, ftnlen string_len)
+/* Subroutine */ int stpool_(cspice_t* __global_state, char *item, integer *
+	nth, char *contin, char *string, integer *size, logical *found, 
+	ftnlen item_len, ftnlen contin_len, ftnlen string_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer comp;
@@ -32,22 +32,22 @@ static stpool_state_t* get_stpool_state() {
     char part[80];
     integer room;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer clast;
     integer csize;
     logical gotit;
-    extern integer rtrim_(char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
     integer putat;
     integer strno;
-    extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gcpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, char *, logical *, ftnlen, ftnlen);
     integer cfirst;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    stpool_state_t* __state = get_stpool_state();
+    stpool_state_t* __state = get_stpool_state(__global_state);
 /* $ Abstract */
 
 /*     Retrieve the NTH string from the kernel pool variable, */
@@ -373,18 +373,18 @@ static stpool_state_t* get_stpool_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
     if (*nth < 1) {
 	*found = FALSE_;
-	s_copy(string, " ", string_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, string, " ", string_len, (ftnlen)1);
 	*size = 0;
 	return 0;
     }
-    chkin_("STPOOL", (ftnlen)6);
-    room = i_len(string, string_len);
-    csize = rtrim_(contin, contin_len);
+    chkin_(__global_state, "STPOOL", (ftnlen)6);
+    room = i_len(&__global_state->f2c, string, string_len);
+    csize = rtrim_(__global_state, contin, contin_len);
     putat = 1;
 
 /*     Retrieve components until we've gone past the first NTH-1 */
@@ -394,22 +394,22 @@ static stpool_state_t* get_stpool_state() {
     comp = 1;
     *found = FALSE_;
     while(strno < *nth) {
-	gcpool_(item, &comp, &__state->c__1, &n, part, &gotit, item_len, (
-		ftnlen)80);
+	gcpool_(__global_state, item, &comp, &__state->c__1, &n, part, &gotit,
+		 item_len, (ftnlen)80);
 	gotit = n > 0;
 	if (! gotit) {
-	    s_copy(string, " ", string_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, string, " ", string_len, (ftnlen)1);
 	    *size = 0;
 	    *found = FALSE_;
-	    chkout_("STPOOL", (ftnlen)6);
+	    chkout_(__global_state, "STPOOL", (ftnlen)6);
 	    return 0;
 	}
-	clast = rtrim_(part, (ftnlen)80);
+	clast = rtrim_(__global_state, part, (ftnlen)80);
 	cfirst = clast - csize + 1;
 	if (cfirst < 0) {
 	    ++strno;
-	} else if (s_cmp(part + (cfirst - 1), contin, clast - (cfirst - 1), 
-		contin_len) != 0) {
+	} else if (s_cmp(&__global_state->f2c, part + (cfirst - 1), contin, 
+		clast - (cfirst - 1), contin_len) != 0) {
 	    ++strno;
 	}
 	++comp;
@@ -421,35 +421,35 @@ static stpool_state_t* get_stpool_state() {
 /*     one is not continued. */
 
     more = TRUE_;
-    s_copy(string, " ", string_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, string, " ", string_len, (ftnlen)1);
     n = 0;
     while(more) {
-	gcpool_(item, &comp, &__state->c__1, &n, part, &more, item_len, (
-		ftnlen)80);
+	gcpool_(__global_state, item, &comp, &__state->c__1, &n, part, &more, 
+		item_len, (ftnlen)80);
 	more = more && n > 0;
 	if (more) {
 	    *found = TRUE_;
-	    clast = rtrim_(part, (ftnlen)80);
+	    clast = rtrim_(__global_state, part, (ftnlen)80);
 	    cfirst = clast - csize + 1;
 	    if (cfirst < 0) {
 		if (putat <= room) {
-		    s_copy(string + (putat - 1), part, string_len - (putat - 
-			    1), clast);
+		    s_copy(&__global_state->f2c, string + (putat - 1), part, 
+			    string_len - (putat - 1), clast);
 		}
 		putat += clast;
 		more = FALSE_;
-	    } else if (s_cmp(part + (cfirst - 1), contin, clast - (cfirst - 1)
-		    , contin_len) != 0) {
+	    } else if (s_cmp(&__global_state->f2c, part + (cfirst - 1), 
+		    contin, clast - (cfirst - 1), contin_len) != 0) {
 		if (putat <= room) {
-		    s_copy(string + (putat - 1), part, string_len - (putat - 
-			    1), clast);
+		    s_copy(&__global_state->f2c, string + (putat - 1), part, 
+			    string_len - (putat - 1), clast);
 		}
 		putat += clast;
 		more = FALSE_;
 	    } else if (cfirst > 1) {
 		if (putat <= room) {
-		    s_copy(string + (putat - 1), part, string_len - (putat - 
-			    1), cfirst - 1);
+		    s_copy(&__global_state->f2c, string + (putat - 1), part, 
+			    string_len - (putat - 1), cfirst - 1);
 		}
 		putat = putat + cfirst - 1;
 	    }
@@ -460,7 +460,7 @@ static stpool_state_t* get_stpool_state() {
 /*     We are done.  Get the size of the full string and checkout. */
 
     *size = putat - 1;
-    chkout_("STPOOL", (ftnlen)6);
+    chkout_(__global_state, "STPOOL", (ftnlen)6);
     return 0;
 } /* stpool_ */
 

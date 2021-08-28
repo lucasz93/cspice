@@ -8,19 +8,20 @@
 
 
 typedef int eqstr_state_t;
-static eqstr_state_t* get_eqstr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline eqstr_state_t* get_eqstr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure EQSTR ( Equivalent strings ) */
-logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
+logical eqstr_(cspice_t* __global_state, char *a, char *b, ftnlen a_len, 
+	ftnlen b_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), i_len(char *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), i_len(
+	    f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer lena;
@@ -36,7 +37,7 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 
 
     /* Module state */
-    eqstr_state_t* __state = get_eqstr_state();
+    eqstr_state_t* __state = get_eqstr_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether two strings are equivalent. */
@@ -318,14 +319,14 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 /*     On the other hand, in many cases the strings will be exactly */
 /*     equal. If so, why knock ourselves out? */
 
-    if (s_cmp(a, b, a_len, b_len) == 0) {
+    if (s_cmp(&__global_state->f2c, a, b, a_len, b_len) == 0) {
 	ret_val = TRUE_;
 	return ret_val;
     } else {
 	pa = 1;
 	pb = 1;
-	lena = i_len(a, a_len);
-	lenb = i_len(b, b_len);
+	lena = i_len(&__global_state->f2c, a, a_len);
+	lenb = i_len(&__global_state->f2c, b, b_len);
 	lbound = 'a';
 	ubound = 'z';
 	delta = 'A' - 'a';
@@ -369,8 +370,8 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 
 		    if (pb > lenb) {
 			ret_val = TRUE_;
-		    } else if (s_cmp(b + (pb - 1), " ", b_len - (pb - 1), (
-			    ftnlen)1) != 0) {
+		    } else if (s_cmp(&__global_state->f2c, b + (pb - 1), 
+			    " ", b_len - (pb - 1), (ftnlen)1) != 0) {
 			ret_val = FALSE_;
 		    } else {
 			ret_val = TRUE_;
@@ -385,8 +386,8 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 /*                 Whichever of the following tests passes, we're going */
 /*                 to have a verdict at the end of the IF block below. */
 
-		    if (s_cmp(a + (pa - 1), " ", a_len - (pa - 1), (ftnlen)1) 
-			    != 0) {
+		    if (s_cmp(&__global_state->f2c, a + (pa - 1), " ", a_len 
+			    - (pa - 1), (ftnlen)1) != 0) {
 			ret_val = FALSE_;
 		    } else {
 			ret_val = TRUE_;

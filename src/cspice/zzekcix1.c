@@ -8,24 +8,25 @@
 
 
 typedef int zzekcix1_state_t;
-static zzekcix1_state_t* get_zzekcix1_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekcix1_state_t* get_zzekcix1_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKCIX1 ( EK, create index, type 1 ) */
-/* Subroutine */ int zzekcix1_(integer *handle, integer *coldsc)
+/* Subroutine */ int zzekcix1_(cspice_t* __global_state, integer *handle, 
+	integer *coldsc)
 {
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int zzektrit_(integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzektrit_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzekcix1_state_t* __state = get_zzekcix1_state();
+    zzekcix1_state_t* __state = get_zzekcix1_state(__global_state);
 /* $ Abstract */
 
 /*     Create a new type 1 index for a specified EK column. */
@@ -250,10 +251,10 @@ static zzekcix1_state_t* get_zzekcix1_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKCIX1", (ftnlen)8);
+	chkin_(__global_state, "ZZEKCIX1", (ftnlen)8);
     }
 
 /*     Before trying to actually write anything, do every error */
@@ -262,9 +263,9 @@ static zzekcix1_state_t* get_zzekcix1_state() {
 /*     Is this file handle valid--is the file open for paged write */
 /*     access?  Signal an error if not. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZEKCIX1", (ftnlen)8);
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZEKCIX1", (ftnlen)8);
 	return 0;
     }
 
@@ -272,8 +273,8 @@ static zzekcix1_state_t* get_zzekcix1_state() {
 /*     page number of the tree serves as the index pointer. */
 
     coldsc[5] = 1;
-    zzektrit_(handle, &coldsc[6]);
-    chkout_("ZZEKCIX1", (ftnlen)8);
+    zzektrit_(__global_state, handle, &coldsc[6]);
+    chkout_(__global_state, "ZZEKCIX1", (ftnlen)8);
     return 0;
 } /* zzekcix1_ */
 

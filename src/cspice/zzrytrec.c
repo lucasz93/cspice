@@ -8,8 +8,7 @@
 
 
 extern zzrytrec_init_t __zzrytrec_init;
-static zzrytrec_state_t* get_zzrytrec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzrytrec_state_t* get_zzrytrec_state(cspice_t* state) {
 	if (!state->zzrytrec)
 		state->zzrytrec = __cspice_allocate_module(sizeof(
 	zzrytrec_state_t), &__zzrytrec_init, sizeof(__zzrytrec_init));
@@ -18,41 +17,42 @@ static zzrytrec_state_t* get_zzrytrec_state() {
 }
 
 /* $Procedure ZZRYTREC ( DSK, ray touches rectangular element ) */
-/* Subroutine */ int zzrytrec_(doublereal *vertex, doublereal *raydir, 
-	doublereal *bounds, doublereal *margin, integer *nxpts, doublereal *
-	xpt)
+/* Subroutine */ int zzrytrec_(cspice_t* __global_state, doublereal *vertex, 
+	doublereal *raydir, doublereal *bounds, doublereal *margin, integer *
+	nxpts, doublereal *xpt)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzraybox_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzraybox_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, logical *);
     integer i__;
     doublereal l[3];
     doublereal delta[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     logical inside;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal boxori[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     doublereal extent[3];
-    extern logical return_(void);
-    extern /* Subroutine */ int zzinrec_(doublereal *, doublereal *, 
-	    doublereal *, integer *, logical *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzinrec_(cspice_t*, doublereal *, doublereal *
+	    , doublereal *, integer *, logical *);
 
 
     /* Module state */
-    zzrytrec_state_t* __state = get_zzrytrec_state();
+    zzrytrec_state_t* __state = get_zzrytrec_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -225,7 +225,7 @@ static zzrytrec_state_t* get_zzrytrec_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -233,26 +233,28 @@ static zzrytrec_state_t* get_zzrytrec_state() {
 /*     bounds. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, "zzry"
-		"trec_", (ftnlen)224)] = bounds[(i__2 = (i__ << 1) - 1) < 6 && 
-		0 <= i__2 ? i__2 : s_rnge("bounds", i__2, "zzrytrec_", (
+	l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "l", i__1, "zzrytrec_", (ftnlen)224)] = 
+		bounds[(i__2 = (i__ << 1) - 1) < 6 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "bounds", i__2, "zzrytrec_", (
 		ftnlen)224)] - bounds[(i__3 = (i__ << 1) - 2) < 6 && 0 <= 
-		i__3 ? i__3 : s_rnge("bounds", i__3, "zzrytrec_", (ftnlen)224)
-		];
-	if (l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zzrytrec_", (ftnlen)226)] <= 0.) {
-	    chkin_("ZZRYTREC", (ftnlen)8);
-	    setmsg_("Coordinate # bounds were #:#; bounds must be strictly i"
-		    "ncreasing.", (ftnlen)65);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &bounds[(i__1 = (i__ << 1) - 2) < 6 && 0 <= i__1 ? 
-		    i__1 : s_rnge("bounds", i__1, "zzrytrec_", (ftnlen)232)], 
-		    (ftnlen)1);
-	    errdp_("#", &bounds[(i__1 = (i__ << 1) - 1) < 6 && 0 <= i__1 ? 
-		    i__1 : s_rnge("bounds", i__1, "zzrytrec_", (ftnlen)233)], 
-		    (ftnlen)1);
-	    sigerr_("SPICE(BADCOORDBOUNDS)", (ftnlen)21);
-	    chkout_("ZZRYTREC", (ftnlen)8);
+		i__3 ? i__3 : s_rnge(&__global_state->f2c, "bounds", i__3, 
+		"zzrytrec_", (ftnlen)224)];
+	if (l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "l", i__1, "zzrytrec_", (ftnlen)226)] <= 
+		0.) {
+	    chkin_(__global_state, "ZZRYTREC", (ftnlen)8);
+	    setmsg_(__global_state, "Coordinate # bounds were #:#; bounds mu"
+		    "st be strictly increasing.", (ftnlen)65);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &bounds[(i__1 = (i__ << 1) - 2) < 6 &&
+		     0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bounds",
+		     i__1, "zzrytrec_", (ftnlen)232)], (ftnlen)1);
+	    errdp_(__global_state, "#", &bounds[(i__1 = (i__ << 1) - 1) < 6 &&
+		     0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bounds",
+		     i__1, "zzrytrec_", (ftnlen)233)], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADCOORDBOUNDS)", (ftnlen)21);
+	    chkout_(__global_state, "ZZRYTREC", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -264,40 +266,44 @@ static zzrytrec_state_t* get_zzrytrec_state() {
 
     *nxpts = 0;
     d__1 = *margin * 2;
-    zzinrec_(vertex, bounds, &d__1, &__state->c__0, &inside);
+    zzinrec_(__global_state, vertex, bounds, &d__1, &__state->c__0, &inside);
     if (inside) {
 
 /*        We know the answer. */
 
 	*nxpts = 1;
-	vequ_(vertex, xpt);
+	vequ_(__global_state, vertex, xpt);
 	return 0;
     }
 
 /*     Expand the box using the specified margin. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	delta[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("delta", i__2,
-		 "zzrytrec_", (ftnlen)269)] = *margin * (d__1 = l[(i__1 = i__ 
-		- 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, "zzrytrec_", 
-		(ftnlen)269)], abs(d__1));
-	boxori[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("boxori", 
-		i__1, "zzrytrec_", (ftnlen)271)] = bounds[(i__2 = (i__ << 1) 
-		- 2) < 6 && 0 <= i__2 ? i__2 : s_rnge("bounds", i__2, "zzryt"
-		"rec_", (ftnlen)271)] - delta[(i__3 = i__ - 1) < 3 && 0 <= 
-		i__3 ? i__3 : s_rnge("delta", i__3, "zzrytrec_", (ftnlen)271)]
-		;
-	extent[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("extent", 
-		i__1, "zzrytrec_", (ftnlen)273)] = l[(i__2 = i__ - 1) < 3 && 
-		0 <= i__2 ? i__2 : s_rnge("l", i__2, "zzrytrec_", (ftnlen)273)
-		] + delta[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(
-		"delta", i__3, "zzrytrec_", (ftnlen)273)] * 2;
+	delta[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "delta", i__2, "zzrytrec_", (ftnlen)269)]
+		 = *margin * (d__1 = l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? 
+		i__1 : s_rnge(&__global_state->f2c, "l", i__1, "zzrytrec_", (
+		ftnlen)269)], abs(d__1));
+	boxori[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "boxori", i__1, "zzrytrec_", (ftnlen)271)
+		] = bounds[(i__2 = (i__ << 1) - 2) < 6 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "bounds", i__2, "zzrytrec_", (
+		ftnlen)271)] - delta[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 
+		: s_rnge(&__global_state->f2c, "delta", i__3, "zzrytrec_", (
+		ftnlen)271)];
+	extent[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "extent", i__1, "zzrytrec_", (ftnlen)273)
+		] = l[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "l", i__2, "zzrytrec_", (ftnlen)273)] + 
+		delta[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "delta", i__3, "zzrytrec_", (ftnlen)273)]
+		 * 2;
     }
 
 /*     Find the ray-surface intercept on the expanded element, */
 /*     if the intercept exists. */
 
-    zzraybox_(vertex, raydir, boxori, extent, xpt, &found);
+    zzraybox_(__global_state, vertex, raydir, boxori, extent, xpt, &found);
     if (found) {
 	*nxpts = 1;
     }

@@ -8,33 +8,32 @@
 
 
 typedef int remlac_state_t;
-static remlac_state_t* get_remlac_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline remlac_state_t* get_remlac_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      REMLAC ( Remove elements from a character array ) */
-/* Subroutine */ int remlac_(integer *ne, integer *loc, char *array, integer *
-	na, ftnlen array_len)
+/* Subroutine */ int remlac_(cspice_t* __global_state, integer *ne, integer *
+	loc, char *array, integer *na, ftnlen array_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    remlac_state_t* __state = get_remlac_state();
+    remlac_state_t* __state = get_remlac_state(__global_state);
 /* $ Abstract */
 
 /*      Remove one or more elements from a character array at the */
@@ -220,10 +219,10 @@ static remlac_state_t* get_remlac_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("REMLAC", (ftnlen)6);
+	chkin_(__global_state, "REMLAC", (ftnlen)6);
     }
 
 /*     If LOC does not point to an actual element, signal an error and */
@@ -231,18 +230,19 @@ static remlac_state_t* get_remlac_state() {
 /*     value of LOC is invalid, and an error is signalled. */
 
     if (*loc < 1 || *loc > *na) {
-	setmsg_("Location was *.", (ftnlen)15);
-	errint_("*", loc, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("REMLAC", (ftnlen)6);
+	setmsg_(__global_state, "Location was *.", (ftnlen)15);
+	errint_(__global_state, "*", loc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "REMLAC", (ftnlen)6);
 	return 0;
 
 /*     Don't try to remove non-existent elements. */
 
     } else if (*ne > *na - *loc + 1) {
-	setmsg_("Trying to remove non-existent elements.", (ftnlen)39);
-	sigerr_("SPICE(NONEXISTELEMENTS)", (ftnlen)23);
-	chkout_("REMLAC", (ftnlen)6);
+	setmsg_(__global_state, "Trying to remove non-existent elements.", (
+		ftnlen)39);
+	sigerr_(__global_state, "SPICE(NONEXISTELEMENTS)", (ftnlen)23);
+	chkout_(__global_state, "REMLAC", (ftnlen)6);
 	return 0;
 
 /*     If there are elements to be removed, remove them. Otherwise, */
@@ -254,15 +254,15 @@ static remlac_state_t* get_remlac_state() {
 
 	i__1 = *na - *ne;
 	for (i__ = *loc; i__ <= i__1; ++i__) {
-	    s_copy(array + (i__ - 1) * array_len, array + (i__ + *ne - 1) * 
-		    array_len, array_len, array_len);
+	    s_copy(&__global_state->f2c, array + (i__ - 1) * array_len, array 
+		    + (i__ + *ne - 1) * array_len, array_len, array_len);
 	}
 
 /*        Update the number of elements in the array. */
 
 	*na -= *ne;
     }
-    chkout_("REMLAC", (ftnlen)6);
+    chkout_(__global_state, "REMLAC", (ftnlen)6);
     return 0;
 } /* remlac_ */
 

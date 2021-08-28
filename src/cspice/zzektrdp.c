@@ -8,25 +8,24 @@
 
 
 typedef int zzektrdp_state_t;
-static zzektrdp_state_t* get_zzektrdp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrdp_state_t* get_zzektrdp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKTRDP ( EK tree, return data pointer ) */
-/* Subroutine */ int zzektrdp_(integer *handle, integer *tree, integer *key, 
-	integer *ptr)
+/* Subroutine */ int zzektrdp_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *key, integer *ptr)
 {
     integer node;
-    extern /* Subroutine */ int zzektrlk_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrlk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *);
     integer level;
     integer noffst;
     integer idx;
 
 
     /* Module state */
-    zzektrdp_state_t* __state = get_zzektrdp_state();
+    zzektrdp_state_t* __state = get_zzektrdp_state(__global_state);
 /* $ Abstract */
 
 /*     Return the data pointer from a specified location in an EK tree. */
@@ -157,7 +156,8 @@ static zzektrdp_state_t* get_zzektrdp_state() {
 
 /*     Use discovery check-in in this puppy. */
 
-    zzektrlk_(handle, tree, key, &idx, &node, &noffst, &level, ptr);
+    zzektrlk_(__global_state, handle, tree, key, &idx, &node, &noffst, &level,
+	     ptr);
     return 0;
 } /* zzektrdp_ */
 

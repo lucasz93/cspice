@@ -8,8 +8,7 @@
 
 
 extern zzekmloc_init_t __zzekmloc_init;
-static zzekmloc_state_t* get_zzekmloc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekmloc_state_t* get_zzekmloc_state(cspice_t* state) {
 	if (!state->zzekmloc)
 		state->zzekmloc = __cspice_allocate_module(sizeof(
 	zzekmloc_state_t), &__zzekmloc_init, sizeof(__zzekmloc_init));
@@ -18,8 +17,8 @@ static zzekmloc_state_t* get_zzekmloc_state() {
 }
 
 /* $Procedure      ZZEKMLOC ( EK, return integer metadata location ) */
-/* Subroutine */ int zzekmloc_(integer *handle, integer *segno, integer *page,
-	 integer *base)
+/* Subroutine */ int zzekmloc_(cspice_t* __global_state, integer *handle, 
+	integer *segno, integer *page, integer *base)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -27,22 +26,22 @@ static zzekmloc_state_t* get_zzekmloc_state() {
     /* Local variables */
     integer nseg;
     integer tree;
-    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
-	    integer *);
-    extern integer zzektrbs_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzektrdp_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern integer zzektrbs_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer tbase;
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern integer eknseg_(integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern integer eknseg_(cspice_t*, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzekmloc_state_t* __state = get_zzekmloc_state();
+    zzekmloc_state_t* __state = get_zzekmloc_state(__global_state);
 /* $ Abstract */
 
 /*     Return the integer metadata location of a specified segment.  The */
@@ -254,39 +253,40 @@ static zzekmloc_state_t* get_zzekmloc_state() {
 
 /*     Get the segment count; valididate SEGNO. */
 
-    nseg = eknseg_(handle);
+    nseg = eknseg_(__global_state, handle);
 
 /*     Check out SEGNO. */
 
     if (*segno < 1 || *segno > nseg) {
-	chkin_("ZZEKMLOC", (ftnlen)8);
-	setmsg_("Segment number = #; valid range is 1:#.", (ftnlen)39);
-	errint_("#", segno, (ftnlen)1);
-	errint_("#", &nseg, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX )", (ftnlen)20);
-	chkout_("ZZEKMLOC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKMLOC", (ftnlen)8);
+	setmsg_(__global_state, "Segment number = #; valid range is 1:#.", (
+		ftnlen)39);
+	errint_(__global_state, "#", segno, (ftnlen)1);
+	errint_(__global_state, "#", &nseg, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX )", (ftnlen)20);
+	chkout_(__global_state, "ZZEKMLOC", (ftnlen)8);
 	return 0;
     }
 
 /*     Find the segment in the segment tree. */
 /*     Obtain the base address of the first integer page. */
 
-    tbase = zzektrbs_(&__state->c__1);
+    tbase = zzektrbs_(__global_state, &__state->c__1);
 
 /*     Look up the head node of the segment tree. */
 
     i__1 = tbase + 1;
     i__2 = tbase + 1;
-    dasrdi_(handle, &i__1, &i__2, &tree);
+    dasrdi_(__global_state, handle, &i__1, &i__2, &tree);
 
 /*     Get the segment pointer for the segment having index SEGNO. */
 /*     This pointer is actually the page number we're looking for. */
 
-    zzektrdp_(handle, &tree, segno, page);
+    zzektrdp_(__global_state, handle, &tree, segno, page);
 
 /*     Return the base address of the metadata page as well. */
 
-    *base = zzektrbs_(page);
+    *base = zzektrbs_(__global_state, page);
     return 0;
 } /* zzekmloc_ */
 

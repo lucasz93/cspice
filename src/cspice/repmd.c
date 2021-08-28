@@ -8,39 +8,38 @@
 
 
 typedef int repmd_state_t;
-static repmd_state_t* get_repmd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline repmd_state_t* get_repmd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  REPMD  ( Replace marker with double precision number ) */
-/* Subroutine */ int repmd_(char *in, char *marker, doublereal *value, 
-	integer *sigdig, char *out, ftnlen in_len, ftnlen marker_len, ftnlen 
-	out_len)
+/* Subroutine */ int repmd_(cspice_t* __global_state, char *in, char *marker, 
+	doublereal *value, integer *sigdig, char *out, ftnlen in_len, ftnlen 
+	marker_len, ftnlen out_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_indx(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_indx(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzrepsub_(char *, integer *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int dpstr_(doublereal *, integer *, char *, 
-	    ftnlen);
+    extern /* Subroutine */ int zzrepsub_(cspice_t*, char *, integer *, 
+	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int dpstr_(cspice_t*, doublereal *, integer *, 
+	    char *, ftnlen);
     integer mrknbf;
     integer subnbf;
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer mrknbl;
     integer subnbl;
-    extern integer frstnb_(char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
     integer mrkpsb;
     integer mrkpse;
     char substr[23];
 
 
     /* Module state */
-    repmd_state_t* __state = get_repmd_state();
+    repmd_state_t* __state = get_repmd_state(__global_state);
 /* $ Abstract */
 
 /*     Replace a marker with a double precision number. */
@@ -302,8 +301,9 @@ static repmd_state_t* get_repmd_state() {
 
 /*     If MARKER is blank, no substitution is possible. */
 
-    if (s_cmp(marker, " ", marker_len, (ftnlen)1) == 0) {
-	s_copy(out, in, out_len, in_len);
+    if (s_cmp(&__global_state->f2c, marker, " ", marker_len, (ftnlen)1) == 0) 
+	    {
+	s_copy(&__global_state->f2c, out, in, out_len, in_len);
 	return 0;
     }
 
@@ -311,11 +311,12 @@ static repmd_state_t* get_repmd_state() {
 /*     (ignoring leading and trailing blanks). If MARKER is not */
 /*     a substring of IN, no substitution can be performed. */
 
-    mrknbf = frstnb_(marker, marker_len);
-    mrknbl = lastnb_(marker, marker_len);
-    mrkpsb = i_indx(in, marker + (mrknbf - 1), in_len, mrknbl - (mrknbf - 1));
+    mrknbf = frstnb_(__global_state, marker, marker_len);
+    mrknbl = lastnb_(__global_state, marker, marker_len);
+    mrkpsb = i_indx(&__global_state->f2c, in, marker + (mrknbf - 1), in_len, 
+	    mrknbl - (mrknbf - 1));
     if (mrkpsb == 0) {
-	s_copy(out, in, out_len, in_len);
+	s_copy(&__global_state->f2c, out, in, out_len, in_len);
 	return 0;
     }
     mrkpse = mrkpsb + mrknbl - mrknbf;
@@ -323,12 +324,12 @@ static repmd_state_t* get_repmd_state() {
 /*     Okay, MARKER is non-blank and has been found. Convert the */
 /*     number to text, and substitute the text for the marker. */
 
-    dpstr_(value, sigdig, substr, (ftnlen)23);
-    subnbf = frstnb_(substr, (ftnlen)23);
-    subnbl = lastnb_(substr, (ftnlen)23);
+    dpstr_(__global_state, value, sigdig, substr, (ftnlen)23);
+    subnbf = frstnb_(__global_state, substr, (ftnlen)23);
+    subnbl = lastnb_(__global_state, substr, (ftnlen)23);
     if (subnbf != 0 && subnbl != 0) {
-	zzrepsub_(in, &mrkpsb, &mrkpse, substr + (subnbf - 1), out, in_len, 
-		subnbl - (subnbf - 1), out_len);
+	zzrepsub_(__global_state, in, &mrkpsb, &mrkpse, substr + (subnbf - 1),
+		 out, in_len, subnbl - (subnbf - 1), out_len);
     }
     return 0;
 } /* repmd_ */

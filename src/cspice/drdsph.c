@@ -8,17 +8,16 @@
 
 
 typedef int drdsph_state_t;
-static drdsph_state_t* get_drdsph_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline drdsph_state_t* get_drdsph_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DRDSPH ( Derivative of rectangular w.r.t. spherical ) */
-/* Subroutine */ int drdsph_(doublereal *r__, doublereal *colat, doublereal *
-	long__, doublereal *jacobi)
+/* Subroutine */ int drdsph_(cspice_t* __global_state, doublereal *r__, 
+	doublereal *colat, doublereal *long__, doublereal *jacobi)
 {
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal clong;
@@ -28,7 +27,7 @@ static drdsph_state_t* get_drdsph_state() {
 
 
     /* Module state */
-    drdsph_state_t* __state = get_drdsph_state();
+    drdsph_state_t* __state = get_drdsph_state(__global_state);
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */
@@ -220,10 +219,10 @@ static drdsph_state_t* get_drdsph_state() {
 
 /*     Local variables */
 
-    ccolat = cos(*colat);
-    scolat = sin(*colat);
-    clong = cos(*long__);
-    slong = sin(*long__);
+    ccolat = cos(&__global_state->f2c, *colat);
+    scolat = sin(&__global_state->f2c, *colat);
+    clong = cos(&__global_state->f2c, *long__);
+    slong = sin(&__global_state->f2c, *long__);
     jacobi[0] = clong * scolat;
     jacobi[1] = slong * scolat;
     jacobi[2] = ccolat;

@@ -173,7 +173,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "pltnrm_c" );
+   chkin_c ( naif_state, "pltnrm_c" );
 
    pltnrm_ ( (SpiceDouble *) v1,
              (SpiceDouble *) v2,

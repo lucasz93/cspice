@@ -8,35 +8,34 @@
 
 
 typedef int pckcls_state_t;
-static pckcls_state_t* get_pckcls_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pckcls_state_t* get_pckcls_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure PCKCLS ( PCK, close file ) */
-/* Subroutine */ int pckcls_(integer *handle)
+/* Subroutine */ int pckcls_(cspice_t* __global_state, integer *handle)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found;
-    extern /* Subroutine */ int daffna_(logical *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *);
-    extern /* Subroutine */ int dafcls_(integer *);
+    extern /* Subroutine */ int daffna_(cspice_t*, logical *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafbfs_(cspice_t*, integer *);
+    extern /* Subroutine */ int dafcls_(cspice_t*, integer *);
     char access[5];
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    pckcls_state_t* __state = get_pckcls_state();
+    pckcls_state_t* __state = get_pckcls_state(__global_state);
 /* $ Abstract */
 
 /*     Close an open PCK file. */
@@ -167,10 +166,10 @@ static pckcls_state_t* get_pckcls_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("PCKCLS", (ftnlen)6);
+    chkin_(__global_state, "PCKCLS", (ftnlen)6);
 
 /*     Get the access method for the file. Currently, if HANDLE < 0, the */
 /*     access method is 'WRITE'. If HANDLE > 0, the access method is */
@@ -178,46 +177,47 @@ static pckcls_state_t* get_pckcls_state() {
 /*     in the handle manager umbrella, ZZDDHNFO. */
 
     if (*handle < 0) {
-	s_copy(access, "WRITE", (ftnlen)5, (ftnlen)5);
+	s_copy(&__global_state->f2c, access, "WRITE", (ftnlen)5, (ftnlen)5);
     } else if (*handle > 0) {
-	s_copy(access, "READ", (ftnlen)5, (ftnlen)4);
+	s_copy(&__global_state->f2c, access, "READ", (ftnlen)5, (ftnlen)4);
     }
 
 /*     If the file is open for writing and there are segments in the file */
 /*     fix the ID word and close the file, or just close the file. */
 
-    if (s_cmp(access, "WRITE", (ftnlen)5, (ftnlen)5) == 0) {
+    if (s_cmp(&__global_state->f2c, access, "WRITE", (ftnlen)5, (ftnlen)5) == 
+	    0) {
 
 /*        Check to see if there are any segments in the file. If there */
 /*        are no segments, we signal an error. This probably indicates a */
 /*        programming error of some sort anyway. Why would you create a */
 /*        file and put nothing in it? */
 
-	dafbfs_(handle);
-	daffna_(&found);
-	if (failed_()) {
-	    chkout_("PCKCLS", (ftnlen)6);
+	dafbfs_(__global_state, handle);
+	daffna_(__global_state, &found);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "PCKCLS", (ftnlen)6);
 	    return 0;
 	}
 	if (! found) {
-	    setmsg_("No segments were found in the PCK file '#'. There must "
-		    "be at least one segment in the file when this subroutine"
-		    " is called.", (ftnlen)122);
-	    errhan_("#", handle, (ftnlen)1);
-	    sigerr_("SPICE(NOSEGMENTSFOUND)", (ftnlen)22);
-	    chkout_("PCKCLS", (ftnlen)6);
+	    setmsg_(__global_state, "No segments were found in the PCK file "
+		    "'#'. There must be at least one segment in the file when"
+		    " this subroutine is called.", (ftnlen)122);
+	    errhan_(__global_state, "#", handle, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOSEGMENTSFOUND)", (ftnlen)22);
+	    chkout_(__global_state, "PCKCLS", (ftnlen)6);
 	    return 0;
 	}
     }
 
 /*     Close the file. */
 
-    dafcls_(handle);
+    dafcls_(__global_state, handle);
 
 /*     No need to check FAILED() here, since we just return. The caller */
 /*     should check it though. */
 
-    chkout_("PCKCLS", (ftnlen)6);
+    chkout_(__global_state, "PCKCLS", (ftnlen)6);
     return 0;
 } /* pckcls_ */
 

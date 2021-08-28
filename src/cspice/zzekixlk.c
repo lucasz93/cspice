@@ -8,34 +8,33 @@
 
 
 typedef int zzekixlk_state_t;
-static zzekixlk_state_t* get_zzekixlk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekixlk_state_t* get_zzekixlk_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZEKIXLK ( EK, look up record pointer in EK index ) */
-/* Subroutine */ int zzekixlk_(integer *handle, integer *coldsc, integer *key,
-	 integer *recptr)
+/* Subroutine */ int zzekixlk_(cspice_t* __global_state, integer *handle, 
+	integer *coldsc, integer *key, integer *recptr)
 {
     integer base;
     integer tree;
-    extern /* Subroutine */ int zzektrdp_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzektrdp_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer q;
     integer r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer itype;
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer addrss;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzekixlk_state_t* __state = get_zzekixlk_state();
+    zzekixlk_state_t* __state = get_zzekixlk_state(__global_state);
 /* $ Abstract */
 
 /*     Look up a specified record pointer from an EK index. */
@@ -489,7 +488,7 @@ static zzekixlk_state_t* get_zzekixlk_state() {
 /*        a B*-tree.  Just use the tree look up routine. */
 
 	tree = coldsc[6];
-	zzektrdp_(handle, &tree, key, recptr);
+	zzektrdp_(__global_state, handle, &tree, key, recptr);
     } else if (itype == 2) {
 
 /*        For type 2 indexes, the index pointer is the base address */
@@ -500,16 +499,17 @@ static zzekixlk_state_t* get_zzekixlk_state() {
 	q = (*key - 1) / 254;
 	r__ = *key - q * 254;
 	addrss = base + (q << 8) + r__;
-	dasrdi_(handle, &addrss, &addrss, recptr);
+	dasrdi_(__global_state, handle, &addrss, &addrss, recptr);
     } else {
 
 /*        Sorry, no other types of indexes are supported. */
 
-	chkin_("ZZEKIXLK", (ftnlen)8);
-	setmsg_("The index type # is not supported.", (ftnlen)34);
-	errint_("#", &itype, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("ZZEKIXLK", (ftnlen)8);
+	chkin_(__global_state, "ZZEKIXLK", (ftnlen)8);
+	setmsg_(__global_state, "The index type # is not supported.", (ftnlen)
+		34);
+	errint_(__global_state, "#", &itype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKIXLK", (ftnlen)8);
 	return 0;
     }
     return 0;

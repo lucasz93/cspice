@@ -8,23 +8,24 @@
 
 
 typedef int zzekgrcp_state_t;
-static zzekgrcp_state_t* get_zzekgrcp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekgrcp_state_t* get_zzekgrcp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKGRCP ( EK, get record companion pointer ) */
-/* Subroutine */ int zzekgrcp_(integer *handle, integer *recptr, integer *ptr)
+/* Subroutine */ int zzekgrcp_(cspice_t* __global_state, integer *handle, 
+	integer *recptr, integer *ptr)
 {
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer loc;
 
 
     /* Module state */
-    zzekgrcp_state_t* __state = get_zzekgrcp_state();
+    zzekgrcp_state_t* __state = get_zzekgrcp_state(__global_state);
 /* $ Abstract */
 
 /*     Get the companion pointer of a specified EK record. */
@@ -372,15 +373,15 @@ static zzekgrcp_state_t* get_zzekgrcp_state() {
 /*     Is this file handle valid--is the file open for paged write */
 /*     access?  Signal an error if not. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
 /*     Compute the companion pointer and set the pointer. */
 
     loc = *recptr + 2;
-    dasrdi_(handle, &loc, &loc, ptr);
+    dasrdi_(__global_state, handle, &loc, &loc, ptr);
     return 0;
 } /* zzekgrcp_ */
 

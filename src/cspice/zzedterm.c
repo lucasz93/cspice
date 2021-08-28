@@ -8,8 +8,7 @@
 
 
 extern zzedterm_init_t __zzedterm_init;
-static zzedterm_state_t* get_zzedterm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzedterm_state_t* get_zzedterm_state(cspice_t* state) {
 	if (!state->zzedterm)
 		state->zzedterm = __cspice_allocate_module(sizeof(
 	zzedterm_state_t), &__zzedterm_init, sizeof(__zzedterm_init));
@@ -18,33 +17,34 @@ static zzedterm_state_t* get_zzedterm_state() {
 }
 
 /* $Procedure ZZEDTERM ( Ellipsoid terminator ) */
-/* Subroutine */ int zzedterm_(char *type__, doublereal *a, doublereal *b, 
-	doublereal *c__, doublereal *srcrad, doublereal *srcpos, integer *
-	npts, doublereal *trmpts, ftnlen type_len)
+/* Subroutine */ int zzedterm_(cspice_t* __global_state, char *type__, 
+	doublereal *a, doublereal *b, doublereal *c__, doublereal *srcrad, 
+	doublereal *srcpos, integer *npts, doublereal *trmpts, ftnlen 
+	type_len)
 {
     /* System generated locals */
     integer trmpts_dim2, i__1, i__2;
     doublereal d__1, d__2, d__3;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    double asin(doublereal);
-    integer s_rnge(char *, integer, char *, integer);
-    double d_sign(doublereal *, doublereal *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    double asin(f2c_state_t*, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double d_sign(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal rmin;
     doublereal rmax;
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern doublereal vsep_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
     integer nitr;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal d__;
     doublereal e[3];
     integer i__;
@@ -56,55 +56,60 @@ static zzedterm_state_t* get_zzedterm_state() {
     doublereal y[3];
     doublereal z__[3];
     doublereal inang;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int frame_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int frame_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal plane[4];
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     doublereal theta;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal trans[9]	/* was [3][3] */;
     doublereal srcpt[3];
     doublereal vtemp[3];
-    extern doublereal vnorm_(doublereal *);
-    extern doublereal twopi_(void);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int pl2nvc_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern doublereal twopi_(cspice_t*);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int pl2nvc_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal lambda;
-    extern /* Subroutine */ int nvp2pl_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern doublereal halfpi_(void);
+    extern /* Subroutine */ int nvp2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern doublereal halfpi_(cspice_t*);
     doublereal minrad;
-    extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int latrec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal maxrad;
     doublereal angerr;
     logical umbral;
-    extern doublereal touchd_(doublereal *);
+    extern doublereal touchd_(cspice_t*, doublereal *);
     doublereal offset[3];
     doublereal prvdif;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     doublereal outang;
     doublereal plcons;
     doublereal prvang;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     char loctyp[50];
-    extern logical return_(void);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    doublereal dir[3];
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
 	    ;
+    doublereal dir[3];
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal vtx[3];
 
 
     /* Module state */
-    zzedterm_state_t* __state = get_zzedterm_state();
+    zzedterm_state_t* __state = get_zzedterm_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -337,66 +342,69 @@ static zzedterm_state_t* get_zzedterm_state() {
     trmpts_dim2 = *npts;
 
     /* Function Body */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZEDTERM", (ftnlen)8);
+    chkin_(__global_state, "ZZEDTERM", (ftnlen)8);
 
 /*     Check the terminator type. */
 
-    ljust_(type__, loctyp, type_len, (ftnlen)50);
-    ucase_(loctyp, loctyp, (ftnlen)50, (ftnlen)50);
-    if (s_cmp(loctyp, "UMBRAL", (ftnlen)50, (ftnlen)6) == 0) {
+    ljust_(__global_state, type__, loctyp, type_len, (ftnlen)50);
+    ucase_(__global_state, loctyp, loctyp, (ftnlen)50, (ftnlen)50);
+    if (s_cmp(&__global_state->f2c, loctyp, "UMBRAL", (ftnlen)50, (ftnlen)6) 
+	    == 0) {
 	umbral = TRUE_;
-    } else if (s_cmp(loctyp, "PENUMBRAL", (ftnlen)50, (ftnlen)9) == 0) {
+    } else if (s_cmp(&__global_state->f2c, loctyp, "PENUMBRAL", (ftnlen)50, (
+	    ftnlen)9) == 0) {
 	umbral = FALSE_;
     } else {
-	setmsg_("Terminator type must be UMBRAL or PENUMBRAL but was actuall"
-		"y #.", (ftnlen)63);
-	errch_("#", type__, (ftnlen)1, type_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZEDTERM", (ftnlen)8);
+	setmsg_(__global_state, "Terminator type must be UMBRAL or PENUMBRAL"
+		" but was actually #.", (ftnlen)63);
+	errch_(__global_state, "#", type__, (ftnlen)1, type_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZEDTERM", (ftnlen)8);
 	return 0;
     }
 
 /*     Check the terminator set dimension. */
 
     if (*npts < 1) {
-	setmsg_("Set must contain at least one point; NPTS  = #.", (ftnlen)47)
-		;
-	errint_("#", npts, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("ZZEDTERM", (ftnlen)8);
+	setmsg_(__global_state, "Set must contain at least one point; NPTS  "
+		"= #.", (ftnlen)47);
+	errint_(__global_state, "#", npts, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEDTERM", (ftnlen)8);
 	return 0;
     }
 
 /*     The ellipsoid semi-axes must have positive length. */
 
     if (*a <= 0. || *b <= 0. || *c__ <= 0.) {
-	setmsg_("Semi-axis lengths:  A = #, B = #, C = #. ", (ftnlen)41);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(INVALIDAXISLENGTH)", (ftnlen)24);
-	chkout_("ZZEDTERM", (ftnlen)8);
+	setmsg_(__global_state, "Semi-axis lengths:  A = #, B = #, C = #. ", (
+		ftnlen)41);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDAXISLENGTH)", (ftnlen)24);
+	chkout_(__global_state, "ZZEDTERM", (ftnlen)8);
 	return 0;
     }
 
 /*     Check the input light source radius. */
 
     if (*srcrad <= 0.) {
-	setmsg_("Light source must have positive radius; actual radius was #."
-		, (ftnlen)60);
-	errdp_("#", srcrad, (ftnlen)1);
-	sigerr_("SPICE(INVALIDRADIUS)", (ftnlen)20);
-	chkout_("ZZEDTERM", (ftnlen)8);
+	setmsg_(__global_state, "Light source must have positive radius; act"
+		"ual radius was #.", (ftnlen)60);
+	errdp_(__global_state, "#", srcrad, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDRADIUS)", (ftnlen)20);
+	chkout_(__global_state, "ZZEDTERM", (ftnlen)8);
 	return 0;
     }
 
 /*     The light source must not intersect the outer bounding */
 /*     sphere of the ellipsoid. */
 
-    d__ = vnorm_(srcpos);
+    d__ = vnorm_(__global_state, srcpos);
 /* Computing MAX */
     d__1 = max(*a,*b);
     rmax = max(d__1,*c__);
@@ -407,32 +415,33 @@ static zzedterm_state_t* get_zzedterm_state() {
 
 /*        The light source is too close. */
 
-	setmsg_("Light source intersects outer bounding sphere of the ellips"
-		"oid.  Light source radius = #; ellipsoid's longest axis = #;"
-		" sum = #; distance between centers = #.", (ftnlen)158);
-	errdp_("#", srcrad, (ftnlen)1);
-	errdp_("#", &rmax, (ftnlen)1);
+	setmsg_(__global_state, "Light source intersects outer bounding sphe"
+		"re of the ellipsoid.  Light source radius = #; ellipsoid's l"
+		"ongest axis = #; sum = #; distance between centers = #.", (
+		ftnlen)158);
+	errdp_(__global_state, "#", srcrad, (ftnlen)1);
+	errdp_(__global_state, "#", &rmax, (ftnlen)1);
 	d__1 = *srcrad + rmax;
-	errdp_("#", &d__1, (ftnlen)1);
-	errdp_("#", &d__, (ftnlen)1);
-	sigerr_("SPICE(OBJECTSTOOCLOSE)", (ftnlen)22);
-	chkout_("ZZEDTERM", (ftnlen)8);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	errdp_(__global_state, "#", &d__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(OBJECTSTOOCLOSE)", (ftnlen)22);
+	chkout_(__global_state, "ZZEDTERM", (ftnlen)8);
 	return 0;
     }
 
 /*     Let the negative of the ellipsoid-light source vector be the */
 /*     Z-axis of a frame we'll use to generate the terminator set. */
 
-    vminus_(srcpos, z__);
-    frame_(z__, x, y);
+    vminus_(__global_state, srcpos, z__);
+    frame_(__global_state, z__, x, y);
 
 /*     Create the rotation matrix required to convert vectors */
 /*     from the source-centered frame back to the target body-fixed */
 /*     frame. */
 
-    vequ_(x, trans);
-    vequ_(y, &trans[3]);
-    vequ_(z__, &trans[6]);
+    vequ_(__global_state, x, trans);
+    vequ_(__global_state, y, &trans[3]);
+    vequ_(__global_state, z__, &trans[6]);
 
 /*     Find the maximum and minimum target radii. */
 
@@ -453,8 +462,8 @@ static zzedterm_state_t* get_zzedterm_state() {
 /*        OUTANG corresponds to the target's outer bounding sphere; */
 /*        INANG to the inner bounding sphere. */
 
-	outang = asin((*srcrad - maxrad) / d__);
-	inang = asin((*srcrad - minrad) / d__);
+	outang = asin(&__global_state->f2c, (*srcrad - maxrad) / d__);
+	inang = asin(&__global_state->f2c, (*srcrad - minrad) / d__);
     } else {
 
 /*        Compute the angular offsets from the axis of rays tangent to */
@@ -465,14 +474,14 @@ static zzedterm_state_t* get_zzedterm_state() {
 /*        OUTANG corresponds to the target's outer bounding sphere; */
 /*        INANG to the inner bounding sphere. */
 
-	outang = asin((*srcrad + maxrad) / d__);
-	inang = asin((*srcrad + minrad) / d__);
+	outang = asin(&__global_state->f2c, (*srcrad + maxrad) / d__);
+	inang = asin(&__global_state->f2c, (*srcrad + minrad) / d__);
     }
 
 /*     Compute the angular delta we'll use for generating */
 /*     terminator points. */
 
-    delta = twopi_() / *npts;
+    delta = twopi_(__global_state) / *npts;
 
 /*     Generate the terminator points. */
 
@@ -484,7 +493,7 @@ static zzedterm_state_t* get_zzedterm_state() {
 /*        the X-Y plane of the frame produced by FRAME */
 /*        and corresponding to the angle THETA. */
 
-	latrec_(srcrad, &theta, &__state->c_b30, srcpt);
+	latrec_(__global_state, srcrad, &theta, &__state->c_b30, srcpt);
 
 /*        Now solve for the angle by which SRCPT must be rotated (toward */
 /*        +Z in the umbral case, away from +Z in the penumbral case) */
@@ -498,16 +507,16 @@ static zzedterm_state_t* get_zzedterm_state() {
 	} else {
 	    angle = inang;
 	}
-	prvdif = twopi_();
-	prvang = angle + halfpi_();
+	prvdif = twopi_(__global_state);
+	prvang = angle + halfpi_(__global_state);
 	nitr = 0;
 	for(;;) { /* while(complicated condition) */
 	    d__2 = (d__1 = angle - prvang, abs(d__1));
-	    if (!(nitr <= 10 && touchd_(&d__2) < prvdif))
+	    if (!(nitr <= 10 && touchd_(__global_state, &d__2) < prvdif))
 	    	break;
 	    ++nitr;
 	    d__2 = (d__1 = angle - prvang, abs(d__1));
-	    prvdif = touchd_(&d__2);
+	    prvdif = touchd_(__global_state, &d__2);
 	    prvang = angle;
 
 /*           Find the closest point on the ellipsoid to the plane */
@@ -517,21 +526,21 @@ static zzedterm_state_t* get_zzedterm_state() {
 /*           SRCPT by ANGLE towards +Z.  The plane's normal vector is */
 /*           parallel to VTX in the source-centered frame. */
 
-	    latrec_(srcrad, &theta, &angle, vtx);
-	    vequ_(vtx, dir);
+	    latrec_(__global_state, srcrad, &theta, &angle, vtx);
+	    vequ_(__global_state, vtx, dir);
 
 /*           VTX and DIR are expressed in the source-centered frame.  We */
 /*           must translate VTX to the target frame and rotate both */
 /*           vectors into that frame. */
 
-	    mxv_(trans, vtx, vtemp);
-	    vadd_(srcpos, vtemp, vtx);
-	    mxv_(trans, dir, vtemp);
-	    vequ_(vtemp, dir);
+	    mxv_(__global_state, trans, vtx, vtemp);
+	    vadd_(__global_state, srcpos, vtemp, vtx);
+	    mxv_(__global_state, trans, dir, vtemp);
+	    vequ_(__global_state, vtemp, dir);
 
 /*           Create the plane defined by VTX and DIR. */
 
-	    nvp2pl_(dir, vtx, plane);
+	    nvp2pl_(__global_state, dir, vtx, plane);
 
 /*           Find the closest point on the ellipsoid to the plane. At */
 /*           the point we seek, the outward normal on the ellipsoid is */
@@ -539,7 +548,7 @@ static zzedterm_state_t* get_zzedterm_state() {
 /*           from the origin.  We can always obtain this choice from */
 /*           PL2NVC. */
 
-	    pl2nvc_(plane, dir, &plcons);
+	    pl2nvc_(__global_state, plane, dir, &plcons);
 
 /*           At the point */
 
@@ -576,33 +585,36 @@ static zzedterm_state_t* get_zzedterm_state() {
 	    d__1 = *a * dir[0];
 	    d__2 = *b * dir[1];
 	    d__3 = *c__ * dir[2];
-	    vpack_(&d__1, &d__2, &d__3, v);
-	    lambda = 1. / vnorm_(v);
+	    vpack_(__global_state, &d__1, &d__2, &d__3, v);
+	    lambda = 1. / vnorm_(__global_state, v);
 	    d__1 = *a * v[0];
 	    d__2 = *b * v[1];
 	    d__3 = *c__ * v[2];
-	    vpack_(&d__1, &d__2, &d__3, e);
-	    vscl_(&lambda, e, &trmpts[(i__2 = i__ * 3 - 3) < 3 * trmpts_dim2 
-		    && 0 <= i__2 ? i__2 : s_rnge("trmpts", i__2, "zzedterm_", 
-		    (ftnlen)582)]);
+	    vpack_(__global_state, &d__1, &d__2, &d__3, e);
+	    vscl_(__global_state, &lambda, e, &trmpts[(i__2 = i__ * 3 - 3) < 
+		    3 * trmpts_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "trmpts", i__2, "zzedterm_", (ftnlen)
+		    582)]);
 
 /*           Make a new estimate of the plane rotation required to touch */
 /*           the target. */
 
-	    vsub_(&trmpts[(i__2 = i__ * 3 - 3) < 3 * trmpts_dim2 && 0 <= i__2 
-		    ? i__2 : s_rnge("trmpts", i__2, "zzedterm_", (ftnlen)588)]
-		    , vtx, offset);
+	    vsub_(__global_state, &trmpts[(i__2 = i__ * 3 - 3) < 3 * 
+		    trmpts_dim2 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "trmpts", i__2, "zzedterm_", (ftnlen)
+		    588)], vtx, offset);
 
 /*           Let ANGERR be an estimate of the magnitude of angular error */
 /*           between the plane and the terminator. */
 
-	    angerr = vsep_(dir, offset) - halfpi_();
+	    angerr = vsep_(__global_state, dir, offset) - halfpi_(
+		    __global_state);
 
 /*           Let S indicate the sign of the altitude error:  where */
 /*           S is positive, the plane is above E. */
 
-	    d__1 = vdot_(e, dir);
-	    s = d_sign(&__state->c_b35, &d__1);
+	    d__1 = vdot_(__global_state, e, dir);
+	    s = d_sign(&__global_state->f2c, &__state->c_b35, &d__1);
 	    if (umbral) {
 
 /*              If the plane is above the target, increase the */
@@ -618,7 +630,7 @@ static zzedterm_state_t* get_zzedterm_state() {
 	    }
 	}
     }
-    chkout_("ZZEDTERM", (ftnlen)8);
+    chkout_(__global_state, "ZZEDTERM", (ftnlen)8);
     return 0;
 } /* zzedterm_ */
 

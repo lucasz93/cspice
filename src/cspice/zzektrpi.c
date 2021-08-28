@@ -8,46 +8,46 @@
 
 
 typedef int zzektrpi_state_t;
-static zzektrpi_state_t* get_zzektrpi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrpi_state_t* get_zzektrpi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKTRPI ( EK tree, parent information ) */
-/* Subroutine */ int zzektrpi_(integer *handle, integer *tree, integer *key, 
-	integer *parent, integer *pkey, integer *poffst, integer *lpidx, 
-	integer *lpkey, integer *lsib, integer *rpidx, integer *rpkey, 
-	integer *rsib)
+/* Subroutine */ int zzektrpi_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *key, integer *parent, integer *pkey, integer *
+	poffst, integer *lpidx, integer *lpkey, integer *lsib, integer *rpidx,
+	 integer *rpkey, integer *rsib)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer page[256];
     integer lkey;
     integer prev;
-    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgri_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer child;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     integer offset;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern integer lstlei_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern integer lstlei_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer maxkey;
     integer newkey;
     integer prvkey;
     integer totkey;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzektrpi_state_t* __state = get_zzektrpi_state();
+    zzektrpi_state_t* __state = get_zzektrpi_state(__global_state);
 /* $ Abstract */
 
 /*     Given a key, return general information pertaining to the key's */
@@ -623,7 +623,7 @@ static zzektrpi_state_t* get_zzektrpi_state() {
 /*     Start out by reading in the root page.  The node level starts */
 /*     out at 1. */
 
-    zzekpgri_(handle, tree, page);
+    zzekpgri_(__global_state, handle, tree, page);
     *parent = 0;
     *pkey = 0;
     *poffst = 0;
@@ -639,24 +639,25 @@ static zzektrpi_state_t* get_zzektrpi_state() {
 
     totkey = page[2];
     if (lkey < 1 || lkey > totkey) {
-	chkin_("ZZEKTRPI", (ftnlen)8);
-	setmsg_("Key = #; valid range = 1:#. Tree = #, file = #", (ftnlen)46);
-	errint_("#", &lkey, (ftnlen)1);
-	errint_("#", &totkey, (ftnlen)1);
-	errint_("#", tree, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZEKTRPI", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRPI", (ftnlen)8);
+	setmsg_(__global_state, "Key = #; valid range = 1:#. Tree = #, file "
+		"= #", (ftnlen)46);
+	errint_(__global_state, "#", &lkey, (ftnlen)1);
+	errint_(__global_state, "#", &totkey, (ftnlen)1);
+	errint_(__global_state, "#", tree, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZEKTRPI", (ftnlen)8);
 	return 0;
     }
 
 /*     Find the last key at this level that is less than or equal to */
 /*     the requested key. */
 
-    prev = lstlei_(&lkey, &page[4], &page[5]);
+    prev = lstlei_(__global_state, &lkey, &page[4], &page[5]);
     if (prev > 0) {
-	prvkey = page[(i__1 = prev + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrpi_", (ftnlen)279)];
+	prvkey = page[(i__1 = prev + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "page", i__1, "zzektrpi_", (ftnlen)279)];
     } else {
 	prvkey = 0;
     }
@@ -677,10 +678,10 @@ static zzektrpi_state_t* get_zzektrpi_state() {
     maxkey = page[4];
     if (prev > 0) {
 	*lpidx = prev;
-	*lpkey = page[(i__1 = *lpidx + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrpi_", (ftnlen)303)];
-	*lsib = page[(i__1 = *lpidx + 87) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrpi_", (ftnlen)304)];
+	*lpkey = page[(i__1 = *lpidx + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "page", i__1, "zzektrpi_", (ftnlen)303)];
+	*lsib = page[(i__1 = *lpidx + 87) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "page", i__1, "zzektrpi_", (ftnlen)304)];
     } else {
 	*lpidx = 0;
 	*lpkey = 0;
@@ -688,23 +689,23 @@ static zzektrpi_state_t* get_zzektrpi_state() {
     }
     if (prev < maxkey) {
 	*rpidx = prev + 1;
-	*rpkey = page[(i__1 = *rpidx + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrpi_", (ftnlen)313)];
-	*rsib = page[(i__1 = *rpidx + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"page", i__1, "zzektrpi_", (ftnlen)314)];
+	*rpkey = page[(i__1 = *rpidx + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "page", i__1, "zzektrpi_", (ftnlen)313)];
+	*rsib = page[(i__1 = *rpidx + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "page", i__1, "zzektrpi_", (ftnlen)314)];
     } else {
 	*rpidx = 0;
 	*rpkey = 0;
 	*rsib = 0;
     }
-    child = page[(i__1 = prev + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge("page",
-	     i__1, "zzektrpi_", (ftnlen)322)];
+    child = page[(i__1 = prev + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "page", i__1, "zzektrpi_", (ftnlen)322)];
     found = FALSE_;
     while(child > 0 && ! found) {
 
 /*        Read in the child page. */
 
-	zzekpgri_(handle, &child, page);
+	zzekpgri_(__global_state, handle, &child, page);
 
 /*        Find the last key at this level that is less than or equal to */
 /*        the requested key.  Since the keys we're looking at now are */
@@ -713,10 +714,11 @@ static zzektrpi_state_t* get_zzektrpi_state() {
 /*        node preceding the first key of this subtree. */
 
 	newkey = lkey - offset;
-	prev = lstlei_(&newkey, page, &page[1]);
+	prev = lstlei_(__global_state, &newkey, page, &page[1]);
 	if (prev > 0) {
-	    prvkey = page[(i__1 = prev) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		    "page", i__1, "zzektrpi_", (ftnlen)342)];
+	    prvkey = page[(i__1 = prev) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "page", i__1, "zzektrpi_", (ftnlen)
+		    342)];
 	} else {
 	    prvkey = 0;
 	}
@@ -738,9 +740,11 @@ static zzektrpi_state_t* get_zzektrpi_state() {
 	    if (prev > 0) {
 		*lpidx = prev;
 		*lpkey = page[(i__1 = *lpidx) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("page", i__1, "zzektrpi_", (ftnlen)367)];
+			s_rnge(&__global_state->f2c, "page", i__1, "zzektrpi_"
+			, (ftnlen)367)];
 		*lsib = page[(i__1 = *lpidx + 63) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("page", i__1, "zzektrpi_", (ftnlen)368)];
+			s_rnge(&__global_state->f2c, "page", i__1, "zzektrpi_"
+			, (ftnlen)368)];
 	    } else {
 		*lpidx = 0;
 		*lpkey = 0;
@@ -749,9 +753,11 @@ static zzektrpi_state_t* get_zzektrpi_state() {
 	    if (prev < maxkey) {
 		*rpidx = prev + 1;
 		*rpkey = page[(i__1 = *rpidx) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("page", i__1, "zzektrpi_", (ftnlen)377)];
+			s_rnge(&__global_state->f2c, "page", i__1, "zzektrpi_"
+			, (ftnlen)377)];
 		*rsib = page[(i__1 = *rpidx + 64) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("page", i__1, "zzektrpi_", (ftnlen)378)];
+			s_rnge(&__global_state->f2c, "page", i__1, "zzektrpi_"
+			, (ftnlen)378)];
 	    } else {
 		*rpidx = 0;
 		*rpkey = 0;
@@ -763,7 +769,8 @@ static zzektrpi_state_t* get_zzektrpi_state() {
 
 	    offset = prvkey + offset;
 	    child = page[(i__1 = prev + 64) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("page", i__1, "zzektrpi_", (ftnlen)390)];
+		    s_rnge(&__global_state->f2c, "page", i__1, "zzektrpi_", (
+		    ftnlen)390)];
 	}
     }
 
@@ -771,16 +778,16 @@ static zzektrpi_state_t* get_zzektrpi_state() {
 /*     got trouble. */
 
     if (! found) {
-	chkin_("ZZEKTRPI", (ftnlen)8);
-	setmsg_("Key #; valid range = 1:#. Tree = #, file = #.  Key was not "
-		"found.  This probably indicates a corrupted file or a bug in"
-		" the EK code.", (ftnlen)132);
-	errint_("#", &lkey, (ftnlen)1);
-	errint_("#", &totkey, (ftnlen)1);
-	errint_("#", tree, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(ITEMNOTFOUND)", (ftnlen)19);
-	chkout_("ZZEKTRPI", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRPI", (ftnlen)8);
+	setmsg_(__global_state, "Key #; valid range = 1:#. Tree = #, file = "
+		"#.  Key was not found.  This probably indicates a corrupted "
+		"file or a bug in the EK code.", (ftnlen)132);
+	errint_(__global_state, "#", &lkey, (ftnlen)1);
+	errint_(__global_state, "#", &totkey, (ftnlen)1);
+	errint_(__global_state, "#", tree, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ITEMNOTFOUND)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKTRPI", (ftnlen)8);
 	return 0;
     }
     return 0;

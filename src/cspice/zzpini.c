@@ -8,45 +8,44 @@
 
 
 typedef int zzpini_state_t;
-static zzpini_state_t* get_zzpini_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzpini_state_t* get_zzpini_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZPINI ( Private --- kernel pool initialization ) */
-/* Subroutine */ int zzpini_(logical *first, integer *maxvar, integer *maxval,
-	 integer *maxlin, char *begdat, char *begtxt, integer *nmpool, 
-	integer *dppool, integer *chpool, integer *namlst, integer *datlst, 
-	integer *maxagt, integer *mxnote, char *wtvars, integer *wtptrs, 
-	integer *wtpool, char *wtagnt, char *agents, char *active, char *
-	notify, integer *subctr, ftnlen begdat_len, ftnlen begtxt_len, ftnlen 
-	wtvars_len, ftnlen wtagnt_len, ftnlen agents_len, ftnlen active_len, 
-	ftnlen notify_len)
+/* Subroutine */ int zzpini_(cspice_t* __global_state, logical *first, 
+	integer *maxvar, integer *maxval, integer *maxlin, char *begdat, char 
+	*begtxt, integer *nmpool, integer *dppool, integer *chpool, integer *
+	namlst, integer *datlst, integer *maxagt, integer *mxnote, char *
+	wtvars, integer *wtptrs, integer *wtpool, char *wtagnt, char *agents, 
+	char *active, char *notify, integer *subctr, ftnlen begdat_len, 
+	ftnlen begtxt_len, ftnlen wtvars_len, ftnlen wtagnt_len, ftnlen 
+	agents_len, ftnlen active_len, ftnlen notify_len)
 {
     /* System generated locals */
     integer namlst_dim1, datlst_dim1, i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzctrsin_(integer *);
+    extern /* Subroutine */ int zzctrsin_(cspice_t*, integer *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer dummy;
-    extern logical failed_(void);
-    extern /* Subroutine */ int clearc_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int lnkini_(integer *, integer *);
-    extern integer touchi_(integer *);
-    extern /* Subroutine */ int ssizec_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern integer zzshsh_(integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int clearc_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int lnkini_(cspice_t*, integer *, integer *);
+    extern integer touchi_(cspice_t*, integer *);
+    extern /* Subroutine */ int ssizec_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern integer zzshsh_(cspice_t*, integer *);
 
 
     /* Module state */
-    zzpini_state_t* __state = get_zzpini_state();
+    zzpini_state_t* __state = get_zzpini_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -337,37 +336,41 @@ static zzpini_state_t* get_zzpini_state() {
 
     /* Function Body */
     if (*first) {
-	chkin_("ZZPINI", (ftnlen)6);
+	chkin_(__global_state, "ZZPINI", (ftnlen)6);
 	i__1 = *maxvar;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    namlst[(i__2 = i__ - 1) < 1 * namlst_dim1 && 0 <= i__2 ? i__2 : 
-		    s_rnge("namlst", i__2, "zzpini_", (ftnlen)305)] = 0;
+		    s_rnge(&__global_state->f2c, "namlst", i__2, "zzpini_", (
+		    ftnlen)305)] = 0;
 	    datlst[(i__2 = i__ - 1) < 1 * datlst_dim1 && 0 <= i__2 ? i__2 : 
-		    s_rnge("datlst", i__2, "zzpini_", (ftnlen)306)] = 0;
+		    s_rnge(&__global_state->f2c, "datlst", i__2, "zzpini_", (
+		    ftnlen)306)] = 0;
 	}
 
 /*        Set up hash function. Use TOUCHI to suppress */
 /*        compiler warnings. */
 
-	dummy = zzshsh_(maxvar);
-	dummy = touchi_(&dummy);
-	s_copy(begdat, "\\begindata", begdat_len, (ftnlen)10);
-	s_copy(begtxt, "\\begintext", begtxt_len, (ftnlen)10);
-	lnkini_(maxvar, nmpool);
-	lnkini_(maxval, dppool);
-	lnkini_(maxlin, chpool);
-	ssizec_(maxvar, wtvars, wtvars_len);
-	cleari_(maxvar, wtptrs);
-	lnkini_(mxnote, wtpool);
-	clearc_(mxnote, wtagnt, wtagnt_len);
-	ssizec_(mxnote, agents, agents_len);
-	ssizec_(mxnote, active, active_len);
-	ssizec_(mxnote, notify, notify_len);
-	zzctrsin_(subctr);
-	if (! failed_()) {
+	dummy = zzshsh_(__global_state, maxvar);
+	dummy = touchi_(__global_state, &dummy);
+	s_copy(&__global_state->f2c, begdat, "\\begindata", begdat_len, (
+		ftnlen)10);
+	s_copy(&__global_state->f2c, begtxt, "\\begintext", begtxt_len, (
+		ftnlen)10);
+	lnkini_(__global_state, maxvar, nmpool);
+	lnkini_(__global_state, maxval, dppool);
+	lnkini_(__global_state, maxlin, chpool);
+	ssizec_(__global_state, maxvar, wtvars, wtvars_len);
+	cleari_(__global_state, maxvar, wtptrs);
+	lnkini_(__global_state, mxnote, wtpool);
+	clearc_(__global_state, mxnote, wtagnt, wtagnt_len);
+	ssizec_(__global_state, mxnote, agents, agents_len);
+	ssizec_(__global_state, mxnote, active, active_len);
+	ssizec_(__global_state, mxnote, notify, notify_len);
+	zzctrsin_(__global_state, subctr);
+	if (! failed_(__global_state)) {
 	    *first = FALSE_;
 	}
-	chkout_("ZZPINI", (ftnlen)6);
+	chkout_(__global_state, "ZZPINI", (ftnlen)6);
 	return 0;
     }
     return 0;

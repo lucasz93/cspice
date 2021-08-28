@@ -8,13 +8,13 @@
 
 
 typedef int lstled_state_t;
-static lstled_state_t* get_lstled_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lstled_state_t* get_lstled_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   LSTLED ( Last double precision element less than or equal) */
-integer lstled_(doublereal *x, integer *n, doublereal *array)
+integer lstled_(cspice_t* __global_state, doublereal *x, integer *n, 
+	doublereal *array)
 {
     /* System generated locals */
     integer ret_val;
@@ -28,7 +28,7 @@ integer lstled_(doublereal *x, integer *n, doublereal *array)
 
 
     /* Module state */
-    lstled_state_t* __state = get_lstled_state();
+    lstled_state_t* __state = get_lstled_state(__global_state);
 /* $ Abstract */
 
 /*      Given a number X and an array of non-decreasing numbers, */

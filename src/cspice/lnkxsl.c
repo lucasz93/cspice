@@ -8,8 +8,7 @@
 
 
 extern lnkxsl_init_t __lnkxsl_init;
-static lnkxsl_state_t* get_lnkxsl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lnkxsl_state_t* get_lnkxsl_state(cspice_t* state) {
 	if (!state->lnkxsl)
 		state->lnkxsl = __cspice_allocate_module(sizeof(
 	lnkxsl_state_t), &__lnkxsl_init, sizeof(__lnkxsl_init));
@@ -18,20 +17,21 @@ static lnkxsl_state_t* get_lnkxsl_state() {
 }
 
 /* $Procedure      LNKXSL ( LNK, extract sublist from list  ) */
-/* Subroutine */ int lnkxsl_(integer *head, integer *tail, integer *pool)
+/* Subroutine */ int lnkxsl_(cspice_t* __global_state, integer *head, integer 
+	*tail, integer *pool)
 {
     integer node;
     integer prev;
     integer next;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    lnkxsl_state_t* __state = get_lnkxsl_state();
+    lnkxsl_state_t* __state = get_lnkxsl_state(__global_state);
 /* $ Abstract */
 
 /*     Extract a specified sublist from a list. */
@@ -243,29 +243,30 @@ static lnkxsl_state_t* get_lnkxsl_state() {
 /*     must be allocated as well. */
 
     if (*head < 1 || *head > pool[10] || *tail < 1 || *tail > pool[10]) {
-	chkin_("LNKXSL", (ftnlen)6);
-	setmsg_("HEAD was #.  TAIL was #. Valid range is 1 to #.", (ftnlen)47)
-		;
-	errint_("#", head, (ftnlen)1);
-	errint_("#", tail, (ftnlen)1);
-	errint_("#", &pool[10], (ftnlen)1);
-	sigerr_("SPICE(INVALIDNODE)", (ftnlen)18);
-	chkout_("LNKXSL", (ftnlen)6);
+	chkin_(__global_state, "LNKXSL", (ftnlen)6);
+	setmsg_(__global_state, "HEAD was #.  TAIL was #. Valid range is 1 t"
+		"o #.", (ftnlen)47);
+	errint_(__global_state, "#", head, (ftnlen)1);
+	errint_(__global_state, "#", tail, (ftnlen)1);
+	errint_(__global_state, "#", &pool[10], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDNODE)", (ftnlen)18);
+	chkout_(__global_state, "LNKXSL", (ftnlen)6);
 	return 0;
     } else if (pool[(*head << 1) + 11] == 0 || pool[(*tail << 1) + 11] == 0) {
-	chkin_("LNKXSL", (ftnlen)6);
-	setmsg_("Node HEAD: node number = #; backward pointer = #;  forward "
-		"pointer = #. Node TAIL: node number = #; backward pointer = "
-		"#;  forward pointer = #. (\"FREE\" is #)", (ftnlen)157);
-	errint_("#", head, (ftnlen)1);
-	errint_("#", &pool[(*head << 1) + 11], (ftnlen)1);
-	errint_("#", &pool[(*head << 1) + 10], (ftnlen)1);
-	errint_("#", tail, (ftnlen)1);
-	errint_("#", &pool[(*tail << 1) + 11], (ftnlen)1);
-	errint_("#", &pool[(*tail << 1) + 10], (ftnlen)1);
-	errint_("#", &__state->c__0, (ftnlen)1);
-	sigerr_("SPICE(UNALLOCATEDNODE)", (ftnlen)22);
-	chkout_("LNKXSL", (ftnlen)6);
+	chkin_(__global_state, "LNKXSL", (ftnlen)6);
+	setmsg_(__global_state, "Node HEAD: node number = #; backward pointe"
+		"r = #;  forward pointer = #. Node TAIL: node number = #; bac"
+		"kward pointer = #;  forward pointer = #. (\"FREE\" is #)", (
+		ftnlen)157);
+	errint_(__global_state, "#", head, (ftnlen)1);
+	errint_(__global_state, "#", &pool[(*head << 1) + 11], (ftnlen)1);
+	errint_(__global_state, "#", &pool[(*head << 1) + 10], (ftnlen)1);
+	errint_(__global_state, "#", tail, (ftnlen)1);
+	errint_(__global_state, "#", &pool[(*tail << 1) + 11], (ftnlen)1);
+	errint_(__global_state, "#", &pool[(*tail << 1) + 10], (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__0, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNALLOCATEDNODE)", (ftnlen)22);
+	chkout_(__global_state, "LNKXSL", (ftnlen)6);
 	return 0;
     }
 
@@ -280,13 +281,13 @@ static lnkxsl_state_t* get_lnkxsl_state() {
 /*     If we didn't find TAIL, that's an error. */
 
     if (node != *tail) {
-	chkin_("LNKXSL", (ftnlen)6);
-	setmsg_("Node # cannot be found by forward traversal, starting at no"
-		"de #.", (ftnlen)64);
-	errint_("#", tail, (ftnlen)1);
-	errint_("#", head, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSUBLIST)", (ftnlen)21);
-	chkout_("LNKXSL", (ftnlen)6);
+	chkin_(__global_state, "LNKXSL", (ftnlen)6);
+	setmsg_(__global_state, "Node # cannot be found by forward traversal"
+		", starting at node #.", (ftnlen)64);
+	errint_(__global_state, "#", tail, (ftnlen)1);
+	errint_(__global_state, "#", head, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSUBLIST)", (ftnlen)21);
+	chkout_(__global_state, "LNKXSL", (ftnlen)6);
 	return 0;
     }
 

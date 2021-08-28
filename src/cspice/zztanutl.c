@@ -7,8 +7,7 @@
 #include "__cspice_state.h"
 
 
-static zztanutl_state_t* get_zztanutl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zztanutl_state_t* get_zztanutl_state(cspice_t* state) {
 	if (!state->zztanutl)
 		state->zztanutl = __cspice_allocate_module(sizeof(
 	zztanutl_state_t), 0, 0);
@@ -17,45 +16,48 @@ static zztanutl_state_t* get_zztanutl_state() {
 }
 
 /* $Procedure ZZTANUTL ( DSK, tangent ray utilities ) */
-/* Subroutine */ int zztanutl_0_(int n__, integer *curve, doublereal *srcrad, 
-	integer *shape, integer *trgcde, integer *nsurf, integer *srflst, 
-	integer *fixfid, doublereal *et, doublereal *plnvec, doublereal *axis,
-	 doublereal *angle, logical *ocultd, doublereal *point)
+/* Subroutine */ int zztanutl_0_(cspice_t* __global_state, int n__, integer *
+	curve, doublereal *srcrad, integer *shape, integer *trgcde, integer *
+	nsurf, integer *srflst, integer *fixfid, doublereal *et, doublereal *
+	plnvec, doublereal *axis, doublereal *angle, logical *ocultd, 
+	doublereal *point)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal apex[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzsuelin_(integer *);
-    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzraysfx_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern doublereal pi_(void);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzsuelin_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzsudski_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzraysfx_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vrotv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern doublereal pi_(cspice_t*);
     doublereal raydir[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal vrtoff[3];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int vhatip_(doublereal *);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    zztanutl_state_t* __state = get_zztanutl_state();
+    zztanutl_state_t* __state = get_zztanutl_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -293,9 +295,9 @@ static zztanutl_state_t* get_zztanutl_state() {
 	case 2: goto L_zztansta;
 	}
 
-    chkin_("ZZTANUTL", (ftnlen)8);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZTANUTL", (ftnlen)8);
+    chkin_(__global_state, "ZZTANUTL", (ftnlen)8);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZTANUTL", (ftnlen)8);
     return 0;
 /* $Procedure ZZTANINI ( DSK, tangent utility initialization ) */
 
@@ -568,33 +570,36 @@ L_zztanini:
 /*     initialize tangent ray finding state function */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZTANINI", (ftnlen)8);
+    chkin_(__global_state, "ZZTANINI", (ftnlen)8);
 
 /*     Check for zero vectors on input. */
 
-    if (vzero_(axis)) {
-	setmsg_("Input axis vector is the zero vector.", (ftnlen)37);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("ZZTANINI", (ftnlen)8);
+    if (vzero_(__global_state, axis)) {
+	setmsg_(__global_state, "Input axis vector is the zero vector.", (
+		ftnlen)37);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "ZZTANINI", (ftnlen)8);
 	return 0;
     }
-    if (vzero_(plnvec)) {
-	setmsg_("Input reference vector is the zero vector.", (ftnlen)42);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("ZZTANINI", (ftnlen)8);
+    if (vzero_(__global_state, plnvec)) {
+	setmsg_(__global_state, "Input reference vector is the zero vector.", 
+		(ftnlen)42);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "ZZTANINI", (ftnlen)8);
 	return 0;
     }
 
 /*     Save the curve type. */
 
     if (*curve != 0 && *curve != 1 && *curve != 2) {
-	setmsg_("Curve type code # was not recognized.", (ftnlen)37);
-	errint_("#", curve, (ftnlen)1);
-	sigerr_("SPICE(BADCURVETYPE)", (ftnlen)19);
-	chkout_("ZZTANINI", (ftnlen)8);
+	setmsg_(__global_state, "Curve type code # was not recognized.", (
+		ftnlen)37);
+	errint_(__global_state, "#", curve, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADCURVETYPE)", (ftnlen)19);
+	chkout_(__global_state, "ZZTANINI", (ftnlen)8);
 	return 0;
     }
     __state->svcurv = *curve;
@@ -603,11 +608,11 @@ L_zztanini:
 
     if (*curve == 1 || *curve == 2) {
 	if (*srcrad <= 0.) {
-	    setmsg_("The source radius was #. The radius must be positive fo"
-		    "r a terminator computation.", (ftnlen)82);
-	    errdp_("#", srcrad, (ftnlen)1);
-	    sigerr_("SPICE(BADSOURCERADIUS)", (ftnlen)22);
-	    chkout_("ZZTANINI", (ftnlen)8);
+	    setmsg_(__global_state, "The source radius was #. The radius mus"
+		    "t be positive for a terminator computation.", (ftnlen)82);
+	    errdp_(__global_state, "#", srcrad, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADSOURCERADIUS)", (ftnlen)22);
+	    chkout_(__global_state, "ZZTANINI", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -617,18 +622,18 @@ L_zztanini:
 /*     AXIS and PLNVEC. The direction of positive rotation */
 /*     about the normal is from AXIS toward PLNVEC. */
 
-    vcrss_(axis, plnvec, __state->svnrml);
-    if (vzero_(__state->svnrml)) {
-	setmsg_("Input reference vector and axis vector are linearly depende"
-		"nt.", (ftnlen)62);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("ZZTANINI", (ftnlen)8);
+    vcrss_(__global_state, axis, plnvec, __state->svnrml);
+    if (vzero_(__global_state, __state->svnrml)) {
+	setmsg_(__global_state, "Input reference vector and axis vector are "
+		"linearly dependent.", (ftnlen)62);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "ZZTANINI", (ftnlen)8);
 	return 0;
     }
 
 /*     Scale the normal vector to unit length. */
 
-    vhatip_(__state->svnrml);
+    vhatip_(__global_state, __state->svnrml);
 
 /*     Save a unit-length copy of the input axis. */
 /*     Save the original axis as the ray's vertex; this */
@@ -636,8 +641,8 @@ L_zztanini:
 /*     will be used, after addition of an offset, in the */
 /*     terminator computations. Save the evaluation epoch. */
 
-    vequ_(axis, __state->svvrtx);
-    vhat_(axis, __state->svaxis);
+    vequ_(__global_state, axis, __state->svvrtx);
+    vhat_(__global_state, axis, __state->svaxis);
     __state->svet = *et;
 
 /*     Prepare the DSK SINCPT utilities for a computation with */
@@ -647,20 +652,21 @@ L_zztanini:
 
 /*        This is the ellipsoid case. */
 
-	zzsuelin_(trgcde);
+	zzsuelin_(__global_state, trgcde);
     } else if (*shape == 2) {
 
 /*        This is the DSK case. */
 
-	zzsudski_(trgcde, nsurf, srflst, fixfid);
+	zzsudski_(__global_state, trgcde, nsurf, srflst, fixfid);
     } else {
-	setmsg_("Target shape code # was not recognized.", (ftnlen)39);
-	errint_("#", shape, (ftnlen)1);
-	sigerr_("SPICE(BADSHAPE)", (ftnlen)15);
-	chkout_("ZZTANINI", (ftnlen)8);
+	setmsg_(__global_state, "Target shape code # was not recognized.", (
+		ftnlen)39);
+	errint_(__global_state, "#", shape, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSHAPE)", (ftnlen)15);
+	chkout_(__global_state, "ZZTANINI", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZTANINI", (ftnlen)8);
+    chkout_(__global_state, "ZZTANINI", (ftnlen)8);
     return 0;
 /* $Procedure ZZTANSTA ( DSK, tangent ray state ) */
 
@@ -845,18 +851,20 @@ L_zztansta:
 /*     tangent ray finding occultation state and intercept */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZTANSTA", (ftnlen)8);
+    chkin_(__global_state, "ZZTANSTA", (ftnlen)8);
     if (__state->svcurv == 0) {
 
 /*        This is the limb case. */
 
 /*        We'll rotate SVAXIS by ANGLE to achieve the desired result. */
 
-	vrotv_(__state->svaxis, __state->svnrml, angle, raydir);
-	zzraysfx_(__state->svvrtx, raydir, &__state->svet, point, ocultd);
+	vrotv_(__global_state, __state->svaxis, __state->svnrml, angle, 
+		raydir);
+	zzraysfx_(__global_state, __state->svvrtx, raydir, &__state->svet, 
+		point, ocultd);
     } else if (__state->svcurv == 1) {
 
 /*        This is the umbral terminator case. */
@@ -865,7 +873,8 @@ L_zztansta:
 /*        the axis about the cutting half-plane normal by */
 /*        the input angle. */
 
-	vrotv_(__state->svaxis, __state->svnrml, angle, raydir);
+	vrotv_(__global_state, __state->svaxis, __state->svnrml, angle, 
+		raydir);
 
 /*        Produce the offset of the ray's vertex from the */
 /*        center of the source by rotating the axis */
@@ -873,11 +882,13 @@ L_zztansta:
 /*        of the vector must be SVIRAD. The saved axis */
 /*        has unit length. */
 
-	d__1 = *angle - pi_() / 2;
-	vrotv_(__state->svaxis, __state->svnrml, &d__1, vrtoff);
-	vsclip_(&__state->svirad, vrtoff);
-	vadd_(__state->svvrtx, vrtoff, apex);
-	zzraysfx_(apex, raydir, &__state->svet, point, ocultd);
+	d__1 = *angle - pi_(__global_state) / 2;
+	vrotv_(__global_state, __state->svaxis, __state->svnrml, &d__1, 
+		vrtoff);
+	vsclip_(__global_state, &__state->svirad, vrtoff);
+	vadd_(__global_state, __state->svvrtx, vrtoff, apex);
+	zzraysfx_(__global_state, apex, raydir, &__state->svet, point, ocultd)
+		;
     } else if (__state->svcurv == 2) {
 
 /*        This is the penumbral terminator case. */
@@ -887,53 +898,58 @@ L_zztansta:
 /*        the *negative* of the input angle. */
 
 	d__1 = -(*angle);
-	vrotv_(__state->svaxis, __state->svnrml, &d__1, raydir);
+	vrotv_(__global_state, __state->svaxis, __state->svnrml, &d__1, 
+		raydir);
 
 /*        Produce the ray's vertex by rotating the axis */
 /*        vector about the normal, *not its negative,* */
 /*        by 3*pi/2 - ANGLE radians. The length of the vector */
 /*        must be SRCRAD. The saved axis has unit length. */
 
-	d__1 = pi_() * 1.5 - *angle;
-	vrotv_(__state->svaxis, __state->svnrml, &d__1, vrtoff);
-	vsclip_(&__state->svirad, vrtoff);
-	vadd_(__state->svvrtx, vrtoff, apex);
-	zzraysfx_(apex, raydir, &__state->svet, point, ocultd);
+	d__1 = pi_(__global_state) * 1.5 - *angle;
+	vrotv_(__global_state, __state->svaxis, __state->svnrml, &d__1, 
+		vrtoff);
+	vsclip_(__global_state, &__state->svirad, vrtoff);
+	vadd_(__global_state, __state->svvrtx, vrtoff, apex);
+	zzraysfx_(__global_state, apex, raydir, &__state->svet, point, ocultd)
+		;
     } else {
 
 /*        This case should have been ruled out by a check in */
 /*        ZZTANINI. Check again anyway. */
 
-	setmsg_("Bad curve type code #.", (ftnlen)22);
-	errint_("#", &__state->svcurv, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZTANSTA", (ftnlen)8);
+	setmsg_(__global_state, "Bad curve type code #.", (ftnlen)22);
+	errint_(__global_state, "#", &__state->svcurv, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZTANSTA", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZTANSTA", (ftnlen)8);
+    chkout_(__global_state, "ZZTANSTA", (ftnlen)8);
     return 0;
 } /* zztanutl_ */
 
-/* Subroutine */ int zztanutl_(integer *curve, doublereal *srcrad, integer *
-	shape, integer *trgcde, integer *nsurf, integer *srflst, integer *
-	fixfid, doublereal *et, doublereal *plnvec, doublereal *axis, 
-	doublereal *angle, logical *ocultd, doublereal *point)
+/* Subroutine */ int zztanutl_(cspice_t* __global_state, integer *curve, 
+	doublereal *srcrad, integer *shape, integer *trgcde, integer *nsurf, 
+	integer *srflst, integer *fixfid, doublereal *et, doublereal *plnvec, 
+	doublereal *axis, doublereal *angle, logical *ocultd, doublereal *
+	point)
 {
     return zztanutl_0_(0, curve, srcrad, shape, trgcde, nsurf, srflst, fixfid,
 	     et, plnvec, axis, angle, ocultd, point);
     }
 
-/* Subroutine */ int zztanini_(integer *curve, doublereal *srcrad, integer *
-	shape, integer *trgcde, integer *nsurf, integer *srflst, integer *
-	fixfid, doublereal *et, doublereal *plnvec, doublereal *axis)
+/* Subroutine */ int zztanini_(cspice_t* __global_state, integer *curve, 
+	doublereal *srcrad, integer *shape, integer *trgcde, integer *nsurf, 
+	integer *srflst, integer *fixfid, doublereal *et, doublereal *plnvec, 
+	doublereal *axis)
 {
     return zztanutl_0_(1, curve, srcrad, shape, trgcde, nsurf, srflst, fixfid,
 	     et, plnvec, axis, (doublereal *)0, (logical *)0, (doublereal *)0)
 	    ;
     }
 
-/* Subroutine */ int zztansta_(doublereal *angle, logical *ocultd, doublereal 
-	*point)
+/* Subroutine */ int zztansta_(cspice_t* __global_state, doublereal *angle, 
+	logical *ocultd, doublereal *point)
 {
     return zztanutl_0_(2, (integer *)0, (doublereal *)0, (integer *)0, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (

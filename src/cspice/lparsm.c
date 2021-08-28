@@ -8,19 +8,20 @@
 
 
 typedef int lparsm_state_t;
-static lparsm_state_t* get_lparsm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lparsm_state_t* get_lparsm_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LPARSM ( Parse a list of items ) */
-/* Subroutine */ int lparsm_(char *list, char *delims, integer *nmax, integer 
-	*n, char *items, ftnlen list_len, ftnlen delims_len, ftnlen items_len)
+/* Subroutine */ int lparsm_(cspice_t* __global_state, char *list, char *
+	delims, integer *nmax, integer *n, char *items, ftnlen list_len, 
+	ftnlen delims_len, ftnlen items_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen), i_indx(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), i_indx(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     char bchr[1];
@@ -31,7 +32,7 @@ static lparsm_state_t* get_lparsm_state() {
 
 
     /* Module state */
-    lparsm_state_t* __state = get_lparsm_state();
+    lparsm_state_t* __state = get_lparsm_state(__global_state);
 /* $ Abstract */
 
 /*     Parse a list of items separated by multiple delimiters. */
@@ -235,15 +236,15 @@ static lparsm_state_t* get_lparsm_state() {
 
 /*     Blank list contains a blank item. */
 
-    if (s_cmp(list, " ", list_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, list, " ", list_len, (ftnlen)1) == 0) {
 	*n = 1;
-	s_copy(items, " ", items_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, items, " ", items_len, (ftnlen)1);
     } else {
 
 /*        Eliminate trailing blanks. EOL is the last non-blank */
 /*        character in the list. */
 
-	eol = i_len(list, list_len);
+	eol = i_len(&__global_state->f2c, list, list_len);
 	while(*(unsigned char *)&list[eol - 1] == 32) {
 	    --eol;
 	}
@@ -286,8 +287,8 @@ static lparsm_state_t* get_lparsm_state() {
 	    } else {
 		*(unsigned char *)echr = ' ';
 	    }
-	    while(e <= eol && i_indx(delims, echr, delims_len, (ftnlen)1) == 
-		    0) {
+	    while(e <= eol && i_indx(&__global_state->f2c, delims, echr, 
+		    delims_len, (ftnlen)1) == 0) {
 		++e;
 		if (e <= eol) {
 		    *(unsigned char *)echr = *(unsigned char *)&list[e - 1];
@@ -314,7 +315,8 @@ static lparsm_state_t* get_lparsm_state() {
 		    }
 		}
 		if (e <= eol) {
-		    if (i_indx(delims, echr, delims_len, (ftnlen)1) == 0) {
+		    if (i_indx(&__global_state->f2c, delims, echr, delims_len,
+			     (ftnlen)1) == 0) {
 
 /*                    We're looking at a non-delimiter character. */
 
@@ -333,11 +335,11 @@ static lparsm_state_t* get_lparsm_state() {
 
 	    ++(*n);
 	    if (e > b) {
-		s_copy(items + (*n - 1) * items_len, list + (b - 1), 
-			items_len, e - 1 - (b - 1));
+		s_copy(&__global_state->f2c, items + (*n - 1) * items_len, 
+			list + (b - 1), items_len, e - 1 - (b - 1));
 	    } else {
-		s_copy(items + (*n - 1) * items_len, " ", items_len, (ftnlen)
-			1);
+		s_copy(&__global_state->f2c, items + (*n - 1) * items_len, 
+			" ", items_len, (ftnlen)1);
 	    }
 
 /*           If there are more items to be found, continue with */
@@ -353,10 +355,11 @@ static lparsm_state_t* get_lparsm_state() {
 /*        If the list ended with a (non-blank) delimiter, add a */
 /*        blank item to the end. */
 
-	if (i_indx(delims, list + (eol - 1), delims_len, (ftnlen)1) != 0 && *
-		n < *nmax) {
+	if (i_indx(&__global_state->f2c, delims, list + (eol - 1), delims_len,
+		 (ftnlen)1) != 0 && *n < *nmax) {
 	    ++(*n);
-	    s_copy(items + (*n - 1) * items_len, " ", items_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, items + (*n - 1) * items_len, " ", 
+		    items_len, (ftnlen)1);
 	}
     }
     return 0;

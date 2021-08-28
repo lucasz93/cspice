@@ -8,8 +8,7 @@
 
 
 extern idw2at_init_t __idw2at_init;
-static idw2at_state_t* get_idw2at_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline idw2at_state_t* get_idw2at_state(cspice_t* state) {
 	if (!state->idw2at)
 		state->idw2at = __cspice_allocate_module(sizeof(
 	idw2at_state_t), &__idw2at_init, sizeof(__idw2at_init));
@@ -18,28 +17,29 @@ static idw2at_state_t* get_idw2at_state() {
 }
 
 /* $Procedure      IDW2AT ( Get file architecture and type from ID word ) */
-/* Subroutine */ int idw2at_(char *idword, char *arch, char *type__, ftnlen 
-	idword_len, ftnlen arch_len, ftnlen type_len)
+/* Subroutine */ int idw2at_(cspice_t* __global_state, char *idword, char *
+	arch, char *type__, ftnlen idword_len, ftnlen arch_len, ftnlen 
+	type_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char part1[8];
     char part2[8];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer slash;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern integer pos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen);
 
 
     /* Module state */
-    idw2at_state_t* __state = get_idw2at_state();
+    idw2at_state_t* __state = get_idw2at_state(__global_state);
 /* $ Abstract */
 
 /*     Extract the architecture and type of a SPICE binary kernel file */
@@ -263,26 +263,27 @@ static idw2at_state_t* get_idw2at_state() {
 
 /*     Standard obligatory error handling stuff. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("IDW2AT", (ftnlen)6);
+	chkin_(__global_state, "IDW2AT", (ftnlen)6);
     }
 
 /*     Check to see if we got a blank string for the ID word. If we did, */
 /*     set the architecture and type to unknown. */
 
-    if (s_cmp(idword, " ", idword_len, (ftnlen)1) == 0) {
-	s_copy(arch, "?", arch_len, (ftnlen)1);
-	s_copy(type__, "?", type_len, (ftnlen)1);
-	chkout_("IDW2AT", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, idword, " ", idword_len, (ftnlen)1) == 0) 
+	    {
+	s_copy(&__global_state->f2c, arch, "?", arch_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, type__, "?", type_len, (ftnlen)1);
+	chkout_(__global_state, "IDW2AT", (ftnlen)6);
 	return 0;
     }
 
 /*     Initialize the temporary storage variables that we use. */
 
-    s_copy(part1, " ", (ftnlen)8, (ftnlen)1);
-    s_copy(part2, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, part1, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, part2, " ", (ftnlen)8, (ftnlen)1);
 
 /*     See if we can get the architecture and type from the ID word. */
 
@@ -290,11 +291,12 @@ static idw2at_state_t* get_idw2at_state() {
 /*     recognize the architecture or the type, so set the architecture */
 /*     and type to unknown. */
 
-    slash = pos_(idword, "/", &__state->c__1, idword_len, (ftnlen)1);
+    slash = pos_(__global_state, idword, "/", &__state->c__1, idword_len, (
+	    ftnlen)1);
     if (slash == 0) {
-	s_copy(arch, "?", arch_len, (ftnlen)1);
-	s_copy(type__, "?", type_len, (ftnlen)1);
-	chkout_("IDW2AT", (ftnlen)6);
+	s_copy(&__global_state->f2c, arch, "?", arch_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, type__, "?", type_len, (ftnlen)1);
+	chkout_(__global_state, "IDW2AT", (ftnlen)6);
 	return 0;
     }
 
@@ -302,9 +304,10 @@ static idw2at_state_t* get_idw2at_state() {
 /*     in older files and the part after the slash is the type of file or */
 /*     the architecture in older files. */
 
-    s_copy(part1, idword, (ftnlen)8, slash - 1);
+    s_copy(&__global_state->f2c, part1, idword, (ftnlen)8, slash - 1);
     i__1 = slash;
-    s_copy(part2, idword + i__1, (ftnlen)8, idword_len - i__1);
+    s_copy(&__global_state->f2c, part2, idword + i__1, (ftnlen)8, idword_len 
+	    - i__1);
 
 /*     Let's now do some testing to try and figure out what's going on. */
 
@@ -314,57 +317,68 @@ static idw2at_state_t* get_idw2at_state() {
 
 /*    then we look for the things that begin with the word 'NAIF' */
 
-    if (s_cmp(part1, "DAF", (ftnlen)8, (ftnlen)3) == 0) {
+    if (s_cmp(&__global_state->f2c, part1, "DAF", (ftnlen)8, (ftnlen)3) == 0) 
+	    {
 
 /*        We have a DAF file, so set the architecture and type. */
 
-	s_copy(arch, "DAF", arch_len, (ftnlen)3);
-	if (s_cmp(part2, " ", (ftnlen)8, (ftnlen)1) != 0) {
-	    s_copy(type__, part2, type_len, (ftnlen)8);
+	s_copy(&__global_state->f2c, arch, "DAF", arch_len, (ftnlen)3);
+	if (s_cmp(&__global_state->f2c, part2, " ", (ftnlen)8, (ftnlen)1) != 
+		0) {
+	    s_copy(&__global_state->f2c, type__, part2, type_len, (ftnlen)8);
 	} else {
-	    s_copy(type__, "?", type_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, type__, "?", type_len, (ftnlen)1);
 	}
-    } else if (s_cmp(part1, "DAS", (ftnlen)8, (ftnlen)3) == 0) {
+    } else if (s_cmp(&__global_state->f2c, part1, "DAS", (ftnlen)8, (ftnlen)3)
+	     == 0) {
 
 /*        We have a DAS file, so set the architecture and type. */
 
-	s_copy(arch, "DAS", arch_len, (ftnlen)3);
-	if (s_cmp(part2, " ", (ftnlen)8, (ftnlen)1) != 0) {
-	    s_copy(type__, part2, type_len, (ftnlen)8);
+	s_copy(&__global_state->f2c, arch, "DAS", arch_len, (ftnlen)3);
+	if (s_cmp(&__global_state->f2c, part2, " ", (ftnlen)8, (ftnlen)1) != 
+		0) {
+	    s_copy(&__global_state->f2c, type__, part2, type_len, (ftnlen)8);
 	} else {
-	    s_copy(type__, "?", type_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, type__, "?", type_len, (ftnlen)1);
 	}
-    } else if (s_cmp(part1, "TXT", (ftnlen)8, (ftnlen)3) == 0) {
+    } else if (s_cmp(&__global_state->f2c, part1, "TXT", (ftnlen)8, (ftnlen)3)
+	     == 0) {
 
 /*        We have an ASCII text file, so set the architecture and type. */
 
-	s_copy(arch, "TXT", arch_len, (ftnlen)3);
-	if (s_cmp(part2, " ", (ftnlen)8, (ftnlen)1) != 0) {
-	    s_copy(type__, part2, type_len, (ftnlen)8);
+	s_copy(&__global_state->f2c, arch, "TXT", arch_len, (ftnlen)3);
+	if (s_cmp(&__global_state->f2c, part2, " ", (ftnlen)8, (ftnlen)1) != 
+		0) {
+	    s_copy(&__global_state->f2c, type__, part2, type_len, (ftnlen)8);
 	} else {
-	    s_copy(type__, "?", type_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, type__, "?", type_len, (ftnlen)1);
 	}
-    } else if (s_cmp(part1, "ASC", (ftnlen)8, (ftnlen)3) == 0) {
+    } else if (s_cmp(&__global_state->f2c, part1, "ASC", (ftnlen)8, (ftnlen)3)
+	     == 0) {
 
 /*        We have an ASCII text file, so set the architecture and type. */
 
-	s_copy(arch, "TXT", arch_len, (ftnlen)3);
-	if (s_cmp(part2, " ", (ftnlen)8, (ftnlen)1) != 0) {
-	    s_copy(type__, part2, type_len, (ftnlen)8);
+	s_copy(&__global_state->f2c, arch, "TXT", arch_len, (ftnlen)3);
+	if (s_cmp(&__global_state->f2c, part2, " ", (ftnlen)8, (ftnlen)1) != 
+		0) {
+	    s_copy(&__global_state->f2c, type__, part2, type_len, (ftnlen)8);
 	} else {
-	    s_copy(type__, "?", type_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, type__, "?", type_len, (ftnlen)1);
 	}
-    } else if (s_cmp(part1, "KPL", (ftnlen)8, (ftnlen)3) == 0) {
+    } else if (s_cmp(&__global_state->f2c, part1, "KPL", (ftnlen)8, (ftnlen)3)
+	     == 0) {
 
 /*        We have a kernel pool file, so set the architecture and type. */
 
-	s_copy(arch, "KPL", arch_len, (ftnlen)3);
-	if (s_cmp(part2, " ", (ftnlen)8, (ftnlen)1) != 0) {
-	    s_copy(type__, part2, type_len, (ftnlen)8);
+	s_copy(&__global_state->f2c, arch, "KPL", arch_len, (ftnlen)3);
+	if (s_cmp(&__global_state->f2c, part2, " ", (ftnlen)8, (ftnlen)1) != 
+		0) {
+	    s_copy(&__global_state->f2c, type__, part2, type_len, (ftnlen)8);
 	} else {
-	    s_copy(type__, "?", type_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, type__, "?", type_len, (ftnlen)1);
 	}
-    } else if (s_cmp(part1, "NAIF", (ftnlen)8, (ftnlen)4) == 0) {
+    } else if (s_cmp(&__global_state->f2c, part1, "NAIF", (ftnlen)8, (ftnlen)
+	    4) == 0) {
 
 /*        We have a DAF (or NIP, these are equivalent) or DAS file, */
 /*        identified by the value of PART2, but we have no idea what the */
@@ -376,22 +390,24 @@ static idw2at_state_t* get_idw2at_state() {
 /*        DAF or NIP, we give up on the type. As mentioned above, if */
 /*        PART2 contains DAS, we know a priori the type of the file. */
 
-	if (s_cmp(part2, "DAF", (ftnlen)8, (ftnlen)3) == 0 || s_cmp(part2, 
-		"NIP", (ftnlen)8, (ftnlen)3) == 0) {
-	    s_copy(arch, "DAF", arch_len, (ftnlen)3);
-	    s_copy(type__, "?", type_len, (ftnlen)1);
-	} else if (s_cmp(part2, "DAS", (ftnlen)8, (ftnlen)3) == 0) {
-	    s_copy(arch, "DAS", arch_len, (ftnlen)3);
-	    s_copy(type__, "PRE", type_len, (ftnlen)3);
+	if (s_cmp(&__global_state->f2c, part2, "DAF", (ftnlen)8, (ftnlen)3) ==
+		 0 || s_cmp(&__global_state->f2c, part2, "NIP", (ftnlen)8, (
+		ftnlen)3) == 0) {
+	    s_copy(&__global_state->f2c, arch, "DAF", arch_len, (ftnlen)3);
+	    s_copy(&__global_state->f2c, type__, "?", type_len, (ftnlen)1);
+	} else if (s_cmp(&__global_state->f2c, part2, "DAS", (ftnlen)8, (
+		ftnlen)3) == 0) {
+	    s_copy(&__global_state->f2c, arch, "DAS", arch_len, (ftnlen)3);
+	    s_copy(&__global_state->f2c, type__, "PRE", type_len, (ftnlen)3);
 	} else {
-	    s_copy(arch, "?", arch_len, (ftnlen)1);
-	    s_copy(type__, "?", type_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, arch, "?", arch_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, type__, "?", type_len, (ftnlen)1);
 	}
     } else {
-	s_copy(arch, "?", arch_len, (ftnlen)1);
-	s_copy(type__, "?", type_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, arch, "?", arch_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, type__, "?", type_len, (ftnlen)1);
     }
-    chkout_("IDW2AT", (ftnlen)6);
+    chkout_(__global_state, "IDW2AT", (ftnlen)6);
     return 0;
 } /* idw2at_ */
 

@@ -398,7 +398,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkw20_c" );
+   chkin_c ( naif_state, "spkw20_c" );
 
    /*
    Check the input strings to make sure the pointers

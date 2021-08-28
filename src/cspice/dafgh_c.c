@@ -175,7 +175,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafgh_c" );
+   chkin_c ( naif_state, "dafgh_c" );
 
    
    dafgh_ ( (integer *) handle );

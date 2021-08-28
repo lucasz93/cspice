@@ -8,13 +8,13 @@
 
 
 typedef int cleard_state_t;
-static cleard_state_t* get_cleard_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cleard_state_t* get_cleard_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CLEARD ( Clear a double precision array ) */
-/* Subroutine */ int cleard_(integer *ndim, doublereal *array)
+/* Subroutine */ int cleard_(cspice_t* __global_state, integer *ndim, 
+	doublereal *array)
 {
     /* System generated locals */
     integer i__1;
@@ -24,7 +24,7 @@ static cleard_state_t* get_cleard_state() {
 
 
     /* Module state */
-    cleard_state_t* __state = get_cleard_state();
+    cleard_state_t* __state = get_cleard_state(__global_state);
 /* $ Abstract */
 
 /*      Fill a double precision array with zeros. */

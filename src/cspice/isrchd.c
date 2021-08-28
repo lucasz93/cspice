@@ -8,13 +8,13 @@
 
 
 typedef int isrchd_state_t;
-static isrchd_state_t* get_isrchd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline isrchd_state_t* get_isrchd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure             ISRCHD  ( Search in a double precision array ) */
-integer isrchd_(doublereal *value, integer *ndim, doublereal *array)
+integer isrchd_(cspice_t* __global_state, doublereal *value, integer *ndim, 
+	doublereal *array)
 {
     /* System generated locals */
     integer ret_val, i__1;
@@ -24,7 +24,7 @@ integer isrchd_(doublereal *value, integer *ndim, doublereal *array)
 
 
     /* Module state */
-    isrchd_state_t* __state = get_isrchd_state();
+    isrchd_state_t* __state = get_isrchd_state(__global_state);
 /* $ Abstract */
 
 /*      Search for a given value within a double precision array. Return */

@@ -8,30 +8,29 @@
 
 
 typedef int zzdspc_state_t;
-static zzdspc_state_t* get_zzdspc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdspc_state_t* get_zzdspc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZDSPC ( SGP4 deep space routine ) */
-/* Subroutine */ int zzdspc_(integer *irez, doublereal *d2201, doublereal *
-	d2211, doublereal *d3210, doublereal *d3222, doublereal *d4410, 
-	doublereal *d4422, doublereal *d5220, doublereal *d5232, doublereal *
-	d5421, doublereal *d5433, doublereal *dedt, doublereal *del1, 
-	doublereal *del2, doublereal *del3, doublereal *didt, doublereal *
-	dmdt, doublereal *dnodt, doublereal *domdt, doublereal *argpo, 
-	doublereal *argpdot, doublereal *t, doublereal *tc, doublereal *gsto, 
-	doublereal *xfact, doublereal *xlamo, doublereal *no, doublereal *
-	atime, doublereal *eccm, doublereal *argpm, doublereal *inclm, 
-	doublereal *xli, doublereal *mm, doublereal *xni, doublereal *nodem, 
-	doublereal *dndt, doublereal *xn)
+/* Subroutine */ int zzdspc_(cspice_t* __global_state, integer *irez, 
+	doublereal *d2201, doublereal *d2211, doublereal *d3210, doublereal *
+	d3222, doublereal *d4410, doublereal *d4422, doublereal *d5220, 
+	doublereal *d5232, doublereal *d5421, doublereal *d5433, doublereal *
+	dedt, doublereal *del1, doublereal *del2, doublereal *del3, 
+	doublereal *didt, doublereal *dmdt, doublereal *dnodt, doublereal *
+	domdt, doublereal *argpo, doublereal *argpdot, doublereal *t, 
+	doublereal *tc, doublereal *gsto, doublereal *xfact, doublereal *
+	xlamo, doublereal *no, doublereal *atime, doublereal *eccm, 
+	doublereal *argpm, doublereal *inclm, doublereal *xli, doublereal *mm,
+	 doublereal *xni, doublereal *nodem, doublereal *dndt, doublereal *xn)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double d_mod(doublereal *, doublereal *), sin(doublereal), cos(doublereal)
-	    ;
+    double d_mod(f2c_state_t*, doublereal *, doublereal *), sin(f2c_state_t*, 
+	    doublereal), cos(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal delt;
@@ -43,7 +42,7 @@ static zzdspc_state_t* get_zzdspc_state() {
     doublereal fasx6;
     doublereal step2;
     doublereal x2omi;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal theta;
     doublereal xnddt;
     integer iretn;
@@ -51,7 +50,7 @@ static zzdspc_state_t* get_zzdspc_state() {
     doublereal xldot;
     doublereal rptim;
     doublereal stepp;
-    extern doublereal twopi_(void);
+    extern doublereal twopi_(cspice_t*);
     doublereal g22;
     doublereal g32;
     doublereal g52;
@@ -59,13 +58,13 @@ static zzdspc_state_t* get_zzdspc_state() {
     doublereal g54;
     doublereal ft;
     doublereal xl;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal x2li;
 
 
     /* Module state */
-    zzdspc_state_t* __state = get_zzdspc_state();
+    zzdspc_state_t* __state = get_zzdspc_state(__global_state);
 /* $ Abstract */
 
 /*     This subroutine provides deep space contributions to mean */
@@ -289,10 +288,10 @@ static zzdspc_state_t* get_zzdspc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSPC", (ftnlen)6);
+    chkin_(__global_state, "ZZDSPC", (ftnlen)6);
 
 /*     Constants */
 
@@ -313,8 +312,8 @@ static zzdspc_state_t* get_zzdspc_state() {
 
     *dndt = 0.;
     d__1 = *gsto + *tc * rptim;
-    d__2 = twopi_();
-    theta = d_mod(&d__1, &d__2);
+    d__2 = twopi_(__global_state);
+    theta = d_mod(&__global_state->f2c, &d__1, &d__2);
     *eccm += *dedt * *t;
     *inclm += *didt * *t;
     *argpm += *domdt * *t;
@@ -380,11 +379,15 @@ static zzdspc_state_t* get_zzdspc_state() {
 /*           NEAR - SYNCHRONOUS RESONANCE TERMS */
 
 	    if (*irez != 2) {
-		xndt = *del1 * sin(*xli - fasx2) + *del2 * sin((*xli - fasx4) 
-			* 2.) + *del3 * sin((*xli - fasx6) * 3.);
+		xndt = *del1 * sin(&__global_state->f2c, *xli - fasx2) + *
+			del2 * sin(&__global_state->f2c, (*xli - fasx4) * 2.) 
+			+ *del3 * sin(&__global_state->f2c, (*xli - fasx6) * 
+			3.);
 		xldot = *xni + *xfact;
-		xnddt = *del1 * cos(*xli - fasx2) + *del2 * 2. * cos((*xli - 
-			fasx4) * 2.) + *del3 * 3. * cos((*xli - fasx6) * 3.);
+		xnddt = *del1 * cos(&__global_state->f2c, *xli - fasx2) + *
+			del2 * 2. * cos(&__global_state->f2c, (*xli - fasx4) *
+			 2.) + *del3 * 3. * cos(&__global_state->f2c, (*xli - 
+			fasx6) * 3.);
 		xnddt *= xldot;
 	    } else {
 
@@ -393,21 +396,29 @@ static zzdspc_state_t* get_zzdspc_state() {
 		xomi = *argpo + *argpdot * *atime;
 		x2omi = xomi + xomi;
 		x2li = *xli + *xli;
-		xndt = *d2201 * sin(x2omi + *xli - g22) + *d2211 * sin(*xli - 
-			g22) + *d3210 * sin(xomi + *xli - g32) + *d3222 * sin(
-			-xomi + *xli - g32) + *d4410 * sin(x2omi + x2li - g44)
-			 + *d4422 * sin(x2li - g44) + *d5220 * sin(xomi + *
-			xli - g52) + *d5232 * sin(-xomi + *xli - g52) + *
-			d5421 * sin(xomi + x2li - g54) + *d5433 * sin(-xomi + 
-			x2li - g54);
+		xndt = *d2201 * sin(&__global_state->f2c, x2omi + *xli - g22) 
+			+ *d2211 * sin(&__global_state->f2c, *xli - g22) + *
+			d3210 * sin(&__global_state->f2c, xomi + *xli - g32) 
+			+ *d3222 * sin(&__global_state->f2c, -xomi + *xli - 
+			g32) + *d4410 * sin(&__global_state->f2c, x2omi + 
+			x2li - g44) + *d4422 * sin(&__global_state->f2c, x2li 
+			- g44) + *d5220 * sin(&__global_state->f2c, xomi + *
+			xli - g52) + *d5232 * sin(&__global_state->f2c, -xomi 
+			+ *xli - g52) + *d5421 * sin(&__global_state->f2c, 
+			xomi + x2li - g54) + *d5433 * sin(&
+			__global_state->f2c, -xomi + x2li - g54);
 		xldot = *xni + *xfact;
-		xnddt = *d2201 * cos(x2omi + *xli - g22) + *d2211 * cos(*xli 
-			- g22) + *d3210 * cos(xomi + *xli - g32) + *d3222 * 
-			cos(-xomi + *xli - g32) + *d5220 * cos(xomi + *xli - 
-			g52) + *d5232 * cos(-xomi + *xli - g52) + (*d4410 * 
-			cos(x2omi + x2li - g44) + *d4422 * cos(x2li - g44) + *
-			d5421 * cos(xomi + x2li - g54) + *d5433 * cos(-xomi + 
-			x2li - g54)) * 2.;
+		xnddt = *d2201 * cos(&__global_state->f2c, x2omi + *xli - g22)
+			 + *d2211 * cos(&__global_state->f2c, *xli - g22) + *
+			d3210 * cos(&__global_state->f2c, xomi + *xli - g32) 
+			+ *d3222 * cos(&__global_state->f2c, -xomi + *xli - 
+			g32) + *d5220 * cos(&__global_state->f2c, xomi + *xli 
+			- g52) + *d5232 * cos(&__global_state->f2c, -xomi + *
+			xli - g52) + (*d4410 * cos(&__global_state->f2c, 
+			x2omi + x2li - g44) + *d4422 * cos(&
+			__global_state->f2c, x2li - g44) + *d5421 * cos(&
+			__global_state->f2c, xomi + x2li - g54) + *d5433 * 
+			cos(&__global_state->f2c, -xomi + x2li - g54)) * 2.;
 		xnddt *= xldot;
 	    }
 
@@ -439,7 +450,7 @@ static zzdspc_state_t* get_zzdspc_state() {
 	}
 	*xn = *no + *dndt;
     }
-    chkout_("ZZDSPC", (ftnlen)6);
+    chkout_(__global_state, "ZZDSPC", (ftnlen)6);
     return 0;
 } /* zzdspc_ */
 

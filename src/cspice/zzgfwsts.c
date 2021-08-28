@@ -8,8 +8,7 @@
 
 
 extern zzgfwsts_init_t __zzgfwsts_init;
-static zzgfwsts_state_t* get_zzgfwsts_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfwsts_state_t* get_zzgfwsts_state(cspice_t* state) {
 	if (!state->zzgfwsts)
 		state->zzgfwsts = __cspice_allocate_module(sizeof(
 	zzgfwsts_state_t), &__zzgfwsts_init, sizeof(__zzgfwsts_init));
@@ -18,11 +17,11 @@ static zzgfwsts_state_t* get_zzgfwsts_state() {
 }
 
 /* $Procedure ZZGFWSTS ( Private --- GF, sift first window thru second ) */
-/* Subroutine */ int zzgfwsts_(doublereal *wndw1, doublereal *wndw2, char *
-	inclsn, doublereal *wndw3, ftnlen inclsn_len)
+/* Subroutine */ int zzgfwsts_(cspice_t* __global_state, doublereal *wndw1, 
+	doublereal *wndw2, char *inclsn, doublereal *wndw3, ftnlen inclsn_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     logical keep;
@@ -36,28 +35,29 @@ static zzgfwsts_state_t* get_zzgfwsts_state() {
     integer endp3;
     integer size1;
     integer size2;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical right;
-    extern integer sized_(doublereal *);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
     char locinc[2];
     logical closed;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ssized_(integer *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ssized_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
     integer maxpts;
     integer ovflow;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzgfwsts_state_t* __state = get_zzgfwsts_state();
+    zzgfwsts_state_t* __state = get_zzgfwsts_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -222,21 +222,21 @@ static zzgfwsts_state_t* get_zzgfwsts_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFWSTS", (ftnlen)8);
+    chkin_(__global_state, "ZZGFWSTS", (ftnlen)8);
 
 /*     Store the maximum number of endpoints that can be loaded into */
 /*     WNDW3 */
 
-    maxpts = sized_(wndw3);
-    ssized_(&maxpts, wndw3);
+    maxpts = sized_(__global_state, wndw3);
+    ssized_(__global_state, &maxpts, wndw3);
 
 /*     Find the number of endpoints in each of the input windows. */
 
-    size1 = cardd_(wndw1);
-    size2 = cardd_(wndw2);
+    size1 = cardd_(__global_state, wndw1);
+    size2 = cardd_(__global_state, wndw2);
 
 /*     Initialize the place holders for each of the input windows. */
 
@@ -246,19 +246,23 @@ static zzgfwsts_state_t* get_zzgfwsts_state() {
     endp2 = 2;
     begp3 = -1;
     endp3 = 0;
-    cmprss_(" ", &__state->c__0, inclsn, locinc, (ftnlen)1, inclsn_len, (
-	    ftnlen)2);
-    open = s_cmp(locinc, "()", (ftnlen)2, (ftnlen)2) == 0;
-    left = s_cmp(locinc, "[)", (ftnlen)2, (ftnlen)2) == 0;
-    right = s_cmp(locinc, "(]", (ftnlen)2, (ftnlen)2) == 0;
-    closed = s_cmp(locinc, "[]", (ftnlen)2, (ftnlen)2) == 0;
+    cmprss_(__global_state, " ", &__state->c__0, inclsn, locinc, (ftnlen)1, 
+	    inclsn_len, (ftnlen)2);
+    open = s_cmp(&__global_state->f2c, locinc, "()", (ftnlen)2, (ftnlen)2) == 
+	    0;
+    left = s_cmp(&__global_state->f2c, locinc, "[)", (ftnlen)2, (ftnlen)2) == 
+	    0;
+    right = s_cmp(&__global_state->f2c, locinc, "(]", (ftnlen)2, (ftnlen)2) ==
+	     0;
+    closed = s_cmp(&__global_state->f2c, locinc, "[]", (ftnlen)2, (ftnlen)2) 
+	    == 0;
     if (! (open || left || right || closed)) {
-	setmsg_("The value of the inclusion flag must be one of the followin"
-		"g: '[]', '[)', '(]', or '()'.  However the value supplied wa"
-		"s '#'. ", (ftnlen)126);
-	errch_("#", inclsn, (ftnlen)1, inclsn_len);
-	sigerr_("SPICE(UNKNOWNINCLUSION)", (ftnlen)23);
-	chkout_("ZZGFWSTS", (ftnlen)8);
+	setmsg_(__global_state, "The value of the inclusion flag must be one"
+		" of the following: '[]', '[)', '(]', or '()'.  However the v"
+		"alue supplied was '#'. ", (ftnlen)126);
+	errch_(__global_state, "#", inclsn, (ftnlen)1, inclsn_len);
+	sigerr_(__global_state, "SPICE(UNKNOWNINCLUSION)", (ftnlen)23);
+	chkout_(__global_state, "ZZGFWSTS", (ftnlen)8);
 	return 0;
     }
 
@@ -343,16 +347,16 @@ static zzgfwsts_state_t* get_zzgfwsts_state() {
 	}
     }
     if (ovflow > 0) {
-	setmsg_("The output window does not have sufficient memory to contai"
-		"n the result of sifting the two given windows. The output wi"
-		"ndow requires space for # more values than what has been pro"
-		"vided. ", (ftnlen)186);
-	errint_("#", &ovflow, (ftnlen)1);
-	sigerr_("SPICE(OUTOFROOM)", (ftnlen)16);
+	setmsg_(__global_state, "The output window does not have sufficient "
+		"memory to contain the result of sifting the two given window"
+		"s. The output window requires space for # more values than w"
+		"hat has been provided. ", (ftnlen)186);
+	errint_(__global_state, "#", &ovflow, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(OUTOFROOM)", (ftnlen)16);
     } else {
-	scardd_(&endp3, wndw3);
+	scardd_(__global_state, &endp3, wndw3);
     }
-    chkout_("ZZGFWSTS", (ftnlen)8);
+    chkout_(__global_state, "ZZGFWSTS", (ftnlen)8);
     return 0;
 } /* zzgfwsts_ */
 

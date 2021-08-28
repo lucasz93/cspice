@@ -8,8 +8,7 @@
 
 
 extern zzekac07_init_t __zzekac07_init;
-static zzekac07_state_t* get_zzekac07_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekac07_state_t* get_zzekac07_state(cspice_t* state) {
 	if (!state->zzekac07)
 		state->zzekac07 = __cspice_allocate_module(sizeof(
 	zzekac07_state_t), &__zzekac07_init, sizeof(__zzekac07_init));
@@ -18,38 +17,41 @@ static zzekac07_state_t* get_zzekac07_state() {
 }
 
 /* $Procedure     ZZEKAC07 ( EK, add class 7 column to segment ) */
-/* Subroutine */ int zzekac07_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *ivals, logical *nlflgs, integer *wkindx)
+/* Subroutine */ int zzekac07_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *ivals, logical *nlflgs, 
+	integer *wkindx)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer page[256];
     integer from;
-    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekacps_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekordi_(integer *, logical *, logical *, 
-	    integer *, integer *);
-    extern /* Subroutine */ int zzekwpai_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekwpal_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekcnam_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int zzekacps_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekordi_(cspice_t*, integer *, logical *, 
 	    logical *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekwpai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekwpal_(cspice_t*, integer *, integer *, 
+	    integer *, logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer p;
     integer mbase;
     integer npage;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer class__;
     integer nrows;
     integer cmbase;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     char column[32];
     integer colidx;
     integer datbas;
@@ -63,17 +65,17 @@ static zzekac07_state_t* get_zzekac07_state() {
     integer to;
     logical indexd;
     logical nullok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
 
 
     /* Module state */
-    zzekac07_state_t* __state = get_zzekac07_state();
+    zzekac07_state_t* __state = get_zzekac07_state(__global_state);
 /* $ Abstract */
 
 /*     Add an entire class 7 column to an EK segment. */
@@ -861,10 +863,10 @@ static zzekac07_state_t* get_zzekac07_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKAC07", (ftnlen)8);
+	chkin_(__global_state, "ZZEKAC07", (ftnlen)8);
     }
 
 /*     Grab the column's attributes. */
@@ -879,13 +881,13 @@ static zzekac07_state_t* get_zzekac07_state() {
 /*     This column had better be class 7. */
 
     if (class__ != 7) {
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	setmsg_("Column class code # found in descriptor for column #.  Clas"
-		"s should be 7.", (ftnlen)73);
-	errint_("#", &class__, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
-	chkout_("ZZEKAC07", (ftnlen)8);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	setmsg_(__global_state, "Column class code # found in descriptor for"
+		" column #.  Class should be 7.", (ftnlen)73);
+	errint_(__global_state, "#", &class__, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	sigerr_(__global_state, "SPICE(NOCLASS)", (ftnlen)14);
+	chkout_(__global_state, "ZZEKAC07", (ftnlen)8);
 	return 0;
     }
 
@@ -897,14 +899,15 @@ static zzekac07_state_t* get_zzekac07_state() {
 /*     allocate that many new, contiguous pages. */
 
     npage = (nrows + 253) / 254;
-    zzekacps_(handle, segdsc, &__state->c__3, &npage, &p, &datbas);
+    zzekacps_(__global_state, handle, segdsc, &__state->c__3, &npage, &p, &
+	    datbas);
 
 /*     We'll use FROM to indicate the element of IVALS we're */
 /*     considering and TO to indicate the element of PAGE to write */
 /*     to. */
 
     to = 1;
-    cleari_(&__state->c__256, page);
+    cleari_(__global_state, &__state->c__256, page);
     i__1 = nrows;
     for (from = 1; from <= i__1; ++from) {
 
@@ -914,8 +917,9 @@ static zzekac07_state_t* get_zzekac07_state() {
 
 /*           The current item is non-null. */
 
-	    page[(i__2 = to - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("page", 
-		    i__2, "zzekac07_", (ftnlen)279)] = ivals[from - 1];
+	    page[(i__2 = to - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "page", i__2, "zzekac07_", (ftnlen)
+		    279)] = ivals[from - 1];
 	}
 	++to;
 	if (to > 254 || from == nrows) {
@@ -928,7 +932,7 @@ static zzekac07_state_t* get_zzekac07_state() {
 
 /*           Write out the data page. */
 
-	    zzekpgwi_(handle, &p, page);
+	    zzekpgwi_(__global_state, handle, &p, page);
 
 /*           Next page. */
 
@@ -942,7 +946,7 @@ static zzekac07_state_t* get_zzekac07_state() {
     cmbase = coldsc[9];
     i__1 = cmbase + 1;
     i__2 = cmbase + 1;
-    dasudi_(handle, &i__1, &i__2, &datbas);
+    dasudi_(__global_state, handle, &i__1, &i__2, &datbas);
 
 /*     If the column is supposed to have an index, now is the time to */
 /*     build that index.  Type 2 indexes are just order vectors. */
@@ -951,11 +955,12 @@ static zzekac07_state_t* get_zzekac07_state() {
 
 /*        Compute the order vector. */
 
-	zzekordi_(ivals, &nullok, nlflgs, &nrows, wkindx);
+	zzekordi_(__global_state, ivals, &nullok, nlflgs, &nrows, wkindx);
 
 /*        Write out the index. */
 
-	zzekwpai_(handle, segdsc, &nrows, wkindx, &idxpag, &idxbas);
+	zzekwpai_(__global_state, handle, segdsc, &nrows, wkindx, &idxpag, &
+		idxbas);
 
 /*        Update the column's metadata to point to the index.  The */
 /*        pointer indicates base address of the index.  Also set the */
@@ -965,25 +970,26 @@ static zzekac07_state_t* get_zzekac07_state() {
 	dscbas = mbase + 24 + (colidx - 1) * 11;
 	i__1 = dscbas + 7;
 	i__2 = dscbas + 7;
-	dasudi_(handle, &i__1, &i__2, &idxbas);
+	dasudi_(__global_state, handle, &i__1, &i__2, &idxbas);
 	i__1 = dscbas + 6;
 	i__2 = dscbas + 6;
-	dasudi_(handle, &i__1, &i__2, &__state->c__2);
+	dasudi_(__global_state, handle, &i__1, &i__2, &__state->c__2);
     }
     if (nullok) {
 
 /*        Nulls are allowed.  Write out the null flag array. */
 
-	zzekwpal_(handle, segdsc, &nrows, nlflgs, &nflpag, &nflbas);
+	zzekwpal_(__global_state, handle, segdsc, &nrows, nlflgs, &nflpag, &
+		nflbas);
 
 /*        Update the column's metadata area to point to the null flag */
 /*        array. */
 
 	i__1 = cmbase + 2;
 	i__2 = cmbase + 2;
-	dasudi_(handle, &i__1, &i__2, &nflbas);
+	dasudi_(__global_state, handle, &i__1, &i__2, &nflbas);
     }
-    chkout_("ZZEKAC07", (ftnlen)8);
+    chkout_(__global_state, "ZZEKAC07", (ftnlen)8);
     return 0;
 } /* zzekac07_ */
 

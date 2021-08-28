@@ -408,7 +408,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "furnsh_c" );
+   chkin_c ( naif_state, "furnsh_c" );
 
 
    /*

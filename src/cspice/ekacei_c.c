@@ -353,7 +353,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekacei_c" );
+   chkin_c ( naif_state, "ekacei_c" );
 
    /*
    Check the column name to make sure the pointer is non-null

@@ -8,25 +8,24 @@
 
 
 typedef int esrchc_state_t;
-static esrchc_state_t* get_esrchc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline esrchc_state_t* get_esrchc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ESRCHC ( Equivalence search, character ) */
-integer esrchc_(char *value, integer *ndim, char *array, ftnlen value_len, 
-	ftnlen array_len)
+integer esrchc_(cspice_t* __global_state, char *value, integer *ndim, char *
+	array, ftnlen value_len, ftnlen array_len)
 {
     /* System generated locals */
     integer ret_val, i__1;
 
     /* Local variables */
     integer i__;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
 
 
     /* Module state */
-    esrchc_state_t* __state = get_esrchc_state();
+    esrchc_state_t* __state = get_esrchc_state(__global_state);
 /* $ Abstract */
 
 /*     Search for a given value within a character string array. */
@@ -173,8 +172,8 @@ integer esrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
     ret_val = 0;
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	if (eqstr_(array + (i__ - 1) * array_len, value, array_len, value_len)
-		) {
+	if (eqstr_(__global_state, array + (i__ - 1) * array_len, value, 
+		array_len, value_len)) {
 	    ret_val = i__;
 	    return ret_val;
 	}

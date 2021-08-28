@@ -266,7 +266,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekappr_c" );
+   chkin_c ( naif_state, "ekappr_c" );
 
    /*
    Convert the segment number to a Fortran index.

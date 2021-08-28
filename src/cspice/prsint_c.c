@@ -137,7 +137,7 @@
    /*
    Participate in error handling.
    */
-   chkin_c ( "prsint_c");
+   chkin_c ( naif_state, "prsint_c");
 
    
    /*

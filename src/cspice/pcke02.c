@@ -8,32 +8,31 @@
 
 
 typedef int pcke02_state_t;
-static pcke02_state_t* get_pcke02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pcke02_state_t* get_pcke02_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure PCKE02 ( PCK, evaluate data record from type 2 segment ) */
-/* Subroutine */ int pcke02_(doublereal *et, doublereal *record, doublereal *
-	eulang)
+/* Subroutine */ int pcke02_(cspice_t* __global_state, doublereal *et, 
+	doublereal *record, doublereal *eulang)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    double d_mod(doublereal *, doublereal *);
+    double d_mod(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int spke02_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern doublereal twopi_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int spke02_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern doublereal twopi_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    pcke02_state_t* __state = get_pcke02_state();
+    pcke02_state_t* __state = get_pcke02_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single PCK data record from a segment of type 2 */
@@ -207,23 +206,23 @@ static pcke02_state_t* get_pcke02_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PCKE02", (ftnlen)6);
+	chkin_(__global_state, "PCKE02", (ftnlen)6);
     }
 
 /*     Call evaluation routine to get Euler angles */
 /*     phi, delta, w. */
 
-    spke02_(et, record, eulang);
+    spke02_(__global_state, et, record, eulang);
 
 /*     Mod the 3rd element of the state by TWOPI. */
 /*     We do this because we've always done this. */
 
-    d__1 = twopi_();
-    eulang[2] = d_mod(&eulang[2], &d__1);
-    chkout_("PCKE02", (ftnlen)6);
+    d__1 = twopi_(__global_state);
+    eulang[2] = d_mod(&__global_state->f2c, &eulang[2], &d__1);
+    chkout_(__global_state, "PCKE02", (ftnlen)6);
     return 0;
 } /* pcke02_ */
 

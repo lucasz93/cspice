@@ -296,7 +296,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "pltar_c" );
+   chkin_c ( naif_state, "pltar_c" );
 
 
    retval = (SpiceDouble) pltar_ ( ( integer    * ) &nv,

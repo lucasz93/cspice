@@ -8,8 +8,7 @@
 
 
 extern nparsd_init_t __nparsd_init;
-static nparsd_state_t* get_nparsd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline nparsd_state_t* get_nparsd_state(cspice_t* state) {
 	if (!state->nparsd)
 		state->nparsd = __cspice_allocate_module(sizeof(
 	nparsd_state_t), &__nparsd_init, sizeof(__nparsd_init));
@@ -18,8 +17,9 @@ static nparsd_state_t* get_nparsd_state() {
 }
 
 /* $Procedure      NPARSD ( Double Precision parsing of a string ) */
-/* Subroutine */ int nparsd_(char *string, doublereal *x, char *error, 
-	integer *ptr, ftnlen string_len, ftnlen error_len)
+/* Subroutine */ int nparsd_(cspice_t* __global_state, char *string, 
+	doublereal *x, char *error, integer *ptr, ftnlen string_len, ftnlen 
+	error_len)
 {
     /* Initialized data */
 
@@ -29,22 +29,23 @@ static nparsd_state_t* get_nparsd_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
-    double d_lg10(doublereal *), d_int(doublereal *);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), i_len(char *, ftnlen), 
-	    i_dnnt(doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double d_lg10(f2c_state_t*, doublereal *), d_int(f2c_state_t*, doublereal 
+	    *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), i_len(
+	    f2c_state_t*, char *, ftnlen), i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int zzinssub_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern doublereal dpmax_(void);
-    extern doublereal pi_(void);
-    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int zzinssub_(cspice_t*, char *, char *, integer *
+	    , char *, ftnlen, ftnlen, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
+    extern doublereal pi_(cspice_t*);
+    extern /* Subroutine */ int prefix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
 
     /* Module state */
-    nparsd_state_t* __state = get_nparsd_state();
+    nparsd_state_t* __state = get_nparsd_state(__global_state);
 /* $ Abstract */
 
 /*     Parse a character string that represents a number and return */
@@ -363,91 +364,129 @@ static nparsd_state_t* get_nparsd_state() {
 
 /*        Set up the error messages */
 
-	s_copy(__state->toobig, "The number represented by the input string "
-		"is too large to be stored as a double precision number. ", (
-		ftnlen)160, (ftnlen)99);
-	s_copy(__state->unxpch, "An unexpected character was found while att"
-		"empting to parse the input string. ", (ftnlen)160, (ftnlen)78)
-		;
-	s_copy(__state->unxppt, "An unexpected decimal point was found in th"
-		"e input string. ", (ftnlen)160, (ftnlen)59);
-	s_copy(__state->unxpsn, "An unexpected sign character was found in t"
-		"he input string. ", (ftnlen)160, (ftnlen)60);
-	s_copy(__state->blnkst, "The input string is blank. Blank strings ar"
-		"e not considered to be numbers. ", (ftnlen)160, (ftnlen)75);
-	s_copy(__state->unrcst, "The input string could not be recognized as"
-		" a number. ", (ftnlen)160, (ftnlen)54);
+	s_copy(&__global_state->f2c, __state->toobig, "The number represente"
+		"d by the input string is too large to be stored as a double "
+		"precision number. ", (ftnlen)160, (ftnlen)99);
+	s_copy(&__global_state->f2c, __state->unxpch, "An unexpected charact"
+		"er was found while attempting to parse the input string. ", (
+		ftnlen)160, (ftnlen)78);
+	s_copy(&__global_state->f2c, __state->unxppt, "An unexpected decimal"
+		" point was found in the input string. ", (ftnlen)160, (ftnlen)
+		59);
+	s_copy(&__global_state->f2c, __state->unxpsn, "An unexpected sign ch"
+		"aracter was found in the input string. ", (ftnlen)160, (
+		ftnlen)60);
+	s_copy(&__global_state->f2c, __state->blnkst, "The input string is b"
+		"lank. Blank strings are not considered to be numbers. ", (
+		ftnlen)160, (ftnlen)75);
+	s_copy(&__global_state->f2c, __state->unrcst, "The input string coul"
+		"d not be recognized as a number. ", (ftnlen)160, (ftnlen)54);
 	__state->blank = ' ';
-	__state->values[(i__1 = '0' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)476)] = 0.;
-	__state->values[(i__1 = '1' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)477)] = 1.;
-	__state->values[(i__1 = '2' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)478)] = 2.;
-	__state->values[(i__1 = '3' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)479)] = 3.;
-	__state->values[(i__1 = '4' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)480)] = 4.;
-	__state->values[(i__1 = '5' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)481)] = 5.;
-	__state->values[(i__1 = '6' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)482)] = 6.;
-	__state->values[(i__1 = '7' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)483)] = 7.;
-	__state->values[(i__1 = '8' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)484)] = 8.;
-	__state->values[(i__1 = '9' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)485)] = 9.;
-	__state->values[(i__1 = '-' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)486)] = -1.;
-	__state->values[(i__1 = '+' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(
-		"values", i__1, "nparsd_", (ftnlen)487)] = 1.;
-	__state->class__[(i__1 = ' ') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)489)] = 4;
-	__state->class__[(i__1 = ',') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)490)] = 4;
-	__state->class__[(i__1 = '.') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)492)] = 2;
-	__state->class__[(i__1 = 'E') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)494)] = 3;
-	__state->class__[(i__1 = 'D') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)495)] = 3;
-	__state->class__[(i__1 = 'e') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)496)] = 3;
-	__state->class__[(i__1 = 'd') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)497)] = 3;
-	__state->class__[(i__1 = '+') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)499)] = 7;
-	__state->class__[(i__1 = '-') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)500)] = 7;
-	__state->class__[(i__1 = '1') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)502)] = 1;
-	__state->class__[(i__1 = '2') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)503)] = 1;
-	__state->class__[(i__1 = '3') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)504)] = 1;
-	__state->class__[(i__1 = '4') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)505)] = 1;
-	__state->class__[(i__1 = '5') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)506)] = 1;
-	__state->class__[(i__1 = '6') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)507)] = 1;
-	__state->class__[(i__1 = '7') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)508)] = 1;
-	__state->class__[(i__1 = '8') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)509)] = 1;
-	__state->class__[(i__1 = '9') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)510)] = 1;
-	__state->class__[(i__1 = '0') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)511)] = 1;
-	__state->class__[(i__1 = 'p') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)513)] = 5;
-	__state->class__[(i__1 = 'P') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)514)] = 5;
-	__state->class__[(i__1 = 'i') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)515)] = 6;
-	__state->class__[(i__1 = 'I') < 129 && 0 <= i__1 ? i__1 : s_rnge(
-		"class", i__1, "nparsd_", (ftnlen)516)] = 6;
+	__state->values[(i__1 = '0' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)476)] 
+		= 0.;
+	__state->values[(i__1 = '1' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)477)] 
+		= 1.;
+	__state->values[(i__1 = '2' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)478)] 
+		= 2.;
+	__state->values[(i__1 = '3' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)479)] 
+		= 3.;
+	__state->values[(i__1 = '4' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)480)] 
+		= 4.;
+	__state->values[(i__1 = '5' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)481)] 
+		= 5.;
+	__state->values[(i__1 = '6' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)482)] 
+		= 6.;
+	__state->values[(i__1 = '7' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)483)] 
+		= 7.;
+	__state->values[(i__1 = '8' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)484)] 
+		= 8.;
+	__state->values[(i__1 = '9' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)485)] 
+		= 9.;
+	__state->values[(i__1 = '-' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)486)] 
+		= -1.;
+	__state->values[(i__1 = '+' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "values", i__1, "nparsd_", (ftnlen)487)] 
+		= 1.;
+	__state->class__[(i__1 = ' ') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)489)] =
+		 4;
+	__state->class__[(i__1 = ',') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)490)] =
+		 4;
+	__state->class__[(i__1 = '.') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)492)] =
+		 2;
+	__state->class__[(i__1 = 'E') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)494)] =
+		 3;
+	__state->class__[(i__1 = 'D') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)495)] =
+		 3;
+	__state->class__[(i__1 = 'e') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)496)] =
+		 3;
+	__state->class__[(i__1 = 'd') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)497)] =
+		 3;
+	__state->class__[(i__1 = '+') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)499)] =
+		 7;
+	__state->class__[(i__1 = '-') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)500)] =
+		 7;
+	__state->class__[(i__1 = '1') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)502)] =
+		 1;
+	__state->class__[(i__1 = '2') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)503)] =
+		 1;
+	__state->class__[(i__1 = '3') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)504)] =
+		 1;
+	__state->class__[(i__1 = '4') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)505)] =
+		 1;
+	__state->class__[(i__1 = '5') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)506)] =
+		 1;
+	__state->class__[(i__1 = '6') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)507)] =
+		 1;
+	__state->class__[(i__1 = '7') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)508)] =
+		 1;
+	__state->class__[(i__1 = '8') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)509)] =
+		 1;
+	__state->class__[(i__1 = '9') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)510)] =
+		 1;
+	__state->class__[(i__1 = '0') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)511)] =
+		 1;
+	__state->class__[(i__1 = 'p') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)513)] =
+		 5;
+	__state->class__[(i__1 = 'P') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)514)] =
+		 5;
+	__state->class__[(i__1 = 'i') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)515)] =
+		 6;
+	__state->class__[(i__1 = 'I') < 129 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "class", i__1, "nparsd_", (ftnlen)516)] =
+		 6;
 
 /*        Finally create the numbers that will be used for checking */
 /*        for floating point overflow. */
@@ -457,11 +496,11 @@ static nparsd_state_t* get_nparsd_state() {
 /*              underflow anyway, and dividing zero by a number (BASE) */
 /*              still gives you zero. */
 
-	d__2 = dpmax_();
-	d__1 = d_lg10(&d__2);
-	__state->maxexp = d_int(&d__1);
+	d__2 = dpmax_(__global_state);
+	d__1 = d_lg10(&__global_state->f2c, &d__2);
+	__state->maxexp = d_int(&__global_state->f2c, &d__1);
 	__state->minexp = -(__state->maxexp + 1);
-	__state->smlbnd = dpmax_() / __state->lookup[10];
+	__state->smlbnd = dpmax_(__global_state) / __state->lookup[10];
 	__state->intbnd = 10.;
 	__state->next = __state->intbnd + 1.;
 	while(__state->intbnd != __state->next) {
@@ -486,7 +525,7 @@ static nparsd_state_t* get_nparsd_state() {
 /*     We expect to be constructing the integer part of the */
 /*     numeric string. */
 
-    s_copy(error, " ", error_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, error, " ", error_len, (ftnlen)1);
     *ptr = 0;
     __state->pntok = TRUE_;
     __state->signok = TRUE_;
@@ -531,8 +570,10 @@ static nparsd_state_t* get_nparsd_state() {
 /*     Before doing anything else we determine whether or not */
 /*     the input string is empty. */
 
-    if (s_cmp(string, " ", string_len, (ftnlen)1) == 0) {
-	s_copy(error, __state->blnkst, error_len, (ftnlen)160);
+    if (s_cmp(&__global_state->f2c, string, " ", string_len, (ftnlen)1) == 0) 
+	    {
+	s_copy(&__global_state->f2c, error, __state->blnkst, error_len, (
+		ftnlen)160);
 	*ptr = 1;
 	return 0;
     }
@@ -551,7 +592,7 @@ static nparsd_state_t* get_nparsd_state() {
 /*     character that we are concerned with and M is the middle of */
 /*     the current search interval ( from B to NL ). */
 
-    __state->l = i_len(string, string_len);
+    __state->l = i_len(&__global_state->f2c, string, string_len);
     __state->b = 1;
     __state->nl = __state->l - 1;
 
@@ -568,8 +609,8 @@ static nparsd_state_t* get_nparsd_state() {
 
 	if (*(unsigned char *)&string[__state->l - 1] != __state->blank) {
 	    __state->b = __state->l;
-	} else if (s_cmp(string + (__state->m - 1), " ", __state->nl - (
-		__state->m - 1), (ftnlen)1) == 0) {
+	} else if (s_cmp(&__global_state->f2c, string + (__state->m - 1), 
+		" ", __state->nl - (__state->m - 1), (ftnlen)1) == 0) {
 
 /*           If you got here, the STRING(L:L) is a blank. */
 /*           The string from L+1 on out is blank. */
@@ -638,19 +679,20 @@ static nparsd_state_t* get_nparsd_state() {
 
 	    __state->nexti = __state->i__ + 1;
 	    __state->thisi = __state->i__;
-	    zzinssub_(string, "]", &__state->nexti, error, string_len, (
-		    ftnlen)1, error_len);
-	    zzinssub_(error, "[", &__state->thisi, error, error_len, (ftnlen)
-		    1, error_len);
-	    prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
-		    error_len);
+	    zzinssub_(__global_state, string, "]", &__state->nexti, error, 
+		    string_len, (ftnlen)1, error_len);
+	    zzinssub_(__global_state, error, "[", &__state->thisi, error, 
+		    error_len, (ftnlen)1, error_len);
+	    prefix_(__global_state, __state->unxpch, &__state->c__1, error, (
+		    ftnlen)160, error_len);
 	    *ptr = __state->i__;
 	    return 0;
 
 /*        The action taken depends upon the class of the token. */
 
 	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
-		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)739)] == 1) {
+		i__2 : s_rnge(&__global_state->f2c, "class", i__2, "nparsd_", 
+		(ftnlen)739)] == 1) {
 
 /*           Once a digit has been encountered, we can no longer */
 /*           allow the string 'PI' or a sign until an exponent */
@@ -672,8 +714,8 @@ static nparsd_state_t* get_nparsd_state() {
 		if (__state->intval < __state->intbnd) {
 		    __state->intval = __state->intval * 10. + __state->values[
 			    (i__2 = __state->id - 1) < 128 && 0 <= i__2 ? 
-			    i__2 : s_rnge("values", i__2, "nparsd_", (ftnlen)
-			    761)];
+			    i__2 : s_rnge(&__global_state->f2c, "values", 
+			    i__2, "nparsd_", (ftnlen)761)];
 		} else {
 
 /*                 Once the integer exceeds a given bound, */
@@ -688,8 +730,9 @@ static nparsd_state_t* get_nparsd_state() {
 		    if (__state->roundi) {
 			__state->roundi = FALSE_;
 			if (__state->values[(i__2 = __state->id - 1) < 128 && 
-				0 <= i__2 ? i__2 : s_rnge("values", i__2, 
-				"nparsd_", (ftnlen)779)] > 5.) {
+				0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "values", i__2, "nparsd_"
+				, (ftnlen)779)] > 5.) {
 			    __state->intval += 1.;
 			}
 		    }
@@ -716,14 +759,16 @@ static nparsd_state_t* get_nparsd_state() {
 		    if (__state->decval < __state->intbnd) {
 			__state->decval = __state->decval * 10. + 
 				__state->values[(i__2 = __state->id - 1) < 
-				128 && 0 <= i__2 ? i__2 : s_rnge("values", 
-				i__2, "nparsd_", (ftnlen)808)];
+				128 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "values", i__2, "nparsd_"
+				, (ftnlen)808)];
 			__state->ecount += -1;
 		    } else if (__state->roundd) {
 			__state->roundd = FALSE_;
 			if (__state->values[(i__2 = __state->id - 1) < 128 && 
-				0 <= i__2 ? i__2 : s_rnge("values", i__2, 
-				"nparsd_", (ftnlen)815)] >= 5.) {
+				0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "values", i__2, "nparsd_"
+				, (ftnlen)815)] >= 5.) {
 			    __state->decval += 1.;
 			}
 		    }
@@ -743,8 +788,9 @@ static nparsd_state_t* get_nparsd_state() {
 		    if (__state->divisr < __state->intbnd) {
 			__state->decval = __state->decval * 10. + 
 				__state->values[(i__2 = __state->id - 1) < 
-				128 && 0 <= i__2 ? i__2 : s_rnge("values", 
-				i__2, "nparsd_", (ftnlen)835)];
+				128 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "values", i__2, "nparsd_"
+				, (ftnlen)835)];
 			__state->divisr *= 10.;
 		    }
 		}
@@ -761,7 +807,8 @@ static nparsd_state_t* get_nparsd_state() {
 /*                 of the double precision number are built */
 /*                 at the end of this routine. */
 
-		    s_copy(error, __state->toobig, error_len, (ftnlen)160);
+		    s_copy(&__global_state->f2c, error, __state->toobig, 
+			    error_len, (ftnlen)160);
 		    *ptr = __state->i__;
 		    return 0;
 		} else if (__state->expval + __state->ecount < 
@@ -785,8 +832,9 @@ static nparsd_state_t* get_nparsd_state() {
 
 		    __state->expval = __state->expval * 10. + __state->dpsign[
 			    1] * __state->values[(i__2 = __state->id - 1) < 
-			    128 && 0 <= i__2 ? i__2 : s_rnge("values", i__2, 
-			    "nparsd_", (ftnlen)877)];
+			    128 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "values", i__2, "nparsd_", (
+			    ftnlen)877)];
 		}
 
 /*           Even though this character is a digit, its not expected */
@@ -795,17 +843,18 @@ static nparsd_state_t* get_nparsd_state() {
 	    } else {
 		__state->nexti = __state->i__ + 1;
 		__state->thisi = __state->i__;
-		zzinssub_(string, "]", &__state->nexti, error, string_len, (
-			ftnlen)1, error_len);
-		zzinssub_(error, "[", &__state->thisi, error, error_len, (
-			ftnlen)1, error_len);
-		prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
-			error_len);
+		zzinssub_(__global_state, string, "]", &__state->nexti, error,
+			 string_len, (ftnlen)1, error_len);
+		zzinssub_(__global_state, error, "[", &__state->thisi, error, 
+			error_len, (ftnlen)1, error_len);
+		prefix_(__global_state, __state->unxpch, &__state->c__1, 
+			error, (ftnlen)160, error_len);
 		*ptr = __state->i__;
 		return 0;
 	    }
 	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
-		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)898)] == 2) {
+		i__2 : s_rnge(&__global_state->f2c, "class", i__2, "nparsd_", 
+		(ftnlen)898)] == 2) {
 	    if (__state->pntok) {
 		__state->bpiok = FALSE_;
 		__state->epiok = FALSE_;
@@ -818,17 +867,18 @@ static nparsd_state_t* get_nparsd_state() {
 	    } else {
 		__state->nexti = __state->i__ + 1;
 		__state->thisi = __state->i__;
-		zzinssub_(string, "]", &__state->nexti, error, string_len, (
-			ftnlen)1, error_len);
-		zzinssub_(error, "[", &__state->thisi, error, error_len, (
-			ftnlen)1, error_len);
-		prefix_(__state->unxppt, &__state->c__1, error, (ftnlen)160, 
-			error_len);
+		zzinssub_(__global_state, string, "]", &__state->nexti, error,
+			 string_len, (ftnlen)1, error_len);
+		zzinssub_(__global_state, error, "[", &__state->thisi, error, 
+			error_len, (ftnlen)1, error_len);
+		prefix_(__global_state, __state->unxppt, &__state->c__1, 
+			error, (ftnlen)160, error_len);
 		*ptr = __state->i__;
 		return 0;
 	    }
 	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
-		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)925)] == 3) {
+		i__2 : s_rnge(&__global_state->f2c, "class", i__2, "nparsd_", 
+		(ftnlen)925)] == 3) {
 	    __state->sigchr = TRUE_;
 	    if (__state->expok) {
 		__state->bpiok = FALSE_;
@@ -843,38 +893,41 @@ static nparsd_state_t* get_nparsd_state() {
 	    } else {
 		__state->nexti = __state->i__ + 1;
 		__state->thisi = __state->i__;
-		zzinssub_(string, "]", &__state->nexti, error, string_len, (
-			ftnlen)1, error_len);
-		zzinssub_(error, "[", &__state->thisi, error, error_len, (
-			ftnlen)1, error_len);
-		prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
-			error_len);
+		zzinssub_(__global_state, string, "]", &__state->nexti, error,
+			 string_len, (ftnlen)1, error_len);
+		zzinssub_(__global_state, error, "[", &__state->thisi, error, 
+			error_len, (ftnlen)1, error_len);
+		prefix_(__global_state, __state->unxpch, &__state->c__1, 
+			error, (ftnlen)160, error_len);
 		*ptr = __state->i__;
 		return 0;
 	    }
 	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
-		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)955)] == 7) {
+		i__2 : s_rnge(&__global_state->f2c, "class", i__2, "nparsd_", 
+		(ftnlen)955)] == 7) {
 	    if (__state->signok) {
 		__state->dpsign[(i__2 = __state->signdx - 1) < 2 && 0 <= i__2 
-			? i__2 : s_rnge("dpsign", i__2, "nparsd_", (ftnlen)
-			959)] = __state->values[(i__3 = __state->id - 1) < 
-			128 && 0 <= i__3 ? i__3 : s_rnge("values", i__3, 
-			"nparsd_", (ftnlen)959)];
+			? i__2 : s_rnge(&__global_state->f2c, "dpsign", i__2, 
+			"nparsd_", (ftnlen)959)] = __state->values[(i__3 = 
+			__state->id - 1) < 128 && 0 <= i__3 ? i__3 : s_rnge(&
+			__global_state->f2c, "values", i__3, "nparsd_", (
+			ftnlen)959)];
 		__state->signok = FALSE_;
 	    } else {
 		__state->nexti = __state->i__ + 1;
 		__state->thisi = __state->i__;
-		zzinssub_(string, "]", &__state->nexti, error, string_len, (
-			ftnlen)1, error_len);
-		zzinssub_(error, "[", &__state->thisi, error, error_len, (
-			ftnlen)1, error_len);
-		prefix_(__state->unxpsn, &__state->c__1, error, (ftnlen)160, 
-			error_len);
+		zzinssub_(__global_state, string, "]", &__state->nexti, error,
+			 string_len, (ftnlen)1, error_len);
+		zzinssub_(__global_state, error, "[", &__state->thisi, error, 
+			error_len, (ftnlen)1, error_len);
+		prefix_(__global_state, __state->unxpsn, &__state->c__1, 
+			error, (ftnlen)160, error_len);
 		*ptr = __state->i__;
 		return 0;
 	    }
 	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
-		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)976)] == 5) {
+		i__2 : s_rnge(&__global_state->f2c, "class", i__2, "nparsd_", 
+		(ftnlen)976)] == 5) {
 	    __state->sigchr = TRUE_;
 	    if (__state->bpiok) {
 		__state->doint = FALSE_;
@@ -888,17 +941,18 @@ static nparsd_state_t* get_nparsd_state() {
 	    } else {
 		__state->nexti = __state->i__ + 1;
 		__state->thisi = __state->i__;
-		zzinssub_(string, "]", &__state->nexti, error, string_len, (
-			ftnlen)1, error_len);
-		zzinssub_(error, "[", &__state->thisi, error, error_len, (
-			ftnlen)1, error_len);
-		prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
-			error_len);
+		zzinssub_(__global_state, string, "]", &__state->nexti, error,
+			 string_len, (ftnlen)1, error_len);
+		zzinssub_(__global_state, error, "[", &__state->thisi, error, 
+			error_len, (ftnlen)1, error_len);
+		prefix_(__global_state, __state->unxpch, &__state->c__1, 
+			error, (ftnlen)160, error_len);
 		*ptr = __state->i__;
 		return 0;
 	    }
 	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
-		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)1005)] == 6) {
+		i__2 : s_rnge(&__global_state->f2c, "class", i__2, "nparsd_", 
+		(ftnlen)1005)] == 6) {
 	    if (__state->epiok) {
 		__state->doint = FALSE_;
 		__state->dodec = FALSE_;
@@ -909,21 +963,22 @@ static nparsd_state_t* get_nparsd_state() {
 		__state->signok = FALSE_;
 		__state->epiok = FALSE_;
 		__state->mantsa = TRUE_;
-		__state->intval = pi_();
+		__state->intval = pi_(__global_state);
 	    } else {
 		__state->nexti = __state->i__ + 1;
 		__state->thisi = __state->i__;
-		zzinssub_(string, "]", &__state->nexti, error, string_len, (
-			ftnlen)1, error_len);
-		zzinssub_(error, "[", &__state->thisi, error, error_len, (
-			ftnlen)1, error_len);
-		prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
-			error_len);
+		zzinssub_(__global_state, string, "]", &__state->nexti, error,
+			 string_len, (ftnlen)1, error_len);
+		zzinssub_(__global_state, error, "[", &__state->thisi, error, 
+			error_len, (ftnlen)1, error_len);
+		prefix_(__global_state, __state->unxpch, &__state->c__1, 
+			error, (ftnlen)160, error_len);
 		*ptr = __state->i__;
 		return 0;
 	    }
 	} else if (__state->class__[(i__2 = __state->id) < 129 && 0 <= i__2 ? 
-		i__2 : s_rnge("class", i__2, "nparsd_", (ftnlen)1035)] == 4) {
+		i__2 : s_rnge(&__global_state->f2c, "class", i__2, "nparsd_", 
+		(ftnlen)1035)] == 4) {
 
 /*           We don't do anything. */
 
@@ -934,12 +989,12 @@ static nparsd_state_t* get_nparsd_state() {
 
 	    __state->nexti = __state->i__ + 1;
 	    __state->thisi = __state->i__;
-	    zzinssub_(string, "]", &__state->nexti, error, string_len, (
-		    ftnlen)1, error_len);
-	    zzinssub_(error, "[", &__state->thisi, error, error_len, (ftnlen)
-		    1, error_len);
-	    prefix_(__state->unxpch, &__state->c__1, error, (ftnlen)160, 
-		    error_len);
+	    zzinssub_(__global_state, string, "]", &__state->nexti, error, 
+		    string_len, (ftnlen)1, error_len);
+	    zzinssub_(__global_state, error, "[", &__state->thisi, error, 
+		    error_len, (ftnlen)1, error_len);
+	    prefix_(__global_state, __state->unxpch, &__state->c__1, error, (
+		    ftnlen)160, error_len);
 	    *ptr = __state->i__;
 	    return 0;
 	}
@@ -949,7 +1004,8 @@ static nparsd_state_t* get_nparsd_state() {
 /*     it but never finished.  This is an error. */
 
     if (__state->epiok) {
-	s_copy(error, __state->unrcst, error_len, (ftnlen)160);
+	s_copy(&__global_state->f2c, error, __state->unrcst, error_len, (
+		ftnlen)160);
 	*ptr = __state->l;
 	return 0;
     }
@@ -994,8 +1050,9 @@ static nparsd_state_t* get_nparsd_state() {
 /*        a number. An example of such a string would be: '+  ,,.,,'. */
 /*        So, we will set an appropriate error message and return. */
 
-	s_copy(error, __state->unrcst, error_len, (ftnlen)160);
-	*ptr = i_len(string, string_len) + 1;
+	s_copy(&__global_state->f2c, error, __state->unrcst, error_len, (
+		ftnlen)160);
+	*ptr = i_len(&__global_state->f2c, string, string_len) + 1;
 	return 0;
     }
 
@@ -1015,8 +1072,8 @@ static nparsd_state_t* get_nparsd_state() {
 	    __state->expval += 10.;
 	}
 	__state->value /= __state->lookup[(i__1 = -((integer) __state->expval)
-		) < 11 && 0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "nparsd_",
-		 (ftnlen)1139)];
+		) < 11 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"lookup", i__1, "nparsd_", (ftnlen)1139)];
 
 /*     If the exponent is positive ... */
 
@@ -1027,28 +1084,31 @@ static nparsd_state_t* get_nparsd_state() {
 /*           a number that overflows. */
 
 	    if (__state->value >= __state->smlbnd) {
-		s_copy(error, __state->toobig, error_len, (ftnlen)160);
-		*ptr = i_len(string, string_len) + 1;
+		s_copy(&__global_state->f2c, error, __state->toobig, 
+			error_len, (ftnlen)160);
+		*ptr = i_len(&__global_state->f2c, string, string_len) + 1;
 		return 0;
 	    } else {
 		__state->value *= __state->lookup[10];
 		__state->expval += -10.;
 	    }
 	}
-	__state->exp__ = i_dnnt(&__state->expval);
+	__state->exp__ = i_dnnt(&__global_state->f2c, &__state->expval);
 
 /*        Again, make sure that a floating point overflow isn't */
 /*        going to happen. */
 
-	if (__state->value < dpmax_() / __state->lookup[(i__1 = 
-		__state->exp__) < 11 && 0 <= i__1 ? i__1 : s_rnge("lookup", 
-		i__1, "nparsd_", (ftnlen)1172)]) {
+	if (__state->value < dpmax_(__global_state) / __state->lookup[(i__1 = 
+		__state->exp__) < 11 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "lookup", i__1, "nparsd_", (ftnlen)1172)]
+		) {
 	    __state->value *= __state->lookup[(i__1 = __state->exp__) < 11 && 
-		    0 <= i__1 ? i__1 : s_rnge("lookup", i__1, "nparsd_", (
-		    ftnlen)1174)];
+		    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "lookup", 
+		    i__1, "nparsd_", (ftnlen)1174)];
 	} else {
-	    s_copy(error, __state->toobig, error_len, (ftnlen)160);
-	    *ptr = i_len(string, string_len) + 1;
+	    s_copy(&__global_state->f2c, error, __state->toobig, error_len, (
+		    ftnlen)160);
+	    *ptr = i_len(&__global_state->f2c, string, string_len) + 1;
 	    return 0;
 	}
     }

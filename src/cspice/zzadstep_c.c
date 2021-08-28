@@ -159,7 +159,7 @@
    {
       return ( 0 );
    }
-   chkin_c ( "zzadstep_c" );
+   chkin_c ( naif_state, "zzadstep_c" );
 
    /*
    Retrieve the stored pointer for the passed-in function; cast
@@ -167,7 +167,7 @@
    list matches that of gfstep_c.
    */
 
-   fPtr = (  void (*) (SpiceDouble, SpiceDouble*)  )  zzadget_c ( UDSTEP );
+   fPtr = (  void (*) (SpiceDouble, SpiceDouble*)  )  zzadget_c ( naif_state,  ( UDSTEP );
 
    /*
    Call the stored function. 

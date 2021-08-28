@@ -173,7 +173,7 @@
    {
       return;
    }
-   chkin_c ( "ssize_c" );
+   chkin_c ( naif_state, "ssize_c" );
 
 
    if ( size < 0 ) 

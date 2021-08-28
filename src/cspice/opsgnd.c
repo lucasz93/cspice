@@ -8,20 +8,19 @@
 
 
 typedef int opsgnd_state_t;
-static opsgnd_state_t* get_opsgnd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline opsgnd_state_t* get_opsgnd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            OPSGND ( Opposite Sign Double Precision Numbers ) */
-logical opsgnd_(doublereal *x, doublereal *y)
+logical opsgnd_(cspice_t* __global_state, doublereal *x, doublereal *y)
 {
     /* System generated locals */
     logical ret_val;
 
 
     /* Module state */
-    opsgnd_state_t* __state = get_opsgnd_state();
+    opsgnd_state_t* __state = get_opsgnd_state(__global_state);
 /* $ Abstract */
 
 /*      Function: true if the input arguments have opposite signs. */

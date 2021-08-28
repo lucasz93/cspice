@@ -208,7 +208,7 @@
       return;
       }
 
-   chkin_c ( "errdev_c" );
+   chkin_c ( naif_state, "errdev_c" );
 
 
    /*

@@ -8,8 +8,7 @@
 
 
 extern zzftpchk_init_t __zzftpchk_init;
-static zzftpchk_state_t* get_zzftpchk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzftpchk_state_t* get_zzftpchk_state(cspice_t* state) {
 	if (!state->zzftpchk)
 		state->zzftpchk = __cspice_allocate_module(sizeof(
 	zzftpchk_state_t), &__zzftpchk_init, sizeof(__zzftpchk_init));
@@ -18,28 +17,28 @@ static zzftpchk_state_t* get_zzftpchk_state() {
 }
 
 /* $Procedure ZZFTPCHK ( Private --- Check for FTP Errors ) */
-/* Subroutine */ int zzftpchk_(char *string, logical *ftperr, ftnlen 
-	string_len)
+/* Subroutine */ int zzftpchk_(cspice_t* __global_state, char *string, 
+	logical *ftperr, ftnlen string_len)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int zzrbrkst_(char *, char *, char *, char *, 
-	    integer *, logical *, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzftpstr_(char *, char *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzrbrkst_(cspice_t*, char *, char *, char *, 
+	    char *, integer *, logical *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzftpstr_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     char delim[1];
-    extern integer rtrim_(char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
     integer length;
     integer fsmidx;
     integer msfidx;
     logical isther;
     char filstr[48];
-    extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern integer pos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen);
 
 
     /* Module state */
-    zzftpchk_state_t* __state = get_zzftpchk_state();
+    zzftpchk_state_t* __state = get_zzftpchk_state(__global_state);
 /* $ Abstract */
 
 /*    Check a character string that may contain the FTP validation */
@@ -339,8 +338,9 @@ static zzftpchk_state_t* get_zzftpchk_state() {
 /*     validation string. */
 
     if (__state->first) {
-	zzftpstr_(__state->memstr, __state->lftbkt, __state->rgtbkt, delim, (
-		ftnlen)16, (ftnlen)6, (ftnlen)6, (ftnlen)1);
+	zzftpstr_(__global_state, __state->memstr, __state->lftbkt, 
+		__state->rgtbkt, delim, (ftnlen)16, (ftnlen)6, (ftnlen)6, (
+		ftnlen)1);
 
 /*        Don't fetch the string on subsequent calls to this routine. */
 
@@ -355,8 +355,9 @@ static zzftpchk_state_t* get_zzftpchk_state() {
 /*     this case we may only validate the part of the substring near */
 /*     the head, for which we have enough room in FILSTR. */
 
-    zzrbrkst_(string, __state->lftbkt, __state->rgtbkt, filstr, &length, &
-	    isther, string_len, rtrim_(__state->lftbkt, (ftnlen)6), rtrim_(
+    zzrbrkst_(__global_state, string, __state->lftbkt, __state->rgtbkt, 
+	    filstr, &length, &isther, string_len, rtrim_(__global_state, 
+	    __state->lftbkt, (ftnlen)6), rtrim_(__global_state, 
 	    __state->rgtbkt, (ftnlen)6), (ftnlen)48);
 
 /*     Now check ISTHER to see if either LFTBKT or RGTBKT was present */
@@ -385,8 +386,8 @@ static zzftpchk_state_t* get_zzftpchk_state() {
 /*        First determine if the data from the file is a subset of */
 /*        what is stored in memory. */
 
-	fsmidx = pos_(__state->memstr, filstr, &__state->c__1, (ftnlen)16, 
-		rtrim_(filstr, (ftnlen)48));
+	fsmidx = pos_(__global_state, __state->memstr, filstr, &__state->c__1,
+		 (ftnlen)16, rtrim_(__global_state, filstr, (ftnlen)48));
 
 /*        In the event that FSMIDX is non-zero, we know that FILSTR */
 /*        is a substring of MEMSTR, and thus we have validated all the */
@@ -402,8 +403,9 @@ static zzftpchk_state_t* get_zzftpchk_state() {
 /*        is a substring of what's in FILSTR. */
 
 	} else {
-	    msfidx = pos_(filstr, __state->memstr, &__state->c__1, (ftnlen)48,
-		     rtrim_(__state->memstr, (ftnlen)16));
+	    msfidx = pos_(__global_state, filstr, __state->memstr, &
+		    __state->c__1, (ftnlen)48, rtrim_(__global_state, 
+		    __state->memstr, (ftnlen)16));
 
 /*           If this comes back as zero, then we definitely have */
 /*           an FTP error. Set FTPERR appropriately. */

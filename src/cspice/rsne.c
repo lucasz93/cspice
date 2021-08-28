@@ -49,12 +49,11 @@ extern int ungetc(int, FILE*);	/* for systems with a buggy stdio.h */
 
  static Vardesc *
 #ifdef KR_headers
-hash(ht, s) hashtab *ht; register char *s;
+hash(f2c, ht, s) f2c_state_t *f2c; hashtab *ht; register char *s;
 #else
-hash(hashtab *ht, register char *s)
+hash(f2c_state_t *f2c, hashtab *ht, register char *s)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	register int c, x;
 	register hashentry *h;
 	char *s0 = s;
@@ -69,12 +68,11 @@ hash(hashtab *ht, register char *s)
 
  hashtab *
 #ifdef KR_headers
-mk_hashtab(nl) Namelist *nl;
+mk_hashtab(f2c, nl) f2c_state_t *f2c; Namelist *nl;
 #else
-mk_hashtab(Namelist *nl)
+mk_hashtab(f2c_state_t *f2c, Namelist *nl)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int nht, nv;
 	hashtab *ht;
 	Vardesc *v, **vd, **vde;
@@ -113,7 +111,7 @@ mk_hashtab(Namelist *nl)
 	vde = vd + nv;
 	while(vd < vde) {
 		v = *vd++;
-		if (!hash(ht, v->name)) {
+		if (!hash(f2c, ht, v->name)) {
 			he->next = *f2c->zot;
 			*f2c->zot = he;
 			he->name = v->name;
@@ -124,25 +122,21 @@ mk_hashtab(Namelist *nl)
 	return ht;
 	}
 
-/* MECHSOFT: Not critical state. Safe to keep thread local. */
-static _Thread_local char Alpha[256], Alphanum[256];
-
  static VOID
-nl_init(Void) {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+nl_init(f2c_state_t *f2c) {
 	register char *s;
 	register int c;
 
 	if(!f2c->f__init)
 		f_init();
 	for(s = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; c = *s++; )
-		Alpha[c]
-		= Alphanum[c]
-		= Alpha[c + 'a' - 'A']
-		= Alphanum[c + 'a' - 'A']
+		f2c->Alpha[c]
+		= f2c->Alphanum[c]
+		= f2c->Alpha[c + 'a' - 'A']
+		= f2c->Alphanum[c + 'a' - 'A']
 		= c;
 	for(s = "0123456789_"; c = *s++; )
-		Alphanum[c] = c;
+		f2c->Alphanum[c] = c;
 	}
 
 #define GETC(f2c,x) (x=(*f2c->l_getc)())
@@ -150,22 +144,21 @@ nl_init(Void) {
 
  static int
 #ifdef KR_headers
-getname(s, slen) register char *s; int slen;
+getname(f2c, s, slen) f2c_state_t *f2c; register char *s; int slen;
 #else
-getname(register char *s, int slen)
+getname(f2c_state_t *f2c, register char *s, int slen)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	register char *se = s + slen - 1;
 	register int ch;
 
 	GETC(f2c, ch);
-	if (!(*s++ = Alpha[ch & 0xff])) {
+	if (!(*s++ = f2c->Alpha[ch & 0xff])) {
 		if (ch != EOF)
 			ch = 115;
 		errfl(f2c->f__elist->cierr, ch, "namelist read");
 		}
-	while(*s = Alphanum[GETC(f2c, ch) & 0xff])
+	while(*s = f2c->Alphanum[GETC(f2c, ch) & 0xff])
 		if (s < se)
 			s++;
 	if (ch == EOF)
@@ -177,12 +170,11 @@ getname(register char *s, int slen)
 
  static int
 #ifdef KR_headers
-getnum(chp, val) int *chp; ftnlen *val;
+getnum(f2c, chp, val) f2c_state_t *f2c; int *chp; ftnlen *val;
 #else
-getnum(int *chp, ftnlen *val)
+getnum(f2c_state_t *f2c, int *chp, ftnlen *val)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	register int ch, sign;
 	register ftnlen x;
 
@@ -212,25 +204,24 @@ getnum(int *chp, ftnlen *val)
 
  static int
 #ifdef KR_headers
-getdimen(chp, d, delta, extent, x1)
- int *chp; dimen *d; ftnlen delta, extent, *x1;
+getdimen(f2c, chp, d, delta, extent, x1)
+ f2c_state_t *f2c; int *chp; dimen *d; ftnlen delta, extent, *x1;
 #else
-getdimen(int *chp, dimen *d, ftnlen delta, ftnlen extent, ftnlen *x1)
+getdimen(f2c_state_t *f2c, int *chp, dimen *d, ftnlen delta, ftnlen extent, ftnlen *x1)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	register int k;
 	ftnlen x2, x3;
 
-	if (k = getnum(chp, x1))
+	if (k = getnum(f2c, chp, x1))
 		return k;
 	x3 = 1;
 	if (*chp == ':') {
-		if (k = getnum(chp, &x2))
+		if (k = getnum(f2c, chp, &x2))
 			return k;
 		x2 -= *x1;
 		if (*chp == ':') {
-			if (k = getnum(chp, &x3))
+			if (k = getnum(f2c, chp, &x3))
 				return k;
 			if (!x3)
 				return 123;
@@ -252,12 +243,11 @@ getdimen(int *chp, dimen *d, ftnlen delta, ftnlen extent, ftnlen *x1)
 #ifndef No_Namelist_Questions
  static Void
 #ifdef KR_headers
-print_ne(a) cilist *a;
+print_ne(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-print_ne(cilist *a)
+print_ne(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	flag intext = f2c->f__external;
 	int rpsave = f2c->f__recpos;
 	FILE *cfsave = f2c->f__cf;
@@ -279,12 +269,11 @@ print_ne(cilist *a)
  static char where0[] = "namelist read start ";
 
 #ifdef KR_headers
-x_rsne(a) cilist *a;
+x_rsne(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-x_rsne(cilist *a)
+x_rsne(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int ch, got1, k, n, nd, quote, readall;
 	Namelist *nl;
 	static char where[] = "namelist read";
@@ -299,8 +288,8 @@ x_rsne(cilist *a)
 	long iva, ivae;
 	dimen dimens[MAXDIM], substr;
 
-	if (!Alpha['a'])
-		nl_init();
+	if (!f2c->Alpha['a'])
+		nl_init(f2c);
 	f2c->f__reading=1;
 	f2c->f__formatted=1;
 	got1 = 0;
@@ -314,7 +303,7 @@ x_rsne(cilist *a)
 			goto have_amp;
 #ifndef No_Namelist_Questions
 		case '?':
-			print_ne(a);
+			print_ne(f2c, a);
 			continue;
 #endif
 		default:
@@ -329,7 +318,7 @@ x_rsne(cilist *a)
 #endif
 		}
  have_amp:
-	if (ch = getname(buf,sizeof(buf)))
+	if (ch = getname(f2c, buf,sizeof(buf)))
 		return ch;
 	nl = (Namelist *)a->cifmt;
 	if (strcmp(buf, nl->name))
@@ -367,7 +356,7 @@ x_rsne(cilist *a)
 			}
 		}
 #endif
-	ht = mk_hashtab(nl);
+	ht = mk_hashtab(f2c, nl);
 	if (!ht)
 		errfl(f2c->f__elist->cierr, 113, where0);
 	for(;;) {
@@ -384,12 +373,12 @@ x_rsne(cilist *a)
 				if (ch <= ' ' && ch >= 0 || ch == ',')
 					continue;
 				Ungetc(f2c,ch,f2c->f__cf);
-				if (ch = getname(buf,sizeof(buf)))
+				if (ch = getname(f2c, buf,sizeof(buf)))
 					return ch;
 				goto havename;
 			}
  havename:
-		v = hash(ht,buf);
+		v = hash(f2c, ht,buf);
 		if (!v)
 			errfl(a->cierr, 119, where);
 		while(GETC(f2c,ch) <= ' ' && ch >= 0);
@@ -408,7 +397,7 @@ x_rsne(cilist *a)
 			if (!(dims = v->dims)) {
 				if (type != TYCHAR)
 					errfl(a->cierr, 122, where);
-				if (k = getdimen(&ch, dn, (ftnlen)size,
+				if (k = getdimen(f2c, &ch, dn, (ftnlen)size,
 						(ftnlen)size, &b))
 					errfl(a->cierr, k, where);
 				if (ch != ')')
@@ -425,7 +414,7 @@ x_rsne(cilist *a)
 			nomax = span = dims[1];
 			ivae = iva + size*nomax;
 			f2c->colonseen = 0;
-			if (k = getdimen(&ch, dn, size, nomax, &b))
+			if (k = getdimen(f2c, &ch, dn, size, nomax, &b))
 				errfl(a->cierr, k, where);
 			no = dn->extent;
 			b0 = dims[2];
@@ -436,7 +425,7 @@ x_rsne(cilist *a)
 					errfl(a->cierr, 115, where);
 				dn1 = dn + 1;
 				span /= *dims;
-				if (k = getdimen(&ch, dn1, dn->delta**dims,
+				if (k = getdimen(f2c, &ch, dn1, dn->delta**dims,
 						span, &b1))
 					errfl(a->cierr, k, where);
 				ex *= *dims;
@@ -456,7 +445,7 @@ x_rsne(cilist *a)
 			no1 = 1;
 			dn0 = dimens;
 			if (type == TYCHAR && ch == '(' /*)*/) {
-				if (k = getdimen(&ch, &substr, size, size, &b))
+				if (k = getdimen(f2c, &ch, &substr, size, size, &b))
 					errfl(a->cierr, k, where);
 				if (ch != ')')
 					errfl(a->cierr, 115, where);
@@ -550,12 +539,12 @@ x_rsne(cilist *a)
 				while(ch <= ' ' && ch >= 0)
 					GETC(f2c, ch);
 				Ungetc(f2c,ch,f2c->f__cf);
-				if (!Alpha[ch & 0xff] && ch >= 0)
+				if (!f2c->Alpha[ch & 0xff] && ch >= 0)
 					errfl(a->cierr, 125, where);
 				break;
 				}
 			Ungetc(f2c,ch,f2c->f__cf);
-			if (readall && !Alpha[ch & 0xff])
+			if (readall && !f2c->Alpha[ch & 0xff])
 				goto readloop;
 			if ((no -= no1) <= 0)
 				break;
@@ -573,12 +562,11 @@ x_rsne(cilist *a)
 
  integer
 #ifdef KR_headers
-s_rsne(a) cilist *a;
+s_rsne(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-s_rsne(cilist *a)
+s_rsne(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 
 	f2c->f__external=1;
@@ -590,7 +578,7 @@ s_rsne(cilist *a)
 	f2c->l_getc = t_getc;
 	f2c->l_ungetc = un_getc;
 	f2c->f__doend = xrd_SL;
-	n = x_rsne(a);
+	n = x_rsne(f2c, a);
 	f2c->nml_read = 0;
 	if (n)
 		return n;

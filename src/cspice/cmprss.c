@@ -8,21 +8,21 @@
 
 
 typedef int cmprss_state_t;
-static cmprss_state_t* get_cmprss_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cmprss_state_t* get_cmprss_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CMPRSS ( Compress a character string ) */
-/* Subroutine */ int cmprss_(char *delim, integer *n, char *input, char *
-	output, ftnlen delim_len, ftnlen input_len, ftnlen output_len)
+/* Subroutine */ int cmprss_(cspice_t* __global_state, char *delim, integer *
+	n, char *input, char *output, ftnlen delim_len, ftnlen input_len, 
+	ftnlen output_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
@@ -33,7 +33,7 @@ static cmprss_state_t* get_cmprss_state() {
 
 
     /* Module state */
-    cmprss_state_t* __state = get_cmprss_state();
+    cmprss_state_t* __state = get_cmprss_state(__global_state);
 /* $ Abstract */
 
 /*      Compress a character string by removing occurrences of */
@@ -172,8 +172,8 @@ static cmprss_state_t* get_cmprss_state() {
 /*     Find out how much space there is in the INPUT and OUTPUT strings */
 /*     and initialize the delimiter counter and output place holder. */
 
-    inlen = i_len(input, input_len);
-    outlen = i_len(output, output_len);
+    inlen = i_len(&__global_state->f2c, input, input_len);
+    outlen = i_len(&__global_state->f2c, output, output_len);
     count = 0;
     j = 0;
     i__1 = inlen;
@@ -212,7 +212,8 @@ static cmprss_state_t* get_cmprss_state() {
 
     if (j < outlen) {
 	i__1 = j;
-	s_copy(output + i__1, " ", output_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, output + i__1, " ", output_len - i__1, (
+		ftnlen)1);
     }
     return 0;
 } /* cmprss_ */

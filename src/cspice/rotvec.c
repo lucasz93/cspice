@@ -8,8 +8,7 @@
 
 
 extern rotvec_init_t __rotvec_init;
-static rotvec_state_t* get_rotvec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rotvec_state_t* get_rotvec_state(cspice_t* state) {
 	if (!state->rotvec)
 		state->rotvec = __cspice_allocate_module(sizeof(
 	rotvec_state_t), &__rotvec_init, sizeof(__rotvec_init));
@@ -18,8 +17,8 @@ static rotvec_state_t* get_rotvec_state() {
 }
 
 /* $Procedure      ROTVEC ( Transform a vector via a rotation ) */
-/* Subroutine */ int rotvec_(doublereal *v1, doublereal *angle, integer *
-	iaxis, doublereal *vout)
+/* Subroutine */ int rotvec_(cspice_t* __global_state, doublereal *v1, 
+	doublereal *angle, integer *iaxis, doublereal *vout)
 {
     /* Initialized data */
 
@@ -28,8 +27,8 @@ static rotvec_state_t* get_rotvec_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    double sin(doublereal), cos(doublereal);
-    integer s_rnge(char *, integer, char *, integer);
+    double sin(f2c_state_t*, doublereal), cos(f2c_state_t*, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal temp[3];
@@ -42,7 +41,7 @@ static rotvec_state_t* get_rotvec_state() {
 
 
     /* Module state */
-    rotvec_state_t* __state = get_rotvec_state();
+    rotvec_state_t* __state = get_rotvec_state(__global_state);
 /* $ Abstract */
 
 /*     Transform a vector to a new coordinate system rotated by ANGLE */
@@ -221,40 +220,45 @@ static rotvec_state_t* get_rotvec_state() {
 
 /*  Get the sine and cosine of ANGLE */
 
-    s = sin(*angle);
-    c__ = cos(*angle);
+    s = sin(&__global_state->f2c, *angle);
+    c__ = cos(&__global_state->f2c, *angle);
 
 /*  Get indices for axes. The first index is for the axis of rotation. */
 /*  The next two axes follow in right hand order (XYZ).  First get the */
 /*  non-negative value of IAXIS mod 3 . */
 
     tmp = (*iaxis % 3 + 3) % 3;
-    i1 = __state->indexs[(i__1 = tmp) < 5 && 0 <= i__1 ? i__1 : s_rnge("inde"
-	    "xs", i__1, "rotvec_", (ftnlen)215)];
-    i2 = __state->indexs[(i__1 = tmp + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(
-	    "indexs", i__1, "rotvec_", (ftnlen)216)];
-    i3 = __state->indexs[(i__1 = tmp + 2) < 5 && 0 <= i__1 ? i__1 : s_rnge(
-	    "indexs", i__1, "rotvec_", (ftnlen)217)];
+    i1 = __state->indexs[(i__1 = tmp) < 5 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "indexs", i__1, "rotvec_", (ftnlen)215)];
+    i2 = __state->indexs[(i__1 = tmp + 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "indexs", i__1, "rotvec_", (ftnlen)216)];
+    i3 = __state->indexs[(i__1 = tmp + 2) < 5 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "indexs", i__1, "rotvec_", (ftnlen)217)];
 
 /*  The coordinate along the axis of rotation does not change. */
 
-    temp[0] = v1[(i__1 = i1 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("v1", i__1, 
-	    "rotvec_", (ftnlen)221)];
-    temp[1] = c__ * v1[(i__1 = i2 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("v1", 
-	    i__1, "rotvec_", (ftnlen)222)] + s * v1[(i__2 = i3 - 1) < 3 && 0 
-	    <= i__2 ? i__2 : s_rnge("v1", i__2, "rotvec_", (ftnlen)222)];
-    temp[2] = -s * v1[(i__1 = i2 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("v1", 
-	    i__1, "rotvec_", (ftnlen)223)] + c__ * v1[(i__2 = i3 - 1) < 3 && 
-	    0 <= i__2 ? i__2 : s_rnge("v1", i__2, "rotvec_", (ftnlen)223)];
+    temp[0] = v1[(i__1 = i1 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "v1", i__1, "rotvec_", (ftnlen)221)];
+    temp[1] = c__ * v1[(i__1 = i2 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "v1", i__1, "rotvec_", (ftnlen)222)] + s * 
+	    v1[(i__2 = i3 - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "v1", i__2, "rotvec_", (ftnlen)222)];
+    temp[2] = -s * v1[(i__1 = i2 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "v1", i__1, "rotvec_", (ftnlen)223)] + c__ * 
+	    v1[(i__2 = i3 - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "v1", i__2, "rotvec_", (ftnlen)223)];
 
 /*  Move the buffered vector to the output */
 
-    vout[(i__1 = i1 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vout", i__1, "rot"
-	    "vec_", (ftnlen)227)] = temp[0];
-    vout[(i__1 = i2 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vout", i__1, "rot"
-	    "vec_", (ftnlen)228)] = temp[1];
-    vout[(i__1 = i3 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vout", i__1, "rot"
-	    "vec_", (ftnlen)229)] = temp[2];
+    vout[(i__1 = i1 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "vout", i__1, "rotvec_", (ftnlen)227)] = 
+	    temp[0];
+    vout[(i__1 = i2 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "vout", i__1, "rotvec_", (ftnlen)228)] = 
+	    temp[1];
+    vout[(i__1 = i3 - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "vout", i__1, "rotvec_", (ftnlen)229)] = 
+	    temp[2];
 
     return 0;
 } /* rotvec_ */

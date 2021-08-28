@@ -251,7 +251,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dlafps_c" );
+   chkin_c ( naif_state, "dlafps_c" );
 
    /*
    Populate the Fortran DLA descriptor array fCurrent with the contents

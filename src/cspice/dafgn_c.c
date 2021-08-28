@@ -267,7 +267,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafgn_c" );
+   chkin_c ( naif_state, "dafgn_c" );
 
    /*
    Make sure the output string has at least enough room for one output

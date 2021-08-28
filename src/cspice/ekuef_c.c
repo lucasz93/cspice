@@ -131,7 +131,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekuef_c" );
+   chkin_c ( naif_state, "ekuef_c" );
 
    
    /*

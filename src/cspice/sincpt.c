@@ -8,8 +8,7 @@
 
 
 extern sincpt_init_t __sincpt_init;
-static sincpt_state_t* get_sincpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sincpt_state_t* get_sincpt_state(cspice_t* state) {
 	if (!state->sincpt)
 		state->sincpt = __cspice_allocate_module(sizeof(
 	sincpt_state_t), &__sincpt_init, sizeof(__sincpt_init));
@@ -18,51 +17,55 @@ static sincpt_state_t* get_sincpt_state() {
 }
 
 /* $Procedure SINCPT ( Surface intercept ) */
-/* Subroutine */ int sincpt_(char *method, char *target, doublereal *et, char 
-	*fixref, char *abcorr, char *obsrvr, char *dref, doublereal *dvec, 
-	doublereal *spoint, doublereal *trgepc, doublereal *srfvec, logical *
-	found, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, 
-	ftnlen abcorr_len, ftnlen obsrvr_len, ftnlen dref_len)
+/* Subroutine */ int sincpt_(cspice_t* __global_state, char *method, char *
+	target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, 
+	char *dref, doublereal *dvec, doublereal *spoint, doublereal *trgepc, 
+	doublereal *srfvec, logical *found, ftnlen method_len, ftnlen 
+	target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len, 
+	ftnlen dref_len)
 {
     /* Initialized data */
 
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzmaxrad_();
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzsuelin_(integer *);
-    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int zzsfxcor_(U_fp, U_fp, U_fp, integer *, 
-	    doublereal *, char *, logical *, logical *, logical *, logical *, 
-	    char *, integer *, integer *, integer *, integer *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, logical *, ftnlen, 
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
-	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
-    extern /* Subroutine */ int zzraysfx_();
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern logical vzero_(doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int zzmaxrad_(cspice_t*);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzsuelin_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzsudski_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzsfxcor_(cspice_t*, U_fp, U_fp, U_fp, 
+	    integer *, doublereal *, char *, logical *, logical *, logical *, 
+	    logical *, char *, integer *, integer *, integer *, integer *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, logical *,
+	     ftnlen, ftnlen);
+    extern /* Subroutine */ int zzprsmet_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, logical *, integer *, integer *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzsrftrk_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int zzraysfx_(cspice_t*);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern logical failed_(cspice_t*);
     integer dfrcde;
     integer fxfcde;
     integer obscde;
     integer dclass;
     integer trgcde;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     char pntdef[20];
     char shpstr[9];
     char subtyp[20];
@@ -75,17 +78,17 @@ static sincpt_state_t* get_sincpt_state() {
     logical attblk[15];
     logical surfup;
     logical fnd;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int zzraynp_();
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzraynp_(cspice_t*);
 
 
     /* Module state */
-    sincpt_state_t* __state = get_sincpt_state();
+    sincpt_state_t* __state = get_sincpt_state(__global_state);
 /* $ Abstract */
 
 /*     Given an observer and a direction vector defining a ray, compute */
@@ -2351,10 +2354,10 @@ static sincpt_state_t* get_sincpt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SINCPT", (ftnlen)6);
+    chkin_(__global_state, "SINCPT", (ftnlen)6);
 
 /*     Nothing has been found yet. */
 
@@ -2366,26 +2369,27 @@ static sincpt_state_t* get_sincpt_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
-	zzctruin_(__state->svctr3);
-	zzctruin_(__state->svctr4);
-	zzctruin_(__state->svctr5);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
+	zzctruin_(__global_state, __state->svctr3);
+	zzctruin_(__global_state, __state->svctr4);
+	zzctruin_(__global_state, __state->svctr5);
     }
-    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    if (__state->first || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        Make sure the results of this block won't be reused */
 /*        if we bail out due to an error. */
 
-	s_copy(__state->prvcor, " ", (ftnlen)5, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->prvcor, " ", (ftnlen)5, (ftnlen)
+		1);
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
 
-	zzvalcor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("SINCPT", (ftnlen)6);
+	zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SINCPT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -2413,35 +2417,38 @@ static sincpt_state_t* get_sincpt_state() {
 
 /*        The aberration correction flag is valid; save it. */
 
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
-	    __state->svfnd1, target, &trgcde, &fnd, (ftnlen)36, target_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtcde, &__state->svfnd1, target, &trgcde, &fnd, (ftnlen)
+	    36, target_len);
     if (! fnd) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit, or that you failed to lo"
-		"ad a kernel containing a name-ID mapping for this body.", (
-		ftnlen)234);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SINCPT", (ftnlen)6);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit, or that "
+		"you failed to load a kernel containing a name-ID mapping for"
+		" this body.", (ftnlen)234);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SINCPT", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
-	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svobsr, &
+	    __state->svobsc, &__state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)
+	    36, obsrvr_len);
     if (! fnd) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE Toolkit, or that you failed to "
-		"load a kernel containing a name-ID mapping for this body.", (
-		ftnlen)236);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SINCPT", (ftnlen)6);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE Toolkit, or tha"
+		"t you failed to load a kernel containing a name-ID mapping f"
+		"or this body.", (ftnlen)236);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SINCPT", (ftnlen)6);
 	return 0;
     }
 
@@ -2449,85 +2456,87 @@ static sincpt_state_t* get_sincpt_state() {
 /*     an error. */
 
     if (obscde == trgcde) {
-	setmsg_("In computing the surface intercept point, the observing bod"
-		"y and target body are the same. Both are #.", (ftnlen)102);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("SINCPT", (ftnlen)6);
+	setmsg_(__global_state, "In computing the surface intercept point, t"
+		"he observing body and target body are the same. Both are #.", 
+		(ftnlen)102);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "SINCPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(__state->svctr3, __state->svfref, &__state->svfxfc, fixref, &
-	    fxfcde, (ftnlen)32, fixref_len);
-    frinfo_(&fxfcde, &fxcent, &fxclss, &fxtyid, &fnd);
-    if (failed_()) {
-	chkout_("SINCPT", (ftnlen)6);
+    zznamfrm_(__global_state, __state->svctr3, __state->svfref, &
+	    __state->svfxfc, fixref, &fxfcde, (ftnlen)32, fixref_len);
+    frinfo_(__global_state, &fxfcde, &fxcent, &fxclss, &fxtyid, &fnd);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SINCPT", (ftnlen)6);
 	return 0;
     }
     if (! fnd) {
-	setmsg_("Reference frame # is not recognized by the SPICE frame subs"
-		"ystem. Possibly a required frame definition kernel has not b"
-		"een loaded.", (ftnlen)130);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	chkout_("SINCPT", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not recognized by the "
+		"SPICE frame subsystem. Possibly a required frame definition "
+		"kernel has not been loaded.", (ftnlen)130);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	chkout_(__global_state, "SINCPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure that FIXREF is centered at the target body's center. */
 
     if (fxcent != trgcde) {
-	setmsg_("Reference frame # is not centered at the target body #. The"
-		" ID code of the frame center is #.", (ftnlen)93);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	errint_("#", &fxcent, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	chkout_("SINCPT", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not centered at the ta"
+		"rget body #. The ID code of the frame center is #.", (ftnlen)
+		93);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errint_(__global_state, "#", &fxcent, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	chkout_(__global_state, "SINCPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Check for a zero ray direction vector. */
 
-    if (vzero_(dvec)) {
-	setmsg_("Input ray direction was the zero vector; this vector must b"
-		"e non-zero.", (ftnlen)70);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("SINCPT", (ftnlen)6);
+    if (vzero_(__global_state, dvec)) {
+	setmsg_(__global_state, "Input ray direction was the zero vector; th"
+		"is vector must be non-zero.", (ftnlen)70);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "SINCPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Determine the attributes of the frame designated by DREF. */
 
-    zznamfrm_(__state->svctr4, __state->svdref, &__state->svdfrc, dref, &
-	    dfrcde, (ftnlen)32, dref_len);
-    frinfo_(&dfrcde, &dcentr, &dclass, &dtypid, &fnd);
-    if (failed_()) {
-	chkout_("SINCPT", (ftnlen)6);
+    zznamfrm_(__global_state, __state->svctr4, __state->svdref, &
+	    __state->svdfrc, dref, &dfrcde, (ftnlen)32, dref_len);
+    frinfo_(__global_state, &dfrcde, &dcentr, &dclass, &dtypid, &fnd);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SINCPT", (ftnlen)6);
 	return 0;
     }
     if (! fnd) {
-	setmsg_("Reference frame # is not recognized by the SPICE frame subs"
-		"ystem. Possibly a required frame definition kernel has not b"
-		"een loaded.", (ftnlen)130);
-	errch_("#", dref, (ftnlen)1, dref_len);
-	sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	chkout_("SINCPT", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not recognized by the "
+		"SPICE frame subsystem. Possibly a required frame definition "
+		"kernel has not been loaded.", (ftnlen)130);
+	errch_(__global_state, "#", dref, (ftnlen)1, dref_len);
+	sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	chkout_(__global_state, "SINCPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(__state->svctr5, &surfup);
+    zzsrftrk_(__global_state, __state->svctr5, &surfup);
 
 /*     Initialize the SINCPT utility package for the next computation. */
 /*     The choice of initialization routine depends on the target */
 /*     surface type. */
 
-    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
-	     (ftnlen)500) != 0) {
+    if (__state->first || surfup || s_cmp(&__global_state->f2c, method, 
+	    __state->prvmth, method_len, (ftnlen)500) != 0) {
 
 /*        Set the previous method string to an invalid value, so it */
 /*        cannot match any future, valid input. This will force this */
@@ -2535,7 +2544,8 @@ static sincpt_state_t* get_sincpt_state() {
 /*        failure occurs in this branch. Once success is assured, we can */
 /*        record the current method in the previous method string. */
 
-	s_copy(__state->prvmth, " ", (ftnlen)500, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->prvmth, " ", (ftnlen)500, (
+		ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -2544,45 +2554,49 @@ static sincpt_state_t* get_sincpt_state() {
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&trgcde, method, &__state->c__100, shpstr, subtyp, &
-		__state->pri, &__state->nsurf, __state->srflst, pntdef, 
-		trmstr, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20, (
-		ftnlen)20);
-	if (failed_()) {
-	    chkout_("SINCPT", (ftnlen)6);
+	zzprsmet_(__global_state, &trgcde, method, &__state->c__100, shpstr, 
+		subtyp, &__state->pri, &__state->nsurf, __state->srflst, 
+		pntdef, trmstr, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20,
+		 (ftnlen)20);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SINCPT", (ftnlen)6);
 	    return 0;
 	}
-	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
+	if (eqstr_(__global_state, shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9))
+		 {
 	    __state->shape = 1;
-	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
+	} else if (eqstr_(__global_state, shpstr, "DSK", (ftnlen)9, (ftnlen)3)
+		) {
 	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
 
-	    setmsg_("[1] Returned shape value from method string was <#>.", (
-		    ftnlen)52);
-	    errch_("#", shpstr, (ftnlen)1, (ftnlen)9);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("SINCPT", (ftnlen)6);
+	    setmsg_(__global_state, "[1] Returned shape value from method st"
+		    "ring was <#>.", (ftnlen)52);
+	    errch_(__global_state, "#", shpstr, (ftnlen)1, (ftnlen)9);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "SINCPT", (ftnlen)6);
 	    return 0;
 	}
 
 /*        There should be no subtype specification in the method */
 /*        string. */
 
-	if (s_cmp(subtyp, " ", (ftnlen)20, (ftnlen)1) != 0) {
-	    setmsg_("Spurious sub-observer point type <#> was present in the"
-		    " method string #. The sub-observer type is valid in the "
-		    "method strings for SUBPNT and SUBSLR, but is not applica"
-		    "ble for SINCPT.", (ftnlen)182);
-	    errch_("#", subtyp, (ftnlen)1, (ftnlen)20);
-	    errch_("#", method, (ftnlen)1, method_len);
-	    sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	    chkout_("SINCPT", (ftnlen)6);
+	if (s_cmp(&__global_state->f2c, subtyp, " ", (ftnlen)20, (ftnlen)1) !=
+		 0) {
+	    setmsg_(__global_state, "Spurious sub-observer point type <#> wa"
+		    "s present in the method string #. The sub-observer type "
+		    "is valid in the method strings for SUBPNT and SUBSLR, bu"
+		    "t is not applicable for SINCPT.", (ftnlen)182);
+	    errch_(__global_state, "#", subtyp, (ftnlen)1, (ftnlen)20);
+	    errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	    sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	    chkout_(__global_state, "SINCPT", (ftnlen)6);
 	    return 0;
 	}
-	s_copy(__state->prvmth, method, (ftnlen)500, method_len);
+	s_copy(&__global_state->f2c, __state->prvmth, method, (ftnlen)500, 
+		method_len);
     }
 
 /*     At this point, the first pass actions were successful. */
@@ -2593,7 +2607,7 @@ static sincpt_state_t* get_sincpt_state() {
 /*        Initialize the intercept algorithm to use the reference */
 /*        ellipsoid of the target body. */
 
-	zzsuelin_(&trgcde);
+	zzsuelin_(__global_state, &trgcde);
     } else if (__state->shape == 2) {
 
 /*        This is the DSK case. */
@@ -2604,26 +2618,28 @@ static sincpt_state_t* get_sincpt_state() {
 /*        Initialize the intercept algorithm to use a DSK */
 /*        model for the surface of the target body. */
 
-	zzsudski_(&trgcde, &__state->nsurf, __state->srflst, &fxfcde);
+	zzsudski_(__global_state, &trgcde, &__state->nsurf, __state->srflst, &
+		fxfcde);
     } else {
 
 /*        This is a backstop check. */
 
-	setmsg_("[2] Returned shape value from method string was <#>.", (
-		ftnlen)52);
-	errch_("#", shpstr, (ftnlen)1, (ftnlen)9);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("SINCPT", (ftnlen)6);
+	setmsg_(__global_state, "[2] Returned shape value from method string"
+		" was <#>.", (ftnlen)52);
+	errch_(__global_state, "#", shpstr, (ftnlen)1, (ftnlen)9);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "SINCPT", (ftnlen)6);
 	return 0;
     }
 
 /*     Perform the intercept computation. */
 
-    zzsfxcor_((U_fp)zzraynp_, (U_fp)zzmaxrad_, (U_fp)zzraysfx_, &trgcde, et, 
-	    abcorr, &__state->uselt, &__state->usecn, &__state->usestl, &
-	    __state->xmit, fixref, &obscde, &dfrcde, &dclass, &dcentr, dvec, 
-	    spoint, trgepc, srfvec, found, abcorr_len, fixref_len);
-    chkout_("SINCPT", (ftnlen)6);
+    zzsfxcor_(__global_state, (U_fp)zzraynp_, (U_fp)zzmaxrad_, (U_fp)
+	    zzraysfx_, &trgcde, et, abcorr, &__state->uselt, &__state->usecn, 
+	    &__state->usestl, &__state->xmit, fixref, &obscde, &dfrcde, &
+	    dclass, &dcentr, dvec, spoint, trgepc, srfvec, found, abcorr_len, 
+	    fixref_len);
+    chkout_(__global_state, "SINCPT", (ftnlen)6);
     return 0;
 } /* sincpt_ */
 

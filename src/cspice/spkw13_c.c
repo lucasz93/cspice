@@ -251,7 +251,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkw13_c" );
+   chkin_c ( naif_state, "spkw13_c" );
 
    /*
    Check the input strings to make sure the pointers

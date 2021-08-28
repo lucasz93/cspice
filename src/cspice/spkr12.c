@@ -8,24 +8,23 @@
 
 
 typedef int spkr12_state_t;
-static spkr12_state_t* get_spkr12_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr12_state_t* get_spkr12_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPKR12 ( Read SPK record from segment, type 12 ) */
-/* Subroutine */ int spkr12_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr12_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int spkr08_(integer *, doublereal *, doublereal *,
-	     doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int spkr08_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spkr12_state_t* __state = get_spkr12_state();
+    spkr12_state_t* __state = get_spkr12_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single data record from a type 12 SPK segment. */
@@ -198,15 +197,15 @@ static spkr12_state_t* get_spkr12_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKR12", (ftnlen)6);
+    chkin_(__global_state, "SPKR12", (ftnlen)6);
 
 /*     The type 8 reader knows how to obtain a type 12 record. */
 
-    spkr08_(handle, descr, et, record);
-    chkout_("SPKR12", (ftnlen)6);
+    spkr08_(__global_state, handle, descr, et, record);
+    chkout_(__global_state, "SPKR12", (ftnlen)6);
     return 0;
 } /* spkr12_ */
 

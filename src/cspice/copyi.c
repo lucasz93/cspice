@@ -8,13 +8,13 @@
 
 
 typedef int copyi_state_t;
-static copyi_state_t* get_copyi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline copyi_state_t* get_copyi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      COPYI ( Copy an integer cell ) */
-/* Subroutine */ int copyi_(integer *cell, integer *copy)
+/* Subroutine */ int copyi_(cspice_t* __global_state, integer *cell, integer *
+	copy)
 {
     /* System generated locals */
     integer i__1;
@@ -23,19 +23,19 @@ static copyi_state_t* get_copyi_state() {
     integer card;
     integer size;
     integer i__;
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer moved;
-    extern integer sizei_(integer *);
-    extern /* Subroutine */ int scardi_(integer *, integer *);
-    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer sizei_(cspice_t*, integer *);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int excess_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    copyi_state_t* __state = get_copyi_state();
+    copyi_state_t* __state = get_copyi_state(__global_state);
 /* $ Abstract */
 
 /*      Copy the contents of an integer cell to another cell. */
@@ -178,16 +178,16 @@ static copyi_state_t* get_copyi_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("COPYI", (ftnlen)5);
+    chkin_(__global_state, "COPYI", (ftnlen)5);
 
 /*     We need the cardinality of the input cell, and the size of */
 /*     the output cell. */
 
-    card = cardi_(cell);
-    size = sizei_(copy);
+    card = cardi_(__global_state, cell);
+    size = sizei_(__global_state, copy);
 
 /*     Start moving the elements, one by one. Stop if the output */
 /*     cell fills up. */
@@ -200,15 +200,15 @@ static copyi_state_t* get_copyi_state() {
 
 /*     Set the cardinality of the output cell. Report any excess. */
 
-    scardi_(&moved, copy);
+    scardi_(__global_state, &moved, copy);
     if (card > size) {
 	i__1 = card - size;
-	excess_(&i__1, "cell", (ftnlen)4);
-	sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);
-	chkout_("COPYI", (ftnlen)5);
+	excess_(__global_state, &i__1, "cell", (ftnlen)4);
+	sigerr_(__global_state, "SPICE(CELLTOOSMALL)", (ftnlen)19);
+	chkout_(__global_state, "COPYI", (ftnlen)5);
 	return 0;
     }
-    chkout_("COPYI", (ftnlen)5);
+    chkout_(__global_state, "COPYI", (ftnlen)5);
     return 0;
 } /* copyi_ */
 

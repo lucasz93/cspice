@@ -208,7 +208,7 @@
    /*
    Participate in error handling
    */
-   chkin_c ( "scpart_c");
+   chkin_c ( naif_state, "scpart_c");
 
    /*
    Unlike most of the wrappers, this one reads the

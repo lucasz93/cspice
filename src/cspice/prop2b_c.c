@@ -205,7 +205,7 @@
    Participate in error handling.
    */
 
-   chkin_c ( "prop2b_c");
+   chkin_c ( naif_state, "prop2b_c");
 
 
    prop2b_ ( ( doublereal * ) &gm,

@@ -8,37 +8,39 @@
 
 
 typedef int dgeodr_state_t;
-static dgeodr_state_t* get_dgeodr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dgeodr_state_t* get_dgeodr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DGEODR ( Derivative of geodetic w.r.t. rectangular ) */
-/* Subroutine */ int dgeodr_(doublereal *x, doublereal *y, doublereal *z__, 
-	doublereal *re, doublereal *f, doublereal *jacobi)
+/* Subroutine */ int dgeodr_(cspice_t* __global_state, doublereal *x, 
+	doublereal *y, doublereal *z__, doublereal *re, doublereal *f, 
+	doublereal *jacobi)
 {
     doublereal long__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal injacb[9]	/* was [3][3] */;
-    extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int drdgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int recgeo_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int drdgeo_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal rectan[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int invort_(doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int invort_(cspice_t*, doublereal *, doublereal *)
+	    ;
     doublereal lat;
     doublereal alt;
 
 
     /* Module state */
-    dgeodr_state_t* __state = get_dgeodr_state();
+    dgeodr_state_t* __state = get_dgeodr_state(__global_state);
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */
@@ -239,10 +241,10 @@ static dgeodr_state_t* get_dgeodr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DGEODR", (ftnlen)6);
+	chkin_(__global_state, "DGEODR", (ftnlen)6);
     }
 
 /*     If the flattening coefficient is greater than one, the polar */
@@ -251,28 +253,29 @@ static dgeodr_state_t* get_dgeodr_state() {
 /*     error and check out. */
 
     if (*f >= 1.) {
-	setmsg_("Flattening coefficient was *.", (ftnlen)29);
-	errdp_("*", f, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("DGEODR", (ftnlen)6);
+	setmsg_(__global_state, "Flattening coefficient was *.", (ftnlen)29);
+	errdp_(__global_state, "*", f, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DGEODR", (ftnlen)6);
 	return 0;
     }
     if (*re <= 0.) {
-	setmsg_("Equatorial Radius <= 0.0D0. RE = *", (ftnlen)34);
-	errdp_("*", re, (ftnlen)1);
-	sigerr_("SPICE(BADRADIUS)", (ftnlen)16);
-	chkout_("DGEODR", (ftnlen)6);
+	setmsg_(__global_state, "Equatorial Radius <= 0.0D0. RE = *", (ftnlen)
+		34);
+	errdp_(__global_state, "*", re, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADRADIUS)", (ftnlen)16);
+	chkout_(__global_state, "DGEODR", (ftnlen)6);
 	return 0;
     }
 
 /*     There is a singularity of the Jacobian for points on the z-axis. */
 
     if (*x == 0. && *y == 0.) {
-	setmsg_("The Jacobian of the transformation from rectangular to geod"
-		"etic coordinates is not defined for points on the z-axis.", (
-		ftnlen)116);
-	sigerr_("SPICE(POINTONZAXIS)", (ftnlen)19);
-	chkout_("DGEODR", (ftnlen)6);
+	setmsg_(__global_state, "The Jacobian of the transformation from rec"
+		"tangular to geodetic coordinates is not defined for points o"
+		"n the z-axis.", (ftnlen)116);
+	sigerr_(__global_state, "SPICE(POINTONZAXIS)", (ftnlen)19);
+	chkout_(__global_state, "DGEODR", (ftnlen)6);
 	return 0;
     }
 
@@ -281,22 +284,22 @@ static dgeodr_state_t* get_dgeodr_state() {
 
 /*     First move the X,Y and Z coordinates into a vector. */
 
-    vpack_(x, y, z__, rectan);
+    vpack_(__global_state, x, y, z__, rectan);
 
 /*     Convert from rectangular to geodetic coordinates. */
 
-    recgeo_(rectan, re, f, &long__, &lat, &alt);
+    recgeo_(__global_state, rectan, re, f, &long__, &lat, &alt);
 
 /*     Get the Jacobian of the transformation from geodetic to */
 /*     rectangular coordinates at LONG, LAT, ALT. */
 
-    drdgeo_(&long__, &lat, &alt, re, f, injacb);
+    drdgeo_(__global_state, &long__, &lat, &alt, re, f, injacb);
 
 /*     Now invert INJACB to get the Jacobian of the transformation */
 /*     from rectangular to geodetic coordinates. */
 
-    invort_(injacb, jacobi);
-    chkout_("DGEODR", (ftnlen)6);
+    invort_(__global_state, injacb, jacobi);
+    chkout_(__global_state, "DGEODR", (ftnlen)6);
     return 0;
 } /* dgeodr_ */
 

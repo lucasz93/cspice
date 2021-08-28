@@ -8,26 +8,26 @@
 
 
 typedef int sce2s_state_t;
-static sce2s_state_t* get_sce2s_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sce2s_state_t* get_sce2s_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SCE2S ( ET to SCLK string ) */
-/* Subroutine */ int sce2s_(integer *sc, doublereal *et, char *sclkch, ftnlen 
-	sclkch_len)
+/* Subroutine */ int sce2s_(cspice_t* __global_state, integer *sc, doublereal 
+	*et, char *sclkch, ftnlen sclkch_len)
 {
-    extern /* Subroutine */ int sce2t_(integer *, doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int scdecd_(integer *, doublereal *, char *, 
-	    ftnlen);
+    extern /* Subroutine */ int sce2t_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int scdecd_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
     doublereal sclkdp;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sce2s_state_t* __state = get_sce2s_state();
+    sce2s_state_t* __state = get_sce2s_state(__global_state);
 /* $ Abstract */
 
 /*   Convert an epoch specified as ephemeris seconds past J2000 (ET) to */
@@ -350,17 +350,17 @@ static sce2s_state_t* get_sce2s_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCE2S", (ftnlen)5);
+	chkin_(__global_state, "SCE2S", (ftnlen)5);
     }
 
 /*     Convert ET to encoded SCLK, and then to an SCLK string. */
 
-    sce2t_(sc, et, &sclkdp);
-    scdecd_(sc, &sclkdp, sclkch, sclkch_len);
-    chkout_("SCE2S", (ftnlen)5);
+    sce2t_(__global_state, sc, et, &sclkdp);
+    scdecd_(__global_state, sc, &sclkdp, sclkch, sclkch_len);
+    chkout_(__global_state, "SCE2S", (ftnlen)5);
     return 0;
 } /* sce2s_ */
 

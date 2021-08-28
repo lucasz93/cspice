@@ -8,8 +8,7 @@
 
 
 extern zzspkzp1_init_t __zzspkzp1_init;
-static zzspkzp1_state_t* get_zzspkzp1_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzspkzp1_state_t* get_zzspkzp1_state(cspice_t* state) {
 	if (!state->zzspkzp1)
 		state->zzspkzp1 = __cspice_allocate_module(sizeof(
 	zzspkzp1_state_t), &__zzspkzp1_init, sizeof(__zzspkzp1_init));
@@ -18,9 +17,9 @@ static zzspkzp1_state_t* get_zzspkzp1_state() {
 }
 
 /* $Procedure ZZSPKZP1 ( S/P Kernel, easy position ) */
-/* Subroutine */ int zzspkzp1_(integer *targ, doublereal *et, char *ref, char 
-	*abcorr, integer *obs, doublereal *ptarg, doublereal *lt, ftnlen 
-	ref_len, ftnlen abcorr_len)
+/* Subroutine */ int zzspkzp1_(cspice_t* __global_state, integer *targ, 
+	doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *
+	ptarg, doublereal *lt, ftnlen ref_len, ftnlen abcorr_len)
 {
     /* Initialized data */
 
@@ -29,36 +28,38 @@ static zzspkzp1_state_t* get_zzspkzp1_state() {
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int zzrefch1_(integer *, integer *, doublereal *, 
+    extern /* Subroutine */ int zzrefch1_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int zzspkpa1_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, char *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzspksb1_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzspkgp1_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical eqchr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer ltrim_(cspice_t*, char *, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int zzspkpa1_(integer *, doublereal *, char *, 
-	    doublereal *, char *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzspksb1_(integer *, doublereal *, char *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int zzspkgp1_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical eqchr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer ltrim_(char *, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
 
 
     /* Module state */
-    zzspkzp1_state_t* __state = get_zzspkzp1_state();
+    zzspkzp1_state_t* __state = get_zzspkzp1_state(__global_state);
 /* $ Abstract */
 
 /*     Return the position of a target body relative to an observing */
@@ -1029,29 +1030,29 @@ static zzspkzp1_state_t* get_zzspkzp1_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZSPKZP1", (ftnlen)8);
+	chkin_(__global_state, "ZZSPKZP1", (ftnlen)8);
     }
 
 /*     Get the frame id for J2000 on the first call to this routine. */
 
     if (__state->first) {
-	namfrm_("J2000", &__state->fj2000, (ftnlen)5);
+	namfrm_(__global_state, "J2000", &__state->fj2000, (ftnlen)5);
 
 /*        Initialize counter. */
 
-	zzctruin_(__state->svctr1);
+	zzctruin_(__global_state, __state->svctr1);
 	__state->first = FALSE_;
     }
 
 /*     Decide whether the aberration correction is for received or */
 /*     transmitted radiation. */
 
-    __state->i__ = ltrim_(abcorr, abcorr_len);
-    __state->xmit = eqchr_(abcorr + (__state->i__ - 1), "X", (ftnlen)1, (
-	    ftnlen)1);
+    __state->i__ = ltrim_(__global_state, abcorr, abcorr_len);
+    __state->xmit = eqchr_(__global_state, abcorr + (__state->i__ - 1), "X", (
+	    ftnlen)1, (ftnlen)1);
 
 /*     If we only want geometric positions, then compute just that. */
 
@@ -1060,39 +1061,41 @@ static zzspkzp1_state_t* get_zzspkzp1_state() {
 /*     apparent position of the target body relative to the observer */
 /*     with the requested aberration corrections. */
 
-    if (eqstr_(abcorr, "NONE", abcorr_len, (ftnlen)4)) {
-	zzspkgp1_(targ, et, ref, obs, ptarg, lt, ref_len);
+    if (eqstr_(__global_state, abcorr, "NONE", abcorr_len, (ftnlen)4)) {
+	zzspkgp1_(__global_state, targ, et, ref, obs, ptarg, lt, ref_len);
     } else {
 
 /*        Get the auxiliary information about the requested output */
 /*        frame. */
 
-	zznamfrm_(__state->svctr1, __state->svref, &__state->svreqf, ref, &
-		__state->reqfrm, (ftnlen)32, ref_len);
+	zznamfrm_(__global_state, __state->svctr1, __state->svref, &
+		__state->svreqf, ref, &__state->reqfrm, (ftnlen)32, ref_len);
 	if (__state->reqfrm == 0) {
-	    setmsg_("The requested output frame '#' is not recognized by the"
-		    " reference frame subsystem. Please check that the approp"
-		    "riate kernels have been loaded and that you have correct"
-		    "ly entered the name of the output frame. ", (ftnlen)208);
-	    errch_("#", ref, (ftnlen)1, ref_len);
-	    sigerr_("SPICE(UNKNOWNFRAME)", (ftnlen)19);
-	    chkout_("ZZSPKZP1", (ftnlen)8);
+	    setmsg_(__global_state, "The requested output frame '#' is not r"
+		    "ecognized by the reference frame subsystem. Please check"
+		    " that the appropriate kernels have been loaded and that "
+		    "you have correctly entered the name of the output frame. "
+		    , (ftnlen)208);
+	    errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	    sigerr_(__global_state, "SPICE(UNKNOWNFRAME)", (ftnlen)19);
+	    chkout_(__global_state, "ZZSPKZP1", (ftnlen)8);
 	    return 0;
 	}
-	frinfo_(&__state->reqfrm, &__state->center, &__state->type__, &
-		__state->typeid, &__state->found);
-	if (failed_()) {
-	    chkout_("ZZSPKZP1", (ftnlen)8);
+	frinfo_(__global_state, &__state->reqfrm, &__state->center, &
+		__state->type__, &__state->typeid, &__state->found);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKZP1", (ftnlen)8);
 	    return 0;
 	}
 	if (! __state->found) {
-	    setmsg_("The requested output frame '#' is not recognized by the"
-		    " reference frame subsystem. Please check that the approp"
-		    "riate kernels have been loaded and that you have correct"
-		    "ly entered the name of the output frame. ", (ftnlen)208);
-	    errch_("#", ref, (ftnlen)1, ref_len);
-	    sigerr_("SPICE(UNKNOWNFRAME2)", (ftnlen)20);
-	    chkout_("ZZSPKZP1", (ftnlen)8);
+	    setmsg_(__global_state, "The requested output frame '#' is not r"
+		    "ecognized by the reference frame subsystem. Please check"
+		    " that the appropriate kernels have been loaded and that "
+		    "you have correctly entered the name of the output frame. "
+		    , (ftnlen)208);
+	    errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	    sigerr_(__global_state, "SPICE(UNKNOWNFRAME2)", (ftnlen)20);
+	    chkout_(__global_state, "ZZSPKZP1", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1100,10 +1103,10 @@ static zzspkzp1_state_t* get_zzspkzp1_state() {
 /*        call SPKSSB, SPKAPO and return. */
 
 	if (__state->type__ == 1) {
-	    zzspksb1_(obs, et, ref, __state->sobs, ref_len);
-	    zzspkpa1_(targ, et, ref, __state->sobs, abcorr, ptarg, lt, 
-		    ref_len, abcorr_len);
-	    chkout_("ZZSPKZP1", (ftnlen)8);
+	    zzspksb1_(__global_state, obs, et, ref, __state->sobs, ref_len);
+	    zzspkpa1_(__global_state, targ, et, ref, __state->sobs, abcorr, 
+		    ptarg, lt, ref_len, abcorr_len);
+	    chkout_(__global_state, "ZZSPKZP1", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1116,11 +1119,11 @@ static zzspkzp1_state_t* get_zzspkzp1_state() {
 
 /*        We also need the light time to the center of the frame. */
 
-	zzspksb1_(obs, et, "J2000", __state->sobs, (ftnlen)5);
-	zzspkpa1_(targ, et, "J2000", __state->sobs, abcorr, __state->postn, 
-		lt, (ftnlen)5, abcorr_len);
-	if (failed_()) {
-	    chkout_("ZZSPKZP1", (ftnlen)8);
+	zzspksb1_(__global_state, obs, et, "J2000", __state->sobs, (ftnlen)5);
+	zzspkpa1_(__global_state, targ, et, "J2000", __state->sobs, abcorr, 
+		__state->postn, lt, (ftnlen)5, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKZP1", (ftnlen)8);
 	    return 0;
 	}
 	if (__state->center == *obs) {
@@ -1128,15 +1131,16 @@ static zzspkzp1_state_t* get_zzspkzp1_state() {
 	} else if (__state->center == *targ) {
 	    __state->ltcent = *lt;
 	} else {
-	    zzspkpa1_(&__state->center, et, "J2000", __state->sobs, abcorr, 
-		    __state->temp, &__state->ltcent, (ftnlen)5, abcorr_len);
+	    zzspkpa1_(__global_state, &__state->center, et, "J2000", 
+		    __state->sobs, abcorr, __state->temp, &__state->ltcent, (
+		    ftnlen)5, abcorr_len);
 	}
 
 /*        If something went wrong (like we couldn't get the position of */
 /*        the center relative to the observer) now it is time to quit. */
 
-	if (failed_()) {
-	    chkout_("ZZSPKZP1", (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKZP1", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1153,14 +1157,15 @@ static zzspkzp1_state_t* get_zzspkzp1_state() {
 /*        and convert the position. */
 
 	d__1 = *et - __state->ltcent;
-	zzrefch1_(&__state->fj2000, &__state->reqfrm, &d__1, __state->xform);
-	if (failed_()) {
-	    chkout_("ZZSPKZP1", (ftnlen)8);
+	zzrefch1_(__global_state, &__state->fj2000, &__state->reqfrm, &d__1, 
+		__state->xform);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSPKZP1", (ftnlen)8);
 	    return 0;
 	}
-	mxv_(__state->xform, __state->postn, ptarg);
+	mxv_(__global_state, __state->xform, __state->postn, ptarg);
     }
-    chkout_("ZZSPKZP1", (ftnlen)8);
+    chkout_(__global_state, "ZZSPKZP1", (ftnlen)8);
     return 0;
 } /* zzspkzp1_ */
 

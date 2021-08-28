@@ -8,8 +8,7 @@
 
 
 extern zzmobliq_init_t __zzmobliq_init;
-static zzmobliq_state_t* get_zzmobliq_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzmobliq_state_t* get_zzmobliq_state(cspice_t* state) {
 	if (!state->zzmobliq)
 		state->zzmobliq = __cspice_allocate_module(sizeof(
 	zzmobliq_state_t), &__zzmobliq_init, sizeof(__zzmobliq_init));
@@ -18,18 +17,18 @@ static zzmobliq_state_t* get_zzmobliq_state() {
 }
 
 /* $Procedure   ZZMOBLIQ   ( Mean obliquity of date ) */
-/* Subroutine */ int zzmobliq_(doublereal *et, doublereal *mob, doublereal *
-	dmob)
+/* Subroutine */ int zzmobliq_(cspice_t* __global_state, doublereal *et, 
+	doublereal *mob, doublereal *dmob)
 {
     /* Initialized data */
 
 
-    extern doublereal jyear_(void);
-    extern doublereal rpd_(void);
+    extern doublereal jyear_(cspice_t*);
+    extern doublereal rpd_(cspice_t*);
 
 
     /* Module state */
-    zzmobliq_state_t* __state = get_zzmobliq_state();
+    zzmobliq_state_t* __state = get_zzmobliq_state(__global_state);
 /* $ Abstract */
 
 /*     Return the mean obliquity of the ecliptic, and its time */
@@ -176,8 +175,8 @@ static zzmobliq_state_t* get_zzmobliq_state() {
 
     if (__state->first) {
 	__state->first = FALSE_;
-	__state->year = jyear_();
-	__state->rad = rpd_();
+	__state->year = jyear_(__global_state);
+	__state->rad = rpd_(__global_state);
 	__state->persec = 1. / (__state->year * 100.);
     }
 

@@ -8,8 +8,7 @@
 
 
 extern lxname_init_t __lxname_init;
-static lxname_state_t* get_lxname_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lxname_state_t* get_lxname_state(cspice_t* state) {
 	if (!state->lxname)
 		state->lxname = __cspice_allocate_module(sizeof(
 	lxname_state_t), &__lxname_init, sizeof(__lxname_init));
@@ -18,15 +17,16 @@ static lxname_state_t* get_lxname_state() {
 }
 
 /* $Procedure      LXNAME ( Lex names ) */
-/* Subroutine */ int lxname_0_(int n__, char *hdchrs, char *tlchrs, char *
-	string, integer *first, integer *last, integer *idspec, integer *
-	nchar, ftnlen hdchrs_len, ftnlen tlchrs_len, ftnlen string_len)
+/* Subroutine */ int lxname_0_(cspice_t* __global_state, int n__, char *
+	hdchrs, char *tlchrs, char *string, integer *first, integer *last, 
+	integer *idspec, integer *nchar, ftnlen hdchrs_len, ftnlen tlchrs_len,
+	 ftnlen string_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer c__;
@@ -34,29 +34,30 @@ static lxname_state_t* get_lxname_state() {
     integer i__;
     integer l;
     integer nhead;
-    extern integer cardi_(integer *);
+    extern integer cardi_(cspice_t*, integer *);
     integer tailc[261];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ntail;
     integer tcpos;
-    extern integer rtrim_(char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
     integer hl;
     integer tl;
-    extern /* Subroutine */ int scardi_(integer *, integer *);
-    extern /* Subroutine */ int validi_(integer *, integer *, integer *);
-    extern integer bsrchi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int appndi_(integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
-    extern /* Subroutine */ int insrti_(integer *, integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int validi_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer bsrchi_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int appndi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int insrti_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    lxname_state_t* __state = get_lxname_state();
+    lxname_state_t* __state = get_lxname_state(__global_state);
 /* $ Abstract */
 
 /*     Umbrella routine for name scanning entry points. */
@@ -347,13 +348,13 @@ static lxname_state_t* get_lxname_state() {
 	case 3: goto L_lxcsid;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("LXNAME", (ftnlen)6);
+	chkin_(__global_state, "LXNAME", (ftnlen)6);
     }
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("LXNAME", (ftnlen)6);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "LXNAME", (ftnlen)6);
     return 0;
 /* $Procedure      LXIDNT ( Lex identifer ) */
 
@@ -523,7 +524,7 @@ L_lxidnt:
 
 /*     Save the length of the non-blank prefix of the input string. */
 
-    l = rtrim_(string, string_len);
+    l = rtrim_(__global_state, string, string_len);
 
 /*     Handle the cases in which we can tell right away that */
 /*     no token can be found. */
@@ -539,7 +540,7 @@ L_lxidnt:
 
     nhead = idspec[6];
     c__ = *(unsigned char *)&string[*first - 1];
-    i__ = bsrchi_(&c__, &nhead, &idspec[8]);
+    i__ = bsrchi_(__global_state, &c__, &nhead, &idspec[8]);
     if (i__ == 0) {
 	*last = *first - 1;
 	*nchar = 0;
@@ -557,7 +558,7 @@ L_lxidnt:
     while(*last < l) {
 	i__1 = *last;
 	c__ = *(unsigned char *)&string[i__1];
-	i__ = bsrchi_(&c__, &ntail, &idspec[tcpos + 5]);
+	i__ = bsrchi_(__global_state, &c__, &ntail, &idspec[tcpos + 5]);
 	if (i__ == 0) {
 	    return 0;
 	} else {
@@ -708,37 +709,40 @@ L_lxdfid:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("LXDFID", (ftnlen)6);
+	chkin_(__global_state, "LXDFID", (ftnlen)6);
     }
 
 /*     Initialize our head and tail character sets. */
 
-    ssizei_(&__state->c__255, headc);
-    ssizei_(&__state->c__255, tailc);
+    ssizei_(__global_state, &__state->c__255, headc);
+    ssizei_(__global_state, &__state->c__255, tailc);
 
 /*     Fill in the head and tail character arrays with their default */
 /*     values.  User integer codes for the characters. */
 
     for (i__ = 1; i__ <= 26; ++i__) {
-	headc[(i__1 = i__ + 5) < 261 && 0 <= i__1 ? i__1 : s_rnge("headc", 
-		i__1, "lxname_", (ftnlen)761)] = 'A' + i__ - 1;
-	headc[(i__1 = i__ + 31) < 261 && 0 <= i__1 ? i__1 : s_rnge("headc", 
-		i__1, "lxname_", (ftnlen)762)] = 'a' + i__ - 1;
-	tailc[(i__1 = i__ + 5) < 261 && 0 <= i__1 ? i__1 : s_rnge("tailc", 
-		i__1, "lxname_", (ftnlen)763)] = headc[(i__2 = i__ + 5) < 261 
-		&& 0 <= i__2 ? i__2 : s_rnge("headc", i__2, "lxname_", (
-		ftnlen)763)];
-	tailc[(i__1 = i__ + 31) < 261 && 0 <= i__1 ? i__1 : s_rnge("tailc", 
-		i__1, "lxname_", (ftnlen)764)] = headc[(i__2 = i__ + 31) < 
-		261 && 0 <= i__2 ? i__2 : s_rnge("headc", i__2, "lxname_", (
-		ftnlen)764)];
+	headc[(i__1 = i__ + 5) < 261 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "headc", i__1, "lxname_", (ftnlen)761)] =
+		 'A' + i__ - 1;
+	headc[(i__1 = i__ + 31) < 261 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "headc", i__1, "lxname_", (ftnlen)762)] =
+		 'a' + i__ - 1;
+	tailc[(i__1 = i__ + 5) < 261 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tailc", i__1, "lxname_", (ftnlen)763)] =
+		 headc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "headc", i__2, "lxname_", (ftnlen)763)];
+	tailc[(i__1 = i__ + 31) < 261 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tailc", i__1, "lxname_", (ftnlen)764)] =
+		 headc[(i__2 = i__ + 31) < 261 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "headc", i__2, "lxname_", (ftnlen)764)];
     }
     for (i__ = 1; i__ <= 10; ++i__) {
-	tailc[(i__1 = i__ + 57) < 261 && 0 <= i__1 ? i__1 : s_rnge("tailc", 
-		i__1, "lxname_", (ftnlen)769)] = '0' + i__ - 1;
+	tailc[(i__1 = i__ + 57) < 261 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tailc", i__1, "lxname_", (ftnlen)769)] =
+		 '0' + i__ - 1;
     }
     tailc[68] = '$';
     tailc[69] = '_';
@@ -747,8 +751,8 @@ L_lxdfid:
 
 /*     Turn the arrays into integer sets. */
 
-    validi_(&__state->c__255, &nhead, headc);
-    validi_(&__state->c__255, &ntail, tailc);
+    validi_(__global_state, &__state->c__255, &nhead, headc);
+    validi_(__global_state, &__state->c__255, &ntail, tailc);
 
 /*     Create the output specification IDSPEC.  This is a cell */
 /*     containing, in order, */
@@ -761,20 +765,22 @@ L_lxdfid:
 /*     IDSPEC is assumed to be initialized. */
 
 
-    scardi_(&__state->c__0, idspec);
-    appndi_(&nhead, idspec);
-    appndi_(&ntail, idspec);
+    scardi_(__global_state, &__state->c__0, idspec);
+    appndi_(__global_state, &nhead, idspec);
+    appndi_(__global_state, &ntail, idspec);
     i__1 = nhead;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	appndi_(&headc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? i__2 : s_rnge(
-		"headc", i__2, "lxname_", (ftnlen)802)], idspec);
+	appndi_(__global_state, &headc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "headc", i__2, "lxname_", 
+		(ftnlen)802)], idspec);
     }
     i__1 = ntail;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	appndi_(&tailc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? i__2 : s_rnge(
-		"tailc", i__2, "lxname_", (ftnlen)806)], idspec);
+	appndi_(__global_state, &tailc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "tailc", i__2, "lxname_", 
+		(ftnlen)806)], idspec);
     }
-    chkout_("LXDFID", (ftnlen)6);
+    chkout_(__global_state, "LXDFID", (ftnlen)6);
     return 0;
 /* $Procedure      LXCSID ( Lex, custom identifier characters ) */
 
@@ -937,32 +943,32 @@ L_lxcsid:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("LXCSID", (ftnlen)6);
+	chkin_(__global_state, "LXCSID", (ftnlen)6);
     }
 
 /*     Initialize our head and tail character sets, every time. */
 
-    ssizei_(&__state->c__255, headc);
-    ssizei_(&__state->c__255, tailc);
+    ssizei_(__global_state, &__state->c__255, headc);
+    ssizei_(__global_state, &__state->c__255, tailc);
 
 /*     Check the inputs before proceeding. */
 
-    hl = rtrim_(hdchrs, hdchrs_len);
-    tl = rtrim_(tlchrs, tlchrs_len);
+    hl = rtrim_(__global_state, hdchrs, hdchrs_len);
+    tl = rtrim_(__global_state, tlchrs, tlchrs_len);
     i__1 = hl;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	c__ = *(unsigned char *)&hdchrs[i__ - 1];
 	if (c__ < 32 || c__ > 126) {
-	    setmsg_("The character having integer code # in position # of th"
-		    "e head character string HDCHRS is a non-printing charact"
-		    "er.", (ftnlen)114);
-	    errint_("#", &c__, (ftnlen)1);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(NONPRINTINGCHARS)", (ftnlen)23);
-	    chkout_("LXCSID", (ftnlen)6);
+	    setmsg_(__global_state, "The character having integer code # in "
+		    "position # of the head character string HDCHRS is a non-"
+		    "printing character.", (ftnlen)114);
+	    errint_(__global_state, "#", &c__, (ftnlen)1);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NONPRINTINGCHARS)", (ftnlen)23);
+	    chkout_(__global_state, "LXCSID", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -970,13 +976,13 @@ L_lxcsid:
     for (i__ = 1; i__ <= i__1; ++i__) {
 	c__ = *(unsigned char *)&tlchrs[i__ - 1];
 	if (c__ < 32 || c__ > 126) {
-	    setmsg_("The character having integer code # in position # of th"
-		    "e tail character string TLCHRS is a non-printing charact"
-		    "er.", (ftnlen)114);
-	    errint_("#", &c__, (ftnlen)1);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(NONPRINTINGCHARS)", (ftnlen)23);
-	    chkout_("LXCSID", (ftnlen)6);
+	    setmsg_(__global_state, "The character having integer code # in "
+		    "position # of the tail character string TLCHRS is a non-"
+		    "printing character.", (ftnlen)114);
+	    errint_(__global_state, "#", &c__, (ftnlen)1);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NONPRINTINGCHARS)", (ftnlen)23);
+	    chkout_(__global_state, "LXCSID", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -989,18 +995,18 @@ L_lxcsid:
     for (i__ = 1; i__ <= i__1; ++i__) {
 	c__ = *(unsigned char *)&hdchrs[i__ - 1];
 	if (c__ != 32) {
-	    insrti_(&c__, headc);
+	    insrti_(__global_state, &c__, headc);
 	}
     }
-    nhead = cardi_(headc);
+    nhead = cardi_(__global_state, headc);
     i__1 = tl;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	c__ = *(unsigned char *)&tlchrs[i__ - 1];
 	if (c__ != 32) {
-	    insrti_(&c__, tailc);
+	    insrti_(__global_state, &c__, tailc);
 	}
     }
-    ntail = cardi_(tailc);
+    ntail = cardi_(__global_state, tailc);
 
 /*     Create the output specification IDSPEC.  This is a cell */
 /*     containing, in order, */
@@ -1013,47 +1019,51 @@ L_lxcsid:
 /*     IDSPEC is assumed to be initialized. */
 
 
-    scardi_(&__state->c__0, idspec);
-    appndi_(&nhead, idspec);
-    appndi_(&ntail, idspec);
+    scardi_(__global_state, &__state->c__0, idspec);
+    appndi_(__global_state, &nhead, idspec);
+    appndi_(__global_state, &ntail, idspec);
     i__1 = nhead;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	appndi_(&headc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? i__2 : s_rnge(
-		"headc", i__2, "lxname_", (ftnlen)1089)], idspec);
+	appndi_(__global_state, &headc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "headc", i__2, "lxname_", 
+		(ftnlen)1089)], idspec);
     }
     i__1 = ntail;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	appndi_(&tailc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? i__2 : s_rnge(
-		"tailc", i__2, "lxname_", (ftnlen)1093)], idspec);
+	appndi_(__global_state, &tailc[(i__2 = i__ + 5) < 261 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "tailc", i__2, "lxname_", 
+		(ftnlen)1093)], idspec);
     }
-    chkout_("LXCSID", (ftnlen)6);
+    chkout_(__global_state, "LXCSID", (ftnlen)6);
     return 0;
 } /* lxname_ */
 
-/* Subroutine */ int lxname_(char *hdchrs, char *tlchrs, char *string, 
-	integer *first, integer *last, integer *idspec, integer *nchar, 
-	ftnlen hdchrs_len, ftnlen tlchrs_len, ftnlen string_len)
+/* Subroutine */ int lxname_(cspice_t* __global_state, char *hdchrs, char *
+	tlchrs, char *string, integer *first, integer *last, integer *idspec, 
+	integer *nchar, ftnlen hdchrs_len, ftnlen tlchrs_len, ftnlen 
+	string_len)
 {
     return lxname_0_(0, hdchrs, tlchrs, string, first, last, idspec, nchar, 
 	    hdchrs_len, tlchrs_len, string_len);
     }
 
-/* Subroutine */ int lxidnt_(integer *idspec, char *string, integer *first, 
-	integer *last, integer *nchar, ftnlen string_len)
+/* Subroutine */ int lxidnt_(cspice_t* __global_state, integer *idspec, char *
+	string, integer *first, integer *last, integer *nchar, ftnlen 
+	string_len)
 {
     return lxname_0_(1, (char *)0, (char *)0, string, first, last, idspec, 
 	    nchar, (ftnint)0, (ftnint)0, string_len);
     }
 
-/* Subroutine */ int lxdfid_(integer *idspec)
+/* Subroutine */ int lxdfid_(cspice_t* __global_state, integer *idspec)
 {
     return lxname_0_(2, (char *)0, (char *)0, (char *)0, (integer *)0, (
 	    integer *)0, idspec, (integer *)0, (ftnint)0, (ftnint)0, (ftnint)
 	    0);
     }
 
-/* Subroutine */ int lxcsid_(char *hdchrs, char *tlchrs, integer *idspec, 
-	ftnlen hdchrs_len, ftnlen tlchrs_len)
+/* Subroutine */ int lxcsid_(cspice_t* __global_state, char *hdchrs, char *
+	tlchrs, integer *idspec, ftnlen hdchrs_len, ftnlen tlchrs_len)
 {
     return lxname_0_(3, hdchrs, tlchrs, (char *)0, (integer *)0, (integer *)0,
 	     idspec, (integer *)0, hdchrs_len, tlchrs_len, (ftnint)0);

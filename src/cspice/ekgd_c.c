@@ -374,7 +374,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekgd_c" );
+   chkin_c ( naif_state, "ekgd_c" );
 
 
    /*

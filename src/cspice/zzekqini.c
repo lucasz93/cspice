@@ -8,8 +8,7 @@
 
 
 extern zzekqini_init_t __zzekqini_init;
-static zzekqini_state_t* get_zzekqini_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekqini_state_t* get_zzekqini_state(cspice_t* state) {
 	if (!state->zzekqini)
 		state->zzekqini = __cspice_allocate_module(sizeof(
 	zzekqini_state_t), &__zzekqini_init, sizeof(__zzekqini_init));
@@ -18,32 +17,33 @@ static zzekqini_state_t* get_zzekqini_state() {
 }
 
 /* $Procedure   ZZEKQINI ( Private: EK, intialize encoded query ) */
-/* Subroutine */ int zzekqini_(integer *isize, integer *dsize, integer *eqryi,
-	 char *eqryc, doublereal *eqryd, ftnlen eqryc_len)
+/* Subroutine */ int zzekqini_(cspice_t* __global_state, integer *isize, 
+	integer *dsize, integer *eqryi, char *eqryc, doublereal *eqryd, 
+	ftnlen eqryc_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
-    extern /* Subroutine */ int appndi_(integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int appndi_(cspice_t*, integer *, integer *);
 
 
     /* Module state */
-    zzekqini_state_t* __state = get_zzekqini_state();
+    zzekqini_state_t* __state = get_zzekqini_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -694,59 +694,60 @@ static zzekqini_state_t* get_zzekqini_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKQINI", (ftnlen)8);
+	chkin_(__global_state, "ZZEKQINI", (ftnlen)8);
     }
 
 /*     Check sizes: */
 
     if (*isize < 27869) {
-	setmsg_("Size of integer component of encoded query is #; at least #"
-		" elements are required.", (ftnlen)82);
-	errint_("#", isize, (ftnlen)1);
-	errint_("#", &__state->c__27869, (ftnlen)1);
-	sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);
-	chkout_("ZZEKQINI", (ftnlen)8);
+	setmsg_(__global_state, "Size of integer component of encoded query "
+		"is #; at least # elements are required.", (ftnlen)82);
+	errint_(__global_state, "#", isize, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__27869, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CELLTOOSMALL)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKQINI", (ftnlen)8);
 	return 0;
     }
     if (*dsize < 100) {
-	setmsg_("Size of d.p. component of encoded query is #; at least # el"
-		"ements are required.", (ftnlen)79);
-	errint_("#", dsize, (ftnlen)1);
-	errint_("#", &__state->c__100, (ftnlen)1);
-	sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);
-	chkout_("ZZEKQINI", (ftnlen)8);
+	setmsg_(__global_state, "Size of d.p. component of encoded query is "
+		"#; at least # elements are required.", (ftnlen)79);
+	errint_(__global_state, "#", dsize, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__100, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CELLTOOSMALL)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKQINI", (ftnlen)8);
 	return 0;
     }
-    if (i_len(eqryc, eqryc_len) < 2000) {
-	setmsg_("Size of character component of encoded query is #; a length"
-		" of at least # characters is required.", (ftnlen)97);
-	i__1 = i_len(eqryc, eqryc_len);
-	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &__state->c__2000, (ftnlen)1);
-	sigerr_("SPICE(STRINGTOOSHORT)", (ftnlen)21);
-	chkout_("ZZEKQINI", (ftnlen)8);
+    if (i_len(&__global_state->f2c, eqryc, eqryc_len) < 2000) {
+	setmsg_(__global_state, "Size of character component of encoded quer"
+		"y is #; a length of at least # characters is required.", (
+		ftnlen)97);
+	i__1 = i_len(&__global_state->f2c, eqryc, eqryc_len);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__2000, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(STRINGTOOSHORT)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKQINI", (ftnlen)8);
 	return 0;
     }
 
 /*     Initialize the integer cell, the d.p. array, and the string. */
 
-    ssizei_(isize, eqryi);
-    cleard_(dsize, eqryd);
-    s_copy(eqryc, " ", eqryc_len, (ftnlen)1);
+    ssizei_(__global_state, isize, eqryi);
+    cleard_(__global_state, dsize, eqryd);
+    s_copy(&__global_state->f2c, eqryc, " ", eqryc_len, (ftnlen)1);
 
 /*     Append enough elements to the integer cell to contain the */
 /*     fixed-size portion of the encoded query: */
 
     for (i__ = 1; i__ <= 19; ++i__) {
-	appndi_(&__state->c__0, eqryi);
+	appndi_(__global_state, &__state->c__0, eqryi);
     }
 
 /*     Clear out the fixed-size portion of the integer cell. */
 
-    cleari_(&__state->c__19, &eqryi[6]);
+    cleari_(__global_state, &__state->c__19, &eqryi[6]);
 
 /*     Fill in the architecture version. */
 
@@ -761,7 +762,7 @@ static zzekqini_state_t* get_zzekqini_state() {
 
 /*     Set the buffer sizes: */
 
-    eqryi[20] = i_len(eqryc, eqryc_len);
+    eqryi[20] = i_len(&__global_state->f2c, eqryc, eqryc_len);
     eqryi[18] = *dsize;
 
 /*     Set the free pointers: */
@@ -772,7 +773,7 @@ static zzekqini_state_t* get_zzekqini_state() {
 /*     Indicate that initialization has been done: */
 
     eqryi[8] = 1;
-    chkout_("ZZEKQINI", (ftnlen)8);
+    chkout_(__global_state, "ZZEKQINI", (ftnlen)8);
     return 0;
 } /* zzekqini_ */
 

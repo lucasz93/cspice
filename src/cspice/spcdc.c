@@ -8,31 +8,30 @@
 
 
 typedef int spcdc_state_t;
-static spcdc_state_t* get_spcdc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spcdc_state_t* get_spcdc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure SPCDC ( SPK and CK, delete comments ) */
-/* Subroutine */ int spcdc_(integer *handle)
+/* Subroutine */ int spcdc_(cspice_t* __global_state, integer *handle)
 {
     integer free;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer bward;
     integer fward;
     integer nd;
     integer ni;
     char ifname[60];
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int dafrrr_(integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafrrr_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer nrr;
 
 
     /* Module state */
-    spcdc_state_t* __state = get_spcdc_state();
+    spcdc_state_t* __state = get_spcdc_state(__global_state);
 /* $ Abstract */
 
 /*     Empty the comment area of a binary SPK or CK file. */
@@ -207,10 +206,10 @@ static spcdc_state_t* get_spcdc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPCDC", (ftnlen)5);
+	chkin_(__global_state, "SPCDC", (ftnlen)5);
     }
 
 /*     The comment area IS the reserved records.  To empty the comment */
@@ -222,13 +221,14 @@ static spcdc_state_t* get_spcdc_state() {
 /*     is the record number of that first summary record, and NRR is */
 /*     the number of reserved records in the file. */
 
-    dafrfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
+    dafrfr_(__global_state, handle, &nd, &ni, ifname, &fward, &bward, &free, (
+	    ftnlen)60);
     nrr = fward - 2;
 
 /*     Once we know how many there are, we can remove them. */
 
-    dafrrr_(handle, &nrr);
-    chkout_("SPCDC", (ftnlen)5);
+    dafrrr_(__global_state, handle, &nrr);
+    chkout_(__global_state, "SPCDC", (ftnlen)5);
     return 0;
 } /* spcdc_ */
 

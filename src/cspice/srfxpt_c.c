@@ -946,7 +946,7 @@
    {
       return;
    }
-   chkin_c ( "srfxpt_c" );
+   chkin_c ( naif_state, "srfxpt_c" );
 
    /*
    Check the input string arguments:

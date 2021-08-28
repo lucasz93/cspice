@@ -8,8 +8,7 @@
 
 
 extern spks09_init_t __spks09_init;
-static spks09_state_t* get_spks09_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spks09_state_t* get_spks09_state(cspice_t* state) {
 	if (!state->spks09)
 		state->spks09 = __cspice_allocate_module(sizeof(
 	spks09_state_t), &__spks09_init, sizeof(__spks09_init));
@@ -18,15 +17,15 @@ static spks09_state_t* get_spks09_state() {
 }
 
 /* $Procedure SPKS09 ( S/P Kernel, subset, type 9 ) */
-/* Subroutine */ int spks09_(integer *handle, integer *baddr, integer *eaddr, 
-	doublereal *begin, doublereal *end)
+/* Subroutine */ int spks09_(cspice_t* __global_state, integer *handle, 
+	integer *baddr, integer *eaddr, doublereal *begin, doublereal *end)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
     doublereal data[6];
@@ -34,19 +33,19 @@ static spks09_state_t* get_spks09_state() {
     integer nrec;
     integer ndir;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     integer degree;
     integer offset;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer rec[2];
 
 
     /* Module state */
-    spks09_state_t* __state = get_spks09_state();
+    spks09_state_t* __state = get_spks09_state(__global_state);
 /* $ Abstract */
 
 /*     Extract a subset of the data in an SPK segment of type 9 */
@@ -229,16 +228,16 @@ static spks09_state_t* get_spks09_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKS09", (ftnlen)6);
+	chkin_(__global_state, "SPKS09", (ftnlen)6);
     }
 
 /*     See whether there's any work to do; return immediately if not. */
 
     if (*begin > *end) {
-	chkout_("SPKS09", (ftnlen)6);
+	chkout_(__global_state, "SPKS09", (ftnlen)6);
 	return 0;
     }
 
@@ -246,9 +245,9 @@ static spks09_state_t* get_spks09_state() {
 /*     degree as well. */
 
     i__1 = *eaddr - 1;
-    dafgda_(handle, &i__1, eaddr, data);
-    degree = i_dnnt(data);
-    nrec = i_dnnt(&data[1]);
+    dafgda_(__global_state, handle, &i__1, eaddr, data);
+    degree = i_dnnt(&__global_state->f2c, data);
+    nrec = i_dnnt(&__global_state->f2c, &data[1]);
 
 /*     From the number of records, we can compute */
 
@@ -267,12 +266,12 @@ static spks09_state_t* get_spks09_state() {
     rec[1] = 1;
     i__1 = offe + rec[1];
     i__2 = offe + rec[1];
-    dafgda_(handle, &i__1, &i__2, data);
+    dafgda_(__global_state, handle, &i__1, &i__2, data);
     while(rec[1] < nrec && data[0] < *end) {
 	++rec[1];
 	i__1 = offe + rec[1];
 	i__2 = offe + rec[1];
-	dafgda_(handle, &i__1, &i__2, data);
+	dafgda_(__global_state, handle, &i__1, &i__2, data);
     }
 
 /*     Make sure that there are DEGREE/2 additional states to the right */
@@ -298,12 +297,12 @@ static spks09_state_t* get_spks09_state() {
     rec[0] = nrec;
     i__1 = offe + rec[0];
     i__2 = offe + rec[0];
-    dafgda_(handle, &i__1, &i__2, data);
+    dafgda_(__global_state, handle, &i__1, &i__2, data);
     while(rec[0] > 1 && data[0] > *begin) {
 	--rec[0];
 	i__1 = offe + rec[0];
 	i__2 = offe + rec[0];
-	dafgda_(handle, &i__1, &i__2, data);
+	dafgda_(__global_state, handle, &i__1, &i__2, data);
     }
 
 /*     Make sure that there are DEGREE/2 additional states to the left */
@@ -328,8 +327,8 @@ static spks09_state_t* get_spks09_state() {
 	offset = *baddr - 1 + (i__ - 1) * 6;
 	i__2 = offset + 1;
 	i__3 = offset + 6;
-	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &__state->c__6);
+	dafgda_(__global_state, handle, &i__2, &i__3, data);
+	dafada_(__global_state, data, &__state->c__6);
     }
 
 /*     Copy epochs REC(1) through REC(2) to the output file. */
@@ -338,8 +337,8 @@ static spks09_state_t* get_spks09_state() {
     for (i__ = rec[0]; i__ <= i__1; ++i__) {
 	i__2 = offe + i__;
 	i__3 = offe + i__;
-	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &__state->c__1);
+	dafgda_(__global_state, handle, &i__2, &i__3, data);
+	dafada_(__global_state, data, &__state->c__1);
     }
 
 /*     Put every 100'th epoch into the directory, except the last */
@@ -349,18 +348,18 @@ static spks09_state_t* get_spks09_state() {
     for (i__ = rec[0] + 99; i__ <= i__1; i__ += 100) {
 	i__2 = offe + i__;
 	i__3 = offe + i__;
-	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &__state->c__1);
+	dafgda_(__global_state, handle, &i__2, &i__3, data);
+	dafada_(__global_state, data, &__state->c__1);
     }
 
 /*     Store the polynomial degree and the number of records */
 /*     to end the segment. */
 
     d__1 = (doublereal) degree;
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
     d__1 = (doublereal) (rec[1] - rec[0] + 1);
-    dafada_(&d__1, &__state->c__1);
-    chkout_("SPKS09", (ftnlen)6);
+    dafada_(__global_state, &d__1, &__state->c__1);
+    chkout_(__global_state, "SPKS09", (ftnlen)6);
     return 0;
 } /* spks09_ */
 

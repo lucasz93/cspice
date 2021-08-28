@@ -8,8 +8,7 @@
 
 
 extern cknm06_init_t __cknm06_init;
-static cknm06_state_t* get_cknm06_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cknm06_state_t* get_cknm06_state(cspice_t* state) {
 	if (!state->cknm06)
 		state->cknm06 = __cspice_allocate_module(sizeof(
 	cknm06_state_t), &__cknm06_init, sizeof(__cknm06_init));
@@ -18,31 +17,31 @@ static cknm06_state_t* get_cknm06_state() {
 }
 
 /* $Procedure CKNM06 ( C-kernel, number of mini-segments, type 06 ) */
-/* Subroutine */ int cknm06_(integer *handle, doublereal *descr, integer *
-	nmini)
+/* Subroutine */ int cknm06_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, integer *nmini)
 {
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal dpdata[1];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    cknm06_state_t* __state = get_cknm06_state();
+    cknm06_state_t* __state = get_cknm06_state(__global_state);
 /* $ Abstract */
 
 /*     Given the handle of a CK file and the descriptor of a type 6 */
@@ -435,10 +434,10 @@ static cknm06_state_t* get_cknm06_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKNM06", (ftnlen)6);
+    chkin_(__global_state, "CKNM06", (ftnlen)6);
 
 /*     The number of discrete pointing instances contained in a data */
 /*     type 6 segment is stored in the last double precision word of the */
@@ -460,28 +459,28 @@ static cknm06_state_t* get_cknm06_state() {
 /*        IC(6)  Final address of segment data */
 
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
 
 /*     If this segment is not of data type 6, then signal an error. */
 
     if (ic[2] != 6) {
-	setmsg_("Data type of the segment should be 6: Passed descriptor sho"
-		"ws type = #.", (ftnlen)71);
-	errint_("#", &ic[2], (ftnlen)1);
-	sigerr_("SPICE(CKWRONGDATATYPE)", (ftnlen)22);
-	chkout_("CKNM06", (ftnlen)6);
+	setmsg_(__global_state, "Data type of the segment should be 6: Passe"
+		"d descriptor shows type = #.", (ftnlen)71);
+	errint_(__global_state, "#", &ic[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CKWRONGDATATYPE)", (ftnlen)22);
+	chkout_(__global_state, "CKNM06", (ftnlen)6);
 	return 0;
     }
 
 /*     The number of mini-segments is the final word in the segment. */
 
-    dafgda_(handle, &ic[5], &ic[5], dpdata);
-    if (failed_()) {
-	chkout_("CKNM06", (ftnlen)6);
+    dafgda_(__global_state, handle, &ic[5], &ic[5], dpdata);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKNM06", (ftnlen)6);
 	return 0;
     }
-    *nmini = i_dnnt(dpdata);
-    chkout_("CKNM06", (ftnlen)6);
+    *nmini = i_dnnt(&__global_state->f2c, dpdata);
+    chkout_(__global_state, "CKNM06", (ftnlen)6);
     return 0;
 } /* cknm06_ */
 

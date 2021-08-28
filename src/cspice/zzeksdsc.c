@@ -8,29 +8,28 @@
 
 
 typedef int zzeksdsc_state_t;
-static zzeksdsc_state_t* get_zzeksdsc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzeksdsc_state_t* get_zzeksdsc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKSDSC ( EK, get segment descriptor ) */
-/* Subroutine */ int zzeksdsc_(integer *handle, integer *segno, integer *
-	segdsc)
+/* Subroutine */ int zzeksdsc_(cspice_t* __global_state, integer *handle, 
+	integer *segno, integer *segdsc)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
-    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekmloc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer mbase;
     integer mp;
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
 
 
     /* Module state */
-    zzeksdsc_state_t* __state = get_zzeksdsc_state();
+    zzeksdsc_state_t* __state = get_zzeksdsc_state(__global_state);
 /* $ Abstract */
 
 /*     Look up the descriptor of a specified EK segment. */
@@ -253,10 +252,10 @@ static zzeksdsc_state_t* get_zzeksdsc_state() {
 
 /*     Use discovery check-in. */
 
-    zzekmloc_(handle, segno, &mp, &mbase);
+    zzekmloc_(__global_state, handle, segno, &mp, &mbase);
     i__1 = mbase + 1;
     i__2 = mbase + 24;
-    dasrdi_(handle, &i__1, &i__2, segdsc);
+    dasrdi_(__global_state, handle, &i__1, &i__2, segdsc);
     return 0;
 } /* zzeksdsc_ */
 

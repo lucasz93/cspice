@@ -8,32 +8,33 @@
 
 
 typedef int zzekslnk_state_t;
-static zzekslnk_state_t* get_zzekslnk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekslnk_state_t* get_zzekslnk_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKSLNK ( EK, set link count for data page ) */
-/* Subroutine */ int zzekslnk_(integer *handle, integer *type__, integer *p, 
-	integer *nlinks)
+/* Subroutine */ int zzekslnk_(cspice_t* __global_state, integer *handle, 
+	integer *type__, integer *p, integer *nlinks)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     integer base;
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
-    doublereal dplnk;
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasudd_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekpgbs_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzeksei_(integer *, integer *, integer *);
+    doublereal dplnk;
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasudd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzeksei_(cspice_t*, integer *, integer *, 
+	    integer *);
 
 
     /* Module state */
-    zzekslnk_state_t* __state = get_zzekslnk_state();
+    zzekslnk_state_t* __state = get_zzekslnk_state(__global_state);
 /* $ Abstract */
 
 /*     Set the link count for a specified EK data page. */
@@ -440,8 +441,8 @@ static zzekslnk_state_t* get_zzekslnk_state() {
 
 /*     Look up the base address of the page. */
 
-    zzekpgbs_(type__, p, &base);
-    if (failed_()) {
+    zzekpgbs_(__global_state, type__, p, &base);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (*type__ == 1) {
@@ -449,7 +450,7 @@ static zzekslnk_state_t* get_zzekslnk_state() {
 /*        Set the encoded count. */
 
 	i__1 = base + 1020;
-	zzeksei_(handle, &i__1, nlinks);
+	zzeksei_(__global_state, handle, &i__1, nlinks);
     } else if (*type__ == 2) {
 
 /*        Convert the input count to d.p. type. */
@@ -457,7 +458,7 @@ static zzekslnk_state_t* get_zzekslnk_state() {
 	dplnk = (doublereal) (*nlinks);
 	i__1 = base + 128;
 	i__2 = base + 128;
-	dasudd_(handle, &i__1, &i__2, &dplnk);
+	dasudd_(__global_state, handle, &i__1, &i__2, &dplnk);
     } else {
 
 /*        The remaining possibility is that TYPE is INT.  If we had had */
@@ -465,7 +466,7 @@ static zzekslnk_state_t* get_zzekslnk_state() {
 
 	i__1 = base + 256;
 	i__2 = base + 256;
-	dasudi_(handle, &i__1, &i__2, nlinks);
+	dasudi_(__global_state, handle, &i__1, &i__2, nlinks);
     }
     return 0;
 } /* zzekslnk_ */

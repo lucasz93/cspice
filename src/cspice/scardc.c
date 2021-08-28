@@ -8,27 +8,27 @@
 
 
 typedef int scardc_state_t;
-static scardc_state_t* get_scardc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline scardc_state_t* get_scardc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SCARDC ( Set the cardinality of a character cell ) */
-/* Subroutine */ int scardc_(integer *card, char *cell, ftnlen cell_len)
+/* Subroutine */ int scardc_(cspice_t* __global_state, integer *card, char *
+	cell, ftnlen cell_len)
 {
     integer size;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dechar_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int enchar_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dechar_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int enchar_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    scardc_state_t* __state = get_scardc_state();
+    scardc_state_t* __state = get_scardc_state(__global_state);
 /* $ Abstract */
 
 /*      Set the cardinality of a character cell. */
@@ -203,29 +203,29 @@ static scardc_state_t* get_scardc_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCARDC", (ftnlen)6);
+	chkin_(__global_state, "SCARDC", (ftnlen)6);
     }
 
 /*     The cardinality may range from 0 to the size of the cell, */
 /*     inclusive.  Other values will be snubbed. */
 
-    dechar_(cell + (cell_len << 2), &size, cell_len);
+    dechar_(__global_state, cell + (cell_len << 2), &size, cell_len);
     if (*card < 0 || *card > size) {
-	setmsg_("Attempt to set cardinality of cell to invalid value.  The v"
-		"alue was #.", (ftnlen)70);
-	errint_("#", card, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCARDINALITY)", (ftnlen)25);
-	chkout_("SCARDC", (ftnlen)6);
+	setmsg_(__global_state, "Attempt to set cardinality of cell to inval"
+		"id value.  The value was #.", (ftnlen)70);
+	errint_(__global_state, "#", card, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCARDINALITY)", (ftnlen)25);
+	chkout_(__global_state, "SCARDC", (ftnlen)6);
 	return 0;
     }
 
 /*     Not much to this. */
 
-    enchar_(card, cell + cell_len * 5, cell_len);
-    chkout_("SCARDC", (ftnlen)6);
+    enchar_(__global_state, card, cell + cell_len * 5, cell_len);
+    chkout_(__global_state, "SCARDC", (ftnlen)6);
     return 0;
 } /* scardc_ */
 

@@ -363,7 +363,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkw03_c" );
+   chkin_c ( naif_state, "spkw03_c" );
    
 
    /*

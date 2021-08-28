@@ -8,8 +8,7 @@
 
 
 extern zzbquad_init_t __zzbquad_init;
-static zzbquad_state_t* get_zzbquad_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzbquad_state_t* get_zzbquad_state(cspice_t* state) {
 	if (!state->zzbquad)
 		state->zzbquad = __cspice_allocate_module(sizeof(
 	zzbquad_state_t), &__zzbquad_init, sizeof(__zzbquad_init));
@@ -18,9 +17,9 @@ static zzbquad_state_t* get_zzbquad_state() {
 }
 
 /* $Procedure  ZZBQUAD ( Solve quadratic equation with bounds ) */
-/* Subroutine */ int zzbquad_(doublereal *a, doublereal *b, doublereal *c__, 
-	doublereal *ub, integer *n, integer *nx, doublereal *r1, doublereal *
-	r2)
+/* Subroutine */ int zzbquad_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *c__, doublereal *ub, integer *n, integer *
+	nx, doublereal *r1, doublereal *r2)
 {
     /* Initialized data */
 
@@ -29,26 +28,27 @@ static zzbquad_state_t* get_zzbquad_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal denom;
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal dscrim;
-    extern doublereal touchd_(doublereal *);
+    extern doublereal touchd_(cspice_t*, doublereal *);
     doublereal sqdisc;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal num1;
     doublereal num2;
 
 
     /* Module state */
-    zzbquad_state_t* __state = get_zzbquad_state();
+    zzbquad_state_t* __state = get_zzbquad_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -236,11 +236,12 @@ static zzbquad_state_t* get_zzbquad_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
     if (__state->first) {
-	__state->big = sqrt(dpmax_()) / 100;
+	__state->big = sqrt(&__global_state->f2c, dpmax_(__global_state)) / 
+		100;
 	__state->first = FALSE_;
     }
 
@@ -255,39 +256,40 @@ static zzbquad_state_t* get_zzbquad_state() {
 
     if (abs(*a) > __state->big || abs(*b) > __state->big || abs(*c__) > 
 	    __state->big) {
-	chkin_("ZZBQUAD", (ftnlen)7);
-	setmsg_("Coefficients must have magnitude less than or equal to #, b"
-		"ut were A = #; B = #; C = #.", (ftnlen)87);
-	errdp_("#", &__state->big, (ftnlen)1);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZBQUAD", (ftnlen)7);
+	chkin_(__global_state, "ZZBQUAD", (ftnlen)7);
+	setmsg_(__global_state, "Coefficients must have magnitude less than "
+		"or equal to #, but were A = #; B = #; C = #.", (ftnlen)87);
+	errdp_(__global_state, "#", &__state->big, (ftnlen)1);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZBQUAD", (ftnlen)7);
 	return 0;
     }
 
 /*     Reject large magnitude upper bounds as well. */
 
     if (abs(*ub) > __state->big) {
-	chkin_("ZZBQUAD", (ftnlen)7);
-	setmsg_("Upper bounds must have magnitude less than or equal to #, b"
-		"ut was #.", (ftnlen)68);
-	errdp_("#", &__state->big, (ftnlen)1);
-	errdp_("#", ub, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZBQUAD", (ftnlen)7);
+	chkin_(__global_state, "ZZBQUAD", (ftnlen)7);
+	setmsg_(__global_state, "Upper bounds must have magnitude less than "
+		"or equal to #, but was #.", (ftnlen)68);
+	errdp_(__global_state, "#", &__state->big, (ftnlen)1);
+	errdp_(__global_state, "#", ub, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZBQUAD", (ftnlen)7);
 	return 0;
     }
 
 /*     The upper bound must be positive. */
 
     if (*ub <= 0.) {
-	chkin_("ZZBQUAD", (ftnlen)7);
-	setmsg_("Upper bound must be positive but was #.", (ftnlen)39);
-	errdp_("#", ub, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZBQUAD", (ftnlen)7);
+	chkin_(__global_state, "ZZBQUAD", (ftnlen)7);
+	setmsg_(__global_state, "Upper bound must be positive but was #.", (
+		ftnlen)39);
+	errdp_(__global_state, "#", ub, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZBQUAD", (ftnlen)7);
 	return 0;
     }
 
@@ -342,7 +344,7 @@ static zzbquad_state_t* get_zzbquad_state() {
 /*        check we've already performed. */
 
 	d__1 = *b * *b - *a * 4 * *c__;
-	dscrim = touchd_(&d__1);
+	dscrim = touchd_(__global_state, &d__1);
 	if (dscrim < 0.) {
 
 /*           We have complex roots, so we're done. */
@@ -380,7 +382,7 @@ static zzbquad_state_t* get_zzbquad_state() {
 /*           on the relative magnitudes of A and DSCRIM. */
 
 	    denom = *a * 2;
-	    sqdisc = sqrt(dscrim);
+	    sqdisc = sqrt(&__global_state->f2c, dscrim);
 	    if (*b > 0.) {
 		num2 = -(*b) - sqdisc;
 		num1 = -(*b) + sqdisc;

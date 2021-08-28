@@ -8,8 +8,7 @@
 
 
 extern zzftpstr_init_t __zzftpstr_init;
-static zzftpstr_state_t* get_zzftpstr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzftpstr_state_t* get_zzftpstr_state(cspice_t* state) {
 	if (!state->zzftpstr)
 		state->zzftpstr = __cspice_allocate_module(sizeof(
 	zzftpstr_state_t), &__zzftpstr_init, sizeof(__zzftpstr_init));
@@ -18,9 +17,9 @@ static zzftpstr_state_t* get_zzftpstr_state() {
 }
 
 /* $Procedure ZZFTPSTR ( Private --- Fetch FTP Validation String ) */
-/* Subroutine */ int zzftpstr_(char *tstcom, char *lend, char *rend, char *
-	delim, ftnlen tstcom_len, ftnlen lend_len, ftnlen rend_len, ftnlen 
-	delim_len)
+/* Subroutine */ int zzftpstr_(cspice_t* __global_state, char *tstcom, char *
+	lend, char *rend, char *delim, ftnlen tstcom_len, ftnlen lend_len, 
+	ftnlen rend_len, ftnlen delim_len)
 {
     /* Initialized data */
 
@@ -30,9 +29,10 @@ static zzftpstr_state_t* get_zzftpstr_state() {
     integer i__1[3], i__2[2], i__3;
 
     /* Builtin functions */
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen),
-	     s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen), s_copy(f2c_state_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     char asc000[1];
@@ -42,13 +42,13 @@ static zzftpstr_state_t* get_zzftpstr_state() {
     char asc206[1];
     char asc129[1];
     integer i__;
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
     char testsq[5*6];
 
 
     /* Module state */
-    zzftpstr_state_t* __state = get_zzftpstr_state();
+    zzftpstr_state_t* __state = get_zzftpstr_state(__global_state);
 /* $ Abstract */
 
 /*    Retrieve the components of the FTP validation string. */
@@ -399,14 +399,16 @@ static zzftpstr_state_t* get_zzftpstr_state() {
 	i__1[0] = 1, a__1[0] = __state->locdlm;
 	i__1[1] = 1, a__1[1] = asc013;
 	i__1[2] = 1, a__1[2] = __state->locdlm;
-	s_cat(testsq, a__1, i__1, &__state->c__3, (ftnlen)5);
+	s_cat(&__global_state->f2c, testsq, a__1, i__1, &__state->c__3, (
+		ftnlen)5);
 
 /*        Cluster #2 : <LF> - <10> - Unix Line Terminator */
 
 /* Writing concatenation */
 	i__2[0] = 1, a__2[0] = asc010;
 	i__2[1] = 1, a__2[1] = __state->locdlm;
-	s_cat(testsq + 5, a__2, i__2, &__state->c__2, (ftnlen)5);
+	s_cat(&__global_state->f2c, testsq + 5, a__2, i__2, &__state->c__2, (
+		ftnlen)5);
 
 /*        Cluster #3 : <CR><LF> - <10><13> - Microsoft Line Terminator */
 
@@ -414,7 +416,8 @@ static zzftpstr_state_t* get_zzftpstr_state() {
 	i__1[0] = 1, a__1[0] = asc013;
 	i__1[1] = 1, a__1[1] = asc010;
 	i__1[2] = 1, a__1[2] = __state->locdlm;
-	s_cat(testsq + 10, a__1, i__1, &__state->c__3, (ftnlen)5);
+	s_cat(&__global_state->f2c, testsq + 10, a__1, i__1, &__state->c__3, (
+		ftnlen)5);
 
 /*        Cluster #4 : <13><0> */
 
@@ -422,14 +425,16 @@ static zzftpstr_state_t* get_zzftpstr_state() {
 	i__1[0] = 1, a__1[0] = asc013;
 	i__1[1] = 1, a__1[1] = asc000;
 	i__1[2] = 1, a__1[2] = __state->locdlm;
-	s_cat(testsq + 15, a__1, i__1, &__state->c__3, (ftnlen)5);
+	s_cat(&__global_state->f2c, testsq + 15, a__1, i__1, &__state->c__3, (
+		ftnlen)5);
 
 /*        Cluster #5 : <129> - Macintosh Permutation of Parity Codes */
 
 /* Writing concatenation */
 	i__2[0] = 1, a__2[0] = asc129;
 	i__2[1] = 1, a__2[1] = __state->locdlm;
-	s_cat(testsq + 20, a__2, i__2, &__state->c__2, (ftnlen)5);
+	s_cat(&__global_state->f2c, testsq + 20, a__2, i__2, &__state->c__2, (
+		ftnlen)5);
 
 /*        Cluster #6 : <16><206> */
 
@@ -437,7 +442,8 @@ static zzftpstr_state_t* get_zzftpstr_state() {
 	i__1[0] = 1, a__1[0] = asc016;
 	i__1[1] = 1, a__1[1] = asc206;
 	i__1[2] = 1, a__1[2] = __state->locdlm;
-	s_cat(testsq + 25, a__1, i__1, &__state->c__3, (ftnlen)5);
+	s_cat(&__global_state->f2c, testsq + 25, a__1, i__1, &__state->c__3, (
+		ftnlen)5);
 
 /*        Sample cluster addition code follows */
 
@@ -449,15 +455,17 @@ static zzftpstr_state_t* get_zzftpstr_state() {
 /*        Now build the local copy of TSTCOM, LOCSTR. First clear the */
 /*        uninitialized contents. */
 
-	s_copy(__state->locstr, " ", (ftnlen)16, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->locstr, " ", (ftnlen)16, (
+		ftnlen)1);
 	for (i__ = 1; i__ <= 6; ++i__) {
 
 /*           Append TESTSQ(I) to LOCSTR to properly construct the */
 /*           test component of the FTP validation string. */
 
-	    suffix_(testsq + ((i__3 = i__ - 1) < 6 && 0 <= i__3 ? i__3 : 
-		    s_rnge("testsq", i__3, "zzftpstr_", (ftnlen)399)) * 5, &
-		    __state->c__0, __state->locstr, (ftnlen)5, (ftnlen)16);
+	    suffix_(__global_state, testsq + ((i__3 = i__ - 1) < 6 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "testsq", i__3,
+		     "zzftpstr_", (ftnlen)399)) * 5, &__state->c__0, 
+		    __state->locstr, (ftnlen)5, (ftnlen)16);
 	}
 
 /*        Prevent execution of this initialization code after first pass. */
@@ -468,10 +476,12 @@ static zzftpstr_state_t* get_zzftpstr_state() {
 /*     Copy the local copies of the FTP string components to the */
 /*     arguments passed in from the caller. */
 
-    s_copy(tstcom, __state->locstr, tstcom_len, (ftnlen)16);
-    s_copy(lend, __state->loclnd, lend_len, (ftnlen)6);
-    s_copy(rend, __state->locrnd, rend_len, (ftnlen)6);
-    s_copy(delim, __state->locdlm, delim_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, tstcom, __state->locstr, tstcom_len, (ftnlen)
+	    16);
+    s_copy(&__global_state->f2c, lend, __state->loclnd, lend_len, (ftnlen)6);
+    s_copy(&__global_state->f2c, rend, __state->locrnd, rend_len, (ftnlen)6);
+    s_copy(&__global_state->f2c, delim, __state->locdlm, delim_len, (ftnlen)1)
+	    ;
     return 0;
 } /* zzftpstr_ */
 

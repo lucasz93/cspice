@@ -8,13 +8,13 @@
 
 
 typedef int reordl_state_t;
-static reordl_state_t* get_reordl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline reordl_state_t* get_reordl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      REORDL ( Reorder a logical array ) */
-/* Subroutine */ int reordl_(integer *iorder, integer *ndim, logical *array)
+/* Subroutine */ int reordl_(cspice_t* __global_state, integer *iorder, 
+	integer *ndim, logical *array)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -27,7 +27,7 @@ static reordl_state_t* get_reordl_state() {
 
 
     /* Module state */
-    reordl_state_t* __state = get_reordl_state();
+    reordl_state_t* __state = get_reordl_state(__global_state);
 /* $ Abstract */
 
 /*      Re-order the elements of a logical array according to */

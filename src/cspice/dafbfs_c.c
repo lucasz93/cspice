@@ -383,7 +383,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafbfs_c" );
+   chkin_c ( naif_state, "dafbfs_c" );
 
 
    dafbfs_ ( ( integer * ) &handle );

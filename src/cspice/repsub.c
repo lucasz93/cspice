@@ -8,8 +8,7 @@
 
 
 extern repsub_init_t __repsub_init;
-static repsub_state_t* get_repsub_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline repsub_state_t* get_repsub_state(cspice_t* state) {
 	if (!state->repsub)
 		state->repsub = __cspice_allocate_module(sizeof(
 	repsub_state_t), &__repsub_init, sizeof(__repsub_init));
@@ -18,36 +17,37 @@ static repsub_state_t* get_repsub_state() {
 }
 
 /* $Procedure      REPSUB ( Replace one substring with another ) */
-/* Subroutine */ int repsub_(char *in, integer *left, integer *right, char *
-	string, char *out, ftnlen in_len, ftnlen string_len, ftnlen out_len)
+/* Subroutine */ int repsub_(cspice_t* __global_state, char *in, integer *
+	left, integer *right, char *string, char *out, ftnlen in_len, ftnlen 
+	string_len, ftnlen out_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer next;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer inlen;
-    extern integer sumai_(integer *, integer *);
+    extern integer sumai_(cspice_t*, integer *, integer *);
     integer remain;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer strlen;
     integer outlen;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer end;
     integer use[3];
 
 
     /* Module state */
-    repsub_state_t* __state = get_repsub_state();
+    repsub_state_t* __state = get_repsub_state(__global_state);
 /* $ Abstract */
 
 /*     Replace the substring (LEFT:RIGHT) with a string of any length. */
@@ -234,42 +234,42 @@ static repsub_state_t* get_repsub_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("REPSUB", (ftnlen)6);
+	chkin_(__global_state, "REPSUB", (ftnlen)6);
     }
 
 /*     Get the lengths of all the strings involved in this transaction. */
 
-    inlen = i_len(in, in_len);
-    strlen = i_len(string, string_len);
-    outlen = i_len(out, out_len);
+    inlen = i_len(&__global_state->f2c, in, in_len);
+    strlen = i_len(&__global_state->f2c, string, string_len);
+    outlen = i_len(&__global_state->f2c, out, out_len);
 
 /*     Reject bad inputs. */
 
     if (*left < 1) {
-	setmsg_("REPSUB error: LEFT (#) must not be less than 1.", (ftnlen)47)
-		;
-	errint_("#", left, (ftnlen)1);
-	sigerr_("SPICE(BEFOREBEGSTR)", (ftnlen)19);
-	chkout_("REPSUB", (ftnlen)6);
+	setmsg_(__global_state, "REPSUB error: LEFT (#) must not be less tha"
+		"n 1.", (ftnlen)47);
+	errint_(__global_state, "#", left, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BEFOREBEGSTR)", (ftnlen)19);
+	chkout_(__global_state, "REPSUB", (ftnlen)6);
 	return 0;
     } else if (*right > inlen) {
-	setmsg_("REPSUB error: RIGHT (#) must not exceed length of IN (#).", (
-		ftnlen)57);
-	errint_("#", right, (ftnlen)1);
-	errint_("#", &inlen, (ftnlen)1);
-	sigerr_("SPICE(PASTENDSTR)", (ftnlen)17);
-	chkout_("REPSUB", (ftnlen)6);
+	setmsg_(__global_state, "REPSUB error: RIGHT (#) must not exceed len"
+		"gth of IN (#).", (ftnlen)57);
+	errint_(__global_state, "#", right, (ftnlen)1);
+	errint_(__global_state, "#", &inlen, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(PASTENDSTR)", (ftnlen)17);
+	chkout_(__global_state, "REPSUB", (ftnlen)6);
 	return 0;
     } else if (*right < *left - 1) {
-	setmsg_("REPSUB error: LEFT (#) must not exceed RIGHT+1 (# + 1). ", (
-		ftnlen)56);
-	errint_("#", left, (ftnlen)1);
-	errint_("#", right, (ftnlen)1);
-	sigerr_("SPICE(BADSUBSTR)", (ftnlen)16);
-	chkout_("REPSUB", (ftnlen)6);
+	setmsg_(__global_state, "REPSUB error: LEFT (#) must not exceed RIGH"
+		"T+1 (# + 1). ", (ftnlen)56);
+	errint_(__global_state, "#", left, (ftnlen)1);
+	errint_(__global_state, "#", right, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSUBSTR)", (ftnlen)16);
+	chkout_(__global_state, "REPSUB", (ftnlen)6);
 	return 0;
     }
 
@@ -301,13 +301,13 @@ static repsub_state_t* get_repsub_state() {
 /*     is longer than the original substring. The main thing is to */
 /*     avoid overwriting characters that have yet to be moved. */
 
-    end = sumai_(use, &__state->c__3);
+    end = sumai_(__global_state, use, &__state->c__3);
     if (*left + strlen > *right) {
 	next = end;
 	for (i__ = use[2]; i__ >= 1; --i__) {
 	    i__1 = *right + i__ - 1;
-	    s_copy(out + (next - 1), in + i__1, (ftnlen)1, *right + i__ - 
-		    i__1);
+	    s_copy(&__global_state->f2c, out + (next - 1), in + i__1, (ftnlen)
+		    1, *right + i__ - i__1);
 	    --next;
 	}
     } else {
@@ -315,8 +315,8 @@ static repsub_state_t* get_repsub_state() {
 	i__1 = use[2];
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    i__2 = *right + i__ - 1;
-	    s_copy(out + (next - 1), in + i__2, (ftnlen)1, *right + i__ - 
-		    i__2);
+	    s_copy(&__global_state->f2c, out + (next - 1), in + i__2, (ftnlen)
+		    1, *right + i__ - i__2);
 	    ++next;
 	}
     }
@@ -340,9 +340,10 @@ static repsub_state_t* get_repsub_state() {
 
     if (end < outlen) {
 	i__1 = end;
-	s_copy(out + i__1, " ", out_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, out + i__1, " ", out_len - i__1, (ftnlen)
+		1);
     }
-    chkout_("REPSUB", (ftnlen)6);
+    chkout_(__global_state, "REPSUB", (ftnlen)6);
     return 0;
 } /* repsub_ */
 

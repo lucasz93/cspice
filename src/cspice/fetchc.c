@@ -8,29 +8,29 @@
 
 
 typedef int fetchc_state_t;
-static fetchc_state_t* get_fetchc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline fetchc_state_t* get_fetchc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            FETCHC ( Fetch from a character set ) */
-integer fetchc_(integer *nth, char *set, ftnlen set_len)
+integer fetchc_(cspice_t* __global_state, integer *nth, char *set, ftnlen 
+	set_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Local variables */
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    fetchc_state_t* __state = get_fetchc_state();
+    fetchc_state_t* __state = get_fetchc_state(__global_state);
 /* $ Abstract */
 
 /*      Returns the location within the set array of the NTH element */
@@ -208,20 +208,21 @@ integer fetchc_(integer *nth, char *set, ftnlen set_len)
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0;
 	return ret_val;
     } else {
-	chkin_("FETCHC", (ftnlen)6);
+	chkin_(__global_state, "FETCHC", (ftnlen)6);
     }
 
 /*     Check to see if the N'TH element exists. */
 
-    if (*nth < 1 || *nth > cardc_(set, set_len)) {
+    if (*nth < 1 || *nth > cardc_(__global_state, set, set_len)) {
 	ret_val = 0;
-	setmsg_("NTH element does not exist. NTH was *.", (ftnlen)38);
-	errint_("*", nth, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
+	setmsg_(__global_state, "NTH element does not exist. NTH was *.", (
+		ftnlen)38);
+	errint_(__global_state, "*", nth, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
 
 /*     The great secret is that, for now, sets really are maintained */
 /*     in order, for reasons of efficiency. */
@@ -229,7 +230,7 @@ integer fetchc_(integer *nth, char *set, ftnlen set_len)
     } else {
 	ret_val = *nth;
     }
-    chkout_("FETCHC", (ftnlen)6);
+    chkout_(__global_state, "FETCHC", (ftnlen)6);
     return ret_val;
 } /* fetchc_ */
 

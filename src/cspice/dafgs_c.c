@@ -397,7 +397,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafgs_c" );
+   chkin_c ( naif_state, "dafgs_c" );
 
 
    dafgs_ ( ( doublereal * ) sum );

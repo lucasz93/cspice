@@ -8,30 +8,29 @@
 
 
 typedef int wncard_state_t;
-static wncard_state_t* get_wncard_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wncard_state_t* get_wncard_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure WNCARD ( Cardinality of a double precision window ) */
-integer wncard_(doublereal *window)
+integer wncard_(cspice_t* __global_state, doublereal *window)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Local variables */
-    extern logical even_(integer *);
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern logical even_(cspice_t*, integer *);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    wncard_state_t* __state = get_wncard_state();
+    wncard_state_t* __state = get_wncard_state(__global_state);
 /* $ Abstract */
 
 /*     Return the cardinality (number of intervals) of a double */
@@ -183,22 +182,22 @@ integer wncard_(doublereal *window)
 
 /*     SPICELIB functions */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0;
 	return ret_val;
     } else {
-	chkin_("WNCARD", (ftnlen)6);
+	chkin_(__global_state, "WNCARD", (ftnlen)6);
     }
-    ret_val = cardd_(window);
+    ret_val = cardd_(__global_state, window);
 
 /*     Confirm the cardinality as an even integer. */
 
-    if (! even_(&ret_val)) {
-	setmsg_("Invalid window size, a window should have an even number of"
-		" elements. The size was #.", (ftnlen)85);
-	errint_("#", &ret_val, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("WNCARD", (ftnlen)6);
+    if (! even_(__global_state, &ret_val)) {
+	setmsg_(__global_state, "Invalid window size, a window should have a"
+		"n even number of elements. The size was #.", (ftnlen)85);
+	errint_(__global_state, "#", &ret_val, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "WNCARD", (ftnlen)6);
 	ret_val = 0;
 	return ret_val;
     }
@@ -208,7 +207,7 @@ integer wncard_(doublereal *window)
 /*     cardinality value. */
 
     ret_val /= 2;
-    chkout_("WNCARD", (ftnlen)6);
+    chkout_(__global_state, "WNCARD", (ftnlen)6);
     return ret_val;
 } /* wncard_ */
 

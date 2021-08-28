@@ -8,8 +8,7 @@
 
 
 extern ckmp06_init_t __ckmp06_init;
-static ckmp06_state_t* get_ckmp06_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckmp06_state_t* get_ckmp06_state(cspice_t* state) {
 	if (!state->ckmp06)
 		state->ckmp06 = __cspice_allocate_module(sizeof(
 	ckmp06_state_t), &__ckmp06_init, sizeof(__ckmp06_init));
@@ -18,45 +17,46 @@ static ckmp06_state_t* get_ckmp06_state() {
 }
 
 /* $Procedure CKMP06 ( C-kernel, get mini-segment parameters, type 06 ) */
-/* Subroutine */ int ckmp06_(integer *handle, doublereal *descr, integer *
-	msno, doublereal *rate, integer *subtyp, integer *winsiz, integer *
-	nrec, doublereal *ivlbds, doublereal *lstepc)
+/* Subroutine */ int ckmp06_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, integer *msno, doublereal *rate, integer *subtyp, 
+	integer *winsiz, integer *nrec, doublereal *ivlbds, doublereal *
+	lstepc)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer ndir;
     integer baddr;
     integer eaddr;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer minie;
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal dpdata[1];
     integer epaddr;
     doublereal buffer[4];
     integer ivlbas;
     integer nepdir;
     integer ptrbas;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer nintvl;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ckmp06_state_t* __state = get_ckmp06_state();
+    ckmp06_state_t* __state = get_ckmp06_state(__global_state);
 /* $ Abstract */
 
 /*     Return the mini-segment control parameters, mini-segment interval */
@@ -491,10 +491,10 @@ static ckmp06_state_t* get_ckmp06_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKMP06", (ftnlen)6);
+    chkin_(__global_state, "CKMP06", (ftnlen)6);
 
 /*     The number of discrete pointing instances contained in a data */
 /*     type 6 segment is stored in the last double precision word of the */
@@ -516,16 +516,16 @@ static ckmp06_state_t* get_ckmp06_state() {
 /*        IC(6)  Final address of segment data */
 
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
 
 /*     If this segment is not of data type 6, then signal an error. */
 
     if (ic[2] != 6) {
-	setmsg_("Data type of the segment should be 6: Passed descriptor sho"
-		"ws type = #.", (ftnlen)71);
-	errint_("#", &ic[2], (ftnlen)1);
-	sigerr_("SPICE(CKWRONGDATATYPE)", (ftnlen)22);
-	chkout_("CKMP06", (ftnlen)6);
+	setmsg_(__global_state, "Data type of the segment should be 6: Passe"
+		"d descriptor shows type = #.", (ftnlen)71);
+	errint_(__global_state, "#", &ic[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CKWRONGDATATYPE)", (ftnlen)22);
+	chkout_(__global_state, "CKMP06", (ftnlen)6);
 	return 0;
     }
 
@@ -535,19 +535,19 @@ static ckmp06_state_t* get_ckmp06_state() {
 
     baddr = ic[4];
     eaddr = ic[5];
-    dafgda_(handle, &eaddr, &eaddr, dpdata);
-    if (failed_()) {
-	chkout_("CKMP06", (ftnlen)6);
+    dafgda_(__global_state, handle, &eaddr, &eaddr, dpdata);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKMP06", (ftnlen)6);
 	return 0;
     }
-    nintvl = i_dnnt(dpdata);
+    nintvl = i_dnnt(&__global_state->f2c, dpdata);
     if (*msno < 1 || *msno > nintvl) {
-	setmsg_("Mini-segment index must be in range 1:# but was #.", (ftnlen)
-		50);
-	errint_("#", &nintvl, (ftnlen)1);
-	errint_("#", msno, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("CKMP06", (ftnlen)6);
+	setmsg_(__global_state, "Mini-segment index must be in range 1:# but"
+		" was #.", (ftnlen)50);
+	errint_(__global_state, "#", &nintvl, (ftnlen)1);
+	errint_(__global_state, "#", msno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "CKMP06", (ftnlen)6);
 	return 0;
     }
 
@@ -572,7 +572,7 @@ static ckmp06_state_t* get_ckmp06_state() {
 
     i__1 = ivlbas + *msno;
     i__2 = ivlbas + *msno + 1;
-    dafgda_(handle, &i__1, &i__2, ivlbds);
+    dafgda_(__global_state, handle, &i__1, &i__2, ivlbds);
 
 /*     Compute the mini-segment end pointer as an absolute DAF address. */
 /*     The stored value is a relative address. Begin by looking up the */
@@ -580,33 +580,33 @@ static ckmp06_state_t* get_ckmp06_state() {
 
     i__1 = ptrbas + *msno + 1;
     i__2 = ptrbas + *msno + 1;
-    dafgda_(handle, &i__1, &i__2, buffer);
-    if (failed_()) {
-	chkout_("CKMP06", (ftnlen)6);
+    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKMP06", (ftnlen)6);
 	return 0;
     }
-    minie = baddr - 1 + i_dnnt(buffer) - 1;
+    minie = baddr - 1 + i_dnnt(&__global_state->f2c, buffer) - 1;
 
 /*     Fetch the parameters for the mini-segment. */
 
     i__1 = minie - 3;
-    dafgda_(handle, &i__1, &minie, buffer);
-    if (failed_()) {
-	chkout_("CKMP06", (ftnlen)6);
+    dafgda_(__global_state, handle, &i__1, &minie, buffer);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKMP06", (ftnlen)6);
 	return 0;
     }
     *rate = buffer[0];
-    *subtyp = i_dnnt(&buffer[1]);
-    *winsiz = i_dnnt(&buffer[2]);
-    *nrec = i_dnnt(&buffer[3]);
+    *subtyp = i_dnnt(&__global_state->f2c, &buffer[1]);
+    *winsiz = i_dnnt(&__global_state->f2c, &buffer[2]);
+    *nrec = i_dnnt(&__global_state->f2c, &buffer[3]);
 
 /*     The last epoch of the mini-segment precedes the mini-segment's */
 /*     control area and the epoch directories. */
 
     nepdir = (*nrec - 1) / 100;
     epaddr = minie - 4 - nepdir;
-    dafgda_(handle, &epaddr, &epaddr, lstepc);
-    chkout_("CKMP06", (ftnlen)6);
+    dafgda_(__global_state, handle, &epaddr, &epaddr, lstepc);
+    chkout_(__global_state, "CKMP06", (ftnlen)6);
     return 0;
 } /* ckmp06_ */
 

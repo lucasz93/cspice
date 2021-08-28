@@ -8,8 +8,7 @@
 
 
 extern rdkvar_init_t __rdkvar_init;
-static rdkvar_state_t* get_rdkvar_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rdkvar_state_t* get_rdkvar_state(cspice_t* state) {
 	if (!state->rdkvar)
 		state->rdkvar = __cspice_allocate_module(sizeof(
 	rdkvar_state_t), &__rdkvar_init, sizeof(__rdkvar_init));
@@ -18,51 +17,52 @@ static rdkvar_state_t* get_rdkvar_state() {
 }
 
 /* $Procedure      RDKVAR ( Read the next variable from a kernel file ) */
-/* Subroutine */ int rdkvar_(char *tabsym, integer *tabptr, doublereal *
-	tabval, char *name__, logical *eof, ftnlen tabsym_len, ftnlen 
-	name_len)
+/* Subroutine */ int rdkvar_(cspice_t* __global_state, char *tabsym, integer *
+	tabptr, doublereal *tabval, char *name__, logical *eof, ftnlen 
+	tabsym_len, ftnlen name_len)
 {
     /* System generated locals */
     address a__1[2];
     integer i__1[2];
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
 
     /* Local variables */
     char line[80];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     char error[80];
-    extern logical failed_(void);
-    extern /* Subroutine */ int rdkdat_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int replch_(char *, char *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int rdkdat_(cspice_t*, char *, logical *, ftnlen);
+    extern /* Subroutine */ int replch_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     char cvalue[30];
     doublereal dvalue;
     char varnam[80];
-    extern /* Subroutine */ int sydeld_(char *, char *, integer *, doublereal 
-	    *, ftnlen, ftnlen);
-    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
-	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sydeld_(cspice_t*, char *, char *, integer *, 
+	    doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int nparsd_(cspice_t*, char *, doublereal *, char 
+	    *, integer *, ftnlen, ftnlen);
     char dirctv[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int tparse_(char *, doublereal *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int syenqd_(char *, doublereal *, char *, integer 
-	    *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int tparse_(cspice_t*, char *, doublereal *, char 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int syenqd_(cspice_t*, char *, doublereal *, char 
+	    *, integer *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int nextwd_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
     char status[6];
 
 
     /* Module state */
-    rdkvar_state_t* __state = get_rdkvar_state();
+    rdkvar_state_t* __state = get_rdkvar_state(__global_state);
 /* $ Abstract */
 
 /*     Read the next variable from a SPICE ASCII kernel file into a */
@@ -285,53 +285,58 @@ static rdkvar_state_t* get_rdkvar_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("RDKVAR", (ftnlen)6);
+	chkin_(__global_state, "RDKVAR", (ftnlen)6);
     }
 
 /*     No variable yet. */
 
-    s_copy(name__, " ", name_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, name__, " ", name_len, (ftnlen)1);
 
 /*     No parsing error has occurred yet. */
 
-    s_copy(error, " ", (ftnlen)80, (ftnlen)1);
+    s_copy(&__global_state->f2c, error, " ", (ftnlen)80, (ftnlen)1);
 
 /*     Get the next data line. Unless something is terribly wrong, */
 /*     this will begin a new variable definition. We have to read */
 /*     the whole variable, unless we luck out and get an error, in */
 /*     which case we can quit. */
 
-    s_copy(status, "BEGIN", (ftnlen)6, (ftnlen)5);
-    while(s_cmp(status, "DONE", (ftnlen)6, (ftnlen)4) != 0 && ! failed_()) {
-	rdkdat_(line, eof, (ftnlen)80);
+    s_copy(&__global_state->f2c, status, "BEGIN", (ftnlen)6, (ftnlen)5);
+    while(s_cmp(&__global_state->f2c, status, "DONE", (ftnlen)6, (ftnlen)4) !=
+	     0 && ! failed_(__global_state)) {
+	rdkdat_(__global_state, line, eof, (ftnlen)80);
 	if (*eof) {
-	    chkout_("RDKVAR", (ftnlen)6);
+	    chkout_(__global_state, "RDKVAR", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Replace commas with blanks. We make no distinctions between */
 /*        the two. */
 
-	replch_(line, ",", " ", line, (ftnlen)80, (ftnlen)1, (ftnlen)1, (
-		ftnlen)80);
+	replch_(__global_state, line, ",", " ", line, (ftnlen)80, (ftnlen)1, (
+		ftnlen)1, (ftnlen)80);
 
 /*        The first word on the first line should be the name of a */
 /*        variable. The second word should be a directive: = or +=. */
 
-	if (s_cmp(status, "BEGIN", (ftnlen)6, (ftnlen)5) == 0) {
-	    nextwd_(line, varnam, line, (ftnlen)80, (ftnlen)80, (ftnlen)80);
-	    nextwd_(line, dirctv, line, (ftnlen)80, (ftnlen)3, (ftnlen)80);
+	if (s_cmp(&__global_state->f2c, status, "BEGIN", (ftnlen)6, (ftnlen)5)
+		 == 0) {
+	    nextwd_(__global_state, line, varnam, line, (ftnlen)80, (ftnlen)
+		    80, (ftnlen)80);
+	    nextwd_(__global_state, line, dirctv, line, (ftnlen)80, (ftnlen)3,
+		     (ftnlen)80);
 
 /*           If this is replacement (=) and not an addition (+=), */
 /*           delete the values currently associated with the variable. */
 /*           They will be replaced later. */
 
-	    if (s_cmp(dirctv, "=", (ftnlen)3, (ftnlen)1) == 0) {
-		sydeld_(varnam, tabsym, tabptr, tabval, (ftnlen)80, 
-			tabsym_len);
+	    if (s_cmp(&__global_state->f2c, dirctv, "=", (ftnlen)3, (ftnlen)1)
+		     == 0) {
+		sydeld_(__global_state, varnam, tabsym, tabptr, tabval, (
+			ftnlen)80, tabsym_len);
 	    }
 
 /*           If this is a vector, the next thing on the line will be a */
@@ -340,18 +345,22 @@ static rdkvar_state_t* get_rdkvar_state() {
 /*           plant a bogus right parenthesis, to make the following loop */
 /*           terminate after one iteration. */
 
-	    nextwd_(line, cvalue, line, (ftnlen)80, (ftnlen)30, (ftnlen)80);
-	    if (s_cmp(cvalue, "(", (ftnlen)30, (ftnlen)1) == 0) {
-		nextwd_(line, cvalue, line, (ftnlen)80, (ftnlen)30, (ftnlen)
-			80);
+	    nextwd_(__global_state, line, cvalue, line, (ftnlen)80, (ftnlen)
+		    30, (ftnlen)80);
+	    if (s_cmp(&__global_state->f2c, cvalue, "(", (ftnlen)30, (ftnlen)
+		    1) == 0) {
+		nextwd_(__global_state, line, cvalue, line, (ftnlen)80, (
+			ftnlen)30, (ftnlen)80);
 	    } else {
-		s_copy(line, ")", (ftnlen)80, (ftnlen)1);
+		s_copy(&__global_state->f2c, line, ")", (ftnlen)80, (ftnlen)1)
+			;
 	    }
 
 /*        For subsequent lines, treat everything as a new value. */
 
 	} else {
-	    nextwd_(line, cvalue, line, (ftnlen)80, (ftnlen)30, (ftnlen)80);
+	    nextwd_(__global_state, line, cvalue, line, (ftnlen)80, (ftnlen)
+		    30, (ftnlen)80);
 	}
 
 /*        We have a value anyway. Store it in the table. */
@@ -361,48 +370,61 @@ static rdkvar_state_t* get_rdkvar_state() {
 
 /*        Dates begin with @; anything else is presumed to be a number. */
 
-	while(s_cmp(cvalue, ")", (ftnlen)30, (ftnlen)1) != 0 && s_cmp(cvalue, 
-		" ", (ftnlen)30, (ftnlen)1) != 0) {
+	while(s_cmp(&__global_state->f2c, cvalue, ")", (ftnlen)30, (ftnlen)1) 
+		!= 0 && s_cmp(&__global_state->f2c, cvalue, " ", (ftnlen)30, (
+		ftnlen)1) != 0) {
 	    if (*(unsigned char *)cvalue == '@') {
-		tparse_(cvalue + 1, &dvalue, error, (ftnlen)29, (ftnlen)80);
-		if (s_cmp(error, " ", (ftnlen)80, (ftnlen)1) != 0) {
+		tparse_(__global_state, cvalue + 1, &dvalue, error, (ftnlen)
+			29, (ftnlen)80);
+		if (s_cmp(&__global_state->f2c, error, " ", (ftnlen)80, (
+			ftnlen)1) != 0) {
 /* Writing concatenation */
 		    i__1[0] = 14, a__1[0] = "Encountered : ";
 		    i__1[1] = 29, a__1[1] = cvalue + 1;
-		    s_cat(error, a__1, i__1, &__state->c__2, (ftnlen)80);
-		    setmsg_(error, (ftnlen)80);
-		    sigerr_("SPICE(DATEEXPECTED)", (ftnlen)19);
-		    chkout_("RDKVAR", (ftnlen)6);
+		    s_cat(&__global_state->f2c, error, a__1, i__1, &
+			    __state->c__2, (ftnlen)80);
+		    setmsg_(__global_state, error, (ftnlen)80);
+		    sigerr_(__global_state, "SPICE(DATEEXPECTED)", (ftnlen)19)
+			    ;
+		    chkout_(__global_state, "RDKVAR", (ftnlen)6);
 		    return 0;
 		}
 	    } else {
-		nparsd_(cvalue, &dvalue, error, &i__, (ftnlen)30, (ftnlen)80);
-		if (s_cmp(error, " ", (ftnlen)80, (ftnlen)1) != 0) {
+		nparsd_(__global_state, cvalue, &dvalue, error, &i__, (ftnlen)
+			30, (ftnlen)80);
+		if (s_cmp(&__global_state->f2c, error, " ", (ftnlen)80, (
+			ftnlen)1) != 0) {
 /* Writing concatenation */
 		    i__1[0] = 14, a__1[0] = "Encountered : ";
 		    i__1[1] = 30, a__1[1] = cvalue;
-		    s_cat(error, a__1, i__1, &__state->c__2, (ftnlen)80);
-		    setmsg_(error, (ftnlen)80);
-		    sigerr_("SPICE(NUMBEREXPECTED)", (ftnlen)21);
-		    chkout_("RDKVAR", (ftnlen)6);
+		    s_cat(&__global_state->f2c, error, a__1, i__1, &
+			    __state->c__2, (ftnlen)80);
+		    setmsg_(__global_state, error, (ftnlen)80);
+		    sigerr_(__global_state, "SPICE(NUMBEREXPECTED)", (ftnlen)
+			    21);
+		    chkout_(__global_state, "RDKVAR", (ftnlen)6);
 		    return 0;
 		}
 	    }
-	    syenqd_(varnam, &dvalue, tabsym, tabptr, tabval, (ftnlen)80, 
-		    tabsym_len);
-	    nextwd_(line, cvalue, line, (ftnlen)80, (ftnlen)30, (ftnlen)80);
+	    syenqd_(__global_state, varnam, &dvalue, tabsym, tabptr, tabval, (
+		    ftnlen)80, tabsym_len);
+	    nextwd_(__global_state, line, cvalue, line, (ftnlen)80, (ftnlen)
+		    30, (ftnlen)80);
 	}
-	if (s_cmp(cvalue, ")", (ftnlen)30, (ftnlen)1) == 0) {
-	    s_copy(status, "DONE", (ftnlen)6, (ftnlen)4);
+	if (s_cmp(&__global_state->f2c, cvalue, ")", (ftnlen)30, (ftnlen)1) ==
+		 0) {
+	    s_copy(&__global_state->f2c, status, "DONE", (ftnlen)6, (ftnlen)4)
+		    ;
 	} else {
-	    s_copy(status, "INVAR", (ftnlen)6, (ftnlen)5);
+	    s_copy(&__global_state->f2c, status, "INVAR", (ftnlen)6, (ftnlen)
+		    5);
 	}
     }
 
 /*     Return the name of the variable, but only if everything went okay. */
 
-    s_copy(name__, varnam, name_len, (ftnlen)80);
-    chkout_("RDKVAR", (ftnlen)6);
+    s_copy(&__global_state->f2c, name__, varnam, name_len, (ftnlen)80);
+    chkout_(__global_state, "RDKVAR", (ftnlen)6);
     return 0;
 } /* rdkvar_ */
 

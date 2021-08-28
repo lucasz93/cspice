@@ -8,34 +8,35 @@
 
 
 typedef int syordd_state_t;
-static syordd_state_t* get_syordd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline syordd_state_t* get_syordd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SYORDD ( Order the components of a single symbol ) */
-/* Subroutine */ int syordd_(char *name__, char *tabsym, integer *tabptr, 
-	doublereal *tabval, ftnlen name_len, ftnlen tabsym_len)
+/* Subroutine */ int syordd_(cspice_t* __global_state, char *name__, char *
+	tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen 
+	tabsym_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sumai_(integer *, integer *);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int shelld_(integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int shelld_(cspice_t*, integer *, doublereal *);
     integer locval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer locsym;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    syordd_state_t* __state = get_syordd_state();
+    syordd_state_t* __state = get_syordd_state(__global_state);
 /* $ Abstract */
 
 /*     Order the components of a single symbol in a double precision */
@@ -192,30 +193,30 @@ static syordd_state_t* get_syordd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYORDD", (ftnlen)6);
+	chkin_(__global_state, "SYORDD", (ftnlen)6);
     }
 
 /*     How many symbols? */
 
-    nsym = cardc_(tabsym, tabsym_len);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
 
 /*     Is this symbol even in the table? */
 
-    locsym = bsrchc_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
+    locsym = bsrchc_(__global_state, name__, &nsym, tabsym + tabsym_len * 6, 
+	    name_len, tabsym_len);
 
 /*     If so, sort the components in place. */
 
     if (locsym > 0) {
 	i__1 = locsym - 1;
-	locval = sumai_(&tabptr[6], &i__1) + 1;
+	locval = sumai_(__global_state, &tabptr[6], &i__1) + 1;
 	n = tabptr[locsym + 5];
-	shelld_(&tabptr[locsym + 5], &tabval[locval + 5]);
+	shelld_(__global_state, &tabptr[locsym + 5], &tabval[locval + 5]);
     }
-    chkout_("SYORDD", (ftnlen)6);
+    chkout_(__global_state, "SYORDD", (ftnlen)6);
     return 0;
 } /* syordd_ */
 

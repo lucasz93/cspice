@@ -8,8 +8,7 @@
 
 
 extern zzdsksba_init_t __zzdsksba_init;
-static zzdsksba_state_t* get_zzdsksba_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdsksba_state_t* get_zzdsksba_state(cspice_t* state) {
 	if (!state->zzdsksba)
 		state->zzdsksba = __cspice_allocate_module(sizeof(
 	zzdsksba_state_t), &__zzdsksba_init, sizeof(__zzdsksba_init));
@@ -18,68 +17,72 @@ static zzdsksba_state_t* get_zzdsksba_state() {
 }
 
 /* $Procedure ZZDSKSBA ( DSK, add entry to API segment buffer ) */
-/* Subroutine */ int zzdsksba_(integer *bodyid, integer *maxbod, integer *
-	stsize, integer *btbody, integer *btnbod, integer *btsegp, integer *
-	btstsz, integer *sthan, doublereal *stdscr, integer *stdlad, integer *
-	stfree, doublereal *stoff, doublereal *stctr, doublereal *strad)
+/* Subroutine */ int zzdsksba_(cspice_t* __global_state, integer *bodyid, 
+	integer *maxbod, integer *stsize, integer *btbody, integer *btnbod, 
+	integer *btsegp, integer *btstsz, integer *sthan, doublereal *stdscr, 
+	integer *stdlad, integer *stfree, doublereal *stoff, doublereal *
+	stctr, doublereal *strad)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_cmp(char *, char *, ftnlen, ftnlen);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer nseg;
-    extern /* Subroutine */ int zzdskbdc_();
-    extern /* Subroutine */ int zzdskbbl_(integer *);
-    extern logical zzdsksbd_(integer *);
-    extern /* Subroutine */ int zzsegbox_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int zzdskbdc_(cspice_t*);
+    extern /* Subroutine */ int zzdskbbl_(cspice_t*, integer *);
+    extern logical zzdsksbd_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzsegbox_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *);
+    extern /* Subroutine */ int zzdsksbr_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    doublereal *, integer *, integer *, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int zzdsksbr_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, doublereal 
-	    *, integer *, integer *, doublereal *, doublereal *, doublereal *)
-	    ;
-    extern /* Subroutine */ int zzdskbss_(integer *);
-    extern /* Subroutine */ int zzdsksns_(U_fp, integer *, integer *, 
-	    doublereal *, logical *);
+    extern /* Subroutine */ int zzdskbss_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzdsksns_(cspice_t*, U_fp, integer *, integer 
+	    *, doublereal *, logical *);
     integer i__;
     integer j;
     integer avail;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern logical failed_(cspice_t*);
     doublereal et;
     integer dladsc[8];
     integer handle;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     doublereal lt;
     integer segcld;
     integer segfid;
     logical segfnd;
     char frname[32];
-    extern integer isrchi_(integer *, integer *, integer *);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
     doublereal dskdsc[24];
     integer frmctr;
     integer segcls;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer segctr;
     logical frmfnd;
     logical status;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int spkgps_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int frmnam_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int spkgps_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
 
 
     /* Module state */
-    zzdsksba_state_t* __state = get_zzdsksba_state();
+    zzdsksba_state_t* __state = get_zzdsksba_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -691,51 +694,53 @@ static zzdsksba_state_t* get_zzdsksba_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKSBA", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKSBA", (ftnlen)8);
 
 /*     Check the body table for presence of the new body. It's */
 /*     an error to call this routine for a body that's already */
 /*     present. (Such a call likely indicates the tables were */
 /*     not re-initialized after a BSR state change.) */
 
-    i__ = isrchi_(bodyid, btnbod, btbody);
+    i__ = isrchi_(__global_state, bodyid, btnbod, btbody);
     if (i__ > 0) {
-	setmsg_("Body # is already present in the DSK segment buffer body ta"
-		"ble. The table must be re-initialized before this body can b"
-		"e added.", (ftnlen)127);
-	errint_("#", bodyid, (ftnlen)1);
-	sigerr_("SPICE(INVALIDADD)", (ftnlen)17);
-	chkout_("ZZDSKSBA", (ftnlen)8);
+	setmsg_(__global_state, "Body # is already present in the DSK segmen"
+		"t buffer body table. The table must be re-initialized before"
+		" this body can be added.", (ftnlen)127);
+	errint_(__global_state, "#", bodyid, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDADD)", (ftnlen)17);
+	chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure the BSR segment list for the body is up to */
 /*     date. */
 
-    zzdskbbl_(bodyid);
-    if (failed_()) {
-	chkout_("ZZDSKSBA", (ftnlen)8);
+    zzdskbbl_(__global_state, bodyid);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 	return 0;
     }
 
 /*     Count the segments in the BSR system for the body. */
 
     nseg = 0;
-    status = zzdsksbd_(bodyid);
-    zzdskbss_(bodyid);
-    zzdsksns_((U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &segfnd);
-    if (failed_()) {
-	chkout_("ZZDSKSBA", (ftnlen)8);
+    status = zzdsksbd_(__global_state, bodyid);
+    zzdskbss_(__global_state, bodyid);
+    zzdsksns_(__global_state, (U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &
+	    segfnd);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 	return 0;
     }
     while(segfnd) {
 	++nseg;
-	zzdsksns_((U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &segfnd);
-	if (failed_()) {
-	    chkout_("ZZDSKSBA", (ftnlen)8);
+	zzdsksns_(__global_state, (U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &
+		segfnd);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -747,13 +752,13 @@ static zzdsksba_state_t* get_zzdsksba_state() {
 /*     the value in ZZDSKBSR. */
 
     if (nseg > *stsize) {
-	setmsg_("The number of segments for body # is #; the size STSIZE of "
-		"the input segment table is #.", (ftnlen)88);
-	errint_("#", bodyid, (ftnlen)1);
-	errint_("#", &nseg, (ftnlen)1);
-	errint_("#", stsize, (ftnlen)1);
-	sigerr_("SPICE(SEGMENTTABLEFULL)", (ftnlen)23);
-	chkout_("ZZDSKSBA", (ftnlen)8);
+	setmsg_(__global_state, "The number of segments for body # is #; the"
+		" size STSIZE of the input segment table is #.", (ftnlen)88);
+	errint_(__global_state, "#", bodyid, (ftnlen)1);
+	errint_(__global_state, "#", &nseg, (ftnlen)1);
+	errint_(__global_state, "#", stsize, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(SEGMENTTABLEFULL)", (ftnlen)23);
+	chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 	return 0;
     }
 
@@ -762,10 +767,11 @@ static zzdsksba_state_t* get_zzdsksba_state() {
 
     avail = *stsize - *stfree + 1;
     if (*btnbod == *maxbod || avail < nseg) {
-	zzdsksbr_(&nseg, maxbod, stsize, btbody, btnbod, btsegp, btstsz, 
-		sthan, stdscr, stdlad, stfree, stoff, stctr, strad);
-	if (failed_()) {
-	    chkout_("ZZDSKSBA", (ftnlen)8);
+	zzdsksbr_(__global_state, &nseg, maxbod, stsize, btbody, btnbod, 
+		btsegp, btstsz, sthan, stdscr, stdlad, stfree, stoff, stctr, 
+		strad);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -781,11 +787,12 @@ static zzdsksba_state_t* get_zzdsksba_state() {
 /*     Make a second pass through the BSR segment list, this time */
 /*     accumulating segments in the input segment table as we go. */
 
-    status = zzdsksbd_(bodyid);
-    zzdskbss_(bodyid);
-    zzdsksns_((U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &segfnd);
-    if (failed_()) {
-	chkout_("ZZDSKSBA", (ftnlen)8);
+    status = zzdsksbd_(__global_state, bodyid);
+    zzdskbss_(__global_state, bodyid);
+    zzdsksns_(__global_state, (U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &
+	    segfnd);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 	return 0;
     }
     while(segfnd) {
@@ -794,12 +801,15 @@ static zzdsksba_state_t* get_zzdsksba_state() {
 /*        index STFREE in the segment table. */
 
 	sthan[*stfree - 1] = handle;
-	movei_(dladsc, &__state->c__8, &stdlad[(*stfree << 3) - 8]);
-	moved_(dskdsc, &__state->c__24, &stdscr[*stfree * 24 - 24]);
+	movei_(__global_state, dladsc, &__state->c__8, &stdlad[(*stfree << 3) 
+		- 8]);
+	moved_(__global_state, dskdsc, &__state->c__24, &stdscr[*stfree * 24 
+		- 24]);
 	++(*stfree);
-	zzdsksns_((U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &segfnd);
-	if (failed_()) {
-	    chkout_("ZZDSKSBA", (ftnlen)8);
+	zzdsksns_(__global_state, (U_fp)zzdskbdc_, &handle, dladsc, dskdsc, &
+		segfnd);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -814,22 +824,23 @@ static zzdsksba_state_t* get_zzdsksba_state() {
 /*        for BODYID. */
 
 	j = btsegp[*btnbod - 1] + i__ - 1;
-	zzsegbox_(&stdscr[j * 24 - 24], &stctr[j * 3 - 3], &strad[j - 1]);
-	if (failed_()) {
-	    chkout_("ZZDSKSBA", (ftnlen)8);
+	zzsegbox_(__global_state, &stdscr[j * 24 - 24], &stctr[j * 3 - 3], &
+		strad[j - 1]);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Obtain the center of the frame for the Ith segment. */
 
-	segfid = i_dnnt(&stdscr[j * 24 - 20]);
-	frinfo_(&segfid, &frmctr, &segcls, &segcld, &frmfnd);
+	segfid = i_dnnt(&__global_state->f2c, &stdscr[j * 24 - 20]);
+	frinfo_(__global_state, &segfid, &frmctr, &segcls, &segcld, &frmfnd);
 	if (! frmfnd) {
-	    setmsg_("Could not look up frame info for segment frame having I"
-		    "D #.", (ftnlen)59);
-	    errint_("#", &segfid, (ftnlen)1);
-	    sigerr_("SPICE(NOFRAMEINFO)", (ftnlen)18);
-	    chkout_("ZZDSKSBA", (ftnlen)8);
+	    setmsg_(__global_state, "Could not look up frame info for segmen"
+		    "t frame having ID #.", (ftnlen)59);
+	    errint_(__global_state, "#", &segfid, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOFRAMEINFO)", (ftnlen)18);
+	    chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 	    return 0;
 	}
 
@@ -837,17 +848,18 @@ static zzdsksba_state_t* get_zzdsksba_state() {
 /*        body, compute the offset between the two. Otherwise */
 /*        set the offset to zero. */
 
-	segctr = i_dnnt(&stdscr[j * 24 - 23]);
+	segctr = i_dnnt(&__global_state->f2c, &stdscr[j * 24 - 23]);
 	if (segctr == frmctr) {
-	    cleard_(&__state->c__3, &stoff[j * 3 - 3]);
+	    cleard_(__global_state, &__state->c__3, &stoff[j * 3 - 3]);
 	} else {
-	    frmnam_(&segfid, frname, (ftnlen)32);
-	    if (s_cmp(frname, " ", (ftnlen)32, (ftnlen)1) == 0) {
-		setmsg_("Could not look up frame info for segment frame havi"
-			"ng ID #.", (ftnlen)59);
-		errint_("#", &segfid, (ftnlen)1);
-		sigerr_("SPICE(NOFRAMENAME)", (ftnlen)18);
-		chkout_("ZZDSKSBA", (ftnlen)8);
+	    frmnam_(__global_state, &segfid, frname, (ftnlen)32);
+	    if (s_cmp(&__global_state->f2c, frname, " ", (ftnlen)32, (ftnlen)
+		    1) == 0) {
+		setmsg_(__global_state, "Could not look up frame info for se"
+			"gment frame having ID #.", (ftnlen)59);
+		errint_(__global_state, "#", &segfid, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(NOFRAMENAME)", (ftnlen)18);
+		chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 		return 0;
 	    }
 
@@ -855,15 +867,15 @@ static zzdsksba_state_t* get_zzdsksba_state() {
 /*           DSK coverage epoch in order for the following call to work. */
 
 	    et = (stdscr[j * 24 - 2] + stdscr[j * 24 - 1]) / 2;
-	    spkgps_(&frmctr, &et, frname, &segctr, &stoff[j * 3 - 3], &lt, (
-		    ftnlen)32);
-	    if (failed_()) {
-		chkout_("ZZDSKSBA", (ftnlen)8);
+	    spkgps_(__global_state, &frmctr, &et, frname, &segctr, &stoff[j * 
+		    3 - 3], &lt, (ftnlen)32);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
 		return 0;
 	    }
 	}
     }
-    chkout_("ZZDSKSBA", (ftnlen)8);
+    chkout_(__global_state, "ZZDSKSBA", (ftnlen)8);
     return 0;
 } /* zzdsksba_ */
 

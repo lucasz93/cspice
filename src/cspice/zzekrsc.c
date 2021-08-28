@@ -8,42 +8,43 @@
 
 
 typedef int zzekrsc_state_t;
-static zzekrsc_state_t* get_zzekrsc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrsc_state_t* get_zzekrsc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   ZZEKRSC ( EK, read scalar, character ) */
-/* Subroutine */ int zzekrsc_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr, integer *eltidx, integer *cvlen, char *cval, 
-	logical *isnull, logical *found, ftnlen cval_len)
+/* Subroutine */ int zzekrsc_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr, integer *eltidx, 
+	integer *cvlen, char *cval, logical *isnull, logical *found, ftnlen 
+	cval_len)
 {
-    extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekcnam_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
     integer class__;
     integer recno;
     integer segno;
     integer dtype;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     char column[32];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int zzekrd03_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzekrd06_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, char *, logical *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekrd09_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzekrd03_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzekrd06_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, char *, logical *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzekrd09_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, logical *, ftnlen);
 
 
     /* Module state */
-    zzekrsc_state_t* __state = get_zzekrsc_state();
+    zzekrsc_state_t* __state = get_zzekrsc_state(__global_state);
 /* $ Abstract */
 
 /*     Read scalar data from a character column in a specified EK */
@@ -533,19 +534,20 @@ static zzekrsc_state_t* get_zzekrsc_state() {
 
     dtype = coldsc[1];
     if (dtype != 1) {
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
 	segno = segdsc[1];
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKRSC", (ftnlen)7);
-	setmsg_("Column # is of type #; ZZEKRSC only works with integer colu"
-		"mns.  RECNO = #; SEGNO = #; EK = #.", (ftnlen)94);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	errint_("#", &dtype, (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errint_("#", &segno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
-	chkout_("ZZEKRSC", (ftnlen)7);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKRSC", (ftnlen)7);
+	setmsg_(__global_state, "Column # is of type #; ZZEKRSC only works w"
+		"ith integer columns.  RECNO = #; SEGNO = #; EK = #.", (ftnlen)
+		94);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", &dtype, (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errint_(__global_state, "#", &segno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGDATATYPE)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKRSC", (ftnlen)7);
 	return 0;
     }
 
@@ -554,37 +556,37 @@ static zzekrsc_state_t* get_zzekrsc_state() {
 
     class__ = coldsc[0];
     if (class__ == 3) {
-	zzekrd03_(handle, segdsc, coldsc, recptr, cvlen, cval, isnull, 
-		cval_len);
+	zzekrd03_(__global_state, handle, segdsc, coldsc, recptr, cvlen, cval,
+		 isnull, cval_len);
 	*found = TRUE_;
     } else if (class__ == 6) {
 
 /*        Class 6 columns contain character string array entries. */
 
-	zzekrd06_(handle, segdsc, coldsc, recptr, eltidx, eltidx, cval, 
-		isnull, found, cval_len);
+	zzekrd06_(__global_state, handle, segdsc, coldsc, recptr, eltidx, 
+		eltidx, cval, isnull, found, cval_len);
     } else if (class__ == 9) {
-	zzekrd09_(handle, segdsc, coldsc, recptr, cvlen, cval, isnull, 
-		cval_len);
+	zzekrd09_(__global_state, handle, segdsc, coldsc, recptr, cvlen, cval,
+		 isnull, cval_len);
 	*found = TRUE_;
     } else {
 
 /*        This is an unsupported character column class. */
 
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
 	segno = segdsc[1];
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKRSC", (ftnlen)7);
-	setmsg_("Class # from input column descriptor is not a supported cha"
-		"racter class.  COLUMN = #; RECNO = #; SEGNO = #; EK = #.", (
-		ftnlen)115);
-	errint_("#", &class__, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	errint_("#", &recno, (ftnlen)1);
-	errint_("#", &segno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
-	chkout_("ZZEKRSC", (ftnlen)7);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKRSC", (ftnlen)7);
+	setmsg_(__global_state, "Class # from input column descriptor is not"
+		" a supported character class.  COLUMN = #; RECNO = #; SEGNO "
+		"= #; EK = #.", (ftnlen)115);
+	errint_(__global_state, "#", &class__, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errint_(__global_state, "#", &segno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOCLASS)", (ftnlen)14);
+	chkout_(__global_state, "ZZEKRSC", (ftnlen)7);
 	return 0;
     }
     return 0;

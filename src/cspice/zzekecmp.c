@@ -8,22 +8,21 @@
 
 
 typedef int zzekecmp_state_t;
-static zzekecmp_state_t* get_zzekecmp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekecmp_state_t* get_zzekecmp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKECMP ( EK, column entry element comparison ) */
-integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
-	rows, integer *elts)
+integer zzekecmp_(cspice_t* __global_state, integer *hans, integer *sgdscs, 
+	integer *cldscs, integer *rows, integer *elts)
 {
     /* System generated locals */
     integer ret_val, i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    logical l_lt(char *, char *, ftnlen, ftnlen), l_gt(char *, char *, ftnlen,
-	     ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    logical l_lt(f2c_state_t*, char *, char *, ftnlen, ftnlen), l_gt(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char cval[1024*2];
@@ -31,28 +30,29 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
     integer ival[2];
     logical null[2];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer cvlen[2];
     logical found;
     integer cmplen[2];
     integer lhstyp;
     integer rhstyp;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int zzekrsc_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, char *, logical *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekrsd_(integer *, integer *, integer *, 
-	    integer *, integer *, doublereal *, logical *, logical *);
-    extern /* Subroutine */ int zzekrsi_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *, logical *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzekrsc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, char *, logical *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzekrsd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, doublereal *, logical *, logical 
+	    *);
+    extern /* Subroutine */ int zzekrsi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, logical *, logical *);
 
 
     /* Module state */
-    zzekecmp_state_t* __state = get_zzekecmp_state();
+    zzekecmp_state_t* __state = get_zzekecmp_state(__global_state);
 /* $ Abstract */
 
 /*     Compare two column entry elements, and return the relation of the */
@@ -692,32 +692,34 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 /*        integer or double precision types are acceptable on */
 /*        the right hand side. */
 
-	zzekrsi_(hans, sgdscs, cldscs, rows, elts, ival, null, &found);
+	zzekrsi_(__global_state, hans, sgdscs, cldscs, rows, elts, ival, null,
+		 &found);
 	if (! found) {
-	    chkin_("ZZEKECMP", (ftnlen)8);
-	    setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX = #. Column entry e"
-		    "lement was not found.", (ftnlen)76);
-	    errhan_("#", hans, (ftnlen)1);
-	    errint_("#", &cldscs[8], (ftnlen)1);
-	    errint_("#", rows, (ftnlen)1);
-	    errint_("#", elts, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	    chkout_("ZZEKECMP", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+	    setmsg_(__global_state, "EK = #; COLIDX = #; ROW = #; ELTIDX = #"
+		    ". Column entry element was not found.", (ftnlen)76);
+	    errhan_(__global_state, "#", hans, (ftnlen)1);
+	    errint_(__global_state, "#", &cldscs[8], (ftnlen)1);
+	    errint_(__global_state, "#", rows, (ftnlen)1);
+	    errint_(__global_state, "#", elts, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	    chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 	    return ret_val;
 	}
 	if (rhstyp == 3) {
-	    zzekrsi_(&hans[1], &sgdscs[24], &cldscs[11], &rows[1], elts, &
-		    ival[1], &null[1], &found);
+	    zzekrsi_(__global_state, &hans[1], &sgdscs[24], &cldscs[11], &
+		    rows[1], elts, &ival[1], &null[1], &found);
 	    if (! found) {
-		chkin_("ZZEKECMP", (ftnlen)8);
-		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
-			"ry element was not found.", (ftnlen)76);
-		errhan_("#", &hans[1], (ftnlen)1);
-		errint_("#", &cldscs[19], (ftnlen)1);
-		errint_("#", &rows[1], (ftnlen)1);
-		errint_("#", &elts[1], (ftnlen)1);
-		sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-		chkout_("ZZEKECMP", (ftnlen)8);
+		chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+		setmsg_(__global_state, "EK = #; COLIDX = #; ROW = #; ELTIDX"
+			"  = #.Column entry element was not found.", (ftnlen)
+			76);
+		errhan_(__global_state, "#", &hans[1], (ftnlen)1);
+		errint_(__global_state, "#", &cldscs[19], (ftnlen)1);
+		errint_(__global_state, "#", &rows[1], (ftnlen)1);
+		errint_(__global_state, "#", &elts[1], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+		chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 		return ret_val;
 	    }
 
@@ -737,18 +739,19 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 		}
 	    }
 	} else if (rhstyp == 2) {
-	    zzekrsd_(&hans[1], &sgdscs[24], &cldscs[11], &rows[1], elts, &
-		    dval[1], &null[1], &found);
+	    zzekrsd_(__global_state, &hans[1], &sgdscs[24], &cldscs[11], &
+		    rows[1], elts, &dval[1], &null[1], &found);
 	    if (! found) {
-		chkin_("ZZEKECMP", (ftnlen)8);
-		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
-			"ry element was not found.", (ftnlen)76);
-		errhan_("#", &hans[1], (ftnlen)1);
-		errint_("#", &cldscs[19], (ftnlen)1);
-		errint_("#", &rows[1], (ftnlen)1);
-		errint_("#", &elts[1], (ftnlen)1);
-		sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-		chkout_("ZZEKECMP", (ftnlen)8);
+		chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+		setmsg_(__global_state, "EK = #; COLIDX = #; ROW = #; ELTIDX"
+			"  = #.Column entry element was not found.", (ftnlen)
+			76);
+		errhan_(__global_state, "#", &hans[1], (ftnlen)1);
+		errint_(__global_state, "#", &cldscs[19], (ftnlen)1);
+		errint_(__global_state, "#", &rows[1], (ftnlen)1);
+		errint_(__global_state, "#", &elts[1], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+		chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 		return ret_val;
 	    }
 	    if (null[0] || null[1]) {
@@ -769,44 +772,47 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 /*           This is a big-time semantic error.  We should */
 /*           never arrive here. */
 
-	    chkin_("ZZEKECMP", (ftnlen)8);
-	    setmsg_("LHS data type is #; RHSTYP is #.", (ftnlen)32);
-	    errint_("#", &lhstyp, (ftnlen)1);
-	    errint_("#", &rhstyp, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZEKECMP", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+	    setmsg_(__global_state, "LHS data type is #; RHSTYP is #.", (
+		    ftnlen)32);
+	    errint_(__global_state, "#", &lhstyp, (ftnlen)1);
+	    errint_(__global_state, "#", &rhstyp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 	    return ret_val;
 	}
     } else if (lhstyp == 2) {
 
 /*        This is a mirror image of the INT case. */
 
-	zzekrsd_(hans, sgdscs, cldscs, rows, elts, dval, null, &found);
+	zzekrsd_(__global_state, hans, sgdscs, cldscs, rows, elts, dval, null,
+		 &found);
 	if (! found) {
-	    chkin_("ZZEKECMP", (ftnlen)8);
-	    setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX = #. Column entry e"
-		    "lement was not found.", (ftnlen)76);
-	    errhan_("#", hans, (ftnlen)1);
-	    errint_("#", &cldscs[8], (ftnlen)1);
-	    errint_("#", rows, (ftnlen)1);
-	    errint_("#", elts, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	    chkout_("ZZEKECMP", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+	    setmsg_(__global_state, "EK = #; COLIDX = #; ROW = #; ELTIDX = #"
+		    ". Column entry element was not found.", (ftnlen)76);
+	    errhan_(__global_state, "#", hans, (ftnlen)1);
+	    errint_(__global_state, "#", &cldscs[8], (ftnlen)1);
+	    errint_(__global_state, "#", rows, (ftnlen)1);
+	    errint_(__global_state, "#", elts, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	    chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 	    return ret_val;
 	}
 	if (rhstyp == 3) {
-	    zzekrsi_(&hans[1], &sgdscs[24], &cldscs[11], &rows[1], elts, &
-		    ival[1], &null[1], &found);
+	    zzekrsi_(__global_state, &hans[1], &sgdscs[24], &cldscs[11], &
+		    rows[1], elts, &ival[1], &null[1], &found);
 	    if (! found) {
-		chkin_("ZZEKECMP", (ftnlen)8);
-		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
-			"ry element was not found.", (ftnlen)76);
-		errhan_("#", &hans[1], (ftnlen)1);
-		errint_("#", &cldscs[19], (ftnlen)1);
-		errint_("#", &rows[1], (ftnlen)1);
-		errint_("#", &elts[1], (ftnlen)1);
-		sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-		chkout_("ZZEKECMP", (ftnlen)8);
+		chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+		setmsg_(__global_state, "EK = #; COLIDX = #; ROW = #; ELTIDX"
+			"  = #.Column entry element was not found.", (ftnlen)
+			76);
+		errhan_(__global_state, "#", &hans[1], (ftnlen)1);
+		errint_(__global_state, "#", &cldscs[19], (ftnlen)1);
+		errint_(__global_state, "#", &rows[1], (ftnlen)1);
+		errint_(__global_state, "#", &elts[1], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+		chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 		return ret_val;
 	    }
 
@@ -826,18 +832,19 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 		}
 	    }
 	} else if (rhstyp == 2) {
-	    zzekrsd_(&hans[1], &sgdscs[24], &cldscs[11], &rows[1], elts, &
-		    dval[1], &null[1], &found);
+	    zzekrsd_(__global_state, &hans[1], &sgdscs[24], &cldscs[11], &
+		    rows[1], elts, &dval[1], &null[1], &found);
 	    if (! found) {
-		chkin_("ZZEKECMP", (ftnlen)8);
-		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
-			"ry element was not found.", (ftnlen)76);
-		errhan_("#", &hans[1], (ftnlen)1);
-		errint_("#", &cldscs[19], (ftnlen)1);
-		errint_("#", &rows[1], (ftnlen)1);
-		errint_("#", &elts[1], (ftnlen)1);
-		sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-		chkout_("ZZEKECMP", (ftnlen)8);
+		chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+		setmsg_(__global_state, "EK = #; COLIDX = #; ROW = #; ELTIDX"
+			"  = #.Column entry element was not found.", (ftnlen)
+			76);
+		errhan_(__global_state, "#", &hans[1], (ftnlen)1);
+		errint_(__global_state, "#", &cldscs[19], (ftnlen)1);
+		errint_(__global_state, "#", &rows[1], (ftnlen)1);
+		errint_(__global_state, "#", &elts[1], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+		chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 		return ret_val;
 	    }
 	    if (null[0] || null[1]) {
@@ -858,12 +865,13 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 /*           This is a big-time semantic error.  We should */
 /*           never arrive here. */
 
-	    chkin_("ZZEKECMP", (ftnlen)8);
-	    setmsg_("LHS data type is #; RHSTYP is #.", (ftnlen)32);
-	    errint_("#", &lhstyp, (ftnlen)1);
-	    errint_("#", &rhstyp, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZEKECMP", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+	    setmsg_(__global_state, "LHS data type is #; RHSTYP is #.", (
+		    ftnlen)32);
+	    errint_(__global_state, "#", &lhstyp, (ftnlen)1);
+	    errint_(__global_state, "#", &rhstyp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 	    return ret_val;
 	}
     } else if (lhstyp == 4) {
@@ -875,31 +883,35 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 /*           This is a big-time semantic error.  We should */
 /*           never arrive here. */
 
-	    chkin_("ZZEKECMP", (ftnlen)8);
-	    setmsg_("LHS data type is #; RHSTYP is #.", (ftnlen)32);
-	    errint_("#", &lhstyp, (ftnlen)1);
-	    errint_("#", &rhstyp, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZEKECMP", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+	    setmsg_(__global_state, "LHS data type is #; RHSTYP is #.", (
+		    ftnlen)32);
+	    errint_(__global_state, "#", &lhstyp, (ftnlen)1);
+	    errint_(__global_state, "#", &rhstyp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 	    return ret_val;
 	}
 	for (i__ = 1; i__ <= 2; ++i__) {
-	    zzekrsd_(&hans[i__ - 1], &sgdscs[i__ * 24 - 24], &cldscs[i__ * 11 
-		    - 11], &rows[i__ - 1], &elts[i__ - 1], &dval[(i__1 = i__ 
-		    - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("dval", i__1, "zze"
-		    "kecmp_", (ftnlen)486)], &null[(i__2 = i__ - 1) < 2 && 0 <=
-		     i__2 ? i__2 : s_rnge("null", i__2, "zzekecmp_", (ftnlen)
-		    486)], &found);
+	    zzekrsd_(__global_state, &hans[i__ - 1], &sgdscs[i__ * 24 - 24], &
+		    cldscs[i__ * 11 - 11], &rows[i__ - 1], &elts[i__ - 1], &
+		    dval[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "dval", i__1, "zzekecmp_", (ftnlen)
+		    486)], &null[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "null", i__2, "zzekecmp_", (
+		    ftnlen)486)], &found);
 	    if (! found) {
-		chkin_("ZZEKECMP", (ftnlen)8);
-		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
-			"ry element was not found.", (ftnlen)76);
-		errhan_("#", &hans[i__ - 1], (ftnlen)1);
-		errint_("#", &cldscs[i__ * 11 - 3], (ftnlen)1);
-		errint_("#", &rows[i__ - 1], (ftnlen)1);
-		errint_("#", &elts[i__ - 1], (ftnlen)1);
-		sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-		chkout_("ZZEKECMP", (ftnlen)8);
+		chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+		setmsg_(__global_state, "EK = #; COLIDX = #; ROW = #; ELTIDX"
+			"  = #.Column entry element was not found.", (ftnlen)
+			76);
+		errhan_(__global_state, "#", &hans[i__ - 1], (ftnlen)1);
+		errint_(__global_state, "#", &cldscs[i__ * 11 - 3], (ftnlen)1)
+			;
+		errint_(__global_state, "#", &rows[i__ - 1], (ftnlen)1);
+		errint_(__global_state, "#", &elts[i__ - 1], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+		chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 		return ret_val;
 	    }
 	}
@@ -924,43 +936,49 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 
 /*           You know what kind of semantic error this is. */
 
-	    chkin_("ZZEKECMP", (ftnlen)8);
-	    setmsg_("LHS data type is #; RHSTYP is #.", (ftnlen)32);
-	    errint_("#", &lhstyp, (ftnlen)1);
-	    errint_("#", &rhstyp, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZEKECMP", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+	    setmsg_(__global_state, "LHS data type is #; RHSTYP is #.", (
+		    ftnlen)32);
+	    errint_(__global_state, "#", &lhstyp, (ftnlen)1);
+	    errint_(__global_state, "#", &rhstyp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 	    return ret_val;
 	}
 	for (i__ = 1; i__ <= 2; ++i__) {
-	    zzekrsc_(&hans[i__ - 1], &sgdscs[i__ * 24 - 24], &cldscs[i__ * 11 
-		    - 11], &rows[i__ - 1], &elts[i__ - 1], &cvlen[(i__1 = i__ 
-		    - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("cvlen", i__1, 
-		    "zzekecmp_", (ftnlen)548)], cval + (((i__2 = i__ - 1) < 2 
-		    && 0 <= i__2 ? i__2 : s_rnge("cval", i__2, "zzekecmp_", (
+	    zzekrsc_(__global_state, &hans[i__ - 1], &sgdscs[i__ * 24 - 24], &
+		    cldscs[i__ * 11 - 11], &rows[i__ - 1], &elts[i__ - 1], &
+		    cvlen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "cvlen", i__1, "zzekecmp_", (ftnlen)
+		    548)], cval + (((i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 :
+		     s_rnge(&__global_state->f2c, "cval", i__2, "zzekecmp_", (
 		    ftnlen)548)) << 10), &null[(i__3 = i__ - 1) < 2 && 0 <= 
-		    i__3 ? i__3 : s_rnge("null", i__3, "zzekecmp_", (ftnlen)
-		    548)], &found, (ftnlen)1024);
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "null", i__3, 
+		    "zzekecmp_", (ftnlen)548)], &found, (ftnlen)1024);
 	    if (! found) {
-		chkin_("ZZEKECMP", (ftnlen)8);
-		setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX  = #.Column ent"
-			"ry element was not found.", (ftnlen)76);
-		errhan_("#", &hans[i__ - 1], (ftnlen)1);
-		errint_("#", &cldscs[i__ * 11 - 3], (ftnlen)1);
-		errint_("#", &rows[i__ - 1], (ftnlen)1);
-		errint_("#", &elts[i__ - 1], (ftnlen)1);
-		sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-		chkout_("ZZEKECMP", (ftnlen)8);
+		chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+		setmsg_(__global_state, "EK = #; COLIDX = #; ROW = #; ELTIDX"
+			"  = #.Column entry element was not found.", (ftnlen)
+			76);
+		errhan_(__global_state, "#", &hans[i__ - 1], (ftnlen)1);
+		errint_(__global_state, "#", &cldscs[i__ * 11 - 3], (ftnlen)1)
+			;
+		errint_(__global_state, "#", &rows[i__ - 1], (ftnlen)1);
+		errint_(__global_state, "#", &elts[i__ - 1], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+		chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 		return ret_val;
 	    }
 
 /*           Let CMPLEN(I) be the string length to use in comparisons. */
 
 /* Computing MIN */
-	    i__3 = cvlen[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(
-		    "cvlen", i__2, "zzekecmp_", (ftnlen)577)];
-	    cmplen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("cmplen",
-		     i__1, "zzekecmp_", (ftnlen)577)] = min(i__3,1024);
+	    i__3 = cvlen[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "cvlen", i__2, "zzekecmp_", (ftnlen)
+		    577)];
+	    cmplen[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "cmplen", i__1, "zzekecmp_", (ftnlen)
+		    577)] = min(i__3,1024);
 	}
 	if (null[0] || null[1]) {
 	    if (! null[1]) {
@@ -969,9 +987,11 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 		ret_val = 3;
 	    }
 	} else {
-	    if (l_lt(cval, cval + 1024, cmplen[0], cmplen[1])) {
+	    if (l_lt(&__global_state->f2c, cval, cval + 1024, cmplen[0], 
+		    cmplen[1])) {
 		ret_val = 5;
-	    } else if (l_gt(cval, cval + 1024, cmplen[0], cmplen[1])) {
+	    } else if (l_gt(&__global_state->f2c, cval, cval + 1024, cmplen[0]
+		    , cmplen[1])) {
 		ret_val = 3;
 	    } else {
 		ret_val = 1;
@@ -981,11 +1001,12 @@ integer zzekecmp_(integer *hans, integer *sgdscs, integer *cldscs, integer *
 
 /*        Something untoward has happened in our descriptor. */
 
-	chkin_("ZZEKECMP", (ftnlen)8);
-	setmsg_("The data type code # was not recognized.", (ftnlen)40);
-	errint_("#", &lhstyp, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDATATYPE)", (ftnlen)22);
-	chkout_("ZZEKECMP", (ftnlen)8);
+	chkin_(__global_state, "ZZEKECMP", (ftnlen)8);
+	setmsg_(__global_state, "The data type code # was not recognized.", (
+		ftnlen)40);
+	errint_(__global_state, "#", &lhstyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDATATYPE)", (ftnlen)22);
+	chkout_(__global_state, "ZZEKECMP", (ftnlen)8);
 	return ret_val;
     }
     return ret_val;

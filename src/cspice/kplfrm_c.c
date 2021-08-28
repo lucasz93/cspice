@@ -410,7 +410,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "kplfrm_c" );
+   chkin_c ( naif_state, "kplfrm_c" );
 
    /*
    Initialize the control area of the cell's data array

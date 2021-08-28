@@ -8,8 +8,7 @@
 
 
 extern pi_init_t __pi_init;
-static pi_state_t* get_pi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pi_state_t* get_pi_state(cspice_t* state) {
 	if (!state->pi)
 		state->pi = __cspice_allocate_module(sizeof(pi_state_t), &
 	__pi_init, sizeof(__pi_init));
@@ -18,7 +17,7 @@ static pi_state_t* get_pi_state() {
 }
 
 /* $Procedure                     PI ( Value of pi ) */
-doublereal pi_(void)
+doublereal pi_(cspice_t* __global_state)
 {
     /* Initialized data */
 
@@ -27,11 +26,11 @@ doublereal pi_(void)
     doublereal ret_val;
 
     /* Builtin functions */
-    double acos(doublereal);
+    double acos(f2c_state_t*, doublereal);
 
 
     /* Module state */
-    pi_state_t* __state = get_pi_state();
+    pi_state_t* __state = get_pi_state(__global_state);
 /* $ Abstract */
 
 /*     Return the value of pi (the ratio of the circumference of */
@@ -165,7 +164,7 @@ doublereal pi_(void)
 /*     What is there to say? */
 
     if (__state->value == 0.) {
-	__state->value = acos(-1.);
+	__state->value = acos(&__global_state->f2c, -1.);
     }
     ret_val = __state->value;
     return ret_val;

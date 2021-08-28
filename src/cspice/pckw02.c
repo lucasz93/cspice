@@ -8,8 +8,7 @@
 
 
 extern pckw02_init_t __pckw02_init;
-static pckw02_state_t* get_pckw02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pckw02_state_t* get_pckw02_state(cspice_t* state) {
 	if (!state->pckw02)
 		state->pckw02 = __cspice_allocate_module(sizeof(
 	pckw02_state_t), &__pckw02_init, sizeof(__pckw02_init));
@@ -18,10 +17,10 @@ static pckw02_state_t* get_pckw02_state() {
 }
 
 /* $Procedure PCKW02 ( PCK, write type 2 segment ) */
-/* Subroutine */ int pckw02_(integer *handle, integer *body, char *frame, 
-	doublereal *first, doublereal *last, char *segid, doublereal *intlen, 
-	integer *n, integer *polydg, doublereal *cdata, doublereal *btime, 
-	ftnlen frame_len, ftnlen segid_len)
+/* Subroutine */ int pckw02_(cspice_t* __global_state, integer *handle, 
+	integer *body, char *frame, doublereal *first, doublereal *last, char 
+	*segid, doublereal *intlen, integer *n, integer *polydg, doublereal *
+	cdata, doublereal *btime, ftnlen frame_len, ftnlen segid_len)
 {
     /* System generated locals */
     integer i__1;
@@ -29,33 +28,36 @@ static pckw02_state_t* get_pckw02_state() {
     /* Local variables */
     integer i__;
     integer k;
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int etcal_(cspice_t*, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal ltime;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal rsize;
     char etstr[40];
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
-	    ftnlen);
-    extern /* Subroutine */ int dafena_(void);
-    extern logical failed_(void);
-    extern /* Subroutine */ int chckid_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int dafena_(cspice_t*);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int chckid_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
     integer refcod;
     integer ninrec;
     doublereal radius;
     doublereal numrec;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     char netstr[40];
     doublereal dcd[2];
     integer icd[5];
@@ -63,7 +65,7 @@ static pckw02_state_t* get_pckw02_state() {
 
 
     /* Module state */
-    pckw02_state_t* __state = get_pckw02_state();
+    pckw02_state_t* __state = get_pckw02_state(__global_state);
 /* $ Abstract */
 
 /*    Write a type 2 segment to a PCK binary file given */
@@ -322,55 +324,57 @@ static pckw02_state_t* get_pckw02_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PCKW02", (ftnlen)6);
+	chkin_(__global_state, "PCKW02", (ftnlen)6);
     }
 
 /*     The number of sets of coefficients must be positive. */
 
     if (*n <= 0) {
-	setmsg_("The number of sets of Euler anglecoefficients is not positi"
-		"ve. N = #", (ftnlen)68);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(NUMCOEFFSNOTPOS)", (ftnlen)22);
-	chkout_("PCKW02", (ftnlen)6);
+	setmsg_(__global_state, "The number of sets of Euler anglecoefficien"
+		"ts is not positive. N = #", (ftnlen)68);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NUMCOEFFSNOTPOS)", (ftnlen)22);
+	chkout_(__global_state, "PCKW02", (ftnlen)6);
 	return 0;
     }
 
 /*     The interval length must be positive. */
 
     if (*intlen <= 0.) {
-	setmsg_("The interval length is not positive.N = #", (ftnlen)41);
-	errdp_("#", intlen, (ftnlen)1);
-	sigerr_("SPICE(INTLENNOTPOS)", (ftnlen)19);
-	chkout_("PCKW02", (ftnlen)6);
+	setmsg_(__global_state, "The interval length is not positive.N = #", (
+		ftnlen)41);
+	errdp_(__global_state, "#", intlen, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INTLENNOTPOS)", (ftnlen)19);
+	chkout_(__global_state, "PCKW02", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the NAIF integer code for the reference frame. */
 
-    irfnum_(frame, &refcod, frame_len);
+    irfnum_(__global_state, frame, &refcod, frame_len);
     if (refcod == 0) {
-	setmsg_("The reference frame # is not supported.", (ftnlen)39);
-	errch_("#", frame, (ftnlen)1, frame_len);
-	sigerr_("SPICE(INVALIDREFFRAME)", (ftnlen)22);
-	chkout_("PCKW02", (ftnlen)6);
+	setmsg_(__global_state, "The reference frame # is not supported.", (
+		ftnlen)39);
+	errch_(__global_state, "#", frame, (ftnlen)1, frame_len);
+	sigerr_(__global_state, "SPICE(INVALIDREFFRAME)", (ftnlen)22);
+	chkout_(__global_state, "PCKW02", (ftnlen)6);
 	return 0;
     }
 
 /*     The segment stop time must be greater than the begin time. */
 
     if (*first > *last) {
-	setmsg_("The segment start time: # is greater than the segment end t"
-		"ime: #", (ftnlen)65);
-	etcal_(first, etstr, (ftnlen)40);
-	errch_("#", etstr, (ftnlen)1, (ftnlen)40);
-	etcal_(last, netstr, (ftnlen)40);
-	errch_("#", netstr, (ftnlen)1, (ftnlen)40);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("PCKW02", (ftnlen)6);
+	setmsg_(__global_state, "The segment start time: # is greater than t"
+		"he segment end time: #", (ftnlen)65);
+	etcal_(__global_state, first, etstr, (ftnlen)40);
+	errch_(__global_state, "#", etstr, (ftnlen)1, (ftnlen)40);
+	etcal_(__global_state, last, netstr, (ftnlen)40);
+	errch_(__global_state, "#", netstr, (ftnlen)1, (ftnlen)40);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "PCKW02", (ftnlen)6);
 	return 0;
     }
 
@@ -378,14 +382,15 @@ static pckw02_state_t* get_pckw02_state() {
 /*     to the begin time of the segment. */
 
     if (*first < *btime) {
-	setmsg_("The segment descriptor start time: # is less than the begin"
-		"ning time of the segment data: #", (ftnlen)91);
-	etcal_(first, etstr, (ftnlen)40);
-	errch_("#", etstr, (ftnlen)1, (ftnlen)40);
-	etcal_(btime, etstr, (ftnlen)40);
-	errch_("#", etstr, (ftnlen)1, (ftnlen)40);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("PCKW02", (ftnlen)6);
+	setmsg_(__global_state, "The segment descriptor start time: # is les"
+		"s than the beginning time of the segment data: #", (ftnlen)91)
+		;
+	etcal_(__global_state, first, etstr, (ftnlen)40);
+	errch_(__global_state, "#", etstr, (ftnlen)1, (ftnlen)40);
+	etcal_(__global_state, btime, etstr, (ftnlen)40);
+	errch_(__global_state, "#", etstr, (ftnlen)1, (ftnlen)40);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "PCKW02", (ftnlen)6);
 	return 0;
     }
 
@@ -394,23 +399,23 @@ static pckw02_state_t* get_pckw02_state() {
 
     ltime = *btime + *n * *intlen;
     if (*last > ltime) {
-	setmsg_("The segment descriptor end time: # is greater than the end "
-		"time of the segment data: #", (ftnlen)86);
-	etcal_(last, etstr, (ftnlen)40);
-	errch_("#", etstr, (ftnlen)1, (ftnlen)40);
-	etcal_(&ltime, etstr, (ftnlen)40);
-	errch_("#", etstr, (ftnlen)1, (ftnlen)40);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("PCKW02", (ftnlen)6);
+	setmsg_(__global_state, "The segment descriptor end time: # is great"
+		"er than the end time of the segment data: #", (ftnlen)86);
+	etcal_(__global_state, last, etstr, (ftnlen)40);
+	errch_(__global_state, "#", etstr, (ftnlen)1, (ftnlen)40);
+	etcal_(__global_state, &ltime, etstr, (ftnlen)40);
+	errch_(__global_state, "#", etstr, (ftnlen)1, (ftnlen)40);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "PCKW02", (ftnlen)6);
 	return 0;
     }
 
 /*     Now check the validity of the segment identifier. */
 
-    chckid_("PCK segment identifier", &__state->c__40, segid, (ftnlen)22, 
-	    segid_len);
-    if (failed_()) {
-	chkout_("PCKW02", (ftnlen)6);
+    chckid_(__global_state, "PCK segment identifier", &__state->c__40, segid, 
+	    (ftnlen)22, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "PCKW02", (ftnlen)6);
 	return 0;
     }
 
@@ -428,7 +433,7 @@ static pckw02_state_t* get_pckw02_state() {
 
 /*     Pack the segment descriptor. */
 
-    dafps_(&__state->c__2, &__state->c__5, dcd, icd, descr);
+    dafps_(__global_state, &__state->c__2, &__state->c__5, dcd, icd, descr);
 
 /*     Begin a new segment of PCK type 2 form: */
 
@@ -447,7 +452,7 @@ static pckw02_state_t* get_pckw02_state() {
 /*        RADIUS     ( radius of time interval ) */
 /*        X coefficients, Y coefficients, Z coefficients */
 
-    dafbna_(handle, descr, segid, segid_len);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
 
 /*     Calculate the number of entries in a record. */
 
@@ -463,37 +468,37 @@ static pckw02_state_t* get_pckw02_state() {
 
 	radius = *intlen / 2;
 	mid = *btime + radius + (i__ - 1) * *intlen;
-	dafada_(&mid, &__state->c__1);
-	dafada_(&radius, &__state->c__1);
+	dafada_(__global_state, &mid, &__state->c__1);
+	dafada_(__global_state, &radius, &__state->c__1);
 
 /*        Put one set of coefficients into the segment. */
 
 	k = (i__ - 1) * ninrec + 1;
-	dafada_(&cdata[k - 1], &ninrec);
+	dafada_(__global_state, &cdata[k - 1], &ninrec);
     }
 
 /*     Store the initial epoch of the first record. */
 
-    dafada_(btime, &__state->c__1);
+    dafada_(__global_state, btime, &__state->c__1);
 
 /*     Store the length of interval covered by each record. */
 
-    dafada_(intlen, &__state->c__1);
+    dafada_(__global_state, intlen, &__state->c__1);
 
 /*     Store the size of each record (total number of array elements). */
 
     rsize = (doublereal) (ninrec + 2);
-    dafada_(&rsize, &__state->c__1);
+    dafada_(__global_state, &rsize, &__state->c__1);
 
 /*     Store the number of records contained in the segment. */
 
     numrec = (doublereal) (*n);
-    dafada_(&numrec, &__state->c__1);
+    dafada_(__global_state, &numrec, &__state->c__1);
 
 /*     End this segment. */
 
-    dafena_();
-    chkout_("PCKW02", (ftnlen)6);
+    dafena_(__global_state);
+    chkout_(__global_state, "PCKW02", (ftnlen)6);
     return 0;
 } /* pckw02_ */
 

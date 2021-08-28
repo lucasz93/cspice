@@ -8,8 +8,7 @@
 
 
 extern sgfrvi_init_t __sgfrvi_init;
-static sgfrvi_state_t* get_sgfrvi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sgfrvi_state_t* get_sgfrvi_state(cspice_t* state) {
 	if (!state->sgfrvi)
 		state->sgfrvi = __cspice_allocate_module(sizeof(
 	sgfrvi_state_t), &__sgfrvi_init, sizeof(__sgfrvi_init));
@@ -18,8 +17,9 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 }
 
 /* $Procedure      SGFRVI ( Generic Segments: Fetch ref. value and index ) */
-/* Subroutine */ int sgfrvi_(integer *handle, doublereal *descr, doublereal *
-	x, doublereal *value, integer *indx, logical *found)
+/* Subroutine */ int sgfrvi_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *x, doublereal *value, integer *indx, 
+	logical *found)
 {
     /* Initialized data */
 
@@ -28,50 +28,51 @@ static sgfrvi_state_t* get_sgfrvi_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     logical done;
     integer i__;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical myfnd;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal endref;
     integer nfetch;
     doublereal buffer[101];
     integer bfindx;
     integer remain;
-    extern /* Subroutine */ int sgmeta_(integer *, doublereal *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int sgmeta_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *);
     doublereal dpimax;
     integer myrefb;
-    extern integer lstled_(doublereal *, integer *, doublereal *);
+    extern integer lstled_(cspice_t*, doublereal *, integer *, doublereal *);
     doublereal dptemp;
     integer fullrd;
     integer rdridx;
     integer myrdrb;
-    extern integer intmax_(void);
+    extern integer intmax_(cspice_t*);
     integer mynref;
     logical isdirv;
     integer myindx;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer mynrdr;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     doublereal myvalu;
-    extern logical return_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer myrdrt;
     integer mynpkt;
     integer end;
 
 
     /* Module state */
-    sgfrvi_state_t* __state = get_sgfrvi_state();
+    sgfrvi_state_t* __state = get_sgfrvi_state(__global_state);
 /* $ Abstract */
 
 /*     Given the handle of a DAF and the descriptor associated with */
@@ -656,27 +657,27 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SGFRVI", (ftnlen)6);
+    chkin_(__global_state, "SGFRVI", (ftnlen)6);
 
 /*     Set the value for the maximum index as a double precision number, */
 /*     but only do it the first time into the subroutine. */
 
     if (__state->first) {
 	__state->first = FALSE_;
-	dpimax = (doublereal) intmax_();
+	dpimax = (doublereal) intmax_(__global_state);
     }
 
 /*     Collect the necessary meta data values common to all cases. */
 
-    sgmeta_(handle, descr, &__state->c__12, &mynpkt);
-    sgmeta_(handle, descr, &__state->c__7, &mynref);
-    sgmeta_(handle, descr, &__state->c__5, &myrdrt);
-    sgmeta_(handle, descr, &__state->c__6, &myrefb);
-    if (failed_()) {
-	chkout_("SGFRVI", (ftnlen)6);
+    sgmeta_(__global_state, handle, descr, &__state->c__12, &mynpkt);
+    sgmeta_(__global_state, handle, descr, &__state->c__7, &mynref);
+    sgmeta_(__global_state, handle, descr, &__state->c__5, &myrdrt);
+    sgmeta_(__global_state, handle, descr, &__state->c__6, &myrefb);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SGFRVI", (ftnlen)6);
 	return 0;
     }
 
@@ -686,17 +687,18 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 /*     MXIDXT, as specified in the file 'sgparam.inc'. */
 
     if (myrdrt < 0 || myrdrt > 4) {
-	setmsg_("The generic DAF segment you attempted to read has an unsupp"
-		"orted reference directory structure. The integer code given "
-		"for this structure is #, and allowed codes are within the ra"
-		"nge # to #. The likely cause of this anamoly is your version"
-		" of SPICELIB needs updating. Contact your system administrat"
-		"or or NAIF for a toolkit update.", (ftnlen)331);
-	errint_("#", &myrdrt, (ftnlen)1);
-	errint_("#", &__state->c__0, (ftnlen)1);
-	errint_("#", &__state->c__4, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNREFDIR)", (ftnlen)20);
-	chkout_("SGFRVI", (ftnlen)6);
+	setmsg_(__global_state, "The generic DAF segment you attempted to re"
+		"ad has an unsupported reference directory structure. The int"
+		"eger code given for this structure is #, and allowed codes a"
+		"re within the range # to #. The likely cause of this anamoly"
+		" is your version of SPICELIB needs updating. Contact your sy"
+		"stem administrator or NAIF for a toolkit update.", (ftnlen)
+		331);
+	errint_(__global_state, "#", &myrdrt, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__0, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__4, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNREFDIR)", (ftnlen)20);
+	chkout_(__global_state, "SGFRVI", (ftnlen)6);
 	return 0;
     }
 
@@ -746,10 +748,10 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 /*        In addition to the meta data items we already have, we also */
 /*        need these. */
 
-	sgmeta_(handle, descr, &__state->c__4, &mynrdr);
-	sgmeta_(handle, descr, &__state->c__3, &myrdrb);
-	if (failed_()) {
-	    chkout_("SGFRVI", (ftnlen)6);
+	sgmeta_(__global_state, handle, descr, &__state->c__4, &mynrdr);
+	sgmeta_(__global_state, handle, descr, &__state->c__3, &myrdrb);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGFRVI", (ftnlen)6);
 	    return 0;
 	}
 
@@ -785,15 +787,15 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 	    nfetch = min(100,remain);
 	    begin = myrdrb + fullrd * 100 + 1;
 	    end = begin + nfetch - 1;
-	    dafgda_(handle, &begin, &end, buffer);
-	    if (failed_()) {
-		chkout_("SGFRVI", (ftnlen)6);
+	    dafgda_(__global_state, handle, &begin, &end, buffer);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SGFRVI", (ftnlen)6);
 		return 0;
 	    }
 
 /*           See if X is in the current buffer. */
 
-	    rdridx = lstled_(x, &nfetch, buffer);
+	    rdridx = lstled_(__global_state, x, &nfetch, buffer);
 	    if (rdridx == 0) {
 
 /*              If not, then X < BUFFER(1) and we're done. This indicates */
@@ -807,8 +809,8 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 /*              are done, X = BUFFER(NFETCH), or X > BUFFER(NFETCH). */
 
 		if (*x == buffer[(i__1 = nfetch - 1) < 101 && 0 <= i__1 ? 
-			i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)417)]
-			) {
+			i__1 : s_rnge(&__global_state->f2c, "buffer", i__1, 
+			"sgfrvi_", (ftnlen)417)]) {
 
 /*                 If X = BUFFER(NFETCH) we are done, we have a directory */
 /*                 value, and it might be a value we want to return. */
@@ -841,8 +843,8 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 
 		done = TRUE_;
 		if (*x == buffer[(i__1 = rdridx - 1) < 101 && 0 <= i__1 ? 
-			i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)455)]
-			) {
+			i__1 : s_rnge(&__global_state->f2c, "buffer", i__1, 
+			"sgfrvi_", (ftnlen)455)]) {
 		    isdirv = TRUE_;
 		}
 	    }
@@ -872,12 +874,12 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 		nfetch = min(i__1,i__2);
 		begin = myrefb + rdridx * 100;
 		end = begin + nfetch - 1;
-		dafgda_(handle, &begin, &end, buffer);
-		if (failed_()) {
-		    chkout_("SGFRVI", (ftnlen)6);
+		dafgda_(__global_state, handle, &begin, &end, buffer);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SGFRVI", (ftnlen)6);
 		    return 0;
 		}
-		bfindx = lstled_(x, &nfetch, buffer);
+		bfindx = lstled_(__global_state, x, &nfetch, buffer);
 		myindx = rdridx * 100 + bfindx - 1;
 	    } else if (rdridx == 0) {
 
@@ -889,12 +891,12 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 		nfetch = min(101,mynref);
 		begin = myrefb + 1;
 		end = begin + nfetch - 1;
-		dafgda_(handle, &begin, &end, buffer);
-		if (failed_()) {
-		    chkout_("SGFRVI", (ftnlen)6);
+		dafgda_(__global_state, handle, &begin, &end, buffer);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SGFRVI", (ftnlen)6);
 		    return 0;
 		}
-		bfindx = lstled_(x, &nfetch, buffer);
+		bfindx = lstled_(__global_state, x, &nfetch, buffer);
 		myindx = bfindx;
 	    } else if (rdridx == mynrdr) {
 
@@ -915,12 +917,12 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 		begin = myrefb + rdridx * 100;
 		end = myrefb + mynref;
 		nfetch = end - begin + 1;
-		dafgda_(handle, &begin, &end, buffer);
-		if (failed_()) {
-		    chkout_("SGFRVI", (ftnlen)6);
+		dafgda_(__global_state, handle, &begin, &end, buffer);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SGFRVI", (ftnlen)6);
 		    return 0;
 		}
-		bfindx = lstled_(x, &nfetch, buffer);
+		bfindx = lstled_(__global_state, x, &nfetch, buffer);
 		myindx = rdridx * 100 + bfindx - 1;
 	    }
 	} else {
@@ -962,17 +964,17 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 /*                    that is immediately before the current one. */
 
 			if (*x > buffer[(i__1 = bfindx - 1) < 101 && 0 <= 
-				i__1 ? i__1 : s_rnge("buffer", i__1, "sgfrvi_"
-				, (ftnlen)595)]) {
+				i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"buffer", i__1, "sgfrvi_", (ftnlen)595)]) {
 			    myfnd = TRUE_;
 			    myvalu = buffer[(i__1 = bfindx - 1) < 101 && 0 <= 
-				    i__1 ? i__1 : s_rnge("buffer", i__1, 
-				    "sgfrvi_", (ftnlen)598)];
+				    i__1 ? i__1 : s_rnge(&__global_state->f2c,
+				     "buffer", i__1, "sgfrvi_", (ftnlen)598)];
 			} else {
 			    myfnd = TRUE_;
 			    myvalu = buffer[(i__1 = bfindx - 2) < 101 && 0 <= 
-				    i__1 ? i__1 : s_rnge("buffer", i__1, 
-				    "sgfrvi_", (ftnlen)603)];
+				    i__1 ? i__1 : s_rnge(&__global_state->f2c,
+				     "buffer", i__1, "sgfrvi_", (ftnlen)603)];
 			    --myindx;
 			}
 		    } else {
@@ -983,12 +985,12 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 /*                    value to be associated with X. */
 
 			if (*x > buffer[(i__1 = myindx - 1) < 101 && 0 <= 
-				i__1 ? i__1 : s_rnge("buffer", i__1, "sgfrvi_"
-				, (ftnlen)615)]) {
+				i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"buffer", i__1, "sgfrvi_", (ftnlen)615)]) {
 			    myfnd = TRUE_;
 			    myvalu = buffer[(i__1 = myindx - 1) < 101 && 0 <= 
-				    i__1 ? i__1 : s_rnge("buffer", i__1, 
-				    "sgfrvi_", (ftnlen)618)];
+				    i__1 ? i__1 : s_rnge(&__global_state->f2c,
+				     "buffer", i__1, "sgfrvi_", (ftnlen)618)];
 			} else {
 
 /*                       We did not find a reference value. X was */
@@ -1016,9 +1018,9 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 		--myindx;
 		begin = myrefb + myindx;
 		end = begin;
-		dafgda_(handle, &begin, &end, &myvalu);
-		if (failed_()) {
-		    chkout_("SGFRVI", (ftnlen)6);
+		dafgda_(__global_state, handle, &begin, &end, &myvalu);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SGFRVI", (ftnlen)6);
 		    return 0;
 		}
 	    }
@@ -1041,8 +1043,8 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 		if (myindx > 0 && myindx <= mynref) {
 		    myfnd = TRUE_;
 		    myvalu = buffer[(i__1 = bfindx - 1) < 101 && 0 <= i__1 ? 
-			    i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)
-			    684)];
+			    i__1 : s_rnge(&__global_state->f2c, "buffer", 
+			    i__1, "sgfrvi_", (ftnlen)684)];
 		} else if (myindx == 0) {
 
 /*                 We did not find a reference value. X was < the */
@@ -1086,17 +1088,18 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 /*                 the event of a tie. */
 
 		    if (buffer[(i__1 = i__) < 101 && 0 <= i__1 ? i__1 : 
-			    s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)734)] - 
-			    *x <= *x - buffer[(i__2 = i__ - 1) < 101 && 0 <= 
-			    i__2 ? i__2 : s_rnge("buffer", i__2, "sgfrvi_", (
-			    ftnlen)734)]) {
+			    s_rnge(&__global_state->f2c, "buffer", i__1, 
+			    "sgfrvi_", (ftnlen)734)] - *x <= *x - buffer[(
+			    i__2 = i__ - 1) < 101 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "buffer", i__2, 
+			    "sgfrvi_", (ftnlen)734)]) {
 			++i__;
 			++myindx;
 		    }
 		    myfnd = TRUE_;
 		    myvalu = buffer[(i__1 = i__ - 1) < 101 && 0 <= i__1 ? 
-			    i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)
-			    742)];
+			    i__1 : s_rnge(&__global_state->f2c, "buffer", 
+			    i__1, "sgfrvi_", (ftnlen)742)];
 		} else if (myindx == 0) {
 
 /*                 X is before the first reference value for the */
@@ -1114,8 +1117,8 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 
 		    myfnd = TRUE_;
 		    myvalu = buffer[(i__1 = bfindx - 1) < 101 && 0 <= i__1 ? 
-			    i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)
-			    762)];
+			    i__1 : s_rnge(&__global_state->f2c, "buffer", 
+			    i__1, "sgfrvi_", (ftnlen)762)];
 		}
 	    } else {
 
@@ -1133,9 +1136,9 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 
 	begin = myrefb + 1;
 	end = myrefb + 2;
-	dafgda_(handle, &begin, &end, buffer);
-	if (failed_()) {
-	    chkout_("SGFRVI", (ftnlen)6);
+	dafgda_(__global_state, handle, &begin, &end, buffer);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGFRVI", (ftnlen)6);
 	    return 0;
 	}
 	endref = buffer[0] + (doublereal) (mynpkt - 1) * buffer[1];
@@ -1172,14 +1175,15 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 /*              integer. */
 
 		if (dptemp > dpimax) {
-		    setmsg_("The computed index is too large to be represent"
-			    "ed as an integer. The most likely problem is tha"
-			    "t an incorrect value was stored for the step siz"
-			    "e. The value found for the step was: #", (ftnlen)
-			    181);
-		    errdp_("#", &buffer[1], (ftnlen)1);
-		    sigerr_("SPICE(INDEXTOOLARGE)", (ftnlen)20);
-		    chkout_("SGFRVI", (ftnlen)6);
+		    setmsg_(__global_state, "The computed index is too large"
+			    " to be represented as an integer. The most likel"
+			    "y problem is that an incorrect value was stored "
+			    "for the step size. The value found for the step "
+			    "was: #", (ftnlen)181);
+		    errdp_(__global_state, "#", &buffer[1], (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(INDEXTOOLARGE)", (ftnlen)
+			    20);
+		    chkout_(__global_state, "SGFRVI", (ftnlen)6);
 		    return 0;
 		}
 		myindx = (integer) dptemp;
@@ -1202,9 +1206,9 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 
 	begin = myrefb + 1;
 	end = myrefb + 2;
-	dafgda_(handle, &begin, &end, buffer);
-	if (failed_()) {
-	    chkout_("SGFRVI", (ftnlen)6);
+	dafgda_(__global_state, handle, &begin, &end, buffer);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SGFRVI", (ftnlen)6);
 	    return 0;
 	}
 	endref = buffer[0] + (doublereal) (mynpkt - 1) * buffer[1];
@@ -1244,14 +1248,15 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 
 		dptemp = (*x - buffer[0]) / buffer[1] + 1.5;
 		if (dptemp > dpimax + .5) {
-		    setmsg_("The computed index is too large to be represent"
-			    "ed as an integer. The most likely problem is tha"
-			    "t an incorrect value was stored for the step siz"
-			    "e. The value found for the step was: #", (ftnlen)
-			    181);
-		    errdp_("#", &buffer[1], (ftnlen)1);
-		    sigerr_("SPICE(INDEXTOOLARGE)", (ftnlen)20);
-		    chkout_("SGFRVI", (ftnlen)6);
+		    setmsg_(__global_state, "The computed index is too large"
+			    " to be represented as an integer. The most likel"
+			    "y problem is that an incorrect value was stored "
+			    "for the step size. The value found for the step "
+			    "was: #", (ftnlen)181);
+		    errdp_(__global_state, "#", &buffer[1], (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(INDEXTOOLARGE)", (ftnlen)
+			    20);
+		    chkout_(__global_state, "SGFRVI", (ftnlen)6);
 		    return 0;
 		}
 		myindx = (integer) dptemp;
@@ -1277,7 +1282,7 @@ static sgfrvi_state_t* get_sgfrvi_state() {
 	*value = myvalu;
     }
     *found = myfnd;
-    chkout_("SGFRVI", (ftnlen)6);
+    chkout_(__global_state, "SGFRVI", (ftnlen)6);
     return 0;
 } /* sgfrvi_ */
 

@@ -8,14 +8,13 @@
 
 
 typedef int dafrda_state_t;
-static dafrda_state_t* get_dafrda_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafrda_state_t* get_dafrda_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DAFRDA ( DAF, read data from address ) */
-/* Subroutine */ int dafrda_(integer *handle, integer *begin, integer *end, 
-	doublereal *data)
+/* Subroutine */ int dafrda_(cspice_t* __global_state, integer *handle, 
+	integer *begin, integer *end, doublereal *data)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -27,26 +26,28 @@ static dafrda_state_t* get_dafrda_state() {
     integer endw;
     integer last;
     integer next;
-    extern /* Subroutine */ int zzddhisn_(integer *, logical *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzddhisn_(cspice_t*, integer *, logical *, 
+	    logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
     logical found;
     integer first;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int dafrdr_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *);
-    extern /* Subroutine */ int dafarw_(integer *, integer *, integer *);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int dafrdr_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int dafarw_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     logical native;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dafrda_state_t* __state = get_dafrda_state();
+    dafrda_state_t* __state = get_dafrda_state(__global_state);
 /* $ Abstract */
 
 /*     Read the double precision data bounded by two addresses within */
@@ -254,54 +255,55 @@ static dafrda_state_t* get_dafrda_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Check to see if HANDLE is associated with a DAF of the native */
 /*     binary file format. */
 
-    zzddhisn_(handle, &native, &found);
+    zzddhisn_(__global_state, handle, &native, &found);
 
 /*     If the HANDLE was located, then check whether the binary file */
 /*     format is native.  Otherwise, defer diagnosing the missing */
 /*     handle to DAFRDR. */
 
     if (found && ! native) {
-	chkin_("DAFRDA", (ftnlen)6);
-	setmsg_("The binary file format for file '#' is not native. This rou"
-		"tine operates only on files of the native format.", (ftnlen)
-		108);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(UNSUPPORTEDBFF)", (ftnlen)21);
-	chkout_("DAFRDA", (ftnlen)6);
+	chkin_(__global_state, "DAFRDA", (ftnlen)6);
+	setmsg_(__global_state, "The binary file format for file '#' is not "
+		"native. This routine operates only on files of the native fo"
+		"rmat.", (ftnlen)108);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNSUPPORTEDBFF)", (ftnlen)21);
+	chkout_(__global_state, "DAFRDA", (ftnlen)6);
 	return 0;
     }
 
 /*     Bad addresses? */
 
     if (*begin <= 0) {
-	chkin_("DAFRDA", (ftnlen)6);
-	setmsg_("Negative value for BEGIN address: #", (ftnlen)35);
-	errint_("#", begin, (ftnlen)1);
-	sigerr_("SPICE(DAFNEGADDR)", (ftnlen)17);
-	chkout_("DAFRDA", (ftnlen)6);
+	chkin_(__global_state, "DAFRDA", (ftnlen)6);
+	setmsg_(__global_state, "Negative value for BEGIN address: #", (
+		ftnlen)35);
+	errint_(__global_state, "#", begin, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNEGADDR)", (ftnlen)17);
+	chkout_(__global_state, "DAFRDA", (ftnlen)6);
 	return 0;
     } else if (*begin > *end) {
-	chkin_("DAFRDA", (ftnlen)6);
-	setmsg_("Beginning address (#) greater than ending address (#).", (
-		ftnlen)54);
-	errint_("#", begin, (ftnlen)1);
-	errint_("#", end, (ftnlen)1);
-	sigerr_("SPICE(DAFBEGGTEND)", (ftnlen)18);
-	chkout_("DAFRDA", (ftnlen)6);
+	chkin_(__global_state, "DAFRDA", (ftnlen)6);
+	setmsg_(__global_state, "Beginning address (#) greater than ending a"
+		"ddress (#).", (ftnlen)54);
+	errint_(__global_state, "#", begin, (ftnlen)1);
+	errint_(__global_state, "#", end, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFBEGGTEND)", (ftnlen)18);
+	chkout_(__global_state, "DAFRDA", (ftnlen)6);
 	return 0;
     }
 
 /*     Convert raw addresses to record/word representations. */
 
-    dafarw_(begin, &begr, &begw);
-    dafarw_(end, &endr, &endw);
+    dafarw_(__global_state, begin, &begr, &begw);
+    dafarw_(__global_state, end, &endr, &endw);
 
 /*     Get as many records as needed. Return the last part of the */
 /*     first record, the first part of the last record, and all of */
@@ -324,10 +326,11 @@ static dafrda_state_t* get_dafrda_state() {
 	    first = 1;
 	    last = 128;
 	}
-	dafrdr_(handle, &recno, &first, &last, &data[next - 1], &found);
+	dafrdr_(__global_state, handle, &recno, &first, &last, &data[next - 1]
+		, &found);
 	if (! found) {
 	    i__2 = last - first + 1;
-	    cleard_(&i__2, &data[next - 1]);
+	    cleard_(__global_state, &i__2, &data[next - 1]);
 	}
 	next += last - first + 1;
     }

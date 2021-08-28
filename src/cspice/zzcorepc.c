@@ -8,24 +8,24 @@
 
 
 typedef int zzcorepc_state_t;
-static zzcorepc_state_t* get_zzcorepc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzcorepc_state_t* get_zzcorepc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZCOREPC ( Correct epoch for aberration ) */
-/* Subroutine */ int zzcorepc_(char *abcorr, doublereal *et, doublereal *lt, 
-	doublereal *etcorr, ftnlen abcorr_len)
+/* Subroutine */ int zzcorepc_(cspice_t* __global_state, char *abcorr, 
+	doublereal *et, doublereal *lt, doublereal *etcorr, ftnlen abcorr_len)
 {
-    extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzprscor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical corblk[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzcorepc_state_t* __state = get_zzcorepc_state();
+    zzcorepc_state_t* __state = get_zzcorepc_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -308,15 +308,15 @@ static zzcorepc_state_t* get_zzcorepc_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZCOREPC", (ftnlen)8);
+    chkin_(__global_state, "ZZCOREPC", (ftnlen)8);
 
 /*     Parse the aberration correction string.  Obtain a correction */
 /*     attribute block. */
 
-    zzprscor_(abcorr, corblk, abcorr_len);
+    zzprscor_(__global_state, abcorr, corblk, abcorr_len);
     if (corblk[1]) {
 
 /*        Light time corrections are used.  The output epoch */
@@ -340,7 +340,7 @@ static zzcorepc_state_t* get_zzcorepc_state() {
 
 	*etcorr = *et;
     }
-    chkout_("ZZCOREPC", (ftnlen)8);
+    chkout_(__global_state, "ZZCOREPC", (ftnlen)8);
     return 0;
 } /* zzcorepc_ */
 

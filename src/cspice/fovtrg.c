@@ -8,8 +8,7 @@
 
 
 extern fovtrg_init_t __fovtrg_init;
-static fovtrg_state_t* get_fovtrg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline fovtrg_state_t* get_fovtrg_state(cspice_t* state) {
 	if (!state->fovtrg)
 		state->fovtrg = __cspice_allocate_module(sizeof(
 	fovtrg_state_t), &__fovtrg_init, sizeof(__fovtrg_init));
@@ -18,29 +17,30 @@ static fovtrg_state_t* get_fovtrg_state() {
 }
 
 /* $Procedure      FOVTRG ( Is target in FOV at time? ) */
-/* Subroutine */ int fovtrg_(char *inst, char *target, char *tshape, char *
-	tframe, char *abcorr, char *obsrvr, doublereal *et, logical *visibl, 
-	ftnlen inst_len, ftnlen target_len, ftnlen tshape_len, ftnlen 
-	tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int fovtrg_(cspice_t* __global_state, char *inst, char *
+	target, char *tshape, char *tframe, char *abcorr, char *obsrvr, 
+	doublereal *et, logical *visibl, ftnlen inst_len, ftnlen target_len, 
+	ftnlen tshape_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen 
+	obsrvr_len)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int zzgffvin_(char *, char *, doublereal *, char *
-	    , char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int zzgffvst_(doublereal *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzgffvin_(cspice_t*, char *, char *, 
+	    doublereal *, char *, char *, char *, char *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgffvst_(cspice_t*, doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    fovtrg_state_t* __state = get_fovtrg_state();
+    fovtrg_state_t* __state = get_fovtrg_state(__global_state);
 /* $ Abstract */
 
 /*     Determine if a specified ephemeris object is within the */
@@ -799,18 +799,18 @@ static fovtrg_state_t* get_fovtrg_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("FOVTRG", (ftnlen)6);
+    chkin_(__global_state, "FOVTRG", (ftnlen)6);
 
 /*     Reject the target shape 'RAY'. */
 
-    if (eqstr_(tshape, "RAY", tshape_len, (ftnlen)3)) {
-	setmsg_("The target shape RAY is not supported by this routine. Use "
-		"the routine FOVRAY instead.", (ftnlen)86);
-	sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	chkout_("FOVTRG", (ftnlen)6);
+    if (eqstr_(__global_state, tshape, "RAY", tshape_len, (ftnlen)3)) {
+	setmsg_(__global_state, "The target shape RAY is not supported by th"
+		"is routine. Use the routine FOVRAY instead.", (ftnlen)86);
+	sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	chkout_(__global_state, "FOVTRG", (ftnlen)6);
 	return 0;
     }
 
@@ -823,18 +823,18 @@ static fovtrg_state_t* get_fovtrg_state() {
 
 /*     Initialize the visibility calculation. */
 
-    zzgffvin_(inst, tshape, __state->raydir, target, tframe, abcorr, obsrvr, 
-	    inst_len, tshape_len, target_len, tframe_len, abcorr_len, 
-	    obsrvr_len);
-    if (failed_()) {
-	chkout_("FOVTRG", (ftnlen)6);
+    zzgffvin_(__global_state, inst, tshape, __state->raydir, target, tframe, 
+	    abcorr, obsrvr, inst_len, tshape_len, target_len, tframe_len, 
+	    abcorr_len, obsrvr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "FOVTRG", (ftnlen)6);
 	return 0;
     }
 
 /*     Calculate the visibility state. */
 
-    zzgffvst_(et, visibl);
-    chkout_("FOVTRG", (ftnlen)6);
+    zzgffvst_(__global_state, et, visibl);
+    chkout_(__global_state, "FOVTRG", (ftnlen)6);
     return 0;
 } /* fovtrg_ */
 

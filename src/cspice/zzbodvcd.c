@@ -8,27 +8,27 @@
 
 
 typedef int zzbodvcd_state_t;
-static zzbodvcd_state_t* get_zzbodvcd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzbodvcd_state_t* get_zzbodvcd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZBODVCD ( Get d.p. kernel variable for body, with bypass ) */
-/* Subroutine */ int zzbodvcd_(integer *bodyid, char *item, integer *maxn, 
-	integer *varctr, integer *n, doublereal *values, ftnlen item_len)
+/* Subroutine */ int zzbodvcd_(cspice_t* __global_state, integer *bodyid, 
+	char *item, integer *maxn, integer *varctr, integer *n, doublereal *
+	values, ftnlen item_len)
 {
-    extern /* Subroutine */ int zzpctrck_(integer *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzpctrck_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
     logical update;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzbodvcd_state_t* __state = get_zzbodvcd_state();
+    zzbodvcd_state_t* __state = get_zzbodvcd_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -390,27 +390,27 @@ static zzbodvcd_state_t* get_zzbodvcd_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZBODVCD", (ftnlen)8);
+    chkin_(__global_state, "ZZBODVCD", (ftnlen)8);
 
 /*     See whether the kernel pool state has changed since the */
 /*     user counter was set. Update the user counter if so. */
 
-    zzpctrck_(varctr, &update);
+    zzpctrck_(__global_state, varctr, &update);
 
 /*     If the pool was updated, or if we're looking at a new variable, */
 /*     update the kernel variable values, size, and found flag. */
 /*     Otherwise do nothing. */
 
     if (update) {
-	bodvcd_(bodyid, item, maxn, n, values, item_len);
-	if (failed_()) {
+	bodvcd_(__global_state, bodyid, item, maxn, n, values, item_len);
+	if (failed_(__global_state)) {
 	    *n = 0;
 	}
     }
-    chkout_("ZZBODVCD", (ftnlen)8);
+    chkout_(__global_state, "ZZBODVCD", (ftnlen)8);
     return 0;
 } /* zzbodvcd_ */
 

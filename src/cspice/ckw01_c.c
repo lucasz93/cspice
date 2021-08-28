@@ -505,7 +505,7 @@
    /*
    Participate in error handling.
    */
-   chkin_c ( "ckw01_c" );
+   chkin_c ( naif_state, "ckw01_c" );
 
  
    /*

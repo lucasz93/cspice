@@ -8,26 +8,25 @@
 
 
 typedef int vnorm_state_t;
-static vnorm_state_t* get_vnorm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vnorm_state_t* get_vnorm_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VNORM ( Vector norm, 3 dimensions ) */
-doublereal vnorm_(doublereal *v1)
+doublereal vnorm_(cspice_t* __global_state, doublereal *v1)
 {
     /* System generated locals */
     doublereal ret_val, d__1, d__2, d__3;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal v1max;
 
 
     /* Module state */
-    vnorm_state_t* __state = get_vnorm_state();
+    vnorm_state_t* __state = get_vnorm_state(__global_state);
 /* $ Abstract */
 
 /*      Compute the magnitude of a double precision, 3-dimensional */
@@ -171,7 +170,8 @@ doublereal vnorm_(doublereal *v1)
 	d__2 = v1[1] / v1max;
 /* Computing 2nd power */
 	d__3 = v1[2] / v1max;
-	ret_val = v1max * sqrt(d__1 * d__1 + d__2 * d__2 + d__3 * d__3);
+	ret_val = v1max * sqrt(&__global_state->f2c, d__1 * d__1 + d__2 * 
+		d__2 + d__3 * d__3);
     }
 
     return ret_val;

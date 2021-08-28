@@ -8,14 +8,13 @@
 
 
 typedef int zzddhivf_state_t;
-static zzddhivf_state_t* get_zzddhivf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzddhivf_state_t* get_zzddhivf_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZDDHIVF ( Private --- DDH Identify VAX DAF File Format ) */
-/* Subroutine */ int zzddhivf_(char *nsum, integer *bff, logical *found, 
-	ftnlen nsum_len)
+/* Subroutine */ int zzddhivf_(cspice_t* __global_state, char *nsum, integer *
+	bff, logical *found, ftnlen nsum_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
@@ -27,7 +26,7 @@ static zzddhivf_state_t* get_zzddhivf_state() {
 
 
     /* Module state */
-    zzddhivf_state_t* __state = get_zzddhivf_state();
+    zzddhivf_state_t* __state = get_zzddhivf_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */

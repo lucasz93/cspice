@@ -8,35 +8,34 @@
 
 
 typedef int ckcls_state_t;
-static ckcls_state_t* get_ckcls_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckcls_state_t* get_ckcls_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure CKCLS ( CK, Close file ) */
-/* Subroutine */ int ckcls_(integer *handle)
+/* Subroutine */ int ckcls_(cspice_t* __global_state, integer *handle)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found;
-    extern /* Subroutine */ int daffna_(logical *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *);
-    extern /* Subroutine */ int dafcls_(integer *);
+    extern /* Subroutine */ int daffna_(cspice_t*, logical *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafbfs_(cspice_t*, integer *);
+    extern /* Subroutine */ int dafcls_(cspice_t*, integer *);
     char access[5];
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ckcls_state_t* __state = get_ckcls_state();
+    ckcls_state_t* __state = get_ckcls_state(__global_state);
 /* $ Abstract */
 
 /*     Close an open CK file. */
@@ -167,10 +166,10 @@ static ckcls_state_t* get_ckcls_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKCLS", (ftnlen)5);
+    chkin_(__global_state, "CKCLS", (ftnlen)5);
 
 /*     Get the access method for the file. Currently, if HANDLE < 0, the */
 /*     access method is 'WRITE'. If HANDLE > 0, the access method is */
@@ -178,46 +177,47 @@ static ckcls_state_t* get_ckcls_state() {
 /*     in the handle manager umbrella, ZZDDHNFO. */
 
     if (*handle < 0) {
-	s_copy(access, "WRITE", (ftnlen)5, (ftnlen)5);
+	s_copy(&__global_state->f2c, access, "WRITE", (ftnlen)5, (ftnlen)5);
     } else if (*handle > 0) {
-	s_copy(access, "READ", (ftnlen)5, (ftnlen)4);
+	s_copy(&__global_state->f2c, access, "READ", (ftnlen)5, (ftnlen)4);
     }
 
 /*     Fix the ID word if the file is open for writing and close the */
 /*     file, or just close the file. */
 
-    if (s_cmp(access, "WRITE", (ftnlen)5, (ftnlen)5) == 0) {
+    if (s_cmp(&__global_state->f2c, access, "WRITE", (ftnlen)5, (ftnlen)5) == 
+	    0) {
 
 /*        Check to see if there are any segments in the file. If there */
 /*        are no segments, we signal an error. This probably indicates a */
 /*        programming error of some sort anyway. Why would you create a */
 /*        file and put nothing in it? */
 
-	dafbfs_(handle);
-	daffna_(&found);
-	if (failed_()) {
-	    chkout_("CKCLS", (ftnlen)5);
+	dafbfs_(__global_state, handle);
+	daffna_(__global_state, &found);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKCLS", (ftnlen)5);
 	    return 0;
 	}
 	if (! found) {
-	    setmsg_("No segments were found in the CK file '#'. There must b"
-		    "e at least one segment in the file when this subroutine "
-		    "is called.", (ftnlen)121);
-	    errhan_("#", handle, (ftnlen)1);
-	    sigerr_("SPICE(NOSEGMENTSFOUND)", (ftnlen)22);
-	    chkout_("CKCLS", (ftnlen)5);
+	    setmsg_(__global_state, "No segments were found in the CK file '"
+		    "#'. There must be at least one segment in the file when "
+		    "this subroutine is called.", (ftnlen)121);
+	    errhan_(__global_state, "#", handle, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOSEGMENTSFOUND)", (ftnlen)22);
+	    chkout_(__global_state, "CKCLS", (ftnlen)5);
 	    return 0;
 	}
     }
 
 /*     Close the file. */
 
-    dafcls_(handle);
+    dafcls_(__global_state, handle);
 
 /*     No need to check FAILED() here, since we just return. The caller */
 /*     should check it though. */
 
-    chkout_("CKCLS", (ftnlen)5);
+    chkout_(__global_state, "CKCLS", (ftnlen)5);
     return 0;
 } /* ckcls_ */
 

@@ -8,8 +8,7 @@
 
 
 extern zzctr_init_t __zzctr_init;
-static zzctr_state_t* get_zzctr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzctr_state_t* get_zzctr_state(cspice_t* state) {
 	if (!state->zzctr)
 		state->zzctr = __cspice_allocate_module(sizeof(zzctr_state_t),
 	 &__zzctr_init, sizeof(__zzctr_init));
@@ -18,23 +17,23 @@ static zzctr_state_t* get_zzctr_state() {
 }
 
 /* $Procedure ZZCTR ( Manipulate Counter Array ) */
-/* Subroutine */ int zzctr_0_(int n__, integer *newctr, integer *oldctr, 
-	logical *update)
+/* Subroutine */ int zzctr_0_(cspice_t* __global_state, int n__, integer *
+	newctr, integer *oldctr, logical *update)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern integer intmin_(void);
-    extern integer intmax_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern integer intmin_(cspice_t*);
+    extern integer intmax_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzctr_state_t* __state = get_zzctr_state();
+    zzctr_state_t* __state = get_zzctr_state(__global_state);
 /* $ Abstract */
 
 /*     Manipulate counter array. */
@@ -348,19 +347,19 @@ static zzctr_state_t* get_zzctr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     This routine should never be called. If this routine is called, */
 /*     an error is signaled. */
 
-    chkin_("ZZCTR", (ftnlen)5);
-    setmsg_("ZZCTR: You have called an entry which performs performs no run-"
-	    "time function. This may indicate a bug. Please check the documen"
-	    "tation for the subroutine ZZCTR.", (ftnlen)159);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZCTR", (ftnlen)5);
+    chkin_(__global_state, "ZZCTR", (ftnlen)5);
+    setmsg_(__global_state, "ZZCTR: You have called an entry which performs "
+	    "performs no run-time function. This may indicate a bug. Please c"
+	    "heck the documentation for the subroutine ZZCTR.", (ftnlen)159);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZCTR", (ftnlen)5);
     return 0;
 /* $Procedure ZZCTRUIN ( CounTeR array, User counter INitialization ) */
 
@@ -471,15 +470,15 @@ L_zzctruin:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Initialize the high and low values. */
 
     if (__state->first) {
-	__state->ctrhgh = intmax_();
-	__state->ctrlow = intmin_();
+	__state->ctrhgh = intmax_(__global_state);
+	__state->ctrlow = intmin_(__global_state);
 	__state->first = FALSE_;
     }
 
@@ -598,15 +597,15 @@ L_zzctrsin:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Initialize the high and low values. */
 
     if (__state->first) {
-	__state->ctrhgh = intmax_();
-	__state->ctrlow = intmin_();
+	__state->ctrhgh = intmax_(__global_state);
+	__state->ctrlow = intmin_(__global_state);
 	__state->first = FALSE_;
     }
 
@@ -723,15 +722,15 @@ L_zzctrinc:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Initialize the high and low values. */
 
     if (__state->first) {
-	__state->ctrhgh = intmax_();
-	__state->ctrlow = intmin_();
+	__state->ctrhgh = intmax_(__global_state);
+	__state->ctrlow = intmin_(__global_state);
 	__state->first = FALSE_;
     }
 
@@ -739,14 +738,14 @@ L_zzctrinc:
 /*     values. */
 
     if (oldctr[0] == __state->ctrhgh && oldctr[1] == __state->ctrhgh) {
-	chkin_("ZZCTRINC", (ftnlen)8);
-	setmsg_("A subsystem state counter overflowed. For this to happen th"
-		"ere must be a SPICE bug or you must have been running your S"
-		"PICE-based application for a very long time. Please contact "
-		"NAIF.and report the circumstances under which this happened.",
-		 (ftnlen)239);
-	sigerr_("SPICE(SPICEISTIRED)", (ftnlen)19);
-	chkout_("ZZCTRINC", (ftnlen)8);
+	chkin_(__global_state, "ZZCTRINC", (ftnlen)8);
+	setmsg_(__global_state, "A subsystem state counter overflowed. For t"
+		"his to happen there must be a SPICE bug or you must have bee"
+		"n running your SPICE-based application for a very long time."
+		" Please contact NAIF.and report the circumstances under whic"
+		"h this happened.", (ftnlen)239);
+	sigerr_(__global_state, "SPICE(SPICEISTIRED)", (ftnlen)19);
+	chkout_(__global_state, "ZZCTRINC", (ftnlen)8);
 	return 0;
     }
 
@@ -878,7 +877,7 @@ L_zzctrchk:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -895,28 +894,29 @@ L_zzctrchk:
     return 0;
 } /* zzctr_ */
 
-/* Subroutine */ int zzctr_(integer *newctr, integer *oldctr, logical *update)
+/* Subroutine */ int zzctr_(cspice_t* __global_state, integer *newctr, 
+	integer *oldctr, logical *update)
 {
     return zzctr_0_(0, newctr, oldctr, update);
     }
 
-/* Subroutine */ int zzctruin_(integer *oldctr)
+/* Subroutine */ int zzctruin_(cspice_t* __global_state, integer *oldctr)
 {
     return zzctr_0_(1, (integer *)0, oldctr, (logical *)0);
     }
 
-/* Subroutine */ int zzctrsin_(integer *oldctr)
+/* Subroutine */ int zzctrsin_(cspice_t* __global_state, integer *oldctr)
 {
     return zzctr_0_(2, (integer *)0, oldctr, (logical *)0);
     }
 
-/* Subroutine */ int zzctrinc_(integer *oldctr)
+/* Subroutine */ int zzctrinc_(cspice_t* __global_state, integer *oldctr)
 {
     return zzctr_0_(3, (integer *)0, oldctr, (logical *)0);
     }
 
-/* Subroutine */ int zzctrchk_(integer *newctr, integer *oldctr, logical *
-	update)
+/* Subroutine */ int zzctrchk_(cspice_t* __global_state, integer *newctr, 
+	integer *oldctr, logical *update)
 {
     return zzctr_0_(4, newctr, oldctr, update);
     }

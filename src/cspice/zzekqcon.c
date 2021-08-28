@@ -8,45 +8,45 @@
 
 
 typedef int zzekqcon_state_t;
-static zzekqcon_state_t* get_zzekqcon_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekqcon_state_t* get_zzekqcon_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  ZZEKQCON ( Private: EK, read constraints from query ) */
-/* Subroutine */ int zzekqcon_(integer *eqryi, char *eqryc, doublereal *eqryd,
-	 integer *n, integer *cnstyp, char *ltname, integer *ltidx, char *
-	lcname, integer *lcidx, integer *opcode, char *rtname, integer *rtidx,
-	 char *rcname, integer *rcidx, integer *dtype, integer *cbeg, integer 
-	*cend, doublereal *dval, integer *ival, ftnlen eqryc_len, ftnlen 
-	ltname_len, ftnlen lcname_len, ftnlen rtname_len, ftnlen rcname_len)
+/* Subroutine */ int zzekqcon_(cspice_t* __global_state, integer *eqryi, char 
+	*eqryc, doublereal *eqryd, integer *n, integer *cnstyp, char *ltname, 
+	integer *ltidx, char *lcname, integer *lcidx, integer *opcode, char *
+	rtname, integer *rtidx, char *rcname, integer *rcidx, integer *dtype, 
+	integer *cbeg, integer *cend, doublereal *dval, integer *ival, ftnlen 
+	eqryc_len, ftnlen ltname_len, ftnlen lcname_len, ftnlen rtname_len, 
+	ftnlen rcname_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_dnnt(doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer base;
     integer ntab;
     integer ncns;
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer cb;
     integer ce;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer icheck;
     integer tb;
     integer te;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer ptr;
 
 
     /* Module state */
-    zzekqcon_state_t* __state = get_zzekqcon_state();
+    zzekqcon_state_t* __state = get_zzekqcon_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -778,27 +778,28 @@ static zzekqcon_state_t* get_zzekqcon_state() {
 
 /*     Use discovery check-in. */
 
-    zzekreqi_(eqryi, "SEM_CHECKED", &icheck, (ftnlen)11);
-    if (failed_()) {
+    zzekreqi_(__global_state, eqryi, "SEM_CHECKED", &icheck, (ftnlen)11);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (icheck == -1) {
-	chkin_("ZZEKQCON", (ftnlen)8);
-	setmsg_("Encoded query has not been semantically checked.", (ftnlen)
-		48);
-	sigerr_("SPICE(NOTSEMCHECKED)", (ftnlen)20);
-	chkout_("ZZEKQCON", (ftnlen)8);
+	chkin_(__global_state, "ZZEKQCON", (ftnlen)8);
+	setmsg_(__global_state, "Encoded query has not been semantically che"
+		"cked.", (ftnlen)48);
+	sigerr_(__global_state, "SPICE(NOTSEMCHECKED)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKQCON", (ftnlen)8);
 	return 0;
     }
-    zzekreqi_(eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
-    zzekreqi_(eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
+    zzekreqi_(__global_state, eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
+    zzekreqi_(__global_state, eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
     if (*n < 1 || *n > ncns) {
-	chkin_("ZZEKQCON", (ftnlen)8);
-	setmsg_("Constraint index # is out of valid range 1:#.", (ftnlen)45);
-	errint_("#", n, (ftnlen)1);
-	errint_("#", &ncns, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKQCON", (ftnlen)8);
+	chkin_(__global_state, "ZZEKQCON", (ftnlen)8);
+	setmsg_(__global_state, "Constraint index # is out of valid range 1:"
+		"#.", (ftnlen)45);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	errint_(__global_state, "#", &ncns, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKQCON", (ftnlen)8);
 	return 0;
     }
 
@@ -816,14 +817,16 @@ static zzekqcon_state_t* get_zzekqcon_state() {
     tb = eqryi[base + 10];
     te = eqryi[base + 11];
     if (tb != 0) {
-	s_copy(ltname, eqryc + (tb - 1), ltname_len, te - (tb - 1));
+	s_copy(&__global_state->f2c, ltname, eqryc + (tb - 1), ltname_len, te 
+		- (tb - 1));
     } else {
-	s_copy(ltname, " ", ltname_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, ltname, " ", ltname_len, (ftnlen)1);
     }
     *lcidx = eqryi[base + 18];
     cb = eqryi[base + 16];
     ce = eqryi[base + 17];
-    s_copy(lcname, eqryc + (cb - 1), lcname_len, ce - (cb - 1));
+    s_copy(&__global_state->f2c, lcname, eqryc + (cb - 1), lcname_len, ce - (
+	    cb - 1));
 
 /*     Next, the opcode. */
 
@@ -837,14 +840,16 @@ static zzekqcon_state_t* get_zzekqcon_state() {
 	tb = eqryi[base + 23];
 	te = eqryi[base + 24];
 	if (tb != 0) {
-	    s_copy(rtname, eqryc + (tb - 1), rtname_len, te - (tb - 1));
+	    s_copy(&__global_state->f2c, rtname, eqryc + (tb - 1), rtname_len,
+		     te - (tb - 1));
 	} else {
-	    s_copy(rtname, " ", rtname_len, (ftnlen)1);
+	    s_copy(&__global_state->f2c, rtname, " ", rtname_len, (ftnlen)1);
 	}
 	*rcidx = eqryi[base + 31];
 	cb = eqryi[base + 29];
 	ce = eqryi[base + 30];
-	s_copy(rcname, eqryc + (cb - 1), rcname_len, ce - (cb - 1));
+	s_copy(&__global_state->f2c, rcname, eqryc + (cb - 1), rcname_len, ce 
+		- (cb - 1));
 
 /*        ...and clear out the scalar outputs. */
 
@@ -879,7 +884,7 @@ static zzekqcon_state_t* get_zzekqcon_state() {
 		*ival = 0;
 	    } else if (*dtype == 3) {
 		ptr = eqryi[base + 23];
-		*ival = i_dnnt(&eqryd[ptr - 1]);
+		*ival = i_dnnt(&__global_state->f2c, &eqryd[ptr - 1]);
 		*dval = 0.;
 		*cbeg = 1;
 		*cend = 1;
@@ -898,9 +903,9 @@ static zzekqcon_state_t* get_zzekqcon_state() {
 /*        Set the RHS table and column outputs. */
 
 	*rtidx = 0;
-	s_copy(rtname, " ", rtname_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, rtname, " ", rtname_len, (ftnlen)1);
 	*rcidx = 0;
-	s_copy(rtname, " ", rtname_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, rtname, " ", rtname_len, (ftnlen)1);
     }
     return 0;
 } /* zzekqcon_ */

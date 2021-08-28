@@ -8,17 +8,17 @@
 
 
 typedef int vminus_state_t;
-static vminus_state_t* get_vminus_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vminus_state_t* get_vminus_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VMINUS ( Minus V, "-V", 3 dimensions ) */
-/* Subroutine */ int vminus_(doublereal *v1, doublereal *vout)
+/* Subroutine */ int vminus_(cspice_t* __global_state, doublereal *v1, 
+	doublereal *vout)
 {
 
     /* Module state */
-    vminus_state_t* __state = get_vminus_state();
+    vminus_state_t* __state = get_vminus_state(__global_state);
 /* $ Abstract */
 
 /*     Negate a double precision 3-dimensional vector. */

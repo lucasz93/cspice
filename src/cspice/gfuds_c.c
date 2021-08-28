@@ -882,7 +882,7 @@
      {
       return;
       }
-   chkin_c ( "gfuds_c" );
+   chkin_c ( naif_state, "gfuds_c" );
 
 
    /*
@@ -905,8 +905,8 @@
    Store the input function pointers so these functions can be
    called by the GF adapters.
    */
-   zzadsave_c ( UDFUNC,  (void *)(udfuns)  );
-   zzadsave_c ( UDQDEC,  (void *)(udqdec)  );
+   zzadsave_c ( naif_state, UDFUNC,  (void *)(udfuns)  );
+   zzadsave_c ( naif_state, UDQDEC,  (void *)(udqdec)  );
 
    /*
    Check the workspace size; some mallocs have a violent

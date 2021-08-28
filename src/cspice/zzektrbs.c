@@ -8,8 +8,7 @@
 
 
 extern zzektrbs_init_t __zzektrbs_init;
-static zzektrbs_state_t* get_zzektrbs_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrbs_state_t* get_zzektrbs_state(cspice_t* state) {
 	if (!state->zzektrbs)
 		state->zzektrbs = __cspice_allocate_module(sizeof(
 	zzektrbs_state_t), &__zzektrbs_init, sizeof(__zzektrbs_init));
@@ -18,17 +17,18 @@ static zzektrbs_state_t* get_zzektrbs_state() {
 }
 
 /* $Procedure      ZZEKTRBS ( EK tree, base address ) */
-integer zzektrbs_(integer *node)
+integer zzektrbs_(cspice_t* __global_state, integer *node)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Local variables */
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgbs_(cspice_t*, integer *, integer *, 
+	    integer *);
 
 
     /* Module state */
-    zzektrbs_state_t* __state = get_zzektrbs_state();
+    zzektrbs_state_t* __state = get_zzektrbs_state(__global_state);
 /* $ Abstract */
 
 /*     Map a node in a tree to its DAS base integer address. */
@@ -191,7 +191,7 @@ integer zzektrbs_(integer *node)
 
 /*     Just use the mapping supplied by the paging system. */
 
-    zzekpgbs_(&__state->c__3, node, &ret_val);
+    zzekpgbs_(__global_state, &__state->c__3, node, &ret_val);
     return ret_val;
 } /* zzektrbs_ */
 

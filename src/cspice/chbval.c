@@ -8,14 +8,13 @@
 
 
 typedef int chbval_state_t;
-static chbval_state_t* get_chbval_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline chbval_state_t* get_chbval_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CHBVAL ( Value of a Chebsheff polynomial expansion ) */
-/* Subroutine */ int chbval_(doublereal *cp, integer *degp, doublereal *x2s, 
-	doublereal *x, doublereal *p)
+/* Subroutine */ int chbval_(cspice_t* __global_state, doublereal *cp, 
+	integer *degp, doublereal *x2s, doublereal *x, doublereal *p)
 {
     integer j;
     doublereal s;
@@ -24,7 +23,7 @@ static chbval_state_t* get_chbval_state() {
 
 
     /* Module state */
-    chbval_state_t* __state = get_chbval_state();
+    chbval_state_t* __state = get_chbval_state(__global_state);
 /* $ Abstract */
 
 /*     Given the coefficients for the Chebyshev expansion of a */

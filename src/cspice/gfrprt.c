@@ -8,8 +8,7 @@
 
 
 extern gfrprt_init_t __gfrprt_init;
-static gfrprt_state_t* get_gfrprt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gfrprt_state_t* get_gfrprt_state(cspice_t* state) {
 	if (!state->gfrprt)
 		state->gfrprt = __cspice_allocate_module(sizeof(
 	gfrprt_state_t), &__gfrprt_init, sizeof(__gfrprt_init));
@@ -18,58 +17,60 @@ static gfrprt_state_t* get_gfrprt_state() {
 }
 
 /* $Procedure GFRPRT ( GF, progress reporting package ) */
-/* Subroutine */ int gfrprt_0_(int n__, doublereal *window, char *begmss, 
-	char *endmss, doublereal *ivbeg, doublereal *ivend, doublereal *time, 
-	ftnlen begmss_len, ftnlen endmss_len)
+/* Subroutine */ int gfrprt_0_(cspice_t* __global_state, int n__, doublereal *
+	window, char *begmss, char *endmss, doublereal *ivbeg, doublereal *
+	ivend, doublereal *time, ftnlen begmss_len, ftnlen endmss_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal incr;
     doublereal freq;
     integer long__;
     integer unit;
-    extern /* Subroutine */ int zzgfwkad_(doublereal *, integer *, char *, 
-	    char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfwkin_(doublereal *);
-    extern /* Subroutine */ int zzgfdsps_(integer *, char *, char *, integer *
-	    , ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfwkmo_(integer *, doublereal *, doublereal 
-	    *, integer *, char *, char *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgftswk_(doublereal *, doublereal *, integer 
-	    *, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfwkad_(cspice_t*, doublereal *, integer *, 
+	    char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfwkin_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int zzgfdsps_(cspice_t*, integer *, char *, char *
+	    , integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfwkmo_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, integer *, char *, char *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzgftswk_(cspice_t*, doublereal *, doublereal 
+	    *, integer *, char *, char *, ftnlen, ftnlen);
     integer i__;
-    extern integer cardd_(doublereal *);
+    extern integer cardd_(cspice_t*, doublereal *);
     char begin[55];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int stdio_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int stdio_(cspice_t*, char *, integer *, ftnlen);
     doublereal total;
     integer short__;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer tcheck;
     integer chrcod;
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     doublereal stddev;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     doublereal measur;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int wnsumd_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int wnsumd_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, integer *, integer *);
+    extern logical return_(cspice_t*);
     integer stdout;
     char end[13];
     doublereal ave;
 
 
     /* Module state */
-    gfrprt_state_t* __state = get_gfrprt_state();
+    gfrprt_state_t* __state = get_gfrprt_state(__global_state);
 /* $ Abstract */
 
 /*     The entry points contained under this routine provide users */
@@ -510,9 +511,9 @@ static gfrprt_state_t* get_gfrprt_state() {
 	case 3: goto L_gfrepf;
 	}
 
-    chkin_("GFRPRT", (ftnlen)6);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("GFRPRT", (ftnlen)6);
+    chkin_(__global_state, "GFRPRT", (ftnlen)6);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "GFRPRT", (ftnlen)6);
     return 0;
 /* $Procedure GFREPI ( GF, progress report initialization ) */
 
@@ -666,73 +667,78 @@ L_gfrepi:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("GFREPI", (ftnlen)6);
+    chkin_(__global_state, "GFREPI", (ftnlen)6);
 
 /*     Check to see if either the message prefix or suffix */
 /*     is too long. */
 
-    if (lastnb_(begmss, begmss_len) > 55) {
-	setmsg_("Progress report prefix message contains # characters; limit"
-		" is #.", (ftnlen)65);
-	i__1 = lastnb_(begmss, begmss_len);
-	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &__state->c__55, (ftnlen)1);
-	sigerr_("SPICE(MESSAGETOOLONG)", (ftnlen)21);
-	chkout_("GFREPI", (ftnlen)6);
+    if (lastnb_(__global_state, begmss, begmss_len) > 55) {
+	setmsg_(__global_state, "Progress report prefix message contains # c"
+		"haracters; limit is #.", (ftnlen)65);
+	i__1 = lastnb_(__global_state, begmss, begmss_len);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__55, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(MESSAGETOOLONG)", (ftnlen)21);
+	chkout_(__global_state, "GFREPI", (ftnlen)6);
 	return 0;
     }
-    if (lastnb_(endmss, endmss_len) > 13) {
-	setmsg_("Progress report suffix message contains # characters; limit"
-		" is #.", (ftnlen)65);
-	i__1 = lastnb_(endmss, endmss_len);
-	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &__state->c__13, (ftnlen)1);
-	sigerr_("SPICE(MESSAGETOOLONG)", (ftnlen)21);
-	chkout_("GFREPI", (ftnlen)6);
+    if (lastnb_(__global_state, endmss, endmss_len) > 13) {
+	setmsg_(__global_state, "Progress report suffix message contains # c"
+		"haracters; limit is #.", (ftnlen)65);
+	i__1 = lastnb_(__global_state, endmss, endmss_len);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__13, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(MESSAGETOOLONG)", (ftnlen)21);
+	chkout_(__global_state, "GFREPI", (ftnlen)6);
 	return 0;
     }
 
 /*     Now check that all the characters in the message prefix and */
 /*     suffix can be printed. */
 
-    i__1 = lastnb_(begmss, begmss_len);
+    i__1 = lastnb_(__global_state, begmss, begmss_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	chrcod = *(unsigned char *)&begmss[i__ - 1];
 	if (chrcod < 32 || chrcod > 126) {
-	    setmsg_("The progress report message prefix contains a nonprinta"
-		    "ble character; ASCII code is #.", (ftnlen)86);
-	    errint_("#", &chrcod, (ftnlen)1);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("GFREPI", (ftnlen)6);
+	    setmsg_(__global_state, "The progress report message prefix cont"
+		    "ains a nonprintable character; ASCII code is #.", (ftnlen)
+		    86);
+	    errint_(__global_state, "#", &chrcod, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "GFREPI", (ftnlen)6);
 	    return 0;
 	}
     }
-    i__1 = lastnb_(endmss, endmss_len);
+    i__1 = lastnb_(__global_state, endmss, endmss_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	chrcod = *(unsigned char *)&endmss[i__ - 1];
 	if (chrcod < 32 || chrcod > 126) {
-	    setmsg_("The progress report message suffix contains a nonprinta"
-		    "ble character; ASCII code is #.", (ftnlen)86);
-	    errint_("#", &chrcod, (ftnlen)1);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("GFREPI", (ftnlen)6);
+	    setmsg_(__global_state, "The progress report message suffix cont"
+		    "ains a nonprintable character; ASCII code is #.", (ftnlen)
+		    86);
+	    errint_(__global_state, "#", &chrcod, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "GFREPI", (ftnlen)6);
 	    return 0;
 	}
     }
-    s_copy(__state->copyb, begmss, (ftnlen)55, begmss_len);
-    s_copy(__state->copye, endmss, (ftnlen)13, endmss_len);
+    s_copy(&__global_state->f2c, __state->copyb, begmss, (ftnlen)55, 
+	    begmss_len);
+    s_copy(&__global_state->f2c, __state->copye, endmss, (ftnlen)13, 
+	    endmss_len);
 
 /*     Find the length of the window. Use that to initialize the work */
 /*     reporter. */
 
-    wnsumd_(window, &measur, &ave, &stddev, &short__, &long__);
-    zzgftswk_(&measur, &__state->c_b26, &__state->c__4, begmss, endmss, 
-	    begmss_len, endmss_len);
-    if (failed_()) {
-	chkout_("GFREPI", (ftnlen)6);
+    wnsumd_(__global_state, window, &measur, &ave, &stddev, &short__, &long__)
+	    ;
+    zzgftswk_(__global_state, &measur, &__state->c_b26, &__state->c__4, 
+	    begmss, endmss, begmss_len, endmss_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "GFREPI", (ftnlen)6);
 	return 0;
     }
 
@@ -740,13 +746,13 @@ L_gfrepi:
 /*     The remaining amount of work in the current interval is */
 /*     the measure of the interval. */
 
-    if (cardd_(window) >= 2) {
+    if (cardd_(__global_state, window) >= 2) {
 	__state->t0 = window[6];
 	__state->remain = window[7] - __state->t0;
     } else {
 	__state->remain = 0.;
     }
-    chkout_("GFREPI", (ftnlen)6);
+    chkout_(__global_state, "GFREPI", (ftnlen)6);
     return 0;
 /* $Procedure   GFREPU ( GF, progress report update ) */
 
@@ -912,22 +918,22 @@ L_gfrepu:
 /*     GF update a progress report */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("GFREPU", (ftnlen)6);
+    chkin_(__global_state, "GFREPU", (ftnlen)6);
 
 /*     Do a few error checks before getting started. */
 
 /*     We expect the endpoints of the current window to be in order. */
 
     if (*ivend < *ivbeg) {
-	setmsg_("Interval endpoints are #:#; endpoints must be in increasing"
-		" order.", (ftnlen)66);
-	errdp_("#", ivbeg, (ftnlen)1);
-	errdp_("#", ivend, (ftnlen)1);
-	sigerr_("SPICE(BADENDPOINTS)", (ftnlen)19);
-	chkout_("GFREPU", (ftnlen)6);
+	setmsg_(__global_state, "Interval endpoints are #:#; endpoints must "
+		"be in increasing order.", (ftnlen)66);
+	errdp_(__global_state, "#", ivbeg, (ftnlen)1);
+	errdp_(__global_state, "#", ivend, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADENDPOINTS)", (ftnlen)19);
+	chkout_(__global_state, "GFREPU", (ftnlen)6);
 	return 0;
     }
 
@@ -935,12 +941,13 @@ L_gfrepu:
 /*     window. */
 
     if (*time < *ivbeg || *time > *ivend) {
-	setmsg_("TIME should be in interval #:# but is #.", (ftnlen)40);
-	errdp_("#", time, (ftnlen)1);
-	errdp_("#", ivbeg, (ftnlen)1);
-	errdp_("#", ivend, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("GFREPU", (ftnlen)6);
+	setmsg_(__global_state, "TIME should be in interval #:# but is #.", (
+		ftnlen)40);
+	errdp_(__global_state, "#", time, (ftnlen)1);
+	errdp_(__global_state, "#", ivbeg, (ftnlen)1);
+	errdp_(__global_state, "#", ivend, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "GFREPU", (ftnlen)6);
 	return 0;
     }
 
@@ -972,8 +979,8 @@ L_gfrepu:
 
 /*     Report the work increment. */
 
-    zzgfwkin_(&incr);
-    chkout_("GFREPU", (ftnlen)6);
+    zzgfwkin_(__global_state, &incr);
+    chkout_(__global_state, "GFREPU", (ftnlen)6);
     return 0;
 /* $Procedure      GFREPF ( GF, progress report finalization ) */
 
@@ -1083,26 +1090,26 @@ L_gfrepf:
 /*     GF finish a progress report */
 
 /* -& */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("GFREPF", (ftnlen)6);
-    zzgfwkad_(&__state->c_b44, &__state->c__1, __state->copyb, __state->copye,
-	     (ftnlen)55, (ftnlen)13);
-    zzgfwkin_(&__state->c_b44);
+    chkin_(__global_state, "GFREPF", (ftnlen)6);
+    zzgfwkad_(__global_state, &__state->c_b44, &__state->c__1, __state->copyb,
+	     __state->copye, (ftnlen)55, (ftnlen)13);
+    zzgfwkin_(__global_state, &__state->c_b44);
 
 /*     Determine whether progress report output is currently */
 /*     being sent to standard output. Fetch the output unit. */
 
-    zzgfwkmo_(&unit, &total, &freq, &tcheck, begin, end, &incr, (ftnlen)55, (
-	    ftnlen)13);
-    stdio_("STDOUT", &stdout, (ftnlen)6);
+    zzgfwkmo_(__global_state, &unit, &total, &freq, &tcheck, begin, end, &
+	    incr, (ftnlen)55, (ftnlen)13);
+    stdio_(__global_state, "STDOUT", &stdout, (ftnlen)6);
     if (unit != stdout) {
 
 /*        We're not currently writing to standard output, so we're */
 /*        done. */
 
-	chkout_("GFREPF", (ftnlen)6);
+	chkout_(__global_state, "GFREPF", (ftnlen)6);
 	return 0;
     }
 
@@ -1126,34 +1133,35 @@ L_gfrepf:
 /*     interest of minimizing the number of places where I/O is */
 /*     performed, we rely on ZZGFDSPS to do that job. */
 
-    zzgfdsps_(&__state->c__1, " ", "A", &__state->c__1, (ftnlen)1, (ftnlen)1);
-    chkout_("GFREPF", (ftnlen)6);
+    zzgfdsps_(__global_state, &__state->c__1, " ", "A", &__state->c__1, (
+	    ftnlen)1, (ftnlen)1);
+    chkout_(__global_state, "GFREPF", (ftnlen)6);
     return 0;
 } /* gfrprt_ */
 
-/* Subroutine */ int gfrprt_(doublereal *window, char *begmss, char *endmss, 
-	doublereal *ivbeg, doublereal *ivend, doublereal *time, ftnlen 
-	begmss_len, ftnlen endmss_len)
+/* Subroutine */ int gfrprt_(cspice_t* __global_state, doublereal *window, 
+	char *begmss, char *endmss, doublereal *ivbeg, doublereal *ivend, 
+	doublereal *time, ftnlen begmss_len, ftnlen endmss_len)
 {
     return gfrprt_0_(0, window, begmss, endmss, ivbeg, ivend, time, 
 	    begmss_len, endmss_len);
     }
 
-/* Subroutine */ int gfrepi_(doublereal *window, char *begmss, char *endmss, 
-	ftnlen begmss_len, ftnlen endmss_len)
+/* Subroutine */ int gfrepi_(cspice_t* __global_state, doublereal *window, 
+	char *begmss, char *endmss, ftnlen begmss_len, ftnlen endmss_len)
 {
     return gfrprt_0_(1, window, begmss, endmss, (doublereal *)0, (doublereal *
 	    )0, (doublereal *)0, begmss_len, endmss_len);
     }
 
-/* Subroutine */ int gfrepu_(doublereal *ivbeg, doublereal *ivend, doublereal 
-	*time)
+/* Subroutine */ int gfrepu_(cspice_t* __global_state, doublereal *ivbeg, 
+	doublereal *ivend, doublereal *time)
 {
     return gfrprt_0_(2, (doublereal *)0, (char *)0, (char *)0, ivbeg, ivend, 
 	    time, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int gfrepf_(void)
+/* Subroutine */ int gfrepf_(cspice_t* __global_state)
 {
     return gfrprt_0_(3, (doublereal *)0, (char *)0, (char *)0, (doublereal *)
 	    0, (doublereal *)0, (doublereal *)0, (ftnint)0, (ftnint)0);

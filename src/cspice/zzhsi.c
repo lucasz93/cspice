@@ -8,8 +8,7 @@
 
 
 extern zzhsi_init_t __zzhsi_init;
-static zzhsi_state_t* get_zzhsi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzhsi_state_t* get_zzhsi_state(cspice_t* state) {
 	if (!state->zzhsi)
 		state->zzhsi = __cspice_allocate_module(sizeof(zzhsi_state_t),
 	 &__zzhsi_init, sizeof(__zzhsi_init));
@@ -18,35 +17,37 @@ static zzhsi_state_t* get_zzhsi_state() {
 }
 
 /* $Procedure ZZHSI ( Private---Add-only Integer Hash ) */
-/* Subroutine */ int zzhsi_0_(int n__, integer *hashsz, integer *hedlst, 
-	integer *collst, integer *items, integer *item, char *param, integer *
-	itemat, logical *new__, integer *avail, ftnlen param_len)
+/* Subroutine */ int zzhsi_0_(cspice_t* __global_state, int n__, integer *
+	hashsz, integer *hedlst, integer *collst, integer *items, integer *
+	item, char *param, integer *itemat, logical *new__, integer *avail, 
+	ftnlen param_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer node;
     logical full;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
     logical lfound;
     integer lookat;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern integer zzhashi_(integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern integer zzhashi_(cspice_t*, integer *, integer *);
 
 
     /* Module state */
-    zzhsi_state_t* __state = get_zzhsi_state();
+    zzhsi_state_t* __state = get_zzhsi_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -451,16 +452,16 @@ static zzhsi_state_t* get_zzhsi_state() {
 	case 5: goto L_zzhsiinf;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZHSI", (ftnlen)5);
+	chkin_(__global_state, "ZZHSI", (ftnlen)5);
     }
 
 /*     Signal bogus entry error and check out. */
 
-    sigerr_("BOGUSENTRY", (ftnlen)10);
-    chkout_("ZZHSI", (ftnlen)5);
+    sigerr_(__global_state, "BOGUSENTRY", (ftnlen)10);
+    chkout_(__global_state, "ZZHSI", (ftnlen)5);
     return 0;
 /* $Procedure ZZHSIINI ( Private---Initialize Add-only Integer Hash ) */
 
@@ -590,17 +591,17 @@ L_zzhsiini:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZHSIINI", (ftnlen)8);
+    chkin_(__global_state, "ZZHSIINI", (ftnlen)8);
 
 /*     The requested number of nodes must be valid. ZZHASHI will check */
 /*     that. */
 
-    i__ = zzhashi_(&__state->c__1, hashsz);
-    if (failed_()) {
-	chkout_("ZZHSIINI", (ftnlen)8);
+    i__ = zzhashi_(__global_state, &__state->c__1, hashsz);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZHSIINI", (ftnlen)8);
 	return 0;
     }
 
@@ -615,7 +616,7 @@ L_zzhsiini:
 
     collst[5] = *hashsz;
     collst[4] = 1;
-    chkout_("ZZHSIINI", (ftnlen)8);
+    chkout_(__global_state, "ZZHSIINI", (ftnlen)8);
     return 0;
 /* $Procedure ZZHSIADD ( Private---Add an Item to Add-only Integer Hash ) */
 
@@ -759,7 +760,7 @@ L_zzhsiadd:
 /*     Standard SPICE error handling. No checking-in here. We will do it */
 /*     when we have to. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -770,14 +771,15 @@ L_zzhsiadd:
 /*     Use simple division hash function to get index of the head node. */
 
     if (collst[5] < 1) {
-	chkin_("ZZHSIADD", (ftnlen)8);
-	setmsg_("Uninitialized hash. Size was #.", (ftnlen)31);
-	errint_("#", &collst[5], (ftnlen)1);
-	sigerr_("SPICE(UNINITIALIZEDHASH)", (ftnlen)24);
-	chkout_("ZZHSIADD", (ftnlen)8);
+	chkin_(__global_state, "ZZHSIADD", (ftnlen)8);
+	setmsg_(__global_state, "Uninitialized hash. Size was #.", (ftnlen)31)
+		;
+	errint_(__global_state, "#", &collst[5], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNINITIALIZEDHASH)", (ftnlen)24);
+	chkout_(__global_state, "ZZHSIADD", (ftnlen)8);
 	return 0;
     }
-    lookat = zzhashi_(item, &collst[5]);
+    lookat = zzhashi_(__global_state, item, &collst[5]);
     node = hedlst[lookat - 1];
 
 /*     Set initial values. */
@@ -874,10 +876,11 @@ L_zzhsiadd:
 /*     an error. Report it and return. */
 
     if (full && ! lfound) {
-	chkin_("ZZHSIADD", (ftnlen)8);
-	setmsg_("The hash has no room for any more items.", (ftnlen)40);
-	sigerr_("SPICE(HASHISFULL)", (ftnlen)17);
-	chkout_("ZZHSIADD", (ftnlen)8);
+	chkin_(__global_state, "ZZHSIADD", (ftnlen)8);
+	setmsg_(__global_state, "The hash has no room for any more items.", (
+		ftnlen)40);
+	sigerr_(__global_state, "SPICE(HASHISFULL)", (ftnlen)17);
+	chkout_(__global_state, "ZZHSIADD", (ftnlen)8);
 	return 0;
     }
     return 0;
@@ -1010,21 +1013,22 @@ L_zzhsichk:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Use simple division hash function to get index of the head node. */
 
     if (collst[5] < 1) {
-	chkin_("ZZHSIADD", (ftnlen)8);
-	setmsg_("Uninitialized hash. Size was #.", (ftnlen)31);
-	errint_("#", &collst[5], (ftnlen)1);
-	sigerr_("SPICE(UNINITIALIZEDHASH)", (ftnlen)24);
-	chkout_("ZZHSIADD", (ftnlen)8);
+	chkin_(__global_state, "ZZHSIADD", (ftnlen)8);
+	setmsg_(__global_state, "Uninitialized hash. Size was #.", (ftnlen)31)
+		;
+	errint_(__global_state, "#", &collst[5], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNINITIALIZEDHASH)", (ftnlen)24);
+	chkout_(__global_state, "ZZHSIADD", (ftnlen)8);
 	return 0;
     }
-    lookat = zzhashi_(item, &collst[5]);
+    lookat = zzhashi_(__global_state, item, &collst[5]);
     node = hedlst[lookat - 1];
 
 /*     Set initial values. */
@@ -1304,13 +1308,14 @@ L_zzhsiinf:
 
 /*     Get the hash size. */
 
-    if (s_cmp(param, "HASH SIZE", param_len, (ftnlen)9) == 0) {
+    if (s_cmp(&__global_state->f2c, param, "HASH SIZE", param_len, (ftnlen)9) 
+	    == 0) {
 	*avail = collst[5];
 
 /*     Get the count of used nodes in the head list. */
 
-    } else if (s_cmp(param, "USED HEADNODE COUNT", param_len, (ftnlen)19) == 
-	    0) {
+    } else if (s_cmp(&__global_state->f2c, param, "USED HEADNODE COUNT", 
+	    param_len, (ftnlen)19) == 0) {
 	*avail = 0;
 	i__1 = collst[5];
 	for (i__ = 1; i__ <= i__1; ++i__) {
@@ -1321,8 +1326,8 @@ L_zzhsiinf:
 
 /*     Get the count of unused nodes in the head list. */
 
-    } else if (s_cmp(param, "UNUSED HEADNODE COUNT", param_len, (ftnlen)21) ==
-	     0) {
+    } else if (s_cmp(&__global_state->f2c, param, "UNUSED HEADNODE COUNT", 
+	    param_len, (ftnlen)21) == 0) {
 	*avail = 0;
 	i__1 = collst[5];
 	for (i__ = 1; i__ <= i__1; ++i__) {
@@ -1333,19 +1338,20 @@ L_zzhsiinf:
 
 /*     Get the count of used slots in the item list. */
 
-    } else if (s_cmp(param, "USED ITEM COUNT", param_len, (ftnlen)15) == 0) {
+    } else if (s_cmp(&__global_state->f2c, param, "USED ITEM COUNT", 
+	    param_len, (ftnlen)15) == 0) {
 	*avail = collst[4] - 1;
 
 /*     Get the count of unused slots in the item list. */
 
-    } else if (s_cmp(param, "UNUSED ITEM COUNT", param_len, (ftnlen)17) == 0) 
-	    {
+    } else if (s_cmp(&__global_state->f2c, param, "UNUSED ITEM COUNT", 
+	    param_len, (ftnlen)17) == 0) {
 	*avail = collst[5] - collst[4] + 1;
 
 /*     Get the size of the longest item list for any hash value. */
 
-    } else if (s_cmp(param, "LONGEST LIST SIZE", param_len, (ftnlen)17) == 0) 
-	    {
+    } else if (s_cmp(&__global_state->f2c, param, "LONGEST LIST SIZE", 
+	    param_len, (ftnlen)17) == 0) {
 	*avail = 0;
 	i__1 = collst[5];
 	for (i__ = 1; i__ <= i__1; ++i__) {
@@ -1362,53 +1368,58 @@ L_zzhsiinf:
 
     } else {
 	*avail = 0;
-	chkin_("ZZHSIINF", (ftnlen)8);
-	setmsg_("Parameter '#' is not recognized.", (ftnlen)32);
-	errch_("#", param, (ftnlen)1, param_len);
-	sigerr_("SPICE(ITEMNOTRECOGNIZED)", (ftnlen)24);
-	chkout_("ZZHSIINF", (ftnlen)8);
+	chkin_(__global_state, "ZZHSIINF", (ftnlen)8);
+	setmsg_(__global_state, "Parameter '#' is not recognized.", (ftnlen)
+		32);
+	errch_(__global_state, "#", param, (ftnlen)1, param_len);
+	sigerr_(__global_state, "SPICE(ITEMNOTRECOGNIZED)", (ftnlen)24);
+	chkout_(__global_state, "ZZHSIINF", (ftnlen)8);
     }
     return 0;
 } /* zzhsi_ */
 
-/* Subroutine */ int zzhsi_(integer *hashsz, integer *hedlst, integer *collst,
-	 integer *items, integer *item, char *param, integer *itemat, logical 
-	*new__, integer *avail, ftnlen param_len)
+/* Subroutine */ int zzhsi_(cspice_t* __global_state, integer *hashsz, 
+	integer *hedlst, integer *collst, integer *items, integer *item, char 
+	*param, integer *itemat, logical *new__, integer *avail, ftnlen 
+	param_len)
 {
     return zzhsi_0_(0, hashsz, hedlst, collst, items, item, param, itemat, 
 	    new__, avail, param_len);
     }
 
-/* Subroutine */ int zzhsiini_(integer *hashsz, integer *hedlst, integer *
-	collst)
+/* Subroutine */ int zzhsiini_(cspice_t* __global_state, integer *hashsz, 
+	integer *hedlst, integer *collst)
 {
     return zzhsi_0_(1, hashsz, hedlst, collst, (integer *)0, (integer *)0, (
 	    char *)0, (integer *)0, (logical *)0, (integer *)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzhsiadd_(integer *hedlst, integer *collst, integer *
-	items, integer *item, integer *itemat, logical *new__)
+/* Subroutine */ int zzhsiadd_(cspice_t* __global_state, integer *hedlst, 
+	integer *collst, integer *items, integer *item, integer *itemat, 
+	logical *new__)
 {
     return zzhsi_0_(2, (integer *)0, hedlst, collst, items, item, (char *)0, 
 	    itemat, new__, (integer *)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzhsichk_(integer *hedlst, integer *collst, integer *
-	items, integer *item, integer *itemat)
+/* Subroutine */ int zzhsichk_(cspice_t* __global_state, integer *hedlst, 
+	integer *collst, integer *items, integer *item, integer *itemat)
 {
     return zzhsi_0_(3, (integer *)0, hedlst, collst, items, item, (char *)0, 
 	    itemat, (logical *)0, (integer *)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzhsiavl_(integer *collst, integer *avail)
+/* Subroutine */ int zzhsiavl_(cspice_t* __global_state, integer *collst, 
+	integer *avail)
 {
     return zzhsi_0_(4, (integer *)0, (integer *)0, collst, (integer *)0, (
 	    integer *)0, (char *)0, (integer *)0, (logical *)0, avail, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int zzhsiinf_(integer *hedlst, integer *collst, integer *
-	items, char *param, integer *avail, ftnlen param_len)
+/* Subroutine */ int zzhsiinf_(cspice_t* __global_state, integer *hedlst, 
+	integer *collst, integer *items, char *param, integer *avail, ftnlen 
+	param_len)
 {
     return zzhsi_0_(5, (integer *)0, hedlst, collst, items, (integer *)0, 
 	    param, (integer *)0, (logical *)0, avail, param_len);

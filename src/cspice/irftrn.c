@@ -8,26 +8,26 @@
 
 
 typedef int irftrn_state_t;
-static irftrn_state_t* get_irftrn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline irftrn_state_t* get_irftrn_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      IRFTRN ( Inertial reference frame transformation ) */
-/* Subroutine */ int irftrn_(char *refa, char *refb, doublereal *rotab, 
-	ftnlen refa_len, ftnlen refb_len)
+/* Subroutine */ int irftrn_(cspice_t* __global_state, char *refa, char *refb,
+	 doublereal *rotab, ftnlen refa_len, ftnlen refb_len)
 {
     integer codea;
     integer codeb;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int irfrot_(integer *, integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int irfrot_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    irftrn_state_t* __state = get_irftrn_state();
+    irftrn_state_t* __state = get_irftrn_state(__global_state);
 /* $ Abstract */
 
 /*     Return the matrix that transforms vectors from one specified */
@@ -201,19 +201,19 @@ static irftrn_state_t* get_irftrn_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("IRFTRN", (ftnlen)6);
+	chkin_(__global_state, "IRFTRN", (ftnlen)6);
     }
 
 /*     Encode the reference frame names, and find the transformation */
 /*     matrix. */
 
-    irfnum_(refa, &codea, refa_len);
-    irfnum_(refb, &codeb, refb_len);
-    irfrot_(&codea, &codeb, rotab);
-    chkout_("IRFTRN", (ftnlen)6);
+    irfnum_(__global_state, refa, &codea, refa_len);
+    irfnum_(__global_state, refb, &codeb, refb_len);
+    irfrot_(__global_state, &codea, &codeb, rotab);
+    chkout_(__global_state, "IRFTRN", (ftnlen)6);
     return 0;
 } /* irftrn_ */
 

@@ -8,8 +8,7 @@
 
 
 extern stelab_init_t __stelab_init;
-static stelab_state_t* get_stelab_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline stelab_state_t* get_stelab_state(cspice_t* state) {
 	if (!state->stelab)
 		state->stelab = __cspice_allocate_module(sizeof(
 	stelab_state_t), &__stelab_init, sizeof(__stelab_init));
@@ -18,41 +17,43 @@ static stelab_state_t* get_stelab_state() {
 }
 
 /* $Procedure      STELAB     ( Stellar Aberration ) */
-/* Subroutine */ int stelab_(doublereal *pobj, doublereal *vobs, doublereal *
-	appobj)
+/* Subroutine */ int stelab_(cspice_t* __global_state, doublereal *pobj, 
+	doublereal *vobs, doublereal *appobj)
 {
     /* Builtin functions */
-    double asin(doublereal);
+    double asin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal vbyc[3];
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     doublereal h__[3];
     doublereal u[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern doublereal clight_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vrotv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern doublereal clight_(cspice_t*);
     doublereal onebyc;
     doublereal sinphi;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal lensqr;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal phi;
 
 
     /* Module state */
-    stelab_state_t* __state = get_stelab_state();
+    stelab_state_t* __state = get_stelab_state(__global_state);
 /* $ Abstract */
 
 /*      Correct the apparent position of an object for stellar */
@@ -270,10 +271,10 @@ static stelab_state_t* get_stelab_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("STELAB", (ftnlen)6);
+	chkin_(__global_state, "STELAB", (ftnlen)6);
     }
 
 /*     We are not going to compute the aberrated vector in exactly the */
@@ -285,48 +286,48 @@ static stelab_state_t* get_stelab_state() {
 /*     Get a unit vector that points in the direction of the object */
 /*     ( u_obj ). */
 
-    vhat_(pobj, u);
+    vhat_(__global_state, pobj, u);
 
 /*     Get the velocity vector scaled with respect to the speed of light */
 /*     ( v/c ). */
 
-    onebyc = 1. / clight_();
-    vscl_(&onebyc, vobs, vbyc);
+    onebyc = 1. / clight_(__global_state);
+    vscl_(__global_state, &onebyc, vobs, vbyc);
 
 /*     If the square of the length of the velocity vector is greater than */
 /*     or equal to one, the speed of the observer is greater than or */
 /*     equal to the speed of light. The observer speed is definitely out */
 /*     of range. Signal an error and check out. */
 
-    lensqr = vdot_(vbyc, vbyc);
+    lensqr = vdot_(__global_state, vbyc, vbyc);
     if (lensqr >= 1.) {
-	setmsg_("Velocity components of observer were:  dx/dt = *, dy/dt = *"
-		", dz/dt = *.", (ftnlen)71);
-	errdp_("*", vobs, (ftnlen)1);
-	errdp_("*", &vobs[1], (ftnlen)1);
-	errdp_("*", &vobs[2], (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("STELAB", (ftnlen)6);
+	setmsg_(__global_state, "Velocity components of observer were:  dx/d"
+		"t = *, dy/dt = *, dz/dt = *.", (ftnlen)71);
+	errdp_(__global_state, "*", vobs, (ftnlen)1);
+	errdp_(__global_state, "*", &vobs[1], (ftnlen)1);
+	errdp_(__global_state, "*", &vobs[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "STELAB", (ftnlen)6);
 	return 0;
     }
 
 /*     Compute u_obj x (v/c) */
 
-    vcrss_(u, vbyc, h__);
+    vcrss_(__global_state, u, vbyc, h__);
 
 /*     If the magnitude of the vector H is zero, the observer is moving */
 /*     along the line of sight to the object, and no correction is */
 /*     required. Otherwise, rotate the position of the object by phi */
 /*     radians about H to obtain the apparent position. */
 
-    sinphi = vnorm_(h__);
+    sinphi = vnorm_(__global_state, h__);
     if (sinphi != 0.) {
-	phi = asin(sinphi);
-	vrotv_(pobj, h__, &phi, appobj);
+	phi = asin(&__global_state->f2c, sinphi);
+	vrotv_(__global_state, pobj, h__, &phi, appobj);
     } else {
-	moved_(pobj, &__state->c__3, appobj);
+	moved_(__global_state, pobj, &__state->c__3, appobj);
     }
-    chkout_("STELAB", (ftnlen)6);
+    chkout_(__global_state, "STELAB", (ftnlen)6);
     return 0;
 } /* stelab_ */
 

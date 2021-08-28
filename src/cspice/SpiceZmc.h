@@ -343,7 +343,7 @@ use CHKPTR_VAL, which is defined below.
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "Pointer \"#\" is null; a non-null "          \
@@ -366,7 +366,7 @@ use CHKPTR_VAL, which is defined below.
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "Pointer \"#\" is null; a non-null "          \
@@ -401,7 +401,7 @@ use CHKFSTR_VAL, which is defined below.
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "String \"#\" has length zero." );            \
@@ -425,7 +425,7 @@ use CHKFSTR_VAL, which is defined below.
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "String \"#\" has length zero." );            \
@@ -460,7 +460,7 @@ use CHKOSTR_VAL, which is defined below.
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "String \"#\" has length #; must be >= 2." ); \
@@ -486,7 +486,7 @@ use CHKOSTR_VAL, which is defined below.
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "String \"#\" has length #; must be >= 2." ); \
@@ -575,7 +575,7 @@ use CHKOSTR_VAL, which is defined below.
                                                                      \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "Data type of # is #; expected type "         \
@@ -606,7 +606,7 @@ use CHKOSTR_VAL, which is defined below.
                                                                      \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "Data type of # is #; expected type "         \
@@ -675,7 +675,7 @@ use CHKOSTR_VAL, which is defined below.
                                                                      \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "Data type of # is #; data type of # "        \
@@ -706,7 +706,7 @@ use CHKOSTR_VAL, which is defined below.
                                                                      \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "Data type of # is #; data type of # "        \
@@ -753,7 +753,7 @@ use CHKOSTR_VAL, which is defined below.
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "Cell # must be sorted and have unique "      \
@@ -781,7 +781,7 @@ use CHKOSTR_VAL, which is defined below.
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( modname );                                  \
+               chkin_c ( naif_state, modname );                                  \
             }                                                        \
                                                                      \
             setmsg_c ( "Cell # must be sorted and have unique "      \

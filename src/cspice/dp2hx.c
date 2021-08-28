@@ -8,8 +8,7 @@
 
 
 extern dp2hx_init_t __dp2hx_init;
-static dp2hx_state_t* get_dp2hx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dp2hx_state_t* get_dp2hx_state(cspice_t* state) {
 	if (!state->dp2hx)
 		state->dp2hx = __cspice_allocate_module(sizeof(dp2hx_state_t),
 	 &__dp2hx_init, sizeof(__dp2hx_init));
@@ -18,8 +17,8 @@ static dp2hx_state_t* get_dp2hx_state() {
 }
 
 /* $Procedure  DP2HX  ( D.p. number to hexadecimal string ) */
-/* Subroutine */ int dp2hx_(doublereal *number, char *string, integer *length,
-	 ftnlen string_len)
+/* Subroutine */ int dp2hx_(cspice_t* __global_state, doublereal *number, 
+	char *string, integer *length, ftnlen string_len)
 {
     /* Initialized data */
 
@@ -29,12 +28,14 @@ static dp2hx_state_t* get_dp2hx_state() {
     integer i__1, i__2[2];
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen),
-	     s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen), s_copy(f2c_state_t*, char *, char *, ftnlen, 
+	    ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int int2hx_(integer *, char *, integer *, ftnlen);
+    extern /* Subroutine */ int int2hx_(cspice_t*, integer *, char *, integer 
+	    *, ftnlen);
     doublereal remndr;
     integer explen;
     logical negtiv;
@@ -48,7 +49,7 @@ static dp2hx_state_t* get_dp2hx_state() {
 
 
     /* Module state */
-    dp2hx_state_t* __state = get_dp2hx_state();
+    dp2hx_state_t* __state = get_dp2hx_state(__global_state);
 /* $ Abstract */
 
 /*     Convert a double precision number to an equivalent character */
@@ -504,18 +505,20 @@ static dp2hx_state_t* get_dp2hx_state() {
 	    remndr = tmpnum - (doublereal) result;
 	    *(unsigned char *)&tmpstr[positn - 1] = *(unsigned char *)&
 		    __state->digits[(i__1 = -result) < 16 && 0 <= i__1 ? i__1 
-		    : s_rnge("digits", i__1, "dp2hx_", (ftnlen)554)];
+		    : s_rnge(&__global_state->f2c, "digits", i__1, "dp2hx_", (
+		    ftnlen)554)];
 	}
 
 /*        Put the exponent on the end of the number and update the */
 /*        position. */
 
-	int2hx_(&intexp, expstr, &explen, (ftnlen)255);
+	int2hx_(__global_state, &intexp, expstr, &explen, (ftnlen)255);
 	i__1 = positn;
 /* Writing concatenation */
 	i__2[0] = 1, a__1[0] = "^";
 	i__2[1] = explen, a__1[1] = expstr;
-	s_cat(tmpstr + i__1, a__1, i__2, &__state->c__2, 255 - i__1);
+	s_cat(&__global_state->f2c, tmpstr + i__1, a__1, i__2, &__state->c__2,
+		 255 - i__1);
 	positn = positn + explen + 1;
     } else if (postiv) {
 
@@ -543,25 +546,27 @@ static dp2hx_state_t* get_dp2hx_state() {
 	    remndr = tmpnum - (doublereal) result;
 	    *(unsigned char *)&tmpstr[positn - 1] = *(unsigned char *)&
 		    __state->digits[(i__1 = result) < 16 && 0 <= i__1 ? i__1 :
-		     s_rnge("digits", i__1, "dp2hx_", (ftnlen)589)];
+		     s_rnge(&__global_state->f2c, "digits", i__1, "dp2hx_", (
+		    ftnlen)589)];
 	}
 
 /*        Put the exponent on the end of the number and update the */
 /*        position. */
 
-	int2hx_(&intexp, expstr, &explen, (ftnlen)255);
+	int2hx_(__global_state, &intexp, expstr, &explen, (ftnlen)255);
 	i__1 = positn;
 /* Writing concatenation */
 	i__2[0] = 1, a__1[0] = "^";
 	i__2[1] = explen, a__1[1] = expstr;
-	s_cat(tmpstr + i__1, a__1, i__2, &__state->c__2, 255 - i__1);
+	s_cat(&__global_state->f2c, tmpstr + i__1, a__1, i__2, &__state->c__2,
+		 255 - i__1);
 	positn = positn + explen + 1;
     } else {
 
 /*        Treat zero as a special case, because it's easier. */
 
 	positn = 3;
-	s_copy(tmpstr, "0^0", (ftnlen)3, (ftnlen)3);
+	s_copy(&__global_state->f2c, tmpstr, "0^0", (ftnlen)3, (ftnlen)3);
     }
 
 /*     Set the value for the length of the character string produced */
@@ -574,7 +579,7 @@ static dp2hx_state_t* get_dp2hx_state() {
 /*     the truncation on the right if STRING is not long enough to */
 /*     contain all of the characters produced. */
 
-    s_copy(string, tmpstr, string_len, (*length));
+    s_copy(&__global_state->f2c, string, tmpstr, string_len, (*length));
     return 0;
 } /* dp2hx_ */
 

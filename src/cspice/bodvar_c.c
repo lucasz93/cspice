@@ -184,7 +184,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "bodvar_c" );
+   chkin_c ( naif_state, "bodvar_c" );
 
 
    /*

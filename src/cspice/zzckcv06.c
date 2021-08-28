@@ -8,38 +8,40 @@
 
 
 typedef int zzckcv06_state_t;
-static zzckcv06_state_t* get_zzckcv06_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzckcv06_state_t* get_zzckcv06_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZCKCV06 ( Private --- C-kernel segment coverage, type 06 ) */
-/* Subroutine */ int zzckcv06_(integer *handle, integer *arrbeg, integer *
-	arrend, integer *sclkid, doublereal *dc, doublereal *tol, char *
-	timsys, doublereal *schedl, ftnlen timsys_len)
+/* Subroutine */ int zzckcv06_(cspice_t* __global_state, integer *handle, 
+	integer *arrbeg, integer *arrend, integer *sclkid, doublereal *dc, 
+	doublereal *tol, char *timsys, doublereal *schedl, ftnlen timsys_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer nrec;
     integer ndir;
-    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sct2e_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
     integer i__;
     doublereal begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer minie;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical istdb;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal et;
     integer epaddr;
     doublereal buffer[4];
@@ -49,17 +51,17 @@ static zzckcv06_state_t* get_zzckcv06_state() {
     doublereal lstepc;
     integer nivdir;
     integer ptrbas;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     integer nintvl;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzckcv06_state_t* __state = get_zzckcv06_state();
+    zzckcv06_state_t* __state = get_zzckcv06_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -396,43 +398,43 @@ static zzckcv06_state_t* get_zzckcv06_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZCKCV06", (ftnlen)8);
+    chkin_(__global_state, "ZZCKCV06", (ftnlen)8);
 
 /*     Check tolerance value. */
 
     if (*tol < 0.) {
-	setmsg_("Tolerance must be non-negative; actual value was #.", (
-		ftnlen)51);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZCKCV06", (ftnlen)8);
+	setmsg_(__global_state, "Tolerance must be non-negative; actual valu"
+		"e was #.", (ftnlen)51);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZCKCV06", (ftnlen)8);
 	return 0;
     }
 
 /*     Set a logical flag indicating whether the time system is SCLK. */
 
-    istdb = eqstr_(timsys, "TDB", timsys_len, (ftnlen)3);
+    istdb = eqstr_(__global_state, timsys, "TDB", timsys_len, (ftnlen)3);
 
 /*     Check time system. */
 
     if (! istdb) {
-	if (! eqstr_(timsys, "SCLK", timsys_len, (ftnlen)4)) {
-	    setmsg_("Time system spec TIMSYS was #; allowed values are SCLK "
-		    "and TDB.", (ftnlen)63);
-	    errch_("#", timsys, (ftnlen)1, timsys_len);
-	    sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	    chkout_("ZZCKCV06", (ftnlen)8);
+	if (! eqstr_(__global_state, timsys, "SCLK", timsys_len, (ftnlen)4)) {
+	    setmsg_(__global_state, "Time system spec TIMSYS was #; allowed "
+		    "values are SCLK and TDB.", (ftnlen)63);
+	    errch_(__global_state, "#", timsys, (ftnlen)1, timsys_len);
+	    sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	    chkout_(__global_state, "ZZCKCV06", (ftnlen)8);
 	    return 0;
 	}
     }
 
 /*     Fetch the mini-segment count from the segment. */
 
-    dafgda_(handle, arrend, arrend, buffer);
-    nintvl = i_dnnt(buffer);
+    dafgda_(__global_state, handle, arrend, arrend, buffer);
+    nintvl = i_dnnt(&__global_state->f2c, buffer);
 
 /*     Each mini-segment contributes a coverage interval to the */
 /*     total coverage of the segment. Since mini-segments can */
@@ -471,9 +473,9 @@ static zzckcv06_state_t* get_zzckcv06_state() {
 
 	i__2 = ivlbas + i__;
 	i__3 = ivlbas + i__ + 1;
-	dafgda_(handle, &i__2, &i__3, ivlbds);
-	if (failed_()) {
-	    chkout_("ZZCKCV06", (ftnlen)8);
+	dafgda_(__global_state, handle, &i__2, &i__3, ivlbds);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZCKCV06", (ftnlen)8);
 	    return 0;
 	}
 
@@ -486,21 +488,21 @@ static zzckcv06_state_t* get_zzckcv06_state() {
 
 	i__2 = ptrbas + i__;
 	i__3 = ptrbas + i__ + 1;
-	dafgda_(handle, &i__2, &i__3, buffer);
-	if (failed_()) {
-	    chkout_("ZZCKCV06", (ftnlen)8);
+	dafgda_(__global_state, handle, &i__2, &i__3, buffer);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZCKCV06", (ftnlen)8);
 	    return 0;
 	}
-	minie = *arrbeg - 1 + i_dnnt(&buffer[1]) - 1;
+	minie = *arrbeg - 1 + i_dnnt(&__global_state->f2c, &buffer[1]) - 1;
 
 /*        Fetch the mini-segment's record count NREC. */
 
-	dafgda_(handle, &minie, &minie, buffer);
-	if (failed_()) {
-	    chkout_("ZZCKCV06", (ftnlen)8);
+	dafgda_(__global_state, handle, &minie, &minie, buffer);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZCKCV06", (ftnlen)8);
 	    return 0;
 	}
-	nrec = i_dnnt(buffer);
+	nrec = i_dnnt(&__global_state->f2c, buffer);
 
 /*        Compute the number of epoch directories for this */
 /*        mini-segment. */
@@ -511,9 +513,9 @@ static zzckcv06_state_t* get_zzckcv06_state() {
 /*        area and the epoch directories. */
 
 	epaddr = minie - 4 - ndir;
-	dafgda_(handle, &epaddr, &epaddr, &lstepc);
-	if (failed_()) {
-	    chkout_("ZZCKCV06", (ftnlen)8);
+	dafgda_(__global_state, handle, &epaddr, &epaddr, &lstepc);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZCKCV06", (ftnlen)8);
 	    return 0;
 	}
 	begin = ivlbds[0];
@@ -544,12 +546,12 @@ static zzckcv06_state_t* get_zzckcv06_state() {
 /*        Convert the time to TDB if necessary. */
 
 	if (istdb) {
-	    sct2e_(sclkid, &begin, &et);
+	    sct2e_(__global_state, sclkid, &begin, &et);
 	    begin = et;
-	    sct2e_(sclkid, &finish, &et);
+	    sct2e_(__global_state, sclkid, &finish, &et);
 	    finish = et;
-	    if (failed_()) {
-		chkout_("ZZCKCV06", (ftnlen)8);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZCKCV06", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -557,14 +559,14 @@ static zzckcv06_state_t* get_zzckcv06_state() {
 /*        Insert the interval into the window. */
 
 	if (begin <= finish) {
-	    wninsd_(&begin, &finish, schedl);
-	    if (failed_()) {
-		chkout_("ZZCKCV06", (ftnlen)8);
+	    wninsd_(__global_state, &begin, &finish, schedl);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZCKCV06", (ftnlen)8);
 		return 0;
 	    }
 	}
     }
-    chkout_("ZZCKCV06", (ftnlen)8);
+    chkout_(__global_state, "ZZCKCV06", (ftnlen)8);
     return 0;
 } /* zzckcv06_ */
 

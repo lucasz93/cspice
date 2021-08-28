@@ -8,8 +8,7 @@
 
 
 extern zzektrbn_init_t __zzektrbn_init;
-static zzektrbn_state_t* get_zzektrbn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrbn_state_t* get_zzektrbn_state(cspice_t* state) {
 	if (!state->zzektrbn)
 		state->zzektrbn = __cspice_allocate_module(sizeof(
 	zzektrbn_state_t), &__zzektrbn_init, sizeof(__zzektrbn_init));
@@ -18,26 +17,27 @@ static zzektrbn_state_t* get_zzektrbn_state() {
 }
 
 /* $Procedure      ZZEKTRBN ( EK tree, balance nodes ) */
-/* Subroutine */ int zzektrbn_(integer *handle, integer *tree, integer *left, 
-	integer *right, integer *parent, integer *pkidx)
+/* Subroutine */ int zzektrbn_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *left, integer *right, integer *parent, 
+	integer *pkidx)
 {
     integer root;
-    extern integer zzektrnk_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrrk_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer zzektrnk_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrrk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer schlep;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer lnkeys;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer rnkeys;
     integer sum;
 
 
     /* Module state */
-    zzektrbn_state_t* __state = get_zzektrbn_state();
+    zzektrbn_state_t* __state = get_zzektrbn_state(__global_state);
 /* $ Abstract */
 
 /*     Solve overflow in a node by balancing the node */
@@ -425,17 +425,17 @@ static zzektrbn_state_t* get_zzektrbn_state() {
 
     root = *tree;
     if (*left == root || *right == root) {
-	chkin_("ZZEKTRBN", (ftnlen)8);
-	setmsg_("Input node is root; only children can be balanced.", (ftnlen)
-		50);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKTRBN", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRBN", (ftnlen)8);
+	setmsg_(__global_state, "Input node is root; only children can be ba"
+		"lanced.", (ftnlen)50);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKTRBN", (ftnlen)8);
     }
 
 /*     Get the key counts for the left and right nodes. */
 
-    lnkeys = zzektrnk_(handle, tree, left);
-    rnkeys = zzektrnk_(handle, tree, right);
+    lnkeys = zzektrnk_(__global_state, handle, tree, left);
+    rnkeys = zzektrnk_(__global_state, handle, tree, right);
 
 /*     Balancing the nodes should give each of them a key count in */
 /*     the range of */
@@ -446,17 +446,18 @@ static zzektrbn_state_t* get_zzektrbn_state() {
 
     sum = lnkeys + rnkeys;
     if (sum > 124 || sum < 82) {
-	chkin_("ZZEKTRBN", (ftnlen)8);
-	setmsg_("Node # and right sibling # contain # and # keys respectivel"
-		"y; count sum should be in range #:#.", (ftnlen)95);
-	errint_("#", left, (ftnlen)1);
-	errint_("#", right, (ftnlen)1);
-	errint_("#", &lnkeys, (ftnlen)1);
-	errint_("#", &rnkeys, (ftnlen)1);
-	errint_("#", &__state->c__82, (ftnlen)1);
-	errint_("#", &__state->c__124, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKTRBN", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRBN", (ftnlen)8);
+	setmsg_(__global_state, "Node # and right sibling # contain # and # "
+		"keys respectively; count sum should be in range #:#.", (
+		ftnlen)95);
+	errint_(__global_state, "#", left, (ftnlen)1);
+	errint_(__global_state, "#", right, (ftnlen)1);
+	errint_(__global_state, "#", &lnkeys, (ftnlen)1);
+	errint_(__global_state, "#", &rnkeys, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__82, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__124, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKTRBN", (ftnlen)8);
 	return 0;
     }
 
@@ -473,7 +474,8 @@ static zzektrbn_state_t* get_zzektrbn_state() {
 
 /*     Rotate the requested number of keys. */
 
-    zzektrrk_(handle, tree, left, right, parent, pkidx, &schlep);
+    zzektrrk_(__global_state, handle, tree, left, right, parent, pkidx, &
+	    schlep);
     return 0;
 } /* zzektrbn_ */
 

@@ -8,20 +8,19 @@
 
 
 typedef int opsgni_state_t;
-static opsgni_state_t* get_opsgni_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline opsgni_state_t* get_opsgni_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            OPSGNI  ( Opposite Sign Integers ) */
-logical opsgni_(integer *x, integer *y)
+logical opsgni_(cspice_t* __global_state, integer *x, integer *y)
 {
     /* System generated locals */
     logical ret_val;
 
 
     /* Module state */
-    opsgni_state_t* __state = get_opsgni_state();
+    opsgni_state_t* __state = get_opsgni_state(__global_state);
 /* $ Abstract */
 
 /*     Function: true if the input arguments have opposite signs. */

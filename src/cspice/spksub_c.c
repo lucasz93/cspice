@@ -213,7 +213,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spksub_c" );
+   chkin_c ( naif_state, "spksub_c" );
 
    /*
    Check the input strings to make sure the pointers

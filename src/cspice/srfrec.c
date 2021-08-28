@@ -8,8 +8,7 @@
 
 
 extern srfrec_init_t __srfrec_init;
-static srfrec_state_t* get_srfrec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline srfrec_state_t* get_srfrec_state(cspice_t* state) {
 	if (!state->srfrec)
 		state->srfrec = __cspice_allocate_module(sizeof(
 	srfrec_state_t), &__srfrec_init, sizeof(__srfrec_init));
@@ -18,25 +17,25 @@ static srfrec_state_t* get_srfrec_state() {
 }
 
 /* $Procedure      SRFREC ( Surface to rectangular coordinates ) */
-/* Subroutine */ int srfrec_(integer *body, doublereal *long__, doublereal *
-	lat, doublereal *rectan)
+/* Subroutine */ int srfrec_(cspice_t* __global_state, integer *body, 
+	doublereal *long__, doublereal *lat, doublereal *rectan)
 {
     doublereal uvec[3];
     integer n;
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int edpnt_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
-    extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int edpnt_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int latrec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    srfrec_state_t* __state = get_srfrec_state();
+    srfrec_state_t* __state = get_srfrec_state(__global_state);
 /* $ Abstract */
 
 /*     Convert planetocentric latitude and longitude of a surface */
@@ -311,25 +310,26 @@ static srfrec_state_t* get_srfrec_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SRFREC", (ftnlen)6);
+    chkin_(__global_state, "SRFREC", (ftnlen)6);
 
 /*     Look up the body's radii. */
 
-    bodvcd_(body, "RADII", &__state->c__3, &n, radii, (ftnlen)5);
+    bodvcd_(__global_state, body, "RADII", &__state->c__3, &n, radii, (ftnlen)
+	    5);
 
 /*     Find the unit vector pointing from the body center to the */
 /*     input surface point. */
 
-    latrec_(&__state->c_b5, long__, lat, uvec);
+    latrec_(__global_state, &__state->c_b5, long__, lat, uvec);
 
 /*     Find out where the ray defined by this vector intersects the */
 /*     surface.  This intercept is the point we're looking for. */
 
-    edpnt_(uvec, radii, &radii[1], &radii[2], rectan);
-    chkout_("SRFREC", (ftnlen)6);
+    edpnt_(__global_state, uvec, radii, &radii[1], &radii[2], rectan);
+    chkout_(__global_state, "SRFREC", (ftnlen)6);
     return 0;
 } /* srfrec_ */
 

@@ -8,57 +8,58 @@
 
 
 typedef int zzekscmp_state_t;
-static zzekscmp_state_t* get_zzekscmp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekscmp_state_t* get_zzekscmp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKSCMP ( EK, scalar value comparison ) */
-logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
-	coldsc, integer *row, integer *eltidx, integer *dtype, char *cval, 
-	doublereal *dval, integer *ival, logical *null, ftnlen cval_len)
+logical zzekscmp_(cspice_t* __global_state, integer *op, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *row, integer *eltidx, 
+	integer *dtype, char *cval, doublereal *dval, integer *ival, logical *
+	null, ftnlen cval_len)
 {
     /* System generated locals */
     integer i__1;
     logical ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    logical l_lt(char *, char *, ftnlen, ftnlen), l_gt(char *, char *, ftnlen,
-	     ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    logical l_lt(f2c_state_t*, char *, char *, ftnlen, ftnlen), l_gt(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char eltc[1024];
     doublereal eltd;
     integer elti;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer cvlen;
     logical found;
     logical enull;
-    extern logical failed_(void);
-    extern logical matchi_(char *, char *, char *, char *, ftnlen, ftnlen, 
-	    ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern logical matchi_(cspice_t*, char *, char *, char *, char *, ftnlen, 
+	    ftnlen, ftnlen, ftnlen);
     integer cmplen;
     doublereal numval;
     integer coltyp;
     integer strlen;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     integer rel;
-    extern /* Subroutine */ int zzekrsc_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, char *, logical *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekrsd_(integer *, integer *, integer *, 
-	    integer *, integer *, doublereal *, logical *, logical *);
-    extern /* Subroutine */ int zzekrsi_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *, logical *);
+    extern /* Subroutine */ int zzekrsc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, char *, logical *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzekrsd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, doublereal *, logical *, logical 
+	    *);
+    extern /* Subroutine */ int zzekrsi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, logical *, logical *);
 
 
     /* Module state */
-    zzekscmp_state_t* __state = get_zzekscmp_state();
+    zzekscmp_state_t* __state = get_zzekscmp_state(__global_state);
 /* $ Abstract */
 
 /*     Compare a specified scalar EK column entry with a scalar value. */
@@ -830,16 +831,16 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
 /*        string. */
 
 /* Computing MIN */
-	i__1 = i_len(cval, cval_len);
+	i__1 = i_len(&__global_state->f2c, cval, cval_len);
 	cvlen = min(i__1,1024);
 
 /*        Fetch the column entry to be compared. Note that ROW */
 /*        is a polymorphic identifier. See ZZEKRSC for details */
 /*        on how ROW is used. */
 
-	zzekrsc_(handle, segdsc, coldsc, row, eltidx, &strlen, eltc, &enull, &
-		found, (ftnlen)1024);
-	if (failed_()) {
+	zzekrsc_(__global_state, handle, segdsc, coldsc, row, eltidx, &strlen,
+		 eltc, &enull, &found, (ftnlen)1024);
+	if (failed_(__global_state)) {
 
 /*           Don't check out here because we haven't checked in. */
 
@@ -854,27 +855,30 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
 	    cmplen = 0;
 	}
     } else if (coltyp == 2 || coltyp == 4) {
-	zzekrsd_(handle, segdsc, coldsc, row, eltidx, &eltd, &enull, &found);
+	zzekrsd_(__global_state, handle, segdsc, coldsc, row, eltidx, &eltd, &
+		enull, &found);
     } else if (coltyp == 3) {
-	zzekrsi_(handle, segdsc, coldsc, row, eltidx, &elti, &enull, &found);
+	zzekrsi_(__global_state, handle, segdsc, coldsc, row, eltidx, &elti, &
+		enull, &found);
     } else {
-	chkin_("ZZEKSCMP", (ftnlen)8);
-	setmsg_("Data type code # not recognized.", (ftnlen)32);
-	errint_("#", &coltyp, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDATATYPE)", (ftnlen)22);
-	chkout_("ZZEKSCMP", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSCMP", (ftnlen)8);
+	setmsg_(__global_state, "Data type code # not recognized.", (ftnlen)
+		32);
+	errint_(__global_state, "#", &coltyp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDATATYPE)", (ftnlen)22);
+	chkout_(__global_state, "ZZEKSCMP", (ftnlen)8);
 	return ret_val;
     }
     if (! found) {
-	chkin_("ZZEKSCMP", (ftnlen)8);
-	setmsg_("EK = #; COLIDX = #; ROW = #; ELTIDX = #. Column entry eleme"
-		"nt was not found.", (ftnlen)76);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &coldsc[8], (ftnlen)1);
-	errint_("#", row, (ftnlen)1);
-	errint_("#", eltidx, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKSCMP", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSCMP", (ftnlen)8);
+	setmsg_(__global_state, "EK = #; COLIDX = #; ROW = #; ELTIDX = #. Co"
+		"lumn entry element was not found.", (ftnlen)76);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &coldsc[8], (ftnlen)1);
+	errint_(__global_state, "#", row, (ftnlen)1);
+	errint_(__global_state, "#", eltidx, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKSCMP", (ftnlen)8);
 	return ret_val;
     }
 
@@ -911,29 +915,32 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
 
 	if (coltyp == 1) {
 	    if (*dtype != 1) {
-		chkin_("ZZEKSCMP", (ftnlen)8);
-		setmsg_("Column type is #; value type is #.", (ftnlen)34);
-		errint_("#", &coltyp, (ftnlen)1);
-		errint_("#", dtype, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZEKSCMP", (ftnlen)8);
+		chkin_(__global_state, "ZZEKSCMP", (ftnlen)8);
+		setmsg_(__global_state, "Column type is #; value type is #.", 
+			(ftnlen)34);
+		errint_(__global_state, "#", &coltyp, (ftnlen)1);
+		errint_(__global_state, "#", dtype, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZEKSCMP", (ftnlen)8);
 		return ret_val;
 	    }
-	    if (l_lt(eltc, cval, cmplen, cvlen)) {
+	    if (l_lt(&__global_state->f2c, eltc, cval, cmplen, cvlen)) {
 		rel = 5;
-	    } else if (l_gt(eltc, cval, cmplen, cvlen)) {
+	    } else if (l_gt(&__global_state->f2c, eltc, cval, cmplen, cvlen)) 
+		    {
 		rel = 3;
 	    } else {
 		rel = 1;
 	    }
 	} else if (coltyp == 4) {
 	    if (*dtype != 4 && *dtype != 2) {
-		chkin_("ZZEKSCMP", (ftnlen)8);
-		setmsg_("Column type is #; value type is #.", (ftnlen)34);
-		errint_("#", &coltyp, (ftnlen)1);
-		errint_("#", dtype, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZEKSCMP", (ftnlen)8);
+		chkin_(__global_state, "ZZEKSCMP", (ftnlen)8);
+		setmsg_(__global_state, "Column type is #; value type is #.", 
+			(ftnlen)34);
+		errint_(__global_state, "#", &coltyp, (ftnlen)1);
+		errint_(__global_state, "#", dtype, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZEKSCMP", (ftnlen)8);
 		return ret_val;
 	    }
 	    if (eltd < *dval) {
@@ -949,12 +956,13 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
 	    } else if (*dtype == 2 || *dtype == 4) {
 		numval = *dval;
 	    } else {
-		chkin_("ZZEKSCMP", (ftnlen)8);
-		setmsg_("Column type is #; value type is #.", (ftnlen)34);
-		errint_("#", &coltyp, (ftnlen)1);
-		errint_("#", dtype, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZEKSCMP", (ftnlen)8);
+		chkin_(__global_state, "ZZEKSCMP", (ftnlen)8);
+		setmsg_(__global_state, "Column type is #; value type is #.", 
+			(ftnlen)34);
+		errint_(__global_state, "#", &coltyp, (ftnlen)1);
+		errint_(__global_state, "#", dtype, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZEKSCMP", (ftnlen)8);
 		return ret_val;
 	    }
 	    if (eltd < numval) {
@@ -970,12 +978,13 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
 	    } else if (*dtype == 2) {
 		numval = *dval;
 	    } else {
-		chkin_("ZZEKSCMP", (ftnlen)8);
-		setmsg_("Column type is #; value type is #.", (ftnlen)34);
-		errint_("#", &coltyp, (ftnlen)1);
-		errint_("#", dtype, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZEKSCMP", (ftnlen)8);
+		chkin_(__global_state, "ZZEKSCMP", (ftnlen)8);
+		setmsg_(__global_state, "Column type is #; value type is #.", 
+			(ftnlen)34);
+		errint_(__global_state, "#", &coltyp, (ftnlen)1);
+		errint_(__global_state, "#", dtype, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZEKSCMP", (ftnlen)8);
 		return ret_val;
 	    }
 	    if ((doublereal) elti < numval) {
@@ -990,11 +999,12 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
 /*           Something untoward has happened in our column descriptor */
 /*           argument. */
 
-	    chkin_("ZZEKSCMP", (ftnlen)8);
-	    setmsg_("The data type code # was not recognized.", (ftnlen)40);
-	    errint_("#", &coltyp, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDDATATYPE)", (ftnlen)22);
-	    chkout_("ZZEKSCMP", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKSCMP", (ftnlen)8);
+	    setmsg_(__global_state, "The data type code # was not recognized."
+		    , (ftnlen)40);
+	    errint_(__global_state, "#", &coltyp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDDATATYPE)", (ftnlen)22);
+	    chkout_(__global_state, "ZZEKSCMP", (ftnlen)8);
 	    return ret_val;
 	}
     }
@@ -1017,27 +1027,27 @@ logical zzekscmp_(integer *op, integer *handle, integer *segdsc, integer *
 	if (*null || enull) {
 	    ret_val = FALSE_;
 	} else {
-	    ret_val = matchi_(eltc, cval, "*", "%", cmplen, cvlen, (ftnlen)1, 
-		    (ftnlen)1);
+	    ret_val = matchi_(__global_state, eltc, cval, "*", "%", cmplen, 
+		    cvlen, (ftnlen)1, (ftnlen)1);
 	}
     } else if (*op == 8 && *dtype == 1) {
 	if (*null || enull) {
 	    ret_val = FALSE_;
 	} else {
-	    ret_val = ! matchi_(eltc, cval, "*", "%", cmplen, cvlen, (ftnlen)
-		    1, (ftnlen)1);
+	    ret_val = ! matchi_(__global_state, eltc, cval, "*", "%", cmplen, 
+		    cvlen, (ftnlen)1, (ftnlen)1);
 	}
     } else {
 
 /*        Sorry, we couldn't resist. */
 
-	chkin_("ZZEKSCMP", (ftnlen)8);
-	setmsg_("The relational operator # was not recognized or was not app"
-		"licable for data type #.", (ftnlen)83);
-	errint_("#", op, (ftnlen)1);
-	errint_("#", dtype, (ftnlen)1);
-	sigerr_("SPICE(UNNATURALRELATION)", (ftnlen)24);
-	chkout_("ZZEKSCMP", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSCMP", (ftnlen)8);
+	setmsg_(__global_state, "The relational operator # was not recognize"
+		"d or was not applicable for data type #.", (ftnlen)83);
+	errint_(__global_state, "#", op, (ftnlen)1);
+	errint_(__global_state, "#", dtype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNNATURALRELATION)", (ftnlen)24);
+	chkout_(__global_state, "ZZEKSCMP", (ftnlen)8);
 	return ret_val;
     }
     return ret_val;

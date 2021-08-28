@@ -8,8 +8,7 @@
 
 
 extern zzinlat0_init_t __zzinlat0_init;
-static zzinlat0_state_t* get_zzinlat0_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzinlat0_state_t* get_zzinlat0_state(cspice_t* state) {
 	if (!state->zzinlat0)
 		state->zzinlat0 = __cspice_allocate_module(sizeof(
 	zzinlat0_state_t), &__zzinlat0_init, sizeof(__zzinlat0_init));
@@ -18,17 +17,18 @@ static zzinlat0_state_t* get_zzinlat0_state() {
 }
 
 /* $Procedure ZZINLAT0 ( DSK, in latitudinal element, w/o margin? ) */
-/* Subroutine */ int zzinlat0_(doublereal *r__, doublereal *lon, doublereal *
-	lat, doublereal *bounds, integer *exclud, logical *inside)
+/* Subroutine */ int zzinlat0_(cspice_t* __global_state, doublereal *r__, 
+	doublereal *lon, doublereal *lat, doublereal *bounds, integer *exclud,
+	 logical *inside)
 {
     /* Initialized data */
 
 
     doublereal minr;
     doublereal maxr;
-    extern /* Subroutine */ int zznrmlon_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern doublereal twopi_(void);
+    extern /* Subroutine */ int zznrmlon_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *);
+    extern doublereal twopi_(cspice_t*);
     doublereal loclon;
     doublereal maxlat;
     doublereal minlat;
@@ -37,7 +37,7 @@ static zzinlat0_state_t* get_zzinlat0_state() {
 
 
     /* Module state */
-    zzinlat0_state_t* __state = get_zzinlat0_state();
+    zzinlat0_state_t* __state = get_zzinlat0_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -434,7 +434,7 @@ static zzinlat0_state_t* get_zzinlat0_state() {
 /*     Initial values */
 
     if (__state->first) {
-	__state->pi2 = twopi_();
+	__state->pi2 = twopi_(__global_state);
 	__state->first = FALSE_;
     }
 
@@ -493,7 +493,8 @@ static zzinlat0_state_t* get_zzinlat0_state() {
 
 /*        Put the local longitude bounds in order, if necessary. */
 
-	zznrmlon_(bounds, &bounds[1], &__state->c_b2, &minlon, &maxlon);
+	zznrmlon_(__global_state, bounds, &bounds[1], &__state->c_b2, &minlon,
+		 &maxlon);
 
 /*        Compare the point's longitude to the segment's longitude */
 /*        bounds. */

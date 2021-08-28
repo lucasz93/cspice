@@ -8,14 +8,13 @@
 
 
 typedef int maxad_state_t;
-static maxad_state_t* get_maxad_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline maxad_state_t* get_maxad_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  MAXAD  ( Maximum element of array, DP ) */
-/* Subroutine */ int maxad_(doublereal *array, integer *ndim, doublereal *
-	maxval, integer *loc)
+/* Subroutine */ int maxad_(cspice_t* __global_state, doublereal *array, 
+	integer *ndim, doublereal *maxval, integer *loc)
 {
     /* System generated locals */
     integer i__1;
@@ -25,7 +24,7 @@ static maxad_state_t* get_maxad_state() {
 
 
     /* Module state */
-    maxad_state_t* __state = get_maxad_state();
+    maxad_state_t* __state = get_maxad_state(__global_state);
 /* $ Abstract */
 
 /*     Locate the maximum element of a DP array. */

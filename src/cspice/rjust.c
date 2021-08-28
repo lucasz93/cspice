@@ -8,35 +8,34 @@
 
 
 typedef int rjust_state_t;
-static rjust_state_t* get_rjust_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rjust_state_t* get_rjust_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RJUST ( Right justify a character string ) */
-/* Subroutine */ int rjust_(char *input, char *output, ftnlen input_len, 
-	ftnlen output_len)
+/* Subroutine */ int rjust_(cspice_t* __global_state, char *input, char *
+	output, ftnlen input_len, ftnlen output_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer last;
     integer i__;
     integer first;
     integer start;
-    extern integer lastnb_(char *, ftnlen);
-    extern integer frstnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
     integer loc;
 
 
     /* Module state */
-    rjust_state_t* __state = get_rjust_state();
+    rjust_state_t* __state = get_rjust_state(__global_state);
 /* $ Abstract */
 
 /*      Right justify a character string. */
@@ -170,15 +169,16 @@ static rjust_state_t* get_rjust_state() {
 
 /*     Blank string? It's all the same. */
 
-    if (s_cmp(input, " ", input_len, (ftnlen)1) == 0) {
-	s_copy(output, input, output_len, input_len);
+    if (s_cmp(&__global_state->f2c, input, " ", input_len, (ftnlen)1) == 0) {
+	s_copy(&__global_state->f2c, output, input, output_len, input_len);
 
 /*     Get the first non-blank character. Start OUTPUT at that point. */
 
     } else {
-	first = frstnb_(input, input_len);
-	last = lastnb_(input, input_len);
-	start = i_len(output, output_len) - (last - first);
+	first = frstnb_(__global_state, input, input_len);
+	last = lastnb_(__global_state, input, input_len);
+	start = i_len(&__global_state->f2c, output, output_len) - (last - 
+		first);
 
 /*        If the input string is too long (START < 1), move FIRST */
 /*        up a little to truncate on the left. */
@@ -191,7 +191,7 @@ static rjust_state_t* get_rjust_state() {
 /*        Move the characters in reverse order, to keep from stomping */
 /*        anything if the operation is being done in place. */
 
-	loc = i_len(output, output_len);
+	loc = i_len(&__global_state->f2c, output, output_len);
 	i__1 = first;
 	for (i__ = last; i__ >= i__1; --i__) {
 	    *(unsigned char *)&output[loc - 1] = *(unsigned char *)&input[i__ 
@@ -202,7 +202,7 @@ static rjust_state_t* get_rjust_state() {
 /*        Clear the first part of OUTPUT, if necessary. */
 
 	if (start > 1) {
-	    s_copy(output, " ", start - 1, (ftnlen)1);
+	    s_copy(&__global_state->f2c, output, " ", start - 1, (ftnlen)1);
 	}
     }
     return 0;

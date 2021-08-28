@@ -8,41 +8,42 @@
 
 
 typedef int ekacld_state_t;
-static ekacld_state_t* get_ekacld_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekacld_state_t* get_ekacld_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure     EKACLD ( EK, add d.p. column to segment ) */
-/* Subroutine */ int ekacld_(integer *handle, integer *segno, char *column, 
-	doublereal *dvals, integer *entszs, logical *nlflgs, integer *rcptrs, 
-	integer *wkindx, ftnlen column_len)
+/* Subroutine */ int ekacld_(cspice_t* __global_state, integer *handle, 
+	integer *segno, char *column, doublereal *dvals, integer *entszs, 
+	logical *nlflgs, integer *rcptrs, integer *wkindx, ftnlen column_len)
 {
-    extern /* Subroutine */ int zzekcdsc_(integer *, integer *, char *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzeksdsc_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekcdsc_(cspice_t*, integer *, integer *, 
+	    char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzeksdsc_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer class__;
     integer dtype;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer coldsc[11];
     integer segdsc[24];
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int zzekac02_(integer *, integer *, integer *, 
-	    doublereal *, logical *, integer *, integer *);
-    extern /* Subroutine */ int zzekac05_(integer *, integer *, integer *, 
-	    doublereal *, integer *, logical *);
-    extern /* Subroutine */ int zzekac08_(integer *, integer *, integer *, 
-	    doublereal *, logical *, integer *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzekac02_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekac05_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzekac08_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, logical *, integer *);
 
 
     /* Module state */
-    ekacld_state_t* __state = get_ekacld_state();
+    ekacld_state_t* __state = get_ekacld_state(__global_state);
 /* $ Abstract */
 
 /*     Add an entire double precision column to an EK segment. */
@@ -683,18 +684,18 @@ static ekacld_state_t* get_ekacld_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKACLD", (ftnlen)6);
+	chkin_(__global_state, "EKACLD", (ftnlen)6);
     }
 
 /*     Find the descriptors for the specified segment and column. */
 
-    zzeksdsc_(handle, segno, segdsc);
-    zzekcdsc_(handle, segdsc, column, coldsc, column_len);
-    if (failed_()) {
-	chkout_("EKACLD", (ftnlen)6);
+    zzeksdsc_(__global_state, handle, segno, segdsc);
+    zzekcdsc_(__global_state, handle, segdsc, column, coldsc, column_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKACLD", (ftnlen)6);
 	return 0;
     }
 
@@ -703,12 +704,12 @@ static ekacld_state_t* get_ekacld_state() {
     class__ = coldsc[0];
     dtype = coldsc[1];
     if (dtype != 2 && dtype != 4) {
-	setmsg_("Column # is of type #; EKACLD only works with d.p. or TIME "
-		"columns.", (ftnlen)67);
-	errch_("#", column, (ftnlen)1, column_len);
-	errint_("#", &dtype, (ftnlen)1);
-	sigerr_("SPICE(WRONGDATATYPE)", (ftnlen)20);
-	chkout_("EKACLD", (ftnlen)6);
+	setmsg_(__global_state, "Column # is of type #; EKACLD only works wi"
+		"th d.p. or TIME columns.", (ftnlen)67);
+	errch_(__global_state, "#", column, (ftnlen)1, column_len);
+	errint_(__global_state, "#", &dtype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGDATATYPE)", (ftnlen)20);
+	chkout_(__global_state, "EKACLD", (ftnlen)6);
 	return 0;
     }
 
@@ -718,30 +719,33 @@ static ekacld_state_t* get_ekacld_state() {
 
 /*        Class 2 columns contain d.p. scalars. */
 
-	zzekac02_(handle, segdsc, coldsc, dvals, nlflgs, rcptrs, wkindx);
+	zzekac02_(__global_state, handle, segdsc, coldsc, dvals, nlflgs, 
+		rcptrs, wkindx);
     } else if (class__ == 5) {
 
 /*        Class 5 columns contain d.p. arrays. */
 
-	zzekac05_(handle, segdsc, coldsc, dvals, entszs, nlflgs);
+	zzekac05_(__global_state, handle, segdsc, coldsc, dvals, entszs, 
+		nlflgs);
     } else if (class__ == 8) {
 
 /*        Class 8 columns contain fixed-count d.p. scalars. */
 
-	zzekac08_(handle, segdsc, coldsc, dvals, nlflgs, wkindx);
+	zzekac08_(__global_state, handle, segdsc, coldsc, dvals, nlflgs, 
+		wkindx);
     } else {
 
 /*        This is an unsupported column class. */
 
-	setmsg_("Unsupported column class code # found in descriptor for col"
-		"umn #.", (ftnlen)65);
-	errint_("#", &class__, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, column_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("EKACLD", (ftnlen)6);
+	setmsg_(__global_state, "Unsupported column class code # found in de"
+		"scriptor for column #.", (ftnlen)65);
+	errint_(__global_state, "#", &class__, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, column_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "EKACLD", (ftnlen)6);
 	return 0;
     }
-    chkout_("EKACLD", (ftnlen)6);
+    chkout_(__global_state, "EKACLD", (ftnlen)6);
     return 0;
 } /* ekacld_ */
 

@@ -744,7 +744,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dskmi2_c" );
+   chkin_c ( naif_state, "dskmi2_c" );
 
    /*
    Cast input "make vertex list" flag to type logical. 

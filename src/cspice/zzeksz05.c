@@ -8,41 +8,40 @@
 
 
 typedef int zzeksz05_state_t;
-static zzeksz05_state_t* get_zzeksz05_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzeksz05_state_t* get_zzeksz05_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZEKSZ05 ( EK, element entry size, class 5 ) */
-integer zzeksz05_(integer *handle, integer *segdsc, integer *coldsc, integer *
-	recptr)
+integer zzeksz05_(cspice_t* __global_state, integer *handle, integer *segdsc, 
+	integer *coldsc, integer *recptr)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer nrec;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal dpcnt;
     integer ncols;
-    extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer colidx;
     integer datptr;
     integer ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzeksz05_state_t* __state = get_zzeksz05_state();
+    zzeksz05_state_t* __state = get_zzeksz05_state(__global_state);
 /* $ Abstract */
 
 /*     Return the size of a specified entry in a class 5 column. */
@@ -729,12 +728,13 @@ integer zzeksz05_(integer *handle, integer *segdsc, integer *coldsc, integer *
 
     ncols = segdsc[4];
     if (colidx < 1 || colidx > ncols) {
-	chkin_("ZZEKSZ05", (ftnlen)8);
-	setmsg_("Column index = #; valid range is 1:#.", (ftnlen)37);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &nrec, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKSZ05", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSZ05", (ftnlen)8);
+	setmsg_(__global_state, "Column index = #; valid range is 1:#.", (
+		ftnlen)37);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &nrec, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKSZ05", (ftnlen)8);
 	return ret_val;
     }
 
@@ -749,7 +749,7 @@ integer zzeksz05_(integer *handle, integer *segdsc, integer *coldsc, integer *
 /*     Compute the data pointer location.  Read the data pointer. */
 
     ptrloc = *recptr + 2 + colidx;
-    dasrdi_(handle, &ptrloc, &ptrloc, &datptr);
+    dasrdi_(__global_state, handle, &ptrloc, &ptrloc, &datptr);
     if (datptr < 1) {
 
 /*        The value is null.  Null entries are always considered to have */
@@ -760,8 +760,8 @@ integer zzeksz05_(integer *handle, integer *segdsc, integer *coldsc, integer *
 
 /*        DATPTR points to the element count. */
 
-	dasrdd_(handle, &datptr, &datptr, &dpcnt);
-	ret_val = i_dnnt(&dpcnt);
+	dasrdd_(__global_state, handle, &datptr, &datptr, &dpcnt);
+	ret_val = i_dnnt(&__global_state->f2c, &dpcnt);
     }
     return ret_val;
 } /* zzeksz05_ */

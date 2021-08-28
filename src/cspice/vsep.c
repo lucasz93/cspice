@@ -8,35 +8,34 @@
 
 
 typedef int vsep_state_t;
-static vsep_state_t* get_vsep_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vsep_state_t* get_vsep_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VSEP  ( Angular separation of vectors, 3 dimensions ) */
-doublereal vsep_(doublereal *v1, doublereal *v2)
+doublereal vsep_(cspice_t* __global_state, doublereal *v1, doublereal *v2)
 {
     /* System generated locals */
     doublereal ret_val;
 
     /* Builtin functions */
-    double asin(doublereal);
+    double asin(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     doublereal dmag1;
     doublereal dmag2;
     doublereal vtemp[3];
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal u1[3];
     doublereal u2[3];
-    extern doublereal pi_(void);
+    extern doublereal pi_(cspice_t*);
 
 
     /* Module state */
-    vsep_state_t* __state = get_vsep_state();
+    vsep_state_t* __state = get_vsep_state(__global_state);
 /* $ Abstract */
 
 /*      Find the separation angle in radians between two double */
@@ -228,28 +227,30 @@ doublereal vsep_(doublereal *v1, doublereal *v2)
 
 /*  Calculate the magnitudes of V1 and V2; if either is 0, VSEP = 0 */
 
-    unorm_(v1, u1, &dmag1);
+    unorm_(__global_state, v1, u1, &dmag1);
     if (dmag1 == 0.) {
 	ret_val = 0.;
 	return ret_val;
     }
-    unorm_(v2, u2, &dmag2);
+    unorm_(__global_state, v2, u2, &dmag2);
     if (dmag2 == 0.) {
 	ret_val = 0.;
 	return ret_val;
     }
-    if (vdot_(u1, u2) > 0.) {
+    if (vdot_(__global_state, u1, u2) > 0.) {
 	vtemp[0] = u1[0] - u2[0];
 	vtemp[1] = u1[1] - u2[1];
 	vtemp[2] = u1[2] - u2[2];
-	ret_val = asin(vnorm_(vtemp) * .5) * 2.;
-    } else if (vdot_(u1, u2) < 0.) {
+	ret_val = asin(&__global_state->f2c, vnorm_(__global_state, vtemp) * 
+		.5) * 2.;
+    } else if (vdot_(__global_state, u1, u2) < 0.) {
 	vtemp[0] = u1[0] + u2[0];
 	vtemp[1] = u1[1] + u2[1];
 	vtemp[2] = u1[2] + u2[2];
-	ret_val = pi_() - asin(vnorm_(vtemp) * .5) * 2.;
+	ret_val = pi_(__global_state) - asin(&__global_state->f2c, vnorm_(
+		__global_state, vtemp) * .5) * 2.;
     } else {
-	ret_val = pi_() / 2.;
+	ret_val = pi_(__global_state) / 2.;
     }
     return ret_val;
 } /* vsep_ */

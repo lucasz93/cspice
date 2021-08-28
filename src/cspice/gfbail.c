@@ -8,20 +8,19 @@
 
 
 typedef int gfbail_state_t;
-static gfbail_state_t* get_gfbail_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gfbail_state_t* get_gfbail_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure GFBAIL ( GF, default bailout function ) */
-logical gfbail_(void)
+logical gfbail_(cspice_t* __global_state)
 {
     /* System generated locals */
     logical ret_val;
 
 
     /* Module state */
-    gfbail_state_t* __state = get_gfbail_state();
+    gfbail_state_t* __state = get_gfbail_state(__global_state);
 /* $ Abstract */
 
 /*     This routine serves as a placeholder for an interrupt */

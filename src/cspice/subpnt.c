@@ -8,8 +8,7 @@
 
 
 extern subpnt_init_t __subpnt_init;
-static subpnt_state_t* get_subpnt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline subpnt_state_t* get_subpnt_state(cspice_t* state) {
 	if (!state->subpnt)
 		state->subpnt = __cspice_allocate_module(sizeof(
 	subpnt_state_t), &__subpnt_init, sizeof(__subpnt_init));
@@ -18,10 +17,11 @@ static subpnt_state_t* get_subpnt_state() {
 }
 
 /* $Procedure      SUBPNT ( Sub-observer point ) */
-/* Subroutine */ int subpnt_(char *method, char *target, doublereal *et, char 
-	*fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *
-	trgepc, doublereal *srfvec, ftnlen method_len, ftnlen target_len, 
-	ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int subpnt_(cspice_t* __global_state, char *method, char *
+	target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, 
+	doublereal *spoint, doublereal *trgepc, doublereal *srfvec, ftnlen 
+	method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, 
+	ftnlen obsrvr_len)
 {
     /* Initialized data */
 
@@ -30,56 +30,59 @@ static subpnt_state_t* get_subpnt_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
     doublereal dvec[3];
     integer nitr;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal tpos[3];
-    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int mtxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
     doublereal j2pos[3];
-    extern /* Subroutine */ int zzsudski_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzsudski_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer i__;
-    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
-	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
+    extern /* Subroutine */ int zzprsmet_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, logical *, integer *, integer *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzsrftrk_(cspice_t*, integer *, logical *);
     doublereal s;
     doublereal radii[3];
     doublereal range;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern doublereal vdist_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
     doublereal vtemp[3];
     doublereal xform[9]	/* was [3][3] */;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern doublereal vnorm_(doublereal *);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal corvj2[3];
     doublereal subvj2[3];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal lt;
     doublereal etdiff;
     integer obscde;
     integer fixcid;
     doublereal ltdiff;
-    extern doublereal clight_(void);
+    extern doublereal clight_(cspice_t*);
     integer fixfid;
     integer nradii;
     integer trgcde;
-    extern doublereal touchd_(doublereal *);
-    extern logical return_(void);
+    extern doublereal touchd_(cspice_t*, doublereal *);
+    extern logical return_(cspice_t*);
     char pntdef[20];
     char shpstr[9];
     char trmstr[20];
@@ -97,39 +100,41 @@ static subpnt_state_t* get_subpnt_state() {
     logical fnd;
     logical surfup;
     doublereal alt;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
-    extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int surfpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int spkezp_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
 	    ;
-    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int stlabx_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int nearpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int surfpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, logical *
+	    );
+    extern /* Subroutine */ int spkssb_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int pxform_(cspice_t*, char *, char *, doublereal 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int stlabx_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int stelab_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
-    extern /* Subroutine */ int zzsbfxr_(integer *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
-	     logical *);
+    extern /* Subroutine */ int zzsbfxr_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, doublereal *, doublereal *, 
+	    doublereal *, logical *);
 
 
     /* Module state */
-    subpnt_state_t* __state = get_subpnt_state();
+    subpnt_state_t* __state = get_subpnt_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the rectangular coordinates of the sub-observer point on */
@@ -2232,10 +2237,10 @@ static subpnt_state_t* get_subpnt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SUBPNT", (ftnlen)6);
+    chkin_(__global_state, "SUBPNT", (ftnlen)6);
 
 /*     Counter initialization is done separately. */
 
@@ -2243,24 +2248,25 @@ static subpnt_state_t* get_subpnt_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
-	zzctruin_(__state->svctr3);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
+	zzctruin_(__global_state, __state->svctr3);
     }
-    if (__state->first || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    if (__state->first || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        Make sure the results of this block won't be reused */
 /*        if we bail out due to an error. */
 
-	s_copy(__state->prvcor, " ", (ftnlen)5, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->prvcor, " ", (ftnlen)5, (ftnlen)
+		1);
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
 
-	zzvalcor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("SUBPNT", (ftnlen)6);
+	zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -2288,35 +2294,38 @@ static subpnt_state_t* get_subpnt_state() {
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
     }
 
 /*     Obtain integer codes for the target and observer. */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
-	    __state->svfnd1, target, &trgcde, &fnd, (ftnlen)36, target_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtcde, &__state->svfnd1, target, &trgcde, &fnd, (ftnlen)
+	    36, target_len);
     if (! fnd) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit, or that you failed to lo"
-		"ad a kernel containing a name-ID mapping for this body.", (
-		ftnlen)234);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SUBPNT", (ftnlen)6);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit, or that "
+		"you failed to load a kernel containing a name-ID mapping for"
+		" this body.", (ftnlen)234);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
-    zzbods2c_(__state->svctr2, __state->svobsr, &__state->svobsc, &
-	    __state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)36, obsrvr_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svobsr, &
+	    __state->svobsc, &__state->svfnd2, obsrvr, &obscde, &fnd, (ftnlen)
+	    36, obsrvr_len);
     if (! fnd) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE Toolkit, or that you failed to "
-		"load a kernel containing a name-ID mapping for this body.", (
-		ftnlen)236);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SUBPNT", (ftnlen)6);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE Toolkit, or tha"
+		"t you failed to load a kernel containing a name-ID mapping f"
+		"or this body.", (ftnlen)236);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
 
@@ -2324,61 +2333,64 @@ static subpnt_state_t* get_subpnt_state() {
 /*     an error. */
 
     if (obscde == trgcde) {
-	setmsg_("In computing the sub-observer point, the observing body and"
-		" target body are the same. Both are #.", (ftnlen)97);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	chkout_("SUBPNT", (ftnlen)6);
+	setmsg_(__global_state, "In computing the sub-observer point, the ob"
+		"serving body and target body are the same. Both are #.", (
+		ftnlen)97);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(__state->svctr3, __state->svfref, &__state->svrefc, fixref, &
-	    fixfid, (ftnlen)32, fixref_len);
-    frinfo_(&fixfid, &fixctr, &fixcls, &fixcid, &fnd);
-    if (failed_()) {
-	chkout_("SUBPNT", (ftnlen)6);
+    zznamfrm_(__global_state, __state->svctr3, __state->svfref, &
+	    __state->svrefc, fixref, &fixfid, (ftnlen)32, fixref_len);
+    frinfo_(__global_state, &fixfid, &fixctr, &fixcls, &fixcid, &fnd);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
     if (! fnd) {
-	setmsg_("Reference frame # is not recognized by the SPICE frame subs"
-		"ystem. Possibly a required frame definition kernel has not b"
-		"een loaded.", (ftnlen)130);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	chkout_("SUBPNT", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not recognized by the "
+		"SPICE frame subsystem. Possibly a required frame definition "
+		"kernel has not been loaded.", (ftnlen)130);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure that FIXREF is centered at the target body's center. */
 
     if (fixctr != trgcde) {
-	setmsg_("Reference frame # is not centered at the the target body #."
-		" The ID code of the frame center is #.", (ftnlen)97);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	errint_("#", &fixctr, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	chkout_("SUBPNT", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not centered at the th"
+		"e target body #. The ID code of the frame center is #.", (
+		ftnlen)97);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errint_(__global_state, "#", &fixctr, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(__state->svctr4, &surfup);
+    zzsrftrk_(__global_state, __state->svctr4, &surfup);
 
 /*     If necessary, parse the method specification. PRVMTH records the */
 /*     last valid value of METHOD; PRI, NEAR, SHAPE, NSURF, and SRFLST */
 /*     are the corresponding saved variables. */
 
-    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
-	     (ftnlen)500) != 0) {
+    if (__state->first || surfup || s_cmp(&__global_state->f2c, method, 
+	    __state->prvmth, method_len, (ftnlen)500) != 0) {
 
 /*        Make sure parsed values from METHOD can't be reused before */
 /*        we've checked them. */
 
-	s_copy(__state->prvmth, " ", (ftnlen)500, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->prvmth, " ", (ftnlen)500, (
+		ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -2387,35 +2399,38 @@ static subpnt_state_t* get_subpnt_state() {
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&trgcde, method, &__state->c__100, shpstr, __state->subtyp, 
-		&__state->pri, &__state->nsurf, __state->srflst, pntdef, 
-		trmstr, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20, (
-		ftnlen)20);
-	if (failed_()) {
-	    chkout_("SUBPNT", (ftnlen)6);
+	zzprsmet_(__global_state, &trgcde, method, &__state->c__100, shpstr, 
+		__state->subtyp, &__state->pri, &__state->nsurf, 
+		__state->srflst, pntdef, trmstr, method_len, (ftnlen)9, (
+		ftnlen)20, (ftnlen)20, (ftnlen)20);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	    return 0;
 	}
-	if (s_cmp(__state->subtyp, " ", (ftnlen)20, (ftnlen)1) == 0) {
-	    setmsg_("Sub-observer point type was invalid or was not found in"
-		    " the method string #.", (ftnlen)76);
-	    errch_("#", method, (ftnlen)1, method_len);
-	    sigerr_("SPICE(INVALIDSUBTYPE)", (ftnlen)21);
-	    chkout_("SUBPNT", (ftnlen)6);
+	if (s_cmp(&__global_state->f2c, __state->subtyp, " ", (ftnlen)20, (
+		ftnlen)1) == 0) {
+	    setmsg_(__global_state, "Sub-observer point type was invalid or "
+		    "was not found in the method string #.", (ftnlen)76);
+	    errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	    sigerr_(__global_state, "SPICE(INVALIDSUBTYPE)", (ftnlen)21);
+	    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	    return 0;
 	}
-	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
+	if (eqstr_(__global_state, shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9))
+		 {
 	    __state->shape = 1;
-	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
+	} else if (eqstr_(__global_state, shpstr, "DSK", (ftnlen)9, (ftnlen)3)
+		) {
 	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
 
-	    setmsg_("Returned shape value from method string was <#>.", (
-		    ftnlen)48);
-	    errch_("#", shpstr, (ftnlen)1, (ftnlen)9);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("SUBPNT", (ftnlen)6);
+	    setmsg_(__global_state, "Returned shape value from method string"
+		    " was <#>.", (ftnlen)48);
+	    errch_(__global_state, "#", shpstr, (ftnlen)1, (ftnlen)9);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	    return 0;
 	}
 	if (__state->shape == 1) {
@@ -2423,32 +2438,34 @@ static subpnt_state_t* get_subpnt_state() {
 /*           Allow both "near point" and "nadir" expressions the */
 /*           ellipsoid case, since in these case, these are equivalent. */
 
-	    __state->near__ = eqstr_(__state->subtyp, "NEAR POINT", (ftnlen)
-		    20, (ftnlen)10) || eqstr_(__state->subtyp, "NADIR", (
-		    ftnlen)20, (ftnlen)5);
+	    __state->near__ = eqstr_(__global_state, __state->subtyp, "NEAR "
+		    "POINT", (ftnlen)20, (ftnlen)10) || eqstr_(__global_state, 
+		    __state->subtyp, "NADIR", (ftnlen)20, (ftnlen)5);
 	} else {
 
 /*           "near point" is not supported for DSKs. */
 
-	    __state->near__ = eqstr_(__state->subtyp, "NADIR", (ftnlen)20, (
-		    ftnlen)5);
+	    __state->near__ = eqstr_(__global_state, __state->subtyp, "NADIR",
+		     (ftnlen)20, (ftnlen)5);
 	}
 	if (! __state->near__) {
-	    if (! eqstr_(__state->subtyp, "INTERCEPT", (ftnlen)20, (ftnlen)9))
-		     {
-		setmsg_("Invalid sub-observer point type <#> was found in th"
-			"e method string #.", (ftnlen)69);
-		errch_("#", __state->subtyp, (ftnlen)1, (ftnlen)20);
-		errch_("#", method, (ftnlen)1, method_len);
-		sigerr_("SPICE(INVALIDSUBTYPE)", (ftnlen)21);
-		chkout_("SUBPNT", (ftnlen)6);
+	    if (! eqstr_(__global_state, __state->subtyp, "INTERCEPT", (
+		    ftnlen)20, (ftnlen)9)) {
+		setmsg_(__global_state, "Invalid sub-observer point type <#>"
+			" was found in the method string #.", (ftnlen)69);
+		errch_(__global_state, "#", __state->subtyp, (ftnlen)1, (
+			ftnlen)20);
+		errch_(__global_state, "#", method, (ftnlen)1, method_len);
+		sigerr_(__global_state, "SPICE(INVALIDSUBTYPE)", (ftnlen)21);
+		chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		return 0;
 	    }
 	}
 
 /*        Save the current value of METHOD. */
 
-	s_copy(__state->prvmth, method, (ftnlen)500, method_len);
+	s_copy(&__global_state->f2c, __state->prvmth, method, (ftnlen)500, 
+		method_len);
     }
 
 /*     At this point, the first pass actions were successful. */
@@ -2461,19 +2478,20 @@ static subpnt_state_t* get_subpnt_state() {
 /*        Initialize the intercept algorithm to use a DSK */
 /*        model for the surface of the target body. */
 
-	zzsudski_(&trgcde, &__state->nsurf, __state->srflst, &fixfid);
+	zzsudski_(__global_state, &trgcde, &__state->nsurf, __state->srflst, &
+		fixfid);
     } else if (__state->shape != 1) {
-	setmsg_("Computation method argument was <#>; this string must speci"
-		"fy a supported shape model and computation type. See the des"
-		"cription of METHOD in the header of SUBPNT for details.", (
-		ftnlen)174);
-	errch_("#", method, (ftnlen)1, method_len);
-	sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	chkout_("SUBPNT", (ftnlen)6);
+	setmsg_(__global_state, "Computation method argument was <#>; this s"
+		"tring must specify a supported shape model and computation t"
+		"ype. See the description of METHOD in the header of SUBPNT f"
+		"or details.", (ftnlen)174);
+	errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
-    if (failed_()) {
-	chkout_("SUBPNT", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
 
@@ -2513,17 +2531,17 @@ static subpnt_state_t* get_subpnt_state() {
 /*            that corrected vector in order to compute the sub-observer */
 /*            point. */
 
-    spkezp_(&trgcde, et, fixref, abcorr, &obscde, tpos, &lt, fixref_len, 
-	    abcorr_len);
-    if (failed_()) {
-	chkout_("SUBPNT", (ftnlen)6);
+    spkezp_(__global_state, &trgcde, et, fixref, abcorr, &obscde, tpos, &lt, 
+	    fixref_len, abcorr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
 
 /*     Negate the target's position to obtain the position of the */
 /*     observer relative to the target. */
 
-    vminus_(tpos, obspos);
+    vminus_(__global_state, tpos, obspos);
 
 /*     Find the sub-observer point given the target epoch, */
 /*     observer-target position, and target body orientation we've */
@@ -2533,23 +2551,24 @@ static subpnt_state_t* get_subpnt_state() {
 
 /*     Get the radii of the target body from the kernel pool. */
 
-    bodvcd_(&trgcde, "RADII", &__state->c__3, &nradii, radii, (ftnlen)5);
-    if (failed_()) {
-	chkout_("SUBPNT", (ftnlen)6);
+    bodvcd_(__global_state, &trgcde, "RADII", &__state->c__3, &nradii, radii, 
+	    (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
-    range = vnorm_(obspos);
+    range = vnorm_(__global_state, obspos);
     if (range == 0.) {
 
 /*        We've already ensured that observer and target are */
 /*        distinct, so this should be a very unusual occurrence. */
 
-	setmsg_("Observer-target distance is zero. Observer is #; target is "
-		"#.", (ftnlen)61);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(NOSEPARATION)", (ftnlen)19);
-	chkout_("SUBPNT", (ftnlen)6);
+	setmsg_(__global_state, "Observer-target distance is zero. Observer "
+		"is #; target is #.", (ftnlen)61);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(NOSEPARATION)", (ftnlen)19);
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
 
@@ -2561,9 +2580,10 @@ static subpnt_state_t* get_subpnt_state() {
 /*        Locate the nearest point to the observer on the target */
 /*        body's reference ellipsoid. */
 
-	nearpt_(obspos, radii, &radii[1], &radii[2], spoint, &alt);
-	if (failed_()) {
-	    chkout_("SUBPNT", (ftnlen)6);
+	nearpt_(__global_state, obspos, radii, &radii[1], &radii[2], spoint, &
+		alt);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -2577,31 +2597,34 @@ static subpnt_state_t* get_subpnt_state() {
 
 /*           Generate the ray direction; find the DSK intercept. */
 
-	    vsub_(spoint, obspos, dvec);
-	    zzsbfxr_(&trgcde, &__state->nsurf, __state->srflst, trgepc, &
-		    fixfid, obspos, dvec, spoint, &fnd);
-	    if (failed_()) {
-		chkout_("SUBPNT", (ftnlen)6);
+	    vsub_(__global_state, spoint, obspos, dvec);
+	    zzsbfxr_(__global_state, &trgcde, &__state->nsurf, 
+		    __state->srflst, trgepc, &fixfid, obspos, dvec, spoint, &
+		    fnd);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		return 0;
 	    }
 	    if (! fnd) {
-		setmsg_("No sub-observer point was found on the surface defi"
-			"ned by DSK data.Observer is #; target is #. This pro"
-			"blem can occur for bodies having shapes not well mod"
-			"eled by ellipsoids. Consider using the \"Intercept: "
-			"DSK\" computation method.", (ftnlen)230);
-		errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-		errch_("#", target, (ftnlen)1, target_len);
-		sigerr_("SPICE(SUBPOINTNOTFOUND)", (ftnlen)23);
-		chkout_("SUBPNT", (ftnlen)6);
+		setmsg_(__global_state, "No sub-observer point was found on "
+			"the surface defined by DSK data.Observer is #; targe"
+			"t is #. This problem can occur for bodies having sha"
+			"pes not well modeled by ellipsoids. Consider using t"
+			"he \"Intercept: DSK\" computation method.", (ftnlen)
+			230);
+		errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+		errch_(__global_state, "#", target, (ftnlen)1, target_len);
+		sigerr_(__global_state, "SPICE(SUBPOINTNOTFOUND)", (ftnlen)23)
+			;
+		chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		return 0;
 	    }
 
 /*           Re-compute the altitude using the intercept on the DSK */
 /*           surface. */
 
-	    vsub_(spoint, obspos, srfvec);
-	    alt = vnorm_(srfvec);
+	    vsub_(__global_state, spoint, obspos, srfvec);
+	    alt = vnorm_(__global_state, srfvec);
 	}
     } else {
 
@@ -2612,56 +2635,59 @@ static subpnt_state_t* get_subpnt_state() {
 /*           Locate the surface intercept of the ray from the */
 /*           observer to the target center. */
 
-	    surfpt_(obspos, tpos, radii, &radii[1], &radii[2], spoint, &fnd);
-	    if (failed_()) {
-		chkout_("SUBPNT", (ftnlen)6);
+	    surfpt_(__global_state, obspos, tpos, radii, &radii[1], &radii[2],
+		     spoint, &fnd);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		return 0;
 	    }
 	    if (! fnd) {
 
 /*              If there's no intercept, we have a numerical problem. */
 
-		setmsg_("No intercept of observer-target ray was found.", (
-			ftnlen)46);
-		sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-		chkout_("SUBPNT", (ftnlen)6);
+		setmsg_(__global_state, "No intercept of observer-target ray"
+			" was found.", (ftnlen)46);
+		sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+		chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		return 0;
 	    }
-	    alt = vdist_(obspos, spoint);
+	    alt = vdist_(__global_state, obspos, spoint);
 	} else {
 
 /*           Generate the ray direction; find the DSK intercept. */
 
-	    vminus_(obspos, dvec);
-	    zzsbfxr_(&trgcde, &__state->nsurf, __state->srflst, trgepc, &
-		    fixfid, obspos, dvec, spoint, &fnd);
-	    if (failed_()) {
-		chkout_("SUBPNT", (ftnlen)6);
+	    vminus_(__global_state, obspos, dvec);
+	    zzsbfxr_(__global_state, &trgcde, &__state->nsurf, 
+		    __state->srflst, trgepc, &fixfid, obspos, dvec, spoint, &
+		    fnd);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		return 0;
 	    }
 	    if (! fnd) {
-		setmsg_("No sub-observer point was found on the surface defi"
-			"ned by DSK data.Observer is #; target is #. This pro"
-			"blem can occur for a body having an irregular shape "
-			"such that the origin of the body-fixed reference fra"
-			"me is outside of the body. A torus is an example of "
-			"such a shape.", (ftnlen)272);
-		errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-		errch_("#", target, (ftnlen)1, target_len);
-		sigerr_("SPICE(SUBPOINTNOTFOUND)", (ftnlen)23);
-		chkout_("SUBPNT", (ftnlen)6);
+		setmsg_(__global_state, "No sub-observer point was found on "
+			"the surface defined by DSK data.Observer is #; targe"
+			"t is #. This problem can occur for a body having an "
+			"irregular shape such that the origin of the body-fix"
+			"ed reference frame is outside of the body. A torus i"
+			"s an example of such a shape.", (ftnlen)272);
+		errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+		errch_(__global_state, "#", target, (ftnlen)1, target_len);
+		sigerr_(__global_state, "SPICE(SUBPOINTNOTFOUND)", (ftnlen)23)
+			;
+		chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		return 0;
 	    }
 
 /*           Re-compute the altitude using the intercept on the DSK */
 /*           surface. */
 
-	    vsub_(spoint, obspos, srfvec);
-	    alt = vnorm_(srfvec);
+	    vsub_(__global_state, spoint, obspos, srfvec);
+	    alt = vnorm_(__global_state, srfvec);
 	}
     }
-    if (failed_()) {
-	chkout_("SUBPNT", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
 
@@ -2678,8 +2704,8 @@ static subpnt_state_t* get_subpnt_state() {
 /*        the vector OBSPOS. SPOINT was set immediately above. The */
 /*        only output left to compute is SRFVEC. */
 
-	vsub_(spoint, obspos, srfvec);
-	chkout_("SUBPNT", (ftnlen)6);
+	vsub_(__global_state, spoint, obspos, srfvec);
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
 
@@ -2688,7 +2714,7 @@ static subpnt_state_t* get_subpnt_state() {
 /*     set to give us the correct answer for each aberration */
 /*     correction case. */
 
-    lt = alt / clight_();
+    lt = alt / clight_(__global_state);
     *trgepc = *et + s * lt;
 
 /*     We'll now make an improved sub-observer point estimate using */
@@ -2703,9 +2729,9 @@ static subpnt_state_t* get_subpnt_state() {
 /*     Get the J2000-relative state of the observer relative to */
 /*     the solar system barycenter at ET. */
 
-    spkssb_(&obscde, et, "J2000", ssbost, (ftnlen)5);
-    if (failed_()) {
-	chkout_("SUBPNT", (ftnlen)6);
+    spkssb_(__global_state, &obscde, et, "J2000", ssbost, (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	return 0;
     }
 
@@ -2722,9 +2748,9 @@ static subpnt_state_t* get_subpnt_state() {
 /*        Get the J2000-relative state of the target relative to */
 /*        the solar system barycenter at the target epoch. */
 
-	spkssb_(&trgcde, trgepc, "J2000", ssbtst, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("SUBPNT", (ftnlen)6);
+	spkssb_(__global_state, &trgcde, trgepc, "J2000", ssbtst, (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -2732,13 +2758,14 @@ static subpnt_state_t* get_subpnt_state() {
 /*        Convert this vector from the J2000 frame to the target */
 /*        frame at TRGEPC. */
 
-	vsub_(ssbost, ssbtst, j2pos);
-	pxform_("J2000", fixref, trgepc, xform, (ftnlen)5, fixref_len);
-	if (failed_()) {
-	    chkout_("SUBPNT", (ftnlen)6);
+	vsub_(__global_state, ssbost, ssbtst, j2pos);
+	pxform_(__global_state, "J2000", fixref, trgepc, xform, (ftnlen)5, 
+		fixref_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	    return 0;
 	}
-	mxv_(xform, j2pos, obspos);
+	mxv_(__global_state, xform, j2pos, obspos);
 
 /*        If we're using stellar aberration corrections, adjust the */
 /*        observer position to account for the stellar aberration */
@@ -2759,15 +2786,15 @@ static subpnt_state_t* get_subpnt_state() {
 /*           relative to the target body-fixed frame at TRGEPC. We must */
 /*           perform our corrections in an inertial frame. */
 
-	    vsub_(spoint, obspos, subvec);
-	    mtxv_(xform, subvec, subvj2);
+	    vsub_(__global_state, spoint, obspos, subvec);
+	    mtxv_(__global_state, xform, subvec, subvj2);
 	    if (__state->xmit) {
-		stlabx_(subvj2, &ssbost[3], corvj2);
+		stlabx_(__global_state, subvj2, &ssbost[3], corvj2);
 	    } else {
-		stelab_(subvj2, &ssbost[3], corvj2);
+		stelab_(__global_state, subvj2, &ssbost[3], corvj2);
 	    }
-	    mxv_(xform, corvj2, corpos);
-	    vsub_(corpos, subvec, stloff);
+	    mxv_(__global_state, xform, corvj2, corpos);
+	    vsub_(__global_state, corpos, subvec, stloff);
 
 /*           In principle, we want to shift the target body position */
 /*           relative to the solar system barycenter by STLOFF, but we */
@@ -2775,8 +2802,8 @@ static subpnt_state_t* get_subpnt_state() {
 /*           location relative to the target body's center by */
 /*           subtracting off STLOFF. */
 
-	    vsub_(obspos, stloff, vtemp);
-	    vequ_(vtemp, obspos);
+	    vsub_(__global_state, obspos, stloff, vtemp);
+	    vequ_(__global_state, vtemp, obspos);
 	}
 
 /*        Find the sub-observer point using the current estimated */
@@ -2787,9 +2814,10 @@ static subpnt_state_t* get_subpnt_state() {
 /*           Locate the nearest point to the observer on the target's */
 /*           reference ellipsoid. */
 
-	    nearpt_(obspos, radii, &radii[1], &radii[2], spoint, &alt);
-	    if (failed_()) {
-		chkout_("SUBPNT", (ftnlen)6);
+	    nearpt_(__global_state, obspos, radii, &radii[1], &radii[2], 
+		    spoint, &alt);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -2803,32 +2831,36 @@ static subpnt_state_t* get_subpnt_state() {
 
 /*              Generate the ray direction; find the DSK intercept. */
 
-		vsub_(spoint, obspos, dvec);
-		zzsbfxr_(&trgcde, &__state->nsurf, __state->srflst, trgepc, &
-			fixfid, obspos, dvec, spoint, &fnd);
-		if (failed_()) {
-		    chkout_("SUBPNT", (ftnlen)6);
+		vsub_(__global_state, spoint, obspos, dvec);
+		zzsbfxr_(__global_state, &trgcde, &__state->nsurf, 
+			__state->srflst, trgepc, &fixfid, obspos, dvec, 
+			spoint, &fnd);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		    return 0;
 		}
 		if (! fnd) {
-		    setmsg_("No sub-observer point was found on the surface "
-			    "defined by DSK data.Observer is #; target is #. "
-			    "This problem can occur for bodies having shapes "
-			    "not well modeled by ellipsoids. Consider using t"
-			    "he \"Intercept: DSK\" computation method.", (
-			    ftnlen)230);
-		    errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-		    errch_("#", target, (ftnlen)1, target_len);
-		    sigerr_("SPICE(SUBPOINTNOTFOUND)", (ftnlen)23);
-		    chkout_("SUBPNT", (ftnlen)6);
+		    setmsg_(__global_state, "No sub-observer point was found"
+			    " on the surface defined by DSK data.Observer is "
+			    "#; target is #. This problem can occur for bodie"
+			    "s having shapes not well modeled by ellipsoids. "
+			    "Consider using the \"Intercept: DSK\" computatio"
+			    "n method.", (ftnlen)230);
+		    errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len)
+			    ;
+		    errch_(__global_state, "#", target, (ftnlen)1, target_len)
+			    ;
+		    sigerr_(__global_state, "SPICE(SUBPOINTNOTFOUND)", (
+			    ftnlen)23);
+		    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		    return 0;
 		}
 
 /*              Re-compute the altitude using the intercept on the */
 /*              DSK surface. */
 
-		vsub_(spoint, obspos, srfvec);
-		alt = vnorm_(srfvec);
+		vsub_(__global_state, spoint, obspos, srfvec);
+		alt = vnorm_(__global_state, srfvec);
 	    }
 	} else {
 
@@ -2836,16 +2868,16 @@ static subpnt_state_t* get_subpnt_state() {
 
 /*           Generate the ray direction. */
 
-	    vminus_(obspos, dvec);
+	    vminus_(__global_state, obspos, dvec);
 
 /*           Locate the surface intercept of the ray from the */
 /*           observer to the target center. */
 
 	    if (__state->shape == 1) {
-		surfpt_(obspos, dvec, radii, &radii[1], &radii[2], spoint, &
-			fnd);
-		if (failed_()) {
-		    chkout_("SUBPNT", (ftnlen)6);
+		surfpt_(__global_state, obspos, dvec, radii, &radii[1], &
+			radii[2], spoint, &fnd);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		    return 0;
 		}
 		if (! fnd) {
@@ -2853,52 +2885,58 @@ static subpnt_state_t* get_subpnt_state() {
 /*                 If there's no intercept, we have a numerical */
 /*                 problem. */
 
-		    setmsg_("No intercept of observer-target ray was found.", 
-			    (ftnlen)46);
-		    sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-		    chkout_("SUBPNT", (ftnlen)6);
+		    setmsg_(__global_state, "No intercept of observer-target"
+			    " ray was found.", (ftnlen)46);
+		    sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)
+			    21);
+		    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		    return 0;
 		}
-		alt = vdist_(obspos, spoint);
+		alt = vdist_(__global_state, obspos, spoint);
 	    } else {
 
 /*              Find the ray-DSK surface intercept. */
 
-		zzsbfxr_(&trgcde, &__state->nsurf, __state->srflst, trgepc, &
-			fixfid, obspos, dvec, spoint, &fnd);
-		if (failed_()) {
-		    chkout_("SUBPNT", (ftnlen)6);
+		zzsbfxr_(__global_state, &trgcde, &__state->nsurf, 
+			__state->srflst, trgepc, &fixfid, obspos, dvec, 
+			spoint, &fnd);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		    return 0;
 		}
 		if (! fnd) {
-		    setmsg_("No sub-observer point was found on the surface "
-			    "defined by DSK data.Observer is #; target is #. "
-			    "This problem can occur for a body having an irre"
-			    "gular shape such that the origin of the body-fix"
-			    "ed reference frame is outside of the body. A tor"
-			    "us is an example of such a shape.", (ftnlen)272);
-		    errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-		    errch_("#", target, (ftnlen)1, target_len);
-		    sigerr_("SPICE(SUBPOINTNOTFOUND)", (ftnlen)23);
-		    chkout_("SUBPNT", (ftnlen)6);
+		    setmsg_(__global_state, "No sub-observer point was found"
+			    " on the surface defined by DSK data.Observer is "
+			    "#; target is #. This problem can occur for a bod"
+			    "y having an irregular shape such that the origin"
+			    " of the body-fixed reference frame is outside of"
+			    " the body. A torus is an example of such a shape."
+			    , (ftnlen)272);
+		    errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len)
+			    ;
+		    errch_(__global_state, "#", target, (ftnlen)1, target_len)
+			    ;
+		    sigerr_(__global_state, "SPICE(SUBPOINTNOTFOUND)", (
+			    ftnlen)23);
+		    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 		    return 0;
 		}
 
 /*              Compute the altitude using the intercept on the DSK */
 /*              surface. */
 
-		vsub_(spoint, obspos, srfvec);
-		alt = vnorm_(srfvec);
+		vsub_(__global_state, spoint, obspos, srfvec);
+		alt = vnorm_(__global_state, srfvec);
 	    }
 	}
-	if (failed_()) {
-	    chkout_("SUBPNT", (ftnlen)6);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SUBPNT", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Compute a new light time estimate and new target epoch. */
 
-	lt = alt / clight_();
+	lt = alt / clight_(__global_state);
 	*trgepc = *et + s * lt;
 
 /*        At this point, we have new estimates of the sub-observer */
@@ -2916,9 +2954,9 @@ static subpnt_state_t* get_subpnt_state() {
 /*        existence. */
 
 	d__2 = lt - prevlt;
-	ltdiff = (d__1 = touchd_(&d__2), abs(d__1));
+	ltdiff = (d__1 = touchd_(__global_state, &d__2), abs(d__1));
 	d__2 = *trgepc - prevet;
-	etdiff = (d__1 = touchd_(&d__2), abs(d__1));
+	etdiff = (d__1 = touchd_(__global_state, &d__2), abs(d__1));
 	prevlt = lt;
 	prevet = *trgepc;
 	++i__;
@@ -2927,8 +2965,8 @@ static subpnt_state_t* get_subpnt_state() {
 /*     SPOINT, TRGEPC, and OBSPOS have been set at this point. Compute */
 /*     SRFVEC. */
 
-    vsub_(spoint, obspos, srfvec);
-    chkout_("SUBPNT", (ftnlen)6);
+    vsub_(__global_state, spoint, obspos, srfvec);
+    chkout_(__global_state, "SUBPNT", (ftnlen)6);
     return 0;
 } /* subpnt_ */
 

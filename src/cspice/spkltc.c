@@ -8,8 +8,7 @@
 
 
 extern spkltc_init_t __spkltc_init;
-static spkltc_state_t* get_spkltc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkltc_state_t* get_spkltc_state(cspice_t* state) {
 	if (!state->spkltc)
 		state->spkltc = __cspice_allocate_module(sizeof(
 	spkltc_state_t), &__spkltc_init, sizeof(__spkltc_init));
@@ -18,9 +17,10 @@ static spkltc_state_t* get_spkltc_state() {
 }
 
 /* $Procedure SPKLTC ( S/P Kernel, light time corrected state ) */
-/* Subroutine */ int spkltc_(integer *targ, doublereal *et, char *ref, char *
-	abcorr, doublereal *stobs, doublereal *starg, doublereal *lt, 
-	doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len)
+/* Subroutine */ int spkltc_(cspice_t* __global_state, integer *targ, 
+	doublereal *et, char *ref, char *abcorr, doublereal *stobs, 
+	doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, 
+	ftnlen abcorr_len)
 {
     /* Initialized data */
 
@@ -29,48 +29,50 @@ static spkltc_state_t* get_spkltc_state() {
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal dist;
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
     doublereal a;
     doublereal b;
     doublereal c__;
     integer i__;
     integer refid;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal epoch;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsubg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
     doublereal ssblt;
     doublereal lterr;
-    extern doublereal vnorm_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal prvlt;
-    extern logical failed_(void);
-    extern doublereal clight_(void);
+    extern logical failed_(cspice_t*);
+    extern doublereal clight_(cspice_t*);
     logical attblk[15];
-    extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int spkgeo_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern doublereal touchd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int spkgeo_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer ltsign;
-    extern /* Subroutine */ int irfnum_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int irfnum_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal ssbtrg[6];
     integer numitr;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     logical usestl;
 
 
     /* Module state */
-    spkltc_state_t* __state = get_spkltc_state();
+    spkltc_state_t* __state = get_spkltc_state(__global_state);
 /* $ Abstract */
 
 /*     Return the state (position and velocity) of a target body */
@@ -704,26 +706,27 @@ static spkltc_state_t* get_spkltc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKLTC", (ftnlen)6);
+	chkin_(__global_state, "SPKLTC", (ftnlen)6);
     }
-    if (__state->pass1 || s_cmp(abcorr, __state->prvcor, abcorr_len, (ftnlen)
-	    5) != 0) {
+    if (__state->pass1 || s_cmp(&__global_state->f2c, abcorr, __state->prvcor,
+	     abcorr_len, (ftnlen)5) != 0) {
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
 
-	zzvalcor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("SPKLTC", (ftnlen)6);
+	zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKLTC", (ftnlen)6);
 	    return 0;
 	}
 
 /*        The aberration correction flag is recognized; save it. */
 
-	s_copy(__state->prvcor, abcorr, (ftnlen)5, abcorr_len);
+	s_copy(&__global_state->f2c, __state->prvcor, abcorr, (ftnlen)5, 
+		abcorr_len);
 
 /*        Set logical flags indicating the attributes of the requested */
 /*        correction: */
@@ -748,13 +751,13 @@ static spkltc_state_t* get_spkltc_state() {
 
 /*     See if the reference frame is a recognized inertial frame. */
 
-    irfnum_(ref, &refid, ref_len);
+    irfnum_(__global_state, ref, &refid, ref_len);
     if (refid == 0) {
-	setmsg_("The requested frame '#' is not a recognized inertial frame. "
-		, (ftnlen)60);
-	errch_("#", ref, (ftnlen)1, ref_len);
-	sigerr_("SPICE(BADFRAME)", (ftnlen)15);
-	chkout_("SPKLTC", (ftnlen)6);
+	setmsg_(__global_state, "The requested frame '#' is not a recognized"
+		" inertial frame. ", (ftnlen)60);
+	errch_(__global_state, "#", ref, (ftnlen)1, ref_len);
+	sigerr_(__global_state, "SPICE(BADFRAME)", (ftnlen)15);
+	chkout_(__global_state, "SPKLTC", (ftnlen)6);
 	return 0;
     }
 
@@ -763,14 +766,15 @@ static spkltc_state_t* get_spkltc_state() {
 /*     observer to get the relative state. Use this to compute the */
 /*     one-way light time. */
 
-    spkgeo_(targ, et, ref, &__state->c__0, ssbtrg, &ssblt, ref_len);
-    if (failed_()) {
-	chkout_("SPKLTC", (ftnlen)6);
+    spkgeo_(__global_state, targ, et, ref, &__state->c__0, ssbtrg, &ssblt, 
+	    ref_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKLTC", (ftnlen)6);
 	return 0;
     }
-    vsubg_(ssbtrg, stobs, &__state->c__6, starg);
-    dist = vnorm_(starg);
-    *lt = dist / clight_();
+    vsubg_(__global_state, ssbtrg, stobs, &__state->c__6, starg);
+    dist = vnorm_(__global_state, starg);
+    *lt = dist / clight_(__global_state);
     if (*lt == 0.) {
 
 /*        This can happen only if the observer and target are at the */
@@ -778,7 +782,7 @@ static spkltc_state_t* get_spkltc_state() {
 /*        going to compute the light time derivative. */
 
 	*dlt = 0.;
-	chkout_("SPKLTC", (ftnlen)6);
+	chkout_(__global_state, "SPKLTC", (ftnlen)6);
 	return 0;
     }
     if (! __state->uselt) {
@@ -789,11 +793,12 @@ static spkltc_state_t* get_spkltc_state() {
 
 /*           (1/c) * d(VNORM(STARG))/dt */
 
-	*dlt = vdot_(starg, &starg[3]) / (dist * clight_());
+	*dlt = vdot_(__global_state, starg, &starg[3]) / (dist * clight_(
+		__global_state));
 
 /*        LT and DLT are both set, so we can return. */
 
-	chkout_("SPKLTC", (ftnlen)6);
+	chkout_(__global_state, "SPKLTC", (ftnlen)6);
 	return 0;
     }
 
@@ -825,15 +830,16 @@ static spkltc_state_t* get_spkltc_state() {
 /*        during the previous loop iteration. */
 
 	epoch = *et + ltsign * *lt;
-	spkgeo_(targ, &epoch, ref, &__state->c__0, ssbtrg, &ssblt, ref_len);
-	if (failed_()) {
-	    chkout_("SPKLTC", (ftnlen)6);
+	spkgeo_(__global_state, targ, &epoch, ref, &__state->c__0, ssbtrg, &
+		ssblt, ref_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKLTC", (ftnlen)6);
 	    return 0;
 	}
-	vsubg_(ssbtrg, stobs, &__state->c__6, starg);
+	vsubg_(__global_state, ssbtrg, stobs, &__state->c__6, starg);
 	prvlt = *lt;
-	d__1 = vnorm_(starg) / clight_();
-	*lt = touchd_(&d__1);
+	d__1 = vnorm_(__global_state, starg) / clight_(__global_state);
+	*lt = touchd_(__global_state, &d__1);
 /*        LTERR is the magnitude of the change between the current */
 /*        estimate of light time and the previous estimate, relative to */
 /*        the previous light time corrected epoch. */
@@ -841,7 +847,7 @@ static spkltc_state_t* get_spkltc_state() {
 /* Computing MAX */
 	d__3 = 1., d__4 = abs(epoch);
 	d__2 = (d__1 = *lt - prvlt, abs(d__1)) / max(d__3,d__4);
-	lterr = touchd_(&d__2);
+	lterr = touchd_(__global_state, &d__2);
 	++i__;
     }
 
@@ -927,19 +933,19 @@ static spkltc_state_t* get_spkltc_state() {
 
 
 
-    a = 1. / (clight_() * vnorm_(starg));
-    b = vdot_(starg, &starg[3]);
-    c__ = vdot_(starg, &ssbtrg[3]);
+    a = 1. / (clight_(__global_state) * vnorm_(__global_state, starg));
+    b = vdot_(__global_state, starg, &starg[3]);
+    c__ = vdot_(__global_state, starg, &ssbtrg[3]);
 
 /*     For physically realistic target velocities, S*C*A cannot equal 1. */
 /*     We'll check for this case anyway. */
 
     if (ltsign * c__ * a > .99999999989999999) {
-	setmsg_("Target range rate magnitude is approximately the speed of l"
-		"ight. The light time derivative cannot be computed.", (ftnlen)
-		110);
-	sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-	chkout_("SPKLTC", (ftnlen)6);
+	setmsg_(__global_state, "Target range rate magnitude is approximatel"
+		"y the speed of light. The light time derivative cannot be co"
+		"mputed.", (ftnlen)110);
+	sigerr_(__global_state, "SPICE(DIVIDEBYZERO)", (ftnlen)19);
+	chkout_(__global_state, "SPKLTC", (ftnlen)6);
 	return 0;
     }
 
@@ -951,8 +957,9 @@ static spkltc_state_t* get_spkltc_state() {
 /*     with the light-time corrected velocity. */
 
     d__1 = ltsign * *dlt + 1.;
-    vlcom_(&d__1, &ssbtrg[3], &__state->c_b19, &stobs[3], &starg[3]);
-    chkout_("SPKLTC", (ftnlen)6);
+    vlcom_(__global_state, &d__1, &ssbtrg[3], &__state->c_b19, &stobs[3], &
+	    starg[3]);
+    chkout_(__global_state, "SPKLTC", (ftnlen)6);
     return 0;
 } /* spkltc_ */
 

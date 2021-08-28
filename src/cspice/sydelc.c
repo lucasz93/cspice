@@ -8,8 +8,7 @@
 
 
 extern sydelc_init_t __sydelc_init;
-static sydelc_state_t* get_sydelc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sydelc_state_t* get_sydelc_state(cspice_t* state) {
 	if (!state->sydelc)
 		state->sydelc = __cspice_allocate_module(sizeof(
 	sydelc_state_t), &__sydelc_init, sizeof(__sydelc_init));
@@ -18,8 +17,9 @@ static sydelc_state_t* get_sydelc_state() {
 }
 
 /* $Procedure      SYDELC ( Delete a symbol from the symbol table ) */
-/* Subroutine */ int sydelc_(char *name__, char *tabsym, integer *tabptr, 
-	char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len)
+/* Subroutine */ int sydelc_(cspice_t* __global_state, char *name__, char *
+	tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen 
+	tabsym_len, ftnlen tabval_len)
 {
     /* System generated locals */
     integer i__1;
@@ -28,26 +28,27 @@ static sydelc_state_t* get_sydelc_state() {
     integer nval;
     integer nptr;
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sumai_(integer *, integer *);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int remlac_(integer *, integer *, char *, integer 
-	    *, ftnlen);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int scardi_(integer *, integer *);
-    extern /* Subroutine */ int remlai_(integer *, integer *, integer *, 
-	    integer *);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int scardc_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int remlac_(cspice_t*, integer *, integer *, char 
+	    *, integer *, ftnlen);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int remlai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer dimval;
     integer locval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer locsym;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sydelc_state_t* __state = get_sydelc_state();
+    sydelc_state_t* __state = get_sydelc_state(__global_state);
 /* $ Abstract */
 
 /*     Delete a symbol from a character symbol table. The symbol and its */
@@ -197,39 +198,40 @@ static sydelc_state_t* get_sydelc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYDELC", (ftnlen)6);
+	chkin_(__global_state, "SYDELC", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
-    nptr = cardi_(tabptr);
-    nval = cardc_(tabval, tabval_len);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
+    nptr = cardi_(__global_state, tabptr);
+    nval = cardc_(__global_state, tabval, tabval_len);
 
 /*     Is this symbol even in the table? */
 
-    locsym = bsrchc_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
+    locsym = bsrchc_(__global_state, name__, &nsym, tabsym + tabsym_len * 6, 
+	    name_len, tabsym_len);
 
 /*     If it's not in the table, we're done. If it is, we can proceed */
 /*     without fear of overflow. */
 
     if (locsym > 0) {
 	i__1 = locsym - 1;
-	locval = sumai_(&tabptr[6], &i__1) + 1;
+	locval = sumai_(__global_state, &tabptr[6], &i__1) + 1;
 	dimval = tabptr[locsym + 5];
-	remlac_(&__state->c__1, &locsym, tabsym + tabsym_len * 6, &nsym, 
-		tabsym_len);
-	scardc_(&nsym, tabsym, tabsym_len);
-	remlai_(&__state->c__1, &locsym, &tabptr[6], &nptr);
-	scardi_(&nptr, tabptr);
-	remlac_(&dimval, &locval, tabval + tabval_len * 6, &nval, tabval_len);
-	scardc_(&nval, tabval, tabval_len);
+	remlac_(__global_state, &__state->c__1, &locsym, tabsym + tabsym_len *
+		 6, &nsym, tabsym_len);
+	scardc_(__global_state, &nsym, tabsym, tabsym_len);
+	remlai_(__global_state, &__state->c__1, &locsym, &tabptr[6], &nptr);
+	scardi_(__global_state, &nptr, tabptr);
+	remlac_(__global_state, &dimval, &locval, tabval + tabval_len * 6, &
+		nval, tabval_len);
+	scardc_(__global_state, &nval, tabval, tabval_len);
     }
-    chkout_("SYDELC", (ftnlen)6);
+    chkout_(__global_state, "SYDELC", (ftnlen)6);
     return 0;
 } /* sydelc_ */
 

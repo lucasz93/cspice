@@ -171,7 +171,7 @@
    /*
    Participate in error handling.
    */
-   chkin_c ( "ckopn_c" );
+   chkin_c ( naif_state, "ckopn_c" );
 
    /*
    Check the input strings fname and ifname to make sure the pointers

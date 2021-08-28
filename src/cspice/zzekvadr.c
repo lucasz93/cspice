@@ -8,8 +8,7 @@
 
 
 extern zzekvadr_init_t __zzekvadr_init;
-static zzekvadr_state_t* get_zzekvadr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekvadr_state_t* get_zzekvadr_state(cspice_t* state) {
 	if (!state->zzekvadr)
 		state->zzekvadr = __cspice_allocate_module(sizeof(
 	zzekvadr_state_t), &__zzekvadr_init, sizeof(__zzekvadr_init));
@@ -18,30 +17,32 @@ static zzekvadr_state_t* get_zzekvadr_state() {
 }
 
 /* $Procedure  ZZEKVADR  ( Compute row vector address ) */
-/* Subroutine */ int zzekvadr_0_(int n__, integer *njrs, integer *bases, 
-	integer *rwvidx, integer *rwvbas, integer *sgvbas)
+/* Subroutine */ int zzekvadr_0_(cspice_t* __global_state, int n__, integer *
+	njrs, integer *bases, integer *rwvidx, integer *rwvbas, integer *
+	sgvbas)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzekstop_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern integer lstlei_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekstop_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern integer lstlei_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzeksrd_(cspice_t*, integer *, integer *, 
+	    integer *);
 
 
     /* Module state */
-    zzekvadr_state_t* __state = get_zzekvadr_state();
+    zzekvadr_state_t* __state = get_zzekvadr_state(__global_state);
 /* $ Abstract */
 
 /*     Given a union of EK join row sets and a row vector index, */
@@ -308,16 +309,16 @@ static zzekvadr_state_t* get_zzekvadr_state() {
 	case 2: goto L_zzekvcal;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKVADR", (ftnlen)8);
+	chkin_(__global_state, "ZZEKVADR", (ftnlen)8);
     }
 
 /*     Never come here. */
 
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZEKVADR", (ftnlen)8);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZEKVADR", (ftnlen)8);
     return 0;
 /* $Procedure  ZZEKVSET  ( Row vector address calculation set-up ) */
 
@@ -465,42 +466,43 @@ L_zzekvset:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKVSET", (ftnlen)8);
+	chkin_(__global_state, "ZZEKVSET", (ftnlen)8);
     }
 
 /*     Validate join row set count. */
 
     if (*njrs < 1 || *njrs > 200) {
-	setmsg_("Number of join row sets was #; valid range is 1:#", (ftnlen)
-		49);
-	errint_("#", njrs, (ftnlen)1);
-	errint_("#", &__state->c__200, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKVSET", (ftnlen)8);
+	setmsg_(__global_state, "Number of join row sets was #; valid range "
+		"is 1:#", (ftnlen)49);
+	errint_(__global_state, "#", njrs, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__200, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKVSET", (ftnlen)8);
 	return 0;
     }
 
 /*     Validate the join row set bases. */
 
-    zzekstop_(&__state->top);
+    zzekstop_(__global_state, &__state->top);
     i__1 = *njrs;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	if (bases[__state->i__ - 1] < 0 || bases[__state->i__ - 1] > 
 		__state->top) {
-	    setmsg_("Base address # was #; valid range is 1:#", (ftnlen)40);
-	    errint_("#", &__state->i__, (ftnlen)1);
-	    errint_("#", &bases[__state->i__ - 1], (ftnlen)1);
-	    errint_("#", &__state->top, (ftnlen)1);
-	    sigerr_("SPICE(BADADDRESS)", (ftnlen)17);
-	    chkout_("ZZEKVSET", (ftnlen)8);
+	    setmsg_(__global_state, "Base address # was #; valid range is 1:#"
+		    , (ftnlen)40);
+	    errint_(__global_state, "#", &__state->i__, (ftnlen)1);
+	    errint_(__global_state, "#", &bases[__state->i__ - 1], (ftnlen)1);
+	    errint_(__global_state, "#", &__state->top, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADADDRESS)", (ftnlen)17);
+	    chkout_(__global_state, "ZZEKVSET", (ftnlen)8);
 	    return 0;
 	}
 	__state->svbas[(i__2 = __state->i__ - 1) < 200 && 0 <= i__2 ? i__2 : 
-		s_rnge("svbas", i__2, "zzekvadr_", (ftnlen)526)] = bases[
-		__state->i__ - 1];
+		s_rnge(&__global_state->f2c, "svbas", i__2, "zzekvadr_", (
+		ftnlen)526)] = bases[__state->i__ - 1];
     }
 
 /*     Validate and save the table count.  It's an error for this */
@@ -508,29 +510,31 @@ L_zzekvset:
 /*     union. */
 
     __state->addrss = bases[0] + 3;
-    zzeksrd_(&__state->addrss, &__state->addrss, &__state->ntabs);
+    zzeksrd_(__global_state, &__state->addrss, &__state->addrss, &
+	    __state->ntabs);
     if (__state->ntabs < 1 || __state->ntabs > 10) {
-	setmsg_("Table count for first join row set was #; valid range is 1:#"
-		, (ftnlen)60);
-	errint_("#", &__state->ntabs, (ftnlen)1);
-	errint_("#", &__state->c__10, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKVSET", (ftnlen)8);
+	setmsg_(__global_state, "Table count for first join row set was #; v"
+		"alid range is 1:#", (ftnlen)60);
+	errint_(__global_state, "#", &__state->ntabs, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__10, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKVSET", (ftnlen)8);
 	return 0;
     }
     i__1 = *njrs;
     for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
 	__state->addrss = bases[__state->i__ - 1] + 3;
-	zzeksrd_(&__state->addrss, &__state->addrss, &__state->j);
+	zzeksrd_(__global_state, &__state->addrss, &__state->addrss, &
+		__state->j);
 	if (__state->j != __state->ntabs) {
-	    setmsg_("Join row set # contains # tables; first join row set co"
-		    "ntains # tables.  These counts are supposed to match.", (
-		    ftnlen)108);
-	    errint_("#", &__state->i__, (ftnlen)1);
-	    errint_("#", &__state->j, (ftnlen)1);
-	    errint_("#", &__state->ntabs, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	    chkout_("ZZEKVSET", (ftnlen)8);
+	    setmsg_(__global_state, "Join row set # contains # tables; first"
+		    " join row set contains # tables.  These counts are suppo"
+		    "sed to match.", (ftnlen)108);
+	    errint_(__global_state, "#", &__state->i__, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->j, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->ntabs, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	    chkout_(__global_state, "ZZEKVSET", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -539,36 +543,37 @@ L_zzekvset:
 /*     These counts must be in range.  Save the start indices of */
 /*     the row vectors in each join row set. */
 
-    cleari_(&__state->c__200, __state->begidx);
+    cleari_(__global_state, &__state->c__200, __state->begidx);
     __state->begidx[0] = 1;
     i__1 = *njrs;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	__state->addrss = bases[__state->i__ - 1] + 2;
-	zzeksrd_(&__state->addrss, &__state->addrss, &__state->j);
+	zzeksrd_(__global_state, &__state->addrss, &__state->addrss, &
+		__state->j);
 	if (__state->j < 0 || __state->j > __state->top) {
-	    setmsg_("Join row set # has row count #; valid range is 0:#", (
-		    ftnlen)50);
-	    errint_("#", &__state->i__, (ftnlen)1);
-	    errint_("#", &__state->j, (ftnlen)1);
-	    errint_("#", &__state->top, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	    chkout_("ZZEKVSET", (ftnlen)8);
+	    setmsg_(__global_state, "Join row set # has row count #; valid r"
+		    "ange is 0:#", (ftnlen)50);
+	    errint_(__global_state, "#", &__state->i__, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->j, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->top, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	    chkout_(__global_state, "ZZEKVSET", (ftnlen)8);
 	    return 0;
 	}
 	if (__state->i__ < *njrs) {
 	    __state->begidx[(i__2 = __state->i__) < 200 && 0 <= i__2 ? i__2 : 
-		    s_rnge("begidx", i__2, "zzekvadr_", (ftnlen)598)] = 
-		    __state->begidx[(i__3 = __state->i__ - 1) < 200 && 0 <= 
-		    i__3 ? i__3 : s_rnge("begidx", i__3, "zzekvadr_", (ftnlen)
-		    598)] + __state->j;
+		    s_rnge(&__global_state->f2c, "begidx", i__2, "zzekvadr_", 
+		    (ftnlen)598)] = __state->begidx[(i__3 = __state->i__ - 1) 
+		    < 200 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "begidx", i__3, "zzekvadr_", (ftnlen)598)] + __state->j;
 	}
     }
 
 /*     Retain the index of the last row vector. */
 
     __state->maxrwv = __state->begidx[(i__1 = *njrs - 1) < 200 && 0 <= i__1 ? 
-	    i__1 : s_rnge("begidx", i__1, "zzekvadr_", (ftnlen)608)] + 
-	    __state->j;
+	    i__1 : s_rnge(&__global_state->f2c, "begidx", i__1, "zzekvadr_", (
+	    ftnlen)608)] + __state->j;
 
 /*     Save the base addresses of the row vectors in each join row set. */
 /*     Validate the segment vector counts while we're at it. */
@@ -576,26 +581,28 @@ L_zzekvset:
     i__1 = *njrs;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	__state->addrss = bases[__state->i__ - 1] + 4;
-	zzeksrd_(&__state->addrss, &__state->addrss, &__state->nsv);
+	zzeksrd_(__global_state, &__state->addrss, &__state->addrss, &
+		__state->nsv);
 	if (__state->nsv < 0) {
-	    setmsg_("Join row set # has segment vector count #; count must b"
-		    "e non-negative.", (ftnlen)70);
-	    errint_("#", &__state->i__, (ftnlen)1);
-	    errint_("#", &__state->nsv, (ftnlen)1);
-	    errint_("#", &__state->top, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	    chkout_("ZZEKVSET", (ftnlen)8);
+	    setmsg_(__global_state, "Join row set # has segment vector count"
+		    " #; count must be non-negative.", (ftnlen)70);
+	    errint_(__global_state, "#", &__state->i__, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->nsv, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->top, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	    chkout_(__global_state, "ZZEKVSET", (ftnlen)8);
 	    return 0;
 	}
 	__state->rbas[(i__2 = __state->i__ - 1) < 200 && 0 <= i__2 ? i__2 : 
-		s_rnge("rbas", i__2, "zzekvadr_", (ftnlen)633)] = 
-		__state->addrss + __state->nsv * (__state->ntabs + 2);
+		s_rnge(&__global_state->f2c, "rbas", i__2, "zzekvadr_", (
+		ftnlen)633)] = __state->addrss + __state->nsv * (
+		__state->ntabs + 2);
     }
 
 /*     Retain the count of join row sets in the union. */
 
     __state->svnjrs = *njrs;
-    chkout_("ZZEKVSET", (ftnlen)8);
+    chkout_(__global_state, "ZZEKVSET", (ftnlen)8);
     return 0;
 /* $Procedure  ZZEKVCAL  ( Row vector address calculation  ) */
 
@@ -733,19 +740,21 @@ L_zzekvcal:
 /*     If the index is out of range, that's an error. */
 
     if (*rwvidx < 1 || *rwvidx > __state->maxrwv) {
-	chkin_("ZZEKVCAL", (ftnlen)8);
-	setmsg_("Row vector index was #; valid range is 0:#", (ftnlen)42);
-	errint_("#", rwvidx, (ftnlen)1);
-	errint_("#", &__state->maxrwv, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKVCAL", (ftnlen)8);
+	chkin_(__global_state, "ZZEKVCAL", (ftnlen)8);
+	setmsg_(__global_state, "Row vector index was #; valid range is 0:#", 
+		(ftnlen)42);
+	errint_(__global_state, "#", rwvidx, (ftnlen)1);
+	errint_(__global_state, "#", &__state->maxrwv, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKVCAL", (ftnlen)8);
 	return 0;
     }
 
 /*     Identify the join row set containing the indicated row.  Our error */
 /*     check guarantees a non-zero result. */
 
-    __state->jrsidx = lstlei_(rwvidx, &__state->svnjrs, __state->begidx);
+    __state->jrsidx = lstlei_(__global_state, rwvidx, &__state->svnjrs, 
+	    __state->begidx);
 
 /*     Compute the offset of the indicated row vector relative to the */
 /*     first row vector in the parent join row set.  This offset is one */
@@ -753,14 +762,14 @@ L_zzekvcal:
 /*     the augmented row vector size. */
 
     __state->reloff = (*rwvidx - __state->begidx[(i__1 = __state->jrsidx - 1) 
-	    < 200 && 0 <= i__1 ? i__1 : s_rnge("begidx", i__1, "zzekvadr_", (
-	    ftnlen)814)]) * (__state->ntabs + 1);
+	    < 200 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "begidx",
+	     i__1, "zzekvadr_", (ftnlen)814)]) * (__state->ntabs + 1);
 
 /*     Find the base address of the row vector. */
 
     *rwvbas = __state->rbas[(i__1 = __state->jrsidx - 1) < 200 && 0 <= i__1 ? 
-	    i__1 : s_rnge("rbas", i__1, "zzekvadr_", (ftnlen)819)] + 
-	    __state->reloff;
+	    i__1 : s_rnge(&__global_state->f2c, "rbas", i__1, "zzekvadr_", (
+	    ftnlen)819)] + __state->reloff;
 
 /*     Compute the base address of the parent segment vector.  The base- */
 /*     relative address of the segment vector is stored at the end of the */
@@ -768,27 +777,28 @@ L_zzekvcal:
 
     i__1 = *rwvbas + __state->ntabs + 1;
     i__2 = *rwvbas + __state->ntabs + 1;
-    zzeksrd_(&i__1, &i__2, sgvbas);
+    zzeksrd_(__global_state, &i__1, &i__2, sgvbas);
     *sgvbas = __state->svbas[(i__1 = __state->jrsidx - 1) < 200 && 0 <= i__1 ?
-	     i__1 : s_rnge("svbas", i__1, "zzekvadr_", (ftnlen)828)] + *
-	    sgvbas;
+	     i__1 : s_rnge(&__global_state->f2c, "svbas", i__1, "zzekvadr_", (
+	    ftnlen)828)] + *sgvbas;
     return 0;
 } /* zzekvadr_ */
 
-/* Subroutine */ int zzekvadr_(integer *njrs, integer *bases, integer *rwvidx,
-	 integer *rwvbas, integer *sgvbas)
+/* Subroutine */ int zzekvadr_(cspice_t* __global_state, integer *njrs, 
+	integer *bases, integer *rwvidx, integer *rwvbas, integer *sgvbas)
 {
     return zzekvadr_0_(0, njrs, bases, rwvidx, rwvbas, sgvbas);
     }
 
-/* Subroutine */ int zzekvset_(integer *njrs, integer *bases)
+/* Subroutine */ int zzekvset_(cspice_t* __global_state, integer *njrs, 
+	integer *bases)
 {
     return zzekvadr_0_(1, njrs, bases, (integer *)0, (integer *)0, (integer *)
 	    0);
     }
 
-/* Subroutine */ int zzekvcal_(integer *rwvidx, integer *rwvbas, integer *
-	sgvbas)
+/* Subroutine */ int zzekvcal_(cspice_t* __global_state, integer *rwvidx, 
+	integer *rwvbas, integer *sgvbas)
 {
     return zzekvadr_0_(2, (integer *)0, (integer *)0, rwvidx, rwvbas, sgvbas);
     }

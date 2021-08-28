@@ -8,31 +8,31 @@
 
 
 typedef int zzekqcnj_state_t;
-static zzekqcnj_state_t* get_zzekqcnj_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekqcnj_state_t* get_zzekqcnj_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  ZZEKQCNJ ( Private: EK, read conjunction sizes from query ) */
-/* Subroutine */ int zzekqcnj_(integer *eqryi, integer *n, integer *size)
+/* Subroutine */ int zzekqcnj_(cspice_t* __global_state, integer *eqryi, 
+	integer *n, integer *size)
 {
     integer ntab;
     integer ncnj;
     integer ncns;
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     integer iparse;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer loc;
 
 
     /* Module state */
-    zzekqcnj_state_t* __state = get_zzekqcnj_state();
+    zzekqcnj_state_t* __state = get_zzekqcnj_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -547,27 +547,29 @@ static zzekqcnj_state_t* get_zzekqcnj_state() {
 
 /*     Use discovery check-in. */
 
-    zzekreqi_(eqryi, "PARSED", &iparse, (ftnlen)6);
-    if (failed_()) {
+    zzekreqi_(__global_state, eqryi, "PARSED", &iparse, (ftnlen)6);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (iparse == -1) {
-	chkin_("ZZEKQCNJ", (ftnlen)8);
-	setmsg_("Encoded query has not yet been parsed.", (ftnlen)38);
-	sigerr_("SPICE(UNPARSEDQUERY)", (ftnlen)20);
-	chkout_("ZZEKQCNJ", (ftnlen)8);
+	chkin_(__global_state, "ZZEKQCNJ", (ftnlen)8);
+	setmsg_(__global_state, "Encoded query has not yet been parsed.", (
+		ftnlen)38);
+	sigerr_(__global_state, "SPICE(UNPARSEDQUERY)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKQCNJ", (ftnlen)8);
 	return 0;
     }
-    zzekreqi_(eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
-    zzekreqi_(eqryi, "NUM_CONJUNCTIONS", &ncnj, (ftnlen)16);
-    zzekreqi_(eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
+    zzekreqi_(__global_state, eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
+    zzekreqi_(__global_state, eqryi, "NUM_CONJUNCTIONS", &ncnj, (ftnlen)16);
+    zzekreqi_(__global_state, eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
     if (*n < 1 || *n > ncnj) {
-	chkin_("ZZEKQCNJ", (ftnlen)8);
-	setmsg_("Table index # is out of valid range 1:#.", (ftnlen)40);
-	errint_("#", n, (ftnlen)1);
-	errint_("#", &ncnj, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKQCNJ", (ftnlen)8);
+	chkin_(__global_state, "ZZEKQCNJ", (ftnlen)8);
+	setmsg_(__global_state, "Table index # is out of valid range 1:#.", (
+		ftnlen)40);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	errint_(__global_state, "#", &ncnj, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKQCNJ", (ftnlen)8);
 	return 0;
     }
 

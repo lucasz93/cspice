@@ -8,8 +8,7 @@
 
 
 extern jul2gr_init_t __jul2gr_init;
-static jul2gr_state_t* get_jul2gr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline jul2gr_state_t* get_jul2gr_state(cspice_t* state) {
 	if (!state->jul2gr)
 		state->jul2gr = __cspice_allocate_module(sizeof(
 	jul2gr_state_t), &__jul2gr_init, sizeof(__jul2gr_init));
@@ -18,8 +17,8 @@ static jul2gr_state_t* get_jul2gr_state() {
 }
 
 /* $Procedure      JUL2GR (Julian to Gregorian Calendar) */
-/* Subroutine */ int jul2gr_0_(int n__, integer *year, integer *month, 
-	integer *day, integer *doy)
+/* Subroutine */ int jul2gr_0_(cspice_t* __global_state, int n__, integer *
+	year, integer *month, integer *day, integer *doy)
 {
     /* Initialized data */
 
@@ -28,15 +27,15 @@ static jul2gr_state_t* get_jul2gr_state() {
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int rmaini_(integer *, integer *, integer *, 
-	    integer *);
-    extern integer lstlti_(integer *, integer *, integer *);
+    extern /* Subroutine */ int rmaini_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern integer lstlti_(cspice_t*, integer *, integer *, integer *);
 
     /* Module state */
-    jul2gr_state_t* __state = get_jul2gr_state();
+    jul2gr_state_t* __state = get_jul2gr_state(__global_state);
 /* $ Abstract */
 
 /*     Convert Year Month and Day on the Julian Calendar */
@@ -364,20 +363,22 @@ static jul2gr_state_t* get_jul2gr_state() {
 	__state->rdayg = 365 * (__state->c__1582 - 1) + (__state->c__1582 - 1)
 		 / 4 - (__state->c__1582 - 1) / 100 + (__state->c__1582 - 1) /
 		 400 + (__state->dpjan0[(i__1 = __state->c__10 - 1) < 12 && 0 
-		<= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)
-		535)] + __state->extra[(i__2 = __state->c__10 - 1) < 12 && 0 
-		<= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)535)
-		] * (max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + 
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "dpjan0", i__1, 
+		"jul2gr_", (ftnlen)535)] + __state->extra[(i__2 = 
+		__state->c__10 - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "extra", i__2, "jul2gr_", (ftnlen)535)] *
+		 (max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + 
 		__state->c__15) - 1;
 /* Computing MAX */
 	i__3 = 0, i__4 = 1 + abs(__state->c__1582) / __state->c__4 * 
 		__state->c__4 - abs(__state->c__1582);
 	__state->rdayj = 365 * (__state->c__1582 - 1) + (__state->c__1582 - 1)
 		 / 4 + (__state->dpjan0[(i__1 = __state->c__10 - 1) < 12 && 0 
-		<= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)
-		536)] + __state->extra[(i__2 = __state->c__10 - 1) < 12 && 0 
-		<= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)536)
-		] * max(i__3,i__4) + __state->c__5) - 1;
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "dpjan0", i__1, 
+		"jul2gr_", (ftnlen)536)] + __state->extra[(i__2 = 
+		__state->c__10 - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "extra", i__2, "jul2gr_", (ftnlen)536)] *
+		 max(i__3,i__4) + __state->c__5) - 1;
 	__state->offstj = __state->rdayj - __state->rdayg;
 	__state->offstg = __state->rdayg - __state->rdayj;
     }
@@ -386,12 +387,14 @@ static jul2gr_state_t* get_jul2gr_state() {
 /*     YEARs into a positive range. */
 
     i__1 = *month - 1;
-    rmaini_(&i__1, &__state->c__12, &__state->yroff, &__state->mon);
+    rmaini_(__global_state, &i__1, &__state->c__12, &__state->yroff, &
+	    __state->mon);
     __state->yr = *year + __state->yroff;
     ++__state->mon;
     __state->dy = *day;
     if (__state->yr <= 0) {
-	rmaini_(&__state->yr, &__state->c__4, &__state->m4, &__state->tmpyr);
+	rmaini_(__global_state, &__state->yr, &__state->c__4, &__state->m4, &
+		__state->tmpyr);
 	__state->yr = __state->tmpyr;
 	if (__state->yr == 0) {
 	    __state->yr += 4;
@@ -410,10 +413,11 @@ static jul2gr_state_t* get_jul2gr_state() {
 	    abs(__state->yr);
     __state->dayj = 365 * (__state->yr - 1) + (__state->yr - 1) / 4 + (
 	    __state->dpjan0[(i__1 = __state->mon - 1) < 12 && 0 <= i__1 ? 
-	    i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)574)] + 
-	    __state->extra[(i__2 = __state->mon - 1) < 12 && 0 <= i__2 ? i__2 
-	    : s_rnge("extra", i__2, "jul2gr_", (ftnlen)574)] * max(i__3,i__4) 
-	    + __state->dy) - 1 + __state->offset;
+	    i__1 : s_rnge(&__global_state->f2c, "dpjan0", i__1, "jul2gr_", (
+	    ftnlen)574)] + __state->extra[(i__2 = __state->mon - 1) < 12 && 0 
+	    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "extra", i__2, 
+	    "jul2gr_", (ftnlen)574)] * max(i__3,i__4) + __state->dy) - 1 + 
+	    __state->offset;
 
 /*     This day is DAYJ - RDAYJ days after 1582 Oct 5 on the */
 /*     julian calendar.  But this is the same as the number */
@@ -427,8 +431,8 @@ static jul2gr_state_t* get_jul2gr_state() {
 /*     straight forward task to get the year, month and day */
 /*     on the Gregorian calendar. */
 
-    rmaini_(&__state->dayg, &__state->c_b27, &__state->m400, &__state->tmpday)
-	    ;
+    rmaini_(__global_state, &__state->dayg, &__state->c_b27, &__state->m400, &
+	    __state->tmpday);
     __state->dayg = __state->tmpday;
 /* Computing MIN */
     i__1 = 3, i__2 = __state->dayg / 36524;
@@ -459,17 +463,17 @@ static jul2gr_state_t* get_jul2gr_state() {
     i__5 = 0, i__6 = 1 + abs(__state->yr) / __state->c__400 * __state->c__400 
 	    - abs(__state->yr);
     if (max(i__1,i__2) - max(i__3,i__4) + max(i__5,i__6) == 0) {
-	__state->mon = lstlti_(&__state->dofyr, &__state->c__12, 
-		__state->dpjan0);
+	__state->mon = lstlti_(__global_state, &__state->dofyr, &
+		__state->c__12, __state->dpjan0);
 	__state->dy = __state->dofyr - __state->dpjan0[(i__1 = __state->mon - 
-		1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_"
-		, (ftnlen)616)];
+		1) < 12 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"dpjan0", i__1, "jul2gr_", (ftnlen)616)];
     } else {
-	__state->mon = lstlti_(&__state->dofyr, &__state->c__12, 
-		__state->dpbegl);
+	__state->mon = lstlti_(__global_state, &__state->dofyr, &
+		__state->c__12, __state->dpbegl);
 	__state->dy = __state->dofyr - __state->dpbegl[(i__1 = __state->mon - 
-		1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpbegl", i__1, "jul2gr_"
-		, (ftnlen)619)];
+		1) < 12 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"dpbegl", i__1, "jul2gr_", (ftnlen)619)];
     }
     *year = __state->yr;
     *month = __state->mon;
@@ -702,20 +706,22 @@ L_gr2jul:
 	__state->rdayg = 365 * (__state->c__1582 - 1) + (__state->c__1582 - 1)
 		 / 4 - (__state->c__1582 - 1) / 100 + (__state->c__1582 - 1) /
 		 400 + (__state->dpjan0[(i__1 = __state->c__10 - 1) < 12 && 0 
-		<= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)
-		850)] + __state->extra[(i__2 = __state->c__10 - 1) < 12 && 0 
-		<= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)850)
-		] * (max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + 
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "dpjan0", i__1, 
+		"jul2gr_", (ftnlen)850)] + __state->extra[(i__2 = 
+		__state->c__10 - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "extra", i__2, "jul2gr_", (ftnlen)850)] *
+		 (max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + 
 		__state->c__15) - 1;
 /* Computing MAX */
 	i__3 = 0, i__4 = 1 + abs(__state->c__1582) / __state->c__4 * 
 		__state->c__4 - abs(__state->c__1582);
 	__state->rdayj = 365 * (__state->c__1582 - 1) + (__state->c__1582 - 1)
 		 / 4 + (__state->dpjan0[(i__1 = __state->c__10 - 1) < 12 && 0 
-		<= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)
-		851)] + __state->extra[(i__2 = __state->c__10 - 1) < 12 && 0 
-		<= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)851)
-		] * max(i__3,i__4) + __state->c__5) - 1;
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "dpjan0", i__1, 
+		"jul2gr_", (ftnlen)851)] + __state->extra[(i__2 = 
+		__state->c__10 - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "extra", i__2, "jul2gr_", (ftnlen)851)] *
+		 max(i__3,i__4) + __state->c__5) - 1;
 	__state->offstj = __state->rdayj - __state->rdayg;
 	__state->offstg = __state->rdayg - __state->rdayj;
     }
@@ -724,13 +730,14 @@ L_gr2jul:
 /*     a positive range. */
 
     i__1 = *month - 1;
-    rmaini_(&i__1, &__state->c__12, &__state->yroff, &__state->mon);
+    rmaini_(__global_state, &i__1, &__state->c__12, &__state->yroff, &
+	    __state->mon);
     __state->yr = *year + __state->yroff;
     ++__state->mon;
     __state->dy = *day;
     if (__state->yr <= 0) {
-	rmaini_(&__state->yr, &__state->c__400, &__state->m400, &
-		__state->tmpyr);
+	rmaini_(__global_state, &__state->yr, &__state->c__400, &
+		__state->m400, &__state->tmpyr);
 	__state->yr = __state->tmpyr;
 	if (__state->yr == 0) {
 	    __state->yr += 400;
@@ -756,11 +763,11 @@ L_gr2jul:
     __state->dayg = 365 * (__state->yr - 1) + (__state->yr - 1) / 4 - (
 	    __state->yr - 1) / 100 + (__state->yr - 1) / 400 + (
 	    __state->dpjan0[(i__1 = __state->mon - 1) < 12 && 0 <= i__1 ? 
-	    i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)888)] + 
-	    __state->extra[(i__2 = __state->mon - 1) < 12 && 0 <= i__2 ? i__2 
-	    : s_rnge("extra", i__2, "jul2gr_", (ftnlen)888)] * (max(i__3,i__4)
-	     - max(i__5,i__6) + max(i__7,i__8)) + __state->dy) - 1 + 
-	    __state->offset;
+	    i__1 : s_rnge(&__global_state->f2c, "dpjan0", i__1, "jul2gr_", (
+	    ftnlen)888)] + __state->extra[(i__2 = __state->mon - 1) < 12 && 0 
+	    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "extra", i__2, 
+	    "jul2gr_", (ftnlen)888)] * (max(i__3,i__4) - max(i__5,i__6) + max(
+	    i__7,i__8)) + __state->dy) - 1 + __state->offset;
 
 /*     This day is DAYG - RDAYG days after 1582 Oct 15 on the */
 /*     Gregorian calendar.  But this is the same as the number */
@@ -774,8 +781,8 @@ L_gr2jul:
 /*     straight forward task to get the year, month and day */
 /*     on the Julian calendar. */
 
-    rmaini_(&__state->dayj, &__state->c__1461, &__state->m4, &__state->tmpday)
-	    ;
+    rmaini_(__global_state, &__state->dayj, &__state->c__1461, &__state->m4, &
+	    __state->tmpday);
     __state->dayj = __state->tmpday;
 /* Computing MIN */
     i__1 = 3, i__2 = __state->dayj / 365;
@@ -791,17 +798,17 @@ L_gr2jul:
     i__1 = 0, i__2 = 1 + abs(__state->yr) / __state->c__4 * __state->c__4 - 
 	    abs(__state->yr);
     if (max(i__1,i__2) == 0) {
-	__state->mon = lstlti_(&__state->dofyr, &__state->c__12, 
-		__state->dpjan0);
+	__state->mon = lstlti_(__global_state, &__state->dofyr, &
+		__state->c__12, __state->dpjan0);
 	__state->dy = __state->dofyr - __state->dpjan0[(i__1 = __state->mon - 
-		1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_"
-		, (ftnlen)922)];
+		1) < 12 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"dpjan0", i__1, "jul2gr_", (ftnlen)922)];
     } else {
-	__state->mon = lstlti_(&__state->dofyr, &__state->c__12, 
-		__state->dpbegl);
+	__state->mon = lstlti_(__global_state, &__state->dofyr, &
+		__state->c__12, __state->dpbegl);
 	__state->dy = __state->dofyr - __state->dpbegl[(i__1 = __state->mon - 
-		1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpbegl", i__1, "jul2gr_"
-		, (ftnlen)925)];
+		1) < 12 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"dpbegl", i__1, "jul2gr_", (ftnlen)925)];
     }
     *year = __state->yr;
     *month = __state->mon;
@@ -810,14 +817,14 @@ L_gr2jul:
     return 0;
 } /* jul2gr_ */
 
-/* Subroutine */ int jul2gr_(integer *year, integer *month, integer *day, 
-	integer *doy)
+/* Subroutine */ int jul2gr_(cspice_t* __global_state, integer *year, integer 
+	*month, integer *day, integer *doy)
 {
     return jul2gr_0_(0, year, month, day, doy);
     }
 
-/* Subroutine */ int gr2jul_(integer *year, integer *month, integer *day, 
-	integer *doy)
+/* Subroutine */ int gr2jul_(cspice_t* __global_state, integer *year, integer 
+	*month, integer *day, integer *doy)
 {
     return jul2gr_0_(1, year, month, day, doy);
     }

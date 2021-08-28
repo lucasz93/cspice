@@ -8,20 +8,19 @@
 
 
 typedef int smsgni_state_t;
-static smsgni_state_t* get_smsgni_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline smsgni_state_t* get_smsgni_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            SMSGNI  ( Same Sign Integer Numbers ) */
-logical smsgni_(integer *x, integer *y)
+logical smsgni_(cspice_t* __global_state, integer *x, integer *y)
 {
     /* System generated locals */
     logical ret_val;
 
 
     /* Module state */
-    smsgni_state_t* __state = get_smsgni_state();
+    smsgni_state_t* __state = get_smsgni_state(__global_state);
 /* $ Abstract */
 
 /*      A logical function that is true if the input arguments have the */

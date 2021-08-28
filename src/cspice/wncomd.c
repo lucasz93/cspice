@@ -8,8 +8,7 @@
 
 
 extern wncomd_init_t __wncomd_init;
-static wncomd_state_t* get_wncomd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wncomd_state_t* get_wncomd_state(cspice_t* state) {
 	if (!state->wncomd)
 		state->wncomd = __cspice_allocate_module(sizeof(
 	wncomd_state_t), &__wncomd_init, sizeof(__wncomd_init));
@@ -18,25 +17,25 @@ static wncomd_state_t* get_wncomd_state() {
 }
 
 /* $Procedure      WNCOMD ( Complement a DP window ) */
-/* Subroutine */ int wncomd_(doublereal *left, doublereal *right, doublereal *
-	window, doublereal *result)
+/* Subroutine */ int wncomd_(cspice_t* __global_state, doublereal *left, 
+	doublereal *right, doublereal *window, doublereal *result)
 {
     integer card;
     integer i__;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int wninsd_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern logical return_(void);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wninsd_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    wncomd_state_t* __state = get_wncomd_state();
+    wncomd_state_t* __state = get_wncomd_state(__global_state);
 /* $ Abstract */
 
 /*      Determine the complement of a double precision window with */
@@ -217,27 +216,27 @@ static wncomd_state_t* get_wncomd_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("WNCOMD", (ftnlen)6);
+    chkin_(__global_state, "WNCOMD", (ftnlen)6);
 
 /*     Get the cardinality of the input window. */
 
-    card = cardd_(window);
+    card = cardd_(__global_state, window);
 
 /*     Empty out the result window before proceeding. */
 
-    scardd_(&__state->c__0, result);
+    scardd_(__global_state, &__state->c__0, result);
 
 /*     Check to see if the input interval is valid. If it is not, signal */
 /*     an error and return. */
 
     if (*left > *right) {
-	setmsg_("WNCOMD: Left endpoint may not exceed right endpoint.", (
-		ftnlen)52);
-	sigerr_("SPICE(BADENDPOINTS)", (ftnlen)19);
-	chkout_("WNCOMD", (ftnlen)6);
+	setmsg_(__global_state, "WNCOMD: Left endpoint may not exceed right "
+		"endpoint.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(BADENDPOINTS)", (ftnlen)19);
+	chkout_(__global_state, "WNCOMD", (ftnlen)6);
 	return 0;
     }
 
@@ -246,8 +245,8 @@ static wncomd_state_t* get_wncomd_state() {
 /*     the entire interval. */
 
     if (card == 0 || window[6] >= *right || window[card + 5] <= *left) {
-	wninsd_(left, right, result);
-	chkout_("WNCOMD", (ftnlen)6);
+	wninsd_(__global_state, left, right, result);
+	chkout_(__global_state, "WNCOMD", (ftnlen)6);
 	return 0;
     }
 
@@ -278,15 +277,16 @@ static wncomd_state_t* get_wncomd_state() {
 /*     in the input window, the complement begins with LEFT. */
 
     if (i__ <= card && window[i__ + 4] > *left) {
-	wninsd_(left, &window[i__ + 4], result);
+	wninsd_(__global_state, left, &window[i__ + 4], result);
     }
 
 /*     Start schlepping endpoints [b(i),a(i+1)] from the input window */
 /*     to the output window. Stop when we find one of our new right */
 /*     endpoints exceeds the end of the input interval. */
 
-    while(! failed_() && i__ < card && window[i__ + 6] < *right) {
-	wninsd_(&window[i__ + 5], &window[i__ + 6], result);
+    while(! failed_(__global_state) && i__ < card && window[i__ + 6] < *right)
+	     {
+	wninsd_(__global_state, &window[i__ + 5], &window[i__ + 6], result);
 	i__ += 2;
     }
 
@@ -294,9 +294,9 @@ static wncomd_state_t* get_wncomd_state() {
 /*     in the input window, the complement ends with RIGHT. */
 
     if (i__ <= card && window[i__ + 5] < *right) {
-	wninsd_(&window[i__ + 5], right, result);
+	wninsd_(__global_state, &window[i__ + 5], right, result);
     }
-    chkout_("WNCOMD", (ftnlen)6);
+    chkout_(__global_state, "WNCOMD", (ftnlen)6);
     return 0;
 } /* wncomd_ */
 

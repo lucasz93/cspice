@@ -993,7 +993,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "term_pl02" );
+   chkin_c ( naif_state, "term_pl02" );
 
 
    /*

@@ -8,8 +8,7 @@
 
 
 extern ioerr_init_t __ioerr_init;
-static ioerr_state_t* get_ioerr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ioerr_state_t* get_ioerr_state(cspice_t* state) {
 	if (!state->ioerr)
 		state->ioerr = __cspice_allocate_module(sizeof(ioerr_state_t),
 	 &__ioerr_init, sizeof(__ioerr_init));
@@ -18,23 +17,23 @@ static ioerr_state_t* get_ioerr_state() {
 }
 
 /* $Procedure      IOERR ( I/O error message writer ) */
-/* Subroutine */ int ioerr_(char *action, char *file, integer *iostat, ftnlen 
-	action_len, ftnlen file_len)
+/* Subroutine */ int ioerr_(cspice_t* __global_state, char *action, char *
+	file, integer *iostat, ftnlen action_len, ftnlen file_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char error[320];
     char iochar[10];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    ioerr_state_t* __state = get_ioerr_state();
+    ioerr_state_t* __state = get_ioerr_state(__global_state);
 /* $ Abstract */
 
 /*      Set the long error message equal to a standard I/O error message */
@@ -226,36 +225,42 @@ static ioerr_state_t* get_ioerr_state() {
 
 /*     First comes some standard stuff. */
 
-    s_copy(error, "An error occurred while", (ftnlen)320, (ftnlen)23);
+    s_copy(&__global_state->f2c, error, "An error occurred while", (ftnlen)
+	    320, (ftnlen)23);
 
 /*     Next comes the action that caused the error, and the file name. */
 /*     There should be at least one space between each of these pieces, */
 /*     but not more than one. */
 
-    suffix_(action, &__state->c__1, error, action_len, (ftnlen)320);
-    suffix_(file, &__state->c__1, error, file_len, (ftnlen)320);
-    suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)320);
+    suffix_(__global_state, action, &__state->c__1, error, action_len, (
+	    ftnlen)320);
+    suffix_(__global_state, file, &__state->c__1, error, file_len, (ftnlen)
+	    320);
+    suffix_(__global_state, ".", &__state->c__0, error, (ftnlen)1, (ftnlen)
+	    320);
 
 /*     More standard stuff. If IOSTAT is zero, there is no need for this */
 /*     part of the message. */
 
     if (*iostat != 0) {
-	suffix_("The value of IOSTAT returned was", &__state->c__2, error, (
-		ftnlen)32, (ftnlen)320);
+	suffix_(__global_state, "The value of IOSTAT returned was", &
+		__state->c__2, error, (ftnlen)32, (ftnlen)320);
 
 /*        IOSTAT must be written to a character variable first. */
 /*        Attempting to write it directly to ERROR could cause a */
 /*        boo-boo if we have already overrun the length of ERROR. */
 
-	intstr_(iostat, iochar, (ftnlen)10);
-	suffix_(iochar, &__state->c__1, error, (ftnlen)10, (ftnlen)320);
-	suffix_(".", &__state->c__0, error, (ftnlen)1, (ftnlen)320);
+	intstr_(__global_state, iostat, iochar, (ftnlen)10);
+	suffix_(__global_state, iochar, &__state->c__1, error, (ftnlen)10, (
+		ftnlen)320);
+	suffix_(__global_state, ".", &__state->c__0, error, (ftnlen)1, (
+		ftnlen)320);
     }
 
 /*     The message has been constructed.  Set the long error message */
 /*     equal to the constructed message. */
 
-    setmsg_(error, (ftnlen)320);
+    setmsg_(__global_state, error, (ftnlen)320);
     return 0;
 } /* ioerr_ */
 

@@ -8,31 +8,31 @@
 
 
 typedef int sct2e_state_t;
-static sct2e_state_t* get_sct2e_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sct2e_state_t* get_sct2e_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SCT2E ( SCLK ticks to ET ) */
-/* Subroutine */ int sct2e_(integer *sc, doublereal *sclkdp, doublereal *et)
+/* Subroutine */ int sct2e_(cspice_t* __global_state, integer *sc, doublereal 
+	*sclkdp, doublereal *et)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int scte01_(integer *, doublereal *, doublereal *)
-	    ;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer sctype_(integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int scte01_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer sctype_(cspice_t*, integer *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sct2e_state_t* __state = get_sct2e_state();
+    sct2e_state_t* __state = get_sct2e_state(__global_state);
 /* $ Abstract */
 
 /*     Convert encoded spacecraft clock (`ticks') to ephemeris */
@@ -324,25 +324,25 @@ static sct2e_state_t* get_sct2e_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCT2E", (ftnlen)5);
+	chkin_(__global_state, "SCT2E", (ftnlen)5);
     }
 
 /*     Just hand off the conversion to the appropriate routine. */
 
-    if (sctype_(sc) == 1) {
-	scte01_(sc, sclkdp, et);
+    if (sctype_(__global_state, sc) == 1) {
+	scte01_(__global_state, sc, sclkdp, et);
     } else {
-	setmsg_("Clock type # is not supported.", (ftnlen)30);
-	i__1 = sctype_(sc);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("SCT2E", (ftnlen)5);
+	setmsg_(__global_state, "Clock type # is not supported.", (ftnlen)30);
+	i__1 = sctype_(__global_state, sc);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "SCT2E", (ftnlen)5);
 	return 0;
     }
-    chkout_("SCT2E", (ftnlen)5);
+    chkout_(__global_state, "SCT2E", (ftnlen)5);
     return 0;
 } /* sct2e_ */
 

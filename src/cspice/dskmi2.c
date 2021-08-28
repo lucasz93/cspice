@@ -8,8 +8,7 @@
 
 
 extern dskmi2_init_t __dskmi2_init;
-static dskmi2_state_t* get_dskmi2_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskmi2_state_t* get_dskmi2_state(cspice_t* state) {
 	if (!state->dskmi2)
 		state->dskmi2 = __cspice_allocate_module(sizeof(
 	dskmi2_state_t), &__dskmi2_init, sizeof(__dskmi2_init));
@@ -18,30 +17,34 @@ static dskmi2_state_t* get_dskmi2_state() {
 }
 
 /* $Procedure DSKMI2 ( DSK, make spatial index for type 2 segment ) */
-/* Subroutine */ int dskmi2_(integer *nv, doublereal *vrtces, integer *np, 
-	integer *plates, doublereal *finscl, integer *corscl, integer *worksz,
-	 integer *voxpsz, integer *voxlsz, logical *makvtl, integer *spxisz, 
-	integer *work, doublereal *spaixd, integer *spaixi)
+/* Subroutine */ int dskmi2_(cspice_t* __global_state, integer *nv, 
+	doublereal *vrtces, integer *np, integer *plates, doublereal *finscl, 
+	integer *corscl, integer *worksz, integer *voxpsz, integer *voxlsz, 
+	logical *makvtl, integer *spxisz, integer *work, doublereal *spaixd, 
+	integer *spaixi)
 {
     /* System generated locals */
     integer spaixi_dim1, i__1, i__2, i__3, i__4, i__5, i__6;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzmkspin_(integer *, integer *, doublereal *, 
-	    doublereal *, integer *, integer *, integer *, integer *, integer 
-	    *, integer *, doublereal *, doublereal *, integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int zzmkspin_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, doublereal *, doublereal *, 
+	    integer *, integer *, integer *, integer *, integer *, doublereal 
+	    *, integer *);
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int zzvrtplt_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern logical failed_(void);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzvrtplt_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern logical return_(cspice_t*);
     integer nshift;
     integer nvxtot;
     integer reqsiz;
@@ -50,14 +53,14 @@ static dskmi2_state_t* get_dskmi2_state() {
     integer vtxlsz;
     integer vxlidx;
     integer vxpidx;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    dskmi2_state_t* __state = get_dskmi2_state();
+    dskmi2_state_t* __state = get_dskmi2_state(__global_state);
 /* $ Abstract */
 
 /*     Make spatial index for a DSK type 2 segment. The index is */
@@ -1188,78 +1191,81 @@ static dskmi2_state_t* get_dskmi2_state() {
     spaixi_dim1 = *spxisz;
 
     /* Function Body */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKMI2", (ftnlen)6);
+    chkin_(__global_state, "DSKMI2", (ftnlen)6);
 
 /*     Perform error checks on inputs. */
 
     if (*finscl <= 0.) {
-	setmsg_("Fine voxel scale = #; scale must be positive. Usually scale"
-		" should be > 1.0.", (ftnlen)76);
-	errdp_("#", finscl, (ftnlen)1);
-	sigerr_("SPICE(BADFINEVOXELSCALE)", (ftnlen)24);
-	chkout_("DSKMI2", (ftnlen)6);
+	setmsg_(__global_state, "Fine voxel scale = #; scale must be positiv"
+		"e. Usually scale should be > 1.0.", (ftnlen)76);
+	errdp_(__global_state, "#", finscl, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADFINEVOXELSCALE)", (ftnlen)24);
+	chkout_(__global_state, "DSKMI2", (ftnlen)6);
 	return 0;
     }
     if (*corscl < 1) {
-	setmsg_("Coarse voxel scale = #; scale must be >= 1.", (ftnlen)43);
-	errint_("#", corscl, (ftnlen)1);
-	sigerr_("SPICE(BADCOARSEVOXSCALE)", (ftnlen)24);
-	chkout_("DSKMI2", (ftnlen)6);
+	setmsg_(__global_state, "Coarse voxel scale = #; scale must be >= 1.",
+		 (ftnlen)43);
+	errint_(__global_state, "#", corscl, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADCOARSEVOXSCALE)", (ftnlen)24);
+	chkout_(__global_state, "DSKMI2", (ftnlen)6);
 	return 0;
     }
     if (*nv < 3 || *nv > 16000002) {
-	setmsg_("Vertex count NV = #; count must be in the range 3:#.", (
-		ftnlen)52);
-	errint_("#", nv, (ftnlen)1);
-	errint_("#", &__state->c_b14, (ftnlen)1);
-	sigerr_("SPICE(BADVERTEXCOUNT)", (ftnlen)21);
-	chkout_("DSKMI2", (ftnlen)6);
+	setmsg_(__global_state, "Vertex count NV = #; count must be in the r"
+		"ange 3:#.", (ftnlen)52);
+	errint_(__global_state, "#", nv, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c_b14, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADVERTEXCOUNT)", (ftnlen)21);
+	chkout_(__global_state, "DSKMI2", (ftnlen)6);
 	return 0;
     }
     if (*np < 1 || *np > 32000000) {
-	setmsg_("Plate count NP = #; count must be in the range 1:#.", (
-		ftnlen)51);
-	errint_("#", np, (ftnlen)1);
-	errint_("#", &__state->c_b20, (ftnlen)1);
-	sigerr_("SPICE(BADPLATECOUNT)", (ftnlen)20);
-	chkout_("DSKMI2", (ftnlen)6);
+	setmsg_(__global_state, "Plate count NP = #; count must be in the ra"
+		"nge 1:#.", (ftnlen)51);
+	errint_(__global_state, "#", np, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c_b20, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADPLATECOUNT)", (ftnlen)20);
+	chkout_(__global_state, "DSKMI2", (ftnlen)6);
 	return 0;
     }
     if (*worksz < *np + 1) {
-	setmsg_("Workspace size = #; size is too small to hold all voxel-pla"
-		"te associations. Size should be at least # * (average number"
-		" of voxels intersected by each plate).", (ftnlen)157);
-	errint_("#", worksz, (ftnlen)1);
-	errint_("#", np, (ftnlen)1);
-	sigerr_("SPICE(WORKSPACETOOSMALL)", (ftnlen)24);
-	chkout_("DSKMI2", (ftnlen)6);
+	setmsg_(__global_state, "Workspace size = #; size is too small to ho"
+		"ld all voxel-plate associations. Size should be at least # *"
+		" (average number of voxels intersected by each plate).", (
+		ftnlen)157);
+	errint_(__global_state, "#", worksz, (ftnlen)1);
+	errint_(__global_state, "#", np, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WORKSPACETOOSMALL)", (ftnlen)24);
+	chkout_(__global_state, "DSKMI2", (ftnlen)6);
 	return 0;
     }
     if (*voxpsz < 1) {
-	setmsg_("Voxel-pointer array size = #; size is too small to hold all"
-		" voxel-plate list pointers. Size should be at least # * (num"
-		"ber of non-empty coarse voxels).", (ftnlen)151);
-	errint_("#", voxpsz, (ftnlen)1);
+	setmsg_(__global_state, "Voxel-pointer array size = #; size is too s"
+		"mall to hold all voxel-plate list pointers. Size should be a"
+		"t least # * (number of non-empty coarse voxels).", (ftnlen)
+		151);
+	errint_(__global_state, "#", voxpsz, (ftnlen)1);
 /* Computing 3rd power */
 	i__2 = *corscl;
 	i__1 = i__2 * (i__2 * i__2);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(PTRARRAYTOOSMALL)", (ftnlen)23);
-	chkout_("DSKMI2", (ftnlen)6);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(PTRARRAYTOOSMALL)", (ftnlen)23);
+	chkout_(__global_state, "DSKMI2", (ftnlen)6);
 	return 0;
     }
     if (*voxlsz < *np + 1) {
-	setmsg_("Voxel-plate list array size = #; size is too small to hold "
-		"all voxel-plate associations. Size should be at least # * (a"
-		"verage number of voxels intersected by each plate).", (ftnlen)
-		170);
-	errint_("#", voxlsz, (ftnlen)1);
-	errint_("#", np, (ftnlen)1);
-	sigerr_("SPICE(PLATELISTTOOSMALL)", (ftnlen)24);
-	chkout_("DSKMI2", (ftnlen)6);
+	setmsg_(__global_state, "Voxel-plate list array size = #; size is to"
+		"o small to hold all voxel-plate associations. Size should be"
+		" at least # * (average number of voxels intersected by each "
+		"plate).", (ftnlen)170);
+	errint_(__global_state, "#", voxlsz, (ftnlen)1);
+	errint_(__global_state, "#", np, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(PLATELISTTOOSMALL)", (ftnlen)24);
+	chkout_(__global_state, "DSKMI2", (ftnlen)6);
 	return 0;
     }
 
@@ -1292,19 +1298,19 @@ static dskmi2_state_t* get_dskmi2_state() {
 	vtxlsz = 0;
     }
     if (*spxisz < reqsiz) {
-	setmsg_("Integer spatial index size = #; size must be at least #.", (
-		ftnlen)56);
-	errint_("#", spxisz, (ftnlen)1);
-	errint_("#", &reqsiz, (ftnlen)1);
-	sigerr_("SPICE(INTINDEXTOOSMALL)", (ftnlen)23);
-	chkout_("DSKMI2", (ftnlen)6);
+	setmsg_(__global_state, "Integer spatial index size = #; size must b"
+		"e at least #.", (ftnlen)56);
+	errint_(__global_state, "#", spxisz, (ftnlen)1);
+	errint_(__global_state, "#", &reqsiz, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INTINDEXTOOSMALL)", (ftnlen)23);
+	chkout_(__global_state, "DSKMI2", (ftnlen)6);
 	return 0;
     }
 
 /*     Set known values in spatial index arrays. */
 
-    spaixi[(i__1 = 3) < 1 * spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1, "dsk"
-	    "mi2_", (ftnlen)898)] = *corscl;
+    spaixi[(i__1 = 3) < 1 * spaixi_dim1 ? i__1 : s_rnge(&__global_state->f2c, 
+	    "spaixi", i__1, "dskmi2_", (ftnlen)898)] = *corscl;
 
 /*     Prepare indices in the spatial index arrays. */
 
@@ -1321,20 +1327,22 @@ static dskmi2_state_t* get_dskmi2_state() {
 
 /*     Create spatial index for plates. */
 
-    zzmkspin_(np, plates, vrtces, finscl, corscl, voxpsz, worksz, voxlsz, 
-	    work, &spaixi[(i__1 = 0) < 1 * spaixi_dim1 ? i__1 : s_rnge("spai"
-	    "xi", i__1, "dskmi2_", (ftnlen)917)], &spaixd[9], &spaixd[6], &
-	    nvxtot, &spaixi[(i__2 = 4) < 1 * spaixi_dim1 ? i__2 : s_rnge(
-	    "spaixi", i__2, "dskmi2_", (ftnlen)917)], &spaixi[(i__3 = vxpidx 
-	    - 1) < 1 * spaixi_dim1 && 0 <= i__3 ? i__3 : s_rnge("spaixi", 
-	    i__3, "dskmi2_", (ftnlen)917)], &spaixi[(i__4 = 5) < 1 * 
-	    spaixi_dim1 ? i__4 : s_rnge("spaixi", i__4, "dskmi2_", (ftnlen)
-	    917)], &spaixi[(i__5 = vxlidx - 1) < 1 * spaixi_dim1 && 0 <= i__5 
-	    ? i__5 : s_rnge("spaixi", i__5, "dskmi2_", (ftnlen)917)], spaixd, 
-	    &spaixi[(i__6 = 7) < 1 * spaixi_dim1 ? i__6 : s_rnge("spaixi", 
-	    i__6, "dskmi2_", (ftnlen)917)]);
-    if (failed_()) {
-	chkout_("DSKMI2", (ftnlen)6);
+    zzmkspin_(__global_state, np, plates, vrtces, finscl, corscl, voxpsz, 
+	    worksz, voxlsz, work, &spaixi[(i__1 = 0) < 1 * spaixi_dim1 ? i__1 
+	    : s_rnge(&__global_state->f2c, "spaixi", i__1, "dskmi2_", (ftnlen)
+	    917)], &spaixd[9], &spaixd[6], &nvxtot, &spaixi[(i__2 = 4) < 1 * 
+	    spaixi_dim1 ? i__2 : s_rnge(&__global_state->f2c, "spaixi", i__2, 
+	    "dskmi2_", (ftnlen)917)], &spaixi[(i__3 = vxpidx - 1) < 1 * 
+	    spaixi_dim1 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+	    "spaixi", i__3, "dskmi2_", (ftnlen)917)], &spaixi[(i__4 = 5) < 1 *
+	     spaixi_dim1 ? i__4 : s_rnge(&__global_state->f2c, "spaixi", i__4,
+	     "dskmi2_", (ftnlen)917)], &spaixi[(i__5 = vxlidx - 1) < 1 * 
+	    spaixi_dim1 && 0 <= i__5 ? i__5 : s_rnge(&__global_state->f2c, 
+	    "spaixi", i__5, "dskmi2_", (ftnlen)917)], spaixd, &spaixi[(i__6 = 
+	    7) < 1 * spaixi_dim1 ? i__6 : s_rnge(&__global_state->f2c, "spai"
+	    "xi", i__6, "dskmi2_", (ftnlen)917)]);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DSKMI2", (ftnlen)6);
 	return 0;
     }
 
@@ -1343,16 +1351,17 @@ static dskmi2_state_t* get_dskmi2_state() {
 /*     of the array. We need to shift the plate list so that */
 /*     it starts right after the end of the pointer array. */
 
-    nshift = *voxpsz - spaixi[(i__1 = 4) < 1 * spaixi_dim1 ? i__1 : s_rnge(
-	    "spaixi", i__1, "dskmi2_", (ftnlen)942)];
-    i__2 = spaixi[(i__1 = 5) < 1 * spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1,
-	     "dskmi2_", (ftnlen)944)];
+    nshift = *voxpsz - spaixi[(i__1 = 4) < 1 * spaixi_dim1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "spaixi", i__1, "dskmi2_", (ftnlen)942)];
+    i__2 = spaixi[(i__1 = 5) < 1 * spaixi_dim1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "spaixi", i__1, "dskmi2_", (ftnlen)944)];
     for (i__ = 1; i__ <= i__2; ++i__) {
 	j = vxlidx - 1 + i__;
 	spaixi[(i__1 = j - nshift - 1) < 1 * spaixi_dim1 && 0 <= i__1 ? i__1 :
-		 s_rnge("spaixi", i__1, "dskmi2_", (ftnlen)948)] = spaixi[(
-		i__3 = j - 1) < 1 * spaixi_dim1 && 0 <= i__3 ? i__3 : s_rnge(
-		"spaixi", i__3, "dskmi2_", (ftnlen)948)];
+		 s_rnge(&__global_state->f2c, "spaixi", i__1, "dskmi2_", (
+		ftnlen)948)] = spaixi[(i__3 = j - 1) < 1 * spaixi_dim1 && 0 <=
+		 i__3 ? i__3 : s_rnge(&__global_state->f2c, "spaixi", i__3, 
+		"dskmi2_", (ftnlen)948)];
     }
 
 /*     Update the voxel list start index to reflect the shift. */
@@ -1367,28 +1376,31 @@ static dskmi2_state_t* get_dskmi2_state() {
 /*           VTPIDX is the start index of the vertex pointer array. */
 
 	vtpidx = vxlidx + spaixi[(i__2 = 5) < 1 * spaixi_dim1 ? i__2 : s_rnge(
-		"spaixi", i__2, "dskmi2_", (ftnlen)965)];
+		&__global_state->f2c, "spaixi", i__2, "dskmi2_", (ftnlen)965)]
+		;
 
 /*           VXLIDX is the start index of the vertex-plate list. The */
 /*           list start is offset from the vertex pointer array by */
 /*           the size of the array, which is always NV. */
 
 	vtlidx = vtpidx + *nv;
-	zzvrtplt_(nv, np, plates, worksz, &vtxlsz, work, &spaixi[(i__2 = 
-		vtpidx - 1) < 1 * spaixi_dim1 && 0 <= i__2 ? i__2 : s_rnge(
-		"spaixi", i__2, "dskmi2_", (ftnlen)973)], &spaixi[(i__1 = 6) <
-		 1 * spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1, "dskmi2_", (
+	zzvrtplt_(__global_state, nv, np, plates, worksz, &vtxlsz, work, &
+		spaixi[(i__2 = vtpidx - 1) < 1 * spaixi_dim1 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "spaixi", i__2, "dskmi2_",
+		 (ftnlen)973)], &spaixi[(i__1 = 6) < 1 * spaixi_dim1 ? i__1 : 
+		s_rnge(&__global_state->f2c, "spaixi", i__1, "dskmi2_", (
 		ftnlen)973)], &spaixi[(i__3 = vtlidx - 1) < 1 * spaixi_dim1 &&
-		 0 <= i__3 ? i__3 : s_rnge("spaixi", i__3, "dskmi2_", (ftnlen)
-		973)]);
+		 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "spaixi", 
+		i__3, "dskmi2_", (ftnlen)973)]);
     } else {
 
 /*        Zero out the size of the vertex-plate list. */
 
-	spaixi[(i__2 = 6) < 1 * spaixi_dim1 ? i__2 : s_rnge("spaixi", i__2, 
-		"dskmi2_", (ftnlen)983)] = 0;
+	spaixi[(i__2 = 6) < 1 * spaixi_dim1 ? i__2 : s_rnge(&
+		__global_state->f2c, "spaixi", i__2, "dskmi2_", (ftnlen)983)] 
+		= 0;
     }
-    chkout_("DSKMI2", (ftnlen)6);
+    chkout_(__global_state, "DSKMI2", (ftnlen)6);
     return 0;
 } /* dskmi2_ */
 

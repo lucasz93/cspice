@@ -8,13 +8,13 @@
 
 
 typedef int bschoi_state_t;
-static bschoi_state_t* get_bschoi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bschoi_state_t* get_bschoi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure BSCHOI ( Binary search with order vector, integer ) */
-integer bschoi_(integer *value, integer *ndim, integer *array, integer *order)
+integer bschoi_(cspice_t* __global_state, integer *value, integer *ndim, 
+	integer *array, integer *order)
 {
     /* System generated locals */
     integer ret_val;
@@ -26,7 +26,7 @@ integer bschoi_(integer *value, integer *ndim, integer *array, integer *order)
 
 
     /* Module state */
-    bschoi_state_t* __state = get_bschoi_state();
+    bschoi_state_t* __state = get_bschoi_state(__global_state);
 /* $ Abstract */
 
 /*      Do a binary search for a given value within an integer array, */

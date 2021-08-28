@@ -8,8 +8,7 @@
 
 
 extern zzplatfm_init_t __zzplatfm_init;
-static zzplatfm_state_t* get_zzplatfm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzplatfm_state_t* get_zzplatfm_state(cspice_t* state) {
 	if (!state->zzplatfm)
 		state->zzplatfm = __cspice_allocate_module(sizeof(
 	zzplatfm_state_t), &__zzplatfm_init, sizeof(__zzplatfm_init));
@@ -18,8 +17,8 @@ static zzplatfm_state_t* get_zzplatfm_state() {
 }
 
 /* $Procedure ZZPLATFM ( Private --- Get platform attributes ) */
-/* Subroutine */ int zzplatfm_(char *key, char *value, ftnlen key_len, ftnlen 
-	value_len)
+/* Subroutine */ int zzplatfm_(cspice_t* __global_state, char *key, char *
+	value, ftnlen key_len, ftnlen value_len)
 {
     /* Initialized data */
 
@@ -28,18 +27,21 @@ static zzplatfm_state_t* get_zzplatfm_state() {
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer index;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     char keycpy[64];
 
     /* Module state */
-    zzplatfm_state_t* __state = get_zzplatfm_state();
+    zzplatfm_state_t* __state = get_zzplatfm_state(__global_state);
 /* $ Abstract */
 
 /*     Return platform ID and various attributes of the intended */
@@ -338,29 +340,39 @@ static zzplatfm_state_t* get_zzplatfm_state() {
 
 /*        Store the keys in the KEYVAL array. */
 
-	s_copy(__state->keyval, "SYSTEM", (ftnlen)64, (ftnlen)6);
-	s_copy(__state->keyval + 64, "O/S", (ftnlen)64, (ftnlen)3);
-	s_copy(__state->keyval + 128, "COMPILER", (ftnlen)64, (ftnlen)8);
-	s_copy(__state->keyval + 192, "FILE_FORMAT", (ftnlen)64, (ftnlen)11);
-	s_copy(__state->keyval + 256, "TEXT_FORMAT", (ftnlen)64, (ftnlen)11);
-	s_copy(__state->keyval + 320, "READS_BFF", (ftnlen)64, (ftnlen)9);
+	s_copy(&__global_state->f2c, __state->keyval, "SYSTEM", (ftnlen)64, (
+		ftnlen)6);
+	s_copy(&__global_state->f2c, __state->keyval + 64, "O/S", (ftnlen)64, 
+		(ftnlen)3);
+	s_copy(&__global_state->f2c, __state->keyval + 128, "COMPILER", (
+		ftnlen)64, (ftnlen)8);
+	s_copy(&__global_state->f2c, __state->keyval + 192, "FILE_FORMAT", (
+		ftnlen)64, (ftnlen)11);
+	s_copy(&__global_state->f2c, __state->keyval + 256, "TEXT_FORMAT", (
+		ftnlen)64, (ftnlen)11);
+	s_copy(&__global_state->f2c, __state->keyval + 320, "READS_BFF", (
+		ftnlen)64, (ftnlen)9);
 
 /*        Set the default reply to be the zero'th component of ATTCPY. */
 /*        This obviates IF-THEN-ELSE branching all together. */
 
-	s_copy(__state->attcpy, "<UNAVAILABLE>                   ", (ftnlen)
-		32, (ftnlen)32);
+	s_copy(&__global_state->f2c, __state->attcpy, "<UNAVAILABLE>        "
+		"           ", (ftnlen)32, (ftnlen)32);
 
 /*        Platform/Environment specific assignments follow. */
 
-	s_copy(__state->attcpy + 32, "PC", (ftnlen)32, (ftnlen)2);
-	s_copy(__state->attcpy + 64, "LINUX", (ftnlen)32, (ftnlen)5);
-	s_copy(__state->attcpy + 96, "GFORTRAN/64BIT", (ftnlen)32, (ftnlen)14)
-		;
-	s_copy(__state->attcpy + 128, "LTL-IEEE", (ftnlen)32, (ftnlen)8);
-	s_copy(__state->attcpy + 160, "LF", (ftnlen)32, (ftnlen)2);
-	s_copy(__state->attcpy + 192, "BIG-IEEE LTL-IEEE", (ftnlen)32, (
-		ftnlen)17);
+	s_copy(&__global_state->f2c, __state->attcpy + 32, "PC", (ftnlen)32, (
+		ftnlen)2);
+	s_copy(&__global_state->f2c, __state->attcpy + 64, "LINUX", (ftnlen)
+		32, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->attcpy + 96, "GFORTRAN/64BIT", (
+		ftnlen)32, (ftnlen)14);
+	s_copy(&__global_state->f2c, __state->attcpy + 128, "LTL-IEEE", (
+		ftnlen)32, (ftnlen)8);
+	s_copy(&__global_state->f2c, __state->attcpy + 160, "LF", (ftnlen)32, 
+		(ftnlen)2);
+	s_copy(&__global_state->f2c, __state->attcpy + 192, "BIG-IEEE LTL-IE"
+		"EE", (ftnlen)32, (ftnlen)17);
 
 /*        Don't execute these assignments again. */
 
@@ -371,18 +383,18 @@ static zzplatfm_state_t* get_zzplatfm_state() {
 /*     to the known member of the equivalence class of possible */
 /*     values. */
 
-    ucase_(key, keycpy, key_len, (ftnlen)64);
-    ljust_(keycpy, keycpy, (ftnlen)64, (ftnlen)64);
+    ucase_(__global_state, key, keycpy, key_len, (ftnlen)64);
+    ljust_(__global_state, keycpy, keycpy, (ftnlen)64, (ftnlen)64);
 
 /*     Find out which key we were given.  In the event that one of the */
 /*     KEYVALs (or some equivalent string) was not passed in, ISRCHC */
 /*     returns a value of zero. */
 
-    index = isrchc_(keycpy, &__state->c__6, __state->keyval, (ftnlen)64, (
-	    ftnlen)64);
-    s_copy(value, __state->attcpy + (((i__1 = index) < 7 && 0 <= i__1 ? i__1 :
-	     s_rnge("attcpy", i__1, "zzplatfm_", (ftnlen)425)) << 5), 
-	    value_len, (ftnlen)32);
+    index = isrchc_(__global_state, keycpy, &__state->c__6, __state->keyval, (
+	    ftnlen)64, (ftnlen)64);
+    s_copy(&__global_state->f2c, value, __state->attcpy + (((i__1 = index) < 
+	    7 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "attcpy", 
+	    i__1, "zzplatfm_", (ftnlen)425)) << 5), value_len, (ftnlen)32);
     return 0;
 } /* zzplatfm_ */
 

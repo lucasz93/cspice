@@ -8,8 +8,7 @@
 
 
 extern zzdsksbi_init_t __zzdsksbi_init;
-static zzdsksbi_state_t* get_zzdsksbi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdsksbi_state_t* get_zzdsksbi_state(cspice_t* state) {
 	if (!state->zzdsksbi)
 		state->zzdsksbi = __cspice_allocate_module(sizeof(
 	zzdsksbi_state_t), &__zzdsksbi_init, sizeof(__zzdsksbi_init));
@@ -18,25 +17,26 @@ static zzdsksbi_state_t* get_zzdsksbi_state() {
 }
 
 /* $Procedure ZZDSKSBI ( DSK, initialize API segment buffer ) */
-/* Subroutine */ int zzdsksbi_(integer *maxbod, integer *stsize, integer *
-	btbody, integer *btnbod, integer *btsegp, integer *btstsz, integer *
-	sthan, doublereal *stdscr, integer *stdlad, integer *stfree, 
-	doublereal *stoff, doublereal *stctr, doublereal *strad)
+/* Subroutine */ int zzdsksbi_(cspice_t* __global_state, integer *maxbod, 
+	integer *stsize, integer *btbody, integer *btnbod, integer *btsegp, 
+	integer *btstsz, integer *sthan, doublereal *stdscr, integer *stdlad, 
+	integer *stfree, doublereal *stoff, doublereal *stctr, doublereal *
+	strad)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzdsksbi_state_t* __state = get_zzdsksbi_state();
+    zzdsksbi_state_t* __state = get_zzdsksbi_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -541,10 +541,10 @@ static zzdsksbi_state_t* get_zzdsksbi_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDSKBSI", (ftnlen)8);
+    chkin_(__global_state, "ZZDSKBSI", (ftnlen)8);
 
 /*     Clear the body table. */
 
@@ -561,14 +561,14 @@ static zzdsksbi_state_t* get_zzdsksbi_state() {
     i__1 = *stsize;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	sthan[i__ - 1] = 0;
-	cleard_(&__state->c__24, &stdscr[i__ * 24 - 24]);
-	cleari_(&__state->c__8, &stdlad[(i__ << 3) - 8]);
-	cleard_(&__state->c__3, &stoff[i__ * 3 - 3]);
-	cleard_(&__state->c__3, &stctr[i__ * 3 - 3]);
+	cleard_(__global_state, &__state->c__24, &stdscr[i__ * 24 - 24]);
+	cleari_(__global_state, &__state->c__8, &stdlad[(i__ << 3) - 8]);
+	cleard_(__global_state, &__state->c__3, &stoff[i__ * 3 - 3]);
+	cleard_(__global_state, &__state->c__3, &stctr[i__ * 3 - 3]);
 	strad[i__ - 1] = 0.;
     }
     *stfree = 1;
-    chkout_("ZZDSKBSI", (ftnlen)8);
+    chkout_(__global_state, "ZZDSKBSI", (ftnlen)8);
     return 0;
 } /* zzdsksbi_ */
 

@@ -8,8 +8,7 @@
 
 
 extern gfocce_init_t __gfocce_init;
-static gfocce_state_t* get_gfocce_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gfocce_state_t* get_gfocce_state(cspice_t* state) {
 	if (!state->gfocce)
 		state->gfocce = __cspice_allocate_module(sizeof(
 	gfocce_state_t), &__gfocce_init, sizeof(__gfocce_init));
@@ -18,54 +17,57 @@ static gfocce_state_t* get_gfocce_state() {
 }
 
 /* $Procedure      GFOCCE ( GF, occultation event ) */
-/* Subroutine */ int gfocce_(char *occtyp, char *front, char *fshape, char *
-	fframe, char *back, char *bshape, char *bframe, char *abcorr, char *
-	obsrvr, doublereal *tol, U_fp udstep, U_fp udrefn, logical *rpt, S_fp 
-	udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, 
-	doublereal *cnfine, doublereal *result, ftnlen occtyp_len, ftnlen 
-	front_len, ftnlen fshape_len, ftnlen fframe_len, ftnlen back_len, 
-	ftnlen bshape_len, ftnlen bframe_len, ftnlen abcorr_len, ftnlen 
-	obsrvr_len)
+/* Subroutine */ int gfocce_(cspice_t* __global_state, char *occtyp, char *
+	front, char *fshape, char *fframe, char *back, char *bshape, char *
+	bframe, char *abcorr, char *obsrvr, doublereal *tol, U_fp udstep, 
+	U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, 
+	logical *bail, L_fp udbail, doublereal *cnfine, doublereal *result, 
+	ftnlen occtyp_len, ftnlen front_len, ftnlen fshape_len, ftnlen 
+	fframe_len, ftnlen back_len, ftnlen bshape_len, ftnlen bframe_len, 
+	ftnlen abcorr_len, ftnlen obsrvr_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzgfocin_(char *, char *, char *, char *, 
-	    char *, char *, char *, char *, char *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzgfocst_();
-    extern /* Subroutine */ int zzgfsolv_(U_fp, U_fp, U_fp, logical *, L_fp, 
-	    logical *, doublereal *, doublereal *, doublereal *, doublereal *,
-	     logical *, U_fp, doublereal *);
+    extern /* Subroutine */ int zzgfocin_(cspice_t*, char *, char *, char *, 
+	    char *, char *, char *, char *, char *, char *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfocst_(cspice_t*);
+    extern /* Subroutine */ int zzgfsolv_(cspice_t*, U_fp, U_fp, U_fp, 
+	    logical *, L_fp, logical *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *, U_fp, doublereal *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern integer sized_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern integer sized_(cspice_t*, doublereal *);
     integer count;
     doublereal start;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
     char lbshap[500];
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
     char lfshap[500];
-    extern integer wncard_(doublereal *);
+    extern integer wncard_(cspice_t*, doublereal *);
     doublereal finish;
-    extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int wnfetd_(doublereal *, integer *, doublereal *,
-	     doublereal *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wnfetd_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, doublereal *);
 
 
     /* Module state */
-    gfocce_state_t* __state = get_gfocce_state();
+    gfocce_state_t* __state = get_gfocce_state(__global_state);
 /* $ Abstract */
 
 /*     Determine time intervals when an observer sees one target */
@@ -1457,77 +1459,80 @@ static gfocce_state_t* get_gfocce_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("GFOCCE", (ftnlen)6);
+    chkin_(__global_state, "GFOCCE", (ftnlen)6);
 
 /*     Check the result window's size. */
 
-    if (sized_(result) < 2) {
-	setmsg_("Result window size must be at least 2 but was #.", (ftnlen)
-		48);
-	i__1 = sized_(result);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(WINDOWTOOSMALL)", (ftnlen)21);
-	chkout_("GFOCCE", (ftnlen)6);
+    if (sized_(__global_state, result) < 2) {
+	setmsg_(__global_state, "Result window size must be at least 2 but w"
+		"as #.", (ftnlen)48);
+	i__1 = sized_(__global_state, result);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WINDOWTOOSMALL)", (ftnlen)21);
+	chkout_(__global_state, "GFOCCE", (ftnlen)6);
 	return 0;
     }
 
 /*     Empty the RESULT window. */
 
-    scardd_(&__state->c__0, result);
+    scardd_(__global_state, &__state->c__0, result);
 
 /*     Check the convergence tolerance. */
 
     if (*tol <= 0.) {
-	setmsg_("Tolerance must be positive but was #.", (ftnlen)37);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTOLERANCE)", (ftnlen)23);
-	chkout_("GFOCCE", (ftnlen)6);
+	setmsg_(__global_state, "Tolerance must be positive but was #.", (
+		ftnlen)37);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTOLERANCE)", (ftnlen)23);
+	chkout_(__global_state, "GFOCCE", (ftnlen)6);
 	return 0;
     }
 
 /*     Check the target shape specifications. */
 
-    ljust_(bshape, lbshap, bshape_len, (ftnlen)500);
-    ucase_(lbshap, lbshap, (ftnlen)500, (ftnlen)500);
-    ljust_(fshape, lfshap, fshape_len, (ftnlen)500);
-    ucase_(lfshap, lfshap, (ftnlen)500, (ftnlen)500);
+    ljust_(__global_state, bshape, lbshap, bshape_len, (ftnlen)500);
+    ucase_(__global_state, lbshap, lbshap, (ftnlen)500, (ftnlen)500);
+    ljust_(__global_state, fshape, lfshap, fshape_len, (ftnlen)500);
+    ucase_(__global_state, lfshap, lfshap, (ftnlen)500, (ftnlen)500);
 
 /*     Note for maintenance programmer: these checks will */
 /*     require modification to handle DSK-based shapes. */
 
-    if (s_cmp(lfshap, "POINT", (ftnlen)500, (ftnlen)5) == 0 && s_cmp(lbshap, 
-	    "POINT", (ftnlen)500, (ftnlen)5) == 0) {
-	setmsg_("The front and back target shape specifications are both PTS"
-		"HAP; at least one of these targets must be an extended objec"
-		"t.", (ftnlen)121);
-	sigerr_("SPICE(INVALIDSHAPECOMBO)", (ftnlen)24);
-	chkout_("GFOCCE", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, lfshap, "POINT", (ftnlen)500, (ftnlen)5) 
+	    == 0 && s_cmp(&__global_state->f2c, lbshap, "POINT", (ftnlen)500, 
+	    (ftnlen)5) == 0) {
+	setmsg_(__global_state, "The front and back target shape specificati"
+		"ons are both PTSHAP; at least one of these targets must be a"
+		"n extended object.", (ftnlen)121);
+	sigerr_(__global_state, "SPICE(INVALIDSHAPECOMBO)", (ftnlen)24);
+	chkout_(__global_state, "GFOCCE", (ftnlen)6);
 	return 0;
     }
 
 /*     Initialize the occultation calculation. */
 
-    zzgfocin_(occtyp, front, lfshap, fframe, back, lbshap, bframe, obsrvr, 
-	    abcorr, occtyp_len, front_len, (ftnlen)500, fframe_len, back_len, 
-	    (ftnlen)500, bframe_len, obsrvr_len, abcorr_len);
-    if (failed_()) {
-	chkout_("GFOCCE", (ftnlen)6);
+    zzgfocin_(__global_state, occtyp, front, lfshap, fframe, back, lbshap, 
+	    bframe, obsrvr, abcorr, occtyp_len, front_len, (ftnlen)500, 
+	    fframe_len, back_len, (ftnlen)500, bframe_len, obsrvr_len, 
+	    abcorr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "GFOCCE", (ftnlen)6);
 	return 0;
     }
 
 /*     Prepare the progress reporter if appropriate. */
 
     if (*rpt) {
-	(*udrepi)(cnfine, "Occultation/transit search ", "done.", (ftnlen)27, 
-		(ftnlen)5);
+	(*udrepi)(__global_state, cnfine, "Occultation/transit search ", 
+		"done.", (ftnlen)27, (ftnlen)5);
     }
 
 /*     Cycle over the intervals in the confining window. */
 
-    count = wncard_(cnfine);
+    count = wncard_(__global_state, cnfine);
     i__1 = count;
     for (i__ = 1; i__ <= i__1; ++i__) {
 
@@ -1535,24 +1540,24 @@ static gfocce_state_t* get_gfocce_state() {
 /*        window. Search this interval for occultation events. Union the */
 /*        result with the contents of the RESULT window. */
 
-	wnfetd_(cnfine, &i__, &start, &finish);
-	zzgfsolv_((U_fp)zzgfocst_, (U_fp)udstep, (U_fp)udrefn, bail, (L_fp)
-		udbail, &__state->c_false, &__state->c_b21, &start, &finish, 
-		tol, rpt, (U_fp)udrepu, result);
-	if (failed_()) {
-	    chkout_("GFOCCE", (ftnlen)6);
+	wnfetd_(__global_state, cnfine, &i__, &start, &finish);
+	zzgfsolv_(__global_state, (U_fp)zzgfocst_, (U_fp)udstep, (U_fp)udrefn,
+		 bail, (L_fp)udbail, &__state->c_false, &__state->c_b21, &
+		start, &finish, tol, rpt, (U_fp)udrepu, result);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "GFOCCE", (ftnlen)6);
 	    return 0;
 	}
 	if (*bail) {
 
 /*           Interrupt handling is enabled. */
 
-	    if ((*udbail)()) {
+	    if ((*udbail)(__global_state)) {
 
 /*              An interrupt has been issued. Return now regardless of */
 /*              whether the search has been completed. */
 
-		chkout_("GFOCCE", (ftnlen)6);
+		chkout_(__global_state, "GFOCCE", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1561,9 +1566,9 @@ static gfocce_state_t* get_gfocce_state() {
 /*     End the progress report. */
 
     if (*rpt) {
-	(*udrepf)();
+	(*udrepf)(__global_state);
     }
-    chkout_("GFOCCE", (ftnlen)6);
+    chkout_(__global_state, "GFOCCE", (ftnlen)6);
     return 0;
 } /* gfocce_ */
 

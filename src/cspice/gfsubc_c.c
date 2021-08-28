@@ -1000,7 +1000,7 @@
       {
       return;
       }
-   chkin_c ( "gfsubc_c" );
+   chkin_c ( naif_state, "gfsubc_c" );
 
 
    /*

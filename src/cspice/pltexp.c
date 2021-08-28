@@ -8,14 +8,13 @@
 
 
 typedef int pltexp_state_t;
-static pltexp_state_t* get_pltexp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pltexp_state_t* get_pltexp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure PLTEXP ( Plate expander ) */
-/* Subroutine */ int pltexp_(doublereal *iverts, doublereal *delta, 
-	doublereal *overts)
+/* Subroutine */ int pltexp_(cspice_t* __global_state, doublereal *iverts, 
+	doublereal *delta, doublereal *overts)
 {
     doublereal d__;
     doublereal s;
@@ -23,7 +22,7 @@ static pltexp_state_t* get_pltexp_state() {
 
 
     /* Module state */
-    pltexp_state_t* __state = get_pltexp_state();
+    pltexp_state_t* __state = get_pltexp_state(__global_state);
 /* $ Abstract */
 
 /*     Expand a triangular plate by a specified amount. The expanded */

@@ -8,23 +8,22 @@
 
 
 typedef int latsph_state_t;
-static latsph_state_t* get_latsph_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline latsph_state_t* get_latsph_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LATSPH ( Latitudinal to spherical coordinates ) */
-/* Subroutine */ int latsph_(doublereal *radius, doublereal *long__, 
-	doublereal *lat, doublereal *rho, doublereal *colat, doublereal *
-	longs)
+/* Subroutine */ int latsph_(cspice_t* __global_state, doublereal *radius, 
+	doublereal *long__, doublereal *lat, doublereal *rho, doublereal *
+	colat, doublereal *longs)
 {
     doublereal ph;
     doublereal th;
-    extern doublereal halfpi_(void);
+    extern doublereal halfpi_(cspice_t*);
 
 
     /* Module state */
-    latsph_state_t* __state = get_latsph_state();
+    latsph_state_t* __state = get_latsph_state(__global_state);
 /* $ Abstract */
 
 /*     Convert from latitudinal coordinates to spherical coordinates. */
@@ -183,7 +182,7 @@ static latsph_state_t* get_latsph_state() {
 /*     Convert to spherical coordinates, storing the results in */
 /*     temporary variables */
 
-    th = halfpi_() - *lat;
+    th = halfpi_(__global_state) - *lat;
     ph = *long__;
 
 /*     Move results to output variables */

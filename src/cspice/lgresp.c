@@ -8,14 +8,13 @@
 
 
 typedef int lgresp_state_t;
-static lgresp_state_t* get_lgresp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lgresp_state_t* get_lgresp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure LGRESP ( Lagrange interpolation on equally spaced points ) */
-doublereal lgresp_(integer *n, doublereal *first, doublereal *step, 
-	doublereal *yvals, doublereal *work, doublereal *x)
+doublereal lgresp_(cspice_t* __global_state, integer *n, doublereal *first, 
+	doublereal *step, doublereal *yvals, doublereal *work, doublereal *x)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -25,18 +24,18 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
     doublereal newx;
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal c1;
     doublereal c2;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    lgresp_state_t* __state = get_lgresp_state();
+    lgresp_state_t* __state = get_lgresp_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a Lagrange interpolating polynomial for a specified */
@@ -298,7 +297,7 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
 
 /*     Check in only if an error is detected. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0.;
 	return ret_val;
     }
@@ -307,11 +306,12 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
 
     if (*n < 1) {
 	ret_val = 0.;
-	chkin_("LGRESP", (ftnlen)6);
-	setmsg_("Array size must be positive; was #.", (ftnlen)35);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("LGRESP", (ftnlen)6);
+	chkin_(__global_state, "LGRESP", (ftnlen)6);
+	setmsg_(__global_state, "Array size must be positive; was #.", (
+		ftnlen)35);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "LGRESP", (ftnlen)6);
 	return ret_val;
     }
 
@@ -319,10 +319,10 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
 
     if (*step == 0.) {
 	ret_val = 0.;
-	chkin_("LGRESP", (ftnlen)6);
-	setmsg_("Step size was zero.", (ftnlen)19);
-	sigerr_("SPICE(INVALIDSTEPSIZE)", (ftnlen)22);
-	chkout_("LGRESP", (ftnlen)6);
+	chkin_(__global_state, "LGRESP", (ftnlen)6);
+	setmsg_(__global_state, "Step size was zero.", (ftnlen)19);
+	sigerr_(__global_state, "SPICE(INVALIDSTEPSIZE)", (ftnlen)22);
+	chkout_(__global_state, "LGRESP", (ftnlen)6);
 	return ret_val;
     }
 

@@ -8,8 +8,7 @@
 
 
 extern dasrwr_init_t __dasrwr_init;
-static dasrwr_state_t* get_dasrwr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasrwr_state_t* get_dasrwr_state(cspice_t* state) {
 	if (!state->dasrwr)
 		state->dasrwr = __cspice_allocate_module(sizeof(
 	dasrwr_state_t), &__dasrwr_init, sizeof(__dasrwr_init));
@@ -18,10 +17,10 @@ static dasrwr_state_t* get_dasrwr_state() {
 }
 
 /* $Procedure      DASRWR ( DAS, read/write records ) */
-/* Subroutine */ int dasrwr_0_(int n__, integer *handle, integer *recno, char 
-	*recc, doublereal *recd, integer *reci, integer *first, integer *last,
-	 doublereal *datad, integer *datai, char *datac, ftnlen recc_len, 
-	ftnlen datac_len)
+/* Subroutine */ int dasrwr_0_(cspice_t* __global_state, int n__, integer *
+	handle, integer *recno, char *recc, doublereal *recd, integer *reci, 
+	integer *first, integer *last, doublereal *datad, integer *datai, 
+	char *datac, ftnlen recc_len, ftnlen datac_len)
 {
     /* Initialized data */
 
@@ -30,41 +29,48 @@ static dasrwr_state_t* get_dasrwr_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzdasgrd_(integer *, integer *, doublereal *);
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzdasgri_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int lnkan_(integer *, integer *);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern integer lnktl_(integer *, integer *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int dasiod_(char *, integer *, integer *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int dasioi_(char *, integer *, integer *, integer 
-	    *, ftnlen);
-    extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int lnkini_(integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *);
-    extern /* Subroutine */ int lnkxsl_(integer *, integer *, integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzdasgrd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int zzdasgri_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int lnkan_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer lnktl_(cspice_t*, integer *, integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasioc_(cspice_t*, char *, integer *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dasiod_(cspice_t*, char *, integer *, integer 
+	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int dasioi_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
+    extern /* Subroutine */ int lnkilb_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dassih_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int lnkini_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int lnkfsl_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int lnkxsl_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    dasrwr_state_t* __state = get_dasrwr_state();
+    dasrwr_state_t* __state = get_dasrwr_state(__global_state);
 /* $ Abstract */
 
 /*     Read and write DAS physical records. */
@@ -388,16 +394,16 @@ static dasrwr_state_t* get_dasrwr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASRWR", (ftnlen)6);
+	chkin_(__global_state, "DASRWR", (ftnlen)6);
     }
 
 /*     Never come here. */
 
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("DASRWR", (ftnlen)6);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "DASRWR", (ftnlen)6);
     return 0;
 /* $Procedure DASRRD ( DAS, read record, double precision ) */
 
@@ -616,27 +622,27 @@ L_dasrrd:
 /*     If it hasn't been done yet, initialize the pointer list pools. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__10, __state->poold);
-	lnkini_(&__state->c__10, __state->pooli);
-	lnkini_(&__state->c__10, __state->poolc);
+	lnkini_(__global_state, &__state->c__10, __state->poold);
+	lnkini_(__global_state, &__state->c__10, __state->pooli);
+	lnkini_(__global_state, &__state->c__10, __state->poolc);
 	__state->pass1 = FALSE_;
     }
 
 /*     Check FIRST and LAST.  Use discovery check-in. */
 
     if (*first < 1 || *first > 128 || *last < 1 || *last > 128) {
-	chkin_("DASRRD", (ftnlen)6);
-	setmsg_("Array indices FIRST and LAST were #,  #; allowed range for "
-		"both is [#, #]. File was #, record number was #.", (ftnlen)
-		107);
-	errint_("#", first, (ftnlen)1);
-	errint_("#", last, (ftnlen)1);
-	errint_("#", &__state->c__1, (ftnlen)1);
-	errint_("#", &__state->c__128, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", recno, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DASRRD", (ftnlen)6);
+	chkin_(__global_state, "DASRRD", (ftnlen)6);
+	setmsg_(__global_state, "Array indices FIRST and LAST were #,  #; al"
+		"lowed range for both is [#, #]. File was #, record number wa"
+		"s #.", (ftnlen)107);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__128, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DASRRD", (ftnlen)6);
 	return 0;
     }
 
@@ -655,17 +661,20 @@ L_dasrrd:
     __state->node = __state->headd;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufd[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)715)]
-		 && *recno == __state->rnbufd[(i__2 = __state->node - 1) < 10 
-		&& 0 <= i__2 ? i__2 : s_rnge("rnbufd", i__2, "dasrwr_", (
-		ftnlen)715)]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufd", i__1, 
+		"dasrwr_", (ftnlen)715)] && *recno == __state->rnbufd[(i__2 = 
+		__state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rnbufd", i__2, "dasrwr_", (ftnlen)715)])
+		 {
 
 /*           Found it.  Move this record to the head of the list. */
 /*           Update our head pointer as required. */
 
 	    if (__state->node != __state->headd) {
-		lnkxsl_(&__state->node, &__state->node, __state->poold);
-		lnkilb_(&__state->node, &__state->headd, __state->poold);
+		lnkxsl_(__global_state, &__state->node, &__state->node, 
+			__state->poold);
+		lnkilb_(__global_state, &__state->node, &__state->headd, 
+			__state->poold);
 		__state->headd = __state->node;
 	    }
 
@@ -673,13 +682,15 @@ L_dasrrd:
 
 	    if (*first == *last) {
 		datad[0] = __state->rcbufd[(i__1 = *first + (__state->node << 
-			7) - 129) < 1280 && 0 <= i__1 ? i__1 : s_rnge("rcbufd"
-			, i__1, "dasrwr_", (ftnlen)735)];
+			7) - 129) < 1280 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "rcbufd", i__1, "dasrwr_", (
+			ftnlen)735)];
 	    } else {
 		i__2 = *last - *first + 1;
-		moved_(&__state->rcbufd[(i__1 = *first + (__state->node << 7) 
-			- 129) < 1280 && 0 <= i__1 ? i__1 : s_rnge("rcbufd", 
-			i__1, "dasrwr_", (ftnlen)739)], &i__2, datad);
+		moved_(__global_state, &__state->rcbufd[(i__1 = *first + (
+			__state->node << 7) - 129) < 1280 && 0 <= i__1 ? i__1 
+			: s_rnge(&__global_state->f2c, "rcbufd", i__1, "dasr"
+			"wr_", (ftnlen)739)], &i__2, datad);
 	    }
 
 /*           We haven't checked in, so don't check out. */
@@ -687,8 +698,8 @@ L_dasrrd:
 	    return 0;
 	}
 	__state->node = __state->poold[(i__1 = (__state->node << 1) + 10) < 
-		32 && 0 <= i__1 ? i__1 : s_rnge("poold", i__1, "dasrwr_", (
-		ftnlen)750)];
+		32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "poold",
+		 i__1, "dasrwr_", (ftnlen)750)];
     }
 
 /*     The record wasn't buffered.  We need to allocate entries to */
@@ -699,37 +710,42 @@ L_dasrrd:
 /*     Since we're now going to do a file read, it doesn't slow */
 /*     us down much to check in, comparatively speaking. */
 
-    chkin_("DASRRD", (ftnlen)6);
+    chkin_(__global_state, "DASRRD", (ftnlen)6);
     if (__state->usedd == 10) {
 
 /*        Grab the buffer entry at the tail end of the list. */
 
-	__state->node = lnktl_(&__state->headd, __state->poold);
-	lnkxsl_(&__state->node, &__state->node, __state->poold);
+	__state->node = lnktl_(__global_state, &__state->headd, 
+		__state->poold);
+	lnkxsl_(__global_state, &__state->node, &__state->node, 
+		__state->poold);
 
 /*        If the allocated buffer entry was updated, write it out. */
 
 	if (__state->upbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("upbufd", i__1, "dasrwr_", (ftnlen)776)]) {
+		i__1 : s_rnge(&__global_state->f2c, "upbufd", i__1, "dasrwr_",
+		 (ftnlen)776)]) {
 
 /*           We'll need a logical unit in order to write to the file. */
 
-	    zzddhhlu_(&__state->hnbufd[(i__1 = __state->node - 1) < 10 && 0 <=
-		     i__1 ? i__1 : s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)
+	    zzddhhlu_(__global_state, &__state->hnbufd[(i__1 = __state->node 
+		    - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "hnbufd", i__1, "dasrwr_", (ftnlen)
 		    780)], "DAS", &__state->c_false, &__state->wrunit, (
 		    ftnlen)3);
-	    if (failed_()) {
-		chkout_("DASRRD", (ftnlen)6);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASRRD", (ftnlen)6);
 		return 0;
 	    }
-	    dasiod_("WRITE", &__state->wrunit, &__state->rnbufd[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufd", i__1, "dasrwr_", (ftnlen)787)], &
-		    __state->rcbufd[(i__2 = (__state->node << 7) - 128) < 
-		    1280 && 0 <= i__2 ? i__2 : s_rnge("rcbufd", i__2, "dasrw"
-		    "r_", (ftnlen)787)], (ftnlen)5);
-	    if (failed_()) {
-		chkout_("DASRRD", (ftnlen)6);
+	    dasiod_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufd[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufd", i__1,
+		     "dasrwr_", (ftnlen)787)], &__state->rcbufd[(i__2 = (
+		    __state->node << 7) - 128) < 1280 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "rcbufd", i__2, "dasrwr_", (
+		    ftnlen)787)], (ftnlen)5);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASRRD", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -738,17 +754,17 @@ L_dasrrd:
 /*        Allocate a new set of buffer entries, but don't link */
 /*        them into the list yet. */
 
-	lnkan_(__state->poold, &__state->node);
+	lnkan_(__global_state, __state->poold, &__state->node);
 	++__state->usedd;
     }
 
 /*     Try to read the record. */
 
-    zzdasgrd_(handle, recno, &__state->rcbufd[(i__1 = (__state->node << 7) - 
-	    128) < 1280 && 0 <= i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_"
-	    , (ftnlen)813)]);
-    if (failed_()) {
-	chkout_("DASRRD", (ftnlen)6);
+    zzdasgrd_(__global_state, handle, recno, &__state->rcbufd[(i__1 = (
+	    __state->node << 7) - 128) < 1280 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufd", i__1, "dasrwr_", (ftnlen)813)]);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASRRD", (ftnlen)6);
 	return 0;
     }
 
@@ -759,22 +775,26 @@ L_dasrrd:
 /*     Set the file handle, record number, and update flag for */
 /*     this record. */
 
-    lnkilb_(&__state->node, &__state->headd, __state->poold);
+    lnkilb_(__global_state, &__state->node, &__state->headd, __state->poold);
     __state->hnbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)830)] = *handle;
+	    s_rnge(&__global_state->f2c, "hnbufd", i__1, "dasrwr_", (ftnlen)
+	    830)] = *handle;
     __state->rnbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rnbufd", i__1, "dasrwr_", (ftnlen)831)] = *recno;
+	    s_rnge(&__global_state->f2c, "rnbufd", i__1, "dasrwr_", (ftnlen)
+	    831)] = *recno;
     __state->upbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("upbufd", i__1, "dasrwr_", (ftnlen)832)] = FALSE_;
+	    s_rnge(&__global_state->f2c, "upbufd", i__1, "dasrwr_", (ftnlen)
+	    832)] = FALSE_;
     __state->headd = __state->node;
 
 /*     Don't forget to return the requested data. */
 
     i__2 = *last - *first + 1;
-    moved_(&__state->rcbufd[(i__1 = *first + (__state->node << 7) - 129) < 
-	    1280 && 0 <= i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_", (
-	    ftnlen)838)], &i__2, datad);
-    chkout_("DASRRD", (ftnlen)6);
+    moved_(__global_state, &__state->rcbufd[(i__1 = *first + (__state->node <<
+	     7) - 129) < 1280 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufd", i__1, "dasrwr_", (ftnlen)838)], &
+	    i__2, datad);
+    chkout_(__global_state, "DASRRD", (ftnlen)6);
     return 0;
 /* $Procedure DASRRI ( DAS, read record, integer ) */
 
@@ -993,27 +1013,27 @@ L_dasrri:
 /*     If it hasn't been done yet, initialize the pointer list pools. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__10, __state->poold);
-	lnkini_(&__state->c__10, __state->pooli);
-	lnkini_(&__state->c__10, __state->poolc);
+	lnkini_(__global_state, &__state->c__10, __state->poold);
+	lnkini_(__global_state, &__state->c__10, __state->pooli);
+	lnkini_(__global_state, &__state->c__10, __state->poolc);
 	__state->pass1 = FALSE_;
     }
 
 /*     Check FIRST and LAST.  Use discovery check-in. */
 
     if (*first < 1 || *first > 256 || *last < 1 || *last > 256) {
-	chkin_("DASRRI", (ftnlen)6);
-	setmsg_("Array indices FIRST and LAST were #,  #; allowed range for "
-		"both is [#, #]. File was #, record number was #.", (ftnlen)
-		107);
-	errint_("#", first, (ftnlen)1);
-	errint_("#", last, (ftnlen)1);
-	errint_("#", &__state->c__1, (ftnlen)1);
-	errint_("#", &__state->c__256, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", recno, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DASRRI", (ftnlen)6);
+	chkin_(__global_state, "DASRRI", (ftnlen)6);
+	setmsg_(__global_state, "Array indices FIRST and LAST were #,  #; al"
+		"lowed range for both is [#, #]. File was #, record number wa"
+		"s #.", (ftnlen)107);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__256, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DASRRI", (ftnlen)6);
 	return 0;
     }
 
@@ -1032,18 +1052,21 @@ L_dasrri:
     __state->node = __state->headi;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufi[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)1124)
-		] && *recno == __state->rnbufi[(i__2 = __state->node - 1) < 
-		10 && 0 <= i__2 ? i__2 : s_rnge("rnbufi", i__2, "dasrwr_", (
-		ftnlen)1124)]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufi", i__1, 
+		"dasrwr_", (ftnlen)1124)] && *recno == __state->rnbufi[(i__2 =
+		 __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rnbufi", i__2, "dasrwr_", (ftnlen)1124)]
+		) {
 
 
 /*           Found it.  Move this record to the head of the list. */
 /*           Update our head pointer as required. */
 
 	    if (__state->node != __state->headi) {
-		lnkxsl_(&__state->node, &__state->node, __state->pooli);
-		lnkilb_(&__state->node, &__state->headi, __state->pooli);
+		lnkxsl_(__global_state, &__state->node, &__state->node, 
+			__state->pooli);
+		lnkilb_(__global_state, &__state->node, &__state->headi, 
+			__state->pooli);
 		__state->headi = __state->node;
 	    }
 
@@ -1051,13 +1074,15 @@ L_dasrri:
 
 	    if (*first == *last) {
 		datai[0] = __state->rcbufi[(i__1 = *first + (__state->node << 
-			8) - 257) < 2560 && 0 <= i__1 ? i__1 : s_rnge("rcbufi"
-			, i__1, "dasrwr_", (ftnlen)1145)];
+			8) - 257) < 2560 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "rcbufi", i__1, "dasrwr_", (
+			ftnlen)1145)];
 	    } else {
 		i__2 = *last - *first + 1;
-		movei_(&__state->rcbufi[(i__1 = *first + (__state->node << 8) 
-			- 257) < 2560 && 0 <= i__1 ? i__1 : s_rnge("rcbufi", 
-			i__1, "dasrwr_", (ftnlen)1149)], &i__2, datai);
+		movei_(__global_state, &__state->rcbufi[(i__1 = *first + (
+			__state->node << 8) - 257) < 2560 && 0 <= i__1 ? i__1 
+			: s_rnge(&__global_state->f2c, "rcbufi", i__1, "dasr"
+			"wr_", (ftnlen)1149)], &i__2, datai);
 	    }
 
 /*           We haven't checked in, so don't check out. */
@@ -1065,8 +1090,8 @@ L_dasrri:
 	    return 0;
 	}
 	__state->node = __state->pooli[(i__1 = (__state->node << 1) + 10) < 
-		32 && 0 <= i__1 ? i__1 : s_rnge("pooli", i__1, "dasrwr_", (
-		ftnlen)1160)];
+		32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "pooli",
+		 i__1, "dasrwr_", (ftnlen)1160)];
     }
 
 /*     The record wasn't buffered.  We need to allocate entries to */
@@ -1077,30 +1102,35 @@ L_dasrri:
 /*     Since we're now going to do a file read, it doesn't slow */
 /*     us down much to check in, comparatively speaking. */
 
-    chkin_("DASRRI", (ftnlen)6);
+    chkin_(__global_state, "DASRRI", (ftnlen)6);
     if (__state->usedi == 10) {
 
 /*        Grab the buffer entry at the tail end of the list. */
 
-	__state->node = lnktl_(&__state->headi, __state->pooli);
-	lnkxsl_(&__state->node, &__state->node, __state->pooli);
+	__state->node = lnktl_(__global_state, &__state->headi, 
+		__state->pooli);
+	lnkxsl_(__global_state, &__state->node, &__state->node, 
+		__state->pooli);
 
 /*        If the allocated buffer entry was updated, write it out. */
 
 	if (__state->upbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("upbufi", i__1, "dasrwr_", (ftnlen)1186)]) {
-	    zzddhhlu_(&__state->hnbufi[(i__1 = __state->node - 1) < 10 && 0 <=
-		     i__1 ? i__1 : s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)
+		i__1 : s_rnge(&__global_state->f2c, "upbufi", i__1, "dasrwr_",
+		 (ftnlen)1186)]) {
+	    zzddhhlu_(__global_state, &__state->hnbufi[(i__1 = __state->node 
+		    - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "hnbufi", i__1, "dasrwr_", (ftnlen)
 		    1188)], "DAS", &__state->c_false, &__state->wrunit, (
 		    ftnlen)3);
-	    dasioi_("WRITE", &__state->wrunit, &__state->rnbufi[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufi", i__1, "dasrwr_", (ftnlen)1190)], &
-		    __state->rcbufi[(i__2 = (__state->node << 8) - 256) < 
-		    2560 && 0 <= i__2 ? i__2 : s_rnge("rcbufi", i__2, "dasrw"
-		    "r_", (ftnlen)1190)], (ftnlen)5);
-	    if (failed_()) {
-		chkout_("DASRRI", (ftnlen)6);
+	    dasioi_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufi[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufi", i__1,
+		     "dasrwr_", (ftnlen)1190)], &__state->rcbufi[(i__2 = (
+		    __state->node << 8) - 256) < 2560 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "rcbufi", i__2, "dasrwr_", (
+		    ftnlen)1190)], (ftnlen)5);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASRRI", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1109,17 +1139,17 @@ L_dasrri:
 /*        Allocate a new set of buffer entries, but don't link */
 /*        them into the list yet. */
 
-	lnkan_(__state->pooli, &__state->node);
+	lnkan_(__global_state, __state->pooli, &__state->node);
 	++__state->usedi;
     }
 
 /*     Try to read the record. */
 
-    zzdasgri_(handle, recno, &__state->rcbufi[(i__1 = (__state->node << 8) - 
-	    256) < 2560 && 0 <= i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_"
-	    , (ftnlen)1216)]);
-    if (failed_()) {
-	chkout_("DASRRI", (ftnlen)6);
+    zzdasgri_(__global_state, handle, recno, &__state->rcbufi[(i__1 = (
+	    __state->node << 8) - 256) < 2560 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufi", i__1, "dasrwr_", (ftnlen)1216)]);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASRRI", (ftnlen)6);
 	return 0;
     }
 
@@ -1130,22 +1160,26 @@ L_dasrri:
 /*     Set the file handle, record number, and update flag for */
 /*     this record. */
 
-    lnkilb_(&__state->node, &__state->headi, __state->pooli);
+    lnkilb_(__global_state, &__state->node, &__state->headi, __state->pooli);
     __state->hnbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)1233)] = *handle;
+	    s_rnge(&__global_state->f2c, "hnbufi", i__1, "dasrwr_", (ftnlen)
+	    1233)] = *handle;
     __state->rnbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rnbufi", i__1, "dasrwr_", (ftnlen)1234)] = *recno;
+	    s_rnge(&__global_state->f2c, "rnbufi", i__1, "dasrwr_", (ftnlen)
+	    1234)] = *recno;
     __state->upbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("upbufi", i__1, "dasrwr_", (ftnlen)1235)] = FALSE_;
+	    s_rnge(&__global_state->f2c, "upbufi", i__1, "dasrwr_", (ftnlen)
+	    1235)] = FALSE_;
     __state->headi = __state->node;
 
 /*     Don't forget to return the requested data. */
 
     i__2 = *last - *first + 1;
-    movei_(&__state->rcbufi[(i__1 = *first + (__state->node << 8) - 257) < 
-	    2560 && 0 <= i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_", (
-	    ftnlen)1241)], &i__2, datai);
-    chkout_("DASRRI", (ftnlen)6);
+    movei_(__global_state, &__state->rcbufi[(i__1 = *first + (__state->node <<
+	     8) - 257) < 2560 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufi", i__1, "dasrwr_", (ftnlen)1241)], &
+	    i__2, datai);
+    chkout_(__global_state, "DASRRI", (ftnlen)6);
     return 0;
 /* $Procedure DASRRC ( DAS, read record, character ) */
 
@@ -1361,27 +1395,27 @@ L_dasrrc:
 /*     If it hasn't been done yet, initialize the pointer list pools. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__10, __state->poold);
-	lnkini_(&__state->c__10, __state->pooli);
-	lnkini_(&__state->c__10, __state->poolc);
+	lnkini_(__global_state, &__state->c__10, __state->poold);
+	lnkini_(__global_state, &__state->c__10, __state->pooli);
+	lnkini_(__global_state, &__state->c__10, __state->poolc);
 	__state->pass1 = FALSE_;
     }
 
 /*     Check FIRST and LAST.  Use discovery check-in. */
 
     if (*first < 1 || *first > 1024 || *last < 1 || *last > 1024) {
-	chkin_("DASRRC", (ftnlen)6);
-	setmsg_("Array indices FIRST and LAST were #,  #; allowed range for "
-		"both is [#, #]. File was #, record number was #.", (ftnlen)
-		107);
-	errint_("#", first, (ftnlen)1);
-	errint_("#", last, (ftnlen)1);
-	errint_("#", &__state->c__1, (ftnlen)1);
-	errint_("#", &__state->c__1024, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", recno, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DASRRC", (ftnlen)6);
+	chkin_(__global_state, "DASRRC", (ftnlen)6);
+	setmsg_(__global_state, "Array indices FIRST and LAST were #,  #; al"
+		"lowed range for both is [#, #]. File was #, record number wa"
+		"s #.", (ftnlen)107);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__1024, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DASRRC", (ftnlen)6);
 	return 0;
     }
 
@@ -1400,35 +1434,39 @@ L_dasrrc:
     __state->node = __state->headc;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufc[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)1525)
-		] && *recno == __state->rnbufc[(i__2 = __state->node - 1) < 
-		10 && 0 <= i__2 ? i__2 : s_rnge("rnbufc", i__2, "dasrwr_", (
-		ftnlen)1525)]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufc", i__1, 
+		"dasrwr_", (ftnlen)1525)] && *recno == __state->rnbufc[(i__2 =
+		 __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rnbufc", i__2, "dasrwr_", (ftnlen)1525)]
+		) {
 
 
 /*           Found it.  Move this record to the head of the list. */
 /*           Update our head pointer as required. */
 
 	    if (__state->node != __state->headc) {
-		lnkxsl_(&__state->node, &__state->node, __state->poolc);
-		lnkilb_(&__state->node, &__state->headc, __state->poolc);
+		lnkxsl_(__global_state, &__state->node, &__state->node, 
+			__state->poolc);
+		lnkilb_(__global_state, &__state->node, &__state->headc, 
+			__state->poolc);
 		__state->headc = __state->node;
 	    }
 
 /*           Don't forget to return the requested data. */
 
-	    s_copy(datac, __state->rcbufc + ((((i__1 = __state->node - 1) < 
-		    10 && 0 <= i__1 ? i__1 : s_rnge("rcbufc", i__1, "dasrwr_",
-		     (ftnlen)1544)) << 10) + (*first - 1)), datac_len, *last 
-		    - (*first - 1));
+	    s_copy(&__global_state->f2c, datac, __state->rcbufc + ((((i__1 = 
+		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "rcbufc", i__1, "dasrwr_", (ftnlen)
+		    1544)) << 10) + (*first - 1)), datac_len, *last - (*first 
+		    - 1));
 
 /*           We haven't checked in, so don't check out. */
 
 	    return 0;
 	}
 	__state->node = __state->poolc[(i__1 = (__state->node << 1) + 10) < 
-		32 && 0 <= i__1 ? i__1 : s_rnge("poolc", i__1, "dasrwr_", (
-		ftnlen)1553)];
+		32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "poolc",
+		 i__1, "dasrwr_", (ftnlen)1553)];
     }
 
 /*     The record wasn't buffered.  We need to allocate entries to */
@@ -1439,30 +1477,35 @@ L_dasrrc:
 /*     Since we're now going to do a file read, it doesn't slow */
 /*     us down much to check in, comparatively speaking. */
 
-    chkin_("DASRRC", (ftnlen)6);
+    chkin_(__global_state, "DASRRC", (ftnlen)6);
     if (__state->usedc == 10) {
 
 /*        Grab the buffer entry at the tail end of the list. */
 
-	__state->node = lnktl_(&__state->headc, __state->poolc);
-	lnkxsl_(&__state->node, &__state->node, __state->poolc);
+	__state->node = lnktl_(__global_state, &__state->headc, 
+		__state->poolc);
+	lnkxsl_(__global_state, &__state->node, &__state->node, 
+		__state->poolc);
 
 /*        If the allocated buffer entry was updated, write it out. */
 
 	if (__state->upbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("upbufc", i__1, "dasrwr_", (ftnlen)1579)]) {
-	    zzddhhlu_(&__state->hnbufc[(i__1 = __state->node - 1) < 10 && 0 <=
-		     i__1 ? i__1 : s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)
+		i__1 : s_rnge(&__global_state->f2c, "upbufc", i__1, "dasrwr_",
+		 (ftnlen)1579)]) {
+	    zzddhhlu_(__global_state, &__state->hnbufc[(i__1 = __state->node 
+		    - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "hnbufc", i__1, "dasrwr_", (ftnlen)
 		    1581)], "DAS", &__state->c_false, &__state->wrunit, (
 		    ftnlen)3);
-	    dasioc_("WRITE", &__state->wrunit, &__state->rnbufc[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufc", i__1, "dasrwr_", (ftnlen)1583)], 
-		    __state->rcbufc + (((i__2 = __state->node - 1) < 10 && 0 
-		    <= i__2 ? i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (
-		    ftnlen)1583)) << 10), (ftnlen)5, (ftnlen)1024);
-	    if (failed_()) {
-		chkout_("DASRRC", (ftnlen)6);
+	    dasioc_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufc[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufc", i__1,
+		     "dasrwr_", (ftnlen)1583)], __state->rcbufc + (((i__2 = 
+		    __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rcbufc", i__2, "dasrwr_", (ftnlen)
+		    1583)) << 10), (ftnlen)5, (ftnlen)1024);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASRRC", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1471,18 +1514,20 @@ L_dasrrc:
 /*        Allocate a new set of buffer entries, but don't link */
 /*        them into the list yet. */
 
-	lnkan_(__state->poolc, &__state->node);
+	lnkan_(__global_state, __state->poolc, &__state->node);
 	++__state->usedc;
     }
 
 /*     Try to read the record. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &__state->unit, (ftnlen)3);
-    dasioc_("READ", &__state->unit, recno, __state->rcbufc + (((i__1 = 
-	    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("rcbufc", 
-	    i__1, "dasrwr_", (ftnlen)1611)) << 10), (ftnlen)4, (ftnlen)1024);
-    if (failed_()) {
-	chkout_("DASRRC", (ftnlen)6);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &
+	    __state->unit, (ftnlen)3);
+    dasioc_(__global_state, "READ", &__state->unit, recno, __state->rcbufc + (
+	    ((i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufc", i__1, "dasrwr_", (ftnlen)1611)) << 
+	    10), (ftnlen)4, (ftnlen)1024);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASRRC", (ftnlen)6);
 	return 0;
     }
 
@@ -1493,21 +1538,25 @@ L_dasrrc:
 /*     Set the file handle, record number, and update flag for */
 /*     this record. */
 
-    lnkilb_(&__state->node, &__state->headc, __state->poolc);
+    lnkilb_(__global_state, &__state->node, &__state->headc, __state->poolc);
     __state->hnbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)1628)] = *handle;
+	    s_rnge(&__global_state->f2c, "hnbufc", i__1, "dasrwr_", (ftnlen)
+	    1628)] = *handle;
     __state->rnbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rnbufc", i__1, "dasrwr_", (ftnlen)1629)] = *recno;
+	    s_rnge(&__global_state->f2c, "rnbufc", i__1, "dasrwr_", (ftnlen)
+	    1629)] = *recno;
     __state->upbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("upbufc", i__1, "dasrwr_", (ftnlen)1630)] = FALSE_;
+	    s_rnge(&__global_state->f2c, "upbufc", i__1, "dasrwr_", (ftnlen)
+	    1630)] = FALSE_;
     __state->headc = __state->node;
 
 /*     Don't forget to return the requested data. */
 
-    s_copy(datac, __state->rcbufc + ((((i__1 = __state->node - 1) < 10 && 0 <=
-	     i__1 ? i__1 : s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)1636)) <<
-	     10) + (*first - 1)), datac_len, *last - (*first - 1));
-    chkout_("DASRRC", (ftnlen)6);
+    s_copy(&__global_state->f2c, datac, __state->rcbufc + ((((i__1 = 
+	    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufc", i__1, "dasrwr_", (ftnlen)1636)) << 
+	    10) + (*first - 1)), datac_len, *last - (*first - 1));
+    chkout_(__global_state, "DASRRC", (ftnlen)6);
     return 0;
 /* $Procedure DASWRD ( DAS, write record, double precision ) */
 
@@ -1701,25 +1750,25 @@ L_daswrd:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASWRD", (ftnlen)6);
+    chkin_(__global_state, "DASWRD", (ftnlen)6);
 
 /*     Check that the file is open for writing.  Signal an error if not. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DASWRD", (ftnlen)6);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASWRD", (ftnlen)6);
 	return 0;
     }
 
 /*     If it hasn't been done yet, initialize the pointer list pools. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__10, __state->poold);
-	lnkini_(&__state->c__10, __state->pooli);
-	lnkini_(&__state->c__10, __state->poolc);
+	lnkini_(__global_state, &__state->c__10, __state->poold);
+	lnkini_(__global_state, &__state->c__10, __state->pooli);
+	lnkini_(__global_state, &__state->c__10, __state->poolc);
 	__state->pass1 = FALSE_;
     }
 
@@ -1733,38 +1782,42 @@ L_daswrd:
     __state->node = __state->headd;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufd[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)1884)
-		] && *recno == __state->rnbufd[(i__2 = __state->node - 1) < 
-		10 && 0 <= i__2 ? i__2 : s_rnge("rnbufd", i__2, "dasrwr_", (
-		ftnlen)1884)]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufd", i__1, 
+		"dasrwr_", (ftnlen)1884)] && *recno == __state->rnbufd[(i__2 =
+		 __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rnbufd", i__2, "dasrwr_", (ftnlen)1884)]
+		) {
 
 /*           Found it.  Update the buffered record. */
 
-	    moved_(recd, &__state->c__128, &__state->rcbufd[(i__1 = (
-		    __state->node << 7) - 128) < 1280 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rcbufd", i__1, "dasrwr_", (ftnlen)1889)]);
+	    moved_(__global_state, recd, &__state->c__128, &__state->rcbufd[(
+		    i__1 = (__state->node << 7) - 128) < 1280 && 0 <= i__1 ? 
+		    i__1 : s_rnge(&__global_state->f2c, "rcbufd", i__1, "das"
+		    "rwr_", (ftnlen)1889)]);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    __state->upbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		    i__1 : s_rnge("upbufd", i__1, "dasrwr_", (ftnlen)1895)] = 
-		    TRUE_;
+		    i__1 : s_rnge(&__global_state->f2c, "upbufd", i__1, "das"
+		    "rwr_", (ftnlen)1895)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
 
 	    if (__state->node != __state->headd) {
-		lnkxsl_(&__state->node, &__state->node, __state->poold);
-		lnkilb_(&__state->node, &__state->headd, __state->poold);
+		lnkxsl_(__global_state, &__state->node, &__state->node, 
+			__state->poold);
+		lnkilb_(__global_state, &__state->node, &__state->headd, 
+			__state->poold);
 		__state->headd = __state->node;
 	    }
-	    chkout_("DASWRD", (ftnlen)6);
+	    chkout_(__global_state, "DASWRD", (ftnlen)6);
 	    return 0;
 	}
 	__state->node = __state->poold[(i__1 = (__state->node << 1) + 10) < 
-		32 && 0 <= i__1 ? i__1 : s_rnge("poold", i__1, "dasrwr_", (
-		ftnlen)1914)];
+		32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "poold",
+		 i__1, "dasrwr_", (ftnlen)1914)];
     }
 
 /*     The record we're writing to is not buffered.  We'll allocate */
@@ -1777,31 +1830,36 @@ L_daswrd:
 
 /*        There's a free buffer entry available.  Just allocate it. */
 
-	lnkan_(__state->poold, &__state->node);
+	lnkan_(__global_state, __state->poold, &__state->node);
 	++__state->usedd;
     } else {
 
 /*        Grab the buffer entry at the tail end of the list. */
 
-	__state->node = lnktl_(&__state->headd, __state->poold);
-	lnkxsl_(&__state->node, &__state->node, __state->poold);
+	__state->node = lnktl_(__global_state, &__state->headd, 
+		__state->poold);
+	lnkxsl_(__global_state, &__state->node, &__state->node, 
+		__state->poold);
 
 /*        If the allocated record was updated, write it out. */
 
 	if (__state->upbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("upbufd", i__1, "dasrwr_", (ftnlen)1944)]) {
-	    zzddhhlu_(&__state->hnbufd[(i__1 = __state->node - 1) < 10 && 0 <=
-		     i__1 ? i__1 : s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)
+		i__1 : s_rnge(&__global_state->f2c, "upbufd", i__1, "dasrwr_",
+		 (ftnlen)1944)]) {
+	    zzddhhlu_(__global_state, &__state->hnbufd[(i__1 = __state->node 
+		    - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "hnbufd", i__1, "dasrwr_", (ftnlen)
 		    1946)], "DAS", &__state->c_false, &__state->wrunit, (
 		    ftnlen)3);
-	    dasiod_("WRITE", &__state->wrunit, &__state->rnbufd[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufd", i__1, "dasrwr_", (ftnlen)1948)], &
-		    __state->rcbufd[(i__2 = (__state->node << 7) - 128) < 
-		    1280 && 0 <= i__2 ? i__2 : s_rnge("rcbufd", i__2, "dasrw"
-		    "r_", (ftnlen)1948)], (ftnlen)5);
-	    if (failed_()) {
-		chkout_("DASWRD", (ftnlen)6);
+	    dasiod_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufd[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufd", i__1,
+		     "dasrwr_", (ftnlen)1948)], &__state->rcbufd[(i__2 = (
+		    __state->node << 7) - 128) < 1280 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "rcbufd", i__2, "dasrwr_", (
+		    ftnlen)1948)], (ftnlen)5);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASWRD", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1809,26 +1867,29 @@ L_daswrd:
 
 /*     Now update the allocated buffer entry with the input data. */
 
-    moved_(recd, &__state->c__128, &__state->rcbufd[(i__1 = (__state->node << 
-	    7) - 128) < 1280 && 0 <= i__1 ? i__1 : s_rnge("rcbufd", i__1, 
-	    "dasrwr_", (ftnlen)1965)]);
+    moved_(__global_state, recd, &__state->c__128, &__state->rcbufd[(i__1 = (
+	    __state->node << 7) - 128) < 1280 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufd", i__1, "dasrwr_", (ftnlen)1965)]);
 
 /*     Set the update flag, indicating that this buffer entry */
 /*     has been modified. Also set the handle and record number */
 /*     entries. */
 
     __state->upbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("upbufd", i__1, "dasrwr_", (ftnlen)1972)] = TRUE_;
+	    s_rnge(&__global_state->f2c, "upbufd", i__1, "dasrwr_", (ftnlen)
+	    1972)] = TRUE_;
     __state->hnbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)1973)] = *handle;
+	    s_rnge(&__global_state->f2c, "hnbufd", i__1, "dasrwr_", (ftnlen)
+	    1973)] = *handle;
     __state->rnbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rnbufd", i__1, "dasrwr_", (ftnlen)1974)] = *recno;
+	    s_rnge(&__global_state->f2c, "rnbufd", i__1, "dasrwr_", (ftnlen)
+	    1974)] = *recno;
 
 /*     Link this buffer entry to the head of the list. */
 
-    lnkilb_(&__state->node, &__state->headd, __state->poold);
+    lnkilb_(__global_state, &__state->node, &__state->headd, __state->poold);
     __state->headd = __state->node;
-    chkout_("DASWRD", (ftnlen)6);
+    chkout_(__global_state, "DASWRD", (ftnlen)6);
     return 0;
 /* $Procedure DASWRI ( DAS, write record, integer ) */
 
@@ -2021,25 +2082,25 @@ L_daswri:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASWRI", (ftnlen)6);
+    chkin_(__global_state, "DASWRI", (ftnlen)6);
 
 /*     Check that the file is open for writing.  Signal an error if not. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DASWRI", (ftnlen)6);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASWRI", (ftnlen)6);
 	return 0;
     }
 
 /*     If it hasn't been done yet, initialize the pointer list pools. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__10, __state->poold);
-	lnkini_(&__state->c__10, __state->pooli);
-	lnkini_(&__state->c__10, __state->poolc);
+	lnkini_(__global_state, &__state->c__10, __state->poold);
+	lnkini_(__global_state, &__state->c__10, __state->pooli);
+	lnkini_(__global_state, &__state->c__10, __state->poolc);
 	__state->pass1 = FALSE_;
     }
 
@@ -2053,38 +2114,42 @@ L_daswri:
     __state->node = __state->headi;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufi[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)2228)
-		] && *recno == __state->rnbufi[(i__2 = __state->node - 1) < 
-		10 && 0 <= i__2 ? i__2 : s_rnge("rnbufi", i__2, "dasrwr_", (
-		ftnlen)2228)]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufi", i__1, 
+		"dasrwr_", (ftnlen)2228)] && *recno == __state->rnbufi[(i__2 =
+		 __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rnbufi", i__2, "dasrwr_", (ftnlen)2228)]
+		) {
 
 /*           Found it.  Update the buffered record. */
 
-	    movei_(reci, &__state->c__256, &__state->rcbufi[(i__1 = (
-		    __state->node << 8) - 256) < 2560 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rcbufi", i__1, "dasrwr_", (ftnlen)2233)]);
+	    movei_(__global_state, reci, &__state->c__256, &__state->rcbufi[(
+		    i__1 = (__state->node << 8) - 256) < 2560 && 0 <= i__1 ? 
+		    i__1 : s_rnge(&__global_state->f2c, "rcbufi", i__1, "das"
+		    "rwr_", (ftnlen)2233)]);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    __state->upbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		    i__1 : s_rnge("upbufi", i__1, "dasrwr_", (ftnlen)2239)] = 
-		    TRUE_;
+		    i__1 : s_rnge(&__global_state->f2c, "upbufi", i__1, "das"
+		    "rwr_", (ftnlen)2239)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
 
 	    if (__state->node != __state->headi) {
-		lnkxsl_(&__state->node, &__state->node, __state->pooli);
-		lnkilb_(&__state->node, &__state->headi, __state->pooli);
+		lnkxsl_(__global_state, &__state->node, &__state->node, 
+			__state->pooli);
+		lnkilb_(__global_state, &__state->node, &__state->headi, 
+			__state->pooli);
 		__state->headi = __state->node;
 	    }
-	    chkout_("DASWRI", (ftnlen)6);
+	    chkout_(__global_state, "DASWRI", (ftnlen)6);
 	    return 0;
 	}
 	__state->node = __state->pooli[(i__1 = (__state->node << 1) + 10) < 
-		32 && 0 <= i__1 ? i__1 : s_rnge("pooli", i__1, "dasrwr_", (
-		ftnlen)2258)];
+		32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "pooli",
+		 i__1, "dasrwr_", (ftnlen)2258)];
     }
 
 /*     The record we're writing to is not buffered.  We'll allocate */
@@ -2097,31 +2162,36 @@ L_daswri:
 
 /*        There's a free buffer entry available.  Just allocate it. */
 
-	lnkan_(__state->pooli, &__state->node);
+	lnkan_(__global_state, __state->pooli, &__state->node);
 	++__state->usedi;
     } else {
 
 /*        Grab the buffer entry at the tail end of the list. */
 
-	__state->node = lnktl_(&__state->headi, __state->pooli);
-	lnkxsl_(&__state->node, &__state->node, __state->pooli);
+	__state->node = lnktl_(__global_state, &__state->headi, 
+		__state->pooli);
+	lnkxsl_(__global_state, &__state->node, &__state->node, 
+		__state->pooli);
 
 /*        If the allocated record was updated, write it out. */
 
 	if (__state->upbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("upbufi", i__1, "dasrwr_", (ftnlen)2287)]) {
-	    zzddhhlu_(&__state->hnbufi[(i__1 = __state->node - 1) < 10 && 0 <=
-		     i__1 ? i__1 : s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)
+		i__1 : s_rnge(&__global_state->f2c, "upbufi", i__1, "dasrwr_",
+		 (ftnlen)2287)]) {
+	    zzddhhlu_(__global_state, &__state->hnbufi[(i__1 = __state->node 
+		    - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "hnbufi", i__1, "dasrwr_", (ftnlen)
 		    2289)], "DAS", &__state->c_false, &__state->wrunit, (
 		    ftnlen)3);
-	    dasioi_("WRITE", &__state->wrunit, &__state->rnbufi[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufi", i__1, "dasrwr_", (ftnlen)2291)], &
-		    __state->rcbufi[(i__2 = (__state->node << 8) - 256) < 
-		    2560 && 0 <= i__2 ? i__2 : s_rnge("rcbufi", i__2, "dasrw"
-		    "r_", (ftnlen)2291)], (ftnlen)5);
-	    if (failed_()) {
-		chkout_("DASWRI", (ftnlen)6);
+	    dasioi_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufi[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufi", i__1,
+		     "dasrwr_", (ftnlen)2291)], &__state->rcbufi[(i__2 = (
+		    __state->node << 8) - 256) < 2560 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "rcbufi", i__2, "dasrwr_", (
+		    ftnlen)2291)], (ftnlen)5);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASWRI", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -2129,27 +2199,31 @@ L_daswri:
 
 /*     Now update the allocated buffer entry with the input data. */
 
-    movei_(reci, &__state->c__256, &__state->rcbufi[(i__1 = (__state->node << 
-	    8) - 256) < 2560 && 0 <= i__1 ? i__1 : s_rnge("rcbufi", i__1, 
-	    "dasrwr_", (ftnlen)2308)]);
+    movei_(__global_state, reci, &__state->c__256, &__state->rcbufi[(i__1 = (
+	    __state->node << 8) - 256) < 2560 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufi", i__1, "dasrwr_", (ftnlen)2308)]);
 
 /*     Set the update flag, indicating that this buffer entry */
 /*     has been modified.  Also set the handle and record number */
 /*     entries. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &__state->unit, (ftnlen)3);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &
+	    __state->unit, (ftnlen)3);
     __state->upbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("upbufi", i__1, "dasrwr_", (ftnlen)2317)] = TRUE_;
+	    s_rnge(&__global_state->f2c, "upbufi", i__1, "dasrwr_", (ftnlen)
+	    2317)] = TRUE_;
     __state->hnbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)2318)] = *handle;
+	    s_rnge(&__global_state->f2c, "hnbufi", i__1, "dasrwr_", (ftnlen)
+	    2318)] = *handle;
     __state->rnbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rnbufi", i__1, "dasrwr_", (ftnlen)2319)] = *recno;
+	    s_rnge(&__global_state->f2c, "rnbufi", i__1, "dasrwr_", (ftnlen)
+	    2319)] = *recno;
 
 /*     Link this buffer entry to the head of the list. */
 
-    lnkilb_(&__state->node, &__state->headi, __state->pooli);
+    lnkilb_(__global_state, &__state->node, &__state->headi, __state->pooli);
     __state->headi = __state->node;
-    chkout_("DASWRI", (ftnlen)6);
+    chkout_(__global_state, "DASWRI", (ftnlen)6);
     return 0;
 /* $Procedure DASWRC ( DAS, write record, character ) */
 
@@ -2343,25 +2417,25 @@ L_daswrc:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASWRC", (ftnlen)6);
+    chkin_(__global_state, "DASWRC", (ftnlen)6);
 
 /*     Check that the file is open for writing.  Signal an error if not. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DASWRC", (ftnlen)6);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASWRC", (ftnlen)6);
 	return 0;
     }
 
 /*     If it hasn't been done yet, initialize the pointer list pools. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__10, __state->poold);
-	lnkini_(&__state->c__10, __state->pooli);
-	lnkini_(&__state->c__10, __state->poolc);
+	lnkini_(__global_state, &__state->c__10, __state->poold);
+	lnkini_(__global_state, &__state->c__10, __state->pooli);
+	lnkini_(__global_state, &__state->c__10, __state->poolc);
 	__state->pass1 = FALSE_;
     }
 
@@ -2375,38 +2449,42 @@ L_daswrc:
     __state->node = __state->headc;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufc[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)2574)
-		] && *recno == __state->rnbufc[(i__2 = __state->node - 1) < 
-		10 && 0 <= i__2 ? i__2 : s_rnge("rnbufc", i__2, "dasrwr_", (
-		ftnlen)2574)]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufc", i__1, 
+		"dasrwr_", (ftnlen)2574)] && *recno == __state->rnbufc[(i__2 =
+		 __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rnbufc", i__2, "dasrwr_", (ftnlen)2574)]
+		) {
 
 /*           Found it.  Update the buffered record. */
 
-	    s_copy(__state->rcbufc + (((i__1 = __state->node - 1) < 10 && 0 <=
-		     i__1 ? i__1 : s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)
+	    s_copy(&__global_state->f2c, __state->rcbufc + (((i__1 = 
+		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "rcbufc", i__1, "dasrwr_", (ftnlen)
 		    2579)) << 10), recc, (ftnlen)1024, recc_len);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    __state->upbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		    i__1 : s_rnge("upbufc", i__1, "dasrwr_", (ftnlen)2585)] = 
-		    TRUE_;
+		    i__1 : s_rnge(&__global_state->f2c, "upbufc", i__1, "das"
+		    "rwr_", (ftnlen)2585)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
 
 	    if (__state->node != __state->headc) {
-		lnkxsl_(&__state->node, &__state->node, __state->poolc);
-		lnkilb_(&__state->node, &__state->headc, __state->poolc);
+		lnkxsl_(__global_state, &__state->node, &__state->node, 
+			__state->poolc);
+		lnkilb_(__global_state, &__state->node, &__state->headc, 
+			__state->poolc);
 		__state->headc = __state->node;
 	    }
-	    chkout_("DASWRC", (ftnlen)6);
+	    chkout_(__global_state, "DASWRC", (ftnlen)6);
 	    return 0;
 	}
 	__state->node = __state->poolc[(i__1 = (__state->node << 1) + 10) < 
-		32 && 0 <= i__1 ? i__1 : s_rnge("poolc", i__1, "dasrwr_", (
-		ftnlen)2604)];
+		32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "poolc",
+		 i__1, "dasrwr_", (ftnlen)2604)];
     }
 
 /*     The record we're writing to is not buffered.  We'll allocate */
@@ -2419,31 +2497,36 @@ L_daswrc:
 
 /*        There's a free buffer entry available.  Just allocate it. */
 
-	lnkan_(__state->poolc, &__state->node);
+	lnkan_(__global_state, __state->poolc, &__state->node);
 	++__state->usedc;
     } else {
 
 /*        Grab the buffer entry at the tail end of the list. */
 
-	__state->node = lnktl_(&__state->headc, __state->poolc);
-	lnkxsl_(&__state->node, &__state->node, __state->poolc);
+	__state->node = lnktl_(__global_state, &__state->headc, 
+		__state->poolc);
+	lnkxsl_(__global_state, &__state->node, &__state->node, 
+		__state->poolc);
 
 /*        If the allocated record was updated, write it out. */
 
 	if (__state->upbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("upbufc", i__1, "dasrwr_", (ftnlen)2633)]) {
-	    zzddhhlu_(&__state->hnbufc[(i__1 = __state->node - 1) < 10 && 0 <=
-		     i__1 ? i__1 : s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)
+		i__1 : s_rnge(&__global_state->f2c, "upbufc", i__1, "dasrwr_",
+		 (ftnlen)2633)]) {
+	    zzddhhlu_(__global_state, &__state->hnbufc[(i__1 = __state->node 
+		    - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "hnbufc", i__1, "dasrwr_", (ftnlen)
 		    2635)], "DAS", &__state->c_false, &__state->wrunit, (
 		    ftnlen)3);
-	    dasioc_("WRITE", &__state->wrunit, &__state->rnbufc[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufc", i__1, "dasrwr_", (ftnlen)2637)], 
-		    __state->rcbufc + (((i__2 = __state->node - 1) < 10 && 0 
-		    <= i__2 ? i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (
-		    ftnlen)2637)) << 10), (ftnlen)5, (ftnlen)1024);
-	    if (failed_()) {
-		chkout_("DASWRC", (ftnlen)6);
+	    dasioc_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufc[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufc", i__1,
+		     "dasrwr_", (ftnlen)2637)], __state->rcbufc + (((i__2 = 
+		    __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rcbufc", i__2, "dasrwr_", (ftnlen)
+		    2637)) << 10), (ftnlen)5, (ftnlen)1024);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASWRC", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -2451,26 +2534,30 @@ L_daswrc:
 
 /*     Now update the allocated buffer entry with the input data. */
 
-    s_copy(__state->rcbufc + (((i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-	    i__1 : s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)2654)) << 10), 
-	    recc, (ftnlen)1024, recc_len);
+    s_copy(&__global_state->f2c, __state->rcbufc + (((i__1 = __state->node - 
+	    1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "rcbu"
+	    "fc", i__1, "dasrwr_", (ftnlen)2654)) << 10), recc, (ftnlen)1024, 
+	    recc_len);
 
 /*     Set the update flag, indicating that this buffer entry */
 /*     has been modified.  Also set the handle and record number */
 /*     entries. */
 
     __state->upbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("upbufc", i__1, "dasrwr_", (ftnlen)2661)] = TRUE_;
+	    s_rnge(&__global_state->f2c, "upbufc", i__1, "dasrwr_", (ftnlen)
+	    2661)] = TRUE_;
     __state->hnbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)2662)] = *handle;
+	    s_rnge(&__global_state->f2c, "hnbufc", i__1, "dasrwr_", (ftnlen)
+	    2662)] = *handle;
     __state->rnbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rnbufc", i__1, "dasrwr_", (ftnlen)2663)] = *recno;
+	    s_rnge(&__global_state->f2c, "rnbufc", i__1, "dasrwr_", (ftnlen)
+	    2663)] = *recno;
 
 /*     Link this buffer entry to the head of the list. */
 
-    lnkilb_(&__state->node, &__state->headc, __state->poolc);
+    lnkilb_(__global_state, &__state->node, &__state->headc, __state->poolc);
     __state->headc = __state->node;
-    chkout_("DASWRC", (ftnlen)6);
+    chkout_(__global_state, "DASWRC", (ftnlen)6);
     return 0;
 /* $Procedure DASURD ( DAS, update record, double precision ) */
 
@@ -2697,49 +2784,49 @@ L_dasurd:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASURD", (ftnlen)6);
+    chkin_(__global_state, "DASURD", (ftnlen)6);
 
 /*     Check that the file is open for writing.  Signal an error if not. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DASURD", (ftnlen)6);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASURD", (ftnlen)6);
 	return 0;
     }
 
 /*     If it hasn't been done yet, initialize the pointer list pools. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__10, __state->poold);
-	lnkini_(&__state->c__10, __state->pooli);
-	lnkini_(&__state->c__10, __state->poolc);
+	lnkini_(__global_state, &__state->c__10, __state->poold);
+	lnkini_(__global_state, &__state->c__10, __state->pooli);
+	lnkini_(__global_state, &__state->c__10, __state->poolc);
 	__state->pass1 = FALSE_;
     }
 
 /*     If FIRST or LAST are out of range, no dice. */
 
     if (*first < 1 || *first > 128 || *last < 1 || *last > 128) {
-	setmsg_("Array indices FIRST and LAST were #,  #; allowed range for "
-		"both is [#, #]. File was #, record number was #.", (ftnlen)
-		107);
-	errint_("#", first, (ftnlen)1);
-	errint_("#", last, (ftnlen)1);
-	errint_("#", &__state->c__1, (ftnlen)1);
-	errint_("#", &__state->c__128, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", recno, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DASURD", (ftnlen)6);
+	setmsg_(__global_state, "Array indices FIRST and LAST were #,  #; al"
+		"lowed range for both is [#, #]. File was #, record number wa"
+		"s #.", (ftnlen)107);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__128, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DASURD", (ftnlen)6);
 	return 0;
     }
 
 /*     There's nothing to do if LAST < FIRST. */
 
     if (*last < *first) {
-	chkout_("DASURD", (ftnlen)6);
+	chkout_(__global_state, "DASURD", (ftnlen)6);
 	return 0;
     }
 
@@ -2753,39 +2840,43 @@ L_dasurd:
     __state->node = __state->headd;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufd[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)2982)
-		] && *recno == __state->rnbufd[(i__2 = __state->node - 1) < 
-		10 && 0 <= i__2 ? i__2 : s_rnge("rnbufd", i__2, "dasrwr_", (
-		ftnlen)2982)]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufd", i__1, 
+		"dasrwr_", (ftnlen)2982)] && *recno == __state->rnbufd[(i__2 =
+		 __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rnbufd", i__2, "dasrwr_", (ftnlen)2982)]
+		) {
 
 /*           Found it.  Update the buffered record. */
 
 	    i__2 = *last - *first + 1;
-	    moved_(datad, &i__2, &__state->rcbufd[(i__1 = *first + (
-		    __state->node << 7) - 129) < 1280 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rcbufd", i__1, "dasrwr_", (ftnlen)2987)]);
+	    moved_(__global_state, datad, &i__2, &__state->rcbufd[(i__1 = *
+		    first + (__state->node << 7) - 129) < 1280 && 0 <= i__1 ? 
+		    i__1 : s_rnge(&__global_state->f2c, "rcbufd", i__1, "das"
+		    "rwr_", (ftnlen)2987)]);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    __state->upbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		    i__1 : s_rnge("upbufd", i__1, "dasrwr_", (ftnlen)2993)] = 
-		    TRUE_;
+		    i__1 : s_rnge(&__global_state->f2c, "upbufd", i__1, "das"
+		    "rwr_", (ftnlen)2993)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
 
 	    if (__state->node != __state->headd) {
-		lnkxsl_(&__state->node, &__state->node, __state->poold);
-		lnkilb_(&__state->node, &__state->headd, __state->poold);
+		lnkxsl_(__global_state, &__state->node, &__state->node, 
+			__state->poold);
+		lnkilb_(__global_state, &__state->node, &__state->headd, 
+			__state->poold);
 		__state->headd = __state->node;
 	    }
-	    chkout_("DASURD", (ftnlen)6);
+	    chkout_(__global_state, "DASURD", (ftnlen)6);
 	    return 0;
 	}
 	__state->node = __state->poold[(i__1 = (__state->node << 1) + 10) < 
-		32 && 0 <= i__1 ? i__1 : s_rnge("poold", i__1, "dasrwr_", (
-		ftnlen)3012)];
+		32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "poold",
+		 i__1, "dasrwr_", (ftnlen)3012)];
     }
 
 /*     The record we're writing to is not buffered.  In order to */
@@ -2799,31 +2890,36 @@ L_dasurd:
 
 /*        There's a free buffer entry available.  Just allocate it. */
 
-	lnkan_(__state->poold, &__state->node);
+	lnkan_(__global_state, __state->poold, &__state->node);
 	++__state->usedd;
     } else {
 
 /*        Grab the buffer entry at the tail end of the list. */
 
-	__state->node = lnktl_(&__state->headd, __state->poold);
-	lnkxsl_(&__state->node, &__state->node, __state->poold);
+	__state->node = lnktl_(__global_state, &__state->headd, 
+		__state->poold);
+	lnkxsl_(__global_state, &__state->node, &__state->node, 
+		__state->poold);
 
 /*        If the allocated record was updated, write it out. */
 
 	if (__state->upbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("upbufd", i__1, "dasrwr_", (ftnlen)3043)]) {
-	    zzddhhlu_(&__state->hnbufd[(i__1 = __state->node - 1) < 10 && 0 <=
-		     i__1 ? i__1 : s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)
+		i__1 : s_rnge(&__global_state->f2c, "upbufd", i__1, "dasrwr_",
+		 (ftnlen)3043)]) {
+	    zzddhhlu_(__global_state, &__state->hnbufd[(i__1 = __state->node 
+		    - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "hnbufd", i__1, "dasrwr_", (ftnlen)
 		    3045)], "DAS", &__state->c_false, &__state->wrunit, (
 		    ftnlen)3);
-	    dasiod_("WRITE", &__state->wrunit, &__state->rnbufd[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufd", i__1, "dasrwr_", (ftnlen)3047)], &
-		    __state->rcbufd[(i__2 = (__state->node << 7) - 128) < 
-		    1280 && 0 <= i__2 ? i__2 : s_rnge("rcbufd", i__2, "dasrw"
-		    "r_", (ftnlen)3047)], (ftnlen)5);
-	    if (failed_()) {
-		chkout_("DASURD", (ftnlen)6);
+	    dasiod_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufd[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufd", i__1,
+		     "dasrwr_", (ftnlen)3047)], &__state->rcbufd[(i__2 = (
+		    __state->node << 7) - 128) < 1280 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "rcbufd", i__2, "dasrwr_", (
+		    ftnlen)3047)], (ftnlen)5);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASURD", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -2831,11 +2927,11 @@ L_dasurd:
 
 /*     Now try to read the record we're going to update. */
 
-    zzdasgrd_(handle, recno, &__state->rcbufd[(i__1 = (__state->node << 7) - 
-	    128) < 1280 && 0 <= i__1 ? i__1 : s_rnge("rcbufd", i__1, "dasrwr_"
-	    , (ftnlen)3065)]);
-    if (failed_()) {
-	chkout_("DASURD", (ftnlen)6);
+    zzdasgrd_(__global_state, handle, recno, &__state->rcbufd[(i__1 = (
+	    __state->node << 7) - 128) < 1280 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufd", i__1, "dasrwr_", (ftnlen)3065)]);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASURD", (ftnlen)6);
 	return 0;
     }
 
@@ -2846,13 +2942,16 @@ L_dasurd:
 
 /*     Update the head pointer. */
 
-    lnkilb_(&__state->node, &__state->headd, __state->poold);
+    lnkilb_(__global_state, &__state->node, &__state->headd, __state->poold);
     __state->hnbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)3082)] = *handle;
+	    s_rnge(&__global_state->f2c, "hnbufd", i__1, "dasrwr_", (ftnlen)
+	    3082)] = *handle;
     __state->rnbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rnbufd", i__1, "dasrwr_", (ftnlen)3083)] = *recno;
+	    s_rnge(&__global_state->f2c, "rnbufd", i__1, "dasrwr_", (ftnlen)
+	    3083)] = *recno;
     __state->upbufd[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("upbufd", i__1, "dasrwr_", (ftnlen)3084)] = TRUE_;
+	    s_rnge(&__global_state->f2c, "upbufd", i__1, "dasrwr_", (ftnlen)
+	    3084)] = TRUE_;
     __state->headd = __state->node;
 
 /*     At long last, make the requested update.  Note that we don't */
@@ -2860,10 +2959,10 @@ L_dasurd:
 /*     automatically before or at the time the file is closed. */
 
     i__2 = *last - *first + 1;
-    moved_(datad, &i__2, &__state->rcbufd[(i__1 = *first + (__state->node << 
-	    7) - 129) < 1280 && 0 <= i__1 ? i__1 : s_rnge("rcbufd", i__1, 
-	    "dasrwr_", (ftnlen)3092)]);
-    chkout_("DASURD", (ftnlen)6);
+    moved_(__global_state, datad, &i__2, &__state->rcbufd[(i__1 = *first + (
+	    __state->node << 7) - 129) < 1280 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufd", i__1, "dasrwr_", (ftnlen)3092)]);
+    chkout_(__global_state, "DASURD", (ftnlen)6);
     return 0;
 /* $Procedure DASURI ( DAS, update record, integer ) */
 
@@ -3090,49 +3189,49 @@ L_dasuri:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASURI", (ftnlen)6);
+    chkin_(__global_state, "DASURI", (ftnlen)6);
 
 /*     Check that the file is open for writing.  Signal an error if not. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DASURI", (ftnlen)6);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASURI", (ftnlen)6);
 	return 0;
     }
 
 /*     If it hasn't been done yet, initialize the pointer list pools. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__10, __state->poold);
-	lnkini_(&__state->c__10, __state->pooli);
-	lnkini_(&__state->c__10, __state->poolc);
+	lnkini_(__global_state, &__state->c__10, __state->poold);
+	lnkini_(__global_state, &__state->c__10, __state->pooli);
+	lnkini_(__global_state, &__state->c__10, __state->poolc);
 	__state->pass1 = FALSE_;
     }
 
 /*     If FIRST or LAST are out of range, no dice. */
 
     if (*first < 1 || *first > 256 || *last < 1 || *last > 256) {
-	setmsg_("Array indices FIRST and LAST were #,  #; allowed range for "
-		"both is [#, #]. File was #, record number was #.", (ftnlen)
-		107);
-	errint_("#", first, (ftnlen)1);
-	errint_("#", last, (ftnlen)1);
-	errint_("#", &__state->c__1, (ftnlen)1);
-	errint_("#", &__state->c__256, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", recno, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DASURI", (ftnlen)6);
+	setmsg_(__global_state, "Array indices FIRST and LAST were #,  #; al"
+		"lowed range for both is [#, #]. File was #, record number wa"
+		"s #.", (ftnlen)107);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__256, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DASURI", (ftnlen)6);
 	return 0;
     }
 
 /*     There's nothing to do if LAST < FIRST. */
 
     if (*last < *first) {
-	chkout_("DASURI", (ftnlen)6);
+	chkout_(__global_state, "DASURI", (ftnlen)6);
 	return 0;
     }
 
@@ -3146,39 +3245,43 @@ L_dasuri:
     __state->node = __state->headi;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufi[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)3406)
-		] && *recno == __state->rnbufi[(i__2 = __state->node - 1) < 
-		10 && 0 <= i__2 ? i__2 : s_rnge("rnbufi", i__2, "dasrwr_", (
-		ftnlen)3406)]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufi", i__1, 
+		"dasrwr_", (ftnlen)3406)] && *recno == __state->rnbufi[(i__2 =
+		 __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rnbufi", i__2, "dasrwr_", (ftnlen)3406)]
+		) {
 
 /*           Found it.  Update the buffered record. */
 
 	    i__2 = *last - *first + 1;
-	    movei_(datai, &i__2, &__state->rcbufi[(i__1 = *first + (
-		    __state->node << 8) - 257) < 2560 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rcbufi", i__1, "dasrwr_", (ftnlen)3411)]);
+	    movei_(__global_state, datai, &i__2, &__state->rcbufi[(i__1 = *
+		    first + (__state->node << 8) - 257) < 2560 && 0 <= i__1 ? 
+		    i__1 : s_rnge(&__global_state->f2c, "rcbufi", i__1, "das"
+		    "rwr_", (ftnlen)3411)]);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    __state->upbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		    i__1 : s_rnge("upbufi", i__1, "dasrwr_", (ftnlen)3417)] = 
-		    TRUE_;
+		    i__1 : s_rnge(&__global_state->f2c, "upbufi", i__1, "das"
+		    "rwr_", (ftnlen)3417)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
 
 	    if (__state->node != __state->headi) {
-		lnkxsl_(&__state->node, &__state->node, __state->pooli);
-		lnkilb_(&__state->node, &__state->headi, __state->pooli);
+		lnkxsl_(__global_state, &__state->node, &__state->node, 
+			__state->pooli);
+		lnkilb_(__global_state, &__state->node, &__state->headi, 
+			__state->pooli);
 		__state->headi = __state->node;
 	    }
-	    chkout_("DASURI", (ftnlen)6);
+	    chkout_(__global_state, "DASURI", (ftnlen)6);
 	    return 0;
 	}
 	__state->node = __state->pooli[(i__1 = (__state->node << 1) + 10) < 
-		32 && 0 <= i__1 ? i__1 : s_rnge("pooli", i__1, "dasrwr_", (
-		ftnlen)3436)];
+		32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "pooli",
+		 i__1, "dasrwr_", (ftnlen)3436)];
     }
 
 /*     The record we're writing to is not buffered.  We'll allocate */
@@ -3191,31 +3294,36 @@ L_dasuri:
 
 /*        There's a free buffer entry available.  Just allocate it. */
 
-	lnkan_(__state->pooli, &__state->node);
+	lnkan_(__global_state, __state->pooli, &__state->node);
 	++__state->usedi;
     } else {
 
 /*        Grab the buffer entry at the tail end of the list. */
 
-	__state->node = lnktl_(&__state->headi, __state->pooli);
-	lnkxsl_(&__state->node, &__state->node, __state->pooli);
+	__state->node = lnktl_(__global_state, &__state->headi, 
+		__state->pooli);
+	lnkxsl_(__global_state, &__state->node, &__state->node, 
+		__state->pooli);
 
 /*        If the allocated record was updated, write it out. */
 
 	if (__state->upbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("upbufi", i__1, "dasrwr_", (ftnlen)3465)]) {
-	    zzddhhlu_(&__state->hnbufi[(i__1 = __state->node - 1) < 10 && 0 <=
-		     i__1 ? i__1 : s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)
+		i__1 : s_rnge(&__global_state->f2c, "upbufi", i__1, "dasrwr_",
+		 (ftnlen)3465)]) {
+	    zzddhhlu_(__global_state, &__state->hnbufi[(i__1 = __state->node 
+		    - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "hnbufi", i__1, "dasrwr_", (ftnlen)
 		    3467)], "DAS", &__state->c_false, &__state->wrunit, (
 		    ftnlen)3);
-	    dasioi_("WRITE", &__state->wrunit, &__state->rnbufi[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufi", i__1, "dasrwr_", (ftnlen)3469)], &
-		    __state->rcbufi[(i__2 = (__state->node << 8) - 256) < 
-		    2560 && 0 <= i__2 ? i__2 : s_rnge("rcbufi", i__2, "dasrw"
-		    "r_", (ftnlen)3469)], (ftnlen)5);
-	    if (failed_()) {
-		chkout_("DASURI", (ftnlen)6);
+	    dasioi_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufi[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufi", i__1,
+		     "dasrwr_", (ftnlen)3469)], &__state->rcbufi[(i__2 = (
+		    __state->node << 8) - 256) < 2560 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "rcbufi", i__2, "dasrwr_", (
+		    ftnlen)3469)], (ftnlen)5);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASURI", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -3223,11 +3331,11 @@ L_dasuri:
 
 /*     Now try to read the record we're going to update. */
 
-    zzdasgri_(handle, recno, &__state->rcbufi[(i__1 = (__state->node << 8) - 
-	    256) < 2560 && 0 <= i__1 ? i__1 : s_rnge("rcbufi", i__1, "dasrwr_"
-	    , (ftnlen)3486)]);
-    if (failed_()) {
-	chkout_("DASURI", (ftnlen)6);
+    zzdasgri_(__global_state, handle, recno, &__state->rcbufi[(i__1 = (
+	    __state->node << 8) - 256) < 2560 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufi", i__1, "dasrwr_", (ftnlen)3486)]);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASURI", (ftnlen)6);
 	return 0;
     }
 
@@ -3238,13 +3346,16 @@ L_dasuri:
 
 /*     Update the head pointer. */
 
-    lnkilb_(&__state->node, &__state->headi, __state->pooli);
+    lnkilb_(__global_state, &__state->node, &__state->headi, __state->pooli);
     __state->hnbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)3503)] = *handle;
+	    s_rnge(&__global_state->f2c, "hnbufi", i__1, "dasrwr_", (ftnlen)
+	    3503)] = *handle;
     __state->rnbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rnbufi", i__1, "dasrwr_", (ftnlen)3504)] = *recno;
+	    s_rnge(&__global_state->f2c, "rnbufi", i__1, "dasrwr_", (ftnlen)
+	    3504)] = *recno;
     __state->upbufi[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("upbufi", i__1, "dasrwr_", (ftnlen)3505)] = TRUE_;
+	    s_rnge(&__global_state->f2c, "upbufi", i__1, "dasrwr_", (ftnlen)
+	    3505)] = TRUE_;
     __state->headi = __state->node;
 
 /*     At long last, make the requested update.  Note that we don't */
@@ -3252,10 +3363,10 @@ L_dasuri:
 /*     automatically before or at the time the file is closed. */
 
     i__2 = *last - *first + 1;
-    movei_(datai, &i__2, &__state->rcbufi[(i__1 = *first + (__state->node << 
-	    8) - 257) < 2560 && 0 <= i__1 ? i__1 : s_rnge("rcbufi", i__1, 
-	    "dasrwr_", (ftnlen)3513)]);
-    chkout_("DASURI", (ftnlen)6);
+    movei_(__global_state, datai, &i__2, &__state->rcbufi[(i__1 = *first + (
+	    __state->node << 8) - 257) < 2560 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufi", i__1, "dasrwr_", (ftnlen)3513)]);
+    chkout_(__global_state, "DASURI", (ftnlen)6);
     return 0;
 /* $Procedure DASURC ( DAS, update record, character ) */
 
@@ -3487,49 +3598,49 @@ L_dasurc:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASURC", (ftnlen)6);
+    chkin_(__global_state, "DASURC", (ftnlen)6);
 
 /*     Check that the file is open for writing.  Signal an error if not. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DASURC", (ftnlen)6);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASURC", (ftnlen)6);
 	return 0;
     }
 
 /*     If it hasn't been done yet, initialize the pointer list pools. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__10, __state->poold);
-	lnkini_(&__state->c__10, __state->pooli);
-	lnkini_(&__state->c__10, __state->poolc);
+	lnkini_(__global_state, &__state->c__10, __state->poold);
+	lnkini_(__global_state, &__state->c__10, __state->pooli);
+	lnkini_(__global_state, &__state->c__10, __state->poolc);
 	__state->pass1 = FALSE_;
     }
 
 /*     If FIRST or LAST are out of range, no dice. */
 
     if (*first < 1 || *first > 1024 || *last < 1 || *last > 1024) {
-	setmsg_("String indices FIRST and LAST were #,  #; allowed range for"
-		" both is [#, #]. File was #, record number was #.", (ftnlen)
-		108);
-	errint_("#", first, (ftnlen)1);
-	errint_("#", last, (ftnlen)1);
-	errint_("#", &__state->c__1, (ftnlen)1);
-	errint_("#", &__state->c__1024, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", recno, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DASURC", (ftnlen)6);
+	setmsg_(__global_state, "String indices FIRST and LAST were #,  #; a"
+		"llowed range for both is [#, #]. File was #, record number w"
+		"as #.", (ftnlen)108);
+	errint_(__global_state, "#", first, (ftnlen)1);
+	errint_(__global_state, "#", last, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__1024, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DASURC", (ftnlen)6);
 	return 0;
     }
 
 /*     There's nothing to do if LAST < FIRST. */
 
     if (*last < *first) {
-	chkout_("DASURC", (ftnlen)6);
+	chkout_(__global_state, "DASURC", (ftnlen)6);
 	return 0;
     }
 
@@ -3543,39 +3654,43 @@ L_dasurc:
     __state->node = __state->headc;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufc[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)3833)
-		] && *recno == __state->rnbufc[(i__2 = __state->node - 1) < 
-		10 && 0 <= i__2 ? i__2 : s_rnge("rnbufc", i__2, "dasrwr_", (
-		ftnlen)3833)]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufc", i__1, 
+		"dasrwr_", (ftnlen)3833)] && *recno == __state->rnbufc[(i__2 =
+		 __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rnbufc", i__2, "dasrwr_", (ftnlen)3833)]
+		) {
 
 /*           Found it.  Update the buffered record. */
 
-	    s_copy(__state->rcbufc + ((((i__1 = __state->node - 1) < 10 && 0 
-		    <= i__1 ? i__1 : s_rnge("rcbufc", i__1, "dasrwr_", (
-		    ftnlen)3838)) << 10) + (*first - 1)), datac, *last - (*
-		    first - 1), datac_len);
+	    s_copy(&__global_state->f2c, __state->rcbufc + ((((i__1 = 
+		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "rcbufc", i__1, "dasrwr_", (ftnlen)
+		    3838)) << 10) + (*first - 1)), datac, *last - (*first - 1)
+		    , datac_len);
 
 /*           Set the update flag, indicating that this buffer entry */
 /*           has been modified. */
 
 	    __state->upbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		    i__1 : s_rnge("upbufc", i__1, "dasrwr_", (ftnlen)3844)] = 
-		    TRUE_;
+		    i__1 : s_rnge(&__global_state->f2c, "upbufc", i__1, "das"
+		    "rwr_", (ftnlen)3844)] = TRUE_;
 
 /*           Put the information about this record at the head of the */
 /*           active list, if it is not already there. */
 
 	    if (__state->node != __state->headc) {
-		lnkxsl_(&__state->node, &__state->node, __state->poolc);
-		lnkilb_(&__state->node, &__state->headc, __state->poolc);
+		lnkxsl_(__global_state, &__state->node, &__state->node, 
+			__state->poolc);
+		lnkilb_(__global_state, &__state->node, &__state->headc, 
+			__state->poolc);
 		__state->headc = __state->node;
 	    }
-	    chkout_("DASURC", (ftnlen)6);
+	    chkout_(__global_state, "DASURC", (ftnlen)6);
 	    return 0;
 	}
 	__state->node = __state->poolc[(i__1 = (__state->node << 1) + 10) < 
-		32 && 0 <= i__1 ? i__1 : s_rnge("poolc", i__1, "dasrwr_", (
-		ftnlen)3863)];
+		32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "poolc",
+		 i__1, "dasrwr_", (ftnlen)3863)];
     }
 
 /*     The record we're writing to is not buffered.  We'll allocate */
@@ -3588,31 +3703,36 @@ L_dasurc:
 
 /*        There's a free buffer entry available.  Just allocate it. */
 
-	lnkan_(__state->poolc, &__state->node);
+	lnkan_(__global_state, __state->poolc, &__state->node);
 	++__state->usedc;
     } else {
 
 /*        Grab the buffer entry at the tail end of the list. */
 
-	__state->node = lnktl_(&__state->headc, __state->poolc);
-	lnkxsl_(&__state->node, &__state->node, __state->poolc);
+	__state->node = lnktl_(__global_state, &__state->headc, 
+		__state->poolc);
+	lnkxsl_(__global_state, &__state->node, &__state->node, 
+		__state->poolc);
 
 /*        If the allocated record was updated, write it out. */
 
 	if (__state->upbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("upbufc", i__1, "dasrwr_", (ftnlen)3892)]) {
-	    zzddhhlu_(&__state->hnbufc[(i__1 = __state->node - 1) < 10 && 0 <=
-		     i__1 ? i__1 : s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)
+		i__1 : s_rnge(&__global_state->f2c, "upbufc", i__1, "dasrwr_",
+		 (ftnlen)3892)]) {
+	    zzddhhlu_(__global_state, &__state->hnbufc[(i__1 = __state->node 
+		    - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "hnbufc", i__1, "dasrwr_", (ftnlen)
 		    3895)], "DAS", &__state->c_false, &__state->wrunit, (
 		    ftnlen)3);
-	    dasioc_("WRITE", &__state->wrunit, &__state->rnbufc[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufc", i__1, "dasrwr_", (ftnlen)3897)], 
-		    __state->rcbufc + (((i__2 = __state->node - 1) < 10 && 0 
-		    <= i__2 ? i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (
-		    ftnlen)3897)) << 10), (ftnlen)5, (ftnlen)1024);
-	    if (failed_()) {
-		chkout_("DASURC", (ftnlen)6);
+	    dasioc_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufc[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufc", i__1,
+		     "dasrwr_", (ftnlen)3897)], __state->rcbufc + (((i__2 = 
+		    __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rcbufc", i__2, "dasrwr_", (ftnlen)
+		    3897)) << 10), (ftnlen)5, (ftnlen)1024);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASURC", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -3620,12 +3740,14 @@ L_dasurc:
 
 /*     Now try to read the record we're going to update. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &__state->unit, (ftnlen)3);
-    dasioc_("READ", &__state->unit, recno, __state->rcbufc + (((i__1 = 
-	    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("rcbufc", 
-	    i__1, "dasrwr_", (ftnlen)3916)) << 10), (ftnlen)4, (ftnlen)1024);
-    if (failed_()) {
-	chkout_("DASURC", (ftnlen)6);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &
+	    __state->unit, (ftnlen)3);
+    dasioc_(__global_state, "READ", &__state->unit, recno, __state->rcbufc + (
+	    ((i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "rcbufc", i__1, "dasrwr_", (ftnlen)3916)) << 
+	    10), (ftnlen)4, (ftnlen)1024);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASURC", (ftnlen)6);
 	return 0;
     }
 
@@ -3636,23 +3758,27 @@ L_dasurc:
 
 /*     Update the head pointer. */
 
-    lnkilb_(&__state->node, &__state->headc, __state->poolc);
+    lnkilb_(__global_state, &__state->node, &__state->headc, __state->poolc);
     __state->hnbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)3933)] = *handle;
+	    s_rnge(&__global_state->f2c, "hnbufc", i__1, "dasrwr_", (ftnlen)
+	    3933)] = *handle;
     __state->rnbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rnbufc", i__1, "dasrwr_", (ftnlen)3934)] = *recno;
+	    s_rnge(&__global_state->f2c, "rnbufc", i__1, "dasrwr_", (ftnlen)
+	    3934)] = *recno;
     __state->upbufc[(i__1 = __state->node - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("upbufc", i__1, "dasrwr_", (ftnlen)3935)] = TRUE_;
+	    s_rnge(&__global_state->f2c, "upbufc", i__1, "dasrwr_", (ftnlen)
+	    3935)] = TRUE_;
     __state->headc = __state->node;
 
 /*     At long last, make the requested update.  Note that we don't */
 /*     have to write the record back to the file; that will get done */
 /*     automatically before or at the time the file is closed. */
 
-    s_copy(__state->rcbufc + ((((i__1 = __state->node - 1) < 10 && 0 <= i__1 ?
-	     i__1 : s_rnge("rcbufc", i__1, "dasrwr_", (ftnlen)3943)) << 10) + 
-	    (*first - 1)), datac, *last - (*first - 1), datac_len);
-    chkout_("DASURC", (ftnlen)6);
+    s_copy(&__global_state->f2c, __state->rcbufc + ((((i__1 = __state->node - 
+	    1) < 10 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "rcbu"
+	    "fc", i__1, "dasrwr_", (ftnlen)3943)) << 10) + (*first - 1)), 
+	    datac, *last - (*first - 1), datac_len);
+    chkout_(__global_state, "DASURC", (ftnlen)6);
     return 0;
 /* $Procedure DASWBR ( DAS, write buffered records ) */
 
@@ -3846,33 +3972,34 @@ L_daswbr:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASWBR", (ftnlen)6);
+    chkin_(__global_state, "DASWBR", (ftnlen)6);
 
 /*     Check that the file is open for writing.  Signal an error if not. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DASWBR", (ftnlen)6);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASWBR", (ftnlen)6);
 	return 0;
     }
 
 /*     If it hasn't been done yet, initialize the pointer list pools. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__10, __state->poold);
-	lnkini_(&__state->c__10, __state->pooli);
-	lnkini_(&__state->c__10, __state->poolc);
+	lnkini_(__global_state, &__state->c__10, __state->poold);
+	lnkini_(__global_state, &__state->c__10, __state->pooli);
+	lnkini_(__global_state, &__state->c__10, __state->poolc);
 	__state->pass1 = FALSE_;
     }
 
 /*     Obtain a logical unit for HANDLE. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &__state->wrunit, (ftnlen)3);
-    if (failed_()) {
-	chkout_("DASWBR", (ftnlen)6);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &
+	    __state->wrunit, (ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASWBR", (ftnlen)6);
 	return 0;
     }
 
@@ -3884,20 +4011,21 @@ L_daswbr:
     __state->node = __state->headd;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufd[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufd", i__1, "dasrwr_", (ftnlen)4200)
-		]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufd", i__1, 
+		"dasrwr_", (ftnlen)4200)]) {
 
 /*           This record belongs to the file of interest, so write the */
 /*           the record out. */
 
-	    dasiod_("WRITE", &__state->wrunit, &__state->rnbufd[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufd", i__1, "dasrwr_", (ftnlen)4205)], &
-		    __state->rcbufd[(i__2 = (__state->node << 7) - 128) < 
-		    1280 && 0 <= i__2 ? i__2 : s_rnge("rcbufd", i__2, "dasrw"
-		    "r_", (ftnlen)4205)], (ftnlen)5);
-	    if (failed_()) {
-		chkout_("DASWBR", (ftnlen)6);
+	    dasiod_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufd[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufd", i__1,
+		     "dasrwr_", (ftnlen)4205)], &__state->rcbufd[(i__2 = (
+		    __state->node << 7) - 128) < 1280 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "rcbufd", i__2, "dasrwr_", (
+		    ftnlen)4205)], (ftnlen)5);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASWBR", (ftnlen)6);
 		return 0;
 	    }
 
@@ -3908,12 +4036,13 @@ L_daswbr:
 /*           buffer elements. */
 
 	    __state->next = __state->poold[(i__1 = (__state->node << 1) + 10) 
-		    < 32 && 0 <= i__1 ? i__1 : s_rnge("poold", i__1, "dasrwr_"
-		    , (ftnlen)4222)];
+		    < 32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "poold", i__1, "dasrwr_", (ftnlen)4222)];
 	    if (__state->node == __state->headd) {
 		__state->headd = __state->next;
 	    }
-	    lnkfsl_(&__state->node, &__state->node, __state->poold);
+	    lnkfsl_(__global_state, &__state->node, &__state->node, 
+		    __state->poold);
 	    __state->node = __state->next;
 	    --__state->usedd;
 	} else {
@@ -3921,8 +4050,8 @@ L_daswbr:
 /*           Just get the next node. */
 
 	    __state->node = __state->poold[(i__1 = (__state->node << 1) + 10) 
-		    < 32 && 0 <= i__1 ? i__1 : s_rnge("poold", i__1, "dasrwr_"
-		    , (ftnlen)4237)];
+		    < 32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "poold", i__1, "dasrwr_", (ftnlen)4237)];
 	}
     }
 
@@ -3931,20 +4060,21 @@ L_daswbr:
     __state->node = __state->headi;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufi[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufi", i__1, "dasrwr_", (ftnlen)4252)
-		]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufi", i__1, 
+		"dasrwr_", (ftnlen)4252)]) {
 
 /*           This record belongs to the file of interest, so write the */
 /*           the record out. */
 
-	    dasioi_("WRITE", &__state->wrunit, &__state->rnbufi[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufi", i__1, "dasrwr_", (ftnlen)4257)], &
-		    __state->rcbufi[(i__2 = (__state->node << 8) - 256) < 
-		    2560 && 0 <= i__2 ? i__2 : s_rnge("rcbufi", i__2, "dasrw"
-		    "r_", (ftnlen)4257)], (ftnlen)5);
-	    if (failed_()) {
-		chkout_("DASWBR", (ftnlen)6);
+	    dasioi_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufi[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufi", i__1,
+		     "dasrwr_", (ftnlen)4257)], &__state->rcbufi[(i__2 = (
+		    __state->node << 8) - 256) < 2560 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "rcbufi", i__2, "dasrwr_", (
+		    ftnlen)4257)], (ftnlen)5);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASWBR", (ftnlen)6);
 		return 0;
 	    }
 
@@ -3955,12 +4085,13 @@ L_daswbr:
 /*           buffer elements. */
 
 	    __state->next = __state->pooli[(i__1 = (__state->node << 1) + 10) 
-		    < 32 && 0 <= i__1 ? i__1 : s_rnge("pooli", i__1, "dasrwr_"
-		    , (ftnlen)4274)];
+		    < 32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "pooli", i__1, "dasrwr_", (ftnlen)4274)];
 	    if (__state->node == __state->headi) {
 		__state->headi = __state->next;
 	    }
-	    lnkfsl_(&__state->node, &__state->node, __state->pooli);
+	    lnkfsl_(__global_state, &__state->node, &__state->node, 
+		    __state->pooli);
 	    __state->node = __state->next;
 	    --__state->usedi;
 	} else {
@@ -3968,8 +4099,8 @@ L_daswbr:
 /*           Just get the next node. */
 
 	    __state->node = __state->pooli[(i__1 = (__state->node << 1) + 10) 
-		    < 32 && 0 <= i__1 ? i__1 : s_rnge("pooli", i__1, "dasrwr_"
-		    , (ftnlen)4289)];
+		    < 32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "pooli", i__1, "dasrwr_", (ftnlen)4289)];
 	}
     }
 
@@ -3978,20 +4109,21 @@ L_daswbr:
     __state->node = __state->headc;
     while(__state->node > 0) {
 	if (*handle == __state->hnbufc[(i__1 = __state->node - 1) < 10 && 0 <=
-		 i__1 ? i__1 : s_rnge("hnbufc", i__1, "dasrwr_", (ftnlen)4304)
-		]) {
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "hnbufc", i__1, 
+		"dasrwr_", (ftnlen)4304)]) {
 
 /*           This record belongs to the file of interest, so write the */
 /*           the record out. */
 
-	    dasioc_("WRITE", &__state->wrunit, &__state->rnbufc[(i__1 = 
-		    __state->node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rnbufc", i__1, "dasrwr_", (ftnlen)4309)], 
-		    __state->rcbufc + (((i__2 = __state->node - 1) < 10 && 0 
-		    <= i__2 ? i__2 : s_rnge("rcbufc", i__2, "dasrwr_", (
-		    ftnlen)4309)) << 10), (ftnlen)5, (ftnlen)1024);
-	    if (failed_()) {
-		chkout_("DASWBR", (ftnlen)6);
+	    dasioc_(__global_state, "WRITE", &__state->wrunit, &
+		    __state->rnbufc[(i__1 = __state->node - 1) < 10 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "rnbufc", i__1,
+		     "dasrwr_", (ftnlen)4309)], __state->rcbufc + (((i__2 = 
+		    __state->node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rcbufc", i__2, "dasrwr_", (ftnlen)
+		    4309)) << 10), (ftnlen)5, (ftnlen)1024);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASWBR", (ftnlen)6);
 		return 0;
 	    }
 
@@ -4002,12 +4134,13 @@ L_daswbr:
 /*           buffer elements. */
 
 	    __state->next = __state->poolc[(i__1 = (__state->node << 1) + 10) 
-		    < 32 && 0 <= i__1 ? i__1 : s_rnge("poolc", i__1, "dasrwr_"
-		    , (ftnlen)4326)];
+		    < 32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "poolc", i__1, "dasrwr_", (ftnlen)4326)];
 	    if (__state->node == __state->headc) {
 		__state->headc = __state->next;
 	    }
-	    lnkfsl_(&__state->node, &__state->node, __state->poolc);
+	    lnkfsl_(__global_state, &__state->node, &__state->node, 
+		    __state->poolc);
 	    __state->node = __state->next;
 	    --__state->usedc;
 	} else {
@@ -4015,95 +4148,98 @@ L_daswbr:
 /*           Just get the next node. */
 
 	    __state->node = __state->poolc[(i__1 = (__state->node << 1) + 10) 
-		    < 32 && 0 <= i__1 ? i__1 : s_rnge("poolc", i__1, "dasrwr_"
-		    , (ftnlen)4341)];
+		    < 32 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "poolc", i__1, "dasrwr_", (ftnlen)4341)];
 	}
     }
-    chkout_("DASWBR", (ftnlen)6);
+    chkout_(__global_state, "DASWBR", (ftnlen)6);
     return 0;
 } /* dasrwr_ */
 
-/* Subroutine */ int dasrwr_(integer *handle, integer *recno, char *recc, 
-	doublereal *recd, integer *reci, integer *first, integer *last, 
-	doublereal *datad, integer *datai, char *datac, ftnlen recc_len, 
-	ftnlen datac_len)
+/* Subroutine */ int dasrwr_(cspice_t* __global_state, integer *handle, 
+	integer *recno, char *recc, doublereal *recd, integer *reci, integer *
+	first, integer *last, doublereal *datad, integer *datai, char *datac, 
+	ftnlen recc_len, ftnlen datac_len)
 {
     return dasrwr_0_(0, handle, recno, recc, recd, reci, first, last, datad, 
 	    datai, datac, recc_len, datac_len);
     }
 
-/* Subroutine */ int dasrrd_(integer *handle, integer *recno, integer *first, 
-	integer *last, doublereal *datad)
+/* Subroutine */ int dasrrd_(cspice_t* __global_state, integer *handle, 
+	integer *recno, integer *first, integer *last, doublereal *datad)
 {
     return dasrwr_0_(1, handle, recno, (char *)0, (doublereal *)0, (integer *)
 	    0, first, last, datad, (integer *)0, (char *)0, (ftnint)0, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int dasrri_(integer *handle, integer *recno, integer *first, 
-	integer *last, integer *datai)
+/* Subroutine */ int dasrri_(cspice_t* __global_state, integer *handle, 
+	integer *recno, integer *first, integer *last, integer *datai)
 {
     return dasrwr_0_(2, handle, recno, (char *)0, (doublereal *)0, (integer *)
 	    0, first, last, (doublereal *)0, datai, (char *)0, (ftnint)0, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int dasrrc_(integer *handle, integer *recno, integer *first, 
-	integer *last, char *datac, ftnlen datac_len)
+/* Subroutine */ int dasrrc_(cspice_t* __global_state, integer *handle, 
+	integer *recno, integer *first, integer *last, char *datac, ftnlen 
+	datac_len)
 {
     return dasrwr_0_(3, handle, recno, (char *)0, (doublereal *)0, (integer *)
 	    0, first, last, (doublereal *)0, (integer *)0, datac, (ftnint)0, 
 	    datac_len);
     }
 
-/* Subroutine */ int daswrd_(integer *handle, integer *recno, doublereal *
-	recd)
+/* Subroutine */ int daswrd_(cspice_t* __global_state, integer *handle, 
+	integer *recno, doublereal *recd)
 {
     return dasrwr_0_(4, handle, recno, (char *)0, recd, (integer *)0, (
 	    integer *)0, (integer *)0, (doublereal *)0, (integer *)0, (char *)
 	    0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int daswri_(integer *handle, integer *recno, integer *reci)
+/* Subroutine */ int daswri_(cspice_t* __global_state, integer *handle, 
+	integer *recno, integer *reci)
 {
     return dasrwr_0_(5, handle, recno, (char *)0, (doublereal *)0, reci, (
 	    integer *)0, (integer *)0, (doublereal *)0, (integer *)0, (char *)
 	    0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int daswrc_(integer *handle, integer *recno, char *recc, 
-	ftnlen recc_len)
+/* Subroutine */ int daswrc_(cspice_t* __global_state, integer *handle, 
+	integer *recno, char *recc, ftnlen recc_len)
 {
     return dasrwr_0_(6, handle, recno, recc, (doublereal *)0, (integer *)0, (
 	    integer *)0, (integer *)0, (doublereal *)0, (integer *)0, (char *)
 	    0, recc_len, (ftnint)0);
     }
 
-/* Subroutine */ int dasurd_(integer *handle, integer *recno, integer *first, 
-	integer *last, doublereal *datad)
+/* Subroutine */ int dasurd_(cspice_t* __global_state, integer *handle, 
+	integer *recno, integer *first, integer *last, doublereal *datad)
 {
     return dasrwr_0_(7, handle, recno, (char *)0, (doublereal *)0, (integer *)
 	    0, first, last, datad, (integer *)0, (char *)0, (ftnint)0, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int dasuri_(integer *handle, integer *recno, integer *first, 
-	integer *last, integer *datai)
+/* Subroutine */ int dasuri_(cspice_t* __global_state, integer *handle, 
+	integer *recno, integer *first, integer *last, integer *datai)
 {
     return dasrwr_0_(8, handle, recno, (char *)0, (doublereal *)0, (integer *)
 	    0, first, last, (doublereal *)0, datai, (char *)0, (ftnint)0, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int dasurc_(integer *handle, integer *recno, integer *first, 
-	integer *last, char *datac, ftnlen datac_len)
+/* Subroutine */ int dasurc_(cspice_t* __global_state, integer *handle, 
+	integer *recno, integer *first, integer *last, char *datac, ftnlen 
+	datac_len)
 {
     return dasrwr_0_(9, handle, recno, (char *)0, (doublereal *)0, (integer *)
 	    0, first, last, (doublereal *)0, (integer *)0, datac, (ftnint)0, 
 	    datac_len);
     }
 
-/* Subroutine */ int daswbr_(integer *handle)
+/* Subroutine */ int daswbr_(cspice_t* __global_state, integer *handle)
 {
     return dasrwr_0_(10, handle, (integer *)0, (char *)0, (doublereal *)0, (
 	    integer *)0, (integer *)0, (integer *)0, (doublereal *)0, (

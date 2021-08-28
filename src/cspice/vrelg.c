@@ -8,26 +8,27 @@
 
 
 typedef int vrelg_state_t;
-static vrelg_state_t* get_vrelg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vrelg_state_t* get_vrelg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  VRELG ( Vector relative difference, general dimension ) */
-doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim)
+doublereal vrelg_(cspice_t* __global_state, doublereal *v1, doublereal *v2, 
+	integer *ndim)
 {
     /* System generated locals */
     doublereal ret_val, d__1, d__2;
 
     /* Local variables */
     doublereal denorm;
-    extern doublereal vdistg_(doublereal *, doublereal *, integer *);
-    extern doublereal vnormg_(doublereal *, integer *);
+    extern doublereal vdistg_(cspice_t*, doublereal *, doublereal *, integer *
+	    );
+    extern doublereal vnormg_(cspice_t*, doublereal *, integer *);
     doublereal nunorm;
 
 
     /* Module state */
-    vrelg_state_t* __state = get_vrelg_state();
+    vrelg_state_t* __state = get_vrelg_state(__global_state);
 /* $ Abstract */
 
 /*   Return the relative difference between two vectors of general */
@@ -246,12 +247,13 @@ doublereal vrelg_(doublereal *v1, doublereal *v2, integer *ndim)
 /*     This handles the case where both vectors are zero vectors since */
 /*     the distance between them will be zero. */
 
-    nunorm = vdistg_(v1, v2, ndim);
+    nunorm = vdistg_(__global_state, v1, v2, ndim);
     if (nunorm == 0.) {
 	ret_val = 0.;
     } else {
 /* Computing MAX */
-	d__1 = vnormg_(v1, ndim), d__2 = vnormg_(v2, ndim);
+	d__1 = vnormg_(__global_state, v1, ndim), d__2 = vnormg_(
+		__global_state, v2, ndim);
 	denorm = max(d__1,d__2);
 	ret_val = nunorm / denorm;
     }

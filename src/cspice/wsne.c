@@ -1,16 +1,14 @@
 #include "f2c.h"
 #include "fio.h"
 #include "lio.h"
-#include "__cspice_state.h"
 
  integer
 #ifdef KR_headers
-s_wsne(a) cilist *a;
+s_wsne(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-s_wsne(cilist *a)
+s_wsne(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 
 	if(n=c_le(a))

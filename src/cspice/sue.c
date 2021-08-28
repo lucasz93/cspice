@@ -3,12 +3,11 @@
 #include "__cspice_state.h"
 
 #ifdef KR_headers
-c_sue(a) cilist *a;
+c_sue(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-c_sue(cilist *a)
+c_sue(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	f2c->f__external=f2c->f__sequential=1;
 	f2c->f__formatted=0;
 	f2c->f__curunit = &f2c->f__units[a->ciunit];
@@ -23,16 +22,15 @@ c_sue(cilist *a)
 	return(0);
 }
 #ifdef KR_headers
-integer s_rsue(a) cilist *a;
+integer s_rsue(f2c, a) f2c_state_t *f2c; cilist *a;
 #else
-integer s_rsue(cilist *a)
+integer s_rsue(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 	if(!f2c->f__init) f_init();
 	f2c->f__reading=1;
-	if(n=c_sue(a)) return(n);
+	if(n=c_sue(f2c,a)) return(n);
 	f2c->f__recpos=0;
 	if(f2c->f__curunit->uwrt && f__nowreading(f2c->f__curunit))
 		err(a->cierr, errno, "read start");
@@ -48,15 +46,14 @@ integer s_rsue(cilist *a)
 	return(0);
 }
 #ifdef KR_headers
-integer s_wsue(a) cilist *a;
+integer s_wsue(f2c,a) f2c_state_t *f2c; cilist *a;
 #else
-integer s_wsue(cilist *a)
+integer s_wsue(f2c_state_t *f2c, cilist *a)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 	if(!f2c->f__init) f_init();
-	if(n=c_sue(a)) return(n);
+	if(n=c_sue(f2c, a)) return(n);
 	f2c->f__reading=0;
 	f2c->f__reclen=0;
 	if(f2c->f__curunit->uwrt != 1 && f__nowwriting(f2c->f__curunit))
@@ -65,9 +62,8 @@ integer s_wsue(cilist *a)
 	(void) fseek(f2c->f__cf,(long)sizeof(uiolen),SEEK_CUR);
 	return(0);
 }
-integer e_wsue(Void)
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	long loc;
+integer e_wsue(f2c_state_t *f2c)
+{	long loc;
 	fwrite((char *)&f2c->f__reclen,sizeof(uiolen),1,f2c->f__cf);
 #ifdef ALWAYS_FLUSH
 	if (fflush(f2c->f__cf))
@@ -79,9 +75,8 @@ integer e_wsue(Void)
 	fseek(f2c->f__cf,loc,SEEK_SET);
 	return(0);
 }
-integer e_rsue(Void)
+integer e_rsue(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	(void) fseek(f2c->f__cf,(long)(f2c->f__reclen-f2c->f__recpos+sizeof(uiolen)),SEEK_CUR);
 	return(0);
 }

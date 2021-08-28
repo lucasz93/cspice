@@ -8,26 +8,25 @@
 
 
 typedef int zzspksb1_state_t;
-static zzspksb1_state_t* get_zzspksb1_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzspksb1_state_t* get_zzspksb1_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZSPKSB1 ( S/P Kernel, solar system barycenter ) */
-/* Subroutine */ int zzspksb1_(integer *targ, doublereal *et, char *ref, 
-	doublereal *starg, ftnlen ref_len)
+/* Subroutine */ int zzspksb1_(cspice_t* __global_state, integer *targ, 
+	doublereal *et, char *ref, doublereal *starg, ftnlen ref_len)
 {
     integer bary;
-    extern /* Subroutine */ int zzspkgo1_(integer *, doublereal *, char *, 
-	    integer *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzspkgo1_(cspice_t*, integer *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal lt;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzspksb1_state_t* __state = get_zzspksb1_state();
+    zzspksb1_state_t* __state = get_zzspksb1_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -198,14 +197,14 @@ static zzspksb1_state_t* get_zzspksb1_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZSPKSB1", (ftnlen)8);
+	chkin_(__global_state, "ZZSPKSB1", (ftnlen)8);
     }
     bary = 0;
-    zzspkgo1_(targ, et, ref, &bary, starg, &lt, ref_len);
-    chkout_("ZZSPKSB1", (ftnlen)8);
+    zzspkgo1_(__global_state, targ, et, ref, &bary, starg, &lt, ref_len);
+    chkout_(__global_state, "ZZSPKSB1", (ftnlen)8);
     return 0;
 } /* zzspksb1_ */
 

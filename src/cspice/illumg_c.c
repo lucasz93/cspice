@@ -1173,7 +1173,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "illumg_c" );
+   chkin_c ( naif_state, "illumg_c" );
 
 
    /*

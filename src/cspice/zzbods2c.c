@@ -8,31 +8,31 @@
 
 
 typedef int zzbods2c_state_t;
-static zzbods2c_state_t* get_zzbods2c_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzbods2c_state_t* get_zzbods2c_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZBODS2C ( Body name to ID translation, with bypass ) */
-/* Subroutine */ int zzbods2c_(integer *usrctr, char *savnam, integer *savcde,
-	 logical *savfnd, char *name__, integer *code, logical *found, ftnlen 
-	savnam_len, ftnlen name_len)
+/* Subroutine */ int zzbods2c_(cspice_t* __global_state, integer *usrctr, 
+	char *savnam, integer *savcde, logical *savfnd, char *name__, integer 
+	*code, logical *found, ftnlen savnam_len, ftnlen name_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzbctrck_(integer *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzbctrck_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int bods2c_(cspice_t*, char *, integer *, logical 
+	    *, ftnlen);
     logical update;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzbods2c_state_t* __state = get_zzbods2c_state();
+    zzbods2c_state_t* __state = get_zzbods2c_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -345,19 +345,19 @@ static zzbods2c_state_t* get_zzbods2c_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Check/update ZZBODTRN state counter. */
 
-    zzbctrck_(usrctr, &update);
+    zzbctrck_(__global_state, usrctr, &update);
 
 /*     Check update flag, saved found flag, and saved name against the */
 /*     input. */
 
-    if (! update && *savfnd && s_cmp(savnam, name__, savnam_len, name_len) == 
-	    0) {
+    if (! update && *savfnd && s_cmp(&__global_state->f2c, savnam, name__, 
+	    savnam_len, name_len) == 0) {
 
 /*        No change in body-name mapping state, the saved name was */
 /*        successfully resolved earlier, and input and saved names are */
@@ -369,21 +369,21 @@ static zzbods2c_state_t* get_zzbods2c_state() {
 
 /*        Check in because BODS2C may fail. */
 
-	chkin_("ZZBODS2C", (ftnlen)8);
+	chkin_(__global_state, "ZZBODS2C", (ftnlen)8);
 
 /*        Body-name mapping state changed, or the saved name was never */
 /*        successfully resolved earlier, or input and saved names are */
 /*        different. Call BODS2C to look up ID and FOUND and reset saved */
 /*        values. */
 
-	bods2c_(name__, code, found, name_len);
-	s_copy(savnam, name__, savnam_len, name_len);
+	bods2c_(__global_state, name__, code, found, name_len);
+	s_copy(&__global_state->f2c, savnam, name__, savnam_len, name_len);
 	*savcde = *code;
 	*savfnd = *found;
 
 /*        Check out. */
 
-	chkout_("ZZBODS2C", (ftnlen)8);
+	chkout_(__global_state, "ZZBODS2C", (ftnlen)8);
     }
     return 0;
 } /* zzbods2c_ */

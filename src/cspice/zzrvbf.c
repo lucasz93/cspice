@@ -8,8 +8,7 @@
 
 
 extern zzrvbf_init_t __zzrvbf_init;
-static zzrvbf_state_t* get_zzrvbf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzrvbf_state_t* get_zzrvbf_state(cspice_t* state) {
 	if (!state->zzrvbf)
 		state->zzrvbf = __cspice_allocate_module(sizeof(
 	zzrvbf_state_t), &__zzrvbf_init, sizeof(__zzrvbf_init));
@@ -18,11 +17,11 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 }
 
 /* $Procedure ZZRVBF ( Private --- Pool, read the next buffer variable ) */
-/* Subroutine */ int zzrvbf_(char *buffer, integer *bsize, integer *linnum, 
-	integer *namlst, integer *nmpool, char *names, integer *datlst, 
-	integer *dppool, doublereal *dpvals, integer *chpool, char *chvals, 
-	char *varnam, logical *eof, ftnlen buffer_len, ftnlen names_len, 
-	ftnlen chvals_len, ftnlen varnam_len)
+/* Subroutine */ int zzrvbf_(cspice_t* __global_state, char *buffer, integer *
+	bsize, integer *linnum, integer *namlst, integer *nmpool, char *names,
+	 integer *datlst, integer *dppool, doublereal *dpvals, integer *
+	chpool, char *chvals, char *varnam, logical *eof, ftnlen buffer_len, 
+	ftnlen names_len, ftnlen chvals_len, ftnlen varnam_len)
 {
     /* Initialized data */
 
@@ -31,36 +30,40 @@ static zzrvbf_state_t* get_zzrvbf_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), i_len(char *, ftnlen), 
-	    s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), i_len(
+	    f2c_state_t*, char *, ftnlen), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int lnkan_(integer *, integer *);
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int zzcln_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int lnkila_(integer *, integer *, integer *);
-    extern integer lastpc_(char *, ftnlen);
-    extern integer lnknfn_(integer *);
-    extern integer zzhash_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *);
-    extern /* Subroutine */ int tparse_(char *, doublereal *, char *, ftnlen, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
+    extern /* Subroutine */ int lnkan_(cspice_t*, integer *, integer *);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzcln_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int lnkila_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer lastpc_(cspice_t*, char *, ftnlen);
+    extern integer lnknfn_(cspice_t*, integer *);
+    extern integer zzhash_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int lnkfsl_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int tparse_(cspice_t*, char *, doublereal *, char 
 	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int nparsd_(cspice_t*, char *, doublereal *, char 
+	    *, integer *, ftnlen, ftnlen);
 
 
     /* Module state */
-    zzrvbf_state_t* __state = get_zzrvbf_state();
+    zzrvbf_state_t* __state = get_zzrvbf_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -308,10 +311,10 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZRVBF", (ftnlen)6);
+	chkin_(__global_state, "ZZRVBF", (ftnlen)6);
     }
 
 /*     Initializations. */
@@ -331,8 +334,9 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 
 /*     No variable yet and no parsing errors so far. */
 
-    s_copy(__state->name__, " ", (ftnlen)132, (ftnlen)1);
-    s_copy(__state->error, " ", (ftnlen)256, (ftnlen)1);
+    s_copy(&__global_state->f2c, __state->name__, " ", (ftnlen)132, (ftnlen)1)
+	    ;
+    s_copy(&__global_state->f2c, __state->error, " ", (ftnlen)256, (ftnlen)1);
     __state->ncomp = 0;
 
 /*     Get the next data line. Unless something is terribly wrong, */
@@ -341,19 +345,21 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*     we can quit. */
 
     __state->status = 1;
-    while(__state->status != 2 && ! failed_()) {
-	s_copy(__state->line, " ", (ftnlen)132, (ftnlen)1);
+    while(__state->status != 2 && ! failed_(__global_state)) {
+	s_copy(&__global_state->f2c, __state->line, " ", (ftnlen)132, (ftnlen)
+		1);
 
 /*        We need to skip blank lines... */
 
-	while(s_cmp(__state->line, " ", (ftnlen)132, (ftnlen)1) == 0) {
+	while(s_cmp(&__global_state->f2c, __state->line, " ", (ftnlen)132, (
+		ftnlen)1) == 0) {
 	    *eof = *linnum > *bsize;
 	    if (*eof) {
-		chkout_("ZZRVBF", (ftnlen)6);
+		chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 		return 0;
 	    }
-	    s_copy(__state->line, buffer + (*linnum - 1) * buffer_len, (
-		    ftnlen)132, buffer_len);
+	    s_copy(&__global_state->f2c, __state->line, buffer + (*linnum - 1)
+		     * buffer_len, (ftnlen)132, buffer_len);
 	    ++(*linnum);
 	}
 
@@ -381,7 +387,8 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 	__state->insepf = TRUE_;
 	__state->count = 0;
 	__state->i__ = 0;
-	while(__state->i__ < i_len(__state->line, (ftnlen)132)) {
+	while(__state->i__ < i_len(&__global_state->f2c, __state->line, (
+		ftnlen)132)) {
 
 /*           The current character is either a separator, quote or */
 /*           some other character. */
@@ -415,14 +422,17 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 		    if (__state->code == __state->iequal) {
 			++__state->count;
 			__state->begs[(i__1 = __state->count - 1) < 132 && 0 
-				<= i__1 ? i__1 : s_rnge("begs", i__1, "zzrvb"
-				"f_", (ftnlen)544)] = __state->i__;
+				<= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"begs", i__1, "zzrvbf_", (ftnlen)544)] = 
+				__state->i__;
 			__state->type__[(i__1 = __state->count - 1) < 132 && 
-				0 <= i__1 ? i__1 : s_rnge("type", i__1, "zzr"
-				"vbf_", (ftnlen)545)] = 5;
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "type", i__1, "zzrvbf_", 
+				(ftnlen)545)] = 5;
 			__state->ends[(i__1 = __state->count - 1) < 132 && 0 
-				<= i__1 ? i__1 : s_rnge("ends", i__1, "zzrvb"
-				"f_", (ftnlen)546)] = __state->i__;
+				<= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"ends", i__1, "zzrvbf_", (ftnlen)546)] = 
+				__state->i__;
 			if (__state->i__ > 1) {
 
 /*                       Look back at the previous character. */
@@ -439,67 +449,79 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*                          the end of the last token. */
 
 				__state->type__[(i__1 = __state->count - 1) < 
-					132 && 0 <= i__1 ? i__1 : s_rnge(
-					"type", i__1, "zzrvbf_", (ftnlen)562)]
-					 = 6;
+					132 && 0 <= i__1 ? i__1 : s_rnge(&
+					__global_state->f2c, "type", i__1, 
+					"zzrvbf_", (ftnlen)562)] = 6;
 				__state->begs[(i__1 = __state->count - 1) < 
-					132 && 0 <= i__1 ? i__1 : s_rnge(
-					"begs", i__1, "zzrvbf_", (ftnlen)563)]
-					 = __state->i__ - 1;
+					132 && 0 <= i__1 ? i__1 : s_rnge(&
+					__global_state->f2c, "begs", i__1, 
+					"zzrvbf_", (ftnlen)563)] = 
+					__state->i__ - 1;
 				if (__state->begs[(i__1 = __state->count - 2) 
-					< 132 && 0 <= i__1 ? i__1 : s_rnge(
-					"begs", i__1, "zzrvbf_", (ftnlen)565)]
-					 == __state->ends[(i__2 = 
-					__state->count - 2) < 132 && 0 <= 
-					i__2 ? i__2 : s_rnge("ends", i__2, 
-					"zzrvbf_", (ftnlen)565)]) {
+					< 132 && 0 <= i__1 ? i__1 : s_rnge(&
+					__global_state->f2c, "begs", i__1, 
+					"zzrvbf_", (ftnlen)565)] == 
+					__state->ends[(i__2 = __state->count 
+					- 2) < 132 && 0 <= i__2 ? i__2 : 
+					s_rnge(&__global_state->f2c, "ends", 
+					i__2, "zzrvbf_", (ftnlen)565)]) {
 				    --__state->count;
 				    __state->begs[(i__1 = __state->count - 1) 
 					    < 132 && 0 <= i__1 ? i__1 : 
-					    s_rnge("begs", i__1, "zzrvbf_", (
-					    ftnlen)569)] = __state->i__ - 1;
+					    s_rnge(&__global_state->f2c, 
+					    "begs", i__1, "zzrvbf_", (ftnlen)
+					    569)] = __state->i__ - 1;
 				    __state->ends[(i__1 = __state->count - 1) 
 					    < 132 && 0 <= i__1 ? i__1 : 
-					    s_rnge("ends", i__1, "zzrvbf_", (
-					    ftnlen)570)] = __state->i__;
+					    s_rnge(&__global_state->f2c, 
+					    "ends", i__1, "zzrvbf_", (ftnlen)
+					    570)] = __state->i__;
 				    __state->type__[(i__1 = __state->count - 
 					    1) < 132 && 0 <= i__1 ? i__1 : 
-					    s_rnge("type", i__1, "zzrvbf_", (
-					    ftnlen)571)] = 6;
+					    s_rnge(&__global_state->f2c, 
+					    "type", i__1, "zzrvbf_", (ftnlen)
+					    571)] = 6;
 				} else {
 				    __state->ends[(i__1 = __state->count - 2) 
 					    < 132 && 0 <= i__1 ? i__1 : 
-					    s_rnge("ends", i__1, "zzrvbf_", (
-					    ftnlen)575)] = __state->ends[(
-					    i__2 = __state->count - 2) < 132 
-					    && 0 <= i__2 ? i__2 : s_rnge(
-					    "ends", i__2, "zzrvbf_", (ftnlen)
-					    575)] - 1;
+					    s_rnge(&__global_state->f2c, 
+					    "ends", i__1, "zzrvbf_", (ftnlen)
+					    575)] = __state->ends[(i__2 = 
+					    __state->count - 2) < 132 && 0 <= 
+					    i__2 ? i__2 : s_rnge(&
+					    __global_state->f2c, "ends", i__2,
+					     "zzrvbf_", (ftnlen)575)] - 1;
 				}
 			    }
 			}
 		    } else if (__state->code == __state->irparn) {
 			++__state->count;
 			__state->begs[(i__1 = __state->count - 1) < 132 && 0 
-				<= i__1 ? i__1 : s_rnge("begs", i__1, "zzrvb"
-				"f_", (ftnlen)586)] = __state->i__;
+				<= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"begs", i__1, "zzrvbf_", (ftnlen)586)] = 
+				__state->i__;
 			__state->ends[(i__1 = __state->count - 1) < 132 && 0 
-				<= i__1 ? i__1 : s_rnge("ends", i__1, "zzrvb"
-				"f_", (ftnlen)587)] = __state->i__;
+				<= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"ends", i__1, "zzrvbf_", (ftnlen)587)] = 
+				__state->i__;
 			__state->type__[(i__1 = __state->count - 1) < 132 && 
-				0 <= i__1 ? i__1 : s_rnge("type", i__1, "zzr"
-				"vbf_", (ftnlen)588)] = 4;
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "type", i__1, "zzrvbf_", 
+				(ftnlen)588)] = 4;
 		    } else if (__state->code == __state->ilparn) {
 			++__state->count;
 			__state->begs[(i__1 = __state->count - 1) < 132 && 0 
-				<= i__1 ? i__1 : s_rnge("begs", i__1, "zzrvb"
-				"f_", (ftnlen)593)] = __state->i__;
+				<= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"begs", i__1, "zzrvbf_", (ftnlen)593)] = 
+				__state->i__;
 			__state->ends[(i__1 = __state->count - 1) < 132 && 0 
-				<= i__1 ? i__1 : s_rnge("ends", i__1, "zzrvb"
-				"f_", (ftnlen)594)] = __state->i__;
+				<= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"ends", i__1, "zzrvbf_", (ftnlen)594)] = 
+				__state->i__;
 			__state->type__[(i__1 = __state->count - 1) < 132 && 
-				0 <= i__1 ? i__1 : s_rnge("type", i__1, "zzr"
-				"vbf_", (ftnlen)595)] = 3;
+				0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "type", i__1, "zzrvbf_", 
+				(ftnlen)595)] = 3;
 		    }
 		}
 	    } else if (__state->code == __state->iquote) {
@@ -518,15 +540,15 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 		    __state->inquot = TRUE_;
 		    ++__state->count;
 		    __state->begs[(i__1 = __state->count - 1) < 132 && 0 <= 
-			    i__1 ? i__1 : s_rnge("begs", i__1, "zzrvbf_", (
-			    ftnlen)618)] = __state->i__;
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "begs",
+			     i__1, "zzrvbf_", (ftnlen)618)] = __state->i__;
 		    __state->type__[(i__1 = __state->count - 1) < 132 && 0 <= 
-			    i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (
-			    ftnlen)619)] = 1;
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "type",
+			     i__1, "zzrvbf_", (ftnlen)619)] = 1;
 		}
 		__state->ends[(i__1 = __state->count - 1) < 132 && 0 <= i__1 ?
-			 i__1 : s_rnge("ends", i__1, "zzrvbf_", (ftnlen)623)] 
-			= __state->i__;
+			 i__1 : s_rnge(&__global_state->f2c, "ends", i__1, 
+			"zzrvbf_", (ftnlen)623)] = __state->i__;
 	    } else {
 
 /*              This is some character other than a quote, or */
@@ -550,15 +572,15 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 		    __state->intokn = TRUE_;
 		    ++__state->count;
 		    __state->begs[(i__1 = __state->count - 1) < 132 && 0 <= 
-			    i__1 ? i__1 : s_rnge("begs", i__1, "zzrvbf_", (
-			    ftnlen)648)] = __state->i__;
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "begs",
+			     i__1, "zzrvbf_", (ftnlen)648)] = __state->i__;
 		    __state->type__[(i__1 = __state->count - 1) < 132 && 0 <= 
-			    i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (
-			    ftnlen)649)] = 2;
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "type",
+			     i__1, "zzrvbf_", (ftnlen)649)] = 2;
 		}
 		__state->ends[(i__1 = __state->count - 1) < 132 && 0 <= i__1 ?
-			 i__1 : s_rnge("ends", i__1, "zzrvbf_", (ftnlen)652)] 
-			= __state->i__;
+			 i__1 : s_rnge(&__global_state->f2c, "ends", i__1, 
+			"zzrvbf_", (ftnlen)652)] = __state->i__;
 	    }
 	}
 
@@ -570,38 +592,41 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*           There must be at least 3 contributing tokens on this line. */
 
 	    if (__state->count < 3) {
-		setmsg_("A kernel variable was not properly formed on line #"
-			" text buffer.Such an assignment should have the form"
-			": '<variable name> [+]= <values>'. This line was '#'"
-			". ", (ftnlen)157);
-		__state->r2 = rtrim_(__state->line, (ftnlen)132);
-		errint_("#", linnum, (ftnlen)1);
-		errch_("#", __state->line, (ftnlen)1, __state->r2);
-		sigerr_("SPICE(BADVARASSIGN)", (ftnlen)19);
-		chkout_("ZZRVBF", (ftnlen)6);
+		setmsg_(__global_state, "A kernel variable was not properly "
+			"formed on line # text buffer.Such an assignment shou"
+			"ld have the form: '<variable name> [+]= <values>'. T"
+			"his line was '#'. ", (ftnlen)157);
+		__state->r2 = rtrim_(__global_state, __state->line, (ftnlen)
+			132);
+		errint_(__global_state, "#", linnum, (ftnlen)1);
+		errch_(__global_state, "#", __state->line, (ftnlen)1, 
+			__state->r2);
+		sigerr_(__global_state, "SPICE(BADVARASSIGN)", (ftnlen)19);
+		chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 		return 0;
 	    }
 
 /*           See if the variable name is legitimate: */
 
 	    i__1 = __state->begs[0] - 1;
-	    __state->badat = lastpc_(__state->line + i__1, __state->ends[0] - 
-		    i__1);
+	    __state->badat = lastpc_(__global_state, __state->line + i__1, 
+		    __state->ends[0] - i__1);
 	    if (__state->badat <= __state->ends[0] - __state->begs[0]) {
 
 /*              There is a non-printing character in the variable */
 /*              name.  This isn't allowed. */
 
 		__state->at = __state->begs[0] + __state->badat;
-		setmsg_("There is a non-printing character embedded in line "
-			"# of the text buffer.  Non-printing characters are n"
-			"ot allowed in kernel variable assignments.  The non-"
-			"printing character has ASCII code #. ", (ftnlen)192);
-		errint_("#", linnum, (ftnlen)1);
+		setmsg_(__global_state, "There is a non-printing character e"
+			"mbedded in line # of the text buffer.  Non-printing "
+			"characters are not allowed in kernel variable assign"
+			"ments.  The non-printing character has ASCII code #. "
+			, (ftnlen)192);
+		errint_(__global_state, "#", linnum, (ftnlen)1);
 		i__1 = *(unsigned char *)&__state->line[__state->at - 1];
-		errint_("#", &i__1, (ftnlen)1);
-		sigerr_("SPICE(NONPRINTINGCHAR)", (ftnlen)22);
-		chkout_("ZZRVBF", (ftnlen)6);
+		errint_(__global_state, "#", &i__1, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(NONPRINTINGCHAR)", (ftnlen)22);
+		chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 		return 0;
 	    }
 
@@ -609,27 +634,28 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*           if longer than MAXLEN. */
 
 	    i__1 = __state->begs[0] - 1;
-	    __state->varlen = i_len(__state->line + i__1, __state->ends[0] - 
-		    i__1);
+	    __state->varlen = i_len(&__global_state->f2c, __state->line + 
+		    i__1, __state->ends[0] - i__1);
 	    if (__state->varlen > 32) {
-		setmsg_("A kernel pool variable name in the input buffer exc"
-			"eeds the maximum allowed length #1. The actual lengt"
-			"h of the variable name is #2, the offending variable"
-			" name to #3 characters: '#4'.", (ftnlen)184);
-		errint_("#1", &__state->c__32, (ftnlen)2);
-		errint_("#2", &__state->varlen, (ftnlen)2);
-		errint_("#3", &__state->c__132, (ftnlen)2);
+		setmsg_(__global_state, "A kernel pool variable name in the "
+			"input buffer exceeds the maximum allowed length #1. "
+			"The actual length of the variable name is #2, the of"
+			"fending variable name to #3 characters: '#4'.", (
+			ftnlen)184);
+		errint_(__global_state, "#1", &__state->c__32, (ftnlen)2);
+		errint_(__global_state, "#2", &__state->varlen, (ftnlen)2);
+		errint_(__global_state, "#3", &__state->c__132, (ftnlen)2);
 		i__1 = __state->begs[0] - 1;
-		errch_("#4", __state->line + i__1, (ftnlen)2, __state->ends[0]
-			 - i__1);
-		sigerr_("SPICE(BADVARNAME)", (ftnlen)17);
+		errch_(__global_state, "#4", __state->line + i__1, (ftnlen)2, 
+			__state->ends[0] - i__1);
+		sigerr_(__global_state, "SPICE(BADVARNAME)", (ftnlen)17);
 	    }
 
 /*           The variable name is ok. How about the directive. */
 
 	    i__1 = __state->begs[0] - 1;
-	    s_copy(varnam, __state->line + i__1, varnam_len, __state->ends[0] 
-		    - i__1);
+	    s_copy(&__global_state->f2c, varnam, __state->line + i__1, 
+		    varnam_len, __state->ends[0] - i__1);
 	    __state->dirctv = __state->type__[1];
 
 /*           If this is replacement (=) and not an addition (+=), */
@@ -637,17 +663,19 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*           They will be replaced later. */
 
 	    if (__state->dirctv != 5 && __state->dirctv != 6) {
-		setmsg_("A kernel variable was not properly formed on line #"
-			" of the text buffer. Such an assignment should have "
-			"the form: '<variable name> [+]= <values>'.  More spe"
-			"cifically, the assignment operator did not have one "
-			"of the expected forms: '=' or '+='. The line was '#'"
-			". ", (ftnlen)261);
-		__state->r2 = rtrim_(__state->line, (ftnlen)132);
-		errint_("#", linnum, (ftnlen)1);
-		errch_("#", __state->line, (ftnlen)1, __state->r2);
-		sigerr_("SPICE(BADVARASSIGN)", (ftnlen)19);
-		chkout_("ZZRVBF", (ftnlen)6);
+		setmsg_(__global_state, "A kernel variable was not properly "
+			"formed on line # of the text buffer. Such an assignm"
+			"ent should have the form: '<variable name> [+]= <val"
+			"ues>'.  More specifically, the assignment operator d"
+			"id not have one of the expected forms: '=' or '+='. "
+			"The line was '#'. ", (ftnlen)261);
+		__state->r2 = rtrim_(__global_state, __state->line, (ftnlen)
+			132);
+		errint_(__global_state, "#", linnum, (ftnlen)1);
+		errch_(__global_state, "#", __state->line, (ftnlen)1, 
+			__state->r2);
+		sigerr_(__global_state, "SPICE(BADVARASSIGN)", (ftnlen)19);
+		chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 		return 0;
 	    }
 
@@ -656,9 +684,9 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*           we will use the variable FOUND to indicate whether or */
 /*           not it was already present. */
 
-	    __state->lookat = zzhash_(varnam, varnam_len);
+	    __state->lookat = zzhash_(__global_state, varnam, varnam_len);
 	    __state->node = namlst[__state->lookat - 1];
-	    __state->full = lnknfn_(nmpool) <= 0;
+	    __state->full = lnknfn_(__global_state, nmpool) <= 0;
 	    __state->found = FALSE_;
 
 /*           See if this name (or one colliding with it in the */
@@ -668,8 +696,9 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 		__state->head = __state->node;
 		__state->tail = -nmpool[(__state->head << 1) + 11];
 		while(__state->node > 0 && ! __state->found) {
-		    __state->found = s_cmp(names + (__state->node - 1) * 
-			    names_len, varnam, names_len, varnam_len) == 0;
+		    __state->found = s_cmp(&__global_state->f2c, names + (
+			    __state->node - 1) * names_len, varnam, names_len,
+			     varnam_len) == 0;
 		    __state->nameat = __state->node;
 		    __state->node = nmpool[(__state->node << 1) + 10];
 		}
@@ -678,10 +707,11 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*                 We didn't find this name on the conflict resolution */
 /*                 list. Allocate a new slot for it. */
 
-		    lnkan_(nmpool, &__state->node);
-		    lnkila_(&__state->tail, &__state->node, nmpool);
-		    s_copy(names + (__state->node - 1) * names_len, varnam, 
-			    names_len, varnam_len);
+		    lnkan_(__global_state, nmpool, &__state->node);
+		    lnkila_(__global_state, &__state->tail, &__state->node, 
+			    nmpool);
+		    s_copy(&__global_state->f2c, names + (__state->node - 1) *
+			     names_len, varnam, names_len, varnam_len);
 		    __state->nameat = __state->node;
 		}
 	    } else if (! __state->full) {
@@ -690,10 +720,10 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*              has been loaded so far.  We need to allocate */
 /*              a name slot for this variable. */
 
-		lnkan_(nmpool, &__state->node);
+		lnkan_(__global_state, nmpool, &__state->node);
 		namlst[__state->lookat - 1] = __state->node;
-		s_copy(names + (__state->node - 1) * names_len, varnam, 
-			names_len, varnam_len);
+		s_copy(&__global_state->f2c, names + (__state->node - 1) * 
+			names_len, varnam, names_len, varnam_len);
 		__state->nameat = __state->node;
 	    }
 
@@ -701,12 +731,12 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*           we've got an error. Diagnose it and return. */
 
 	    if (__state->full && ! __state->found) {
-		setmsg_("The kernel pool does not have room for any more var"
-			"iables.  It filled up at line # of the text buffer. ",
-			 (ftnlen)103);
-		errint_("#", linnum, (ftnlen)1);
-		sigerr_("SPICE(KERNELPOOLFULL)", (ftnlen)21);
-		chkout_("ZZRVBF", (ftnlen)6);
+		setmsg_(__global_state, "The kernel pool does not have room "
+			"for any more variables.  It filled up at line # of t"
+			"he text buffer. ", (ftnlen)103);
+		errint_(__global_state, "#", linnum, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(KERNELPOOLFULL)", (ftnlen)21);
+		chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 		return 0;
 	    }
 
@@ -736,7 +766,8 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 
 			__state->head = -__state->datahd;
 			__state->tail = -chpool[(__state->head << 1) + 11];
-			lnkfsl_(&__state->head, &__state->tail, chpool);
+			lnkfsl_(__global_state, &__state->head, &
+				__state->tail, chpool);
 		    } else {
 
 /*                    This variable was numeric type. We need to */
@@ -744,7 +775,8 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 
 			__state->head = __state->datahd;
 			__state->tail = -dppool[(__state->head << 1) + 11];
-			lnkfsl_(&__state->head, &__state->tail, dppool);
+			lnkfsl_(__global_state, &__state->head, &
+				__state->tail, dppool);
 		    }
 		}
 	    } else if (__state->dirctv == 6) {
@@ -776,8 +808,8 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 		__state->nxttok = 3;
 		++__state->count;
 		__state->type__[(i__1 = __state->count - 1) < 132 && 0 <= 
-			i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (ftnlen)
-			921)] = 4;
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "type", 
+			i__1, "zzrvbf_", (ftnlen)921)] = 4;
 	    }
 
 /*        For subsequent lines, treat everything as a new value. */
@@ -794,17 +826,17 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*        Dates begin with @; anything else is presumed to be a number. */
 
 	while(__state->type__[(i__1 = __state->nxttok - 1) < 132 && 0 <= i__1 
-		? i__1 : s_rnge("type", i__1, "zzrvbf_", (ftnlen)941)] != 4 &&
-		 __state->nxttok <= __state->count) {
+		? i__1 : s_rnge(&__global_state->f2c, "type", i__1, "zzrvbf_",
+		 (ftnlen)941)] != 4 && __state->nxttok <= __state->count) {
 
 /*           Get the begin and end of this token. */
 
 	    __state->b = __state->begs[(i__1 = __state->nxttok - 1) < 132 && 
-		    0 <= i__1 ? i__1 : s_rnge("begs", i__1, "zzrvbf_", (
-		    ftnlen)945)];
+		    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "begs", 
+		    i__1, "zzrvbf_", (ftnlen)945)];
 	    __state->e = __state->ends[(i__1 = __state->nxttok - 1) < 132 && 
-		    0 <= i__1 ? i__1 : s_rnge("ends", i__1, "zzrvbf_", (
-		    ftnlen)946)];
+		    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ends", 
+		    i__1, "zzrvbf_", (ftnlen)946)];
 	    if (__state->vartyp == 3) {
 
 /*              We need to determine which category of variable we */
@@ -812,12 +844,12 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*              type. */
 
 		if (__state->type__[(i__1 = __state->nxttok - 1) < 132 && 0 <=
-			 i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (
-			ftnlen)954)] == 1) {
+			 i__1 ? i__1 : s_rnge(&__global_state->f2c, "type", 
+			i__1, "zzrvbf_", (ftnlen)954)] == 1) {
 		    __state->vartyp = 1;
 		} else if (__state->type__[(i__1 = __state->nxttok - 1) < 132 
-			&& 0 <= i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", 
-			(ftnlen)958)] == 2) {
+			&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"type", i__1, "zzrvbf_", (ftnlen)958)] == 2) {
 		    __state->vartyp = 2;
 		} else {
 
@@ -826,16 +858,17 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 
 /*                 First perform the clean up function. */
 
-		    zzcln_(&__state->lookat, &__state->nameat, namlst, datlst,
-			     nmpool, chpool, dppool);
-		    setmsg_("The first item following the assignment operato"
-			    "r should be the value of a variable or a left pa"
-			    "renthesis '(' followed by a value for a variable"
-			    ". This is not true on line # of the text buffer. "
-			    , (ftnlen)192);
-		    errint_("#", linnum, (ftnlen)1);
-		    sigerr_("SPICE(BADVARASSIGN)", (ftnlen)19);
-		    chkout_("ZZRVBF", (ftnlen)6);
+		    zzcln_(__global_state, &__state->lookat, &__state->nameat,
+			     namlst, datlst, nmpool, chpool, dppool);
+		    setmsg_(__global_state, "The first item following the as"
+			    "signment operator should be the value of a varia"
+			    "ble or a left parenthesis '(' followed by a valu"
+			    "e for a variable. This is not true on line # of "
+			    "the text buffer. ", (ftnlen)192);
+		    errint_(__global_state, "#", linnum, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADVARASSIGN)", (ftnlen)19)
+			    ;
+		    chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 		    return 0;
 		}
 	    }
@@ -844,23 +877,25 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*              First make sure that this token represents a string. */
 
 		if (__state->type__[(i__1 = __state->nxttok - 1) < 132 && 0 <=
-			 i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (
-			ftnlen)996)] != 1) {
+			 i__1 ? i__1 : s_rnge(&__global_state->f2c, "type", 
+			i__1, "zzrvbf_", (ftnlen)996)] != 1) {
 
 /*                 First perform the clean up function. */
 
-		    zzcln_(&__state->lookat, &__state->nameat, namlst, datlst,
-			     nmpool, chpool, dppool);
-		    __state->r1 = rtrim_(varnam, varnam_len);
-		    setmsg_("The kernel variable # has been set up as a stri"
-			    "ng variable.  However, the value that you are at"
-			    "tempting to assign to this variable on line # of"
-			    " the text buffer is not a string value. ", (
-			    ftnlen)183);
-		    errch_("#", varnam, (ftnlen)1, __state->r1);
-		    errint_("#", linnum, (ftnlen)1);
-		    sigerr_("SPICE(TYPEMISMATCH)", (ftnlen)19);
-		    chkout_("ZZRVBF", (ftnlen)6);
+		    zzcln_(__global_state, &__state->lookat, &__state->nameat,
+			     namlst, datlst, nmpool, chpool, dppool);
+		    __state->r1 = rtrim_(__global_state, varnam, varnam_len);
+		    setmsg_(__global_state, "The kernel variable # has been "
+			    "set up as a string variable.  However, the value"
+			    " that you are attempting to assign to this varia"
+			    "ble on line # of the text buffer is not a string"
+			    " value. ", (ftnlen)183);
+		    errch_(__global_state, "#", varnam, (ftnlen)1, 
+			    __state->r1);
+		    errint_(__global_state, "#", linnum, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(TYPEMISMATCH)", (ftnlen)19)
+			    ;
+		    chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 		    return 0;
 		}
 
@@ -871,34 +906,37 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 
 /*                 First perform the clean up function. */
 
-		    zzcln_(&__state->lookat, &__state->nameat, namlst, datlst,
-			     nmpool, chpool, dppool);
-		    setmsg_("There is a quoted string with no characters on "
-			    "line # of the text buffer. ", (ftnlen)74);
-		    errint_("#", linnum, (ftnlen)1);
-		    sigerr_("SPICE(TYPEMISMATCH)", (ftnlen)19);
-		    chkout_("ZZRVBF", (ftnlen)6);
+		    zzcln_(__global_state, &__state->lookat, &__state->nameat,
+			     namlst, datlst, nmpool, chpool, dppool);
+		    setmsg_(__global_state, "There is a quoted string with n"
+			    "o characters on line # of the text buffer. ", (
+			    ftnlen)74);
+		    errint_(__global_state, "#", linnum, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(TYPEMISMATCH)", (ftnlen)19)
+			    ;
+		    chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 		    return 0;
 		}
 
 /*              We are ready to go.  Allocate a node for this data */
 /*              item. First make sure there is room to do so. */
 
-		__state->free = lnknfn_(chpool);
+		__state->free = lnknfn_(__global_state, chpool);
 		if (__state->free <= 0) {
-		    setmsg_("There is no room available for adding another c"
-			    "haracter value to the kernel pool.  The characte"
-			    "r values buffer became full at line # of the tex"
-			    "t buffer. ", (ftnlen)153);
-		    errint_("#", linnum, (ftnlen)1);
-		    sigerr_("SPICE(KERNELPOOLFULL)", (ftnlen)21);
-		    chkout_("ZZRVBF", (ftnlen)6);
+		    setmsg_(__global_state, "There is no room available for "
+			    "adding another character value to the kernel poo"
+			    "l.  The character values buffer became full at l"
+			    "ine # of the text buffer. ", (ftnlen)153);
+		    errint_(__global_state, "#", linnum, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(KERNELPOOLFULL)", (ftnlen)
+			    21);
+		    chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 		    return 0;
 		}
 
 /*              Allocate a node for storing this string value: */
 
-		lnkan_(chpool, &__state->chnode);
+		lnkan_(__global_state, chpool, &__state->chnode);
 		if (datlst[__state->nameat - 1] == 0) {
 
 /*                 There was no data for this name yet.  We make */
@@ -911,15 +949,16 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 
 		    __state->head = -datlst[__state->nameat - 1];
 		    __state->tail = -chpool[(__state->head << 1) + 11];
-		    lnkila_(&__state->tail, &__state->chnode, chpool);
+		    lnkila_(__global_state, &__state->tail, &__state->chnode, 
+			    chpool);
 		}
 
 /*              Finally insert this data item in the data buffer */
 /*              at CHNODE.  Note any quotes will be doubled so we */
 /*              have to undo this affect when we store the data. */
 
-		s_copy(chvals + (__state->chnode - 1) * chvals_len, " ", 
-			chvals_len, (ftnlen)1);
+		s_copy(&__global_state->f2c, chvals + (__state->chnode - 1) * 
+			chvals_len, " ", chvals_len, (ftnlen)1);
 		++__state->ncomp;
 		__state->i__ = 1;
 		__state->j = __state->b + 1;
@@ -941,23 +980,25 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 
 	    } else {
 		if (__state->type__[(i__1 = __state->nxttok - 1) < 132 && 0 <=
-			 i__1 ? i__1 : s_rnge("type", i__1, "zzrvbf_", (
-			ftnlen)1117)] != 2) {
+			 i__1 ? i__1 : s_rnge(&__global_state->f2c, "type", 
+			i__1, "zzrvbf_", (ftnlen)1117)] != 2) {
 
 /*                 First perform the clean up function. */
 
-		    zzcln_(&__state->lookat, &__state->nameat, namlst, datlst,
-			     nmpool, chpool, dppool);
-		    __state->r1 = rtrim_(varnam, varnam_len);
-		    setmsg_("The kernel variable # has been set up as a nume"
-			    "ric or time variable.  However, the value that y"
-			    "ou are attempting to assign to this variable on "
-			    "line # of the kernel buffer is not a numeric or "
-			    "time value. ", (ftnlen)203);
-		    errch_("#", varnam, (ftnlen)1, __state->r1);
-		    errint_("#", linnum, (ftnlen)1);
-		    sigerr_("SPICE(TYPEMISMATCH)", (ftnlen)19);
-		    chkout_("ZZRVBF", (ftnlen)6);
+		    zzcln_(__global_state, &__state->lookat, &__state->nameat,
+			     namlst, datlst, nmpool, chpool, dppool);
+		    __state->r1 = rtrim_(__global_state, varnam, varnam_len);
+		    setmsg_(__global_state, "The kernel variable # has been "
+			    "set up as a numeric or time variable.  However, "
+			    "the value that you are attempting to assign to t"
+			    "his variable on line # of the kernel buffer is n"
+			    "ot a numeric or time value. ", (ftnlen)203);
+		    errch_(__global_state, "#", varnam, (ftnlen)1, 
+			    __state->r1);
+		    errint_(__global_state, "#", linnum, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(TYPEMISMATCH)", (ftnlen)19)
+			    ;
+		    chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 		    return 0;
 		}
 
@@ -974,59 +1015,70 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 
 /*                    First perform the clean up function. */
 
-			zzcln_(&__state->lookat, &__state->nameat, namlst, 
-				datlst, nmpool, chpool, dppool);
-			__state->r1 = rtrim_(varnam, varnam_len);
-			setmsg_("At character # of  line # in the text buffe"
-				"r the character '@' appears.  This character"
-				" is reserved for identifying time values in "
-				"assignments to kernel pool variables.  Howev"
-				"er it is not being used in this fashion for "
-				"the variable '#'. ", (ftnlen)237);
-			errint_("#", &__state->b, (ftnlen)1);
-			errint_("#", linnum, (ftnlen)1);
-			errch_("#", varnam, (ftnlen)1, __state->r1);
-			sigerr_("SPICE(BADTIMESPEC)", (ftnlen)18);
-			chkout_("ZZRVBF", (ftnlen)6);
+			zzcln_(__global_state, &__state->lookat, &
+				__state->nameat, namlst, datlst, nmpool, 
+				chpool, dppool);
+			__state->r1 = rtrim_(__global_state, varnam, 
+				varnam_len);
+			setmsg_(__global_state, "At character # of  line # i"
+				"n the text buffer the character '@' appears."
+				"  This character is reserved for identifying"
+				" time values in assignments to kernel pool v"
+				"ariables.  However it is not being used in t"
+				"his fashion for the variable '#'. ", (ftnlen)
+				237);
+			errint_(__global_state, "#", &__state->b, (ftnlen)1);
+			errint_(__global_state, "#", linnum, (ftnlen)1);
+			errch_(__global_state, "#", varnam, (ftnlen)1, 
+				__state->r1);
+			sigerr_(__global_state, "SPICE(BADTIMESPEC)", (ftnlen)
+				18);
+			chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 			return 0;
 		    }
 		    i__1 = __state->b;
-		    tparse_(__state->line + i__1, &__state->dvalue, 
-			    __state->error, __state->e - i__1, (ftnlen)256);
-		    if (s_cmp(__state->error, " ", (ftnlen)256, (ftnlen)1) != 
-			    0) {
+		    tparse_(__global_state, __state->line + i__1, &
+			    __state->dvalue, __state->error, __state->e - 
+			    i__1, (ftnlen)256);
+		    if (s_cmp(&__global_state->f2c, __state->error, " ", (
+			    ftnlen)256, (ftnlen)1) != 0) {
 
 /*                    First perform the clean up function. */
 
-			zzcln_(&__state->lookat, &__state->nameat, namlst, 
-				datlst, nmpool, chpool, dppool);
-			setmsg_("Encountered '#' while attempting to parse a"
-				" time on line # of the text buffer. ", (
-				ftnlen)79);
+			zzcln_(__global_state, &__state->lookat, &
+				__state->nameat, namlst, datlst, nmpool, 
+				chpool, dppool);
+			setmsg_(__global_state, "Encountered '#' while attem"
+				"pting to parse a time on line # of the text "
+				"buffer. ", (ftnlen)79);
 			i__1 = __state->b;
-			errch_("#", __state->line + i__1, (ftnlen)1, 
-				__state->e - i__1);
-			errint_("#", linnum, (ftnlen)1);
-			sigerr_("SPICE(BADTIMESPEC)", (ftnlen)18);
-			chkout_("ZZRVBF", (ftnlen)6);
+			errch_(__global_state, "#", __state->line + i__1, (
+				ftnlen)1, __state->e - i__1);
+			errint_(__global_state, "#", linnum, (ftnlen)1);
+			sigerr_(__global_state, "SPICE(BADTIMESPEC)", (ftnlen)
+				18);
+			chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 			return 0;
 		    }
 		} else {
-		    nparsd_(__state->line + (__state->b - 1), &
-			    __state->dvalue, __state->error, &__state->i__, 
+		    nparsd_(__global_state, __state->line + (__state->b - 1), 
+			    &__state->dvalue, __state->error, &__state->i__, 
 			    __state->e - (__state->b - 1), (ftnlen)256);
-		    if (s_cmp(__state->error, " ", (ftnlen)256, (ftnlen)1) != 
-			    0) {
-			zzcln_(&__state->lookat, &__state->nameat, namlst, 
-				datlst, nmpool, chpool, dppool);
-			setmsg_("Encountered '#' while attempting to parse a"
-				" number on line # of the text buffer", (
-				ftnlen)79);
-			errch_("#", __state->line + (__state->b - 1), (ftnlen)
-				1, __state->e - (__state->b - 1));
-			errint_("#", linnum, (ftnlen)1);
-			sigerr_("SPICE(NUMBEREXPECTED)", (ftnlen)21);
-			chkout_("ZZRVBF", (ftnlen)6);
+		    if (s_cmp(&__global_state->f2c, __state->error, " ", (
+			    ftnlen)256, (ftnlen)1) != 0) {
+			zzcln_(__global_state, &__state->lookat, &
+				__state->nameat, namlst, datlst, nmpool, 
+				chpool, dppool);
+			setmsg_(__global_state, "Encountered '#' while attem"
+				"pting to parse a number on line # of the tex"
+				"t buffer", (ftnlen)79);
+			errch_(__global_state, "#", __state->line + (
+				__state->b - 1), (ftnlen)1, __state->e - (
+				__state->b - 1));
+			errint_(__global_state, "#", linnum, (ftnlen)1);
+			sigerr_(__global_state, "SPICE(NUMBEREXPECTED)", (
+				ftnlen)21);
+			chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 			return 0;
 		    }
 		}
@@ -1034,21 +1086,22 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*              OK. We have a parsed value.  See if there is room in */
 /*              the numeric portion of the pool to store this value. */
 
-		__state->free = lnknfn_(dppool);
+		__state->free = lnknfn_(__global_state, dppool);
 		if (__state->free <= 0) {
-		    setmsg_("There is no room available for adding another n"
-			    "umeric value to the kernel pool.  The numeric va"
-			    "lues buffer became full at line # of the text bu"
-			    "ffer.", (ftnlen)148);
-		    errint_("#", linnum, (ftnlen)1);
-		    sigerr_("SPICE(KERNELPOOLFULL)", (ftnlen)21);
-		    chkout_("ZZRVBF", (ftnlen)6);
+		    setmsg_(__global_state, "There is no room available for "
+			    "adding another numeric value to the kernel pool."
+			    "  The numeric values buffer became full at line "
+			    "# of the text buffer.", (ftnlen)148);
+		    errint_(__global_state, "#", linnum, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(KERNELPOOLFULL)", (ftnlen)
+			    21);
+		    chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 		    return 0;
 		}
 
 /*              Allocate a node for storing this numeric value: */
 
-		lnkan_(dppool, &__state->dpnode);
+		lnkan_(__global_state, dppool, &__state->dpnode);
 		if (datlst[__state->nameat - 1] == 0) {
 
 /*                 There was no data for this name yet.  We make */
@@ -1061,7 +1114,8 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 
 		    __state->head = datlst[__state->nameat - 1];
 		    __state->tail = -dppool[(__state->head << 1) + 11];
-		    lnkila_(&__state->tail, &__state->dpnode, dppool);
+		    lnkila_(__global_state, &__state->tail, &__state->dpnode, 
+			    dppool);
 		}
 
 /*              Finally insert this data item into the numeric buffer. */
@@ -1093,23 +1147,24 @@ static zzrvbf_state_t* get_zzrvbf_state() {
 /*     happen if there is a vector input of the form NAME = ( ) */
 
     if (__state->ncomp < 1) {
-	zzcln_(&__state->lookat, &__state->nameat, namlst, datlst, nmpool, 
-		chpool, dppool);
-	setmsg_("The first item following the assignment operator should be "
-		"the value of a variable or a left parenthesis '(' followed b"
-		"y a value for a variable. This is not true on line # of the "
-		"text buffer. ", (ftnlen)192);
+	zzcln_(__global_state, &__state->lookat, &__state->nameat, namlst, 
+		datlst, nmpool, chpool, dppool);
+	setmsg_(__global_state, "The first item following the assignment ope"
+		"rator should be the value of a variable or a left parenthesi"
+		"s '(' followed by a value for a variable. This is not true o"
+		"n line # of the text buffer. ", (ftnlen)192);
 	i__1 = *linnum - 1;
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(BADVARASSIGN)", (ftnlen)19);
-	chkout_("ZZRVBF", (ftnlen)6);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADVARASSIGN)", (ftnlen)19);
+	chkout_(__global_state, "ZZRVBF", (ftnlen)6);
 	return 0;
     }
 
 /*     Return the name of the variable. */
 
-    s_copy(__state->name__, varnam, (ftnlen)132, varnam_len);
-    chkout_("ZZRVBF", (ftnlen)6);
+    s_copy(&__global_state->f2c, __state->name__, varnam, (ftnlen)132, 
+	    varnam_len);
+    chkout_(__global_state, "ZZRVBF", (ftnlen)6);
     return 0;
 } /* zzrvbf_ */
 

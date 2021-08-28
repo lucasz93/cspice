@@ -8,20 +8,19 @@
 
 
 typedef int touchi_state_t;
-static touchi_state_t* get_touchi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline touchi_state_t* get_touchi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      TOUCHI ( Touch a variable ) */
-integer touchi_(integer *int__)
+integer touchi_(cspice_t* __global_state, integer *int__)
 {
     /* System generated locals */
     integer ret_val;
 
 
     /* Module state */
-    touchi_state_t* __state = get_touchi_state();
+    touchi_state_t* __state = get_touchi_state(__global_state);
 /* $ Abstract */
 
 /*     Return the value of the input integer */

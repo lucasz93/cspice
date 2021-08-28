@@ -8,18 +8,19 @@
 
 
 typedef int replwd_state_t;
-static replwd_state_t* get_replwd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline replwd_state_t* get_replwd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      REPLWD ( Replace a word ) */
-/* Subroutine */ int replwd_(char *instr, integer *nth, char *new__, char *
-	outstr, ftnlen instr_len, ftnlen new_len, ftnlen outstr_len)
+/* Subroutine */ int replwd_(cspice_t* __global_state, char *instr, integer *
+	nth, char *new__, char *outstr, ftnlen instr_len, ftnlen new_len, 
+	ftnlen outstr_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), i_len(char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), i_len(
+	    f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer f;
@@ -30,17 +31,17 @@ static replwd_state_t* get_replwd_state() {
     integer n;
     integer begin;
     integer shift;
-    extern /* Subroutine */ int nthwd_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int nthwd_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
     char short__[2];
-    extern /* Subroutine */ int fndnwd_(char *, integer *, integer *, integer 
-	    *, ftnlen);
-    extern integer lastnb_(char *, ftnlen);
-    extern integer frstnb_(char *, ftnlen);
+    extern /* Subroutine */ int fndnwd_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    replwd_state_t* __state = get_replwd_state();
+    replwd_state_t* __state = get_replwd_state(__global_state);
 /* $ Abstract */
 
 /*      Replace the Nth word in a string with a new word. */
@@ -225,26 +226,27 @@ static replwd_state_t* get_replwd_state() {
 /*     word is longer than the old one.  When its shorter we'll */
 /*     need to change this scheme slightly.) */
 
-    s_copy(outstr, instr, outstr_len, instr_len);
+    s_copy(&__global_state->f2c, outstr, instr, outstr_len, instr_len);
 
 /*     Where does the word to be replaced begin? If there is none, */
 /*     just return the original string. */
 
-    nthwd_(outstr, nth, short__, &begin, outstr_len, (ftnlen)2);
+    nthwd_(__global_state, outstr, nth, short__, &begin, outstr_len, (ftnlen)
+	    2);
     if (begin == 0) {
 	return 0;
     }
 
 /*     Otherwise, find out where it ends as well. */
 
-    fndnwd_(instr, &begin, &i__, &j, instr_len);
+    fndnwd_(__global_state, instr, &begin, &i__, &j, instr_len);
 
 /*     Now insert only the non-blank part of the replacement string. */
 /*     If the replacement string is blank, don't insert anything. */
 
-    if (s_cmp(new__, " ", new_len, (ftnlen)1) != 0) {
-	f = frstnb_(new__, new_len);
-	l = lastnb_(new__, new_len);
+    if (s_cmp(&__global_state->f2c, new__, " ", new_len, (ftnlen)1) != 0) {
+	f = frstnb_(__global_state, new__, new_len);
+	l = lastnb_(__global_state, new__, new_len);
 
 /*        Except in the lucky case that the word to insert is the */
 /*        same length as the word it's replacing, we will have */
@@ -263,7 +265,7 @@ static replwd_state_t* get_replwd_state() {
 /*        of the string and copy the character SHIFT spaces to the */
 /*        left. */
 
-	k = i_len(outstr, outstr_len);
+	k = i_len(&__global_state->f2c, outstr, outstr_len);
 	n = k - shift;
 	while(n > j) {
 	    *(unsigned char *)&outstr[k - 1] = *(unsigned char *)&outstr[n - 
@@ -276,7 +278,8 @@ static replwd_state_t* get_replwd_state() {
 /*        of the way, replace the opened space with the new */
 /*        word. */
 
-	while(f <= l && i__ <= i_len(outstr, outstr_len)) {
+	while(f <= l && i__ <= i_len(&__global_state->f2c, outstr, outstr_len)
+		) {
 	    *(unsigned char *)&outstr[i__ - 1] = *(unsigned char *)&new__[f - 
 		    1];
 	    ++f;
@@ -287,7 +290,8 @@ static replwd_state_t* get_replwd_state() {
 /*        We have a left shift. Fill in the first part of the word */
 /*        we are replacing with the new one. */
 
-	while(f <= l && i__ <= i_len(outstr, outstr_len)) {
+	while(f <= l && i__ <= i_len(&__global_state->f2c, outstr, outstr_len)
+		) {
 	    *(unsigned char *)&outstr[i__ - 1] = *(unsigned char *)&new__[f - 
 		    1];
 	    ++f;
@@ -299,8 +303,8 @@ static replwd_state_t* get_replwd_state() {
 
 	if (shift < 0) {
 	    ++j;
-	    while(i__ <= i_len(outstr, outstr_len) && j <= i_len(instr, 
-		    instr_len)) {
+	    while(i__ <= i_len(&__global_state->f2c, outstr, outstr_len) && j 
+		    <= i_len(&__global_state->f2c, instr, instr_len)) {
 		*(unsigned char *)&outstr[i__ - 1] = *(unsigned char *)&instr[
 			j - 1];
 		++i__;
@@ -309,9 +313,9 @@ static replwd_state_t* get_replwd_state() {
 
 /*           Finally pad the string with blanks. */
 
-	    if (i__ <= i_len(outstr, outstr_len)) {
-		s_copy(outstr + (i__ - 1), " ", outstr_len - (i__ - 1), (
-			ftnlen)1);
+	    if (i__ <= i_len(&__global_state->f2c, outstr, outstr_len)) {
+		s_copy(&__global_state->f2c, outstr + (i__ - 1), " ", 
+			outstr_len - (i__ - 1), (ftnlen)1);
 	    }
 	}
     }

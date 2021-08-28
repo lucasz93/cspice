@@ -154,7 +154,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekopr_c" );
+   chkin_c ( naif_state, "ekopr_c" );
 
    /*
    Check the file name to make sure the pointer is non-null 

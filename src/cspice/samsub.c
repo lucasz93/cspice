@@ -8,24 +8,25 @@
 
 
 typedef int samsub_state_t;
-static samsub_state_t* get_samsub_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline samsub_state_t* get_samsub_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SAMSUB (Same substrings) */
-logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
-	 integer *e2, ftnlen str1_len, ftnlen str2_len)
+logical samsub_(cspice_t* __global_state, char *str1, integer *b1, integer *
+	e1, char *str2, integer *b2, integer *e2, ftnlen str1_len, ftnlen 
+	str2_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
 
 
     /* Module state */
-    samsub_state_t* __state = get_samsub_state();
+    samsub_state_t* __state = get_samsub_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether or not two substrings are the same */
@@ -220,14 +221,14 @@ logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
 /*     Check equality of two substrings. */
 
 /* -& */
-    if (*e1 < *b1 || *e2 < *b2 || *b1 < 1 || *b2 < 1 || *e1 > i_len(str1, 
-	    str1_len) || *e2 > i_len(str2, str2_len) || *e1 - *b1 != *e2 - *
-	    b2) {
+    if (*e1 < *b1 || *e2 < *b2 || *b1 < 1 || *b2 < 1 || *e1 > i_len(&
+	    __global_state->f2c, str1, str1_len) || *e2 > i_len(&
+	    __global_state->f2c, str2, str2_len) || *e1 - *b1 != *e2 - *b2) {
 	ret_val = FALSE_;
 	return ret_val;
     }
-    ret_val = s_cmp(str1 + (*b1 - 1), str2 + (*b2 - 1), *e1 - (*b1 - 1), *e2 
-	    - (*b2 - 1)) == 0;
+    ret_val = s_cmp(&__global_state->f2c, str1 + (*b1 - 1), str2 + (*b2 - 1), 
+	    *e1 - (*b1 - 1), *e2 - (*b2 - 1)) == 0;
     return ret_val;
 } /* samsub_ */
 

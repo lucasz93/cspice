@@ -8,8 +8,7 @@
 
 
 extern recpgr_init_t __recpgr_init;
-static recpgr_state_t* get_recpgr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline recpgr_state_t* get_recpgr_state(cspice_t* state) {
 	if (!state->recpgr)
 		state->recpgr = __cspice_allocate_module(sizeof(
 	recpgr_state_t), &__recpgr_init, sizeof(__recpgr_init));
@@ -18,9 +17,9 @@ static recpgr_state_t* get_recpgr_state() {
 }
 
 /* $Procedure RECPGR ( Rectangular to planetographic ) */
-/* Subroutine */ int recpgr_(char *body, doublereal *rectan, doublereal *re, 
-	doublereal *f, doublereal *lon, doublereal *lat, doublereal *alt, 
-	ftnlen body_len)
+/* Subroutine */ int recpgr_(cspice_t* __global_state, char *body, doublereal 
+	*rectan, doublereal *re, doublereal *f, doublereal *lon, doublereal *
+	lat, doublereal *alt, ftnlen body_len)
 {
     /* Initialized data */
 
@@ -29,41 +28,45 @@ static recpgr_state_t* get_recpgr_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer sense;
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern doublereal twopi_(void);
-    extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern doublereal twopi_(cspice_t*);
+    extern /* Subroutine */ int recgeo_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     integer bodyid;
-    extern /* Subroutine */ int gcpool_(char *, integer *, integer *, integer 
-	    *, char *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int gcpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, char *, logical *, ftnlen, ftnlen);
     char kvalue[80];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char pmkvar[32];
     char pgrlon[4];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
-	    ftnlen);
-    extern integer plnsns_(integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljucrs_(cspice_t*, integer *, char *, char *, 
+	    ftnlen, ftnlen);
+    extern integer plnsns_(cspice_t*, integer *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    recpgr_state_t* __state = get_recpgr_state();
+    recpgr_state_t* __state = get_recpgr_state(__global_state);
 /* $ Abstract */
 
 /*     Convert rectangular coordinates to planetographic coordinates. */
@@ -620,10 +623,10 @@ static recpgr_state_t* get_recpgr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("RECPGR", (ftnlen)6);
+    chkin_(__global_state, "RECPGR", (ftnlen)6);
 
 /*     Initialization. */
 
@@ -631,22 +634,23 @@ static recpgr_state_t* get_recpgr_state() {
 
 /*        Initialize counter. */
 
-	zzctruin_(__state->svctr1);
+	zzctruin_(__global_state, __state->svctr1);
 	__state->first = FALSE_;
     }
 
 /*     Convert the body name to an ID code. */
 
-    zzbods2c_(__state->svctr1, __state->svbody, &__state->svbdid, &
-	    __state->svfnd1, body, &bodyid, &found, (ftnlen)36, body_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svbody, &
+	    __state->svbdid, &__state->svfnd1, body, &bodyid, &found, (ftnlen)
+	    36, body_len);
     if (! found) {
-	setmsg_("The value of the input argument BODY is #, this is not a re"
-		"cognized name of an ephemeris object. The cause of this prob"
-		"lem may be that you need an updated version of the SPICE Too"
-		"lkit. ", (ftnlen)185);
-	errch_("#", body, (ftnlen)1, body_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("RECPGR", (ftnlen)6);
+	setmsg_(__global_state, "The value of the input argument BODY is #, "
+		"this is not a recognized name of an ephemeris object. The ca"
+		"use of this problem may be that you need an updated version "
+		"of the SPICE Toolkit. ", (ftnlen)185);
+	errch_(__global_state, "#", body, (ftnlen)1, body_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "RECPGR", (ftnlen)6);
 	return 0;
     }
 
@@ -654,10 +658,10 @@ static recpgr_state_t* get_recpgr_state() {
 /*     and check out. */
 
     if (*re <= 0.) {
-	setmsg_("Equatorial radius was #.", (ftnlen)24);
-	errdp_("#", re, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("RECPGR", (ftnlen)6);
+	setmsg_(__global_state, "Equatorial radius was #.", (ftnlen)24);
+	errdp_(__global_state, "#", re, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "RECPGR", (ftnlen)6);
 	return 0;
     }
 
@@ -666,58 +670,61 @@ static recpgr_state_t* get_recpgr_state() {
 /*     case is a problem, so signal an error and check out. */
 
     if (*f >= 1.) {
-	setmsg_("Flattening coefficient was #.", (ftnlen)29);
-	errdp_("#", f, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("RECPGR", (ftnlen)6);
+	setmsg_(__global_state, "Flattening coefficient was #.", (ftnlen)29);
+	errdp_(__global_state, "#", f, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "RECPGR", (ftnlen)6);
 	return 0;
     }
 
 /*     Look up the longitude sense override variable from the */
 /*     kernel pool. */
 
-    repmi_("BODY#_PGR_POSITIVE_LON", "#", &bodyid, pmkvar, (ftnlen)22, (
-	    ftnlen)1, (ftnlen)32);
-    gcpool_(pmkvar, &__state->c__1, &__state->c__1, &n, kvalue, &found, (
-	    ftnlen)32, (ftnlen)80);
+    repmi_(__global_state, "BODY#_PGR_POSITIVE_LON", "#", &bodyid, pmkvar, (
+	    ftnlen)22, (ftnlen)1, (ftnlen)32);
+    gcpool_(__global_state, pmkvar, &__state->c__1, &__state->c__1, &n, 
+	    kvalue, &found, (ftnlen)32, (ftnlen)80);
     if (found) {
 
 /*        Make sure we recognize the value of PGRLON. */
 
-	ljucrs_(&__state->c__0, kvalue, pgrlon, (ftnlen)80, (ftnlen)4);
-	if (s_cmp(pgrlon, "EAST", (ftnlen)4, (ftnlen)4) == 0) {
+	ljucrs_(__global_state, &__state->c__0, kvalue, pgrlon, (ftnlen)80, (
+		ftnlen)4);
+	if (s_cmp(&__global_state->f2c, pgrlon, "EAST", (ftnlen)4, (ftnlen)4) 
+		== 0) {
 	    sense = 1;
-	} else if (s_cmp(pgrlon, "WEST", (ftnlen)4, (ftnlen)4) == 0) {
+	} else if (s_cmp(&__global_state->f2c, pgrlon, "WEST", (ftnlen)4, (
+		ftnlen)4) == 0) {
 	    sense = -1;
 	} else {
-	    setmsg_("Kernel variable # may have the values EAST or WEST.  Ac"
-		    "tual value was #.", (ftnlen)72);
-	    errch_("#", pmkvar, (ftnlen)1, (ftnlen)32);
-	    errch_("#", kvalue, (ftnlen)1, (ftnlen)80);
-	    sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	    chkout_("RECPGR", (ftnlen)6);
+	    setmsg_(__global_state, "Kernel variable # may have the values E"
+		    "AST or WEST.  Actual value was #.", (ftnlen)72);
+	    errch_(__global_state, "#", pmkvar, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", kvalue, (ftnlen)1, (ftnlen)80);
+	    sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	    chkout_(__global_state, "RECPGR", (ftnlen)6);
 	    return 0;
 	}
     } else {
 
 /*        Look up the spin sense of the body's prime meridian. */
 
-	sense = plnsns_(&bodyid);
+	sense = plnsns_(__global_state, &bodyid);
 
 /*        If the required prime meridian rate was not available, */
 /*        PLNSNS returns the code 0.  Here we consider this situation */
 /*        to be an error. */
 
 	if (sense == 0) {
-	    repmi_("BODY#_PM", "#", &bodyid, pmkvar, (ftnlen)8, (ftnlen)1, (
-		    ftnlen)32);
-	    setmsg_("Prime meridian rate coefficient defined by kernel varia"
-		    "ble # is required but not available for body #. ", (
-		    ftnlen)103);
-	    errch_("#", pmkvar, (ftnlen)1, (ftnlen)32);
-	    errch_("#", body, (ftnlen)1, body_len);
-	    sigerr_("SPICE(MISSINGDATA)", (ftnlen)18);
-	    chkout_("RECPGR", (ftnlen)6);
+	    repmi_(__global_state, "BODY#_PM", "#", &bodyid, pmkvar, (ftnlen)
+		    8, (ftnlen)1, (ftnlen)32);
+	    setmsg_(__global_state, "Prime meridian rate coefficient defined"
+		    " by kernel variable # is required but not available for "
+		    "body #. ", (ftnlen)103);
+	    errch_(__global_state, "#", pmkvar, (ftnlen)1, (ftnlen)32);
+	    errch_(__global_state, "#", body, (ftnlen)1, body_len);
+	    sigerr_(__global_state, "SPICE(MISSINGDATA)", (ftnlen)18);
+	    chkout_(__global_state, "RECPGR", (ftnlen)6);
 	    return 0;
 	}
 
@@ -732,7 +739,7 @@ static recpgr_state_t* get_recpgr_state() {
 
 /*     Convert the input coordinates first to geodetic coordinates. */
 
-    recgeo_(rectan, re, f, lon, lat, alt);
+    recgeo_(__global_state, rectan, re, f, lon, lat, alt);
 /*     Adjust the longitude according to the sense of the body's */
 /*     spin, or according to the override value if one is provided. */
 
@@ -742,14 +749,14 @@ static recpgr_state_t* get_recpgr_state() {
 /*     the latter being the range of planetographic longitude. */
 
     if (*lon < 0.) {
-	*lon += twopi_();
+	*lon += twopi_(__global_state);
     }
 
 /*     Make sure round-off error doesn't take LON out of range. */
 
-    d__1 = twopi_();
-    *lon = brcktd_(lon, &__state->c_b34, &d__1);
-    chkout_("RECPGR", (ftnlen)6);
+    d__1 = twopi_(__global_state);
+    *lon = brcktd_(__global_state, lon, &__state->c_b34, &d__1);
+    chkout_(__global_state, "RECPGR", (ftnlen)6);
     return 0;
 } /* recpgr_ */
 

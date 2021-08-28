@@ -8,28 +8,27 @@
 
 
 typedef int minac_state_t;
-static minac_state_t* get_minac_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline minac_state_t* get_minac_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  MINAC  ( Minimum element of array, character ) */
-/* Subroutine */ int minac_(char *array, integer *ndim, char *minval, integer 
-	*loc, ftnlen array_len, ftnlen minval_len)
+/* Subroutine */ int minac_(cspice_t* __global_state, char *array, integer *
+	ndim, char *minval, integer *loc, ftnlen array_len, ftnlen minval_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    logical l_lt(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    logical l_lt(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    minac_state_t* __state = get_minac_state();
+    minac_state_t* __state = get_minac_state(__global_state);
 /* $ Abstract */
 
 /*     Locate the minimum element of a character array. */
@@ -177,14 +176,14 @@ static minac_state_t* get_minac_state() {
 	*loc = 0;
 	return 0;
     }
-    s_copy(minval, array, minval_len, array_len);
+    s_copy(&__global_state->f2c, minval, array, minval_len, array_len);
     *loc = 1;
     i__1 = *ndim;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	if (l_lt(array + (i__ - 1) * array_len, minval, array_len, minval_len)
-		) {
-	    s_copy(minval, array + (i__ - 1) * array_len, minval_len, 
-		    array_len);
+	if (l_lt(&__global_state->f2c, array + (i__ - 1) * array_len, minval, 
+		array_len, minval_len)) {
+	    s_copy(&__global_state->f2c, minval, array + (i__ - 1) * 
+		    array_len, minval_len, array_len);
 	    *loc = i__;
 	}
     }

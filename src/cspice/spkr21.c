@@ -8,8 +8,7 @@
 
 
 extern spkr21_init_t __spkr21_init;
-static spkr21_state_t* get_spkr21_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr21_state_t* get_spkr21_state(cspice_t* state) {
 	if (!state->spkr21)
 		state->spkr21 = __cspice_allocate_module(sizeof(
 	spkr21_state_t), &__spkr21_init, sizeof(__spkr21_init));
@@ -18,14 +17,14 @@ static spkr21_state_t* get_spkr21_state() {
 }
 
 /* $Procedure      SPKR21 ( Read SPK record from segment, type 21 ) */
-/* Subroutine */ int spkr21_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr21_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
     doublereal data[100];
@@ -36,28 +35,28 @@ static spkr21_state_t* get_spkr21_state() {
     integer offr;
     integer i__;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer recno;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
     integer maxdim;
     integer dflsiz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer lstltd_(doublereal *, integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lstltd_(cspice_t*, doublereal *, integer *, doublereal *);
+    extern logical return_(cspice_t*);
     integer end;
     integer off;
 
 
     /* Module state */
-    spkr21_state_t* __state = get_spkr21_state();
+    spkr21_state_t* __state = get_spkr21_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 21 */
@@ -315,14 +314,14 @@ static spkr21_state_t* get_spkr21_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKR21", (ftnlen)6);
+    chkin_(__global_state, "SPKR21", (ftnlen)6);
 
 /*     Unpack the segment descriptor. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     begin = ic[4];
     end = ic[5];
 
@@ -341,21 +340,21 @@ static spkr21_state_t* get_spkr21_state() {
 /*     We'll fetch the difference table dimension as well. */
 
     i__1 = end - 1;
-    dafgda_(handle, &i__1, &end, data);
-    nrec = i_dnnt(&data[1]);
+    dafgda_(__global_state, handle, &i__1, &end, data);
+    nrec = i_dnnt(&__global_state->f2c, &data[1]);
     ndir = nrec / 100;
     offd = end - ndir - 2;
     offe = offd - nrec;
-    maxdim = i_dnnt(data);
+    maxdim = i_dnnt(&__global_state->f2c, data);
     if (maxdim > 25) {
-	setmsg_("The input record has a maximum table dimension of #, while "
-		"the maximum supported by this routine is #. It is possible t"
-		"hat this problem is due to your SPICE Toolkit being out of d"
-		"ate.", (ftnlen)183);
-	errint_("#", &maxdim, (ftnlen)1);
-	errint_("#", &__state->c__25, (ftnlen)1);
-	sigerr_("SPICE(DIFFLINETOOLARGE)", (ftnlen)23);
-	chkout_("SPKR21", (ftnlen)6);
+	setmsg_(__global_state, "The input record has a maximum table dimens"
+		"ion of #, while the maximum supported by this routine is #. "
+		"It is possible that this problem is due to your SPICE Toolki"
+		"t being out of date.", (ftnlen)183);
+	errint_(__global_state, "#", &maxdim, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__25, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DIFFLINETOOLARGE)", (ftnlen)23);
+	chkout_(__global_state, "SPKR21", (ftnlen)6);
 	return 0;
     }
 
@@ -379,13 +378,13 @@ static spkr21_state_t* get_spkr21_state() {
     if (nrec <= 100) {
 	i__1 = offe + 1;
 	i__2 = offe + nrec;
-	dafgda_(handle, &i__1, &i__2, data);
-	recno = lstltd_(et, &nrec, data) + 1;
+	dafgda_(__global_state, handle, &i__1, &i__2, data);
+	recno = lstltd_(__global_state, et, &nrec, data) + 1;
 	offr = begin - 1 + (recno - 1) * dflsiz;
 	i__1 = offr + 1;
 	i__2 = offr + dflsiz;
-	dafgda_(handle, &i__1, &i__2, &record[1]);
-	chkout_("SPKR21", (ftnlen)6);
+	dafgda_(__global_state, handle, &i__1, &i__2, &record[1]);
+	chkout_(__global_state, "SPKR21", (ftnlen)6);
 	return 0;
     }
 
@@ -400,18 +399,19 @@ static spkr21_state_t* get_spkr21_state() {
     for (i__ = 1; i__ <= i__1; ++i__) {
 	i__2 = offd + i__;
 	i__3 = offd + i__;
-	dafgda_(handle, &i__2, &i__3, data);
+	dafgda_(__global_state, handle, &i__2, &i__3, data);
 	if (data[0] >= *et) {
 	    off = offe + (i__ - 1) * 100;
 	    i__2 = off + 1;
 	    i__3 = off + 100;
-	    dafgda_(handle, &i__2, &i__3, data);
-	    recno = (i__ - 1) * 100 + lstltd_(et, &__state->c__100, data) + 1;
+	    dafgda_(__global_state, handle, &i__2, &i__3, data);
+	    recno = (i__ - 1) * 100 + lstltd_(__global_state, et, &
+		    __state->c__100, data) + 1;
 	    offr = begin - 1 + (recno - 1) * dflsiz;
 	    i__2 = offr + 1;
 	    i__3 = offr + dflsiz;
-	    dafgda_(handle, &i__2, &i__3, &record[1]);
-	    chkout_("SPKR21", (ftnlen)6);
+	    dafgda_(__global_state, handle, &i__2, &i__3, &record[1]);
+	    chkout_(__global_state, "SPKR21", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -422,13 +422,13 @@ static spkr21_state_t* get_spkr21_state() {
     i__ = nrec % 100;
     i__1 = end - ndir - i__ - 1;
     i__2 = end - ndir - 2;
-    dafgda_(handle, &i__1, &i__2, data);
-    recno = ndir * 100 + lstltd_(et, &i__, data) + 1;
+    dafgda_(__global_state, handle, &i__1, &i__2, data);
+    recno = ndir * 100 + lstltd_(__global_state, et, &i__, data) + 1;
     offr = begin - 1 + (recno - 1) * dflsiz;
     i__1 = offr + 1;
     i__2 = offr + dflsiz;
-    dafgda_(handle, &i__1, &i__2, &record[1]);
-    chkout_("SPKR21", (ftnlen)6);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[1]);
+    chkout_(__global_state, "SPKR21", (ftnlen)6);
     return 0;
 } /* spkr21_ */
 

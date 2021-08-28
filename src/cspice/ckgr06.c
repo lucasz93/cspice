@@ -8,8 +8,7 @@
 
 
 extern ckgr06_init_t __ckgr06_init;
-static ckgr06_state_t* get_ckgr06_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckgr06_state_t* get_ckgr06_state(cspice_t* state) {
 	if (!state->ckgr06)
 		state->ckgr06 = __cspice_allocate_module(sizeof(
 	ckgr06_state_t), &__ckgr06_init, sizeof(__ckgr06_init));
@@ -18,8 +17,8 @@ static ckgr06_state_t* get_ckgr06_state() {
 }
 
 /* $Procedure CKGR06 ( C-kernel, get record, type 06 ) */
-/* Subroutine */ int ckgr06_(integer *handle, doublereal *descr, integer *
-	msno, integer *recno, doublereal *record)
+/* Subroutine */ int ckgr06_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, integer *msno, integer *recno, doublereal *record)
 {
     /* Initialized data */
 
@@ -28,23 +27,24 @@ static ckgr06_state_t* get_ckgr06_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer nrec;
     doublereal rate;
     integer baddr;
     integer eaddr;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer minib;
     integer minie;
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal dpdata[1];
     integer epcbas;
     integer epaddr;
@@ -52,18 +52,18 @@ static ckgr06_state_t* get_ckgr06_state() {
     doublereal buffer[4];
     integer nepdir;
     integer ptrbas;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer nintvl;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer pktsiz;
     integer subtyp;
 
 
     /* Module state */
-    ckgr06_state_t* __state = get_ckgr06_state();
+    ckgr06_state_t* __state = get_ckgr06_state(__global_state);
 /* $ Abstract */
 
 /*     Given the handle and descriptor of a type 6 segment in a CK file, */
@@ -673,10 +673,10 @@ static ckgr06_state_t* get_ckgr06_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKGR06", (ftnlen)6);
+    chkin_(__global_state, "CKGR06", (ftnlen)6);
 
 /*     The number of discrete pointing instances contained in a data */
 /*     type 6 segment is stored in the last double precision word of the */
@@ -698,16 +698,16 @@ static ckgr06_state_t* get_ckgr06_state() {
 /*        IC(6)  Final address of segment data */
 
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
 
 /*     If this segment is not of data type 6, then signal an error. */
 
     if (ic[2] != 6) {
-	setmsg_("Data type of the segment should be 6: Passed descriptor sho"
-		"ws type = #.", (ftnlen)71);
-	errint_("#", &ic[2], (ftnlen)1);
-	sigerr_("SPICE(CKWRONGDATATYPE)", (ftnlen)22);
-	chkout_("CKGR06", (ftnlen)6);
+	setmsg_(__global_state, "Data type of the segment should be 6: Passe"
+		"d descriptor shows type = #.", (ftnlen)71);
+	errint_(__global_state, "#", &ic[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CKWRONGDATATYPE)", (ftnlen)22);
+	chkout_(__global_state, "CKGR06", (ftnlen)6);
 	return 0;
     }
 
@@ -717,19 +717,19 @@ static ckgr06_state_t* get_ckgr06_state() {
 
     baddr = ic[4];
     eaddr = ic[5];
-    dafgda_(handle, &eaddr, &eaddr, dpdata);
-    if (failed_()) {
-	chkout_("CKGR06", (ftnlen)6);
+    dafgda_(__global_state, handle, &eaddr, &eaddr, dpdata);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKGR06", (ftnlen)6);
 	return 0;
     }
-    nintvl = i_dnnt(dpdata);
+    nintvl = i_dnnt(&__global_state->f2c, dpdata);
     if (*msno < 1 || *msno > nintvl) {
-	setmsg_("Mini-segment index must be in range 1:# but was #.", (ftnlen)
-		50);
-	errint_("#", &nintvl, (ftnlen)1);
-	errint_("#", msno, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("CKGR06", (ftnlen)6);
+	setmsg_(__global_state, "Mini-segment index must be in range 1:# but"
+		" was #.", (ftnlen)50);
+	errint_(__global_state, "#", &nintvl, (ftnlen)1);
+	errint_(__global_state, "#", msno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "CKGR06", (ftnlen)6);
 	return 0;
     }
 
@@ -744,22 +744,22 @@ static ckgr06_state_t* get_ckgr06_state() {
     bufbas = ptrbas + *msno - 1;
     i__1 = bufbas + 1;
     i__2 = bufbas + 2;
-    dafgda_(handle, &i__1, &i__2, buffer);
-    if (failed_()) {
-	chkout_("CKGR06", (ftnlen)6);
+    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKGR06", (ftnlen)6);
 	return 0;
     }
-    minib = baddr - 1 + i_dnnt(buffer);
-    minie = baddr - 1 + i_dnnt(&buffer[1]) - 1;
+    minib = baddr - 1 + i_dnnt(&__global_state->f2c, buffer);
+    minie = baddr - 1 + i_dnnt(&__global_state->f2c, &buffer[1]) - 1;
 
 /*     Fetch the control area of the mini-segment. */
 
     bufbas = minie - 4;
     i__1 = bufbas + 1;
     i__2 = bufbas + 4;
-    dafgda_(handle, &i__1, &i__2, buffer);
-    if (failed_()) {
-	chkout_("CKGR06", (ftnlen)6);
+    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKGR06", (ftnlen)6);
 	return 0;
     }
 
@@ -767,32 +767,33 @@ static ckgr06_state_t* get_ckgr06_state() {
 /*     subtype, and record count. */
 
     rate = buffer[0];
-    subtyp = i_dnnt(&buffer[1]);
-    nrec = i_dnnt(&buffer[3]);
+    subtyp = i_dnnt(&__global_state->f2c, &buffer[1]);
+    nrec = i_dnnt(&__global_state->f2c, &buffer[3]);
 
 /*     Compute the packet size for this mini-segment. This will */
 /*     be used a bit later. We'll also check the subtype. */
 
     if (subtyp < 0 || subtyp > 3) {
-	setmsg_("Unexpected CK type 6 subtype # found in mini-segment #.", (
-		ftnlen)55);
-	errint_("#", &subtyp, (ftnlen)1);
-	errint_("#", msno, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("CKGR06", (ftnlen)6);
+	setmsg_(__global_state, "Unexpected CK type 6 subtype # found in min"
+		"i-segment #.", (ftnlen)55);
+	errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	errint_(__global_state, "#", msno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "CKGR06", (ftnlen)6);
 	return 0;
     }
     pktsiz = __state->pktszs[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : s_rnge(
-	    "pktszs", i__1, "ckgr06_", (ftnlen)686)];
+	    &__global_state->f2c, "pktszs", i__1, "ckgr06_", (ftnlen)686)];
 
 /*     Check the record index. */
 
     if (*recno < 1 || *recno > nrec) {
-	setmsg_("Record index must be in range 1:# but was #.", (ftnlen)44);
-	errint_("#", &nrec, (ftnlen)1);
-	errint_("#", recno, (ftnlen)1);
-	sigerr_("SPICE(CKNONEXISTREC)", (ftnlen)20);
-	chkout_("CKGR06", (ftnlen)6);
+	setmsg_(__global_state, "Record index must be in range 1:# but was #."
+		, (ftnlen)44);
+	errint_(__global_state, "#", &nrec, (ftnlen)1);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CKNONEXISTREC)", (ftnlen)20);
+	chkout_(__global_state, "CKGR06", (ftnlen)6);
 	return 0;
     }
 
@@ -806,7 +807,7 @@ static ckgr06_state_t* get_ckgr06_state() {
 /*     element 1 of the output record. */
 
     epaddr = epcbas + *recno;
-    dafgda_(handle, &epaddr, &epaddr, record);
+    dafgda_(__global_state, handle, &epaddr, &epaddr, record);
 
 /*     Transfer the subtype and rate to the output record. */
 
@@ -818,12 +819,12 @@ static ckgr06_state_t* get_ckgr06_state() {
     bufbas = minib - 1 + (*recno - 1) * pktsiz;
     i__1 = bufbas + 1;
     i__2 = bufbas + pktsiz;
-    dafgda_(handle, &i__1, &i__2, &record[3]);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[3]);
 
 /*     The record is complete if DAFGDA did its job. We don't */
 /*     check FAILED here since we're about to return. */
 
-    chkout_("CKGR06", (ftnlen)6);
+    chkout_(__global_state, "CKGR06", (ftnlen)6);
     return 0;
 } /* ckgr06_ */
 

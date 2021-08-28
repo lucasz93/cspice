@@ -8,32 +8,33 @@
 
 
 typedef int zzgfpaq_state_t;
-static zzgfpaq_state_t* get_zzgfpaq_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfpaq_state_t* get_zzgfpaq_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZGFPAQ ( Private --- GF, phase angle between bodies ) */
-/* Subroutine */ int zzgfpaq_(doublereal *et, integer *targ, integer *illmn, 
-	integer *obs, char *abcorr, doublereal *value, ftnlen abcorr_len)
+/* Subroutine */ int zzgfpaq_(cspice_t* __global_state, doublereal *et, 
+	integer *targ, integer *illmn, integer *obs, char *abcorr, doublereal 
+	*value, ftnlen abcorr_len)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern doublereal pi_(void);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern doublereal pi_(cspice_t*);
     doublereal lt;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int spkezp_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern logical return_(cspice_t*);
     doublereal pv1[3];
     doublereal pv2[3];
     char ref[5];
@@ -41,7 +42,7 @@ static zzgfpaq_state_t* get_zzgfpaq_state() {
 
 
     /* Module state */
-    zzgfpaq_state_t* __state = get_zzgfpaq_state();
+    zzgfpaq_state_t* __state = get_zzgfpaq_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -200,37 +201,38 @@ static zzgfpaq_state_t* get_zzgfpaq_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFPAQ", (ftnlen)7);
+    chkin_(__global_state, "ZZGFPAQ", (ftnlen)7);
 
 /*     This calculation is invariant with respect to reference frame. */
 /*     Use J2000 for convenience. */
 
-    s_copy(ref, "J2000", (ftnlen)5, (ftnlen)5);
+    s_copy(&__global_state->f2c, ref, "J2000", (ftnlen)5, (ftnlen)5);
 
 /*     Get the position of the TARG object relative to OBS at ET. */
 
-    spkezp_(targ, et, ref, abcorr, obs, pv1, &lt, (ftnlen)5, abcorr_len);
-    if (failed_()) {
-	chkout_("ZZGFPAQ", (ftnlen)7);
+    spkezp_(__global_state, targ, et, ref, abcorr, obs, pv1, &lt, (ftnlen)5, 
+	    abcorr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFPAQ", (ftnlen)7);
 	return 0;
     }
 
 /*     Get the state of the ILLMN object relative to TARG at ET */
 /*     for no aberration correction, or ET - LT otherwise. */
 
-    if (eqstr_(abcorr, "NONE", abcorr_len, (ftnlen)4)) {
-	spkezp_(illmn, et, ref, abcorr, targ, pv2, &lt, (ftnlen)5, abcorr_len)
-		;
+    if (eqstr_(__global_state, abcorr, "NONE", abcorr_len, (ftnlen)4)) {
+	spkezp_(__global_state, illmn, et, ref, abcorr, targ, pv2, &lt, (
+		ftnlen)5, abcorr_len);
     } else {
 	d__1 = *et - lt;
-	spkezp_(illmn, &d__1, ref, abcorr, targ, pv2, &lt, (ftnlen)5, 
-		abcorr_len);
+	spkezp_(__global_state, illmn, &d__1, ref, abcorr, targ, pv2, &lt, (
+		ftnlen)5, abcorr_len);
     }
-    if (failed_()) {
-	chkout_("ZZGFPAQ", (ftnlen)7);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFPAQ", (ftnlen)7);
 	return 0;
     }
 
@@ -256,16 +258,16 @@ static zzgfpaq_state_t* get_zzgfpaq_state() {
 
 /*     Calculate the angle separating the vectors relative to TARG */
 
-    sep = vsep_(pv1, pv2);
+    sep = vsep_(__global_state, pv1, pv2);
 
 /*     The angle of interest is that between -PV1 and PV2 measured from */
 /*     TARG. Subtract SEP from PI to calculate this angle. */
 
-    *value = pi_() - sep;
+    *value = pi_(__global_state) - sep;
 
 /*     All done. */
 
-    chkout_("ZZGFPAQ", (ftnlen)7);
+    chkout_(__global_state, "ZZGFPAQ", (ftnlen)7);
     return 0;
 } /* zzgfpaq_ */
 

@@ -8,8 +8,7 @@
 
 
 extern xfmsta_init_t __xfmsta_init;
-static xfmsta_state_t* get_xfmsta_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline xfmsta_state_t* get_xfmsta_state(cspice_t* state) {
 	if (!state->xfmsta)
 		state->xfmsta = __cspice_allocate_module(sizeof(
 	xfmsta_state_t), &__xfmsta_init, sizeof(__xfmsta_init));
@@ -18,9 +17,9 @@ static xfmsta_state_t* get_xfmsta_state() {
 }
 
 /* $Procedure      XFMSTA ( Transform state between coordinate systems) */
-/* Subroutine */ int xfmsta_(doublereal *istate, char *icosys, char *ocosys, 
-	char *body, doublereal *ostate, ftnlen icosys_len, ftnlen ocosys_len, 
-	ftnlen body_len)
+/* Subroutine */ int xfmsta_(cspice_t* __global_state, doublereal *istate, 
+	char *icosys, char *ocosys, char *body, doublereal *ostate, ftnlen 
+	icosys_len, ftnlen ocosys_len, ftnlen body_len)
 {
     /* Initialized data */
 
@@ -30,93 +29,102 @@ static xfmsta_state_t* get_xfmsta_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
-    integer s_rnge(char *, integer, char *, integer);
+    double sqrt(f2c_state_t*, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
     doublereal ivel[3];
     doublereal ipos[3];
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     integer isys;
     integer osys;
     doublereal f;
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer i__;
     integer j;
     doublereal radii[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern doublereal dpmax_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern doublereal dpmax_(cspice_t*);
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vequg_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vequg_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     doublereal sqtmp;
     char isysu[40];
     char osysu[40];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal jacobi[9]	/* was [3][3] */;
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
-    extern /* Subroutine */ int georec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int drdgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int dgeodr_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int georec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int drdgeo_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int recgeo_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int dgeodr_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
     integer bodyid;
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int drdlat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int cylrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int drdcyl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    doublereal toobig;
-    extern /* Subroutine */ int sphrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int drdsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int pgrrec_(char *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int drdpgr_(char *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int reccyl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int recsph_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int recpgr_(char *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
-    extern /* Subroutine */ int dcyldr_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int dlatdr_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int ljucrs_(integer *, char *, char *, ftnlen, 
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int dsphdr_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int dpgrdr_(char *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int latrec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int drdlat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int cylrec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int drdcyl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    doublereal toobig;
+    extern /* Subroutine */ int sphrec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int drdsph_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int pgrrec_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int drdpgr_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int reccyl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int recsph_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int recpgr_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int dcyldr_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int dlatdr_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int ljucrs_(cspice_t*, integer *, char *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dsphdr_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int dpgrdr_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, ftnlen);
+    extern logical return_(cspice_t*);
     integer dim;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    xfmsta_state_t* __state = get_xfmsta_state();
+    xfmsta_state_t* __state = get_xfmsta_state(__global_state);
 /* $ Abstract */
 
 /*     Transform a state between coordinate systems. */
@@ -837,10 +845,10 @@ static xfmsta_state_t* get_xfmsta_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("XFMSTA", (ftnlen)6);
+    chkin_(__global_state, "XFMSTA", (ftnlen)6);
 
 /*     Initialization. */
 
@@ -848,25 +856,27 @@ static xfmsta_state_t* get_xfmsta_state() {
 
 /*        Initialize counter. */
 
-	zzctruin_(__state->svctr1);
+	zzctruin_(__global_state, __state->svctr1);
 	__state->first = FALSE_;
     }
 
 /*     Remove initial and trailing spaces. */
 /*     Convert the input coordinate systems to upper case. */
 
-    ljucrs_(&__state->c__0, icosys, isysu, icosys_len, (ftnlen)40);
-    ljucrs_(&__state->c__0, ocosys, osysu, ocosys_len, (ftnlen)40);
+    ljucrs_(__global_state, &__state->c__0, icosys, isysu, icosys_len, (
+	    ftnlen)40);
+    ljucrs_(__global_state, &__state->c__0, ocosys, osysu, ocosys_len, (
+	    ftnlen)40);
 
 /*     Check to see if the input and output coordinate systems */
 /*     provided by the user are acceptable. Store the integer */
 /*     code of the input and output coordinate systems into */
 /*     ISYS and OSYS. */
 
-    isys = isrchc_(isysu, &__state->c__6, __state->cosys, (ftnlen)40, (ftnlen)
-	    40);
-    osys = isrchc_(osysu, &__state->c__6, __state->cosys, (ftnlen)40, (ftnlen)
-	    40);
+    isys = isrchc_(__global_state, isysu, &__state->c__6, __state->cosys, (
+	    ftnlen)40, (ftnlen)40);
+    osys = isrchc_(__global_state, osysu, &__state->c__6, __state->cosys, (
+	    ftnlen)40, (ftnlen)40);
 
 /*     If the coordinate systems are not acceptable, an error is */
 /*     signaled. */
@@ -877,32 +887,32 @@ static xfmsta_state_t* get_xfmsta_state() {
 /*           Both the input and the output coordinate systems were not */
 /*           recognized. */
 
-	    setmsg_("Input coordinate system # and output coordinate system "
-		    "# are not recognized.", (ftnlen)76);
-	    errch_("#", icosys, (ftnlen)1, icosys_len);
-	    errch_("#", ocosys, (ftnlen)1, ocosys_len);
-	    sigerr_("SPICE(COORDSYSNOTREC)", (ftnlen)21);
-	    chkout_("XFMSTA", (ftnlen)6);
+	    setmsg_(__global_state, "Input coordinate system # and output co"
+		    "ordinate system # are not recognized.", (ftnlen)76);
+	    errch_(__global_state, "#", icosys, (ftnlen)1, icosys_len);
+	    errch_(__global_state, "#", ocosys, (ftnlen)1, ocosys_len);
+	    sigerr_(__global_state, "SPICE(COORDSYSNOTREC)", (ftnlen)21);
+	    chkout_(__global_state, "XFMSTA", (ftnlen)6);
 	    return 0;
 	} else if (isys == 0) {
 
 /*           The input coordinate system was not recognized. */
 
-	    setmsg_("Input coordinate system # was not recognized", (ftnlen)
-		    44);
-	    errch_("#", icosys, (ftnlen)1, icosys_len);
-	    sigerr_("SPICE(COORDSYSNOTREC)", (ftnlen)21);
-	    chkout_("XFMSTA", (ftnlen)6);
+	    setmsg_(__global_state, "Input coordinate system # was not recog"
+		    "nized", (ftnlen)44);
+	    errch_(__global_state, "#", icosys, (ftnlen)1, icosys_len);
+	    sigerr_(__global_state, "SPICE(COORDSYSNOTREC)", (ftnlen)21);
+	    chkout_(__global_state, "XFMSTA", (ftnlen)6);
 	    return 0;
 	} else {
 
 /*           The output coordinate system was not recognized. */
 
-	    setmsg_("Output coordinate system # was not recognized", (ftnlen)
-		    45);
-	    errch_("#", ocosys, (ftnlen)1, ocosys_len);
-	    sigerr_("SPICE(COORDSYSNOTREC)", (ftnlen)21);
-	    chkout_("XFMSTA", (ftnlen)6);
+	    setmsg_(__global_state, "Output coordinate system # was not reco"
+		    "gnized", (ftnlen)45);
+	    errch_(__global_state, "#", ocosys, (ftnlen)1, ocosys_len);
+	    sigerr_(__global_state, "SPICE(COORDSYSNOTREC)", (ftnlen)21);
+	    chkout_(__global_state, "XFMSTA", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -912,8 +922,8 @@ static xfmsta_state_t* get_xfmsta_state() {
 /*     place. */
 
     if (isys == osys) {
-	vequg_(istate, &__state->c__6, ostate);
-	chkout_("XFMSTA", (ftnlen)6);
+	vequg_(__global_state, istate, &__state->c__6, ostate);
+	chkout_(__global_state, "XFMSTA", (ftnlen)6);
 	return 0;
     }
 
@@ -927,16 +937,18 @@ static xfmsta_state_t* get_xfmsta_state() {
 
 /*        Find the NAIF ID code */
 
-	zzbods2c_(__state->svctr1, __state->svbody, &__state->svbdid, &
-		__state->svfnd1, body, &bodyid, &found, (ftnlen)36, body_len);
+	zzbods2c_(__global_state, __state->svctr1, __state->svbody, &
+		__state->svbdid, &__state->svfnd1, body, &bodyid, &found, (
+		ftnlen)36, body_len);
 
 /*        If the body's name was found, find the body's radii and */
 /*        compute flattening coefficient. Otherwise, signal an error. */
 
 	if (found) {
-	    bodvcd_(&bodyid, "RADII", &__state->c__3, &dim, radii, (ftnlen)5);
-	    if (failed_()) {
-		chkout_("XFMSTA", (ftnlen)6);
+	    bodvcd_(__global_state, &bodyid, "RADII", &__state->c__3, &dim, 
+		    radii, (ftnlen)5);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "XFMSTA", (ftnlen)6);
 		return 0;
 	    }
 
@@ -944,13 +956,14 @@ static xfmsta_state_t* get_xfmsta_state() {
 /*           signaled. */
 
 	    if (radii[2] <= 0. || radii[0] <= 0.) {
-		setmsg_("At least one radii is less than or equal to zero. T"
-			"he equatorial radius has a value of # and the polar "
-			"radius has has a value of #.", (ftnlen)131);
-		errdp_("#", radii, (ftnlen)1);
-		errdp_("#", &radii[2], (ftnlen)1);
-		sigerr_("SPICE(INVALIDRADIUS)", (ftnlen)20);
-		chkout_("XFMSTA", (ftnlen)6);
+		setmsg_(__global_state, "At least one radii is less than or "
+			"equal to zero. The equatorial radius has a value of "
+			"# and the polar radius has has a value of #.", (
+			ftnlen)131);
+		errdp_(__global_state, "#", radii, (ftnlen)1);
+		errdp_(__global_state, "#", &radii[2], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDRADIUS)", (ftnlen)20);
+		chkout_(__global_state, "XFMSTA", (ftnlen)6);
 		return 0;
 	    }
 
@@ -958,17 +971,18 @@ static xfmsta_state_t* get_xfmsta_state() {
 /*           divided by the equatorial radius is greater than DPMAX, */
 /*           a numeric overflow may occur, so an error is signaled. */
 
-	    if (sqrt((d__1 = radii[0] - radii[2], abs(d__1))) / sqrt((abs(
-		    radii[0]))) >= sqrt(dpmax_())) {
-		setmsg_("The equatorial radius for # has a value of # and a "
-			"polar radius of #. The flattening coefficient cannot"
-			" be calculated due to numeric overflow.", (ftnlen)142)
-			;
-		errch_("#", body, (ftnlen)1, body_len);
-		errdp_("#", radii, (ftnlen)1);
-		errdp_("#", &radii[2], (ftnlen)1);
-		sigerr_("SPICE(INVALIDRADIUS)", (ftnlen)20);
-		chkout_("XFMSTA", (ftnlen)6);
+	    if (sqrt(&__global_state->f2c, (d__1 = radii[0] - radii[2], abs(
+		    d__1))) / sqrt(&__global_state->f2c, (abs(radii[0]))) >= 
+		    sqrt(&__global_state->f2c, dpmax_(__global_state))) {
+		setmsg_(__global_state, "The equatorial radius for # has a v"
+			"alue of # and a polar radius of #. The flattening co"
+			"efficient cannot be calculated due to numeric overfl"
+			"ow.", (ftnlen)142);
+		errch_(__global_state, "#", body, (ftnlen)1, body_len);
+		errdp_(__global_state, "#", radii, (ftnlen)1);
+		errdp_(__global_state, "#", &radii[2], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDRADIUS)", (ftnlen)20);
+		chkout_(__global_state, "XFMSTA", (ftnlen)6);
 		return 0;
 	    }
 
@@ -977,17 +991,19 @@ static xfmsta_state_t* get_xfmsta_state() {
 /*           coordinates. */
 
 	    if (radii[0] != radii[1]) {
-		setmsg_("The body # has radii (#, #, #). Unequal equatorial "
-			"ellipsoid radii are not supported for # and # coordi"
-			"nates.", (ftnlen)109);
-		errch_("#", body, (ftnlen)1, body_len);
-		errdp_("#", radii, (ftnlen)1);
-		errdp_("#", &radii[1], (ftnlen)1);
-		errdp_("#", &radii[2], (ftnlen)1);
-		errch_("#", __state->cosys + 160, (ftnlen)1, (ftnlen)40);
-		errch_("#", __state->cosys + 200, (ftnlen)1, (ftnlen)40);
-		sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-		chkout_("XFMSTA", (ftnlen)6);
+		setmsg_(__global_state, "The body # has radii (#, #, #). Une"
+			"qual equatorial ellipsoid radii are not supported fo"
+			"r # and # coordinates.", (ftnlen)109);
+		errch_(__global_state, "#", body, (ftnlen)1, body_len);
+		errdp_(__global_state, "#", radii, (ftnlen)1);
+		errdp_(__global_state, "#", &radii[1], (ftnlen)1);
+		errdp_(__global_state, "#", &radii[2], (ftnlen)1);
+		errch_(__global_state, "#", __state->cosys + 160, (ftnlen)1, (
+			ftnlen)40);
+		errch_(__global_state, "#", __state->cosys + 200, (ftnlen)1, (
+			ftnlen)40);
+		sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+		chkout_(__global_state, "XFMSTA", (ftnlen)6);
 		return 0;
 	    }
 
@@ -995,11 +1011,11 @@ static xfmsta_state_t* get_xfmsta_state() {
 
 	    f = (radii[0] - radii[2]) / radii[0];
 	} else {
-	    setmsg_("The input body name # does not have a valid NAIF ID cod"
-		    "e.", (ftnlen)57);
-	    errch_("#", body, (ftnlen)1, body_len);
-	    sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	    chkout_("XFMSTA", (ftnlen)6);
+	    setmsg_(__global_state, "The input body name # does not have a v"
+		    "alid NAIF ID code.", (ftnlen)57);
+	    errch_(__global_state, "#", body, (ftnlen)1, body_len);
+	    sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	    chkout_(__global_state, "XFMSTA", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -1017,7 +1033,7 @@ static xfmsta_state_t* get_xfmsta_state() {
 /*     TOOBIG is used for preventing numerical overflow. The square */
 /*     roots of values are used to safely check if overflow will occur. */
 
-    toobig = sqrt(dpmax_() / 100.);
+    toobig = sqrt(&__global_state->f2c, dpmax_(__global_state) / 100.);
     if (isys != 1) {
 
 /*        To rectangular... */
@@ -1026,58 +1042,60 @@ static xfmsta_state_t* get_xfmsta_state() {
 
 /*                  ... from cylindrical */
 
-	    cylrec_(istate, &istate[1], &istate[2], ipos);
-	    drdcyl_(istate, &istate[1], &istate[2], jacobi);
+	    cylrec_(__global_state, istate, &istate[1], &istate[2], ipos);
+	    drdcyl_(__global_state, istate, &istate[1], &istate[2], jacobi);
 	} else if (isys == 3) {
 
 /*                  ... from latitudinal */
 
-	    latrec_(istate, &istate[1], &istate[2], ipos);
-	    drdlat_(istate, &istate[1], &istate[2], jacobi);
+	    latrec_(__global_state, istate, &istate[1], &istate[2], ipos);
+	    drdlat_(__global_state, istate, &istate[1], &istate[2], jacobi);
 	} else if (isys == 4) {
 
 /*                  ... from spherical */
 
-	    sphrec_(istate, &istate[1], &istate[2], ipos);
-	    drdsph_(istate, &istate[1], &istate[2], jacobi);
+	    sphrec_(__global_state, istate, &istate[1], &istate[2], ipos);
+	    drdsph_(__global_state, istate, &istate[1], &istate[2], jacobi);
 	} else if (isys == 5) {
 
 /*                  ... from geodetic */
 
-	    georec_(istate, &istate[1], &istate[2], radii, &f, ipos);
-	    if (failed_()) {
-		chkout_("XFMSTA", (ftnlen)6);
+	    georec_(__global_state, istate, &istate[1], &istate[2], radii, &f,
+		     ipos);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "XFMSTA", (ftnlen)6);
 		return 0;
 	    }
-	    drdgeo_(istate, &istate[1], &istate[2], radii, &f, jacobi);
+	    drdgeo_(__global_state, istate, &istate[1], &istate[2], radii, &f,
+		     jacobi);
 	} else if (isys == 6) {
 
 /*                  ... from planetographic */
 
-	    pgrrec_(body, istate, &istate[1], &istate[2], radii, &f, ipos, 
-		    body_len);
-	    if (failed_()) {
-		chkout_("XFMSTA", (ftnlen)6);
+	    pgrrec_(__global_state, body, istate, &istate[1], &istate[2], 
+		    radii, &f, ipos, body_len);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "XFMSTA", (ftnlen)6);
 		return 0;
 	    }
-	    drdpgr_(body, istate, &istate[1], &istate[2], radii, &f, jacobi, 
-		    body_len);
+	    drdpgr_(__global_state, body, istate, &istate[1], &istate[2], 
+		    radii, &f, jacobi, body_len);
 	} else {
-	    setmsg_("This error should never occur. This is an intermediate "
-		    "step in which a non-rectangular input state should be tr"
-		    "ansferred to rectangular.  The input coordinate system i"
-		    "s not recognized, yet was not caught by an earlier check."
-		    , (ftnlen)224);
-	    sigerr_("SPICE(BUG1)", (ftnlen)11);
-	    chkout_("XFMSTA", (ftnlen)6);
+	    setmsg_(__global_state, "This error should never occur. This is "
+		    "an intermediate step in which a non-rectangular input st"
+		    "ate should be transferred to rectangular.  The input coo"
+		    "rdinate system is not recognized, yet was not caught by "
+		    "an earlier check.", (ftnlen)224);
+	    sigerr_(__global_state, "SPICE(BUG1)", (ftnlen)11);
+	    chkout_(__global_state, "XFMSTA", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Some DRD* routines are not error free. Be safe and check */
 /*        FAILED to not use un-initialized JACOBI. */
 
-	if (failed_()) {
-	    chkout_("XFMSTA", (ftnlen)6);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "XFMSTA", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1086,16 +1104,21 @@ static xfmsta_state_t* get_xfmsta_state() {
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    for (j = 1; j <= 3; ++j) {
-		sqtmp = sqrt((d__1 = jacobi[(i__1 = i__ + j * 3 - 4) < 9 && 0 
-			<= i__1 ? i__1 : s_rnge("jacobi", i__1, "xfmsta_", (
-			ftnlen)1092)], abs(d__1))) * sqrt((d__2 = istate[(
-			i__2 = j + 2) < 6 && 0 <= i__2 ? i__2 : s_rnge("ista"
-			"te", i__2, "xfmsta_", (ftnlen)1092)], abs(d__2)));
+		sqtmp = sqrt(&__global_state->f2c, (d__1 = jacobi[(i__1 = i__ 
+			+ j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "jacobi", i__1, "xfmsta_", (
+			ftnlen)1092)], abs(d__1))) * sqrt(&
+			__global_state->f2c, (d__2 = istate[(i__2 = j + 2) < 
+			6 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			"istate", i__2, "xfmsta_", (ftnlen)1092)], abs(d__2)))
+			;
 		if (sqtmp > toobig) {
-		    setmsg_("The product of the Jacobian and velocity may ca"
-			    "use numeric overflow.", (ftnlen)68);
-		    sigerr_("SPICE(NUMERICOVERFLOW)", (ftnlen)22);
-		    chkout_("XFMSTA", (ftnlen)6);
+		    setmsg_(__global_state, "The product of the Jacobian and"
+			    " velocity may cause numeric overflow.", (ftnlen)
+			    68);
+		    sigerr_(__global_state, "SPICE(NUMERICOVERFLOW)", (ftnlen)
+			    22);
+		    chkout_(__global_state, "XFMSTA", (ftnlen)6);
 		    return 0;
 		}
 	    }
@@ -1103,21 +1126,22 @@ static xfmsta_state_t* get_xfmsta_state() {
 
 /*        Transform the velocity into rectangular coordinates. */
 
-	mxv_(jacobi, &istate[3], ivel);
+	mxv_(__global_state, jacobi, &istate[3], ivel);
     } else if (isys == 1) {
 
 /*        If the input coordinate system is rectangular, the input */
 /*        position does not need to be translated into rectangular. */
 
-	vequ_(istate, ipos);
-	vequ_(&istate[3], ivel);
+	vequ_(__global_state, istate, ipos);
+	vequ_(__global_state, &istate[3], ivel);
     } else {
-	setmsg_("This error should never occur. This is an ELSE statement. I"
-		"f the input coordinate system is not rectangular, the IF sho"
-		"uld be executed. If the input coordinate system is rectangul"
-		"ar, the ELSE IF should be executed.", (ftnlen)214);
-	sigerr_("SPICE(BUG2)", (ftnlen)11);
-	chkout_("XFMSTA", (ftnlen)6);
+	setmsg_(__global_state, "This error should never occur. This is an E"
+		"LSE statement. If the input coordinate system is not rectang"
+		"ular, the IF should be executed. If the input coordinate sys"
+		"tem is rectangular, the ELSE IF should be executed.", (ftnlen)
+		214);
+	sigerr_(__global_state, "SPICE(BUG2)", (ftnlen)11);
+	chkout_(__global_state, "XFMSTA", (ftnlen)6);
 	return 0;
     }
 
@@ -1160,47 +1184,52 @@ static xfmsta_state_t* get_xfmsta_state() {
 
 /*                  ... to cylindrical */
 
-		    vpack_(&__state->c_b65, &__state->c_b65, &ivel[2], &
-			    ostate[3]);
-		    reccyl_(ipos, ostate, &ostate[1], &ostate[2]);
+		    vpack_(__global_state, &__state->c_b65, &__state->c_b65, &
+			    ivel[2], &ostate[3]);
+		    reccyl_(__global_state, ipos, ostate, &ostate[1], &ostate[
+			    2]);
 		} else if (osys == 3) {
 
 /*                  ... to latitudinal */
 
-		    vpack_(&ivel[2], &__state->c_b65, &__state->c_b65, &
-			    ostate[3]);
-		    reclat_(ipos, ostate, &ostate[1], &ostate[2]);
+		    vpack_(__global_state, &ivel[2], &__state->c_b65, &
+			    __state->c_b65, &ostate[3]);
+		    reclat_(__global_state, ipos, ostate, &ostate[1], &ostate[
+			    2]);
 		} else if (osys == 4) {
 
 /*                  ... to spherical */
 
-		    vpack_(&ivel[2], &__state->c_b65, &__state->c_b65, &
-			    ostate[3]);
-		    recsph_(ipos, ostate, &ostate[1], &ostate[2]);
+		    vpack_(__global_state, &ivel[2], &__state->c_b65, &
+			    __state->c_b65, &ostate[3]);
+		    recsph_(__global_state, ipos, ostate, &ostate[1], &ostate[
+			    2]);
 		} else if (osys == 5) {
 
 /*                  ... to geodetic */
 
-		    vpack_(&__state->c_b65, &__state->c_b65, &ivel[2], &
-			    ostate[3]);
-		    recgeo_(ipos, radii, &f, ostate, &ostate[1], &ostate[2]);
+		    vpack_(__global_state, &__state->c_b65, &__state->c_b65, &
+			    ivel[2], &ostate[3]);
+		    recgeo_(__global_state, ipos, radii, &f, ostate, &ostate[
+			    1], &ostate[2]);
 		} else if (osys == 6) {
 
 /*                  ... to planetographic */
 
-		    vpack_(&__state->c_b65, &__state->c_b65, &ivel[2], &
-			    ostate[3]);
-		    recpgr_(body, ipos, radii, &f, ostate, &ostate[1], &
-			    ostate[2], body_len);
+		    vpack_(__global_state, &__state->c_b65, &__state->c_b65, &
+			    ivel[2], &ostate[3]);
+		    recpgr_(__global_state, body, ipos, radii, &f, ostate, &
+			    ostate[1], &ostate[2], body_len);
 		} else {
-		    setmsg_("This error should never occur. This is an inter"
-			    "mediate step in which a position and velocity al"
-			    "ong the z-axis are converted to a non-rectangula"
-			    "r coordinate system from rectangular. The output"
-			    " coordinate system is not recognized, yet was no"
-			    "t caught by an earlier check.", (ftnlen)268);
-		    sigerr_("SPICE(BUG3)", (ftnlen)11);
-		    chkout_("XFMSTA", (ftnlen)6);
+		    setmsg_(__global_state, "This error should never occur. "
+			    "This is an intermediate step in which a position"
+			    " and velocity along the z-axis are converted to "
+			    "a non-rectangular coordinate system from rectang"
+			    "ular. The output coordinate system is not recogn"
+			    "ized, yet was not caught by an earlier check.", (
+			    ftnlen)268);
+		    sigerr_(__global_state, "SPICE(BUG3)", (ftnlen)11);
+		    chkout_(__global_state, "XFMSTA", (ftnlen)6);
 		    return 0;
 		}
 
@@ -1208,7 +1237,7 @@ static xfmsta_state_t* get_xfmsta_state() {
 /*              case of the position and velocity existing along the */
 /*              z-axis. */
 
-		chkout_("XFMSTA", (ftnlen)6);
+		chkout_(__global_state, "XFMSTA", (ftnlen)6);
 		return 0;
 	    } else {
 
@@ -1216,9 +1245,10 @@ static xfmsta_state_t* get_xfmsta_state() {
 /*              converted since it is not along the z-axis. */
 /*              Signal an error. */
 
-		setmsg_("Invalid input state: z axis.", (ftnlen)28);
-		sigerr_("SPICE(INVALIDSTATE)", (ftnlen)19);
-		chkout_("XFMSTA", (ftnlen)6);
+		setmsg_(__global_state, "Invalid input state: z axis.", (
+			ftnlen)28);
+		sigerr_(__global_state, "SPICE(INVALIDSTATE)", (ftnlen)19);
+		chkout_(__global_state, "XFMSTA", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1230,50 +1260,52 @@ static xfmsta_state_t* get_xfmsta_state() {
 
 /*                  ... to cylindrical */
 
-	    dcyldr_(ipos, &ipos[1], &ipos[2], jacobi);
-	    reccyl_(ipos, ostate, &ostate[1], &ostate[2]);
+	    dcyldr_(__global_state, ipos, &ipos[1], &ipos[2], jacobi);
+	    reccyl_(__global_state, ipos, ostate, &ostate[1], &ostate[2]);
 	} else if (osys == 3) {
 
 /*                  ... to latitudinal */
 
-	    dlatdr_(ipos, &ipos[1], &ipos[2], jacobi);
-	    reclat_(ipos, ostate, &ostate[1], &ostate[2]);
+	    dlatdr_(__global_state, ipos, &ipos[1], &ipos[2], jacobi);
+	    reclat_(__global_state, ipos, ostate, &ostate[1], &ostate[2]);
 	} else if (osys == 4) {
 
 /*                  ... to spherical */
 
-	    dsphdr_(ipos, &ipos[1], &ipos[2], jacobi);
-	    recsph_(ipos, ostate, &ostate[1], &ostate[2]);
+	    dsphdr_(__global_state, ipos, &ipos[1], &ipos[2], jacobi);
+	    recsph_(__global_state, ipos, ostate, &ostate[1], &ostate[2]);
 	} else if (osys == 5) {
 
 /*                  ... to geodetic */
 
-	    dgeodr_(ipos, &ipos[1], &ipos[2], radii, &f, jacobi);
-	    recgeo_(ipos, radii, &f, ostate, &ostate[1], &ostate[2]);
+	    dgeodr_(__global_state, ipos, &ipos[1], &ipos[2], radii, &f, 
+		    jacobi);
+	    recgeo_(__global_state, ipos, radii, &f, ostate, &ostate[1], &
+		    ostate[2]);
 	} else if (osys == 6) {
 
 /*                  ... to planetographic */
 
-	    dpgrdr_(body, ipos, &ipos[1], &ipos[2], radii, &f, jacobi, 
-		    body_len);
-	    recpgr_(body, ipos, radii, &f, ostate, &ostate[1], &ostate[2], 
-		    body_len);
+	    dpgrdr_(__global_state, body, ipos, &ipos[1], &ipos[2], radii, &f,
+		     jacobi, body_len);
+	    recpgr_(__global_state, body, ipos, radii, &f, ostate, &ostate[1],
+		     &ostate[2], body_len);
 	} else {
-	    setmsg_("This error should never occur. This is an intermediate "
-		    "step in which a state is converted to a non-rectangular "
-		    "coordinate system from rectangular. The output coordinat"
-		    "e system is not recognized, yet was not caught by an ear"
-		    "lier check.", (ftnlen)234);
-	    sigerr_("SPICE(BUG4)", (ftnlen)11);
-	    chkout_("XFMSTA", (ftnlen)6);
+	    setmsg_(__global_state, "This error should never occur. This is "
+		    "an intermediate step in which a state is converted to a "
+		    "non-rectangular coordinate system from rectangular. The "
+		    "output coordinate system is not recognized, yet was not "
+		    "caught by an earlier check.", (ftnlen)234);
+	    sigerr_(__global_state, "SPICE(BUG4)", (ftnlen)11);
+	    chkout_(__global_state, "XFMSTA", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Many D*DR and REC* routines are not error free. Be safe and */
 /*        check FAILED to not use un-initialized JACOBI. */
 
-	if (failed_()) {
-	    chkout_("XFMSTA", (ftnlen)6);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "XFMSTA", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1282,16 +1314,20 @@ static xfmsta_state_t* get_xfmsta_state() {
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    for (j = 1; j <= 3; ++j) {
-		sqtmp = sqrt((d__1 = jacobi[(i__1 = i__ + j * 3 - 4) < 9 && 0 
-			<= i__1 ? i__1 : s_rnge("jacobi", i__1, "xfmsta_", (
-			ftnlen)1352)], abs(d__1))) * sqrt((d__2 = ivel[(i__2 =
-			 j - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("ivel", i__2,
-			 "xfmsta_", (ftnlen)1352)], abs(d__2)));
+		sqtmp = sqrt(&__global_state->f2c, (d__1 = jacobi[(i__1 = i__ 
+			+ j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "jacobi", i__1, "xfmsta_", (
+			ftnlen)1352)], abs(d__1))) * sqrt(&
+			__global_state->f2c, (d__2 = ivel[(i__2 = j - 1) < 3 
+			&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			"ivel", i__2, "xfmsta_", (ftnlen)1352)], abs(d__2)));
 		if (sqtmp > toobig) {
-		    setmsg_("The product of the Jacobian and velocity may ca"
-			    "use numeric overflow.", (ftnlen)68);
-		    sigerr_("SPICE(NUMERICOVERFLOW)", (ftnlen)22);
-		    chkout_("XFMSTA", (ftnlen)6);
+		    setmsg_(__global_state, "The product of the Jacobian and"
+			    " velocity may cause numeric overflow.", (ftnlen)
+			    68);
+		    sigerr_(__global_state, "SPICE(NUMERICOVERFLOW)", (ftnlen)
+			    22);
+		    chkout_(__global_state, "XFMSTA", (ftnlen)6);
 		    return 0;
 		}
 	    }
@@ -1299,7 +1335,7 @@ static xfmsta_state_t* get_xfmsta_state() {
 
 /*        Calculate the velocity in the output coordinate system. */
 
-	mxv_(jacobi, ivel, &ostate[3]);
+	mxv_(__global_state, jacobi, ivel, &ostate[3]);
     } else if (osys == 1) {
 
 /*        If the output coordinate system is rectangular, the position */
@@ -1307,18 +1343,19 @@ static xfmsta_state_t* get_xfmsta_state() {
 /*        the rectangular IPOS and IVEL, respectively, because the */
 /*        components have already been converted to rectangular. */
 
-	vequ_(ipos, ostate);
-	vequ_(ivel, &ostate[3]);
+	vequ_(__global_state, ipos, ostate);
+	vequ_(__global_state, ivel, &ostate[3]);
     } else {
-	setmsg_("This error should never occur. This is an ELSE statement. I"
-		"f the output coordinate system is not rectangular, the IF sh"
-		"ould be executed. If the output coordinate system is rectang"
-		"ular, the ELSE IF should be executed.", (ftnlen)216);
-	sigerr_("SPICE(BUG5)", (ftnlen)11);
-	chkout_("XFMSTA", (ftnlen)6);
+	setmsg_(__global_state, "This error should never occur. This is an E"
+		"LSE statement. If the output coordinate system is not rectan"
+		"gular, the IF should be executed. If the output coordinate s"
+		"ystem is rectangular, the ELSE IF should be executed.", (
+		ftnlen)216);
+	sigerr_(__global_state, "SPICE(BUG5)", (ftnlen)11);
+	chkout_(__global_state, "XFMSTA", (ftnlen)6);
 	return 0;
     }
-    chkout_("XFMSTA", (ftnlen)6);
+    chkout_(__global_state, "XFMSTA", (ftnlen)6);
     return 0;
 } /* xfmsta_ */
 

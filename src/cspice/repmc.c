@@ -8,36 +8,36 @@
 
 
 typedef int repmc_state_t;
-static repmc_state_t* get_repmc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline repmc_state_t* get_repmc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  REPMC  ( Replace marker with character string ) */
-/* Subroutine */ int repmc_(char *in, char *marker, char *value, char *out, 
-	ftnlen in_len, ftnlen marker_len, ftnlen value_len, ftnlen out_len)
+/* Subroutine */ int repmc_(cspice_t* __global_state, char *in, char *marker, 
+	char *value, char *out, ftnlen in_len, ftnlen marker_len, ftnlen 
+	value_len, ftnlen out_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_indx(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_indx(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzrepsub_(char *, integer *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzrepsub_(cspice_t*, char *, integer *, 
+	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);
     integer mrknbf;
-    extern integer lastnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer mrknbl;
-    extern integer frstnb_(char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
     integer mrkpsb;
     integer mrkpse;
 
 
     /* Module state */
-    repmc_state_t* __state = get_repmc_state();
+    repmc_state_t* __state = get_repmc_state(__global_state);
 /* $ Abstract */
 
 /*     Replace a marker with a character string. */
@@ -277,8 +277,9 @@ static repmc_state_t* get_repmc_state() {
 
 /*     If MARKER is blank, no substitution is possible. */
 
-    if (s_cmp(marker, " ", marker_len, (ftnlen)1) == 0) {
-	s_copy(out, in, out_len, in_len);
+    if (s_cmp(&__global_state->f2c, marker, " ", marker_len, (ftnlen)1) == 0) 
+	    {
+	s_copy(&__global_state->f2c, out, in, out_len, in_len);
 	return 0;
     }
 
@@ -286,11 +287,12 @@ static repmc_state_t* get_repmc_state() {
 /*     (ignoring leading and trailing blanks). If MARKER is not */
 /*     a substring of IN, no substitution can be performed. */
 
-    mrknbf = frstnb_(marker, marker_len);
-    mrknbl = lastnb_(marker, marker_len);
-    mrkpsb = i_indx(in, marker + (mrknbf - 1), in_len, mrknbl - (mrknbf - 1));
+    mrknbf = frstnb_(__global_state, marker, marker_len);
+    mrknbl = lastnb_(__global_state, marker, marker_len);
+    mrkpsb = i_indx(&__global_state->f2c, in, marker + (mrknbf - 1), in_len, 
+	    mrknbl - (mrknbf - 1));
     if (mrkpsb == 0) {
-	s_copy(out, in, out_len, in_len);
+	s_copy(&__global_state->f2c, out, in, out_len, in_len);
 	return 0;
     }
     mrkpse = mrkpsb + mrknbl - mrknbf;
@@ -299,12 +301,14 @@ static repmc_state_t* get_repmc_state() {
 /*     blank, substitute a single blank. (This removes the marker.) */
 /*     Otherwise substitute the non-blank portion. */
 
-    if (s_cmp(value, " ", value_len, (ftnlen)1) == 0) {
-	zzrepsub_(in, &mrkpsb, &mrkpse, " ", out, in_len, (ftnlen)1, out_len);
+    if (s_cmp(&__global_state->f2c, value, " ", value_len, (ftnlen)1) == 0) {
+	zzrepsub_(__global_state, in, &mrkpsb, &mrkpse, " ", out, in_len, (
+		ftnlen)1, out_len);
     } else {
-	i__1 = frstnb_(value, value_len) - 1;
-	zzrepsub_(in, &mrkpsb, &mrkpse, value + i__1, out, in_len, lastnb_(
-		value, value_len) - i__1, out_len);
+	i__1 = frstnb_(__global_state, value, value_len) - 1;
+	zzrepsub_(__global_state, in, &mrkpsb, &mrkpse, value + i__1, out, 
+		in_len, lastnb_(__global_state, value, value_len) - i__1, 
+		out_len);
     }
     return 0;
 } /* repmc_ */

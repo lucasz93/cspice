@@ -629,7 +629,7 @@
    {
       return; 
    }
-   chkin_c ( "getfov_c" );
+   chkin_c ( naif_state, "getfov_c" );
 
    /*
    Make sure the output strings have at least enough room for one

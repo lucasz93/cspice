@@ -8,13 +8,12 @@
 
 
 typedef int sumai_state_t;
-static sumai_state_t* get_sumai_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sumai_state_t* get_sumai_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure SUMAI ( Sum of an integer array ) */
-integer sumai_(integer *array, integer *n)
+integer sumai_(cspice_t* __global_state, integer *array, integer *n)
 {
     /* System generated locals */
     integer ret_val, i__1;
@@ -25,7 +24,7 @@ integer sumai_(integer *array, integer *n)
 
 
     /* Module state */
-    sumai_state_t* __state = get_sumai_state();
+    sumai_state_t* __state = get_sumai_state(__global_state);
 /* $ Abstract */
 
 /*      Return the sum of the elements of an integer array. */

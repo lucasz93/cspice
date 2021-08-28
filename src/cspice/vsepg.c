@@ -8,35 +8,36 @@
 
 
 typedef int vsepg_state_t;
-static vsepg_state_t* get_vsepg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vsepg_state_t* get_vsepg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  VSEPG ( Angular separation of vectors, general dimension ) */
-doublereal vsepg_(doublereal *v1, doublereal *v2, integer *ndim)
+doublereal vsepg_(cspice_t* __global_state, doublereal *v1, doublereal *v2, 
+	integer *ndim)
 {
     /* System generated locals */
     integer i__1;
     doublereal ret_val, d__1;
 
     /* Builtin functions */
-    double sqrt(doublereal), asin(doublereal);
+    double sqrt(f2c_state_t*, doublereal), asin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal dmag1;
     doublereal dmag2;
     integer i__;
-    extern doublereal vdotg_(doublereal *, doublereal *, integer *);
+    extern doublereal vdotg_(cspice_t*, doublereal *, doublereal *, integer *)
+	    ;
     doublereal r1;
     doublereal r2;
     doublereal magdif;
-    extern doublereal pi_(void);
-    extern doublereal vnormg_(doublereal *, integer *);
+    extern doublereal pi_(cspice_t*);
+    extern doublereal vnormg_(cspice_t*, doublereal *, integer *);
 
 
     /* Module state */
-    vsepg_state_t* __state = get_vsepg_state();
+    vsepg_state_t* __state = get_vsepg_state(__global_state);
 /* $ Abstract */
 
 /*      VSEPG finds the separation angle in radians between two double */
@@ -241,17 +242,17 @@ doublereal vsepg_(doublereal *v1, doublereal *v2, integer *ndim)
 
 /*     Calculate the magnitudes of V1 and V2; if either is 0, VSEPG = 0 */
 
-    dmag1 = vnormg_(v1, ndim);
+    dmag1 = vnormg_(__global_state, v1, ndim);
     if (dmag1 == 0.) {
 	ret_val = 0.;
 	return ret_val;
     }
-    dmag2 = vnormg_(v2, ndim);
+    dmag2 = vnormg_(__global_state, v2, ndim);
     if (dmag2 == 0.) {
 	ret_val = 0.;
 	return ret_val;
     }
-    if (vdotg_(v1, v2, ndim) > 0.) {
+    if (vdotg_(__global_state, v1, v2, ndim) > 0.) {
 	r1 = 1. / dmag1;
 	r2 = 1. / dmag2;
 	magdif = 0.;
@@ -261,9 +262,9 @@ doublereal vsepg_(doublereal *v1, doublereal *v2, integer *ndim)
 	    d__1 = v1[i__ - 1] * r1 - v2[i__ - 1] * r2;
 	    magdif += d__1 * d__1;
 	}
-	magdif = sqrt(magdif);
-	ret_val = asin(magdif * .5) * 2.;
-    } else if (vdotg_(v1, v2, ndim) < 0.) {
+	magdif = sqrt(&__global_state->f2c, magdif);
+	ret_val = asin(&__global_state->f2c, magdif * .5) * 2.;
+    } else if (vdotg_(__global_state, v1, v2, ndim) < 0.) {
 	r1 = 1. / dmag1;
 	r2 = 1. / dmag2;
 	magdif = 0.;
@@ -273,10 +274,11 @@ doublereal vsepg_(doublereal *v1, doublereal *v2, integer *ndim)
 	    d__1 = v1[i__ - 1] * r1 + v2[i__ - 1] * r2;
 	    magdif += d__1 * d__1;
 	}
-	magdif = sqrt(magdif);
-	ret_val = pi_() - asin(magdif * .5) * 2.;
+	magdif = sqrt(&__global_state->f2c, magdif);
+	ret_val = pi_(__global_state) - asin(&__global_state->f2c, magdif * 
+		.5) * 2.;
     } else {
-	ret_val = pi_() / 2.;
+	ret_val = pi_(__global_state) / 2.;
     }
     return ret_val;
 } /* vsepg_ */

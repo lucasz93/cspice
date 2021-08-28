@@ -8,30 +8,31 @@
 
 
 typedef int shellc_state_t;
-static shellc_state_t* get_shellc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline shellc_state_t* get_shellc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SHELLC ( Shell sort a character array ) */
-/* Subroutine */ int shellc_(integer *ndim, char *array, ftnlen array_len)
+/* Subroutine */ int shellc_(cspice_t* __global_state, integer *ndim, char *
+	array, ftnlen array_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    logical l_le(char *, char *, ftnlen, ftnlen);
+    logical l_le(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int swapc_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int swapc_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer jg;
     integer gap;
 
 
     /* Module state */
-    shellc_state_t* __state = get_shellc_state();
+    shellc_state_t* __state = get_shellc_state(__global_state);
 /* $ Abstract */
 
 /*      Sort an array of character strings according to the ASCII */
@@ -168,12 +169,12 @@ static shellc_state_t* get_shellc_state() {
 	    j = i__ - gap;
 	    while(j > 0) {
 		jg = j + gap;
-		if (l_le(array + (j - 1) * array_len, array + (jg - 1) * 
-			array_len, array_len, array_len)) {
+		if (l_le(&__global_state->f2c, array + (j - 1) * array_len, 
+			array + (jg - 1) * array_len, array_len, array_len)) {
 		    j = 0;
 		} else {
-		    swapc_(array + (j - 1) * array_len, array + (jg - 1) * 
-			    array_len, array_len, array_len);
+		    swapc_(__global_state, array + (j - 1) * array_len, array 
+			    + (jg - 1) * array_len, array_len, array_len);
 		}
 		j -= gap;
 	    }

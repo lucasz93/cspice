@@ -8,23 +8,23 @@
 
 
 typedef int cke01_state_t;
-static cke01_state_t* get_cke01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cke01_state_t* get_cke01_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CKE01 ( CK evaluate pointing record, data type 1 ) */
-/* Subroutine */ int cke01_(logical *needav, doublereal *record, doublereal *
-	cmat, doublereal *av, doublereal *clkout)
+/* Subroutine */ int cke01_(cspice_t* __global_state, logical *needav, 
+	doublereal *record, doublereal *cmat, doublereal *av, doublereal *
+	clkout)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int q2m_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int q2m_(cspice_t*, doublereal *, doublereal *);
 
 
     /* Module state */
-    cke01_state_t* __state = get_cke01_state();
+    cke01_state_t* __state = get_cke01_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a pointing record returned by CKR01 from a CK data type 1 */
@@ -377,22 +377,22 @@ static cke01_state_t* get_cke01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKE01", (ftnlen)5);
+	chkin_(__global_state, "CKE01", (ftnlen)5);
     }
 
 /*     Dissect the record. */
 
     *clkout = record[0];
-    q2m_(&record[1], cmat);
+    q2m_(__global_state, &record[1], cmat);
     if (*needav) {
 	av[0] = record[5];
 	av[1] = record[6];
 	av[2] = record[7];
     }
-    chkout_("CKE01", (ftnlen)5);
+    chkout_(__global_state, "CKE01", (ftnlen)5);
     return 0;
 } /* cke01_ */
 

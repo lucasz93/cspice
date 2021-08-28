@@ -8,8 +8,7 @@
 
 
 extern bodfnd_init_t __bodfnd_init;
-static bodfnd_state_t* get_bodfnd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bodfnd_state_t* get_bodfnd_state(cspice_t* state) {
 	if (!state->bodfnd)
 		state->bodfnd = __cspice_allocate_module(sizeof(
 	bodfnd_state_t), &__bodfnd_init, sizeof(__bodfnd_init));
@@ -18,32 +17,33 @@ static bodfnd_state_t* get_bodfnd_state() {
 }
 
 /* $Procedure BODFND ( Find values from the kernel pool ) */
-logical bodfnd_(integer *body, char *item, ftnlen item_len)
+logical bodfnd_(cspice_t* __global_state, integer *body, char *item, ftnlen 
+	item_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char code[16];
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical found;
     char dtype[1];
     char varnam[32];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
 	    ftnlen, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    bodfnd_state_t* __state = get_bodfnd_state();
+    bodfnd_state_t* __state = get_bodfnd_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether values exist for some item for any body */
@@ -200,29 +200,32 @@ logical bodfnd_(integer *body, char *item, ftnlen item_len)
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = FALSE_;
 	return ret_val;
     } else {
-	chkin_("BODFND", (ftnlen)6);
+	chkin_(__global_state, "BODFND", (ftnlen)6);
     }
 
 /*     Construct the variable name from BODY and ITEM. */
 
-    s_copy(varnam, "BODY", (ftnlen)32, (ftnlen)4);
-    intstr_(body, code, (ftnlen)16);
-    suffix_(code, &__state->c__0, varnam, (ftnlen)16, (ftnlen)32);
-    suffix_("_", &__state->c__0, varnam, (ftnlen)1, (ftnlen)32);
-    suffix_(item, &__state->c__0, varnam, item_len, (ftnlen)32);
+    s_copy(&__global_state->f2c, varnam, "BODY", (ftnlen)32, (ftnlen)4);
+    intstr_(__global_state, body, code, (ftnlen)16);
+    suffix_(__global_state, code, &__state->c__0, varnam, (ftnlen)16, (ftnlen)
+	    32);
+    suffix_(__global_state, "_", &__state->c__0, varnam, (ftnlen)1, (ftnlen)
+	    32);
+    suffix_(__global_state, item, &__state->c__0, varnam, item_len, (ftnlen)
+	    32);
 
 /*     Search the kernel pool for the item. */
 
-    dtpool_(varnam, &found, &n, dtype, (ftnlen)32, (ftnlen)1);
+    dtpool_(__global_state, varnam, &found, &n, dtype, (ftnlen)32, (ftnlen)1);
 
 /*     Was anything there? */
 
     ret_val = found;
-    chkout_("BODFND", (ftnlen)6);
+    chkout_(__global_state, "BODFND", (ftnlen)6);
     return ret_val;
 } /* bodfnd_ */
 

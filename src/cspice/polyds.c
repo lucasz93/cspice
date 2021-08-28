@@ -8,14 +8,13 @@
 
 
 typedef int polyds_state_t;
-static polyds_state_t* get_polyds_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline polyds_state_t* get_polyds_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      POLYDS ( Compute a Polynomial and its Derivatives ) */
-/* Subroutine */ int polyds_(doublereal *coeffs, integer *deg, integer *
-	nderiv, doublereal *t, doublereal *p)
+/* Subroutine */ int polyds_(cspice_t* __global_state, doublereal *coeffs, 
+	integer *deg, integer *nderiv, doublereal *t, doublereal *p)
 {
     /* System generated locals */
     integer i__1;
@@ -27,7 +26,7 @@ static polyds_state_t* get_polyds_state() {
 
 
     /* Module state */
-    polyds_state_t* __state = get_polyds_state();
+    polyds_state_t* __state = get_polyds_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the value of a polynomial and it's first */

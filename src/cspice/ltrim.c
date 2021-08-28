@@ -8,23 +8,22 @@
 
 
 typedef int ltrim_state_t;
-static ltrim_state_t* get_ltrim_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ltrim_state_t* get_ltrim_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   LTRIM ( Left trim ) */
-integer ltrim_(char *string, ftnlen string_len)
+integer ltrim_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     integer ret_val, i__1, i__2;
 
     /* Local variables */
-    extern integer frstnb_(char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    ltrim_state_t* __state = get_ltrim_state();
+    ltrim_state_t* __state = get_ltrim_state(__global_state);
 /* $ Abstract */
 
 /*     Return the maximum of 1 and the location of the first non-blank */
@@ -168,7 +167,7 @@ integer ltrim_(char *string, ftnlen string_len)
 /*     `Just do it'. */
 
 /* Computing MAX */
-    i__1 = 1, i__2 = frstnb_(string, string_len);
+    i__1 = 1, i__2 = frstnb_(__global_state, string, string_len);
     ret_val = max(i__1,i__2);
     return ret_val;
 } /* ltrim_ */

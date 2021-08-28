@@ -8,35 +8,36 @@
 
 
 typedef int syseli_state_t;
-static syseli_state_t* get_syseli_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline syseli_state_t* get_syseli_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SYSELI ( Select a subset of the values of a symbol ) */
-/* Subroutine */ int syseli_(char *name__, integer *begin, integer *end, char 
-	*tabsym, integer *tabptr, integer *tabval, integer *values, logical *
-	found, ftnlen name_len, ftnlen tabsym_len)
+/* Subroutine */ int syseli_(cspice_t* __global_state, char *name__, integer *
+	begin, integer *end, char *tabsym, integer *tabptr, integer *tabval, 
+	integer *values, logical *found, ftnlen name_len, ftnlen tabsym_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer sumai_(integer *, integer *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer sumai_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer locval;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer locsym;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    syseli_state_t* __state = get_syseli_state();
+    syseli_state_t* __state = get_syseli_state(__global_state);
 /* $ Abstract */
 
 /*     Select a subset of the values associated with a particular */
@@ -242,20 +243,20 @@ static syseli_state_t* get_syseli_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYSELI", (ftnlen)6);
+	chkin_(__global_state, "SYSELI", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
 
 /*     Is this symbol even in the table? */
 
-    locsym = bsrchc_(name__, &nsym, tabsym + tabsym_len * 6, name_len, 
-	    tabsym_len);
+    locsym = bsrchc_(__global_state, name__, &nsym, tabsym + tabsym_len * 6, 
+	    name_len, tabsym_len);
 
 /*     If it's not in the table, it's definitely a problem. */
 
@@ -271,14 +272,15 @@ static syseli_state_t* get_syseli_state() {
 		*end) {
 	    *found = TRUE_;
 	    i__1 = locsym - 1;
-	    locval = sumai_(&tabptr[6], &i__1) + 1;
+	    locval = sumai_(__global_state, &tabptr[6], &i__1) + 1;
 	    i__1 = *end - *begin + 1;
-	    movei_(&tabval[locval + *begin + 4], &i__1, values);
+	    movei_(__global_state, &tabval[locval + *begin + 4], &i__1, 
+		    values);
 	} else {
 	    *found = FALSE_;
 	}
     }
-    chkout_("SYSELI", (ftnlen)6);
+    chkout_(__global_state, "SYSELI", (ftnlen)6);
     return 0;
 } /* syseli_ */
 

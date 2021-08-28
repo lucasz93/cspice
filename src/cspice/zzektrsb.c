@@ -8,30 +8,30 @@
 
 
 typedef int zzektrsb_state_t;
-static zzektrsb_state_t* get_zzektrsb_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrsb_state_t* get_zzektrsb_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKTRSB ( EK tree, identify siblings ) */
-/* Subroutine */ int zzektrsb_(integer *handle, integer *tree, integer *key, 
-	integer *lsib, integer *lkey, integer *rsib, integer *rkey)
+/* Subroutine */ int zzektrsb_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *key, integer *lsib, integer *lkey, integer *
+	rsib, integer *rkey)
 {
     integer base;
     integer pkey;
-    extern integer zzektrbs_(integer *);
-    extern /* Subroutine */ int zzektrpi_(integer *, integer *, integer *, 
+    extern integer zzektrbs_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzektrpi_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
+	    integer *, integer *, integer *, integer *);
     integer nkbas;
     integer lpidx;
     integer lpkey;
     integer rpidx;
     integer rpkey;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer kidbas;
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer keybas;
     integer addrss;
     integer parent;
@@ -42,7 +42,7 @@ static zzektrsb_state_t* get_zzektrsb_state() {
 
 
     /* Module state */
-    zzektrsb_state_t* __state = get_zzektrsb_state();
+    zzektrsb_state_t* __state = get_zzektrsb_state(__global_state);
 /* $ Abstract */
 
 /*     Identify the immediate siblings of a node:  return a key in each */
@@ -392,9 +392,9 @@ static zzektrsb_state_t* get_zzektrsb_state() {
 /*     Start out by looking up the parent node.  We get LSIB */
 /*     and RSIB for free. */
 
-    zzektrpi_(handle, tree, key, &parent, &pkey, &poffst, &lpidx, &lpkey, 
-	    lsib, &rpidx, &rpkey, rsib);
-    if (failed_()) {
+    zzektrpi_(__global_state, handle, tree, key, &parent, &pkey, &poffst, &
+	    lpidx, &lpkey, lsib, &rpidx, &rpkey, rsib);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
@@ -422,17 +422,17 @@ static zzektrsb_state_t* get_zzektrsb_state() {
 /*        the immediate predecessor of the left sibling node. */
 
 	llpidx = lpidx - 1;
-	base = zzektrbs_(&parent);
+	base = zzektrbs_(__global_state, &parent);
 	addrss = base + keybas + llpidx;
-	dasrdi_(handle, &addrss, &addrss, &loffst);
+	dasrdi_(__global_state, handle, &addrss, &addrss, &loffst);
 	loffst += poffst;
 
 /*        Get the first key from the left sibling.  Convert the key */
 /*        to an absolute key. */
 
-	base = zzektrbs_(lsib);
+	base = zzektrbs_(__global_state, lsib);
 	addrss = base + 2;
-	dasrdi_(handle, &addrss, &addrss, lkey);
+	dasrdi_(__global_state, handle, &addrss, &addrss, lkey);
 	*lkey += loffst;
     } else if (lpidx == 1) {
 
@@ -442,9 +442,9 @@ static zzektrsb_state_t* get_zzektrsb_state() {
 /*        Get the first key from the left sibling.  Convert the key */
 /*        to an absolute key. */
 
-	base = zzektrbs_(lsib);
+	base = zzektrbs_(__global_state, lsib);
 	addrss = base + 2;
-	dasrdi_(handle, &addrss, &addrss, lkey);
+	dasrdi_(__global_state, handle, &addrss, &addrss, lkey);
 	*lkey += poffst;
     } else {
 
@@ -467,9 +467,9 @@ static zzektrsb_state_t* get_zzektrsb_state() {
 /*        Get the first key from the right sibling.  Convert the key */
 /*        to an absolute key. */
 
-	base = zzektrbs_(rsib);
+	base = zzektrbs_(__global_state, rsib);
 	addrss = base + 2;
-	dasrdi_(handle, &addrss, &addrss, rkey);
+	dasrdi_(__global_state, handle, &addrss, &addrss, rkey);
 	*rkey += roffst;
     } else {
 

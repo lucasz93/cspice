@@ -8,19 +8,19 @@
 
 
 typedef int swapd_state_t;
-static swapd_state_t* get_swapd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline swapd_state_t* get_swapd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SWAPD ( Swap double precision values ) */
-/* Subroutine */ int swapd_(doublereal *a, doublereal *b)
+/* Subroutine */ int swapd_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b)
 {
     doublereal temp;
 
 
     /* Module state */
-    swapd_state_t* __state = get_swapd_state();
+    swapd_state_t* __state = get_swapd_state(__global_state);
 /* $ Abstract */
 
 /*      Swap the contents of two double precision variables. */

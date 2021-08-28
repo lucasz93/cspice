@@ -8,31 +8,34 @@
 
 
 typedef int stdio_state_t;
-static stdio_state_t* get_stdio_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline stdio_state_t* get_stdio_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      STDIO ( Standard IO ) */
-/* Subroutine */ int stdio_(char *name__, integer *unit, ftnlen name_len)
+/* Subroutine */ int stdio_(cspice_t* __global_state, char *name__, integer *
+	unit, ftnlen name_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char myname[8];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    stdio_state_t* __state = get_stdio_state();
+    stdio_state_t* __state = get_stdio_state(__global_state);
 /* $ Abstract */
 
 /*    Return the logical unit associated with some standard input or */
@@ -155,21 +158,24 @@ static stdio_state_t* get_stdio_state() {
 
 /*     Local Variables */
 
-    ljust_(name__, myname, name_len, (ftnlen)8);
-    ucase_(myname, myname, (ftnlen)8, (ftnlen)8);
-    if (s_cmp(myname, "STDIN", (ftnlen)8, (ftnlen)5) == 0) {
+    ljust_(__global_state, name__, myname, name_len, (ftnlen)8);
+    ucase_(__global_state, myname, myname, (ftnlen)8, (ftnlen)8);
+    if (s_cmp(&__global_state->f2c, myname, "STDIN", (ftnlen)8, (ftnlen)5) == 
+	    0) {
 	*unit = 5;
-    } else if (s_cmp(myname, "STDOUT", (ftnlen)8, (ftnlen)6) == 0) {
+    } else if (s_cmp(&__global_state->f2c, myname, "STDOUT", (ftnlen)8, (
+	    ftnlen)6) == 0) {
 	*unit = 6;
-    } else if (return_()) {
+    } else if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("STDIO", (ftnlen)5);
-	setmsg_("The only \"names\" recognized by STDIO are 'STDIN' and 'STD"
-		"OUT' you requested a unit for '#'. ", (ftnlen)92);
-	errch_("#", name__, (ftnlen)1, name_len);
-	sigerr_("SPICE(BADSTDIONAME)", (ftnlen)19);
-	chkout_("STDIO", (ftnlen)5);
+	chkin_(__global_state, "STDIO", (ftnlen)5);
+	setmsg_(__global_state, "The only \"names\" recognized by STDIO are "
+		"'STDIN' and 'STDOUT' you requested a unit for '#'. ", (ftnlen)
+		92);
+	errch_(__global_state, "#", name__, (ftnlen)1, name_len);
+	sigerr_(__global_state, "SPICE(BADSTDIONAME)", (ftnlen)19);
+	chkout_(__global_state, "STDIO", (ftnlen)5);
     }
     return 0;
 } /* stdio_ */

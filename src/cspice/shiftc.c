@@ -8,34 +8,34 @@
 
 
 typedef int shiftc_state_t;
-static shiftc_state_t* get_shiftc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline shiftc_state_t* get_shiftc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SHIFTC ( Shift a character string ) */
-/* Subroutine */ int shiftc_(char *in, char *dir, integer *nshift, char *
-	fillc, char *out, ftnlen in_len, ftnlen dir_len, ftnlen fillc_len, 
-	ftnlen out_len)
+/* Subroutine */ int shiftc_(cspice_t* __global_state, char *in, char *dir, 
+	integer *nshift, char *fillc, char *out, ftnlen in_len, ftnlen 
+	dir_len, ftnlen fillc_len, ftnlen out_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int shiftl_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int shiftr_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int shiftl_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int shiftr_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    shiftc_state_t* __state = get_shiftc_state();
+    shiftc_state_t* __state = get_shiftc_state(__global_state);
 /* $ Abstract */
 
 /*      Shift the contents of a character string to the left or right. */
@@ -191,34 +191,39 @@ static shiftc_state_t* get_shiftc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SHIFTC", (ftnlen)6);
+	chkin_(__global_state, "SHIFTC", (ftnlen)6);
     }
 
 /*     Hand off to one of the other routines. */
 
     if (*(unsigned char *)dir == 'L' || *(unsigned char *)dir == 'l') {
 	if (*nshift >= 0) {
-	    shiftl_(in, nshift, fillc, out, in_len, (ftnlen)1, out_len);
+	    shiftl_(__global_state, in, nshift, fillc, out, in_len, (ftnlen)1,
+		     out_len);
 	} else {
 	    i__1 = -(*nshift);
-	    shiftr_(in, &i__1, fillc, out, in_len, (ftnlen)1, out_len);
+	    shiftr_(__global_state, in, &i__1, fillc, out, in_len, (ftnlen)1, 
+		    out_len);
 	}
     } else if (*(unsigned char *)dir == 'R' || *(unsigned char *)dir == 'r') {
 	if (*nshift >= 0) {
-	    shiftr_(in, nshift, fillc, out, in_len, (ftnlen)1, out_len);
+	    shiftr_(__global_state, in, nshift, fillc, out, in_len, (ftnlen)1,
+		     out_len);
 	} else {
 	    i__1 = -(*nshift);
-	    shiftl_(in, &i__1, fillc, out, in_len, (ftnlen)1, out_len);
+	    shiftl_(__global_state, in, &i__1, fillc, out, in_len, (ftnlen)1, 
+		    out_len);
 	}
     } else {
-	setmsg_("Shift direction (#) must be L, l, R, or r.", (ftnlen)42);
-	errch_("#", dir, (ftnlen)1, (ftnlen)1);
-	sigerr_("SPICE(ILLEGSHIFTDIR)", (ftnlen)20);
+	setmsg_(__global_state, "Shift direction (#) must be L, l, R, or r.", 
+		(ftnlen)42);
+	errch_(__global_state, "#", dir, (ftnlen)1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ILLEGSHIFTDIR)", (ftnlen)20);
     }
-    chkout_("SHIFTC", (ftnlen)6);
+    chkout_(__global_state, "SHIFTC", (ftnlen)6);
     return 0;
 } /* shiftc_ */
 

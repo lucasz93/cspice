@@ -8,8 +8,7 @@
 
 
 extern spkezr_init_t __spkezr_init;
-static spkezr_state_t* get_spkezr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkezr_state_t* get_spkezr_state(cspice_t* state) {
 	if (!state->spkezr)
 		state->spkezr = __cspice_allocate_module(sizeof(
 	spkezr_state_t), &__spkezr_init, sizeof(__spkezr_init));
@@ -18,31 +17,35 @@ static spkezr_state_t* get_spkezr_state() {
 }
 
 /* $Procedure SPKEZR ( S/P Kernel, easier reader ) */
-/* Subroutine */ int spkezr_(char *targ, doublereal *et, char *ref, char *
-	abcorr, char *obs, doublereal *starg, doublereal *lt, ftnlen targ_len,
-	 ftnlen ref_len, ftnlen abcorr_len, ftnlen obs_len)
+/* Subroutine */ int spkezr_(cspice_t* __global_state, char *targ, doublereal 
+	*et, char *ref, char *abcorr, char *obs, doublereal *starg, 
+	doublereal *lt, ftnlen targ_len, ftnlen ref_len, ftnlen abcorr_len, 
+	ftnlen obs_len)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer obsid;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern /* Subroutine */ int spkez_(integer *, doublereal *, char *, char *
-	    , integer *, doublereal *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int spkez_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
     integer targid;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spkezr_state_t* __state = get_spkezr_state();
+    spkezr_state_t* __state = get_spkezr_state(__global_state);
 /* $ Abstract */
 
 /*     Return the state (position and velocity) of a target body */
@@ -684,10 +687,10 @@ static spkezr_state_t* get_spkezr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKEZR", (ftnlen)6);
+	chkin_(__global_state, "SPKEZR", (ftnlen)6);
     }
 
 /*     Initialization. */
@@ -696,51 +699,54 @@ static spkezr_state_t* get_spkezr_state() {
 
 /*        Initialize counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
 	__state->first = FALSE_;
     }
 
 /*     Starting from translation of target name to its code */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtgid, &
-	    __state->svfnd1, targ, &targid, &found, (ftnlen)36, targ_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtgid, &__state->svfnd1, targ, &targid, &found, (ftnlen)
+	    36, targ_len);
     if (! found) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit. Alternatively you may ca"
-		"ll SPKEZ directly if you know the SPICE ID codes for both '#"
-		"' and '#' ", (ftnlen)249);
-	errch_("#", targ, (ftnlen)1, targ_len);
-	errch_("#", targ, (ftnlen)1, targ_len);
-	errch_("#", obs, (ftnlen)1, obs_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SPKEZR", (ftnlen)6);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit. Alternat"
+		"ively you may call SPKEZ directly if you know the SPICE ID c"
+		"odes for both '#' and '#' ", (ftnlen)249);
+	errch_(__global_state, "#", targ, (ftnlen)1, targ_len);
+	errch_(__global_state, "#", targ, (ftnlen)1, targ_len);
+	errch_(__global_state, "#", obs, (ftnlen)1, obs_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SPKEZR", (ftnlen)6);
 	return 0;
     }
 
 /*     Now do the same for observer */
 
-    zzbods2c_(__state->svctr2, __state->svobsn, &__state->svobsi, &
-	    __state->svfnd2, obs, &obsid, &found, (ftnlen)36, obs_len);
+    zzbods2c_(__global_state, __state->svctr2, __state->svobsn, &
+	    __state->svobsi, &__state->svfnd2, obs, &obsid, &found, (ftnlen)
+	    36, obs_len);
     if (! found) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE toolkit. Alternatively you may "
-		"call SPKEZ directly if you know the SPICE ID codes for both "
-		"'#' and '#' ", (ftnlen)251);
-	errch_("#", obs, (ftnlen)1, obs_len);
-	errch_("#", targ, (ftnlen)1, targ_len);
-	errch_("#", obs, (ftnlen)1, obs_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SPKEZR", (ftnlen)6);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE toolkit. Altern"
+		"atively you may call SPKEZ directly if you know the SPICE ID"
+		" codes for both '#' and '#' ", (ftnlen)251);
+	errch_(__global_state, "#", obs, (ftnlen)1, obs_len);
+	errch_(__global_state, "#", targ, (ftnlen)1, targ_len);
+	errch_(__global_state, "#", obs, (ftnlen)1, obs_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SPKEZR", (ftnlen)6);
 	return 0;
     }
 
 /*     After all translations are done we can call SPKEZ. */
 
-    spkez_(&targid, et, ref, abcorr, &obsid, starg, lt, ref_len, abcorr_len);
-    chkout_("SPKEZR", (ftnlen)6);
+    spkez_(__global_state, &targid, et, ref, abcorr, &obsid, starg, lt, 
+	    ref_len, abcorr_len);
+    chkout_(__global_state, "SPKEZR", (ftnlen)6);
     return 0;
 } /* spkezr_ */
 

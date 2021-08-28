@@ -8,8 +8,7 @@
 
 
 extern dasrdc_init_t __dasrdc_init;
-static dasrdc_state_t* get_dasrdc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasrdc_state_t* get_dasrdc_state(cspice_t* state) {
 	if (!state->dasrdc)
 		state->dasrdc = __cspice_allocate_module(sizeof(
 	dasrdc_state_t), &__dasrdc_init, sizeof(__dasrdc_init));
@@ -18,43 +17,44 @@ static dasrdc_state_t* get_dasrdc_state() {
 }
 
 /* $Procedure      DASRDC ( DAS, read data, character ) */
-/* Subroutine */ int dasrdc_(integer *handle, integer *first, integer *last, 
-	integer *bpos, integer *epos, char *data, ftnlen data_len)
+/* Subroutine */ int dasrdc_(cspice_t* __global_state, integer *handle, 
+	integer *first, integer *last, integer *bpos, integer *epos, char *
+	data, ftnlen data_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer l;
     integer n;
     integer nread;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
     integer nmove;
     integer rcpos;
-    extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dasa2l_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern logical failed_(cspice_t*);
     integer clbase;
-    extern /* Subroutine */ int dasrrc_(integer *, integer *, integer *, 
-	    integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrrc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, char *, ftnlen);
     integer nmoved;
     integer clsize;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer numchr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer wordno;
     integer chr;
     integer elt;
 
 
     /* Module state */
-    dasrdc_state_t* __state = get_dasrdc_state();
+    dasrdc_state_t* __state = get_dasrdc_state(__global_state);
 /* $ Abstract */
 
 /*     Read character data from a range of DAS logical addresses. */
@@ -370,33 +370,36 @@ static dasrdc_state_t* get_dasrdc_state() {
 
 /*     Make sure BPOS and EPOS are ok; stop here if not. */
 
-    if (*bpos < 1 || *epos < 1 || *bpos > i_len(data, data_len) || *epos > 
-	    i_len(data, data_len)) {
-	chkin_("DASRDC", (ftnlen)6);
-	setmsg_("Substring bounds must be in range [1,#]. Actual range [BPOS"
-		",EPOS] was [#,#].", (ftnlen)76);
-	i__1 = i_len(data, data_len);
-	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", bpos, (ftnlen)1);
-	errint_("#", epos, (ftnlen)1);
-	sigerr_("SPICE(BADSUBSTRINGBOUNDS)", (ftnlen)25);
-	chkout_("DASRDC", (ftnlen)6);
+    if (*bpos < 1 || *epos < 1 || *bpos > i_len(&__global_state->f2c, data, 
+	    data_len) || *epos > i_len(&__global_state->f2c, data, data_len)) 
+	    {
+	chkin_(__global_state, "DASRDC", (ftnlen)6);
+	setmsg_(__global_state, "Substring bounds must be in range [1,#]. Ac"
+		"tual range [BPOS,EPOS] was [#,#].", (ftnlen)76);
+	i__1 = i_len(&__global_state->f2c, data, data_len);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	errint_(__global_state, "#", bpos, (ftnlen)1);
+	errint_(__global_state, "#", epos, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSUBSTRINGBOUNDS)", (ftnlen)25);
+	chkout_(__global_state, "DASRDC", (ftnlen)6);
 	return 0;
     } else if (*epos < *bpos) {
-	chkin_("DASRDC", (ftnlen)6);
-	setmsg_("Substring upper bound must not be less than lower bound.  A"
-		"ctual range [BPOS,EPOS] was [#,#].", (ftnlen)93);
-	errint_("#", bpos, (ftnlen)1);
-	errint_("#", epos, (ftnlen)1);
-	sigerr_("SPICE(BADSUBSTRINGBOUNDS)", (ftnlen)25);
-	chkout_("DASRDC", (ftnlen)6);
+	chkin_(__global_state, "DASRDC", (ftnlen)6);
+	setmsg_(__global_state, "Substring upper bound must not be less than"
+		" lower bound.  Actual range [BPOS,EPOS] was [#,#].", (ftnlen)
+		93);
+	errint_(__global_state, "#", bpos, (ftnlen)1);
+	errint_(__global_state, "#", epos, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSUBSTRINGBOUNDS)", (ftnlen)25);
+	chkout_(__global_state, "DASRDC", (ftnlen)6);
 	return 0;
     }
 
 /*     Find out the physical location of the first character to read.  If */
 /*     FIRST is out of range, DASA2L will cause an error to be signalled. */
 
-    dasa2l_(handle, &__state->c__1, first, &clbase, &clsize, &recno, &wordno);
+    dasa2l_(__global_state, handle, &__state->c__1, first, &clbase, &clsize, &
+	    recno, &wordno);
 
 /*     Get the length of the elements of DATA.  Count the total number */
 /*     of characters to read. */
@@ -415,7 +418,7 @@ static dasrdc_state_t* get_dasrdc_state() {
     nmoved = 0;
     rcpos = wordno;
     while(nmoved < numchr) {
-	if (failed_()) {
+	if (failed_(__global_state)) {
 	    return 0;
 	}
 	if (chr > *epos) {
@@ -430,8 +433,8 @@ static dasrdc_state_t* get_dasrdc_state() {
 	i__1 = numchr - nmoved, i__2 = *epos - chr + 1;
 	nmove = min(i__1,i__2);
 	i__1 = rcpos + nmove - 1;
-	dasrrc_(handle, &recno, &rcpos, &i__1, data + ((elt - 1) * data_len + 
-		(chr - 1)), chr + nmove - 1 - (chr - 1));
+	dasrrc_(__global_state, handle, &recno, &rcpos, &i__1, data + ((elt - 
+		1) * data_len + (chr - 1)), chr + nmove - 1 - (chr - 1));
 	nmoved += nmove;
 	rcpos += nmove;
 	chr += nmove;
@@ -442,7 +445,7 @@ static dasrdc_state_t* get_dasrdc_state() {
 /*     Read from as many additional records as necessary. */
 
     while(nread < n) {
-	if (failed_()) {
+	if (failed_(__global_state)) {
 	    return 0;
 	}
 
@@ -463,7 +466,7 @@ static dasrdc_state_t* get_dasrdc_state() {
 	    numchr = min(i__1,1024);
 	    nmoved = 0;
 	    rcpos = 1;
-	    while(nmoved < numchr && ! failed_()) {
+	    while(nmoved < numchr && ! failed_(__global_state)) {
 		if (chr > *epos) {
 		    ++elt;
 		    chr = *bpos;
@@ -476,8 +479,9 @@ static dasrdc_state_t* get_dasrdc_state() {
 		i__1 = numchr - nmoved, i__2 = *epos - chr + 1;
 		nmove = min(i__1,i__2);
 		i__1 = rcpos + nmove - 1;
-		dasrrc_(handle, &recno, &rcpos, &i__1, data + ((elt - 1) * 
-			data_len + (chr - 1)), chr + nmove - 1 - (chr - 1));
+		dasrrc_(__global_state, handle, &recno, &rcpos, &i__1, data + 
+			((elt - 1) * data_len + (chr - 1)), chr + nmove - 1 - 
+			(chr - 1));
 		nmoved += nmove;
 		rcpos += nmove;
 		chr += nmove;
@@ -491,8 +495,8 @@ static dasrdc_state_t* get_dasrdc_state() {
 /*           cluster has address FIRST + NREAD. */
 
 	    i__1 = *first + nread;
-	    dasa2l_(handle, &__state->c__1, &i__1, &clbase, &clsize, &recno, &
-		    wordno);
+	    dasa2l_(__global_state, handle, &__state->c__1, &i__1, &clbase, &
+		    clsize, &recno, &wordno);
 	}
     }
     return 0;

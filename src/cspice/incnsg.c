@@ -8,8 +8,7 @@
 
 
 extern incnsg_init_t __incnsg_init;
-static incnsg_state_t* get_incnsg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline incnsg_state_t* get_incnsg_state(cspice_t* state) {
 	if (!state->incnsg)
 		state->incnsg = __cspice_allocate_module(sizeof(
 	incnsg_state_t), &__incnsg_init, sizeof(__incnsg_init));
@@ -18,9 +17,9 @@ static incnsg_state_t* get_incnsg_state() {
 }
 
 /* $Procedure      INCNSG ( Intersection of cone and line segment ) */
-/* Subroutine */ int incnsg_(doublereal *apex, doublereal *axis, doublereal *
-	angle, doublereal *endpt1, doublereal *endpt2, integer *nxpts, 
-	doublereal *xpt1, doublereal *xpt2)
+/* Subroutine */ int incnsg_(cspice_t* __global_state, doublereal *apex, 
+	doublereal *axis, doublereal *angle, doublereal *endpt1, doublereal *
+	endpt2, integer *nxpts, doublereal *xpt1, doublereal *xpt2)
 {
     /* Initialized data */
 
@@ -30,31 +29,31 @@ static incnsg_state_t* get_incnsg_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(doublereal);
-    integer s_rnge(char *, integer, char *, integer);
+    double cos(f2c_state_t*, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal dmag;
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal minp[3];
     doublereal maxp[3];
     doublereal udir[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal plnx[3];
     doublereal uuax;
     doublereal wuax;
-    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int mtxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal v1mag;
     doublereal v2mag;
-    extern /* Subroutine */ int zzcnquad_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int zzcnquad_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, integer *, doublereal *, 
+	    doublereal *);
     doublereal uoff1[3];
     doublereal uoff2[3];
     doublereal xoff1[3];
@@ -62,38 +61,39 @@ static incnsg_state_t* get_incnsg_state() {
     doublereal a;
     doublereal b;
     doublereal c__;
-    extern /* Subroutine */ int zzsglatx_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzsglatx_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *);
     integer i__;
-    extern /* Subroutine */ int zzcxbrut_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, logical *)
-	    ;
+    extern /* Subroutine */ int zzcxbrut_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
+	    logical *);
     integer n;
     doublereal x[3];
-    extern /* Subroutine */ int frame_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int frame_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal axmag;
     doublereal colat;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal vdist_(doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
     doublereal uaxis[3];
     doublereal vtemp[3];
     doublereal xform[9]	/* was [3][3] */;
     integer nplnx;
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int unorm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal s1;
     doublereal s2;
     doublereal v1[3];
     doublereal v2[3];
     doublereal w2;
     doublereal vtemp2[3];
-    extern /* Subroutine */ int nvp2pl_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern logical failed_(void);
-    extern doublereal pi_(void);
-    extern doublereal halfpi_(void);
+    extern /* Subroutine */ int nvp2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern logical failed_(cspice_t*);
+    extern doublereal pi_(cspice_t*);
+    extern doublereal halfpi_(cspice_t*);
     doublereal locang;
     doublereal cosang;
     doublereal wu;
@@ -101,23 +101,23 @@ static incnsg_state_t* get_incnsg_state() {
     doublereal minlat;
     doublereal ca2;
     doublereal maxlat;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     doublereal coserr;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal dp1;
     doublereal dp2;
     doublereal nrmpln[4];
     logical in1;
     logical in2;
-    extern /* Subroutine */ int inrypl_(doublereal *, doublereal *, 
-	    doublereal *, integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int inrypl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, integer *, doublereal *);
+    extern logical return_(cspice_t*);
     doublereal uv1[3];
     doublereal uv2[3];
     doublereal dir[3];
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     logical neg1;
     doublereal off1[3];
     doublereal off2[3];
@@ -125,7 +125,7 @@ static incnsg_state_t* get_incnsg_state() {
 
 
     /* Module state */
-    incnsg_state_t* __state = get_incnsg_state();
+    incnsg_state_t* __state = get_incnsg_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the points of intersection of a specified nappe of a cone */
@@ -408,7 +408,7 @@ static incnsg_state_t* get_incnsg_state() {
 /*     out afterward. When those code sections are skipped, */
 /*     we avoid traceback participation. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -418,42 +418,42 @@ static incnsg_state_t* get_incnsg_state() {
 
 /*     The cone's axis vector must be non-zero. */
 
-    unorm_(axis, uaxis, &axmag);
+    unorm_(__global_state, axis, uaxis, &axmag);
     if (axmag == 0.) {
-	chkin_("INCNSG", (ftnlen)6);
-	setmsg_("The cone's axis vector must be non-zero but sadly, it faile"
-		"d to meet this criterion.", (ftnlen)84);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("INCNSG", (ftnlen)6);
+	chkin_(__global_state, "INCNSG", (ftnlen)6);
+	setmsg_(__global_state, "The cone's axis vector must be non-zero but"
+		" sadly, it failed to meet this criterion.", (ftnlen)84);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "INCNSG", (ftnlen)6);
 	return 0;
     }
 
 /*     The cone's angular radius must be non-negative. */
 
     if (*angle < 0.) {
-	chkin_("INCNSG", (ftnlen)6);
-	setmsg_("The cone's angular radius must be  non-negative but was # ("
-		"radians).", (ftnlen)68);
-	errdp_("#", angle, (ftnlen)1);
-	sigerr_("SPICE(INVALIDANGLE)", (ftnlen)19);
-	chkout_("INCNSG", (ftnlen)6);
+	chkin_(__global_state, "INCNSG", (ftnlen)6);
+	setmsg_(__global_state, "The cone's angular radius must be  non-nega"
+		"tive but was # (radians).", (ftnlen)68);
+	errdp_(__global_state, "#", angle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDANGLE)", (ftnlen)19);
+	chkout_(__global_state, "INCNSG", (ftnlen)6);
 	return 0;
     }
 
 /*     The endpoints of the segment must be distinct. Check this after */
 /*     computing a unit direction vector for the line segment. */
 
-    vsub_(endpt2, endpt1, dir);
-    unorm_(dir, udir, &dmag);
+    vsub_(__global_state, endpt2, endpt1, dir);
+    unorm_(__global_state, dir, udir, &dmag);
     if (dmag == 0.) {
-	chkin_("INCNSG", (ftnlen)6);
-	setmsg_("The distance between the segment's endpoints was zero. Firs"
-		"t endpoint: (# # #).", (ftnlen)79);
-	errdp_("#", endpt1, (ftnlen)1);
-	errdp_("#", &endpt1[1], (ftnlen)1);
-	errdp_("#", &endpt1[2], (ftnlen)1);
-	sigerr_("SPICE(ENDPOINTSMATCH)", (ftnlen)21);
-	chkout_("INCNSG", (ftnlen)6);
+	chkin_(__global_state, "INCNSG", (ftnlen)6);
+	setmsg_(__global_state, "The distance between the segment's endpoint"
+		"s was zero. First endpoint: (# # #).", (ftnlen)79);
+	errdp_(__global_state, "#", endpt1, (ftnlen)1);
+	errdp_(__global_state, "#", &endpt1[1], (ftnlen)1);
+	errdp_(__global_state, "#", &endpt1[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ENDPOINTSMATCH)", (ftnlen)21);
+	chkout_(__global_state, "INCNSG", (ftnlen)6);
 	return 0;
     }
 
@@ -461,7 +461,7 @@ static incnsg_state_t* get_incnsg_state() {
 /*     cases with COSANG equal to 0 as though the cone is actually a */
 /*     plane normal to the axis and containing the apex. */
 
-    cosang = cos(*angle);
+    cosang = cos(&__global_state->f2c, *angle);
     locang = *angle;
 
 /*     We'll work with a local axis that has angular separation of */
@@ -469,7 +469,7 @@ static incnsg_state_t* get_incnsg_state() {
 
     if (cosang < 0.) {
 	cosang = -cosang;
-	locang = pi_() - *angle;
+	locang = pi_(__global_state) - *angle;
 	uaxis[0] = -uaxis[0];
 	uaxis[1] = -uaxis[1];
 	uaxis[2] = -uaxis[2];
@@ -478,15 +478,15 @@ static incnsg_state_t* get_incnsg_state() {
 /*     Compute the offsets of the endpoints of the segment from */
 /*     the cone's apex. */
 
-    vsub_(endpt1, apex, off1);
-    vsub_(endpt2, apex, off2);
+    vsub_(__global_state, endpt1, apex, off1);
+    vsub_(__global_state, endpt2, apex, off2);
 
 /*     Deal with some of the simple cases first. */
 
-    vhat_(off1, uoff1);
-    vhat_(off2, uoff2);
-    dp1 = vdot_(uoff1, uaxis);
-    dp2 = vdot_(uoff2, uaxis);
+    vhat_(__global_state, off1, uoff1);
+    vhat_(__global_state, off2, uoff2);
+    dp1 = vdot_(__global_state, uoff1, uaxis);
+    dp2 = vdot_(__global_state, uoff2, uaxis);
 
 /*     The given axis is inside the nappe defined by the angular radius. */
 
@@ -522,8 +522,8 @@ static incnsg_state_t* get_incnsg_state() {
 /*        NVP2PL can signal an error only if the input axis is the */
 /*        zero vector. We've ensured that it isn't. */
 
-	nvp2pl_(uaxis, apex, nrmpln);
-	inrypl_(endpt1, udir, nrmpln, &nplnx, plnx);
+	nvp2pl_(__global_state, uaxis, apex, nrmpln);
+	inrypl_(__global_state, endpt1, udir, nrmpln, &nplnx, plnx);
 
 /*        If the ray doesn't hit the plane, we're done. Otherwise, */
 /*        check the intercept. */
@@ -533,13 +533,13 @@ static incnsg_state_t* get_incnsg_state() {
 /*           The ray does hit the plane. If the intersection is on the */
 /*           line segment, we have a solution. */
 
-	    if (vdist_(plnx, endpt1) <= dmag) {
+	    if (vdist_(__global_state, plnx, endpt1) <= dmag) {
 
 /*              The intercept is not further along the ray than the */
 /*              second endpoint. It's a valid solution. */
 
 		*nxpts = 1;
-		vequ_(plnx, xpt1);
+		vequ_(__global_state, plnx, xpt1);
 	    }
 	}
 
@@ -629,10 +629,10 @@ static incnsg_state_t* get_incnsg_state() {
 
 /*     Intermediate values: */
 
-    uuax = vdot_(udir, uaxis);
-    wuax = vdot_(off1, uaxis);
-    wu = vdot_(off1, udir);
-    w2 = vdot_(off1, off1);
+    uuax = vdot_(__global_state, udir, uaxis);
+    wuax = vdot_(__global_state, off1, uaxis);
+    wu = vdot_(__global_state, off1, udir);
+    w2 = vdot_(__global_state, off1, off1);
     ca2 = cosang * cosang;
 
 /*     Quadratic coefficients: */
@@ -648,7 +648,7 @@ static incnsg_state_t* get_incnsg_state() {
 /*     Solve the equation, using DMAG as an upper bound */
 /*     on the magnitude of the roots. */
 
-    zzcnquad_(&a, &b, &c__, &dmag, &n, &s1, &s2);
+    zzcnquad_(__global_state, &a, &b, &c__, &dmag, &n, &s1, &s2);
 
 /*     Compute the possible intersection points and test them */
 /*     to make sure they really are solutions. */
@@ -663,13 +663,14 @@ static incnsg_state_t* get_incnsg_state() {
 	    xpt1[0] = endpt1[0] + s1 * udir[0];
 	    xpt1[1] = endpt1[1] + s1 * udir[1];
 	    xpt1[2] = endpt1[2] + s1 * udir[2];
-	    vsub_(xpt1, apex, v1);
+	    vsub_(__global_state, xpt1, apex, v1);
 
 /*           See whether V1 is on the cone. */
 
-	    unorm_(v1, uv1, &v1mag);
+	    unorm_(__global_state, v1, uv1, &v1mag);
 	    if (v1mag > 0.) {
-		coserr = (d__1 = vdot_(uv1, uaxis) - cosang, abs(d__1));
+		coserr = (d__1 = vdot_(__global_state, uv1, uaxis) - cosang, 
+			abs(d__1));
 	    } else {
 		coserr = 0.;
 	    }
@@ -691,13 +692,14 @@ static incnsg_state_t* get_incnsg_state() {
 		xpt2[0] = endpt1[0] + s2 * udir[0];
 		xpt2[1] = endpt1[1] + s2 * udir[1];
 		xpt2[2] = endpt1[2] + s2 * udir[2];
-		vsub_(xpt2, apex, v2);
+		vsub_(__global_state, xpt2, apex, v2);
 
 /*              See whether V2 is on the cone. */
 
-		unorm_(v2, uv2, &v2mag);
+		unorm_(__global_state, v2, uv2, &v2mag);
 		if (v2mag > 0.) {
-		    coserr = (d__1 = vdot_(uv2, uaxis) - cosang, abs(d__1));
+		    coserr = (d__1 = vdot_(__global_state, uv2, uaxis) - 
+			    cosang, abs(d__1));
 		} else {
 		    coserr = 0.;
 		}
@@ -713,7 +715,7 @@ static incnsg_state_t* get_incnsg_state() {
 
 /*                    This is the only valid root; overwrite XPT1. */
 
-			vequ_(xpt2, xpt1);
+			vequ_(__global_state, xpt2, xpt1);
 		    }
 		}
 	    }
@@ -753,8 +755,8 @@ static incnsg_state_t* get_incnsg_state() {
 /*              situation. Therefore, we don't check in before the */
 /*              following call. */
 
-		zzcxbrut_(apex, uaxis, &locang, endpt1, endpt2, xpt1, &isbrck)
-			;
+		zzcxbrut_(__global_state, apex, uaxis, &locang, endpt1, 
+			endpt2, xpt1, &isbrck);
 		if (isbrck) {
 
 /*                 As long as the root was bracketed, XPT1 is a */
@@ -764,7 +766,7 @@ static incnsg_state_t* get_incnsg_state() {
 		}
 	    }
 	} else {
-	    chkin_("INCNSG", (ftnlen)6);
+	    chkin_(__global_state, "INCNSG", (ftnlen)6);
 
 /*           Both endpoints are outside the cone. We could have zero to */
 /*           two roots. If the minimum angular separation of the segment */
@@ -780,60 +782,64 @@ static incnsg_state_t* get_incnsg_state() {
 /*           We'll count the roots we find, so we'll start at zero. */
 
 	    *nxpts = 0;
-	    frame_(uaxis, x, __state->y);
+	    frame_(__global_state, uaxis, x, __state->y);
 	    for (i__ = 1; i__ <= 3; ++i__) {
-		xform[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-			"xform", i__1, "incnsg_", (ftnlen)831)] = x[(i__2 = 
-			i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("x", i__2, 
-			"incnsg_", (ftnlen)831)];
-		xform[(i__1 = i__ * 3 - 2) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-			"xform", i__1, "incnsg_", (ftnlen)832)] = __state->y[(
-			i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-			"y", i__2, "incnsg_", (ftnlen)832)];
-		xform[(i__1 = i__ * 3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-			"xform", i__1, "incnsg_", (ftnlen)833)] = uaxis[(i__2 
-			= i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("uaxis", 
+		xform[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "xform", i__1, "incnsg_", (
+			ftnlen)831)] = x[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
+			i__2 : s_rnge(&__global_state->f2c, "x", i__2, "incn"
+			"sg_", (ftnlen)831)];
+		xform[(i__1 = i__ * 3 - 2) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "xform", i__1, "incnsg_", (
+			ftnlen)832)] = __state->y[(i__2 = i__ - 1) < 3 && 0 <=
+			 i__2 ? i__2 : s_rnge(&__global_state->f2c, "y", i__2,
+			 "incnsg_", (ftnlen)832)];
+		xform[(i__1 = i__ * 3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "xform", i__1, "incnsg_", (
+			ftnlen)833)] = uaxis[(i__2 = i__ - 1) < 3 && 0 <= 
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "uaxis", 
 			i__2, "incnsg_", (ftnlen)833)];
 	    }
-	    mxv_(xform, off1, xoff1);
-	    mxv_(xform, off2, xoff2);
-	    zzsglatx_(xoff1, xoff2, &minlat, minp, &maxlat, maxp);
-	    if (failed_()) {
-		chkout_("INCNSG", (ftnlen)6);
+	    mxv_(__global_state, xform, off1, xoff1);
+	    mxv_(__global_state, xform, off2, xoff2);
+	    zzsglatx_(__global_state, xoff1, xoff2, &minlat, minp, &maxlat, 
+		    maxp);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "INCNSG", (ftnlen)6);
 		return 0;
 	    }
 
 /*           COLAT is the colatitude of the point of maximum latitude. */
 
-	    colat = halfpi_() - maxlat;
+	    colat = halfpi_(__global_state) - maxlat;
 	    if (colat < locang) {
 
 /*              MAXP is inside the cone. There should be an intersection */
 /*              on the segment between XOFF1 and MAXP and another */
 /*              between MAXP and XOFF2. */
 
-		zzcxbrut_(__state->origin, __state->z__, &locang, xoff1, maxp,
-			 vtemp, &isbrck);
+		zzcxbrut_(__global_state, __state->origin, __state->z__, &
+			locang, xoff1, maxp, vtemp, &isbrck);
 		if (isbrck) {
 
 /*                 Convert VTEMP to the original frame, then translate */
 /*                 it so that it's represented as an offset from the */
 /*                 origin. */
 
-		    mtxv_(xform, vtemp, vtemp2);
-		    vadd_(vtemp2, apex, xpt1);
+		    mtxv_(__global_state, xform, vtemp, vtemp2);
+		    vadd_(__global_state, vtemp2, apex, xpt1);
 		    *nxpts = 1;
 		}
-		zzcxbrut_(__state->origin, __state->z__, &locang, maxp, xoff2,
-			 vtemp, &isbrck);
+		zzcxbrut_(__global_state, __state->origin, __state->z__, &
+			locang, maxp, xoff2, vtemp, &isbrck);
 		if (isbrck) {
 
 /*                 Convert VTEMP to the original frame, then translate */
 /*                 it so that it's represented as an offset from the */
 /*                 origin. */
 
-		    mtxv_(xform, vtemp, vtemp2);
-		    vadd_(vtemp2, apex, xpt2);
+		    mtxv_(__global_state, xform, vtemp, vtemp2);
+		    vadd_(__global_state, vtemp2, apex, xpt2);
 		    if (*nxpts == 1) {
 
 /*                    Both roots are valid. */
@@ -844,7 +850,7 @@ static incnsg_state_t* get_incnsg_state() {
 /*                    The second root is the only valid root. Move it */
 /*                    into XPT1. */
 
-			vequ_(xpt2, xpt1);
+			vequ_(__global_state, xpt2, xpt1);
 			*nxpts = 1;
 		    }
 		}
@@ -854,13 +860,13 @@ static incnsg_state_t* get_incnsg_state() {
 /*              the segment and cone. This occurs at the point */
 /*              having maximum latitude: MAXP. */
 
-		vequ_(maxp, xpt1);
+		vequ_(__global_state, maxp, xpt1);
 		*nxpts = 1;
 
 /*           Note that if COLAT > LOCANG, there are no roots. */
 
 	    }
-	    chkout_("INCNSG", (ftnlen)6);
+	    chkout_(__global_state, "INCNSG", (ftnlen)6);
 	}
 
 /*        This is the end of portion of the "brute force" branch in */

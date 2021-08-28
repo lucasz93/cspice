@@ -8,8 +8,7 @@
 
 
 extern dafwcr_init_t __dafwcr_init;
-static dafwcr_state_t* get_dafwcr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafwcr_state_t* get_dafwcr_state(cspice_t* state) {
 	if (!state->dafwcr)
 		state->dafwcr = __cspice_allocate_module(sizeof(
 	dafwcr_state_t), &__dafwcr_init, sizeof(__dafwcr_init));
@@ -18,35 +17,36 @@ static dafwcr_state_t* get_dafwcr_state() {
 }
 
 /* $Procedure DAFWCR ( DAF, write character record ) */
-/* Subroutine */ int dafwcr_(integer *handle, integer *recno, char *crec, 
-	ftnlen crec_len)
+/* Subroutine */ int dafwcr_(cspice_t* __global_state, integer *handle, 
+	integer *recno, char *crec, ftnlen crec_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), s_wdue(cilist *), do_uio(integer *, char *,
-	     ftnlen), e_wdue(void);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_wdue(f2c_state_t*, cilist *
+	    ), do_uio(f2c_state_t*, integer *, char *, ftnlen), e_wdue(
+	    f2c_state_t*);
 
     /* Local variables */
     integer unit;
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    dafwcr_state_t* __state = get_dafwcr_state();
+    dafwcr_state_t* __state = get_dafwcr_state(__global_state);
 /* $ Abstract */
 
 /*     Write or rewrite the contents of a character record to */
@@ -204,12 +204,13 @@ static dafwcr_state_t* get_dafwcr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFWCR", (ftnlen)6);
+	chkin_(__global_state, "DAFWCR", (ftnlen)6);
     }
-    zzddhhlu_(handle, "DAF", &__state->c_false, &unit, (ftnlen)3);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_false, &unit, (
+	    ftnlen)3);
 
 /*     Look out for */
 
@@ -219,34 +220,34 @@ static dafwcr_state_t* get_dafwcr_state() {
 
 /*       -- Failed write. */
 
-    dafsih_(handle, "WRITE", (ftnlen)5);
-    if (i_len(crec, crec_len) != 1000) {
-	setmsg_("Expected length of character record is 1000. Length of pass"
-		"ed record is #", (ftnlen)73);
-	i__1 = i_len(crec, crec_len);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(DAFBADCRECLEN)", (ftnlen)20);
+    dafsih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (i_len(&__global_state->f2c, crec, crec_len) != 1000) {
+	setmsg_(__global_state, "Expected length of character record is 1000"
+		". Length of passed record is #", (ftnlen)73);
+	i__1 = i_len(&__global_state->f2c, crec, crec_len);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFBADCRECLEN)", (ftnlen)20);
     } else {
 	__state->io___3.ciunit = unit;
 	__state->io___3.cirec = *recno;
-	iostat = s_wdue(&__state->io___3);
+	iostat = s_wdue(&__global_state->f2c, &__state->io___3);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, crec, crec_len);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, crec, crec_len);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = e_wdue();
+	iostat = e_wdue(&__global_state->f2c);
 L100001:
 	if (iostat != 0) {
-	    setmsg_("Character record write failed. Value of IOSTAT was #", (
-		    ftnlen)52);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DAFWRITEFAIL)", (ftnlen)19);
+	    setmsg_(__global_state, "Character record write failed. Value of"
+		    " IOSTAT was #", (ftnlen)52);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DAFWRITEFAIL)", (ftnlen)19);
 	}
     }
-    chkout_("DAFWCR", (ftnlen)6);
+    chkout_(__global_state, "DAFWCR", (ftnlen)6);
     return 0;
 } /* dafwcr_ */
 

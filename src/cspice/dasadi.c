@@ -8,8 +8,7 @@
 
 
 extern dasadi_init_t __dasadi_init;
-static dasadi_state_t* get_dasadi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasadi_state_t* get_dasadi_state(cspice_t* state) {
 	if (!state->dasadi)
 		state->dasadi = __cspice_allocate_module(sizeof(
 	dasadi_state_t), &__dasadi_init, sizeof(__dasadi_init));
@@ -18,45 +17,50 @@ static dasadi_state_t* get_dasadi_state() {
 }
 
 /* $Procedure      DASADI ( DAS, add data, integer ) */
-/* Subroutine */ int dasadi_(integer *handle, integer *n, integer *data)
+/* Subroutine */ int dasadi_(cspice_t* __global_state, integer *handle, 
+	integer *n, integer *data)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     integer free;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
     integer recno;
     integer lasti;
     integer ncomr;
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dasa2l_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasa2l_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern logical failed_(cspice_t*);
     integer clbase;
-    extern /* Subroutine */ int dascud_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dascud_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dashfs_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *);
     integer record[256];
     integer lastla[3];
-    extern /* Subroutine */ int dasuri_(integer *, integer *, integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int dasuri_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
     integer lastrc[3];
     integer clsize;
-    extern /* Subroutine */ int daswri_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int daswri_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer lastwd[3];
     integer nresvc;
     integer wordno;
     integer numint;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer nresvr;
     integer nwritn;
 
 
     /* Module state */
-    dasadi_state_t* __state = get_dasadi_state();
+    dasadi_state_t* __state = get_dasadi_state(__global_state);
 /* $ Abstract */
 
 /*     Add an array of integers to a DAS file. */
@@ -316,16 +320,16 @@ static dasadi_state_t* get_dasadi_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASADI", (ftnlen)6);
+	chkin_(__global_state, "DASADI", (ftnlen)6);
     }
 
 /*     Get the file summary for this DAS. */
 
-    dashfs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 
-	    lastwd);
+    dashfs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, 
+	    lastla, lastrc, lastwd);
     lasti = lastla[2];
 
 /*     We will keep track of the location that we wish to write to */
@@ -343,8 +347,8 @@ static dasadi_state_t* get_dasadi_state() {
 /*     available for integer data. */
 
     if (lasti >= 1) {
-	dasa2l_(handle, &__state->c__3, &lasti, &clbase, &clsize, &recno, &
-		wordno);
+	dasa2l_(__global_state, handle, &__state->c__3, &lasti, &clbase, &
+		clsize, &recno, &wordno);
     } else {
 	recno = free;
 	wordno = 0;
@@ -358,7 +362,7 @@ static dasadi_state_t* get_dasadi_state() {
 
 
     nwritn = 0;
-    while(nwritn < *n && ! failed_()) {
+    while(nwritn < *n && ! failed_(__global_state)) {
 
 /*        Write as much data as we can (or need to) into the current */
 /*        record.  We assume that RECNO, WORDNO, and NWRITN have been */
@@ -377,12 +381,13 @@ static dasadi_state_t* get_dasadi_state() {
 /*           the part we're interested in. */
 
 	    if (wordno == 0) {
-		movei_(&data[nwritn], &numint, record);
-		daswri_(handle, &recno, record);
+		movei_(__global_state, &data[nwritn], &numint, record);
+		daswri_(__global_state, handle, &recno, record);
 	    } else {
 		i__1 = wordno + 1;
 		i__2 = wordno + numint;
-		dasuri_(handle, &recno, &i__1, &i__2, &data[nwritn]);
+		dasuri_(__global_state, handle, &recno, &i__1, &i__2, &data[
+			nwritn]);
 	    }
 	    nwritn += numint;
 	    wordno += numint;
@@ -412,8 +417,8 @@ static dasadi_state_t* get_dasadi_state() {
 /*     integer words.  DASCUD will also update the file summary */
 /*     accordingly. */
 
-    dascud_(handle, &__state->c__3, n);
-    chkout_("DASADI", (ftnlen)6);
+    dascud_(__global_state, handle, &__state->c__3, n);
+    chkout_(__global_state, "DASADI", (ftnlen)6);
     return 0;
 } /* dasadi_ */
 

@@ -159,7 +159,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "exists_c");
+   chkin_c ( naif_state, "exists_c");
 
 
    /*

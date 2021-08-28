@@ -8,8 +8,7 @@
 
 
 extern int2hx_init_t __int2hx_init;
-static int2hx_state_t* get_int2hx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline int2hx_state_t* get_int2hx_state(cspice_t* state) {
 	if (!state->int2hx)
 		state->int2hx = __cspice_allocate_module(sizeof(
 	int2hx_state_t), &__int2hx_init, sizeof(__int2hx_init));
@@ -18,8 +17,8 @@ static int2hx_state_t* get_int2hx_state() {
 }
 
 /* $Procedure  INT2HX  ( Integer to signed hexadecimal string ) */
-/* Subroutine */ int int2hx_(integer *number, char *string, integer *length, 
-	ftnlen string_len)
+/* Subroutine */ int int2hx_(cspice_t* __global_state, integer *number, char *
+	string, integer *length, ftnlen string_len)
 {
     /* Initialized data */
 
@@ -28,8 +27,8 @@ static int2hx_state_t* get_int2hx_state() {
     integer i__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer begin;
@@ -40,7 +39,7 @@ static int2hx_state_t* get_int2hx_state() {
 
 
     /* Module state */
-    int2hx_state_t* __state = get_int2hx_state();
+    int2hx_state_t* __state = get_int2hx_state(__global_state);
 /* $ Abstract */
 
 /*     Convert an integer to an equivalent signed hexadecimal string. */
@@ -303,7 +302,8 @@ static int2hx_state_t* get_int2hx_state() {
 	    itemp = result;
 	    *(unsigned char *)&tmpstr[begin - 1] = *(unsigned char *)&
 		    __state->digits[(i__1 = remndr) < 16 && 0 <= i__1 ? i__1 :
-		     s_rnge("digits", i__1, "int2hx_", (ftnlen)301)];
+		     s_rnge(&__global_state->f2c, "digits", i__1, "int2hx_", (
+		    ftnlen)301)];
 	}
 
 /*        Put the minus sign in place. */
@@ -323,7 +323,8 @@ static int2hx_state_t* get_int2hx_state() {
 	    itemp = result;
 	    *(unsigned char *)&tmpstr[begin - 1] = *(unsigned char *)&
 		    __state->digits[(i__1 = remndr) < 16 && 0 <= i__1 ? i__1 :
-		     s_rnge("digits", i__1, "int2hx_", (ftnlen)322)];
+		     s_rnge(&__global_state->f2c, "digits", i__1, "int2hx_", (
+		    ftnlen)322)];
 	}
     } else {
 
@@ -340,7 +341,8 @@ static int2hx_state_t* get_int2hx_state() {
 /*     long enough to contain all of the characters in the string */
 /*     that was produced. */
 
-    s_copy(string, tmpstr + (begin - 1), string_len, 255 - (begin - 1));
+    s_copy(&__global_state->f2c, string, tmpstr + (begin - 1), string_len, 
+	    255 - (begin - 1));
 
 /*     Also, set the value for the length of the hexadecimal string */
 /*     before returning. */

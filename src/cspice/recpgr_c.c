@@ -520,7 +520,7 @@
    {
       return; 
    }
-   chkin_c ( "recpgr_c" );
+   chkin_c ( naif_state, "recpgr_c" );
 
 
    /*

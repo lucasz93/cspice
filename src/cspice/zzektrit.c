@@ -8,8 +8,7 @@
 
 
 extern zzektrit_init_t __zzektrit_init;
-static zzektrit_state_t* get_zzektrit_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrit_state_t* get_zzektrit_state(cspice_t* state) {
 	if (!state->zzektrit)
 		state->zzektrit = __cspice_allocate_module(sizeof(
 	zzektrit_state_t), &__zzektrit_init, sizeof(__zzektrit_init));
@@ -18,22 +17,24 @@ static zzektrit_state_t* get_zzektrit_state() {
 }
 
 /* $Procedure      ZZEKTRIT ( EK tree, initialize ) */
-/* Subroutine */ int zzektrit_(integer *handle, integer *tree)
+/* Subroutine */ int zzektrit_(cspice_t* __global_state, integer *handle, 
+	integer *tree)
 {
     integer base;
     integer page[256];
-    extern /* Subroutine */ int zzekpgal_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekpgal_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgwi_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
     integer p;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzektrit_state_t* __state = get_zzektrit_state();
+    zzektrit_state_t* __state = get_zzektrit_state(__global_state);
 /* $ Abstract */
 
 /*     Initialize an EK tree, returning the root of the tree. */
@@ -526,16 +527,16 @@ static zzektrit_state_t* get_zzektrit_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKTRIT", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRIT", (ftnlen)8);
     }
 
 /*     Start out by allocating a DAS integer page.  We'll write the root */
 /*     node out to this page. */
 
-    zzekpgal_(handle, &__state->c__3, &p, &base);
+    zzekpgal_(__global_state, handle, &__state->c__3, &p, &base);
     page[0] = 1;
     page[1] = 1;
     page[2] = 0;
@@ -544,19 +545,19 @@ static zzektrit_state_t* get_zzektrit_state() {
 
 /*     Set all keys to zero; set all child and data pointers to null. */
 
-    cleari_(&__state->c__82, &page[5]);
-    cleari_(&__state->c__82, &page[172]);
-    cleari_(&__state->c__83, &page[88]);
+    cleari_(__global_state, &__state->c__82, &page[5]);
+    cleari_(__global_state, &__state->c__82, &page[172]);
+    cleari_(__global_state, &__state->c__83, &page[88]);
 
 /*     Write out the page. */
 
-    zzekpgwi_(handle, &p, page);
+    zzekpgwi_(__global_state, handle, &p, page);
 
 /*     The identifier we return is just the page number of the tree's */
 /*     root. */
 
     *tree = p;
-    chkout_("ZZEKTRIT", (ftnlen)8);
+    chkout_(__global_state, "ZZEKTRIT", (ftnlen)8);
     return 0;
 } /* zzektrit_ */
 

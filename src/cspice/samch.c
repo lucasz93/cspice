@@ -8,24 +8,23 @@
 
 
 typedef int samch_state_t;
-static samch_state_t* get_samch_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline samch_state_t* get_samch_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SAMCH ( Same character ) */
-logical samch_(char *str1, integer *l1, char *str2, integer *l2, ftnlen 
-	str1_len, ftnlen str2_len)
+logical samch_(cspice_t* __global_state, char *str1, integer *l1, char *str2, 
+	integer *l2, ftnlen str1_len, ftnlen str2_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
 
     /* Module state */
-    samch_state_t* __state = get_samch_state();
+    samch_state_t* __state = get_samch_state(__global_state);
 /* $ Abstract */
 
 /*     Determine if two characters from different strings are the */
@@ -196,8 +195,8 @@ logical samch_(char *str1, integer *l1, char *str2, integer *l2, ftnlen
 /*     Check two characters substrings for case sensitive equal */
 
 /* -& */
-    if (*l1 < 1 || *l2 < 1 || *l1 > i_len(str1, str1_len) || *l2 > i_len(str2,
-	     str2_len)) {
+    if (*l1 < 1 || *l2 < 1 || *l1 > i_len(&__global_state->f2c, str1, 
+	    str1_len) || *l2 > i_len(&__global_state->f2c, str2, str2_len)) {
 	ret_val = FALSE_;
 	return ret_val;
     }

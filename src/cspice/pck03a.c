@@ -8,28 +8,27 @@
 
 
 typedef int pck03a_state_t;
-static pck03a_state_t* get_pck03a_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pck03a_state_t* get_pck03a_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure PCK03A ( PCK, add data to a type 3 segment ) */
-/* Subroutine */ int pck03a_(integer *handle, integer *ncsets, doublereal *
-	coeffs, doublereal *epochs)
+/* Subroutine */ int pck03a_(cspice_t* __global_state, integer *handle, 
+	integer *ncsets, doublereal *coeffs, doublereal *epochs)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sgwfpk_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgwfpk_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    pck03a_state_t* __state = get_pck03a_state();
+    pck03a_state_t* __state = get_pck03a_state(__global_state);
 /* $ Abstract */
 
 /*     Add data to a type 03 PCK segment in the binary PCK file */
@@ -361,34 +360,34 @@ static pck03a_state_t* get_pck03a_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PCK03A", (ftnlen)6);
+	chkin_(__global_state, "PCK03A", (ftnlen)6);
     }
 
 /*     First, check to see if the number of coefficient sets and epochs */
 /*     is positive. */
 
     if (*ncsets <= 0) {
-	setmsg_("The number of coefficient sets and epochs to be added to th"
-		"e PCK segment in the file '#' was not positive. Its value wa"
-		"s: #.", (ftnlen)124);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", ncsets, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("PCK03A", (ftnlen)6);
+	setmsg_(__global_state, "The number of coefficient sets and epochs t"
+		"o be added to the PCK segment in the file '#' was not positi"
+		"ve. Its value was: #.", (ftnlen)124);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", ncsets, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "PCK03A", (ftnlen)6);
 	return 0;
     }
 
 /*     Add the data. */
 
-    sgwfpk_(handle, ncsets, coeffs, ncsets, epochs);
+    sgwfpk_(__global_state, handle, ncsets, coeffs, ncsets, epochs);
 
 /*     No need to check FAILED() here, since all we do is check out. */
 /*     Leave it up to the caller. */
 
-    chkout_("PCK03A", (ftnlen)6);
+    chkout_(__global_state, "PCK03A", (ftnlen)6);
     return 0;
 } /* pck03a_ */
 

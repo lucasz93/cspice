@@ -8,8 +8,7 @@
 
 
 extern dasecu_init_t __dasecu_init;
-static dasecu_state_t* get_dasecu_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasecu_state_t* get_dasecu_state(cspice_t* state) {
 	if (!state->dasecu)
 		state->dasecu = __cspice_allocate_module(sizeof(
 	dasecu_state_t), &__dasecu_init, sizeof(__dasecu_init));
@@ -18,25 +17,26 @@ static dasecu_state_t* get_dasecu_state() {
 }
 
 /* $Procedure      DASECU ( DAS extract comments to a logical unit ) */
-/* Subroutine */ int dasecu_(integer *handle, integer *comlun, logical *
-	comnts)
+/* Subroutine */ int dasecu_(cspice_t* __global_state, integer *handle, 
+	integer *comlun, logical *comnts)
 {
-    extern /* Subroutine */ int dasec_(integer *, integer *, integer *, char *
-	    , logical *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dasec_(cspice_t*, integer *, integer *, 
+	    integer *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     char combuf[255*22];
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dassih_(cspice_t*, integer *, char *, ftnlen);
     integer numcom;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int writla_(integer *, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int writla_(cspice_t*, integer *, char *, integer 
+	    *, ftnlen);
     logical gotsom;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     logical eoc;
 
 
     /* Module state */
-    dasecu_state_t* __state = get_dasecu_state();
+    dasecu_state_t* __state = get_dasecu_state(__global_state);
 /* $ Abstract */
 
 /*     Extract comments from a previously opened binary DAS file to a */
@@ -192,17 +192,17 @@ static dasecu_state_t* get_dasecu_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASECU", (ftnlen)6);
+	chkin_(__global_state, "DASECU", (ftnlen)6);
     }
 
 /*     Verify that the DAS file attached to HANDLE is opened for reading. */
 
-    dassih_(handle, "READ", (ftnlen)4);
-    if (failed_()) {
-	chkout_("DASECU", (ftnlen)6);
+    dassih_(__global_state, handle, "READ", (ftnlen)4);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASECU", (ftnlen)6);
 	return 0;
     }
 
@@ -216,9 +216,10 @@ static dasecu_state_t* get_dasecu_state() {
 /*        While we have not reached the end of the comments, get some */
 /*        more. */
 
-	dasec_(handle, &__state->c__22, &numcom, combuf, &eoc, (ftnlen)255);
-	if (failed_()) {
-	    chkout_("DASECU", (ftnlen)6);
+	dasec_(__global_state, handle, &__state->c__22, &numcom, combuf, &eoc,
+		 (ftnlen)255);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DASECU", (ftnlen)6);
 	    return 0;
 	}
 	if (numcom > 0) {
@@ -230,9 +231,9 @@ static dasecu_state_t* get_dasecu_state() {
 	    if (! gotsom) {
 		gotsom = TRUE_;
 	    }
-	    writla_(&numcom, combuf, comlun, (ftnlen)255);
-	    if (failed_()) {
-		chkout_("DASECU", (ftnlen)6);
+	    writla_(__global_state, &numcom, combuf, comlun, (ftnlen)255);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASECU", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -241,7 +242,7 @@ static dasecu_state_t* get_dasecu_state() {
 /*     Set the output flag indicating whether or not we got any comments. */
 
     *comnts = gotsom;
-    chkout_("DASECU", (ftnlen)6);
+    chkout_(__global_state, "DASECU", (ftnlen)6);
     return 0;
 } /* dasecu_ */
 

@@ -8,8 +8,7 @@
 
 
 extern zzektrud_init_t __zzektrud_init;
-static zzektrud_state_t* get_zzektrud_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrud_state_t* get_zzektrud_state(cspice_t* state) {
 	if (!state->zzektrud)
 		state->zzektrud = __cspice_allocate_module(sizeof(
 	zzektrud_state_t), &__zzektrud_init, sizeof(__zzektrud_init));
@@ -18,14 +17,14 @@ static zzektrud_state_t* get_zzektrud_state() {
 }
 
 /* $Procedure      ZZEKTRUD ( EK tree, unbalanced deletion ) */
-/* Subroutine */ int zzektrud_(integer *handle, integer *tree, integer *key, 
-	integer *trgkey, logical *undrfl)
+/* Subroutine */ int zzektrud_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *key, integer *trgkey, logical *undrfl)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer leaf;
@@ -36,17 +35,19 @@ static zzektrud_state_t* get_zzektrud_state() {
     integer root;
     integer lsib2;
     integer rsib2;
-    extern /* Subroutine */ int zzekpgri_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgwi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgri_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekpgwi_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer pkey2;
-    extern /* Subroutine */ int zzektrlk_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrpi_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzektrlk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrpi_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
+	    integer *, integer *, integer *, integer *);
     integer i__;
     integer lpage[256];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer rpage[256];
     integer tpage[256];
     integer depth;
@@ -63,11 +64,11 @@ static zzektrud_state_t* get_zzektrud_state() {
     integer lpkey2;
     integer rpidx2;
     integer rpkey2;
-    extern logical failed_(void);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     integer target;
     integer parent;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer keyidx;
     integer datptr;
     integer loffst;
@@ -76,13 +77,13 @@ static zzektrud_state_t* get_zzektrud_state() {
     integer tnkeys;
     integer toffst;
     integer totkey;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    zzektrud_state_t* __state = get_zzektrud_state();
+    zzektrud_state_t* __state = get_zzektrud_state(__global_state);
 /* $ Abstract */
 
 /*     Delete a value from a tree at a specified location without */
@@ -582,19 +583,20 @@ static zzektrud_state_t* get_zzektrud_state() {
 
 /*     We always need to update the root page, so read it now. */
 
-    zzekpgri_(handle, &root, rpage);
+    zzekpgri_(__global_state, handle, &root, rpage);
 
 /*     The allowed range of keys is 1 to TOTKEY, where TOTKEY is the */
 /*     total number of keys already present. */
 
     totkey = rpage[2];
     if (*key < 1 || *key > totkey) {
-	chkin_("ZZEKTRUD", (ftnlen)8);
-	setmsg_("Key = #. Valid range is 1:#.  File = #.", (ftnlen)39);
-	errint_("#", key, (ftnlen)1);
-	errint_("#", &totkey, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	chkout_("ZZEKTRUD", (ftnlen)8);
+	chkin_(__global_state, "ZZEKTRUD", (ftnlen)8);
+	setmsg_(__global_state, "Key = #. Valid range is 1:#.  File = #.", (
+		ftnlen)39);
+	errint_(__global_state, "#", key, (ftnlen)1);
+	errint_(__global_state, "#", &totkey, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	chkout_(__global_state, "ZZEKTRUD", (ftnlen)8);
 	return 0;
     }
 
@@ -631,31 +633,37 @@ static zzektrud_state_t* get_zzektrud_state() {
 
 	i__1 = nkeys - 1;
 	for (i__ = *key; i__ <= i__1; ++i__) {
-	    rpage[(i__2 = i__ + 4) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage",
-		     i__2, "zzektrud_", (ftnlen)296)] = rpage[(i__3 = i__ + 5)
-		     < 256 && 0 <= i__3 ? i__3 : s_rnge("rpage", i__3, "zzek"
-		    "trud_", (ftnlen)296)] - 1;
-	    rpage[(i__2 = i__ + 171) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpa"
-		    "ge", i__2, "zzektrud_", (ftnlen)297)] = rpage[(i__3 = i__ 
-		    + 172) < 256 && 0 <= i__3 ? i__3 : s_rnge("rpage", i__3, 
-		    "zzektrud_", (ftnlen)297)];
+	    rpage[(i__2 = i__ + 4) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rpage", i__2, "zzektrud_", (ftnlen)
+		    296)] = rpage[(i__3 = i__ + 5) < 256 && 0 <= i__3 ? i__3 :
+		     s_rnge(&__global_state->f2c, "rpage", i__3, "zzektrud_", 
+		    (ftnlen)296)] - 1;
+	    rpage[(i__2 = i__ + 171) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rpage", i__2, "zzektrud_", (ftnlen)
+		    297)] = rpage[(i__3 = i__ + 172) < 256 && 0 <= i__3 ? 
+		    i__3 : s_rnge(&__global_state->f2c, "rpage", i__3, "zzek"
+		    "trud_", (ftnlen)297)];
 	}
 	i__1 = nkeys;
 	for (i__ = *key; i__ <= i__1; ++i__) {
-	    rpage[(i__2 = i__ + 87) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage"
-		    , i__2, "zzektrud_", (ftnlen)301)] = rpage[(i__3 = i__ + 
-		    88) < 256 && 0 <= i__3 ? i__3 : s_rnge("rpage", i__3, 
-		    "zzektrud_", (ftnlen)301)];
+	    rpage[(i__2 = i__ + 87) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rpage", i__2, "zzektrud_", (ftnlen)
+		    301)] = rpage[(i__3 = i__ + 88) < 256 && 0 <= i__3 ? i__3 
+		    : s_rnge(&__global_state->f2c, "rpage", i__3, "zzektrud_",
+		     (ftnlen)301)];
 	}
 
 /*        Zero out the freed entries. */
 
-	rpage[(i__1 = nkeys + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage", 
-		i__1, "zzektrud_", (ftnlen)307)] = 0;
-	rpage[(i__1 = nkeys + 171) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage",
-		 i__1, "zzektrud_", (ftnlen)308)] = 0;
-	rpage[(i__1 = nkeys + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage", 
-		i__1, "zzektrud_", (ftnlen)309)] = 0;
+	rpage[(i__1 = nkeys + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rpage", i__1, "zzektrud_", (ftnlen)307)]
+		 = 0;
+	rpage[(i__1 = nkeys + 171) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rpage", i__1, "zzektrud_", (ftnlen)308)]
+		 = 0;
+	rpage[(i__1 = nkeys + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rpage", i__1, "zzektrud_", (ftnlen)309)]
+		 = 0;
 
 /*        Update the key count. */
 
@@ -677,29 +685,32 @@ static zzektrud_state_t* get_zzektrud_state() {
 
 /*        Write the page back out, and we're all set. */
 
-	zzekpgwi_(handle, &root, rpage);
+	zzekpgwi_(__global_state, handle, &root, rpage);
     } else if (*key == totkey) {
 
 /*        The deleted key is the last key in the tree.  This case */
 /*        is simple, because no remaining keys change as a result of */
 /*        this deletion. */
 
-	zzektrlk_(handle, tree, key, &keyidx, &target, &toffst, &level, &
-		datptr);
-	if (failed_()) {
+	zzektrlk_(__global_state, handle, tree, key, &keyidx, &target, &
+		toffst, &level, &datptr);
+	if (failed_(__global_state)) {
 	    return 0;
 	}
-	zzekpgri_(handle, &target, tpage);
+	zzekpgri_(__global_state, handle, &target, tpage);
 	nkeys = tpage[0];
 
 /*        Zero out the freed entries. */
 
-	tpage[(i__1 = nkeys) < 256 && 0 <= i__1 ? i__1 : s_rnge("tpage", i__1,
-		 "zzektrud_", (ftnlen)360)] = 0;
-	tpage[(i__1 = nkeys + 127) < 256 && 0 <= i__1 ? i__1 : s_rnge("tpage",
-		 i__1, "zzektrud_", (ftnlen)361)] = 0;
-	tpage[(i__1 = nkeys + 64) < 256 && 0 <= i__1 ? i__1 : s_rnge("tpage", 
-		i__1, "zzektrud_", (ftnlen)362)] = 0;
+	tpage[(i__1 = nkeys) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tpage", i__1, "zzektrud_", (ftnlen)360)]
+		 = 0;
+	tpage[(i__1 = nkeys + 127) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tpage", i__1, "zzektrud_", (ftnlen)361)]
+		 = 0;
+	tpage[(i__1 = nkeys + 64) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "tpage", i__1, "zzektrud_", (ftnlen)362)]
+		 = 0;
 
 /*        Update the key count for this node: */
 
@@ -723,14 +734,14 @@ static zzektrud_state_t* get_zzektrud_state() {
 
 /*        Write the affected pages back out. */
 
-	zzekpgwi_(handle, &root, rpage);
-	zzekpgwi_(handle, &target, tpage);
+	zzekpgwi_(__global_state, handle, &root, rpage);
+	zzekpgwi_(__global_state, handle, &target, tpage);
     } else {
 
 /*        Locate the item we wish to delete. */
 
-	zzektrlk_(handle, tree, key, &keyidx, &target, &toffst, &level, &
-		datptr);
+	zzektrlk_(__global_state, handle, tree, key, &keyidx, &target, &
+		toffst, &level, &datptr);
 	if (level == depth) {
 
 /*           The node containing KEY is a leaf node, which is what we */
@@ -743,31 +754,32 @@ static zzektrud_state_t* get_zzektrud_state() {
 /*           addressing method, we want to do this look-up while */
 /*           we're sure it will work. */
 
-	    zzektrpi_(handle, tree, key, &parent, &pkey, &poffst, &lpidx, &
-		    lpkey, &lsib, &rpidx, &rpkey, &rsib);
-	    if (failed_()) {
+	    zzektrpi_(__global_state, handle, tree, key, &parent, &pkey, &
+		    poffst, &lpidx, &lpkey, &lsib, &rpidx, &rpkey, &rsib);
+	    if (failed_(__global_state)) {
 		return 0;
 	    }
 
 /*           Read the target page.  Get the key count for this node. */
 
-	    zzekpgri_(handle, &target, tpage);
+	    zzekpgri_(__global_state, handle, &target, tpage);
 	    tnkeys = tpage[0];
 
 /*           Each node is allowed to underflow by 1 element.  If there */
 /*           is already a deficit, OK, that's it. */
 
 	    if (tnkeys < 41) {
-		chkin_("ZZEKTRUD", (ftnlen)8);
-		setmsg_("Node = #. Tree = #. File = #. Key count = #; max al"
-			"lowed, including overflow, is #.", (ftnlen)83);
-		errint_("#", &target, (ftnlen)1);
-		errint_("#", tree, (ftnlen)1);
-		errhan_("#", handle, (ftnlen)1);
-		errint_("#", &tnkeys, (ftnlen)1);
-		errint_("#", &__state->c__63, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZEKTRUD", (ftnlen)8);
+		chkin_(__global_state, "ZZEKTRUD", (ftnlen)8);
+		setmsg_(__global_state, "Node = #. Tree = #. File = #. Key c"
+			"ount = #; max allowed, including overflow, is #.", (
+			ftnlen)83);
+		errint_(__global_state, "#", &target, (ftnlen)1);
+		errint_(__global_state, "#", tree, (ftnlen)1);
+		errhan_(__global_state, "#", handle, (ftnlen)1);
+		errint_(__global_state, "#", &tnkeys, (ftnlen)1);
+		errint_(__global_state, "#", &__state->c__63, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZEKTRUD", (ftnlen)8);
 		return 0;
 	    }
 
@@ -778,24 +790,27 @@ static zzektrud_state_t* get_zzektrud_state() {
 
 	    i__1 = tnkeys - 1;
 	    for (i__ = keyidx; i__ <= i__1; ++i__) {
-		tpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("tpage",
-			 i__2, "zzektrud_", (ftnlen)457)] = tpage[(i__3 = i__ 
-			+ 1) < 256 && 0 <= i__3 ? i__3 : s_rnge("tpage", i__3,
-			 "zzektrud_", (ftnlen)457)] - 1;
+		tpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "tpage", i__2, "zzektrud_", (
+			ftnlen)457)] = tpage[(i__3 = i__ + 1) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "tpage", 
+			i__3, "zzektrud_", (ftnlen)457)] - 1;
 	    }
 	    i__1 = tnkeys - 1;
 	    for (i__ = keyidx; i__ <= i__1; ++i__) {
-		tpage[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"tpage", i__2, "zzektrud_", (ftnlen)461)] = tpage[(
-			i__3 = i__ + 128) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"tpage", i__3, "zzektrud_", (ftnlen)461)];
+		tpage[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "tpage", i__2, "zzektrud_", (
+			ftnlen)461)] = tpage[(i__3 = i__ + 128) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "tpage", 
+			i__3, "zzektrud_", (ftnlen)461)];
 	    }
 	    i__1 = tnkeys;
 	    for (i__ = keyidx; i__ <= i__1; ++i__) {
-		tpage[(i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"tpage", i__2, "zzektrud_", (ftnlen)465)] = tpage[(
-			i__3 = i__ + 64) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"tpage", i__3, "zzektrud_", (ftnlen)465)];
+		tpage[(i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "tpage", i__2, "zzektrud_", (
+			ftnlen)465)] = tpage[(i__3 = i__ + 64) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "tpage", 
+			i__3, "zzektrud_", (ftnlen)465)];
 	    }
 
 /*           Update the key count for the target node. */
@@ -813,7 +828,7 @@ static zzektrud_state_t* get_zzektrud_state() {
 
 /*           Write the target page back out. */
 
-	    zzekpgwi_(handle, &target, tpage);
+	    zzekpgwi_(__global_state, handle, &target, tpage);
 	} else {
 
 /*           The node containing KEY is not a leaf node.  Therefore, */
@@ -823,9 +838,9 @@ static zzektrud_state_t* get_zzektrud_state() {
 /*           Find this predecessor. */
 
 	    i__1 = *key - 1;
-	    zzektrlk_(handle, tree, &i__1, &prev, &leaf, &loffst, &level, &
-		    datptr);
-	    if (failed_()) {
+	    zzektrlk_(__global_state, handle, tree, &i__1, &prev, &leaf, &
+		    loffst, &level, &datptr);
+	    if (failed_(__global_state)) {
 		return 0;
 	    }
 
@@ -837,9 +852,9 @@ static zzektrud_state_t* get_zzektrud_state() {
 /*           we're sure it will work. */
 
 	    i__1 = *key - 1;
-	    zzektrpi_(handle, tree, &i__1, &parent, &pkey, &poffst, &lpidx, &
-		    lpkey, &lsib, &rpidx, &rpkey, &rsib);
-	    if (failed_()) {
+	    zzektrpi_(__global_state, handle, tree, &i__1, &parent, &pkey, &
+		    poffst, &lpidx, &lpkey, &lsib, &rpidx, &rpkey, &rsib);
+	    if (failed_(__global_state)) {
 		return 0;
 	    }
 
@@ -852,21 +867,23 @@ static zzektrud_state_t* get_zzektrud_state() {
 /*           Moving the key's predecessor into the key's location is */
 /*           accomplished simply by transferring the data pointer. */
 
-	    zzekpgri_(handle, &leaf, lpage);
+	    zzekpgri_(__global_state, handle, &leaf, lpage);
 	    if (target == root) {
 
 /*              The root page has already been read into RPAGE. */
 
 		rpage[(i__1 = keyidx + 171) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("rpage", i__1, "zzektrud_", (ftnlen)537)] = 
-			lpage[(i__2 = prev + 127) < 256 && 0 <= i__2 ? i__2 : 
-			s_rnge("lpage", i__2, "zzektrud_", (ftnlen)537)];
+			s_rnge(&__global_state->f2c, "rpage", i__1, "zzektru"
+			"d_", (ftnlen)537)] = lpage[(i__2 = prev + 127) < 256 
+			&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			"lpage", i__2, "zzektrud_", (ftnlen)537)];
 	    } else {
-		zzekpgri_(handle, &target, tpage);
+		zzekpgri_(__global_state, handle, &target, tpage);
 		tpage[(i__1 = keyidx + 127) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("tpage", i__1, "zzektrud_", (ftnlen)543)] = 
-			lpage[(i__2 = prev + 127) < 256 && 0 <= i__2 ? i__2 : 
-			s_rnge("lpage", i__2, "zzektrud_", (ftnlen)543)];
+			s_rnge(&__global_state->f2c, "tpage", i__1, "zzektru"
+			"d_", (ftnlen)543)] = lpage[(i__2 = prev + 127) < 256 
+			&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			"lpage", i__2, "zzektrud_", (ftnlen)543)];
 	    }
 
 /*           The keys and data pointers in the leaf must be shifted */
@@ -877,14 +894,16 @@ static zzektrud_state_t* get_zzektrud_state() {
 	    nlkeys = lpage[0];
 	    i__1 = nlkeys - 1;
 	    for (i__ = prev; i__ <= i__1; ++i__) {
-		lpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("lpage",
-			 i__2, "zzektrud_", (ftnlen)556)] = lpage[(i__3 = i__ 
-			+ 1) < 256 && 0 <= i__3 ? i__3 : s_rnge("lpage", i__3,
-			 "zzektrud_", (ftnlen)556)] - 1;
-		lpage[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"lpage", i__2, "zzektrud_", (ftnlen)557)] = lpage[(
-			i__3 = i__ + 128) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"lpage", i__3, "zzektrud_", (ftnlen)557)];
+		lpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "lpage", i__2, "zzektrud_", (
+			ftnlen)556)] = lpage[(i__3 = i__ + 1) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "lpage", 
+			i__3, "zzektrud_", (ftnlen)556)] - 1;
+		lpage[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "lpage", i__2, "zzektrud_", (
+			ftnlen)557)] = lpage[(i__3 = i__ + 128) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "lpage", 
+			i__3, "zzektrud_", (ftnlen)557)];
 	    }
 
 /*           Update the key count for the leaf node. */
@@ -902,9 +921,9 @@ static zzektrud_state_t* get_zzektrud_state() {
 
 /*           Write the leaf, and if necessary, the target page back out. */
 
-	    zzekpgwi_(handle, &leaf, lpage);
+	    zzekpgwi_(__global_state, handle, &leaf, lpage);
 	    if (target != root) {
-		zzekpgwi_(handle, &target, tpage);
+		zzekpgwi_(__global_state, handle, &target, tpage);
 	    }
 
 /*           The next step will be to update the ancestors of LEAF. */
@@ -923,27 +942,29 @@ static zzektrud_state_t* get_zzektrud_state() {
 /*           Before going to work on the parent, get *its* parent's info. */
 /*           This is the last chance to do so. */
 
-	    zzektrpi_(handle, tree, &pkey, &paren2, &pkey2, &poffs2, &lpidx2, 
-		    &lpkey2, &lsib2, &rpidx2, &rpkey2, &rsib2);
+	    zzektrpi_(__global_state, handle, tree, &pkey, &paren2, &pkey2, &
+		    poffs2, &lpidx2, &lpkey2, &lsib2, &rpidx2, &rpkey2, &
+		    rsib2);
 
 /*           Read the parent node.  All keys from the right parent key */
 /*           onward get decremented.  Remember that there may be no */
 /*           right parent key. */
 
-	    zzekpgri_(handle, &parent, tpage);
+	    zzekpgri_(__global_state, handle, &parent, tpage);
 	    tnkeys = tpage[0];
 	    if (rpidx > 0) {
 		i__1 = tnkeys;
 		for (i__ = rpidx; i__ <= i__1; ++i__) {
-		    tpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			    "tpage", i__2, "zzektrud_", (ftnlen)621)] = tpage[
-			    (i__3 = i__) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			    "tpage", i__3, "zzektrud_", (ftnlen)621)] - 1;
+		    tpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "tpage", i__2, "zzektrud_", (
+			    ftnlen)621)] = tpage[(i__3 = i__) < 256 && 0 <= 
+			    i__3 ? i__3 : s_rnge(&__global_state->f2c, "tpage"
+			    , i__3, "zzektrud_", (ftnlen)621)] - 1;
 		}
 
 /*              Write the updated page back out. */
 
-		zzekpgwi_(handle, &parent, tpage);
+		zzekpgwi_(__global_state, handle, &parent, tpage);
 	    }
 	    parent = paren2;
 	    pkey = pkey2;
@@ -957,10 +978,11 @@ static zzektrud_state_t* get_zzektrud_state() {
 	if (rpidx > 0) {
 	    i__1 = tnkeys;
 	    for (i__ = rpidx; i__ <= i__1; ++i__) {
-		rpage[(i__2 = i__ + 4) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-			"rpage", i__2, "zzektrud_", (ftnlen)647)] = rpage[(
-			i__3 = i__ + 4) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-			"rpage", i__3, "zzektrud_", (ftnlen)647)] - 1;
+		rpage[(i__2 = i__ + 4) < 256 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "rpage", i__2, "zzektrud_", (
+			ftnlen)647)] = rpage[(i__3 = i__ + 4) < 256 && 0 <= 
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "rpage", 
+			i__3, "zzektrud_", (ftnlen)647)] - 1;
 	    }
 	}
 
@@ -970,7 +992,7 @@ static zzektrud_state_t* get_zzektrud_state() {
 
 /*        Write the updated root page back out. */
 
-	zzekpgwi_(handle, &root, rpage);
+	zzekpgwi_(__global_state, handle, &root, rpage);
     }
     return 0;
 } /* zzektrud_ */

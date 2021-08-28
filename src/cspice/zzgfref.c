@@ -8,8 +8,7 @@
 
 
 extern zzgfref_init_t __zzgfref_init;
-static zzgfref_state_t* get_zzgfref_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfref_state_t* get_zzgfref_state(cspice_t* state) {
 	if (!state->zzgfref)
 		state->zzgfref = __cspice_allocate_module(sizeof(
 	zzgfref_state_t), &__zzgfref_init, sizeof(__zzgfref_init));
@@ -18,15 +17,15 @@ static zzgfref_state_t* get_zzgfref_state() {
 }
 
 /* $Procedure ZZGFREF ( Private --- GF, update REFVAL ) */
-/* Subroutine */ int zzgfref_(doublereal *refval)
+/* Subroutine */ int zzgfref_(cspice_t* __global_state, doublereal *refval)
 {
     logical ok;
-    extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
-	    doublereal *);
+    extern /* Subroutine */ int zzholdd_(cspice_t*, integer *, integer *, 
+	    logical *, doublereal *);
 
 
     /* Module state */
-    zzgfref_state_t* __state = get_zzgfref_state();
+    zzgfref_state_t* __state = get_zzgfref_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE private routine intended solely for the support of SPICE */
@@ -274,7 +273,7 @@ static zzgfref_state_t* get_zzgfref_state() {
 
 /*     Store the REFVAL value for use in ZZGFUDLT. */
 
-    zzholdd_(&__state->c_n2, &__state->c__2, &ok, refval);
+    zzholdd_(__global_state, &__state->c_n2, &__state->c__2, &ok, refval);
     return 0;
 } /* zzgfref_ */
 

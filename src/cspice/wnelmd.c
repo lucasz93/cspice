@@ -8,13 +8,13 @@
 
 
 typedef int wnelmd_state_t;
-static wnelmd_state_t* get_wnelmd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wnelmd_state_t* get_wnelmd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            WNELMD ( Element of a DP window ) */
-logical wnelmd_(doublereal *point, doublereal *window)
+logical wnelmd_(cspice_t* __global_state, doublereal *point, doublereal *
+	window)
 {
     /* System generated locals */
     integer i__1;
@@ -23,14 +23,14 @@ logical wnelmd_(doublereal *point, doublereal *window)
     /* Local variables */
     integer card;
     integer i__;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    wnelmd_state_t* __state = get_wnelmd_state();
+    wnelmd_state_t* __state = get_wnelmd_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether a point is an element of a double precision */
@@ -182,16 +182,16 @@ logical wnelmd_(doublereal *point, doublereal *window)
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = FALSE_;
 	return ret_val;
     } else {
-	chkin_("WNELMD", (ftnlen)6);
+	chkin_(__global_state, "WNELMD", (ftnlen)6);
     }
 
 /*     How many endpoints in the window? */
 
-    card = cardd_(window);
+    card = cardd_(__global_state, window);
 
 /*     Check the point against every interval in the window. Quit if */
 /*     we find an interval that contains it. Inefficient, but it works. */
@@ -200,12 +200,12 @@ logical wnelmd_(doublereal *point, doublereal *window)
     for (i__ = 1; i__ <= i__1; i__ += 2) {
 	if (*point >= window[i__ + 5] && *point <= window[i__ + 6]) {
 	    ret_val = TRUE_;
-	    chkout_("WNELMD", (ftnlen)6);
+	    chkout_(__global_state, "WNELMD", (ftnlen)6);
 	    return ret_val;
 	}
     }
     ret_val = FALSE_;
-    chkout_("WNELMD", (ftnlen)6);
+    chkout_(__global_state, "WNELMD", (ftnlen)6);
     return ret_val;
 } /* wnelmd_ */
 

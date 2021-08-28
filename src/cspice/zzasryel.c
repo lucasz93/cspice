@@ -8,8 +8,7 @@
 
 
 extern zzasryel_init_t __zzasryel_init;
-static zzasryel_state_t* get_zzasryel_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzasryel_state_t* get_zzasryel_state(cspice_t* state) {
 	if (!state->zzasryel)
 		state->zzasryel = __cspice_allocate_module(sizeof(
 	zzasryel_state_t), &__zzasryel_init, sizeof(__zzasryel_init));
@@ -18,84 +17,88 @@ static zzasryel_state_t* get_zzasryel_state() {
 }
 
 /* $Procedure      ZZASRYEL ( Angular separation of ray and ellipse ) */
-/* Subroutine */ int zzasryel_(char *extrem, doublereal *ellips, doublereal *
-	vertex, doublereal *dir, doublereal *angle, doublereal *extpt, ftnlen 
-	extrem_len)
+/* Subroutine */ int zzasryel_(cspice_t* __global_state, char *extrem, 
+	doublereal *ellips, doublereal *vertex, doublereal *dir, doublereal *
+	angle, doublereal *extpt, ftnlen extrem_len)
 {
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    double cos(doublereal), sin(doublereal), sqrt(doublereal);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), sqrt(
+	    f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal diff[3];
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal udir[3];
     doublereal xoff[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern doublereal vsep_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
     integer nitr;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal vprj[3];
     doublereal a;
     doublereal b;
     integer i__;
     doublereal delta;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal udiff[3];
     doublereal acomp;
     doublereal bcomp;
     doublereal asign;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal theta;
     logical domin;
     doublereal level;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int swapd_(doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int swapd_(cspice_t*, doublereal *, doublereal *);
     doublereal lower;
-    extern doublereal vdist_(doublereal *, doublereal *);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
     doublereal upper;
     doublereal newpt;
-    extern doublereal vnorm_(doublereal *);
-    extern doublereal twopi_(void);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern doublereal twopi_(cspice_t*);
     doublereal p2;
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vprjp_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int vprjp_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal v2[3];
     integer nxpts;
     doublereal proxy;
-    extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int el2cgv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom3_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int psv2pl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int psv2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal gr;
     doublereal eplane[4];
     doublereal center[3];
     doublereal btween;
-    extern doublereal touchd_(doublereal *);
+    extern doublereal touchd_(cspice_t*, doublereal *);
     doublereal smajor[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer extidx;
     doublereal sminor[3];
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int inrypl_(doublereal *, doublereal *, 
-	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int inrypl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, integer *, doublereal *);
     doublereal btwprx;
     doublereal extprx;
     char exttyp[3];
@@ -105,7 +108,7 @@ static zzasryel_state_t* get_zzasryel_state() {
 
 
     /* Module state */
-    zzasryel_state_t* __state = get_zzasryel_state();
+    zzasryel_state_t* __state = get_zzasryel_state(__global_state);
 /* $ Abstract */
 
 /*     Find the minimum or maximum angular separation between a */
@@ -535,60 +538,65 @@ static zzasryel_state_t* get_zzasryel_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZASRYEL", (ftnlen)8);
+	chkin_(__global_state, "ZZASRYEL", (ftnlen)8);
     }
 
 /*     Decide whether we're looking for a minimum or maximum. */
 
-    cmprss_(" ", &__state->c__0, extrem, exttyp, (ftnlen)1, extrem_len, (
-	    ftnlen)3);
-    ljust_(exttyp, exttyp, (ftnlen)3, (ftnlen)3);
-    if (s_cmp(exttyp, "MIN", (ftnlen)3, (ftnlen)3) == 0) {
+    cmprss_(__global_state, " ", &__state->c__0, extrem, exttyp, (ftnlen)1, 
+	    extrem_len, (ftnlen)3);
+    ljust_(__global_state, exttyp, exttyp, (ftnlen)3, (ftnlen)3);
+    if (s_cmp(&__global_state->f2c, exttyp, "MIN", (ftnlen)3, (ftnlen)3) == 0)
+	     {
 	domin = TRUE_;
-    } else if (s_cmp(exttyp, "MAX", (ftnlen)3, (ftnlen)3) == 0) {
+    } else if (s_cmp(&__global_state->f2c, exttyp, "MAX", (ftnlen)3, (ftnlen)
+	    3) == 0) {
 	domin = FALSE_;
     } else {
-	setmsg_("Extremum specifier # was not recognized.", (ftnlen)40);
-	errch_("#", extrem, (ftnlen)1, extrem_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZASRYEL", (ftnlen)8);
+	setmsg_(__global_state, "Extremum specifier # was not recognized.", (
+		ftnlen)40);
+	errch_(__global_state, "#", extrem, (ftnlen)1, extrem_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZASRYEL", (ftnlen)8);
 	return 0;
     }
 
 /*     Get the center and semi-axes of the ellipse. */
 
-    el2cgv_(ellips, center, smajor, sminor);
+    el2cgv_(__global_state, ellips, center, smajor, sminor);
 
 /*     The ellipse semi-axes must have positive length. */
 
-    a = vnorm_(smajor);
-    b = vnorm_(sminor);
-    if (vzero_(smajor) || vzero_(sminor)) {
-	setmsg_("Semi-axis lengths:  A = #, B = #.", (ftnlen)33);
-	errdp_("#", &a, (ftnlen)1);
-	errdp_("#", &b, (ftnlen)1);
-	sigerr_("SPICE(INVALIDAXISLENGTH)", (ftnlen)24);
-	chkout_("ZZASRYEL", (ftnlen)8);
+    a = vnorm_(__global_state, smajor);
+    b = vnorm_(__global_state, sminor);
+    if (vzero_(__global_state, smajor) || vzero_(__global_state, sminor)) {
+	setmsg_(__global_state, "Semi-axis lengths:  A = #, B = #.", (ftnlen)
+		33);
+	errdp_(__global_state, "#", &a, (ftnlen)1);
+	errdp_(__global_state, "#", &b, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDAXISLENGTH)", (ftnlen)24);
+	chkout_(__global_state, "ZZASRYEL", (ftnlen)8);
 	return 0;
     }
 
 /*     Find the plane of the ellipse. */
 
-    psv2pl_(center, smajor, sminor, eplane);
-    if (failed_()) {
-	chkout_("ZZASRYEL", (ftnlen)8);
+    psv2pl_(__global_state, center, smajor, sminor, eplane);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZASRYEL", (ftnlen)8);
 	return 0;
     }
 
 /*     The ray's direction vector must be non-zero. */
 
-    if (vzero_(dir)) {
-	setmsg_("Ray's direction vector must be non-zero.", (ftnlen)40);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("ZZASRYEL", (ftnlen)8);
+    if (vzero_(__global_state, dir)) {
+	setmsg_(__global_state, "Ray's direction vector must be non-zero.", (
+		ftnlen)40);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "ZZASRYEL", (ftnlen)8);
 	return 0;
     }
 
@@ -596,11 +604,12 @@ static zzasryel_state_t* get_zzasryel_state() {
 /*     The orthogonal projection of the point onto the plane should */
 /*     yield a distinct vector. */
 
-    vprjp_(vertex, eplane, vprj);
-    if (vdist_(vertex, vprj) == 0.) {
-	setmsg_("Viewing point is in the plane of the ellipse.", (ftnlen)45);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("ZZASRYEL", (ftnlen)8);
+    vprjp_(__global_state, vertex, eplane, vprj);
+    if (vdist_(__global_state, vertex, vprj) == 0.) {
+	setmsg_(__global_state, "Viewing point is in the plane of the ellips"
+		"e.", (ftnlen)45);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "ZZASRYEL", (ftnlen)8);
 	return 0;
     }
 
@@ -610,7 +619,7 @@ static zzasryel_state_t* get_zzasryel_state() {
 
 /*     First, find the intersection of the ray and plane. */
 
-    inrypl_(vertex, dir, eplane, &nxpts, xpt);
+    inrypl_(__global_state, vertex, dir, eplane, &nxpts, xpt);
     if (nxpts == -1) {
 
 /*        We don't expect to hit this case since we've already tested */
@@ -618,9 +627,10 @@ static zzasryel_state_t* get_zzasryel_state() {
 /*        variations in round-off error make this case possible though */
 /*        unlikely. */
 
-	setmsg_("Ray lies in the plane of the ellipse.", (ftnlen)37);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("ZZASRYEL", (ftnlen)8);
+	setmsg_(__global_state, "Ray lies in the plane of the ellipse.", (
+		ftnlen)37);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "ZZASRYEL", (ftnlen)8);
 	return 0;
     }
 
@@ -641,9 +651,9 @@ static zzasryel_state_t* get_zzasryel_state() {
 /*        aligned with the axes of the ellipse and centered at */
 /*        the ellipse's center. */
 
-	vsub_(xpt, center, xoff);
-	acomp = vdot_(xoff, smajor) / a;
-	bcomp = vdot_(xoff, sminor) / b;
+	vsub_(__global_state, xpt, center, xoff);
+	acomp = vdot_(__global_state, xoff, smajor) / a;
+	bcomp = vdot_(__global_state, xoff, sminor) / b;
 
 /*        Now find the "level curve parameter" LEVEL for the offset of */
 /*        the intersection point from the ellipse's center. */
@@ -708,24 +718,25 @@ static zzasryel_state_t* get_zzasryel_state() {
 /*     the ellipse's center from the vertex position to obtain a */
 /*     translated ellipse centered at the origin. */
 
-    vsub_(vertex, center, v2);
+    vsub_(__global_state, vertex, center, v2);
     if (domin) {
 	extprx = 2.;
     } else {
 	extprx = 0.;
     }
     extidx = 0;
-    p2 = twopi_();
+    p2 = twopi_(__global_state);
     delta = p2 / npt;
-    vhat_(dir, udir);
+    vhat_(__global_state, dir, udir);
     i__1 = npt - 1;
     for (i__ = 0; i__ <= i__1; ++i__) {
 	theta = i__ * delta;
-	d__1 = cos(theta);
-	d__2 = sin(theta);
-	vlcom3_(&__state->c_b26, v2, &d__1, smajor, &d__2, sminor, diff);
-	vhat_(diff, udiff);
-	proxy = vdist_(udiff, udir);
+	d__1 = cos(&__global_state->f2c, theta);
+	d__2 = sin(&__global_state->f2c, theta);
+	vlcom3_(__global_state, &__state->c_b26, v2, &d__1, smajor, &d__2, 
+		sminor, diff);
+	vhat_(__global_state, diff, udiff);
+	proxy = vdist_(__global_state, udiff, udir);
 	if (domin) {
 	    if (proxy < extprx) {
 		extidx = i__;
@@ -764,7 +775,7 @@ static zzasryel_state_t* get_zzasryel_state() {
 /*                          UPPER  - LOWER                        2 */
 
 
-    gr = (3. - sqrt(5.)) / 2.;
+    gr = (3. - sqrt(&__global_state->f2c, 5.)) / 2.;
     lower = p2 / npt * (extidx - 1);
     upper = p2 / npt * (extidx + 1);
 
@@ -801,7 +812,7 @@ static zzasryel_state_t* get_zzasryel_state() {
     proxy = 3.;
     for(;;) { /* while(complicated condition) */
 	d__1 = upper - lower;
-	if (!(nitr <= 100 && touchd_(&d__1) > 1e-9))
+	if (!(nitr <= 100 && touchd_(__global_state, &d__1) > 1e-9))
 		break;
 
 /*        At this point, the following order relations hold: */
@@ -830,11 +841,12 @@ static zzasryel_state_t* get_zzasryel_state() {
 /*        BTWPRX.  To do this, we need the proxy function value at */
 /*        NEWPT. */
 
-	d__1 = cos(newpt);
-	d__2 = sin(newpt);
-	vlcom3_(&__state->c_b26, v2, &d__1, smajor, &d__2, sminor, diff);
-	vhat_(diff, udiff);
-	proxy = vdist_(udiff, udir);
+	d__1 = cos(&__global_state->f2c, newpt);
+	d__2 = sin(&__global_state->f2c, newpt);
+	vlcom3_(__global_state, &__state->c_b26, v2, &d__1, smajor, &d__2, 
+		sminor, diff);
+	vhat_(__global_state, diff, udiff);
+	proxy = vdist_(__global_state, udiff, udir);
 
 /*        Swap NEWPT and BTWEEN if necessary, to ensure that */
 
@@ -842,8 +854,8 @@ static zzasryel_state_t* get_zzasryel_state() {
 /*                  _ */
 
 	if (newpt > btween) {
-	    swapd_(&btween, &newpt);
-	    swapd_(&btwprx, &proxy);
+	    swapd_(__global_state, &btween, &newpt);
+	    swapd_(__global_state, &btwprx, &proxy);
 	}
 	if (domin) {
 	    if (proxy > btwprx) {
@@ -868,16 +880,16 @@ static zzasryel_state_t* get_zzasryel_state() {
 /*     At this point, LPT is a good estimate of the limb point at which */
 /*     the extremum of the angular separation from the ray occurs. */
 
-    vadd_(diff, v2, lpt);
+    vadd_(__global_state, diff, v2, lpt);
 
 /*     Add the center back to LPT to find EXTPT on the original ellipse. */
 
-    vadd_(center, lpt, extpt);
+    vadd_(__global_state, center, lpt, extpt);
 
 /*     Set the angular separation at EXTPT. */
 
-    *angle = vsep_(diff, udir) * asign;
-    chkout_("ZZASRYEL", (ftnlen)8);
+    *angle = vsep_(__global_state, diff, udir) * asign;
+    chkout_(__global_state, "ZZASRYEL", (ftnlen)8);
     return 0;
 } /* zzasryel_ */
 

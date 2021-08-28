@@ -8,24 +8,24 @@
 
 
 typedef int scardi_state_t;
-static scardi_state_t* get_scardi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline scardi_state_t* get_scardi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SCARDI ( Set the cardinality of an integer cell ) */
-/* Subroutine */ int scardi_(integer *card, integer *cell)
+/* Subroutine */ int scardi_(cspice_t* __global_state, integer *card, integer 
+	*cell)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    scardi_state_t* __state = get_scardi_state();
+    scardi_state_t* __state = get_scardi_state(__global_state);
 /* $ Abstract */
 
 /*     Set the cardinality of an integer cell. */
@@ -196,28 +196,28 @@ static scardi_state_t* get_scardi_state() {
 
 /*     SPICELIB functions */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCARDI", (ftnlen)6);
+	chkin_(__global_state, "SCARDI", (ftnlen)6);
     }
 
 /*     The cardinality may range from 0 to the size of the cell, */
 /*     inclusive.  Other values will be snubbed. */
 
     if (*card < 0 || *card > cell[4]) {
-	setmsg_("Attempt to set cardinality of cell to invalid value.  The v"
-		"alue was #.", (ftnlen)70);
-	errint_("#", card, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCARDINALITY)", (ftnlen)25);
-	chkout_("SCARDI", (ftnlen)6);
+	setmsg_(__global_state, "Attempt to set cardinality of cell to inval"
+		"id value.  The value was #.", (ftnlen)70);
+	errint_(__global_state, "#", card, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCARDINALITY)", (ftnlen)25);
+	chkout_(__global_state, "SCARDI", (ftnlen)6);
 	return 0;
     }
 
 /*     Not much to this. */
 
     cell[5] = *card;
-    chkout_("SCARDI", (ftnlen)6);
+    chkout_(__global_state, "SCARDI", (ftnlen)6);
     return 0;
 } /* scardi_ */
 

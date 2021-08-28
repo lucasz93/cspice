@@ -8,8 +8,7 @@
 
 
 extern zzcxbrut_init_t __zzcxbrut_init;
-static zzcxbrut_state_t* get_zzcxbrut_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzcxbrut_state_t* get_zzcxbrut_state(cspice_t* state) {
 	if (!state->zzcxbrut)
 		state->zzcxbrut = __cspice_allocate_module(sizeof(
 	zzcxbrut_state_t), &__zzcxbrut_init, sizeof(__zzcxbrut_init));
@@ -18,54 +17,55 @@ static zzcxbrut_state_t* get_zzcxbrut_state() {
 }
 
 /* $Procedure  ZZCXBRUT ( Cone-segment intersection by brute force ) */
-/* Subroutine */ int zzcxbrut_(doublereal *apex, doublereal *axis, doublereal 
-	*angle, doublereal *endpt1, doublereal *endpt2, doublereal *xpt, 
-	logical *isbrck)
+/* Subroutine */ int zzcxbrut_(cspice_t* __global_state, doublereal *apex, 
+	doublereal *axis, doublereal *angle, doublereal *endpt1, doublereal *
+	endpt2, doublereal *xpt, logical *isbrck)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(doublereal);
+    double cos(f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal high;
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     integer nitr;
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal uoff1[3];
     doublereal uoff2[3];
     doublereal x[3];
     doublereal delta;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal midpt;
     logical state;
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern logical vzero_(doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     logical state1;
     logical state2;
     doublereal dp;
-    extern doublereal pi_(void);
-    extern doublereal halfpi_(void);
+    extern doublereal pi_(cspice_t*);
+    extern doublereal halfpi_(cspice_t*);
     doublereal locang;
     doublereal cosang;
     doublereal ux[3];
     doublereal locaxi[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int vhatip_(doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal dp1;
     doublereal dp2;
     doublereal prvdlt;
-    extern logical return_(void);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
     doublereal seg[3];
     doublereal low;
     doublereal off1[3];
@@ -73,7 +73,7 @@ static zzcxbrut_state_t* get_zzcxbrut_state() {
 
 
     /* Module state */
-    zzcxbrut_state_t* __state = get_zzcxbrut_state();
+    zzcxbrut_state_t* __state = get_zzcxbrut_state(__global_state);
 /* $ Abstract */
 
 
@@ -242,46 +242,46 @@ static zzcxbrut_state_t* get_zzcxbrut_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Check the axis. */
 
-    if (vzero_(axis)) {
-	chkin_("ZZCXBRUT", (ftnlen)8);
-	setmsg_("Cone axis is the zero vector", (ftnlen)28);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("ZZCXBRUT", (ftnlen)8);
+    if (vzero_(__global_state, axis)) {
+	chkin_(__global_state, "ZZCXBRUT", (ftnlen)8);
+	setmsg_(__global_state, "Cone axis is the zero vector", (ftnlen)28);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "ZZCXBRUT", (ftnlen)8);
 	return 0;
     }
 
 /*     Make a local version of the cone's axis and angle. The */
 /*     angle will be less than or equal to pi/2 radians. */
 
-    if (*angle > halfpi_()) {
-	locang = pi_() - *angle;
-	vminus_(axis, locaxi);
+    if (*angle > halfpi_(__global_state)) {
+	locang = pi_(__global_state) - *angle;
+	vminus_(__global_state, axis, locaxi);
     } else {
 	locang = *angle;
-	vequ_(axis, locaxi);
+	vequ_(__global_state, axis, locaxi);
     }
-    vhatip_(locaxi);
-    cosang = cos(locang);
+    vhatip_(__global_state, locaxi);
+    cosang = cos(&__global_state->f2c, locang);
 
 /*     Calculate the offsets of the endpoints from the apex, */
 /*     and get unit-length versions of these. */
 
-    vsub_(endpt1, apex, off1);
-    vsub_(endpt2, apex, off2);
-    vhat_(off1, uoff1);
-    vhat_(off2, uoff2);
+    vsub_(__global_state, endpt1, apex, off1);
+    vsub_(__global_state, endpt2, apex, off2);
+    vhat_(__global_state, off1, uoff1);
+    vhat_(__global_state, off2, uoff2);
 
 /*     Get the dot products of the unit offsets with the axis. */
 /*     These will serve as proxies for latitude. */
 
-    dp1 = vdot_(uoff1, locaxi);
-    dp2 = vdot_(uoff2, locaxi);
+    dp1 = vdot_(__global_state, uoff1, locaxi);
+    dp2 = vdot_(__global_state, uoff2, locaxi);
 
 /*     The "state" variables at the endpoints are .TRUE. if */
 /*     the endpoints are on or inside the cone. */
@@ -299,7 +299,7 @@ static zzcxbrut_state_t* get_zzcxbrut_state() {
 
 /*     Prepare for a solution by bisection. */
 
-    vsub_(off2, off1, seg);
+    vsub_(__global_state, off2, off1, seg);
     low = 0.;
     high = 1.;
     delta = (d__1 = high - low, abs(d__1));
@@ -307,9 +307,9 @@ static zzcxbrut_state_t* get_zzcxbrut_state() {
     nitr = 0;
     while(delta > 1e-15 && delta < prvdlt && nitr < 1000) {
 	midpt = (low + high) / 2;
-	vlcom_(&__state->c_b6, off1, &midpt, seg, x);
-	vhat_(x, ux);
-	dp = vdot_(ux, locaxi);
+	vlcom_(__global_state, &__state->c_b6, off1, &midpt, seg, x);
+	vhat_(__global_state, x, ux);
+	dp = vdot_(__global_state, ux, locaxi);
 	state = dp >= cosang;
 	if (state == state1) {
 
@@ -328,7 +328,7 @@ static zzcxbrut_state_t* get_zzcxbrut_state() {
 /*     X is an offset from APEX. The solution is an offset from the */
 /*     origin. */
 
-    vadd_(apex, x, xpt);
+    vadd_(__global_state, apex, x, xpt);
     return 0;
 } /* zzcxbrut_ */
 

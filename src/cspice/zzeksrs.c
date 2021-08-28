@@ -8,24 +8,24 @@
 
 
 typedef int zzeksrs_state_t;
-static zzeksrs_state_t* get_zzeksrs_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzeksrs_state_t* get_zzeksrs_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKSRS ( EK, set record status ) */
-/* Subroutine */ int zzeksrs_(integer *handle, integer *recptr, integer *
-	status)
+/* Subroutine */ int zzeksrs_(cspice_t* __global_state, integer *handle, 
+	integer *recptr, integer *status)
 {
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer loc;
 
 
     /* Module state */
-    zzeksrs_state_t* __state = get_zzeksrs_state();
+    zzeksrs_state_t* __state = get_zzeksrs_state(__global_state);
 /* $ Abstract */
 
 /*     Set the status of a specified EK record. */
@@ -264,15 +264,15 @@ static zzeksrs_state_t* get_zzeksrs_state() {
 /*     Is this file handle valid--is the file open for paged write */
 /*     access?  Signal an error if not. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
 /*     Compute the status word location and set the status. */
 
     loc = *recptr + 1;
-    dasudi_(handle, &loc, &loc, status);
+    dasudi_(__global_state, handle, &loc, &loc, status);
     return 0;
 } /* zzeksrs_ */
 

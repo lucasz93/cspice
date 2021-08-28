@@ -264,7 +264,7 @@
    /*
    Participate in error handling
    */
-   chkin_c ( "bods2c_c");
+   chkin_c ( naif_state, "bods2c_c");
 
 
    /*

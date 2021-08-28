@@ -8,18 +8,17 @@
 
 
 typedef int vpack_state_t;
-static vpack_state_t* get_vpack_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vpack_state_t* get_vpack_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VPACK ( Pack three scalar components into a vector ) */
-/* Subroutine */ int vpack_(doublereal *x, doublereal *y, doublereal *z__, 
-	doublereal *v)
+/* Subroutine */ int vpack_(cspice_t* __global_state, doublereal *x, 
+	doublereal *y, doublereal *z__, doublereal *v)
 {
 
     /* Module state */
-    vpack_state_t* __state = get_vpack_state();
+    vpack_state_t* __state = get_vpack_state(__global_state);
 /* $ Abstract */
 
 /*      Pack three scalar components into a vector. */

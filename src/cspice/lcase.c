@@ -8,8 +8,7 @@
 
 
 extern lcase_init_t __lcase_init;
-static lcase_state_t* get_lcase_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lcase_state_t* get_lcase_state(cspice_t* state) {
 	if (!state->lcase)
 		state->lcase = __cspice_allocate_module(sizeof(lcase_state_t),
 	 &__lcase_init, sizeof(__lcase_init));
@@ -18,8 +17,8 @@ static lcase_state_t* get_lcase_state() {
 }
 
 /* $Procedure      LCASE ( Convert to lowercase ) */
-/* Subroutine */ int lcase_(char *in, char *out, ftnlen in_len, ftnlen 
-	out_len)
+/* Subroutine */ int lcase_(cspice_t* __global_state, char *in, char *out, 
+	ftnlen in_len, ftnlen out_len)
 {
     /* Initialized data */
 
@@ -28,8 +27,8 @@ static lcase_state_t* get_lcase_state() {
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer i__;
@@ -37,7 +36,7 @@ static lcase_state_t* get_lcase_state() {
 
 
     /* Module state */
-    lcase_state_t* __state = get_lcase_state();
+    lcase_state_t* __state = get_lcase_state(__global_state);
 /* $ Abstract */
 
 /*      Convert the characters in a string to lowercase. */
@@ -184,8 +183,8 @@ static lcase_state_t* get_lcase_state() {
 /*     Move the string from IN to OUT. Step through OUT one character */
 /*     at a time, translating letters between 'A' and 'Z' to lowercase. */
 
-    s_copy(out, in, out_len, in_len);
-    i__1 = i_len(out, out_len);
+    s_copy(&__global_state->f2c, out, in, out_len, in_len);
+    i__1 = i_len(&__global_state->f2c, out, out_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ich = *(unsigned char *)&out[i__ - 1];
 	if (ich >= __state->uppera && ich <= __state->upperz) {

@@ -8,19 +8,18 @@
 
 
 typedef int zzektloc_state_t;
-static zzektloc_state_t* get_zzektloc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektloc_state_t* get_zzektloc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKTLOC ( EK, locate token in tokenized EK query ) */
-/* Subroutine */ int zzektloc_(integer *tokid, integer *kwcode, integer *
-	ntoken, integer *tokens, integer *values, integer *loc, logical *
-	found)
+/* Subroutine */ int zzektloc_(cspice_t* __global_state, integer *tokid, 
+	integer *kwcode, integer *ntoken, integer *tokens, integer *values, 
+	integer *loc, logical *found)
 {
 
     /* Module state */
-    zzektloc_state_t* __state = get_zzektloc_state();
+    zzektloc_state_t* __state = get_zzektloc_state(__global_state);
 /* $ Abstract */
 
 /*     Locate the first occurrence of a specified token in a tokenized */

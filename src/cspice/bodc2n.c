@@ -8,24 +8,23 @@
 
 
 typedef int bodc2n_state_t;
-static bodc2n_state_t* get_bodc2n_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bodc2n_state_t* get_bodc2n_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      BODC2N ( Body ID code to name translation ) */
-/* Subroutine */ int bodc2n_(integer *code, char *name__, logical *found, 
-	ftnlen name_len)
+/* Subroutine */ int bodc2n_(cspice_t* __global_state, integer *code, char *
+	name__, logical *found, ftnlen name_len)
 {
-    extern /* Subroutine */ int zzbodc2n_(integer *, char *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzbodc2n_(cspice_t*, integer *, char *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    bodc2n_state_t* __state = get_bodc2n_state();
+    bodc2n_state_t* __state = get_bodc2n_state(__global_state);
 /* $ Abstract */
 
 /*     Translate the SPICE integer code of a body into a common name */
@@ -262,17 +261,17 @@ static bodc2n_state_t* get_bodc2n_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("BODC2N", (ftnlen)6);
+	chkin_(__global_state, "BODC2N", (ftnlen)6);
     }
-    zzbodc2n_(code, name__, found, name_len);
+    zzbodc2n_(__global_state, code, name__, found, name_len);
 
 /*     No need for any error checking, since all we do is check out */
 /*     and return anyway. We leave the error checking to the caller. */
 
-    chkout_("BODC2N", (ftnlen)6);
+    chkout_(__global_state, "BODC2N", (ftnlen)6);
     return 0;
 } /* bodc2n_ */
 

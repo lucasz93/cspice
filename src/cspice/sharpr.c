@@ -8,21 +8,20 @@
 
 
 typedef int sharpr_state_t;
-static sharpr_state_t* get_sharpr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sharpr_state_t* get_sharpr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SHARPR ( Sharpen a rotation ) */
-/* Subroutine */ int sharpr_(doublereal *rot)
+/* Subroutine */ int sharpr_(cspice_t* __global_state, doublereal *rot)
 {
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    sharpr_state_t* __state = get_sharpr_state();
+    sharpr_state_t* __state = get_sharpr_state(__global_state);
 /* $ Abstract */
 
 /*     Given a matrix that is "nearly" a rotation, adjust the columns */
@@ -160,17 +159,17 @@ static sharpr_state_t* get_sharpr_state() {
 
 /*     Unitize the first column of the rotation. */
 
-    vhatip_(rot);
+    vhatip_(__global_state, rot);
 
 /*     Unitize the third column of the rotation and make it */
 /*     orthogonal to the first two columns. */
 
-    ucrss_(rot, &rot[3], &rot[6]);
+    ucrss_(__global_state, rot, &rot[3], &rot[6]);
 
 /*     Unitize the second column of the rotation and make it */
 /*     orthogonal to the first and third columns. */
 
-    ucrss_(&rot[6], rot, &rot[3]);
+    ucrss_(__global_state, &rot[6], rot, &rot[3]);
     return 0;
 } /* sharpr_ */
 

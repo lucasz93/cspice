@@ -8,37 +8,39 @@
 
 
 typedef int zzbodini_state_t;
-static zzbodini_state_t* get_zzbodini_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzbodini_state_t* get_zzbodini_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZBODINI ( Private --- Body-Code Hash Initialization ) */
-/* Subroutine */ int zzbodini_(char *names, char *nornam, integer *codes, 
-	integer *nvals, integer *maxval, integer *bnmlst, integer *bnmpol, 
-	char *bnmnms, integer *bnmidx, integer *bidlst, integer *bidpol, 
-	integer *bidids, integer *bididx, ftnlen names_len, ftnlen nornam_len,
-	 ftnlen bnmnms_len)
+/* Subroutine */ int zzbodini_(cspice_t* __global_state, char *names, char *
+	nornam, integer *codes, integer *nvals, integer *maxval, integer *
+	bnmlst, integer *bnmpol, char *bnmnms, integer *bnmidx, integer *
+	bidlst, integer *bidpol, integer *bidids, integer *bididx, ftnlen 
+	names_len, ftnlen nornam_len, ftnlen bnmnms_len)
 {
     integer item;
-    extern /* Subroutine */ int zzhscadd_(integer *, integer *, char *, char *
-	    , integer *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzhsiadd_(integer *, integer *, integer *, 
-	    integer *, integer *, logical *);
-    extern /* Subroutine */ int zzhscini_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzhsiini_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzhscadd_(cspice_t*, integer *, integer *, 
+	    char *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzhsiadd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, logical *);
+    extern /* Subroutine */ int zzhscini_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzhsiini_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     logical new__;
 
 
     /* Module state */
-    zzbodini_state_t* __state = get_zzbodini_state();
+    zzbodini_state_t* __state = get_zzbodini_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -382,22 +384,22 @@ static zzbodini_state_t* get_zzbodini_state() {
 /*     Consistency check. */
 
     if (*maxval < *nvals) {
-	chkin_("ZZBODINI", (ftnlen)8);
-	setmsg_("There is an inconsistency between the number of input bodie"
-		"s and the size of the output hashes. The number of input bod"
-		"ies was #. The size of the output hashes was #.", (ftnlen)166)
-		;
-	errint_("#", nvals, (ftnlen)1);
-	errint_("#", maxval, (ftnlen)1);
-	sigerr_("SPICE(BUG1)", (ftnlen)11);
-	chkout_("ZZBODINI", (ftnlen)8);
+	chkin_(__global_state, "ZZBODINI", (ftnlen)8);
+	setmsg_(__global_state, "There is an inconsistency between the numbe"
+		"r of input bodies and the size of the output hashes. The num"
+		"ber of input bodies was #. The size of the output hashes was"
+		" #.", (ftnlen)166);
+	errint_(__global_state, "#", nvals, (ftnlen)1);
+	errint_(__global_state, "#", maxval, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG1)", (ftnlen)11);
+	chkout_(__global_state, "ZZBODINI", (ftnlen)8);
 	return 0;
     }
 
 /*     Initialize output hashes. */
 
-    zzhsiini_(maxval, bidlst, bidpol);
-    zzhscini_(maxval, bnmlst, bnmpol);
+    zzhsiini_(__global_state, maxval, bidlst, bidpol);
+    zzhscini_(__global_state, maxval, bnmlst, bnmpol);
 
 /*     Loop through the input arrays to populate hashes. We do it */
 /*     backwards to pick and register only the highest priority (latest) */
@@ -408,17 +410,19 @@ static zzbodini_state_t* get_zzbodini_state() {
 /*        Register this normalized name, but only if it is not already */
 /*        in the hash. */
 
-	zzhscadd_(bnmlst, bnmpol, bnmnms, nornam + (i__ - 1) * 36, &item, &
-		new__, (ftnlen)36, (ftnlen)36);
+	zzhscadd_(__global_state, bnmlst, bnmpol, bnmnms, nornam + (i__ - 1) *
+		 36, &item, &new__, (ftnlen)36, (ftnlen)36);
 	if (new__) {
 	    if (item != 0) {
 		bnmidx[item - 1] = i__;
 	    } else {
-		chkin_("ZZBODINI", (ftnlen)8);
-		setmsg_("Could not add name # to the hash.", (ftnlen)33);
-		errch_("#", nornam + (i__ - 1) * 36, (ftnlen)1, (ftnlen)36);
-		sigerr_("SPICE(BUG3)", (ftnlen)11);
-		chkout_("ZZBODINI", (ftnlen)8);
+		chkin_(__global_state, "ZZBODINI", (ftnlen)8);
+		setmsg_(__global_state, "Could not add name # to the hash.", (
+			ftnlen)33);
+		errch_(__global_state, "#", nornam + (i__ - 1) * 36, (ftnlen)
+			1, (ftnlen)36);
+		sigerr_(__global_state, "SPICE(BUG3)", (ftnlen)11);
+		chkout_(__global_state, "ZZBODINI", (ftnlen)8);
 	    }
 	}
 
@@ -432,16 +436,18 @@ static zzbodini_state_t* get_zzbodini_state() {
 
 /*           Register this ID, but only if it is not already in the hash. */
 
-	    zzhsiadd_(bidlst, bidpol, bidids, &codes[i__ - 1], &item, &new__);
+	    zzhsiadd_(__global_state, bidlst, bidpol, bidids, &codes[i__ - 1],
+		     &item, &new__);
 	    if (new__) {
 		if (item != 0) {
 		    bididx[item - 1] = i__;
 		} else {
-		    chkin_("ZZBODINI", (ftnlen)8);
-		    setmsg_("Could not add ID # to the hash.", (ftnlen)31);
-		    errint_("#", &codes[i__ - 1], (ftnlen)1);
-		    sigerr_("SPICE(BUG2)", (ftnlen)11);
-		    chkout_("ZZBODINI", (ftnlen)8);
+		    chkin_(__global_state, "ZZBODINI", (ftnlen)8);
+		    setmsg_(__global_state, "Could not add ID # to the hash.",
+			     (ftnlen)31);
+		    errint_(__global_state, "#", &codes[i__ - 1], (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG2)", (ftnlen)11);
+		    chkout_(__global_state, "ZZBODINI", (ftnlen)8);
 		    return 0;
 		}
 	    }

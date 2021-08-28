@@ -8,8 +8,7 @@
 
 
 extern dasfm_init_t __dasfm_init;
-static dasfm_state_t* get_dasfm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dasfm_state_t* get_dasfm_state(cspice_t* state) {
 	if (!state->dasfm)
 		state->dasfm = __cspice_allocate_module(sizeof(dasfm_state_t),
 	 &__dasfm_init, sizeof(__dasfm_init));
@@ -18,11 +17,12 @@ static dasfm_state_t* get_dasfm_state() {
 }
 
 /* $Procedure DASFM ( DAS, file manager ) */
-/* Subroutine */ int dasfm_0_(int n__, char *fname, char *ftype, char *ifname,
-	 integer *handle, integer *unit, integer *free, integer *lastla, 
-	integer *lastrc, integer *lastwd, integer *nresvr, integer *nresvc, 
-	integer *ncomr, integer *ncomc, integer *fhset, char *access, ftnlen 
-	fname_len, ftnlen ftype_len, ftnlen ifname_len, ftnlen access_len)
+/* Subroutine */ int dasfm_0_(cspice_t* __global_state, int n__, char *fname, 
+	char *ftype, char *ifname, integer *handle, integer *unit, integer *
+	free, integer *lastla, integer *lastrc, integer *lastwd, integer *
+	nresvr, integer *nresvc, integer *ncomr, integer *ncomc, integer *
+	fhset, char *access, ftnlen fname_len, ftnlen ftype_len, ftnlen 
+	ifname_len, ftnlen access_len)
 {
     /* Initialized data */
 
@@ -34,66 +34,76 @@ static dasfm_state_t* get_dasfm_state() {
     inlist ioin__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
-    integer s_wdue(cilist *), do_uio(integer *, char *, ftnlen), e_wdue(void),
-	     f_clos(cllist *), s_rdue(cilist *), e_rdue(void), f_inqu(inlist *
-	    );
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
+    integer s_wdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_wdue(f2c_state_t*), f_clos(f2c_state_t*, 
+	    cllist *), s_rdue(f2c_state_t*, cilist *), e_rdue(f2c_state_t*), 
+	    f_inqu(f2c_state_t*, inlist *);
 
     /* Local variables */
-    extern /* Subroutine */ int zzddhfnh_(char *, integer *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzddhcls_(integer *, char *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzdasgri_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzddhluh_(integer *, integer *, logical *);
-    extern /* Subroutine */ int zzddhopn_(char *, char *, char *, integer *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzdasnfr_(integer *, char *, char *, integer *
-	    , integer *, integer *, integer *, char *, ftnlen, ftnlen, ftnlen)
-	    ;
-    extern /* Subroutine */ int zzdasrfr_(integer *, char *, char *, integer *
-	    , integer *, integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
-    extern logical elemi_(integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int maxai_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzddhfnh_(cspice_t*, char *, integer *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzddhcls_(cspice_t*, integer *, char *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int zzdasgri_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int lnkan_(integer *, integer *);
-    extern /* Subroutine */ int copyi_(integer *, integer *);
-    extern integer ltrim_(char *, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern integer lnknfn_(integer *);
-    extern integer lnknxt_(integer *, integer *);
-    extern logical return_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int lnkini_(integer *, integer *);
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int lnkilb_(integer *, integer *, integer *);
-    extern /* Subroutine */ int insrti_(integer *, integer *);
-    extern /* Subroutine */ int dasioi_(char *, integer *, integer *, integer 
-	    *, ftnlen);
-    extern /* Subroutine */ int lnkfsl_(integer *, integer *, integer *);
-    extern /* Subroutine */ int removi_(integer *, integer *);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int zzddhluh_(cspice_t*, integer *, integer *, 
+	    logical *);
+    extern /* Subroutine */ int zzddhopn_(cspice_t*, char *, char *, char *, 
+	    integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdasnfr_(cspice_t*, integer *, char *, char *
+	    , integer *, integer *, integer *, integer *, char *, ftnlen, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int zzdasrfr_(cspice_t*, integer *, char *, char *
+	    , integer *, integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzplatfm_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical elemi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int maxai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int lnkan_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int copyi_(cspice_t*, integer *, integer *);
+    extern integer ltrim_(cspice_t*, char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern integer lnknfn_(cspice_t*, integer *);
+    extern integer lnknxt_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int lnkini_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int lnkilb_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int insrti_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int dasioi_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
+    extern /* Subroutine */ int lnkfsl_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int removi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    dasfm_state_t* __state = get_dasfm_state();
+    dasfm_state_t* __state = get_dasfm_state(__global_state);
 /* $ Abstract */
 
 /*     Manage open DAS files. */
@@ -1072,12 +1082,12 @@ static dasfm_state_t* get_dasfm_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASFM", (ftnlen)5);
-	sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-	chkout_("DASFM", (ftnlen)5);
+	chkin_(__global_state, "DASFM", (ftnlen)5);
+	sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+	chkout_(__global_state, "DASFM", (ftnlen)5);
     }
     return 0;
 /* $Procedure DASOPR ( DAS, open for read ) */
@@ -1340,16 +1350,16 @@ L_dasopr:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASOPR", (ftnlen)6);
+    chkin_(__global_state, "DASOPR", (ftnlen)6);
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
 
@@ -1361,9 +1371,10 @@ L_dasopr:
 /*        reading, ZZDDHOPN will just increment the number of links and */
 /*        return the handle. */
 
-    zzddhopn_(fname, "READ", "DAS", handle, fname_len, (ftnlen)4, (ftnlen)3);
-    if (failed_()) {
-	chkout_("DASOPR", (ftnlen)6);
+    zzddhopn_(__global_state, fname, "READ", "DAS", handle, fname_len, (
+	    ftnlen)4, (ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASOPR", (ftnlen)6);
 	return 0;
     }
 
@@ -1374,11 +1385,12 @@ L_dasopr:
     __state->found = FALSE_;
     while(! __state->found && __state->findex > 0) {
 	if (__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("fthan", i__1, "dasfm_", (ftnlen)1401)] == *
-		handle) {
+		i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (
+		ftnlen)1401)] == *handle) {
 	    __state->found = TRUE_;
 	} else {
-	    __state->findex = lnknxt_(&__state->findex, __state->pool);
+	    __state->findex = lnknxt_(__global_state, &__state->findex, 
+		    __state->pool);
 	}
     }
     if (__state->found) {
@@ -1387,39 +1399,40 @@ L_dasopr:
 /*        of links to this file. */
 
 	__state->ftlnk[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftlnk", i__1, "dasfm_", (ftnlen)1414)] = 
-		__state->ftlnk[(i__2 = __state->findex - 1) < 5000 && 0 <= 
-		i__2 ? i__2 : s_rnge("ftlnk", i__2, "dasfm_", (ftnlen)1414)] 
-		+ 1;
+		i__1 : s_rnge(&__global_state->f2c, "ftlnk", i__1, "dasfm_", (
+		ftnlen)1414)] = __state->ftlnk[(i__2 = __state->findex - 1) < 
+		5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftl"
+		"nk", i__2, "dasfm_", (ftnlen)1414)] + 1;
 	*handle = __state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 <= 
-		i__1 ? i__1 : s_rnge("fthan", i__1, "dasfm_", (ftnlen)1415)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, 
+		"dasfm_", (ftnlen)1415)];
 
 /*        There's nothing else to do. */
 
-	chkout_("DASOPR", (ftnlen)6);
+	chkout_(__global_state, "DASOPR", (ftnlen)6);
 	return 0;
     }
 
 /*     This file has no entry in the file table. We need to */
 /*     create a new entry. See whether there's room for it. */
 
-    if (lnknfn_(__state->pool) == 0) {
-	setmsg_("The file table is full, with # entries. Could not open '#'.",
-		 (ftnlen)59);
-	errint_("#", &__state->c__5000, (ftnlen)1);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	sigerr_("SPICE(DASFTFULL)", (ftnlen)16);
-	chkout_("DASOPR", (ftnlen)6);
+    if (lnknfn_(__global_state, __state->pool) == 0) {
+	setmsg_(__global_state, "The file table is full, with # entries. Cou"
+		"ld not open '#'.", (ftnlen)59);
+	errint_(__global_state, "#", &__state->c__5000, (ftnlen)1);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	sigerr_(__global_state, "SPICE(DASFTFULL)", (ftnlen)16);
+	chkout_(__global_state, "DASOPR", (ftnlen)6);
 	return 0;
     }
 
 /*     Read the file's file record. */
 
-    zzdasrfr_(handle, __state->idword, __state->locifn, &__state->locrrc, &
-	    __state->locrch, &__state->loccrc, &__state->loccch, (ftnlen)8, (
-	    ftnlen)60);
-    if (failed_()) {
-	chkout_("DASOPR", (ftnlen)6);
+    zzdasrfr_(__global_state, handle, __state->idword, __state->locifn, &
+	    __state->locrrc, &__state->locrch, &__state->loccrc, &
+	    __state->loccch, (ftnlen)8, (ftnlen)60);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASOPR", (ftnlen)6);
 	return 0;
     }
 
@@ -1427,15 +1440,18 @@ L_dasopr:
 /*     opened DAS file. Link the information for this file at the */
 /*     head of the file table list. */
 
-    lnkan_(__state->pool, &__state->new__);
-    lnkilb_(&__state->new__, &__state->fthead, __state->pool);
+    lnkan_(__global_state, __state->pool, &__state->new__);
+    lnkilb_(__global_state, &__state->new__, &__state->fthead, __state->pool);
     __state->fthead = __state->new__;
     __state->fthan[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "dasfm_", (ftnlen)1460)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (ftnlen)
+	    1460)] = *handle;
     __state->ftacc[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftacc", i__1, "dasfm_", (ftnlen)1461)] = 1;
+	    s_rnge(&__global_state->f2c, "ftacc", i__1, "dasfm_", (ftnlen)
+	    1461)] = 1;
     __state->ftlnk[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftlnk", i__1, "dasfm_", (ftnlen)1462)] = 1;
+	    s_rnge(&__global_state->f2c, "ftlnk", i__1, "dasfm_", (ftnlen)
+	    1462)] = 1;
 
 /*     Fill in the file summary. We already know how many reserved */
 /*     records and comment records there are. To find the number of the */
@@ -1444,21 +1460,21 @@ L_dasopr:
 /*     the directory records. We do not assume that the data records in */
 /*     the DAS file have been segregated. */
 
-    cleari_(&__state->c__14, &__state->ftsum[(i__1 = __state->fthead * 14 - 
-	    14) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", 
-	    (ftnlen)1472)]);
+    cleari_(__global_state, &__state->c__14, &__state->ftsum[(i__1 = 
+	    __state->fthead * 14 - 14) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)1472)]);
     __state->ftsum[(i__1 = __state->fthead * 14 - 14) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1474)] = 
-	    __state->locrrc;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)1474)] = __state->locrrc;
     __state->ftsum[(i__1 = __state->fthead * 14 - 13) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1475)] = 
-	    __state->locrch;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)1475)] = __state->locrch;
     __state->ftsum[(i__1 = __state->fthead * 14 - 12) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1476)] = 
-	    __state->loccrc;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)1476)] = __state->loccrc;
     __state->ftsum[(i__1 = __state->fthead * 14 - 11) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1477)] = 
-	    __state->loccch;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)1477)] = __state->loccch;
 
 /*     We'll find the values for each data type separately. */
 
@@ -1473,15 +1489,16 @@ L_dasopr:
 /*        record of the current type. */
 
 	__state->ldrec[(i__1 = __state->type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("ldrec", i__1, "dasfm_", (ftnlen)1493)] = 0;
+		s_rnge(&__global_state->f2c, "ldrec", i__1, "dasfm_", (ftnlen)
+		1493)] = 0;
 
 /*        Find the last directory containing a descriptor of a */
 /*        record cluster of the current type. */
 
-	zzdasgri_(handle, &__state->nrec, __state->dirrec);
+	zzdasgri_(__global_state, handle, &__state->nrec, __state->dirrec);
 	__state->maxadr = __state->dirrec[(i__1 = (__state->type__ << 1) + 1) 
-		< 256 && 0 <= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasfm_", (
-		ftnlen)1501)];
+		< 256 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"dirrec", i__1, "dasfm_", (ftnlen)1501)];
 	__state->nxtdir = __state->dirrec[1];
 	while(__state->nxtdir > 0) {
 
@@ -1489,17 +1506,19 @@ L_dasopr:
 /*           descriptors for clusters we're interested in, update the */
 /*           directory record number. */
 
-	    zzdasgri_(handle, &__state->nxtdir, __state->dirrec);
-	    if (failed_()) {
-		chkout_("DASOPR", (ftnlen)6);
+	    zzdasgri_(__global_state, handle, &__state->nxtdir, 
+		    __state->dirrec);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASOPR", (ftnlen)6);
 		return 0;
 	    }
 	    if (__state->dirrec[(i__1 = (__state->type__ << 1) + 1) < 256 && 
-		    0 <= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasfm_", (
-		    ftnlen)1519)] > 0) {
+		    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "dirrec", 
+		    i__1, "dasfm_", (ftnlen)1519)] > 0) {
 		__state->maxadr = __state->dirrec[(i__1 = (__state->type__ << 
-			1) + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge("dirrec", 
-			i__1, "dasfm_", (ftnlen)1521)];
+			1) + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "dirrec", i__1, "dasfm_", (
+			ftnlen)1521)];
 		__state->nrec = __state->nxtdir;
 	    }
 	    __state->nxtdir = __state->dirrec[1];
@@ -1512,16 +1531,18 @@ L_dasopr:
 /*        MAXADR is the maximum logical address of TYPE. */
 
 	__state->ftsum[(i__1 = __state->type__ + 5 + __state->fthead * 14 - 
-		15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "das"
-		"fm_", (ftnlen)1537)] = __state->maxadr;
+		15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+		 "ftsum", i__1, "dasfm_", (ftnlen)1537)] = __state->maxadr;
 	if (__state->maxadr > 0) {
 	    __state->ftsum[(i__1 = __state->type__ + 8 + __state->fthead * 14 
-		    - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, 
-		    "dasfm_", (ftnlen)1540)] = __state->nrec;
+		    - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)
+		    1540)] = __state->nrec;
 	} else {
 	    __state->ftsum[(i__1 = __state->type__ + 8 + __state->fthead * 14 
-		    - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, 
-		    "dasfm_", (ftnlen)1542)] = 0;
+		    - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)
+		    1542)] = 0;
 	}
 
 /*        We still need to set the word location of the final */
@@ -1532,9 +1553,10 @@ L_dasopr:
 /*           Re-read the directory record containing the last descriptor */
 /*           of the current type. */
 
-	    zzdasgri_(handle, &__state->nrec, __state->dirrec);
-	    if (failed_()) {
-		chkout_("DASOPR", (ftnlen)6);
+	    zzdasgri_(__global_state, handle, &__state->nrec, __state->dirrec)
+		    ;
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASOPR", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1548,38 +1570,42 @@ L_dasopr:
 /*           cluster. */
 
 	    __state->last = __state->dirrec[(i__1 = __state->type__ << 1) < 
-		    256 && 0 <= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasfm_",
-		     (ftnlen)1570)] - 1;
+		    256 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "dirrec", i__1, "dasfm_", (ftnlen)1570)] - 1;
 	    __state->dsctyp = __state->dirrec[8];
 	    __state->prvtyp = __state->prev[(i__1 = __state->dsctyp - 1) < 3 
-		    && 0 <= i__1 ? i__1 : s_rnge("prev", i__1, "dasfm_", (
-		    ftnlen)1572)];
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prev",
+		     i__1, "dasfm_", (ftnlen)1572)];
 	    __state->endrec = __state->nrec;
 	    __state->pos = 9;
 	    while(__state->last < __state->maxadr) {
 		++__state->pos;
 		if (__state->dirrec[(i__1 = __state->pos - 1) < 256 && 0 <= 
-			i__1 ? i__1 : s_rnge("dirrec", i__1, "dasfm_", (
-			ftnlen)1580)] > 0) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "dirrec", 
+			i__1, "dasfm_", (ftnlen)1580)] > 0) {
 		    __state->curtyp = __state->next[(i__1 = __state->prvtyp - 
-			    1) < 3 && 0 <= i__1 ? i__1 : s_rnge("next", i__1, 
-			    "dasfm_", (ftnlen)1581)];
+			    1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "next", i__1, "dasfm_", (
+			    ftnlen)1581)];
 		} else {
 		    __state->curtyp = __state->prev[(i__1 = __state->prvtyp - 
-			    1) < 3 && 0 <= i__1 ? i__1 : s_rnge("prev", i__1, 
-			    "dasfm_", (ftnlen)1583)];
+			    1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "prev", i__1, "dasfm_", (
+			    ftnlen)1583)];
 		}
 		if (__state->curtyp == __state->type__) {
 		    __state->last += __state->nw[(i__3 = __state->type__ - 1) 
-			    < 3 && 0 <= i__3 ? i__3 : s_rnge("nw", i__3, 
-			    "dasfm_", (ftnlen)1587)] * (i__2 = 
-			    __state->dirrec[(i__1 = __state->pos - 1) < 256 &&
-			     0 <= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasf"
-			    "m_", (ftnlen)1587)], abs(i__2));
+			    < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "nw", i__3, "dasfm_", (
+			    ftnlen)1587)] * (i__2 = __state->dirrec[(i__1 = 
+			    __state->pos - 1) < 256 && 0 <= i__1 ? i__1 : 
+			    s_rnge(&__global_state->f2c, "dirrec", i__1, 
+			    "dasfm_", (ftnlen)1587)], abs(i__2));
 		}
 		__state->endrec += (i__2 = __state->dirrec[(i__1 = 
-			__state->pos - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-			"dirrec", i__1, "dasfm_", (ftnlen)1590)], abs(i__2));
+			__state->pos - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "dirrec", i__1, "dasfm_", (
+			ftnlen)1590)], abs(i__2));
 		__state->prvtyp = __state->curtyp;
 	    }
 
@@ -1588,20 +1614,23 @@ L_dasopr:
 /*           of the last data record of TYPE. */
 
 	    __state->ftsum[(i__1 = __state->type__ + 11 + __state->fthead * 
-		    14 - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", 
-		    i__1, "dasfm_", (ftnlen)1599)] = __state->pos;
+		    14 - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)
+		    1599)] = __state->pos;
 	    __state->ldrec[(i__1 = __state->type__ - 1) < 3 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ldrec", i__1, "dasfm_", (ftnlen)1600)] = 
-		    __state->endrec;
+		    i__1 : s_rnge(&__global_state->f2c, "ldrec", i__1, "dasf"
+		    "m_", (ftnlen)1600)] = __state->endrec;
 	} else {
 
 /*           There's no data of TYPE in the file. */
 
 	    __state->ftsum[(i__1 = __state->type__ + 11 + __state->fthead * 
-		    14 - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", 
-		    i__1, "dasfm_", (ftnlen)1607)] = 0;
+		    14 - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)
+		    1607)] = 0;
 	    __state->ldrec[(i__1 = __state->type__ - 1) < 3 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ldrec", i__1, "dasfm_", (ftnlen)1608)] = 0;
+		    i__1 : s_rnge(&__global_state->f2c, "ldrec", i__1, "dasf"
+		    "m_", (ftnlen)1608)] = 0;
 	}
     }
 
@@ -1610,26 +1639,27 @@ L_dasopr:
 /*     the directory records. It may happen that the last record in use */
 /*     is an empty directory. */
 
-    maxai_(__state->ldrec, &__state->c__3, &__state->ldrmax, &__state->loc);
+    maxai_(__global_state, __state->ldrec, &__state->c__3, &__state->ldrmax, &
+	    __state->loc);
     __state->nrec = __state->locrrc + __state->loccrc + 2;
-    zzdasgri_(handle, &__state->nrec, __state->dirrec);
+    zzdasgri_(__global_state, handle, &__state->nrec, __state->dirrec);
     __state->nxtrec = __state->dirrec[1];
     while(__state->nxtrec != 0) {
 	__state->nrec = __state->nxtrec;
-	zzdasgri_(handle, &__state->nrec, __state->dirrec);
+	zzdasgri_(__global_state, handle, &__state->nrec, __state->dirrec);
 	__state->nxtrec = __state->dirrec[1];
     }
 
 /*     Now NREC is the last directory record. */
 
     __state->ftsum[(i__1 = __state->fthead * 14 - 10) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1642)] = max(
-	    __state->ldrmax,__state->nrec) + 1;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)1642)] = max(__state->ldrmax,__state->nrec) + 1;
 
 /*     Insert the new handle into our handle set. */
 
-    insrti_(handle, __state->fhlist);
-    chkout_("DASOPR", (ftnlen)6);
+    insrti_(__global_state, handle, __state->fhlist);
+    chkout_(__global_state, "DASOPR", (ftnlen)6);
     return 0;
 /* $Procedure DASOPW ( DAS, open for write ) */
 
@@ -1858,40 +1888,41 @@ L_dasopw:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASOPW", (ftnlen)6);
+    chkin_(__global_state, "DASOPW", (ftnlen)6);
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
-    if (lnknfn_(__state->pool) == 0) {
-	setmsg_("The file table is full, with # entries. Could not open '#'.",
-		 (ftnlen)59);
-	errint_("#", &__state->c__5000, (ftnlen)1);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	sigerr_("SPICE(DASFTFULL)", (ftnlen)16);
-	chkout_("DASOPW", (ftnlen)6);
+    if (lnknfn_(__global_state, __state->pool) == 0) {
+	setmsg_(__global_state, "The file table is full, with # entries. Cou"
+		"ld not open '#'.", (ftnlen)59);
+	errint_(__global_state, "#", &__state->c__5000, (ftnlen)1);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	sigerr_(__global_state, "SPICE(DASFTFULL)", (ftnlen)16);
+	chkout_(__global_state, "DASOPW", (ftnlen)6);
 	return 0;
     }
 
 /*     Open the file for writing:   open the file, get the */
 /*     internal file name, and set the number of links to one. */
 
-    zzddhopn_(fname, "WRITE", "DAS", handle, fname_len, (ftnlen)5, (ftnlen)3);
+    zzddhopn_(__global_state, fname, "WRITE", "DAS", handle, fname_len, (
+	    ftnlen)5, (ftnlen)3);
 
 /*     Read the file record. */
 
-    zzdasrfr_(handle, __state->idword, __state->locifn, &__state->locrrc, &
-	    __state->locrch, &__state->loccrc, &__state->loccch, (ftnlen)8, (
-	    ftnlen)60);
-    if (failed_()) {
-	chkout_("DASOPW", (ftnlen)6);
+    zzdasrfr_(__global_state, handle, __state->idword, __state->locifn, &
+	    __state->locrrc, &__state->locrch, &__state->loccrc, &
+	    __state->loccch, (ftnlen)8, (ftnlen)60);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASOPW", (ftnlen)6);
 	return 0;
     }
 
@@ -1904,15 +1935,18 @@ L_dasopw:
 
 /*     Set the output argument HANDLE as well. */
 
-    lnkan_(__state->pool, &__state->new__);
-    lnkilb_(&__state->new__, &__state->fthead, __state->pool);
+    lnkan_(__global_state, __state->pool, &__state->new__);
+    lnkilb_(__global_state, &__state->new__, &__state->fthead, __state->pool);
     __state->fthead = __state->new__;
     __state->fthan[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "dasfm_", (ftnlen)1948)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (ftnlen)
+	    1948)] = *handle;
     __state->ftacc[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftacc", i__1, "dasfm_", (ftnlen)1949)] = 2;
+	    s_rnge(&__global_state->f2c, "ftacc", i__1, "dasfm_", (ftnlen)
+	    1949)] = 2;
     __state->ftlnk[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftlnk", i__1, "dasfm_", (ftnlen)1950)] = 1;
+	    s_rnge(&__global_state->f2c, "ftlnk", i__1, "dasfm_", (ftnlen)
+	    1950)] = 1;
 
 /*     Fill in the file summary. We already know how many reserved */
 /*     records and comment records there are. To find the number of the */
@@ -1921,28 +1955,29 @@ L_dasopw:
 /*     the directory records. We do not assume that the data records in */
 /*     the DAS file have been segregated. */
 
-    cleari_(&__state->c__14, &__state->ftsum[(i__1 = __state->fthead * 14 - 
-	    14) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", 
-	    (ftnlen)1960)]);
+    cleari_(__global_state, &__state->c__14, &__state->ftsum[(i__1 = 
+	    __state->fthead * 14 - 14) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)1960)]);
     __state->ftsum[(i__1 = __state->fthead * 14 - 14) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1962)] = 
-	    __state->locrrc;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)1962)] = __state->locrrc;
     __state->ftsum[(i__1 = __state->fthead * 14 - 13) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1963)] = 
-	    __state->locrch;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)1963)] = __state->locrch;
     __state->ftsum[(i__1 = __state->fthead * 14 - 12) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1964)] = 
-	    __state->loccrc;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)1964)] = __state->loccrc;
     __state->ftsum[(i__1 = __state->fthead * 14 - 11) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)1965)] = 
-	    __state->loccch;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)1965)] = __state->loccch;
 
 /*     We'll need the logical unit connected to the file, so */
 /*     we can read the file's directory records. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &__state->number, (ftnlen)3);
-    if (failed_()) {
-	chkout_("DASOPW", (ftnlen)6);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &
+	    __state->number, (ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASOPW", (ftnlen)6);
 	return 0;
     }
 
@@ -1959,15 +1994,16 @@ L_dasopw:
 /*        record of the current type. */
 
 	__state->ldrec[(i__1 = __state->type__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("ldrec", i__1, "dasfm_", (ftnlen)1992)] = 0;
+		s_rnge(&__global_state->f2c, "ldrec", i__1, "dasfm_", (ftnlen)
+		1992)] = 0;
 
 /*        Find the last directory containing a descriptor of a */
 /*        record cluster of the current type. */
 
-	zzdasgri_(handle, &__state->nrec, __state->dirrec);
+	zzdasgri_(__global_state, handle, &__state->nrec, __state->dirrec);
 	__state->maxadr = __state->dirrec[(i__1 = (__state->type__ << 1) + 1) 
-		< 256 && 0 <= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasfm_", (
-		ftnlen)2000)];
+		< 256 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"dirrec", i__1, "dasfm_", (ftnlen)2000)];
 	__state->nxtdir = __state->dirrec[1];
 	while(__state->nxtdir > 0) {
 
@@ -1975,17 +2011,19 @@ L_dasopw:
 /*           descriptors for clusters we're interested in, update the */
 /*           directory record number. */
 
-	    zzdasgri_(handle, &__state->nxtdir, __state->dirrec);
-	    if (failed_()) {
-		chkout_("DASOPW", (ftnlen)6);
+	    zzdasgri_(__global_state, handle, &__state->nxtdir, 
+		    __state->dirrec);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASOPW", (ftnlen)6);
 		return 0;
 	    }
 	    if (__state->dirrec[(i__1 = (__state->type__ << 1) + 1) < 256 && 
-		    0 <= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasfm_", (
-		    ftnlen)2018)] > 0) {
+		    0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "dirrec", 
+		    i__1, "dasfm_", (ftnlen)2018)] > 0) {
 		__state->maxadr = __state->dirrec[(i__1 = (__state->type__ << 
-			1) + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge("dirrec", 
-			i__1, "dasfm_", (ftnlen)2020)];
+			1) + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "dirrec", i__1, "dasfm_", (
+			ftnlen)2020)];
 		__state->nrec = __state->nxtdir;
 	    }
 	    __state->nxtdir = __state->dirrec[1];
@@ -1998,16 +2036,18 @@ L_dasopw:
 /*        MAXADR is the maximum logical address of TYPE. */
 
 	__state->ftsum[(i__1 = __state->type__ + 5 + __state->fthead * 14 - 
-		15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "das"
-		"fm_", (ftnlen)2036)] = __state->maxadr;
+		15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+		 "ftsum", i__1, "dasfm_", (ftnlen)2036)] = __state->maxadr;
 	if (__state->maxadr > 0) {
 	    __state->ftsum[(i__1 = __state->type__ + 8 + __state->fthead * 14 
-		    - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, 
-		    "dasfm_", (ftnlen)2039)] = __state->nrec;
+		    - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)
+		    2039)] = __state->nrec;
 	} else {
 	    __state->ftsum[(i__1 = __state->type__ + 8 + __state->fthead * 14 
-		    - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, 
-		    "dasfm_", (ftnlen)2041)] = 0;
+		    - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)
+		    2041)] = 0;
 	}
 
 /*        We still need to set the word location of the final */
@@ -2018,9 +2058,10 @@ L_dasopw:
 /*           Re-read the directory record containing the last descriptor */
 /*           of the current type. */
 
-	    zzdasgri_(handle, &__state->nrec, __state->dirrec);
-	    if (failed_()) {
-		chkout_("DASOPW", (ftnlen)6);
+	    zzdasgri_(__global_state, handle, &__state->nrec, __state->dirrec)
+		    ;
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASOPW", (ftnlen)6);
 		return 0;
 	    }
 
@@ -2034,38 +2075,42 @@ L_dasopw:
 /*           cluster. */
 
 	    __state->last = __state->dirrec[(i__1 = __state->type__ << 1) < 
-		    256 && 0 <= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasfm_",
-		     (ftnlen)2069)] - 1;
+		    256 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "dirrec", i__1, "dasfm_", (ftnlen)2069)] - 1;
 	    __state->dsctyp = __state->dirrec[8];
 	    __state->prvtyp = __state->prev[(i__1 = __state->dsctyp - 1) < 3 
-		    && 0 <= i__1 ? i__1 : s_rnge("prev", i__1, "dasfm_", (
-		    ftnlen)2071)];
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "prev",
+		     i__1, "dasfm_", (ftnlen)2071)];
 	    __state->endrec = __state->nrec;
 	    __state->pos = 9;
 	    while(__state->last < __state->maxadr) {
 		++__state->pos;
 		if (__state->dirrec[(i__1 = __state->pos - 1) < 256 && 0 <= 
-			i__1 ? i__1 : s_rnge("dirrec", i__1, "dasfm_", (
-			ftnlen)2079)] > 0) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "dirrec", 
+			i__1, "dasfm_", (ftnlen)2079)] > 0) {
 		    __state->curtyp = __state->next[(i__1 = __state->prvtyp - 
-			    1) < 3 && 0 <= i__1 ? i__1 : s_rnge("next", i__1, 
-			    "dasfm_", (ftnlen)2080)];
+			    1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "next", i__1, "dasfm_", (
+			    ftnlen)2080)];
 		} else {
 		    __state->curtyp = __state->prev[(i__1 = __state->prvtyp - 
-			    1) < 3 && 0 <= i__1 ? i__1 : s_rnge("prev", i__1, 
-			    "dasfm_", (ftnlen)2082)];
+			    1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "prev", i__1, "dasfm_", (
+			    ftnlen)2082)];
 		}
 		if (__state->curtyp == __state->type__) {
 		    __state->last += __state->nw[(i__3 = __state->type__ - 1) 
-			    < 3 && 0 <= i__3 ? i__3 : s_rnge("nw", i__3, 
-			    "dasfm_", (ftnlen)2086)] * (i__2 = 
-			    __state->dirrec[(i__1 = __state->pos - 1) < 256 &&
-			     0 <= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasf"
-			    "m_", (ftnlen)2086)], abs(i__2));
+			    < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "nw", i__3, "dasfm_", (
+			    ftnlen)2086)] * (i__2 = __state->dirrec[(i__1 = 
+			    __state->pos - 1) < 256 && 0 <= i__1 ? i__1 : 
+			    s_rnge(&__global_state->f2c, "dirrec", i__1, 
+			    "dasfm_", (ftnlen)2086)], abs(i__2));
 		}
 		__state->endrec += (i__2 = __state->dirrec[(i__1 = 
-			__state->pos - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-			"dirrec", i__1, "dasfm_", (ftnlen)2089)], abs(i__2));
+			__state->pos - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "dirrec", i__1, "dasfm_", (
+			ftnlen)2089)], abs(i__2));
 		__state->prvtyp = __state->curtyp;
 	    }
 
@@ -2074,20 +2119,23 @@ L_dasopw:
 /*           of the last data record of TYPE. */
 
 	    __state->ftsum[(i__1 = __state->type__ + 11 + __state->fthead * 
-		    14 - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", 
-		    i__1, "dasfm_", (ftnlen)2098)] = __state->pos;
+		    14 - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)
+		    2098)] = __state->pos;
 	    __state->ldrec[(i__1 = __state->type__ - 1) < 3 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ldrec", i__1, "dasfm_", (ftnlen)2099)] = 
-		    __state->endrec;
+		    i__1 : s_rnge(&__global_state->f2c, "ldrec", i__1, "dasf"
+		    "m_", (ftnlen)2099)] = __state->endrec;
 	} else {
 
 /*           There's no data of TYPE in the file. */
 
 	    __state->ftsum[(i__1 = __state->type__ + 11 + __state->fthead * 
-		    14 - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", 
-		    i__1, "dasfm_", (ftnlen)2106)] = 0;
+		    14 - 15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)
+		    2106)] = 0;
 	    __state->ldrec[(i__1 = __state->type__ - 1) < 3 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ldrec", i__1, "dasfm_", (ftnlen)2107)] = 0;
+		    i__1 : s_rnge(&__global_state->f2c, "ldrec", i__1, "dasf"
+		    "m_", (ftnlen)2107)] = 0;
 	}
     }
 
@@ -2096,28 +2144,29 @@ L_dasopw:
 /*     the directory records. It may happen that the last record in use */
 /*     is an empty directory. */
 
-    maxai_(__state->ldrec, &__state->c__3, &__state->ldrmax, &__state->loc);
+    maxai_(__global_state, __state->ldrec, &__state->c__3, &__state->ldrmax, &
+	    __state->loc);
     __state->nrec = __state->locrrc + __state->loccrc + 2;
-    dasioi_("READ", &__state->number, &__state->nrec, __state->dirrec, (
-	    ftnlen)4);
+    dasioi_(__global_state, "READ", &__state->number, &__state->nrec, 
+	    __state->dirrec, (ftnlen)4);
     __state->nxtrec = __state->dirrec[1];
     while(__state->nxtrec != 0) {
 	__state->nrec = __state->nxtrec;
-	dasioi_("READ", &__state->number, &__state->nrec, __state->dirrec, (
-		ftnlen)4);
+	dasioi_(__global_state, "READ", &__state->number, &__state->nrec, 
+		__state->dirrec, (ftnlen)4);
 	__state->nxtrec = __state->dirrec[1];
     }
 
 /*     Now NREC is the last directory record. */
 
     __state->ftsum[(i__1 = __state->fthead * 14 - 10) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2141)] = max(
-	    __state->ldrmax,__state->nrec) + 1;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)2141)] = max(__state->ldrmax,__state->nrec) + 1;
 
 /*     Insert the new handle into our handle set. */
 
-    insrti_(handle, __state->fhlist);
-    chkout_("DASOPW", (ftnlen)6);
+    insrti_(__global_state, handle, __state->fhlist);
+    chkout_(__global_state, "DASOPW", (ftnlen)6);
     return 0;
 /* $Procedure DASONW ( DAS, open new file ) */
 
@@ -2358,49 +2407,49 @@ L_dasonw:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASONW", (ftnlen)6);
+    chkin_(__global_state, "DASONW", (ftnlen)6);
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
 
 /*     Check to see whether the filename is blank. If it is, signal an */
 /*     error, check out, and return. */
 
-    if (s_cmp(fname, " ", fname_len, (ftnlen)1) == 0) {
-	setmsg_("The file name is blank. ", (ftnlen)24);
-	sigerr_("SPICE(BLANKFILENAME)", (ftnlen)20);
-	chkout_("DASONW", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, fname, " ", fname_len, (ftnlen)1) == 0) {
+	setmsg_(__global_state, "The file name is blank. ", (ftnlen)24);
+	sigerr_(__global_state, "SPICE(BLANKFILENAME)", (ftnlen)20);
+	chkout_(__global_state, "DASONW", (ftnlen)6);
 	return 0;
     }
 
 /*     Check if the file type is blank. */
 
-    if (s_cmp(ftype, " ", ftype_len, (ftnlen)1) == 0) {
-	setmsg_("The file type is blank. ", (ftnlen)24);
-	sigerr_("SPICE(BLANKFILETYPE)", (ftnlen)20);
-	chkout_("DASONW", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, ftype, " ", ftype_len, (ftnlen)1) == 0) {
+	setmsg_(__global_state, "The file type is blank. ", (ftnlen)24);
+	sigerr_(__global_state, "SPICE(BLANKFILETYPE)", (ftnlen)20);
+	chkout_(__global_state, "DASONW", (ftnlen)6);
 	return 0;
     }
 
 /*     Check for nonprinting characters in the file type. */
 
-    __state->fnb = ltrim_(ftype, ftype_len);
-    i__1 = rtrim_(ftype, ftype_len);
+    __state->fnb = ltrim_(__global_state, ftype, ftype_len);
+    i__1 = rtrim_(__global_state, ftype, ftype_len);
     for (__state->i__ = __state->fnb; __state->i__ <= i__1; ++__state->i__) {
 	if (*(unsigned char *)&ftype[__state->i__ - 1] > 126 || *(unsigned 
 		char *)&ftype[__state->i__ - 1] < 32) {
-	    setmsg_("The file type contains nonprinting characters. ", (
-		    ftnlen)47);
-	    sigerr_("SPICE(ILLEGALCHARACTER)", (ftnlen)23);
-	    chkout_("DASONW", (ftnlen)6);
+	    setmsg_(__global_state, "The file type contains nonprinting char"
+		    "acters. ", (ftnlen)47);
+	    sigerr_(__global_state, "SPICE(ILLEGALCHARACTER)", (ftnlen)23);
+	    chkout_(__global_state, "DASONW", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2408,11 +2457,11 @@ L_dasonw:
 /*     Validate the comment record count. */
 
     if (*ncomr < 0) {
-	setmsg_("The number of comment records allocated must be non-negativ"
-		"e but was #.", (ftnlen)71);
-	errint_("#", ncomr, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("DASONW", (ftnlen)6);
+	setmsg_(__global_state, "The number of comment records allocated mus"
+		"t be non-negative but was #.", (ftnlen)71);
+	errint_(__global_state, "#", ncomr, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "DASONW", (ftnlen)6);
 	return 0;
     }
 
@@ -2422,36 +2471,40 @@ L_dasonw:
 /*     nonblank character and its three (3) immediate successors in the */
 /*     input string FTYPE. */
 
-    s_copy(__state->ttype, ftype + (__state->fnb - 1), (ftnlen)4, ftype_len - 
-	    (__state->fnb - 1));
+    s_copy(&__global_state->f2c, __state->ttype, ftype + (__state->fnb - 1), (
+	    ftnlen)4, ftype_len - (__state->fnb - 1));
 /* Writing concatenation */
     i__4[0] = 4, a__1[0] = "DAS/";
     i__4[1] = 4, a__1[1] = __state->ttype;
-    s_cat(__state->idword, a__1, i__4, &__state->c__2, (ftnlen)8);
+    s_cat(&__global_state->f2c, __state->idword, a__1, i__4, &__state->c__2, (
+	    ftnlen)8);
 
 /*     The file can be opened only if there is room for another file. */
 
-    if (lnknfn_(__state->pool) == 0) {
-	setmsg_("The file table is full, with # entries. Could not open '#'.",
-		 (ftnlen)59);
-	errint_("#", &__state->c__5000, (ftnlen)1);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	sigerr_("SPICE(DASFTFULL)", (ftnlen)16);
-	chkout_("DASONW", (ftnlen)6);
+    if (lnknfn_(__global_state, __state->pool) == 0) {
+	setmsg_(__global_state, "The file table is full, with # entries. Cou"
+		"ld not open '#'.", (ftnlen)59);
+	errint_(__global_state, "#", &__state->c__5000, (ftnlen)1);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	sigerr_(__global_state, "SPICE(DASFTFULL)", (ftnlen)16);
+	chkout_(__global_state, "DASONW", (ftnlen)6);
 	return 0;
     }
 
 /*     Open a new file. */
 
-    zzddhopn_(fname, "NEW", "DAS", handle, fname_len, (ftnlen)3, (ftnlen)3);
+    zzddhopn_(__global_state, fname, "NEW", "DAS", handle, fname_len, (ftnlen)
+	    3, (ftnlen)3);
 
 /*     Get a logical unit for the file. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &__state->number, (ftnlen)3);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &
+	    __state->number, (ftnlen)3);
 
 /*     Fetch the system file format. */
 
-    zzplatfm_("FILE_FORMAT", __state->format, (ftnlen)11, (ftnlen)8);
+    zzplatfm_(__global_state, "FILE_FORMAT", __state->format, (ftnlen)11, (
+	    ftnlen)8);
 
 /*     Prepare to write the file record. */
 
@@ -2471,17 +2524,18 @@ L_dasonw:
 /*     Initially, all of these counts are zero, except for the */
 /*     comment record count, which is set by the caller. */
 
-    s_copy(__state->locifn, ifname, (ftnlen)60, ifname_len);
-    zzdasnfr_(&__state->number, __state->idword, __state->locifn, &
-	    __state->c__0, &__state->c__0, ncomr, &__state->c__0, 
-	    __state->format, (ftnlen)8, (ftnlen)60, (ftnlen)8);
+    s_copy(&__global_state->f2c, __state->locifn, ifname, (ftnlen)60, 
+	    ifname_len);
+    zzdasnfr_(__global_state, &__state->number, __state->idword, 
+	    __state->locifn, &__state->c__0, &__state->c__0, ncomr, &
+	    __state->c__0, __state->format, (ftnlen)8, (ftnlen)60, (ftnlen)8);
 
 /*     Check to see whether or not ZZDASNFR generated an error */
 /*     writing the file record to the logical unit. In the event */
 /*     an error occurs, checkout and return. */
 
-    if (failed_()) {
-	chkout_("DASONW", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASONW", (ftnlen)6);
 	return 0;
     }
 
@@ -2492,27 +2546,27 @@ L_dasonw:
 /*     are no reserved records, so the directory occupies record */
 /*     NCOMR+2. */
 
-    cleari_(&__state->c__256, __state->dirrec);
+    cleari_(__global_state, &__state->c__256, __state->dirrec);
     __state->io___42.ciunit = __state->number;
     __state->io___42.cirec = *ncomr + 2;
-    __state->iostat = s_wdue(&__state->io___42);
+    __state->iostat = s_wdue(&__global_state->f2c, &__state->io___42);
     if (__state->iostat != 0) {
 	goto L100001;
     }
-    __state->iostat = do_uio(&__state->c__256, (char *)&__state->dirrec[0], (
-	    ftnlen)sizeof(integer));
+    __state->iostat = do_uio(&__global_state->f2c, &__state->c__256, (char *)&
+	    __state->dirrec[0], (ftnlen)sizeof(integer));
     if (__state->iostat != 0) {
 	goto L100001;
     }
-    __state->iostat = e_wdue();
+    __state->iostat = e_wdue(&__global_state->f2c);
 L100001:
     if (__state->iostat != 0) {
 
 /*        We had a write error. Ask the handle manager to */
 /*        close and delete the new file. */
 
-	zzddhcls_(handle, "DAS", &__state->c_true, (ftnlen)3);
-	chkout_("DASONW", (ftnlen)6);
+	zzddhcls_(__global_state, handle, "DAS", &__state->c_true, (ftnlen)3);
+	chkout_(__global_state, "DASONW", (ftnlen)6);
 	return 0;
     }
 
@@ -2522,33 +2576,37 @@ L100001:
 
 /*     Set the output argument HANDLE as well. */
 
-    lnkan_(__state->pool, &__state->new__);
-    lnkilb_(&__state->new__, &__state->fthead, __state->pool);
+    lnkan_(__global_state, __state->pool, &__state->new__);
+    lnkilb_(__global_state, &__state->new__, &__state->fthead, __state->pool);
 
 /*     Clear out the file summary, except for the number of comment */
 /*     records and the free record pointer. The free record pointer */
 /*     should point to the first record AFTER the first directory. */
 
     __state->fthead = __state->new__;
-    cleari_(&__state->c__14, &__state->ftsum[(i__1 = __state->fthead * 14 - 
-	    14) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", 
-	    (ftnlen)2596)]);
+    cleari_(__global_state, &__state->c__14, &__state->ftsum[(i__1 = 
+	    __state->fthead * 14 - 14) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)2596)]);
     __state->fthan[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "dasfm_", (ftnlen)2598)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (ftnlen)
+	    2598)] = *handle;
     __state->ftacc[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftacc", i__1, "dasfm_", (ftnlen)2599)] = 2;
+	    s_rnge(&__global_state->f2c, "ftacc", i__1, "dasfm_", (ftnlen)
+	    2599)] = 2;
     __state->ftlnk[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftlnk", i__1, "dasfm_", (ftnlen)2600)] = 1;
+	    s_rnge(&__global_state->f2c, "ftlnk", i__1, "dasfm_", (ftnlen)
+	    2600)] = 1;
     __state->ftsum[(i__1 = __state->fthead * 14 - 10) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2601)] = *ncomr + 
-	    3;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)2601)] = *ncomr + 3;
     __state->ftsum[(i__1 = __state->fthead * 14 - 12) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2602)] = *ncomr;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)2602)] = *ncomr;
 
 /*     Insert the new handle into our handle set. */
 
-    insrti_(handle, __state->fhlist);
-    chkout_("DASONW", (ftnlen)6);
+    insrti_(__global_state, handle, __state->fhlist);
+    chkout_(__global_state, "DASONW", (ftnlen)6);
     return 0;
 /* $Procedure DASOPN ( DAS, open new ) */
 
@@ -2761,38 +2819,38 @@ L_dasopn:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASOPN", (ftnlen)6);
+    chkin_(__global_state, "DASOPN", (ftnlen)6);
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
 
 /*     Check to see whether the filename is blank. If it is, signal an */
 /*     error, check out, and return. */
 
-    if (s_cmp(fname, " ", fname_len, (ftnlen)1) == 0) {
-	setmsg_("The file name is blank. ", (ftnlen)24);
-	sigerr_("SPICE(BLANKFILENAME)", (ftnlen)20);
-	chkout_("DASOPN", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, fname, " ", fname_len, (ftnlen)1) == 0) {
+	setmsg_(__global_state, "The file name is blank. ", (ftnlen)24);
+	sigerr_(__global_state, "SPICE(BLANKFILENAME)", (ftnlen)20);
+	chkout_(__global_state, "DASOPN", (ftnlen)6);
 	return 0;
     }
 
 /*     The file can be opened only if there is room for another file. */
 
-    if (lnknfn_(__state->pool) == 0) {
-	setmsg_("The file table is full, with # entries. Could not open '#'.",
-		 (ftnlen)59);
-	errint_("#", &__state->c__5000, (ftnlen)1);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	sigerr_("SPICE(DASFTFULL)", (ftnlen)16);
-	chkout_("DASOPN", (ftnlen)6);
+    if (lnknfn_(__global_state, __state->pool) == 0) {
+	setmsg_(__global_state, "The file table is full, with # entries. Cou"
+		"ld not open '#'.", (ftnlen)59);
+	errint_(__global_state, "#", &__state->c__5000, (ftnlen)1);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	sigerr_(__global_state, "SPICE(DASFTFULL)", (ftnlen)16);
+	chkout_(__global_state, "DASOPN", (ftnlen)6);
 	return 0;
     }
 
@@ -2811,16 +2869,19 @@ L_dasopn:
 /*     the file. */
 
 
-    zzddhopn_(fname, "NEW", "DAS", handle, fname_len, (ftnlen)3, (ftnlen)3);
-    zzddhhlu_(handle, "DAS", &__state->c_false, &__state->number, (ftnlen)3);
-    if (failed_()) {
-	chkout_("DASOPN", (ftnlen)6);
+    zzddhopn_(__global_state, fname, "NEW", "DAS", handle, fname_len, (ftnlen)
+	    3, (ftnlen)3);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &
+	    __state->number, (ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASOPN", (ftnlen)6);
 	return 0;
     }
 
 /*     Fetch the system file format. */
 
-    zzplatfm_("FILE_FORMAT", __state->format, (ftnlen)11, (ftnlen)8);
+    zzplatfm_(__global_state, "FILE_FORMAT", __state->format, (ftnlen)11, (
+	    ftnlen)8);
 
 /*     Prepare to write the file record. */
 
@@ -2840,13 +2901,15 @@ L_dasopn:
 /*     Initially, all of these counts are zero. */
 
 
-    s_copy(__state->locifn, ifname, (ftnlen)60, ifname_len);
-    s_copy(__state->idword, "NAIF/DAS", (ftnlen)8, (ftnlen)8);
-    zzdasnfr_(&__state->number, __state->idword, __state->locifn, &
-	    __state->c__0, &__state->c__0, &__state->c__0, &__state->c__0, 
-	    __state->format, (ftnlen)8, (ftnlen)60, (ftnlen)8);
-    if (failed_()) {
-	chkout_("DASOPN", (ftnlen)6);
+    s_copy(&__global_state->f2c, __state->locifn, ifname, (ftnlen)60, 
+	    ifname_len);
+    s_copy(&__global_state->f2c, __state->idword, "NAIF/DAS", (ftnlen)8, (
+	    ftnlen)8);
+    zzdasnfr_(__global_state, &__state->number, __state->idword, 
+	    __state->locifn, &__state->c__0, &__state->c__0, &__state->c__0, &
+	    __state->c__0, __state->format, (ftnlen)8, (ftnlen)60, (ftnlen)8);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASOPN", (ftnlen)6);
 	return 0;
     }
 
@@ -2857,15 +2920,15 @@ L_dasopn:
 
 /*     NOTE: re-write this using ZZDDHCLS. */
 
-    cleari_(&__state->c__256, __state->dirrec);
-    dasioi_("WRITE", &__state->number, &__state->c__2, __state->dirrec, (
-	    ftnlen)5);
-    if (failed_()) {
+    cleari_(__global_state, &__state->c__256, __state->dirrec);
+    dasioi_(__global_state, "WRITE", &__state->number, &__state->c__2, 
+	    __state->dirrec, (ftnlen)5);
+    if (failed_(__global_state)) {
 	cl__1.cerr = 0;
 	cl__1.cunit = __state->number;
 	cl__1.csta = "DELETE";
-	f_clos(&cl__1);
-	chkout_("DASOPN", (ftnlen)6);
+	f_clos(&__global_state->f2c, &cl__1);
+	chkout_(__global_state, "DASOPN", (ftnlen)6);
 	return 0;
     }
 
@@ -2875,30 +2938,34 @@ L_dasopn:
 
 /*     Set the output argument HANDLE as well. */
 
-    lnkan_(__state->pool, &__state->new__);
-    lnkilb_(&__state->new__, &__state->fthead, __state->pool);
+    lnkan_(__global_state, __state->pool, &__state->new__);
+    lnkilb_(__global_state, &__state->new__, &__state->fthead, __state->pool);
 
 /*     Clear out the file summary, except for the free record pointer. */
 /*     The free record pointer should point to the first record AFTER */
 /*     the first directory. */
 
     __state->fthead = __state->new__;
-    cleari_(&__state->c__14, &__state->ftsum[(i__1 = __state->fthead * 14 - 
-	    14) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", 
-	    (ftnlen)2978)]);
+    cleari_(__global_state, &__state->c__14, &__state->ftsum[(i__1 = 
+	    __state->fthead * 14 - 14) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)2978)]);
     __state->fthan[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "dasfm_", (ftnlen)2980)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (ftnlen)
+	    2980)] = *handle;
     __state->ftacc[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftacc", i__1, "dasfm_", (ftnlen)2981)] = 2;
+	    s_rnge(&__global_state->f2c, "ftacc", i__1, "dasfm_", (ftnlen)
+	    2981)] = 2;
     __state->ftlnk[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftlnk", i__1, "dasfm_", (ftnlen)2982)] = 1;
+	    s_rnge(&__global_state->f2c, "ftlnk", i__1, "dasfm_", (ftnlen)
+	    2982)] = 1;
     __state->ftsum[(i__1 = __state->fthead * 14 - 10) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)2983)] = 3;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)2983)] = 3;
 
 /*     Insert the new handle into our handle set. */
 
-    insrti_(handle, __state->fhlist);
-    chkout_("DASOPN", (ftnlen)6);
+    insrti_(__global_state, handle, __state->fhlist);
+    chkout_(__global_state, "DASOPN", (ftnlen)6);
     return 0;
 /* $Procedure DASOPS ( DAS, open scratch ) */
 
@@ -3123,55 +3190,58 @@ L_dasops:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASOPS", (ftnlen)6);
+    chkin_(__global_state, "DASOPS", (ftnlen)6);
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
 
 /*     The file can be opened only if there is room for another file. */
 
-    if (lnknfn_(__state->pool) == 0) {
-	setmsg_("The file table is full, with # entries. Could not open a sc"
-		"ratch file. If a call to DASOPS was not made and this error "
-		"occurred, it is likely that the DAS file table was full and "
-		"an attempt to close a file opened with write access was made"
-		". See the DAS required reading and DASFM for details.", (
-		ftnlen)292);
-	errint_("#", &__state->c__5000, (ftnlen)1);
-	sigerr_("SPICE(DASFTFULL)", (ftnlen)16);
-	chkout_("DASOPS", (ftnlen)6);
+    if (lnknfn_(__global_state, __state->pool) == 0) {
+	setmsg_(__global_state, "The file table is full, with # entries. Cou"
+		"ld not open a scratch file. If a call to DASOPS was not made"
+		" and this error occurred, it is likely that the DAS file tab"
+		"le was full and an attempt to close a file opened with write"
+		" access was made. See the DAS required reading and DASFM for"
+		" details.", (ftnlen)292);
+	errint_(__global_state, "#", &__state->c__5000, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASFTFULL)", (ftnlen)16);
+	chkout_(__global_state, "DASOPS", (ftnlen)6);
 	return 0;
     }
 
 /*     Assign a name to the scratch file. This name is required */
 /*     by the DDH subsystem. */
 
-    s_copy(__state->locdas, "DAS SCRATCH FILE", (ftnlen)255, (ftnlen)16);
+    s_copy(&__global_state->f2c, __state->locdas, "DAS SCRATCH FILE", (ftnlen)
+	    255, (ftnlen)16);
 
 /*     Open a DAS file for scratch access. */
 
-    zzddhopn_(__state->locdas, "SCRATCH", "DAS", handle, (ftnlen)255, (ftnlen)
-	    7, (ftnlen)3);
-    if (failed_()) {
-	chkout_("DASOPS", (ftnlen)6);
+    zzddhopn_(__global_state, __state->locdas, "SCRATCH", "DAS", handle, (
+	    ftnlen)255, (ftnlen)7, (ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASOPS", (ftnlen)6);
 	return 0;
     }
 
 /*     Get a logical unit for the file. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &__state->number, (ftnlen)3);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &
+	    __state->number, (ftnlen)3);
 
 /*     Fetch the system file format. */
 
-    zzplatfm_("FILE_FORMAT", __state->format, (ftnlen)11, (ftnlen)8);
+    zzplatfm_(__global_state, "FILE_FORMAT", __state->format, (ftnlen)11, (
+	    ftnlen)8);
 
 /*     Prepare to write the file record. */
 
@@ -3191,17 +3261,18 @@ L_dasops:
 /*     Initially, all of these counts are zero, except for the */
 /*     comment record count, which is set by the caller. */
 
-    s_copy(__state->locifn, __state->locdas, (ftnlen)60, (ftnlen)60);
-    zzdasnfr_(&__state->number, __state->idword, __state->locifn, &
-	    __state->c__0, &__state->c__0, &__state->c__0, &__state->c__0, 
-	    __state->format, (ftnlen)8, (ftnlen)60, (ftnlen)8);
+    s_copy(&__global_state->f2c, __state->locifn, __state->locdas, (ftnlen)60,
+	     (ftnlen)60);
+    zzdasnfr_(__global_state, &__state->number, __state->idword, 
+	    __state->locifn, &__state->c__0, &__state->c__0, &__state->c__0, &
+	    __state->c__0, __state->format, (ftnlen)8, (ftnlen)60, (ftnlen)8);
 
 /*     Check to see whether or not ZZDASNFR generated an error */
 /*     writing the file record to the logical unit. In the event */
 /*     an error occurs, checkout and return. */
 
-    if (failed_()) {
-	chkout_("DASOPS", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASOPS", (ftnlen)6);
 	return 0;
     }
 
@@ -3211,30 +3282,34 @@ L_dasops:
 
 /*     Set the output argument HANDLE as well. */
 
-    lnkan_(__state->pool, &__state->new__);
-    lnkilb_(&__state->new__, &__state->fthead, __state->pool);
+    lnkan_(__global_state, __state->pool, &__state->new__);
+    lnkilb_(__global_state, &__state->new__, &__state->fthead, __state->pool);
     __state->fthead = __state->new__;
 
 /*     Clear out the file summary, except for the free record pointer. */
 /*     The free record pointer should point to the first record AFTER */
 /*     the first directory. */
 
-    cleari_(&__state->c__14, &__state->ftsum[(i__1 = __state->fthead * 14 - 
-	    14) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", 
-	    (ftnlen)3344)]);
+    cleari_(__global_state, &__state->c__14, &__state->ftsum[(i__1 = 
+	    __state->fthead * 14 - 14) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)3344)]);
     __state->fthan[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "dasfm_", (ftnlen)3346)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (ftnlen)
+	    3346)] = *handle;
     __state->ftacc[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftacc", i__1, "dasfm_", (ftnlen)3347)] = 2;
+	    s_rnge(&__global_state->f2c, "ftacc", i__1, "dasfm_", (ftnlen)
+	    3347)] = 2;
     __state->ftlnk[(i__1 = __state->fthead - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftlnk", i__1, "dasfm_", (ftnlen)3348)] = 1;
+	    s_rnge(&__global_state->f2c, "ftlnk", i__1, "dasfm_", (ftnlen)
+	    3348)] = 1;
     __state->ftsum[(i__1 = __state->fthead * 14 - 10) < 70000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)3349)] = 3;
+	    i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, "dasfm_", (
+	    ftnlen)3349)] = 3;
 
 /*     Insert the new handle into our handle set. */
 
-    insrti_(handle, __state->fhlist);
-    chkout_("DASOPS", (ftnlen)6);
+    insrti_(__global_state, handle, __state->fhlist);
+    chkout_(__global_state, "DASOPS", (ftnlen)6);
     return 0;
 /* $Procedure DASLLC ( DAS, low-level close ) */
 
@@ -3453,16 +3528,16 @@ L_dasllc:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASLLC", (ftnlen)6);
+    chkin_(__global_state, "DASLLC", (ftnlen)6);
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
 
@@ -3473,11 +3548,12 @@ L_dasllc:
     __state->found = FALSE_;
     while(! __state->found && __state->findex > 0) {
 	if (__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("fthan", i__1, "dasfm_", (ftnlen)3611)] == *
-		handle) {
+		i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (
+		ftnlen)3611)] == *handle) {
 	    __state->found = TRUE_;
 	} else {
-	    __state->findex = lnknxt_(&__state->findex, __state->pool);
+	    __state->findex = lnknxt_(__global_state, &__state->findex, 
+		    __state->pool);
 	}
     }
 
@@ -3488,31 +3564,35 @@ L_dasllc:
 
     if (__state->found) {
 	__state->ftlnk[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftlnk", i__1, "dasfm_", (ftnlen)3627)] = 
-		__state->ftlnk[(i__2 = __state->findex - 1) < 5000 && 0 <= 
-		i__2 ? i__2 : s_rnge("ftlnk", i__2, "dasfm_", (ftnlen)3627)] 
-		- 1;
+		i__1 : s_rnge(&__global_state->f2c, "ftlnk", i__1, "dasfm_", (
+		ftnlen)3627)] = __state->ftlnk[(i__2 = __state->findex - 1) < 
+		5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftl"
+		"nk", i__2, "dasfm_", (ftnlen)3627)] - 1;
 	if (__state->ftlnk[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftlnk", i__1, "dasfm_", (ftnlen)3629)] == 0) {
+		i__1 : s_rnge(&__global_state->f2c, "ftlnk", i__1, "dasfm_", (
+		ftnlen)3629)] == 0) {
 
 /*           Close this file and delete it from the active list. */
 /*           If this was the head node of the list, the head node */
 /*           becomes the successor of this node (which may be NIL). */
 /*           Delete the handle from our handle set. */
 
-	    zzddhcls_(handle, "DAS", &__state->c_false, (ftnlen)3);
-	    if (failed_()) {
-		chkout_("DASLLC", (ftnlen)6);
+	    zzddhcls_(__global_state, handle, "DAS", &__state->c_false, (
+		    ftnlen)3);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DASLLC", (ftnlen)6);
 		return 0;
 	    }
 	    if (__state->findex == __state->fthead) {
-		__state->fthead = lnknxt_(&__state->findex, __state->pool);
+		__state->fthead = lnknxt_(__global_state, &__state->findex, 
+			__state->pool);
 	    }
-	    lnkfsl_(&__state->findex, &__state->findex, __state->pool);
-	    removi_(handle, __state->fhlist);
+	    lnkfsl_(__global_state, &__state->findex, &__state->findex, 
+		    __state->pool);
+	    removi_(__global_state, handle, __state->fhlist);
 	}
     }
-    chkout_("DASLLC", (ftnlen)6);
+    chkout_(__global_state, "DASLLC", (ftnlen)6);
     return 0;
 /* $Procedure DASHFS ( DAS, handle to file summary ) */
 
@@ -3778,28 +3858,29 @@ L_dashfs:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASHFS", (ftnlen)6);
+	chkin_(__global_state, "DASHFS", (ftnlen)6);
     }
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
     __state->findex = __state->fthead;
     __state->found = FALSE_;
     while(! __state->found && __state->findex > 0) {
 	if (__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("fthan", i__1, "dasfm_", (ftnlen)3959)] == *
-		handle) {
+		i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (
+		ftnlen)3959)] == *handle) {
 	    __state->found = TRUE_;
 	} else {
-	    __state->findex = lnknxt_(&__state->findex, __state->pool);
+	    __state->findex = lnknxt_(__global_state, &__state->findex, 
+		    __state->pool);
 	}
     }
     if (__state->found) {
@@ -3807,43 +3888,47 @@ L_dashfs:
 /*        Give the caller the current summary from the file table. */
 
 	*nresvr = __state->ftsum[(i__1 = __state->findex * 14 - 14) < 70000 &&
-		 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)
-		3972)];
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftsum", 
+		i__1, "dasfm_", (ftnlen)3972)];
 	*nresvc = __state->ftsum[(i__1 = __state->findex * 14 - 13) < 70000 &&
-		 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)
-		3973)];
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftsum", 
+		i__1, "dasfm_", (ftnlen)3973)];
 	*ncomr = __state->ftsum[(i__1 = __state->findex * 14 - 12) < 70000 && 
-		0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)
-		3974)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1,
+		 "dasfm_", (ftnlen)3974)];
 	*ncomc = __state->ftsum[(i__1 = __state->findex * 14 - 11) < 70000 && 
-		0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)
-		3975)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1,
+		 "dasfm_", (ftnlen)3975)];
 	*free = __state->ftsum[(i__1 = __state->findex * 14 - 10) < 70000 && 
-		0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)
-		3976)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1,
+		 "dasfm_", (ftnlen)3976)];
 	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
 	    lastla[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastla", i__1, "dasfm_", (ftnlen)3979)] = __state->ftsum[
-		    (i__2 = __state->i__ + 5 + __state->findex * 14 - 15) < 
-		    70000 && 0 <= i__2 ? i__2 : s_rnge("ftsum", i__2, "dasfm_"
-		    , (ftnlen)3979)];
+		    &__global_state->f2c, "lastla", i__1, "dasfm_", (ftnlen)
+		    3979)] = __state->ftsum[(i__2 = __state->i__ + 5 + 
+		    __state->findex * 14 - 15) < 70000 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "ftsum", i__2, "dasfm_", (
+		    ftnlen)3979)];
 	    lastrc[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastrc", i__1, "dasfm_", (ftnlen)3980)] = __state->ftsum[
-		    (i__2 = __state->i__ + 8 + __state->findex * 14 - 15) < 
-		    70000 && 0 <= i__2 ? i__2 : s_rnge("ftsum", i__2, "dasfm_"
-		    , (ftnlen)3980)];
+		    &__global_state->f2c, "lastrc", i__1, "dasfm_", (ftnlen)
+		    3980)] = __state->ftsum[(i__2 = __state->i__ + 8 + 
+		    __state->findex * 14 - 15) < 70000 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "ftsum", i__2, "dasfm_", (
+		    ftnlen)3980)];
 	    lastwd[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dasfm_", (ftnlen)3981)] = __state->ftsum[
-		    (i__2 = __state->i__ + 11 + __state->findex * 14 - 15) < 
-		    70000 && 0 <= i__2 ? i__2 : s_rnge("ftsum", i__2, "dasfm_"
-		    , (ftnlen)3981)];
+		    &__global_state->f2c, "lastwd", i__1, "dasfm_", (ftnlen)
+		    3981)] = __state->ftsum[(i__2 = __state->i__ + 11 + 
+		    __state->findex * 14 - 15) < 70000 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "ftsum", i__2, "dasfm_", (
+		    ftnlen)3981)];
 	}
     } else {
-	setmsg_("There is no DAS file open with handle = #", (ftnlen)41);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(DASNOSUCHHANDLE)", (ftnlen)22);
+	setmsg_(__global_state, "There is no DAS file open with handle = #", (
+		ftnlen)41);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASNOSUCHHANDLE)", (ftnlen)22);
     }
-    chkout_("DASHFS", (ftnlen)6);
+    chkout_(__global_state, "DASHFS", (ftnlen)6);
     return 0;
 /* $Procedure DASUFS ( DAS, update file summary ) */
 
@@ -4138,16 +4223,16 @@ L_dasufs:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASUFS", (ftnlen)6);
+    chkin_(__global_state, "DASUFS", (ftnlen)6);
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
 
@@ -4157,21 +4242,22 @@ L_dasufs:
     __state->found = FALSE_;
     while(! __state->found && __state->findex > 0) {
 	if (__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("fthan", i__1, "dasfm_", (ftnlen)4326)] == *
-		handle) {
+		i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (
+		ftnlen)4326)] == *handle) {
 	    __state->found = TRUE_;
 	} else {
-	    __state->findex = lnknxt_(&__state->findex, __state->pool);
+	    __state->findex = lnknxt_(__global_state, &__state->findex, 
+		    __state->pool);
 	}
     }
     if (__state->found) {
 
 /*        Obtain a logical unit for this file. */
 
-	zzddhhlu_(handle, "DAS", &__state->c_false, &__state->number, (ftnlen)
-		3);
-	if (failed_()) {
-	    chkout_("DASUFS", (ftnlen)6);
+	zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &
+		__state->number, (ftnlen)3);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DASUFS", (ftnlen)6);
 	    return 0;
 	}
 
@@ -4180,13 +4266,14 @@ L_dasufs:
 /*        open for read access only. */
 
 	if (__state->ftacc[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftacc", i__1, "dasfm_", (ftnlen)4350)] != 2) {
-	    setmsg_("DAS file not open for writing. Handle = #, file = '#'.", 
-		    (ftnlen)54);
-	    errint_("#", handle, (ftnlen)1);
-	    errfnm_("#", &__state->number, (ftnlen)1);
-	    sigerr_("SPICE(DASINVALIDACCESS)", (ftnlen)23);
-	    chkout_("DASUFS", (ftnlen)6);
+		i__1 : s_rnge(&__global_state->f2c, "ftacc", i__1, "dasfm_", (
+		ftnlen)4350)] != 2) {
+	    setmsg_(__global_state, "DAS file not open for writing. Handle ="
+		    " #, file = '#'.", (ftnlen)54);
+	    errint_(__global_state, "#", handle, (ftnlen)1);
+	    errfnm_(__global_state, "#", &__state->number, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DASINVALIDACCESS)", (ftnlen)23);
+	    chkout_(__global_state, "DASUFS", (ftnlen)6);
 	    return 0;
 	}
 
@@ -4195,120 +4282,123 @@ L_dasufs:
 /*        counts in the file record.  Otherwise, leave the file alone. */
 
 	if (*nresvr != __state->ftsum[(i__1 = __state->findex * 14 - 14) < 
-		70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (
-		ftnlen)4367)] || *nresvc != __state->ftsum[(i__2 = 
-		__state->findex * 14 - 13) < 70000 && 0 <= i__2 ? i__2 : 
-		s_rnge("ftsum", i__2, "dasfm_", (ftnlen)4367)] || *ncomr != 
-		__state->ftsum[(i__3 = __state->findex * 14 - 12) < 70000 && 
-		0 <= i__3 ? i__3 : s_rnge("ftsum", i__3, "dasfm_", (ftnlen)
+		70000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"ftsum", i__1, "dasfm_", (ftnlen)4367)] || *nresvc != 
+		__state->ftsum[(i__2 = __state->findex * 14 - 13) < 70000 && 
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftsum", i__2,
+		 "dasfm_", (ftnlen)4367)] || *ncomr != __state->ftsum[(i__3 = 
+		__state->findex * 14 - 12) < 70000 && 0 <= i__3 ? i__3 : 
+		s_rnge(&__global_state->f2c, "ftsum", i__3, "dasfm_", (ftnlen)
 		4367)] || *ncomc != __state->ftsum[(i__5 = __state->findex * 
-		14 - 11) < 70000 && 0 <= i__5 ? i__5 : s_rnge("ftsum", i__5, 
-		"dasfm_", (ftnlen)4367)]) {
+		14 - 11) < 70000 && 0 <= i__5 ? i__5 : s_rnge(&
+		__global_state->f2c, "ftsum", i__5, "dasfm_", (ftnlen)4367)]) 
+		{
 
 /*           Read the file record. */
 
 	    __state->io___44.ciunit = __state->number;
-	    __state->iostat = s_rdue(&__state->io___44);
+	    __state->iostat = s_rdue(&__global_state->f2c, &__state->io___44);
 	    if (__state->iostat != 0) {
 		goto L100002;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, __state->idword, (ftnlen)
-		    8);
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		    __state->idword, (ftnlen)8);
 	    if (__state->iostat != 0) {
 		goto L100002;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, __state->locifn, (ftnlen)
-		    60);
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		    __state->locifn, (ftnlen)60);
 	    if (__state->iostat != 0) {
 		goto L100002;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, (char *)&__state->locrrc,
-		     (ftnlen)sizeof(integer));
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, (
+		    char *)&__state->locrrc, (ftnlen)sizeof(integer));
 	    if (__state->iostat != 0) {
 		goto L100002;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, (char *)&__state->locrch,
-		     (ftnlen)sizeof(integer));
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, (
+		    char *)&__state->locrch, (ftnlen)sizeof(integer));
 	    if (__state->iostat != 0) {
 		goto L100002;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, (char *)&__state->loccrc,
-		     (ftnlen)sizeof(integer));
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, (
+		    char *)&__state->loccrc, (ftnlen)sizeof(integer));
 	    if (__state->iostat != 0) {
 		goto L100002;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, (char *)&__state->loccch,
-		     (ftnlen)sizeof(integer));
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, (
+		    char *)&__state->loccch, (ftnlen)sizeof(integer));
 	    if (__state->iostat != 0) {
 		goto L100002;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, __state->locfmt, (ftnlen)
-		    8);
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		    __state->locfmt, (ftnlen)8);
 	    if (__state->iostat != 0) {
 		goto L100002;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, __state->tail, (ftnlen)
-		    932);
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		    __state->tail, (ftnlen)932);
 	    if (__state->iostat != 0) {
 		goto L100002;
 	    }
-	    __state->iostat = e_rdue();
+	    __state->iostat = e_rdue(&__global_state->f2c);
 L100002:
 	    if (__state->iostat != 0) {
-		setmsg_("Attempt to read file record failed. File was '#'.  "
-			"Value of IOSTAT was '#'.", (ftnlen)75);
-		errfnm_("#", &__state->number, (ftnlen)1);
-		errint_("#", &__state->iostat, (ftnlen)1);
-		sigerr_("SPICE(DASREADFAIL)", (ftnlen)18);
-		chkout_("DASUFS", (ftnlen)6);
+		setmsg_(__global_state, "Attempt to read file record failed."
+			" File was '#'.  Value of IOSTAT was '#'.", (ftnlen)75)
+			;
+		errfnm_(__global_state, "#", &__state->number, (ftnlen)1);
+		errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(DASREADFAIL)", (ftnlen)18);
+		chkout_(__global_state, "DASUFS", (ftnlen)6);
 		return 0;
 	    }
 	    __state->io___47.ciunit = __state->number;
-	    __state->iostat = s_wdue(&__state->io___47);
+	    __state->iostat = s_wdue(&__global_state->f2c, &__state->io___47);
 	    if (__state->iostat != 0) {
 		goto L100003;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, __state->idword, (ftnlen)
-		    8);
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		    __state->idword, (ftnlen)8);
 	    if (__state->iostat != 0) {
 		goto L100003;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, __state->locifn, (ftnlen)
-		    60);
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		    __state->locifn, (ftnlen)60);
 	    if (__state->iostat != 0) {
 		goto L100003;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, (char *)&(*nresvr), (
-		    ftnlen)sizeof(integer));
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, (
+		    char *)&(*nresvr), (ftnlen)sizeof(integer));
 	    if (__state->iostat != 0) {
 		goto L100003;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, (char *)&(*nresvc), (
-		    ftnlen)sizeof(integer));
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, (
+		    char *)&(*nresvc), (ftnlen)sizeof(integer));
 	    if (__state->iostat != 0) {
 		goto L100003;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, (char *)&(*ncomr), (
-		    ftnlen)sizeof(integer));
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, (
+		    char *)&(*ncomr), (ftnlen)sizeof(integer));
 	    if (__state->iostat != 0) {
 		goto L100003;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, (char *)&(*ncomc), (
-		    ftnlen)sizeof(integer));
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, (
+		    char *)&(*ncomc), (ftnlen)sizeof(integer));
 	    if (__state->iostat != 0) {
 		goto L100003;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, __state->locfmt, (ftnlen)
-		    8);
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		    __state->locfmt, (ftnlen)8);
 	    if (__state->iostat != 0) {
 		goto L100003;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, __state->tail, (ftnlen)
-		    932);
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		    __state->tail, (ftnlen)932);
 	    if (__state->iostat != 0) {
 		goto L100003;
 	    }
-	    __state->iostat = e_wdue();
+	    __state->iostat = e_wdue(&__global_state->f2c);
 L100003:
 	    if (__state->iostat != 0) {
 
@@ -4332,18 +4422,21 @@ L100003:
 		ioin__1.inrecl = 0;
 		ioin__1.innrec = 0;
 		ioin__1.inblank = 0;
-		__state->inqsta = f_inqu(&ioin__1);
-		zzddhcls_(handle, "DAS", &__state->c_false, (ftnlen)3);
-		if (failed_()) {
-		    chkout_("DASUFS", (ftnlen)6);
+		__state->inqsta = f_inqu(&__global_state->f2c, &ioin__1);
+		zzddhcls_(__global_state, handle, "DAS", &__state->c_false, (
+			ftnlen)3);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "DASUFS", (ftnlen)6);
 		    return 0;
 		}
-		setmsg_("Attempt to update file record failed. File was '#'."
-			"  Value of IOSTAT was '#'.", (ftnlen)77);
-		errch_("#", __state->locdas, (ftnlen)1, (ftnlen)255);
-		errint_("#", &__state->iostat, (ftnlen)1);
-		sigerr_("SPICE(DASWRITEFAIL)", (ftnlen)19);
-		chkout_("DASUFS", (ftnlen)6);
+		setmsg_(__global_state, "Attempt to update file record faile"
+			"d. File was '#'.  Value of IOSTAT was '#'.", (ftnlen)
+			77);
+		errch_(__global_state, "#", __state->locdas, (ftnlen)1, (
+			ftnlen)255);
+		errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(DASWRITEFAIL)", (ftnlen)19);
+		chkout_(__global_state, "DASUFS", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -4351,45 +4444,49 @@ L100003:
 /*        Update the file table. */
 
 	__state->ftsum[(i__1 = __state->findex * 14 - 14) < 70000 && 0 <= 
-		i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)4441)] =
-		 *nresvr;
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, 
+		"dasfm_", (ftnlen)4441)] = *nresvr;
 	__state->ftsum[(i__1 = __state->findex * 14 - 13) < 70000 && 0 <= 
-		i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)4442)] =
-		 *nresvc;
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, 
+		"dasfm_", (ftnlen)4442)] = *nresvc;
 	__state->ftsum[(i__1 = __state->findex * 14 - 12) < 70000 && 0 <= 
-		i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)4443)] =
-		 *ncomr;
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, 
+		"dasfm_", (ftnlen)4443)] = *ncomr;
 	__state->ftsum[(i__1 = __state->findex * 14 - 11) < 70000 && 0 <= 
-		i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)4444)] =
-		 *ncomc;
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, 
+		"dasfm_", (ftnlen)4444)] = *ncomc;
 	__state->ftsum[(i__1 = __state->findex * 14 - 10) < 70000 && 0 <= 
-		i__1 ? i__1 : s_rnge("ftsum", i__1, "dasfm_", (ftnlen)4445)] =
-		 *free;
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "ftsum", i__1, 
+		"dasfm_", (ftnlen)4445)] = *free;
 	for (__state->i__ = 1; __state->i__ <= 3; ++__state->i__) {
 	    __state->ftsum[(i__1 = __state->i__ + 5 + __state->findex * 14 - 
-		    15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, 
-		    "dasfm_", (ftnlen)4448)] = lastla[(i__2 = __state->i__ - 
-		    1) < 3 && 0 <= i__2 ? i__2 : s_rnge("lastla", i__2, "das"
-		    "fm_", (ftnlen)4448)];
+		    15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)
+		    4448)] = lastla[(i__2 = __state->i__ - 1) < 3 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "lastla", i__2,
+		     "dasfm_", (ftnlen)4448)];
 	    __state->ftsum[(i__1 = __state->i__ + 8 + __state->findex * 14 - 
-		    15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, 
-		    "dasfm_", (ftnlen)4449)] = lastrc[(i__2 = __state->i__ - 
-		    1) < 3 && 0 <= i__2 ? i__2 : s_rnge("lastrc", i__2, "das"
-		    "fm_", (ftnlen)4449)];
+		    15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)
+		    4449)] = lastrc[(i__2 = __state->i__ - 1) < 3 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "lastrc", i__2,
+		     "dasfm_", (ftnlen)4449)];
 	    __state->ftsum[(i__1 = __state->i__ + 11 + __state->findex * 14 - 
-		    15) < 70000 && 0 <= i__1 ? i__1 : s_rnge("ftsum", i__1, 
-		    "dasfm_", (ftnlen)4450)] = lastwd[(i__2 = __state->i__ - 
-		    1) < 3 && 0 <= i__2 ? i__2 : s_rnge("lastwd", i__2, "das"
-		    "fm_", (ftnlen)4450)];
+		    15) < 70000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ftsum", i__1, "dasfm_", (ftnlen)
+		    4450)] = lastwd[(i__2 = __state->i__ - 1) < 3 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "lastwd", i__2,
+		     "dasfm_", (ftnlen)4450)];
 	}
     } else {
-	setmsg_("There is no file open with handle = #", (ftnlen)37);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(DASNOSUCHHANDLE)", (ftnlen)22);
-	chkout_("DASUFS", (ftnlen)6);
+	setmsg_(__global_state, "There is no file open with handle = #", (
+		ftnlen)37);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASNOSUCHHANDLE)", (ftnlen)22);
+	chkout_(__global_state, "DASUFS", (ftnlen)6);
 	return 0;
     }
-    chkout_("DASUFS", (ftnlen)6);
+    chkout_(__global_state, "DASUFS", (ftnlen)6);
     return 0;
 /* $Procedure DASHLU ( DAS, handle to logical unit ) */
 
@@ -4576,17 +4673,17 @@ L_dashlu:
 
 /*     We use discovery check-ins in this routine. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	chkin_("DASHLU", (ftnlen)6);
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
-	chkout_("DASHLU", (ftnlen)6);
+	chkin_(__global_state, "DASHLU", (ftnlen)6);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
+	chkout_(__global_state, "DASHLU", (ftnlen)6);
 	__state->pass1 = FALSE_;
     }
 
@@ -4596,11 +4693,12 @@ L_dashlu:
     __state->found = FALSE_;
     while(! __state->found && __state->findex > 0) {
 	if (__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("fthan", i__1, "dasfm_", (ftnlen)4685)] == *
-		handle) {
+		i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (
+		ftnlen)4685)] == *handle) {
 	    __state->found = TRUE_;
 	} else {
-	    __state->findex = lnknxt_(&__state->findex, __state->pool);
+	    __state->findex = lnknxt_(__global_state, &__state->findex, 
+		    __state->pool);
 	}
     }
     if (__state->found) {
@@ -4608,13 +4706,15 @@ L_dashlu:
 /*        For backward compatibility, the logical unit must be */
 /*        locked to the file. */
 
-	zzddhhlu_(handle, "DAS", &__state->c_true, unit, (ftnlen)3);
+	zzddhhlu_(__global_state, handle, "DAS", &__state->c_true, unit, (
+		ftnlen)3);
     } else {
-	chkin_("DASHLU", (ftnlen)6);
-	setmsg_("There is no file open with handle = #", (ftnlen)37);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(DASNOSUCHHANDLE)", (ftnlen)22);
-	chkout_("DASHLU", (ftnlen)6);
+	chkin_(__global_state, "DASHLU", (ftnlen)6);
+	setmsg_(__global_state, "There is no file open with handle = #", (
+		ftnlen)37);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASNOSUCHHANDLE)", (ftnlen)22);
+	chkout_(__global_state, "DASHLU", (ftnlen)6);
     }
     return 0;
 /* $Procedure DASLUH ( DAS, logical unit to handle ) */
@@ -4790,28 +4890,29 @@ L_dasluh:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASLUH", (ftnlen)6);
+    chkin_(__global_state, "DASLUH", (ftnlen)6);
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
 
 /*     Try to locate the handle associated with this unit. */
 
-    zzddhluh_(unit, handle, &__state->found);
+    zzddhluh_(__global_state, unit, handle, &__state->found);
     if (! __state->found) {
-	setmsg_("There is no DAS file open with unit = #", (ftnlen)39);
-	errint_("#", unit, (ftnlen)1);
-	sigerr_("SPICE(DASNOSUCHUNIT)", (ftnlen)20);
+	setmsg_(__global_state, "There is no DAS file open with unit = #", (
+		ftnlen)39);
+	errint_(__global_state, "#", unit, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASNOSUCHUNIT)", (ftnlen)20);
     }
-    chkout_("DASLUH", (ftnlen)6);
+    chkout_(__global_state, "DASLUH", (ftnlen)6);
     return 0;
 /* $Procedure DASHFN ( DAS, handle to file name ) */
 
@@ -5001,17 +5102,17 @@ L_dashfn:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASHFN", (ftnlen)6);
+	chkin_(__global_state, "DASHFN", (ftnlen)6);
     }
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
 
@@ -5021,16 +5122,17 @@ L_dashfn:
     __state->found = FALSE_;
     while(! __state->found && __state->findex > 0) {
 	if (__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("fthan", i__1, "dasfm_", (ftnlen)5147)] == *
-		handle) {
+		i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (
+		ftnlen)5147)] == *handle) {
 	    __state->found = TRUE_;
 	} else {
-	    __state->findex = lnknxt_(&__state->findex, __state->pool);
+	    __state->findex = lnknxt_(__global_state, &__state->findex, 
+		    __state->pool);
 	}
     }
     if (__state->found) {
-	zzddhhlu_(handle, "DAS", &__state->c_false, &__state->number, (ftnlen)
-		3);
+	zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &
+		__state->number, (ftnlen)3);
 	ioin__1.inerr = 0;
 	ioin__1.inunit = __state->number;
 	ioin__1.infile = 0;
@@ -5049,13 +5151,14 @@ L_dashfn:
 	ioin__1.inrecl = 0;
 	ioin__1.innrec = 0;
 	ioin__1.inblank = 0;
-	f_inqu(&ioin__1);
+	f_inqu(&__global_state->f2c, &ioin__1);
     } else {
-	setmsg_("There is no DAS file open with handle = #", (ftnlen)41);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(DASNOSUCHHANDLE)", (ftnlen)22);
+	setmsg_(__global_state, "There is no DAS file open with handle = #", (
+		ftnlen)41);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASNOSUCHHANDLE)", (ftnlen)22);
     }
-    chkout_("DASHFN", (ftnlen)6);
+    chkout_(__global_state, "DASHFN", (ftnlen)6);
     return 0;
 /* $Procedure DASFNH ( DAS, file name to handle ) */
 
@@ -5230,26 +5333,26 @@ L_dasfnh:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASFNH", (ftnlen)6);
+    chkin_(__global_state, "DASFNH", (ftnlen)6);
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
-    zzddhfnh_(fname, handle, &__state->found, fname_len);
+    zzddhfnh_(__global_state, fname, handle, &__state->found, fname_len);
     if (! __state->found) {
-	setmsg_("There is no DAS file in the table with file name = '#'", (
-		ftnlen)54);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	sigerr_("SPICE(DASNOSUCHFILE)", (ftnlen)20);
+	setmsg_(__global_state, "There is no DAS file in the table with file"
+		" name = '#'", (ftnlen)54);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	sigerr_(__global_state, "SPICE(DASNOSUCHFILE)", (ftnlen)20);
     }
-    chkout_("DASFNH", (ftnlen)6);
+    chkout_(__global_state, "DASFNH", (ftnlen)6);
     return 0;
 /* $Procedure      DASHOF ( DAS, handles of open files ) */
 
@@ -5420,24 +5523,24 @@ L_dashof:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASHOF", (ftnlen)6);
+	chkin_(__global_state, "DASHOF", (ftnlen)6);
     }
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
 
 /*     Just stuff our local list into the set. */
 
-    copyi_(__state->fhlist, fhset);
-    chkout_("DASHOF", (ftnlen)6);
+    copyi_(__global_state, __state->fhlist, fhset);
+    chkout_(__global_state, "DASHOF", (ftnlen)6);
     return 0;
 /* $Procedure      DASSIH ( DAS, signal invalid handles ) */
 
@@ -5661,43 +5764,47 @@ L_dassih:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASSIH", (ftnlen)6);
+    chkin_(__global_state, "DASSIH", (ftnlen)6);
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
 
 /*     Get an upper case, left-justified copy of ACCESS. */
 
-    ljust_(access, __state->acc, access_len, (ftnlen)10);
-    ucase_(__state->acc, __state->acc, (ftnlen)10, (ftnlen)10);
+    ljust_(__global_state, access, __state->acc, access_len, (ftnlen)10);
+    ucase_(__global_state, __state->acc, __state->acc, (ftnlen)10, (ftnlen)10)
+	    ;
 
 /*     Make sure we recognize the access type specified by the caller. */
 
-    if (s_cmp(__state->acc, "READ", (ftnlen)10, (ftnlen)4) != 0 && s_cmp(
-	    __state->acc, "WRITE", (ftnlen)10, (ftnlen)5) != 0) {
-	setmsg_("Unrecognized access type.  Type was #. ", (ftnlen)39);
-	errch_("#", access, (ftnlen)1, access_len);
-	sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	chkout_("DASSIH", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, __state->acc, "READ", (ftnlen)10, (ftnlen)
+	    4) != 0 && s_cmp(&__global_state->f2c, __state->acc, "WRITE", (
+	    ftnlen)10, (ftnlen)5) != 0) {
+	setmsg_(__global_state, "Unrecognized access type.  Type was #. ", (
+		ftnlen)39);
+	errch_(__global_state, "#", access, (ftnlen)1, access_len);
+	sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	chkout_(__global_state, "DASSIH", (ftnlen)6);
 	return 0;
     }
 
 /*     See whether the input handle is in our list at all.  It's */
 /*     unlawful for the handle to be absent. */
 
-    if (! elemi_(handle, __state->fhlist)) {
-	setmsg_("Handle # is not attached to an open DAS file.", (ftnlen)45);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(DASNOSUCHHANDLE)", (ftnlen)22);
-	chkout_("DASSIH", (ftnlen)6);
+    if (! elemi_(__global_state, handle, __state->fhlist)) {
+	setmsg_(__global_state, "Handle # is not attached to an open DAS fil"
+		"e.", (ftnlen)45);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASNOSUCHHANDLE)", (ftnlen)22);
+	chkout_(__global_state, "DASSIH", (ftnlen)6);
 	return 0;
     } else {
 
@@ -5708,40 +5815,41 @@ L_dassih:
 	__state->found = FALSE_;
 	while(! __state->found && __state->findex > 0) {
 	    if (__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 <= 
-		    i__1 ? i__1 : s_rnge("fthan", i__1, "dasfm_", (ftnlen)
-		    5873)] == *handle) {
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, 
+		    "dasfm_", (ftnlen)5873)] == *handle) {
 		__state->found = TRUE_;
 	    } else {
-		__state->findex = lnknxt_(&__state->findex, __state->pool);
+		__state->findex = lnknxt_(__global_state, &__state->findex, 
+			__state->pool);
 	    }
 	}
 
 /*        At this point, FINDEX points to the file table entries */
 /*        for this file. */
 
-	if (s_cmp(__state->acc, "WRITE", (ftnlen)10, (ftnlen)5) == 0 && 
-		__state->ftacc[(i__1 = __state->findex - 1) < 5000 && 0 <= 
-		i__1 ? i__1 : s_rnge("ftacc", i__1, "dasfm_", (ftnlen)5885)] 
-		!= 2) {
+	if (s_cmp(&__global_state->f2c, __state->acc, "WRITE", (ftnlen)10, (
+		ftnlen)5) == 0 && __state->ftacc[(i__1 = __state->findex - 1) 
+		< 5000 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"ftacc", i__1, "dasfm_", (ftnlen)5885)] != 2) {
 
 /*           If the access type is 'WRITE', the DAS file must be open */
 /*           for writing. */
 
-	    zzddhhlu_(handle, "DAS", &__state->c_false, &__state->number, (
-		    ftnlen)3);
-	    setmsg_("DAS file not open for writing. Handle = #, file = '#'.", 
-		    (ftnlen)54);
-	    errint_("#", handle, (ftnlen)1);
-	    errfnm_("#", &__state->number, (ftnlen)1);
-	    sigerr_("SPICE(DASINVALIDACCESS)", (ftnlen)23);
-	    chkout_("DASSIH", (ftnlen)6);
+	    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &
+		    __state->number, (ftnlen)3);
+	    setmsg_(__global_state, "DAS file not open for writing. Handle ="
+		    " #, file = '#'.", (ftnlen)54);
+	    errint_(__global_state, "#", handle, (ftnlen)1);
+	    errfnm_(__global_state, "#", &__state->number, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DASINVALIDACCESS)", (ftnlen)23);
+	    chkout_(__global_state, "DASSIH", (ftnlen)6);
 	    return 0;
 	}
     }
 
 /*     The DAS file's handle is o.k. */
 
-    chkout_("DASSIH", (ftnlen)6);
+    chkout_(__global_state, "DASSIH", (ftnlen)6);
     return 0;
 /* $Procedure      DASHAM ( DAS, handle to access method ) */
 
@@ -5923,16 +6031,16 @@ L_dasham:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DASHAM", (ftnlen)6);
+    chkin_(__global_state, "DASHAM", (ftnlen)6);
 
 /*     Initialize the file table pool and handle list, if necessary. */
 
     if (__state->pass1) {
-	lnkini_(&__state->c__5000, __state->pool);
-	ssizei_(&__state->c__5000, __state->fhlist);
+	lnkini_(__global_state, &__state->c__5000, __state->pool);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->pass1 = FALSE_;
     }
 
@@ -5943,19 +6051,20 @@ L_dasham:
     __state->found = FALSE_;
     while(! __state->found && __state->findex > 0) {
 	if (__state->fthan[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("fthan", i__1, "dasfm_", (ftnlen)6124)] == *
-		handle) {
+		i__1 : s_rnge(&__global_state->f2c, "fthan", i__1, "dasfm_", (
+		ftnlen)6124)] == *handle) {
 	    __state->found = TRUE_;
 	} else {
-	    __state->findex = lnknxt_(&__state->findex, __state->pool);
+	    __state->findex = lnknxt_(__global_state, &__state->findex, 
+		    __state->pool);
 	}
     }
     if (! __state->found) {
-	setmsg_("The handle # does not designate a known DAS file ", (ftnlen)
-		49);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(INVALIDHANDLE)", (ftnlen)20);
-	chkout_("DASHAM", (ftnlen)6);
+	setmsg_(__global_state, "The handle # does not designate a known DAS"
+		" file ", (ftnlen)49);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDHANDLE)", (ftnlen)20);
+	chkout_(__global_state, "DASHAM", (ftnlen)6);
 	return 0;
     }
 
@@ -5963,27 +6072,30 @@ L_dasham:
 /*     argument accordingly. */
 
     if (__state->ftacc[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ftacc", i__1, "dasfm_", (ftnlen)6147)] == 1) {
-	s_copy(access, "READ", access_len, (ftnlen)4);
+	    i__1 : s_rnge(&__global_state->f2c, "ftacc", i__1, "dasfm_", (
+	    ftnlen)6147)] == 1) {
+	s_copy(&__global_state->f2c, access, "READ", access_len, (ftnlen)4);
     } else {
-	s_copy(access, "WRITE", access_len, (ftnlen)5);
+	s_copy(&__global_state->f2c, access, "WRITE", access_len, (ftnlen)5);
     }
-    chkout_("DASHAM", (ftnlen)6);
+    chkout_(__global_state, "DASHAM", (ftnlen)6);
     return 0;
 } /* dasfm_ */
 
-/* Subroutine */ int dasfm_(char *fname, char *ftype, char *ifname, integer *
-	handle, integer *unit, integer *free, integer *lastla, integer *
-	lastrc, integer *lastwd, integer *nresvr, integer *nresvc, integer *
-	ncomr, integer *ncomc, integer *fhset, char *access, ftnlen fname_len,
-	 ftnlen ftype_len, ftnlen ifname_len, ftnlen access_len)
+/* Subroutine */ int dasfm_(cspice_t* __global_state, char *fname, char *
+	ftype, char *ifname, integer *handle, integer *unit, integer *free, 
+	integer *lastla, integer *lastrc, integer *lastwd, integer *nresvr, 
+	integer *nresvc, integer *ncomr, integer *ncomc, integer *fhset, char 
+	*access, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len, 
+	ftnlen access_len)
 {
     return dasfm_0_(0, fname, ftype, ifname, handle, unit, free, lastla, 
 	    lastrc, lastwd, nresvr, nresvc, ncomr, ncomc, fhset, access, 
 	    fname_len, ftype_len, ifname_len, access_len);
     }
 
-/* Subroutine */ int dasopr_(char *fname, integer *handle, ftnlen fname_len)
+/* Subroutine */ int dasopr_(cspice_t* __global_state, char *fname, integer *
+	handle, ftnlen fname_len)
 {
     return dasfm_0_(1, fname, (char *)0, (char *)0, handle, (integer *)0, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
@@ -5991,7 +6103,8 @@ L_dasham:
 	    )0, fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dasopw_(char *fname, integer *handle, ftnlen fname_len)
+/* Subroutine */ int dasopw_(cspice_t* __global_state, char *fname, integer *
+	handle, ftnlen fname_len)
 {
     return dasfm_0_(2, fname, (char *)0, (char *)0, handle, (integer *)0, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
@@ -5999,9 +6112,9 @@ L_dasham:
 	    )0, fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dasonw_(char *fname, char *ftype, char *ifname, integer *
-	ncomr, integer *handle, ftnlen fname_len, ftnlen ftype_len, ftnlen 
-	ifname_len)
+/* Subroutine */ int dasonw_(cspice_t* __global_state, char *fname, char *
+	ftype, char *ifname, integer *ncomr, integer *handle, ftnlen 
+	fname_len, ftnlen ftype_len, ftnlen ifname_len)
 {
     return dasfm_0_(3, fname, ftype, ifname, handle, (integer *)0, (integer *)
 	    0, (integer *)0, (integer *)0, (integer *)0, (integer *)0, (
@@ -6009,8 +6122,8 @@ L_dasham:
 	    fname_len, ftype_len, ifname_len, (ftnint)0);
     }
 
-/* Subroutine */ int dasopn_(char *fname, char *ifname, integer *handle, 
-	ftnlen fname_len, ftnlen ifname_len)
+/* Subroutine */ int dasopn_(cspice_t* __global_state, char *fname, char *
+	ifname, integer *handle, ftnlen fname_len, ftnlen ifname_len)
 {
     return dasfm_0_(4, fname, (char *)0, ifname, handle, (integer *)0, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
@@ -6018,7 +6131,7 @@ L_dasham:
 	    )0, fname_len, (ftnint)0, ifname_len, (ftnint)0);
     }
 
-/* Subroutine */ int dasops_(integer *handle)
+/* Subroutine */ int dasops_(cspice_t* __global_state, integer *handle)
 {
     return dasfm_0_(5, (char *)0, (char *)0, (char *)0, handle, (integer *)0, 
 	    (integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *
@@ -6026,7 +6139,7 @@ L_dasham:
 	    *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dasllc_(integer *handle)
+/* Subroutine */ int dasllc_(cspice_t* __global_state, integer *handle)
 {
     return dasfm_0_(6, (char *)0, (char *)0, (char *)0, handle, (integer *)0, 
 	    (integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *
@@ -6034,9 +6147,9 @@ L_dasham:
 	    *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dashfs_(integer *handle, integer *nresvr, integer *
-	nresvc, integer *ncomr, integer *ncomc, integer *free, integer *
-	lastla, integer *lastrc, integer *lastwd)
+/* Subroutine */ int dashfs_(cspice_t* __global_state, integer *handle, 
+	integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, 
+	integer *free, integer *lastla, integer *lastrc, integer *lastwd)
 {
     return dasfm_0_(7, (char *)0, (char *)0, (char *)0, handle, (integer *)0, 
 	    free, lastla, lastrc, lastwd, nresvr, nresvc, ncomr, ncomc, (
@@ -6044,9 +6157,9 @@ L_dasham:
 	    0);
     }
 
-/* Subroutine */ int dasufs_(integer *handle, integer *nresvr, integer *
-	nresvc, integer *ncomr, integer *ncomc, integer *free, integer *
-	lastla, integer *lastrc, integer *lastwd)
+/* Subroutine */ int dasufs_(cspice_t* __global_state, integer *handle, 
+	integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, 
+	integer *free, integer *lastla, integer *lastrc, integer *lastwd)
 {
     return dasfm_0_(8, (char *)0, (char *)0, (char *)0, handle, (integer *)0, 
 	    free, lastla, lastrc, lastwd, nresvr, nresvc, ncomr, ncomc, (
@@ -6054,7 +6167,8 @@ L_dasham:
 	    0);
     }
 
-/* Subroutine */ int dashlu_(integer *handle, integer *unit)
+/* Subroutine */ int dashlu_(cspice_t* __global_state, integer *handle, 
+	integer *unit)
 {
     return dasfm_0_(9, (char *)0, (char *)0, (char *)0, handle, unit, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
@@ -6062,7 +6176,8 @@ L_dasham:
 	    )0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dasluh_(integer *unit, integer *handle)
+/* Subroutine */ int dasluh_(cspice_t* __global_state, integer *unit, integer 
+	*handle)
 {
     return dasfm_0_(10, (char *)0, (char *)0, (char *)0, handle, unit, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
@@ -6070,7 +6185,8 @@ L_dasham:
 	    )0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dashfn_(integer *handle, char *fname, ftnlen fname_len)
+/* Subroutine */ int dashfn_(cspice_t* __global_state, integer *handle, char *
+	fname, ftnlen fname_len)
 {
     return dasfm_0_(11, fname, (char *)0, (char *)0, handle, (integer *)0, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
@@ -6078,7 +6194,8 @@ L_dasham:
 	    )0, fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dasfnh_(char *fname, integer *handle, ftnlen fname_len)
+/* Subroutine */ int dasfnh_(cspice_t* __global_state, char *fname, integer *
+	handle, ftnlen fname_len)
 {
     return dasfm_0_(12, fname, (char *)0, (char *)0, handle, (integer *)0, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
@@ -6086,7 +6203,7 @@ L_dasham:
 	    )0, fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dashof_(integer *fhset)
+/* Subroutine */ int dashof_(cspice_t* __global_state, integer *fhset)
 {
     return dasfm_0_(13, (char *)0, (char *)0, (char *)0, (integer *)0, (
 	    integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer *)
@@ -6094,7 +6211,8 @@ L_dasham:
 	    (char *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dassih_(integer *handle, char *access, ftnlen access_len)
+/* Subroutine */ int dassih_(cspice_t* __global_state, integer *handle, char *
+	access, ftnlen access_len)
 {
     return dasfm_0_(14, (char *)0, (char *)0, (char *)0, handle, (integer *)0,
 	     (integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer 
@@ -6102,7 +6220,8 @@ L_dasham:
 	    access, (ftnint)0, (ftnint)0, (ftnint)0, access_len);
     }
 
-/* Subroutine */ int dasham_(integer *handle, char *access, ftnlen access_len)
+/* Subroutine */ int dasham_(cspice_t* __global_state, integer *handle, char *
+	access, ftnlen access_len)
 {
     return dasfm_0_(15, (char *)0, (char *)0, (char *)0, handle, (integer *)0,
 	     (integer *)0, (integer *)0, (integer *)0, (integer *)0, (integer 

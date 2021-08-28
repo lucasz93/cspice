@@ -8,8 +8,7 @@
 
 
 extern surfpt_init_t __surfpt_init;
-static surfpt_state_t* get_surfpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline surfpt_state_t* get_surfpt_state(cspice_t* state) {
 	if (!state->surfpt)
 		state->surfpt = __cspice_allocate_module(sizeof(
 	surfpt_state_t), &__surfpt_init, sizeof(__surfpt_init));
@@ -18,8 +17,9 @@ static surfpt_state_t* get_surfpt_state() {
 }
 
 /* $Procedure      SURFPT ( Surface point on an ellipsoid ) */
-/* Subroutine */ int surfpt_(doublereal *positn, doublereal *u, doublereal *a,
-	 doublereal *b, doublereal *c__, doublereal *point, logical *found)
+/* Subroutine */ int surfpt_(cspice_t* __global_state, doublereal *positn, 
+	doublereal *u, doublereal *a, doublereal *b, doublereal *c__, 
+	doublereal *point, logical *found)
 {
     /* Initialized data */
 
@@ -31,44 +31,47 @@ static surfpt_state_t* get_surfpt_state() {
     char ch__1[35];
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
-    double sqrt(doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal pmag;
     doublereal ymag;
     doublereal sign;
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal p[3];
     doublereal scale;
     doublereal x[3];
     doublereal y[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vperp_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal yproj[3];
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     doublereal ux[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer bad;
 
 
     /* Module state */
-    surfpt_state_t* __state = get_surfpt_state();
+    surfpt_state_t* __state = get_surfpt_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the intersection of a line-of-sight vector with the */
@@ -330,18 +333,19 @@ static surfpt_state_t* get_surfpt_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Check the input vector to see if its the zero vector. If it is */
 /*     signal an error and return. */
 
-    if (vzero_(u)) {
-	chkin_("SURFPT", (ftnlen)6);
-	setmsg_("SURFPT: The input vector is the zero vector.", (ftnlen)44);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("SURFPT", (ftnlen)6);
+    if (vzero_(__global_state, u)) {
+	chkin_(__global_state, "SURFPT", (ftnlen)6);
+	setmsg_(__global_state, "SURFPT: The input vector is the zero vector."
+		, (ftnlen)44);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "SURFPT", (ftnlen)6);
 	return 0;
     }
 
@@ -359,21 +363,22 @@ static surfpt_state_t* get_surfpt_state() {
 	bad += 4;
     }
     if (bad > 0) {
-	chkin_("SURFPT", (ftnlen)6);
+	chkin_(__global_state, "SURFPT", (ftnlen)6);
 /* Writing concatenation */
 	i__2[0] = 32, a__1[0] = __state->mssg + (((i__1 = bad - 1) < 7 && 0 <=
-		 i__1 ? i__1 : s_rnge("mssg", i__1, "surfpt_", (ftnlen)354)) 
-		<< 5);
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "mssg", i__1, 
+		"surfpt_", (ftnlen)354)) << 5);
 	i__2[1] = 3, a__1[1] = " ? ";
-	s_cat(ch__1, a__1, i__2, &__state->c__2, (ftnlen)35);
-	setmsg_(ch__1, (ftnlen)35);
-	errch_(" ? ", "The A,B, and C axes were #, #, and # respectively.", (
-		ftnlen)3, (ftnlen)50);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
-	chkout_("SURFPT", (ftnlen)6);
+	s_cat(&__global_state->f2c, ch__1, a__1, i__2, &__state->c__2, (
+		ftnlen)35);
+	setmsg_(__global_state, ch__1, (ftnlen)35);
+	errch_(__global_state, " ? ", "The A,B, and C axes were #, #, and # "
+		"respectively.", (ftnlen)3, (ftnlen)50);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADAXISLENGTH)", (ftnlen)20);
+	chkout_(__global_state, "SURFPT", (ftnlen)6);
 	return 0;
     }
 
@@ -381,7 +386,7 @@ static surfpt_state_t* get_surfpt_state() {
 /*     appropriate values for the "no intersection" case. */
 
     *found = FALSE_;
-    cleard_(&__state->c__3, point);
+    cleard_(__global_state, &__state->c__3, point);
 
 /*     Apply a linear transformation to the point, direction vector, */
 /*     and ellipsoid to transform the problem to one having the unit */
@@ -398,20 +403,20 @@ static surfpt_state_t* get_surfpt_state() {
 /*     Find the component P of Y (the ray's vertex) orthogonal to X */
 /*     (the ray's direction). */
 
-    vperp_(y, x, p);
+    vperp_(__global_state, y, x, p);
 
 /*     Find the component of Y parallel to X. */
 
-    vsub_(y, p, yproj);
+    vsub_(__global_state, y, p, yproj);
 
 /*     Find the magnitudes of Y and P. */
 
-    ymag = vnorm_(y);
-    pmag = vnorm_(p);
+    ymag = vnorm_(__global_state, y);
+    pmag = vnorm_(__global_state, p);
 
 /*     Get a unitized copy of X. */
 
-    vhat_(x, ux);
+    vhat_(__global_state, x, ux);
 
 /*     Now determine whether there's an intersection.  Consider */
 /*     the case where Y is outside the sphere first. */
@@ -428,7 +433,7 @@ static surfpt_state_t* get_surfpt_state() {
 /*        is pointing away from the sphere, and there is no */
 /*        intersection. */
 
-	if (vdot_(yproj, x) > 0.) {
+	if (vdot_(__global_state, yproj, x) > 0.) {
 	    return 0;
 	}
 
@@ -460,7 +465,7 @@ static surfpt_state_t* get_surfpt_state() {
 /*        The ray's vertex is on the surface of the ellipsoid. */
 /*        The vertex is the first point of intersection. */
 
-	vequ_(positn, point);
+	vequ_(__global_state, positn, point);
 	*found = TRUE_;
 	return 0;
     } else {
@@ -484,12 +489,12 @@ static surfpt_state_t* get_surfpt_state() {
 
 /* Computing MAX */
     d__1 = 0., d__2 = 1 - pmag * pmag;
-    scale = sqrt((max(d__1,d__2)));
+    scale = sqrt(&__global_state->f2c, (max(d__1,d__2)));
 
 /*     Find the intercept point on the unit sphere. */
 
     d__1 = sign * scale;
-    vlcom_(&__state->c_b19, p, &d__1, ux, point);
+    vlcom_(__global_state, &__state->c_b19, p, &d__1, ux, point);
 
 /*     Undo our linear transformation. */
 

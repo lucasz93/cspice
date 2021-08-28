@@ -175,7 +175,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "spkopn_c" );
+   chkin_c ( naif_state, "spkopn_c" );
 
    /*
    Check the input string name to make sure the pointer is non-null 

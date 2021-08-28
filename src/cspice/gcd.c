@@ -8,13 +8,12 @@
 
 
 typedef int gcd_state_t;
-static gcd_state_t* get_gcd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gcd_state_t* get_gcd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            GCD ( Greatest Common Divisor ) */
-integer gcd_(integer *a, integer *b)
+integer gcd_(cspice_t* __global_state, integer *a, integer *b)
 {
     /* System generated locals */
     integer ret_val;
@@ -28,7 +27,7 @@ integer gcd_(integer *a, integer *b)
 
 
     /* Module state */
-    gcd_state_t* __state = get_gcd_state();
+    gcd_state_t* __state = get_gcd_state(__global_state);
 /* $ Abstract */
 
 /*      Return the greatest common divisor of two integers. */

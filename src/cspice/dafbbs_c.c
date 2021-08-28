@@ -381,7 +381,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafbbs_c" );
+   chkin_c ( naif_state, "dafbbs_c" );
 
 
    dafbbs_ ( ( integer * ) &handle );

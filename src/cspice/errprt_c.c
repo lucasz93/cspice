@@ -308,7 +308,7 @@
       return;
    }
 
-   chkin_c ( "errprt_c" );
+   chkin_c ( naif_state, "errprt_c" );
 
 
    /*

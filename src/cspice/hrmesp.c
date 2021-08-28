@@ -8,22 +8,21 @@
 
 
 typedef int hrmesp_state_t;
-static hrmesp_state_t* get_hrmesp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline hrmesp_state_t* get_hrmesp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure HRMESP ( Hermite polynomial interpolation, equal spacing  ) */
-/* Subroutine */ int hrmesp_(integer *n, doublereal *first, doublereal *step, 
-	doublereal *yvals, doublereal *x, doublereal *work, doublereal *f, 
-	doublereal *df)
+/* Subroutine */ int hrmesp_(cspice_t* __global_state, integer *n, doublereal 
+	*first, doublereal *step, doublereal *yvals, doublereal *x, 
+	doublereal *work, doublereal *f, doublereal *df)
 {
     /* System generated locals */
     integer yvals_dim1, work_dim1, work_offset, i__1, i__2, i__3, i__4, i__5, 
 	    i__6, i__7;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal temp;
@@ -33,21 +32,21 @@ static hrmesp_state_t* get_hrmesp_state() {
     doublereal newx;
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal denom;
     doublereal c1;
     doublereal c2;
     doublereal xi;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal xij;
 
 
     /* Module state */
-    hrmesp_state_t* __state = get_hrmesp_state();
+    hrmesp_state_t* __state = get_hrmesp_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate, at a specified point, an Hermite interpolating */
@@ -297,28 +296,29 @@ static hrmesp_state_t* get_hrmesp_state() {
     yvals_dim1 = 2 * *n;
 
     /* Function Body */
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     No data, no interpolation. */
 
     if (*n < 1) {
-	chkin_("HRMESP", (ftnlen)6);
-	setmsg_("Array size must be positive; was #.", (ftnlen)35);
-	errint_("#", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("HRMESP", (ftnlen)6);
+	chkin_(__global_state, "HRMESP", (ftnlen)6);
+	setmsg_(__global_state, "Array size must be positive; was #.", (
+		ftnlen)35);
+	errint_(__global_state, "#", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "HRMESP", (ftnlen)6);
 	return 0;
     }
 
 /*     The step size must be non-zero. */
 
     if (*step == 0.) {
-	chkin_("HRMESP", (ftnlen)6);
-	setmsg_("Step size was zero.", (ftnlen)19);
-	sigerr_("SPICE(INVALIDSTEPSIZE)", (ftnlen)22);
-	chkout_("HRMESP", (ftnlen)6);
+	chkin_(__global_state, "HRMESP", (ftnlen)6);
+	setmsg_(__global_state, "Step size was zero.", (ftnlen)19);
+	sigerr_(__global_state, "SPICE(INVALIDSTEPSIZE)", (ftnlen)22);
+	chkout_(__global_state, "HRMESP", (ftnlen)6);
 	return 0;
     }
 
@@ -340,16 +340,18 @@ static hrmesp_state_t* get_hrmesp_state() {
     i__1 = (*n << 1) - 1;
     for (i__ = 1; i__ <= i__1; i__ += 2) {
 	work[(i__2 = i__ + work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 
-		<= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)331)]
-		 = yvals[(i__3 = i__ - 1) < 1 * yvals_dim1 && 0 <= i__3 ? 
-		i__3 : s_rnge("yvals", i__3, "hrmesp_", (ftnlen)331)];
+		<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "work", i__2, 
+		"hrmesp_", (ftnlen)331)] = yvals[(i__3 = i__ - 1) < 1 * 
+		yvals_dim1 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		"yvals", i__3, "hrmesp_", (ftnlen)331)];
     }
     i__1 = *n << 1;
     for (i__ = 2; i__ <= i__1; i__ += 2) {
 	work[(i__2 = i__ + work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 
-		<= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)335)]
-		 = yvals[(i__3 = i__ - 1) < 1 * yvals_dim1 && 0 <= i__3 ? 
-		i__3 : s_rnge("yvals", i__3, "hrmesp_", (ftnlen)335)] * *step;
+		<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "work", i__2, 
+		"hrmesp_", (ftnlen)335)] = yvals[(i__3 = i__ - 1) < 1 * 
+		yvals_dim1 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		"yvals", i__3, "hrmesp_", (ftnlen)335)] * *step;
     }
 
 /*     Compute the second column of the interpolation table: this */
@@ -377,59 +379,66 @@ static hrmesp_state_t* get_hrmesp_state() {
 	this__ = prev + 1;
 	next = this__ + 1;
 	work[(i__2 = prev + (work_dim1 << 1) - work_offset) < 1 * work_dim1 <<
-		 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (
-		ftnlen)366)] = work[(i__3 = this__ + work_dim1 - work_offset) 
-		< 1 * work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", 
-		i__3, "hrmesp_", (ftnlen)366)];
+		 1 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "work", 
+		i__2, "hrmesp_", (ftnlen)366)] = work[(i__3 = this__ + 
+		work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 <= i__3 ? 
+		i__3 : s_rnge(&__global_state->f2c, "work", i__3, "hrmesp_", (
+		ftnlen)366)];
 
 /*        The even-indexed interpolated derivatives are the slopes of */
 /*        the linear interpolating polynomials for adjacent input */
 /*        abscissa/ordinate pairs. No scaling is needed here. */
 
 	work[(i__2 = this__ + (work_dim1 << 1) - work_offset) < 1 * work_dim1 
-		<< 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (
-		ftnlen)373)] = work[(i__3 = next + work_dim1 - work_offset) < 
-		1 * work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		"hrmesp_", (ftnlen)373)] - work[(i__4 = prev + work_dim1 - 
-		work_offset) < 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : 
-		s_rnge("work", i__4, "hrmesp_", (ftnlen)373)];
+		<< 1 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "work"
+		, i__2, "hrmesp_", (ftnlen)373)] = work[(i__3 = next + 
+		work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 <= i__3 ? 
+		i__3 : s_rnge(&__global_state->f2c, "work", i__3, "hrmesp_", (
+		ftnlen)373)] - work[(i__4 = prev + work_dim1 - work_offset) < 
+		1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge(&
+		__global_state->f2c, "work", i__4, "hrmesp_", (ftnlen)373)];
 
 /*        The first column of WORK contains interpolated function values. */
 /*        The odd-indexed entries are the linear Taylor polynomials, */
 /*        each input abscissa value, evaluated at NEWX. */
 
 	temp = work[(i__2 = this__ + work_dim1 - work_offset) < 1 * work_dim1 
-		<< 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (
-		ftnlen)380)] * (newx - (doublereal) i__) + work[(i__3 = prev 
-		+ work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 <= i__3 ?
-		 i__3 : s_rnge("work", i__3, "hrmesp_", (ftnlen)380)];
+		<< 1 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "work"
+		, i__2, "hrmesp_", (ftnlen)380)] * (newx - (doublereal) i__) 
+		+ work[(i__3 = prev + work_dim1 - work_offset) < 1 * 
+		work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "work", i__3, "hrmesp_", (ftnlen)380)];
 	work[(i__2 = this__ + work_dim1 - work_offset) < 1 * work_dim1 << 1 &&
-		 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)
-		383)] = c1 * work[(i__3 = prev + work_dim1 - work_offset) < 1 
-		* work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		"hrmesp_", (ftnlen)383)] + c2 * work[(i__4 = next + work_dim1 
-		- work_offset) < 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : 
-		s_rnge("work", i__4, "hrmesp_", (ftnlen)383)];
+		 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "work", i__2,
+		 "hrmesp_", (ftnlen)383)] = c1 * work[(i__3 = prev + 
+		work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 <= i__3 ? 
+		i__3 : s_rnge(&__global_state->f2c, "work", i__3, "hrmesp_", (
+		ftnlen)383)] + c2 * work[(i__4 = next + work_dim1 - 
+		work_offset) < 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : 
+		s_rnge(&__global_state->f2c, "work", i__4, "hrmesp_", (ftnlen)
+		383)];
 	work[(i__2 = prev + work_dim1 - work_offset) < 1 * work_dim1 << 1 && 
-		0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)
-		386)] = temp;
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "work", i__2, 
+		"hrmesp_", (ftnlen)386)] = temp;
     }
 
 /*     The last column entries were not computed by the preceding loop; */
 /*     compute them now. */
 
     work[(i__1 = (*n << 1) - 1 + (work_dim1 << 1) - work_offset) < 1 * 
-	    work_dim1 << 1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmes"
-	    "p_", (ftnlen)394)] = work[(i__2 = (*n << 1) + work_dim1 - 
-	    work_offset) < 1 * work_dim1 << 1 && 0 <= i__2 ? i__2 : s_rnge(
-	    "work", i__2, "hrmesp_", (ftnlen)394)];
+	    work_dim1 << 1 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+	    "work", i__1, "hrmesp_", (ftnlen)394)] = work[(i__2 = (*n << 1) + 
+	    work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 <= i__2 ? i__2 
+	    : s_rnge(&__global_state->f2c, "work", i__2, "hrmesp_", (ftnlen)
+	    394)];
     work[(i__1 = (*n << 1) - 1 + work_dim1 - work_offset) < 1 * work_dim1 << 
-	    1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)
-	    395)] = work[(i__2 = (*n << 1) + work_dim1 - work_offset) < 1 * 
-	    work_dim1 << 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmes"
-	    "p_", (ftnlen)395)] * (newx - *n) + work[(i__3 = (*n << 1) - 1 + 
-	    work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 <= i__3 ? i__3 
-	    : s_rnge("work", i__3, "hrmesp_", (ftnlen)395)];
+	    1 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "work", i__1,
+	     "hrmesp_", (ftnlen)395)] = work[(i__2 = (*n << 1) + work_dim1 - 
+	    work_offset) < 1 * work_dim1 << 1 && 0 <= i__2 ? i__2 : s_rnge(&
+	    __global_state->f2c, "work", i__2, "hrmesp_", (ftnlen)395)] * (
+	    newx - *n) + work[(i__3 = (*n << 1) - 1 + work_dim1 - work_offset)
+	     < 1 * work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge(&
+	    __global_state->f2c, "work", i__3, "hrmesp_", (ftnlen)395)];
 
 /*     Compute columns 3 through 2*N of the table. */
 
@@ -464,29 +473,33 @@ static hrmesp_state_t* get_hrmesp_state() {
 /*           2.35 on page 64 in reference [2]. */
 
 	    work[(i__3 = i__ + (work_dim1 << 1) - work_offset) < 1 * 
-		    work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		    "hrmesp_", (ftnlen)433)] = (c1 * work[(i__4 = i__ + (
-		    work_dim1 << 1) - work_offset) < 1 * work_dim1 << 1 && 0 
-		    <= i__4 ? i__4 : s_rnge("work", i__4, "hrmesp_", (ftnlen)
-		    433)] + c2 * work[(i__5 = i__ + 1 + (work_dim1 << 1) - 
-		    work_offset) < 1 * work_dim1 << 1 && 0 <= i__5 ? i__5 : 
-		    s_rnge("work", i__5, "hrmesp_", (ftnlen)433)] + (work[(
-		    i__6 = i__ + 1 + work_dim1 - work_offset) < 1 * work_dim1 
-		    << 1 && 0 <= i__6 ? i__6 : s_rnge("work", i__6, "hrmesp_",
-		     (ftnlen)433)] - work[(i__7 = i__ + work_dim1 - 
-		    work_offset) < 1 * work_dim1 << 1 && 0 <= i__7 ? i__7 : 
-		    s_rnge("work", i__7, "hrmesp_", (ftnlen)433)])) / denom;
+		    work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "work", i__3, "hrmesp_", (ftnlen)433)
+		    ] = (c1 * work[(i__4 = i__ + (work_dim1 << 1) - 
+		    work_offset) < 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : 
+		    s_rnge(&__global_state->f2c, "work", i__4, "hrmesp_", (
+		    ftnlen)433)] + c2 * work[(i__5 = i__ + 1 + (work_dim1 << 
+		    1) - work_offset) < 1 * work_dim1 << 1 && 0 <= i__5 ? 
+		    i__5 : s_rnge(&__global_state->f2c, "work", i__5, "hrmes"
+		    "p_", (ftnlen)433)] + (work[(i__6 = i__ + 1 + work_dim1 - 
+		    work_offset) < 1 * work_dim1 << 1 && 0 <= i__6 ? i__6 : 
+		    s_rnge(&__global_state->f2c, "work", i__6, "hrmesp_", (
+		    ftnlen)433)] - work[(i__7 = i__ + work_dim1 - work_offset)
+		     < 1 * work_dim1 << 1 && 0 <= i__7 ? i__7 : s_rnge(&
+		    __global_state->f2c, "work", i__7, "hrmesp_", (ftnlen)433)
+		    ])) / denom;
 
 /*           Compute the interpolated function value at NEWX for the Ith */
 /*           interpolant. */
 
 	    work[(i__3 = i__ + work_dim1 - work_offset) < 1 * work_dim1 << 1 
-		    && 0 <= i__3 ? i__3 : s_rnge("work", i__3, "hrmesp_", (
-		    ftnlen)440)] = (c1 * work[(i__4 = i__ + work_dim1 - 
-		    work_offset) < 1 * work_dim1 << 1 && 0 <= i__4 ? i__4 : 
-		    s_rnge("work", i__4, "hrmesp_", (ftnlen)440)] + c2 * work[
-		    (i__5 = i__ + 1 + work_dim1 - work_offset) < 1 * 
-		    work_dim1 << 1 && 0 <= i__5 ? i__5 : s_rnge("work", i__5, 
+		    && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "work",
+		     i__3, "hrmesp_", (ftnlen)440)] = (c1 * work[(i__4 = i__ 
+		    + work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 <= 
+		    i__4 ? i__4 : s_rnge(&__global_state->f2c, "work", i__4, 
+		    "hrmesp_", (ftnlen)440)] + c2 * work[(i__5 = i__ + 1 + 
+		    work_dim1 - work_offset) < 1 * work_dim1 << 1 && 0 <= 
+		    i__5 ? i__5 : s_rnge(&__global_state->f2c, "work", i__5, 
 		    "hrmesp_", (ftnlen)440)]) / denom;
 	}
     }
@@ -497,10 +510,11 @@ static hrmesp_state_t* get_hrmesp_state() {
 /*     checked that STEP is non-zero. */
 
     *f = work[(i__1 = work_dim1 + 1 - work_offset) < 1 * work_dim1 << 1 && 0 
-	    <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)452)];
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "work", i__1, "hrm"
+	    "esp_", (ftnlen)452)];
     *df = work[(i__1 = (work_dim1 << 1) + 1 - work_offset) < 1 * work_dim1 << 
-	    1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)
-	    453)] / *step;
+	    1 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "work", i__1,
+	     "hrmesp_", (ftnlen)453)] / *step;
     return 0;
 } /* hrmesp_ */
 

@@ -8,29 +8,28 @@
 
 
 typedef int syfetc_state_t;
-static syfetc_state_t* get_syfetc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline syfetc_state_t* get_syfetc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SYFETC ( Fetch the Nth symbol in the table ) */
-/* Subroutine */ int syfetc_(integer *nth, char *tabsym, integer *tabptr, 
-	char *tabval, char *name__, logical *found, ftnlen tabsym_len, ftnlen 
-	tabval_len, ftnlen name_len)
+/* Subroutine */ int syfetc_(cspice_t* __global_state, integer *nth, char *
+	tabsym, integer *tabptr, char *tabval, char *name__, logical *found, 
+	ftnlen tabsym_len, ftnlen tabval_len, ftnlen name_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer nsym;
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    syfetc_state_t* __state = get_syfetc_state();
+    syfetc_state_t* __state = get_syfetc_state(__global_state);
 /* $ Abstract */
 
 /*     Fetch the Nth symbol in a character symbol table. */
@@ -187,15 +186,15 @@ static syfetc_state_t* get_syfetc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SYFETC", (ftnlen)6);
+	chkin_(__global_state, "SYFETC", (ftnlen)6);
     }
 
 /*     How many symbols to start with? */
 
-    nsym = cardc_(tabsym, tabsym_len);
+    nsym = cardc_(__global_state, tabsym, tabsym_len);
 
 /*     If the value of NTH is out of range, that's a problem. */
 
@@ -207,10 +206,10 @@ static syfetc_state_t* get_syfetc_state() {
 
     } else {
 	*found = TRUE_;
-	s_copy(name__, tabsym + (*nth + 5) * tabsym_len, name_len, tabsym_len)
-		;
+	s_copy(&__global_state->f2c, name__, tabsym + (*nth + 5) * tabsym_len,
+		 name_len, tabsym_len);
     }
-    chkout_("SYFETC", (ftnlen)6);
+    chkout_(__global_state, "SYFETC", (ftnlen)6);
     return 0;
 } /* syfetc_ */
 

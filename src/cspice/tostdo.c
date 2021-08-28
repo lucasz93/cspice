@@ -8,8 +8,7 @@
 
 
 extern tostdo_init_t __tostdo_init;
-static tostdo_state_t* get_tostdo_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline tostdo_state_t* get_tostdo_state(cspice_t* state) {
 	if (!state->tostdo)
 		state->tostdo = __cspice_allocate_module(sizeof(
 	tostdo_state_t), &__tostdo_init, sizeof(__tostdo_init));
@@ -18,16 +17,17 @@ static tostdo_state_t* get_tostdo_state() {
 }
 
 /* $Procedure      TOSTDO ( To Standard Output) */
-/* Subroutine */ int tostdo_(char *line, ftnlen line_len)
+/* Subroutine */ int tostdo_(cspice_t* __global_state, char *line, ftnlen 
+	line_len)
 {
     /* Initialized data */
 
 
-    extern /* Subroutine */ int stdio_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int writln_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int stdio_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int writln_(cspice_t*, char *, integer *, ftnlen);
 
     /* Module state */
-    tostdo_state_t* __state = get_tostdo_state();
+    tostdo_state_t* __state = get_tostdo_state(__global_state);
 /* $ Abstract */
 
 /*    Write a line of text to standard output. */
@@ -137,10 +137,10 @@ static tostdo_state_t* get_tostdo_state() {
 
 /* -& */
     if (__state->first) {
-	stdio_("STDOUT", &__state->stdout, (ftnlen)6);
+	stdio_(__global_state, "STDOUT", &__state->stdout, (ftnlen)6);
 	__state->first = FALSE_;
     }
-    writln_(line, &__state->stdout, line_len);
+    writln_(__global_state, line, &__state->stdout, line_len);
     return 0;
 } /* tostdo_ */
 

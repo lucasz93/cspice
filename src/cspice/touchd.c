@@ -8,20 +8,19 @@
 
 
 typedef int touchd_state_t;
-static touchd_state_t* get_touchd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline touchd_state_t* get_touchd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      TOUCHD ( Touch a variable ) */
-doublereal touchd_(doublereal *dp)
+doublereal touchd_(cspice_t* __global_state, doublereal *dp)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    touchd_state_t* __state = get_touchd_state();
+    touchd_state_t* __state = get_touchd_state(__global_state);
 /* $ Abstract */
 
 /*     Return the value of a double precision number. */

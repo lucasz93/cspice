@@ -8,24 +8,23 @@
 
 
 typedef int pl2psv_state_t;
-static pl2psv_state_t* get_pl2psv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pl2psv_state_t* get_pl2psv_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      PL2PSV ( Plane to point and spanning vectors ) */
-/* Subroutine */ int pl2psv_(doublereal *plane, doublereal *point, doublereal 
-	*span1, doublereal *span2)
+/* Subroutine */ int pl2psv_(cspice_t* __global_state, doublereal *plane, 
+	doublereal *point, doublereal *span1, doublereal *span2)
 {
-    extern /* Subroutine */ int frame_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int pl2nvp_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int frame_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
+    extern /* Subroutine */ int pl2nvp_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal normal[3];
 
 
     /* Module state */
-    pl2psv_state_t* __state = get_pl2psv_state();
+    pl2psv_state_t* __state = get_pl2psv_state(__global_state);
 /* $ Abstract */
 
 /*     Return a point and two orthogonal spanning vectors that generate */
@@ -294,14 +293,14 @@ static pl2psv_state_t* get_pl2psv_state() {
 /*     Find a unit normal vector for the plane, and find the closest */
 /*     point in the plane to the origin. */
 
-    pl2nvp_(plane, normal, point);
+    pl2nvp_(__global_state, plane, normal, point);
 
 /*     Next, find an orthogonal pair of vectors that are also */
 /*     orthogonal to the PLANE's normal vector.  The SPICELIB routine */
 /*     FRAME does this for us.  NORMAL, SPAN1, and SPAN2 form a */
 /*     right-handed orthonormal system upon output from FRAME. */
 
-    frame_(normal, span1, span2);
+    frame_(__global_state, normal, span1, span2);
     return 0;
 } /* pl2psv_ */
 

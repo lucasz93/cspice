@@ -588,7 +588,7 @@
    {
       return;
    }
-   chkin_c ( "pxfrm2_c" );
+   chkin_c ( naif_state, "pxfrm2_c" );
 
    /*
    Check the input strings to make sure the pointers are non-null

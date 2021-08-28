@@ -146,7 +146,7 @@
       {
       return ( 0 );
       }
-   chkin_c ( "zzadfunc_c" );
+   chkin_c ( naif_state, "zzadfunc_c" );
 
    /*
    Retrieve the stored pointer for the passed-in function; cast
@@ -154,7 +154,7 @@
    list matches that of "udfunc."
    */
 
-   fPtr = (  void (*) (SpiceDouble, SpiceDouble*)  ) zzadget_c ( UDFUNC );
+   fPtr = (  void (*) (SpiceDouble, SpiceDouble*)  ) zzadget_c ( naif_state,  ( UDFUNC );
 
    /*
    Call the stored function. 

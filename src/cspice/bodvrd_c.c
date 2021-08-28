@@ -273,7 +273,7 @@
    {
       return;
    }
-   chkin_c ( "bodvrd_c" );
+   chkin_c ( naif_state, "bodvrd_c" );
 
 
    /*

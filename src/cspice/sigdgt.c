@@ -8,8 +8,7 @@
 
 
 extern sigdgt_init_t __sigdgt_init;
-static sigdgt_state_t* get_sigdgt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sigdgt_state_t* get_sigdgt_state(cspice_t* state) {
 	if (!state->sigdgt)
 		state->sigdgt = __cspice_allocate_module(sizeof(
 	sigdgt_state_t), &__sigdgt_init, sizeof(__sigdgt_init));
@@ -18,20 +17,21 @@ static sigdgt_state_t* get_sigdgt_state() {
 }
 
 /* $Procedure      SIGDGT ( Retain significant digits ) */
-/* Subroutine */ int sigdgt_(char *in, char *out, ftnlen in_len, ftnlen 
-	out_len)
+/* Subroutine */ int sigdgt_(cspice_t* __global_state, char *in, char *out, 
+	ftnlen in_len, ftnlen out_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_indx(char *, char *, ftnlen, ftnlen), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_indx(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern integer cpos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen)
+	    ;
     integer zero;
     integer i__;
     integer j;
@@ -39,13 +39,13 @@ static sigdgt_state_t* get_sigdgt_state() {
     integer l;
     integer begin;
     char lchar[1];
-    extern integer lastnb_(char *, ftnlen);
-    extern integer frstnb_(char *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
     integer end;
 
 
     /* Module state */
-    sigdgt_state_t* __state = get_sigdgt_state();
+    sigdgt_state_t* __state = get_sigdgt_state(__global_state);
 /* $ Abstract */
 
 /*      Retain only the significant digits in a numeric string. */
@@ -205,10 +205,10 @@ static sigdgt_state_t* get_sigdgt_state() {
 /*     Find the first and last non-blank characters in the string. */
 
 /* Computing MAX */
-    i__1 = 1, i__2 = frstnb_(in, in_len);
+    i__1 = 1, i__2 = frstnb_(__global_state, in, in_len);
     begin = max(i__1,i__2);
 /* Computing MAX */
-    i__1 = 1, i__2 = lastnb_(in, in_len);
+    i__1 = 1, i__2 = lastnb_(__global_state, in, in_len);
     end = max(i__1,i__2);
     *(unsigned char *)lchar = ' ';
 
@@ -216,16 +216,18 @@ static sigdgt_state_t* get_sigdgt_state() {
 
     if (begin == end) {
 	*(unsigned char *)out = *(unsigned char *)&in[begin - 1];
-	if (i_len(out, out_len) > 1) {
-	    s_copy(out + 1, " ", out_len - 1, (ftnlen)1);
+	if (i_len(&__global_state->f2c, out, out_len) > 1) {
+	    s_copy(&__global_state->f2c, out + 1, " ", out_len - 1, (ftnlen)1)
+		    ;
 	}
 
 /*     If there is no decimal point, all zeros are significant. */
 
-    } else if (i_indx(in, ".", in_len, (ftnlen)1) == 0) {
+    } else if (i_indx(&__global_state->f2c, in, ".", in_len, (ftnlen)1) == 0) 
+	    {
 	l = 1;
 	k = begin;
-	while(l <= i_len(out, out_len) && k <= end) {
+	while(l <= i_len(&__global_state->f2c, out, out_len) && k <= end) {
 	    *(unsigned char *)&out[l - 1] = *(unsigned char *)&in[k - 1];
 
 /*           Don't increment L if the last item copied was a space */
@@ -238,8 +240,9 @@ static sigdgt_state_t* get_sigdgt_state() {
 	    *(unsigned char *)lchar = *(unsigned char *)&in[k - 1];
 	    ++k;
 	}
-	if (l <= i_len(out, out_len)) {
-	    s_copy(out + (l - 1), " ", out_len - (l - 1), (ftnlen)1);
+	if (l <= i_len(&__global_state->f2c, out, out_len)) {
+	    s_copy(&__global_state->f2c, out + (l - 1), " ", out_len - (l - 1)
+		    , (ftnlen)1);
 	}
     } else {
 
@@ -247,27 +250,27 @@ static sigdgt_state_t* get_sigdgt_state() {
 /*        preceded by zero ('...0E', '...0D', '...0e', '...0d') or */
 /*        by a space ('... E', '... D', '... e', '... d')? */
 
-	zero = i_indx(in, "0E", in_len, (ftnlen)2);
+	zero = i_indx(&__global_state->f2c, in, "0E", in_len, (ftnlen)2);
 	if (zero == 0) {
-	    zero = i_indx(in, "0D", in_len, (ftnlen)2);
+	    zero = i_indx(&__global_state->f2c, in, "0D", in_len, (ftnlen)2);
 	}
 	if (zero == 0) {
-	    zero = i_indx(in, "0e", in_len, (ftnlen)2);
+	    zero = i_indx(&__global_state->f2c, in, "0e", in_len, (ftnlen)2);
 	}
 	if (zero == 0) {
-	    zero = i_indx(in, "0d", in_len, (ftnlen)2);
+	    zero = i_indx(&__global_state->f2c, in, "0d", in_len, (ftnlen)2);
 	}
 	if (zero == 0) {
-	    zero = i_indx(in, " E", in_len, (ftnlen)2);
+	    zero = i_indx(&__global_state->f2c, in, " E", in_len, (ftnlen)2);
 	}
 	if (zero == 0) {
-	    zero = i_indx(in, " D", in_len, (ftnlen)2);
+	    zero = i_indx(&__global_state->f2c, in, " D", in_len, (ftnlen)2);
 	}
 	if (zero == 0) {
-	    zero = i_indx(in, " e", in_len, (ftnlen)2);
+	    zero = i_indx(&__global_state->f2c, in, " e", in_len, (ftnlen)2);
 	}
 	if (zero == 0) {
-	    zero = i_indx(in, " d", in_len, (ftnlen)2);
+	    zero = i_indx(&__global_state->f2c, in, " d", in_len, (ftnlen)2);
 	}
 
 /*        Begin there, and move toward the front of the string until */
@@ -283,7 +286,8 @@ static sigdgt_state_t* get_sigdgt_state() {
 	    }
 	    l = 1;
 	    k = begin;
-	    while(l <= i_len(out, out_len) && k <= i__) {
+	    while(l <= i_len(&__global_state->f2c, out, out_len) && k <= i__) 
+		    {
 		*(unsigned char *)&out[l - 1] = *(unsigned char *)&in[k - 1];
 
 /*              Don't increment L if the last item copied was a space. */
@@ -296,7 +300,8 @@ static sigdgt_state_t* get_sigdgt_state() {
 		++k;
 	    }
 	    k = j;
-	    while(l <= i_len(out, out_len) && k <= end) {
+	    while(l <= i_len(&__global_state->f2c, out, out_len) && k <= end) 
+		    {
 		*(unsigned char *)&out[l - 1] = *(unsigned char *)&in[k - 1];
 
 /*              Increment L only if we don't have two consecutive */
@@ -309,8 +314,9 @@ static sigdgt_state_t* get_sigdgt_state() {
 		*(unsigned char *)lchar = *(unsigned char *)&in[k - 1];
 		++k;
 	    }
-	    if (l <= i_len(out, out_len)) {
-		s_copy(out + (l - 1), " ", out_len - (l - 1), (ftnlen)1);
+	    if (l <= i_len(&__global_state->f2c, out, out_len)) {
+		s_copy(&__global_state->f2c, out + (l - 1), " ", out_len - (l 
+			- 1), (ftnlen)1);
 	    }
 
 
@@ -318,8 +324,9 @@ static sigdgt_state_t* get_sigdgt_state() {
 /*        non-blank character a zero ('...0')? Then truncate the string */
 /*        after the last character that is neither a blank nor a zero. */
 
-	} else if (*(unsigned char *)&in[end - 1] == '0' && cpos_(in, "EeDd", 
-		&__state->c__1, in_len, (ftnlen)4) == 0) {
+	} else if (*(unsigned char *)&in[end - 1] == '0' && cpos_(
+		__global_state, in, "EeDd", &__state->c__1, in_len, (ftnlen)4)
+		 == 0) {
 	    i__ = end;
 	    while(*(unsigned char *)&in[i__ - 1] == '0' || *(unsigned char *)&
 		    in[i__ - 1] == ' ') {
@@ -327,7 +334,8 @@ static sigdgt_state_t* get_sigdgt_state() {
 	    }
 	    l = 1;
 	    k = begin;
-	    while(l <= i_len(out, out_len) && k <= i__) {
+	    while(l <= i_len(&__global_state->f2c, out, out_len) && k <= i__) 
+		    {
 		*(unsigned char *)&out[l - 1] = *(unsigned char *)&in[k - 1];
 
 /*              Increment L only if we don't have two consecutive */
@@ -340,13 +348,15 @@ static sigdgt_state_t* get_sigdgt_state() {
 		*(unsigned char *)lchar = *(unsigned char *)&in[k - 1];
 		++k;
 	    }
-	    if (l <= i_len(out, out_len)) {
-		s_copy(out + (l - 1), " ", out_len - (l - 1), (ftnlen)1);
+	    if (l <= i_len(&__global_state->f2c, out, out_len)) {
+		s_copy(&__global_state->f2c, out + (l - 1), " ", out_len - (l 
+			- 1), (ftnlen)1);
 	    }
 	} else {
 	    l = 1;
 	    k = begin;
-	    while(l <= i_len(out, out_len) && k <= end) {
+	    while(l <= i_len(&__global_state->f2c, out, out_len) && k <= end) 
+		    {
 		*(unsigned char *)&out[l - 1] = *(unsigned char *)&in[k - 1];
 
 /*              Increment L only if we don't have two consecutive spaces. */
@@ -358,8 +368,9 @@ static sigdgt_state_t* get_sigdgt_state() {
 		*(unsigned char *)lchar = *(unsigned char *)&in[k - 1];
 		++k;
 	    }
-	    if (l <= i_len(out, out_len)) {
-		s_copy(out + (l - 1), " ", out_len - (l - 1), (ftnlen)1);
+	    if (l <= i_len(&__global_state->f2c, out, out_len)) {
+		s_copy(&__global_state->f2c, out + (l - 1), " ", out_len - (l 
+			- 1), (ftnlen)1);
 	    }
 	}
     }
@@ -367,8 +378,8 @@ static sigdgt_state_t* get_sigdgt_state() {
 /*     Special case. The string '.0000....' reduces to '.' after the */
 /*     zeros are removed. */
 
-    if (s_cmp(out, ".", out_len, (ftnlen)1) == 0) {
-	s_copy(out, "0", out_len, (ftnlen)1);
+    if (s_cmp(&__global_state->f2c, out, ".", out_len, (ftnlen)1) == 0) {
+	s_copy(&__global_state->f2c, out, "0", out_len, (ftnlen)1);
     }
     return 0;
 } /* sigdgt_ */

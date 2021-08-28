@@ -737,7 +737,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "edterm_c" );
+   chkin_c ( naif_state, "edterm_c" );
 
    /*
    Check input string pointers and lengths.

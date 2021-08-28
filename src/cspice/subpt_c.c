@@ -491,7 +491,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "subpt_c" );
+   chkin_c ( naif_state, "subpt_c" );
  
  
    /*

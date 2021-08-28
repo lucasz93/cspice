@@ -1379,7 +1379,7 @@
      {
       return;
       }
-   chkin_c ( "gfevnt_c" );
+   chkin_c ( naif_state, "gfevnt_c" );
 
    /*
    Make sure the input string pointer is non-null and that the
@@ -1422,12 +1422,12 @@
    Store the input function pointers so these functions can be
    called by the GF adapters. 
    */
-   zzadsave_c ( UDSTEP,  (void *)(udstep)  );
-   zzadsave_c ( UDREFN,  (void *)(udrefn)  );
-   zzadsave_c ( UDREPF,  (void *)(udrepf)  );
-   zzadsave_c ( UDREPI,  (void *)(udrepi)  );
-   zzadsave_c ( UDREPU,  (void *)(udrepu)  );
-   zzadsave_c ( UDBAIL,  (void *)(udbail)  );
+   zzadsave_c ( naif_state, UDSTEP,  (void *)(udstep)  );
+   zzadsave_c ( naif_state, UDREFN,  (void *)(udrefn)  );
+   zzadsave_c ( naif_state, UDREPF,  (void *)(udrepf)  );
+   zzadsave_c ( naif_state, UDREPI,  (void *)(udrepi)  );
+   zzadsave_c ( naif_state, UDREPU,  (void *)(udrepu)  );
+   zzadsave_c ( naif_state, UDBAIL,  (void *)(udbail)  );
 
    /*
    Allocate the workspace. 'nintvls' indicates the maximum number of

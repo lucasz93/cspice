@@ -8,8 +8,7 @@
 
 
 extern dafrwd_init_t __dafrwd_init;
-static dafrwd_state_t* get_dafrwd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafrwd_state_t* get_dafrwd_state(cspice_t* state) {
 	if (!state->dafrwd)
 		state->dafrwd = __cspice_allocate_module(sizeof(
 	dafrwd_state_t), &__dafrwd_init, sizeof(__dafrwd_init));
@@ -18,9 +17,9 @@ static dafrwd_state_t* get_dafrwd_state() {
 }
 
 /* $Procedure DAFRWD ( DAF, read, write double precision ) */
-/* Subroutine */ int dafrwd_0_(int n__, integer *handle, integer *recno, 
-	integer *begin, integer *end, doublereal *drec, doublereal *data, 
-	logical *found, integer *reads, integer *reqs)
+/* Subroutine */ int dafrwd_0_(cspice_t* __global_state, int n__, integer *
+	handle, integer *recno, integer *begin, integer *end, doublereal *
+	drec, doublereal *data, logical *found, integer *reads, integer *reqs)
 {
     /* Initialized data */
 
@@ -29,50 +28,55 @@ static dafrwd_state_t* get_dafrwd_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_wdue(cilist *), 
-	    do_uio(integer *, char *, ftnlen), e_wdue(void);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_wdue(
+	    f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, char *, 
+	    ftnlen), e_wdue(f2c_state_t*);
 
     /* Local variables */
     logical done;
     integer unit;
-    extern /* Subroutine */ int zzdafgdr_(integer *, integer *, doublereal *, 
+    extern /* Subroutine */ int zzdafgdr_(cspice_t*, integer *, integer *, 
+	    doublereal *, logical *);
+    extern /* Subroutine */ int zzddhrcm_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzdafgsr_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int zzddhisn_(cspice_t*, integer *, logical *, 
 	    logical *);
-    extern /* Subroutine */ int zzddhrcm_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzdafgsr_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *);
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzddhisn_(integer *, logical *, logical *);
     integer b;
     integer e;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int minai_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int minai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     integer count;
     integer nd;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer ni;
-    extern /* Subroutine */ int dafhsf_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dafhsf_(cspice_t*, integer *, integer *, 
+	    integer *);
     logical locfnd;
     integer bufloc;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
     integer minval;
     logical native;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     logical stored;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    dafrwd_state_t* __state = get_dafrwd_state();
+    dafrwd_state_t* __state = get_dafrwd_state(__global_state);
 /* $ Abstract */
 
 /*     Read, write, and rewrite double precision records to and */
@@ -384,12 +388,12 @@ static dafrwd_state_t* get_dafrwd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFRWD", (ftnlen)6);
-	sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-	chkout_("DAFRWD", (ftnlen)6);
+	chkin_(__global_state, "DAFRWD", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+	chkout_(__global_state, "DAFRWD", (ftnlen)6);
     }
     return 0;
 /* $Procedure DAFGDR ( DAF, get double precision record ) */
@@ -565,7 +569,7 @@ L_dafgdr:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -585,9 +589,10 @@ L_dafgdr:
     while(! done) {
 	++bufloc;
 	stored = *handle == __state->rbhan[(i__1 = bufloc - 1) < 100 && 0 <= 
-		i__1 ? i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)592)] 
-		&& *recno == __state->rbrec[(i__2 = bufloc - 1) < 100 && 0 <= 
-		i__2 ? i__2 : s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)592)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "rbhan", i__1, 
+		"dafrwd_", (ftnlen)592)] && *recno == __state->rbrec[(i__2 = 
+		bufloc - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rbrec", i__2, "dafrwd_", (ftnlen)592)];
 	done = stored || bufloc == __state->rbnbr;
     }
 
@@ -600,28 +605,35 @@ L_dafgdr:
 /*     Otherwise, increment the number of reads performed so far. */
 
     if (! stored) {
-	minai_(__state->rbreq, &__state->rbnbr, &minval, &bufloc);
-	zzdafgdr_(handle, recno, &__state->rbdat[(i__1 = (bufloc << 7) - 128) 
-		< 12800 && 0 <= i__1 ? i__1 : s_rnge("rbdat", i__1, "dafrwd_",
-		 (ftnlen)612)], &locfnd);
+	minai_(__global_state, __state->rbreq, &__state->rbnbr, &minval, &
+		bufloc);
+	zzdafgdr_(__global_state, handle, recno, &__state->rbdat[(i__1 = (
+		bufloc << 7) - 128) < 12800 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rbdat", i__1, "dafrwd_", (ftnlen)612)], 
+		&locfnd);
 
 /*        If the call to ZZDAFGDR failed, or the record was not found, */
 /*        then clean up. */
 
-	if (failed_() || ! locfnd) {
+	if (failed_(__global_state) || ! locfnd) {
 	    *found = FALSE_;
 	    __state->rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)620)] = 0;
+		    s_rnge(&__global_state->f2c, "rbhan", i__1, "dafrwd_", (
+		    ftnlen)620)] = 0;
 	    __state->rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbrec", i__1, "dafrwd_", (ftnlen)621)] = 0;
+		    s_rnge(&__global_state->f2c, "rbrec", i__1, "dafrwd_", (
+		    ftnlen)621)] = 0;
 	    __state->rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbreq", i__1, "dafrwd_", (ftnlen)622)] = 0;
+		    s_rnge(&__global_state->f2c, "rbreq", i__1, "dafrwd_", (
+		    ftnlen)622)] = 0;
 	} else {
 	    ++__state->nread;
 	    __state->rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)625)] = *handle;
+		    s_rnge(&__global_state->f2c, "rbhan", i__1, "dafrwd_", (
+		    ftnlen)625)] = *handle;
 	    __state->rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbrec", i__1, "dafrwd_", (ftnlen)626)] = *recno;
+		    s_rnge(&__global_state->f2c, "rbrec", i__1, "dafrwd_", (
+		    ftnlen)626)] = *recno;
 	    if (__state->rbnbr < 100) {
 		++__state->rbnbr;
 	    }
@@ -636,18 +648,21 @@ L_dafgdr:
 	b = max(1,*begin);
 	e = min(128,*end);
 	count = e - b + 1;
-	moved_(&__state->rbdat[(i__1 = b + (bufloc << 7) - 129) < 12800 && 0 
-		<= i__1 ? i__1 : s_rnge("rbdat", i__1, "dafrwd_", (ftnlen)646)
-		], &count, data);
+	moved_(__global_state, &__state->rbdat[(i__1 = b + (bufloc << 7) - 
+		129) < 12800 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rbdat", i__1, "dafrwd_", (ftnlen)646)], 
+		&count, data);
 
 /*        Increment the request counter in such a way that integer */
 /*        overflow will not occur.  This private module from the */
 /*        handle manager halves RBREQ if adding 1 to NREQ would */
 /*        cause its value to exceed INTMAX. */
 
-	zzddhrcm_(&__state->rbnbr, __state->rbreq, &__state->nreq);
+	zzddhrcm_(__global_state, &__state->rbnbr, __state->rbreq, &
+		__state->nreq);
 	__state->rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		"rbreq", i__1, "dafrwd_", (ftnlen)655)] = __state->nreq;
+		&__global_state->f2c, "rbreq", i__1, "dafrwd_", (ftnlen)655)] 
+		= __state->nreq;
     }
     return 0;
 /* $Procedure DAFGSR ( DAF, get summary/descriptor record ) */
@@ -823,7 +838,7 @@ L_dafgsr:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -843,9 +858,10 @@ L_dafgsr:
     while(! done) {
 	++bufloc;
 	stored = *handle == __state->rbhan[(i__1 = bufloc - 1) < 100 && 0 <= 
-		i__1 ? i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)862)] 
-		&& *recno == __state->rbrec[(i__2 = bufloc - 1) < 100 && 0 <= 
-		i__2 ? i__2 : s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)862)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "rbhan", i__1, 
+		"dafrwd_", (ftnlen)862)] && *recno == __state->rbrec[(i__2 = 
+		bufloc - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rbrec", i__2, "dafrwd_", (ftnlen)862)];
 	done = stored || bufloc == __state->rbnbr;
     }
 
@@ -858,29 +874,36 @@ L_dafgsr:
 /*     Otherwise, increment the number of reads performed so far. */
 
     if (! stored) {
-	minai_(__state->rbreq, &__state->rbnbr, &minval, &bufloc);
-	dafhsf_(handle, &nd, &ni);
-	zzdafgsr_(handle, recno, &nd, &ni, &__state->rbdat[(i__1 = (bufloc << 
-		7) - 128) < 12800 && 0 <= i__1 ? i__1 : s_rnge("rbdat", i__1, 
-		"dafrwd_", (ftnlen)884)], &locfnd);
+	minai_(__global_state, __state->rbreq, &__state->rbnbr, &minval, &
+		bufloc);
+	dafhsf_(__global_state, handle, &nd, &ni);
+	zzdafgsr_(__global_state, handle, recno, &nd, &ni, &__state->rbdat[(
+		i__1 = (bufloc << 7) - 128) < 12800 && 0 <= i__1 ? i__1 : 
+		s_rnge(&__global_state->f2c, "rbdat", i__1, "dafrwd_", (
+		ftnlen)884)], &locfnd);
 
 /*        If the call to ZZDAFGSR or DAFHSF failed, or the record */
 /*        was not found, then clean up. */
 
-	if (failed_() || ! locfnd) {
+	if (failed_(__global_state) || ! locfnd) {
 	    *found = FALSE_;
 	    __state->rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)893)] = 0;
+		    s_rnge(&__global_state->f2c, "rbhan", i__1, "dafrwd_", (
+		    ftnlen)893)] = 0;
 	    __state->rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbrec", i__1, "dafrwd_", (ftnlen)894)] = 0;
+		    s_rnge(&__global_state->f2c, "rbrec", i__1, "dafrwd_", (
+		    ftnlen)894)] = 0;
 	    __state->rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbreq", i__1, "dafrwd_", (ftnlen)895)] = 0;
+		    s_rnge(&__global_state->f2c, "rbreq", i__1, "dafrwd_", (
+		    ftnlen)895)] = 0;
 	} else {
 	    ++__state->nread;
 	    __state->rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)898)] = *handle;
+		    s_rnge(&__global_state->f2c, "rbhan", i__1, "dafrwd_", (
+		    ftnlen)898)] = *handle;
 	    __state->rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbrec", i__1, "dafrwd_", (ftnlen)899)] = *recno;
+		    s_rnge(&__global_state->f2c, "rbrec", i__1, "dafrwd_", (
+		    ftnlen)899)] = *recno;
 	    if (__state->rbnbr < 100) {
 		++__state->rbnbr;
 	    }
@@ -895,18 +918,21 @@ L_dafgsr:
 	b = max(1,*begin);
 	e = min(128,*end);
 	count = e - b + 1;
-	moved_(&__state->rbdat[(i__1 = b + (bufloc << 7) - 129) < 12800 && 0 
-		<= i__1 ? i__1 : s_rnge("rbdat", i__1, "dafrwd_", (ftnlen)919)
-		], &count, data);
+	moved_(__global_state, &__state->rbdat[(i__1 = b + (bufloc << 7) - 
+		129) < 12800 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rbdat", i__1, "dafrwd_", (ftnlen)919)], 
+		&count, data);
 
 /*        Increment the request counter in such a way that integer */
 /*        overflow will not occur.  This private module from the */
 /*        handle manager halves RBREQ if adding 1 to NREQ would */
 /*        cause its value to exceed INTMAX. */
 
-	zzddhrcm_(&__state->rbnbr, __state->rbreq, &__state->nreq);
+	zzddhrcm_(__global_state, &__state->rbnbr, __state->rbreq, &
+		__state->nreq);
 	__state->rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		"rbreq", i__1, "dafrwd_", (ftnlen)928)] = __state->nreq;
+		&__global_state->f2c, "rbreq", i__1, "dafrwd_", (ftnlen)928)] 
+		= __state->nreq;
     }
     return 0;
 /* $Procedure DAFRDR ( DAF, read double precision record ) */
@@ -1188,7 +1214,7 @@ L_dafrdr:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -1199,16 +1225,16 @@ L_dafrdr:
 /*     First check to see if HANDLE is associated with a DAF of the */
 /*     native binary file format. */
 
-    zzddhisn_(handle, &native, &locfnd);
+    zzddhisn_(__global_state, handle, &native, &locfnd);
     if (locfnd && ! native) {
 	*found = FALSE_;
-	chkin_("DAFRDR", (ftnlen)6);
-	setmsg_("The binary file format for file '#' is not native. This rou"
-		"tine operates only on files of the native format.", (ftnlen)
-		108);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(UNSUPPORTEDBFF)", (ftnlen)21);
-	chkout_("DAFRDR", (ftnlen)6);
+	chkin_(__global_state, "DAFRDR", (ftnlen)6);
+	setmsg_(__global_state, "The binary file format for file '#' is not "
+		"native. This routine operates only on files of the native fo"
+		"rmat.", (ftnlen)108);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNSUPPORTEDBFF)", (ftnlen)21);
+	chkout_(__global_state, "DAFRDR", (ftnlen)6);
 	return 0;
     }
 
@@ -1224,9 +1250,10 @@ L_dafrdr:
     while(! done) {
 	++bufloc;
 	stored = *handle == __state->rbhan[(i__1 = bufloc - 1) < 100 && 0 <= 
-		i__1 ? i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)1264)] 
-		&& *recno == __state->rbrec[(i__2 = bufloc - 1) < 100 && 0 <= 
-		i__2 ? i__2 : s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)1264)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "rbhan", i__1, 
+		"dafrwd_", (ftnlen)1264)] && *recno == __state->rbrec[(i__2 = 
+		bufloc - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rbrec", i__2, "dafrwd_", (ftnlen)1264)];
 	done = stored || bufloc == __state->rbnbr;
     }
 
@@ -1239,28 +1266,35 @@ L_dafrdr:
 /*     Otherwise, increment the number of reads performed so far. */
 
     if (! stored) {
-	minai_(__state->rbreq, &__state->rbnbr, &minval, &bufloc);
-	zzdafgdr_(handle, recno, &__state->rbdat[(i__1 = (bufloc << 7) - 128) 
-		< 12800 && 0 <= i__1 ? i__1 : s_rnge("rbdat", i__1, "dafrwd_",
-		 (ftnlen)1284)], &locfnd);
+	minai_(__global_state, __state->rbreq, &__state->rbnbr, &minval, &
+		bufloc);
+	zzdafgdr_(__global_state, handle, recno, &__state->rbdat[(i__1 = (
+		bufloc << 7) - 128) < 12800 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rbdat", i__1, "dafrwd_", (ftnlen)1284)],
+		 &locfnd);
 
 /*        If the call to ZZDAFGDR failed, or the record was not found, */
 /*        then clean up. */
 
-	if (failed_() || ! locfnd) {
+	if (failed_(__global_state) || ! locfnd) {
 	    *found = FALSE_;
 	    __state->rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)1292)] = 0;
+		    s_rnge(&__global_state->f2c, "rbhan", i__1, "dafrwd_", (
+		    ftnlen)1292)] = 0;
 	    __state->rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbrec", i__1, "dafrwd_", (ftnlen)1293)] = 0;
+		    s_rnge(&__global_state->f2c, "rbrec", i__1, "dafrwd_", (
+		    ftnlen)1293)] = 0;
 	    __state->rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbreq", i__1, "dafrwd_", (ftnlen)1294)] = 0;
+		    s_rnge(&__global_state->f2c, "rbreq", i__1, "dafrwd_", (
+		    ftnlen)1294)] = 0;
 	} else {
 	    ++__state->nread;
 	    __state->rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)1297)] = *handle;
+		    s_rnge(&__global_state->f2c, "rbhan", i__1, "dafrwd_", (
+		    ftnlen)1297)] = *handle;
 	    __state->rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbrec", i__1, "dafrwd_", (ftnlen)1298)] = *recno;
+		    s_rnge(&__global_state->f2c, "rbrec", i__1, "dafrwd_", (
+		    ftnlen)1298)] = *recno;
 	    if (__state->rbnbr < 100) {
 		++__state->rbnbr;
 	    }
@@ -1275,18 +1309,21 @@ L_dafrdr:
 	b = max(1,*begin);
 	e = min(128,*end);
 	count = e - b + 1;
-	moved_(&__state->rbdat[(i__1 = b + (bufloc << 7) - 129) < 12800 && 0 
-		<= i__1 ? i__1 : s_rnge("rbdat", i__1, "dafrwd_", (ftnlen)
-		1318)], &count, data);
+	moved_(__global_state, &__state->rbdat[(i__1 = b + (bufloc << 7) - 
+		129) < 12800 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "rbdat", i__1, "dafrwd_", (ftnlen)1318)],
+		 &count, data);
 
 /*        Increment the request counter in such a way that integer */
 /*        overflow will not occur.  This private module from the */
 /*        handle manager halves RBREQ if adding 1 to NREQ would */
 /*        cause its value to exceed INTMAX. */
 
-	zzddhrcm_(&__state->rbnbr, __state->rbreq, &__state->nreq);
+	zzddhrcm_(__global_state, &__state->rbnbr, __state->rbreq, &
+		__state->nreq);
 	__state->rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		"rbreq", i__1, "dafrwd_", (ftnlen)1327)] = __state->nreq;
+		&__global_state->f2c, "rbreq", i__1, "dafrwd_", (ftnlen)1327)]
+		 = __state->nreq;
     }
     return 0;
 /* $Procedure DAFWDR ( DAF, write double precision record ) */
@@ -1451,18 +1488,19 @@ L_dafwdr:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFWDR", (ftnlen)6);
+	chkin_(__global_state, "DAFWDR", (ftnlen)6);
     }
 
 /*     No fair writing to a read-only file! */
 
     if (*handle >= 0) {
-	setmsg_("Attempt was made to write to a read-only file.", (ftnlen)46);
-	sigerr_("SPICE(DAFILLEGWRITE)", (ftnlen)20);
-	chkout_("DAFWDR", (ftnlen)6);
+	setmsg_(__global_state, "Attempt was made to write to a read-only fi"
+		"le.", (ftnlen)46);
+	sigerr_(__global_state, "SPICE(DAFILLEGWRITE)", (ftnlen)20);
+	chkout_(__global_state, "DAFWDR", (ftnlen)6);
 	return 0;
     }
 
@@ -1476,27 +1514,29 @@ L_dafwdr:
     while(! done) {
 	++bufloc;
 	stored = *handle == __state->rbhan[(i__1 = bufloc - 1) < 100 && 0 <= 
-		i__1 ? i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)1532)] 
-		&& *recno == __state->rbrec[(i__2 = bufloc - 1) < 100 && 0 <= 
-		i__2 ? i__2 : s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)1532)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "rbhan", i__1, 
+		"dafrwd_", (ftnlen)1532)] && *recno == __state->rbrec[(i__2 = 
+		bufloc - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "rbrec", i__2, "dafrwd_", (ftnlen)1532)];
 	done = stored || bufloc == 100;
     }
 
 /*     Get the unit number for the file, and write the record. */
 
-    zzddhhlu_(handle, "DAF", &__state->c_false, &unit, (ftnlen)3);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_false, &unit, (
+	    ftnlen)3);
     __state->io___21.ciunit = unit;
     __state->io___21.cirec = *recno;
-    iostat = s_wdue(&__state->io___21);
+    iostat = s_wdue(&__global_state->f2c, &__state->io___21);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__128, (char *)&drec[0], (ftnlen)sizeof(
-	    doublereal));
+    iostat = do_uio(&__global_state->f2c, &__state->c__128, (char *)&drec[0], 
+	    (ftnlen)sizeof(doublereal));
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_wdue();
+    iostat = e_wdue(&__global_state->f2c);
 L100001:
 
 /*     If the record was buffered, replace it---with the input */
@@ -1505,28 +1545,32 @@ L100001:
 
     if (stored) {
 	if (iostat == 0) {
-	    moved_(drec, &__state->c__128, &__state->rbdat[(i__1 = (bufloc << 
-		    7) - 128) < 12800 && 0 <= i__1 ? i__1 : s_rnge("rbdat", 
-		    i__1, "dafrwd_", (ftnlen)1555)]);
+	    moved_(__global_state, drec, &__state->c__128, &__state->rbdat[(
+		    i__1 = (bufloc << 7) - 128) < 12800 && 0 <= i__1 ? i__1 : 
+		    s_rnge(&__global_state->f2c, "rbdat", i__1, "dafrwd_", (
+		    ftnlen)1555)]);
 	} else {
 	    __state->rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)1557)] = 0;
+		    s_rnge(&__global_state->f2c, "rbhan", i__1, "dafrwd_", (
+		    ftnlen)1557)] = 0;
 	    __state->rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbrec", i__1, "dafrwd_", (ftnlen)1558)] = 0;
+		    s_rnge(&__global_state->f2c, "rbrec", i__1, "dafrwd_", (
+		    ftnlen)1558)] = 0;
 	    __state->rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rbreq", i__1, "dafrwd_", (ftnlen)1559)] = 0;
+		    s_rnge(&__global_state->f2c, "rbreq", i__1, "dafrwd_", (
+		    ftnlen)1559)] = 0;
 	}
     }
 
 /*     Declare an error if the write failed. */
 
     if (iostat != 0) {
-	setmsg_("Double precision write failed. Value of IOSTAT was #", (
-		ftnlen)52);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(DAFDPWRITEFAIL)", (ftnlen)21);
+	setmsg_(__global_state, "Double precision write failed. Value of IOS"
+		"TAT was #", (ftnlen)52);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFDPWRITEFAIL)", (ftnlen)21);
     }
-    chkout_("DAFWDR", (ftnlen)6);
+    chkout_(__global_state, "DAFWDR", (ftnlen)6);
     return 0;
 /* $Procedure DAFNRR ( DAF number of reads, requests ) */
 
@@ -1678,43 +1722,47 @@ L_dafnrr:
     return 0;
 } /* dafrwd_ */
 
-/* Subroutine */ int dafrwd_(integer *handle, integer *recno, integer *begin, 
-	integer *end, doublereal *drec, doublereal *data, logical *found, 
-	integer *reads, integer *reqs)
+/* Subroutine */ int dafrwd_(cspice_t* __global_state, integer *handle, 
+	integer *recno, integer *begin, integer *end, doublereal *drec, 
+	doublereal *data, logical *found, integer *reads, integer *reqs)
 {
     return dafrwd_0_(0, handle, recno, begin, end, drec, data, found, reads, 
 	    reqs);
     }
 
-/* Subroutine */ int dafgdr_(integer *handle, integer *recno, integer *begin, 
-	integer *end, doublereal *data, logical *found)
+/* Subroutine */ int dafgdr_(cspice_t* __global_state, integer *handle, 
+	integer *recno, integer *begin, integer *end, doublereal *data, 
+	logical *found)
 {
     return dafrwd_0_(1, handle, recno, begin, end, (doublereal *)0, data, 
 	    found, (integer *)0, (integer *)0);
     }
 
-/* Subroutine */ int dafgsr_(integer *handle, integer *recno, integer *begin, 
-	integer *end, doublereal *data, logical *found)
+/* Subroutine */ int dafgsr_(cspice_t* __global_state, integer *handle, 
+	integer *recno, integer *begin, integer *end, doublereal *data, 
+	logical *found)
 {
     return dafrwd_0_(2, handle, recno, begin, end, (doublereal *)0, data, 
 	    found, (integer *)0, (integer *)0);
     }
 
-/* Subroutine */ int dafrdr_(integer *handle, integer *recno, integer *begin, 
-	integer *end, doublereal *data, logical *found)
+/* Subroutine */ int dafrdr_(cspice_t* __global_state, integer *handle, 
+	integer *recno, integer *begin, integer *end, doublereal *data, 
+	logical *found)
 {
     return dafrwd_0_(3, handle, recno, begin, end, (doublereal *)0, data, 
 	    found, (integer *)0, (integer *)0);
     }
 
-/* Subroutine */ int dafwdr_(integer *handle, integer *recno, doublereal *
-	drec)
+/* Subroutine */ int dafwdr_(cspice_t* __global_state, integer *handle, 
+	integer *recno, doublereal *drec)
 {
     return dafrwd_0_(4, handle, recno, (integer *)0, (integer *)0, drec, (
 	    doublereal *)0, (logical *)0, (integer *)0, (integer *)0);
     }
 
-/* Subroutine */ int dafnrr_(integer *reads, integer *reqs)
+/* Subroutine */ int dafnrr_(cspice_t* __global_state, integer *reads, 
+	integer *reqs)
 {
     return dafrwd_0_(5, (integer *)0, (integer *)0, (integer *)0, (integer *)
 	    0, (doublereal *)0, (doublereal *)0, (logical *)0, reads, reqs);

@@ -8,8 +8,7 @@
 
 
 extern zzgffvu_init_t __zzgffvu_init;
-static zzgffvu_state_t* get_zzgffvu_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgffvu_state_t* get_zzgffvu_state(cspice_t* state) {
 	if (!state->zzgffvu)
 		state->zzgffvu = __cspice_allocate_module(sizeof(
 	zzgffvu_state_t), &__zzgffvu_init, sizeof(__zzgffvu_init));
@@ -18,11 +17,11 @@ static zzgffvu_state_t* get_zzgffvu_state() {
 }
 
 /* $Procedure ZZGFFVU ( GF, instrument FOV utilities ) */
-/* Subroutine */ int zzgffvu_0_(int n__, char *inst, char *tshape, doublereal 
-	*raydir, char *target, char *tframe, char *abcorr, char *obsrvr, 
-	doublereal *time, logical *vistat, ftnlen inst_len, ftnlen tshape_len,
-	 ftnlen target_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen 
-	obsrvr_len)
+/* Subroutine */ int zzgffvu_0_(cspice_t* __global_state, int n__, char *inst,
+	 char *tshape, doublereal *raydir, char *target, char *tframe, char *
+	abcorr, char *obsrvr, doublereal *time, logical *vistat, ftnlen 
+	inst_len, ftnlen tshape_len, ftnlen target_len, ftnlen tframe_len, 
+	ftnlen abcorr_len, ftnlen obsrvr_len)
 {
     /* Initialized data */
 
@@ -32,85 +31,94 @@ static zzgffvu_state_t* get_zzgffvu_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
-    double pow_dd(doublereal *, doublereal *), sqrt(doublereal);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *), sqrt(f2c_state_t*
+	    , doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal limb[9];
-    extern integer zzwind2d_(integer *, doublereal *, doublereal *);
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern doublereal vsep_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen);
+    extern integer zzwind2d_(cspice_t*, integer *, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int zzcorepc_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, ftnlen);
     doublereal pnt2d[3];
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzfovaxi_(char *, integer *, doublereal *, 
-	    doublereal *, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzfovaxi_(cspice_t*, char *, integer *, 
+	    doublereal *, doublereal *, ftnlen);
     integer i__;
-    extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzprscor_(cspice_t*, char *, logical *, 
+	    ftnlen);
     doublereal l;
     integer n;
     integer w;
     doublereal x[3];
     doublereal y[3];
     doublereal z__[3];
-    extern /* Subroutine */ int frame_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int zzelvupy_(doublereal *, doublereal *, 
-	    doublereal *, integer *, doublereal *, logical *);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int frame_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzelvupy_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal bsite[3];
     doublereal coord[2];
     logical found;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal stobs[6];
     doublereal vtemp[3];
     doublereal fovpt[3];
     doublereal m1[9]	/* was [3][3] */;
-    extern doublereal vnorm_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal m2[9]	/* was [3][3] */;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     integer nxpts;
-    extern /* Subroutine */ int bods2c_(char *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int bods2c_(cspice_t*, char *, integer *, logical 
+	    *, ftnlen);
+    extern /* Subroutine */ int vrotv_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    extern /* Subroutine */ int cgv2el_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int nvc2pl_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int el2cgv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int cgv2el_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int nvc2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal vtemp2[3];
-    extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int edlimb_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int edlimb_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
     doublereal lt;
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int bodvcd_(cspice_t*, integer *, char *, integer 
+	    *, integer *, doublereal *, ftnlen);
     integer framid;
-    extern doublereal halfpi_(void);
-    extern /* Subroutine */ int stelab_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern doublereal halfpi_(cspice_t*);
+    extern /* Subroutine */ int stelab_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal fovrad[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal ctrext;
     doublereal ettarg;
     doublereal fvlimb[9];
@@ -124,43 +132,45 @@ static zzgffvu_state_t* get_zzgffvu_state() {
     integer frclss;
     integer ocstat;
     logical attblk[15];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
     doublereal dir[3];
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int cmprss_(char *, integer *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int getfov_(integer *, integer *, char *, char *, 
-	    doublereal *, integer *, doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int inrypl_(doublereal *, doublereal *, 
-	    doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int spkezp_(integer *, doublereal *, char *, char 
-	    *, integer *, doublereal *, doublereal *, ftnlen, ftnlen);
-    extern doublereal dpr_(void);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int cmprss_(cspice_t*, char *, integer *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int getfov_(cspice_t*, integer *, integer *, char 
+	    *, char *, doublereal *, integer *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int inrypl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int spkezp_(cspice_t*, integer *, doublereal *, 
+	    char *, char *, integer *, doublereal *, doublereal *, ftnlen, 
+	    ftnlen);
+    extern doublereal dpr_(cspice_t*);
     doublereal sep;
-    extern /* Subroutine */ int pxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
-    extern /* Subroutine */ int spkssb_(integer *, doublereal *, char *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int stlabx_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int pxform_(cspice_t*, char *, char *, doublereal 
+	    *, doublereal *, ftnlen, ftnlen);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
+    extern /* Subroutine */ int spkssb_(cspice_t*, integer *, doublereal *, 
+	    char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int stlabx_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal pos[3];
-    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
-	    ;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal xpt[3];
-    extern integer zzocced_(doublereal *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern integer zzocced_(cspice_t*, doublereal *, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
 
 
     /* Module state */
-    zzgffvu_state_t* __state = get_zzgffvu_state();
+    zzgffvu_state_t* __state = get_zzgffvu_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -774,9 +784,9 @@ static zzgffvu_state_t* get_zzgffvu_state() {
 
 /*     This routine should never be called directly. */
 
-    chkin_("ZZGFFVU", (ftnlen)7);
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("ZZGFFVU", (ftnlen)7);
+    chkin_(__global_state, "ZZGFFVU", (ftnlen)7);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "ZZGFFVU", (ftnlen)7);
     return 0;
 /* $Procedure  ZZGFFVIN ( GF, visibility initialization ) */
 
@@ -1187,40 +1197,41 @@ L_zzgffvin:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFFVIN", (ftnlen)8);
+    chkin_(__global_state, "ZZGFFVIN", (ftnlen)8);
 
 /*     To avoid portability problems, initialize all */
 /*     saved variables that aren't initialized via DATA */
 /*     statements and aren't guaranteed to be initialized */
 /*     for all cases. */
 
-    cleard_(&__state->c__30000, __state->svbnds);
-    cleard_(&__state->c__3, __state->svedct);
-    cleard_(&__state->c__3, __state->svfaxi);
-    cleard_(&__state->c__20000, __state->svfpol);
-    cleard_(&__state->c__9, __state->svfsmx);
-    cleard_(&__state->c__4, __state->svplan);
-    cleard_(&__state->c__3, __state->svrdir);
+    cleard_(__global_state, &__state->c__30000, __state->svbnds);
+    cleard_(__global_state, &__state->c__3, __state->svedct);
+    cleard_(__global_state, &__state->c__3, __state->svfaxi);
+    cleard_(__global_state, &__state->c__20000, __state->svfpol);
+    cleard_(__global_state, &__state->c__9, __state->svfsmx);
+    cleard_(__global_state, &__state->c__4, __state->svplan);
+    cleard_(__global_state, &__state->c__3, __state->svrdir);
     __state->svtarg = 0;
-    s_copy(__state->svtfrm, " ", (ftnlen)32, (ftnlen)1);
-    s_copy(__state->svtnam, " ", (ftnlen)36, (ftnlen)1);
-    cleard_(&__state->c__3, __state->svtrad);
+    s_copy(&__global_state->f2c, __state->svtfrm, " ", (ftnlen)32, (ftnlen)1);
+    s_copy(&__global_state->f2c, __state->svtnam, " ", (ftnlen)36, (ftnlen)1);
+    cleard_(__global_state, &__state->c__3, __state->svtrad);
     __state->svustl = FALSE_;
     __state->svxmit = FALSE_;
 
 /*     Find the NAIF ID for OBSRVR. */
 
-    bods2c_(obsrvr, &__state->svobs, &found, obsrvr_len);
+    bods2c_(__global_state, obsrvr, &__state->svobs, &found, obsrvr_len);
     if (! found) {
-	setmsg_("The observer, '#', is not a recognized name for an ephemeri"
-		"s object. The cause of this problem may be that you need an "
-		"updated version of the SPICE Toolkit. ", (ftnlen)157);
-	errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFFVIN", (ftnlen)8);
+	setmsg_(__global_state, "The observer, '#', is not a recognized name"
+		" for an ephemeris object. The cause of this problem may be t"
+		"hat you need an updated version of the SPICE Toolkit. ", (
+		ftnlen)157);
+	errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	return 0;
     }
 
@@ -1229,64 +1240,69 @@ L_zzgffvin:
 /*     Save a left-justified, upper case version of the target shape */
 /*     specifier. */
 
-    ljust_(tshape, __state->svtshp, tshape_len, (ftnlen)9);
-    ucase_(__state->svtshp, __state->svtshp, (ftnlen)9, (ftnlen)9);
+    ljust_(__global_state, tshape, __state->svtshp, tshape_len, (ftnlen)9);
+    ucase_(__global_state, __state->svtshp, __state->svtshp, (ftnlen)9, (
+	    ftnlen)9);
 
 /*     Note for maintenance programmer: these checks will */
 /*     require modification to handle DSK-based shapes. */
 
-    if (s_cmp(__state->svtshp, "POINT", (ftnlen)9, (ftnlen)5) != 0 && s_cmp(
-	    __state->svtshp, "ELLIPSOID", (ftnlen)9, (ftnlen)9) != 0 && s_cmp(
-	    __state->svtshp, "RAY", (ftnlen)9, (ftnlen)3) != 0) {
-	setmsg_("The target shape specification, '#', is not recognized.", (
-		ftnlen)55);
-	errch_("#", tshape, (ftnlen)1, tshape_len);
-	sigerr_("SPICE(INVALIDSHAPE)", (ftnlen)19);
-	chkout_("ZZGFFVIN", (ftnlen)8);
+    if (s_cmp(&__global_state->f2c, __state->svtshp, "POINT", (ftnlen)9, (
+	    ftnlen)5) != 0 && s_cmp(&__global_state->f2c, __state->svtshp, 
+	    "ELLIPSOID", (ftnlen)9, (ftnlen)9) != 0 && s_cmp(&
+	    __global_state->f2c, __state->svtshp, "RAY", (ftnlen)9, (ftnlen)3)
+	     != 0) {
+	setmsg_(__global_state, "The target shape specification, '#', is not"
+		" recognized.", (ftnlen)55);
+	errch_(__global_state, "#", tshape, (ftnlen)1, tshape_len);
+	sigerr_(__global_state, "SPICE(INVALIDSHAPE)", (ftnlen)19);
+	chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	return 0;
     }
 
 /*     We'll use the logical variable USERAY to indicate that the */
 /*     target is modeled as ray. */
 
-    __state->svuray = s_cmp(__state->svtshp, "RAY", (ftnlen)9, (ftnlen)3) == 
-	    0;
+    __state->svuray = s_cmp(&__global_state->f2c, __state->svtshp, "RAY", (
+	    ftnlen)9, (ftnlen)3) == 0;
 
 /*     Indicate whether we have an extended target. SVXTRG is .TRUE. */
 /*     if and only we have one. */
 
-    __state->svxtrg = s_cmp(__state->svtshp, "ELLIPSOID", (ftnlen)9, (ftnlen)
-	    9) == 0;
+    __state->svxtrg = s_cmp(&__global_state->f2c, __state->svtshp, "ELLIPSOID"
+	    , (ftnlen)9, (ftnlen)9) == 0;
 
 /*     If the target is an ephemeris object, obtain its ID code. */
 /*     Save the target object's name, if applicable. */
 
     if (! __state->svuray) {
-	bods2c_(target, &__state->svtarg, &found, target_len);
+	bods2c_(__global_state, target, &__state->svtarg, &found, target_len);
 	if (! found) {
-	    setmsg_("The target object, '#', is not a recognized name for an"
-		    " ephemeris object. The cause of this problem may be that"
-		    " you need an updated version of the SPICE Toolkit. ", (
-		    ftnlen)162);
-	    errch_("#", target, (ftnlen)1, target_len);
-	    sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	    setmsg_(__global_state, "The target object, '#', is not a recogn"
+		    "ized name for an ephemeris object. The cause of this pro"
+		    "blem may be that you need an updated version of the SPIC"
+		    "E Toolkit. ", (ftnlen)162);
+	    errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	    sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Save the target's name. */
 
-	s_copy(__state->svtnam, target, (ftnlen)36, target_len);
+	s_copy(&__global_state->f2c, __state->svtnam, target, (ftnlen)36, 
+		target_len);
 
 /*        Make sure the observer and target are distinct. */
 
 	if (__state->svtarg == __state->svobs) {
-	    setmsg_("The observer and target must be distinct objects, but a"
-		    "re not: OBSRVR = #; TARGET = #;", (ftnlen)86);
-	    errch_("#", obsrvr, (ftnlen)1, obsrvr_len);
-	    errch_("#", target, (ftnlen)1, target_len);
-	    sigerr_("SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	    setmsg_(__global_state, "The observer and target must be distinc"
+		    "t objects, but are not: OBSRVR = #; TARGET = #;", (ftnlen)
+		    86);
+	    errch_(__global_state, "#", obsrvr, (ftnlen)1, obsrvr_len);
+	    errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	    sigerr_(__global_state, "SPICE(BODIESNOTDISTINCT)", (ftnlen)24);
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -1300,43 +1316,47 @@ L_zzgffvin:
 /*        frame's ID code. But first, check for a blank frame name, */
 /*        since this may be a common problem for the GF FOV system. */
 
-	if (s_cmp(tframe, " ", tframe_len, (ftnlen)1) == 0) {
-	    setmsg_("The target is not modeled as a point, but the associate"
-		    "d frame name is blank.", (ftnlen)77);
-	    sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	if (s_cmp(&__global_state->f2c, tframe, " ", tframe_len, (ftnlen)1) ==
+		 0) {
+	    setmsg_(__global_state, "The target is not modeled as a point, b"
+		    "ut the associated frame name is blank.", (ftnlen)77);
+	    sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
-	namfrm_(tframe, &framid, tframe_len);
+	namfrm_(__global_state, tframe, &framid, tframe_len);
 	if (framid == 0) {
-	    setmsg_("The target frame name # is not recognized.", (ftnlen)42);
-	    errch_("#", tframe, (ftnlen)1, tframe_len);
-	    sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	    setmsg_(__global_state, "The target frame name # is not recogniz"
+		    "ed.", (ftnlen)42);
+	    errch_(__global_state, "#", tframe, (ftnlen)1, tframe_len);
+	    sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Save the target frame name. */
 
-	ljust_(tframe, __state->svtfrm, tframe_len, (ftnlen)32);
-	ucase_(__state->svtfrm, __state->svtfrm, (ftnlen)32, (ftnlen)32);
+	ljust_(__global_state, tframe, __state->svtfrm, tframe_len, (ftnlen)
+		32);
+	ucase_(__global_state, __state->svtfrm, __state->svtfrm, (ftnlen)32, (
+		ftnlen)32);
 
 /*        Obtain the center of the frame. If the target is an ephemeris */
 /*        object, we must verify the frame center is the target. */
 
-	frinfo_(&framid, &frcent, &frclss, &clssid, &found);
+	frinfo_(__global_state, &framid, &frcent, &frclss, &clssid, &found);
 	if (! found) {
 
 /*           Since we mapped the frame name to an ID code, we expect to */
 /*           find the frame info. Getting here may be a sign of an */
 /*           invalid frame kernel. */
 
-	    setmsg_("Frame ID found for # body-fixed frame # but FRINFO coul"
-		    "dn't find frame info. This may be due to a frame kernel "
-		    "error.", (ftnlen)117);
-	    errch_("#", target, (ftnlen)1, target_len);
-	    sigerr_("SPICE(FRAMEINFONOTFOUND)", (ftnlen)24);
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	    setmsg_(__global_state, "Frame ID found for # body-fixed frame #"
+		    " but FRINFO couldn't find frame info. This may be due to"
+		    " a frame kernel error.", (ftnlen)117);
+	    errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	    sigerr_(__global_state, "SPICE(FRAMEINFONOTFOUND)", (ftnlen)24);
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
 	if (__state->svxtrg) {
@@ -1348,13 +1368,13 @@ L_zzgffvin:
 /*              The supposed body-fixed frame for the target isn't */
 /*              actually centered on the target. */
 
-		setmsg_("Supposed body-fixed frame # for target # is actuall"
-			"y centered on body #.", (ftnlen)72);
-		errch_("#", tframe, (ftnlen)1, tframe_len);
-		errch_("#", target, (ftnlen)1, target_len);
-		errint_("#", &frcent, (ftnlen)1);
-		sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-		chkout_("ZZGFFVIN", (ftnlen)8);
+		setmsg_(__global_state, "Supposed body-fixed frame # for tar"
+			"get # is actually centered on body #.", (ftnlen)72);
+		errch_(__global_state, "#", tframe, (ftnlen)1, tframe_len);
+		errch_(__global_state, "#", target, (ftnlen)1, target_len);
+		errint_(__global_state, "#", &frcent, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+		chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -1367,9 +1387,9 @@ L_zzgffvin:
 /*        The target is represented by a ray. Check and save the */
 /*        aberration correction. */
 
-	zzprscor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	zzprscor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1381,12 +1401,12 @@ L_zzgffvin:
 /*           'NONE', 'S', 'XS' */
 
 	if (attblk[1]) {
-	    setmsg_("Aberration correction flag # calls for light time corre"
-		    "ctions; these are not supported for targets represented "
-		    "by rays.", (ftnlen)119);
-	    errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	    sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	    setmsg_(__global_state, "Aberration correction flag # calls for "
+		    "light time corrections; these are not supported for targ"
+		    "ets represented by rays.", (ftnlen)119);
+	    errch_(__global_state, "#", abcorr, (ftnlen)1, abcorr_len);
+	    sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1402,9 +1422,9 @@ L_zzgffvin:
 /*        Check the aberration correction. If SPKEZR can't handle it, */
 /*        neither can we. */
 
-	zzvalcor_(abcorr, attblk, abcorr_len);
-	if (failed_()) {
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -1412,9 +1432,10 @@ L_zzgffvin:
 /*     Remove all spaces from ABCORR then convert to uppercase. Save */
 /*     this version of the aberration correction specifier. */
 
-    cmprss_(" ", &__state->c__0, abcorr, __state->svcorr, (ftnlen)1, 
-	    abcorr_len, (ftnlen)5);
-    ucase_(__state->svcorr, __state->svcorr, (ftnlen)5, (ftnlen)5);
+    cmprss_(__global_state, " ", &__state->c__0, abcorr, __state->svcorr, (
+	    ftnlen)1, abcorr_len, (ftnlen)5);
+    ucase_(__global_state, __state->svcorr, __state->svcorr, (ftnlen)5, (
+	    ftnlen)5);
 
 /*     Process the target body's radii, if applicable. */
 
@@ -1422,23 +1443,23 @@ L_zzgffvin:
 
 /*        Fetch and check the radii. */
 
-	bodvcd_(&__state->svtarg, "RADII", &__state->c__3, &n, 
-		__state->svtrad, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	bodvcd_(__global_state, &__state->svtarg, "RADII", &__state->c__3, &n,
+		 __state->svtrad, (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Check the count of the radii. */
 
 	if (n != 3) {
-	    setmsg_("Target # should have 3 radii but actually has #. This m"
-		    "ay be due to an error in a PCK file used to provide the "
-		    "radii.", (ftnlen)117);
-	    errch_("#", target, (ftnlen)1, target_len);
-	    errint_("#", &n, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	    setmsg_(__global_state, "Target # should have 3 radii but actual"
+		    "ly has #. This may be due to an error in a PCK file used"
+		    " to provide the radii.", (ftnlen)117);
+	    errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	    errint_(__global_state, "#", &n, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDDIMENSION)", (ftnlen)23);
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1447,14 +1468,15 @@ L_zzgffvin:
 
 	if (__state->svtrad[0] <= 0. || __state->svtrad[1] <= 0. || 
 		__state->svtrad[2] <= 0.) {
-	    setmsg_("One or more semi-axis lengths of the target body # are "
-		    "non-positive: 1 = #, 2 = #, 3 = #. ", (ftnlen)90);
-	    errch_("#", target, (ftnlen)1, target_len);
-	    errdp_("#", __state->svtrad, (ftnlen)1);
-	    errdp_("#", &__state->svtrad[1], (ftnlen)1);
-	    errdp_("#", &__state->svtrad[2], (ftnlen)1);
-	    sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	    setmsg_(__global_state, "One or more semi-axis lengths of the ta"
+		    "rget body # are non-positive: 1 = #, 2 = #, 3 = #. ", (
+		    ftnlen)90);
+	    errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	    errdp_(__global_state, "#", __state->svtrad, (ftnlen)1);
+	    errdp_(__global_state, "#", &__state->svtrad[1], (ftnlen)1);
+	    errdp_(__global_state, "#", &__state->svtrad[2], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADAXISLENGTH)", (ftnlen)20);
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1465,7 +1487,7 @@ L_zzgffvin:
 /*        We don't have an extended target body: zero out radius values */
 /*        for this target. */
 
-	cleard_(&__state->c__3, __state->svtrad);
+	cleard_(__global_state, &__state->c__3, __state->svtrad);
     }
 
 /*     Check the direction vector, if applicable. */
@@ -1475,70 +1497,77 @@ L_zzgffvin:
 /*        Make sure the direction vector is non-zero. Save a unit-length */
 /*        copy of the vector. */
 
-	if (vzero_(raydir)) {
-	    setmsg_("Input ray direction was the zero vector; this vector mu"
-		    "st be non-zero.", (ftnlen)70);
-	    sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+	if (vzero_(__global_state, raydir)) {
+	    setmsg_(__global_state, "Input ray direction was the zero vector"
+		    "; this vector must be non-zero.", (ftnlen)70);
+	    sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
-	vhat_(raydir, __state->svrdir);
+	vhat_(__global_state, raydir, __state->svrdir);
     }
 
 /*     Look up the instrument's ID code. */
 
-    bods2c_(inst, &__state->svinst, &found, inst_len);
+    bods2c_(__global_state, inst, &__state->svinst, &found, inst_len);
     if (! found) {
-	setmsg_("'#' is not a recognized name for an instrument. The cause o"
-		"f this problem may be that you have not loaded a required fr"
-		"ame kernel or instrument kernel.", (ftnlen)151);
-	errch_("#", inst, (ftnlen)1, inst_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("ZZGFFVIN", (ftnlen)8);
+	setmsg_(__global_state, "'#' is not a recognized name for an instrum"
+		"ent. The cause of this problem may be that you have not load"
+		"ed a required frame kernel or instrument kernel.", (ftnlen)
+		151);
+	errch_(__global_state, "#", inst, (ftnlen)1, inst_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Save the instrument's name. */
 
-    ljust_(inst, __state->svinam, inst_len, (ftnlen)36);
-    ucase_(__state->svinam, __state->svinam, (ftnlen)36, (ftnlen)36);
+    ljust_(__global_state, inst, __state->svinam, inst_len, (ftnlen)36);
+    ucase_(__global_state, __state->svinam, __state->svinam, (ftnlen)36, (
+	    ftnlen)36);
 
 /*     Look up the instrument parameters. */
 
-    getfov_(&__state->svinst, &__state->c__10000, __state->svishp, 
-	    __state->svifrm, bsite, &__state->svnvrt, __state->svbnds, (
-	    ftnlen)9, (ftnlen)32);
-    if (failed_()) {
-	chkout_("ZZGFFVIN", (ftnlen)8);
+    getfov_(__global_state, &__state->svinst, &__state->c__10000, 
+	    __state->svishp, __state->svifrm, bsite, &__state->svnvrt, 
+	    __state->svbnds, (ftnlen)9, (ftnlen)32);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure the intrument shape specifier is left-justified */
 /*     and in upper case. */
 
-    ljust_(__state->svishp, __state->svishp, (ftnlen)9, (ftnlen)9);
-    ucase_(__state->svishp, __state->svishp, (ftnlen)9, (ftnlen)9);
+    ljust_(__global_state, __state->svishp, __state->svishp, (ftnlen)9, (
+	    ftnlen)9);
+    ucase_(__global_state, __state->svishp, __state->svishp, (ftnlen)9, (
+	    ftnlen)9);
 
 /*     If the instrument's shape is 'RECTANGLE', map it to */
 /*     'POLYGON' */
 
-    if (s_cmp(__state->svishp, "RECTANGLE", (ftnlen)9, (ftnlen)9) == 0) {
-	s_copy(__state->svishp, "POLYGON", (ftnlen)9, (ftnlen)7);
+    if (s_cmp(&__global_state->f2c, __state->svishp, "RECTANGLE", (ftnlen)9, (
+	    ftnlen)9) == 0) {
+	s_copy(&__global_state->f2c, __state->svishp, "POLYGON", (ftnlen)9, (
+		ftnlen)7);
     }
 
 /*     Save an axis vector for the FOV. For circular and ellipsoidal */
 /*     FOVs, the boresight serves as this axis. For polygonal FOVs */
 /*     (rectangular FOVs are included), we'll generate an axis vector. */
 
-    if (s_cmp(__state->svishp, "POLYGON", (ftnlen)9, (ftnlen)7) == 0) {
-	zzfovaxi_(inst, &__state->svnvrt, __state->svbnds, __state->svfaxi, 
-		inst_len);
-	if (failed_()) {
-	    chkout_("ZZGFFVIN", (ftnlen)8);
+    if (s_cmp(&__global_state->f2c, __state->svishp, "POLYGON", (ftnlen)9, (
+	    ftnlen)7) == 0) {
+	zzfovaxi_(__global_state, inst, &__state->svnvrt, __state->svbnds, 
+		__state->svfaxi, inst_len);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	    return 0;
 	}
     } else {
-	vequ_(bsite, __state->svfaxi);
+	vequ_(__global_state, bsite, __state->svfaxi);
     }
 
 /*     Check the angular radius of the FOV. */
@@ -1552,32 +1581,35 @@ L_zzgffvin:
     i__1 = __state->svnvrt;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /* Computing MAX */
-	d__1 = __state->svarad, d__2 = vsep_(&__state->svbnds[(i__2 = i__ * 3 
-		- 3) < 30000 && 0 <= i__2 ? i__2 : s_rnge("svbnds", i__2, 
-		"zzgffvu_", (ftnlen)1267)], __state->svfaxi);
+	d__1 = __state->svarad, d__2 = vsep_(__global_state, &__state->svbnds[
+		(i__2 = i__ * 3 - 3) < 30000 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "svbnds", i__2, "zzgffvu_", (ftnlen)1267)
+		], __state->svfaxi);
 	__state->svarad = max(d__1,d__2);
     }
 
 /*     Our algorithms can't handle FOVs with angular radius of 90 */
 /*     degrees. */
 
-    if (__state->svarad > halfpi_() - 1e-6) {
-	setmsg_("FOV angular radius of # degrees exceeds limit of # degrees.",
-		 (ftnlen)59);
-	d__1 = __state->svarad * dpr_();
-	errdp_("#", &d__1, (ftnlen)1);
-	d__1 = (halfpi_() - 1e-6) * dpr_();
-	errdp_("#", &d__1, (ftnlen)1);
-	sigerr_("SPICE(FOVTOOWIDE)", (ftnlen)17);
-	chkout_("ZZGFFVIN", (ftnlen)8);
+    if (__state->svarad > halfpi_(__global_state) - 1e-6) {
+	setmsg_(__global_state, "FOV angular radius of # degrees exceeds lim"
+		"it of # degrees.", (ftnlen)59);
+	d__1 = __state->svarad * dpr_(__global_state);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	d__1 = (halfpi_(__global_state) - 1e-6) * dpr_(__global_state);
+	errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FOVTOOWIDE)", (ftnlen)17);
+	chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Convert the FOV shape specifier to a left-justified, upper */
 /*     case form. */
 
-    ljust_(__state->svishp, __state->svishp, (ftnlen)9, (ftnlen)9);
-    ucase_(__state->svishp, __state->svishp, (ftnlen)9, (ftnlen)9);
+    ljust_(__global_state, __state->svishp, __state->svishp, (ftnlen)9, (
+	    ftnlen)9);
+    ucase_(__global_state, __state->svishp, __state->svishp, (ftnlen)9, (
+	    ftnlen)9);
 
 /*     We can make the search more efficient by computing any */
 /*     required, time-invariant quantities here in the initialization */
@@ -1588,74 +1620,82 @@ L_zzgffvin:
 /*     the observer. The plane is normal to the FOV axis, at distance 1 */
 /*     unit from the observer. */
 
-    nvc2pl_(__state->svfaxi, &__state->c_b100, __state->svplan);
+    nvc2pl_(__global_state, __state->svfaxi, &__state->c_b100, 
+	    __state->svplan);
 
 /*     Find the point on the plane closest to the origin. This is */
 /*     the center of the FOV. */
 
-    vhat_(__state->svfaxi, __state->svfvct);
+    vhat_(__global_state, __state->svfaxi, __state->svfvct);
 
 /*     If applicable, perform the computations required for an */
 /*     elliptical FOV, where the target representation is arbitrary, or */
 /*     a circular FOV when the target is an extended object. */
 
-    if (s_cmp(__state->svishp, "ELLIPSE", (ftnlen)9, (ftnlen)7) == 0 || s_cmp(
-	    __state->svishp, "CIRCLE", (ftnlen)9, (ftnlen)6) == 0 && 
-	    __state->svxtrg) {
+    if (s_cmp(&__global_state->f2c, __state->svishp, "ELLIPSE", (ftnlen)9, (
+	    ftnlen)7) == 0 || s_cmp(&__global_state->f2c, __state->svishp, 
+	    "CIRCLE", (ftnlen)9, (ftnlen)6) == 0 && __state->svxtrg) {
 
 /*        Also compute the center, semi-axis vectors, and semi-axis */
 /*        lengths of the FOV. If the FOV is circular, we create an */
 /*        artificial, second semi-axis vector. */
 
-	if (s_cmp(__state->svishp, "CIRCLE", (ftnlen)9, (ftnlen)6) == 0) {
+	if (s_cmp(&__global_state->f2c, __state->svishp, "CIRCLE", (ftnlen)9, 
+		(ftnlen)6) == 0) {
 
 /*           We have a circular FOV. We'll create an artificial, second */
 /*           boundary vector, which will give rise to a second */
 /*           semi-axis. */
 
-	    d__1 = halfpi_();
-	    vrotv_(__state->svbnds, __state->svfaxi, &d__1, &__state->svbnds[
-		    3]);
+	    d__1 = halfpi_(__global_state);
+	    vrotv_(__global_state, __state->svbnds, __state->svfaxi, &d__1, &
+		    __state->svbnds[3]);
 	}
 
 /*        Now find the endpoints of the semi-axes in this plane. */
 
 	for (i__ = 1; i__ <= 2; ++i__) {
-	    inrypl_(__state->svorig, &__state->svbnds[(i__1 = i__ * 3 - 3) < 
-		    30000 && 0 <= i__1 ? i__1 : s_rnge("svbnds", i__1, "zzgf"
-		    "fvu_", (ftnlen)1339)], __state->svplan, &nxpts, &semipt[(
-		    i__2 = i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge(
-		    "semipt", i__2, "zzgffvu_", (ftnlen)1339)]);
+	    inrypl_(__global_state, __state->svorig, &__state->svbnds[(i__1 = 
+		    i__ * 3 - 3) < 30000 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "svbnds", i__1, "zzgffvu_", (ftnlen)
+		    1339)], __state->svplan, &nxpts, &semipt[(i__2 = i__ * 3 
+		    - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "semipt", i__2, "zzgffvu_", (ftnlen)
+		    1339)]);
 	    if (nxpts != 1) {
-		setmsg_("Error creating FOV semi-axis vectors, NXPTS = #. Th"
-			"is may indicate an error in the IK parameters for #.",
-			 (ftnlen)103);
-		errint_("#", &nxpts, (ftnlen)1);
-		errch_("#", inst, (ftnlen)1, inst_len);
-		sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-		chkout_("ZZGFFVIN", (ftnlen)8);
+		setmsg_(__global_state, "Error creating FOV semi-axis vector"
+			"s, NXPTS = #. This may indicate an error in the IK p"
+			"arameters for #.", (ftnlen)103);
+		errint_(__global_state, "#", &nxpts, (ftnlen)1);
+		errch_(__global_state, "#", inst, (ftnlen)1, inst_len);
+		sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+		chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 		return 0;
 	    }
 
 /*           Compute and find the length of each semi-axis vector. */
 
-	    vsub_(&semipt[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : 
-		    s_rnge("semipt", i__1, "zzgffvu_", (ftnlen)1359)], 
-		    __state->svfvct, &__state->svsemi[(i__2 = i__ * 3 - 3) < 
-		    6 && 0 <= i__2 ? i__2 : s_rnge("svsemi", i__2, "zzgffvu_",
-		     (ftnlen)1359)]);
-	    __state->svxmag[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "svxmag", i__1, "zzgffvu_", (ftnlen)1361)] = vnorm_(&
+	    vsub_(__global_state, &semipt[(i__1 = i__ * 3 - 3) < 6 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "semipt", i__1,
+		     "zzgffvu_", (ftnlen)1359)], __state->svfvct, &
 		    __state->svsemi[(i__2 = i__ * 3 - 3) < 6 && 0 <= i__2 ? 
-		    i__2 : s_rnge("svsemi", i__2, "zzgffvu_", (ftnlen)1361)]);
+		    i__2 : s_rnge(&__global_state->f2c, "svsemi", i__2, "zzg"
+		    "ffvu_", (ftnlen)1359)]);
+	    __state->svxmag[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
+		    &__global_state->f2c, "svxmag", i__1, "zzgffvu_", (ftnlen)
+		    1361)] = vnorm_(__global_state, &__state->svsemi[(i__2 = 
+		    i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "svsemi", i__2, "zzgffvu_", (ftnlen)
+		    1361)]);
 	    if (__state->svxmag[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("svxmag", i__1, "zzgffvu_", (ftnlen)1363)] == 0.) {
-		setmsg_("FOV semi-axis #* for @ has zero length.", (ftnlen)39)
-			;
-		errint_("*", &i__, (ftnlen)1);
-		errch_("@", inst, (ftnlen)1, inst_len);
-		sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-		chkout_("ZZGFFVIN", (ftnlen)8);
+		    s_rnge(&__global_state->f2c, "svxmag", i__1, "zzgffvu_", (
+		    ftnlen)1363)] == 0.) {
+		setmsg_(__global_state, "FOV semi-axis #* for @ has zero len"
+			"gth.", (ftnlen)39);
+		errint_(__global_state, "*", &i__, (ftnlen)1);
+		errch_(__global_state, "@", inst, (ftnlen)1, inst_len);
+		sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+		chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -1666,9 +1706,9 @@ L_zzgffvin:
 /*     the FOV. This allows use to later use ZZOCCED to determine the */
 /*     target's visibility. */
 
-    if ((s_cmp(__state->svishp, "CIRCLE", (ftnlen)9, (ftnlen)6) == 0 || s_cmp(
-	    __state->svishp, "ELLIPSE", (ftnlen)9, (ftnlen)7) == 0) && 
-	    __state->svxtrg) {
+    if ((s_cmp(&__global_state->f2c, __state->svishp, "CIRCLE", (ftnlen)9, (
+	    ftnlen)6) == 0 || s_cmp(&__global_state->f2c, __state->svishp, 
+	    "ELLIPSE", (ftnlen)9, (ftnlen)7) == 0) && __state->svxtrg) {
 
 /*        Create an ellipsoid whose semi-axes are consistent with */
 /*        ellipse in SVPLAN defined by SEMIPT. To start out, select the */
@@ -1690,7 +1730,7 @@ L_zzgffvin:
 /*        The ellipsoid's center is SVEDCT. */
 
 	d__1 = ctrext + 1.;
-	vscl_(&d__1, __state->svfvct, __state->svedct);
+	vscl_(__global_state, &d__1, __state->svfvct, __state->svedct);
 
 /*        NOTE: in the code and discussion that follow, there are */
 /*        references to both the FOV center SVFVCT and the ellipsoid */
@@ -1704,21 +1744,22 @@ L_zzgffvin:
 /*        in the direction from SVFVCT toward SEMIPT(*,1) will have this */
 /*        length. */
 
-	fovrad[2] = __state->svxmag[0] * sqrt(pow_dd(__state->svxmag, &
-		__state->c_b130) + 1.);
+	fovrad[2] = __state->svxmag[0] * sqrt(&__global_state->f2c, pow_dd(&
+		__global_state->f2c, __state->svxmag, &__state->c_b130) + 1.);
 	fovrad[0] = fovrad[2];
 
 /*        Compute the corresponding columns of the FOV semi-axis matrix. */
 
 /*        The ellipsoid's third axis points along the FOV axis: */
 
-	vscl_(&fovrad[2], __state->svfvct, &__state->svfsmx[6]);
+	vscl_(__global_state, &fovrad[2], __state->svfvct, &__state->svfsmx[6]
+		);
 
 /*        The first ellipsoid semi-axis is associated with SEMIPT(*,1) */
 /*        and also has length FOVRAD(3): */
 
-	vhat_(__state->svsemi, vtemp);
-	vscl_(fovrad, vtemp, __state->svfsmx);
+	vhat_(__global_state, __state->svsemi, vtemp);
+	vscl_(__global_state, fovrad, vtemp, __state->svfsmx);
 
 /*        The ellipsoid's second semi-axis points from SVFVCT toward */
 /*        SEMIPT(*,2). The ratio of its length to that of the other */
@@ -1731,11 +1772,11 @@ L_zzgffvin:
 /*        We define the third axis using a cross product to */
 /*        ensure we produce a matrix with positive determinant. */
 
-	ucrss_(&__state->svfsmx[6], __state->svfsmx, vtemp);
-	vscl_(&fovrad[1], vtemp, &__state->svfsmx[3]);
+	ucrss_(__global_state, &__state->svfsmx[6], __state->svfsmx, vtemp);
+	vscl_(__global_state, &fovrad[1], vtemp, &__state->svfsmx[3]);
     }
-    if (s_cmp(__state->svishp, "CIRCLE", (ftnlen)9, (ftnlen)6) == 0 && ! 
-	    __state->svxtrg) {
+    if (s_cmp(&__global_state->f2c, __state->svishp, "CIRCLE", (ftnlen)9, (
+	    ftnlen)6) == 0 && ! __state->svxtrg) {
 
 /*        We have a circular FOV and a point or ray target model. */
 /*        In this case, our FOV inclusion test is simple as can */
@@ -1743,10 +1784,12 @@ L_zzgffvin:
 /*        target and FOV axis against the angular radius of the */
 /*        FOV. Compute and save this angular radius. */
 
-	__state->svarad = vsep_(__state->svfaxi, __state->svbnds);
-    } else if ((s_cmp(__state->svishp, "RECTANGLE", (ftnlen)9, (ftnlen)9) == 
-	    0 || s_cmp(__state->svishp, "POLYGON", (ftnlen)9, (ftnlen)7) == 0)
-	     && ! __state->svxtrg) {
+	__state->svarad = vsep_(__global_state, __state->svfaxi, 
+		__state->svbnds);
+    } else if ((s_cmp(&__global_state->f2c, __state->svishp, "RECTANGLE", (
+	    ftnlen)9, (ftnlen)9) == 0 || s_cmp(&__global_state->f2c, 
+	    __state->svishp, "POLYGON", (ftnlen)9, (ftnlen)7) == 0) && ! 
+	    __state->svxtrg) {
 
 /*        We have a rectangular or polygonal FOV and a ray or point */
 /*        target. */
@@ -1761,21 +1804,24 @@ L_zzgffvin:
 /*        will have vertices given by the (X,Y) components of each */
 /*        intersection. */
 
-	vequ_(__state->svfaxi, z__);
-	frame_(z__, x, y);
+	vequ_(__global_state, __state->svfaxi, z__);
+	frame_(__global_state, z__, x, y);
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    __state->svfovm[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : 
-		    s_rnge("svfovm", i__1, "zzgffvu_", (ftnlen)1490)] = x[(
-		    i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("x", 
-		    i__2, "zzgffvu_", (ftnlen)1490)];
+		    s_rnge(&__global_state->f2c, "svfovm", i__1, "zzgffvu_", (
+		    ftnlen)1490)] = x[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "x", i__2, "zzgffvu_",
+		     (ftnlen)1490)];
 	    __state->svfovm[(i__1 = i__ * 3 - 2) < 9 && 0 <= i__1 ? i__1 : 
-		    s_rnge("svfovm", i__1, "zzgffvu_", (ftnlen)1491)] = y[(
-		    i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("y", 
-		    i__2, "zzgffvu_", (ftnlen)1491)];
+		    s_rnge(&__global_state->f2c, "svfovm", i__1, "zzgffvu_", (
+		    ftnlen)1491)] = y[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "y", i__2, "zzgffvu_",
+		     (ftnlen)1491)];
 	    __state->svfovm[(i__1 = i__ * 3 - 1) < 9 && 0 <= i__1 ? i__1 : 
-		    s_rnge("svfovm", i__1, "zzgffvu_", (ftnlen)1492)] = z__[(
-		    i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("z", 
-		    i__2, "zzgffvu_", (ftnlen)1492)];
+		    s_rnge(&__global_state->f2c, "svfovm", i__1, "zzgffvu_", (
+		    ftnlen)1492)] = z__[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "z", i__2, "zzgffvu_",
+		     (ftnlen)1492)];
 	}
 
 /*        Compute the intersections of the FOV boundary vectors with the */
@@ -1786,31 +1832,32 @@ L_zzgffvin:
 
 	i__1 = __state->svnvrt;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    inrypl_(__state->svorig, &__state->svbnds[(i__2 = i__ * 3 - 3) < 
-		    30000 && 0 <= i__2 ? i__2 : s_rnge("svbnds", i__2, "zzgf"
-		    "fvu_", (ftnlen)1504)], __state->svplan, &nxpts, xpt);
+	    inrypl_(__global_state, __state->svorig, &__state->svbnds[(i__2 = 
+		    i__ * 3 - 3) < 30000 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "svbnds", i__2, "zzgffvu_", (ftnlen)
+		    1504)], __state->svplan, &nxpts, xpt);
 	    if (nxpts != 1) {
-		setmsg_("Error finding FOV plane intercept of FOV boundary v"
-			"ector #, NXPTS = #. This may indicate an error in th"
-			"e IK parameters for #.", (ftnlen)125);
-		errint_("#", &i__, (ftnlen)1);
-		errint_("#", &nxpts, (ftnlen)1);
-		errch_("#", inst, (ftnlen)1, inst_len);
-		sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-		chkout_("ZZGFFVIN", (ftnlen)8);
+		setmsg_(__global_state, "Error finding FOV plane intercept o"
+			"f FOV boundary vector #, NXPTS = #. This may indicat"
+			"e an error in the IK parameters for #.", (ftnlen)125);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errint_(__global_state, "#", &nxpts, (ftnlen)1);
+		errch_(__global_state, "#", inst, (ftnlen)1, inst_len);
+		sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+		chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
 		return 0;
 	    }
-	    vsub_(xpt, __state->svfvct, vtemp);
-	    mxv_(__state->svfovm, vtemp, vtemp2);
+	    vsub_(__global_state, xpt, __state->svfvct, vtemp);
+	    mxv_(__global_state, __state->svfovm, vtemp, vtemp2);
 	    __state->svfpol[(i__2 = (i__ << 1) - 2) < 20000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("svfpol", i__2, "zzgffvu_", (ftnlen)1525)] =
-		     vtemp2[0];
+		    i__2 : s_rnge(&__global_state->f2c, "svfpol", i__2, "zzg"
+		    "ffvu_", (ftnlen)1525)] = vtemp2[0];
 	    __state->svfpol[(i__2 = (i__ << 1) - 1) < 20000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("svfpol", i__2, "zzgffvu_", (ftnlen)1526)] =
-		     vtemp2[1];
+		    i__2 : s_rnge(&__global_state->f2c, "svfpol", i__2, "zzg"
+		    "ffvu_", (ftnlen)1526)] = vtemp2[1];
 	}
     }
-    chkout_("ZZGFFVIN", (ftnlen)8);
+    chkout_(__global_state, "ZZGFFVIN", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFFVST ( GF, "is target in FOV?"  ) */
 
@@ -1945,10 +1992,10 @@ L_zzgffvst:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFFVST", (ftnlen)8);
+    chkin_(__global_state, "ZZGFFVST", (ftnlen)8);
 
 /*     Initialize the state output. */
 
@@ -1966,27 +2013,31 @@ L_zzgffvst:
 /*        Start by finding the observer-target position vector in the */
 /*        target body-fixed frame. */
 
-	spkezp_(&__state->svtarg, time, __state->svtfrm, __state->svcorr, &
-		__state->svobs, pos, &lt, (ftnlen)32, (ftnlen)5);
+	spkezp_(__global_state, &__state->svtarg, time, __state->svtfrm, 
+		__state->svcorr, &__state->svobs, pos, &lt, (ftnlen)32, (
+		ftnlen)5);
 
 /*        Compute the target epoch. */
 
-	zzcorepc_(__state->svcorr, time, &lt, &ettarg, (ftnlen)5);
+	zzcorepc_(__global_state, __state->svcorr, time, &lt, &ettarg, (
+		ftnlen)5);
 
 /*        Find the transformation from the target frame at ETTARG to the */
 /*        instrument frame at TIME. We'll need to use J2000 as an */
 /*        intermediate frame. */
 
-	pxform_(__state->svtfrm, "J2000", &ettarg, m1, (ftnlen)32, (ftnlen)5);
-	pxform_("J2000", __state->svifrm, time, m2, (ftnlen)5, (ftnlen)32);
-	if (failed_()) {
-	    chkout_("ZZGFFVST", (ftnlen)8);
+	pxform_(__global_state, __state->svtfrm, "J2000", &ettarg, m1, (
+		ftnlen)32, (ftnlen)5);
+	pxform_(__global_state, "J2000", __state->svifrm, time, m2, (ftnlen)5,
+		 (ftnlen)32);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFFVST", (ftnlen)8);
 	    return 0;
 	}
-	mxm_(m2, m1, insmat);
-	if (s_cmp(__state->svishp, "RECTANGLE", (ftnlen)9, (ftnlen)9) == 0 || 
-		s_cmp(__state->svishp, "POLYGON", (ftnlen)9, (ftnlen)7) == 0) 
-		{
+	mxm_(__global_state, m2, m1, insmat);
+	if (s_cmp(&__global_state->f2c, __state->svishp, "RECTANGLE", (ftnlen)
+		9, (ftnlen)9) == 0 || s_cmp(&__global_state->f2c, 
+		__state->svishp, "POLYGON", (ftnlen)9, (ftnlen)7) == 0) {
 
 /*           The FOV is a rectangle or other polygon; we treat both */
 /*           cases the same way. */
@@ -1994,12 +2045,12 @@ L_zzgffvst:
 /*           Negate POS to obtain the position of the observer with */
 /*           respect to the target. */
 
-	    vminus_(pos, obspos);
+	    vminus_(__global_state, pos, obspos);
 
 /*           Find the limb in the target body-fixed frame. */
 
-	    edlimb_(__state->svtrad, &__state->svtrad[1], &__state->svtrad[2],
-		     obspos, limb);
+	    edlimb_(__global_state, __state->svtrad, &__state->svtrad[1], &
+		    __state->svtrad[2], obspos, limb);
 
 /*           Transform the limb from the target frame at ETTARG */
 /*           to the instrument frame at TIME. The matrix INSMAT */
@@ -2008,7 +2059,7 @@ L_zzgffvst:
 /*           pack the results into FVLIMB. Below, M1 and M2 are */
 /*           simply temporary 3x3 matrices. */
 
-	    el2cgv_(limb, m1, &m1[3], &m1[6]);
+	    el2cgv_(__global_state, limb, m1, &m1[3], &m1[6]);
 
 /*           Before performing the frame transformation on the */
 /*           limb's center, translate the center so that the */
@@ -2016,15 +2067,17 @@ L_zzgffvst:
 /*           in the target body-fixed frame, this is a convenient */
 /*           place for the translation. */
 
-	    vadd_(pos, m1, vtemp);
-	    vequ_(vtemp, m1);
+	    vadd_(__global_state, pos, m1, vtemp);
+	    vequ_(__global_state, vtemp, m1);
 	    for (i__ = 1; i__ <= 3; ++i__) {
-		mxv_(insmat, &m1[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 
-			: s_rnge("m1", i__1, "zzgffvu_", (ftnlen)1757)], &m2[(
-			i__2 = i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-			"m2", i__2, "zzgffvu_", (ftnlen)1757)]);
+		mxv_(__global_state, insmat, &m1[(i__1 = i__ * 3 - 3) < 9 && 
+			0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "m1", 
+			i__1, "zzgffvu_", (ftnlen)1757)], &m2[(i__2 = i__ * 3 
+			- 3) < 9 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "m2", i__2, "zzgffvu_", (ftnlen)
+			1757)]);
 	    }
-	    cgv2el_(m2, &m2[3], &m2[6], fvlimb);
+	    cgv2el_(__global_state, m2, &m2[3], &m2[6], fvlimb);
 
 /*           All geometric objects in the following call are expressed */
 /*           in the instrument reference frame. */
@@ -2032,11 +2085,12 @@ L_zzgffvst:
 /*           The target is in the FOV if and only if ZZELVUPY finds an */
 /*           intersection, so we use VISTAT as the "found" flag. */
 
-	    zzelvupy_(fvlimb, __state->svorig, __state->svfaxi, &
-		    __state->svnvrt, __state->svbnds, vistat);
-	} else if (s_cmp(__state->svishp, "CIRCLE", (ftnlen)9, (ftnlen)6) == 
-		0 || s_cmp(__state->svishp, "ELLIPSE", (ftnlen)9, (ftnlen)7) 
-		== 0) {
+	    zzelvupy_(__global_state, fvlimb, __state->svorig, 
+		    __state->svfaxi, &__state->svnvrt, __state->svbnds, 
+		    vistat);
+	} else if (s_cmp(&__global_state->f2c, __state->svishp, "CIRCLE", (
+		ftnlen)9, (ftnlen)6) == 0 || s_cmp(&__global_state->f2c, 
+		__state->svishp, "ELLIPSE", (ftnlen)9, (ftnlen)7) == 0) {
 
 /*           The FOV is a circle or ellipse. For both FOV shapes, */
 /*           we represent the FOV by an ellipsoid in the FOV */
@@ -2049,23 +2103,24 @@ L_zzgffvst:
 
 /*           Transform the target position to the instrument frame. */
 
-	    mxv_(insmat, pos, trgctr);
+	    mxv_(__global_state, insmat, pos, trgctr);
 
 /*           The columns of INSMAT are the target body's semi-axis */
 /*           direction vectors; we scale these by the target radii */
 /*           to obtain the semi-axis matrix for the target. */
 
 	    for (i__ = 1; i__ <= 3; ++i__) {
-		vscl_(&__state->svtrad[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? 
-			i__1 : s_rnge("svtrad", i__1, "zzgffvu_", (ftnlen)
-			1795)], &insmat[(i__2 = i__ * 3 - 3) < 9 && 0 <= i__2 
-			? i__2 : s_rnge("insmat", i__2, "zzgffvu_", (ftnlen)
-			1795)], &trgsmx[(i__3 = i__ * 3 - 3) < 9 && 0 <= i__3 
-			? i__3 : s_rnge("trgsmx", i__3, "zzgffvu_", (ftnlen)
-			1795)]);
+		vscl_(__global_state, &__state->svtrad[(i__1 = i__ - 1) < 3 &&
+			 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"svtrad", i__1, "zzgffvu_", (ftnlen)1795)], &insmat[(
+			i__2 = i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "insmat", i__2, "zzgffvu_", (
+			ftnlen)1795)], &trgsmx[(i__3 = i__ * 3 - 3) < 9 && 0 
+			<= i__3 ? i__3 : s_rnge(&__global_state->f2c, "trgsmx"
+			, i__3, "zzgffvu_", (ftnlen)1795)]);
 	    }
-	    ocstat = zzocced_(__state->svorig, __state->svedct, 
-		    __state->svfsmx, trgctr, trgsmx);
+	    ocstat = zzocced_(__global_state, __state->svorig, 
+		    __state->svedct, __state->svfsmx, trgctr, trgsmx);
 
 /*           A return code of zero indicates no occultation. Any other */
 /*           return code indicates a non-empty intersection of the */
@@ -2078,12 +2133,15 @@ L_zzgffvst:
 /*           this problem in the initialization step, but we repeat the */
 /*           check here for safety. */
 
-	    setmsg_("The target body # has shape #; the only supported shape"
-		    "s are ELLIPSOID, POINT, and RAY.", (ftnlen)87);
-	    errch_("#", __state->svtnam, (ftnlen)1, (ftnlen)36);
-	    errch_("#", __state->svishp, (ftnlen)1, (ftnlen)9);
-	    sigerr_("SPICE(INVALIDSHAPE)", (ftnlen)19);
-	    chkout_("ZZGFFVST", (ftnlen)8);
+	    setmsg_(__global_state, "The target body # has shape #; the only"
+		    " supported shapes are ELLIPSOID, POINT, and RAY.", (
+		    ftnlen)87);
+	    errch_(__global_state, "#", __state->svtnam, (ftnlen)1, (ftnlen)
+		    36);
+	    errch_(__global_state, "#", __state->svishp, (ftnlen)1, (ftnlen)9)
+		    ;
+	    sigerr_(__global_state, "SPICE(INVALIDSHAPE)", (ftnlen)19);
+	    chkout_(__global_state, "ZZGFFVST", (ftnlen)8);
 	    return 0;
 	}
 
@@ -2107,17 +2165,17 @@ L_zzgffvst:
 /*           for targets represented by rays, we evaluate SVTFRM */
 /*           at the current epoch TIME. */
 
-	    pxform_(__state->svtfrm, __state->svifrm, time, insmat, (ftnlen)
-		    32, (ftnlen)32);
-	    if (failed_()) {
-		chkout_("ZZGFFVST", (ftnlen)8);
+	    pxform_(__global_state, __state->svtfrm, __state->svifrm, time, 
+		    insmat, (ftnlen)32, (ftnlen)32);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZGFFVST", (ftnlen)8);
 		return 0;
 	    }
 
 /*           Transform the ray's direction vector to the instrument */
 /*           frame. */
 
-	    mxv_(insmat, __state->svrdir, dir);
+	    mxv_(__global_state, insmat, __state->svrdir, dir);
 
 /*           If we need to correct the ray's direction for stellar */
 /*           aberration, do it now. */
@@ -2127,17 +2185,18 @@ L_zzgffvst:
 /*              Find the state of the observer relative to the */
 /*              solar system barycenter in the J2000 frame. */
 
-		spkssb_(&__state->svobs, time, "J2000", stobs, (ftnlen)5);
+		spkssb_(__global_state, &__state->svobs, time, "J2000", stobs,
+			 (ftnlen)5);
 
 /*              Convert the direction vector to the J2000 frame. */
 
-		pxform_(__state->svifrm, "J2000", time, m1, (ftnlen)32, (
-			ftnlen)5);
-		if (failed_()) {
-		    chkout_("ZZGFFVST", (ftnlen)8);
+		pxform_(__global_state, __state->svifrm, "J2000", time, m1, (
+			ftnlen)32, (ftnlen)5);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZGFFVST", (ftnlen)8);
 		    return 0;
 		}
-		mxv_(m1, dir, vtemp);
+		mxv_(__global_state, m1, dir, vtemp);
 
 /*              Apply the stellar aberration correction. */
 
@@ -2145,15 +2204,15 @@ L_zzgffvst:
 
 /*                 Use the transmission correction. */
 
-		    stlabx_(vtemp, &stobs[3], vtemp2);
+		    stlabx_(__global_state, vtemp, &stobs[3], vtemp2);
 		} else {
-		    stelab_(vtemp, &stobs[3], vtemp2);
+		    stelab_(__global_state, vtemp, &stobs[3], vtemp2);
 		}
 
 /*              Map the direction vector back to the instrument */
 /*              frame. */
 
-		mtxv_(m1, vtemp2, dir);
+		mtxv_(__global_state, m1, vtemp2, dir);
 	    }
 
 /*           The target direction in the instrument frame DIR has */
@@ -2173,18 +2232,19 @@ L_zzgffvst:
 /*           time, we look up the direction vector in the J2000 frame */
 /*           and then map it to the instrument frame. */
 
-	    spkezp_(&__state->svtarg, time, "J2000", __state->svcorr, &
-		    __state->svobs, vtemp, &lt, (ftnlen)5, (ftnlen)5);
-	    pxform_("J2000", __state->svifrm, time, m1, (ftnlen)5, (ftnlen)32)
-		    ;
-	    if (failed_()) {
-		chkout_("ZZGFFVST", (ftnlen)8);
+	    spkezp_(__global_state, &__state->svtarg, time, "J2000", 
+		    __state->svcorr, &__state->svobs, vtemp, &lt, (ftnlen)5, (
+		    ftnlen)5);
+	    pxform_(__global_state, "J2000", __state->svifrm, time, m1, (
+		    ftnlen)5, (ftnlen)32);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZGFFVST", (ftnlen)8);
 		return 0;
 	    }
-	    mxv_(m1, vtemp, dir);
+	    mxv_(__global_state, m1, vtemp, dir);
 	}
-	if (failed_()) {
-	    chkout_("ZZGFFVST", (ftnlen)8);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFFVST", (ftnlen)8);
 	    return 0;
 	}
 
@@ -2193,8 +2253,9 @@ L_zzgffvst:
 /*        The determination of whether the ray is in the FOV depends */
 /*        on the FOV shape. */
 
-	sep = vsep_(dir, __state->svfaxi);
-	if (s_cmp(__state->svishp, "CIRCLE", (ftnlen)9, (ftnlen)6) == 0) {
+	sep = vsep_(__global_state, dir, __state->svfaxi);
+	if (s_cmp(&__global_state->f2c, __state->svishp, "CIRCLE", (ftnlen)9, 
+		(ftnlen)6) == 0) {
 
 /*           Just compare the angular separation of POS with the */
 /*           FOV axis direction against the FOV angular radius SVARAD. */
@@ -2221,7 +2282,8 @@ L_zzgffvst:
 /*           observer, and having direction vector POS, with the FOV */
 /*           plane. */
 
-	    inrypl_(__state->svorig, dir, __state->svplan, &nxpts, xpt);
+	    inrypl_(__global_state, __state->svorig, dir, __state->svplan, &
+		    nxpts, xpt);
 
 /*           If there's no intersection, the target isn't visible. */
 
@@ -2231,11 +2293,12 @@ L_zzgffvst:
 
 /*              "This can't happen." :) */
 
-		setmsg_("By construction, the vertex of the observer-target "
-			"ray can't lie in the FOV plane. If somehow it does, "
-			"we have a serious problem.", (ftnlen)129);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("ZZGFFVST", (ftnlen)8);
+		setmsg_(__global_state, "By construction, the vertex of the "
+			"observer-target ray can't lie in the FOV plane. If s"
+			"omehow it does, we have a serious problem.", (ftnlen)
+			129);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "ZZGFFVST", (ftnlen)8);
 		return 0;
 	    } else {
 
@@ -2244,9 +2307,9 @@ L_zzgffvst:
 /*              Find the vector from the center of the FOV to XPT. */
 /*              Call this vector FOVPT. */
 
-		vsub_(xpt, __state->svfvct, fovpt);
-		if (s_cmp(__state->svishp, "ELLIPSE", (ftnlen)9, (ftnlen)7) ==
-			 0) {
+		vsub_(__global_state, xpt, __state->svfvct, fovpt);
+		if (s_cmp(&__global_state->f2c, __state->svishp, "ELLIPSE", (
+			ftnlen)9, (ftnlen)7) == 0) {
 
 /*                 The FOV shape is elliptical. To decide whether FOVPT */
 /*                 is within the FOV, compute the level surface */
@@ -2263,34 +2326,38 @@ L_zzgffvst:
 
 		    for (i__ = 1; i__ <= 2; ++i__) {
 			coord[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				s_rnge("coord", i__1, "zzgffvu_", (ftnlen)
-				2024)] = vdot_(fovpt, &__state->svsemi[(i__2 =
-				 i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : 
-				s_rnge("svsemi", i__2, "zzgffvu_", (ftnlen)
-				2024)]) / __state->svxmag[(i__3 = i__ - 1) < 
-				2 && 0 <= i__3 ? i__3 : s_rnge("svxmag", i__3,
-				 "zzgffvu_", (ftnlen)2024)];
+				s_rnge(&__global_state->f2c, "coord", i__1, 
+				"zzgffvu_", (ftnlen)2024)] = vdot_(
+				__global_state, fovpt, &__state->svsemi[(i__2 
+				= i__ * 3 - 3) < 6 && 0 <= i__2 ? i__2 : 
+				s_rnge(&__global_state->f2c, "svsemi", i__2, 
+				"zzgffvu_", (ftnlen)2024)]) / __state->svxmag[
+				(i__3 = i__ - 1) < 2 && 0 <= i__3 ? i__3 : 
+				s_rnge(&__global_state->f2c, "svxmag", i__3, 
+				"zzgffvu_", (ftnlen)2024)];
 		    }
 		    d__1 = coord[0] / __state->svxmag[0];
 		    d__2 = coord[1] / __state->svxmag[1];
-		    l = pow_dd(&d__1, &__state->c_b130) + pow_dd(&d__2, &
+		    l = pow_dd(&__global_state->f2c, &d__1, &__state->c_b130) 
+			    + pow_dd(&__global_state->f2c, &d__2, &
 			    __state->c_b130);
 
 /*                 The target is visible if FOVPT is inside the FOV */
 /*                 ellipse; this condition is indicated by L <= 1. */
 
 		    *vistat = l <= 1.;
-		} else if (s_cmp(__state->svishp, "POLYGON", (ftnlen)9, (
-			ftnlen)7) == 0) {
+		} else if (s_cmp(&__global_state->f2c, __state->svishp, "POL"
+			"YGON", (ftnlen)9, (ftnlen)7) == 0) {
 
 /*                The FOV is a polygon. Convert FOVPT to the FOV frame, */
 /*                then find the winding number of the FOV about the X-Y */
 /*                projection of FOVPT. */
 
-		    mxv_(__state->svfovm, fovpt, vtemp);
+		    mxv_(__global_state, __state->svfovm, fovpt, vtemp);
 		    pnt2d[0] = vtemp[0];
 		    pnt2d[1] = vtemp[1];
-		    w = zzwind2d_(&__state->svnvrt, __state->svfpol, pnt2d);
+		    w = zzwind2d_(__global_state, &__state->svnvrt, 
+			    __state->svfpol, pnt2d);
 
 /*                 Any non-zero winding number indicates that the */
 /*                 FOV polygon wraps around the point representing */
@@ -2304,13 +2371,16 @@ L_zzgffvst:
 /*                 prevented this problem in the initialization step, */
 /*                 but we repeat the check here for safety. */
 
-		    setmsg_("Instrument #'s FOV has shape #; the only suppor"
-			    "ted shapes are ELLIPSE, CIRCLE, and POLYGON.", (
-			    ftnlen)91);
-		    errch_("#", __state->svinam, (ftnlen)1, (ftnlen)36);
-		    errch_("#", __state->svishp, (ftnlen)1, (ftnlen)9);
-		    sigerr_("SPICE(INVALIDSHAPE)", (ftnlen)19);
-		    chkout_("ZZGFFVST", (ftnlen)8);
+		    setmsg_(__global_state, "Instrument #'s FOV has shape #;"
+			    " the only supported shapes are ELLIPSE, CIRCLE, "
+			    "and POLYGON.", (ftnlen)91);
+		    errch_(__global_state, "#", __state->svinam, (ftnlen)1, (
+			    ftnlen)36);
+		    errch_(__global_state, "#", __state->svishp, (ftnlen)1, (
+			    ftnlen)9);
+		    sigerr_(__global_state, "SPICE(INVALIDSHAPE)", (ftnlen)19)
+			    ;
+		    chkout_(__global_state, "ZZGFFVST", (ftnlen)8);
 		    return 0;
 		}
 
@@ -2332,31 +2402,33 @@ L_zzgffvst:
 
 /*     We've processed all target representation/FOV shape cases. */
 
-    chkout_("ZZGFFVST", (ftnlen)8);
+    chkout_(__global_state, "ZZGFFVST", (ftnlen)8);
     return 0;
 } /* zzgffvu_ */
 
-/* Subroutine */ int zzgffvu_(char *inst, char *tshape, doublereal *raydir, 
-	char *target, char *tframe, char *abcorr, char *obsrvr, doublereal *
-	time, logical *vistat, ftnlen inst_len, ftnlen tshape_len, ftnlen 
-	target_len, ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int zzgffvu_(cspice_t* __global_state, char *inst, char *
+	tshape, doublereal *raydir, char *target, char *tframe, char *abcorr, 
+	char *obsrvr, doublereal *time, logical *vistat, ftnlen inst_len, 
+	ftnlen tshape_len, ftnlen target_len, ftnlen tframe_len, ftnlen 
+	abcorr_len, ftnlen obsrvr_len)
 {
     return zzgffvu_0_(0, inst, tshape, raydir, target, tframe, abcorr, obsrvr,
 	     time, vistat, inst_len, tshape_len, target_len, tframe_len, 
 	    abcorr_len, obsrvr_len);
     }
 
-/* Subroutine */ int zzgffvin_(char *inst, char *tshape, doublereal *raydir, 
-	char *target, char *tframe, char *abcorr, char *obsrvr, ftnlen 
-	inst_len, ftnlen tshape_len, ftnlen target_len, ftnlen tframe_len, 
-	ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int zzgffvin_(cspice_t* __global_state, char *inst, char *
+	tshape, doublereal *raydir, char *target, char *tframe, char *abcorr, 
+	char *obsrvr, ftnlen inst_len, ftnlen tshape_len, ftnlen target_len, 
+	ftnlen tframe_len, ftnlen abcorr_len, ftnlen obsrvr_len)
 {
     return zzgffvu_0_(1, inst, tshape, raydir, target, tframe, abcorr, obsrvr,
 	     (doublereal *)0, (logical *)0, inst_len, tshape_len, target_len, 
 	    tframe_len, abcorr_len, obsrvr_len);
     }
 
-/* Subroutine */ int zzgffvst_(doublereal *time, logical *vistat)
+/* Subroutine */ int zzgffvst_(cspice_t* __global_state, doublereal *time, 
+	logical *vistat)
 {
     return zzgffvu_0_(2, (char *)0, (char *)0, (doublereal *)0, (char *)0, (
 	    char *)0, (char *)0, (char *)0, time, vistat, (ftnint)0, (ftnint)

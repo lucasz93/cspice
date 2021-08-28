@@ -8,8 +8,7 @@
 
 
 extern dafps_init_t __dafps_init;
-static dafps_state_t* get_dafps_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafps_state_t* get_dafps_state(cspice_t* state) {
 	if (!state->dafps)
 		state->dafps = __cspice_allocate_module(sizeof(dafps_state_t),
 	 &__dafps_init, sizeof(__dafps_init));
@@ -18,8 +17,8 @@ static dafps_state_t* get_dafps_state() {
 }
 
 /* $Procedure DAFPS ( DAF, pack summary ) */
-/* Subroutine */ int dafps_0_(int n__, integer *nd, integer *ni, doublereal *
-	dc, integer *ic, doublereal *sum)
+/* Subroutine */ int dafps_0_(cspice_t* __global_state, int n__, integer *nd, 
+	integer *ni, doublereal *dc, integer *ic, doublereal *sum)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -27,13 +26,15 @@ static dafps_state_t* get_dafps_state() {
     /* Local variables */
     integer m;
     integer n;
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
 #define dequiv (__state->equiv_0)
 #define iequiv ((integer *)__state->equiv_0)
 
     /* Module state */
-    dafps_state_t* __state = get_dafps_state();
+    dafps_state_t* __state = get_dafps_state(__global_state);
 /* $ Abstract */
 
 /*     Pack (assemble) an array summary from its double precision and */
@@ -195,16 +196,16 @@ static dafps_state_t* get_dafps_state() {
 /* Computing MIN */
     i__1 = 125, i__2 = max(0,*nd);
     n = min(i__1,i__2);
-    moved_(dc, &n, sum);
+    moved_(__global_state, dc, &n, sum);
 
 /*     The integer components must detour through an equivalence. */
 
 /* Computing MIN */
     i__1 = 250 - (n << 1), i__2 = max(0,*ni);
     m = min(i__1,i__2);
-    movei_(ic, &m, iequiv);
+    movei_(__global_state, ic, &m, iequiv);
     i__1 = (m - 1) / 2 + 1;
-    moved_(dequiv, &i__1, &sum[n]);
+    moved_(__global_state, dequiv, &i__1, &sum[n]);
     return 0;
 /* $Procedure DAFUS ( DAF, unpack summary ) */
 
@@ -473,13 +474,13 @@ L_dafus:
 /* Computing MIN */
     i__1 = 125, i__2 = max(0,*nd);
     n = min(i__1,i__2);
-    moved_(sum, &n, dc);
+    moved_(__global_state, sum, &n, dc);
 /* Computing MIN */
     i__1 = 250 - (n << 1), i__2 = max(0,*ni);
     m = min(i__1,i__2);
     i__1 = (m - 1) / 2 + 1;
-    moved_(&sum[n], &i__1, dequiv);
-    movei_(iequiv, &m, ic);
+    moved_(__global_state, &sum[n], &i__1, dequiv);
+    movei_(__global_state, iequiv, &m, ic);
     return 0;
 } /* dafps_ */
 
@@ -487,14 +488,14 @@ L_dafus:
 #undef dequiv
 
 
-/* Subroutine */ int dafps_(integer *nd, integer *ni, doublereal *dc, integer 
-	*ic, doublereal *sum)
+/* Subroutine */ int dafps_(cspice_t* __global_state, integer *nd, integer *
+	ni, doublereal *dc, integer *ic, doublereal *sum)
 {
     return dafps_0_(0, nd, ni, dc, ic, sum);
     }
 
-/* Subroutine */ int dafus_(doublereal *sum, integer *nd, integer *ni, 
-	doublereal *dc, integer *ic)
+/* Subroutine */ int dafus_(cspice_t* __global_state, doublereal *sum, 
+	integer *nd, integer *ni, doublereal *dc, integer *ic)
 {
     return dafps_0_(1, nd, ni, dc, ic, sum);
     }

@@ -8,8 +8,7 @@
 
 
 extern prompt_init_t __prompt_init;
-static prompt_state_t* get_prompt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline prompt_state_t* get_prompt_state(cspice_t* state) {
 	if (!state->prompt)
 		state->prompt = __cspice_allocate_module(sizeof(
 	prompt_state_t), &__prompt_init, sizeof(__prompt_init));
@@ -18,29 +17,32 @@ static prompt_state_t* get_prompt_state() {
 }
 
 /* $Procedure      PROMPT ( Prompt a user for a string ) */
-/* Subroutine */ int prompt_(char *prmpt, char *string, ftnlen prmpt_len, 
-	ftnlen string_len)
+/* Subroutine */ int prompt_(cspice_t* __global_state, char *prmpt, char *
+	string, ftnlen prmpt_len, ftnlen string_len)
 {
     /* System generated locals */
     integer i__1, i__2;
     cilist ci__1;
 
     /* Builtin functions */
-    integer s_wsfe(cilist *), do_fio(integer *, char *, ftnlen), e_wsfe(void),
-	     s_rsfe(cilist *), e_rsfe(void), i_len(char *, ftnlen);
+    integer s_wsfe(f2c_state_t*, cilist *), do_fio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_wsfe(f2c_state_t*), s_rsfe(f2c_state_t*, 
+	    cilist *), e_rsfe(f2c_state_t*), i_len(f2c_state_t*, char *, 
+	    ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    prompt_state_t* __state = get_prompt_state();
+    prompt_state_t* __state = get_prompt_state(__global_state);
 /* $ Abstract */
 
 /*     This routine prompts a user for keyboard input. */
@@ -351,15 +353,15 @@ static prompt_state_t* get_prompt_state() {
     ci__1.cierr = 1;
     ci__1.ciunit = 6;
     ci__1.cifmt = "(A,$)";
-    iostat = s_wsfe(&ci__1);
+    iostat = s_wsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&__state->c__1, prmpt, prmpt_len);
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, prmpt, prmpt_len);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_wsfe();
+    iostat = e_wsfe(&__global_state->f2c);
 L100001:
 
 /*     If none of the write statements above works on a particular */
@@ -379,16 +381,16 @@ L100001:
 /*     can be redirected. Better safe than confused later. */
 
     if (iostat != 0) {
-	chkin_("PROMPT", (ftnlen)6);
-	setmsg_("An error occurred while attempting to write a prompt to the"
-		" standard output device, possibly because standard output ha"
-		"s been redirected to a file. There is not much that can be d"
-		"one about this if it happens. We do not try to determine whe"
-		"ther standard output has been redirected, so be sure that th"
-		"ere are sufficient resources available for the operation bei"
-		"ng performed.", (ftnlen)372);
-	sigerr_("SPICE(WRITEFAILED)", (ftnlen)18);
-	chkout_("PROMPT", (ftnlen)6);
+	chkin_(__global_state, "PROMPT", (ftnlen)6);
+	setmsg_(__global_state, "An error occurred while attempting to write"
+		" a prompt to the standard output device, possibly because st"
+		"andard output has been redirected to a file. There is not mu"
+		"ch that can be done about this if it happens. We do not try "
+		"to determine whether standard output has been redirected, so"
+		" be sure that there are sufficient resources available for t"
+		"he operation being performed.", (ftnlen)372);
+	sigerr_(__global_state, "SPICE(WRITEFAILED)", (ftnlen)18);
+	chkout_(__global_state, "PROMPT", (ftnlen)6);
 	return 0;
     }
 
@@ -399,30 +401,30 @@ L100001:
     ci__1.ciend = 1;
     ci__1.ciunit = 5;
     ci__1.cifmt = "(A)";
-    iostat = s_rsfe(&ci__1);
+    iostat = s_rsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_fio(&__state->c__1, string, string_len);
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, string, string_len);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = e_rsfe();
+    iostat = e_rsfe(&__global_state->f2c);
 L100002:
     if (iostat != 0) {
-	chkin_("PROMPT", (ftnlen)6);
-	setmsg_("An error occurred while attempting to retrieve a reply to t"
-		"he prompt \"#\".  A possible cause is that you have exhauste"
-		"d the input buffer while attempting to type your response.  "
-		"It may help if you limit your response to # or fewer charact"
-		"ers. ", (ftnlen)242);
-	errch_("#", prmpt, (ftnlen)1, prmpt_len);
+	chkin_(__global_state, "PROMPT", (ftnlen)6);
+	setmsg_(__global_state, "An error occurred while attempting to retri"
+		"eve a reply to the prompt \"#\".  A possible cause is that y"
+		"ou have exhausted the input buffer while attempting to type "
+		"your response.  It may help if you limit your response to # "
+		"or fewer characters. ", (ftnlen)242);
+	errch_(__global_state, "#", prmpt, (ftnlen)1, prmpt_len);
 /* Computing MIN */
-	i__2 = i_len(string, string_len);
+	i__2 = i_len(&__global_state->f2c, string, string_len);
 	i__1 = min(i__2,131);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(READFAILED)", (ftnlen)17);
-	chkout_("PROMPT", (ftnlen)6);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(READFAILED)", (ftnlen)17);
+	chkout_(__global_state, "PROMPT", (ftnlen)6);
 	return 0;
     }
     return 0;

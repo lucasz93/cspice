@@ -8,28 +8,27 @@
 
 
 typedef int unormg_state_t;
-static unormg_state_t* get_unormg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline unormg_state_t* get_unormg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      UNORMG ( Unit vector and norm, general dimension ) */
-/* Subroutine */ int unormg_(doublereal *v1, integer *ndim, doublereal *vout, 
-	doublereal *vmag)
+/* Subroutine */ int unormg_(cspice_t* __global_state, doublereal *v1, 
+	integer *ndim, doublereal *vout, doublereal *vmag)
 {
     /* System generated locals */
     integer v1_dim1, vout_dim1, i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
-    extern doublereal vnormg_(doublereal *, integer *);
+    extern doublereal vnormg_(cspice_t*, doublereal *, integer *);
 
 
     /* Module state */
-    unormg_state_t* __state = get_unormg_state();
+    unormg_state_t* __state = get_unormg_state(__global_state);
 /* $ Abstract */
 
 /*     Normalize a double precision vector of arbitrary dimension and */
@@ -171,7 +170,7 @@ static unormg_state_t* get_unormg_state() {
     v1_dim1 = *ndim;
 
     /* Function Body */
-    *vmag = vnormg_(v1, ndim);
+    *vmag = vnormg_(__global_state, v1, ndim);
 
 /*   If VMAG is nonzero, then normalize.  Note that this process is */
 /*   numerically stable: overflow could only happen if VMAG were small, */
@@ -183,15 +182,17 @@ static unormg_state_t* get_unormg_state() {
 	i__1 = *ndim;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : 
-		    s_rnge("vout", i__2, "unormg_", (ftnlen)161)] = v1[(i__3 =
-		     i__ - 1) < 1 * v1_dim1 && 0 <= i__3 ? i__3 : s_rnge(
-		    "v1", i__3, "unormg_", (ftnlen)161)] / *vmag;
+		    s_rnge(&__global_state->f2c, "vout", i__2, "unormg_", (
+		    ftnlen)161)] = v1[(i__3 = i__ - 1) < 1 * v1_dim1 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "v1", i__3, 
+		    "unormg_", (ftnlen)161)] / *vmag;
 	}
     } else {
 	i__1 = *ndim;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    vout[(i__2 = i__ - 1) < 1 * vout_dim1 && 0 <= i__2 ? i__2 : 
-		    s_rnge("vout", i__2, "unormg_", (ftnlen)165)] = 0.;
+		    s_rnge(&__global_state->f2c, "vout", i__2, "unormg_", (
+		    ftnlen)165)] = 0.;
 	}
     }
 

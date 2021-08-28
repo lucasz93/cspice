@@ -8,8 +8,7 @@
 
 
 extern bodvrd_init_t __bodvrd_init;
-static bodvrd_state_t* get_bodvrd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bodvrd_state_t* get_bodvrd_state(cspice_t* state) {
 	if (!state->bodvrd)
 		state->bodvrd = __cspice_allocate_module(sizeof(
 	bodvrd_state_t), &__bodvrd_init, sizeof(__bodvrd_init));
@@ -18,42 +17,45 @@ static bodvrd_state_t* get_bodvrd_state() {
 }
 
 /* $Procedure      BODVRD ( Return d.p. values from the kernel pool ) */
-/* Subroutine */ int bodvrd_(char *bodynm, char *item, integer *maxn, integer 
-	*dim, doublereal *values, ftnlen bodynm_len, ftnlen item_len)
+/* Subroutine */ int bodvrd_(cspice_t* __global_state, char *bodynm, char *
+	item, integer *maxn, integer *dim, doublereal *values, ftnlen 
+	bodynm_len, ftnlen item_len)
 {
     /* Initialized data */
 
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char code[16];
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
     char type__[1];
-    extern /* Subroutine */ int zzctruin_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
     integer bodyid;
     char varnam[32];
-    extern /* Subroutine */ int gdpool_(char *, integer *, integer *, integer 
-	    *, doublereal *, logical *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dtpool_(char *, logical *, integer *, char *, 
+    extern /* Subroutine */ int gdpool_(cspice_t*, char *, integer *, integer 
+	    *, integer *, doublereal *, logical *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dtpool_(cspice_t*, char *, logical *, integer 
+	    *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
 	    ftnlen, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    bodvrd_state_t* __state = get_bodvrd_state();
+    bodvrd_state_t* __state = get_bodvrd_state(__global_state);
 /* $ Abstract */
 
 /*     Fetch from the kernel pool the double precision values */
@@ -383,10 +385,10 @@ static bodvrd_state_t* get_bodvrd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("BODVRD", (ftnlen)6);
+	chkin_(__global_state, "BODVRD", (ftnlen)6);
     }
 
 /*     Initialization. */
@@ -395,52 +397,57 @@ static bodvrd_state_t* get_bodvrd_state() {
 
 /*        Initialize counter. */
 
-	zzctruin_(__state->svctr1);
+	zzctruin_(__global_state, __state->svctr1);
 	__state->first = FALSE_;
     }
 
 /*     Translate the input name to an ID code. */
 
-    zzbods2c_(__state->svctr1, __state->svbdnm, &__state->svbdid, &
-	    __state->svfnd1, bodynm, &bodyid, &found, (ftnlen)36, bodynm_len);
+    zzbods2c_(__global_state, __state->svctr1, __state->svbdnm, &
+	    __state->svbdid, &__state->svfnd1, bodynm, &bodyid, &found, (
+	    ftnlen)36, bodynm_len);
     if (! found) {
-	setmsg_("The body name # could not be translated to a NAIF ID code. "
-		" The cause of this problem may be that you need an updated v"
-		"ersion of the SPICE Toolkit.", (ftnlen)147);
-	errch_("#", bodynm, (ftnlen)1, bodynm_len);
-	sigerr_("SPICE(NOTRANSLATION)", (ftnlen)20);
-	chkout_("BODVRD", (ftnlen)6);
+	setmsg_(__global_state, "The body name # could not be translated to "
+		"a NAIF ID code.  The cause of this problem may be that you n"
+		"eed an updated version of the SPICE Toolkit.", (ftnlen)147);
+	errch_(__global_state, "#", bodynm, (ftnlen)1, bodynm_len);
+	sigerr_(__global_state, "SPICE(NOTRANSLATION)", (ftnlen)20);
+	chkout_(__global_state, "BODVRD", (ftnlen)6);
 	return 0;
     }
 
 /*     Construct the variable name from BODY and ITEM. */
 
-    s_copy(varnam, "BODY", (ftnlen)32, (ftnlen)4);
-    intstr_(&bodyid, code, (ftnlen)16);
-    suffix_(code, &__state->c__0, varnam, (ftnlen)16, (ftnlen)32);
-    suffix_("_", &__state->c__0, varnam, (ftnlen)1, (ftnlen)32);
-    suffix_(item, &__state->c__0, varnam, item_len, (ftnlen)32);
+    s_copy(&__global_state->f2c, varnam, "BODY", (ftnlen)32, (ftnlen)4);
+    intstr_(__global_state, &bodyid, code, (ftnlen)16);
+    suffix_(__global_state, code, &__state->c__0, varnam, (ftnlen)16, (ftnlen)
+	    32);
+    suffix_(__global_state, "_", &__state->c__0, varnam, (ftnlen)1, (ftnlen)
+	    32);
+    suffix_(__global_state, item, &__state->c__0, varnam, item_len, (ftnlen)
+	    32);
 
 /*     Make sure the item is present in the kernel pool. */
 
-    dtpool_(varnam, &found, dim, type__, (ftnlen)32, (ftnlen)1);
+    dtpool_(__global_state, varnam, &found, dim, type__, (ftnlen)32, (ftnlen)
+	    1);
     if (! found) {
-	setmsg_("The variable # could not be found in the kernel pool.", (
-		ftnlen)53);
-	errch_("#", varnam, (ftnlen)1, (ftnlen)32);
-	sigerr_("SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
-	chkout_("BODVRD", (ftnlen)6);
+	setmsg_(__global_state, "The variable # could not be found in the ke"
+		"rnel pool.", (ftnlen)53);
+	errch_(__global_state, "#", varnam, (ftnlen)1, (ftnlen)32);
+	sigerr_(__global_state, "SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
+	chkout_(__global_state, "BODVRD", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure the item's data type is numeric. */
 
     if (*(unsigned char *)type__ != 'N') {
-	setmsg_("The data associated with variable # are not of numeric type."
-		, (ftnlen)60);
-	errch_("#", varnam, (ftnlen)1, (ftnlen)32);
-	sigerr_("SPICE(TYPEMISMATCH)", (ftnlen)19);
-	chkout_("BODVRD", (ftnlen)6);
+	setmsg_(__global_state, "The data associated with variable # are not"
+		" of numeric type.", (ftnlen)60);
+	errch_(__global_state, "#", varnam, (ftnlen)1, (ftnlen)32);
+	sigerr_(__global_state, "SPICE(TYPEMISMATCH)", (ftnlen)19);
+	chkout_(__global_state, "BODVRD", (ftnlen)6);
 	return 0;
     }
 
@@ -448,22 +455,23 @@ static bodvrd_state_t* get_bodvrd_state() {
 /*     the requested data. */
 
     if (*maxn < *dim) {
-	setmsg_("The data array associated with variable # has dimension #, "
-		"which is larger than the available space # in the output arr"
-		"ay.", (ftnlen)122);
-	errch_("#", varnam, (ftnlen)1, (ftnlen)32);
-	errint_("#", dim, (ftnlen)1);
-	errint_("#", maxn, (ftnlen)1);
-	sigerr_("SPICE(ARRAYTOOSMALL)", (ftnlen)20);
-	chkout_("BODVRD", (ftnlen)6);
+	setmsg_(__global_state, "The data array associated with variable # h"
+		"as dimension #, which is larger than the available space # i"
+		"n the output array.", (ftnlen)122);
+	errch_(__global_state, "#", varnam, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", dim, (ftnlen)1);
+	errint_(__global_state, "#", maxn, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ARRAYTOOSMALL)", (ftnlen)20);
+	chkout_(__global_state, "BODVRD", (ftnlen)6);
 	return 0;
     }
 
 /*     Grab the values.  We know at this point they're present in */
 /*     the kernel pool, so we don't check the FOUND flag. */
 
-    gdpool_(varnam, &__state->c__1, maxn, dim, values, &found, (ftnlen)32);
-    chkout_("BODVRD", (ftnlen)6);
+    gdpool_(__global_state, varnam, &__state->c__1, maxn, dim, values, &found,
+	     (ftnlen)32);
+    chkout_(__global_state, "BODVRD", (ftnlen)6);
     return 0;
 } /* bodvrd_ */
 

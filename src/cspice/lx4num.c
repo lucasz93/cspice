@@ -8,17 +8,16 @@
 
 
 typedef int lx4num_state_t;
-static lx4num_state_t* get_lx4num_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lx4num_state_t* get_lx4num_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      LX4NUM (Scan for a number) */
-/* Subroutine */ int lx4num_(char *string, integer *first, integer *last, 
-	integer *nchar, ftnlen string_len)
+/* Subroutine */ int lx4num_(cspice_t* __global_state, char *string, integer *
+	first, integer *last, integer *nchar, ftnlen string_len)
 {
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer temp;
@@ -26,14 +25,14 @@ static lx4num_state_t* get_lx4num_state() {
     integer i__;
     integer l;
     integer n;
-    extern /* Subroutine */ int lx4dec_(char *, integer *, integer *, integer 
-	    *, ftnlen);
-    extern /* Subroutine */ int lx4sgn_(char *, integer *, integer *, integer 
-	    *, ftnlen);
+    extern /* Subroutine */ int lx4dec_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
+    extern /* Subroutine */ int lx4sgn_(cspice_t*, char *, integer *, integer 
+	    *, integer *, ftnlen);
 
 
     /* Module state */
-    lx4num_state_t* __state = get_lx4num_state();
+    lx4num_state_t* __state = get_lx4num_state(__global_state);
 /* $ Abstract */
 
 /*     Scan a string from a specified starting position for the */
@@ -192,7 +191,7 @@ static lx4num_state_t* get_lx4num_state() {
 
 /* -& */
     *last = *first - 1;
-    l = i_len(string, string_len);
+    l = i_len(&__global_state->f2c, string, string_len);
 
 /*     If start is beyond the ends of the string, we  can quit now. */
 
@@ -204,7 +203,7 @@ static lx4num_state_t* get_lx4num_state() {
 /*     If this is a number, it must begin with a decimal number */
 /*     substring. */
 
-    lx4dec_(string, first, last, nchar, string_len);
+    lx4dec_(__global_state, string, first, last, nchar, string_len);
     if (*nchar > 0 && *last < l) {
 	f = *last + 1;
 	i__ = *(unsigned char *)&string[f - 1];
@@ -217,7 +216,7 @@ static lx4num_state_t* get_lx4num_state() {
 /*           if we have a signed integer. */
 
 	    ++f;
-	    lx4sgn_(string, &f, &temp, &n, string_len);
+	    lx4sgn_(__global_state, string, &f, &temp, &n, string_len);
 
 /*           If there was a signed integer, N will be bigger than */
 /*           zero and TEMP will point to the last character of */

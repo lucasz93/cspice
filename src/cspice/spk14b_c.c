@@ -424,7 +424,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spk14b_c" );
+   chkin_c ( naif_state, "spk14b_c" );
 
 
    /*

@@ -8,30 +8,30 @@
 
 
 typedef int prsint_state_t;
-static prsint_state_t* get_prsint_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline prsint_state_t* get_prsint_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   PRSINT   ( Parse integer with error checking ) */
-/* Subroutine */ int prsint_(char *string, integer *intval, ftnlen string_len)
+/* Subroutine */ int prsint_(cspice_t* __global_state, char *string, integer *
+	intval, ftnlen string_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int nparsi_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char errmsg[320];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer ptr;
 
 
     /* Module state */
-    prsint_state_t* __state = get_prsint_state();
+    prsint_state_t* __state = get_prsint_state(__global_state);
 /* $ Abstract */
 
 /*     Parse a string as an integer, encapsulating error handling. */
@@ -142,12 +142,14 @@ static prsint_state_t* get_prsint_state() {
 
 /*     Use discovery check-in. */
 
-    nparsi_(string, intval, errmsg, &ptr, string_len, (ftnlen)320);
-    if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
-	chkin_("PRSINT", (ftnlen)6);
-	setmsg_(errmsg, (ftnlen)320);
-	sigerr_("SPICE(NOTANINTEGER)", (ftnlen)19);
-	chkout_("PRSINT", (ftnlen)6);
+    nparsi_(__global_state, string, intval, errmsg, &ptr, string_len, (ftnlen)
+	    320);
+    if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (ftnlen)1) != 0)
+	     {
+	chkin_(__global_state, "PRSINT", (ftnlen)6);
+	setmsg_(__global_state, errmsg, (ftnlen)320);
+	sigerr_(__global_state, "SPICE(NOTANINTEGER)", (ftnlen)19);
+	chkout_(__global_state, "PRSINT", (ftnlen)6);
 	return 0;
     }
     return 0;

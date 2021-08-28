@@ -8,22 +8,21 @@
 
 
 typedef int zzektrap_state_t;
-static zzektrap_state_t* get_zzektrap_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzektrap_state_t* get_zzektrap_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKTRAP ( EK tree, append item ) */
-/* Subroutine */ int zzektrap_(integer *handle, integer *tree, integer *value,
-	 integer *key)
+/* Subroutine */ int zzektrap_(cspice_t* __global_state, integer *handle, 
+	integer *tree, integer *value, integer *key)
 {
-    extern /* Subroutine */ int zzektrin_(integer *, integer *, integer *, 
-	    integer *);
-    extern integer zzektrsz_(integer *, integer *);
+    extern /* Subroutine */ int zzektrin_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern integer zzektrsz_(cspice_t*, integer *, integer *);
 
 
     /* Module state */
-    zzektrap_state_t* __state = get_zzektrap_state();
+    zzektrap_state_t* __state = get_zzektrap_state(__global_state);
 /* $ Abstract */
 
 /*     Append an item to a tree.  The key indicating the location of */
@@ -154,8 +153,8 @@ static zzektrap_state_t* get_zzektrap_state() {
 
 /*     Non-SPICELIB functions */
 
-    *key = zzektrsz_(handle, tree) + 1;
-    zzektrin_(handle, tree, key, value);
+    *key = zzektrsz_(__global_state, handle, tree) + 1;
+    zzektrin_(__global_state, handle, tree, key, value);
     return 0;
 } /* zzektrap_ */
 

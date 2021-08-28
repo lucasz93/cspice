@@ -8,8 +8,7 @@
 
 
 extern lparss_init_t __lparss_init;
-static lparss_state_t* get_lparss_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline lparss_state_t* get_lparss_state(cspice_t* state) {
 	if (!state->lparss)
 		state->lparss = __cspice_allocate_module(sizeof(
 	lparss_state_t), &__lparss_init, sizeof(__lparss_init));
@@ -18,13 +17,13 @@ static lparss_state_t* get_lparss_state() {
 }
 
 /* $Procedure      LPARSS ( Parse a list of items; return a set. ) */
-/* Subroutine */ int lparss_(char *list, char *delims, char *set, ftnlen 
-	list_len, ftnlen delims_len, ftnlen set_len)
+/* Subroutine */ int lparss_(cspice_t* __global_state, char *list, char *
+	delims, char *set, ftnlen list_len, ftnlen delims_len, ftnlen set_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), i_indx(char *, char *, 
-	    ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), i_indx(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char bchr[1];
@@ -33,21 +32,23 @@ static lparss_state_t* get_lparss_state() {
     integer b;
     integer e;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical valid;
-    extern integer sizec_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int validc_(integer *, integer *, char *, ftnlen);
-    extern integer lastnb_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int insrtc_(char *, char *, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern integer sizec_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int scardc_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int validc_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int insrtc_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical return_(cspice_t*);
     integer eol;
 
 
     /* Module state */
-    lparss_state_t* __state = get_lparss_state();
+    lparss_state_t* __state = get_lparss_state(__global_state);
 /* $ Abstract */
 
 /*     Parse a list of items delimited by multiple delimiters, */
@@ -311,10 +312,10 @@ static lparss_state_t* get_lparss_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("LPARSS", (ftnlen)6);
+	chkin_(__global_state, "LPARSS", (ftnlen)6);
     }
 
 /*     Because speed is essential in many list parsing applications, */
@@ -330,7 +331,7 @@ static lparss_state_t* get_lparss_state() {
 
 /*     What is the size of the set? */
 
-    nmax = sizec_(set, set_len);
+    nmax = sizec_(__global_state, set, set_len);
 
 /*     The array has not been validated yet. */
 
@@ -338,16 +339,16 @@ static lparss_state_t* get_lparss_state() {
 
 /*     Blank list contains a blank item.  No need to validate. */
 
-    if (s_cmp(list, " ", list_len, (ftnlen)1) == 0) {
-	scardc_(&__state->c__0, set, set_len);
-	insrtc_(" ", set, (ftnlen)1, set_len);
+    if (s_cmp(&__global_state->f2c, list, " ", list_len, (ftnlen)1) == 0) {
+	scardc_(__global_state, &__state->c__0, set, set_len);
+	insrtc_(__global_state, " ", set, (ftnlen)1, set_len);
 	valid = TRUE_;
     } else {
 
 /*        Eliminate trailing blanks.  EOL is the last non-blank */
 /*        character in the list. */
 
-	eol = lastnb_(list, list_len);
+	eol = lastnb_(__global_state, list, list_len);
 
 /*        As the King said to Alice: 'Begin at the beginning. */
 /*        Continue until you reach the end. Then stop.' */
@@ -387,8 +388,8 @@ static lparss_state_t* get_lparss_state() {
 	    } else {
 		*(unsigned char *)echr = ' ';
 	    }
-	    while(e <= eol && i_indx(delims, echr, delims_len, (ftnlen)1) == 
-		    0) {
+	    while(e <= eol && i_indx(&__global_state->f2c, delims, echr, 
+		    delims_len, (ftnlen)1) == 0) {
 		++e;
 		if (e <= eol) {
 		    *(unsigned char *)echr = *(unsigned char *)&list[e - 1];
@@ -415,7 +416,8 @@ static lparss_state_t* get_lparss_state() {
 		    }
 		}
 		if (e <= eol) {
-		    if (i_indx(delims, echr, delims_len, (ftnlen)1) == 0) {
+		    if (i_indx(&__global_state->f2c, delims, echr, delims_len,
+			     (ftnlen)1) == 0) {
 
 /*                    We're looking at a non-delimiter character. */
 
@@ -442,14 +444,14 @@ static lparss_state_t* get_lparss_state() {
 		if (n < nmax) {
 		    ++n;
 		    if (e > b) {
-			s_copy(set + (n + 5) * set_len, list + (b - 1), 
-				set_len, e - 1 - (b - 1));
+			s_copy(&__global_state->f2c, set + (n + 5) * set_len, 
+				list + (b - 1), set_len, e - 1 - (b - 1));
 		    } else {
-			s_copy(set + (n + 5) * set_len, " ", set_len, (ftnlen)
-				1);
+			s_copy(&__global_state->f2c, set + (n + 5) * set_len, 
+				" ", set_len, (ftnlen)1);
 		    }
 		} else {
-		    validc_(&nmax, &nmax, set, set_len);
+		    validc_(__global_state, &nmax, &nmax, set, set_len);
 		    valid = TRUE_;
 		}
 	    }
@@ -460,12 +462,13 @@ static lparss_state_t* get_lparss_state() {
 
 	    if (valid) {
 		if (e > b) {
-		    insrtc_(list + (b - 1), set, e - 1 - (b - 1), set_len);
+		    insrtc_(__global_state, list + (b - 1), set, e - 1 - (b - 
+			    1), set_len);
 		} else {
-		    insrtc_(" ", set, (ftnlen)1, set_len);
+		    insrtc_(__global_state, " ", set, (ftnlen)1, set_len);
 		}
-		if (failed_()) {
-		    chkout_("LPARSS", (ftnlen)6);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "LPARSS", (ftnlen)6);
 		    return 0;
 		}
 	    }
@@ -480,15 +483,16 @@ static lparss_state_t* get_lparss_state() {
 /*        returning. */
 
 	if (! valid) {
-	    validc_(&nmax, &n, set, set_len);
+	    validc_(__global_state, &nmax, &n, set, set_len);
 	}
 
 /*        If the list ended with a (non-blank) delimiter, insert a */
 /*        blank item into the set. If there isn't any room, signal */
 /*        an error. */
 
-	if (i_indx(delims, list + (eol - 1), delims_len, (ftnlen)1) != 0) {
-	    insrtc_(" ", set, (ftnlen)1, set_len);
+	if (i_indx(&__global_state->f2c, delims, list + (eol - 1), delims_len,
+		 (ftnlen)1) != 0) {
+	    insrtc_(__global_state, " ", set, (ftnlen)1, set_len);
 
 /*           If INSRTC failed to insert the blank because the set */
 /*           was already full, INSRTC will have signaled an error. */
@@ -496,7 +500,7 @@ static lparss_state_t* get_lparss_state() {
 
 	}
     }
-    chkout_("LPARSS", (ftnlen)6);
+    chkout_(__global_state, "LPARSS", (ftnlen)6);
     return 0;
 } /* lparss_ */
 

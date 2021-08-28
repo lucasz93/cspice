@@ -8,20 +8,19 @@
 
 
 typedef int chbase_state_t;
-static chbase_state_t* get_chbase_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline chbase_state_t* get_chbase_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure CHBASE ( Character set base ) */
-integer chbase_(void)
+integer chbase_(cspice_t* __global_state)
 {
     /* System generated locals */
     integer ret_val;
 
 
     /* Module state */
-    chbase_state_t* __state = get_chbase_state();
+    chbase_state_t* __state = get_chbase_state(__global_state);
 /* $ Abstract */
 
 /*     Return the base value used to encode unsigned integer values */

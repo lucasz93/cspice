@@ -8,19 +8,20 @@
 
 
 typedef int elltof_state_t;
-static elltof_state_t* get_elltof_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline elltof_state_t* get_elltof_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ELLTOF ( Elliptic time of flight ) */
-/* Subroutine */ int elltof_(doublereal *ma, doublereal *ecc, doublereal *e)
+/* Subroutine */ int elltof_(cspice_t* __global_state, doublereal *ma, 
+	doublereal *ecc, doublereal *e)
 {
     /* System generated locals */
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sin(doublereal), sqrt(doublereal), cos(doublereal);
+    double sin(f2c_state_t*, doublereal), sqrt(f2c_state_t*, doublereal), cos(
+	    f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal a;
@@ -30,25 +31,25 @@ static elltof_state_t* get_elltof_state() {
     doublereal q;
     doublereal r__;
     doublereal y;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dcbrt_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dcbrt_(cspice_t*, doublereal *);
     doublereal deriv;
     doublereal m0;
-    extern doublereal twopi_(void);
+    extern doublereal twopi_(cspice_t*);
     doublereal deriv2;
     doublereal fn;
     doublereal change;
-    extern doublereal pi_(void);
-    extern doublereal halfpi_(void);
+    extern doublereal pi_(cspice_t*);
+    extern doublereal halfpi_(cspice_t*);
     doublereal qr;
     doublereal mprime;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    elltof_state_t* __state = get_elltof_state();
+    elltof_state_t* __state = get_elltof_state(__global_state);
 /* $ Abstract */
 
 /*     Solve the time of flight equation MA = E - e sin(E) for the */
@@ -199,14 +200,14 @@ static elltof_state_t* get_elltof_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ELLTOF", (ftnlen)6);
+	chkin_(__global_state, "ELLTOF", (ftnlen)6);
     }
     if (*ecc < 0. || *ecc >= 1.) {
-	sigerr_("SPICE(WRONGCONIC)", (ftnlen)17);
-	chkout_("ELLTOF", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(WRONGCONIC)", (ftnlen)17);
+	chkout_(__global_state, "ELLTOF", (ftnlen)6);
 	return 0;
     }
 
@@ -224,9 +225,10 @@ static elltof_state_t* get_elltof_state() {
 /*     So, we begin by reducing the input mean anomaly to [0,pi]. */
 
     m = abs(*ma);
-    if (m > pi_()) {
-	n = (integer) ((m - pi_()) / twopi_()) + 1;
-	mprime = m - n * twopi_();
+    if (m > pi_(__global_state)) {
+	n = (integer) ((m - pi_(__global_state)) / twopi_(__global_state)) + 
+		1;
+	mprime = m - n * twopi_(__global_state);
     } else {
 	n = 0;
 	mprime = m;
@@ -260,14 +262,14 @@ static elltof_state_t* get_elltof_state() {
 /*     provides a good initial estimate of y for all values of e. */
 
 
-    m0 = halfpi_() - *ecc;
+    m0 = halfpi_(__global_state) - *ecc;
     if (m >= m0) {
-	a = pi_() - m;
-	b = pi_() - m0;
+	a = pi_(__global_state) - m;
+	b = pi_(__global_state) - m0;
 /* Computing 2nd power */
 	d__1 = 1. - a / b;
 	y = 1. - d__1 * d__1 * (a * 2. / b + 1. - a / (*ecc + 1.));
-	*e = *ecc * sin(*ecc * y + m) + m;
+	*e = *ecc * sin(&__global_state->f2c, *ecc * y + m) + m;
 
 /*     The situation is a little more troublesome, however, when M < M0. */
 /*     For small eccentricity, the cubic */
@@ -302,17 +304,17 @@ static elltof_state_t* get_elltof_state() {
 /* Computing 2nd power */
 	d__1 = 1. - m / m0;
 	y = 1. - d__1 * d__1 * (m * 2. / m0 + 1. - m / (1. - *ecc));
-	*e = *ecc * sin(*ecc * y + m) + m;
+	*e = *ecc * sin(&__global_state->f2c, *ecc * y + m) + m;
     } else if (*ecc <= .85) {
 /* Computing 4th power */
 	d__1 = 1. - m / m0, d__1 *= d__1;
 	y = 1. - d__1 * d__1;
-	*e = *ecc * sin(*ecc * y + m) + m;
+	*e = *ecc * sin(&__global_state->f2c, *ecc * y + m) + m;
     } else if (*ecc <= .96 || m > .05) {
 /* Computing 8th power */
 	d__1 = 1. - m / m0, d__1 *= d__1, d__1 *= d__1;
 	y = 1. - d__1 * d__1;
-	*e = *ecc * sin(*ecc * y + m) + m;
+	*e = *ecc * sin(&__global_state->f2c, *ecc * y + m) + m;
     } else {
 	q = 2. / *ecc * (1. - *ecc);
 	r__ = m / *ecc * 3.;
@@ -320,10 +322,10 @@ static elltof_state_t* get_elltof_state() {
 	d__1 = q;
 /* Computing 2nd power */
 	d__2 = r__;
-	qr = sqrt(d__1 * (d__1 * d__1) + d__2 * d__2);
+	qr = sqrt(&__global_state->f2c, d__1 * (d__1 * d__1) + d__2 * d__2);
 	d__1 = r__ + qr;
 	d__2 = r__ - qr;
-	*e = dcbrt_(&d__1) + dcbrt_(&d__2);
+	*e = dcbrt_(__global_state, &d__1) + dcbrt_(__global_state, &d__2);
     }
 
 /*     Use the Newton second-order method, */
@@ -340,9 +342,9 @@ static elltof_state_t* get_elltof_state() {
 
     change = 1.;
     while(abs(change) > 1e-15) {
-	fn = *e - *ecc * sin(*e) - m;
-	deriv = 1. - *ecc * cos(*e);
-	deriv2 = *ecc * sin(*e);
+	fn = *e - *ecc * sin(&__global_state->f2c, *e) - m;
+	deriv = 1. - *ecc * cos(&__global_state->f2c, *e);
+	deriv2 = *ecc * sin(&__global_state->f2c, *e);
 /* Computing 2nd power */
 	d__1 = deriv;
 	change = fn / deriv * (fn * deriv2 / (d__1 * d__1 * 2.) + 1.);
@@ -355,12 +357,12 @@ static elltof_state_t* get_elltof_state() {
 	*e = -(*e);
     }
     if (n > 0) {
-	*e += n * twopi_();
+	*e += n * twopi_(__global_state);
     }
     if (*ma < 0.) {
 	*e = -(*e);
     }
-    chkout_("ELLTOF", (ftnlen)6);
+    chkout_(__global_state, "ELLTOF", (ftnlen)6);
     return 0;
 } /* elltof_ */
 

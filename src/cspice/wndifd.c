@@ -8,13 +8,13 @@
 
 
 typedef int wndifd_state_t;
-static wndifd_state_t* get_wndifd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wndifd_state_t* get_wndifd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      WNDIFD ( Difference two DP windows ) */
-/* Subroutine */ int wndifd_(doublereal *a, doublereal *b, doublereal *c__)
+/* Subroutine */ int wndifd_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *c__)
 {
     /* System generated locals */
     integer i__1;
@@ -26,19 +26,19 @@ static wndifd_state_t* get_wndifd_state() {
     integer acard;
     integer bcard;
     doublereal l;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer csize;
-    extern integer sized_(doublereal *);
-    extern /* Subroutine */ int copyd_(doublereal *, doublereal *);
+    extern integer sized_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int copyd_(cspice_t*, doublereal *, doublereal *);
     integer needed;
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ssized_(integer *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ssized_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     logical unrslv;
     integer apb;
     integer bpb;
@@ -48,7 +48,7 @@ static wndifd_state_t* get_wndifd_state() {
 
 
     /* Module state */
-    wndifd_state_t* __state = get_wndifd_state();
+    wndifd_state_t* __state = get_wndifd_state(__global_state);
 /* $ Abstract */
 
 /*      Place the difference of two double precision windows into */
@@ -201,31 +201,31 @@ static wndifd_state_t* get_wndifd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("WNDIFD", (ftnlen)6);
+    chkin_(__global_state, "WNDIFD", (ftnlen)6);
 
 /*     Find the cardinality of the input windows, and the allowed size */
 /*     of the output window. Also, save the size of the second window. */
 
-    acard = cardd_(a);
-    bcard = cardd_(b);
-    csize = sized_(c__);
+    acard = cardd_(__global_state, a);
+    bcard = cardd_(__global_state, b);
+    csize = sized_(__global_state, c__);
     over = 0;
 
 /*     Empty out the output window. */
 
-    ssized_(&csize, c__);
+    ssized_(__global_state, &csize, c__);
 
 /*     Let's handle the pathological cases first. */
 
     if (bcard == 0) {
-	copyd_(a, c__);
-	chkout_("WNDIFD", (ftnlen)6);
+	copyd_(__global_state, a, c__);
+	chkout_(__global_state, "WNDIFD", (ftnlen)6);
 	return 0;
     } else if (acard == 0) {
-	chkout_("WNDIFD", (ftnlen)6);
+	chkout_(__global_state, "WNDIFD", (ftnlen)6);
 	return 0;
     }
 
@@ -344,7 +344,7 @@ static wndifd_state_t* get_wndifd_state() {
 			c__[put + 5] = f;
 			c__[put + 6] = b[bpb + 5];
 			i__1 = put + 1;
-			scardd_(&i__1, c__);
+			scardd_(__global_state, &i__1, c__);
 			put += 2;
 		    } else {
 			over += 2;
@@ -389,7 +389,7 @@ static wndifd_state_t* get_wndifd_state() {
 		c__[put + 5] = f;
 		c__[put + 6] = l;
 		i__1 = put + 1;
-		scardd_(&i__1, c__);
+		scardd_(__global_state, &i__1, c__);
 		put += 2;
 	    } else {
 		over += 2;
@@ -407,15 +407,15 @@ static wndifd_state_t* get_wndifd_state() {
 
     if (over > 0) {
 	needed = over + csize;
-	setmsg_("The output window did not have sufficient room to contain t"
-		"he result of the window difference.  It has room for # endpo"
-		"ints, but # were needed to describe the difference. ", (
-		ftnlen)171);
-	errint_("#", &csize, (ftnlen)1);
-	errint_("#", &needed, (ftnlen)1);
-	sigerr_("SPICE(WINDOWEXCESS)", (ftnlen)19);
+	setmsg_(__global_state, "The output window did not have sufficient r"
+		"oom to contain the result of the window difference.  It has "
+		"room for # endpoints, but # were needed to describe the diff"
+		"erence. ", (ftnlen)171);
+	errint_(__global_state, "#", &csize, (ftnlen)1);
+	errint_(__global_state, "#", &needed, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WINDOWEXCESS)", (ftnlen)19);
     }
-    chkout_("WNDIFD", (ftnlen)6);
+    chkout_(__global_state, "WNDIFD", (ftnlen)6);
     return 0;
 } /* wndifd_ */
 

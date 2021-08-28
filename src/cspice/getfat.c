@@ -8,8 +8,7 @@
 
 
 extern getfat_init_t __getfat_init;
-static getfat_state_t* get_getfat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline getfat_state_t* get_getfat_state(cspice_t* state) {
 	if (!state->getfat)
 		state->getfat = __cspice_allocate_module(sizeof(
 	getfat_state_t), &__getfat_init, sizeof(__getfat_init));
@@ -18,8 +17,8 @@ static getfat_state_t* get_getfat_state() {
 }
 
 /* $Procedure GETFAT ( Get file architecture and type ) */
-/* Subroutine */ int getfat_(char *file, char *arch, char *kertyp, ftnlen 
-	file_len, ftnlen arch_len, ftnlen kertyp_len)
+/* Subroutine */ int getfat_(cspice_t* __global_state, char *file, char *arch,
+	 char *kertyp, ftnlen file_len, ftnlen arch_len, ftnlen kertyp_len)
 {
     /* System generated locals */
     cilist ci__1;
@@ -28,60 +27,66 @@ static getfat_state_t* get_getfat_state() {
     inlist ioin__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), f_inqu(inlist *), f_open(
-	    olist *), s_rdue(cilist *), do_uio(integer *, char *, ftnlen), 
-	    e_rdue(void), f_clos(cllist *), s_rsfe(cilist *), do_fio(integer *
-	    , char *, ftnlen), e_rsfe(void);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), f_inqu(
+	    f2c_state_t*, inlist *), f_open(f2c_state_t*, olist *), s_rdue(
+	    f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, char *, 
+	    ftnlen), e_rdue(f2c_state_t*), f_clos(f2c_state_t*, cllist *), 
+	    s_rsfe(f2c_state_t*, cilist *), do_fio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rsfe(f2c_state_t*);
 
     /* Local variables */
-    extern /* Subroutine */ int zzddhfnh_(char *, integer *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int zzddhnfo_(integer *, char *, integer *, 
-	    integer *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
+    extern /* Subroutine */ int zzddhfnh_(cspice_t*, char *, integer *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzddhgsd_(cspice_t*, char *, integer *, char *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzddhnfo_(cspice_t*, integer *, char *, 
+	    integer *, integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
     integer i__;
     char fname[255];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
     logical exist;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int idw2at_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     integer handle;
-    extern /* Subroutine */ int dafcls_(integer *);
+    extern /* Subroutine */ int dafcls_(cspice_t*, integer *);
     char filarc[32];
     integer intbff;
     logical opened;
-    extern /* Subroutine */ int dafopr_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int dafopr_(cspice_t*, char *, integer *, ftnlen);
     integer intarc;
     char idword[12];
     integer intamn;
     integer number;
     logical diropn;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int getlun_(integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int getlun_(cspice_t*, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int nextwd_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     char tmpwrd[12];
-    extern logical return_(void);
-    extern /* Subroutine */ int zzckspk_(integer *, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzckspk_(cspice_t*, integer *, char *, ftnlen)
+	    ;
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    getfat_state_t* __state = get_getfat_state();
+    getfat_state_t* __state = get_getfat_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the architecture and type of SPICE kernels. */
@@ -814,22 +819,22 @@ static getfat_state_t* get_getfat_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("GETFAT", (ftnlen)6);
+	chkin_(__global_state, "GETFAT", (ftnlen)6);
     }
 
 /*     Initialize the temporary storage variables that we use. */
 
-    s_copy(idword, " ", (ftnlen)12, (ftnlen)1);
+    s_copy(&__global_state->f2c, idword, " ", (ftnlen)12, (ftnlen)1);
 
 /*     If the filename we have is blank, signal an error and return. */
 
-    if (s_cmp(file, " ", file_len, (ftnlen)1) == 0) {
-	setmsg_("The file name is blank.", (ftnlen)23);
-	sigerr_("SPICE(BLANKFILENAME)", (ftnlen)20);
-	chkout_("GETFAT", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, file, " ", file_len, (ftnlen)1) == 0) {
+	setmsg_(__global_state, "The file name is blank.", (ftnlen)23);
+	sigerr_(__global_state, "SPICE(BLANKFILENAME)", (ftnlen)20);
+	chkout_(__global_state, "GETFAT", (ftnlen)6);
 	return 0;
     }
 
@@ -838,20 +843,22 @@ static getfat_state_t* get_getfat_state() {
 /*     the moment, as far as we know, the file is not opened. */
 
     opened = FALSE_;
-    zzddhfnh_(file, &handle, &found, file_len);
+    zzddhfnh_(__global_state, file, &handle, &found, file_len);
     if (found) {
 
 /*        If the file was recognized, we need to get the unit number */
 /*        associated with it. */
 
-	zzddhnfo_(&handle, fname, &intarc, &intbff, &intamn, &found, (ftnlen)
-		255);
+	zzddhnfo_(__global_state, &handle, fname, &intarc, &intbff, &intamn, &
+		found, (ftnlen)255);
 
 /*        Translate the architecture ID to a string and retrieve the */
 /*        logical unit to use with this file. */
 
-	zzddhgsd_("ARCH", &intarc, filarc, (ftnlen)4, (ftnlen)32);
-	zzddhhlu_(&handle, filarc, &__state->c_false, &number, (ftnlen)32);
+	zzddhgsd_(__global_state, "ARCH", &intarc, filarc, (ftnlen)4, (ftnlen)
+		32);
+	zzddhhlu_(__global_state, &handle, filarc, &__state->c_false, &number,
+		 (ftnlen)32);
 	opened = TRUE_;
     } else {
 
@@ -874,16 +881,16 @@ static getfat_state_t* get_getfat_state() {
 	ioin__1.inrecl = 0;
 	ioin__1.innrec = 0;
 	ioin__1.inblank = 0;
-	iostat = f_inqu(&ioin__1);
+	iostat = f_inqu(&__global_state->f2c, &ioin__1);
 
 /*        Not too likely, but if the INQUIRE statement fails... */
 
 	if (iostat != 0) {
-	    setmsg_("IOSTAT error in INQUIRE statement. IOSTAT = #.", (ftnlen)
-		    46);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(INQUIREERROR)", (ftnlen)19);
-	    chkout_("GETFAT", (ftnlen)6);
+	    setmsg_(__global_state, "IOSTAT error in INQUIRE statement. IOST"
+		    "AT = #.", (ftnlen)46);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INQUIREERROR)", (ftnlen)19);
+	    chkout_(__global_state, "GETFAT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -892,10 +899,11 @@ static getfat_state_t* get_getfat_state() {
 /*        not exist are considered to be open. */
 
 	if (! exist) {
-	    setmsg_("The kernel file '#' does not exist.", (ftnlen)35);
-	    errch_("#", file, (ftnlen)1, file_len);
-	    sigerr_("SPICE(FILENOTFOUND)", (ftnlen)19);
-	    chkout_("GETFAT", (ftnlen)6);
+	    setmsg_(__global_state, "The kernel file '#' does not exist.", (
+		    ftnlen)35);
+	    errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	    sigerr_(__global_state, "SPICE(FILENOTFOUND)", (ftnlen)19);
+	    chkout_(__global_state, "GETFAT", (ftnlen)6);
 	    return 0;
 	}
 
@@ -908,10 +916,11 @@ static getfat_state_t* get_getfat_state() {
 /*           All we can do is signal an error letting the caller */
 /*           know that we are helpless in this case. */
 
-	    setmsg_("The file '#' is already open.", (ftnlen)29);
-	    errch_("#", file, (ftnlen)1, file_len);
-	    sigerr_("SPICE(EXTERNALOPEN)", (ftnlen)19);
-	    chkout_("GETFAT", (ftnlen)6);
+	    setmsg_(__global_state, "The file '#' is already open.", (ftnlen)
+		    29);
+	    errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	    sigerr_(__global_state, "SPICE(EXTERNALOPEN)", (ftnlen)19);
+	    chkout_(__global_state, "GETFAT", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -927,7 +936,7 @@ static getfat_state_t* get_getfat_state() {
 /*     and see if we can locate the idword. */
 
     if (! opened) {
-	getlun_(&number);
+	getlun_(__global_state, &number);
 	o__1.oerr = 1;
 	o__1.ounit = number;
 	o__1.ofnmlen = file_len;
@@ -937,7 +946,7 @@ static getfat_state_t* get_getfat_state() {
 	o__1.oacc = "DIRECT";
 	o__1.ofm = 0;
 	o__1.oblnk = 0;
-	iostat = f_open(&o__1);
+	iostat = f_open(&__global_state->f2c, &o__1);
 
 /*     If we had trouble opening the file, try opening it as a */
 /*     sequential file. */
@@ -953,20 +962,21 @@ static getfat_state_t* get_getfat_state() {
 	    o__1.oacc = "SEQUENTIAL";
 	    o__1.ofm = 0;
 	    o__1.oblnk = 0;
-	    iostat = f_open(&o__1);
+	    iostat = f_open(&__global_state->f2c, &o__1);
 
 /*        If we still have problems opening the file, we don't have a */
 /*        clue about the file architecture and type. */
 
 	    if (iostat != 0) {
-		s_copy(arch, "?", arch_len, (ftnlen)1);
-		s_copy(kertyp, "?", kertyp_len, (ftnlen)1);
-		setmsg_("Attempt to open the file '#' failed. IOSTAT = #.", (
-			ftnlen)48);
-		errch_("#", file, (ftnlen)1, file_len);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEOPENFAILED)", (ftnlen)21);
-		chkout_("GETFAT", (ftnlen)6);
+		s_copy(&__global_state->f2c, arch, "?", arch_len, (ftnlen)1);
+		s_copy(&__global_state->f2c, kertyp, "?", kertyp_len, (ftnlen)
+			1);
+		setmsg_(__global_state, "Attempt to open the file '#' failed"
+			". IOSTAT = #.", (ftnlen)48);
+		errch_(__global_state, "#", file, (ftnlen)1, file_len);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEOPENFAILED)", (ftnlen)21);
+		chkout_(__global_state, "GETFAT", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -979,15 +989,16 @@ static getfat_state_t* get_getfat_state() {
 
     if (diropn) {
 	__state->io___14.ciunit = number;
-	iostat = s_rdue(&__state->io___14);
+	iostat = s_rdue(&__global_state->f2c, &__state->io___14);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, tmpwrd, (ftnlen)12);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, tmpwrd, (ftnlen)
+		12);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = e_rdue();
+	iostat = e_rdue(&__global_state->f2c);
 L100001:
 
 /*        If we couldn't read from the file as a direct access file with */
@@ -1005,14 +1016,14 @@ L100001:
 /*              There's nothing we can do but abandon our quest to */
 /*              determine the type of the file. */
 
-		setmsg_("The file '#' is opened as a binary SPICE kernel.  B"
-			"ut it cannot be read using a direct access read. The"
-			" value of IOSTAT returned by the attempted READ is #"
-			". ", (ftnlen)157);
-		errch_("#", file, (ftnlen)1, file_len);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		chkout_("GETFAT", (ftnlen)6);
+		setmsg_(__global_state, "The file '#' is opened as a binary "
+			"SPICE kernel.  But it cannot be read using a direct "
+			"access read. The value of IOSTAT returned by the att"
+			"empted READ is #. ", (ftnlen)157);
+		errch_(__global_state, "#", file, (ftnlen)1, file_len);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+		chkout_(__global_state, "GETFAT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1025,7 +1036,7 @@ L100001:
 	    cl__1.cerr = 0;
 	    cl__1.cunit = number;
 	    cl__1.csta = 0;
-	    f_clos(&cl__1);
+	    f_clos(&__global_state->f2c, &cl__1);
 	    o__1.oerr = 1;
 	    o__1.ounit = number;
 	    o__1.ofnmlen = file_len;
@@ -1035,20 +1046,21 @@ L100001:
 	    o__1.oacc = "SEQUENTIAL";
 	    o__1.ofm = 0;
 	    o__1.oblnk = 0;
-	    iostat = f_open(&o__1);
+	    iostat = f_open(&__global_state->f2c, &o__1);
 
 /*           If we could not open the file, we don't have a clue about */
 /*           the file architecture and type. */
 
 	    if (iostat != 0) {
-		s_copy(arch, "?", arch_len, (ftnlen)1);
-		s_copy(kertyp, "?", kertyp_len, (ftnlen)1);
-		setmsg_("Attempt to open the file '#' failed. IOSTAT = #.", (
-			ftnlen)48);
-		errch_("#", file, (ftnlen)1, file_len);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEOPENFAILED)", (ftnlen)21);
-		chkout_("GETFAT", (ftnlen)6);
+		s_copy(&__global_state->f2c, arch, "?", arch_len, (ftnlen)1);
+		s_copy(&__global_state->f2c, kertyp, "?", kertyp_len, (ftnlen)
+			1);
+		setmsg_(__global_state, "Attempt to open the file '#' failed"
+			". IOSTAT = #.", (ftnlen)48);
+		errch_(__global_state, "#", file, (ftnlen)1, file_len);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEOPENFAILED)", (ftnlen)21);
+		chkout_(__global_state, "GETFAT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1058,15 +1070,16 @@ L100001:
 	    ci__1.ciend = 1;
 	    ci__1.ciunit = number;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_rsfe(&ci__1);
+	    iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100002;
 	    }
-	    iostat = do_fio(&__state->c__1, tmpwrd, (ftnlen)12);
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, tmpwrd, (
+		    ftnlen)12);
 	    if (iostat != 0) {
 		goto L100002;
 	    }
-	    iostat = e_rsfe();
+	    iostat = e_rsfe(&__global_state->f2c);
 L100002:
 	    ;
 	}
@@ -1075,15 +1088,16 @@ L100002:
 	ci__1.ciend = 1;
 	ci__1.ciunit = number;
 	ci__1.cifmt = "(A)";
-	iostat = s_rsfe(&ci__1);
+	iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = do_fio(&__state->c__1, tmpwrd, (ftnlen)12);
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, tmpwrd, (ftnlen)
+		12);
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = e_rsfe();
+	iostat = e_rsfe(&__global_state->f2c);
 L100003:
 	;
     }
@@ -1091,18 +1105,18 @@ L100003:
 /*     If we had an error while reading, we don't recognize this file. */
 
     if (iostat != 0) {
-	s_copy(arch, "?", arch_len, (ftnlen)1);
-	s_copy(kertyp, "?", kertyp_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, arch, "?", arch_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, kertyp, "?", kertyp_len, (ftnlen)1);
 	cl__1.cerr = 0;
 	cl__1.cunit = number;
 	cl__1.csta = 0;
-	f_clos(&cl__1);
-	setmsg_("Attempt to read from file '#' failed. IOSTAT = #.", (ftnlen)
-		49);
-	errch_("#", file, (ftnlen)1, file_len);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("GETFAT", (ftnlen)6);
+	f_clos(&__global_state->f2c, &cl__1);
+	setmsg_(__global_state, "Attempt to read from file '#' failed. IOSTA"
+		"T = #.", (ftnlen)49);
+	errch_(__global_state, "#", file, (ftnlen)1, file_len);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "GETFAT", (ftnlen)6);
 	return 0;
     }
 
@@ -1113,7 +1127,7 @@ L100003:
 	cl__1.cerr = 0;
 	cl__1.cunit = number;
 	cl__1.csta = 0;
-	f_clos(&cl__1);
+	f_clos(&__global_state->f2c, &cl__1);
     }
 
 /*     At this point, we have a candidate for an ID word. To avoid */
@@ -1129,46 +1143,53 @@ L100003:
 
 /*     Identify the architecture and type, if we can. */
 
-    ljust_(tmpwrd, tmpwrd, (ftnlen)12, (ftnlen)12);
-    ucase_(tmpwrd, tmpwrd, (ftnlen)12, (ftnlen)12);
-    nextwd_(tmpwrd, idword, tmpwrd, (ftnlen)12, (ftnlen)12, (ftnlen)12);
-    if (s_cmp(idword, "DAFETF", (ftnlen)12, (ftnlen)6) == 0) {
+    ljust_(__global_state, tmpwrd, tmpwrd, (ftnlen)12, (ftnlen)12);
+    ucase_(__global_state, tmpwrd, tmpwrd, (ftnlen)12, (ftnlen)12);
+    nextwd_(__global_state, tmpwrd, idword, tmpwrd, (ftnlen)12, (ftnlen)12, (
+	    ftnlen)12);
+    if (s_cmp(&__global_state->f2c, idword, "DAFETF", (ftnlen)12, (ftnlen)6) 
+	    == 0) {
 
 /*        We have a DAF encoded transfer file. */
 
-	s_copy(arch, "XFR", arch_len, (ftnlen)3);
-	s_copy(kertyp, "DAF", kertyp_len, (ftnlen)3);
-    } else if (s_cmp(idword, "DASETF", (ftnlen)12, (ftnlen)6) == 0) {
+	s_copy(&__global_state->f2c, arch, "XFR", arch_len, (ftnlen)3);
+	s_copy(&__global_state->f2c, kertyp, "DAF", kertyp_len, (ftnlen)3);
+    } else if (s_cmp(&__global_state->f2c, idword, "DASETF", (ftnlen)12, (
+	    ftnlen)6) == 0) {
 
 /*        We have a DAS encoded transfer file. */
 
-	s_copy(arch, "XFR", arch_len, (ftnlen)3);
-	s_copy(kertyp, "DAS", kertyp_len, (ftnlen)3);
-    } else if (s_cmp(idword, "'NAIF/DAF'", (ftnlen)10, (ftnlen)10) == 0) {
+	s_copy(&__global_state->f2c, arch, "XFR", arch_len, (ftnlen)3);
+	s_copy(&__global_state->f2c, kertyp, "DAS", kertyp_len, (ftnlen)3);
+    } else if (s_cmp(&__global_state->f2c, idword, "'NAIF/DAF'", (ftnlen)10, (
+	    ftnlen)10) == 0) {
 
 /*        We have an old DAF decimal text file. */
 
-	s_copy(arch, "DEC", arch_len, (ftnlen)3);
-	s_copy(kertyp, "DAF", kertyp_len, (ftnlen)3);
-    } else if (s_cmp(idword, "NAIF/DAS", (ftnlen)8, (ftnlen)8) == 0) {
+	s_copy(&__global_state->f2c, arch, "DEC", arch_len, (ftnlen)3);
+	s_copy(&__global_state->f2c, kertyp, "DAF", kertyp_len, (ftnlen)3);
+    } else if (s_cmp(&__global_state->f2c, idword, "NAIF/DAS", (ftnlen)8, (
+	    ftnlen)8) == 0) {
 
 /*        We have a pre release DAS binary file. */
 
-	s_copy(arch, "DAS", arch_len, (ftnlen)3);
-	s_copy(kertyp, "PRE", kertyp_len, (ftnlen)3);
+	s_copy(&__global_state->f2c, arch, "DAS", arch_len, (ftnlen)3);
+	s_copy(&__global_state->f2c, kertyp, "PRE", kertyp_len, (ftnlen)3);
     } else {
 
 /*        Get the architecture and type from the ID word, if we can. */
 
-	idw2at_(idword, arch, kertyp, (ftnlen)8, arch_len, kertyp_len);
+	idw2at_(__global_state, idword, arch, kertyp, (ftnlen)8, arch_len, 
+		kertyp_len);
     }
 
 /*     If the architecture is DAF and the type is unknown, '?', then we */
 /*     have either an SPK file, a CK file, or something we don't */
 /*     understand. Let's check it out. */
 
-    if (s_cmp(arch, "DAF", arch_len, (ftnlen)3) == 0 && s_cmp(kertyp, "?", 
-	    kertyp_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, arch, "DAF", arch_len, (ftnlen)3) == 0 && 
+	    s_cmp(&__global_state->f2c, kertyp, "?", kertyp_len, (ftnlen)1) ==
+	     0) {
 
 /*        We have a DAF file and we do not know what the type is. This */
 /*        situation can occur for older SPK and CK files, before the ID */
@@ -1180,11 +1201,11 @@ L100003:
 /*        Open the file and pass the handle to the private routine */
 /*        that deals with the dirty work. */
 
-	dafopr_(file, &handle, file_len);
-	zzckspk_(&handle, kertyp, kertyp_len);
-	dafcls_(&handle);
+	dafopr_(__global_state, file, &handle, file_len);
+	zzckspk_(__global_state, &handle, kertyp, kertyp_len);
+	dafcls_(__global_state, &handle);
     }
-    chkout_("GETFAT", (ftnlen)6);
+    chkout_(__global_state, "GETFAT", (ftnlen)6);
     return 0;
 } /* getfat_ */
 

@@ -8,26 +8,26 @@
 
 
 typedef int vprojg_state_t;
-static vprojg_state_t* get_vprojg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vprojg_state_t* get_vprojg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VPROJG ( Vector projection, general dimension ) */
-/* Subroutine */ int vprojg_(doublereal *a, doublereal *b, integer *ndim, 
-	doublereal *p)
+/* Subroutine */ int vprojg_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, integer *ndim, doublereal *p)
 {
 
     doublereal scale;
     doublereal adotb;
     doublereal bdotb;
-    extern /* Subroutine */ int vsclg_(doublereal *, doublereal *, integer *, 
-	    doublereal *);
-    extern doublereal vdotg_(doublereal *, doublereal *, integer *);
+    extern /* Subroutine */ int vsclg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
+    extern doublereal vdotg_(cspice_t*, doublereal *, doublereal *, integer *)
+	    ;
 
 
     /* Module state */
-    vprojg_state_t* __state = get_vprojg_state();
+    vprojg_state_t* __state = get_vprojg_state(__global_state);
 /* $ Abstract */
 
 /*     VPROJG finds the projection of the one vector onto another */
@@ -184,8 +184,8 @@ static vprojg_state_t* get_vprojg_state() {
 /* -& */
 
 
-    adotb = vdotg_(a, b, ndim);
-    bdotb = vdotg_(b, b, ndim);
+    adotb = vdotg_(__global_state, a, b, ndim);
+    bdotb = vdotg_(__global_state, b, b, ndim);
 
     if (bdotb == 0.) {
 	scale = 0.;
@@ -193,7 +193,7 @@ static vprojg_state_t* get_vprojg_state() {
 	scale = adotb / bdotb;
     }
 
-    vsclg_(&scale, b, ndim, p);
+    vsclg_(__global_state, &scale, b, ndim, p);
 
     return 0;
 } /* vprojg_ */

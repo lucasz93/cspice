@@ -8,8 +8,7 @@
 
 
 extern trcpkg_init_t __trcpkg_init;
-static trcpkg_state_t* get_trcpkg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline trcpkg_state_t* get_trcpkg_state(cspice_t* state) {
 	if (!state->trcpkg)
 		state->trcpkg = __cspice_allocate_module(sizeof(
 	trcpkg_state_t), &__trcpkg_init, sizeof(__trcpkg_init));
@@ -18,9 +17,9 @@ static trcpkg_state_t* get_trcpkg_state() {
 }
 
 /* $Procedure      TRCPKG ( Trace package ) */
-/* Subroutine */ int trcpkg_0_(int n__, integer *depth, integer *index, char *
-	module, char *trace, char *name__, ftnlen module_len, ftnlen 
-	trace_len, ftnlen name_len)
+/* Subroutine */ int trcpkg_0_(cspice_t* __global_state, int n__, integer *
+	depth, integer *index, char *module, char *trace, char *name__, 
+	ftnlen module_len, ftnlen trace_len, ftnlen name_len)
 {
     /* Initialized data */
 
@@ -31,32 +30,35 @@ static trcpkg_state_t* get_trcpkg_state() {
     char ch__1[149], ch__2[64];
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_cat(char *, char **, integer *, integer *, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_cat(f2c_state_t*, char *, char **, integer *, 
+	    integer *, ftnlen);
 
     /* Local variables */
     integer i__;
     integer l;
     integer first;
-    extern integer rtrim_(char *, ftnlen);
-    extern logical failed_(void);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     char device[255];
-    extern /* Subroutine */ int getact_(integer *);
+    extern /* Subroutine */ int getact_(cspice_t*, integer *);
     integer action;
-    extern /* Subroutine */ int getdev_(char *, ftnlen);
+    extern /* Subroutine */ int getdev_(cspice_t*, char *, ftnlen);
     char tmpnam[80];
-    extern integer frstnb_(char *, ftnlen);
-    extern /* Subroutine */ int wrline_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wrline_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
     char string[11];
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int intstr_(cspice_t*, integer *, char *, ftnlen);
 
 
     /* Module state */
-    trcpkg_state_t* __state = get_trcpkg_state();
+    trcpkg_state_t* __state = get_trcpkg_state(__global_state);
 /* $ Abstract */
 
 /*     Maintain a trace of subroutine calls for error messages. */
@@ -474,9 +476,10 @@ static trcpkg_state_t* get_trcpkg_state() {
 
 /*     Executable Code: */
 
-    wrline_("SCREEN", "SPICE(BOGUSENTRY)", (ftnlen)6, (ftnlen)17);
-    wrline_("SCREEN", "TRCPKG: You have called an entry that performs no run"
-	    "-time function. ", (ftnlen)6, (ftnlen)69);
+    wrline_(__global_state, "SCREEN", "SPICE(BOGUSENTRY)", (ftnlen)6, (ftnlen)
+	    17);
+    wrline_(__global_state, "SCREEN", "TRCPKG: You have called an entry that"
+	    " performs no run-time function. ", (ftnlen)6, (ftnlen)69);
     return 0;
 /* $Procedure      CHKIN ( Module Check In ) */
 
@@ -762,7 +765,7 @@ L_chkin:
     if (*(unsigned char *)module != ' ') {
 	first = 1;
     } else {
-	first = frstnb_(module, module_len);
+	first = frstnb_(__global_state, module, module_len);
     }
 
 /*     Check to see if the module name is blank. */
@@ -775,18 +778,19 @@ L_chkin:
 
 	if (__state->modcnt < 100) {
 	    ++__state->modcnt;
-	    s_copy(__state->stack + (((i__1 = __state->modcnt - 1) < 100 && 0 
-		    <= i__1 ? i__1 : s_rnge("stack", i__1, "trcpkg_", (ftnlen)
+	    s_copy(&__global_state->f2c, __state->stack + (((i__1 = 
+		    __state->modcnt - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "stack", i__1, "trcpkg_", (ftnlen)
 		    785)) << 5), module + (first - 1), (ftnlen)32, module_len 
 		    - (first - 1));
 	} else {
 	    ++__state->ovrflw;
-	    getdev_(device, (ftnlen)255);
-	    wrline_(device, "SPICE(TRACEBACKOVERFLOW)", (ftnlen)255, (ftnlen)
-		    24);
-	    wrline_(device, "CHKIN:  The trace storage is completely full.  "
-		    "No further module names can be added.", (ftnlen)255, (
-		    ftnlen)84);
+	    getdev_(__global_state, device, (ftnlen)255);
+	    wrline_(__global_state, device, "SPICE(TRACEBACKOVERFLOW)", (
+		    ftnlen)255, (ftnlen)24);
+	    wrline_(__global_state, device, "CHKIN:  The trace storage is co"
+		    "mpletely full.  No further module names can be added.", (
+		    ftnlen)255, (ftnlen)84);
 	}
 
 /*        Keep track of the maximum depth encountered. */
@@ -795,10 +799,12 @@ L_chkin:
 	    __state->maxdep = __state->modcnt + __state->ovrflw;
 	}
     } else {
-	getdev_(device, (ftnlen)255);
-	wrline_(device, "SPICE(BLANKMODULENAME)", (ftnlen)255, (ftnlen)22);
-	wrline_(device, "CHKIN:  An attempt to check in was made without sup"
-		"plying a module name.", (ftnlen)255, (ftnlen)72);
+	getdev_(__global_state, device, (ftnlen)255);
+	wrline_(__global_state, device, "SPICE(BLANKMODULENAME)", (ftnlen)255,
+		 (ftnlen)22);
+	wrline_(__global_state, device, "CHKIN:  An attempt to check in was "
+		"made without supplying a module name.", (ftnlen)255, (ftnlen)
+		72);
     }
 
 /*     We're done now, so return. */
@@ -1116,45 +1122,52 @@ L_chkout:
 	    if (*(unsigned char *)module != ' ') {
 		first = 1;
 	    } else {
-		first = frstnb_(module, module_len);
+		first = frstnb_(__global_state, module, module_len);
 	    }
 /* Computing MIN */
-	    i__1 = i_len(module, module_len), i__2 = first + 31;
+	    i__1 = i_len(&__global_state->f2c, module, module_len), i__2 = 
+		    first + 31;
 	    l = min(i__1,i__2);
-	    if (s_cmp(__state->stack + (((i__1 = __state->modcnt - 1) < 100 &&
-		     0 <= i__1 ? i__1 : s_rnge("stack", i__1, "trcpkg_", (
-		    ftnlen)1144)) << 5), module + (first - 1), (ftnlen)32, l 
-		    - (first - 1)) != 0) {
-		s_copy(tmpnam, module + (first - 1), (ftnlen)80, module_len - 
-			(first - 1));
-		getdev_(device, (ftnlen)255);
-		wrline_(device, "SPICE(NAMESDONOTMATCH)", (ftnlen)255, (
-			ftnlen)22);
+	    if (s_cmp(&__global_state->f2c, __state->stack + (((i__1 = 
+		    __state->modcnt - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "stack", i__1, "trcpkg_", (ftnlen)
+		    1144)) << 5), module + (first - 1), (ftnlen)32, l - (
+		    first - 1)) != 0) {
+		s_copy(&__global_state->f2c, tmpnam, module + (first - 1), (
+			ftnlen)80, module_len - (first - 1));
+		getdev_(__global_state, device, (ftnlen)255);
+		wrline_(__global_state, device, "SPICE(NAMESDONOTMATCH)", (
+			ftnlen)255, (ftnlen)22);
 /* Writing concatenation */
 		i__3[0] = 19, a__1[0] = "CHKOUT:  Caller is ";
-		i__3[1] = rtrim_(tmpnam, (ftnlen)80), a__1[1] = tmpnam;
+		i__3[1] = rtrim_(__global_state, tmpnam, (ftnlen)80), a__1[1] 
+			= tmpnam;
 		i__3[2] = 17, a__1[2] = "; popped name is ";
-		i__3[3] = rtrim_(__state->stack + (((i__2 = __state->modcnt - 
-			1) < 100 && 0 <= i__2 ? i__2 : s_rnge("stack", i__2, 
-			"trcpkg_", (ftnlen)1149)) << 5), (ftnlen)32), a__1[3] 
-			= __state->stack + (((i__1 = __state->modcnt - 1) < 
-			100 && 0 <= i__1 ? i__1 : s_rnge("stack", i__1, "trc"
-			"pkg_", (ftnlen)1149)) << 5);
-		i__3[4] = 1, a__1[4] = ".";
-		s_cat(ch__1, a__1, i__3, &__state->c__5, (ftnlen)149);
-		wrline_(device, ch__1, (ftnlen)255, rtrim_(tmpnam, (ftnlen)80)
-			 + 36 + rtrim_(__state->stack + (((i__2 = 
+		i__3[3] = rtrim_(__global_state, __state->stack + (((i__2 = 
 			__state->modcnt - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("stack", i__2, "trcpkg_", (ftnlen)1149)) << 5),
-			 (ftnlen)32) + 1);
+			s_rnge(&__global_state->f2c, "stack", i__2, "trcpkg_",
+			 (ftnlen)1149)) << 5), (ftnlen)32), a__1[3] = 
+			__state->stack + (((i__1 = __state->modcnt - 1) < 100 
+			&& 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"stack", i__1, "trcpkg_", (ftnlen)1149)) << 5);
+		i__3[4] = 1, a__1[4] = ".";
+		s_cat(&__global_state->f2c, ch__1, a__1, i__3, &__state->c__5,
+			 (ftnlen)149);
+		wrline_(__global_state, device, ch__1, (ftnlen)255, rtrim_(
+			__global_state, tmpnam, (ftnlen)80) + 36 + rtrim_(
+			__global_state, __state->stack + (((i__2 = 
+			__state->modcnt - 1) < 100 && 0 <= i__2 ? i__2 : 
+			s_rnge(&__global_state->f2c, "stack", i__2, "trcpkg_",
+			 (ftnlen)1149)) << 5), (ftnlen)32) + 1);
 	    }
 	    --__state->modcnt;
 	} else {
-	    getdev_(device, (ftnlen)255);
-	    wrline_(device, "SPICE(TRACESTACKEMPTY)", (ftnlen)255, (ftnlen)22)
-		    ;
-	    wrline_(device, "CHKOUT: An attempt to check out was made when n"
-		    "o modules were checked in.", (ftnlen)255, (ftnlen)73);
+	    getdev_(__global_state, device, (ftnlen)255);
+	    wrline_(__global_state, device, "SPICE(TRACESTACKEMPTY)", (ftnlen)
+		    255, (ftnlen)22);
+	    wrline_(__global_state, device, "CHKOUT: An attempt to check out"
+		    " was made when no modules were checked in.", (ftnlen)255, 
+		    (ftnlen)73);
 	}
     } else {
 
@@ -1398,13 +1411,13 @@ L_trcdep:
 
 /*     Find the error handling mode. */
 
-    getact_(&action);
+    getact_(__global_state, &action);
 
 /*     If we're in 'RETURN' mode, and an error has occurred, we want to */
 /*     use the frozen version of the traceback.  Otherwise, we want to */
 /*     get the use the current module stack depth. */
 
-    if (action == 3 && failed_()) {
+    if (action == 3 && failed_(__global_state)) {
 	*depth = __state->frzcnt + __state->frzovr;
     } else {
 	*depth = __state->modcnt + __state->ovrflw;
@@ -1853,13 +1866,13 @@ L_trcnam:
 
 /*     Get the error handling mode. */
 
-    getact_(&action);
+    getact_(__global_state, &action);
 
 /*     If we're in 'RETURN' mode, and an error has occurred, we want to */
 /*     use the frozen version of the traceback.  Otherwise, we want to */
 /*     get the module name from the current traceback. */
 
-    if (action == 3 && failed_()) {
+    if (action == 3 && failed_(__global_state)) {
 
 /*        Check the input index. It must be positive and less than the */
 /*        current stack depth. */
@@ -1869,29 +1882,33 @@ L_trcnam:
 /*           Invalid index...we output the error messages directly */
 /*           in this case: */
 
-	    getdev_(device, (ftnlen)255);
-	    wrline_(device, "SPICE(INVALIDINDEX)", (ftnlen)255, (ftnlen)19);
-	    intstr_(index, string, (ftnlen)11);
+	    getdev_(__global_state, device, (ftnlen)255);
+	    wrline_(__global_state, device, "SPICE(INVALIDINDEX)", (ftnlen)
+		    255, (ftnlen)19);
+	    intstr_(__global_state, index, string, (ftnlen)11);
 /* Writing concatenation */
 	    i__4[0] = 52, a__2[0] = "TRCNAM: An invalid index was input.  Th"
 		    "e value was: ";
-	    i__4[1] = rtrim_(string, (ftnlen)11), a__2[1] = string;
+	    i__4[1] = rtrim_(__global_state, string, (ftnlen)11), a__2[1] = 
+		    string;
 	    i__4[2] = 1, a__2[2] = ".";
-	    s_cat(ch__2, a__2, i__4, &__state->c__3, (ftnlen)64);
-	    wrline_(device, ch__2, (ftnlen)255, rtrim_(string, (ftnlen)11) + 
-		    53);
+	    s_cat(&__global_state->f2c, ch__2, a__2, i__4, &__state->c__3, (
+		    ftnlen)64);
+	    wrline_(__global_state, device, ch__2, (ftnlen)255, rtrim_(
+		    __global_state, string, (ftnlen)11) + 53);
 	    return 0;
 	}
 
 /*        We're OK, so get the name or not available. */
 
 	if (*index <= 100) {
-	    s_copy(name__, __state->frozen + (((i__1 = *index - 1) < 100 && 0 
-		    <= i__1 ? i__1 : s_rnge("frozen", i__1, "trcpkg_", (
-		    ftnlen)1919)) << 5), name_len, (ftnlen)32);
+	    s_copy(&__global_state->f2c, name__, __state->frozen + (((i__1 = *
+		    index - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "frozen", i__1, "trcpkg_", (ftnlen)
+		    1919)) << 5), name_len, (ftnlen)32);
 	} else {
-	    s_copy(name__, "<Overflow No Name Available>", name_len, (ftnlen)
-		    28);
+	    s_copy(&__global_state->f2c, name__, "<Overflow No Name Availabl"
+		    "e>", name_len, (ftnlen)28);
 	}
     } else {
 
@@ -1905,29 +1922,33 @@ L_trcnam:
 /*           Invalid index...we output the error messages directly */
 /*           in this case: */
 
-	    getdev_(device, (ftnlen)255);
-	    wrline_(device, "SPICE(INVALIDINDEX)", (ftnlen)255, (ftnlen)19);
-	    intstr_(index, string, (ftnlen)11);
+	    getdev_(__global_state, device, (ftnlen)255);
+	    wrline_(__global_state, device, "SPICE(INVALIDINDEX)", (ftnlen)
+		    255, (ftnlen)19);
+	    intstr_(__global_state, index, string, (ftnlen)11);
 /* Writing concatenation */
 	    i__4[0] = 52, a__2[0] = "TRCNAM: An invalid index was input.  Th"
 		    "e value was: ";
-	    i__4[1] = rtrim_(string, (ftnlen)11), a__2[1] = string;
+	    i__4[1] = rtrim_(__global_state, string, (ftnlen)11), a__2[1] = 
+		    string;
 	    i__4[2] = 1, a__2[2] = ".";
-	    s_cat(ch__2, a__2, i__4, &__state->c__3, (ftnlen)64);
-	    wrline_(device, ch__2, (ftnlen)255, rtrim_(string, (ftnlen)11) + 
-		    53);
+	    s_cat(&__global_state->f2c, ch__2, a__2, i__4, &__state->c__3, (
+		    ftnlen)64);
+	    wrline_(__global_state, device, ch__2, (ftnlen)255, rtrim_(
+		    __global_state, string, (ftnlen)11) + 53);
 	    return 0;
 	}
 
 /*        We're OK, so get the name or name not available. */
 
 	if (*index <= 100) {
-	    s_copy(name__, __state->stack + (((i__1 = *index - 1) < 100 && 0 
-		    <= i__1 ? i__1 : s_rnge("stack", i__1, "trcpkg_", (ftnlen)
+	    s_copy(&__global_state->f2c, name__, __state->stack + (((i__1 = *
+		    index - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "stack", i__1, "trcpkg_", (ftnlen)
 		    1949)) << 5), name_len, (ftnlen)32);
 	} else {
-	    s_copy(name__, "<Overflow No Name Available>", name_len, (ftnlen)
-		    28);
+	    s_copy(&__global_state->f2c, name__, "<Overflow No Name Availabl"
+		    "e>", name_len, (ftnlen)28);
 	}
     }
     return 0;
@@ -2193,72 +2214,82 @@ L_qcktrc:
 
 /*     Be sure that the output string is empty. */
 
-    s_copy(trace, " ", trace_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, trace, " ", trace_len, (ftnlen)1);
 
 /*     Get the error handling mode. */
 
-    getact_(&action);
+    getact_(__global_state, &action);
 
 /*     If we're in 'RETURN' mode, and an error has occurred, we want to */
 /*     use the frozen version of the traceback.  Otherwise, we want to */
 /*     use the current traceback. */
 
-    if (action == 3 && failed_()) {
+    if (action == 3 && failed_(__global_state)) {
 	i__1 = __state->frzcnt;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (i__ > 1) {
-		suffix_("-->", &__state->c__1, trace, (ftnlen)3, trace_len);
-		suffix_(__state->frozen + (((i__2 = i__ - 1) < 100 && 0 <= 
-			i__2 ? i__2 : s_rnge("frozen", i__2, "trcpkg_", (
+		suffix_(__global_state, "-->", &__state->c__1, trace, (ftnlen)
+			3, trace_len);
+		suffix_(__global_state, __state->frozen + (((i__2 = i__ - 1) <
+			 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "frozen", i__2, "trcpkg_", (
 			ftnlen)2241)) << 5), &__state->c__1, trace, (ftnlen)
 			32, trace_len);
 	    } else {
-		suffix_(__state->frozen + (((i__2 = i__ - 1) < 100 && 0 <= 
-			i__2 ? i__2 : s_rnge("frozen", i__2, "trcpkg_", (
+		suffix_(__global_state, __state->frozen + (((i__2 = i__ - 1) <
+			 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "frozen", i__2, "trcpkg_", (
 			ftnlen)2243)) << 5), &__state->c__0, trace, (ftnlen)
 			32, trace_len);
 	    }
 	}
 	if (__state->frzovr > 0) {
-	    suffix_("-->", &__state->c__1, trace, (ftnlen)3, trace_len);
+	    suffix_(__global_state, "-->", &__state->c__1, trace, (ftnlen)3, 
+		    trace_len);
 	    if (__state->frzovr > 1) {
-		intstr_(&__state->frzovr, string, (ftnlen)11);
-		suffix_("<", &__state->c__1, trace, (ftnlen)1, trace_len);
-		suffix_(string, &__state->c__0, trace, (ftnlen)11, trace_len);
-		suffix_("Names Overflowed>", &__state->c__1, trace, (ftnlen)
-			17, trace_len);
+		intstr_(__global_state, &__state->frzovr, string, (ftnlen)11);
+		suffix_(__global_state, "<", &__state->c__1, trace, (ftnlen)1,
+			 trace_len);
+		suffix_(__global_state, string, &__state->c__0, trace, (
+			ftnlen)11, trace_len);
+		suffix_(__global_state, "Names Overflowed>", &__state->c__1, 
+			trace, (ftnlen)17, trace_len);
 	    } else {
-		suffix_("<One Name Overflowed>", &__state->c__1, trace, (
-			ftnlen)21, trace_len);
+		suffix_(__global_state, "<One Name Overflowed>", &
+			__state->c__1, trace, (ftnlen)21, trace_len);
 	    }
 	}
     } else {
 	i__1 = __state->modcnt;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (i__ > 1) {
-		suffix_("-->", &__state->c__1, trace, (ftnlen)3, trace_len);
-		suffix_(__state->stack + (((i__2 = i__ - 1) < 100 && 0 <= 
-			i__2 ? i__2 : s_rnge("stack", i__2, "trcpkg_", (
-			ftnlen)2268)) << 5), &__state->c__1, trace, (ftnlen)
-			32, trace_len);
+		suffix_(__global_state, "-->", &__state->c__1, trace, (ftnlen)
+			3, trace_len);
+		suffix_(__global_state, __state->stack + (((i__2 = i__ - 1) < 
+			100 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c,
+			 "stack", i__2, "trcpkg_", (ftnlen)2268)) << 5), &
+			__state->c__1, trace, (ftnlen)32, trace_len);
 	    } else {
-		suffix_(__state->stack + (((i__2 = i__ - 1) < 100 && 0 <= 
-			i__2 ? i__2 : s_rnge("stack", i__2, "trcpkg_", (
-			ftnlen)2270)) << 5), &__state->c__0, trace, (ftnlen)
-			32, trace_len);
+		suffix_(__global_state, __state->stack + (((i__2 = i__ - 1) < 
+			100 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c,
+			 "stack", i__2, "trcpkg_", (ftnlen)2270)) << 5), &
+			__state->c__0, trace, (ftnlen)32, trace_len);
 	    }
 	}
 	if (__state->ovrflw > 0) {
-	    suffix_("-->", &__state->c__1, trace, (ftnlen)3, trace_len);
+	    suffix_(__global_state, "-->", &__state->c__1, trace, (ftnlen)3, 
+		    trace_len);
 	    if (__state->ovrflw > 1) {
-		intstr_(&__state->ovrflw, string, (ftnlen)11);
-		suffix_("<", &__state->c__1, trace, (ftnlen)1, trace_len);
-		suffix_(string, &__state->c__0, trace, (ftnlen)11, trace_len);
-		suffix_("Names Overflowed>", &__state->c__1, trace, (ftnlen)
-			17, trace_len);
+		intstr_(__global_state, &__state->ovrflw, string, (ftnlen)11);
+		suffix_(__global_state, "<", &__state->c__1, trace, (ftnlen)1,
+			 trace_len);
+		suffix_(__global_state, string, &__state->c__0, trace, (
+			ftnlen)11, trace_len);
+		suffix_(__global_state, "Names Overflowed>", &__state->c__1, 
+			trace, (ftnlen)17, trace_len);
 	    } else {
-		suffix_("<One Name Overflowed>", &__state->c__1, trace, (
-			ftnlen)21, trace_len);
+		suffix_(__global_state, "<One Name Overflowed>", &
+			__state->c__1, trace, (ftnlen)21, trace_len);
 	    }
 	}
     }
@@ -2452,11 +2483,12 @@ L_freeze:
     __state->frzovr = __state->ovrflw;
     i__1 = __state->modcnt;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	s_copy(__state->frozen + (((i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 
-		: s_rnge("frozen", i__2, "trcpkg_", (ftnlen)2488)) << 5), 
-		__state->stack + (((i__5 = i__ - 1) < 100 && 0 <= i__5 ? i__5 
-		: s_rnge("stack", i__5, "trcpkg_", (ftnlen)2488)) << 5), (
-		ftnlen)32, (ftnlen)32);
+	s_copy(&__global_state->f2c, __state->frozen + (((i__2 = i__ - 1) < 
+		100 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "froz"
+		"en", i__2, "trcpkg_", (ftnlen)2488)) << 5), __state->stack + (
+		((i__5 = i__ - 1) < 100 && 0 <= i__5 ? i__5 : s_rnge(&
+		__global_state->f2c, "stack", i__5, "trcpkg_", (ftnlen)2488)) 
+		<< 5), (ftnlen)32, (ftnlen)32);
     }
     return 0;
 /* $Procedure  TRCOFF  ( Turn tracing off ) */
@@ -2640,57 +2672,61 @@ L_trcoff:
     return 0;
 } /* trcpkg_ */
 
-/* Subroutine */ int trcpkg_(integer *depth, integer *index, char *module, 
-	char *trace, char *name__, ftnlen module_len, ftnlen trace_len, 
-	ftnlen name_len)
+/* Subroutine */ int trcpkg_(cspice_t* __global_state, integer *depth, 
+	integer *index, char *module, char *trace, char *name__, ftnlen 
+	module_len, ftnlen trace_len, ftnlen name_len)
 {
     return trcpkg_0_(0, depth, index, module, trace, name__, module_len, 
 	    trace_len, name_len);
     }
 
-/* Subroutine */ int chkin_(char *module, ftnlen module_len)
+/* Subroutine */ int chkin_(cspice_t* __global_state, char *module, ftnlen 
+	module_len)
 {
     return trcpkg_0_(1, (integer *)0, (integer *)0, module, (char *)0, (char *
 	    )0, module_len, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int chkout_(char *module, ftnlen module_len)
+/* Subroutine */ int chkout_(cspice_t* __global_state, char *module, ftnlen 
+	module_len)
 {
     return trcpkg_0_(2, (integer *)0, (integer *)0, module, (char *)0, (char *
 	    )0, module_len, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int trcdep_(integer *depth)
+/* Subroutine */ int trcdep_(cspice_t* __global_state, integer *depth)
 {
     return trcpkg_0_(3, depth, (integer *)0, (char *)0, (char *)0, (char *)0, 
 	    (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int trcmxd_(integer *depth)
+/* Subroutine */ int trcmxd_(cspice_t* __global_state, integer *depth)
 {
     return trcpkg_0_(4, depth, (integer *)0, (char *)0, (char *)0, (char *)0, 
 	    (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int trcnam_(integer *index, char *name__, ftnlen name_len)
+/* Subroutine */ int trcnam_(cspice_t* __global_state, integer *index, char *
+	name__, ftnlen name_len)
 {
     return trcpkg_0_(5, (integer *)0, index, (char *)0, (char *)0, name__, (
 	    ftnint)0, (ftnint)0, name_len);
     }
 
-/* Subroutine */ int qcktrc_(char *trace, ftnlen trace_len)
+/* Subroutine */ int qcktrc_(cspice_t* __global_state, char *trace, ftnlen 
+	trace_len)
 {
     return trcpkg_0_(6, (integer *)0, (integer *)0, (char *)0, trace, (char *)
 	    0, (ftnint)0, trace_len, (ftnint)0);
     }
 
-/* Subroutine */ int freeze_(void)
+/* Subroutine */ int freeze_(cspice_t* __global_state)
 {
     return trcpkg_0_(7, (integer *)0, (integer *)0, (char *)0, (char *)0, (
 	    char *)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int trcoff_(void)
+/* Subroutine */ int trcoff_(cspice_t* __global_state)
 {
     return trcpkg_0_(8, (integer *)0, (integer *)0, (char *)0, (char *)0, (
 	    char *)0, (ftnint)0, (ftnint)0, (ftnint)0);

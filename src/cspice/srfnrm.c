@@ -8,8 +8,7 @@
 
 
 extern srfnrm_init_t __srfnrm_init;
-static srfnrm_state_t* get_srfnrm_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline srfnrm_state_t* get_srfnrm_state(cspice_t* state) {
 	if (!state->srfnrm)
 		state->srfnrm = __cspice_allocate_module(sizeof(
 	srfnrm_state_t), &__srfnrm_init, sizeof(__srfnrm_init));
@@ -18,9 +17,10 @@ static srfnrm_state_t* get_srfnrm_state() {
 }
 
 /* $Procedure SRFNRM ( Map surface points to outward normal vectors ) */
-/* Subroutine */ int srfnrm_(char *method, char *target, doublereal *et, char 
-	*fixref, integer *npts, doublereal *srfpts, doublereal *normls, 
-	ftnlen method_len, ftnlen target_len, ftnlen fixref_len)
+/* Subroutine */ int srfnrm_(cspice_t* __global_state, char *method, char *
+	target, doublereal *et, char *fixref, integer *npts, doublereal *
+	srfpts, doublereal *normls, ftnlen method_len, ftnlen target_len, 
+	ftnlen fixref_len)
 {
     /* Initialized data */
 
@@ -30,38 +30,41 @@ static srfnrm_state_t* get_srfnrm_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    double pow_dd(doublereal *, doublereal *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
-	    logical *, char *, integer *, logical *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzbodvcd_(integer *, char *, integer *, 
-	    integer *, integer *, doublereal *, ftnlen);
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzsbfnrm_(integer *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzctruin_(integer *);
+    extern /* Subroutine */ int zzbods2c_(cspice_t*, integer *, char *, 
+	    integer *, logical *, char *, integer *, logical *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int zzbodvcd_(cspice_t*, integer *, char *, 
+	    integer *, integer *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zznamfrm_(cspice_t*, integer *, char *, 
+	    integer *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzsbfnrm_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzctruin_(cspice_t*, integer *);
     integer i__;
-    extern /* Subroutine */ int zzprsmet_(integer *, char *, integer *, char *
-	    , char *, logical *, integer *, integer *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzprsmet_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, logical *, integer *, integer *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     integer n;
-    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzsrftrk_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal level;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal limit;
     doublereal a2;
     doublereal b2;
     doublereal c2;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
     integer trgcde;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     char lmbtyp[20];
     char shpstr[9];
     char subtyp[20];
@@ -72,20 +75,20 @@ static srfnrm_state_t* get_srfnrm_state() {
     integer fxclss;
     integer fxclid;
     logical surfup;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
     logical fnd;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int dskgtl_(integer *, doublereal *);
-    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int dskgtl_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int surfnm_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
 
     /* Module state */
-    srfnrm_state_t* __state = get_srfnrm_state();
+    srfnrm_state_t* __state = get_srfnrm_state(__global_state);
 /* $ Abstract */
 
 /*     Map array of surface points on a specified target body to */
@@ -1377,85 +1380,87 @@ static srfnrm_state_t* get_srfnrm_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SRFNRM", (ftnlen)6);
+    chkin_(__global_state, "SRFNRM", (ftnlen)6);
     if (__state->first) {
 
 /*        Initialize local surface counter. */
 
-	zzctruin_(__state->srfctr);
+	zzctruin_(__global_state, __state->srfctr);
 
 /*        Initialize target, frame, and radius counters. */
 
-	zzctruin_(__state->svctr1);
-	zzctruin_(__state->svctr2);
-	zzctruin_(__state->svctr3);
+	zzctruin_(__global_state, __state->svctr1);
+	zzctruin_(__global_state, __state->svctr2);
+	zzctruin_(__global_state, __state->svctr3);
     }
 
 /*     Obtain integer code for the target. */
 
-    zzbods2c_(__state->svctr1, __state->svtarg, &__state->svtcde, &
-	    __state->svfnd1, target, &trgcde, &fnd, (ftnlen)36, target_len);
-    if (failed_()) {
-	chkout_("SRFNRM", (ftnlen)6);
+    zzbods2c_(__global_state, __state->svctr1, __state->svtarg, &
+	    __state->svtcde, &__state->svfnd1, target, &trgcde, &fnd, (ftnlen)
+	    36, target_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SRFNRM", (ftnlen)6);
 	return 0;
     }
     if (! fnd) {
-	setmsg_("The target, '#', is not a recognized name for an ephemeris "
-		"object. The cause of this problem may be that you need an up"
-		"dated version of the SPICE Toolkit, or that you failed to lo"
-		"ad a kernel containing a name-ID mapping for this body.", (
-		ftnlen)234);
-	errch_("#", target, (ftnlen)1, target_len);
-	sigerr_("SPICE(IDCODENOTFOUND)", (ftnlen)21);
-	chkout_("SRFNRM", (ftnlen)6);
+	setmsg_(__global_state, "The target, '#', is not a recognized name f"
+		"or an ephemeris object. The cause of this problem may be tha"
+		"t you need an updated version of the SPICE Toolkit, or that "
+		"you failed to load a kernel containing a name-ID mapping for"
+		" this body.", (ftnlen)234);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	sigerr_(__global_state, "SPICE(IDCODENOTFOUND)", (ftnlen)21);
+	chkout_(__global_state, "SRFNRM", (ftnlen)6);
 	return 0;
     }
 
 /*     Determine the attributes of the frame designated by FIXREF. */
 
-    zznamfrm_(__state->svctr2, __state->svfref, &__state->svfxfc, fixref, &
-	    fixfid, (ftnlen)32, fixref_len);
-    frinfo_(&fixfid, &fxcent, &fxclss, &fxclid, &fnd);
-    if (failed_()) {
-	chkout_("SRFNRM", (ftnlen)6);
+    zznamfrm_(__global_state, __state->svctr2, __state->svfref, &
+	    __state->svfxfc, fixref, &fixfid, (ftnlen)32, fixref_len);
+    frinfo_(__global_state, &fixfid, &fxcent, &fxclss, &fxclid, &fnd);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SRFNRM", (ftnlen)6);
 	return 0;
     }
     if (! fnd) {
-	setmsg_("Reference frame # is not recognized by the SPICE frame subs"
-		"ystem. Possibly a required frame definition kernel has not b"
-		"een loaded.", (ftnlen)130);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	sigerr_("SPICE(NOFRAME)", (ftnlen)14);
-	chkout_("SRFNRM", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not recognized by the "
+		"SPICE frame subsystem. Possibly a required frame definition "
+		"kernel has not been loaded.", (ftnlen)130);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	sigerr_(__global_state, "SPICE(NOFRAME)", (ftnlen)14);
+	chkout_(__global_state, "SRFNRM", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure that FIXREF is centered at the target body's center. */
 
     if (fxcent != trgcde) {
-	setmsg_("Reference frame # is not centered at the target body #. The"
-		" ID code of the frame center is #.", (ftnlen)93);
-	errch_("#", fixref, (ftnlen)1, fixref_len);
-	errch_("#", target, (ftnlen)1, target_len);
-	errint_("#", &fxcent, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFRAME)", (ftnlen)19);
-	chkout_("SRFNRM", (ftnlen)6);
+	setmsg_(__global_state, "Reference frame # is not centered at the ta"
+		"rget body #. The ID code of the frame center is #.", (ftnlen)
+		93);
+	errch_(__global_state, "#", fixref, (ftnlen)1, fixref_len);
+	errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	errint_(__global_state, "#", &fxcent, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFRAME)", (ftnlen)19);
+	chkout_(__global_state, "SRFNRM", (ftnlen)6);
 	return 0;
     }
 
 /*     Check whether the surface name/ID mapping has been updated. */
 
-    zzsrftrk_(__state->srfctr, &surfup);
+    zzsrftrk_(__global_state, __state->srfctr, &surfup);
 
 /*     Initialize the SINCPT utility package for the next computation. */
 /*     The choice of initialization routine depends on the target */
 /*     surface type. */
 
-    if (__state->first || surfup || s_cmp(method, __state->prvmth, method_len,
-	     (ftnlen)500) != 0) {
+    if (__state->first || surfup || s_cmp(&__global_state->f2c, method, 
+	    __state->prvmth, method_len, (ftnlen)500) != 0) {
 
 /*        Set the previous method string to an invalid value, so it */
 /*        cannot match any future, valid input. This will force this */
@@ -1463,7 +1468,8 @@ static srfnrm_state_t* get_srfnrm_state() {
 /*        failure occurs in this branch. Once success is assured, we can */
 /*        record the current method in the previous method string. */
 
-	s_copy(__state->prvmth, " ", (ftnlen)500, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->prvmth, " ", (ftnlen)500, (
+		ftnlen)1);
 
 /*        Parse the method string. If the string is valid, the */
 /*        outputs SHAPE and SUBTYP will always be be set. However, */
@@ -1472,45 +1478,49 @@ static srfnrm_state_t* get_srfnrm_state() {
 /*        For DSK shapes, the surface list array and count will be set */
 /*        if the method string contains a surface list. */
 
-	zzprsmet_(&trgcde, method, &__state->c__100, shpstr, subtyp, &
-		__state->pri, &__state->nsurf, __state->srflst, lmbtyp, 
-		trmtyp, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20, (
-		ftnlen)20);
-	if (failed_()) {
-	    chkout_("SRFNRM", (ftnlen)6);
+	zzprsmet_(__global_state, &trgcde, method, &__state->c__100, shpstr, 
+		subtyp, &__state->pri, &__state->nsurf, __state->srflst, 
+		lmbtyp, trmtyp, method_len, (ftnlen)9, (ftnlen)20, (ftnlen)20,
+		 (ftnlen)20);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SRFNRM", (ftnlen)6);
 	    return 0;
 	}
-	if (eqstr_(shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9)) {
+	if (eqstr_(__global_state, shpstr, "ELLIPSOID", (ftnlen)9, (ftnlen)9))
+		 {
 	    __state->shape = 1;
-	} else if (eqstr_(shpstr, "DSK", (ftnlen)9, (ftnlen)3)) {
+	} else if (eqstr_(__global_state, shpstr, "DSK", (ftnlen)9, (ftnlen)3)
+		) {
 	    __state->shape = 2;
 	} else {
 
 /*           This is a backstop check. */
 
-	    setmsg_("[1] Returned shape value from method string was <#>.", (
-		    ftnlen)52);
-	    errch_("#", shpstr, (ftnlen)1, (ftnlen)9);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("SRFNRM", (ftnlen)6);
+	    setmsg_(__global_state, "[1] Returned shape value from method st"
+		    "ring was <#>.", (ftnlen)52);
+	    errch_(__global_state, "#", shpstr, (ftnlen)1, (ftnlen)9);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "SRFNRM", (ftnlen)6);
 	    return 0;
 	}
 
 /*        There should be no subtype specification in the method */
 /*        string. */
 
-	if (s_cmp(subtyp, " ", (ftnlen)20, (ftnlen)1) != 0) {
-	    setmsg_("Spurious sub-observer point type <#> was present in the"
-		    " method string #. The sub-observer type is valid in the "
-		    "method strings for SUBPNT and SUBSLR, but is not applica"
-		    "ble for SRFNRM.", (ftnlen)182);
-	    errch_("#", subtyp, (ftnlen)1, (ftnlen)20);
-	    errch_("#", method, (ftnlen)1, method_len);
-	    sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	    chkout_("SRFNRM", (ftnlen)6);
+	if (s_cmp(&__global_state->f2c, subtyp, " ", (ftnlen)20, (ftnlen)1) !=
+		 0) {
+	    setmsg_(__global_state, "Spurious sub-observer point type <#> wa"
+		    "s present in the method string #. The sub-observer type "
+		    "is valid in the method strings for SUBPNT and SUBSLR, bu"
+		    "t is not applicable for SRFNRM.", (ftnlen)182);
+	    errch_(__global_state, "#", subtyp, (ftnlen)1, (ftnlen)20);
+	    errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	    sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	    chkout_(__global_state, "SRFNRM", (ftnlen)6);
 	    return 0;
 	}
-	s_copy(__state->prvmth, method, (ftnlen)500, method_len);
+	s_copy(&__global_state->f2c, __state->prvmth, method, (ftnlen)500, 
+		method_len);
     }
 
 /*     At this point, the first pass actions were successful. */
@@ -1524,28 +1534,28 @@ static srfnrm_state_t* get_srfnrm_state() {
 
 /*           Reset counter to force lookup. */
 
-	    zzctruin_(__state->svctr3);
+	    zzctruin_(__global_state, __state->svctr3);
 	}
 
 /*        Look up target radii using counter. */
 
-	zzbodvcd_(&trgcde, "RADII", &__state->c__3, __state->svctr3, &n, 
-		__state->svradi, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("SRFNRM", (ftnlen)6);
+	zzbodvcd_(__global_state, &trgcde, "RADII", &__state->c__3, 
+		__state->svctr3, &n, __state->svradi, (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SRFNRM", (ftnlen)6);
 	    return 0;
 	}
 /* Computing MIN */
 	d__1 = min(__state->svradi[0],__state->svradi[1]);
 	if (min(d__1,__state->svradi[2]) <= 0.) {
-	    setmsg_("Body # radii should be positive but were # # #.", (
-		    ftnlen)47);
-	    errch_("#", target, (ftnlen)1, target_len);
-	    errdp_("#", __state->svradi, (ftnlen)1);
-	    errdp_("#", &__state->svradi[1], (ftnlen)1);
-	    errdp_("#", &__state->svradi[2], (ftnlen)1);
-	    sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
-	    chkout_("SRFNRM", (ftnlen)6);
+	    setmsg_(__global_state, "Body # radii should be positive but wer"
+		    "e # # #.", (ftnlen)47);
+	    errch_(__global_state, "#", target, (ftnlen)1, target_len);
+	    errdp_(__global_state, "#", __state->svradi, (ftnlen)1);
+	    errdp_(__global_state, "#", &__state->svradi[1], (ftnlen)1);
+	    errdp_(__global_state, "#", &__state->svradi[2], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADAXISLENGTH)", (ftnlen)20);
+	    chkout_(__global_state, "SRFNRM", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1558,7 +1568,7 @@ static srfnrm_state_t* get_srfnrm_state() {
 /* Computing MAX */
 	d__1 = max(__state->svradi[0],__state->svradi[1]);
 	__state->maxr = max(d__1,__state->svradi[2]);
-	dskgtl_(&__state->c__4, &ptsrfm);
+	dskgtl_(__global_state, &__state->c__4, &ptsrfm);
 	limit = ptsrfm * __state->maxr;
 
 /*        Generate normal vectors. */
@@ -1571,25 +1581,28 @@ static srfnrm_state_t* get_srfnrm_state() {
 	    d__1 = srfpts[i__ * 3 - 3] * srfpts[i__ * 3 - 3] / a2 + srfpts[
 		    i__ * 3 - 2] * srfpts[i__ * 3 - 2] / b2 + srfpts[i__ * 3 
 		    - 1] * srfpts[i__ * 3 - 1] / c2;
-	    level = pow_dd(&d__1, &__state->c_b45);
+	    level = pow_dd(&__global_state->f2c, &d__1, &__state->c_b45);
 
 /*           The test below is a distance test if the target shape */
 /*           is a sphere. For other ellipsoids, it's an approximation. */
 
 	    if ((d__1 = level - 1., abs(d__1)) >= limit) {
-		setmsg_("Input point at index # is not on the target body su"
-			"rface. The level surface parameter (x/a)**2 + (y/b)*"
-			"*2 + (z/c)**2 for this point is #.", (ftnlen)137);
-		errint_("#", &i__, (ftnlen)1);
-		errdp_("#", &level, (ftnlen)1);
-		sigerr_("SPICE(POINTNOTONSURFACE)", (ftnlen)24);
-		chkout_("SRFNRM", (ftnlen)6);
+		setmsg_(__global_state, "Input point at index # is not on th"
+			"e target body surface. The level surface parameter ("
+			"x/a)**2 + (y/b)**2 + (z/c)**2 for this point is #.", (
+			ftnlen)137);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errdp_(__global_state, "#", &level, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(POINTNOTONSURFACE)", (ftnlen)
+			24);
+		chkout_(__global_state, "SRFNRM", (ftnlen)6);
 		return 0;
 	    }
-	    surfnm_(__state->svradi, &__state->svradi[1], &__state->svradi[2],
-		     &srfpts[i__ * 3 - 3], &normls[i__ * 3 - 3]);
-	    if (failed_()) {
-		chkout_("SRFNRM", (ftnlen)6);
+	    surfnm_(__global_state, __state->svradi, &__state->svradi[1], &
+		    __state->svradi[2], &srfpts[i__ * 3 - 3], &normls[i__ * 3 
+		    - 3]);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SRFNRM", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1603,26 +1616,27 @@ static srfnrm_state_t* get_srfnrm_state() {
 /*           Use the DSK API segment buffering system to efficiently */
 /*           select relevant segments and compute normals. */
 
-	    zzsbfnrm_(&trgcde, &__state->nsurf, __state->srflst, et, &fixfid, 
-		    &srfpts[i__ * 3 - 3], &normls[i__ * 3 - 3]);
-	    if (failed_()) {
-		chkout_("SRFNRM", (ftnlen)6);
+	    zzsbfnrm_(__global_state, &trgcde, &__state->nsurf, 
+		    __state->srflst, et, &fixfid, &srfpts[i__ * 3 - 3], &
+		    normls[i__ * 3 - 3]);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "SRFNRM", (ftnlen)6);
 		return 0;
 	    }
 
 /*           Make sure normals have unit length. */
 
-	    vhatip_(&normls[i__ * 3 - 3]);
+	    vhatip_(__global_state, &normls[i__ * 3 - 3]);
 	}
     } else {
-	setmsg_("Input method <#> does not specify the target shape as eithe"
-		"r ELLIPSOID or DSK.", (ftnlen)78);
-	errch_("#", method, (ftnlen)1, method_len);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("SRFNRM", (ftnlen)6);
+	setmsg_(__global_state, "Input method <#> does not specify the targe"
+		"t shape as either ELLIPSOID or DSK.", (ftnlen)78);
+	errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "SRFNRM", (ftnlen)6);
 	return 0;
     }
-    chkout_("SRFNRM", (ftnlen)6);
+    chkout_(__global_state, "SRFNRM", (ftnlen)6);
     return 0;
 } /* srfnrm_ */
 

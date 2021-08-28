@@ -2,21 +2,18 @@
 #include "f2c.h"
 #include "fio.h"
 #include "fmt.h"
-#include "__cspice_state.h"
 
  int
-x_wSL(Void)
+x_wSL(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n = f__putbuf('\n');
 	f2c->f__hiwater = f2c->f__recpos = f2c->f__cursor = 0;
 	return(n == 0);
 }
 
  static int
-xw_end(Void)
+xw_end(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n;
 
 	if(f2c->f__nonl) {
@@ -30,9 +27,8 @@ xw_end(Void)
 }
 
  static int
-xw_rev(Void)
+xw_rev(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int n = 0;
 	if(f2c->f__workdone) {
 		n = f__putbuf('\n');
@@ -43,18 +39,17 @@ xw_rev(Void)
 }
 
 #ifdef KR_headers
-integer s_wsfe(a) cilist *a;	/*start*/
+integer s_wsfe(f2c,a) f2c_state_t *f2c; cilist *a;	/*start*/
 #else
-integer s_wsfe(cilist *a)	/*start*/
+integer s_wsfe(f2c_state_t *f2c, cilist *a)	/*start*/
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int n;
+{	int n;
 	if(!f2c->f__init) f_init();
 	f2c->f__reading=0;
 	f2c->f__sequential=1;
 	f2c->f__formatted=1;
 	f2c->f__external=1;
-	if(n=c_sfe(a)) return(n);
+	if(n=c_sfe(f2c,a)) return(n);
 	f2c->f__elist=a;
 	f2c->f__hiwater = f2c->f__cursor=f2c->f__recpos=0;
 	f2c->f__nonl = 0;

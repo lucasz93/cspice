@@ -8,28 +8,27 @@
 
 
 typedef int cardd_state_t;
-static cardd_state_t* get_cardd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cardd_state_t* get_cardd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            CARDD ( Cardinality of a double precision cell ) */
-integer cardd_(doublereal *cell)
+integer cardd_(cspice_t* __global_state, doublereal *cell)
 {
     /* System generated locals */
     integer ret_val, i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    cardd_state_t* __state = get_cardd_state();
+    cardd_state_t* __state = get_cardd_state(__global_state);
 /* $ Abstract */
 
 /*     Return the cardinality (number of elements) of a double */
@@ -191,11 +190,11 @@ integer cardd_(doublereal *cell)
 
 /*     SPICELIB functions */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0;
 	return ret_val;
     } else {
-	chkin_("CARDD", (ftnlen)5);
+	chkin_(__global_state, "CARDD", (ftnlen)5);
     }
 
 /*     Set return value, regardless of validity. */
@@ -205,32 +204,34 @@ integer cardd_(doublereal *cell)
 /*     Squeal if something is awry. */
 
     if ((integer) cell[4] < 0) {
-	setmsg_("Invalid cell size.  The size was #.", (ftnlen)35);
+	setmsg_(__global_state, "Invalid cell size.  The size was #.", (
+		ftnlen)35);
 	i__1 = (integer) cell[4];
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("CARDD", (ftnlen)5);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "CARDD", (ftnlen)5);
 	return ret_val;
     } else if ((integer) cell[5] < 0) {
-	setmsg_("Invalid cell cardinality.  The cardinality was #.", (ftnlen)
-		49);
+	setmsg_(__global_state, "Invalid cell cardinality.  The cardinality "
+		"was #.", (ftnlen)49);
 	i__1 = (integer) cell[5];
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCARDINALITY)", (ftnlen)25);
-	chkout_("CARDD", (ftnlen)5);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCARDINALITY)", (ftnlen)25);
+	chkout_(__global_state, "CARDD", (ftnlen)5);
 	return ret_val;
     } else if ((integer) cell[5] > (integer) cell[4]) {
-	setmsg_("Invalid cell cardinality; cardinality exceeds cell size.  T"
-		"he cardinality was #.  The size was #.", (ftnlen)97);
+	setmsg_(__global_state, "Invalid cell cardinality; cardinality excee"
+		"ds cell size.  The cardinality was #.  The size was #.", (
+		ftnlen)97);
 	i__1 = (integer) cell[5];
-	errint_("#", &i__1, (ftnlen)1);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
 	i__1 = (integer) cell[4];
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCARDINALITY)", (ftnlen)25);
-	chkout_("CARDD", (ftnlen)5);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCARDINALITY)", (ftnlen)25);
+	chkout_(__global_state, "CARDD", (ftnlen)5);
 	return ret_val;
     }
-    chkout_("CARDD", (ftnlen)5);
+    chkout_(__global_state, "CARDD", (ftnlen)5);
     return ret_val;
 } /* cardd_ */
 

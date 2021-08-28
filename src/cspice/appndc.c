@@ -8,33 +8,33 @@
 
 
 typedef int appndc_state_t;
-static appndc_state_t* get_appndc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline appndc_state_t* get_appndc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      APPNDC ( Append an item to a character cell ) */
-/* Subroutine */ int appndc_(char *item, char *cell, ftnlen item_len, ftnlen 
-	cell_len)
+/* Subroutine */ int appndc_(cspice_t* __global_state, char *item, char *cell,
+	 ftnlen item_len, ftnlen cell_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern integer cardc_(char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer sizec_(char *, ftnlen);
-    extern /* Subroutine */ int scardc_(integer *, char *, ftnlen);
+    extern integer cardc_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer sizec_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int scardc_(cspice_t*, integer *, char *, ftnlen);
     integer nwcard;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    appndc_state_t* __state = get_appndc_state();
+    appndc_state_t* __state = get_appndc_state(__global_state);
 /* $ Abstract */
 
 /*      Append an item to a character cell. */
@@ -173,10 +173,10 @@ static appndc_state_t* get_appndc_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("APPNDC", (ftnlen)6);
+	chkin_(__global_state, "APPNDC", (ftnlen)6);
     }
 
 /*     Check to see if the cell can accomodate the addition of a */
@@ -184,17 +184,18 @@ static appndc_state_t* get_appndc_state() {
 /*     reset the cardinality. If the cell cannot accomodate the */
 /*     addition of a new item, signal an error. */
 
-    nwcard = cardc_(cell, cell_len) + 1;
-    if (nwcard <= sizec_(cell, cell_len)) {
-	s_copy(cell + (nwcard + 5) * cell_len, item, cell_len, item_len);
-	scardc_(&nwcard, cell, cell_len);
+    nwcard = cardc_(__global_state, cell, cell_len) + 1;
+    if (nwcard <= sizec_(__global_state, cell, cell_len)) {
+	s_copy(&__global_state->f2c, cell + (nwcard + 5) * cell_len, item, 
+		cell_len, item_len);
+	scardc_(__global_state, &nwcard, cell, cell_len);
     } else {
-	setmsg_("The cell cannot accomodate the addition of the item *.", (
-		ftnlen)54);
-	errch_("*", item, (ftnlen)1, item_len);
-	sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);
+	setmsg_(__global_state, "The cell cannot accomodate the addition of "
+		"the item *.", (ftnlen)54);
+	errch_(__global_state, "*", item, (ftnlen)1, item_len);
+	sigerr_(__global_state, "SPICE(CELLTOOSMALL)", (ftnlen)19);
     }
-    chkout_("APPNDC", (ftnlen)6);
+    chkout_(__global_state, "APPNDC", (ftnlen)6);
     return 0;
 } /* appndc_ */
 

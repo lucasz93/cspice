@@ -8,20 +8,19 @@
 
 
 typedef int b1900_state_t;
-static b1900_state_t* get_b1900_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline b1900_state_t* get_b1900_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure                     B1900 ( Besselian Date 1900.0 ) */
-doublereal b1900_(void)
+doublereal b1900_(cspice_t* __global_state)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    b1900_state_t* __state = get_b1900_state();
+    b1900_state_t* __state = get_b1900_state(__global_state);
 /* $ Abstract */
 
 /*     Return the Julian Date corresponding to Besselian Date 1900.0. */

@@ -141,7 +141,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekops_c" );
+   chkin_c ( naif_state, "ekops_c" );
 
 
    ekops_ ( ( integer * ) handle );

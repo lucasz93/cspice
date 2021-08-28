@@ -8,20 +8,20 @@
 
 
 typedef int spke12_state_t;
-static spke12_state_t* get_spke12_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spke12_state_t* get_spke12_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPKE12 ( S/P Kernel, evaluate, type 12 ) */
-/* Subroutine */ int spke12_(doublereal *et, doublereal *record, doublereal *
-	state)
+/* Subroutine */ int spke12_(cspice_t* __global_state, doublereal *et, 
+	doublereal *record, doublereal *state)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer from;
@@ -29,19 +29,19 @@ static spke12_state_t* get_spke12_state() {
     integer i__;
     integer j;
     integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer to;
     doublereal locrec[129];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int hrmesp_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int hrmesp_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
     integer xstart;
 
 
     /* Module state */
-    spke12_state_t* __state = get_spke12_state();
+    spke12_state_t* __state = get_spke12_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single data record from a type 12 SPK segment. */
@@ -221,11 +221,11 @@ static spke12_state_t* get_spke12_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKE12", (ftnlen)6);
-    n = i_dnnt(record);
+    chkin_(__global_state, "SPKE12", (ftnlen)6);
+    n = i_dnnt(&__global_state->f2c, record);
 
 /*     We interpolate each state component in turn. */
 
@@ -239,21 +239,24 @@ static spke12_state_t* get_spke12_state() {
 
 	    from = (j - 1) * 6 + 3 + i__;
 	    to = (j << 1) - 1;
-	    locrec[(i__2 = to - 1) < 129 && 0 <= i__2 ? i__2 : s_rnge("locrec"
-		    , i__2, "spke12_", (ftnlen)247)] = record[from - 1];
-	    locrec[(i__2 = to) < 129 && 0 <= i__2 ? i__2 : s_rnge("locrec", 
-		    i__2, "spke12_", (ftnlen)248)] = record[from + 2];
+	    locrec[(i__2 = to - 1) < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "locrec", i__2, "spke12_", (ftnlen)
+		    247)] = record[from - 1];
+	    locrec[(i__2 = to) < 129 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "locrec", i__2, "spke12_", (ftnlen)
+		    248)] = record[from + 2];
 	}
 
 /*        Interpolate the Ith position and velocity components of the */
 /*        state. */
 
-	hrmesp_(&n, &record[1], &record[2], locrec, et, work, &state[(i__1 = 
-		i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1, 
-		"spke12_", (ftnlen)256)], &state[(i__2 = i__ + 2) < 6 && 0 <= 
-		i__2 ? i__2 : s_rnge("state", i__2, "spke12_", (ftnlen)256)]);
+	hrmesp_(__global_state, &n, &record[1], &record[2], locrec, et, work, 
+		&state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "state", i__1, "spke12_", (ftnlen)256)], 
+		&state[(i__2 = i__ + 2) < 6 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "state", i__2, "spke12_", (ftnlen)256)]);
     }
-    chkout_("SPKE12", (ftnlen)6);
+    chkout_(__global_state, "SPKE12", (ftnlen)6);
     return 0;
 } /* spke12_ */
 

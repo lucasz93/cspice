@@ -8,20 +8,19 @@
 
 
 typedef int mtxv_state_t;
-static mtxv_state_t* get_mtxv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline mtxv_state_t* get_mtxv_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      MTXV  ( Matrix transpose times vector, 3x3 ) */
-/* Subroutine */ int mtxv_(doublereal *matrix, doublereal *vin, doublereal *
-	vout)
+/* Subroutine */ int mtxv_(cspice_t* __global_state, doublereal *matrix, 
+	doublereal *vin, doublereal *vout)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
@@ -29,7 +28,7 @@ static mtxv_state_t* get_mtxv_state() {
 
 
     /* Module state */
-    mtxv_state_t* __state = get_mtxv_state();
+    mtxv_state_t* __state = get_mtxv_state(__global_state);
 /* $ Abstract */
 
 /*     MTXV multiplies the transpose of a 3x3 matrix on the left with */
@@ -191,13 +190,15 @@ static mtxv_state_t* get_mtxv_state() {
 /*  Perform the matrix-vector multiplication */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	prodv[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("prodv", i__1,
-		 "mtxv_", (ftnlen)179)] = matrix[(i__2 = i__ * 3 - 3) < 9 && 
-		0 <= i__2 ? i__2 : s_rnge("matrix", i__2, "mtxv_", (ftnlen)
-		179)] * vin[0] + matrix[(i__3 = i__ * 3 - 2) < 9 && 0 <= i__3 
-		? i__3 : s_rnge("matrix", i__3, "mtxv_", (ftnlen)179)] * vin[
-		1] + matrix[(i__4 = i__ * 3 - 1) < 9 && 0 <= i__4 ? i__4 : 
-		s_rnge("matrix", i__4, "mtxv_", (ftnlen)179)] * vin[2];
+	prodv[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "prodv", i__1, "mtxv_", (ftnlen)179)] = 
+		matrix[(i__2 = i__ * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "matrix", i__2, "mtxv_", (ftnlen)179)] * 
+		vin[0] + matrix[(i__3 = i__ * 3 - 2) < 9 && 0 <= i__3 ? i__3 :
+		 s_rnge(&__global_state->f2c, "matrix", i__3, "mtxv_", (
+		ftnlen)179)] * vin[1] + matrix[(i__4 = i__ * 3 - 1) < 9 && 0 
+		<= i__4 ? i__4 : s_rnge(&__global_state->f2c, "matrix", i__4, 
+		"mtxv_", (ftnlen)179)] * vin[2];
     }
 
 /*  Move the result into VOUT */

@@ -8,8 +8,7 @@
 
 
 extern zzekpage_init_t __zzekpage_init;
-static zzekpage_state_t* get_zzekpage_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekpage_state_t* get_zzekpage_state(cspice_t* state) {
 	if (!state->zzekpage)
 		state->zzekpage = __cspice_allocate_module(sizeof(
 	zzekpage_state_t), &__zzekpage_init, sizeof(__zzekpage_init));
@@ -18,58 +17,65 @@ static zzekpage_state_t* get_zzekpage_state() {
 }
 
 /* $Procedure  ZZEKPAGE ( Private: Manage EK DAS paging system ) */
-/* Subroutine */ int zzekpage_0_(int n__, integer *handle, integer *type__, 
-	integer *addrss, char *stat, integer *p, char *pagec, doublereal *
-	paged, integer *pagei, integer *base, integer *value, ftnlen stat_len,
-	 ftnlen pagec_len)
+/* Subroutine */ int zzekpage_0_(cspice_t* __global_state, int n__, integer *
+	handle, integer *type__, integer *addrss, char *stat, integer *p, 
+	char *pagec, doublereal *paged, integer *pagei, integer *base, 
+	integer *value, ftnlen stat_len, ftnlen pagec_len)
 {
     /* System generated locals */
     integer i__1;
     doublereal d__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_dnnt(f2c_state_t*, doublereal *), i_len(f2c_state_t*, char *, 
+	    ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int fillc_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
 	    ftnlen);
-    extern /* Subroutine */ int filld_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int filli_(integer *, integer *, integer *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dasadc_(integer *, integer *, integer *, 
-	    integer *, char *, ftnlen);
-    extern /* Subroutine */ int dasadd_(integer *, integer *, doublereal *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int prtdec_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int fillc_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern /* Subroutine */ int filld_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
-    extern /* Subroutine */ int dasudc_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int filli_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dasadc_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int dasudd_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int dasadd_(cspice_t*, integer *, integer *, 
 	    doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int prtenc_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasadi_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int daslla_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dassih_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasrdc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int prtdec_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int dasrdd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int dasudc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasudd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int prtenc_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
     /* Module state */
-    zzekpage_state_t* __state = get_zzekpage_state();
+    zzekpage_state_t* __state = get_zzekpage_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -447,7 +453,7 @@ static zzekpage_state_t* get_zzekpage_state() {
 	case 13: goto L_zzekpgst;
 	}
 
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
     return 0;
 /* $Procedure  ZZEKPGIN ( Private: Initialize DAS for paged access ) */
 
@@ -573,59 +579,68 @@ L_zzekpgin:
 /* -    Beta Version 1.0.0, 18-OCT-1995 (NJB) */
 
 /* -& */
-    chkin_("ZZEKPGIN", (ftnlen)8);
+    chkin_(__global_state, "ZZEKPGIN", (ftnlen)8);
 
 /*     The file must be open for write access. */
 
-    dassih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZEKPGIN", (ftnlen)8);
+    dassih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZEKPGIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Find out which addresses are already in use.  A file containing */
 /*     data cannot be initialized. */
 
-    daslla_(handle, &__state->lastc, &__state->lastd, &__state->lasti);
+    daslla_(__global_state, handle, &__state->lastc, &__state->lastd, &
+	    __state->lasti);
     if (__state->lastc > 0 || __state->lastd > 0 || __state->lasti > 0) {
-	setmsg_("File # contains data; LASTC = #; LASTD = #; LASTI = #.", (
-		ftnlen)54);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &__state->lastc, (ftnlen)1);
-	errint_("#", &__state->lastd, (ftnlen)1);
-	errint_("#", &__state->lasti, (ftnlen)1);
-	sigerr_("SPICE(DASNOTEMPTY)", (ftnlen)18);
-	chkout_("ZZEKPGIN", (ftnlen)8);
+	setmsg_(__global_state, "File # contains data; LASTC = #; LASTD = #;"
+		" LASTI = #.", (ftnlen)54);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &__state->lastc, (ftnlen)1);
+	errint_(__global_state, "#", &__state->lastd, (ftnlen)1);
+	errint_(__global_state, "#", &__state->lasti, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DASNOTEMPTY)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKPGIN", (ftnlen)8);
 	return 0;
     }
 
 /*     Initialize our fill buffers. */
 
-    fillc_(" ", &__state->c__1, __state->cfill, (ftnlen)1, (ftnlen)1024);
-    filld_(&__state->c_b15, &__state->c__128, __state->dfill);
-    filli_(&__state->c__0, &__state->c__256, __state->ifill);
+    fillc_(__global_state, " ", &__state->c__1, __state->cfill, (ftnlen)1, (
+	    ftnlen)1024);
+    filld_(__global_state, &__state->c_b15, &__state->c__128, __state->dfill);
+    filli_(__global_state, &__state->c__0, &__state->c__256, __state->ifill);
 
 /*     Initialize enough integer addresses to hold the metadata area. */
 
-    dasadi_(handle, &__state->c__256, __state->ifill);
+    dasadi_(__global_state, handle, &__state->c__256, __state->ifill);
 
 /*     Set the architecture code. */
 
-    dasudi_(handle, &__state->c__1, &__state->c__1, &__state->c__8);
+    dasudi_(__global_state, handle, &__state->c__1, &__state->c__1, &
+	    __state->c__8);
 
 /*     Set the page sizes and base addresses. */
 
-    dasudi_(handle, &__state->c__2, &__state->c__2, &__state->c__1024);
-    dasudi_(handle, &__state->c__7, &__state->c__7, &__state->c__128);
-    dasudi_(handle, &__state->c__12, &__state->c__12, &__state->c__256);
-    dasudi_(handle, &__state->c__3, &__state->c__3, &__state->c__0);
-    dasudi_(handle, &__state->c__8, &__state->c__8, &__state->c__0);
-    dasudi_(handle, &__state->c__13, &__state->c__13, &__state->c__256);
+    dasudi_(__global_state, handle, &__state->c__2, &__state->c__2, &
+	    __state->c__1024);
+    dasudi_(__global_state, handle, &__state->c__7, &__state->c__7, &
+	    __state->c__128);
+    dasudi_(__global_state, handle, &__state->c__12, &__state->c__12, &
+	    __state->c__256);
+    dasudi_(__global_state, handle, &__state->c__3, &__state->c__3, &
+	    __state->c__0);
+    dasudi_(__global_state, handle, &__state->c__8, &__state->c__8, &
+	    __state->c__0);
+    dasudi_(__global_state, handle, &__state->c__13, &__state->c__13, &
+	    __state->c__256);
 
 /*     Since the integer fill value is zero, and since zero is */
 /*     interpreted as null pointer, all pointers are initialized. */
 
-    chkout_("ZZEKPGIN", (ftnlen)8);
+    chkout_(__global_state, "ZZEKPGIN", (ftnlen)8);
     return 0;
 /* $Procedure  ZZEKPGAN ( Private: EK, allocate new page ) */
 
@@ -762,54 +777,61 @@ L_zzekpgan:
 /* -    Beta Version 1.0.0, 18-OCT-1995 (NJB) */
 
 /* -& */
-    chkin_("ZZEKPGAN", (ftnlen)8);
+    chkin_(__global_state, "ZZEKPGAN", (ftnlen)8);
 
 /*     Validate the file. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZEKPGAN", (ftnlen)8);
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZEKPGAN", (ftnlen)8);
 	return 0;
     }
     if (*type__ == 1) {
 
 /*        The new page follows the last character address. */
 
-	dasadc_(handle, &__state->c__1024, &__state->c__1, &__state->c__1024, 
-		__state->cfill, (ftnlen)1024);
+	dasadc_(__global_state, handle, &__state->c__1024, &__state->c__1, &
+		__state->c__1024, __state->cfill, (ftnlen)1024);
 
 /*        Update the character page count. */
 
-	dasrdi_(handle, &__state->c__4, &__state->c__4, &__state->npc);
+	dasrdi_(__global_state, handle, &__state->c__4, &__state->c__4, &
+		__state->npc);
 	i__1 = __state->npc + 1;
-	dasudi_(handle, &__state->c__4, &__state->c__4, &i__1);
+	dasudi_(__global_state, handle, &__state->c__4, &__state->c__4, &i__1)
+		;
 
 /*        Set the page number and base address. */
 
 	*p = __state->npc + 1;
 	*base = __state->npc << 10;
     } else if (*type__ == 2) {
-	dasadd_(handle, &__state->c__128, __state->dfill);
-	dasrdi_(handle, &__state->c__9, &__state->c__9, &__state->npd);
+	dasadd_(__global_state, handle, &__state->c__128, __state->dfill);
+	dasrdi_(__global_state, handle, &__state->c__9, &__state->c__9, &
+		__state->npd);
 	i__1 = __state->npd + 1;
-	dasudi_(handle, &__state->c__9, &__state->c__9, &i__1);
+	dasudi_(__global_state, handle, &__state->c__9, &__state->c__9, &i__1)
+		;
 	*p = __state->npd + 1;
 	*base = __state->npd << 7;
     } else if (*type__ == 3) {
-	dasadi_(handle, &__state->c__256, __state->ifill);
-	dasrdi_(handle, &__state->c__14, &__state->c__14, &__state->npi);
+	dasadi_(__global_state, handle, &__state->c__256, __state->ifill);
+	dasrdi_(__global_state, handle, &__state->c__14, &__state->c__14, &
+		__state->npi);
 	i__1 = __state->npi + 1;
-	dasudi_(handle, &__state->c__14, &__state->c__14, &i__1);
+	dasudi_(__global_state, handle, &__state->c__14, &__state->c__14, &
+		i__1);
 	*p = __state->npi + 1;
 	*base = (__state->npi << 8) + 256;
     } else {
-	setmsg_("The data type code # was not recognized.", (ftnlen)40);
-	errint_("#", type__, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("ZZEKPGAN", (ftnlen)8);
+	setmsg_(__global_state, "The data type code # was not recognized.", (
+		ftnlen)40);
+	errint_(__global_state, "#", type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKPGAN", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZEKPGAN", (ftnlen)8);
+    chkout_(__global_state, "ZZEKPGAN", (ftnlen)8);
     return 0;
 /* $Procedure  ZZEKPGAL ( Private: EK, allocate page ) */
 
@@ -942,13 +964,13 @@ L_zzekpgal:
 /* -    Beta Version 1.0.0, 18-OCT-1995 (NJB) */
 
 /* -& */
-    chkin_("ZZEKPGAL", (ftnlen)8);
+    chkin_(__global_state, "ZZEKPGAL", (ftnlen)8);
 
 /*     Validate the file. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZEKPGAL", (ftnlen)8);
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZEKPGAL", (ftnlen)8);
 	return 0;
     }
     if (*type__ == 1) {
@@ -956,7 +978,8 @@ L_zzekpgal:
 /*        If the character free list is non-empty, take a page from */
 /*        that list. */
 
-	dasrdi_(handle, &__state->c__6, &__state->c__6, &__state->freec);
+	dasrdi_(__global_state, handle, &__state->c__6, &__state->c__6, &
+		__state->freec);
 	if (__state->freec > 0) {
 
 /*           We'll return the first free page. */
@@ -968,18 +991,23 @@ L_zzekpgal:
 
 	    __state->addr__ = (__state->freec - 1 << 10) + 1;
 	    i__1 = __state->addr__ + 4;
-	    dasrdc_(handle, &__state->addr__, &i__1, &__state->c__1, &
-		    __state->c__5, __state->encpag, (ftnlen)5);
-	    prtdec_(__state->encpag, &__state->forwrd, (ftnlen)5);
+	    dasrdc_(__global_state, handle, &__state->addr__, &i__1, &
+		    __state->c__1, &__state->c__5, __state->encpag, (ftnlen)5)
+		    ;
+	    prtdec_(__global_state, __state->encpag, &__state->forwrd, (
+		    ftnlen)5);
 	    __state->freec = __state->forwrd;
 
 /*           Decrement the free page count, and write the free pointer */
 /*           back to the file. */
 
-	    dasrdi_(handle, &__state->c__5, &__state->c__5, &__state->nfreec);
+	    dasrdi_(__global_state, handle, &__state->c__5, &__state->c__5, &
+		    __state->nfreec);
 	    i__1 = __state->nfreec - 1;
-	    dasudi_(handle, &__state->c__5, &__state->c__5, &i__1);
-	    dasudi_(handle, &__state->c__6, &__state->c__6, &__state->freec);
+	    dasudi_(__global_state, handle, &__state->c__5, &__state->c__5, &
+		    i__1);
+	    dasudi_(__global_state, handle, &__state->c__6, &__state->c__6, &
+		    __state->freec);
 
 /*           Set base address. */
 
@@ -988,14 +1016,16 @@ L_zzekpgal:
 
 /*           The new page follows the last character address. */
 
-	    dasadc_(handle, &__state->c__1024, &__state->c__1, &
-		    __state->c__1024, __state->cfill, (ftnlen)1024);
+	    dasadc_(__global_state, handle, &__state->c__1024, &__state->c__1,
+		     &__state->c__1024, __state->cfill, (ftnlen)1024);
 
 /*           Update the character page count. */
 
-	    dasrdi_(handle, &__state->c__4, &__state->c__4, &__state->npc);
+	    dasrdi_(__global_state, handle, &__state->c__4, &__state->c__4, &
+		    __state->npc);
 	    i__1 = __state->npc + 1;
-	    dasudi_(handle, &__state->c__4, &__state->c__4, &i__1);
+	    dasudi_(__global_state, handle, &__state->c__4, &__state->c__4, &
+		    i__1);
 
 /*           Set the page number and base address. */
 
@@ -1007,7 +1037,8 @@ L_zzekpgal:
 /*        If the d.p. free list is non-empty, take a page from */
 /*        that list. */
 
-	dasrdi_(handle, &__state->c__11, &__state->c__11, &__state->freed);
+	dasrdi_(__global_state, handle, &__state->c__11, &__state->c__11, &
+		__state->freed);
 	if (__state->freed > 0) {
 
 /*           We'll return the first free page. */
@@ -1018,19 +1049,20 @@ L_zzekpgal:
 /*           any.  Obtain the forward pointer from the page. */
 
 	    __state->addr__ = (__state->freed - 1 << 7) + 1;
-	    dasrdd_(handle, &__state->addr__, &__state->addr__, &
-		    __state->dpptr);
-	    __state->freed = i_dnnt(&__state->dpptr);
+	    dasrdd_(__global_state, handle, &__state->addr__, &
+		    __state->addr__, &__state->dpptr);
+	    __state->freed = i_dnnt(&__global_state->f2c, &__state->dpptr);
 
 /*           Decrement the free page count, and write the free pointer */
 /*           back to the file. */
 
-	    dasrdi_(handle, &__state->c__10, &__state->c__10, &
-		    __state->nfreed);
+	    dasrdi_(__global_state, handle, &__state->c__10, &__state->c__10, 
+		    &__state->nfreed);
 	    i__1 = __state->nfreed - 1;
-	    dasudi_(handle, &__state->c__10, &__state->c__10, &i__1);
-	    dasudi_(handle, &__state->c__11, &__state->c__11, &__state->freed)
-		    ;
+	    dasudi_(__global_state, handle, &__state->c__10, &__state->c__10, 
+		    &i__1);
+	    dasudi_(__global_state, handle, &__state->c__11, &__state->c__11, 
+		    &__state->freed);
 
 /*           Set base address. */
 
@@ -1039,13 +1071,15 @@ L_zzekpgal:
 
 /*           The new page follows the last d.p. address. */
 
-	    dasadd_(handle, &__state->c__128, __state->dfill);
+	    dasadd_(__global_state, handle, &__state->c__128, __state->dfill);
 
 /*           Update the d.p. page count. */
 
-	    dasrdi_(handle, &__state->c__9, &__state->c__9, &__state->npd);
+	    dasrdi_(__global_state, handle, &__state->c__9, &__state->c__9, &
+		    __state->npd);
 	    i__1 = __state->npd + 1;
-	    dasudi_(handle, &__state->c__9, &__state->c__9, &i__1);
+	    dasudi_(__global_state, handle, &__state->c__9, &__state->c__9, &
+		    i__1);
 
 /*           Set the page number and base address. */
 
@@ -1057,7 +1091,8 @@ L_zzekpgal:
 /*        If the integer free list is non-empty, take a page from */
 /*        that list. */
 
-	dasrdi_(handle, &__state->c__16, &__state->c__16, &__state->freei);
+	dasrdi_(__global_state, handle, &__state->c__16, &__state->c__16, &
+		__state->freei);
 	if (__state->freei > 0) {
 
 /*           We'll return the first free page. */
@@ -1068,38 +1103,42 @@ L_zzekpgal:
 /*           any.  Obtain the forward pointer from the page. */
 
 	    __state->addr__ = (__state->freei - 1 << 8) + 257;
-	    dasrdi_(handle, &__state->addr__, &__state->addr__, &
-		    __state->freei);
+	    dasrdi_(__global_state, handle, &__state->addr__, &
+		    __state->addr__, &__state->freei);
 
 /*           Decrement the free page count, and write the free pointer */
 /*           back to the file. */
 
-	    dasrdi_(handle, &__state->c__15, &__state->c__15, &
-		    __state->nfreei);
+	    dasrdi_(__global_state, handle, &__state->c__15, &__state->c__15, 
+		    &__state->nfreei);
 	    i__1 = __state->nfreei - 1;
-	    dasudi_(handle, &__state->c__15, &__state->c__15, &i__1);
-	    dasudi_(handle, &__state->c__16, &__state->c__16, &__state->freei)
-		    ;
+	    dasudi_(__global_state, handle, &__state->c__15, &__state->c__15, 
+		    &i__1);
+	    dasudi_(__global_state, handle, &__state->c__16, &__state->c__16, 
+		    &__state->freei);
 
 /*           Set base address. */
 
 	    *base = (*p - 1 << 8) + 256;
 	} else {
-	    dasadi_(handle, &__state->c__256, __state->ifill);
-	    dasrdi_(handle, &__state->c__14, &__state->c__14, &__state->npi);
+	    dasadi_(__global_state, handle, &__state->c__256, __state->ifill);
+	    dasrdi_(__global_state, handle, &__state->c__14, &__state->c__14, 
+		    &__state->npi);
 	    i__1 = __state->npi + 1;
-	    dasudi_(handle, &__state->c__14, &__state->c__14, &i__1);
+	    dasudi_(__global_state, handle, &__state->c__14, &__state->c__14, 
+		    &i__1);
 	    *p = __state->npi + 1;
 	    *base = (__state->npi << 8) + 256;
 	}
     } else {
-	setmsg_("The data type code # was not recognized.", (ftnlen)40);
-	errint_("#", type__, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("ZZEKPGAL", (ftnlen)8);
+	setmsg_(__global_state, "The data type code # was not recognized.", (
+		ftnlen)40);
+	errint_(__global_state, "#", type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKPGAL", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZEKPGAL", (ftnlen)8);
+    chkout_(__global_state, "ZZEKPGAL", (ftnlen)8);
     return 0;
 /* $Procedure  ZZEKPGFR ( Private: EK, free page ) */
 
@@ -1230,13 +1269,13 @@ L_zzekpgfr:
 /* -    Beta Version 1.0.0, 18-OCT-1995 (NJB) */
 
 /* -& */
-    chkin_("ZZEKPGFR", (ftnlen)8);
+    chkin_(__global_state, "ZZEKPGFR", (ftnlen)8);
 
 /*     Check the file. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("ZZEKPGFR", (ftnlen)8);
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZEKPGFR", (ftnlen)8);
 	return 0;
     }
     if (*type__ == 1) {
@@ -1244,109 +1283,124 @@ L_zzekpgfr:
 /*        Validate the page number.  Find out how many pages are */
 /*        out there. */
 
-	dasrdi_(handle, &__state->c__4, &__state->c__4, &__state->npc);
+	dasrdi_(__global_state, handle, &__state->c__4, &__state->c__4, &
+		__state->npc);
 	if (*p < 1 || *p > __state->npc) {
-	    setmsg_("Attempt to free non-existent CHR page. Page number = #;"
-		    " valid range is 1:#", (ftnlen)74);
-	    errint_("#", p, (ftnlen)1);
-	    errint_("#", &__state->npc, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	    chkout_("ZZEKPGFR", (ftnlen)8);
+	    setmsg_(__global_state, "Attempt to free non-existent CHR page. "
+		    "Page number = #; valid range is 1:#", (ftnlen)74);
+	    errint_(__global_state, "#", p, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->npc, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	    chkout_(__global_state, "ZZEKPGFR", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Get the current character free pointer and free page count. */
 
-	dasrdi_(handle, &__state->c__6, &__state->c__6, &__state->freec);
-	dasrdi_(handle, &__state->c__5, &__state->c__5, &__state->nfreec);
+	dasrdi_(__global_state, handle, &__state->c__6, &__state->c__6, &
+		__state->freec);
+	dasrdi_(__global_state, handle, &__state->c__5, &__state->c__5, &
+		__state->nfreec);
 
 /*        Insert into the freed page a pointer to the head of the */
 /*        free list. */
 
-	prtenc_(&__state->freec, __state->encpag, (ftnlen)5);
+	prtenc_(__global_state, &__state->freec, __state->encpag, (ftnlen)5);
 	__state->addr__ = (*p - 1 << 10) + 1;
 	i__1 = __state->addr__ + 4;
-	dasudc_(handle, &__state->addr__, &i__1, &__state->c__1, &
-		__state->c__5, __state->encpag, (ftnlen)5);
+	dasudc_(__global_state, handle, &__state->addr__, &i__1, &
+		__state->c__1, &__state->c__5, __state->encpag, (ftnlen)5);
 
 /*        Update the current character free pointer and free page count. */
 
-	dasudi_(handle, &__state->c__6, &__state->c__6, p);
+	dasudi_(__global_state, handle, &__state->c__6, &__state->c__6, p);
 	i__1 = __state->nfreec + 1;
-	dasudi_(handle, &__state->c__5, &__state->c__5, &i__1);
+	dasudi_(__global_state, handle, &__state->c__5, &__state->c__5, &i__1)
+		;
     } else if (*type__ == 2) {
 
 /*        Validate the page number.  Find out how many pages are */
 /*        out there. */
 
-	dasrdi_(handle, &__state->c__9, &__state->c__9, &__state->npd);
+	dasrdi_(__global_state, handle, &__state->c__9, &__state->c__9, &
+		__state->npd);
 	if (*p < 1 || *p > __state->npd) {
-	    setmsg_("Attempt to free non-existent DP page. Page number = #; "
-		    "valid range is 1:#", (ftnlen)73);
-	    errint_("#", p, (ftnlen)1);
-	    errint_("#", &__state->npd, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	    chkout_("ZZEKPGFR", (ftnlen)8);
+	    setmsg_(__global_state, "Attempt to free non-existent DP page. P"
+		    "age number = #; valid range is 1:#", (ftnlen)73);
+	    errint_(__global_state, "#", p, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->npd, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	    chkout_(__global_state, "ZZEKPGFR", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Get the current d.p. free pointer and free page count. */
 
-	dasrdi_(handle, &__state->c__11, &__state->c__11, &__state->freed);
-	dasrdi_(handle, &__state->c__10, &__state->c__10, &__state->nfreed);
+	dasrdi_(__global_state, handle, &__state->c__11, &__state->c__11, &
+		__state->freed);
+	dasrdi_(__global_state, handle, &__state->c__10, &__state->c__10, &
+		__state->nfreed);
 
 /*        Insert into the freed page a pointer to the head of the */
 /*        free list. */
 
 	__state->addr__ = (*p - 1 << 7) + 1;
 	d__1 = (doublereal) __state->freed;
-	dasudd_(handle, &__state->addr__, &__state->addr__, &d__1);
+	dasudd_(__global_state, handle, &__state->addr__, &__state->addr__, &
+		d__1);
 
 /*        Update the current d.p. free pointer and free page count. */
 
-	dasudi_(handle, &__state->c__11, &__state->c__11, p);
+	dasudi_(__global_state, handle, &__state->c__11, &__state->c__11, p);
 	i__1 = __state->nfreed + 1;
-	dasudi_(handle, &__state->c__10, &__state->c__10, &i__1);
+	dasudi_(__global_state, handle, &__state->c__10, &__state->c__10, &
+		i__1);
     } else if (*type__ == 3) {
 
 /*        Validate the page number.  Find out how many pages are */
 /*        out there. */
 
-	dasrdi_(handle, &__state->c__14, &__state->c__14, &__state->npi);
+	dasrdi_(__global_state, handle, &__state->c__14, &__state->c__14, &
+		__state->npi);
 	if (*p < 1 || *p > __state->npi) {
-	    setmsg_("Attempt to free non-existent INT page. Page number = #;"
-		    " valid range is 1:#", (ftnlen)74);
-	    errint_("#", p, (ftnlen)1);
-	    errint_("#", &__state->npi, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	    chkout_("ZZEKPGFR", (ftnlen)8);
+	    setmsg_(__global_state, "Attempt to free non-existent INT page. "
+		    "Page number = #; valid range is 1:#", (ftnlen)74);
+	    errint_(__global_state, "#", p, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->npi, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	    chkout_(__global_state, "ZZEKPGFR", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Get the current integer free pointer and free page count. */
 
-	dasrdi_(handle, &__state->c__16, &__state->c__16, &__state->freei);
-	dasrdi_(handle, &__state->c__15, &__state->c__15, &__state->nfreei);
+	dasrdi_(__global_state, handle, &__state->c__16, &__state->c__16, &
+		__state->freei);
+	dasrdi_(__global_state, handle, &__state->c__15, &__state->c__15, &
+		__state->nfreei);
 
 /*        Insert into the freed page a pointer to the head of the */
 /*        free list. */
 
 	__state->addr__ = (*p - 1 << 8) + 257;
-	dasudi_(handle, &__state->addr__, &__state->addr__, &__state->freei);
+	dasudi_(__global_state, handle, &__state->addr__, &__state->addr__, &
+		__state->freei);
 
 /*        Update the current integer free pointer and free page count. */
 
-	dasudi_(handle, &__state->c__16, &__state->c__16, p);
+	dasudi_(__global_state, handle, &__state->c__16, &__state->c__16, p);
 	i__1 = __state->nfreei + 1;
-	dasudi_(handle, &__state->c__15, &__state->c__15, &i__1);
+	dasudi_(__global_state, handle, &__state->c__15, &__state->c__15, &
+		i__1);
     } else {
-	setmsg_("The data type code # was not recognized.", (ftnlen)40);
-	errint_("#", type__, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("ZZEKPGFR", (ftnlen)8);
+	setmsg_(__global_state, "The data type code # was not recognized.", (
+		ftnlen)40);
+	errint_(__global_state, "#", type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKPGFR", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZEKPGFR", (ftnlen)8);
+    chkout_(__global_state, "ZZEKPGFR", (ftnlen)8);
     return 0;
 /* $Procedure  ZZEKPGRC ( Private: EK, read character page ) */
 
@@ -1476,25 +1530,28 @@ L_zzekpgrc:
 
 /*     Find out how many character pages are in use. */
 
-    dasrdi_(handle, &__state->c__4, &__state->c__4, &__state->npc);
+    dasrdi_(__global_state, handle, &__state->c__4, &__state->c__4, &
+	    __state->npc);
     if (*p < 1 || *p > __state->npc) {
-	chkin_("ZZEKPGRC", (ftnlen)8);
-	setmsg_("CHR page = #; valid range is [1:#]", (ftnlen)34);
-	errint_("#", p, (ftnlen)1);
-	errint_("#", &__state->npc, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKPGRC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPGRC", (ftnlen)8);
+	setmsg_(__global_state, "CHR page = #; valid range is [1:#]", (ftnlen)
+		34);
+	errint_(__global_state, "#", p, (ftnlen)1);
+	errint_(__global_state, "#", &__state->npc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKPGRC", (ftnlen)8);
 	return 0;
     }
-    __state->l = i_len(pagec, pagec_len);
+    __state->l = i_len(&__global_state->f2c, pagec, pagec_len);
     __state->e = min(__state->l,1024);
     __state->addr__ = (*p - 1 << 10) + 1;
     i__1 = __state->addr__ + 1023;
-    dasrdc_(handle, &__state->addr__, &i__1, &__state->c__1, &__state->e, 
-	    pagec, pagec_len);
+    dasrdc_(__global_state, handle, &__state->addr__, &i__1, &__state->c__1, &
+	    __state->e, pagec, pagec_len);
     if (__state->l > __state->e) {
 	i__1 = __state->e;
-	s_copy(pagec + i__1, " ", pagec_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, pagec + i__1, " ", pagec_len - i__1, (
+		ftnlen)1);
     }
     return 0;
 /* $Procedure  ZZEKPGRD ( Private: EK, read d.p. page ) */
@@ -1620,19 +1677,21 @@ L_zzekpgrd:
 
 /*     Find out how many d.p. pages are in use. */
 
-    dasrdi_(handle, &__state->c__9, &__state->c__9, &__state->npd);
+    dasrdi_(__global_state, handle, &__state->c__9, &__state->c__9, &
+	    __state->npd);
     if (*p < 1 || *p > __state->npd) {
-	chkin_("ZZEKPGRD", (ftnlen)8);
-	setmsg_("DP page = #; valid range is [1:#]", (ftnlen)33);
-	errint_("#", p, (ftnlen)1);
-	errint_("#", &__state->npd, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKPGRD", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPGRD", (ftnlen)8);
+	setmsg_(__global_state, "DP page = #; valid range is [1:#]", (ftnlen)
+		33);
+	errint_(__global_state, "#", p, (ftnlen)1);
+	errint_(__global_state, "#", &__state->npd, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKPGRD", (ftnlen)8);
 	return 0;
     }
     __state->addr__ = (*p - 1 << 7) + 1;
     i__1 = __state->addr__ + 127;
-    dasrdd_(handle, &__state->addr__, &i__1, paged);
+    dasrdd_(__global_state, handle, &__state->addr__, &i__1, paged);
     return 0;
 /* $Procedure  ZZEKPGRI ( Private: EK, read integer page ) */
 
@@ -1757,19 +1816,21 @@ L_zzekpgri:
 
 /*     Find out how many integer pages are in use. */
 
-    dasrdi_(handle, &__state->c__14, &__state->c__14, &__state->npi);
+    dasrdi_(__global_state, handle, &__state->c__14, &__state->c__14, &
+	    __state->npi);
     if (*p < 1 || *p > __state->npi) {
-	chkin_("ZZEKPGRI", (ftnlen)8);
-	setmsg_("INT page = #; valid range is [1:#]", (ftnlen)34);
-	errint_("#", p, (ftnlen)1);
-	errint_("#", &__state->npi, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKPGRI", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPGRI", (ftnlen)8);
+	setmsg_(__global_state, "INT page = #; valid range is [1:#]", (ftnlen)
+		34);
+	errint_(__global_state, "#", p, (ftnlen)1);
+	errint_(__global_state, "#", &__state->npi, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKPGRI", (ftnlen)8);
 	return 0;
     }
     __state->addr__ = (*p - 1 << 8) + 257;
     i__1 = __state->addr__ + 255;
-    dasrdi_(handle, &__state->addr__, &i__1, pagei);
+    dasrdi_(__global_state, handle, &__state->addr__, &i__1, pagei);
     return 0;
 /* $Procedure  ZZEKPGWC ( Private: EK, write character page ) */
 
@@ -1902,36 +1963,39 @@ L_zzekpgwc:
 
 /*     Validate the file. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
 /*     Find out how many character pages are in use. */
 
-    dasrdi_(handle, &__state->c__4, &__state->c__4, &__state->npc);
+    dasrdi_(__global_state, handle, &__state->c__4, &__state->c__4, &
+	    __state->npc);
     if (*p < 1 || *p > __state->npc) {
-	chkin_("ZZEKPGWC", (ftnlen)8);
-	setmsg_("CHR page = #; valid range is [1:#]", (ftnlen)34);
-	errint_("#", p, (ftnlen)1);
-	errint_("#", &__state->npc, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKPGWC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPGWC", (ftnlen)8);
+	setmsg_(__global_state, "CHR page = #; valid range is [1:#]", (ftnlen)
+		34);
+	errint_(__global_state, "#", p, (ftnlen)1);
+	errint_(__global_state, "#", &__state->npc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKPGWC", (ftnlen)8);
 	return 0;
     }
-    __state->l = i_len(pagec, pagec_len);
+    __state->l = i_len(&__global_state->f2c, pagec, pagec_len);
     if (__state->l < 1024) {
-	chkin_("ZZEKPGWC", (ftnlen)8);
-	setmsg_("Input CHR page size = #; valid size is [#:]", (ftnlen)43);
-	errint_("#", &__state->l, (ftnlen)1);
-	errint_("#", &__state->c__1024, (ftnlen)1);
-	sigerr_("SPICE(STRINGTOOSHORT)", (ftnlen)21);
-	chkout_("ZZEKPGWC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPGWC", (ftnlen)8);
+	setmsg_(__global_state, "Input CHR page size = #; valid size is [#:]",
+		 (ftnlen)43);
+	errint_(__global_state, "#", &__state->l, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__1024, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(STRINGTOOSHORT)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKPGWC", (ftnlen)8);
 	return 0;
     }
     __state->addr__ = (*p - 1 << 10) + 1;
     i__1 = __state->addr__ + 1023;
-    dasudc_(handle, &__state->addr__, &i__1, &__state->c__1, &
+    dasudc_(__global_state, handle, &__state->addr__, &i__1, &__state->c__1, &
 	    __state->c__1024, pagec, pagec_len);
     return 0;
 /* $Procedure  ZZEKPGWD ( Private: EK, write d.p. page ) */
@@ -2063,26 +2127,28 @@ L_zzekpgwd:
 
 /*     Validate the file. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
 /*     Find out how many d.p. pages are in use. */
 
-    dasrdi_(handle, &__state->c__9, &__state->c__9, &__state->npd);
+    dasrdi_(__global_state, handle, &__state->c__9, &__state->c__9, &
+	    __state->npd);
     if (*p < 1 || *p > __state->npd) {
-	chkin_("ZZEKPGWD", (ftnlen)8);
-	setmsg_("DP page = #; valid range is [1:#]", (ftnlen)33);
-	errint_("#", p, (ftnlen)1);
-	errint_("#", &__state->npd, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKPGWD", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPGWD", (ftnlen)8);
+	setmsg_(__global_state, "DP page = #; valid range is [1:#]", (ftnlen)
+		33);
+	errint_(__global_state, "#", p, (ftnlen)1);
+	errint_(__global_state, "#", &__state->npd, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKPGWD", (ftnlen)8);
 	return 0;
     }
     __state->addr__ = (*p - 1 << 7) + 1;
     i__1 = __state->addr__ + 127;
-    dasudd_(handle, &__state->addr__, &i__1, paged);
+    dasudd_(__global_state, handle, &__state->addr__, &i__1, paged);
     return 0;
 /* $Procedure  ZZEKPGWI ( Private: EK, write integer page ) */
 
@@ -2212,26 +2278,28 @@ L_zzekpgwi:
 
 /*     Validate the file. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
 	return 0;
     }
 
 /*     Find out how many integer pages are in use. */
 
-    dasrdi_(handle, &__state->c__14, &__state->c__14, &__state->npi);
+    dasrdi_(__global_state, handle, &__state->c__14, &__state->c__14, &
+	    __state->npi);
     if (*p < 1 || *p > __state->npi) {
-	chkin_("ZZEKPGWI", (ftnlen)8);
-	setmsg_("INT page = #; valid range is [1:#]", (ftnlen)34);
-	errint_("#", p, (ftnlen)1);
-	errint_("#", &__state->npi, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKPGWI", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPGWI", (ftnlen)8);
+	setmsg_(__global_state, "INT page = #; valid range is [1:#]", (ftnlen)
+		34);
+	errint_(__global_state, "#", p, (ftnlen)1);
+	errint_(__global_state, "#", &__state->npi, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKPGWI", (ftnlen)8);
 	return 0;
     }
     __state->addr__ = (*p - 1 << 8) + 257;
     i__1 = __state->addr__ + 255;
-    dasudi_(handle, &__state->addr__, &i__1, pagei);
+    dasudi_(__global_state, handle, &__state->addr__, &i__1, pagei);
     return 0;
 /* $Procedure  ZZEKPGBS ( Private: EK, map page to base address ) */
 
@@ -2357,11 +2425,12 @@ L_zzekpgbs:
     } else if (*type__ == 3) {
 	*base = (*p - 1 << 8) + 256;
     } else {
-	chkin_("ZZEKPGBS", (ftnlen)8);
-	setmsg_("The data type code # was not recognized.", (ftnlen)40);
-	errint_("#", type__, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("ZZEKPGBS", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPGBS", (ftnlen)8);
+	setmsg_(__global_state, "The data type code # was not recognized.", (
+		ftnlen)40);
+	errint_(__global_state, "#", type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKPGBS", (ftnlen)8);
 	return 0;
     }
     return 0;
@@ -2498,11 +2567,12 @@ L_zzekpgpg:
 	*p = (*addrss - 1) / 256;
 	*base = (*p - 1 << 8) + 256;
     } else {
-	chkin_("ZZEKPGBS", (ftnlen)8);
-	setmsg_("The data type code # was not recognized.", (ftnlen)40);
-	errint_("#", type__, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("ZZEKPGBS", (ftnlen)8);
+	chkin_(__global_state, "ZZEKPGBS", (ftnlen)8);
+	setmsg_(__global_state, "The data type code # was not recognized.", (
+		ftnlen)40);
+	errint_(__global_state, "#", type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKPGBS", (ftnlen)8);
 	return 0;
     }
     return 0;
@@ -2639,130 +2709,147 @@ L_zzekpgst:
 /* -    Beta Version 1.0.0, 18-OCT-1995 (NJB) */
 
 /* -& */
-    chkin_("ZZEKPGST", (ftnlen)8);
-    if (eqstr_(stat, "N_C_ALLOC", stat_len, (ftnlen)9)) {
-	dasrdi_(handle, &__state->c__4, &__state->c__4, value);
-    } else if (eqstr_(stat, "N_D_ALLOC", stat_len, (ftnlen)9)) {
-	dasrdi_(handle, &__state->c__9, &__state->c__9, value);
-    } else if (eqstr_(stat, "N_I_ALLOC", stat_len, (ftnlen)9)) {
-	dasrdi_(handle, &__state->c__14, &__state->c__14, value);
-    } else if (eqstr_(stat, "N_C_FREE", stat_len, (ftnlen)8)) {
-	dasrdi_(handle, &__state->c__5, &__state->c__5, value);
-    } else if (eqstr_(stat, "N_D_FREE", stat_len, (ftnlen)8)) {
-	dasrdi_(handle, &__state->c__10, &__state->c__10, value);
-    } else if (eqstr_(stat, "N_I_FREE", stat_len, (ftnlen)8)) {
-	dasrdi_(handle, &__state->c__15, &__state->c__15, value);
+    chkin_(__global_state, "ZZEKPGST", (ftnlen)8);
+    if (eqstr_(__global_state, stat, "N_C_ALLOC", stat_len, (ftnlen)9)) {
+	dasrdi_(__global_state, handle, &__state->c__4, &__state->c__4, value)
+		;
+    } else if (eqstr_(__global_state, stat, "N_D_ALLOC", stat_len, (ftnlen)9))
+	     {
+	dasrdi_(__global_state, handle, &__state->c__9, &__state->c__9, value)
+		;
+    } else if (eqstr_(__global_state, stat, "N_I_ALLOC", stat_len, (ftnlen)9))
+	     {
+	dasrdi_(__global_state, handle, &__state->c__14, &__state->c__14, 
+		value);
+    } else if (eqstr_(__global_state, stat, "N_C_FREE", stat_len, (ftnlen)8)) 
+	    {
+	dasrdi_(__global_state, handle, &__state->c__5, &__state->c__5, value)
+		;
+    } else if (eqstr_(__global_state, stat, "N_D_FREE", stat_len, (ftnlen)8)) 
+	    {
+	dasrdi_(__global_state, handle, &__state->c__10, &__state->c__10, 
+		value);
+    } else if (eqstr_(__global_state, stat, "N_I_FREE", stat_len, (ftnlen)8)) 
+	    {
+	dasrdi_(__global_state, handle, &__state->c__15, &__state->c__15, 
+		value);
     } else {
-	setmsg_("Statistic # is not supported.", (ftnlen)29);
-	errch_("#", stat, (ftnlen)1, stat_len);
-	sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	chkout_("ZZEKPGST", (ftnlen)8);
+	setmsg_(__global_state, "Statistic # is not supported.", (ftnlen)29);
+	errch_(__global_state, "#", stat, (ftnlen)1, stat_len);
+	sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKPGST", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZEKPGST", (ftnlen)8);
+    chkout_(__global_state, "ZZEKPGST", (ftnlen)8);
     return 0;
 } /* zzekpage_ */
 
-/* Subroutine */ int zzekpage_(integer *handle, integer *type__, integer *
-	addrss, char *stat, integer *p, char *pagec, doublereal *paged, 
-	integer *pagei, integer *base, integer *value, ftnlen stat_len, 
-	ftnlen pagec_len)
+/* Subroutine */ int zzekpage_(cspice_t* __global_state, integer *handle, 
+	integer *type__, integer *addrss, char *stat, integer *p, char *pagec,
+	 doublereal *paged, integer *pagei, integer *base, integer *value, 
+	ftnlen stat_len, ftnlen pagec_len)
 {
     return zzekpage_0_(0, handle, type__, addrss, stat, p, pagec, paged, 
 	    pagei, base, value, stat_len, pagec_len);
     }
 
-/* Subroutine */ int zzekpgin_(integer *handle)
+/* Subroutine */ int zzekpgin_(cspice_t* __global_state, integer *handle)
 {
     return zzekpage_0_(1, handle, (integer *)0, (integer *)0, (char *)0, (
 	    integer *)0, (char *)0, (doublereal *)0, (integer *)0, (integer *)
 	    0, (integer *)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzekpgan_(integer *handle, integer *type__, integer *p, 
-	integer *base)
+/* Subroutine */ int zzekpgan_(cspice_t* __global_state, integer *handle, 
+	integer *type__, integer *p, integer *base)
 {
     return zzekpage_0_(2, handle, type__, (integer *)0, (char *)0, p, (char *)
 	    0, (doublereal *)0, (integer *)0, base, (integer *)0, (ftnint)0, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int zzekpgal_(integer *handle, integer *type__, integer *p, 
-	integer *base)
+/* Subroutine */ int zzekpgal_(cspice_t* __global_state, integer *handle, 
+	integer *type__, integer *p, integer *base)
 {
     return zzekpage_0_(3, handle, type__, (integer *)0, (char *)0, p, (char *)
 	    0, (doublereal *)0, (integer *)0, base, (integer *)0, (ftnint)0, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int zzekpgfr_(integer *handle, integer *type__, integer *p)
+/* Subroutine */ int zzekpgfr_(cspice_t* __global_state, integer *handle, 
+	integer *type__, integer *p)
 {
     return zzekpage_0_(4, handle, type__, (integer *)0, (char *)0, p, (char *)
 	    0, (doublereal *)0, (integer *)0, (integer *)0, (integer *)0, (
 	    ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzekpgrc_(integer *handle, integer *p, char *pagec, 
-	ftnlen pagec_len)
+/* Subroutine */ int zzekpgrc_(cspice_t* __global_state, integer *handle, 
+	integer *p, char *pagec, ftnlen pagec_len)
 {
     return zzekpage_0_(5, handle, (integer *)0, (integer *)0, (char *)0, p, 
 	    pagec, (doublereal *)0, (integer *)0, (integer *)0, (integer *)0, 
 	    (ftnint)0, pagec_len);
     }
 
-/* Subroutine */ int zzekpgrd_(integer *handle, integer *p, doublereal *paged)
+/* Subroutine */ int zzekpgrd_(cspice_t* __global_state, integer *handle, 
+	integer *p, doublereal *paged)
 {
     return zzekpage_0_(6, handle, (integer *)0, (integer *)0, (char *)0, p, (
 	    char *)0, paged, (integer *)0, (integer *)0, (integer *)0, (
 	    ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzekpgri_(integer *handle, integer *p, integer *pagei)
+/* Subroutine */ int zzekpgri_(cspice_t* __global_state, integer *handle, 
+	integer *p, integer *pagei)
 {
     return zzekpage_0_(7, handle, (integer *)0, (integer *)0, (char *)0, p, (
 	    char *)0, (doublereal *)0, pagei, (integer *)0, (integer *)0, (
 	    ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzekpgwc_(integer *handle, integer *p, char *pagec, 
-	ftnlen pagec_len)
+/* Subroutine */ int zzekpgwc_(cspice_t* __global_state, integer *handle, 
+	integer *p, char *pagec, ftnlen pagec_len)
 {
     return zzekpage_0_(8, handle, (integer *)0, (integer *)0, (char *)0, p, 
 	    pagec, (doublereal *)0, (integer *)0, (integer *)0, (integer *)0, 
 	    (ftnint)0, pagec_len);
     }
 
-/* Subroutine */ int zzekpgwd_(integer *handle, integer *p, doublereal *paged)
+/* Subroutine */ int zzekpgwd_(cspice_t* __global_state, integer *handle, 
+	integer *p, doublereal *paged)
 {
     return zzekpage_0_(9, handle, (integer *)0, (integer *)0, (char *)0, p, (
 	    char *)0, paged, (integer *)0, (integer *)0, (integer *)0, (
 	    ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzekpgwi_(integer *handle, integer *p, integer *pagei)
+/* Subroutine */ int zzekpgwi_(cspice_t* __global_state, integer *handle, 
+	integer *p, integer *pagei)
 {
     return zzekpage_0_(10, handle, (integer *)0, (integer *)0, (char *)0, p, (
 	    char *)0, (doublereal *)0, pagei, (integer *)0, (integer *)0, (
 	    ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzekpgbs_(integer *type__, integer *p, integer *base)
+/* Subroutine */ int zzekpgbs_(cspice_t* __global_state, integer *type__, 
+	integer *p, integer *base)
 {
     return zzekpage_0_(11, (integer *)0, type__, (integer *)0, (char *)0, p, (
 	    char *)0, (doublereal *)0, (integer *)0, base, (integer *)0, (
 	    ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int zzekpgpg_(integer *type__, integer *addrss, integer *p, 
-	integer *base)
+/* Subroutine */ int zzekpgpg_(cspice_t* __global_state, integer *type__, 
+	integer *addrss, integer *p, integer *base)
 {
     return zzekpage_0_(12, (integer *)0, type__, addrss, (char *)0, p, (char *
 	    )0, (doublereal *)0, (integer *)0, base, (integer *)0, (ftnint)0, 
 	    (ftnint)0);
     }
 
-/* Subroutine */ int zzekpgst_(integer *handle, char *stat, integer *value, 
-	ftnlen stat_len)
+/* Subroutine */ int zzekpgst_(cspice_t* __global_state, integer *handle, 
+	char *stat, integer *value, ftnlen stat_len)
 {
     return zzekpage_0_(13, handle, (integer *)0, (integer *)0, stat, (integer 
 	    *)0, (char *)0, (doublereal *)0, (integer *)0, (integer *)0, 

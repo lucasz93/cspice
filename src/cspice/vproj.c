@@ -8,13 +8,13 @@
 
 
 typedef int vproj_state_t;
-static vproj_state_t* get_vproj_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vproj_state_t* get_vproj_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VPROJ ( Vector projection, 3 dimensions ) */
-/* Subroutine */ int vproj_(doublereal *a, doublereal *b, doublereal *p)
+/* Subroutine */ int vproj_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *p)
 {
     /* System generated locals */
     doublereal d__1, d__2;
@@ -22,16 +22,16 @@ static vproj_state_t* get_vproj_state() {
     /* Local variables */
     doublereal biga;
     doublereal bigb;
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
-    extern doublereal vdot_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
     doublereal r__[3];
     doublereal t[3];
     doublereal scale;
 
 
     /* Module state */
-    vproj_state_t* __state = get_vproj_state();
+    vproj_state_t* __state = get_vproj_state(__global_state);
 /* $ Abstract */
 
 /*     VPROJ finds the projection of one vector onto another vector. */
@@ -193,8 +193,9 @@ static vproj_state_t* get_vproj_state() {
     t[0] = a[0] / biga;
     t[1] = a[1] / biga;
     t[2] = a[2] / biga;
-    scale = vdot_(t, r__) * biga / vdot_(r__, r__);
-    vscl_(&scale, r__, p);
+    scale = vdot_(__global_state, t, r__) * biga / vdot_(__global_state, r__, 
+	    r__);
+    vscl_(__global_state, &scale, r__, p);
     return 0;
 } /* vproj_ */
 

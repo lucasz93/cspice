@@ -8,8 +8,7 @@
 
 
 extern m2eul_init_t __m2eul_init;
-static m2eul_state_t* get_m2eul_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline m2eul_state_t* get_m2eul_state(cspice_t* state) {
 	if (!state->m2eul)
 		state->m2eul = __cspice_allocate_module(sizeof(m2eul_state_t),
 	 &__m2eul_init, sizeof(__m2eul_init));
@@ -18,9 +17,9 @@ static m2eul_state_t* get_m2eul_state() {
 }
 
 /* $Procedure      M2EUL ( Matrix to Euler angles ) */
-/* Subroutine */ int m2eul_(doublereal *r__, integer *axis3, integer *axis2, 
-	integer *axis1, doublereal *angle3, doublereal *angle2, doublereal *
-	angle1)
+/* Subroutine */ int m2eul_(cspice_t* __global_state, doublereal *r__, 
+	integer *axis3, integer *axis2, integer *axis1, doublereal *angle3, 
+	doublereal *angle2, doublereal *angle1)
 {
     /* Initialized data */
 
@@ -29,34 +28,36 @@ static m2eul_state_t* get_m2eul_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double acos(doublereal), atan2(doublereal, doublereal), asin(doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double acos(f2c_state_t*, doublereal), atan2(f2c_state_t*, doublereal, 
+	    doublereal), asin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal sign;
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern /* Subroutine */ int mtxm_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     integer c__;
     integer i__;
     logical degen;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical isrot_(doublereal *, doublereal *, doublereal *);
-    doublereal change[9]	/* was [3][3] */;
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    doublereal tmpmat[9]	/* was [3][3] */;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    doublereal tmprot[9]	/* was [3][3] */;
-    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical isrot_(cspice_t*, doublereal *, doublereal *, doublereal *)
 	    ;
+    doublereal change[9]	/* was [3][3] */;
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    doublereal tmpmat[9]	/* was [3][3] */;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    doublereal tmprot[9]	/* was [3][3] */;
+    extern /* Subroutine */ int mxm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    m2eul_state_t* __state = get_m2eul_state();
+    m2eul_state_t* __state = get_m2eul_state(__global_state);
 /* $ Abstract */
 
 /*     Factor a rotation matrix as a product of three rotations about */
@@ -617,10 +618,10 @@ static m2eul_state_t* get_m2eul_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("M2EUL", (ftnlen)5);
+	chkin_(__global_state, "M2EUL", (ftnlen)5);
     }
 
 /*     The first order of business is to screen out the goofy cases. */
@@ -630,31 +631,34 @@ static m2eul_state_t* get_m2eul_state() {
 
     if (*axis3 < 1 || *axis3 > 3 || (*axis2 < 1 || *axis2 > 3) || (*axis1 < 1 
 	    || *axis1 > 3)) {
-	setmsg_("Axis numbers are #,  #,  #. ", (ftnlen)28);
-	errint_("#", axis3, (ftnlen)1);
-	errint_("#", axis2, (ftnlen)1);
-	errint_("#", axis1, (ftnlen)1);
-	sigerr_("SPICE(BADAXISNUMBERS)", (ftnlen)21);
-	chkout_("M2EUL", (ftnlen)5);
+	setmsg_(__global_state, "Axis numbers are #,  #,  #. ", (ftnlen)28);
+	errint_(__global_state, "#", axis3, (ftnlen)1);
+	errint_(__global_state, "#", axis2, (ftnlen)1);
+	errint_(__global_state, "#", axis1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADAXISNUMBERS)", (ftnlen)21);
+	chkout_(__global_state, "M2EUL", (ftnlen)5);
 	return 0;
 
 /*     ...and the second axis number must differ from its neighbors. */
 
     } else if (*axis3 == *axis2 || *axis1 == *axis2) {
-	setmsg_("Middle axis matches neighbor: # # #.", (ftnlen)36);
-	errint_("#", axis3, (ftnlen)1);
-	errint_("#", axis2, (ftnlen)1);
-	errint_("#", axis1, (ftnlen)1);
-	sigerr_("SPICE(BADAXISNUMBERS)", (ftnlen)21);
-	chkout_("M2EUL", (ftnlen)5);
+	setmsg_(__global_state, "Middle axis matches neighbor: # # #.", (
+		ftnlen)36);
+	errint_(__global_state, "#", axis3, (ftnlen)1);
+	errint_(__global_state, "#", axis2, (ftnlen)1);
+	errint_(__global_state, "#", axis1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADAXISNUMBERS)", (ftnlen)21);
+	chkout_(__global_state, "M2EUL", (ftnlen)5);
 	return 0;
 
 /*     R must be a rotation matrix, or we may as well forget it. */
 
-    } else if (! isrot_(r__, &__state->c_b15, &__state->c_b15)) {
-	setmsg_("Input matrix is not a rotation.", (ftnlen)31);
-	sigerr_("SPICE(NOTAROTATION)", (ftnlen)19);
-	chkout_("M2EUL", (ftnlen)5);
+    } else if (! isrot_(__global_state, r__, &__state->c_b15, &__state->c_b15)
+	    ) {
+	setmsg_(__global_state, "Input matrix is not a rotation.", (ftnlen)31)
+		;
+	sigerr_(__global_state, "SPICE(NOTAROTATION)", (ftnlen)19);
+	chkout_(__global_state, "M2EUL", (ftnlen)5);
 	return 0;
     }
 
@@ -663,9 +667,10 @@ static m2eul_state_t* get_m2eul_state() {
 /*     of R that has unitized columns. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	vhat_(&r__[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		"r", i__1, "m2eul_", (ftnlen)667)], &tmprot[(i__2 = i__ * 3 - 
-		3) < 9 && 0 <= i__2 ? i__2 : s_rnge("tmprot", i__2, "m2eul_", 
+	vhat_(__global_state, &r__[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? 
+		i__1 : s_rnge(&__global_state->f2c, "r", i__1, "m2eul_", (
+		ftnlen)667)], &tmprot[(i__2 = i__ * 3 - 3) < 9 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "tmprot", i__2, "m2eul_", 
 		(ftnlen)667)]);
     }
 
@@ -742,7 +747,8 @@ static m2eul_state_t* get_m2eul_state() {
 /*        1. */
 
 	if (*axis2 == __state->next[(i__1 = *axis3 - 1) < 3 && 0 <= i__1 ? 
-		i__1 : s_rnge("next", i__1, "m2eul_", (ftnlen)746)]) {
+		i__1 : s_rnge(&__global_state->f2c, "next", i__1, "m2eul_", (
+		ftnlen)746)]) {
 	    sign = 1.;
 	} else {
 	    sign = -1.;
@@ -754,18 +760,21 @@ static m2eul_state_t* get_m2eul_state() {
 
 /*        Set up the entries of CHANGE: */
 
-	cleard_(&__state->c__9, change);
-	change[(i__1 = *axis3 + 5) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)762)] = 1.;
-	change[(i__1 = *axis2 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)763)] = 1.;
-	change[(i__1 = c__ + 2) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)764)] = sign * 1.;
+	cleard_(__global_state, &__state->c__9, change);
+	change[(i__1 = *axis3 + 5) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "change", i__1, "m2eul_", (ftnlen)762)] =
+		 1.;
+	change[(i__1 = *axis2 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "change", i__1, "m2eul_", (ftnlen)763)] =
+		 1.;
+	change[(i__1 = c__ + 2) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "change", i__1, "m2eul_", (ftnlen)764)] =
+		 sign * 1.;
 
 /*        Transform TMPROT. */
 
-	mxm_(tmprot, change, tmpmat);
-	mtxm_(change, tmpmat, tmprot);
+	mxm_(__global_state, tmprot, change, tmpmat);
+	mtxm_(__global_state, change, tmpmat, tmprot);
 
 /*        Now we're ready to find the Euler angles, using a */
 /*        3-1-3 factorization.  In general, the matrix product */
@@ -827,15 +836,15 @@ static m2eul_state_t* get_m2eul_state() {
 
 	if (degen) {
 	    *angle3 = 0.;
-	    *angle2 = acos(tmprot[8]);
-	    *angle1 = atan2(tmprot[3], tmprot[0]);
+	    *angle2 = acos(&__global_state->f2c, tmprot[8]);
+	    *angle1 = atan2(&__global_state->f2c, tmprot[3], tmprot[0]);
 	} else {
 
 /*           The normal case. */
 
-	    *angle3 = atan2(tmprot[6], tmprot[7]);
-	    *angle2 = acos(tmprot[8]);
-	    *angle1 = atan2(tmprot[2], -tmprot[5]);
+	    *angle3 = atan2(&__global_state->f2c, tmprot[6], tmprot[7]);
+	    *angle2 = acos(&__global_state->f2c, tmprot[8]);
+	    *angle1 = atan2(&__global_state->f2c, tmprot[2], -tmprot[5]);
 	}
     } else {
 
@@ -866,7 +875,8 @@ static m2eul_state_t* get_m2eul_state() {
 /*        little mapping that takes 1 to 2, 2 to 3, and 3 to 1. */
 
 	if (*axis2 == __state->next[(i__1 = *axis3 - 1) < 3 && 0 <= i__1 ? 
-		i__1 : s_rnge("next", i__1, "m2eul_", (ftnlen)883)]) {
+		i__1 : s_rnge(&__global_state->f2c, "next", i__1, "m2eul_", (
+		ftnlen)883)]) {
 	    sign = 1.;
 	} else {
 	    sign = -1.;
@@ -874,18 +884,21 @@ static m2eul_state_t* get_m2eul_state() {
 
 /*        Set up the entries of CHANGE: */
 
-	cleard_(&__state->c__9, change);
-	change[(i__1 = *axis3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)894)] = 1.;
-	change[(i__1 = *axis2 + 2) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)895)] = 1.;
-	change[(i__1 = *axis1 + 5) < 9 && 0 <= i__1 ? i__1 : s_rnge("change", 
-		i__1, "m2eul_", (ftnlen)896)] = sign * 1.;
+	cleard_(__global_state, &__state->c__9, change);
+	change[(i__1 = *axis3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "change", i__1, "m2eul_", (ftnlen)894)] =
+		 1.;
+	change[(i__1 = *axis2 + 2) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "change", i__1, "m2eul_", (ftnlen)895)] =
+		 1.;
+	change[(i__1 = *axis1 + 5) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "change", i__1, "m2eul_", (ftnlen)896)] =
+		 sign * 1.;
 
 /*        Transform TMPROT. */
 
-	mxm_(tmprot, change, tmpmat);
-	mtxm_(change, tmpmat, tmprot);
+	mxm_(__global_state, tmprot, change, tmpmat);
+	mtxm_(__global_state, change, tmpmat, tmprot);
 
 /*        Now we're ready to find the Euler angles, using a */
 /*        3-2-1 factorization.  In general, the matrix product */
@@ -949,18 +962,20 @@ static m2eul_state_t* get_m2eul_state() {
 
 	if (degen) {
 	    *angle3 = 0.;
-	    *angle2 = asin(-tmprot[6]);
-	    *angle1 = sign * atan2(-tmprot[1], tmprot[4]);
+	    *angle2 = asin(&__global_state->f2c, -tmprot[6]);
+	    *angle1 = sign * atan2(&__global_state->f2c, -tmprot[1], tmprot[4]
+		    );
 	} else {
 
 /*           The normal case. */
 
-	    *angle3 = atan2(tmprot[7], tmprot[8]);
-	    *angle2 = asin(-tmprot[6]);
-	    *angle1 = sign * atan2(tmprot[3], tmprot[0]);
+	    *angle3 = atan2(&__global_state->f2c, tmprot[7], tmprot[8]);
+	    *angle2 = asin(&__global_state->f2c, -tmprot[6]);
+	    *angle1 = sign * atan2(&__global_state->f2c, tmprot[3], tmprot[0])
+		    ;
 	}
     }
-    chkout_("M2EUL", (ftnlen)5);
+    chkout_(__global_state, "M2EUL", (ftnlen)5);
     return 0;
 } /* m2eul_ */
 

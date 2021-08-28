@@ -8,20 +8,20 @@
 
 
 typedef int exact_state_t;
-static exact_state_t* get_exact_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline exact_state_t* get_exact_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure                     EXACT ( Round to exact value ) */
-doublereal exact_(doublereal *number, doublereal *value, doublereal *tol)
+doublereal exact_(cspice_t* __global_state, doublereal *number, doublereal *
+	value, doublereal *tol)
 {
     /* System generated locals */
     doublereal ret_val, d__1;
 
 
     /* Module state */
-    exact_state_t* __state = get_exact_state();
+    exact_state_t* __state = get_exact_state(__global_state);
 /* $ Abstract */
 
 /*     Round an input double precision number to a specified exact value */

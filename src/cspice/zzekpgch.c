@@ -8,8 +8,7 @@
 
 
 extern zzekpgch_init_t __zzekpgch_init;
-static zzekpgch_state_t* get_zzekpgch_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekpgch_state_t* get_zzekpgch_state(cspice_t* state) {
 	if (!state->zzekpgch)
 		state->zzekpgch = __cspice_allocate_module(sizeof(
 	zzekpgch_state_t), &__zzekpgch_init, sizeof(__zzekpgch_init));
@@ -18,35 +17,35 @@ static zzekpgch_state_t* get_zzekpgch_state() {
 }
 
 /* $Procedure   ZZEKPGCH ( EK, paging system access check ) */
-/* Subroutine */ int zzekpgch_(integer *handle, char *access, ftnlen 
-	access_len)
+/* Subroutine */ int zzekpgch_(cspice_t* __global_state, integer *handle, 
+	char *access, ftnlen access_len)
 {
     integer topc;
     integer topd;
     integer topi;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer lastc;
     integer lastd;
     integer lasti;
     integer id;
-    extern logical failed_(void);
-    extern /* Subroutine */ int daslla_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dassih_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int daslla_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dassih_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer npc;
     integer npd;
     integer npi;
 
 
     /* Module state */
-    zzekpgch_state_t* __state = get_zzekpgch_state();
+    zzekpgch_state_t* __state = get_zzekpgch_state(__global_state);
 /* $ Abstract */
 
 /*     Check that an EK is valid for a specified type of access by the */
@@ -397,35 +396,36 @@ static zzekpgch_state_t* get_zzekpgch_state() {
 
 /*     Local variables */
 
-    chkin_("ZZEKPGCH", (ftnlen)8);
+    chkin_(__global_state, "ZZEKPGCH", (ftnlen)8);
 
 /*     Check whether the DAS is opened for the specified access method. */
 
-    dassih_(handle, access, access_len);
-    if (failed_()) {
-	chkout_("ZZEKPGCH", (ftnlen)8);
+    dassih_(__global_state, handle, access, access_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZEKPGCH", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure the DAS file is of the right type. */
 
-    dasrdi_(handle, &__state->c__1, &__state->c__1, &id);
+    dasrdi_(__global_state, handle, &__state->c__1, &__state->c__1, &id);
     if (id != 8) {
-	setmsg_("File # has architecture #, which is invalid for paged acces"
-		"s.  You are using EK software version #.", (ftnlen)99);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &id, (ftnlen)1);
-	errint_("#", &__state->c__8, (ftnlen)1);
-	sigerr_("SPICE(WRONGARCHITECTURE)", (ftnlen)24);
-	chkout_("ZZEKPGCH", (ftnlen)8);
+	setmsg_(__global_state, "File # has architecture #, which is invalid"
+		" for paged access.  You are using EK software version #.", (
+		ftnlen)99);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &id, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__8, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGARCHITECTURE)", (ftnlen)24);
+	chkout_(__global_state, "ZZEKPGCH", (ftnlen)8);
 	return 0;
     }
 
 /*     Obtain the page counts.  Set the `top' addresses. */
 
-    dasrdi_(handle, &__state->c__4, &__state->c__4, &npc);
-    dasrdi_(handle, &__state->c__9, &__state->c__9, &npd);
-    dasrdi_(handle, &__state->c__14, &__state->c__14, &npi);
+    dasrdi_(__global_state, handle, &__state->c__4, &__state->c__4, &npc);
+    dasrdi_(__global_state, handle, &__state->c__9, &__state->c__9, &npd);
+    dasrdi_(__global_state, handle, &__state->c__14, &__state->c__14, &npi);
     topc = npc << 10;
     topd = npd << 7;
     topi = (npi << 8) + 256;
@@ -433,33 +433,36 @@ static zzekpgch_state_t* get_zzekpgch_state() {
 /*     Verify that the last addresses in use are consistent with the */
 /*     `top' addresses known to this system. */
 
-    daslla_(handle, &lastc, &lastd, &lasti);
+    daslla_(__global_state, handle, &lastc, &lastd, &lasti);
     if (lastc > topc) {
-	setmsg_("File # has last char address #; `top' = #.", (ftnlen)42);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &lastc, (ftnlen)1);
-	errint_("#", &topc, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
-	chkout_("ZZEKPGCH", (ftnlen)8);
+	setmsg_(__global_state, "File # has last char address #; `top' = #.", 
+		(ftnlen)42);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &lastc, (ftnlen)1);
+	errint_(__global_state, "#", &topc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFORMAT)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKPGCH", (ftnlen)8);
 	return 0;
     } else if (lastd > topd) {
-	setmsg_("File # has last d.p. address #; `top' = #.", (ftnlen)42);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &lastd, (ftnlen)1);
-	errint_("#", &topd, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
-	chkout_("ZZEKPGCH", (ftnlen)8);
+	setmsg_(__global_state, "File # has last d.p. address #; `top' = #.", 
+		(ftnlen)42);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &lastd, (ftnlen)1);
+	errint_(__global_state, "#", &topd, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFORMAT)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKPGCH", (ftnlen)8);
 	return 0;
     } else if (lasti > topi) {
-	setmsg_("File # has last int. address #; `top' = #.", (ftnlen)42);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &lasti, (ftnlen)1);
-	errint_("#", &topi, (ftnlen)1);
-	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
-	chkout_("ZZEKPGCH", (ftnlen)8);
+	setmsg_(__global_state, "File # has last int. address #; `top' = #.", 
+		(ftnlen)42);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &lasti, (ftnlen)1);
+	errint_(__global_state, "#", &topi, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDFORMAT)", (ftnlen)20);
+	chkout_(__global_state, "ZZEKPGCH", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZEKPGCH", (ftnlen)8);
+    chkout_(__global_state, "ZZEKPGCH", (ftnlen)8);
     return 0;
 } /* zzekpgch_ */
 

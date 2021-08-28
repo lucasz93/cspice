@@ -8,8 +8,7 @@
 
 
 extern zzekfrx_init_t __zzekfrx_init;
-static zzekfrx_state_t* get_zzekfrx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekfrx_state_t* get_zzekfrx_state(cspice_t* state) {
 	if (!state->zzekfrx)
 		state->zzekfrx = __cspice_allocate_module(sizeof(
 	zzekfrx_state_t), &__zzekfrx_init, sizeof(__zzekfrx_init));
@@ -18,44 +17,47 @@ static zzekfrx_state_t* get_zzekfrx_state() {
 }
 
 /* $Procedure     ZZEKFRX ( EK, find record in index ) */
-/* Subroutine */ int zzekfrx_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr, integer *pos)
+/* Subroutine */ int zzekfrx_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr, integer *pos)
 {
     char cval[1024];
     doublereal dval;
     integer ival;
-    extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzeklerc_(integer *, integer *, integer *, 
-	    char *, integer *, logical *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int zzeklerd_(integer *, integer *, integer *, 
-	    doublereal *, integer *, logical *, integer *, integer *);
-    extern /* Subroutine */ int zzekleri_(integer *, integer *, integer *, 
-	    integer *, integer *, logical *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzeklerc_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, logical *, integer *, integer *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzeklerd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *, integer *, logical *, integer *, integer 
+	    *);
+    extern /* Subroutine */ int zzekleri_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, logical *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
     integer cvlen;
     logical found;
     integer dtype;
     integer cmplen;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     logical isnull;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer prvptr;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int zzekrsc_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, char *, logical *, logical *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekrsd_(integer *, integer *, integer *, 
-	    integer *, integer *, doublereal *, logical *, logical *);
-    extern /* Subroutine */ int zzekrsi_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, logical *, logical *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int zzekrsc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, char *, logical *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzekrsd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, doublereal *, logical *, logical 
+	    *);
+    extern /* Subroutine */ int zzekrsi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, logical *, logical *);
 
 
     /* Module state */
-    zzekfrx_state_t* __state = get_zzekfrx_state();
+    zzekfrx_state_t* __state = get_zzekfrx_state(__global_state);
 /* $ Abstract */
 
 /*     Find the ordinal position of a specified record in a specified, */
@@ -585,37 +587,37 @@ static zzekfrx_state_t* get_zzekfrx_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZEKFRX", (ftnlen)7);
+    chkin_(__global_state, "ZZEKFRX", (ftnlen)7);
 
 /*     Determine the data type of the column, and look up the value */
 /*     associated with RECPTR. */
 
     dtype = coldsc[1];
     if (dtype == 1) {
-	zzekrsc_(handle, segdsc, coldsc, recptr, &__state->c__1, &cvlen, cval,
-		 &isnull, &found, (ftnlen)1024);
+	zzekrsc_(__global_state, handle, segdsc, coldsc, recptr, &
+		__state->c__1, &cvlen, cval, &isnull, &found, (ftnlen)1024);
 	if (found && ! isnull) {
 	    cmplen = min(cvlen,1024);
 	} else {
 	    cmplen = 0;
 	}
     } else if (dtype == 2 || dtype == 4) {
-	zzekrsd_(handle, segdsc, coldsc, recptr, &__state->c__1, &dval, &
-		isnull, &found);
+	zzekrsd_(__global_state, handle, segdsc, coldsc, recptr, &
+		__state->c__1, &dval, &isnull, &found);
     } else if (dtype == 3) {
-	zzekrsi_(handle, segdsc, coldsc, recptr, &__state->c__1, &ival, &
-		isnull, &found);
+	zzekrsi_(__global_state, handle, segdsc, coldsc, recptr, &
+		__state->c__1, &ival, &isnull, &found);
     } else {
-	setmsg_("File = #; COLIDX = #. Unrecognized data type code # found i"
-		"n descriptor.", (ftnlen)72);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &coldsc[8], (ftnlen)1);
-	errint_("#", &dtype, (ftnlen)1);
-	sigerr_("SPICE(ITEMNOTFOUND)", (ftnlen)19);
-	chkout_("ZZEKFRX", (ftnlen)7);
+	setmsg_(__global_state, "File = #; COLIDX = #. Unrecognized data typ"
+		"e code # found in descriptor.", (ftnlen)72);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &coldsc[8], (ftnlen)1);
+	errint_(__global_state, "#", &dtype, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ITEMNOTFOUND)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKFRX", (ftnlen)7);
 	return 0;
     }
     if (! found) {
@@ -623,15 +625,15 @@ static zzekfrx_state_t* get_zzekfrx_state() {
 /*        We have a most heinous situation.  We should always be able */
 /*        to find the value associated with a record. */
 
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	setmsg_("File = #; RECNO = #; COLIDX = #. Column entry was not found"
-		".  This probably indicates a corrupted file or a bug in the "
-		"EK code.", (ftnlen)127);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errint_("#", &coldsc[8], (ftnlen)1);
-	sigerr_("SPICE(ITEMNOTFOUND)", (ftnlen)19);
-	chkout_("ZZEKFRX", (ftnlen)7);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	setmsg_(__global_state, "File = #; RECNO = #; COLIDX = #. Column ent"
+		"ry was not found.  This probably indicates a corrupted file "
+		"or a bug in the EK code.", (ftnlen)127);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errint_(__global_state, "#", &coldsc[8], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ITEMNOTFOUND)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKFRX", (ftnlen)7);
 	return 0;
     }
 
@@ -643,36 +645,36 @@ static zzekfrx_state_t* get_zzekfrx_state() {
 /*     the ordinal position of our record. */
 
     if (dtype == 1) {
-	zzeklerc_(handle, segdsc, coldsc, cval, recptr, &isnull, pos, &prvptr,
-		 cmplen);
+	zzeklerc_(__global_state, handle, segdsc, coldsc, cval, recptr, &
+		isnull, pos, &prvptr, cmplen);
     } else if (dtype == 2 || dtype == 4) {
-	zzeklerd_(handle, segdsc, coldsc, &dval, recptr, &isnull, pos, &
-		prvptr);
+	zzeklerd_(__global_state, handle, segdsc, coldsc, &dval, recptr, &
+		isnull, pos, &prvptr);
     } else {
 
 /*        The data type is INT.  (We've already checked for invalid */
 /*        types.) */
 
-	zzekleri_(handle, segdsc, coldsc, &ival, recptr, &isnull, pos, &
-		prvptr);
+	zzekleri_(__global_state, handle, segdsc, coldsc, &ival, recptr, &
+		isnull, pos, &prvptr);
     }
     if (prvptr != *recptr) {
 
 /*        Big problem.  This should never happen. */
 
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	setmsg_("File = #; RECNO = #; COLIDX = #.  Record that was last less"
-		" than or equal to RECNO was not equal to RECNO.  This probab"
-		"ly indicates  a corrupted file or a bug in the EK code.", (
-		ftnlen)174);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errint_("#", &coldsc[8], (ftnlen)1);
-	sigerr_("SPICE(ITEMNOTFOUND)", (ftnlen)19);
-	chkout_("ZZEKFRX", (ftnlen)7);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	setmsg_(__global_state, "File = #; RECNO = #; COLIDX = #.  Record th"
+		"at was last less than or equal to RECNO was not equal to REC"
+		"NO.  This probably indicates  a corrupted file or a bug in t"
+		"he EK code.", (ftnlen)174);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errint_(__global_state, "#", &coldsc[8], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(ITEMNOTFOUND)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKFRX", (ftnlen)7);
 	return 0;
     }
-    chkout_("ZZEKFRX", (ftnlen)7);
+    chkout_(__global_state, "ZZEKFRX", (ftnlen)7);
     return 0;
 } /* zzekfrx_ */
 

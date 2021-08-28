@@ -8,36 +8,38 @@
 
 
 typedef int ekappr_state_t;
-static ekappr_state_t* get_ekappr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekappr_state_t* get_ekappr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      EKAPPR ( EK, append record onto segment ) */
-/* Subroutine */ int ekappr_(integer *handle, integer *segno, integer *recno)
+/* Subroutine */ int ekappr_(cspice_t* __global_state, integer *handle, 
+	integer *segno, integer *recno)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     integer nrec;
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int zzekmloc_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzekmloc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer mbase;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     integer mp;
     integer segdsc[24];
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int ekinsr_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int ekinsr_(integer *, integer *, integer *);
 
 
     /* Module state */
-    ekappr_state_t* __state = get_ekappr_state();
+    ekappr_state_t* __state = get_ekappr_state(__global_state);
 /* $ Abstract */
 
 /*     Append a new, empty record at the end of a specified E-kernel */
@@ -807,10 +809,10 @@ static ekappr_state_t* get_ekappr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKAPPR", (ftnlen)6);
+	chkin_(__global_state, "EKAPPR", (ftnlen)6);
     }
 
 /*     Before trying to actually write anything, do every error */
@@ -819,9 +821,9 @@ static ekappr_state_t* get_ekappr_state() {
 /*     Is this file handle valid--is the file open for paged write */
 /*     access?  Signal an error if not. */
 
-    zzekpgch_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("EKAPPR", (ftnlen)6);
+    zzekpgch_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKAPPR", (ftnlen)6);
 	return 0;
     }
 
@@ -829,14 +831,14 @@ static ekappr_state_t* get_ekappr_state() {
 /*     Given the base address, we can read the pertinent metadata in */
 /*     one shot. */
 
-    zzekmloc_(handle, segno, &mp, &mbase);
-    if (failed_()) {
-	chkout_("EKAPPR", (ftnlen)6);
+    zzekmloc_(__global_state, handle, segno, &mp, &mbase);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKAPPR", (ftnlen)6);
 	return 0;
     }
     i__1 = mbase + 1;
     i__2 = mbase + 24;
-    dasrdi_(handle, &i__1, &i__2, segdsc);
+    dasrdi_(__global_state, handle, &i__1, &i__2, segdsc);
 
 /*     Obtain the number of records already present. */
 
@@ -845,8 +847,8 @@ static ekappr_state_t* get_ekappr_state() {
 /*     Insert the new record at the end of the segment. */
 
     *recno = nrec + 1;
-    ekinsr_(handle, segno, recno);
-    chkout_("EKAPPR", (ftnlen)6);
+    ekinsr_(__global_state, handle, segno, recno);
+    chkout_(__global_state, "EKAPPR", (ftnlen)6);
     return 0;
 } /* ekappr_ */
 

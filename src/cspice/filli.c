@@ -8,13 +8,13 @@
 
 
 typedef int filli_state_t;
-static filli_state_t* get_filli_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline filli_state_t* get_filli_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      FILLI ( Fill an integer array ) */
-/* Subroutine */ int filli_(integer *value, integer *ndim, integer *array)
+/* Subroutine */ int filli_(cspice_t* __global_state, integer *value, integer 
+	*ndim, integer *array)
 {
     /* System generated locals */
     integer i__1;
@@ -24,7 +24,7 @@ static filli_state_t* get_filli_state() {
 
 
     /* Module state */
-    filli_state_t* __state = get_filli_state();
+    filli_state_t* __state = get_filli_state(__global_state);
 /* $ Abstract */
 
 /*      Fill an integer array with a specified value. */

@@ -1,13 +1,11 @@
 #include "f2c.h"
 #include "fio.h"
 #include "fmt.h"
-#include "__cspice_state.h"
 
  static int
-mv_cur(Void)	/* shouldn't use fseek because it insists on calling fflush */
+mv_cur(f2c_state_t *f2c)	/* shouldn't use fseek because it insists on calling fflush */
 		/* instead we know too much about stdio */
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int cursor = f2c->f__cursor;
 	f2c->f__cursor = 0;
 	if(f2c->f__external == 0) {
@@ -65,12 +63,11 @@ mv_cur(Void)	/* shouldn't use fseek because it insists on calling fflush */
 
  static int
 #ifdef KR_headers
-wrt_Z(n,w,minlen,len) Uint *n; int w, minlen; ftnlen len;
+wrt_Z(f2c,n,w,minlen,len) f2c_state_t *f2c; Uint *n; int w, minlen; ftnlen len;
 #else
-wrt_Z(Uint *n, int w, int minlen, ftnlen len)
+wrt_Z(f2c_state_t *f2c, Uint *n, int w, int minlen, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	register char *s, *se;
 	register int i, w1;
 	static int one = 1;						/* MECHSOFT: Read only. Safe to keep static. */
@@ -121,12 +118,11 @@ wrt_Z(Uint *n, int w, int minlen, ftnlen len)
 
  static int
 #ifdef KR_headers
-wrt_I(n,w,len, base) Uint *n; ftnlen len; register int base;
+wrt_I(f2c,n,w,len, base) f2c_state_t *f2c; Uint *n; ftnlen len; register int base;
 #else
-wrt_I(Uint *n, int w, ftnlen len, register int base)
+wrt_I(f2c_state_t *f2c, Uint *n, int w, ftnlen len, register int base)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int ndigit,sign,spare,i;
+{	int ndigit,sign,spare,i;
 	longint x;
 	char *ans;
 	if(len==sizeof(integer)) x=n->il;
@@ -150,12 +146,11 @@ wrt_I(Uint *n, int w, ftnlen len, register int base)
 }
  static int
 #ifdef KR_headers
-wrt_IM(n,w,m,len,base) Uint *n; ftnlen len; int base;
+wrt_IM(f2c,n,w,m,len,base) f2c_state_t *f2c; Uint *n; ftnlen len; int base;
 #else
-wrt_IM(Uint *n, int w, int m, ftnlen len, int base)
+wrt_IM(f2c_state_t *f2c, Uint *n, int w, int m, ftnlen len, int base)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int ndigit,sign,spare,i,xsign;
+{	int ndigit,sign,spare,i,xsign;
 	longint x;
 	char *ans;
 	if(sizeof(integer)==len) x=n->il;
@@ -188,15 +183,14 @@ wrt_IM(Uint *n, int w, int m, ftnlen len, int base)
 }
  static int
 #ifdef KR_headers
-wrt_AP(s) char *s;
+wrt_AP(f2c,s) f2c_state_t *f2c; char *s;
 #else
-wrt_AP(char *s)
+wrt_AP(f2c_state_t *f2c, char *s)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	char quote;
+{	char quote;
 	int i;
 
-	if(f2c->f__cursor && (i = mv_cur()))
+	if(f2c->f__cursor && (i = mv_cur(f2c)))
 		return i;
 	quote = *s++;
 	for(;*s;s++)
@@ -208,26 +202,24 @@ wrt_AP(char *s)
 }
  static int
 #ifdef KR_headers
-wrt_H(a,s) char *s;
+wrt_H(f2c,a,s) f2c_state_t *f2c; char *s;
 #else
-wrt_H(int a, char *s)
+wrt_H(f2c_state_t *f2c, int a, char *s)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int i;
 
-	if(f2c->f__cursor && (i = mv_cur()))
+	if(f2c->f__cursor && (i = mv_cur(f2c)))
 		return i;
 	while(a--) (*f2c->f__putn)(*s++);
 	return(1);
 }
 #ifdef KR_headers
-wrt_L(n,len, sz) Uint *n; ftnlen sz;
+wrt_L(f2c, n,len, sz) f2c_state_t *f2c; Uint *n; ftnlen sz;
 #else
-wrt_L(Uint *n, int len, ftnlen sz)
+wrt_L(f2c_state_t *f2c, Uint *n, int len, ftnlen sz)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int i;
+{	int i;
 	long x;
 	if(sizeof(long)==sz) x=n->il;
 	else if(sz == sizeof(char)) x = n->ic;
@@ -240,23 +232,21 @@ wrt_L(Uint *n, int len, ftnlen sz)
 }
  static int
 #ifdef KR_headers
-wrt_A(p,len) char *p; ftnlen len;
+wrt_A(f2c,p,len) f2c_state_t *f2c; char *p; ftnlen len;
 #else
-wrt_A(char *p, ftnlen len)
+wrt_A(f2c_state_t *f2c, char *p, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	while(len-- > 0) (*f2c->f__putn)(*p++);
 	return(0);
 }
  static int
 #ifdef KR_headers
-wrt_AW(p,w,len) char * p; ftnlen len;
+wrt_AW(f2c,p,w,len) f2c_state_t *f2c; char * p; ftnlen len;
 #else
-wrt_AW(char * p, int w, ftnlen len)
+wrt_AW(f2c_state_t *f2c, char * p, int w, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	while(w>len)
 	{	w--;
 		(*f2c->f__putn)(' ');
@@ -268,12 +258,11 @@ wrt_AW(char * p, int w, ftnlen len)
 
  static int
 #ifdef KR_headers
-wrt_G(p,w,d,e,len) ufloat *p; ftnlen len;
+wrt_G(f2c,p,w,d,e,len) f2c_state_t *f2c; ufloat *p; ftnlen len;
 #else
-wrt_G(ufloat *p, int w, int d, int e, ftnlen len)
+wrt_G(f2c_state_t *f2c, ufloat *p, int w, int d, int e, ftnlen len)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	double up = 1,x;
+{	double up = 1,x;
 	int i=0,oldscale,n,j;
 	x = len==sizeof(real)?p->pf:p->pd;
 	if(x < 0 ) x = -x;
@@ -298,59 +287,57 @@ wrt_G(ufloat *p, int w, int d, int e, ftnlen len)
 	return(wrt_E(p,w,d,e,len));
 }
 #ifdef KR_headers
-w_ed(p,ptr,len) struct syl *p; char *ptr; ftnlen len;
+w_ed(f2c,p,ptr,len) f2c_state_t *f2c; struct syl *p; char *ptr; ftnlen len;
 #else
-w_ed(struct syl *p, char *ptr, ftnlen len)
+w_ed(f2c_state_t *f2c, struct syl *p, char *ptr, ftnlen len)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	int i;
 
-	if(f2c->f__cursor && (i = mv_cur()))
+	if(f2c->f__cursor && (i = mv_cur(f2c)))
 		return i;
 	switch(p->op)
 	{
 	default:
 		fprintf(stderr,"w_ed, unexpected code: %d\n", p->op);
 		sig_die(f2c->f__fmtbuf, 1);
-	case I:	return(wrt_I((Uint *)ptr,p->p1,len, 10));
+	case I:	return(wrt_I(f2c,(Uint *)ptr,p->p1,len, 10));
 	case IM:
-		return(wrt_IM((Uint *)ptr,p->p1,p->p2.i[0],len,10));
+		return(wrt_IM(f2c,(Uint *)ptr,p->p1,p->p2.i[0],len,10));
 
 		/* O and OM don't work right for character, double, complex, */
 		/* or doublecomplex, and they differ from Fortran 90 in */
 		/* showing a minus sign for negative values. */
 
-	case O:	return(wrt_I((Uint *)ptr, p->p1, len, 8));
+	case O:	return(wrt_I(f2c,(Uint *)ptr, p->p1, len, 8));
 	case OM:
-		return(wrt_IM((Uint *)ptr,p->p1,p->p2.i[0],len,8));
-	case L:	return(wrt_L((Uint *)ptr,p->p1, len));
-	case A: return(wrt_A(ptr,len));
+		return(wrt_IM(f2c,(Uint *)ptr,p->p1,p->p2.i[0],len,8));
+	case L:	return(wrt_L(f2c,(Uint *)ptr,p->p1, len));
+	case A: return(wrt_A(f2c,ptr,len));
 	case AW:
-		return(wrt_AW(ptr,p->p1,len));
+		return(wrt_AW(f2c,ptr,p->p1,len));
 	case D:
 	case E:
 	case EE:
 		return(wrt_E((ufloat *)ptr,p->p1,p->p2.i[0],p->p2.i[1],len));
 	case G:
 	case GE:
-		return(wrt_G((ufloat *)ptr,p->p1,p->p2.i[0],p->p2.i[1],len));
+		return(wrt_G(f2c,(ufloat *)ptr,p->p1,p->p2.i[0],p->p2.i[1],len));
 	case F:	return(wrt_F((ufloat *)ptr,p->p1,p->p2.i[0],len));
 
 		/* Z and ZM assume 8-bit bytes. */
 
-	case Z: return(wrt_Z((Uint *)ptr,p->p1,0,len));
+	case Z: return(wrt_Z(f2c,(Uint *)ptr,p->p1,0,len));
 	case ZM:
-		return(wrt_Z((Uint *)ptr,p->p1,p->p2.i[0],len));
+		return(wrt_Z(f2c,(Uint *)ptr,p->p1,p->p2.i[0],len));
 	}
 }
 #ifdef KR_headers
-w_ned(p) struct syl *p;
+w_ned(f2c,p) f2c_state_t *f2c; struct syl *p;
 #else
-w_ned(struct syl *p)
+w_ned(f2c_state_t *f2c, struct syl *p)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	switch(p->op)
 	{
 	default: fprintf(stderr,"w_ned, unexpected code: %d\n", p->op);
@@ -368,8 +355,8 @@ w_ned(struct syl *p)
 		f2c->f__cursor += p->p1;
 		return(1);
 	case APOS:
-		return(wrt_AP(p->p2.s));
+		return(wrt_AP(f2c,p->p2.s));
 	case H:
-		return(wrt_H(p->p1,p->p2.s));
+		return(wrt_H(f2c,p->p1,p->p2.s));
 	}
 }

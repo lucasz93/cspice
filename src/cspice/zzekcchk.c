@@ -8,42 +8,43 @@
 
 
 typedef int zzekcchk_state_t;
-static zzekcchk_state_t* get_zzekcchk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekcchk_state_t* get_zzekcchk_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  ZZEKCCHK ( Private: EK, check names in encoded query ) */
-/* Subroutine */ int zzekcchk_(char *query, integer *eqryi, char *eqryc, 
-	integer *ntab, char *tablst, char *alslst, integer *base, logical *
-	error, char *errmsg, integer *errptr, ftnlen query_len, ftnlen 
-	eqryc_len, ftnlen tablst_len, ftnlen alslst_len, ftnlen errmsg_len)
+/* Subroutine */ int zzekcchk_(cspice_t* __global_state, char *query, integer 
+	*eqryi, char *eqryc, integer *ntab, char *tablst, char *alslst, 
+	integer *base, logical *error, char *errmsg, integer *errptr, ftnlen 
+	query_len, ftnlen eqryc_len, ftnlen tablst_len, ftnlen alslst_len, 
+	ftnlen errmsg_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
     integer i__;
     integer j;
-    extern /* Subroutine */ int ekcii_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int ekcii_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer cb;
     integer cc;
     integer ce;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer tb;
     integer te;
-    extern /* Subroutine */ int ekccnt_(char *, integer *, ftnlen);
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ekccnt_(cspice_t*, char *, integer *, ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     char column[32];
     char ctouch[1];
     integer attdsc[6];
@@ -52,16 +53,16 @@ static zzekcchk_state_t* get_zzekcchk_state() {
     integer nmatch;
     integer tabidx;
     logical noname;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     logical fnd;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer lxb[2];
 
 
     /* Module state */
-    zzekcchk_state_t* __state = get_zzekcchk_state();
+    zzekcchk_state_t* __state = get_zzekcchk_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -873,21 +874,22 @@ static zzekcchk_state_t* get_zzekcchk_state() {
 /*     No error to start with. */
 
     *error = FALSE_;
-    s_copy(errmsg, " ", errmsg_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, errmsg, " ", errmsg_len, (ftnlen)1);
     *errptr = 0;
     *(unsigned char *)ctouch = *(unsigned char *)query;
 
 /*     The query must have been parsed at this point, or it's no go. */
 
-    zzekreqi_(eqryi, "PARSED", &iparse, (ftnlen)6);
-    if (failed_()) {
+    zzekreqi_(__global_state, eqryi, "PARSED", &iparse, (ftnlen)6);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (iparse == -1) {
-	chkin_("ZZEKCCHK", (ftnlen)8);
-	setmsg_("Encoded query has not been parsed.", (ftnlen)34);
-	sigerr_("SPICE(QUERYNOTPARSED)", (ftnlen)21);
-	chkout_("ZZEKCCHK", (ftnlen)8);
+	chkin_(__global_state, "ZZEKCCHK", (ftnlen)8);
+	setmsg_(__global_state, "Encoded query has not been parsed.", (ftnlen)
+		34);
+	sigerr_(__global_state, "SPICE(QUERYNOTPARSED)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKCCHK", (ftnlen)8);
 	return 0;
     }
 
@@ -901,14 +903,14 @@ static zzekcchk_state_t* get_zzekcchk_state() {
     ce = eqryi[*base + 16];
     lxb[1] = eqryi[*base + 13];
     if (cb <= 0 || ce <= 0) {
-	chkin_("ZZEKCCHK", (ftnlen)8);
-	setmsg_("Invalid string bounds #:# for column.  Column name descript"
-		"or base is #.", (ftnlen)72);
-	errint_("#", &cb, (ftnlen)1);
-	errint_("#", &ce, (ftnlen)1);
-	errint_("#", base, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKCCHK", (ftnlen)8);
+	chkin_(__global_state, "ZZEKCCHK", (ftnlen)8);
+	setmsg_(__global_state, "Invalid string bounds #:# for column.  Colu"
+		"mn name descriptor base is #.", (ftnlen)72);
+	errint_(__global_state, "#", &cb, (ftnlen)1);
+	errint_(__global_state, "#", &ce, (ftnlen)1);
+	errint_(__global_state, "#", base, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKCCHK", (ftnlen)8);
 	return 0;
     }
     noname = tb == 0;
@@ -922,13 +924,14 @@ static zzekcchk_state_t* get_zzekcchk_state() {
 	nmatch = 0;
 	i__1 = *ntab;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    ekccnt_(tablst + (i__ - 1) * tablst_len, &cc, tablst_len);
+	    ekccnt_(__global_state, tablst + (i__ - 1) * tablst_len, &cc, 
+		    tablst_len);
 	    i__2 = cc;
 	    for (j = 1; j <= i__2; ++j) {
-		ekcii_(tablst + (i__ - 1) * tablst_len, &j, column, attdsc, 
-			tablst_len, (ftnlen)32);
-		if (s_cmp(eqryc + (cb - 1), column, ce - (cb - 1), (ftnlen)32)
-			 == 0) {
+		ekcii_(__global_state, tablst + (i__ - 1) * tablst_len, &j, 
+			column, attdsc, tablst_len, (ftnlen)32);
+		if (s_cmp(&__global_state->f2c, eqryc + (cb - 1), column, ce 
+			- (cb - 1), (ftnlen)32) == 0) {
 		    ++nmatch;
 		    colidx = j;
 		    tabidx = i__;
@@ -937,18 +940,19 @@ static zzekcchk_state_t* get_zzekcchk_state() {
 	}
 	if (nmatch == 0) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Column <#> is not present in any table in FROM c"
-		    "lause.", errmsg_len, (ftnlen)54);
-	    repmc_(errmsg, "#", eqryc + (cb - 1), errmsg, errmsg_len, (ftnlen)
-		    1, ce - (cb - 1), errmsg_len);
+	    s_copy(&__global_state->f2c, errmsg, "Column <#> is not present "
+		    "in any table in FROM clause.", errmsg_len, (ftnlen)54);
+	    repmc_(__global_state, errmsg, "#", eqryc + (cb - 1), errmsg, 
+		    errmsg_len, (ftnlen)1, ce - (cb - 1), errmsg_len);
 	    *errptr = lxb[1];
 	    return 0;
 	} else if (nmatch > 1) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Column name <#> is ambiguous; a qualifying table"
-		    " name or alias is required.", errmsg_len, (ftnlen)75);
-	    repmc_(errmsg, "#", eqryc + (cb - 1), errmsg, errmsg_len, (ftnlen)
-		    1, ce - (cb - 1), errmsg_len);
+	    s_copy(&__global_state->f2c, errmsg, "Column name <#> is ambiguo"
+		    "us; a qualifying table name or alias is required.", 
+		    errmsg_len, (ftnlen)75);
+	    repmc_(__global_state, errmsg, "#", eqryc + (cb - 1), errmsg, 
+		    errmsg_len, (ftnlen)1, ce - (cb - 1), errmsg_len);
 	    *errptr = lxb[1];
 	    return 0;
 	}
@@ -957,21 +961,21 @@ static zzekcchk_state_t* get_zzekcchk_state() {
 /*        Find the qualifying name in the FROM table list.  If the */
 /*        name is not there, look in the alias list. */
 
-	tabidx = isrchc_(eqryc + (tb - 1), ntab, tablst, te - (tb - 1), 
-		tablst_len);
+	tabidx = isrchc_(__global_state, eqryc + (tb - 1), ntab, tablst, te - 
+		(tb - 1), tablst_len);
 	if (tabidx == 0) {
-	    tabidx = isrchc_(eqryc + (tb - 1), ntab, alslst, te - (tb - 1), 
-		    alslst_len);
+	    tabidx = isrchc_(__global_state, eqryc + (tb - 1), ntab, alslst, 
+		    te - (tb - 1), alslst_len);
 	}
 
 /*        If the table name wasn't in either list, we can't use it. */
 
 	if (tabidx == 0) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Table name <#> is not present in FROM clause.", 
-		    errmsg_len, (ftnlen)45);
-	    repmc_(errmsg, "#", eqryc + (tb - 1), errmsg, errmsg_len, (ftnlen)
-		    1, te - (tb - 1), errmsg_len);
+	    s_copy(&__global_state->f2c, errmsg, "Table name <#> is not pres"
+		    "ent in FROM clause.", errmsg_len, (ftnlen)45);
+	    repmc_(__global_state, errmsg, "#", eqryc + (tb - 1), errmsg, 
+		    errmsg_len, (ftnlen)1, te - (tb - 1), errmsg_len);
 	    *errptr = lxb[0];
 	    return 0;
 	}
@@ -979,14 +983,15 @@ static zzekcchk_state_t* get_zzekcchk_state() {
 /*        Check the column.  This column must be present in the */
 /*        table that qualifies it. */
 
-	ekccnt_(tablst + (tabidx - 1) * tablst_len, &cc, tablst_len);
+	ekccnt_(__global_state, tablst + (tabidx - 1) * tablst_len, &cc, 
+		tablst_len);
 	fnd = FALSE_;
 	i__ = 1;
 	while(i__ <= cc && ! fnd) {
-	    ekcii_(tablst + (tabidx - 1) * tablst_len, &i__, column, attdsc, 
-		    tablst_len, (ftnlen)32);
-	    if (s_cmp(eqryc + (cb - 1), column, ce - (cb - 1), (ftnlen)32) == 
-		    0) {
+	    ekcii_(__global_state, tablst + (tabidx - 1) * tablst_len, &i__, 
+		    column, attdsc, tablst_len, (ftnlen)32);
+	    if (s_cmp(&__global_state->f2c, eqryc + (cb - 1), column, ce - (
+		    cb - 1), (ftnlen)32) == 0) {
 		fnd = TRUE_;
 		colidx = i__;
 	    } else {
@@ -995,12 +1000,12 @@ static zzekcchk_state_t* get_zzekcchk_state() {
 	}
 	if (! fnd) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Column <#> does not exist in table <#>.", 
-		    errmsg_len, (ftnlen)39);
-	    repmc_(errmsg, "#", eqryc + (cb - 1), errmsg, errmsg_len, (ftnlen)
-		    1, ce - (cb - 1), errmsg_len);
-	    repmc_(errmsg, "#", eqryc + (tb - 1), errmsg, errmsg_len, (ftnlen)
-		    1, te - (tb - 1), errmsg_len);
+	    s_copy(&__global_state->f2c, errmsg, "Column <#> does not exist "
+		    "in table <#>.", errmsg_len, (ftnlen)39);
+	    repmc_(__global_state, errmsg, "#", eqryc + (cb - 1), errmsg, 
+		    errmsg_len, (ftnlen)1, ce - (cb - 1), errmsg_len);
+	    repmc_(__global_state, errmsg, "#", eqryc + (tb - 1), errmsg, 
+		    errmsg_len, (ftnlen)1, te - (tb - 1), errmsg_len);
 	    *errptr = lxb[1];
 	    return 0;
 	}

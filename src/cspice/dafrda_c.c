@@ -198,7 +198,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafrda_c" );
+   chkin_c ( naif_state, "dafrda_c" );
    
    dafrda_ ( ( integer    * ) &handle,
              ( integer    * ) &begin,

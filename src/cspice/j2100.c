@@ -8,20 +8,19 @@
 
 
 typedef int j2100_state_t;
-static j2100_state_t* get_j2100_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline j2100_state_t* get_j2100_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure                     J2100 ( Julian Date of 2100 JAN 1.5 ) */
-doublereal j2100_(void)
+doublereal j2100_(cspice_t* __global_state)
 {
     /* System generated locals */
     doublereal ret_val;
 
 
     /* Module state */
-    j2100_state_t* __state = get_j2100_state();
+    j2100_state_t* __state = get_j2100_state(__global_state);
 /* $ Abstract */
 
 /*     Return the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5). */

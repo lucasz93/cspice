@@ -8,8 +8,7 @@
 
 
 extern zznofcon_init_t __zznofcon_init;
-static zznofcon_state_t* get_zznofcon_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zznofcon_state_t* get_zznofcon_state(cspice_t* state) {
 	if (!state->zznofcon)
 		state->zznofcon = __cspice_allocate_module(sizeof(
 	zznofcon_state_t), &__zznofcon_init, sizeof(__zznofcon_init));
@@ -18,56 +17,58 @@ static zznofcon_state_t* get_zznofcon_state() {
 }
 
 /* $Procedure  ZZNOFCON ( Create frame connection long error message ) */
-/* Subroutine */ int zznofcon_(doublereal *et, integer *frame1, integer *
-	endp1, integer *frame2, integer *endp2, char *errmsg, ftnlen 
-	errmsg_len)
+/* Subroutine */ int zznofcon_(cspice_t* __global_state, doublereal *et, 
+	integer *frame1, integer *endp1, integer *frame2, integer *endp2, 
+	char *errmsg, ftnlen errmsg_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char name__[32*2];
     integer i__;
     char bname[32*2];
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int etcal_(cspice_t*, doublereal *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer class__;
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer endps[2];
-    extern /* Subroutine */ int repmf_(char *, char *, doublereal *, integer *
-	    , char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmf_(cspice_t*, char *, char *, doublereal *
+	    , integer *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen);
     logical found;
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int ckmeta_(integer *, char *, integer *, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int ckmeta_(cspice_t*, integer *, char *, integer 
+	    *, ftnlen);
     integer sclkid;
     logical havnam[2];
     integer frames[2];
     integer center;
     integer clssid;
     char phrase[600];
-    extern /* Subroutine */ int frmnam_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int frinfo_(integer *, integer *, integer *, 
-	    integer *, logical *);
+    extern /* Subroutine */ int frmnam_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int frinfo_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *);
     logical ckmiss;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     logical scmiss;
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern logical return_(void);
-    extern logical zzsclk_(integer *, integer *);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern logical zzsclk_(cspice_t*, integer *, integer *);
     char timstr[35];
 
 
     /* Module state */
-    zznofcon_state_t* __state = get_zznofcon_state();
+    zznofcon_state_t* __state = get_zznofcon_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -445,10 +446,10 @@ static zznofcon_state_t* get_zznofcon_state() {
 /*     Because this routine might cause a SPICE error to be */
 /*     signaled, we have to check in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZNOFCON", (ftnlen)8);
+    chkin_(__global_state, "ZZNOFCON", (ftnlen)8);
 
 /*     Capture input IDs in arrays. */
 
@@ -468,53 +469,61 @@ static zznofcon_state_t* get_zznofcon_state() {
 
 /*     Get a string representation of the transformation epoch. */
 
-    etcal_(et, timstr, (ftnlen)35);
+    etcal_(__global_state, et, timstr, (ftnlen)35);
 
 /*     Get the names of the participating frames, if available. */
 
-    frmnam_(frames, name__, (ftnlen)32);
-    frmnam_(&frames[1], name__ + 32, (ftnlen)32);
-    frmnam_(endps, bname, (ftnlen)32);
-    frmnam_(&endps[1], bname + 32, (ftnlen)32);
-    if (failed_()) {
-	chkout_("ZZNOFCON", (ftnlen)8);
+    frmnam_(__global_state, frames, name__, (ftnlen)32);
+    frmnam_(__global_state, &frames[1], name__ + 32, (ftnlen)32);
+    frmnam_(__global_state, endps, bname, (ftnlen)32);
+    frmnam_(__global_state, &endps[1], bname + 32, (ftnlen)32);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZNOFCON", (ftnlen)8);
 	return 0;
     }
     for (i__ = 1; i__ <= 2; ++i__) {
-	if (s_cmp(name__ + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		s_rnge("name", i__1, "zznofcon_", (ftnlen)383)) << 5), " ", (
-		ftnlen)32, (ftnlen)1) == 0) {
-	    s_copy(name__ + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("name", i__1, "zznofcon_", (ftnlen)385)) << 5), 
-		    "Name not available", (ftnlen)32, (ftnlen)18);
-	    havnam[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("havnam",
-		     i__1, "zznofcon_", (ftnlen)386)] = FALSE_;
+	if (s_cmp(&__global_state->f2c, name__ + (((i__1 = i__ - 1) < 2 && 0 
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "name", i__1, 
+		"zznofcon_", (ftnlen)383)) << 5), " ", (ftnlen)32, (ftnlen)1) 
+		== 0) {
+	    s_copy(&__global_state->f2c, name__ + (((i__1 = i__ - 1) < 2 && 0 
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "name", 
+		    i__1, "zznofcon_", (ftnlen)385)) << 5), "Name not availa"
+		    "ble", (ftnlen)32, (ftnlen)18);
+	    havnam[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "havnam", i__1, "zznofcon_", (ftnlen)
+		    386)] = FALSE_;
 	} else {
-	    havnam[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("havnam",
-		     i__1, "zznofcon_", (ftnlen)388)] = TRUE_;
+	    havnam[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "havnam", i__1, "zznofcon_", (ftnlen)
+		    388)] = TRUE_;
 	}
-	if (s_cmp(bname + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		"bname", i__1, "zznofcon_", (ftnlen)391)) << 5), " ", (ftnlen)
-		32, (ftnlen)1) == 0) {
-	    s_copy(bname + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-		    s_rnge("bname", i__1, "zznofcon_", (ftnlen)392)) << 5), 
-		    "Name not available", (ftnlen)32, (ftnlen)18);
+	if (s_cmp(&__global_state->f2c, bname + (((i__1 = i__ - 1) < 2 && 0 <=
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "bname", i__1, 
+		"zznofcon_", (ftnlen)391)) << 5), " ", (ftnlen)32, (ftnlen)1) 
+		== 0) {
+	    s_copy(&__global_state->f2c, bname + (((i__1 = i__ - 1) < 2 && 0 
+		    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "bname", 
+		    i__1, "zznofcon_", (ftnlen)392)) << 5), "Name not availa"
+		    "ble", (ftnlen)32, (ftnlen)18);
 	}
     }
-    s_copy(errmsg, "At epoch # TDB (# TDB), there is insufficient informatio"
-	    "n available to transform from reference frame # (@) to reference"
-	    " frame # (@).", errmsg_len, (ftnlen)133);
-    repmf_(errmsg, "#", et, &__state->c__14, "E", errmsg, errmsg_len, (ftnlen)
-	    1, (ftnlen)1, errmsg_len);
-    repmc_(errmsg, "#", timstr, errmsg, errmsg_len, (ftnlen)1, (ftnlen)35, 
-	    errmsg_len);
+    s_copy(&__global_state->f2c, errmsg, "At epoch # TDB (# TDB), there is i"
+	    "nsufficient information available to transform from reference fr"
+	    "ame # (@) to reference frame # (@).", errmsg_len, (ftnlen)133);
+    repmf_(__global_state, errmsg, "#", et, &__state->c__14, "E", errmsg, 
+	    errmsg_len, (ftnlen)1, (ftnlen)1, errmsg_len);
+    repmc_(__global_state, errmsg, "#", timstr, errmsg, errmsg_len, (ftnlen)1,
+	     (ftnlen)35, errmsg_len);
     for (i__ = 1; i__ <= 2; ++i__) {
-	repmi_(errmsg, "#", &frames[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 :
-		 s_rnge("frames", i__1, "zznofcon_", (ftnlen)408)], errmsg, 
-		errmsg_len, (ftnlen)1, errmsg_len);
-	repmc_(errmsg, "@", name__ + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		i__1 : s_rnge("name", i__1, "zznofcon_", (ftnlen)409)) << 5), 
-		errmsg, errmsg_len, (ftnlen)1, (ftnlen)32, errmsg_len);
+	repmi_(__global_state, errmsg, "#", &frames[(i__1 = i__ - 1) < 2 && 0 
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "frames", i__1, 
+		"zznofcon_", (ftnlen)408)], errmsg, errmsg_len, (ftnlen)1, 
+		errmsg_len);
+	repmc_(__global_state, errmsg, "@", name__ + (((i__1 = i__ - 1) < 2 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "name", i__1,
+		 "zznofcon_", (ftnlen)409)) << 5), errmsg, errmsg_len, (
+		ftnlen)1, (ftnlen)32, errmsg_len);
     }
 
 /*     For any frame graph longer than a single point, tell the user */
@@ -522,31 +531,37 @@ static zznofcon_state_t* get_zznofcon_state() {
 /*     at that frame. */
 
     for (i__ = 1; i__ <= 2; ++i__) {
-	if (frames[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("frames",
-		 i__1, "zznofcon_", (ftnlen)420)] != endps[(i__2 = i__ - 1) < 
-		2 && 0 <= i__2 ? i__2 : s_rnge("endps", i__2, "zznofcon_", (
-		ftnlen)420)]) {
-	    s_copy(phrase, "Frame # could be transformed to frame # (@).", (
-		    ftnlen)600, (ftnlen)44);
-	    if (havnam[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "havnam", i__1, "zznofcon_", (ftnlen)424)]) {
-		repmc_(phrase, "#", name__ + (((i__1 = i__ - 1) < 2 && 0 <= 
-			i__1 ? i__1 : s_rnge("name", i__1, "zznofcon_", (
+	if (frames[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "frames", i__1, "zznofcon_", (ftnlen)420)
+		] != endps[(i__2 = i__ - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "endps", i__2, "zznofcon_", (ftnlen)420)]
+		) {
+	    s_copy(&__global_state->f2c, phrase, "Frame # could be transform"
+		    "ed to frame # (@).", (ftnlen)600, (ftnlen)44);
+	    if (havnam[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "havnam", i__1, "zznofcon_", (ftnlen)
+		    424)]) {
+		repmc_(__global_state, phrase, "#", name__ + (((i__1 = i__ - 
+			1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "name", i__1, "zznofcon_", (
 			ftnlen)425)) << 5), phrase, (ftnlen)600, (ftnlen)1, (
 			ftnlen)32, (ftnlen)600);
 	    } else {
-		repmi_(phrase, "#", &frames[(i__1 = i__ - 1) < 2 && 0 <= i__1 
-			? i__1 : s_rnge("frames", i__1, "zznofcon_", (ftnlen)
-			427)], phrase, (ftnlen)600, (ftnlen)1, (ftnlen)600);
+		repmi_(__global_state, phrase, "#", &frames[(i__1 = i__ - 1) <
+			 2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"frames", i__1, "zznofcon_", (ftnlen)427)], phrase, (
+			ftnlen)600, (ftnlen)1, (ftnlen)600);
 	    }
-	    repmi_(phrase, "#", &endps[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("endps", i__1, "zznofcon_", (ftnlen)430)], 
-		    phrase, (ftnlen)600, (ftnlen)1, (ftnlen)600);
-	    repmc_(phrase, "@", bname + (((i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		    i__1 : s_rnge("bname", i__1, "zznofcon_", (ftnlen)431)) <<
-		     5), phrase, (ftnlen)600, (ftnlen)1, (ftnlen)32, (ftnlen)
-		    600);
-	    suffix_(phrase, &__state->c__1, errmsg, (ftnlen)600, errmsg_len);
+	    repmi_(__global_state, phrase, "#", &endps[(i__1 = i__ - 1) < 2 &&
+		     0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "endps", 
+		    i__1, "zznofcon_", (ftnlen)430)], phrase, (ftnlen)600, (
+		    ftnlen)1, (ftnlen)600);
+	    repmc_(__global_state, phrase, "@", bname + (((i__1 = i__ - 1) < 
+		    2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		    "bname", i__1, "zznofcon_", (ftnlen)431)) << 5), phrase, (
+		    ftnlen)600, (ftnlen)1, (ftnlen)32, (ftnlen)600);
+	    suffix_(__global_state, phrase, &__state->c__1, errmsg, (ftnlen)
+		    600, errmsg_len);
 
 /*           The error messages below are appended only if they're not */
 /*           redundant. */
@@ -556,42 +571,46 @@ static zznofcon_state_t* get_zznofcon_state() {
 /*              For each endpoint frame, if that frame is of CK type, */
 /*              indicate the instrument ID for which CK data are needed. */
 
-		frinfo_(&endps[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-			s_rnge("endps", i__1, "zznofcon_", (ftnlen)444)], &
-			center, &class__, &clssid, &found);
-		if (failed_()) {
-		    chkout_("ZZNOFCON", (ftnlen)8);
+		frinfo_(__global_state, &endps[(i__1 = i__ - 1) < 2 && 0 <= 
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "endps", 
+			i__1, "zznofcon_", (ftnlen)444)], &center, &class__, &
+			clssid, &found);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZNOFCON", (ftnlen)8);
 		    return 0;
 		}
 		if (found) {
 		    if (class__ == 3) {
-			s_copy(phrase, "The latter is a CK frame; a CK file "
-				"containing data for instrument or structure "
-				"# at the epoch shown above, as well as a cor"
-				"responding SCLK kernel, must be loaded in or"
-				"der to use this frame.", (ftnlen)600, (ftnlen)
-				190);
-			repmi_(phrase, "#", &clssid, phrase, (ftnlen)600, (
-				ftnlen)1, (ftnlen)600);
-			suffix_(phrase, &__state->c__1, errmsg, (ftnlen)600, 
-				errmsg_len);
+			s_copy(&__global_state->f2c, phrase, "The latter is "
+				"a CK frame; a CK file containing data for in"
+				"strument or structure # at the epoch shown a"
+				"bove, as well as a corresponding SCLK kernel"
+				", must be loaded in order to use this frame.",
+				 (ftnlen)600, (ftnlen)190);
+			repmi_(__global_state, phrase, "#", &clssid, phrase, (
+				ftnlen)600, (ftnlen)1, (ftnlen)600);
+			suffix_(__global_state, phrase, &__state->c__1, 
+				errmsg, (ftnlen)600, errmsg_len);
 
 /*                    Find out whether we have SCLK data for this */
 /*                    CK ID. */
 
-			ckmeta_(&clssid, "SCLK", &sclkid, (ftnlen)4);
-			if (! zzsclk_(&clssid, &sclkid)) {
+			ckmeta_(__global_state, &clssid, "SCLK", &sclkid, (
+				ftnlen)4);
+			if (! zzsclk_(__global_state, &clssid, &sclkid)) {
 			    scmiss = TRUE_;
-			    s_copy(phrase, "No SCLK kernel for instrument or"
-				    " structure #, with corresponding SCLK ID"
-				    " #, is currently loaded.", (ftnlen)600, (
-				    ftnlen)96);
-			    repmi_(phrase, "#", &clssid, phrase, (ftnlen)600, 
-				    (ftnlen)1, (ftnlen)600);
-			    repmi_(phrase, "#", &sclkid, phrase, (ftnlen)600, 
-				    (ftnlen)1, (ftnlen)600);
-			    suffix_(phrase, &__state->c__1, errmsg, (ftnlen)
-				    600, errmsg_len);
+			    s_copy(&__global_state->f2c, phrase, "No SCLK ke"
+				    "rnel for instrument or structure #, with"
+				    " corresponding SCLK ID #, is currently l"
+				    "oaded.", (ftnlen)600, (ftnlen)96);
+			    repmi_(__global_state, phrase, "#", &clssid, 
+				    phrase, (ftnlen)600, (ftnlen)1, (ftnlen)
+				    600);
+			    repmi_(__global_state, phrase, "#", &sclkid, 
+				    phrase, (ftnlen)600, (ftnlen)1, (ftnlen)
+				    600);
+			    suffix_(__global_state, phrase, &__state->c__1, 
+				    errmsg, (ftnlen)600, errmsg_len);
 			} else {
 
 /*                       If we got here and have the SCLK data, then */
@@ -620,54 +639,58 @@ static zznofcon_state_t* get_zznofcon_state() {
 /*           this graph is a CK frame, generate a phrase */
 /*           indicating the needed CK data. */
 
-	    frinfo_(&frames[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "frames", i__1, "zznofcon_", (ftnlen)520)], &center, &
-		    class__, &clssid, &found);
-	    if (failed_()) {
-		chkout_("ZZNOFCON", (ftnlen)8);
+	    frinfo_(__global_state, &frames[(i__1 = i__ - 1) < 2 && 0 <= i__1 
+		    ? i__1 : s_rnge(&__global_state->f2c, "frames", i__1, 
+		    "zznofcon_", (ftnlen)520)], &center, &class__, &clssid, &
+		    found);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZNOFCON", (ftnlen)8);
 		return 0;
 	    }
 	    if (found) {
 		if (class__ == 3) {
-		    s_copy(phrase, "# is a CK frame; a CK file containing da"
-			    "ta for instrument or structure # at the epoch sh"
-			    "own above, as well as a corresponding SCLK kerne"
-			    "l, must be loaded in order to use this frame.", (
-			    ftnlen)600, (ftnlen)181);
+		    s_copy(&__global_state->f2c, phrase, "# is a CK frame; a"
+			    " CK file containing data for instrument or struc"
+			    "ture # at the epoch shown above, as well as a co"
+			    "rresponding SCLK kernel, must be loaded in order"
+			    " to use this frame.", (ftnlen)600, (ftnlen)181);
 		    if (havnam[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-			    s_rnge("havnam", i__1, "zznofcon_", (ftnlen)539)])
-			     {
-			repmc_(phrase, "#", name__ + (((i__1 = i__ - 1) < 2 &&
-				 0 <= i__1 ? i__1 : s_rnge("name", i__1, 
-				"zznofcon_", (ftnlen)540)) << 5), phrase, (
-				ftnlen)600, (ftnlen)1, (ftnlen)32, (ftnlen)
-				600);
+			    s_rnge(&__global_state->f2c, "havnam", i__1, 
+			    "zznofcon_", (ftnlen)539)]) {
+			repmc_(__global_state, phrase, "#", name__ + (((i__1 =
+				 i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "name", i__1, "zznofcon_"
+				, (ftnlen)540)) << 5), phrase, (ftnlen)600, (
+				ftnlen)1, (ftnlen)32, (ftnlen)600);
 		    } else {
-			repmi_(phrase, "#", &frames[(i__1 = i__ - 1) < 2 && 0 
-				<= i__1 ? i__1 : s_rnge("frames", i__1, "zzn"
-				"ofcon_", (ftnlen)542)], phrase, (ftnlen)600, (
+			repmi_(__global_state, phrase, "#", &frames[(i__1 = 
+				i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "frames", i__1, "zznofc"
+				"on_", (ftnlen)542)], phrase, (ftnlen)600, (
 				ftnlen)1, (ftnlen)600);
 		    }
-		    repmi_(phrase, "#", &clssid, phrase, (ftnlen)600, (ftnlen)
-			    1, (ftnlen)600);
-		    suffix_(phrase, &__state->c__1, errmsg, (ftnlen)600, 
-			    errmsg_len);
+		    repmi_(__global_state, phrase, "#", &clssid, phrase, (
+			    ftnlen)600, (ftnlen)1, (ftnlen)600);
+		    suffix_(__global_state, phrase, &__state->c__1, errmsg, (
+			    ftnlen)600, errmsg_len);
 
 /*                 Find out whether we have SCLK data for this */
 /*                 CK ID. */
 
-		    ckmeta_(&clssid, "SCLK", &sclkid, (ftnlen)4);
-		    if (! zzsclk_(&clssid, &sclkid)) {
+		    ckmeta_(__global_state, &clssid, "SCLK", &sclkid, (ftnlen)
+			    4);
+		    if (! zzsclk_(__global_state, &clssid, &sclkid)) {
 			scmiss = TRUE_;
-			s_copy(phrase, "No SCLK kernel for instrument or str"
-				"ucture #, with corresponding SCLK ID #, is c"
-				"urrently loaded.", (ftnlen)600, (ftnlen)96);
-			repmi_(phrase, "#", &clssid, phrase, (ftnlen)600, (
-				ftnlen)1, (ftnlen)600);
-			repmi_(phrase, "#", &sclkid, phrase, (ftnlen)600, (
-				ftnlen)1, (ftnlen)600);
-			suffix_(phrase, &__state->c__1, errmsg, (ftnlen)600, 
-				errmsg_len);
+			s_copy(&__global_state->f2c, phrase, "No SCLK kernel"
+				" for instrument or structure #, with corresp"
+				"onding SCLK ID #, is currently loaded.", (
+				ftnlen)600, (ftnlen)96);
+			repmi_(__global_state, phrase, "#", &clssid, phrase, (
+				ftnlen)600, (ftnlen)1, (ftnlen)600);
+			repmi_(__global_state, phrase, "#", &sclkid, phrase, (
+				ftnlen)600, (ftnlen)1, (ftnlen)600);
+			suffix_(__global_state, phrase, &__state->c__1, 
+				errmsg, (ftnlen)600, errmsg_len);
 		    } else {
 
 /*                    If we got here and have the SCLK data, then */
@@ -702,33 +725,36 @@ static zznofcon_state_t* get_zznofcon_state() {
 
 /*           We lack SCLK data for one frame and CK data for another. */
 
-	    s_copy(phrase, "For a CK frame for which the corresponding SCLK "
-		    "kernel has been loaded, failure to find required CK data"
-		    " could be due to one or more CK files not having been lo"
-		    "aded, or to the epoch shown above lying within a coverag"
-		    "e gap or beyond the coverage bounds of the loaded CK fil"
-		    "es. It is also possible that no loaded CK file has requi"
-		    "red angular velocity data for the input epoch, even if a"
-		    " loaded CK does have attitude data for that epoch. You c"
-		    "an use CKBRIEF with the -dump option to display coverage"
-		    " intervals of a CK file.", (ftnlen)600, (ftnlen)520);
+	    s_copy(&__global_state->f2c, phrase, "For a CK frame for which t"
+		    "he corresponding SCLK kernel has been loaded, failure to"
+		    " find required CK data could be due to one or more CK fi"
+		    "les not having been loaded, or to the epoch shown above "
+		    "lying within a coverage gap or beyond the coverage bound"
+		    "s of the loaded CK files. It is also possible that no lo"
+		    "aded CK file has required angular velocity data for the "
+		    "input epoch, even if a loaded CK does have attitude data"
+		    " for that epoch. You can use CKBRIEF with the -dump opti"
+		    "on to display coverage intervals of a CK file.", (ftnlen)
+		    600, (ftnlen)520);
 	} else {
 
 /*           We have SCLK data but lack CK data. */
 
-	    s_copy(phrase, "Failure to find required CK data could be due to"
-		    " one or more CK files not having been loaded, or to the "
-		    "epoch shown above lying within a coverage gap or beyond "
-		    "the coverage bounds of the loaded CK files. It is also p"
-		    "ossible that no loaded CK file has required angular velo"
-		    "city data for the input epoch, even if a loaded CK does "
-		    "have attitude data for that epoch. You can use CKBRIEF w"
-		    "ith the -dump option to display coverage intervals of a "
-		    "CK file.", (ftnlen)600, (ftnlen)448);
+	    s_copy(&__global_state->f2c, phrase, "Failure to find required C"
+		    "K data could be due to one or more CK files not having b"
+		    "een loaded, or to the epoch shown above lying within a c"
+		    "overage gap or beyond the coverage bounds of the loaded "
+		    "CK files. It is also possible that no loaded CK file has"
+		    " required angular velocity data for the input epoch, eve"
+		    "n if a loaded CK does have attitude data for that epoch."
+		    " You can use CKBRIEF with the -dump option to display co"
+		    "verage intervals of a CK file.", (ftnlen)600, (ftnlen)448)
+		    ;
 	}
-	suffix_(phrase, &__state->c__1, errmsg, (ftnlen)600, errmsg_len);
+	suffix_(__global_state, phrase, &__state->c__1, errmsg, (ftnlen)600, 
+		errmsg_len);
     }
-    chkout_("ZZNOFCON", (ftnlen)8);
+    chkout_(__global_state, "ZZNOFCON", (ftnlen)8);
     return 0;
 } /* zznofcon_ */
 

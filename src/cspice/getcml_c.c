@@ -169,7 +169,7 @@
    putcml_c.c
    */
 
-   chkin_c( "getcml_c" );
+   chkin_c ( naif_state,"getcml_c" );
 
    zzgetcml_c ( argc, argv, SPICEFALSE );
 

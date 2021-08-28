@@ -8,26 +8,26 @@
 
 
 typedef int scs2e_state_t;
-static scs2e_state_t* get_scs2e_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline scs2e_state_t* get_scs2e_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SCS2E ( SCLK string to ET ) */
-/* Subroutine */ int scs2e_(integer *sc, char *sclkch, doublereal *et, ftnlen 
-	sclkch_len)
+/* Subroutine */ int scs2e_(cspice_t* __global_state, integer *sc, char *
+	sclkch, doublereal *et, ftnlen sclkch_len)
 {
-    extern /* Subroutine */ int sct2e_(integer *, doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int scencd_(integer *, char *, doublereal *, 
-	    ftnlen);
+    extern /* Subroutine */ int sct2e_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int scencd_(cspice_t*, integer *, char *, 
+	    doublereal *, ftnlen);
     doublereal sclkdp;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    scs2e_state_t* __state = get_scs2e_state();
+    scs2e_state_t* __state = get_scs2e_state(__global_state);
 /* $ Abstract */
 
 /*     Convert a spacecraft clock string to ephemeris seconds past */
@@ -292,17 +292,17 @@ static scs2e_state_t* get_scs2e_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCS2E", (ftnlen)5);
+	chkin_(__global_state, "SCS2E", (ftnlen)5);
     }
 
 /*     Encode SCLKCH, and convert the result to ET. */
 
-    scencd_(sc, sclkch, &sclkdp, sclkch_len);
-    sct2e_(sc, &sclkdp, et);
-    chkout_("SCS2E", (ftnlen)5);
+    scencd_(__global_state, sc, sclkch, &sclkdp, sclkch_len);
+    sct2e_(__global_state, sc, &sclkdp, et);
+    chkout_(__global_state, "SCS2E", (ftnlen)5);
     return 0;
 } /* scs2e_ */
 

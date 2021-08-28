@@ -256,7 +256,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dskobj_c" );
+   chkin_c ( naif_state, "dskobj_c" );
 
    /*
    Check the input string to make sure the pointer is non-null and

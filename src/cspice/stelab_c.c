@@ -199,7 +199,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "stelab_c" );
+   chkin_c ( naif_state, "stelab_c" );
 
 
    /*

@@ -8,21 +8,21 @@
 
 
 typedef int conics_state_t;
-static conics_state_t* get_conics_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline conics_state_t* get_conics_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      CONICS ( Determine state from conic elements ) */
-/* Subroutine */ int conics_(doublereal *elts, doublereal *et, doublereal *
-	state)
+/* Subroutine */ int conics_(cspice_t* __global_state, doublereal *elts, 
+	doublereal *et, doublereal *state)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal), sqrt(doublereal), d_mod(
-	    doublereal *, doublereal *);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), sqrt(
+	    f2c_state_t*, doublereal), d_mod(f2c_state_t*, doublereal *, 
+	    doublereal *);
 
     /* Local variables */
     doublereal cnci;
@@ -32,38 +32,39 @@ static conics_state_t* get_conics_state() {
     doublereal sini;
     doublereal cosn;
     doublereal sinn;
-    extern /* Subroutine */ int vscl_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vscl_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal cosw;
     doublereal sinw;
     doublereal n;
     doublereal v;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal lnode;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal m0;
-    extern doublereal twopi_(void);
+    extern doublereal twopi_(cspice_t*);
     doublereal t0;
-    extern /* Subroutine */ int prop2b_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int prop2b_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal dt;
     doublereal rp;
     doublereal mu;
     doublereal basisp[3];
     doublereal period;
     doublereal basisq[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal pstate[6];
     doublereal ainvrs;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal ecc;
     doublereal inc;
 
 
     /* Module state */
-    conics_state_t* __state = get_conics_state();
+    conics_state_t* __state = get_conics_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the state (position, velocity) of an orbiting body */
@@ -320,10 +321,10 @@ static conics_state_t* get_conics_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CONICS", (ftnlen)6);
+	chkin_(__global_state, "CONICS", (ftnlen)6);
     }
 
 /*     Unpack the element vector. */
@@ -340,40 +341,42 @@ static conics_state_t* get_conics_state() {
 /*     Handle all of the exceptions first. */
 
     if (ecc < 0.) {
-	setmsg_("The eccentricity supplied was negative. Only positive value"
-		"s are meaningful.  The value was #", (ftnlen)93);
-	errdp_("#", &ecc, (ftnlen)1);
-	sigerr_("SPICE(BADECCENTRICITY)", (ftnlen)22);
-	chkout_("CONICS", (ftnlen)6);
+	setmsg_(__global_state, "The eccentricity supplied was negative. Onl"
+		"y positive values are meaningful.  The value was #", (ftnlen)
+		93);
+	errdp_(__global_state, "#", &ecc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADECCENTRICITY)", (ftnlen)22);
+	chkout_(__global_state, "CONICS", (ftnlen)6);
 	return 0;
     }
     if (rp <= 0.) {
-	setmsg_("The value of periapse range supplied was non-positive.  Onl"
-		"y positive values are allowed.  The value supplied was #. ", (
-		ftnlen)117);
-	errdp_("#", &rp, (ftnlen)1);
-	sigerr_("SPICE(BADPERIAPSEVALUE)", (ftnlen)23);
-	chkout_("CONICS", (ftnlen)6);
+	setmsg_(__global_state, "The value of periapse range supplied was no"
+		"n-positive.  Only positive values are allowed.  The value su"
+		"pplied was #. ", (ftnlen)117);
+	errdp_(__global_state, "#", &rp, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADPERIAPSEVALUE)", (ftnlen)23);
+	chkout_(__global_state, "CONICS", (ftnlen)6);
 	return 0;
     }
     if (mu <= 0.) {
-	setmsg_("The value of GM supplied was non-positive.  Only positive v"
-		"alues are allowed.  The value supplied was #. ", (ftnlen)105);
-	errdp_("#", &mu, (ftnlen)1);
-	sigerr_("SPICE(BADGM)", (ftnlen)12);
-	chkout_("CONICS", (ftnlen)6);
+	setmsg_(__global_state, "The value of GM supplied was non-positive. "
+		" Only positive values are allowed.  The value supplied was #"
+		". ", (ftnlen)105);
+	errdp_(__global_state, "#", &mu, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADGM)", (ftnlen)12);
+	chkout_(__global_state, "CONICS", (ftnlen)6);
 	return 0;
     }
 
 /*     First construct the orthonormal basis vectors that span the orbit */
 /*     plane. */
 
-    cosi = cos(inc);
-    sini = sin(inc);
-    cosn = cos(lnode);
-    sinn = sin(lnode);
-    cosw = cos(argp);
-    sinw = sin(argp);
+    cosi = cos(&__global_state->f2c, inc);
+    sini = sin(&__global_state->f2c, inc);
+    cosn = cos(&__global_state->f2c, lnode);
+    sinn = sin(&__global_state->f2c, lnode);
+    cosw = cos(&__global_state->f2c, argp);
+    sinw = sin(&__global_state->f2c, argp);
     snci = sinn * cosi;
     cnci = cosn * cosi;
     basisp[0] = cosn * cosw - snci * sinw;
@@ -399,9 +402,9 @@ static conics_state_t* get_conics_state() {
 
 /*     so that: */
 
-    v = sqrt(mu * (ecc + 1.) / rp);
-    vscl_(&rp, basisp, pstate);
-    vscl_(&v, basisq, &pstate[3]);
+    v = sqrt(&__global_state->f2c, mu * (ecc + 1.) / rp);
+    vscl_(__global_state, &rp, basisp, pstate);
+    vscl_(__global_state, &v, basisq, &pstate[3]);
 
 /*     Finally compute DT the elapsed time since the epoch of periapse. */
 /*     Ellipses first, since they are the most common. */
@@ -414,8 +417,8 @@ static conics_state_t* get_conics_state() {
 /*        But since, A = RP / ( 1 - ECC ) ... */
 
 	ainvrs = (1. - ecc) / rp;
-	n = sqrt(mu * ainvrs) * ainvrs;
-	period = twopi_() / n;
+	n = sqrt(&__global_state->f2c, mu * ainvrs) * ainvrs;
+	period = twopi_(__global_state) / n;
 
 /*        In general the mean anomaly is given by */
 
@@ -432,7 +435,7 @@ static conics_state_t* get_conics_state() {
 /*        periodic, we can mod this value by the period of the orbit. */
 
 	d__1 = *et - t0 + m0 / n;
-	dt = d_mod(&d__1, &period);
+	dt = d_mod(&__global_state->f2c, &d__1, &period);
 
 /*     Hyperbolas next. */
 
@@ -444,20 +447,20 @@ static conics_state_t* get_conics_state() {
 /*        But since, |A| = RP / ( ECC - 1 ) ... */
 
 	ainvrs = (ecc - 1.) / rp;
-	n = sqrt(mu * ainvrs) * ainvrs;
+	n = sqrt(&__global_state->f2c, mu * ainvrs) * ainvrs;
 	dt = *et - t0 + m0 / n;
 
 /*     Finally, parabolas. */
 
     } else {
-	n = sqrt(mu / (rp * 2.)) / rp;
+	n = sqrt(&__global_state->f2c, mu / (rp * 2.)) / rp;
 	dt = *et - t0 + m0 / n;
     }
 
 /*     Now let PROP2B do the work of propagating the state. */
 
-    prop2b_(&mu, pstate, &dt, state);
-    chkout_("CONICS", (ftnlen)6);
+    prop2b_(__global_state, &mu, pstate, &dt, state);
+    chkout_(__global_state, "CONICS", (ftnlen)6);
     return 0;
 } /* conics_ */
 

@@ -8,8 +8,7 @@
 
 
 extern zzgfudb_init_t __zzgfudb_init;
-static zzgfudb_state_t* get_zzgfudb_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgfudb_state_t* get_zzgfudb_state(cspice_t* state) {
 	if (!state->zzgfudb)
 		state->zzgfudb = __cspice_allocate_module(sizeof(
 	zzgfudb_state_t), &__zzgfudb_init, sizeof(__zzgfudb_init));
@@ -18,36 +17,37 @@ static zzgfudb_state_t* get_zzgfudb_state() {
 }
 
 /* $Procedure ZZGFUDB ( Private --- GF, general use boolean search ) */
-/* Subroutine */ int zzgfudb_(U_fp udfuns, U_fp udfunb, doublereal *tol, U_fp 
-	udstep, U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp 
-	udrepf, logical *bail, L_fp udbail, doublereal *cnfine, doublereal *
-	result)
+/* Subroutine */ int zzgfudb_(cspice_t* __global_state, U_fp udfuns, U_fp 
+	udfunb, doublereal *tol, U_fp udstep, U_fp udrefn, logical *rpt, S_fp 
+	udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, 
+	doublereal *cnfine, doublereal *result)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer count;
     doublereal start;
-    extern logical failed_(void);
-    extern /* Subroutine */ int zzgfsolvx_(U_fp, U_fp, U_fp, U_fp, logical *, 
-	    L_fp, logical *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, logical *, U_fp, doublereal *);
-    extern integer wncard_(doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int zzgfsolvx_(cspice_t*, U_fp, U_fp, U_fp, U_fp, 
+	    logical *, L_fp, logical *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, logical *, U_fp, doublereal *);
+    extern integer wncard_(cspice_t*, doublereal *);
     doublereal finish;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int wnfetd_(doublereal *, integer *, doublereal *,
-	     doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int wnfetd_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzgfudb_state_t* __state = get_zzgfudb_state();
+    zzgfudb_state_t* __state = get_zzgfudb_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -742,31 +742,32 @@ static zzgfudb_state_t* get_zzgfudb_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZGFUDB", (ftnlen)7);
+    chkin_(__global_state, "ZZGFUDB", (ftnlen)7);
 
 /*     Check the convergence tolerance. */
 
     if (*tol <= 0.) {
-	setmsg_("Tolerance must be positive but was #.", (ftnlen)37);
-	errdp_("#", tol, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTOLERANCE)", (ftnlen)23);
-	chkout_("ZZGFUDB", (ftnlen)7);
+	setmsg_(__global_state, "Tolerance must be positive but was #.", (
+		ftnlen)37);
+	errdp_(__global_state, "#", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTOLERANCE)", (ftnlen)23);
+	chkout_(__global_state, "ZZGFUDB", (ftnlen)7);
 	return 0;
     }
 
 /*     Prepare the progress reporter if appropriate. */
 
     if (*rpt) {
-	(*udrepi)(cnfine, "User defined boolean event search ", "done.", (
-		ftnlen)34, (ftnlen)5);
+	(*udrepi)(__global_state, cnfine, "User defined boolean event search "
+		, "done.", (ftnlen)34, (ftnlen)5);
     }
 
 /*     Cycle over the intervals in the confining window. */
 
-    count = wncard_(cnfine);
+    count = wncard_(__global_state, cnfine);
     i__1 = count;
     for (i__ = 1; i__ <= i__1; ++i__) {
 
@@ -774,28 +775,29 @@ static zzgfudb_state_t* get_zzgfudb_state() {
 /*        window. Search this interval for boolean events. Union the */
 /*        result with the contents of the RESULT window. */
 
-	wnfetd_(cnfine, &i__, &start, &finish);
+	wnfetd_(__global_state, cnfine, &i__, &start, &finish);
 
 /*        Call ZZGFSOLVX to do the event detection work. The boolean */
 /*        function passes as UDFUNB, the scalar as UDFUNS. */
 
-	zzgfsolvx_((U_fp)udfuns, (U_fp)udfunb, (U_fp)udstep, (U_fp)udrefn, 
-		bail, (L_fp)udbail, &__state->c_false, &__state->c_b10, &
-		start, &finish, tol, rpt, (U_fp)udrepu, result);
-	if (failed_()) {
-	    chkout_("ZZGFUDB", (ftnlen)7);
+	zzgfsolvx_(__global_state, (U_fp)udfuns, (U_fp)udfunb, (U_fp)udstep, (
+		U_fp)udrefn, bail, (L_fp)udbail, &__state->c_false, &
+		__state->c_b10, &start, &finish, tol, rpt, (U_fp)udrepu, 
+		result);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZGFUDB", (ftnlen)7);
 	    return 0;
 	}
 	if (*bail) {
 
 /*           Interrupt handling is enabled. */
 
-	    if ((*udbail)()) {
+	    if ((*udbail)(__global_state)) {
 
 /*              An interrupt has been issued. Return now regardless of */
 /*              whether the search completed. */
 
-		chkout_("ZZGFUDB", (ftnlen)7);
+		chkout_(__global_state, "ZZGFUDB", (ftnlen)7);
 		return 0;
 	    }
 	}
@@ -804,9 +806,9 @@ static zzgfudb_state_t* get_zzgfudb_state() {
 /*     End the progress report. */
 
     if (*rpt) {
-	(*udrepf)();
+	(*udrepf)(__global_state);
     }
-    chkout_("ZZGFUDB", (ftnlen)7);
+    chkout_(__global_state, "ZZGFUDB", (ftnlen)7);
     return 0;
 } /* zzgfudb_ */
 

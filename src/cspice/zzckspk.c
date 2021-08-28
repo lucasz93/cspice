@@ -8,8 +8,7 @@
 
 
 extern zzckspk_init_t __zzckspk_init;
-static zzckspk_state_t* get_zzckspk_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzckspk_state_t* get_zzckspk_state(cspice_t* state) {
 	if (!state->zzckspk)
 		state->zzckspk = __cspice_allocate_module(sizeof(
 	zzckspk_state_t), &__zzckspk_init, sizeof(__zzckspk_init));
@@ -18,13 +17,14 @@ static zzckspk_state_t* get_zzckspk_state() {
 }
 
 /* $Procedure      ZZCKSPK ( SPK or CK ) */
-/* Subroutine */ int zzckspk_(integer *handle, char *ckspk, ftnlen ckspk_len)
+/* Subroutine */ int zzckspk_(cspice_t* __global_state, integer *handle, char 
+	*ckspk, ftnlen ckspk_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer from;
@@ -33,39 +33,40 @@ static zzckspk_state_t* get_zzckspk_state() {
     integer nspk;
     integer type__;
     logical ck2ok;
-    extern /* Subroutine */ int zzsizeok_(integer *, integer *, integer *, 
-	    integer *, logical *, integer *);
-    extern /* Subroutine */ int dafgs_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int zzsizeok_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *, integer *);
+    extern /* Subroutine */ int dafgs_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     logical found;
     doublereal times[2];
     integer first;
     logical spkok;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
-    extern /* Subroutine */ int daffna_(logical *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafbfs_(integer *);
-    extern /* Subroutine */ int dafhsf_(integer *, integer *, integer *);
+    extern /* Subroutine */ int daffna_(cspice_t*, logical *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafbfs_(cspice_t*, integer *);
+    extern /* Subroutine */ int dafhsf_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer to;
     doublereal chcktm;
     integer angvel;
     doublereal lastdp;
     integer thisnd;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer thisni;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal frsttm;
     doublereal sum[5];
     integer nck2;
 
 
     /* Module state */
-    zzckspk_state_t* __state = get_zzckspk_state();
+    zzckspk_state_t* __state = get_zzckspk_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -187,29 +188,29 @@ static zzckspk_state_t* get_zzckspk_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZCKSPK", (ftnlen)7);
+    chkin_(__global_state, "ZZCKSPK", (ftnlen)7);
 
 /*     Make sure the values of ND and NI associated with this file */
 /*     have the correct values. */
 
-    dafhsf_(handle, &thisnd, &thisni);
+    dafhsf_(__global_state, handle, &thisnd, &thisni);
     if (thisnd != 2 || thisni != 6) {
-	s_copy(ckspk, "?", ckspk_len, (ftnlen)1);
-	chkout_("ZZCKSPK", (ftnlen)7);
+	s_copy(&__global_state->f2c, ckspk, "?", ckspk_len, (ftnlen)1);
+	chkout_(__global_state, "ZZCKSPK", (ftnlen)7);
 	return 0;
     }
 
 /*     We've got the correct values for ND and NI, examine the descriptor */
 /*     for the first array. */
 
-    dafbfs_(handle);
-    daffna_(&found);
-    if (failed_()) {
-	s_copy(ckspk, "?", ckspk_len, (ftnlen)1);
-	chkout_("ZZCKSPK", (ftnlen)7);
+    dafbfs_(__global_state, handle);
+    daffna_(__global_state, &found);
+    if (failed_(__global_state)) {
+	s_copy(&__global_state->f2c, ckspk, "?", ckspk_len, (ftnlen)1);
+	chkout_(__global_state, "ZZCKSPK", (ftnlen)7);
 	return 0;
     }
 
@@ -217,15 +218,15 @@ static zzckspk_state_t* get_zzckspk_state() {
 /*     the file type. */
 
     if (! found) {
-	s_copy(ckspk, "?", ckspk_len, (ftnlen)1);
-	chkout_("ZZCKSPK", (ftnlen)7);
+	s_copy(&__global_state->f2c, ckspk, "?", ckspk_len, (ftnlen)1);
+	chkout_(__global_state, "ZZCKSPK", (ftnlen)7);
 	return 0;
     }
 
 /*     Unpack the summary record. */
 
-    dafgs_(sum);
-    dafus_(sum, &__state->c__2, &__state->c__6, dc, ic);
+    dafgs_(__global_state, sum);
+    dafus_(__global_state, sum, &__state->c__2, &__state->c__6, dc, ic);
 
 /*     Look at the slot where the angular velocity flag would */
 /*     be located if this is a CK file. */
@@ -237,13 +238,13 @@ static zzckspk_state_t* get_zzckspk_state() {
 /*     right at the start. */
 
     if (angvel == 0) {
-	s_copy(ckspk, "CK", ckspk_len, (ftnlen)2);
-	chkout_("ZZCKSPK", (ftnlen)7);
+	s_copy(&__global_state->f2c, ckspk, "CK", ckspk_len, (ftnlen)2);
+	chkout_(__global_state, "ZZCKSPK", (ftnlen)7);
 	return 0;
     }
     if (angvel > 1) {
-	s_copy(ckspk, "SPK", ckspk_len, (ftnlen)3);
-	chkout_("ZZCKSPK", (ftnlen)7);
+	s_copy(&__global_state->f2c, ckspk, "SPK", ckspk_len, (ftnlen)3);
+	chkout_(__global_state, "ZZCKSPK", (ftnlen)7);
 	return 0;
     }
 
@@ -252,8 +253,8 @@ static zzckspk_state_t* get_zzckspk_state() {
 /*     barycenter. */
 
     if (ic[1] == 0) {
-	s_copy(ckspk, "SPK", ckspk_len, (ftnlen)3);
-	chkout_("ZZCKSPK", (ftnlen)7);
+	s_copy(&__global_state->f2c, ckspk, "SPK", ckspk_len, (ftnlen)3);
+	chkout_(__global_state, "ZZCKSPK", (ftnlen)7);
 	return 0;
     }
 
@@ -268,21 +269,21 @@ static zzckspk_state_t* get_zzckspk_state() {
 /*     of being an SPK and if it does get the number of MDA records. */
 
     i__1 = size - 1;
-    zzsizeok_(&i__1, &__state->c__72, &__state->c__100, &__state->c__0, &
-	    spkok, &nspk);
+    zzsizeok_(__global_state, &i__1, &__state->c__72, &__state->c__100, &
+	    __state->c__0, &spkok, &nspk);
     if (! spkok) {
-	s_copy(ckspk, "CK", ckspk_len, (ftnlen)2);
-	chkout_("ZZCKSPK", (ftnlen)7);
+	s_copy(&__global_state->f2c, ckspk, "CK", ckspk_len, (ftnlen)2);
+	chkout_(__global_state, "ZZCKSPK", (ftnlen)7);
 	return 0;
     }
-    dafgda_(handle, &last, &last, &lastdp);
+    dafgda_(__global_state, handle, &last, &last, &lastdp);
 
 /*     See if the last number in the file is the allowed number of */
 /*     MDA records.  If not, this must be a CK segment. */
 
     if (lastdp != (doublereal) nspk) {
-	s_copy(ckspk, "CK", ckspk_len, (ftnlen)2);
-	chkout_("ZZCKSPK", (ftnlen)7);
+	s_copy(&__global_state->f2c, ckspk, "CK", ckspk_len, (ftnlen)2);
+	chkout_(__global_state, "ZZCKSPK", (ftnlen)7);
 	return 0;
     }
 
@@ -291,19 +292,19 @@ static zzckspk_state_t* get_zzckspk_state() {
 /*     not 2, we must have an SPK file. */
 
     if (type__ != 2) {
-	s_copy(ckspk, "SPK", ckspk_len, (ftnlen)3);
-	chkout_("ZZCKSPK", (ftnlen)7);
+	s_copy(&__global_state->f2c, ckspk, "SPK", ckspk_len, (ftnlen)3);
+	chkout_(__global_state, "ZZCKSPK", (ftnlen)7);
 	return 0;
     }
 
 /*     We are getting down to the nitty gritty here. See if the */
 /*     size is compatible with a type 02 C-kernel. */
 
-    zzsizeok_(&size, &__state->c__10, &__state->c__100, &__state->c__1, &
-	    ck2ok, &nck2);
+    zzsizeok_(__global_state, &size, &__state->c__10, &__state->c__100, &
+	    __state->c__1, &ck2ok, &nck2);
     if (! ck2ok) {
-	s_copy(ckspk, "SPK", ckspk_len, (ftnlen)3);
-	chkout_("ZZCKSPK", (ftnlen)7);
+	s_copy(&__global_state->f2c, ckspk, "SPK", ckspk_len, (ftnlen)3);
+	chkout_(__global_state, "ZZCKSPK", (ftnlen)7);
 	return 0;
     }
 
@@ -333,7 +334,7 @@ static zzckspk_state_t* get_zzckspk_state() {
 
 	i__1 = last - nspk;
 	i__2 = last - nspk;
-	dafgda_(handle, &i__1, &i__2, &frsttm);
+	dafgda_(__global_state, handle, &i__1, &i__2, &frsttm);
 
 /*        Now (under the assumption that we have an SPK segment) look */
 /*        up the epoch from the last MDA record--- the NSPK'th */
@@ -341,16 +342,16 @@ static zzckspk_state_t* get_zzckspk_state() {
 /*        in the array of epochs. */
 	from = first + (nspk - 1) * 71;
 	to = from;
-	dafgda_(handle, &from, &to, &chcktm);
+	dafgda_(__global_state, handle, &from, &to, &chcktm);
 
 /*        If this is a type 02 segment.  The value we just picked out */
 /*        will come from the array of stop ticks.  The array of stop */
 /*        ticks is non-decreasing so: */
 
 	if (chcktm > frsttm) {
-	    s_copy(ckspk, "SPK", ckspk_len, (ftnlen)3);
+	    s_copy(&__global_state->f2c, ckspk, "SPK", ckspk_len, (ftnlen)3);
 	} else {
-	    s_copy(ckspk, "CK", ckspk_len, (ftnlen)2);
+	    s_copy(&__global_state->f2c, ckspk, "CK", ckspk_len, (ftnlen)2);
 	}
     } else {
 
@@ -362,7 +363,7 @@ static zzckspk_state_t* get_zzckspk_state() {
 
 	from = last - (nck2 - 1) / 100;
 	to = from + 1;
-	dafgda_(handle, &from, &to, times);
+	dafgda_(__global_state, handle, &from, &to, times);
 
 /*        If we happen to have a TYPE 01 SPK segment we've just */
 /*        read two consecutive values from the epochs sub-array of the */
@@ -386,12 +387,12 @@ static zzckspk_state_t* get_zzckspk_state() {
 /*        we have TIMES(1) < TIMES(2) */
 
 	if (times[0] > times[1]) {
-	    s_copy(ckspk, "CK", ckspk_len, (ftnlen)2);
+	    s_copy(&__global_state->f2c, ckspk, "CK", ckspk_len, (ftnlen)2);
 	} else {
-	    s_copy(ckspk, "SPK", ckspk_len, (ftnlen)3);
+	    s_copy(&__global_state->f2c, ckspk, "SPK", ckspk_len, (ftnlen)3);
 	}
     }
-    chkout_("ZZCKSPK", (ftnlen)7);
+    chkout_(__global_state, "ZZCKSPK", (ftnlen)7);
     return 0;
 } /* zzckspk_ */
 

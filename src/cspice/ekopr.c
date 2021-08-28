@@ -8,24 +8,25 @@
 
 
 typedef int ekopr_state_t;
-static ekopr_state_t* get_ekopr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekopr_state_t* get_ekopr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   EKOPR ( EK, open file for reading ) */
-/* Subroutine */ int ekopr_(char *fname, integer *handle, ftnlen fname_len)
+/* Subroutine */ int ekopr_(cspice_t* __global_state, char *fname, integer *
+	handle, ftnlen fname_len)
 {
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasopr_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasopr_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    ekopr_state_t* __state = get_ekopr_state();
+    ekopr_state_t* __state = get_ekopr_state(__global_state);
 /* $ Abstract */
 
 /*     Open an existing E-kernel file for reading. */
@@ -159,25 +160,25 @@ static ekopr_state_t* get_ekopr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKOPR", (ftnlen)5);
+	chkin_(__global_state, "EKOPR", (ftnlen)5);
     }
 
 /*     Open the file as a DAS file. */
 
-    dasopr_(fname, handle, fname_len);
-    if (failed_()) {
-	chkout_("EKOPR", (ftnlen)5);
+    dasopr_(__global_state, fname, handle, fname_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKOPR", (ftnlen)5);
 	return 0;
     }
 
 /*     Nothing doing unless the architecture is correct.  This file */
 /*     should be a paged DAS EK. */
 
-    zzekpgch_(handle, "READ", (ftnlen)4);
-    chkout_("EKOPR", (ftnlen)5);
+    zzekpgch_(__global_state, handle, "READ", (ftnlen)4);
+    chkout_(__global_state, "EKOPR", (ftnlen)5);
     return 0;
 } /* ekopr_ */
 

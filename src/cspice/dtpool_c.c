@@ -260,7 +260,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dtpool_c" );
+   chkin_c ( naif_state, "dtpool_c" );
 
 
    /*

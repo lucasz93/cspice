@@ -8,42 +8,43 @@
 
 
 typedef int zzrecbox_state_t;
-static zzrecbox_state_t* get_zzrecbox_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzrecbox_state_t* get_zzrecbox_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZRECBOX (Bounding box for rectangular volume element) */
-/* Subroutine */ int zzrecbox_(doublereal *bounds, doublereal *center, 
-	doublereal *lx, doublereal *ly, doublereal *lz, doublereal *radius)
+/* Subroutine */ int zzrecbox_(cspice_t* __global_state, doublereal *bounds, 
+	doublereal *center, doublereal *lx, doublereal *ly, doublereal *lz, 
+	doublereal *radius)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1, d__2, d__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal diag[3];
     integer i__;
     doublereal l[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal vnorm_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal mincor[3];
     doublereal maxcor[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzrecbox_state_t* __state = get_zzrecbox_state();
+    zzrecbox_state_t* __state = get_zzrecbox_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -192,40 +193,45 @@ static zzrecbox_state_t* get_zzrecbox_state() {
 /*     This routine uses discovery check-in. We check RETURN in order to */
 /*     avoid performing math operations using invalid operands. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Get local copies of the bounds of the volume element. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	mincor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("mincor", 
-		i__1, "zzrecbox_", (ftnlen)191)] = bounds[(i__2 = (i__ << 1) 
-		- 2) < 6 && 0 <= i__2 ? i__2 : s_rnge("bounds", i__2, "zzrec"
-		"box_", (ftnlen)191)];
-	maxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("maxcor", 
-		i__1, "zzrecbox_", (ftnlen)192)] = bounds[(i__2 = (i__ << 1) 
-		- 1) < 6 && 0 <= i__2 ? i__2 : s_rnge("bounds", i__2, "zzrec"
-		"box_", (ftnlen)192)];
-	l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, "zzre"
-		"cbox_", (ftnlen)193)] = maxcor[(i__2 = i__ - 1) < 3 && 0 <= 
-		i__2 ? i__2 : s_rnge("maxcor", i__2, "zzrecbox_", (ftnlen)193)
-		] - mincor[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(
-		"mincor", i__3, "zzrecbox_", (ftnlen)193)];
-	if (l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("l", i__1, 
-		"zzrecbox_", (ftnlen)195)] <= 0.) {
-	    chkin_("ZZRECBOX", (ftnlen)8);
-	    setmsg_("Coordinate # bounds were #:#; bounds must be strictly i"
-		    "ncreasing.", (ftnlen)65);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &mincor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("mincor", i__1, "zzrecbox_", (ftnlen)201)], (
-		    ftnlen)1);
-	    errdp_("#", &maxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("maxcor", i__1, "zzrecbox_", (ftnlen)202)], (
-		    ftnlen)1);
-	    sigerr_("SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
-	    chkout_("ZZRECBOX", (ftnlen)8);
+	mincor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "mincor", i__1, "zzrecbox_", (ftnlen)191)
+		] = bounds[(i__2 = (i__ << 1) - 2) < 6 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "bounds", i__2, "zzrecbox_", (
+		ftnlen)191)];
+	maxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "maxcor", i__1, "zzrecbox_", (ftnlen)192)
+		] = bounds[(i__2 = (i__ << 1) - 1) < 6 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "bounds", i__2, "zzrecbox_", (
+		ftnlen)192)];
+	l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "l", i__1, "zzrecbox_", (ftnlen)193)] = 
+		maxcor[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "maxcor", i__2, "zzrecbox_", (ftnlen)193)
+		] - mincor[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "mincor", i__3, "zzrecbox_", (ftnlen)193)
+		];
+	if (l[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "l", i__1, "zzrecbox_", (ftnlen)195)] <= 
+		0.) {
+	    chkin_(__global_state, "ZZRECBOX", (ftnlen)8);
+	    setmsg_(__global_state, "Coordinate # bounds were #:#; bounds mu"
+		    "st be strictly increasing.", (ftnlen)65);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &mincor[(i__1 = i__ - 1) < 3 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "mincor", i__1,
+		     "zzrecbox_", (ftnlen)201)], (ftnlen)1);
+	    errdp_(__global_state, "#", &maxcor[(i__1 = i__ - 1) < 3 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "maxcor", i__1,
+		     "zzrecbox_", (ftnlen)202)], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
+	    chkout_(__global_state, "ZZRECBOX", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -239,11 +245,13 @@ static zzrecbox_state_t* get_zzrecbox_state() {
 /*     Compute the coordinates of the center of the box. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	center[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("center", 
-		i__1, "zzrecbox_", (ftnlen)222)] = mincor[(i__2 = i__ - 1) < 
-		3 && 0 <= i__2 ? i__2 : s_rnge("mincor", i__2, "zzrecbox_", (
-		ftnlen)222)] + l[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
-		s_rnge("l", i__3, "zzrecbox_", (ftnlen)222)] / 2;
+	center[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "center", i__1, "zzrecbox_", (ftnlen)222)
+		] = mincor[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "mincor", i__2, "zzrecbox_", (ftnlen)222)
+		] + l[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "l", i__3, "zzrecbox_", (ftnlen)222)] / 
+		2;
     }
 
 /*     The radius is the distance from the center of the box */
@@ -252,8 +260,8 @@ static zzrecbox_state_t* get_zzrecbox_state() {
     d__1 = *lx / 2;
     d__2 = *ly / 2;
     d__3 = *lz / 2;
-    vpack_(&d__1, &d__2, &d__3, diag);
-    *radius = vnorm_(diag);
+    vpack_(__global_state, &d__1, &d__2, &d__3, diag);
+    *radius = vnorm_(__global_state, diag);
     return 0;
 } /* zzrecbox_ */
 

@@ -505,7 +505,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkltc_c" );
+   chkin_c ( naif_state, "spkltc_c" );
 
 
    /*

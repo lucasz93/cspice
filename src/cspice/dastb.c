@@ -8,8 +8,7 @@
 
 
 extern dastb_init_t __dastb_init;
-static dastb_state_t* get_dastb_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dastb_state_t* get_dastb_state(cspice_t* state) {
 	if (!state->dastb)
 		state->dastb = __cspice_allocate_module(sizeof(dastb_state_t),
 	 &__dastb_init, sizeof(__dastb_init));
@@ -18,50 +17,58 @@ static dastb_state_t* get_dastb_state() {
 }
 
 /* $Procedure DASTB ( DAS, convert transfer file to binary file ) */
-/* Subroutine */ int dastb_(integer *xfrlun, char *binfil, ftnlen binfil_len)
+/* Subroutine */ int dastb_(cspice_t* __global_state, integer *xfrlun, char *
+	binfil, ftnlen binfil_len)
 {
     /* System generated locals */
     cilist ci__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_rsle(void), s_cmp(char *, char *, ftnlen, ftnlen), s_rsfe(
-	    cilist *), do_fio(integer *, char *, ftnlen), e_rsfe(void);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rsle(f2c_state_t*, cilist *), do_lio(f2c_state_t*, integer *, 
+	    integer *, char *, ftnlen), e_rsle(f2c_state_t*), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rsfe(f2c_state_t*
+	    , cilist *), do_fio(f2c_state_t*, integer *, char *, ftnlen), 
+	    e_rsfe(f2c_state_t*);
 
     /* Local variables */
     char line[255];
     logical more;
     char word[255];
     char rest[255];
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
     logical inblk;
     char tarch[8];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer recno;
     integer ncomr;
     char ttype[8];
-    extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int dasadc_(integer *, integer *, integer *, 
-	    integer *, char *, ftnlen);
-    extern /* Subroutine */ int dasadd_(integer *, integer *, doublereal *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasadi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int idw2at_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int dasadc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dasadd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasadi_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer ncdata;
     integer handle;
     integer nddata;
-    extern /* Subroutine */ int dasacr_(integer *, integer *);
+    extern /* Subroutine */ int dasacr_(cspice_t*, integer *, integer *);
     char ifname[60];
     integer nidata;
-    extern /* Subroutine */ int rdencc_(integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int rdencc_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
     char crecrd[1024];
-    extern /* Subroutine */ int rdenci_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dasioc_(char *, integer *, integer *, char *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int rdenci_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dasioc_(cspice_t*, char *, integer *, integer 
+	    *, char *, ftnlen, ftnlen);
     char cbuffr[4*1024];
     doublereal dbuffr[1024];
     integer bindex;
@@ -75,36 +82,37 @@ static dastb_state_t* get_dastb_state() {
     integer numblk;
     integer numdta;
     integer ecount;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
     char errmsg[320];
     integer nresvc;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer numlft;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dasonw_(char *, char *, char *, integer *, 
-	    integer *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int daswfr_(integer *, char *, char *, integer *, 
-	    integer *, integer *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dascls_(integer *);
-    extern /* Subroutine */ int nextwd_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasonw_(cspice_t*, char *, char *, char *, 
+	    integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int daswfr_(cspice_t*, integer *, char *, char *, 
+	    integer *, integer *, integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dascls_(cspice_t*, integer *);
+    extern /* Subroutine */ int nextwd_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     integer tcount;
-    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int nparsi_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
     integer errptr;
     integer nresvr;
-    extern /* Subroutine */ int rdencd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int rdencd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    dastb_state_t* __state = get_dastb_state();
+    dastb_state_t* __state = get_dastb_state(__global_state);
 /* $ Abstract */
 
 /*     Convert the contents of a DAS transfer file into an equivalent */
@@ -365,10 +373,10 @@ static dastb_state_t* get_dastb_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASTB", (ftnlen)5);
+	chkin_(__global_state, "DASTB", (ftnlen)5);
     }
 
 /*     A DAS transfer file contains in an encoded form all of the data */
@@ -511,25 +519,26 @@ static dastb_state_t* get_dastb_state() {
 /*     error occurs, set an appropriate error message and signal the */
 /*     error. */
 
-    s_copy(idword, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, idword, " ", (ftnlen)8, (ftnlen)1);
     __state->io___3.ciunit = *xfrlun;
-    iostat = s_rsle(&__state->io___3);
+    iostat = s_rsle(&__global_state->f2c, &__state->io___3);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_lio(&__state->c__9, &__state->c__1, idword, (ftnlen)8);
+    iostat = do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+	    idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rsle();
+    iostat = e_rsle(&__global_state->f2c);
 L100001:
     if (iostat != 0) {
-	setmsg_("Error reading the file ID word from the DAS transfer file: "
-		"#. IOSTAT = #.", (ftnlen)73);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("DASTB", (ftnlen)5);
+	setmsg_(__global_state, "Error reading the file ID word from the DAS"
+		" transfer file: #. IOSTAT = #.", (ftnlen)73);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "DASTB", (ftnlen)5);
 	return 0;
     }
 
@@ -537,49 +546,53 @@ L100001:
 /*     is that we are attempting to convert a DAS file. So, split the */
 /*     ID word into its architecture and type and check the architecture. */
 
-    idw2at_(idword, tarch, ttype, (ftnlen)8, (ftnlen)8, (ftnlen)8);
-    if (s_cmp(tarch, "DAS", (ftnlen)8, (ftnlen)3) != 0) {
-	setmsg_("File architecture was not 'DAS' for file #.", (ftnlen)43);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	sigerr_("SPICE(NOTADASFILE)", (ftnlen)18);
-	chkout_("DASTB", (ftnlen)5);
+    idw2at_(__global_state, idword, tarch, ttype, (ftnlen)8, (ftnlen)8, (
+	    ftnlen)8);
+    if (s_cmp(&__global_state->f2c, tarch, "DAS", (ftnlen)8, (ftnlen)3) != 0) 
+	    {
+	setmsg_(__global_state, "File architecture was not 'DAS' for file #.",
+		 (ftnlen)43);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTADASFILE)", (ftnlen)18);
+	chkout_(__global_state, "DASTB", (ftnlen)5);
 	return 0;
     }
 
 /*     Read the internal filename for the DAS file. */
 
-    s_copy(ifname, " ", (ftnlen)60, (ftnlen)1);
+    s_copy(&__global_state->f2c, ifname, " ", (ftnlen)60, (ftnlen)1);
     __state->io___7.ciunit = *xfrlun;
-    iostat = s_rsle(&__state->io___7);
+    iostat = s_rsle(&__global_state->f2c, &__state->io___7);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&__state->c__9, &__state->c__1, ifname, (ftnlen)60);
+    iostat = do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+	    ifname, (ftnlen)60);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = e_rsle();
+    iostat = e_rsle(&__global_state->f2c);
 L100002:
     if (iostat != 0) {
-	setmsg_("Error reading the internal filename from the DAS transfer f"
-		"ile: #. IOSTAT = #.", (ftnlen)78);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("DASTB", (ftnlen)5);
+	setmsg_(__global_state, "Error reading the internal filename from th"
+		"e DAS transfer file: #. IOSTAT = #.", (ftnlen)78);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "DASTB", (ftnlen)5);
 	return 0;
     }
 
 /*     Open a new binary DAS file and write its file record. */
 
-    dasonw_(binfil, ttype, ifname, &__state->c__0, &handle, binfil_len, (
-	    ftnlen)8, (ftnlen)60);
-    if (failed_()) {
+    dasonw_(__global_state, binfil, ttype, ifname, &__state->c__0, &handle, 
+	    binfil_len, (ftnlen)8, (ftnlen)60);
+    if (failed_(__global_state)) {
 
 /*        If an error occurred while opening the new DAS file, */
 /*        then check out and return. */
 
-	chkout_("DASTB", (ftnlen)5);
+	chkout_(__global_state, "DASTB", (ftnlen)5);
 	return 0;
     }
 
@@ -592,25 +605,25 @@ L100002:
     ncomc = 0;
     nresvr = 0;
     nresvc = 0;
-    daswfr_(&handle, idword, ifname, &nresvr, &nresvc, &ncomr, &ncomc, (
-	    ftnlen)8, (ftnlen)60);
-    if (failed_()) {
+    daswfr_(__global_state, &handle, idword, ifname, &nresvr, &nresvc, &ncomr,
+	     &ncomc, (ftnlen)8, (ftnlen)60);
+    if (failed_(__global_state)) {
 
 /*        If an error occurred while writing the DAS file record, */
 /*        attempt to close the binary file, then check out and return. */
 
-	dascls_(&handle);
-	chkout_("DASTB", (ftnlen)5);
+	dascls_(__global_state, &handle);
+	chkout_(__global_state, "DASTB", (ftnlen)5);
 	return 0;
     }
 
 /*     Read and decode the number of reserved records and reserved */
 /*     characters. */
 
-    rdenci_(xfrlun, &__state->c__1, &nresvr);
-    rdenci_(xfrlun, &__state->c__1, &nresvc);
-    if (failed_()) {
-	chkout_("DASTB", (ftnlen)5);
+    rdenci_(__global_state, xfrlun, &__state->c__1, &nresvr);
+    rdenci_(__global_state, xfrlun, &__state->c__1, &nresvc);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASTB", (ftnlen)5);
 	return 0;
     }
 
@@ -623,38 +636,38 @@ L100002:
 
 /*        Close the file, signal the error, and exit. */
 
-	dascls_(&handle);
-	setmsg_("The number of reserved characters was nonzero (#) in file: "
-		"#, but the DAS reserved record area has NOT been implemented"
-		" yet!", (ftnlen)124);
-	errint_("#", &nresvc, (ftnlen)1);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	sigerr_("SPICE(BADDASFILE)", (ftnlen)17);
-	chkout_("DASTB", (ftnlen)5);
+	dascls_(__global_state, &handle);
+	setmsg_(__global_state, "The number of reserved characters was nonze"
+		"ro (#) in file: #, but the DAS reserved record area has NOT "
+		"been implemented yet!", (ftnlen)124);
+	errint_(__global_state, "#", &nresvc, (ftnlen)1);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDASFILE)", (ftnlen)17);
+	chkout_(__global_state, "DASTB", (ftnlen)5);
 	return 0;
     }
     if (nresvr != 0) {
 
 /*        Close the file, signal the error, and exit. */
 
-	dascls_(&handle);
-	setmsg_("The number of reserved records was nonzero (#) in file: #, "
-		"but the DAS reserved record area has NOT been implemented ye"
-		"t!", (ftnlen)121);
-	errint_("#", &nresvr, (ftnlen)1);
-	errfnm_("#", xfrlun, (ftnlen)1);
-	sigerr_("SPICE(BADDASFILE)", (ftnlen)17);
-	chkout_("DASTB", (ftnlen)5);
+	dascls_(__global_state, &handle);
+	setmsg_(__global_state, "The number of reserved records was nonzero "
+		"(#) in file: #, but the DAS reserved record area has NOT bee"
+		"n implemented yet!", (ftnlen)121);
+	errint_(__global_state, "#", &nresvr, (ftnlen)1);
+	errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDASFILE)", (ftnlen)17);
+	chkout_(__global_state, "DASTB", (ftnlen)5);
 	return 0;
     }
 
 /*     Read and decode the number of comment records and comment */
 /*     characters. */
 
-    rdenci_(xfrlun, &__state->c__1, &ncomr);
-    rdenci_(xfrlun, &__state->c__1, &ncomc);
-    if (failed_()) {
-	chkout_("DASTB", (ftnlen)5);
+    rdenci_(__global_state, xfrlun, &__state->c__1, &ncomr);
+    rdenci_(__global_state, xfrlun, &__state->c__1, &ncomc);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DASTB", (ftnlen)5);
 	return 0;
     }
 
@@ -684,27 +697,28 @@ L100002:
 /*        so just add the comments. But first, convert the DAS file */
 /*        handle into its equivalent logical unit. */
 
-	zzddhhlu_(&handle, "DAS", &__state->c_false, &daslun, (ftnlen)3);
-	if (failed_()) {
+	zzddhhlu_(__global_state, &handle, "DAS", &__state->c_false, &daslun, 
+		(ftnlen)3);
+	if (failed_(__global_state)) {
 
 /*           If an error occurred, attempt to close the binary file, */
 /*           then check out and return. */
 
-	    dascls_(&handle);
-	    chkout_("DASTB", (ftnlen)5);
+	    dascls_(__global_state, &handle);
+	    chkout_(__global_state, "DASTB", (ftnlen)5);
 	    return 0;
 	}
 
 /*        Allocate the necessary comment records. */
 
-	dasacr_(&handle, &ncomr);
-	if (failed_()) {
+	dasacr_(__global_state, &handle, &ncomr);
+	if (failed_(__global_state)) {
 
 /*           If an error occurred, attempt to close the binary file, */
 /*           then checkout and return. */
 
-	    dascls_(&handle);
-	    chkout_("DASTB", (ftnlen)5);
+	    dascls_(__global_state, &handle);
+	    chkout_(__global_state, "DASTB", (ftnlen)5);
 	    return 0;
 	}
 
@@ -726,20 +740,22 @@ L100002:
 
 	inblk = FALSE_;
 	while(more) {
-	    s_copy(crecrd, " ", (ftnlen)1024, (ftnlen)1);
+	    s_copy(&__global_state->f2c, crecrd, " ", (ftnlen)1024, (ftnlen)1)
+		    ;
 	    ci__1.cierr = 1;
 	    ci__1.ciend = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_rsfe(&ci__1);
+	    iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = do_fio(&__state->c__1, line, (ftnlen)255);
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, (
+		    ftnlen)255);
 	    if (iostat != 0) {
 		goto L100003;
 	    }
-	    iostat = e_rsfe();
+	    iostat = e_rsfe(&__global_state->f2c);
 L100003:
 	    if (iostat != 0) {
 
@@ -747,13 +763,13 @@ L100003:
 /*              file close the binary file, set an appropriate error */
 /*              message, then check out and return. */
 
-		dascls_(&handle);
-		setmsg_("Error reading from the DAS transfer file #. IOSTAT "
-			"= #.", (ftnlen)55);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		chkout_("DASTB", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error reading from the DAS transfer"
+			" file #. IOSTAT = #.", (ftnlen)55);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+		chkout_(__global_state, "DASTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -761,53 +777,61 @@ L100003:
 /*           ending a comment block, or scanning for the total number */
 /*           of comment blocks. So look for the appropriate keyword. */
 
-	    nextwd_(line, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)255);
-	    if (s_cmp(word, "BEGIN_COMMENT_BLOCK", (ftnlen)255, (ftnlen)19) ==
-		     0) {
+	    nextwd_(__global_state, line, word, rest, (ftnlen)255, (ftnlen)
+		    255, (ftnlen)255);
+	    if (s_cmp(&__global_state->f2c, word, "BEGIN_COMMENT_BLOCK", (
+		    ftnlen)255, (ftnlen)19) == 0) {
 
 /*              Get the comment block index. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &bindex, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &bindex, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the begin block */
 /*                 index, close the binary file, set an appropriate */
 /*                 error  message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Begin comment block error, could not parse bloc"
-			    "k number. Error: # File: #", (ftnlen)73);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Begin comment block error, coul"
+			    "d not parse block number. Error: # File: #", (
+			    ftnlen)73);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the count of characters in the block. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &bcount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &bcount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the beginning */
 /*                 data count, close the binary file, set an */
 /*                 appropriate error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Begin comment block error, could not parse the "
-			    "data count for block: #. Error: # File: #", (
-			    ftnlen)88);
-		    errint_("#", &bindex, (ftnlen)1);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Begin comment block error, coul"
+			    "d not parse the data count for block: #. Error: "
+			    "# File: #", (ftnlen)88);
+		    errint_(__global_state, "#", &bindex, (ftnlen)1);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -817,52 +841,59 @@ L100003:
 
 		inblk = TRUE_;
 		++blkcnt;
-	    } else if (s_cmp(word, "END_COMMENT_BLOCK", (ftnlen)255, (ftnlen)
-		    17) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, word, "END_COMMENT_BLOCK", 
+		    (ftnlen)255, (ftnlen)17) == 0) {
 
 /*              Get the data block index. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &eindex, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &eindex, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the end comment */
 /*                 block index, close the binary file, set an appropriate */
 /*                 error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("End comment block error, could not parse block "
-			    "number. Error: # File: #", (ftnlen)71);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "End comment block error, could "
+			    "not parse block number. Error: # File: #", (
+			    ftnlen)71);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the count of characters in the DAS array. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &ecount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &ecount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the ending data */
 /*                 count, close the binary file, set an appropriate */
 /*                 error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("End comment block error, could not parse the da"
-			    "ta count for  block: #. Error: # File: #", (
-			    ftnlen)87);
-		    errint_("#", &eindex, (ftnlen)1);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "End comment block error, could "
+			    "not parse the data count for  block: #. Error: #"
+			    " File: #", (ftnlen)87);
+		    errint_(__global_state, "#", &eindex, (ftnlen)1);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -875,14 +906,16 @@ L100003:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Comment block index mismatch: Beginning index: "
-			    "#; Ending index: #. File: #", (ftnlen)74);
-		    errint_("#", &bindex, (ftnlen)1);
-		    errint_("#", &eindex, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Comment block index mismatch: B"
+			    "eginning index: #; Ending index: #. File: #", (
+			    ftnlen)74);
+		    errint_(__global_state, "#", &bindex, (ftnlen)1);
+		    errint_(__global_state, "#", &eindex, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -895,14 +928,16 @@ L100003:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Comment block count mismatch: Beginning count: "
-			    "#; Ending count: #. File: #", (ftnlen)74);
-		    errint_("#", &bcount, (ftnlen)1);
-		    errint_("#", &ecount, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Comment block count mismatch: B"
+			    "eginning count: #; Ending count: #. File: #", (
+			    ftnlen)74);
+		    errint_(__global_state, "#", &bcount, (ftnlen)1);
+		    errint_(__global_state, "#", &ecount, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -911,52 +946,59 @@ L100003:
 /*              flag INBLK, to .FALSE.. */
 
 		inblk = FALSE_;
-	    } else if (s_cmp(word, "TOTAL_COMMENT_BLOCKS", (ftnlen)255, (
-		    ftnlen)20) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, word, "TOTAL_COMMENT_BLOC"
+		    "KS", (ftnlen)255, (ftnlen)20) == 0) {
 
 /*              We have the total comment blocks keyword to parse, so */
 /*              get the total number of comment blocks processed. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &numblk, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &numblk, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the total number of */
 /*                 data blocks, close the binary file, set an appropriate */
 /*                 error  message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Comment block count error, could not parse the "
-			    "total number of character blocks: #. File: #", (
-			    ftnlen)91);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Comment block count error, coul"
+			    "d not parse the total number of character blocks"
+			    ": #. File: #", (ftnlen)91);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the total count of comment characters. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &tcount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &tcount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the comment */
 /*                 data count, close the binary file, set an */
 /*                 appropriate error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Comment count error, could not parse the total "
-			    "count. Error: # File: #", (ftnlen)70);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Comment count error, could not "
+			    "parse the total count. Error: # File: #", (ftnlen)
+			    70);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -970,16 +1012,17 @@ L100003:
 /*                 not match, close the binary file, set an appropriate */
 /*                 error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("The number of comment data blocks processed (#)"
-			    " was not equal to the number of comment data blo"
-			    "cks placed in the DAS text file (#). File: #", (
-			    ftnlen)139);
-		    errint_("#", &blkcnt, (ftnlen)1);
-		    errint_("#", &numblk, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "The number of comment data bloc"
+			    "ks processed (#) was not equal to the number of "
+			    "comment data blocks placed in the DAS text file "
+			    "(#). File: #", (ftnlen)139);
+		    errint_(__global_state, "#", &blkcnt, (ftnlen)1);
+		    errint_(__global_state, "#", &numblk, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -992,14 +1035,16 @@ L100003:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Comment count mismatch: computed count: #; expe"
-			    "cted count: #. File: #", (ftnlen)69);
-		    errint_("#", &dtacnt, (ftnlen)1);
-		    errint_("#", &tcount, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Comment count mismatch: compute"
+			    "d count: #; expected count: #. File: #", (ftnlen)
+			    69);
+		    errint_(__global_state, "#", &dtacnt, (ftnlen)1);
+		    errint_(__global_state, "#", &tcount, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1014,13 +1059,14 @@ L100003:
 /*              appropriate error message, close the DAS file, and */
 /*              return. */
 
-		dascls_(&handle);
-		setmsg_("Unknown keyword '#' encountered while processing th"
-			"e DAS transfer file #.", (ftnlen)73);
-		errch_("#", word, (ftnlen)1, (ftnlen)255);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		chkout_("DASTB", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Unknown keyword '#' encountered whi"
+			"le processing the DAS transfer file #.", (ftnlen)73);
+		errch_(__global_state, "#", word, (ftnlen)1, (ftnlen)255);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DASTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1054,20 +1100,21 @@ L100003:
 /*                 Read and decode a record of encoded comment data */
 /*                 from the text file. */
 
-		    rdencc_(xfrlun, &numdta, crecrd, (ftnlen)1024);
+		    rdencc_(__global_state, xfrlun, &numdta, crecrd, (ftnlen)
+			    1024);
 
 /*                 Write the comment data to the comment area in the */
 /*                 binary DAS file. */
 
-		    dasioc_("WRITE", &daslun, &recno, crecrd, (ftnlen)5, (
-			    ftnlen)1024);
-		    if (failed_()) {
+		    dasioc_(__global_state, "WRITE", &daslun, &recno, crecrd, 
+			    (ftnlen)5, (ftnlen)1024);
+		    if (failed_(__global_state)) {
 
 /*                    If an error occurred, attempt to close the */
 /*                    binary file, then checkout and return. */
 
-			dascls_(&handle);
-			chkout_("DASTB", (ftnlen)5);
+			dascls_(__global_state, &handle);
+			chkout_(__global_state, "DASTB", (ftnlen)5);
 			return 0;
 		    }
 
@@ -1101,17 +1148,17 @@ L100003:
 /*        Write the file record to the DAS file, to update the number */
 /*        of comment characters. */
 
-	daswfr_(&handle, idword, ifname, &nresvr, &nresvc, &ncomr, &ncomc, (
-		ftnlen)8, (ftnlen)60);
+	daswfr_(__global_state, &handle, idword, ifname, &nresvr, &nresvc, &
+		ncomr, &ncomc, (ftnlen)8, (ftnlen)60);
     }
 
 /*     Read the data counts from the DAS transfer file. These will be */
 /*     useful in determining which data types to expect in the text file */
 /*     when converting back to binary. */
 
-    rdenci_(xfrlun, &__state->c__1, &ncdata);
-    rdenci_(xfrlun, &__state->c__1, &nddata);
-    rdenci_(xfrlun, &__state->c__1, &nidata);
+    rdenci_(__global_state, xfrlun, &__state->c__1, &ncdata);
+    rdenci_(__global_state, xfrlun, &__state->c__1, &nddata);
+    rdenci_(__global_state, xfrlun, &__state->c__1, &nidata);
 
 /*     Process the character data array, if there is some character data. */
 
@@ -1135,15 +1182,16 @@ L100003:
 	    ci__1.ciend = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_rsfe(&ci__1);
+	    iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = do_fio(&__state->c__1, line, (ftnlen)255);
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, (
+		    ftnlen)255);
 	    if (iostat != 0) {
 		goto L100004;
 	    }
-	    iostat = e_rsfe();
+	    iostat = e_rsfe(&__global_state->f2c);
 L100004:
 	    if (iostat != 0) {
 
@@ -1151,13 +1199,13 @@ L100004:
 /*              DAS file close the binary file, set an appropriate error */
 /*              message, then check out and return. */
 
-		dascls_(&handle);
-		setmsg_("Error reading from the DAS transfer file #. IOSTAT "
-			"= #.", (ftnlen)55);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		chkout_("DASTB", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error reading from the DAS transfer"
+			" file #. IOSTAT = #.", (ftnlen)55);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+		chkout_(__global_state, "DASTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1165,53 +1213,61 @@ L100004:
 /*           data block, or scanning for the total number of data blocks. */
 /*           So look for the appropriate keyword. */
 
-	    nextwd_(line, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)255);
-	    if (s_cmp(word, "BEGIN_CHARACTER_BLOCK", (ftnlen)255, (ftnlen)21) 
-		    == 0) {
+	    nextwd_(__global_state, line, word, rest, (ftnlen)255, (ftnlen)
+		    255, (ftnlen)255);
+	    if (s_cmp(&__global_state->f2c, word, "BEGIN_CHARACTER_BLOCK", (
+		    ftnlen)255, (ftnlen)21) == 0) {
 
 /*              Get the block number. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &bindex, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &bindex, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the begin block */
 /*                 index, close the binary file, set an appropriate */
 /*                 error  message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Begin character block error, could not parse bl"
-			    "ock number. Error: # File: #", (ftnlen)75);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Begin character block error, co"
+			    "uld not parse block number. Error: # File: #", (
+			    ftnlen)75);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the count of characters in the block. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &bcount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &bcount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the beginning */
 /*                 data count, close the binary file, set an */
 /*                 appropriate error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Begin character block error, could not parse th"
-			    "e data count for block: #. Error: # File: #", (
-			    ftnlen)90);
-		    errint_("#", &bindex, (ftnlen)1);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Begin character block error, co"
+			    "uld not parse the data count for block: #. Error"
+			    ": # File: #", (ftnlen)90);
+		    errint_(__global_state, "#", &bindex, (ftnlen)1);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1221,52 +1277,59 @@ L100004:
 
 		inblk = TRUE_;
 		++blkcnt;
-	    } else if (s_cmp(word, "END_CHARACTER_BLOCK", (ftnlen)255, (
-		    ftnlen)19) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, word, "END_CHARACTER_BLOCK"
+		    , (ftnlen)255, (ftnlen)19) == 0) {
 
 /*              Get the data block index. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &eindex, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &eindex, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the end block */
 /*                 index, close the binary file, set an appropriate */
 /*                 error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("End character block error, could not parse bloc"
-			    "k number. Error: # File: #", (ftnlen)73);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "End character block error, coul"
+			    "d not parse block number. Error: # File: #", (
+			    ftnlen)73);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the count of characters in the DAS array. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &ecount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &ecount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the ending data */
 /*                 count, close the binary file, set an appropriate */
 /*                 error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("End character block error, could not parse the "
-			    "data count for block: #. Error: # File: #", (
-			    ftnlen)88);
-		    errint_("#", &eindex, (ftnlen)1);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "End character block error, coul"
+			    "d not parse the data count for block: #. Error: "
+			    "# File: #", (ftnlen)88);
+		    errint_(__global_state, "#", &eindex, (ftnlen)1);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1279,14 +1342,16 @@ L100004:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Character block index mismatch: Beginning index"
-			    ": #; Ending index: #. File: #", (ftnlen)76);
-		    errint_("#", &bindex, (ftnlen)1);
-		    errint_("#", &eindex, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Character block index mismatch:"
+			    " Beginning index: #; Ending index: #. File: #", (
+			    ftnlen)76);
+		    errint_(__global_state, "#", &bindex, (ftnlen)1);
+		    errint_(__global_state, "#", &eindex, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1299,14 +1364,16 @@ L100004:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Character block count mismatch: Beginning count"
-			    ": #; Ending count: #. File: #", (ftnlen)76);
-		    errint_("#", &bcount, (ftnlen)1);
-		    errint_("#", &ecount, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Character block count mismatch:"
+			    " Beginning count: #; Ending count: #. File: #", (
+			    ftnlen)76);
+		    errint_(__global_state, "#", &bcount, (ftnlen)1);
+		    errint_(__global_state, "#", &ecount, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1315,52 +1382,59 @@ L100004:
 /*              INBLK, to  .FALSE.. */
 
 		inblk = FALSE_;
-	    } else if (s_cmp(word, "TOTAL_CHARACTER_BLOCKS", (ftnlen)255, (
-		    ftnlen)22) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, word, "TOTAL_CHARACTER_BL"
+		    "OCKS", (ftnlen)255, (ftnlen)22) == 0) {
 
 /*              We have the total data blocks keyword to parse, so get */
 /*              the total number of character data blocks processed. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &numblk, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &numblk, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the total number of */
 /*                 data blocks, close the binary file, set an appropriate */
 /*                 error  message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Block count error, could not parse the total nu"
-			    "mber of character blocks: #. File: #", (ftnlen)83)
-			    ;
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Block count error, could not pa"
+			    "rse the total number of character blocks: #. Fil"
+			    "e: #", (ftnlen)83);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the total count of characters. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &tcount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &tcount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the character */
 /*                 data count, close the binary file, set an */
 /*                 appropriate error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Character count error, could not parse the tota"
-			    "l count. Error: # File: #", (ftnlen)72);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Character count error, could no"
+			    "t parse the total count. Error: # File: #", (
+			    ftnlen)72);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1374,16 +1448,17 @@ L100004:
 /*                 the binary file, set an appropriate error message, */
 /*                 then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("The number of character data blocks processed ("
-			    "#) was not equal to the number of character data"
-			    " blocks placed in the DAS transfer file (#). Fil"
-			    "e: #", (ftnlen)147);
-		    errint_("#", &blkcnt, (ftnlen)1);
-		    errint_("#", &numblk, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "The number of character data bl"
+			    "ocks processed (#) was not equal to the number o"
+			    "f character data blocks placed in the DAS transf"
+			    "er file (#). File: #", (ftnlen)147);
+		    errint_(__global_state, "#", &blkcnt, (ftnlen)1);
+		    errint_(__global_state, "#", &numblk, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1396,14 +1471,16 @@ L100004:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Character count mismatch: computed count: #; ex"
-			    "pected count: #. File: #", (ftnlen)71);
-		    errint_("#", &dtacnt, (ftnlen)1);
-		    errint_("#", &tcount, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Character count mismatch: compu"
+			    "ted count: #; expected count: #. File: #", (
+			    ftnlen)71);
+		    errint_(__global_state, "#", &dtacnt, (ftnlen)1);
+		    errint_(__global_state, "#", &tcount, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1418,13 +1495,14 @@ L100004:
 /*              appropriate error message, close the DAS file, and */
 /*              return. */
 
-		dascls_(&handle);
-		setmsg_("Unknown keyword '#' encountered while processing th"
-			"e DAS transfer file #.", (ftnlen)73);
-		errch_("#", word, (ftnlen)1, (ftnlen)255);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		chkout_("DASTB", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Unknown keyword '#' encountered whi"
+			"le processing the DAS transfer file #.", (ftnlen)73);
+		errch_(__global_state, "#", word, (ftnlen)1, (ftnlen)255);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DASTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1455,20 +1533,21 @@ L100004:
 /*                 Read and decode a buffer of encoded character data */
 /*                 from the text file. */
 
-		    rdencc_(xfrlun, &numdta, cbuffr, (ftnlen)4);
+		    rdencc_(__global_state, xfrlun, &numdta, cbuffr, (ftnlen)
+			    4);
 
 /*                 Write the character data to the DAS character */
 /*                 array in the binary DAS file. */
 
-		    dasadc_(&handle, &numdta, &__state->c__1, &__state->c__4, 
-			    cbuffr, (ftnlen)4);
-		    if (failed_()) {
+		    dasadc_(__global_state, &handle, &numdta, &__state->c__1, 
+			    &__state->c__4, cbuffr, (ftnlen)4);
+		    if (failed_(__global_state)) {
 
 /*                    If an error occurred, attempt to close the */
 /*                    binary file, then checkout and return. */
 
-			dascls_(&handle);
-			chkout_("DASTB", (ftnlen)5);
+			dascls_(__global_state, &handle);
+			chkout_(__global_state, "DASTB", (ftnlen)5);
 			return 0;
 		    }
 
@@ -1524,15 +1603,16 @@ L100004:
 	    ci__1.ciend = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_rsfe(&ci__1);
+	    iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100005;
 	    }
-	    iostat = do_fio(&__state->c__1, line, (ftnlen)255);
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, (
+		    ftnlen)255);
 	    if (iostat != 0) {
 		goto L100005;
 	    }
-	    iostat = e_rsfe();
+	    iostat = e_rsfe(&__global_state->f2c);
 L100005:
 	    if (iostat != 0) {
 
@@ -1540,13 +1620,13 @@ L100005:
 /*              DAS file close the binary file, set an appropriate error */
 /*              message, then check out and return. */
 
-		dascls_(&handle);
-		setmsg_("Error reading from the DAS transfer file #. IOSTAT "
-			"= #.", (ftnlen)55);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		chkout_("DASTB", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error reading from the DAS transfer"
+			" file #. IOSTAT = #.", (ftnlen)55);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+		chkout_(__global_state, "DASTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1554,52 +1634,61 @@ L100005:
 /*           data block, or scanning for the total number of data blocks. */
 /*           So look for the appropriate keyword. */
 
-	    nextwd_(line, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)255);
-	    if (s_cmp(word, "BEGIN_DP_BLOCK", (ftnlen)255, (ftnlen)14) == 0) {
+	    nextwd_(__global_state, line, word, rest, (ftnlen)255, (ftnlen)
+		    255, (ftnlen)255);
+	    if (s_cmp(&__global_state->f2c, word, "BEGIN_DP_BLOCK", (ftnlen)
+		    255, (ftnlen)14) == 0) {
 
 /*              Get the block number. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &bindex, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &bindex, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the begin block */
 /*                 index, close the binary file, set an appropriate */
 /*                 error  message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Begin double precision block error, could not p"
-			    "arse block number. Error: # File: #", (ftnlen)82);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Begin double precision block er"
+			    "ror, could not parse block number. Error: # File"
+			    ": #", (ftnlen)82);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the count of double precision numbers in the block. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &bcount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &bcount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the beginning */
 /*                 data count, close the binary file, set an */
 /*                 appropriate error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Begin double precision block error, could not p"
-			    "arse the data count for block: #. Error: # File:"
-			    " #", (ftnlen)97);
-		    errint_("#", &bindex, (ftnlen)1);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Begin double precision block er"
+			    "ror, could not parse the data count for block: #"
+			    ". Error: # File: #", (ftnlen)97);
+		    errint_(__global_state, "#", &bindex, (ftnlen)1);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1609,52 +1698,59 @@ L100005:
 
 		inblk = TRUE_;
 		++blkcnt;
-	    } else if (s_cmp(word, "END_DP_BLOCK", (ftnlen)255, (ftnlen)12) ==
-		     0) {
+	    } else if (s_cmp(&__global_state->f2c, word, "END_DP_BLOCK", (
+		    ftnlen)255, (ftnlen)12) == 0) {
 
 /*              Get the data block index. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &eindex, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &eindex, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the end block */
 /*                 index, close the binary file, set an appropriate */
 /*                 error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("End double precision block error, could not par"
-			    "se block number. Error: # File: #", (ftnlen)80);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "End double precision block erro"
+			    "r, could not parse block number. Error: # File: #"
+			    , (ftnlen)80);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the count of double precision numbers in the block. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &ecount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &ecount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the ending data */
 /*                 count, close the binary file, set an appropriate */
 /*                 error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("End double precision block error, could not par"
-			    "se the data count for block: #. Error: # File: #",
-			     (ftnlen)95);
-		    errint_("#", &eindex, (ftnlen)1);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "End double precision block erro"
+			    "r, could not parse the data count for block: #. "
+			    "Error: # File: #", (ftnlen)95);
+		    errint_(__global_state, "#", &eindex, (ftnlen)1);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1667,15 +1763,16 @@ L100005:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Double precision block index mismatch: Beginnin"
-			    "g index: #; Ending index: #. File: #", (ftnlen)83)
-			    ;
-		    errint_("#", &bindex, (ftnlen)1);
-		    errint_("#", &eindex, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Double precision block index mi"
+			    "smatch: Beginning index: #; Ending index: #. Fil"
+			    "e: #", (ftnlen)83);
+		    errint_(__global_state, "#", &bindex, (ftnlen)1);
+		    errint_(__global_state, "#", &eindex, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1688,15 +1785,16 @@ L100005:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Double precision block count mismatch: Beginnin"
-			    "g count: #; Ending count: #. File: #", (ftnlen)83)
-			    ;
-		    errint_("#", &bcount, (ftnlen)1);
-		    errint_("#", &ecount, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Double precision block count mi"
+			    "smatch: Beginning count: #; Ending count: #. Fil"
+			    "e: #", (ftnlen)83);
+		    errint_(__global_state, "#", &bcount, (ftnlen)1);
+		    errint_(__global_state, "#", &ecount, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1705,52 +1803,59 @@ L100005:
 /*              INBLK, to  .FALSE.. */
 
 		inblk = FALSE_;
-	    } else if (s_cmp(word, "TOTAL_DP_BLOCKS", (ftnlen)255, (ftnlen)15)
-		     == 0) {
+	    } else if (s_cmp(&__global_state->f2c, word, "TOTAL_DP_BLOCKS", (
+		    ftnlen)255, (ftnlen)15) == 0) {
 
 /*              We have the total data blocks keyword to parse, so get */
 /*              the total number of character data blocks processed. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &numblk, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &numblk, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the total number of */
 /*                 data blocks, close the binary file, set an appropriate */
 /*                 error  message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Block count error, could not parse the total nu"
-			    "mber of double precision data blocks: #. File: #",
-			     (ftnlen)95);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Block count error, could not pa"
+			    "rse the total number of double precision data bl"
+			    "ocks: #. File: #", (ftnlen)95);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the total count of double precision numbers. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &tcount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &tcount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the double */
 /*                 precision data count, close the binary file, set an */
 /*                 appropriate error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Double precision count error, could not parse t"
-			    "he total count. Error: # File: #", (ftnlen)79);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Double precision count error, c"
+			    "ould not parse the total count. Error: # File: #",
+			     (ftnlen)79);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1764,16 +1869,17 @@ L100005:
 /*                 the binary file, set an appropriate error message, */
 /*                 then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("The number of double precision data blocks proc"
-			    "essed (#) was not equal to the number of double "
-			    "precision data blocks placed in the DAS transfer"
-			    " file (#). File: #", (ftnlen)161);
-		    errint_("#", &blkcnt, (ftnlen)1);
-		    errint_("#", &numblk, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "The number of double precision "
+			    "data blocks processed (#) was not equal to the n"
+			    "umber of double precision data blocks placed in "
+			    "the DAS transfer file (#). File: #", (ftnlen)161);
+		    errint_(__global_state, "#", &blkcnt, (ftnlen)1);
+		    errint_(__global_state, "#", &numblk, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1786,14 +1892,16 @@ L100005:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Double precision count mismatch: computed count"
-			    ": #; expected count: #. File: #", (ftnlen)78);
-		    errint_("#", &dtacnt, (ftnlen)1);
-		    errint_("#", &tcount, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Double precision count mismatch"
+			    ": computed count: #; expected count: #. File: #", 
+			    (ftnlen)78);
+		    errint_(__global_state, "#", &dtacnt, (ftnlen)1);
+		    errint_(__global_state, "#", &tcount, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1808,13 +1916,14 @@ L100005:
 /*              appropriate error message, close the DAS file, and */
 /*              return. */
 
-		dascls_(&handle);
-		setmsg_("Unknown keyword '#' encountered while processing th"
-			"e DAS transfer  file #.", (ftnlen)74);
-		errch_("#", word, (ftnlen)1, (ftnlen)255);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		chkout_("DASTB", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Unknown keyword '#' encountered whi"
+			"le processing the DAS transfer  file #.", (ftnlen)74);
+		errch_(__global_state, "#", word, (ftnlen)1, (ftnlen)255);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DASTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1844,19 +1953,19 @@ L100005:
 /*                 Read and decode a buffer of encoded double precision */
 /*                 data from the text file. */
 
-		    rdencd_(xfrlun, &numdta, dbuffr);
+		    rdencd_(__global_state, xfrlun, &numdta, dbuffr);
 
 /*                 Write the double precision data to the DAS double */
 /*                 precision array in the binary DAS file. */
 
-		    dasadd_(&handle, &numdta, dbuffr);
-		    if (failed_()) {
+		    dasadd_(__global_state, &handle, &numdta, dbuffr);
+		    if (failed_(__global_state)) {
 
 /*                    If an error occurred, attempt to close the */
 /*                    binary file, then checkout and return. */
 
-			dascls_(&handle);
-			chkout_("DASTB", (ftnlen)5);
+			dascls_(__global_state, &handle);
+			chkout_(__global_state, "DASTB", (ftnlen)5);
 			return 0;
 		    }
 
@@ -1911,15 +2020,16 @@ L100005:
 	    ci__1.ciend = 1;
 	    ci__1.ciunit = *xfrlun;
 	    ci__1.cifmt = "(A)";
-	    iostat = s_rsfe(&ci__1);
+	    iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	    if (iostat != 0) {
 		goto L100006;
 	    }
-	    iostat = do_fio(&__state->c__1, line, (ftnlen)255);
+	    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, (
+		    ftnlen)255);
 	    if (iostat != 0) {
 		goto L100006;
 	    }
-	    iostat = e_rsfe();
+	    iostat = e_rsfe(&__global_state->f2c);
 L100006:
 	    if (iostat != 0) {
 
@@ -1927,13 +2037,13 @@ L100006:
 /*              DAS file close the binary file, set an appropriate error */
 /*              message, then check out and return. */
 
-		dascls_(&handle);
-		setmsg_("Error reading from the DAS transfer file #. IOSTAT "
-			"= #.", (ftnlen)55);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		chkout_("DASTB", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Error reading from the DAS transfer"
+			" file #. IOSTAT = #.", (ftnlen)55);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+		chkout_(__global_state, "DASTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1941,53 +2051,61 @@ L100006:
 /*           data block, or scanning for the total number of data blocks. */
 /*           So look for the appropriate keyword. */
 
-	    nextwd_(line, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)255);
-	    if (s_cmp(word, "BEGIN_INTEGER_BLOCK", (ftnlen)255, (ftnlen)19) ==
-		     0) {
+	    nextwd_(__global_state, line, word, rest, (ftnlen)255, (ftnlen)
+		    255, (ftnlen)255);
+	    if (s_cmp(&__global_state->f2c, word, "BEGIN_INTEGER_BLOCK", (
+		    ftnlen)255, (ftnlen)19) == 0) {
 
 /*              Get the block number. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &bindex, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &bindex, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the begin block */
 /*                 index, close the binary file, set an appropriate */
 /*                 error  message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Begin integer block error, could not parse bloc"
-			    "k number. Error: # File: #", (ftnlen)73);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Begin integer block error, coul"
+			    "d not parse block number. Error: # File: #", (
+			    ftnlen)73);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the count of integers in the block. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &bcount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &bcount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the beginning */
 /*                 data count, close the binary file, set an */
 /*                 appropriate error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Begin integer block error, could not parse the "
-			    "data count for  block: #. Error: # File: #", (
-			    ftnlen)89);
-		    errint_("#", &bindex, (ftnlen)1);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Begin integer block error, coul"
+			    "d not parse the data count for  block: #. Error:"
+			    " # File: #", (ftnlen)89);
+		    errint_(__global_state, "#", &bindex, (ftnlen)1);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1997,52 +2115,59 @@ L100006:
 
 		inblk = TRUE_;
 		++blkcnt;
-	    } else if (s_cmp(word, "END_INTEGER_BLOCK", (ftnlen)255, (ftnlen)
-		    17) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, word, "END_INTEGER_BLOCK", 
+		    (ftnlen)255, (ftnlen)17) == 0) {
 
 /*              Get the data block index. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &eindex, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &eindex, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the end block */
 /*                 index, close the binary file, set an appropriate */
 /*                 error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("End integer block error, could not parse block "
-			    "number. Error: # File: #", (ftnlen)71);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "End integer block error, could "
+			    "not parse block number. Error: # File: #", (
+			    ftnlen)71);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the count of integers in the block. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &ecount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &ecount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the ending data */
 /*                 count, close the binary file, set an appropriate */
 /*                 error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("End integer block error, could not parse the da"
-			    "ta count for block: #.Error: # File: #", (ftnlen)
-			    85);
-		    errint_("#", &eindex, (ftnlen)1);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "End integer block error, could "
+			    "not parse the data count for block: #.Error: # F"
+			    "ile: #", (ftnlen)85);
+		    errint_(__global_state, "#", &eindex, (ftnlen)1);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -2055,14 +2180,16 @@ L100006:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Integer block index mismatch: Beginning index: "
-			    "#; Ending index: #. File: #", (ftnlen)74);
-		    errint_("#", &bindex, (ftnlen)1);
-		    errint_("#", &eindex, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Integer block index mismatch: B"
+			    "eginning index: #; Ending index: #. File: #", (
+			    ftnlen)74);
+		    errint_(__global_state, "#", &bindex, (ftnlen)1);
+		    errint_(__global_state, "#", &eindex, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -2075,14 +2202,16 @@ L100006:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Integer block count mismatch: Beginning count: "
-			    "#; Ending count: #. File: #", (ftnlen)74);
-		    errint_("#", &bcount, (ftnlen)1);
-		    errint_("#", &ecount, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Integer block count mismatch: B"
+			    "eginning count: #; Ending count: #. File: #", (
+			    ftnlen)74);
+		    errint_(__global_state, "#", &bcount, (ftnlen)1);
+		    errint_(__global_state, "#", &ecount, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -2091,52 +2220,59 @@ L100006:
 /*              INBLK, to .FALSE.. */
 
 		inblk = FALSE_;
-	    } else if (s_cmp(word, "TOTAL_INTEGER_BLOCKS", (ftnlen)255, (
-		    ftnlen)20) == 0) {
+	    } else if (s_cmp(&__global_state->f2c, word, "TOTAL_INTEGER_BLOC"
+		    "KS", (ftnlen)255, (ftnlen)20) == 0) {
 
 /*              We have the total data blocks keyword to parse, so get */
 /*              the total number of character data blocks processed. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &numblk, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &numblk, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the total number of */
 /*                 data blocks, close the binary file, set an appropriate */
 /*                 error  message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Block count error, could not parse the total nu"
-			    "mber of integer data blocks: #. File: #", (ftnlen)
-			    86);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Block count error, could not pa"
+			    "rse the total number of integer data blocks: #. "
+			    "File: #", (ftnlen)86);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Parse the total count of integers. */
 
-		nextwd_(rest, word, rest, (ftnlen)255, (ftnlen)255, (ftnlen)
-			255);
-		nparsi_(word, &tcount, errmsg, &errptr, (ftnlen)255, (ftnlen)
-			320);
-		if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
+		nextwd_(__global_state, rest, word, rest, (ftnlen)255, (
+			ftnlen)255, (ftnlen)255);
+		nparsi_(__global_state, word, &tcount, errmsg, &errptr, (
+			ftnlen)255, (ftnlen)320);
+		if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (
+			ftnlen)1) != 0) {
 
 /*                 If an error occurred while parsing the integer */
 /*                 data count, close the binary file, set an */
 /*                 appropriate error message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Integer count error, could not parse the total "
-			    "count. Error: # File: #", (ftnlen)70);
-		    errch_("#", errmsg, (ftnlen)1, (ftnlen)320);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Integer count error, could not "
+			    "parse the total count. Error: # File: #", (ftnlen)
+			    70);
+		    errch_(__global_state, "#", errmsg, (ftnlen)1, (ftnlen)
+			    320);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -2150,16 +2286,17 @@ L100006:
 /*                 the binary file, set an appropriate error message, */
 /*                 then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("The number of integer data blocks processed (#)"
-			    " was not equal to the number of integer data blo"
-			    "cks placed in the DAS transfer file (#). File: #",
-			     (ftnlen)143);
-		    errint_("#", &blkcnt, (ftnlen)1);
-		    errint_("#", &numblk, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "The number of integer data bloc"
+			    "ks processed (#) was not equal to the number of "
+			    "integer data blocks placed in the DAS transfer f"
+			    "ile (#). File: #", (ftnlen)143);
+		    errint_(__global_state, "#", &blkcnt, (ftnlen)1);
+		    errint_(__global_state, "#", &numblk, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -2172,14 +2309,16 @@ L100006:
 /*                 close the binary file, set an appropriate error */
 /*                 message, then check out and return. */
 
-		    dascls_(&handle);
-		    setmsg_("Integer count mismatch: computed count: #; expe"
-			    "cted count: #. File: #", (ftnlen)69);
-		    errint_("#", &dtacnt, (ftnlen)1);
-		    errint_("#", &tcount, (ftnlen)1);
-		    errfnm_("#", xfrlun, (ftnlen)1);
-		    sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		    chkout_("DASTB", (ftnlen)5);
+		    dascls_(__global_state, &handle);
+		    setmsg_(__global_state, "Integer count mismatch: compute"
+			    "d count: #; expected count: #. File: #", (ftnlen)
+			    69);
+		    errint_(__global_state, "#", &dtacnt, (ftnlen)1);
+		    errint_(__global_state, "#", &tcount, (ftnlen)1);
+		    errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (
+			    ftnlen)25);
+		    chkout_(__global_state, "DASTB", (ftnlen)5);
 		    return 0;
 		}
 
@@ -2194,13 +2333,14 @@ L100006:
 /*              appropriate error message, close the DAS file, and */
 /*              return. */
 
-		dascls_(&handle);
-		setmsg_("Unknown keyword '#' encountered while processing th"
-			"e DAS transfer  file #.", (ftnlen)74);
-		errch_("#", word, (ftnlen)1, (ftnlen)255);
-		errfnm_("#", xfrlun, (ftnlen)1);
-		sigerr_("SPICE(BADDASTRANSFERFILE)", (ftnlen)25);
-		chkout_("DASTB", (ftnlen)5);
+		dascls_(__global_state, &handle);
+		setmsg_(__global_state, "Unknown keyword '#' encountered whi"
+			"le processing the DAS transfer  file #.", (ftnlen)74);
+		errch_(__global_state, "#", word, (ftnlen)1, (ftnlen)255);
+		errfnm_(__global_state, "#", xfrlun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADDASTRANSFERFILE)", (ftnlen)
+			25);
+		chkout_(__global_state, "DASTB", (ftnlen)5);
 		return 0;
 	    }
 
@@ -2230,19 +2370,19 @@ L100006:
 /*                 Read and decode a buffer of encoded integer data */
 /*                 from the text file. */
 
-		    rdenci_(xfrlun, &numdta, ibuffr);
+		    rdenci_(__global_state, xfrlun, &numdta, ibuffr);
 
 /*                 Write the integer data to the DAS integer array in */
 /*                 the binary DAS file. */
 
-		    dasadi_(&handle, &numdta, ibuffr);
-		    if (failed_()) {
+		    dasadi_(__global_state, &handle, &numdta, ibuffr);
+		    if (failed_(__global_state)) {
 
 /*                    If an error occurred, attempt to close the */
 /*                    binary file, then checkout and return. */
 
-			dascls_(&handle);
-			chkout_("DASTB", (ftnlen)5);
+			dascls_(__global_state, &handle);
+			chkout_(__global_state, "DASTB", (ftnlen)5);
 			return 0;
 		    }
 
@@ -2277,8 +2417,8 @@ L100006:
 
 /*     Close only the binary file. */
 
-    dascls_(&handle);
-    chkout_("DASTB", (ftnlen)5);
+    dascls_(__global_state, &handle);
+    chkout_(__global_state, "DASTB", (ftnlen)5);
     return 0;
 } /* dastb_ */
 

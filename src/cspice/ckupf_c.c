@@ -132,7 +132,7 @@
    Participate in error handling
    */
 
-   chkin_c ( "ckupf_c");
+   chkin_c ( naif_state, "ckupf_c");
 
 
    /*

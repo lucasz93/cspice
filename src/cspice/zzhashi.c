@@ -8,27 +8,26 @@
 
 
 typedef int zzhashi_state_t;
-static zzhashi_state_t* get_zzhashi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzhashi_state_t* get_zzhashi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZHASHI ( Private---integer hash function ) */
-integer zzhashi_(integer *n, integer *m)
+integer zzhashi_(cspice_t* __global_state, integer *n, integer *m)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzhashi_state_t* __state = get_zzhashi_state();
+    zzhashi_state_t* __state = get_zzhashi_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -144,12 +143,12 @@ integer zzhashi_(integer *n, integer *m)
 
     if (*m <= 0) {
 	ret_val = 0;
-	chkin_("ZZHASHI", (ftnlen)7);
-	setmsg_("The input hash function divisor was not a positive number. "
-		"It was #.", (ftnlen)68);
-	errint_("#", m, (ftnlen)1);
-	sigerr_("SPICE(INVALIDDIVISOR)", (ftnlen)21);
-	chkout_("ZZHASHI", (ftnlen)7);
+	chkin_(__global_state, "ZZHASHI", (ftnlen)7);
+	setmsg_(__global_state, "The input hash function divisor was not a p"
+		"ositive number. It was #.", (ftnlen)68);
+	errint_(__global_state, "#", m, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDDIVISOR)", (ftnlen)21);
+	chkout_(__global_state, "ZZHASHI", (ftnlen)7);
 	return ret_val;
     }
 

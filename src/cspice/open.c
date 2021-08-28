@@ -107,15 +107,14 @@ char *f__w_mode[4] = {"wb", "w", "r+b", "r+"};
  static void
 #ifdef KR_headers
 
-   f__bufadj(n, c) int n, c;
+   f__bufadj(f2c, n, c) f2c_state_t *f2c; int n, c;
 
 #else
 
-   f__bufadj(int n, int c)
+   f__bufadj(f2c_state_t *f2c, int n, int c)
 
 #endif
    {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    unsigned int len;
    char *nbuf, *s, *t, *te;
 
@@ -139,15 +138,14 @@ char *f__w_mode[4] = {"wb", "w", "r+b", "r+"};
 int
 #ifdef KR_headers
 
-   f__putbuf(c) int c;
+   f__putbuf(f2c, c) f2c_state_t *f2c; int c;
 
 #else
 
-   f__putbuf(int c)
+   f__putbuf(f2c_state_t *f2c, int c)
 
 #endif
    {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    char *s, *se;
    int n;
 
@@ -155,7 +153,7 @@ int
       f2c->f__recpos = f2c->f__hiwater;
    n = f2c->f__recpos + 1;
    if (n >= f2c->f__buflen)
-      f__bufadj(n, f2c->f__recpos);
+      f__bufadj(f2c, n, f2c->f__recpos);
    s = f2c->f__buf;
    se = s + f2c->f__recpos;
    if (c)
@@ -175,39 +173,37 @@ int
 void
 #ifdef KR_headers
 
-   x_putc(c)
+   x_putc(f2c, c) f2c_state_t *f2c;
 
 #else
 
-   x_putc(int c)
+   x_putc(f2c_state_t *f2c, int c)
 
 #endif
    {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    if (f2c->f__recpos >= f2c->f__buflen)
-      f__bufadj(f2c->f__recpos, f2c->f__buflen);
+      f__bufadj(f2c, f2c->f__recpos, f2c->f__buflen);
    f2c->f__buf[f2c->f__recpos++] = c;
    }
 
-#define opnerr(f,m,s) {if(f) errno= m; else opn_err(m,s,a); return(m);}
+#define opnerr(f2c,f,m,s) {if(f) errno= m; else opn_err(f2c,m,s,a); return(m);}
 
 static void
 #ifdef KR_headers
 
-   opn_err(m, s, a) int m; char *s; olist *a;
+   opn_err(f2c, m, s, a) f2c_state_t *f2c; int m; char *s; olist *a;
 
 #else
 
-   opn_err(int m, char *s, olist *a)
+   opn_err(f2c_state_t *f2c, int m, char *s, olist *a)
 
 #endif
    {
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
    if (a->ofnm)
      {
      /* supply file name to error message */
       if (a->ofnmlen >= f2c->f__buflen)
-         f__bufadj((int)a->ofnmlen, 0);
+         f__bufadj(f2c, (int)a->ofnmlen, 0);
       g_char(a->ofnm, a->ofnmlen, f2c->f__curunit->ufnm = f2c->f__buf);
       }
    f__fatal(m, s);
@@ -218,15 +214,14 @@ static void
 
 #ifdef KR_headers
 
-   integer f_open(a) olist *a;
+   integer f_open(f2c,a) f2c_state_t *f2c; olist *a;
 
 #else
 
-   integer f_open( olist *a)
+   integer f_open(f2c_state_t *f2c, olist *a)
 
 #endif
-   {   
-   f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
+   {
    unit *b;
    integer rv;
    char buf[256], *s;
@@ -283,7 +278,7 @@ static void
        {
       g_char(a->ofnm,a->ofnmlen,buf);
       if (!buf[0])
-         opnerr(a->oerr,107,"open")
+         opnerr(f2c,a->oerr,107,"open")
       }
    else
       sprintf(buf, "fort.%ld", a->ounit);
@@ -306,7 +301,7 @@ static void
 #else
       if ( access(buf,0) )
          {
-         opnerr(a->oerr,errno,"open");
+         opnerr(f2c,a->oerr,errno,"open");
          }
 #endif
       break;
@@ -338,7 +333,7 @@ static void
 
       if (!(b->ufd = tmpfile()))
          {
-         opnerr(a->oerr,errno,"open")
+         opnerr(f2c,a->oerr,errno,"open")
          }
 
       b->ufnm = 0;
@@ -365,7 +360,7 @@ static void
          }
 #else
       if (!access(buf,0))
-         opnerr(a->oerr,128,"open")
+         opnerr(f2c,a->oerr,128,"open")
 #endif
 
        /* no break */
@@ -388,7 +383,7 @@ static void
    }
 
    b->ufnm=(char *) malloc((unsigned int)(strlen(buf)+1));
-   if(b->ufnm==NULL) opnerr(a->oerr,113,"no space");
+   if(b->ufnm==NULL) opnerr(f2c,a->oerr,113,"no space");
    (void) strcpy(b->ufnm,buf);
    if ((s = a->oacc) && b->url)
       ufmt = 0;
@@ -407,7 +402,7 @@ static void
 #ifndef NON_UNIX_STDIO
 
    if((b->uinode = f__inode(buf,&b->udev)) == -1)
-      opnerr(a->oerr,108,"open")
+      opnerr(f2c,a->oerr,108,"open")
 
 #endif
 
@@ -416,7 +411,7 @@ static void
          rewind(b->ufd);
       else if ((s = a->oacc) && (*s == 'a' || *s == 'A')
          && fseek(b->ufd, 0L, SEEK_END))
-            opnerr(a->oerr,129,"open");
+            opnerr(f2c,a->oerr,129,"open");
    return(0);
 }
 
@@ -425,11 +420,11 @@ static void
 
 #ifdef KR_headers
 
-   fk_open( seq, fmt, n) ftnint n;
+   fk_open(f2c, seq, fmt, n) f2c_state_t *f2c; ftnint n;
 
 #else
 
-   fk_open(int seq, int fmt, ftnint n)
+   fk_open(f2c_state_t *f2c, int seq, int fmt, ftnint n)
 
 #endif
    {
@@ -445,7 +440,7 @@ static void
    a.ofm = fmt==FMT?"f":"u";
    a.orl = seq==DIR?1:0;
    a.oblnk=NULL;
-   return(f_open(&a));
+   return(f_open(f2c,&a));
    }
 
 #ifdef __cplusplus

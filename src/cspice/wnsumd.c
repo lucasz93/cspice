@@ -8,40 +8,40 @@
 
 
 typedef int wnsumd_state_t;
-static wnsumd_state_t* get_wnsumd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wnsumd_state_t* get_wnsumd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure WNSUMD ( Summary of a double precision window ) */
-/* Subroutine */ int wnsumd_(doublereal *window, doublereal *meas, doublereal 
-	*avg, doublereal *stddev, integer *short__, integer *long__)
+/* Subroutine */ int wnsumd_(cspice_t* __global_state, doublereal *window, 
+	doublereal *meas, doublereal *avg, doublereal *stddev, integer *
+	short__, integer *long__)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     integer card;
-    extern logical even_(integer *);
+    extern logical even_(cspice_t*, integer *);
     integer i__;
-    extern integer cardd_(doublereal *);
+    extern integer cardd_(cspice_t*, doublereal *);
     doublereal m;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal mlong;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal mshort;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal sumsqr;
     doublereal sum;
 
 
     /* Module state */
-    wnsumd_state_t* __state = get_wnsumd_state();
+    wnsumd_state_t* __state = get_wnsumd_state(__global_state);
 /* $ Abstract */
 
 /*     Summarize the contents of a double precision window. */
@@ -240,22 +240,22 @@ static wnsumd_state_t* get_wnsumd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Get the cardinality (number of endpoints) of the window. */
 
-    card = cardd_(window);
+    card = cardd_(__global_state, window);
 
 /*     Confirm evenness of CARD. */
 
-    if (! even_(&card)) {
-	chkin_("WNSUMD", (ftnlen)6);
-	setmsg_("Input window has odd cardinality. A valid SPICE window must"
-		" have even element cardinality.", (ftnlen)90);
-	sigerr_("SPICE(INVALIDCARDINALITY)", (ftnlen)25);
-	chkout_("WNSUMD", (ftnlen)6);
+    if (! even_(__global_state, &card)) {
+	chkin_(__global_state, "WNSUMD", (ftnlen)6);
+	setmsg_(__global_state, "Input window has odd cardinality. A valid S"
+		"PICE window must have even element cardinality.", (ftnlen)90);
+	sigerr_(__global_state, "SPICE(INVALIDCARDINALITY)", (ftnlen)25);
+	chkout_(__global_state, "WNSUMD", (ftnlen)6);
 	return 0;
     }
 
@@ -298,7 +298,8 @@ static wnsumd_state_t* get_wnsumd_state() {
 
 	*meas = sum;
 	*avg = *meas * 2. / (doublereal) card;
-	*stddev = sqrt(sumsqr * 2. / (doublereal) card - *avg * *avg);
+	*stddev = sqrt(&__global_state->f2c, sumsqr * 2. / (doublereal) card 
+		- *avg * *avg);
     }
     return 0;
 } /* wnsumd_ */

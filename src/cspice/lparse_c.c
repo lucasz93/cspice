@@ -224,7 +224,7 @@
    /*
    Participate in error handling.
    */
-   chkin_c ( "lparse_c" );
+   chkin_c ( naif_state, "lparse_c" );
 
 
    /*

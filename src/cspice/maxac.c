@@ -8,28 +8,27 @@
 
 
 typedef int maxac_state_t;
-static maxac_state_t* get_maxac_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline maxac_state_t* get_maxac_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure  MAXAC  ( Maximum element of array, character ) */
-/* Subroutine */ int maxac_(char *array, integer *ndim, char *maxval, integer 
-	*loc, ftnlen array_len, ftnlen maxval_len)
+/* Subroutine */ int maxac_(cspice_t* __global_state, char *array, integer *
+	ndim, char *maxval, integer *loc, ftnlen array_len, ftnlen maxval_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    logical l_gt(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    logical l_gt(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    maxac_state_t* __state = get_maxac_state();
+    maxac_state_t* __state = get_maxac_state(__global_state);
 /* $ Abstract */
 
 /*     Locate the maximum element of a character array. */
@@ -177,14 +176,14 @@ static maxac_state_t* get_maxac_state() {
 	*loc = 0;
 	return 0;
     }
-    s_copy(maxval, array, maxval_len, array_len);
+    s_copy(&__global_state->f2c, maxval, array, maxval_len, array_len);
     *loc = 1;
     i__1 = *ndim;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	if (l_gt(array + (i__ - 1) * array_len, maxval, array_len, maxval_len)
-		) {
-	    s_copy(maxval, array + (i__ - 1) * array_len, maxval_len, 
-		    array_len);
+	if (l_gt(&__global_state->f2c, array + (i__ - 1) * array_len, maxval, 
+		array_len, maxval_len)) {
+	    s_copy(&__global_state->f2c, maxval, array + (i__ - 1) * 
+		    array_len, maxval_len, array_len);
 	    *loc = i__;
 	}
     }

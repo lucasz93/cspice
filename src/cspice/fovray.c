@@ -8,28 +8,28 @@
 
 
 typedef int fovray_state_t;
-static fovray_state_t* get_fovray_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline fovray_state_t* get_fovray_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      FOVRAY ( Is ray in FOV at time? ) */
-/* Subroutine */ int fovray_(char *inst, doublereal *raydir, char *rframe, 
-	char *abcorr, char *obsrvr, doublereal *et, logical *visibl, ftnlen 
-	inst_len, ftnlen rframe_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int fovray_(cspice_t* __global_state, char *inst, doublereal 
+	*raydir, char *rframe, char *abcorr, char *obsrvr, doublereal *et, 
+	logical *visibl, ftnlen inst_len, ftnlen rframe_len, ftnlen 
+	abcorr_len, ftnlen obsrvr_len)
 {
-    extern /* Subroutine */ int zzgffvin_(char *, char *, doublereal *, char *
-	    , char *, char *, char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int zzgffvst_(doublereal *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzgffvin_(cspice_t*, char *, char *, 
+	    doublereal *, char *, char *, char *, char *, ftnlen, ftnlen, 
+	    ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgffvst_(cspice_t*, doublereal *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    fovray_state_t* __state = get_fovray_state();
+    fovray_state_t* __state = get_fovray_state(__global_state);
 /* $ Abstract */
 
 /*     Determine if a specified ray is within the field-of-view (FOV) of */
@@ -647,10 +647,10 @@ static fovray_state_t* get_fovray_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("FOVRAY", (ftnlen)6);
+    chkin_(__global_state, "FOVRAY", (ftnlen)6);
 
 /*     Note to maintenance programmer: input exception checks */
 /*     are delegated to ZZGFFVU. If the implementation of that */
@@ -661,17 +661,18 @@ static fovray_state_t* get_fovray_state() {
 
 /*     Initialize the visibility calculation. */
 
-    zzgffvin_(inst, "RAY", raydir, " ", rframe, abcorr, obsrvr, inst_len, (
-	    ftnlen)3, (ftnlen)1, rframe_len, abcorr_len, obsrvr_len);
-    if (failed_()) {
-	chkout_("FOVRAY", (ftnlen)6);
+    zzgffvin_(__global_state, inst, "RAY", raydir, " ", rframe, abcorr, 
+	    obsrvr, inst_len, (ftnlen)3, (ftnlen)1, rframe_len, abcorr_len, 
+	    obsrvr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "FOVRAY", (ftnlen)6);
 	return 0;
     }
 
 /*     Calculate the visibility state. */
 
-    zzgffvst_(et, visibl);
-    chkout_("FOVRAY", (ftnlen)6);
+    zzgffvst_(__global_state, et, visibl);
+    chkout_(__global_state, "FOVRAY", (ftnlen)6);
     return 0;
 } /* fovray_ */
 

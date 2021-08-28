@@ -8,8 +8,7 @@
 
 
 extern zzcnquad_init_t __zzcnquad_init;
-static zzcnquad_state_t* get_zzcnquad_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzcnquad_state_t* get_zzcnquad_state(cspice_t* state) {
 	if (!state->zzcnquad)
 		state->zzcnquad = __cspice_allocate_module(sizeof(
 	zzcnquad_state_t), &__zzcnquad_init, sizeof(__zzcnquad_init));
@@ -18,8 +17,9 @@ static zzcnquad_state_t* get_zzcnquad_state() {
 }
 
 /* $Procedure  ZZCNQUAD ( Solve quadratic equation for cone intercept ) */
-/* Subroutine */ int zzcnquad_(doublereal *a, doublereal *b, doublereal *c__, 
-	doublereal *ub, integer *n, doublereal *r1, doublereal *r2)
+/* Subroutine */ int zzcnquad_(cspice_t* __global_state, doublereal *a, 
+	doublereal *b, doublereal *c__, doublereal *ub, integer *n, 
+	doublereal *r1, doublereal *r2)
 {
     /* Initialized data */
 
@@ -29,30 +29,30 @@ static zzcnquad_state_t* get_zzcnquad_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
-    integer s_rnge(char *, integer, char *, integer);
-    double d_sign(doublereal *, doublereal *);
+    double sqrt(f2c_state_t*, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double d_sign(f2c_state_t*, doublereal *, doublereal *);
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dpmax_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
     integer maxix;
     doublereal coeffs[3];
     integer nx;
     doublereal maxmag;
-    extern doublereal touchd_(doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int zzbquad_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
+    extern doublereal touchd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzbquad_(cspice_t*, doublereal *, doublereal *
+	    , doublereal *, doublereal *, integer *, integer *, doublereal *, 
 	    doublereal *);
     doublereal inv1;
     doublereal inv2;
 
 
     /* Module state */
-    zzcnquad_state_t* __state = get_zzcnquad_state();
+    zzcnquad_state_t* __state = get_zzcnquad_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -225,16 +225,17 @@ static zzcnquad_state_t* get_zzcnquad_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZCNQUAD", (ftnlen)8);
+    chkin_(__global_state, "ZZCNQUAD", (ftnlen)8);
 
 /*     On the first pass, set the upper bound for the reciprocal */
 /*     solution. */
 
     if (__state->first) {
-	__state->invub = sqrt(dpmax_()) / 200.;
+	__state->invub = sqrt(&__global_state->f2c, dpmax_(__global_state)) / 
+		200.;
 	__state->first = FALSE_;
     }
 
@@ -248,7 +249,7 @@ static zzcnquad_state_t* get_zzcnquad_state() {
 	} else {
 	    *n = -2;
 	}
-	chkout_("ZZCNQUAD", (ftnlen)8);
+	chkout_(__global_state, "ZZCNQUAD", (ftnlen)8);
 	return 0;
     }
 
@@ -258,21 +259,21 @@ static zzcnquad_state_t* get_zzcnquad_state() {
     d__1 = abs(*a), d__2 = abs(*b), d__1 = max(d__1,d__2), d__2 = abs(*c__);
     maxmag = max(d__1,d__2);
     d__1 = *a / maxmag;
-    coeffs[0] = touchd_(&d__1);
+    coeffs[0] = touchd_(__global_state, &d__1);
     d__1 = *b / maxmag;
-    coeffs[1] = touchd_(&d__1);
+    coeffs[1] = touchd_(__global_state, &d__1);
     d__1 = *c__ / maxmag;
-    coeffs[2] = touchd_(&d__1);
+    coeffs[2] = touchd_(__global_state, &d__1);
 
 /*     Identify the coefficient of largest magnitude. */
 
     maxix = 1;
     for (i__ = 2; i__ <= 3; ++i__) {
-	if ((d__1 = coeffs[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"coeffs", i__1, "zzcnquad_", (ftnlen)272)], abs(d__1)) > (
-		d__2 = coeffs[(i__2 = maxix - 1) < 3 && 0 <= i__2 ? i__2 : 
-		s_rnge("coeffs", i__2, "zzcnquad_", (ftnlen)272)], abs(d__2)))
-		 {
+	if ((d__1 = coeffs[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "coeffs", i__1, "zzcnquad_", (ftnlen)272)
+		], abs(d__1)) > (d__2 = coeffs[(i__2 = maxix - 1) < 3 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "coeffs", i__2, 
+		"zzcnquad_", (ftnlen)272)], abs(d__2))) {
 
 /*           Record the index of the maximum magnitude. */
 
@@ -282,10 +283,11 @@ static zzcnquad_state_t* get_zzcnquad_state() {
 
 /*     Make sure the value of maximum magnitude is +/- 1. */
 
-    coeffs[(i__1 = maxix - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("coeffs", i__1,
-	     "zzcnquad_", (ftnlen)285)] = d_sign(&__state->c_b8, &coeffs[(
-	    i__2 = maxix - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("coeffs", i__2,
-	     "zzcnquad_", (ftnlen)285)]);
+    coeffs[(i__1 = maxix - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "coeffs", i__1, "zzcnquad_", (ftnlen)285)] = 
+	    d_sign(&__global_state->f2c, &__state->c_b8, &coeffs[(i__2 = 
+	    maxix - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+	    "coeffs", i__2, "zzcnquad_", (ftnlen)285)]);
 
 /*     Find roots in a manner suited to the coefficients we have. */
 
@@ -294,7 +296,8 @@ static zzcnquad_state_t* get_zzcnquad_state() {
 /*        This is a numerically well-behaved case. Delegate the */
 /*        job to ZZBQUAD. */
 
-	zzbquad_(coeffs, &coeffs[1], &coeffs[2], ub, n, &nx, r1, r2);
+	zzbquad_(__global_state, coeffs, &coeffs[1], &coeffs[2], ub, n, &nx, 
+		r1, r2);
     } else if (abs(coeffs[2]) >= 1e-8) {
 
 /*        The zero-order coefficient has magnitude >= SMALL. */
@@ -330,8 +333,8 @@ static zzcnquad_state_t* get_zzcnquad_state() {
 /*        magnitude restriction imposed by UB. We set the upper bound */
 /*        to a value that ZZBQUAD will allow. */
 
-	zzbquad_(&coeffs[2], &coeffs[1], coeffs, &__state->invub, n, &nx, &
-		inv1, &inv2);
+	zzbquad_(__global_state, &coeffs[2], &coeffs[1], coeffs, &
+		__state->invub, n, &nx, &inv1, &inv2);
 	if (*n == 1) {
 
 /*           We have one real root. Make sure we can invert it. */
@@ -493,7 +496,7 @@ static zzcnquad_state_t* get_zzcnquad_state() {
 	    }
 	}
     }
-    chkout_("ZZCNQUAD", (ftnlen)8);
+    chkout_(__global_state, "ZZCNQUAD", (ftnlen)8);
     return 0;
 } /* zzcnquad_ */
 

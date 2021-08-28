@@ -471,7 +471,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekbseg_c" );
+   chkin_c ( naif_state, "ekbseg_c" );
 
    /*
    Check the table name to make sure the pointer is non-null 

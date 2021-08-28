@@ -8,8 +8,7 @@
 
 
 extern zzsglatx_init_t __zzsglatx_init;
-static zzsglatx_state_t* get_zzsglatx_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzsglatx_state_t* get_zzsglatx_state(cspice_t* state) {
 	if (!state->zzsglatx)
 		state->zzsglatx = __cspice_allocate_module(sizeof(
 	zzsglatx_state_t), &__zzsglatx_init, sizeof(__zzsglatx_init));
@@ -18,39 +17,40 @@ static zzsglatx_state_t* get_zzsglatx_state() {
 }
 
 /* $Procedure ZZSGLATX ( Line segment latitude extent ) */
-/* Subroutine */ int zzsglatx_(doublereal *p1, doublereal *p2, doublereal *
-	minlat, doublereal *minp, doublereal *maxlat, doublereal *maxp)
+/* Subroutine */ int zzsglatx_(cspice_t* __global_state, doublereal *p1, 
+	doublereal *p2, doublereal *minlat, doublereal *minp, doublereal *
+	maxlat, doublereal *maxp)
 {
     /* Initialized data */
 
 
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal r__;
     doublereal t[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern logical vzero_(doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     integer nxpts;
     doublereal plane2[4];
-    extern /* Subroutine */ int nvc2pl_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int nvc2pl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern logical failed_(cspice_t*);
     doublereal crease[3];
-    extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int reclat_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal normal[3];
-    extern logical opsgnd_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vhatip_(doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern logical opsgnd_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal dp1;
     doublereal dp2;
-    extern /* Subroutine */ int inrypl_(doublereal *, doublereal *, 
-	    doublereal *, integer *, doublereal *);
-    extern logical return_(void);
+    extern /* Subroutine */ int inrypl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, integer *, doublereal *);
+    extern logical return_(cspice_t*);
     doublereal dir[3];
     doublereal lat;
     doublereal lon;
@@ -59,7 +59,7 @@ static zzsglatx_state_t* get_zzsglatx_state() {
 
 
     /* Module state */
-    zzsglatx_state_t* __state = get_zzsglatx_state();
+    zzsglatx_state_t* __state = get_zzsglatx_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -297,15 +297,15 @@ static zzsglatx_state_t* get_zzsglatx_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZSGLATX", (ftnlen)8);
+    chkin_(__global_state, "ZZSGLATX", (ftnlen)8);
 
 /*     Start by computing latitude at the segment's endpoints. */
 
-    reclat_(p1, &r__, &lon, &lat1);
-    reclat_(p2, &r__, &lon, &lat2);
+    reclat_(__global_state, p1, &r__, &lon, &lat1);
+    reclat_(__global_state, p2, &r__, &lon, &lat2);
 
 /*     Initialize the outputs using latitudes of the endpoints. */
 /*     If there are interior extrema, we'll update these outputs */
@@ -314,35 +314,35 @@ static zzsglatx_state_t* get_zzsglatx_state() {
     if (lat1 <= lat2) {
 	*minlat = lat1;
 	*maxlat = lat2;
-	vequ_(p1, minp);
-	vequ_(p2, maxp);
+	vequ_(__global_state, p1, minp);
+	vequ_(__global_state, p2, maxp);
     } else {
 	*minlat = lat2;
 	*maxlat = lat1;
-	vequ_(p2, minp);
-	vequ_(p1, maxp);
+	vequ_(__global_state, p2, minp);
+	vequ_(__global_state, p1, maxp);
     }
 
 /*     We want to work with the plane containing the origin, P1, and P2. */
 /*     We'll call this plane PLANE1. First see whether P1 and P2 are */
 /*     linearly independent. */
 
-    vcrss_(p1, p2, normal);
-    if (vzero_(normal)) {
+    vcrss_(__global_state, p1, p2, normal);
+    if (vzero_(__global_state, normal)) {
 
 /*        We have a special case: P1 and P2 define a line passing */
 /*        through the origin. The latitude extrema lie on the */
 /*        segment endpoints, and possibly at every point on the */
 /*        segment. We've already computed the outputs. */
 
-	chkout_("ZZSGLATX", (ftnlen)8);
+	chkout_(__global_state, "ZZSGLATX", (ftnlen)8);
 	return 0;
     }
 
 /*     At this point we know that NORMAL is non-zero. Convert it */
 /*     to a unit vector. */
 
-    vhatip_(normal);
+    vhatip_(__global_state, normal);
 
 /*     Let ALPHA be the non-negative angle between PLANE1 and the X-Y */
 /*     plane. Then ALPHA and -ALPHA are, respectively, the maximum and */
@@ -358,21 +358,21 @@ static zzsglatx_state_t* get_zzsglatx_state() {
 /*     does exist, the X-Y plane and PLANE1 intersect in a "crease" */
 /*     that is normal to PLANE2. */
 
-    vcrss_(__state->z__, normal, crease);
-    if (vzero_(crease)) {
+    vcrss_(__global_state, __state->z__, normal, crease);
+    if (vzero_(__global_state, crease)) {
 
 /*        Z and NORMAL are linearly dependent; PLANE1 coincides (up to */
 /*        round-off error) with the X-Y plane. We've already computed */
 /*        the outputs. */
 
-	chkout_("ZZSGLATX", (ftnlen)8);
+	chkout_(__global_state, "ZZSGLATX", (ftnlen)8);
 	return 0;
     }
 
 /*     At this point we know CREASE is non-zero. Convert */
 /*     it to a unit vector. */
 
-    vhatip_(crease);
+    vhatip_(__global_state, crease);
 
 /*     By construction, CREASE is orthogonal to NORMAL. PLANE2 */
 /*     cuts PLANE1 in a line L passing through the origin. If */
@@ -387,9 +387,9 @@ static zzsglatx_state_t* get_zzsglatx_state() {
 /*     segment, then the endpoints must be on opposite sides of PLANE2. */
 /*     See whether this is the case. */
 
-    dp1 = vdot_(p1, crease);
-    dp2 = vdot_(p2, crease);
-    if (opsgnd_(&dp1, &dp2)) {
+    dp1 = vdot_(__global_state, p1, crease);
+    dp2 = vdot_(__global_state, p2, crease);
+    if (opsgnd_(__global_state, &dp1, &dp2)) {
 
 /*        The segment crosses PLANE2 at an interior point; this */
 /*        point is where the extremum occurs. Solve for the */
@@ -400,11 +400,11 @@ static zzsglatx_state_t* get_zzsglatx_state() {
 /*        an error. Therefore we don't check FAILED after the */
 /*        following call. */
 
-	nvc2pl_(crease, &__state->c_b5, plane2);
-	vsub_(p2, p1, dir);
-	inrypl_(p1, dir, plane2, &nxpts, t);
-	if (failed_()) {
-	    chkout_("ZZSGLATX", (ftnlen)8);
+	nvc2pl_(__global_state, crease, &__state->c_b5, plane2);
+	vsub_(__global_state, p2, p1, dir);
+	inrypl_(__global_state, p1, dir, plane2, &nxpts, t);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZSGLATX", (ftnlen)8);
 	    return 0;
 	}
 	if (nxpts == 1) {
@@ -422,13 +422,13 @@ static zzsglatx_state_t* get_zzsglatx_state() {
 
 /*           This is not a special case computationally. */
 
-	    reclat_(t, &r__, &lon, &lat);
+	    reclat_(__global_state, t, &r__, &lon, &lat);
 	    if (lat > *maxlat) {
 		*maxlat = lat;
-		vequ_(t, maxp);
+		vequ_(__global_state, t, maxp);
 	    } else if (lat < *minlat) {
 		*minlat = lat;
-		vequ_(t, minp);
+		vequ_(__global_state, t, minp);
 	    }
 
 /*           There can be only one local extremum, so we're done. */
@@ -458,7 +458,7 @@ static zzsglatx_state_t* get_zzsglatx_state() {
 /*     In all of the numbered cases the extrema occur at the endpoints. */
 /*     and have been found already. In all cases, the outputs are set. */
 
-    chkout_("ZZSGLATX", (ftnlen)8);
+    chkout_(__global_state, "ZZSGLATX", (ftnlen)8);
     return 0;
 } /* zzsglatx_ */
 

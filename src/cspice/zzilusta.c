@@ -8,8 +8,7 @@
 
 
 extern zzilusta_init_t __zzilusta_init;
-static zzilusta_state_t* get_zzilusta_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzilusta_state_t* get_zzilusta_state(cspice_t* state) {
 	if (!state->zzilusta)
 		state->zzilusta = __cspice_allocate_module(sizeof(
 	zzilusta_state_t), &__zzilusta_init, sizeof(__zzilusta_init));
@@ -18,69 +17,74 @@ static zzilusta_state_t* get_zzilusta_state() {
 }
 
 /* $Procedure ZZILUSTA ( Illumination angle states ) */
-/* Subroutine */ int zzilusta_(char *method, char *target, char *illum, 
-	doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *
-	spoint, doublereal *normal, doublereal *phssta, doublereal *incsta, 
-	doublereal *emista, ftnlen method_len, ftnlen target_len, ftnlen 
-	illum_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len)
+/* Subroutine */ int zzilusta_(cspice_t* __global_state, char *method, char *
+	target, char *illum, doublereal *et, char *fixref, char *abcorr, char 
+	*obsrvr, doublereal *spoint, doublereal *normal, doublereal *phssta, 
+	doublereal *incsta, doublereal *emista, ftnlen method_len, ftnlen 
+	target_len, ftnlen illum_len, ftnlen fixref_len, ftnlen abcorr_len, 
+	ftnlen obsrvr_len)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
     doublereal uvec[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern doublereal vsep_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vsep_(cspice_t*, doublereal *, doublereal *);
     logical xmit;
-    extern /* Subroutine */ int mxvg_(doublereal *, doublereal *, integer *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int zzcorepc_(char *, doublereal *, doublereal *, 
-	    doublereal *, ftnlen);
-    extern /* Subroutine */ int zzvalcor_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzcorsxf_(logical *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int mxvg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, integer *, doublereal *);
+    extern /* Subroutine */ int zzcorepc_(cspice_t*, char *, doublereal *, 
+	    doublereal *, doublereal *, ftnlen);
+    extern /* Subroutine */ int zzvalcor_(cspice_t*, char *, logical *, 
+	    ftnlen);
+    extern /* Subroutine */ int zzcorsxf_(cspice_t*, logical *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     doublereal starg[6];
-    extern doublereal dvsep_(doublereal *, doublereal *);
+    extern doublereal dvsep_(cspice_t*, doublereal *, doublereal *);
     doublereal ltsrc;
     doublereal xform[36]	/* was [6][6] */;
     logical uselt;
-    extern logical eqstr_(char *, char *, ftnlen, ftnlen);
-    extern logical vzero_(doublereal *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern logical eqstr_(cspice_t*, char *, char *, ftnlen, ftnlen);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     doublereal lt;
-    extern doublereal clight_(void);
+    extern doublereal clight_(cspice_t*);
     logical attblk[6];
     doublereal obssta[6];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal srcsta[6];
-    extern /* Subroutine */ int spkcpo_(char *, doublereal *, char *, char *, 
-	    char *, doublereal *, char *, char *, doublereal *, doublereal *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int spkcpo_(cspice_t*, char *, doublereal *, char 
+	    *, char *, char *, doublereal *, char *, char *, doublereal *, 
+	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
     doublereal fxnsta[6];
     doublereal nrmsta[6];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int spkcpt_(doublereal *, char *, char *, 
-	    doublereal *, char *, char *, char *, char *, doublereal *, 
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int spkcpt_(cspice_t*, doublereal *, char *, char 
+	    *, doublereal *, char *, char *, char *, char *, doublereal *, 
 	    doublereal *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
     doublereal etsurf;
-    extern /* Subroutine */ int vminug_(doublereal *, integer *, doublereal *)
-	    ;
+    extern /* Subroutine */ int vminug_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     doublereal tmpxfm[36]	/* was [6][6] */;
-    extern logical return_(void);
-    extern /* Subroutine */ int sxform_(char *, char *, doublereal *, 
-	    doublereal *, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int sxform_(cspice_t*, char *, char *, doublereal 
+	    *, doublereal *, ftnlen, ftnlen);
     doublereal dlt;
 
 
     /* Module state */
-    zzilusta_state_t* __state = get_zzilusta_state();
+    zzilusta_state_t* __state = get_zzilusta_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -388,28 +392,30 @@ static zzilusta_state_t* get_zzilusta_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZILUSTA", (ftnlen)8);
+    chkin_(__global_state, "ZZILUSTA", (ftnlen)8);
 
 /*     For now, only ellipsoids are supported as target shapes. */
 
-    if (! eqstr_(method, "ELLIPSOID", method_len, (ftnlen)9)) {
-	setmsg_("The computation method # was not recognized. ", (ftnlen)45);
-	errch_("#", method, (ftnlen)1, method_len);
-	sigerr_("SPICE(INVALIDMETHOD)", (ftnlen)20);
-	chkout_("ZZILUSTA", (ftnlen)8);
+    if (! eqstr_(__global_state, method, "ELLIPSOID", method_len, (ftnlen)9)) 
+	    {
+	setmsg_(__global_state, "The computation method # was not recognized"
+		". ", (ftnlen)45);
+	errch_(__global_state, "#", method, (ftnlen)1, method_len);
+	sigerr_(__global_state, "SPICE(INVALIDMETHOD)", (ftnlen)20);
+	chkout_(__global_state, "ZZILUSTA", (ftnlen)8);
 	return 0;
     }
 
 /*     Reject zero normal vectors. */
 
-    if (vzero_(normal)) {
-	setmsg_("The input normal vector must not be zero, but sadly, it was."
-		, (ftnlen)60);
-	sigerr_("SPICE(ZEROVECTOR)", (ftnlen)17);
-	chkout_("ZZILUSTA", (ftnlen)8);
+    if (vzero_(__global_state, normal)) {
+	setmsg_(__global_state, "The input normal vector must not be zero, b"
+		"ut sadly, it was.", (ftnlen)60);
+	sigerr_(__global_state, "SPICE(ZEROVECTOR)", (ftnlen)17);
+	chkout_(__global_state, "ZZILUSTA", (ftnlen)8);
 	return 0;
     }
 
@@ -417,30 +423,31 @@ static zzilusta_state_t* get_zzilusta_state() {
 /*     observer. We'll represent the state in an inertial */
 /*     reference frame. */
 
-    spkcpt_(spoint, target, fixref, et, "J2000", "TARGET", abcorr, obsrvr, 
-	    starg, &lt, target_len, fixref_len, (ftnlen)5, (ftnlen)6, 
-	    abcorr_len, obsrvr_len);
+    spkcpt_(__global_state, spoint, target, fixref, et, "J2000", "TARGET", 
+	    abcorr, obsrvr, starg, &lt, target_len, fixref_len, (ftnlen)5, (
+	    ftnlen)6, abcorr_len, obsrvr_len);
 
 /*     Compute the epoch associated with the surface point. */
 
-    zzcorepc_(abcorr, et, &lt, &etsurf, abcorr_len);
+    zzcorepc_(__global_state, abcorr, et, &lt, &etsurf, abcorr_len);
 
 /*     Now let the surface point be the observer, let the observation */
 /*     epoch be ETSURF, and find the apparent state of the illumination */
 /*     source as seen from the surface point. */
 
-    spkcpo_(illum, &etsurf, "J2000", "OBSERVER", abcorr, spoint, target, 
-	    fixref, srcsta, &ltsrc, illum_len, (ftnlen)5, (ftnlen)8, 
-	    abcorr_len, target_len, fixref_len);
-    if (failed_()) {
-	chkout_("ZZILUSTA", (ftnlen)8);
+    spkcpo_(__global_state, illum, &etsurf, "J2000", "OBSERVER", abcorr, 
+	    spoint, target, fixref, srcsta, &ltsrc, illum_len, (ftnlen)5, (
+	    ftnlen)8, abcorr_len, target_len, fixref_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZILUSTA", (ftnlen)8);
 	return 0;
     }
 
 /*     We will need to transform the state of the normal vector to */
 /*     the inertial frame. The epoch at which the transformation must be */
 /*     evaluated is that associated with the surface point. */
-    sxform_(fixref, "J2000", &etsurf, xform, fixref_len, (ftnlen)5);
+    sxform_(__global_state, fixref, "J2000", &etsurf, xform, fixref_len, (
+	    ftnlen)5);
 
 /*     Correct the body-fixed to inertial frame transformation for the */
 /*     rate of change with respect to ET of observer-surface point light */
@@ -448,19 +455,20 @@ static zzilusta_state_t* get_zzilusta_state() {
 
 /*     Start out by parsing ABCORR. */
 
-    zzvalcor_(abcorr, attblk, abcorr_len);
-    if (failed_()) {
-	chkout_("ZZILUSTA", (ftnlen)8);
+    zzvalcor_(__global_state, abcorr, attblk, abcorr_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZILUSTA", (ftnlen)8);
 	return 0;
     }
     uselt = attblk[1];
     xmit = attblk[4];
     if (xmit) {
-	setmsg_("Aberration correction # is for transmission; only reception"
-		" corrections are supported by this routine.", (ftnlen)102);
-	errch_("#", abcorr, (ftnlen)1, abcorr_len);
-	sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	chkout_("ZZILUSTA", (ftnlen)8);
+	setmsg_(__global_state, "Aberration correction # is for transmission"
+		"; only reception corrections are supported by this routine.", 
+		(ftnlen)102);
+	errch_(__global_state, "#", abcorr, (ftnlen)1, abcorr_len);
+	sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	chkout_(__global_state, "ZZILUSTA", (ftnlen)8);
 	return 0;
     }
     if (uselt) {
@@ -469,25 +477,27 @@ static zzilusta_state_t* get_zzilusta_state() {
 /*        observer-surface point light time. This rate is the range rate */
 /*        divided by the speed of light. */
 
-	vhat_(starg, uvec);
-	dlt = vdot_(&starg[3], uvec) / clight_();
+	vhat_(__global_state, starg, uvec);
+	dlt = vdot_(__global_state, &starg[3], uvec) / clight_(__global_state)
+		;
 
 /*        Correct the state transformation. */
 
-	zzcorsxf_(&__state->c_false, &dlt, xform, tmpxfm);
-	moved_(tmpxfm, &__state->c__36, xform);
+	zzcorsxf_(__global_state, &__state->c_false, &dlt, xform, tmpxfm);
+	moved_(__global_state, tmpxfm, &__state->c__36, xform);
     }
 
 /*     Create a body-fixed state vector for the normal vector. */
 /*     Convert the normal vector to unit length for safety. */
 
-    vhat_(normal, fxnsta);
-    cleard_(&__state->c__3, &fxnsta[3]);
+    vhat_(__global_state, normal, fxnsta);
+    cleard_(__global_state, &__state->c__3, &fxnsta[3]);
 
 /*     Transform the state of the normal vector to the inertial */
 /*     frame. */
 
-    mxvg_(xform, fxnsta, &__state->c__6, &__state->c__6, nrmsta);
+    mxvg_(__global_state, xform, fxnsta, &__state->c__6, &__state->c__6, 
+	    nrmsta);
 
 /*     We also must adjust the state of the illumination source for the */
 /*     rate of change with respect to ET of the observer-surface point */
@@ -505,31 +515,31 @@ static zzilusta_state_t* get_zzilusta_state() {
 /*        d(ETSURF) / d(ET) = ( 1 - DLT ) */
 
 	d__1 = 1. - dlt;
-	vsclip_(&d__1, &srcsta[3]);
+	vsclip_(__global_state, &d__1, &srcsta[3]);
     }
 
 /*     The surface-point observer state we wish to use is the negative */
 /*     of the observer-surface point state. */
 
-    vminug_(starg, &__state->c__6, obssta);
+    vminug_(__global_state, starg, &__state->c__6, obssta);
 
 /*     Compute the state (value and rate of change ) */
 /*     of the phase angle. */
 
-    phssta[0] = vsep_(obssta, srcsta);
-    phssta[1] = dvsep_(obssta, srcsta);
+    phssta[0] = vsep_(__global_state, obssta, srcsta);
+    phssta[1] = dvsep_(__global_state, obssta, srcsta);
 
 /*     Compute the state of the illumination source */
 /*     incidence angle. */
 
-    incsta[0] = vsep_(nrmsta, srcsta);
-    incsta[1] = dvsep_(nrmsta, srcsta);
+    incsta[0] = vsep_(__global_state, nrmsta, srcsta);
+    incsta[1] = dvsep_(__global_state, nrmsta, srcsta);
 
 /*     Compute the state of the emission angle. */
 
-    emista[0] = vsep_(nrmsta, obssta);
-    emista[1] = dvsep_(nrmsta, obssta);
-    chkout_("ZZILUSTA", (ftnlen)8);
+    emista[0] = vsep_(__global_state, nrmsta, obssta);
+    emista[1] = dvsep_(__global_state, nrmsta, obssta);
+    chkout_(__global_state, "ZZILUSTA", (ftnlen)8);
     return 0;
 } /* zzilusta_ */
 

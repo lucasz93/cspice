@@ -8,8 +8,7 @@
 
 
 extern npelpt_init_t __npelpt_init;
-static npelpt_state_t* get_npelpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline npelpt_state_t* get_npelpt_state(cspice_t* state) {
 	if (!state->npelpt)
 		state->npelpt = __cspice_allocate_module(sizeof(
 	npelpt_state_t), &__npelpt_init, sizeof(__npelpt_init));
@@ -18,53 +17,55 @@ static npelpt_state_t* get_npelpt_state() {
 }
 
 /* $Procedure   NPELPT  ( Nearest point on ellipse to point ) */
-/* Subroutine */ int npelpt_(doublereal *point, doublereal *ellips, 
-	doublereal *pnear, doublereal *dist)
+/* Subroutine */ int npelpt_(cspice_t* __global_state, doublereal *point, 
+	doublereal *ellips, doublereal *pnear, doublereal *dist)
 {
     /* System generated locals */
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int mtxv_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int mtxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern doublereal vdist_(doublereal *, doublereal *);
-    doublereal tempv[3];
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int el2cgv_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
+    doublereal tempv[3];
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int el2cgv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal majlen;
     doublereal center[3];
     doublereal minlen;
-    extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int nearpt_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal smajor[3];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal rotate[9]	/* was [3][3] */;
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    doublereal sminor[3];
-    extern /* Subroutine */ int twovec_(doublereal *, integer *, doublereal *,
-	     integer *, doublereal *);
-    doublereal prjpnt[3];
-    extern logical return_(void);
-    doublereal tmppnt[3];
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
 	    ;
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    doublereal sminor[3];
+    extern /* Subroutine */ int twovec_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    doublereal prjpnt[3];
+    extern logical return_(cspice_t*);
+    doublereal tmppnt[3];
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    npelpt_state_t* __state = get_npelpt_state();
+    npelpt_state_t* __state = get_npelpt_state(__global_state);
 /* $ Abstract */
 
 /*     Find the nearest point on an ellipse to a specified point, both */
@@ -251,10 +252,10 @@ static npelpt_state_t* get_npelpt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("NPELPT", (ftnlen)6);
+	chkin_(__global_state, "NPELPT", (ftnlen)6);
     }
 
 /*     Here's an overview of our solution: */
@@ -299,32 +300,32 @@ static npelpt_state_t* get_npelpt_state() {
 
 /*     Find the ellipse's center and semi-axes. */
 
-    el2cgv_(ellips, center, smajor, sminor);
+    el2cgv_(__global_state, ellips, center, smajor, sminor);
 
 /*     Find the lengths of the semi-axes, and scale the vectors to try */
 /*     to prevent arithmetic unpleasantness.  Degenerate ellipses are */
 /*     turned away at the door. */
 
-    minlen = vnorm_(sminor);
-    majlen = vnorm_(smajor);
+    minlen = vnorm_(__global_state, sminor);
+    majlen = vnorm_(__global_state, smajor);
     if (min(majlen,minlen) == 0.) {
-	setmsg_("Semi-axis lengths: # #. ", (ftnlen)24);
-	errdp_("#", &majlen, (ftnlen)1);
-	errdp_("#", &minlen, (ftnlen)1);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("NPELPT", (ftnlen)6);
+	setmsg_(__global_state, "Semi-axis lengths: # #. ", (ftnlen)24);
+	errdp_(__global_state, "#", &majlen, (ftnlen)1);
+	errdp_(__global_state, "#", &minlen, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "NPELPT", (ftnlen)6);
 	return 0;
     }
     scale = 1. / majlen;
-    vsclip_(&scale, smajor);
-    vsclip_(&scale, sminor);
+    vsclip_(__global_state, &scale, smajor);
+    vsclip_(__global_state, &scale, sminor);
 
 /*     Translate ellipse and point so that the ellipse is centered at */
 /*     the origin.  Scale the point's coordinates to maintain the */
 /*     correct relative position to the scaled ellipse. */
 
-    vsub_(point, center, tmppnt);
-    vsclip_(&scale, tmppnt);
+    vsub_(__global_state, point, center, tmppnt);
+    vsclip_(__global_state, &scale, tmppnt);
 
 /*     We want to reduce the problem to a two-dimensional one.  We'll */
 /*     work in a coordinate system whose x- and y- axes are aligned with */
@@ -332,12 +333,13 @@ static npelpt_state_t* get_npelpt_state() {
 /*     z-axis is picked to give us a right-handed system.  We find the */
 /*     matrix that transforms coordinates to our new system using TWOVEC. */
 
-    twovec_(smajor, &__state->c__1, sminor, &__state->c__2, rotate);
+    twovec_(__global_state, smajor, &__state->c__1, sminor, &__state->c__2, 
+	    rotate);
 
 /*     Apply the coordinate transformation to our scaled input point. */
 
-    mxv_(rotate, tmppnt, tempv);
-    vequ_(tempv, tmppnt);
+    mxv_(__global_state, rotate, tmppnt, tempv);
+    vequ_(__global_state, tempv, tmppnt);
 
 /*     We must find the distance between the orthogonal projection of */
 /*     TMPPNT onto the x-y plane and the ellipse.  The projection is */
@@ -348,7 +350,7 @@ static npelpt_state_t* get_npelpt_state() {
 /*     we'll call this projection PRJPNT. */
 
 
-    vpack_(tmppnt, &tmppnt[1], &__state->c_b10, prjpnt);
+    vpack_(__global_state, tmppnt, &tmppnt[1], &__state->c_b10, prjpnt);
 
 /*     Now we're ready to find the distance between and a triaxial */
 /*     ellipsoid whose intersection with the x-y plane is the ellipse */
@@ -362,19 +364,20 @@ static npelpt_state_t* get_npelpt_state() {
 /*     Find the nearest point to PRJPNT on the ellipoid, PNEAR. */
 
     d__1 = minlen / majlen;
-    nearpt_(prjpnt, &__state->c_b11, &d__1, &__state->c_b12, pnear, dist);
+    nearpt_(__global_state, prjpnt, &__state->c_b11, &d__1, &__state->c_b12, 
+	    pnear, dist);
 
 /*     Scale the near point coordinates back to the original scale. */
 
-    vsclip_(&majlen, pnear);
+    vsclip_(__global_state, &majlen, pnear);
 
 /*     Apply the required inverse rotation and translation to PNEAR. */
 /*     Compute the point-to-ellipse distance. */
 
-    mtxv_(rotate, pnear, tempv);
-    vadd_(tempv, center, pnear);
-    *dist = vdist_(pnear, point);
-    chkout_("NPELPT", (ftnlen)6);
+    mtxv_(__global_state, rotate, pnear, tempv);
+    vadd_(__global_state, tempv, center, pnear);
+    *dist = vdist_(__global_state, pnear, point);
+    chkout_(__global_state, "NPELPT", (ftnlen)6);
     return 0;
 } /* npelpt_ */
 

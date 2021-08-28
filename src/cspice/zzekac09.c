@@ -8,8 +8,7 @@
 
 
 extern zzekac09_init_t __zzekac09_init;
-static zzekac09_state_t* get_zzekac09_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekac09_state_t* get_zzekac09_state(cspice_t* state) {
 	if (!state->zzekac09)
 		state->zzekac09 = __cspice_allocate_module(sizeof(
 	zzekac09_state_t), &__zzekac09_init, sizeof(__zzekac09_init));
@@ -18,44 +17,45 @@ static zzekac09_state_t* get_zzekac09_state() {
 }
 
 /* $Procedure     ZZEKAC09 ( EK, add class 9 column to segment ) */
-/* Subroutine */ int zzekac09_(integer *handle, integer *segdsc, integer *
-	coldsc, char *cvals, logical *nlflgs, integer *wkindx, ftnlen 
-	cvals_len)
+/* Subroutine */ int zzekac09_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, char *cvals, logical *nlflgs, 
+	integer *wkindx, ftnlen cvals_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char page[1024];
     integer from;
-    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekacps_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekordc_(char *, logical *, logical *, 
-	    integer *, integer *, ftnlen);
-    extern /* Subroutine */ int zzekpgwc_(integer *, integer *, char *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekwpai_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekwpal_(integer *, integer *, integer *, 
-	    logical *, integer *, integer *);
-    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekcnam_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int zzekacps_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekordc_(cspice_t*, char *, logical *, 
+	    logical *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int zzekpgwc_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
+    extern /* Subroutine */ int zzekwpai_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekwpal_(cspice_t*, integer *, integer *, 
+	    integer *, logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekslnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer l;
     integer p;
     integer mbase;
     integer npage;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer class__;
     integer nrows;
     integer cmbase;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     char column[32];
     integer colidx;
     integer datbas;
@@ -70,17 +70,17 @@ static zzekac09_state_t* get_zzekac09_state() {
     logical fixlen;
     logical indexd;
     logical nullok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer spp;
 
 
     /* Module state */
-    zzekac09_state_t* __state = get_zzekac09_state();
+    zzekac09_state_t* __state = get_zzekac09_state(__global_state);
 /* $ Abstract */
 
 /*     Add an entire class 9 column to an EK segment. */
@@ -868,10 +868,10 @@ static zzekac09_state_t* get_zzekac09_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZEKAC09", (ftnlen)8);
+	chkin_(__global_state, "ZZEKAC09", (ftnlen)8);
     }
 
 /*     Grab the column's attributes.  Initialize the maximum non-blank */
@@ -889,35 +889,37 @@ static zzekac09_state_t* get_zzekac09_state() {
 /*     This column had better be class 9. */
 
     if (class__ != 9) {
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	setmsg_("Column class code # found in descriptor for column #.  Clas"
-		"s should be 9.", (ftnlen)73);
-	errint_("#", &class__, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	sigerr_("SPICE(NOCLASS)", (ftnlen)14);
-	chkout_("ZZEKAC09", (ftnlen)8);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	setmsg_(__global_state, "Column class code # found in descriptor for"
+		" column #.  Class should be 9.", (ftnlen)73);
+	errint_(__global_state, "#", &class__, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	sigerr_(__global_state, "SPICE(NOCLASS)", (ftnlen)14);
+	chkout_(__global_state, "ZZEKAC09", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure the column has fixed-length strings. */
 
     if (! fixlen) {
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	setmsg_("Column # has variable string length; class 9 supports fixed"
-		"-length strings only.", (ftnlen)80);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKAC09", (ftnlen)8);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	setmsg_(__global_state, "Column # has variable string length; class "
+		"9 supports fixed-length strings only.", (ftnlen)80);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKAC09", (ftnlen)8);
 	return 0;
     }
 
 /*     Check the input string length. */
 
-    if (l < 0 || l > i_len(cvals, cvals_len) || l > 1014) {
-	setmsg_("String length # is just plain wrong.", (ftnlen)36);
-	errint_("#", &l, (ftnlen)1);
-	sigerr_("SPICE(INVALIDSIZE)", (ftnlen)18);
-	chkout_("ZZEKAC09", (ftnlen)8);
+    if (l < 0 || l > i_len(&__global_state->f2c, cvals, cvals_len) || l > 
+	    1014) {
+	setmsg_(__global_state, "String length # is just plain wrong.", (
+		ftnlen)36);
+	errint_(__global_state, "#", &l, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDSIZE)", (ftnlen)18);
+	chkout_(__global_state, "ZZEKAC09", (ftnlen)8);
 	return 0;
     }
 
@@ -933,22 +935,23 @@ static zzekac09_state_t* get_zzekac09_state() {
 /*     allocate that many new, contiguous pages. */
 
     npage = (nrows + spp - 1) / spp;
-    zzekacps_(handle, segdsc, &__state->c__1, &npage, &p, &datbas);
+    zzekacps_(__global_state, handle, segdsc, &__state->c__1, &npage, &p, &
+	    datbas);
 
 /*     We'll use FROM to indicate the element of CVALS we're */
 /*     considering and TO to indicate the element of PAGE to write */
 /*     to. */
 
     to = 1;
-    s_copy(page, " ", (ftnlen)1024, (ftnlen)1);
+    s_copy(&__global_state->f2c, page, " ", (ftnlen)1024, (ftnlen)1);
     i__1 = nrows;
     for (from = 1; from <= i__1; ++from) {
 
 /*        The Assignment. */
 
 	if (! nullok || ! nlflgs[from - 1]) {
-	    s_copy(page + (to - 1), cvals + (from - 1) * cvals_len, to + l - 
-		    1 - (to - 1), cvals_len);
+	    s_copy(&__global_state->f2c, page + (to - 1), cvals + (from - 1) *
+		     cvals_len, to + l - 1 - (to - 1), cvals_len);
 	}
 	to += l;
 	if (to > 1014 - l + 1 || from == nrows) {
@@ -957,12 +960,12 @@ static zzekac09_state_t* get_zzekac09_state() {
 /*           the last of the available data.  It's time to write out the */
 /*           current page. */
 
-	    zzekpgwc_(handle, &p, page, (ftnlen)1024);
+	    zzekpgwc_(__global_state, handle, &p, page, (ftnlen)1024);
 
 /*           Set the link count. */
 
 	    i__2 = (to - l) / l;
-	    zzekslnk_(handle, &__state->c__1, &p, &i__2);
+	    zzekslnk_(__global_state, handle, &__state->c__1, &p, &i__2);
 
 /*           Next page. */
 
@@ -976,7 +979,7 @@ static zzekac09_state_t* get_zzekac09_state() {
     cmbase = coldsc[9];
     i__1 = cmbase + 1;
     i__2 = cmbase + 1;
-    dasudi_(handle, &i__1, &i__2, &datbas);
+    dasudi_(__global_state, handle, &i__1, &i__2, &datbas);
 
 /*     If the column is supposed to have an index, now is the time to */
 /*     build that index.  Type 2 indexes are just order vectors. */
@@ -985,11 +988,13 @@ static zzekac09_state_t* get_zzekac09_state() {
 
 /*        Compute the order vector. */
 
-	zzekordc_(cvals, &nullok, nlflgs, &nrows, wkindx, cvals_len);
+	zzekordc_(__global_state, cvals, &nullok, nlflgs, &nrows, wkindx, 
+		cvals_len);
 
 /*        Write out the index. */
 
-	zzekwpai_(handle, segdsc, &nrows, wkindx, &idxpag, &idxbas);
+	zzekwpai_(__global_state, handle, segdsc, &nrows, wkindx, &idxpag, &
+		idxbas);
 
 /*        Update the column's metadata to point to the index.  The */
 /*        pointer indicates base address of the index.  Also set the */
@@ -999,25 +1004,26 @@ static zzekac09_state_t* get_zzekac09_state() {
 	dscbas = mbase + 24 + (colidx - 1) * 11;
 	i__1 = dscbas + 7;
 	i__2 = dscbas + 7;
-	dasudi_(handle, &i__1, &i__2, &idxbas);
+	dasudi_(__global_state, handle, &i__1, &i__2, &idxbas);
 	i__1 = dscbas + 6;
 	i__2 = dscbas + 6;
-	dasudi_(handle, &i__1, &i__2, &__state->c__2);
+	dasudi_(__global_state, handle, &i__1, &i__2, &__state->c__2);
     }
     if (nullok) {
 
 /*        Nulls are allowed.  Write out the null flag array. */
 
-	zzekwpal_(handle, segdsc, &nrows, nlflgs, &nflpag, &nflbas);
+	zzekwpal_(__global_state, handle, segdsc, &nrows, nlflgs, &nflpag, &
+		nflbas);
 
 /*        Update the column's metadata area to point to the null flag */
 /*        array. */
 
 	i__1 = cmbase + 2;
 	i__2 = cmbase + 2;
-	dasudi_(handle, &i__1, &i__2, &nflbas);
+	dasudi_(__global_state, handle, &i__1, &i__2, &nflbas);
     }
-    chkout_("ZZEKAC09", (ftnlen)8);
+    chkout_(__global_state, "ZZEKAC09", (ftnlen)8);
     return 0;
 } /* zzekac09_ */
 

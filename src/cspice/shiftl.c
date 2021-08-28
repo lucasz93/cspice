@@ -8,21 +8,21 @@
 
 
 typedef int shiftl_state_t;
-static shiftl_state_t* get_shiftl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline shiftl_state_t* get_shiftl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SHIFTL ( Shift left ) */
-/* Subroutine */ int shiftl_(char *in, integer *nshift, char *fillc, char *
-	out, ftnlen in_len, ftnlen fillc_len, ftnlen out_len)
+/* Subroutine */ int shiftl_(cspice_t* __global_state, char *in, integer *
+	nshift, char *fillc, char *out, ftnlen in_len, ftnlen fillc_len, 
+	ftnlen out_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
@@ -35,7 +35,7 @@ static shiftl_state_t* get_shiftl_state() {
 
 
     /* Module state */
-    shiftl_state_t* __state = get_shiftl_state();
+    shiftl_state_t* __state = get_shiftl_state(__global_state);
 /* $ Abstract */
 
 /*      Shift the contents of a character string to the left. */
@@ -205,8 +205,8 @@ static shiftl_state_t* get_shiftl_state() {
 
 /*     Get the length of the input, output strings. */
 
-    inlen = i_len(in, in_len);
-    outlen = i_len(out, out_len);
+    inlen = i_len(&__global_state->f2c, in, in_len);
+    outlen = i_len(&__global_state->f2c, out, out_len);
 
 /*     If the shift is zero or negative, the string is not changed. */
 /*     If longer than the input string, the entire string is shifted. */
@@ -232,7 +232,8 @@ static shiftl_state_t* get_shiftl_state() {
     i__1 = nsave;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	i__2 = i__ + s - 1;
-	s_copy(out + (i__ - 1), in + i__2, (ftnlen)1, i__ + s - i__2);
+	s_copy(&__global_state->f2c, out + (i__ - 1), in + i__2, (ftnlen)1, 
+		i__ + s - i__2);
     }
 
 /*     Add as many fill characters as appropriate. */
@@ -247,7 +248,8 @@ static shiftl_state_t* get_shiftl_state() {
 
     if (outlen > inlen) {
 	i__1 = inlen;
-	s_copy(out + i__1, " ", out_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, out + i__1, " ", out_len - i__1, (ftnlen)
+		1);
     }
     return 0;
 } /* shiftl_ */

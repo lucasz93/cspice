@@ -214,7 +214,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spklef_c" );
+   chkin_c ( naif_state, "spklef_c" );
 
 
    /*

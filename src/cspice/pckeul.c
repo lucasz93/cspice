@@ -8,8 +8,7 @@
 
 
 extern pckeul_init_t __pckeul_init;
-static pckeul_state_t* get_pckeul_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pckeul_state_t* get_pckeul_state(cspice_t* state) {
 	if (!state->pckeul)
 		state->pckeul = __cspice_allocate_module(sizeof(
 	pckeul_state_t), &__pckeul_init, sizeof(__pckeul_init));
@@ -18,33 +17,34 @@ static pckeul_state_t* get_pckeul_state() {
 }
 
 /* $Procedure PCKEUL ( PCK, get Euler angles at time from PCK file ) */
-/* Subroutine */ int pckeul_(integer *body, doublereal *et, logical *found, 
-	char *ref, doublereal *eulang, ftnlen ref_len)
+/* Subroutine */ int pckeul_(cspice_t* __global_state, integer *body, 
+	doublereal *et, logical *found, char *ref, doublereal *eulang, ftnlen 
+	ref_len)
 {
     integer iref;
     integer type__;
-    extern /* Subroutine */ int pcke02_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal descr[5];
-    extern /* Subroutine */ int pckr02_(integer *, doublereal *, doublereal *,
+    extern /* Subroutine */ int pcke02_(cspice_t*, doublereal *, doublereal *,
 	     doublereal *);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    doublereal descr[5];
+    extern /* Subroutine */ int pckr02_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     char ident[40];
     integer handle;
-    extern /* Subroutine */ int irfnam_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int irfnam_(cspice_t*, integer *, char *, ftnlen);
     doublereal record[130];
-    extern /* Subroutine */ int pcksfs_(integer *, doublereal *, integer *, 
-	    doublereal *, char *, logical *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int pcksfs_(cspice_t*, integer *, doublereal *, 
+	    integer *, doublereal *, char *, logical *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer icd[5];
 
 
     /* Module state */
-    pckeul_state_t* __state = get_pckeul_state();
+    pckeul_state_t* __state = get_pckeul_state(__global_state);
 /* $ Abstract */
 
 /*      This routine is obsolete.  It supports only the type 02 binary */
@@ -221,33 +221,35 @@ static pckeul_state_t* get_pckeul_state() {
 
 /*     Standard SPICE Error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PCKEUL", (ftnlen)6);
+	chkin_(__global_state, "PCKEUL", (ftnlen)6);
     }
 
 /*     Get a segment applicable to a specified body and epoch. */
 
-    pcksfs_(body, et, &handle, descr, ident, found, (ftnlen)40);
+    pcksfs_(__global_state, body, et, &handle, descr, ident, found, (ftnlen)
+	    40);
     if (*found) {
 
 /*        Look at parts of the descriptor. */
 
-	dafus_(descr, &__state->c__2, &__state->c__5, dcd, icd);
+	dafus_(__global_state, descr, &__state->c__2, &__state->c__5, dcd, 
+		icd);
 	type__ = icd[2];
 	iref = icd[1];
-	irfnam_(&iref, ref, ref_len);
+	irfnam_(__global_state, &iref, ref, ref_len);
 	if (type__ == 2) {
 
 /*           Read in Chebyshev coefficients from segment. */
 
-	    pckr02_(&handle, descr, et, record);
+	    pckr02_(__global_state, &handle, descr, et, record);
 
 /*           Call evaluation routine to get Euler angles */
 /*           phi, delta, w. */
 
-	    pcke02_(et, record, eulang);
+	    pcke02_(__global_state, et, record, eulang);
 	} else {
 
 /*           If appropriate data was not found, found is false. */
@@ -255,7 +257,7 @@ static pckeul_state_t* get_pckeul_state() {
 	    *found = FALSE_;
 	}
     }
-    chkout_("PCKEUL", (ftnlen)6);
+    chkout_(__global_state, "PCKEUL", (ftnlen)6);
     return 0;
 } /* pckeul_ */
 

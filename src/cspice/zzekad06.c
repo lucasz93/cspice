@@ -8,8 +8,7 @@
 
 
 extern zzekad06_init_t __zzekad06_init;
-static zzekad06_state_t* get_zzekad06_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekad06_state_t* get_zzekad06_state(cspice_t* state) {
 	if (!state->zzekad06)
 		state->zzekad06 = __cspice_allocate_module(sizeof(
 	zzekad06_state_t), &__zzekad06_init, sizeof(__zzekad06_init));
@@ -18,9 +17,9 @@ static zzekad06_state_t* get_zzekad06_state() {
 }
 
 /* $Procedure     ZZEKAD06 ( EK, add data to class 6 column ) */
-/* Subroutine */ int zzekad06_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr, integer *nvals, char *cvals, logical *isnull,
-	 ftnlen cvals_len)
+/* Subroutine */ int zzekad06_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr, integer *nvals, 
+	char *cvals, logical *isnull, ftnlen cvals_len)
 {
     /* Initialized data */
 
@@ -29,35 +28,37 @@ static zzekad06_state_t* get_zzekad06_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
-    extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekglnk_(integer *, integer *, integer *, 
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekpgbs_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzeksfwd_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int zzekglnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzeksfwd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekslnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasudc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int zzeksei_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzekslnk_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasudc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int zzeksei_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekaps_(integer *, integer *, integer *, 
-	    logical *, integer *, integer *);
+    extern /* Subroutine */ int zzekaps_(cspice_t*, integer *, integer *, 
+	    integer *, logical *, integer *, integer *);
 
 
     /* Module state */
-    zzekad06_state_t* __state = get_zzekad06_state();
+    zzekad06_state_t* __state = get_zzekad06_state(__global_state);
 /* $ Abstract */
 
 /*     Add a column entry to a specified record in a class 6 column. */
@@ -798,7 +799,8 @@ static zzekad06_state_t* get_zzekad06_state() {
 /*     Use discovery check-in. */
 
     if (__state->first) {
-	s_copy(__state->padbuf, " ", (ftnlen)100, (ftnlen)1);
+	s_copy(&__global_state->f2c, __state->padbuf, " ", (ftnlen)100, (
+		ftnlen)1);
 	__state->first = FALSE_;
     }
 
@@ -811,12 +813,13 @@ static zzekad06_state_t* get_zzekad06_state() {
 
     __state->ncols = segdsc[4];
     if (__state->colidx < 1 || __state->colidx > __state->ncols) {
-	chkin_("ZZEKAD06", (ftnlen)8);
-	setmsg_("Column index = #; valid range is 1:#.", (ftnlen)37);
-	errint_("#", &__state->colidx, (ftnlen)1);
-	errint_("#", &__state->nrec, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKAD06", (ftnlen)8);
+	chkin_(__global_state, "ZZEKAD06", (ftnlen)8);
+	setmsg_(__global_state, "Column index = #; valid range is 1:#.", (
+		ftnlen)37);
+	errint_(__global_state, "#", &__state->colidx, (ftnlen)1);
+	errint_(__global_state, "#", &__state->nrec, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKAD06", (ftnlen)8);
 	return 0;
     }
 
@@ -824,16 +827,17 @@ static zzekad06_state_t* get_zzekad06_state() {
 /*     in this column. */
 
     if (*isnull && coldsc[7] != 1) {
-	__state->recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKAD06", (ftnlen)8);
-	setmsg_("Column having index # in segment # does not allow nulls, bu"
-		"t a null value was supplied for the element in record #.", (
-		ftnlen)115);
-	errint_("#", &__state->colidx, (ftnlen)1);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", &__state->recno, (ftnlen)1);
-	sigerr_("SPICE(BADATTRIBUTE)", (ftnlen)19);
-	chkout_("ZZEKAD06", (ftnlen)8);
+	__state->recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr)
+		;
+	chkin_(__global_state, "ZZEKAD06", (ftnlen)8);
+	setmsg_(__global_state, "Column having index # in segment # does not"
+		" allow nulls, but a null value was supplied for the element "
+		"in record #.", (ftnlen)115);
+	errint_(__global_state, "#", &__state->colidx, (ftnlen)1);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", &__state->recno, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADATTRIBUTE)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKAD06", (ftnlen)8);
 	return 0;
     }
 
@@ -842,27 +846,27 @@ static zzekad06_state_t* get_zzekad06_state() {
 /*     positive. */
 
     if (*nvals < 1) {
-	chkin_("ZZEKAD06", (ftnlen)8);
-	setmsg_("COLIDX = #;  segment = #; NVALS = #;  NVALS must be positiv"
-		"e ", (ftnlen)61);
-	errint_("#", &__state->colidx, (ftnlen)1);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", nvals, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKAD06", (ftnlen)8);
+	chkin_(__global_state, "ZZEKAD06", (ftnlen)8);
+	setmsg_(__global_state, "COLIDX = #;  segment = #; NVALS = #;  NVALS"
+		" must be positive ", (ftnlen)61);
+	errint_(__global_state, "#", &__state->colidx, (ftnlen)1);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", nvals, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKAD06", (ftnlen)8);
 	return 0;
     }
     if (coldsc[3] != -1) {
 	if (*nvals != coldsc[3]) {
-	    chkin_("ZZEKAD06", (ftnlen)8);
-	    setmsg_("COLIDX = #;  segment = #; NVALS = #; declared entry siz"
-		    "e = #.  Sizes must match.", (ftnlen)80);
-	    errint_("#", &__state->colidx, (ftnlen)1);
-	    errint_("#", &segdsc[1], (ftnlen)1);
-	    errint_("#", nvals, (ftnlen)1);
-	    errint_("#", &coldsc[3], (ftnlen)1);
-	    sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	    chkout_("ZZEKAD06", (ftnlen)8);
+	    chkin_(__global_state, "ZZEKAD06", (ftnlen)8);
+	    setmsg_(__global_state, "COLIDX = #;  segment = #; NVALS = #; de"
+		    "clared entry size = #.  Sizes must match.", (ftnlen)80);
+	    errint_(__global_state, "#", &__state->colidx, (ftnlen)1);
+	    errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	    errint_(__global_state, "#", nvals, (ftnlen)1);
+	    errint_(__global_state, "#", &coldsc[3], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	    chkout_(__global_state, "ZZEKAD06", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -875,7 +879,8 @@ static zzekad06_state_t* get_zzekad06_state() {
 /*        All we need do is set the data pointer.  The segment's */
 /*        metadata are not affected. */
 
-	dasudi_(handle, &__state->ptrloc, &__state->ptrloc, &__state->c_n2);
+	dasudi_(__global_state, handle, &__state->ptrloc, &__state->ptrloc, &
+		__state->c_n2);
     } else {
 
 /*        Decide now whether we will need to pad the input entry */
@@ -883,7 +888,7 @@ static zzekad06_state_t* get_zzekad06_state() {
 /*        we'll need. */
 
 	__state->strlen = coldsc[2];
-	__state->cvlen = i_len(cvals, cvals_len);
+	__state->cvlen = i_len(&__global_state->f2c, cvals, cvals_len);
 	__state->pad = __state->cvlen < __state->strlen;
 	if (__state->pad) {
 	    __state->padlen = __state->strlen - __state->cvlen;
@@ -898,11 +903,12 @@ static zzekad06_state_t* get_zzekad06_state() {
 
 	if (__state->lastw < 1014) {
 	    __state->p = segdsc[15];
-	    zzekpgbs_(&__state->c__1, &__state->p, &__state->pbase);
+	    zzekpgbs_(__global_state, &__state->c__1, &__state->p, &
+		    __state->pbase);
 	    __state->datptr = __state->pbase + __state->lastw + 1;
 	}
 	__state->eltidx = 1;
-	while(__state->eltidx <= *nvals && ! failed_()) {
+	while(__state->eltidx <= *nvals && ! failed_(__global_state)) {
 
 /*           Write out the element having index ELTIDX. */
 
@@ -927,19 +933,21 @@ static zzekad06_state_t* get_zzekad06_state() {
 /*                 possible to the current page. */
 
 		    if (__state->fstpag) {
-			dasudi_(handle, &__state->ptrloc, &__state->ptrloc, &
-				__state->datptr);
-			zzeksei_(handle, &__state->datptr, nvals);
+			dasudi_(__global_state, handle, &__state->ptrloc, &
+				__state->ptrloc, &__state->datptr);
+			zzeksei_(__global_state, handle, &__state->datptr, 
+				nvals);
 			__state->room += -5;
 			__state->datptr += 5;
 
 /*                    The first page containing some or all of the data */
 /*                    item gains a link. */
 
-			zzekglnk_(handle, &__state->c__1, &__state->p, &
-				__state->nlinks);
+			zzekglnk_(__global_state, handle, &__state->c__1, &
+				__state->p, &__state->nlinks);
 			i__1 = __state->nlinks + 1;
-			zzekslnk_(handle, &__state->c__1, &__state->p, &i__1);
+			zzekslnk_(__global_state, handle, &__state->c__1, &
+				__state->p, &i__1);
 		    }
 
 /*                 Write the characters we can fit onto the current page. */
@@ -958,9 +966,10 @@ static zzekad06_state_t* get_zzekad06_state() {
 			    i__1 = __state->datptr + __state->nchrs - 1;
 			    i__2 = __state->pos + 1;
 			    i__3 = __state->pos + __state->nchrs;
-			    dasudc_(handle, &__state->datptr, &i__1, &i__2, &
-				    i__3, cvals + (__state->eltidx - 1) * 
-				    cvals_len, cvals_len);
+			    dasudc_(__global_state, handle, &__state->datptr, 
+				    &i__1, &i__2, &i__3, cvals + (
+				    __state->eltidx - 1) * cvals_len, 
+				    cvals_len);
 			    __state->n -= __state->nchrs;
 			    __state->pos += __state->nchrs;
 			    __state->datptr += __state->nchrs;
@@ -974,7 +983,8 @@ static zzekad06_state_t* get_zzekad06_state() {
 			    while(__state->np > 0) {
 				__state->wp = min(__state->np,100);
 				i__1 = __state->datptr + __state->wp - 1;
-				dasudc_(handle, &__state->datptr, &i__1, &
+				dasudc_(__global_state, handle, &
+					__state->datptr, &i__1, &
 					__state->c__1, &__state->wp, 
 					__state->padbuf, (ftnlen)100);
 				__state->np -= __state->wp;
@@ -1008,11 +1018,11 @@ static zzekad06_state_t* get_zzekad06_state() {
 /*                 first data page written to, link the previous page to */
 /*                 the current one. */
 
-		    zzekaps_(handle, segdsc, &__state->c__1, &
+		    zzekaps_(__global_state, handle, segdsc, &__state->c__1, &
 			    __state->c_false, &__state->p2, &__state->pbase);
 		    if (! __state->fstpag) {
-			zzeksfwd_(handle, &__state->c__1, &__state->p, &
-				__state->p2);
+			zzeksfwd_(__global_state, handle, &__state->c__1, &
+				__state->p, &__state->p2);
 		    }
 		    __state->p = __state->p2;
 		    __state->lastw = 0;
@@ -1031,8 +1041,8 @@ static zzekad06_state_t* get_zzekad06_state() {
 		    } else {
 			__state->nlinks = 1;
 		    }
-		    zzekslnk_(handle, &__state->c__1, &__state->p, &
-			    __state->nlinks);
+		    zzekslnk_(__global_state, handle, &__state->c__1, &
+			    __state->p, &__state->nlinks);
 		}
 	    }
 
@@ -1047,7 +1057,7 @@ static zzekad06_state_t* get_zzekad06_state() {
     __state->mbase = segdsc[2];
     i__1 = __state->mbase + 1;
     i__2 = __state->mbase + 24;
-    dasudi_(handle, &i__1, &i__2, segdsc);
+    dasudi_(__global_state, handle, &i__1, &i__2, segdsc);
 
 /*     Class 6 columns are not indexed, so we need not update any */
 /*     index to account for the new element. */

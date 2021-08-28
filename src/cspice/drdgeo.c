@@ -8,17 +8,18 @@
 
 
 typedef int drdgeo_state_t;
-static drdgeo_state_t* get_drdgeo_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline drdgeo_state_t* get_drdgeo_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DRDGEO ( Derivative of rectangular w.r.t. geodetic ) */
-/* Subroutine */ int drdgeo_(doublereal *long__, doublereal *lat, doublereal *
-	alt, doublereal *re, doublereal *f, doublereal *jacobi)
+/* Subroutine */ int drdgeo_(cspice_t* __global_state, doublereal *long__, 
+	doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, 
+	doublereal *jacobi)
 {
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal), sqrt(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal), sqrt(
+	    f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal clat;
@@ -28,18 +29,19 @@ static drdgeo_state_t* get_drdgeo_state() {
     doublereal slon;
     doublereal flat2;
     doublereal g;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal g2;
     doublereal dgdlat;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    drdgeo_state_t* __state = get_drdgeo_state();
+    drdgeo_state_t* __state = get_drdgeo_state(__global_state);
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */
@@ -258,10 +260,10 @@ static drdgeo_state_t* get_drdgeo_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DRDGEO", (ftnlen)6);
+	chkin_(__global_state, "DRDGEO", (ftnlen)6);
     }
 
 /*     If the flattening coefficient is greater than one, the polar */
@@ -270,17 +272,18 @@ static drdgeo_state_t* get_drdgeo_state() {
 /*     error and check out. */
 
     if (*f >= 1.) {
-	setmsg_("Flattening coefficient was *.", (ftnlen)29);
-	errdp_("*", f, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("DRDGEO", (ftnlen)6);
+	setmsg_(__global_state, "Flattening coefficient was *.", (ftnlen)29);
+	errdp_(__global_state, "*", f, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DRDGEO", (ftnlen)6);
 	return 0;
     }
     if (*re <= 0.) {
-	setmsg_("Equatorial Radius <= 0.0D0. RE = *", (ftnlen)34);
-	errdp_("*", re, (ftnlen)1);
-	sigerr_("SPICE(BADRADIUS)", (ftnlen)16);
-	chkout_("DRDGEO", (ftnlen)6);
+	setmsg_(__global_state, "Equatorial Radius <= 0.0D0. RE = *", (ftnlen)
+		34);
+	errdp_(__global_state, "*", re, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADRADIUS)", (ftnlen)16);
+	chkout_(__global_state, "DRDGEO", (ftnlen)6);
 	return 0;
     }
 
@@ -434,16 +437,16 @@ static drdgeo_state_t* get_drdgeo_state() {
 /*     We're going to need the sine and cosine of LAT and LONG many */
 /*     times.  We'll just compute them once. */
 
-    clat = cos(*lat);
-    clon = cos(*long__);
-    slat = sin(*lat);
-    slon = sin(*long__);
+    clat = cos(&__global_state->f2c, *lat);
+    clon = cos(&__global_state->f2c, *long__);
+    slat = sin(&__global_state->f2c, *lat);
+    slon = sin(&__global_state->f2c, *long__);
 
 /*     Referring to the G given in the header we have... */
 
     flat = 1. - *f;
     flat2 = flat * flat;
-    g = sqrt(clat * clat + flat2 * slat * slat);
+    g = sqrt(&__global_state->f2c, clat * clat + flat2 * slat * slat);
     g2 = g * g;
     dgdlat = (flat2 - 1.) * slat * clat / g;
 
@@ -462,7 +465,7 @@ static drdgeo_state_t* get_drdgeo_state() {
     jacobi[6] = clon * clat;
     jacobi[7] = slon * clat;
     jacobi[8] = slat;
-    chkout_("DRDGEO", (ftnlen)6);
+    chkout_(__global_state, "DRDGEO", (ftnlen)6);
     return 0;
 } /* drdgeo_ */
 

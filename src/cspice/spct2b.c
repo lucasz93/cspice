@@ -8,8 +8,7 @@
 
 
 extern spct2b_init_t __spct2b_init;
-static spct2b_state_t* get_spct2b_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spct2b_state_t* get_spct2b_state(cspice_t* state) {
 	if (!state->spct2b)
 		state->spct2b = __cspice_allocate_module(sizeof(
 	spct2b_state_t), &__spct2b_init, sizeof(__spct2b_init));
@@ -18,7 +17,8 @@ static spct2b_state_t* get_spct2b_state() {
 }
 
 /* $Procedure SPCT2B ( SPK and CK, text to binary ) */
-/* Subroutine */ int spct2b_(integer *unit, char *binary, ftnlen binary_len)
+/* Subroutine */ int spct2b_(cspice_t* __global_state, integer *unit, char *
+	binary, ftnlen binary_len)
 {
     /* System generated locals */
     integer i__1;
@@ -27,34 +27,37 @@ static spct2b_state_t* get_spct2b_state() {
     cllist cl__1;
 
     /* Builtin functions */
-    integer s_rsfe(cilist *), do_fio(integer *, char *, ftnlen), e_rsfe(void),
-	     s_cmp(char *, char *, ftnlen, ftnlen), f_open(olist *), s_wsfe(
-	    cilist *), e_wsfe(void), f_clos(cllist *);
+    integer s_rsfe(f2c_state_t*, cilist *), do_fio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rsfe(f2c_state_t*), s_cmp(f2c_state_t*, char *,
+	     char *, ftnlen, ftnlen), f_open(f2c_state_t*, olist *), s_wsfe(
+	    f2c_state_t*, cilist *), e_wsfe(f2c_state_t*), f_clos(f2c_state_t*
+	    , cllist *);
 
     /* Local variables */
     char line[1000];
-    extern /* Subroutine */ int spcac_(integer *, integer *, char *, char *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer ltrim_(char *, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int daft2b_(integer *, char *, integer *, ftnlen);
+    extern /* Subroutine */ int spcac_(cspice_t*, integer *, integer *, char *
+	    , char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer ltrim_(cspice_t*, char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int daft2b_(cspice_t*, integer *, char *, integer 
+	    *, ftnlen);
     integer handle;
-    extern /* Subroutine */ int dafcls_(integer *);
-    extern /* Subroutine */ int dafopw_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int dafcls_(cspice_t*, integer *);
+    extern /* Subroutine */ int dafopw_(cspice_t*, char *, integer *, ftnlen);
     integer scrtch;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int getlun_(integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int getlun_(cspice_t*, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spct2b_state_t* __state = get_spct2b_state();
+    spct2b_state_t* __state = get_spct2b_state(__global_state);
 /* $ Abstract */
 
 /*     Reconstruct a binary SPK or CK file including comments */
@@ -292,10 +295,10 @@ static spct2b_state_t* get_spct2b_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPCT2B", (ftnlen)6);
+	chkin_(__global_state, "SPCT2B", (ftnlen)6);
     }
 
 /*     DAFT2B creates the new binary file and writes the data to */
@@ -303,7 +306,7 @@ static spct2b_state_t* get_spct2b_state() {
 /*     it reads from the text file, it will signal an error. */
 /*     Initially, no records are reserved. */
 
-    daft2b_(unit, binary, &__state->c__0, binary_len);
+    daft2b_(__global_state, unit, binary, &__state->c__0, binary_len);
 
 /*     The comments follow the data and are surrounded by markers. */
 /*     BMARK should be the next line that we read.  If it isn't, */
@@ -318,29 +321,29 @@ static spct2b_state_t* get_spct2b_state() {
     ci__1.ciend = 1;
     ci__1.ciunit = *unit;
     ci__1.cifmt = "(A)";
-    iostat = s_rsfe(&ci__1);
+    iostat = s_rsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&__state->c__1, line, (ftnlen)1000);
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, (ftnlen)1000);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rsfe();
+    iostat = e_rsfe(&__global_state->f2c);
 L100001:
     if (iostat > 0) {
-	setmsg_("Error reading the text file named FNM.  Value of IOSTAT is "
-		"#.", (ftnlen)61);
-	errint_("#", &iostat, (ftnlen)1);
-	errfnm_("FNM", unit, (ftnlen)3);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("SPCT2B", (ftnlen)6);
+	setmsg_(__global_state, "Error reading the text file named FNM.  Val"
+		"ue of IOSTAT is #.", (ftnlen)61);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	errfnm_(__global_state, "FNM", unit, (ftnlen)3);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "SPCT2B", (ftnlen)6);
 	return 0;
     }
-    i__1 = ltrim_(line, (ftnlen)1000) - 1;
-    if (s_cmp(line + i__1, "~NAIF/SPC BEGIN COMMENTS~", 1000 - i__1, (ftnlen)
-	    25) != 0 || iostat < 0) {
-	chkout_("SPCT2B", (ftnlen)6);
+    i__1 = ltrim_(__global_state, line, (ftnlen)1000) - 1;
+    if (s_cmp(&__global_state->f2c, line + i__1, "~NAIF/SPC BEGIN COMMENTS~", 
+	    1000 - i__1, (ftnlen)25) != 0 || iostat < 0) {
+	chkout_(__global_state, "SPCT2B", (ftnlen)6);
 	return 0;
     }
 
@@ -352,7 +355,7 @@ L100001:
 /*     but it's not okay to rewind the file connected to UNIT -- */
 /*     we don't know the initial location of the file pointer. */
 
-    getlun_(&scrtch);
+    getlun_(__global_state, &scrtch);
     o__1.oerr = 1;
     o__1.ounit = scrtch;
     o__1.ofnm = 0;
@@ -361,36 +364,37 @@ L100001:
     o__1.oacc = "SEQUENTIAL";
     o__1.ofm = "FORMATTED";
     o__1.oblnk = 0;
-    iostat = f_open(&o__1);
+    iostat = f_open(&__global_state->f2c, &o__1);
     if (iostat != 0) {
-	setmsg_("Error opening a scratch file.  File name was FNM.  Value of"
-		" IOSTAT is #.", (ftnlen)72);
-	errint_("#", &iostat, (ftnlen)1);
-	errfnm_("FNM", &scrtch, (ftnlen)3);
-	sigerr_("SPICE(FILEOPENERROR)", (ftnlen)20);
-	chkout_("SPCT2B", (ftnlen)6);
+	setmsg_(__global_state, "Error opening a scratch file.  File name wa"
+		"s FNM.  Value of IOSTAT is #.", (ftnlen)72);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	errfnm_(__global_state, "FNM", &scrtch, (ftnlen)3);
+	sigerr_(__global_state, "SPICE(FILEOPENERROR)", (ftnlen)20);
+	chkout_(__global_state, "SPCT2B", (ftnlen)6);
 	return 0;
     }
     ci__1.cierr = 1;
     ci__1.ciunit = scrtch;
     ci__1.cifmt = "(A)";
-    iostat = s_wsfe(&ci__1);
+    iostat = s_wsfe(&__global_state->f2c, &ci__1);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)1000));
+    iostat = do_fio(&__global_state->f2c, &__state->c__1, line, rtrim_(
+	    __global_state, line, (ftnlen)1000));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = e_wsfe();
+    iostat = e_wsfe(&__global_state->f2c);
 L100002:
     if (iostat != 0) {
-	setmsg_("Error writing to scratch file. File name is FNM.  Value of "
-		"IOSTAT is #.", (ftnlen)71);
-	errint_("#", &iostat, (ftnlen)1);
-	errfnm_("FNM", &scrtch, (ftnlen)3);
-	sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	chkout_("SPCT2B", (ftnlen)6);
+	setmsg_(__global_state, "Error writing to scratch file. File name is"
+		" FNM.  Value of IOSTAT is #.", (ftnlen)71);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	errfnm_(__global_state, "FNM", &scrtch, (ftnlen)3);
+	sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	chkout_(__global_state, "SPCT2B", (ftnlen)6);
 	return 0;
     }
 
@@ -398,53 +402,55 @@ L100002:
 /*     in the scratch file until we get to the end marker. */
 
     for(;;) { /* while(complicated condition) */
-	i__1 = ltrim_(line, (ftnlen)1000) - 1;
-	if (!(s_cmp(line + i__1, "~NAIF/SPC END COMMENTS~", 1000 - i__1, (
-		ftnlen)23) != 0))
+	i__1 = ltrim_(__global_state, line, (ftnlen)1000) - 1;
+	if (!(s_cmp(&__global_state->f2c, line + i__1, "~NAIF/SPC END COMMEN"
+		"TS~", 1000 - i__1, (ftnlen)23) != 0))
 		break;
 	ci__1.cierr = 1;
 	ci__1.ciend = 1;
 	ci__1.ciunit = *unit;
 	ci__1.cifmt = "(A)";
-	iostat = s_rsfe(&ci__1);
+	iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = do_fio(&__state->c__1, line, (ftnlen)1000);
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, (ftnlen)
+		1000);
 	if (iostat != 0) {
 	    goto L100003;
 	}
-	iostat = e_rsfe();
+	iostat = e_rsfe(&__global_state->f2c);
 L100003:
 	if (iostat != 0) {
-	    setmsg_("Error reading the text file named FNM.  Value of IOSTAT"
-		    " is #.", (ftnlen)61);
-	    errint_("#", &iostat, (ftnlen)1);
-	    errfnm_("FNM", unit, (ftnlen)3);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("SPCT2B", (ftnlen)6);
+	    setmsg_(__global_state, "Error reading the text file named FNM. "
+		    " Value of IOSTAT is #.", (ftnlen)61);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    errfnm_(__global_state, "FNM", unit, (ftnlen)3);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "SPCT2B", (ftnlen)6);
 	    return 0;
 	}
 	ci__1.cierr = 1;
 	ci__1.ciunit = scrtch;
 	ci__1.cifmt = "(A)";
-	iostat = s_wsfe(&ci__1);
+	iostat = s_wsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100004;
 	}
-	iostat = do_fio(&__state->c__1, line, rtrim_(line, (ftnlen)1000));
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, rtrim_(
+		__global_state, line, (ftnlen)1000));
 	if (iostat != 0) {
 	    goto L100004;
 	}
-	iostat = e_wsfe();
+	iostat = e_wsfe(&__global_state->f2c);
 L100004:
 	if (iostat != 0) {
-	    setmsg_("Error writing to scratch file.  File name is FNM.  Valu"
-		    "e of IOSTAT is #.", (ftnlen)72);
-	    errint_("#", &iostat, (ftnlen)1);
-	    errfnm_("FNM", &scrtch, (ftnlen)3);
-	    sigerr_("SPICE(FILEWRITEFAILED)", (ftnlen)22);
-	    chkout_("SPCT2B", (ftnlen)6);
+	    setmsg_(__global_state, "Error writing to scratch file.  File na"
+		    "me is FNM.  Value of IOSTAT is #.", (ftnlen)72);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    errfnm_(__global_state, "FNM", &scrtch, (ftnlen)3);
+	    sigerr_(__global_state, "SPICE(FILEWRITEFAILED)", (ftnlen)22);
+	    chkout_(__global_state, "SPCT2B", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -452,18 +458,18 @@ L100004:
 /*     Open the new binary file and add the comments that have been */
 /*     stored temporarily in a scratch file. */
 
-    dafopw_(binary, &handle, binary_len);
-    spcac_(&handle, &scrtch, "~NAIF/SPC BEGIN COMMENTS~", "~NAIF/SPC END COM"
-	    "MENTS~", (ftnlen)25, (ftnlen)23);
+    dafopw_(__global_state, binary, &handle, binary_len);
+    spcac_(__global_state, &handle, &scrtch, "~NAIF/SPC BEGIN COMMENTS~", 
+	    "~NAIF/SPC END COMMENTS~", (ftnlen)25, (ftnlen)23);
 
 /*     Close the files.  The scratch file is automatically deleted. */
 
-    dafcls_(&handle);
+    dafcls_(__global_state, &handle);
     cl__1.cerr = 0;
     cl__1.cunit = scrtch;
     cl__1.csta = 0;
-    f_clos(&cl__1);
-    chkout_("SPCT2B", (ftnlen)6);
+    f_clos(&__global_state->f2c, &cl__1);
+    chkout_(__global_state, "SPCT2B", (ftnlen)6);
     return 0;
 } /* spct2b_ */
 

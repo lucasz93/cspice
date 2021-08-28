@@ -8,8 +8,7 @@
 
 
 extern dpspce_init_t __dpspce_init;
-static dpspce_state_t* get_dpspce_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dpspce_state_t* get_dpspce_state(cspice_t* state) {
 	if (!state->dpspce)
 		state->dpspce = __cspice_allocate_module(sizeof(
 	dpspce_state_t), &__dpspce_init, sizeof(__dpspce_init));
@@ -18,8 +17,8 @@ static dpspce_state_t* get_dpspce_state() {
 }
 
 /* $Procedure DPSPCE ( Propagate a two line element set for deep space ) */
-/* Subroutine */ int dpspce_(doublereal *time, doublereal *geophs, doublereal 
-	*elems, doublereal *state)
+/* Subroutine */ int dpspce_(cspice_t* __global_state, doublereal *time, 
+	doublereal *geophs, doublereal *elems, doublereal *state)
 {
     /* Initialized data */
 
@@ -29,31 +28,32 @@ static dpspce_state_t* get_dpspce_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double pow_dd(doublereal *, doublereal *), cos(doublereal), sqrt(
-	    doublereal), sin(doublereal), d_mod(doublereal *, doublereal *), 
-	    atan2(doublereal, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double pow_dd(f2c_state_t*, doublereal *, doublereal *), cos(f2c_state_t*,
+	     doublereal), sqrt(f2c_state_t*, doublereal), sin(f2c_state_t*, 
+	    doublereal), d_mod(f2c_state_t*, doublereal *, doublereal *), 
+	    atan2(f2c_state_t*, doublereal, doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int zzdpinit_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal twopi_(void);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern doublereal halfpi_(void);
-    extern /* Subroutine */ int latrec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int zzdpsec_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int zzdpinit_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal twopi_(cspice_t*);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int zzdpper_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern doublereal halfpi_(cspice_t*);
+    extern /* Subroutine */ int latrec_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzdpsec_(cspice_t*, doublereal *, doublereal *
+	    , doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzdpper_(cspice_t*, doublereal *, doublereal *
+	    , doublereal *, doublereal *, doublereal *, doublereal *);
 
     /* Module state */
-    dpspce_state_t* __state = get_dpspce_state();
+    dpspce_state_t* __state = get_dpspce_state(__global_state);
 /* $ Abstract */
 
 /*     This routine propagates NORAD two-line element data for */
@@ -386,18 +386,18 @@ static dpspce_state_t* get_dpspce_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DPSPCE", (ftnlen)6);
+	chkin_(__global_state, "DPSPCE", (ftnlen)6);
     }
 
 /*     If this is the very first time into this routine, set these */
 /*     values. */
 
     if (__state->first) {
-	__state->pix2 = twopi_();
-	__state->pio2 = halfpi_();
+	__state->pix2 = twopi_(__global_state);
+	__state->pio2 = halfpi_(__global_state);
 	__state->first = FALSE_;
     }
 
@@ -413,17 +413,19 @@ static dpspce_state_t* get_dpspce_state() {
 
 	for (__state->i__ = 1; __state->i__ <= 8; ++__state->i__) {
 	    if (__state->lstphs[(i__1 = __state->i__ - 1) < 8 && 0 <= i__1 ? 
-		    i__1 : s_rnge("lstphs", i__1, "dpspce_", (ftnlen)547)] != 
-		    geophs[(i__2 = __state->i__ - 1) < 8 && 0 <= i__2 ? i__2 :
-		     s_rnge("geophs", i__2, "dpspce_", (ftnlen)547)]) {
+		    i__1 : s_rnge(&__global_state->f2c, "lstphs", i__1, "dps"
+		    "pce_", (ftnlen)547)] != geophs[(i__2 = __state->i__ - 1) <
+		     8 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "geophs", i__2, "dpspce_", (ftnlen)547)]) {
 		__state->doinit = TRUE_;
 	    }
 	}
 	for (__state->i__ = 1; __state->i__ <= 10; ++__state->i__) {
 	    if (__state->lstelm[(i__1 = __state->i__ - 1) < 10 && 0 <= i__1 ? 
-		    i__1 : s_rnge("lstelm", i__1, "dpspce_", (ftnlen)556)] != 
-		    elems[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ? i__2 :
-		     s_rnge("elems", i__2, "dpspce_", (ftnlen)556)]) {
+		    i__1 : s_rnge(&__global_state->f2c, "lstelm", i__1, "dps"
+		    "pce_", (ftnlen)556)] != elems[(i__2 = __state->i__ - 1) < 
+		    10 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "elems", i__2, "dpspce_", (ftnlen)556)]) {
 		__state->doinit = TRUE_;
 	    }
 	}
@@ -450,9 +452,10 @@ static dpspce_state_t* get_dpspce_state() {
 
 	for (__state->i__ = 1; __state->i__ <= 8; ++__state->i__) {
 	    __state->lstphs[(i__1 = __state->i__ - 1) < 8 && 0 <= i__1 ? i__1 
-		    : s_rnge("lstphs", i__1, "dpspce_", (ftnlen)590)] = 
-		    geophs[(i__2 = __state->i__ - 1) < 8 && 0 <= i__2 ? i__2 :
-		     s_rnge("geophs", i__2, "dpspce_", (ftnlen)590)];
+		    : s_rnge(&__global_state->f2c, "lstphs", i__1, "dpspce_", 
+		    (ftnlen)590)] = geophs[(i__2 = __state->i__ - 1) < 8 && 0 
+		    <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "geophs", 
+		    i__2, "dpspce_", (ftnlen)590)];
 	}
 
 /*        Unpack the elements array. */
@@ -470,9 +473,10 @@ static dpspce_state_t* get_dpspce_state() {
 
 	for (__state->i__ = 1; __state->i__ <= 10; ++__state->i__) {
 	    __state->lstelm[(i__1 = __state->i__ - 1) < 10 && 0 <= i__1 ? 
-		    i__1 : s_rnge("lstelm", i__1, "dpspce_", (ftnlen)610)] = 
-		    elems[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ? i__2 :
-		     s_rnge("elems", i__2, "dpspce_", (ftnlen)610)];
+		    i__1 : s_rnge(&__global_state->f2c, "lstelm", i__1, "dps"
+		    "pce_", (ftnlen)610)] = elems[(i__2 = __state->i__ - 1) < 
+		    10 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "elems", i__2, "dpspce_", (ftnlen)610)];
 	}
 
 /*        Set common variables, the init flag and calculate the */
@@ -500,8 +504,8 @@ static dpspce_state_t* get_dpspce_state() {
 /*        from input elements */
 
 	d__1 = __state->xke / __state->xno;
-	__state->a1 = pow_dd(&d__1, &__state->c_b19);
-	__state->cosio = cos(__state->xincl);
+	__state->a1 = pow_dd(&__global_state->f2c, &d__1, &__state->c_b19);
+	__state->cosio = cos(&__global_state->f2c, __state->xincl);
 /* Computing 2nd power */
 	d__1 = __state->cosio;
 	__state->theta2 = d__1 * d__1;
@@ -509,7 +513,7 @@ static dpspce_state_t* get_dpspce_state() {
 /* Computing 2nd power */
 	d__1 = __state->eo;
 	__state->betao2 = 1. - d__1 * d__1;
-	__state->betao = sqrt(__state->betao2);
+	__state->betao = sqrt(&__global_state->f2c, __state->betao2);
 /* Computing 2nd power */
 	d__1 = __state->a1;
 	__state->del1 = __state->ck2 * 1.5 * __state->x3thm1 / (d__1 * d__1 * 
@@ -558,15 +562,15 @@ static dpspce_state_t* get_dpspce_state() {
 /* Computing 4th power */
 	d__1 = __state->tsi, d__1 *= d__1;
 	__state->coef = __state->qoms24 * (d__1 * d__1);
-	__state->coef1 = __state->coef / pow_dd(&__state->psisq, &
-		__state->c_b20);
+	__state->coef1 = __state->coef / pow_dd(&__global_state->f2c, &
+		__state->psisq, &__state->c_b20);
 	__state->c2 = __state->coef1 * __state->xnodp * (__state->aodp * (
 		__state->etasq * 1.5 + 1. + __state->eeta * (__state->etasq + 
 		4.)) + __state->ck2 * .75 * __state->tsi / __state->psisq * 
 		__state->x3thm1 * (__state->etasq * 3. * (__state->etasq + 8.)
 		 + 8.));
 	__state->c1 = __state->bstar * __state->c2;
-	__state->sinio = sin(__state->xincl);
+	__state->sinio = sin(&__global_state->f2c, __state->xincl);
 /* Computing 3rd power */
 	d__1 = __state->ae;
 	__state->a3ovk2 = -__state->xj3 / __state->ck2 * (d__1 * (d__1 * d__1)
@@ -579,7 +583,8 @@ static dpspce_state_t* get_dpspce_state() {
 		__state->x3thm1 * -3. * (1. - __state->eeta * 2. + 
 		__state->etasq * (1.5 - __state->eeta * .5)) + 
 		__state->x1mth2 * .75 * (__state->etasq * 2. - __state->eeta *
-		 (__state->etasq + 1.)) * cos(__state->omegao * 2.)));
+		 (__state->etasq + 1.)) * cos(&__global_state->f2c, 
+		__state->omegao * 2.)));
 	__state->temp1 = __state->ck2 * 3. * __state->pinvsq * __state->xnodp;
 	__state->temp2 = __state->temp1 * __state->ck2 * __state->pinvsq;
 	__state->temp3 = __state->ck4 * 1.25 * __state->pinvsq * 
@@ -605,8 +610,8 @@ static dpspce_state_t* get_dpspce_state() {
 	__state->aycof = __state->a3ovk2 * .25 * __state->sinio;
 	__state->x7thm1 = __state->theta2 * 7. - 1.;
     }
-    zzdpinit_(&__state->aodp, &__state->xmdot, &__state->omgdot, &
-	    __state->xnodot, &__state->xnodp, elems);
+    zzdpinit_(__global_state, &__state->aodp, &__state->xmdot, &
+	    __state->omgdot, &__state->xnodot, &__state->xnodp, elems);
 
 /*     Get the time since the EPOCH in minutes. */
 
@@ -626,33 +631,36 @@ static dpspce_state_t* get_dpspce_state() {
 
 /*     Calculate the secular terms. */
 
-    zzdpsec_(&__state->xmdf, &__state->omgadf, &__state->xnode, &__state->em, 
-	    &__state->xinc, &__state->xn, &__state->tsince, elems, &
-	    __state->omgdot);
+    zzdpsec_(__global_state, &__state->xmdf, &__state->omgadf, &
+	    __state->xnode, &__state->em, &__state->xinc, &__state->xn, &
+	    __state->tsince, elems, &__state->omgdot);
     d__1 = __state->xke / __state->xn;
 /* Computing 2nd power */
     d__2 = __state->tempa;
-    __state->a = pow_dd(&d__1, &__state->c_b19) * (d__2 * d__2);
+    __state->a = pow_dd(&__global_state->f2c, &d__1, &__state->c_b19) * (d__2 
+	    * d__2);
     __state->e = __state->em - __state->tempe;
     __state->xmam = __state->xmdf + __state->xnodp * __state->templ;
 
 /*     Calculate the periodic terms. */
 
-    zzdpper_(&__state->tsince, &__state->e, &__state->xinc, &__state->omgadf, 
-	    &__state->xnode, &__state->xmam);
+    zzdpper_(__global_state, &__state->tsince, &__state->e, &__state->xinc, &
+	    __state->omgadf, &__state->xnode, &__state->xmam);
     __state->xl = __state->xmam + __state->omgadf + __state->xnode;
-    __state->xn = __state->xke / pow_dd(&__state->a, &__state->c_b22);
+    __state->xn = __state->xke / pow_dd(&__global_state->f2c, &__state->a, &
+	    __state->c_b22);
 
 /*      Long period periodics */
 
-    __state->axn = __state->e * cos(__state->omgadf);
+    __state->axn = __state->e * cos(&__global_state->f2c, __state->omgadf);
 /* Computing 2nd power */
     d__1 = __state->e;
     __state->temp = 1. / (__state->a * (1. - d__1 * d__1));
     __state->xll = __state->temp * __state->xlcof * __state->axn;
     __state->aynl = __state->temp * __state->aycof;
     __state->xlt = __state->xl + __state->xll;
-    __state->ayn = __state->e * sin(__state->omgadf) + __state->aynl;
+    __state->ayn = __state->e * sin(&__global_state->f2c, __state->omgadf) + 
+	    __state->aynl;
 
 /*     Solve Kepler's equation */
 
@@ -671,7 +679,7 @@ static dpspce_state_t* get_dpspce_state() {
 /*     Get the mod division of CAPU with 2 Pi */
 
     d__1 = __state->xlt - __state->xnode;
-    __state->capu = d_mod(&d__1, &__state->pix2);
+    __state->capu = d_mod(&__global_state->f2c, &d__1, &__state->pix2);
     if (__state->capu < 0.) {
 	__state->capu += __state->pix2;
     }
@@ -682,8 +690,8 @@ static dpspce_state_t* get_dpspce_state() {
     __state->cont = TRUE_;
     while(__state->cont) {
 	__state->temp2 = __state->epw;
-	__state->sinepw = sin(__state->temp2);
-	__state->cosepw = cos(__state->temp2);
+	__state->sinepw = sin(&__global_state->f2c, __state->temp2);
+	__state->cosepw = cos(&__global_state->f2c, __state->temp2);
 	__state->temp3 = __state->axn * __state->sinepw;
 	__state->temp4 = __state->ayn * __state->cosepw;
 	__state->temp5 = __state->axn * __state->cosepw;
@@ -708,11 +716,12 @@ static dpspce_state_t* get_dpspce_state() {
     __state->pl = __state->a * __state->temp;
     __state->rk = __state->a * (1. - __state->ecose);
     __state->temp1 = 1. / __state->rk;
-    __state->rdot = __state->xke * sqrt(__state->a) * __state->esine * 
+    __state->rdot = __state->xke * sqrt(&__global_state->f2c, __state->a) * 
+	    __state->esine * __state->temp1;
+    __state->rfdot = __state->xke * sqrt(&__global_state->f2c, __state->pl) * 
 	    __state->temp1;
-    __state->rfdot = __state->xke * sqrt(__state->pl) * __state->temp1;
     __state->temp2 = __state->a * __state->temp1;
-    __state->betal = sqrt(__state->temp);
+    __state->betal = sqrt(&__global_state->f2c, __state->temp);
     __state->temp3 = 1. / (__state->betal + 1.);
     __state->cosu = __state->temp2 * (__state->cosepw - __state->axn + 
 	    __state->ayn * __state->esine * __state->temp3);
@@ -722,7 +731,8 @@ static dpspce_state_t* get_dpspce_state() {
 /*     Compute the angle from the x-axis of the point ( COSU, SINU ) */
 
     if (__state->sinu != 0. || __state->cosu != 0.) {
-	__state->uang = atan2(__state->sinu, __state->cosu);
+	__state->uang = atan2(&__global_state->f2c, __state->sinu, 
+		__state->cosu);
 	if (__state->uang < 0.) {
 	    __state->uang += __state->pix2;
 	}
@@ -760,22 +770,25 @@ static dpspce_state_t* get_dpspce_state() {
 /*     M = (-sin(xnodek)cos(xinck), cos(xnodek)cos(xinck), sin(xinck) ) */
 /*     N = (           cos(xnodek), sin(xnodek)          , 0          ) */
 
-    __state->sinuk = sin(__state->uk);
-    __state->cosuk = cos(__state->uk);
+    __state->sinuk = sin(&__global_state->f2c, __state->uk);
+    __state->cosuk = cos(&__global_state->f2c, __state->uk);
 
 /*     Use LATREC to generate M and N.  M is a latitude to rectangle */
 /*     conversion of a unit vector where PI/2 + XNODEK is the longitude */
 
     d__1 = __state->pio2 + __state->xnodek;
-    latrec_(&__state->c_b23, &d__1, &__state->xinck, __state->m);
-    latrec_(&__state->c_b23, &__state->xnodek, &__state->c_b25, __state->n);
+    latrec_(__global_state, &__state->c_b23, &d__1, &__state->xinck, 
+	    __state->m);
+    latrec_(__global_state, &__state->c_b23, &__state->xnodek, &
+	    __state->c_b25, __state->n);
 
 /*     Sum the components to obtain U and V */
 
-    vlcom_(&__state->sinuk, __state->m, &__state->cosuk, __state->n, 
-	    __state->u);
+    vlcom_(__global_state, &__state->sinuk, __state->m, &__state->cosuk, 
+	    __state->n, __state->u);
     d__1 = -__state->sinuk;
-    vlcom_(&__state->cosuk, __state->m, &d__1, __state->n, __state->v);
+    vlcom_(__global_state, &__state->cosuk, __state->m, &d__1, __state->n, 
+	    __state->v);
 
 /*     Determine the position and velocity then pack the STATE vector */
 /*     with value scaled to KM and KPS. */
@@ -785,18 +798,19 @@ static dpspce_state_t* get_dpspce_state() {
 
     __state->scale = __state->xkmper / __state->ae;
     d__1 = __state->rk * __state->scale;
-    vlcom_(&d__1, __state->u, &__state->c_b25, __state->v, state);
+    vlcom_(__global_state, &d__1, __state->u, &__state->c_b25, __state->v, 
+	    state);
 
 /*     Now scale to KPS for the velocity component */
 
     __state->scale /= 60.;
     d__1 = __state->rdotk * __state->scale;
     d__2 = __state->rfdotk * __state->scale;
-    vlcom_(&d__1, __state->u, &d__2, __state->v, &state[3]);
+    vlcom_(__global_state, &d__1, __state->u, &d__2, __state->v, &state[3]);
 
 /*     All done now.... */
 
-    chkout_("DPSPCE", (ftnlen)6);
+    chkout_(__global_state, "DPSPCE", (ftnlen)6);
     return 0;
 } /* dpspce_ */
 

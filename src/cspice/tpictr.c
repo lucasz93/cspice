@@ -8,18 +8,18 @@
 
 
 typedef int tpictr_state_t;
-static tpictr_state_t* get_tpictr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline tpictr_state_t* get_tpictr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      TPICTR ( Create a Time Format Picture ) */
-/* Subroutine */ int tpictr_(char *sample, char *pictur, logical *ok, char *
-	error, ftnlen sample_len, ftnlen pictur_len, ftnlen error_len)
+/* Subroutine */ int tpictr_(cspice_t* __global_state, char *sample, char *
+	pictur, logical *ok, char *error, ftnlen sample_len, ftnlen 
+	pictur_len, ftnlen error_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     doublereal tvec[10];
@@ -29,13 +29,13 @@ static tpictr_state_t* get_tpictr_state() {
     logical succes;
     logical yabbrv;
     char modify[8*5];
-    extern /* Subroutine */ int tpartv_(char *, doublereal *, integer *, char 
-	    *, char *, logical *, logical *, logical *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int tpartv_(cspice_t*, char *, doublereal *, 
+	    integer *, char *, char *, logical *, logical *, logical *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
 
 
     /* Module state */
-    tpictr_state_t* __state = get_tpictr_state();
+    tpictr_state_t* __state = get_tpictr_state(__global_state);
 /* $ Abstract */
 
 /*     Given a sample time string, create a time format picture */
@@ -206,15 +206,16 @@ static tpictr_state_t* get_tpictr_state() {
 /*     This routine is really just a front for one aspect of */
 /*     the routine TPARTV. */
 
-    s_copy(error, " ", error_len, (ftnlen)1);
-    tpartv_(sample, tvec, &ntvec, type__, modify, &mods, &yabbrv, &succes, 
-	    pictur, error, sample_len, (ftnlen)5, (ftnlen)8, pictur_len, 
-	    error_len);
-    if (s_cmp(pictur, " ", pictur_len, (ftnlen)1) == 0) {
+    s_copy(&__global_state->f2c, error, " ", error_len, (ftnlen)1);
+    tpartv_(__global_state, sample, tvec, &ntvec, type__, modify, &mods, &
+	    yabbrv, &succes, pictur, error, sample_len, (ftnlen)5, (ftnlen)8, 
+	    pictur_len, error_len);
+    if (s_cmp(&__global_state->f2c, pictur, " ", pictur_len, (ftnlen)1) == 0) 
+	    {
 	*ok = FALSE_;
     } else {
 	*ok = TRUE_;
-	s_copy(error, " ", error_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, error, " ", error_len, (ftnlen)1);
     }
     return 0;
 } /* tpictr_ */

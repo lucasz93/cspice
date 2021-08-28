@@ -8,8 +8,7 @@
 
 
 extern zzekrd04_init_t __zzekrd04_init;
-static zzekrd04_state_t* get_zzekrd04_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrd04_state_t* get_zzekrd04_state(cspice_t* state) {
 	if (!state->zzekrd04)
 		state->zzekrd04 = __cspice_allocate_module(sizeof(
 	zzekrd04_state_t), &__zzekrd04_init, sizeof(__zzekrd04_init));
@@ -18,9 +17,9 @@ static zzekrd04_state_t* get_zzekrd04_state() {
 }
 
 /* $Procedure   ZZEKRD04 ( EK, read class 4 column entry elements ) */
-/* Subroutine */ int zzekrd04_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr, integer *beg, integer *end, integer *ivals, 
-	logical *isnull, logical *found)
+/* Subroutine */ int zzekrd04_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr, integer *beg, 
+	integer *end, integer *ivals, logical *isnull, logical *found)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -28,37 +27,38 @@ static zzekrd04_state_t* get_zzekrd04_state() {
     /* Local variables */
     integer base;
     integer nelt;
-    extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekgfwd_(integer *, integer *, integer *, 
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzekgfwd_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgbs_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern /* Subroutine */ int zzekpgbs_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekpgpg_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int zzekpgpg_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer p;
     integer nread;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
     integer ncols;
     integer ptemp;
     integer start;
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     integer remain;
     integer colidx;
     integer datptr;
     integer maxidx;
     integer minidx;
     integer ptrloc;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzekrd04_state_t* __state = get_zzekrd04_state();
+    zzekrd04_state_t* __state = get_zzekrd04_state(__global_state);
 /* $ Abstract */
 
 /*     Read a specified element range from a column entry in a specified */
@@ -802,19 +802,20 @@ static zzekrd04_state_t* get_zzekrd04_state() {
     ncols = segdsc[4];
     colidx = coldsc[8];
     if (colidx < 1 || colidx > ncols) {
-	chkin_("ZZEKRD04", (ftnlen)8);
-	setmsg_("Column index = #; valid range is 1:#.", (ftnlen)37);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &ncols, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKRD04", (ftnlen)8);
+	chkin_(__global_state, "ZZEKRD04", (ftnlen)8);
+	setmsg_(__global_state, "Column index = #; valid range is 1:#.", (
+		ftnlen)37);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &ncols, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKRD04", (ftnlen)8);
 	return 0;
     }
 
 /*     Compute the data pointer location, and read the pointer. */
 
     ptrloc = *recptr + 2 + colidx;
-    dasrdi_(handle, &ptrloc, &ptrloc, &datptr);
+    dasrdi_(__global_state, handle, &ptrloc, &ptrloc, &datptr);
     if (datptr > 0) {
 
 /*        The entry is non-null. */
@@ -824,7 +825,7 @@ static zzekrd04_state_t* get_zzekrd04_state() {
 /*        Get the element count.  Check for range specifications that */
 /*        can't be met. */
 
-	dasrdi_(handle, &datptr, &datptr, &nelt);
+	dasrdi_(__global_state, handle, &datptr, &datptr, &nelt);
 	if (*beg < 1 || *beg > nelt) {
 	    *found = FALSE_;
 	    return 0;
@@ -839,7 +840,7 @@ static zzekrd04_state_t* get_zzekrd04_state() {
 /*        The request is valid, so read the data.  The first step is to */
 /*        locate the element at index BEG. */
 
-	zzekpgpg_(&__state->c__3, &datptr, &p, &base);
+	zzekpgpg_(__global_state, &__state->c__3, &datptr, &p, &base);
 	minidx = 1;
 	maxidx = base + 254 - datptr;
 	datptr += *beg;
@@ -849,12 +850,12 @@ static zzekrd04_state_t* get_zzekrd04_state() {
 
 	    i__1 = base + 255;
 	    i__2 = base + 255;
-	    dasrdi_(handle, &i__1, &i__2, &p);
+	    dasrdi_(__global_state, handle, &i__1, &i__2, &p);
 
 /*           Determine the highest-indexed element of the column entry */
 /*           located on the current page. */
 
-	    zzekpgbs_(&__state->c__3, &p, &base);
+	    zzekpgbs_(__global_state, &__state->c__3, &p, &base);
 	    minidx = maxidx + 1;
 /* Computing MIN */
 	    i__1 = maxidx + 254;
@@ -880,23 +881,24 @@ static zzekrd04_state_t* get_zzekrd04_state() {
 	i__1 = remain, i__2 = base + 254 - datptr + 1;
 	nread = min(i__1,i__2);
 	i__1 = datptr + nread - 1;
-	dasrdi_(handle, &datptr, &i__1, &ivals[start - 1]);
+	dasrdi_(__global_state, handle, &datptr, &i__1, &ivals[start - 1]);
 	remain -= nread;
-	while(remain > 0 && ! failed_()) {
+	while(remain > 0 && ! failed_(__global_state)) {
 
 /*           Locate the page on which the element is continued. */
 
-	    zzekgfwd_(handle, &__state->c__3, &p, &ptemp);
+	    zzekgfwd_(__global_state, handle, &__state->c__3, &p, &ptemp);
 	    p = ptemp;
-	    zzekpgbs_(&__state->c__3, &p, &base);
+	    zzekpgbs_(__global_state, &__state->c__3, &p, &base);
 	    datptr = base + 1;
 	    start += nread;
 	    nread = min(remain,254);
 	    i__1 = datptr + nread - 1;
-	    dasrdi_(handle, &datptr, &i__1, &ivals[start - 1]);
+	    dasrdi_(__global_state, handle, &datptr, &i__1, &ivals[start - 1])
+		    ;
 	    remain -= nread;
 	}
-	*found = ! failed_();
+	*found = ! failed_(__global_state);
     } else if (datptr == -2) {
 
 /*        The value is null. */
@@ -907,30 +909,30 @@ static zzekrd04_state_t* get_zzekrd04_state() {
 
 /*        The data value is absent.  This is an error. */
 
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	chkin_("ZZEKRD04", (ftnlen)8);
-	setmsg_("Attempted to read uninitialized column entry.  SEGNO = #; C"
-		"OLIDX = #; RECNO = #; EK = #", (ftnlen)87);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(UNINITIALIZEDVALUE)", (ftnlen)25);
-	chkout_("ZZEKRD04", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	chkin_(__global_state, "ZZEKRD04", (ftnlen)8);
+	setmsg_(__global_state, "Attempted to read uninitialized column entr"
+		"y.  SEGNO = #; COLIDX = #; RECNO = #; EK = #", (ftnlen)87);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNINITIALIZEDVALUE)", (ftnlen)25);
+	chkout_(__global_state, "ZZEKRD04", (ftnlen)8);
 	return 0;
     } else {
 
 /*        The data pointer is corrupted. */
 
-	chkin_("ZZEKRD04", (ftnlen)8);
-	setmsg_("Data pointer is corrupted. SEGNO = #; COLIDX =  #; RECNO = "
-		"#; EK = #", (ftnlen)68);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKRD04", (ftnlen)8);
+	chkin_(__global_state, "ZZEKRD04", (ftnlen)8);
+	setmsg_(__global_state, "Data pointer is corrupted. SEGNO = #; COLID"
+		"X =  #; RECNO = #; EK = #", (ftnlen)68);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKRD04", (ftnlen)8);
 	return 0;
     }
     return 0;

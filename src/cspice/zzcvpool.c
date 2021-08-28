@@ -8,24 +8,23 @@
 
 
 typedef int zzcvpool_state_t;
-static zzcvpool_state_t* get_zzcvpool_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzcvpool_state_t* get_zzcvpool_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZCVPOOL ( Private---Check variable update, with counter ) */
-/* Subroutine */ int zzcvpool_(char *agent, integer *usrctr, logical *update, 
-	ftnlen agent_len)
+/* Subroutine */ int zzcvpool_(cspice_t* __global_state, char *agent, integer 
+	*usrctr, logical *update, ftnlen agent_len)
 {
-    extern /* Subroutine */ int zzpctrck_(integer *, logical *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int cvpool_(char *, logical *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzpctrck_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cvpool_(cspice_t*, char *, logical *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzcvpool_state_t* __state = get_zzcvpool_state();
+    zzcvpool_state_t* __state = get_zzcvpool_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -300,20 +299,20 @@ static zzcvpool_state_t* get_zzcvpool_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Check/update counter. */
 
-    zzpctrck_(usrctr, update);
+    zzpctrck_(__global_state, usrctr, update);
 
 /*     If counter was updated, check in and call CVPOOL. */
 
     if (*update) {
-	chkin_("ZZCVPOOL", (ftnlen)8);
-	cvpool_(agent, update, agent_len);
-	chkout_("ZZCVPOOL", (ftnlen)8);
+	chkin_(__global_state, "ZZCVPOOL", (ftnlen)8);
+	cvpool_(__global_state, agent, update, agent_len);
+	chkout_(__global_state, "ZZCVPOOL", (ftnlen)8);
     }
     return 0;
 } /* zzcvpool_ */

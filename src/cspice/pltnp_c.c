@@ -198,7 +198,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "pltnp_c" );
+   chkin_c ( naif_state, "pltnp_c" );
 
 
    pltnp_ ( (doublereal  *) point,

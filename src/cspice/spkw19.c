@@ -8,8 +8,7 @@
 
 
 extern spkw19_init_t __spkw19_init;
-static spkw19_state_t* get_spkw19_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkw19_state_t* get_spkw19_state(cspice_t* state) {
 	if (!state->spkw19)
 		state->spkw19 = __cspice_allocate_module(sizeof(
 	spkw19_state_t), &__spkw19_init, sizeof(__spkw19_init));
@@ -18,11 +17,12 @@ static spkw19_state_t* get_spkw19_state() {
 }
 
 /* $Procedure      SPKW19 ( Write SPK segment, type 19 ) */
-/* Subroutine */ int spkw19_(integer *handle, integer *body, integer *center, 
-	char *frame, doublereal *first, doublereal *last, char *segid, 
-	integer *nintvl, integer *npkts, integer *subtps, integer *degres, 
-	doublereal *packts, doublereal *epochs, doublereal *ivlbds, logical *
-	sellst, ftnlen frame_len, ftnlen segid_len)
+/* Subroutine */ int spkw19_(cspice_t* __global_state, integer *handle, 
+	integer *body, integer *center, char *frame, doublereal *first, 
+	doublereal *last, char *segid, integer *nintvl, integer *npkts, 
+	integer *subtps, integer *degres, doublereal *packts, doublereal *
+	epochs, doublereal *ivlbds, logical *sellst, ftnlen frame_len, ftnlen 
+	segid_len)
 {
     /* Initialized data */
 
@@ -32,7 +32,7 @@ static spkw19_state_t* get_spkw19_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer isel;
@@ -40,44 +40,46 @@ static spkw19_state_t* get_spkw19_state() {
     integer i__;
     integer j;
     integer k;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
     doublereal descr[5];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer bepix;
     integer eepix;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    doublereal dc[2];
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
 	    ftnlen);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    doublereal dc[2];
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
     integer ic[6];
-    extern /* Subroutine */ int dafena_(void);
-    extern logical failed_(void);
+    extern /* Subroutine */ int dafena_(cspice_t*);
+    extern logical failed_(cspice_t*);
     integer segbeg;
     integer chrcod;
     integer refcod;
     integer segend;
     integer pktbeg;
-    extern /* Subroutine */ int namfrm_(char *, integer *, ftnlen);
-    extern integer lastnb_(char *, ftnlen);
+    extern /* Subroutine */ int namfrm_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
     integer pktend;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer minisz;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer pktdsz;
     integer winsiz;
     integer pktsiz;
     integer subtyp;
-    extern logical odd_(integer *);
+    extern logical odd_(cspice_t*, integer *);
 
 
     /* Module state */
-    spkw19_state_t* __state = get_spkw19_state();
+    spkw19_state_t* __state = get_spkw19_state(__global_state);
 /* $ Abstract */
 
 /*     Write a type 19 segment to an SPK file. */
@@ -653,20 +655,20 @@ static spkw19_state_t* get_spkw19_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKW19", (ftnlen)6);
+    chkin_(__global_state, "SPKW19", (ftnlen)6);
 
 /*     Start with a parameter compatibility check. */
 
     if (FALSE_) {
-	setmsg_("SPK type 19 record size may be as large as #, but SPKPVN re"
-		"cord size is #.", (ftnlen)74);
-	errint_("#", &__state->c__198, (ftnlen)1);
-	errint_("#", &__state->c__198, (ftnlen)1);
-	sigerr_("SPICE(BUG0)", (ftnlen)11);
-	chkout_("SPKW19", (ftnlen)6);
+	setmsg_(__global_state, "SPK type 19 record size may be as large as "
+		"#, but SPKPVN record size is #.", (ftnlen)74);
+	errint_(__global_state, "#", &__state->c__198, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__198, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG0)", (ftnlen)11);
+	chkout_(__global_state, "SPKW19", (ftnlen)6);
 	return 0;
     }
 
@@ -674,47 +676,48 @@ static spkw19_state_t* get_spkw19_state() {
 /*     correctly ordered. */
 
     if (*last < *first) {
-	setmsg_("Segment start time is #; stop time is #; bounds must be in "
-		"nondecreasing order.", (ftnlen)79);
-	errdp_("#", first, (ftnlen)1);
-	errdp_("#", last, (ftnlen)1);
-	sigerr_("SPICE(BADDESCRTIMES)", (ftnlen)20);
-	chkout_("SPKW19", (ftnlen)6);
+	setmsg_(__global_state, "Segment start time is #; stop time is #; bo"
+		"unds must be in nondecreasing order.", (ftnlen)79);
+	errdp_(__global_state, "#", first, (ftnlen)1);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADDESCRTIMES)", (ftnlen)20);
+	chkout_(__global_state, "SPKW19", (ftnlen)6);
 	return 0;
     }
 
 /*     Get the NAIF integer code for the reference frame. */
 
-    namfrm_(frame, &refcod, frame_len);
+    namfrm_(__global_state, frame, &refcod, frame_len);
     if (refcod == 0) {
-	setmsg_("The reference frame # is not supported.", (ftnlen)39);
-	errch_("#", frame, (ftnlen)1, frame_len);
-	sigerr_("SPICE(INVALIDREFFRAME)", (ftnlen)22);
-	chkout_("SPKW19", (ftnlen)6);
+	setmsg_(__global_state, "The reference frame # is not supported.", (
+		ftnlen)39);
+	errch_(__global_state, "#", frame, (ftnlen)1, frame_len);
+	sigerr_(__global_state, "SPICE(INVALIDREFFRAME)", (ftnlen)22);
+	chkout_(__global_state, "SPKW19", (ftnlen)6);
 	return 0;
     }
 
 /*     Check to see if the segment identifier is too long. */
 
-    if (lastnb_(segid, segid_len) > 40) {
-	setmsg_("Segment identifier contains more than 40 characters.", (
-		ftnlen)52);
-	sigerr_("SPICE(SEGIDTOOLONG)", (ftnlen)19);
-	chkout_("SPKW19", (ftnlen)6);
+    if (lastnb_(__global_state, segid, segid_len) > 40) {
+	setmsg_(__global_state, "Segment identifier contains more than 40 ch"
+		"aracters.", (ftnlen)52);
+	sigerr_(__global_state, "SPICE(SEGIDTOOLONG)", (ftnlen)19);
+	chkout_(__global_state, "SPKW19", (ftnlen)6);
 	return 0;
     }
 
 /*     Now check that all the characters in the segment identifier */
 /*     can be printed. */
 
-    i__1 = lastnb_(segid, segid_len);
+    i__1 = lastnb_(__global_state, segid, segid_len);
     for (i__ = 1; i__ <= i__1; ++i__) {
 	chrcod = *(unsigned char *)&segid[i__ - 1];
 	if (chrcod < 32 || chrcod > 126) {
-	    setmsg_("The segment identifier contains nonprintable characters",
-		     (ftnlen)55);
-	    sigerr_("SPICE(NONPRINTABLECHARS)", (ftnlen)24);
-	    chkout_("SPKW19", (ftnlen)6);
+	    setmsg_(__global_state, "The segment identifier contains nonprin"
+		    "table characters", (ftnlen)55);
+	    sigerr_(__global_state, "SPICE(NONPRINTABLECHARS)", (ftnlen)24);
+	    chkout_(__global_state, "SPKW19", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -722,11 +725,11 @@ static spkw19_state_t* get_spkw19_state() {
 /*     The mini-segment/interval count must be positive. */
 
     if (*nintvl < 1) {
-	setmsg_("Mini-segment/interval count was #; this count must be posit"
-		"ive.", (ftnlen)63);
-	errint_("#", nintvl, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("SPKW19", (ftnlen)6);
+	setmsg_(__global_state, "Mini-segment/interval count was #; this cou"
+		"nt must be positive.", (ftnlen)63);
+	errint_(__global_state, "#", nintvl, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "SPKW19", (ftnlen)6);
 	return 0;
     }
 
@@ -738,18 +741,18 @@ static spkw19_state_t* get_spkw19_state() {
     i__1 = *nintvl;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (ivlbds[i__ - 1] >= ivlbds[i__]) {
-	    setmsg_("Interval bounds at indices # and # are # and # respecti"
-		    "vely. The difference is #. The bounds are required to be"
-		    " strictly increasing.", (ftnlen)132);
-	    errint_("#", &i__, (ftnlen)1);
+	    setmsg_(__global_state, "Interval bounds at indices # and # are "
+		    "# and # respectively. The difference is #. The bounds ar"
+		    "e required to be strictly increasing.", (ftnlen)132);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
 	    i__2 = i__ + 1;
-	    errint_("#", &i__2, (ftnlen)1);
-	    errdp_("#", &ivlbds[i__ - 1], (ftnlen)1);
-	    errdp_("#", &ivlbds[i__], (ftnlen)1);
+	    errint_(__global_state, "#", &i__2, (ftnlen)1);
+	    errdp_(__global_state, "#", &ivlbds[i__ - 1], (ftnlen)1);
+	    errdp_(__global_state, "#", &ivlbds[i__], (ftnlen)1);
 	    d__1 = ivlbds[i__] - ivlbds[i__ - 1];
-	    errdp_("#", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
-	    chkout_("SPKW19", (ftnlen)6);
+	    errdp_(__global_state, "#", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDSOUTOFORDER)", (ftnlen)23);
+	    chkout_(__global_state, "SPKW19", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -758,17 +761,17 @@ static spkw19_state_t* get_spkw19_state() {
 /*     beyond the span of the interval bounds. */
 
     if (*first < ivlbds[0] || *last > ivlbds[*nintvl]) {
-	setmsg_("First interval start time is #; segment start time is #; se"
-		"gment stop time is #; last interval stop time is #. This seq"
-		"uence of times is required to be non-decreasing: segment cov"
-		"erage must be contained within the union of the interpolatio"
-		"n intervals.", (ftnlen)251);
-	errdp_("#", ivlbds, (ftnlen)1);
-	errdp_("#", first, (ftnlen)1);
-	errdp_("#", last, (ftnlen)1);
-	errdp_("#", &ivlbds[*nintvl], (ftnlen)1);
-	sigerr_("SPICE(COVERAGEGAP)", (ftnlen)18);
-	chkout_("SPKW19", (ftnlen)6);
+	setmsg_(__global_state, "First interval start time is #; segment sta"
+		"rt time is #; segment stop time is #; last interval stop tim"
+		"e is #. This sequence of times is required to be non-decreas"
+		"ing: segment coverage must be contained within the union of "
+		"the interpolation intervals.", (ftnlen)251);
+	errdp_(__global_state, "#", ivlbds, (ftnlen)1);
+	errdp_(__global_state, "#", first, (ftnlen)1);
+	errdp_(__global_state, "#", last, (ftnlen)1);
+	errdp_(__global_state, "#", &ivlbds[*nintvl], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(COVERAGEGAP)", (ftnlen)18);
+	chkout_(__global_state, "SPKW19", (ftnlen)6);
 	return 0;
     }
 
@@ -795,13 +798,13 @@ static spkw19_state_t* get_spkw19_state() {
 /*        Check the number of packets. */
 
 	if (npkts[i__ - 1] < 2) {
-	    setmsg_("At least 2 packets are required for SPK type 19. Number"
-		    " of packets supplied was # in mini-segment at index #.", (
-		    ftnlen)109);
-	    errint_("#", &npkts[i__ - 1], (ftnlen)1);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(TOOFEWPACKETS)", (ftnlen)20);
-	    chkout_("SPKW19", (ftnlen)6);
+	    setmsg_(__global_state, "At least 2 packets are required for SPK"
+		    " type 19. Number of packets supplied was # in mini-segme"
+		    "nt at index #.", (ftnlen)109);
+	    errint_(__global_state, "#", &npkts[i__ - 1], (ftnlen)1);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(TOOFEWPACKETS)", (ftnlen)20);
+	    chkout_(__global_state, "SPKW19", (ftnlen)6);
 	    return 0;
 	}
 
@@ -811,16 +814,17 @@ static spkw19_state_t* get_spkw19_state() {
 
 	subtyp = subtps[i__ - 1];
 	if (subtyp < 0 || subtyp > 2) {
-	    setmsg_("Unexpected SPK type 19 subtype # found in mini-segment "
-		    "#.", (ftnlen)57);
-	    errint_("#", &subtyp, (ftnlen)1);
-	    errint_("#", &i__, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDSUBTYPE)", (ftnlen)21);
-	    chkout_("SPKW19", (ftnlen)6);
+	    setmsg_(__global_state, "Unexpected SPK type 19 subtype # found "
+		    "in mini-segment #.", (ftnlen)57);
+	    errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDSUBTYPE)", (ftnlen)21);
+	    chkout_(__global_state, "SPKW19", (ftnlen)6);
 	    return 0;
 	}
 	pktsiz = __state->pktszs[(i__2 = subtyp) < 3 && 0 <= i__2 ? i__2 : 
-		s_rnge("pktszs", i__2, "spkw19_", (ftnlen)699)];
+		s_rnge(&__global_state->f2c, "pktszs", i__2, "spkw19_", (
+		ftnlen)699)];
 	if (subtyp == 0) {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
 	} else if (subtyp == 1) {
@@ -828,39 +832,41 @@ static spkw19_state_t* get_spkw19_state() {
 	} else if (subtyp == 2) {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
 	} else {
-	    setmsg_("Subtype = #; not expected.", (ftnlen)26);
-	    errint_("#", &subtyp, (ftnlen)1);
-	    sigerr_("SPICE(BUG1)", (ftnlen)11);
+	    setmsg_(__global_state, "Subtype = #; not expected.", (ftnlen)26);
+	    errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG1)", (ftnlen)11);
 	}
 
 /*        Make sure that the degree of the interpolating polynomials is */
 /*        in range. */
 
 	if (degres[i__ - 1] < 1 || degres[i__ - 1] > 27) {
-	    setmsg_("The interpolating polynomials of mini-segment # have de"
-		    "gree #; the valid degree range is [1, #]", (ftnlen)95);
-	    errint_("#", &i__, (ftnlen)1);
-	    errint_("#", &degres[i__ - 1], (ftnlen)1);
-	    errint_("#", &__state->c__27, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDDEGREE)", (ftnlen)20);
-	    chkout_("SPKW19", (ftnlen)6);
+	    setmsg_(__global_state, "The interpolating polynomials of mini-s"
+		    "egment # have degree #; the valid degree range is [1, #]",
+		     (ftnlen)95);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errint_(__global_state, "#", &degres[i__ - 1], (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c__27, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDDEGREE)", (ftnlen)20);
+	    chkout_(__global_state, "SPKW19", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Make sure that the window size is even. */
 
-	if (odd_(&winsiz)) {
-	    setmsg_("The interpolating polynomials of mini-segment # have wi"
-		    "ndow size # and degree # for SPK type 19. The mini-segme"
-		    "nt subtype is #. The degree must be equivalent to 3 mod "
-		    "4 for subtype 0 (Hermite interpolation) and be odd for s"
-		    "ubtype 1 (Lagrange interpolation).", (ftnlen)257);
-	    errint_("#", &i__, (ftnlen)1);
-	    errint_("#", &winsiz, (ftnlen)1);
-	    errint_("#", &degres[i__ - 1], (ftnlen)1);
-	    errint_("#", &subtps[i__ - 1], (ftnlen)1);
-	    sigerr_("SPICE(BADWINDOWSIZE)", (ftnlen)20);
-	    chkout_("SPKW19", (ftnlen)6);
+	if (odd_(__global_state, &winsiz)) {
+	    setmsg_(__global_state, "The interpolating polynomials of mini-s"
+		    "egment # have window size # and degree # for SPK type 19"
+		    ". The mini-segment subtype is #. The degree must be equi"
+		    "valent to 3 mod 4 for subtype 0 (Hermite interpolation) "
+		    "and be odd for subtype 1 (Lagrange interpolation).", (
+		    ftnlen)257);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errint_(__global_state, "#", &winsiz, (ftnlen)1);
+	    errint_(__global_state, "#", &degres[i__ - 1], (ftnlen)1);
+	    errint_(__global_state, "#", &subtps[i__ - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADWINDOWSIZE)", (ftnlen)20);
+	    chkout_(__global_state, "SPKW19", (ftnlen)6);
 	    return 0;
 	}
 
@@ -877,16 +883,17 @@ static spkw19_state_t* get_spkw19_state() {
 	for (j = 1; j <= i__2; ++j) {
 	    k = bepix + j - 1;
 	    if (epochs[k - 1] >= epochs[k]) {
-		setmsg_("In mini-segment #, epoch # having index # in array "
-			"EPOCHS and index # in the mini-segment is greater th"
-			"an or equal to its successor #.", (ftnlen)134);
-		errint_("#", &i__, (ftnlen)1);
-		errdp_("#", &epochs[k - 1], (ftnlen)1);
-		errint_("#", &k, (ftnlen)1);
-		errint_("#", &j, (ftnlen)1);
-		errdp_("#", &epochs[k], (ftnlen)1);
-		sigerr_("SPICE(TIMESOUTOFORDER)", (ftnlen)22);
-		chkout_("SPKW19", (ftnlen)6);
+		setmsg_(__global_state, "In mini-segment #, epoch # having i"
+			"ndex # in array EPOCHS and index # in the mini-segme"
+			"nt is greater than or equal to its successor #.", (
+			ftnlen)134);
+		errint_(__global_state, "#", &i__, (ftnlen)1);
+		errdp_(__global_state, "#", &epochs[k - 1], (ftnlen)1);
+		errint_(__global_state, "#", &k, (ftnlen)1);
+		errint_(__global_state, "#", &j, (ftnlen)1);
+		errdp_(__global_state, "#", &epochs[k], (ftnlen)1);
+		sigerr_(__global_state, "SPICE(TIMESOUTOFORDER)", (ftnlen)22);
+		chkout_(__global_state, "SPKW19", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -895,22 +902,22 @@ static spkw19_state_t* get_spkw19_state() {
 /*        mini-segment includes the Ith interpolation interval. */
 
 	if (epochs[bepix - 1] > ivlbds[i__ - 1]) {
-	    setmsg_("Interpolation interval # start time # precedes mini-seg"
-		    "ment's first epoch #.", (ftnlen)76);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &ivlbds[i__ - 1], (ftnlen)1);
-	    errdp_("#", &epochs[bepix - 1], (ftnlen)1);
-	    sigerr_("SPICE(BOUNDSDISAGREE)", (ftnlen)21);
-	    chkout_("SPKW19", (ftnlen)6);
+	    setmsg_(__global_state, "Interpolation interval # start time # p"
+		    "recedes mini-segment's first epoch #.", (ftnlen)76);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &ivlbds[i__ - 1], (ftnlen)1);
+	    errdp_(__global_state, "#", &epochs[bepix - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDSDISAGREE)", (ftnlen)21);
+	    chkout_(__global_state, "SPKW19", (ftnlen)6);
 	    return 0;
 	} else if (epochs[eepix - 1] < ivlbds[i__]) {
-	    setmsg_("Interpolation interval # end time # exceeds mini-segmen"
-		    "t's last epoch #.", (ftnlen)72);
-	    errint_("#", &i__, (ftnlen)1);
-	    errdp_("#", &ivlbds[i__], (ftnlen)1);
-	    errdp_("#", &epochs[eepix - 1], (ftnlen)1);
-	    sigerr_("SPICE(BOUNDSDISAGREE)", (ftnlen)21);
-	    chkout_("SPKW19", (ftnlen)6);
+	    setmsg_(__global_state, "Interpolation interval # end time # exc"
+		    "eeds mini-segment's last epoch #.", (ftnlen)72);
+	    errint_(__global_state, "#", &i__, (ftnlen)1);
+	    errdp_(__global_state, "#", &ivlbds[i__], (ftnlen)1);
+	    errdp_(__global_state, "#", &epochs[eepix - 1], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BOUNDSDISAGREE)", (ftnlen)21);
+	    chkout_(__global_state, "SPKW19", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -1007,13 +1014,13 @@ static spkw19_state_t* get_spkw19_state() {
     ic[3] = 19;
     dc[0] = *first;
     dc[1] = *last;
-    dafps_(&__state->c__2, &__state->c__6, dc, ic, descr);
+    dafps_(__global_state, &__state->c__2, &__state->c__6, dc, ic, descr);
 
 /*     Begin a new segment. */
 
-    dafbna_(handle, descr, segid, segid_len);
-    if (failed_()) {
-	chkout_("SPKW19", (ftnlen)6);
+    dafbna_(__global_state, handle, descr, segid, segid_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKW19", (ftnlen)6);
 	return 0;
     }
 
@@ -1034,7 +1041,8 @@ static spkw19_state_t* get_spkw19_state() {
 
 	subtyp = subtps[i__ - 1];
 	pktsiz = __state->pktszs[(i__2 = subtyp) < 3 && 0 <= i__2 ? i__2 : 
-		s_rnge("pktszs", i__2, "spkw19_", (ftnlen)952)];
+		s_rnge(&__global_state->f2c, "pktszs", i__2, "spkw19_", (
+		ftnlen)952)];
 	if (subtyp == 0) {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
 	} else if (subtyp == 1) {
@@ -1042,9 +1050,9 @@ static spkw19_state_t* get_spkw19_state() {
 	} else if (subtyp == 2) {
 	    winsiz = (degres[i__ - 1] + 1) / 2;
 	} else {
-	    setmsg_("Subtype = #; not expected.", (ftnlen)26);
-	    errint_("#", &subtyp, (ftnlen)1);
-	    sigerr_("SPICE(BUG2)", (ftnlen)11);
+	    setmsg_(__global_state, "Subtype = #; not expected.", (ftnlen)26);
+	    errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG2)", (ftnlen)11);
 	}
 
 /*        Now that we have the packet size, we can compute */
@@ -1060,13 +1068,13 @@ static spkw19_state_t* get_spkw19_state() {
 /*        current mini-segment to the file. Start with the */
 /*        packet data. */
 
-	dafada_(&packts[pktbeg - 1], &pktdsz);
+	dafada_(__global_state, &packts[pktbeg - 1], &pktdsz);
 
 /*        Write the epochs for this mini-segment. */
 
 	bepix = eepix + 1;
 	eepix = bepix - 1 + npkts[i__ - 1];
-	dafada_(&epochs[bepix - 1], &npkts[i__ - 1]);
+	dafada_(__global_state, &epochs[bepix - 1], &npkts[i__ - 1]);
 
 /*        Compute the number of epoch directories for the */
 /*        current mini-segment. */
@@ -1078,20 +1086,20 @@ static spkw19_state_t* get_spkw19_state() {
 	i__2 = ndir;
 	for (j = 1; j <= i__2; ++j) {
 	    k = bepix - 1 + j * 100;
-	    dafada_(&epochs[k - 1], &__state->c__1);
+	    dafada_(__global_state, &epochs[k - 1], &__state->c__1);
 	}
 
 /*        Write the mini-segment's subtype, window size, and packet */
 /*        count to the segment. */
 
 	d__1 = (doublereal) subtps[i__ - 1];
-	dafada_(&d__1, &__state->c__1);
+	dafada_(__global_state, &d__1, &__state->c__1);
 	d__1 = (doublereal) winsiz;
-	dafada_(&d__1, &__state->c__1);
+	dafada_(__global_state, &d__1, &__state->c__1);
 	d__1 = (doublereal) npkts[i__ - 1];
-	dafada_(&d__1, &__state->c__1);
-	if (failed_()) {
-	    chkout_("SPKW19", (ftnlen)6);
+	dafada_(__global_state, &d__1, &__state->c__1);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "SPKW19", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -1101,7 +1109,7 @@ static spkw19_state_t* get_spkw19_state() {
 /*     Next write the interpolation interval bounds. */
 
     i__1 = *nintvl + 1;
-    dafada_(ivlbds, &i__1);
+    dafada_(__global_state, ivlbds, &i__1);
 
 /*     Create and write directories for the interval */
 /*     bounds. */
@@ -1112,7 +1120,7 @@ static spkw19_state_t* get_spkw19_state() {
     ndir = *nintvl / 100;
     i__1 = ndir;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	dafada_(&ivlbds[i__ * 100 - 1], &__state->c__1);
+	dafada_(__global_state, &ivlbds[i__ * 100 - 1], &__state->c__1);
     }
 
 /*     Now we compute and write the start/stop pointers */
@@ -1130,7 +1138,8 @@ static spkw19_state_t* get_spkw19_state() {
 /*        Set the packet size, which is a function of the subtype. */
 
 	pktsiz = __state->pktszs[(i__2 = subtps[i__ - 1]) < 3 && 0 <= i__2 ? 
-		i__2 : s_rnge("pktszs", i__2, "spkw19_", (ftnlen)1065)];
+		i__2 : s_rnge(&__global_state->f2c, "pktszs", i__2, "spkw19_",
+		 (ftnlen)1065)];
 
 /*        In order to compute the end pointer of the current */
 /*        mini-segment, we must compute the size, in terms */
@@ -1157,14 +1166,14 @@ static spkw19_state_t* get_spkw19_state() {
 /*        by 1, will be written. */
 
 	d__1 = (doublereal) segbeg;
-	dafada_(&d__1, &__state->c__1);
+	dafada_(__global_state, &d__1, &__state->c__1);
     }
 
 /*     Write the last mini-segment end pointer, incremented by one. */
 /*     SEGEND was computed on the last iteration of the above loop. */
 
     d__1 = (doublereal) (segend + 1);
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
 
 /*     Write out the interval selection flag. The input */
 /*     boolean value is represented by a numeric constant. */
@@ -1175,17 +1184,17 @@ static spkw19_state_t* get_spkw19_state() {
 	isel = -1;
     }
     d__1 = (doublereal) isel;
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
 
 /*     Write the mini-segment/interpolation interval count. */
 
     d__1 = (doublereal) (*nintvl);
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
 
 /*     End the segment. */
 
-    dafena_();
-    chkout_("SPKW19", (ftnlen)6);
+    dafena_(__global_state);
+    chkout_(__global_state, "SPKW19", (ftnlen)6);
     return 0;
 } /* spkw19_ */
 

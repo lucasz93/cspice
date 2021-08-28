@@ -8,8 +8,7 @@
 
 
 extern putact_init_t __putact_init;
-static putact_state_t* get_putact_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline putact_state_t* get_putact_state(cspice_t* state) {
 	if (!state->putact)
 		state->putact = __cspice_allocate_module(sizeof(
 	putact_state_t), &__putact_init, sizeof(__putact_init));
@@ -18,14 +17,15 @@ static putact_state_t* get_putact_state() {
 }
 
 /* $Procedure      PUTACT ( Store Error Response Action ) */
-/* Subroutine */ int putact_0_(int n__, integer *action)
+/* Subroutine */ int putact_0_(cspice_t* __global_state, int n__, integer *
+	action)
 {
     /* Initialized data */
 
 
 
     /* Module state */
-    putact_state_t* __state = get_putact_state();
+    putact_state_t* __state = get_putact_state(__global_state);
 /* $ Abstract */
 
 /*     PUTACT is a low-level data structure access routine which */
@@ -357,12 +357,12 @@ L_getact:
     return 0;
 } /* putact_ */
 
-/* Subroutine */ int putact_(integer *action)
+/* Subroutine */ int putact_(cspice_t* __global_state, integer *action)
 {
     return putact_0_(0, action);
     }
 
-/* Subroutine */ int getact_(integer *action)
+/* Subroutine */ int getact_(cspice_t* __global_state, integer *action)
 {
     return putact_0_(1, action);
     }

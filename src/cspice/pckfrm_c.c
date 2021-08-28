@@ -294,7 +294,7 @@
    {
       return; 
    }
-   chkin_c ( "pckfrm_c" );
+   chkin_c ( naif_state, "pckfrm_c" );
 
 
    /*

@@ -8,8 +8,7 @@
 
 
 extern zzinpdt0_init_t __zzinpdt0_init;
-static zzinpdt0_state_t* get_zzinpdt0_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzinpdt0_state_t* get_zzinpdt0_state(cspice_t* state) {
 	if (!state->zzinpdt0)
 		state->zzinpdt0 = __cspice_allocate_module(sizeof(
 	zzinpdt0_state_t), &__zzinpdt0_init, sizeof(__zzinpdt0_init));
@@ -18,8 +17,9 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
 }
 
 /* $Procedure ZZINPDT0 ( DSK, in planetodetic element, w/o margin? ) */
-/* Subroutine */ int zzinpdt0_(doublereal *p, doublereal *lon, doublereal *
-	bounds, doublereal *corpar, integer *exclud, logical *inside)
+/* Subroutine */ int zzinpdt0_(cspice_t* __global_state, doublereal *p, 
+	doublereal *lon, doublereal *bounds, doublereal *corpar, integer *
+	exclud, logical *inside)
 {
     /* Initialized data */
 
@@ -32,21 +32,21 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
     doublereal emax;
     doublereal pmin;
     doublereal pmax;
-    extern /* Subroutine */ int zzellbds_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int zzellbds_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *);
-    extern /* Subroutine */ int zzpdcmpl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *);
+    extern /* Subroutine */ int zzpdcmpl_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, integer *);
     doublereal f;
-    extern /* Subroutine */ int zznrmlon_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zznrmlon_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal level;
-    extern doublereal twopi_(void);
-    extern logical failed_(void);
+    extern doublereal twopi_(cspice_t*);
+    extern logical failed_(cspice_t*);
     doublereal re;
     doublereal rp;
-    extern doublereal halfpi_(void);
+    extern doublereal halfpi_(cspice_t*);
     doublereal loclon;
     doublereal maxlat;
     doublereal maxalt;
@@ -56,12 +56,12 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
     doublereal minalt;
     integer maxrel;
     integer minrel;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzinpdt0_state_t* __state = get_zzinpdt0_state();
+    zzinpdt0_state_t* __state = get_zzinpdt0_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -488,12 +488,12 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZINPDT0", (ftnlen)8);
+    chkin_(__global_state, "ZZINPDT0", (ftnlen)8);
     if (__state->first) {
-	__state->pi2 = twopi_();
+	__state->pi2 = twopi_(__global_state);
 	__state->first = FALSE_;
     }
 
@@ -520,22 +520,22 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
 /*        Compare the point's latitude to the segment's latitude bounds. */
 
 /* Computing MAX */
-	d__1 = bounds[2] - 1e-12, d__2 = -halfpi_();
+	d__1 = bounds[2] - 1e-12, d__2 = -halfpi_(__global_state);
 	minlat = max(d__1,d__2);
 /* Computing MIN */
-	d__1 = bounds[3] + 1e-12, d__2 = halfpi_();
+	d__1 = bounds[3] + 1e-12, d__2 = halfpi_(__global_state);
 	maxlat = min(d__1,d__2);
-	zzpdcmpl_(&re, &f, p, &minlat, &minrel);
-	zzpdcmpl_(&re, &f, p, &maxlat, &maxrel);
-	if (failed_()) {
-	    chkout_("ZZINPDT0", (ftnlen)8);
+	zzpdcmpl_(__global_state, &re, &f, p, &minlat, &minrel);
+	zzpdcmpl_(__global_state, &re, &f, p, &maxlat, &maxrel);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZINPDT0", (ftnlen)8);
 	    return 0;
 	}
 	if (minrel == -1 || maxrel == 1) {
 
 /*           The point's latitude is outside of the segment's range. */
 
-	    chkout_("ZZINPDT0", (ftnlen)8);
+	    chkout_(__global_state, "ZZINPDT0", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -550,7 +550,8 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
 
 /*        Put the local longitude bounds in order, if necessary. */
 
-	zznrmlon_(bounds, &bounds[1], &__state->c_b5, &minlon, &maxlon);
+	zznrmlon_(__global_state, bounds, &bounds[1], &__state->c_b5, &minlon,
+		 &maxlon);
 
 /*        Compare the point's longitude to the segment's longitude */
 /*        bounds. */
@@ -574,7 +575,7 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
 /*           The point's longitude, adjusted if necessary for */
 /*           comparison, is outside of the segment's range. */
 
-	    chkout_("ZZINPDT0", (ftnlen)8);
+	    chkout_(__global_state, "ZZINPDT0", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -592,7 +593,8 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
 /*           This is the oblate case. Get the semi-axis lengths */
 /*           for the inner and outer bounding spheroids. */
 
-	    zzellbds_(&re, &rp, &maxalt, &minalt, &emax, &pmax, &emin, &pmin);
+	    zzellbds_(__global_state, &re, &rp, &maxalt, &minalt, &emax, &
+		    pmax, &emin, &pmin);
 	} else {
 
 /*           This is the prolate case. RP is the longer axis. Get the */
@@ -602,7 +604,8 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
 /*           In this call, we'll store the radii associated with */
 /*           the longer axis in PMAX and PMIN. */
 
-	    zzellbds_(&rp, &re, &maxalt, &minalt, &pmax, &emax, &pmin, &emin);
+	    zzellbds_(__global_state, &rp, &re, &maxalt, &minalt, &pmax, &
+		    emax, &pmin, &emin);
 	}
 
 /*        Compute the input point's level surface parameters */
@@ -622,7 +625,7 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
 
 /*           The point is outside of the outer bounding ellipsoid. */
 
-	    chkout_("ZZINPDT0", (ftnlen)8);
+	    chkout_(__global_state, "ZZINPDT0", (ftnlen)8);
 	    return 0;
 	}
 /* Computing 2nd power */
@@ -637,7 +640,7 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
 /*           The point is inside the inner bounding ellipsoid, which */
 /*           implies it is outside of the segment's boundaries. */
 
-	    chkout_("ZZINPDT0", (ftnlen)8);
+	    chkout_(__global_state, "ZZINPDT0", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -646,7 +649,7 @@ static zzinpdt0_state_t* get_zzinpdt0_state() {
 /*     the segment. Being on the boundary counts as inside. */
 
     *inside = TRUE_;
-    chkout_("ZZINPDT0", (ftnlen)8);
+    chkout_(__global_state, "ZZINPDT0", (ftnlen)8);
     return 0;
 } /* zzinpdt0_ */
 

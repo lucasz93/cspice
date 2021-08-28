@@ -305,7 +305,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekcii_c" );
+   chkin_c ( naif_state, "ekcii_c" );
 
    /*
    Make sure the output column has at least enough room for one output

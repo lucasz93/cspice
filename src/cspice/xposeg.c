@@ -8,14 +8,13 @@
 
 
 typedef int xposeg_state_t;
-static xposeg_state_t* get_xposeg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline xposeg_state_t* get_xposeg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      XPOSEG ( Transpose a matrix, general ) */
-/* Subroutine */ int xposeg_(doublereal *matrix, integer *nrow, integer *ncol,
-	 doublereal *xposem)
+/* Subroutine */ int xposeg_(cspice_t* __global_state, doublereal *matrix, 
+	integer *nrow, integer *ncol, doublereal *xposem)
 {
     integer dest;
     doublereal temp;
@@ -30,7 +29,7 @@ static xposeg_state_t* get_xposeg_state() {
 
 
     /* Module state */
-    xposeg_state_t* __state = get_xposeg_state();
+    xposeg_state_t* __state = get_xposeg_state(__global_state);
 /* $ Abstract */
 
 /*     Transpose a matrix of arbitrary size (the matrix */

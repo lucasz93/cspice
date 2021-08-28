@@ -136,7 +136,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "pckuof_c" );
+   chkin_c ( naif_state, "pckuof_c" );
 
    /*
    Call the f2c'd Fortran routine.

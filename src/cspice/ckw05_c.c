@@ -653,7 +653,7 @@
    {
       return;
    }
-   chkin_c ( "ckw05_c" );
+   chkin_c ( naif_state, "ckw05_c" );
 
  
    /*

@@ -8,13 +8,13 @@
 
 
 typedef int removi_state_t;
-static removi_state_t* get_removi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline removi_state_t* get_removi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      REMOVI ( Remove an item from an integer set ) */
-/* Subroutine */ int removi_(integer *item, integer *a)
+/* Subroutine */ int removi_(cspice_t* __global_state, integer *item, integer 
+	*a)
 {
     /* System generated locals */
     integer i__1;
@@ -22,18 +22,18 @@ static removi_state_t* get_removi_state() {
     /* Local variables */
     integer card;
     integer i__;
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     logical in;
-    extern /* Subroutine */ int scardi_(integer *, integer *);
-    extern integer bsrchi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
+    extern integer bsrchi_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer loc;
 
 
     /* Module state */
-    removi_state_t* __state = get_removi_state();
+    removi_state_t* __state = get_removi_state(__global_state);
 /* $ Abstract */
 
 /*      Remove an item from an integer set. */
@@ -181,19 +181,19 @@ static removi_state_t* get_removi_state() {
 
 /*     Standard error handling: */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("REMOVI", (ftnlen)6);
+	chkin_(__global_state, "REMOVI", (ftnlen)6);
     }
 
 /*     What is the cardinality of the set? */
 
-    card = cardi_(a);
+    card = cardi_(__global_state, a);
 
 /*     Determine the location (if any) of the item within the set. */
 
-    loc = bsrchi_(item, &card, &a[6]);
+    loc = bsrchi_(__global_state, item, &card, &a[6]);
 
 /*     Is the item in the set? If so, it needs to be removed. */
 
@@ -209,9 +209,9 @@ static removi_state_t* get_removi_state() {
 	    a[i__ + 5] = a[i__ + 6];
 	}
 	i__1 = card - 1;
-	scardi_(&i__1, a);
+	scardi_(__global_state, &i__1, a);
     }
-    chkout_("REMOVI", (ftnlen)6);
+    chkout_(__global_state, "REMOVI", (ftnlen)6);
     return 0;
 } /* removi_ */
 

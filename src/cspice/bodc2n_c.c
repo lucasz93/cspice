@@ -274,7 +274,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "bodc2n_c");
+   chkin_c ( naif_state, "bodc2n_c");
 
 
    /*

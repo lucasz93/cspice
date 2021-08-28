@@ -8,8 +8,7 @@
 
 
 extern sctran_init_t __sctran_init;
-static sctran_state_t* get_sctran_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sctran_state_t* get_sctran_state(cspice_t* state) {
 	if (!state->sctran)
 		state->sctran = __cspice_allocate_module(sizeof(
 	sctran_state_t), &__sctran_init, sizeof(__sctran_init));
@@ -18,33 +17,37 @@ static sctran_state_t* get_sctran_state() {
 }
 
 /* $Procedure  SCTRAN  ( SCLK name/ID code translation ) */
-/* Subroutine */ int sctran_0_(int n__, char *clknam, integer *clkid, logical 
-	*found, ftnlen clknam_len)
+/* Subroutine */ int sctran_0_(cspice_t* __global_state, int n__, char *
+	clknam, integer *clkid, logical *found, ftnlen clknam_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern integer posr_(char *, char *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int bodn2c_(char *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int bodc2n_(integer *, char *, logical *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    char tmpnam[32];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int suffix_(char *, integer *, char *, ftnlen, 
+    extern integer posr_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen)
+	    ;
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern logical return_(void);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int bodn2c_(cspice_t*, char *, integer *, logical 
+	    *, ftnlen);
+    extern /* Subroutine */ int bodc2n_(cspice_t*, integer *, char *, logical 
+	    *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    char tmpnam[32];
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int suffix_(cspice_t*, char *, integer *, char *, 
+	    ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
     integer loc;
 
 
     /* Module state */
-    sctran_state_t* __state = get_sctran_state();
+    sctran_state_t* __state = get_sctran_state(__global_state);
 /* $ Abstract */
 
 /*     Convert between SCLK name strings and ID codes. */
@@ -193,13 +196,13 @@ static sctran_state_t* get_sctran_state() {
 	case 2: goto L_scid2n;
 	}
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCTRAN", (ftnlen)6);
+	chkin_(__global_state, "SCTRAN", (ftnlen)6);
     }
-    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-    chkout_("SCTRAN", (ftnlen)6);
+    sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+    chkout_(__global_state, "SCTRAN", (ftnlen)6);
     return 0;
 /* $Procedure  SCN2ID  ( SCLK name to ID code ) */
 
@@ -366,17 +369,18 @@ L_scn2id:
 
 /*     Convert name to upper case. */
 
-    ucase_(clknam, tmpnam, clknam_len, (ftnlen)32);
+    ucase_(__global_state, clknam, tmpnam, clknam_len, (ftnlen)32);
 
 /*     Remove the final occurrence of the  string 'SCLK' from */
 /*     the input name. */
 
-    i__1 = rtrim_(tmpnam, (ftnlen)32);
-    loc = posr_(tmpnam, "SCLK", &i__1, (ftnlen)32, (ftnlen)4);
+    i__1 = rtrim_(__global_state, tmpnam, (ftnlen)32);
+    loc = posr_(__global_state, tmpnam, "SCLK", &i__1, (ftnlen)32, (ftnlen)4);
     if (loc > 0) {
-	s_copy(tmpnam + (loc - 1), " ", (ftnlen)4, (ftnlen)1);
+	s_copy(&__global_state->f2c, tmpnam + (loc - 1), " ", (ftnlen)4, (
+		ftnlen)1);
     }
-    bodn2c_(tmpnam, clkid, found, (ftnlen)32);
+    bodn2c_(__global_state, tmpnam, clkid, found, (ftnlen)32);
     return 0;
 /* $Procedure  SCID2N  ( SCLK ID code to name ) */
 
@@ -523,28 +527,29 @@ L_scid2n:
 /*     convert an SCLK name to an SCLK ID code */
 
 /* -& */
-    bodc2n_(clkid, clknam, found, clknam_len);
+    bodc2n_(__global_state, clkid, clknam, found, clknam_len);
     if (! (*found)) {
 	return 0;
     }
-    suffix_("SCLK", &__state->c__1, clknam, (ftnlen)4, clknam_len);
+    suffix_(__global_state, "SCLK", &__state->c__1, clknam, (ftnlen)4, 
+	    clknam_len);
     return 0;
 } /* sctran_ */
 
-/* Subroutine */ int sctran_(char *clknam, integer *clkid, logical *found, 
-	ftnlen clknam_len)
+/* Subroutine */ int sctran_(cspice_t* __global_state, char *clknam, integer *
+	clkid, logical *found, ftnlen clknam_len)
 {
     return sctran_0_(0, clknam, clkid, found, clknam_len);
     }
 
-/* Subroutine */ int scn2id_(char *clknam, integer *clkid, logical *found, 
-	ftnlen clknam_len)
+/* Subroutine */ int scn2id_(cspice_t* __global_state, char *clknam, integer *
+	clkid, logical *found, ftnlen clknam_len)
 {
     return sctran_0_(1, clknam, clkid, found, clknam_len);
     }
 
-/* Subroutine */ int scid2n_(integer *clkid, char *clknam, logical *found, 
-	ftnlen clknam_len)
+/* Subroutine */ int scid2n_(cspice_t* __global_state, integer *clkid, char *
+	clknam, logical *found, ftnlen clknam_len)
 {
     return sctran_0_(2, clknam, clkid, found, clknam_len);
     }

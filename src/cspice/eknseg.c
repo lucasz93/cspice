@@ -8,8 +8,7 @@
 
 
 extern eknseg_init_t __eknseg_init;
-static eknseg_state_t* get_eknseg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline eknseg_state_t* get_eknseg_state(cspice_t* state) {
 	if (!state->eknseg)
 		state->eknseg = __cspice_allocate_module(sizeof(
 	eknseg_state_t), &__eknseg_init, sizeof(__eknseg_init));
@@ -18,7 +17,7 @@ static eknseg_state_t* get_eknseg_state() {
 }
 
 /* $Procedure      EKNSEG ( EK, number of segments in file ) */
-integer eknseg_(integer *handle)
+integer eknseg_(cspice_t* __global_state, integer *handle)
 {
     /* System generated locals */
     integer ret_val, i__1, i__2;
@@ -26,19 +25,20 @@ integer eknseg_(integer *handle)
     /* Local variables */
     integer base;
     integer tree;
-    extern /* Subroutine */ int zzekpgch_(integer *, char *, ftnlen);
-    extern integer zzektrbs_(integer *);
-    extern integer zzektrsz_(integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzekpgch_(cspice_t*, integer *, char *, 
+	    ftnlen);
+    extern integer zzektrbs_(cspice_t*, integer *);
+    extern integer zzektrsz_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    eknseg_state_t* __state = get_eknseg_state();
+    eknseg_state_t* __state = get_eknseg_state(__global_state);
 /* $ Abstract */
 
 /*     Return the number of segments in a specified EK. */
@@ -219,34 +219,34 @@ integer eknseg_(integer *handle)
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return ret_val;
     } else {
-	chkin_("EKNSEG", (ftnlen)6);
+	chkin_(__global_state, "EKNSEG", (ftnlen)6);
     }
 
 /*     Make sure this is a paged DAS EK. */
 
-    zzekpgch_(handle, "READ", (ftnlen)4);
-    if (failed_()) {
-	chkout_("EKNSEG", (ftnlen)6);
+    zzekpgch_(__global_state, handle, "READ", (ftnlen)4);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKNSEG", (ftnlen)6);
 	return ret_val;
     }
 
 /*     Obtain the base address of the first integer page. */
 
-    base = zzektrbs_(&__state->c__1);
+    base = zzektrbs_(__global_state, &__state->c__1);
 
 /*     Look up the head node of the segment tree. */
 
     i__1 = base + 1;
     i__2 = base + 1;
-    dasrdi_(handle, &i__1, &i__2, &tree);
+    dasrdi_(__global_state, handle, &i__1, &i__2, &tree);
 
 /*     Get the entry count for the segment tree. */
 
-    ret_val = zzektrsz_(handle, &tree);
-    chkout_("EKNSEG", (ftnlen)6);
+    ret_val = zzektrsz_(__global_state, handle, &tree);
+    chkout_(__global_state, "EKNSEG", (ftnlen)6);
     return ret_val;
 } /* eknseg_ */
 

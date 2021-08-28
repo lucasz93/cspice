@@ -8,8 +8,7 @@
 
 
 extern tparse_init_t __tparse_init;
-static tparse_state_t* get_tparse_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline tparse_state_t* get_tparse_state(cspice_t* state) {
 	if (!state->tparse)
 		state->tparse = __cspice_allocate_module(sizeof(
 	tparse_state_t), &__tparse_init, sizeof(__tparse_init));
@@ -18,12 +17,13 @@ static tparse_state_t* get_tparse_state() {
 }
 
 /* $Procedure       TPARSE ( Parse a UTC time string ) */
-/* Subroutine */ int tparse_(char *string, doublereal *sp2000, char *error, 
-	ftnlen string_len, ftnlen error_len)
+/* Subroutine */ int tparse_(cspice_t* __global_state, char *string, 
+	doublereal *sp2000, char *error, ftnlen string_len, ftnlen error_len)
 {
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), i_dnnt(doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), i_dnnt(
+	    f2c_state_t*, doublereal *);
 
     /* Local variables */
     integer year;
@@ -32,31 +32,31 @@ static tparse_state_t* get_tparse_state() {
     integer temp;
     char type__[5];
     integer q;
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
     integer ntvec;
     integer month;
     logical ok;
-    extern /* Subroutine */ int tcheck_(doublereal *, char *, logical *, char 
-	    *, logical *, char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int rmaini_(integer *, integer *, integer *, 
-	    integer *);
+    extern /* Subroutine */ int tcheck_(cspice_t*, doublereal *, char *, 
+	    logical *, char *, logical *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int rmaini_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
     logical succes;
     logical yabbrv;
     char modify[8*5];
     logical adjust;
     char pictur[80];
-    extern /* Subroutine */ int tpartv_(char *, doublereal *, integer *, char 
-	    *, char *, logical *, logical *, logical *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int texpyr_(integer *);
-    extern doublereal j2000_(void);
+    extern /* Subroutine */ int tpartv_(cspice_t*, char *, doublereal *, 
+	    integer *, char *, char *, logical *, logical *, logical *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int texpyr_(cspice_t*, integer *);
+    extern doublereal j2000_(cspice_t*);
     integer day;
-    extern doublereal spd_(void);
+    extern doublereal spd_(cspice_t*);
 
 
     /* Module state */
-    tparse_state_t* __state = get_tparse_state();
+    tparse_state_t* __state = get_tparse_state(__global_state);
 /* $ Abstract */
 
 /*      Parse a time string and return seconds past the J2000 epoch */
@@ -493,11 +493,11 @@ static tparse_state_t* get_tparse_state() {
 /*     All the work of taking apart the string is handled */
 /*     by TPARTV. */
 
-    s_copy(error, " ", error_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, error, " ", error_len, (ftnlen)1);
     succes = TRUE_;
-    tpartv_(string, tvec, &ntvec, type__, modify, &mods, &yabbrv, &succes, 
-	    pictur, error, string_len, (ftnlen)5, (ftnlen)8, (ftnlen)80, 
-	    error_len);
+    tpartv_(__global_state, string, tvec, &ntvec, type__, modify, &mods, &
+	    yabbrv, &succes, pictur, error, string_len, (ftnlen)5, (ftnlen)8, 
+	    (ftnlen)80, error_len);
     if (! succes) {
 	return 0;
     }
@@ -506,35 +506,41 @@ static tparse_state_t* get_tparse_state() {
 /*     time string modifiers that can be parsed. */
 
     if (mods) {
-	if (s_cmp(modify + 32, " ", (ftnlen)8, (ftnlen)1) != 0) {
-	    s_copy(error, "TPARSE does not support the specification of a ti"
-		    "me system in a string.  The time system # was specified. "
-		    , error_len, (ftnlen)106);
-	    repmc_(error, "#", modify + 32, error, error_len, (ftnlen)1, (
-		    ftnlen)8, error_len);
+	if (s_cmp(&__global_state->f2c, modify + 32, " ", (ftnlen)8, (ftnlen)
+		1) != 0) {
+	    s_copy(&__global_state->f2c, error, "TPARSE does not support the"
+		    " specification of a time system in a string.  The time s"
+		    "ystem # was specified. ", error_len, (ftnlen)106);
+	    repmc_(__global_state, error, "#", modify + 32, error, error_len, 
+		    (ftnlen)1, (ftnlen)8, error_len);
 	    return 0;
-	} else if (s_cmp(modify + 16, " ", (ftnlen)8, (ftnlen)1) != 0) {
-	    s_copy(error, "TPARSE does not support the specification of a ti"
-		    "me zone in a time string.  The time zone '#' was specifi"
-		    "ed. ", error_len, (ftnlen)109);
-	    repmc_(error, "#", modify + 16, error, error_len, (ftnlen)1, (
-		    ftnlen)8, error_len);
+	} else if (s_cmp(&__global_state->f2c, modify + 16, " ", (ftnlen)8, (
+		ftnlen)1) != 0) {
+	    s_copy(&__global_state->f2c, error, "TPARSE does not support the"
+		    " specification of a time zone in a time string.  The tim"
+		    "e zone '#' was specified. ", error_len, (ftnlen)109);
+	    repmc_(__global_state, error, "#", modify + 16, error, error_len, 
+		    (ftnlen)1, (ftnlen)8, error_len);
 	    return 0;
-	} else if (s_cmp(modify + 24, " ", (ftnlen)8, (ftnlen)1) != 0) {
-	    s_copy(error, "TPARSE does not support the AM/PM conventions for"
-		    " time strings. ", error_len, (ftnlen)64);
+	} else if (s_cmp(&__global_state->f2c, modify + 24, " ", (ftnlen)8, (
+		ftnlen)1) != 0) {
+	    s_copy(&__global_state->f2c, error, "TPARSE does not support the"
+		    " AM/PM conventions for time strings. ", error_len, (
+		    ftnlen)64);
 	    return 0;
 	}
     }
-    if (s_cmp(type__, "JD", (ftnlen)5, (ftnlen)2) == 0) {
+    if (s_cmp(&__global_state->f2c, type__, "JD", (ftnlen)5, (ftnlen)2) == 0) 
+	    {
 
 /*        Nothing to do but convert TVEC(1). */
 
-	*sp2000 = (tvec[0] - j2000_()) * spd_();
-    } else if (s_cmp(type__, "YMD", (ftnlen)5, (ftnlen)3) == 0 || s_cmp(
-	    type__, "YD", (ftnlen)5, (ftnlen)2) == 0) {
-	tcheck_(tvec, type__, &mods, modify, &ok, error, (ftnlen)5, (ftnlen)8,
-		 error_len);
+	*sp2000 = (tvec[0] - j2000_(__global_state)) * spd_(__global_state);
+    } else if (s_cmp(&__global_state->f2c, type__, "YMD", (ftnlen)5, (ftnlen)
+	    3) == 0 || s_cmp(&__global_state->f2c, type__, "YD", (ftnlen)5, (
+	    ftnlen)2) == 0) {
+	tcheck_(__global_state, tvec, type__, &mods, modify, &ok, error, (
+		ftnlen)5, (ftnlen)8, error_len);
 	if (! ok) {
 	    return 0;
 	}
@@ -542,7 +548,8 @@ static tparse_state_t* get_tparse_state() {
 /*        If we have day of year format, we move it into the */
 /*        month-day of month format. */
 
-	if (s_cmp(type__, "YD", (ftnlen)5, (ftnlen)2) == 0) {
+	if (s_cmp(&__global_state->f2c, type__, "YD", (ftnlen)5, (ftnlen)2) ==
+		 0) {
 	    tvec[5] = tvec[4];
 	    tvec[4] = tvec[3];
 	    tvec[3] = tvec[2];
@@ -552,20 +559,22 @@ static tparse_state_t* get_tparse_state() {
 
 /*        Get the year month and day as integers. */
 
-	year = i_dnnt(tvec);
-	month = i_dnnt(&tvec[1]);
-	day = i_dnnt(&tvec[2]);
+	year = i_dnnt(&__global_state->f2c, tvec);
+	month = i_dnnt(&__global_state->f2c, &tvec[1]);
+	day = i_dnnt(&__global_state->f2c, &tvec[2]);
 
 /*        Fix up the year as needed. */
 
-	if (s_cmp(modify, "B.C.", (ftnlen)8, (ftnlen)4) == 0) {
+	if (s_cmp(&__global_state->f2c, modify, "B.C.", (ftnlen)8, (ftnlen)4) 
+		== 0) {
 	    year = 1 - year;
-	} else if (s_cmp(modify, "A.D.", (ftnlen)8, (ftnlen)4) == 0) {
+	} else if (s_cmp(&__global_state->f2c, modify, "A.D.", (ftnlen)8, (
+		ftnlen)4) == 0) {
 
 /*           Do nothing. */
 
 	} else if (year < 100) {
-	    texpyr_(&year);
+	    texpyr_(__global_state, &year);
 	}
 
 /*        Apply the Muller-Wimberly formula and then tack on */
@@ -580,7 +589,7 @@ static tparse_state_t* get_tparse_state() {
 
 	    adjust = TRUE_;
 	    temp = year;
-	    rmaini_(&temp, &__state->c__400, &q, &year);
+	    rmaini_(__global_state, &temp, &__state->c__400, &q, &year);
 	    year += 400;
 	    --q;
 	} else {
@@ -595,19 +604,20 @@ static tparse_state_t* get_tparse_state() {
 
 	    day += q * 146097;
 	}
-	*sp2000 = ((doublereal) day - .5) * spd_() + tvec[3] * 3600. + tvec[4]
-		 * 60. + tvec[5];
+	*sp2000 = ((doublereal) day - .5) * spd_(__global_state) + tvec[3] * 
+		3600. + tvec[4] * 60. + tvec[5];
     } else {
 
 /*        We've already covered all the bases we are planning to */
 /*        cover in this routine.  Any other case is regarded as an */
 /*        error. */
 
-	s_copy(error, "The only type of time strings that are handled by TPA"
-		"RSE are 'JD', 'YMD' and 'YD' (year day-of-year).  You've ent"
-		"ered a string of the type #. ", error_len, (ftnlen)142);
-	repmc_(error, "#", type__, error, error_len, (ftnlen)1, (ftnlen)5, 
-		error_len);
+	s_copy(&__global_state->f2c, error, "The only type of time strings t"
+		"hat are handled by TPARSE are 'JD', 'YMD' and 'YD' (year day"
+		"-of-year).  You've entered a string of the type #. ", 
+		error_len, (ftnlen)142);
+	repmc_(__global_state, error, "#", type__, error, error_len, (ftnlen)
+		1, (ftnlen)5, error_len);
     }
     return 0;
 } /* tparse_ */

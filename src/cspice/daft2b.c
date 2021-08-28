@@ -8,8 +8,7 @@
 
 
 extern daft2b_init_t __daft2b_init;
-static daft2b_state_t* get_daft2b_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline daft2b_state_t* get_daft2b_state(cspice_t* state) {
 	if (!state->daft2b)
 		state->daft2b = __cspice_allocate_module(sizeof(
 	daft2b_state_t), &__daft2b_init, sizeof(__daft2b_init));
@@ -18,56 +17,58 @@ static daft2b_state_t* get_daft2b_state() {
 }
 
 /* $Procedure DAFT2B ( DAF, text to binary ) */
-/* Subroutine */ int daft2b_(integer *text, char *binary, integer *resv, 
-	ftnlen binary_len)
+/* Subroutine */ int daft2b_(cspice_t* __global_state, integer *text, char *
+	binary, integer *resv, ftnlen binary_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_rsle(void), s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *
-	    , integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rsle(f2c_state_t*, cilist *), do_lio(f2c_state_t*, integer *, 
+	    integer *, char *, ftnlen), e_rsle(f2c_state_t*), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(f2c_state_t*
+	    , char *, integer, char *, integer);
 
     /* Local variables */
     char name__[1000*2];
     integer more;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
     char tarch[8];
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer chunk;
     integer isize;
     integer lsize;
     char ttype[8];
-    extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
+    extern /* Subroutine */ int idw2at_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
     doublereal dc[125];
-    extern /* Subroutine */ int dafbna_(integer *, doublereal *, char *, 
-	    ftnlen);
+    extern /* Subroutine */ int dafbna_(cspice_t*, integer *, doublereal *, 
+	    char *, ftnlen);
     integer ic[250];
-    extern /* Subroutine */ int dafena_(void);
+    extern /* Subroutine */ int dafena_(cspice_t*);
     integer nd;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer ni;
     integer handle;
-    extern /* Subroutine */ int dafcls_(integer *);
+    extern /* Subroutine */ int dafcls_(cspice_t*, integer *);
     char ifname[60*2];
-    extern /* Subroutine */ int dafopn_(char *, integer *, integer *, char *, 
-	    integer *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int dafopn_(cspice_t*, char *, integer *, integer 
+	    *, char *, integer *, integer *, ftnlen, ftnlen);
     doublereal buffer[1024];
     char idword[8];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal sum[125];
 
     /* Fortran I/O blocks */
@@ -75,7 +76,7 @@ static daft2b_state_t* get_daft2b_state() {
 
 
     /* Module state */
-    daft2b_state_t* __state = get_daft2b_state();
+    daft2b_state_t* __state = get_daft2b_state(__global_state);
 /* $ Abstract */
 
 /*     Deprecated. The routine DAFTB supersedes this routine. */
@@ -382,36 +383,37 @@ static daft2b_state_t* get_daft2b_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFT2B", (ftnlen)6);
+	chkin_(__global_state, "DAFT2B", (ftnlen)6);
     }
-    s_copy(idword, " ", (ftnlen)8, (ftnlen)1);
-    s_copy(tarch, " ", (ftnlen)8, (ftnlen)1);
-    s_copy(ttype, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, idword, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, tarch, " ", (ftnlen)8, (ftnlen)1);
+    s_copy(&__global_state->f2c, ttype, " ", (ftnlen)8, (ftnlen)1);
 
 /*     We should be positioned and ready to read the file ID word from */
 /*     the text file, so let's try it. */
 
     __state->io___5.ciunit = *text;
-    iostat = s_rsle(&__state->io___5);
+    iostat = s_rsle(&__global_state->f2c, &__state->io___5);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_lio(&__state->c__9, &__state->c__1, idword, (ftnlen)8);
+    iostat = do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+	    idword, (ftnlen)8);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rsle();
+    iostat = e_rsle(&__global_state->f2c);
 L100001:
     if (iostat != 0) {
-	setmsg_("The attempt to read from file '#' failed. IOSTAT = #.", (
-		ftnlen)53);
-	errfnm_("#", text, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-	chkout_("DAFT2B", (ftnlen)6);
+	setmsg_(__global_state, "The attempt to read from file '#' failed. I"
+		"OSTAT = #.", (ftnlen)53);
+	errfnm_(__global_state, "#", text, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+	chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	return 0;
     }
 
@@ -419,50 +421,55 @@ L100001:
 /*     the architecture is 'DAF'. If it is not, this is the wrong */
 /*     routine, and an error will be signalled. */
 
-    idw2at_(idword, tarch, ttype, (ftnlen)8, (ftnlen)8, (ftnlen)8);
-    if (s_cmp(tarch, "DAF", (ftnlen)8, (ftnlen)3) != 0) {
-	setmsg_("File architecture is not 'DAF' for file '#'", (ftnlen)43);
-	errfnm_("#", text, (ftnlen)1);
-	sigerr_("SPICE(NOTADAFFILE)", (ftnlen)18);
-	chkout_("DAFT2B", (ftnlen)6);
+    idw2at_(__global_state, idword, tarch, ttype, (ftnlen)8, (ftnlen)8, (
+	    ftnlen)8);
+    if (s_cmp(&__global_state->f2c, tarch, "DAF", (ftnlen)8, (ftnlen)3) != 0) 
+	    {
+	setmsg_(__global_state, "File architecture is not 'DAF' for file '#'",
+		 (ftnlen)43);
+	errfnm_(__global_state, "#", text, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTADAFFILE)", (ftnlen)18);
+	chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	return 0;
     }
     __state->io___6.ciunit = *text;
-    iostat = s_rsle(&__state->io___6);
+    iostat = s_rsle(&__global_state->f2c, &__state->io___6);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&nd, (ftnlen)
-	    sizeof(integer));
+    iostat = do_lio(&__global_state->f2c, &__state->c__3, &__state->c__1, (
+	    char *)&nd, (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&ni, (ftnlen)
-	    sizeof(integer));
+    iostat = do_lio(&__global_state->f2c, &__state->c__3, &__state->c__1, (
+	    char *)&ni, (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_lio(&__state->c__9, &__state->c__1, ifname, (ftnlen)60);
+    iostat = do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+	    ifname, (ftnlen)60);
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = e_rsle();
+    iostat = e_rsle(&__global_state->f2c);
 L100002:
     if (iostat != 0) {
-	setmsg_("The attempt to read from file '#' failed. IOSTAT = #.", (
-		ftnlen)53);
-	errfnm_("#", text, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-	chkout_("DAFT2B", (ftnlen)6);
+	setmsg_(__global_state, "The attempt to read from file '#' failed. I"
+		"OSTAT = #.", (ftnlen)53);
+	errfnm_(__global_state, "#", text, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+	chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	return 0;
     }
 
 /*     Open the new binary file. */
 
-    dafopn_(binary, &nd, &ni, ifname, resv, &handle, binary_len, (ftnlen)60);
-    if (failed_()) {
-	chkout_("DAFT2B", (ftnlen)6);
+    dafopn_(__global_state, binary, &nd, &ni, ifname, resv, &handle, 
+	    binary_len, (ftnlen)60);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	return 0;
     }
 
@@ -480,250 +487,258 @@ L100002:
     lsize = nd + (ni - 1) / 2 + 1;
     isize = lsize << 3;
     __state->io___13.ciunit = *text;
-    iostat = s_rsle(&__state->io___13);
+    iostat = s_rsle(&__global_state->f2c, &__state->io___13);
     if (iostat != 0) {
 	goto L100003;
     }
-    iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&more, (ftnlen)
-	    sizeof(integer));
+    iostat = do_lio(&__global_state->f2c, &__state->c__3, &__state->c__1, (
+	    char *)&more, (ftnlen)sizeof(integer));
     if (iostat != 0) {
 	goto L100003;
     }
-    iostat = e_rsle();
+    iostat = e_rsle(&__global_state->f2c);
 L100003:
     if (iostat != 0) {
-	dafcls_(&handle);
-	setmsg_("The attempt to read from file '#' failed. IOSTAT = #.", (
-		ftnlen)53);
-	errfnm_("#", text, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-	chkout_("DAFT2B", (ftnlen)6);
+	dafcls_(__global_state, &handle);
+	setmsg_(__global_state, "The attempt to read from file '#' failed. I"
+		"OSTAT = #.", (ftnlen)53);
+	errfnm_(__global_state, "#", text, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+	chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	return 0;
     }
     while(more > 0) {
 	__state->io___15.ciunit = *text;
-	iostat = s_rsle(&__state->io___15);
+	iostat = s_rsle(&__global_state->f2c, &__state->io___15);
 	if (iostat != 0) {
 	    goto L100004;
 	}
-	iostat = do_lio(&__state->c__9, &__state->c__1, name__, isize);
+	iostat = do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+		name__, isize);
 	if (iostat != 0) {
 	    goto L100004;
 	}
-	iostat = e_rsle();
+	iostat = e_rsle(&__global_state->f2c);
 L100004:
 	if (iostat != 0) {
-	    dafcls_(&handle);
-	    setmsg_("The attempt to read from file '#' failed. IOSTAT = #.", (
-		    ftnlen)53);
-	    errfnm_("#", text, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-	    chkout_("DAFT2B", (ftnlen)6);
+	    dafcls_(__global_state, &handle);
+	    setmsg_(__global_state, "The attempt to read from file '#' faile"
+		    "d. IOSTAT = #.", (ftnlen)53);
+	    errfnm_(__global_state, "#", text, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+	    chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	    return 0;
 	}
 	__state->io___17.ciunit = *text;
-	iostat = s_rsle(&__state->io___17);
+	iostat = s_rsle(&__global_state->f2c, &__state->io___17);
 	if (iostat != 0) {
 	    goto L100005;
 	}
 	i__1 = nd;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    iostat = do_lio(&__state->c__5, &__state->c__1, (char *)&dc[(i__2 
-		    = i__ - 1) < 125 && 0 <= i__2 ? i__2 : s_rnge("dc", i__2, 
+	    iostat = do_lio(&__global_state->f2c, &__state->c__5, &
+		    __state->c__1, (char *)&dc[(i__2 = i__ - 1) < 125 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "dc", i__2, 
 		    "daft2b_", (ftnlen)465)], (ftnlen)sizeof(doublereal));
 	    if (iostat != 0) {
 		goto L100005;
 	    }
 	}
-	iostat = e_rsle();
+	iostat = e_rsle(&__global_state->f2c);
 L100005:
 	if (iostat != 0) {
-	    dafcls_(&handle);
-	    setmsg_("The attempt to read from file '#' failed. IOSTAT = #.", (
-		    ftnlen)53);
-	    errfnm_("#", text, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-	    chkout_("DAFT2B", (ftnlen)6);
+	    dafcls_(__global_state, &handle);
+	    setmsg_(__global_state, "The attempt to read from file '#' faile"
+		    "d. IOSTAT = #.", (ftnlen)53);
+	    errfnm_(__global_state, "#", text, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+	    chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	    return 0;
 	}
 	__state->io___20.ciunit = *text;
-	iostat = s_rsle(&__state->io___20);
+	iostat = s_rsle(&__global_state->f2c, &__state->io___20);
 	if (iostat != 0) {
 	    goto L100006;
 	}
 	i__2 = ni - 2;
 	for (i__ = 1; i__ <= i__2; ++i__) {
-	    iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&ic[(i__1 
-		    = i__ - 1) < 250 && 0 <= i__1 ? i__1 : s_rnge("ic", i__1, 
+	    iostat = do_lio(&__global_state->f2c, &__state->c__3, &
+		    __state->c__1, (char *)&ic[(i__1 = i__ - 1) < 250 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "ic", i__1, 
 		    "daft2b_", (ftnlen)480)], (ftnlen)sizeof(integer));
 	    if (iostat != 0) {
 		goto L100006;
 	    }
 	}
-	iostat = e_rsle();
+	iostat = e_rsle(&__global_state->f2c);
 L100006:
 	if (iostat != 0) {
-	    dafcls_(&handle);
-	    setmsg_("The attempt to read from file '#' failed. IOSTAT = #.", (
-		    ftnlen)53);
-	    errfnm_("#", text, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-	    chkout_("DAFT2B", (ftnlen)6);
+	    dafcls_(__global_state, &handle);
+	    setmsg_(__global_state, "The attempt to read from file '#' faile"
+		    "d. IOSTAT = #.", (ftnlen)53);
+	    errfnm_(__global_state, "#", text, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+	    chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	    return 0;
 	}
-	dafps_(&nd, &ni, dc, ic, sum);
-	dafbna_(&handle, sum, name__, isize);
-	if (failed_()) {
-	    chkout_("DAFT2B", (ftnlen)6);
+	dafps_(__global_state, &nd, &ni, dc, ic, sum);
+	dafbna_(__global_state, &handle, sum, name__, isize);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	    return 0;
 	}
 	__state->io___23.ciunit = *text;
-	iostat = s_rsle(&__state->io___23);
+	iostat = s_rsle(&__global_state->f2c, &__state->io___23);
 	if (iostat != 0) {
 	    goto L100007;
 	}
-	iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&chunk, (
-		ftnlen)sizeof(integer));
+	iostat = do_lio(&__global_state->f2c, &__state->c__3, &__state->c__1, 
+		(char *)&chunk, (ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100007;
 	}
-	iostat = e_rsle();
+	iostat = e_rsle(&__global_state->f2c);
 L100007:
 	if (iostat != 0) {
-	    dafcls_(&handle);
-	    setmsg_("The attempt to read from file '#' failed. IOSTAT = #.", (
-		    ftnlen)53);
-	    errfnm_("#", text, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-	    chkout_("DAFT2B", (ftnlen)6);
+	    dafcls_(__global_state, &handle);
+	    setmsg_(__global_state, "The attempt to read from file '#' faile"
+		    "d. IOSTAT = #.", (ftnlen)53);
+	    errfnm_(__global_state, "#", text, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+	    chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	    return 0;
 	}
 	while(chunk > 0) {
 	    if (chunk > 1024) {
-		dafcls_(&handle);
-		setmsg_("Buffer size exceeded. Increase to #.", (ftnlen)36);
-		errint_("#", &chunk, (ftnlen)1);
-		sigerr_("SPICE(DAFOVERFLOW)", (ftnlen)18);
-		chkout_("DAFT2B", (ftnlen)6);
+		dafcls_(__global_state, &handle);
+		setmsg_(__global_state, "Buffer size exceeded. Increase to #."
+			, (ftnlen)36);
+		errint_(__global_state, "#", &chunk, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(DAFOVERFLOW)", (ftnlen)18);
+		chkout_(__global_state, "DAFT2B", (ftnlen)6);
 		return 0;
 	    } else {
 		__state->io___25.ciunit = *text;
-		iostat = s_rsle(&__state->io___25);
+		iostat = s_rsle(&__global_state->f2c, &__state->io___25);
 		if (iostat != 0) {
 		    goto L100008;
 		}
 		i__1 = chunk;
 		for (i__ = 1; i__ <= i__1; ++i__) {
-		    iostat = do_lio(&__state->c__5, &__state->c__1, (char *)&
-			    buffer[(i__2 = i__ - 1) < 1024 && 0 <= i__2 ? 
-			    i__2 : s_rnge("buffer", i__2, "daft2b_", (ftnlen)
-			    533)], (ftnlen)sizeof(doublereal));
+		    iostat = do_lio(&__global_state->f2c, &__state->c__5, &
+			    __state->c__1, (char *)&buffer[(i__2 = i__ - 1) < 
+			    1024 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "buffer", i__2, "daft2b_", (
+			    ftnlen)533)], (ftnlen)sizeof(doublereal));
 		    if (iostat != 0) {
 			goto L100008;
 		    }
 		}
-		iostat = e_rsle();
+		iostat = e_rsle(&__global_state->f2c);
 L100008:
 		if (iostat != 0) {
-		    dafcls_(&handle);
-		    setmsg_("The attempt to read from file '#' failed. IOSTA"
-			    "T = #.", (ftnlen)53);
-		    errfnm_("#", text, (ftnlen)1);
-		    errint_("#", &iostat, (ftnlen)1);
-		    sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-		    chkout_("DAFT2B", (ftnlen)6);
+		    dafcls_(__global_state, &handle);
+		    setmsg_(__global_state, "The attempt to read from file '"
+			    "#' failed. IOSTAT = #.", (ftnlen)53);
+		    errfnm_(__global_state, "#", text, (ftnlen)1);
+		    errint_(__global_state, "#", &iostat, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+		    chkout_(__global_state, "DAFT2B", (ftnlen)6);
 		    return 0;
 		}
-		dafada_(buffer, &chunk);
-		if (failed_()) {
-		    chkout_("DAFT2B", (ftnlen)6);
+		dafada_(__global_state, buffer, &chunk);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "DAFT2B", (ftnlen)6);
 		    return 0;
 		}
 	    }
 	    __state->io___27.ciunit = *text;
-	    iostat = s_rsle(&__state->io___27);
+	    iostat = s_rsle(&__global_state->f2c, &__state->io___27);
 	    if (iostat != 0) {
 		goto L100009;
 	    }
-	    iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&chunk, (
-		    ftnlen)sizeof(integer));
+	    iostat = do_lio(&__global_state->f2c, &__state->c__3, &
+		    __state->c__1, (char *)&chunk, (ftnlen)sizeof(integer));
 	    if (iostat != 0) {
 		goto L100009;
 	    }
-	    iostat = e_rsle();
+	    iostat = e_rsle(&__global_state->f2c);
 L100009:
 	    if (iostat != 0) {
-		dafcls_(&handle);
-		setmsg_("The attempt to read from file '#' failed. IOSTAT = "
-			"#.", (ftnlen)53);
-		errfnm_("#", text, (ftnlen)1);
-		errint_("#", &iostat, (ftnlen)1);
-		sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-		chkout_("DAFT2B", (ftnlen)6);
+		dafcls_(__global_state, &handle);
+		setmsg_(__global_state, "The attempt to read from file '#' f"
+			"ailed. IOSTAT = #.", (ftnlen)53);
+		errfnm_(__global_state, "#", text, (ftnlen)1);
+		errint_(__global_state, "#", &iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+		chkout_(__global_state, "DAFT2B", (ftnlen)6);
 		return 0;
 	    }
 	}
 	__state->io___28.ciunit = *text;
-	iostat = s_rsle(&__state->io___28);
+	iostat = s_rsle(&__global_state->f2c, &__state->io___28);
 	if (iostat != 0) {
 	    goto L100010;
 	}
-	iostat = do_lio(&__state->c__9, &__state->c__1, name__ + 1000, isize);
+	iostat = do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+		name__ + 1000, isize);
 	if (iostat != 0) {
 	    goto L100010;
 	}
-	iostat = e_rsle();
+	iostat = e_rsle(&__global_state->f2c);
 L100010:
 	if (iostat != 0) {
-	    dafcls_(&handle);
-	    setmsg_("The attempt to read from file '#' failed. IOSTAT = #.", (
-		    ftnlen)53);
-	    errfnm_("#", text, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-	    chkout_("DAFT2B", (ftnlen)6);
+	    dafcls_(__global_state, &handle);
+	    setmsg_(__global_state, "The attempt to read from file '#' faile"
+		    "d. IOSTAT = #.", (ftnlen)53);
+	    errfnm_(__global_state, "#", text, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+	    chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	    return 0;
 	}
-	if (s_cmp(name__, name__ + 1000, isize, isize) != 0) {
-	    dafcls_(&handle);
-	    setmsg_("Array name mismatch: # and #.", (ftnlen)29);
-	    errch_("#", name__, (ftnlen)1, isize);
-	    errch_("#", name__ + 1000, (ftnlen)1, isize);
-	    sigerr_("SPICE(DAFNONAMEMATCH)", (ftnlen)21);
-	    chkout_("DAFT2B", (ftnlen)6);
+	if (s_cmp(&__global_state->f2c, name__, name__ + 1000, isize, isize) 
+		!= 0) {
+	    dafcls_(__global_state, &handle);
+	    setmsg_(__global_state, "Array name mismatch: # and #.", (ftnlen)
+		    29);
+	    errch_(__global_state, "#", name__, (ftnlen)1, isize);
+	    errch_(__global_state, "#", name__ + 1000, (ftnlen)1, isize);
+	    sigerr_(__global_state, "SPICE(DAFNONAMEMATCH)", (ftnlen)21);
+	    chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	    return 0;
 	} else {
-	    dafena_();
-	    if (failed_()) {
-		chkout_("DAFT2B", (ftnlen)6);
+	    dafena_(__global_state);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DAFT2B", (ftnlen)6);
 		return 0;
 	    }
 	}
 	__state->io___29.ciunit = *text;
-	iostat = s_rsle(&__state->io___29);
+	iostat = s_rsle(&__global_state->f2c, &__state->io___29);
 	if (iostat != 0) {
 	    goto L100011;
 	}
-	iostat = do_lio(&__state->c__3, &__state->c__1, (char *)&more, (
-		ftnlen)sizeof(integer));
+	iostat = do_lio(&__global_state->f2c, &__state->c__3, &__state->c__1, 
+		(char *)&more, (ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100011;
 	}
-	iostat = e_rsle();
+	iostat = e_rsle(&__global_state->f2c);
 L100011:
 	if (iostat != 0) {
-	    dafcls_(&handle);
-	    setmsg_("The attempt to read from file '#' failed. IOSTAT = #.", (
-		    ftnlen)53);
-	    errfnm_("#", text, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-	    chkout_("DAFT2B", (ftnlen)6);
+	    dafcls_(__global_state, &handle);
+	    setmsg_(__global_state, "The attempt to read from file '#' faile"
+		    "d. IOSTAT = #.", (ftnlen)53);
+	    errfnm_(__global_state, "#", text, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+	    chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -733,40 +748,43 @@ L100011:
 /*     match the one at the front, complain. */
 
     __state->io___30.ciunit = *text;
-    iostat = s_rsle(&__state->io___30);
+    iostat = s_rsle(&__global_state->f2c, &__state->io___30);
     if (iostat != 0) {
 	goto L100012;
     }
-    iostat = do_lio(&__state->c__9, &__state->c__1, ifname + 60, (ftnlen)60);
+    iostat = do_lio(&__global_state->f2c, &__state->c__9, &__state->c__1, 
+	    ifname + 60, (ftnlen)60);
     if (iostat != 0) {
 	goto L100012;
     }
-    iostat = e_rsle();
+    iostat = e_rsle(&__global_state->f2c);
 L100012:
     if (iostat != 0) {
-	dafcls_(&handle);
-	setmsg_("The attempt to read from file '#' failed. IOSTAT = #.", (
-		ftnlen)53);
-	errfnm_("#", text, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(DAFREADFAIL)", (ftnlen)18);
-	chkout_("DAFT2B", (ftnlen)6);
+	dafcls_(__global_state, &handle);
+	setmsg_(__global_state, "The attempt to read from file '#' failed. I"
+		"OSTAT = #.", (ftnlen)53);
+	errfnm_(__global_state, "#", text, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFREADFAIL)", (ftnlen)18);
+	chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	return 0;
     }
-    if (s_cmp(ifname, ifname + 60, (ftnlen)60, (ftnlen)60) != 0) {
-	dafcls_(&handle);
-	setmsg_("Internal file name mismatch: # and #", (ftnlen)36);
-	errch_("#", ifname, (ftnlen)1, (ftnlen)60);
-	errch_("#", ifname + 60, (ftnlen)1, (ftnlen)60);
-	sigerr_("SPICE(DAFNOIFNMATCH)", (ftnlen)20);
-	chkout_("DAFT2B", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, ifname, ifname + 60, (ftnlen)60, (ftnlen)
+	    60) != 0) {
+	dafcls_(__global_state, &handle);
+	setmsg_(__global_state, "Internal file name mismatch: # and #", (
+		ftnlen)36);
+	errch_(__global_state, "#", ifname, (ftnlen)1, (ftnlen)60);
+	errch_(__global_state, "#", ifname + 60, (ftnlen)1, (ftnlen)60);
+	sigerr_(__global_state, "SPICE(DAFNOIFNMATCH)", (ftnlen)20);
+	chkout_(__global_state, "DAFT2B", (ftnlen)6);
 	return 0;
     }
 
 /*     Close the DAF file we just created. */
 
-    dafcls_(&handle);
-    chkout_("DAFT2B", (ftnlen)6);
+    dafcls_(__global_state, &handle);
+    chkout_(__global_state, "DAFT2B", (ftnlen)6);
     return 0;
 } /* daft2b_ */
 

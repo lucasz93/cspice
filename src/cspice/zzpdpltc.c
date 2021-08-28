@@ -8,41 +8,41 @@
 
 
 typedef int zzpdpltc_state_t;
-static zzpdpltc_state_t* get_zzpdpltc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzpdpltc_state_t* get_zzpdpltc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZPDPLTC (Planetodetic coordinates, point latitude check) */
-logical zzpdpltc_(doublereal *re, doublereal *f, doublereal *p, doublereal *
-	lat)
+logical zzpdpltc_(cspice_t* __global_state, doublereal *re, doublereal *f, 
+	doublereal *p, doublereal *lat)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal xxpt;
     doublereal yxpt;
     doublereal a;
     doublereal b;
-    extern /* Subroutine */ int zzelnaxx_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzelnaxx_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *);
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal r2;
-    extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzpdpltc_state_t* __state = get_zzpdpltc_state();
+    zzpdpltc_state_t* __state = get_zzpdpltc_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -240,18 +240,18 @@ logical zzpdpltc_(doublereal *re, doublereal *f, doublereal *p, doublereal *
 /*     Give the function a default value. */
 
     ret_val = FALSE_;
-    if (return_()) {
+    if (return_(__global_state)) {
 	return ret_val;
     }
-    chkin_("ZZPDPLTC", (ftnlen)8);
+    chkin_(__global_state, "ZZPDPLTC", (ftnlen)8);
 
 /*     The equatorial radius must be greater than zero. */
 
     if (*re <= 0.) {
-	setmsg_("Equatorial radius was *.", (ftnlen)24);
-	errdp_("*", re, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZPDPLTC", (ftnlen)8);
+	setmsg_(__global_state, "Equatorial radius was *.", (ftnlen)24);
+	errdp_(__global_state, "*", re, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZPDPLTC", (ftnlen)8);
 	return ret_val;
     }
 
@@ -261,10 +261,10 @@ logical zzpdpltc_(doublereal *re, doublereal *f, doublereal *p, doublereal *
 /*     error and check out. */
 
     if (*f >= 1.) {
-	setmsg_("Flattening coefficient was *.", (ftnlen)29);
-	errdp_("*", f, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZPDPLTC", (ftnlen)8);
+	setmsg_(__global_state, "Flattening coefficient was *.", (ftnlen)29);
+	errdp_(__global_state, "*", f, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZPDPLTC", (ftnlen)8);
 	return ret_val;
     }
 
@@ -337,9 +337,9 @@ logical zzpdpltc_(doublereal *re, doublereal *f, doublereal *p, doublereal *
 /*           Compute the intercepts of a normal vector of a point */
 /*           at latitude LAT, longitude 0, with the X and Y axes. */
 
-	    zzelnaxx_(&a, &b, lat, &xxpt, &yxpt);
-	    if (failed_()) {
-		chkout_("ZZPDPLTC", (ftnlen)8);
+	    zzelnaxx_(__global_state, &a, &b, lat, &xxpt, &yxpt);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZPDPLTC", (ftnlen)8);
 		return ret_val;
 	    }
 
@@ -355,11 +355,11 @@ logical zzpdpltc_(doublereal *re, doublereal *f, doublereal *p, doublereal *
 /*           on the correct side of the X-Y plane. */
 
 	    r2 = p[0] * p[0] + p[1] * p[1];
-	    r__ = sqrt((max(r2,0.)));
+	    r__ = sqrt(&__global_state->f2c, (max(r2,0.)));
 	    ret_val = r__ >= xxpt;
 	}
     }
-    chkout_("ZZPDPLTC", (ftnlen)8);
+    chkout_(__global_state, "ZZPDPLTC", (ftnlen)8);
     return ret_val;
 } /* zzpdpltc_ */
 

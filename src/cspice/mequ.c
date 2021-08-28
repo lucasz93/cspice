@@ -8,8 +8,7 @@
 
 
 extern mequ_init_t __mequ_init;
-static mequ_state_t* get_mequ_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline mequ_state_t* get_mequ_state(cspice_t* state) {
 	if (!state->mequ)
 		state->mequ = __cspice_allocate_module(sizeof(mequ_state_t), &
 	__mequ_init, sizeof(__mequ_init));
@@ -18,13 +17,15 @@ static mequ_state_t* get_mequ_state() {
 }
 
 /* $Procedure      MEQU  ( Matrix equal to another, 3x3 ) */
-/* Subroutine */ int mequ_(doublereal *m1, doublereal *mout)
+/* Subroutine */ int mequ_(cspice_t* __global_state, doublereal *m1, 
+	doublereal *mout)
 {
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
 
 
     /* Module state */
-    mequ_state_t* __state = get_mequ_state();
+    mequ_state_t* __state = get_mequ_state(__global_state);
 /* $ Abstract */
 
 /*      Set one double precision 3x3 matrix equal to another. */
@@ -143,7 +144,7 @@ static mequ_state_t* get_mequ_state() {
 /*     equal to another 3x3_matrix */
 
 /* -& */
-    moved_(m1, &__state->c__9, mout);
+    moved_(__global_state, m1, &__state->c__9, mout);
 
     return 0;
 } /* mequ_ */

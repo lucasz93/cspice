@@ -8,34 +8,34 @@
 
 
 typedef int zzekixdl_state_t;
-static zzekixdl_state_t* get_zzekixdl_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekixdl_state_t* get_zzekixdl_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure     ZZEKIXDL ( EK, delete record from index ) */
-/* Subroutine */ int zzekixdl_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recptr)
+/* Subroutine */ int zzekixdl_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recptr)
 {
     integer tree;
-    extern integer zzekrp2n_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzektrdl_(integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer zzekrp2n_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzektrdl_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer recno;
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer idxtyp;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer idx;
-    extern /* Subroutine */ int zzekfrx_(integer *, integer *, integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int zzekfrx_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
 
 
     /* Module state */
-    zzekixdl_state_t* __state = get_zzekixdl_state();
+    zzekixdl_state_t* __state = get_zzekixdl_state(__global_state);
 /* $ Abstract */
 
 /*     Update an EK column index to reflect deletion of a record */
@@ -487,10 +487,10 @@ static zzekixdl_state_t* get_zzekixdl_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZEKIXDL", (ftnlen)8);
+    chkin_(__global_state, "ZZEKIXDL", (ftnlen)8);
     idxtyp = coldsc[5];
     if (idxtyp != -1) {
 
@@ -499,22 +499,23 @@ static zzekixdl_state_t* get_zzekixdl_state() {
 /*        Some entry in the index points to RECPTR.  Find the entry */
 /*        and delete it. */
 
-	zzekfrx_(handle, segdsc, coldsc, recptr, &idx);
+	zzekfrx_(__global_state, handle, segdsc, coldsc, recptr, &idx);
 	if (idxtyp == 1) {
 
 /*           For type 1 indexes, the index pointer is the root node of */
 /*           a B*-tree.  Just use the tree deletion routine. */
 
 	    tree = coldsc[6];
-	    zzektrdl_(handle, &tree, &idx);
+	    zzektrdl_(__global_state, handle, &tree, &idx);
 	} else {
 
 /*           Sorry, no other types of indexes are supported. */
 
-	    setmsg_("The index type # is not supported.", (ftnlen)34);
-	    errint_("#", &idxtyp, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	    chkout_("ZZEKIXDL", (ftnlen)8);
+	    setmsg_(__global_state, "The index type # is not supported.", (
+		    ftnlen)34);
+	    errint_(__global_state, "#", &idxtyp, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDTYPE)", (ftnlen)18);
+	    chkout_(__global_state, "ZZEKIXDL", (ftnlen)8);
 	    return 0;
 	}
     } else {
@@ -522,17 +523,17 @@ static zzekixdl_state_t* get_zzekixdl_state() {
 /*        This routine should not have been called if the column in */
 /*        question is not indexed. */
 
-	recno = zzekrp2n_(handle, &segdsc[1], recptr);
-	setmsg_("Column was not indexed. File = #; RECNO = #; COLIDX = #.", (
-		ftnlen)56);
-	errhan_("#", handle, (ftnlen)1);
-	errint_("#", &recno, (ftnlen)1);
-	errint_("#", &coldsc[8], (ftnlen)1);
-	sigerr_("SPICE(BUG)", (ftnlen)10);
-	chkout_("ZZEKIXDL", (ftnlen)8);
+	recno = zzekrp2n_(__global_state, handle, &segdsc[1], recptr);
+	setmsg_(__global_state, "Column was not indexed. File = #; RECNO = #"
+		"; COLIDX = #.", (ftnlen)56);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	errint_(__global_state, "#", &recno, (ftnlen)1);
+	errint_(__global_state, "#", &coldsc[8], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	chkout_(__global_state, "ZZEKIXDL", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZEKIXDL", (ftnlen)8);
+    chkout_(__global_state, "ZZEKIXDL", (ftnlen)8);
     return 0;
 } /* zzekixdl_ */
 

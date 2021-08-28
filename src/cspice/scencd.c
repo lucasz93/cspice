@@ -8,8 +8,7 @@
 
 
 extern scencd_init_t __scencd_init;
-static scencd_state_t* get_scencd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline scencd_state_t* get_scencd_state(cspice_t* state) {
 	if (!state->scencd)
 		state->scencd = __cspice_allocate_module(sizeof(
 	scencd_state_t), &__scencd_init, sizeof(__scencd_init));
@@ -18,48 +17,50 @@ static scencd_state_t* get_scencd_state() {
 }
 
 /* $Procedure      SCENCD ( Encode spacecraft clock ) */
-/* Subroutine */ int scencd_(integer *sc, char *sclkch, doublereal *sclkdp, 
-	ftnlen sclkch_len)
+/* Subroutine */ int scencd_(cspice_t* __global_state, integer *sc, char *
+	sclkch, doublereal *sclkdp, ftnlen sclkch_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5;
     doublereal d__1;
 
     /* Builtin functions */
-    double d_nint(doublereal *);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
+    double d_nint(f2c_state_t*, doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern integer cpos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen)
+	    ;
     integer part;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     doublereal ticks;
     integer pnter;
     char error[25];
     doublereal pstop[9999];
-    extern logical failed_(void);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int scpart_(integer *, integer *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int nparsi_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int sctiks_(integer *, char *, doublereal *, 
-	    ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int scpart_(cspice_t*, integer *, integer *, 
+	    doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int nparsi_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sctiks_(cspice_t*, integer *, char *, 
+	    doublereal *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer nparts;
     doublereal pstart[9999];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal ptotls[9999];
     integer pos;
 
 
     /* Module state */
-    scencd_state_t* __state = get_scencd_state();
+    scencd_state_t* __state = get_scencd_state(__global_state);
 /* $ Abstract */
 
 /*     Encode character representation of spacecraft clock time into a */
@@ -563,39 +564,40 @@ static scencd_state_t* get_scencd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCENCD", (ftnlen)6);
+	chkin_(__global_state, "SCENCD", (ftnlen)6);
     }
 
 /*     Convert the non-partition portion of the clock string to ticks. */
 
-    pos = cpos_(sclkch, "/", &__state->c__1, sclkch_len, (ftnlen)1);
+    pos = cpos_(__global_state, sclkch, "/", &__state->c__1, sclkch_len, (
+	    ftnlen)1);
     i__1 = pos;
-    sctiks_(sc, sclkch + i__1, &ticks, sclkch_len - i__1);
-    if (failed_()) {
-	chkout_("SCENCD", (ftnlen)6);
+    sctiks_(__global_state, sc, sclkch + i__1, &ticks, sclkch_len - i__1);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SCENCD", (ftnlen)6);
 	return 0;
     }
-    ticks = d_nint(&ticks);
+    ticks = d_nint(&__global_state->f2c, &ticks);
 
 /*     Read the partition start and stop times (in ticks) for this */
 /*     mission. Error if there are too many of them. */
 
-    scpart_(sc, &nparts, pstart, pstop);
-    if (failed_()) {
-	chkout_("SCENCD", (ftnlen)6);
+    scpart_(__global_state, sc, &nparts, pstart, pstop);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SCENCD", (ftnlen)6);
 	return 0;
     }
     if (nparts > 9999) {
-	setmsg_("The number of partitions, #, for spacecraft # exceeds the v"
-		"alue for parameter MXPART, #.", (ftnlen)88);
-	errint_("#", &nparts, (ftnlen)1);
-	errint_("#", sc, (ftnlen)1);
-	errint_("#", &__state->c__9999, (ftnlen)1);
-	sigerr_("SPICE(TOOMANYPARTS)", (ftnlen)19);
-	chkout_("SCENCD", (ftnlen)6);
+	setmsg_(__global_state, "The number of partitions, #, for spacecraft"
+		" # exceeds the value for parameter MXPART, #.", (ftnlen)88);
+	errint_(__global_state, "#", &nparts, (ftnlen)1);
+	errint_(__global_state, "#", sc, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__9999, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TOOMANYPARTS)", (ftnlen)19);
+	chkout_(__global_state, "SCENCD", (ftnlen)6);
 	return 0;
     }
 
@@ -605,29 +607,34 @@ static scencd_state_t* get_scencd_state() {
 
     i__1 = nparts;
     for (i__ = 1; i__ <= i__1; ++i__) {
-	pstop[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge("pstop", 
-		i__2, "scencd_", (ftnlen)500)] = d_nint(&pstop[(i__3 = i__ - 
-		1) < 9999 && 0 <= i__3 ? i__3 : s_rnge("pstop", i__3, "scenc"
-		"d_", (ftnlen)500)]);
-	pstart[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge("pstart", 
-		i__2, "scencd_", (ftnlen)501)] = d_nint(&pstart[(i__3 = i__ - 
-		1) < 9999 && 0 <= i__3 ? i__3 : s_rnge("pstart", i__3, "scen"
-		"cd_", (ftnlen)501)]);
+	pstop[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "pstop", i__2, "scencd_", (ftnlen)500)] =
+		 d_nint(&__global_state->f2c, &pstop[(i__3 = i__ - 1) < 9999 
+		&& 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "pstop", 
+		i__3, "scencd_", (ftnlen)500)]);
+	pstart[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "pstart", i__2, "scencd_", (ftnlen)501)] 
+		= d_nint(&__global_state->f2c, &pstart[(i__3 = i__ - 1) < 
+		9999 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "pst"
+		"art", i__3, "scencd_", (ftnlen)501)]);
     }
 /*     For each partition, compute the total number of ticks in that */
 /*     partition plus all preceding partitions. */
 
     d__1 = pstop[0] - pstart[0];
-    ptotls[0] = d_nint(&d__1);
+    ptotls[0] = d_nint(&__global_state->f2c, &d__1);
     i__1 = nparts;
     for (i__ = 2; i__ <= i__1; ++i__) {
-	d__1 = ptotls[(i__3 = i__ - 2) < 9999 && 0 <= i__3 ? i__3 : s_rnge(
-		"ptotls", i__3, "scencd_", (ftnlen)512)] + pstop[(i__4 = i__ 
-		- 1) < 9999 && 0 <= i__4 ? i__4 : s_rnge("pstop", i__4, "sce"
-		"ncd_", (ftnlen)512)] - pstart[(i__5 = i__ - 1) < 9999 && 0 <= 
-		i__5 ? i__5 : s_rnge("pstart", i__5, "scencd_", (ftnlen)512)];
-	ptotls[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge("ptotls", 
-		i__2, "scencd_", (ftnlen)512)] = d_nint(&d__1);
+	d__1 = ptotls[(i__3 = i__ - 2) < 9999 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "ptotls", i__3, "scencd_", (ftnlen)512)] 
+		+ pstop[(i__4 = i__ - 1) < 9999 && 0 <= i__4 ? i__4 : s_rnge(&
+		__global_state->f2c, "pstop", i__4, "scencd_", (ftnlen)512)] 
+		- pstart[(i__5 = i__ - 1) < 9999 && 0 <= i__5 ? i__5 : s_rnge(
+		&__global_state->f2c, "pstart", i__5, "scencd_", (ftnlen)512)]
+		;
+	ptotls[(i__2 = i__ - 1) < 9999 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ptotls", i__2, "scencd_", (ftnlen)512)] 
+		= d_nint(&__global_state->f2c, &d__1);
     }
 
 /*     Determine the partition number for the input clock string: */
@@ -653,59 +660,64 @@ static scencd_state_t* get_scencd_state() {
 
 
     if (pos == 1) {
-	setmsg_("Unable to parse the partition number from SCLK string #.", (
-		ftnlen)56);
-	errch_("#", sclkch, (ftnlen)1, sclkch_len);
-	sigerr_("SPICE(BADPARTNUMBER)", (ftnlen)20);
-	chkout_("SCENCD", (ftnlen)6);
+	setmsg_(__global_state, "Unable to parse the partition number from S"
+		"CLK string #.", (ftnlen)56);
+	errch_(__global_state, "#", sclkch, (ftnlen)1, sclkch_len);
+	sigerr_(__global_state, "SPICE(BADPARTNUMBER)", (ftnlen)20);
+	chkout_(__global_state, "SCENCD", (ftnlen)6);
 	return 0;
     }
     if (pos > 1) {
 	part = 0;
-	nparsi_(sclkch, &part, error, &pnter, pos - 1, (ftnlen)25);
-	if (s_cmp(error, " ", (ftnlen)25, (ftnlen)1) != 0) {
-	    setmsg_("Unable to parse the partition number from SCLK string #."
-		    , (ftnlen)56);
-	    errch_("#", sclkch, (ftnlen)1, sclkch_len);
-	    sigerr_("SPICE(BADPARTNUMBER)", (ftnlen)20);
-	    chkout_("SCENCD", (ftnlen)6);
+	nparsi_(__global_state, sclkch, &part, error, &pnter, pos - 1, (
+		ftnlen)25);
+	if (s_cmp(&__global_state->f2c, error, " ", (ftnlen)25, (ftnlen)1) != 
+		0) {
+	    setmsg_(__global_state, "Unable to parse the partition number fr"
+		    "om SCLK string #.", (ftnlen)56);
+	    errch_(__global_state, "#", sclkch, (ftnlen)1, sclkch_len);
+	    sigerr_(__global_state, "SPICE(BADPARTNUMBER)", (ftnlen)20);
+	    chkout_(__global_state, "SCENCD", (ftnlen)6);
 	    return 0;
 	} else if (part <= 0 || part > nparts) {
-	    setmsg_("Partition number # taken from SCLK string # is not in a"
-		    "cceptable range 1 to #.", (ftnlen)78);
-	    errint_("#", &part, (ftnlen)1);
-	    errch_("#", sclkch, (ftnlen)1, sclkch_len);
-	    errint_("#", &nparts, (ftnlen)1);
-	    sigerr_("SPICE(BADPARTNUMBER)", (ftnlen)20);
-	    chkout_("SCENCD", (ftnlen)6);
+	    setmsg_(__global_state, "Partition number # taken from SCLK stri"
+		    "ng # is not in acceptable range 1 to #.", (ftnlen)78);
+	    errint_(__global_state, "#", &part, (ftnlen)1);
+	    errch_(__global_state, "#", sclkch, (ftnlen)1, sclkch_len);
+	    errint_(__global_state, "#", &nparts, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADPARTNUMBER)", (ftnlen)20);
+	    chkout_(__global_state, "SCENCD", (ftnlen)6);
 	    return 0;
 	} else if (ticks < pstart[(i__1 = part - 1) < 9999 && 0 <= i__1 ? 
-		i__1 : s_rnge("pstart", i__1, "scencd_", (ftnlen)575)] || 
-		ticks > pstop[(i__2 = part - 1) < 9999 && 0 <= i__2 ? i__2 : 
-		s_rnge("pstop", i__2, "scencd_", (ftnlen)575)]) {
-	    setmsg_("SCLK count # does not fall in the boundaries of partiti"
-		    "on number #.", (ftnlen)67);
-	    errch_("#", sclkch, (ftnlen)1, sclkch_len);
-	    errint_("#", &part, (ftnlen)1);
-	    sigerr_("SPICE(NOTINPART)", (ftnlen)16);
-	    chkout_("SCENCD", (ftnlen)6);
+		i__1 : s_rnge(&__global_state->f2c, "pstart", i__1, "scencd_",
+		 (ftnlen)575)] || ticks > pstop[(i__2 = part - 1) < 9999 && 0 
+		<= i__2 ? i__2 : s_rnge(&__global_state->f2c, "pstop", i__2, 
+		"scencd_", (ftnlen)575)]) {
+	    setmsg_(__global_state, "SCLK count # does not fall in the bound"
+		    "aries of partition number #.", (ftnlen)67);
+	    errch_(__global_state, "#", sclkch, (ftnlen)1, sclkch_len);
+	    errint_(__global_state, "#", &part, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOTINPART)", (ftnlen)16);
+	    chkout_(__global_state, "SCENCD", (ftnlen)6);
 	    return 0;
 	}
     } else {
 	part = 1;
 	while(part <= nparts && (ticks < pstart[(i__1 = part - 1) < 9999 && 0 
-		<= i__1 ? i__1 : s_rnge("pstart", i__1, "scencd_", (ftnlen)
-		592)] || ticks > pstop[(i__2 = part - 1) < 9999 && 0 <= i__2 ?
-		 i__2 : s_rnge("pstop", i__2, "scencd_", (ftnlen)592)])) {
+		<= i__1 ? i__1 : s_rnge(&__global_state->f2c, "pstart", i__1, 
+		"scencd_", (ftnlen)592)] || ticks > pstop[(i__2 = part - 1) < 
+		9999 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "pst"
+		"op", i__2, "scencd_", (ftnlen)592)])) {
 	    ++part;
 	}
 	if (part > nparts) {
-	    setmsg_("SCLK count # does not fall in the boundaries of any of "
-		    "the partitions for spacecraft #.", (ftnlen)87);
-	    errch_("#", sclkch, (ftnlen)1, sclkch_len);
-	    errint_("#", sc, (ftnlen)1);
-	    sigerr_("SPICE(NOPARTITION)", (ftnlen)18);
-	    chkout_("SCENCD", (ftnlen)6);
+	    setmsg_(__global_state, "SCLK count # does not fall in the bound"
+		    "aries of any of the partitions for spacecraft #.", (
+		    ftnlen)87);
+	    errch_(__global_state, "#", sclkch, (ftnlen)1, sclkch_len);
+	    errint_(__global_state, "#", sc, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(NOPARTITION)", (ftnlen)18);
+	    chkout_(__global_state, "SCENCD", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -717,14 +729,16 @@ static scencd_state_t* get_scencd_state() {
 
     if (part > 1) {
 	*sclkdp = ticks - pstart[(i__1 = part - 1) < 9999 && 0 <= i__1 ? i__1 
-		: s_rnge("pstart", i__1, "scencd_", (ftnlen)622)] + ptotls[(
-		i__2 = part - 2) < 9999 && 0 <= i__2 ? i__2 : s_rnge("ptotls",
-		 i__2, "scencd_", (ftnlen)622)];
+		: s_rnge(&__global_state->f2c, "pstart", i__1, "scencd_", (
+		ftnlen)622)] + ptotls[(i__2 = part - 2) < 9999 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "ptotls", i__2, "scencd_",
+		 (ftnlen)622)];
     } else {
 	*sclkdp = ticks - pstart[(i__1 = part - 1) < 9999 && 0 <= i__1 ? i__1 
-		: s_rnge("pstart", i__1, "scencd_", (ftnlen)624)];
+		: s_rnge(&__global_state->f2c, "pstart", i__1, "scencd_", (
+		ftnlen)624)];
     }
-    chkout_("SCENCD", (ftnlen)6);
+    chkout_(__global_state, "SCENCD", (ftnlen)6);
     return 0;
 } /* scencd_ */
 

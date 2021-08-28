@@ -8,8 +8,7 @@
 
 
 extern zzrepsub_init_t __zzrepsub_init;
-static zzrepsub_state_t* get_zzrepsub_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzrepsub_state_t* get_zzrepsub_state(cspice_t* state) {
 	if (!state->zzrepsub)
 		state->zzrepsub = __cspice_allocate_module(sizeof(
 	zzrepsub_state_t), &__zzrepsub_init, sizeof(__zzrepsub_init));
@@ -18,21 +17,22 @@ static zzrepsub_state_t* get_zzrepsub_state() {
 }
 
 /* $Procedure      ZZREPSUB ( Replace one substring with another ) */
-/* Subroutine */ int zzrepsub_(char *in, integer *left, integer *right, char *
-	string, char *out, ftnlen in_len, ftnlen string_len, ftnlen out_len)
+/* Subroutine */ int zzrepsub_(cspice_t* __global_state, char *in, integer *
+	left, integer *right, char *string, char *out, ftnlen in_len, ftnlen 
+	string_len, ftnlen out_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer next;
     integer i__;
     integer inlen;
-    extern integer sumai_(integer *, integer *);
+    extern integer sumai_(cspice_t*, integer *, integer *);
     integer remain;
     integer myleft;
     integer strlen;
@@ -43,7 +43,7 @@ static zzrepsub_state_t* get_zzrepsub_state() {
 
 
     /* Module state */
-    zzrepsub_state_t* __state = get_zzrepsub_state();
+    zzrepsub_state_t* __state = get_zzrepsub_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -223,9 +223,9 @@ static zzrepsub_state_t* get_zzrepsub_state() {
 
 /*     Get the lengths of all the strings involved in this transaction. */
 
-    inlen = i_len(in, in_len);
-    strlen = i_len(string, string_len);
-    outlen = i_len(out, out_len);
+    inlen = i_len(&__global_state->f2c, in, in_len);
+    strlen = i_len(&__global_state->f2c, string, string_len);
+    outlen = i_len(&__global_state->f2c, out, out_len);
 /* Computing MIN */
     i__1 = inlen + 1, i__2 = max(1,*left);
     myleft = min(i__1,i__2);
@@ -271,13 +271,13 @@ static zzrepsub_state_t* get_zzrepsub_state() {
 /*     is longer than the original substring. The main thing is to */
 /*     avoid overwriting characters that have yet to be moved. */
 
-    end = sumai_(use, &__state->c__3);
+    end = sumai_(__global_state, use, &__state->c__3);
     if (myleft + strlen > *right) {
 	next = end;
 	for (i__ = use[2]; i__ >= 1; --i__) {
 	    i__1 = *right + i__ - 1;
-	    s_copy(out + (next - 1), in + i__1, (ftnlen)1, *right + i__ - 
-		    i__1);
+	    s_copy(&__global_state->f2c, out + (next - 1), in + i__1, (ftnlen)
+		    1, *right + i__ - i__1);
 	    --next;
 	}
     } else {
@@ -285,8 +285,8 @@ static zzrepsub_state_t* get_zzrepsub_state() {
 	i__1 = use[2];
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    i__2 = *right + i__ - 1;
-	    s_copy(out + (next - 1), in + i__2, (ftnlen)1, *right + i__ - 
-		    i__2);
+	    s_copy(&__global_state->f2c, out + (next - 1), in + i__2, (ftnlen)
+		    1, *right + i__ - i__2);
 	    ++next;
 	}
     }
@@ -310,7 +310,8 @@ static zzrepsub_state_t* get_zzrepsub_state() {
 
     if (end < outlen) {
 	i__1 = end;
-	s_copy(out + i__1, " ", out_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, out + i__1, " ", out_len - i__1, (ftnlen)
+		1);
     }
     return 0;
 } /* zzrepsub_ */

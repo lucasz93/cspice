@@ -8,32 +8,32 @@
 
 
 typedef int daslla_state_t;
-static daslla_state_t* get_daslla_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline daslla_state_t* get_daslla_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DASLLA ( DAS, last logical addresses ) */
-/* Subroutine */ int daslla_(integer *handle, integer *lastc, integer *lastd, 
-	integer *lasti)
+/* Subroutine */ int daslla_(cspice_t* __global_state, integer *handle, 
+	integer *lastc, integer *lastd, integer *lasti)
 {
     integer free;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
     integer ncomr;
-    extern /* Subroutine */ int dashfs_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dashfs_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *);
     integer lastla[3];
     integer lastrc[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer lastwd[3];
     integer nresvc;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     integer nresvr;
 
 
     /* Module state */
-    daslla_state_t* __state = get_daslla_state();
+    daslla_state_t* __state = get_daslla_state(__global_state);
 /* $ Abstract */
 
 /*     Return last DAS logical addresses of character, double precision */
@@ -198,21 +198,21 @@ static daslla_state_t* get_daslla_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DASLLA", (ftnlen)6);
+	chkin_(__global_state, "DASLLA", (ftnlen)6);
     }
 
 /*     The file summary for the indicated DAS file contains all of the */
 /*     information we need. */
 
-    dashfs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 
-	    lastwd);
+    dashfs_(__global_state, handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, 
+	    lastla, lastrc, lastwd);
     *lastc = lastla[0];
     *lastd = lastla[1];
     *lasti = lastla[2];
-    chkout_("DASLLA", (ftnlen)6);
+    chkout_(__global_state, "DASLLA", (ftnlen)6);
     return 0;
 } /* daslla_ */
 

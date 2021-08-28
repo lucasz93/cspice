@@ -8,8 +8,7 @@
 
 
 extern cknr01_init_t __cknr01_init;
-static cknr01_state_t* get_cknr01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cknr01_state_t* get_cknr01_state(cspice_t* state) {
 	if (!state->cknr01)
 		state->cknr01 = __cspice_allocate_module(sizeof(
 	cknr01_state_t), &__cknr01_init, sizeof(__cknr01_init));
@@ -18,26 +17,26 @@ static cknr01_state_t* get_cknr01_state() {
 }
 
 /* $Procedure      CKNR01 ( C-kernel, number of records, type 01 ) */
-/* Subroutine */ int cknr01_(integer *handle, doublereal *descr, integer *
-	nrec)
+/* Subroutine */ int cknr01_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, integer *nrec)
 {
     doublereal n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal dcd[2];
     integer icd[6];
 
 
     /* Module state */
-    cknr01_state_t* __state = get_cknr01_state();
+    cknr01_state_t* __state = get_cknr01_state(__global_state);
 /* $ Abstract */
 
 /*     Given the handle of a CK file and the descriptor of a data */
@@ -291,10 +290,10 @@ static cknr01_state_t* get_cknr01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKNR01", (ftnlen)6);
+	chkin_(__global_state, "CKNR01", (ftnlen)6);
     }
 
 /*     The number of pointing records contained in a data type 1 */
@@ -316,24 +315,24 @@ static cknr01_state_t* get_cknr01_state() {
 /*        ICD(6)  Final address of segment data */
 
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dcd, icd);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dcd, icd);
 
 /*     If this segment is not of data type 1, then signal an error. */
 
     if (icd[2] != 1) {
-	setmsg_("Data type of the segment should be 1: Passed descriptor sho"
-		"ws type = #.", (ftnlen)71);
-	errint_("#", &icd[2], (ftnlen)1);
-	sigerr_("SPICE(CKWRONGDATATYPE)", (ftnlen)22);
-	chkout_("CKNR01", (ftnlen)6);
+	setmsg_(__global_state, "Data type of the segment should be 1: Passe"
+		"d descriptor shows type = #.", (ftnlen)71);
+	errint_(__global_state, "#", &icd[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CKWRONGDATATYPE)", (ftnlen)22);
+	chkout_(__global_state, "CKNR01", (ftnlen)6);
 	return 0;
     }
 
 /*     The number of records is the final word in the segment. */
 
-    dafgda_(handle, &icd[5], &icd[5], &n);
+    dafgda_(__global_state, handle, &icd[5], &icd[5], &n);
     *nrec = (integer) n;
-    chkout_("CKNR01", (ftnlen)6);
+    chkout_(__global_state, "CKNR01", (ftnlen)6);
     return 0;
 } /* cknr01_ */
 

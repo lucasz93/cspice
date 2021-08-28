@@ -8,38 +8,38 @@
 
 
 typedef int spke17_state_t;
-static spke17_state_t* get_spke17_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spke17_state_t* get_spke17_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SPKE17 ( Evaluate a type 17 SPK data record) */
-/* Subroutine */ int spke17_(doublereal *et, doublereal *recin, doublereal *
-	state)
+/* Subroutine */ int spke17_(cspice_t* __global_state, doublereal *et, 
+	doublereal *recin, doublereal *state)
 {
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal a;
     doublereal h__;
     doublereal k;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal epoch;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal decpol;
     doublereal rapole;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int eqncpv_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int eqncpv_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal ecc;
 
 
     /* Module state */
-    spke17_state_t* __state = get_spke17_state();
+    spke17_state_t* __state = get_spke17_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluates a single SPK data record from a segment of type 17 */
@@ -243,10 +243,10 @@ static spke17_state_t* get_spke17_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKE17", (ftnlen)6);
+    chkin_(__global_state, "SPKE17", (ftnlen)6);
 
 /*     Fetch the various entities from the input record, first the epoch. */
 
@@ -254,7 +254,7 @@ static spke17_state_t* get_spke17_state() {
     a = recin[1];
     h__ = recin[2];
     k = recin[3];
-    ecc = sqrt(h__ * h__ + k * k);
+    ecc = sqrt(&__global_state->f2c, h__ * h__ + k * k);
     rapole = recin[10];
     decpol = recin[11];
 
@@ -264,31 +264,31 @@ static spke17_state_t* get_spke17_state() {
 /*     here should not be significant. */
 
     if (a <= 0.) {
-	setmsg_("The semi-major axis supplied to the SPK type 17 evaluator w"
-		"as non-positive.  This value must be positive. The value sup"
-		"plied was #.", (ftnlen)131);
-	errdp_("#", &a, (ftnlen)1);
-	sigerr_("SPICE(BADSEMIAXIS)", (ftnlen)18);
-	chkout_("SPKE17", (ftnlen)6);
+	setmsg_(__global_state, "The semi-major axis supplied to the SPK typ"
+		"e 17 evaluator was non-positive.  This value must be positiv"
+		"e. The value supplied was #.", (ftnlen)131);
+	errdp_(__global_state, "#", &a, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADSEMIAXIS)", (ftnlen)18);
+	chkout_(__global_state, "SPKE17", (ftnlen)6);
 	return 0;
     } else if (ecc > .9) {
-	setmsg_("The eccentricity supplied for a type 17 segment is greater "
-		"than 0.9.  It must be less than 0.9.The value supplied to th"
-		"e type 17 evaluator was #. ", (ftnlen)146);
-	errdp_("#", &ecc, (ftnlen)1);
-	sigerr_("SPICE(BADECCENTRICITY)", (ftnlen)22);
-	chkout_("SPKE17", (ftnlen)6);
+	setmsg_(__global_state, "The eccentricity supplied for a type 17 seg"
+		"ment is greater than 0.9.  It must be less than 0.9.The valu"
+		"e supplied to the type 17 evaluator was #. ", (ftnlen)146);
+	errdp_(__global_state, "#", &ecc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADECCENTRICITY)", (ftnlen)22);
+	chkout_(__global_state, "SPKE17", (ftnlen)6);
 	return 0;
     }
 
 /*     That's all for here, just plug the elements into the routine */
 /*     knows how to evaluate the equinoctial elements. */
 
-    eqncpv_(et, &epoch, &recin[1], &rapole, &decpol, state);
+    eqncpv_(__global_state, et, &epoch, &recin[1], &rapole, &decpol, state);
 
 /*     That's all folks.  Check out and return. */
 
-    chkout_("SPKE17", (ftnlen)6);
+    chkout_(__global_state, "SPKE17", (ftnlen)6);
     return 0;
 } /* spke17_ */
 

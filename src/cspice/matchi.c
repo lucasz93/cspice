@@ -8,8 +8,7 @@
 
 
 extern matchi_init_t __matchi_init;
-static matchi_state_t* get_matchi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline matchi_state_t* get_matchi_state(cspice_t* state) {
 	if (!state->matchi)
 		state->matchi = __cspice_allocate_module(sizeof(
 	matchi_state_t), &__matchi_init, sizeof(__matchi_init));
@@ -18,8 +17,9 @@ static matchi_state_t* get_matchi_state() {
 }
 
 /* $Procedure            MATCHI ( Match string against wildcard template ) */
-logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen 
-	string_len, ftnlen templ_len, ftnlen wstr_len, ftnlen wchr_len)
+logical matchi_(cspice_t* __global_state, char *string, char *templ, char *
+	wstr, char *wchr, ftnlen string_len, ftnlen templ_len, ftnlen 
+	wstr_len, ftnlen wchr_len)
 {
     /* System generated locals */
     integer i__1;
@@ -33,23 +33,23 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
     integer tcur;
     integer i__;
     integer j;
-    extern logical samch_(char *, integer *, char *, integer *, ftnlen, 
-	    ftnlen);
-    extern logical nechr_(char *, char *, ftnlen, ftnlen);
+    extern logical samch_(cspice_t*, char *, integer *, char *, integer *, 
+	    ftnlen, ftnlen);
+    extern logical nechr_(cspice_t*, char *, char *, ftnlen, ftnlen);
     integer right;
     integer slast;
     integer tlast;
-    extern logical samchi_(char *, integer *, char *, integer *, ftnlen, 
-	    ftnlen);
-    extern integer lastnb_(char *, ftnlen);
-    extern integer frstnb_(char *, ftnlen);
+    extern logical samchi_(cspice_t*, char *, integer *, char *, integer *, 
+	    ftnlen, ftnlen);
+    extern integer lastnb_(cspice_t*, char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
     logical nosubm;
     integer sfirst;
     integer tfirst;
 
 
     /* Module state */
-    matchi_state_t* __state = get_matchi_state();
+    matchi_state_t* __state = get_matchi_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether a string is matched by a template containing */
@@ -222,10 +222,10 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 
 /*     First let's get everybody's measurments. */
 
-    sfirst = frstnb_(string, string_len);
-    slast = lastnb_(string, string_len);
-    tfirst = frstnb_(templ, templ_len);
-    tlast = lastnb_(templ, templ_len);
+    sfirst = frstnb_(__global_state, string, string_len);
+    slast = lastnb_(__global_state, string, string_len);
+    tfirst = frstnb_(__global_state, templ, templ_len);
+    tlast = lastnb_(__global_state, templ, templ_len);
     tlen = tlast - tfirst + 1;
     slen = slast - sfirst + 1;
     scur = max(1,sfirst);
@@ -244,11 +244,11 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*     The beginning of the string and template must be identical */
 /*     up to the first occurrence of a wild string. */
 
-    while(tcur <= tlast && scur <= slast && ! samch_(templ, &tcur, wstr, &
-	    __state->c__1, templ_len, (ftnlen)1)) {
-	if (nechr_(templ + (tcur - 1), string + (scur - 1), (ftnlen)1, (
-		ftnlen)1) && *(unsigned char *)&templ[tcur - 1] != *(unsigned 
-		char *)wchr) {
+    while(tcur <= tlast && scur <= slast && ! samch_(__global_state, templ, &
+	    tcur, wstr, &__state->c__1, templ_len, (ftnlen)1)) {
+	if (nechr_(__global_state, templ + (tcur - 1), string + (scur - 1), (
+		ftnlen)1, (ftnlen)1) && *(unsigned char *)&templ[tcur - 1] != 
+		*(unsigned char *)wchr) {
 	    ret_val = FALSE_;
 	    return ret_val;
 	} else {
@@ -300,8 +300,8 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*     character.  Find the first non-wild-string character in the */
 /*     template. (If there isn't one, we have a match.) */
 
-    while(tcur <= tlast && samch_(templ, &tcur, wstr, &__state->c__1, 
-	    templ_len, (ftnlen)1)) {
+    while(tcur <= tlast && samch_(__global_state, templ, &tcur, wstr, &
+	    __state->c__1, templ_len, (ftnlen)1)) {
 	++tcur;
     }
     if (tcur > tlast) {
@@ -315,8 +315,8 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*     a wild string character. */
 
     left = tcur;
-    while(tcur <= tlast && ! samch_(templ, &tcur, wstr, &__state->c__1, 
-	    templ_len, (ftnlen)1)) {
+    while(tcur <= tlast && ! samch_(__global_state, templ, &tcur, wstr, &
+	    __state->c__1, templ_len, (ftnlen)1)) {
 	++tcur;
     }
     right = tcur - 1;
@@ -338,9 +338,9 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 	    i__ = slast;
 	    j = tlast;
 	    while(j >= left) {
-		if (samch_(templ, &j, wchr, &__state->c__1, templ_len, (
-			ftnlen)1) || samchi_(templ, &j, string, &i__, 
-			templ_len, string_len)) {
+		if (samch_(__global_state, templ, &j, wchr, &__state->c__1, 
+			templ_len, (ftnlen)1) || samchi_(__global_state, 
+			templ, &j, string, &i__, templ_len, string_len)) {
 		    --j;
 		    --i__;
 		} else {
@@ -363,9 +363,10 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 	    while(nosubm) {
 		i__ = scur;
 		j = left;
-		while(j <= right && (samchi_(string, &i__, templ, &j, 
-			string_len, templ_len) || samch_(wchr, &__state->c__1,
-			 templ, &j, (ftnlen)1, templ_len))) {
+		while(j <= right && (samchi_(__global_state, string, &i__, 
+			templ, &j, string_len, templ_len) || samch_(
+			__global_state, wchr, &__state->c__1, templ, &j, (
+			ftnlen)1, templ_len))) {
 		    ++i__;
 		    ++j;
 		}
@@ -397,8 +398,8 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*        string character.  Hunt for the next substring that doesn't */
 /*        contain a wild string character. */
 
-	while(tcur <= tlast && samch_(templ, &tcur, wstr, &__state->c__1, 
-		templ_len, (ftnlen)1)) {
+	while(tcur <= tlast && samch_(__global_state, templ, &tcur, wstr, &
+		__state->c__1, templ_len, (ftnlen)1)) {
 	    ++tcur;
 	}
 	if (tcur > tlast) {
@@ -416,8 +417,8 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*        does not have a wild string character. */
 
 	left = tcur;
-	while(tcur <= tlast && ! samch_(templ, &tcur, wstr, &__state->c__1, 
-		templ_len, (ftnlen)1)) {
+	while(tcur <= tlast && ! samch_(__global_state, templ, &tcur, wstr, &
+		__state->c__1, templ_len, (ftnlen)1)) {
 	    ++tcur;
 	}
 	right = tcur - 1;

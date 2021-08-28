@@ -8,20 +8,20 @@
 
 
 typedef int vhat_state_t;
-static vhat_state_t* get_vhat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vhat_state_t* get_vhat_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VHAT ( "V-Hat", unit vector along V, 3 dimensions ) */
-/* Subroutine */ int vhat_(doublereal *v1, doublereal *vout)
+/* Subroutine */ int vhat_(cspice_t* __global_state, doublereal *v1, 
+	doublereal *vout)
 {
     doublereal vmag;
-    extern doublereal vnorm_(doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    vhat_state_t* __state = get_vhat_state();
+    vhat_state_t* __state = get_vhat_state(__global_state);
 /* $ Abstract */
 
 /*      Find the unit vector along a double precision 3-dimensional */
@@ -154,7 +154,7 @@ static vhat_state_t* get_vhat_state() {
 
 /*  Obtain the magnitude of V1 */
 
-    vmag = vnorm_(v1);
+    vmag = vnorm_(__global_state, v1);
 
 /*   If VMAG is nonzero, then normalize.  Note that this process is */
 /*   numerically stable: overflow could only happen if VMAG were small, */

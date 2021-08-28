@@ -171,7 +171,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "surfnm_c");
+   chkin_c ( naif_state, "surfnm_c");
    
    
    /*

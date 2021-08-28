@@ -8,33 +8,33 @@
 
 
 typedef int diffi_state_t;
-static diffi_state_t* get_diffi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline diffi_state_t* get_diffi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DIFFI ( Difference of two integer sets ) */
-/* Subroutine */ int diffi_(integer *a, integer *b, integer *c__)
+/* Subroutine */ int diffi_(cspice_t* __global_state, integer *a, integer *b, 
+	integer *c__)
 {
     integer over;
     integer acard;
     integer bcard;
     integer ccard;
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer csize;
-    extern integer sizei_(integer *);
-    extern /* Subroutine */ int scardi_(integer *, integer *);
+    extern integer sizei_(cspice_t*, integer *);
+    extern /* Subroutine */ int scardi_(cspice_t*, integer *, integer *);
     integer apoint;
     integer bpoint;
-    extern /* Subroutine */ int excess_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int excess_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    diffi_state_t* __state = get_diffi_state();
+    diffi_state_t* __state = get_diffi_state(__global_state);
 /* $ Abstract */
 
 /*      Take the difference of two integer sets to form a third set. */
@@ -204,17 +204,17 @@ static diffi_state_t* get_diffi_state() {
 
 /*     Set up the error processing. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DIFFI", (ftnlen)5);
+    chkin_(__global_state, "DIFFI", (ftnlen)5);
 
 /*     Find the cardinality of the input sets, and the allowed size */
 /*     of the output set. */
 
-    acard = cardi_(a);
-    bcard = cardi_(b);
-    csize = sizei_(c__);
+    acard = cardi_(__global_state, a);
+    bcard = cardi_(__global_state, b);
+    csize = sizei_(__global_state, c__);
 
 /*     Begin with the input pointers at the first elements of the */
 /*     input sets. The cardinality of the output set is zero. */
@@ -269,15 +269,15 @@ static diffi_state_t* get_diffi_state() {
 
 /*     Set the cardinality of the output set. */
 
-    scardi_(&ccard, c__);
+    scardi_(__global_state, &ccard, c__);
 
 /*     Report any excess. */
 
     if (over > 0) {
-	excess_(&over, "set", (ftnlen)3);
-	sigerr_("SPICE(SETEXCESS)", (ftnlen)16);
+	excess_(__global_state, &over, "set", (ftnlen)3);
+	sigerr_(__global_state, "SPICE(SETEXCESS)", (ftnlen)16);
     }
-    chkout_("DIFFI", (ftnlen)5);
+    chkout_(__global_state, "DIFFI", (ftnlen)5);
     return 0;
 } /* diffi_ */
 

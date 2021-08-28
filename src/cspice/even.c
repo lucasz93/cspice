@@ -8,20 +8,19 @@
 
 
 typedef int even_state_t;
-static even_state_t* get_even_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline even_state_t* get_even_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            EVEN  ( Is an integer even? ) */
-logical even_(integer *i__)
+logical even_(cspice_t* __global_state, integer *i__)
 {
     /* System generated locals */
     logical ret_val;
 
 
     /* Module state */
-    even_state_t* __state = get_even_state();
+    even_state_t* __state = get_even_state(__global_state);
 /* $ Abstract */
 
 /*      Determine whether an integer is even. */

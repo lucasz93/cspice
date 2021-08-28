@@ -8,8 +8,7 @@
 
 
 extern prop2b_init_t __prop2b_init;
-static prop2b_state_t* get_prop2b_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline prop2b_state_t* get_prop2b_state(cspice_t* state) {
 	if (!state->prop2b)
 		state->prop2b = __cspice_allocate_module(sizeof(
 	prop2b_state_t), &__prop2b_init, sizeof(__prop2b_init));
@@ -18,8 +17,8 @@ static prop2b_state_t* get_prop2b_state() {
 }
 
 /* $Procedure      PROP2B ( Propagate a two-body solution ) */
-/* Subroutine */ int prop2b_(doublereal *gm, doublereal *pvinit, doublereal *
-	dt, doublereal *pvprop)
+/* Subroutine */ int prop2b_(cspice_t* __global_state, doublereal *gm, 
+	doublereal *pvinit, doublereal *dt, doublereal *pvprop)
 {
     /* Initialized data */
 
@@ -29,32 +28,36 @@ static prop2b_state_t* get_prop2b_state() {
     doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double sqrt(doublereal), log(doublereal), exp(doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double sqrt(f2c_state_t*, doublereal), log(f2c_state_t*, doublereal), exp(
+	    f2c_state_t*, doublereal);
 
     /* Local variables */
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern /* Subroutine */ int stmp03_(doublereal *, doublereal *, 
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int vequg_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
-    extern logical vzero_(doublereal *);
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    extern integer brckti_(integer *, integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int stmp03_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequg_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern integer brckti_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    prop2b_state_t* __state = get_prop2b_state();
+    prop2b_state_t* __state = get_prop2b_state(__global_state);
 /* $ Abstract */
 
 /*     Given a central mass and the state of massless body at time t_0, */
@@ -282,10 +285,10 @@ static prop2b_state_t* get_prop2b_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PROP2B", (ftnlen)6);
+	chkin_(__global_state, "PROP2B", (ftnlen)6);
     }
 
 /*     Life will be easier if we use POS and VEL to hold the state. */
@@ -326,23 +329,27 @@ static prop2b_state_t* get_prop2b_state() {
     while(__state->i__ < __state->nsaved && __state->new__) {
 	++__state->i__;
 	__state->k = __state->newest[(i__1 = __state->i__ - 1) < 3 && 0 <= 
-		i__1 ? i__1 : s_rnge("newest", i__1, "prop2b_", (ftnlen)375)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "newest", i__1, 
+		"prop2b_", (ftnlen)375)];
 	__state->new__ = pvinit[0] != __state->savepv[(i__1 = __state->k * 6 
-		- 6) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", i__1, "prop"
-		"2b_", (ftnlen)377)] || pvinit[1] != __state->savepv[(i__2 = 
-		__state->k * 6 - 5) < 18 && 0 <= i__2 ? i__2 : s_rnge("savepv"
-		, i__2, "prop2b_", (ftnlen)377)] || pvinit[2] != 
-		__state->savepv[(i__3 = __state->k * 6 - 4) < 18 && 0 <= i__3 
-		? i__3 : s_rnge("savepv", i__3, "prop2b_", (ftnlen)377)] || 
-		pvinit[3] != __state->savepv[(i__4 = __state->k * 6 - 3) < 18 
-		&& 0 <= i__4 ? i__4 : s_rnge("savepv", i__4, "prop2b_", (
-		ftnlen)377)] || pvinit[4] != __state->savepv[(i__5 = 
-		__state->k * 6 - 2) < 18 && 0 <= i__5 ? i__5 : s_rnge("savepv"
-		, i__5, "prop2b_", (ftnlen)377)] || pvinit[5] != 
-		__state->savepv[(i__6 = __state->k * 6 - 1) < 18 && 0 <= i__6 
-		? i__6 : s_rnge("savepv", i__6, "prop2b_", (ftnlen)377)] || *
-		gm != __state->savegm[(i__7 = __state->k - 1) < 3 && 0 <= 
-		i__7 ? i__7 : s_rnge("savegm", i__7, "prop2b_", (ftnlen)377)];
+		- 6) < 18 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"savepv", i__1, "prop2b_", (ftnlen)377)] || pvinit[1] != 
+		__state->savepv[(i__2 = __state->k * 6 - 5) < 18 && 0 <= i__2 
+		? i__2 : s_rnge(&__global_state->f2c, "savepv", i__2, "prop2"
+		"b_", (ftnlen)377)] || pvinit[2] != __state->savepv[(i__3 = 
+		__state->k * 6 - 4) < 18 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "savepv", i__3, "prop2b_", (ftnlen)377)] 
+		|| pvinit[3] != __state->savepv[(i__4 = __state->k * 6 - 3) < 
+		18 && 0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c, "savepv"
+		, i__4, "prop2b_", (ftnlen)377)] || pvinit[4] != 
+		__state->savepv[(i__5 = __state->k * 6 - 2) < 18 && 0 <= i__5 
+		? i__5 : s_rnge(&__global_state->f2c, "savepv", i__5, "prop2"
+		"b_", (ftnlen)377)] || pvinit[5] != __state->savepv[(i__6 = 
+		__state->k * 6 - 1) < 18 && 0 <= i__6 ? i__6 : s_rnge(&
+		__global_state->f2c, "savepv", i__6, "prop2b_", (ftnlen)377)] 
+		|| *gm != __state->savegm[(i__7 = __state->k - 1) < 3 && 0 <= 
+		i__7 ? i__7 : s_rnge(&__global_state->f2c, "savegm", i__7, 
+		"prop2b_", (ftnlen)377)];
     }
     if (! __state->new__) {
 
@@ -351,13 +358,14 @@ static prop2b_state_t* get_prop2b_state() {
 
 	__state->k = __state->i__;
 	__state->bumped = __state->newest[(i__1 = __state->k - 1) < 3 && 0 <= 
-		i__1 ? i__1 : s_rnge("newest", i__1, "prop2b_", (ftnlen)394)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "newest", i__1, 
+		"prop2b_", (ftnlen)394)];
 	for (__state->i__ = __state->k; __state->i__ >= 2; --__state->i__) {
 	    __state->newest[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 ? i__1 
-		    : s_rnge("newest", i__1, "prop2b_", (ftnlen)397)] = 
-		    __state->newest[(i__2 = __state->i__ - 2) < 3 && 0 <= 
-		    i__2 ? i__2 : s_rnge("newest", i__2, "prop2b_", (ftnlen)
-		    397)];
+		    : s_rnge(&__global_state->f2c, "newest", i__1, "prop2b_", 
+		    (ftnlen)397)] = __state->newest[(i__2 = __state->i__ - 2) 
+		    < 3 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "newest", i__2, "prop2b_", (ftnlen)397)];
 	}
 	__state->newest[0] = __state->bumped;
 	__state->k = __state->bumped;
@@ -365,17 +373,23 @@ static prop2b_state_t* get_prop2b_state() {
 /*        Now look up all of the other saved quantities. */
 
 	__state->b2rv = __state->sb2rv[(i__1 = __state->k - 1) < 3 && 0 <= 
-		i__1 ? i__1 : s_rnge("sb2rv", i__1, "prop2b_", (ftnlen)406)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "sb2rv", i__1, 
+		"prop2b_", (ftnlen)406)];
 	__state->bound = __state->sbound[(i__1 = __state->k - 1) < 3 && 0 <= 
-		i__1 ? i__1 : s_rnge("sbound", i__1, "prop2b_", (ftnlen)407)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "sbound", i__1, 
+		"prop2b_", (ftnlen)407)];
 	__state->bq = __state->sbq[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? 
-		i__1 : s_rnge("sbq", i__1, "prop2b_", (ftnlen)408)];
+		i__1 : s_rnge(&__global_state->f2c, "sbq", i__1, "prop2b_", (
+		ftnlen)408)];
 	__state->br0 = __state->sbr0[(i__1 = __state->k - 1) < 3 && 0 <= i__1 
-		? i__1 : s_rnge("sbr0", i__1, "prop2b_", (ftnlen)409)];
+		? i__1 : s_rnge(&__global_state->f2c, "sbr0", i__1, "prop2b_",
+		 (ftnlen)409)];
 	__state->f = __state->sf[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? 
-		i__1 : s_rnge("sf", i__1, "prop2b_", (ftnlen)410)];
+		i__1 : s_rnge(&__global_state->f2c, "sf", i__1, "prop2b_", (
+		ftnlen)410)];
 	__state->qovr0 = __state->sqovr0[(i__1 = __state->k - 1) < 3 && 0 <= 
-		i__1 ? i__1 : s_rnge("sqovr0", i__1, "prop2b_", (ftnlen)411)];
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "sqovr0", i__1, 
+		"prop2b_", (ftnlen)411)];
     } else {
 
 /*        We have a new state, new GM or both.  First let's make sure */
@@ -384,24 +398,24 @@ static prop2b_state_t* get_prop2b_state() {
 /*        First check for nonpositive mass. */
 
 	if (*gm <= 0.) {
-	    sigerr_("SPICE(NONPOSITIVEMASS)", (ftnlen)22);
-	    chkout_("PROP2B", (ftnlen)6);
+	    sigerr_(__global_state, "SPICE(NONPOSITIVEMASS)", (ftnlen)22);
+	    chkout_(__global_state, "PROP2B", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Next for a zero position vector */
 
-	if (vzero_(__state->pos)) {
-	    sigerr_("SPICE(ZEROPOSITION)", (ftnlen)19);
-	    chkout_("PROP2B", (ftnlen)6);
+	if (vzero_(__global_state, __state->pos)) {
+	    sigerr_(__global_state, "SPICE(ZEROPOSITION)", (ftnlen)19);
+	    chkout_(__global_state, "PROP2B", (ftnlen)6);
 	    return 0;
 	}
 
 /*        Finally for a zero velocity vector */
 
-	if (vzero_(__state->vel)) {
-	    sigerr_("SPICE(ZEROVELOCITY)", (ftnlen)19);
-	    chkout_("PROP2B", (ftnlen)6);
+	if (vzero_(__global_state, __state->vel)) {
+	    sigerr_(__global_state, "SPICE(ZEROVELOCITY)", (ftnlen)19);
+	    chkout_(__global_state, "PROP2B", (ftnlen)6);
 	    return 0;
 	}
 
@@ -418,8 +432,8 @@ static prop2b_state_t* get_prop2b_state() {
 
 /*           RV       be the value of the dot product  POS * VEL */
 
-	__state->r0 = vnorm_(__state->pos);
-	__state->rv = vdot_(__state->pos, __state->vel);
+	__state->r0 = vnorm_(__global_state, __state->pos);
+	__state->rv = vdot_(__global_state, __state->pos, __state->vel);
 
 /*        Let HVEC be the specific angular momentum vector and let Q be */
 /*        the distance at periapse. */
@@ -430,15 +444,15 @@ static prop2b_state_t* get_prop2b_state() {
 /*                   2)    H2    = |HVEC|  =  GM*(1+E)*Q */
 
 
-	vcrss_(__state->pos, __state->vel, __state->hvec);
-	__state->h2 = vdot_(__state->hvec, __state->hvec);
+	vcrss_(__global_state, __state->pos, __state->vel, __state->hvec);
+	__state->h2 = vdot_(__global_state, __state->hvec, __state->hvec);
 
 /*        Let's make sure we are not in the pathological case of */
 /*        rectilinear motion. */
 
 	if (__state->h2 == 0.) {
-	    sigerr_("SPICE(NONCONICMOTION)", (ftnlen)21);
-	    chkout_("PROP2B", (ftnlen)6);
+	    sigerr_(__global_state, "SPICE(NONCONICMOTION)", (ftnlen)21);
+	    chkout_(__global_state, "PROP2B", (ftnlen)6);
 	    return 0;
 	}
 
@@ -457,11 +471,12 @@ static prop2b_state_t* get_prop2b_state() {
 /*                                            GM            R0 */
 
 
-	vcrss_(__state->vel, __state->hvec, __state->tmpvec);
+	vcrss_(__global_state, __state->vel, __state->hvec, __state->tmpvec);
 	d__1 = 1. / *gm;
 	d__2 = -1. / __state->r0;
-	vlcom_(&d__1, __state->tmpvec, &d__2, __state->pos, __state->eqvec);
-	__state->e = vnorm_(__state->eqvec);
+	vlcom_(__global_state, &d__1, __state->tmpvec, &d__2, __state->pos, 
+		__state->eqvec);
+	__state->e = vnorm_(__global_state, __state->eqvec);
 
 /*        Solve the equation H2 = GM*Q*(1+E) for Q. */
 
@@ -510,7 +525,7 @@ static prop2b_state_t* get_prop2b_state() {
 /*        Evidently we will need the constants: */
 
 	__state->f = 1. - __state->e;
-	__state->b = sqrt(__state->q / *gm);
+	__state->b = sqrt(&__global_state->f2c, __state->q / *gm);
 	__state->br0 = __state->b * __state->r0;
 	__state->b2rv = __state->b * __state->b * __state->rv;
 	__state->bq = __state->b * __state->q;
@@ -742,11 +757,12 @@ static prop2b_state_t* get_prop2b_state() {
 		__state->qovr0 / __state->bq, abs(d__1));
 	__state->maxc = max(d__2,d__3);
 	if (__state->f < 0.) {
-	    __state->logmxc = log(__state->maxc);
-	    __state->logdpm = log(dpmax_() / 2.);
+	    __state->logmxc = log(&__global_state->f2c, __state->maxc);
+	    __state->logdpm = log(&__global_state->f2c, dpmax_(__global_state)
+		     / 2.);
 	    __state->fixed = __state->logdpm - __state->logmxc;
-	    __state->rootf = sqrt(-__state->f);
-	    __state->logf = log(-__state->f);
+	    __state->rootf = sqrt(&__global_state->f2c, -__state->f);
+	    __state->logf = log(&__global_state->f2c, -__state->f);
 /* Computing MIN */
 	    d__1 = __state->fixed / __state->rootf, d__2 = (__state->fixed + 
 		    __state->logf * 1.5) / __state->rootf;
@@ -792,63 +808,75 @@ static prop2b_state_t* get_prop2b_state() {
 
 /*           (We'll use logarithms to compute the upper bound for |X|.) */
 
-	    __state->logbnd = (log(1.5) + log(dpmax_()) - log(__state->maxc)) 
-		    / 3.;
-	    __state->bound = exp(__state->logbnd);
+	    __state->logbnd = (log(&__global_state->f2c, 1.5) + log(&
+		    __global_state->f2c, dpmax_(__global_state)) - log(&
+		    __global_state->f2c, __state->maxc)) / 3.;
+	    __state->bound = exp(&__global_state->f2c, __state->logbnd);
 	}
 
 /*        All the obvious problems have been checked, move everybody */
 /*        on the list down and put the new guy on top of the list. */
 
 	i__1 = __state->nsaved + 1;
-	__state->nsaved = brckti_(&i__1, &__state->c__1, &__state->c__3);
+	__state->nsaved = brckti_(__global_state, &i__1, &__state->c__1, &
+		__state->c__3);
 	__state->bumped = __state->newest[(i__1 = __state->nsaved - 1) < 3 && 
-		0 <= i__1 ? i__1 : s_rnge("newest", i__1, "prop2b_", (ftnlen)
-		855)];
+		0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "newest", 
+		i__1, "prop2b_", (ftnlen)855)];
 	for (__state->i__ = __state->nsaved; __state->i__ >= 2; 
 		--__state->i__) {
 	    __state->newest[(i__1 = __state->i__ - 1) < 3 && 0 <= i__1 ? i__1 
-		    : s_rnge("newest", i__1, "prop2b_", (ftnlen)858)] = 
-		    __state->newest[(i__2 = __state->i__ - 2) < 3 && 0 <= 
-		    i__2 ? i__2 : s_rnge("newest", i__2, "prop2b_", (ftnlen)
-		    858)];
+		    : s_rnge(&__global_state->f2c, "newest", i__1, "prop2b_", 
+		    (ftnlen)858)] = __state->newest[(i__2 = __state->i__ - 2) 
+		    < 3 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "newest", i__2, "prop2b_", (ftnlen)858)];
 	}
 	__state->newest[0] = __state->bumped;
 	__state->k = __state->bumped;
 	__state->savepv[(i__1 = __state->k * 6 - 6) < 18 && 0 <= i__1 ? i__1 :
-		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)864)] = pvinit[0];
+		 s_rnge(&__global_state->f2c, "savepv", i__1, "prop2b_", (
+		ftnlen)864)] = pvinit[0];
 	__state->savepv[(i__1 = __state->k * 6 - 5) < 18 && 0 <= i__1 ? i__1 :
-		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)865)] = pvinit[1];
+		 s_rnge(&__global_state->f2c, "savepv", i__1, "prop2b_", (
+		ftnlen)865)] = pvinit[1];
 	__state->savepv[(i__1 = __state->k * 6 - 4) < 18 && 0 <= i__1 ? i__1 :
-		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)866)] = pvinit[2];
+		 s_rnge(&__global_state->f2c, "savepv", i__1, "prop2b_", (
+		ftnlen)866)] = pvinit[2];
 	__state->savepv[(i__1 = __state->k * 6 - 3) < 18 && 0 <= i__1 ? i__1 :
-		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)867)] = pvinit[3];
+		 s_rnge(&__global_state->f2c, "savepv", i__1, "prop2b_", (
+		ftnlen)867)] = pvinit[3];
 	__state->savepv[(i__1 = __state->k * 6 - 2) < 18 && 0 <= i__1 ? i__1 :
-		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)868)] = pvinit[4];
+		 s_rnge(&__global_state->f2c, "savepv", i__1, "prop2b_", (
+		ftnlen)868)] = pvinit[4];
 	__state->savepv[(i__1 = __state->k * 6 - 1) < 18 && 0 <= i__1 ? i__1 :
-		 s_rnge("savepv", i__1, "prop2b_", (ftnlen)869)] = pvinit[5];
+		 s_rnge(&__global_state->f2c, "savepv", i__1, "prop2b_", (
+		ftnlen)869)] = pvinit[5];
 	__state->savegm[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("savegm", i__1, "prop2b_", (ftnlen)870)] = *gm;
+		s_rnge(&__global_state->f2c, "savegm", i__1, "prop2b_", (
+		ftnlen)870)] = *gm;
 
 /*        Finally we save the results of all of the above */
 /*        computations so that we won't have to do them again, */
 /*        if this initial state and GM are entered again. */
 
 	__state->sb2rv[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("sb2rv", i__1, "prop2b_", (ftnlen)877)] = 
-		__state->b2rv;
+		s_rnge(&__global_state->f2c, "sb2rv", i__1, "prop2b_", (
+		ftnlen)877)] = __state->b2rv;
 	__state->sbound[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("sbound", i__1, "prop2b_", (ftnlen)878)] = 
-		__state->bound;
+		s_rnge(&__global_state->f2c, "sbound", i__1, "prop2b_", (
+		ftnlen)878)] = __state->bound;
 	__state->sbq[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"sbq", i__1, "prop2b_", (ftnlen)879)] = __state->bq;
+		&__global_state->f2c, "sbq", i__1, "prop2b_", (ftnlen)879)] = 
+		__state->bq;
 	__state->sbr0[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("sbr0", i__1, "prop2b_", (ftnlen)880)] = __state->br0;
-	__state->sf[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"sf", i__1, "prop2b_", (ftnlen)881)] = __state->f;
+		s_rnge(&__global_state->f2c, "sbr0", i__1, "prop2b_", (ftnlen)
+		880)] = __state->br0;
+	__state->sf[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "sf", i__1, "prop2b_", (ftnlen)881)] = 
+		__state->f;
 	__state->sqovr0[(i__1 = __state->k - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("sqovr0", i__1, "prop2b_", (ftnlen)882)] = 
-		__state->qovr0;
+		s_rnge(&__global_state->f2c, "sqovr0", i__1, "prop2b_", (
+		ftnlen)882)] = __state->qovr0;
     }
 
 
@@ -918,10 +946,10 @@ static prop2b_state_t* get_prop2b_state() {
 
     __state->x = *dt / __state->bq;
     d__1 = -__state->bound;
-    __state->x = brcktd_(&__state->x, &d__1, &__state->bound);
+    __state->x = brcktd_(__global_state, &__state->x, &d__1, &__state->bound);
     __state->fx2 = __state->f * __state->x * __state->x;
-    stmp03_(&__state->fx2, &__state->c0, &__state->c1, &__state->c2, &
-	    __state->c3);
+    stmp03_(__global_state, &__state->fx2, &__state->c0, &__state->c1, &
+	    __state->c2, &__state->c3);
     __state->kfun = __state->x * (__state->br0 * __state->c1 + __state->x * (
 	    __state->b2rv * __state->c2 + __state->x * (__state->bq * 
 	    __state->c3)));
@@ -933,7 +961,8 @@ static prop2b_state_t* get_prop2b_state() {
 	    __state->lower *= 2.;
 	    __state->oldx = __state->x;
 	    d__1 = -__state->bound;
-	    __state->x = brcktd_(&__state->lower, &d__1, &__state->bound);
+	    __state->x = brcktd_(__global_state, &__state->lower, &d__1, &
+		    __state->bound);
 
 /*           Make sure we are making progress. (In other words make sure */
 /*           we don't run into the boundary of values that X can assume. */
@@ -943,8 +972,8 @@ static prop2b_state_t* get_prop2b_state() {
 
 	    if (__state->x == __state->oldx) {
 		__state->fx2 = __state->f * __state->bound * __state->bound;
-		stmp03_(&__state->fx2, &__state->c0, &__state->c1, &
-			__state->c2, &__state->c3);
+		stmp03_(__global_state, &__state->fx2, &__state->c0, &
+			__state->c1, &__state->c2, &__state->c3);
 		__state->kfunl = -__state->bound * (__state->br0 * 
 			__state->c1 - __state->bound * (__state->b2rv * 
 			__state->c2 - __state->bound * __state->bq * 
@@ -952,20 +981,21 @@ static prop2b_state_t* get_prop2b_state() {
 		__state->kfunu = __state->bound * (__state->br0 * __state->c1 
 			+ __state->bound * (__state->b2rv * __state->c2 + 
 			__state->bound * __state->bq * __state->c3));
-		setmsg_("The input delta time (DT) has a value of #.  This i"
-			"s beyond the range of DT for which we can reliably p"
-			"ropagate states. The limits for this GM and initial "
-			"state are from # to #. ", (ftnlen)178);
-		errdp_("#", dt, (ftnlen)1);
-		errdp_("#", &__state->kfunl, (ftnlen)1);
-		errdp_("#", &__state->kfunu, (ftnlen)1);
-		sigerr_("SPICE(DTOUTOFRANGE)", (ftnlen)19);
-		chkout_("PROP2B", (ftnlen)6);
+		setmsg_(__global_state, "The input delta time (DT) has a val"
+			"ue of #.  This is beyond the range of DT for which w"
+			"e can reliably propagate states. The limits for this"
+			" GM and initial state are from # to #. ", (ftnlen)178)
+			;
+		errdp_(__global_state, "#", dt, (ftnlen)1);
+		errdp_(__global_state, "#", &__state->kfunl, (ftnlen)1);
+		errdp_(__global_state, "#", &__state->kfunu, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(DTOUTOFRANGE)", (ftnlen)19);
+		chkout_(__global_state, "PROP2B", (ftnlen)6);
 		return 0;
 	    }
 	    __state->fx2 = __state->f * __state->x * __state->x;
-	    stmp03_(&__state->fx2, &__state->c0, &__state->c1, &__state->c2, &
-		    __state->c3);
+	    stmp03_(__global_state, &__state->fx2, &__state->c0, &__state->c1,
+		     &__state->c2, &__state->c3);
 	    __state->kfun = __state->x * (__state->br0 * __state->c1 + 
 		    __state->x * (__state->b2rv * __state->c2 + __state->x * (
 		    __state->bq * __state->c3)));
@@ -978,14 +1008,15 @@ static prop2b_state_t* get_prop2b_state() {
 	    __state->upper *= 2.;
 	    __state->oldx = __state->x;
 	    d__1 = -__state->bound;
-	    __state->x = brcktd_(&__state->upper, &d__1, &__state->bound);
+	    __state->x = brcktd_(__global_state, &__state->upper, &d__1, &
+		    __state->bound);
 
 /*           Make sure we are making progress. */
 
 	    if (__state->x == __state->oldx) {
 		__state->fx2 = __state->f * __state->bound * __state->bound;
-		stmp03_(&__state->fx2, &__state->c0, &__state->c1, &
-			__state->c2, &__state->c3);
+		stmp03_(__global_state, &__state->fx2, &__state->c0, &
+			__state->c1, &__state->c2, &__state->c3);
 		__state->kfunl = -__state->bound * (__state->br0 * 
 			__state->c1 - __state->bound * (__state->b2rv * 
 			__state->c2 - __state->bound * __state->bq * 
@@ -993,27 +1024,28 @@ static prop2b_state_t* get_prop2b_state() {
 		__state->kfunu = __state->bound * (__state->br0 * __state->c1 
 			+ __state->bound * (__state->b2rv * __state->c2 + 
 			__state->bound * __state->bq * __state->c3));
-		setmsg_("The input delta time (DT) has a value of #.  This i"
-			"s beyond the range of DT for which we can reliably p"
-			"ropagate states. The limits for this GM and initial "
-			"state are from # to #. ", (ftnlen)178);
-		errdp_("#", dt, (ftnlen)1);
-		errdp_("#", &__state->kfunl, (ftnlen)1);
-		errdp_("#", &__state->kfunu, (ftnlen)1);
-		sigerr_("SPICE(DTOUTOFRANGE)", (ftnlen)19);
-		chkout_("PROP2B", (ftnlen)6);
+		setmsg_(__global_state, "The input delta time (DT) has a val"
+			"ue of #.  This is beyond the range of DT for which w"
+			"e can reliably propagate states. The limits for this"
+			" GM and initial state are from # to #. ", (ftnlen)178)
+			;
+		errdp_(__global_state, "#", dt, (ftnlen)1);
+		errdp_(__global_state, "#", &__state->kfunl, (ftnlen)1);
+		errdp_(__global_state, "#", &__state->kfunu, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(DTOUTOFRANGE)", (ftnlen)19);
+		chkout_(__global_state, "PROP2B", (ftnlen)6);
 		return 0;
 	    }
 	    __state->fx2 = __state->f * __state->x * __state->x;
-	    stmp03_(&__state->fx2, &__state->c0, &__state->c1, &__state->c2, &
-		    __state->c3);
+	    stmp03_(__global_state, &__state->fx2, &__state->c0, &__state->c1,
+		     &__state->c2, &__state->c3);
 	    __state->kfun = __state->x * (__state->br0 * __state->c1 + 
 		    __state->x * (__state->b2rv * __state->c2 + __state->x * 
 		    __state->bq * __state->c3));
 	}
     } else {
-	vequg_(pvinit, &__state->c__6, pvprop);
-	chkout_("PROP2B", (ftnlen)6);
+	vequg_(__global_state, pvinit, &__state->c__6, pvprop);
+	chkout_(__global_state, "PROP2B", (ftnlen)6);
 	return 0;
     }
 
@@ -1036,8 +1068,8 @@ static prop2b_state_t* get_prop2b_state() {
     d__1 = __state->upper, d__2 = max(d__3,d__4);
     __state->x = min(d__1,d__2);
     __state->fx2 = __state->f * __state->x * __state->x;
-    stmp03_(&__state->fx2, &__state->c0, &__state->c1, &__state->c2, &
-	    __state->c3);
+    stmp03_(__global_state, &__state->fx2, &__state->c0, &__state->c1, &
+	    __state->c2, &__state->c3);
     __state->lcount = 0;
     __state->mostc = 1000;
     while(__state->x > __state->lower && __state->x < __state->upper && 
@@ -1069,8 +1101,8 @@ static prop2b_state_t* get_prop2b_state() {
 	d__1 = __state->upper, d__2 = max(d__3,d__4);
 	__state->x = min(d__1,d__2);
 	__state->fx2 = __state->f * __state->x * __state->x;
-	stmp03_(&__state->fx2, &__state->c0, &__state->c1, &__state->c2, &
-		__state->c3);
+	stmp03_(__global_state, &__state->fx2, &__state->c0, &__state->c1, &
+		__state->c2, &__state->c3);
 	++__state->lcount;
     }
 
@@ -1092,10 +1124,11 @@ static prop2b_state_t* get_prop2b_state() {
 
 /*     ... and compute the linear combinations needed to get PVPROP */
 
-    vlcom_(&__state->pc, __state->pos, &__state->vc, __state->vel, pvprop);
-    vlcom_(&__state->pcdot, __state->pos, &__state->vcdot, __state->vel, &
-	    pvprop[3]);
-    chkout_("PROP2B", (ftnlen)6);
+    vlcom_(__global_state, &__state->pc, __state->pos, &__state->vc, 
+	    __state->vel, pvprop);
+    vlcom_(__global_state, &__state->pcdot, __state->pos, &__state->vcdot, 
+	    __state->vel, &pvprop[3]);
+    chkout_(__global_state, "PROP2B", (ftnlen)6);
     return 0;
 } /* prop2b_ */
 

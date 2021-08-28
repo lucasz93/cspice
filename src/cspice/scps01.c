@@ -8,8 +8,7 @@
 
 
 extern scps01_init_t __scps01_init;
-static scps01_state_t* get_scps01_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline scps01_state_t* get_scps01_state(cspice_t* state) {
 	if (!state->scps01)
 		state->scps01 = __cspice_allocate_module(sizeof(
 	scps01_state_t), &__scps01_init, sizeof(__scps01_init));
@@ -18,8 +17,9 @@ static scps01_state_t* get_scps01_state() {
 }
 
 /* $Procedure       SCPS01 ( Convert type 1 SCLK string to ticks ) */
-/* Subroutine */ int scps01_(integer *sc, char *clkstr, logical *error, char *
-	msg, doublereal *ticks, ftnlen clkstr_len, ftnlen msg_len)
+/* Subroutine */ int scps01_(cspice_t* __global_state, integer *sc, char *
+	clkstr, logical *error, char *msg, doublereal *ticks, ftnlen 
+	clkstr_len, ftnlen msg_len)
 {
     /* Initialized data */
 
@@ -28,31 +28,31 @@ static scps01_state_t* get_scps01_state() {
     integer i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_rnge(char *, integer, 
-	    char *, integer);
-    double d_nint(doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), s_rnge(
+	    f2c_state_t*, char *, integer, char *, integer);
+    double d_nint(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int scld01_(char *, integer *, integer *, integer 
-	    *, doublereal *, ftnlen);
-    extern /* Subroutine */ int scli01_(char *, integer *, integer *, integer 
-	    *, integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int lparsm_(char *, char *, integer *, integer *, 
+    extern /* Subroutine */ int scld01_(cspice_t*, char *, integer *, integer 
+	    *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int scli01_(cspice_t*, char *, integer *, integer 
+	    *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
 	    char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
-	    *, ftnlen, ftnlen);
-    extern logical return_(void);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int lparsm_(cspice_t*, char *, char *, integer *, 
+	    integer *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int nparsd_(cspice_t*, char *, doublereal *, char 
+	    *, integer *, ftnlen, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    scps01_state_t* __state = get_scps01_state();
+    scps01_state_t* __state = get_scps01_state(__global_state);
 /* $ Abstract */
 
 /*     Convert a character representation of a type 1 spacecraft clock */
@@ -478,17 +478,18 @@ static scps01_state_t* get_scps01_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCPS01", (ftnlen)6);
+	chkin_(__global_state, "SCPS01", (ftnlen)6);
     }
 
 /*     Start off with the error flag and message set for a regular */
 /*     SPICE error. */
 
     *error = TRUE_;
-    s_copy(msg, "SPICELIB error detected.", msg_len, (ftnlen)24);
+    s_copy(&__global_state->f2c, msg, "SPICELIB error detected.", msg_len, (
+	    ftnlen)24);
 
 /*     Our first piece of business is to look up all of the data */
 /*     we require from the kernel pool.  We must form the names */
@@ -499,42 +500,45 @@ static scps01_state_t* get_scps01_state() {
 /*        -  The moduli of the fields of an SCLK string */
 /*        -  The offsets for each clock field. */
 
-    scli01_(__state->namlst, sc, &__state->c__10, &__state->n, &
-	    __state->nfield, (ftnlen)60);
-    scld01_(__state->namlst + 120, sc, &__state->c__10, &__state->n, 
-	    __state->moduli, (ftnlen)60);
-    scld01_(__state->namlst + 60, sc, &__state->c__10, &__state->n, 
-	    __state->offset, (ftnlen)60);
+    scli01_(__global_state, __state->namlst, sc, &__state->c__10, &__state->n,
+	     &__state->nfield, (ftnlen)60);
+    scld01_(__global_state, __state->namlst + 120, sc, &__state->c__10, &
+	    __state->n, __state->moduli, (ftnlen)60);
+    scld01_(__global_state, __state->namlst + 60, sc, &__state->c__10, &
+	    __state->n, __state->offset, (ftnlen)60);
 
 /*     Don't try to continue if we had a lookup error. */
 
-    if (failed_()) {
-	chkout_("SCPS01", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SCPS01", (ftnlen)6);
 	return 0;
     }
 
 /*     If our clock string is blank, we can stop now. */
 
-    if (s_cmp(clkstr, " ", clkstr_len, (ftnlen)1) == 0) {
-	s_copy(msg, "Non partition part of the input clock string is blank.", 
-		msg_len, (ftnlen)54);
+    if (s_cmp(&__global_state->f2c, clkstr, " ", clkstr_len, (ftnlen)1) == 0) 
+	    {
+	s_copy(&__global_state->f2c, msg, "Non partition part of the input c"
+		"lock string is blank.", msg_len, (ftnlen)54);
 	*error = TRUE_;
-	chkout_("SCPS01", (ftnlen)6);
+	chkout_(__global_state, "SCPS01", (ftnlen)6);
 	return 0;
     }
 
 /*     Determine how many ticks is each field is worth. */
 
     __state->cmptks[(i__1 = __state->nfield - 1) < 10 && 0 <= i__1 ? i__1 : 
-	    s_rnge("cmptks", i__1, "scps01_", (ftnlen)464)] = 1.;
+	    s_rnge(&__global_state->f2c, "cmptks", i__1, "scps01_", (ftnlen)
+	    464)] = 1.;
     for (__state->i__ = __state->nfield - 1; __state->i__ >= 1; 
 	    --__state->i__) {
 	__state->cmptks[(i__1 = __state->i__ - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cmptks", i__1, "scps01_", (ftnlen)467)] = 
-		__state->cmptks[(i__2 = __state->i__) < 10 && 0 <= i__2 ? 
-		i__2 : s_rnge("cmptks", i__2, "scps01_", (ftnlen)467)] * 
-		__state->moduli[(i__3 = __state->i__) < 10 && 0 <= i__3 ? 
-		i__3 : s_rnge("moduli", i__3, "scps01_", (ftnlen)467)];
+		s_rnge(&__global_state->f2c, "cmptks", i__1, "scps01_", (
+		ftnlen)467)] = __state->cmptks[(i__2 = __state->i__) < 10 && 
+		0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "cmptks", 
+		i__2, "scps01_", (ftnlen)467)] * __state->moduli[(i__3 = 
+		__state->i__) < 10 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "moduli", i__3, "scps01_", (ftnlen)467)];
     }
 
 /*     Parse the clock components from the input string. There should */
@@ -542,21 +546,24 @@ static scps01_state_t* get_scps01_state() {
 /*     a clock string, we'll let LPARSM take up to MXNFLD components and */
 /*     then test for an error. */
 
-    lparsm_(clkstr, ".:-, ", &__state->c__10, &__state->n, __state->cmp, 
-	    clkstr_len, (ftnlen)5, (ftnlen)30);
+    lparsm_(__global_state, clkstr, ".:-, ", &__state->c__10, &__state->n, 
+	    __state->cmp, clkstr_len, (ftnlen)5, (ftnlen)30);
 
 /*     If the string has too many fields for the specified spacecraft */
 /*     then signal an error. */
 
     if (__state->n > __state->nfield) {
 	*error = TRUE_;
-	s_copy(msg, "Input clock string # has # fields; maximum for this spa"
-		"cecraft clock is #.", msg_len, (ftnlen)74);
-	repmc_(msg, "#", clkstr, msg, msg_len, (ftnlen)1, clkstr_len, msg_len)
-		;
-	repmi_(msg, "#", &__state->n, msg, msg_len, (ftnlen)1, msg_len);
-	repmi_(msg, "#", &__state->nfield, msg, msg_len, (ftnlen)1, msg_len);
-	chkout_("SCPS01", (ftnlen)6);
+	s_copy(&__global_state->f2c, msg, "Input clock string # has # fields"
+		"; maximum for this spacecraft clock is #.", msg_len, (ftnlen)
+		74);
+	repmc_(__global_state, msg, "#", clkstr, msg, msg_len, (ftnlen)1, 
+		clkstr_len, msg_len);
+	repmi_(__global_state, msg, "#", &__state->n, msg, msg_len, (ftnlen)1,
+		 msg_len);
+	repmi_(__global_state, msg, "#", &__state->nfield, msg, msg_len, (
+		ftnlen)1, msg_len);
+	chkout_(__global_state, "SCPS01", (ftnlen)6);
 	return 0;
     }
 
@@ -565,33 +572,37 @@ static scps01_state_t* get_scps01_state() {
 
     i__1 = __state->n;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
-	if (s_cmp(__state->cmp + ((i__2 = __state->i__ - 1) < 10 && 0 <= i__2 
-		? i__2 : s_rnge("cmp", i__2, "scps01_", (ftnlen)504)) * 30, 
-		" ", (ftnlen)30, (ftnlen)1) == 0) {
+	if (s_cmp(&__global_state->f2c, __state->cmp + ((i__2 = __state->i__ 
+		- 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		"cmp", i__2, "scps01_", (ftnlen)504)) * 30, " ", (ftnlen)30, (
+		ftnlen)1) == 0) {
 	    __state->cmpval[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ? 
-		    i__2 : s_rnge("cmpval", i__2, "scps01_", (ftnlen)505)] = 
-		    __state->offset[(i__3 = __state->i__ - 1) < 10 && 0 <= 
-		    i__3 ? i__3 : s_rnge("offset", i__3, "scps01_", (ftnlen)
+		    i__2 : s_rnge(&__global_state->f2c, "cmpval", i__2, "scp"
+		    "s01_", (ftnlen)505)] = __state->offset[(i__3 = 
+		    __state->i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge(&
+		    __global_state->f2c, "offset", i__3, "scps01_", (ftnlen)
 		    505)];
 	} else {
-	    nparsd_(__state->cmp + ((i__2 = __state->i__ - 1) < 10 && 0 <= 
-		    i__2 ? i__2 : s_rnge("cmp", i__2, "scps01_", (ftnlen)507))
-		     * 30, &__state->cmpval[(i__3 = __state->i__ - 1) < 10 && 
-		    0 <= i__3 ? i__3 : s_rnge("cmpval", i__3, "scps01_", (
-		    ftnlen)507)], __state->strerr, &__state->pntr, (ftnlen)30,
-		     (ftnlen)240);
+	    nparsd_(__global_state, __state->cmp + ((i__2 = __state->i__ - 1) 
+		    < 10 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "cmp", i__2, "scps01_", (ftnlen)507)) * 30, &
+		    __state->cmpval[(i__3 = __state->i__ - 1) < 10 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "cmpval", i__3,
+		     "scps01_", (ftnlen)507)], __state->strerr, &
+		    __state->pntr, (ftnlen)30, (ftnlen)240);
 	}
-	if (s_cmp(__state->strerr, " ", (ftnlen)240, (ftnlen)1) != 0) {
+	if (s_cmp(&__global_state->f2c, __state->strerr, " ", (ftnlen)240, (
+		ftnlen)1) != 0) {
 	    *error = TRUE_;
-	    s_copy(msg, "Could not parse SCLK component # from # as a number."
-		    , msg_len, (ftnlen)52);
-	    repmc_(msg, "#", __state->cmp + ((i__2 = __state->i__ - 1) < 10 &&
-		     0 <= i__2 ? i__2 : s_rnge("cmp", i__2, "scps01_", (
-		    ftnlen)517)) * 30, msg, msg_len, (ftnlen)1, (ftnlen)30, 
-		    msg_len);
-	    repmc_(msg, "#", clkstr, msg, msg_len, (ftnlen)1, clkstr_len, 
-		    msg_len);
-	    chkout_("SCPS01", (ftnlen)6);
+	    s_copy(&__global_state->f2c, msg, "Could not parse SCLK componen"
+		    "t # from # as a number.", msg_len, (ftnlen)52);
+	    repmc_(__global_state, msg, "#", __state->cmp + ((i__2 = 
+		    __state->i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "cmp", i__2, "scps01_", (ftnlen)517))
+		     * 30, msg, msg_len, (ftnlen)1, (ftnlen)30, msg_len);
+	    repmc_(__global_state, msg, "#", clkstr, msg, msg_len, (ftnlen)1, 
+		    clkstr_len, msg_len);
+	    chkout_(__global_state, "SCPS01", (ftnlen)6);
 	    return 0;
 	}
 
@@ -601,25 +612,28 @@ static scps01_state_t* get_scps01_state() {
 /*        have been invalid. */
 
 	__state->cmpval[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
-		s_rnge("cmpval", i__2, "scps01_", (ftnlen)531)] = 
-		__state->cmpval[(i__3 = __state->i__ - 1) < 10 && 0 <= i__3 ? 
-		i__3 : s_rnge("cmpval", i__3, "scps01_", (ftnlen)531)] - 
-		__state->offset[(i__4 = __state->i__ - 1) < 10 && 0 <= i__4 ? 
-		i__4 : s_rnge("offset", i__4, "scps01_", (ftnlen)531)];
-	if (d_nint(&__state->cmpval[(i__2 = __state->i__ - 1) < 10 && 0 <= 
-		i__2 ? i__2 : s_rnge("cmpval", i__2, "scps01_", (ftnlen)533)])
+		s_rnge(&__global_state->f2c, "cmpval", i__2, "scps01_", (
+		ftnlen)531)] = __state->cmpval[(i__3 = __state->i__ - 1) < 10 
+		&& 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "cmpval", 
+		i__3, "scps01_", (ftnlen)531)] - __state->offset[(i__4 = 
+		__state->i__ - 1) < 10 && 0 <= i__4 ? i__4 : s_rnge(&
+		__global_state->f2c, "offset", i__4, "scps01_", (ftnlen)531)];
+	if (d_nint(&__global_state->f2c, &__state->cmpval[(i__2 = 
+		__state->i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "cmpval", i__2, "scps01_", (ftnlen)533)])
 		 < 0.) {
 	    *error = TRUE_;
-	    s_copy(msg, "Component number #, # in the SCLK string  # is inva"
-		    "lid.", msg_len, (ftnlen)55);
-	    repmi_(msg, "#", &__state->i__, msg, msg_len, (ftnlen)1, msg_len);
-	    repmc_(msg, "#", __state->cmp + ((i__2 = __state->i__ - 1) < 10 &&
-		     0 <= i__2 ? i__2 : s_rnge("cmp", i__2, "scps01_", (
-		    ftnlen)541)) * 30, msg, msg_len, (ftnlen)1, (ftnlen)30, 
-		    msg_len);
-	    repmc_(msg, "#", clkstr, msg, msg_len, (ftnlen)1, clkstr_len, 
-		    msg_len);
-	    chkout_("SCPS01", (ftnlen)6);
+	    s_copy(&__global_state->f2c, msg, "Component number #, # in the "
+		    "SCLK string  # is invalid.", msg_len, (ftnlen)55);
+	    repmi_(__global_state, msg, "#", &__state->i__, msg, msg_len, (
+		    ftnlen)1, msg_len);
+	    repmc_(__global_state, msg, "#", __state->cmp + ((i__2 = 
+		    __state->i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "cmp", i__2, "scps01_", (ftnlen)541))
+		     * 30, msg, msg_len, (ftnlen)1, (ftnlen)30, msg_len);
+	    repmc_(__global_state, msg, "#", clkstr, msg, msg_len, (ftnlen)1, 
+		    clkstr_len, msg_len);
+	    chkout_(__global_state, "SCPS01", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -632,13 +646,14 @@ static scps01_state_t* get_scps01_state() {
     i__1 = __state->n;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	*ticks += __state->cmpval[(i__2 = __state->i__ - 1) < 10 && 0 <= i__2 
-		? i__2 : s_rnge("cmpval", i__2, "scps01_", (ftnlen)559)] * 
-		__state->cmptks[(i__3 = __state->i__ - 1) < 10 && 0 <= i__3 ? 
-		i__3 : s_rnge("cmptks", i__3, "scps01_", (ftnlen)559)];
+		? i__2 : s_rnge(&__global_state->f2c, "cmpval", i__2, "scps0"
+		"1_", (ftnlen)559)] * __state->cmptks[(i__3 = __state->i__ - 1)
+		 < 10 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		"cmptks", i__3, "scps01_", (ftnlen)559)];
     }
     *error = FALSE_;
-    s_copy(msg, " ", msg_len, (ftnlen)1);
-    chkout_("SCPS01", (ftnlen)6);
+    s_copy(&__global_state->f2c, msg, " ", msg_len, (ftnlen)1);
+    chkout_(__global_state, "SCPS01", (ftnlen)6);
     return 0;
 } /* scps01_ */
 

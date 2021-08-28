@@ -8,33 +8,33 @@
 
 
 typedef int zzinvelt_state_t;
-static zzinvelt_state_t* get_zzinvelt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzinvelt_state_t* get_zzinvelt_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZINVELT ( DSK, in volume element? ) */
-/* Subroutine */ int zzinvelt_(doublereal *p, integer *corsys, doublereal *
-	corpar, doublereal *bounds, doublereal *margin, integer *exclud, 
-	logical *inside)
+/* Subroutine */ int zzinvelt_(cspice_t* __global_state, doublereal *p, 
+	integer *corsys, doublereal *corpar, doublereal *bounds, doublereal *
+	margin, integer *exclud, logical *inside)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int zzinrec_(doublereal *, doublereal *, 
-	    doublereal *, integer *, logical *);
-    extern /* Subroutine */ int zzinlat_(doublereal *, doublereal *, 
-	    doublereal *, integer *, logical *);
-    extern /* Subroutine */ int zzinpdt_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzinrec_(cspice_t*, doublereal *, doublereal *
+	    , doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzinlat_(cspice_t*, doublereal *, doublereal *
+	    , doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzinpdt_(cspice_t*, doublereal *, doublereal *
+	    , doublereal *, doublereal *, integer *, logical *);
 
 
     /* Module state */
-    zzinvelt_state_t* __state = get_zzinvelt_state();
+    zzinvelt_state_t* __state = get_zzinvelt_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -614,15 +614,16 @@ static zzinvelt_state_t* get_zzinvelt_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZINVELT", (ftnlen)8);
+    chkin_(__global_state, "ZZINVELT", (ftnlen)8);
     if (*margin < 0.) {
-	setmsg_("Margin must be non-negative but was #.", (ftnlen)38);
-	errdp_("#", margin, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("ZZINVELT", (ftnlen)8);
+	setmsg_(__global_state, "Margin must be non-negative but was #.", (
+		ftnlen)38);
+	errdp_(__global_state, "#", margin, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "ZZINVELT", (ftnlen)8);
 	return 0;
     }
 
@@ -630,19 +631,20 @@ static zzinvelt_state_t* get_zzinvelt_state() {
 /*     routines. */
 
     if (*corsys == 1) {
-	zzinlat_(p, bounds, margin, exclud, inside);
+	zzinlat_(__global_state, p, bounds, margin, exclud, inside);
     } else if (*corsys == 4) {
-	zzinpdt_(p, bounds, corpar, margin, exclud, inside);
+	zzinpdt_(__global_state, p, bounds, corpar, margin, exclud, inside);
     } else if (*corsys == 3) {
-	zzinrec_(p, bounds, margin, exclud, inside);
+	zzinrec_(__global_state, p, bounds, margin, exclud, inside);
     } else {
-	setmsg_("Coordinate system code # was not recognized.", (ftnlen)44);
-	errint_("#", corsys, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("ZZINVELT", (ftnlen)8);
+	setmsg_(__global_state, "Coordinate system code # was not recognized."
+		, (ftnlen)44);
+	errint_(__global_state, "#", corsys, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "ZZINVELT", (ftnlen)8);
 	return 0;
     }
-    chkout_("ZZINVELT", (ftnlen)8);
+    chkout_(__global_state, "ZZINVELT", (ftnlen)8);
     return 0;
 } /* zzinvelt_ */
 

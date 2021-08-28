@@ -245,7 +245,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dafcs_c" );
+   chkin_c ( naif_state, "dafcs_c" );
 
    
    dafcs_ ( ( integer * ) &handle );

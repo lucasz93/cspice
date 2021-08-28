@@ -8,8 +8,7 @@
 
 
 extern zzmult_init_t __zzmult_init;
-static zzmult_state_t* get_zzmult_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzmult_state_t* get_zzmult_state(cspice_t* state) {
 	if (!state->zzmult)
 		state->zzmult = __cspice_allocate_module(sizeof(
 	zzmult_state_t), &__zzmult_init, sizeof(__zzmult_init));
@@ -18,7 +17,7 @@ static zzmult_state_t* get_zzmult_state() {
 }
 
 /* $Procedure ZZMULT ( Safer multiplication ) */
-doublereal zzmult_(doublereal *a, doublereal *b)
+doublereal zzmult_(cspice_t* __global_state, doublereal *a, doublereal *b)
 {
     /* Initialized data */
 
@@ -27,20 +26,21 @@ doublereal zzmult_(doublereal *a, doublereal *b)
     doublereal ret_val, d__1;
 
     /* Builtin functions */
-    double d_lg10(doublereal *);
+    double d_lg10(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzmult_state_t* __state = get_zzmult_state();
+    zzmult_state_t* __state = get_zzmult_state(__global_state);
 /* $ Abstract */
 
 /*     Safely calculate the value A*B, avoiding the possibility */
@@ -329,14 +329,14 @@ doublereal zzmult_(doublereal *a, doublereal *b)
 
 /*     Return on error. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = 0.;
 	return ret_val;
     }
 
 /*     Participate in error tracing. */
 
-    chkin_("ZZMULT", (ftnlen)6);
+    chkin_(__global_state, "ZZMULT", (ftnlen)6);
 
 /*     Calculate the bounds parameter on first entry. */
 /*     The double precision maximum value has the form */
@@ -347,15 +347,16 @@ doublereal zzmult_(doublereal *a, doublereal *b)
 
 /*        A "floor" evaluation. */
 
-	d__1 = dpmax_();
-	__state->expnt = (doublereal) ((integer) d_lg10(&d__1));
+	d__1 = dpmax_(__global_state);
+	__state->expnt = (doublereal) ((integer) d_lg10(&__global_state->f2c, 
+		&d__1));
     }
 
 /*     If either A or B equals zero the multiplication is zero. */
 
     if (*a == 0. || *b == 0.) {
 	ret_val = 0.;
-	chkout_("ZZMULT", (ftnlen)6);
+	chkout_(__global_state, "ZZMULT", (ftnlen)6);
 	return ret_val;
     }
 
@@ -367,20 +368,20 @@ doublereal zzmult_(doublereal *a, doublereal *b)
 /*     An earlier check returned if A or B equal zero. */
 
     d__1 = abs(*a);
-    __state->loga = d_lg10(&d__1);
+    __state->loga = d_lg10(&__global_state->f2c, &d__1);
     d__1 = abs(*b);
-    __state->logb = d_lg10(&d__1);
+    __state->logb = d_lg10(&__global_state->f2c, &d__1);
 
 /*     Local possible overflow check. */
 
     if (__state->loga + __state->logb > __state->expnt) {
 	ret_val = 0.;
-	setmsg_("Numerical overflow event. Multiplier value, #1, multiplican"
-		"d value, #2.", (ftnlen)71);
-	errdp_("#1", a, (ftnlen)2);
-	errdp_("#2", b, (ftnlen)2);
-	sigerr_("SPICE(NUMERICOVERFLOW)", (ftnlen)22);
-	chkout_("ZZMULT", (ftnlen)6);
+	setmsg_(__global_state, "Numerical overflow event. Multiplier value,"
+		" #1, multiplicand value, #2.", (ftnlen)71);
+	errdp_(__global_state, "#1", a, (ftnlen)2);
+	errdp_(__global_state, "#2", b, (ftnlen)2);
+	sigerr_(__global_state, "SPICE(NUMERICOVERFLOW)", (ftnlen)22);
+	chkout_(__global_state, "ZZMULT", (ftnlen)6);
 	return ret_val;
     }
 
@@ -389,14 +390,14 @@ doublereal zzmult_(doublereal *a, doublereal *b)
 
     if (__state->loga + __state->logb < -(__state->expnt - 1.)) {
 	ret_val = 0.;
-	chkout_("ZZMULT", (ftnlen)6);
+	chkout_(__global_state, "ZZMULT", (ftnlen)6);
 	return ret_val;
     }
 
 /*     This operation should be safe. Probably. */
 
     ret_val = *a * *b;
-    chkout_("ZZMULT", (ftnlen)6);
+    chkout_(__global_state, "ZZMULT", (ftnlen)6);
     return ret_val;
 } /* zzmult_ */
 

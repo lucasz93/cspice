@@ -8,8 +8,7 @@
 
 
 extern ckr06_init_t __ckr06_init;
-static ckr06_state_t* get_ckr06_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ckr06_state_t* get_ckr06_state(cspice_t* state) {
 	if (!state->ckr06)
 		state->ckr06 = __cspice_allocate_module(sizeof(ckr06_state_t),
 	 &__ckr06_init, sizeof(__ckr06_init));
@@ -18,9 +17,9 @@ static ckr06_state_t* get_ckr06_state() {
 }
 
 /* $Procedure CKR06 ( C-kernel, read record from segment, type 6 ) */
-/* Subroutine */ int ckr06_(integer *handle, doublereal *descr, doublereal *
-	sclkdp, doublereal *tol, logical *needav, doublereal *record, logical 
-	*found)
+/* Subroutine */ int ckr06_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *sclkdp, doublereal *tol, logical *
+	needav, doublereal *record, logical *found)
 {
     /* Initialized data */
 
@@ -29,7 +28,8 @@ static ckr06_state_t* get_ckr06_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer high;
@@ -46,63 +46,65 @@ static ckr06_state_t* get_ckr06_state() {
     integer eaddr;
     doublereal t;
     integer nread;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer minib;
     integer minie;
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer ivbas;
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer ivbix;
     integer iveix;
     integer lsize;
     integer first;
     integer group;
     integer rsize;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     logical avflag;
     integer begidx;
     integer bufbas;
     integer dirbas;
     integer pkdbas;
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal buffer[101];
     integer endidx;
     integer remain;
     integer timbas;
     logical samseg;
-    extern integer lstled_(doublereal *, integer *, doublereal *);
+    extern integer lstled_(cspice_t*, doublereal *, integer *, doublereal *);
     integer npkdir;
     doublereal lstepc;
     logical samivl;
     doublereal mintim[2];
-    extern logical touchl_(logical *);
+    extern logical touchl_(cspice_t*, logical *);
     integer maxwnd;
     integer miniix;
     doublereal contrl[4];
     integer nrcpkt;
-    extern integer lstltd_(doublereal *, integer *, doublereal *);
+    extern integer lstltd_(cspice_t*, doublereal *, integer *, doublereal *);
     logical ivlsel;
     integer wndsiz;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     logical prvfnd;
     integer pktsiz;
     integer subtyp;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical odd_(integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical odd_(cspice_t*, integer *);
     doublereal gap;
     integer low;
 
 
     /* Module state */
-    ckr06_state_t* __state = get_ckr06_state();
+    ckr06_state_t* __state = get_ckr06_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single CK data record from a segment of type 6 */
@@ -700,21 +702,22 @@ static ckr06_state_t* get_ckr06_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("CKR06", (ftnlen)5);
+    chkin_(__global_state, "CKR06", (ftnlen)5);
 
 /*     Start with a parameter compatibility check on the first */
 /*     pass. */
 
     if (__state->pass1) {
 	if (FALSE_) {
-	    setmsg_("CK type 6 record size may be as large as #, but CKPFS r"
-		    "ecord size (defined in ckparam.inc) is #.", (ftnlen)96);
-	    errint_("#", &__state->c__196, (ftnlen)1);
-	    errint_("#", &__state->c__340, (ftnlen)1);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
+	    setmsg_(__global_state, "CK type 6 record size may be as large a"
+		    "s #, but CKPFS record size (defined in ckparam.inc) is #."
+		    , (ftnlen)96);
+	    errint_(__global_state, "#", &__state->c__196, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c__340, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
 	}
 
 /*        Indicate the first pass was completed. */
@@ -740,13 +743,13 @@ static ckr06_state_t* get_ckr06_state() {
 
 /*     "Touch" the input argument NEEDAV to suppress compiler warnings. */
 
-    lval = touchl_(needav);
-    lval = touchl_(&lval);
+    lval = touchl_(__global_state, needav);
+    lval = touchl_(__global_state, &lval);
 
 /*     Unpack the segment descriptor, and get the start and end addresses */
 /*     of the segment. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[2];
     avflag = ic[3] == 1;
     baddr = ic[4];
@@ -756,21 +759,22 @@ static ckr06_state_t* get_ckr06_state() {
 /*     available. */
 
     if (*needav && ! avflag) {
-	setmsg_("Segment descriptor indicates angular velocity data are not "
-		"available, but such data were requested.", (ftnlen)99);
-	sigerr_("SPICE(NOAVDATA)", (ftnlen)15);
-	chkout_("CKR06", (ftnlen)5);
+	setmsg_(__global_state, "Segment descriptor indicates angular veloci"
+		"ty data are not available, but such data were requested.", (
+		ftnlen)99);
+	sigerr_(__global_state, "SPICE(NOAVDATA)", (ftnlen)15);
+	chkout_(__global_state, "CKR06", (ftnlen)5);
 	return 0;
     }
 
 /*     Check the tolerance value. */
 
     if (*tol < 0.) {
-	setmsg_("Tolerance must be non-negative but was actually *.", (ftnlen)
-		50);
-	errdp_("*", tol, (ftnlen)1);
-	sigerr_("SPICE(NEGATIVETOL)", (ftnlen)18);
-	chkout_("CKR06", (ftnlen)5);
+	setmsg_(__global_state, "Tolerance must be non-negative but was actu"
+		"ally *.", (ftnlen)50);
+	errdp_(__global_state, "*", tol, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NEGATIVETOL)", (ftnlen)18);
+	chkout_(__global_state, "CKR06", (ftnlen)5);
 	return 0;
     }
 
@@ -782,13 +786,13 @@ static ckr06_state_t* get_ckr06_state() {
 /*        The request time is too far outside the segment's coverage */
 /*        interval for any pointing to satisfy the request. */
 
-	chkout_("CKR06", (ftnlen)5);
+	chkout_(__global_state, "CKR06", (ftnlen)5);
 	return 0;
     }
 
 /*     Set the request time to use for searching. */
 
-    t = brcktd_(sclkdp, dc, &dc[1]);
+    t = brcktd_(__global_state, sclkdp, dc, &dc[1]);
 
 /*     From this point onward, we assume the segment was constructed */
 /*     correctly. */
@@ -980,11 +984,11 @@ static ckr06_state_t* get_ckr06_state() {
 /*        Make sure that this really is a type 06 data segment. */
 
 	if (type__ != 6) {
-	    setmsg_("You are attempting to locate type * data in a type 6 da"
-		    "ta segment.", (ftnlen)66);
-	    errint_("*", &type__, (ftnlen)1);
-	    sigerr_("SPICE(WRONGCKTYPE)", (ftnlen)18);
-	    chkout_("CKR06", (ftnlen)5);
+	    setmsg_(__global_state, "You are attempting to locate type * dat"
+		    "a in a type 6 data segment.", (ftnlen)66);
+	    errint_(__global_state, "*", &type__, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(WRONGCKTYPE)", (ftnlen)18);
+	    chkout_(__global_state, "CKR06", (ftnlen)5);
 	    return 0;
 	}
 
@@ -999,13 +1003,13 @@ static ckr06_state_t* get_ckr06_state() {
 /*        to resolve this. */
 
 	i__1 = eaddr - 1;
-	dafgda_(handle, &i__1, &eaddr, contrl);
-	if (failed_()) {
-	    chkout_("CKR06", (ftnlen)5);
+	dafgda_(__global_state, handle, &i__1, &eaddr, contrl);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKR06", (ftnlen)5);
 	    return 0;
 	}
-	isel = i_dnnt(contrl);
-	n = i_dnnt(&contrl[1]);
+	isel = i_dnnt(&__global_state->f2c, contrl);
+	n = i_dnnt(&__global_state->f2c, &contrl[1]);
 	ivlsel = isel == 1;
 
 /*        Determine the number of interval directory entries in the */
@@ -1090,9 +1094,9 @@ static ckr06_state_t* get_ckr06_state() {
 
 		i__1 = bufbas + 1;
 		i__2 = bufbas + nread;
-		dafgda_(handle, &i__1, &i__2, buffer);
-		if (failed_()) {
-		    chkout_("CKR06", (ftnlen)5);
+		dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "CKR06", (ftnlen)5);
 		    return 0;
 		}
 		remain = ndir - nread;
@@ -1101,8 +1105,8 @@ static ckr06_state_t* get_ckr06_state() {
 /*              this point, so we can use it as an array index. */
 
 		while(remain > 0 && buffer[(i__1 = nread - 1) < 101 && 0 <= 
-			i__1 ? i__1 : s_rnge("buffer", i__1, "ckr06_", (
-			ftnlen)916)] <= t) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffer", 
+			i__1, "ckr06_", (ftnlen)916)] <= t) {
 		    bufbas += nread;
 		    nread = min(remain,101);
 
@@ -1110,9 +1114,9 @@ static ckr06_state_t* get_ckr06_state() {
 
 		    i__1 = bufbas + 1;
 		    i__2 = bufbas + nread;
-		    dafgda_(handle, &i__1, &i__2, buffer);
-		    if (failed_()) {
-			chkout_("CKR06", (ftnlen)5);
+		    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "CKR06", (ftnlen)5);
 			return 0;
 		    }
 		    remain -= nread;
@@ -1126,7 +1130,8 @@ static ckr06_state_t* get_ckr06_state() {
 /*              epochs containing T exceeds the skipped directory count */
 /*              by 1. */
 
-		group = bufbas - dirbas + lstled_(&t, &nread, buffer) + 1;
+		group = bufbas - dirbas + lstled_(__global_state, &t, &nread, 
+			buffer) + 1;
 
 /*              GROUP is in the range 1 : NDIR+1. */
 
@@ -1154,9 +1159,9 @@ static ckr06_state_t* get_ckr06_state() {
 	    nread = min(100,remain);
 	    i__1 = bufbas + 1;
 	    i__2 = bufbas + nread;
-	    dafgda_(handle, &i__1, &i__2, buffer);
-	    if (failed_()) {
-		chkout_("CKR06", (ftnlen)5);
+	    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "CKR06", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1165,7 +1170,8 @@ static ckr06_state_t* get_ckr06_state() {
 /*           1. The case where T matches the final epoch must be handled */
 /*           here, since in this case no epoch exceeds T. */
 
-	    iveix = bufbas - ivbas + lstled_(&t, &nread, buffer) + 1;
+	    iveix = bufbas - ivbas + lstled_(__global_state, &t, &nread, 
+		    buffer) + 1;
 /* Computing MIN */
 	    i__1 = iveix, i__2 = n + 1;
 	    iveix = min(i__1,i__2);
@@ -1173,10 +1179,10 @@ static ckr06_state_t* get_ckr06_state() {
 /*           Backstop test: */
 
 	    if (iveix < 2) {
-		setmsg_("IVEIX = #.", (ftnlen)10);
-		errint_("#", &iveix, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("CKR06", (ftnlen)5);
+		setmsg_(__global_state, "IVEIX = #.", (ftnlen)10);
+		errint_(__global_state, "#", &iveix, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "CKR06", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1223,9 +1229,9 @@ static ckr06_state_t* get_ckr06_state() {
 
 		i__1 = bufbas + 1;
 		i__2 = bufbas + nread;
-		dafgda_(handle, &i__1, &i__2, buffer);
-		if (failed_()) {
-		    chkout_("CKR06", (ftnlen)5);
+		dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "CKR06", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1233,8 +1239,8 @@ static ckr06_state_t* get_ckr06_state() {
 /*              this point, so we can use it as an array index. */
 
 		while(remain > 0 && buffer[(i__1 = nread - 1) < 101 && 0 <= 
-			i__1 ? i__1 : s_rnge("buffer", i__1, "ckr06_", (
-			ftnlen)1062)] < t) {
+			i__1 ? i__1 : s_rnge(&__global_state->f2c, "buffer", 
+			i__1, "ckr06_", (ftnlen)1062)] < t) {
 		    bufbas += nread;
 		    nread = min(remain,101);
 
@@ -1242,9 +1248,9 @@ static ckr06_state_t* get_ckr06_state() {
 
 		    i__1 = bufbas + 1;
 		    i__2 = bufbas + nread;
-		    dafgda_(handle, &i__1, &i__2, buffer);
-		    if (failed_()) {
-			chkout_("CKR06", (ftnlen)5);
+		    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "CKR06", (ftnlen)5);
 			return 0;
 		    }
 		    remain -= nread;
@@ -1257,7 +1263,8 @@ static ckr06_state_t* get_ckr06_state() {
 /*              The index of the group of epochs containing T exceeds */
 /*              the skipped directory count by 1. */
 
-		group = bufbas - dirbas + lstltd_(&t, &nread, buffer) + 1;
+		group = bufbas - dirbas + lstltd_(__global_state, &t, &nread, 
+			buffer) + 1;
 
 /*              GROUP is in the range 1 : NDIR+1. */
 
@@ -1286,9 +1293,9 @@ static ckr06_state_t* get_ckr06_state() {
 	    nread = min(100,remain);
 	    i__1 = bufbas + 1;
 	    i__2 = bufbas + nread;
-	    dafgda_(handle, &i__1, &i__2, buffer);
-	    if (failed_()) {
-		chkout_("CKR06", (ftnlen)5);
+	    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "CKR06", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1296,16 +1303,17 @@ static ckr06_state_t* get_ckr06_state() {
 /*           The case where T matches the first boundary must be handled */
 /*           here, since in this case no boundary precedes T. */
 
-	    ivbix = bufbas - ivbas + lstltd_(&t, &nread, buffer);
+	    ivbix = bufbas - ivbas + lstltd_(__global_state, &t, &nread, 
+		    buffer);
 	    ivbix = max(ivbix,1);
 
 /*           Backstop test: */
 
 	    if (ivbix > n) {
-		setmsg_("IVBIX = #.", (ftnlen)10);
-		errint_("#", &ivbix, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("CKR06", (ftnlen)5);
+		setmsg_(__global_state, "IVBIX = #.", (ftnlen)10);
+		errint_(__global_state, "#", &ivbix, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "CKR06", (ftnlen)5);
 		return 0;
 	    }
 
@@ -1331,34 +1339,34 @@ static ckr06_state_t* get_ckr06_state() {
 	bufbas = eaddr - 2 - (n + 1) + (miniix - 1);
 	i__1 = bufbas + 1;
 	i__2 = bufbas + 2;
-	dafgda_(handle, &i__1, &i__2, buffer);
-	if (failed_()) {
-	    chkout_("CKR06", (ftnlen)5);
+	dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKR06", (ftnlen)5);
 	    return 0;
 	}
-	minib = i_dnnt(buffer) + baddr - 1;
+	minib = i_dnnt(&__global_state->f2c, buffer) + baddr - 1;
 
 /*        Note that the end of the current mini-segment */
 /*        precedes the start of the next mini-segment by */
 /*        one address. */
 
-	minie = i_dnnt(&buffer[1]) + baddr - 2;
+	minie = i_dnnt(&__global_state->f2c, &buffer[1]) + baddr - 2;
 
 /*        Look up the control area of the mini-segment. */
 
 	i__1 = minie - 3;
-	dafgda_(handle, &i__1, &minie, contrl);
-	if (failed_()) {
-	    chkout_("CKR06", (ftnlen)5);
+	dafgda_(__global_state, handle, &i__1, &minie, contrl);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKR06", (ftnlen)5);
 	    return 0;
 	}
 
 /*        Fetch the control area parameters for the mini-segment. */
 
 	rate = contrl[0];
-	subtyp = i_dnnt(&contrl[1]);
-	wndsiz = i_dnnt(&contrl[2]);
-	npkt = i_dnnt(&contrl[3]);
+	subtyp = i_dnnt(&__global_state->f2c, &contrl[1]);
+	wndsiz = i_dnnt(&__global_state->f2c, &contrl[2]);
+	npkt = i_dnnt(&__global_state->f2c, &contrl[3]);
 
 /*        Compute the directory count for the mini-segment. */
 
@@ -1370,9 +1378,9 @@ static ckr06_state_t* get_ckr06_state() {
 	bufbas = minie - 4 - npkdir - 1;
 	i__1 = bufbas + 1;
 	i__2 = bufbas + 1;
-	dafgda_(handle, &i__1, &i__2, &lstepc);
-	if (failed_()) {
-	    chkout_("CKR06", (ftnlen)5);
+	dafgda_(__global_state, handle, &i__1, &i__2, &lstepc);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKR06", (ftnlen)5);
 	    return 0;
 	}
 
@@ -1389,7 +1397,7 @@ static ckr06_state_t* get_ckr06_state() {
 /*              We're out of luck. We can't find pointing for this */
 /*              request. FOUND is already .FALSE., so just return. */
 
-		chkout_("CKR06", (ftnlen)5);
+		chkout_(__global_state, "CKR06", (ftnlen)5);
 		return 0;
 	    } else {
 
@@ -1400,9 +1408,9 @@ static ckr06_state_t* get_ckr06_state() {
 
 		i__1 = ivbas + miniix;
 		i__2 = ivbas + miniix + 1;
-		dafgda_(handle, &i__1, &i__2, mintim);
-		if (failed_()) {
-		    chkout_("CKR06", (ftnlen)5);
+		dafgda_(__global_state, handle, &i__1, &i__2, mintim);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "CKR06", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1414,7 +1422,7 @@ static ckr06_state_t* get_ckr06_state() {
 /*                 We can't find pointing for T. FOUND is already */
 /*                 .FALSE., so just return. */
 
-		    chkout_("CKR06", (ftnlen)5);
+		    chkout_(__global_state, "CKR06", (ftnlen)5);
 		    return 0;
 		}
 
@@ -1438,7 +1446,7 @@ static ckr06_state_t* get_ckr06_state() {
 /*                    T is too far from LSTEPC. We're done. FOUND is */
 /*                    already .FALSE., so just return. */
 
-			chkout_("CKR06", (ftnlen)5);
+			chkout_(__global_state, "CKR06", (ftnlen)5);
 			return 0;
 		    }
 		} else {
@@ -1475,35 +1483,39 @@ static ckr06_state_t* get_ckr06_state() {
 			bufbas = eaddr - 2 - (n + 1) + (miniix - 1);
 			i__1 = bufbas + 1;
 			i__2 = bufbas + 2;
-			dafgda_(handle, &i__1, &i__2, buffer);
-			if (failed_()) {
-			    chkout_("CKR06", (ftnlen)5);
+			dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+			if (failed_(__global_state)) {
+			    chkout_(__global_state, "CKR06", (ftnlen)5);
 			    return 0;
 			}
-			minib = i_dnnt(buffer) + baddr - 1;
+			minib = i_dnnt(&__global_state->f2c, buffer) + baddr 
+				- 1;
 
 /*                    Note that the end of the current mini-segment */
 /*                    precedes the start of the next mini-segment by one */
 /*                    address. */
 
-			minie = i_dnnt(&buffer[1]) + baddr - 2;
+			minie = i_dnnt(&__global_state->f2c, &buffer[1]) + 
+				baddr - 2;
 
 /*                    Look up the control area of the mini-segment. */
 
 			i__1 = minie - 3;
-			dafgda_(handle, &i__1, &minie, contrl);
-			if (failed_()) {
-			    chkout_("CKR06", (ftnlen)5);
+			dafgda_(__global_state, handle, &i__1, &minie, contrl)
+				;
+			if (failed_(__global_state)) {
+			    chkout_(__global_state, "CKR06", (ftnlen)5);
 			    return 0;
 			}
 
 /*                    Fetch the control area parameters for the */
 /*                    mini-segment. */
 
-			rate = (doublereal) i_dnnt(contrl);
-			subtyp = i_dnnt(&contrl[1]);
-			wndsiz = i_dnnt(&contrl[2]);
-			npkt = i_dnnt(&contrl[3]);
+			rate = (doublereal) i_dnnt(&__global_state->f2c, 
+				contrl);
+			subtyp = i_dnnt(&__global_state->f2c, &contrl[1]);
+			wndsiz = i_dnnt(&__global_state->f2c, &contrl[2]);
+			npkt = i_dnnt(&__global_state->f2c, &contrl[3]);
 
 /*                    Since we have new mini-segment parameters, we need */
 /*                    to check them. We'll defer these checks until */
@@ -1528,9 +1540,10 @@ static ckr06_state_t* get_ckr06_state() {
 			bufbas = minie - 4 - npkdir - 1;
 			i__1 = bufbas + 1;
 			i__2 = bufbas + 1;
-			dafgda_(handle, &i__1, &i__2, &lstepc);
-			if (failed_()) {
-			    chkout_("CKR06", (ftnlen)5);
+			dafgda_(__global_state, handle, &i__1, &i__2, &lstepc)
+				;
+			if (failed_(__global_state)) {
+			    chkout_(__global_state, "CKR06", (ftnlen)5);
 			    return 0;
 			}
 		    }
@@ -1564,9 +1577,9 @@ static ckr06_state_t* get_ckr06_state() {
 
 	i__1 = ivbas + miniix;
 	i__2 = ivbas + miniix + 1;
-	dafgda_(handle, &i__1, &i__2, mintim);
-	if (failed_()) {
-	    chkout_("CKR06", (ftnlen)5);
+	dafgda_(__global_state, handle, &i__1, &i__2, mintim);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKR06", (ftnlen)5);
 	    return 0;
 	}
 
@@ -1578,41 +1591,44 @@ static ckr06_state_t* get_ckr06_state() {
 /*        which will be used as an array index. */
 
 	if (subtyp < 0 || subtyp >= 4) {
-	    setmsg_("Unexpected CK type 6 subtype # found in type 06 segment"
-		    " within mini-segment #.", (ftnlen)78);
-	    errint_("#", &subtyp, (ftnlen)1);
-	    errint_("#", &miniix, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDSUBTYPE)", (ftnlen)21);
-	    chkout_("CKR06", (ftnlen)5);
+	    setmsg_(__global_state, "Unexpected CK type 6 subtype # found in"
+		    " type 06 segment within mini-segment #.", (ftnlen)78);
+	    errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	    errint_(__global_state, "#", &miniix, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDSUBTYPE)", (ftnlen)21);
+	    chkout_(__global_state, "CKR06", (ftnlen)5);
 	    return 0;
 	}
 	pktsiz = __state->pktszs[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : 
-		s_rnge("pktszs", i__1, "ckr06_", (ftnlen)1457)];
+		s_rnge(&__global_state->f2c, "pktszs", i__1, "ckr06_", (
+		ftnlen)1457)];
 	maxwnd = __state->mxwnsz[(i__1 = subtyp) < 4 && 0 <= i__1 ? i__1 : 
-		s_rnge("mxwnsz", i__1, "ckr06_", (ftnlen)1458)];
+		s_rnge(&__global_state->f2c, "mxwnsz", i__1, "ckr06_", (
+		ftnlen)1458)];
 
 /*        Check the window size. */
 
 	if (wndsiz < 2 || wndsiz > maxwnd) {
-	    setmsg_("Window size in type 6 segment was #; must be in the ran"
-		    "ge 2:# for subtype #. Mini-segment index is #.", (ftnlen)
-		    101);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    errint_("#", &maxwnd, (ftnlen)1);
-	    errint_("#", &subtyp, (ftnlen)1);
-	    errint_("#", &miniix, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("CKR06", (ftnlen)5);
+	    setmsg_(__global_state, "Window size in type 6 segment was #; mu"
+		    "st be in the range 2:# for subtype #. Mini-segment index"
+		    " is #.", (ftnlen)101);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    errint_(__global_state, "#", &maxwnd, (ftnlen)1);
+	    errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	    errint_(__global_state, "#", &miniix, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "CKR06", (ftnlen)5);
 	    return 0;
 	}
-	if (odd_(&wndsiz)) {
-	    setmsg_("Window size in type 06 segment was #; must be even for "
-		    "subtype #. Mini-segment index is #.", (ftnlen)90);
-	    errint_("#", &wndsiz, (ftnlen)1);
-	    errint_("#", &subtyp, (ftnlen)1);
-	    errint_("#", &miniix, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("CKR06", (ftnlen)5);
+	if (odd_(__global_state, &wndsiz)) {
+	    setmsg_(__global_state, "Window size in type 06 segment was #; m"
+		    "ust be even for subtype #. Mini-segment index is #.", (
+		    ftnlen)90);
+	    errint_(__global_state, "#", &wndsiz, (ftnlen)1);
+	    errint_(__global_state, "#", &subtyp, (ftnlen)1);
+	    errint_(__global_state, "#", &miniix, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "CKR06", (ftnlen)5);
 	    return 0;
 	}
 
@@ -1624,8 +1640,8 @@ static ckr06_state_t* get_ckr06_state() {
 /*        The test below is done for safety. No SPICE errors */
 /*        should ever be detected at this point. */
 
-	if (failed_()) {
-	    chkout_("CKR06", (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKR06", (ftnlen)5);
 	    return 0;
 	}
 
@@ -1712,13 +1728,14 @@ static ckr06_state_t* get_ckr06_state() {
 	remain = npkdir - nread;
 	i__1 = bufbas + 1;
 	i__2 = bufbas + nread;
-	dafgda_(handle, &i__1, &i__2, buffer);
-	if (failed_()) {
-	    chkout_("CKR06", (ftnlen)5);
+	dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "CKR06", (ftnlen)5);
 	    return 0;
 	}
-	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"buffer", i__1, "ckr06_", (ftnlen)1604)] < t && remain > 0) {
+	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "buffer", i__1, "ckr06_", (ftnlen)1604)] 
+		< t && remain > 0) {
 	    bufbas += nread;
 	    nread = min(remain,100);
 	    remain -= nread;
@@ -1727,9 +1744,9 @@ static ckr06_state_t* get_ckr06_state() {
 
 	    i__1 = bufbas + 1;
 	    i__2 = bufbas + nread;
-	    dafgda_(handle, &i__1, &i__2, buffer);
-	    if (failed_()) {
-		chkout_("CKR06", (ftnlen)5);
+	    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "CKR06", (ftnlen)5);
 		return 0;
 	    }
 	}
@@ -1737,7 +1754,8 @@ static ckr06_state_t* get_ckr06_state() {
 /*        At this point, BUFBAS - PKDBAS is the number of directory */
 /*        entries preceding the one contained in BUFFER(1). */
 
-	group = bufbas - pkdbas + lstltd_(&t, &nread, buffer) + 1;
+	group = bufbas - pkdbas + lstltd_(__global_state, &t, &nread, buffer) 
+		+ 1;
     }
 
 /*     GROUP now indicates the set of epochs in which to search for the */
@@ -1769,9 +1787,9 @@ static ckr06_state_t* get_ckr06_state() {
     timbas = pkdbas - npkt;
     i__1 = timbas + begidx;
     i__2 = timbas + endidx;
-    dafgda_(handle, &i__1, &i__2, buffer);
-    if (failed_()) {
-	chkout_("CKR06", (ftnlen)5);
+    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKR06", (ftnlen)5);
 	return 0;
     }
 
@@ -1780,7 +1798,7 @@ static ckr06_state_t* get_ckr06_state() {
 /*     cannot precede the first element of the group. */
 
     i__1 = endidx - begidx + 1;
-    i__ = lstltd_(&t, &i__1, buffer);
+    i__ = lstltd_(__global_state, &t, &i__1, buffer);
 
 /*     The variables LOW and high are the indices of a pair of time */
 /*     tags that bracket the request time. */
@@ -1843,7 +1861,7 @@ static ckr06_state_t* get_ckr06_state() {
 
     i__1 = minib + (first - 1) * pktsiz;
     i__2 = minib + last * pktsiz - 1;
-    dafgda_(handle, &i__1, &i__2, &record[4]);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[4]);
 
 /*     Finally, add the epochs to the output record. */
 /*     Read the sequence of time tags. */
@@ -1851,9 +1869,10 @@ static ckr06_state_t* get_ckr06_state() {
     bufbas = minib - 1 + npkt * pktsiz + (first - 1);
     i__1 = bufbas + 1;
     i__2 = bufbas + nrcpkt;
-    dafgda_(handle, &i__1, &i__2, &record[nrcpkt * pktsiz + 4]);
-    if (failed_()) {
-	chkout_("CKR06", (ftnlen)5);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[nrcpkt * pktsiz + 4]
+	    );
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "CKR06", (ftnlen)5);
 	return 0;
     }
 
@@ -1861,7 +1880,7 @@ static ckr06_state_t* get_ckr06_state() {
 
     *found = TRUE_;
     __state->svfnd = TRUE_;
-    chkout_("CKR06", (ftnlen)5);
+    chkout_(__global_state, "CKR06", (ftnlen)5);
     return 0;
 } /* ckr06_ */
 

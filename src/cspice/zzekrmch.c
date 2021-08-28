@@ -8,8 +8,7 @@
 
 
 extern zzekrmch_init_t __zzekrmch_init;
-static zzekrmch_state_t* get_zzekrmch_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrmch_state_t* get_zzekrmch_state(cspice_t* state) {
 	if (!state->zzekrmch)
 		state->zzekrmch = __cspice_allocate_module(sizeof(
 	zzekrmch_state_t), &__zzekrmch_init, sizeof(__zzekrmch_init));
@@ -18,24 +17,25 @@ static zzekrmch_state_t* get_zzekrmch_state() {
 }
 
 /* $Procedure      ZZEKRMCH ( EK, row match ) */
-logical zzekrmch_(integer *ncnstr, logical *active, integer *handle, integer *
-	segdsc, integer *cdscrs, integer *row, integer *elts, integer *ops, 
-	integer *vtypes, char *chrbuf, integer *cbegs, integer *cends, 
-	doublereal *dvals, integer *ivals, ftnlen chrbuf_len)
+logical zzekrmch_(cspice_t* __global_state, integer *ncnstr, logical *active, 
+	integer *handle, integer *segdsc, integer *cdscrs, integer *row, 
+	integer *elts, integer *ops, integer *vtypes, char *chrbuf, integer *
+	cbegs, integer *cends, doublereal *dvals, integer *ivals, ftnlen 
+	chrbuf_len)
 {
     /* System generated locals */
     integer i__1;
     logical ret_val;
 
     /* Local variables */
-    extern logical zzekscmp_(integer *, integer *, integer *, integer *, 
-	    integer *, integer *, integer *, char *, doublereal *, integer *, 
-	    logical *, ftnlen);
+    extern logical zzekscmp_(cspice_t*, integer *, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, char *, doublereal *, 
+	    integer *, logical *, ftnlen);
     integer i__;
 
 
     /* Module state */
-    zzekrmch_state_t* __state = get_zzekrmch_state();
+    zzekrmch_state_t* __state = get_zzekrmch_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether a specified row in an EK file satisfies */
@@ -707,10 +707,10 @@ logical zzekrmch_(integer *ncnstr, logical *active, integer *handle, integer *
 /*           See whether the row satisfies the Ith constraint. */
 
 	    i__1 = cbegs[i__ - 1] - 1;
-	    ret_val = zzekscmp_(&ops[i__ - 1], handle, segdsc, &cdscrs[i__ * 
-		    11 - 11], row, &elts[i__ - 1], &vtypes[i__ - 1], chrbuf + 
-		    i__1, &dvals[i__ - 1], &ivals[i__ - 1], &__state->c_false,
-		     cends[i__ - 1] - i__1);
+	    ret_val = zzekscmp_(__global_state, &ops[i__ - 1], handle, segdsc,
+		     &cdscrs[i__ * 11 - 11], row, &elts[i__ - 1], &vtypes[i__ 
+		    - 1], chrbuf + i__1, &dvals[i__ - 1], &ivals[i__ - 1], &
+		    __state->c_false, cends[i__ - 1] - i__1);
 	}
 
 /*        Take a look at the next constraint. */

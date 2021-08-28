@@ -8,8 +8,7 @@
 
 
 extern zzeksemc_init_t __zzeksemc_init;
-static zzeksemc_state_t* get_zzeksemc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzeksemc_state_t* get_zzeksemc_state(cspice_t* state) {
 	if (!state->zzeksemc)
 		state->zzeksemc = __cspice_allocate_module(sizeof(
 	zzeksemc_state_t), &__zzeksemc_init, sizeof(__zzeksemc_init));
@@ -18,9 +17,9 @@ static zzeksemc_state_t* get_zzeksemc_state() {
 }
 
 /* $Procedure  ZZEKSEMC ( Private: EK, semantically check encoded query ) */
-/* Subroutine */ int zzeksemc_(char *query, integer *eqryi, char *eqryc, 
-	logical *error, char *errmsg, integer *errptr, ftnlen query_len, 
-	ftnlen eqryc_len, ftnlen errmsg_len)
+/* Subroutine */ int zzeksemc_(cspice_t* __global_state, char *query, integer 
+	*eqryi, char *eqryc, logical *error, char *errmsg, integer *errptr, 
+	ftnlen query_len, ftnlen eqryc_len, ftnlen errmsg_len)
 {
     /* Initialized data */
 
@@ -29,8 +28,8 @@ static zzeksemc_state_t* get_zzeksemc_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer base;
@@ -38,22 +37,22 @@ static zzeksemc_state_t* get_zzeksemc_state() {
     integer ncnj;
     integer ncns;
     integer nord;
-    extern /* Subroutine */ int zzekqtab_(integer *, char *, integer *, char *
-	    , char *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekweqi_(char *, integer *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int zzekqtab_(cspice_t*, integer *, char *, 
+	    integer *, char *, char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzekweqi_(cspice_t*, char *, integer *, 
+	    integer *, ftnlen);
     integer i__;
-    extern /* Subroutine */ int ekcii_(char *, integer *, char *, integer *, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int ekcii_(cspice_t*, char *, integer *, char *, 
+	    integer *, ftnlen, ftnlen);
     char alias[64];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int repmc_(char *, char *, char *, char *, ftnlen,
-	     ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int repmc_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int repmi_(cspice_t*, char *, char *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern logical failed_(cspice_t*);
     char colnam[32];
     char lhstab[64];
     char ordtab[64];
@@ -71,15 +70,15 @@ static zzeksemc_state_t* get_zzeksemc_state() {
     integer trsolv;
     logical likeop;
     logical nulval;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer lxb[2];
     integer lxe[2];
 
 
     /* Module state */
-    zzeksemc_state_t* __state = get_zzeksemc_state();
+    zzeksemc_state_t* __state = get_zzeksemc_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -935,38 +934,39 @@ static zzeksemc_state_t* get_zzeksemc_state() {
 /*     Use discovery check-in. */
 
     *error = FALSE_;
-    s_copy(errmsg, " ", errmsg_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, errmsg, " ", errmsg_len, (ftnlen)1);
     *errptr = 0;
-    zzekreqi_(eqryi, "NAMES_RESOLVED", &irsolv, (ftnlen)14);
-    if (failed_()) {
+    zzekreqi_(__global_state, eqryi, "NAMES_RESOLVED", &irsolv, (ftnlen)14);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (irsolv == -1) {
-	chkin_("ZZEKSEMC", (ftnlen)8);
-	setmsg_("Encoded query has not had names resolved.", (ftnlen)41);
-	sigerr_("SPICE(UNRESOLVEDNAMES)", (ftnlen)22);
-	chkout_("ZZEKSEMC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSEMC", (ftnlen)8);
+	setmsg_(__global_state, "Encoded query has not had names resolved.", (
+		ftnlen)41);
+	sigerr_(__global_state, "SPICE(UNRESOLVEDNAMES)", (ftnlen)22);
+	chkout_(__global_state, "ZZEKSEMC", (ftnlen)8);
 	return 0;
     }
-    zzekreqi_(eqryi, "TIMES_RESOLVED", &trsolv, (ftnlen)14);
-    if (failed_()) {
+    zzekreqi_(__global_state, eqryi, "TIMES_RESOLVED", &trsolv, (ftnlen)14);
+    if (failed_(__global_state)) {
 	return 0;
     }
     if (trsolv == -1) {
-	chkin_("ZZEKSEMC", (ftnlen)8);
-	setmsg_("Encoded query has not had time values resolved.", (ftnlen)47)
-		;
-	sigerr_("SPICE(UNRESOLVEDTIMES)", (ftnlen)22);
-	chkout_("ZZEKSEMC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKSEMC", (ftnlen)8);
+	setmsg_(__global_state, "Encoded query has not had time values resol"
+		"ved.", (ftnlen)47);
+	sigerr_(__global_state, "SPICE(UNRESOLVEDTIMES)", (ftnlen)22);
+	chkout_(__global_state, "ZZEKSEMC", (ftnlen)8);
 	return 0;
     }
 
 /*     Get the important counts from the query. */
 
-    zzekreqi_(eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
-    zzekreqi_(eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
-    zzekreqi_(eqryi, "NUM_CONJUNCTIONS", &ncnj, (ftnlen)16);
-    zzekreqi_(eqryi, "NUM_ORDERBY_COLS", &nord, (ftnlen)16);
+    zzekreqi_(__global_state, eqryi, "NUM_TABLES", &ntab, (ftnlen)10);
+    zzekreqi_(__global_state, eqryi, "NUM_CONSTRAINTS", &ncns, (ftnlen)15);
+    zzekreqi_(__global_state, eqryi, "NUM_CONJUNCTIONS", &ncnj, (ftnlen)16);
+    zzekreqi_(__global_state, eqryi, "NUM_ORDERBY_COLS", &nord, (ftnlen)16);
 
 /*     Perform semantic checks applicable to constraints. */
 
@@ -989,24 +989,26 @@ static zzeksemc_state_t* get_zzeksemc_state() {
 	colidx = eqryi[base + 18];
 	lxb[0] = eqryi[base + 14];
 	lxe[0] = eqryi[base + 15];
-	zzekqtab_(eqryi, eqryc, &tabidx, lhstab, alias, eqryc_len, (ftnlen)64,
-		 (ftnlen)64);
+	zzekqtab_(__global_state, eqryi, eqryc, &tabidx, lhstab, alias, 
+		eqryc_len, (ftnlen)64, (ftnlen)64);
 
 /*        Look up the name and attributes of the column on the LHS of the */
 /*        constraint. */
 
-	ekcii_(lhstab, &colidx, colnam, attdsc, (ftnlen)64, (ftnlen)32);
+	ekcii_(__global_state, lhstab, &colidx, colnam, attdsc, (ftnlen)64, (
+		ftnlen)32);
 	lhstyp = attdsc[1];
 	lhssiz = attdsc[3];
 	if (lhssiz != 1) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Non-scalar column <#> having size # found in que"
-		    "ry constraint.", errmsg_len, (ftnlen)62);
+	    s_copy(&__global_state->f2c, errmsg, "Non-scalar column <#> havi"
+		    "ng size # found in query constraint.", errmsg_len, (
+		    ftnlen)62);
 	    i__2 = lxb[0] - 1;
-	    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (ftnlen)1, 
-		    lxe[1] - i__2, errmsg_len);
-	    repmi_(errmsg, "#", &lhssiz, errmsg, errmsg_len, (ftnlen)1, 
-		    errmsg_len);
+	    repmc_(__global_state, errmsg, "#", query + i__2, errmsg, 
+		    errmsg_len, (ftnlen)1, lxe[1] - i__2, errmsg_len);
+	    repmi_(__global_state, errmsg, "#", &lhssiz, errmsg, errmsg_len, (
+		    ftnlen)1, errmsg_len);
 	    *errptr = lxb[0];
 	    return 0;
 	}
@@ -1027,16 +1029,17 @@ static zzeksemc_state_t* get_zzeksemc_state() {
 	likeop = opcode == 7 || opcode == 8;
 	if (likeop && lhstyp != 1) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "LIKE and NOT LIKE operators may be used only wit"
-		    "h character columns.  Column <#> has type #.", errmsg_len,
-		     (ftnlen)92);
+	    s_copy(&__global_state->f2c, errmsg, "LIKE and NOT LIKE operator"
+		    "s may be used only with character columns.  Column <#> h"
+		    "as type #.", errmsg_len, (ftnlen)92);
 	    i__2 = lxb[0] - 1;
-	    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (ftnlen)1, 
-		    lxe[0] - i__2, errmsg_len);
-	    repmc_(errmsg, "#", __state->typstr + (((i__2 = lhstyp - 1) < 4 &&
-		     0 <= i__2 ? i__2 : s_rnge("typstr", i__2, "zzeksemc_", (
-		    ftnlen)379)) << 5), errmsg, errmsg_len, (ftnlen)1, (
-		    ftnlen)32, errmsg_len);
+	    repmc_(__global_state, errmsg, "#", query + i__2, errmsg, 
+		    errmsg_len, (ftnlen)1, lxe[0] - i__2, errmsg_len);
+	    repmc_(__global_state, errmsg, "#", __state->typstr + (((i__2 = 
+		    lhstyp - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "typstr", i__2, "zzeksemc_", (ftnlen)
+		    379)) << 5), errmsg, errmsg_len, (ftnlen)1, (ftnlen)32, 
+		    errmsg_len);
 	    *errptr = lxb[0];
 	    return 0;
 	}
@@ -1049,24 +1052,26 @@ static zzeksemc_state_t* get_zzeksemc_state() {
 	    colidx = eqryi[base + 31];
 	    lxb[1] = eqryi[base + 27];
 	    lxe[1] = eqryi[base + 28];
-	    zzekqtab_(eqryi, eqryc, &tabidx, rhstab, alias, eqryc_len, (
-		    ftnlen)64, (ftnlen)64);
+	    zzekqtab_(__global_state, eqryi, eqryc, &tabidx, rhstab, alias, 
+		    eqryc_len, (ftnlen)64, (ftnlen)64);
 
 /*           Look up the name and attributes of the column on the RHS of */
 /*           the constraint. */
 
-	    ekcii_(rhstab, &colidx, colnam, attdsc, (ftnlen)64, (ftnlen)32);
+	    ekcii_(__global_state, rhstab, &colidx, colnam, attdsc, (ftnlen)
+		    64, (ftnlen)32);
 	    rhstyp = attdsc[1];
 	    rhssiz = attdsc[3];
 	    if (rhssiz != 1) {
 		*error = TRUE_;
-		s_copy(errmsg, "Non-scalar column <#> having size # found in"
-			" query constraint.", errmsg_len, (ftnlen)62);
+		s_copy(&__global_state->f2c, errmsg, "Non-scalar column <#> "
+			"having size # found in query constraint.", errmsg_len,
+			 (ftnlen)62);
 		i__2 = lxb[0] - 1;
-		repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (ftnlen)
-			1, lxe[1] - i__2, errmsg_len);
-		repmi_(errmsg, "#", &rhssiz, errmsg, errmsg_len, (ftnlen)1, 
-			errmsg_len);
+		repmc_(__global_state, errmsg, "#", query + i__2, errmsg, 
+			errmsg_len, (ftnlen)1, lxe[1] - i__2, errmsg_len);
+		repmi_(__global_state, errmsg, "#", &rhssiz, errmsg, 
+			errmsg_len, (ftnlen)1, errmsg_len);
 		*errptr = lxb[1];
 		return 0;
 	    }
@@ -1081,22 +1086,24 @@ static zzeksemc_state_t* get_zzeksemc_state() {
 		if (lhstyp == 4 || lhstyp == 1 || rhstyp == 4 || rhstyp == 1) 
 			{
 		    *error = TRUE_;
-		    s_copy(errmsg, "Data type mismatch: column <#> has data "
-			    "type #; column <#> has data type #.", errmsg_len, 
-			    (ftnlen)75);
+		    s_copy(&__global_state->f2c, errmsg, "Data type mismatch"
+			    ": column <#> has data type #; column <#> has dat"
+			    "a type #.", errmsg_len, (ftnlen)75);
 		    i__2 = lxb[0] - 1;
-		    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (
-			    ftnlen)1, lxe[0] - i__2, errmsg_len);
-		    repmc_(errmsg, "#", __state->typstr + (((i__2 = lhstyp - 
-			    1) < 4 && 0 <= i__2 ? i__2 : s_rnge("typstr", 
-			    i__2, "zzeksemc_", (ftnlen)440)) << 5), errmsg, 
+		    repmc_(__global_state, errmsg, "#", query + i__2, errmsg, 
+			    errmsg_len, (ftnlen)1, lxe[0] - i__2, errmsg_len);
+		    repmc_(__global_state, errmsg, "#", __state->typstr + (((
+			    i__2 = lhstyp - 1) < 4 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "typstr", i__2, 
+			    "zzeksemc_", (ftnlen)440)) << 5), errmsg, 
 			    errmsg_len, (ftnlen)1, (ftnlen)32, errmsg_len);
 		    i__2 = lxb[1] - 1;
-		    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (
-			    ftnlen)1, lxe[1] - i__2, errmsg_len);
-		    repmc_(errmsg, "#", __state->typstr + (((i__2 = rhstyp - 
-			    1) < 4 && 0 <= i__2 ? i__2 : s_rnge("typstr", 
-			    i__2, "zzeksemc_", (ftnlen)442)) << 5), errmsg, 
+		    repmc_(__global_state, errmsg, "#", query + i__2, errmsg, 
+			    errmsg_len, (ftnlen)1, lxe[1] - i__2, errmsg_len);
+		    repmc_(__global_state, errmsg, "#", __state->typstr + (((
+			    i__2 = rhstyp - 1) < 4 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "typstr", i__2, 
+			    "zzeksemc_", (ftnlen)442)) << 5), errmsg, 
 			    errmsg_len, (ftnlen)1, (ftnlen)32, errmsg_len);
 		    *errptr = lxb[1];
 		    return 0;
@@ -1125,22 +1132,24 @@ static zzeksemc_state_t* get_zzeksemc_state() {
 		if (lhstyp == 4 || lhstyp == 1 || rhstyp == 4 || rhstyp == 1) 
 			{
 		    *error = TRUE_;
-		    s_copy(errmsg, "Data type mismatch: column <#> has data "
-			    "type #; value <#> has data type #.", errmsg_len, (
-			    ftnlen)74);
+		    s_copy(&__global_state->f2c, errmsg, "Data type mismatch"
+			    ": column <#> has data type #; value <#> has data"
+			    " type #.", errmsg_len, (ftnlen)74);
 		    i__2 = lxb[0] - 1;
-		    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (
-			    ftnlen)1, lxe[0] - i__2, errmsg_len);
-		    repmc_(errmsg, "#", __state->typstr + (((i__2 = lhstyp - 
-			    1) < 4 && 0 <= i__2 ? i__2 : s_rnge("typstr", 
-			    i__2, "zzeksemc_", (ftnlen)484)) << 5), errmsg, 
+		    repmc_(__global_state, errmsg, "#", query + i__2, errmsg, 
+			    errmsg_len, (ftnlen)1, lxe[0] - i__2, errmsg_len);
+		    repmc_(__global_state, errmsg, "#", __state->typstr + (((
+			    i__2 = lhstyp - 1) < 4 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "typstr", i__2, 
+			    "zzeksemc_", (ftnlen)484)) << 5), errmsg, 
 			    errmsg_len, (ftnlen)1, (ftnlen)32, errmsg_len);
 		    i__2 = lxb[1] - 1;
-		    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (
-			    ftnlen)1, lxe[1] - i__2, errmsg_len);
-		    repmc_(errmsg, "#", __state->typstr + (((i__2 = rhstyp - 
-			    1) < 4 && 0 <= i__2 ? i__2 : s_rnge("typstr", 
-			    i__2, "zzeksemc_", (ftnlen)486)) << 5), errmsg, 
+		    repmc_(__global_state, errmsg, "#", query + i__2, errmsg, 
+			    errmsg_len, (ftnlen)1, lxe[1] - i__2, errmsg_len);
+		    repmc_(__global_state, errmsg, "#", __state->typstr + (((
+			    i__2 = rhstyp - 1) < 4 && 0 <= i__2 ? i__2 : 
+			    s_rnge(&__global_state->f2c, "typstr", i__2, 
+			    "zzeksemc_", (ftnlen)486)) << 5), errmsg, 
 			    errmsg_len, (ftnlen)1, (ftnlen)32, errmsg_len);
 		    *errptr = lxb[1];
 		    return 0;
@@ -1169,18 +1178,20 @@ static zzeksemc_state_t* get_zzeksemc_state() {
 	colidx = eqryi[base + 17];
 	lxb[0] = eqryi[base + 13];
 	lxe[0] = eqryi[base + 14];
-	zzekqtab_(eqryi, eqryc, &tabidx, ordtab, alias, eqryc_len, (ftnlen)64,
-		 (ftnlen)64);
-	ekcii_(ordtab, &colidx, colnam, attdsc, (ftnlen)64, (ftnlen)32);
+	zzekqtab_(__global_state, eqryi, eqryc, &tabidx, ordtab, alias, 
+		eqryc_len, (ftnlen)64, (ftnlen)64);
+	ekcii_(__global_state, ordtab, &colidx, colnam, attdsc, (ftnlen)64, (
+		ftnlen)32);
 	if (attdsc[3] != 1) {
 	    *error = TRUE_;
-	    s_copy(errmsg, "Non-scalar column <#> having size # found in ord"
-		    "er-by column.", errmsg_len, (ftnlen)61);
+	    s_copy(&__global_state->f2c, errmsg, "Non-scalar column <#> havi"
+		    "ng size # found in order-by column.", errmsg_len, (ftnlen)
+		    61);
 	    i__2 = lxb[0] - 1;
-	    repmc_(errmsg, "#", query + i__2, errmsg, errmsg_len, (ftnlen)1, 
-		    lxe[1] - i__2, errmsg_len);
-	    repmi_(errmsg, "#", &attdsc[3], errmsg, errmsg_len, (ftnlen)1, 
-		    errmsg_len);
+	    repmc_(__global_state, errmsg, "#", query + i__2, errmsg, 
+		    errmsg_len, (ftnlen)1, lxe[1] - i__2, errmsg_len);
+	    repmi_(__global_state, errmsg, "#", &attdsc[3], errmsg, 
+		    errmsg_len, (ftnlen)1, errmsg_len);
 	    *errptr = lxb[0];
 	    return 0;
 	}
@@ -1188,7 +1199,8 @@ static zzeksemc_state_t* get_zzeksemc_state() {
 
 /*     Indicate completion of semantic checking. */
 
-    zzekweqi_("SEM_CHECKED", &__state->c__1, eqryi, (ftnlen)11);
+    zzekweqi_(__global_state, "SEM_CHECKED", &__state->c__1, eqryi, (ftnlen)
+	    11);
     return 0;
 } /* zzeksemc_ */
 

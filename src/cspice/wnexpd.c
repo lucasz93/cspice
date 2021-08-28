@@ -8,8 +8,7 @@
 
 
 extern wnexpd_init_t __wnexpd_init;
-static wnexpd_state_t* get_wnexpd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline wnexpd_state_t* get_wnexpd_state(cspice_t* state) {
 	if (!state->wnexpd)
 		state->wnexpd = __cspice_allocate_module(sizeof(
 	wnexpd_state_t), &__wnexpd_init, sizeof(__wnexpd_init));
@@ -18,8 +17,8 @@ static wnexpd_state_t* get_wnexpd_state() {
 }
 
 /* $Procedure      WNEXPD ( Expand the intervals of a DP window ) */
-/* Subroutine */ int wnexpd_(doublereal *left, doublereal *right, doublereal *
-	window)
+/* Subroutine */ int wnexpd_(cspice_t* __global_state, doublereal *left, 
+	doublereal *right, doublereal *window)
 {
     /* System generated locals */
     integer i__1;
@@ -29,15 +28,15 @@ static wnexpd_state_t* get_wnexpd_state() {
     integer gone;
     integer i__;
     integer j;
-    extern integer cardd_(doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int scardd_(integer *, doublereal *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern integer cardd_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int scardd_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    wnexpd_state_t* __state = get_wnexpd_state();
+    wnexpd_state_t* __state = get_wnexpd_state(__global_state);
 /* $ Abstract */
 
 /*     Expand each of the intervals of a double precision window. */
@@ -196,16 +195,16 @@ static wnexpd_state_t* get_wnexpd_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("WNEXPD", (ftnlen)6);
+	chkin_(__global_state, "WNEXPD", (ftnlen)6);
     }
 
 /*     Get the cardinality of the window. (The size is not important; */
 /*     this routine can't create any new intervals.) */
 
-    card = cardd_(window);
+    card = cardd_(__global_state, window);
 
 /*     Expand the intervals individually. We'll take care of */
 /*     overlaps later on. Negative expansion may cause some */
@@ -227,8 +226,8 @@ static wnexpd_state_t* get_wnexpd_state() {
 
     card -= gone;
     if (card == 0) {
-	scardd_(&__state->c__0, window);
-	chkout_("WNEXPD", (ftnlen)6);
+	scardd_(__global_state, &__state->c__0, window);
+	chkout_(__global_state, "WNEXPD", (ftnlen)6);
 	return 0;
     }
 
@@ -254,8 +253,8 @@ static wnexpd_state_t* get_wnexpd_state() {
 	j += 2;
     }
     window[i__ + 5] = window[j + 5];
-    scardd_(&i__, window);
-    chkout_("WNEXPD", (ftnlen)6);
+    scardd_(__global_state, &i__, window);
+    chkout_(__global_state, "WNEXPD", (ftnlen)6);
     return 0;
 } /* wnexpd_ */
 

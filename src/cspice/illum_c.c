@@ -606,7 +606,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "illum_c" );
+   chkin_c ( naif_state, "illum_c" );
 
    /*
    Check the input strings: target, abcorr, and obsrvr.  Make sure

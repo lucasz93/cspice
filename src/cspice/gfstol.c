@@ -8,8 +8,7 @@
 
 
 extern gfstol_init_t __gfstol_init;
-static gfstol_state_t* get_gfstol_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline gfstol_state_t* get_gfstol_state(cspice_t* state) {
 	if (!state->gfstol)
 		state->gfstol = __cspice_allocate_module(sizeof(
 	gfstol_state_t), &__gfstol_init, sizeof(__gfstol_init));
@@ -18,21 +17,22 @@ static gfstol_state_t* get_gfstol_state() {
 }
 
 /* $Procedure GFSTOL ( GF, set a tolerance value for GF ) */
-/* Subroutine */ int gfstol_(doublereal *value)
+/* Subroutine */ int gfstol_(cspice_t* __global_state, doublereal *value)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     logical ok;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int zzholdd_(integer *, integer *, logical *, 
-	    doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int zzholdd_(cspice_t*, integer *, integer *, 
+	    logical *, doublereal *);
 
 
     /* Module state */
-    gfstol_state_t* __state = get_gfstol_state();
+    gfstol_state_t* __state = get_gfstol_state(__global_state);
 /* $ Abstract */
 
 /*     Override the default GF convergence value used in the high */
@@ -447,7 +447,7 @@ static gfstol_state_t* get_gfstol_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -458,15 +458,15 @@ static gfstol_state_t* get_gfstol_state() {
 /*     Check tolerance value. */
 
     if (*value <= 0.) {
-	chkin_("GFSTOL", (ftnlen)6);
-	setmsg_("Convergence tolerance must be greater-than zero. Input VALU"
-		"E = #.", (ftnlen)65);
-	errdp_("#", value, (ftnlen)1);
-	sigerr_("SPICE(INVALIDTOLERANCE)", (ftnlen)23);
-	chkout_("GFSTOL", (ftnlen)6);
+	chkin_(__global_state, "GFSTOL", (ftnlen)6);
+	setmsg_(__global_state, "Convergence tolerance must be greater-than "
+		"zero. Input VALUE = #.", (ftnlen)65);
+	errdp_(__global_state, "#", value, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDTOLERANCE)", (ftnlen)23);
+	chkout_(__global_state, "GFSTOL", (ftnlen)6);
 	return 0;
     } else {
-	zzholdd_(&__state->c_n2, &__state->c__3, &ok, value);
+	zzholdd_(__global_state, &__state->c_n2, &__state->c__3, &ok, value);
     }
     return 0;
 } /* gfstol_ */

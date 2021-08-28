@@ -8,30 +8,30 @@
 
 
 typedef int beuns_state_t;
-static beuns_state_t* get_beuns_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline beuns_state_t* get_beuns_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            BEUNS  ( Be an unsigned integer? ) */
-logical beuns_(char *string, ftnlen string_len)
+logical beuns_(cspice_t* __global_state, char *string, ftnlen string_len)
 {
     /* System generated locals */
     logical ret_val;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), i_indx(char *, char *, ftnlen, ftnlen), 
-	    s_cmp(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), i_indx(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen), s_cmp(f2c_state_t*, char *, char *, 
+	    ftnlen, ftnlen);
 
     /* Local variables */
     integer i__;
     integer l;
     logical ok;
-    extern integer frstnb_(char *, ftnlen);
+    extern integer frstnb_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    beuns_state_t* __state = get_beuns_state();
+    beuns_state_t* __state = get_beuns_state(__global_state);
 /* $ Abstract */
 
 /*     Determine whether a string represents an unsigned integer. */
@@ -195,8 +195,8 @@ logical beuns_(char *string, ftnlen string_len)
 /*     Get the length of the string and the position of its */
 /*     first non-blank character. */
 
-    l = i_len(string, string_len);
-    i__ = frstnb_(string, string_len);
+    l = i_len(&__global_state->f2c, string, string_len);
+    i__ = frstnb_(__global_state, string, string_len);
 
 /*     If there isn't a non-blank character, this isn't an */
 /*     unsigned integer. */
@@ -212,8 +212,8 @@ logical beuns_(char *string, ftnlen string_len)
 
     ok = TRUE_;
     while(ok && i__ <= l) {
-	if (i_indx("0123456789", string + (i__ - 1), (ftnlen)10, (ftnlen)1) > 
-		0) {
+	if (i_indx(&__global_state->f2c, "0123456789", string + (i__ - 1), (
+		ftnlen)10, (ftnlen)1) > 0) {
 	    ++i__;
 	} else {
 	    ok = FALSE_;
@@ -229,8 +229,8 @@ logical beuns_(char *string, ftnlen string_len)
 
 /*     ... otherwise, it's an unsigned integer if the remainder is blank. */
 
-	ret_val = s_cmp(string + (i__ - 1), " ", string_len - (i__ - 1), (
-		ftnlen)1) == 0;
+	ret_val = s_cmp(&__global_state->f2c, string + (i__ - 1), " ", 
+		string_len - (i__ - 1), (ftnlen)1) == 0;
     }
     return ret_val;
 } /* beuns_ */

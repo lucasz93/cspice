@@ -8,8 +8,7 @@
 
 
 extern dski02_init_t __dski02_init;
-static dski02_state_t* get_dski02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dski02_state_t* get_dski02_state(cspice_t* state) {
 	if (!state->dski02)
 		state->dski02 = __cspice_allocate_module(sizeof(
 	dski02_state_t), &__dski02_init, sizeof(__dski02_init));
@@ -18,8 +17,9 @@ static dski02_state_t* get_dski02_state() {
 }
 
 /* $Procedure DSKI02 ( DSK, fetch integer type 2 data ) */
-/* Subroutine */ int dski02_(integer *handle, integer *dladsc, integer *item, 
-	integer *start, integer *room, integer *n, integer *values)
+/* Subroutine */ int dski02_(cspice_t* __global_state, integer *handle, 
+	integer *dladsc, integer *item, integer *start, integer *room, 
+	integer *n, integer *values)
 {
     /* Initialized data */
 
@@ -34,18 +34,18 @@ static dski02_state_t* get_dski02_state() {
     integer e;
     integer ibase;
     integer ibuff[10];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    dski02_state_t* __state = get_dski02_state();
+    dski02_state_t* __state = get_dski02_state(__global_state);
 /* $ Abstract */
 
 /*     Fetch integer data from a type 2 DSK segment. */
@@ -1078,11 +1078,11 @@ static dski02_state_t* get_dski02_state() {
 	__state->first = FALSE_;
     }
     if (*room <= 0) {
-	chkin_("DSKI02", (ftnlen)6);
-	setmsg_("ROOM was #; must be positive.", (ftnlen)29);
-	errint_("#", room, (ftnlen)1);
-	sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKI02", (ftnlen)6);
+	chkin_(__global_state, "DSKI02", (ftnlen)6);
+	setmsg_(__global_state, "ROOM was #; must be positive.", (ftnlen)29);
+	errint_(__global_state, "#", room, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKI02", (ftnlen)6);
 	return 0;
     }
     ibase = dladsc[2];
@@ -1108,20 +1108,20 @@ static dski02_state_t* get_dski02_state() {
 
 	i__1 = ibase + 1;
 	i__2 = ibase + 10;
-	dasrdi_(handle, &i__1, &i__2, ibuff);
-	if (failed_()) {
+	dasrdi_(__global_state, handle, &i__1, &i__2, ibuff);
+	if (failed_(__global_state)) {
 	    return 0;
 	}
 
 /*        Check the coarse voxel scale. */
 
 	if (ibuff[6] < 1) {
-	    chkin_("DSKI02", (ftnlen)6);
-	    setmsg_("Coarse voxel grid scale is #; this scale should be an i"
-		    "nteger > 1", (ftnlen)65);
-	    errint_("#", &__state->cgscal, (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("DSKI02", (ftnlen)6);
+	    chkin_(__global_state, "DSKI02", (ftnlen)6);
+	    setmsg_(__global_state, "Coarse voxel grid scale is #; this scal"
+		    "e should be an integer > 1", (ftnlen)65);
+	    errint_(__global_state, "#", &__state->cgscal, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "DSKI02", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1279,26 +1279,27 @@ static dski02_state_t* get_dski02_state() {
 	b = ibase + 11 + __state->np * 3 + __state->voxnpt + __state->voxnpl 
 		+ __state->nv + __state->vtxnpl + *start - 1;
     } else {
-	chkin_("DSKI02", (ftnlen)6);
-	setmsg_("Keyword parameter # was not recognized.", (ftnlen)39);
-	errint_("#", item, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("DSKI02", (ftnlen)6);
+	chkin_(__global_state, "DSKI02", (ftnlen)6);
+	setmsg_(__global_state, "Keyword parameter # was not recognized.", (
+		ftnlen)39);
+	errint_(__global_state, "#", item, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "DSKI02", (ftnlen)6);
 	return 0;
     }
 
 /*     The valid range for START is 1:SIZE. */
 
     if (*start < 1 || *start > size) {
-	chkin_("DSKI02", (ftnlen)6);
-	setmsg_("START must be in the range defined by the size of the data "
-		"associated with the keyword parameter #, namely 1:#.  Actual"
-		" value of START was #.", (ftnlen)141);
-	errint_("#", item, (ftnlen)1);
-	errint_("#", &size, (ftnlen)1);
-	errint_("#", start, (ftnlen)1);
-	sigerr_("SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
-	chkout_("DSKI02", (ftnlen)6);
+	chkin_(__global_state, "DSKI02", (ftnlen)6);
+	setmsg_(__global_state, "START must be in the range defined by the s"
+		"ize of the data associated with the keyword parameter #, nam"
+		"ely 1:#.  Actual value of START was #.", (ftnlen)141);
+	errint_(__global_state, "#", item, (ftnlen)1);
+	errint_(__global_state, "#", &size, (ftnlen)1);
+	errint_(__global_state, "#", start, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INDEXOUTOFRANGE)", (ftnlen)22);
+	chkout_(__global_state, "DSKI02", (ftnlen)6);
 	return 0;
     }
 
@@ -1308,7 +1309,7 @@ static dski02_state_t* get_dski02_state() {
     i__1 = *room, i__2 = size - *start + 1;
     *n = min(i__1,i__2);
     e = b + *n - 1;
-    dasrdi_(handle, &b, &e, values);
+    dasrdi_(__global_state, handle, &b, &e, values);
     return 0;
 } /* dski02_ */
 

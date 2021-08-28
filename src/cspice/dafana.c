@@ -8,8 +8,7 @@
 
 
 extern dafana_init_t __dafana_init;
-static dafana_state_t* get_dafana_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafana_state_t* get_dafana_state(cspice_t* state) {
 	if (!state->dafana)
 		state->dafana = __cspice_allocate_module(sizeof(
 	dafana_state_t), &__dafana_init, sizeof(__dafana_init));
@@ -18,8 +17,9 @@ static dafana_state_t* get_dafana_state() {
 }
 
 /* $Procedure DAFANA ( DAF, add new array ) */
-/* Subroutine */ int dafana_0_(int n__, integer *handle, doublereal *sum, 
-	char *name__, doublereal *data, integer *n, ftnlen name_len)
+/* Subroutine */ int dafana_0_(cspice_t* __global_state, int n__, integer *
+	handle, doublereal *sum, char *name__, doublereal *data, integer *n, 
+	ftnlen name_len)
 {
     /* Initialized data */
 
@@ -28,47 +28,55 @@ static dafana_state_t* get_dafana_state() {
     integer i__1, i__2, i__3, i__4, i__5;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern logical elemi_(integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafps_(integer *, integer *, doublereal *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dafhof_(integer *);
-    extern /* Subroutine */ int dafhfn_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int dafwda_(integer *, integer *, integer *, 
+    extern logical elemi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafps_(cspice_t*, integer *, integer *, 
+	    doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
-    extern /* Subroutine */ int dafhsf_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int dafrcr_(integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int dafrdr_(integer *, integer *, integer *, 
-	    integer *, doublereal *, logical *);
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int dafwdr_(integer *, integer *, doublereal *);
-    extern /* Subroutine */ int dafwcr_(integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int dafarw_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dafrwa_(integer *, integer *, integer *);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int dafwfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dafhof_(cspice_t*, integer *);
+    extern /* Subroutine */ int dafhfn_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafwda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int dafhsf_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int dafrcr_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
+    extern /* Subroutine */ int dafrdr_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, doublereal *, logical *);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafwdr_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int dafwcr_(cspice_t*, integer *, integer *, char 
+	    *, ftnlen);
+    extern /* Subroutine */ int dafarw_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dafrwa_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int dafwfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
     /* Module state */
-    dafana_state_t* __state = get_dafana_state();
+    dafana_state_t* __state = get_dafana_state(__global_state);
 /* $ Abstract */
 
 /*     Add a new array to an existing DAF. */
@@ -1095,12 +1103,12 @@ static dafana_state_t* get_dafana_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFANA", (ftnlen)6);
-	sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-	chkout_("DAFANA", (ftnlen)6);
+	chkin_(__global_state, "DAFANA", (ftnlen)6);
+	sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+	chkout_(__global_state, "DAFANA", (ftnlen)6);
     }
     return 0;
 /* $Procedure DAFBNA ( DAF, begin new array ) */
@@ -1263,17 +1271,17 @@ L_dafbna:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFBNA", (ftnlen)6);
+	chkin_(__global_state, "DAFBNA", (ftnlen)6);
     }
 
 /*     Check out the file handle before going any further. */
 
-    dafsih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DAFBNA", (ftnlen)6);
+    dafsih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFBNA", (ftnlen)6);
 	return 0;
     }
 
@@ -1282,11 +1290,11 @@ L_dafbna:
 /*     open DAFs. */
 
     if (__state->first) {
-	ssizei_(&__state->c__5000, __state->opnset);
+	ssizei_(__global_state, &__state->c__5000, __state->opnset);
 	for (__state->i__ = 1; __state->i__ <= 19; ++__state->i__) {
 	    __state->stpool[(i__1 = __state->i__ - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stpool", i__1, "dafana_", (ftnlen)1067)] = 
-		    __state->i__ + 1;
+		    i__1 : s_rnge(&__global_state->f2c, "stpool", i__1, "daf"
+		    "ana_", (ftnlen)1067)] = __state->i__ + 1;
 	}
 	__state->stpool[19] = -1;
 	__state->stfptr = 1;
@@ -1305,13 +1313,14 @@ L_dafbna:
 /*     do the read now and avoid modifying the active list if the */
 /*     read fails. */
 
-    dafrfr_(handle, &__state->nd, &__state->ni, __state->ifname, &
-	    __state->fward, &__state->bward, &__state->free, (ftnlen)60);
+    dafrfr_(__global_state, handle, &__state->nd, &__state->ni, 
+	    __state->ifname, &__state->fward, &__state->bward, &__state->free,
+	     (ftnlen)60);
 
 /*     If we couldn't read the file record, bail out now. */
 
-    if (failed_()) {
-	chkout_("DAFBNA", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFBNA", (ftnlen)6);
 	return 0;
     }
 
@@ -1323,13 +1332,14 @@ L_dafbna:
     __state->found = FALSE_;
     while(__state->p != -1 && ! __state->found) {
 	if (__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("stfh", i__1, "dafana_", (ftnlen)1109)] == *handle) {
+		s_rnge(&__global_state->f2c, "stfh", i__1, "dafana_", (ftnlen)
+		1109)] == *handle) {
 	    __state->found = TRUE_;
 	} else {
 	    __state->prev = __state->p;
 	    __state->p = __state->stpool[(i__1 = __state->p - 1) < 20 && 0 <= 
-		    i__1 ? i__1 : s_rnge("stpool", i__1, "dafana_", (ftnlen)
-		    1113)];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpool", i__1,
+		     "dafana_", (ftnlen)1113)];
 	}
     }
 
@@ -1366,12 +1376,14 @@ L_dafbna:
 /*           the predecessor of P is not NIL. */
 
 	    __state->stpool[(i__1 = __state->prev - 1) < 20 && 0 <= i__1 ? 
-		    i__1 : s_rnge("stpool", i__1, "dafana_", (ftnlen)1151)] = 
-		    __state->stpool[(i__2 = __state->p - 1) < 20 && 0 <= i__2 
-		    ? i__2 : s_rnge("stpool", i__2, "dafana_", (ftnlen)1151)];
+		    i__1 : s_rnge(&__global_state->f2c, "stpool", i__1, "daf"
+		    "ana_", (ftnlen)1151)] = __state->stpool[(i__2 = 
+		    __state->p - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "stpool", i__2, "dafana_", (ftnlen)
+		    1151)];
 	    __state->stpool[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 :
-		     s_rnge("stpool", i__1, "dafana_", (ftnlen)1152)] = 
-		    __state->sthead;
+		     s_rnge(&__global_state->f2c, "stpool", i__1, "dafana_", (
+		    ftnlen)1152)] = __state->sthead;
 	    __state->sthead = __state->p;
 	}
     } else {
@@ -1388,7 +1400,7 @@ L_dafbna:
 /*           that is still open.  DAFHOF will tell us which handles */
 /*           point to open DAFs. */
 
-	    dafhof_(__state->opnset);
+	    dafhof_(__global_state, __state->opnset);
 	    __state->p = __state->sthead;
 	    __state->prev = -1;
 
@@ -1398,16 +1410,17 @@ L_dafbna:
 /*           file handle as we go. */
 
 	    while(__state->p != -1) {
-		if (elemi_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <=
-			 i__1 ? i__1 : s_rnge("stfh", i__1, "dafana_", (
-			ftnlen)1185)], __state->opnset)) {
+		if (elemi_(__global_state, &__state->stfh[(i__1 = __state->p 
+			- 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "stfh", i__1, "dafana_", (ftnlen)
+			1185)], __state->opnset)) {
 
 /*                 The file is open. Have a look at the next node. */
 
 		    __state->prev = __state->p;
 		    __state->p = __state->stpool[(i__1 = __state->p - 1) < 20 
-			    && 0 <= i__1 ? i__1 : s_rnge("stpool", i__1, 
-			    "dafana_", (ftnlen)1190)];
+			    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c,
+			     "stpool", i__1, "dafana_", (ftnlen)1190)];
 		} else {
 
 /*                 This file handle is not on the list, so free the */
@@ -1431,8 +1444,9 @@ L_dafbna:
 
 
 		    __state->nextp = __state->stpool[(i__1 = __state->p - 1) <
-			     20 && 0 <= i__1 ? i__1 : s_rnge("stpool", i__1, 
-			    "dafana_", (ftnlen)1214)];
+			     20 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "stpool", i__1, "dafana_", (
+			    ftnlen)1214)];
 		    if (__state->p == __state->sthead) {
 
 /*                    Re-assign STHEAD so that we don't lose the head */
@@ -1448,12 +1462,13 @@ L_dafbna:
 /*                    pointer of node PREV. */
 
 			__state->stpool[(i__1 = __state->prev - 1) < 20 && 0 
-				<= i__1 ? i__1 : s_rnge("stpool", i__1, "daf"
-				"ana_", (ftnlen)1231)] = __state->nextp;
+				<= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"stpool", i__1, "dafana_", (ftnlen)1231)] = 
+				__state->nextp;
 		    }
 		    __state->stpool[(i__1 = __state->p - 1) < 20 && 0 <= i__1 
-			    ? i__1 : s_rnge("stpool", i__1, "dafana_", (
-			    ftnlen)1236)] = __state->stfptr;
+			    ? i__1 : s_rnge(&__global_state->f2c, "stpool", 
+			    i__1, "dafana_", (ftnlen)1236)] = __state->stfptr;
 		    __state->stfptr = __state->p;
 		    __state->p = __state->nextp;
 		}
@@ -1476,12 +1491,13 @@ L_dafbna:
 /*                 searching. */
 
 		    if (__state->staddg[(i__1 = __state->p - 1) < 20 && 0 <= 
-			    i__1 ? i__1 : s_rnge("staddg", i__1, "dafana_", (
-			    ftnlen)1264)]) {
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stad"
+			    "dg", i__1, "dafana_", (ftnlen)1264)]) {
 			__state->prev = __state->p;
 			__state->p = __state->stpool[(i__1 = __state->p - 1) <
-				 20 && 0 <= i__1 ? i__1 : s_rnge("stpool", 
-				i__1, "dafana_", (ftnlen)1267)];
+				 20 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "stpool", i__1, "dafana_"
+				, (ftnlen)1267)];
 		    } else {
 			__state->found = TRUE_;
 
@@ -1507,8 +1523,9 @@ L_dafbna:
 
 
 			__state->nextp = __state->stpool[(i__1 = __state->p - 
-				1) < 20 && 0 <= i__1 ? i__1 : s_rnge("stpool",
-				 i__1, "dafana_", (ftnlen)1294)];
+				1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "stpool", i__1, "dafana_"
+				, (ftnlen)1294)];
 			if (__state->p == __state->sthead) {
 
 /*                       Re-assign STHEAD so that we don't lose the head */
@@ -1524,13 +1541,15 @@ L_dafbna:
 /*                       forward pointer of node PREV. */
 
 			    __state->stpool[(i__1 = __state->prev - 1) < 20 &&
-				     0 <= i__1 ? i__1 : s_rnge("stpool", i__1,
-				     "dafana_", (ftnlen)1311)] = 
+				     0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "stpool", i__1, 
+				    "dafana_", (ftnlen)1311)] = 
 				    __state->nextp;
 			}
 			__state->stpool[(i__1 = __state->p - 1) < 20 && 0 <= 
-				i__1 ? i__1 : s_rnge("stpool", i__1, "dafana_"
-				, (ftnlen)1316)] = __state->stfptr;
+				i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"stpool", i__1, "dafana_", (ftnlen)1316)] = 
+				__state->stfptr;
 			__state->stfptr = __state->p;
 			__state->p = __state->nextp;
 		    }
@@ -1541,15 +1560,15 @@ L_dafbna:
 /*           for the new DAF to the state table.  If not signal an error. */
 
 	    if (__state->stfptr == -1) {
-		setmsg_("Attempt to initiate create a new array in DAF '#' h"
-			"as failed. DAFANA's state table has room to manage w"
-			"riting to # new arrays simultaneously, but there is "
-			"no room left in the table for this DAF.", (ftnlen)194)
-			;
-		errhan_("#", handle, (ftnlen)1);
-		errint_("#", &__state->c__20, (ftnlen)1);
-		sigerr_("SPICE(STFULL)", (ftnlen)13);
-		chkout_("DAFBNA", (ftnlen)6);
+		setmsg_(__global_state, "Attempt to initiate create a new ar"
+			"ray in DAF '#' has failed. DAFANA's state table has "
+			"room to manage writing to # new arrays simultaneousl"
+			"y, but there is no room left in the table for this D"
+			"AF.", (ftnlen)194);
+		errhan_(__global_state, "#", handle, (ftnlen)1);
+		errint_(__global_state, "#", &__state->c__20, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(STFULL)", (ftnlen)13);
+		chkout_(__global_state, "DAFBNA", (ftnlen)6);
 		return 0;
 	    }
 	}
@@ -1565,11 +1584,11 @@ L_dafbna:
 /*        of the active list, and make P the head of the active list. */
 
 	__state->stfptr = __state->stpool[(i__1 = __state->p - 1) < 20 && 0 <=
-		 i__1 ? i__1 : s_rnge("stpool", i__1, "dafana_", (ftnlen)1360)
-		];
+		 i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpool", i__1, 
+		"dafana_", (ftnlen)1360)];
 	__state->stpool[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("stpool", i__1, "dafana_", (ftnlen)1361)] = 
-		__state->sthead;
+		s_rnge(&__global_state->f2c, "stpool", i__1, "dafana_", (
+		ftnlen)1361)] = __state->sthead;
 	__state->sthead = __state->p;
     }
 
@@ -1580,38 +1599,46 @@ L_dafbna:
 
 /*     Set the state information for the current array. */
 
-    __state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stfh", i__1, "dafana_", (ftnlen)1375)] = *handle;
-    s_copy(__state->stifnm + ((i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stifnm", i__1, "dafana_", (ftnlen)1376)) * 60, 
-	    __state->ifname, (ftnlen)60, (ftnlen)60);
+    __state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "stfh", i__1, "dafana_", (ftnlen)1375)] = *
+	    handle;
+    s_copy(&__global_state->f2c, __state->stifnm + ((i__1 = __state->p - 1) < 
+	    20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stifnm", 
+	    i__1, "dafana_", (ftnlen)1376)) * 60, __state->ifname, (ftnlen)60,
+	     (ftnlen)60);
     __state->staddg[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-	    "staddg", i__1, "dafana_", (ftnlen)1377)] = TRUE_;
+	    &__global_state->f2c, "staddg", i__1, "dafana_", (ftnlen)1377)] = 
+	    TRUE_;
     __state->stfrst[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stfrst", i__1, "dafana_", (ftnlen)1378)] = __state->fward;
+	    &__global_state->f2c, "stfrst", i__1, "dafana_", (ftnlen)1378)] = 
+	    __state->fward;
     __state->stlast[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stlast", i__1, "dafana_", (ftnlen)1379)] = __state->bward;
+	    &__global_state->f2c, "stlast", i__1, "dafana_", (ftnlen)1379)] = 
+	    __state->bward;
     __state->stbegn[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stbegn", i__1, "dafana_", (ftnlen)1380)] = __state->free;
+	    &__global_state->f2c, "stbegn", i__1, "dafana_", (ftnlen)1380)] = 
+	    __state->free;
     __state->stfree[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stfree", i__1, "dafana_", (ftnlen)1381)] = __state->free;
+	    &__global_state->f2c, "stfree", i__1, "dafana_", (ftnlen)1381)] = 
+	    __state->free;
 
 /*     Find out how big the array summary is supposed to be. */
 
-    dafhsf_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stfh", i__1, "dafana_", (ftnlen)1386)], &__state->nd, &
-	    __state->ni);
+    dafhsf_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 && 0 
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, "daf"
+	    "ana_", (ftnlen)1386)], &__state->nd, &__state->ni);
     __state->sumsiz = __state->nd + (__state->ni + 1) / 2;
 
 /*     Set the local copies of the array's summary and name. */
 
-    moved_(sum, &__state->sumsiz, &__state->stlsum[(i__1 = __state->p * 125 - 
-	    125) < 2500 && 0 <= i__1 ? i__1 : s_rnge("stlsum", i__1, "dafana_"
-	    , (ftnlen)1393)]);
-    s_copy(__state->stname + ((i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stname", i__1, "dafana_", (ftnlen)1395)) * 1000, 
-	    name__, (ftnlen)1000, name_len);
-    chkout_("DAFBNA", (ftnlen)6);
+    moved_(__global_state, sum, &__state->sumsiz, &__state->stlsum[(i__1 = 
+	    __state->p * 125 - 125) < 2500 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "stlsum", i__1, "dafana_", (ftnlen)1393)]);
+    s_copy(&__global_state->f2c, __state->stname + ((i__1 = __state->p - 1) < 
+	    20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stname", 
+	    i__1, "dafana_", (ftnlen)1395)) * 1000, name__, (ftnlen)1000, 
+	    name_len);
+    chkout_(__global_state, "DAFBNA", (ftnlen)6);
     return 0;
 /* $Procedure DAFADA ( DAF, add data to array ) */
 
@@ -1766,10 +1793,10 @@ L_dafada:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFADA", (ftnlen)6);
+	chkin_(__global_state, "DAFADA", (ftnlen)6);
     }
 
 /*     This routine operates on the DAF at the head of the active list. */
@@ -1782,33 +1809,35 @@ L_dafada:
 /*     DAFWDR will handle the check. */
 
     if (__state->p == -1) {
-	setmsg_("No DAF is currently being written.", (ftnlen)34);
-	sigerr_("SPICE(DAFNOWRITE)", (ftnlen)17);
-	chkout_("DAFADA", (ftnlen)6);
+	setmsg_(__global_state, "No DAF is currently being written.", (ftnlen)
+		34);
+	sigerr_(__global_state, "SPICE(DAFNOWRITE)", (ftnlen)17);
+	chkout_(__global_state, "DAFADA", (ftnlen)6);
 	return 0;
 
 /*     An array cannot be extended unless begun first. */
 
     } else if (! __state->staddg[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-	    i__1 : s_rnge("staddg", i__1, "dafana_", (ftnlen)1592)]) {
+	    i__1 : s_rnge(&__global_state->f2c, "staddg", i__1, "dafana_", (
+	    ftnlen)1592)]) {
 
 /*        Validate the current handle, then get the name of the DAF. */
 
-	dafsih_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "dafana_", (ftnlen)1596)], "WRITE"
-		, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("DAFADA", (ftnlen)6);
+	dafsih_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1,
+		 "dafana_", (ftnlen)1596)], "WRITE", (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFADA", (ftnlen)6);
 	    return 0;
 	}
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "dafana_", (ftnlen)1603)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("An attempt was made to add data to an array that has not ye"
-		"t been begun, in file #.", (ftnlen)83);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(DAFNEWCONFLICT)", (ftnlen)21);
-	chkout_("DAFADA", (ftnlen)6);
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1,
+		 "dafana_", (ftnlen)1603)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "An attempt was made to add data to an array"
+		" that has not yet been begun, in file #.", (ftnlen)83);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(DAFNEWCONFLICT)", (ftnlen)21);
+	chkout_(__global_state, "DAFADA", (ftnlen)6);
 	return 0;
 
 /*     Start adding data at the first free address, then update that */
@@ -1816,19 +1845,21 @@ L_dafada:
 
     } else if (*n >= 1) {
 	i__4 = __state->stfree[(i__3 = __state->p - 1) < 20 && 0 <= i__3 ? 
-		i__3 : s_rnge("stfree", i__3, "dafana_", (ftnlen)1617)] + *n 
-		- 1;
-	dafwda_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "dafana_", (ftnlen)1617)], &
-		__state->stfree[(i__2 = __state->p - 1) < 20 && 0 <= i__2 ? 
-		i__2 : s_rnge("stfree", i__2, "dafana_", (ftnlen)1617)], &
-		i__4, data);
+		i__3 : s_rnge(&__global_state->f2c, "stfree", i__3, "dafana_",
+		 (ftnlen)1617)] + *n - 1;
+	dafwda_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1,
+		 "dafana_", (ftnlen)1617)], &__state->stfree[(i__2 = 
+		__state->p - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "stfree", i__2, "dafana_", (ftnlen)1617)]
+		, &i__4, data);
 	__state->stfree[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("stfree", i__1, "dafana_", (ftnlen)1618)] = 
-		__state->stfree[(i__2 = __state->p - 1) < 20 && 0 <= i__2 ? 
-		i__2 : s_rnge("stfree", i__2, "dafana_", (ftnlen)1618)] + *n;
+		s_rnge(&__global_state->f2c, "stfree", i__1, "dafana_", (
+		ftnlen)1618)] = __state->stfree[(i__2 = __state->p - 1) < 20 
+		&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stfree", 
+		i__2, "dafana_", (ftnlen)1618)] + *n;
     }
-    chkout_("DAFADA", (ftnlen)6);
+    chkout_(__global_state, "DAFADA", (ftnlen)6);
     return 0;
 /* $Procedure DAFENA ( DAF, end new array ) */
 
@@ -2004,43 +2035,45 @@ L_dafena:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFENA", (ftnlen)6);
+	chkin_(__global_state, "DAFENA", (ftnlen)6);
     }
 
 /*     This routine operates on the DAF at the head of the active list. */
 
     __state->p = __state->sthead;
     if (__state->p == -1) {
-	setmsg_("No DAF is currently being written.", (ftnlen)34);
-	sigerr_("SPICE(DAFNOWRITE)", (ftnlen)17);
-	chkout_("DAFENA", (ftnlen)6);
+	setmsg_(__global_state, "No DAF is currently being written.", (ftnlen)
+		34);
+	sigerr_(__global_state, "SPICE(DAFNOWRITE)", (ftnlen)17);
+	chkout_(__global_state, "DAFENA", (ftnlen)6);
 	return 0;
 
 /*     A new array cannot be ended unless begun first. */
 
     } else if (! __state->staddg[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-	    i__1 : s_rnge("staddg", i__1, "dafana_", (ftnlen)1832)]) {
+	    i__1 : s_rnge(&__global_state->f2c, "staddg", i__1, "dafana_", (
+	    ftnlen)1832)]) {
 
 /*        Validate the current handle, then get the name of the DAF. */
 
-	dafsih_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "dafana_", (ftnlen)1836)], "WRITE"
-		, (ftnlen)5);
-	if (failed_()) {
-	    chkout_("DAFENA", (ftnlen)6);
+	dafsih_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1,
+		 "dafana_", (ftnlen)1836)], "WRITE", (ftnlen)5);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFENA", (ftnlen)6);
 	    return 0;
 	}
-	dafhfn_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "dafana_", (ftnlen)1843)], 
-		__state->dafnam, (ftnlen)255);
-	setmsg_("An attempt was made to end an array that has not yet been b"
-		"egun, in file #.", (ftnlen)75);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(DAFNEWCONFLICT)", (ftnlen)21);
-	chkout_("DAFENA", (ftnlen)6);
+	dafhfn_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1,
+		 "dafana_", (ftnlen)1843)], __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "An attempt was made to end an array that ha"
+		"s not yet been begun, in file #.", (ftnlen)75);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(DAFNEWCONFLICT)", (ftnlen)21);
+	chkout_(__global_state, "DAFENA", (ftnlen)6);
 	return 0;
     }
 
@@ -2049,38 +2082,44 @@ L_dafena:
 /*     initial and final addresses of the data, of which we */
 /*     have been keeping track. */
 
-    dafhsf_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stfh", i__1, "dafana_", (ftnlen)1859)], &__state->nd, &
-	    __state->ni);
-    dafus_(&__state->stlsum[(i__1 = __state->p * 125 - 125) < 2500 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stlsum", i__1, "dafana_", (ftnlen)1861)], &
-	    __state->nd, &__state->ni, __state->dc, __state->ic);
-    __state->ic[(i__1 = __state->ni - 2) < 250 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ic", i__1, "dafana_", (ftnlen)1863)] = __state->stbegn[(i__2 = 
-	    __state->p - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("stbegn", i__2, 
-	    "dafana_", (ftnlen)1863)];
-    __state->ic[(i__1 = __state->ni - 1) < 250 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ic", i__1, "dafana_", (ftnlen)1864)] = __state->stfree[(i__2 = 
-	    __state->p - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("stfree", i__2, 
-	    "dafana_", (ftnlen)1864)] - 1;
-    dafps_(&__state->nd, &__state->ni, __state->dc, __state->ic, &
-	    __state->stlsum[(i__1 = __state->p * 125 - 125) < 2500 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stlsum", i__1, "dafana_", (ftnlen)1866)]);
+    dafhsf_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 && 0 
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, "daf"
+	    "ana_", (ftnlen)1859)], &__state->nd, &__state->ni);
+    dafus_(__global_state, &__state->stlsum[(i__1 = __state->p * 125 - 125) < 
+	    2500 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stlsum", 
+	    i__1, "dafana_", (ftnlen)1861)], &__state->nd, &__state->ni, 
+	    __state->dc, __state->ic);
+    __state->ic[(i__1 = __state->ni - 2) < 250 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ic", i__1, "dafana_", (ftnlen)1863)] = 
+	    __state->stbegn[(i__2 = __state->p - 1) < 20 && 0 <= i__2 ? i__2 :
+	     s_rnge(&__global_state->f2c, "stbegn", i__2, "dafana_", (ftnlen)
+	    1863)];
+    __state->ic[(i__1 = __state->ni - 1) < 250 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "ic", i__1, "dafana_", (ftnlen)1864)] = 
+	    __state->stfree[(i__2 = __state->p - 1) < 20 && 0 <= i__2 ? i__2 :
+	     s_rnge(&__global_state->f2c, "stfree", i__2, "dafana_", (ftnlen)
+	    1864)] - 1;
+    dafps_(__global_state, &__state->nd, &__state->ni, __state->dc, 
+	    __state->ic, &__state->stlsum[(i__1 = __state->p * 125 - 125) < 
+	    2500 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stlsum", 
+	    i__1, "dafana_", (ftnlen)1866)]);
 
 /*     The summary should be stored in the final summary record (the */
 /*     one at the end of the file). Get that entire record, and the */
 /*     corresponding name record. */
 
-    dafrdr_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stfh", i__1, "dafana_", (ftnlen)1873)], &__state->stlast[(
-	    i__2 = __state->p - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("stlast",
-	     i__2, "dafana_", (ftnlen)1873)], &__state->c__1, &
-	    __state->c__128, __state->sumrec, &__state->found);
+    dafrdr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 && 0 
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, "daf"
+	    "ana_", (ftnlen)1873)], &__state->stlast[(i__2 = __state->p - 1) < 
+	    20 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stlast", 
+	    i__2, "dafana_", (ftnlen)1873)], &__state->c__1, &__state->c__128,
+	     __state->sumrec, &__state->found);
     i__3 = __state->stlast[(i__2 = __state->p - 1) < 20 && 0 <= i__2 ? i__2 : 
-	    s_rnge("stlast", i__2, "dafana_", (ftnlen)1874)] + 1;
-    dafrcr_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stfh", i__1, "dafana_", (ftnlen)1874)], &i__3, 
-	    __state->namrec, (ftnlen)1000);
+	    s_rnge(&__global_state->f2c, "stlast", i__2, "dafana_", (ftnlen)
+	    1874)] + 1;
+    dafrcr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 && 0 
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, "daf"
+	    "ana_", (ftnlen)1874)], &i__3, __state->namrec, (ftnlen)1000);
     __state->narray = (integer) __state->sumrec[2];
 
 /*     The number of arrays determines where the summary and name */
@@ -2089,17 +2128,19 @@ L_dafena:
 
     __state->sumsiz = __state->nd + (__state->ni + 1) / 2;
     __state->dloc = __state->narray * __state->sumsiz + 4;
-    moved_(&__state->stlsum[(i__1 = __state->p * 125 - 125) < 2500 && 0 <= 
-	    i__1 ? i__1 : s_rnge("stlsum", i__1, "dafana_", (ftnlen)1885)], &
-	    __state->sumsiz, &__state->sumrec[(i__2 = __state->dloc - 1) < 
-	    128 && 0 <= i__2 ? i__2 : s_rnge("sumrec", i__2, "dafana_", (
+    moved_(__global_state, &__state->stlsum[(i__1 = __state->p * 125 - 125) < 
+	    2500 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stlsum", 
+	    i__1, "dafana_", (ftnlen)1885)], &__state->sumsiz, &
+	    __state->sumrec[(i__2 = __state->dloc - 1) < 128 && 0 <= i__2 ? 
+	    i__2 : s_rnge(&__global_state->f2c, "sumrec", i__2, "dafana_", (
 	    ftnlen)1885)]);
     __state->namsiz = __state->sumsiz << 3;
     __state->cloc = __state->narray * __state->namsiz + 1;
-    s_copy(__state->namrec + (__state->cloc - 1), __state->stname + ((i__1 = 
-	    __state->p - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("stname", i__1, 
-	    "dafana_", (ftnlen)1890)) * 1000, __state->cloc + __state->namsiz 
-	    - 1 - (__state->cloc - 1), (ftnlen)1000);
+    s_copy(&__global_state->f2c, __state->namrec + (__state->cloc - 1), 
+	    __state->stname + ((i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
+	    i__1 : s_rnge(&__global_state->f2c, "stname", i__1, "dafana_", (
+	    ftnlen)1890)) * 1000, __state->cloc + __state->namsiz - 1 - (
+	    __state->cloc - 1), (ftnlen)1000);
     __state->sumrec[2] += 1.;
     __state->narray = (integer) __state->sumrec[2];
 
@@ -2107,16 +2148,19 @@ L_dafena:
 /*     record, and it can simply be replaced. */
 
     if (__state->narray < 125 / __state->sumsiz) {
-	dafwdr_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "dafana_", (ftnlen)1901)], &
-		__state->stlast[(i__2 = __state->p - 1) < 20 && 0 <= i__2 ? 
-		i__2 : s_rnge("stlast", i__2, "dafana_", (ftnlen)1901)], 
-		__state->sumrec);
+	dafwdr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1,
+		 "dafana_", (ftnlen)1901)], &__state->stlast[(i__2 = 
+		__state->p - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "stlast", i__2, "dafana_", (ftnlen)1901)]
+		, __state->sumrec);
 	i__3 = __state->stlast[(i__2 = __state->p - 1) < 20 && 0 <= i__2 ? 
-		i__2 : s_rnge("stlast", i__2, "dafana_", (ftnlen)1902)] + 1;
-	dafwcr_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "dafana_", (ftnlen)1902)], &i__3, 
-		__state->namrec, (ftnlen)1000);
+		i__2 : s_rnge(&__global_state->f2c, "stlast", i__2, "dafana_",
+		 (ftnlen)1902)] + 1;
+	dafwcr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1,
+		 "dafana_", (ftnlen)1902)], &i__3, __state->namrec, (ftnlen)
+		1000);
 
 /*     When the record becomes full, a new one must be written. */
 /*     However, this fact should be transparent to the user. */
@@ -2130,39 +2174,45 @@ L_dafena:
 /*        DAFARW (`address to record and word'). */
 
 	i__2 = __state->stfree[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfree", i__1, "dafana_", (ftnlen)1917)] - 1;
-	dafarw_(&i__2, &__state->next, &__state->word);
+		i__1 : s_rnge(&__global_state->f2c, "stfree", i__1, "dafana_",
+		 (ftnlen)1917)] - 1;
+	dafarw_(__global_state, &i__2, &__state->next, &__state->word);
 	++__state->next;
 	__state->sumrec[0] = (doublereal) __state->next;
-	dafwdr_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "dafana_", (ftnlen)1921)], &
-		__state->stlast[(i__2 = __state->p - 1) < 20 && 0 <= i__2 ? 
-		i__2 : s_rnge("stlast", i__2, "dafana_", (ftnlen)1921)], 
-		__state->sumrec);
+	dafwdr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1,
+		 "dafana_", (ftnlen)1921)], &__state->stlast[(i__2 = 
+		__state->p - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "stlast", i__2, "dafana_", (ftnlen)1921)]
+		, __state->sumrec);
 	i__3 = __state->stlast[(i__2 = __state->p - 1) < 20 && 0 <= i__2 ? 
-		i__2 : s_rnge("stlast", i__2, "dafana_", (ftnlen)1922)] + 1;
-	dafwcr_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "dafana_", (ftnlen)1922)], &i__3, 
-		__state->namrec, (ftnlen)1000);
+		i__2 : s_rnge(&__global_state->f2c, "stlast", i__2, "dafana_",
+		 (ftnlen)1922)] + 1;
+	dafwcr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1,
+		 "dafana_", (ftnlen)1922)], &i__3, __state->namrec, (ftnlen)
+		1000);
 
 /*        The new summary record should point backwards to the one just */
 /*        written, and should point forwards to nothing. Of course, */
 /*        it contains no summaries, and no names. */
 
-	cleard_(&__state->c__128, __state->sumrec);
+	cleard_(__global_state, &__state->c__128, __state->sumrec);
 	__state->sumrec[0] = 0.;
 	__state->sumrec[1] = (doublereal) __state->stlast[(i__1 = __state->p 
-		- 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("stlast", i__1, "dafa"
-		"na_", (ftnlen)1931)];
+		- 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"stlast", i__1, "dafana_", (ftnlen)1931)];
 	__state->sumrec[2] = 0.;
-	s_copy(__state->namrec, " ", (ftnlen)1000, (ftnlen)1);
-	dafwdr_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "dafana_", (ftnlen)1935)], &
-		__state->next, __state->sumrec);
+	s_copy(&__global_state->f2c, __state->namrec, " ", (ftnlen)1000, (
+		ftnlen)1);
+	dafwdr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1,
+		 "dafana_", (ftnlen)1935)], &__state->next, __state->sumrec);
 	i__2 = __state->next + 1;
-	dafwcr_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stfh", i__1, "dafana_", (ftnlen)1936)], &i__2, 
-		__state->namrec, (ftnlen)1000);
+	dafwcr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 &&
+		 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1,
+		 "dafana_", (ftnlen)1936)], &i__2, __state->namrec, (ftnlen)
+		1000);
 
 /*        If a new summary record  was added, the first free address */
 /*        lies just beyond the end of the matching character record. */
@@ -2171,35 +2221,41 @@ L_dafena:
 /*        the next free address. */
 
 	__state->stlast[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("stlast", i__1, "dafana_", (ftnlen)1945)] = 
-		__state->next;
+		s_rnge(&__global_state->f2c, "stlast", i__1, "dafana_", (
+		ftnlen)1945)] = __state->next;
 	i__3 = __state->stlast[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-		i__1 : s_rnge("stlast", i__1, "dafana_", (ftnlen)1946)] + 2;
-	dafrwa_(&i__3, &__state->c__1, &__state->stfree[(i__2 = __state->p - 
-		1) < 20 && 0 <= i__2 ? i__2 : s_rnge("stfree", i__2, "dafana_"
-		, (ftnlen)1946)]);
+		i__1 : s_rnge(&__global_state->f2c, "stlast", i__1, "dafana_",
+		 (ftnlen)1946)] + 2;
+	dafrwa_(__global_state, &i__3, &__state->c__1, &__state->stfree[(i__2 
+		= __state->p - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "stfree", i__2, "dafana_", (ftnlen)1946)]
+		);
     }
 
 /*     The new value STFREE(P) must be rewritten in the file record each */
 /*     time a new array is added. If a new record was added, the new */
 /*     value of STLAST(P) will be rewritten as well. */
 
-    dafwfr_(&__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stfh", i__1, "dafana_", (ftnlen)1955)], &__state->nd, &
-	    __state->ni, __state->stifnm + ((i__2 = __state->p - 1) < 20 && 0 
-	    <= i__2 ? i__2 : s_rnge("stifnm", i__2, "dafana_", (ftnlen)1955)) 
-	    * 60, &__state->stfrst[(i__3 = __state->p - 1) < 20 && 0 <= i__3 ?
-	     i__3 : s_rnge("stfrst", i__3, "dafana_", (ftnlen)1955)], &
-	    __state->stlast[(i__4 = __state->p - 1) < 20 && 0 <= i__4 ? i__4 :
-	     s_rnge("stlast", i__4, "dafana_", (ftnlen)1955)], &
-	    __state->stfree[(i__5 = __state->p - 1) < 20 && 0 <= i__5 ? i__5 :
-	     s_rnge("stfree", i__5, "dafana_", (ftnlen)1955)], (ftnlen)60);
+    dafwfr_(__global_state, &__state->stfh[(i__1 = __state->p - 1) < 20 && 0 
+	    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "stfh", i__1, "daf"
+	    "ana_", (ftnlen)1955)], &__state->nd, &__state->ni, 
+	    __state->stifnm + ((i__2 = __state->p - 1) < 20 && 0 <= i__2 ? 
+	    i__2 : s_rnge(&__global_state->f2c, "stifnm", i__2, "dafana_", (
+	    ftnlen)1955)) * 60, &__state->stfrst[(i__3 = __state->p - 1) < 20 
+	    && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "stfrst", i__3,
+	     "dafana_", (ftnlen)1955)], &__state->stlast[(i__4 = __state->p - 
+	    1) < 20 && 0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c, "stla"
+	    "st", i__4, "dafana_", (ftnlen)1955)], &__state->stfree[(i__5 = 
+	    __state->p - 1) < 20 && 0 <= i__5 ? i__5 : s_rnge(&
+	    __global_state->f2c, "stfree", i__5, "dafana_", (ftnlen)1955)], (
+	    ftnlen)60);
 
 /*     Ready for another array. */
 
     __state->staddg[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-	    "staddg", i__1, "dafana_", (ftnlen)1966)] = FALSE_;
-    chkout_("DAFENA", (ftnlen)6);
+	    &__global_state->f2c, "staddg", i__1, "dafana_", (ftnlen)1966)] = 
+	    FALSE_;
+    chkout_(__global_state, "DAFENA", (ftnlen)6);
     return 0;
 /* $Procedure      DAFCAD ( DAF, continue adding data ) */
 
@@ -2382,17 +2438,17 @@ L_dafcad:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFCAD", (ftnlen)6);
+	chkin_(__global_state, "DAFCAD", (ftnlen)6);
     }
 
 /*     Check out the file handle before going any further. */
 
-    dafsih_(handle, "WRITE", (ftnlen)5);
-    if (failed_()) {
-	chkout_("DAFCAD", (ftnlen)6);
+    dafsih_(__global_state, handle, "WRITE", (ftnlen)5);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFCAD", (ftnlen)6);
 	return 0;
     }
 
@@ -2404,13 +2460,14 @@ L_dafcad:
     __state->found = FALSE_;
     while(__state->p != -1 && ! __state->found) {
 	if (__state->stfh[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("stfh", i__1, "dafana_", (ftnlen)2189)] == *handle) {
+		s_rnge(&__global_state->f2c, "stfh", i__1, "dafana_", (ftnlen)
+		2189)] == *handle) {
 	    __state->found = TRUE_;
 	} else {
 	    __state->prev = __state->p;
 	    __state->p = __state->stpool[(i__1 = __state->p - 1) < 20 && 0 <= 
-		    i__1 ? i__1 : s_rnge("stpool", i__1, "dafana_", (ftnlen)
-		    2193)];
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "stpool", i__1,
+		     "dafana_", (ftnlen)2193)];
 	}
     }
 
@@ -2422,21 +2479,24 @@ L_dafcad:
 /*     already writing to. */
 
     if (! __state->found) {
-	dafhfn_(handle, __state->dafnam, (ftnlen)255);
-	setmsg_("No write in progress to #. (Handle was #.) ", (ftnlen)43);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(NOARRAYSTARTED)", (ftnlen)21);
-	chkout_("DAFCAD", (ftnlen)6);
+	dafhfn_(__global_state, handle, __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No write in progress to #. (Handle was #.) ",
+		 (ftnlen)43);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOARRAYSTARTED)", (ftnlen)21);
+	chkout_(__global_state, "DAFCAD", (ftnlen)6);
 	return 0;
     } else if (! __state->staddg[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? 
-	    i__1 : s_rnge("staddg", i__1, "dafana_", (ftnlen)2217)]) {
-	dafhfn_(handle, __state->dafnam, (ftnlen)255);
-	setmsg_("No write in progress to #. (Handle was #.) ", (ftnlen)43);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(NOARRAYSTARTED)", (ftnlen)21);
-	chkout_("DAFCAD", (ftnlen)6);
+	    i__1 : s_rnge(&__global_state->f2c, "staddg", i__1, "dafana_", (
+	    ftnlen)2217)]) {
+	dafhfn_(__global_state, handle, __state->dafnam, (ftnlen)255);
+	setmsg_(__global_state, "No write in progress to #. (Handle was #.) ",
+		 (ftnlen)43);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOARRAYSTARTED)", (ftnlen)21);
+	chkout_(__global_state, "DAFCAD", (ftnlen)6);
 	return 0;
     }
 
@@ -2456,44 +2516,47 @@ L_dafcad:
 /*        the predecessor of P is not NIL. */
 
 	__state->stpool[(i__1 = __state->prev - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("stpool", i__1, "dafana_", (ftnlen)2246)] = 
-		__state->stpool[(i__2 = __state->p - 1) < 20 && 0 <= i__2 ? 
-		i__2 : s_rnge("stpool", i__2, "dafana_", (ftnlen)2246)];
+		s_rnge(&__global_state->f2c, "stpool", i__1, "dafana_", (
+		ftnlen)2246)] = __state->stpool[(i__2 = __state->p - 1) < 20 
+		&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "stpool", 
+		i__2, "dafana_", (ftnlen)2246)];
 	__state->stpool[(i__1 = __state->p - 1) < 20 && 0 <= i__1 ? i__1 : 
-		s_rnge("stpool", i__1, "dafana_", (ftnlen)2247)] = 
-		__state->sthead;
+		s_rnge(&__global_state->f2c, "stpool", i__1, "dafana_", (
+		ftnlen)2247)] = __state->sthead;
 	__state->sthead = __state->p;
     }
-    chkout_("DAFCAD", (ftnlen)6);
+    chkout_(__global_state, "DAFCAD", (ftnlen)6);
     return 0;
 } /* dafana_ */
 
-/* Subroutine */ int dafana_(integer *handle, doublereal *sum, char *name__, 
-	doublereal *data, integer *n, ftnlen name_len)
+/* Subroutine */ int dafana_(cspice_t* __global_state, integer *handle, 
+	doublereal *sum, char *name__, doublereal *data, integer *n, ftnlen 
+	name_len)
 {
     return dafana_0_(0, handle, sum, name__, data, n, name_len);
     }
 
-/* Subroutine */ int dafbna_(integer *handle, doublereal *sum, char *name__, 
-	ftnlen name_len)
+/* Subroutine */ int dafbna_(cspice_t* __global_state, integer *handle, 
+	doublereal *sum, char *name__, ftnlen name_len)
 {
     return dafana_0_(1, handle, sum, name__, (doublereal *)0, (integer *)0, 
 	    name_len);
     }
 
-/* Subroutine */ int dafada_(doublereal *data, integer *n)
+/* Subroutine */ int dafada_(cspice_t* __global_state, doublereal *data, 
+	integer *n)
 {
     return dafana_0_(2, (integer *)0, (doublereal *)0, (char *)0, data, n, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int dafena_(void)
+/* Subroutine */ int dafena_(cspice_t* __global_state)
 {
     return dafana_0_(3, (integer *)0, (doublereal *)0, (char *)0, (doublereal 
 	    *)0, (integer *)0, (ftnint)0);
     }
 
-/* Subroutine */ int dafcad_(integer *handle)
+/* Subroutine */ int dafcad_(cspice_t* __global_state, integer *handle)
 {
     return dafana_0_(4, handle, (doublereal *)0, (char *)0, (doublereal *)0, (
 	    integer *)0, (ftnint)0);

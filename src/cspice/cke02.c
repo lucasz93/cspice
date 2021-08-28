@@ -8,8 +8,7 @@
 
 
 extern cke02_init_t __cke02_init;
-static cke02_state_t* get_cke02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline cke02_state_t* get_cke02_state(cspice_t* state) {
 	if (!state->cke02)
 		state->cke02 = __cspice_allocate_module(sizeof(cke02_state_t),
 	 &__cke02_init, sizeof(__cke02_init));
@@ -18,30 +17,32 @@ static cke02_state_t* get_cke02_state() {
 }
 
 /* $Procedure  CKE02 ( C-kernel, evaluate pointing record, data type 2 ) */
-/* Subroutine */ int cke02_(logical *needav, doublereal *record, doublereal *
-	cmat, doublereal *av, doublereal *clkout)
+/* Subroutine */ int cke02_(cspice_t* __global_state, logical *needav, 
+	doublereal *record, doublereal *cmat, doublereal *av, doublereal *
+	clkout)
 {
     doublereal time;
     doublereal quat[4];
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
-    extern /* Subroutine */ int mxmt_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int mxmt_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal cbase[9]	/* was [3][3] */;
     doublereal angle;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vequg_(doublereal *, integer *, doublereal *);
-    extern doublereal vnorm_(doublereal *);
-    extern /* Subroutine */ int axisar_(doublereal *, doublereal *, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vequg_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int axisar_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     doublereal avtemp[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int q2m_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int q2m_(cspice_t*, doublereal *, doublereal *);
     doublereal rot[9]	/* was [3][3] */;
 
 
     /* Module state */
-    cke02_state_t* __state = get_cke02_state();
+    cke02_state_t* __state = get_cke02_state(__global_state);
 /* $ Abstract */
 
 /*   Evaluate a pointing record returned by CKR02 from a CK data type 2 */
@@ -329,10 +330,10 @@ static cke02_state_t* get_cke02_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("CKE02", (ftnlen)5);
+	chkin_(__global_state, "CKE02", (ftnlen)5);
     }
 
 /*     Copy the returned encoded SCLK time into CLKOUT. */
@@ -354,8 +355,8 @@ static cke02_state_t* get_cke02_state() {
 /*        RECORD ( 9  ) = av2 */
 /*        RECORD ( 10 ) = av3 */
 
-    vequg_(&record[3], &__state->c__4, quat);
-    vequ_(&record[7], avtemp);
+    vequg_(__global_state, &record[3], &__state->c__4, quat);
+    vequ_(__global_state, &record[7], avtemp);
 
 /*     Calculate the angle of the rotation. */
 
@@ -364,16 +365,16 @@ static cke02_state_t* get_cke02_state() {
 /*        RECORD ( 3 ) = The number of seconds per SCLK tick. */
 
     time = (record[1] - record[0]) * record[2];
-    angle = time * vnorm_(avtemp);
+    angle = time * vnorm_(__global_state, avtemp);
 
 /*     Construct a matrix which rotates vectors by ANGLE radians about */
 /*     AVTEMP. */
 
-    axisar_(avtemp, &angle, rot);
+    axisar_(__global_state, avtemp, &angle, rot);
 
 /*     Convert the quaternion to a C - matrix. */
 
-    q2m_(quat, cbase);
+    q2m_(__global_state, quat, cbase);
 
 /*     Rotate each of the axis vectors of the spacecraft instrument frame */
 /*     by ANGLE radians about AVTEMP. (AVTEMP is given in the same */
@@ -390,14 +391,14 @@ static cke02_state_t* get_cke02_state() {
 /*        [ CBASE ]   *   [  ROT  ]     =     [  CMAT  ] */
 /*        [       ]       [       ]           [        ] */
 
-    mxmt_(cbase, rot, cmat);
+    mxmt_(__global_state, cbase, rot, cmat);
 
 /*     Return the angular velocity only if it is requested. */
 
     if (*needav) {
-	vequ_(avtemp, av);
+	vequ_(__global_state, avtemp, av);
     }
-    chkout_("CKE02", (ftnlen)5);
+    chkout_(__global_state, "CKE02", (ftnlen)5);
     return 0;
 } /* cke02_ */
 

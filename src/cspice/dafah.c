@@ -8,8 +8,7 @@
 
 
 extern dafah_init_t __dafah_init;
-static dafah_state_t* get_dafah_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafah_state_t* get_dafah_state(cspice_t* state) {
 	if (!state->dafah)
 		state->dafah = __cspice_allocate_module(sizeof(dafah_state_t),
 	 &__dafah_init, sizeof(__dafah_init));
@@ -18,10 +17,10 @@ static dafah_state_t* get_dafah_state() {
 }
 
 /* $Procedure DAFAH ( DAF, assign handles ) */
-/* Subroutine */ int dafah_0_(int n__, char *fname, char *ftype, integer *nd, 
-	integer *ni, char *ifname, integer *resv, integer *handle, integer *
-	unit, integer *fhset, char *access, ftnlen fname_len, ftnlen 
-	ftype_len, ftnlen ifname_len, ftnlen access_len)
+/* Subroutine */ int dafah_0_(cspice_t* __global_state, int n__, char *fname, 
+	char *ftype, integer *nd, integer *ni, char *ifname, integer *resv, 
+	integer *handle, integer *unit, integer *fhset, char *access, ftnlen 
+	fname_len, ftnlen ftype_len, ftnlen ifname_len, ftnlen access_len)
 {
     /* Initialized data */
 
@@ -31,58 +30,66 @@ static dafah_state_t* get_dafah_state() {
     integer i__1, i__2, i__3[2], i__4;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen), s_cat(char *,
-	     char **, integer *, integer *, ftnlen);
-    integer s_wdue(cilist *), do_uio(integer *, char *, ftnlen), e_wdue(void);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen),
+	     s_cat(f2c_state_t*, char *, char **, integer *, integer *, 
+	    ftnlen);
+    integer s_wdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_wdue(f2c_state_t*);
 
     /* Local variables */
-    extern /* Subroutine */ int zzdafgfr_(integer *, char *, integer *, 
-	    integer *, char *, integer *, integer *, integer *, logical *, 
-	    ftnlen, ftnlen);
-    extern /* Subroutine */ int zzddhfnh_(char *, integer *, logical *, 
+    extern /* Subroutine */ int zzdafgfr_(cspice_t*, integer *, char *, 
+	    integer *, integer *, char *, integer *, integer *, integer *, 
+	    logical *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzddhfnh_(cspice_t*, char *, integer *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzdafnfr_(cspice_t*, integer *, char *, 
+	    integer *, integer *, char *, integer *, integer *, integer *, 
+	    char *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzddhcls_(cspice_t*, integer *, char *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzddhnfo_(cspice_t*, integer *, char *, 
+	    integer *, integer *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int zzddhluh_(cspice_t*, integer *, integer *, 
+	    logical *);
+    extern /* Subroutine */ int zzddhopn_(cspice_t*, char *, char *, char *, 
+	    integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzplatfm_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzdafnfr_(integer *, char *, integer *, 
-	    integer *, char *, integer *, integer *, integer *, char *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzddhcls_(integer *, char *, logical *, 
+    extern logical elemi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzddhnfo_(integer *, char *, integer *, 
-	    integer *, integer *, logical *, ftnlen);
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzddhluh_(integer *, integer *, logical *);
-    extern /* Subroutine */ int zzddhopn_(char *, char *, char *, integer *, 
-	    ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
-    extern logical elemi_(integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int copyi_(integer *, integer *);
-    extern integer ltrim_(char *, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int dafrwa_(integer *, integer *, integer *);
-    extern integer isrchi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int removi_(integer *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int ssizei_(integer *, integer *);
-    extern /* Subroutine */ int insrti_(integer *, integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int copyi_(cspice_t*, integer *, integer *);
+    extern integer ltrim_(cspice_t*, char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int dafrwa_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int removi_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int ssizei_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int insrti_(cspice_t*, integer *, integer *);
+    extern logical return_(cspice_t*);
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    dafah_state_t* __state = get_dafah_state();
+    dafah_state_t* __state = get_dafah_state(__global_state);
 /* $ Abstract */
 
 /*     Assign handles to DAFs as they are opened. */
@@ -1126,12 +1133,12 @@ static dafah_state_t* get_dafah_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFAH", (ftnlen)5);
-	sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
-	chkout_("DAFAH", (ftnlen)5);
+	chkin_(__global_state, "DAFAH", (ftnlen)5);
+	sigerr_(__global_state, "SPICE(BOGUSENTRY)", (ftnlen)17);
+	chkout_(__global_state, "DAFAH", (ftnlen)5);
     }
     return 0;
 /* $Procedure DAFOPR ( DAF, open for read ) */
@@ -1539,27 +1546,28 @@ L_dafopr:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFOPR", (ftnlen)6);
+	chkin_(__global_state, "DAFOPR", (ftnlen)6);
     }
 
 /*     Initialize the handle list, if necessary. */
 
     if (__state->first) {
-	ssizei_(&__state->c__5000, __state->fhlist);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->first = FALSE_;
     }
 
 /*     Attempt to open the file; perform any appropriate checks. */
 
-    zzddhopn_(fname, "READ", "DAF", handle, fname_len, (ftnlen)4, (ftnlen)3);
+    zzddhopn_(__global_state, fname, "READ", "DAF", handle, fname_len, (
+	    ftnlen)4, (ftnlen)3);
 
 /*     Check FAILED(); return if an error has occurred. */
 
-    if (failed_()) {
-	chkout_("DAFOPR", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFOPR", (ftnlen)6);
 	return 0;
     }
 
@@ -1567,29 +1575,31 @@ L_dafopr:
 /*     is simply increment its link count by one, check out and */
 /*     return. */
 
-    __state->findex = isrchi_(handle, &__state->nft, __state->fthan);
+    __state->findex = isrchi_(__global_state, handle, &__state->nft, 
+	    __state->fthan);
     if (__state->findex != 0) {
 	__state->ftlnk[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftlnk", i__1, "dafah_", (ftnlen)1343)] = 
-		__state->ftlnk[(i__2 = __state->findex - 1) < 5000 && 0 <= 
-		i__2 ? i__2 : s_rnge("ftlnk", i__2, "dafah_", (ftnlen)1343)] 
-		+ 1;
-	chkout_("DAFOPR", (ftnlen)6);
+		i__1 : s_rnge(&__global_state->f2c, "ftlnk", i__1, "dafah_", (
+		ftnlen)1343)] = __state->ftlnk[(i__2 = __state->findex - 1) < 
+		5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftl"
+		"nk", i__2, "dafah_", (ftnlen)1343)] + 1;
+	chkout_(__global_state, "DAFOPR", (ftnlen)6);
 	return 0;
     }
 
 /*     Retrieve ND and NI from the file record. */
 
-    zzdafgfr_(handle, __state->idword, &__state->fnd, &__state->fni, 
-	    __state->ifn, &__state->fward, &__state->bward, &__state->free, &
-	    __state->found, (ftnlen)8, (ftnlen)60);
+    zzdafgfr_(__global_state, handle, __state->idword, &__state->fnd, &
+	    __state->fni, __state->ifn, &__state->fward, &__state->bward, &
+	    __state->free, &__state->found, (ftnlen)8, (ftnlen)60);
     if (! __state->found) {
-	zzddhcls_(handle, "DAF", &__state->c_false, (ftnlen)3);
-	setmsg_("Error reading the file record from the binary DAF file '#'.",
-		 (ftnlen)59);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("DAFOPR", (ftnlen)6);
+	zzddhcls_(__global_state, handle, "DAF", &__state->c_false, (ftnlen)3)
+		;
+	setmsg_(__global_state, "Error reading the file record from the bina"
+		"ry DAF file '#'.", (ftnlen)59);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "DAFOPR", (ftnlen)6);
 	return 0;
     }
 
@@ -1601,18 +1611,22 @@ L_dafopr:
 
     ++__state->nft;
     __state->fthan[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "dafah_", (ftnlen)1381)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "dafah_", (ftnlen)
+	    1381)] = *handle;
     __state->ftnd[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnd", i__1, "dafah_", (ftnlen)1382)] = __state->fnd;
+	    s_rnge(&__global_state->f2c, "ftnd", i__1, "dafah_", (ftnlen)1382)
+	    ] = __state->fnd;
     __state->ftni[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftni", i__1, "dafah_", (ftnlen)1383)] = __state->fni;
+	    s_rnge(&__global_state->f2c, "ftni", i__1, "dafah_", (ftnlen)1383)
+	    ] = __state->fni;
     __state->ftlnk[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftlnk", i__1, "dafah_", (ftnlen)1384)] = 1;
+	    s_rnge(&__global_state->f2c, "ftlnk", i__1, "dafah_", (ftnlen)
+	    1384)] = 1;
 
 /*     Insert the new handle into our handle set. */
 
-    insrti_(handle, __state->fhlist);
-    chkout_("DAFOPR", (ftnlen)6);
+    insrti_(__global_state, handle, __state->fhlist);
+    chkout_(__global_state, "DAFOPR", (ftnlen)6);
     return 0;
 /* $Procedure DAFOPW ( DAF, open for write ) */
 
@@ -1926,55 +1940,57 @@ L_dafopw:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFOPW", (ftnlen)6);
+	chkin_(__global_state, "DAFOPW", (ftnlen)6);
     }
 
 /*     Initialize the handle list, if necessary. */
 
     if (__state->first) {
-	ssizei_(&__state->c__5000, __state->fhlist);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->first = FALSE_;
     }
 
 /*     Check to see if there is room in the file table. */
 
     if (__state->nft == 5000) {
-	setmsg_("The file table is full, with # entries. Could not open '#'.",
-		 (ftnlen)59);
-	errint_("#", &__state->c__5000, (ftnlen)1);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	sigerr_("SPICE(DAFFTFULL)", (ftnlen)16);
-	chkout_("DAFOPW", (ftnlen)6);
+	setmsg_(__global_state, "The file table is full, with # entries. Cou"
+		"ld not open '#'.", (ftnlen)59);
+	errint_(__global_state, "#", &__state->c__5000, (ftnlen)1);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	sigerr_(__global_state, "SPICE(DAFFTFULL)", (ftnlen)16);
+	chkout_(__global_state, "DAFOPW", (ftnlen)6);
 	return 0;
     }
 
 /*     Attempt to open the file; perform any appropriate checks. */
 
-    zzddhopn_(fname, "WRITE", "DAF", handle, fname_len, (ftnlen)5, (ftnlen)3);
+    zzddhopn_(__global_state, fname, "WRITE", "DAF", handle, fname_len, (
+	    ftnlen)5, (ftnlen)3);
 
 /*     Check FAILED(); return if an error has occurred. */
 
-    if (failed_()) {
-	chkout_("DAFOPW", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFOPW", (ftnlen)6);
 	return 0;
     }
 
 /*     Retrieve ND and NI from the file record. */
 
-    zzdafgfr_(handle, __state->idword, &__state->fnd, &__state->fni, 
-	    __state->ifn, &__state->fward, &__state->bward, &__state->free, &
-	    __state->found, (ftnlen)8, (ftnlen)60);
+    zzdafgfr_(__global_state, handle, __state->idword, &__state->fnd, &
+	    __state->fni, __state->ifn, &__state->fward, &__state->bward, &
+	    __state->free, &__state->found, (ftnlen)8, (ftnlen)60);
     if (! __state->found) {
-	zzddhcls_(handle, "DAF", &__state->c_false, (ftnlen)3);
-	setmsg_("Error reading the file record from the binary DAF file '#'.",
-		 (ftnlen)59);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	errint_("#", &__state->iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("DAFOPW", (ftnlen)6);
+	zzddhcls_(__global_state, handle, "DAF", &__state->c_false, (ftnlen)3)
+		;
+	setmsg_(__global_state, "Error reading the file record from the bina"
+		"ry DAF file '#'.", (ftnlen)59);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "DAFOPW", (ftnlen)6);
 	return 0;
     }
 
@@ -1986,18 +2002,22 @@ L_dafopw:
 
     ++__state->nft;
     __state->fthan[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "dafah_", (ftnlen)1791)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "dafah_", (ftnlen)
+	    1791)] = *handle;
     __state->ftnd[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnd", i__1, "dafah_", (ftnlen)1792)] = __state->fnd;
+	    s_rnge(&__global_state->f2c, "ftnd", i__1, "dafah_", (ftnlen)1792)
+	    ] = __state->fnd;
     __state->ftni[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftni", i__1, "dafah_", (ftnlen)1793)] = __state->fni;
+	    s_rnge(&__global_state->f2c, "ftni", i__1, "dafah_", (ftnlen)1793)
+	    ] = __state->fni;
     __state->ftlnk[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftlnk", i__1, "dafah_", (ftnlen)1794)] = 1;
+	    s_rnge(&__global_state->f2c, "ftlnk", i__1, "dafah_", (ftnlen)
+	    1794)] = 1;
 
 /*     Insert the new handle into our handle set. */
 
-    insrti_(handle, __state->fhlist);
-    chkout_("DAFOPW", (ftnlen)6);
+    insrti_(__global_state, handle, __state->fhlist);
+    chkout_(__global_state, "DAFOPW", (ftnlen)6);
     return 0;
 /* $Procedure DAFONW ( DAF, open new ) */
 
@@ -2306,51 +2326,51 @@ L_dafonw:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFONW", (ftnlen)6);
+	chkin_(__global_state, "DAFONW", (ftnlen)6);
     }
 
 /*     Initialize the handle list, if necessary. */
 
     if (__state->first) {
-	ssizei_(&__state->c__5000, __state->fhlist);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->first = FALSE_;
     }
 
 /*     Check to see if there is room in the file table. */
 
     if (__state->nft == 5000) {
-	setmsg_("The file table is full, with # entries. Could not open '#'.",
-		 (ftnlen)59);
-	errint_("#", &__state->c__5000, (ftnlen)1);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	sigerr_("SPICE(DAFFTFULL)", (ftnlen)16);
-	chkout_("DAFONW", (ftnlen)6);
+	setmsg_(__global_state, "The file table is full, with # entries. Cou"
+		"ld not open '#'.", (ftnlen)59);
+	errint_(__global_state, "#", &__state->c__5000, (ftnlen)1);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	sigerr_(__global_state, "SPICE(DAFFTFULL)", (ftnlen)16);
+	chkout_(__global_state, "DAFONW", (ftnlen)6);
 	return 0;
     }
 
 /*     Check if the file type is blank. */
 
-    if (s_cmp(ftype, " ", ftype_len, (ftnlen)1) == 0) {
-	setmsg_("The file type is blank.", (ftnlen)23);
-	sigerr_("SPICE(BLANKFILETYPE)", (ftnlen)20);
-	chkout_("DAFONW", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, ftype, " ", ftype_len, (ftnlen)1) == 0) {
+	setmsg_(__global_state, "The file type is blank.", (ftnlen)23);
+	sigerr_(__global_state, "SPICE(BLANKFILETYPE)", (ftnlen)20);
+	chkout_(__global_state, "DAFONW", (ftnlen)6);
 	return 0;
     }
 
 /*     Check for nonprinting characters in the file type. */
 
-    __state->fnb = ltrim_(ftype, ftype_len);
-    i__1 = rtrim_(ftype, ftype_len);
+    __state->fnb = ltrim_(__global_state, ftype, ftype_len);
+    i__1 = rtrim_(__global_state, ftype, ftype_len);
     for (__state->i__ = __state->fnb; __state->i__ <= i__1; ++__state->i__) {
 	if (*(unsigned char *)&ftype[__state->i__ - 1] > 126 || *(unsigned 
 		char *)&ftype[__state->i__ - 1] < 32) {
-	    setmsg_("The file type contains nonprinting characters.", (ftnlen)
-		    46);
-	    sigerr_("SPICE(ILLEGALCHARACTER)", (ftnlen)23);
-	    chkout_("DAFONW", (ftnlen)6);
+	    setmsg_(__global_state, "The file type contains nonprinting char"
+		    "acters.", (ftnlen)46);
+	    sigerr_(__global_state, "SPICE(ILLEGALCHARACTER)", (ftnlen)23);
+	    chkout_(__global_state, "DAFONW", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -2361,99 +2381,107 @@ L_dafonw:
 /*     nonblank character and its three (3), or fewer, immediate */
 /*     successors in the input string FTYPE. */
 
-    s_copy(__state->ttype, ftype + (__state->fnb - 1), (ftnlen)4, ftype_len - 
-	    (__state->fnb - 1));
+    s_copy(&__global_state->f2c, __state->ttype, ftype + (__state->fnb - 1), (
+	    ftnlen)4, ftype_len - (__state->fnb - 1));
 /* Writing concatenation */
     i__3[0] = 4, a__1[0] = "DAF/";
     i__3[1] = 4, a__1[1] = __state->ttype;
-    s_cat(__state->idword, a__1, i__3, &__state->c__2, (ftnlen)8);
+    s_cat(&__global_state->f2c, __state->idword, a__1, i__3, &__state->c__2, (
+	    ftnlen)8);
 
 /*     Make sure ND and NI are in range. */
 
     if (*nd < 0 || *nd > 124) {
-	setmsg_("ND was #, should be in range [0,#].", (ftnlen)35);
-	errint_("#", nd, (ftnlen)1);
-	errint_("#", &__state->c__124, (ftnlen)1);
-	sigerr_("SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
-	chkout_("DAFONW", (ftnlen)6);
+	setmsg_(__global_state, "ND was #, should be in range [0,#].", (
+		ftnlen)35);
+	errint_(__global_state, "#", nd, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__124, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
+	chkout_(__global_state, "DAFONW", (ftnlen)6);
 	return 0;
     }
     if (*ni < 2 || *ni > 250) {
-	setmsg_("NI was #, should be in range [2,#].", (ftnlen)35);
-	errint_("#", ni, (ftnlen)1);
-	errint_("#", &__state->c__250, (ftnlen)1);
-	sigerr_("SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
-	chkout_("DAFONW", (ftnlen)6);
+	setmsg_(__global_state, "NI was #, should be in range [2,#].", (
+		ftnlen)35);
+	errint_(__global_state, "#", ni, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__250, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
+	chkout_(__global_state, "DAFONW", (ftnlen)6);
 	return 0;
     }
     if (*nd + (*ni + 1) / 2 > 125) {
-	setmsg_("Summary size was #, should not exceed #.", (ftnlen)40);
+	setmsg_(__global_state, "Summary size was #, should not exceed #.", (
+		ftnlen)40);
 	i__1 = *nd + (*ni + 1) / 2;
-	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &__state->c__125, (ftnlen)1);
-	sigerr_("SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
-	chkout_("DAFONW", (ftnlen)6);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__125, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
+	chkout_(__global_state, "DAFONW", (ftnlen)6);
 	return 0;
     }
 
 /*     The user must reserve some non-negative number of records. */
 
     if (*resv < 0) {
-	setmsg_("An attempt was made to reserve a negative number (#) of rec"
-		"ords.", (ftnlen)64);
-	errint_("#", resv, (ftnlen)1);
-	sigerr_("SPICE(DAFNORESV)", (ftnlen)16);
-	chkout_("DAFONW", (ftnlen)6);
+	setmsg_(__global_state, "An attempt was made to reserve a negative n"
+		"umber (#) of records.", (ftnlen)64);
+	errint_(__global_state, "#", resv, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNORESV)", (ftnlen)16);
+	chkout_(__global_state, "DAFONW", (ftnlen)6);
 	return 0;
     }
 
 /*     Attempt to create the file; perform any appropriate checks. */
 
-    zzddhopn_(fname, "NEW", "DAF", handle, fname_len, (ftnlen)3, (ftnlen)3);
+    zzddhopn_(__global_state, fname, "NEW", "DAF", handle, fname_len, (ftnlen)
+	    3, (ftnlen)3);
 
 /*     Check FAILED(); return if an error has occurred. */
 
-    if (failed_()) {
-	chkout_("DAFONW", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFONW", (ftnlen)6);
 	return 0;
     }
-    s_copy(__state->ifn, ifname, (ftnlen)60, ifname_len);
+    s_copy(&__global_state->f2c, __state->ifn, ifname, (ftnlen)60, ifname_len)
+	    ;
     __state->fnd = *nd;
     __state->fni = *ni;
     __state->fward = *resv + 2;
     __state->bward = __state->fward;
-    s_copy(__state->crec, " ", (ftnlen)1000, (ftnlen)1);
-    cleard_(&__state->c__128, __state->drec);
+    s_copy(&__global_state->f2c, __state->crec, " ", (ftnlen)1000, (ftnlen)1);
+    cleard_(__global_state, &__state->c__128, __state->drec);
     i__1 = __state->fward + 2;
-    dafrwa_(&i__1, &__state->c__1, &__state->free);
+    dafrwa_(__global_state, &i__1, &__state->c__1, &__state->free);
 
 /*     Fetch a logical unit for HANDLE. */
 
-    zzddhhlu_(handle, "DAF", &__state->c_false, &__state->lun, (ftnlen)3);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_false, &__state->lun,
+	     (ftnlen)3);
 
 /*     Check FAILED(); return if an error has occurred. */
 
-    if (failed_()) {
-	chkout_("DAFONW", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFONW", (ftnlen)6);
 	return 0;
     }
 
 /*     Fetch the system file format. */
 
-    zzplatfm_("FILE_FORMAT", __state->format, (ftnlen)11, (ftnlen)8);
+    zzplatfm_(__global_state, "FILE_FORMAT", __state->format, (ftnlen)11, (
+	    ftnlen)8);
 
 /*     Write the new file record to the logical unit, LUN. */
 
-    zzdafnfr_(&__state->lun, __state->idword, &__state->fnd, &__state->fni, 
-	    __state->ifn, &__state->fward, &__state->bward, &__state->free, 
-	    __state->format, (ftnlen)8, (ftnlen)60, (ftnlen)8);
+    zzdafnfr_(__global_state, &__state->lun, __state->idword, &__state->fnd, &
+	    __state->fni, __state->ifn, &__state->fward, &__state->bward, &
+	    __state->free, __state->format, (ftnlen)8, (ftnlen)60, (ftnlen)8);
 
 /*     Check to see whether or not ZZDAFNFR generated an error writing */
 /*     the file record to the logical unit.  In the event an error */
 /*     occurs, checkout and return. */
 
-    if (failed_()) {
-	chkout_("DAFONW", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFONW", (ftnlen)6);
 	return 0;
     }
 
@@ -2476,72 +2504,74 @@ L_dafonw:
 	    }
 	    __state->io___25.ciunit = __state->lun;
 	    __state->io___25.cirec = __state->i__;
-	    __state->iostat = s_wdue(&__state->io___25);
+	    __state->iostat = s_wdue(&__global_state->f2c, &__state->io___25);
 	    if (__state->iostat != 0) {
 		goto L100001;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, __state->crec, (ftnlen)
-		    1000);
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		    __state->crec, (ftnlen)1000);
 	    if (__state->iostat != 0) {
 		goto L100001;
 	    }
-	    __state->iostat = e_wdue();
+	    __state->iostat = e_wdue(&__global_state->f2c);
 L100001:
 	    if (__state->iostat != 0) {
-		zzddhcls_(handle, "DAF", &__state->c_true, (ftnlen)3);
-		setmsg_("Attempt to write file '#' failed. Value of IOSTAT w"
-			"as #.", (ftnlen)56);
-		errch_("#", fname, (ftnlen)1, fname_len);
-		errint_("#", &__state->iostat, (ftnlen)1);
-		sigerr_("SPICE(DAFWRITEFAIL)", (ftnlen)19);
-		chkout_("DAFONW", (ftnlen)6);
+		zzddhcls_(__global_state, handle, "DAF", &__state->c_true, (
+			ftnlen)3);
+		setmsg_(__global_state, "Attempt to write file '#' failed. V"
+			"alue of IOSTAT was #.", (ftnlen)56);
+		errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+		errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(DAFWRITEFAIL)", (ftnlen)19);
+		chkout_(__global_state, "DAFONW", (ftnlen)6);
 		return 0;
 	    }
 	}
     }
     __state->io___26.ciunit = __state->lun;
     __state->io___26.cirec = __state->fward;
-    __state->iostat = s_wdue(&__state->io___26);
+    __state->iostat = s_wdue(&__global_state->f2c, &__state->io___26);
     if (__state->iostat != 0) {
 	goto L100002;
     }
-    __state->iostat = do_uio(&__state->c__128, (char *)&__state->drec[0], (
-	    ftnlen)sizeof(doublereal));
+    __state->iostat = do_uio(&__global_state->f2c, &__state->c__128, (char *)&
+	    __state->drec[0], (ftnlen)sizeof(doublereal));
     if (__state->iostat != 0) {
 	goto L100002;
     }
-    __state->iostat = e_wdue();
+    __state->iostat = e_wdue(&__global_state->f2c);
 L100002:
     if (__state->iostat != 0) {
-	zzddhcls_(handle, "DAF", &__state->c_true, (ftnlen)3);
-	setmsg_("Attempt to write file '#' failed. Value of IOSTAT was #.", (
-		ftnlen)56);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	errint_("#", &__state->iostat, (ftnlen)1);
-	sigerr_("SPICE(DAFWRITEFAIL)", (ftnlen)19);
-	chkout_("DAFONW", (ftnlen)6);
+	zzddhcls_(__global_state, handle, "DAF", &__state->c_true, (ftnlen)3);
+	setmsg_(__global_state, "Attempt to write file '#' failed. Value of "
+		"IOSTAT was #.", (ftnlen)56);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFWRITEFAIL)", (ftnlen)19);
+	chkout_(__global_state, "DAFONW", (ftnlen)6);
 	return 0;
     }
     __state->io___27.ciunit = __state->lun;
     __state->io___27.cirec = __state->fward + 1;
-    __state->iostat = s_wdue(&__state->io___27);
+    __state->iostat = s_wdue(&__global_state->f2c, &__state->io___27);
     if (__state->iostat != 0) {
 	goto L100003;
     }
-    __state->iostat = do_uio(&__state->c__1, __state->crec, (ftnlen)1000);
+    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+	    __state->crec, (ftnlen)1000);
     if (__state->iostat != 0) {
 	goto L100003;
     }
-    __state->iostat = e_wdue();
+    __state->iostat = e_wdue(&__global_state->f2c);
 L100003:
     if (__state->iostat != 0) {
-	zzddhcls_(handle, "DAF", &__state->c_true, (ftnlen)3);
-	setmsg_("Attempt to write file '#' failed. Value of IOSTAT was #.", (
-		ftnlen)56);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	errint_("#", &__state->iostat, (ftnlen)1);
-	sigerr_("SPICE(DAFWRITEFAIL)", (ftnlen)19);
-	chkout_("DAFONW", (ftnlen)6);
+	zzddhcls_(__global_state, handle, "DAF", &__state->c_true, (ftnlen)3);
+	setmsg_(__global_state, "Attempt to write file '#' failed. Value of "
+		"IOSTAT was #.", (ftnlen)56);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFWRITEFAIL)", (ftnlen)19);
+	chkout_(__global_state, "DAFONW", (ftnlen)6);
 	return 0;
     }
 
@@ -2550,18 +2580,22 @@ L100003:
 
     ++__state->nft;
     __state->fthan[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "dafah_", (ftnlen)2377)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "dafah_", (ftnlen)
+	    2377)] = *handle;
     __state->ftnd[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnd", i__1, "dafah_", (ftnlen)2378)] = __state->fnd;
+	    s_rnge(&__global_state->f2c, "ftnd", i__1, "dafah_", (ftnlen)2378)
+	    ] = __state->fnd;
     __state->ftni[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftni", i__1, "dafah_", (ftnlen)2379)] = __state->fni;
+	    s_rnge(&__global_state->f2c, "ftni", i__1, "dafah_", (ftnlen)2379)
+	    ] = __state->fni;
     __state->ftlnk[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftlnk", i__1, "dafah_", (ftnlen)2380)] = 1;
+	    s_rnge(&__global_state->f2c, "ftlnk", i__1, "dafah_", (ftnlen)
+	    2380)] = 1;
 
 /*     Insert the new handle into our handle set. */
 
-    insrti_(handle, __state->fhlist);
-    chkout_("DAFONW", (ftnlen)6);
+    insrti_(__global_state, handle, __state->fhlist);
+    chkout_(__global_state, "DAFONW", (ftnlen)6);
     return 0;
 /* $Procedure DAFOPN ( DAF, open new ) */
 
@@ -2877,117 +2911,124 @@ L_dafopn:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFOPN", (ftnlen)6);
+	chkin_(__global_state, "DAFOPN", (ftnlen)6);
     }
 
 /*     Initialize the handle list, if necessary. */
 
     if (__state->first) {
-	ssizei_(&__state->c__5000, __state->fhlist);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->first = FALSE_;
     }
 
 /*     Check to see if there is room in the file table. */
 
     if (__state->nft == 5000) {
-	setmsg_("The file table is full, with # entries. Could not open '#'.",
-		 (ftnlen)59);
-	errint_("#", &__state->c__5000, (ftnlen)1);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	sigerr_("SPICE(DAFFTFULL)", (ftnlen)16);
-	chkout_("DAFOPN", (ftnlen)6);
+	setmsg_(__global_state, "The file table is full, with # entries. Cou"
+		"ld not open '#'.", (ftnlen)59);
+	errint_(__global_state, "#", &__state->c__5000, (ftnlen)1);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	sigerr_(__global_state, "SPICE(DAFFTFULL)", (ftnlen)16);
+	chkout_(__global_state, "DAFOPN", (ftnlen)6);
 	return 0;
     }
 
 /*     Make sure ND and NI are in range. */
 
     if (*nd < 0 || *nd > 124) {
-	setmsg_("ND was #, should be in range [0,#].", (ftnlen)35);
-	errint_("#", nd, (ftnlen)1);
-	errint_("#", &__state->c__124, (ftnlen)1);
-	sigerr_("SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
-	chkout_("DAFOPN", (ftnlen)6);
+	setmsg_(__global_state, "ND was #, should be in range [0,#].", (
+		ftnlen)35);
+	errint_(__global_state, "#", nd, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__124, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
+	chkout_(__global_state, "DAFOPN", (ftnlen)6);
 	return 0;
     }
     if (*ni < 2 || *ni > 250) {
-	setmsg_("NI was #, should be in range [2,#].", (ftnlen)35);
-	errint_("#", ni, (ftnlen)1);
-	errint_("#", &__state->c__250, (ftnlen)1);
-	sigerr_("SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
-	chkout_("DAFOPN", (ftnlen)6);
+	setmsg_(__global_state, "NI was #, should be in range [2,#].", (
+		ftnlen)35);
+	errint_(__global_state, "#", ni, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__250, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
+	chkout_(__global_state, "DAFOPN", (ftnlen)6);
 	return 0;
     }
     if (*nd + (*ni + 1) / 2 > 125) {
-	setmsg_("Summary size was #, should not exceed #.", (ftnlen)40);
+	setmsg_(__global_state, "Summary size was #, should not exceed #.", (
+		ftnlen)40);
 	i__1 = *nd + (*ni + 1) / 2;
-	errint_("#", &i__1, (ftnlen)1);
-	errint_("#", &__state->c__125, (ftnlen)1);
-	sigerr_("SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
-	chkout_("DAFOPN", (ftnlen)6);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	errint_(__global_state, "#", &__state->c__125, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFINVALIDPARAMS)", (ftnlen)23);
+	chkout_(__global_state, "DAFOPN", (ftnlen)6);
 	return 0;
     }
 
 /*     The user must reserve some non-negative number of records. */
 
     if (*resv < 0) {
-	setmsg_("An attempt was made to reserve a negative number (#) of rec"
-		"ords.", (ftnlen)64);
-	errint_("#", resv, (ftnlen)1);
-	sigerr_("SPICE(DAFNORESV)", (ftnlen)16);
-	chkout_("DAFOPN", (ftnlen)6);
+	setmsg_(__global_state, "An attempt was made to reserve a negative n"
+		"umber (#) of records.", (ftnlen)64);
+	errint_(__global_state, "#", resv, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNORESV)", (ftnlen)16);
+	chkout_(__global_state, "DAFOPN", (ftnlen)6);
 	return 0;
     }
 
 /*     Attempt to create the file; perform any appropriate checks. */
 
-    zzddhopn_(fname, "NEW", "DAF", handle, fname_len, (ftnlen)3, (ftnlen)3);
+    zzddhopn_(__global_state, fname, "NEW", "DAF", handle, fname_len, (ftnlen)
+	    3, (ftnlen)3);
 
 /*     Check FAILED(); return if an error has occurred. */
 
-    if (failed_()) {
-	chkout_("DAFOPN", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFOPN", (ftnlen)6);
 	return 0;
     }
-    s_copy(__state->ifn, ifname, (ftnlen)60, ifname_len);
+    s_copy(&__global_state->f2c, __state->ifn, ifname, (ftnlen)60, ifname_len)
+	    ;
     __state->fnd = *nd;
     __state->fni = *ni;
     __state->fward = *resv + 2;
     __state->bward = __state->fward;
-    s_copy(__state->crec, " ", (ftnlen)1000, (ftnlen)1);
-    cleard_(&__state->c__128, __state->drec);
+    s_copy(&__global_state->f2c, __state->crec, " ", (ftnlen)1000, (ftnlen)1);
+    cleard_(__global_state, &__state->c__128, __state->drec);
     i__1 = __state->fward + 2;
-    dafrwa_(&i__1, &__state->c__1, &__state->free);
+    dafrwa_(__global_state, &i__1, &__state->c__1, &__state->free);
 
 /*     Fetch a logical unit for HANDLE. */
 
-    zzddhhlu_(handle, "DAF", &__state->c_false, &__state->lun, (ftnlen)3);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_false, &__state->lun,
+	     (ftnlen)3);
 
 /*     Check FAILED(); return if an error has occurred. */
 
-    if (failed_()) {
-	chkout_("DAFOPN", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFOPN", (ftnlen)6);
 	return 0;
     }
 
 /*     Fetch the system file format. */
 
-    zzplatfm_("FILE_FORMAT", __state->format, (ftnlen)11, (ftnlen)8);
+    zzplatfm_(__global_state, "FILE_FORMAT", __state->format, (ftnlen)11, (
+	    ftnlen)8);
 
 /*     Write the new file record to the logical unit, LUN. */
 
-    zzdafnfr_(&__state->lun, "NAIF/DAF", &__state->fnd, &__state->fni, 
-	    __state->ifn, &__state->fward, &__state->bward, &__state->free, 
-	    __state->format, (ftnlen)8, (ftnlen)60, (ftnlen)8);
+    zzdafnfr_(__global_state, &__state->lun, "NAIF/DAF", &__state->fnd, &
+	    __state->fni, __state->ifn, &__state->fward, &__state->bward, &
+	    __state->free, __state->format, (ftnlen)8, (ftnlen)60, (ftnlen)8);
 
 /*     Check to see whether or not ZZDAFNFR generated an error writing */
 /*     the file record to the logical unit.  In the event an error */
 /*     occurs, checkout and return. */
 
-    if (failed_()) {
-	chkout_("DAFOPN", (ftnlen)6);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFOPN", (ftnlen)6);
 	return 0;
     }
 
@@ -3001,72 +3042,74 @@ L_dafopn:
 	for (__state->i__ = 2; __state->i__ <= i__1; ++__state->i__) {
 	    __state->io___28.ciunit = __state->lun;
 	    __state->io___28.cirec = __state->i__;
-	    __state->iostat = s_wdue(&__state->io___28);
+	    __state->iostat = s_wdue(&__global_state->f2c, &__state->io___28);
 	    if (__state->iostat != 0) {
 		goto L100004;
 	    }
-	    __state->iostat = do_uio(&__state->c__1, __state->crec, (ftnlen)
-		    1000);
+	    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+		    __state->crec, (ftnlen)1000);
 	    if (__state->iostat != 0) {
 		goto L100004;
 	    }
-	    __state->iostat = e_wdue();
+	    __state->iostat = e_wdue(&__global_state->f2c);
 L100004:
 	    if (__state->iostat != 0) {
-		zzddhcls_(handle, "DAF", &__state->c_true, (ftnlen)3);
-		setmsg_("Attempt to write file '#' failed. Value of IOSTAT w"
-			"as #.", (ftnlen)56);
-		errch_("#", fname, (ftnlen)1, fname_len);
-		errint_("#", &__state->iostat, (ftnlen)1);
-		sigerr_("SPICE(DAFWRITEFAIL)", (ftnlen)19);
-		chkout_("DAFOPN", (ftnlen)6);
+		zzddhcls_(__global_state, handle, "DAF", &__state->c_true, (
+			ftnlen)3);
+		setmsg_(__global_state, "Attempt to write file '#' failed. V"
+			"alue of IOSTAT was #.", (ftnlen)56);
+		errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+		errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(DAFWRITEFAIL)", (ftnlen)19);
+		chkout_(__global_state, "DAFOPN", (ftnlen)6);
 		return 0;
 	    }
 	}
     }
     __state->io___29.ciunit = __state->lun;
     __state->io___29.cirec = __state->fward;
-    __state->iostat = s_wdue(&__state->io___29);
+    __state->iostat = s_wdue(&__global_state->f2c, &__state->io___29);
     if (__state->iostat != 0) {
 	goto L100005;
     }
-    __state->iostat = do_uio(&__state->c__128, (char *)&__state->drec[0], (
-	    ftnlen)sizeof(doublereal));
+    __state->iostat = do_uio(&__global_state->f2c, &__state->c__128, (char *)&
+	    __state->drec[0], (ftnlen)sizeof(doublereal));
     if (__state->iostat != 0) {
 	goto L100005;
     }
-    __state->iostat = e_wdue();
+    __state->iostat = e_wdue(&__global_state->f2c);
 L100005:
     if (__state->iostat != 0) {
-	zzddhcls_(handle, "DAF", &__state->c_true, (ftnlen)3);
-	setmsg_("Attempt to write file '#' failed. Value of IOSTAT was #.", (
-		ftnlen)56);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	errint_("#", &__state->iostat, (ftnlen)1);
-	sigerr_("SPICE(DAFWRITEFAIL)", (ftnlen)19);
-	chkout_("DAFOPN", (ftnlen)6);
+	zzddhcls_(__global_state, handle, "DAF", &__state->c_true, (ftnlen)3);
+	setmsg_(__global_state, "Attempt to write file '#' failed. Value of "
+		"IOSTAT was #.", (ftnlen)56);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFWRITEFAIL)", (ftnlen)19);
+	chkout_(__global_state, "DAFOPN", (ftnlen)6);
 	return 0;
     }
     __state->io___30.ciunit = __state->lun;
     __state->io___30.cirec = __state->fward + 1;
-    __state->iostat = s_wdue(&__state->io___30);
+    __state->iostat = s_wdue(&__global_state->f2c, &__state->io___30);
     if (__state->iostat != 0) {
 	goto L100006;
     }
-    __state->iostat = do_uio(&__state->c__1, __state->crec, (ftnlen)1000);
+    __state->iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+	    __state->crec, (ftnlen)1000);
     if (__state->iostat != 0) {
 	goto L100006;
     }
-    __state->iostat = e_wdue();
+    __state->iostat = e_wdue(&__global_state->f2c);
 L100006:
     if (__state->iostat != 0) {
-	zzddhcls_(handle, "DAF", &__state->c_true, (ftnlen)3);
-	setmsg_("Attempt to write file '#' failed. Value of IOSTAT was #.", (
-		ftnlen)56);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	errint_("#", &__state->iostat, (ftnlen)1);
-	sigerr_("SPICE(DAFWRITEFAIL)", (ftnlen)19);
-	chkout_("DAFOPN", (ftnlen)6);
+	zzddhcls_(__global_state, handle, "DAF", &__state->c_true, (ftnlen)3);
+	setmsg_(__global_state, "Attempt to write file '#' failed. Value of "
+		"IOSTAT was #.", (ftnlen)56);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	errint_(__global_state, "#", &__state->iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFWRITEFAIL)", (ftnlen)19);
+	chkout_(__global_state, "DAFOPN", (ftnlen)6);
 	return 0;
     }
 
@@ -3075,18 +3118,22 @@ L100006:
 
     ++__state->nft;
     __state->fthan[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("fthan", i__1, "dafah_", (ftnlen)2921)] = *handle;
+	    s_rnge(&__global_state->f2c, "fthan", i__1, "dafah_", (ftnlen)
+	    2921)] = *handle;
     __state->ftnd[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftnd", i__1, "dafah_", (ftnlen)2922)] = __state->fnd;
+	    s_rnge(&__global_state->f2c, "ftnd", i__1, "dafah_", (ftnlen)2922)
+	    ] = __state->fnd;
     __state->ftni[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftni", i__1, "dafah_", (ftnlen)2923)] = __state->fni;
+	    s_rnge(&__global_state->f2c, "ftni", i__1, "dafah_", (ftnlen)2923)
+	    ] = __state->fni;
     __state->ftlnk[(i__1 = __state->nft - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ftlnk", i__1, "dafah_", (ftnlen)2924)] = 1;
+	    s_rnge(&__global_state->f2c, "ftlnk", i__1, "dafah_", (ftnlen)
+	    2924)] = 1;
 
 /*     Insert the new handle into our handle set. */
 
-    insrti_(handle, __state->fhlist);
-    chkout_("DAFOPN", (ftnlen)6);
+    insrti_(__global_state, handle, __state->fhlist);
+    chkout_(__global_state, "DAFOPN", (ftnlen)6);
     return 0;
 /* $Procedure DAFCLS ( DAF, close ) */
 
@@ -3426,16 +3473,16 @@ L_dafcls:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFCLS", (ftnlen)6);
+	chkin_(__global_state, "DAFCLS", (ftnlen)6);
     }
 
 /*     Initialize the handle list, if necessary. */
 
     if (__state->first) {
-	ssizei_(&__state->c__5000, __state->fhlist);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->first = FALSE_;
     }
 
@@ -3445,48 +3492,55 @@ L_dafcls:
 
 /*     If the file is not open: no harm, no foul. */
 
-    __state->findex = isrchi_(handle, &__state->nft, __state->fthan);
+    __state->findex = isrchi_(__global_state, handle, &__state->nft, 
+	    __state->fthan);
     if (__state->findex > 0) {
 	__state->ftlnk[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftlnk", i__1, "dafah_", (ftnlen)3305)] = 
-		__state->ftlnk[(i__2 = __state->findex - 1) < 5000 && 0 <= 
-		i__2 ? i__2 : s_rnge("ftlnk", i__2, "dafah_", (ftnlen)3305)] 
-		- 1;
+		i__1 : s_rnge(&__global_state->f2c, "ftlnk", i__1, "dafah_", (
+		ftnlen)3305)] = __state->ftlnk[(i__2 = __state->findex - 1) < 
+		5000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ftl"
+		"nk", i__2, "dafah_", (ftnlen)3305)] - 1;
 	if (__state->ftlnk[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("ftlnk", i__1, "dafah_", (ftnlen)3307)] == 0) {
-	    zzddhcls_(handle, "DAF", &__state->c_false, (ftnlen)3);
+		i__1 : s_rnge(&__global_state->f2c, "ftlnk", i__1, "dafah_", (
+		ftnlen)3307)] == 0) {
+	    zzddhcls_(__global_state, handle, "DAF", &__state->c_false, (
+		    ftnlen)3);
 	    i__1 = __state->nft - 1;
 	    for (__state->i__ = __state->findex; __state->i__ <= i__1; 
 		    ++__state->i__) {
 		__state->fthan[(i__2 = __state->i__ - 1) < 5000 && 0 <= i__2 ?
-			 i__2 : s_rnge("fthan", i__2, "dafah_", (ftnlen)3312)]
-			 = __state->fthan[(i__4 = __state->i__) < 5000 && 0 <=
-			 i__4 ? i__4 : s_rnge("fthan", i__4, "dafah_", (
-			ftnlen)3312)];
+			 i__2 : s_rnge(&__global_state->f2c, "fthan", i__2, 
+			"dafah_", (ftnlen)3312)] = __state->fthan[(i__4 = 
+			__state->i__) < 5000 && 0 <= i__4 ? i__4 : s_rnge(&
+			__global_state->f2c, "fthan", i__4, "dafah_", (ftnlen)
+			3312)];
 		__state->ftlnk[(i__2 = __state->i__ - 1) < 5000 && 0 <= i__2 ?
-			 i__2 : s_rnge("ftlnk", i__2, "dafah_", (ftnlen)3313)]
-			 = __state->ftlnk[(i__4 = __state->i__) < 5000 && 0 <=
-			 i__4 ? i__4 : s_rnge("ftlnk", i__4, "dafah_", (
-			ftnlen)3313)];
+			 i__2 : s_rnge(&__global_state->f2c, "ftlnk", i__2, 
+			"dafah_", (ftnlen)3313)] = __state->ftlnk[(i__4 = 
+			__state->i__) < 5000 && 0 <= i__4 ? i__4 : s_rnge(&
+			__global_state->f2c, "ftlnk", i__4, "dafah_", (ftnlen)
+			3313)];
 		__state->ftnd[(i__2 = __state->i__ - 1) < 5000 && 0 <= i__2 ? 
-			i__2 : s_rnge("ftnd", i__2, "dafah_", (ftnlen)3314)] =
-			 __state->ftnd[(i__4 = __state->i__) < 5000 && 0 <= 
-			i__4 ? i__4 : s_rnge("ftnd", i__4, "dafah_", (ftnlen)
+			i__2 : s_rnge(&__global_state->f2c, "ftnd", i__2, 
+			"dafah_", (ftnlen)3314)] = __state->ftnd[(i__4 = 
+			__state->i__) < 5000 && 0 <= i__4 ? i__4 : s_rnge(&
+			__global_state->f2c, "ftnd", i__4, "dafah_", (ftnlen)
 			3314)];
 		__state->ftni[(i__2 = __state->i__ - 1) < 5000 && 0 <= i__2 ? 
-			i__2 : s_rnge("ftni", i__2, "dafah_", (ftnlen)3315)] =
-			 __state->ftni[(i__4 = __state->i__) < 5000 && 0 <= 
-			i__4 ? i__4 : s_rnge("ftni", i__4, "dafah_", (ftnlen)
+			i__2 : s_rnge(&__global_state->f2c, "ftni", i__2, 
+			"dafah_", (ftnlen)3315)] = __state->ftni[(i__4 = 
+			__state->i__) < 5000 && 0 <= i__4 ? i__4 : s_rnge(&
+			__global_state->f2c, "ftni", i__4, "dafah_", (ftnlen)
 			3315)];
 	    }
 	    --__state->nft;
 
 /*           Delete the handle from our handle set. */
 
-	    removi_(handle, __state->fhlist);
+	    removi_(__global_state, handle, __state->fhlist);
 	}
     }
-    chkout_("DAFCLS", (ftnlen)6);
+    chkout_(__global_state, "DAFCLS", (ftnlen)6);
     return 0;
 /* $Procedure DAFHSF ( DAF, handle to summary format ) */
 
@@ -3740,23 +3794,27 @@ L_dafhsf:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFHSF", (ftnlen)6);
+	chkin_(__global_state, "DAFHSF", (ftnlen)6);
     }
-    __state->findex = isrchi_(handle, &__state->nft, __state->fthan);
+    __state->findex = isrchi_(__global_state, handle, &__state->nft, 
+	    __state->fthan);
     if (__state->findex > 0) {
 	*nd = __state->ftnd[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ?
-		 i__1 : s_rnge("ftnd", i__1, "dafah_", (ftnlen)3600)];
+		 i__1 : s_rnge(&__global_state->f2c, "ftnd", i__1, "dafah_", (
+		ftnlen)3600)];
 	*ni = __state->ftni[(i__1 = __state->findex - 1) < 5000 && 0 <= i__1 ?
-		 i__1 : s_rnge("ftni", i__1, "dafah_", (ftnlen)3601)];
+		 i__1 : s_rnge(&__global_state->f2c, "ftni", i__1, "dafah_", (
+		ftnlen)3601)];
     } else {
-	setmsg_("There is no DAF open with handle = #", (ftnlen)36);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(DAFNOSUCHHANDLE)", (ftnlen)22);
+	setmsg_(__global_state, "There is no DAF open with handle = #", (
+		ftnlen)36);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNOSUCHHANDLE)", (ftnlen)22);
     }
-    chkout_("DAFHSF", (ftnlen)6);
+    chkout_(__global_state, "DAFHSF", (ftnlen)6);
     return 0;
 /* $Procedure DAFHLU ( DAF, handle to logical unit ) */
 
@@ -3975,13 +4033,14 @@ L_dafhlu:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFHLU", (ftnlen)6);
+	chkin_(__global_state, "DAFHLU", (ftnlen)6);
     }
-    zzddhhlu_(handle, "DAF", &__state->c_true, unit, (ftnlen)3);
-    chkout_("DAFHLU", (ftnlen)6);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_true, unit, (ftnlen)
+	    3);
+    chkout_(__global_state, "DAFHLU", (ftnlen)6);
     return 0;
 /* $Procedure DAFLUH ( DAF, logical unit to handle ) */
 
@@ -4163,36 +4222,37 @@ L_dafluh:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFLUH", (ftnlen)6);
+	chkin_(__global_state, "DAFLUH", (ftnlen)6);
     }
-    zzddhluh_(unit, handle, &__state->found);
+    zzddhluh_(__global_state, unit, handle, &__state->found);
     if (! __state->found) {
 	*handle = 0;
-	setmsg_("There is no file open with unit = #", (ftnlen)35);
-	errint_("#", unit, (ftnlen)1);
-	sigerr_("SPICE(DAFNOSUCHUNIT)", (ftnlen)20);
-	chkout_("DAFLUH", (ftnlen)6);
+	setmsg_(__global_state, "There is no file open with unit = #", (
+		ftnlen)35);
+	errint_(__global_state, "#", unit, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNOSUCHUNIT)", (ftnlen)20);
+	chkout_(__global_state, "DAFLUH", (ftnlen)6);
 	return 0;
     }
 
 /*     Now make certain that the HANDLE is associated with a DAF. */
 
-    zzddhnfo_(handle, __state->dafnam, &__state->iarc, &__state->ibff, &
-	    __state->iamh, &__state->found, (ftnlen)255);
+    zzddhnfo_(__global_state, handle, __state->dafnam, &__state->iarc, &
+	    __state->ibff, &__state->iamh, &__state->found, (ftnlen)255);
     if (__state->iarc != 1) {
 	*handle = 0;
-	setmsg_("The file, '#', connected to unit # is not a DAF.", (ftnlen)
-		48);
-	errfnm_("#", unit, (ftnlen)1);
-	errint_("#", unit, (ftnlen)1);
-	sigerr_("SPICE(DAFNOSUCHUNIT)", (ftnlen)20);
-	chkout_("DAFLUH", (ftnlen)6);
+	setmsg_(__global_state, "The file, '#', connected to unit # is not a"
+		" DAF.", (ftnlen)48);
+	errfnm_(__global_state, "#", unit, (ftnlen)1);
+	errint_(__global_state, "#", unit, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNOSUCHUNIT)", (ftnlen)20);
+	chkout_(__global_state, "DAFLUH", (ftnlen)6);
 	return 0;
     }
-    chkout_("DAFLUH", (ftnlen)6);
+    chkout_(__global_state, "DAFLUH", (ftnlen)6);
     return 0;
 /* $Procedure DAFHFN ( DAF, handle to file name ) */
 
@@ -4393,22 +4453,24 @@ L_dafhfn:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFHFN", (ftnlen)6);
+	chkin_(__global_state, "DAFHFN", (ftnlen)6);
     }
-    zzddhnfo_(handle, __state->dafnam, &__state->iarc, &__state->ibff, &
-	    __state->iamh, &__state->found, (ftnlen)255);
+    zzddhnfo_(__global_state, handle, __state->dafnam, &__state->iarc, &
+	    __state->ibff, &__state->iamh, &__state->found, (ftnlen)255);
     if (! __state->found || __state->iarc != 1) {
-	setmsg_("There is no file open with handle = #", (ftnlen)37);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(DAFNOSUCHHANDLE)", (ftnlen)22);
-	chkout_("DAFHFN", (ftnlen)6);
+	setmsg_(__global_state, "There is no file open with handle = #", (
+		ftnlen)37);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNOSUCHHANDLE)", (ftnlen)22);
+	chkout_(__global_state, "DAFHFN", (ftnlen)6);
 	return 0;
     }
-    s_copy(fname, __state->dafnam, fname_len, (ftnlen)255);
-    chkout_("DAFHFN", (ftnlen)6);
+    s_copy(&__global_state->f2c, fname, __state->dafnam, fname_len, (ftnlen)
+	    255);
+    chkout_(__global_state, "DAFHFN", (ftnlen)6);
     return 0;
 /* $Procedure DAFFNH ( DAF, file name to handle ) */
 
@@ -4641,35 +4703,35 @@ L_daffnh:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFFNH", (ftnlen)6);
+	chkin_(__global_state, "DAFFNH", (ftnlen)6);
     }
-    zzddhfnh_(fname, handle, &__state->found, fname_len);
+    zzddhfnh_(__global_state, fname, handle, &__state->found, fname_len);
     if (! __state->found) {
 	*handle = 0;
-	setmsg_("There is no file in the DAF table with file name = '#'", (
-		ftnlen)54);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	sigerr_("SPICE(DAFNOSUCHFILE)", (ftnlen)20);
-	chkout_("DAFFNH", (ftnlen)6);
+	setmsg_(__global_state, "There is no file in the DAF table with file"
+		" name = '#'", (ftnlen)54);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	sigerr_(__global_state, "SPICE(DAFNOSUCHFILE)", (ftnlen)20);
+	chkout_(__global_state, "DAFFNH", (ftnlen)6);
 	return 0;
     }
 
 /*     Now make certain that HANDLE is associated with a DAF. */
 
-    zzddhnfo_(handle, __state->dafnam, &__state->iarc, &__state->ibff, &
-	    __state->iamh, &__state->found, (ftnlen)255);
+    zzddhnfo_(__global_state, handle, __state->dafnam, &__state->iarc, &
+	    __state->ibff, &__state->iamh, &__state->found, (ftnlen)255);
     if (__state->iarc != 1) {
 	*handle = 0;
-	setmsg_("The file, '#', is not a DAF.", (ftnlen)28);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	sigerr_("SPICE(DAFNOSUCHFILE)", (ftnlen)20);
-	chkout_("DAFFNH", (ftnlen)6);
+	setmsg_(__global_state, "The file, '#', is not a DAF.", (ftnlen)28);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	sigerr_(__global_state, "SPICE(DAFNOSUCHFILE)", (ftnlen)20);
+	chkout_(__global_state, "DAFFNH", (ftnlen)6);
 	return 0;
     }
-    chkout_("DAFFNH", (ftnlen)6);
+    chkout_(__global_state, "DAFFNH", (ftnlen)6);
     return 0;
 /* $Procedure DAFHOF ( DAF, handles of open files ) */
 
@@ -4849,23 +4911,23 @@ L_dafhof:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFHOF", (ftnlen)6);
+	chkin_(__global_state, "DAFHOF", (ftnlen)6);
     }
 
 /*     Initialize the handle list, if necessary. */
 
     if (__state->first) {
-	ssizei_(&__state->c__5000, __state->fhlist);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->first = FALSE_;
     }
 
 /*     Just stuff our local list into the set. */
 
-    copyi_(__state->fhlist, fhset);
-    chkout_("DAFHOF", (ftnlen)6);
+    copyi_(__global_state, __state->fhlist, fhset);
+    chkout_(__global_state, "DAFHOF", (ftnlen)6);
     return 0;
 /* $Procedure DAFSIH ( DAF, signal invalid handles ) */
 
@@ -5129,164 +5191,177 @@ L_dafsih:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFSIH", (ftnlen)6);
+	chkin_(__global_state, "DAFSIH", (ftnlen)6);
     }
 
 /*     Initialize the handle list, if necessary. */
 
     if (__state->first) {
-	ssizei_(&__state->c__5000, __state->fhlist);
+	ssizei_(__global_state, &__state->c__5000, __state->fhlist);
 	__state->first = FALSE_;
     }
 
 /*     Get an upper case, left-justified copy of ACCESS. */
 
-    ljust_(access, __state->acc, access_len, (ftnlen)10);
-    ucase_(__state->acc, __state->acc, (ftnlen)10, (ftnlen)10);
+    ljust_(__global_state, access, __state->acc, access_len, (ftnlen)10);
+    ucase_(__global_state, __state->acc, __state->acc, (ftnlen)10, (ftnlen)10)
+	    ;
 
 /*     Make sure we recognize the access type specified by the caller. */
 
-    if (s_cmp(__state->acc, "READ", (ftnlen)10, (ftnlen)4) != 0 && s_cmp(
-	    __state->acc, "WRITE", (ftnlen)10, (ftnlen)5) != 0) {
-	setmsg_("Unrecognized access type.  Type was #. ", (ftnlen)39);
-	errch_("#", access, (ftnlen)1, access_len);
-	sigerr_("SPICE(INVALIDOPTION)", (ftnlen)20);
-	chkout_("DAFSIH", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, __state->acc, "READ", (ftnlen)10, (ftnlen)
+	    4) != 0 && s_cmp(&__global_state->f2c, __state->acc, "WRITE", (
+	    ftnlen)10, (ftnlen)5) != 0) {
+	setmsg_(__global_state, "Unrecognized access type.  Type was #. ", (
+		ftnlen)39);
+	errch_(__global_state, "#", access, (ftnlen)1, access_len);
+	sigerr_(__global_state, "SPICE(INVALIDOPTION)", (ftnlen)20);
+	chkout_(__global_state, "DAFSIH", (ftnlen)6);
 	return 0;
     }
 
 /*     Retrieve information about this HANDLE. */
 
-    zzddhnfo_(handle, __state->dafnam, &__state->iarc, &__state->ibff, &
-	    __state->iamh, &__state->found, (ftnlen)255);
+    zzddhnfo_(__global_state, handle, __state->dafnam, &__state->iarc, &
+	    __state->ibff, &__state->iamh, &__state->found, (ftnlen)255);
 
 /*     See whether the input handle is in our list at all.  It's */
 /*     unlawful for the handle to be absent.  All open DAFs are */
 /*     readable, so in the case that ACC is 'READ', we're done if */
 /*     the DAF is open. */
 
-    if (! __state->found || ! elemi_(handle, __state->fhlist)) {
-	setmsg_("There is no file open with handle = #", (ftnlen)37);
-	errint_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(DAFNOSUCHHANDLE)", (ftnlen)22);
-	chkout_("DAFSIH", (ftnlen)6);
+    if (! __state->found || ! elemi_(__global_state, handle, __state->fhlist))
+	     {
+	setmsg_(__global_state, "There is no file open with handle = #", (
+		ftnlen)37);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DAFNOSUCHHANDLE)", (ftnlen)22);
+	chkout_(__global_state, "DAFSIH", (ftnlen)6);
 	return 0;
 
 /*     If the access type is 'WRITE', the DAF must be open for writing. */
 /*     This is not the case if the value of IAMH returned from the handle */
 /*     manager is not READ. */
 
-    } else if (s_cmp(__state->acc, "WRITE", (ftnlen)10, (ftnlen)5) == 0 && 
-	    __state->iamh == 1) {
-	setmsg_("DAF not open for write.  Handle = #, file = '#'", (ftnlen)47)
-		;
-	errint_("#", handle, (ftnlen)1);
-	errch_("#", __state->dafnam, (ftnlen)1, (ftnlen)255);
-	sigerr_("SPICE(DAFINVALIDACCESS)", (ftnlen)23);
-	chkout_("DAFSIH", (ftnlen)6);
+    } else if (s_cmp(&__global_state->f2c, __state->acc, "WRITE", (ftnlen)10, 
+	    (ftnlen)5) == 0 && __state->iamh == 1) {
+	setmsg_(__global_state, "DAF not open for write.  Handle = #, file ="
+		" '#'", (ftnlen)47);
+	errint_(__global_state, "#", handle, (ftnlen)1);
+	errch_(__global_state, "#", __state->dafnam, (ftnlen)1, (ftnlen)255);
+	sigerr_(__global_state, "SPICE(DAFINVALIDACCESS)", (ftnlen)23);
+	chkout_(__global_state, "DAFSIH", (ftnlen)6);
 	return 0;
     }
 
 /*     The DAF's handle is o.k. */
 
-    chkout_("DAFSIH", (ftnlen)6);
+    chkout_(__global_state, "DAFSIH", (ftnlen)6);
     return 0;
 } /* dafah_ */
 
-/* Subroutine */ int dafah_(char *fname, char *ftype, integer *nd, integer *
-	ni, char *ifname, integer *resv, integer *handle, integer *unit, 
-	integer *fhset, char *access, ftnlen fname_len, ftnlen ftype_len, 
-	ftnlen ifname_len, ftnlen access_len)
+/* Subroutine */ int dafah_(cspice_t* __global_state, char *fname, char *
+	ftype, integer *nd, integer *ni, char *ifname, integer *resv, integer 
+	*handle, integer *unit, integer *fhset, char *access, ftnlen 
+	fname_len, ftnlen ftype_len, ftnlen ifname_len, ftnlen access_len)
 {
     return dafah_0_(0, fname, ftype, nd, ni, ifname, resv, handle, unit, 
 	    fhset, access, fname_len, ftype_len, ifname_len, access_len);
     }
 
-/* Subroutine */ int dafopr_(char *fname, integer *handle, ftnlen fname_len)
+/* Subroutine */ int dafopr_(cspice_t* __global_state, char *fname, integer *
+	handle, ftnlen fname_len)
 {
     return dafah_0_(1, fname, (char *)0, (integer *)0, (integer *)0, (char *)
 	    0, (integer *)0, handle, (integer *)0, (integer *)0, (char *)0, 
 	    fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dafopw_(char *fname, integer *handle, ftnlen fname_len)
+/* Subroutine */ int dafopw_(cspice_t* __global_state, char *fname, integer *
+	handle, ftnlen fname_len)
 {
     return dafah_0_(2, fname, (char *)0, (integer *)0, (integer *)0, (char *)
 	    0, (integer *)0, handle, (integer *)0, (integer *)0, (char *)0, 
 	    fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dafonw_(char *fname, char *ftype, integer *nd, integer *
-	ni, char *ifname, integer *resv, integer *handle, ftnlen fname_len, 
-	ftnlen ftype_len, ftnlen ifname_len)
+/* Subroutine */ int dafonw_(cspice_t* __global_state, char *fname, char *
+	ftype, integer *nd, integer *ni, char *ifname, integer *resv, integer 
+	*handle, ftnlen fname_len, ftnlen ftype_len, ftnlen ifname_len)
 {
     return dafah_0_(3, fname, ftype, nd, ni, ifname, resv, handle, (integer *)
 	    0, (integer *)0, (char *)0, fname_len, ftype_len, ifname_len, (
 	    ftnint)0);
     }
 
-/* Subroutine */ int dafopn_(char *fname, integer *nd, integer *ni, char *
-	ifname, integer *resv, integer *handle, ftnlen fname_len, ftnlen 
-	ifname_len)
+/* Subroutine */ int dafopn_(cspice_t* __global_state, char *fname, integer *
+	nd, integer *ni, char *ifname, integer *resv, integer *handle, ftnlen 
+	fname_len, ftnlen ifname_len)
 {
     return dafah_0_(4, fname, (char *)0, nd, ni, ifname, resv, handle, (
 	    integer *)0, (integer *)0, (char *)0, fname_len, (ftnint)0, 
 	    ifname_len, (ftnint)0);
     }
 
-/* Subroutine */ int dafcls_(integer *handle)
+/* Subroutine */ int dafcls_(cspice_t* __global_state, integer *handle)
 {
     return dafah_0_(5, (char *)0, (char *)0, (integer *)0, (integer *)0, (
 	    char *)0, (integer *)0, handle, (integer *)0, (integer *)0, (char 
 	    *)0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dafhsf_(integer *handle, integer *nd, integer *ni)
+/* Subroutine */ int dafhsf_(cspice_t* __global_state, integer *handle, 
+	integer *nd, integer *ni)
 {
     return dafah_0_(6, (char *)0, (char *)0, nd, ni, (char *)0, (integer *)0, 
 	    handle, (integer *)0, (integer *)0, (char *)0, (ftnint)0, (ftnint)
 	    0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dafhlu_(integer *handle, integer *unit)
+/* Subroutine */ int dafhlu_(cspice_t* __global_state, integer *handle, 
+	integer *unit)
 {
     return dafah_0_(7, (char *)0, (char *)0, (integer *)0, (integer *)0, (
 	    char *)0, (integer *)0, handle, unit, (integer *)0, (char *)0, (
 	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dafluh_(integer *unit, integer *handle)
+/* Subroutine */ int dafluh_(cspice_t* __global_state, integer *unit, integer 
+	*handle)
 {
     return dafah_0_(8, (char *)0, (char *)0, (integer *)0, (integer *)0, (
 	    char *)0, (integer *)0, handle, unit, (integer *)0, (char *)0, (
 	    ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dafhfn_(integer *handle, char *fname, ftnlen fname_len)
+/* Subroutine */ int dafhfn_(cspice_t* __global_state, integer *handle, char *
+	fname, ftnlen fname_len)
 {
     return dafah_0_(9, fname, (char *)0, (integer *)0, (integer *)0, (char *)
 	    0, (integer *)0, handle, (integer *)0, (integer *)0, (char *)0, 
 	    fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int daffnh_(char *fname, integer *handle, ftnlen fname_len)
+/* Subroutine */ int daffnh_(cspice_t* __global_state, char *fname, integer *
+	handle, ftnlen fname_len)
 {
     return dafah_0_(10, fname, (char *)0, (integer *)0, (integer *)0, (char *)
 	    0, (integer *)0, handle, (integer *)0, (integer *)0, (char *)0, 
 	    fname_len, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dafhof_(integer *fhset)
+/* Subroutine */ int dafhof_(cspice_t* __global_state, integer *fhset)
 {
     return dafah_0_(11, (char *)0, (char *)0, (integer *)0, (integer *)0, (
 	    char *)0, (integer *)0, (integer *)0, (integer *)0, fhset, (char *
 	    )0, (ftnint)0, (ftnint)0, (ftnint)0, (ftnint)0);
     }
 
-/* Subroutine */ int dafsih_(integer *handle, char *access, ftnlen access_len)
+/* Subroutine */ int dafsih_(cspice_t* __global_state, integer *handle, char *
+	access, ftnlen access_len)
 {
     return dafah_0_(12, (char *)0, (char *)0, (integer *)0, (integer *)0, (
 	    char *)0, (integer *)0, handle, (integer *)0, (integer *)0, 

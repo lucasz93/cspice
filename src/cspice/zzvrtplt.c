@@ -7,8 +7,7 @@
 #include "__cspice_state.h"
 
 
-static zzvrtplt_state_t* get_zzvrtplt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzvrtplt_state_t* get_zzvrtplt_state(cspice_t* state) {
 	if (!state->zzvrtplt)
 		state->zzvrtplt = __cspice_allocate_module(sizeof(
 	zzvrtplt_state_t), 0, 0);
@@ -17,31 +16,31 @@ static zzvrtplt_state_t* get_zzvrtplt_state() {
 }
 
 /* $Procedure  ZZVRTPLT  ( create vertex-plate mapping ) */
-/* Subroutine */ int zzvrtplt_(integer *nv, integer *np, integer *plates, 
-	integer *cellsz, integer *maxlst, integer *cells, integer *vrtptr, 
-	integer *nlist, integer *pltlst)
+/* Subroutine */ int zzvrtplt_(cspice_t* __global_state, integer *nv, integer 
+	*np, integer *plates, integer *cellsz, integer *maxlst, integer *
+	cells, integer *vrtptr, integer *nlist, integer *pltlst)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int zzaddlnk_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int zzinilnk_(integer *, integer *, integer *, 
-	    integer *, integer *);
-    extern /* Subroutine */ int zzuntngl_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int zzaddlnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzinilnk_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *);
+    extern /* Subroutine */ int zzuntngl_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzvrtplt_state_t* __state = get_zzvrtplt_state();
+    zzvrtplt_state_t* __state = get_zzvrtplt_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -521,52 +520,52 @@ static zzvrtplt_state_t* get_zzvrtplt_state() {
 
 /*     Standard SPICELIB error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZVRTPLT", (ftnlen)8);
+    chkin_(__global_state, "ZZVRTPLT", (ftnlen)8);
     if (*nv < 1) {
-	setmsg_("Vertex count NV = #; count must be positive.be positive.", (
-		ftnlen)56);
-	errint_("#", nv, (ftnlen)1);
-	sigerr_("SPICE(BADVERTEXCOUNT)", (ftnlen)21);
-	chkout_("ZZVRTPLT", (ftnlen)8);
+	setmsg_(__global_state, "Vertex count NV = #; count must be positive"
+		".be positive.", (ftnlen)56);
+	errint_(__global_state, "#", nv, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADVERTEXCOUNT)", (ftnlen)21);
+	chkout_(__global_state, "ZZVRTPLT", (ftnlen)8);
 	return 0;
     }
     if (*np < 1) {
-	setmsg_("Plate count NP = #; count must be positive.be positive.", (
-		ftnlen)55);
-	errint_("#", np, (ftnlen)1);
-	sigerr_("SPICE(BADPLATECOUNT)", (ftnlen)20);
-	chkout_("ZZVRTPLT", (ftnlen)8);
+	setmsg_(__global_state, "Plate count NP = #; count must be positive."
+		"be positive.", (ftnlen)55);
+	errint_(__global_state, "#", np, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADPLATECOUNT)", (ftnlen)20);
+	chkout_(__global_state, "ZZVRTPLT", (ftnlen)8);
 	return 0;
     }
     if (*cellsz < *np * 3) {
-	setmsg_("Cell array size CELLSZ = #; size must be >= 3*NP. NP is the"
-		" plate count #.", (ftnlen)74);
-	errint_("#", cellsz, (ftnlen)1);
-	errint_("#", np, (ftnlen)1);
-	sigerr_("SPICE(CELLARRAYTOOSMALL)", (ftnlen)24);
-	chkout_("ZZVRTPLT", (ftnlen)8);
+	setmsg_(__global_state, "Cell array size CELLSZ = #; size must be >="
+		" 3*NP. NP is the plate count #.", (ftnlen)74);
+	errint_(__global_state, "#", cellsz, (ftnlen)1);
+	errint_(__global_state, "#", np, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(CELLARRAYTOOSMALL)", (ftnlen)24);
+	chkout_(__global_state, "ZZVRTPLT", (ftnlen)8);
 	return 0;
     }
     if (*maxlst < *nv + *np * 3) {
-	setmsg_("Plate list array size MAXPLT = #; size must be >= 3*NP + NV"
-		", which is #. (NV = vertex count, NP = plate count.)", (
-		ftnlen)111);
-	errint_("#", maxlst, (ftnlen)1);
+	setmsg_(__global_state, "Plate list array size MAXPLT = #; size must"
+		" be >= 3*NP + NV, which is #. (NV = vertex count, NP = plate"
+		" count.)", (ftnlen)111);
+	errint_(__global_state, "#", maxlst, (ftnlen)1);
 	i__1 = *np * 3 + *nv;
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(PLATELISTTOOSMALL)", (ftnlen)24);
-	chkout_("ZZVRTPLT", (ftnlen)8);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(PLATELISTTOOSMALL)", (ftnlen)24);
+	chkout_(__global_state, "ZZVRTPLT", (ftnlen)8);
 	return 0;
     }
 
 /*     Initialize pointer and cell structure. */
 
-    zzinilnk_(nv, cellsz, &__state->ncell, vrtptr, cells);
-    if (failed_()) {
-	chkout_("ZZVRTPLT", (ftnlen)8);
+    zzinilnk_(__global_state, nv, cellsz, &__state->ncell, vrtptr, cells);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZVRTPLT", (ftnlen)8);
 	return 0;
     }
 
@@ -580,10 +579,11 @@ static zzvrtplt_state_t* get_zzvrtplt_state() {
 /*           AVAL = PLATES(J,I), vertex J of plate ID I. */
 /*           BVAL = I, plate ID value I. */
 
-	    zzaddlnk_(&plates[__state->j + __state->i__ * 3 - 4], &
-		    __state->i__, np, cellsz, vrtptr, &__state->ncell, cells);
-	    if (failed_()) {
-		chkout_("ZZVRTPLT", (ftnlen)8);
+	    zzaddlnk_(__global_state, &plates[__state->j + __state->i__ * 3 - 
+		    4], &__state->i__, np, cellsz, vrtptr, &__state->ncell, 
+		    cells);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZVRTPLT", (ftnlen)8);
 		return 0;
 	    }
 	}
@@ -609,11 +609,12 @@ static zzvrtplt_state_t* get_zzvrtplt_state() {
 /*             contain the IDs of those plates which have the vertex */
 /*             as a member. */
 
-    zzuntngl_(nv, cellsz, cells, maxlst, vrtptr, nlist, pltlst);
+    zzuntngl_(__global_state, nv, cellsz, cells, maxlst, vrtptr, nlist, 
+	    pltlst);
 
 /*     Standard SPICE error handling. */
 
-    chkout_("ZZVRTPLT", (ftnlen)8);
+    chkout_(__global_state, "ZZVRTPLT", (ftnlen)8);
     return 0;
 } /* zzvrtplt_ */
 

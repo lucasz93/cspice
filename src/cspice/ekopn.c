@@ -8,8 +8,7 @@
 
 
 extern ekopn_init_t __ekopn_init;
-static ekopn_state_t* get_ekopn_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline ekopn_state_t* get_ekopn_state(cspice_t* state) {
 	if (!state->ekopn)
 		state->ekopn = __cspice_allocate_module(sizeof(ekopn_state_t),
 	 &__ekopn_init, sizeof(__ekopn_init));
@@ -18,35 +17,36 @@ static ekopn_state_t* get_ekopn_state() {
 }
 
 /* $Procedure   EKOPN ( EK, open new file ) */
-/* Subroutine */ int ekopn_(char *fname, char *ifname, integer *ncomch, 
-	integer *handle, ftnlen fname_len, ftnlen ifname_len)
+/* Subroutine */ int ekopn_(cspice_t* __global_state, char *fname, char *
+	ifname, integer *ncomch, integer *handle, ftnlen fname_len, ftnlen 
+	ifname_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
     integer base;
-    extern /* Subroutine */ int zzekpgan_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int zzekpgin_(integer *);
-    extern /* Subroutine */ int zzektrit_(integer *, integer *);
+    extern /* Subroutine */ int zzekpgan_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int zzekpgin_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzektrit_(cspice_t*, integer *, integer *);
     integer p;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
-    extern /* Subroutine */ int dasudi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int dasonw_(char *, char *, char *, integer *, 
-	    integer *, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern /* Subroutine */ int dasudi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasonw_(cspice_t*, char *, char *, char *, 
+	    integer *, integer *, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer ncr;
 
 
     /* Module state */
-    ekopn_state_t* __state = get_ekopn_state();
+    ekopn_state_t* __state = get_ekopn_state(__global_state);
 /* $ Abstract */
 
 /*     Open a new E-kernel file and prepare the file for writing. */
@@ -310,20 +310,20 @@ static ekopn_state_t* get_ekopn_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("EKOPN", (ftnlen)5);
+	chkin_(__global_state, "EKOPN", (ftnlen)5);
     }
 
 /*     Check the comment character count. */
 
     if (*ncomch < 0) {
-	setmsg_("The number of reserved comment characters must be non-negat"
-		"ive but was #.", (ftnlen)73);
-	errint_("#", ncomch, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("EKOPN", (ftnlen)5);
+	setmsg_(__global_state, "The number of reserved comment characters m"
+		"ust be non-negative but was #.", (ftnlen)73);
+	errint_(__global_state, "#", ncomch, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "EKOPN", (ftnlen)5);
 	return 0;
     }
 
@@ -332,41 +332,41 @@ static ekopn_state_t* get_ekopn_state() {
 /*     number of comment characters. */
 
     ncr = (*ncomch + 1023) / 1024;
-    dasonw_(fname, "EK", ifname, &ncr, handle, fname_len, (ftnlen)2, 
-	    ifname_len);
-    if (failed_()) {
-	chkout_("EKOPN", (ftnlen)5);
+    dasonw_(__global_state, fname, "EK", ifname, &ncr, handle, fname_len, (
+	    ftnlen)2, ifname_len);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKOPN", (ftnlen)5);
 	return 0;
     }
 
 /*     Initialize the file for paged access.  The EK architecture */
 /*     code is automatically set by the paging initialization routine. */
 
-    zzekpgin_(handle);
-    if (failed_()) {
-	chkout_("EKOPN", (ftnlen)5);
+    zzekpgin_(__global_state, handle);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EKOPN", (ftnlen)5);
 	return 0;
     }
 
 /*     Allocate the first integer page for the file's metadata.  We */
 /*     don't need to examine the page number; it's 1. */
 
-    zzekpgan_(handle, &__state->c__3, &p, &base);
+    zzekpgan_(__global_state, handle, &__state->c__3, &p, &base);
 
 /*     Initialize a new tree.  This tree will point to the file's */
 /*     segments. */
 
-    zzektrit_(handle, &p);
+    zzektrit_(__global_state, handle, &p);
 
 /*     Save the segment pointer's root page number. */
 
     i__1 = base + 1;
     i__2 = base + 1;
-    dasudi_(handle, &i__1, &i__2, &p);
+    dasudi_(__global_state, handle, &i__1, &i__2, &p);
 
 /*     That's it.  We're ready to add data to the file. */
 
-    chkout_("EKOPN", (ftnlen)5);
+    chkout_(__global_state, "EKOPN", (ftnlen)5);
     return 0;
 } /* ekopn_ */
 

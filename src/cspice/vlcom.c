@@ -8,18 +8,17 @@
 
 
 typedef int vlcom_state_t;
-static vlcom_state_t* get_vlcom_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline vlcom_state_t* get_vlcom_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      VLCOM ( Vector linear combination, 3 dimensions ) */
-/* Subroutine */ int vlcom_(doublereal *a, doublereal *v1, doublereal *b, 
-	doublereal *v2, doublereal *sum)
+/* Subroutine */ int vlcom_(cspice_t* __global_state, doublereal *a, 
+	doublereal *v1, doublereal *b, doublereal *v2, doublereal *sum)
 {
 
     /* Module state */
-    vlcom_state_t* __state = get_vlcom_state();
+    vlcom_state_t* __state = get_vlcom_state(__global_state);
 /* $ Abstract */
 
 /*      Compute a vector linear combination of two double precision, */

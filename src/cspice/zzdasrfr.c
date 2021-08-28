@@ -8,8 +8,7 @@
 
 
 extern zzdasrfr_init_t __zzdasrfr_init;
-static zzdasrfr_state_t* get_zzdasrfr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzdasrfr_state_t* get_zzdasrfr_state(cspice_t* state) {
 	if (!state->zzdasrfr)
 		state->zzdasrfr = __cspice_allocate_module(sizeof(
 	zzdasrfr_state_t), &__zzdasrfr_init, sizeof(__zzdasrfr_init));
@@ -18,45 +17,47 @@ static zzdasrfr_state_t* get_zzdasrfr_state() {
 }
 
 /* $Procedure      ZZDASRFR ( DAS, read file record ) */
-/* Subroutine */ int zzdasrfr_(integer *handle, char *idword, char *ifname, 
-	integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, 
-	ftnlen idword_len, ftnlen ifname_len)
+/* Subroutine */ int zzdasrfr_(cspice_t* __global_state, integer *handle, 
+	char *idword, char *ifname, integer *nresvr, integer *nresvc, integer 
+	*ncomr, integer *ncomc, ftnlen idword_len, ftnlen ifname_len)
 {
     /* Initialized data */
 
 
     /* Builtin functions */
-    integer s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rdue(f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rdue(f2c_state_t*);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer ibff;
     integer unit;
-    extern /* Subroutine */ int zzddhnfc_(integer *);
-    extern /* Subroutine */ int zzddhppf_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int zzxlatei_(integer *, char *, integer *, 
-	    integer *, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern logical failed_(void);
+    extern /* Subroutine */ int zzddhnfc_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzddhppf_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
+    extern /* Subroutine */ int zzxlatei_(cspice_t*, integer *, char *, 
+	    integer *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
     char chrbuf[1024];
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     char tmpifn[60];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
     char tmpidw[8];
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    zzdasrfr_state_t* __state = get_zzdasrfr_state();
+    zzdasrfr_state_t* __state = get_zzdasrfr_state(__global_state);
 /* $ Abstract */
 
 /*     Return the contents of the file record of a specified DAS file. */
@@ -531,18 +532,18 @@ static zzdasrfr_state_t* get_zzdasrfr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZDASRFR", (ftnlen)8);
+    chkin_(__global_state, "ZZDASRFR", (ftnlen)8);
 
 /*     On the first pass through this routine, get the integer code of */
 /*     the host system's native binary file format. */
 
     if (__state->first) {
-	zzddhnfc_(&__state->natbff);
-	if (failed_()) {
-	    chkout_("ZZDASRFR", (ftnlen)8);
+	zzddhnfc_(__global_state, &__state->natbff);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZDASRFR", (ftnlen)8);
 	    return 0;
 	}
 	__state->first = FALSE_;
@@ -550,13 +551,14 @@ static zzdasrfr_state_t* get_zzdasrfr_state() {
 
 /*     Get a logical unit for this DAS file. */
 
-    zzddhhlu_(handle, "DAS", &__state->c_false, &unit, (ftnlen)3);
+    zzddhhlu_(__global_state, handle, "DAS", &__state->c_false, &unit, (
+	    ftnlen)3);
 
 /*     Get the integer code for the file's binary format. */
 
-    zzddhppf_(&unit, &__state->c__2, &ibff);
-    if (failed_()) {
-	chkout_("ZZDASRFR", (ftnlen)8);
+    zzddhppf_(__global_state, &unit, &__state->c__2, &ibff);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZDASRFR", (ftnlen)8);
 	return 0;
     }
     if (ibff == __state->natbff) {
@@ -564,51 +566,53 @@ static zzdasrfr_state_t* get_zzdasrfr_state() {
 /*        We're looking at a native file. Just read the file record. */
 
 	__state->io___6.ciunit = unit;
-	iostat = s_rdue(&__state->io___6);
+	iostat = s_rdue(&__global_state->f2c, &__state->io___6);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, tmpidw, (ftnlen)8);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, tmpidw, (ftnlen)
+		8);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, tmpifn, (ftnlen)60);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, tmpifn, (ftnlen)
+		60);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, (char *)&(*nresvr), (ftnlen)sizeof(
-		integer));
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*
+		nresvr), (ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, (char *)&(*nresvc), (ftnlen)sizeof(
-		integer));
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*
+		nresvc), (ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, (char *)&(*ncomr), (ftnlen)sizeof(
-		integer));
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*
+		ncomr), (ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_uio(&__state->c__1, (char *)&(*ncomc), (ftnlen)sizeof(
-		integer));
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, (char *)&(*
+		ncomc), (ftnlen)sizeof(integer));
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = e_rdue();
+	iostat = e_rdue(&__global_state->f2c);
 L100001:
 	if (iostat != 0) {
-	    setmsg_("Could not DAS read file record. File was #.  IOSTAT was"
-		    " #.", (ftnlen)58);
-	    errfnm_("#", &unit, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(DASFILEREADFAILED)", (ftnlen)24);
-	    chkout_("ZZDASRFR", (ftnlen)8);
+	    setmsg_(__global_state, "Could not DAS read file record. File wa"
+		    "s #.  IOSTAT was #.", (ftnlen)58);
+	    errfnm_(__global_state, "#", &unit, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DASFILEREADFAILED)", (ftnlen)24);
+	    chkout_(__global_state, "ZZDASRFR", (ftnlen)8);
 	    return 0;
 	}
-	s_copy(idword, tmpidw, idword_len, (ftnlen)8);
-	s_copy(ifname, tmpifn, ifname_len, (ftnlen)60);
+	s_copy(&__global_state->f2c, idword, tmpidw, idword_len, (ftnlen)8);
+	s_copy(&__global_state->f2c, ifname, tmpifn, ifname_len, (ftnlen)60);
     } else {
 
 /*        The file is non-native. */
@@ -620,40 +624,47 @@ L100001:
 /*        pick it apart. */
 
 	__state->io___9.ciunit = unit;
-	iostat = s_rdue(&__state->io___9);
+	iostat = s_rdue(&__global_state->f2c, &__state->io___9);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&__state->c__1, chrbuf, (ftnlen)1024);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, chrbuf, (ftnlen)
+		1024);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = e_rdue();
+	iostat = e_rdue(&__global_state->f2c);
 L100002:
 	if (iostat != 0) {
-	    setmsg_("Could not read DAS file record. File is #. IOSTAT was #"
-		    ". File's BFF integer code is #.", (ftnlen)86);
-	    errfnm_("#", &unit, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    errint_("#", &ibff, (ftnlen)1);
-	    sigerr_("SPICE(DASFILEREADFAILED)", (ftnlen)24);
-	    chkout_("ZZDASRFR", (ftnlen)8);
+	    setmsg_(__global_state, "Could not read DAS file record. File is"
+		    " #. IOSTAT was #. File's BFF integer code is #.", (ftnlen)
+		    86);
+	    errfnm_(__global_state, "#", &unit, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    errint_(__global_state, "#", &ibff, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(DASFILEREADFAILED)", (ftnlen)24);
+	    chkout_(__global_state, "ZZDASRFR", (ftnlen)8);
 	    return 0;
 	}
 
 /*        Set the string output arguments. */
 
-	s_copy(idword, chrbuf, idword_len, (ftnlen)8);
-	s_copy(ifname, chrbuf + 8, ifname_len, (ftnlen)60);
+	s_copy(&__global_state->f2c, idword, chrbuf, idword_len, (ftnlen)8);
+	s_copy(&__global_state->f2c, ifname, chrbuf + 8, ifname_len, (ftnlen)
+		60);
 
 /*        The integer output arguments require translation. */
 
-	zzxlatei_(&ibff, chrbuf + 68, &__state->c__1, nresvr, (ftnlen)4);
-	zzxlatei_(&ibff, chrbuf + 72, &__state->c__1, nresvc, (ftnlen)4);
-	zzxlatei_(&ibff, chrbuf + 76, &__state->c__1, ncomr, (ftnlen)4);
-	zzxlatei_(&ibff, chrbuf + 80, &__state->c__1, ncomc, (ftnlen)4);
+	zzxlatei_(__global_state, &ibff, chrbuf + 68, &__state->c__1, nresvr, 
+		(ftnlen)4);
+	zzxlatei_(__global_state, &ibff, chrbuf + 72, &__state->c__1, nresvc, 
+		(ftnlen)4);
+	zzxlatei_(__global_state, &ibff, chrbuf + 76, &__state->c__1, ncomr, (
+		ftnlen)4);
+	zzxlatei_(__global_state, &ibff, chrbuf + 80, &__state->c__1, ncomc, (
+		ftnlen)4);
     }
-    chkout_("ZZDASRFR", (ftnlen)8);
+    chkout_(__global_state, "ZZDASRFR", (ftnlen)8);
     return 0;
 } /* zzdasrfr_ */
 

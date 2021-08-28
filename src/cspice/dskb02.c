@@ -8,8 +8,7 @@
 
 
 extern dskb02_init_t __dskb02_init;
-static dskb02_state_t* get_dskb02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskb02_state_t* get_dskb02_state(cspice_t* state) {
 	if (!state->dskb02)
 		state->dskb02 = __cspice_allocate_module(sizeof(
 	dskb02_state_t), &__dskb02_init, sizeof(__dskb02_init));
@@ -18,35 +17,38 @@ static dskb02_state_t* get_dskb02_state() {
 }
 
 /* $Procedure DSKB02 ( DSK, fetch type 2 bookkeeping data ) */
-/* Subroutine */ int dskb02_(integer *handle, integer *dladsc, integer *nv, 
-	integer *np, integer *nvxtot, doublereal *vtxbds, doublereal *voxsiz, 
-	doublereal *voxori, integer *vgrext, integer *cgscal, integer *vtxnpl,
-	 integer *voxnpt, integer *voxnpl)
+/* Subroutine */ int dskb02_(cspice_t* __global_state, integer *handle, 
+	integer *dladsc, integer *nv, integer *np, integer *nvxtot, 
+	doublereal *vtxbds, doublereal *voxsiz, doublereal *voxori, integer *
+	vgrext, integer *cgscal, integer *vtxnpl, integer *voxnpt, integer *
+	voxnpl)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Local variables */
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     integer b;
     integer e;
     integer ibase;
     doublereal dbuff[10];
     integer ibuff[10];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    integer dpbase;
-    extern /* Subroutine */ int dasrdd_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
 	    doublereal *);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
 	    integer *);
-    extern logical return_(void);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer dpbase;
+    extern /* Subroutine */ int dasrdd_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    dskb02_state_t* __state = get_dskb02_state();
+    dskb02_state_t* __state = get_dskb02_state(__global_state);
 /* $ Abstract */
 
 /*     Return bookkeeping data from a DSK type 2 segment. */
@@ -885,10 +887,10 @@ static dskb02_state_t* get_dskb02_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKB02", (ftnlen)6);
+    chkin_(__global_state, "DSKB02", (ftnlen)6);
     dpbase = dladsc[4];
     ibase = dladsc[2];
 
@@ -897,7 +899,7 @@ static dskb02_state_t* get_dskb02_state() {
 
     i__1 = ibase + 1;
     i__2 = ibase + 10;
-    dasrdi_(handle, &i__1, &i__2, ibuff);
+    dasrdi_(__global_state, handle, &i__1, &i__2, ibuff);
     *nv = ibuff[0];
     *np = ibuff[1];
     *nvxtot = ibuff[2];
@@ -905,17 +907,17 @@ static dskb02_state_t* get_dskb02_state() {
     *voxnpt = ibuff[7];
     *voxnpl = ibuff[8];
     *vtxnpl = ibuff[9];
-    movei_(&ibuff[3], &__state->c__3, vgrext);
+    movei_(__global_state, &ibuff[3], &__state->c__3, vgrext);
 
 /*     Read the d.p. parameters. */
 
     b = dpbase + 25;
     e = dpbase + 34;
-    dasrdd_(handle, &b, &e, dbuff);
-    moved_(dbuff, &__state->c__6, vtxbds);
-    vequ_(&dbuff[6], voxori);
+    dasrdd_(__global_state, handle, &b, &e, dbuff);
+    moved_(__global_state, dbuff, &__state->c__6, vtxbds);
+    vequ_(__global_state, &dbuff[6], voxori);
     *voxsiz = dbuff[9];
-    chkout_("DSKB02", (ftnlen)6);
+    chkout_(__global_state, "DSKB02", (ftnlen)6);
     return 0;
 } /* dskb02_ */
 

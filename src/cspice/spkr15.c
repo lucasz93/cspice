@@ -8,8 +8,7 @@
 
 
 extern spkr15_init_t __spkr15_init;
-static spkr15_state_t* get_spkr15_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr15_state_t* get_spkr15_state(cspice_t* state) {
 	if (!state->spkr15)
 		state->spkr15 = __cspice_allocate_module(sizeof(
 	spkr15_state_t), &__spkr15_init, sizeof(__spkr15_init));
@@ -18,8 +17,8 @@ static spkr15_state_t* get_spkr15_state() {
 }
 
 /* $Procedure      SPKR15 ( Read SPK record from segment, type 15 ) */
-/* Subroutine */ int spkr15_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr15_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
     /* System generated locals */
     integer i__1;
@@ -27,23 +26,23 @@ static spkr15_state_t* get_spkr15_state() {
     /* Local variables */
     integer type__;
     integer begin;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     integer end;
 
 
     /* Module state */
-    spkr15_state_t* __state = get_spkr15_state();
+    spkr15_state_t* __state = get_spkr15_state(__global_state);
 /* $ Abstract */
 
 /*     This routine reads a single spk data record from a segment of */
@@ -234,14 +233,14 @@ static spkr15_state_t* get_spkr15_state() {
 
 /*     Standard Spice Error Handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKR15", (ftnlen)6);
+    chkin_(__global_state, "SPKR15", (ftnlen)6);
 
 /*     Unpack the segment descriptor. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[3];
     begin = ic[4];
     end = ic[5];
@@ -249,11 +248,11 @@ static spkr15_state_t* get_spkr15_state() {
 /*     Make sure that this really is a type 15 data segment. */
 
     if (type__ != 15) {
-	setmsg_("You are attempting to locate type 15 data in a type # data "
-		"segment.", (ftnlen)67);
-	errint_("#", &type__, (ftnlen)1);
-	sigerr_("SPICE(WRONGSPKTYPE)", (ftnlen)19);
-	chkout_("SPKR15", (ftnlen)6);
+	setmsg_(__global_state, "You are attempting to locate type 15 data i"
+		"n a type # data segment.", (ftnlen)67);
+	errint_(__global_state, "#", &type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGSPKTYPE)", (ftnlen)19);
+	chkout_(__global_state, "SPKR15", (ftnlen)6);
 	return 0;
     }
 
@@ -261,20 +260,20 @@ static spkr15_state_t* get_spkr15_state() {
 /*     the correct amount of data. */
 
     if (end - begin != 15) {
-	setmsg_("A type 15 segment should contain exactly 16 double precisio"
-		"n values.  The segment supplied had #.  The segment is badly"
-		" formed. ", (ftnlen)128);
+	setmsg_(__global_state, "A type 15 segment should contain exactly 16"
+		" double precision values.  The segment supplied had #.  The "
+		"segment is badly formed. ", (ftnlen)128);
 	i__1 = end - begin + 1;
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(MALFORMEDSEGMENT)", (ftnlen)23);
-	chkout_("SPKR15", (ftnlen)6);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(MALFORMEDSEGMENT)", (ftnlen)23);
+	chkout_(__global_state, "SPKR15", (ftnlen)6);
 	return 0;
     }
 
 /*     Read the data for the record. */
 
-    dafgda_(handle, &begin, &end, record);
-    chkout_("SPKR15", (ftnlen)6);
+    dafgda_(__global_state, handle, &begin, &end, record);
+    chkout_(__global_state, "SPKR15", (ftnlen)6);
     return 0;
 } /* spkr15_ */
 

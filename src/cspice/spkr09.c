@@ -8,8 +8,7 @@
 
 
 extern spkr09_init_t __spkr09_init;
-static spkr09_state_t* get_spkr09_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr09_state_t* get_spkr09_state(cspice_t* state) {
 	if (!state->spkr09)
 		state->spkr09 = __cspice_allocate_module(sizeof(
 	spkr09_state_t), &__spkr09_init, sizeof(__spkr09_init));
@@ -18,15 +17,16 @@ static spkr09_state_t* get_spkr09_state() {
 }
 
 /* $Procedure      SPKR09 ( Read SPK record from segment, type 9 ) */
-/* Subroutine */ int spkr09_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr09_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     integer high;
@@ -38,15 +38,16 @@ static spkr09_state_t* get_spkr09_state() {
     integer n;
     integer begin;
     integer nread;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     integer first;
     integer group;
     integer start;
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     doublereal dc[2];
     integer ic[6];
     integer degree;
@@ -57,21 +58,21 @@ static spkr09_state_t* get_spkr09_state() {
     integer endidx;
     integer remain;
     integer timbas;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal contrl[2];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer lstltd_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer lstltd_(cspice_t*, doublereal *, integer *, doublereal *);
     integer wndsiz;
-    extern logical return_(void);
-    extern logical odd_(integer *);
+    extern logical return_(cspice_t*);
+    extern logical odd_(cspice_t*, integer *);
     integer end;
     integer low;
 
 
     /* Module state */
-    spkr09_state_t* __state = get_spkr09_state();
+    spkr09_state_t* __state = get_spkr09_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 9 */
@@ -267,14 +268,14 @@ static spkr09_state_t* get_spkr09_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
 /*     Unpack the segment descriptor, and get the start and end addresses */
 /*     of the segment. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dc, ic);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dc, ic);
     type__ = ic[3];
     begin = ic[4];
     end = ic[5];
@@ -282,12 +283,12 @@ static spkr09_state_t* get_spkr09_state() {
 /*     Make sure that this really is a type 9 or type 13 data segment. */
 
     if (type__ != 9 && type__ != 13) {
-	chkin_("SPKR09", (ftnlen)6);
-	setmsg_("You are attempting to locate type 9 or type 13 data in a ty"
-		"pe # data segment.", (ftnlen)77);
-	errint_("#", &type__, (ftnlen)1);
-	sigerr_("SPICE(WRONGSPKTYPE)", (ftnlen)19);
-	chkout_("SPKR09", (ftnlen)6);
+	chkin_(__global_state, "SPKR09", (ftnlen)6);
+	setmsg_(__global_state, "You are attempting to locate type 9 or type"
+		" 13 data in a type # data segment.", (ftnlen)77);
+	errint_(__global_state, "#", &type__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(WRONGSPKTYPE)", (ftnlen)19);
+	chkout_(__global_state, "SPKR09", (ftnlen)6);
 	return 0;
     }
 
@@ -295,14 +296,14 @@ static spkr09_state_t* get_spkr09_state() {
 /*     descriptor. */
 
     if (*et < dc[0] || *et > dc[1]) {
-	chkin_("SPKR09", (ftnlen)6);
-	setmsg_("Request time # is outside of descriptor bounds # : #.", (
-		ftnlen)53);
-	errdp_("#", et, (ftnlen)1);
-	errdp_("#", dc, (ftnlen)1);
-	errdp_("#", &dc[1], (ftnlen)1);
-	sigerr_("SPICE(TIMEOUTOFBOUNDS)", (ftnlen)22);
-	chkout_("SPKR09", (ftnlen)6);
+	chkin_(__global_state, "SPKR09", (ftnlen)6);
+	setmsg_(__global_state, "Request time # is outside of descriptor bou"
+		"nds # : #.", (ftnlen)53);
+	errdp_(__global_state, "#", et, (ftnlen)1);
+	errdp_(__global_state, "#", dc, (ftnlen)1);
+	errdp_(__global_state, "#", &dc[1], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(TIMEOUTOFBOUNDS)", (ftnlen)22);
+	chkout_(__global_state, "SPKR09", (ftnlen)6);
 	return 0;
     }
 
@@ -336,9 +337,9 @@ static spkr09_state_t* get_spkr09_state() {
 
 
     i__1 = end - 1;
-    dafgda_(handle, &i__1, &end, contrl);
-    degree = i_dnnt(contrl);
-    n = i_dnnt(&contrl[1]);
+    dafgda_(__global_state, handle, &i__1, &end, contrl);
+    degree = i_dnnt(&__global_state->f2c, contrl);
+    n = i_dnnt(&__global_state->f2c, &contrl[1]);
     wndsiz = degree + 1;
 
 /*     We'll now select the set of states that define the interpolating */
@@ -368,10 +369,10 @@ static spkr09_state_t* get_spkr09_state() {
 	remain = ndir - nread;
 	i__1 = bufbas + 1;
 	i__2 = bufbas + nread;
-	dafgda_(handle, &i__1, &i__2, buffer);
-	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"buffer", i__1, "spkr09_", (ftnlen)373)] < *et && remain > 0) 
-		{
+	dafgda_(__global_state, handle, &i__1, &i__2, buffer);
+	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "buffer", i__1, "spkr09_", (ftnlen)373)] 
+		< *et && remain > 0) {
 	    bufbas += nread;
 	    nread = min(remain,101);
 	    remain -= nread;
@@ -380,13 +381,14 @@ static spkr09_state_t* get_spkr09_state() {
 
 	    i__1 = bufbas + 1;
 	    i__2 = bufbas + nread;
-	    dafgda_(handle, &i__1, &i__2, buffer);
+	    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
 	}
 
 /*        At this point, BUFBAS - DIRBAS is the number of directory */
 /*        entries preceding the one contained in BUFFER(1). */
 
-	group = bufbas - dirbas + lstltd_(et, &nread, buffer) + 1;
+	group = bufbas - dirbas + lstltd_(__global_state, et, &nread, buffer) 
+		+ 1;
     }
 
 /*     GROUP now indicates the set of epochs in which to search for the */
@@ -418,14 +420,14 @@ static spkr09_state_t* get_spkr09_state() {
     timbas = dirbas - n;
     i__1 = timbas + begidx;
     i__2 = timbas + endidx;
-    dafgda_(handle, &i__1, &i__2, buffer);
+    dafgda_(__global_state, handle, &i__1, &i__2, buffer);
 
 /*     Find two adjacent epochs bounding the request epoch.  The request */
 /*     time cannot be greater than all of epochs in the group, and it */
 /*     cannot precede the first element of the group. */
 
     i__1 = endidx - begidx + 1;
-    i__ = lstltd_(et, &i__1, buffer);
+    i__ = lstltd_(__global_state, et, &i__1, buffer);
 
 /*     The variables LOW and high are the indices of a pair of time */
 /*     tags that bracket the request time. */
@@ -439,7 +441,7 @@ static spkr09_state_t* get_spkr09_state() {
 
 /*     Now select the set of states used for interpolation. */
 
-    if (odd_(&wndsiz)) {
+    if (odd_(__global_state, &wndsiz)) {
 
 /*        Find the index of the state whose epoch is closest to the */
 /*        input epoch.  The index I is in the range [0, DIRSIZ], */
@@ -454,10 +456,10 @@ static spkr09_state_t* get_spkr09_state() {
 
 	    near__ = low;
 	} else if ((d__1 = *et - buffer[(i__1 = i__ - 1) < 101 && 0 <= i__1 ? 
-		i__1 : s_rnge("buffer", i__1, "spkr09_", (ftnlen)467)], abs(
-		d__1)) < (d__2 = *et - buffer[(i__2 = i__) < 101 && 0 <= i__2 
-		? i__2 : s_rnge("buffer", i__2, "spkr09_", (ftnlen)467)], abs(
-		d__2))) {
+		i__1 : s_rnge(&__global_state->f2c, "buffer", i__1, "spkr09_",
+		 (ftnlen)467)], abs(d__1)) < (d__2 = *et - buffer[(i__2 = i__)
+		 < 101 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		"buffer", i__2, "spkr09_", (ftnlen)467)], abs(d__2))) {
 	    near__ = low;
 	} else {
 	    near__ = high;
@@ -501,14 +503,14 @@ static spkr09_state_t* get_spkr09_state() {
 
     i__1 = begin + (first - 1) * 6;
     i__2 = begin + last * 6 - 1;
-    dafgda_(handle, &i__1, &i__2, &record[1]);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[1]);
 
 /*     Finally, add the epochs to the output record. */
 
     start = begin + n * 6 + first - 2;
     i__1 = start + 1;
     i__2 = start + wndsiz;
-    dafgda_(handle, &i__1, &i__2, &record[wndsiz * 6 + 1]);
+    dafgda_(__global_state, handle, &i__1, &i__2, &record[wndsiz * 6 + 1]);
     return 0;
 } /* spkr09_ */
 

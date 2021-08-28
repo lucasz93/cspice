@@ -8,36 +8,36 @@
 
 
 typedef int dcyldr_state_t;
-static dcyldr_state_t* get_dcyldr_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dcyldr_state_t* get_dcyldr_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DCYLDR (Derivative of cylindrical w.r.t. rectangular ) */
-/* Subroutine */ int dcyldr_(doublereal *x, doublereal *y, doublereal *z__, 
-	doublereal *jacobi)
+/* Subroutine */ int dcyldr_(cspice_t* __global_state, doublereal *x, 
+	doublereal *y, doublereal *z__, doublereal *jacobi)
 {
     doublereal long__;
     doublereal r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vpack_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vpack_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     doublereal injacb[9]	/* was [3][3] */;
     doublereal rectan[3];
-    extern /* Subroutine */ int reccyl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int drdcyl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int reccyl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int drdcyl_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
     doublereal zz;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int invort_(doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int invort_(cspice_t*, doublereal *, doublereal *)
+	    ;
 
 
     /* Module state */
-    dcyldr_state_t* __state = get_dcyldr_state();
+    dcyldr_state_t* __state = get_dcyldr_state(__global_state);
 /* $ Abstract */
 
 /*     This routine computes the Jacobian of the transformation from */
@@ -224,20 +224,20 @@ static dcyldr_state_t* get_dcyldr_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DCYLDR", (ftnlen)6);
+	chkin_(__global_state, "DCYLDR", (ftnlen)6);
     }
 
 /*     There is a singularity of the Jacobian for points on the z-axis. */
 
     if (*x == 0. && *y == 0.) {
-	setmsg_("The Jacobian of the transformation from rectangular to cyli"
-		"ndrical coordinates is not defined for points on the z-axis.",
-		 (ftnlen)119);
-	sigerr_("SPICE(POINTONZAXIS)", (ftnlen)19);
-	chkout_("DCYLDR", (ftnlen)6);
+	setmsg_(__global_state, "The Jacobian of the transformation from rec"
+		"tangular to cylindrical coordinates is not defined for point"
+		"s on the z-axis.", (ftnlen)119);
+	sigerr_(__global_state, "SPICE(POINTONZAXIS)", (ftnlen)19);
+	chkout_(__global_state, "DCYLDR", (ftnlen)6);
 	return 0;
     }
 
@@ -246,22 +246,22 @@ static dcyldr_state_t* get_dcyldr_state() {
 
 /*     First move the X,Y and Z coordinates into a vector. */
 
-    vpack_(x, y, z__, rectan);
+    vpack_(__global_state, x, y, z__, rectan);
 
 /*     Convert from rectangular to cylindrical coordinates. */
 
-    reccyl_(rectan, &r__, &long__, &zz);
+    reccyl_(__global_state, rectan, &r__, &long__, &zz);
 
 /*     Get the Jacobian from cylindrical to rectangular coordinates at */
 /*     R, LONG, Z. */
 
-    drdcyl_(&r__, &long__, &zz, injacb);
+    drdcyl_(__global_state, &r__, &long__, &zz, injacb);
 
 /*     Now invert INJACB to get the Jacobian from rectangular to */
 /*     cylindrical coordinates. */
 
-    invort_(injacb, jacobi);
-    chkout_("DCYLDR", (ftnlen)6);
+    invort_(__global_state, injacb, jacobi);
+    chkout_(__global_state, "DCYLDR", (ftnlen)6);
     return 0;
 } /* dcyldr_ */
 

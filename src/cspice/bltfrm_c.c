@@ -300,7 +300,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "bltfrm_c" );
+   chkin_c ( naif_state, "bltfrm_c" );
 
    /*
    Initialize the control area of the cell's data array

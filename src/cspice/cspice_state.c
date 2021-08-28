@@ -3,12 +3,17 @@
 #include "__cspice_state.h"
 #undef abs
 #include <stdlib.h>
-void cspice_init() {
+void* cspice_alloc() {
 	cspice_t* state = calloc(1, sizeof(cspice_t));
+	f2c_state_t* f2c = &state->f2c;
+	f2c->read_non_native = 0;
+	f2c->f__init = 0;
+	f2c->f__buf = f2c->f__buf0;
+	f2c->f__buflen = sizeof(f2c->f__buf0);
 #ifdef USER_T
 	__cspice_init_user(&state->user);
 #endif
-	__cspice_set_state(state);
+	return state;
 }
 
 void* cspice_copy(void* s) {
@@ -768,21 +773,10 @@ void* cspice_copy(void* s) {
 	if (state->zzwninsd) copy->zzwninsd = __cspice_allocate_module(sizeof(*copy->zzwninsd), state->zzwninsd, sizeof(*copy->zzwninsd));
 	if (state->zzxlated) copy->zzxlated = __cspice_allocate_module(sizeof(*copy->zzxlated), state->zzxlated, sizeof(*copy->zzxlated));
 	if (state->zzxlatei) copy->zzxlatei = __cspice_allocate_module(sizeof(*copy->zzxlatei), state->zzxlatei, sizeof(*copy->zzxlatei));
+#ifdef USER_T
+	memcpy(&copy->user, &state->user, sizeof(copy->user));
+#endif
 	return copy;
-}
-
-void* cspice_save(void) {
-	return cspice_copy(__cspice_get_state());
-}
-
-void cspice_push(void* state) {
-	cspice_t* next = state;
-	next->prev = __cspice_get_state();
-	__cspice_set_state(next);
-}
-
-void cspice_push_copy(void* state) {
-	cspice_push(cspice_copy(state));
 }
 
 void cspice_free(void* s) {
@@ -1544,13 +1538,3 @@ void cspice_free(void* s) {
 	free(state);
 }
 
-void* cspice_pop() {
-	cspice_t* cur = __cspice_get_state();
-	__cspice_set_state(cur->prev);
-	return cur;
-}
-
-void cspice_shutdown() {
-	while (__cspice_get_state())
-		cspice_pop();
-}

@@ -8,31 +8,30 @@
 
 
 typedef int prsdp_state_t;
-static prsdp_state_t* get_prsdp_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline prsdp_state_t* get_prsdp_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure   PRSDP   ( Parse d.p. number with error checking ) */
-/* Subroutine */ int prsdp_(char *string, doublereal *dpval, ftnlen 
-	string_len)
+/* Subroutine */ int prsdp_(cspice_t* __global_state, char *string, 
+	doublereal *dpval, ftnlen string_len)
 {
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int nparsd_(char *, doublereal *, char *, integer 
-	    *, ftnlen, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int nparsd_(cspice_t*, char *, doublereal *, char 
+	    *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     char errmsg[320];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer ptr;
 
 
     /* Module state */
-    prsdp_state_t* __state = get_prsdp_state();
+    prsdp_state_t* __state = get_prsdp_state(__global_state);
 /* $ Abstract */
 
 /*     Parse a string as a double precision number, encapsulating error */
@@ -150,12 +149,14 @@ static prsdp_state_t* get_prsdp_state() {
 
 /*     Use discovery check-in. */
 
-    nparsd_(string, dpval, errmsg, &ptr, string_len, (ftnlen)320);
-    if (s_cmp(errmsg, " ", (ftnlen)320, (ftnlen)1) != 0) {
-	chkin_("PRSDP", (ftnlen)5);
-	setmsg_(errmsg, (ftnlen)320);
-	sigerr_("SPICE(NOTADPNUMBER)", (ftnlen)19);
-	chkout_("PRSDP", (ftnlen)5);
+    nparsd_(__global_state, string, dpval, errmsg, &ptr, string_len, (ftnlen)
+	    320);
+    if (s_cmp(&__global_state->f2c, errmsg, " ", (ftnlen)320, (ftnlen)1) != 0)
+	     {
+	chkin_(__global_state, "PRSDP", (ftnlen)5);
+	setmsg_(__global_state, errmsg, (ftnlen)320);
+	sigerr_(__global_state, "SPICE(NOTADPNUMBER)", (ftnlen)19);
+	chkout_(__global_state, "PRSDP", (ftnlen)5);
 	return 0;
     }
     return 0;

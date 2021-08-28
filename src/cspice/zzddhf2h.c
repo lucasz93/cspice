@@ -8,18 +8,17 @@
 
 
 typedef int zzddhf2h_state_t;
-static zzddhf2h_state_t* get_zzddhf2h_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzddhf2h_state_t* get_zzddhf2h_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure ZZDDHF2H ( Private --- DDH Filename to Handle ) */
-/* Subroutine */ int zzddhf2h_(char *fname, integer *ftabs, integer *ftamh, 
-	integer *ftarc, integer *ftbff, integer *fthan, char *ftnam, integer *
-	ftrtm, doublereal *ftmnm, integer *nft, integer *utcst, integer *
-	uthan, logical *utlck, integer *utlun, integer *nut, logical *exists, 
-	logical *opened, integer *handle, logical *found, doublereal *mnm, 
-	ftnlen fname_len, ftnlen ftnam_len)
+/* Subroutine */ int zzddhf2h_(cspice_t* __global_state, char *fname, integer 
+	*ftabs, integer *ftamh, integer *ftarc, integer *ftbff, integer *
+	fthan, char *ftnam, integer *ftrtm, doublereal *ftmnm, integer *nft, 
+	integer *utcst, integer *uthan, logical *utlck, integer *utlun, 
+	integer *nut, logical *exists, logical *opened, integer *handle, 
+	logical *found, doublereal *mnm, ftnlen fname_len, ftnlen ftnam_len)
 {
     /* System generated locals */
     olist o__1;
@@ -27,36 +26,38 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
     inlist ioin__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), f_inqu(inlist *), f_open(
-	    olist *), f_clos(cllist *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), f_inqu(
+	    f2c_state_t*, inlist *), f_open(f2c_state_t*, olist *), f_clos(
+	    f2c_state_t*, cllist *);
 
     /* Local variables */
     integer unit;
-    extern doublereal zzddhmnm_(integer *);
-    extern /* Subroutine */ int zzddhgtu_(integer *, integer *, logical *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int zzddhrmu_(integer *, integer *, integer *, 
-	    integer *, logical *, integer *, integer *);
+    extern doublereal zzddhmnm_(cspice_t*, integer *);
+    extern /* Subroutine */ int zzddhgtu_(cspice_t*, integer *, integer *, 
+	    logical *, integer *, integer *, integer *);
+    extern /* Subroutine */ int zzddhrmu_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, logical *, integer *, integer *);
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer rchar;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern logical failed_(void);
-    extern integer isrchi_(integer *, integer *, integer *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern logical failed_(cspice_t*);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
     logical locopn;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer uindex;
     logical locexs;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    zzddhf2h_state_t* __state = get_zzddhf2h_state();
+    zzddhf2h_state_t* __state = get_zzddhf2h_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -574,28 +575,28 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZDDHF2H", (ftnlen)8);
+	chkin_(__global_state, "ZZDDHF2H", (ftnlen)8);
     }
 
 /*     First check to see if FNAME is blank.  If so, set FOUND to .FALSE. */
 /*     and return.  ZZDDHOPN prevents any blank filenames from being */
 /*     loaded into the file table. */
 
-    if (s_cmp(fname, " ", fname_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, fname, " ", fname_len, (ftnlen)1) == 0) {
 	*found = FALSE_;
 	*handle = 0;
 	*opened = FALSE_;
 	*exists = FALSE_;
-	chkout_("ZZDDHF2H", (ftnlen)8);
+	chkout_(__global_state, "ZZDDHF2H", (ftnlen)8);
 	return 0;
     }
 
 /*     Start by trimming the file name in preparation for the INQUIRE. */
 
-    rchar = rtrim_(fname, fname_len);
+    rchar = rtrim_(__global_state, fname, fname_len);
 
 /*     Now INQUIRE on the input file FNAME. */
 
@@ -616,17 +617,18 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
     ioin__1.inrecl = 0;
     ioin__1.innrec = 0;
     ioin__1.inblank = 0;
-    iostat = f_inqu(&ioin__1);
+    iostat = f_inqu(&__global_state->f2c, &ioin__1);
 
 /*     Check IOSTAT for failure. */
 
     if (iostat != 0) {
 	*found = FALSE_;
 	*handle = 0;
-	setmsg_("INQUIRE failed. Value of IOSTAT was #.", (ftnlen)38);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(INQUIREFAILED)", (ftnlen)20);
-	chkout_("ZZDDHF2H", (ftnlen)8);
+	setmsg_(__global_state, "INQUIRE failed. Value of IOSTAT was #.", (
+		ftnlen)38);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	chkout_(__global_state, "ZZDDHF2H", (ftnlen)8);
 	return 0;
     }
 
@@ -644,7 +646,7 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
     if (! (*exists)) {
 	*found = FALSE_;
 	*handle = 0;
-	chkout_("ZZDDHF2H", (ftnlen)8);
+	chkout_(__global_state, "ZZDDHF2H", (ftnlen)8);
 	return 0;
     }
 
@@ -657,7 +659,7 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
 /*        Since the file is opened, see if we can find its unit */
 /*        in the unit table. */
 
-	uindex = isrchi_(&unit, nut, utlun);
+	uindex = isrchi_(__global_state, &unit, nut, utlun);
 
 /*        When UINDEX is 0, the file is opened, but not by */
 /*        the DAF/DAS handle manager.  Set FOUND to FALSE, HANDLE */
@@ -666,7 +668,7 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
 	if (uindex == 0) {
 	    *handle = 0;
 	    *found = FALSE_;
-	    chkout_("ZZDDHF2H", (ftnlen)8);
+	    chkout_(__global_state, "ZZDDHF2H", (ftnlen)8);
 	    return 0;
 	}
 
@@ -676,7 +678,7 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
 
 	*handle = uthan[uindex - 1];
 	*found = *handle != 0;
-	chkout_("ZZDDHF2H", (ftnlen)8);
+	chkout_(__global_state, "ZZDDHF2H", (ftnlen)8);
 	return 0;
     }
 
@@ -686,11 +688,11 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
 /*     and then INQUIRE on every file in the table.  To do this, we */
 /*     need a unit. Get one. */
 
-    zzddhgtu_(utcst, uthan, utlck, utlun, nut, &uindex);
-    if (failed_()) {
+    zzddhgtu_(__global_state, utcst, uthan, utlck, utlun, nut, &uindex);
+    if (failed_(__global_state)) {
 	*handle = 0;
 	*found = FALSE_;
-	chkout_("ZZDDHF2H", (ftnlen)8);
+	chkout_(__global_state, "ZZDDHF2H", (ftnlen)8);
 	return 0;
     }
 
@@ -707,7 +709,7 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
     o__1.oacc = "DIRECT";
     o__1.ofm = 0;
     o__1.oblnk = 0;
-    iostat = f_open(&o__1);
+    iostat = f_open(&__global_state->f2c, &o__1);
 
 /*     Check IOSTAT. */
 
@@ -724,24 +726,25 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
 	cl__1.cerr = 0;
 	cl__1.cunit = utlun[uindex - 1];
 	cl__1.csta = 0;
-	f_clos(&cl__1);
-	zzddhrmu_(&uindex, nft, utcst, uthan, utlck, utlun, nut);
+	f_clos(&__global_state->f2c, &cl__1);
+	zzddhrmu_(__global_state, &uindex, nft, utcst, uthan, utlck, utlun, 
+		nut);
 
 /*        Signal the error and return. */
 
-	setmsg_("Attempt to open file '#' failed. Value of IOSTAT was #.", (
-		ftnlen)55);
-	errch_("#", fname, (ftnlen)1, fname_len);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEOPENFAILED)", (ftnlen)21);
-	chkout_("ZZDDHF2H", (ftnlen)8);
+	setmsg_(__global_state, "Attempt to open file '#' failed. Value of I"
+		"OSTAT was #.", (ftnlen)55);
+	errch_(__global_state, "#", fname, (ftnlen)1, fname_len);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEOPENFAILED)", (ftnlen)21);
+	chkout_(__global_state, "ZZDDHF2H", (ftnlen)8);
 	return 0;
     }
 
 /*     Get a unique enough DP number -- the Magic NuMber (MNM) ;) -- for */
 /*     this file. */
 
-    *mnm = zzddhmnm_(&utlun[uindex - 1]);
+    *mnm = zzddhmnm_(__global_state, &utlun[uindex - 1]);
 
 /*     Now loop through all the files in the file table. Unfortunately */
 /*     we have no other choice. */
@@ -784,7 +787,7 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
 	    ioin__1.inrecl = 0;
 	    ioin__1.innrec = 0;
 	    ioin__1.inblank = 0;
-	    iostat = f_inqu(&ioin__1);
+	    iostat = f_inqu(&__global_state->f2c, &ioin__1);
 	}
 
 /*        Check IOSTAT. */
@@ -802,15 +805,17 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
 	    cl__1.cerr = 0;
 	    cl__1.cunit = utlun[uindex - 1];
 	    cl__1.csta = 0;
-	    f_clos(&cl__1);
-	    zzddhrmu_(&uindex, nft, utcst, uthan, utlck, utlun, nut);
+	    f_clos(&__global_state->f2c, &cl__1);
+	    zzddhrmu_(__global_state, &uindex, nft, utcst, uthan, utlck, 
+		    utlun, nut);
 
 /*           Signal the error and return. */
 
-	    setmsg_("INQUIRE failed. Value of IOSTAT was #.", (ftnlen)38);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(INQUIREFAILED)", (ftnlen)20);
-	    chkout_("ZZDDHF2H", (ftnlen)8);
+	    setmsg_(__global_state, "INQUIRE failed. Value of IOSTAT was #.", 
+		    (ftnlen)38);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	    chkout_(__global_state, "ZZDDHF2H", (ftnlen)8);
 	    return 0;
 	}
 
@@ -839,9 +844,9 @@ static zzddhf2h_state_t* get_zzddhf2h_state() {
     cl__1.cerr = 0;
     cl__1.cunit = utlun[uindex - 1];
     cl__1.csta = 0;
-    f_clos(&cl__1);
-    zzddhrmu_(&uindex, nft, utcst, uthan, utlck, utlun, nut);
-    chkout_("ZZDDHF2H", (ftnlen)8);
+    f_clos(&__global_state->f2c, &cl__1);
+    zzddhrmu_(__global_state, &uindex, nft, utcst, uthan, utlck, utlun, nut);
+    chkout_(__global_state, "ZZDDHF2H", (ftnlen)8);
     return 0;
 } /* zzddhf2h_ */
 

@@ -175,7 +175,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "spkpds_c" );
+   chkin_c ( naif_state, "spkpds_c" );
 
    /*
    Check the input frame string to make sure the pointer

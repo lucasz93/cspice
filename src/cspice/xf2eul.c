@@ -8,8 +8,7 @@
 
 
 extern xf2eul_init_t __xf2eul_init;
-static xf2eul_state_t* get_xf2eul_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline xf2eul_state_t* get_xf2eul_state(cspice_t* state) {
 	if (!state->xf2eul)
 		state->xf2eul = __cspice_allocate_module(sizeof(
 	xf2eul_state_t), &__xf2eul_init, sizeof(__xf2eul_init));
@@ -18,8 +17,9 @@ static xf2eul_state_t* get_xf2eul_state() {
 }
 
 /* $Procedure      XF2EUL ( State transformation to Euler angles ) */
-/* Subroutine */ int xf2eul_0_(int n__, doublereal *xform, integer *axisa, 
-	integer *axisb, integer *axisc, doublereal *eulang, logical *unique)
+/* Subroutine */ int xf2eul_0_(cspice_t* __global_state, int n__, doublereal *
+	xform, integer *axisa, integer *axisb, integer *axisc, doublereal *
+	eulang, logical *unique)
 {
     /* Initialized data */
 
@@ -28,17 +28,17 @@ static xf2eul_state_t* get_xf2eul_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double cos(doublereal), sin(doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
     /* Local variables */
     doublereal drdt[9]	/* was [3][3] */;
-    extern /* Subroutine */ int mxmt_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int m2eul_(doublereal *, integer *, integer *, 
-	    integer *, doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
-	    *, integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int mxmt_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int m2eul_(cspice_t*, doublereal *, integer *, 
+	    integer *, integer *, doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int eul2m_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, integer *, integer *, integer *, doublereal *);
     integer a;
     integer b;
     doublereal d__;
@@ -50,28 +50,29 @@ static xf2eul_state_t* get_xf2eul_state() {
     doublereal u;
     doublereal v;
     doublereal omega[3];
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
     doublereal ca;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal sa;
     doublereal domega[3];
     doublereal locang[6];
     integer locaxa;
     integer locaxb;
     integer locaxc;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal drdtrt[9]	/* was [3][3] */;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal solutn[9]	/* was [3][3] */;
-    extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
-	    ;
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int mxm_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int mxv_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
 
 
     /* Module state */
-    xf2eul_state_t* __state = get_xf2eul_state();
+    xf2eul_state_t* __state = get_xf2eul_state(__global_state);
 /* $ Abstract */
 
 /*     Convert a state transformation matrix to Euler angles and their */
@@ -706,24 +707,26 @@ static xf2eul_state_t* get_xf2eul_state() {
 
 /*     Standard SPICE exception handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("XF2EUL", (ftnlen)6);
+    chkin_(__global_state, "XF2EUL", (ftnlen)6);
 
 /*     Get the rotation and derivative of the rotation separately. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	k = i__ + 3;
 	for (j = 1; j <= 3; ++j) {
-	    r__[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "r", i__1, "xf2eul_", (ftnlen)714)] = xform[(i__2 = i__ + 
-		    j * 6 - 7) < 36 && 0 <= i__2 ? i__2 : s_rnge("xform", 
-		    i__2, "xf2eul_", (ftnlen)714)];
-	    drdt[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "drdt", i__1, "xf2eul_", (ftnlen)715)] = xform[(i__2 = k 
-		    + j * 6 - 7) < 36 && 0 <= i__2 ? i__2 : s_rnge("xform", 
-		    i__2, "xf2eul_", (ftnlen)715)];
+	    r__[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "r", i__1, "xf2eul_", (ftnlen)714)] =
+		     xform[(i__2 = i__ + j * 6 - 7) < 36 && 0 <= i__2 ? i__2 :
+		     s_rnge(&__global_state->f2c, "xform", i__2, "xf2eul_", (
+		    ftnlen)714)];
+	    drdt[(i__1 = i__ + j * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "drdt", i__1, "xf2eul_", (ftnlen)715)
+		    ] = xform[(i__2 = k + j * 6 - 7) < 36 && 0 <= i__2 ? i__2 
+		    : s_rnge(&__global_state->f2c, "xform", i__2, "xf2eul_", (
+		    ftnlen)715)];
 	}
     }
 
@@ -731,9 +734,10 @@ static xf2eul_state_t* get_xf2eul_state() {
 /*     the various Euler angles now.  This will take care of all the */
 /*     bad axis cases too so we don't have to check here. */
 
-    m2eul_(r__, axisa, axisb, axisc, eulang, &eulang[1], &eulang[2]);
-    if (failed_()) {
-	chkout_("XF2EUL", (ftnlen)6);
+    m2eul_(__global_state, r__, axisa, axisb, axisc, eulang, &eulang[1], &
+	    eulang[2]);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "XF2EUL", (ftnlen)6);
 	return 0;
     }
 
@@ -744,12 +748,13 @@ static xf2eul_state_t* get_xf2eul_state() {
     b = *axisb;
     l = 6 - a - b;
     d__ = __state->delta[(i__1 = a + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-	    s_rnge("delta", i__1, "xf2eul_", (ftnlen)740)];
+	    s_rnge(&__global_state->f2c, "delta", i__1, "xf2eul_", (ftnlen)
+	    740)];
 
 /*                      t */
 /*     Compute DR/DT * R   and extract OMEGA */
 
-    mxmt_(drdt, r__, drdtrt);
+    mxmt_(__global_state, drdt, r__, drdtrt);
 
 /*     The vector corresponding to DRDTRT is computed as shown below. */
 
@@ -770,22 +775,25 @@ static xf2eul_state_t* get_xf2eul_state() {
 /*        omega(3) = w(L) = d*drdtrt(B,A) */
 
     omega[0] = d__ * drdtrt[(i__1 = l + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-	    s_rnge("drdtrt", i__1, "xf2eul_", (ftnlen)768)];
+	    s_rnge(&__global_state->f2c, "drdtrt", i__1, "xf2eul_", (ftnlen)
+	    768)];
     omega[1] = d__ * drdtrt[(i__1 = a + l * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-	    s_rnge("drdtrt", i__1, "xf2eul_", (ftnlen)769)];
+	    s_rnge(&__global_state->f2c, "drdtrt", i__1, "xf2eul_", (ftnlen)
+	    769)];
     omega[2] = d__ * drdtrt[(i__1 = b + a * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-	    s_rnge("drdtrt", i__1, "xf2eul_", (ftnlen)770)];
+	    s_rnge(&__global_state->f2c, "drdtrt", i__1, "xf2eul_", (ftnlen)
+	    770)];
 
 /*     Compute the various sines and cosines that we need. */
 
-    ca = cos(eulang[0]);
-    sa = sin(eulang[0]);
+    ca = cos(&__global_state->f2c, eulang[0]);
+    sa = sin(&__global_state->f2c, eulang[0]);
     if (*axisa == *axisc) {
-	u = cos(eulang[1]);
-	v = d__ * sin(eulang[1]);
+	u = cos(&__global_state->f2c, eulang[1]);
+	v = d__ * sin(&__global_state->f2c, eulang[1]);
     } else {
-	u = -d__ * sin(eulang[1]);
-	v = cos(eulang[1]);
+	u = -d__ * sin(&__global_state->f2c, eulang[1]);
+	v = cos(&__global_state->f2c, eulang[1]);
     }
 
 /*     To avoid floating point overflows we make sure that we */
@@ -825,7 +833,7 @@ static xf2eul_state_t* get_xf2eul_state() {
 	} else {
 	    eulang[4] = d__ * omega[2] / sa;
 	}
-	chkout_("XF2EUL", (ftnlen)6);
+	chkout_(__global_state, "XF2EUL", (ftnlen)6);
 	return 0;
     }
 
@@ -846,8 +854,8 @@ static xf2eul_state_t* get_xf2eul_state() {
     solutn[6] = u * ca / v;
     solutn[7] = d__ * sa;
     solutn[8] = -ca / v;
-    mxv_(solutn, omega, &eulang[3]);
-    chkout_("XF2EUL", (ftnlen)6);
+    mxv_(__global_state, solutn, omega, &eulang[3]);
+    chkout_(__global_state, "XF2EUL", (ftnlen)6);
     return 0;
 /* $Procedure      EUL2XF ( Euler angles and derivative to transformation) */
 
@@ -1063,16 +1071,16 @@ L_eul2xf:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("EUL2XF", (ftnlen)6);
+    chkin_(__global_state, "EUL2XF", (ftnlen)6);
 
 /*     We're going to work with a local copy LOCANG of the euler angle */
 /*     state vector EULANG.  We'll also use a local set of axis */
 /*     numbers. */
 
-    moved_(eulang, &__state->c__6, locang);
+    moved_(__global_state, eulang, &__state->c__6, locang);
     locaxa = *axisa;
     locaxb = *axisb;
     locaxc = *axisc;
@@ -1096,15 +1104,17 @@ L_eul2xf:
 /*        Absorb the second angle into the selected angle and set the */
 /*        second angle to zero.  The same goes for the angular rates. */
 
-	locang[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("locang", 
-		i__1, "xf2eul_", (ftnlen)1119)] = locang[(i__2 = i__ - 1) < 6 
-		&& 0 <= i__2 ? i__2 : s_rnge("locang", i__2, "xf2eul_", (
-		ftnlen)1119)] + locang[1];
+	locang[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "locang", i__1, "xf2eul_", (ftnlen)1119)]
+		 = locang[(i__2 = i__ - 1) < 6 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "locang", i__2, "xf2eul_", (ftnlen)1119)]
+		 + locang[1];
 	locang[1] = 0.;
-	locang[(i__1 = i__ + 2) < 6 && 0 <= i__1 ? i__1 : s_rnge("locang", 
-		i__1, "xf2eul_", (ftnlen)1122)] = locang[(i__2 = i__ + 2) < 6 
-		&& 0 <= i__2 ? i__2 : s_rnge("locang", i__2, "xf2eul_", (
-		ftnlen)1122)] + locang[4];
+	locang[(i__1 = i__ + 2) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "locang", i__1, "xf2eul_", (ftnlen)1122)]
+		 = locang[(i__2 = i__ + 2) < 6 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "locang", i__2, "xf2eul_", (ftnlen)1122)]
+		 + locang[4];
 	locang[4] = 0.;
 
 /*        Pick a second axis that doesn't match the others.  Since */
@@ -1112,13 +1122,15 @@ L_eul2xf:
 /*        matters here is picking a distinct axis. */
 
 	if (*axisc == __state->next[(i__1 = *axisa - 1) < 3 && 0 <= i__1 ? 
-		i__1 : s_rnge("next", i__1, "xf2eul_", (ftnlen)1130)]) {
+		i__1 : s_rnge(&__global_state->f2c, "next", i__1, "xf2eul_", (
+		ftnlen)1130)]) {
 
 /*           The first axis is the predecessor of the third, so we pick */
 /*           the successor of the third. */
 
 	    locaxb = __state->next[(i__1 = *axisc - 1) < 3 && 0 <= i__1 ? 
-		    i__1 : s_rnge("next", i__1, "xf2eul_", (ftnlen)1135)];
+		    i__1 : s_rnge(&__global_state->f2c, "next", i__1, "xf2eu"
+		    "l_", (ftnlen)1135)];
 	} else {
 
 /*           Either the third axis is the predecessor of the first or */
@@ -1126,7 +1138,8 @@ L_eul2xf:
 /*           choice. */
 
 	    locaxb = __state->next[(i__1 = *axisa - 1) < 3 && 0 <= i__1 ? 
-		    i__1 : s_rnge("next", i__1, "xf2eul_", (ftnlen)1143)];
+		    i__1 : s_rnge(&__global_state->f2c, "next", i__1, "xf2eu"
+		    "l_", (ftnlen)1143)];
 	}
     }
 
@@ -1140,9 +1153,10 @@ L_eul2xf:
 /*     The derivation for everything that is about to happen here */
 /*     is included in the previous entry point. */
 
-    eul2m_(locang, &locang[1], &locang[2], &locaxa, &locaxb, &locaxc, r__);
-    if (failed_()) {
-	chkout_("EUL2XF", (ftnlen)6);
+    eul2m_(__global_state, locang, &locang[1], &locang[2], &locaxa, &locaxb, &
+	    locaxc, r__);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "EUL2XF", (ftnlen)6);
 	return 0;
     }
 
@@ -1153,18 +1167,19 @@ L_eul2xf:
     b = locaxb;
     l = 6 - a - b;
     d__ = __state->delta[(i__1 = a + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : 
-	    s_rnge("delta", i__1, "xf2eul_", (ftnlen)1175)];
+	    s_rnge(&__global_state->f2c, "delta", i__1, "xf2eul_", (ftnlen)
+	    1175)];
 
 /*     Compute the various sines and cosines that we need. */
 
-    ca = cos(locang[0]);
-    sa = sin(locang[0]);
+    ca = cos(&__global_state->f2c, locang[0]);
+    sa = sin(&__global_state->f2c, locang[0]);
     if (locaxa == locaxc) {
-	u = cos(locang[1]);
-	v = d__ * sin(locang[1]);
+	u = cos(&__global_state->f2c, locang[1]);
+	v = d__ * sin(&__global_state->f2c, locang[1]);
     } else {
-	u = -d__ * sin(locang[1]);
-	v = cos(locang[1]);
+	u = -d__ * sin(&__global_state->f2c, locang[1]);
+	v = cos(&__global_state->f2c, locang[1]);
     }
 
 /*                            t */
@@ -1203,53 +1218,64 @@ L_eul2xf:
     solutn[6] = -d__ * u;
     solutn[7] = -sa * v;
     solutn[8] = -d__ * ca * v;
-    mxv_(solutn, &locang[3], domega);
-    drdtrt[(i__1 = l + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1233)] = domega[0];
-    drdtrt[(i__1 = b + l * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1234)] = -domega[0];
-    drdtrt[(i__1 = a + l * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1236)] = domega[1];
-    drdtrt[(i__1 = l + a * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1237)] = -domega[1];
-    drdtrt[(i__1 = b + a * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1239)] = domega[2];
-    drdtrt[(i__1 = a + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge("drdtrt", 
-	    i__1, "xf2eul_", (ftnlen)1240)] = -domega[2];
+    mxv_(__global_state, solutn, &locang[3], domega);
+    drdtrt[(i__1 = l + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "drdtrt", i__1, "xf2eul_", (ftnlen)1233)] = 
+	    domega[0];
+    drdtrt[(i__1 = b + l * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "drdtrt", i__1, "xf2eul_", (ftnlen)1234)] = 
+	    -domega[0];
+    drdtrt[(i__1 = a + l * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "drdtrt", i__1, "xf2eul_", (ftnlen)1236)] = 
+	    domega[1];
+    drdtrt[(i__1 = l + a * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "drdtrt", i__1, "xf2eul_", (ftnlen)1237)] = 
+	    -domega[1];
+    drdtrt[(i__1 = b + a * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "drdtrt", i__1, "xf2eul_", (ftnlen)1239)] = 
+	    domega[2];
+    drdtrt[(i__1 = a + b * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+	    __global_state->f2c, "drdtrt", i__1, "xf2eul_", (ftnlen)1240)] = 
+	    -domega[2];
     drdtrt[0] = 0.;
     drdtrt[4] = 0.;
     drdtrt[8] = 0.;
-    mxm_(drdtrt, r__, drdt);
+    mxm_(__global_state, drdtrt, r__, drdt);
     for (j = 1; j <= 3; ++j) {
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    xform[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(
-		    "xform", i__1, "xf2eul_", (ftnlen)1250)] = r__[(i__2 = 
-		    i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("r", 
-		    i__2, "xf2eul_", (ftnlen)1250)];
+	    xform[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "xform", i__1, "xf2eul_", (ftnlen)
+		    1250)] = r__[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "r", i__2, "xf2eul_", 
+		    (ftnlen)1250)];
 	    xform[(i__1 = i__ + 3 + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? i__1 
-		    : s_rnge("xform", i__1, "xf2eul_", (ftnlen)1251)] = r__[(
-		    i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-		    "r", i__2, "xf2eul_", (ftnlen)1251)];
+		    : s_rnge(&__global_state->f2c, "xform", i__1, "xf2eul_", (
+		    ftnlen)1251)] = r__[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "r", i__2, 
+		    "xf2eul_", (ftnlen)1251)];
 	    xform[(i__1 = i__ + 3 + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-		    s_rnge("xform", i__1, "xf2eul_", (ftnlen)1252)] = drdt[(
-		    i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-		    "drdt", i__2, "xf2eul_", (ftnlen)1252)];
+		    s_rnge(&__global_state->f2c, "xform", i__1, "xf2eul_", (
+		    ftnlen)1252)] = drdt[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "drdt", i__2, 
+		    "xf2eul_", (ftnlen)1252)];
 	    xform[(i__1 = i__ + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-		    s_rnge("xform", i__1, "xf2eul_", (ftnlen)1253)] = 0.;
+		    s_rnge(&__global_state->f2c, "xform", i__1, "xf2eul_", (
+		    ftnlen)1253)] = 0.;
 	}
     }
-    chkout_("EUL2XF", (ftnlen)6);
+    chkout_(__global_state, "EUL2XF", (ftnlen)6);
     return 0;
 } /* xf2eul_ */
 
-/* Subroutine */ int xf2eul_(doublereal *xform, integer *axisa, integer *
-	axisb, integer *axisc, doublereal *eulang, logical *unique)
+/* Subroutine */ int xf2eul_(cspice_t* __global_state, doublereal *xform, 
+	integer *axisa, integer *axisb, integer *axisc, doublereal *eulang, 
+	logical *unique)
 {
     return xf2eul_0_(0, xform, axisa, axisb, axisc, eulang, unique);
     }
 
-/* Subroutine */ int eul2xf_(doublereal *eulang, integer *axisa, integer *
-	axisb, integer *axisc, doublereal *xform)
+/* Subroutine */ int eul2xf_(cspice_t* __global_state, doublereal *eulang, 
+	integer *axisa, integer *axisb, integer *axisc, doublereal *xform)
 {
     return xf2eul_0_(1, xform, axisa, axisb, axisc, eulang, (logical *)0);
     }

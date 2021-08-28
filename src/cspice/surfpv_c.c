@@ -496,7 +496,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "surfpv_c" );
+   chkin_c ( naif_state, "surfpv_c" );
 
 
    surfpv_ (  (doublereal *)  stvrtx,

@@ -275,7 +275,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "nearpt_c" );
+   chkin_c ( naif_state, "nearpt_c" );
 
 
    /*

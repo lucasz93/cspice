@@ -8,21 +8,21 @@
 
 
 typedef int zzekrbck_state_t;
-static zzekrbck_state_t* get_zzekrbck_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrbck_state_t* get_zzekrbck_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKRBCK ( EK, record backup <STUB> ) */
-/* Subroutine */ int zzekrbck_(char *action, integer *handle, integer *segdsc,
-	 integer *coldsc, integer *recno, ftnlen action_len)
+/* Subroutine */ int zzekrbck_(cspice_t* __global_state, char *action, 
+	integer *handle, integer *segdsc, integer *coldsc, integer *recno, 
+	ftnlen action_len)
 {
     integer i__;
     char tmpchr[1];
 
 
     /* Module state */
-    zzekrbck_state_t* __state = get_zzekrbck_state();
+    zzekrbck_state_t* __state = get_zzekrbck_state(__global_state);
 /* $ Abstract */
 
 /*     Back up a modified EK record belonging to a shadowed EK. */

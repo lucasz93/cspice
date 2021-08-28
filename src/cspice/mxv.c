@@ -8,20 +8,19 @@
 
 
 typedef int mxv_state_t;
-static mxv_state_t* get_mxv_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline mxv_state_t* get_mxv_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      MXV ( Matrix times vector, 3x3 ) */
-/* Subroutine */ int mxv_(doublereal *matrix, doublereal *vin, doublereal *
-	vout)
+/* Subroutine */ int mxv_(cspice_t* __global_state, doublereal *matrix, 
+	doublereal *vin, doublereal *vout)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
@@ -29,7 +28,7 @@ static mxv_state_t* get_mxv_state() {
 
 
     /* Module state */
-    mxv_state_t* __state = get_mxv_state();
+    mxv_state_t* __state = get_mxv_state(__global_state);
 /* $ Abstract */
 
 /*     Multiply a 3x3 double precision matrix with a 3-dimensional */
@@ -171,13 +170,15 @@ static mxv_state_t* get_mxv_state() {
 /*  Perform the matrix-vector multiplication */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	prodv[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("prodv", i__1,
-		 "mxv_", (ftnlen)157)] = matrix[(i__2 = i__ - 1) < 9 && 0 <= 
-		i__2 ? i__2 : s_rnge("matrix", i__2, "mxv_", (ftnlen)157)] * 
+	prodv[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "prodv", i__1, "mxv_", (ftnlen)157)] = 
+		matrix[(i__2 = i__ - 1) < 9 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "matrix", i__2, "mxv_", (ftnlen)157)] * 
 		vin[0] + matrix[(i__3 = i__ + 2) < 9 && 0 <= i__3 ? i__3 : 
-		s_rnge("matrix", i__3, "mxv_", (ftnlen)157)] * vin[1] + 
-		matrix[(i__4 = i__ + 5) < 9 && 0 <= i__4 ? i__4 : s_rnge(
-		"matrix", i__4, "mxv_", (ftnlen)157)] * vin[2];
+		s_rnge(&__global_state->f2c, "matrix", i__3, "mxv_", (ftnlen)
+		157)] * vin[1] + matrix[(i__4 = i__ + 5) < 9 && 0 <= i__4 ? 
+		i__4 : s_rnge(&__global_state->f2c, "matrix", i__4, "mxv_", (
+		ftnlen)157)] * vin[2];
     }
 
 /*  Move the buffered vector into the output vector VOUT. */

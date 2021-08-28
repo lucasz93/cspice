@@ -279,7 +279,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "pcpool_c" );
+   chkin_c ( naif_state, "pcpool_c" );
 
    /*
    Check the input kernel variable name to make sure the pointer is

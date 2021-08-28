@@ -8,8 +8,7 @@
 
 
 extern zzgetbff_init_t __zzgetbff_init;
-static zzgetbff_state_t* get_zzgetbff_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzgetbff_state_t* get_zzgetbff_state(cspice_t* state) {
 	if (!state->zzgetbff)
 		state->zzgetbff = __cspice_allocate_module(sizeof(
 	zzgetbff_state_t), &__zzgetbff_init, sizeof(__zzgetbff_init));
@@ -18,7 +17,7 @@ static zzgetbff_state_t* get_zzgetbff_state() {
 }
 
 /* $Procedure ZZGETBFF ( Private --- Get Binary File Format ) */
-/* Subroutine */ int zzgetbff_(integer *bffid)
+/* Subroutine */ int zzgetbff_(cspice_t* __global_state, integer *bffid)
 {
     /* Initialized data */
 
@@ -27,7 +26,7 @@ static zzgetbff_state_t* get_zzgetbff_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
@@ -35,7 +34,7 @@ static zzgetbff_state_t* get_zzgetbff_state() {
 #define iequiv ((integer *)__state->equiv_0)
 
     /* Module state */
-    zzgetbff_state_t* __state = get_zzgetbff_state();
+    zzgetbff_state_t* __state = get_zzgetbff_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -474,9 +473,10 @@ static zzgetbff_state_t* get_zzgetbff_state() {
     *bffid = 0;
     for (i__ = 1; i__ <= 4; ++i__) {
 	if (iequiv[0] == __state->int1st[(i__1 = i__ - 1) < 4 && 0 <= i__1 ? 
-		i__1 : s_rnge("int1st", i__1, "zzgetbff_", (ftnlen)215)] && 
-		iequiv[1] == __state->int2nd[(i__2 = i__ - 1) < 4 && 0 <= 
-		i__2 ? i__2 : s_rnge("int2nd", i__2, "zzgetbff_", (ftnlen)215)
+		i__1 : s_rnge(&__global_state->f2c, "int1st", i__1, "zzgetbf"
+		"f_", (ftnlen)215)] && iequiv[1] == __state->int2nd[(i__2 = 
+		i__ - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "int2nd", i__2, "zzgetbff_", (ftnlen)215)
 		]) {
 	    *bffid = i__;
 	}

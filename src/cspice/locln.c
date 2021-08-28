@@ -8,8 +8,7 @@
 
 
 extern locln_init_t __locln_init;
-static locln_state_t* get_locln_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline locln_state_t* get_locln_state(cspice_t* state) {
 	if (!state->locln)
 		state->locln = __cspice_allocate_module(sizeof(locln_state_t),
 	 &__locln_init, sizeof(__locln_init));
@@ -18,39 +17,42 @@ static locln_state_t* get_locln_state() {
 }
 
 /* $Procedure LOCLN ( Locate lines in a text file ) */
-/* Subroutine */ int locln_(integer *unit, char *bmark, char *emark, char *
-	line, integer *bline, integer *eline, logical *found, ftnlen 
-	bmark_len, ftnlen emark_len, ftnlen line_len)
+/* Subroutine */ int locln_(cspice_t* __global_state, integer *unit, char *
+	bmark, char *emark, char *line, integer *bline, integer *eline, 
+	logical *found, ftnlen bmark_len, ftnlen emark_len, ftnlen line_len)
 {
     /* System generated locals */
     integer i__1;
     cilist ci__1;
 
     /* Builtin functions */
-    integer s_rsfe(cilist *), do_fio(integer *, char *, ftnlen), e_rsfe(void),
-	     s_cmp(char *, char *, ftnlen, ftnlen);
+    integer s_rsfe(f2c_state_t*, cilist *), do_fio(f2c_state_t*, integer *, 
+	    char *, ftnlen), e_rsfe(f2c_state_t*), s_cmp(f2c_state_t*, char *,
+	     char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern integer ltrim_(char *, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern integer ltrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical bfound;
     logical efound;
     integer bltemp;
     integer eltemp;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     logical eof;
 
 
     /* Module state */
-    locln_state_t* __state = get_locln_state();
+    locln_state_t* __state = get_locln_state(__global_state);
 /* $ Abstract */
 
 /*     Locate a group of lines in a text file delimited by markers. */
@@ -469,10 +471,10 @@ static locln_state_t* get_locln_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("LOCLN", (ftnlen)5);
+	chkin_(__global_state, "LOCLN", (ftnlen)5);
     }
 
 /*     We'll use temporary variables BLTEMP and ELTEMP for BLINE and */
@@ -496,15 +498,15 @@ static locln_state_t* get_locln_state() {
 	ci__1.ciend = 1;
 	ci__1.ciunit = *unit;
 	ci__1.cifmt = "(A)";
-	iostat = s_rsfe(&ci__1);
+	iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = do_fio(&__state->c__1, line, line_len);
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, line_len);
 	if (iostat != 0) {
 	    goto L100001;
 	}
-	iostat = e_rsfe();
+	iostat = e_rsfe(&__global_state->f2c);
 L100001:
 
 /*        An end-of-file condition is indicated by a negative value */
@@ -512,14 +514,14 @@ L100001:
 /*        error. */
 
 	if (iostat > 0) {
-	    setmsg_("While searching for BMARK = #, an attempt to read the f"
-		    "ile named FILENAME failed.  The value of IOSTAT is #.", (
-		    ftnlen)108);
-	    errch_("#", bmark, (ftnlen)1, bmark_len);
-	    errint_("#", &iostat, (ftnlen)1);
-	    errfnm_("FILENAME", unit, (ftnlen)8);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("LOCLN", (ftnlen)5);
+	    setmsg_(__global_state, "While searching for BMARK = #, an attem"
+		    "pt to read the file named FILENAME failed.  The value of"
+		    " IOSTAT is #.", (ftnlen)108);
+	    errch_(__global_state, "#", bmark, (ftnlen)1, bmark_len);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    errfnm_(__global_state, "FILENAME", unit, (ftnlen)8);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "LOCLN", (ftnlen)5);
 	    return 0;
 	} else if (iostat < 0) {
 	    eof = TRUE_;
@@ -529,19 +531,20 @@ L100001:
 /*           check for a match. */
 
 	    ++bltemp;
-	    ljust_(line, line, line_len, line_len);
+	    ljust_(__global_state, line, line, line_len, line_len);
 
 /*           By convention, if BMARK is blank, it matches the */
 /*           first line that we read.  If it is not blank, we */
 /*           compare it to the line just read, ignoring leading */
 /*           and trailing blanks. */
 
-	    if (s_cmp(bmark, " ", bmark_len, (ftnlen)1) == 0) {
+	    if (s_cmp(&__global_state->f2c, bmark, " ", bmark_len, (ftnlen)1) 
+		    == 0) {
 		bfound = TRUE_;
 	    } else {
-		i__1 = ltrim_(bmark, bmark_len) - 1;
-		if (s_cmp(bmark + i__1, line, bmark_len - i__1, line_len) == 
-			0) {
+		i__1 = ltrim_(__global_state, bmark, bmark_len) - 1;
+		if (s_cmp(&__global_state->f2c, bmark + i__1, line, bmark_len 
+			- i__1, line_len) == 0) {
 		    bfound = TRUE_;
 		}
 	    }
@@ -556,15 +559,15 @@ L100001:
 	ci__1.ciend = 1;
 	ci__1.ciunit = *unit;
 	ci__1.cifmt = "(A)";
-	iostat = s_rsfe(&ci__1);
+	iostat = s_rsfe(&__global_state->f2c, &ci__1);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_fio(&__state->c__1, line, line_len);
+	iostat = do_fio(&__global_state->f2c, &__state->c__1, line, line_len);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = e_rsfe();
+	iostat = e_rsfe(&__global_state->f2c);
 L100002:
 
 /*        An end-of-file condition is indicated by a negative value */
@@ -572,14 +575,14 @@ L100002:
 /*        error. */
 
 	if (iostat > 0) {
-	    setmsg_("While searching for EMARK = #, an attempt to read the f"
-		    "ile named FILENAME failed.  The value of IOSTAT is #.", (
-		    ftnlen)108);
-	    errch_("#", emark, (ftnlen)1, emark_len);
-	    errint_("#", &iostat, (ftnlen)1);
-	    errfnm_("FILENAME", unit, (ftnlen)8);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("LOCLN", (ftnlen)5);
+	    setmsg_(__global_state, "While searching for EMARK = #, an attem"
+		    "pt to read the file named FILENAME failed.  The value of"
+		    " IOSTAT is #.", (ftnlen)108);
+	    errch_(__global_state, "#", emark, (ftnlen)1, emark_len);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    errfnm_(__global_state, "FILENAME", unit, (ftnlen)8);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "LOCLN", (ftnlen)5);
 	    return 0;
 	} else if (iostat < 0) {
 	    eof = TRUE_;
@@ -587,7 +590,8 @@ L100002:
 /*           By convention, if EMARK is blank, it matches the */
 /*           last line in the file. */
 
-	    if (s_cmp(emark, " ", emark_len, (ftnlen)1) == 0) {
+	    if (s_cmp(&__global_state->f2c, emark, " ", emark_len, (ftnlen)1) 
+		    == 0) {
 		efound = TRUE_;
 	    }
 	} else {
@@ -596,11 +600,12 @@ L100002:
 /*           a match. */
 
 	    ++eltemp;
-	    ljust_(line, line, line_len, line_len);
-	    if (s_cmp(emark, " ", emark_len, (ftnlen)1) != 0) {
-		i__1 = ltrim_(emark, emark_len) - 1;
-		if (s_cmp(emark + i__1, line, emark_len - i__1, line_len) == 
-			0) {
+	    ljust_(__global_state, line, line, line_len, line_len);
+	    if (s_cmp(&__global_state->f2c, emark, " ", emark_len, (ftnlen)1) 
+		    != 0) {
+		i__1 = ltrim_(__global_state, emark, emark_len) - 1;
+		if (s_cmp(&__global_state->f2c, emark + i__1, line, emark_len 
+			- i__1, line_len) == 0) {
 		    efound = TRUE_;
 		}
 	    }
@@ -615,7 +620,7 @@ L100002:
 	*bline = bltemp;
 	*eline = eltemp;
     }
-    chkout_("LOCLN", (ftnlen)5);
+    chkout_(__global_state, "LOCLN", (ftnlen)5);
     return 0;
 } /* locln_ */
 

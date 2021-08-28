@@ -8,8 +8,7 @@
 
 
 extern dpstrf_init_t __dpstrf_init;
-static dpstrf_state_t* get_dpstrf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dpstrf_state_t* get_dpstrf_state(cspice_t* state) {
 	if (!state->dpstrf)
 		state->dpstrf = __cspice_allocate_module(sizeof(
 	dpstrf_state_t), &__dpstrf_init, sizeof(__dpstrf_init));
@@ -18,28 +17,29 @@ static dpstrf_state_t* get_dpstrf_state() {
 }
 
 /* $Procedure      DPSTRF ( Double Precision Number to Character ) */
-/* Subroutine */ int dpstrf_(doublereal *x, integer *sigdig, char *format, 
-	char *string, ftnlen format_len, ftnlen string_len)
+/* Subroutine */ int dpstrf_(cspice_t* __global_state, doublereal *x, integer 
+	*sigdig, char *format, char *string, ftnlen format_len, ftnlen 
+	string_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer i_len(char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
 
     /* Local variables */
     integer last;
     integer i__;
     integer j;
-    extern /* Subroutine */ int zzvsbstr_(integer *, integer *, logical *, 
-	    char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzvsbstr_(cspice_t*, integer *, integer *, 
+	    logical *, char *, logical *, ftnlen);
     doublereal y;
-    extern /* Subroutine */ int zzvststr_(doublereal *, char *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int zzvststr_(cspice_t*, doublereal *, char *, 
+	    integer *, ftnlen);
     integer first;
-    extern /* Subroutine */ int dpstr_(doublereal *, integer *, char *, 
-	    ftnlen);
+    extern /* Subroutine */ int dpstr_(cspice_t*, doublereal *, integer *, 
+	    char *, ftnlen);
     integer maxdig;
     integer lastch;
     logical ovflow;
@@ -47,7 +47,7 @@ static dpstrf_state_t* get_dpstrf_state() {
 
 
     /* Module state */
-    dpstrf_state_t* __state = get_dpstrf_state();
+    dpstrf_state_t* __state = get_dpstrf_state(__global_state);
 /* $ Abstract */
 
 /*     Take a double precision number and convert it to an */
@@ -300,7 +300,7 @@ static dpstrf_state_t* get_dpstrf_state() {
 /*     If the format is 'E' we just let DPSTR handle the problem. */
 
     if (*(unsigned char *)format == 'E') {
-	dpstr_(x, &maxdig, string, string_len);
+	dpstr_(__global_state, x, &maxdig, string, string_len);
 	return 0;
     }
 
@@ -308,18 +308,18 @@ static dpstrf_state_t* get_dpstrf_state() {
 /*     the sign for the number. */
 
     if (*x < 0.) {
-	s_copy(string, "-", string_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, string, "-", string_len, (ftnlen)1);
     } else {
-	s_copy(string, " ", string_len, (ftnlen)1);
+	s_copy(&__global_state->f2c, string, " ", string_len, (ftnlen)1);
     }
 
 /*     If X is zero, we can handle this without any regard to the */
 /*     exponent. */
 
     if (*x == 0.) {
-	zzvststr_(x, " ", &exp__, (ftnlen)1);
-	zzvsbstr_(&__state->c_n1, &maxdig, &__state->c_false, string + 1, &
-		ovflow, string_len - 1);
+	zzvststr_(__global_state, x, " ", &exp__, (ftnlen)1);
+	zzvsbstr_(__global_state, &__state->c_n1, &maxdig, &__state->c_false, 
+		string + 1, &ovflow, string_len - 1);
 	return 0;
     }
 
@@ -330,7 +330,7 @@ static dpstrf_state_t* get_dpstrf_state() {
 
 /*     Create a virtual decimal string for Y. */
 
-    zzvststr_(&y, " ", &exp__, (ftnlen)1);
+    zzvststr_(__global_state, &y, " ", &exp__, (ftnlen)1);
 
 /*     Now we can just fill in the string by reading the appropriate */
 /*     substring from the virtual decimal string.  We need to compute */
@@ -347,30 +347,31 @@ static dpstrf_state_t* get_dpstrf_state() {
 	++last;
     }
     first = min(-1,first);
-    zzvsbstr_(&first, &last, &__state->c_true, string + 1, &ovflow, 
-	    string_len - 1);
+    zzvsbstr_(__global_state, &first, &last, &__state->c_true, string + 1, &
+	    ovflow, string_len - 1);
     if (ovflow) {
 	--first;
-	zzvsbstr_(&first, &last, &__state->c_true, string + 1, &ovflow, 
-		string_len - 1);
+	zzvsbstr_(__global_state, &first, &last, &__state->c_true, string + 1,
+		 &ovflow, string_len - 1);
 
 /*        We need to blank out the last digit of string. */
 
 	lastch = last - first + 2;
-	if (last > 0 && lastch <= i_len(string, string_len)) {
-	    s_copy(string + (lastch - 1), " ", string_len - (lastch - 1), (
-		    ftnlen)1);
+	if (last > 0 && lastch <= i_len(&__global_state->f2c, string, 
+		string_len)) {
+	    s_copy(&__global_state->f2c, string + (lastch - 1), " ", 
+		    string_len - (lastch - 1), (ftnlen)1);
 	}
     }
     if (last < 0) {
 	j = last - first + 3;
 	for (i__ = last + 1; i__ <= -1; ++i__) {
-	    if (j <= i_len(string, string_len)) {
+	    if (j <= i_len(&__global_state->f2c, string, string_len)) {
 		*(unsigned char *)&string[j - 1] = '0';
 	    }
 	    ++j;
 	}
-	if (j <= i_len(string, string_len)) {
+	if (j <= i_len(&__global_state->f2c, string, string_len)) {
 	    *(unsigned char *)&string[j - 1] = '.';
 	}
     }

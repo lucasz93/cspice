@@ -8,8 +8,7 @@
 
 
 extern pcke03_init_t __pcke03_init;
-static pcke03_state_t* get_pcke03_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline pcke03_state_t* get_pcke03_state(cspice_t* state) {
 	if (!state->pcke03)
 		state->pcke03 = __cspice_allocate_module(sizeof(
 	pcke03_state_t), &__pcke03_init, sizeof(__pcke03_init));
@@ -18,40 +17,40 @@ static pcke03_state_t* get_pcke03_state() {
 }
 
 /* $Procedure PCKE03 ( PCK, evaluate data record from type 3 segment ) */
-/* Subroutine */ int pcke03_(doublereal *et, doublereal *record, doublereal *
-	rotmat)
+/* Subroutine */ int pcke03_(cspice_t* __global_state, doublereal *et, 
+	doublereal *record, doublereal *rotmat)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
-	    *, integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int eul2m_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, integer *, integer *, integer *, doublereal *);
     integer i__;
     integer j;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
-	    *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vcrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     integer degree;
-    extern /* Subroutine */ int chbval_(doublereal *, integer *, doublereal *,
-	     doublereal *, doublereal *);
+    extern /* Subroutine */ int chbval_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, doublereal *, doublereal *);
     integer ncoeff;
-    extern doublereal halfpi_(void);
+    extern doublereal halfpi_(cspice_t*);
     integer cofloc;
     doublereal eulang[6];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     doublereal drotdt[9]	/* was [3][3] */;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     doublereal mav[3];
-    extern doublereal rpd_(void);
+    extern doublereal rpd_(cspice_t*);
     doublereal rot[9]	/* was [3][3] */;
 
 
     /* Module state */
-    pcke03_state_t* __state = get_pcke03_state();
+    pcke03_state_t* __state = get_pcke03_state(__global_state);
 /* $ Abstract */
 
 /*     Evaluate a single PCK data record from a segment of type 03 */
@@ -236,10 +235,10 @@ static pcke03_state_t* get_pcke03_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("PCKE03", (ftnlen)6);
+	chkin_(__global_state, "PCKE03", (ftnlen)6);
     }
 
 /*     The first number in the record is the number of Chebyshev */
@@ -285,24 +284,26 @@ static pcke03_state_t* get_pcke03_state() {
 /*        parameters, which are located, in our case, in the second and */
 /*        third slots of the record. */
 
-	chbval_(&record[cofloc - 1], &degree, &record[1], et, &eulang[(i__1 = 
-		i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("eulang", i__1, 
-		"pcke03_", (ftnlen)262)]);
+	chbval_(__global_state, &record[cofloc - 1], &degree, &record[1], et, 
+		&eulang[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "eulang", i__1, "pcke03_", (ftnlen)262)])
+		;
 
 /*        Convert to radians. */
 
-	eulang[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("eulang", 
-		i__1, "pcke03_", (ftnlen)267)] = rpd_() * eulang[(i__2 = i__ 
-		- 1) < 6 && 0 <= i__2 ? i__2 : s_rnge("eulang", i__2, "pcke0"
-		"3_", (ftnlen)267)];
+	eulang[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "eulang", i__1, "pcke03_", (ftnlen)267)] 
+		= rpd_(__global_state) * eulang[(i__2 = i__ - 1) < 6 && 0 <= 
+		i__2 ? i__2 : s_rnge(&__global_state->f2c, "eulang", i__2, 
+		"pcke03_", (ftnlen)267)];
     }
 
 /*     EULANG(1) is RA make it PHI */
 /*     EULANG(2) is DEC make it DELTA */
 /*     EULANG(3) is W */
 
-    eulang[0] = halfpi_() + eulang[0];
-    eulang[1] = halfpi_() - eulang[1];
+    eulang[0] = halfpi_(__global_state) + eulang[0];
+    eulang[1] = halfpi_(__global_state) - eulang[1];
 
 /*     Before we obtain the state transformation matrix, we need to */
 /*     compute the rotation components of the transformation.. */
@@ -323,8 +324,8 @@ static pcke03_state_t* get_pcke03_state() {
 
 /*     Compute the rotation associated with the Euler angles. */
 
-    eul2m_(&eulang[2], &eulang[1], eulang, &__state->c__3, &__state->c__1, &
-	    __state->c__3, rot);
+    eul2m_(__global_state, &eulang[2], &eulang[1], eulang, &__state->c__3, &
+	    __state->c__1, &__state->c__3, rot);
 
 /*     This rotation transforms positions relative to the inertial */
 /*     frame to positions relative to the bodyfixed frame. */
@@ -377,31 +378,35 @@ static pcke03_state_t* get_pcke03_state() {
     mav[0] = -eulang[3];
     mav[1] = -eulang[4];
     mav[2] = -eulang[5];
-    vcrss_(mav, rot, drotdt);
-    vcrss_(mav, &rot[3], &drotdt[3]);
-    vcrss_(mav, &rot[6], &drotdt[6]);
+    vcrss_(__global_state, mav, rot, drotdt);
+    vcrss_(__global_state, mav, &rot[3], &drotdt[3]);
+    vcrss_(__global_state, mav, &rot[6], &drotdt[6]);
 
 /*     Now we simply fill in the blanks. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	for (j = 1; j <= 3; ++j) {
 	    rotmat[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rotmat", i__1, "pcke03_", (ftnlen)362)] = rot[(i__2 = 
-		    i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("rot", 
-		    i__2, "pcke03_", (ftnlen)362)];
+		    &__global_state->f2c, "rotmat", i__1, "pcke03_", (ftnlen)
+		    362)] = rot[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "rot", i__2, "pcke03_"
+		    , (ftnlen)362)];
 	    rotmat[(i__1 = i__ + 3 + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rotmat", i__1, "pcke03_", (ftnlen)363)] = drotdt[(
-		    i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-		    "drotdt", i__2, "pcke03_", (ftnlen)363)];
+		    s_rnge(&__global_state->f2c, "rotmat", i__1, "pcke03_", (
+		    ftnlen)363)] = drotdt[(i__2 = i__ + j * 3 - 4) < 9 && 0 <=
+		     i__2 ? i__2 : s_rnge(&__global_state->f2c, "drotdt", 
+		    i__2, "pcke03_", (ftnlen)363)];
 	    rotmat[(i__1 = i__ + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rotmat", i__1, "pcke03_", (ftnlen)364)] = 0.;
+		    s_rnge(&__global_state->f2c, "rotmat", i__1, "pcke03_", (
+		    ftnlen)364)] = 0.;
 	    rotmat[(i__1 = i__ + 3 + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? 
-		    i__1 : s_rnge("rotmat", i__1, "pcke03_", (ftnlen)365)] = 
-		    rot[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : 
-		    s_rnge("rot", i__2, "pcke03_", (ftnlen)365)];
+		    i__1 : s_rnge(&__global_state->f2c, "rotmat", i__1, "pck"
+		    "e03_", (ftnlen)365)] = rot[(i__2 = i__ + j * 3 - 4) < 9 &&
+		     0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "rot", 
+		    i__2, "pcke03_", (ftnlen)365)];
 	}
     }
-    chkout_("PCKE03", (ftnlen)6);
+    chkout_(__global_state, "PCKE03", (ftnlen)6);
     return 0;
 } /* pcke03_ */
 

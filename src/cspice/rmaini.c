@@ -8,23 +8,22 @@
 
 
 typedef int rmaini_state_t;
-static rmaini_state_t* get_rmaini_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline rmaini_state_t* get_rmaini_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      RMAINI ( Remainder --- integer ) */
-/* Subroutine */ int rmaini_(integer *num, integer *denom, integer *q, 
-	integer *rem)
+/* Subroutine */ int rmaini_(cspice_t* __global_state, integer *num, integer *
+	denom, integer *q, integer *rem)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
 
 
     /* Module state */
-    rmaini_state_t* __state = get_rmaini_state();
+    rmaini_state_t* __state = get_rmaini_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the integer quotient and non-negative remainder */
@@ -150,11 +149,11 @@ static rmaini_state_t* get_rmaini_state() {
 /*     Take care of the zero-denominator case first */
 
     if ((doublereal) (*denom) == 0.) {
-	chkin_("RMAINI", (ftnlen)6);
-	setmsg_("Attempting to compute a quotient with a divide by zero.", (
-		ftnlen)55);
-	sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-	chkout_("RMAINI", (ftnlen)6);
+	chkin_(__global_state, "RMAINI", (ftnlen)6);
+	setmsg_(__global_state, "Attempting to compute a quotient with a div"
+		"ide by zero.", (ftnlen)55);
+	sigerr_(__global_state, "SPICE(DIVIDEBYZERO)", (ftnlen)19);
+	chkout_(__global_state, "RMAINI", (ftnlen)6);
 	return 0;
     }
     *q = *num / *denom;

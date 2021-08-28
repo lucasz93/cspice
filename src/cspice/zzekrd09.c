@@ -8,8 +8,7 @@
 
 
 extern zzekrd09_init_t __zzekrd09_init;
-static zzekrd09_state_t* get_zzekrd09_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekrd09_state_t* get_zzekrd09_state(cspice_t* state) {
 	if (!state->zzekrd09)
 		state->zzekrd09 = __cspice_allocate_module(sizeof(
 	zzekrd09_state_t), &__zzekrd09_init, sizeof(__zzekrd09_init));
@@ -18,27 +17,28 @@ static zzekrd09_state_t* get_zzekrd09_state() {
 }
 
 /* $Procedure   ZZEKRD09 ( EK, read class 9 column entry elements ) */
-/* Subroutine */ int zzekrd09_(integer *handle, integer *segdsc, integer *
-	coldsc, integer *recno, integer *cvlen, char *cval, logical *isnull, 
-	ftnlen cval_len)
+/* Subroutine */ int zzekrd09_(cspice_t* __global_state, integer *handle, 
+	integer *segdsc, integer *coldsc, integer *recno, integer *cvlen, 
+	char *cval, logical *isnull, ftnlen cval_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer mdat[2];
-    extern /* Subroutine */ int zzekcnam_(integer *, integer *, char *, 
-	    ftnlen);
+    extern /* Subroutine */ int zzekcnam_(cspice_t*, integer *, integer *, 
+	    char *, ftnlen);
     char cflag[1];
     integer l;
     integer q;
     integer r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer ncols;
     char column[32];
     integer addrss;
@@ -48,20 +48,20 @@ static zzekrd09_state_t* get_zzekrd09_state() {
     integer nflbas;
     integer offset;
     logical nullok;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int errhan_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int errhan_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int dasrdc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
     integer spp;
 
 
     /* Module state */
-    zzekrd09_state_t* __state = get_zzekrd09_state();
+    zzekrd09_state_t* __state = get_zzekrd09_state(__global_state);
 /* $ Abstract */
 
 /*     Read a column entry from a specified record in a class 9 column. */
@@ -868,16 +868,16 @@ static zzekrd09_state_t* get_zzekrd09_state() {
     nullok = coldsc[7] == 1;
     l = coldsc[2];
     if (colidx < 1 || colidx > ncols) {
-	chkin_("ZZEKRD09", (ftnlen)8);
-	setmsg_("Column index = #; valid range is 1:#.SEGNO = #; RECNO = #; "
-		"EK = #", (ftnlen)65);
-	errint_("#", &colidx, (ftnlen)1);
-	errint_("#", &ncols, (ftnlen)1);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("ZZEKRD09", (ftnlen)8);
+	chkin_(__global_state, "ZZEKRD09", (ftnlen)8);
+	setmsg_(__global_state, "Column index = #; valid range is 1:#.SEGNO "
+		"= #; RECNO = #; EK = #", (ftnlen)65);
+	errint_(__global_state, "#", &colidx, (ftnlen)1);
+	errint_(__global_state, "#", &ncols, (ftnlen)1);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKRD09", (ftnlen)8);
 	return 0;
     }
 
@@ -885,26 +885,26 @@ static zzekrd09_state_t* get_zzekrd09_state() {
 /*     know the string length. */
 
     *cvlen = l;
-    if (*cvlen > i_len(cval, cval_len)) {
+    if (*cvlen > i_len(&__global_state->f2c, cval, cval_len)) {
 
 /*        We have a string truncation error.  Look up the column */
 /*        name, record number, and file name before signaling an */
 /*        error. */
 
-	zzekcnam_(handle, coldsc, column, (ftnlen)32);
-	chkin_("ZZEKRD09", (ftnlen)8);
-	setmsg_("String value has length #; output string can hold only # ch"
-		"aracters.  COLUMN = #; SEGNO = #; RECNO = #; EK = #", (ftnlen)
-		110);
-	errint_("#", cvlen, (ftnlen)1);
-	i__1 = i_len(cval, cval_len);
-	errint_("#", &i__1, (ftnlen)1);
-	errch_("#", column, (ftnlen)1, (ftnlen)32);
-	errint_("#", &segdsc[1], (ftnlen)1);
-	errint_("#", recno, (ftnlen)1);
-	errhan_("#", handle, (ftnlen)1);
-	sigerr_("SPICE(STRINGTRUNCATED)", (ftnlen)22);
-	chkout_("ZZEKRD09", (ftnlen)8);
+	zzekcnam_(__global_state, handle, coldsc, column, (ftnlen)32);
+	chkin_(__global_state, "ZZEKRD09", (ftnlen)8);
+	setmsg_(__global_state, "String value has length #; output string ca"
+		"n hold only # characters.  COLUMN = #; SEGNO = #; RECNO = #;"
+		" EK = #", (ftnlen)110);
+	errint_(__global_state, "#", cvlen, (ftnlen)1);
+	i__1 = i_len(&__global_state->f2c, cval, cval_len);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	errch_(__global_state, "#", column, (ftnlen)1, (ftnlen)32);
+	errint_(__global_state, "#", &segdsc[1], (ftnlen)1);
+	errint_(__global_state, "#", recno, (ftnlen)1);
+	errhan_(__global_state, "#", handle, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(STRINGTRUNCATED)", (ftnlen)22);
+	chkout_(__global_state, "ZZEKRD09", (ftnlen)8);
 	return 0;
     }
 
@@ -916,7 +916,7 @@ static zzekrd09_state_t* get_zzekrd09_state() {
 
     i__1 = metloc + 1;
     i__2 = metloc + 2;
-    dasrdi_(handle, &i__1, &i__2, mdat);
+    dasrdi_(__global_state, handle, &i__1, &i__2, mdat);
     datbas = mdat[0];
     nflbas = mdat[1];
 
@@ -932,8 +932,8 @@ static zzekrd09_state_t* get_zzekrd09_state() {
 	r__ = *recno - q * 1014;
 	offset = r__ + (q << 10);
 	addrss = nflbas + offset;
-	dasrdc_(handle, &addrss, &addrss, &__state->c__1, &__state->c__1, 
-		cflag, (ftnlen)1);
+	dasrdc_(__global_state, handle, &addrss, &addrss, &__state->c__1, &
+		__state->c__1, cflag, (ftnlen)1);
 	*isnull = *(unsigned char *)cflag == 'T';
 	if (*isnull) {
 	    return 0;
@@ -953,13 +953,15 @@ static zzekrd09_state_t* get_zzekrd09_state() {
     r__ = *recno - q * spp;
     addrss = datbas + (q << 10) + (r__ - 1) * l + 1;
     i__1 = addrss + l - 1;
-    dasrdc_(handle, &addrss, &i__1, &__state->c__1, &l, cval, cval_len);
+    dasrdc_(__global_state, handle, &addrss, &i__1, &__state->c__1, &l, cval, 
+	    cval_len);
 
 /*     Blank-pad CVAL if required. */
 
-    if (i_len(cval, cval_len) > l) {
+    if (i_len(&__global_state->f2c, cval, cval_len) > l) {
 	i__1 = l;
-	s_copy(cval + i__1, " ", cval_len - i__1, (ftnlen)1);
+	s_copy(&__global_state->f2c, cval + i__1, " ", cval_len - i__1, (
+		ftnlen)1);
     }
     return 0;
 } /* zzekrd09_ */

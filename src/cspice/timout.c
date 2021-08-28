@@ -8,8 +8,7 @@
 
 
 extern timout_init_t __timout_init;
-static timout_state_t* get_timout_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline timout_state_t* get_timout_state(cspice_t* state) {
 	if (!state->timout)
 		state->timout = __cspice_allocate_module(sizeof(
 	timout_state_t), &__timout_init, sizeof(__timout_init));
@@ -18,8 +17,8 @@ static timout_state_t* get_timout_state() {
 }
 
 /* $Procedure      TIMOUT ( Time Output ) */
-/* Subroutine */ int timout_(doublereal *et, char *pictur, char *output, 
-	ftnlen pictur_len, ftnlen output_len)
+/* Subroutine */ int timout_(cspice_t* __global_state, doublereal *et, char *
+	pictur, char *output, ftnlen pictur_len, ftnlen output_len)
 {
     /* Initialized data */
 
@@ -29,55 +28,61 @@ static timout_state_t* get_timout_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_rnge(char *, integer, char *, integer), s_cmp(char *, char *, 
-	    ftnlen, ftnlen);
-    double d_int(doublereal *);
-    integer i_dnnt(doublereal *);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_cmp(
+	    f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    double d_int(f2c_state_t*, doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int scan_(char *, char *, integer *, integer *, 
+    extern /* Subroutine */ int scan_(cspice_t*, char *, char *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
+	    integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int lcase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int dpfmt_(cspice_t*, doublereal *, char *, char *
+	    , ftnlen, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int gr2jul_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int jul2gr_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern integer bsrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int timdef_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int rmaind_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern integer brckti_(cspice_t*, integer *, integer *, integer *);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
+    extern doublereal unitim_(cspice_t*, doublereal *, char *, char *, ftnlen,
+	     ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int scanpr_(cspice_t*, integer *, char *, integer 
+	    *, integer *, ftnlen);
+    extern /* Subroutine */ int prefix_(cspice_t*, char *, integer *, char *, 
 	    ftnlen, ftnlen);
-    extern /* Subroutine */ int lcase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dpfmt_(doublereal *, char *, char *, ftnlen, 
-	    ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int gr2jul_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int jul2gr_(integer *, integer *, integer *, 
-	    integer *);
-    extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int timdef_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int rmaind_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern integer brckti_(integer *, integer *, integer *);
-    extern integer isrchi_(integer *, integer *, integer *);
-    extern doublereal unitim_(doublereal *, char *, char *, ftnlen, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int scanpr_(integer *, char *, integer *, integer 
-	    *, ftnlen);
-    extern /* Subroutine */ int prefix_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int scanrj_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    extern /* Subroutine */ int ttrans_(char *, char *, doublereal *, ftnlen, 
-	    ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern doublereal j2000_(void);
-    extern doublereal j1950_(void);
-    extern doublereal spd_(void);
-    extern /* Subroutine */ int zzutcpm_(char *, integer *, doublereal *, 
-	    doublereal *, integer *, logical *, ftnlen);
+    extern /* Subroutine */ int scanrj_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int ttrans_(cspice_t*, char *, char *, doublereal 
+	    *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern doublereal j2000_(cspice_t*);
+    extern doublereal j1950_(cspice_t*);
+    extern doublereal spd_(cspice_t*);
+    extern /* Subroutine */ int zzutcpm_(cspice_t*, char *, integer *, 
+	    doublereal *, doublereal *, integer *, logical *, ftnlen);
 
 
     /* Module state */
-    timout_state_t* __state = get_timout_state();
+    timout_state_t* __state = get_timout_state(__global_state);
 /* $ Abstract */
 
 /*     This routine converts an input epoch represented in TDB seconds */
@@ -780,10 +785,10 @@ static timout_state_t* get_timout_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("TIMOUT", (ftnlen)6);
+    chkin_(__global_state, "TIMOUT", (ftnlen)6);
 
 /*     Chapter 1. Initializations. */
 /*     ================================================================= */
@@ -794,51 +799,93 @@ static timout_state_t* get_timout_state() {
 
     if (__state->first) {
 	__state->first = FALSE_;
-	s_copy(__state->marks, "YYYY", (ftnlen)8, (ftnlen)4);
-	s_copy(__state->marks + 8, "YR", (ftnlen)8, (ftnlen)2);
-	s_copy(__state->marks + 16, "MON", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->marks + 24, "Mon", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->marks + 32, "mon", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->marks + 40, "MONTH", (ftnlen)8, (ftnlen)5);
-	s_copy(__state->marks + 48, "Month", (ftnlen)8, (ftnlen)5);
-	s_copy(__state->marks + 56, "month", (ftnlen)8, (ftnlen)5);
-	s_copy(__state->marks + 64, "MM", (ftnlen)8, (ftnlen)2);
-	s_copy(__state->marks + 72, "DOY", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->marks + 80, "WKD", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->marks + 88, "Wkd", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->marks + 96, "wkd", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->marks + 104, "WEEKDAY", (ftnlen)8, (ftnlen)7);
-	s_copy(__state->marks + 112, "Weekday", (ftnlen)8, (ftnlen)7);
-	s_copy(__state->marks + 120, "weekday", (ftnlen)8, (ftnlen)7);
-	s_copy(__state->marks + 128, "DD", (ftnlen)8, (ftnlen)2);
-	s_copy(__state->marks + 136, "MN", (ftnlen)8, (ftnlen)2);
-	s_copy(__state->marks + 144, "HR", (ftnlen)8, (ftnlen)2);
-	s_copy(__state->marks + 152, "SC", (ftnlen)8, (ftnlen)2);
-	s_copy(__state->marks + 160, ".#", (ftnlen)8, (ftnlen)2);
-	s_copy(__state->marks + 168, "#", (ftnlen)8, (ftnlen)1);
-	s_copy(__state->marks + 176, "JULIAND", (ftnlen)8, (ftnlen)7);
-	s_copy(__state->marks + 184, "::UTC", (ftnlen)8, (ftnlen)5);
-	s_copy(__state->marks + 192, "::TDB", (ftnlen)8, (ftnlen)5);
-	s_copy(__state->marks + 200, "::TDT", (ftnlen)8, (ftnlen)5);
-	s_copy(__state->marks + 208, "SP2000", (ftnlen)8, (ftnlen)6);
-	s_copy(__state->marks + 216, "SP1950", (ftnlen)8, (ftnlen)6);
-	s_copy(__state->marks + 224, "::RND", (ftnlen)8, (ftnlen)5);
-	s_copy(__state->marks + 232, "::TRNC", (ftnlen)8, (ftnlen)6);
-	s_copy(__state->marks + 240, "ERA", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->marks + 248, "era", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->marks + 256, "AMPM", (ftnlen)8, (ftnlen)4);
-	s_copy(__state->marks + 264, "ampm", (ftnlen)8, (ftnlen)4);
-	s_copy(__state->marks + 272, "::UTC+", (ftnlen)8, (ftnlen)6);
-	s_copy(__state->marks + 280, "::UTC-", (ftnlen)8, (ftnlen)6);
-	s_copy(__state->marks + 288, "::JCAL", (ftnlen)8, (ftnlen)6);
-	s_copy(__state->marks + 296, "::GCAL", (ftnlen)8, (ftnlen)6);
-	s_copy(__state->marks + 304, "::MCAL", (ftnlen)8, (ftnlen)6);
-	s_copy(__state->marks + 312, "AP", (ftnlen)8, (ftnlen)2);
-	s_copy(__state->marks + 320, "?ERA?", (ftnlen)8, (ftnlen)5);
-	s_copy(__state->marks + 328, "?era?", (ftnlen)8, (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->marks, "YYYY", (ftnlen)8, (
+		ftnlen)4);
+	s_copy(&__global_state->f2c, __state->marks + 8, "YR", (ftnlen)8, (
+		ftnlen)2);
+	s_copy(&__global_state->f2c, __state->marks + 16, "MON", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->marks + 24, "Mon", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->marks + 32, "mon", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->marks + 40, "MONTH", (ftnlen)8, 
+		(ftnlen)5);
+	s_copy(&__global_state->f2c, __state->marks + 48, "Month", (ftnlen)8, 
+		(ftnlen)5);
+	s_copy(&__global_state->f2c, __state->marks + 56, "month", (ftnlen)8, 
+		(ftnlen)5);
+	s_copy(&__global_state->f2c, __state->marks + 64, "MM", (ftnlen)8, (
+		ftnlen)2);
+	s_copy(&__global_state->f2c, __state->marks + 72, "DOY", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->marks + 80, "WKD", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->marks + 88, "Wkd", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->marks + 96, "wkd", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->marks + 104, "WEEKDAY", (ftnlen)
+		8, (ftnlen)7);
+	s_copy(&__global_state->f2c, __state->marks + 112, "Weekday", (ftnlen)
+		8, (ftnlen)7);
+	s_copy(&__global_state->f2c, __state->marks + 120, "weekday", (ftnlen)
+		8, (ftnlen)7);
+	s_copy(&__global_state->f2c, __state->marks + 128, "DD", (ftnlen)8, (
+		ftnlen)2);
+	s_copy(&__global_state->f2c, __state->marks + 136, "MN", (ftnlen)8, (
+		ftnlen)2);
+	s_copy(&__global_state->f2c, __state->marks + 144, "HR", (ftnlen)8, (
+		ftnlen)2);
+	s_copy(&__global_state->f2c, __state->marks + 152, "SC", (ftnlen)8, (
+		ftnlen)2);
+	s_copy(&__global_state->f2c, __state->marks + 160, ".#", (ftnlen)8, (
+		ftnlen)2);
+	s_copy(&__global_state->f2c, __state->marks + 168, "#", (ftnlen)8, (
+		ftnlen)1);
+	s_copy(&__global_state->f2c, __state->marks + 176, "JULIAND", (ftnlen)
+		8, (ftnlen)7);
+	s_copy(&__global_state->f2c, __state->marks + 184, "::UTC", (ftnlen)8,
+		 (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->marks + 192, "::TDB", (ftnlen)8,
+		 (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->marks + 200, "::TDT", (ftnlen)8,
+		 (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->marks + 208, "SP2000", (ftnlen)
+		8, (ftnlen)6);
+	s_copy(&__global_state->f2c, __state->marks + 216, "SP1950", (ftnlen)
+		8, (ftnlen)6);
+	s_copy(&__global_state->f2c, __state->marks + 224, "::RND", (ftnlen)8,
+		 (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->marks + 232, "::TRNC", (ftnlen)
+		8, (ftnlen)6);
+	s_copy(&__global_state->f2c, __state->marks + 240, "ERA", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->marks + 248, "era", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->marks + 256, "AMPM", (ftnlen)8, 
+		(ftnlen)4);
+	s_copy(&__global_state->f2c, __state->marks + 264, "ampm", (ftnlen)8, 
+		(ftnlen)4);
+	s_copy(&__global_state->f2c, __state->marks + 272, "::UTC+", (ftnlen)
+		8, (ftnlen)6);
+	s_copy(&__global_state->f2c, __state->marks + 280, "::UTC-", (ftnlen)
+		8, (ftnlen)6);
+	s_copy(&__global_state->f2c, __state->marks + 288, "::JCAL", (ftnlen)
+		8, (ftnlen)6);
+	s_copy(&__global_state->f2c, __state->marks + 296, "::GCAL", (ftnlen)
+		8, (ftnlen)6);
+	s_copy(&__global_state->f2c, __state->marks + 304, "::MCAL", (ftnlen)
+		8, (ftnlen)6);
+	s_copy(&__global_state->f2c, __state->marks + 312, "AP", (ftnlen)8, (
+		ftnlen)2);
+	s_copy(&__global_state->f2c, __state->marks + 320, "?ERA?", (ftnlen)8,
+		 (ftnlen)5);
+	s_copy(&__global_state->f2c, __state->marks + 328, "?era?", (ftnlen)8,
+		 (ftnlen)5);
 	__state->nmarks = 42;
-	scanpr_(&__state->nmarks, __state->marks, __state->mrklen, 
-		__state->pntrs, (ftnlen)8);
+	scanpr_(__global_state, &__state->nmarks, __state->marks, 
+		__state->mrklen, __state->pntrs, (ftnlen)8);
 
 /*        Now that we've prepared our recognized substrings and */
 /*        auxiliary arrays for scanning, collect the id's of the */
@@ -846,179 +893,223 @@ static timout_state_t* get_timout_state() {
 /*        substrings. */
 
 	__state->id[1] = 0;
-	__state->id[2] = bsrchc_("YYYY", &__state->nmarks, __state->marks, (
-		ftnlen)4, (ftnlen)8);
-	__state->id[3] = bsrchc_("YR", &__state->nmarks, __state->marks, (
-		ftnlen)2, (ftnlen)8);
-	__state->id[4] = bsrchc_("MON", &__state->nmarks, __state->marks, (
-		ftnlen)3, (ftnlen)8);
-	__state->id[5] = bsrchc_("Mon", &__state->nmarks, __state->marks, (
-		ftnlen)3, (ftnlen)8);
-	__state->id[6] = bsrchc_("mon", &__state->nmarks, __state->marks, (
-		ftnlen)3, (ftnlen)8);
-	__state->id[7] = bsrchc_("MONTH", &__state->nmarks, __state->marks, (
-		ftnlen)5, (ftnlen)8);
-	__state->id[8] = bsrchc_("Month", &__state->nmarks, __state->marks, (
-		ftnlen)5, (ftnlen)8);
-	__state->id[9] = bsrchc_("month", &__state->nmarks, __state->marks, (
-		ftnlen)5, (ftnlen)8);
-	__state->id[10] = bsrchc_("MM", &__state->nmarks, __state->marks, (
-		ftnlen)2, (ftnlen)8);
-	__state->id[11] = bsrchc_("DOY", &__state->nmarks, __state->marks, (
-		ftnlen)3, (ftnlen)8);
-	__state->id[12] = bsrchc_("WKD", &__state->nmarks, __state->marks, (
-		ftnlen)3, (ftnlen)8);
-	__state->id[13] = bsrchc_("Wkd", &__state->nmarks, __state->marks, (
-		ftnlen)3, (ftnlen)8);
-	__state->id[14] = bsrchc_("wkd", &__state->nmarks, __state->marks, (
-		ftnlen)3, (ftnlen)8);
-	__state->id[15] = bsrchc_("WEEKDAY", &__state->nmarks, __state->marks,
-		 (ftnlen)7, (ftnlen)8);
-	__state->id[16] = bsrchc_("Weekday", &__state->nmarks, __state->marks,
-		 (ftnlen)7, (ftnlen)8);
-	__state->id[17] = bsrchc_("weekday", &__state->nmarks, __state->marks,
-		 (ftnlen)7, (ftnlen)8);
-	__state->id[18] = bsrchc_("DD", &__state->nmarks, __state->marks, (
-		ftnlen)2, (ftnlen)8);
-	__state->id[19] = bsrchc_("MN", &__state->nmarks, __state->marks, (
-		ftnlen)2, (ftnlen)8);
-	__state->id[20] = bsrchc_("HR", &__state->nmarks, __state->marks, (
-		ftnlen)2, (ftnlen)8);
-	__state->id[21] = bsrchc_("SC", &__state->nmarks, __state->marks, (
-		ftnlen)2, (ftnlen)8);
-	__state->id[22] = bsrchc_(".#", &__state->nmarks, __state->marks, (
-		ftnlen)2, (ftnlen)8);
-	__state->id[23] = bsrchc_("#", &__state->nmarks, __state->marks, (
-		ftnlen)1, (ftnlen)8);
-	__state->id[24] = bsrchc_("JULIAND", &__state->nmarks, __state->marks,
-		 (ftnlen)7, (ftnlen)8);
-	__state->id[25] = bsrchc_("::UTC", &__state->nmarks, __state->marks, (
-		ftnlen)5, (ftnlen)8);
-	__state->id[26] = bsrchc_("::TDB", &__state->nmarks, __state->marks, (
-		ftnlen)5, (ftnlen)8);
-	__state->id[27] = bsrchc_("::TDT", &__state->nmarks, __state->marks, (
-		ftnlen)5, (ftnlen)8);
-	__state->id[28] = bsrchc_("SP2000", &__state->nmarks, __state->marks, 
-		(ftnlen)6, (ftnlen)8);
-	__state->id[29] = bsrchc_("SP1950", &__state->nmarks, __state->marks, 
-		(ftnlen)6, (ftnlen)8);
-	__state->id[30] = bsrchc_("::RND", &__state->nmarks, __state->marks, (
-		ftnlen)5, (ftnlen)8);
-	__state->id[31] = bsrchc_("::TRNC", &__state->nmarks, __state->marks, 
-		(ftnlen)6, (ftnlen)8);
-	__state->id[32] = bsrchc_("ERA", &__state->nmarks, __state->marks, (
-		ftnlen)3, (ftnlen)8);
-	__state->id[33] = bsrchc_("era", &__state->nmarks, __state->marks, (
-		ftnlen)3, (ftnlen)8);
-	__state->id[34] = bsrchc_("?ERA?", &__state->nmarks, __state->marks, (
-		ftnlen)5, (ftnlen)8);
-	__state->id[35] = bsrchc_("?era?", &__state->nmarks, __state->marks, (
-		ftnlen)5, (ftnlen)8);
-	__state->id[36] = bsrchc_("AMPM", &__state->nmarks, __state->marks, (
-		ftnlen)4, (ftnlen)8);
-	__state->id[37] = bsrchc_("ampm", &__state->nmarks, __state->marks, (
-		ftnlen)4, (ftnlen)8);
-	__state->id[38] = bsrchc_("::UTC+", &__state->nmarks, __state->marks, 
-		(ftnlen)6, (ftnlen)8);
-	__state->id[39] = bsrchc_("::UTC-", &__state->nmarks, __state->marks, 
-		(ftnlen)6, (ftnlen)8);
-	__state->id[40] = bsrchc_("::JCAL", &__state->nmarks, __state->marks, 
-		(ftnlen)6, (ftnlen)8);
-	__state->id[41] = bsrchc_("::GCAL", &__state->nmarks, __state->marks, 
-		(ftnlen)6, (ftnlen)8);
-	__state->id[42] = bsrchc_("::MCAL", &__state->nmarks, __state->marks, 
-		(ftnlen)6, (ftnlen)8);
-	__state->id[45] = bsrchc_("AP", &__state->nmarks, __state->marks, (
-		ftnlen)2, (ftnlen)8);
+	__state->id[2] = bsrchc_(__global_state, "YYYY", &__state->nmarks, 
+		__state->marks, (ftnlen)4, (ftnlen)8);
+	__state->id[3] = bsrchc_(__global_state, "YR", &__state->nmarks, 
+		__state->marks, (ftnlen)2, (ftnlen)8);
+	__state->id[4] = bsrchc_(__global_state, "MON", &__state->nmarks, 
+		__state->marks, (ftnlen)3, (ftnlen)8);
+	__state->id[5] = bsrchc_(__global_state, "Mon", &__state->nmarks, 
+		__state->marks, (ftnlen)3, (ftnlen)8);
+	__state->id[6] = bsrchc_(__global_state, "mon", &__state->nmarks, 
+		__state->marks, (ftnlen)3, (ftnlen)8);
+	__state->id[7] = bsrchc_(__global_state, "MONTH", &__state->nmarks, 
+		__state->marks, (ftnlen)5, (ftnlen)8);
+	__state->id[8] = bsrchc_(__global_state, "Month", &__state->nmarks, 
+		__state->marks, (ftnlen)5, (ftnlen)8);
+	__state->id[9] = bsrchc_(__global_state, "month", &__state->nmarks, 
+		__state->marks, (ftnlen)5, (ftnlen)8);
+	__state->id[10] = bsrchc_(__global_state, "MM", &__state->nmarks, 
+		__state->marks, (ftnlen)2, (ftnlen)8);
+	__state->id[11] = bsrchc_(__global_state, "DOY", &__state->nmarks, 
+		__state->marks, (ftnlen)3, (ftnlen)8);
+	__state->id[12] = bsrchc_(__global_state, "WKD", &__state->nmarks, 
+		__state->marks, (ftnlen)3, (ftnlen)8);
+	__state->id[13] = bsrchc_(__global_state, "Wkd", &__state->nmarks, 
+		__state->marks, (ftnlen)3, (ftnlen)8);
+	__state->id[14] = bsrchc_(__global_state, "wkd", &__state->nmarks, 
+		__state->marks, (ftnlen)3, (ftnlen)8);
+	__state->id[15] = bsrchc_(__global_state, "WEEKDAY", &__state->nmarks,
+		 __state->marks, (ftnlen)7, (ftnlen)8);
+	__state->id[16] = bsrchc_(__global_state, "Weekday", &__state->nmarks,
+		 __state->marks, (ftnlen)7, (ftnlen)8);
+	__state->id[17] = bsrchc_(__global_state, "weekday", &__state->nmarks,
+		 __state->marks, (ftnlen)7, (ftnlen)8);
+	__state->id[18] = bsrchc_(__global_state, "DD", &__state->nmarks, 
+		__state->marks, (ftnlen)2, (ftnlen)8);
+	__state->id[19] = bsrchc_(__global_state, "MN", &__state->nmarks, 
+		__state->marks, (ftnlen)2, (ftnlen)8);
+	__state->id[20] = bsrchc_(__global_state, "HR", &__state->nmarks, 
+		__state->marks, (ftnlen)2, (ftnlen)8);
+	__state->id[21] = bsrchc_(__global_state, "SC", &__state->nmarks, 
+		__state->marks, (ftnlen)2, (ftnlen)8);
+	__state->id[22] = bsrchc_(__global_state, ".#", &__state->nmarks, 
+		__state->marks, (ftnlen)2, (ftnlen)8);
+	__state->id[23] = bsrchc_(__global_state, "#", &__state->nmarks, 
+		__state->marks, (ftnlen)1, (ftnlen)8);
+	__state->id[24] = bsrchc_(__global_state, "JULIAND", &__state->nmarks,
+		 __state->marks, (ftnlen)7, (ftnlen)8);
+	__state->id[25] = bsrchc_(__global_state, "::UTC", &__state->nmarks, 
+		__state->marks, (ftnlen)5, (ftnlen)8);
+	__state->id[26] = bsrchc_(__global_state, "::TDB", &__state->nmarks, 
+		__state->marks, (ftnlen)5, (ftnlen)8);
+	__state->id[27] = bsrchc_(__global_state, "::TDT", &__state->nmarks, 
+		__state->marks, (ftnlen)5, (ftnlen)8);
+	__state->id[28] = bsrchc_(__global_state, "SP2000", &__state->nmarks, 
+		__state->marks, (ftnlen)6, (ftnlen)8);
+	__state->id[29] = bsrchc_(__global_state, "SP1950", &__state->nmarks, 
+		__state->marks, (ftnlen)6, (ftnlen)8);
+	__state->id[30] = bsrchc_(__global_state, "::RND", &__state->nmarks, 
+		__state->marks, (ftnlen)5, (ftnlen)8);
+	__state->id[31] = bsrchc_(__global_state, "::TRNC", &__state->nmarks, 
+		__state->marks, (ftnlen)6, (ftnlen)8);
+	__state->id[32] = bsrchc_(__global_state, "ERA", &__state->nmarks, 
+		__state->marks, (ftnlen)3, (ftnlen)8);
+	__state->id[33] = bsrchc_(__global_state, "era", &__state->nmarks, 
+		__state->marks, (ftnlen)3, (ftnlen)8);
+	__state->id[34] = bsrchc_(__global_state, "?ERA?", &__state->nmarks, 
+		__state->marks, (ftnlen)5, (ftnlen)8);
+	__state->id[35] = bsrchc_(__global_state, "?era?", &__state->nmarks, 
+		__state->marks, (ftnlen)5, (ftnlen)8);
+	__state->id[36] = bsrchc_(__global_state, "AMPM", &__state->nmarks, 
+		__state->marks, (ftnlen)4, (ftnlen)8);
+	__state->id[37] = bsrchc_(__global_state, "ampm", &__state->nmarks, 
+		__state->marks, (ftnlen)4, (ftnlen)8);
+	__state->id[38] = bsrchc_(__global_state, "::UTC+", &__state->nmarks, 
+		__state->marks, (ftnlen)6, (ftnlen)8);
+	__state->id[39] = bsrchc_(__global_state, "::UTC-", &__state->nmarks, 
+		__state->marks, (ftnlen)6, (ftnlen)8);
+	__state->id[40] = bsrchc_(__global_state, "::JCAL", &__state->nmarks, 
+		__state->marks, (ftnlen)6, (ftnlen)8);
+	__state->id[41] = bsrchc_(__global_state, "::GCAL", &__state->nmarks, 
+		__state->marks, (ftnlen)6, (ftnlen)8);
+	__state->id[42] = bsrchc_(__global_state, "::MCAL", &__state->nmarks, 
+		__state->marks, (ftnlen)6, (ftnlen)8);
+	__state->id[45] = bsrchc_(__global_state, "AP", &__state->nmarks, 
+		__state->marks, (ftnlen)2, (ftnlen)8);
 	__state->class__[(i__1 = __state->id[1]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1174)] = 2;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1174)] = 2;
 	__state->class__[(i__1 = __state->id[2]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1175)] = 3;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1175)] = 3;
 	__state->class__[(i__1 = __state->id[3]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1176)] = 4;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1176)] = 4;
 	__state->class__[(i__1 = __state->id[4]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1177)] = 47;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1177)] = 47;
 	__state->class__[(i__1 = __state->id[5]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1178)] = 47;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1178)] = 47;
 	__state->class__[(i__1 = __state->id[6]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1179)] = 47;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1179)] = 47;
 	__state->class__[(i__1 = __state->id[7]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1180)] = 47;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1180)] = 47;
 	__state->class__[(i__1 = __state->id[8]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1181)] = 47;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1181)] = 47;
 	__state->class__[(i__1 = __state->id[9]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1182)] = 47;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1182)] = 47;
 	__state->class__[(i__1 = __state->id[10]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1183)] = 11;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1183)] = 11;
 	__state->class__[(i__1 = __state->id[11]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1184)] = 12;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1184)] = 12;
 	__state->class__[(i__1 = __state->id[12]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1185)] = 48;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1185)] = 48;
 	__state->class__[(i__1 = __state->id[13]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1186)] = 48;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1186)] = 48;
 	__state->class__[(i__1 = __state->id[14]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1187)] = 48;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1187)] = 48;
 	__state->class__[(i__1 = __state->id[15]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1188)] = 48;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1188)] = 48;
 	__state->class__[(i__1 = __state->id[16]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1189)] = 48;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1189)] = 48;
 	__state->class__[(i__1 = __state->id[17]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1190)] = 48;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1190)] = 48;
 	__state->class__[(i__1 = __state->id[18]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1191)] = 19;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1191)] = 19;
 	__state->class__[(i__1 = __state->id[19]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1192)] = 20;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1192)] = 20;
 	__state->class__[(i__1 = __state->id[20]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1193)] = 21;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1193)] = 21;
 	__state->class__[(i__1 = __state->id[21]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1194)] = 22;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1194)] = 22;
 	__state->class__[(i__1 = __state->id[22]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1195)] = 23;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1195)] = 23;
 	__state->class__[(i__1 = __state->id[23]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1196)] = 24;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1196)] = 24;
 	__state->class__[(i__1 = __state->id[24]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1197)] = 25;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1197)] = 25;
 	__state->class__[(i__1 = __state->id[25]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1198)] = 44;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1198)] = 44;
 	__state->class__[(i__1 = __state->id[26]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1199)] = 44;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1199)] = 44;
 	__state->class__[(i__1 = __state->id[27]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1200)] = 44;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1200)] = 44;
 	__state->class__[(i__1 = __state->id[28]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1201)] = 29;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1201)] = 29;
 	__state->class__[(i__1 = __state->id[29]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1202)] = 30;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1202)] = 30;
 	__state->class__[(i__1 = __state->id[30]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1203)] = 31;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1203)] = 31;
 	__state->class__[(i__1 = __state->id[31]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1204)] = 32;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1204)] = 32;
 	__state->class__[(i__1 = __state->id[32]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1205)] = 49;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1205)] = 49;
 	__state->class__[(i__1 = __state->id[33]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1206)] = 49;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1206)] = 49;
 	__state->class__[(i__1 = __state->id[34]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1207)] = 49;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1207)] = 49;
 	__state->class__[(i__1 = __state->id[35]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1208)] = 49;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1208)] = 49;
 	__state->class__[(i__1 = __state->id[36]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1209)] = 50;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1209)] = 50;
 	__state->class__[(i__1 = __state->id[37]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1210)] = 50;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1210)] = 50;
 	__state->class__[(i__1 = __state->id[38]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1211)] = 44;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1211)] = 44;
 	__state->class__[(i__1 = __state->id[39]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1212)] = 44;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1212)] = 44;
 	__state->class__[(i__1 = __state->id[40]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1213)] = 45;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1213)] = 45;
 	__state->class__[(i__1 = __state->id[41]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1214)] = 45;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1214)] = 45;
 	__state->class__[(i__1 = __state->id[42]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1215)] = 45;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1215)] = 45;
 	__state->class__[(i__1 = __state->id[45]) < 43 && 0 <= i__1 ? i__1 : 
-		s_rnge("class", i__1, "timout_", (ftnlen)1216)] = 46;
+		s_rnge(&__global_state->f2c, "class", i__1, "timout_", (
+		ftnlen)1216)] = 46;
 	for (__state->i__ = 1; __state->i__ <= 51; ++__state->i__) {
 	    __state->pad[(i__1 = __state->i__ - 1) < 51 && 0 <= i__1 ? i__1 : 
-		    s_rnge("pad", i__1, "timout_", (ftnlen)1219)] = 0.;
+		    s_rnge(&__global_state->f2c, "pad", i__1, "timout_", (
+		    ftnlen)1219)] = 0.;
 	}
 	__state->pad[21] = .5;
 	__state->pad[19] = __state->pad[21] * 60.;
@@ -1052,29 +1143,41 @@ static timout_state_t* get_timout_state() {
 
 /*        Set up the default formats for the various time components */
 
-	s_copy(__state->orignl + 64, "YYYY", (ftnlen)32, (ftnlen)4);
+	s_copy(&__global_state->f2c, __state->orignl + 64, "YYYY", (ftnlen)32,
+		 (ftnlen)4);
 	__state->length[2] = 4;
-	s_copy(__state->orignl + 96, "0Y", (ftnlen)32, (ftnlen)2);
+	s_copy(&__global_state->f2c, __state->orignl + 96, "0Y", (ftnlen)32, (
+		ftnlen)2);
 	__state->length[3] = 2;
-	s_copy(__state->orignl + 352, "0DD", (ftnlen)32, (ftnlen)3);
+	s_copy(&__global_state->f2c, __state->orignl + 352, "0DD", (ftnlen)32,
+		 (ftnlen)3);
 	__state->length[11] = 3;
-	s_copy(__state->orignl + 576, "0D", (ftnlen)32, (ftnlen)2);
+	s_copy(&__global_state->f2c, __state->orignl + 576, "0D", (ftnlen)32, 
+		(ftnlen)2);
 	__state->length[18] = 2;
-	s_copy(__state->orignl + 320, "0M", (ftnlen)32, (ftnlen)2);
+	s_copy(&__global_state->f2c, __state->orignl + 320, "0M", (ftnlen)32, 
+		(ftnlen)2);
 	__state->length[10] = 2;
-	s_copy(__state->orignl + 640, "0H", (ftnlen)32, (ftnlen)2);
+	s_copy(&__global_state->f2c, __state->orignl + 640, "0H", (ftnlen)32, 
+		(ftnlen)2);
 	__state->length[20] = 2;
-	s_copy(__state->orignl + 1440, "0H", (ftnlen)32, (ftnlen)2);
+	s_copy(&__global_state->f2c, __state->orignl + 1440, "0H", (ftnlen)32,
+		 (ftnlen)2);
 	__state->length[45] = 2;
-	s_copy(__state->orignl + 608, "0M", (ftnlen)32, (ftnlen)2);
+	s_copy(&__global_state->f2c, __state->orignl + 608, "0M", (ftnlen)32, 
+		(ftnlen)2);
 	__state->length[19] = 2;
-	s_copy(__state->orignl + 672, "0S", (ftnlen)32, (ftnlen)2);
+	s_copy(&__global_state->f2c, __state->orignl + 672, "0S", (ftnlen)32, 
+		(ftnlen)2);
 	__state->length[21] = 2;
-	s_copy(__state->orignl + 768, "XXXXXXX", (ftnlen)32, (ftnlen)7);
+	s_copy(&__global_state->f2c, __state->orignl + 768, "XXXXXXX", (
+		ftnlen)32, (ftnlen)7);
 	__state->length[24] = 7;
-	s_copy(__state->orignl + 896, "XXXXXXXXXXX", (ftnlen)32, (ftnlen)11);
+	s_copy(&__global_state->f2c, __state->orignl + 896, "XXXXXXXXXXX", (
+		ftnlen)32, (ftnlen)11);
 	__state->length[28] = 11;
-	s_copy(__state->orignl + 928, "XXXXXXXXXXX", (ftnlen)32, (ftnlen)11);
+	s_copy(&__global_state->f2c, __state->orignl + 928, "XXXXXXXXXXX", (
+		ftnlen)32, (ftnlen)11);
 	__state->length[29] = 11;
 
 /*        Finally set up the component pointers... */
@@ -1097,17 +1200,17 @@ static timout_state_t* get_timout_state() {
 /*     output string will terminate with no unfinished business */
 /*     left to resolve). */
 
-    s_copy(__state->mystr, " ", (ftnlen)256, (ftnlen)1);
-    ljust_(pictur, __state->mystr, pictur_len, (ftnlen)255);
-    __state->e = rtrim_(__state->mystr, (ftnlen)256) + 1;
+    s_copy(&__global_state->f2c, __state->mystr, " ", (ftnlen)256, (ftnlen)1);
+    ljust_(__global_state, pictur, __state->mystr, pictur_len, (ftnlen)255);
+    __state->e = rtrim_(__global_state, __state->mystr, (ftnlen)256) + 1;
     __state->start = 1;
 
 /*     Scan the input string. */
 
-    scan_(__state->mystr, __state->marks, __state->mrklen, __state->pntrs, &
-	    __state->c__100, &__state->start, &__state->ntokns, 
-	    __state->ident, __state->beg, __state->end, __state->e, (ftnlen)8)
-	    ;
+    scan_(__global_state, __state->mystr, __state->marks, __state->mrklen, 
+	    __state->pntrs, &__state->c__100, &__state->start, &
+	    __state->ntokns, __state->ident, __state->beg, __state->end, 
+	    __state->e, (ftnlen)8);
 
 /*     Locate the time system that will be used.  This must */
 /*     be one of the following: UTC, TDB, TDT */
@@ -1121,20 +1224,25 @@ static timout_state_t* get_timout_state() {
 
 /*     Get the default time type from TIMDEF */
 
-    timdef_("GET", "SYSTEM", __state->tsys, (ftnlen)3, (ftnlen)6, (ftnlen)16);
-    if (s_cmp(__state->tsys, "UTC", (ftnlen)16, (ftnlen)3) == 0) {
+    timdef_(__global_state, "GET", "SYSTEM", __state->tsys, (ftnlen)3, (
+	    ftnlen)6, (ftnlen)16);
+    if (s_cmp(&__global_state->f2c, __state->tsys, "UTC", (ftnlen)16, (ftnlen)
+	    3) == 0) {
 	__state->timtyp = __state->id[25];
-    } else if (s_cmp(__state->tsys, "TDB", (ftnlen)16, (ftnlen)3) == 0) {
+    } else if (s_cmp(&__global_state->f2c, __state->tsys, "TDB", (ftnlen)16, (
+	    ftnlen)3) == 0) {
 	__state->timtyp = __state->id[26];
-    } else if (s_cmp(__state->tsys, "TDT", (ftnlen)16, (ftnlen)3) == 0) {
+    } else if (s_cmp(&__global_state->f2c, __state->tsys, "TDT", (ftnlen)16, (
+	    ftnlen)3) == 0) {
 	__state->timtyp = __state->id[27];
     } else {
 	__state->timtyp = __state->id[38];
-	timdef_("GET", "ZONE", __state->zon, (ftnlen)3, (ftnlen)4, (ftnlen)32)
-		;
-	prefix_("::", &__state->c__0, __state->zon, (ftnlen)2, (ftnlen)32);
-	zzutcpm_(__state->zon, &__state->c__1, &__state->hoff, &__state->moff,
-		 &__state->last, &__state->ok, (ftnlen)32);
+	timdef_(__global_state, "GET", "ZONE", __state->zon, (ftnlen)3, (
+		ftnlen)4, (ftnlen)32);
+	prefix_(__global_state, "::", &__state->c__0, __state->zon, (ftnlen)2,
+		 (ftnlen)32);
+	zzutcpm_(__global_state, __state->zon, &__state->c__1, &__state->hoff,
+		 &__state->moff, &__state->last, &__state->ok, (ftnlen)32);
 	__state->dozone = __state->ok;
 
 /*        The routine TIMDEF uses ZZUTCPM to determine whether */
@@ -1150,28 +1258,30 @@ static timout_state_t* get_timout_state() {
     }
     while(__state->unknwn && __state->i__ <= __state->ntokns) {
 	if (__state->class__[(i__2 = __state->ident[(i__1 = __state->i__ - 1) 
-		< 100 && 0 <= i__1 ? i__1 : s_rnge("ident", i__1, "timout_", (
-		ftnlen)1378)]) < 43 && 0 <= i__2 ? i__2 : s_rnge("class", 
-		i__2, "timout_", (ftnlen)1378)] == 44) {
+		< 100 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"ident", i__1, "timout_", (ftnlen)1378)]) < 43 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "class", i__2, "timout_", 
+		(ftnlen)1378)] == 44) {
 	    __state->timtyp = __state->ident[(i__1 = __state->i__ - 1) < 100 
-		    && 0 <= i__1 ? i__1 : s_rnge("ident", i__1, "timout_", (
-		    ftnlen)1379)];
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ident"
+		    , i__1, "timout_", (ftnlen)1379)];
 	    __state->unknwn = FALSE_;
 	    __state->dozone = FALSE_;
 	    if (__state->ident[(i__1 = __state->i__ - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("ident", i__1, "timout_", (ftnlen)1383)] == 
-		    __state->id[38] || __state->ident[(i__2 = __state->i__ - 
-		    1) < 100 && 0 <= i__2 ? i__2 : s_rnge("ident", i__2, 
-		    "timout_", (ftnlen)1383)] == __state->id[39]) {
+		    i__1 : s_rnge(&__global_state->f2c, "ident", i__1, "timo"
+		    "ut_", (ftnlen)1383)] == __state->id[38] || __state->ident[
+		    (i__2 = __state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "ident", i__2, "timout_", (
+		    ftnlen)1383)] == __state->id[39]) {
 
 /*              We've got a time zone specification. Parse it and */
 /*              store the offsets from UTC. */
 
-		zzutcpm_(__state->mystr, &__state->beg[(i__1 = __state->i__ - 
-			1) < 100 && 0 <= i__1 ? i__1 : s_rnge("beg", i__1, 
-			"timout_", (ftnlen)1390)], &__state->hoff, &
-			__state->moff, &__state->last, &__state->ok, (ftnlen)
-			256);
+		zzutcpm_(__global_state, __state->mystr, &__state->beg[(i__1 =
+			 __state->i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
+			&__global_state->f2c, "beg", i__1, "timout_", (ftnlen)
+			1390)], &__state->hoff, &__state->moff, &
+			__state->last, &__state->ok, (ftnlen)256);
 		if (__state->ok) {
 		    __state->dozone = TRUE_;
 		    __state->timtyp = __state->id[38];
@@ -1186,22 +1296,26 @@ static timout_state_t* get_timout_state() {
 /*                 format string. */
 
 		    if (__state->last == __state->end[(i__1 = __state->i__) < 
-			    100 && 0 <= i__1 ? i__1 : s_rnge("end", i__1, 
-			    "timout_", (ftnlen)1407)]) {
+			    100 && 0 <= i__1 ? i__1 : s_rnge(&
+			    __global_state->f2c, "end", i__1, "timout_", (
+			    ftnlen)1407)]) {
 			__state->ident[(i__1 = __state->i__) < 100 && 0 <= 
-				i__1 ? i__1 : s_rnge("ident", i__1, "timout_",
-				 (ftnlen)1408)] = __state->ident[(i__2 = 
-				__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-				s_rnge("ident", i__2, "timout_", (ftnlen)1408)
-				];
+				i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"ident", i__1, "timout_", (ftnlen)1408)] = 
+				__state->ident[(i__2 = __state->i__ - 1) < 
+				100 && 0 <= i__2 ? i__2 : s_rnge(&
+				__global_state->f2c, "ident", i__2, "timout_",
+				 (ftnlen)1408)];
 			++__state->i__;
 		    } else {
 			__state->end[(i__1 = __state->i__ - 1) < 100 && 0 <= 
-				i__1 ? i__1 : s_rnge("end", i__1, "timout_", (
-				ftnlen)1411)] = __state->last;
+				i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"end", i__1, "timout_", (ftnlen)1411)] = 
+				__state->last;
 			__state->beg[(i__1 = __state->i__) < 100 && 0 <= i__1 
-				? i__1 : s_rnge("beg", i__1, "timout_", (
-				ftnlen)1412)] = __state->last + 1;
+				? i__1 : s_rnge(&__global_state->f2c, "beg", 
+				i__1, "timout_", (ftnlen)1412)] = 
+				__state->last + 1;
 		    }
 		}
 	    }
@@ -1217,23 +1331,26 @@ static timout_state_t* get_timout_state() {
 
 /*     Get the default calendar from TIMDEF. */
 
-    timdef_("GET", "CALENDAR", __state->cal, (ftnlen)3, (ftnlen)8, (ftnlen)16)
-	    ;
-    if (s_cmp(__state->cal, "GREGORIAN", (ftnlen)16, (ftnlen)9) == 0) {
+    timdef_(__global_state, "GET", "CALENDAR", __state->cal, (ftnlen)3, (
+	    ftnlen)8, (ftnlen)16);
+    if (s_cmp(&__global_state->f2c, __state->cal, "GREGORIAN", (ftnlen)16, (
+	    ftnlen)9) == 0) {
 	__state->caltyp = __state->id[41];
-    } else if (s_cmp(__state->cal, "JULIAN", (ftnlen)16, (ftnlen)6) == 0) {
+    } else if (s_cmp(&__global_state->f2c, __state->cal, "JULIAN", (ftnlen)16,
+	     (ftnlen)6) == 0) {
 	__state->caltyp = __state->id[40];
     } else {
 	__state->caltyp = __state->id[42];
     }
     while(__state->unknwn && __state->i__ <= __state->ntokns) {
 	if (__state->class__[(i__2 = __state->ident[(i__1 = __state->i__ - 1) 
-		< 100 && 0 <= i__1 ? i__1 : s_rnge("ident", i__1, "timout_", (
-		ftnlen)1448)]) < 43 && 0 <= i__2 ? i__2 : s_rnge("class", 
-		i__2, "timout_", (ftnlen)1448)] == 45) {
+		< 100 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+		"ident", i__1, "timout_", (ftnlen)1448)]) < 43 && 0 <= i__2 ? 
+		i__2 : s_rnge(&__global_state->f2c, "class", i__2, "timout_", 
+		(ftnlen)1448)] == 45) {
 	    __state->caltyp = __state->ident[(i__1 = __state->i__ - 1) < 100 
-		    && 0 <= i__1 ? i__1 : s_rnge("ident", i__1, "timout_", (
-		    ftnlen)1449)];
+		    && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "ident"
+		    , i__1, "timout_", (ftnlen)1449)];
 	    __state->unknwn = FALSE_;
 	}
 	++__state->i__;
@@ -1242,16 +1359,17 @@ static timout_state_t* get_timout_state() {
 /*     Next determine whether or not we shall be performing rounding */
 /*     on output. */
 
-    __state->pumpup = isrchi_(&__state->id[30], &__state->ntokns, 
-	    __state->ident) != 0;
+    __state->pumpup = isrchi_(__global_state, &__state->id[30], &
+	    __state->ntokns, __state->ident) != 0;
 
 /*     Determine if we have an Era specification */
 
-    __state->doera = isrchi_(&__state->id[33], &__state->ntokns, 
-	    __state->ident) != 0 || isrchi_(&__state->id[32], &
-	    __state->ntokns, __state->ident) != 0 || isrchi_(&__state->id[34],
-	     &__state->ntokns, __state->ident) != 0 || isrchi_(&__state->id[
-	    35], &__state->ntokns, __state->ident) != 0;
+    __state->doera = isrchi_(__global_state, &__state->id[33], &
+	    __state->ntokns, __state->ident) != 0 || isrchi_(__global_state, &
+	    __state->id[32], &__state->ntokns, __state->ident) != 0 || 
+	    isrchi_(__global_state, &__state->id[34], &__state->ntokns, 
+	    __state->ident) != 0 || isrchi_(__global_state, &__state->id[35], 
+	    &__state->ntokns, __state->ident) != 0;
 
 /*     Until we've examined the year, we assume that the era is not */
 /*     supposed to vanish. */
@@ -1261,8 +1379,8 @@ static timout_state_t* get_timout_state() {
 /*     Next remove all of the time system dudes from the list of */
 /*     tokens. */
 
-    scanrj_(__state->dump, &__state->ndump, &__state->ntokns, __state->ident, 
-	    __state->beg, __state->end);
+    scanrj_(__global_state, __state->dump, &__state->ndump, &__state->ntokns, 
+	    __state->ident, __state->beg, __state->end);
 
 /*     If the user wants to round the output, we need to pump up ET */
 /*     by the smallest significant part of the input picture.  But */
@@ -1280,9 +1398,10 @@ static timout_state_t* get_timout_state() {
 	__state->i__ = 1;
 	while(__state->i__ <= __state->ntokns) {
 	    __state->type__ = __state->class__[(i__2 = __state->ident[(i__1 = 
-		    __state->i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ident", i__1, "timout_", (ftnlen)1503)]) < 43 && 0 <= 
-		    i__2 ? i__2 : s_rnge("class", i__2, "timout_", (ftnlen)
+		    __state->i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "ident", i__1, "timout_", (ftnlen)
+		    1503)]) < 43 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "class", i__2, "timout_", (ftnlen)
 		    1503)];
 	    if (__state->type__ == 2 || __state->type__ == 23 || 
 		    __state->type__ == 24 || __state->type__ == 50 || 
@@ -1298,8 +1417,8 @@ static timout_state_t* get_timout_state() {
 
 		__state->factor = 1.;
 		__state->incr = __state->pad[(i__1 = __state->type__ - 1) < 
-			51 && 0 <= i__1 ? i__1 : s_rnge("pad", i__1, "timout_"
-			, (ftnlen)1524)];
+			51 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"pad", i__1, "timout_", (ftnlen)1524)];
 
 /*              Examine the next token.  If it's not a decimal point */
 /*              and marker, we have the least significant part of */
@@ -1308,9 +1427,10 @@ static timout_state_t* get_timout_state() {
 		++__state->i__;
 		__state->type__ = __state->class__[(i__2 = __state->ident[(
 			i__1 = __state->i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("ident", i__1, "timout_", (ftnlen)1532)]) < 43 
-			&& 0 <= i__2 ? i__2 : s_rnge("class", i__2, "timout_",
-			 (ftnlen)1532)];
+			s_rnge(&__global_state->f2c, "ident", i__1, "timout_",
+			 (ftnlen)1532)]) < 43 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "class", i__2, "timout_", (
+			ftnlen)1532)];
 		if (__state->type__ == 23) {
 		    __state->factor *= .1;
 		    ++__state->i__;
@@ -1319,8 +1439,9 @@ static timout_state_t* get_timout_state() {
 /*                 holders */
 
 		    while(__state->ident[(i__1 = __state->i__ - 1) < 100 && 0 
-			    <= i__1 ? i__1 : s_rnge("ident", i__1, "timout_", 
-			    (ftnlen)1543)] == __state->id[23]) {
+			    <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			    "ident", i__1, "timout_", (ftnlen)1543)] == 
+			    __state->id[23]) {
 			__state->factor *= .1;
 			++__state->i__;
 		    }
@@ -1344,7 +1465,8 @@ static timout_state_t* get_timout_state() {
 
     for (__state->part = 1; __state->part <= 51; ++__state->part) {
 	__state->have[(i__1 = __state->part - 1) < 51 && 0 <= i__1 ? i__1 : 
-		s_rnge("have", i__1, "timout_", (ftnlen)1573)] = FALSE_;
+		s_rnge(&__global_state->f2c, "have", i__1, "timout_", (ftnlen)
+		1573)] = FALSE_;
     }
 
 /*     Set up the input time format and the output time format that will */
@@ -1368,27 +1490,33 @@ static timout_state_t* get_timout_state() {
 
 	__state->myet += __state->timpad;
 	__state->values[28] = __state->myet;
-	__state->values[24] = unitim_(&__state->myet, "TDB", "JDTDB", (ftnlen)
-		3, (ftnlen)5);
-	__state->values[29] = __state->values[28] + spd_() * (j2000_() - 
-		j1950_());
-	s_copy(__state->bastyp, "FORMAL", (ftnlen)16, (ftnlen)6);
-	s_copy(__state->ymdfmt, "YMDF", (ftnlen)8, (ftnlen)4);
-	s_copy(__state->ywfmt, "YMWDF", (ftnlen)8, (ftnlen)5);
+	__state->values[24] = unitim_(__global_state, &__state->myet, "TDB", 
+		"JDTDB", (ftnlen)3, (ftnlen)5);
+	__state->values[29] = __state->values[28] + spd_(__global_state) * (
+		j2000_(__global_state) - j1950_(__global_state));
+	s_copy(&__global_state->f2c, __state->bastyp, "FORMAL", (ftnlen)16, (
+		ftnlen)6);
+	s_copy(&__global_state->f2c, __state->ymdfmt, "YMDF", (ftnlen)8, (
+		ftnlen)4);
+	s_copy(&__global_state->f2c, __state->ywfmt, "YMWDF", (ftnlen)8, (
+		ftnlen)5);
 	__state->have[28] = TRUE_;
 	__state->have[29] = TRUE_;
 	__state->have[24] = TRUE_;
     } else if (__state->timtyp == __state->id[27]) {
-	__state->myet = unitim_(&__state->myet, "TDB", "TDT", (ftnlen)3, (
-		ftnlen)3) + __state->timpad;
+	__state->myet = unitim_(__global_state, &__state->myet, "TDB", "TDT", 
+		(ftnlen)3, (ftnlen)3) + __state->timpad;
 	__state->values[28] = __state->myet;
-	__state->values[24] = unitim_(&__state->myet, "TDT", "JDTDT", (ftnlen)
-		3, (ftnlen)5);
-	__state->values[29] = __state->values[28] + spd_() * (j2000_() - 
-		j1950_());
-	s_copy(__state->bastyp, "FORMAL", (ftnlen)16, (ftnlen)6);
-	s_copy(__state->ymdfmt, "YMDF", (ftnlen)8, (ftnlen)4);
-	s_copy(__state->ywfmt, "YMWDF", (ftnlen)8, (ftnlen)5);
+	__state->values[24] = unitim_(__global_state, &__state->myet, "TDT", 
+		"JDTDT", (ftnlen)3, (ftnlen)5);
+	__state->values[29] = __state->values[28] + spd_(__global_state) * (
+		j2000_(__global_state) - j1950_(__global_state));
+	s_copy(&__global_state->f2c, __state->bastyp, "FORMAL", (ftnlen)16, (
+		ftnlen)6);
+	s_copy(&__global_state->f2c, __state->ymdfmt, "YMDF", (ftnlen)8, (
+		ftnlen)4);
+	s_copy(&__global_state->f2c, __state->ywfmt, "YMWDF", (ftnlen)8, (
+		ftnlen)5);
 	__state->have[28] = TRUE_;
 	__state->have[29] = TRUE_;
 	__state->have[24] = TRUE_;
@@ -1398,11 +1526,14 @@ static timout_state_t* get_timout_state() {
 /*        working epoch.  This rounds properly when it's time to get */
 /*        fractional components. */
 
-	__state->myet = unitim_(&__state->myet, "TDB", "TDT", (ftnlen)3, (
-		ftnlen)3) + __state->timpad;
-	s_copy(__state->bastyp, "TDT", (ftnlen)16, (ftnlen)3);
-	s_copy(__state->ymdfmt, "YMD", (ftnlen)8, (ftnlen)3);
-	s_copy(__state->ywfmt, "YMWD", (ftnlen)8, (ftnlen)4);
+	__state->myet = unitim_(__global_state, &__state->myet, "TDB", "TDT", 
+		(ftnlen)3, (ftnlen)3) + __state->timpad;
+	s_copy(&__global_state->f2c, __state->bastyp, "TDT", (ftnlen)16, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->ymdfmt, "YMD", (ftnlen)8, (
+		ftnlen)3);
+	s_copy(&__global_state->f2c, __state->ywfmt, "YMWD", (ftnlen)8, (
+		ftnlen)4);
     }
 
 /*     Chapter 3.  Building the Output String */
@@ -1418,9 +1549,10 @@ static timout_state_t* get_timout_state() {
     i__1 = __state->ntokns;
     for (__state->i__ = 1; __state->i__ <= i__1; ++__state->i__) {
 	__state->type__ = __state->class__[(i__3 = __state->ident[(i__2 = 
-		__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("ident", 
-		i__2, "timout_", (ftnlen)1654)]) < 43 && 0 <= i__3 ? i__3 : 
-		s_rnge("class", i__3, "timout_", (ftnlen)1654)];
+		__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "ident", i__2, "timout_", (ftnlen)1654)])
+		 < 43 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		"class", i__3, "timout_", (ftnlen)1654)];
 	__state->tvec[0] = __state->myet;
 
 /*        If the next marker is not one we use as a place holder */
@@ -1441,28 +1573,33 @@ static timout_state_t* get_timout_state() {
 
 		i__3 = __state->width - __state->length[(i__2 = 
 			__state->numtyp - 1) < 51 && 0 <= i__2 ? i__2 : 
-			s_rnge("length", i__2, "timout_", (ftnlen)1676)] - 1;
-		__state->trncat = brckti_(&i__3, &__state->c__0, &
-			__state->c__14);
-		__state->frac = __state->value - d_int(&__state->value);
+			s_rnge(&__global_state->f2c, "length", i__2, "timout_"
+			, (ftnlen)1676)] - 1;
+		__state->trncat = brckti_(__global_state, &i__3, &
+			__state->c__0, &__state->c__14);
+		__state->frac = __state->value - d_int(&__global_state->f2c, &
+			__state->value);
 		if (__state->frac < 0.) {
 		    __state->value += -1.;
 		    __state->frac += 1.;
 		}
 		d__1 = __state->frac * __state->power[(i__2 = __state->trncat)
-			 < 15 && 0 <= i__2 ? i__2 : s_rnge("power", i__2, 
-			"timout_", (ftnlen)1684)];
-		__state->intmed = (d_int(&d__1) - .125) / __state->power[(
-			i__3 = __state->trncat) < 15 && 0 <= i__3 ? i__3 : 
-			s_rnge("power", i__3, "timout_", (ftnlen)1684)];
-		__state->frac = brcktd_(&__state->intmed, &__state->c_b274, &
-			__state->c_b275);
-		__state->value = d_int(&__state->value) + __state->frac;
-		dpfmt_(&__state->value, __state->fmt, __state->substr, (
-			ftnlen)32, (ftnlen)256);
-		s_copy(__state->string + (__state->appnd - 1), 
-			__state->substr, 256 - (__state->appnd - 1), (ftnlen)
-			256);
+			 < 15 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "power", i__2, "timout_", (
+			ftnlen)1684)];
+		__state->intmed = (d_int(&__global_state->f2c, &d__1) - .125) 
+			/ __state->power[(i__3 = __state->trncat) < 15 && 0 <=
+			 i__3 ? i__3 : s_rnge(&__global_state->f2c, "power", 
+			i__3, "timout_", (ftnlen)1684)];
+		__state->frac = brcktd_(__global_state, &__state->intmed, &
+			__state->c_b274, &__state->c_b275);
+		__state->value = d_int(&__global_state->f2c, &__state->value) 
+			+ __state->frac;
+		dpfmt_(__global_state, &__state->value, __state->fmt, 
+			__state->substr, (ftnlen)32, (ftnlen)256);
+		s_copy(&__global_state->f2c, __state->string + (
+			__state->appnd - 1), __state->substr, 256 - (
+			__state->appnd - 1), (ftnlen)256);
 		__state->appnd += __state->width;
 		__state->have[22] = FALSE_;
 		__state->making = FALSE_;
@@ -1476,16 +1613,19 @@ static timout_state_t* get_timout_state() {
 
 	if (__state->type__ == 2) {
 	    i__2 = __state->beg[(i__3 = __state->i__ - 1) < 100 && 0 <= i__3 ?
-		     i__3 : s_rnge("beg", i__3, "timout_", (ftnlen)1711)] - 1;
-	    s_copy(__state->string + (__state->appnd - 1), __state->mystr + 
-		    i__2, 256 - (__state->appnd - 1), __state->end[(i__4 = 
-		    __state->i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge(
-		    "end", i__4, "timout_", (ftnlen)1711)] - i__2);
+		     i__3 : s_rnge(&__global_state->f2c, "beg", i__3, "timou"
+		    "t_", (ftnlen)1711)] - 1;
+	    s_copy(&__global_state->f2c, __state->string + (__state->appnd - 
+		    1), __state->mystr + i__2, 256 - (__state->appnd - 1), 
+		    __state->end[(i__4 = __state->i__ - 1) < 100 && 0 <= i__4 
+		    ? i__4 : s_rnge(&__global_state->f2c, "end", i__4, "timo"
+		    "ut_", (ftnlen)1711)] - i__2);
 	    __state->appnd = __state->appnd - __state->beg[(i__2 = 
-		    __state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-		    "beg", i__2, "timout_", (ftnlen)1712)] + __state->end[(
-		    i__3 = __state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-		    s_rnge("end", i__3, "timout_", (ftnlen)1712)] + 1;
+		    __state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "beg", i__2, "timout_", (ftnlen)1712)
+		    ] + __state->end[(i__3 = __state->i__ - 1) < 100 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "end", i__3, 
+		    "timout_", (ftnlen)1712)] + 1;
 
 /*        If the token is a place holder, we either just append it */
 /*        or tack it on to a format string we are creating.. */
@@ -1494,35 +1634,40 @@ static timout_state_t* get_timout_state() {
 	    if (__state->making) {
 		__state->b = __state->width + 1;
 		__state->e = __state->b - __state->beg[(i__2 = __state->i__ - 
-			1) < 100 && 0 <= i__2 ? i__2 : s_rnge("beg", i__2, 
-			"timout_", (ftnlen)1723)] + __state->end[(i__3 = 
-			__state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
+			1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "beg", i__2, "timout_", (ftnlen)
+			1723)] + __state->end[(i__3 = __state->i__ - 1) < 100 
+			&& 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
 			"end", i__3, "timout_", (ftnlen)1723)];
 		i__2 = __state->beg[(i__3 = __state->i__ - 1) < 100 && 0 <= 
-			i__3 ? i__3 : s_rnge("beg", i__3, "timout_", (ftnlen)
-			1724)] - 1;
-		s_copy(__state->fmt + (__state->b - 1), __state->mystr + i__2,
-			 __state->e - (__state->b - 1), __state->end[(i__4 = 
-			__state->i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge(
-			"end", i__4, "timout_", (ftnlen)1724)] - i__2);
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "beg", 
+			i__3, "timout_", (ftnlen)1724)] - 1;
+		s_copy(&__global_state->f2c, __state->fmt + (__state->b - 1), 
+			__state->mystr + i__2, __state->e - (__state->b - 1), 
+			__state->end[(i__4 = __state->i__ - 1) < 100 && 0 <= 
+			i__4 ? i__4 : s_rnge(&__global_state->f2c, "end", 
+			i__4, "timout_", (ftnlen)1724)] - i__2);
 		__state->width = __state->width - __state->beg[(i__2 = 
-			__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"beg", i__2, "timout_", (ftnlen)1725)] + __state->end[
-			(i__3 = __state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("end", i__3, "timout_", (ftnlen)1725)] + 1;
+			__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "beg", i__2, "timout_", (ftnlen)
+			1725)] + __state->end[(i__3 = __state->i__ - 1) < 100 
+			&& 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+			"end", i__3, "timout_", (ftnlen)1725)] + 1;
 	    } else {
 		i__2 = __state->beg[(i__3 = __state->i__ - 1) < 100 && 0 <= 
-			i__3 ? i__3 : s_rnge("beg", i__3, "timout_", (ftnlen)
-			1727)] - 1;
-		s_copy(__state->string + (__state->appnd - 1), __state->mystr 
-			+ i__2, (ftnlen)1, __state->end[(i__4 = __state->i__ 
-			- 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("end", i__4, 
-			"timout_", (ftnlen)1727)] - i__2);
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "beg", 
+			i__3, "timout_", (ftnlen)1727)] - 1;
+		s_copy(&__global_state->f2c, __state->string + (
+			__state->appnd - 1), __state->mystr + i__2, (ftnlen)1,
+			 __state->end[(i__4 = __state->i__ - 1) < 100 && 0 <= 
+			i__4 ? i__4 : s_rnge(&__global_state->f2c, "end", 
+			i__4, "timout_", (ftnlen)1727)] - i__2);
 		__state->appnd = __state->appnd - __state->beg[(i__2 = 
-			__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"beg", i__2, "timout_", (ftnlen)1728)] + __state->end[
-			(i__3 = __state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("end", i__3, "timout_", (ftnlen)1728)] + 1;
+			__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "beg", i__2, "timout_", (ftnlen)
+			1728)] + __state->end[(i__3 = __state->i__ - 1) < 100 
+			&& 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+			"end", i__3, "timout_", (ftnlen)1728)] + 1;
 	    }
 
 /*        If the token is the decimal point plus place holder */
@@ -1534,49 +1679,55 @@ static timout_state_t* get_timout_state() {
 	    if (! __state->making) {
 		__state->b = __state->appnd;
 		__state->e = __state->appnd - __state->beg[(i__2 = 
-			__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"beg", i__2, "timout_", (ftnlen)1742)] + __state->end[
-			(i__3 = __state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("end", i__3, "timout_", (ftnlen)1742)];
+			__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "beg", i__2, "timout_", (ftnlen)
+			1742)] + __state->end[(i__3 = __state->i__ - 1) < 100 
+			&& 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+			"end", i__3, "timout_", (ftnlen)1742)];
 		i__2 = __state->beg[(i__3 = __state->i__ - 1) < 100 && 0 <= 
-			i__3 ? i__3 : s_rnge("beg", i__3, "timout_", (ftnlen)
-			1743)] - 1;
-		s_copy(__state->string + (__state->b - 1), __state->mystr + 
-			i__2, __state->e - (__state->b - 1), __state->end[(
-			i__4 = __state->i__ - 1) < 100 && 0 <= i__4 ? i__4 : 
-			s_rnge("end", i__4, "timout_", (ftnlen)1743)] - i__2);
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "beg", 
+			i__3, "timout_", (ftnlen)1743)] - 1;
+		s_copy(&__global_state->f2c, __state->string + (__state->b - 
+			1), __state->mystr + i__2, __state->e - (__state->b - 
+			1), __state->end[(i__4 = __state->i__ - 1) < 100 && 0 
+			<= i__4 ? i__4 : s_rnge(&__global_state->f2c, "end", 
+			i__4, "timout_", (ftnlen)1743)] - i__2);
 		__state->appnd = __state->e + 1;
 		__state->have[22] = FALSE_;
 	    } else if (__state->timfmt == 2) {
 		__state->b = __state->width + 1;
 		__state->e = __state->b - __state->beg[(i__2 = __state->i__ - 
-			1) < 100 && 0 <= i__2 ? i__2 : s_rnge("beg", i__2, 
-			"timout_", (ftnlen)1750)] + __state->end[(i__3 = 
-			__state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
+			1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "beg", i__2, "timout_", (ftnlen)
+			1750)] + __state->end[(i__3 = __state->i__ - 1) < 100 
+			&& 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
 			"end", i__3, "timout_", (ftnlen)1750)];
 		i__2 = __state->beg[(i__3 = __state->i__ - 1) < 100 && 0 <= 
-			i__3 ? i__3 : s_rnge("beg", i__3, "timout_", (ftnlen)
-			1751)] - 1;
-		s_copy(__state->fmt + (__state->b - 1), __state->mystr + i__2,
-			 __state->e - (__state->b - 1), __state->end[(i__4 = 
-			__state->i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge(
-			"end", i__4, "timout_", (ftnlen)1751)] - i__2);
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "beg", 
+			i__3, "timout_", (ftnlen)1751)] - 1;
+		s_copy(&__global_state->f2c, __state->fmt + (__state->b - 1), 
+			__state->mystr + i__2, __state->e - (__state->b - 1), 
+			__state->end[(i__4 = __state->i__ - 1) < 100 && 0 <= 
+			i__4 ? i__4 : s_rnge(&__global_state->f2c, "end", 
+			i__4, "timout_", (ftnlen)1751)] - i__2);
 		__state->width = __state->e;
 		__state->have[22] = TRUE_;
 	    } else {
 		__state->b = __state->width + 1;
 		__state->e = __state->b - __state->beg[(i__2 = __state->i__ - 
-			1) < 100 && 0 <= i__2 ? i__2 : s_rnge("beg", i__2, 
-			"timout_", (ftnlen)1758)] + __state->end[(i__3 = 
-			__state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
+			1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "beg", i__2, "timout_", (ftnlen)
+			1758)] + __state->end[(i__3 = __state->i__ - 1) < 100 
+			&& 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
 			"end", i__3, "timout_", (ftnlen)1758)];
 		i__2 = __state->beg[(i__3 = __state->i__ - 1) < 100 && 0 <= 
-			i__3 ? i__3 : s_rnge("beg", i__3, "timout_", (ftnlen)
-			1759)] - 1;
-		s_copy(__state->fmt + (__state->b - 1), __state->mystr + i__2,
-			 __state->e - (__state->b - 1), __state->end[(i__4 = 
-			__state->i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge(
-			"end", i__4, "timout_", (ftnlen)1759)] - i__2);
+			i__3 ? i__3 : s_rnge(&__global_state->f2c, "beg", 
+			i__3, "timout_", (ftnlen)1759)] - 1;
+		s_copy(&__global_state->f2c, __state->fmt + (__state->b - 1), 
+			__state->mystr + i__2, __state->e - (__state->b - 1), 
+			__state->end[(i__4 = __state->i__ - 1) < 100 && 0 <= 
+			i__4 ? i__4 : s_rnge(&__global_state->f2c, "end", 
+			i__4, "timout_", (ftnlen)1759)] - i__2);
 		__state->width = __state->e;
 		__state->have[22] = TRUE_;
 
@@ -1609,16 +1760,16 @@ static timout_state_t* get_timout_state() {
 /*              vectors we need, so we don't have to go to a lot */
 /*              of trouble now. */
 
-		ttrans_(__state->intyp, __state->bastyp, __state->ptvec, (
-			ftnlen)16, (ftnlen)16);
-		ttrans_(__state->intyp, __state->bastyp, __state->ntvec, (
-			ftnlen)16, (ftnlen)16);
+		ttrans_(__global_state, __state->intyp, __state->bastyp, 
+			__state->ptvec, (ftnlen)16, (ftnlen)16);
+		ttrans_(__global_state, __state->intyp, __state->bastyp, 
+			__state->ntvec, (ftnlen)16, (ftnlen)16);
 /* Computing MAX */
 		d__1 = 1., d__2 = __state->ntvec[0] - __state->ptvec[0];
 		__state->delta = max(d__1,d__2);
 		d__1 = (__state->myet - __state->ptvec[0]) / __state->delta;
-		__state->frac = brcktd_(&__state->c_b274, &__state->c_b275, &
-			d__1);
+		__state->frac = brcktd_(__global_state, &__state->c_b274, &
+			__state->c_b275, &d__1);
 		__state->value += __state->frac;
 	    }
 	} else {
@@ -1632,16 +1783,17 @@ static timout_state_t* get_timout_state() {
 
 	    __state->making = TRUE_;
 	    __state->have[22] = FALSE_;
-	    s_copy(__state->fmt, __state->orignl + (((i__2 = __state->type__ 
-		    - 1) < 51 && 0 <= i__2 ? i__2 : s_rnge("orignl", i__2, 
-		    "timout_", (ftnlen)1816)) << 5), (ftnlen)32, (ftnlen)32);
+	    s_copy(&__global_state->f2c, __state->fmt, __state->orignl + (((
+		    i__2 = __state->type__ - 1) < 51 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "orignl", i__2, "timout_", (
+		    ftnlen)1816)) << 5), (ftnlen)32, (ftnlen)32);
 	    __state->width = __state->length[(i__2 = __state->type__ - 1) < 
-		    51 && 0 <= i__2 ? i__2 : s_rnge("length", i__2, "timout_",
-		     (ftnlen)1817)];
+		    51 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+		    "length", i__2, "timout_", (ftnlen)1817)];
 	    __state->numtyp = __state->type__;
 	    if (! __state->have[(i__2 = __state->type__ - 1) < 51 && 0 <= 
-		    i__2 ? i__2 : s_rnge("have", i__2, "timout_", (ftnlen)
-		    1820)]) {
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "have", i__2, 
+		    "timout_", (ftnlen)1820)]) {
 		__state->tvec[0] = __state->myet;
 
 /*              Most components are handled in the next block. */
@@ -1652,8 +1804,8 @@ static timout_state_t* get_timout_state() {
 			__state->type__ == 50 || __state->type__ == 21 || 
 			__state->type__ == 49 || __state->type__ == 46 || 
 			__state->type__ == 20 || __state->type__ == 22) {
-		    ttrans_(__state->bastyp, __state->ymdfmt, __state->tvec, (
-			    ftnlen)16, (ftnlen)8);
+		    ttrans_(__global_state, __state->bastyp, __state->ymdfmt, 
+			    __state->tvec, (ftnlen)16, (ftnlen)8);
 
 /*                 The seconds component is finished.  Regardless */
 /*                 of any zone or calendar modifications, we just */
@@ -1668,8 +1820,8 @@ static timout_state_t* get_timout_state() {
 			__state->tvec[3] += __state->hoff;
 			__state->tvec[4] += __state->moff;
 			__state->tvec[5] = 0.;
-			ttrans_("YMDF", "YMDF", __state->tvec, (ftnlen)4, (
-				ftnlen)4);
+			ttrans_(__global_state, "YMDF", "YMDF", __state->tvec,
+				 (ftnlen)4, (ftnlen)4);
 		    }
 
 /*                 One way or the other the hours and minutes components */
@@ -1688,16 +1840,19 @@ static timout_state_t* get_timout_state() {
 /*                 Finally, if we need to change the calendar to */
 /*                 Julian this is the place to handle it. */
 
-		    __state->jyear = i_dnnt(__state->tvec);
-		    __state->jmonth = i_dnnt(&__state->tvec[1]);
-		    __state->jday = i_dnnt(&__state->tvec[2]);
-		    gr2jul_(&__state->jyear, &__state->jmonth, &__state->jday,
-			     &__state->jdoy);
+		    __state->jyear = i_dnnt(&__global_state->f2c, 
+			    __state->tvec);
+		    __state->jmonth = i_dnnt(&__global_state->f2c, &
+			    __state->tvec[1]);
+		    __state->jday = i_dnnt(&__global_state->f2c, &
+			    __state->tvec[2]);
+		    gr2jul_(__global_state, &__state->jyear, &__state->jmonth,
+			     &__state->jday, &__state->jdoy);
 		    __state->gyear = __state->jyear;
 		    __state->gmonth = __state->jmonth;
 		    __state->gday = __state->jday;
-		    jul2gr_(&__state->gyear, &__state->gmonth, &__state->gday,
-			     &__state->gdoy);
+		    jul2gr_(__global_state, &__state->gyear, &__state->gmonth,
+			     &__state->gday, &__state->gdoy);
 		    if (__state->caltyp == __state->id[41]) {
 			__state->values[2] = (doublereal) __state->gyear;
 			__state->values[10] = (doublereal) __state->gmonth;
@@ -1760,8 +1915,8 @@ static timout_state_t* get_timout_state() {
 
 /*                 Fetch the last two digits of the year. */
 
-		    rmaind_(&__state->values[2], &__state->c_b338, &
-			    __state->x, &__state->tempd);
+		    rmaind_(__global_state, &__state->values[2], &
+			    __state->c_b338, &__state->x, &__state->tempd);
 		    __state->values[3] = __state->tempd;
 		    __state->have[2] = TRUE_;
 		    __state->have[3] = TRUE_;
@@ -1776,8 +1931,8 @@ static timout_state_t* get_timout_state() {
 		    __state->have[48] = TRUE_;
 		} else if (__state->type__ == 48) {
 		    __state->tvec[0] = __state->myet;
-		    ttrans_(__state->bastyp, __state->ywfmt, __state->tvec, (
-			    ftnlen)16, (ftnlen)8);
+		    ttrans_(__global_state, __state->bastyp, __state->ywfmt, 
+			    __state->tvec, (ftnlen)16, (ftnlen)8);
 
 /*                 If we need to deal with time zones, this is */
 /*                 the time to do it. */
@@ -1786,8 +1941,8 @@ static timout_state_t* get_timout_state() {
 			__state->tvec[4] += __state->hoff;
 			__state->tvec[5] += __state->moff;
 			__state->tvec[6] = 0.;
-			ttrans_("YMWDF", "YMWDF", __state->tvec, (ftnlen)5, (
-				ftnlen)5);
+			ttrans_(__global_state, "YMWDF", "YMWDF", 
+				__state->tvec, (ftnlen)5, (ftnlen)5);
 		    }
 		    __state->values[47] = __state->tvec[3];
 		    __state->have[47] = TRUE_;
@@ -1798,11 +1953,12 @@ static timout_state_t* get_timout_state() {
 /*                 already HAVE SP2000 and SP1950). */
 
 		    __state->tvec[0] = __state->myet;
-		    ttrans_(__state->bastyp, "FORMAL", __state->tvec, (ftnlen)
-			    16, (ftnlen)6);
+		    ttrans_(__global_state, __state->bastyp, "FORMAL", 
+			    __state->tvec, (ftnlen)16, (ftnlen)6);
 		    __state->values[28] = __state->tvec[0];
-		    __state->values[29] = __state->values[28] + spd_() * (
-			    j2000_() - j1950_());
+		    __state->values[29] = __state->values[28] + spd_(
+			    __global_state) * (j2000_(__global_state) - 
+			    j1950_(__global_state));
 		    __state->have[28] = TRUE_;
 		    __state->have[29] = TRUE_;
 		} else if (__state->type__ == 25) {
@@ -1812,8 +1968,8 @@ static timout_state_t* get_timout_state() {
 /*                 output. */
 
 		    __state->tvec[0] = __state->myet;
-		    ttrans_(__state->bastyp, "JDUTC", __state->tvec, (ftnlen)
-			    16, (ftnlen)5);
+		    ttrans_(__global_state, __state->bastyp, "JDUTC", 
+			    __state->tvec, (ftnlen)16, (ftnlen)5);
 		    __state->values[24] = __state->tvec[0];
 		    __state->have[24] = TRUE_;
 		}
@@ -1828,130 +1984,150 @@ static timout_state_t* get_timout_state() {
 /*           and p.m.'s specially. */
 
 	    if (__state->type__ == 47) {
-		__state->indx = i_dnnt(&__state->values[10]);
-		s_copy(__state->mymon, __state->months + ((i__2 = 
-			__state->indx - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-			"months", i__2, "timout_", (ftnlen)2060)) * 9, (
-			ftnlen)9, (ftnlen)9);
+		__state->indx = i_dnnt(&__global_state->f2c, &__state->values[
+			10]);
+		s_copy(&__global_state->f2c, __state->mymon, __state->months 
+			+ ((i__2 = __state->indx - 1) < 12 && 0 <= i__2 ? 
+			i__2 : s_rnge(&__global_state->f2c, "months", i__2, 
+			"timout_", (ftnlen)2060)) * 9, (ftnlen)9, (ftnlen)9);
 		__state->montyp = __state->ident[(i__2 = __state->i__ - 1) < 
-			100 && 0 <= i__2 ? i__2 : s_rnge("ident", i__2, "tim"
-			"out_", (ftnlen)2061)];
+			100 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c,
+			 "ident", i__2, "timout_", (ftnlen)2061)];
 
 /*              There is no ELSE case in the block below because all of */
 /*              the possible MONTYP values are checked explicitly. */
 
 		if (__state->montyp == __state->id[4]) {
-		    ucase_(__state->mymon, __state->mymon, (ftnlen)9, (ftnlen)
-			    9);
-		    s_copy(__state->mymon + 3, " ", (ftnlen)6, (ftnlen)1);
+		    ucase_(__global_state, __state->mymon, __state->mymon, (
+			    ftnlen)9, (ftnlen)9);
+		    s_copy(&__global_state->f2c, __state->mymon + 3, " ", (
+			    ftnlen)6, (ftnlen)1);
 		    __state->mylen = 3;
 		} else if (__state->montyp == __state->id[5]) {
-		    s_copy(__state->mymon + 3, " ", (ftnlen)6, (ftnlen)1);
+		    s_copy(&__global_state->f2c, __state->mymon + 3, " ", (
+			    ftnlen)6, (ftnlen)1);
 		    __state->mylen = 3;
 		} else if (__state->montyp == __state->id[6]) {
-		    lcase_(__state->mymon, __state->mymon, (ftnlen)9, (ftnlen)
-			    9);
-		    s_copy(__state->mymon + 3, " ", (ftnlen)6, (ftnlen)1);
+		    lcase_(__global_state, __state->mymon, __state->mymon, (
+			    ftnlen)9, (ftnlen)9);
+		    s_copy(&__global_state->f2c, __state->mymon + 3, " ", (
+			    ftnlen)6, (ftnlen)1);
 		    __state->mylen = 3;
 		} else if (__state->montyp == __state->id[8]) {
 		    __state->mylen = __state->mlen[(i__2 = __state->indx - 1) 
-			    < 12 && 0 <= i__2 ? i__2 : s_rnge("mlen", i__2, 
-			    "timout_", (ftnlen)2079)];
+			    < 12 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "mlen", i__2, "timout_", (
+			    ftnlen)2079)];
 		} else if (__state->montyp == __state->id[7]) {
-		    ucase_(__state->mymon, __state->mymon, (ftnlen)9, (ftnlen)
-			    9);
+		    ucase_(__global_state, __state->mymon, __state->mymon, (
+			    ftnlen)9, (ftnlen)9);
 		    __state->mylen = __state->mlen[(i__2 = __state->indx - 1) 
-			    < 12 && 0 <= i__2 ? i__2 : s_rnge("mlen", i__2, 
-			    "timout_", (ftnlen)2082)];
+			    < 12 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "mlen", i__2, "timout_", (
+			    ftnlen)2082)];
 		} else if (__state->montyp == __state->id[9]) {
-		    lcase_(__state->mymon, __state->mymon, (ftnlen)9, (ftnlen)
-			    9);
+		    lcase_(__global_state, __state->mymon, __state->mymon, (
+			    ftnlen)9, (ftnlen)9);
 		    __state->mylen = __state->mlen[(i__2 = __state->indx - 1) 
-			    < 12 && 0 <= i__2 ? i__2 : s_rnge("mlen", i__2, 
-			    "timout_", (ftnlen)2085)];
+			    < 12 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "mlen", i__2, "timout_", (
+			    ftnlen)2085)];
 		}
-		s_copy(__state->string + (__state->appnd - 1), __state->mymon,
-			 256 - (__state->appnd - 1), (ftnlen)9);
+		s_copy(&__global_state->f2c, __state->string + (
+			__state->appnd - 1), __state->mymon, 256 - (
+			__state->appnd - 1), (ftnlen)9);
 		__state->appnd += __state->mylen;
 		__state->making = FALSE_;
 	    } else if (__state->type__ == 48) {
-		__state->indx = i_dnnt(&__state->values[47]);
-		s_copy(__state->mywkd, __state->wkdays + ((i__2 = 
-			__state->indx - 1) < 7 && 0 <= i__2 ? i__2 : s_rnge(
-			"wkdays", i__2, "timout_", (ftnlen)2095)) * 9, (
-			ftnlen)9, (ftnlen)9);
+		__state->indx = i_dnnt(&__global_state->f2c, &__state->values[
+			47]);
+		s_copy(&__global_state->f2c, __state->mywkd, __state->wkdays 
+			+ ((i__2 = __state->indx - 1) < 7 && 0 <= i__2 ? i__2 
+			: s_rnge(&__global_state->f2c, "wkdays", i__2, "timo"
+			"ut_", (ftnlen)2095)) * 9, (ftnlen)9, (ftnlen)9);
 		__state->wktyp = __state->ident[(i__2 = __state->i__ - 1) < 
-			100 && 0 <= i__2 ? i__2 : s_rnge("ident", i__2, "tim"
-			"out_", (ftnlen)2096)];
+			100 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c,
+			 "ident", i__2, "timout_", (ftnlen)2096)];
 
 /*              There is no ELSE case in the block below because all of */
 /*              the possible WKTYP values are checked explicitly. */
 
 		if (__state->wktyp == __state->id[12]) {
-		    ucase_(__state->mywkd, __state->mywkd, (ftnlen)9, (ftnlen)
-			    9);
-		    s_copy(__state->mywkd + 3, " ", (ftnlen)6, (ftnlen)1);
+		    ucase_(__global_state, __state->mywkd, __state->mywkd, (
+			    ftnlen)9, (ftnlen)9);
+		    s_copy(&__global_state->f2c, __state->mywkd + 3, " ", (
+			    ftnlen)6, (ftnlen)1);
 		    __state->mylen = 3;
 		} else if (__state->wktyp == __state->id[13]) {
-		    s_copy(__state->mywkd + 3, " ", (ftnlen)6, (ftnlen)1);
+		    s_copy(&__global_state->f2c, __state->mywkd + 3, " ", (
+			    ftnlen)6, (ftnlen)1);
 		    __state->mylen = 3;
 		} else if (__state->wktyp == __state->id[14]) {
-		    lcase_(__state->mywkd, __state->mywkd, (ftnlen)9, (ftnlen)
-			    9);
-		    s_copy(__state->mywkd + 3, " ", (ftnlen)6, (ftnlen)1);
+		    lcase_(__global_state, __state->mywkd, __state->mywkd, (
+			    ftnlen)9, (ftnlen)9);
+		    s_copy(&__global_state->f2c, __state->mywkd + 3, " ", (
+			    ftnlen)6, (ftnlen)1);
 		    __state->mylen = 3;
 		} else if (__state->wktyp == __state->id[16]) {
 		    __state->mylen = __state->wklen[(i__2 = __state->indx - 1)
-			     < 7 && 0 <= i__2 ? i__2 : s_rnge("wklen", i__2, 
-			    "timout_", (ftnlen)2114)];
+			     < 7 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "wklen", i__2, "timout_", (
+			    ftnlen)2114)];
 		} else if (__state->wktyp == __state->id[15]) {
-		    ucase_(__state->mywkd, __state->mywkd, (ftnlen)9, (ftnlen)
-			    9);
+		    ucase_(__global_state, __state->mywkd, __state->mywkd, (
+			    ftnlen)9, (ftnlen)9);
 		    __state->mylen = __state->wklen[(i__2 = __state->indx - 1)
-			     < 7 && 0 <= i__2 ? i__2 : s_rnge("wklen", i__2, 
-			    "timout_", (ftnlen)2117)];
+			     < 7 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "wklen", i__2, "timout_", (
+			    ftnlen)2117)];
 		} else if (__state->wktyp == __state->id[17]) {
-		    lcase_(__state->mywkd, __state->mywkd, (ftnlen)9, (ftnlen)
-			    9);
+		    lcase_(__global_state, __state->mywkd, __state->mywkd, (
+			    ftnlen)9, (ftnlen)9);
 		    __state->mylen = __state->wklen[(i__2 = __state->indx - 1)
-			     < 7 && 0 <= i__2 ? i__2 : s_rnge("wklen", i__2, 
-			    "timout_", (ftnlen)2120)];
+			     < 7 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "wklen", i__2, "timout_", (
+			    ftnlen)2120)];
 		}
-		s_copy(__state->string + (__state->appnd - 1), __state->mywkd,
-			 256 - (__state->appnd - 1), (ftnlen)9);
+		s_copy(&__global_state->f2c, __state->string + (
+			__state->appnd - 1), __state->mywkd, 256 - (
+			__state->appnd - 1), (ftnlen)9);
 		__state->appnd += __state->mylen;
 		__state->making = FALSE_;
 	    } else if (__state->type__ == 49) {
 		if (__state->values[48] == 2. && (__state->ident[(i__2 = 
-			__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"ident", i__2, "timout_", (ftnlen)2130)] == 
-			__state->id[32] || __state->ident[(i__3 = 
-			__state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-			"ident", i__3, "timout_", (ftnlen)2130)] == 
-			__state->id[34])) {
-		    s_copy(__state->string + (__state->appnd - 1), " A.D.", 
-			    256 - (__state->appnd - 1), (ftnlen)5);
+			__state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "ident", i__2, "timout_", (
+			ftnlen)2130)] == __state->id[32] || __state->ident[(
+			i__3 = __state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
+			s_rnge(&__global_state->f2c, "ident", i__3, "timout_",
+			 (ftnlen)2130)] == __state->id[34])) {
+		    s_copy(&__global_state->f2c, __state->string + (
+			    __state->appnd - 1), " A.D.", 256 - (
+			    __state->appnd - 1), (ftnlen)5);
 		} else if (__state->values[48] == 2. && (__state->ident[(i__2 
 			= __state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("ident", i__2, "timout_", (ftnlen)2136)] == 
-			__state->id[33] || __state->ident[(i__3 = 
-			__state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-			"ident", i__3, "timout_", (ftnlen)2136)] == 
-			__state->id[35])) {
-		    s_copy(__state->string + (__state->appnd - 1), " a.d.", 
-			    256 - (__state->appnd - 1), (ftnlen)5);
+			s_rnge(&__global_state->f2c, "ident", i__2, "timout_",
+			 (ftnlen)2136)] == __state->id[33] || __state->ident[(
+			i__3 = __state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
+			s_rnge(&__global_state->f2c, "ident", i__3, "timout_",
+			 (ftnlen)2136)] == __state->id[35])) {
+		    s_copy(&__global_state->f2c, __state->string + (
+			    __state->appnd - 1), " a.d.", 256 - (
+			    __state->appnd - 1), (ftnlen)5);
 		} else if (__state->values[48] == 1. && (__state->ident[(i__2 
 			= __state->i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("ident", i__2, "timout_", (ftnlen)2141)] == 
-			__state->id[32] || __state->ident[(i__3 = 
-			__state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-			"ident", i__3, "timout_", (ftnlen)2141)] == 
-			__state->id[34])) {
-		    s_copy(__state->string + (__state->appnd - 1), " B.C.", 
-			    256 - (__state->appnd - 1), (ftnlen)5);
+			s_rnge(&__global_state->f2c, "ident", i__2, "timout_",
+			 (ftnlen)2141)] == __state->id[32] || __state->ident[(
+			i__3 = __state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
+			s_rnge(&__global_state->f2c, "ident", i__3, "timout_",
+			 (ftnlen)2141)] == __state->id[34])) {
+		    s_copy(&__global_state->f2c, __state->string + (
+			    __state->appnd - 1), " B.C.", 256 - (
+			    __state->appnd - 1), (ftnlen)5);
 		} else {
-		    s_copy(__state->string + (__state->appnd - 1), " b.c.", 
-			    256 - (__state->appnd - 1), (ftnlen)5);
+		    s_copy(&__global_state->f2c, __state->string + (
+			    __state->appnd - 1), " b.c.", 256 - (
+			    __state->appnd - 1), (ftnlen)5);
 		}
 
 /*              If we have the vanishing kind of era, and we've */
@@ -1960,54 +2136,61 @@ static timout_state_t* get_timout_state() {
 /*              increment the place holder. */
 
 		if (__state->ident[(i__2 = __state->i__ - 1) < 100 && 0 <= 
-			i__2 ? i__2 : s_rnge("ident", i__2, "timout_", (
-			ftnlen)2158)] == __state->id[34] || __state->ident[(
-			i__3 = __state->i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("ident", i__3, "timout_", (ftnlen)2158)] == 
-			__state->id[35]) {
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "ident", 
+			i__2, "timout_", (ftnlen)2158)] == __state->id[34] || 
+			__state->ident[(i__3 = __state->i__ - 1) < 100 && 0 <=
+			 i__3 ? i__3 : s_rnge(&__global_state->f2c, "ident", 
+			i__3, "timout_", (ftnlen)2158)] == __state->id[35]) {
 		    if (__state->vanish) {
-			s_copy(__state->string + (__state->appnd - 1), " ", 
-				256 - (__state->appnd - 1), (ftnlen)1);
+			s_copy(&__global_state->f2c, __state->string + (
+				__state->appnd - 1), " ", 256 - (
+				__state->appnd - 1), (ftnlen)1);
 			++__state->appnd;
 		    } else {
 			__state->appnd += 6;
 		    }
 		} else {
-		    ljust_(__state->string + (__state->appnd - 1), 
-			    __state->string + (__state->appnd - 1), 256 - (
-			    __state->appnd - 1), 256 - (__state->appnd - 1));
+		    ljust_(__global_state, __state->string + (__state->appnd 
+			    - 1), __state->string + (__state->appnd - 1), 256 
+			    - (__state->appnd - 1), 256 - (__state->appnd - 1)
+			    );
 		    __state->appnd += 4;
 		}
 		__state->making = FALSE_;
 	    } else if (__state->type__ == 50) {
 		if (__state->ident[(i__2 = __state->i__ - 1) < 100 && 0 <= 
-			i__2 ? i__2 : s_rnge("ident", i__2, "timout_", (
-			ftnlen)2178)] == __state->id[36] && __state->values[
-			20] >= 12.) {
-		    s_copy(__state->string + (__state->appnd - 1), "P.M.", 
-			    256 - (__state->appnd - 1), (ftnlen)4);
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "ident", 
+			i__2, "timout_", (ftnlen)2178)] == __state->id[36] && 
+			__state->values[20] >= 12.) {
+		    s_copy(&__global_state->f2c, __state->string + (
+			    __state->appnd - 1), "P.M.", 256 - (
+			    __state->appnd - 1), (ftnlen)4);
 		} else if (__state->ident[(i__2 = __state->i__ - 1) < 100 && 
-			0 <= i__2 ? i__2 : s_rnge("ident", i__2, "timout_", (
-			ftnlen)2183)] == __state->id[36] && __state->values[
-			20] < 12.) {
-		    s_copy(__state->string + (__state->appnd - 1), "A.M.", 
-			    256 - (__state->appnd - 1), (ftnlen)4);
+			0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ide"
+			"nt", i__2, "timout_", (ftnlen)2183)] == __state->id[
+			36] && __state->values[20] < 12.) {
+		    s_copy(&__global_state->f2c, __state->string + (
+			    __state->appnd - 1), "A.M.", 256 - (
+			    __state->appnd - 1), (ftnlen)4);
 		} else if (__state->ident[(i__2 = __state->i__ - 1) < 100 && 
-			0 <= i__2 ? i__2 : s_rnge("ident", i__2, "timout_", (
-			ftnlen)2188)] == __state->id[37] && __state->values[
-			20] >= 12.) {
-		    s_copy(__state->string + (__state->appnd - 1), "p.m.", 
-			    256 - (__state->appnd - 1), (ftnlen)4);
+			0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, "ide"
+			"nt", i__2, "timout_", (ftnlen)2188)] == __state->id[
+			37] && __state->values[20] >= 12.) {
+		    s_copy(&__global_state->f2c, __state->string + (
+			    __state->appnd - 1), "p.m.", 256 - (
+			    __state->appnd - 1), (ftnlen)4);
 		} else {
-		    s_copy(__state->string + (__state->appnd - 1), "a.m.", 
-			    256 - (__state->appnd - 1), (ftnlen)4);
+		    s_copy(&__global_state->f2c, __state->string + (
+			    __state->appnd - 1), "a.m.", 256 - (
+			    __state->appnd - 1), (ftnlen)4);
 		}
 		__state->appnd += 4;
 		__state->making = FALSE_;
 	    } else {
 		__state->value = __state->values[(i__2 = __state->type__ - 1) 
-			< 51 && 0 <= i__2 ? i__2 : s_rnge("values", i__2, 
-			"timout_", (ftnlen)2204)];
+			< 51 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "values", i__2, "timout_", (
+			ftnlen)2204)];
 	    }
 
 /*           If we are now creating a format string, we should */
@@ -2023,8 +2206,9 @@ static timout_state_t* get_timout_state() {
 /*              and SP1950. */
 
 		__state->values[0] = __state->values[(i__2 = __state->type__ 
-			- 1) < 51 && 0 <= i__2 ? i__2 : s_rnge("values", i__2,
-			 "timout_", (ftnlen)2222)];
+			- 1) < 51 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "values", i__2, "timout_", (
+			ftnlen)2222)];
 
 /*              Here's how this works:  We will copy all of */
 /*              the components of the time representation up to */
@@ -2044,29 +2228,29 @@ static timout_state_t* get_timout_state() {
 
 		for (__state->j = 1; __state->j <= 7; ++__state->j) {
 		    __state->ptvec[(i__2 = __state->j - 1) < 8 && 0 <= i__2 ? 
-			    i__2 : s_rnge("ptvec", i__2, "timout_", (ftnlen)
-			    2242)] = 0.;
+			    i__2 : s_rnge(&__global_state->f2c, "ptvec", i__2,
+			     "timout_", (ftnlen)2242)] = 0.;
 		    __state->ntvec[(i__2 = __state->j - 1) < 8 && 0 <= i__2 ? 
-			    i__2 : s_rnge("ntvec", i__2, "timout_", (ftnlen)
-			    2243)] = 0.;
+			    i__2 : s_rnge(&__global_state->f2c, "ntvec", i__2,
+			     "timout_", (ftnlen)2243)] = 0.;
 		}
 		if (__state->type__ == 3 || __state->type__ == 4) {
 		    __state->stopat = 1;
 		    __state->timfmt = 1;
-		    s_copy(__state->intyp, __state->ymdfmt, (ftnlen)16, (
-			    ftnlen)8);
+		    s_copy(&__global_state->f2c, __state->intyp, 
+			    __state->ymdfmt, (ftnlen)16, (ftnlen)8);
 		    __state->incr = 1.;
 		} else if (__state->type__ == 11) {
 		    __state->stopat = 2;
 		    __state->timfmt = 1;
-		    s_copy(__state->intyp, __state->ymdfmt, (ftnlen)16, (
-			    ftnlen)8);
+		    s_copy(&__global_state->f2c, __state->intyp, 
+			    __state->ymdfmt, (ftnlen)16, (ftnlen)8);
 		    __state->incr = 1.;
 		} else if (__state->type__ == 19 || __state->type__ == 12) {
 		    __state->stopat = 3;
 		    __state->timfmt = 1;
-		    s_copy(__state->intyp, __state->ymdfmt, (ftnlen)16, (
-			    ftnlen)8);
+		    s_copy(&__global_state->f2c, __state->intyp, 
+			    __state->ymdfmt, (ftnlen)16, (ftnlen)8);
 		    __state->incr = 1.;
 		} else if (__state->type__ == 21 || __state->type__ == 46) {
 
@@ -2078,35 +2262,35 @@ static timout_state_t* get_timout_state() {
 
 		    __state->stopat = 4;
 		    __state->timfmt = 1;
-		    s_copy(__state->intyp, __state->ymdfmt, (ftnlen)16, (
-			    ftnlen)8);
+		    s_copy(&__global_state->f2c, __state->intyp, 
+			    __state->ymdfmt, (ftnlen)16, (ftnlen)8);
 		    __state->incr = 1.;
 		} else if (__state->type__ == 20) {
 		    __state->stopat = 5;
 		    __state->timfmt = 1;
-		    s_copy(__state->intyp, __state->ymdfmt, (ftnlen)16, (
-			    ftnlen)8);
+		    s_copy(&__global_state->f2c, __state->intyp, 
+			    __state->ymdfmt, (ftnlen)16, (ftnlen)8);
 		    __state->incr = 1.;
 		} else if (__state->type__ == 22) {
 		    __state->stopat = 6;
 		    __state->timfmt = 1;
-		    s_copy(__state->intyp, __state->ymdfmt, (ftnlen)16, (
-			    ftnlen)8);
+		    s_copy(&__global_state->f2c, __state->intyp, 
+			    __state->ymdfmt, (ftnlen)16, (ftnlen)8);
 		    __state->incr = 0.;
 		} else if (__state->type__ == 25) {
 		    __state->stopat = 1;
 		    __state->timfmt = 2;
 		    __state->incr = 0.;
 		    if (__state->timtyp == __state->id[27]) {
-			s_copy(__state->intyp, "JDTDT", (ftnlen)16, (ftnlen)5)
-				;
+			s_copy(&__global_state->f2c, __state->intyp, "JDTDT", 
+				(ftnlen)16, (ftnlen)5);
 		    } else if (__state->timtyp == __state->id[26]) {
-			s_copy(__state->intyp, "JDTDB", (ftnlen)16, (ftnlen)5)
-				;
+			s_copy(&__global_state->f2c, __state->intyp, "JDTDB", 
+				(ftnlen)16, (ftnlen)5);
 		    } else if (__state->timtyp == __state->id[25] || 
 			    __state->timtyp == __state->id[38]) {
-			s_copy(__state->intyp, "JDUTC", (ftnlen)16, (ftnlen)5)
-				;
+			s_copy(&__global_state->f2c, __state->intyp, "JDUTC", 
+				(ftnlen)16, (ftnlen)5);
 		    }
 		} else {
 
@@ -2116,8 +2300,8 @@ static timout_state_t* get_timout_state() {
 		    __state->stopat = 1;
 		    __state->timfmt = 2;
 		    __state->incr = 0.;
-		    s_copy(__state->intyp, __state->bastyp, (ftnlen)16, (
-			    ftnlen)16);
+		    s_copy(&__global_state->f2c, __state->intyp, 
+			    __state->bastyp, (ftnlen)16, (ftnlen)16);
 		}
 
 /*              Ok.  We are now ready to construct the previous */
@@ -2126,23 +2310,26 @@ static timout_state_t* get_timout_state() {
 		i__2 = __state->stopat;
 		for (__state->j = 1; __state->j <= i__2; ++__state->j) {
 		    __state->ptvec[(i__3 = __state->j - 1) < 8 && 0 <= i__3 ? 
-			    i__3 : s_rnge("ptvec", i__3, "timout_", (ftnlen)
-			    2333)] = __state->values[(i__5 = __state->compnt[(
-			    i__4 = __state->j + (__state->timfmt << 3) - 9) < 
-			    16 && 0 <= i__4 ? i__4 : s_rnge("compnt", i__4, 
-			    "timout_", (ftnlen)2333)] - 1) < 51 && 0 <= i__5 ?
-			     i__5 : s_rnge("values", i__5, "timout_", (ftnlen)
-			    2333)];
+			    i__3 : s_rnge(&__global_state->f2c, "ptvec", i__3,
+			     "timout_", (ftnlen)2333)] = __state->values[(
+			    i__5 = __state->compnt[(i__4 = __state->j + (
+			    __state->timfmt << 3) - 9) < 16 && 0 <= i__4 ? 
+			    i__4 : s_rnge(&__global_state->f2c, "compnt", 
+			    i__4, "timout_", (ftnlen)2333)] - 1) < 51 && 0 <= 
+			    i__5 ? i__5 : s_rnge(&__global_state->f2c, "valu"
+			    "es", i__5, "timout_", (ftnlen)2333)];
 		    __state->ntvec[(i__3 = __state->j - 1) < 8 && 0 <= i__3 ? 
-			    i__3 : s_rnge("ntvec", i__3, "timout_", (ftnlen)
-			    2334)] = __state->ptvec[(i__4 = __state->j - 1) < 
-			    8 && 0 <= i__4 ? i__4 : s_rnge("ptvec", i__4, 
-			    "timout_", (ftnlen)2334)];
+			    i__3 : s_rnge(&__global_state->f2c, "ntvec", i__3,
+			     "timout_", (ftnlen)2334)] = __state->ptvec[(i__4 
+			    = __state->j - 1) < 8 && 0 <= i__4 ? i__4 : 
+			    s_rnge(&__global_state->f2c, "ptvec", i__4, "tim"
+			    "out_", (ftnlen)2334)];
 		}
 		__state->ntvec[(i__2 = __state->stopat - 1) < 8 && 0 <= i__2 ?
-			 i__2 : s_rnge("ntvec", i__2, "timout_", (ftnlen)2337)
-			] = __state->ntvec[(i__3 = __state->stopat - 1) < 8 &&
-			 0 <= i__3 ? i__3 : s_rnge("ntvec", i__3, "timout_", (
+			 i__2 : s_rnge(&__global_state->f2c, "ntvec", i__2, 
+			"timout_", (ftnlen)2337)] = __state->ntvec[(i__3 = 
+			__state->stopat - 1) < 8 && 0 <= i__3 ? i__3 : s_rnge(
+			&__global_state->f2c, "ntvec", i__3, "timout_", (
 			ftnlen)2337)] + __state->incr;
 
 /*              If the type is a year or month, then we need to set */
@@ -2164,19 +2351,25 @@ static timout_state_t* get_timout_state() {
 /*                 Convert both PTVEC and NTVEC to the gregorian */
 /*                 calendar */
 
-		    __state->jyear = i_dnnt(__state->ptvec);
-		    __state->jmonth = i_dnnt(&__state->ptvec[1]);
-		    __state->jday = i_dnnt(&__state->ptvec[2]);
-		    jul2gr_(&__state->jyear, &__state->jmonth, &__state->jday,
-			     &__state->jdoy);
+		    __state->jyear = i_dnnt(&__global_state->f2c, 
+			    __state->ptvec);
+		    __state->jmonth = i_dnnt(&__global_state->f2c, &
+			    __state->ptvec[1]);
+		    __state->jday = i_dnnt(&__global_state->f2c, &
+			    __state->ptvec[2]);
+		    jul2gr_(__global_state, &__state->jyear, &__state->jmonth,
+			     &__state->jday, &__state->jdoy);
 		    __state->ptvec[0] = (doublereal) __state->jyear;
 		    __state->ptvec[1] = (doublereal) __state->jmonth;
 		    __state->ptvec[2] = (doublereal) __state->jday;
-		    __state->jyear = i_dnnt(__state->ntvec);
-		    __state->jmonth = i_dnnt(&__state->ntvec[1]);
-		    __state->jday = i_dnnt(&__state->ntvec[2]);
-		    jul2gr_(&__state->jyear, &__state->jmonth, &__state->jday,
-			     &__state->jdoy);
+		    __state->jyear = i_dnnt(&__global_state->f2c, 
+			    __state->ntvec);
+		    __state->jmonth = i_dnnt(&__global_state->f2c, &
+			    __state->ntvec[1]);
+		    __state->jday = i_dnnt(&__global_state->f2c, &
+			    __state->ntvec[2]);
+		    jul2gr_(__global_state, &__state->jyear, &__state->jmonth,
+			     &__state->jday, &__state->jdoy);
 		    __state->ntvec[0] = (doublereal) __state->jyear;
 		    __state->ntvec[1] = (doublereal) __state->jmonth;
 		    __state->ntvec[2] = (doublereal) __state->jday;
@@ -2188,10 +2381,10 @@ static timout_state_t* get_timout_state() {
 		    __state->ntvec[4] -= __state->moff;
 		    __state->ptvec[5] = 0.;
 		    __state->ntvec[5] = 0.;
-		    ttrans_("YMDF", "YMDF", __state->ptvec, (ftnlen)4, (
-			    ftnlen)4);
-		    ttrans_("YMDF", "YMDF", __state->ntvec, (ftnlen)4, (
-			    ftnlen)4);
+		    ttrans_(__global_state, "YMDF", "YMDF", __state->ptvec, (
+			    ftnlen)4, (ftnlen)4);
+		    ttrans_(__global_state, "YMDF", "YMDF", __state->ntvec, (
+			    ftnlen)4, (ftnlen)4);
 		    if (__state->type__ == 22) {
 			__state->ptvec[5] = __state->values[21];
 			__state->ntvec[5] = __state->values[21];
@@ -2204,8 +2397,9 @@ static timout_state_t* get_timout_state() {
 /*     All that's left to do is to copy the constructed string */
 /*     to the output string. */
 
-    s_copy(output, __state->string, output_len, (ftnlen)256);
-    chkout_("TIMOUT", (ftnlen)6);
+    s_copy(&__global_state->f2c, output, __state->string, output_len, (ftnlen)
+	    256);
+    chkout_(__global_state, "TIMOUT", (ftnlen)6);
     return 0;
 } /* timout_ */
 

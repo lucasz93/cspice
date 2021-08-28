@@ -19,12 +19,11 @@
 
  static
 #ifdef KR_headers
-char *ap_end(s) char *s;
+char *ap_end(f2c, s) f2c_state_t *f2c; char *s;
 #else
-char *ap_end(char *s)
+char *ap_end(f2c_state_t *f2c, char *s)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	char quote;
+{	char quote;
 	quote= *s++;
 	for(;*s;s++)
 	{	if(*s!=quote) continue;
@@ -39,12 +38,11 @@ char *ap_end(char *s)
 }
  static
 #ifdef KR_headers
-op_gen(a,b,c,d)
+op_gen(f2c,a,b,c,d)
 #else
-op_gen(int a, int b, int c, int d)
+op_gen(f2c_state_t *f2c, int a, int b, int c, int d)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	struct syl *p= &f2c->f__syl[f2c->f__pc];
+{	struct syl *p= &f2c->f__syl[f2c->f__pc];
 	if(f2c->f__pc>=SYLMX)
 	{	fprintf(stderr,"format too complicated:\n");
 		sig_die(f2c->f__fmtbuf, 1);
@@ -57,9 +55,9 @@ op_gen(int a, int b, int c, int d)
 }
 #ifdef KR_headers
 static char *f_list();
-static char *gt_num(s,n,n1) char *s; int *n, n1;
+static char *gt_num(f2c,s,n,n1) char *s; int *n, n1;
 #else
-static char *f_list(char*);
+static char *f_list(f2c_state_t *f2c, char*);
 static char *gt_num(char *s, int *n, int n1)
 #endif
 {	int m=0,f__cnt=0;
@@ -85,20 +83,19 @@ static char *gt_num(char *s, int *n, int n1)
 
  static
 #ifdef KR_headers
-char *f_s(s,curloc) char *s;
+char *f_s(f2c, s,curloc) f2c_state_t *f2c; char *s;
 #else
-char *f_s(char *s, int curloc)
+char *f_s(f2c_state_t *f2c, char *s, int curloc)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	skip(s);
 	if(*s++!='(')
 	{
 		return(NULL);
 	}
 	if(f2c->f__parenlvl++ ==1) f2c->f__revloc=curloc;
-	if(op_gen(RET1,curloc,0,0)<0 ||
-		(s=f_list(s))==NULL)
+	if(op_gen(f2c,RET1,curloc,0,0)<0 ||
+		(s=f_list(f2c, s))==NULL)
 	{
 		return(NULL);
 	}
@@ -108,24 +105,23 @@ char *f_s(char *s, int curloc)
 
  static
 #ifdef KR_headers
-ne_d(s,p) char *s,**p;
+ne_d(f2c,s,p) f2c_state_t *f2c; char *s,**p;
 #else
-ne_d(char *s, char **p)
+ne_d(f2c_state_t *f2c, char *s, char **p)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int n,x,sign=0;
+{	int n,x,sign=0;
 	struct syl *sp;
 	switch(*s)
 	{
 	default:
 		return(0);
-	case ':': (void) op_gen(COLON,0,0,0); break;
+	case ':': (void) op_gen(f2c,COLON,0,0,0); break;
 	case '$':
-		(void) op_gen(NONL, 0, 0, 0); break;
+		(void) op_gen(f2c,NONL, 0, 0, 0); break;
 	case 'B':
 	case 'b':
-		if(*++s=='z' || *s == 'Z') (void) op_gen(BZ,0,0,0);
-		else (void) op_gen(BN,0,0,0);
+		if(*++s=='z' || *s == 'Z') (void) op_gen(f2c,BZ,0,0,0);
+		else (void) op_gen(f2c,BN,0,0,0);
 		break;
 	case 'S':
 	case 's':
@@ -138,9 +134,9 @@ ne_d(char *s, char **p)
 			s++;
 		}
 		else x=S;
-		(void) op_gen(x,0,0,0);
+		(void) op_gen(f2c,x,0,0,0);
 		break;
-	case '/': (void) op_gen(SLASH,0,0,0); break;
+	case '/': (void) op_gen(f2c,SLASH,0,0,0); break;
 	case '-': sign=1;
 	case '+':	s++;	/*OUTRAGEOUS CODING TRICK*/
 	case '0': case '1': case '2': case '3': case '4':
@@ -154,12 +150,12 @@ ne_d(char *s, char **p)
 		default:
 			return(0);
 		case 'P':
-		case 'p': if(sign) n= -n; (void) op_gen(P,n,0,0); break;
+		case 'p': if(sign) n= -n; (void) op_gen(f2c,P,n,0,0); break;
 		case 'X':
-		case 'x': (void) op_gen(X,n,0,0); break;
+		case 'x': (void) op_gen(f2c,X,n,0,0); break;
 		case 'H':
 		case 'h':
-			sp = &f2c->f__syl[op_gen(H,n,0,0)];
+			sp = &f2c->f__syl[op_gen(f2c,H,n,0,0)];
 			sp->p2.s = s + 1;
 			s+=n;
 			break;
@@ -168,9 +164,9 @@ ne_d(char *s, char **p)
 	case GLITCH:
 	case '"':
 	case '\'':
-		sp = &f2c->f__syl[op_gen(APOS,0,0,0)];
+		sp = &f2c->f__syl[op_gen(f2c,APOS,0,0,0)];
 		sp->p2.s = s;
-		if((*p = ap_end(s)) == NULL)
+		if((*p = ap_end(f2c,s)) == NULL)
 			return(0);
 		return(1);
 	case 'T':
@@ -187,12 +183,12 @@ ne_d(char *s, char **p)
 		if (!(s=gt_num(s+1,&n,0)))
 			goto bad;
 		s--;
-		(void) op_gen(x,n,0,0);
+		(void) op_gen(f2c,x,n,0,0);
 		break;
 	case 'X':
-	case 'x': (void) op_gen(X,1,0,0); break;
+	case 'x': (void) op_gen(f2c,X,1,0,0); break;
 	case 'P':
-	case 'p': (void) op_gen(P,1,0,0); break;
+	case 'p': (void) op_gen(f2c,P,1,0,0); break;
 	}
 	s++;
 	*p=s;
@@ -201,15 +197,14 @@ ne_d(char *s, char **p)
 
  static
 #ifdef KR_headers
-e_d(s,p) char *s,**p;
+e_d(f2c,s,p) f2c_state_t *f2c; char *s,**p;
 #else
-e_d(char *s, char **p)
+e_d(f2c_state_t *f2c, char *s, char **p)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	int i,im,n,w,d,e,found=0,x=0;
+{	int i,im,n,w,d,e,found=0,x=0;
 	char *sv=s;
 	s=gt_num(s,&n,1);
-	(void) op_gen(STACK,n,0,0);
+	(void) op_gen(f2c,STACK,n,0,0);
 	switch(*s++)
 	{
 	default: break;
@@ -230,11 +225,11 @@ e_d(char *s, char **p)
 			}
 		else d=0;
 		if(*s!='E' && *s != 'e')
-			(void) op_gen(x==1?E:G,w,d,0);	/* default is Ew.dE2 */
+			(void) op_gen(f2c,x==1?E:G,w,d,0);	/* default is Ew.dE2 */
 		else {
 			if (!(s=gt_num(s+1,&e,0)))
 				goto bad;
-			(void) op_gen(x==1?EE:GE,w,d,e);
+			(void) op_gen(f2c,x==1?EE:GE,w,d,e);
 			}
 		break;
 	case 'O':
@@ -253,7 +248,7 @@ e_d(char *s, char **p)
 		if (!(s=gt_num(s,&w,0)))
 			goto bad;
 		if(w==0) break;
-		(void) op_gen(L,w,0,0);
+		(void) op_gen(f2c,L,w,0,0);
 		break;
 	case 'A':
 	case 'a':
@@ -262,10 +257,10 @@ e_d(char *s, char **p)
 		if(*s>='0' && *s<='9')
 		{	s=gt_num(s,&w,1);
 			if(w==0) break;
-			(void) op_gen(AW,w,0,0);
+			(void) op_gen(f2c,AW,w,0,0);
 			break;
 		}
-		(void) op_gen(A,0,0,0);
+		(void) op_gen(f2c,A,0,0,0);
 		break;
 	case 'F':
 	case 'f':
@@ -278,7 +273,7 @@ e_d(char *s, char **p)
 				goto bad;
 			}
 		else d=0;
-		(void) op_gen(F,w,d,0);
+		(void) op_gen(f2c,F,w,d,0);
 		break;
 	case 'D':
 	case 'd':
@@ -291,7 +286,7 @@ e_d(char *s, char **p)
 				goto bad;
 			}
 		else d=0;
-		(void) op_gen(D,w,d,0);
+		(void) op_gen(f2c,D,w,d,0);
 		break;
 	case 'I':
 	case 'i':
@@ -303,12 +298,12 @@ e_d(char *s, char **p)
 		found=1;
 		if(w==0) break;
 		if(*s!='.')
-		{	(void) op_gen(i,w,0,0);
+		{	(void) op_gen(f2c,i,w,0,0);
 			break;
 		}
 		if (!(s=gt_num(s+1,&d,0)))
 			goto bad;
-		(void) op_gen(im,w,d,0);
+		(void) op_gen(f2c,im,w,d,0);
 		break;
 	}
 	if(found==0)
@@ -321,40 +316,39 @@ e_d(char *s, char **p)
 }
  static
 #ifdef KR_headers
-char *i_tem(s) char *s;
+char *i_tem(f2c,s) f2c_state_t *f2c; char *s;
 #else
-char *i_tem(char *s)
+char *i_tem(f2c_state_t *f2c, char *s)
 #endif
 {	char *t;
 	int n,curloc;
 	if(*s==')') return(s);
-	if(ne_d(s,&t)) return(t);
-	if(e_d(s,&t)) return(t);
+	if(ne_d(f2c,s,&t)) return(t);
+	if(e_d(f2c,s,&t)) return(t);
 	s=gt_num(s,&n,1);
-	if((curloc=op_gen(STACK,n,0,0))<0) return(NULL);
-	return(f_s(s,curloc));
+	if((curloc=op_gen(f2c,STACK,n,0,0))<0) return(NULL);
+	return(f_s(f2c,s,curloc));
 }
 
  static
 #ifdef KR_headers
-char *f_list(s) char *s;
+char *f_list(f2c,s) f2c_state_t *f2c; char *s;
 #else
-char *f_list(char *s)
+char *f_list(f2c_state_t *f2c, char *s)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	for(;*s!=0;)
 	{	skip(s);
-		if((s=i_tem(s))==NULL) return(NULL);
+		if((s=i_tem(f2c,s))==NULL) return(NULL);
 		skip(s);
 		if(*s==',') s++;
 		else if(*s==')')
 		{	if(--f2c->f__parenlvl==0)
 			{
-				(void) op_gen(REVERT,f2c->f__revloc,0,0);
+				(void) op_gen(f2c,REVERT,f2c->f__revloc,0,0);
 				return(++s);
 			}
-			(void) op_gen(GOTO,0,0,0);
+			(void) op_gen(f2c,GOTO,0,0,0);
 			return(++s);
 		}
 	}
@@ -362,14 +356,13 @@ char *f_list(char *s)
 }
 
 #ifdef KR_headers
-pars_f(s) char *s;
+pars_f(f2c,s) f2c_state_t *f2c; char *s;
 #else
-pars_f(char *s)
+pars_f(f2c_state_t *f2c, char *s)
 #endif
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	f2c->f__parenlvl=f2c->f__revloc=f2c->f__pc=0;
-	if(f_s(s,0) == NULL)
+	if(f_s(f2c,s,0) == NULL)
 	{
 		return(-1);
 	}
@@ -410,12 +403,11 @@ type_f(int n)
 	}
 }
 #ifdef KR_headers
-integer do_fio(number,ptr,len) ftnint *number; ftnlen len; char *ptr;
+integer do_fio(f2c,number,ptr,len) f2c_state_t *f2c; ftnint *number; ftnlen len; char *ptr;
 #else
-integer do_fio(ftnint *number, char *ptr, ftnlen len)
+integer do_fio(f2c_state_t *f2c, ftnint *number, char *ptr, ftnlen len)
 #endif
-{	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
-	struct syl *p;
+{	struct syl *p;
 	int n,i;
 	for(i=0;i<*number;i++,ptr+=len)
 	{
@@ -505,14 +497,13 @@ loop:	switch(type_f((p= &f2c->f__syl[f2c->f__pc])->op))
 	}
 	return(0);
 }
-en_fio(Void)
+en_fio(f2c_state_t *f2c)
 {	ftnint one=1;
-	return(do_fio(&one,(char *)NULL,(ftnint)0));
+	return(do_fio(f2c,&one,(char *)NULL,(ftnint)0));
 }
  VOID
-fmt_bg(Void)
+fmt_bg(f2c_state_t *f2c)
 {
-	f2c_state_t* f2c = &__cspice_get_state()->user.f2c;
 	f2c->f__workdone=f2c->f__cp=f2c->f__rp=f2c->f__pc=f2c->f__cursor=0;
 	f2c->f__cnt[0]=f2c->f__ret[0]=0;
 }

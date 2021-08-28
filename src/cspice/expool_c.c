@@ -154,7 +154,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "expool_c" );
+   chkin_c ( naif_state, "expool_c" );
 
 
    /*

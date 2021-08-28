@@ -8,8 +8,7 @@
 
 
 extern nearpt_init_t __nearpt_init;
-static nearpt_state_t* get_nearpt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline nearpt_state_t* get_nearpt_state(cspice_t* state) {
 	if (!state->nearpt)
 		state->nearpt = __cspice_allocate_module(sizeof(
 	nearpt_state_t), &__nearpt_init, sizeof(__nearpt_init));
@@ -18,8 +17,9 @@ static nearpt_state_t* get_nearpt_state() {
 }
 
 /* $Procedure      NEARPT ( Nearest point on an ellipsoid ) */
-/* Subroutine */ int nearpt_(doublereal *positn, doublereal *a, doublereal *b,
-	 doublereal *c__, doublereal *npoint, doublereal *alt)
+/* Subroutine */ int nearpt_(cspice_t* __global_state, doublereal *positn, 
+	doublereal *a, doublereal *b, doublereal *c__, doublereal *npoint, 
+	doublereal *alt)
 {
     /* Initialized data */
 
@@ -29,12 +29,13 @@ static nearpt_state_t* get_nearpt_state() {
     doublereal d__1, d__2, d__3, d__4, d__5;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-    double sqrt(doublereal), pow_dd(doublereal *, doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
+    double sqrt(f2c_state_t*, doublereal), pow_dd(f2c_state_t*, doublereal *, 
+	    doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal sign;
     doublereal axis[3];
     doublereal temp;
@@ -42,60 +43,67 @@ static nearpt_state_t* get_nearpt_state() {
     doublereal errp[3];
     doublereal copy[3];
     logical trim;
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     integer i__;
     doublereal q;
     doublereal scale;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal denom;
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     logical extra;
     doublereal lower;
-    extern doublereal vdist_(doublereal *, doublereal *);
+    extern doublereal vdist_(cspice_t*, doublereal *, doublereal *);
     doublereal point[3];
     doublereal pnorm;
     doublereal upper;
-    extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
+    extern /* Subroutine */ int vperp_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
     doublereal denom2;
     doublereal denom3;
     doublereal lambda;
     doublereal tlambd[3];
     doublereal height;
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
+    extern doublereal brcktd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     logical inside;
     doublereal factor;
-    extern /* Subroutine */ int orderd_(doublereal *, integer *, integer *);
-    extern /* Subroutine */ int reordd_(integer *, integer *, doublereal *);
+    extern /* Subroutine */ int orderd_(cspice_t*, doublereal *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int reordd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
     doublereal toobig;
     integer iorder[3];
-    extern doublereal touchd_(doublereal *);
+    extern doublereal touchd_(cspice_t*, doublereal *);
     doublereal olderr;
     doublereal normal[3];
     doublereal bestht;
     doublereal orignl[3];
     doublereal prodct;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     doublereal epoint[3];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int vsclip_(doublereal *, doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int vsclip_(cspice_t*, doublereal *, doublereal *)
+	    ;
     doublereal bestpt[3];
     doublereal newerr;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal axisqr[3];
-    extern logical approx_(doublereal *, doublereal *, doublereal *);
+    extern logical approx_(cspice_t*, doublereal *, doublereal *, doublereal *
+	    );
     doublereal qlower;
     integer snglpt;
     doublereal qupper;
     doublereal spoint[3];
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     logical solvng;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int surfnm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int surfnm_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *);
     integer solutn;
     integer bad;
     doublereal err[3];
@@ -103,7 +111,7 @@ static nearpt_state_t* get_nearpt_state() {
 
 
     /* Module state */
-    nearpt_state_t* __state = get_nearpt_state();
+    nearpt_state_t* __state = get_nearpt_state(__global_state);
 /* $ Abstract */
 
 /*     This routine locates the point on the surface of an ellipsoid */
@@ -565,10 +573,10 @@ static nearpt_state_t* get_nearpt_state() {
 /*     ================================================================ */
 /*     ---------------------------------------------------------------- */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("NEARPT", (ftnlen)6);
+	chkin_(__global_state, "NEARPT", (ftnlen)6);
     }
 
 /*     Check the axes to make sure that none of them is less than or */
@@ -585,16 +593,16 @@ static nearpt_state_t* get_nearpt_state() {
 	bad += 4;
     }
     if (bad > 0) {
-	setmsg_(__state->mssg + ((i__1 = bad - 1) < 7 && 0 <= i__1 ? i__1 : 
-		s_rnge("mssg", i__1, "nearpt_", (ftnlen)591)) * 80, (ftnlen)
-		80);
-	errch_("?", "The A,B, and C axes were #, #, and # respectively.", (
-		ftnlen)1, (ftnlen)50);
-	errdp_("#", a, (ftnlen)1);
-	errdp_("#", b, (ftnlen)1);
-	errdp_("#", c__, (ftnlen)1);
-	sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
-	chkout_("NEARPT", (ftnlen)6);
+	setmsg_(__global_state, __state->mssg + ((i__1 = bad - 1) < 7 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "mssg", i__1, 
+		"nearpt_", (ftnlen)591)) * 80, (ftnlen)80);
+	errch_(__global_state, "?", "The A,B, and C axes were #, #, and # re"
+		"spectively.", (ftnlen)1, (ftnlen)50);
+	errdp_(__global_state, "#", a, (ftnlen)1);
+	errdp_(__global_state, "#", b, (ftnlen)1);
+	errdp_(__global_state, "#", c__, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BADAXISLENGTH)", (ftnlen)20);
+	chkout_(__global_state, "NEARPT", (ftnlen)6);
 	return 0;
     }
 
@@ -772,10 +780,10 @@ static nearpt_state_t* get_nearpt_state() {
     axis[0] = *a;
     axis[1] = *b;
     axis[2] = *c__;
-    vequ_(positn, point);
-    orderd_(axis, &__state->c__3, iorder);
-    reordd_(iorder, &__state->c__3, axis);
-    reordd_(iorder, &__state->c__3, point);
+    vequ_(__global_state, positn, point);
+    orderd_(__global_state, axis, &__state->c__3, iorder);
+    reordd_(__global_state, iorder, &__state->c__3, axis);
+    reordd_(__global_state, iorder, &__state->c__3, point);
 
 /*     Rescale everything so as to avoid underflows when squaring */
 /*     quantities and copy the original starting point. */
@@ -783,34 +791,37 @@ static nearpt_state_t* get_nearpt_state() {
 /*     Be sure that this is UNDONE at the end of the routine. */
 
     scale = 1. / axis[0];
-    vsclip_(&scale, axis);
-    vsclip_(&scale, point);
-    vequ_(point, orignl);
+    vsclip_(__global_state, &scale, axis);
+    vsclip_(__global_state, &scale, point);
+    vequ_(__global_state, point, orignl);
 
 /*     Save the norm of the scaled input point. */
 
-    pnorm = vnorm_(point);
+    pnorm = vnorm_(__global_state, point);
 
 /*     The scaled axis lengths must be small enough so they can */
 /*     be squared. */
 
-    toobig = sqrt(dpmax_() / 100.);
+    toobig = sqrt(&__global_state->f2c, dpmax_(__global_state) / 100.);
 
 /*     Note the first axis has length 1.D0, so we don't check it. */
 
     for (i__ = 2; i__ <= 3; ++i__) {
-	if (axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("axis", 
-		i__1, "nearpt_", (ftnlen)818)] > toobig) {
-	    setmsg_("Ratio of length of axis #* to length of axis #* is *; t"
-		    "his value may cause numeric overflow.", (ftnlen)92);
-	    errint_("*", &iorder[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("iorder", i__1, "nearpt_", (ftnlen)823)], (ftnlen)
-		    1);
-	    errint_("*", iorder, (ftnlen)1);
-	    errdp_("*", &axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("axis", i__1, "nearpt_", (ftnlen)825)], (ftnlen)1);
-	    sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
-	    chkout_("NEARPT", (ftnlen)6);
+	if (axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "axis", i__1, "nearpt_", (ftnlen)818)] > 
+		toobig) {
+	    setmsg_(__global_state, "Ratio of length of axis #* to length of"
+		    " axis #* is *; this value may cause numeric overflow.", (
+		    ftnlen)92);
+	    errint_(__global_state, "*", &iorder[(i__1 = i__ - 1) < 3 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "iorder", i__1,
+		     "nearpt_", (ftnlen)823)], (ftnlen)1);
+	    errint_(__global_state, "*", iorder, (ftnlen)1);
+	    errdp_(__global_state, "*", &axis[(i__1 = i__ - 1) < 3 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "axis", i__1, 
+		    "nearpt_", (ftnlen)825)], (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADAXISLENGTH)", (ftnlen)20);
+	    chkout_(__global_state, "NEARPT", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -823,21 +834,23 @@ static nearpt_state_t* get_nearpt_state() {
 /*     the square roots of the factors to TOOBIG. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	prodct = sqrt(axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"axis", i__1, "nearpt_", (ftnlen)844)]) * sqrt((d__1 = point[(
-		i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("point", 
-		i__2, "nearpt_", (ftnlen)844)], abs(d__1)));
+	prodct = sqrt(&__global_state->f2c, axis[(i__1 = i__ - 1) < 3 && 0 <= 
+		i__1 ? i__1 : s_rnge(&__global_state->f2c, "axis", i__1, 
+		"nearpt_", (ftnlen)844)]) * sqrt(&__global_state->f2c, (d__1 =
+		 point[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "point", i__2, "nearpt_", (ftnlen)844)], 
+		abs(d__1)));
 	if (prodct > toobig) {
-	    setmsg_("Product of length of scaled axis #* and size of corresp"
-		    "onding scaled component of POSITN is > *; these values m"
-		    "ay cause numeric overflow.", (ftnlen)137);
-	    errint_("*", &iorder[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("iorder", i__1, "nearpt_", (ftnlen)852)], (ftnlen)
-		    1);
-	    d__1 = pow_dd(&toobig, &__state->c_b36);
-	    errdp_("*", &d__1, (ftnlen)1);
-	    sigerr_("SPICE(INPUTSTOOLARGE)", (ftnlen)21);
-	    chkout_("NEARPT", (ftnlen)6);
+	    setmsg_(__global_state, "Product of length of scaled axis #* and"
+		    " size of corresponding scaled component of POSITN is > *"
+		    "; these values may cause numeric overflow.", (ftnlen)137);
+	    errint_(__global_state, "*", &iorder[(i__1 = i__ - 1) < 3 && 0 <= 
+		    i__1 ? i__1 : s_rnge(&__global_state->f2c, "iorder", i__1,
+		     "nearpt_", (ftnlen)852)], (ftnlen)1);
+	    d__1 = pow_dd(&__global_state->f2c, &toobig, &__state->c_b36);
+	    errdp_(__global_state, "*", &d__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INPUTSTOOLARGE)", (ftnlen)21);
+	    chkout_(__global_state, "NEARPT", (ftnlen)6);
 	    return 0;
 	}
     }
@@ -876,21 +889,25 @@ static nearpt_state_t* get_nearpt_state() {
 /*        contribute to an addition to the corresponding component */
 /*        of AXIS, is in fact zero. */
 
-	vequ_(point, copy);
+	vequ_(__global_state, point, copy);
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("poi"
-		    "nt", i__1, "nearpt_", (ftnlen)903)] * .5 + axis[(i__2 = 
-		    i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("axis", i__2, 
-		    "nearpt_", (ftnlen)903)] == axis[(i__3 = i__ - 1) < 3 && 
-		    0 <= i__3 ? i__3 : s_rnge("axis", i__3, "nearpt_", (
-		    ftnlen)903)] || point[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? 
-		    i__4 : s_rnge("point", i__4, "nearpt_", (ftnlen)903)] * 
-		    .5 - axis[(i__5 = i__ - 1) < 3 && 0 <= i__5 ? i__5 : 
-		    s_rnge("axis", i__5, "nearpt_", (ftnlen)903)] == -axis[(
-		    i__6 = i__ - 1) < 3 && 0 <= i__6 ? i__6 : s_rnge("axis", 
-		    i__6, "nearpt_", (ftnlen)903)]) {
-		point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("poi"
-			"nt", i__1, "nearpt_", (ftnlen)906)] = 0.;
+	    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "point", i__1, "nearpt_", (ftnlen)
+		    903)] * .5 + axis[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
+		    i__2 : s_rnge(&__global_state->f2c, "axis", i__2, "nearp"
+		    "t_", (ftnlen)903)] == axis[(i__3 = i__ - 1) < 3 && 0 <= 
+		    i__3 ? i__3 : s_rnge(&__global_state->f2c, "axis", i__3, 
+		    "nearpt_", (ftnlen)903)] || point[(i__4 = i__ - 1) < 3 && 
+		    0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c, "point", 
+		    i__4, "nearpt_", (ftnlen)903)] * .5 - axis[(i__5 = i__ - 
+		    1) < 3 && 0 <= i__5 ? i__5 : s_rnge(&__global_state->f2c, 
+		    "axis", i__5, "nearpt_", (ftnlen)903)] == -axis[(i__6 = 
+		    i__ - 1) < 3 && 0 <= i__6 ? i__6 : s_rnge(&
+		    __global_state->f2c, "axis", i__6, "nearpt_", (ftnlen)903)
+		    ]) {
+		point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "point", i__1, "nearpt_", (
+			ftnlen)906)] = 0.;
 	    }
 	}
 
@@ -988,14 +1005,16 @@ static nearpt_state_t* get_nearpt_state() {
 /*           term of the expression for Q isn't bigger than 4. */
 
 	    for (i__ = 1; i__ <= 3; ++i__) {
-		tlambd[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-			"tlambd", i__2, "nearpt_", (ftnlen)1011)] = ((d__1 = 
-			point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("point", i__1, "nearpt_", (ftnlen)1011)], abs(
-			d__1)) * .5 - axis[(i__3 = i__ - 1) < 3 && 0 <= i__3 ?
-			 i__3 : s_rnge("axis", i__3, "nearpt_", (ftnlen)1011)]
-			) * axis[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : 
-			s_rnge("axis", i__4, "nearpt_", (ftnlen)1011)];
+		tlambd[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "tlambd", i__2, "nearpt_", (
+			ftnlen)1011)] = ((d__1 = point[(i__1 = i__ - 1) < 3 &&
+			 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+			"point", i__1, "nearpt_", (ftnlen)1011)], abs(d__1)) *
+			 .5 - axis[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
+			s_rnge(&__global_state->f2c, "axis", i__3, "nearpt_", 
+			(ftnlen)1011)]) * axis[(i__4 = i__ - 1) < 3 && 0 <= 
+			i__4 ? i__4 : s_rnge(&__global_state->f2c, "axis", 
+			i__4, "nearpt_", (ftnlen)1011)];
 	    }
 /* Computing MAX */
 	    d__1 = max(0.,tlambd[0]), d__1 = max(d__1,tlambd[1]);
@@ -1045,8 +1064,9 @@ static nearpt_state_t* get_nearpt_state() {
 
 	    snglpt = 4;
 	    for (i__ = 3; i__ >= 1; --i__) {
-		if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"point", i__1, "nearpt_", (ftnlen)1065)] != 0.) {
+		if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "point", i__1, "nearpt_", (
+			ftnlen)1065)] != 0.) {
 		    snglpt = i__;
 		}
 	    }
@@ -1057,22 +1077,24 @@ static nearpt_state_t* get_nearpt_state() {
 	    if (snglpt <= 3) {
 		for (i__ = 1; i__ <= 3; ++i__) {
 		    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			    s_rnge("point", i__1, "nearpt_", (ftnlen)1079)] ==
-			     0.) {
+			    s_rnge(&__global_state->f2c, "point", i__1, "nea"
+			    "rpt_", (ftnlen)1079)] == 0.) {
 			tlambd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-				s_rnge("tlambd", i__1, "nearpt_", (ftnlen)
-				1080)] = -axisqr[2];
+				s_rnge(&__global_state->f2c, "tlambd", i__1, 
+				"nearpt_", (ftnlen)1080)] = -axisqr[2];
 		    } else {
 			tlambd[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
-				s_rnge("tlambd", i__2, "nearpt_", (ftnlen)
-				1082)] = axis[(i__3 = i__ - 1) < 3 && 0 <= 
-				i__3 ? i__3 : s_rnge("axis", i__3, "nearpt_", 
+				s_rnge(&__global_state->f2c, "tlambd", i__2, 
+				"nearpt_", (ftnlen)1082)] = axis[(i__3 = i__ 
+				- 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+				__global_state->f2c, "axis", i__3, "nearpt_", 
 				(ftnlen)1082)] * ((d__1 = point[(i__1 = i__ - 
-				1) < 3 && 0 <= i__1 ? i__1 : s_rnge("point", 
-				i__1, "nearpt_", (ftnlen)1082)], abs(d__1)) * 
-				.5 - axis[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? 
-				i__4 : s_rnge("axis", i__4, "nearpt_", (
-				ftnlen)1082)]);
+				1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "point", i__1, "nearpt_",
+				 (ftnlen)1082)], abs(d__1)) * .5 - axis[(i__4 
+				= i__ - 1) < 3 && 0 <= i__4 ? i__4 : s_rnge(&
+				__global_state->f2c, "axis", i__4, "nearpt_", 
+				(ftnlen)1082)]);
 		    }
 		}
 /* Computing MAX */
@@ -1118,10 +1140,12 @@ static nearpt_state_t* get_nearpt_state() {
 /*        values of LAMBDA. */
 
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("poi"
-		    "nt", i__1, "nearpt_", (ftnlen)1139)] == 0.) {
-		term[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("term",
-			 i__1, "nearpt_", (ftnlen)1141)] = 0.;
+	    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "point", i__1, "nearpt_", (ftnlen)
+		    1139)] == 0.) {
+		term[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "term", i__1, "nearpt_", (ftnlen)
+			1141)] = 0.;
 	    } else {
 
 /*              We have to be a bit careful for points inside the */
@@ -1134,12 +1158,13 @@ static nearpt_state_t* get_nearpt_state() {
 /*              can simply truncate its individual terms when we are in */
 /*              danger of division overflows. */
 		denom = axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("axis", i__1, "nearpt_", (ftnlen)1155)] + 
-			lambda / axis[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
-			i__2 : s_rnge("axis", i__2, "nearpt_", (ftnlen)1155)];
+			s_rnge(&__global_state->f2c, "axis", i__1, "nearpt_", 
+			(ftnlen)1155)] + lambda / axis[(i__2 = i__ - 1) < 3 &&
+			 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			"axis", i__2, "nearpt_", (ftnlen)1155)];
 		trim = (d__1 = point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 
-			: s_rnge("point", i__1, "nearpt_", (ftnlen)1157)], 
-			abs(d__1)) * .5 > denom;
+			: s_rnge(&__global_state->f2c, "point", i__1, "nearp"
+			"t_", (ftnlen)1157)], abs(d__1)) * .5 > denom;
 		if (inside && trim) {
 		    factor = 2.;
 		} else {
@@ -1148,20 +1173,21 @@ static nearpt_state_t* get_nearpt_state() {
 /*                 check anyway. */
 
 		    if (denom == 0.) {
-			setmsg_("AXIS(#) + LAMBDA/AXIS(#) is zero.", (ftnlen)
-				33);
-			errint_("#", &i__, (ftnlen)1);
-			errint_("#", &i__, (ftnlen)1);
-			sigerr_("SPICE(BUG)", (ftnlen)10);
-			chkout_("NEARPT", (ftnlen)6);
+			setmsg_(__global_state, "AXIS(#) + LAMBDA/AXIS(#) is"
+				" zero.", (ftnlen)33);
+			errint_(__global_state, "#", &i__, (ftnlen)1);
+			errint_(__global_state, "#", &i__, (ftnlen)1);
+			sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+			chkout_(__global_state, "NEARPT", (ftnlen)6);
 			return 0;
 		    }
 		    factor = point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			    s_rnge("point", i__1, "nearpt_", (ftnlen)1179)] / 
-			    denom;
+			    s_rnge(&__global_state->f2c, "point", i__1, "nea"
+			    "rpt_", (ftnlen)1179)] / denom;
 		}
-		term[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("term",
-			 i__1, "nearpt_", (ftnlen)1183)] = factor * factor;
+		term[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "term", i__1, "nearpt_", (ftnlen)
+			1183)] = factor * factor;
 	    }
 	}
 	if (! inside) {
@@ -1192,27 +1218,28 @@ static nearpt_state_t* get_nearpt_state() {
 
 	for(;;) { /* while(complicated condition) */
 	    d__1 = upper - lower;
-	    if (!(touchd_(&d__1) > 0.))
+	    if (!(touchd_(__global_state, &d__1) > 0.))
 	    	break;
 	    ++itr;
 	    if (itr > 2048) {
-		setmsg_("Iteration limit # exceeded in NEARPT. A, B, C = # #"
-			" #; POSITN = ( #, #, # ). LOWER = #; UPPER = #; UPPE"
-			"R-LOWER = #. Solution pass number = #.  This event s"
-			"hould never occur. Contact NAIF.", (ftnlen)187);
-		errint_("#", &__state->c__2048, (ftnlen)1);
-		errdp_("#", a, (ftnlen)1);
-		errdp_("#", b, (ftnlen)1);
-		errdp_("#", c__, (ftnlen)1);
-		errdp_("#", positn, (ftnlen)1);
-		errdp_("#", &positn[1], (ftnlen)1);
-		errdp_("#", &positn[2], (ftnlen)1);
-		errdp_("#", &lower, (ftnlen)1);
-		errdp_("#", &upper, (ftnlen)1);
+		setmsg_(__global_state, "Iteration limit # exceeded in NEARP"
+			"T. A, B, C = # # #; POSITN = ( #, #, # ). LOWER = #;"
+			" UPPER = #; UPPER-LOWER = #. Solution pass number = "
+			"#.  This event should never occur. Contact NAIF.", (
+			ftnlen)187);
+		errint_(__global_state, "#", &__state->c__2048, (ftnlen)1);
+		errdp_(__global_state, "#", a, (ftnlen)1);
+		errdp_(__global_state, "#", b, (ftnlen)1);
+		errdp_(__global_state, "#", c__, (ftnlen)1);
+		errdp_(__global_state, "#", positn, (ftnlen)1);
+		errdp_(__global_state, "#", &positn[1], (ftnlen)1);
+		errdp_(__global_state, "#", &positn[2], (ftnlen)1);
+		errdp_(__global_state, "#", &lower, (ftnlen)1);
+		errdp_(__global_state, "#", &upper, (ftnlen)1);
 		d__1 = upper - lower;
-		errdp_("#", &d__1, (ftnlen)1);
-		sigerr_("SPICE(BUG)", (ftnlen)10);
-		chkout_("NEARPT", (ftnlen)6);
+		errdp_(__global_state, "#", &d__1, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		chkout_(__global_state, "NEARPT", (ftnlen)6);
 		return 0;
 	    }
 
@@ -1254,7 +1281,7 @@ static nearpt_state_t* get_nearpt_state() {
 /*              bracketing interval.  Force it back in to the current */
 /*              interval. */
 
-		lambda = brcktd_(&lambda, &lower, &upper);
+		lambda = brcktd_(__global_state, &lambda, &lower, &upper);
 	    }
 
 /*           At this point, it's guaranteed that */
@@ -1272,8 +1299,9 @@ static nearpt_state_t* get_nearpt_state() {
 /*           endpoints.  Set LOWER and UPPER equal so that the loop will */
 /*           finally terminate. */
 
-	    if (approx_(&lambda, &lower, &__state->c_b108) || approx_(&lambda,
-		     &upper, &__state->c_b108)) {
+	    if (approx_(__global_state, &lambda, &lower, &__state->c_b108) || 
+		    approx_(__global_state, &lambda, &upper, &__state->c_b108)
+		    ) {
 
 /*              Make the decision as to which way to push */
 /*              the boundaries, by selecting that endpoint */
@@ -1292,23 +1320,25 @@ static nearpt_state_t* get_nearpt_state() {
 /*           value of Q at our new guess for LAMBDA. */
 
 	    d__1 = upper - lower;
-	    if (touchd_(&d__1) > 0.) {
+	    if (touchd_(__global_state, &d__1) > 0.) {
 		for (i__ = 1; i__ <= 3; ++i__) {
 		    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			    s_rnge("point", i__1, "nearpt_", (ftnlen)1337)] ==
-			     0.) {
+			    s_rnge(&__global_state->f2c, "point", i__1, "nea"
+			    "rpt_", (ftnlen)1337)] == 0.) {
 			term[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-				s_rnge("term", i__1, "nearpt_", (ftnlen)1339)]
-				 = 0.;
+				s_rnge(&__global_state->f2c, "term", i__1, 
+				"nearpt_", (ftnlen)1339)] = 0.;
 		    } else {
 			denom = axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 
-				: s_rnge("axis", i__1, "nearpt_", (ftnlen)
-				1343)] + lambda / axis[(i__2 = i__ - 1) < 3 &&
-				 0 <= i__2 ? i__2 : s_rnge("axis", i__2, 
+				: s_rnge(&__global_state->f2c, "axis", i__1, 
+				"nearpt_", (ftnlen)1343)] + lambda / axis[(
+				i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+				s_rnge(&__global_state->f2c, "axis", i__2, 
 				"nearpt_", (ftnlen)1343)];
 			trim = (d__1 = point[(i__1 = i__ - 1) < 3 && 0 <= 
-				i__1 ? i__1 : s_rnge("point", i__1, "nearpt_",
-				 (ftnlen)1345)], abs(d__1)) * .5 > denom;
+				i__1 ? i__1 : s_rnge(&__global_state->f2c, 
+				"point", i__1, "nearpt_", (ftnlen)1345)], abs(
+				d__1)) * .5 > denom;
 			if (inside && trim) {
 			    factor = 2.;
 			} else {
@@ -1317,25 +1347,27 @@ static nearpt_state_t* get_nearpt_state() {
 /*                       check anyway. */
 
 			    if (denom == 0.) {
-				setmsg_("AXIS(#) + LAMBDA/AXIS(#) is zero.", (
-					ftnlen)33);
-				errint_("#", &i__, (ftnlen)1);
-				errint_("#", &i__, (ftnlen)1);
-				sigerr_("SPICE(BUG)", (ftnlen)10);
-				chkout_("NEARPT", (ftnlen)6);
+				setmsg_(__global_state, "AXIS(#) + LAMBDA/AX"
+					"IS(#) is zero.", (ftnlen)33);
+				errint_(__global_state, "#", &i__, (ftnlen)1);
+				errint_(__global_state, "#", &i__, (ftnlen)1);
+				sigerr_(__global_state, "SPICE(BUG)", (ftnlen)
+					10);
+				chkout_(__global_state, "NEARPT", (ftnlen)6);
 				return 0;
 			    }
 			    factor = point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ?
-				     i__1 : s_rnge("point", i__1, "nearpt_", (
-				    ftnlen)1368)] / denom;
+				     i__1 : s_rnge(&__global_state->f2c, 
+				    "point", i__1, "nearpt_", (ftnlen)1368)] /
+				     denom;
 			}
 			term[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-				s_rnge("term", i__1, "nearpt_", (ftnlen)1372)]
-				 = factor * factor;
+				s_rnge(&__global_state->f2c, "term", i__1, 
+				"nearpt_", (ftnlen)1372)] = factor * factor;
 		    }
 		}
 		d__1 = term[0] + term[1] + term[2] - 1.;
-		q = touchd_(&d__1);
+		q = touchd_(__global_state, &d__1);
 	    }
 
 /*           Q(LAMBDA) has been set unless we've already found */
@@ -1350,31 +1382,34 @@ static nearpt_state_t* get_nearpt_state() {
 
 	lambda = lower;
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("poi"
-		    "nt", i__1, "nearpt_", (ftnlen)1398)] == 0.) {
-		spoint[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"spoint", i__1, "nearpt_", (ftnlen)1400)] = 0.;
+	    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "point", i__1, "nearpt_", (ftnlen)
+		    1398)] == 0.) {
+		spoint[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "spoint", i__1, "nearpt_", (
+			ftnlen)1400)] = 0.;
 	    } else {
 		denom = lambda / axisqr[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? 
-			i__1 : s_rnge("axisqr", i__1, "nearpt_", (ftnlen)1404)
-			] + 1.;
+			i__1 : s_rnge(&__global_state->f2c, "axisqr", i__1, 
+			"nearpt_", (ftnlen)1404)] + 1.;
 
 /*             We don't expect that DENOM will be non-positive, but we */
 /*             check for this case anyway. */
 
 		if (denom <= 0.) {
-		    setmsg_("Denominator in expression for SPOINT(#) is #.", (
-			    ftnlen)45);
-		    errint_("#", &i__, (ftnlen)1);
-		    errdp_("#", &denom, (ftnlen)1);
-		    sigerr_("SPICE(BUG)", (ftnlen)10);
-		    chkout_("NEARPT", (ftnlen)6);
+		    setmsg_(__global_state, "Denominator in expression for S"
+			    "POINT(#) is #.", (ftnlen)45);
+		    errint_(__global_state, "#", &i__, (ftnlen)1);
+		    errdp_(__global_state, "#", &denom, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		    chkout_(__global_state, "NEARPT", (ftnlen)6);
 		    return 0;
 		}
-		spoint[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"spoint", i__1, "nearpt_", (ftnlen)1421)] = copy[(
-			i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-			"copy", i__2, "nearpt_", (ftnlen)1421)] / denom;
+		spoint[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "spoint", i__1, "nearpt_", (
+			ftnlen)1421)] = copy[(i__2 = i__ - 1) < 3 && 0 <= 
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "copy", 
+			i__2, "nearpt_", (ftnlen)1421)] / denom;
 	    }
 	}
 
@@ -1523,9 +1558,10 @@ static nearpt_state_t* get_nearpt_state() {
 /*               | POINT(3) | <= c - a*(a/c) */
 
 	    if (axis[0] != axis[(i__1 = snglpt - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("axis", i__1, "nearpt_", (ftnlen)1575)] && abs(
-		    point[1]) <= axis[1] - axisqr[0] / axis[1] && abs(point[2]
-		    ) <= axis[2] - axisqr[0] / axis[2]) {
+		    s_rnge(&__global_state->f2c, "axis", i__1, "nearpt_", (
+		    ftnlen)1575)] && abs(point[1]) <= axis[1] - axisqr[0] / 
+		    axis[1] && abs(point[2]) <= axis[2] - axisqr[0] / axis[2])
+		     {
 
 /*             What happens next depends on whether the ellipsoid is */
 /*             prolate or triaxial. */
@@ -1568,7 +1604,8 @@ static nearpt_state_t* get_nearpt_state() {
 
 /*                      ...and compute the x component of the point. */
 
-			    epoint[0] = axis[0] * sqrt((max(0.,temp)));
+			    epoint[0] = axis[0] * sqrt(&__global_state->f2c, (
+				    max(0.,temp)));
 			    extra = TRUE_;
 			}
 		    }
@@ -1617,7 +1654,8 @@ static nearpt_state_t* get_nearpt_state() {
 
 /*                      ...and compute the x component of the point. */
 
-			    epoint[0] = axis[0] * sqrt(temp);
+			    epoint[0] = axis[0] * sqrt(&__global_state->f2c, 
+				    temp);
 			    extra = TRUE_;
 			}
 		    }
@@ -1628,8 +1666,9 @@ static nearpt_state_t* get_nearpt_state() {
 /*          is the one we are searching for. */
 
 	    if (extra) {
-		if (vdist_(epoint, point) < vdist_(spoint, point)) {
-		    vequ_(epoint, spoint);
+		if (vdist_(__global_state, epoint, point) < vdist_(
+			__global_state, spoint, point)) {
+		    vequ_(__global_state, epoint, spoint);
 		}
 	    }
 	}
@@ -1648,9 +1687,9 @@ static nearpt_state_t* get_nearpt_state() {
 /*           contain both the current solution point and the */
 /*           original point). */
 
-	    vequ_(spoint, point);
-	    vequ_(spoint, bestpt);
-	    bestht = vdist_(bestpt, orignl);
+	    vequ_(__global_state, spoint, point);
+	    vequ_(__global_state, spoint, bestpt);
+	    bestht = vdist_(__global_state, bestpt, orignl);
 	} else if (solutn == 2) {
 
 /*           The current solution point will be very close to lying */
@@ -1687,29 +1726,31 @@ static nearpt_state_t* get_nearpt_state() {
 
 /*           First we need to compute the altitude */
 
-	    height = sign * vdist_(spoint, orignl);
+	    height = sign * vdist_(__global_state, spoint, orignl);
 
 /*           Next compute the difference between the input point and */
 /*           the one we get by moving out along the normal at our */
 /*           solution point by the computed altitude. */
 
-	    surfnm_(axis, &axis[1], &axis[2], spoint, normal);
+	    surfnm_(__global_state, axis, &axis[1], &axis[2], spoint, normal);
 	    for (i__ = 1; i__ <= 3; ++i__) {
-		err[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("err", 
-			i__1, "nearpt_", (ftnlen)1774)] = orignl[(i__2 = i__ 
-			- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("orignl", i__2, 
+		err[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "err", i__1, "nearpt_", (ftnlen)
+			1774)] = orignl[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
+			i__2 : s_rnge(&__global_state->f2c, "orignl", i__2, 
 			"nearpt_", (ftnlen)1774)] - spoint[(i__3 = i__ - 1) < 
-			3 && 0 <= i__3 ? i__3 : s_rnge("spoint", i__3, "near"
-			"pt_", (ftnlen)1774)] - height * normal[(i__4 = i__ - 
-			1) < 3 && 0 <= i__4 ? i__4 : s_rnge("normal", i__4, 
-			"nearpt_", (ftnlen)1774)];
+			3 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+			"spoint", i__3, "nearpt_", (ftnlen)1774)] - height * 
+			normal[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : 
+			s_rnge(&__global_state->f2c, "normal", i__4, "nearpt_"
+			, (ftnlen)1774)];
 	    }
 
 /*           Find the component of the error vector that is */
 /*           perpendicular to the normal, and shift our solution */
 /*           point by this component. */
 
-	    vperp_(err, normal, errp);
+	    vperp_(__global_state, err, normal, errp);
 
 /*           The sign of the original point's altitude tells */
 /*           us whether the point is outside the ellipsoid. */
@@ -1725,27 +1766,27 @@ static nearpt_state_t* get_nearpt_state() {
 /*                 we don't expect to arrive here. This is a backstop */
 /*                 check. */
 
-		    setmsg_("Norm of scaled point is 0. POSITN = ( #, #, # )",
-			     (ftnlen)47);
-		    errdp_("#", positn, (ftnlen)1);
-		    errdp_("#", &positn[1], (ftnlen)1);
-		    errdp_("#", &positn[2], (ftnlen)1);
-		    sigerr_("SPICE(BUG)", (ftnlen)10);
-		    chkout_("NEARPT", (ftnlen)6);
+		    setmsg_(__global_state, "Norm of scaled point is 0. POSI"
+			    "TN = ( #, #, # )", (ftnlen)47);
+		    errdp_(__global_state, "#", positn, (ftnlen)1);
+		    errdp_(__global_state, "#", &positn[1], (ftnlen)1);
+		    errdp_(__global_state, "#", &positn[2], (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+		    chkout_(__global_state, "NEARPT", (ftnlen)6);
 		    return 0;
 		}
-		d__1 = vnorm_(spoint) / pnorm;
-		vsclip_(&d__1, errp);
+		d__1 = vnorm_(__global_state, spoint) / pnorm;
+		vsclip_(__global_state, &d__1, errp);
 	    }
-	    vadd_(spoint, errp, point);
-	    olderr = vnorm_(err);
+	    vadd_(__global_state, spoint, errp, point);
+	    olderr = vnorm_(__global_state, err);
 	    bestht = height;
 
 /*           Finally store the current solution point, so that if */
 /*           this sharpening doesn't improve our estimate of the */
 /*           near point, we can just return our current best guess. */
 
-	    vequ_(spoint, bestpt);
+	    vequ_(__global_state, spoint, bestpt);
 	} else if (solutn > 2) {
 
 /*           This branch exists for the purpose of testing our */
@@ -1773,28 +1814,30 @@ static nearpt_state_t* get_nearpt_state() {
 
 /*           First compute the altitude, */
 
-	    height = sign * vdist_(spoint, orignl);
+	    height = sign * vdist_(__global_state, spoint, orignl);
 
 /*           ... compute the difference */
 
 /*              ORIGNL - SPOINT - HEIGHT*NORMAL, */
 
-	    surfnm_(axis, &axis[1], &axis[2], spoint, normal);
+	    surfnm_(__global_state, axis, &axis[1], &axis[2], spoint, normal);
 	    for (i__ = 1; i__ <= 3; ++i__) {
-		err[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("err", 
-			i__1, "nearpt_", (ftnlen)1867)] = orignl[(i__2 = i__ 
-			- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("orignl", i__2, 
+		err[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+			__global_state->f2c, "err", i__1, "nearpt_", (ftnlen)
+			1867)] = orignl[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
+			i__2 : s_rnge(&__global_state->f2c, "orignl", i__2, 
 			"nearpt_", (ftnlen)1867)] - spoint[(i__3 = i__ - 1) < 
-			3 && 0 <= i__3 ? i__3 : s_rnge("spoint", i__3, "near"
-			"pt_", (ftnlen)1867)] - height * normal[(i__4 = i__ - 
-			1) < 3 && 0 <= i__4 ? i__4 : s_rnge("normal", i__4, 
-			"nearpt_", (ftnlen)1867)];
+			3 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+			"spoint", i__3, "nearpt_", (ftnlen)1867)] - height * 
+			normal[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : 
+			s_rnge(&__global_state->f2c, "normal", i__4, "nearpt_"
+			, (ftnlen)1867)];
 	    }
 
 /*           ...and determine the magnitude of the error due to our */
 /*           sharpened estimate. */
 
-	    newerr = vnorm_(err);
+	    newerr = vnorm_(__global_state, err);
 
 /*           If the sharpened estimate yields a smaller error ... */
 
@@ -1806,14 +1849,14 @@ static nearpt_state_t* get_nearpt_state() {
 
 		olderr = newerr;
 		bestht = height;
-		vequ_(spoint, bestpt);
+		vequ_(__global_state, spoint, bestpt);
 
 /*              Next, if we haven't passed the limit on the number of */
 /*              iterations allowed we prepare the initial point for our */
 /*              "sharpening" estimate. */
 
 		if (solutn <= 6) {
-		    vperp_(err, normal, errp);
+		    vperp_(__global_state, err, normal, errp);
 
 /*                 The sign of the original point's altitude tells */
 /*                 us whether the point is outside the ellipsoid. */
@@ -1829,19 +1872,21 @@ static nearpt_state_t* get_nearpt_state() {
 /*                       ellipsoid, we don't expect to arrive here. */
 /*                       This is a backstop check. */
 
-			    setmsg_("Norm of scaled point is 0. POSITN = ( #"
-				    ", #, # )", (ftnlen)47);
-			    errdp_("#", positn, (ftnlen)1);
-			    errdp_("#", &positn[1], (ftnlen)1);
-			    errdp_("#", &positn[2], (ftnlen)1);
-			    sigerr_("SPICE(BUG)", (ftnlen)10);
-			    chkout_("NEARPT", (ftnlen)6);
+			    setmsg_(__global_state, "Norm of scaled point is"
+				    " 0. POSITN = ( #, #, # )", (ftnlen)47);
+			    errdp_(__global_state, "#", positn, (ftnlen)1);
+			    errdp_(__global_state, "#", &positn[1], (ftnlen)1)
+				    ;
+			    errdp_(__global_state, "#", &positn[2], (ftnlen)1)
+				    ;
+			    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+			    chkout_(__global_state, "NEARPT", (ftnlen)6);
 			    return 0;
 			}
-			d__1 = vnorm_(spoint) / pnorm;
-			vsclip_(&d__1, errp);
+			d__1 = vnorm_(__global_state, spoint) / pnorm;
+			vsclip_(__global_state, &d__1, errp);
 		    }
-		    vadd_(spoint, errp, point);
+		    vadd_(__global_state, spoint, errp, point);
 		}
 	    } else {
 
@@ -1868,16 +1913,18 @@ static nearpt_state_t* get_nearpt_state() {
 /*     and copy the value of BESTHT into the output argument. */
 
     d__1 = 1. / scale;
-    vsclip_(&d__1, bestpt);
+    vsclip_(__global_state, &d__1, bestpt);
     for (i__ = 1; i__ <= 3; ++i__) {
 	npoint[(i__2 = iorder[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("iorder", i__1, "nearpt_", (ftnlen)1966)] - 1) < 3 && 
-		0 <= i__2 ? i__2 : s_rnge("npoint", i__2, "nearpt_", (ftnlen)
-		1966)] = bestpt[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
-		s_rnge("bestpt", i__3, "nearpt_", (ftnlen)1966)];
+		s_rnge(&__global_state->f2c, "iorder", i__1, "nearpt_", (
+		ftnlen)1966)] - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "npoint", i__2, "nearpt_", (ftnlen)1966)]
+		 = bestpt[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(&
+		__global_state->f2c, "bestpt", i__3, "nearpt_", (ftnlen)1966)]
+		;
     }
     *alt = bestht / scale;
-    chkout_("NEARPT", (ftnlen)6);
+    chkout_(__global_state, "NEARPT", (ftnlen)6);
     return 0;
 } /* nearpt_ */
 

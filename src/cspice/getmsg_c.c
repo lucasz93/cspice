@@ -246,7 +246,7 @@
    Participate in error tracing.
    */
 
-   chkin_c ( "getmsg_c" );
+   chkin_c ( naif_state, "getmsg_c" );
 
 
    /*

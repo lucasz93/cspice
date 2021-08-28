@@ -8,8 +8,7 @@
 
 
 extern dpfmt_init_t __dpfmt_init;
-static dpfmt_state_t* get_dpfmt_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dpfmt_state_t* get_dpfmt_state(cspice_t* state) {
 	if (!state->dpfmt)
 		state->dpfmt = __cspice_allocate_module(sizeof(dpfmt_state_t),
 	 &__dpfmt_init, sizeof(__dpfmt_init));
@@ -18,35 +17,40 @@ static dpfmt_state_t* get_dpfmt_state() {
 }
 
 /* $Procedure      DPFMT ( Format a double precision number ) */
-/* Subroutine */ int dpfmt_(doublereal *x, char *pictur, char *str, ftnlen 
-	pictur_len, ftnlen str_len)
+/* Subroutine */ int dpfmt_(cspice_t* __global_state, doublereal *x, char *
+	pictur, char *str, ftnlen pictur_len, ftnlen str_len)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen), s_cmp(char *, char *, ftnlen, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen), s_cmp(f2c_state_t*, char *, 
+	    char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     char fill[1];
     integer dpat;
     char sign[1];
     integer i__;
-    extern /* Subroutine */ int zzvsbstr_(integer *, integer *, logical *, 
-	    char *, logical *, ftnlen);
+    extern /* Subroutine */ int zzvsbstr_(cspice_t*, integer *, integer *, 
+	    logical *, char *, logical *, ftnlen);
     doublereal y;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzvststr_(doublereal *, char *, integer *, 
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
+    extern /* Subroutine */ int zzvststr_(cspice_t*, doublereal *, char *, 
+	    integer *, ftnlen);
     logical shift;
-    extern integer ncpos_(char *, char *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int dpstr_(doublereal *, integer *, char *, 
+    extern integer ncpos_(cspice_t*, char *, char *, integer *, ftnlen, 
 	    ftnlen);
+    extern /* Subroutine */ int dpstr_(cspice_t*, doublereal *, integer *, 
+	    char *, ftnlen);
     integer start;
-    extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int rjust_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int ljust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int rjust_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     char mystr[32];
     integer declen;
     integer sigdig;
@@ -56,19 +60,19 @@ static dpfmt_state_t* get_dpfmt_state() {
     integer frstch;
     integer intlen;
     integer firstb;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     logical ovflow;
     integer expsiz;
     integer sprsiz;
     integer exp__;
-    extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern integer pos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen);
 
 
     /* Module state */
-    dpfmt_state_t* __state = get_dpfmt_state();
+    dpfmt_state_t* __state = get_dpfmt_state(__global_state);
 /* $ Abstract */
 
 /*     Using a picture, create a formatted string that represents a */
@@ -350,9 +354,10 @@ static dpfmt_state_t* get_dpfmt_state() {
 
 /*     Determine where the picture ends. */
 
-    firstb = pos_(pictur, " ", &__state->c__1, pictur_len, (ftnlen)1);
+    firstb = pos_(__global_state, pictur, " ", &__state->c__1, pictur_len, (
+	    ftnlen)1);
     if (firstb == 0) {
-	lastch = i_len(pictur, pictur_len);
+	lastch = i_len(&__global_state->f2c, pictur, pictur_len);
     } else {
 	lastch = firstb - 1;
     }
@@ -360,47 +365,52 @@ static dpfmt_state_t* get_dpfmt_state() {
 /*     Make sure there is a picture to worry about. */
 
     if (lastch == 0) {
-	chkin_("DPFMT", (ftnlen)5);
-	setmsg_("The format picture must begin with a non-blank character.  "
-		"The picture supplied was began with a blank.", (ftnlen)103);
-	sigerr_("SPICE(NOPICTURE)", (ftnlen)16);
-	chkout_("DPFMT", (ftnlen)5);
+	chkin_(__global_state, "DPFMT", (ftnlen)5);
+	setmsg_(__global_state, "The format picture must begin with a non-bl"
+		"ank character.  The picture supplied was began with a blank.",
+		 (ftnlen)103);
+	sigerr_(__global_state, "SPICE(NOPICTURE)", (ftnlen)16);
+	chkout_(__global_state, "DPFMT", (ftnlen)5);
 	return 0;
     } else if (lastch == 1) {
-	if (s_cmp(pictur, "+", pictur_len, (ftnlen)1) == 0 || s_cmp(pictur, 
-		"-", pictur_len, (ftnlen)1) == 0 || s_cmp(pictur, ".", 
+	if (s_cmp(&__global_state->f2c, pictur, "+", pictur_len, (ftnlen)1) ==
+		 0 || s_cmp(&__global_state->f2c, pictur, "-", pictur_len, (
+		ftnlen)1) == 0 || s_cmp(&__global_state->f2c, pictur, ".", 
 		pictur_len, (ftnlen)1) == 0) {
-	    chkin_("DPFMT", (ftnlen)5);
-	    setmsg_("Format pictures must have at least one significant char"
-		    "acter. The picture provided '#' does not. ", (ftnlen)97);
-	    errch_("#", pictur, (ftnlen)1, (ftnlen)1);
-	    sigerr_("SPICE(BADPICTURE)", (ftnlen)17);
-	    chkout_("DPFMT", (ftnlen)5);
+	    chkin_(__global_state, "DPFMT", (ftnlen)5);
+	    setmsg_(__global_state, "Format pictures must have at least one "
+		    "significant character. The picture provided '#' does not"
+		    ". ", (ftnlen)97);
+	    errch_(__global_state, "#", pictur, (ftnlen)1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(BADPICTURE)", (ftnlen)17);
+	    chkout_(__global_state, "DPFMT", (ftnlen)5);
 	    return 0;
 	}
     } else if (lastch == 2) {
-	if (s_cmp(pictur, "+.", pictur_len, (ftnlen)2) == 0 || s_cmp(pictur, 
-		"-.", pictur_len, (ftnlen)2) == 0) {
-	    chkin_("DPFMT", (ftnlen)5);
-	    setmsg_("Format pictures must have at least one significant char"
-		    "acter. The picture provided '#' does not. ", (ftnlen)97);
-	    errch_("#", pictur, (ftnlen)1, (ftnlen)2);
-	    sigerr_("SPICE(BADPICTURE)", (ftnlen)17);
-	    chkout_("DPFMT", (ftnlen)5);
+	if (s_cmp(&__global_state->f2c, pictur, "+.", pictur_len, (ftnlen)2) 
+		== 0 || s_cmp(&__global_state->f2c, pictur, "-.", pictur_len, 
+		(ftnlen)2) == 0) {
+	    chkin_(__global_state, "DPFMT", (ftnlen)5);
+	    setmsg_(__global_state, "Format pictures must have at least one "
+		    "significant character. The picture provided '#' does not"
+		    ". ", (ftnlen)97);
+	    errch_(__global_state, "#", pictur, (ftnlen)1, (ftnlen)2);
+	    sigerr_(__global_state, "SPICE(BADPICTURE)", (ftnlen)17);
+	    chkout_(__global_state, "DPFMT", (ftnlen)5);
 	    return 0;
 	}
-    } else if (lastch > i_len(str, str_len)) {
-	chkin_("DPFMT", (ftnlen)5);
-	setmsg_("The output string is not long enough to accommodate a numbe"
-		"r formatted according the the supplied format picture.  The "
-		"output string has length #.  The output picture '#' requires"
-		" # characters. ", (ftnlen)194);
-	i__1 = i_len(str, str_len);
-	errint_("#", &i__1, (ftnlen)1);
-	errch_("#", pictur, (ftnlen)1, lastch);
-	errint_("#", &lastch, (ftnlen)1);
-	sigerr_("SPICE(OUTPUTTOOSHORT)", (ftnlen)21);
-	chkout_("DPFMT", (ftnlen)5);
+    } else if (lastch > i_len(&__global_state->f2c, str, str_len)) {
+	chkin_(__global_state, "DPFMT", (ftnlen)5);
+	setmsg_(__global_state, "The output string is not long enough to acc"
+		"ommodate a number formatted according the the supplied forma"
+		"t picture.  The output string has length #.  The output pict"
+		"ure '#' requires # characters. ", (ftnlen)194);
+	i__1 = i_len(&__global_state->f2c, str, str_len);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	errch_(__global_state, "#", pictur, (ftnlen)1, lastch);
+	errint_(__global_state, "#", &lastch, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(OUTPUTTOOSHORT)", (ftnlen)21);
+	chkout_(__global_state, "DPFMT", (ftnlen)5);
 	return 0;
     }
 
@@ -452,7 +462,7 @@ static dpfmt_state_t* get_dpfmt_state() {
 
 /*     We can set the sign portion of the string now. */
 
-    s_copy(str, sign, str_len, (ftnlen)1);
+    s_copy(&__global_state->f2c, str, sign, str_len, (ftnlen)1);
 
 /*     Determine what character should be use for leading characters */
 /*     before the first significant character of the output string. */
@@ -465,7 +475,8 @@ static dpfmt_state_t* get_dpfmt_state() {
 
 /*     See if there is a decimal point. */
 
-    dpat = pos_(pictur, ".", &__state->c__1, pictur_len, (ftnlen)1);
+    dpat = pos_(__global_state, pictur, ".", &__state->c__1, pictur_len, (
+	    ftnlen)1);
 
 /*     The integer part is the stuff to the left of the first */
 /*     decimal point and that follows the sign (if there is one */
@@ -525,7 +536,7 @@ static dpfmt_state_t* get_dpfmt_state() {
 /*     unsigned part of X. */
 
     y = abs(*x);
-    zzvststr_(&y, fill, &exp__, (ftnlen)1);
+    zzvststr_(__global_state, &y, fill, &exp__, (ftnlen)1);
 
 /*     The actual number of digits required to print the unsigned integer */
 /*     portion X is EXP + 1 (provided EXP is at least 0.) We have */
@@ -562,10 +573,10 @@ static dpfmt_state_t* get_dpfmt_state() {
 		*(unsigned char *)&str[i__ - 1] = '*';
 	    }
 	} else {
-	    dpstr_(x, &sigdig, mystr, (ftnlen)32);
+	    dpstr_(__global_state, x, &sigdig, mystr, (ftnlen)32);
 	    *(unsigned char *)mystr = *(unsigned char *)sign;
-	    ljust_(mystr, str, (ftnlen)32, str_len);
-	    rjust_(str, str, lastch, lastch);
+	    ljust_(__global_state, mystr, str, (ftnlen)32, str_len);
+	    rjust_(__global_state, str, str, lastch, lastch);
 	}
 	return 0;
     }
@@ -586,8 +597,8 @@ static dpfmt_state_t* get_dpfmt_state() {
 
     start = sgnlen + 1;
     i__1 = -intlen;
-    zzvsbstr_(&i__1, &declen, &__state->c_true, str + (start - 1), &ovflow, 
-	    str_len - (start - 1));
+    zzvsbstr_(__global_state, &i__1, &declen, &__state->c_true, str + (start 
+	    - 1), &ovflow, str_len - (start - 1));
 
 /*     We might be done at this point.  The IF-THEN block below */
 /*     handles the one snag that could arise. */
@@ -619,10 +630,10 @@ static dpfmt_state_t* get_dpfmt_state() {
 		*(unsigned char *)&str[i__ - 1] = '*';
 	    }
 	} else {
-	    dpstr_(x, &sigdig, mystr, (ftnlen)32);
+	    dpstr_(__global_state, x, &sigdig, mystr, (ftnlen)32);
 	    *(unsigned char *)mystr = *(unsigned char *)sign;
-	    ljust_(mystr, str, (ftnlen)32, str_len);
-	    rjust_(str, str, lastch, lastch);
+	    ljust_(__global_state, mystr, str, (ftnlen)32, str_len);
+	    rjust_(__global_state, str, str, lastch, lastch);
 	    return 0;
 	}
     } else if (shift) {
@@ -630,10 +641,12 @@ static dpfmt_state_t* get_dpfmt_state() {
 /*        We need to move the sign right until, there are no */
 /*        blanks between it and the next character. */
 
-	frstch = ncpos_(str, " -", &__state->c__1, str_len, (ftnlen)2);
+	frstch = ncpos_(__global_state, str, " -", &__state->c__1, str_len, (
+		ftnlen)2);
 	if (frstch > 2) {
 	    i__1 = frstch - 2;
-	    s_copy(str + i__1, str, frstch - 1 - i__1, (ftnlen)1);
+	    s_copy(&__global_state->f2c, str + i__1, str, frstch - 1 - i__1, (
+		    ftnlen)1);
 	    *(unsigned char *)str = ' ';
 	}
     }

@@ -8,8 +8,7 @@
 
 
 extern zzddhppf_init_t __zzddhppf_init;
-static zzddhppf_state_t* get_zzddhppf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzddhppf_state_t* get_zzddhppf_state(cspice_t* state) {
 	if (!state->zzddhppf)
 		state->zzddhppf = __cspice_allocate_module(sizeof(
 	zzddhppf_state_t), &__zzddhppf_init, sizeof(__zzddhppf_init));
@@ -18,7 +17,8 @@ static zzddhppf_state_t* get_zzddhppf_state() {
 }
 
 /* $Procedure ZZDDHPPF ( Private --- DDH Prepare Preexisting File ) */
-/* Subroutine */ int zzddhppf_(integer *unit, integer *arch, integer *bff)
+/* Subroutine */ int zzddhppf_(cspice_t* __global_state, integer *unit, 
+	integer *arch, integer *bff)
 {
     /* Initialized data */
 
@@ -28,50 +28,56 @@ static zzddhppf_state_t* get_zzddhppf_state() {
     char ch__1[1];
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), s_rdue(cilist *), 
-	    do_uio(integer *, char *, ftnlen), e_rdue(void);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), s_rdue(
+	    f2c_state_t*, cilist *), do_uio(f2c_state_t*, integer *, char *, 
+	    ftnlen), e_rdue(f2c_state_t*);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    extern /* Subroutine */ int zzddhgsd_(char *, integer *, char *, ftnlen, 
+    extern /* Subroutine */ int zzddhgsd_(cspice_t*, char *, integer *, char *
+	    , ftnlen, ftnlen);
+    extern /* Subroutine */ int zzddhivf_(cspice_t*, char *, integer *, 
+	    logical *, ftnlen);
+    extern /* Subroutine */ int zzftpchk_(cspice_t*, char *, logical *, 
 	    ftnlen);
-    extern /* Subroutine */ int zzddhivf_(char *, integer *, logical *, 
+    extern /* Subroutine */ int zzplatfm_(cspice_t*, char *, char *, ftnlen, 
 	    ftnlen);
-    extern /* Subroutine */ int zzftpchk_(char *, logical *, ftnlen);
-    extern /* Subroutine */ int zzplatfm_(char *, char *, ftnlen, ftnlen);
     integer i__;
     integer fdrec;
-    extern /* Subroutine */ int zzftpstr_(char *, char *, char *, char *, 
-	    ftnlen, ftnlen, ftnlen, ftnlen);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int ucase_(char *, char *, ftnlen, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzftpstr_(cspice_t*, char *, char *, char *, 
+	    char *, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int ucase_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern /* Subroutine */ int idw2at_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int idw2at_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     char filarc[4];
     char bffidw[8];
     char chrrec[1000];
-    extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
+    extern integer isrchc_(cspice_t*, char *, integer *, char *, ftnlen, 
+	    ftnlen);
     integer iostat;
     integer tstarc;
     char filtyp[4];
     logical ftperr;
     integer ftppos;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
-    extern integer pos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
+    extern integer pos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen);
 
     /* Fortran I/O blocks */
 
 
 
     /* Module state */
-    zzddhppf_state_t* __state = get_zzddhppf_state();
+    zzddhppf_state_t* __state = get_zzddhppf_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -786,10 +792,10 @@ static zzddhppf_state_t* get_zzddhppf_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("ZZDDHPPF", (ftnlen)8);
+	chkin_(__global_state, "ZZDDHPPF", (ftnlen)8);
     }
 
 /*     If this is the first time into the routine, populate local */
@@ -806,14 +812,16 @@ static zzddhppf_state_t* get_zzddhppf_state() {
 /*        Retrieve the BFF and ARCH names. */
 
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    zzddhgsd_("BFF", &i__, __state->strbff + (((i__1 = i__ - 1) < 5 &&
-		     0 <= i__1 ? i__1 : s_rnge("strbff", i__1, "zzddhppf_", (
-		    ftnlen)504)) << 3), (ftnlen)3, (ftnlen)8);
+	    zzddhgsd_(__global_state, "BFF", &i__, __state->strbff + (((i__1 =
+		     i__ - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "strbff", i__1, "zzddhppf_", (ftnlen)
+		    504)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 	for (i__ = 1; i__ <= 2; ++i__) {
-	    zzddhgsd_("ARCH", &i__, __state->strarc + (((i__1 = i__ - 1) < 2 
-		    && 0 <= i__1 ? i__1 : s_rnge("strarc", i__1, "zzddhppf_", 
-		    (ftnlen)508)) << 3), (ftnlen)4, (ftnlen)8);
+	    zzddhgsd_(__global_state, "ARCH", &i__, __state->strarc + (((i__1 
+		    = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "strarc", i__1, "zzddhppf_", (ftnlen)
+		    508)) << 3), (ftnlen)4, (ftnlen)8);
 	}
 
 /*        Extend STRBFF to include the null BFFID.  This addresses */
@@ -826,8 +834,9 @@ static zzddhppf_state_t* get_zzddhppf_state() {
 
 /*        Fetch the FTP string. */
 
-	zzftpstr_(__state->ftpmem, __state->ftplft, __state->ftprgt, 
-		__state->ftpdlm, (ftnlen)16, (ftnlen)6, (ftnlen)6, (ftnlen)1);
+	zzftpstr_(__global_state, __state->ftpmem, __state->ftplft, 
+		__state->ftprgt, __state->ftpdlm, (ftnlen)16, (ftnlen)6, (
+		ftnlen)6, (ftnlen)1);
 
 /*        Set FIRST to FALSE so we will not reassign any of these values. */
 
@@ -839,11 +848,11 @@ static zzddhppf_state_t* get_zzddhppf_state() {
 
     if (*arch <= 0 || *arch > 2) {
 	*bff = 0;
-	setmsg_("The integer code, '#' indicating the file architecture to e"
-		"xamine is out of range.", (ftnlen)82);
-	errint_("#", arch, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNFILARC)", (ftnlen)20);
-	chkout_("ZZDDHPPF", (ftnlen)8);
+	setmsg_(__global_state, "The integer code, '#' indicating the file a"
+		"rchitecture to examine is out of range.", (ftnlen)82);
+	errint_(__global_state, "#", arch, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNFILARC)", (ftnlen)20);
+	chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 	return 0;
     }
 
@@ -851,49 +860,51 @@ static zzddhppf_state_t* get_zzddhppf_state() {
 /*     characters. */
 
     __state->io___11.ciunit = *unit;
-    iostat = s_rdue(&__state->io___11);
+    iostat = s_rdue(&__global_state->f2c, &__state->io___11);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_uio(&__state->c__1, chrrec, (ftnlen)1000);
+    iostat = do_uio(&__global_state->f2c, &__state->c__1, chrrec, (ftnlen)
+	    1000);
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = e_rdue();
+    iostat = e_rdue(&__global_state->f2c);
 L100001:
 
 /*     Check for read failure. */
 
     if (iostat != 0) {
 	*bff = 0;
-	setmsg_("Error reading the file record from the binary DAF file '#'."
-		"  IOSTAT = #.", (ftnlen)72);
-	errfnm_("#", unit, (ftnlen)1);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	chkout_("ZZDDHPPF", (ftnlen)8);
+	setmsg_(__global_state, "Error reading the file record from the bina"
+		"ry DAF file '#'.  IOSTAT = #.", (ftnlen)72);
+	errfnm_(__global_state, "#", unit, (ftnlen)1);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 	return 0;
     }
 
 /*     First check the ID word from the input file. */
 
-    idw2at_(chrrec, filarc, filtyp, (ftnlen)8, (ftnlen)4, (ftnlen)4);
+    idw2at_(__global_state, chrrec, filarc, filtyp, (ftnlen)8, (ftnlen)4, (
+	    ftnlen)4);
 
 /*     Now locate FILARC in the STRARC array. */
 
-    tstarc = isrchc_(filarc, &__state->c__2, __state->strarc, (ftnlen)4, (
-	    ftnlen)8);
+    tstarc = isrchc_(__global_state, filarc, &__state->c__2, __state->strarc, 
+	    (ftnlen)4, (ftnlen)8);
 
 /*     If FILARC was not found, signal an appropriate error. */
 
     if (tstarc == 0) {
 	*bff = 0;
-	setmsg_("The file, #, has a unidentified file architecture.  Check t"
-		"hat this file is a properly created binary SPICE kernel.", (
-		ftnlen)115);
-	errfnm_("#", unit, (ftnlen)1);
-	sigerr_("SPICE(UNKNOWNFILARC)", (ftnlen)20);
-	chkout_("ZZDDHPPF", (ftnlen)8);
+	setmsg_(__global_state, "The file, #, has a unidentified file archit"
+		"ecture.  Check that this file is a properly created binary S"
+		"PICE kernel.", (ftnlen)115);
+	errfnm_(__global_state, "#", unit, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(UNKNOWNFILARC)", (ftnlen)20);
+	chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 	return 0;
 
 /*     Otherwise we have an architecture mismatch error, if */
@@ -901,35 +912,39 @@ L100001:
 
     } else if (tstarc != *arch) {
 	*bff = 0;
-	setmsg_("A request to load the # file, $, has been made by the % sys"
-		"tem.  This operation is not permitted.", (ftnlen)97);
-	errch_("#", __state->strarc + (((i__1 = tstarc - 1) < 2 && 0 <= i__1 ?
-		 i__1 : s_rnge("strarc", i__1, "zzddhppf_", (ftnlen)608)) << 
-		3), (ftnlen)1, (ftnlen)8);
-	errfnm_("$", unit, (ftnlen)1);
-	errch_("%", __state->strarc + (((i__1 = *arch - 1) < 2 && 0 <= i__1 ? 
-		i__1 : s_rnge("strarc", i__1, "zzddhppf_", (ftnlen)610)) << 3)
-		, (ftnlen)1, (ftnlen)8);
-	sigerr_("SPICE(FILARCHMISMATCH)", (ftnlen)22);
-	chkout_("ZZDDHPPF", (ftnlen)8);
+	setmsg_(__global_state, "A request to load the # file, $, has been m"
+		"ade by the % system.  This operation is not permitted.", (
+		ftnlen)97);
+	errch_(__global_state, "#", __state->strarc + (((i__1 = tstarc - 1) < 
+		2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "strarc",
+		 i__1, "zzddhppf_", (ftnlen)608)) << 3), (ftnlen)1, (ftnlen)8)
+		;
+	errfnm_(__global_state, "$", unit, (ftnlen)1);
+	errch_(__global_state, "%", __state->strarc + (((i__1 = *arch - 1) < 
+		2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "strarc",
+		 i__1, "zzddhppf_", (ftnlen)610)) << 3), (ftnlen)1, (ftnlen)8)
+		;
+	sigerr_(__global_state, "SPICE(FILARCHMISMATCH)", (ftnlen)22);
+	chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 	return 0;
     }
 
 /*     Now check for possible FTP transfer errors. */
 
-    zzftpchk_(chrrec + 499, &ftperr, (ftnlen)501);
+    zzftpchk_(__global_state, chrrec + 499, &ftperr, (ftnlen)501);
     if (ftperr) {
 	*bff = 0;
-	setmsg_("FTP transfer error detected.  This binary $, '#', has most "
-		"likely been corrupted by an ASCII mode FTP transfer. Obtain "
-		"the file using IMAGE or BINARY transfer mode from the source."
-		, (ftnlen)180);
-	errch_("$", __state->strarc + (((i__1 = tstarc - 1) < 2 && 0 <= i__1 ?
-		 i__1 : s_rnge("strarc", i__1, "zzddhppf_", (ftnlen)631)) << 
-		3), (ftnlen)1, (ftnlen)8);
-	errfnm_("#", unit, (ftnlen)1);
-	sigerr_("SPICE(FTPXFERERROR)", (ftnlen)19);
-	chkout_("ZZDDHPPF", (ftnlen)8);
+	setmsg_(__global_state, "FTP transfer error detected.  This binary $"
+		", '#', has most likely been corrupted by an ASCII mode FTP t"
+		"ransfer. Obtain the file using IMAGE or BINARY transfer mode"
+		" from the source.", (ftnlen)180);
+	errch_(__global_state, "$", __state->strarc + (((i__1 = tstarc - 1) < 
+		2 && 0 <= i__1 ? i__1 : s_rnge(&__global_state->f2c, "strarc",
+		 i__1, "zzddhppf_", (ftnlen)631)) << 3), (ftnlen)1, (ftnlen)8)
+		;
+	errfnm_(__global_state, "#", unit, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(FTPXFERERROR)", (ftnlen)19);
+	chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 	return 0;
     }
 
@@ -939,8 +954,8 @@ L100001:
 /*     and we can expect to locate the binary file format */
 /*     identification string. */
 
-    ftppos = pos_(chrrec + 499, __state->ftplft, &__state->c__1, (ftnlen)501, 
-	    (ftnlen)6);
+    ftppos = pos_(__global_state, chrrec + 499, __state->ftplft, &
+	    __state->c__1, (ftnlen)501, (ftnlen)6);
 
 /*     Check to see if we found FTPLFT.  If so extract the binary */
 /*     file format ID word from the file record. */
@@ -950,27 +965,29 @@ L100001:
 /*        Extract BFFIDW from CHRREC. */
 
 	if (*arch == 1) {
-	    s_copy(bffidw, chrrec + 88, (ftnlen)8, (ftnlen)8);
+	    s_copy(&__global_state->f2c, bffidw, chrrec + 88, (ftnlen)8, (
+		    ftnlen)8);
 	} else if (*arch == 2) {
-	    s_copy(bffidw, chrrec + 84, (ftnlen)8, (ftnlen)8);
+	    s_copy(&__global_state->f2c, bffidw, chrrec + 84, (ftnlen)8, (
+		    ftnlen)8);
 	}
 
 /*        See if we can find BFFIDW in the STRBFF list. */
 
-	*bff = isrchc_(bffidw, &__state->c__5, __state->strbff, (ftnlen)8, (
-		ftnlen)8);
+	*bff = isrchc_(__global_state, bffidw, &__state->c__5, 
+		__state->strbff, (ftnlen)8, (ftnlen)8);
 
 /*        Check to see if BFF is 0, if it is, signal an error since */
 /*        this indicates an unrecognized BFF. */
 
 	if (*bff == 0) {
-	    setmsg_("The file '#' utilizes the binary file format '#'.  This"
-		    " format is currently unknown to this toolkit.  A toolkit"
-		    " update may be in order.", (ftnlen)135);
-	    errfnm_("#", unit, (ftnlen)1);
-	    errch_("#", bffidw, (ftnlen)1, (ftnlen)8);
-	    sigerr_("SPICE(UNKNOWNBFF)", (ftnlen)17);
-	    chkout_("ZZDDHPPF", (ftnlen)8);
+	    setmsg_(__global_state, "The file '#' utilizes the binary file f"
+		    "ormat '#'.  This format is currently unknown to this too"
+		    "lkit.  A toolkit update may be in order.", (ftnlen)135);
+	    errfnm_(__global_state, "#", unit, (ftnlen)1);
+	    errch_(__global_state, "#", bffidw, (ftnlen)1, (ftnlen)8);
+	    sigerr_(__global_state, "SPICE(UNKNOWNBFF)", (ftnlen)17);
+	    chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 	    return 0;
 	}
 
@@ -978,7 +995,7 @@ L100001:
 /*        return as swe have identified the BFF. */
 
 	if (*bff != 5) {
-	    chkout_("ZZDDHPPF", (ftnlen)8);
+	    chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 	    return 0;
 	}
     }
@@ -987,20 +1004,21 @@ L100001:
 /*     assume it is of the native architecture. */
 
     if (*arch == 2) {
-	zzplatfm_("FILE_FORMAT", bffidw, (ftnlen)11, (ftnlen)8);
-	ucase_(bffidw, bffidw, (ftnlen)8, (ftnlen)8);
-	*bff = isrchc_(bffidw, &__state->c__4, __state->strbff, (ftnlen)8, (
-		ftnlen)8);
+	zzplatfm_(__global_state, "FILE_FORMAT", bffidw, (ftnlen)11, (ftnlen)
+		8);
+	ucase_(__global_state, bffidw, bffidw, (ftnlen)8, (ftnlen)8);
+	*bff = isrchc_(__global_state, bffidw, &__state->c__4, 
+		__state->strbff, (ftnlen)8, (ftnlen)8);
 	if (*bff == 0) {
-	    setmsg_("The native architecture for this platform is unknown to"
-		    " this version of the toolkit. This is a severe problem t"
-		    "hat should never occur, please contact NAIF.", (ftnlen)
-		    155);
-	    sigerr_("SPICE(BUG)", (ftnlen)10);
-	    chkout_("ZZDDHPPF", (ftnlen)8);
+	    setmsg_(__global_state, "The native architecture for this platfo"
+		    "rm is unknown to this version of the toolkit. This is a "
+		    "severe problem that should never occur, please contact N"
+		    "AIF.", (ftnlen)155);
+	    sigerr_(__global_state, "SPICE(BUG)", (ftnlen)10);
+	    chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 	    return 0;
 	}
-	chkout_("ZZDDHPPF", (ftnlen)8);
+	chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 	return 0;
     }
 
@@ -1084,27 +1102,28 @@ L100001:
 
 	__state->io___20.ciunit = *unit;
 	__state->io___20.cirec = fdrec;
-	iostat = s_rdue(&__state->io___20);
+	iostat = s_rdue(&__global_state->f2c, &__state->io___20);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&__state->c__1, chrrec, (ftnlen)1000);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, chrrec, (ftnlen)
+		1000);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = e_rdue();
+	iostat = e_rdue(&__global_state->f2c);
 L100002:
 
 /*        Check for read failure. */
 
 	if (iostat != 0) {
 	    *bff = 0;
-	    setmsg_("Error reading a descriptor record from the binary DAF f"
-		    "ile '#'.  IOSTAT = #.", (ftnlen)76);
-	    errfnm_("#", unit, (ftnlen)1);
-	    errint_("#", &iostat, (ftnlen)1);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("ZZDDHPPF", (ftnlen)8);
+	    setmsg_(__global_state, "Error reading a descriptor record from "
+		    "the binary DAF file '#'.  IOSTAT = #.", (ftnlen)76);
+	    errfnm_(__global_state, "#", unit, (ftnlen)1);
+	    errint_(__global_state, "#", &iostat, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1126,12 +1145,12 @@ L100002:
 /*           between little endian formats.  Signal an error and return. */
 
 	    *bff = 0;
-	    setmsg_("The DAF, '#', appears to contain no data.  As such, its"
-		    " binary file format can not be determined which prevents"
-		    " it from being loaded.", (ftnlen)133);
-	    errfnm_("#", unit, (ftnlen)1);
-	    sigerr_("SPICE(UNKNOWNBFF)", (ftnlen)17);
-	    chkout_("ZZDDHPPF", (ftnlen)8);
+	    setmsg_(__global_state, "The DAF, '#', appears to contain no dat"
+		    "a.  As such, its binary file format can not be determine"
+		    "d which prevents it from being loaded.", (ftnlen)133);
+	    errfnm_(__global_state, "#", unit, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(UNKNOWNBFF)", (ftnlen)17);
+	    chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 	    return 0;
 	} else if (*(unsigned char *)&chrrec[16] == *(unsigned char *)
 		__state->null && *(unsigned char *)&chrrec[17] == *(unsigned 
@@ -1147,21 +1166,21 @@ L100002:
 /*           We are probably looking at a VAX file.  Find out which */
 /*           format. */
 
-	    zzddhivf_(chrrec + 16, bff, &found, (ftnlen)8);
+	    zzddhivf_(__global_state, chrrec + 16, bff, &found, (ftnlen)8);
 	    if (! found) {
 		*bff = 0;
-		setmsg_("Unable to determine the binary file format of DAF '"
-			"#'.", (ftnlen)54);
-		errfnm_("#", unit, (ftnlen)1);
-		sigerr_("SPICE(UNKNOWNBFF)", (ftnlen)17);
-		chkout_("ZZDDHPPF", (ftnlen)8);
+		setmsg_(__global_state, "Unable to determine the binary file"
+			" format of DAF '#'.", (ftnlen)54);
+		errfnm_(__global_state, "#", unit, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(UNKNOWNBFF)", (ftnlen)17);
+		chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
 		return 0;
 	    }
 	}
     } else {
 	*bff = 0;
     }
-    chkout_("ZZDDHPPF", (ftnlen)8);
+    chkout_(__global_state, "ZZDDHPPF", (ftnlen)8);
     return 0;
 } /* zzddhppf_ */
 

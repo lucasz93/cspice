@@ -8,21 +8,20 @@
 
 
 typedef int bschoc_state_t;
-static bschoc_state_t* get_bschoc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bschoc_state_t* get_bschoc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure BSCHOC ( Binary search with order vector, character ) */
-integer bschoc_(char *value, integer *ndim, char *array, integer *order, 
-	ftnlen value_len, ftnlen array_len)
+integer bschoc_(cspice_t* __global_state, char *value, integer *ndim, char *
+	array, integer *order, ftnlen value_len, ftnlen array_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    logical l_lt(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    logical l_lt(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer left;
@@ -31,7 +30,7 @@ integer bschoc_(char *value, integer *ndim, char *array, integer *order,
 
 
     /* Module state */
-    bschoc_state_t* __state = get_bschoc_state();
+    bschoc_state_t* __state = get_bschoc_state(__global_state);
 /* $ Abstract */
 
 /*      Do a binary search for a given value within a character array, */
@@ -195,15 +194,15 @@ integer bschoc_(char *value, integer *ndim, char *array, integer *order,
 
 /*        If the middle element matches, return its location. */
 
-	if (s_cmp(value, array + (order[i__ - 1] - 1) * array_len, value_len, 
-		array_len) == 0) {
+	if (s_cmp(&__global_state->f2c, value, array + (order[i__ - 1] - 1) * 
+		array_len, value_len, array_len) == 0) {
 	    ret_val = order[i__ - 1];
 	    return ret_val;
 
 /*        Otherwise narrow the search area. */
 
-	} else if (l_lt(value, array + (order[i__ - 1] - 1) * array_len, 
-		value_len, array_len)) {
+	} else if (l_lt(&__global_state->f2c, value, array + (order[i__ - 1] 
+		- 1) * array_len, value_len, array_len)) {
 	    right = i__ - 1;
 	} else {
 	    left = i__ + 1;

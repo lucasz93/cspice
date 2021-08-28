@@ -133,7 +133,7 @@
    Participate in error tracing.  
    */
 
-   chkin_c ( "eknseg_c" );
+   chkin_c ( naif_state, "eknseg_c" );
    
    /*
    We capture the value returned by eknseg_ rather than return it 

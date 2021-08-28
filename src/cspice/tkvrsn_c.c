@@ -186,7 +186,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "tkvrsn_c" );
+   chkin_c ( naif_state, "tkvrsn_c" );
 
 
    /*

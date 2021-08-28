@@ -248,7 +248,7 @@
       {
       return;
       }
-   chkin_c ( "uddf_c" );
+   chkin_c ( naif_state, "uddf_c" );
 
    /*
    Apply a three-point estimation of the derivative for 'udfunc' at

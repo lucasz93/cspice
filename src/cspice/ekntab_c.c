@@ -140,7 +140,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "ekntab_c" );
+   chkin_c ( naif_state, "ekntab_c" );
 
 
    ekntab_ (  (integer *) n );

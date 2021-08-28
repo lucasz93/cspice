@@ -8,8 +8,7 @@
 
 
 extern dskobj_init_t __dskobj_init;
-static dskobj_state_t* get_dskobj_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskobj_state_t* get_dskobj_state(cspice_t* state) {
 	if (!state->dskobj)
 		state->dskobj = __cspice_allocate_module(sizeof(
 	dskobj_state_t), &__dskobj_init, sizeof(__dskobj_init));
@@ -18,49 +17,56 @@ static dskobj_state_t* get_dskobj_state() {
 }
 
 /* $Procedure      DSKOBJ ( DSK, get object IDs ) */
-/* Subroutine */ int dskobj_(char *dsk, integer *bodids, ftnlen dsk_len)
+/* Subroutine */ int dskobj_(cspice_t* __global_state, char *dsk, integer *
+	bodids, ftnlen dsk_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), i_dnnt(doublereal *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), i_dnnt(
+	    f2c_state_t*, doublereal *);
 
     /* Local variables */
     char arch[4];
-    extern integer cardi_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dskgd_(integer *, integer *, doublereal *);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern integer cardi_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dskgd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     logical found;
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
-    extern integer sizei_(integer *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern integer sizei_(cspice_t*, integer *);
+    extern logical failed_(cspice_t*);
     integer dladsc[8];
     integer handle;
-    extern /* Subroutine */ int dlabfs_(integer *, integer *, logical *);
-    extern /* Subroutine */ int dlafns_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int dlabfs_(cspice_t*, integer *, integer *, 
 	    logical *);
-    extern /* Subroutine */ int validi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int dascls_(integer *);
-    extern /* Subroutine */ int getfat_(char *, char *, char *, ftnlen, 
-	    ftnlen, ftnlen);
+    extern /* Subroutine */ int dlafns_(cspice_t*, integer *, integer *, 
+	    integer *, logical *);
+    extern /* Subroutine */ int validi_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int dascls_(cspice_t*, integer *);
+    extern /* Subroutine */ int getfat_(cspice_t*, char *, char *, char *, 
+	    ftnlen, ftnlen, ftnlen);
     doublereal dskdsc[24];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer nxtdsc[8];
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int dasopr_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int dskcls_(integer *, logical *);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasopr_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int dskcls_(cspice_t*, integer *, logical *);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     char kertyp[4];
-    extern logical return_(void);
-    extern /* Subroutine */ int appndi_(integer *, integer *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int appndi_(cspice_t*, integer *, integer *);
     integer bid;
 
 
     /* Module state */
-    dskobj_state_t* __state = get_dskobj_state();
+    dskobj_state_t* __state = get_dskobj_state(__global_state);
 /* $ Abstract */
 
 /*     Find the set of body ID codes of all objects for which */
@@ -587,65 +593,68 @@ static dskobj_state_t* get_dskobj_state() {
 
 /*     Local variables */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKOBJ", (ftnlen)6);
+    chkin_(__global_state, "DSKOBJ", (ftnlen)6);
 
 /*     See whether GETFAT thinks we've got a DSK file. */
 
-    getfat_(dsk, arch, kertyp, dsk_len, (ftnlen)4, (ftnlen)4);
-    if (s_cmp(arch, "XFR", (ftnlen)4, (ftnlen)3) == 0) {
-	setmsg_("Input file # has architecture #. The file must be a binary "
-		"DSK file to be readable by this routine. If the input file i"
-		"s an DSK file in transfer format, run TOBIN on the file to c"
-		"onvert it to binary format.", (ftnlen)206);
-	errch_("#", dsk, (ftnlen)1, dsk_len);
-	errch_("#", arch, (ftnlen)1, (ftnlen)4);
-	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
-	chkout_("DSKOBJ", (ftnlen)6);
+    getfat_(__global_state, dsk, arch, kertyp, dsk_len, (ftnlen)4, (ftnlen)4);
+    if (s_cmp(&__global_state->f2c, arch, "XFR", (ftnlen)4, (ftnlen)3) == 0) {
+	setmsg_(__global_state, "Input file # has architecture #. The file m"
+		"ust be a binary DSK file to be readable by this routine. If "
+		"the input file is an DSK file in transfer format, run TOBIN "
+		"on the file to convert it to binary format.", (ftnlen)206);
+	errch_(__global_state, "#", dsk, (ftnlen)1, dsk_len);
+	errch_(__global_state, "#", arch, (ftnlen)1, (ftnlen)4);
+	sigerr_(__global_state, "SPICE(INVALIDFORMAT)", (ftnlen)20);
+	chkout_(__global_state, "DSKOBJ", (ftnlen)6);
 	return 0;
-    } else if (s_cmp(arch, "DAS", (ftnlen)4, (ftnlen)3) != 0) {
-	setmsg_("Input file # has architecture #. The file must be a binary "
-		"DSK file to be readable by this routine. Binary DSK files ha"
-		"ve DAS architecture. If you expected the file to be a binary"
-		" DSK file, the problem may be due to the file being an old n"
-		"on-native file lacking binary file format information. It's "
-		"also possible the file has been corrupted.", (ftnlen)341);
-	errch_("#", dsk, (ftnlen)1, dsk_len);
-	errch_("#", arch, (ftnlen)1, (ftnlen)4);
-	sigerr_("SPICE(INVALIDARCHTYPE)", (ftnlen)22);
-	chkout_("DSKOBJ", (ftnlen)6);
+    } else if (s_cmp(&__global_state->f2c, arch, "DAS", (ftnlen)4, (ftnlen)3) 
+	    != 0) {
+	setmsg_(__global_state, "Input file # has architecture #. The file m"
+		"ust be a binary DSK file to be readable by this routine. Bin"
+		"ary DSK files have DAS architecture. If you expected the fil"
+		"e to be a binary DSK file, the problem may be due to the fil"
+		"e being an old non-native file lacking binary file format in"
+		"formation. It's also possible the file has been corrupted.", (
+		ftnlen)341);
+	errch_(__global_state, "#", dsk, (ftnlen)1, dsk_len);
+	errch_(__global_state, "#", arch, (ftnlen)1, (ftnlen)4);
+	sigerr_(__global_state, "SPICE(INVALIDARCHTYPE)", (ftnlen)22);
+	chkout_(__global_state, "DSKOBJ", (ftnlen)6);
 	return 0;
-    } else if (s_cmp(kertyp, "DSK", (ftnlen)4, (ftnlen)3) != 0) {
-	setmsg_("Input file # has file type #. The file must be a binary DSK"
-		" file to be readable by this routine. If you expected the fi"
-		"le to be a binary DSK file, the problem may be due to the fi"
-		"le being an old non-native file lacking binary file format i"
-		"nformation. It's also possible the file has been corrupted.", 
-		(ftnlen)298);
-	errch_("#", dsk, (ftnlen)1, dsk_len);
-	errch_("#", kertyp, (ftnlen)1, (ftnlen)4);
-	sigerr_("SPICE(INVALIDFILETYPE)", (ftnlen)22);
-	chkout_("DSKOBJ", (ftnlen)6);
+    } else if (s_cmp(&__global_state->f2c, kertyp, "DSK", (ftnlen)4, (ftnlen)
+	    3) != 0) {
+	setmsg_(__global_state, "Input file # has file type #. The file must"
+		" be a binary DSK file to be readable by this routine. If you"
+		" expected the file to be a binary DSK file, the problem may "
+		"be due to the file being an old non-native file lacking bina"
+		"ry file format information. It's also possible the file has "
+		"been corrupted.", (ftnlen)298);
+	errch_(__global_state, "#", dsk, (ftnlen)1, dsk_len);
+	errch_(__global_state, "#", kertyp, (ftnlen)1, (ftnlen)4);
+	sigerr_(__global_state, "SPICE(INVALIDFILETYPE)", (ftnlen)22);
+	chkout_(__global_state, "DSKOBJ", (ftnlen)6);
 	return 0;
     }
 
 /*     Open the DSK for read access; start a forward search. */
 
-    dasopr_(dsk, &handle, dsk_len);
-    dlabfs_(&handle, nxtdsc, &found);
-    if (failed_()) {
-	chkout_("DSKOBJ", (ftnlen)6);
+    dasopr_(__global_state, dsk, &handle, dsk_len);
+    dlabfs_(__global_state, &handle, nxtdsc, &found);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DSKOBJ", (ftnlen)6);
 	return 0;
     }
-    while(found && ! failed_()) {
+    while(found && ! failed_(__global_state)) {
 
 /*        Get the DSK descriptor of the current segment. */
 /*        This is where we'll find the body ID code. */
 
-	movei_(nxtdsc, &__state->c__8, dladsc);
-	dskgd_(&handle, dladsc, dskdsc);
+	movei_(__global_state, nxtdsc, &__state->c__8, dladsc);
+	dskgd_(__global_state, &handle, dladsc, dskdsc);
 
 /*        The body ID is at location CTRIDX ("center index") */
 /*        of the DSK descriptor. */
@@ -658,34 +667,35 @@ static dskobj_state_t* get_dskobj_state() {
 /*        catch an out-of-room error, because we would lose */
 /*        the ability to close the file. */
 
-	bid = i_dnnt(&dskdsc[1]);
-	if (cardi_(bodids) == sizei_(bodids)) {
+	bid = i_dnnt(&__global_state->f2c, &dskdsc[1]);
+	if (cardi_(__global_state, bodids) == sizei_(__global_state, bodids)) 
+		{
 
 /*           We're going to signal an error. Close the DSK */
 /*           first. */
 
-	    dskcls_(&handle, &__state->c_false);
-	    setmsg_("Cannot append body ID # to cell while reading DSK file "
-		    "#. Cell size is #.", (ftnlen)73);
-	    errint_("#", &bid, (ftnlen)1);
-	    errch_("#", dsk, (ftnlen)1, dsk_len);
-	    i__1 = sizei_(bodids);
-	    errint_("#", &i__1, (ftnlen)1);
-	    sigerr_("SPICE(CELLTOOSMALL)", (ftnlen)19);
-	    chkout_("DSKOBJ", (ftnlen)6);
+	    dskcls_(__global_state, &handle, &__state->c_false);
+	    setmsg_(__global_state, "Cannot append body ID # to cell while r"
+		    "eading DSK file #. Cell size is #.", (ftnlen)73);
+	    errint_(__global_state, "#", &bid, (ftnlen)1);
+	    errch_(__global_state, "#", dsk, (ftnlen)1, dsk_len);
+	    i__1 = sizei_(__global_state, bodids);
+	    errint_(__global_state, "#", &i__1, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(CELLTOOSMALL)", (ftnlen)19);
+	    chkout_(__global_state, "DSKOBJ", (ftnlen)6);
 	    return 0;
 	}
-	appndi_(&bid, bodids);
+	appndi_(__global_state, &bid, bodids);
 
 /*        Fetch the DLA descriptor of the next segment. */
 
-	dlafns_(&handle, dladsc, nxtdsc, &found);
+	dlafns_(__global_state, &handle, dladsc, nxtdsc, &found);
     }
-    i__1 = sizei_(bodids);
-    i__2 = cardi_(bodids);
-    validi_(&i__1, &i__2, bodids);
-    dascls_(&handle);
-    chkout_("DSKOBJ", (ftnlen)6);
+    i__1 = sizei_(__global_state, bodids);
+    i__2 = cardi_(__global_state, bodids);
+    validi_(__global_state, &i__1, &i__2, bodids);
+    dascls_(__global_state, &handle);
+    chkout_(__global_state, "DSKOBJ", (ftnlen)6);
     return 0;
 } /* dskobj_ */
 

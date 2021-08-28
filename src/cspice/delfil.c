@@ -8,13 +8,13 @@
 
 
 typedef int delfil_state_t;
-static delfil_state_t* get_delfil_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline delfil_state_t* get_delfil_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      DELFIL ( Delete a file  ) */
-/* Subroutine */ int delfil_(char *filnam, ftnlen filnam_len)
+/* Subroutine */ int delfil_(cspice_t* __global_state, char *filnam, ftnlen 
+	filnam_len)
 {
     /* System generated locals */
     olist o__1;
@@ -22,26 +22,28 @@ static delfil_state_t* get_delfil_state() {
     inlist ioin__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), f_inqu(inlist *), f_open(
-	    olist *), f_clos(cllist *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), f_inqu(
+	    f2c_state_t*, inlist *), f_open(f2c_state_t*, olist *), f_clos(
+	    f2c_state_t*, cllist *);
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errch_(cspice_t*, char *, char *, ftnlen, 
+	    ftnlen);
     integer lunit;
     logical opened;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int getlun_(integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int getlun_(cspice_t*, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     logical exists;
 
 
     /* Module state */
-    delfil_state_t* __state = get_delfil_state();
+    delfil_state_t* __state = get_delfil_state(__global_state);
 /* $ Abstract */
 
 /*     Delete a file. */
@@ -174,19 +176,20 @@ static delfil_state_t* get_delfil_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DELFIL", (ftnlen)6);
+	chkin_(__global_state, "DELFIL", (ftnlen)6);
     }
 
 /*     Check to see if the filename we got is blank. If it is, signal an */
 /*     error and return. */
 
-    if (s_cmp(filnam, " ", filnam_len, (ftnlen)1) == 0) {
-	setmsg_("The file name is blank.", (ftnlen)23);
-	sigerr_("SPICE(BLANKFILENAME)", (ftnlen)20);
-	chkout_("DELFIL", (ftnlen)6);
+    if (s_cmp(&__global_state->f2c, filnam, " ", filnam_len, (ftnlen)1) == 0) 
+	    {
+	setmsg_(__global_state, "The file name is blank.", (ftnlen)23);
+	sigerr_(__global_state, "SPICE(BLANKFILENAME)", (ftnlen)20);
+	chkout_(__global_state, "DELFIL", (ftnlen)6);
 	return 0;
     }
 
@@ -210,18 +213,18 @@ static delfil_state_t* get_delfil_state() {
     ioin__1.inrecl = 0;
     ioin__1.innrec = 0;
     ioin__1.inblank = 0;
-    iostat = f_inqu(&ioin__1);
+    iostat = f_inqu(&__global_state->f2c, &ioin__1);
 
 /*     Not too likely, but if the INQUIRE statement fails signal an error */
 /*     and return. */
 
     if (iostat != 0) {
-	setmsg_("INQUIRE statement failed for file '#'. IOSTAT = #.", (ftnlen)
-		50);
-	errch_("#", filnam, (ftnlen)1, filnam_len);
-	errint_("#", &iostat, (ftnlen)1);
-	sigerr_("SPICE(INQUIREFAILED)", (ftnlen)20);
-	chkout_("DELFIL", (ftnlen)6);
+	setmsg_(__global_state, "INQUIRE statement failed for file '#'. IOST"
+		"AT = #.", (ftnlen)50);
+	errch_(__global_state, "#", filnam, (ftnlen)1, filnam_len);
+	errint_(__global_state, "#", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	chkout_(__global_state, "DELFIL", (ftnlen)6);
 	return 0;
     }
 
@@ -229,10 +232,10 @@ static delfil_state_t* get_delfil_state() {
 /*     signal an error and return. */
 
     if (! exists) {
-	setmsg_("The file '#' does not exist.", (ftnlen)28);
-	errch_("#", filnam, (ftnlen)1, filnam_len);
-	sigerr_("SPICE(NOSUCHFILE)", (ftnlen)17);
-	chkout_("DELFIL", (ftnlen)6);
+	setmsg_(__global_state, "The file '#' does not exist.", (ftnlen)28);
+	errch_(__global_state, "#", filnam, (ftnlen)1, filnam_len);
+	sigerr_(__global_state, "SPICE(NOSUCHFILE)", (ftnlen)17);
+	chkout_(__global_state, "DELFIL", (ftnlen)6);
 	return 0;
     }
 
@@ -241,17 +244,17 @@ static delfil_state_t* get_delfil_state() {
 /*     open, signal an error and return. */
 
     if (opened) {
-	setmsg_("The file '#' is currently open and cannot be deleted.", (
-		ftnlen)53);
-	errch_("#", filnam, (ftnlen)1, filnam_len);
-	sigerr_("SPICE(FILECURRENTLYOPEN)", (ftnlen)24);
-	chkout_("DELFIL", (ftnlen)6);
+	setmsg_(__global_state, "The file '#' is currently open and cannot b"
+		"e deleted.", (ftnlen)53);
+	errch_(__global_state, "#", filnam, (ftnlen)1, filnam_len);
+	sigerr_(__global_state, "SPICE(FILECURRENTLYOPEN)", (ftnlen)24);
+	chkout_(__global_state, "DELFIL", (ftnlen)6);
 	return 0;
     }
 
 /*     Get an available logical unit and attempt to open the file. */
 
-    getlun_(&lunit);
+    getlun_(__global_state, &lunit);
     o__1.oerr = 1;
     o__1.ounit = lunit;
     o__1.ofnmlen = filnam_len;
@@ -261,16 +264,17 @@ static delfil_state_t* get_delfil_state() {
     o__1.oacc = 0;
     o__1.ofm = 0;
     o__1.oblnk = 0;
-    iostat = f_open(&o__1);
+    iostat = f_open(&__global_state->f2c, &o__1);
 
 /*     If we had trouble opening the file, signal an appropriate error */
 /*     and return. */
 
     if (iostat != 0) {
-	setmsg_("Attempt to open the file '#' failed.", (ftnlen)36);
-	errch_("#", filnam, (ftnlen)1, filnam_len);
-	sigerr_("SPICE(FILEOPENFAILED)", (ftnlen)21);
-	chkout_("DELFIL", (ftnlen)6);
+	setmsg_(__global_state, "Attempt to open the file '#' failed.", (
+		ftnlen)36);
+	errch_(__global_state, "#", filnam, (ftnlen)1, filnam_len);
+	sigerr_(__global_state, "SPICE(FILEOPENFAILED)", (ftnlen)21);
+	chkout_(__global_state, "DELFIL", (ftnlen)6);
 	return 0;
     }
 
@@ -281,19 +285,20 @@ static delfil_state_t* get_delfil_state() {
     cl__1.cerr = 1;
     cl__1.cunit = lunit;
     cl__1.csta = "DELETE";
-    iostat = f_clos(&cl__1);
+    iostat = f_clos(&__global_state->f2c, &cl__1);
     if (iostat != 0) {
 	cl__1.cerr = 0;
 	cl__1.cunit = lunit;
 	cl__1.csta = 0;
-	f_clos(&cl__1);
-	setmsg_("Attempt to delete the file '#' failed.", (ftnlen)38);
-	errch_("#", filnam, (ftnlen)1, filnam_len);
-	sigerr_("SPICE(FILEDELETEFAILED)", (ftnlen)23);
-	chkout_("DELFIL", (ftnlen)6);
+	f_clos(&__global_state->f2c, &cl__1);
+	setmsg_(__global_state, "Attempt to delete the file '#' failed.", (
+		ftnlen)38);
+	errch_(__global_state, "#", filnam, (ftnlen)1, filnam_len);
+	sigerr_(__global_state, "SPICE(FILEDELETEFAILED)", (ftnlen)23);
+	chkout_(__global_state, "DELFIL", (ftnlen)6);
 	return 0;
     }
-    chkout_("DELFIL", (ftnlen)6);
+    chkout_(__global_state, "DELFIL", (ftnlen)6);
     return 0;
 } /* delfil_ */
 

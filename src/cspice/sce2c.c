@@ -8,31 +8,31 @@
 
 
 typedef int sce2c_state_t;
-static sce2c_state_t* get_sce2c_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline sce2c_state_t* get_sce2c_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SCE2C ( ET to continuous SCLK ticks ) */
-/* Subroutine */ int sce2c_(integer *sc, doublereal *et, doublereal *sclkdp)
+/* Subroutine */ int sce2c_(cspice_t* __global_state, integer *sc, doublereal 
+	*et, doublereal *sclkdp)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int scec01_(integer *, doublereal *, doublereal *)
-	    ;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern integer sctype_(integer *);
-    extern logical return_(void);
+    extern /* Subroutine */ int scec01_(cspice_t*, integer *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern integer sctype_(cspice_t*, integer *);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    sce2c_state_t* __state = get_sce2c_state();
+    sce2c_state_t* __state = get_sce2c_state(__global_state);
 /* $ Abstract */
 
 /*     Convert ephemeris seconds past J2000 (ET) to continuous encoded */
@@ -284,25 +284,25 @@ static sce2c_state_t* get_sce2c_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SCE2C", (ftnlen)5);
+	chkin_(__global_state, "SCE2C", (ftnlen)5);
     }
 
 /*     Just hand off the conversion to the appropriate routine. */
 
-    if (sctype_(sc) == 1) {
-	scec01_(sc, et, sclkdp);
+    if (sctype_(__global_state, sc) == 1) {
+	scec01_(__global_state, sc, et, sclkdp);
     } else {
-	setmsg_("Clock type # is not supported.", (ftnlen)30);
-	i__1 = sctype_(sc);
-	errint_("#", &i__1, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
-	chkout_("SCE2C", (ftnlen)5);
+	setmsg_(__global_state, "Clock type # is not supported.", (ftnlen)30);
+	i__1 = sctype_(__global_state, sc);
+	errint_(__global_state, "#", &i__1, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(NOTSUPPORTED)", (ftnlen)19);
+	chkout_(__global_state, "SCE2C", (ftnlen)5);
 	return 0;
     }
-    chkout_("SCE2C", (ftnlen)5);
+    chkout_(__global_state, "SCE2C", (ftnlen)5);
     return 0;
 } /* sce2c_ */
 

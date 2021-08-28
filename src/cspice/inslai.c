@@ -8,14 +8,13 @@
 
 
 typedef int inslai_state_t;
-static inslai_state_t* get_inslai_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline inslai_state_t* get_inslai_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      INSLAI (Insert at location in an integer array) */
-/* Subroutine */ int inslai_(integer *elts, integer *ne, integer *loc, 
-	integer *array, integer *na)
+/* Subroutine */ int inslai_(cspice_t* __global_state, integer *elts, integer 
+	*ne, integer *loc, integer *array, integer *na)
 {
     /* System generated locals */
     integer i__1;
@@ -23,16 +22,16 @@ static inslai_state_t* get_inslai_state() {
     /* Local variables */
     integer size;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    inslai_state_t* __state = get_inslai_state();
+    inslai_state_t* __state = get_inslai_state(__global_state);
 /* $ Abstract */
 
 /*      Insert one or more elements into an integer array at */
@@ -223,10 +222,10 @@ static inslai_state_t* get_inslai_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("INSLAI", (ftnlen)6);
+	chkin_(__global_state, "INSLAI", (ftnlen)6);
     }
 
 /*     Check the dimension of the array. */
@@ -237,10 +236,10 @@ static inslai_state_t* get_inslai_state() {
 /*     is not out of range. If it is, signal an error and bail out. */
 
     if (*loc < 1 || *loc > size + 1) {
-	setmsg_("Location was *.", (ftnlen)15);
-	errint_("*", loc, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("INSLAI", (ftnlen)6);
+	setmsg_(__global_state, "Location was *.", (ftnlen)15);
+	errint_(__global_state, "*", loc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "INSLAI", (ftnlen)6);
 	return 0;
     }
 
@@ -267,7 +266,7 @@ static inslai_state_t* get_inslai_state() {
 
 	*na = size + *ne;
     }
-    chkout_("INSLAI", (ftnlen)6);
+    chkout_(__global_state, "INSLAI", (ftnlen)6);
     return 0;
 } /* inslai_ */
 

@@ -8,21 +8,20 @@
 
 
 typedef int bsrchc_state_t;
-static bsrchc_state_t* get_bsrchc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline bsrchc_state_t* get_bsrchc_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure            BSRCHC ( Binary search for a character string ) */
-integer bsrchc_(char *value, integer *ndim, char *array, ftnlen value_len, 
-	ftnlen array_len)
+integer bsrchc_(cspice_t* __global_state, char *value, integer *ndim, char *
+	array, ftnlen value_len, ftnlen array_len)
 {
     /* System generated locals */
     integer ret_val;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    logical l_lt(char *, char *, ftnlen, ftnlen);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen);
+    logical l_lt(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer left;
@@ -31,7 +30,7 @@ integer bsrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
 
 
     /* Module state */
-    bsrchc_state_t* __state = get_bsrchc_state();
+    bsrchc_state_t* __state = get_bsrchc_state(__global_state);
 /* $ Abstract */
 
 /*      Do a binary search for a given value within a character array, */
@@ -191,15 +190,15 @@ integer bsrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
 
 /*        If the middle element matches, return its location. */
 
-	if (s_cmp(value, array + (i__ - 1) * array_len, value_len, array_len) 
-		== 0) {
+	if (s_cmp(&__global_state->f2c, value, array + (i__ - 1) * array_len, 
+		value_len, array_len) == 0) {
 	    ret_val = i__;
 	    return ret_val;
 
 /*        Otherwise narrow the search area. */
 
-	} else if (l_lt(value, array + (i__ - 1) * array_len, value_len, 
-		array_len)) {
+	} else if (l_lt(&__global_state->f2c, value, array + (i__ - 1) * 
+		array_len, value_len, array_len)) {
 	    right = i__ - 1;
 	} else {
 	    left = i__ + 1;

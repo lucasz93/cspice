@@ -8,8 +8,7 @@
 
 
 extern spkr10_init_t __spkr10_init;
-static spkr10_state_t* get_spkr10_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkr10_state_t* get_spkr10_state(cspice_t* state) {
 	if (!state->spkr10)
 		state->spkr10 = __cspice_allocate_module(sizeof(
 	spkr10_state_t), &__spkr10_init, sizeof(__spkr10_init));
@@ -18,28 +17,29 @@ static spkr10_state_t* get_spkr10_state() {
 }
 
 /* $Procedure SPKR10 ( SPK, read record from SPK type 10 segment ) */
-/* Subroutine */ int spkr10_(integer *handle, doublereal *descr, doublereal *
-	et, doublereal *record)
+/* Subroutine */ int spkr10_(cspice_t* __global_state, integer *handle, 
+	doublereal *descr, doublereal *et, doublereal *record)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int sgfcon_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *);
-    extern /* Subroutine */ int sgmeta_(integer *, doublereal *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int sgfpkt_(integer *, doublereal *, integer *, 
-	    integer *, doublereal *, integer *);
-    extern /* Subroutine */ int sgfrvi_(integer *, doublereal *, doublereal *,
-	     doublereal *, integer *, logical *);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int sgfcon_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *);
+    extern /* Subroutine */ int sgmeta_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sgfpkt_(cspice_t*, integer *, doublereal *, 
+	    integer *, integer *, doublereal *, integer *);
+    extern /* Subroutine */ int sgfrvi_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, integer *, logical *);
+    extern logical return_(cspice_t*);
 
     /* Module state */
-    spkr10_state_t* __state = get_spkr10_state();
+    spkr10_state_t* __state = get_spkr10_state(__global_state);
 /* $ Abstract */
 
 /*     Read a single SPK data record from a segment of type 10 */
@@ -597,20 +597,21 @@ static spkr10_state_t* get_spkr10_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("SPKR10", (ftnlen)6);
+    chkin_(__global_state, "SPKR10", (ftnlen)6);
 
 /*     Fetch the constants and store them in the first part of */
 /*     the output RECORD. */
 
-    sgfcon_(handle, descr, &__state->c__1, &__state->c__8, record);
+    sgfcon_(__global_state, handle, descr, &__state->c__1, &__state->c__8, 
+	    record);
 
 /*     Locate the time in the file closest to the input ET. */
 
-    sgfrvi_(handle, descr, et, &__state->value, &__state->indx, &
-	    __state->found);
+    sgfrvi_(__global_state, handle, descr, et, &__state->value, &
+	    __state->indx, &__state->found);
 
 /*     Determine which pair of element sets to choose so that */
 /*     they will bracket ET. */
@@ -621,7 +622,8 @@ static spkr10_state_t* get_spkr10_state() {
 	__state->from = max(i__1,1);
 	__state->to = __state->indx;
     } else {
-	sgmeta_(handle, descr, &__state->c__7, &__state->nepoch);
+	sgmeta_(__global_state, handle, descr, &__state->c__7, &
+		__state->nepoch);
 	__state->from = __state->indx;
 /* Computing MIN */
 	i__1 = __state->indx + 1;
@@ -630,8 +632,8 @@ static spkr10_state_t* get_spkr10_state() {
 
 /*     Fetch the element sets */
 
-    sgfpkt_(handle, descr, &__state->from, &__state->to, &record[8], 
-	    __state->ends);
+    sgfpkt_(__global_state, handle, descr, &__state->from, &__state->to, &
+	    record[8], __state->ends);
 
 /*     If the size of the packets is not 14, this is an old style */
 /*     two-line element set without nutation information.  We simply */
@@ -665,9 +667,9 @@ static spkr10_state_t* get_spkr10_state() {
 /*     that the record is properly constructed. */
 
     if (__state->from == __state->to) {
-	moved_(&record[8], &__state->c__14, &record[22]);
+	moved_(__global_state, &record[8], &__state->c__14, &record[22]);
     }
-    chkout_("SPKR10", (ftnlen)6);
+    chkout_(__global_state, "SPKR10", (ftnlen)6);
     return 0;
 } /* spkr10_ */
 

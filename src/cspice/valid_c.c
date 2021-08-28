@@ -225,7 +225,7 @@
    {
       return;
    }
-   chkin_c ( "valid_c" );
+   chkin_c ( naif_state, "valid_c" );
  
  
    /*

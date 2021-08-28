@@ -8,20 +8,19 @@
 
 
 typedef int zzmsxf_state_t;
-static zzmsxf_state_t* get_zzmsxf_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzmsxf_state_t* get_zzmsxf_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZMSXF ( Multiply sequence of state transformations ) */
-/* Subroutine */ int zzmsxf_(doublereal *matrix, integer *n, doublereal *
-	output)
+/* Subroutine */ int zzmsxf_(cspice_t* __global_state, doublereal *matrix, 
+	integer *n, doublereal *output)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7, i__8;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer incr;
@@ -36,7 +35,7 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 
 
     /* Module state */
-    zzmsxf_state_t* __state = get_zzmsxf_state();
+    zzmsxf_state_t* __state = get_zzmsxf_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -219,27 +218,29 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)208)] = 
-			matrix[j + 35] * matrix[(k + 6) * 6 - 42] + matrix[j 
-			+ 41] * matrix[(k + 6) * 6 - 41] + matrix[j + 47] * 
-			matrix[(k + 6) * 6 - 40];
+			s_rnge(&__global_state->f2c, "output", i__1, "zzmsxf_"
+			, (ftnlen)208)] = matrix[j + 35] * matrix[(k + 6) * 6 
+			- 42] + matrix[j + 41] * matrix[(k + 6) * 6 - 41] + 
+			matrix[j + 47] * matrix[(k + 6) * 6 - 40];
 	    }
 	}
 	for (j = 4; j <= 6; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)217)] = 
-			matrix[j + 35] * matrix[(k + 6) * 6 - 42] + matrix[j 
-			+ 41] * matrix[(k + 6) * 6 - 41] + matrix[j + 47] * 
-			matrix[(k + 6) * 6 - 40] + matrix[j + 53] * matrix[(k 
-			+ 6) * 6 - 39] + matrix[j + 59] * matrix[(k + 6) * 6 
-			- 38] + matrix[j + 65] * matrix[(k + 6) * 6 - 37];
+			s_rnge(&__global_state->f2c, "output", i__1, "zzmsxf_"
+			, (ftnlen)217)] = matrix[j + 35] * matrix[(k + 6) * 6 
+			- 42] + matrix[j + 41] * matrix[(k + 6) * 6 - 41] + 
+			matrix[j + 47] * matrix[(k + 6) * 6 - 40] + matrix[j 
+			+ 53] * matrix[(k + 6) * 6 - 39] + matrix[j + 59] * 
+			matrix[(k + 6) * 6 - 38] + matrix[j + 65] * matrix[(k 
+			+ 6) * 6 - 37];
 	    }
 	}
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 4; k <= 6; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)228)] = 0.;
+			s_rnge(&__global_state->f2c, "output", i__1, "zzmsxf_"
+			, (ftnlen)228)] = 0.;
 	    }
 	}
 	for (j = 4; j <= 6; ++j) {
@@ -247,10 +248,10 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 	    for (k = 4; k <= 6; ++k) {
 		m = k - 3;
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)236)] = 
-			output[(i__2 = l + m * 6 - 7) < 36 && 0 <= i__2 ? 
-			i__2 : s_rnge("output", i__2, "zzmsxf_", (ftnlen)236)]
-			;
+			s_rnge(&__global_state->f2c, "output", i__1, "zzmsxf_"
+			, (ftnlen)236)] = output[(i__2 = l + m * 6 - 7) < 36 
+			&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			"output", i__2, "zzmsxf_", (ftnlen)236)];
 	    }
 	}
     } else if (*n > 2) {
@@ -267,10 +268,10 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		temp[(i__1 = j + (k + put * 6) * 6 - 43) < 72 && 0 <= i__1 ? 
-			i__1 : s_rnge("temp", i__1, "zzmsxf_", (ftnlen)257)] =
-			 matrix[j + 35] * matrix[(k + 6) * 6 - 42] + matrix[j 
-			+ 41] * matrix[(k + 6) * 6 - 41] + matrix[j + 47] * 
-			matrix[(k + 6) * 6 - 40];
+			i__1 : s_rnge(&__global_state->f2c, "temp", i__1, 
+			"zzmsxf_", (ftnlen)257)] = matrix[j + 35] * matrix[(k 
+			+ 6) * 6 - 42] + matrix[j + 41] * matrix[(k + 6) * 6 
+			- 41] + matrix[j + 47] * matrix[(k + 6) * 6 - 40];
 	    }
 	}
 
@@ -279,12 +280,13 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 	for (j = 4; j <= 6; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		temp[(i__1 = j + (k + put * 6) * 6 - 43) < 72 && 0 <= i__1 ? 
-			i__1 : s_rnge("temp", i__1, "zzmsxf_", (ftnlen)268)] =
-			 matrix[j + 35] * matrix[(k + 6) * 6 - 42] + matrix[j 
-			+ 41] * matrix[(k + 6) * 6 - 41] + matrix[j + 47] * 
-			matrix[(k + 6) * 6 - 40] + matrix[j + 53] * matrix[(k 
-			+ 6) * 6 - 39] + matrix[j + 59] * matrix[(k + 6) * 6 
-			- 38] + matrix[j + 65] * matrix[(k + 6) * 6 - 37];
+			i__1 : s_rnge(&__global_state->f2c, "temp", i__1, 
+			"zzmsxf_", (ftnlen)268)] = matrix[j + 35] * matrix[(k 
+			+ 6) * 6 - 42] + matrix[j + 41] * matrix[(k + 6) * 6 
+			- 41] + matrix[j + 47] * matrix[(k + 6) * 6 - 40] + 
+			matrix[j + 53] * matrix[(k + 6) * 6 - 39] + matrix[j 
+			+ 59] * matrix[(k + 6) * 6 - 38] + matrix[j + 65] * 
+			matrix[(k + 6) * 6 - 37];
 	    }
 	}
 
@@ -317,16 +319,18 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 	    for (j = 1; j <= 3; ++j) {
 		for (k = 1; k <= 3; ++k) {
 		    temp[(i__2 = j + (k + put * 6) * 6 - 43) < 72 && 0 <= 
-			    i__2 ? i__2 : s_rnge("temp", i__2, "zzmsxf_", (
-			    ftnlen)306)] = matrix[j + (i__ * 6 + 1) * 6 - 43] 
-			    * temp[(i__3 = (k + get * 6) * 6 - 42) < 72 && 0 
-			    <= i__3 ? i__3 : s_rnge("temp", i__3, "zzmsxf_", (
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "temp",
+			     i__2, "zzmsxf_", (ftnlen)306)] = matrix[j + (i__ 
+			    * 6 + 1) * 6 - 43] * temp[(i__3 = (k + get * 6) * 
+			    6 - 42) < 72 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "temp", i__3, "zzmsxf_", (
 			    ftnlen)306)] + matrix[j + (i__ * 6 + 2) * 6 - 43] 
 			    * temp[(i__4 = (k + get * 6) * 6 - 41) < 72 && 0 
-			    <= i__4 ? i__4 : s_rnge("temp", i__4, "zzmsxf_", (
-			    ftnlen)306)] + matrix[j + (i__ * 6 + 3) * 6 - 43] 
-			    * temp[(i__5 = (k + get * 6) * 6 - 40) < 72 && 0 
-			    <= i__5 ? i__5 : s_rnge("temp", i__5, "zzmsxf_", (
+			    <= i__4 ? i__4 : s_rnge(&__global_state->f2c, 
+			    "temp", i__4, "zzmsxf_", (ftnlen)306)] + matrix[j 
+			    + (i__ * 6 + 3) * 6 - 43] * temp[(i__5 = (k + get 
+			    * 6) * 6 - 40) < 72 && 0 <= i__5 ? i__5 : s_rnge(&
+			    __global_state->f2c, "temp", i__5, "zzmsxf_", (
 			    ftnlen)306)];
 		}
 	    }
@@ -336,26 +340,29 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 	    for (j = 4; j <= 6; ++j) {
 		for (k = 1; k <= 3; ++k) {
 		    temp[(i__2 = j + (k + put * 6) * 6 - 43) < 72 && 0 <= 
-			    i__2 ? i__2 : s_rnge("temp", i__2, "zzmsxf_", (
-			    ftnlen)318)] = matrix[j + (i__ * 6 + 1) * 6 - 43] 
-			    * temp[(i__3 = (k + get * 6) * 6 - 42) < 72 && 0 
-			    <= i__3 ? i__3 : s_rnge("temp", i__3, "zzmsxf_", (
+			    i__2 ? i__2 : s_rnge(&__global_state->f2c, "temp",
+			     i__2, "zzmsxf_", (ftnlen)318)] = matrix[j + (i__ 
+			    * 6 + 1) * 6 - 43] * temp[(i__3 = (k + get * 6) * 
+			    6 - 42) < 72 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "temp", i__3, "zzmsxf_", (
 			    ftnlen)318)] + matrix[j + (i__ * 6 + 2) * 6 - 43] 
 			    * temp[(i__4 = (k + get * 6) * 6 - 41) < 72 && 0 
-			    <= i__4 ? i__4 : s_rnge("temp", i__4, "zzmsxf_", (
-			    ftnlen)318)] + matrix[j + (i__ * 6 + 3) * 6 - 43] 
-			    * temp[(i__5 = (k + get * 6) * 6 - 40) < 72 && 0 
-			    <= i__5 ? i__5 : s_rnge("temp", i__5, "zzmsxf_", (
+			    <= i__4 ? i__4 : s_rnge(&__global_state->f2c, 
+			    "temp", i__4, "zzmsxf_", (ftnlen)318)] + matrix[j 
+			    + (i__ * 6 + 3) * 6 - 43] * temp[(i__5 = (k + get 
+			    * 6) * 6 - 40) < 72 && 0 <= i__5 ? i__5 : s_rnge(&
+			    __global_state->f2c, "temp", i__5, "zzmsxf_", (
 			    ftnlen)318)] + matrix[j + (i__ * 6 + 4) * 6 - 43] 
 			    * temp[(i__6 = (k + get * 6) * 6 - 39) < 72 && 0 
-			    <= i__6 ? i__6 : s_rnge("temp", i__6, "zzmsxf_", (
-			    ftnlen)318)] + matrix[j + (i__ * 6 + 5) * 6 - 43] 
-			    * temp[(i__7 = (k + get * 6) * 6 - 38) < 72 && 0 
-			    <= i__7 ? i__7 : s_rnge("temp", i__7, "zzmsxf_", (
+			    <= i__6 ? i__6 : s_rnge(&__global_state->f2c, 
+			    "temp", i__6, "zzmsxf_", (ftnlen)318)] + matrix[j 
+			    + (i__ * 6 + 5) * 6 - 43] * temp[(i__7 = (k + get 
+			    * 6) * 6 - 38) < 72 && 0 <= i__7 ? i__7 : s_rnge(&
+			    __global_state->f2c, "temp", i__7, "zzmsxf_", (
 			    ftnlen)318)] + matrix[j + (i__ * 6 + 6) * 6 - 43] 
 			    * temp[(i__8 = (k + get * 6) * 6 - 37) < 72 && 0 
-			    <= i__8 ? i__8 : s_rnge("temp", i__8, "zzmsxf_", (
-			    ftnlen)318)];
+			    <= i__8 ? i__8 : s_rnge(&__global_state->f2c, 
+			    "temp", i__8, "zzmsxf_", (ftnlen)318)];
 		}
 	    }
 
@@ -375,16 +382,18 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)347)] = 
-			matrix[j + (*n * 6 + 1) * 6 - 43] * temp[(i__2 = (k + 
-			get * 6) * 6 - 42) < 72 && 0 <= i__2 ? i__2 : s_rnge(
-			"temp", i__2, "zzmsxf_", (ftnlen)347)] + matrix[j + (*
-			n * 6 + 2) * 6 - 43] * temp[(i__3 = (k + get * 6) * 6 
-			- 41) < 72 && 0 <= i__3 ? i__3 : s_rnge("temp", i__3, 
-			"zzmsxf_", (ftnlen)347)] + matrix[j + (*n * 6 + 3) * 
-			6 - 43] * temp[(i__4 = (k + get * 6) * 6 - 40) < 72 &&
-			 0 <= i__4 ? i__4 : s_rnge("temp", i__4, "zzmsxf_", (
-			ftnlen)347)];
+			s_rnge(&__global_state->f2c, "output", i__1, "zzmsxf_"
+			, (ftnlen)347)] = matrix[j + (*n * 6 + 1) * 6 - 43] * 
+			temp[(i__2 = (k + get * 6) * 6 - 42) < 72 && 0 <= 
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "temp", 
+			i__2, "zzmsxf_", (ftnlen)347)] + matrix[j + (*n * 6 + 
+			2) * 6 - 43] * temp[(i__3 = (k + get * 6) * 6 - 41) < 
+			72 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+			"temp", i__3, "zzmsxf_", (ftnlen)347)] + matrix[j + (*
+			n * 6 + 3) * 6 - 43] * temp[(i__4 = (k + get * 6) * 6 
+			- 40) < 72 && 0 <= i__4 ? i__4 : s_rnge(&
+			__global_state->f2c, "temp", i__4, "zzmsxf_", (ftnlen)
+			347)];
 	    }
 	}
 
@@ -393,24 +402,28 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 	for (j = 4; j <= 6; ++j) {
 	    for (k = 1; k <= 3; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)358)] = 
-			matrix[j + (*n * 6 + 1) * 6 - 43] * temp[(i__2 = (k + 
-			get * 6) * 6 - 42) < 72 && 0 <= i__2 ? i__2 : s_rnge(
-			"temp", i__2, "zzmsxf_", (ftnlen)358)] + matrix[j + (*
-			n * 6 + 2) * 6 - 43] * temp[(i__3 = (k + get * 6) * 6 
-			- 41) < 72 && 0 <= i__3 ? i__3 : s_rnge("temp", i__3, 
-			"zzmsxf_", (ftnlen)358)] + matrix[j + (*n * 6 + 3) * 
-			6 - 43] * temp[(i__4 = (k + get * 6) * 6 - 40) < 72 &&
-			 0 <= i__4 ? i__4 : s_rnge("temp", i__4, "zzmsxf_", (
-			ftnlen)358)] + matrix[j + (*n * 6 + 4) * 6 - 43] * 
-			temp[(i__5 = (k + get * 6) * 6 - 39) < 72 && 0 <= 
-			i__5 ? i__5 : s_rnge("temp", i__5, "zzmsxf_", (ftnlen)
-			358)] + matrix[j + (*n * 6 + 5) * 6 - 43] * temp[(
-			i__6 = (k + get * 6) * 6 - 38) < 72 && 0 <= i__6 ? 
-			i__6 : s_rnge("temp", i__6, "zzmsxf_", (ftnlen)358)] 
-			+ matrix[j + (*n * 6 + 6) * 6 - 43] * temp[(i__7 = (k 
-			+ get * 6) * 6 - 37) < 72 && 0 <= i__7 ? i__7 : 
-			s_rnge("temp", i__7, "zzmsxf_", (ftnlen)358)];
+			s_rnge(&__global_state->f2c, "output", i__1, "zzmsxf_"
+			, (ftnlen)358)] = matrix[j + (*n * 6 + 1) * 6 - 43] * 
+			temp[(i__2 = (k + get * 6) * 6 - 42) < 72 && 0 <= 
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "temp", 
+			i__2, "zzmsxf_", (ftnlen)358)] + matrix[j + (*n * 6 + 
+			2) * 6 - 43] * temp[(i__3 = (k + get * 6) * 6 - 41) < 
+			72 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+			"temp", i__3, "zzmsxf_", (ftnlen)358)] + matrix[j + (*
+			n * 6 + 3) * 6 - 43] * temp[(i__4 = (k + get * 6) * 6 
+			- 40) < 72 && 0 <= i__4 ? i__4 : s_rnge(&
+			__global_state->f2c, "temp", i__4, "zzmsxf_", (ftnlen)
+			358)] + matrix[j + (*n * 6 + 4) * 6 - 43] * temp[(
+			i__5 = (k + get * 6) * 6 - 39) < 72 && 0 <= i__5 ? 
+			i__5 : s_rnge(&__global_state->f2c, "temp", i__5, 
+			"zzmsxf_", (ftnlen)358)] + matrix[j + (*n * 6 + 5) * 
+			6 - 43] * temp[(i__6 = (k + get * 6) * 6 - 38) < 72 &&
+			 0 <= i__6 ? i__6 : s_rnge(&__global_state->f2c, 
+			"temp", i__6, "zzmsxf_", (ftnlen)358)] + matrix[j + (*
+			n * 6 + 6) * 6 - 43] * temp[(i__7 = (k + get * 6) * 6 
+			- 37) < 72 && 0 <= i__7 ? i__7 : s_rnge(&
+			__global_state->f2c, "temp", i__7, "zzmsxf_", (ftnlen)
+			358)];
 	    }
 	}
 
@@ -419,7 +432,8 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 	for (j = 1; j <= 3; ++j) {
 	    for (k = 4; k <= 6; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)371)] = 0.;
+			s_rnge(&__global_state->f2c, "output", i__1, "zzmsxf_"
+			, (ftnlen)371)] = 0.;
 	    }
 	}
 
@@ -431,10 +445,10 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 	    for (k = 4; k <= 6; ++k) {
 		m = k - 3;
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)384)] = 
-			output[(i__2 = l + m * 6 - 7) < 36 && 0 <= i__2 ? 
-			i__2 : s_rnge("output", i__2, "zzmsxf_", (ftnlen)384)]
-			;
+			s_rnge(&__global_state->f2c, "output", i__1, "zzmsxf_"
+			, (ftnlen)384)] = output[(i__2 = l + m * 6 - 7) < 36 
+			&& 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c, 
+			"output", i__2, "zzmsxf_", (ftnlen)384)];
 	    }
 	}
     } else if (*n == 1) {
@@ -445,19 +459,22 @@ static zzmsxf_state_t* get_zzmsxf_state() {
 	for (i__ = 1; i__ <= 6; ++i__) {
 	    for (j = 1; j <= 6; ++j) {
 		output[(i__1 = j + i__ * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)398)] = 
-			matrix[j + (i__ + 6) * 6 - 43];
+			s_rnge(&__global_state->f2c, "output", i__1, "zzmsxf_"
+			, (ftnlen)398)] = matrix[j + (i__ + 6) * 6 - 43];
 	    }
 	}
     } else if (*n <= 0) {
 	for (j = 1; j <= 6; ++j) {
-	    output[(i__1 = j + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(
-		    "output", i__1, "zzmsxf_", (ftnlen)407)] = 1.;
+	    output[(i__1 = j + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "output", i__1, "zzmsxf_", (ftnlen)
+		    407)] = 1.;
 	    for (k = j + 1; k <= 6; ++k) {
 		output[(i__1 = j + k * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)410)] = 0.;
+			s_rnge(&__global_state->f2c, "output", i__1, "zzmsxf_"
+			, (ftnlen)410)] = 0.;
 		output[(i__1 = k + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-			s_rnge("output", i__1, "zzmsxf_", (ftnlen)411)] = 0.;
+			s_rnge(&__global_state->f2c, "output", i__1, "zzmsxf_"
+			, (ftnlen)411)] = 0.;
 	    }
 	}
     }

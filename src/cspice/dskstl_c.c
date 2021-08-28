@@ -181,7 +181,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "dskstl_c" );
+   chkin_c ( naif_state, "dskstl_c" );
 
 
    dskstl_ ( (integer     *) &keywrd,

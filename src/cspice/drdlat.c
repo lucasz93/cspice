@@ -8,21 +8,20 @@
 
 
 typedef int drdlat_state_t;
-static drdlat_state_t* get_drdlat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline drdlat_state_t* get_drdlat_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DRDLAT ( Derivative of rectangular w.r.t. latitudinal ) */
-/* Subroutine */ int drdlat_(doublereal *r__, doublereal *long__, doublereal *
-	lat, doublereal *jacobi)
+/* Subroutine */ int drdlat_(cspice_t* __global_state, doublereal *r__, 
+	doublereal *long__, doublereal *lat, doublereal *jacobi)
 {
     /* Builtin functions */
-    double cos(doublereal), sin(doublereal);
+    double cos(f2c_state_t*, doublereal), sin(f2c_state_t*, doublereal);
 
 
     /* Module state */
-    drdlat_state_t* __state = get_drdlat_state();
+    drdlat_state_t* __state = get_drdlat_state(__global_state);
 /* $ Abstract */
 
 /*     Compute the Jacobian of the transformation from latitudinal to */
@@ -209,15 +208,21 @@ static drdlat_state_t* get_drdlat_state() {
 
 /*     Construct the matrix directly. */
 
-    jacobi[0] = cos(*long__) * cos(*lat);
-    jacobi[1] = sin(*long__) * cos(*lat);
-    jacobi[2] = sin(*lat);
-    jacobi[3] = -(*r__) * sin(*long__) * cos(*lat);
-    jacobi[4] = *r__ * cos(*long__) * cos(*lat);
+    jacobi[0] = cos(&__global_state->f2c, *long__) * cos(&__global_state->f2c,
+	     *lat);
+    jacobi[1] = sin(&__global_state->f2c, *long__) * cos(&__global_state->f2c,
+	     *lat);
+    jacobi[2] = sin(&__global_state->f2c, *lat);
+    jacobi[3] = -(*r__) * sin(&__global_state->f2c, *long__) * cos(&
+	    __global_state->f2c, *lat);
+    jacobi[4] = *r__ * cos(&__global_state->f2c, *long__) * cos(&
+	    __global_state->f2c, *lat);
     jacobi[5] = 0.;
-    jacobi[6] = -(*r__) * cos(*long__) * sin(*lat);
-    jacobi[7] = -(*r__) * sin(*long__) * sin(*lat);
-    jacobi[8] = *r__ * cos(*lat);
+    jacobi[6] = -(*r__) * cos(&__global_state->f2c, *long__) * sin(&
+	    __global_state->f2c, *lat);
+    jacobi[7] = -(*r__) * sin(&__global_state->f2c, *long__) * sin(&
+	    __global_state->f2c, *lat);
+    jacobi[8] = *r__ * cos(&__global_state->f2c, *lat);
     return 0;
 } /* drdlat_ */
 

@@ -290,7 +290,7 @@
       return;
       }
 
-   chkin_c ( "gfstol_c" );
+   chkin_c ( naif_state, "gfstol_c" );
 
    /*
    Let the f2c'd routine do the work.

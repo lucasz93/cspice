@@ -8,34 +8,34 @@
 
 
 typedef int inslac_state_t;
-static inslac_state_t* get_inslac_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline inslac_state_t* get_inslac_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      INSLAC ( Insert at location in a character array ) */
-/* Subroutine */ int inslac_(char *elts, integer *ne, integer *loc, char *
-	array, integer *na, ftnlen elts_len, ftnlen array_len)
+/* Subroutine */ int inslac_(cspice_t* __global_state, char *elts, integer *
+	ne, integer *loc, char *array, integer *na, ftnlen elts_len, ftnlen 
+	array_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer size;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    inslac_state_t* __state = get_inslac_state();
+    inslac_state_t* __state = get_inslac_state(__global_state);
 /* $ Abstract */
 
 /*      Insert one or more elements into a character array at the */
@@ -229,10 +229,10 @@ static inslac_state_t* get_inslac_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("INSLAC", (ftnlen)6);
+	chkin_(__global_state, "INSLAC", (ftnlen)6);
     }
 
 /*     Check the dimension of the array. */
@@ -243,10 +243,10 @@ static inslac_state_t* get_inslac_state() {
 /*     is not out of range. If it is, signal an error and bail out. */
 
     if (*loc < 1 || *loc > size + 1) {
-	setmsg_("Location was *.", (ftnlen)15);
-	errint_("*", loc, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("INSLAC", (ftnlen)6);
+	setmsg_(__global_state, "Location was *.", (ftnlen)15);
+	errint_(__global_state, "*", loc, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "INSLAC", (ftnlen)6);
 	return 0;
     }
 
@@ -259,23 +259,23 @@ static inslac_state_t* get_inslac_state() {
 
 	i__1 = *loc;
 	for (i__ = size; i__ >= i__1; --i__) {
-	    s_copy(array + (i__ + *ne - 1) * array_len, array + (i__ - 1) * 
-		    array_len, array_len, array_len);
+	    s_copy(&__global_state->f2c, array + (i__ + *ne - 1) * array_len, 
+		    array + (i__ - 1) * array_len, array_len, array_len);
 	}
 
 /*        Now put the new elements in the vacated spaces. */
 
 	i__1 = *ne;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    s_copy(array + (*loc + i__ - 2) * array_len, elts + (i__ - 1) * 
-		    elts_len, array_len, elts_len);
+	    s_copy(&__global_state->f2c, array + (*loc + i__ - 2) * array_len,
+		     elts + (i__ - 1) * elts_len, array_len, elts_len);
 	}
 
 /*        Update the number of elements in the array. */
 
 	*na = size + *ne;
     }
-    chkout_("INSLAC", (ftnlen)6);
+    chkout_(__global_state, "INSLAC", (ftnlen)6);
     return 0;
 } /* inslac_ */
 

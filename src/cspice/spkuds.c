@@ -8,8 +8,7 @@
 
 
 extern spkuds_init_t __spkuds_init;
-static spkuds_state_t* get_spkuds_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spkuds_state_t* get_spkuds_state(cspice_t* state) {
 	if (!state->spkuds)
 		state->spkuds = __cspice_allocate_module(sizeof(
 	spkuds_state_t), &__spkuds_init, sizeof(__spkuds_init));
@@ -18,22 +17,22 @@ static spkuds_state_t* get_spkuds_state() {
 }
 
 /* $Procedure      SPKUDS ( SPK - unpack segment descriptor ) */
-/* Subroutine */ int spkuds_(doublereal *descr, integer *body, integer *
-	center, integer *frame, integer *type__, doublereal *first, 
-	doublereal *last, integer *begin, integer *end)
+/* Subroutine */ int spkuds_(cspice_t* __global_state, doublereal *descr, 
+	integer *body, integer *center, integer *frame, integer *type__, 
+	doublereal *first, doublereal *last, integer *begin, integer *end)
 {
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dafus_(doublereal *, integer *, integer *, 
-	    doublereal *, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dafus_(cspice_t*, doublereal *, integer *, 
+	    integer *, doublereal *, integer *);
     integer ipart[6];
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     doublereal dppart[2];
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
 
 
     /* Module state */
-    spkuds_state_t* __state = get_spkuds_state();
+    spkuds_state_t* __state = get_spkuds_state(__global_state);
 /* $ Abstract */
 
 /*     Unpack the contents of an SPK segment descriptor */
@@ -194,19 +193,20 @@ static spkuds_state_t* get_spkuds_state() {
 
 /*     Standard introductory error handling preparations. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKUDS", (ftnlen)6);
+	chkin_(__global_state, "SPKUDS", (ftnlen)6);
     }
 
 /*     No judgements are made about the descriptor when we */
 /*     unpack it.  If things were done right when the descriptor */
 /*     was created, it should be fine now. */
 
-    dafus_(descr, &__state->c__2, &__state->c__6, dppart, ipart);
-    if (failed_()) {
-	chkout_("SPKUDS", (ftnlen)6);
+    dafus_(__global_state, descr, &__state->c__2, &__state->c__6, dppart, 
+	    ipart);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "SPKUDS", (ftnlen)6);
 	return 0;
     }
     *body = ipart[0];
@@ -217,7 +217,7 @@ static spkuds_state_t* get_spkuds_state() {
     *end = ipart[5];
     *first = dppart[0];
     *last = dppart[1];
-    chkout_("SPKUDS", (ftnlen)6);
+    chkout_(__global_state, "SPKUDS", (ftnlen)6);
     return 0;
 } /* spkuds_ */
 

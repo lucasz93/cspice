@@ -8,14 +8,13 @@
 
 
 typedef int swapai_state_t;
-static swapai_state_t* get_swapai_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline swapai_state_t* get_swapai_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      SWAPAI ( Swap elements within an integer array ) */
-/* Subroutine */ int swapai_(integer *n, integer *locn, integer *m, integer *
-	locm, integer *array)
+/* Subroutine */ int swapai_(cspice_t* __global_state, integer *n, integer *
+	locn, integer *m, integer *locm, integer *array)
 {
     /* System generated locals */
     integer i__1;
@@ -23,27 +22,27 @@ static swapai_state_t* get_swapai_state() {
     /* Local variables */
     integer nsub;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer extra;
-    extern /* Subroutine */ int swapi_(integer *, integer *);
+    extern /* Subroutine */ int swapi_(cspice_t*, integer *, integer *);
     integer lm;
     integer ln;
     integer nm;
     integer nn;
     integer begsub;
     integer direct;
-    extern /* Subroutine */ int cyaiip_(integer *, char *, integer *, integer 
-	    *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int cyaiip_(cspice_t*, integer *, char *, integer 
+	    *, integer *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     char dir[1];
 
 
     /* Module state */
-    swapai_state_t* __state = get_swapai_state();
+    swapai_state_t* __state = get_swapai_state(__global_state);
 /* $ Abstract */
 
 /*     Swap (exchange) two non-intersecting groups of contiguous */
@@ -374,37 +373,41 @@ static swapai_state_t* get_swapai_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SWAPAI", (ftnlen)6);
+	chkin_(__global_state, "SWAPAI", (ftnlen)6);
     }
 
 /*     Check to see if the inputs are valid. */
 
     if (*n < 0) {
-	setmsg_("Number of elements in the first group is *.", (ftnlen)43);
-	errint_("*", n, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("SWAPAI", (ftnlen)6);
+	setmsg_(__global_state, "Number of elements in the first group is *.",
+		 (ftnlen)43);
+	errint_(__global_state, "*", n, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "SWAPAI", (ftnlen)6);
 	return 0;
     } else if (*m < 0) {
-	setmsg_("Number of elements in the second group is *.", (ftnlen)44);
-	errint_("*", m, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("SWAPAI", (ftnlen)6);
+	setmsg_(__global_state, "Number of elements in the second group is *."
+		, (ftnlen)44);
+	errint_(__global_state, "*", m, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "SWAPAI", (ftnlen)6);
 	return 0;
     } else if (*locn < 1) {
-	setmsg_("Location of the first group is *.", (ftnlen)33);
-	errint_("*", locn, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("SWAPAI", (ftnlen)6);
+	setmsg_(__global_state, "Location of the first group is *.", (ftnlen)
+		33);
+	errint_(__global_state, "*", locn, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "SWAPAI", (ftnlen)6);
 	return 0;
     } else if (*locm < 1) {
-	setmsg_("Location of the second group is *.", (ftnlen)34);
-	errint_("*", locm, (ftnlen)1);
-	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
-	chkout_("SWAPAI", (ftnlen)6);
+	setmsg_(__global_state, "Location of the second group is *.", (ftnlen)
+		34);
+	errint_(__global_state, "*", locm, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDINDEX)", (ftnlen)19);
+	chkout_(__global_state, "SWAPAI", (ftnlen)6);
 	return 0;
     }
 
@@ -425,9 +428,10 @@ static swapai_state_t* get_swapai_state() {
 /*     The elements must be distinct. */
 
     if (lm < ln + nn) {
-	setmsg_("Elements to be swapped are not distinct.", (ftnlen)40);
-	sigerr_("SPICE(NOTDISTINCT)", (ftnlen)18);
-	chkout_("SWAPAI", (ftnlen)6);
+	setmsg_(__global_state, "Elements to be swapped are not distinct.", (
+		ftnlen)40);
+	sigerr_(__global_state, "SPICE(NOTDISTINCT)", (ftnlen)18);
+	chkout_(__global_state, "SWAPAI", (ftnlen)6);
 	return 0;
     }
 
@@ -436,7 +440,7 @@ static swapai_state_t* get_swapai_state() {
     direct = min(nn,nm);
     i__1 = direct - 1;
     for (i__ = 0; i__ <= i__1; ++i__) {
-	swapi_(&array[ln + i__ - 1], &array[lm + i__ - 1]);
+	swapi_(__global_state, &array[ln + i__ - 1], &array[lm + i__ - 1]);
     }
 
 /*     Cycle. */
@@ -450,9 +454,10 @@ static swapai_state_t* get_swapai_state() {
 	}
 	begsub = ln + direct;
 	nsub = lm - ln + (nm - direct);
-	cyaiip_(&nsub, dir, &extra, &array[begsub - 1], (ftnlen)1);
+	cyaiip_(__global_state, &nsub, dir, &extra, &array[begsub - 1], (
+		ftnlen)1);
     }
-    chkout_("SWAPAI", (ftnlen)6);
+    chkout_(__global_state, "SWAPAI", (ftnlen)6);
     return 0;
 } /* swapai_ */
 

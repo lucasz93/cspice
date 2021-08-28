@@ -8,8 +8,7 @@
 
 
 extern zzekweed_init_t __zzekweed_init;
-static zzekweed_state_t* get_zzekweed_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekweed_state_t* get_zzekweed_state(cspice_t* state) {
 	if (!state->zzekweed)
 		state->zzekweed = __cspice_allocate_module(sizeof(
 	zzekweed_state_t), &__zzekweed_init, sizeof(__zzekweed_init));
@@ -18,7 +17,8 @@ static zzekweed_state_t* get_zzekweed_state() {
 }
 
 /* $Procedure  ZZEKWEED ( Private: EK, weed out redundant row vectors ) */
-/* Subroutine */ int zzekweed_(integer *njrs, integer *bases, integer *nrows)
+/* Subroutine */ int zzekweed_(cspice_t* __global_state, integer *njrs, 
+	integer *bases, integer *nrows)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4, i__5, i__6, i__7;
@@ -29,14 +29,15 @@ static zzekweed_state_t* get_zzekweed_state() {
     integer ndel;
     integer ntab;
     integer pred;
-    extern /* Subroutine */ int zzeksupd_(integer *, integer *, integer *);
-    extern /* Subroutine */ int zzekvset_(integer *, integer *);
+    extern /* Subroutine */ int zzeksupd_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int zzekvset_(cspice_t*, integer *, integer *);
     integer i__;
     integer j;
-    extern /* Subroutine */ int zzekjsqz_(integer *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int zzekjsqz_(cspice_t*, integer *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer nrloc;
-    extern logical sameai_(integer *, integer *, integer *);
+    extern logical sameai_(cspice_t*, integer *, integer *, integer *);
     integer nr;
     integer csgbas;
     integer candsv[10];
@@ -46,13 +47,13 @@ static zzekweed_state_t* get_zzekweed_state() {
     integer ncndrv;
     integer ncndsv;
     integer prwbas;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer nsvloc;
     integer predsv[10];
     integer prwvec[11];
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer nprdrv;
     integer nprdsv;
     integer rvsize;
@@ -63,11 +64,12 @@ static zzekweed_state_t* get_zzekweed_state() {
     integer csv;
     integer prv;
     integer psv;
-    extern /* Subroutine */ int zzeksrd_(integer *, integer *, integer *);
+    extern /* Subroutine */ int zzeksrd_(cspice_t*, integer *, integer *, 
+	    integer *);
 
 
     /* Module state */
-    zzekweed_state_t* __state = get_zzekweed_state();
+    zzekweed_state_t* __state = get_zzekweed_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -441,23 +443,24 @@ static zzekweed_state_t* get_zzekweed_state() {
 /*     Use discovery check-in. */
 
     if (*njrs < 1 || *njrs > 200) {
-	chkin_("ZZEKWEED", (ftnlen)8);
-	setmsg_("The number of join row sets in the union is #", (ftnlen)45);
-	errint_("#", njrs, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKWEED", (ftnlen)8);
+	chkin_(__global_state, "ZZEKWEED", (ftnlen)8);
+	setmsg_(__global_state, "The number of join row sets in the union is"
+		" #", (ftnlen)45);
+	errint_(__global_state, "#", njrs, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKWEED", (ftnlen)8);
 	return 0;
     }
 
 /*     Make sure that the addressing routines are properly initialized. */
 
-    zzekvset_(njrs, bases);
+    zzekvset_(__global_state, njrs, bases);
 
 /*     Get the segment vector and row vector sizes.  The sizes that */
 /*     apply to the first join row set will suffice throughout. */
 
     loc = bases[0] + 3;
-    zzeksrd_(&loc, &loc, &ntab);
+    zzeksrd_(__global_state, &loc, &loc, &ntab);
     svsize = ntab;
     rvsize = ntab + 1;
 
@@ -482,7 +485,7 @@ static zzekweed_state_t* get_zzekweed_state() {
 /*        `candidate' join row set. */
 
 	nsvloc = bases[cand - 1] + 4;
-	zzeksrd_(&nsvloc, &nsvloc, &ncndsv);
+	zzeksrd_(__global_state, &nsvloc, &nsvloc, &ncndsv);
 	i__2 = ncndsv;
 	for (csv = 1; csv <= i__2; ++csv) {
 
@@ -491,7 +494,7 @@ static zzekweed_state_t* get_zzekweed_state() {
 	    csgbas = bases[cand - 1] + 4 + (csv - 1) * svsize;
 	    i__3 = csgbas + 1;
 	    i__4 = csgbas + svsize;
-	    zzeksrd_(&i__3, &i__4, candsv);
+	    zzeksrd_(__global_state, &i__3, &i__4, candsv);
 
 /*           Get the row vector count and base address of the set of */
 /*           row vectors for the candidate segment vector, in case */
@@ -502,11 +505,11 @@ static zzekweed_state_t* get_zzekweed_state() {
 	    base = bases[cand - 1] + 4 + ncndsv * svsize + (csv - 1 << 1);
 	    i__3 = base + 1;
 	    i__4 = base + 1;
-	    zzeksrd_(&i__3, &i__4, &crwbas);
+	    zzeksrd_(__global_state, &i__3, &i__4, &crwbas);
 	    crwbas += bases[cand - 1];
 	    i__3 = base + 2;
 	    i__4 = base + 2;
-	    zzeksrd_(&i__3, &i__4, &ncndrv);
+	    zzeksrd_(__global_state, &i__3, &i__4, &ncndrv);
 
 /*           For the current predecessor join row set, look up the */
 /*           segment vectors in that join row set and compare them to the */
@@ -519,7 +522,7 @@ static zzekweed_state_t* get_zzekweed_state() {
 /*              predecessor join row set. */
 
 		nsvloc = bases[pred - 1] + 4;
-		zzeksrd_(&nsvloc, &nsvloc, &nprdsv);
+		zzeksrd_(__global_state, &nsvloc, &nsvloc, &nprdsv);
 		i__4 = nprdsv;
 		for (psv = 1; psv <= i__4; ++psv) {
 
@@ -528,11 +531,11 @@ static zzekweed_state_t* get_zzekweed_state() {
 		    psgbas = bases[pred - 1] + 4 + (psv - 1) * svsize;
 		    i__5 = csgbas + 1;
 		    i__6 = csgbas + svsize;
-		    zzeksrd_(&i__5, &i__6, predsv);
+		    zzeksrd_(__global_state, &i__5, &i__6, predsv);
 
 /*                 Compare the segment vectors and hope for the best. */
 
-		    if (sameai_(candsv, predsv, &svsize)) {
+		    if (sameai_(__global_state, candsv, predsv, &svsize)) {
 
 /*                    Unfortunately, the two segment vectors match, so */
 /*                    there's something to do.  We'll have to compare */
@@ -550,11 +553,11 @@ static zzekweed_state_t* get_zzekweed_state() {
 				1 << 1);
 			i__5 = base + 1;
 			i__6 = base + 1;
-			zzeksrd_(&i__5, &i__6, &prwbas);
+			zzeksrd_(__global_state, &i__5, &i__6, &prwbas);
 			prwbas += bases[pred - 1];
 			i__5 = base + 2;
 			i__6 = base + 2;
-			zzeksrd_(&i__5, &i__6, &nprdrv);
+			zzeksrd_(__global_state, &i__5, &i__6, &nprdrv);
 
 /*                    Compare all row vectors. */
 
@@ -563,15 +566,17 @@ static zzekweed_state_t* get_zzekweed_state() {
 			    base = crwbas + (crv - 1) * rvsize;
 			    i__6 = base + 1;
 			    i__7 = base + rvsize;
-			    zzeksrd_(&i__6, &i__7, crwvec);
+			    zzeksrd_(__global_state, &i__6, &i__7, crwvec);
 			    prv = 1;
 			    hit = FALSE_;
 			    while(prv <= nprdrv && ! hit) {
 				base = prwbas + (prv - 1) * rvsize;
 				i__6 = base + 1;
 				i__7 = base + rvsize;
-				zzeksrd_(&i__6, &i__7, prwvec);
-				if (sameai_(crwvec, prwvec, &rvsize)) {
+				zzeksrd_(__global_state, &i__6, &i__7, prwvec)
+					;
+				if (sameai_(__global_state, crwvec, prwvec, &
+					rvsize)) {
 
 /*                             The row vectors, together with their */
 /*                             qualifying segment vectors, match.  The */
@@ -585,7 +590,8 @@ static zzekweed_state_t* get_zzekweed_state() {
 				    base = crwbas + (crv - 1) * rvsize;
 				    i__6 = base + 1;
 				    i__7 = base + 1;
-				    zzeksupd_(&i__6, &i__7, &__state->c__0);
+				    zzeksupd_(__global_state, &i__6, &i__7, &
+					    __state->c__0);
 				    hit = TRUE_;
 				} else {
 				    ++prv;
@@ -628,9 +634,9 @@ static zzekweed_state_t* get_zzekweed_state() {
 /*        Compress the current join row set.  If it ends up empty, */
 /*        expel it from the union. */
 
-	zzekjsqz_(&bases[i__ - 1]);
+	zzekjsqz_(__global_state, &bases[i__ - 1]);
 	nrloc = bases[i__ - 1] + 2;
-	zzeksrd_(&nrloc, &nrloc, &nr);
+	zzeksrd_(__global_state, &nrloc, &nrloc, &nr);
 	if (nr == 0) {
 
 /*           This entire join row set can be deleted from the union. */
@@ -650,7 +656,7 @@ static zzekweed_state_t* get_zzekweed_state() {
     i__1 = *njrs;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	nrloc = bases[i__ - 1] + 2;
-	zzeksrd_(&nrloc, &nrloc, &nr);
+	zzeksrd_(__global_state, &nrloc, &nrloc, &nr);
 	*nrows += nr;
     }
     return 0;

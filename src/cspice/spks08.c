@@ -8,8 +8,7 @@
 
 
 extern spks08_init_t __spks08_init;
-static spks08_state_t* get_spks08_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline spks08_state_t* get_spks08_state(cspice_t* state) {
 	if (!state->spks08)
 		state->spks08 = __cspice_allocate_module(sizeof(
 	spks08_state_t), &__spks08_init, sizeof(__spks08_init));
@@ -18,37 +17,37 @@ static spks08_state_t* get_spks08_state() {
 }
 
 /* $Procedure SPKS08 ( S/P Kernel, subset, type 8 ) */
-/* Subroutine */ int spks08_(integer *handle, integer *baddr, integer *eaddr, 
-	doublereal *begin, doublereal *end)
+/* Subroutine */ int spks08_(cspice_t* __global_state, integer *handle, 
+	integer *baddr, integer *eaddr, doublereal *begin, doublereal *end)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *);
-    double d_int(doublereal *);
+    integer i_dnnt(f2c_state_t*, doublereal *);
+    double d_int(f2c_state_t*, doublereal *);
 
     /* Local variables */
     doublereal data[6];
     integer nrec;
     doublereal step;
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal ratio;
     doublereal start;
-    extern /* Subroutine */ int dafada_(doublereal *, integer *);
-    extern /* Subroutine */ int dafgda_(integer *, integer *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int dafada_(cspice_t*, doublereal *, integer *);
+    extern /* Subroutine */ int dafgda_(cspice_t*, integer *, integer *, 
+	    integer *, doublereal *);
     integer degree;
     integer offset;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer rec[2];
 
 
     /* Module state */
-    spks08_state_t* __state = get_spks08_state();
+    spks08_state_t* __state = get_spks08_state(__global_state);
 /* $ Abstract */
 
 /*     Extract a subset of the data in an SPK segment of type 8 */
@@ -229,10 +228,10 @@ static spks08_state_t* get_spks08_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("SPKS08", (ftnlen)6);
+	chkin_(__global_state, "SPKS08", (ftnlen)6);
     }
 
 /*     Look up the following items: */
@@ -243,16 +242,16 @@ static spks08_state_t* get_spks08_state() {
 /*        -- The number of records in the segment */
 
     i__1 = *eaddr - 3;
-    dafgda_(handle, &i__1, eaddr, data);
+    dafgda_(__global_state, handle, &i__1, eaddr, data);
     start = data[0];
     step = data[1];
-    degree = i_dnnt(&data[2]);
-    nrec = i_dnnt(&data[3]);
+    degree = i_dnnt(&__global_state->f2c, &data[2]);
+    nrec = i_dnnt(&__global_state->f2c, &data[3]);
 
 /*     See whether there's any work to do; return immediately if not. */
 
     if (*end < *begin || *end < start || *begin > start + (nrec - 1) * step) {
-	chkout_("SPKS08", (ftnlen)6);
+	chkout_(__global_state, "SPKS08", (ftnlen)6);
 	return 0;
     }
 
@@ -288,7 +287,7 @@ static spks08_state_t* get_spks08_state() {
 /*     This epoch corresponds to the last state to be transferred. */
 
     ratio = (*end - start) / step;
-    if (ratio == d_int(&ratio)) {
+    if (ratio == d_int(&__global_state->f2c, &ratio)) {
 /* Computing MIN */
 	i__1 = (integer) ratio, i__2 = nrec - 1;
 	rec[1] = min(i__1,i__2) + 1;
@@ -320,21 +319,21 @@ static spks08_state_t* get_spks08_state() {
 	offset = *baddr - 1 + (i__ - 1) * 6;
 	i__2 = offset + 1;
 	i__3 = offset + 6;
-	dafgda_(handle, &i__2, &i__3, data);
-	dafada_(data, &__state->c__6);
+	dafgda_(__global_state, handle, &i__2, &i__3, data);
+	dafada_(__global_state, data, &__state->c__6);
     }
 
 /*     Store the start time, step size, polynomial degree and the */
 /*     number of records to end the segment. */
 
     d__1 = start + (rec[0] - 1) * step;
-    dafada_(&d__1, &__state->c__1);
-    dafada_(&step, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
+    dafada_(__global_state, &step, &__state->c__1);
     d__1 = (doublereal) degree;
-    dafada_(&d__1, &__state->c__1);
+    dafada_(__global_state, &d__1, &__state->c__1);
     d__1 = (doublereal) (rec[1] - rec[0] + 1);
-    dafada_(&d__1, &__state->c__1);
-    chkout_("SPKS08", (ftnlen)6);
+    dafada_(__global_state, &d__1, &__state->c__1);
+    chkout_(__global_state, "SPKS08", (ftnlen)6);
     return 0;
 } /* spks08_ */
 

@@ -8,8 +8,7 @@
 
 
 extern zzrtnmat_init_t __zzrtnmat_init;
-static zzrtnmat_state_t* get_zzrtnmat_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzrtnmat_state_t* get_zzrtnmat_state(cspice_t* state) {
 	if (!state->zzrtnmat)
 		state->zzrtnmat = __cspice_allocate_module(sizeof(
 	zzrtnmat_state_t), &__zzrtnmat_init, sizeof(__zzrtnmat_init));
@@ -18,7 +17,8 @@ static zzrtnmat_state_t* get_zzrtnmat_state() {
 }
 
 /* $Procedure ZZRTNMAT ( RTN transformation matrix ) */
-/* Subroutine */ int zzrtnmat_(doublereal *v, doublereal *m)
+/* Subroutine */ int zzrtnmat_(cspice_t* __global_state, doublereal *v, 
+	doublereal *m)
 {
     /* Initialized data */
 
@@ -27,30 +27,32 @@ static zzrtnmat_state_t* get_zzrtnmat_state() {
     integer i__1, i__2;
 
     /* Builtin functions */
-    double atan2(doublereal, doublereal), cos(doublereal), sin(doublereal);
-    integer s_rnge(char *, integer, char *, integer);
+    double atan2(f2c_state_t*, doublereal, doublereal), cos(f2c_state_t*, 
+	    doublereal), sin(f2c_state_t*, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     doublereal east[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal vlon[3];
     integer i__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int errdp_(char *, doublereal *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errdp_(cspice_t*, char *, doublereal *, 
+	    ftnlen);
     doublereal north[3];
-    extern /* Subroutine */ int ucrss_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int ucrss_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     doublereal rad[3];
     doublereal lon;
 
 
     /* Module state */
-    zzrtnmat_state_t* __state = get_zzrtnmat_state();
+    zzrtnmat_state_t* __state = get_zzrtnmat_state(__global_state);
 /* $ Abstract */
 
 /*     Given a vector, return a transformation matrix that maps from the */
@@ -228,19 +230,19 @@ static zzrtnmat_state_t* get_zzrtnmat_state() {
 
 /*     Use discovery check-in. Just test the RETURN status. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
     if (v[0] == 0. && v[1] == 0.) {
-	cleard_(&__state->c__9, m);
-	chkin_("ZZRTNMAT", (ftnlen)8);
-	setmsg_("Input vector (# # #) lies on Z-axis; tangential and normal "
-		"directions are undefined.", (ftnlen)84);
-	errdp_("#", v, (ftnlen)1);
-	errdp_("#", &v[1], (ftnlen)1);
-	errdp_("#", &v[2], (ftnlen)1);
-	sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
-	chkout_("ZZRTNMAT", (ftnlen)8);
+	cleard_(__global_state, &__state->c__9, m);
+	chkin_(__global_state, "ZZRTNMAT", (ftnlen)8);
+	setmsg_(__global_state, "Input vector (# # #) lies on Z-axis; tangen"
+		"tial and normal directions are undefined.", (ftnlen)84);
+	errdp_(__global_state, "#", v, (ftnlen)1);
+	errdp_(__global_state, "#", &v[1], (ftnlen)1);
+	errdp_(__global_state, "#", &v[2], (ftnlen)1);
+	sigerr_(__global_state, "SPICE(DEGENERATECASE)", (ftnlen)21);
+	chkout_(__global_state, "ZZRTNMAT", (ftnlen)8);
 	return 0;
     } else {
 
@@ -248,38 +250,41 @@ static zzrtnmat_state_t* get_zzrtnmat_state() {
 /*        robust way of determining the longitude of V, even */
 /*        when the magnitude of V is very small. */
 
-	lon = atan2(v[1], v[0]);
+	lon = atan2(&__global_state->f2c, v[1], v[0]);
 
 /*        Let VLON be a unit vector in the x-y plane whose */
 /*        longitude is LON. */
 
-	vlon[0] = cos(lon);
-	vlon[1] = sin(lon);
+	vlon[0] = cos(&__global_state->f2c, lon);
+	vlon[1] = sin(&__global_state->f2c, lon);
 	vlon[2] = 0.;
 
 /*        We can compute the East and North vectors */
 /*        without much loss of precision, since VLON is */
 /*        orthogonal to Z and EAST is orthogonal to V. */
 
-	ucrss_(__state->z__, vlon, east);
-	ucrss_(v, east, north);
-	vhat_(v, rad);
+	ucrss_(__global_state, __state->z__, vlon, east);
+	ucrss_(__global_state, v, east, north);
+	vhat_(__global_state, v, rad);
 
 /*        The rows of M are the basis vectors of */
 /*        the radial/East/North frame: */
 
 	for (i__ = 1; i__ <= 3; ++i__) {
-	    m[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge("m", i__1,
-		     "zzrtnmat_", (ftnlen)258)] = rad[(i__2 = i__ - 1) < 3 && 
-		    0 <= i__2 ? i__2 : s_rnge("rad", i__2, "zzrtnmat_", (
-		    ftnlen)258)];
-	    m[(i__1 = i__ * 3 - 2) < 9 && 0 <= i__1 ? i__1 : s_rnge("m", i__1,
-		     "zzrtnmat_", (ftnlen)259)] = east[(i__2 = i__ - 1) < 3 &&
-		     0 <= i__2 ? i__2 : s_rnge("east", i__2, "zzrtnmat_", (
-		    ftnlen)259)];
-	    m[(i__1 = i__ * 3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("m", i__1,
-		     "zzrtnmat_", (ftnlen)260)] = north[(i__2 = i__ - 1) < 3 
-		    && 0 <= i__2 ? i__2 : s_rnge("north", i__2, "zzrtnmat_", (
+	    m[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "m", i__1, "zzrtnmat_", (ftnlen)258)]
+		     = rad[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "rad", i__2, "zzrtnmat_", (ftnlen)
+		    258)];
+	    m[(i__1 = i__ * 3 - 2) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "m", i__1, "zzrtnmat_", (ftnlen)259)]
+		     = east[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
+		    &__global_state->f2c, "east", i__2, "zzrtnmat_", (ftnlen)
+		    259)];
+	    m[(i__1 = i__ * 3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "m", i__1, "zzrtnmat_", (ftnlen)260)]
+		     = north[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		    s_rnge(&__global_state->f2c, "north", i__2, "zzrtnmat_", (
 		    ftnlen)260)];
 	}
     }

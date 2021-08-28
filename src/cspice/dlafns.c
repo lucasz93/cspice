@@ -8,29 +8,28 @@
 
 
 typedef int dlafns_state_t;
-static dlafns_state_t* get_dlafns_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dlafns_state_t* get_dlafns_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DLAFNS ( DLA, find next segment ) */
-/* Subroutine */ int dlafns_(integer *handle, integer *descr, integer *nxtdsc,
-	 logical *found)
+/* Subroutine */ int dlafns_(cspice_t* __global_state, integer *handle, 
+	integer *descr, integer *nxtdsc, logical *found)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dasrdi_(integer *, integer *, integer *, 
-	    integer *);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dasrdi_(cspice_t*, integer *, integer *, 
+	    integer *, integer *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern logical return_(cspice_t*);
     integer fwd;
 
 
     /* Module state */
-    dlafns_state_t* __state = get_dlafns_state();
+    dlafns_state_t* __state = get_dlafns_state(__global_state);
 /* $ Abstract */
 
 /*     Find the segment following a specified segment in a DLA file. */
@@ -416,10 +415,10 @@ static dlafns_state_t* get_dlafns_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DLAFNS", (ftnlen)6);
+    chkin_(__global_state, "DLAFNS", (ftnlen)6);
 
 /*     Nothing found yet. */
 
@@ -432,16 +431,16 @@ static dlafns_state_t* get_dlafns_state() {
 
 /*        There is no segment following the input segment. */
 
-	chkout_("DLAFNS", (ftnlen)6);
+	chkout_(__global_state, "DLAFNS", (ftnlen)6);
 	return 0;
     }
 
 /*     Look up the next descriptor */
 
     i__1 = fwd + 7;
-    dasrdi_(handle, &fwd, &i__1, nxtdsc);
+    dasrdi_(__global_state, handle, &fwd, &i__1, nxtdsc);
     *found = TRUE_;
-    chkout_("DLAFNS", (ftnlen)6);
+    chkout_(__global_state, "DLAFNS", (ftnlen)6);
     return 0;
 } /* dlafns_ */
 

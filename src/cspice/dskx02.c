@@ -8,8 +8,7 @@
 
 
 extern dskx02_init_t __dskx02_init;
-static dskx02_state_t* get_dskx02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dskx02_state_t* get_dskx02_state(cspice_t* state) {
 	if (!state->dskx02)
 		state->dskx02 = __cspice_allocate_module(sizeof(
 	dskx02_state_t), &__dskx02_init, sizeof(__dskx02_init));
@@ -18,9 +17,9 @@ static dskx02_state_t* get_dskx02_state() {
 }
 
 /* $Procedure DSKX02 ( DSK, ray-surface intercept, type 2 ) */
-/* Subroutine */ int dskx02_(integer *handle, integer *dladsc, doublereal *
-	vertex, doublereal *raydir, integer *plid, doublereal *xpt, logical *
-	found)
+/* Subroutine */ int dskx02_(cspice_t* __global_state, integer *handle, 
+	integer *dladsc, doublereal *vertex, doublereal *raydir, integer *
+	plid, doublereal *xpt, logical *found)
 {
     /* Initialized data */
 
@@ -30,68 +29,73 @@ static dskx02_state_t* get_dskx02_state() {
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), i_dnnt(doublereal *);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), i_dnnt(
+	    f2c_state_t*, doublereal *);
 
     /* Local variables */
     doublereal vtx2[3];
-    extern /* Subroutine */ int xdda_(doublereal *, doublereal *, integer *, 
-	    integer *, integer *, integer *);
+    extern /* Subroutine */ int xdda_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, integer *, integer *, integer *);
     logical have;
     doublereal near__;
     integer cvid;
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
     doublereal udir[3];
     integer vloc;
     integer vids[3];
     logical hits;
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     integer pntr;
-    extern /* Subroutine */ int zztogrid_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int zzinvelt_(doublereal *, integer *, doublereal 
-	    *, doublereal *, doublereal *, integer *, logical *);
-    extern /* Subroutine */ int zzraybox_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, logical *);
+    extern /* Subroutine */ int zztogrid_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int zzinvelt_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzraybox_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *, doublereal *, doublereal *, logical *);
     integer i__;
     integer j;
     integer k;
-    extern /* Subroutine */ int dskb02_(integer *, integer *, integer *, 
-	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
-	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dskb02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, doublereal *, doublereal *, 
+	    doublereal *, integer *, integer *, integer *, integer *, integer 
+	    *);
     doublereal edges[9]	/* was [3][3] */;
     doublereal scale;
     integer final;
     integer w;
-    extern /* Subroutine */ int dskd02_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *);
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dski02_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, integer *);
-    extern /* Subroutine */ int dskgd_(integer *, integer *, doublereal *);
-    extern /* Subroutine */ int filli_(integer *, integer *, integer *);
+    extern /* Subroutine */ int dskd02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dski02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
+    extern /* Subroutine */ int dskgd_(cspice_t*, integer *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int filli_(cspice_t*, integer *, integer *, 
+	    integer *);
     logical inseg;
     doublereal coord[3];
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer nvbuf;
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
     logical extra;
-    extern /* Subroutine */ int vsubg_(doublereal *, doublereal *, integer *, 
-	    doublereal *);
+    extern /* Subroutine */ int vsubg_(cspice_t*, doublereal *, doublereal *, 
+	    integer *, doublereal *);
     integer group;
     integer start;
     logical invox;
     integer cgxyz[3];
-    extern logical vzero_(doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
     doublereal xpnts[9]	/* was [3][3] */;
-    extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int vlcom3_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer fx;
     integer fy;
     integer fz;
@@ -99,8 +103,8 @@ static dskx02_state_t* get_dskx02_state() {
     integer grpbeg;
     integer to;
     integer vi;
-    extern logical return_(void);
-    extern integer isrchi_(integer *, integer *, integer *);
+    extern logical return_(cspice_t*);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
     doublereal hitcor[3];
     doublereal normal[3];
     doublereal obsmat[9]	/* was [3][3] */;
@@ -120,26 +124,27 @@ static dskx02_state_t* get_dskx02_state() {
     integer voxptr;
     logical boxhit;
     logical newseg;
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern /* Subroutine */ int dskgtl_(integer *, doublereal *);
-    extern /* Subroutine */ int orderi_(integer *, integer *, integer *);
-    extern /* Subroutine */ int pltexp_(doublereal *, doublereal *, 
-	    doublereal *);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern /* Subroutine */ int dskgtl_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int orderi_(cspice_t*, integer *, integer *, 
+	    integer *);
+    extern /* Subroutine */ int pltexp_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
     integer vxc1;
     integer vxc2;
     integer vxc3;
-    extern /* Subroutine */ int insang_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, logical *, doublereal *);
-    extern /* Subroutine */ int pltnrm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+    extern /* Subroutine */ int insang_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, logical *, doublereal *);
+    extern /* Subroutine */ int pltnrm_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
 
 
     /* Module state */
-    dskx02_state_t* __state = get_dskx02_state();
+    dskx02_state_t* __state = get_dskx02_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the plate ID and body-fixed coordinates of the */
@@ -1579,34 +1584,35 @@ static dskx02_state_t* get_dskx02_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("DSKX02", (ftnlen)6);
+    chkin_(__global_state, "DSKX02", (ftnlen)6);
 
 /*     Until we have better knowledge we assume there is no intersection. */
 
     *plid = 0;
     *found = FALSE_;
     have = FALSE_;
-    near__ = dpmax_();
+    near__ = dpmax_(__global_state);
 
 /*     Initialize the vertex buffer. */
 
-    cleari_(&__state->c__200, __state->vidxs);
+    cleari_(__global_state, &__state->c__200, __state->vidxs);
 
 /*     Check whether the ray direction vector is the zero vector. */
 
-    if (vzero_(raydir)) {
-	setmsg_("Ray direction is the zero vector.", (ftnlen)33);
-	sigerr_("SPICE(RAYISZEROVECTOR)", (ftnlen)22);
-	chkout_("DSKX02", (ftnlen)6);
+    if (vzero_(__global_state, raydir)) {
+	setmsg_(__global_state, "Ray direction is the zero vector.", (ftnlen)
+		33);
+	sigerr_(__global_state, "SPICE(RAYISZEROVECTOR)", (ftnlen)22);
+	chkout_(__global_state, "DSKX02", (ftnlen)6);
 	return 0;
     }
 
 /*     Obtain the unit vector of the ray from the observer. */
 
-    vhat_(raydir, udir);
+    vhat_(__global_state, raydir, udir);
 
 /*     Decide whether we're looking at a new segment. */
 
@@ -1637,12 +1643,12 @@ static dskx02_state_t* get_dskx02_state() {
 /*        units and calculate the farthest extent of the */
 /*        voxel grid in voxel space. */
 
-	dskb02_(handle, dladsc, &__state->nv, &__state->np, &__state->nvxtot, 
-		__state->vtxbds, &__state->voxsiz, __state->voxori, 
-		__state->vgrext, &__state->cgscal, &__state->vtxnpl, &
-		__state->voxnpt, &__state->voxnpl);
-	if (failed_()) {
-	    chkout_("DSKX02", (ftnlen)6);
+	dskb02_(__global_state, handle, dladsc, &__state->nv, &__state->np, &
+		__state->nvxtot, __state->vtxbds, &__state->voxsiz, 
+		__state->voxori, __state->vgrext, &__state->cgscal, &
+		__state->vtxnpl, &__state->voxnpt, &__state->voxnpl);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DSKX02", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1650,19 +1656,19 @@ static dskx02_state_t* get_dskx02_state() {
 /*        the voxel size. */
 
 	if (__state->voxsiz == 0.) {
-	    setmsg_("Voxel size is zero. This is an error in the DSK file at"
-		    "tached to handle #.", (ftnlen)74);
-	    errint_("#", handle, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDVALUE)", (ftnlen)19);
-	    chkout_("DSKX02", (ftnlen)6);
+	    setmsg_(__global_state, "Voxel size is zero. This is an error in"
+		    " the DSK file attached to handle #.", (ftnlen)74);
+	    errint_(__global_state, "#", handle, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(INVALIDVALUE)", (ftnlen)19);
+	    chkout_(__global_state, "DSKX02", (ftnlen)6);
 	    return 0;
 	}
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    __state->grdext[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "grdext", i__1, "dskx02_", (ftnlen)1026)] = 
-		    __state->vgrext[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 :
-		     s_rnge("vgrext", i__2, "dskx02_", (ftnlen)1026)] * 
-		    __state->voxsiz;
+		    &__global_state->f2c, "grdext", i__1, "dskx02_", (ftnlen)
+		    1026)] = __state->vgrext[(i__2 = i__ - 1) < 3 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "vgrext", i__2,
+		     "dskx02_", (ftnlen)1026)] * __state->voxsiz;
 	}
 
 /*        Set the margin used for checking whether the ray's vertex */
@@ -1675,10 +1681,11 @@ static dskx02_state_t* get_dskx02_state() {
 /*        Check the coarse grid voxel scale. */
 
 	if (__state->cgscal < 1) {
-	    setmsg_("Coarse grid scale = #; should be >= 1.", (ftnlen)38);
-	    errint_("#", &__state->cgscal, (ftnlen)1);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("DSKX02", (ftnlen)6);
+	    setmsg_(__global_state, "Coarse grid scale = #; should be >= 1.", 
+		    (ftnlen)38);
+	    errint_(__global_state, "#", &__state->cgscal, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "DSKX02", (ftnlen)6);
 	    return 0;
 	}
 
@@ -1687,40 +1694,41 @@ static dskx02_state_t* get_dskx02_state() {
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    __state->cgrext[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "cgrext", i__1, "dskx02_", (ftnlen)1053)] = 
-		    __state->vgrext[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 :
-		     s_rnge("vgrext", i__2, "dskx02_", (ftnlen)1053)] / 
-		    __state->cgscal;
+		    &__global_state->f2c, "cgrext", i__1, "dskx02_", (ftnlen)
+		    1053)] = __state->vgrext[(i__2 = i__ - 1) < 3 && 0 <= 
+		    i__2 ? i__2 : s_rnge(&__global_state->f2c, "vgrext", i__2,
+		     "dskx02_", (ftnlen)1053)] / __state->cgscal;
 	}
 	__state->cgscl2 = __state->cgscal * __state->cgscal;
 /* Computing 3rd power */
 	i__1 = __state->cgscal;
 	__state->ncgr = __state->nvxtot / (i__1 * (i__1 * i__1));
 	if (__state->ncgr > 100000) {
-	    setmsg_("Coarse grid size NCGR = #. Buffer size = #", (ftnlen)42);
-	    errint_("#", &__state->ncgr, (ftnlen)1);
-	    errint_("#", &__state->c_b27, (ftnlen)1);
-	    sigerr_("SPICE(GRIDTOOLARGE)", (ftnlen)19);
-	    chkout_("DSKX02", (ftnlen)6);
+	    setmsg_(__global_state, "Coarse grid size NCGR = #. Buffer size "
+		    "= #", (ftnlen)42);
+	    errint_(__global_state, "#", &__state->ncgr, (ftnlen)1);
+	    errint_(__global_state, "#", &__state->c_b27, (ftnlen)1);
+	    sigerr_(__global_state, "SPICE(GRIDTOOLARGE)", (ftnlen)19);
+	    chkout_(__global_state, "DSKX02", (ftnlen)6);
 	    return 0;
 	}
-	dski02_(handle, dladsc, &__state->c__14, &__state->c__1, &
-		__state->c_b27, &dim, __state->cgrptr);
-	dskgd_(handle, dladsc, __state->dskdsc);
-	if (failed_()) {
-	    chkout_("DSKX02", (ftnlen)6);
+	dski02_(__global_state, handle, dladsc, &__state->c__14, &
+		__state->c__1, &__state->c_b27, &dim, __state->cgrptr);
+	dskgd_(__global_state, handle, dladsc, __state->dskdsc);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DSKX02", (ftnlen)6);
 	    return 0;
 	}
-	__state->corsys = i_dnnt(&__state->dskdsc[5]);
+	__state->corsys = i_dnnt(&__global_state->f2c, &__state->dskdsc[5]);
 	__state->prvhan = *handle;
-	movei_(dladsc, &__state->c__8, __state->prvdsc);
+	movei_(__global_state, dladsc, &__state->c__8, __state->prvdsc);
     }
 
 /*     Compute tolerance used for determining whether an intercept */
 /*     is inside a voxel. The expansion fraction must be fetched */
 /*     on every call to DSKX02. */
 
-    dskgtl_(&__state->c__1, &xpdfrc);
+    dskgtl_(__global_state, &__state->c__1, &xpdfrc);
 /* Computing MAX */
     d__1 = abs(__state->grdext[0]), d__2 = abs(__state->grdext[1]), d__1 = 
 	    max(d__1,d__2), d__2 = abs(__state->grdext[2]);
@@ -1729,24 +1737,24 @@ static dskx02_state_t* get_dskx02_state() {
 /*     Find the ray intercept on the surface of the fine voxel grid, */
 /*     if the intercept exists. */
 
-    zzraybox_(vertex, raydir, __state->voxori, __state->grdext, vtx2, &boxhit)
-	    ;
+    zzraybox_(__global_state, vertex, raydir, __state->voxori, 
+	    __state->grdext, vtx2, &boxhit);
     if (! boxhit) {
-	chkout_("DSKX02", (ftnlen)6);
+	chkout_(__global_state, "DSKX02", (ftnlen)6);
 	return 0;
     }
 
 /*     Convert the grid intercept to voxel space coordinates. */
 /*     The result COORD will be used as the ray's vertex in XDDA. */
 
-    zztogrid_(vtx2, __state->voxori, &__state->voxsiz, coord);
+    zztogrid_(__global_state, vtx2, __state->voxori, &__state->voxsiz, coord);
 
 /*     Determine the voxels hit by the ray. */
 
-    xdda_(coord, udir, __state->vgrext, &__state->c__50000, &nvxout, 
-	    __state->voxlst);
-    if (failed_()) {
-	chkout_("DSKX02", (ftnlen)6);
+    xdda_(__global_state, coord, udir, __state->vgrext, &__state->c__50000, &
+	    nvxout, __state->voxlst);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DSKX02", (ftnlen)6);
 	return 0;
     }
 
@@ -1754,7 +1762,7 @@ static dskx02_state_t* get_dskx02_state() {
 /*     if it is. */
 
     if (nvxout == 0) {
-	chkout_("DSKX02", (ftnlen)6);
+	chkout_(__global_state, "DSKX02", (ftnlen)6);
 	return 0;
     }
 
@@ -1769,7 +1777,7 @@ static dskx02_state_t* get_dskx02_state() {
 /*     This vertex change is not performed if the vertex is already */
 /*     inside, or within a small margin away from, the voxel grid. */
 
-    vsub_(vertex, __state->voxori, vtxoff);
+    vsub_(__global_state, vertex, __state->voxori, vtxoff);
     if (vtxoff[0] < -__state->grdtol || vtxoff[0] > __state->grdtol + 
 	    __state->grdext[0] || vtxoff[1] < -__state->grdtol || vtxoff[1] > 
 	    __state->grdtol + __state->grdext[1] || vtxoff[2] < 
@@ -1780,8 +1788,8 @@ static dskx02_state_t* get_dskx02_state() {
 /*        margin. Move the ray-grid intercept away from the grid to */
 /*        improve numeric performance. */
 
-	vlcom3_(&__state->c_b40, __state->voxori, &__state->voxsiz, coord, &
-		__state->c_b41, udir, vtx2);
+	vlcom3_(__global_state, &__state->c_b40, __state->voxori, &
+		__state->voxsiz, coord, &__state->c_b41, udir, vtx2);
     }
 
 /*     We are going to need to subtract the location of the observer */
@@ -1789,9 +1797,9 @@ static dskx02_state_t* get_dskx02_state() {
 /*     make 3 copies of the observer's location so that we make a single */
 /*     subroutine call to handle the 3 subtractions. */
 
-    vequ_(vtx2, obsmat);
-    vequ_(vtx2, &obsmat[3]);
-    vequ_(vtx2, &obsmat[6]);
+    vequ_(__global_state, vtx2, obsmat);
+    vequ_(__global_state, vtx2, &obsmat[3]);
+    vequ_(__global_state, vtx2, &obsmat[6]);
 
 /*     Use the coarse voxel grid to compress the voxel list. We */
 /*     remove all voxels belonging to empty coarse voxels. */
@@ -1804,16 +1812,18 @@ static dskx02_state_t* get_dskx02_state() {
 /*        containing this voxel. */
 
 	for (j = 1; j <= 3; ++j) {
-	    cgxyz[(i__2 = j - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("cgxyz", 
-		    i__2, "dskx02_", (ftnlen)1189)] = (__state->voxlst[(i__3 =
-		     j + i__ * 3 - 4) < 150000 && 0 <= i__3 ? i__3 : s_rnge(
+	    cgxyz[(i__2 = j - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+		    __global_state->f2c, "cgxyz", i__2, "dskx02_", (ftnlen)
+		    1189)] = (__state->voxlst[(i__3 = j + i__ * 3 - 4) < 
+		    150000 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
 		    "voxlst", i__3, "dskx02_", (ftnlen)1189)] - 1) / 
 		    __state->cgscal + 1;
 	}
 	cvid = cgxyz[0] + __state->cgrext[0] * (cgxyz[1] + cgxyz[2] * 
 		__state->cgrext[1] - (1 + __state->cgrext[1]));
 	if (__state->cgrptr[(i__2 = cvid - 1) < 100000 && 0 <= i__2 ? i__2 : 
-		s_rnge("cgrptr", i__2, "dskx02_", (ftnlen)1196)] > 0) {
+		s_rnge(&__global_state->f2c, "cgrptr", i__2, "dskx02_", (
+		ftnlen)1196)] > 0) {
 
 /*           This coarse voxel is non-empty; add the index of the */
 /*           current voxel to the output list.  Save the coordinates of */
@@ -1821,20 +1831,23 @@ static dskx02_state_t* get_dskx02_state() {
 
 	    ++to;
 	    __state->vxlout[(i__2 = to - 1) < 50000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("vxlout", i__2, "dskx02_", (ftnlen)1203)] = i__;
+		    s_rnge(&__global_state->f2c, "vxlout", i__2, "dskx02_", (
+		    ftnlen)1203)] = i__;
 	    for (j = 1; j <= 3; ++j) {
 		__state->vxlcg[(i__2 = j + to * 3 - 4) < 150000 && 0 <= i__2 ?
-			 i__2 : s_rnge("vxlcg", i__2, "dskx02_", (ftnlen)1206)
-			] = cgxyz[(i__3 = j - 1) < 3 && 0 <= i__3 ? i__3 : 
-			s_rnge("cgxyz", i__3, "dskx02_", (ftnlen)1206)];
+			 i__2 : s_rnge(&__global_state->f2c, "vxlcg", i__2, 
+			"dskx02_", (ftnlen)1206)] = cgxyz[(i__3 = j - 1) < 3 
+			&& 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+			"cgxyz", i__3, "dskx02_", (ftnlen)1206)];
 	    }
 
 /*           Save the coarse voxel start pointer as well. */
 
 	    __state->vxlstr[(i__2 = to - 1) < 50000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("vxlstr", i__2, "dskx02_", (ftnlen)1211)] = 
-		    __state->cgrptr[(i__3 = cvid - 1) < 100000 && 0 <= i__3 ? 
-		    i__3 : s_rnge("cgrptr", i__3, "dskx02_", (ftnlen)1211)];
+		    s_rnge(&__global_state->f2c, "vxlstr", i__2, "dskx02_", (
+		    ftnlen)1211)] = __state->cgrptr[(i__3 = cvid - 1) < 
+		    100000 && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+		    "cgrptr", i__3, "dskx02_", (ftnlen)1211)];
 	}
     }
 
@@ -1846,7 +1859,7 @@ static dskx02_state_t* get_dskx02_state() {
 /*     done. */
 
     if (nvxout == 0) {
-	chkout_("DSKX02", (ftnlen)6);
+	chkout_(__global_state, "DSKX02", (ftnlen)6);
 	return 0;
     }
 
@@ -1887,22 +1900,26 @@ static dskx02_state_t* get_dskx02_state() {
 /*           the base of its parent coarse voxel. */
 
 	    j = __state->vxlout[(i__2 = vi - 1) < 50000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("vxlout", i__2, "dskx02_", (ftnlen)1274)];
+		    s_rnge(&__global_state->f2c, "vxlout", i__2, "dskx02_", (
+		    ftnlen)1274)];
 	    fx = __state->voxlst[(i__2 = j * 3 - 3) < 150000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("voxlst", i__2, "dskx02_", (ftnlen)1276)] - 
-		    __state->cgscal * (__state->vxlcg[(i__3 = vi * 3 - 3) < 
-		    150000 && 0 <= i__3 ? i__3 : s_rnge("vxlcg", i__3, "dskx"
-		    "02_", (ftnlen)1276)] - 1);
+		    i__2 : s_rnge(&__global_state->f2c, "voxlst", i__2, "dsk"
+		    "x02_", (ftnlen)1276)] - __state->cgscal * (__state->vxlcg[
+		    (i__3 = vi * 3 - 3) < 150000 && 0 <= i__3 ? i__3 : s_rnge(
+		    &__global_state->f2c, "vxlcg", i__3, "dskx02_", (ftnlen)
+		    1276)] - 1);
 	    fy = __state->voxlst[(i__2 = j * 3 - 2) < 150000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("voxlst", i__2, "dskx02_", (ftnlen)1277)] - 
-		    __state->cgscal * (__state->vxlcg[(i__3 = vi * 3 - 2) < 
-		    150000 && 0 <= i__3 ? i__3 : s_rnge("vxlcg", i__3, "dskx"
-		    "02_", (ftnlen)1277)] - 1);
+		    i__2 : s_rnge(&__global_state->f2c, "voxlst", i__2, "dsk"
+		    "x02_", (ftnlen)1277)] - __state->cgscal * (__state->vxlcg[
+		    (i__3 = vi * 3 - 2) < 150000 && 0 <= i__3 ? i__3 : s_rnge(
+		    &__global_state->f2c, "vxlcg", i__3, "dskx02_", (ftnlen)
+		    1277)] - 1);
 	    fz = __state->voxlst[(i__2 = j * 3 - 1) < 150000 && 0 <= i__2 ? 
-		    i__2 : s_rnge("voxlst", i__2, "dskx02_", (ftnlen)1278)] - 
-		    __state->cgscal * (__state->vxlcg[(i__3 = vi * 3 - 1) < 
-		    150000 && 0 <= i__3 ? i__3 : s_rnge("vxlcg", i__3, "dskx"
-		    "02_", (ftnlen)1278)] - 1);
+		    i__2 : s_rnge(&__global_state->f2c, "voxlst", i__2, "dsk"
+		    "x02_", (ftnlen)1278)] - __state->cgscal * (__state->vxlcg[
+		    (i__3 = vi * 3 - 1) < 150000 && 0 <= i__3 ? i__3 : s_rnge(
+		    &__global_state->f2c, "vxlcg", i__3, "dskx02_", (ftnlen)
+		    1278)] - 1);
 	    offset = fx + __state->cgscal * (fy - 1) + __state->cgscl2 * (fz 
 		    - 1);
 
@@ -1910,12 +1927,12 @@ static dskx02_state_t* get_dskx02_state() {
 /*           the pointer array, and look up the pointer. */
 
 	    j = __state->vxlstr[(i__2 = vi - 1) < 50000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("vxlstr", i__2, "dskx02_", (ftnlen)1286)] + offset 
-		    - 1;
-	    dski02_(handle, dladsc, &__state->c__10, &j, &__state->c__1, &dim,
-		     &voxptr);
-	    if (failed_()) {
-		chkout_("DSKX02", (ftnlen)6);
+		    s_rnge(&__global_state->f2c, "vxlstr", i__2, "dskx02_", (
+		    ftnlen)1286)] + offset - 1;
+	    dski02_(__global_state, handle, dladsc, &__state->c__10, &j, &
+		    __state->c__1, &dim, &voxptr);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "DSKX02", (ftnlen)6);
 		return 0;
 	    }
 	    if (voxptr == -1) {
@@ -1924,10 +1941,10 @@ static dskx02_state_t* get_dskx02_state() {
 
 /*              Get the plate count for this voxel. */
 
-		dski02_(handle, dladsc, &__state->c__11, &voxptr, &
-			__state->c__1, &dim, &nplate);
-		if (failed_()) {
-		    chkout_("DSKX02", (ftnlen)6);
+		dski02_(__global_state, handle, dladsc, &__state->c__11, &
+			voxptr, &__state->c__1, &dim, &nplate);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "DSKX02", (ftnlen)6);
 		    return 0;
 		}
 	    }
@@ -1937,23 +1954,25 @@ static dskx02_state_t* get_dskx02_state() {
 /*                 Get the plate list for this voxel. */
 
 		    i__3 = voxptr + 1;
-		    dski02_(handle, dladsc, &__state->c__11, &i__3, &nplate, &
-			    dim, &__state->platid[(i__2 = pntr - 1) < 256000 
-			    && 0 <= i__2 ? i__2 : s_rnge("platid", i__2, 
-			    "dskx02_", (ftnlen)1320)]);
-		    if (failed_()) {
-			chkout_("DSKX02", (ftnlen)6);
+		    dski02_(__global_state, handle, dladsc, &__state->c__11, &
+			    i__3, &nplate, &dim, &__state->platid[(i__2 = 
+			    pntr - 1) < 256000 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "platid", i__2, "dskx02_", (
+			    ftnlen)1320)]);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "DSKX02", (ftnlen)6);
 			return 0;
 		    }
 		    plroom -= nplate;
 		} else {
-		    setmsg_("NPLATE = #. Available room in PLATID array = #."
-			    " Array size = #.", (ftnlen)63);
-		    errint_("#", &nplate, (ftnlen)1);
-		    errint_("#", &plroom, (ftnlen)1);
-		    errint_("#", &__state->c_b89, (ftnlen)1);
-		    sigerr_("SPICE(ARRAYTOOSMALL)", (ftnlen)20);
-		    chkout_("DSKX02", (ftnlen)6);
+		    setmsg_(__global_state, "NPLATE = #. Available room in P"
+			    "LATID array = #. Array size = #.", (ftnlen)63);
+		    errint_(__global_state, "#", &nplate, (ftnlen)1);
+		    errint_(__global_state, "#", &plroom, (ftnlen)1);
+		    errint_(__global_state, "#", &__state->c_b89, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(ARRAYTOOSMALL)", (ftnlen)
+			    20);
+		    chkout_(__global_state, "DSKX02", (ftnlen)6);
 		    return 0;
 		}
 
@@ -1962,9 +1981,10 @@ static dskx02_state_t* get_dskx02_state() {
 /*              XDDA lists these voxels in the order the ray hits */
 /*              them, so the lowest indexed voxels are hit first. */
 
-		filli_(&vi, &nplate, &__state->source[(i__2 = pntr - 1) < 
-			256000 && 0 <= i__2 ? i__2 : s_rnge("source", i__2, 
-			"dskx02_", (ftnlen)1349)]);
+		filli_(__global_state, &vi, &nplate, &__state->source[(i__2 = 
+			pntr - 1) < 256000 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "source", i__2, "dskx02_", (
+			ftnlen)1349)]);
 	    }
 
 /*           NPLATE returns zero or greater. */
@@ -1982,7 +2002,7 @@ static dskx02_state_t* get_dskx02_state() {
 /*        So we find the order vector for the plate ID array, then use */
 /*        this vector to mark duplicates. */
 
-	orderi_(__state->platid, &totplt, __state->ordvec);
+	orderi_(__global_state, __state->platid, &totplt, __state->ordvec);
 
 /*        Negate the plate ID of every duplicate we find, leaving */
 /*        the instance in the voxel closest to the ray's origin */
@@ -2004,14 +2024,15 @@ static dskx02_state_t* get_dskx02_state() {
 /*           ID at index I-1 may have been "marked" via negation. */
 
 	    if (__state->platid[(i__6 = __state->ordvec[(i__5 = i__ - 1) < 
-		    256000 && 0 <= i__5 ? i__5 : s_rnge("ordvec", i__5, "dsk"
-		    "x02_", (ftnlen)1393)] - 1) < 256000 && 0 <= i__6 ? i__6 : 
-		    s_rnge("platid", i__6, "dskx02_", (ftnlen)1393)] == (i__4 
-		    = __state->platid[(i__3 = __state->ordvec[(i__2 = i__ - 2)
-		     < 256000 && 0 <= i__2 ? i__2 : s_rnge("ordvec", i__2, 
-		    "dskx02_", (ftnlen)1393)] - 1) < 256000 && 0 <= i__3 ? 
-		    i__3 : s_rnge("platid", i__3, "dskx02_", (ftnlen)1393)], 
-		    abs(i__4))) {
+		    256000 && 0 <= i__5 ? i__5 : s_rnge(&__global_state->f2c, 
+		    "ordvec", i__5, "dskx02_", (ftnlen)1393)] - 1) < 256000 &&
+		     0 <= i__6 ? i__6 : s_rnge(&__global_state->f2c, "platid",
+		     i__6, "dskx02_", (ftnlen)1393)] == (i__4 = 
+		    __state->platid[(i__3 = __state->ordvec[(i__2 = i__ - 2) <
+		     256000 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c,
+		     "ordvec", i__2, "dskx02_", (ftnlen)1393)] - 1) < 256000 
+		    && 0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, "plat"
+		    "id", i__3, "dskx02_", (ftnlen)1393)], abs(i__4))) {
 
 /*              The plates having indices ORDVEC(I-1) and ORDVEC(I) are */
 /*              duplicates. */
@@ -2025,34 +2046,38 @@ static dskx02_state_t* get_dskx02_state() {
 /*              index ORDVEC(I). */
 
 		if (__state->ordvec[(i__2 = i__ - 1) < 256000 && 0 <= i__2 ? 
-			i__2 : s_rnge("ordvec", i__2, "dskx02_", (ftnlen)1407)
-			] < minidx) {
+			i__2 : s_rnge(&__global_state->f2c, "ordvec", i__2, 
+			"dskx02_", (ftnlen)1407)] < minidx) {
 
 /*                 The plate that was previously at the minimum index is */
 /*                 now considered a duplicate. The new minimum index for */
 /*                 the current plate ID value is ORDVEC(I). */
 
 		    __state->platid[(i__2 = minidx - 1) < 256000 && 0 <= i__2 
-			    ? i__2 : s_rnge("platid", i__2, "dskx02_", (
-			    ftnlen)1413)] = -__state->platid[(i__3 = minidx - 
-			    1) < 256000 && 0 <= i__3 ? i__3 : s_rnge("platid",
-			     i__3, "dskx02_", (ftnlen)1413)];
+			    ? i__2 : s_rnge(&__global_state->f2c, "platid", 
+			    i__2, "dskx02_", (ftnlen)1413)] = 
+			    -__state->platid[(i__3 = minidx - 1) < 256000 && 
+			    0 <= i__3 ? i__3 : s_rnge(&__global_state->f2c, 
+			    "platid", i__3, "dskx02_", (ftnlen)1413)];
 		    minidx = __state->ordvec[(i__2 = i__ - 1) < 256000 && 0 <=
-			     i__2 ? i__2 : s_rnge("ordvec", i__2, "dskx02_", (
-			    ftnlen)1414)];
+			     i__2 ? i__2 : s_rnge(&__global_state->f2c, "ord"
+			    "vec", i__2, "dskx02_", (ftnlen)1414)];
 		} else {
 
 /*                 The current plate is a duplicate; mark it. */
 
 		    __state->platid[(i__3 = __state->ordvec[(i__2 = i__ - 1) <
-			     256000 && 0 <= i__2 ? i__2 : s_rnge("ordvec", 
-			    i__2, "dskx02_", (ftnlen)1420)] - 1) < 256000 && 
-			    0 <= i__3 ? i__3 : s_rnge("platid", i__3, "dskx0"
-			    "2_", (ftnlen)1420)] = -__state->platid[(i__5 = 
-			    __state->ordvec[(i__4 = i__ - 1) < 256000 && 0 <= 
-			    i__4 ? i__4 : s_rnge("ordvec", i__4, "dskx02_", (
-			    ftnlen)1420)] - 1) < 256000 && 0 <= i__5 ? i__5 : 
-			    s_rnge("platid", i__5, "dskx02_", (ftnlen)1420)];
+			     256000 && 0 <= i__2 ? i__2 : s_rnge(&
+			    __global_state->f2c, "ordvec", i__2, "dskx02_", (
+			    ftnlen)1420)] - 1) < 256000 && 0 <= i__3 ? i__3 : 
+			    s_rnge(&__global_state->f2c, "platid", i__3, 
+			    "dskx02_", (ftnlen)1420)] = -__state->platid[(
+			    i__5 = __state->ordvec[(i__4 = i__ - 1) < 256000 
+			    && 0 <= i__4 ? i__4 : s_rnge(&__global_state->f2c,
+			     "ordvec", i__4, "dskx02_", (ftnlen)1420)] - 1) < 
+			    256000 && 0 <= i__5 ? i__5 : s_rnge(&
+			    __global_state->f2c, "platid", i__5, "dskx02_", (
+			    ftnlen)1420)];
 		}
 	    } else {
 
@@ -2060,16 +2085,16 @@ static dskx02_state_t* get_dskx02_state() {
 /*              ID has no duplicates. */
 
 		minidx = __state->ordvec[(i__2 = i__ - 1) < 256000 && 0 <= 
-			i__2 ? i__2 : s_rnge("ordvec", i__2, "dskx02_", (
-			ftnlen)1429)];
+			i__2 ? i__2 : s_rnge(&__global_state->f2c, "ordvec", 
+			i__2, "dskx02_", (ftnlen)1429)];
 	    }
 	}
 
 /*        If something went wrong up above there is no point in */
 /*        going on from here. */
 
-	if (failed_()) {
-	    chkout_("DSKX02", (ftnlen)6);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DSKX02", (ftnlen)6);
 	    return 0;
 	}
 
@@ -2086,7 +2111,8 @@ static dskx02_state_t* get_dskx02_state() {
 /*           Retrieve the current plate ID. */
 
 	    j = __state->platid[(i__1 = i__ - 1) < 256000 && 0 <= i__1 ? i__1 
-		    : s_rnge("platid", i__1, "dskx02_", (ftnlen)1459)];
+		    : s_rnge(&__global_state->f2c, "platid", i__1, "dskx02_", 
+		    (ftnlen)1459)];
 	    if (j > 0) {
 
 /*              This is not a duplicate plate; consider it. */
@@ -2098,8 +2124,8 @@ static dskx02_state_t* get_dskx02_state() {
 /*                 later voxel. */
 
 		    if (__state->source[(i__1 = i__ - 1) < 256000 && 0 <= 
-			    i__1 ? i__1 : s_rnge("source", i__1, "dskx02_", (
-			    ftnlen)1472)] > final) {
+			    i__1 ? i__1 : s_rnge(&__global_state->f2c, "sour"
+			    "ce", i__1, "dskx02_", (ftnlen)1472)] > final) {
 
 /*                    This is a "late plate": it occurs in a voxel later */
 /*                    than that in which the first valid hit was found. */
@@ -2112,10 +2138,10 @@ static dskx02_state_t* get_dskx02_state() {
 /*                 Fetch the vertex IDs of this plate. */
 
 		    start = (j - 1) * 3 + 1;
-		    dski02_(handle, dladsc, &__state->c__9, &start, &
-			    __state->c__3, &dim, vids);
-		    if (failed_()) {
-			chkout_("DSKX02", (ftnlen)6);
+		    dski02_(__global_state, handle, dladsc, &__state->c__9, &
+			    start, &__state->c__3, &dim, vids);
+		    if (failed_(__global_state)) {
+			chkout_(__global_state, "DSKX02", (ftnlen)6);
 			return 0;
 		    }
 
@@ -2126,33 +2152,37 @@ static dskx02_state_t* get_dskx02_state() {
 /*                    Any vertex may be buffered already. Look in */
 /*                    the vertex buffer before reading the vertex. */
 
-			vloc = isrchi_(&vids[(i__1 = k - 1) < 3 && 0 <= i__1 ?
-				 i__1 : s_rnge("vids", i__1, "dskx02_", (
-				ftnlen)1506)], &nvbuf, __state->vidxs);
+			vloc = isrchi_(__global_state, &vids[(i__1 = k - 1) < 
+				3 && 0 <= i__1 ? i__1 : s_rnge(&
+				__global_state->f2c, "vids", i__1, "dskx02_", 
+				(ftnlen)1506)], &nvbuf, __state->vidxs);
 			if (vloc > 0) {
 
 /*                       The vertex was buffered; just copy it. */
 
-			    vequ_(&__state->vbuff[(i__1 = vloc * 3 - 3) < 600 
-				    && 0 <= i__1 ? i__1 : s_rnge("vbuff", 
+			    vequ_(__global_state, &__state->vbuff[(i__1 = 
+				    vloc * 3 - 3) < 600 && 0 <= i__1 ? i__1 : 
+				    s_rnge(&__global_state->f2c, "vbuff", 
 				    i__1, "dskx02_", (ftnlen)1512)], &points[(
 				    i__2 = k * 3 - 3) < 9 && 0 <= i__2 ? i__2 
-				    : s_rnge("points", i__2, "dskx02_", (
-				    ftnlen)1512)]);
+				    : s_rnge(&__global_state->f2c, "points", 
+				    i__2, "dskx02_", (ftnlen)1512)]);
 			} else {
 
 /*                       Read in the vertex. */
 
 			    start = (vids[(i__1 = k - 1) < 3 && 0 <= i__1 ? 
-				    i__1 : s_rnge("vids", i__1, "dskx02_", (
-				    ftnlen)1518)] - 1) * 3 + 1;
-			    dskd02_(handle, dladsc, &__state->c__19, &start, &
-				    __state->c__3, &dim, &points[(i__1 = k * 
-				    3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-				    "points", i__1, "dskx02_", (ftnlen)1520)])
-				    ;
-			    if (failed_()) {
-				chkout_("DSKX02", (ftnlen)6);
+				    i__1 : s_rnge(&__global_state->f2c, "vids"
+				    , i__1, "dskx02_", (ftnlen)1518)] - 1) * 
+				    3 + 1;
+			    dskd02_(__global_state, handle, dladsc, &
+				    __state->c__19, &start, &__state->c__3, &
+				    dim, &points[(i__1 = k * 3 - 3) < 9 && 0 
+				    <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "points", i__1, 
+				    "dskx02_", (ftnlen)1520)]);
+			    if (failed_(__global_state)) {
+				chkout_(__global_state, "DSKX02", (ftnlen)6);
 				return 0;
 			    }
 
@@ -2160,19 +2190,21 @@ static dskx02_state_t* get_dskx02_state() {
 
 			    if (nvbuf < 200) {
 				++nvbuf;
-				vequ_(&points[(i__1 = k * 3 - 3) < 9 && 0 <= 
-					i__1 ? i__1 : s_rnge("points", i__1, 
+				vequ_(__global_state, &points[(i__1 = k * 3 - 
+					3) < 9 && 0 <= i__1 ? i__1 : s_rnge(&
+					__global_state->f2c, "points", i__1, 
 					"dskx02_", (ftnlen)1536)], &
 					__state->vbuff[(i__2 = nvbuf * 3 - 3) 
-					< 600 && 0 <= i__2 ? i__2 : s_rnge(
-					"vbuff", i__2, "dskx02_", (ftnlen)
-					1536)]);
+					< 600 && 0 <= i__2 ? i__2 : s_rnge(&
+					__global_state->f2c, "vbuff", i__2, 
+					"dskx02_", (ftnlen)1536)]);
 				__state->vidxs[(i__1 = nvbuf - 1) < 200 && 0 
-					<= i__1 ? i__1 : s_rnge("vidxs", i__1,
-					 "dskx02_", (ftnlen)1538)] = vids[(
+					<= i__1 ? i__1 : s_rnge(&
+					__global_state->f2c, "vidxs", i__1, 
+					"dskx02_", (ftnlen)1538)] = vids[(
 					i__2 = k - 1) < 3 && 0 <= i__2 ? i__2 
-					: s_rnge("vids", i__2, "dskx02_", (
-					ftnlen)1538)];
+					: s_rnge(&__global_state->f2c, "vids",
+					 i__2, "dskx02_", (ftnlen)1538)];
 			    }
 			}
 		    }
@@ -2189,17 +2221,20 @@ static dskx02_state_t* get_dskx02_state() {
 /*                 members of the edge rays. Finally see if the */
 /*                 boresight lies inside the tetrahedron. */
 
-		    vsubg_(points, obsmat, &__state->c__9, edges);
-		    pltexp_(edges, &xpdfrc, xpnts);
-		    insang_(udir, xpnts, &xpnts[3], &xpnts[6], &hits, &scale);
+		    vsubg_(__global_state, points, obsmat, &__state->c__9, 
+			    edges);
+		    pltexp_(__global_state, edges, &xpdfrc, xpnts);
+		    insang_(__global_state, udir, xpnts, &xpnts[3], &xpnts[6],
+			     &hits, &scale);
 		    if (hits) {
 
 /*                    Reject intersections with plates that face away */
 /*                    from the ray. Accept intersections with plates */
 /*                    that face toward the ray. */
 
-			pltnrm_(points, &points[3], &points[6], normal);
-			hits = vdot_(udir, normal) <= 0.;
+			pltnrm_(__global_state, points, &points[3], &points[6]
+				, normal);
+			hits = vdot_(__global_state, udir, normal) <= 0.;
 		    }
 		    if (hits) {
 
@@ -2219,7 +2254,8 @@ static dskx02_state_t* get_dskx02_state() {
 /*                          ___   ____   __________ */
 /*                          XPT = VTX2 + SCALE*UDIR */
 
-			    vlcom_(&__state->c_b40, vtx2, &scale, udir, xpt);
+			    vlcom_(__global_state, &__state->c_b40, vtx2, &
+				    scale, udir, xpt);
 
 /*                       Compute the voxel grid coordinates of the */
 /*                       intercept. HITCOR is a double precision vector */
@@ -2227,27 +2263,31 @@ static dskx02_state_t* get_dskx02_state() {
 /*                       be precise). Note that the components of HITCOR */
 /*                       are zero-based. */
 
-			    zztogrid_(xpt, __state->voxori, &__state->voxsiz, 
-				    hitcor);
+			    zztogrid_(__global_state, xpt, __state->voxori, &
+				    __state->voxsiz, hitcor);
 
 /*                       Look up the voxel grid coordinates (integer, */
 /*                       1-based) of the current voxel. */
 
 			    k = __state->vxlout[(i__2 = __state->source[(i__1 
 				    = i__ - 1) < 256000 && 0 <= i__1 ? i__1 : 
-				    s_rnge("source", i__1, "dskx02_", (ftnlen)
-				    1615)] - 1) < 50000 && 0 <= i__2 ? i__2 : 
-				    s_rnge("vxlout", i__2, "dskx02_", (ftnlen)
-				    1615)];
+				    s_rnge(&__global_state->f2c, "source", 
+				    i__1, "dskx02_", (ftnlen)1615)] - 1) < 
+				    50000 && 0 <= i__2 ? i__2 : s_rnge(&
+				    __global_state->f2c, "vxlout", i__2, 
+				    "dskx02_", (ftnlen)1615)];
 			    vxc1 = __state->voxlst[(i__1 = k * 3 - 3) < 
-				    150000 && 0 <= i__1 ? i__1 : s_rnge("vox"
-				    "lst", i__1, "dskx02_", (ftnlen)1617)];
+				    150000 && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "voxlst", i__1, 
+				    "dskx02_", (ftnlen)1617)];
 			    vxc2 = __state->voxlst[(i__1 = k * 3 - 2) < 
-				    150000 && 0 <= i__1 ? i__1 : s_rnge("vox"
-				    "lst", i__1, "dskx02_", (ftnlen)1618)];
+				    150000 && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "voxlst", i__1, 
+				    "dskx02_", (ftnlen)1618)];
 			    vxc3 = __state->voxlst[(i__1 = k * 3 - 1) < 
-				    150000 && 0 <= i__1 ? i__1 : s_rnge("vox"
-				    "lst", i__1, "dskx02_", (ftnlen)1619)];
+				    150000 && 0 <= i__1 ? i__1 : s_rnge(&
+				    __global_state->f2c, "voxlst", i__1, 
+				    "dskx02_", (ftnlen)1619)];
 			    invox = hitcor[0] > vxc1 - __state->xtol - 1 && 
 				    hitcor[0] < vxc1 + __state->xtol && 
 				    hitcor[1] > vxc2 - __state->xtol - 1 && 
@@ -2260,10 +2300,12 @@ static dskx02_state_t* get_dskx02_state() {
 /*                          segment's boundaries, where the boundaries */
 /*                          are extended using the "greedy" margin. */
 
-				dskgtl_(&__state->c__2, &greedm);
-				zzinvelt_(xpt, &__state->corsys, &
-					__state->dskdsc[6], &__state->dskdsc[
-					16], &greedm, &__state->c__0, &inseg);
+				dskgtl_(__global_state, &__state->c__2, &
+					greedm);
+				zzinvelt_(__global_state, xpt, &
+					__state->corsys, &__state->dskdsc[6], 
+					&__state->dskdsc[16], &greedm, &
+					__state->c__0, &inseg);
 				if (inseg) {
 
 /*                             We have a viable intercept. Record the */
@@ -2278,8 +2320,9 @@ static dskx02_state_t* get_dskx02_state() {
 				    *plid = j;
 				    final = __state->source[(i__1 = i__ - 1) <
 					     256000 && 0 <= i__1 ? i__1 : 
-					    s_rnge("source", i__1, "dskx02_", 
-					    (ftnlen)1657)];
+					    s_rnge(&__global_state->f2c, 
+					    "source", i__1, "dskx02_", (
+					    ftnlen)1657)];
 
 /*                             Indicate that a solution was found. We'll */
 /*                             keep looking for a better one if PLID is */
@@ -2299,12 +2342,14 @@ static dskx02_state_t* get_dskx02_state() {
 				for (k = 1; k <= i__1; ++k) {
 				    if ((i__3 = __state->platid[(i__2 = k - 1)
 					     < 256000 && 0 <= i__2 ? i__2 : 
-					    s_rnge("platid", i__2, "dskx02_", 
-					    (ftnlen)1678)], abs(i__3)) == w) {
+					    s_rnge(&__global_state->f2c, 
+					    "platid", i__2, "dskx02_", (
+					    ftnlen)1678)], abs(i__3)) == w) {
 					__state->platid[(i__2 = k - 1) < 
 						256000 && 0 <= i__2 ? i__2 : 
-						s_rnge("platid", i__2, "dskx"
-						"02_", (ftnlen)1679)] = w;
+						s_rnge(&__global_state->f2c, 
+						"platid", i__2, "dskx02_", (
+						ftnlen)1679)] = w;
 				    }
 				}
 			    }
@@ -2340,7 +2385,7 @@ static dskx02_state_t* get_dskx02_state() {
 
 /*     That's all folks. */
 
-    chkout_("DSKX02", (ftnlen)6);
+    chkout_(__global_state, "DSKX02", (ftnlen)6);
     return 0;
 } /* dskx02_ */
 

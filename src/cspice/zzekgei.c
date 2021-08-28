@@ -8,8 +8,7 @@
 
 
 extern zzekgei_init_t __zzekgei_init;
-static zzekgei_state_t* get_zzekgei_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekgei_state_t* get_zzekgei_state(cspice_t* state) {
 	if (!state->zzekgei)
 		state->zzekgei = __cspice_allocate_module(sizeof(
 	zzekgei_state_t), &__zzekgei_init, sizeof(__zzekgei_init));
@@ -18,20 +17,21 @@ static zzekgei_state_t* get_zzekgei_state() {
 }
 
 /* $Procedure  ZZEKGEI ( Private: EK, get encoded integer ) */
-/* Subroutine */ int zzekgei_(integer *handle, integer *addrss, integer *ival)
+/* Subroutine */ int zzekgei_(cspice_t* __global_state, integer *handle, 
+	integer *addrss, integer *ival)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     char cval[5];
-    extern /* Subroutine */ int dasrdc_(integer *, integer *, integer *, 
-	    integer *, integer *, char *, ftnlen);
-    extern /* Subroutine */ int prtdec_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int dasrdc_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, char *, ftnlen);
+    extern /* Subroutine */ int prtdec_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzekgei_state_t* __state = get_zzekgei_state();
+    zzekgei_state_t* __state = get_zzekgei_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -274,12 +274,12 @@ static zzekgei_state_t* get_zzekgei_state() {
 /*     characters. */
 
     i__1 = *addrss + 4;
-    dasrdc_(handle, addrss, &i__1, &__state->c__1, &__state->c__5, cval, (
-	    ftnlen)5);
+    dasrdc_(__global_state, handle, addrss, &i__1, &__state->c__1, &
+	    __state->c__5, cval, (ftnlen)5);
 
 /*     Decode the number. */
 
-    prtdec_(cval, ival, (ftnlen)5);
+    prtdec_(__global_state, cval, ival, (ftnlen)5);
     return 0;
 } /* zzekgei_ */
 

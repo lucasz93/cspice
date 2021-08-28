@@ -8,36 +8,36 @@
 
 
 typedef int exists_state_t;
-static exists_state_t* get_exists_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline exists_state_t* get_exists_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure             EXISTS ( Does the file exist? ) */
-logical exists_(char *file, ftnlen file_len)
+logical exists_(cspice_t* __global_state, char *file, ftnlen file_len)
 {
     /* System generated locals */
     logical ret_val;
     inlist ioin__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), f_inqu(inlist *);
+    integer s_cmp(f2c_state_t*, char *, char *, ftnlen, ftnlen), f_inqu(
+	    f2c_state_t*, inlist *);
 
     /* Local variables */
     integer r__;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern integer rtrim_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern integer rtrim_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
-    extern logical return_(void);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
+    extern logical return_(cspice_t*);
     logical myexst;
 
 
     /* Module state */
-    exists_state_t* __state = get_exists_state();
+    exists_state_t* __state = get_exists_state(__global_state);
 /* $ Abstract */
 
 /*      Determine whether a file exists. */
@@ -219,11 +219,11 @@ logical exists_(char *file, ftnlen file_len)
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	ret_val = FALSE_;
 	return ret_val;
     } else {
-	chkin_("EXISTS", (ftnlen)6);
+	chkin_(__global_state, "EXISTS", (ftnlen)6);
     }
 
 /*     Initialize the local variable MYEXST to be .FALSE. */
@@ -232,14 +232,14 @@ logical exists_(char *file, ftnlen file_len)
 
 /*     First we test to see if the filename is blank. */
 
-    if (s_cmp(file, " ", file_len, (ftnlen)1) == 0) {
+    if (s_cmp(&__global_state->f2c, file, " ", file_len, (ftnlen)1) == 0) {
 	ret_val = FALSE_;
-	setmsg_("The file name is blank. ", (ftnlen)24);
-	sigerr_("SPICE(BLANKFILENAME)", (ftnlen)20);
-	chkout_("EXISTS", (ftnlen)6);
+	setmsg_(__global_state, "The file name is blank. ", (ftnlen)24);
+	sigerr_(__global_state, "SPICE(BLANKFILENAME)", (ftnlen)20);
+	chkout_(__global_state, "EXISTS", (ftnlen)6);
 	return ret_val;
     }
-    r__ = rtrim_(file, file_len);
+    r__ = rtrim_(__global_state, file, file_len);
 
 /*     So simple, it defies explanation. */
 
@@ -260,20 +260,20 @@ logical exists_(char *file, ftnlen file_len)
     ioin__1.inrecl = 0;
     ioin__1.innrec = 0;
     ioin__1.inblank = 0;
-    iostat = f_inqu(&ioin__1);
+    iostat = f_inqu(&__global_state->f2c, &ioin__1);
     if (iostat != 0) {
 	ret_val = FALSE_;
-	setmsg_("Value of IOSTAT was *.", (ftnlen)22);
-	errint_("*", &iostat, (ftnlen)1);
-	sigerr_("SPICE(INQUIREFAILED)", (ftnlen)20);
-	chkout_("EXISTS", (ftnlen)6);
+	setmsg_(__global_state, "Value of IOSTAT was *.", (ftnlen)22);
+	errint_(__global_state, "*", &iostat, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INQUIREFAILED)", (ftnlen)20);
+	chkout_(__global_state, "EXISTS", (ftnlen)6);
 	return ret_val;
     }
 
 /*     Set the value of the function, check out and return. */
 
     ret_val = myexst;
-    chkout_("EXISTS", (ftnlen)6);
+    chkout_(__global_state, "EXISTS", (ftnlen)6);
     return ret_val;
 } /* exists_ */
 

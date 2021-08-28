@@ -823,7 +823,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "limb_pl02" );
+   chkin_c ( naif_state, "limb_pl02" );
 
    /*
    Check the input strings. Make sure none of the pointers are null and

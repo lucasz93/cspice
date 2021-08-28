@@ -178,7 +178,7 @@
    /*
    Participate in error tracing.
    */
-   chkin_c ( "frinfo_c" );
+   chkin_c ( naif_state, "frinfo_c" );
 
 
    frinfo_ ( ( integer  * ) &frcode,

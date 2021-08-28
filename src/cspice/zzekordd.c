@@ -8,14 +8,13 @@
 
 
 typedef int zzekordd_state_t;
-static zzekordd_state_t* get_zzekordd_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekordd_state_t* get_zzekordd_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ZZEKORDD ( Order of a double precision EK column ) */
-/* Subroutine */ int zzekordd_(doublereal *dvals, logical *nullok, logical *
-	nlflgs, integer *nvals, integer *iorder)
+/* Subroutine */ int zzekordd_(cspice_t* __global_state, doublereal *dvals, 
+	logical *nullok, logical *nlflgs, integer *nvals, integer *iorder)
 {
     /* System generated locals */
     integer i__1;
@@ -23,13 +22,13 @@ static zzekordd_state_t* get_zzekordd_state() {
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int swapi_(integer *, integer *);
+    extern /* Subroutine */ int swapi_(cspice_t*, integer *, integer *);
     integer jg;
     integer gap;
 
 
     /* Module state */
-    zzekordd_state_t* __state = get_zzekordd_state();
+    zzekordd_state_t* __state = get_zzekordd_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the order of elements in a double precision EK column, */
@@ -251,7 +250,7 @@ static zzekordd_state_t* get_zzekordd_state() {
 
 		    j = 0;
 		} else {
-		    swapi_(&iorder[j - 1], &iorder[jg - 1]);
+		    swapi_(__global_state, &iorder[j - 1], &iorder[jg - 1]);
 		}
 		j -= gap;
 	    }

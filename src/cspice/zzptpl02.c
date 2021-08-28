@@ -8,8 +8,7 @@
 
 
 extern zzptpl02_init_t __zzptpl02_init;
-static zzptpl02_state_t* get_zzptpl02_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzptpl02_state_t* get_zzptpl02_state(cspice_t* state) {
 	if (!state->zzptpl02)
 		state->zzptpl02 = __cspice_allocate_module(sizeof(
 	zzptpl02_state_t), &__zzptpl02_init, sizeof(__zzptpl02_init));
@@ -18,9 +17,9 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 }
 
 /* $Procedure ZZPTPL02 ( DSK, map point to plate, type 2 ) */
-/* Subroutine */ int zzptpl02_(integer *handle, integer *dladsc, doublereal *
-	dskdsc, doublereal *point, integer *plid, integer *plate, doublereal *
-	verts, logical *found)
+/* Subroutine */ int zzptpl02_(cspice_t* __global_state, integer *handle, 
+	integer *dladsc, doublereal *dskdsc, doublereal *point, integer *plid,
+	 integer *plate, doublereal *verts, logical *found)
 {
     /* Initialized data */
 
@@ -30,43 +29,47 @@ static zzptpl02_state_t* get_zzptpl02_state() {
     doublereal d__1;
 
     /* Builtin functions */
-    integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
+    integer i_dnnt(f2c_state_t*, doublereal *), s_rnge(f2c_state_t*, char *, 
+	    integer, char *, integer);
 
     /* Local variables */
     doublereal dmin__;
     doublereal dist;
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern integer zzvox2id_(integer *, integer *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern /* Subroutine */ int zzsegbox_(doublereal *, doublereal *, 
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern integer zzvox2id_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int vsub_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int zzinvelt_(doublereal *, integer *, doublereal 
-	    *, doublereal *, doublereal *, integer *, logical *);
+    extern /* Subroutine */ int zzsegbox_(cspice_t*, doublereal *, doublereal 
+	    *, doublereal *);
+    extern /* Subroutine */ int zzinvelt_(cspice_t*, doublereal *, integer *, 
+	    doublereal *, doublereal *, doublereal *, integer *, logical *);
     integer i__;
     integer j;
     integer k;
     integer n;
-    extern /* Subroutine */ int dskd02_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *, doublereal *);
-    extern /* Subroutine */ int zzvoxcvo_(integer *, integer *, integer *, 
-	    integer *, integer *, integer *);
-    integer nread;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int dski02_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int dskd02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, doublereal *);
+    extern /* Subroutine */ int zzvoxcvo_(cspice_t*, integer *, integer *, 
 	    integer *, integer *, integer *, integer *);
+    integer nread;
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dski02_(cspice_t*, integer *, integer *, 
+	    integer *, integer *, integer *, integer *, integer *);
     doublereal pnear[3];
-    extern doublereal dpmax_(void);
-    extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
-    extern /* Subroutine */ int movei_(integer *, integer *, integer *);
+    extern doublereal dpmax_(cspice_t*);
+    extern /* Subroutine */ int moved_(cspice_t*, doublereal *, integer *, 
+	    doublereal *);
+    extern /* Subroutine */ int movei_(cspice_t*, integer *, integer *, 
+	    integer *);
     integer start;
-    extern /* Subroutine */ int pltnp_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *, doublereal *);
-    extern logical failed_(void);
+    extern /* Subroutine */ int pltnp_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    extern logical failed_(cspice_t*);
     integer cgroff[3];
-    extern integer brckti_(integer *, integer *, integer *);
-    extern logical dlassg_(integer *, integer *, integer *, integer *);
-    extern logical return_(void);
+    extern integer brckti_(cspice_t*, integer *, integer *, integer *);
+    extern logical dlassg_(cspice_t*, integer *, integer *, integer *, 
+	    integer *);
+    extern logical return_(cspice_t*);
     doublereal boxctr[3];
     doublereal offset[3];
     doublereal normal[3];
@@ -90,19 +93,19 @@ static zzptpl02_state_t* get_zzptpl02_state() {
     integer vgrcor[3];
     integer vid;
     logical inside;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int dskgtl_(integer *, doublereal *);
-    extern /* Subroutine */ int pltexp_(doublereal *, doublereal *, 
-	    doublereal *);
-    extern /* Subroutine */ int pltnrm_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
-    extern /* Subroutine */ int vhatip_(doublereal *);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int dskgtl_(cspice_t*, integer *, doublereal *);
+    extern /* Subroutine */ int pltexp_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *);
+    extern /* Subroutine */ int pltnrm_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *);
+    extern /* Subroutine */ int vhatip_(cspice_t*, doublereal *);
 
 
     /* Module state */
-    zzptpl02_state_t* __state = get_zzptpl02_state();
+    zzptpl02_state_t* __state = get_zzptpl02_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -1051,10 +1054,10 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 
 /*     Initial values */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
-    chkin_("ZZPTPL02", (ftnlen)8);
+    chkin_(__global_state, "ZZPTPL02", (ftnlen)8);
 
 /*     No plate has been found so far. */
 
@@ -1063,42 +1066,42 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 /*     Decide whether we're looking at the segment we saw */
 /*     on the previous call. */
 
-    if (__state->pass1 || ! dlassg_(handle, &__state->prvhan, dladsc, 
-	    __state->prvdsc)) {
+    if (__state->pass1 || ! dlassg_(__global_state, handle, &__state->prvhan, 
+	    dladsc, __state->prvdsc)) {
 
 /*        We'll need to look up the voxel grid parameters for this */
 /*        segment. */
 
-	dskd02_(handle, dladsc, &__state->c__17, &__state->c__1, &
-		__state->c__3, &n, __state->voxori);
-	dskd02_(handle, dladsc, &__state->c__18, &__state->c__1, &
-		__state->c__1, &n, &__state->voxsiz);
-	dski02_(handle, dladsc, &__state->c__4, &__state->c__1, &
-		__state->c__3, &n, __state->vgrext);
-	dski02_(handle, dladsc, &__state->c__5, &__state->c__1, &
-		__state->c__1, &n, &__state->cgrscl);
-	if (failed_()) {
-	    chkout_("ZZPTPL02", (ftnlen)8);
+	dskd02_(__global_state, handle, dladsc, &__state->c__17, &
+		__state->c__1, &__state->c__3, &n, __state->voxori);
+	dskd02_(__global_state, handle, dladsc, &__state->c__18, &
+		__state->c__1, &__state->c__1, &n, &__state->voxsiz);
+	dski02_(__global_state, handle, dladsc, &__state->c__4, &
+		__state->c__1, &__state->c__3, &n, __state->vgrext);
+	dski02_(__global_state, handle, dladsc, &__state->c__5, &
+		__state->c__1, &__state->c__1, &n, &__state->cgrscl);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	    return 0;
 	}
 	if (__state->voxsiz == 0.) {
-	    setmsg_("Voxel edge length is zero; length must be positive.", (
-		    ftnlen)51);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("ZZPTPL02", (ftnlen)8);
+	    setmsg_(__global_state, "Voxel edge length is zero; length must "
+		    "be positive.", (ftnlen)51);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	    return 0;
 	}
 	if (__state->cgrscl == 0) {
-	    setmsg_("Coarse voxel scale is zero; scale must be positive.", (
-		    ftnlen)51);
-	    sigerr_("SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
-	    chkout_("ZZPTPL02", (ftnlen)8);
+	    setmsg_(__global_state, "Coarse voxel scale is zero; scale must "
+		    "be positive.", (ftnlen)51);
+	    sigerr_(__global_state, "SPICE(VALUEOUTOFRANGE)", (ftnlen)22);
+	    chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	    return 0;
 	}
-	__state->corsys = i_dnnt(&dskdsc[5]);
-	zzsegbox_(dskdsc, boxctr, &__state->maxr);
-	if (failed_()) {
-	    chkout_("ZZPTPL02", (ftnlen)8);
+	__state->corsys = i_dnnt(&__global_state->f2c, &dskdsc[5]);
+	zzsegbox_(__global_state, dskdsc, boxctr, &__state->maxr);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1107,7 +1110,7 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 /*        changes. Save the current handle and DLA descriptor. */
 
 	__state->prvhan = *handle;
-	movei_(dladsc, &__state->c__8, __state->prvdsc);
+	movei_(__global_state, dladsc, &__state->c__8, __state->prvdsc);
 	__state->pass1 = FALSE_;
     }
 
@@ -1115,21 +1118,21 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 /*     the distance limit. This call must be made on every */
 /*     call to ZZPTPL02. */
 
-    dskgtl_(&__state->c__4, &ptsrfm);
+    dskgtl_(__global_state, &__state->c__4, &ptsrfm);
     __state->limit = ptsrfm * __state->maxr;
 
 /*     Look up the plate expansion fraction. This call must be made on */
 /*     every call to ZZPTPL02. */
 
-    dskgtl_(&__state->c__1, &xpdfrc);
+    dskgtl_(__global_state, &__state->c__1, &xpdfrc);
 
 /*     Find out whether the point is within the volume element */
 /*     bounding the segment. */
 
-    zzinvelt_(point, &__state->corsys, &dskdsc[6], &dskdsc[16], &ptsrfm, &
-	    __state->c__0, &inside);
-    if (failed_()) {
-	chkout_("ZZPTPL02", (ftnlen)8);
+    zzinvelt_(__global_state, point, &__state->corsys, &dskdsc[6], &dskdsc[16]
+	    , &ptsrfm, &__state->c__0, &inside);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	return 0;
     }
     if (! inside) {
@@ -1137,7 +1140,7 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 /*        The point is too far from the segment to be considered */
 /*        to lie on a plate in that segment. */
 
-	chkout_("ZZPTPL02", (ftnlen)8);
+	chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	return 0;
     }
 
@@ -1145,15 +1148,17 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 /*     point is outside the voxel grid, map the point to the closest */
 /*     voxel. */
 
-    vsub_(point, __state->voxori, offset);
+    vsub_(__global_state, point, __state->voxori, offset);
     for (i__ = 1; i__ <= 3; ++i__) {
 	j = (integer) (offset[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("offset", i__1, "zzptpl02_", (ftnlen)467)] / 
-		__state->voxsiz) + 1;
-	vgrcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vgrcor", 
-		i__1, "zzptpl02_", (ftnlen)469)] = brckti_(&j, &__state->c__1,
-		 &__state->vgrext[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
-		s_rnge("vgrext", i__2, "zzptpl02_", (ftnlen)469)]);
+		s_rnge(&__global_state->f2c, "offset", i__1, "zzptpl02_", (
+		ftnlen)467)] / __state->voxsiz) + 1;
+	vgrcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "vgrcor", i__1, "zzptpl02_", (ftnlen)469)
+		] = brckti_(__global_state, &j, &__state->c__1, &
+		__state->vgrext[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
+		s_rnge(&__global_state->f2c, "vgrext", i__2, "zzptpl02_", (
+		ftnlen)469)]);
     }
 
 /*     Compute the coordinates of the coarse voxel containing the fine */
@@ -1162,10 +1167,10 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 /*     pointer associating the fine voxel with its plate list. The */
 /*     1-d offset PTROFF is 1-based. */
 
-    zzvoxcvo_(vgrcor, __state->vgrext, &__state->cgrscl, cgrcor, cgroff, &
-	    ptroff);
-    if (failed_()) {
-	chkout_("ZZPTPL02", (ftnlen)8);
+    zzvoxcvo_(__global_state, vgrcor, __state->vgrext, &__state->cgrscl, 
+	    cgrcor, cgroff, &ptroff);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	return 0;
     }
 
@@ -1176,16 +1181,17 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 /*     the coarse voxel grid. */
 
     for (i__ = 1; i__ <= 3; ++i__) {
-	cgrext[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("cgrext", 
-		i__1, "zzptpl02_", (ftnlen)495)] = __state->vgrext[(i__2 = 
-		i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("vgrext", i__2, 
-		"zzptpl02_", (ftnlen)495)] / __state->cgrscl;
+	cgrext[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "cgrext", i__1, "zzptpl02_", (ftnlen)495)
+		] = __state->vgrext[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 :
+		 s_rnge(&__global_state->f2c, "vgrext", i__2, "zzptpl02_", (
+		ftnlen)495)] / __state->cgrscl;
     }
-    cgrvid = zzvox2id_(cgrcor, cgrext);
-    dski02_(handle, dladsc, &__state->c__14, &cgrvid, &__state->c__1, &n, &
-	    cgrptr);
-    if (failed_()) {
-	chkout_("ZZPTPL02", (ftnlen)8);
+    cgrvid = zzvox2id_(__global_state, cgrcor, cgrext);
+    dski02_(__global_state, handle, dladsc, &__state->c__14, &cgrvid, &
+	    __state->c__1, &n, &cgrptr);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	return 0;
     }
     if (cgrptr < 1) {
@@ -1193,7 +1199,7 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 /*        There are no non-empty fine voxels, hence no plates, in the */
 /*        coarse voxel we're looking at. */
 
-	chkout_("ZZPTPL02", (ftnlen)8);
+	chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	return 0;
     }
 
@@ -1201,23 +1207,23 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 /*     the pointer is non-null, look up the plate count. */
 
     ptrloc = cgrptr - 1 + ptroff;
-    dski02_(handle, dladsc, &__state->c__10, &ptrloc, &__state->c__1, &n, &
-	    pltptr);
-    if (failed_() || pltptr < 1) {
-	chkout_("ZZPTPL02", (ftnlen)8);
+    dski02_(__global_state, handle, dladsc, &__state->c__10, &ptrloc, &
+	    __state->c__1, &n, &pltptr);
+    if (failed_(__global_state) || pltptr < 1) {
+	chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	return 0;
     }
-    dski02_(handle, dladsc, &__state->c__11, &pltptr, &__state->c__1, &n, &
-	    nplate);
-    if (failed_() || nplate < 1) {
-	chkout_("ZZPTPL02", (ftnlen)8);
+    dski02_(__global_state, handle, dladsc, &__state->c__11, &pltptr, &
+	    __state->c__1, &n, &nplate);
+    if (failed_(__global_state) || nplate < 1) {
+	chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	return 0;
     }
 
 /*     Loop through the plates, keeping track of the minimum plate-point */
 /*     distance. */
 
-    dmin__ = dpmax_();
+    dmin__ = dpmax_(__global_state);
     remain = nplate;
     nread = min(remain,1000);
     i__ = 1;
@@ -1226,9 +1232,10 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 /*        Look up the current set of plate IDs. */
 
 	i__1 = pltptr + i__;
-	dski02_(handle, dladsc, &__state->c__11, &i__1, &nread, &n, pltbuf);
-	if (failed_()) {
-	    chkout_("ZZPTPL02", (ftnlen)8);
+	dski02_(__global_state, handle, dladsc, &__state->c__11, &i__1, &
+		nread, &n, pltbuf);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 	    return 0;
 	}
 
@@ -1239,35 +1246,38 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 	i__1 = nread;
 	for (j = 1; j <= i__1; ++j) {
 	    pidtmp = pltbuf[(i__2 = j - 1) < 1000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("pltbuf", i__2, "zzptpl02_", (ftnlen)563)];
+		    s_rnge(&__global_state->f2c, "pltbuf", i__2, "zzptpl02_", 
+		    (ftnlen)563)];
 	    start = (pidtmp - 1) * 3 + 1;
-	    dski02_(handle, dladsc, &__state->c__9, &start, &__state->c__3, &
-		    n, plttmp);
+	    dski02_(__global_state, handle, dladsc, &__state->c__9, &start, &
+		    __state->c__3, &n, plttmp);
 	    for (k = 1; k <= 3; ++k) {
-		vid = plttmp[(i__2 = k - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-			"plttmp", i__2, "zzptpl02_", (ftnlen)570)];
+		vid = plttmp[(i__2 = k - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(&
+			__global_state->f2c, "plttmp", i__2, "zzptpl02_", (
+			ftnlen)570)];
 		start = (vid - 1) * 3 + 1;
-		dskd02_(handle, dladsc, &__state->c__19, &start, &
-			__state->c__3, &n, &vrttmp[(i__2 = k * 3 - 3) < 9 && 
-			0 <= i__2 ? i__2 : s_rnge("vrttmp", i__2, "zzptpl02_",
-			 (ftnlen)573)]);
+		dskd02_(__global_state, handle, dladsc, &__state->c__19, &
+			start, &__state->c__3, &n, &vrttmp[(i__2 = k * 3 - 3) 
+			< 9 && 0 <= i__2 ? i__2 : s_rnge(&__global_state->f2c,
+			 "vrttmp", i__2, "zzptpl02_", (ftnlen)573)]);
 	    }
-	    if (failed_()) {
-		chkout_("ZZPTPL02", (ftnlen)8);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 		return 0;
 	    }
 
 /*           Work with an expanded version of the plate. */
 
-	    pltexp_(vrttmp, &xpdfrc, xverts);
-	    pltnrm_(xverts, &xverts[3], &xverts[6], normal);
-	    if (failed_()) {
-		chkout_("ZZPTPL02", (ftnlen)8);
+	    pltexp_(__global_state, vrttmp, &xpdfrc, xverts);
+	    pltnrm_(__global_state, xverts, &xverts[3], &xverts[6], normal);
+	    if (failed_(__global_state)) {
+		chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 		return 0;
 	    }
-	    vhatip_(normal);
-	    vsub_(point, xverts, pntoff);
-	    if ((d__1 = vdot_(pntoff, normal), abs(d__1)) <= __state->limit) {
+	    vhatip_(__global_state, normal);
+	    vsub_(__global_state, point, xverts, pntoff);
+	    if ((d__1 = vdot_(__global_state, pntoff, normal), abs(d__1)) <= 
+		    __state->limit) {
 
 /*              The input point lies in a narrow region of space */
 /*              bounded by two planes, both of which are parallel */
@@ -1278,13 +1288,14 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 /*              containing that plate. However, the proportion of such */
 /*              cases will normally be small. */
 
-		pltnp_(point, xverts, &xverts[3], &xverts[6], pnear, &dist);
-		if (failed_()) {
-		    chkout_("ZZPTPL02", (ftnlen)8);
+		pltnp_(__global_state, point, xverts, &xverts[3], &xverts[6], 
+			pnear, &dist);
+		if (failed_(__global_state)) {
+		    chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
 		    return 0;
 		}
 	    } else {
-		dist = dpmax_();
+		dist = dpmax_(__global_state);
 	    }
 	    if (dist <= __state->limit) {
 
@@ -1297,8 +1308,8 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 
 /*                 Set the output vertices to the original version. */
 
-		    movei_(plttmp, &__state->c__3, plate);
-		    moved_(vrttmp, &__state->c__9, verts);
+		    movei_(__global_state, plttmp, &__state->c__3, plate);
+		    moved_(__global_state, vrttmp, &__state->c__9, verts);
 
 /*                 We'll return the above values if we don't find */
 /*                 a better match. */
@@ -1313,7 +1324,7 @@ static zzptpl02_state_t* get_zzptpl02_state() {
 	i__ += nread;
 	nread = min(remain,1000);
     }
-    chkout_("ZZPTPL02", (ftnlen)8);
+    chkout_(__global_state, "ZZPTPL02", (ftnlen)8);
     return 0;
 } /* zzptpl02_ */
 

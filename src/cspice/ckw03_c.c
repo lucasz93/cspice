@@ -623,7 +623,7 @@
    /*
    Participate in error handling.
    */
-   chkin_c ( "ckw03_c" );
+   chkin_c ( naif_state, "ckw03_c" );
 
  
    /*

@@ -8,8 +8,7 @@
 
 
 extern dafec_init_t __dafec_init;
-static dafec_state_t* get_dafec_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dafec_state_t* get_dafec_state(cspice_t* state) {
 	if (!state->dafec)
 		state->dafec = __cspice_allocate_module(sizeof(dafec_state_t),
 	 &__dafec_init, sizeof(__dafec_init));
@@ -18,8 +17,9 @@ static dafec_state_t* get_dafec_state() {
 }
 
 /* $Procedure DAFEC ( DAF extract comments ) */
-/* Subroutine */ int dafec_(integer *handle, integer *bufsiz, integer *n, 
-	char *buffer, logical *done, ftnlen buffer_len)
+/* Subroutine */ int dafec_(cspice_t* __global_state, integer *handle, 
+	integer *bufsiz, integer *n, char *buffer, logical *done, ftnlen 
+	buffer_len)
 {
     /* Initialized data */
 
@@ -28,19 +28,22 @@ static dafec_state_t* get_dafec_state() {
     integer i__1, i__2, i__3;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer), i_len(char *, ftnlen), 
-	    s_rdue(cilist *), do_uio(integer *, char *, ftnlen), e_rdue(void);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer), i_len(
+	    f2c_state_t*, char *, ftnlen), s_rdue(f2c_state_t*, cilist *), 
+	    do_uio(f2c_state_t*, integer *, char *, ftnlen), e_rdue(
+	    f2c_state_t*);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer free;
-    extern integer cpos_(char *, char *, integer *, ftnlen, ftnlen);
-    extern /* Subroutine */ int zzddhhlu_(integer *, char *, logical *, 
-	    integer *, ftnlen);
+    extern integer cpos_(cspice_t*, char *, char *, integer *, ftnlen, ftnlen)
+	    ;
+    extern /* Subroutine */ int zzddhhlu_(cspice_t*, integer *, char *, 
+	    logical *, integer *, ftnlen);
     integer i__;
     integer j;
     integer k;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     integer ncomc;
     integer bward;
     integer fward;
@@ -48,31 +51,32 @@ static dafec_state_t* get_dafec_state() {
     integer index;
     logical found;
     integer ncomr;
-    extern integer ncpos_(char *, char *, integer *, ftnlen, ftnlen);
+    extern integer ncpos_(cspice_t*, char *, char *, integer *, ftnlen, 
+	    ftnlen);
     logical empty;
     char ch[1];
     integer nd;
-    extern logical failed_(void);
+    extern logical failed_(cspice_t*);
     integer ni;
-    extern /* Subroutine */ int dafsih_(integer *, char *, ftnlen);
+    extern /* Subroutine */ int dafsih_(cspice_t*, integer *, char *, ftnlen);
     char ifname[60];
-    extern /* Subroutine */ int dafrfr_(integer *, integer *, integer *, char 
-	    *, integer *, integer *, integer *, ftnlen);
+    extern /* Subroutine */ int dafrfr_(cspice_t*, integer *, integer *, 
+	    integer *, char *, integer *, integer *, integer *, ftnlen);
     integer daflun;
     integer nchars;
-    extern integer isrchi_(integer *, integer *, integer *);
+    extern integer isrchi_(cspice_t*, integer *, integer *, integer *);
     integer linlen;
     integer eocpos;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
     integer numcom;
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
     integer nelpos;
-    extern /* Subroutine */ int errfnm_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int errfnm_(cspice_t*, char *, integer *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
     integer curpos;
-    extern logical return_(void);
+    extern logical return_(cspice_t*);
     logical eol;
 
     /* Fortran I/O blocks */
@@ -80,7 +84,7 @@ static dafec_state_t* get_dafec_state() {
 
 
     /* Module state */
-    dafec_state_t* __state = get_dafec_state();
+    dafec_state_t* __state = get_dafec_state(__global_state);
 /* $ Abstract */
 
 /*     Extract comments from the comment area of a binary DAF. */
@@ -417,10 +421,10 @@ static dafec_state_t* get_dafec_state() {
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     } else {
-	chkin_("DAFEC", (ftnlen)5);
+	chkin_(__global_state, "DAFEC", (ftnlen)5);
     }
 
 /*     If this is the first time that this routine has been called, */
@@ -435,15 +439,20 @@ static dafec_state_t* get_dafec_state() {
 	*(unsigned char *)__state->eolmrk = '\0';
 	for (i__ = 1; i__ <= 5000; ++i__) {
 	    __state->filchr[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("filchr", i__1, "dafec_", (ftnlen)446)] = 0;
+		    s_rnge(&__global_state->f2c, "filchr", i__1, "dafec_", (
+		    ftnlen)446)] = 0;
 	    __state->filcnt[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("filcnt", i__1, "dafec_", (ftnlen)447)] = 0;
+		    s_rnge(&__global_state->f2c, "filcnt", i__1, "dafec_", (
+		    ftnlen)447)] = 0;
 	    __state->filhan[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("filhan", i__1, "dafec_", (ftnlen)448)] = 0;
+		    s_rnge(&__global_state->f2c, "filhan", i__1, "dafec_", (
+		    ftnlen)448)] = 0;
 	    __state->lstpos[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("lstpos", i__1, "dafec_", (ftnlen)449)] = 0;
+		    s_rnge(&__global_state->f2c, "lstpos", i__1, "dafec_", (
+		    ftnlen)449)] = 0;
 	    __state->lstrec[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("lstrec", i__1, "dafec_", (ftnlen)450)] = 0;
+		    s_rnge(&__global_state->f2c, "lstrec", i__1, "dafec_", (
+		    ftnlen)450)] = 0;
 	}
     }
 
@@ -451,40 +460,43 @@ static dafec_state_t* get_dafec_state() {
 /*     by calling the routine to signal an invalid access mode on a */
 /*     handle. */
 
-    dafsih_(handle, "READ", (ftnlen)4);
-    if (failed_()) {
-	chkout_("DAFEC", (ftnlen)5);
+    dafsih_(__global_state, handle, "READ", (ftnlen)4);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFEC", (ftnlen)5);
 	return 0;
     }
 
 /*     Check for a nonpositive BUFFER size. */
 
     if (*bufsiz <= 0) {
-	setmsg_("The output buffer size was not positive: #.", (ftnlen)43);
-	errint_("#", bufsiz, (ftnlen)1);
-	sigerr_("SPICE(INVALIDARGUMENT)", (ftnlen)22);
-	chkout_("DAFEC", (ftnlen)5);
+	setmsg_(__global_state, "The output buffer size was not positive: #.",
+		 (ftnlen)43);
+	errint_(__global_state, "#", bufsiz, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDARGUMENT)", (ftnlen)22);
+	chkout_(__global_state, "DAFEC", (ftnlen)5);
 	return 0;
     }
 
 /*     Convert the DAF handle to its corresponding Fortran logical */
 /*     unit number for reading the comment records. */
 
-    zzddhhlu_(handle, "DAF", &__state->c_false, &daflun, (ftnlen)3);
-    if (failed_()) {
-	chkout_("DAFEC", (ftnlen)5);
+    zzddhhlu_(__global_state, handle, "DAF", &__state->c_false, &daflun, (
+	    ftnlen)3);
+    if (failed_(__global_state)) {
+	chkout_(__global_state, "DAFEC", (ftnlen)5);
 	return 0;
     }
 
 /*     Get the length of a single character string in the buffer. */
 
-    linlen = i_len(buffer, buffer_len);
+    linlen = i_len(&__global_state->f2c, buffer, buffer_len);
 
 /*     If we have extracted comments from at least one file and we */
 /*     didn't finish, check to see if HANDLE is in the file table. */
 
     if (__state->nfiles > 0) {
-	index = isrchi_(handle, &__state->nfiles, __state->filhan);
+	index = isrchi_(__global_state, handle, &__state->nfiles, 
+		__state->filhan);
     } else {
 	index = 0;
     }
@@ -498,13 +510,17 @@ static dafec_state_t* get_dafec_state() {
 /*        i.e., where we left off when we last read from that file. */
 
 	recno = __state->lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 
-		: s_rnge("lstrec", i__1, "dafec_", (ftnlen)516)];
+		: s_rnge(&__global_state->f2c, "lstrec", i__1, "dafec_", (
+		ftnlen)516)];
 	curpos = __state->lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("lstpos", i__1, "dafec_", (ftnlen)517)];
+		i__1 : s_rnge(&__global_state->f2c, "lstpos", i__1, "dafec_", 
+		(ftnlen)517)];
 	nchars = __state->filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? 
-		i__1 : s_rnge("filchr", i__1, "dafec_", (ftnlen)518)];
+		i__1 : s_rnge(&__global_state->f2c, "filchr", i__1, "dafec_", 
+		(ftnlen)518)];
 	ncomc = __state->filcnt[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 
-		: s_rnge("filcnt", i__1, "dafec_", (ftnlen)519)];
+		: s_rnge(&__global_state->f2c, "filcnt", i__1, "dafec_", (
+		ftnlen)519)];
     } else {
 
 /*        We have not yet read any comments from this file, so start at */
@@ -515,9 +531,10 @@ static dafec_state_t* get_dafec_state() {
 /*        Read the file record from the DAF attached to HANDLE. We will */
 /*        get back some stuff that we do not use. */
 
-	dafrfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
-	if (failed_()) {
-	    chkout_("DAFEC", (ftnlen)5);
+	dafrfr_(__global_state, handle, &nd, &ni, ifname, &fward, &bward, &
+		free, (ftnlen)60);
+	if (failed_(__global_state)) {
+	    chkout_(__global_state, "DAFEC", (ftnlen)5);
 	    return 0;
 	}
 
@@ -538,37 +555,40 @@ static dafec_state_t* get_dafec_state() {
 		recno = ncomr + 1;
 		__state->io___29.ciunit = daflun;
 		__state->io___29.cirec = recno;
-		iostat = s_rdue(&__state->io___29);
+		iostat = s_rdue(&__global_state->f2c, &__state->io___29);
 		if (iostat != 0) {
 		    goto L100001;
 		}
-		iostat = do_uio(&__state->c__1, __state->crecrd, (ftnlen)1000)
-			;
+		iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+			__state->crecrd, (ftnlen)1000);
 		if (iostat != 0) {
 		    goto L100001;
 		}
-		iostat = e_rdue();
+		iostat = e_rdue(&__global_state->f2c);
 L100001:
 		if (iostat != 0) {
-		    setmsg_("Error reading comment area of binary file named"
-			    " '#'. IOSTAT = #.", (ftnlen)64);
-		    errfnm_("#", &daflun, (ftnlen)1);
-		    errint_("#", &iostat, (ftnlen)1);
-		    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		    chkout_("DAFEC", (ftnlen)5);
+		    setmsg_(__global_state, "Error reading comment area of b"
+			    "inary file named '#'. IOSTAT = #.", (ftnlen)64);
+		    errfnm_(__global_state, "#", &daflun, (ftnlen)1);
+		    errint_(__global_state, "#", &iostat, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)
+			    21);
+		    chkout_(__global_state, "DAFEC", (ftnlen)5);
 		    return 0;
 		}
 
 /*              Scan the comment record looking for the end of comments */
 /*              marker. */
 
-		eocpos = cpos_(__state->crecrd, __state->eocmrk, &
-			__state->c__1, (ftnlen)1000, (ftnlen)1);
+		eocpos = cpos_(__global_state, __state->crecrd, 
+			__state->eocmrk, &__state->c__1, (ftnlen)1000, (
+			ftnlen)1);
 		if (eocpos > 0) {
 		    found = TRUE_;
 		} else {
-		    nelpos = ncpos_(__state->crecrd, __state->eolmrk, &
-			    __state->c__1, (ftnlen)1000, (ftnlen)1);
+		    nelpos = ncpos_(__global_state, __state->crecrd, 
+			    __state->eolmrk, &__state->c__1, (ftnlen)1000, (
+			    ftnlen)1);
 		    if (nelpos != 0) {
 			empty = FALSE_;
 		    } else {
@@ -581,12 +601,12 @@ L100001:
 /*           comment area is not empty, then it is an error. */
 
 	    if (! found && ! empty) {
-		setmsg_("The comment area in the DAF file '#' may be damaged"
-			". The end of the comments could not be found.", (
-			ftnlen)96);
-		errfnm_("#", &daflun, (ftnlen)1);
-		sigerr_("SPICE(BADCOMMENTAREA)", (ftnlen)21);
-		chkout_("DAFEC", (ftnlen)5);
+		setmsg_(__global_state, "The comment area in the DAF file '#"
+			"' may be damaged. The end of the comments could not "
+			"be found.", (ftnlen)96);
+		errfnm_(__global_state, "#", &daflun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADCOMMENTAREA)", (ftnlen)21);
+		chkout_(__global_state, "DAFEC", (ftnlen)5);
 		return 0;
 	    } else if (found) {
 		ncomc = (ncomr - 1) * 1000 + eocpos - 1;
@@ -604,7 +624,7 @@ L100001:
 	if (ncomc == 0) {
 	    *n = 0;
 	    *done = TRUE_;
-	    chkout_("DAFEC", (ftnlen)5);
+	    chkout_(__global_state, "DAFEC", (ftnlen)5);
 	    return 0;
 	}
 
@@ -626,23 +646,24 @@ L100001:
 
 	__state->io___33.ciunit = daflun;
 	__state->io___33.cirec = recno;
-	iostat = s_rdue(&__state->io___33);
+	iostat = s_rdue(&__global_state->f2c, &__state->io___33);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = do_uio(&__state->c__1, __state->crecrd, (ftnlen)1000);
+	iostat = do_uio(&__global_state->f2c, &__state->c__1, __state->crecrd,
+		 (ftnlen)1000);
 	if (iostat != 0) {
 	    goto L100002;
 	}
-	iostat = e_rdue();
+	iostat = e_rdue(&__global_state->f2c);
 L100002:
 	if (iostat != 0) {
-	    setmsg_("Error reading comment area of binary file named FILE.  "
-		    "IOSTAT = *.", (ftnlen)66);
-	    errint_("*", &iostat, (ftnlen)1);
-	    errfnm_("FILE", &daflun, (ftnlen)4);
-	    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-	    chkout_("DAFEC", (ftnlen)5);
+	    setmsg_(__global_state, "Error reading comment area of binary fi"
+		    "le named FILE.  IOSTAT = *.", (ftnlen)66);
+	    errint_(__global_state, "*", &iostat, (ftnlen)1);
+	    errfnm_(__global_state, "FILE", &daflun, (ftnlen)4);
+	    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)21);
+	    chkout_(__global_state, "DAFEC", (ftnlen)5);
 	    return 0;
 	}
     }
@@ -666,8 +687,9 @@ L100002:
 	    if (*(unsigned char *)ch == 0) {
 		eol = TRUE_;
 		if (j <= linlen) {
-		    s_copy(buffer + ((i__ - 1) * buffer_len + (j - 1)), " ", 
-			    buffer_len - (j - 1), (ftnlen)1);
+		    s_copy(&__global_state->f2c, buffer + ((i__ - 1) * 
+			    buffer_len + (j - 1)), " ", buffer_len - (j - 1), 
+			    (ftnlen)1);
 		}
 	    } else {
 		if (j <= linlen) {
@@ -675,12 +697,14 @@ L100002:
 			    ] = *(unsigned char *)ch;
 		    ++j;
 		} else {
-		    setmsg_("The output buffer line length (#) was not long "
-			    "enough to contain comment line #.", (ftnlen)80);
-		    errint_("#", &linlen, (ftnlen)1);
-		    errint_("#", &i__, (ftnlen)1);
-		    sigerr_("SPICE(COMMENTTOOLONG)", (ftnlen)21);
-		    chkout_("DAFEC", (ftnlen)5);
+		    setmsg_(__global_state, "The output buffer line length ("
+			    "#) was not long enough to contain comment line #."
+			    , (ftnlen)80);
+		    errint_(__global_state, "#", &linlen, (ftnlen)1);
+		    errint_(__global_state, "#", &i__, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(COMMENTTOOLONG)", (ftnlen)
+			    21);
+		    chkout_(__global_state, "DAFEC", (ftnlen)5);
 		    return 0;
 		}
 	    }
@@ -693,24 +717,25 @@ L100002:
 		++recno;
 		__state->io___38.ciunit = daflun;
 		__state->io___38.cirec = recno;
-		iostat = s_rdue(&__state->io___38);
+		iostat = s_rdue(&__global_state->f2c, &__state->io___38);
 		if (iostat != 0) {
 		    goto L100003;
 		}
-		iostat = do_uio(&__state->c__1, __state->crecrd, (ftnlen)1000)
-			;
+		iostat = do_uio(&__global_state->f2c, &__state->c__1, 
+			__state->crecrd, (ftnlen)1000);
 		if (iostat != 0) {
 		    goto L100003;
 		}
-		iostat = e_rdue();
+		iostat = e_rdue(&__global_state->f2c);
 L100003:
 		if (iostat != 0) {
-		    setmsg_("Error reading comment area of binary file named"
-			    " #.  IOSTAT = #.", (ftnlen)63);
-		    errfnm_("#", &daflun, (ftnlen)1);
-		    errint_("#", &iostat, (ftnlen)1);
-		    sigerr_("SPICE(FILEREADFAILED)", (ftnlen)21);
-		    chkout_("DAFEC", (ftnlen)5);
+		    setmsg_(__global_state, "Error reading comment area of b"
+			    "inary file named #.  IOSTAT = #.", (ftnlen)63);
+		    errfnm_(__global_state, "#", &daflun, (ftnlen)1);
+		    errint_(__global_state, "#", &iostat, (ftnlen)1);
+		    sigerr_(__global_state, "SPICE(FILEREADFAILED)", (ftnlen)
+			    21);
+		    chkout_(__global_state, "DAFEC", (ftnlen)5);
 		    return 0;
 		}
 		curpos = 1;
@@ -724,14 +749,14 @@ L100003:
 /*           comment area of the DAF file. This should never happen. */
 
 	    if (nchars > ncomc) {
-		setmsg_("Count of comment characters (#) exceeds the number "
-			"of comment characters (#) in the DAF file #.", (
-			ftnlen)95);
-		errint_("#", &nchars, (ftnlen)1);
-		errint_("#", &ncomc, (ftnlen)1);
-		errfnm_("#", &daflun, (ftnlen)1);
-		sigerr_("SPICE(BADCOMMENTAREA)", (ftnlen)21);
-		chkout_("DAFEC", (ftnlen)5);
+		setmsg_(__global_state, "Count of comment characters (#) exc"
+			"eeds the number of comment characters (#) in the DAF"
+			" file #.", (ftnlen)95);
+		errint_(__global_state, "#", &nchars, (ftnlen)1);
+		errint_(__global_state, "#", &ncomc, (ftnlen)1);
+		errfnm_(__global_state, "#", &daflun, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(BADCOMMENTAREA)", (ftnlen)21);
+		chkout_(__global_state, "DAFEC", (ftnlen)5);
 		return 0;
 	    }
 	}
@@ -769,30 +794,35 @@ L100003:
 		i__1 = __state->nfiles - 1;
 		for (k = index; k <= i__1; ++k) {
 		    __state->filchr[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("filchr", i__2, "dafec_", (ftnlen)811)] =
-			     __state->filchr[(i__3 = k) < 5000 && 0 <= i__3 ? 
-			    i__3 : s_rnge("filchr", i__3, "dafec_", (ftnlen)
-			    811)];
+			    : s_rnge(&__global_state->f2c, "filchr", i__2, 
+			    "dafec_", (ftnlen)811)] = __state->filchr[(i__3 = 
+			    k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "filchr", i__3, "dafec_", (
+			    ftnlen)811)];
 		    __state->filcnt[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("filcnt", i__2, "dafec_", (ftnlen)812)] =
-			     __state->filcnt[(i__3 = k) < 5000 && 0 <= i__3 ? 
-			    i__3 : s_rnge("filcnt", i__3, "dafec_", (ftnlen)
-			    812)];
+			    : s_rnge(&__global_state->f2c, "filcnt", i__2, 
+			    "dafec_", (ftnlen)812)] = __state->filcnt[(i__3 = 
+			    k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "filcnt", i__3, "dafec_", (
+			    ftnlen)812)];
 		    __state->filhan[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("filhan", i__2, "dafec_", (ftnlen)813)] =
-			     __state->filhan[(i__3 = k) < 5000 && 0 <= i__3 ? 
-			    i__3 : s_rnge("filhan", i__3, "dafec_", (ftnlen)
-			    813)];
+			    : s_rnge(&__global_state->f2c, "filhan", i__2, 
+			    "dafec_", (ftnlen)813)] = __state->filhan[(i__3 = 
+			    k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "filhan", i__3, "dafec_", (
+			    ftnlen)813)];
 		    __state->lstrec[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("lstrec", i__2, "dafec_", (ftnlen)814)] =
-			     __state->lstrec[(i__3 = k) < 5000 && 0 <= i__3 ? 
-			    i__3 : s_rnge("lstrec", i__3, "dafec_", (ftnlen)
-			    814)];
+			    : s_rnge(&__global_state->f2c, "lstrec", i__2, 
+			    "dafec_", (ftnlen)814)] = __state->lstrec[(i__3 = 
+			    k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "lstrec", i__3, "dafec_", (
+			    ftnlen)814)];
 		    __state->lstpos[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("lstpos", i__2, "dafec_", (ftnlen)815)] =
-			     __state->lstpos[(i__3 = k) < 5000 && 0 <= i__3 ? 
-			    i__3 : s_rnge("lstpos", i__3, "dafec_", (ftnlen)
-			    815)];
+			    : s_rnge(&__global_state->f2c, "lstpos", i__2, 
+			    "dafec_", (ftnlen)815)] = __state->lstpos[(i__3 = 
+			    k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(&
+			    __global_state->f2c, "lstpos", i__3, "dafec_", (
+			    ftnlen)815)];
 		}
 		--__state->nfiles;
 	    }
@@ -820,29 +850,29 @@ L100003:
 /*           its information if there is room in the file table. */
 
 	    if (__state->nfiles >= 5000) {
-		setmsg_("The file table is full with # files, and another fi"
-			"le could not be added.", (ftnlen)73);
-		errint_("#", &__state->c__5000, (ftnlen)1);
-		sigerr_("SPICE(FILETABLEFULL)", (ftnlen)20);
-		chkout_("DAFEC", (ftnlen)5);
+		setmsg_(__global_state, "The file table is full with # files"
+			", and another file could not be added.", (ftnlen)73);
+		errint_(__global_state, "#", &__state->c__5000, (ftnlen)1);
+		sigerr_(__global_state, "SPICE(FILETABLEFULL)", (ftnlen)20);
+		chkout_(__global_state, "DAFEC", (ftnlen)5);
 		return 0;
 	    }
 	    ++__state->nfiles;
 	    __state->filchr[(i__1 = __state->nfiles - 1) < 5000 && 0 <= i__1 ?
-		     i__1 : s_rnge("filchr", i__1, "dafec_", (ftnlen)859)] = 
-		    nchars;
+		     i__1 : s_rnge(&__global_state->f2c, "filchr", i__1, 
+		    "dafec_", (ftnlen)859)] = nchars;
 	    __state->filcnt[(i__1 = __state->nfiles - 1) < 5000 && 0 <= i__1 ?
-		     i__1 : s_rnge("filcnt", i__1, "dafec_", (ftnlen)860)] = 
-		    ncomc;
+		     i__1 : s_rnge(&__global_state->f2c, "filcnt", i__1, 
+		    "dafec_", (ftnlen)860)] = ncomc;
 	    __state->filhan[(i__1 = __state->nfiles - 1) < 5000 && 0 <= i__1 ?
-		     i__1 : s_rnge("filhan", i__1, "dafec_", (ftnlen)861)] = *
-		    handle;
+		     i__1 : s_rnge(&__global_state->f2c, "filhan", i__1, 
+		    "dafec_", (ftnlen)861)] = *handle;
 	    __state->lstrec[(i__1 = __state->nfiles - 1) < 5000 && 0 <= i__1 ?
-		     i__1 : s_rnge("lstrec", i__1, "dafec_", (ftnlen)862)] = 
-		    recno;
+		     i__1 : s_rnge(&__global_state->f2c, "lstrec", i__1, 
+		    "dafec_", (ftnlen)862)] = recno;
 	    __state->lstpos[(i__1 = __state->nfiles - 1) < 5000 && 0 <= i__1 ?
-		     i__1 : s_rnge("lstpos", i__1, "dafec_", (ftnlen)863)] = 
-		    curpos;
+		     i__1 : s_rnge(&__global_state->f2c, "lstpos", i__1, 
+		    "dafec_", (ftnlen)863)] = curpos;
 	    __state->lsthan = *handle;
 	} else {
 
@@ -850,15 +880,18 @@ L100003:
 /*           so just update its information. */
 
 	    __state->filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("filchr", i__1, "dafec_", (ftnlen)871)] = nchars;
+		    s_rnge(&__global_state->f2c, "filchr", i__1, "dafec_", (
+		    ftnlen)871)] = nchars;
 	    __state->lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("lstrec", i__1, "dafec_", (ftnlen)872)] = recno;
+		    s_rnge(&__global_state->f2c, "lstrec", i__1, "dafec_", (
+		    ftnlen)872)] = recno;
 	    __state->lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("lstpos", i__1, "dafec_", (ftnlen)873)] = curpos;
+		    s_rnge(&__global_state->f2c, "lstpos", i__1, "dafec_", (
+		    ftnlen)873)] = curpos;
 	    __state->lsthan = *handle;
 	}
     }
-    chkout_("DAFEC", (ftnlen)5);
+    chkout_(__global_state, "DAFEC", (ftnlen)5);
     return 0;
 } /* dafec_ */
 

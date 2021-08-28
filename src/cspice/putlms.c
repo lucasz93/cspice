@@ -8,8 +8,7 @@
 
 
 extern putlms_init_t __putlms_init;
-static putlms_state_t* get_putlms_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline putlms_state_t* get_putlms_state(cspice_t* state) {
 	if (!state->putlms)
 		state->putlms = __cspice_allocate_module(sizeof(
 	putlms_state_t), &__putlms_init, sizeof(__putlms_init));
@@ -18,17 +17,18 @@ static putlms_state_t* get_putlms_state() {
 }
 
 /* $Procedure      PUTLMS ( Store Long Error Message ) */
-/* Subroutine */ int putlms_0_(int n__, char *msg, ftnlen msg_len)
+/* Subroutine */ int putlms_0_(cspice_t* __global_state, int n__, char *msg, 
+	ftnlen msg_len)
 {
     /* Initialized data */
 
 
     /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
 
     /* Module state */
-    putlms_state_t* __state = get_putlms_state();
+    putlms_state_t* __state = get_putlms_state(__global_state);
 /* $ Abstract */
 
 /*     PUTLMS is a low-level data structure access routine which stores */
@@ -224,7 +224,7 @@ static putlms_state_t* get_putlms_state() {
 
 /*     Executable Code: */
 
-    s_copy(__state->savmsg, msg, (ftnlen)1840, msg_len);
+    s_copy(&__global_state->f2c, __state->savmsg, msg, (ftnlen)1840, msg_len);
     return 0;
 /* $Procedure      GETLMS ( Get Long Error Message ) */
 
@@ -360,16 +360,18 @@ L_getlms:
 
 /*     Grab the saved long message: */
 
-    s_copy(msg, __state->savmsg, msg_len, (ftnlen)1840);
+    s_copy(&__global_state->f2c, msg, __state->savmsg, msg_len, (ftnlen)1840);
     return 0;
 } /* putlms_ */
 
-/* Subroutine */ int putlms_(char *msg, ftnlen msg_len)
+/* Subroutine */ int putlms_(cspice_t* __global_state, char *msg, ftnlen 
+	msg_len)
 {
     return putlms_0_(0, msg, msg_len);
     }
 
-/* Subroutine */ int getlms_(char *msg, ftnlen msg_len)
+/* Subroutine */ int getlms_(cspice_t* __global_state, char *msg, ftnlen 
+	msg_len)
 {
     return putlms_0_(1, msg, msg_len);
     }

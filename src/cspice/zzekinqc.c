@@ -8,8 +8,7 @@
 
 
 extern zzekinqc_init_t __zzekinqc_init;
-static zzekinqc_state_t* get_zzekinqc_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzekinqc_state_t* get_zzekinqc_state(cspice_t* state) {
 	if (!state->zzekinqc)
 		state->zzekinqc = __cspice_allocate_module(sizeof(
 	zzekinqc_state_t), &__zzekinqc_init, sizeof(__zzekinqc_init));
@@ -18,37 +17,37 @@ static zzekinqc_state_t* get_zzekinqc_state() {
 }
 
 /* $Procedure   ZZEKINQC ( Private: EK, insert into query, character ) */
-/* Subroutine */ int zzekinqc_(char *value, integer *length, integer *lexbeg, 
-	integer *lexend, integer *eqryi, char *eqryc, integer *descr, ftnlen 
-	value_len, ftnlen eqryc_len)
+/* Subroutine */ int zzekinqc_(cspice_t* __global_state, char *value, integer 
+	*length, integer *lexbeg, integer *lexend, integer *eqryi, char *
+	eqryc, integer *descr, ftnlen value_len, ftnlen eqryc_len)
 {
     /* System generated locals */
     integer i__1, i__2;
 
     /* Builtin functions */
-    integer i_len(char *, ftnlen);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer i_len(f2c_state_t*, char *, ftnlen);
+    /* Subroutine */ int s_copy(f2c_state_t*, char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     integer free;
     integer init;
     integer size;
     integer room;
-    extern /* Subroutine */ int zzekreqi_(integer *, char *, integer *, 
-	    ftnlen);
-    extern /* Subroutine */ int zzekweqi_(char *, integer *, integer *, 
-	    ftnlen);
+    extern /* Subroutine */ int zzekreqi_(cspice_t*, integer *, char *, 
+	    integer *, ftnlen);
+    extern /* Subroutine */ int zzekweqi_(cspice_t*, char *, integer *, 
+	    integer *, ftnlen);
     integer l;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
-    extern /* Subroutine */ int cleari_(integer *, integer *);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int cleari_(cspice_t*, integer *, integer *);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int errint_(cspice_t*, char *, integer *, ftnlen);
 
 
     /* Module state */
-    zzekinqc_state_t* __state = get_zzekinqc_state();
+    zzekinqc_state_t* __state = get_zzekinqc_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -639,53 +638,56 @@ static zzekinqc_state_t* get_zzekinqc_state() {
 
 /*     Use discovery check-in. */
 
-    zzekreqi_(eqryi, "INITIALIZED", &init, (ftnlen)11);
+    zzekreqi_(__global_state, eqryi, "INITIALIZED", &init, (ftnlen)11);
     if (init != 1) {
-	chkin_("ZZEKINQC", (ftnlen)8);
-	setmsg_("Encoded query must be initialized before it may be written.",
-		 (ftnlen)59);
-	sigerr_("SPICE(NOTINITIALIZED)", (ftnlen)21);
-	chkout_("ZZEKINQC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKINQC", (ftnlen)8);
+	setmsg_(__global_state, "Encoded query must be initialized before it"
+		" may be written.", (ftnlen)59);
+	sigerr_(__global_state, "SPICE(NOTINITIALIZED)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKINQC", (ftnlen)8);
 	return 0;
     }
 
 /*     Check the input length value. */
 
     if (*length < 1) {
-	chkin_("ZZEKINQC", (ftnlen)8);
-	setmsg_("Length of string value was #; must be > 0.", (ftnlen)42);
-	errint_("#", length, (ftnlen)1);
-	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
-	chkout_("ZZEKINQC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKINQC", (ftnlen)8);
+	setmsg_(__global_state, "Length of string value was #; must be > 0.", 
+		(ftnlen)42);
+	errint_(__global_state, "#", length, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(INVALIDCOUNT)", (ftnlen)19);
+	chkout_(__global_state, "ZZEKINQC", (ftnlen)8);
 	return 0;
     }
 
 /*     Get the character free pointer; make sure there's enough room. */
 
-    zzekreqi_(eqryi, "FREE_CHR", &free, (ftnlen)8);
-    zzekreqi_(eqryi, "CHR_BUF_SIZE", &size, (ftnlen)12);
+    zzekreqi_(__global_state, eqryi, "FREE_CHR", &free, (ftnlen)8);
+    zzekreqi_(__global_state, eqryi, "CHR_BUF_SIZE", &size, (ftnlen)12);
     room = size - free + 1;
     if (*length > room) {
-	chkin_("ZZEKINQC", (ftnlen)8);
-	setmsg_("Out of room in character portion of encoded query; only # e"
-		"lements were available; # are needed.", (ftnlen)96);
-	errint_("#", &room, (ftnlen)1);
-	errint_("#", length, (ftnlen)1);
-	sigerr_("SPICE(BUFFERTOOSMALL)", (ftnlen)21);
-	chkout_("ZZEKINQC", (ftnlen)8);
+	chkin_(__global_state, "ZZEKINQC", (ftnlen)8);
+	setmsg_(__global_state, "Out of room in character portion of encoded"
+		" query; only # elements were available; # are needed.", (
+		ftnlen)96);
+	errint_(__global_state, "#", &room, (ftnlen)1);
+	errint_(__global_state, "#", length, (ftnlen)1);
+	sigerr_(__global_state, "SPICE(BUFFERTOOSMALL)", (ftnlen)21);
+	chkout_(__global_state, "ZZEKINQC", (ftnlen)8);
 	return 0;
     }
 
 /*     Insert the value into the character portion of the encoded query. */
 
 /* Computing MIN */
-    i__1 = *length, i__2 = i_len(value, value_len);
+    i__1 = *length, i__2 = i_len(&__global_state->f2c, value, value_len);
     l = min(i__1,i__2);
-    s_copy(eqryc + (free - 1), value, eqryc_len - (free - 1), l);
+    s_copy(&__global_state->f2c, eqryc + (free - 1), value, eqryc_len - (free 
+	    - 1), l);
 
 /*     Fill in the descriptor. */
 
-    cleari_(&__state->c__6, descr);
+    cleari_(__global_state, &__state->c__6, descr);
     descr[0] = 1;
     descr[1] = *lexbeg;
     descr[2] = *lexend;
@@ -695,7 +697,7 @@ static zzekinqc_state_t* get_zzekinqc_state() {
 /*     Update the character free pointer. */
 
     i__1 = free + *length;
-    zzekweqi_("FREE_CHR", &i__1, eqryi, (ftnlen)8);
+    zzekweqi_(__global_state, "FREE_CHR", &i__1, eqryi, (ftnlen)8);
     return 0;
 } /* zzekinqc_ */
 

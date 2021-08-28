@@ -8,8 +8,7 @@
 
 
 extern zzstelab_init_t __zzstelab_init;
-static zzstelab_state_t* get_zzstelab_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline zzstelab_state_t* get_zzstelab_state(cspice_t* state) {
 	if (!state->zzstelab)
 		state->zzstelab = __cspice_allocate_module(sizeof(
 	zzstelab_state_t), &__zzstelab_init, sizeof(__zzstelab_init));
@@ -18,25 +17,26 @@ static zzstelab_state_t* get_zzstelab_state() {
 }
 
 /* $Procedure ZZSTELAB ( Private --- stellar aberration correction ) */
-/* Subroutine */ int zzstelab_(logical *xmit, doublereal *accobs, doublereal *
-	vobs, doublereal *starg, doublereal *scorr, doublereal *dscorr)
+/* Subroutine */ int zzstelab_(cspice_t* __global_state, logical *xmit, 
+	doublereal *accobs, doublereal *vobs, doublereal *starg, doublereal *
+	scorr, doublereal *dscorr)
 {
     /* System generated locals */
     integer i__1;
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
-    integer s_rnge(char *, integer, char *, integer);
+    double sqrt(f2c_state_t*, doublereal);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
-    extern /* Subroutine */ int vadd_(doublereal *, doublereal *, doublereal *
-	    );
+    extern /* Subroutine */ int vadd_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *);
     doublereal dphi;
     doublereal rhat[3];
-    extern /* Subroutine */ int vhat_(doublereal *, doublereal *);
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
+    extern /* Subroutine */ int vhat_(cspice_t*, doublereal *, doublereal *);
+    extern doublereal vdot_(cspice_t*, doublereal *, doublereal *);
+    extern /* Subroutine */ int vequ_(cspice_t*, doublereal *, doublereal *);
     doublereal term1[3];
     doublereal term2[3];
     doublereal term3[3];
@@ -44,47 +44,48 @@ static zzstelab_state_t* get_zzstelab_state() {
     doublereal lcacc[3];
     integer i__;
     doublereal s;
-    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern /* Subroutine */ int chkin_(cspice_t*, char *, ftnlen);
     doublereal saoff[6]	/* was [3][2] */;
     doublereal drhat[3];
-    extern /* Subroutine */ int dvhat_(doublereal *, doublereal *);
+    extern /* Subroutine */ int dvhat_(cspice_t*, doublereal *, doublereal *);
     doublereal ptarg[3];
     doublereal evobs[3];
     doublereal srhat[6];
     doublereal vphat[3];
     doublereal vtarg[3];
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
-	    *);
-    extern doublereal vnorm_(doublereal *);
-    extern logical vzero_(doublereal *);
-    extern /* Subroutine */ int vlcom3_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int vlcom_(cspice_t*, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int vperp_(cspice_t*, doublereal *, doublereal *, 
 	    doublereal *);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *);
+    extern doublereal vnorm_(cspice_t*, doublereal *);
+    extern logical vzero_(cspice_t*, doublereal *);
+    extern /* Subroutine */ int vlcom3_(cspice_t*, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
+    extern /* Subroutine */ int cleard_(cspice_t*, integer *, doublereal *);
     doublereal vp[3];
-    extern doublereal clight_(void);
+    extern doublereal clight_(cspice_t*);
     doublereal dptmag;
     doublereal ptgmag;
     doublereal eptarg[3];
     doublereal dvphat[3];
     doublereal lcvobs[3];
-    extern /* Subroutine */ int qderiv_(integer *, doublereal *, doublereal *,
-	     doublereal *, doublereal *);
-    extern /* Subroutine */ int sigerr_(char *, ftnlen);
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
+    extern /* Subroutine */ int qderiv_(cspice_t*, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    extern /* Subroutine */ int sigerr_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int chkout_(cspice_t*, char *, ftnlen);
+    extern /* Subroutine */ int setmsg_(cspice_t*, char *, ftnlen);
     doublereal svphat[6];
-    extern logical return_(void);
-    extern /* Subroutine */ int vminus_(doublereal *, doublereal *);
+    extern logical return_(cspice_t*);
+    extern /* Subroutine */ int vminus_(cspice_t*, doublereal *, doublereal *)
+	    ;
     doublereal sgn;
     doublereal dvp[3];
     doublereal svp[6];
 
 
     /* Module state */
-    zzstelab_state_t* __state = get_zzstelab_state();
+    zzstelab_state_t* __state = get_zzstelab_state(__global_state);
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
@@ -293,7 +294,7 @@ static zzstelab_state_t* get_zzstelab_state() {
 
 /*     Use discovery check-in. */
 
-    if (return_()) {
+    if (return_(__global_state)) {
 	return 0;
     }
 
@@ -415,42 +416,42 @@ static zzstelab_state_t* get_zzstelab_state() {
 /*        DPTMAG */
 
     if (*xmit) {
-	vminus_(vobs, lcvobs);
-	vminus_(accobs, lcacc);
+	vminus_(__global_state, vobs, lcvobs);
+	vminus_(__global_state, accobs, lcacc);
     } else {
-	vequ_(vobs, lcvobs);
-	vequ_(accobs, lcacc);
+	vequ_(__global_state, vobs, lcvobs);
+	vequ_(__global_state, accobs, lcacc);
     }
-    vequ_(starg, ptarg);
-    vequ_(&starg[3], vtarg);
-    dvhat_(starg, srhat);
-    vequ_(srhat, rhat);
-    vequ_(&srhat[3], drhat);
-    vperp_(lcvobs, rhat, vp);
-    dptmag = vdot_(vtarg, rhat);
+    vequ_(__global_state, starg, ptarg);
+    vequ_(__global_state, &starg[3], vtarg);
+    dvhat_(__global_state, starg, srhat);
+    vequ_(__global_state, srhat, rhat);
+    vequ_(__global_state, &srhat[3], drhat);
+    vperp_(__global_state, lcvobs, rhat, vp);
+    dptmag = vdot_(__global_state, vtarg, rhat);
 
 /*     Compute sin(phi) and cos(phi), which we'll call S and C */
 /*     respectively. Note that phi is always close to zero for */
 /*     realistic inputs (for which ||VOBS|| << CLIGHT), so the */
 /*     cosine term is positive. */
 
-    s = vnorm_(vp) / clight_();
+    s = vnorm_(__global_state, vp) / clight_(__global_state);
 /* Computing MAX */
     d__1 = 0., d__2 = 1 - s * s;
-    c__ = sqrt((max(d__1,d__2)));
+    c__ = sqrt(&__global_state->f2c, (max(d__1,d__2)));
     if (c__ == 0.) {
 
 /*        C will be used as a divisor later (in the computation */
 /*        of DPHI), so we'll put a stop to the problem here. */
 
-	chkin_("ZZSTELAB", (ftnlen)8);
-	setmsg_("Cosine of the aberration angle is 0; this cannot occur for "
-		"realistic observer velocities. This case can arise due to un"
-		"initialized inputs. This cosine value is used as a divisor i"
-		"n a later computation, so it must not be equal to zero.", (
-		ftnlen)234);
-	sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-	chkout_("ZZSTELAB", (ftnlen)8);
+	chkin_(__global_state, "ZZSTELAB", (ftnlen)8);
+	setmsg_(__global_state, "Cosine of the aberration angle is 0; this c"
+		"annot occur for realistic observer velocities. This case can"
+		" arise due to uninitialized inputs. This cosine value is use"
+		"d as a divisor in a later computation, so it must not be equ"
+		"al to zero.", (ftnlen)234);
+	sigerr_(__global_state, "SPICE(DIVIDEBYZERO)", (ftnlen)19);
+	chkout_(__global_state, "ZZSTELAB", (ftnlen)8);
 	return 0;
     }
 
@@ -458,10 +459,10 @@ static zzstelab_state_t* get_zzstelab_state() {
 /*     aberration correction. We avoid relying on */
 /*     VHAT's exception handling for the zero vector. */
 
-    if (vzero_(vp)) {
-	cleard_(&__state->c__3, vphat);
+    if (vzero_(__global_state, vp)) {
+	cleard_(__global_state, &__state->c__3, vphat);
     } else {
-	vhat_(vp, vphat);
+	vhat_(__global_state, vp, vphat);
     }
 
 /*     Now we can use equation (9) to obtain the stellar */
@@ -472,10 +473,10 @@ static zzstelab_state_t* get_zzstelab_state() {
 /*           ( sin(phi)*VPHAT + (cos(phi)-1)*RHAT ) * ||PTARG|| */
 
 
-    ptgmag = vnorm_(ptarg);
+    ptgmag = vnorm_(__global_state, ptarg);
     d__1 = ptgmag * s;
     d__2 = ptgmag * (c__ - 1.);
-    vlcom_(&d__1, vphat, &d__2, rhat, scorr);
+    vlcom_(__global_state, &d__1, vphat, &d__2, rhat, scorr);
 
 /*     Now we use S as an estimate of PHI to decide if we're */
 /*     going to differentiate the stellar aberration correction */
@@ -496,24 +497,27 @@ static zzstelab_state_t* get_zzstelab_state() {
 /*            = ACCOBS - (  ( <VOBS,DRHAT> + <ACCOBS, RHAT> )*RHAT */
 /*                        +   <VOBS,RHAT>  * DRHAT                 ) */
 
-	d__1 = -vdot_(lcvobs, drhat) - vdot_(lcacc, rhat);
-	d__2 = -vdot_(lcvobs, rhat);
-	vlcom3_(&__state->c_b7, lcacc, &d__1, rhat, &d__2, drhat, dvp);
-	vhat_(vp, vphat);
+	d__1 = -vdot_(__global_state, lcvobs, drhat) - vdot_(__global_state, 
+		lcacc, rhat);
+	d__2 = -vdot_(__global_state, lcvobs, rhat);
+	vlcom3_(__global_state, &__state->c_b7, lcacc, &d__1, rhat, &d__2, 
+		drhat, dvp);
+	vhat_(__global_state, vp, vphat);
 
 /*        Now we can compute DVPHAT, the derivative of VPHAT: */
 
-	vequ_(vp, svp);
-	vequ_(dvp, &svp[3]);
-	dvhat_(svp, svphat);
-	vequ_(&svphat[3], dvphat);
+	vequ_(__global_state, vp, svp);
+	vequ_(__global_state, dvp, &svp[3]);
+	dvhat_(__global_state, svp, svphat);
+	vequ_(__global_state, &svphat[3], dvphat);
 
 /*        Compute the DPHI, the time derivative of PHI, using equation 8: */
 
 /*           d(phi)/dt = (1/cos(phi)) * (1/c) * <DVP, VPHAT> */
 
 
-	dphi = 1. / (c__ * clight_()) * vdot_(dvp, vphat);
+	dphi = 1. / (c__ * clight_(__global_state)) * vdot_(__global_state, 
+		dvp, vphat);
 
 /*        At long last we've assembled all of the "ingredients" required */
 /*        to compute DSCORR: */
@@ -532,14 +536,15 @@ static zzstelab_state_t* get_zzstelab_state() {
 
 
 	d__1 = c__ * dphi;
-	vlcom_(&s, dvphat, &d__1, vphat, term1);
+	vlcom_(__global_state, &s, dvphat, &d__1, vphat, term1);
 	d__1 = c__ - 1.;
 	d__2 = -s * dphi;
-	vlcom_(&d__1, drhat, &d__2, rhat, term2);
-	vadd_(term1, term2, term3);
+	vlcom_(__global_state, &d__1, drhat, &d__2, rhat, term2);
+	vadd_(__global_state, term1, term2, term3);
 	d__1 = dptmag * s;
 	d__2 = dptmag * (c__ - 1.);
-	vlcom3_(&ptgmag, term3, &d__1, vphat, &d__2, rhat, dscorr);
+	vlcom3_(__global_state, &ptgmag, term3, &d__1, vphat, &d__2, rhat, 
+		dscorr);
     } else {
 
 /*        This is the numeric case. We're going to differentiate */
@@ -562,13 +567,15 @@ static zzstelab_state_t* get_zzstelab_state() {
 /*           to make a linear estimate. */
 
 	    d__1 = sgn * 1.;
-	    vlcom_(&__state->c_b7, lcvobs, &d__1, lcacc, evobs);
+	    vlcom_(__global_state, &__state->c_b7, lcvobs, &d__1, lcacc, 
+		    evobs);
 
 /*           Estimate the observer-target vector. We use the */
 /*           observer-target state velocity to make a linear estimate. */
 
 	    d__1 = sgn * 1.;
-	    vlcom_(&__state->c_b7, starg, &d__1, &starg[3], eptarg);
+	    vlcom_(__global_state, &__state->c_b7, starg, &d__1, &starg[3], 
+		    eptarg);
 
 /*           Let RHAT be the unit observer-target position. */
 /*           Compute the component of the observer's velocity */
@@ -576,35 +583,37 @@ static zzstelab_state_t* get_zzstelab_state() {
 /*           this vector VP. Also compute the unit vector in */
 /*           the direction of VP. */
 
-	    vhat_(eptarg, rhat);
-	    vperp_(evobs, rhat, vp);
-	    if (vzero_(vp)) {
-		cleard_(&__state->c__3, vphat);
+	    vhat_(__global_state, eptarg, rhat);
+	    vperp_(__global_state, evobs, rhat, vp);
+	    if (vzero_(__global_state, vp)) {
+		cleard_(__global_state, &__state->c__3, vphat);
 	    } else {
-		vhat_(vp, vphat);
+		vhat_(__global_state, vp, vphat);
 	    }
 
 /*           Compute the sine and cosine of the correction */
 /*           angle. */
 
-	    s = vnorm_(vp) / clight_();
+	    s = vnorm_(__global_state, vp) / clight_(__global_state);
 /* Computing MAX */
 	    d__1 = 0., d__2 = 1 - s * s;
-	    c__ = sqrt((max(d__1,d__2)));
+	    c__ = sqrt(&__global_state->f2c, (max(d__1,d__2)));
 
 /*           Compute the vector offset of the correction. */
 
-	    ptgmag = vnorm_(eptarg);
+	    ptgmag = vnorm_(__global_state, eptarg);
 	    d__1 = ptgmag * s;
 	    d__2 = ptgmag * (c__ - 1.);
-	    vlcom_(&d__1, vphat, &d__2, rhat, &saoff[(i__1 = i__ * 3 - 3) < 6 
-		    && 0 <= i__1 ? i__1 : s_rnge("saoff", i__1, "zzstelab_", (
-		    ftnlen)597)]);
+	    vlcom_(__global_state, &d__1, vphat, &d__2, rhat, &saoff[(i__1 = 
+		    i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : s_rnge(&
+		    __global_state->f2c, "saoff", i__1, "zzstelab_", (ftnlen)
+		    597)]);
 	}
 
 /*        Now compute the derivative. */
 
-	qderiv_(&__state->c__3, saoff, &saoff[3], &__state->c_b7, dscorr);
+	qderiv_(__global_state, &__state->c__3, saoff, &saoff[3], &
+		__state->c_b7, dscorr);
     }
 
 /*     At this point the correction offset SCORR and its derivative */

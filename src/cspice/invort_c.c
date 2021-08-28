@@ -173,7 +173,7 @@
    /*
    Participate in error tracing. 
    */
-   chkin_c ( "invort_c" );
+   chkin_c ( naif_state, "invort_c" );
 
    /*
    Transpose the input matrix to obtain a Fortran-style matrix.

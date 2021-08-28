@@ -8,27 +8,27 @@
 
 
 typedef int dlassg_state_t;
-static dlassg_state_t* get_dlassg_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline dlassg_state_t* get_dlassg_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure DLASSG ( DLA, same segment? ) */
-logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2)
+logical dlassg_(cspice_t* __global_state, integer *han1, integer *han2, 
+	integer *dsc1, integer *dsc2)
 {
     /* System generated locals */
     integer i__1, i__2;
     logical ret_val;
 
     /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
+    integer s_rnge(f2c_state_t*, char *, integer, char *, integer);
 
     /* Local variables */
     integer i__;
 
 
     /* Module state */
-    dlassg_state_t* __state = get_dlassg_state();
+    dlassg_state_t* __state = get_dlassg_state(__global_state);
 /* $ Abstract */
 
 /*     Return a logical value indicating whether a two DLA */
@@ -346,10 +346,10 @@ logical dlassg_(integer *han1, integer *han2, integer *dsc1, integer *dsc2)
 /*     must match in order to have a matching result. */
 
     for (i__ = 1; i__ <= 8; ++i__) {
-	if (dsc1[(i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("dsc1", 
-		i__1, "dlassg_", (ftnlen)226)] != dsc2[(i__2 = i__ - 1) < 8 &&
-		 0 <= i__2 ? i__2 : s_rnge("dsc2", i__2, "dlassg_", (ftnlen)
-		226)]) {
+	if (dsc1[(i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge(&
+		__global_state->f2c, "dsc1", i__1, "dlassg_", (ftnlen)226)] !=
+		 dsc2[(i__2 = i__ - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge(&
+		__global_state->f2c, "dsc2", i__2, "dlassg_", (ftnlen)226)]) {
 	    return ret_val;
 	}
     }

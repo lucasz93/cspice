@@ -8,13 +8,13 @@
 
 
 typedef int orderi_state_t;
-static orderi_state_t* get_orderi_state() {
-	cspice_t* state =  __cspice_get_state();
+static inline orderi_state_t* get_orderi_state(cspice_t* state) {
 	return 0;
 }
 
 /* $Procedure      ORDERI ( Order of an integer array ) */
-/* Subroutine */ int orderi_(integer *array, integer *ndim, integer *iorder)
+/* Subroutine */ int orderi_(cspice_t* __global_state, integer *array, 
+	integer *ndim, integer *iorder)
 {
     /* System generated locals */
     integer i__1;
@@ -22,13 +22,13 @@ static orderi_state_t* get_orderi_state() {
     /* Local variables */
     integer i__;
     integer j;
-    extern /* Subroutine */ int swapi_(integer *, integer *);
+    extern /* Subroutine */ int swapi_(cspice_t*, integer *, integer *);
     integer jg;
     integer gap;
 
 
     /* Module state */
-    orderi_state_t* __state = get_orderi_state();
+    orderi_state_t* __state = get_orderi_state(__global_state);
 /* $ Abstract */
 
 /*     Determine the order of elements in an integer array. */
@@ -189,7 +189,7 @@ static orderi_state_t* get_orderi_state() {
 		if (array[iorder[j - 1] - 1] <= array[iorder[jg - 1] - 1]) {
 		    j = 0;
 		} else {
-		    swapi_(&iorder[j - 1], &iorder[jg - 1]);
+		    swapi_(__global_state, &iorder[j - 1], &iorder[jg - 1]);
 		}
 		j -= gap;
 	    }

@@ -145,7 +145,7 @@
    /*
    Participate in error handling.
    */
-   chkin_c ( "prsdp_c");
+   chkin_c ( naif_state, "prsdp_c");
 
 
    /*
