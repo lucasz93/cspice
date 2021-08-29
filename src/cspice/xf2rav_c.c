@@ -46,7 +46,8 @@
    #undef xf2rav_c
    
 
-   void xf2rav_c ( ConstSpiceDouble   xform [6][6],
+   void xf2rav_c ( void             * naif_state,
+                   ConstSpiceDouble   xform [6][6],
                    SpiceDouble        rot   [3][3],
                    SpiceDouble        av    [3]     ) 
 
@@ -228,7 +229,7 @@
 
    */
    
-   mtxm_c ( drdt, rot, omega );
+   mtxm_c ( naif_state, drdt, rot, omega );
    
 
    /*

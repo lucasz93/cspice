@@ -49,7 +49,8 @@
    #include "SpiceZst.h"
    #undef   dvcrss_c
 
-   void dvcrss_c ( ConstSpiceDouble s1  [6],
+   void dvcrss_c ( void           * naif_state,
+                   ConstSpiceDouble s1  [6],
                    ConstSpiceDouble s2  [6],
                    SpiceDouble      sout[6] ) 
 
@@ -157,19 +158,19 @@
    /*
    Calculate the cross product of 's1' and 's2', store it in 'vtemp'.
    */
-   vcrss_c (s1, s2, vtemp );
+   vcrss_c ( naif_state, s1, s2, vtemp );
 
    /*
    Calculate the two components of the derivative of s1 x s2.
    */
-   vcrss_c ( &(s1[3]), s2,       dvtmp1 );
-   vcrss_c ( s1,       &(s2[3]), dvtmp2 );
+   vcrss_c ( naif_state, &(s1[3]), s2,       dvtmp1 );
+   vcrss_c ( naif_state, s1,       &(s2[3]), dvtmp2 );
 
    /*
    Put all of the pieces into 'sout'.
    */
-   vequ_c ( vtemp, sout );
-   vadd_c ( dvtmp1, dvtmp2, &(sout[3]));
+   vequ_c ( naif_state, vtemp, sout );
+   vadd_c ( naif_state, dvtmp1, dvtmp2, &(sout[3]));
 
 } /* End dvcrss_c */
 

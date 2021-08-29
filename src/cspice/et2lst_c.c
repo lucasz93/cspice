@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void et2lst_c ( SpiceDouble        et,
+   void et2lst_c ( void             * naif_state,
+                   SpiceDouble        et,
                    SpiceInt           body,
                    SpiceDouble        lon,
                    ConstSpiceChar   * type,
@@ -345,7 +346,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -354,16 +355,17 @@
    /*
    Check the input type argument. 
    */
-   CHKFSTR ( CHK_STANDARD, "et2lst_c", type );
+   CHKFSTR ( naif_state, CHK_STANDARD, "et2lst_c", type );
 
    /*
    Check the output arguments. 
    */
-   CHKOSTR ( CHK_STANDARD, "et2lst_c", time, timlen  );
-   CHKOSTR ( CHK_STANDARD, "et2lst_c", ampm, ampmlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "et2lst_c", time, timlen  );
+   CHKOSTR ( naif_state, CHK_STANDARD, "et2lst_c", ampm, ampmlen );
 
 
-   et2lst_ ( ( doublereal * ) &et,
+   et2lst_ ( naif_state,
+             ( doublereal * ) &et,
              ( integer    * ) &body,
              ( doublereal * ) &lon,
              ( char       * ) type,
@@ -383,7 +385,7 @@
    F2C_ConvertStr ( ampmlen, ampm );
 
 
-   chkout_c ( "et2lst_c" );
+   chkout_c ( naif_state, "et2lst_c" );
 
 } /* End et2lst_c */
 

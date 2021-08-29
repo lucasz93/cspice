@@ -45,7 +45,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void dafgsr_c  ( SpiceInt        handle,
+   void dafgsr_c  ( void          * naif_state,
+                    SpiceInt        handle,
                     SpiceInt        recno,
                     SpiceInt        begin,
                     SpiceInt        end,
@@ -193,7 +194,8 @@
    chkin_c ( naif_state, "dafgsr_c" );
 
 
-   dafgsr_ ( ( integer    * ) &handle,
+   dafgsr_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) &recno,
              ( integer    * ) &begin,
              ( integer    * ) &end,
@@ -203,6 +205,6 @@
    *found = (SpiceBoolean) fnd;
 
 
-   chkout_c ( "dafgsr_c" );
+   chkout_c ( naif_state, "dafgsr_c" );
 
 } /* End dafgsr_c */

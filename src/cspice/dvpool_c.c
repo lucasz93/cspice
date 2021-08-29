@@ -47,7 +47,7 @@
    #include "SpiceZmc.h"
    
 
-   void dvpool_c ( ConstSpiceChar  * name ) 
+   void dvpool_c ( void *naif_state, ConstSpiceChar  * name ) 
 
 /*
 
@@ -147,14 +147,15 @@
    Check the kernel variable name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_DISCOVER, "dvpool_c", name );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "dvpool_c", name );
    
  
    /*
    Call the f2c'd routine.
    */
  
-   dvpool_ (  ( char    * ) name,
+   dvpool_ (  naif_state,
+              ( char    * ) name,
               ( ftnlen    ) strlen(name) );
               
  

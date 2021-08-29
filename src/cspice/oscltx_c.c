@@ -50,7 +50,8 @@
    #include "SpiceZfc.h"
    #undef   oscltx_c
 
-   void oscltx_c ( ConstSpiceDouble state [6],
+   void oscltx_c ( void           * naif_state,
+                   ConstSpiceDouble state [6],
                    SpiceDouble      et,
                    SpiceDouble      mu,
                    SpiceDouble      elts  [SPICE_OSCLTX_NELTS] ) 
@@ -298,12 +299,13 @@
    /*
    Let the f2c'd routine do the work. 
    */
-   oscltx_ (  (doublereal *) state,
+   oscltx_ (  naif_state,
+              (doublereal *) state,
               (doublereal *) &et,
               (doublereal *) &mu,
               (doublereal *) elts  );
 
 
-   chkout_c ( "oscltx_c" );
+   chkout_c ( naif_state, "oscltx_c" );
 
 } /* End oscltx_c */

@@ -51,7 +51,9 @@
    #include "SpiceZfc.h"
    #undef   uddc_c
 
-   void uddc_c ( void            ( * udfunc ) ( SpiceDouble    x,
+   void uddc_c ( void              * naif_state,
+                 void            ( * udfunc ) ( void         * naif_state,
+                                                SpiceDouble    x,
                                                 SpiceDouble  * value ),
                  SpiceDouble         x,
                  SpiceDouble         dx,
@@ -183,7 +185,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
      {
       return;
       }
@@ -191,16 +193,16 @@
 
    *isdecr = SPICEFALSE;
 
-   uddf_c ( udfunc, x, dx, &deriv );
+   uddf_c ( naif_state, udfunc, x, dx, &deriv );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
      {
-     chkout_c ( "uddc_c" );
+     chkout_c ( naif_state, "uddc_c" );
      return;
      }
 
    *isdecr = deriv <  0.;
 
-   chkout_c ( "uddc_c" );
+   chkout_c ( naif_state, "uddc_c" );
    return;
    }

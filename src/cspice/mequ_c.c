@@ -46,7 +46,8 @@
    #include "SpiceZmc.h"
    #undef    mequ_c
 
-   void mequ_c ( ConstSpiceDouble  m1  [3][3],
+   void mequ_c ( void            * naif_state,
+                 ConstSpiceDouble  m1  [3][3],
                  SpiceDouble       mout[3][3] )
 
 /*

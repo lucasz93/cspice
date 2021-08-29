@@ -57,7 +57,8 @@
    #undef spkaps_c
 
 
-   void spkaps_c ( SpiceInt           targ,
+   void spkaps_c ( void             * naif_state,
+                   SpiceInt           targ,
                    SpiceDouble        et,
                    ConstSpiceChar   * ref,
                    ConstSpiceChar   * abcorr,
@@ -612,11 +613,12 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkaps_c", ref    );
-   CHKFSTR ( CHK_STANDARD, "spkaps_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkaps_c", ref    );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkaps_c", abcorr );
 
 
-   spkaps_ ( (integer    *) &targ,
+   spkaps_ ( naif_state,
+             (integer    *) &targ,
              (doublereal *) &et,
              (char       *) ref,
              (char       *) abcorr,
@@ -630,6 +632,6 @@
 
 
 
-   chkout_c ( "spkaps_c" );
+   chkout_c ( naif_state, "spkaps_c" );
 
 } /* End spkaps_c */

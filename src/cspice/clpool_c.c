@@ -47,7 +47,7 @@
    #include "SpiceZfc.h"
    
 
-   void clpool_c ( void ) 
+   void clpool_c ( void *naif_state ) 
 
 /*
 
@@ -178,10 +178,10 @@
    Just call the f2c'd routine.
    */
 
-   clpool_();
+   clpool_(naif_state);
 
 
-   chkout_c ( "clpool_c" );
+   chkout_c ( naif_state, "clpool_c" );
 
 } /* End clpool_c */
 

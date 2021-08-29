@@ -47,10 +47,13 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
    #include "f2cMang.h"
+   #include "f2c.h"
+   #include "__cspice_state.h"
    #undef    bsrchc_c
 
 
-   SpiceInt bsrchc_c ( ConstSpiceChar  * value,
+   SpiceInt bsrchc_c ( void            * naif_state,
+                       ConstSpiceChar  * value,
                        SpiceInt          ndim,   
                        SpiceInt          lenvals,
                        const void      * array   ) 
@@ -193,12 +196,13 @@
 */
 
 { /* Begin bsrchc_c */
+   cspice_t * state = (cspice_t *)naif_state;
 
    /*
    f2c library utility prototypes 
    */
-   logical          l_lt   (char *a, char *b, ftnlen la, ftnlen lb ); 
-   extern integer   s_cmp  (char *a, char *b, ftnlen la, ftnlen lb ); 
+   logical          l_lt   (f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb ); 
+   extern integer   s_cmp  (f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb ); 
 
    /*
    Local macros 
@@ -231,14 +235,14 @@
    Make sure the pointer for the key value is non-null 
    and that the length is adequate.  
    */
-   CHKPTR_VAL ( CHK_DISCOVER, "bsrchc_c", value, -1 );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "bsrchc_c", value, -1 );
 
    
    /*
    Make sure the pointer for the string array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR_VAL ( CHK_DISCOVER, "bsrchc_c", array, lenvals, -1 );   
+   CHKOSTR_VAL ( naif_state, CHK_DISCOVER, "bsrchc_c", array, lenvals, -1 );   
 
   
    /*
@@ -263,7 +267,8 @@
       of zero indicates equality, and a positive value indicates
       the second argument is greater.
       */
-      order =  (SpiceInt) s_cmp ( (char    * ) value, 
+      order =  (SpiceInt) s_cmp ( &state->f2c,
+                                  (char    * ) value, 
                                   (char    * ) ARRAY(i),
                                   (ftnlen    ) keylen,
                                   (ftnlen    ) strlen(ARRAY(i)) );

@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #undef spkpvn_c
 
-   void spkpvn_c ( SpiceInt             handle,
+   void spkpvn_c ( void               * naif_state,
+                   SpiceInt             handle,
                    ConstSpiceDouble     descr [5],
                    SpiceDouble          et,
                    SpiceInt           * ref,
@@ -288,11 +289,11 @@
 
          if ( !found )
          {
-            setmsg_c ( "No SPK segment available for body # at "
+            setmsg_c ( naif_state, "No SPK segment available for body # at "
                        "time #."                                );
-            errint_c ( "#",  body                               );
-            errch_c  ( "#",  timstr                             );
-            sigerr_c ( "SPICE(NOSEGMENT)"                       );
+            errint_c ( naif_state, "#",  body                               );
+            errch_c  ( naif_state, "#",  timstr                             );
+            sigerr_c ( naif_state, "SPICE(NOSEGMENT)"                       );
          }
 
          /.  
@@ -448,13 +449,14 @@
    */
    chkin_c ( naif_state, "spkpvn_c" );
 
-   spkpvn_ ( ( integer     * ) &handle,
+   spkpvn_ ( naif_state,
+             ( integer     * ) &handle,
              ( doublereal  * ) descr,
              ( doublereal  * ) &et,
              ( integer     * ) ref,
              ( doublereal  * ) state,
              ( integer     * ) center  );
  
-   chkout_c ( "spkpvn_c" );
+   chkout_c ( naif_state, "spkpvn_c" );
 
 } /* End spkpvn_c */

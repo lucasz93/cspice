@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void copy_c (  SpiceCell   * cell,
+   void copy_c (  void        * naif_state,
+                  SpiceCell   * cell,
                   SpiceCell   * copy  )
 
 /*
@@ -168,7 +169,7 @@
    /*
    Standard SPICE error handling. 
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -178,13 +179,13 @@
    /*
    Make sure data types match. 
    */
-   CELLMATCH2 ( CHK_STANDARD, "copy_c", cell, copy );
+   CELLMATCH2 ( naif_state, CHK_STANDARD, "copy_c", cell, copy );
 
 
    /*
    Initialize the cells if necessary. 
    */
-   CELLINIT2 ( cell, copy );
+   CELLINIT2 ( naif_state, cell, copy );
 
 
    /*
@@ -196,27 +197,28 @@
       /*
       Construct Fortran-style sets suitable for passing to copyc_. 
       */
-      C2F_MAP_CELL2 ( "copy_c", 
+      C2F_MAP_CELL2 ( naif_state, "copy_c", 
                       cell, fCell,   fLen,
                       copy, fCell+1, fLen+1 );
       
-      if ( failed_c() )
+      if ( failed_c(naif_state) )
       {
-         chkout_c ( "copy_c" );
+         chkout_c ( naif_state, "copy_c" );
          return;
       }
 
-      copyc_ ( (char    * )  fCell[0],
+      copyc_ ( naif_state,
+               (char    * )  fCell[0],
                (char    * )  fCell[1],
                (ftnlen    )  fLen[0],
                (ftnlen    )  fLen[1]  );
 
-      if ( !failed_c() )
+      if ( !failed_c(naif_state) )
       {
          /*
          Map the copy back to a C style cell. 
          */
-         F2C_MAP_CELL ( fCell[1], fLen[1], copy );
+         F2C_MAP_CELL ( naif_state, fCell[1], fLen[1], copy );
       }
 
       /*
@@ -230,43 +232,45 @@
 
    else if ( cell->dtype == SPICE_DP )
    {
-      copyd_ ( (doublereal * )  (cell->base),
+      copyd_ ( naif_state,
+               (doublereal * )  (cell->base),
                (doublereal * )  (copy->base)   );
 
       /*
       Sync the output cell. 
       */
-      if ( !failed_c() )
+      if ( !failed_c(naif_state) )
       {
-         zzsynccl_c ( F2C, copy );
+         zzsynccl_c ( naif_state, F2C, copy );
       }
 
    }
 
    else if ( cell->dtype == SPICE_INT )
    {
-      copyi_ ( (integer * )  (cell->base),
+      copyi_ ( naif_state,
+               (integer * )  (cell->base),
                (integer * )  (copy->base)  );      
 
       /*
       Sync the output cell. 
       */
-      if ( !failed_c() )
+      if ( !failed_c(naif_state) )
       {
-         zzsynccl_c ( F2C, copy );
+         zzsynccl_c ( naif_state, F2C, copy );
       }
 
    }
    
    else
    {
-       setmsg_c ( "Source cell contains unrecognized data type code #." );
-       errint_c ( "#",  (SpiceInt) (cell->dtype)                        );
-       sigerr_c ( "SPICE(NOTSUPPORTED)"                                 );
-       chkout_c ( "copy_c"                                              );
+       setmsg_c ( naif_state, "Source cell contains unrecognized data type code #." );
+       errint_c ( naif_state, "#",  (SpiceInt) (cell->dtype)                        );
+       sigerr_c ( naif_state, "SPICE(NOTSUPPORTED)"                                 );
+       chkout_c ( naif_state, "copy_c"                                              );
        return;
    }
 
-   chkout_c ( "copy_c" );
+   chkout_c ( naif_state, "copy_c" );
 
 } /* End copy_c */

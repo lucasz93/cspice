@@ -44,7 +44,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZmc.h"
 
-   void ident_c ( SpiceDouble    matrix[3][3] ) 
+   void ident_c ( void *naif_state, SpiceDouble    matrix[3][3] ) 
 
 /*
 

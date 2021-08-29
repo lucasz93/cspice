@@ -47,7 +47,8 @@
    #include "SpiceUsr.h"
 
 
-   SpiceDouble brcktd_c ( SpiceDouble  number, 
+   SpiceDouble brcktd_c ( void       * naif_state,
+                          SpiceDouble  number, 
                           SpiceDouble  end1,
                           SpiceDouble  end2   )
 /*

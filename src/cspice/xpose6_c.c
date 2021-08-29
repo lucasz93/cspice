@@ -46,7 +46,7 @@
    #undef    xpose6_c
 
 
-   void xpose6_c ( ConstSpiceDouble m1[6][6],  SpiceDouble mout[6][6] )
+   void xpose6_c ( void * naif_state, ConstSpiceDouble m1[6][6],  SpiceDouble mout[6][6] )
 
 /*
 

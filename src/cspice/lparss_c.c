@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void lparss_c ( ConstSpiceChar   * list,
+   void lparss_c ( void             * naif_state,
+                   ConstSpiceChar   * list,
                    ConstSpiceChar   * delims,
                    SpiceCell        * set     ) 
 
@@ -214,7 +215,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -227,13 +228,13 @@
    
    We must know that list is not a null pointer first.
    */
-   CHKPTR ( CHK_STANDARD, "lparss_c", list  );
+   CHKPTR ( naif_state, CHK_STANDARD, "lparss_c", list  );
    
    if ( list[0] == NULLCHAR ) 
    {
-      insrtc_c ( "", set );
+      insrtc_c ( naif_state, "", set );
       
-      chkout_c ( "lparss_c" );
+      chkout_c ( naif_state, "lparss_c" );
       return;
    }
    
@@ -242,20 +243,20 @@
    Check the input delimiter string to make sure the pointers are 
    non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "lparss_c", list   );
-   CHKFSTR ( CHK_STANDARD, "lparss_c", delims );
+   CHKFSTR ( naif_state, CHK_STANDARD, "lparss_c", list   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "lparss_c", delims );
    
    
    /*
    Make sure we've been handed a character set.
    */
-   CELLTYPECHK ( CHK_STANDARD, "lparss_c", SPICE_CHR, set );
+   CELLTYPECHK ( naif_state, CHK_STANDARD, "lparss_c", SPICE_CHR, set );
 
 
    /*
    Initialize the set if necessary. 
    */
-   CELLINIT ( set );
+   CELLINIT ( naif_state, set );
 
 
    /*
@@ -263,11 +264,11 @@
    write to.  The first argument (caller) is empty because we
    don't want to use delegated check-in.
    */
-   C2F_MAP_CELL ( "",  set,  &fCell,  &fLen );
+   C2F_MAP_CELL ( naif_state, "",  set,  &fCell,  &fLen );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "lparss_c" );
+      chkout_c ( naif_state, "lparss_c" );
       return;
    }
 
@@ -275,7 +276,8 @@
    /*
    Call the f2c'd routine.
    */
-   lparss_ ( ( char       * ) list,
+   lparss_ ( naif_state,
+             ( char       * ) list,
              ( char       * ) delims,
              ( char       * ) fCell,
              ( ftnlen       ) strlen(list),
@@ -285,7 +287,7 @@
    /*
    Map the Fortran set to a CSPICE set.
    */
-   F2C_MAP_CELL ( fCell, fLen, set );
+   F2C_MAP_CELL ( naif_state, fCell, fLen, set );
    
 
    /*
@@ -294,6 +296,6 @@
    free ( fCell );
 
 
-   chkout_c ( "lparss_c" );
+   chkout_c ( naif_state, "lparss_c" );
 
 } /* End lparss_c */

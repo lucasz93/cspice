@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void ekopw_c ( ConstSpiceChar  * fname,
+   void ekopw_c ( void            * naif_state,
+                  ConstSpiceChar  * fname,
                   SpiceInt        * handle ) 
 
 /*
@@ -197,17 +198,18 @@
    Check the file name string.  The pointer must be non-null
    and the string length must be at least 1.
    */
-   CHKFSTR ( CHK_STANDARD, "ekopw_c", fname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekopw_c", fname );
 
 
    /*
    Call the f2c'd routine.
    */
-   ekopw_ (  ( char      * ) fname,
+   ekopw_ (  naif_state,
+             ( char      * ) fname,
              ( integer   * ) handle,
              ( ftnlen      ) strlen(fname) );
              
 
-   chkout_c ( "ekopw_c" );
+   chkout_c ( naif_state, "ekopw_c" );
 
 } /* End ekopw_c */

@@ -54,11 +54,15 @@
    #include "zzalloc.h"
    #undef   gfuds_c
 
-   void gfuds_c (  void             ( * udfuns ) ( SpiceDouble       et,
+   void gfuds_c (  void               * naif_state,
+                   void             ( * udfuns ) ( void            * naif_state,
+                                                   SpiceDouble       et,
                                                    SpiceDouble     * value ),
 
-                   void             ( * udqdec ) ( void ( * udfuns )
-                                                        ( SpiceDouble   et,
+                   void             ( * udqdec ) ( void            * naif_state,
+                                                   void ( * udfuns )
+                                                        ( void        * naif_state,
+                                                          SpiceDouble   et,
                                                           SpiceDouble * value ),
 
                                                    SpiceDouble       et,
@@ -878,7 +882,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
      {
       return;
       }
@@ -888,18 +892,18 @@
    /*
    Make sure cell data types are d.p.
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "gfuds_c", SPICE_DP, cnfine, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "gfuds_c", SPICE_DP, cnfine, result );
 
    /*
    Initialize the input cells if necessary.
    */
-   CELLINIT2 ( cnfine, result );
+   CELLINIT2 ( naif_state, cnfine, result );
 
    /*
    Check the input strings to make sure each pointer is non-null
    and each string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gfuds_c", relate );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfuds_c", relate );
 
    /*
    Store the input function pointers so these functions can be
@@ -916,11 +920,11 @@
 
    if ( nintvls < 1 )
       {
-      setmsg_c ( "The specified workspace interval count # was "
+      setmsg_c ( naif_state, "The specified workspace interval count # was "
                  "less than the minimum allowed value of one (1)." );
-      errint_c ( "#",  nintvls                              );
-      sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                   );
-      chkout_c ( "gfuds_c"                                  );
+      errint_c ( naif_state, "#",  nintvls                              );
+      sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                   );
+      chkout_c ( naif_state, "gfuds_c"                                  );
       return;
       }
 
@@ -935,15 +939,15 @@
 
    nBytes = (nintvls + SPICE_CELL_CTRLSZ ) * nw * sizeof(SpiceDouble);
 
-   work   = (doublereal *) alloc_SpiceMemory( nBytes );
+   work   = (doublereal *) alloc_SpiceMemory( naif_state, nBytes );
 
    if ( !work )
       {
-      setmsg_c ( "Workspace allocation of # bytes failed due to "
+      setmsg_c ( naif_state, "Workspace allocation of # bytes failed due to "
                  "malloc failure"                               );
-      errint_c ( "#",  nBytes                                   );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                          );
-      chkout_c ( "gfuds_c"                                      );
+      errint_c ( naif_state, "#",  nBytes                                   );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                          );
+      chkout_c ( naif_state, "gfuds_c"                                      );
       return;
       }
 
@@ -959,7 +963,8 @@
 
    */
 
-   (void) gfuds_( ( U_fp            ) zzadfunc_c,
+   (void) gfuds_( naif_state,
+                  ( U_fp            ) zzadfunc_c,
                   ( U_fp            ) zzadqdec_c,
                   ( char          * ) relate,
                   ( doublereal    * ) &refval,
@@ -976,18 +981,18 @@
    /*
    Always free dynamically allocated memory.
    */
-   free_SpiceMemory( work );
+   free_SpiceMemory( naif_state, work );
 
    /*
    Sync the output cell.
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
      {
-     zzsynccl_c ( F2C, result );
+     zzsynccl_c ( naif_state, F2C, result );
      }
 
    ALLOC_CHECK;
 
-   chkout_c ( "gfuds_c" );
+   chkout_c ( naif_state, "gfuds_c" );
 
    } /* End gfuds_c */

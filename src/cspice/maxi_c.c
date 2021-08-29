@@ -47,7 +47,7 @@
    #include "SpiceZmc.h"
    
 
-   SpiceInt maxi_c ( SpiceInt n,  ... ) 
+   SpiceInt maxi_c ( void *naif_state, SpiceInt n,  ... ) 
 
 /*
 

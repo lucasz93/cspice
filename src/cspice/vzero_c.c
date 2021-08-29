@@ -46,7 +46,8 @@
    #undef    vzero_c
    
 
-   SpiceBoolean vzero_c ( ConstSpiceDouble v[3] ) 
+   SpiceBoolean vzero_c ( void             * naif_state,
+                          ConstSpiceDouble   v[3] ) 
 
 /*
 

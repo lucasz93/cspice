@@ -48,7 +48,8 @@
    #undef    vprjp_c
 
 
-   void vprjp_c ( ConstSpiceDouble    vin   [3],
+   void vprjp_c ( void              * naif_state,
+                  ConstSpiceDouble    vin   [3],
                   ConstSpicePlane   * plane,
                   SpiceDouble         vout  [3] ) 
 
@@ -156,7 +157,7 @@
    Participate in error tracing.
    */
 
-   if ( return_c() ) 
+   if ( return_c(naif_state) ) 
    {
       return;
    }
@@ -168,7 +169,7 @@
    Obtain a unit vector normal to the input plane, and a constant
    for the plane.
    */
-   pl2nvc_c ( plane, normal, &constant );
+   pl2nvc_c ( naif_state, plane, normal, &constant );
  
    
    /*
@@ -189,14 +190,15 @@
    Subtracting this multiple of normal from vin yields vout.
    */
  
-   vlcom_c (  1.0,
+   vlcom_c (  naif_state,
+              1.0,
               vin,
-              constant - vdot_c ( vin, normal ),
+              constant - vdot_c ( naif_state, vin, normal ),
               normal,
               vout                              );
  
  
-   chkout_c ( "vprjp_c" );
+   chkout_c ( naif_state, "vprjp_c" );
 
 } /* End vprjp_c */
 

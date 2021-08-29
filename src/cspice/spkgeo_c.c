@@ -46,7 +46,8 @@
    #include "SpiceZmc.h"
    #include "SpiceZfc.h"
 
-   void spkgeo_c ( SpiceInt          targ, 
+   void spkgeo_c ( void            * naif_state,
+                   SpiceInt          targ, 
                    SpiceDouble       et, 
                    ConstSpiceChar  * ref, 
                    SpiceInt          obs, 
@@ -279,14 +280,15 @@
    Check the input string 'ref' to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkgeo_c", ref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkgeo_c", ref );
    
 
    /*
    Call the f2c'd Fortran routine.  Use explicit type casts for every
    type defined by f2c.
    */
-   spkgeo_ (  ( integer    * )  &targ, 
+   spkgeo_ (  naif_state,
+              ( integer    * )  &targ, 
               ( doublereal * )  &et, 
               ( char       * )  ref, 
               ( integer    * )  &obs,
@@ -295,6 +297,6 @@
               ( ftnlen       )  strlen(ref)   );
 
 
-   chkout_c ( "spkgeo_c" );
+   chkout_c ( naif_state, "spkgeo_c" );
 
 } /* End spkgeo_c */

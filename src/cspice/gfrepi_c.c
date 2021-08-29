@@ -48,7 +48,8 @@
    #undef   gfrepi_c
 
 
-   void gfrepi_c ( SpiceCell        * window,
+   void gfrepi_c ( void             * naif_state,
+                   SpiceCell        * window,
                    ConstSpiceChar   * begmss,
                    ConstSpiceChar   * endmss  ) 
  
@@ -248,7 +249,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -259,24 +260,25 @@
    Check the input strings to make sure the pointers are non-null 
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gfrepi_c", begmss );
-   CHKFSTR ( CHK_STANDARD, "gfrepi_c", endmss );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfrepi_c", begmss );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfrepi_c", endmss );
 
    /*
    Make sure cell data type is d.p. 
    */
-   CELLTYPECHK ( CHK_STANDARD, "gfrepi_c", SPICE_DP, window );
+   CELLTYPECHK ( naif_state, CHK_STANDARD, "gfrepi_c", SPICE_DP, window );
 
    /*
    Initialize the window if necessary.
    */
-   CELLINIT ( window );
+   CELLINIT ( naif_state, window );
 
   
    /*
    Let the f2c'd routine do the work.
    */
-   gfrepi_  ( ( doublereal  * ) (window->base), 
+   gfrepi_  ( naif_state,
+              ( doublereal  * ) (window->base), 
               ( char        * ) begmss,
               ( char        * ) endmss,
               ( ftnlen        ) strlen(begmss),
@@ -286,6 +288,6 @@
    The cell is an input argument so no sync is necessary. 
    */
 
-   chkout_c ( "gfrepi_c" );
+   chkout_c ( naif_state, "gfrepi_c" );
 
 } /* End gfrepi_c */

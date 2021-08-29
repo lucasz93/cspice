@@ -46,7 +46,8 @@
    #undef    vhat_c
 
 
-   void vhat_c ( ConstSpiceDouble  v1  [3], 
+   void vhat_c ( void            * naif_state,
+                 ConstSpiceDouble  v1  [3], 
                  SpiceDouble       vout[3] )
 /*
 
@@ -150,7 +151,7 @@
    /*
    Obtain the magnitude of v1.
    */
-   vmag = vnorm_c(v1);
+   vmag = vnorm_c(naif_state, v1);
 
    /*
    If vmag is nonzero, then unitize.  Note that this process is

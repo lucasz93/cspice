@@ -53,7 +53,8 @@
    #undef   spkcvt_c
 
 
-   void spkcvt_c ( ConstSpiceDouble       trgsta [6],
+   void spkcvt_c ( void                 * naif_state,
+                   ConstSpiceDouble       trgsta [6],
                    SpiceDouble            trgepc,
                    ConstSpiceChar       * trgctr,
                    ConstSpiceChar       * trgref,
@@ -1096,28 +1097,29 @@
    /*
    Check the input state pointer. 
    */
-   CHKPTR ( CHK_STANDARD, "spkcvt_c", trgsta );
+   CHKPTR ( naif_state, CHK_STANDARD, "spkcvt_c", trgsta );
 
    /*
    Check the input strings. 
    */
-   CHKFSTR ( CHK_STANDARD, "spkcvt_c", trgctr );
-   CHKFSTR ( CHK_STANDARD, "spkcvt_c", trgref );
-   CHKFSTR ( CHK_STANDARD, "spkcvt_c", outref );
-   CHKFSTR ( CHK_STANDARD, "spkcvt_c", refloc );
-   CHKFSTR ( CHK_STANDARD, "spkcvt_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "spkcvt_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvt_c", trgctr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvt_c", trgref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvt_c", outref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvt_c", refloc );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvt_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvt_c", obsrvr );
 
    /*
    Check the output pointers.
    */
-   CHKPTR ( CHK_STANDARD, "spkcvt_c", state );
-   CHKPTR ( CHK_STANDARD, "spkcvt_c", lt    );
+   CHKPTR ( naif_state, CHK_STANDARD, "spkcvt_c", state );
+   CHKPTR ( naif_state, CHK_STANDARD, "spkcvt_c", lt    );
 
    /*
    Let the f2c'd routine do the work. 
    */
-   spkcvt_ ( ( doublereal * ) trgsta,
+   spkcvt_ ( naif_state,
+             ( doublereal * ) trgsta,
              ( doublereal * ) &trgepc,
              ( char       * ) trgctr,
              ( char       * ) trgref,
@@ -1135,6 +1137,6 @@
              ( ftnlen       ) strlen(abcorr),
              ( ftnlen       ) strlen(obsrvr)  );
 
-   chkout_c ( "spkcvt_c" ); 
+   chkout_c ( naif_state, "spkcvt_c" ); 
 
 } /* End spkcvt_c */

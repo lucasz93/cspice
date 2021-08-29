@@ -47,7 +47,8 @@
    #undef    psv2pl_c
 
 
-   void psv2pl_c ( ConstSpiceDouble    point[3],
+   void psv2pl_c ( void              * naif_state,
+                   ConstSpiceDouble    point[3],
                    ConstSpiceDouble    span1[3],
                    ConstSpiceDouble    span2[3],
                    SpicePlane        * plane    ) 
@@ -176,7 +177,7 @@
    This routine checks in only if an error is discovered.
    */
 
-   if ( return_c () ) 
+   if ( return_c(naif_state) ) 
    {
       return;
    }
@@ -185,14 +186,14 @@
    Find the unitized cross product of SPAN1 and SPAN2; this is our
    unit normal vector, or possibly its inverse.
    */
-   ucrss_c (  span1,  span2,  plane->normal  );
+   ucrss_c (  naif_state, span1,  span2,  plane->normal  );
 
-   if (  vzero_c ( plane->normal )  )
+   if (  vzero_c ( naif_state, plane->normal )  )
    {
-      chkin_c  ( "psv2pl_c"                       );
-      setmsg_c ( "Spanning vectors are parallel." );
-      sigerr_c ( "SPICE(DEGENERATECASE)"          );
-      chkout_c ( "psv2pl_c"                       );
+      chkin_c  ( naif_state, "psv2pl_c"                       );
+      setmsg_c ( naif_state, "Spanning vectors are parallel." );
+      sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"          );
+      chkout_c ( naif_state, "psv2pl_c"                       );
       return;
    }
  
@@ -201,7 +202,7 @@
    Find the plane constant corresponding to the unit normal
    vector we've found.
    */
-   plane->constant  =  vdot_c ( plane->normal, point );
+   plane->constant  =  vdot_c ( naif_state, plane->normal, point );
  
  
    /*
@@ -214,7 +215,7 @@
    {
       plane->constant  =   - (plane->constant);
       
-      vminus_c ( plane->normal, plane->normal );
+      vminus_c ( naif_state, plane->normal, plane->normal );
    }
 
 

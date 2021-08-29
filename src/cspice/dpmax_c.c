@@ -44,7 +44,7 @@
 
    #include "SpiceUsr.h"
 
-   SpiceDouble dpmax_c () 
+   SpiceDouble dpmax_c (void *naif_state) 
 
 /*
 
@@ -176,7 +176,7 @@
 
    if ( first )
    {
-      value = dpmax_();
+      value = dpmax_(naif_state);
       first = SPICEFALSE;
    }
    

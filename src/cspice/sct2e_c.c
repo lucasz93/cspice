@@ -47,7 +47,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void sct2e_c ( SpiceInt       sc, 
+   void sct2e_c ( void         * naif_state,
+                  SpiceInt       sc, 
                   SpiceDouble    sclkdp, 
                   SpiceDouble  * et     ) 
 /*
@@ -279,7 +280,8 @@
    /*
    Carry out the conversion.
    */
-   sct2e_ ( ( integer    * ) &sc, 
+   sct2e_ ( naif_state,
+            ( integer    * ) &sc, 
             ( doublereal * ) &sclkdp,
             ( doublereal * ) &loc_et  );
             
@@ -289,7 +291,7 @@
    *et =  loc_et;
    
 
-   chkout_c ( "sct2e_c");
+   chkout_c ( naif_state, "sct2e_c");
    
 
 } /* End sct2e_c */

@@ -48,7 +48,8 @@
    #undef    rotvec_c
 
 
-   void rotvec_c ( ConstSpiceDouble  v1    [3],
+   void rotvec_c ( void            * naif_state,
+                   ConstSpiceDouble  v1    [3],
                    SpiceDouble       angle, 
                    SpiceInt          iaxis, 
                    SpiceDouble       vout  [3] ) 

@@ -54,7 +54,8 @@
    #undef   pckw02_c
 
 
-   void pckw02_c ( SpiceInt           handle,
+   void pckw02_c ( void             * naif_state,
+                   SpiceInt           handle,
                    SpiceInt           clssid,
                    ConstSpiceChar   * frame,
                    SpiceDouble        first,
@@ -266,19 +267,20 @@
    Check the input string frame to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pckw02_c", frame );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pckw02_c", frame );
 
    /*
    Check the input string segid to make sure the pointer is
    non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pckw02_c", segid );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pckw02_c", segid );
 
 
    /*
    Call the f2c'd routine. 
    */
-   pckw02_ ( (integer     *) &handle,
+   pckw02_ ( naif_state,
+             (integer     *) &handle,
              (integer     *) &clssid,
              (char        *) frame,
              (doublereal  *) &first,
@@ -292,6 +294,6 @@
              (ftnlen       ) strlen(frame),
              (ftnlen       ) strlen(segid)  );
 
-   chkout_c ( "pckw02_c" );
+   chkout_c ( naif_state, "pckw02_c" );
 
 } /* End pckw02_c */

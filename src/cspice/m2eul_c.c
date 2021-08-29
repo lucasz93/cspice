@@ -49,7 +49,8 @@
    #undef    m2eul_c
    
 
-   void  m2eul_c ( ConstSpiceDouble    r[3][3],
+   void  m2eul_c ( void              * naif_state,
+                   ConstSpiceDouble    r[3][3],
                    SpiceInt            axis3,
                    SpiceInt            axis2,
                    SpiceInt            axis1,
@@ -481,13 +482,14 @@
    /*
    Transpose the input matrix to put it in column-major order.
    */
-   xpose_c ( r, loc_r );
+   xpose_c ( naif_state, r, loc_r );
 
 
    /*
    Call the f2c'd version of m2eul:
    */
-   m2eul_ ( (doublereal *) loc_r,
+   m2eul_ ( naif_state,
+            (doublereal *) loc_r,
             (integer    *) &axis3,
             (integer    *) &axis2,
             (integer    *) &axis1,
@@ -496,6 +498,6 @@
             (doublereal *) angle1  );
 
 
-   chkout_c ( "m2eul_c" );
+   chkout_c ( naif_state, "m2eul_c" );
 
 } /* End m2eul_c */

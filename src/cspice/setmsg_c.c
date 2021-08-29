@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void setmsg_c ( ConstSpiceChar * message )
+   void setmsg_c ( void           * naif_state, 
+                   ConstSpiceChar * message )
 
 /*
 
@@ -137,10 +138,10 @@
 
        if ( x > MAXVAL )
        {
-          setmsg_c ( "Variable x = #; maximum allowed value is #" );
+          setmsg_c ( naif_state, "Variable x = #; maximum allowed value is #" );
           errdp_c  ( "#",  x                                      );
           errdp_c  ( "#",  MAXVAL                                 );
-          sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                     ) ;
+          sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                     ) ;
           return;
        }
 
@@ -185,13 +186,14 @@
    Check the input string to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_DISCOVER, "setmsg_c", message );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "setmsg_c", message );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   setmsg_ ( ( char  * ) message,
+   setmsg_ ( naif_state,
+             ( char  * ) message,
              ( ftnlen  ) strlen(message) );
 
 

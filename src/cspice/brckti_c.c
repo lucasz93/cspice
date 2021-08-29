@@ -47,7 +47,8 @@
    #include "SpiceUsr.h"
 
 
-   SpiceInt brckti_c ( SpiceInt  number, 
+   SpiceInt brckti_c ( void    * naif_state,
+                       SpiceInt  number, 
                        SpiceInt  end1,
                        SpiceInt  end2   )
 /*

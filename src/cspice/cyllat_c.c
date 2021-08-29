@@ -45,7 +45,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZmc.h"
 
-   void cyllat_c ( SpiceDouble    r,
+   void cyllat_c ( void        *  naif_state,
+                   SpiceDouble    r,
                    SpiceDouble    lonc,
                    SpiceDouble    z,
                    SpiceDouble *  radius,

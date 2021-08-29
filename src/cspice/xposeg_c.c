@@ -48,7 +48,8 @@
    #undef    xposeg_c
 
 
-   void xposeg_c ( const void   * matrix, 
+   void xposeg_c ( void         * naif_state,
+                   const void   * matrix, 
                    SpiceInt       nrow, 
                    SpiceInt       ncol, 
                    void         * xposem ) 
@@ -212,7 +213,8 @@
    matrix.
    */
 
-   xposeg_  (  ( doublereal  * ) matrix,
+   xposeg_  (  naif_state,
+               ( doublereal  * ) matrix,
                ( integer     * ) &ncol,
                ( integer     * ) &nrow,
                ( doublereal  * ) xposem );

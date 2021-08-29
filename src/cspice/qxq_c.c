@@ -47,7 +47,8 @@
    #undef   qxq_c
 
 
-   void qxq_c ( ConstSpiceDouble    q1   [4],
+   void qxq_c ( void              * naif_state,
+                ConstSpiceDouble    q1   [4],
                 ConstSpiceDouble    q2   [4],
                 SpiceDouble         qout [4]  ) 
 
@@ -430,18 +431,19 @@
    /*
    Assign the scalar portion of the product `vout'. 
    */
-   qout[0]  =  q1[0]*q2[0] - vdot_c( q1+1, q2+1 );
+   qout[0]  =  q1[0]*q2[0] - vdot_c( naif_state, q1+1, q2+1 );
 
    /*
    Compute the cross product term of the vector component of
    vout.
    */
-   vcrss_c ( q1+1, q2+1, cross );
+   vcrss_c ( naif_state, q1+1, q2+1, cross );
 
    /*
    Assign the vector portion of the product `vout'. 
    */
-   vlcom3_c ( q1[0],   q2+1,  
+   vlcom3_c ( naif_state,
+              q1[0],   q2+1,  
               q2[0],   q1+1,  
               1.0,     cross,   qout+1 );
 

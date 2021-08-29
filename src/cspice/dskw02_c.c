@@ -53,7 +53,8 @@
    #undef dskw02_c
 
 
-   void dskw02_c ( SpiceInt             handle,
+   void dskw02_c ( void               * naif_state,
+                   SpiceInt             handle,
                    SpiceInt             center,
                    SpiceInt             surfid,
                    SpiceInt             dclass,
@@ -892,10 +893,11 @@
    Check the input frame string to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "dskw02_c", frame );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dskw02_c", frame );
 
 
-   dskw02_ ( (integer     * ) &handle,
+   dskw02_ ( naif_state,
+             (integer     * ) &handle,
              (integer     * ) &center,
              (integer     * ) &surfid,
              (integer     * ) &dclass,
@@ -919,6 +921,6 @@
              (ftnlen        ) strlen(frame)  );
 
 
-   chkout_c ( "dskw02_c" );
+   chkout_c ( naif_state, "dskw02_c" );
 
 } /* End dskw02_c */

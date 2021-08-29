@@ -49,7 +49,8 @@
    #undef    vprjpi_c
 
 
-   void vprjpi_c ( ConstSpiceDouble    vin    [3],
+   void vprjpi_c ( void              * naif_state,
+                   ConstSpiceDouble    vin    [3],
                    ConstSpicePlane   * projpl,
                    ConstSpicePlane   * invpl,
                    SpiceDouble         vout   [3],
@@ -255,7 +256,7 @@
    Participate in error tracing.
    */
    
-   if ( return_c() ) 
+   if ( return_c(naif_state) ) 
    {  
       return;
    }
@@ -266,8 +267,8 @@
    /*
    Unpack the planes.
    */
-   pl2nvc_c ( projpl, projn, &projc );
-   pl2nvc_c ( invpl,  invn,  &invc  );
+   pl2nvc_c ( naif_state, projpl, projn, &projc );
+   pl2nvc_c ( naif_state, invpl,  invn,  &invc  );
  
    /*
    We'll first discuss the computation of VOUT in the nominal case,
@@ -310,8 +311,8 @@
    Compute the numerator and denominator of the right side of (2).
    */
    
-   numer  =  invc - vdot_c ( vin,   invn );
-   denom  =         vdot_c ( projn, invn );
+   numer  =  invc - vdot_c ( naif_state, vin,   invn );
+   denom  =         vdot_c ( naif_state, projn, invn );
    
  
    /*
@@ -335,11 +336,11 @@
  
    if ( fabs(numer) < 1.0 )
    {
-      limit  =  fabs ( BOUND / dpmax_c() );
+      limit  =  fabs ( BOUND / dpmax_c(naif_state) );
    }
    else
    {
-      limit  =  fabs (  ( BOUND / dpmax_c() ) * numer  );
+      limit  =  fabs (  ( BOUND / dpmax_c(naif_state) ) * numer  );
    }
  
    *found  =  ( fabs (denom) > limit );
@@ -352,11 +353,11 @@
       */
       mult = numer / denom;
 
-      vlcom_c ( 1.0, vin, mult, projn, vout );
+      vlcom_c ( naif_state, 1.0, vin, mult, projn, vout );
    }
 
 
-   chkout_c ( "vprjpi_c" );
+   chkout_c ( naif_state, "vprjpi_c" );
 
 } /* End vprjpi_c */
 

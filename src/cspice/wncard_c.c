@@ -46,7 +46,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
    
-   SpiceInt wncard_c ( SpiceCell  * window ) 
+   SpiceInt wncard_c ( void       * naif_state,
+                       SpiceCell  * window ) 
 
 /*
 
@@ -158,14 +159,14 @@
 
    Make sure cell data type is d.p. 
    */
-   CELLTYPECHK_VAL( CHK_DISCOVER, 
+   CELLTYPECHK_VAL ( naif_state, CHK_DISCOVER, 
                     "wncard_c", SPICE_DP, window, 0 );
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT( window );
+   CELLINIT ( naif_state, window );
 
-   retval = wncard_( (doublereal * ) (window->base) );
+   retval = wncard_( naif_state, (doublereal * ) (window->base) );
 
    return( retval );
 

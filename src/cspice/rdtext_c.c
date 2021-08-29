@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void rdtext_c ( ConstSpiceChar * file,
+   void rdtext_c ( void           * naif_state,
+                   ConstSpiceChar * file,
                    SpiceInt         lenout,
                    SpiceChar      * line,
                    SpiceBoolean   * eof    )
@@ -221,12 +222,13 @@
    Check the strings: file, line to insure the pointer is
    non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "rdtext_c", file );
-   CHKOSTR ( CHK_STANDARD, "rdtext_c", line, lenout );
+   CHKFSTR ( naif_state, CHK_STANDARD, "rdtext_c", file );
+   CHKOSTR ( naif_state, CHK_STANDARD, "rdtext_c", line, lenout );
 
 
    /* Call the f2c'd routine. */
-   rdtext_ ( ( char    * ) file,
+   rdtext_ ( naif_state,
+             ( char    * ) file,
              ( char    * ) line,
              ( logical * ) &endfil,
              ( ftnlen    ) strlen(file),
@@ -245,7 +247,7 @@
 
 
    /* Checkout. */
-   chkout_c ( "rdtext_c" );
+   chkout_c ( naif_state, "rdtext_c" );
 
 
 } /* End rdtext_c */

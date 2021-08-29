@@ -50,7 +50,8 @@
    #undef    m2q_c
 
 
-   void m2q_c (  ConstSpiceDouble  r[3][3],
+   void m2q_c (  void            * naif_state,
+                 ConstSpiceDouble  r[3][3],
                  SpiceDouble       q[4]     )
 /*
 
@@ -470,17 +471,18 @@
    /*
    Transpose the input matrix to put it in column-major order.
    */
-   xpose_c ( r, loc_r );
+   xpose_c ( naif_state, r, loc_r );
 
 
    /*
    Call the f2c'd version of m2q:
    */
-   m2q_ ( (doublereal *) loc_r,
+   m2q_ ( naif_state,
+          (doublereal *) loc_r,
           (doublereal *) q      );
 
 
-   chkout_c ( "m2q_c" );
+   chkout_c ( naif_state, "m2q_c" );
 
 
 } /* End m2q_c */

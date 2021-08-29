@@ -48,7 +48,8 @@
    #undef    ekacli_c
    
 
-   void ekacli_c ( SpiceInt                handle,
+   void ekacli_c ( void                  * naif_state,
+                   SpiceInt                handle,
                    SpiceInt                segno,
                    ConstSpiceChar        * column,
                    ConstSpiceInt         * ivals,
@@ -486,14 +487,14 @@
    Check the column name to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekacli_c", column );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekacli_c", column );
 
 
    /*
    Get the row count for this segment.
    */ 
    
-   ekssum_c ( handle, segno, &summary );
+   ekssum_c ( naif_state, handle, segno, &summary );
       
    n = summary.nrows;
 
@@ -507,10 +508,10 @@
 
    if ( !logicalFlags )
    {
-      setmsg_c ( "Failure on malloc call to create null flag array "
+      setmsg_c ( naif_state, "Failure on malloc call to create null flag array "
                  "for column values."                              );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                             );
-      chkout_c ( "ekacli_c"                                        );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                             );
+      chkout_c ( naif_state, "ekacli_c"                                        );
       return;
    }
       
@@ -533,7 +534,8 @@
    /*
    Call the f2c'd routine.
    */ 
-   ekacli_ ( ( integer * ) &handle,
+   ekacli_ ( naif_state,
+             ( integer * ) &handle,
              ( integer * ) &fSegno,
              ( char    * ) column,
              ( integer * ) ivals,
@@ -550,6 +552,6 @@
    free ( logicalFlags );
 
 
-   chkout_c ( "ekacli_c" );
+   chkout_c ( naif_state, "ekacli_c" );
 
 } /* End ekacli_c */

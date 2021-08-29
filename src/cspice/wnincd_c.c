@@ -46,7 +46,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   SpiceBoolean wnincd_c ( SpiceDouble     left,
+   SpiceBoolean wnincd_c ( void          * naif_state,
+                           SpiceDouble     left,
                            SpiceDouble     right,
                            SpiceCell     * window ) 
 
@@ -153,20 +154,21 @@
 
    Make sure cell data type is d.p. 
    */
-   CELLTYPECHK_VAL ( CHK_DISCOVER, 
+   CELLTYPECHK_VAL ( naif_state, CHK_DISCOVER, 
                      "wnincd_c",  SPICE_DP,  window,  SPICEFALSE );
 
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( window );
+   CELLINIT ( naif_state, window );
    
 
    /*
    Let the f2c'd routine do the work. 
    */
-   return ( (SpiceBoolean) wnincd_ ( (doublereal *) &left,
+   return ( (SpiceBoolean) wnincd_ ( naif_state,
+                                     (doublereal *) &left,
                                      (doublereal *) &right, 
                                      (doublereal *) (window->base) )  );
 

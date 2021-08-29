@@ -64,7 +64,8 @@
    #include "SpiceZmc.h"
    #undef gffove_c
 
-   void gffove_c ( ConstSpiceChar     * inst,
+   void gffove_c ( void               * naif_state,
+                   ConstSpiceChar     * inst,
                    ConstSpiceChar     * tshape,
                    ConstSpiceDouble     raydir [3],
                    ConstSpiceChar     * target,
@@ -72,27 +73,31 @@
                    ConstSpiceChar     * abcorr,
                    ConstSpiceChar     * obsrvr,
                    SpiceDouble          tol,
-                   void             ( * udstep ) ( SpiceDouble       et,
+                   void             ( * udstep ) ( void            * naif_state,
+                                                   SpiceDouble       et,
                                                    SpiceDouble     * step ),
 
-                   void             ( * udrefn ) ( SpiceDouble       t1,
+                   void             ( * udrefn ) ( void            * naif_state,
+                                                   SpiceDouble       t1,
                                                    SpiceDouble       t2,
                                                    SpiceBoolean      s1,
                                                    SpiceBoolean      s2,
                                                    SpiceDouble     * t    ),
                    SpiceBoolean         rpt,  
 
-                   void             ( * udrepi ) ( SpiceCell       * cnfine,
+                   void             ( * udrepi ) ( void            * naif_state,
+                                                   SpiceCell       * cnfine,
                                                    ConstSpiceChar  * srcpre,
                                                    ConstSpiceChar  * srcsuf ),
 
-                   void             ( * udrepu ) ( SpiceDouble       ivbeg,
+                   void             ( * udrepu ) ( void            * naif_state,
+                                                   SpiceDouble       ivbeg,
                                                    SpiceDouble       ivend,
                                                    SpiceDouble       et      ),
 
-                   void             ( * udrepf ) ( void ),
+                   void             ( * udrepf ) ( void            * naif_state ),
                    SpiceBoolean         bail,      
-                   SpiceBoolean     ( * udbail ) ( void ),
+                   SpiceBoolean     ( * udbail ) ( void            * naif_state ),
                    SpiceCell          * cnfine,
                    SpiceCell          * result                                )
 
@@ -1487,20 +1492,20 @@
    /*
    Make sure cell data types are d.p. 
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "gffove_c", SPICE_DP, cnfine, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "gffove_c", SPICE_DP, cnfine, result );
 
    /*
    Initialize the input cells if necessary. 
    */
-   CELLINIT2 ( cnfine, result );
+   CELLINIT2 ( naif_state, cnfine, result );
 
    /*
    Make sure the frame name, target, and observer pointers
    are non-null.
    */
-   CHKPTR ( CHK_STANDARD, "gffove_c", tframe );
-   CHKPTR ( CHK_STANDARD, "gffove_c", target );
-   CHKPTR ( CHK_STANDARD, "gffove_c", obsrvr );
+   CHKPTR ( naif_state, CHK_STANDARD, "gffove_c", tframe );
+   CHKPTR ( naif_state, CHK_STANDARD, "gffove_c", target );
+   CHKPTR ( naif_state, CHK_STANDARD, "gffove_c", obsrvr );
 
    /*
    The input frame name, observer name, and target name are special
@@ -1541,9 +1546,9 @@
    Check the other input strings to make sure each pointer is non-null 
    and each string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gffove_c", inst   );
-   CHKFSTR ( CHK_STANDARD, "gffove_c", tshape );
-   CHKFSTR ( CHK_STANDARD, "gffove_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gffove_c", inst   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gffove_c", tshape );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gffove_c", abcorr );
 
    rep       = (logical) rpt;
    interrupt = (logical) bail;
@@ -1579,17 +1584,18 @@
 
          if ( defSigHandler == SIG_ERR )
          {
-            setmsg_c ( "Attempt to establish the CSPICE routine "
+            setmsg_c ( naif_state, "Attempt to establish the CSPICE routine "
                        "gfinth_c as the handler for the interrupt "
                        "signal SIGINT failed."                     );
-            sigerr_c ( "SPICE(SIGNALFAILED)"                       );
-            chkout_c ( "gffove_c"                                  );
+            sigerr_c ( naif_state, "SPICE(SIGNALFAILED)"                       );
+            chkout_c ( naif_state, "gffove_c"                                  );
             return;
          }
       }
    }
 
-   gffove_ ( ( char       * ) inst, 
+   gffove_ ( naif_state,
+             ( char       * ) inst, 
              ( char       * ) tshape,
              ( doublereal * ) raydir, 
              ( char       * ) target, 
@@ -1623,10 +1629,10 @@
 
       if ( sigPtr == SIG_ERR )
       {
-         setmsg_c ( "Attempt to restore the previous handler "
+         setmsg_c ( naif_state, "Attempt to restore the previous handler "
                     "for the interrupt signal SIGINT failed."  );
-         sigerr_c ( "SPICE(SIGNALFAILED)"                      );
-         chkout_c ( "gffove_c"                                 );   
+         sigerr_c ( naif_state, "SPICE(SIGNALFAILED)"                      );
+         chkout_c ( naif_state, "gffove_c"                                 );   
          return;
       }
    }
@@ -1634,11 +1640,11 @@
    /*
    Sync the output result cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, result );
+      zzsynccl_c ( naif_state, F2C, result );
    }
 
-   chkout_c ( "gffove_c" );
+   chkout_c ( naif_state, "gffove_c" );
 
 } /* End gffove_c */

@@ -50,7 +50,8 @@
    #undef    pdpool_c
 
  
-   void pdpool_c ( ConstSpiceChar      * name,
+   void pdpool_c ( void                * naif_state,
+                   ConstSpiceChar      * name,
                    SpiceInt              n,
                    ConstSpiceDouble    * dvals ) 
 
@@ -258,17 +259,18 @@
    Check the input kernel variable name to make sure the pointer is
    non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pdpool_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pdpool_c", name );
 
    /*
    Call the f2c'd routine.
    */
-   pdpool_ ( ( char        * ) name,
+   pdpool_ ( naif_state,
+             ( char        * ) name,
              ( integer     * ) &n,
              ( doublereal  * ) dvals,
              ( ftnlen        ) strlen(name) );
 
 
-   chkout_c ( "pdpool_c" );
+   chkout_c ( naif_state, "pdpool_c" );
 
 } /* End pdpool_c */

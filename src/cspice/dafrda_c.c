@@ -49,7 +49,8 @@
    #include "SpiceZfc.h"
 
  
-   void dafrda_c ( SpiceInt       handle, 
+   void dafrda_c ( void         * naif_state,
+                   SpiceInt       handle, 
                    SpiceInt       begin,
                    SpiceInt       end,
                    SpiceDouble  * data )
@@ -200,12 +201,13 @@
    */
    chkin_c ( naif_state, "dafrda_c" );
    
-   dafrda_ ( ( integer    * ) &handle,
+   dafrda_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) &begin,
              ( integer    * ) &end,
              ( doublereal * ) data );
              
-   chkout_c ( "dafrda_c" );
+   chkout_c ( naif_state, "dafrda_c" );
    
 } /* End of dafrda_c */
  

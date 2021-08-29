@@ -4,6 +4,7 @@
  */
 
 #include "f2c.h"
+#undef L
 #ifndef NO_OVERWRITE
 #include "stdio.h"
 #undef abs
@@ -22,9 +23,9 @@
 
  VOID
 #ifdef KR_headers
-s_cat(lp, rpp, rnp, np, ll) char *lp, *rpp[]; ftnlen rnp[], *np, ll;
+s_cat(f2c, lp, rpp, rnp, np, ll) f2c_state_t *f2c; char *lp, *rpp[]; ftnlen rnp[], *np, ll;
 #else
-s_cat(char *lp, char *rpp[], ftnlen rnp[], ftnlen *np, ftnlen ll)
+s_cat(f2c_state_t *f2c, char *lp, char *rpp[], ftnlen rnp[], ftnlen *np, ftnlen ll)
 #endif
 {
 	ftnlen i, nc;

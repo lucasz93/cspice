@@ -45,7 +45,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   SpiceBoolean failed_c ()
+   SpiceBoolean failed_c (void *naif_state)
 
 /*
 
@@ -151,7 +151,7 @@
 
           rdtext_c ( "SPUD.DAT", line, LENOUT, &eof );
 
-          if ( failed_c() )
+          if ( failed_c(naif_state) )
              {
 
              /. An error occurred during the read. ./
@@ -190,7 +190,7 @@
          while (  !( eof ) && ( lcount <= 5000 )  );
 
 
-         if ( failed_c() )
+         if ( failed_c(naif_state) )
              {
 
              /. An error occurred during the read. ./
@@ -241,7 +241,7 @@
    to say.
    */
 
-   if ( (SpiceBoolean) failed_() )
+   if ( (SpiceBoolean) failed_(naif_state) )
      {
      return SPICETRUE;
      }

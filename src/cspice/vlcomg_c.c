@@ -45,7 +45,8 @@
    #include "SpiceUsr.h"
    #undef   vlcomg_c
 
-   void vlcomg_c ( SpiceInt            n,
+   void vlcomg_c ( void             *  naif_state,
+                   SpiceInt            n,
                    SpiceDouble         a,
                    ConstSpiceDouble *  v1,
                    SpiceDouble         b,

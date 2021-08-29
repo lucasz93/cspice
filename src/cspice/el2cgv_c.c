@@ -49,7 +49,8 @@
    #undef    el2cgv_c
    
 
-   void el2cgv_c ( ConstSpiceEllipse   * ellipse,
+   void el2cgv_c ( void                * naif_state,
+                   ConstSpiceEllipse   * ellipse,
                    SpiceDouble           center[3],
                    SpiceDouble           smajor[3],
                    SpiceDouble           sminor[3]  ) 

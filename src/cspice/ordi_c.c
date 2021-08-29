@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
 
 
-   SpiceInt ordi_c ( SpiceInt        item,
+   SpiceInt ordi_c ( void          * naif_state,
+                     SpiceInt        item,
                      SpiceCell     * set   )
 
 /*
@@ -182,12 +183,12 @@
 
                if (  ordi_c(iElt, &set)  !=  expected[i]  )
                {
-                  setmsg_c ( "Position of # was expected to be # "
+                  setmsg_c ( naif_state, "Position of # was expected to be # "
                              "but was actually #."                 );
-                  errint_c ( "#",  iElt                            );
-                  errint_c ( "#",  expected[i]                     );
-                  errint_c ( "#",  ordi_c(iElt,&set)               );
-                  sigerr_c ( "INVALID LOCATION"                    );
+                  errint_c ( naif_state, "#",  iElt                            );
+                  errint_c ( naif_state, "#",  expected[i]                     );
+                  errint_c ( naif_state, "#",  ordi_c(iElt,&set)               );
+                  sigerr_c ( naif_state, "INVALID LOCATION"                    );
                }
             }
 
@@ -230,23 +231,23 @@
 
    Make sure we're working with an integer cell. 
    */
-   CELLTYPECHK_VAL ( CHK_DISCOVER, "ordi_c", SPICE_INT, set, -1 );
+   CELLTYPECHK_VAL ( naif_state, CHK_DISCOVER, "ordi_c", SPICE_INT, set, -1 );
 
    /*
    Initialize the set if necessary. 
    */
-   CELLINIT ( set );
+   CELLINIT ( naif_state, set );
 
    /*
    Make sure the cell is really a set. 
    */
-   CELLISSETCHK_VAL ( CHK_DISCOVER, "ordi_c", set, -1 );
+   CELLISSETCHK_VAL ( naif_state, CHK_DISCOVER, "ordi_c", set, -1 );
 
    /*
    The routine bsrchi_c returns the index of the item in the set,
    or -1 if the item is not present.
    */
-   return (  bsrchi_c ( item,  set->card,  set->data ) );
+   return (  bsrchi_c ( naif_state, item,  set->card,  set->data ) );
 
 
 } /* End ordi_c */

@@ -48,7 +48,8 @@
    #include "SpiceZim.h"
    #undef   ekbseg_c
 
-   void ekbseg_c ( SpiceInt           handle,
+   void ekbseg_c ( void             * naif_state,
+                   SpiceInt           handle,
                    ConstSpiceChar   * tabnam,
                    SpiceInt           ncols,
                    SpiceInt           cnmlen,
@@ -477,27 +478,27 @@
    Check the table name to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekbseg_c", tabnam );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekbseg_c", tabnam );
 
    /*
    Check the column name array to make sure the pointer is non-null 
    and the string length is non-zero.  Note:  this check is normally
    done for output strings:  CHKOSTR is the macro that does the job.
    */
-   CHKOSTR ( CHK_STANDARD, "ekbseg_c", cnames, cnmlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ekbseg_c", cnames, cnmlen );
 
    /*
    Check the declaration array to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKOSTR ( CHK_STANDARD, "ekbseg_c", decls, declen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ekbseg_c", decls, declen );
 
    C2F_MapStrArr ( "ekbseg_c", 
                    ncols, cnmlen, cnames, &fCnameLen, &fCnameArr );
    
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "ekbseg_c" );
+      chkout_c ( naif_state, "ekbseg_c" );
       return;
    }
 
@@ -505,11 +506,11 @@
    C2F_MapStrArr ( "ekbseg_c", 
                    ncols, declen, decls, &fCdeclLen, &fCdeclArr );
    
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       free ( fCnameArr );
       
-      chkout_c ( "ekbseg_c" );
+      chkout_c ( naif_state, "ekbseg_c" );
       return;
    }
    
@@ -518,7 +519,8 @@
    Call the f2c'd Fortran routine.  Use explicit type casts for every
    type defined by f2c.
    */
-   ekbseg_ ( ( integer  * ) &handle,
+   ekbseg_ ( naif_state,
+             ( integer  * ) &handle,
              ( char     * ) tabnam,
              ( integer  * ) &ncols,
              ( char     * ) fCnameArr,
@@ -541,7 +543,7 @@
    (*segno)--;
    
    
-   chkout_c ( "ekbseg_c" );
+   chkout_c ( naif_state, "ekbseg_c" );
 
 } /* End ekbseg_c */
 

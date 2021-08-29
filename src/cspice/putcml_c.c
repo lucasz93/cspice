@@ -43,7 +43,8 @@
 
    #include "SpiceUsr.h"
 
-   void putcml_c ( SpiceInt      argc,
+   void putcml_c ( void        * naif_state,
+                   SpiceInt      argc,
                    SpiceChar  ** argv )
 
 /*
@@ -169,9 +170,9 @@
 
    chkin_c ( naif_state,"putcml_c" );
 
-   zzgetcml_c ( &argc, &argv, SPICETRUE );
+   zzgetcml_c ( naif_state, &argc, &argv, SPICETRUE );
 
-   chkout_c( "putcml_c" );   
+   chkout_c( naif_state, "putcml_c" );   
    
 }
 

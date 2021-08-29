@@ -47,7 +47,8 @@
    #include "SpiceZim.h"
    #undef   vrel_c
 
-   SpiceDouble vrel_c ( ConstSpiceDouble v1[3],
+   SpiceDouble vrel_c ( void           * naif_state,
+                        ConstSpiceDouble v1[3],
                         ConstSpiceDouble v2[3]  )
 
 /*
@@ -211,7 +212,7 @@
 
    /* If the vectors are both zero or equivalent, return 0. */
 
-   nunorm = vdist_c ( v1, v2 );
+   nunorm = vdist_c ( naif_state, v1, v2 );
 
    if ( nunorm == 0. )
       {
@@ -219,7 +220,7 @@
       }
    else
       {
-      denorm = MaxVal( vnorm_c( v1 ), vnorm_c( v2 ) );
+      denorm = MaxVal( vnorm_c( naif_state, v1 ), vnorm_c( naif_state, v2 ) );
       return ( nunorm/denorm );
       }
 

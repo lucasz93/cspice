@@ -46,7 +46,7 @@
    #include "SpiceZst.h"
 
 
-   void trcoff_c ( void ) 
+   void trcoff_c ( void *naif_state ) 
 
 /*
 
@@ -138,7 +138,7 @@
    /*
    Call the f2c'd routine
    */
-   trcoff_();
+   trcoff_(naif_state);
 
 
 

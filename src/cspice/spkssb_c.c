@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void spkssb_c ( SpiceInt           targ,
+   void spkssb_c ( void             * naif_state,
+                   SpiceInt           targ,
                    SpiceDouble        et,
                    ConstSpiceChar   * ref,
                    SpiceDouble        starg[6] ) 
@@ -198,16 +199,17 @@
    Check the input string 'ref' to make sure the pointer
    is non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkssb_c", ref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkssb_c", ref );
 
 
-   spkssb_ (  ( integer    * ) &targ,
+   spkssb_ (  naif_state,
+              ( integer    * ) &targ,
               ( doublereal * ) &et,
               ( char       * ) ref,
               ( doublereal * ) starg,
               ( ftnlen       ) strlen(ref)  );
 
 
-   chkout_c ( "spkssb_c" );
+   chkout_c ( naif_state, "spkssb_c" );
 
 } /* End spkssb_c */

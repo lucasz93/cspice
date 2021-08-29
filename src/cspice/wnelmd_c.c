@@ -46,7 +46,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   SpiceBoolean wnelmd_c ( SpiceDouble    point,
+   SpiceBoolean wnelmd_c ( void         * naif_state,
+                           SpiceDouble    point,
                            SpiceCell    * window ) 
 
 /*
@@ -153,18 +154,19 @@
 
    Make sure cell data type is d.p. 
    */
-   CELLTYPECHK_VAL ( CHK_DISCOVER, 
+   CELLTYPECHK_VAL ( naif_state, CHK_DISCOVER, 
                      "wnelmd_c", SPICE_DP, window, SPICEFALSE );
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( window );
+   CELLINIT ( naif_state, window );
    
    /*
    Let the f2c'd routine do the work. 
    */
-   retval = wnelmd_ ( (doublereal * ) &point,
+   retval = wnelmd_ ( naif_state,
+                      (doublereal * ) &point,
                       (doublereal * ) (window->base) );
 
    return   ( retval );

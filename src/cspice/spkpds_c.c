@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void spkpds_c ( SpiceInt           body,  
+   void spkpds_c ( void             * naif_state,
+                   SpiceInt           body,  
                    SpiceInt           center,
                    ConstSpiceChar   * frame,
                    SpiceInt           type,
@@ -181,12 +182,13 @@
    Check the input frame string to make sure the pointer
    is non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkpds_c", frame );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkpds_c", frame );
 
    /*
    Call the f2c'd routine.
    */
-   spkpds_ (  ( integer     * ) &body,
+   spkpds_ (  naif_state,
+              ( integer     * ) &body,
               ( integer     * ) &center, 
               ( char        * ) frame,
               ( integer     * ) &type,
@@ -196,6 +198,6 @@
               ( ftnlen        ) strlen(frame)  );
    
 
-   chkout_c ( "spkpds_c" );
+   chkout_c ( naif_state, "spkpds_c" );
 
 } /* End spkpds_c */

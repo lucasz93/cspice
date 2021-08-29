@@ -46,7 +46,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void erract_c ( ConstSpiceChar * op,
+   void erract_c ( void           * naif_state,
+                   ConstSpiceChar * op,
                    SpiceInt         lenout,
                    SpiceChar      * action )
 
@@ -358,7 +359,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() ) 
+   if ( return_c(naif_state) ) 
    {
       return;
    }
@@ -370,28 +371,29 @@
    Check the input string op to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "erract_c", op );
+   CHKFSTR ( naif_state, CHK_STANDARD, "erract_c", op );
 
 
-   if( eqstr_c ( op, "SET") )
+   if( eqstr_c ( naif_state, op, "SET") )
    {
 
       /*
       Operation is SET. "action" will be an input string.  Check
       action as well.
       */
-      CHKFSTR ( CHK_STANDARD, "erract_c", action );
+      CHKFSTR ( naif_state, CHK_STANDARD, "erract_c", action );
 
       /*
       Call the f2c'd Fortran routine.
       */
-      erract_ ( ( char * ) op,
+      erract_ ( naif_state,
+                ( char * ) op,
                 ( char * ) action,
                 ( ftnlen ) strlen(op),
                 ( ftnlen ) strlen(action) );
    }
 
-   else if ( eqstr_c (op, "GET" ) )
+   else if ( eqstr_c (naif_state, op, "GET" ) )
    {
 
       /*
@@ -399,13 +401,14 @@
       the output string has at least enough room for one output
       character and a null terminator.  Also check for a null pointer.
       */
-      CHKOSTR ( CHK_STANDARD, "erract_c", action, lenout );
+      CHKOSTR ( naif_state, CHK_STANDARD, "erract_c", action, lenout );
 
 
       /*
       Call the f2c'd Fortran routine.
       */
-      erract_ ( ( char * ) op,
+      erract_ ( naif_state,
+                ( char * ) op,
                 ( char * ) action,
                 ( ftnlen ) strlen(op),
                 ( ftnlen ) lenout-1    );
@@ -416,16 +419,16 @@
 
    else
    {
-      setmsg_c ( "Input argument op had value: # "
+      setmsg_c ( naif_state, "Input argument op had value: # "
                  "Valid choices are GET or SET."   );   
-      errch_c  ( "#",  op                          );
-      sigerr_c ( "SPICE(INVALIDOPERATION)"         );
-      chkout_c ( "erract_c"                        );
+      errch_c  ( naif_state, "#",  op                          );
+      sigerr_c ( naif_state, "SPICE(INVALIDOPERATION)"         );
+      chkout_c ( naif_state, "erract_c"                        );
       return;
    }
 
 
-   chkout_c ( "erract_c" );
+   chkout_c ( naif_state, "erract_c" );
 
 } /* End erract_c */
 

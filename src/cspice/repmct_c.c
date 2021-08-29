@@ -50,7 +50,8 @@
    #include "SpiceZmc.h"
 
 
-   void repmct_c ( ConstSpiceChar   * in,
+   void repmct_c ( void             * naif_state,
+                   ConstSpiceChar   * in,
                    ConstSpiceChar   * marker,
                    SpiceInt           value,
                    SpiceChar          repcase,
@@ -300,9 +301,9 @@
 
    Make sure no string argument pointers are null.
    */
-   CHKPTR( CHK_DISCOVER, "repmct_c", in     );
-   CHKPTR( CHK_DISCOVER, "repmct_c", marker );
-   CHKPTR( CHK_DISCOVER, "repmct_c", out    );
+   CHKPTR( naif_state, CHK_DISCOVER, "repmct_c", in     );
+   CHKPTR( naif_state, CHK_DISCOVER, "repmct_c", marker );
+   CHKPTR( naif_state, CHK_DISCOVER, "repmct_c", out    );
 
 
    /*
@@ -311,12 +312,12 @@
    */
    if ( lenout < 1 )
    {
-      chkin_c  ( "repmct_c"                                   );
-      setmsg_c ( "String length lenout must be >= 1; actual "
+      chkin_c  ( naif_state, "repmct_c"                                   );
+      setmsg_c ( naif_state, "String length lenout must be >= 1; actual "
                  "value = #."                                 );
-      errint_c ( "#", lenout                                  );
-      sigerr_c ( "SPICE(STRINGTOOSHORT)"                      );
-      chkout_c ( "repmct_c"                                   );
+      errint_c ( naif_state, "#", lenout                                  );
+      sigerr_c ( naif_state, "SPICE(STRINGTOOSHORT)"                      );
+      chkout_c ( naif_state, "repmct_c"                                   );
       return;
    }
 
@@ -359,7 +360,8 @@
    /*
    Simply call the f2c'd routine. 
    */
-   repmct_ ( ( char     * ) in,
+   repmct_ ( naif_state,
+             ( char     * ) in,
              ( char     * ) markPtr,
              ( integer  * ) &value,
              ( char     * ) &repcase,

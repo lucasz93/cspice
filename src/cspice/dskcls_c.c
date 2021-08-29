@@ -49,7 +49,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void dskcls_c ( SpiceInt      handle,
+   void dskcls_c ( void        * naif_state,
+                   SpiceInt      handle,
                    SpiceBoolean  optmiz ) 
 
 /*
@@ -165,9 +166,10 @@
 
    optflg = (logical) optmiz;
 
-   dskcls_ ( (integer  *) &handle,
+   dskcls_ ( naif_state,
+             (integer  *) &handle,
              (logical  *) &optflg  );
 
-   chkout_c ( "dskcls_c" );
+   chkout_c ( naif_state, "dskcls_c" );
 
 } /* End dskcls_c */

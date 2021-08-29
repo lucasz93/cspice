@@ -46,7 +46,7 @@
    #include "SpiceZmc.h"
 
 
-   SpiceInt size_c ( SpiceCell  * cell )
+   SpiceInt size_c ( void *naif_state, SpiceCell  * cell )
 
 
 /*
@@ -165,7 +165,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return ( cell->size );
    }
@@ -175,7 +175,7 @@
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( cell );
+   CELLINIT ( naif_state, cell );
 
 
    /*
@@ -183,40 +183,40 @@
    */
    if (  cell->size < 0  )
    {  
-      setmsg_c ( "Invalid cell size.  The size was #." );
-      errint_c ( "#", cell->size                       );
-      sigerr_c ( "SPICE(INVALIDSIZE)"                  );
-      chkout_c ( "size_c"                              );
+      setmsg_c ( naif_state, "Invalid cell size.  The size was #." );
+      errint_c ( naif_state, "#", cell->size                       );
+      sigerr_c ( naif_state, "SPICE(INVALIDSIZE)"                  );
+      chkout_c ( naif_state, "size_c"                              );
 
       return   ( cell->size ); 
    }
 
    else if ( cell->card < 0 )
    { 
-      setmsg_c ( "Invalid cell cardinality.  The "  
+      setmsg_c ( naif_state, "Invalid cell cardinality.  The "  
                  "cardinality was #."                  );
-      errint_c ( "#", cell->card                       );
-      sigerr_c ( "SPICE(INVALIDCARDINALITY)"           );
-      chkout_c ( "size_c"                              );
+      errint_c ( naif_state, "#", cell->card                       );
+      sigerr_c ( naif_state, "SPICE(INVALIDCARDINALITY)"           );
+      chkout_c ( naif_state, "size_c"                              );
 
       return   ( cell->size ); 
    }
 
    else if ( cell->card  >  cell->size )
    { 
-      setmsg_c ( "Invalid cell cardinality; cardinality exceeds "
+      setmsg_c ( naif_state, "Invalid cell cardinality; cardinality exceeds "
                  " cell size.  The cardinality was #.  The size "
                  " was #."                                        );
-      errint_c ( "#", cell->card                                  );
-      errint_c ( "#", cell->size                                  );
-      sigerr_c ( "SPICE(INVALIDCARDINALITY)"                      );
-      chkout_c ( "size_c"                                         );
+      errint_c ( naif_state, "#", cell->card                                  );
+      errint_c ( naif_state, "#", cell->size                                  );
+      sigerr_c ( naif_state, "SPICE(INVALIDCARDINALITY)"                      );
+      chkout_c ( naif_state, "size_c"                                         );
 
       return   ( cell->size ); 
    }
 
 
-   chkout_c ( "size_c" );
+   chkout_c ( naif_state, "size_c" );
 
    return ( cell->size ); 
 

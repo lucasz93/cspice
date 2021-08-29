@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
 
 
-   void dafopw_c ( ConstSpiceChar  * fname,
+   void dafopw_c ( void            * naif_state,
+                   ConstSpiceChar  * fname,
                    SpiceInt        * handle ) 
 
 /*
@@ -281,7 +282,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return; 
    }
@@ -291,17 +292,18 @@
    Check the file name to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "dafopw_c", fname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dafopw_c", fname );
 
    /*
    Let the f2c'd routine do the work.
    */    
-   dafopw_ ( ( char     * ) fname,
+   dafopw_ ( naif_state,
+             ( char     * ) fname,
              ( integer  * ) handle,
              ( ftnlen     ) strlen(fname) );
 
 
-   chkout_c ( "dafopw_c" );
+   chkout_c ( naif_state, "dafopw_c" );
 
 } /* End dafopw_c */
 

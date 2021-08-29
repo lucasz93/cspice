@@ -46,7 +46,8 @@
    #include "SpiceUsr.h"
    #undef   dvdot_c
 
-   SpiceDouble dvdot_c ( ConstSpiceDouble s1[6],
+   SpiceDouble dvdot_c ( void           * naif_state,
+                         ConstSpiceDouble s1[6],
                          ConstSpiceDouble s2[6] )
 
 /*

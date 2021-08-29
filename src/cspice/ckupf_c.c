@@ -46,7 +46,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void ckupf_c ( SpiceInt handle )
+   void ckupf_c ( void *naif_state, SpiceInt handle )
 
 /*
 
@@ -138,9 +138,9 @@
    /*
    Call the f2c'd Fortran routine.
    */
-   ckupf_ ( &handle );
+   ckupf_ ( naif_state, &handle );
 
 
-   chkout_c ( "ckupf_c");
+   chkout_c ( naif_state, "ckupf_c");
 
 } /* End ckupf_c */

@@ -47,7 +47,7 @@
    #include "SpiceZfc.h"
    #undef dvnorm_c
 
-   SpiceDouble       dvnorm_c ( ConstSpiceDouble state[6] )
+   SpiceDouble       dvnorm_c ( void *naif_state, ConstSpiceDouble state[6] )
 
 /*
 
@@ -217,9 +217,9 @@
    /*
    Call the f2c'd Fortran routine.
    */
-   retval = (SpiceDouble) dvnorm_( (doublereal*) state);
+   retval = (SpiceDouble) dvnorm_( naif_state, (doublereal*) state);
 
-   chkout_c ( "dvnorm_c" );
+   chkout_c ( naif_state, "dvnorm_c" );
 
    return( retval );
 

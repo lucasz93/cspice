@@ -46,7 +46,7 @@
    #include "SpiceZmc.h"
 
 
-   void furnsh_c ( ConstSpiceChar  * file ) 
+   void furnsh_c ( void *naif_state, ConstSpiceChar  * file ) 
 
 /*
 
@@ -415,16 +415,17 @@
    Check the input filename to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "furnsh_c", file );
+   CHKFSTR ( naif_state, CHK_STANDARD, "furnsh_c", file );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   furnsh_ ( ( char   * ) file, 
+   furnsh_ ( naif_state,
+             ( char   * ) file, 
              ( ftnlen   ) strlen(file) );
 
 
-   chkout_c ( "furnsh_c" );
+   chkout_c ( naif_state, "furnsh_c" );
 
 } /* End furnsh_c */

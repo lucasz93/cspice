@@ -50,7 +50,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void spkezp_c ( SpiceInt            targ,
+   void spkezp_c ( void              * naif_state,
+                   SpiceInt            targ,
                    SpiceDouble         et,
                    ConstSpiceChar    * ref,
                    ConstSpiceChar    * abcorr,
@@ -797,15 +798,16 @@
    Check the input strings to make sure the pointers are non-null 
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkezp_c", ref    );
-   CHKFSTR ( CHK_STANDARD, "spkezp_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkezp_c", ref    );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkezp_c", abcorr );
 
 
    /*
    Call the f2c'd Fortran routine.  Use explicit type casts for every
    type defined by f2c.
    */
-   spkezp_ ( ( integer    * )  &targ, 
+   spkezp_ ( naif_state,
+             ( integer    * )  &targ, 
              ( doublereal * )  &et, 
              ( char       * )  ref, 
              ( char       * )  abcorr, 
@@ -816,7 +818,7 @@
              ( ftnlen       )  strlen(abcorr) );
 
 
-   chkout_c ( "spkezp_c" );
+   chkout_c ( naif_state, "spkezp_c" );
 
 } /* End spkezp_c */
 

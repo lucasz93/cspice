@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void lparsm_c ( ConstSpiceChar   * list,
+   void lparsm_c ( void             * naif_state,
+                   ConstSpiceChar   * list,
                    ConstSpiceChar   * delims,
                    SpiceInt           nmax,
                    SpiceInt           lenout,
@@ -216,7 +217,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -229,7 +230,7 @@
    if ( nmax < 1 )
    {
       *n = 0;
-      chkout_c ( "lparsm_c" );
+      chkout_c ( naif_state, "lparsm_c" );
       return;
    }  
    
@@ -241,7 +242,7 @@
    because there's a special case that results in returning before
    the input checks are performed.
    */
-   CHKOSTR ( CHK_STANDARD, "lparsm_c", items, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "lparsm_c", items, lenout );
   
   
    /*
@@ -250,14 +251,14 @@
    
    We must know that list is not a null pointer first.
    */
-   CHKPTR ( CHK_STANDARD, "lparsm_c", list  );
+   CHKPTR ( naif_state, CHK_STANDARD, "lparsm_c", list  );
    
    if ( list[0] == NULLCHAR ) 
    {
       *n                   =  1;
       *(SpiceChar *)items  =  NULLCHAR;
       
-      chkout_c ( "lparsm_c" );
+      chkout_c ( naif_state, "lparsm_c" );
       return;
    }
    
@@ -266,14 +267,15 @@
    Check the input delimiter string to make sure the pointers are 
    non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "lparsm_c", list   );
-   CHKFSTR ( CHK_STANDARD, "lparsm_c", delims );
+   CHKFSTR ( naif_state, CHK_STANDARD, "lparsm_c", list   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "lparsm_c", delims );
    
    
    /*
    Call the f2c'd routine.
    */
-   lparsm_ ( ( char       * ) list,
+   lparsm_ ( naif_state,
+             ( char       * ) list,
              ( char       * ) delims,
              ( integer    * ) &nmax,
              ( integer    * ) n,
@@ -290,6 +292,6 @@
    F2C_ConvertTrStrArr ( *n, lenout, (char *) items );
 
 
-   chkout_c ( "lparsm_c" );
+   chkout_c ( naif_state, "lparsm_c" );
 
 } /* End lparsm_c */

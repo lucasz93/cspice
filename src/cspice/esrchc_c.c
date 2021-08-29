@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
    #undef    esrchc_c
 
-   SpiceInt esrchc_c ( ConstSpiceChar  * value,
+   SpiceInt esrchc_c ( void            * naif_state,
+                       ConstSpiceChar  * value,
                        SpiceInt          ndim,
                        SpiceInt          lenvals,
                        const void      * array    )                    
@@ -202,19 +203,19 @@
    Make sure the input pointer for the key value is non-null 
    and that the length is adequate.  
    */
-   CHKPTR_VAL ( CHK_DISCOVER, "esrchc_c", value, -1 );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "esrchc_c", value, -1 );
 
    
    /*
    Make sure the input pointer for the string array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR_VAL ( CHK_DISCOVER, "esrchc_c", array, lenvals, -1 );
+   CHKOSTR_VAL ( naif_state, CHK_DISCOVER, "esrchc_c", array, lenvals, -1 );
    
 
    for ( i = 0;  i < ndim;  i++ )
    {
-      if (  eqstr_c( value, ARRAY(i) )  )
+      if (  eqstr_c( naif_state, value, ARRAY(i) )  )
       {
          return ( i );
       }

@@ -49,7 +49,8 @@
    #undef    pl2nvp_c
 
 
-   void pl2nvp_c ( ConstSpicePlane   * plane,
+   void pl2nvp_c ( void              * naif_state,
+                   ConstSpicePlane   * plane,
                    SpiceDouble         normal[3],
                    SpiceDouble         point [3]  ) 
 
@@ -167,7 +168,7 @@
    /*
    Find the closest point in the plane to the origin.
    */
-   vscl_c ( plane->constant, plane->normal, point );
+   vscl_c ( naif_state, plane->constant, plane->normal, point );
 
 
 } /* End pl2nvp_c */

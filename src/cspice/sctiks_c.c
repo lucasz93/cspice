@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void sctiks_c ( SpiceInt           sc, 
+   void sctiks_c ( void             * naif_state,
+                   SpiceInt           sc, 
                    ConstSpiceChar   * clkstr, 
                    SpiceDouble      * ticks   ) 
 /*
@@ -311,18 +312,19 @@
    Check the input string to make sure the pointer
    is non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "sctiks_c", clkstr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "sctiks_c", clkstr );
    
    
    /*
    Do the conversion.
    */
-   sctiks_ ( ( integer    * ) &sc,
+   sctiks_ ( naif_state,
+             ( integer    * ) &sc,
              ( char       * ) clkstr,
              ( doublereal * ) ticks,
              ( ftnlen       ) strlen(clkstr) );
              
              
-   chkout_c ( "sctiks_c");
+   chkout_c ( naif_state, "sctiks_c");
 
 } /* End sctiks_c */

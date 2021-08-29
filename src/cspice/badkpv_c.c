@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   SpiceBoolean badkpv_c ( ConstSpiceChar    *caller,
+   SpiceBoolean badkpv_c ( void              *naif_state,
+                           ConstSpiceChar    *caller,
                            ConstSpiceChar    *name,
                            ConstSpiceChar    *comp,
                            SpiceInt           size,
@@ -207,7 +208,7 @@
       if (   badkpv_c( caller, "BODY_399_DATA",      ">", 1, 2, 'N' ) 
           || badkpv_c( caller, "BODY_399_DATAUNITS", "=", 1, 1, 'C' ) ) 
       {
-         chkout_c ( "MYROUTINE" );
+         chkout_c ( naif_state, "MYROUTINE" );
          return;
       } 
  
@@ -255,14 +256,15 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR_VAL ( CHK_STANDARD, "badkpv_c", caller, SPICETRUE );
-   CHKFSTR_VAL ( CHK_STANDARD, "badkpv_c", name,   SPICETRUE );
-   CHKFSTR_VAL ( CHK_STANDARD, "badkpv_c", comp,   SPICETRUE );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "badkpv_c", caller, SPICETRUE );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "badkpv_c", name,   SPICETRUE );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "badkpv_c", comp,   SPICETRUE );
 
    /*
    Let the f2c'd routine do all the work.
    */
-   isbad = badkpv_ (  (char     *)  caller,
+   isbad = badkpv_ (  naif_state,
+                      (char     *)  caller,
                       (char     *)  name,
                       (char     *)  comp,
                       (integer  *)  &size,
@@ -274,7 +276,7 @@
                       (ftnlen    )  1              );
                       
                       
-   chkout_c ( "badkpv_c" );
+   chkout_c ( naif_state, "badkpv_c" );
 
    return (  (SpiceBoolean) isbad  );
 

@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void dtpool_c ( ConstSpiceChar   * name,
+   void dtpool_c ( void             * naif_state,
+                   ConstSpiceChar   * name,
                    SpiceBoolean     * found,
                    SpiceInt         * n,
                    SpiceChar          type [1] ) 
@@ -267,13 +268,14 @@
    Check the input string name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "dtpool_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dtpool_c", name );
 
 
    /*
    Call the f2c'd routine.
    */
-   dtpool_ ( ( char     * ) name,
+   dtpool_ ( naif_state,
+             ( char     * ) name,
              ( logical  * ) &fnd,
              ( integer  * ) n,
              ( char     * ) type,
@@ -287,7 +289,7 @@
    *found = fnd;
    
    
-   chkout_c ( "dtpool_c" );
+   chkout_c ( naif_state, "dtpool_c" );
 
 } /* End dtpool_c */
 

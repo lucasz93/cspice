@@ -50,7 +50,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void ekopn_c ( ConstSpiceChar    * fname,
+   void ekopn_c ( void              * naif_state,
+                  ConstSpiceChar    * fname,
                   ConstSpiceChar    * ifname,
                   SpiceInt            ncomch,
                   SpiceInt          * handle ) 
@@ -165,26 +166,27 @@
    Check the file name to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekopn_c", fname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekopn_c", fname );
 
 
    /*
    Check the internal file name to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekopn_c", ifname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekopn_c", ifname );
 
    /*
    Call the f2c'd Fortran routine.  Use explicit type casts for every
    type defined by f2c.
    */
-   ekopn_ ( ( char     * ) fname, 
+   ekopn_ ( naif_state,
+            ( char     * ) fname, 
             ( char     * ) ifname,
             ( integer  * ) &ncomch,
             ( integer  * ) handle,
             ( ftnlen     ) strlen(fname),
             ( ftnlen     ) strlen(ifname) );
 
-   chkout_c ( "ekopn_c" );
+   chkout_c ( naif_state, "ekopn_c" );
 
 } /* End ekopn_c */

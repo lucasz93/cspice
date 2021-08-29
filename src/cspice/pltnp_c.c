@@ -48,7 +48,8 @@
    #undef pltnp_c
 
 
-   void pltnp_c ( ConstSpiceDouble    point[3],
+   void pltnp_c ( void              * naif_state,
+                  ConstSpiceDouble    point[3],
                   ConstSpiceDouble    v1   [3],
                   ConstSpiceDouble    v2   [3],
                   ConstSpiceDouble    v3   [3],
@@ -201,7 +202,8 @@
    chkin_c ( naif_state, "pltnp_c" );
 
 
-   pltnp_ ( (doublereal  *) point,
+   pltnp_ ( naif_state,
+            (doublereal  *) point,
             (doublereal  *) v1,
             (doublereal  *) v2,
             (doublereal  *) v3,
@@ -209,6 +211,6 @@
             (doublereal  *) dist   );
 
  
-   chkout_c ( "pltnp_c" );
+   chkout_c ( naif_state, "pltnp_c" );
 
 } /* End pltnp_c */

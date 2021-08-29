@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
 
 
-   void timout_c ( SpiceDouble       et,
+   void timout_c ( void            * naif_state,
+                   SpiceDouble       et,
                    ConstSpiceChar  * pictur,
                    SpiceInt          lenout,
                    SpiceChar       * output )
@@ -497,18 +498,19 @@
    Check the input string pictur to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "timout_c", pictur );
+   CHKFSTR ( naif_state, CHK_STANDARD, "timout_c", pictur );
 
    /*
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "timout_c", output, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "timout_c", output, lenout );
    
    /*
    Call our beloved f2c'd routine
    */
-   timout_( ( doublereal * ) &et ,
+   timout_( naif_state,
+            ( doublereal * ) &et ,
             ( char       * ) pictur,
             ( char       * ) output,
             ( ftnlen       ) strlen(pictur),
@@ -521,6 +523,6 @@
    F2C_ConvertStr ( lenout, output );
 
 
-   chkout_c ( "timout_c");
+   chkout_c ( naif_state, "timout_c");
 
 } /* End timout_c */

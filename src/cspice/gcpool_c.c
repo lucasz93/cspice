@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
  
  
-   void gcpool_c ( ConstSpiceChar * name,
+   void gcpool_c ( void           * naif_state,
+                   ConstSpiceChar * name,
                    SpiceInt         start,
                    SpiceInt         room,
                    SpiceInt         lenout,
@@ -312,14 +313,14 @@
    Check the input string utcstr to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gcpool_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gcpool_c", name );
  
  
    /*
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "gcpool_c", cvals, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "gcpool_c", cvals, lenout );
  
  
  
@@ -327,7 +328,8 @@
    Call the f2c'd routine
    */
  
-   gcpool_( ( char    * ) name,
+   gcpool_( naif_state,
+            ( char    * ) name,
             ( integer * ) &start,
             ( integer * ) &room,
             ( integer * ) n,
@@ -352,7 +354,7 @@
  
  
    /* Done.  Checkout. */
-   chkout_c ( "gcpool_c");
+   chkout_c ( naif_state, "gcpool_c");
  
 } /* End gcpool_c */
  

@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
    
    
-   void scencd_c ( SpiceInt           sc, 
+   void scencd_c ( void             * naif_state,
+                   SpiceInt           sc, 
                    ConstSpiceChar   * sclkch, 
                    SpiceDouble      * sclkdp ) 
 /*
@@ -456,18 +457,19 @@
    Check the input string to make sure the pointer
    is non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "scencd_c", sclkch );
+   CHKFSTR ( naif_state, CHK_STANDARD, "scencd_c", sclkch );
    
    
    /*
    Carry out the encoding.
    */
-   scencd_ ( ( integer    * ) &sc,
+   scencd_ ( naif_state,
+             ( integer    * ) &sc,
              ( char       * ) sclkch,
              ( doublereal * ) sclkdp,
              ( ftnlen       ) strlen(sclkch) );
    
    
-   chkout_c ( "scencd_c");
+   chkout_c ( naif_state, "scencd_c");
  
 } /* End scencd_c */

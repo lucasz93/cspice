@@ -51,7 +51,8 @@
    #include "SpiceZmc.h"
 
 
-   void pgrrec_c ( ConstSpiceChar  * body,
+   void pgrrec_c ( void            * naif_state,
+                   ConstSpiceChar  * body,
                    SpiceDouble       lon,
                    SpiceDouble       lat,
                    SpiceDouble       alt,
@@ -488,7 +489,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return; 
    }
@@ -499,13 +500,14 @@
    Check the input string body to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pgrrec_c", body );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pgrrec_c", body );
    
 
    /*
    Call the f2c'd Fortran routine.
    */
-   pgrrec_ ( ( char       * ) body,
+   pgrrec_ ( naif_state,
+             ( char       * ) body,
              ( doublereal * ) &lon,
              ( doublereal * ) &lat,
              ( doublereal * ) &alt,
@@ -516,6 +518,6 @@
 
 
 
-   chkout_c ( "pgrrec_c" );
+   chkout_c ( naif_state, "pgrrec_c" );
 
 } /* End pgrrec_c */

@@ -635,9 +635,9 @@
             contains no segments.  This is
             unexpected, but we're prepared for it.
             ./
-            setmsg_c ( "No segments found in DSK file #.");
-            errch_c  ( "#",  dsk                         );
-            sigerr_c ( "SPICE(NODATA)"                   );
+            setmsg_c ( naif_state, "No segments found in DSK file #.");
+            errch_c  ( naif_state, "#",  dsk                         );
+            sigerr_c ( naif_state, "SPICE(NODATA)"                   );
          }
 
          /.
@@ -933,7 +933,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c()  )
+   if ( return_c(naif_state)  )
    {
       return;
    }
@@ -945,10 +945,10 @@
    sure none of the pointers are null and that each string contains at
    least one non-null character.
    */
-   CHKFSTR ( CHK_STANDARD, "subpt_pl02", method );
-   CHKFSTR ( CHK_STANDARD, "subpt_pl02", target );
-   CHKFSTR ( CHK_STANDARD, "subpt_pl02", abcorr );
-   CHKFSTR ( CHK_STANDARD, "subpt_pl02", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpt_pl02", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpt_pl02", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpt_pl02", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpt_pl02", obsrvr );
 
    /*
    Check the aberration correction string:  reject transmission
@@ -961,11 +961,11 @@
 
    if (  matchi_c( loccor, "X*", '*', '?' )  )
    {
-      setmsg_c ( "Input aberration correction specification # "
+      setmsg_c ( naif_state, "Input aberration correction specification # "
                  "calls for transmission-style corrections."    );
-      errch_c  ( "#",  abcorr                                   );
-      sigerr_c ( "SPICE(NOTSUPPORTED)"                          );
-      chkout_c ( "subpt_pl02"                                   );
+      errch_c  ( naif_state, "#",  abcorr                                   );
+      sigerr_c ( naif_state, "SPICE(NOTSUPPORTED)"                          );
+      chkout_c ( naif_state, "subpt_pl02"                                   );
       return;
    }
 
@@ -976,19 +976,19 @@
 
    if ( failed_c() )
    {
-      chkout_c ( "subpt_pl02" );
+      chkout_c ( naif_state, "subpt_pl02" );
       return;
    }
 
    if ( !found  )
    {
-      setmsg_c ( "The target, '#', is not a recognized name for an "
+      setmsg_c ( naif_state, "The target, '#', is not a recognized name for an "
                  "ephemeris object. The cause of this problem may be "
                  "that you need an updated version of the SPICE "
                  "Toolkit."                                            );
-      errch_c  ( "#", target                                           );
-      sigerr_c ( "SPICE(IDCODENOTFOUND)"                               );
-      chkout_c ( "subpt_pl02"                                          );
+      errch_c  ( naif_state, "#", target                                           );
+      sigerr_c ( naif_state, "SPICE(IDCODENOTFOUND)"                               );
+      chkout_c ( naif_state, "subpt_pl02"                                          );
       return;
    }
 
@@ -996,19 +996,19 @@
 
    if ( failed_c() )
    {
-      chkout_c ( "subpt_pl02" );
+      chkout_c ( naif_state, "subpt_pl02" );
       return;
    }
 
    if ( !found  )
    {
-      setmsg_c ( "The observer, '#', is not a recognized name for an "
+      setmsg_c ( naif_state, "The observer, '#', is not a recognized name for an "
                  "ephemeris object. The cause of this problem may be "
                  "that you need an updated version of the SPICE "
                  "Toolkit."                                            );
-      errch_c  ( "#", obsrvr                                           );
-      sigerr_c ( "SPICE(IDCODENOTFOUND)"                               );
-      chkout_c ( "subpt_pl02"                                          );
+      errch_c  ( naif_state, "#", obsrvr                                           );
+      sigerr_c ( naif_state, "SPICE(IDCODENOTFOUND)"                               );
+      chkout_c ( naif_state, "subpt_pl02"                                          );
       return;
    }
 
@@ -1017,11 +1017,11 @@
    */
    if ( trgcde == obscde  )
    {
-      setmsg_c ( "Both target and observer have the same integer "
+      setmsg_c ( naif_state, "Both target and observer have the same integer "
                  "ID code #.  These objects must be distinct."     );
-      errint_c ( "#", obscde                                       );
-      sigerr_c ( "SPICE(BODIESNOTDISTINCT)"                        );
-      chkout_c ( "subpt_pl02"                                      );
+      errint_c ( naif_state, "#", obscde                                       );
+      sigerr_c ( naif_state, "SPICE(BODIESNOTDISTINCT)"                        );
+      chkout_c ( naif_state, "subpt_pl02"                                      );
       return;
    }
 
@@ -1033,19 +1033,19 @@
  
    if ( failed_c() )
    {
-      chkout_c ( "subpt_pl02" );
+      chkout_c ( naif_state, "subpt_pl02" );
       return;
    }
 
    if ( !found  )
    { 
-      setmsg_c ( "No body-fixed frame is associated with "
+      setmsg_c ( naif_state, "No body-fixed frame is associated with "
                  "target body #; a frame kernel must be "
                  "loaded to make this association.  Consult "
                  "the FRAMES Required Reading for details."   );
-      errch_c  ( "#", target                                  );
-      sigerr_c ( "SPICE(IDCODENOTFOUND)"                      );
-      chkout_c ( "subpt_pl02"                                 );
+      errch_c  ( naif_state, "#", target                                  );
+      sigerr_c ( naif_state, "SPICE(IDCODENOTFOUND)"                      );
+      chkout_c ( naif_state, "subpt_pl02"                                 );
       return;
    }
 
@@ -1079,7 +1079,7 @@
 
    if ( failed_c() )
    {
-      chkout_c ( "subpt_pl02" );
+      chkout_c ( naif_state, "subpt_pl02" );
       return;
    }
 
@@ -1091,22 +1091,22 @@
 
    if ( centerID != trgcde )
    {
-      setmsg_c ( "Input segment is for object with integer ID "
+      setmsg_c ( naif_state, "Input segment is for object with integer ID "
                  "code #, which does not match target ID code #."  );
-      errint_c ( "#", centerID                                     );
-      errint_c ( "#", trgcde                                       );
-      sigerr_c ( "SPICE(TARGETMISMATCH)"                           );
-      chkout_c ( "subpt_pl02"                                      );
+      errint_c ( naif_state, "#", centerID                                     );
+      errint_c ( naif_state, "#", trgcde                                       );
+      sigerr_c ( naif_state, "SPICE(TARGETMISMATCH)"                           );
+      chkout_c ( naif_state, "subpt_pl02"                                      );
       return;
    }
 
    if ( dataType != 2 ) 
    {
-      setmsg_c ( "Input segment has DSK data type #.  A segment of "
+      setmsg_c ( naif_state, "Input segment has DSK data type #.  A segment of "
                  "type 2 is required."                               );
-      errint_c ( "#", dataType                                       );
-      sigerr_c ( "SPICE(WRONGDATATYPE)"                              );
-      chkout_c ( "subpt_pl02"                                        );
+      errint_c ( naif_state, "#", dataType                                       );
+      sigerr_c ( naif_state, "SPICE(WRONGDATATYPE)"                              );
+      chkout_c ( naif_state, "subpt_pl02"                                        );
       return;
    }
 
@@ -1121,7 +1121,7 @@
 
    if ( failed_c() )
    {
-      chkout_c ( "subpt_pl02" );
+      chkout_c ( naif_state, "subpt_pl02" );
       return;
    }
    
@@ -1134,7 +1134,7 @@
 
    if ( failed_c() )
    {
-      chkout_c ( "subpt_pl02" );
+      chkout_c ( naif_state, "subpt_pl02" );
       return;
    }
 
@@ -1169,7 +1169,7 @@
 
       if ( failed_c() )
       {
-         chkout_c ( "subpt_pl02" );
+         chkout_c ( naif_state, "subpt_pl02" );
          return;
       }
 
@@ -1180,7 +1180,7 @@
 
       if ( failed_c() )
       {
-         chkout_c ( "subpt_pl02" );
+         chkout_c ( naif_state, "subpt_pl02" );
          return;
       }
 
@@ -1190,7 +1190,7 @@
       */
       if ( failed_c() )
       {
-         chkout_c ( "subpt_pl02" );
+         chkout_c ( naif_state, "subpt_pl02" );
          return;
       }
 
@@ -1208,7 +1208,7 @@
 
       if ( failed_c() )
       {
-         chkout_c ( "subpt_pl02" );   
+         chkout_c ( naif_state, "subpt_pl02" );   
          return;
       }
 
@@ -1222,12 +1222,12 @@
    }
    else
    {
-      setmsg_c ( "The computation method # was not recognized. "
+      setmsg_c ( naif_state, "The computation method # was not recognized. "
                  "Allowed values are 'Ellipsoid near point' "
                  "and 'Intercept'."                              );
-      errch_c  ( "#",  method                                    );
-      sigerr_c ( "SPICE(DUBIOUSMETHOD)"                          );
-      chkout_c ( "subpt_pl02"                                    );
+      errch_c  ( naif_state, "#",  method                                    );
+      sigerr_c ( naif_state, "SPICE(DUBIOUSMETHOD)"                          );
+      chkout_c ( naif_state, "subpt_pl02"                                    );
       return;
    }
 
@@ -1239,19 +1239,19 @@
 
    if ( failed_c() )
    {
-      chkout_c ( "subpt_pl02" );
+      chkout_c ( naif_state, "subpt_pl02" );
       return;
    }
 
    if ( !found  )
    { 
-      setmsg_c ( "Ray from observer # to center of target # "
+      setmsg_c ( naif_state, "Ray from observer # to center of target # "
                  "did not intersect the surface defined by "
                  "the input handle and descriptor."           );    
-      errch_c  ( "#", obsrvr                                  );
-      errch_c  ( "#", target                                  );
-      sigerr_c ( "SPICE(NOINTERCEPT)"                         );
-      chkout_c ( "subpt_pl02"                                 );
+      errch_c  ( naif_state, "#", obsrvr                                  );
+      errch_c  ( naif_state, "#", target                                  );
+      sigerr_c ( naif_state, "SPICE(NOINTERCEPT)"                         );
+      chkout_c ( naif_state, "subpt_pl02"                                 );
       return;
    }
 
@@ -1286,6 +1286,6 @@
    */
 
 
-   chkout_c ( "subpt_pl02" );
+   chkout_c ( naif_state, "subpt_pl02" );
  
 } /* End subpt_pl02 */

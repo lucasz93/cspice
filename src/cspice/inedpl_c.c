@@ -51,7 +51,8 @@
    #undef    inedpl_c
    
 
-   void inedpl_c ( SpiceDouble           a,
+   void inedpl_c ( void                * naif_state,
+                   SpiceDouble           a,
                    SpiceDouble           b,
                    SpiceDouble           c,
                    ConstSpicePlane     * plane,
@@ -286,12 +287,12 @@
    
       *found = SPICEFALSE;
 
-      setmsg_c ( "semi-axes: a = #,  b = #,  c = #."  );
-      errdp_c  ( "#", a                               );
-      errdp_c  ( "#", b                               );
-      errdp_c  ( "#", c                               );
-      sigerr_c ( "SPICE(DEGENERATECASE)"              );
-      chkout_c ( "inedpl_c"                           );
+      setmsg_c ( naif_state, "semi-axes: a = #,  b = #,  c = #."  );
+      errdp_c  ( naif_state, "#", a                               );
+      errdp_c  ( naif_state, "#", b                               );
+      errdp_c  ( naif_state, "#", c                               );
+      sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"              );
+      chkout_c ( naif_state, "inedpl_c"                           );
       return;
    }
  
@@ -330,16 +331,16 @@
    from the origin.
    */
    
-   pl2psv_c  ( plane, point, span1, span2 );
+   pl2psv_c  ( naif_state, plane, point, span1, span2 );
 
    maxrad  =  MaxAbs ( a, b      );
    maxrad  =  MaxAbs ( c, maxrad );
 
  
-   if ( vnorm_c(point) > maxrad )
+   if ( vnorm_c(naif_state, point) > maxrad )
    {
       *found = SPICEFALSE; 
-      chkout_c ( "inedpl_c" );
+      chkout_c ( naif_state, "inedpl_c" );
       return; 
    }
  
@@ -380,7 +381,7 @@
       span2[i]  =  dstort[i]  *  span2[i];
    }
  
-   psv2pl_c ( point, span1, span2, &dplane );
+   psv2pl_c ( naif_state, point, span1, span2, &dplane );
  
  
    /*
@@ -408,14 +409,14 @@
    circle.
    */
    
-   pl2psv_c  ( &dplane, center, vec1, vec2 );
+   pl2psv_c  ( naif_state, &dplane, center, vec1, vec2 );
 
-   dist = vnorm_c ( center );
+   dist = vnorm_c ( naif_state, center );
 
    if ( dist > 1. )
    {
       *found = SPICEFALSE;
-      chkout_c ( "inedpl_c" );
+      chkout_c ( naif_state, "inedpl_c" );
       return;
    }
  
@@ -425,10 +426,10 @@
    circle.
    */
    
-   rcircl =  sqrt (   brcktd_c ( 1. - dist*dist,  0.,  1. )  );
+   rcircl =  sqrt (   brcktd_c ( naif_state, 1. - dist*dist,  0.,  1. )  );
 
-   vscl_c ( rcircl, vec1, vec1 );
-   vscl_c ( rcircl, vec2, vec2 );
+   vscl_c ( naif_state, rcircl, vec1, vec1 );
+   vscl_c ( naif_state, rcircl, vec2, vec2 );
  
  
    /*
@@ -449,11 +450,11 @@
    /*
    Make an ellipse from the center and generating vectors.
    */
-   cgv2el_c ( center, vec1, vec2, ellipse );
+   cgv2el_c ( naif_state, center, vec1, vec2, ellipse );
 
    *found  =  SPICETRUE;
  
  
-   chkout_c ( "inedpl_c" );
+   chkout_c ( naif_state, "inedpl_c" );
 
 } /* End inedpl_c */

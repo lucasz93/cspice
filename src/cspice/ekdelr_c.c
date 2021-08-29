@@ -46,7 +46,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void ekdelr_c ( SpiceInt   handle,
+   void ekdelr_c ( void     * naif_state,
+                   SpiceInt   handle,
                    SpiceInt   segno,
                    SpiceInt   recno ) 
 
@@ -198,12 +199,13 @@
    segno++;
    recno++;
 
-   ekdelr_ (  ( integer * )  &handle,
+   ekdelr_ (  naif_state,
+              ( integer * )  &handle,
               ( integer * )  &segno,
               ( integer * )  &recno  );
 
 
-   chkout_c ( "ekdelr_c" );
+   chkout_c ( naif_state, "ekdelr_c" );
 
 } /* End ekdelr_c */
 

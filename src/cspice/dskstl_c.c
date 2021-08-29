@@ -47,7 +47,8 @@
    #include "SpiceZfc.h"
 
 
-   void dskstl_c ( SpiceInt        keywrd,
+   void dskstl_c ( void          * naif_state,
+                   SpiceInt        keywrd,
                    SpiceDouble     dpval  ) 
 
 /*
@@ -184,10 +185,11 @@
    chkin_c ( naif_state, "dskstl_c" );
 
 
-   dskstl_ ( (integer     *) &keywrd,
+   dskstl_ ( naif_state,
+             (integer     *) &keywrd,
              (doublereal  *) &dpval   );
 
 
-   chkout_c ( "dskstl_c" );
+   chkout_c ( naif_state, "dskstl_c" );
 
 } /* End dskstl_c */

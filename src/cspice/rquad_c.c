@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void rquad_c ( SpiceDouble  a,
+   void rquad_c ( void       * naif_state,
+                  SpiceDouble  a,
                   SpiceDouble  b,
                   SpiceDouble  c,
                   SpiceDouble  root1[2],
@@ -240,10 +241,10 @@
    
    if (  ( a == 0.0 )  &&  ( b == 0.0 )  )  
    {
-      chkin_c  ( "rquad_c"                                        );
-      setmsg_c ( "Both 1st and 2nd degree coefficients are zero." );
-      sigerr_c ( "SPICE(DEGENERATECASE)"                          );
-      chkout_c ( "rquad"                                          );
+      chkin_c  ( naif_state, "rquad_c"                                        );
+      setmsg_c ( naif_state, "Both 1st and 2nd degree coefficients are zero." );
+      sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"                          );
+      chkout_c ( naif_state, "rquad"                                          );
       return;
    }
  

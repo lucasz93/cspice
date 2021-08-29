@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
    
 
-   void convrt_c ( SpiceDouble       x,
+   void convrt_c ( void            * naif_state,
+                   SpiceDouble       x,
                    ConstSpiceChar  * in,
                    ConstSpiceChar  * out,
                    SpiceDouble     * y    ) 
@@ -239,15 +240,16 @@
    Check the column name to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "convrt_c", in  );
-   CHKFSTR ( CHK_STANDARD, "convrt_c", out );
+   CHKFSTR ( naif_state, CHK_STANDARD, "convrt_c", in  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "convrt_c", out );
    
 
    /*
    Call the f2c'd Fortran routine.
    */
    
-   convrt_ (  ( doublereal * )  &x,
+   convrt_ (  naif_state,
+              ( doublereal * )  &x,
               ( char       * )  in,
               ( char       * )  out,
               ( doublereal * )  y,
@@ -255,7 +257,7 @@
               ( ftnlen       )  strlen(out)  );
 
 
-   chkout_c ( "convrt_c" );
+   chkout_c ( naif_state, "convrt_c" );
 
 } /* End convrt_c */
 

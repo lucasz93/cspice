@@ -47,7 +47,8 @@
    #undef    mtxv_c
    
 
-   void mtxv_c ( ConstSpiceDouble     m1  [3][3],
+   void mtxv_c ( void               * naif_state,
+                 ConstSpiceDouble     m1  [3][3],
                  ConstSpiceDouble     vin [3],
                  SpiceDouble          vout[3]   )
 

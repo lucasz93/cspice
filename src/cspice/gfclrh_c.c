@@ -50,7 +50,7 @@
    #include "SpiceZst.h"
 
 
-   void gfclrh_c ( void ) 
+   void gfclrh_c ( void *naif_state ) 
 
 /*
 
@@ -182,5 +182,5 @@
    Clear the saved interrupt signal handler status. 
    */
 
-   zzgfsavh_c ( SPICEFALSE );
+   zzgfsavh_c ( naif_state, SPICEFALSE );
 }

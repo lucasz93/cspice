@@ -46,7 +46,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void ekgd_c ( SpiceInt          selidx,
+   void ekgd_c ( void            * naif_state,
+                 SpiceInt          selidx,
                  SpiceInt          row,
                  SpiceInt          elment,
                  SpiceDouble     * ddata,
@@ -388,7 +389,8 @@
    /*
    Call the f2c'd routine.
    */
-   ekgd_  ( ( integer    * ) &selidx,
+   ekgd_  ( naif_state,
+            ( integer    * ) &selidx,
             ( integer    * ) &row,
             ( integer    * ) &elment,
             ( doublereal * ) ddata,
@@ -403,6 +405,6 @@
    *found  =  fnd;
    
    
-   chkout_c ( "ekgd_c" );
+   chkout_c ( naif_state, "ekgd_c" );
 
 } /* End ekgd_c */

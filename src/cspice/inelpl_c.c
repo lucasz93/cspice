@@ -51,7 +51,8 @@
    #undef   inelpl_c
 
 
-   void inelpl_c ( ConstSpiceEllipse  * ellips,
+   void inelpl_c ( void               * naif_state,
+                   ConstSpiceEllipse  * ellips,
                    ConstSpicePlane    * plane,
                    SpiceInt           * nxpts,
                    SpiceDouble          xpt1[3],
@@ -314,24 +315,24 @@
    /*
    Check the input plane.
    */
-   pl2nvc_c ( plane, normal, &inpcon );
+   pl2nvc_c ( naif_state, plane, normal, &inpcon );
 
-   if ( vzero_c(normal) )
+   if ( vzero_c(naif_state, normal) )
    {
-      setmsg_c ( "Input SPICE plane has zero normal vector." );
-      sigerr_c ( "SPICE(INVALIDPLANE)"                       );
-      chkout_c ( "inelpl_c"                                  );
+      setmsg_c ( naif_state, "Input SPICE plane has zero normal vector." );
+      sigerr_c ( naif_state, "SPICE(INVALIDPLANE)"                       );
+      chkout_c ( naif_state, "inelpl_c"                                  );
       return;
    }
    else if ( inpcon < 0.0 )
    {
-      setmsg_c ( "Input SPICE plane has non-positive "       
+      setmsg_c ( naif_state, "Input SPICE plane has non-positive "       
                  "constant #. Properly constructed "      
                  "SPICE planes always have non-negative " 
                  "constants."                                );
-      errdp_c  ( "#",  inpcon                                );
-      sigerr_c ( "SPICE(INVALIDPLANE)"                       );
-      chkout_c ( "inelpl_c"                                  );
+      errdp_c  ( naif_state, "#",  inpcon                                );
+      sigerr_c ( naif_state, "SPICE(INVALIDPLANE)"                       );
+      chkout_c ( naif_state, "inelpl_c"                                  );
       return;
    }
 
@@ -341,28 +342,28 @@
    but they must always be orthogonal. We require this
    check only if both semi-axes have non-zero length.
    */
-   el2cgv_c ( ellips, center, smajor, sminor );
+   el2cgv_c ( naif_state, ellips, center, smajor, sminor );
 
-   if ( !vzero_c(sminor) )
+   if ( !vzero_c(naif_state, sminor) )
    {
-      sep = vsep_c( smajor, sminor );
+      sep = vsep_c( naif_state, smajor, sminor );
 
-      if (  fabs( sep-halfpi_c() )  >  SEPLIM  )
+      if (  fabs( sep-halfpi_c(naif_state) )  >  SEPLIM  )
       {
-         setmsg_c ( "Input SPICE ellipse has non-orthogonal "   
+         setmsg_c ( naif_state, "Input SPICE ellipse has non-orthogonal "   
                     "semi-axes: (#,#,#) and (#,#,#). Angular "   
                     "separation of these vectors is # radians. " 
                     "Properly constructed SPICE ellipses "       
                     "always have orthogonal semi-axes."         );
-         errdp_c  ( "#",  smajor[0]                             );
-         errdp_c  ( "#",  smajor[1]                             );
-         errdp_c  ( "#",  smajor[2]                             );
-         errdp_c  ( "#",  sminor[0]                             );
-         errdp_c  ( "#",  sminor[1]                             );
-         errdp_c  ( "#",  sminor[2]                             );
-         errdp_c  ( "#",  sep                                   );
-         sigerr_c ( "SPICE(INVALIDELLIPSE)"                     );
-         chkout_c ( "inelpl_c"                                  );
+         errdp_c  ( naif_state, "#",  smajor[0]                             );
+         errdp_c  ( naif_state, "#",  smajor[1]                             );
+         errdp_c  ( naif_state, "#",  smajor[2]                             );
+         errdp_c  ( naif_state, "#",  sminor[0]                             );
+         errdp_c  ( naif_state, "#",  sminor[1]                             );
+         errdp_c  ( naif_state, "#",  sminor[2]                             );
+         errdp_c  ( naif_state, "#",  sep                                   );
+         sigerr_c ( naif_state, "SPICE(INVALIDELLIPSE)"                     );
+         chkout_c ( naif_state, "inelpl_c"                                  );
          return;
       }
    }
@@ -372,7 +373,7 @@
    whether the ellipse lies in the plane.
    */
 
-   if ( vzero_c(smajor) )
+   if ( vzero_c(naif_state, smajor) )
    {
       /*
       The ellipse is a single point. If the ellipse's center
@@ -381,7 +382,7 @@
       center and the plane's normal vector.
       */
 
-      if (  vdot_c(center, normal)  ==  inpcon  )
+      if (  vdot_c(naif_state, center, normal)  ==  inpcon  )
       {
          /*
          The center does in fact lie in the plane.
@@ -389,8 +390,8 @@
 
          *nxpts = 1;
 
-         vequ_c ( center, xpt1 );
-         vequ_c ( center, xpt2 );
+         vequ_c ( naif_state, center, xpt1 );
+         vequ_c ( naif_state, center, xpt2 );
       }
       else
       {
@@ -405,7 +406,7 @@
       /*
       Return now; this simplifies the logic to follow.
       */
-      chkout_c ( "inelpl_c" );
+      chkout_c ( naif_state, "inelpl_c" );
       return;
    }
 
@@ -419,10 +420,10 @@
    the plane, just get a point and normal vector, and translate
    the point.  Find the plane constant of the translated plane.
    */ 
-   pl2nvp_c ( plane,   normal,  point     );
-   vsub_c   ( point,   center,  point     );
-   nvp2pl_c ( normal,  point,   &trans    );
-   pl2nvc_c ( &trans,  normal,  &constant );
+   pl2nvp_c ( naif_state, plane,   normal,  point     );
+   vsub_c   ( naif_state, point,   center,  point     );
+   nvp2pl_c ( naif_state, normal,  point,   &trans    );
+   pl2nvc_c ( naif_state, &trans,  normal,  &constant );
  
    /*
    Ok, we can get to work.  The locus of the ellipse is
@@ -449,13 +450,13 @@
    theta are solutions. Let's get this case out of the way
    right now, shall we?
    */
-   v[0] = vdot_c ( smajor, normal );
-   v[1] = vdot_c ( sminor, normal );
+   v[0] = vdot_c ( naif_state, smajor, normal );
+   v[1] = vdot_c ( naif_state, sminor, normal );
 
    /*
    Test whether the plane and ellipse are parallel.
    */
-   if (  vzerog_c( v, 2 )  ) 
+   if (  vzerog_c( naif_state, v, 2 )  ) 
    {
       /*
       The ellipse lies in the plane if and only if constant is zero.
@@ -470,7 +471,7 @@
          *nxpts = 0;
       }
 
-      chkout_c ( "inelpl_c" );
+      chkout_c ( naif_state, "inelpl_c" );
       return;
    }
  
@@ -509,11 +510,11 @@
 
    Let's return right now if there are no solutions.
    */
-   if ( vnormg_c ( v, 2 )  < constant )
+   if ( vnormg_c ( naif_state, v, 2 )  < constant )
    {
       *nxpts = 0;
 
-      chkout_c ( "inelpl_c" );
+      chkout_c ( naif_state, "inelpl_c" );
       return;
    }
 
@@ -534,7 +535,7 @@
 
    The values of `theta' are the angles we seek.
    */
-   alpha   =  acos  (  constant  /  vnormg_c ( v, 2 )  );
+   alpha   =  acos  (  constant  /  vnormg_c ( naif_state, v, 2 )  );
 
    beta    =  atan2 ( v[1], v[0] );
 
@@ -555,7 +556,7 @@
    the solutions are identical.
    */
 
-   if ( vzero_c(sminor) )
+   if ( vzero_c(naif_state, sminor) )
    {
       *nxpts = 1;
    }
@@ -578,15 +579,15 @@
    /*
    Compute the intersection points.
    */
-   vlcom3_c ( 1.0,          center,          
+   vlcom3_c ( naif_state, 1.0,          center,          
               cos(angle1),  smajor,          
               sin(angle1),  sminor,   xpt1 );
 
-   vlcom3_c ( 1.0,          center,          
+   vlcom3_c ( naif_state, 1.0,          center,          
               cos(angle2),  smajor,          
               sin(angle2),  sminor,   xpt2 );
  
-   chkout_c ( "inelpl_c" );
+   chkout_c ( naif_state, "inelpl_c" );
 
 } /* End inelpl_c */
 

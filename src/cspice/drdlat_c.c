@@ -47,7 +47,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void drdlat_c ( SpiceDouble   r,
+   void drdlat_c ( void        * naif_state,
+                   SpiceDouble   r,
                    SpiceDouble   lon,
                    SpiceDouble   lat,
                    SpiceDouble   jacobi[3][3] ) 
@@ -200,7 +201,8 @@
    Don't participate in error tracing; the underlying routine is 
    error-free.
    */
-   drdlat_ ( (doublereal *) &r,
+   drdlat_ ( naif_state,
+             (doublereal *) &r,
              (doublereal *) &lon,
              (doublereal *) &lat,
              (doublereal *) jacobi  );
@@ -208,6 +210,6 @@
    /*
    Transpose the Jacobian to create a C-style matrix.
    */
-   xpose_c ( jacobi, jacobi );
+   xpose_c ( naif_state, jacobi, jacobi );
 
 } /* End drdlat_c */

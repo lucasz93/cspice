@@ -44,7 +44,7 @@
 
    #include "SpiceUsr.h"
 
-   SpiceDouble dpmin_c () 
+   SpiceDouble dpmin_c (void *naif_state) 
 
 /*
 
@@ -154,7 +154,7 @@
 
    if ( first )
    {
-      value = dpmin_();
+      value = dpmin_(naif_state);
       first = SPICEFALSE;
    }
    

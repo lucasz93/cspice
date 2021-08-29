@@ -47,7 +47,8 @@
    #undef    inrypl_c
 
 
-   void inrypl_c ( ConstSpiceDouble     vertex [3],
+   void inrypl_c ( void               * naif_state,
+                   ConstSpiceDouble     vertex [3],
                    ConstSpiceDouble     dir    [3],
                    ConstSpicePlane    * plane,
                    SpiceInt           * nxpts,
@@ -379,9 +380,9 @@
 
              if ( !fnd )
              {
-                setmsg_c ( "ID code for body # was not found." );
-                errch_c  ( "#",  sc                            );
-                sigerr_c ( "SPICE(NOTRANSLATION"               );
+                setmsg_c ( naif_state, "ID code for body # was not found." );
+                errch_c  ( naif_state, "#",  sc                            );
+                sigerr_c ( naif_state, "SPICE(NOTRANSLATION"               );
                 return;
              }
 
@@ -580,7 +581,7 @@
    Participate in error tracing.
    */
 
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -600,13 +601,13 @@
    Check the distance of the ray's vertex from the origin.
    */
    
-   toobig = dpmax_c() / MARGIN;
+   toobig = dpmax_c(naif_state) / MARGIN;
 
-   if (  vnorm_c (vertex)  >=  toobig  )
+   if (  vnorm_c (naif_state, vertex)  >=  toobig  )
    {
-      setmsg_c ( "Ray's vertex is too far from the origin." );
-      sigerr_c ( "SPICE(VECTORTOOBIG)"                      );
-      chkout_c ( "inrypl_c"                                 );
+      setmsg_c ( naif_state, "Ray's vertex is too far from the origin." );
+      sigerr_c ( naif_state, "SPICE(VECTORTOOBIG)"                      );
+      chkout_c ( naif_state, "inrypl_c"                                 );
       return;
    }
 
@@ -615,13 +616,13 @@
    Check the distance of the plane from the origin.  (The returned
    plane constant IS this distance.)
    */
-   pl2nvc_c ( plane, normal, &constant );
+   pl2nvc_c ( naif_state, plane, normal, &constant );
  
    if (  constant >=  toobig  )
    {
-      setmsg_c ( "Plane is too far from the origin." );
-      sigerr_c ( "SPICE(VECTORTOOBIG)"               );
-      chkout_c ( "inrypl_c"                          );
+      setmsg_c ( naif_state, "Plane is too far from the origin." );
+      sigerr_c ( naif_state, "SPICE(VECTORTOOBIG)"               );
+      chkout_c ( naif_state, "inrypl_c"                          );
       return;
    }
  
@@ -629,13 +630,13 @@
    /*
    Check the ray's direction vector.
    */
-   vhat_c ( dir, udir );
+   vhat_c ( naif_state, dir, udir );
  
-   if ( vzero_c (udir) )
+   if ( vzero_c (naif_state, udir) )
    {
-      setmsg_c ( "Ray's direction vector is the zero vector."  );
-      sigerr_c ( "SPICE(ZEROVECTOR)"                           );
-      chkout_c ( "inrypl_c"                                    );
+      setmsg_c ( naif_state, "Ray's direction vector is the zero vector."  );
+      sigerr_c ( naif_state, "SPICE(ZEROVECTOR)"                           );
+      chkout_c ( naif_state, "inrypl_c"                                    );
       return;
    }
  
@@ -644,16 +645,16 @@
    That takes care of the error cases.  Now scale the input vertex
    and plane to improve numerical behavior.
    */
-   mscale = MaxAbs ( constant, vnorm_c(vertex) );
+   mscale = MaxAbs ( constant, vnorm_c(naif_state, vertex) );
  
    if ( mscale != 0. ) 
    {
-      vscl_c ( 1.0 / mscale, vertex, sclvtx );
+      vscl_c ( naif_state, 1.0 / mscale, vertex, sclvtx );
       sclcon  =  constant / mscale;
    }
    else
    {
-      vequ_c ( vertex, sclvtx );
+      vequ_c ( naif_state, vertex, sclvtx );
       sclcon   =  constant;
    }
 
@@ -669,7 +670,7 @@
    plane's normal direction.
    */
    
-   prjvn = vdot_c ( sclvtx, normal );
+   prjvn = vdot_c ( naif_state, sclvtx, normal );
  
    /*
    If this projection is the plane constant, the ray's vertex lies in
@@ -689,9 +690,9 @@
       xpt is the original, unscaled vertex.
       */
       
-      vequ_c ( vertex, xpt );
+      vequ_c ( naif_state, vertex, xpt );
  
-      if (  vdot_c ( normal, udir ) == 0.  )
+      if (  vdot_c ( naif_state, normal, udir ) == 0.  )
       {
          /*
          The ray's in the plane.
@@ -704,7 +705,7 @@
          *nxpts  =   1;
       }
  
-      chkout_c ( "inrypl_c" );
+      chkout_c ( naif_state, "inrypl_c" );
       return; 
    }
    
@@ -760,7 +761,7 @@
    normal vector.
    */
    
-   prjdir  =  vdot_c ( udir, normal );
+   prjdir  =  vdot_c ( naif_state, udir, normal );
  
   
    /*
@@ -770,7 +771,7 @@
    smsgnd_ will return a value of SPICEFALSE if prjdir is zero.
    */
   
-   if ( ! smsgnd_ (&prjdir, &prjdif)  )
+   if ( ! smsgnd_ (naif_state, &prjdir, &prjdif)  )
    {
       /*
       The ray is parallel to or points away from the plane.
@@ -779,7 +780,7 @@
       
       CLEAR_VEC ( xpt );
  
-      chkout_c ( "inrypl_c" );
+      chkout_c ( naif_state, "inrypl_c" );
       return; 
    }
  
@@ -812,7 +813,7 @@
       *nxpts = 0;
       CLEAR_VEC ( xpt );
 
-      chkout_c ( "inrypl_c" );
+      chkout_c ( naif_state, "inrypl_c" );
       return; 
    }
    
@@ -827,17 +828,17 @@
    *nxpts   =   1;
    scale    =   fabs (prjdif)  /   fabs (prjdir);
  
-   vlcom_c ( 1.0, sclvtx, scale, udir, xpt );
+   vlcom_c ( naif_state, 1.0, sclvtx, scale, udir, xpt );
  
    /*
    Re-scale xpt.  This is safe, since toobig has already been
    scaled to allow for any growth of xpt at this step.
    */
    
-   vscl_c ( mscale, xpt, xpt );
+   vscl_c ( naif_state, mscale, xpt, xpt );
  
 
-   chkout_c ( "inrypl_c" );
+   chkout_c ( naif_state, "inrypl_c" );
 
 } /* End inrypl_c */
 

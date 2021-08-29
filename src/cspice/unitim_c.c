@@ -49,7 +49,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   SpiceDouble unitim_c ( SpiceDouble        epoch,
+   SpiceDouble unitim_c ( void             * naif_state,
+                          SpiceDouble        epoch,
                           ConstSpiceChar   * insys,
                           ConstSpiceChar   * outsys )
 
@@ -206,24 +207,25 @@
    Check the input string insys to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR_VAL ( CHK_STANDARD, "unitim_c", insys, 0. );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "unitim_c", insys, 0. );
 
    /*
    Check the input string outsys to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR_VAL ( CHK_STANDARD, "unitim_c", outsys, 0. );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "unitim_c", outsys, 0. );
    
    /*
    Call the f2c'd routine.
    */
-   result = (SpiceDouble) unitim_( ( doublereal * ) &epoch,
+   result = (SpiceDouble) unitim_( naif_state,
+                                   ( doublereal * ) &epoch,
                                    ( char       * ) insys,
                                    ( char       * ) outsys,
                                    ( ftnlen       ) strlen(insys),
                                    ( ftnlen       ) strlen(outsys) );
 
-   chkout_c ( "unitim_c");
+   chkout_c ( naif_state, "unitim_c");
    
    return ( result );
    

@@ -63,7 +63,7 @@
                   named routine is supposed to be `checking in'
                   when it calls chkin_c; that is, the call should be
                   the first executable statement following the
-                  reference to the function return_c() (which should be
+                  reference to the function return_c(naif_state) (which should be
                   the first executable statement).
 
 -Detailed_Output
@@ -111,7 +111,7 @@
    have a call to chkin_c as the second executable statement.  The
    first executable statements should be:
 
-      if ( return_c() )
+      if ( return_c(naif_state) )
          {
          return;
          }
@@ -126,7 +126,7 @@
    The line of code preceding the exit or any return statement should
    be
 
-       chkout_c ( module );
+       chkout_c ( naif_state, module );
 
 
    All CSPICE routines should call chkin_c and chkout_c, unless they
@@ -204,7 +204,7 @@
    error is found, this wrapper will be called recursively, but that
    should not cause a problem.
    */
-   CHKFSTR ( CHK_DISCOVER, "chkin_c", module );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "chkin_c", module );
 
 
    /*

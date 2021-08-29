@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    
 
-   void cnmfrm_c ( ConstSpiceChar   * cname,
+   void cnmfrm_c ( void             * naif_state,
+                   ConstSpiceChar   * cname,
                    SpiceInt           lenout,
                    SpiceInt         * frcode,
                    SpiceChar        * frname,
@@ -192,19 +193,20 @@
    Check the input object's name string to make sure the pointer
    is non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "cnmfrm_c", cname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "cnmfrm_c", cname );
 
    /*
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "cnmfrm_c", frname, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "cnmfrm_c", frname, lenout );
 
    
    /*
    Invoke the f2c'd routine.
    */
-   cnmfrm_ (  ( char      * ) cname,
+   cnmfrm_ (  naif_state,
+              ( char      * ) cname,
               ( integer   * ) frcode,
               ( char      * ) frname,
               ( logical   * ) found,
@@ -218,6 +220,6 @@
    F2C_ConvertStr ( lenout, frname );
 
 
-   chkout_c ( "cnmfrm_c" );
+   chkout_c ( naif_state, "cnmfrm_c" );
 
 } /* End cnmfrm_c */

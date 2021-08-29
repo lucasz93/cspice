@@ -46,7 +46,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void dascls_c ( SpiceInt handle ) 
+   void dascls_c ( void *naif_state, SpiceInt handle ) 
 
 /*
 
@@ -193,10 +193,10 @@
    Call the f2c'd Fortran routine.  Use explicit type casts for every
    type defined by f2c.
    */
-   dascls_ (  ( integer * ) &handle );
+   dascls_ (  naif_state, ( integer * ) &handle );
 
 
-   chkout_c ( "dascls_c" );
+   chkout_c ( naif_state, "dascls_c" );
 
 } /* End dascls_c */
 

@@ -46,7 +46,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void ekgi_c ( SpiceInt          selidx,
+   void ekgi_c ( void            * naif_state,
+                 SpiceInt          selidx,
                  SpiceInt          row,
                  SpiceInt          elment,
                  SpiceInt        * idata,
@@ -392,7 +393,8 @@
    /*
    Call the f2c'd routine.
    */
-   ekgi_  ( ( integer * ) &selidx,
+   ekgi_  ( naif_state,
+            ( integer * ) &selidx,
             ( integer * ) &row,
             ( integer * ) &elment,
             ( integer * ) idata,
@@ -406,6 +408,6 @@
    *found  =  fnd;
 
 
-   chkout_c ( "ekgi_c" );
+   chkout_c ( naif_state, "ekgi_c" );
 
 } /* End ekgi_c */

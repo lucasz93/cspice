@@ -48,7 +48,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void ekccnt_c ( ConstSpiceChar  * table,
+   void ekccnt_c ( void            * naif_state,
+                   ConstSpiceChar  * table,
                    SpiceInt        * ccount ) 
 
 /*
@@ -266,13 +267,14 @@
    Check the input string to make sure the pointer
    is non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekccnt_c", table );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekccnt_c", table );
 
-   ekccnt_ (  ( char    * ) table,
+   ekccnt_ (  naif_state,
+              ( char    * ) table,
               ( integer * ) ccount,
               ( ftnlen    ) strlen(table)  );
 
 
-   chkout_c ( "ekccnt_c" );
+   chkout_c ( naif_state, "ekccnt_c" );
 
 } /* End ekccnt_c */

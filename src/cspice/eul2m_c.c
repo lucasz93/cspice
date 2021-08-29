@@ -46,7 +46,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void eul2m_c ( SpiceDouble  angle3,
+   void eul2m_c ( void       * naif_state,
+                  SpiceDouble  angle3,
                   SpiceDouble  angle2,
                   SpiceDouble  angle1,
                   SpiceInt     axis3,
@@ -395,7 +396,8 @@
    /*
    Call the f2c'd version of eul2m:
    */
-   eul2m_ ( (doublereal *) &angle3,
+   eul2m_ ( naif_state,
+            (doublereal *) &angle3,
             (doublereal *) &angle2,
             (doublereal *) &angle1,
             (integer    *) &axis3,
@@ -406,9 +408,9 @@
    /*
    Transpose the output matrix to put it in row-major order.
    */
-   xpose_c ( loc_r, r );
+   xpose_c ( naif_state, loc_r, r );
 
 
-   chkout_c ( "eul2m_c");
+   chkout_c ( naif_state, "eul2m_c");
 
 } /* End eul2m_c */

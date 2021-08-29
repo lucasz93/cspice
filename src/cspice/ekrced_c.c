@@ -48,7 +48,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void ekrced_c ( SpiceInt           handle,
+   void ekrced_c ( void             * naif_state,
+                   SpiceInt           handle,
                    SpiceInt           segno,
                    SpiceInt           recno,
                    ConstSpiceChar   * column,
@@ -205,7 +206,7 @@
    Check the column name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekrced_c", column );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekrced_c", column );
 
 
    /*
@@ -216,7 +217,8 @@
    segno++;
    recno++;
 
-   ekrced_ ( ( integer    * ) &handle,
+   ekrced_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) &segno,
              ( integer    * ) &recno,
              ( char       * ) column,
@@ -232,6 +234,6 @@
    *isnull = null;
 
 
-   chkout_c ( "ekrced_c" );
+   chkout_c ( naif_state, "ekrced_c" );
 
 } /* End ekrced_c */

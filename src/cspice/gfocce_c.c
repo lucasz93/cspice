@@ -61,7 +61,8 @@
    #include "SpiceZad.h"
 
 
-   void gfocce_c ( ConstSpiceChar     * occtyp,
+   void gfocce_c ( void               * naif_state,
+                   ConstSpiceChar     * occtyp,
                    ConstSpiceChar     * front,
                    ConstSpiceChar     * fshape,
                    ConstSpiceChar     * fframe,
@@ -72,27 +73,31 @@
                    ConstSpiceChar     * obsrvr,
                    SpiceDouble          tol,
 
-                   void             ( * udstep ) ( SpiceDouble       et,
+                   void             ( * udstep ) ( void            * naif_state,
+                                                   SpiceDouble       et,
                                                    SpiceDouble     * step ),
 
-                   void             ( * udrefn ) ( SpiceDouble       t1,
+                   void             ( * udrefn ) ( void            * naif_state,
+                                                   SpiceDouble       t1,
                                                    SpiceDouble       t2,
                                                    SpiceBoolean      s1,
                                                    SpiceBoolean      s2,
                                                    SpiceDouble     * t    ),
                    SpiceBoolean         rpt,  
 
-                   void             ( * udrepi ) ( SpiceCell       * cnfine,
+                   void             ( * udrepi ) ( void            * naif_state,
+                                                   SpiceCell       * cnfine,
                                                    ConstSpiceChar  * srcpre,
                                                    ConstSpiceChar  * srcsuf ),
 
-                   void             ( * udrepu ) ( SpiceDouble       ivbeg,
+                   void             ( * udrepu ) ( void            * naif_state,
+                                                   SpiceDouble       ivbeg,
                                                    SpiceDouble       ivend,
                                                    SpiceDouble       et      ),
 
-                   void             ( * udrepf ) ( void ),
+                   void             ( * udrepf ) ( void            * naif_state ),
                    SpiceBoolean         bail,      
-                   SpiceBoolean     ( * udbail ) ( void ),
+                   SpiceBoolean     ( * udbail ) ( void            * naif_state ),
                    SpiceCell          * cnfine,
                    SpiceCell          * result                                )
 
@@ -1284,7 +1289,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -1293,13 +1298,13 @@
    /*
    Make sure cell data types are d.p. 
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "gfocce_c", SPICE_DP, cnfine, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "gfocce_c", SPICE_DP, cnfine, result );
 
    
    /* 
    Initialize the input cells if necessary. 
    */
-   CELLINIT2 ( cnfine, result );
+   CELLINIT2 ( naif_state, cnfine, result );
 
 
    /*
@@ -1310,8 +1315,8 @@
 
    First make sure the frame name pointers are non-null.
    */
-   CHKPTR ( CHK_STANDARD, "gfocce_c", bframe );
-   CHKPTR ( CHK_STANDARD, "gfocce_c", fframe );
+   CHKPTR ( naif_state, CHK_STANDARD, "gfocce_c", bframe );
+   CHKPTR ( naif_state, CHK_STANDARD, "gfocce_c", fframe );
 
    /*
    Use the input frame strings if they're non-empty; otherwise
@@ -1341,13 +1346,13 @@
    Check the other input strings to make sure each pointer is non-null 
    and each string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gfocce_c", occtyp );
-   CHKFSTR ( CHK_STANDARD, "gfocce_c", front  );
-   CHKFSTR ( CHK_STANDARD, "gfocce_c", fshape );
-   CHKFSTR ( CHK_STANDARD, "gfocce_c", back   );
-   CHKFSTR ( CHK_STANDARD, "gfocce_c", bshape );
-   CHKFSTR ( CHK_STANDARD, "gfocce_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "gfocce_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfocce_c", occtyp );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfocce_c", front  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfocce_c", fshape );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfocce_c", back   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfocce_c", bshape );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfocce_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfocce_c", obsrvr );
 
       
    /*
@@ -1387,11 +1392,11 @@
 
          if ( defSigHandler == SIG_ERR )
          {
-            setmsg_c ( "Attempt to establish the CSPICE routine "
+            setmsg_c ( naif_state, "Attempt to establish the CSPICE routine "
                        "gfinth_c as the handler for the interrupt "
                        "signal SIGINT failed."                     );
-            sigerr_c ( "SPICE(SIGNALFAILED)"                       );
-            chkout_c ( "gfocce_c"                                  );
+            sigerr_c ( naif_state, "SPICE(SIGNALFAILED)"                       );
+            chkout_c ( naif_state, "gfocce_c"                                  );
             return;
          }
       }
@@ -1405,7 +1410,8 @@
    to the f2c'd routine.
    */
 
-   gfocce_ ( ( char         * )  occtyp,
+   gfocce_ ( naif_state,
+             ( char         * )  occtyp,
              ( char         * )  front,
              ( char         * )  fshape,
              ( char         * )  fframe,
@@ -1444,10 +1450,10 @@
 
       if ( sigPtr == SIG_ERR )
       {
-         setmsg_c ( "Attempt to restore the previous handler "
+         setmsg_c ( naif_state, "Attempt to restore the previous handler "
                     "for the interrupt signal SIGINT failed."  );
-         sigerr_c ( "SPICE(SIGNALFAILED)"                      );
-         chkout_c ( "gfocce_c"                                 );
+         sigerr_c ( naif_state, "SPICE(SIGNALFAILED)"                      );
+         chkout_c ( naif_state, "gfocce_c"                                 );
          return;
       }
    }
@@ -1455,12 +1461,12 @@
    /*
    Sync the output cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-     zzsynccl_c ( F2C, result ) ;
+     zzsynccl_c ( naif_state, F2C, result ) ;
    }
 
 
-   chkout_c ( "gfocce_c" );
+   chkout_c ( naif_state, "gfocce_c" );
 
 } /* End gfocce_c */

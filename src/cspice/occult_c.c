@@ -55,7 +55,8 @@
    #include "SpiceZmc.h"
    #include <stdio.h>
 
-   void occult_c ( ConstSpiceChar   * targ1,
+   void occult_c ( void             * naif_state,
+                   ConstSpiceChar   * targ1,
                    ConstSpiceChar   * shape1,
                    ConstSpiceChar   * frame1,
                    ConstSpiceChar   * targ2,
@@ -749,7 +750,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -759,19 +760,20 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "occult_c", targ1  );
-   CHKFSTR ( CHK_STANDARD, "occult_c", shape1 );
-   CHKFSTR ( CHK_STANDARD, "occult_c", frame1 );
-   CHKFSTR ( CHK_STANDARD, "occult_c", targ2  );
-   CHKFSTR ( CHK_STANDARD, "occult_c", shape2 );
-   CHKFSTR ( CHK_STANDARD, "occult_c", frame2 );
-   CHKFSTR ( CHK_STANDARD, "occult_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "occult_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "occult_c", targ1  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "occult_c", shape1 );
+   CHKFSTR ( naif_state, CHK_STANDARD, "occult_c", frame1 );
+   CHKFSTR ( naif_state, CHK_STANDARD, "occult_c", targ2  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "occult_c", shape2 );
+   CHKFSTR ( naif_state, CHK_STANDARD, "occult_c", frame2 );
+   CHKFSTR ( naif_state, CHK_STANDARD, "occult_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "occult_c", obsrvr );
 
    /*
    Call the f2c'd routine.
    */
-   occult_ ( ( char       * ) targ1,
+   occult_ ( naif_state,
+             ( char       * ) targ1,
              ( char       * ) shape1,
              ( char       * ) frame1,
              ( char       * ) targ2,
@@ -790,6 +792,6 @@
              ( ftnlen       ) strlen(abcorr),
              ( ftnlen       ) strlen(obsrvr) );
 
-   chkout_c ( "occult_c" );  
+   chkout_c ( naif_state, "occult_c" );  
 
 }

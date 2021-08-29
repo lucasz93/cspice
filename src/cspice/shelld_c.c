@@ -44,7 +44,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void shelld_c ( SpiceInt       ndim,
+   void shelld_c ( void         * naif_state,
+                   SpiceInt       ndim,
                    SpiceDouble  * array ) 
 
 /*
@@ -134,7 +135,8 @@
 { /* Begin shelld_c */
 
 
-   shelld_ ( ( integer    * ) &ndim,
+   shelld_ ( naif_state,
+             ( integer    * ) &ndim,
              ( doublereal * ) array  );
 
 

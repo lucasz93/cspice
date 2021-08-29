@@ -45,7 +45,7 @@
    #undef    vminus_c
    
 
-   void vminus_c ( ConstSpiceDouble v1[3],  SpiceDouble vout[3] ) 
+   void vminus_c ( void *naif_state, ConstSpiceDouble v1[3],  SpiceDouble vout[3] ) 
 
 /*
 

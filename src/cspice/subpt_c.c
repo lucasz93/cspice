@@ -58,7 +58,8 @@
    #include "SpiceZmc.h"
 
  
-   void subpt_c ( ConstSpiceChar       * method,
+   void subpt_c ( void                 * naif_state,
+                  ConstSpiceChar       * method,
                   ConstSpiceChar       * target,
                   SpiceDouble            et,
                   ConstSpiceChar       * abcorr,
@@ -387,7 +388,7 @@
             Convert rectangular coordinates to planetocentric
             latitude and longitude.  Convert radians to degrees.
             ./
-            reclat_c ( spoint, &radius, &lon, &lat );
+            reclat_c ( naif_state,spoint, &radius, &lon, &lat );
  
             lon *= dpr_c ();
             lat *= dpr_c ();
@@ -499,16 +500,17 @@
    sure none of the pointers are null and that each string contains at
    least one non-null character.
    */
-   CHKFSTR ( CHK_STANDARD, "subpt_c", method );
-   CHKFSTR ( CHK_STANDARD, "subpt_c", target );
-   CHKFSTR ( CHK_STANDARD, "subpt_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "subpt_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpt_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpt_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpt_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpt_c", obsrvr );
  
  
    /*
    Call the f2c'd routine.
    */
-   subpt_ (  ( char         * ) method,
+   subpt_ (  naif_state,
+             ( char         * ) method,
              ( char         * ) target,
              ( doublereal   * ) &et,
              ( char         * ) abcorr,
@@ -521,6 +523,6 @@
              ( ftnlen         ) strlen(obsrvr)  );
  
  
-   chkout_c ( "subpt_c" );
+   chkout_c ( naif_state, "subpt_c" );
  
 } /* End subpt_c */

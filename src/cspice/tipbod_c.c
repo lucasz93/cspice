@@ -52,7 +52,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void tipbod_c ( ConstSpiceChar  * ref,
+   void tipbod_c ( void            * naif_state,
+                   ConstSpiceChar  * ref,
                    SpiceInt          body,
                    SpiceDouble       et,
                    SpiceDouble       tipm[3][3] ) 
@@ -328,12 +329,13 @@
    Check the input string ref to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "tipbod_c", ref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "tipbod_c", ref );
 
    /*
    Call the f2c'd Fortran routine.
    */
-   tipbod_ ( ( char        * )  ref, 
+   tipbod_ ( naif_state,
+             ( char        * )  ref, 
              ( integer     * )  &body, 
              ( doublereal  * )  &et, 
              ( doublereal  * )  tipm,
@@ -342,9 +344,9 @@
    /*
    Transpose the output matrix to put it in row-major order.
    */
-   xpose_c  ( tipm, tipm );
+   xpose_c  ( naif_state, tipm, tipm );
    
-   chkout_c ( "tipbod_c" );
+   chkout_c ( naif_state, "tipbod_c" );
  
  
 } /* End tipbod_c */

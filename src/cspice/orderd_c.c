@@ -47,7 +47,8 @@
    #undef    orderd_c
 
 
-   void orderd_c ( ConstSpiceDouble  * array,
+   void orderd_c ( void              * naif_state,
+                   ConstSpiceDouble  * array,
                    SpiceInt            ndim,
                    SpiceInt          * iorder ) 
 
@@ -163,7 +164,8 @@
 
 
 
-   orderd_ ( ( doublereal * ) array,
+   orderd_ ( naif_state,
+             ( doublereal * ) array,
              ( integer    * ) &ndim,
              ( integer    * ) iorder );
 

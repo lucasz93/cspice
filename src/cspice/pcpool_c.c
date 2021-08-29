@@ -51,7 +51,8 @@
    #undef    pcpool_c
 
 
-   void pcpool_c ( ConstSpiceChar  * name,
+   void pcpool_c ( void            * naif_state,
+                   ConstSpiceChar  * name,
                    SpiceInt          n,
                    SpiceInt          lenvals,
                    const void      * cvals    ) 
@@ -285,14 +286,14 @@
    Check the input kernel variable name to make sure the pointer is
    non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pcpool_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pcpool_c", name );
 
 
    /*
    Make sure the input string pointer for the cvals array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR ( CHK_STANDARD, "pcpool_c", cvals, lenvals );
+   CHKOSTR ( naif_state, CHK_STANDARD, "pcpool_c", cvals, lenvals );
    
 
    /*
@@ -301,9 +302,9 @@
    C2F_MapStrArr ( "pcpool_c", 
                    n, lenvals, cvals, &fCvalsLen, &fCvalsArr );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "pcpool_c" );
+      chkout_c ( naif_state, "pcpool_c" );
       return;
    }
 
@@ -311,7 +312,8 @@
    /*
    Call the f2c'd routine.
    */
-   pcpool_ (  ( char       * ) name,
+   pcpool_ (  naif_state,
+              ( char       * ) name,
               ( integer    * ) &n,
               ( char       * ) fCvalsArr,
               ( ftnlen       ) strlen(name), 
@@ -324,7 +326,7 @@
    free ( fCvalsArr );
    
    
-   chkout_c ( "pcpool_c" );
+   chkout_c ( naif_state, "pcpool_c" );
 
 } /* End pcpool_c */
 

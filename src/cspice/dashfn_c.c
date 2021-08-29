@@ -50,7 +50,8 @@
    #undef dashfn_c
 
 
-   void dashfn_c ( SpiceInt     handle,
+   void dashfn_c ( void       * naif_state,
+                   SpiceInt     handle,
                    SpiceInt     namlen,
                    SpiceChar  * fname  ) 
 /*
@@ -200,10 +201,11 @@
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "dashfn_c", fname, namlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "dashfn_c", fname, namlen );
 
   
-   dashfn_ ( (SpiceInt   *) &handle,
+   dashfn_ ( naif_state,
+             (SpiceInt   *) &handle,
              (SpiceChar  *) fname,
              (ftnlen      ) namlen   );
   
@@ -214,6 +216,6 @@
    F2C_ConvertStr ( namlen, fname );
 
 
-   chkout_c ( "dashfn_c" );
+   chkout_c ( naif_state, "dashfn_c" );
 
 } /* End dashfn_c */

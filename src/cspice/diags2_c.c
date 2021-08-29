@@ -50,7 +50,8 @@
    #undef   diags2_c
    
 
-   void diags2_c ( ConstSpiceDouble    symmat [2][2],
+   void diags2_c ( void              * naif_state,
+                   ConstSpiceDouble    symmat [2][2],
                    SpiceDouble         diag   [2][2],
                    SpiceDouble         rotate [2][2]  ) 
 
@@ -391,7 +392,7 @@
 
    */
    
-   rquad_c (  1.0,  -(a + c),   a*c - b*b,   root1,  root2 );
+   rquad_c (  naif_state,  1.0,  -(a + c),   a*c - b*b,   root1,  root2 );
  
  
    /*
@@ -506,14 +507,14 @@
       /*
       Unitize the eigenvector.
       */
-      vhatg_c ( eigvec, 2, eigvec );
+      vhatg_c ( naif_state, eigvec, 2, eigvec );
 
       rotate[0][0]  =  eigvec[1];
       rotate[1][0]  = -eigvec[0];
       rotate[0][1]  =  eigvec[0];
       rotate[1][1]  =  eigvec[1];
 
-      swapd_ (  &(diag[0][0]),  &(diag[1][1])  );
+      swapd_ (  naif_state,  &(diag[0][0]),  &(diag[1][1])  );
 
    }
    
@@ -533,7 +534,7 @@
       /*
       Unitize the eigenvector.
       */
-      vhatg_c ( eigvec, 2, eigvec );
+      vhatg_c ( naif_state, eigvec, 2, eigvec );
 
       rotate[0][0]  =  eigvec[0];
       rotate[1][0]  =  eigvec[1];

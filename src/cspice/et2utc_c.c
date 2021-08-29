@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void et2utc_c (  SpiceDouble       et,
+   void et2utc_c (  void            * naif_state,
+                    SpiceDouble       et,
                     ConstSpiceChar  * format,
                     SpiceInt          prec,
                     SpiceInt          lenout,
@@ -339,19 +340,20 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "et2utc_c", format  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "et2utc_c", format  );
 
    /*
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "et2utc_c", utcstr, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "et2utc_c", utcstr, lenout );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   et2utc_( ( doublereal * ) &et,
+   et2utc_( naif_state,
+            ( doublereal * ) &et,
             ( char       * ) format,
             ( integer    * ) &prec,
             ( char       * ) utcstr,
@@ -364,7 +366,7 @@
    */
    F2C_ConvertStr ( lenout, utcstr );
 
-   chkout_c ( "et2utc_c" );
+   chkout_c ( naif_state, "et2utc_c" );
 
 
 } /* End et2utc_c */

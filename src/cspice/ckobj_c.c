@@ -51,7 +51,8 @@
    #include "SpiceZmc.h"
 
 
-   void ckobj_c ( ConstSpiceChar  * ck,
+   void ckobj_c ( void            * naif_state,
+                  ConstSpiceChar  * ck,
                   SpiceCell       * ids ) 
 
 /*
@@ -310,7 +311,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return; 
    }
@@ -320,34 +321,35 @@
    Check the input string `ck' to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ckobj_c", ck );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckobj_c", ck );
    
    /*
    Make sure cell data type is SpiceInt. 
    */
-   CELLTYPECHK ( CHK_STANDARD, "ckobj_c", SPICE_INT, ids );
+   CELLTYPECHK ( naif_state, CHK_STANDARD, "ckobj_c", SPICE_INT, ids );
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( ids );   
+   CELLINIT ( naif_state, ids );   
 
    /*
    Call the f2c'd Fortran routine.
    */
-   ckobj_ ( ( char       * ) ck,
+   ckobj_ ( naif_state,
+            ( char       * ) ck,
             ( integer    * ) (ids->base),
             ( ftnlen       ) strlen(ck)   );
 
    /*
    Sync the output cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, ids );
+      zzsynccl_c ( naif_state, F2C, ids );
    }
 
 
-   chkout_c ( "ckobj_c" );
+   chkout_c ( naif_state, "ckobj_c" );
 
 } /* End ckobj_c */

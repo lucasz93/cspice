@@ -46,7 +46,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void wndifd_c (  SpiceCell   * a,
+   void wndifd_c (  void        * naif_state,
+                    SpiceCell   * a,
                     SpiceCell   * b,
                     SpiceCell   * c  ) 
 
@@ -160,7 +161,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -170,31 +171,32 @@
    /*
    Make sure cell data types are d.p. 
    */
-   CELLTYPECHK3 ( CHK_STANDARD, "wndifd_c", SPICE_DP, a, b, c );
+   CELLTYPECHK3 ( naif_state, CHK_STANDARD, "wndifd_c", SPICE_DP, a, b, c );
 
 
    /*
    Initialize the cells if necessary. 
    */
-   CELLINIT3 ( a, b, c );
+   CELLINIT3 ( naif_state, a, b, c );
    
 
    /*
    Let the f2c'd routine do the work. 
    */
-   wndifd_ ( (doublereal * ) (a->base),
+   wndifd_ ( naif_state,
+            (doublereal * ) (a->base),
              (doublereal * ) (b->base), 
              (doublereal * ) (c->base)  );
 
    /*
    Sync the output cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, c );
+      zzsynccl_c ( naif_state, F2C, c );
    }
 
 
-   chkout_c ( "wndifd_c" );
+   chkout_c ( naif_state, "wndifd_c" );
 
 } /* End wndifd_c */

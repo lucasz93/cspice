@@ -47,7 +47,7 @@
    #include "SpiceZmc.h"
 
 
-   SpiceBoolean iswhsp_c ( ConstSpiceChar * string ) 
+   SpiceBoolean iswhsp_c ( void *naif_state, ConstSpiceChar * string ) 
 
 /*
 
@@ -177,7 +177,7 @@
    /*
    Check the input string pointer to make sure it's non-null.
    */
-   CHKPTR_VAL ( CHK_DISCOVER, "iswhsp_c", string, SPICEFALSE );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "iswhsp_c", string, SPICEFALSE );
    
 
    /*

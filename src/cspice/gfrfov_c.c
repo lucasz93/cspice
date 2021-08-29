@@ -61,7 +61,8 @@
    #include "SpiceZmc.h"
    #undef gfrfov_c
 
-   void gfrfov_c ( ConstSpiceChar     * inst,
+   void gfrfov_c ( void               * naif_state,
+                   ConstSpiceChar     * inst,
                    ConstSpiceDouble     raydir [3],
                    ConstSpiceChar     * rframe,
                    ConstSpiceChar     * abcorr,
@@ -826,7 +827,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -835,12 +836,12 @@
    /*
    Make sure cell data types are d.p. 
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "gfrfov_c", SPICE_DP, cnfine, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "gfrfov_c", SPICE_DP, cnfine, result );
 
    /*
    Initialize the input cells if necessary. 
    */
-   CELLINIT2 ( cnfine, result );
+   CELLINIT2 ( naif_state, cnfine, result );
  
    /*
    The input observer name is a special case because we allow the
@@ -850,7 +851,7 @@
 
    First make sure the observer name pointer is non-null.
    */
-   CHKPTR ( CHK_STANDARD, "gfrfov_c", obsrvr );
+   CHKPTR ( naif_state, CHK_STANDARD, "gfrfov_c", obsrvr );
 
    /*
    Use the input observer name string if it's non-empty; otherwise
@@ -870,14 +871,15 @@
    Check the other input strings to make sure each pointer is non-null 
    and each string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gfrfov_c", inst   );
-   CHKFSTR ( CHK_STANDARD, "gfrfov_c", rframe );
-   CHKFSTR ( CHK_STANDARD, "gfrfov_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfrfov_c", inst   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfrfov_c", rframe );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfrfov_c", abcorr );
 
    /*
    Let the f2c'd routine do the work. 
    */
-   gfrfov_ ( (char         *) inst,
+   gfrfov_ ( naif_state,
+             (char         *) inst,
              (doublereal   *) raydir,
              (char         *) rframe,
              (char         *) abcorr,
@@ -893,12 +895,12 @@
    /*
    Sync the output result cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, result );
+      zzsynccl_c ( naif_state, F2C, result );
    }
 
-   chkout_c ( "gfrfov_c" );
+   chkout_c ( naif_state, "gfrfov_c" );
 
 } /* End gfrfov_c */
 

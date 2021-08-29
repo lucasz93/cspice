@@ -50,7 +50,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   SpiceDouble lspcn_c ( ConstSpiceChar   * body,
+   SpiceDouble lspcn_c ( void             * naif_state,
+                         ConstSpiceChar   * body,
                          SpiceDouble        et,
                          ConstSpiceChar   * abcorr )
 /*
@@ -286,7 +287,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c()  )
+   if ( return_c(naif_state)  )
    {
       return ( retval ); 
    }
@@ -296,18 +297,19 @@
    Check the input string body to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR_VAL ( CHK_STANDARD, "lspcn_c", body, retval );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "lspcn_c", body, retval );
 
    /*
    Call the f2c'd Fortran routine.
    */
-   retval = lspcn_ ( ( char       * ) body,
+   retval = lspcn_ ( naif_state,
+                     ( char       * ) body,
                      ( doublereal * ) &et,
                      ( char       * ) abcorr,
                      ( ftnlen       ) strlen(body),
                      ( ftnlen       ) strlen(abcorr)  );
 
-   chkout_c ( "lspcn_c" );
+   chkout_c ( naif_state, "lspcn_c" );
 
    return ( retval );
 

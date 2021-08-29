@@ -49,7 +49,8 @@
    #undef    spkapo_c
    
    
-   void spkapo_c ( SpiceInt               targ,
+   void spkapo_c ( void                 * naif_state,
+                   SpiceInt               targ,
                    SpiceDouble            et,
                    ConstSpiceChar       * ref,
                    ConstSpiceDouble       sobs[6],
@@ -646,14 +647,15 @@
    Check the input strings 'ref' and 'abcorr' to make sure the 
    pointers are non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkapo_c", ref    );
-   CHKFSTR ( CHK_STANDARD, "spkapo_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkapo_c", ref    );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkapo_c", abcorr );
 
 
    /*
    Call the f2c'd routine.
    */
-   spkapo_ (  ( integer     * ) &targ,
+   spkapo_ (  naif_state,
+              ( integer     * ) &targ,
               ( doublereal  * ) &et,
               ( char        * ) ref,
               ( doublereal  * ) sobs,
@@ -664,6 +666,6 @@
               ( ftnlen        ) strlen(abcorr)  );
 
 
-   chkout_c ( "spkapo_c" );
+   chkout_c ( naif_state, "spkapo_c" );
 
 } /* End spkapo_c */

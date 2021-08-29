@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void dp2hx_c ( SpiceDouble   number,
+   void dp2hx_c ( void        * naif_state,
+                  SpiceDouble   number,
                   SpiceInt      lenout,
                   SpiceChar   * string,
                   SpiceInt    * length
@@ -257,9 +258,10 @@
    pointer.
    */
 
-   CHKOSTR ( CHK_STANDARD, "dp2hx_c", string, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "dp2hx_c", string, lenout );
 
-   (void) dp2hx_( ( doublereal  * ) &number,
+   (void) dp2hx_( naif_state,
+                  ( doublereal  * ) &number,
                   ( char        * ) string,
                   ( integer     * ) length,
                   ( ftnlen        ) lenout -1 );
@@ -270,6 +272,6 @@
    */
    F2C_ConvertStr( lenout, string );
 
-   chkout_c ( "dp2hx_c" );
+   chkout_c ( naif_state, "dp2hx_c" );
 
 } /* End dp2hx_c */

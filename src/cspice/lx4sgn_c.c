@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void lx4sgn_c ( ConstSpiceChar   * string,
+   void lx4sgn_c ( void             * naif_state,
+                   ConstSpiceChar   * string,
                    SpiceInt           first,
                    SpiceInt         * last,
                    SpiceInt         * nchar  ) 
@@ -202,7 +203,7 @@
 
    Check the input string argument for a null pointer.
    */
-   CHKPTR ( CHK_DISCOVER, "lx4sgn_c", string );
+   CHKPTR ( naif_state, CHK_DISCOVER, "lx4sgn_c", string );
 
 
    /*
@@ -227,7 +228,8 @@
    /*
    Call the f2c'd routine. 
    */
-   lx4sgn_ ( ( char    * ) string,
+   lx4sgn_ ( naif_state,
+             ( char    * ) string,
              ( integer * ) &locFirst,
              ( integer * ) last,
              ( integer * ) nchar,

@@ -46,7 +46,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void ekappr_c ( SpiceInt     handle,
+   void ekappr_c ( void       * naif_state,
+                   SpiceInt     handle,
                    SpiceInt     segno,
                    SpiceInt   * recno  ) 
 /*
@@ -274,7 +275,8 @@
    segno++;
 
    
-   ekappr_ (  ( integer * )  &handle,
+   ekappr_ (  naif_state,
+              ( integer * )  &handle,
               ( integer * )  &segno,
               ( integer * )  recno   );
 
@@ -285,7 +287,7 @@
    ( *recno )--;
 
 
-   chkout_c ( "ekappr_c" );
+   chkout_c ( naif_state, "ekappr_c" );
 
 } /* End ekappr_c */
 

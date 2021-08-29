@@ -49,7 +49,8 @@
    #include "SpiceZst.h"
    #include "SpiceZad.h"
 
-   int zzadqdec_c ( U_fp           udfunc,
+   int zzadqdec_c ( void         * naif_state,
+                    U_fp           udfunc,
                     doublereal   * et,
                     logical      * xbool )
 
@@ -142,12 +143,15 @@
    /*
    Local variables 
    */
-   void           ( * fPtr ) ( void ( * ) ( SpiceDouble,
+   void           ( * fPtr ) ( void *,
+                               void ( * ) ( void         *,
+                                            SpiceDouble,
                                             SpiceDouble  *),
                                SpiceDouble,
                                SpiceBoolean * );
 
-   void           ( * fPtr2) ( SpiceDouble,
+   void           ( * fPtr2) ( void *,
+                               SpiceDouble,
                                SpiceDouble * );
 
    SpiceBoolean       bool_loc;
@@ -156,7 +160,7 @@
    Participate in error tracing.
    */
 
-   if ( return_c() )
+   if ( return_c(naif_state) )
       {
       return ( 0 );
       }
@@ -167,9 +171,10 @@
    the pointer from (void *) to that of a function whose argument
    list matches that of "udqdec."
    */
-   fPtr = ( void (*) ( void ( * ) ( SpiceDouble, SpiceDouble  *),
+   fPtr = ( void (*) ( void*, 
+                       void ( * ) ( SpiceDouble, SpiceDouble  *),
                        SpiceDouble, 
-                       SpiceBoolean*) ) zzadget_c ( naif_state,  ( UDQDEC );
+                       SpiceBoolean*) ) zzadget_c ( naif_state, UDQDEC );
 
    /*
    Retrieve the stored pointer for the user defined scalar function. The
@@ -177,12 +182,12 @@
    the adapter for the scalar function, but the function pointer 
    argument in 'fPtr' requires the non-adapter pointer. Ignore 'udfunc'.
    */
-   fPtr2= ( void (*) (SpiceDouble, SpiceDouble*) ) zzadget_c ( naif_state,  ( UDFUNC );
+   fPtr2= ( void (*) (void*, SpiceDouble, SpiceDouble*) ) zzadget_c ( naif_state, UDFUNC );
 
    /*
    Call the stored function. 
    */
-   (*fPtr) ( fPtr2, (SpiceDouble)(*et), (SpiceBoolean *) &bool_loc );
+   (*fPtr) ( naif_state, fPtr2, (SpiceDouble)(*et), (SpiceBoolean *) &bool_loc );
 
    /*
    Cast the "SpiceBoolean" to "logical" to prevent any future size mismatches
@@ -190,7 +195,7 @@
    */
    *xbool = (logical) bool_loc;
 
-   chkout_c ( "zzadqdec_c" );
+   chkout_c ( naif_state, "zzadqdec_c" );
 
    return ( 0 );
 

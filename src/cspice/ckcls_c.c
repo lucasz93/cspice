@@ -45,7 +45,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void ckcls_c ( SpiceInt handle ) 
+   void ckcls_c ( void *naif_state, SpiceInt handle ) 
 
 /*
 
@@ -139,10 +139,10 @@
    chkin_c ( naif_state, "ckcls_c");
 
 
-   ckcls_ ( ( integer * ) &handle );
+   ckcls_ ( naif_state, ( integer * ) &handle );
    
 
-   chkout_c ( "ckcls_c");
+   chkout_c ( naif_state, "ckcls_c");
 
 } /* End ckcls_c */
 

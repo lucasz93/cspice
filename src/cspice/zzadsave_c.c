@@ -153,7 +153,7 @@
             step function: 
             ./
             userstepPtr = ( void (*)(SpiceDouble, 
-                                     SpiceDouble*) ) zzadget_c ( naif_state, ( UDSTEP );
+                                     SpiceDouble*) ) zzadget_c( UDSTEP );
 
             /.
             Call the function for a given ET and retrieve the step size: 
@@ -213,13 +213,13 @@
 
    if (  ( funcID < 0 ) || ( funcID >= SPICE_N_PASSED_IN_FUNC )  )
    {
-      setmsg_c ( "Input function ID was #; valid range is 0:#. "
+      setmsg_c ( naif_state, "Input function ID was #; valid range is 0:#. "
                  "Function ID doesn't correspond to a known "
                  "passed-in function argument."                  );
-      errint_c ( "#",  (SpiceInt) funcID                         );
-      errint_c ( "#",  (SpiceInt) SPICE_N_PASSED_IN_FUNC - 1     );
-      sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                        );
-      chkout_c ( "zzadsave_c"                                    );
+      errint_c ( naif_state, "#",  (SpiceInt) funcID                         );
+      errint_c ( naif_state, "#",  (SpiceInt) SPICE_N_PASSED_IN_FUNC - 1     );
+      sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                        );
+      chkout_c ( naif_state, "zzadsave_c"                                    );
       return;      
    }
    
@@ -231,7 +231,7 @@
    user->zzadsave.funcPtrList[ funcID ] = funcPtr;
 
 
-   chkout_c ( "zzadsave_c" );
+   chkout_c ( naif_state, "zzadsave_c" );
 
 } /* End zzadsave_c */
 
@@ -364,7 +364,7 @@
 */
 
 { /* Begin zzadget_c */
-   cspice_user_state_t* user = &__cspice_get_state()->user;
+   cspice_user_state_t* user = &((cspice_t *)naif_state)->user;
   
    /*
    Participate in error tracing.
@@ -376,13 +376,13 @@
    */
    if (  ( funcID < 0 ) || ( funcID >= SPICE_N_PASSED_IN_FUNC )  )
    {
-      setmsg_c ( "Input function ID was #; valid range is 0:#. "
+      setmsg_c ( naif_state, "Input function ID was #; valid range is 0:#. "
                  "Function ID doesn't correspond to a known "
                  "passed-in function argument."                  );
-      errint_c ( "#",  (SpiceInt) funcID                         );
-      errint_c ( "#",  (SpiceInt) SPICE_N_PASSED_IN_FUNC - 1     );
-      sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                        );
-      chkout_c ( "zzadget_c"                                     );
+      errint_c ( naif_state, "#",  (SpiceInt) funcID                         );
+      errint_c ( naif_state, "#",  (SpiceInt) SPICE_N_PASSED_IN_FUNC - 1     );
+      sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                        );
+      chkout_c ( naif_state, "zzadget_c"                                     );
 
       /*
       Return an invalid pointer if we can't perform the lookup. 
@@ -393,7 +393,7 @@
    /*
    Check-out now since this is a non-void function. 
    */
-   chkout_c ( "zzadget_c" );
+   chkout_c ( naif_state, "zzadget_c" );
 
    /*
    Return the function pointer as a void pointer.

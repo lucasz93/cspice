@@ -55,10 +55,13 @@
    #include "zzalloc.h"
    #undef gfevnt_c
 
-   void gfevnt_c ( void             ( * udstep ) ( SpiceDouble       et,
+   void gfevnt_c ( void               * naif_state,
+                   void             ( * udstep ) ( void            * naif_state,
+                                                   SpiceDouble       et,
                                                    SpiceDouble     * step ),
 
-                   void             ( * udrefn ) ( SpiceDouble       t1,
+                   void             ( * udrefn ) ( void            * naif_state,
+                                                   SpiceDouble       t1,
                                                    SpiceDouble       t2,
                                                    SpiceBoolean      s1,
                                                    SpiceBoolean      s2,
@@ -77,18 +80,20 @@
                    SpiceDouble          adjust,
                    SpiceBoolean         rpt,  
 
-                   void             ( * udrepi ) ( SpiceCell       * cnfine,
+                   void             ( * udrepi ) ( void            * naif_state,
+                                                   SpiceCell       * cnfine,
                                                    ConstSpiceChar  * srcpre,
                                                    ConstSpiceChar  * srcsuf ),
 
-                   void             ( * udrepu ) ( SpiceDouble       ivbeg,
+                   void             ( * udrepu ) ( void            * naif_state,
+                                                   SpiceDouble       ivbeg,
                                                    SpiceDouble       ivend,
                                                    SpiceDouble       et      ),
 
-                   void             ( * udrepf ) ( void ),
+                   void             ( * udrepf ) ( void            * naif_state ),
                    SpiceInt             nintvls,
                    SpiceBoolean         bail,      
-                   SpiceBoolean     ( * udbail ) ( void ),
+                   SpiceBoolean     ( * udbail ) ( void            * naif_state ),
                    SpiceCell          * cnfine,
                    SpiceCell          * result )
 
@@ -1375,7 +1380,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
      {
       return;
       }
@@ -1385,8 +1390,8 @@
    Make sure the input string pointer is non-null and that the
    length 'lenvals' is sufficient.  
    */
-   CHKFSTR ( CHK_STANDARD, "gfevnt_c", qpnams );
-   CHKFSTR ( CHK_STANDARD, "gfevnt_c", qcpars );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfevnt_c", qpnams );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfevnt_c", qcpars );
 
    /*
    Create a Fortran-style string array.
@@ -1403,19 +1408,19 @@
    /*
    Make sure cell data types are d.p. 
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "gfevnt_c", SPICE_DP, cnfine, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "gfevnt_c", SPICE_DP, cnfine, result );
 
    /* 
    Initialize the input cells if necessary. 
    */
-   CELLINIT2 ( cnfine, result );
+   CELLINIT2 ( naif_state, cnfine, result );
 
    /*
    Check the other input strings to make sure each pointer is non-null 
    and each string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gfevnt_c", gquant );
-   CHKFSTR ( CHK_STANDARD, "gfevnt_c", op );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfevnt_c", gquant );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfevnt_c", op );
 
 
    /*
@@ -1438,15 +1443,15 @@
    nintvls = 2 * nintvls;
    nBytes = (nintvls + SPICE_CELL_CTRLSZ ) * nw * sizeof(SpiceDouble);
 
-   work   = (doublereal *) alloc_SpiceMemory( nBytes );
+   work   = (doublereal *) alloc_SpiceMemory( naif_state, nBytes );
 
    if ( !work ) 
       {
-      setmsg_c ( "Workspace allocation of # bytes failed due to "
+      setmsg_c ( naif_state, "Workspace allocation of # bytes failed due to "
                  "malloc failure"                               );
-      errint_c ( "#",  nBytes                                   );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                          );
-      chkout_c ( "gfevnt_c"                                     );
+      errint_c ( naif_state, "#",  nBytes                                   );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                          );
+      chkout_c ( naif_state, "gfevnt_c"                                     );
       return;
       }
 
@@ -1469,11 +1474,11 @@
 
          if ( defSigHandler == SIG_ERR )
             {
-            setmsg_c ( "Attempt to establish the CSPICE routine "
+            setmsg_c ( naif_state, "Attempt to establish the CSPICE routine "
                        "gfinth_c as the handler for the interrupt "
                        "signal SIGINT failed."                     );
-            sigerr_c ( "SPICE(SIGNALFAILED)"                       );
-            chkout_c ( "gfevnt_c"                                  );
+            sigerr_c ( naif_state, "SPICE(SIGNALFAILED)"                       );
+            chkout_c ( naif_state, "gfevnt_c"                                  );
             return;
             }
          }
@@ -1529,7 +1534,7 @@
    Always restore the previous signal handler and free dynamically 
    allocated memory.
    */
-   free_SpiceMemory( work );
+   free_SpiceMemory( naif_state, work );
    free ( fstr_qpnams );
    free ( fstr_qcpars );
 
@@ -1542,10 +1547,10 @@
 
       if ( sigPtr == SIG_ERR )
          {
-         setmsg_c ( "Attempt to restore the previous handler "
+         setmsg_c ( naif_state, "Attempt to restore the previous handler "
                     "for the interrupt signal SIGINT failed."  );
-         sigerr_c ( "SPICE(SIGNALFAILED)"                      );
-         chkout_c ( "gfevnt_c"                                 );
+         sigerr_c ( naif_state, "SPICE(SIGNALFAILED)"                      );
+         chkout_c ( naif_state, "gfevnt_c"                                 );
          return;
          }
       }
@@ -1553,14 +1558,14 @@
    /*
    Sync the output cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
      {
-     zzsynccl_c ( F2C, result ) ;
+     zzsynccl_c ( naif_state, F2C, result ) ;
      }
 
    ALLOC_CHECK;
 
-   chkout_c ( "gfevnt_c" );
+   chkout_c ( naif_state, "gfevnt_c" );
 
    } 
 

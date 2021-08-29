@@ -54,7 +54,8 @@
    #undef dskmi2_c
 
 
-   void dskmi2_c  ( SpiceInt            nv,
+   void dskmi2_c  ( void              * naif_state,
+                    SpiceInt            nv,
                     ConstSpiceDouble    vrtces[][3],
                     SpiceInt            np,
                     ConstSpiceInt       plates[][3],
@@ -752,7 +753,8 @@
    vtlflg = (logical) makvtl;
                     
 
-   dskmi2_ ( ( integer     * ) &nv,
+   dskmi2_ ( naif_state,
+             ( integer     * ) &nv,
              ( doublereal  * ) vrtces,
              ( integer     * ) &np,
              ( integer     * ) plates,
@@ -768,6 +770,6 @@
              ( integer     * ) spaixi   );
                     
 
-   chkout_c ( "dskmi2_c" );
+   chkout_c ( naif_state, "dskmi2_c" );
 
 } /* End dskmi2_c */

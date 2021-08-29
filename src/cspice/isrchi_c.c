@@ -48,7 +48,8 @@
    #include "SpiceZim.h"
    #undef   isrchi_c
 
-   SpiceInt isrchi_c ( SpiceInt         value,
+   SpiceInt isrchi_c ( void           * naif_state,
+                       SpiceInt         value,
                        SpiceInt         ndim,
                        ConstSpiceInt  * array  ) 
 
@@ -142,7 +143,8 @@
    /*
    Call the f2c'd routine. 
    */
-   loc =  (SpiceInt) isrchi_ ( (integer *) &value, 
+   loc =  (SpiceInt) isrchi_ ( naif_state,
+                               (integer *) &value, 
                                (integer *) &ndim, 
                                (integer *) array   ); 
 

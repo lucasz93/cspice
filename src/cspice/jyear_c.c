@@ -43,7 +43,7 @@
 
    #include "SpiceUsr.h"
 
-   SpiceDouble jyear_c ( void )
+   SpiceDouble jyear_c ( void *naif_state )
 
 /*
 

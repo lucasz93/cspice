@@ -52,7 +52,8 @@
    #include "SpiceZmc.h"
    #undef dskobj_c
 
-   void dskobj_c ( ConstSpiceChar   * dsk,
+   void dskobj_c ( void             * naif_state,
+                   ConstSpiceChar   * dsk,
                    SpiceCell        * bodids ) 
 
 /*
@@ -262,34 +263,35 @@
    Check the input string to make sure the pointer is non-null and
    the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "dskobj_c", dsk );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dskobj_c", dsk );
 
    /*
    Make sure cell data type is integer.
    */
-   CELLTYPECHK ( CHK_STANDARD, "dskobj_c", SPICE_INT, bodids );
+   CELLTYPECHK ( naif_state, CHK_STANDARD, "dskobj_c", SPICE_INT, bodids );
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( bodids );
+   CELLINIT ( naif_state, bodids );
 
    /*
    The f2c'd routine will operate on the integer array associated
    with the input cell. 
    */
-   dskobj_ ( (char     *) dsk,
+   dskobj_ ( naif_state,
+             (char     *) dsk,
              (integer  *) bodids->base,
              (ftnlen    ) strlen(dsk)   );
 
    /*
    Sync the cell. 
    */      
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, bodids );
+      zzsynccl_c ( naif_state, F2C, bodids );
    }
 
-   chkout_c ( "dskobj_c" );
+   chkout_c ( naif_state, "dskobj_c" );
 
 } /* End dskobj_c */

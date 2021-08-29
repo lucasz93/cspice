@@ -55,7 +55,8 @@
 
    #endif
 
-   void zzgetcml_c ( SpiceInt         *  argc,
+   void zzgetcml_c ( void             *  naif_state,
+                     SpiceInt         *  argc,
                      SpiceChar      ***  argv,
                      SpiceBoolean        init )
 
@@ -221,7 +222,7 @@
 */
 
 {
-   cspice_user_state_t* user = &__cspice_get_state()->user;
+   cspice_user_state_t* user = &((cspice_t *)naif_state)->user;
 
    /* Local variables */
 
@@ -270,11 +271,11 @@
       if ( user->zzgetcml.CML_argv == NULL )
          {
 
-         setmsg_c ( "Malloc failed to allocate space for a "
+         setmsg_c ( naif_state, "Malloc failed to allocate space for a "
                     "SpiceChar* array of length #. ");
-         errint_c ( "#", (SpiceInt) user->zzgetcml.CML_argc );
-         sigerr_c ( "SPICE(MALLOCFAILED)"    );
-         chkout_c ( "zzgetcml_c"             );
+         errint_c ( naif_state, "#", (SpiceInt) user->zzgetcml.CML_argc );
+         sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"    );
+         chkout_c ( naif_state, "zzgetcml_c"             );
          return;
          }
 
@@ -296,11 +297,11 @@
          if ( user->zzgetcml.CML_argv[i] == NULL )
             {
 
-            setmsg_c ( "Malloc failed to allocate space for a "
+            setmsg_c ( naif_state, "Malloc failed to allocate space for a "
                        "SpiceChar array of length #. ");
-            errint_c ( "#", (SpiceInt) (1 + len) );
-            sigerr_c ( "SPICE(MALLOCFAILED)"     );
-            chkout_c ( "zzgetcml_c"              );
+            errint_c ( naif_state, "#", (SpiceInt) (1 + len) );
+            sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"     );
+            chkout_c ( naif_state, "zzgetcml_c"              );
             return;
             }
 
@@ -323,9 +324,9 @@
       putcml_c
       */
 
-      setmsg_c ( "getcml_c called without putcml_c initialization" );
-      sigerr_c ( "SPICE(PUTCMLNOTCALLED)"                          );
-      chkout_c ( "zzgetcml_c" );
+      setmsg_c ( naif_state, "getcml_c called without putcml_c initialization" );
+      sigerr_c ( naif_state, "SPICE(PUTCMLNOTCALLED)"                          );
+      chkout_c ( naif_state, "zzgetcml_c" );
       return;
       }
 
@@ -334,9 +335,9 @@
 
       /* This is not the first call, but the call came from putcml_c */
 
-      setmsg_c ( "Illegal attempt to reinitialize with putcml_c" );
-      sigerr_c ( "SPICE(PUTCMLCALLEDTWICE)"                      );
-      chkout_c ( "zzgetcml_c" );
+      setmsg_c ( naif_state, "Illegal attempt to reinitialize with putcml_c" );
+      sigerr_c ( naif_state, "SPICE(PUTCMLCALLEDTWICE)"                      );
+      chkout_c ( naif_state, "zzgetcml_c" );
       return;
       }
 
@@ -353,7 +354,7 @@
 
    /* Check out and return. */
 
-   chkout_c ( "zzgetcml_c" );
+   chkout_c ( naif_state, "zzgetcml_c" );
 
 }
 

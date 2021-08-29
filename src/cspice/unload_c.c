@@ -46,7 +46,7 @@
    #include "SpiceZmc.h"
 
 
-   void unload_c ( ConstSpiceChar  * file ) 
+   void unload_c ( void *naif_state, ConstSpiceChar  * file ) 
 
 /*
 
@@ -192,16 +192,17 @@
    Check the input filename to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "unload_c", file );
+   CHKFSTR ( naif_state, CHK_STANDARD, "unload_c", file );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   unload_ ( ( char   * ) file, 
+   unload_ ( naif_state,
+             ( char   * ) file, 
              ( ftnlen   ) strlen(file) );
 
 
-   chkout_c ( "unload_c" );
+   chkout_c ( naif_state, "unload_c" );
 
 } /* End unload_c */

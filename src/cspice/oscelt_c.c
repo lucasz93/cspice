@@ -50,7 +50,8 @@
    #undef    oscelt_c
    
 
-   void oscelt_c ( ConstSpiceDouble   state[6],
+   void oscelt_c ( void             * naif_state,
+                   ConstSpiceDouble   state[6],
                    SpiceDouble        et,
                    SpiceDouble        mu,
                    SpiceDouble        elts[8]   )
@@ -269,13 +270,14 @@
    /*
    Call the f2c'd Fortran routine.
    */
-   oscelt_( ( doublereal * ) state,
+   oscelt_( naif_state,
+            ( doublereal * ) state,
             ( doublereal * ) &et   ,
             ( doublereal * ) &mu   ,
             ( doublereal * ) elts  );
 
 
-   chkout_c ( "oscelt_c" );
+   chkout_c ( naif_state, "oscelt_c" );
 
 } /* End oscelt_c */
 

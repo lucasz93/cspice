@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void timdef_c ( ConstSpiceChar * action,
+   void timdef_c ( void           * naif_state,
+                   ConstSpiceChar * action,
                    ConstSpiceChar * item,
                    SpiceInt         lenout,
                    SpiceChar      * value )
@@ -281,15 +282,15 @@
    Check the input strings to make sure the pointers are non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "timdef_c", action );
+   CHKFSTR ( naif_state, CHK_STANDARD, "timdef_c", action );
 
-   CHKFSTR ( CHK_STANDARD, "timdef_c", item   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "timdef_c", item   );
 
 
 
    /*  Select a task based on the value of the action string. */
 
-   if ( eqstr_c ( action, "SET") )
+   if ( eqstr_c ( naif_state, action, "SET") )
       {
 
       /*
@@ -297,14 +298,15 @@
       value as well.
       */
 
-      CHKFSTR ( CHK_STANDARD, "timdef_c", value );
+      CHKFSTR ( naif_state, CHK_STANDARD, "timdef_c", value );
 
 
       /*
       Call the f2c'd Fortran routine.
       */
 
-      timdef_( ( char * ) action,
+      timdef_( naif_state,
+               ( char * ) action,
                ( char * ) item,
                ( char * ) value,
                ( ftnlen ) strlen(action),
@@ -314,7 +316,7 @@
 
       }
 
-   else if ( eqstr_c (action, "GET" ) )
+   else if ( eqstr_c (naif_state, action, "GET" ) )
       {
 
       /*
@@ -322,14 +324,15 @@
       the output string has at least enough room for one output
       character and a null terminator.  Also check for a null pointer.
       */
-      CHKOSTR ( CHK_STANDARD, "timdef_c", value, lenout );
+      CHKOSTR ( naif_state, CHK_STANDARD, "timdef_c", value, lenout );
 
 
       /*
       Call the f2c'd Fortran routine.
       */
 
-      timdef_( ( char * ) action,
+      timdef_( naif_state,
+               ( char * ) action,
                ( char * ) item,
                ( char * ) value,
                ( ftnlen ) strlen(action),
@@ -345,7 +348,7 @@
 
 
 
-   chkout_c ( "timdef_c" );
+   chkout_c ( naif_state, "timdef_c" );
 
 
 } /* End timdef_c */

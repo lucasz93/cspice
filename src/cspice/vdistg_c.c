@@ -46,7 +46,8 @@
    #undef    vdistg_c
    
 
-   SpiceDouble vdistg_c ( ConstSpiceDouble   * v1,
+   SpiceDouble vdistg_c ( void               * naif_state,
+                          ConstSpiceDouble   * v1,
                           ConstSpiceDouble   * v2,
                           SpiceInt             ndim )
 /*

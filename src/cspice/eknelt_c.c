@@ -46,7 +46,8 @@
    #include "SpiceZfc.h"
 
 
-   SpiceInt eknelt_c ( SpiceInt  selidx,
+   SpiceInt eknelt_c ( void    * naif_state,
+                       SpiceInt  selidx,
                        SpiceInt  row     ) 
 
 /*
@@ -326,7 +327,8 @@
    Get the number of elements from the f2c'd routine.
    */
 
-   eknelt_ ( ( integer * ) &fIndex,
+   eknelt_ ( naif_state,
+             ( integer * ) &fIndex,
              ( integer * ) &fRow,
              ( integer * ) &n      );
              
@@ -334,7 +336,7 @@
    /*
    Check out before returning the output value.
    */
-   chkout_c ( "eknelt_c" );
+   chkout_c ( naif_state, "eknelt_c" );
    
 
    return ( n );

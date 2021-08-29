@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void dasopw_c ( ConstSpiceChar  * fname,
+   void dasopw_c ( void            * naif_state,
+                   ConstSpiceChar  * fname,
                    SpiceInt        * handle ) 
 
 /*
@@ -159,18 +160,19 @@
    Check the input string to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "dasopw_c", fname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dasopw_c", fname );
 
 
    /*
    Call the f2c'd Fortran routine.  Use explicit type casts for every
    type defined by f2c.
    */
-   dasopw_ ( ( char       * )  fname,
+   dasopw_ ( naif_state,
+             ( char       * )  fname,
              ( integer    * )  handle,
              ( ftnlen       )  strlen(fname) );
 
 
-   chkout_c ( "dasopw_c" );
+   chkout_c ( naif_state, "dasopw_c" );
 
 } /* End dasopw_c */

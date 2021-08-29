@@ -46,7 +46,7 @@
    #include "SpiceZfc.h"
    #undef dvsep_c
 
-   SpiceDouble dvsep_c (ConstSpiceDouble s1[6], ConstSpiceDouble s2[6] ) 
+   SpiceDouble dvsep_c (void *naif_state, ConstSpiceDouble s1[6], ConstSpiceDouble s2[6] ) 
 
 /*
 
@@ -229,10 +229,11 @@
    /*
    Call the f2c'd Fortran routine.
    */
-   retval = (SpiceDouble) dvsep_( ( doublereal * ) s1,
+   retval = (SpiceDouble) dvsep_( naif_state,
+                                  ( doublereal * ) s1,
                                   ( doublereal * ) s2 );
 
-   chkout_c ( "dvsep_c" );
+   chkout_c ( naif_state, "dvsep_c" );
 
    return(retval);
 

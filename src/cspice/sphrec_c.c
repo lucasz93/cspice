@@ -45,7 +45,8 @@
    #include "SpiceUsr.h"
 
 
-   void sphrec_c ( SpiceDouble    r,
+   void sphrec_c ( void         * naif_state,
+                   SpiceDouble    r,
                    SpiceDouble    colat, 
                    SpiceDouble    lon,
                    SpiceDouble    rectan[3] ) 

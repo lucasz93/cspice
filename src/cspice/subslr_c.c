@@ -59,7 +59,8 @@
    #undef subslr_c
 
  
-   void subslr_c ( ConstSpiceChar       * method,
+   void subslr_c ( void                 * naif_state,
+                   ConstSpiceChar       * method,
                    ConstSpiceChar       * target,
                    SpiceDouble            et,
                    ConstSpiceChar       * fixref,
@@ -933,7 +934,7 @@
               planetocentric radius, longitude, and latitude. Convert
               radians to degrees.
               ./
-              reclat_c ( spoint, &spcrad, &spclon, &spclat );
+              reclat_c ( naif_state,spoint, &spcrad, &spclon, &spclat );
 
               spclon *= dpr_c();
               spclat *= dpr_c();
@@ -963,7 +964,7 @@
               planetocentric radius, longitude, and latitude.
               Convert radians to degrees.
               ./
-              reclat_c ( sunpos, &supcrd, &supcln, &supclt );
+              reclat_c ( naif_state,sunpos, &supcrd, &supcln, &supclt );
 
               supcln *= dpr_c();
               supclt *= dpr_c();
@@ -1127,16 +1128,17 @@
    Make sure none of the pointers are null and that each string
    contains at least one non-null character.
    */
-   CHKFSTR ( CHK_STANDARD, "subslr_c", method );
-   CHKFSTR ( CHK_STANDARD, "subslr_c", target );
-   CHKFSTR ( CHK_STANDARD, "subslr_c", fixref );
-   CHKFSTR ( CHK_STANDARD, "subslr_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "subslr_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subslr_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subslr_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subslr_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subslr_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subslr_c", obsrvr );
  
    /*
    Call the f2c'd routine.
    */
-   subslr_ ( ( char         * ) method,
+   subslr_ ( naif_state,
+             ( char         * ) method,
              ( char         * ) target,
              ( doublereal   * ) &et,
              ( char         * ) fixref,
@@ -1151,6 +1153,6 @@
              ( ftnlen         ) strlen(abcorr),
              ( ftnlen         ) strlen(obsrvr)  );
 
-   chkout_c ( "subslr_c" );
+   chkout_c ( naif_state, "subslr_c" );
 
 } /* End subslr_c */

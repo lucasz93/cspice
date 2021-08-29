@@ -44,7 +44,8 @@
    #include "SpiceUsr.h"
    #undef   vaddg_c
 
-   void vaddg_c ( ConstSpiceDouble  * v1,
+   void vaddg_c ( void              * naif_state,
+                  ConstSpiceDouble  * v1,
                   ConstSpiceDouble  * v2,
                   SpiceInt            ndim,
                   SpiceDouble       * vout )

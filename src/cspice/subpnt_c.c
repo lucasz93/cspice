@@ -58,7 +58,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
  
-   void subpnt_c ( ConstSpiceChar       * method,
+   void subpnt_c ( void                 * naif_state,
+                   ConstSpiceChar       * method,
                    ConstSpiceChar       * target,
                    SpiceDouble            et,
                    ConstSpiceChar       * fixref,
@@ -1000,7 +1001,7 @@
              planetocentric radius, longitude, and latitude. Convert
              radians to degrees.
              ./
-             reclat_c ( spoint, &spcrad, &spclon, &spclat );
+             reclat_c ( naif_state,spoint, &spcrad, &spclon, &spclat );
 
              spclon *= dpr_c();
              spclat *= dpr_c();
@@ -1025,7 +1026,7 @@
              planetocentric radius, longitude, and latitude.
              Convert radians to degrees.
              ./
-             reclat_c ( obspos, &opcrad, &opclon, &opclat );
+             reclat_c ( naif_state,obspos, &opcrad, &opclon, &opclat );
 
              opclon *= dpr_c();
              opclat *= dpr_c();
@@ -1335,7 +1336,7 @@
                  planetocentric latitude and longitude. Convert radians to 
                  degrees.
                  ./
-                 reclat_c ( spoint, &radius, &lon, &lat );
+                 reclat_c ( naif_state,spoint, &radius, &lon, &lat );
 
                  lon *= dpr_c();
                  lat *= dpr_c();
@@ -1524,16 +1525,17 @@
    Make sure none of the pointers are null and that each string
    contains at least one non-null character.
    */
-   CHKFSTR ( CHK_STANDARD, "subpnt_c", method );
-   CHKFSTR ( CHK_STANDARD, "subpnt_c", target );
-   CHKFSTR ( CHK_STANDARD, "subpnt_c", fixref );
-   CHKFSTR ( CHK_STANDARD, "subpnt_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "subpnt_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpnt_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpnt_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpnt_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpnt_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subpnt_c", obsrvr );
  
    /*
    Call the f2c'd routine.
    */
-   subpnt_ ( ( char         * ) method,
+   subpnt_ ( naif_state,
+             ( char         * ) method,
              ( char         * ) target,
              ( doublereal   * ) &et,
              ( char         * ) fixref,
@@ -1548,6 +1550,6 @@
              ( ftnlen         ) strlen(abcorr),
              ( ftnlen         ) strlen(obsrvr)  );
 
-   chkout_c ( "subpnt_c" );
+   chkout_c ( naif_state, "subpnt_c" );
 
 } /* End subpnt_c */

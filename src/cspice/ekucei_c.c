@@ -50,7 +50,8 @@
    #undef    ekucei_c
 
 
-   void ekucei_c  ( SpiceInt          handle,
+   void ekucei_c  ( void            * naif_state,
+                    SpiceInt          handle,
                     SpiceInt          segno,
                     SpiceInt          recno,
                     ConstSpiceChar  * column,
@@ -259,7 +260,7 @@
    Check the column name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekucei_c", column );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekucei_c", column );
 
    /*
    Convert the null flag to type logical before passing it to
@@ -272,7 +273,8 @@
    segno++;
    recno++;
 
-   ekucei_  (  ( integer * ) &handle,
+   ekucei_  (  naif_state,
+               ( integer * ) &handle,
                ( integer * ) &segno,
                ( integer * ) &recno,
                ( char    * )  column,
@@ -282,6 +284,6 @@
                ( ftnlen    ) strlen(column) );
 
 
-   chkout_c ( "ekucei_c" );
+   chkout_c ( naif_state, "ekucei_c" );
 
 } /* End ekucei_c */

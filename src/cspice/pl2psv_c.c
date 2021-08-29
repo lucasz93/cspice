@@ -49,7 +49,8 @@
    #undef    pl2psv_c
    
 
-   void pl2psv_c ( ConstSpicePlane  * plane,
+   void pl2psv_c ( void             * naif_state,
+                   ConstSpicePlane  * plane,
                    SpiceDouble        point[3],
                    SpiceDouble        span1[3],
                    SpiceDouble        span2[3]  ) 
@@ -269,7 +270,7 @@
    /*
    Find the closest point in the plane to the origin.
    */
-   vscl_c ( plane->constant, plane->normal, point );
+   vscl_c ( naif_state, plane->constant, plane->normal, point );
  
  
    /*
@@ -281,7 +282,7 @@
    
    MOVED ( plane->normal, 3, normal );
    
-   frame_c ( normal, span1, span2 );
+   frame_c ( naif_state, normal, span1, span2 );
    
 
 } /* End pl2psv_c */

@@ -46,7 +46,8 @@
    #include "SpiceUsr.h"
 
 
-   void frame_c ( SpiceDouble x[3],
+   void frame_c ( void      * naif_state,
+                  SpiceDouble x[3],
                   SpiceDouble y[3],
                   SpiceDouble z[3] ) 
 
@@ -184,7 +185,7 @@
    /*
    First make x into a unit vector.
    */
-   vhat_c ( x, x );
+   vhat_c ( naif_state, x, x );
  
  
    /*

@@ -50,7 +50,8 @@
    #undef   dafps_c
 
 
-   void dafps_c ( SpiceInt             nd,
+   void dafps_c ( void               * naif_state,
+                  SpiceInt             nd,
                   SpiceInt             ni,
                   ConstSpiceDouble   * dc,
                   ConstSpiceInt      * ic,
@@ -231,13 +232,14 @@
    chkin_c ( naif_state, "dafps_c" );
 
 
-   dafps_ (  ( integer    * ) &nd,
+   dafps_ (  naif_state,
+             ( integer    * ) &nd,
              ( integer    * ) &ni,
              ( doublereal * ) dc,
              ( integer    * ) ic,
              ( doublereal * ) sum  );
 
 
-   chkout_c ( "dafps_c" );
+   chkout_c ( naif_state, "dafps_c" );
 
 } /* End dafps_c */

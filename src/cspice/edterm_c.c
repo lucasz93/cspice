@@ -54,7 +54,8 @@
    #include "SpiceZst.h"
    #undef   edterm_c
 
-   void edterm_c ( ConstSpiceChar     * trmtyp,
+   void edterm_c ( void               * naif_state,
+                   ConstSpiceChar     * trmtyp,
                    ConstSpiceChar     * source,
                    ConstSpiceChar     * target,
                    SpiceDouble          et,
@@ -598,7 +599,7 @@
                    Convert the ith terminator point to latitudinal
                    coordinates. Display the point.
                    ./
-                   reclat_c ( trmpts[i], &radius, &lon, &lat );
+                   reclat_c ( naif_state,trmpts[i], &radius, &lon, &lat );
 
                    printf ( "\n"
                             "   Terminator point %d:\n"
@@ -742,21 +743,22 @@
    /*
    Check input string pointers and lengths.
    */
-   CHKFSTR ( CHK_STANDARD, "edterm_c", trmtyp );
-   CHKFSTR ( CHK_STANDARD, "edterm_c", source );
-   CHKFSTR ( CHK_STANDARD, "edterm_c", target );
-   CHKFSTR ( CHK_STANDARD, "edterm_c", fixref );
-   CHKFSTR ( CHK_STANDARD, "edterm_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "edterm_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "edterm_c", trmtyp );
+   CHKFSTR ( naif_state, CHK_STANDARD, "edterm_c", source );
+   CHKFSTR ( naif_state, CHK_STANDARD, "edterm_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "edterm_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "edterm_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "edterm_c", obsrvr );
 
    /*
    Check output array pointers.
    */
-   CHKPTR  ( CHK_STANDARD, "edterm_c", obspos );
-   CHKPTR  ( CHK_STANDARD, "edterm_c", trmpts );
+   CHKPTR  ( naif_state, CHK_STANDARD, "edterm_c", obspos );
+   CHKPTR  ( naif_state, CHK_STANDARD, "edterm_c", trmpts );
 
 
-   edterm_ ( ( char       * ) trmtyp,
+   edterm_ ( naif_state,
+             ( char       * ) trmtyp,
              ( char       * ) source,
              ( char       * ) target,
              ( doublereal * ) &et,
@@ -774,6 +776,6 @@
              ( ftnlen       ) strlen(abcorr),
              ( ftnlen       ) strlen(obsrvr)  );
 
-   chkout_c ( "edterm_c" );
+   chkout_c ( naif_state, "edterm_c" );
 
 } /* End edterm_c */

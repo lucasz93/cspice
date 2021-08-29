@@ -46,7 +46,8 @@
    #include "SpiceZmc.h"
 
 
-   void removi_c ( SpiceInt        item,
+   void removi_c ( void          * naif_state,
+                   SpiceInt        item,
                    SpiceCell     * set  )
 
 
@@ -169,7 +170,7 @@
    /*
    Make sure we're working with an integer cell. 
    */
-   CELLTYPECHK ( CHK_DISCOVER, "removi_c", SPICE_INT, set );
+   CELLTYPECHK ( naif_state, CHK_DISCOVER, "removi_c", SPICE_INT, set );
 
    idata = (SpiceInt *) (set->data);
 
@@ -177,19 +178,19 @@
    /*
    Make sure the cell is really a set. 
    */
-   CELLISSETCHK ( CHK_DISCOVER, "removi_c", set );
+   CELLISSETCHK ( naif_state, CHK_DISCOVER, "removi_c", set );
 
 
    /*
    Initialize the set if necessary. 
    */
-   CELLINIT ( set );
+   CELLINIT ( naif_state, set );
 
 
    /*
    Is the item in the set? If not, we're done now.
    */
-   loc   =  lstlei_c ( item,  set->card,  idata );
+   loc   =  lstlei_c ( naif_state, item,  set->card,  idata );
 
    inSet =  (  loc  >  -1  ) && ( item == idata[loc] );
  
@@ -217,6 +218,6 @@
    /*
    Sync the set. 
    */
-   zzsynccl_c ( C2F, set );
+   zzsynccl_c ( naif_state, C2F, set );
 }
 

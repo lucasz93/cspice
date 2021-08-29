@@ -47,7 +47,8 @@
    #include "SpiceZim.h"
    #undef    lstltd_c
 
-   SpiceInt lstltd_c ( SpiceDouble         x,
+   SpiceInt lstltd_c ( void              * naif_state,
+                       SpiceDouble         x,
                        SpiceInt            n,
                        ConstSpiceDouble  * array ) 
 /*
@@ -171,7 +172,8 @@
   The return value -1 indicates "not found." 
   */
  
-  return ( (SpiceInt) lstltd_ (  (doublereal *) &x,
+  return ( (SpiceInt) lstltd_ (  naif_state,
+                                 (doublereal *) &x,
                                  (integer    *) &n,
                                  (doublereal *) array )   -  1 );
 

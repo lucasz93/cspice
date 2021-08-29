@@ -55,7 +55,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void fovtrg_c ( ConstSpiceChar   * inst,
+   void fovtrg_c ( void             * naif_state,
+                   ConstSpiceChar   * inst,
                    ConstSpiceChar   * target,
                    ConstSpiceChar   * tshape,
                    ConstSpiceChar   * tframe,
@@ -608,7 +609,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -618,11 +619,11 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "fovtrg_c", inst   );
-   CHKFSTR ( CHK_STANDARD, "fovtrg_c", target );
-   CHKFSTR ( CHK_STANDARD, "fovtrg_c", tshape );
-   CHKFSTR ( CHK_STANDARD, "fovtrg_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "fovtrg_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "fovtrg_c", inst   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "fovtrg_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "fovtrg_c", tshape );
+   CHKFSTR ( naif_state, CHK_STANDARD, "fovtrg_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "fovtrg_c", obsrvr );
 
    /*
    The input frame name is a special case because we allow the caller
@@ -632,7 +633,7 @@
 
    First make sure the frame name pointer is non-null.
    */
-   CHKPTR ( CHK_STANDARD, "fovtrg_c", tframe );
+   CHKPTR ( naif_state, CHK_STANDARD, "fovtrg_c", tframe );
    
    /*
    Use the input frame string if it's non-empty; otherwise
@@ -652,7 +653,8 @@
    Call the f2c'd Fortran routine. Use explicit type casts for every
    type defined by f2c.
    */
-   fovtrg_ ( (char         *) inst,
+   fovtrg_ ( naif_state,
+             (char         *) inst,
              (char         *) target,
              (char         *) tshape,
              (char         *) tFrameStr,
@@ -668,7 +670,7 @@
              (ftnlen        ) strlen(obsrvr)  );
  
  
-   chkout_c ( "fovtrg_c" );
+   chkout_c ( naif_state, "fovtrg_c" );
  
 
 } /* End fovtrg_c */

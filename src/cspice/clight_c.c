@@ -44,7 +44,7 @@
 
    #include "SpiceUsr.h"
 
-   SpiceDouble clight_c ( void )
+   SpiceDouble clight_c ( void *naif_state )
 
 /*
 

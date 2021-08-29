@@ -49,7 +49,8 @@
    #include "SpiceZad.h"
    #undef   zzadrepu_c
 
-   int zzadrepu_c ( doublereal  * ivbeg, 
+   int zzadrepu_c ( void        * naif_state,
+                    doublereal  * ivbeg, 
                     doublereal  * ivend,
                     doublereal  * time   )
 
@@ -156,7 +157,8 @@
    /*
    Local variables 
    */
-   void               ( * fPtr ) ( SpiceDouble, 
+   void               ( * fPtr ) ( void *,
+                                   SpiceDouble, 
                                    SpiceDouble,
                                    SpiceDouble );
                            
@@ -164,7 +166,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return ( 0 );
    }
@@ -177,20 +179,22 @@
    list matches that of gfrepu_c.
    */
 
-   fPtr = (  void (*) ( SpiceDouble, 
+   fPtr = (  void (*) ( void*,
+                        SpiceDouble, 
                         SpiceDouble,
-                        SpiceDouble )  )  zzadget_c ( naif_state,  ( UDREPU );
+                        SpiceDouble )  )  zzadget_c ( naif_state, UDREPU );
  
    /*
    Call the CSPICE-style progress report update function. 
    */
    
-   ( *fPtr ) ( (SpiceDouble) (*ivbeg),
+   ( *fPtr ) ( naif_state,
+               (SpiceDouble) (*ivbeg),
                (SpiceDouble) (*ivend),
                (SpiceDouble) (*time )  );
               
 
-   chkout_c ( "zzadrepu_c" );
+   chkout_c ( naif_state, "zzadrepu_c" );
 
    return ( 0 );
 

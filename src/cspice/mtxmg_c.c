@@ -50,7 +50,8 @@
    #undef    mtxmg_c
 
 
-   void mtxmg_c ( const void  * m1,
+   void mtxmg_c ( void        * naif_state,
+                  const void  * m1,
                   const void  * m2,
                   SpiceInt      ncol1,
                   SpiceInt      nr1r2,
@@ -239,10 +240,10 @@
 
    if ( tmpmat == (SpiceDouble *)0 )
    {
-      chkin_c  ( "mtxmg_c"                                         );
-      setmsg_c ( "An attempt to create a temporary matrix failed." );
-      sigerr_c ( "SPICE(MEMALLOCFAILED)"                           );
-      chkout_c ( "mtxmg_c"                                         );
+      chkin_c  ( naif_state, "mtxmg_c"                                         );
+      setmsg_c ( naif_state, "An attempt to create a temporary matrix failed." );
+      sigerr_c ( naif_state, "SPICE(MEMALLOCFAILED)"                           );
+      chkout_c ( naif_state, "mtxmg_c"                                         );
       return;
    }  
 

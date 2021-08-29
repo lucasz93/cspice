@@ -49,7 +49,8 @@
    #undef    mequg_c
 
 
-   void mequg_c ( const void   * m1,
+   void mequg_c ( void         * naif_state,
+                  const void   * m1,
                   SpiceInt       nr,
                   SpiceInt       nc,
                   void         * mout )

@@ -54,7 +54,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void srfs2c_c ( ConstSpiceChar  * srfstr,
+   void srfs2c_c ( void            * naif_state,
+                   ConstSpiceChar  * srfstr,
                    ConstSpiceChar  * bodstr,
                    SpiceInt        * code,
                    SpiceBoolean    * found ) 
@@ -413,13 +414,14 @@
    Check the input strings to make sure the pointers are non-null and
    the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "srfs2c_c", srfstr );
-   CHKFSTR ( CHK_STANDARD, "srfs2c_c", bodstr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "srfs2c_c", srfstr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "srfs2c_c", bodstr );
 
    /*
    Hand off the work to the f2c'd routine. 
    */   
-   srfs2c_ ( (char       *) srfstr,
+   srfs2c_ ( naif_state,
+             (char       *) srfstr,
              (char       *) bodstr,
              (integer    *) code,
              (logical    *) &fnd,
@@ -431,6 +433,6 @@
    */
    *found = fnd;
 
-   chkout_c ( "srfs2c_c" );
+   chkout_c ( naif_state, "srfs2c_c" );
 
 } /* End srfs2c_c */

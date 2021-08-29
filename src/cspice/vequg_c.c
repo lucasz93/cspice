@@ -48,7 +48,8 @@
    #undef    vequg_c
 
 
-   void vequg_c ( ConstSpiceDouble  * vin,
+   void vequg_c ( void              * naif_state,
+                  ConstSpiceDouble  * vin,
                   SpiceInt            ndim,
                   SpiceDouble       * vout )
 /*
@@ -137,10 +138,10 @@
    if ( ndim <= 0 )
       {
 
-      chkin_c    ( "vequg_c"                                      );
-      SpiceError ( "Vector dimension less than or equal to zero",
+      chkin_c    ( naif_state, "vequg_c"                                      );
+      SpiceError ( naif_state, "Vector dimension less than or equal to zero",
                    "BADDIMENSION"                                 );
-      chkout_c   ( "vequg_c"                                     );
+      chkout_c   ( naif_state, "vequg_c"                                     );
       return;
 
       }

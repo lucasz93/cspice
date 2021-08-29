@@ -51,11 +51,15 @@
    #include "SpiceZad.h"
    #undef   gfudb_c
 
-   void gfudb_c (  void             ( * udfuns ) ( SpiceDouble       et,
-                                                   SpiceDouble     * value ),
+   void gfudb_c (  void            * naif_state,
+                  void             ( * udfuns ) ( void            * naif_state,
+                                                  SpiceDouble       et,
+                                                  SpiceDouble     * value ),
 
-                   void             ( * udfunb ) ( void ( * udfuns )
-                                                        ( SpiceDouble   et,
+                   void             ( * udfunb ) ( void           * naif_state,
+                                                   void ( * udfuns )
+                                                        ( void        * naif_state,
+                                                          SpiceDouble   et,
                                                           SpiceDouble * value ),
 
                                                    SpiceDouble       et,
@@ -911,7 +915,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
      {
       return;
       }
@@ -921,12 +925,12 @@
    /*
    Make sure cell data types are d.p.
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "gfudb_c", SPICE_DP, cnfine, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "gfudb_c", SPICE_DP, cnfine, result );
 
    /*
    Initialize the input cells if necessary.
    */
-   CELLINIT2 ( cnfine, result );
+   CELLINIT2 ( naif_state, cnfine, result );
 
    /*
    Store the input function pointers so these functions can be
@@ -947,7 +951,8 @@
 
    */
 
-   (void) gfudb_( ( U_fp            ) zzadfunc_c,
+   (void) gfudb_( naif_state,
+                  ( U_fp            ) zzadfunc_c,
                   ( U_fp            ) zzadqdec_c,
                   ( doublereal    * ) &step,
                   ( doublereal    * ) (cnfine->base),
@@ -957,11 +962,11 @@
    /*
    Sync the output cell.
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
      {
-     zzsynccl_c ( F2C, result );
+     zzsynccl_c ( naif_state, F2C, result );
      }
 
-   chkout_c ( "gfudb_c" );
+   chkout_c ( naif_state, "gfudb_c" );
 
    } /* End gfudb_c */

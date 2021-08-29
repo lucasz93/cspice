@@ -48,7 +48,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void gfsstp_c ( SpiceDouble  step ) 
+   void gfsstp_c ( void *naif_state, SpiceDouble  step ) 
 
 /*
 
@@ -156,7 +156,7 @@
    Participate in error tracing.
    */
 
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -167,8 +167,8 @@
    Let the f2c'd routine do the work.
    */
 
-   gfsstp_ (  (doublereal * ) &step );
+   gfsstp_ ( naif_state, (doublereal * ) &step );
 
-   chkout_c ( "gfsstp_c" );
+   chkout_c ( naif_state, "gfsstp_c" );
 
 } /* End gfsstp_c */

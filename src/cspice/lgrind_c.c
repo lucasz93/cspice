@@ -49,7 +49,8 @@
    #include "SpiceZfc.h"
    #undef    lgrind_c
 
-   void lgrind_c ( SpiceInt            n,
+   void lgrind_c ( void              * naif_state,
+                   SpiceInt            n,
                    ConstSpiceDouble  * xvals,
                    ConstSpiceDouble  * yvals,
                    SpiceDouble       * work,
@@ -266,7 +267,8 @@
    /*
    The f2c'd routine does the work.
    */
-   lgrind_( (integer    *) &n,
+   lgrind_( naif_state,
+            (integer    *) &n,
             (doublereal *) xvals,
             (doublereal *) yvals,
             (doublereal *) work,
@@ -274,6 +276,6 @@
             (doublereal *) p,
             (doublereal *) dp);
 
-   chkout_c ( "lgrind_c" );
+   chkout_c ( naif_state, "lgrind_c" );
 
 } /* End lgrind_c */

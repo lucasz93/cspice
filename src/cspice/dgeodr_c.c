@@ -48,7 +48,8 @@
    #include "SpiceZfc.h"
 
 
-   void dgeodr_c ( SpiceDouble   x,
+   void dgeodr_c ( void        * naif_state,
+                   SpiceDouble   x,
                    SpiceDouble   y,
                    SpiceDouble   z,
                    SpiceDouble   re,
@@ -219,7 +220,8 @@
    chkin_c ( naif_state, "dgeodr_c" );
 
 
-   dgeodr_ ( (doublereal *) &x,
+   dgeodr_ ( naif_state,
+             (doublereal *) &x,
              (doublereal *) &y,
              (doublereal *) &z,
              (doublereal *) &re,
@@ -229,9 +231,9 @@
    /*
    Transpose the Jacobian to create a C-style matrix.
    */
-   xpose_c ( jacobi, jacobi );
+   xpose_c ( naif_state, jacobi, jacobi );
 
 
-   chkout_c ( "dgeodr_c" );
+   chkout_c ( naif_state, "dgeodr_c" );
 
 } /* End dgeodr_c */

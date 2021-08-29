@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   SpiceBoolean set_c (  SpiceCell        * a,
+   SpiceBoolean set_c (  void             * naif_state,
+                         SpiceCell        * a,
                          ConstSpiceChar   * op,
                          SpiceCell        * b   )
 
@@ -249,7 +250,7 @@
    Standard SPICE error handling. 
    */
 
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return ( SPICEFALSE );
    }
@@ -260,25 +261,25 @@
    Check the input string op to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR_VAL ( CHK_STANDARD, "set_c", op, SPICEFALSE );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "set_c", op, SPICEFALSE );
 
 
    /*
    Make sure data types match. 
    */
-   CELLMATCH2_VAL ( CHK_STANDARD, "set_c", a, b, SPICEFALSE );
+   CELLMATCH2_VAL ( naif_state, CHK_STANDARD, "set_c", a, b, SPICEFALSE );
 
 
    /*
    Make sure the input cells are sets.
    */
-   CELLISSETCHK2_VAL ( CHK_STANDARD, "set_c", a, b, SPICEFALSE );
+   CELLISSETCHK2_VAL ( naif_state, CHK_STANDARD, "set_c", a, b, SPICEFALSE );
 
 
    /*
    Initialize the cells if necessary. 
    */
-   CELLINIT2 ( a, b );
+   CELLINIT2 ( naif_state, a, b );
 
 
    /*
@@ -290,19 +291,20 @@
       /*
       Construct Fortran-style sets suitable for passing to setc_. 
       */
-      C2F_MAP_CELL2 ( "set_c", 
+      C2F_MAP_CELL2 ( naif_state, "set_c", 
                       a, fCell,   fLen,
                       b, fCell+1, fLen+1 );
 
 
-      if ( failed_c() )
+      if ( failed_c(naif_state) )
       {
-         chkout_c ( "set_c" );
+         chkout_c ( naif_state, "set_c" );
          return ( SPICEFALSE );
       }
 
 
-      retval =  (SpiceBoolean) setc_ ( (char    * )  fCell[0],
+      retval =  (SpiceBoolean) setc_ ( naif_state,
+                                       (char    * )  fCell[0],
                                        (char    * )  op,
                                        (char    * )  fCell[1],
                                        (ftnlen    )  fLen[0],
@@ -320,7 +322,8 @@
    else if ( a->dtype == SPICE_DP )
    {
 
-      retval =  (SpiceBoolean) setd_ ( (doublereal * ) (a->base),
+      retval =  (SpiceBoolean) setd_ ( naif_state,
+                                       (doublereal * ) (a->base),
                                        (char       * )  op,
                                        (doublereal * ) (b->base), 
                                        (ftnlen       )  strlen(op)  );
@@ -328,7 +331,8 @@
 
    else if ( a->dtype == SPICE_INT )
    {
-      retval =  (SpiceBoolean) seti_ ( (integer * ) (a->base),
+      retval =  (SpiceBoolean) seti_ ( naif_state,
+                                       (integer * ) (a->base),
                                        (char    * )  op,
                                        (integer * ) (b->base), 
                                        (ftnlen    )  strlen(op)  );
@@ -339,15 +343,15 @@
       /*
       We get to this point only if we have an invalid cell type. 
       */
-      setmsg_c ( "Cell a contains unrecognized data type code #." );
-      errint_c ( "#",  (SpiceInt) (a->dtype)                      );
-      sigerr_c ( "SPICE(NOTSUPPORTED)"                            );
-      chkout_c ( "set_c"                                          );
+      setmsg_c ( naif_state, "Cell a contains unrecognized data type code #." );
+      errint_c ( naif_state, "#",  (SpiceInt) (a->dtype)                      );
+      sigerr_c ( naif_state, "SPICE(NOTSUPPORTED)"                            );
+      chkout_c ( naif_state, "set_c"                                          );
       return   ( SPICEFALSE                                       );
    }
 
 
-   chkout_c ( "set_c" );
+   chkout_c ( naif_state, "set_c" );
    return   ( retval  );
 
 

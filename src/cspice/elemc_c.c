@@ -46,7 +46,8 @@
    #include "SpiceZmc.h"
 
 
-   SpiceBoolean elemc_c ( ConstSpiceChar  * item,
+   SpiceBoolean elemc_c ( void            * naif_state,
+                          ConstSpiceChar  * item,
                           SpiceCell       * set   )
 
 /*
@@ -175,32 +176,32 @@
 
    Check the input string pointer to make sure it's not null.
    */
-   CHKPTR_VAL ( CHK_DISCOVER, "elemc_c", item, SPICEFALSE );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "elemc_c", item, SPICEFALSE );
 
 
    /*
    Make sure we're working with a character cell. 
    */
-   CELLTYPECHK_VAL ( CHK_DISCOVER, "elemc_c", SPICE_CHR, set, SPICEFALSE );
+   CELLTYPECHK_VAL ( naif_state, CHK_DISCOVER, "elemc_c", SPICE_CHR, set, SPICEFALSE );
 
 
    /*
    Make sure the cell is really a set. 
    */
-   CELLISSETCHK_VAL ( CHK_DISCOVER, "elemc_c", set, SPICEFALSE );
+   CELLISSETCHK_VAL ( naif_state, CHK_DISCOVER, "elemc_c", set, SPICEFALSE );
 
  
    /*
    Initialize the set if necessary. 
    */
-   CELLINIT ( set );
+   CELLINIT ( naif_state, set );
 
 
    /*
    The routine bsrchc_c returns the index of the item in the set,
    or -1 if the item is not present.
    */
-   return (  bsrchc_c ( item,         set->card,  
-                        set->length,  set->data )   !=   -1   );
+   return (  bsrchc_c ( naif_state, item,         set->card,  
+                                    set->length,  set->data )   !=   -1   );
 
 } /* End elemc_c */

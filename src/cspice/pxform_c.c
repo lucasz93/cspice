@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
 
  
-   void pxform_c ( ConstSpiceChar   * from,
+   void pxform_c ( void             * naif_state,
+                   ConstSpiceChar   * from,
                    ConstSpiceChar   * to,
                    SpiceDouble        et,
                    SpiceDouble        rotate[3][3] )
@@ -200,13 +201,14 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pxform_c", from );
-   CHKFSTR ( CHK_STANDARD, "pxform_c", to   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pxform_c", from );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pxform_c", to   );
  
    /*
    Call the f2c'd routine.
    */
-   pxform_ ( ( char       * ) from,
+   pxform_ ( naif_state,
+             ( char       * ) from,
              ( char       * ) to,
              ( doublereal * ) &et,
              ( doublereal * ) rotate,
@@ -217,9 +219,9 @@
    /*
    Transpose the output to obtain row-major order.
    */
-   xpose_c ( rotate, rotate );
+   xpose_c ( naif_state, rotate, rotate );
    
    
-   chkout_c ( "pxform_c" );
+   chkout_c ( naif_state, "pxform_c" );
  
 } /* End pxform_c */

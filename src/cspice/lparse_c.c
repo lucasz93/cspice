@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void lparse_c ( ConstSpiceChar   * list,
+   void lparse_c ( void             * naif_state,
+                   ConstSpiceChar   * list,
                    ConstSpiceChar   * delim,
                    SpiceInt           nmax,
                    SpiceInt           lenout,
@@ -233,7 +234,7 @@
    if ( nmax < 1 )
    {
       *n = 0;
-      chkout_c ( "lparse_c" );
+      chkout_c ( naif_state, "lparse_c" );
       return;
    }  
    
@@ -245,7 +246,7 @@
    because there's a special case that results in returning before
    the input checks are performed.
    */
-   CHKOSTR ( CHK_STANDARD, "lparse_c", items, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "lparse_c", items, lenout );
   
   
    /*
@@ -254,14 +255,14 @@
    
    We must know that list is not a null pointer first.
    */
-   CHKPTR ( CHK_STANDARD, "lparse_c", list  );
+   CHKPTR ( naif_state, CHK_STANDARD, "lparse_c", list  );
    
    if ( list[0] == NULLCHAR ) 
    {
       *n                   =  1;
       *(SpiceChar *)items  =  NULLCHAR;
       
-      chkout_c ( "lparse_c" );
+      chkout_c ( naif_state, "lparse_c" );
       return;
    }
    
@@ -270,14 +271,15 @@
    Check the input delimiter string to make sure the pointers are 
    non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "lparse_c", list  );
-   CHKFSTR ( CHK_STANDARD, "lparse_c", delim );
+   CHKFSTR ( naif_state, CHK_STANDARD, "lparse_c", list  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "lparse_c", delim );
    
    
    /*
    Call the f2c'd routine.
    */
-   lparse_ ( ( char       * ) list,
+   lparse_ ( naif_state,
+             ( char       * ) list,
              ( char       * ) delim,
              ( integer    * ) &nmax,
              ( integer    * ) n,
@@ -294,7 +296,7 @@
    F2C_ConvertTrStrArr ( *n, lenout, (char *) items );
 
 
-   chkout_c ( "lparse_c" );
+   chkout_c ( naif_state, "lparse_c" );
    
 
 } /* End lparse_c */

@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void ekrcec_c ( SpiceInt           handle,
+   void ekrcec_c ( void             * naif_state,
+                   SpiceInt           handle,
                    SpiceInt           segno,
                    SpiceInt           recno,
                    ConstSpiceChar   * column,
@@ -244,14 +245,14 @@
    Check the column name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekrcec_c", column );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekrcec_c", column );
 
 
    /*
    Make sure the output array has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "ekrcec_c", cvals, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ekrcec_c", cvals, lenout );
 
    /*
    Map the segment and record numbers to their Fortran-style
@@ -262,7 +263,8 @@
    recno++;
 
 
-   ekrcec_ ( ( integer * ) &handle,
+   ekrcec_ ( naif_state,
+             ( integer * ) &handle,
              ( integer * ) &segno,
              ( integer * ) &recno,
              ( char    * ) column,
@@ -284,6 +286,6 @@
    *isnull = null;
 
 
-   chkout_c ( "ekrcec_c" );
+   chkout_c ( naif_state, "ekrcec_c" );
 
 } /* End ekrcec_c */

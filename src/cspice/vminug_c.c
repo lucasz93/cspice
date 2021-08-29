@@ -44,7 +44,8 @@
    #include "SpiceUsr.h"
    #undef   vminug_c
 
-   void vminug_c ( ConstSpiceDouble  * vin,
+   void vminug_c ( void              * naif_state,
+                   ConstSpiceDouble  * vin,
                    SpiceInt            ndim,
                    SpiceDouble       * vout )
 

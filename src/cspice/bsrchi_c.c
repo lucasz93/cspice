@@ -49,7 +49,8 @@
    #include "SpiceZim.h"
    #undef    bsrchi_c
 
-   SpiceInt bsrchi_c ( SpiceInt          value,
+   SpiceInt bsrchi_c ( void            * naif_state,
+                       SpiceInt          value,
                        SpiceInt          ndim,
                        ConstSpiceInt   * array ) 
 /*
@@ -153,7 +154,8 @@
    Note that we adjust the return value to make it a C-style index.
    */
 
-   return (   bsrchi_ ( (integer *) &value,
+   return (   bsrchi_ ( naif_state,
+                        (integer *) &value,
                         (integer *) &ndim,
                         (integer *) array  )   - 1  ); 
 

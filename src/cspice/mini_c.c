@@ -47,7 +47,7 @@
    #include "SpiceZmc.h"
    
 
-   SpiceInt mini_c ( SpiceInt n,  ... ) 
+   SpiceInt mini_c ( void *naif_state, SpiceInt n,  ... ) 
 
 /*
 

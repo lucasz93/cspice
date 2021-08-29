@@ -47,7 +47,8 @@
    #undef    stelab_c
    
  
-   void stelab_c ( ConstSpiceDouble   pobj[3],
+   void stelab_c ( void             * naif_state,
+                   ConstSpiceDouble   pobj[3],
                    ConstSpiceDouble   vobs[3],
                    SpiceDouble        appobj[3] ) 
 /*
@@ -205,11 +206,12 @@
    /*
    Call the f2c'd routine.
    */
-   stelab_ ( ( doublereal * ) pobj,
+   stelab_ ( naif_state,
+             ( doublereal * ) pobj,
              ( doublereal * ) vobs,
              ( doublereal * ) appobj );
 
 
-   chkout_c ( "stelab_c" );
+   chkout_c ( naif_state, "stelab_c" );
 
 } /* End stelab_c */

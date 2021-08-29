@@ -52,7 +52,7 @@
    #include "SpiceZmc.h"
    
    
-   SpiceBoolean eqstr_c ( ConstSpiceChar * a,  ConstSpiceChar * b )
+   SpiceBoolean eqstr_c ( void *naif_state, ConstSpiceChar * a,  ConstSpiceChar * b )
 
 /*
 
@@ -283,8 +283,8 @@
    /*
    Check the input string pointers to make sure they're non-null.
    */
-   CHKPTR_VAL ( CHK_DISCOVER, "eqstr_c", a, retval );
-   CHKPTR_VAL ( CHK_DISCOVER, "eqstr_c", b, retval );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "eqstr_c", a, retval );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "eqstr_c", b, retval );
    
 
    /*
@@ -433,7 +433,7 @@
                retval = SPICETRUE;
                done   = SPICETRUE;
             }
-            else if ( iswhsp_c(pb) )
+            else if ( iswhsp_c(naif_state, pb) )
             {
                retval = SPICETRUE;
                done   = SPICETRUE;
@@ -454,7 +454,7 @@
             There are no more characters in string b to examine.  The
             rest of string a had better be white space.
             */
-            if ( iswhsp_c(pa) )
+            if ( iswhsp_c(naif_state, pa) )
             {
                retval = SPICETRUE;
                done   = SPICETRUE;

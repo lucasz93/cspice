@@ -49,7 +49,8 @@
    #undef pltar_c
 
 
-   SpiceDouble pltar_c ( SpiceInt           nv,
+   SpiceDouble pltar_c ( void             * naif_state,
+                         SpiceInt           nv,
                          ConstSpiceDouble   vrtces [][3],
                          SpiceInt           np,
                          ConstSpiceInt      plates [][3]  )
@@ -299,11 +300,12 @@
    chkin_c ( naif_state, "pltar_c" );
 
 
-   retval = (SpiceDouble) pltar_ ( ( integer    * ) &nv,
+   retval = (SpiceDouble) pltar_ ( naif_state,
+                                   ( integer    * ) &nv,
                                    ( doublereal * ) vrtces,
                                    ( integer    * ) &np,
                                    ( integer    * ) plates  );
-   chkout_c ( "pltar_c" );
+   chkout_c ( naif_state, "pltar_c" );
 
    return ( retval );
 

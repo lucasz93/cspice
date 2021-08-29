@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
    #include "SpiceZst.h"
 
-   void spkacs_c ( SpiceInt           targ,
+   void spkacs_c ( void             * naif_state,
+                   SpiceInt           targ,
                    SpiceDouble        et,
                    ConstSpiceChar   * ref,
                    ConstSpiceChar   * abcorr,
@@ -508,11 +509,12 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkacs_c", ref    );
-   CHKFSTR ( CHK_STANDARD, "spkacs_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkacs_c", ref    );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkacs_c", abcorr );
 
 
-   spkacs_ ( (integer    *) &targ,
+   spkacs_ ( naif_state,
+             (integer    *) &targ,
              (doublereal *) &et,
              (char       *) ref,
              (char       *) abcorr,
@@ -524,6 +526,6 @@
              (ftnlen      ) strlen(abcorr) );
 
 
-   chkout_c ( "spkacs_c" );
+   chkout_c ( naif_state, "spkacs_c" );
 
 } /* End spkacs_c */

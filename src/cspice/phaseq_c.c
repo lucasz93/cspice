@@ -51,7 +51,8 @@
    #include "SpiceZmc.h"
    #undef phaseq_c
 
-   SpiceDouble phaseq_c ( SpiceDouble       et,
+   SpiceDouble phaseq_c ( void            * naif_state,
+                          SpiceDouble       et,
                           ConstSpiceChar  * target,
                           ConstSpiceChar  * illmn,
                           ConstSpiceChar  * obsrvr,
@@ -460,7 +461,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c()  )
+   if ( return_c(naif_state)  )
       {
       return ( retval );
       }
@@ -471,16 +472,17 @@
    Check the input strings to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR_VAL ( CHK_STANDARD, "phaseq_c", target, retval );
-   CHKFSTR_VAL ( CHK_STANDARD, "phaseq_c", illmn, retval );
-   CHKFSTR_VAL ( CHK_STANDARD, "phaseq_c", obsrvr, retval );
-   CHKFSTR_VAL ( CHK_STANDARD, "phaseq_c", abcorr, retval );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "phaseq_c", target, retval );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "phaseq_c", illmn, retval );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "phaseq_c", obsrvr, retval );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "phaseq_c", abcorr, retval );
 
 
    /*
    Call the f2c'd routine for the grunt work.
    */
-   retval = phaseq_ ( (doublereal *) &et,
+   retval = phaseq_ ( naif_state,
+                      (doublereal *) &et,
                       (char       *) target,
                       (char       *) illmn,
                       (char       *) obsrvr,
@@ -490,7 +492,7 @@
                       (ftnlen      ) strlen(obsrvr),
                       (ftnlen      ) strlen(abcorr));
 
-   chkout_c ( "phaseq_c" );
+   chkout_c ( naif_state, "phaseq_c" );
 
    return(retval);
 

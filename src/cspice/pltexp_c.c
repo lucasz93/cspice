@@ -49,7 +49,8 @@
    #include "SpiceZfc.h"
    #undef pltexp_c
 
-   void pltexp_c ( ConstSpiceDouble   iverts[3][3],
+   void pltexp_c ( void             * naif_state,
+                   ConstSpiceDouble   iverts[3][3],
                    SpiceDouble        delta,
                    SpiceDouble        overts[3][3] ) 
 /*
@@ -244,11 +245,12 @@
    chkin_c ( naif_state, "pltexp_c" );
 
 
-   pltexp_ ( ( doublereal * ) iverts,
+   pltexp_ ( naif_state,
+             ( doublereal * ) iverts,
              ( doublereal * ) &delta,
              ( doublereal * ) overts  );
 
 
-   chkout_c ( "pltexp_c" );
+   chkout_c ( naif_state, "pltexp_c" );
 
 } /* End pltexp_c */

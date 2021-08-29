@@ -51,7 +51,8 @@
    #include "SpiceZmc.h"
 
 
-   void lxqstr_c ( ConstSpiceChar    * string,
+   void lxqstr_c ( void              * naif_state,
+                   ConstSpiceChar    * string,
                    SpiceChar           qchar,
                    SpiceInt            first,
                    SpiceInt          * last,
@@ -249,7 +250,7 @@
 
    Check the input string argument for a null pointer.
    */
-   CHKPTR ( CHK_DISCOVER, "lxqstr_c", string );
+   CHKPTR ( naif_state, CHK_DISCOVER, "lxqstr_c", string );
 
 
    /*
@@ -275,7 +276,8 @@
    /*
    Call the f2c'd routine. 
    */
-   lxqstr_ ( ( char    * ) string,
+   lxqstr_ ( naif_state,
+             ( char    * ) string,
              ( char    * ) &qchar,
              ( integer * ) &locFirst,
              ( integer * ) last,

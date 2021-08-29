@@ -59,7 +59,8 @@
    #undef srfnrm_c
 
 
-   void srfnrm_c ( ConstSpiceChar    * method,
+   void srfnrm_c ( void              * naif_state,
+                   ConstSpiceChar    * method,
                    ConstSpiceChar    * target,
                    SpiceDouble         et,
                    ConstSpiceChar    * fixref,
@@ -812,12 +813,13 @@
    at least one data character: that is, one character 
    preceding the null terminator.
    */
-   CHKFSTR ( CHK_STANDARD, "srfnrm_c", method );
-   CHKFSTR ( CHK_STANDARD, "srfnrm_c", target );
-   CHKFSTR ( CHK_STANDARD, "srfnrm_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "srfnrm_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "srfnrm_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "srfnrm_c", fixref );
 
 
-   srfnrm_ ( ( char          * ) method,
+   srfnrm_ ( naif_state,
+             ( char          * ) method,
              ( char          * ) target,
              ( doublereal    * ) &et,
              ( char          * ) fixref,
@@ -829,6 +831,6 @@
              ( ftnlen          ) strlen(fixref)  );
 
 
-   chkout_c ( "srfnrm_c" );
+   chkout_c ( naif_state, "srfnrm_c" );
 
 } /* End srfnrm_c */

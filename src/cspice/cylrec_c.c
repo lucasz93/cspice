@@ -45,7 +45,8 @@
    #include  <math.h>
    #include "SpiceUsr.h"
 
-   void cylrec_c ( SpiceDouble r,
+   void cylrec_c ( void      * naif_state,
+                   SpiceDouble r,
                    SpiceDouble lon,
                    SpiceDouble z,
                    SpiceDouble rectan[3] )

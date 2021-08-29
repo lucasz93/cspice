@@ -60,7 +60,8 @@
    #undef limbpt_c
 
 
-   void limbpt_c ( ConstSpiceChar    * method,
+   void limbpt_c ( void              * naif_state,
+                   ConstSpiceChar    * method,
                    ConstSpiceChar    * target,
                    SpiceDouble         et,
                    ConstSpiceChar    * fixref,
@@ -2040,19 +2041,20 @@
    at least one data character: that is, one character 
    preceding the null terminator.
    */
-   CHKFSTR ( CHK_STANDARD, "limbpt_c", method );
-   CHKFSTR ( CHK_STANDARD, "limbpt_c", target );
-   CHKFSTR ( CHK_STANDARD, "limbpt_c", fixref );
-   CHKFSTR ( CHK_STANDARD, "limbpt_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "limbpt_c", corloc );
-   CHKFSTR ( CHK_STANDARD, "limbpt_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "limbpt_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "limbpt_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "limbpt_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "limbpt_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "limbpt_c", corloc );
+   CHKFSTR ( naif_state, CHK_STANDARD, "limbpt_c", obsrvr );
 
    
    /*
    Call the f2c'd SPICELIB function.
    */
 
-   limbpt_ ( ( char         * ) method,
+   limbpt_ ( naif_state,
+             ( char         * ) method,
              ( char         * ) target,
              ( doublereal   * ) &et,
              ( char         * ) fixref,
@@ -2076,6 +2078,6 @@
              ( ftnlen         ) strlen(corloc),
              ( ftnlen         ) strlen(obsrvr)  );
 
-   chkout_c ( "limbpt_c" );
+   chkout_c ( naif_state, "limbpt_c" );
 
 } /* End limbpt_c */

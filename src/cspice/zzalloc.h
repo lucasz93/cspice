@@ -86,34 +86,44 @@
    /*
    Allocation call prototypes:
    */
-   int           alloc_count                    ();
+   int           alloc_count                    ( void *naif_state );
 
-   SpiceChar  ** alloc_SpiceString_C_array      ( int string_length,
+   SpiceChar  ** alloc_SpiceString_C_array      ( void *naif_state,
+                                                  int string_length,
                                                   int string_count   );
 
-   SpiceChar  ** alloc_SpiceString_C_Copy_array ( int array_len ,
+   SpiceChar  ** alloc_SpiceString_C_Copy_array ( void *naif_state,
+                                                  int array_len ,
                                                   int string_len,
                                                   SpiceChar ** array );
 
-   SpiceDouble * alloc_SpiceDouble_C_array      ( int rows,
+   SpiceDouble * alloc_SpiceDouble_C_array      ( void *naif_state,
+                                                  int rows,
                                                   int cols );
 
-   SpiceInt    * alloc_SpiceInt_C_array         ( int rows,
+   SpiceInt    * alloc_SpiceInt_C_array         ( void *naif_state,
+                                                  int rows,
                                                   int cols );
 
-   SpiceBoolean * alloc_SpiceBoolean_C_array    ( int rows,
+   SpiceBoolean * alloc_SpiceBoolean_C_array    ( void *naif_state,
+                                                  int rows,
                                                   int cols );
 
-   SpiceChar   * alloc_SpiceString              ( int length );
+   SpiceChar   * alloc_SpiceString              ( void *naif_state,
+                                                  int length );
 
-   SpiceChar  ** alloc_SpiceString_Pointer_array( int array_len );
+   SpiceChar  ** alloc_SpiceString_Pointer_array( void *naif_state,
+                                                  int array_len );
 
-   void          free_SpiceString_C_array       ( int dim,
+   void          free_SpiceString_C_array       ( void *naif_state,
+                                                  int dim,
                                                   SpiceChar ** array );
 
-   void        * alloc_SpiceMemory              ( size_t size );
+   void        * alloc_SpiceMemory              ( void *naif_state,
+                                                  size_t size );
 
-   void          free_SpiceMemory               ( void * ptr );
+   void          free_SpiceMemory               ( void *naif_state,
+                                                  void * ptr );
 
 
    /*
@@ -121,12 +131,12 @@
    Note, the need to use this macro exists only in those routines
    allocating/deallocating memory.
    */
-#define ALLOC_CHECK  if (  alloc_count() != 0 )                            \
-                {                                                          \
-                setmsg_c ( "Malloc/Free count not zero at end of routine." \
-                           " Malloc count = #.");                          \
-                errint_c ( "#", alloc_count()            );                \
-                sigerr_c ( "SPICE(MALLOCCOUNT)"        );                  \
+#define ALLOC_CHECK  if (  alloc_count(naif_state) != 0 )                              \
+                {                                                                      \
+                setmsg_c ( naif_state, "Malloc/Free count not zero at end of routine." \
+                           " Malloc count = #.");                                      \
+                errint_c ( naif_state, "#", alloc_count(naif_state)            );      \
+                sigerr_c ( naif_state, "SPICE(MALLOCCOUNT)"        );                  \
                 }
 
 #endif

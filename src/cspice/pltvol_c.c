@@ -51,7 +51,8 @@
    #undef pltvol_c
 
 
-   SpiceDouble pltvol_c ( SpiceInt           nv,
+   SpiceDouble pltvol_c ( void             * naif_state,
+                          SpiceInt           nv,
                           ConstSpiceDouble   vrtces[][3],
                           SpiceInt           np,
                           ConstSpiceInt      plates[][3] )                 
@@ -312,11 +313,12 @@
    chkin_c ( naif_state, "pltvol_c" );
 
 
-   retval = (SpiceDouble) pltvol_ ( (SpiceInt     *) &nv,
+   retval = (SpiceDouble) pltvol_ ( naif_state,
+                                    (SpiceInt     *) &nv,
                                     (SpiceDouble  *) vrtces,
                                     (SpiceInt     *) &np,
                                     (SpiceInt     *) plates  );
-   chkout_c ( "pltvol_c" );
+   chkout_c ( naif_state, "pltvol_c" );
 
    return ( retval );
 

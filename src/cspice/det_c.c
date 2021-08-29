@@ -45,7 +45,7 @@
    #undef    det_c
    
 
-   SpiceDouble det_c ( ConstSpiceDouble m1[3][3] ) 
+   SpiceDouble det_c ( void *naif_state, ConstSpiceDouble m1[3][3] ) 
 
 /*
 

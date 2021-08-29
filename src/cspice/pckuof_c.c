@@ -45,7 +45,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void pckuof_c ( SpiceInt handle )
+   void pckuof_c ( void *naif_state, SpiceInt handle )
 
 /*
 
@@ -141,10 +141,10 @@
    /*
    Call the f2c'd Fortran routine.
    */
-   pckuof_ ( ( integer * ) &handle );
+   pckuof_ ( naif_state, ( integer * ) &handle );
 
 
-   chkout_c ( "pckuof_c" );
+   chkout_c ( naif_state, "pckuof_c" );
 
 
 } /* End pckuof_c */

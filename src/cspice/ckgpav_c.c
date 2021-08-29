@@ -46,7 +46,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void ckgpav_c ( SpiceInt            inst, 
+   void ckgpav_c ( void              * naif_state,
+                   SpiceInt            inst, 
                    SpiceDouble         sclkdp, 
                    SpiceDouble         tol, 
                    ConstSpiceChar    * ref, 
@@ -728,10 +729,11 @@
    Check the input string ref to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ckgpav_c", ref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckgpav_c", ref );
    
       
-   ckgpav_( ( integer    * ) &inst, 
+   ckgpav_( naif_state,
+            ( integer    * ) &inst, 
             ( doublereal * ) &sclkdp, 
             ( doublereal * ) &tol, 
             ( char       * ) ref, 
@@ -751,9 +753,9 @@
    /*
    Transpose the c-matrix on output.
    */
-   xpose_c ( cmat, cmat );
+   xpose_c ( naif_state, cmat, cmat );
    
    
-   chkout_c ( "ckgpav_c");
+   chkout_c ( naif_state, "ckgpav_c");
 
 } /* End ckgpav_c */

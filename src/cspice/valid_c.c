@@ -46,7 +46,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
  
-   void valid_c (  SpiceInt      size,
+   void valid_c (  void        * naif_state,
+                   SpiceInt      size,
                    SpiceInt      n,
                    SpiceCell   * set   )
  
@@ -221,7 +222,7 @@
    /*
    Standard SPICE error handling.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -243,17 +244,18 @@
       /*
       Construct a Fortran-style set suitable for passing to validc_.
       */
-      C2F_MAP_CELL ( "valid_c", set, &fCell, &fLen );
+      C2F_MAP_CELL ( naif_state, "valid_c", set, &fCell, &fLen );
  
 
-      if ( failed_c() )
+      if ( failed_c(naif_state) )
       {
-         chkout_c ( "valid_c" );
+         chkout_c ( naif_state, "valid_c" );
          return;
       }
 
  
-      validc_ ( (integer *)  &size,
+      validc_ ( naif_state,
+                (integer *)  &size,
                 (integer *)  &n,
                 (char    *)  fCell,
                 (ftnlen   )  fLen    );
@@ -262,7 +264,7 @@
       Map the validated set back to a C style set.  This mapping
       sets the size and cardinality members of the cell.
       */
-      F2C_MAP_CELL ( fCell, fLen, set );
+      F2C_MAP_CELL ( naif_state, fCell, fLen, set );
 
       /*
       We're done with the dynamically allocated Fortran-style array. 
@@ -273,41 +275,43 @@
  
    else if ( set->dtype == SPICE_DP )
    {
-      validd_ ( (integer     *) &size,
+      validd_ ( naif_state,
+               (integer     *) &size,
                 (integer     *) &n,
                 (doublereal  *) (set->base) );
       /*
       Sync the output cell.
       */
-      if ( !failed_c() )
+      if ( !failed_c(naif_state) )
       {
-         zzsynccl_c ( F2C, set );
+         zzsynccl_c ( naif_state, F2C, set );
       }
  
    }
  
    else if ( set->dtype == SPICE_INT )
    {
-      validi_ ( (integer     *) &size,
+      validi_ ( naif_state,
+                (integer     *) &size,
                 (integer     *) &n,
                 (integer     *) (set->base) );
  
       /*
       Sync the output cell.
       */
-      if ( !failed_c() )
+      if ( !failed_c(naif_state) )
       {
-         zzsynccl_c ( F2C, set );
+         zzsynccl_c ( naif_state, F2C, set );
       }
  
    }
  
    else
    {
-      setmsg_c ( "Cell set contains unrecognized data type code #." );
-      errint_c ( "#",  (SpiceInt) (set->dtype)                      );
-      sigerr_c ( "SPICE(NOTSUPPORTED)"                              );
-      chkout_c ( "valid_c"                                          );
+      setmsg_c ( naif_state, "Cell set contains unrecognized data type code #." );
+      errint_c ( naif_state, "#",  (SpiceInt) (set->dtype)                      );
+      sigerr_c ( naif_state, "SPICE(NOTSUPPORTED)"                              );
+      chkout_c ( naif_state, "valid_c"                                          );
       return;
    }
 
@@ -318,5 +322,5 @@
    set->isSet = SPICETRUE;
 
 
-   chkout_c ( "valid_c" );
+   chkout_c ( naif_state, "valid_c" );
 }

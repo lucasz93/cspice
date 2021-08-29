@@ -43,9 +43,9 @@
 
    #include "SpiceUsr.h"
    #include "f2c.h"
-   
+   #include "__cspice_state.h"
 
-   void ftncls_c ( SpiceInt unit )
+   void ftncls_c ( void *naif_state, SpiceInt unit )
 
 /*
 
@@ -172,7 +172,7 @@
 
 
 { /* Begin  ftncls_c */
-
+   cspice_t * state = (cspice_t *)naif_state;
 
 
    /*
@@ -206,13 +206,13 @@
    /* 
    Builtin functions 
    */
-   integer f_clos(cllist *);
+   integer f_clos(f2c_state_t *f2c, cllist *);
 
    cl__1.cerr  = 0;
    cl__1.cunit = unit;
    cl__1.csta  = 0;
    
-   f_clos(&cl__1);
+   f_clos(&state->f2c, &cl__1);
 
 
 } /* End  ftncls_c*/

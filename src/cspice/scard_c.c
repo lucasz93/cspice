@@ -45,7 +45,8 @@
 #include "SpiceCel.h"
 #include "SpiceZmc.h"
 
-   void scard_c (  SpiceInt      card,   
+   void scard_c (  void        * naif_state,
+                   SpiceInt      card,   
                    SpiceCell   * cell  )
 /*
 
@@ -167,7 +168,7 @@
    /*
    Use discovery check-in. 
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -176,7 +177,7 @@
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( cell );
+   CELLINIT ( naif_state, cell );
 
 
    /*
@@ -184,13 +185,13 @@
    */
    if (  ( card < 0 ) || ( card > cell->size )  )
    {
-      chkin_c  ( "scard_c"                                        );
-      setmsg_c ( "Attempt to set cardinality of cell to invalid "
+      chkin_c  ( naif_state, "scard_c"                                        );
+      setmsg_c ( naif_state, "Attempt to set cardinality of cell to invalid "
                  "value #.  Valid range is 0:#."                  );
-      errint_c ( "#",  card                                       );
-      errint_c ( "#",  cell->size                                 );
-      sigerr_c ( "SPICE(INVALIDCARDINALITY)"                      );
-      chkout_c ( "scard_c"                                        );
+      errint_c ( naif_state, "#",  card                                       );
+      errint_c ( naif_state, "#",  cell->size                                 );
+      sigerr_c ( naif_state, "SPICE(INVALIDCARDINALITY)"                      );
+      chkout_c ( naif_state, "scard_c"                                        );
       return;
    }
 
@@ -203,7 +204,7 @@
 
    if ( cell->dtype != SPICE_CHR )
    {
-      zzsynccl_c ( C2F, cell );
+      zzsynccl_c ( naif_state, C2F, cell );
    }
    
    /*

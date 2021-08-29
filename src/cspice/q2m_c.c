@@ -50,7 +50,8 @@
    #undef    q2m_c
    
 
-   void q2m_c ( ConstSpiceDouble  q[4], 
+   void q2m_c ( void            * naif_state,
+                ConstSpiceDouble  q[4], 
                 SpiceDouble       r[3][3] ) 
 /*
 
@@ -456,13 +457,14 @@
    /*
    Call the f2c'd version of q2m:
    */
-   q2m_ ( (doublereal *) q,
+   q2m_ ( naif_state,
+          (doublereal *) q,
           (doublereal *) r );
           
    /*
    Transpose the output matrix to put it in row-major order.
    */
-   xpose_c ( r, r );
+   xpose_c ( naif_state, r, r );
           
 
 } /* End q2m_c */

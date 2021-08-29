@@ -45,7 +45,8 @@
    #undef    vscl_c
 
 
-   void vscl_c ( SpiceDouble        s,
+   void vscl_c ( void             * naif_state,
+                 SpiceDouble        s,
                  ConstSpiceDouble   v1[3],
                  SpiceDouble        vout[3] ) 
 

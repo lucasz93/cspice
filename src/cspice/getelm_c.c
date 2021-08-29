@@ -50,7 +50,8 @@
    #undef    getelm_c
    
 
-   void getelm_c ( SpiceInt         frstyr,
+   void getelm_c ( void           * naif_state,
+                   SpiceInt         frstyr,
                    SpiceInt         lineln,
                    const void     * lines,
                    SpiceDouble    * epoch,
@@ -378,7 +379,7 @@
    Check the input line array for null pointer of insufficient string
    length.
    */
-   CHKOSTR ( CHK_STANDARD, "getelm_c", lines, lineln );
+   CHKOSTR ( naif_state, CHK_STANDARD, "getelm_c", lines, lineln );
 
 
    /*
@@ -393,10 +394,10 @@
 
    if ( cvalsPtr == 0 )
    {
-      setmsg_c ( "Failure on malloc call to create pointer array "
+      setmsg_c ( naif_state, "Failure on malloc call to create pointer array "
                  "for line values."                              );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                           );
-      chkout_c ( "getelm_c"                                      );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                           );
+      chkout_c ( naif_state, "getelm_c"                                      );
       return;
    }
    
@@ -415,17 +416,18 @@
    {
       free ( cvalsPtr );
       
-      setmsg_c ( "C to Fortran string array conversion for `lines' "
+      setmsg_c ( naif_state, "C to Fortran string array conversion for `lines' "
                  "failed."                                           );
-      sigerr_c ( "SPICE(STRINGCONVERROR)"                            );
-      chkout_c ( "getelm_c"                                          );
+      sigerr_c ( naif_state, "SPICE(STRINGCONVERROR)"                            );
+      chkout_c ( naif_state, "getelm_c"                                          );
       return;
    }
    
    /*
    Call the f2c'd routine.
    */
-   getelm_ (  ( integer    * ) &frstyr,
+   getelm_ (  naif_state,
+              ( integer    * ) &frstyr,
               ( char       * ) fCvalsArr,
               ( doublereal * ) epoch,
               ( doublereal * ) elems,
@@ -438,6 +440,6 @@
    free ( fCvalsArr );
 
 
-   chkout_c ( "getelm_c" );
+   chkout_c ( naif_state, "getelm_c" );
 
 } /* End getelm_c */

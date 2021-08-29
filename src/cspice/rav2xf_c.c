@@ -47,7 +47,8 @@
    #undef rav2xf_c
    
 
-   void rav2xf_c ( ConstSpiceDouble    rot   [3][3],
+   void rav2xf_c ( void              * naif_state,
+                   ConstSpiceDouble    rot   [3][3],
                    ConstSpiceDouble    av    [3],
                    SpiceDouble         xform [6][6]  ) 
 
@@ -279,7 +280,7 @@
    omegat[2][2] =  0.0;
  
       
-   mxm_c ( rot, omegat, drdt );
+   mxm_c ( naif_state, rot, omegat, drdt );
    
    
    for ( i = 0;  i < 3;  i++ )

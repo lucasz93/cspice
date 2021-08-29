@@ -48,7 +48,8 @@
    #include "SpiceZfc.h"
 
 
-   void drdcyl_c ( SpiceDouble    r,
+   void drdcyl_c ( void         * naif_state,
+                   SpiceDouble    r,
                    SpiceDouble    lon,
                    SpiceDouble    z,
                    SpiceDouble    jacobi[3][3] ) 
@@ -202,7 +203,8 @@
    Don't participate in error tracing; the underlying routine is 
    error-free.
    */
-   drdcyl_ ( (doublereal *) &r,
+   drdcyl_ ( naif_state,
+             (doublereal *) &r,
              (doublereal *) &lon,
              (doublereal *) &z,
              (doublereal *) jacobi  );
@@ -210,6 +212,6 @@
    /*
    Transpose the Jacobian to create a C-style matrix.
    */
-   xpose_c ( jacobi, jacobi );
+   xpose_c ( naif_state, jacobi, jacobi );
 
 } /* End drdcyl_c */

@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
 
 
-   void bodvcd_c ( SpiceInt           bodyid,
+   void bodvcd_c ( void             * naif_state,
+                   SpiceInt           bodyid,
                    ConstSpiceChar   * item,
                    SpiceInt           maxn,
                    SpiceInt         * dim,
@@ -242,7 +243,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -252,19 +253,20 @@
    /*
    Check the input string.
    */
-   CHKFSTR ( CHK_STANDARD, "bodvcd_c", item   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "bodvcd_c", item   );
 
 
    /*
    Call the f2c'd SPICELIB function.
    */
-   bodvcd_ ( (integer    *) &bodyid,
+   bodvcd_ ( naif_state,
+             (integer    *) &bodyid,
              (char       *) item,
              (integer    *) &maxn,
              (integer    *) dim,
              (doublereal *) values,
              (ftnlen      ) strlen(item)    );
 
-   chkout_c ( "bodvcd_c" );
+   chkout_c ( naif_state, "bodvcd_c" );
 
 } /* End bodvcd_c */

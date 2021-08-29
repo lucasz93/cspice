@@ -48,7 +48,8 @@
    #undef axisar_c
 
 
-   void axisar_c ( ConstSpiceDouble  axis   [3],
+   void axisar_c ( void            * naif_state,
+                   ConstSpiceDouble  axis   [3],
                    SpiceDouble       angle,
                    SpiceDouble       r      [3][3]  ) 
 
@@ -212,7 +213,8 @@
    Error free:  no error tracing required.
    */
 
-   axisar_ (  ( doublereal * ) axis,
+   axisar_ (  naif_state,
+              ( doublereal * ) axis,
               ( doublereal * ) &angle,
               ( doublereal * ) r       );
 
@@ -220,7 +222,7 @@
    Transpose the output matrix to put it in row-major order.
    */
    
-   xpose_c ( r, r );
+   xpose_c ( naif_state, r, r );
    
 
 } /* End axisar_c */

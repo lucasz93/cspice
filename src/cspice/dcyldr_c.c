@@ -47,7 +47,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void dcyldr_c ( SpiceDouble    x,
+   void dcyldr_c ( void         * naif_state,
+                   SpiceDouble    x,
                    SpiceDouble    y,
                    SpiceDouble    z,
                    SpiceDouble    jacobi[3][3] )   
@@ -197,7 +198,8 @@
    chkin_c ( naif_state, "dcyldr_c" );
 
 
-   dcyldr_ ( (doublereal *) &x,
+   dcyldr_ ( naif_state,
+             (doublereal *) &x,
              (doublereal *) &y,
              (doublereal *) &z,
              (doublereal *) jacobi  );
@@ -205,9 +207,9 @@
    /*
    Transpose the Jacobian to create a C-style matrix.
    */
-   xpose_c ( jacobi, jacobi );
+   xpose_c ( naif_state, jacobi, jacobi );
 
 
-   chkout_c ( "dcyldr_c" );
+   chkout_c ( naif_state, "dcyldr_c" );
 
 } /* End dcyldr_c */

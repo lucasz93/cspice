@@ -45,7 +45,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void szpool_c ( ConstSpiceChar * name,
+   void szpool_c ( void           * naif_state,
+                   ConstSpiceChar * name,
                    SpiceInt       * n,
                    SpiceBoolean   * found ) 
 
@@ -212,13 +213,14 @@
    Check the input string name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "szpool_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "szpool_c", name );
 
 
    /*
    Call the f2c'd routine.
    */
-   szpool_ ( ( char     * ) name,
+   szpool_ ( naif_state,
+             ( char     * ) name,
              ( integer  * ) n,
              ( logical  * ) &fnd,
              ( ftnlen     ) strlen(name)  );
@@ -232,7 +234,7 @@
    
    
 
-   chkout_c ( "szpool_c" );
+   chkout_c ( naif_state, "szpool_c" );
 
 
 } /* End szpool_c */

@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
    
 
-   void tparse_c ( ConstSpiceChar  * string,
+   void tparse_c ( void            * naif_state,
+                   ConstSpiceChar  * string,
                    SpiceInt          lenout,
                    SpiceDouble     * sp2000,
                    SpiceChar       * errmsg  ) 
@@ -360,21 +361,22 @@
    Check the input time string to make sure the pointer is non-null and
    the string length is non-zero.
    */
-   CHKFSTR ( CHK_DISCOVER, "tparse_c", string );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "tparse_c", string );
 
 
    /*
    Check the output error message string to make sure the pointer is 
    non-null and the string length is at least 2.
    */
-   CHKOSTR ( CHK_DISCOVER, "tparse_c", errmsg, lenout );
+   CHKOSTR ( naif_state, CHK_DISCOVER, "tparse_c", errmsg, lenout );
 
 
    /*
    Call the f2c'd routine.
    */ 
 
-   tparse_ (  ( char        * ) string,
+   tparse_ (  naif_state,
+              ( char        * ) string,
               ( doublereal  * ) sp2000,
               ( char        * ) errmsg,
               ( ftnlen        ) strlen(string),

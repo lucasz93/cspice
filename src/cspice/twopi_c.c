@@ -45,7 +45,7 @@
    #include <math.h>
    #include "SpiceUsr.h"
 
-   SpiceDouble twopi_c ( void ) 
+   SpiceDouble twopi_c ( void *naif_state ) 
 
 /*
 
@@ -130,7 +130,7 @@
    Local Variables
    */
    /* MECHSOFT: Not critical state. Safe to keep thread local. */
-   static SpiceDouble  value = 0.;
+   static _Thread_local SpiceDouble  value = 0.;
 
    if ( value == 0.)
       {

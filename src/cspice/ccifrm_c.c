@@ -47,7 +47,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void ccifrm_c ( SpiceInt          frclss,
+   void ccifrm_c ( void            * naif_state,
+                   SpiceInt          frclss,
                    SpiceInt          clssid,
                    SpiceInt          lenout,
                    SpiceInt        * frcode,
@@ -292,12 +293,13 @@
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "ccifrm_c", frname, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ccifrm_c", frname, lenout );
 
    /*
    Map the inputs to frame attributes, if possible.
    */
-   ccifrm_( ( integer * ) &frclss,
+   ccifrm_( naif_state,
+            ( integer * ) &frclss,
             ( integer * ) &clssid,
             ( integer * ) frcode,
             ( char    * ) frname,
@@ -318,6 +320,6 @@
    *found = (SpiceBoolean)fnd;
 
 
-   chkout_c ( "ccifrm_c" );
+   chkout_c ( naif_state, "ccifrm_c" );
 
 } /* End ccifrm_c */

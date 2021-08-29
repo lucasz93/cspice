@@ -49,7 +49,8 @@
    #include "SpiceZfc.h"
    #undef    chbder_c
 
-   void chbder_c ( ConstSpiceDouble * cp,
+   void chbder_c ( void             * naif_state,
+                   ConstSpiceDouble * cp,
                    SpiceInt           degp,
                    SpiceDouble        x2s[2],
                    SpiceDouble        x,
@@ -340,7 +341,8 @@
 
    chkin_c ( naif_state, "chbder_c" );
 
-   chbder_( (doublereal *) cp,
+   chbder_( naif_state,
+            (doublereal *) cp,
             (integer    *) &degp,
             (doublereal *) x2s,
             (doublereal *) &x,
@@ -348,6 +350,6 @@
             (doublereal *) partdp,
             (doublereal *) dpdxs);
 
-   chkout_c ( "chbder_c" );
+   chkout_c ( naif_state, "chbder_c" );
 
 } /* End chbder_c */

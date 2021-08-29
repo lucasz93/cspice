@@ -48,7 +48,7 @@
    #include "SpiceZst.h"
 
 
-   SpiceBoolean gfbail_c () 
+   SpiceBoolean gfbail_c (void *naif_state) 
 
 /*
 
@@ -181,7 +181,7 @@
    /*
    Return the saved interrupt status. 
   */
-   return (  zzgfgeth_c() );
+   return (  zzgfgeth_c(naif_state) );
 
 
 } /* End gfbail_c */

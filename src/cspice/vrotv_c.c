@@ -48,7 +48,8 @@
    #undef    vrotv_c
    
 
-   void vrotv_c ( ConstSpiceDouble  v     [3],
+   void vrotv_c ( void            * naif_state,
+                  ConstSpiceDouble  v     [3],
                   ConstSpiceDouble  axis  [3],
                   SpiceDouble       theta,
                   SpiceDouble       r     [3] ) 
@@ -173,7 +174,8 @@
 { /* Begin vrotv_c */
 
 
-   vrotv_ ( ( doublereal * ) v, 
+   vrotv_ ( naif_state,
+            ( doublereal * ) v, 
             ( doublereal * ) axis, 
             ( doublereal * ) &theta, 
             ( doublereal * ) r      );

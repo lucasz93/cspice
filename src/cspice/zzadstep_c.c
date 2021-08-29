@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    #include "SpiceZad.h"
 
-   int zzadstep_c ( doublereal  * time,
+   int zzadstep_c ( void        * naif_state,
+                    doublereal  * time,
                     doublereal  * step  ) 
 
 /*
@@ -147,7 +148,8 @@
    /*
    Local variables 
    */
-   void           ( * fPtr ) ( SpiceDouble,
+   void           ( * fPtr ) ( void *,
+                               SpiceDouble,
                                SpiceDouble * );
 
 
@@ -155,7 +157,7 @@
    Participate in error tracing.
    */
 
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return ( 0 );
    }
@@ -167,16 +169,16 @@
    list matches that of gfstep_c.
    */
 
-   fPtr = (  void (*) (SpiceDouble, SpiceDouble*)  )  zzadget_c ( naif_state,  ( UDSTEP );
+   fPtr = (  void (*) (void*, SpiceDouble, SpiceDouble*)  )  zzadget_c ( naif_state, UDSTEP );
 
    /*
    Call the stored function. 
    */
    
-   (*fPtr) ( (SpiceDouble)(*time), (SpiceDouble *)step );
+   (*fPtr) ( naif_state, (SpiceDouble)(*time), (SpiceDouble *)step );
 
 
-   chkout_c ( "zzadstep_c" );
+   chkout_c ( naif_state, "zzadstep_c" );
 
    return ( 0 );
 

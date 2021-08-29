@@ -52,7 +52,8 @@
    #undef    npelpt_c
    
 
-   void npelpt_c ( ConstSpiceDouble      point  [3],
+   void npelpt_c ( void                * naif_state,
+                   ConstSpiceDouble      point  [3],
                    ConstSpiceEllipse   * ellips,
                    SpiceDouble           pnear  [3],
                    SpiceDouble         * dist       ) 
@@ -250,7 +251,7 @@
    /*
    Find the ellipse's center and semi-axes.
    */
-   el2cgv_c ( ellips, center, smajor, sminor );
+   el2cgv_c ( naif_state, ellips, center, smajor, sminor );
  
  
    /*
@@ -259,24 +260,24 @@
    turned away at the door.
    */
    
-   minlen = vnorm_c (sminor);
-   majlen = vnorm_c (smajor);
+   minlen = vnorm_c (naif_state, sminor);
+   majlen = vnorm_c (naif_state, smajor);
 
    if (   MinVal ( majlen, minlen )  ==  0.0  )  
    {
-      setmsg_c ( "Ellipse semi-axis lengths: # #." );
-      errdp_c  ( "#", majlen                       );
-      errdp_c  ( "#", minlen                       );
-      sigerr_c ( "SPICE(DEGENERATECASE)"           );
-      chkout_c ( "npelpt_c"                        );
+      setmsg_c ( naif_state, "Ellipse semi-axis lengths: # #." );
+      errdp_c  ( naif_state, "#", majlen                       );
+      errdp_c  ( naif_state, "#", minlen                       );
+      sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"           );
+      chkout_c ( naif_state, "npelpt_c"                        );
       return;  
    }
  
 
    scale = 1.0 / majlen;
 
-   vscl_c ( scale, smajor, smajor );
-   vscl_c ( scale, sminor, sminor );
+   vscl_c ( naif_state, scale, smajor, smajor );
+   vscl_c ( naif_state, scale, sminor, sminor );
  
  
    /*
@@ -284,8 +285,8 @@
    the origin.  Scale the point's coordinates to maintain the
    correct relative position to the scaled ellipse.
    */
-   vsub_c ( point, center, tmppnt );
-   vscl_c ( scale, tmppnt, tmppnt );
+   vsub_c ( naif_state, point, center, tmppnt );
+   vscl_c ( naif_state, scale, tmppnt, tmppnt );
  
    
    /*
@@ -295,13 +296,13 @@
    z-axis is picked to give us a right-handed system.  We find the
    matrix that transforms coordinates to our new system using twovec_c.
    */
-   twovec_c ( smajor, 1, sminor, 2, rotate );
+   twovec_c ( naif_state, smajor, 1, sminor, 2, rotate );
  
  
    /*
    Apply the coordinate transformation to our scaled input point.
    */
-   mxv_c ( rotate, tmppnt, tmppnt );
+   mxv_c ( naif_state, rotate, tmppnt, tmppnt );
  
  
    /*
@@ -314,7 +315,7 @@
    we'll call this projection prjpnt.
    */
 
-   vpack_c ( tmppnt[0],  tmppnt[1],  0.0,  prjpnt );
+   vpack_c ( naif_state, tmppnt[0],  tmppnt[1],  0.0,  prjpnt );
    
    
    /*
@@ -328,25 +329,25 @@
 
    Find the nearest point to prjpnt on the ellipoid, pnear.
    */
-   nearpt_c ( prjpnt, 1.0, minlen/majlen, 2.0, pnear, dist );
+   nearpt_c ( naif_state, prjpnt, 1.0, minlen/majlen, 2.0, pnear, dist );
  
  
    /*
    Scale the near point coordinates back to the original scale.
    */
-   vscl_c ( majlen, pnear, pnear );
+   vscl_c ( naif_state, majlen, pnear, pnear );
  
  
    /*
    Apply the required inverse rotation and translation to pnear.          
    Compute the point-to-ellipse distance.
    */
-   mtxv_c ( rotate, pnear,  pnear );
-   vadd_c ( pnear,  center, pnear );
+   mtxv_c ( naif_state, rotate, pnear,  pnear );
+   vadd_c ( naif_state, pnear,  center, pnear );
  
-   *dist = vdist_c ( pnear, point );
+   *dist = vdist_c ( naif_state, pnear, point );
  
 
-   chkout_c ( "npelpt_c" );
+   chkout_c ( naif_state, "npelpt_c" );
 
 } /* End npelpt_c */

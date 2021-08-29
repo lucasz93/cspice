@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void kxtrct_c ( ConstSpiceChar       * keywd,
+   void kxtrct_c ( void                 * naif_state,
+                   ConstSpiceChar       * keywd,
                    SpiceInt               termlen,
                    const void           * terms,
                    SpiceInt               nterms,
@@ -281,25 +282,25 @@
    Check the input keyword to make sure the pointer is
    non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "kxtrct_c", keywd );
+   CHKFSTR ( naif_state, CHK_STANDARD, "kxtrct_c", keywd );
 
    /*
    Make sure the input string pointer for the terms array is non-null 
    and that the length termlen is sufficient.  
    */
-   CHKOSTR ( CHK_STANDARD, "kxtrct_c", terms, termlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "kxtrct_c", terms, termlen );
    
    /*
    Make sure the string pointer for the argument "string" is non-null 
    and that the length stringlen is sufficient.  
    */
-   CHKOSTR ( CHK_STANDARD, "kxtrct_c", string, stringlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "kxtrct_c", string, stringlen );
 
    /*
    Make sure the string pointer for the argument "substr" is non-null 
    and that the length substrlen is sufficient.  
    */
-   CHKOSTR ( CHK_STANDARD, "kxtrct_c", substr, substrlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "kxtrct_c", substr, substrlen );
    
 
    /*
@@ -314,10 +315,10 @@
 
    if ( strptrs == 0 )
    {
-      setmsg_c ( "Failure on malloc call to create pointer array "
+      setmsg_c ( naif_state, "Failure on malloc call to create pointer array "
                  "for terms values."                               );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                             );
-      chkout_c ( "kxtrct_c"                                        );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                             );
+      chkout_c ( naif_state, "kxtrct_c"                                        );
       return;
    }
 
@@ -339,11 +340,11 @@
                            &fTermsLen, 
                            &fTermsArr                      );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       free ( strptrs );
       
-      chkout_c ( "kxtrct_c" );
+      chkout_c ( naif_state, "kxtrct_c" );
       return;
    }
 
@@ -351,7 +352,8 @@
    /*
    Call the f2c'd routine.
    */
-   kxtrct_ (  ( char       * ) keywd,
+   kxtrct_ (  naif_state,
+              ( char       * ) keywd,
               ( char       * ) fTermsArr,
               ( integer    * ) &nterms,
               ( char       * ) string,
@@ -377,7 +379,7 @@
    *found = fnd;
 
 
-   chkout_c ( "kxtrct_c" );
+   chkout_c ( naif_state, "kxtrct_c" );
 
 } /* End kxtrct_c */
 

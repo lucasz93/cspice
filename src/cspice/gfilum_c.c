@@ -59,7 +59,8 @@
    #undef gfilum_c
 
 
-   void gfilum_c ( ConstSpiceChar     * method,
+   void gfilum_c ( void               * naif_state,
+                   ConstSpiceChar     * method,
                    ConstSpiceChar     * angtyp,
                    ConstSpiceChar     * target,
                    ConstSpiceChar     * illmn,
@@ -1170,7 +1171,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -1180,25 +1181,25 @@
    /*
    Make sure cell data types are d.p.
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "gfilum_c", SPICE_DP, cnfine, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "gfilum_c", SPICE_DP, cnfine, result );
 
    /*
    Initialize the input cells if necessary.
    */
-   CELLINIT2 ( cnfine, result );
+   CELLINIT2 ( naif_state, cnfine, result );
 
    /*
    Check the input strings to make sure each pointer is non-null
    and each string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gfilum_c", method );
-   CHKFSTR ( CHK_STANDARD, "gfilum_c", angtyp );
-   CHKFSTR ( CHK_STANDARD, "gfilum_c", target );
-   CHKFSTR ( CHK_STANDARD, "gfilum_c", illmn  );
-   CHKFSTR ( CHK_STANDARD, "gfilum_c", fixref );
-   CHKFSTR ( CHK_STANDARD, "gfilum_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "gfilum_c", obsrvr );
-   CHKFSTR ( CHK_STANDARD, "gfilum_c", relate );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfilum_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfilum_c", angtyp );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfilum_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfilum_c", illmn  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfilum_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfilum_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfilum_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfilum_c", relate );
 
    /*
    Check the workspace size; some mallocs have a violent
@@ -1207,11 +1208,11 @@
    */
    if ( nintvls < 1 )
    {
-      setmsg_c ( "The specified workspace interval count # was "
+      setmsg_c ( naif_state, "The specified workspace interval count # was "
                  "less than the minimum allowed value (1)."     );
-      errint_c ( "#",  nintvls                                  );
-      sigerr_c ( "SPICE(INVALIDDIMENSION)"                      );
-      chkout_c ( "gfilum_c"                                     );
+      errint_c ( naif_state, "#",  nintvls                                  );
+      sigerr_c ( naif_state, "SPICE(INVALIDDIMENSION)"                      );
+      chkout_c ( naif_state, "gfilum_c"                                     );
       return;
    }
 
@@ -1231,18 +1232,19 @@
 
    if ( !work )
    {
-      setmsg_c ( "Workspace allocation of # bytes failed due to "
+      setmsg_c ( naif_state, "Workspace allocation of # bytes failed due to "
                  "malloc failure"                                 );
-      errint_c ( "#",  nBytes                                     );
-      sigerr_c ( "SPICE(MALLOCFAILURE)"                           );
-      chkout_c ( "gfilum_c"                                       );
+      errint_c ( naif_state, "#",  nBytes                                     );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILURE)"                           );
+      chkout_c ( naif_state, "gfilum_c"                                       );
       return;
    }
 
    /*
    Let the f2'd routine do the work.
    */
-   gfilum_ ( ( char          * ) method,
+   gfilum_ ( naif_state,
+             ( char          * ) method,
              ( char          * ) angtyp,
              ( char          * ) target,
              ( char          * ) illmn,
@@ -1276,11 +1278,11 @@
    /*
    Sync the output cell.
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-     zzsynccl_c ( F2C, result ) ;
+     zzsynccl_c ( naif_state, F2C, result ) ;
    }
 
-   chkout_c ( "gfilum_c" );
+   chkout_c ( naif_state, "gfilum_c" );
 
 } /* End gfilum_c */

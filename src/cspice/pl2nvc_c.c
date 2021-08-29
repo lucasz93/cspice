@@ -49,7 +49,8 @@
    #undef    pl2nvc_c
    
    
-   void pl2nvc_c ( ConstSpicePlane   * plane,
+   void pl2nvc_c ( void              * naif_state,
+                   ConstSpicePlane   * plane,
                    SpiceDouble         normal[3],
                    SpiceDouble       * constant  ) 
 /*

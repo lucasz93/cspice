@@ -46,7 +46,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void scpart_c ( SpiceInt        sc, 
+   void scpart_c ( void          * naif_state,
+                   SpiceInt        sc, 
                    SpiceInt      * nparts, 
                    SpiceDouble   * pstart, 
                    SpiceDouble   * pstop  ) 
@@ -218,7 +219,8 @@
    partition count.
    */
 
-   scpart_ ( ( integer     * ) &sc,
+   scpart_ ( naif_state,
+             ( integer     * ) &sc,
              ( integer     * ) nparts,
              ( doublereal  * ) pstart,
              ( doublereal  * ) pstop   );
@@ -226,7 +228,7 @@
 
 
 
-   chkout_c ( "scpart_c");
+   chkout_c ( naif_state, "scpart_c");
 
 
 } /* End scpart_c */

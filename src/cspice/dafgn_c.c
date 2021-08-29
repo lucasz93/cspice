@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
 
 
-   void dafgn_c ( SpiceInt     lenout,
+   void dafgn_c ( void       * naif_state,
+                  SpiceInt     lenout,
                   SpiceChar  * name   ) 
 
 /*
@@ -273,10 +274,11 @@
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "dafgn_c", name, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "dafgn_c", name, lenout );
    
    
-   dafgn_ ( ( char   * ) name,
+   dafgn_ ( naif_state,
+            ( char   * ) name,
             ( ftnlen   ) lenout-1 );
             
    /*
@@ -285,6 +287,6 @@
    F2C_ConvertStr ( lenout, name );
    
 
-   chkout_c ( "dafgn_c" );
+   chkout_c ( naif_state, "dafgn_c" );
 
 } /* End dafgn_c */

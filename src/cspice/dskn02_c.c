@@ -50,7 +50,8 @@
    #undef dskn02_c
    
 
-   void dskn02_c ( SpiceInt               handle,
+   void dskn02_c ( void                 * naif_state,
+                   SpiceInt               handle,
                    ConstSpiceDLADescr   * dladsc,
                    SpiceInt               plid,
                    SpiceDouble            normal[3] ) 
@@ -198,9 +199,9 @@
 
             if ( !found )
             { 
-               setmsg_c ( "No segment found in file #." );
-               errch_c  ( "#",  dsk                     );
-               sigerr_c ( "SPICE(NOSEGMENT)"            );
+               setmsg_c ( naif_state, "No segment found in file #." );
+               errch_c  ( naif_state, "#",  dsk                     );
+               sigerr_c ( naif_state, "SPICE(NOSEGMENT)"            );
             }
 
             /.
@@ -353,7 +354,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -375,12 +376,13 @@
    /*
    Call the f2c'd routine.
    */
-   dskn02_ ( ( integer     * ) &handle,
+   dskn02_ ( naif_state,
+             ( integer     * ) &handle,
              ( integer     * ) fDLADescr,
              ( integer     * ) &plid,
              ( doublereal  * ) normal );
 
 
-   chkout_c ( "dskn02_c" );
+   chkout_c ( naif_state, "dskn02_c" );
 
 } /* End dskn02_c */

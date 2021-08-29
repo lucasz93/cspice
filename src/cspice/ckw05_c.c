@@ -52,7 +52,8 @@
    #undef ckw05_c
 
 
-   void ckw05_c ( SpiceInt            handle,
+   void ckw05_c ( void              * naif_state,
+                  SpiceInt            handle,
                   SpiceCK05Subtype    subtyp,
                   SpiceInt            degree,
                   SpiceDouble         begtim,
@@ -649,7 +650,7 @@
    /*
    Participate in error tracingx.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -660,8 +661,8 @@
    Check the input strings to make sure the pointers
    are non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ckw05_c", ref   );
-   CHKFSTR ( CHK_STANDARD, "ckw05_c", segid );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckw05_c", ref   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckw05_c", segid );
     
  
    /*
@@ -677,7 +678,8 @@
    Write the segment.  Note that the packet array
    DOES NOT require transposition!
    */   
-   ckw05_( ( integer    * ) &handle, 
+   ckw05_( naif_state,
+           ( integer    * ) &handle, 
            ( integer    * ) &locSubtype,
            ( integer    * ) &degree,
            ( doublereal * ) &begtim, 
@@ -696,6 +698,6 @@
            ( ftnlen       ) strlen(segid)  );
 
 
-   chkout_c ( "ckw05_c" );
+   chkout_c ( naif_state, "ckw05_c" );
 
 } /* End ckw05_c */

@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void stpool_c ( ConstSpiceChar    * item,
+   void stpool_c ( void              * naif_state,
+                   ConstSpiceChar    * item,
                    SpiceInt            nth,
                    ConstSpiceChar    * contin,
                    SpiceInt            lenout,
@@ -415,15 +416,15 @@
    Check the input strings item and contin to make sure the pointers
    are non-null and the strings are non-empty.
    */
-   CHKFSTR ( CHK_STANDARD, "stpool_c", item   );
-   CHKFSTR ( CHK_STANDARD, "stpool_c", contin );
+   CHKFSTR ( naif_state, CHK_STANDARD, "stpool_c", item   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "stpool_c", contin );
     
 
    /*
    Check the output string to make sure the pointer is non-null and that
    there is room for at least one character plus a null terminator.
    */   
-   CHKOSTR ( CHK_STANDARD, "stpool_c", string, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "stpool_c", string, lenout );
 
    /*
    Call the f2c'd routine.  First map the number of components to
@@ -432,7 +433,8 @@
    
    ncomp = nth + 1;
    
-   stpool_ ( ( char         * ) item,
+   stpool_ ( naif_state,
+             ( char         * ) item,
              ( integer      * ) &ncomp,
              ( char         * ) contin,
              ( char         * ) string,
@@ -469,6 +471,6 @@
    *found = fnd;
 
    
-   chkout_c ( "stpool_c" );
+   chkout_c ( naif_state, "stpool_c" );
 
 } /* End stpool_c */

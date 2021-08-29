@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void spk14b_c (  SpiceInt           handle,
+   void spk14b_c (  void             * naif_state,
+                    SpiceInt           handle,
                     ConstSpiceChar   * segid,
                     SpiceInt           body,
                     SpiceInt           center,
@@ -431,14 +432,15 @@
    Check the input strings to make sure the pointers
    are non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spk14b_c", frame );
-   CHKFSTR ( CHK_STANDARD, "spk14b_c", segid );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spk14b_c", frame );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spk14b_c", segid );
 
 
    /*
    Call the f2c'd routine.
    */
-   spk14b_ (  ( integer     * ) &handle,
+   spk14b_ (  naif_state,
+              ( integer     * ) &handle,
               ( char        * ) segid,
               ( integer     * ) &body, 
               ( integer     * ) &center, 
@@ -450,6 +452,6 @@
               ( ftnlen        ) strlen(frame)   );
                
 
-   chkout_c ( "spk14b_c" );
+   chkout_c ( naif_state, "spk14b_c" );
 
 } /* End spk14b_c */

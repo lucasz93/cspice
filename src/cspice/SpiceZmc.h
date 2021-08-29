@@ -211,11 +211,11 @@ Simple error output through standard SPICE error system .  Set the error
 message and the type
 */
 
-#define SpiceError( errmsg, errtype )   \
-                                        \
-        {                               \
-        setmsg_c ( errmsg  );           \
-        sigerr_c ( errtype );           \
+#define SpiceError( naif, errmsg, errtype )   \
+                                              \
+        {                                     \
+        setmsg_c ( naif, errmsg  );           \
+        sigerr_c ( naif, errtype );           \
         }
 
 
@@ -337,47 +337,47 @@ use CHKPTR_VAL, which is defined below.
 #define  CHK_DISCOVER   2
 #define  CHK_REMAIN     3
 
-#define  CHKPTR( errHandling, modname, pointer )                     \
+#define  CHKPTR( naif, errHandling, modname, pointer )               \
                                                                      \
          if ( (void *)(pointer) == (void *)0 )                       \
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "Pointer \"#\" is null; a non-null "          \
+            setmsg_c ( naif, "Pointer \"#\" is null; a non-null "    \
                        "pointer is required."             );         \
-            errch_c  ( "#", (#pointer)                    );         \
-            sigerr_c ( "SPICE(NULLPOINTER)"               );         \
+            errch_c  ( naif, "#", (#pointer)                    );   \
+            sigerr_c ( naif, "SPICE(NULLPOINTER)"               );   \
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return;                                               \
             }                                                        \
          }
 
 
-#define  CHKPTR_VAL( errHandling, modname, pointer, retval )         \
+#define  CHKPTR_VAL( naif, errHandling, modname, pointer, retval )   \
                                                                      \
          if ( (void *)(pointer) == (void *)0 )                       \
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "Pointer \"#\" is null; a non-null "          \
+            setmsg_c ( naif, "Pointer \"#\" is null; a non-null "    \
                        "pointer is required."             );         \
-            errch_c  ( "#", (#pointer)                    );         \
-            sigerr_c ( "SPICE(NULLPOINTER)"               );         \
+            errch_c  ( naif, "#", (#pointer)                    );   \
+            sigerr_c ( naif, "SPICE(NULLPOINTER)"               );   \
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return   ( retval  );                                 \
             }                                                        \
          }
@@ -392,50 +392,50 @@ CHKFSTR should be used in void functions.  In non-void functions,
 use CHKFSTR_VAL, which is defined below.
 */
 
-#define  CHKFSTR( errHandling, modname, string )                     \
+#define  CHKFSTR( naif, errHandling, modname, string )               \
                                                                      \
-         CHKPTR ( errHandling, modname, string );                    \
+         CHKPTR ( naif, errHandling, modname, string );              \
                                                                      \
          if (     (  (void *)string    !=  (void *)0  )              \
               &&  (   strlen(string)   ==  0          )  )           \
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "String \"#\" has length zero." );            \
-            errch_c  ( "#", (#string)                  );            \
-            sigerr_c ( "SPICE(EMPTYSTRING)"            );            \
+            setmsg_c ( naif, "String \"#\" has length zero." );      \
+            errch_c  ( naif, "#", (#string)                  );      \
+            sigerr_c ( naif, "SPICE(EMPTYSTRING)"            );      \
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return;                                               \
             }                                                        \
          }
 
-#define  CHKFSTR_VAL( errHandling, modname, string, retval )         \
+#define  CHKFSTR_VAL( naif, errHandling, modname, string, retval )   \
                                                                      \
-         CHKPTR_VAL( errHandling, modname, string, retval);          \
+         CHKPTR_VAL( naif, errHandling, modname, string, retval);    \
                                                                      \
          if (     (  (void *)string    !=  (void *)0  )              \
               &&  (   strlen(string)   ==  0          )  )           \
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "String \"#\" has length zero." );            \
-            errch_c  ( "#", (#string)                  );            \
-            sigerr_c ( "SPICE(EMPTYSTRING)"            );            \
+            setmsg_c ( naif, "String \"#\" has length zero." );      \
+            errch_c  ( naif, "#", (#string)                  );      \
+            sigerr_c ( naif, "SPICE(EMPTYSTRING)"            );      \
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return    ( retval );                                 \
             }                                                        \
          }
@@ -451,53 +451,53 @@ CHKOSTR should be used in void functions.  In non-void functions,
 use CHKOSTR_VAL, which is defined below.
 */
 
-#define  CHKOSTR( errHandling, modname, string, length )             \
+#define  CHKOSTR( naif, errHandling, modname, string, length )       \
                                                                      \
-         CHKPTR ( errHandling, modname, string );                    \
+         CHKPTR ( naif, errHandling, modname, string );              \
                                                                      \
          if (     (  (void *)string    !=  (void *)0  )              \
               &&  (   length            <  2          )  )           \
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "String \"#\" has length #; must be >= 2." ); \
-            errch_c  ( "#", (#string)                  );            \
-            errint_c ( "#", (length)                   );            \
-            sigerr_c ( "SPICE(STRINGTOOSHORT)"         );            \
+            setmsg_c ( naif, "String \"#\" has length #; must be >= 2." ); \
+            errch_c  ( naif, "#", (#string)                  );      \
+            errint_c ( naif, "#", (length)                   );      \
+            sigerr_c ( naif, "SPICE(STRINGTOOSHORT)"         );      \
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return;                                               \
             }                                                        \
          }
 
 
-#define  CHKOSTR_VAL( errHandling, modname, string, length, retval ) \
+#define  CHKOSTR_VAL( naif, errHandling, modname, string, length, retval ) \
                                                                      \
-         CHKPTR_VAL( errHandling, modname, string, retval );         \
+         CHKPTR_VAL( naif, errHandling, modname, string, retval );   \
                                                                      \
          if (     (  (void *)string    !=  (void *)0  )              \
               &&  (   length            <  2          )  )           \
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "String \"#\" has length #; must be >= 2." ); \
-            errch_c  ( "#", (#string)                  );            \
-            errint_c ( "#", (length)                   );            \
-            sigerr_c ( "SPICE(STRINGTOOSHORT)"         );            \
+            setmsg_c ( naif, "String \"#\" has length #; must be >= 2." ); \
+            errch_c  ( naif, "#", (#string)                  );      \
+            errint_c ( naif, "#", (length)                   );      \
+            sigerr_c ( naif, "SPICE(STRINGTOOSHORT)"         );      \
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return   ( retval  );                                 \
             }                                                        \
          }
@@ -511,7 +511,7 @@ use CHKOSTR_VAL, which is defined below.
    /*
    Cell initialization macros 
    */
-   #define CELLINIT( cellPtr )                                       \
+   #define CELLINIT( naif, cellPtr )                                 \
                                                                      \
       if ( !( (cellPtr)->init )  )                                   \
       {                                                              \
@@ -541,30 +541,30 @@ use CHKOSTR_VAL, which is defined below.
          }                                                           \
          else                                                        \
          {                                                           \
-            zzsynccl_c ( C2F, (cellPtr) );                           \
+            zzsynccl_c ( naif, C2F, (cellPtr) );                     \
          }                                                           \
                                                                      \
          (cellPtr)->init = SPICETRUE;                                \
       }                                                             
 
 
-   #define CELLINIT2( cellPtr1, cellPtr2 )                           \
+   #define CELLINIT2( naif, cellPtr1, cellPtr2 )                     \
                                                                      \
-      CELLINIT ( cellPtr1 );                                         \
-      CELLINIT ( cellPtr2 );
+      CELLINIT ( naif, cellPtr1 );                                   \
+      CELLINIT ( naif, cellPtr2 );
 
 
-   #define CELLINIT3( cellPtr1, cellPtr2, cellPtr3 )                 \
+   #define CELLINIT3( naif, cellPtr1, cellPtr2, cellPtr3 )           \
                                                                      \
-      CELLINIT ( cellPtr1 );                                         \
-      CELLINIT ( cellPtr2 );                                         \
-      CELLINIT ( cellPtr3 );
+      CELLINIT ( naif, cellPtr1 );                                   \
+      CELLINIT ( naif, cellPtr2 );                                   \
+      CELLINIT ( naif, cellPtr3 );
 
 
    /*
    Data type checking macros: 
    */
-   #define CELLTYPECHK( errHandling, modname, dType, cellPtr1 )      \
+   #define CELLTYPECHK( naif, errHandling, modname, dType, cellPtr1 )\
                                                                      \
          if ( (cellPtr1)->dtype != (dType) )                         \
          {                                                           \
@@ -575,26 +575,26 @@ use CHKOSTR_VAL, which is defined below.
                                                                      \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "Data type of # is #; expected type "         \
-                       "is #."                                );     \
-            errch_c  ( "#", (#cellPtr1)                       );     \
-            errch_c  ( "#", typstr[ (cellPtr1)->dtype ]       );     \
-            errch_c  ( "#", typstr[  dType            ]       );     \
-            sigerr_c ( "SPICE(TYPEMISMATCH)"                  );     \
+            setmsg_c ( naif, "Data type of # is #; expected type "   \
+                             "is #."                                );\
+            errch_c  ( naif, "#", (#cellPtr1)                       );\
+            errch_c  ( naif, "#", typstr[ (cellPtr1)->dtype ]       );\
+            errch_c  ( naif, "#", typstr[  dType            ]       );\
+            sigerr_c ( naif, "SPICE(TYPEMISMATCH)"                  );\
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return;                                               \
             }                                                        \
          }
 
 
-   #define CELLTYPECHK_VAL( errHandling,  modname,                   \
+   #define CELLTYPECHK_VAL( naif, errHandling,  modname,             \
                             dType,        cellPtr1,  retval )        \
                                                                      \
          if ( (cellPtr1)->dtype != (dType) )                         \
@@ -606,49 +606,49 @@ use CHKOSTR_VAL, which is defined below.
                                                                      \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "Data type of # is #; expected type "         \
+            setmsg_c ( naif, "Data type of # is #; expected type "   \
                        "is #."                                );     \
-            errch_c  ( "#", (#cellPtr1)                       );     \
-            errch_c  ( "#", typstr[ (cellPtr1)->dtype ]       );     \
-            errch_c  ( "#", typstr[  dType            ]       );     \
-            sigerr_c ( "SPICE(TYPEMISMATCH)"                  );     \
+            errch_c  ( naif, "#", (#cellPtr1)                       );     \
+            errch_c  ( naif, "#", typstr[ (cellPtr1)->dtype ]       );     \
+            errch_c  ( naif, "#", typstr[  dType            ]       );     \
+            sigerr_c ( naif, "SPICE(TYPEMISMATCH)"                  );     \
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return (retval);                                      \
             }                                                        \
          }
 
 
-   #define CELLTYPECHK2( errHandling,  modname,  dtype,              \
+   #define CELLTYPECHK2( naif, errHandling,  modname,  dtype,        \
                          cellPtr1,     cellPtr2         )            \
                                                                      \
-       CELLTYPECHK( errHandling, modname, dtype, cellPtr1 );         \
-       CELLTYPECHK( errHandling, modname, dtype, cellPtr2 );
+       CELLTYPECHK( naif, errHandling, modname, dtype, cellPtr1 );   \
+       CELLTYPECHK( naif, errHandling, modname, dtype, cellPtr2 );
 
 
 
-   #define CELLTYPECHK2_VAL( errHandling,  modname,  dtype,          \
+   #define CELLTYPECHK2_VAL( naif, errHandling,  modname,  dtype,    \
                              cellPtr1,     cellPtr2, retval )        \
                                                                      \
-       CELLTYPECHK_VAL( errHandling, modname, dtype, cellPtr1,       \
+       CELLTYPECHK_VAL( naif, errHandling, modname, dtype, cellPtr1, \
                         retval                                 );    \
-       CELLTYPECHK_VAL( errHandling, modname, dtype, cellPtr2,       \
+       CELLTYPECHK_VAL( naif, errHandling, modname, dtype, cellPtr2, \
                         retval                                 );
 
 
 
-   #define CELLTYPECHK3( errHandling,  modname,   dtype,             \
+   #define CELLTYPECHK3( naif, errHandling,  modname,   dtype,       \
                          cellPtr1,     cellPtr2,  cellPtr3  )        \
                                                                      \
-       CELLTYPECHK( errHandling, modname, dtype, cellPtr1 );         \
-       CELLTYPECHK( errHandling, modname, dtype, cellPtr2 );         \
-       CELLTYPECHK( errHandling, modname, dtype, cellPtr3 );
+       CELLTYPECHK( naif, errHandling, modname, dtype, cellPtr1 );   \
+       CELLTYPECHK( naif, errHandling, modname, dtype, cellPtr2 );   \
+       CELLTYPECHK( naif, errHandling, modname, dtype, cellPtr3 );
 
 
    #define CELLTYPECHK3_VAL( errHandling, modname,  dtype,           \
@@ -664,7 +664,7 @@ use CHKOSTR_VAL, which is defined below.
 
 
 
-   #define CELLMATCH2( errHandling, modname, cellPtr1, cellPtr2 )    \
+   #define CELLMATCH2( naif, errHandling, modname, cellPtr1, cellPtr2 )    \
                                                                      \
          if ( (cellPtr1)->dtype != (cellPtr2)->dtype )               \
          {                                                           \
@@ -675,26 +675,26 @@ use CHKOSTR_VAL, which is defined below.
                                                                      \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "Data type of # is #; data type of # "        \
+            setmsg_c ( naif, "Data type of # is #; data type of # "  \
                        "is #, but types must match."          );     \
-            errch_c  ( "#", (#cellPtr1)                       );     \
-            errch_c  ( "#", typstr[ (cellPtr1)->dtype ]       );     \
-            errch_c  ( "#", (#cellPtr2)                       );     \
-            errch_c  ( "#", typstr[ (cellPtr2)->dtype ]       );     \
-            sigerr_c ( "SPICE(TYPEMISMATCH)"                  );     \
+            errch_c  ( naif, "#", (#cellPtr1)                       );     \
+            errch_c  ( naif, "#", typstr[ (cellPtr1)->dtype ]       );     \
+            errch_c  ( naif, "#", (#cellPtr2)                       );     \
+            errch_c  ( naif, "#", typstr[ (cellPtr2)->dtype ]       );     \
+            sigerr_c ( naif, "SPICE(TYPEMISMATCH)"                  );     \
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return;                                               \
             }                                                        \
          }
 
-   #define CELLMATCH2_VAL( errHandling, modname,                     \
+   #define CELLMATCH2_VAL( naif, errHandling, modname,               \
                            cellPtr1,    cellPtr2, retval )           \
                                                                      \
          if ( (cellPtr1)->dtype != (cellPtr2)->dtype )               \
@@ -706,132 +706,132 @@ use CHKOSTR_VAL, which is defined below.
                                                                      \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "Data type of # is #; data type of # "        \
+            setmsg_c ( naif, "Data type of # is #; data type of # "  \
                        "is #, but types must match."          );     \
-            errch_c  ( "#", (#cellPtr1)                       );     \
-            errch_c  ( "#", typstr [ (cellPtr1)->dtype ]      );     \
-            errch_c  ( "#", (#cellPtr2)                       );     \
-            errch_c  ( "#", typstr [ (cellPtr2)->dtype ]      );     \
-            sigerr_c ( "SPICE(TYPEMISMATCH)"                  );     \
+            errch_c  ( naif, "#", (#cellPtr1)                       );     \
+            errch_c  ( naif, "#", typstr [ (cellPtr1)->dtype ]      );     \
+            errch_c  ( naif, "#", (#cellPtr2)                       );     \
+            errch_c  ( naif, "#", typstr [ (cellPtr2)->dtype ]      );     \
+            sigerr_c ( naif, "SPICE(TYPEMISMATCH)"                  );     \
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return   ( retval  );                                 \
             }                                                        \
          }
 
 
-   #define CELLMATCH3( errHandling, modname,                         \
+   #define CELLMATCH3( naif, errHandling, modname,                   \
                        cellPtr1,    cellPtr2,  cellPtr3 )            \
                                                                      \
-       CELLMATCH2 ( errHandling, modname, cellPtr1, cellPtr2 );      \
-       CELLMATCH2 ( errHandling, modname, cellPtr2, cellPtr3 );
+       CELLMATCH2 ( naif, errHandling, modname, cellPtr1, cellPtr2 );\
+       CELLMATCH2 ( naif, errHandling, modname, cellPtr2, cellPtr3 );
 
 
 
       
-   #define CELLMATCH3_VAL( errHandling, modname,  cellPtr1,          \
+   #define CELLMATCH3_VAL( naif, errHandling, modname,  cellPtr1,    \
                            cellPtr2,    cellPtr3, retval    )        \
                                                                      \
-       CELLMATCH2_VAL ( errHandling, modname,                        \
+       CELLMATCH2_VAL ( naif, errHandling, modname,                  \
                         cellPtr1,    cellPtr2, retval );             \
                                                                      \
-       CELLMATCH2_VAL ( errHandling, modname,                        \
+       CELLMATCH2_VAL ( naif, errHandling, modname,                  \
                         cellPtr2,    cellPtr3, retval );
 
    /*
    Set checking macros: 
    */
-   #define CELLISSETCHK( errHandling, modname, cellPtr1 )            \
+   #define CELLISSETCHK( naif, errHandling, modname, cellPtr1 )      \
                                                                      \
          if ( !(cellPtr1)->isSet )                                   \
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "Cell # must be sorted and have unique "      \
+            setmsg_c ( naif, "Cell # must be sorted and have unique "\
                        "values in order to be a CSPICE set. "        \
                        "The isSet flag in this cell is SPICEFALSE, " \
                        "indicating the cell may have been modified " \
                        "by a routine that doesn't preserve these "   \
                        "properties."                          );     \
-            errch_c  ( "#", (#cellPtr1)                       );     \
-            sigerr_c ( "SPICE(NOTASET)"                       );     \
+            errch_c  ( naif, "#", (#cellPtr1)                       );     \
+            sigerr_c ( naif, "SPICE(NOTASET)"                       );     \
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return;                                               \
             }                                                        \
          }                                                           
                                                                      
 
-   #define CELLISSETCHK_VAL( errHandling,  modname,                  \
+   #define CELLISSETCHK_VAL( naif, errHandling,  modname,            \
                              cellPtr1,     retval  )                 \
                                                                      \
          if ( !(cellPtr1)->isSet )                                   \
          {                                                           \
             if ( (errHandling) == CHK_DISCOVER  )                    \
             {                                                        \
-               chkin_c ( naif_state, modname );                                  \
+               chkin_c ( naif, modname );                            \
             }                                                        \
                                                                      \
-            setmsg_c ( "Cell # must be sorted and have unique "      \
+            setmsg_c ( naif, "Cell # must be sorted and have unique "\
                        "values in order to be a CSPICE set. "        \
                        "The isSet flag in this cell is SPICEFALSE, " \
                        "indicating the cell may have been modified " \
                        "by a routine that doesn't preserve these "   \
                        "properties."                          );     \
-            errch_c  ( "#", (#cellPtr1)                       );     \
-            sigerr_c ( "SPICE(NOTASET)"                       );     \
+            errch_c  ( naif, "#", (#cellPtr1)                       );     \
+            sigerr_c ( naif, "SPICE(NOTASET)"                       );     \
                                                                      \
             if (    ( (errHandling) == CHK_DISCOVER  )               \
                  || ( (errHandling) == CHK_STANDARD  )   )           \
             {                                                        \
-               chkout_c ( modname );                                 \
+               chkout_c ( naif, modname );                           \
                return (retval);                                      \
             }                                                        \
          }
 
 
-   #define CELLISSETCHK2( errHandling,  modname,                     \
+   #define CELLISSETCHK2( naif, errHandling,  modname,               \
                           cellPtr1,     cellPtr2 )                   \
                                                                      \
-       CELLISSETCHK( errHandling, modname, cellPtr1 );               \
-       CELLISSETCHK( errHandling, modname, cellPtr2 );
+       CELLISSETCHK( naif, errHandling, modname, cellPtr1 );         \
+       CELLISSETCHK( naif, errHandling, modname, cellPtr2 );
 
 
 
-   #define CELLISSETCHK2_VAL( errHandling,  modname,                 \
+   #define CELLISSETCHK2_VAL( naif, errHandling,  modname,           \
                               cellPtr1,     cellPtr2, retval )       \
                                                                      \
-       CELLISSETCHK_VAL( errHandling, modname, cellPtr1, retval );   \
-       CELLISSETCHK_VAL( errHandling, modname, cellPtr2, retval );   \
+       CELLISSETCHK_VAL( naif, errHandling, modname, cellPtr1, retval );   \
+       CELLISSETCHK_VAL( naif, errHandling, modname, cellPtr2, retval );   \
  
 
 
-   #define CELLISSETCHK3( errHandling,  modname,                     \
+   #define CELLISSETCHK3( naif, errHandling,  modname,               \
                           cellPtr1,     cellPtr2,  cellPtr3  )       \
                                                                      \
-       CELLISSETCHK ( errHandling, modname, cellPtr1 );              \
-       CELLISSETCHK ( errHandling, modname, cellPtr2 );              \
-       CELLISSETCHK ( errHandling, modname, cellPtr3 );
+       CELLISSETCHK ( naif, errHandling, modname, cellPtr1 );        \
+       CELLISSETCHK ( naif, errHandling, modname, cellPtr2 );        \
+       CELLISSETCHK ( naif, errHandling, modname, cellPtr3 );
 
 
-   #define CELLISSETCHK3_VAL( errHandling, modname,  cellPtr1,       \
+   #define CELLISSETCHK3_VAL( naif, errHandling, modname,  cellPtr1, \
                               cellPtr2,    cellPtr3, retval    )     \
                                                                      \
-       CELLISSETCHK_VAL ( errHandling, modname, cellPtr1, retval );  \
-       CELLISSETCHK_VAL ( errHandling, modname, cellPtr2, retval );  \
-       CELLISSETCHK_VAL ( errHandling, modname, cellPtr3, retval );
+       CELLISSETCHK_VAL ( naif, errHandling, modname, cellPtr1, retval );  \
+       CELLISSETCHK_VAL ( naif, errHandling, modname, cellPtr2, retval );  \
+       CELLISSETCHK_VAL ( naif, errHandling, modname, cellPtr3, retval );
 
 
    /*
@@ -842,7 +842,7 @@ use CHKOSTR_VAL, which is defined below.
    Macros that map one or more character C cells to dynamically 
    allocated Fortran-style character cells:
    */
-   #define C2F_MAP_CELL( caller, CCell, fCell, fLen )                \
+   #define C2F_MAP_CELL( naif, caller, CCell, fCell, fLen )          \
                                                                      \
       {                                                              \
          /*                                                          \
@@ -863,20 +863,22 @@ use CHKOSTR_VAL, which is defined below.
          C2F_MapFixStrArr ( (caller),      ndim,    lenvals,         \
                             (CCell)->base, (fLen),  (fCell)  );      \
                                                                      \
-         if ( !failed_c() )                                          \
+         if ( !failed_c(naif) )                                      \
          {                                                           \
             /*                                                       \
             Explicitly set the control area info in the Fortran cell.\
             */                                                       \
-            ssizec_ ( ( integer * ) &((CCell)->size),                \
+            ssizec_ ( naif,                                          \
+                      ( integer * ) &((CCell)->size),                \
                       ( char    * ) *(fCell),                        \
                       ( ftnlen    ) *(fLen)           );             \
                                                                      \
-            scardc_ ( ( integer * ) &((CCell)->card),                \
+            scardc_ ( naif,                                          \
+                      ( integer * ) &((CCell)->card),                \
                       ( char    * ) *(fCell),                        \
                       ( ftnlen    ) *(fLen)           );             \
                                                                      \
-            if ( failed_c() )                                        \
+            if ( failed_c(naif) )                                    \
             {                                                        \
                /*                                                    \
                Setting size or cardinality of the Fortran cell       \
@@ -889,17 +891,17 @@ use CHKOSTR_VAL, which is defined below.
       }
 
 
-   #define C2F_MAP_CELL2( caller, CCell1, fCell1, fLen1,             \
+   #define C2F_MAP_CELL2( naif, caller, CCell1, fCell1, fLen1,       \
                                   CCell2, fCell2, fLen2 )            \
                                                                      \
       {                                                              \
-         C2F_MAP_CELL( caller, CCell1, fCell1, fLen1 );              \
+         C2F_MAP_CELL( naif, caller, CCell1, fCell1, fLen1 );        \
                                                                      \
-         if ( !failed_c() )                                          \
+         if ( !failed_c(naif) )                                      \
          {                                                           \
-            C2F_MAP_CELL( caller, CCell2, fCell2, fLen2 );           \
+            C2F_MAP_CELL( naif, caller, CCell2, fCell2, fLen2 );     \
                                                                      \
-            if ( failed_c() )                                        \
+            if ( failed_c(naif) )                                    \
             {                                                        \
                free ( *(fCell1) );                                   \
             }                                                        \
@@ -907,19 +909,19 @@ use CHKOSTR_VAL, which is defined below.
       }
 
 
-   #define C2F_MAP_CELL3( caller, CCell1, fCell1, fLen1,             \
+   #define C2F_MAP_CELL3( naif, caller, CCell1, fCell1, fLen1,       \
                                   CCell2, fCell2, fLen2,             \
                                   CCell3, fCell3, fLen3 )            \
                                                                      \
       {                                                              \
-         C2F_MAP_CELL2( caller, CCell1, fCell1, fLen1,               \
+         C2F_MAP_CELL2( naif, caller, CCell1, fCell1, fLen1,         \
                                 CCell2, fCell2, fLen2  );            \
                                                                      \
-         if ( !failed_c() )                                          \
+         if ( !failed_c(naif) )                                      \
          {                                                           \
-            C2F_MAP_CELL( caller, CCell3, fCell3, fLen3 );           \
+            C2F_MAP_CELL( naif, caller, CCell3, fCell3, fLen3 );     \
                                                                      \
-            if ( failed_c() )                                        \
+            if ( failed_c(naif) )                                    \
             {                                                        \
                free ( *(fCell1) );                                   \
                free ( *(fCell2) );                                   \
@@ -934,7 +936,7 @@ use CHKOSTR_VAL, which is defined below.
    (Note: this macro frees the Fortran cell): 
    */
 
-   #define F2C_MAP_CELL( fCell, fLen, CCell )                        \
+   #define F2C_MAP_CELL( naif, fCell, fLen, CCell )                  \
                                                                      \
       {                                                              \
          SpiceInt                card;                               \
@@ -951,12 +953,14 @@ use CHKOSTR_VAL, which is defined below.
          /*                                                          \
          Capture the size and cardinality of the Fortran cell.       \
          */                                                          \
-         if ( !failed_c() )                                          \
+         if ( !failed_c(naif) )                                      \
          {                                                           \
-            size = sizec_ (  ( char      * ) (fCell),                \
+            size = sizec_ (  naif,                                   \
+                             ( char      * ) (fCell),                \
                              ( ftnlen      ) fLen     );             \
                                                                      \
-            card = cardc_ (  ( char      * ) (fCell),                \
+            card = cardc_ (  naif,                                   \
+                             ( char      * ) (fCell),                \
                              ( ftnlen      ) fLen     );             \
          }                                                           \
                                                                      \
@@ -975,7 +979,7 @@ use CHKOSTR_VAL, which is defined below.
          /*                                                          \
          Sync the size and cardinality of the C cell.                \
          */                                                          \
-         if ( !failed_c() )                                          \
+         if ( !failed_c(naif) )                                      \
          {                                                           \
             (CCell)->size = size;                                    \
             (CCell)->card = card;                                    \

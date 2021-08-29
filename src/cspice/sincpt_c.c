@@ -62,7 +62,8 @@
    #undef   sincpt_c
 
 
-   void sincpt_c ( ConstSpiceChar      * method,
+   void sincpt_c ( void                * naif_state,
+                   ConstSpiceChar      * method,
                    ConstSpiceChar      * target,
                    SpiceDouble           et,
                    ConstSpiceChar      * fixref,
@@ -1019,10 +1020,10 @@
 
             if ( !found )
             {
-                setmsg_c ( "Could not find ID code for "
+                setmsg_c ( naif_state, "Could not find ID code for "
                            "instrument #."               );
-                errch_c  ( "#", camera                   );
-                sigerr_c ( "SPICE(NOTRANSLATION)"        );
+                errch_c  ( naif_state, "#", camera                   );
+                sigerr_c ( naif_state, "SPICE(NOTRANSLATION)"        );
             }
 
             /.
@@ -1110,7 +1111,7 @@
                      Convert rectangular coordinates to planetocentric 
                      latitude and longitude. Convert radians to degrees. 
                      ./ 
-                     reclat_c ( spoint, &radius, &lon, &lat );
+                     reclat_c ( naif_state,spoint, &radius, &lon, &lat );
 
                      lon *= dpr_c ();
                      lat *= dpr_c ();
@@ -1476,7 +1477,7 @@
                  planetocentric latitude and longitude. Convert radians to 
                  degrees.
                  ./
-                 reclat_c ( spoint, &radius, &lon, &lat );
+                 reclat_c ( naif_state,spoint, &radius, &lon, &lat );
 
                  lon *= dpr_c();
                  lat *= dpr_c();
@@ -1689,17 +1690,18 @@
    at least one data character: that is, one character 
    preceding the null terminator.
    */
-   CHKFSTR ( CHK_STANDARD, "sincpt_c", method );
-   CHKFSTR ( CHK_STANDARD, "sincpt_c", target );
-   CHKFSTR ( CHK_STANDARD, "sincpt_c", fixref );
-   CHKFSTR ( CHK_STANDARD, "sincpt_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "sincpt_c", obsrvr );
-   CHKFSTR ( CHK_STANDARD, "sincpt_c", dref   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "sincpt_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "sincpt_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "sincpt_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "sincpt_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "sincpt_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "sincpt_c", dref   );
    
    /*
    Call the f2c'd SPICELIB function.
    */
-   sincpt_ ( (char       *) method,
+   sincpt_ ( naif_state,
+             (char       *) method,
              (char       *) target,
              (doublereal *) &et,
              (char       *) fixref,
@@ -1726,6 +1728,6 @@
    
    *found = fnd;
 
-   chkout_c ( "sincpt_c" );
+   chkout_c ( naif_state, "sincpt_c" );
 
 } /* End sincpt_c */

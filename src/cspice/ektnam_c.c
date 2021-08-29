@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void ektnam_c ( SpiceInt     n,
+   void ektnam_c ( void       * naif_state,
+                   SpiceInt     n,
                    SpiceInt     lenout,
                    SpiceChar  * table  ) 
 
@@ -174,14 +175,15 @@
    Make sure the output table has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "ektnam_c", table, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ektnam_c", table, lenout );
 
    /*
    Map the table index to a Fortran-style index. 
    */   
    n++;
 
-   ektnam_ (  ( integer * ) &n,
+   ektnam_ (  naif_state,
+              ( integer * ) &n,
               ( char    * ) table,
               ( ftnlen    ) lenout-1  );
 
@@ -193,6 +195,6 @@
    F2C_ConvertStr ( lenout, table );
 
 
-   chkout_c ( "ektnam_c" );
+   chkout_c ( naif_state, "ektnam_c" );
 
 } /* End ektnam_c */

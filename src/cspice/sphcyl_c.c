@@ -46,7 +46,8 @@
    #include "SpiceUsr.h"
 
 
-   void sphcyl_c ( SpiceDouble     radius,
+   void sphcyl_c ( void          * naif_state,
+                   SpiceDouble     radius,
                    SpiceDouble     colat,
                    SpiceDouble     slon,
                    SpiceDouble   * r,

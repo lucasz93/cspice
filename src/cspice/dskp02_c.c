@@ -49,7 +49,8 @@
    #include "SpiceZst.h"
    #undef dskp02_c
 
-   void dskp02_c ( SpiceInt              handle,
+   void dskp02_c ( void                * naif_state,
+                   SpiceInt              handle,
                    ConstSpiceDLADescr  * dladsc,
                    SpiceInt              start,
                    SpiceInt              room,
@@ -227,9 +228,9 @@
 
             if ( !found )
             { 
-               setmsg_c ( "No segment found in file #." );
-               errch_c  ( "#",  dsk                     );
-               sigerr_c ( "SPICE(NOSEGMENT)"            );
+               setmsg_c ( naif_state, "No segment found in file #." );
+               errch_c  ( naif_state, "#",  dsk                     );
+               sigerr_c ( naif_state, "SPICE(NOSEGMENT)"            );
             }
 
             /.
@@ -383,7 +384,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -410,7 +411,8 @@
 
    Call the f2c'd routine.
    */
-   dskp02_ ( ( integer  * ) &handle,
+   dskp02_ ( naif_state,
+             ( integer  * ) &handle,
              ( integer  * ) fDLADescr,
              ( integer  * ) &start,
              ( integer  * ) &room,
@@ -418,6 +420,6 @@
              ( integer  * ) plates    );
 
 
-   chkout_c ( "dskp02_c" );
+   chkout_c ( naif_state, "dskp02_c" );
 
 } /* End dskp02_c */

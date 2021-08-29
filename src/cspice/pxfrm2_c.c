@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
    #include "SpiceZst.h" 
 
-   void pxfrm2_c ( ConstSpiceChar   * from,
+   void pxfrm2_c ( void             * naif_state,
+                   ConstSpiceChar   * from,
                    ConstSpiceChar   * to,
                    SpiceDouble        etfrom,
                    SpiceDouble        etto,
@@ -357,7 +358,7 @@
                  if ( !found  )
                  {
                    setmsg_c ("Could not find ID code for instrument #." );
-                   errch_c  ("#", camera );
+                   errch_c  ( naif_state,"#", camera );
                    sigerr_c ("SPICE(NOTRANSLATION)");
                  }
 
@@ -384,7 +385,7 @@
                             bsight,  spoint, &etemit, srfvec, &found );
                  if ( !found  )
                  {
-                   setmsg_c("Intercept not found for the boresight vector.");
+                   setmsg_c ( naif_state, "Intercept not found for the boresight vector.");
                    sigerr_c("SPICE(NOINTERCEPT)");
                  }
 
@@ -393,7 +394,7 @@
                  vector and Mars from rectangular into latitudinal
                  coordinates. Convert radians to degrees.
                  ./
-                 reclat_c ( spoint, &radius, &lon, &lat );
+                 reclat_c ( naif_state,spoint, &radius, &lon, &lat );
 
                  lon *= dpr_c();
                  lat *= dpr_c();
@@ -464,7 +465,7 @@
                  latitudinal coordinates. Convert radians
                  to degrees.
                  ./
-                 reclat_c ( spoint, &radius, &lon, &lat );
+                 reclat_c ( naif_state,spoint, &radius, &lon, &lat );
 
                  lon *= dpr_c(); 
                  lat *= dpr_c();
@@ -489,7 +490,7 @@
 
                  if ( !found  )
                  {
-                   setmsg_c("Intercept not found for the boresight vector.");
+                   setmsg_c ( naif_state, "Intercept not found for the boresight vector.");
                    sigerr_c("SPICE(NOINTERCEPT)");
                  }
 
@@ -498,7 +499,7 @@
                  vector and Mars from rectangular into latitudinal
                  coordinates. Convert radians to degrees.
                  ./
-                 reclat_c ( spoint, &radius, &lon, &lat );
+                 reclat_c ( naif_state,spoint, &radius, &lon, &lat );
 
                  lon *= dpr_c();
                  lat *= dpr_c();
@@ -584,7 +585,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -594,13 +595,14 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pxfrm2_c", from );
-   CHKFSTR ( CHK_STANDARD, "pxfrm2_c", to   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pxfrm2_c", from );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pxfrm2_c", to   );
 
    /*
    Call the f2c'd routine.
    */
-   pxfrm2_ ( ( char       * ) from,
+   pxfrm2_ ( naif_state,
+             ( char       * ) from,
              ( char       * ) to,
              ( doublereal * ) &etfrom,
              ( doublereal * ) &etto,
@@ -611,10 +613,10 @@
    /*
    Transpose the output to obtain row-major order.
    */
-   xpose_c ( rotate, rotate );
+   xpose_c ( naif_state, rotate, rotate );
    
    
-   chkout_c ( "pxfrm2_c" );
+   chkout_c ( naif_state, "pxfrm2_c" );
  
 } /* End pxfrm2_c */
 

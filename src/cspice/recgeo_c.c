@@ -47,7 +47,8 @@
    #undef    recgeo_c
 
 
-   void recgeo_c ( ConstSpiceDouble     rectan[3], 
+   void recgeo_c ( void               * naif_state,
+                   ConstSpiceDouble     rectan[3], 
                    SpiceDouble          re, 
                    SpiceDouble          f, 
                    SpiceDouble        * lon,
@@ -264,7 +265,8 @@
    Call the f2c'd routine.
    */
 
-   recgeo_( ( doublereal * ) rectan,
+   recgeo_( naif_state,
+            ( doublereal * ) rectan,
             ( doublereal * ) &re,
             ( doublereal * ) &f,
             ( doublereal * ) lon,
@@ -272,7 +274,7 @@
             ( doublereal * ) alt);
 
 
-   chkout_c ( "recgeo_c");
+   chkout_c ( naif_state, "recgeo_c");
 
 
 } /* End recgeo_c */

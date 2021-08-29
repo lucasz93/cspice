@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void ekssum_c ( SpiceInt           handle,
+   void ekssum_c ( void             * naif_state,
+                   SpiceInt           handle,
                    SpiceInt           segno,
                    SpiceEKSegSum    * segsum )
 /*
@@ -367,7 +368,8 @@
    a C array, and map the elements to values of this type.
    */
    
-   zzeksinf_ (  ( integer   * ) &handle,
+   zzeksinf_ (  naif_state,
+                ( integer   * ) &handle,
                 ( integer   * ) &segno,
                 ( char      * ) segsum->tabnam,
                 ( integer   * ) segdsc,
@@ -377,9 +379,9 @@
                 ( ftnlen      ) SPICE_EK_CNAMSZ  );
                     
     
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "ekssum_c" );
+      chkout_c ( naif_state, "ekssum_c" );
       return;
    }                  
 
@@ -440,7 +442,7 @@
    }
 
 
-   chkout_c ( "ekssum_c" );
+   chkout_c ( naif_state, "ekssum_c" );
 
 } /* End ekssum_c */
 

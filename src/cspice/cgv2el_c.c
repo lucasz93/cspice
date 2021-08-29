@@ -48,7 +48,8 @@
    #undef    cgv2el_c
 
 
-   void cgv2el_c ( ConstSpiceDouble    center[3],
+   void cgv2el_c ( void              * naif_state,
+                   ConstSpiceDouble    center[3],
                    ConstSpiceDouble    vec1  [3],
                    ConstSpiceDouble    vec2  [3],
                    SpiceEllipse      * ellipse   ) 
@@ -170,10 +171,10 @@
    /*
    Find the semi-axes of the ellipse.  These may be degenerate.
    */
-   saelgv_c ( vec1, vec2, ellipse->semiMajor, ellipse->semiMinor );
+   saelgv_c ( naif_state, vec1, vec2, ellipse->semiMajor, ellipse->semiMinor );
    
    
-   chkout_c ( "cgv2el_c" );
+   chkout_c ( naif_state, "cgv2el_c" );
 
 } /* End cgv2el_c */
 

@@ -52,7 +52,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void kplfrm_c ( SpiceInt      frmcls,
+   void kplfrm_c ( void        * naif_state,
+                   SpiceInt      frmcls,
                    SpiceCell   * idset   ) 
 /*
 
@@ -416,27 +417,28 @@
    Initialize the control area of the cell's data array
    if necessary. 
    */
-   CELLINIT ( idset );
+   CELLINIT ( naif_state, idset );
 
    /*
    Make the sure cell data type is SpiceInt. 
    */
-   CELLTYPECHK ( CHK_STANDARD, "kplfrm_c", SPICE_INT, idset );
+   CELLTYPECHK ( naif_state, CHK_STANDARD, "kplfrm_c", SPICE_INT, idset );
 
    /*
    Let the f2c'd routine do the work.
    */
-   kplfrm_ ( ( integer  * ) &frmcls,
+   kplfrm_ ( naif_state,
+             ( integer  * ) &frmcls,
              ( integer  * ) (idset->base) );
 
    /*
    Sync the output cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-     zzsynccl_c ( F2C, idset ) ;
+     zzsynccl_c ( naif_state, F2C, idset ) ;
    }
 
-   chkout_c ( "kplfrm_c" );
+   chkout_c ( naif_state, "kplfrm_c" );
 
 } /* End kplfrm_c */

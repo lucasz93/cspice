@@ -49,7 +49,8 @@
    #include "SpiceZfc.h"
 
 
-   void dlafns_c ( SpiceInt               handle,
+   void dlafns_c ( void                 * naif_state,
+                   SpiceInt               handle,
                    ConstSpiceDLADescr   * descr,
                    SpiceDLADescr        * nxtdsc,
                    SpiceBoolean         * found    ) 
@@ -296,7 +297,8 @@
    /*
    Call the f2c'd routine.
    */
-   dlafns_ ( ( integer    * ) &handle,
+   dlafns_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) fCurrent,
              ( integer    * ) fDLADescr,
              ( logical    * ) &fnd       );
@@ -327,6 +329,6 @@
    }
 
 
-   chkout_c ( "dlafns_c" );
+   chkout_c ( naif_state, "dlafns_c" );
 
 } /* End dlafns_c */

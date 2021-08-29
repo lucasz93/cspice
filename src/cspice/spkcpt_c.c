@@ -52,7 +52,8 @@
    #include "SpiceZmc.h"
    #undef   spkcpt_c
 
-   void spkcpt_c ( ConstSpiceDouble       trgpos [3],
+   void spkcpt_c ( void                 * naif_state,
+                   ConstSpiceDouble       trgpos [3],
                    ConstSpiceChar       * trgctr,
                    ConstSpiceChar       * trgref,
                    SpiceDouble            et,
@@ -1044,28 +1045,29 @@
    /*
    Check the input state pointer. 
    */
-   CHKPTR ( CHK_STANDARD, "spkcpt_c", trgpos );
+   CHKPTR ( naif_state, CHK_STANDARD, "spkcpt_c", trgpos );
 
    /*
    Check the input strings. 
    */
-   CHKFSTR ( CHK_STANDARD, "spkcpt_c", trgctr );
-   CHKFSTR ( CHK_STANDARD, "spkcpt_c", trgref );
-   CHKFSTR ( CHK_STANDARD, "spkcpt_c", outref );
-   CHKFSTR ( CHK_STANDARD, "spkcpt_c", refloc );
-   CHKFSTR ( CHK_STANDARD, "spkcpt_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "spkcpt_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcpt_c", trgctr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcpt_c", trgref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcpt_c", outref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcpt_c", refloc );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcpt_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcpt_c", obsrvr );
 
    /*
    Check the output pointers.
    */
-   CHKPTR ( CHK_STANDARD, "spkcpt_c", state );
-   CHKPTR ( CHK_STANDARD, "spkcpt_c", lt    );
+   CHKPTR ( naif_state, CHK_STANDARD, "spkcpt_c", state );
+   CHKPTR ( naif_state, CHK_STANDARD, "spkcpt_c", lt    );
 
    /*
    Let the f2c'd routine do the work. 
    */
-   spkcpt_ ( ( doublereal * ) trgpos,
+   spkcpt_ ( naif_state,
+             ( doublereal * ) trgpos,
              ( char       * ) trgctr,
              ( char       * ) trgref,
              ( doublereal * ) &et,
@@ -1082,6 +1084,6 @@
              ( ftnlen       ) strlen(abcorr),
              ( ftnlen       ) strlen(obsrvr)  );
 
-   chkout_c ( "spkcpt_c" ); 
+   chkout_c ( naif_state, "spkcpt_c" ); 
 
 } /* End spkcpt_c */

@@ -50,7 +50,8 @@
    #include "SpiceDLA.h"
    #undef   dskx02_c
 
-   void dskx02_c ( SpiceInt               handle,
+   void dskx02_c ( void                 * naif_state,
+                   SpiceInt               handle,
                    ConstSpiceDLADescr   * dladsc,
                    ConstSpiceDouble       vertex  [3],
                    ConstSpiceDouble       raydir  [3],
@@ -265,9 +266,9 @@
                contains no segments.  This is
                unexpected, but we're prepared for it.
                ./
-               setmsg_c ( "No segments found in DSK file #.");
-               errch_c  ( "#",  dsk                         );
-               sigerr_c ( "SPICE(NODATA)"                   );
+               setmsg_c ( naif_state, "No segments found in DSK file #.");
+               errch_c  ( naif_state, "#",  dsk                         );
+               sigerr_c ( naif_state, "SPICE(NODATA)"                   );
             }
 
             /.
@@ -392,7 +393,7 @@
                      ./
                      if ( fabs(xlat-lat) > TOL ) 
                      {
-                        sigerr_c ( "Latitude error!" );
+                        sigerr_c ( naif_state, "Latitude error!" );
                      }
 
                      if (  (xlon - lon)  > pi_c()  )
@@ -402,12 +403,12 @@
 
                      if (  (xlon - lon)  > TOL  )
                      {
-                        sigerr_c ( "Longitude error!" );
+                        sigerr_c ( naif_state, "Longitude error!" );
                      }
 
                      if ( xr  > (1.0+TOL)*maxr  )
                      {
-                        sigerr_c ( "Radius error!" );
+                        sigerr_c ( naif_state, "Radius error!" );
                      }
                   }
                   /.
@@ -583,7 +584,8 @@
    fDLADescr[SPICE_DLA_CSZIDX] = dladsc->csize;
 
 
-   dskx02_ (  ( integer     * ) &handle,
+   dskx02_ (  naif_state,
+              ( integer     * ) &handle,
               ( integer     * ) fDLADescr,
               ( doublereal  * ) vertex,
               ( doublereal  * ) raydir,
@@ -598,6 +600,6 @@
    *found = (SpiceBoolean) fnd;
 
 
-   chkout_c ( "dskx02_c" );
+   chkout_c ( naif_state, "dskx02_c" );
 
 } /* End dskx02_c */

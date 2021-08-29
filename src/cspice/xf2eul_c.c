@@ -54,7 +54,8 @@
    #undef    xf2eul_c
    
  
-   void xf2eul_c ( ConstSpiceDouble     xform  [6][6],
+   void xf2eul_c ( void               * naif_state,
+                   ConstSpiceDouble     xform  [6][6],
                    SpiceInt             axisa,
                    SpiceInt             axisb,
                    SpiceInt             axisc,
@@ -390,9 +391,10 @@
    The let the f2c'd routine do the real work.
    */
    
-   xpose6_c ( xform, fXform );
+   xpose6_c ( naif_state, xform, fXform );
    
-   xf2eul_ (  ( doublereal * ) fXform, 
+   xf2eul_ (  naif_state,
+              ( doublereal * ) fXform, 
               ( integer    * ) &axisa, 
               ( integer    * ) &axisb, 
               ( integer    * ) &axisc, 
@@ -402,6 +404,6 @@
 
    *unique  =  u;
    
-   chkout_c ( "xf2eul_c" );
+   chkout_c ( naif_state, "xf2eul_c" );
 
 } /* End xf2eul_c */

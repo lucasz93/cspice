@@ -48,7 +48,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   SpiceBoolean bodfnd_c ( SpiceInt           body,
+   SpiceBoolean bodfnd_c ( void             * naif_state,
+                           SpiceInt           body,
                            ConstSpiceChar   * item )
 
 /*
@@ -187,13 +188,14 @@
    Check the input string to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR_VAL ( CHK_STANDARD, "bodfnd_c", item, SPICEFALSE );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "bodfnd_c", item, SPICEFALSE );
 
 
    /*
    Execute the f2c'd routine.
    */
-   result =  (SpiceBoolean) bodfnd_( ( integer    * ) &body,
+   result =  (SpiceBoolean) bodfnd_( naif_state,
+                                     ( integer    * ) &body,
                                      ( char       * ) item,
                                      ( ftnlen       ) strlen(item) );
 
@@ -202,7 +204,7 @@
    We now have a true or false.  Tell the caller the value.  It may need
    to know.
    */
-   chkout_c ( "bodfnd_c" );
+   chkout_c ( naif_state, "bodfnd_c" );
 
    return ( result );
 

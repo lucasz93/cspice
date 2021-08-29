@@ -46,7 +46,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   SpiceBoolean wnreld_c ( SpiceCell       * a,
+   SpiceBoolean wnreld_c ( void            * naif_state,
+                           SpiceCell       * a,
                            ConstSpiceChar  * op,
                            SpiceCell       * b   )
 
@@ -269,7 +270,7 @@
    /*
    Participate in error tracing.
    */
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       return ( SPICEFALSE );
    }
@@ -280,32 +281,33 @@
    Check the input string str to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR_VAL ( CHK_STANDARD, "wnreld_c", op, SPICEFALSE );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "wnreld_c", op, SPICEFALSE );
 
 
    /*
    Make sure cell data types are d.p. 
    */
-   CELLTYPECHK2_VAL ( CHK_STANDARD, 
+   CELLTYPECHK2_VAL ( naif_state, CHK_STANDARD, 
                       "wnreld_c",   SPICE_DP,  a,  b,  SPICEFALSE );
 
 
    /*
    Initialize the cells if necessary. 
    */
-   CELLINIT2 ( a, b );
+   CELLINIT2 ( naif_state, a, b );
 
 
    /*
    Let the f2c'd routine do the work. 
    */
-   retval = wnreld_ ( (doublereal * ) (a->base),
+   retval = wnreld_ ( naif_state,
+                      (doublereal * ) (a->base),
                       (char       * ) op, 
                       (doublereal * ) (b->base),
                       (ftnlen       ) strlen(op)  );
 
 
-   chkout_c ( "wnreld_c" );
+   chkout_c ( naif_state, "wnreld_c" );
 
    return ( retval );
    

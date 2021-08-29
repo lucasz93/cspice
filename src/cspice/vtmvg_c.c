@@ -46,7 +46,8 @@
    #include "SpiceUsr.h"
    #undef vtmvg_c
 
-   SpiceDouble vtmvg_c ( const void          * v1,
+   SpiceDouble vtmvg_c ( void                * naif_state,
+                         const void          * v1,
                          const void          * matrix,
                          const void          * v2,
                          SpiceInt              nrow,

@@ -47,7 +47,8 @@
    #undef raxisa_c
    
 
-   void raxisa_c ( ConstSpiceDouble     matrix[3][3],
+   void raxisa_c ( void               * naif_state,
+                   ConstSpiceDouble     matrix[3][3],
                    SpiceDouble          axis  [3],
                    SpiceDouble        * angle       ) 
 
@@ -233,9 +234,10 @@
    Transpose the input matrix to put it in column-major order.
    */
    
-   xpose_c ( matrix, tmpmat );
+   xpose_c ( naif_state, matrix, tmpmat );
 
-   raxisa_ (  ( doublereal * ) tmpmat,
+   raxisa_ (  naif_state,
+              ( doublereal * ) tmpmat,
               ( doublereal * ) axis,
               ( doublereal * ) angle  );
  

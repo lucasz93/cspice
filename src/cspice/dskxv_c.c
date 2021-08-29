@@ -58,7 +58,8 @@
    #undef dskxv_c
 
 
-   void dskxv_c ( SpiceBoolean         pri,
+   void dskxv_c ( void               * naif_state,
+                  SpiceBoolean         pri,
                   ConstSpiceChar     * target,
                   SpiceInt             nsurf,
                   ConstSpiceInt        srflst[],
@@ -542,14 +543,14 @@
                    dsk1, filtyp, source, &handle, &found );
          if ( !found )
          {
-            sigerr_c ( "SPICE(NOINFO)" );
+            sigerr_c ( naif_state, "SPICE(NOINFO)" );
          }
 
          dlabfs_c ( handle, &dladsc, &found );
 
          if ( !found )
          {
-            sigerr_c ( "SPICE(NOSEGMENT)" );
+            sigerr_c ( naif_state, "SPICE(NOSEGMENT)" );
          }
 
          dskgd_c ( handle, &dladsc, &dskdsc );
@@ -562,18 +563,18 @@
 
          if ( !found )
          {
-            setmsg_c ( "Cannot map body ID # to a name." );
-            errint_c ( "#", bodyid                       );
-            sigerr_c ( "SPICE(BODYNAMENOTFOUND)"         );
+            setmsg_c ( naif_state, "Cannot map body ID # to a name." );
+            errint_c ( naif_state, "#", bodyid                       );
+            sigerr_c ( naif_state, "SPICE(BODYNAMENOTFOUND)"         );
          }
 
          frmnam_c ( framid, FRNMLN, fixref );
 
          if ( eqstr_c( fixref, " " ) )
          {
-            setmsg_c ( "Cannot map frame ID # to a name." );
-            errint_c ( "#", framid                        );
-            sigerr_c ( "SPICE(BODYNAMENOTFOUND)"          );
+            setmsg_c ( naif_state, "Cannot map frame ID # to a name." );
+            errint_c ( naif_state, "#", framid                        );
+            sigerr_c ( naif_state, "SPICE(BODYNAMENOTFOUND)"          );
          }
 
          /.
@@ -686,13 +687,13 @@
                the intercept. Make sure these agree
                well with those of the vertex.
                ./
-               reclat_c ( xptarr[i], latcrd, latcrd+1, latcrd+2 );
+               reclat_c ( naif_state,xptarr[i], latcrd, latcrd+1, latcrd+2 );
                radius = latcrd[0];
 
                /.
                Recover the vertex longitude and latitude.
                ./
-               reclat_c ( vtxarr[i], &vrad, &vlon, &vlat  );
+               reclat_c ( naif_state,vtxarr[i], &vrad, &vlon, &vlat  );
                latrec_c ( radius,     vlon,  vlat, xyzhit );
 
                d = vdist_c( xptarr[i], xyzhit );
@@ -802,8 +803,8 @@
    at least one data character: that is, one character 
    preceding the null terminator.
    */
-   CHKFSTR ( CHK_STANDARD, "dskxv_c", target );
-   CHKFSTR ( CHK_STANDARD, "dskxv_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dskxv_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dskxv_c", fixref );
 
    /*
    Check `nrays' here, since it must be valid in order to 
@@ -811,11 +812,11 @@
    */
    if ( nrays < 1 )
    {
-      setmsg_c ( "The ray count must be at least 1 "
+      setmsg_c ( naif_state, "The ray count must be at least 1 "
                  "but was #."                       );
-      errint_c ( "#",  nrays                        );
-      sigerr_c ( "SPICE(INVALIDCOUNT)"              );
-      chkout_c ( "dskxv_c"                          );
+      errint_c ( naif_state, "#",  nrays                        );
+      sigerr_c ( naif_state, "SPICE(INVALIDCOUNT)"              );
+      chkout_c ( naif_state, "dskxv_c"                          );
       return;
    }
 
@@ -825,15 +826,15 @@
    Allocate an array of type logical to receive flags
    returned by f2c'd routine. 
    */
-   foundFlags = (logical *) alloc_SpiceMemory( (size_t)arrSize );
+   foundFlags = (logical *) alloc_SpiceMemory( naif_state, (size_t)arrSize );
 
    if ( !foundFlags ) 
    {
-      setmsg_c ( "Attempt to allocate # bytes of memory for "
+      setmsg_c ( naif_state, "Attempt to allocate # bytes of memory for "
                  "the foundFlags array failed."               );
-      errint_c ( "#", arrSize                                 );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                        );
-      chkout_c ( "dskxv_c"                                    );
+      errint_c ( naif_state, "#", arrSize                                 );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                        );
+      chkout_c ( naif_state, "dskxv_c"                                    );
       return;       
    }
 
@@ -843,7 +844,8 @@
    */
    priFlag = (logical)pri;
 
-   dskxv_ ( (logical     *) &priFlag,
+   dskxv_ ( naif_state,
+            (logical     *) &priFlag,
             (char        *) target,
             (integer     *) &nsurf,
             (integer     *) srflst,
@@ -857,15 +859,15 @@
             (ftnlen       ) strlen(target),
             (ftnlen       ) strlen(fixref)  );
             
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       /*
       Always deallocate the flags array, even if the
       above call failed.
       */
-      free_SpiceMemory( (void *)foundFlags ); 
+      free_SpiceMemory( naif_state, (void *)foundFlags ); 
 
-      chkout_c ( "dskxv_c" );
+      chkout_c ( naif_state, "dskxv_c" );
       return;
    }
 
@@ -881,9 +883,9 @@
    /*
    Deallocate the flags array.
    */
-   free_SpiceMemory( (void *)foundFlags ); 
+   free_SpiceMemory( naif_state, (void *)foundFlags ); 
 
 
-   chkout_c ( "dskxv_c" );
+   chkout_c ( naif_state, "dskxv_c" );
 
 } /* End dskxv_c */

@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
 
 
-   void cmprss_c ( SpiceChar          delim,
+   void cmprss_c ( void             * naif_state,
+                   SpiceChar          delim,
                    SpiceInt           n,
                    ConstSpiceChar   * input,
                    SpiceInt           lenout,
@@ -183,8 +184,8 @@
    Check for null input and output pointers. 
    */
    
-   CHKPTR( CHK_DISCOVER, "cmprss_c", input  );
-   CHKPTR( CHK_DISCOVER, "cmprss_c", output );
+   CHKPTR( naif_state, CHK_DISCOVER, "cmprss_c", input  );
+   CHKPTR( naif_state, CHK_DISCOVER, "cmprss_c", output );
 
 
    /*
@@ -194,12 +195,12 @@
    
    if ( lenout < 1 )
    {
-      chkin_c  ( "cmprss_c"                                           );
-      setmsg_c ( "Output string must have length at least 1; lenout "
+      chkin_c  ( naif_state, "cmprss_c"                                           );
+      setmsg_c ( naif_state, "Output string must have length at least 1; lenout "
                  "= #"                                                );
-      errint_c ( "#",  lenout                                         );
-      sigerr_c ( "SPICE(STRINGTOOSHORT)"                              );
-      chkout_c ( "cmprss_c"                                           );
+      errint_c ( naif_state, "#",  lenout                                         );
+      sigerr_c ( naif_state, "SPICE(STRINGTOOSHORT)"                              );
+      chkout_c ( naif_state, "cmprss_c"                                           );
       return;
    }
    

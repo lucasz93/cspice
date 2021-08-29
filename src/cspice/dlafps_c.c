@@ -48,7 +48,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void dlafps_c ( SpiceInt               handle,
+   void dlafps_c ( void                 * naif_state,
+                   SpiceInt               handle,
                    ConstSpiceDLADescr   * descr,
                    SpiceDLADescr        * prvdsc,
                    SpiceBoolean         * found   ) 
@@ -269,7 +270,8 @@
    /*
    Call the f2c'd routine.
    */
-   dlafps_ ( ( integer    * ) &handle,
+   dlafps_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) fCurrent,
              ( integer    * ) fDLADescr,
              ( logical    * ) &fnd       );
@@ -299,6 +301,6 @@
       prvdsc->csize  = fDLADescr[SPICE_DLA_CSZIDX];
    }
 
-   chkout_c ( "dlafps_c" );
+   chkout_c ( naif_state, "dlafps_c" );
 
 } /* End dlafps_c */

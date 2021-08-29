@@ -45,7 +45,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void tsetyr_c ( SpiceInt year )
+   void tsetyr_c ( void *naif_state, SpiceInt year )
 
 /*
 
@@ -171,7 +171,7 @@
 
    /* Make the call to the f2c'd routine.  Not much else. */
 
-   tsetyr_ ( &year );
+   tsetyr_ ( naif_state, &year );
 
 
 } /* End tsetyr_c */

@@ -45,7 +45,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void dafdc_c ( SpiceInt handle ) 
+   void dafdc_c ( void *naif_state, SpiceInt handle ) 
 
 /*
 
@@ -147,10 +147,10 @@
    /*
    Hand off the task to the f2c'd routine. 
    */
-   dafdc_ ( (integer *) &handle );
+   dafdc_ ( naif_state, (integer *) &handle );
 
 
 
-   chkout_c ( "dafdc_c" );
+   chkout_c ( naif_state, "dafdc_c" );
 
 } /* End dafdc_c */

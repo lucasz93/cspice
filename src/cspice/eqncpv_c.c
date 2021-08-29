@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
    #undef eqncpv_c
 
-   void eqncpv_c ( SpiceDouble        et,
+   void eqncpv_c ( void             * naif_state,
+                   SpiceDouble        et,
                    SpiceDouble        epoch,
                    ConstSpiceDouble   eqel[9],
                    SpiceDouble        rapol,
@@ -394,13 +395,14 @@
 
    chkin_c ( naif_state, "eqncpv_c" );
 
-   eqncpv_ ( ( doublereal * ) &et,
+   eqncpv_ ( naif_state,
+             ( doublereal * ) &et,
              ( doublereal * ) &epoch,
              ( doublereal * ) eqel,
              ( doublereal * ) &rapol,
              ( doublereal * ) &decpol,
              ( doublereal * ) state);
 
-   chkout_c ( "eqncpv_c" );
+   chkout_c ( naif_state, "eqncpv_c" );
 
 } /* End eqncpv_c */

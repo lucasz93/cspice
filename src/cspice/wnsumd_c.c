@@ -45,7 +45,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void wnsumd_c ( SpiceCell      * window,
+   void wnsumd_c ( void           * naif_state,
+                   SpiceCell      * window,
                    SpiceDouble    * meas,
                    SpiceDouble    * avg,
                    SpiceDouble    * stddev,
@@ -207,17 +208,18 @@
 
    Make sure cell data type is d.p. 
    */
-   CELLTYPECHK ( CHK_DISCOVER, "wnsumd_c", SPICE_DP, window );
+   CELLTYPECHK ( naif_state, CHK_DISCOVER, "wnsumd_c", SPICE_DP, window );
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( window );
+   CELLINIT ( naif_state, window );
    
    /*
    Let the f2c'd routine do the work. 
    */
-   wnsumd_ ( (doublereal * ) (window->base),
+   wnsumd_ ( naif_state,
+             (doublereal * ) (window->base),
              (doublereal * ) meas, 
              (doublereal * ) avg, 
              (doublereal * ) stddev, 

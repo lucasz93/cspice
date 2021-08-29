@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    
 
-   void tpictr_c ( ConstSpiceChar * sample,
+   void tpictr_c ( void           * naif_state,
+                   ConstSpiceChar * sample,
                    SpiceInt         lenout,
                    SpiceInt         lenerr,
                    SpiceChar      * pictur,
@@ -209,21 +210,22 @@
    Check the input string sample to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "tpictr_c", sample );
+   CHKFSTR ( naif_state, CHK_STANDARD, "tpictr_c", sample );
 
 
    /*
    Make sure the output strings have at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "tpictr_c",  pictur, lenout );
-   CHKOSTR ( CHK_STANDARD, "tpictr_c",  errmsg, lenerr );
+   CHKOSTR ( naif_state, CHK_STANDARD, "tpictr_c",  pictur, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "tpictr_c",  errmsg, lenerr );
 
 
    /* 
    Call the f2c'd routine. 
    */
-   tpictr_( ( char    * ) sample,
+   tpictr_( naif_state,
+            ( char    * ) sample,
             ( char    * ) pictur,
             ( logical * ) &okeydoke,
             ( char    * ) errmsg,
@@ -246,7 +248,7 @@
    *ok = okeydoke;
 
 
-   chkout_c ( "tpictr_c" );
+   chkout_c ( naif_state, "tpictr_c" );
 
 
 } /* End tpictr_c */

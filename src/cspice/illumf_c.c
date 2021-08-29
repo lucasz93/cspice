@@ -63,7 +63,8 @@
    #undef illumf_c
 
 
-   void illumf_c ( ConstSpiceChar        * method,
+   void illumf_c ( void                  * naif_state,
+                   ConstSpiceChar        * method,
                    ConstSpiceChar        * target,
                    ConstSpiceChar        * ilusrc,
                    SpiceDouble             et,
@@ -1224,17 +1225,18 @@
    sure none of the pointers are null and that each string contains at
    least one non-null character.
    */
-   CHKFSTR ( CHK_STANDARD, "illumf_c", method );
-   CHKFSTR ( CHK_STANDARD, "illumf_c", target );
-   CHKFSTR ( CHK_STANDARD, "illumf_c", ilusrc );
-   CHKFSTR ( CHK_STANDARD, "illumf_c", fixref );
-   CHKFSTR ( CHK_STANDARD, "illumf_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "illumf_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "illumf_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "illumf_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "illumf_c", ilusrc );
+   CHKFSTR ( naif_state, CHK_STANDARD, "illumf_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "illumf_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "illumf_c", obsrvr );
 
    /*
    Call the f2c'd routine.
    */
-   illumf_ ( ( char         * ) method,
+   illumf_ ( naif_state,
+             ( char         * ) method,
              ( char         * ) target,
              ( char         * ) ilusrc,
              ( doublereal   * ) &et, 
@@ -1263,6 +1265,6 @@
    *visibl = (SpiceBoolean)locvis;
    *lit    = (SpiceBoolean)loclit;
                          
-   chkout_c ( "illumf_c" );
+   chkout_c ( naif_state, "illumf_c" );
 
 } /* End illumf_c */

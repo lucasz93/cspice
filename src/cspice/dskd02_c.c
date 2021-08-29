@@ -49,7 +49,8 @@
    #undef dskd02_c
 
 
-   void dskd02_c ( SpiceInt               handle,
+   void dskd02_c ( void                 * naif_state,
+                   SpiceInt               handle,
                    ConstSpiceDLADescr   * dladsc,
                    SpiceInt               item,
                    SpiceInt               start,
@@ -253,9 +254,9 @@
                contains no segments.  This is
                unexpected, but we're prepared for it.
                ./
-               setmsg_c ( "No segments found in DSK file #." );
-               errch_c  ( "#", dsk                           );
-               sigerr_c ( "SPICE(NODATA)"                    );
+               setmsg_c ( naif_state, "No segments found in DSK file #." );
+               errch_c  ( naif_state, "#", dsk                           );
+               sigerr_c ( naif_state, "SPICE(NODATA)"                    );
             }
 
             /.
@@ -434,7 +435,8 @@
    /*
    Call the f2c'd routine. 
    */
-   dskd02_ ( ( integer      * ) &handle,      
+   dskd02_ ( naif_state,
+             ( integer      * ) &handle,      
              ( integer      * ) fDLADescr,
              ( integer      * ) &fItem,
              ( integer      * ) &fStart,
@@ -443,6 +445,6 @@
              ( doublereal   * ) values     );
 
 
-   chkout_c ( "dskd02_c" );
+   chkout_c ( naif_state, "dskd02_c" );
 
 } /* End dskd02_c */

@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void utc2et_c ( ConstSpiceChar  * utcstr,
+   void utc2et_c ( void            * naif_state,
+                   ConstSpiceChar  * utcstr,
                    SpiceDouble     * et      )
 
 /*
@@ -279,18 +280,19 @@ Ancient Epochs
    Check the input string utcstr to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "utc2et_c", utcstr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "utc2et_c", utcstr );
 
 
    /*
    Call the f2c'd routine.
    */
-   utc2et_( ( char       * ) utcstr,
+   utc2et_( naif_state,
+            ( char       * ) utcstr,
             ( doublereal * ) et,
             ( ftnlen       ) strlen(utcstr) );
 
 
-   chkout_c ( "utc2et_c" );
+   chkout_c ( naif_state, "utc2et_c" );
 
 
 } /* End utc2et_c */

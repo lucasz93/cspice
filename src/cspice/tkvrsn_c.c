@@ -48,7 +48,7 @@
    #include "SpiceZst.h"
 
 
-   ConstSpiceChar  * tkvrsn_c ( ConstSpiceChar * item ) 
+   ConstSpiceChar  * tkvrsn_c ( void *naif_state, ConstSpiceChar * item ) 
 
 /*
 
@@ -193,7 +193,7 @@
    Check the input string to make sure the pointer
    is non-null and the string length is non-zero.
    */
-   CHKFSTR_VAL ( CHK_STANDARD, "tkvrsn_c", item, (ConstSpiceChar *)NULLCPTR );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "tkvrsn_c", item, (ConstSpiceChar *)NULLCPTR );
    
    
    /*
@@ -204,7 +204,8 @@
    
    strcpy ( verStr, CSPICE_PREFIX );
    
-   tkvrsn_ ( ( char * ) item,
+   tkvrsn_ ( naif_state,
+             ( char * ) item,
              ( char * ) (verStr+OFFSET),
              ( ftnlen ) strlen(item),
              ( ftnlen ) MAXLEN-OFFSET-1 );
@@ -218,13 +219,13 @@
       
       
    
-   if ( eqstr_c ( item, "TOOLKIT" ) )
+   if ( eqstr_c ( naif_state, item, "TOOLKIT" ) )
    {
       /* 
       Return the string including the prefix.
       */
       
-      chkout_c ( "tkvrsn_c" );
+      chkout_c ( naif_state, "tkvrsn_c" );
 
       return ( (ConstSpiceChar *)verStr );
       
@@ -235,7 +236,7 @@
       Return whatever was returned by tkvrsn_.
       */
       
-      chkout_c ( "tkvrsn_c" );
+      chkout_c ( naif_state, "tkvrsn_c" );
 
       return ( (ConstSpiceChar *)verStr+OFFSET );
    }

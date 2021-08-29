@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
 
 
-   void str2et_c ( ConstSpiceChar * str,
+   void str2et_c ( void           * naif_state,
+                   ConstSpiceChar * str,
                    SpiceDouble    * et   )
 
 /*
@@ -626,18 +627,19 @@
    Check the input string str to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "str2et_c", str );
+   CHKFSTR ( naif_state, CHK_STANDARD, "str2et_c", str );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   str2et_ ( ( char       * ) str,
+   str2et_ ( naif_state,
+             ( char       * ) str,
              ( doublereal * ) et,
              ( ftnlen       ) strlen(str)  );
 
 
-   chkout_c ( "str2et_c" );
+   chkout_c ( naif_state, "str2et_c" );
    
 
 }/* End str2et_c */

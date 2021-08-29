@@ -51,7 +51,8 @@
    #undef    spkw05_c
    
 
-   void spkw05_c ( SpiceInt                handle,
+   void spkw05_c ( void                  * naif_state,
+                   SpiceInt                handle,
                    SpiceInt                body,
                    SpiceInt                center,
                    ConstSpiceChar        * frame,
@@ -239,8 +240,8 @@
    Check the input strings to make sure the pointers
    are non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkw05_c", frame );
-   CHKFSTR ( CHK_STANDARD, "spkw05_c", segid );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkw05_c", frame );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkw05_c", segid );
  
 
    /*
@@ -248,7 +249,8 @@
    transposition!
    */
    
-   spkw05_ ( ( integer    * ) &handle,
+   spkw05_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) &body,
              ( integer    * ) &center,
              ( char       * ) frame,
@@ -262,6 +264,6 @@
              ( ftnlen       ) strlen(frame),
              ( ftnlen       ) strlen(segid)  );
 
-   chkout_c ( "spkw05_c" );
+   chkout_c ( naif_state, "spkw05_c" );
 
 } /* End spkw05_c */

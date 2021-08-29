@@ -44,7 +44,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void dafbbs_c ( SpiceInt handle )
+   void dafbbs_c ( void *naif_state, SpiceInt handle )
 
 /*
 
@@ -384,9 +384,9 @@
    chkin_c ( naif_state, "dafbbs_c" );
 
 
-   dafbbs_ ( ( integer * ) &handle );
+   dafbbs_ ( naif_state, ( integer * ) &handle );
 
 
-   chkout_c ( "dafbbs_c" );
+   chkout_c ( naif_state, "dafbbs_c" );
 
 } /* End dafbbs_c */

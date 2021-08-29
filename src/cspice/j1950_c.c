@@ -43,7 +43,7 @@
 
    #include "SpiceUsr.h"
 
-   SpiceDouble j1950_c ( void )
+   SpiceDouble j1950_c ( void *naif_state )
 
 /*
 

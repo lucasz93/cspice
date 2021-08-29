@@ -50,7 +50,8 @@
    #undef    conics_c
   
 
-   void conics_c ( ConstSpiceDouble  elts[8],
+   void conics_c ( void            * naif_state,
+                   ConstSpiceDouble  elts[8],
                    SpiceDouble       et,
                    SpiceDouble       state[6] )
 
@@ -193,11 +194,12 @@
 
    chkin_c ( naif_state, "conics_c");
 
-   conics_ ( ( doublereal * ) elts,
+   conics_ ( naif_state,
+             ( doublereal * ) elts,
              ( doublereal * ) &et,
              ( doublereal * ) state );
 
-   chkout_c ( "conics_c");
+   chkout_c ( naif_state, "conics_c");
 
 
 } /* End conics_c */

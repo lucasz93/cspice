@@ -49,7 +49,7 @@
    #include "SpiceUsr.h"
  
 
-   void gfinth_c ( int sigcode ) 
+   void gfinth_c ( void *naif_state, int sigcode ) 
 
 /*
 
@@ -129,9 +129,9 @@
 
           if ( previousHandler == SIG_ERR )
           {
-             setmsg_c ( "Attempt to establish gfinth_c as the "
+             setmsg_c ( naif_state, "Attempt to establish gfinth_c as the "
                         "handler for the SIGINT signal failed." );
-             sigerr_c ( "SPICE(SIGNALFAILED)"                   );
+             sigerr_c ( naif_state, "SPICE(SIGNALFAILED)"                   );
           }
 
           /.
@@ -141,9 +141,9 @@
 
           if ( handlerPtr == SIG_ERR )
           {
-             setmsg_c ( "Attempt to re-establish the previous "
+             setmsg_c ( naif_state, "Attempt to re-establish the previous "
                         "handler for the SIGINT signal failed." );
-             sigerr_c ( "SPICE(SIGNALFAILED)"                   );
+             sigerr_c ( naif_state, "SPICE(SIGNALFAILED)"                   );
           }
 
           return ( 0 );
@@ -180,7 +180,7 @@
    /*
    Prototypes 
    */
-   void                      zzgfsavh_c ( SpiceBoolean status );
+   void                      zzgfsavh_c ( void *naif_state, SpiceBoolean status );
 
 
    /*
@@ -203,9 +203,9 @@
 
       if ( handler == SIG_ERR )
       {
-         setmsg_c ( "Attempt to establish gfinth_c as the "
+         setmsg_c ( naif_state, "Attempt to establish gfinth_c as the "
                     "handler for the SIGINT signal failed." );
-         sigerr_c ( "SPICE(SIGNALFAILED)"                   );
+         sigerr_c ( naif_state, "SPICE(SIGNALFAILED)"                   );
       }
 
 
@@ -213,19 +213,19 @@
       An interrupt signal has been received. Update the 
       signal status.
       */
-      zzgfsavh_c ( SPICETRUE );
+      zzgfsavh_c ( naif_state, SPICETRUE );
    }
    else
    {
       /*
       This handler should not receive any other signal. 
       */
-      chkin_c  ( "gfinth_c"                                  );
-      setmsg_c ( "A signal other than SIGINT was received. "
+      chkin_c  ( naif_state, "gfinth_c"                                  );
+      setmsg_c ( naif_state, "A signal other than SIGINT was received. "
                  "The signal code was #."                    );
-      errint_c ( "#",  (SpiceInt)sigcode                     );
-      sigerr_c ( "SPICE(INVALIDSIGNAL)"                      );
-      chkout_c ( "gfinth_c"                                  );
+      errint_c ( naif_state, "#",  (SpiceInt)sigcode                     );
+      sigerr_c ( naif_state, "SPICE(INVALIDSIGNAL)"                      );
+      chkout_c ( naif_state, "gfinth_c"                                  );
    }
 
 

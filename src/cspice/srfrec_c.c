@@ -49,7 +49,8 @@
    #include "SpiceZfc.h"
 
 
-   void srfrec_c ( SpiceInt      body,
+   void srfrec_c ( void        * naif_state,
+                   SpiceInt      body,
                    SpiceDouble   longitude,
                    SpiceDouble   latitude,
                    SpiceDouble   rectan[3] ) 
@@ -221,7 +222,7 @@
              Now try to recover the original latitudinal coordinates
              from the rectangular coordinates found by srfrec_c.
              ./
-             reclat_c ( x, &radius, &lon, &lat );
+             reclat_c ( naif_state,x, &radius, &lon, &lat );
 
              /.
              Convert angles back to degree for display.
@@ -277,12 +278,13 @@
    */
    chkin_c ( naif_state, "srfrec_c" );
 
-   srfrec_ ( (SpiceInt    *) &body,
+   srfrec_ ( naif_state,
+             (SpiceInt    *) &body,
              (SpiceDouble *) &longitude,
              (SpiceDouble *) &latitude,
              (SpiceDouble *) rectan      );
 
 
-   chkout_c ( "srfrec_c" );
+   chkout_c ( naif_state, "srfrec_c" );
 
 } /* End srfrec_c */

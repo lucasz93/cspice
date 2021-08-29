@@ -47,7 +47,7 @@
    #undef dasdc_c
 
 
-   void dasdc_c ( SpiceInt handle ) 
+   void dasdc_c ( void *naif_state, SpiceInt handle ) 
 
 /*
 
@@ -146,9 +146,9 @@
    chkin_c ( naif_state, "dasdc_c" );
 
 
-   dasdc_ ( (integer *) &handle );
+   dasdc_ ( naif_state, (integer *) &handle );
 
 
-   chkout_c ( "dasdc_c" );
+   chkout_c ( naif_state, "dasdc_c" );
 
 } /* End dasdc_c */

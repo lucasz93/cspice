@@ -47,7 +47,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void boddef_c ( ConstSpiceChar   * name,
+   void boddef_c ( void             * naif_state,
+                   ConstSpiceChar   * name,
                    SpiceInt           code )
 
 /*
@@ -303,17 +304,18 @@
    Check the input string name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "boddef_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "boddef_c", name );
 
 
    /*
    Effect the new name/code mapping.
    */
-   boddef_ ( ( char    * )  name,
+   boddef_ ( naif_state,
+             ( char    * )  name,
              ( integer * ) &code,
              ( ftnlen    )  strlen(name) );
 
 
-   chkout_c ( "boddef_c");
+   chkout_c ( naif_state, "boddef_c");
 
 } /* End boddef_c */

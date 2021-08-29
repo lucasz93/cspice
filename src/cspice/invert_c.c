@@ -45,7 +45,8 @@
    #undef    invert_c
    
 
-   void invert_c ( ConstSpiceDouble  m1  [3][3],
+   void invert_c ( void            * naif_state,
+                   ConstSpiceDouble  m1  [3][3],
                    SpiceDouble       mout[3][3] ) 
 
 /*
@@ -168,7 +169,7 @@
    Find the determinant of m1 and check for singularity.
    */
    
-   mdet = det_c(m1);
+   mdet = det_c(naif_state, m1);
    
    if ( fabs(mdet) < SINGULAR_DET ) 
    {
@@ -205,7 +206,7 @@
      
    invdet = 1. / mdet;
   
-   vsclg_c ( invdet, (SpiceDouble *)mtemp, 9, (SpiceDouble *)mout );
+   vsclg_c ( naif_state, invdet, (SpiceDouble *)mtemp, 9, (SpiceDouble *)mout );
 
 
 } /* End invert_c */

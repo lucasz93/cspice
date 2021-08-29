@@ -45,7 +45,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void udf_c ( SpiceDouble   x,
+   void udf_c ( void        * naif_state,
+                SpiceDouble   x,
                 SpiceDouble * value ) 
 
 /*

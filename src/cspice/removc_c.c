@@ -47,7 +47,8 @@
    #include "f2cMang.h"
 
 
-   void removc_c ( ConstSpiceChar  * item,
+   void removc_c ( void            * naif_state,
+                   ConstSpiceChar  * item,
                    SpiceCell       * set   )
 
 /*
@@ -198,25 +199,25 @@
    /*
    Check the input string pointer to make sure it's not null.
    */
-   CHKPTR ( CHK_DISCOVER, "removc_c", item );
+   CHKPTR ( naif_state, CHK_DISCOVER, "removc_c", item );
 
 
    /*
    Make sure we're working with a character cell. 
    */
-   CELLTYPECHK ( CHK_DISCOVER, "removc_c", SPICE_CHR, set );
+   CELLTYPECHK ( naif_state, CHK_DISCOVER, "removc_c", SPICE_CHR, set );
 
 
    /*
    Make sure the cell is really a set. 
    */
-   CELLISSETCHK ( CHK_DISCOVER, "removc_c", set );
+   CELLISSETCHK ( naif_state, CHK_DISCOVER, "removc_c", set );
 
 
    /*
    Initialize the set if necessary. 
    */
-   CELLINIT ( set );
+   CELLINIT ( naif_state, set );
 
 
    /*
@@ -224,7 +225,7 @@
    */
    cdata =  (SpiceChar *) (set->data);
 
-   loc   =  lstlec_c ( item,  set->card,  set->length,  cdata );
+   loc   =  lstlec_c ( naif_state, item,  set->card,  set->length,  cdata );
 
    inSet =       (  loc  >  -1  ) 
 
@@ -244,7 +245,7 @@
    */   
    for (  i = loc;   i < (set->card) - 1;   i++  )
    {
-      SPICE_CELL_SET_C( ARRAY(i+1), i, set );
+      SPICE_CELL_SET_C ( naif_state, ARRAY(i+1), i, set );
    }
 
 

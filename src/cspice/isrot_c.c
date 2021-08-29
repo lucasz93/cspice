@@ -47,7 +47,8 @@
    #undef    isrot_c
    
    
-   SpiceBoolean isrot_c ( ConstSpiceDouble    m   [3][3],
+   SpiceBoolean isrot_c ( void              * naif_state,
+                          ConstSpiceDouble    m   [3][3],
                           SpiceDouble         ntol,
                           SpiceDouble         dtol       )
 
@@ -236,20 +237,20 @@
    */
    if ( ntol < 0.0 )
    {
-      chkin_c  ( "isrot_c"                               );
-      setmsg_c ( "ntol should be non-negative; it is #." );
-      errdp_c  ( "#", ntol                               );
-      sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                );
-      chkout_c ( "isrot_c"                               );
+      chkin_c  ( naif_state, "isrot_c"                               );
+      setmsg_c ( naif_state, "ntol should be non-negative; it is #." );
+      errdp_c  ( naif_state, "#", ntol                               );
+      sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                );
+      chkout_c ( naif_state, "isrot_c"                               );
       return   ( SPICEFALSE                              );
    }
    else if ( dtol < 0.0 )
    {
-      chkin_c  ( "isrot_c"                               );
-      setmsg_c ( "dtol should be non-negative; it is #." );
-      errdp_c  ( "#", dtol                               );
-      sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                );
-      chkout_c ( "isrot_c"                               );
+      chkin_c  ( naif_state, "isrot_c"                               );
+      setmsg_c ( naif_state, "dtol should be non-negative; it is #." );
+      errdp_c  ( naif_state, "#", dtol                               );
+      sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                );
+      chkout_c ( naif_state, "isrot_c"                               );
       return   ( SPICEFALSE                              );
    }
 
@@ -264,19 +265,19 @@
    unitized columns of m.
    */
    
-   xpose_c ( m, mtrans );
+   xpose_c ( naif_state, m, mtrans );
    
-   unorm_c ( mtrans[0], unit[0], &n0 );
-   unorm_c ( mtrans[1], unit[1], &n1 );
-   unorm_c ( mtrans[2], unit[2], &n2 );
+   unorm_c ( naif_state, mtrans[0], unit[0], &n0 );
+   unorm_c ( naif_state, mtrans[1], unit[1], &n1 );
+   unorm_c ( naif_state, mtrans[2], unit[2], &n2 );
    
    
-   normok =     (   n0 == brcktd_c ( n0,  1.0 - ntol,  1.0 + ntol )  )
-             && (   n1 == brcktd_c ( n1,  1.0 - ntol,  1.0 + ntol )  )
-             && (   n2 == brcktd_c ( n2,  1.0 - ntol,  1.0 + ntol )  );
+   normok =     (   n0 == brcktd_c ( naif_state, n0,  1.0 - ntol,  1.0 + ntol )  )
+             && (   n1 == brcktd_c ( naif_state, n1,  1.0 - ntol,  1.0 + ntol )  )
+             && (   n2 == brcktd_c ( naif_state, n2,  1.0 - ntol,  1.0 + ntol )  );
 
-   d      =     det_c ( unit );
-   detok  =  (  d == brcktd_c ( d,  1.0 - dtol,  1.0 + dtol )  );
+   d      =     det_c ( naif_state, unit );
+   detok  =  (  d == brcktd_c ( naif_state, d,  1.0 - dtol,  1.0 + dtol )  );
 
  
    return ( normok && detok );

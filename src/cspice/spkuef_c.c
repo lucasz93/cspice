@@ -48,7 +48,7 @@
    #include "SpiceZst.h"
 
 
-   void spkuef_c ( SpiceInt handle )
+   void spkuef_c ( void *naif_state, SpiceInt handle )
 
 /*
 
@@ -134,16 +134,16 @@
    /*
    Participate in error handling
    */
-   chkin_c ( naif_state,"spkuef_c");
+   chkin_c ( naif_state, "spkuef_c");
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   spkuef_ ( &handle );
+   spkuef_ ( naif_state, &handle );
 
 
-   chkout_c( "spkuef_c");
+   chkout_c( naif_state, "spkuef_c");
 
 } /* end spkuef_c */
 

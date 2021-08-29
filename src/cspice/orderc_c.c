@@ -48,7 +48,8 @@
    #undef    orderc_c
 
 
-   void orderc_c ( SpiceInt      lenvals,
+   void orderc_c ( void        * naif_state,
+                   SpiceInt      lenvals,
                    const void  * array,
                    SpiceInt      ndim,
                    SpiceInt    * iorder  ) 
@@ -193,7 +194,7 @@
    */
    if ( ndim < 1 ) 
    {
-      chkout_c ( "orderc_c" );
+      chkout_c ( naif_state, "orderc_c" );
       return;
    }
 
@@ -201,7 +202,7 @@
    Make sure the input pointer for the string array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR ( CHK_STANDARD, "orderc_c", array, lenvals );
+   CHKOSTR ( naif_state, CHK_STANDARD, "orderc_c", array, lenvals );
    
 
    /*
@@ -210,9 +211,9 @@
    C2F_MapStrArr ( "orderc_c", 
                    ndim, lenvals, array, &fCvalsLen, &fCvalsArr );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "orderc_c" );
+      chkout_c ( naif_state, "orderc_c" );
       return;
    }
 
@@ -220,7 +221,8 @@
    /*
    Call the f2c'd routine.
    */
-   orderc_ (  ( char       * ) fCvalsArr,
+   orderc_ (  naif_state,
+              ( char       * ) fCvalsArr,
               ( integer    * ) &ndim,
               ( integer    * ) iorder,
               ( ftnlen       ) fCvalsLen     );
@@ -240,6 +242,6 @@
    } 
 
 
-   chkout_c ( "orderc_c" );
+   chkout_c ( naif_state, "orderc_c" );
 
 } /* End orderc_c */

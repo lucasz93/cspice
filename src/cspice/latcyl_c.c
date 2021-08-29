@@ -45,7 +45,8 @@
    #include "SpiceUsr.h"
 
 
-   void latcyl_c ( SpiceDouble    radius,
+   void latcyl_c ( void        *  naif_state,
+                   SpiceDouble    radius,
                    SpiceDouble    lon,
                    SpiceDouble    lat,
                    SpiceDouble *  r,

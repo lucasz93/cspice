@@ -52,7 +52,8 @@
    #undef    spkw18_c
    
 
-   void spkw18_c ( SpiceInt             handle,
+   void spkw18_c ( void               * naif_state,
+                   SpiceInt             handle,
                    SpiceSPK18Subtype    subtyp,
                    SpiceInt             body,
                    SpiceInt             center, 
@@ -297,7 +298,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() ) 
+   if ( return_c(naif_state) ) 
    {
       return;
    }
@@ -307,8 +308,8 @@
    Check the input strings to make sure the pointers
    are non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkw18_c", frame );
-   CHKFSTR ( CHK_STANDARD, "spkw18_c", segid );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkw18_c", frame );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkw18_c", segid );
  
 
    locSubtype = (SpiceInt) subtyp;
@@ -316,7 +317,8 @@
    /*
    Write the segment. 
    */
-   spkw18_ ( ( integer    * ) &handle,
+   spkw18_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) &locSubtype,
              ( integer    * ) &body,
              ( integer    * ) &center,
@@ -332,7 +334,7 @@
              ( ftnlen       ) strlen(segid)  );
 
 
-   chkout_c ( "spkw18_c" );
+   chkout_c ( naif_state, "spkw18_c" );
 
 
 } /* End spkw18_c */

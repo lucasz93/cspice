@@ -43,7 +43,7 @@ None.
 
    #include "SpiceUsr.h"
 
-   SpiceDouble tyear_c ( void ) 
+   SpiceDouble tyear_c ( void *naif_state ) 
 
 /*
 

@@ -45,7 +45,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void spkopa_c ( ConstSpiceChar * file,
+   void spkopa_c ( void           * naif_state,
+                   ConstSpiceChar * file,
                    SpiceInt       * handle ) 
 
 /*
@@ -185,15 +186,16 @@
    Check the input string file to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkopa_c", file );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkopa_c", file );
 
    /*
    Call the f2c'd Fortran routine.
    */
-   spkopa_ ( ( char     * )  file, 
+   spkopa_ ( naif_state,
+             ( char     * )  file, 
              ( integer  * )  handle,
              ( ftnlen     )  strlen(file) );
 
-   chkout_c ( "spkopa_c" );
+   chkout_c ( naif_state, "spkopa_c" );
 
 } /* End spkopa_c */

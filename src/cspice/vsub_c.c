@@ -46,7 +46,8 @@
    #undef    vsub_c
 
 
-   void vsub_c ( ConstSpiceDouble   v1[3],
+   void vsub_c ( void             * naif_state,
+                 ConstSpiceDouble   v1[3],
                  ConstSpiceDouble   v2[3],
                  SpiceDouble        vout[3] ) 
 /*

@@ -48,7 +48,8 @@
    #undef    nplnpt_c
    
 
-   void nplnpt_c ( ConstSpiceDouble    linpt  [3],
+   void nplnpt_c ( void              * naif_state,
+                   ConstSpiceDouble    linpt  [3],
                    ConstSpiceDouble    lindir [3],
                    ConstSpiceDouble    point  [3],
                    SpiceDouble         pnear  [3],
@@ -176,12 +177,12 @@
    /*
    We need a real direction vector to work with.
    */
-   if (  vzero_c (lindir)  )
+   if (  vzero_c (naif_state, lindir)  )
    {
-      chkin_c  ( "nplnpt_c"                           );
-      setmsg_c ( "Direction vector must be non-zero." );
-      sigerr_c ( "SPICE(ZEROVECTOR)"                  );
-      chkout_c ( "nplnpt_c"                           );
+      chkin_c  ( naif_state, "nplnpt_c"                           );
+      setmsg_c ( naif_state, "Direction vector must be non-zero." );
+      sigerr_c ( naif_state, "SPICE(ZEROVECTOR)"                  );
+      chkout_c ( naif_state, "nplnpt_c"                           );
       return;
    }
  
@@ -192,11 +193,11 @@
    translated point TRANS is the projection of TRANS onto the line.
    */
    
-   vsub_c  ( point,  linpt,  trans );
-   vproj_c ( trans,  lindir, pnear );
-   vadd_c  ( pnear,  linpt,  pnear );
+   vsub_c  ( naif_state, point,  linpt,  trans );
+   vproj_c ( naif_state, trans,  lindir, pnear );
+   vadd_c  ( naif_state, pnear,  linpt,  pnear );
  
-   *dist = vdist_c ( pnear,  point );
+   *dist = vdist_c ( naif_state, pnear,  point );
 
 
 } /* End nplnpt_c */

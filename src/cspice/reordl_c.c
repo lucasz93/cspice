@@ -49,7 +49,8 @@
    #undef    reordl_c
    
 
-   void reordl_c ( ConstSpiceInt   * iorder,
+   void reordl_c ( void            * naif_state,
+                   ConstSpiceInt   * iorder,
                    SpiceInt          ndim,      
                    SpiceBoolean    * array ) 
 
@@ -201,13 +202,13 @@ ordvec
 
    if ( ordvec == 0 )
    {
-      chkin_c  ( "reordl_c"                                ); 
-      setmsg_c ( "Failure on malloc call to create array "
+      chkin_c  ( naif_state, "reordl_c"                                ); 
+      setmsg_c ( naif_state, "Failure on malloc call to create array "
                  "for Fortran-style order vector.  Tried "
                  "to allocate # bytes."                    );
-      errint_c ( "#",  vSize                               );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                     );
-      chkout_c ( "reordl_c"                                );
+      errint_c ( naif_state, "#",  vSize                               );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                     );
+      chkout_c ( naif_state, "reordl_c"                                );
       return;
    }
 
@@ -228,13 +229,13 @@ ordvec
    {
       free ( ordvec );
 
-      chkin_c  ( "reordl_c"                                ); 
-      setmsg_c ( "Failure on malloc call to create array "
+      chkin_c  ( naif_state, "reordl_c"                                ); 
+      setmsg_c ( naif_state, "Failure on malloc call to create array "
                  "for Fortran-style order vector.  Tried "
                  "to allocate # bytes."                    );
-      errint_c ( "#",  aSize                               );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                     );
-      chkout_c ( "reordl_c"                                );
+      errint_c ( naif_state, "#",  aSize                               );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                     );
+      chkout_c ( naif_state, "reordl_c"                                );
       return;
    }
 
@@ -244,7 +245,8 @@ ordvec
    }
 
 
-   reordl_ ( ( integer * ) ordvec,
+   reordl_ ( naif_state,
+             ( integer * ) ordvec,
              ( integer * ) &ndim,
              ( logical * ) lArray );
 

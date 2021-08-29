@@ -285,9 +285,9 @@ enum{ ALLOC_INC,    /* Increment the count value by +1.   */
 
 -&
 */
-int zzalloc_count ( int op )
+int zzalloc_count ( void *naif_state, int op )
    {
-   cspice_user_state_t* user = &__cspice_get_state()->user;
+   cspice_user_state_t* user = &((cspice_t *)naif_state)->user;
 
    /*
    Respond according to the op variable.
@@ -326,9 +326,9 @@ int zzalloc_count ( int op )
 
       default:
 
-         setmsg_c ( "Unknown op in zzalloc_count: #");
-         errint_c  ( "#", op           );
-         sigerr_c ( "SPICE(UNKNOWNOP)" );
+         setmsg_c ( naif_state, "Unknown op in zzalloc_count: #");
+         errint_c ( naif_state, "#", op           );
+         sigerr_c ( naif_state, "SPICE(UNKNOWNOP)" );
          return 0;
          break;
 
@@ -435,7 +435,7 @@ int zzalloc_count ( int op )
 -&
 */
 
-SpiceChar * alloc_SpiceString ( int length )
+SpiceChar * alloc_SpiceString ( void *naif_state, int length )
    {
 
    SpiceChar           * str;
@@ -443,7 +443,7 @@ SpiceChar * alloc_SpiceString ( int length )
    chkin_c ( naif_state, "alloc_SpiceString" );
 
    /* Allocate the needed memory for the double array. Check for errors. */
-   str = (SpiceChar *) alloc_SpiceMemory ( length * sizeof(SpiceChar) );
+   str = (SpiceChar *) alloc_SpiceMemory ( naif_state, length * sizeof(SpiceChar) );
 
    /*
    Check for a malloc failure. Signal a SPICE error if error found.
@@ -452,14 +452,14 @@ SpiceChar * alloc_SpiceString ( int length )
       {
 
       /* Malloc failed; signal an error; return a NULL. */
-      setmsg_c ( "Malloc failed to allocate space for a string of length #. ");
-      errint_c ( "#", (SpiceInt) length   );
-      sigerr_c ( "SPICE(MALLOCFAILED)"    );
-      chkout_c ( "alloc_SpiceString" );
+      setmsg_c ( naif_state, "Malloc failed to allocate space for a string of length #. ");
+      errint_c ( naif_state, "#", (SpiceInt) length   );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"    );
+      chkout_c ( naif_state, "alloc_SpiceString" );
       return NULL;
       }
 
-   chkout_c ( "alloc_SpiceString" );
+   chkout_c ( naif_state, "alloc_SpiceString" );
    return str;
    }
 
@@ -561,7 +561,7 @@ SpiceChar * alloc_SpiceString ( int length )
 
 -&
 */
-SpiceInt * alloc_SpiceInt_C_array ( int rows, int cols )
+SpiceInt * alloc_SpiceInt_C_array ( void *naif_state, int rows, int cols )
    {
 
    SpiceInt            * mat;
@@ -570,22 +570,22 @@ SpiceInt * alloc_SpiceInt_C_array ( int rows, int cols )
 
    if ( rows*cols < 1 )
       {
-      setmsg_c ( "The specified total workspace size #1 was "
+      setmsg_c ( naif_state, "The specified total workspace size #1 was "
                  "less than the minimum allowed value (1). "
                  "The value for both rows, #2, and cols, #3, "
                  "must excceed zero."                       );
-      errint_c ( "#1", (SpiceInt) (rows*cols)               );
-      errint_c ( "#2", (SpiceInt) rows                      );
-      errint_c ( "#3", (SpiceInt) cols                      );
-      sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                   );
-      chkout_c ( "alloc_SpiceInt_C_array"                   );
+      errint_c ( naif_state, "#1", (SpiceInt) (rows*cols)               );
+      errint_c ( naif_state, "#2", (SpiceInt) rows                      );
+      errint_c ( naif_state, "#3", (SpiceInt) cols                      );
+      sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                   );
+      chkout_c ( naif_state, "alloc_SpiceInt_C_array"                   );
       return NULL;
       }
 
    /*
    Allocate the needed memory for the double array. Check for errors.
    */
-   mat = (SpiceInt *) alloc_SpiceMemory ( rows * cols * sizeof(SpiceInt) );
+   mat = (SpiceInt *) alloc_SpiceMemory ( naif_state, rows * cols * sizeof(SpiceInt) );
 
    /*
    Check for a malloc failure. Signal a SPICE error if error found.
@@ -594,16 +594,16 @@ SpiceInt * alloc_SpiceInt_C_array ( int rows, int cols )
       {
 
       /* Malloc failed; signal an error; return a NULL. */
-      setmsg_c ( "Malloc failed to allocate space for an array of "
+      setmsg_c ( naif_state, "Malloc failed to allocate space for an array of "
                  "$1 * $2 SpiceInts. ");
-      errint_c ( "#", (SpiceInt) rows     );
-      errint_c ( "#", (SpiceInt) cols     );
-      sigerr_c ( "SPICE(MALLOCFAILED)"    );
-      chkout_c ( "alloc_SpiceInt_C_array" );
+      errint_c ( naif_state, "#", (SpiceInt) rows     );
+      errint_c ( naif_state, "#", (SpiceInt) cols     );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"    );
+      chkout_c ( naif_state, "alloc_SpiceInt_C_array" );
       return NULL;
       }
 
-   chkout_c ( "alloc_SpiceInt_C_array" );
+   chkout_c ( naif_state, "alloc_SpiceInt_C_array" );
    return mat;
    }
 
@@ -705,7 +705,7 @@ SpiceInt * alloc_SpiceInt_C_array ( int rows, int cols )
 
 -&
 */
-SpiceBoolean * alloc_SpiceBoolean_C_array ( int rows, int cols )
+SpiceBoolean * alloc_SpiceBoolean_C_array ( void *naif_state, int rows, int cols )
    {
 
    SpiceBoolean            * mat;
@@ -714,22 +714,23 @@ SpiceBoolean * alloc_SpiceBoolean_C_array ( int rows, int cols )
 
    if ( rows*cols < 1 )
       {
-      setmsg_c ( "The specified total workspace size #1 was "
+      setmsg_c ( naif_state, "The specified total workspace size #1 was "
                  "less than the minimum allowed value (1). "
                  "The value for both rows, #2, and cols, #3, "
                  "must excceed zero."                       );
-      errint_c ( "#1", (SpiceInt) (rows*cols)               );
-      errint_c ( "#2", (SpiceInt) rows                      );
-      errint_c ( "#3", (SpiceInt) cols                      );
-      sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                   );
-      chkout_c ( "alloc_SpiceBoolean_C_array"                   );
+      errint_c ( naif_state, "#1", (SpiceInt) (rows*cols)               );
+      errint_c ( naif_state, "#2", (SpiceInt) rows                      );
+      errint_c ( naif_state, "#3", (SpiceInt) cols                      );
+      sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                   );
+      chkout_c ( naif_state, "alloc_SpiceBoolean_C_array"                   );
       return NULL;
       }
 
    /*
    Allocate the needed memory for the double array. Check for errors.
    */
-   mat = (SpiceBoolean *) alloc_SpiceMemory ( rows * cols * 
+   mat = (SpiceBoolean *) alloc_SpiceMemory ( naif_state,
+                                              rows * cols * 
                                               sizeof(SpiceBoolean) );
 
    /*
@@ -739,16 +740,16 @@ SpiceBoolean * alloc_SpiceBoolean_C_array ( int rows, int cols )
       {
 
       /* Malloc failed; signal an error; return a NULL. */
-      setmsg_c ( "Malloc failed to allocate space for an array of "
+      setmsg_c ( naif_state, "Malloc failed to allocate space for an array of "
                  "$1 * $2 SpiceBooleans. ");
-      errint_c ( "#", (SpiceInt) rows     );
-      errint_c ( "#", (SpiceInt) cols     );
-      sigerr_c ( "SPICE(MALLOCFAILED)"    );
-      chkout_c ( "alloc_SpiceBoolean_C_array" );
+      errint_c ( naif_state, "#", (SpiceInt) rows     );
+      errint_c ( naif_state, "#", (SpiceInt) cols     );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"    );
+      chkout_c ( naif_state, "alloc_SpiceBoolean_C_array" );
       return NULL;
       }
 
-   chkout_c ( "alloc_SpiceBoolean_C_array" );
+   chkout_c ( naif_state, "alloc_SpiceBoolean_C_array" );
    return mat;
    }
 
@@ -862,7 +863,7 @@ SpiceBoolean * alloc_SpiceBoolean_C_array ( int rows, int cols )
 
 -&
 */
-SpiceDouble * alloc_SpiceDouble_C_array ( int rows, int cols )
+SpiceDouble * alloc_SpiceDouble_C_array ( void *naif_state, int rows, int cols )
    {
 
    SpiceDouble         * mat;
@@ -871,22 +872,22 @@ SpiceDouble * alloc_SpiceDouble_C_array ( int rows, int cols )
 
    if ( (rows < 1) || (cols < 1) )
       {
-      setmsg_c ( "The specified total workspace size #1 was "
+      setmsg_c ( naif_state, "The specified total workspace size #1 was "
                  "less than the minimum allowed value (1). "
                  "The value for both rows, #2, and cols, #3, "
                  "must excceed zero."                       );
-      errint_c ( "#1", (SpiceInt) (rows*cols)               );
-      errint_c ( "#2", (SpiceInt) rows                      );
-      errint_c ( "#3", (SpiceInt) cols                      );
-      sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                   );
-      chkout_c ( "alloc_SpiceDouble_C_array"                );
+      errint_c ( naif_state, "#1", (SpiceInt) (rows*cols)               );
+      errint_c ( naif_state, "#2", (SpiceInt) rows                      );
+      errint_c ( naif_state, "#3", (SpiceInt) cols                      );
+      sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                   );
+      chkout_c ( naif_state, "alloc_SpiceDouble_C_array"                );
       return NULL;
       }
 
    /*
    Allocate the needed memory for the double array. Check for errors.
    */
-   mat = (SpiceDouble*) alloc_SpiceMemory( rows *cols *sizeof(SpiceDouble));
+   mat = (SpiceDouble*) alloc_SpiceMemory( naif_state, rows *cols *sizeof(SpiceDouble));
 
    /*
    Check for a malloc failure. Signal a SPICE error if error found.
@@ -895,16 +896,16 @@ SpiceDouble * alloc_SpiceDouble_C_array ( int rows, int cols )
       {
 
       /* Malloc failed; signal an error; return a NULL. */
-      setmsg_c ( "Malloc failed to allocate space for an array of "
+      setmsg_c ( naif_state, "Malloc failed to allocate space for an array of "
                  "$1 * $2 SpiceDoubles. ");
-      errint_c ( "#", (SpiceInt) rows        );
-      errint_c ( "#", (SpiceInt) cols        );
-      sigerr_c ( "SPICE(MALLOCFAILED)"       );
-      chkout_c ( "alloc_SpiceDouble_C_array" );
+      errint_c ( naif_state, "#", (SpiceInt) rows        );
+      errint_c ( naif_state, "#", (SpiceInt) cols        );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"       );
+      chkout_c ( naif_state, "alloc_SpiceDouble_C_array" );
       return NULL;
       }
 
-   chkout_c ( "alloc_SpiceDouble_C_array" );
+   chkout_c ( naif_state, "alloc_SpiceDouble_C_array" );
    return mat;
    }
 
@@ -1034,7 +1035,7 @@ SpiceDouble * alloc_SpiceDouble_C_array ( int rows, int cols )
 
 -&
 */
-SpiceChar ** alloc_SpiceString_C_array ( int string_length, int string_count )
+SpiceChar ** alloc_SpiceString_C_array ( void *naif_state, int string_length, int string_count )
    {
 
    SpiceChar          ** cvals;
@@ -1046,18 +1047,18 @@ SpiceChar ** alloc_SpiceString_C_array ( int string_length, int string_count )
    */
    if( string_count < 1 )
       {
-      setmsg_c ( "The user defined a non-positive value for string count: #");
-      errint_c ( "#", string_count           );
-      sigerr_c ( "SPICE(NOTPOSITIVE)"        );
-      chkout_c ( "alloc_SpiceString_C_array" );
+      setmsg_c ( naif_state, "The user defined a non-positive value for string count: #");
+      errint_c ( naif_state, "#", string_count           );
+      sigerr_c ( naif_state, "SPICE(NOTPOSITIVE)"        );
+      chkout_c ( naif_state, "alloc_SpiceString_C_array" );
       return NULL;
       }
    else if( string_length < 2 )
       {
-      setmsg_c ( "The user defined a value less than 2 for string length: #");
-      errint_c ( "#", string_length          );
-      sigerr_c ( "SPICE(STRINGTOOSMALL)"     );
-      chkout_c ( "alloc_SpiceString_C_array" );
+      setmsg_c ( naif_state, "The user defined a value less than 2 for string length: #");
+      errint_c ( naif_state, "#", string_length          );
+      sigerr_c ( naif_state, "SPICE(STRINGTOOSMALL)"     );
+      chkout_c ( naif_state, "alloc_SpiceString_C_array" );
       return NULL;
       }
 
@@ -1066,15 +1067,15 @@ SpiceChar ** alloc_SpiceString_C_array ( int string_length, int string_count )
    Allocate the needed memory for the strings array. Check for errors.
    */
    cvals    = (SpiceChar**)
-               alloc_SpiceMemory ( string_count*sizeof(SpiceChar*) );
+               alloc_SpiceMemory ( naif_state, string_count*sizeof(SpiceChar*) );
    if ( cvals == NULL )
       {
 
       /* Malloc failed; signal an error; return a NULL. */
-      setmsg_c ( "Malloc failed to allocate space for # SpiceChar pointers. ");
-      errint_c ( "#", string_count           );
-      sigerr_c ( "SPICE(MALLOCFAILED)"       );
-      chkout_c ( "alloc_SpiceString_C_array" );
+      setmsg_c ( naif_state, "Malloc failed to allocate space for # SpiceChar pointers. ");
+      errint_c ( naif_state, "#", string_count           );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"       );
+      chkout_c ( naif_state, "alloc_SpiceString_C_array" );
       return NULL;
       }
 
@@ -1082,7 +1083,8 @@ SpiceChar ** alloc_SpiceString_C_array ( int string_length, int string_count )
    Now allocate enough memory for the string_length * string_count block.
    Assign the memory to cvals[0], i.e. *cvals.
    */
-   cvals[0] = (SpiceChar* ) alloc_SpiceMemory ( string_length
+   cvals[0] = (SpiceChar* ) alloc_SpiceMemory ( naif_state,
+                                                string_length
                                                 * string_count
                                                 * sizeof(SpiceChar) );
    if ( cvals[0] == NULL )
@@ -1092,14 +1094,14 @@ SpiceChar ** alloc_SpiceString_C_array ( int string_length, int string_count )
       Malloc failed; free the allocated memory; signal an error; return
       a NULL .
       */
-      free_SpiceMemory( cvals );
+      free_SpiceMemory( naif_state, cvals );
 
-      setmsg_c ( "Malloc failed to allocate space for $1 * $2 "
+      setmsg_c ( naif_state, "Malloc failed to allocate space for $1 * $2 "
                  "SpiceChar values. ");
-      errint_c ( "$1", string_count          );
-      errint_c ( "$2", string_length         );
-      sigerr_c ( "SPICE(MALLOCFAILED)"       );
-      chkout_c ( "alloc_SpiceString_C_array" );
+      errint_c ( naif_state, "$1", string_count          );
+      errint_c ( naif_state, "$2", string_length         );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"       );
+      chkout_c ( naif_state, "alloc_SpiceString_C_array" );
       return NULL;
       }
 
@@ -1108,7 +1110,7 @@ SpiceChar ** alloc_SpiceString_C_array ( int string_length, int string_count )
    nothing more. The user must explicitly assign the cvals pointers to
    the appropriate values.
    */
-   chkout_c ( "alloc_SpiceString_C_array" );
+   chkout_c ( naif_state, "alloc_SpiceString_C_array" );
    return cvals;
    }
 
@@ -1210,7 +1212,8 @@ SpiceChar ** alloc_SpiceString_C_array ( int string_length, int string_count )
 
 -&
 */
-SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len,
+SpiceChar ** alloc_SpiceString_C_Copy_array ( void *naif_state,
+                                              int array_len,
                                               int string_len,
                                               SpiceChar ** array )
    {
@@ -1225,18 +1228,18 @@ SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len,
    */
    if( array_len < 1 )
       {
-      setmsg_c ( "The user defined a non-positive value for array length: #");
-      errint_c ( "#", array_len                   );
-      sigerr_c ( "SPICE(NOTPOSITIVE)"             );
-      chkout_c ( "alloc_SpiceString_C_Copy_array" );
+      setmsg_c ( naif_state, "The user defined a non-positive value for array length: #");
+      errint_c ( naif_state, "#", array_len                   );
+      sigerr_c ( naif_state, "SPICE(NOTPOSITIVE)"             );
+      chkout_c ( naif_state, "alloc_SpiceString_C_Copy_array" );
       return NULL;
       }
    else if( string_len < 2 )
       {
-      setmsg_c ( "The user defined a value less than 2 for string length: #");
-      errint_c ( "#", string_len                  );
-      sigerr_c ( "SPICE(NOTPOSITIVE)"             );
-      chkout_c ( "alloc_SpiceString_C_Copy_array" );
+      setmsg_c ( naif_state, "The user defined a value less than 2 for string length: #");
+      errint_c ( naif_state, "#", string_len                  );
+      sigerr_c ( naif_state, "SPICE(NOTPOSITIVE)"             );
+      chkout_c ( naif_state, "alloc_SpiceString_C_Copy_array" );
       return NULL;
       }
 
@@ -1244,14 +1247,14 @@ SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len,
    /*
    Create a string array for passing to the new array.
    */
-   str_array = (SpiceChar**) alloc_SpiceMemory( sizeof(SpiceChar*) *array_len);
+   str_array = (SpiceChar**) alloc_SpiceMemory( naif_state, sizeof(SpiceChar*) *array_len);
    if ( str_array == NULL )
       {
       /* Malloc failed; signal an error; return a NULL. */
-      setmsg_c ( "Malloc failed to allocate space for # SpiceChar pointers. ");
-      errint_c ( "#", array_len                   );
-      sigerr_c ( "SPICE(MALLOCFAILED)"            );
-      chkout_c ( "alloc_SpiceString_C_Copy_array" );
+      setmsg_c ( naif_state, "Malloc failed to allocate space for # SpiceChar pointers. ");
+      errint_c ( naif_state, "#", array_len                   );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"            );
+      chkout_c ( naif_state, "alloc_SpiceString_C_Copy_array" );
       return NULL;
       }
 
@@ -1263,21 +1266,21 @@ SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len,
          {
 
          str_array[i] = (SpiceChar *)
-                        alloc_SpiceMemory(sizeof(SpiceChar) * string_len );
+                        alloc_SpiceMemory(naif_state, sizeof(SpiceChar) * string_len );
 
          if ( str_array[i] == NULL )
             {
             /*
             Malloc failed; free the memory; signal an error; return a NULL.
             */
-            free_SpiceString_C_array ( i-1, str_array );
+            free_SpiceString_C_array ( naif_state, i-1, str_array );
 
-            setmsg_c ( "Malloc failed to allocate space for array "
+            setmsg_c ( naif_state, "Malloc failed to allocate space for array "
                        "$1 of $2 SpiceChars. "          );
-            errint_c ( "$1", (SpiceInt) i               );
-            errint_c ( "$2", string_len                 );
-            sigerr_c ( "SPICE(MALLOCFAILED)"            );
-            chkout_c ( "alloc_SpiceString_C_Copy_array" );
+            errint_c ( naif_state, "$1", (SpiceInt) i               );
+            errint_c ( naif_state, "$2", string_len                 );
+            sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"            );
+            chkout_c ( naif_state, "alloc_SpiceString_C_Copy_array" );
             return NULL;
             }
          else
@@ -1287,7 +1290,7 @@ SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len,
 
          }
 
-   chkout_c ( "alloc_SpiceString_C_Copy_array" );
+   chkout_c ( naif_state, "alloc_SpiceString_C_Copy_array" );
    return str_array;
    }
 
@@ -1389,7 +1392,7 @@ SpiceChar ** alloc_SpiceString_C_Copy_array ( int array_len,
 
 -&
 */
-SpiceChar ** alloc_SpiceString_Pointer_array( int array_len )
+SpiceChar ** alloc_SpiceString_Pointer_array( void *naif_state, int array_len )
    {
 
    SpiceChar          ** ptr_array;
@@ -1401,10 +1404,10 @@ SpiceChar ** alloc_SpiceString_Pointer_array( int array_len )
    */
    if( array_len < 1 )
       {
-      setmsg_c ( "The user defined a non-positive value for array length: #");
-      errint_c ( "#", array_len                    );
-      sigerr_c ( "SPICE(NOTPOSITIVE)"              );
-      chkout_c ( "alloc_SpiceString_Pointer_array" );
+      setmsg_c ( naif_state, "The user defined a non-positive value for array length: #");
+      errint_c ( naif_state, "#", array_len                    );
+      sigerr_c ( naif_state, "SPICE(NOTPOSITIVE)"              );
+      chkout_c ( naif_state, "alloc_SpiceString_Pointer_array" );
       return NULL;
       }
 
@@ -1412,18 +1415,18 @@ SpiceChar ** alloc_SpiceString_Pointer_array( int array_len )
    /*
    Create a string array for passing to the new array.
    */
-   ptr_array = alloc_SpiceMemory( array_len * sizeof(SpiceChar*) );
+   ptr_array = alloc_SpiceMemory( naif_state, array_len * sizeof(SpiceChar*) );
    if ( ptr_array == NULL )
       {
       /* Malloc failed; signal an error; return a NULL. */
-      setmsg_c ( "Malloc failed to allocate space for # SpiceChar pointers. ");
-      errint_c ( "#", array_len                    );
-      sigerr_c ( "SPICE(MALLOCFAILED)"             );
-      chkout_c ( "alloc_SpiceString_Pointer_array" );
+      setmsg_c ( naif_state, "Malloc failed to allocate space for # SpiceChar pointers. ");
+      errint_c ( naif_state, "#", array_len                    );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"             );
+      chkout_c ( naif_state, "alloc_SpiceString_Pointer_array" );
       return NULL;
       }
 
-   chkout_c ( "alloc_SpiceString_Pointer_array" );
+   chkout_c ( naif_state, "alloc_SpiceString_Pointer_array" );
    return ptr_array;
    }
 
@@ -1524,7 +1527,7 @@ SpiceChar ** alloc_SpiceString_Pointer_array( int array_len )
 
 -&
 */
-void free_SpiceString_C_array ( int dim, SpiceChar ** array )
+void free_SpiceString_C_array ( void *naif_state, int dim, SpiceChar ** array )
    {
 
    int                   i;
@@ -1535,10 +1538,10 @@ void free_SpiceString_C_array ( int dim, SpiceChar ** array )
    */
    for (i=0; i< dim; i++)
       {
-      free_SpiceMemory( array[i]);
+      free_SpiceMemory( naif_state, array[i]);
       }
 
-   free_SpiceMemory ( array );
+   free_SpiceMemory ( naif_state, array );
    }
 
 
@@ -1640,7 +1643,7 @@ void free_SpiceString_C_array ( int dim, SpiceChar ** array )
 
 -&
 */
-void free_SpiceMemory( void * ptr )
+void free_SpiceMemory( void *naif_state, void * ptr )
    {
 
    /*
@@ -1651,7 +1654,7 @@ void free_SpiceMemory( void * ptr )
    /*
    Decrement the allocation count.
    */
-   (void) zzalloc_count ( ALLOC_DEC );
+   (void) zzalloc_count ( naif_state, ALLOC_DEC );
 
    }
 
@@ -1753,7 +1756,7 @@ void free_SpiceMemory( void * ptr )
 
 -&
 */
-void * alloc_SpiceMemory ( size_t size )
+void * alloc_SpiceMemory ( void *naif_state, size_t size )
    {
 
    /*
@@ -1771,7 +1774,7 @@ void * alloc_SpiceMemory ( size_t size )
    */
    if ( mem != NULL )
       {
-      (void) zzalloc_count ( ALLOC_INC );
+      (void) zzalloc_count ( naif_state, ALLOC_INC );
       }
 
    /*
@@ -1878,12 +1881,12 @@ void * alloc_SpiceMemory ( size_t size )
 
 -&
 */
-int alloc_count()
+int alloc_count(void *naif_state)
    {
 
    /*
    Nothing to do except return the 'count' value.
    */
-   return zzalloc_count( ALLOC_EQU );
+   return zzalloc_count( naif_state, ALLOC_EQU );
    }
 

@@ -47,7 +47,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZmc.h"
 
-   void rotate_c ( SpiceDouble     angle, 
+   void rotate_c ( void          * naif_state,
+                   SpiceDouble     angle, 
                    SpiceInt        iaxis, 
                    SpiceDouble     mout[3][3] ) 
 
@@ -164,14 +165,15 @@
    /*
    Call the f2c'd version of the routine.
    */ 
-   rotate_ ( (doublereal *) &angle,
+   rotate_ ( naif_state,
+             (doublereal *) &angle,
              (integer    *) &iaxis,
              (doublereal *)  loc_mat );
 
    /*
    Transpose the output matrix to put it in row-major order.
    */
-   xpose_c ( loc_mat, loc_mat );
+   xpose_c ( naif_state, loc_mat, loc_mat );
    
           
    /*

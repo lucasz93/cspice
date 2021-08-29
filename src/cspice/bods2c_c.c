@@ -50,7 +50,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void bods2c_c ( ConstSpiceChar  * name,
+   void bods2c_c ( void            * naif_state,
+                   ConstSpiceChar  * name,
                    SpiceInt        * code,
                    SpiceBoolean    * found )
 
@@ -271,13 +272,14 @@
    Check the input string name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "bods2c_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "bods2c_c", name );
 
 
    /*
    Translate the name to the corresponding code.
    */
-   bods2c_( ( char    * ) name,
+   bods2c_( naif_state,
+            ( char    * ) name,
             ( integer * ) code,
             ( logical * ) &fnd,
             ( ftnlen    ) strlen(name)    );
@@ -291,6 +293,6 @@
    
    
 
-   chkout_c ( "bods2c_c");
+   chkout_c ( naif_state, "bods2c_c");
 
 } /* End bods2c_c */

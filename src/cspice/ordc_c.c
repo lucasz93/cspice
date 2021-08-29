@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
 
 
-   SpiceInt ordc_c ( ConstSpiceChar  * item,
+   SpiceInt ordc_c ( void            * naif_state,
+                     ConstSpiceChar  * item,
                      SpiceCell       * set   )
 /*
 
@@ -190,12 +191,12 @@
 
                if (  ordc_c(cElt, &set)  !=  expected[i]  )
                {
-                  setmsg_c ( "Position of # was expected to be # "
+                  setmsg_c ( naif_state, "Position of # was expected to be # "
                              "but was actually #."                 );
-                  errch_c  ( "#",  cElt                            );
-                  errint_c ( "#",  expected[i]                     );
-                  errint_c ( "#",  ordc_c(cElt,&set)               );
-                  sigerr_c ( "INVALID LOCATION"                    );
+                  errch_c  ( naif_state, "#",  cElt                            );
+                  errint_c ( naif_state, "#",  expected[i]                     );
+                  errint_c ( naif_state, "#",  ordc_c(cElt,&set)               );
+                  sigerr_c ( naif_state, "INVALID LOCATION"                    );
                }
             }
 
@@ -241,29 +242,29 @@
 
    Check the input string pointer to make sure it's not null.
    */
-   CHKPTR_VAL ( CHK_DISCOVER, "ordc_c", item, -1 );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "ordc_c", item, -1 );
 
 
    /*
    Make sure we're working with a character cell. 
    */
-   CELLTYPECHK_VAL ( CHK_DISCOVER, "ordc_c", SPICE_CHR, set, -1 );
+   CELLTYPECHK_VAL ( naif_state, CHK_DISCOVER, "ordc_c", SPICE_CHR, set, -1 );
 
 
    /*
    Initialize the set if necessary. 
    */
-   CELLINIT ( set );
+   CELLINIT ( naif_state, set );
 
    /*
    Make sure the cell is really a set. 
    */
-   CELLISSETCHK_VAL ( CHK_DISCOVER, "ordc_c", set, -1 );
+   CELLISSETCHK_VAL ( naif_state, CHK_DISCOVER, "ordc_c", set, -1 );
 
    /*
    The routine bsrchc_c returns the index of the item in the set,
    or -1 if the item is not present.
    */
-   return (  bsrchc_c ( item,  set->card,  set->length,  set->data )  );
+   return (  bsrchc_c ( naif_state, item,  set->card,  set->length,  set->data )  );
 }
 

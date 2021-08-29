@@ -50,7 +50,8 @@
    #undef spksfs_c
 
 
-   void spksfs_c ( SpiceInt        body,
+   void spksfs_c ( void          * naif_state,
+                   SpiceInt        body,
                    SpiceDouble     et,
                    SpiceInt        idlen,
                    SpiceInt      * handle,
@@ -346,13 +347,14 @@
    one output character and a null terminator.  Also check for a null
    pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "spksfs_c", ident, idlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "spksfs_c", ident, idlen );
 
 
    /*
    Call the f2c'd routine. 
    */
-   spksfs_ ( (integer    *) &body,
+   spksfs_ ( naif_state,
+             (integer    *) &body,
              (doublereal *) &et,
              (integer    *) handle,
              (doublereal *) descr,
@@ -378,7 +380,7 @@
    F2C_ConvertStr ( idlen, ident );
 
 
-   chkout_c ( "spksfs_c" );
+   chkout_c ( naif_state, "spksfs_c" );
 
 } /* End spksfs_c */
 

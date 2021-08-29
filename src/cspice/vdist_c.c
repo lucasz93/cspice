@@ -45,8 +45,9 @@
    #undef    vdist_c
 
 
-   SpiceDouble vdist_c ( ConstSpiceDouble v1[3],
-                         ConstSpiceDouble v2[3] )
+   SpiceDouble vdist_c ( void             * naif_state,
+                         ConstSpiceDouble   v1[3],
+                         ConstSpiceDouble   v2[3] )
 
 /*
 
@@ -186,9 +187,9 @@
 
    /* Function Body */
 
-   vsub_c ( v1, v2, diff);
+   vsub_c ( naif_state, v1, v2, diff);
 
 
-   return  vnorm_c (diff);
+   return  vnorm_c (naif_state, diff);
 
 } /* End vdist_c */

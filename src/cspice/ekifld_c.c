@@ -49,7 +49,8 @@
    #undef    ekifld_c
 
 
-   void ekifld_c ( SpiceInt           handle,
+   void ekifld_c ( void             * naif_state,
+                   SpiceInt           handle,
                    ConstSpiceChar   * tabnam,
                    SpiceInt           ncols,
                    SpiceInt           nrows,
@@ -598,20 +599,20 @@
    Check the table name to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekifld_c", tabnam );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekifld_c", tabnam );
 
    /*
    Check the column name array to make sure the pointer is non-null 
    and the string length is non-zero.  Note:  this check is normally
    done for output strings:  CHKOSTR is the macro that does the job.
    */
-   CHKOSTR ( CHK_STANDARD, "ekifld_c", cnames, cnmlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ekifld_c", cnames, cnmlen );
 
    /*
    Check the declaration array to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKOSTR ( CHK_STANDARD, "ekifld_c", decls, declen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ekifld_c", decls, declen );
 
    /*
    Create a Fortran-style array of column names. 
@@ -620,9 +621,9 @@
    C2F_MapStrArr ( "ekifld_c",
                    ncols, cnmlen, cnames, &fCnameLen, &fCnameArr );
    
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "ekifld_c" );
+      chkout_c ( naif_state, "ekifld_c" );
       return;
    }
 
@@ -634,11 +635,11 @@
    C2F_MapStrArr ( "ekifld_c",
                    ncols, declen, decls,  &fCdeclLen, &fCdeclArr );
    
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       free ( (void *) fCnameArr );
       
-      chkout_c ( "ekifld_c" );
+      chkout_c ( naif_state, "ekifld_c" );
       return;
    }
    
@@ -647,7 +648,8 @@
    Call the f2c'd Fortran routine.  Use explicit type casts for every
    type defined by f2c.
    */
-   ekifld_ ( ( integer  * ) &handle,
+   ekifld_ ( naif_state,
+             ( integer  * ) &handle,
              ( char     * ) tabnam,
              ( integer  * ) &ncols,
              ( integer  * ) &nrows,
@@ -672,6 +674,6 @@
    (*segno)--;
    
    
-   chkout_c ( "ekifld_c" );
+   chkout_c ( naif_state, "ekifld_c" );
 
 } /* End ekifld_c */

@@ -1,6 +1,6 @@
 /*
 
--Procedure zzsynccl_c ( Sync a CSPICE cell )
+-Procedure zzsynccl_c ( naif_state, Sync a CSPICE cell )
 
 -Abstract
 
@@ -50,7 +50,8 @@
    #include "SpiceCel.h"
    #include "SpiceZmc.h"
 
-   void zzsynccl_c ( SpiceTransDir     xdir,
+   void zzsynccl_c ( void            * naif_state,
+                     SpiceTransDir     xdir,
                      SpiceCell       * cell )   
 
 /*
@@ -194,29 +195,33 @@
       */
       if ( dtype == SPICE_DP )
       {
-         ssized_ ( ( integer    * ) &csize,
+         ssized_ ( naif_state,
+                   ( integer    * ) &csize,
                    ( doublereal * ) fcell   );
 
-         scardd_ ( ( integer    * ) &ccard,
+         scardd_ ( naif_state,
+                   ( integer    * ) &ccard,
                    ( doublereal * ) fcell   );
       }
 
       else if ( dtype == SPICE_INT )
       {
-         ssizei_ ( ( integer * ) &csize,
+         ssizei_ ( naif_state,
+                   ( integer * ) &csize,
                    ( integer * ) fcell   );
 
-         scardi_ ( ( integer * ) &ccard,
+         scardi_ ( naif_state,
+                   ( integer * ) &ccard,
                    ( integer * ) fcell   );
       }
 
       else if ( dtype != SPICE_CHR )
       {
-         chkin_c  ( "zzsynccl_c"                    );
-         setmsg_c ( "Invalid data type code # seen" ); 
-         errint_c ( "#",  (SpiceInt) dtype          );   
-         sigerr_c ( "SPICE(NOTSUPPORTED)"           );
-         chkout_c ( "zzsynccl_c"                    );
+         chkin_c  ( naif_state, "zzsynccl_c"                    );
+         setmsg_c ( naif_state, "Invalid data type code # seen" ); 
+         errint_c ( naif_state, "#",  (SpiceInt) dtype          );   
+         sigerr_c ( naif_state, "SPICE(NOTSUPPORTED)"           );
+         chkout_c ( naif_state, "zzsynccl_c"                    );
          return;
       }
    }
@@ -232,31 +237,33 @@
       {
          cstrlen = cell->length;
 
-         cell->size = sizec_ (  ( char      * ) fcell,
+         cell->size = sizec_ (  naif_state,
+                                ( char      * ) fcell,
                                 ( ftnlen      ) cstrlen-1 );
-         cell->card = cardc_ (  ( char      * ) fcell,
+         cell->card = cardc_ (  naif_state,
+                                ( char      * ) fcell,
                                 ( ftnlen      ) cstrlen-1 );
       }
  
       else if ( dtype == SPICE_DP )
       {
-         cell->size = sized_ (  ( doublereal * ) fcell  );
-         cell->card = cardd_ (  ( doublereal * ) fcell  );
+         cell->size = sized_ ( naif_state, ( doublereal * ) fcell  );
+         cell->card = cardd_ ( naif_state,   ( doublereal * ) fcell  );
       }
 
       else if ( dtype == SPICE_INT )
       {
-         cell->size = sizei_ (  ( integer * ) fcell  );
-         cell->card = cardi_ (  ( integer * ) fcell  );
+         cell->size = sizei_ (  naif_state, ( integer * ) fcell  );
+         cell->card = cardi_ (  naif_state, ( integer * ) fcell  );
       }
 
       else
       {
-         chkin_c  ( "zzsynccl_c"                    );
-         setmsg_c ( "Invalid data type code # seen" ); 
-         errint_c ( "#",  (SpiceInt) dtype          );   
-         sigerr_c ( "SPICE(NOTSUPPORTED)"           );
-         chkout_c ( "zzsynccl_c"                    );
+         chkin_c  ( naif_state, "zzsynccl_c"                    );
+         setmsg_c ( naif_state, "Invalid data type code # seen" ); 
+         errint_c ( naif_state, "#",  (SpiceInt) dtype          );   
+         sigerr_c ( naif_state, "SPICE(NOTSUPPORTED)"           );
+         chkout_c ( naif_state, "zzsynccl_c"                    );
          return;
       }
    }

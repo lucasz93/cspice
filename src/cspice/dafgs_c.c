@@ -46,7 +46,7 @@
    #include "SpiceZfc.h"
 
 
-   void dafgs_c ( SpiceDouble sum[] )
+   void dafgs_c ( void *naif_state, SpiceDouble sum[] )
 
 /*
 
@@ -400,9 +400,9 @@
    chkin_c ( naif_state, "dafgs_c" );
 
 
-   dafgs_ ( ( doublereal * ) sum );
+   dafgs_ ( naif_state, ( doublereal * ) sum );
 
 
-   chkout_c ( "dafgs_c" );
+   chkout_c ( naif_state, "dafgs_c" );
 
 } /* End dafgs_c */

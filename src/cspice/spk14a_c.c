@@ -48,7 +48,8 @@
    #undef    spk14a_c
    
    
-   void spk14a_c ( SpiceInt           handle,
+   void spk14a_c ( void             * naif_state,
+                   SpiceInt           handle,
                    SpiceInt           ncsets,
                    ConstSpiceDouble   coeffs [],
                    ConstSpiceDouble   epochs []  ) 
@@ -399,12 +400,13 @@
    chkin_c ( naif_state, "spk14a_c" );
 
 
-   spk14a_ ( ( integer    * ) &handle,
+   spk14a_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) &ncsets,
              ( doublereal * ) coeffs,
              ( doublereal * ) epochs  );
              
 
-   chkout_c ( "spk14a_c" );
+   chkout_c ( naif_state, "spk14a_c" );
 
 } /* End spk14a_c */

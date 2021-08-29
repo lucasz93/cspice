@@ -55,7 +55,8 @@
    #include "SpiceZmc.h"
 
 
-   void srfc2s_c ( SpiceInt        code,
+   void srfc2s_c ( void          * naif_state,
+                   SpiceInt        code,
                    SpiceInt        bodyid,
                    SpiceInt        srflen,
                    SpiceChar     * srfstr,
@@ -385,12 +386,13 @@
    Check the output string to make sure the pointer is non-null and
    the string length is non-zero.
    */
-   CHKOSTR ( CHK_STANDARD, "srfc2s_c", srfstr, srflen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "srfc2s_c", srfstr, srflen );
 
    /*
    Hand off the work to the f2c'd routine.
    */
-   srfc2s_ ( (integer    *) &code,             
+   srfc2s_ ( naif_state,
+             (integer    *) &code,             
              (integer    *) &bodyid,
              (char       *) srfstr,
              (logical    *) &namfnd,
@@ -409,6 +411,6 @@
    F2C_ConvertStr ( srflen, srfstr );
 
 
-   chkout_c ( "srfc2s_c" );
+   chkout_c ( naif_state, "srfc2s_c" );
 
 } /* End srfc2s_c */

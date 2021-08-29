@@ -270,6 +270,6 @@
             ( doublereal * ) sclkdp );
 
 
-   chkout_c ( "sce2c_c" );
+   chkout_c ( naif_state, "sce2c_c" );
 
 } /* End sce2c_c */

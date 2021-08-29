@@ -45,9 +45,12 @@
 #include "SpiceZfc.h"
 #include "SpiceZmc.h"
 #include "f2cMang.h"
+#include "f2c.h"
+#include "__cspice_state.h"
 
 
-   void insrtc_c ( ConstSpiceChar  * item,
+   void insrtc_c ( void            * naif_state,
+                   ConstSpiceChar  * item,
                    SpiceCell       * set   )
 
 /*
@@ -184,10 +187,12 @@
 -&
 */
 {
+   cspice_t *state = (cspice_t *)naif_state;
+
    /*
    f2c library utility prototypes 
    */
-   extern integer   s_cmp  (char *a, char *b, ftnlen la, ftnlen lb ); 
+   extern integer   s_cmp  (f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb ); 
 
 
    /*
@@ -214,25 +219,25 @@
 
    Check the input string pointer to make sure it's not null.
    */
-   CHKPTR ( CHK_DISCOVER, "insrtc_c", item );
+   CHKPTR ( naif_state, CHK_DISCOVER, "insrtc_c", item );
 
 
    /*
    Make sure we're working with a character cell. 
    */
-   CELLTYPECHK ( CHK_DISCOVER, "insrtc_c", SPICE_CHR, set );
+   CELLTYPECHK ( naif_state, CHK_DISCOVER, "insrtc_c", SPICE_CHR, set );
 
 
    /*
    Make sure the input cell is a set.
    */
-   CELLISSETCHK ( CHK_DISCOVER, "insrtc_c", set );
+   CELLISSETCHK ( naif_state, CHK_DISCOVER, "insrtc_c", set );
 
 
    /*
    Initialize the set if it's not already initialized.
    */
-   CELLINIT ( set );
+   CELLINIT ( naif_state, set );
 
 
    /*
@@ -254,11 +259,11 @@
    be truncated, no insertion will occur.  Even in this case, the
    insertion point `loc' returned by lstlec_c will be correct.
    */
-   loc   =  lstlec_c ( item,  set->card,  set->length,  cdata );
+   loc   =  lstlec_c ( naif_state, item,  set->card,  set->length,  cdata );
 
    inSet =     (  loc  >  -1  ) 
 
-            && (  s_cmp( (SpiceChar *)item,  ARRAY(loc), 
+            && (  s_cmp( &state->f2c, (SpiceChar *)item,  ARRAY(loc), 
                           slen,              strlen(ARRAY(loc)) ) == 0  );
  
    if ( inSet )
@@ -272,12 +277,12 @@
    */
    if ( set->card == set->size )
    {
-      chkin_c  ( "insrtc_c"                                       );
-      setmsg_c ( "An element could not be inserted into the set "
+      chkin_c  ( naif_state, "insrtc_c"                                       );
+      setmsg_c ( naif_state, "An element could not be inserted into the set "
                  "due to lack of space; set size is #."           );
-      errint_c ( "#", set->size                                   );
-      sigerr_c ( "SPICE(SETEXCESS)"                               );
-      chkout_c ( "insrtc_c"                                       );
+      errint_c ( naif_state, "#", set->size                                   );
+      sigerr_c ( naif_state, "SPICE(SETEXCESS)"                               );
+      chkout_c ( naif_state, "insrtc_c"                                       );
       return;
    }
 
@@ -288,14 +293,14 @@
    */
    for (  i = (set->card);   i > (loc+1);   i--  )
    {
-      SPICE_CELL_SET_C( ARRAY(i-1), i, set );
+      SPICE_CELL_SET_C ( naif_state, ARRAY(i-1), i, set );
    }
 
    /*
    This insertion macro will truncate the item to be inserted, if 
    necessary.  The input item will be null-terminated.
    */
-   SPICE_CELL_SET_C( item, loc+1, set );
+   SPICE_CELL_SET_C ( naif_state, item, loc+1, set );
 
 
    /*

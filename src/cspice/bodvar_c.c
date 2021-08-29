@@ -50,7 +50,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void bodvar_c ( SpiceInt           body,
+   void bodvar_c ( void             * naif_state,
+                   SpiceInt           body,
                    ConstSpiceChar   * item,
                    SpiceInt         * dim,
                    SpiceDouble      * values )
@@ -191,19 +192,20 @@
    Check the input string to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "bodfnd_c", item );
+   CHKFSTR ( naif_state, CHK_STANDARD, "bodfnd_c", item );
 
 
    /*
    Call the f2c'd routine.
    */
-   bodvar_( ( integer    * ) &body,
+   bodvar_( naif_state,
+            ( integer    * ) &body,
             ( char       * ) item,
             ( integer    * ) dim,
             ( doublereal * ) values,
             ( ftnlen       ) strlen(item) );
 
 
-   chkout_c ( "bodvar_c" );
+   chkout_c ( naif_state, "bodvar_c" );
 
 } /* End  bodvar_c*/

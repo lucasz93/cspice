@@ -44,7 +44,7 @@
    #include "SpiceUsr.h"
    #undef    trace_c
 
-   SpiceDouble trace_c ( ConstSpiceDouble  matrix[3][3] ) 
+   SpiceDouble trace_c ( void *naif_state, ConstSpiceDouble  matrix[3][3] ) 
 
 /*
 

@@ -50,7 +50,8 @@
    #undef eul2xf_c
    
 
-   void eul2xf_c ( ConstSpiceDouble    eulang[6],
+   void eul2xf_c ( void              * naif_state,
+                   ConstSpiceDouble    eulang[6],
                    SpiceInt            axisa,
                    SpiceInt            axisb,
                    SpiceInt            axisc,
@@ -349,7 +350,8 @@
    chkin_c ( naif_state, "eul2xf_c" );
    
    
-   eul2xf_ (  ( doublereal * ) eulang,
+   eul2xf_ (  naif_state,
+              ( doublereal * ) eulang,
               ( integer    * ) &axisa,
               ( integer    * ) &axisb,
               ( integer    * ) &axisc,
@@ -358,10 +360,10 @@
    /*
    Convert the output matrix to row-major order.
    */
-   xpose6_c ( xform, xform );
+   xpose6_c ( naif_state, xform, xform );
    
    
-   chkout_c ( "eul2xf_c" );
+   chkout_c ( naif_state, "eul2xf_c" );
    
 } /* End xf2eul_c */
    

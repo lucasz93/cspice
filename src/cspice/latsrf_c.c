@@ -58,7 +58,8 @@
    #undef latsrf_c
 
 
-   void latsrf_c ( ConstSpiceChar     * method,
+   void latsrf_c ( void               * naif_state,
+                   ConstSpiceChar     * method,
                    ConstSpiceChar     * target,
                    SpiceDouble          et,
                    ConstSpiceChar     * fixref,
@@ -807,12 +808,13 @@
    at least one data character: that is, one character 
    preceding the null terminator.
    */
-   CHKFSTR ( CHK_STANDARD, "latsrf_c", method );
-   CHKFSTR ( CHK_STANDARD, "latsrf_c", target );
-   CHKFSTR ( CHK_STANDARD, "latsrf_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "latsrf_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "latsrf_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "latsrf_c", fixref );
 
 
-   latsrf_ ( ( char         * ) method,
+   latsrf_ ( naif_state,
+             ( char         * ) method,
              ( char         * ) target,
              ( doublereal   * ) &et,
              ( char         * ) fixref,
@@ -824,6 +826,6 @@
              ( ftnlen         ) strlen(fixref)  );
 
 
-   chkout_c ( "latsrf_c" );
+   chkout_c ( naif_state, "latsrf_c" );
 
 } /* End latsrf_c */

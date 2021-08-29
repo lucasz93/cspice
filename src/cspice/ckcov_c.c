@@ -53,7 +53,8 @@
    #include "SpiceZmc.h"
 
 
-   void ckcov_c ( ConstSpiceChar    * ck,
+   void ckcov_c ( void              * naif_state,
+                  ConstSpiceChar    * ck,
                   SpiceInt            idcode,
                   SpiceBoolean        needav,
                   ConstSpiceChar    * level,
@@ -597,7 +598,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return; 
    }
@@ -607,36 +608,37 @@
    Check the input string `ck' to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ckcov_c", ck );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckcov_c", ck );
    
    /*
    Check the input string `level' to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ckcov_c", level );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckcov_c", level );
 
    /*
    Check the input string `timsys' to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ckcov_c", timsys );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckcov_c", timsys );
 
    /*
    Make sure cell data type is d.p. 
    */
-   CELLTYPECHK ( CHK_STANDARD, "ckcov_c", SPICE_DP, cover );
+   CELLTYPECHK ( naif_state, CHK_STANDARD, "ckcov_c", SPICE_DP, cover );
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( cover );   
+   CELLINIT ( naif_state, cover );   
 
    /*
    Call the f2c'd Fortran routine.
    */
    need = needav;
 
-   ckcov_ ( ( char       * ) ck,
+   ckcov_ ( naif_state,
+           ( char       * ) ck,
             ( integer    * ) &idcode,
             ( logical    * ) &need,
             ( char       * ) level,
@@ -650,11 +652,11 @@
    /*
    Sync the output cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, cover );
+      zzsynccl_c ( naif_state, F2C, cover );
    }
 
-   chkout_c ( "ckcov_c" );
+   chkout_c ( naif_state, "ckcov_c" );
 
 } /* End ckcov_c */

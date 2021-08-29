@@ -47,7 +47,7 @@
    #include "SpiceZfc.h"
 
 
-   void reset_c ( void )
+   void reset_c ( void *naif_state )
 
 /*
 
@@ -133,7 +133,7 @@
 
           rdtext_c ( "SPUD.DAT", line, LENOUT, &eof );
 
-          if ( failed_c() )
+          if ( failed_c(naif_state) )
              {
 
              /.
@@ -190,7 +190,7 @@
    Call the f2c'd Fortran routine.
    */
 
-   reset_();
+   reset_(naif_state);
 
 
 } /* End reset_c */

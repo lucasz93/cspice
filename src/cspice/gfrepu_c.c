@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
    #include "SpiceZst.h"
 
-   void gfrepu_c ( SpiceDouble ivbeg,
+   void gfrepu_c ( void      * naif_state,
+                   SpiceDouble ivbeg,
                    SpiceDouble ivend,
                    SpiceDouble time  ) 
 
@@ -220,7 +221,7 @@
    Participate in error tracing.
    */
 
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -229,10 +230,11 @@
    /*
    Let the f2c'd routine do the work.
    */
-   gfrepu_  ( ( doublereal * ) &ivbeg,
+   gfrepu_  ( naif_state,
+              ( doublereal * ) &ivbeg,
               ( doublereal * ) &ivend,
               ( doublereal * ) &time   );
 
-   chkout_c ( "gfrepu_c" );
+   chkout_c ( naif_state, "gfrepu_c" );
 
 } /* End gfrepu_c */

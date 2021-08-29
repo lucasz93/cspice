@@ -48,7 +48,8 @@
    #include "SpiceZfc.h"
 
 
-   void dlabbs_c ( SpiceInt         handle,
+   void dlabbs_c ( void           * naif_state,
+                   SpiceInt         handle,
                    SpiceDLADescr  * descr,
                    SpiceBoolean   * found  )
 /*
@@ -251,7 +252,8 @@
    chkin_c ( naif_state, "dlabbs_c" );
 
 
-   dlabbs_ ( (integer   *) &handle,
+   dlabbs_ ( naif_state,
+             (integer   *) &handle,
              (integer   *) fDLADescr,
              (logical   *) &fnd       );
    
@@ -280,6 +282,6 @@
       descr->csize  = fDLADescr[SPICE_DLA_CSZIDX];
    }
 
-   chkout_c ( "dlabbs_c" );
+   chkout_c ( naif_state, "dlabbs_c" );
 
 } /* End dlabbs_c */

@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void shellc_c ( SpiceInt     ndim,
+   void shellc_c ( void       * naif_state,
+                   SpiceInt     ndim,
                    SpiceInt     lenvals,
                    void       * array   ) 
 /*
@@ -182,7 +183,7 @@
    Make sure the input pointer for the string array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR ( CHK_DISCOVER, "shellc_c", array, lenvals );
+   CHKOSTR ( naif_state, CHK_DISCOVER, "shellc_c", array, lenvals );
    
    /*
    Create a Fortran-style string array.  Don't eliminate trailing
@@ -192,7 +193,7 @@
    C2F_MapFixStrArr ( "shellc_c", 
                       ndim, lenvals, array, &fCvalsLen, &fCvalsArr );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       return;
    }
@@ -200,7 +201,8 @@
    /*
    Call the f2c'd routine.
    */
-   shellc_ (  ( integer    * ) &ndim,
+   shellc_ (  naif_state,
+              ( integer    * ) &ndim,
               ( char       * ) fCvalsArr,     
               ( ftnlen       ) fCvalsLen  );
 

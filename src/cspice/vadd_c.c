@@ -45,7 +45,8 @@
    #undef    vadd_c
    
 
-   void vadd_c ( ConstSpiceDouble   v1[3],
+   void vadd_c ( void             * naif_state,
+                 ConstSpiceDouble   v1[3],
                  ConstSpiceDouble   v2[3],
                  SpiceDouble        vout[3] ) 
 /*

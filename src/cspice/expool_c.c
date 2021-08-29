@@ -47,7 +47,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void expool_c ( ConstSpiceChar  * name,
+   void expool_c ( void            * naif_state,
+                   ConstSpiceChar  * name,
                    SpiceBoolean    * found )
 
 /*
@@ -161,13 +162,14 @@
    Check the input string name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "expool_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "expool_c", name );
 
 
    /*
    Call the f2c'd routine.
    */
-   expool_( ( char    * ) name,
+   expool_( naif_state,
+            ( char    * ) name,
             ( logical * ) &yes,
             ( ftnlen    ) strlen(name) );
 
@@ -177,7 +179,7 @@
 
 
    /* Done.  Checkout. */
-   chkout_c ( "expool_c" );
+   chkout_c ( naif_state, "expool_c" );
 
 
 } /* End expool_c */

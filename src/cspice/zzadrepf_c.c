@@ -49,7 +49,7 @@
    #include "SpiceZad.h"
    #undef   zzadrepf_c
 
-   int zzadrepf_c ()
+   int zzadrepf_c (void *naif_state)
 
  
 /*
@@ -139,13 +139,13 @@
    /*
    Local variables 
    */
-   void               ( * fPtr ) ();
+   void               ( * fPtr ) (void *);
                            
 
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return ( 0 );
    }
@@ -158,16 +158,16 @@
    list matches that of gfrepf_c.
    */
 
-   fPtr = (  void (*) ()  )  zzadget_c ( naif_state,  ( UDREPF );
+   fPtr = (  void (*) (void*)  )  zzadget_c ( naif_state, UDREPF );
  
    /*
    Call the CSPICE-style progress report termination function. 
    */
    
-   ( *fPtr ) ();
+   ( *fPtr ) (naif_state);
               
 
-   chkout_c ( "zzadrepf_c" );
+   chkout_c ( naif_state, "zzadrepf_c" );
 
    return ( 0 );
 

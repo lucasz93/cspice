@@ -48,7 +48,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void scs2e_c ( SpiceInt          sc, 
+   void scs2e_c ( void            * naif_state,
+                  SpiceInt          sc, 
                   ConstSpiceChar  * sclkch, 
                   SpiceDouble     * et      ) 
 /*
@@ -251,18 +252,19 @@
    Check the input string to make sure the pointer
    is non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "scs2e_c", sclkch );
+   CHKFSTR ( naif_state, CHK_STANDARD, "scs2e_c", sclkch );
    
    
    /*
    Carry out the conversion.
    */
-   scs2e_ (  ( integer    * ) &sc, 
+   scs2e_ (  naif_state,
+             ( integer    * ) &sc, 
              ( char       * ) sclkch,
              ( doublereal * ) et,
              ( ftnlen       ) strlen(sclkch)  );
    
    
-   chkout_c ( "scs2e_c");
+   chkout_c ( naif_state, "scs2e_c");
 
 } /* End scs2e_c */

@@ -49,10 +49,13 @@
    #include "SpiceZmc.h"
    #include "SpiceZim.h" 
    #include "f2cMang.h"
+   #include "f2c.h"
+   #include "__cspice_state.h"
    #undef    bschoc_c
 
 
-   SpiceInt bschoc_c ( ConstSpiceChar  * value,
+   SpiceInt bschoc_c ( void            * naif_state,
+                       ConstSpiceChar  * value,
                        SpiceInt          ndim,   
                        SpiceInt          lenvals,
                        const void      * array,
@@ -205,13 +208,12 @@
 */
 
 { /* Begin bschoc_c */
-
+   cspice_t * state = (cspice_t *)naif_state;
 
    /*
    f2c library utility prototypes 
    */
-   logical          l_lt   (char *a, char *b, ftnlen la, ftnlen lb ); 
-   extern integer   s_cmp  (char *a, char *b, ftnlen la, ftnlen lb ); 
+   extern integer   s_cmp  (f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb ); 
 
    /*
    Local macros 
@@ -244,14 +246,14 @@
    Make sure the pointer for the key value is non-null 
    and that the length is adequate.  
    */
-   CHKPTR_VAL ( CHK_DISCOVER, "bschoc_c", value, -1 );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "bschoc_c", value, -1 );
 
    
    /*
    Make sure the pointer for the string array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR_VAL ( CHK_DISCOVER, "bschoc_c", array, lenvals, -1 );   
+   CHKOSTR_VAL ( naif_state, CHK_DISCOVER, "bschoc_c", array, lenvals, -1 );   
 
   
    /*
@@ -276,7 +278,8 @@
       of zero indicates equality, and a positive value indicates
       the second argument is greater.
       */
-      lexord =  (SpiceInt) s_cmp ( (char    * ) value, 
+      lexord =  (SpiceInt) s_cmp ( &state->f2c,
+                                   (char    * ) value, 
                                    (char    * ) ARR_ORD(i),
                                    (ftnlen    ) keylen,
                                    (ftnlen    ) strlen(ARR_ORD(i)) ); 

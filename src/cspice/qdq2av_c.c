@@ -48,7 +48,8 @@
    #undef   qdq2av_c
 
 
-   void qdq2av_c ( ConstSpiceDouble    q  [4],
+   void qdq2av_c ( void              * naif_state,
+                   ConstSpiceDouble    q  [4],
                    ConstSpiceDouble    dq [4],
                    SpiceDouble         av [3]  ) 
 
@@ -691,7 +692,7 @@
    /*
    Get a unitized copy of the input quaternion.
    */
-   vhatg_c ( q, 4, qhat );
+   vhatg_c ( naif_state, q, 4, qhat );
 
 
    /*
@@ -699,7 +700,7 @@
    */
    qstar[0]  =  qhat[0];
 
-   vminus_c ( qhat+1, qstar+1 );
+   vminus_c ( naif_state, qhat+1, qstar+1 );
 
 
    /*
@@ -709,9 +710,9 @@
             av  = -2 * q  * dq
 
    */
-   qxq_c  ( qstar,    dq,  qtemp );
-   vequ_c ( qtemp+1,  av         );
-   vscl_c ( -2.0,     av,  av    );
+   qxq_c  ( naif_state, qstar,    dq,  qtemp );
+   vequ_c ( naif_state, qtemp+1,  av         );
+   vscl_c ( naif_state, -2.0,     av,  av    );
 
 
 } /* End qdq2av_c */

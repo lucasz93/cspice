@@ -49,7 +49,8 @@
    #undef    reordi_c
    
 
-   void reordi_c ( ConstSpiceInt   * iorder,
+   void reordi_c ( void            * naif_state,
+                   ConstSpiceInt   * iorder,
                    SpiceInt          ndim,      
                    SpiceInt        * array ) 
 
@@ -194,13 +195,13 @@
 
    if ( ordvec == 0 )
    {
-      chkin_c  ( "reordi_c"                                ); 
-      setmsg_c ( "Failure on malloc call to create array "
+      chkin_c  ( naif_state, "reordi_c"                                ); 
+      setmsg_c ( naif_state, "Failure on malloc call to create array "
                  "for Fortran-style order vector.  Tried "
                  "to allocate # bytes."                    );
-      errint_c ( "#",  vSize                               );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                     );
-      chkout_c ( "reordi_c"                                );
+      errint_c ( naif_state, "#",  vSize                               );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                     );
+      chkout_c ( naif_state, "reordi_c"                                );
       return;
    }
 
@@ -210,7 +211,8 @@
    }
 
 
-   reordi_ ( ( integer * ) ordvec,
+   reordi_ ( naif_state,
+             ( integer * ) ordvec,
              ( integer * ) &ndim,
              ( integer * ) array );
 

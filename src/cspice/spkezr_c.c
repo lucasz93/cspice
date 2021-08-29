@@ -51,7 +51,8 @@
    #include "SpiceZmc.h"
 
 
-   void spkezr_c ( ConstSpiceChar     *targ,
+   void spkezr_c ( void               *naif_state,
+                   ConstSpiceChar     *targ,
                    SpiceDouble         et,
                    ConstSpiceChar     *ref,
                    ConstSpiceChar     *abcorr,
@@ -859,17 +860,18 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkezr_c", targ   );
-   CHKFSTR ( CHK_STANDARD, "spkezr_c", ref    );
-   CHKFSTR ( CHK_STANDARD, "spkezr_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "spkezr_c", obs    );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkezr_c", targ   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkezr_c", ref    );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkezr_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkezr_c", obs    );
  
  
    /*
    Call the f2c'd Fortran routine. Use explicit type casts for every
    type defined by f2c.
    */
-   spkezr_ ( ( char       * )  targ,
+   spkezr_ ( naif_state,
+             ( char       * )  targ,
              ( doublereal * )  &et,
              ( char       * )  ref,
              ( char       * )  abcorr,
@@ -882,7 +884,7 @@
              ( ftnlen       )  strlen(obs)    );
  
  
-   chkout_c ( "spkezr_c" );
+   chkout_c ( naif_state, "spkezr_c" );
  
 
 } /* End spkezr_c */

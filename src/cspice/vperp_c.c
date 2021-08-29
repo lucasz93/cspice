@@ -47,7 +47,8 @@
    #undef    vperp_c
 
 
-   void vperp_c ( ConstSpiceDouble   a[3],
+   void vperp_c ( void             * naif_state,
+                  ConstSpiceDouble   a[3],
                   ConstSpiceDouble   b[3],
                   SpiceDouble        p[3] )
 /*
@@ -176,12 +177,12 @@
       }
 
 
-   vscl_c ( 1./biga, a, t );
-   vscl_c ( 1./bigb, b, r );
+   vscl_c ( naif_state, 1./biga, a, t );
+   vscl_c ( naif_state, 1./bigb, b, r );
 
-   vproj_c ( t,    r, v );
-   vsub_c  ( t,    v, p );
-   vscl_c  ( biga, p, p );
+   vproj_c ( naif_state, t,    r, v );
+   vsub_c  ( naif_state, t,    v, p );
+   vscl_c  ( naif_state, biga, p, p );
 
 
 } /* End vperp_c */

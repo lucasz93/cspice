@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void getfov_c ( SpiceInt        instid,
+   void getfov_c ( void          * naif_state,
+                   SpiceInt        instid,
                    SpiceInt        room,
                    SpiceInt        shapelen,
                    SpiceInt        framelen,
@@ -625,7 +626,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c()  )
+   if ( return_c(naif_state)  )
    {
       return; 
    }
@@ -636,13 +637,14 @@
    output character and a null terminator.  Also check for a null
    pointer.  
    */
-   CHKOSTR ( CHK_STANDARD, "getfov_c", shape, shapelen );
-   CHKOSTR ( CHK_STANDARD, "getfov_c", frame, framelen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "getfov_c", shape, shapelen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "getfov_c", frame, framelen );
 
    /*
    Call the f2c converted routine.
    */
-   getfov_ ( ( integer    * ) &instid,
+   getfov_ ( naif_state,
+             ( integer    * ) &instid,
              ( integer    * ) &room,
              ( char       * ) shape,
              ( char       * ) frame, 
@@ -659,6 +661,6 @@
    F2C_ConvertStr ( shapelen, shape );
    F2C_ConvertStr ( framelen, frame );
 
-   chkout_c ( "getfov_c" );
+   chkout_c ( naif_state, "getfov_c" );
 
 } /* End getfov_c */

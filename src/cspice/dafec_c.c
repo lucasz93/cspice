@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
    #include "SpiceZst.h"
 
-   void dafec_c ( SpiceInt          handle,
+   void dafec_c ( void            * naif_state,
+                  SpiceInt          handle,
                   SpiceInt          bufsiz,
                   SpiceInt          lenout,
                   SpiceInt        * n,
@@ -267,13 +268,14 @@
    Make sure the string pointer for the buffer array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR ( CHK_STANDARD, "dafec_c", buffer, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "dafec_c", buffer, lenout );
    
 
    /*
    Call the f2c'd routine. 
    */
-   dafec_ ( ( integer * ) &handle,
+   dafec_ ( naif_state,
+            ( integer * ) &handle,
             ( integer * ) &bufsiz,
             ( integer * ) n,
             ( char    * ) buffer,
@@ -297,6 +299,6 @@
       F2C_ConvertTrStrArr ( *n, lenout, (char *)buffer );
    }
  
-   chkout_c ( "dafec_c" );
+   chkout_c ( naif_state, "dafec_c" );
 
 } /* End dafec_c */

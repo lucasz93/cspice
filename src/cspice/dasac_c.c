@@ -51,7 +51,8 @@
    #undef    dasac_c
 
 
-   void dasac_c ( SpiceInt       handle,
+   void dasac_c ( void         * naif_state,
+                  SpiceInt       handle,
                   SpiceInt       n,
                   SpiceInt       buflen,
                   const void   * buffer  ) 
@@ -217,7 +218,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -228,17 +229,17 @@
    */
    if ( n < 1 ) 
    {
-      setmsg_c ( "Comment buffer line count n = #; must be positive." );
-      errint_c ( "#", n                                               );
-      sigerr_c ( "SPICE(INVALIDARGUMENT)"                             );
-      chkout_c ( "dasac_c"                                            );
+      setmsg_c ( naif_state, "Comment buffer line count n = #; must be positive." );
+      errint_c ( naif_state, "#", n                                               );
+      sigerr_c ( naif_state, "SPICE(INVALIDARGUMENT)"                             );
+      chkout_c ( naif_state, "dasac_c"                                            );
       return;
    }
 
    /*
    Check the input buffer for null pointer or short lines. 
    */
-   CHKOSTR ( CHK_STANDARD, "dasac_c", buffer, buflen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "dasac_c", buffer, buflen );
 
 
    /*
@@ -246,9 +247,9 @@
    */
    C2F_MapStrArr ( "dasac_c", n, buflen, buffer, &fCvalsLen, &fCvalsArr );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "dasac_c" );
+      chkout_c ( naif_state, "dasac_c" );
       return;
    }
 
@@ -256,7 +257,8 @@
    /*
    Call the f2c'd routine.
    */
-   dasac_ (  ( integer    * ) &handle,
+   dasac_ (  naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) &n,
              ( char       * ) fCvalsArr,
              ( ftnlen       ) fCvalsLen );
@@ -268,6 +270,6 @@
    free ( fCvalsArr );
 
 
-   chkout_c ( "dasac_c" );
+   chkout_c ( naif_state, "dasac_c" );
 
 } /* End dasac_c */

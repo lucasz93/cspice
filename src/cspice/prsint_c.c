@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void prsint_c ( ConstSpiceChar  * string, 
+   void prsint_c ( void            * naif_state,
+                   ConstSpiceChar  * string, 
                    SpiceInt        * intval ) 
 
 /*
@@ -144,14 +145,15 @@
    Check the input string to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "prsint_c", string );
+   CHKFSTR ( naif_state, CHK_STANDARD, "prsint_c", string );
 
    
-   prsint_ ( ( char      * ) string,
+   prsint_ ( naif_state,
+             ( char      * ) string,
              ( integer   * ) intval,
              ( ftnlen      ) strlen(string) );  
 
    
-   chkout_c ( "prsint_c");
+   chkout_c ( naif_state, "prsint_c");
 
 } /* End prsint_c */

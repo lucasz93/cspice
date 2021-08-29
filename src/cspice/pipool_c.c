@@ -49,7 +49,8 @@
    #undef    pipool_c
 
 
-   void pipool_c ( ConstSpiceChar  * name,
+   void pipool_c ( void            * naif_state,
+                   ConstSpiceChar  * name,
                    SpiceInt          n,
                    ConstSpiceInt   * ivals ) 
 
@@ -257,17 +258,18 @@
    Check the input kernel variable name to make sure the pointer is
    non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pipool_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pipool_c", name );
 
    /*
    Call the f2c'd routine.
    */
-   pipool_ ( ( char        * ) name,
+   pipool_ ( naif_state,
+             ( char        * ) name,
              ( integer     * ) &n,
              ( integer     * ) ivals,
              ( ftnlen        ) strlen(name) );
 
-   chkout_c ( "pipool_c" );
+   chkout_c ( naif_state, "pipool_c" );
 
 } /* End pipool_c */
 

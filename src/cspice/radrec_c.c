@@ -44,7 +44,8 @@
 
    #include "SpiceUsr.h"
 
-   void radrec_c ( SpiceDouble range, 
+   void radrec_c ( void      * naif_state,
+                   SpiceDouble range, 
                    SpiceDouble ra, 
                    SpiceDouble dec, 
                    SpiceDouble rectan[3] ) 
@@ -164,7 +165,7 @@
    There isn't much to say or do...
    */
 
-   latrec_c ( range, ra, dec, rectan );
+   latrec_c ( naif_state, range, ra, dec, rectan );
 
 
 } /* End radrec_c */

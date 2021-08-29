@@ -49,7 +49,8 @@
    #include "SpiceZst.h"
    #undef    isordv_c
 
-   SpiceBoolean isordv_c ( ConstSpiceInt  * array,
+   SpiceBoolean isordv_c ( void           * naif_state,
+                           ConstSpiceInt  * array,
                            SpiceInt         n      ) 
 
 /*
@@ -214,13 +215,13 @@
 
    if ( ordvec == 0 )
    {
-      chkin_c  ( "isordv_c"                                ); 
-      setmsg_c ( "Failure on malloc call to create array "
+      chkin_c  ( naif_state, "isordv_c"                                ); 
+      setmsg_c ( naif_state, "Failure on malloc call to create array "
                  "for Fortran-style order vector.  Tried "
                  "to allocate # bytes."                    );
-      errint_c ( "#",  vSize                               );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                     );
-      chkout_c ( "isordv_c"                                );
+      errint_c ( naif_state, "#",  vSize                               );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                     );
+      chkout_c ( naif_state, "isordv_c"                                );
       return   (  retval                                   );
    }
 
@@ -230,7 +231,8 @@
    }
 
 
-   retval =  (SpiceBoolean) isordv_ ( (integer *) ordvec,
+   retval =  (SpiceBoolean) isordv_ ( naif_state,
+                                      (integer *) ordvec,
                                       (integer *) &n     );
 
    free   ( ordvec );

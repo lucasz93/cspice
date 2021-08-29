@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
    #undef   bodc2s_c
 
-   void bodc2s_c ( SpiceInt        code,
+   void bodc2s_c ( void          * naif_state,
+                   SpiceInt        code,
                    SpiceInt        lenout,
                    SpiceChar     * name )
 
@@ -245,13 +246,14 @@
    Make sure the output name has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "bodc2s_c", name, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "bodc2s_c", name, lenout );
 
 
    /*
    Call the f2c'd routine.
    */
-   (void) bodc2s_( ( integer * )  &code,
+   (void) bodc2s_( naif_state,
+                   ( integer * )  &code,
                    ( char    * )  name,
                    ( ftnlen    )  lenout-1 );
    
@@ -262,6 +264,6 @@
    */
    F2C_ConvertStr ( lenout, name );
 
-   chkout_c ( "bodc2s_c");
+   chkout_c ( naif_state, "bodc2s_c");
 
 } /* End bodc2s_c */

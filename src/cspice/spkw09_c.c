@@ -52,7 +52,8 @@
    #undef    spkw09_c
    
 
-   void spkw09_c ( SpiceInt             handle,
+   void spkw09_c ( void               * naif_state,
+                   SpiceInt             handle,
                    SpiceInt             body,
                    SpiceInt             center, 
                    ConstSpiceChar     * frame,
@@ -259,14 +260,15 @@
    Check the input strings to make sure the pointers
    are non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkw09_c", frame );
-   CHKFSTR ( CHK_STANDARD, "spkw09_c", segid );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkw09_c", frame );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkw09_c", segid );
  
 
    /*
    Write the segment. 
    */
-   spkw09_ ( ( integer    * ) &handle,
+   spkw09_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) &body,
              ( integer    * ) &center,
              ( char       * ) frame,
@@ -281,6 +283,6 @@
              ( ftnlen       ) strlen(segid)  );
 
 
-   chkout_c ( "spkw09_c" );
+   chkout_c ( naif_state, "spkw09_c" );
 
 } /* End spkw09_c */

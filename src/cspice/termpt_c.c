@@ -69,7 +69,8 @@
    #undef termpt_c
 
 
-   void termpt_c ( ConstSpiceChar      * method,
+   void termpt_c ( void                * naif_state,
+                   ConstSpiceChar      * method,
                    ConstSpiceChar      * ilusrc,
                    ConstSpiceChar      * target,
                    SpiceDouble           et,
@@ -1916,20 +1917,21 @@
    at least one data character: that is, one character 
    preceding the null terminator.
    */
-   CHKFSTR ( CHK_STANDARD, "termpt_c", method );
-   CHKFSTR ( CHK_STANDARD, "termpt_c", ilusrc );
-   CHKFSTR ( CHK_STANDARD, "termpt_c", target );
-   CHKFSTR ( CHK_STANDARD, "termpt_c", fixref );
-   CHKFSTR ( CHK_STANDARD, "termpt_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "termpt_c", corloc );
-   CHKFSTR ( CHK_STANDARD, "termpt_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "termpt_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "termpt_c", ilusrc );
+   CHKFSTR ( naif_state, CHK_STANDARD, "termpt_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "termpt_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "termpt_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "termpt_c", corloc );
+   CHKFSTR ( naif_state, CHK_STANDARD, "termpt_c", obsrvr );
 
    
    /*
    Call the f2c'd SPICELIB function.
    */
 
-   termpt_ ( ( char         * ) method,
+   termpt_ ( naif_state,
+             ( char         * ) method,
              ( char         * ) ilusrc,
              ( char         * ) target,
              ( doublereal   * ) &et,
@@ -1956,6 +1958,6 @@
              ( ftnlen         ) strlen(obsrvr)  );
 
 
-   chkout_c ( "termpt_c" );
+   chkout_c ( naif_state, "termpt_c" );
 
 } /* End termpt_c */

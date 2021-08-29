@@ -49,7 +49,8 @@
    #undef    invort_c
 
 
-   void invort_c ( ConstSpiceDouble   m  [3][3],
+   void invort_c ( void             * naif_state,
+                   ConstSpiceDouble   m  [3][3],
                    SpiceDouble        mit[3][3] ) 
 
 /*
@@ -178,17 +179,18 @@
    /*
    Transpose the input matrix to obtain a Fortran-style matrix.
    */
-   xpose_c ( m, temp );
+   xpose_c ( naif_state, m, temp );
 
-   invort_ ( (SpiceDouble * )temp,
+   invort_ ( naif_state,
+             (SpiceDouble * )temp,
              (SpiceDouble * )mit  );
 
    /*
    Transpose the output matrix to obtain a C-style matrix.
    */
-   xpose_c ( mit, mit );
+   xpose_c ( naif_state, mit, mit );
 
 
-   chkout_c ( "invort_c" );
+   chkout_c ( naif_state, "invort_c" );
 
 } /* End invort_c */

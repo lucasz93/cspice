@@ -44,7 +44,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   SpiceBoolean return_c ( void )
+   SpiceBoolean return_c ( void *naif_state )
 
 /*
 
@@ -130,7 +130,7 @@
               anything else. 
        ./ 
  
-              if ( return_c() )
+              if ( return_c(naif_state) )
                  {
                  return;                 
                  }
@@ -163,7 +163,7 @@
               B();
               C();
  
-              if ( failed_c() )
+              if ( failed_c(naif_state) )
                  {
  
        /. 
@@ -221,7 +221,7 @@
    Call the f2c'd Fortran routine and set the status.
    */
 
-   if ( return_() )
+   if ( return_(naif_state) )
       {
       return SPICETRUE;
       }

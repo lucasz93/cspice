@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void etcal_c ( SpiceDouble   et,
+   void etcal_c ( void        * naif_state,
+                  SpiceDouble   et,
                   SpiceInt      lenout,
                   SpiceChar   * string )
 
@@ -237,10 +238,11 @@
    pointer.
    */
 
-   CHKOSTR ( CHK_STANDARD, "etcal_c", string, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "etcal_c", string, lenout );
 
 
-   etcal_( ( doublereal  * ) &et,
+   etcal_( naif_state,
+           ( doublereal  * ) &et,
            ( char        * ) string,
            ( ftnlen        ) lenout - 1 );
 
@@ -250,6 +252,6 @@
    F2C_ConvertStr( lenout, string );
 
 
-   chkout_c ( "etcal_c" );
+   chkout_c ( naif_state, "etcal_c" );
 
 } /* End etcal_c */

@@ -58,7 +58,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void gfoclt_c ( ConstSpiceChar   * occtyp,
+   void gfoclt_c ( void             * naif_state,
+                   ConstSpiceChar   * occtyp,
                    ConstSpiceChar   * front,
                    ConstSpiceChar   * fshape,
                    ConstSpiceChar   * fframe,
@@ -1614,7 +1615,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -1624,12 +1625,12 @@
    /*
    Make sure cell data types are d.p. 
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "gfoclt_c", SPICE_DP, cnfine, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "gfoclt_c", SPICE_DP, cnfine, result );
 
    /*
    Initialize the input cells if necessary. 
    */
-   CELLINIT2 ( cnfine, result );
+   CELLINIT2 ( naif_state, cnfine, result );
 
    /*
    The input frame names are special cases because we allow the caller
@@ -1639,8 +1640,8 @@
 
    First make sure the frame name pointers are non-null.
    */
-   CHKPTR ( CHK_STANDARD, "gfoclt_c", bframe );
-   CHKPTR ( CHK_STANDARD, "gfoclt_c", fframe );
+   CHKPTR ( naif_state, CHK_STANDARD, "gfoclt_c", bframe );
+   CHKPTR ( naif_state, CHK_STANDARD, "gfoclt_c", fframe );
 
    /*
    Use the input frame strings if they're non-empty; otherwise
@@ -1670,19 +1671,20 @@
    Check the other input strings to make sure each pointer is non-null 
    and each string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gfoclt_c", occtyp );
-   CHKFSTR ( CHK_STANDARD, "gfoclt_c", front  );
-   CHKFSTR ( CHK_STANDARD, "gfoclt_c", fshape );
-   CHKFSTR ( CHK_STANDARD, "gfoclt_c", back   );
-   CHKFSTR ( CHK_STANDARD, "gfoclt_c", bshape );
-   CHKFSTR ( CHK_STANDARD, "gfoclt_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "gfoclt_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfoclt_c", occtyp );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfoclt_c", front  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfoclt_c", fshape );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfoclt_c", back   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfoclt_c", bshape );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfoclt_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfoclt_c", obsrvr );
 
 
    /*
    Let the f2c'd routine do the work. 
    */
-   gfoclt_ ( (char         *) occtyp,
+   gfoclt_ ( naif_state,
+             (char         *) occtyp,
              (char         *) front,
              (char         *) fshape,
              (char         *) fFrameStr,
@@ -1707,12 +1709,12 @@
    /*
    Sync the output result cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, result );
+      zzsynccl_c ( naif_state, F2C, result );
    }
 
 
-   chkout_c ( "gfoclt_c" );
+   chkout_c ( naif_state, "gfoclt_c" );
 
 } /* End gfoclt_c */

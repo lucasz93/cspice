@@ -51,7 +51,8 @@
    #undef dasrfr_c
 
 
-   void dasrfr_c ( SpiceInt            handle,
+   void dasrfr_c ( void              * naif_state,
+                   SpiceInt            handle,
                    SpiceInt            idwlen,
                    SpiceInt            ifnlen,
                    SpiceChar         * idword,
@@ -222,11 +223,12 @@
    /*
    Check output string pointers and lengths. 
    */
-   CHKOSTR ( CHK_STANDARD, "dasrfr_c", idword, idwlen );
-   CHKOSTR ( CHK_STANDARD, "dasrfr_c", ifname, ifnlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "dasrfr_c", idword, idwlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "dasrfr_c", ifname, ifnlen );
 
    
-   dasrfr_ ( (integer    *) &handle,
+   dasrfr_ ( naif_state,
+             (integer    *) &handle,
              (char       *) idword, 
              (char       *) ifname, 
              (integer    *) nresvr,
@@ -243,6 +245,6 @@
    F2C_ConvertStr ( ifnlen, ifname );
 
 
-   chkout_c ( "dasrfr_c" );
+   chkout_c ( naif_state, "dasrfr_c" );
 
 } /* End dasrfr_c */

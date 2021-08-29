@@ -49,7 +49,8 @@
    #undef    surfpt_c
    
 
-   void surfpt_c ( ConstSpiceDouble   positn[3], 
+   void surfpt_c ( void             * naif_state,
+                   ConstSpiceDouble   positn[3], 
                    ConstSpiceDouble   u[3], 
                    SpiceDouble        a, 
                    SpiceDouble        b,
@@ -162,7 +163,7 @@
    coordinates, which may be converted directly to planetocentric
    latitude, longitude, and radius:
 
-     reclat_c ( vsurf, &radius, &long, &lat );
+     reclat_c ( naif_state,vsurf, &radius, &long, &lat );
 
    To get the inertial vector from the spacecraft to the surface point,
    you must subtract vpos from vsurf, and rotate the resulting vector
@@ -255,7 +256,8 @@
    /*
    Call the f2c'd surfpt.
    */ 
-   surfpt_( (doublereal *)  positn, 
+   surfpt_( naif_state,
+            (doublereal *)  positn, 
             (doublereal *)  u, 
             (doublereal *)  &a, 
             (doublereal *)  &b,
@@ -265,6 +267,6 @@
 
    *found = fnd;
 
-   chkout_c ( "surfpt_c");
+   chkout_c ( naif_state, "surfpt_c");
 
 } /* End surfpt_c */

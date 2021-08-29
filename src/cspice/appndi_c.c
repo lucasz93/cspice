@@ -46,7 +46,8 @@
 #include "SpiceZmc.h"
 
 
-   void appndi_c ( SpiceInt        item,
+   void appndi_c ( void          * naif_state,
+                   SpiceInt        item,
                    SpiceCell     * cell )
 
 
@@ -159,7 +160,7 @@
    /*
    Use discovery check-in. 
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -167,17 +168,17 @@
    /*
    Make sure we're working with an integer cell. 
    */
-   CELLTYPECHK ( CHK_DISCOVER, "appndi_c", SPICE_INT, cell );
+   CELLTYPECHK ( naif_state, CHK_DISCOVER, "appndi_c", SPICE_INT, cell );
 
 
    if ( cell->card == cell->size )
    {
-      chkin_c  ( "appndi_c"                                        );
-      setmsg_c ( "The cell cannot accomodate the addition of the "
+      chkin_c  ( naif_state, "appndi_c"                                        );
+      setmsg_c ( naif_state, "The cell cannot accomodate the addition of the "
                  "element *"                                       );
-      errint_c ( "*", item                                         );
-      sigerr_c ( "SPICE(CELLTOOSMALL)"                             );
-      chkout_c ( "appndi_c"                                        );
+      errint_c ( naif_state, "*", item                                         );
+      sigerr_c ( naif_state, "SPICE(CELLTOOSMALL)"                             );
+      chkout_c ( naif_state, "appndi_c"                                        );
       return;
    }
 
@@ -185,7 +186,7 @@
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( cell );
+   CELLINIT ( naif_state, cell );
 
 
    /*
@@ -212,7 +213,7 @@
    /*
    Sync the cell. 
    */
-   zzsynccl_c ( C2F, cell );
+   zzsynccl_c ( naif_state, C2F, cell );
 
 
 } /* End appndi_c */

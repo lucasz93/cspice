@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void prsdp_c ( ConstSpiceChar     * string,
+   void prsdp_c ( void               * naif_state,
+                  ConstSpiceChar     * string,
                   SpiceDouble        * dpval  )
 
 /*
@@ -152,14 +153,15 @@
    Check the input string to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "prsdp_c", string );
+   CHKFSTR ( naif_state, CHK_STANDARD, "prsdp_c", string );
 
 
-   prsdp_ ( ( char         * ) string,
+   prsdp_ ( naif_state,
+            ( char         * ) string,
             ( doublereal   * ) dpval,
             ( ftnlen         ) strlen(string)  );
 
 
-   chkout_c ( "prsdp_c");
+   chkout_c ( naif_state, "prsdp_c");
 
 } /* End prsdp_c */

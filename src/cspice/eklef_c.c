@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void eklef_c ( ConstSpiceChar  * fname,
+   void eklef_c ( void            * naif_state,
+                  ConstSpiceChar  * fname,
                   SpiceInt        * handle ) 
 
 /*
@@ -205,17 +206,18 @@
    Check the file name to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "eklef_c", fname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "eklef_c", fname );
 
    /*
    Call the f2c'd Fortran routine.  Use explicit type casts for every
    type defined by f2c.
    */
-   eklef_ (  ( char     * )  fname,
+   eklef_ (  naif_state,
+             ( char     * )  fname,
              ( integer  * )  handle, 
              ( ftnlen     )  strlen(fname)  );
 
 
-   chkout_c ( "eklef_c" );
+   chkout_c ( naif_state, "eklef_c" );
 
 } /* End eklef_c */

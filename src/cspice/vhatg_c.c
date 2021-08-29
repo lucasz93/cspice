@@ -48,7 +48,8 @@
    #undef    vhatg_c
    
    
-   void vhatg_c ( ConstSpiceDouble   * v1,
+   void vhatg_c ( void               * naif_state,
+                  ConstSpiceDouble   * v1,
                   SpiceInt             ndim,
                   SpiceDouble        * vout ) 
 
@@ -145,7 +146,7 @@
    /*
    Obtain the magnitude of v1.
    */
-   vmag = vnormg_c ( v1, ndim );
+   vmag = vnormg_c ( naif_state, v1, ndim );
    
    /*
    If vmag is nonzero, then normalize.  Note that this process is

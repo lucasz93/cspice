@@ -51,7 +51,8 @@
    #include "SpiceZmc.h"
    #include "SpiceDSK.h"
 
-   void dskopn_c ( ConstSpiceChar  * fname,
+   void dskopn_c ( void            * naif_state,
+                   ConstSpiceChar  * fname,
                    ConstSpiceChar  * ifname,
                    SpiceInt          ncomch,
                    SpiceInt       *  handle ) 
@@ -203,16 +204,17 @@
    Check the input string fname to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "dskopn_c", fname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dskopn_c", fname );
    
    /*
    Check the input string ifname to make sure the pointer is 
    non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "dskopn_c", ifname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dskopn_c", ifname );
 
 
-   dskopn_  (  ( char        * ) fname,
+   dskopn_  (  naif_state,
+               ( char        * ) fname,
                ( char        * ) ifname,
                ( integer     * ) &ncomch,
                ( integer     * ) handle,
@@ -221,6 +223,6 @@
 
 
 
-   chkout_c ( "dskopn_c" );
+   chkout_c ( naif_state, "dskopn_c" );
 
 } /* End dskopn_c */

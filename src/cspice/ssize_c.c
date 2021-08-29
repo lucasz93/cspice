@@ -46,7 +46,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void ssize_c (  SpiceInt      size,   
+   void ssize_c (  void        * naif_state,
+                   SpiceInt      size,   
                    SpiceCell   * cell  )
 
 /*
@@ -169,7 +170,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -178,11 +179,11 @@
 
    if ( size < 0 ) 
    {
-      setmsg_c ( "Attempt to set the size of cell to invalid "
+      setmsg_c ( naif_state, "Attempt to set the size of cell to invalid "
                  "value.  The value was #."                    );
-      errint_c ( "#",  size                                    );
-      sigerr_c ( "SPICE(INVALIDSIZE)"                          );
-      chkout_c ( "ssize_c"                                     );
+      errint_c ( naif_state, "#",  size                                    );
+      sigerr_c ( naif_state, "SPICE(INVALIDSIZE)"                          );
+      chkout_c ( naif_state, "ssize_c"                                     );
       return;
    }
 
@@ -190,7 +191,7 @@
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( cell );
+   CELLINIT ( naif_state, cell );
 
 
    /*
@@ -204,7 +205,7 @@
    /*
    Sync the cell. 
    */
-   zzsynccl_c ( C2F, cell );
+   zzsynccl_c ( naif_state, C2F, cell );
 
 
    /*
@@ -213,6 +214,6 @@
    cell->isSet = SPICETRUE;
 
 
-   chkout_c ( "ssize_c" );
+   chkout_c ( naif_state, "ssize_c" );
 
 } /* End ssize_c */

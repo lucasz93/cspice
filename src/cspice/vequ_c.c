@@ -46,7 +46,8 @@
    #undef    vequ_c
 
 
-   void vequ_c ( ConstSpiceDouble   vin[3],
+   void vequ_c ( void             * naif_state,
+                 ConstSpiceDouble   vin[3],
                  SpiceDouble        vout[3] ) 
 /*
 

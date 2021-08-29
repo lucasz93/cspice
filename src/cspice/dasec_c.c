@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
    #undef    dasec_c
 
-   void dasec_c ( SpiceInt         handle,
+   void dasec_c ( void           * naif_state,
+                  SpiceInt         handle,
                   SpiceInt         bufsiz,
                   SpiceInt         buflen,
                   SpiceInt       * n,
@@ -269,7 +270,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() ) 
+   if ( return_c(naif_state) ) 
    {
       return;
    }
@@ -280,13 +281,14 @@
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "dasec_c", buffer, buflen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "dasec_c", buffer, buflen );
  
 
    /*
    Call the f2c'd routine.
    */
-   dasec_  ( (integer *) &handle,
+   dasec_  ( naif_state,
+             (integer *) &handle,
              (integer *) &bufsiz,
              (integer *) n,
              (char    *) buffer,
@@ -309,6 +311,6 @@
    *done = (SpiceBoolean) locDone;
 
 
-   chkout_c ( "dasec_c" );
+   chkout_c ( naif_state, "dasec_c" );
 
 } /* End dasec_c */

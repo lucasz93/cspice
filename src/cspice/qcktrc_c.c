@@ -46,7 +46,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void qcktrc_c ( SpiceInt     tracelen,
+   void qcktrc_c ( void       * naif_state,
+                   SpiceInt     tracelen,
                    SpiceChar  * trace    )
 
 /*
@@ -191,7 +192,7 @@
 
             spkezr_c ( target, et, frame, abcorr, obsrvr, state, &lt );
 
-            if ( failed_c() ) 
+            if ( failed_c(naif_state) ) 
             {
                /.
                An error has been signaled. Fetch and display
@@ -276,25 +277,25 @@
    */
    if ( trace == NULL )
    {
-      reset_c  ();
+      reset_c  (naif_state);
 
-      chkin_c  ( "qcktrc_c"                                   );
-      setmsg_c ( "The output string pointer 'trace' is null." );
-      sigerr_c ( "SPICE(NULLPOINTER)"                         );
-      chkout_c ( "qcktrc_c"                                   );
+      chkin_c  ( naif_state, "qcktrc_c"                                   );
+      setmsg_c ( naif_state, "The output string pointer 'trace' is null." );
+      sigerr_c ( naif_state, "SPICE(NULLPOINTER)"                         );
+      chkout_c ( naif_state, "qcktrc_c"                                   );
       return;
    }
 
    if ( tracelen < 2 )
    {
-      reset_c  ();
+      reset_c  (naif_state);
 
-      chkin_c  ( "qcktrc_c"                                     );
-      setmsg_c ( "The output string 'trace' has length #; the "
+      chkin_c  ( naif_state, "qcktrc_c"                                     );
+      setmsg_c ( naif_state, "The output string 'trace' has length #; the "
                  "minimum allowed length is 2 characters."      );
-      errint_c ( "#",  tracelen                                 );
-      sigerr_c ( "SPICE(STRINGTOOSHORT)"                        );
-      chkout_c ( "qcktrc_c"                                     );
+      errint_c ( naif_state, "#",  tracelen                                 );
+      sigerr_c ( naif_state, "SPICE(STRINGTOOSHORT)"                        );
+      chkout_c ( naif_state, "qcktrc_c"                                     );
       return;
    }
 
@@ -302,7 +303,8 @@
    /*
    Fetch the traceback. 
    */
-   qcktrc_ ( ( char       * ) trace,
+   qcktrc_ ( naif_state,
+             ( char       * ) trace,
              ( ftnlen       ) tracelen-1 );
 
    /*

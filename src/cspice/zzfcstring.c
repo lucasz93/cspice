@@ -233,10 +233,10 @@ void      C2F_CreateStr_Sig ( ConstSpiceChar  * cStr,
 
    if ( status == SPICEFAILURE )
    {
-      chkin_c  ( "C2F_CreateStr_Sig" );
-      setmsg_c ( "An attempt to create a temporary string failed." );
-      sigerr_c ( "SPICE(STRINGCREATEFAIL)" );
-      chkout_c ( "C2F_CreateStr_Sig" );
+      chkin_c  ( naif_state, "C2F_CreateStr_Sig" );
+      setmsg_c ( naif_state, "An attempt to create a temporary string failed." );
+      sigerr_c ( naif_state, "SPICE(STRINGCREATEFAIL)" );
+      chkout_c ( naif_state, "C2F_CreateStr_Sig" );
       return;
    }
 
@@ -354,12 +354,12 @@ void C2F_CreateStrArr_Sig ( SpiceInt           nStr,
          maxLen =  MaxVal (  strlen( *(cStrArr+i) ),  maxLen );
       }  
 
-      chkin_c  ( "C2F_CreateStrArr_Sig"                           );
-      setmsg_c ( "An attempt to create a temporary string array "
+      chkin_c  ( naif_state, "C2F_CreateStrArr_Sig"                           );
+      setmsg_c ( naif_state, "An attempt to create a temporary string array "
                  "failed.  Attempted to allocate # bytes."        );
-      errint_c ( "#",  maxLen * nStr                              );
-      sigerr_c ( "SPICE(STRINGCREATEFAIL)"                        );
-      chkout_c ( "C2F_CreateStrArr_Sig"                           );
+      errint_c ( naif_state, "#",  maxLen * nStr                              );
+      sigerr_c ( naif_state, "SPICE(STRINGCREATEFAIL)"                        );
+      chkout_c ( naif_state, "C2F_CreateStrArr_Sig"                           );
       return;
    }
 }
@@ -437,19 +437,19 @@ void C2F_MapStrArr ( ConstSpiceChar   * caller,
       /*
       Check in for the caller, then perform normal discovery check-in.
       */
-      chkin_c  ( caller );
+      chkin_c  ( naif_state, caller );
 
-      chkin_c  ( "C2F_MapStrArr"                                  );
-      setmsg_c ( "An attempt to create a temporary string array "
+      chkin_c  ( naif_state, "C2F_MapStrArr"                                  );
+      setmsg_c ( naif_state, "An attempt to create a temporary string array "
                  "failed.  Attempted to allocate # bytes."        );
-      errint_c ( "#",  maxLen * nStr                              );
-      sigerr_c ( "SPICE(STRINGCREATEFAIL)"                        );
-      chkout_c ( "C2F_MapStrArr"                                  );
+      errint_c ( naif_state, "#",  maxLen * nStr                              );
+      sigerr_c ( naif_state, "SPICE(STRINGCREATEFAIL)"                        );
+      chkout_c ( naif_state, "C2F_MapStrArr"                                  );
 
       /*
       Check out for the caller. 
       */
-      chkout_c ( caller );
+      chkout_c ( naif_state, caller );
       return;
    }
 
@@ -475,17 +475,17 @@ void C2F_MapStrArr ( ConstSpiceChar   * caller,
          *fStrArr = (SpiceChar *) NULL;
          *fStrLen = 0;
 
-         chkin_c  ( caller );
+         chkin_c  ( naif_state, caller );
 
-         chkin_c  ( "C2F_MapStrArr"                                  );
-         setmsg_c ( "An attempt to copy a C string to a temporary "
+         chkin_c  ( naif_state, "C2F_MapStrArr"                                  );
+         setmsg_c ( naif_state, "An attempt to copy a C string to a temporary "
                     "string of length # failed.  This may be due " 
                     "to an unterminated input string."               );
-         errint_c ( "#",  maxLen                                     );
-         sigerr_c ( "SPICE(STRINGCOPYFAIL)"                          );
-         chkout_c ( "C2F_MapStrArr"                                  );
+         errint_c ( naif_state, "#",  maxLen                                     );
+         sigerr_c ( naif_state, "SPICE(STRINGCOPYFAIL)"                          );
+         chkout_c ( naif_state, "C2F_MapStrArr"                                  );
 
-         chkout_c ( caller );
+         chkout_c ( naif_state, caller );
          return;
       }
    }
@@ -550,16 +550,16 @@ void C2F_MapFixStrArr ( ConstSpiceChar   * caller,
       *fStrArr = (SpiceChar *) NULL;
       *fStrLen = 0;
 
-      chkin_c  ( caller );
+      chkin_c  ( naif_state, caller );
 
-      chkin_c  ( "C2F_MapFixStrArr"                                  );
-      setmsg_c ( "An attempt to create a temporary string array "
+      chkin_c  ( naif_state, "C2F_MapFixStrArr"                                  );
+      setmsg_c ( naif_state, "An attempt to create a temporary string array "
                  "failed.  Attempted to allocate # bytes."           );
-      errint_c ( "#",  fLen * nStr                                   );
-      sigerr_c ( "SPICE(STRINGCREATEFAIL)"                           );
-      chkout_c ( "C2F_MapFixStrArr"                                  );
+      errint_c ( naif_state, "#",  fLen * nStr                                   );
+      sigerr_c ( naif_state, "SPICE(STRINGCREATEFAIL)"                           );
+      chkout_c ( naif_state, "C2F_MapFixStrArr"                                  );
 
-      chkout_c ( caller );
+      chkout_c ( naif_state, caller );
       return;
    }
 
@@ -585,17 +585,17 @@ void C2F_MapFixStrArr ( ConstSpiceChar   * caller,
          *fStrArr = (SpiceChar *) NULL;
          *fStrLen = 0;
 
-         chkin_c  ( caller );
+         chkin_c  ( naif_state, caller );
 
-         chkin_c  ( "C2F_MapFixStrArr"                                  );
-         setmsg_c ( "An attempt to copy a C string to a temporary "
+         chkin_c  ( naif_state, "C2F_MapFixStrArr"                                  );
+         setmsg_c ( naif_state, "An attempt to copy a C string to a temporary "
                     "string of length # failed.  This may be due " 
                     "to an unterminated input string."                  );
-         errint_c ( "#",  fLen                                          );
-         sigerr_c ( "SPICE(STRINGCOPYFAIL)"                             );
-         chkout_c ( "C2F_MapFixStrArr"                                  );
+         errint_c ( naif_state, "#",  fLen                                          );
+         sigerr_c ( naif_state, "SPICE(STRINGCOPYFAIL)"                             );
+         chkout_c ( naif_state, "C2F_MapFixStrArr"                                  );
 
-         chkout_c ( caller );
+         chkout_c ( naif_state, caller );
          return;
       }
    }
@@ -647,12 +647,12 @@ void C2F_CreateFixStrArr ( SpiceInt           nStr,
       *fStrArr = (SpiceChar *) NULL;
       fLen     = 0;
 
-      chkin_c  ( "C2F_CreateFixStrArr"                             );
-      setmsg_c ( "An attempt to create a temporary string array "
+      chkin_c  ( naif_state, "C2F_CreateFixStrArr"                             );
+      setmsg_c ( naif_state, "An attempt to create a temporary string array "
                  "failed.  Attempted to allocate # bytes."         );
-      errint_c ( "#", fLen * nStr                                  );
-      sigerr_c ( "SPICE(STRINGCREATEFAIL)"                         );
-      chkout_c ( "C2F_CreateFixStrArr"                             );
+      errint_c ( naif_state, "#", fLen * nStr                                  );
+      sigerr_c ( naif_state, "SPICE(STRINGCREATEFAIL)"                         );
+      chkout_c ( naif_state, "C2F_CreateFixStrArr"                             );
       return;
    }  
 
@@ -673,11 +673,11 @@ void C2F_CreateFixStrArr ( SpiceInt           nStr,
          *fStrArr = (SpiceChar *) NULL;
          fLen     = 0;
          
-         chkin_c  ( "C2F_CreateFixStrArr"                           );
-         setmsg_c ( "An attempt to copy a string using C2F_StrCpy "
+         chkin_c  ( naif_state, "C2F_CreateFixStrArr"                           );
+         setmsg_c ( naif_state, "An attempt to copy a string using C2F_StrCpy "
                     "failed."                                       );
-         sigerr_c ( "SPICE(STRINGCOPYFAIL)"                         );
-         chkout_c ( "C2F_CreateFixStrArr"                           );
+         sigerr_c ( naif_state, "SPICE(STRINGCOPYFAIL)"                         );
+         chkout_c ( naif_state, "C2F_CreateFixStrArr"                           );
          return;
       }  
    }  
@@ -765,11 +765,11 @@ void      F_Alloc ( SpiceInt         fStrLen,
 
    if ( *fStr == (SpiceChar *)NULL )
    {
-      chkin_c  ( "F_Alloc"                                        );
-      setmsg_c ( "Attempt to allocate string of length # failed." );
-      errint_c ( "#", fStrLen                                     );
-      sigerr_c ( "CSPICE(MALLOCFAILURE)"                          );
-      chkout_c ( "F_Alloc"                                        );
+      chkin_c  ( naif_state, "F_Alloc"                                        );
+      setmsg_c ( naif_state, "Attempt to allocate string of length # failed." );
+      errint_c ( naif_state, "#", fStrLen                                     );
+      sigerr_c ( naif_state, "CSPICE(MALLOCFAILURE)"                          );
+      chkout_c ( naif_state, "F_Alloc"                                        );
       return;
    }
 
@@ -859,10 +859,10 @@ void F2C_CreateStr_Sig ( SpiceInt           fStrLen,
 
    if ( status == SPICEFAILURE )
    {
-      chkin_c  ( "F2C_CreateStr_Sig" );
-      setmsg_c ( "An attempt to create a temporary string failed." );
-      sigerr_c ( "SPICE(STRINGCREATEFAIL)" );
-      chkout_c ( "F2C_CreateStr_Sig" );
+      chkin_c  ( naif_state, "F2C_CreateStr_Sig" );
+      setmsg_c ( naif_state, "An attempt to create a temporary string failed." );
+      sigerr_c ( naif_state, "SPICE(STRINGCREATEFAIL)" );
+      chkout_c ( naif_state, "F2C_CreateStr_Sig" );
       return;
    }
 
@@ -990,10 +990,10 @@ void F2C_CreateStrArr_Sig ( SpiceInt             nStr,
 
    if ( status == SPICEFAILURE )
    {
-      chkin_c  ( "F2C_CreateStrArr_Sig"                            );
-      setmsg_c ( "An attempt to create a temporary string failed." );
-      sigerr_c ( "SPICE(STRINGCREATEFAIL)"                         );
-      chkout_c ( "F2C_CreateStrArr_Sig"                            );
+      chkin_c  ( naif_state, "F2C_CreateStrArr_Sig"                            );
+      setmsg_c ( naif_state, "An attempt to create a temporary string failed." );
+      sigerr_c ( naif_state, "SPICE(STRINGCREATEFAIL)"                         );
+      chkout_c ( naif_state, "F2C_CreateStrArr_Sig"                            );
       return;
    }
 

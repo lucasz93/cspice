@@ -56,7 +56,8 @@
    #include "SpiceZmc.h"
    #undef fovray_c
 
-   void fovray_c ( ConstSpiceChar   * inst,
+   void fovray_c ( void             * naif_state,
+                   ConstSpiceChar   * inst,
                    ConstSpiceDouble   raydir [3],
                    ConstSpiceChar   * rframe,
                    ConstSpiceChar   * abcorr,
@@ -462,7 +463,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -472,9 +473,9 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "fovray_c", inst   );
-   CHKFSTR ( CHK_STANDARD, "fovray_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "fovray_c", observer );
+   CHKFSTR ( naif_state, CHK_STANDARD, "fovray_c", inst   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "fovray_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "fovray_c", observer );
 
    /*
    The input frame name is a special case because we allow the caller
@@ -484,7 +485,7 @@
 
    First make sure the frame name pointer is non-null.
    */
-   CHKPTR ( CHK_STANDARD, "fovray_c", rframe );
+   CHKPTR ( naif_state, CHK_STANDARD, "fovray_c", rframe );
    
    /*
    Use the input frame string if it's non-empty; otherwise
@@ -504,7 +505,8 @@
    Call the f2c'd Fortran routine. Use explicit type casts for every
    type defined by f2c.
    */
-   fovray_ ( (char         *) inst,
+   fovray_ ( naif_state,
+             (char         *) inst,
              (doublereal   *) raydir,
              (char         *) rFrameStr,
              (char         *) abcorr,
@@ -516,7 +518,7 @@
              (ftnlen        ) strlen(abcorr),
              (ftnlen        ) strlen(observer)  );
 
-   chkout_c ( "fovray_c" );
+   chkout_c ( naif_state, "fovray_c" );
  
 
 } /* End fovray_c */

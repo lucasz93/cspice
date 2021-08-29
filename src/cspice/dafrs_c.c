@@ -48,7 +48,7 @@
    #undef   dafrs_c
 
 
-   void dafrs_c ( ConstSpiceDouble  * sum ) 
+   void dafrs_c ( void *naif_state, ConstSpiceDouble  * sum ) 
 
 
 /*
@@ -220,9 +220,9 @@
    /*
    Not much to it. 
    */
-   dafrs_ ( (doublereal *) sum );
+   dafrs_ ( naif_state, (doublereal *) sum );
 
 
-   chkout_c ( "dafrs_c" );
+   chkout_c ( naif_state, "dafrs_c" );
 
 } /* End dafrs_c */

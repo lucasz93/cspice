@@ -533,9 +533,9 @@
                 contains no segments.  This is
                 unexpected, but we're prepared for it.
                 ./
-                setmsg_c ( "No segments found in DSK file #.");
-                errch_c  ( "#",  dsk                         );
-                sigerr_c ( "SPICE(NODATA)"                   );
+                setmsg_c ( naif_state, "No segments found in DSK file #.");
+                errch_c  ( naif_state, "#",  dsk                         );
+                sigerr_c ( naif_state, "SPICE(NODATA)"                   );
              }
 
              /.
@@ -829,10 +829,10 @@
    Check the input strings. Make sure none of the pointers are null and
    that each string contains at least one non-null character.
    */
-   CHKFSTR ( CHK_STANDARD, "limb_pl02", target );
-   CHKFSTR ( CHK_STANDARD, "limb_pl02", fixref );
-   CHKFSTR ( CHK_STANDARD, "limb_pl02", abcorr );
-   CHKFSTR ( CHK_STANDARD, "limb_pl02", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "limb_pl02", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "limb_pl02", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "limb_pl02", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "limb_pl02", obsrvr );
 
    /*
    Map the target name to an ID code.
@@ -841,17 +841,17 @@
 
    if ( failed_c() ) 
    {
-      chkout_c ( "limb_pl02" );
+      chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
    if ( !found ) 
    {
-      setmsg_c ( "The target name # could not be mapped "
+      setmsg_c ( naif_state, "The target name # could not be mapped "
                  "to an ID code."                        );
-      errch_c  ( "#", target                             );
-      sigerr_c ( "SPICE(IDCODENOTFOUND)"                 );
-      chkout_c ( "limb_pl02"                             );
+      errch_c  ( naif_state, "#", target                             );
+      sigerr_c ( naif_state, "SPICE(IDCODENOTFOUND)"                 );
+      chkout_c ( naif_state, "limb_pl02"                             );
       return;      
    }
 
@@ -862,17 +862,17 @@
 
    if ( failed_c() ) 
    {
-      chkout_c ( "limb_pl02" );
+      chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
    if ( !found ) 
    {
-      setmsg_c ( "The observer name # could not be mapped "
+      setmsg_c ( naif_state, "The observer name # could not be mapped "
                  "to an ID code."                        );
-      errch_c  ( "#", obsrvr                             );
-      sigerr_c ( "SPICE(IDCODENOTFOUND)"                 );
-      chkout_c ( "limb_pl02"                             );
+      errch_c  ( naif_state, "#", obsrvr                             );
+      sigerr_c ( naif_state, "SPICE(IDCODENOTFOUND)"                 );
+      chkout_c ( naif_state, "limb_pl02"                             );
       return;      
    }
 
@@ -881,11 +881,11 @@
    */
    if ( trgcde == obscde  )
    {
-      setmsg_c ( "Both target and observer have the same integer "
+      setmsg_c ( naif_state, "Both target and observer have the same integer "
                  "ID code #.  These objects must be distinct."     );
-      errint_c ( "#", obscde                                       );
-      sigerr_c ( "SPICE(BODIESNOTDISTINCT)"                        );
-      chkout_c ( "limb_pl02"                                       );
+      errint_c ( naif_state, "#", obscde                                       );
+      sigerr_c ( naif_state, "SPICE(BODIESNOTDISTINCT)"                        );
+      chkout_c ( naif_state, "limb_pl02"                                       );
       return;
    }
 
@@ -897,17 +897,17 @@
 
    if ( failed_c() ) 
    {
-      chkout_c ( "limb_pl02" );
+      chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
    if ( dskdsc.center != trgcde )
    {
-      setmsg_c ( "The target is # but the input DSK "
+      setmsg_c ( naif_state, "The target is # but the input DSK "
                  "segment is for body #."            );
-      errint_c ( "#", dskdsc.center                  );
-      sigerr_c ( "SPICE(DSKTARGETMISMATCH)"          );
-      chkout_c ( "limb_pl02"                         );
+      errint_c ( naif_state, "#", dskdsc.center                  );
+      sigerr_c ( naif_state, "SPICE(DSKTARGETMISMATCH)"          );
+      chkout_c ( naif_state, "limb_pl02"                         );
       return;            
    }
 
@@ -917,11 +917,11 @@
    */
    if ( npoints < 1 )
    {
-      setmsg_c ( "The requested number of limb points must be "
+      setmsg_c ( naif_state, "The requested number of limb points must be "
                  "positive but was #."                          );
-      errint_c ( "#", npoints                                   );
-      sigerr_c ( "SPICE(INVALIDCOUNT)"                          );
-      chkout_c ( "limb_pl02"                                    );
+      errint_c ( naif_state, "#", npoints                                   );
+      sigerr_c ( naif_state, "SPICE(INVALIDCOUNT)"                          );
+      chkout_c ( naif_state, "limb_pl02"                                    );
       return;
    }
 
@@ -932,17 +932,17 @@
 
    if ( failed_c() ) 
    {
-      chkout_c ( "limb_pl02" );
+      chkout_c ( naif_state, "limb_pl02" );
       return;
    }
    
    if ( frcode == 0 ) 
    {
-      setmsg_c ( "The reference frame name # could not be mapped "
+      setmsg_c ( naif_state, "The reference frame name # could not be mapped "
                  "to an ID code."                                );
-      errch_c  ( "#", fixref                                     );
-      sigerr_c ( "SPICE(UNKNOWNFRAME)"                           );
-      chkout_c ( "limb_pl02"                                     );
+      errch_c  ( naif_state, "#", fixref                                     );
+      sigerr_c ( naif_state, "SPICE(UNKNOWNFRAME)"                           );
+      chkout_c ( naif_state, "limb_pl02"                                     );
       return;
    }
 
@@ -950,30 +950,30 @@
 
    if ( failed_c() ) 
    {
-      chkout_c ( "limb_pl02" );
+      chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
    if ( !found )
    {
-      setmsg_c ( "The reference frame name # could not be mapped "
+      setmsg_c ( naif_state, "The reference frame name # could not be mapped "
                  "to a frame specification."                     );
-      errch_c  ( "#", fixref                                     );
-      sigerr_c ( "SPICE(UNKNOWNFRAME)"                           );
-      chkout_c ( "limb_pl02"                                     );
+      errch_c  ( naif_state, "#", fixref                                     );
+      sigerr_c ( naif_state, "SPICE(UNKNOWNFRAME)"                           );
+      chkout_c ( naif_state, "limb_pl02"                                     );
       return;
    }
 
    if ( frcent != trgcde )
    {
-      setmsg_c ( "The body-fixed reference frame # must be "
+      setmsg_c ( naif_state, "The body-fixed reference frame # must be "
                  "centered on the target #, but is centered "
                  "on body #."                                 );
-      errch_c  ( "#", fixref                                  );
-      errch_c  ( "#", target                                  );
-      errint_c ( "#", frcent                                  );
-      sigerr_c ( "SPICE(INVALIDFRAME)"                        );
-      chkout_c ( "limb_pl02"                                  );
+      errch_c  ( naif_state, "#", fixref                                  );
+      errch_c  ( naif_state, "#", target                                  );
+      errint_c ( naif_state, "#", frcent                                  );
+      sigerr_c ( naif_state, "SPICE(INVALIDFRAME)"                        );
+      chkout_c ( naif_state, "limb_pl02"                                  );
       return;            
    }
 
@@ -991,17 +991,17 @@
 
    if ( failed_c() ) 
    {
-      chkout_c ( "limb_pl02" );
+      chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
    if ( n < 3 )
    {
-      setmsg_c ( "There must be three target radii but the "
+      setmsg_c ( naif_state, "There must be three target radii but the "
                  "actual count was #."                      );
-      errint_c ( "#", npoints                               );
-      sigerr_c ( "SPICE(INVALIDCOUNT)"                      );
-      chkout_c ( "limb_pl02"                                );
+      errint_c ( naif_state, "#", npoints                               );
+      sigerr_c ( naif_state, "SPICE(INVALIDCOUNT)"                      );
+      chkout_c ( naif_state, "limb_pl02"                                );
       return;
    }
 
@@ -1009,7 +1009,7 @@
 
    if ( failed_c() ) 
    {
-      chkout_c ( "limb_pl02" );
+      chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
@@ -1019,7 +1019,7 @@
 
    if ( failed_c() ) 
    {
-      chkout_c ( "limb_pl02" );
+      chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
@@ -1048,7 +1048,7 @@
 
    if ( failed_c() ) 
    {
-      chkout_c ( "limb_pl02" );
+      chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
@@ -1057,7 +1057,7 @@
    
    if ( failed_c() ) 
    {
-      chkout_c ( "limb_pl02" );
+      chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
@@ -1082,17 +1082,17 @@
 
       if ( failed_c() ) 
       {
-         chkout_c ( "limb_pl02" );
+         chkout_c ( naif_state, "limb_pl02" );
          return;
       }
 
       if ( !found )
       {
-         setmsg_c ( "Could not invert orthogonal projection "
+         setmsg_c ( naif_state, "Could not invert orthogonal projection "
                     "for the limb point at index #."         );
-         errint_c ( "#", i                                   );
-         sigerr_c ( "SPICE(DEGENERATECASE)"                  );
-         chkout_c ( "limb_pl02"                              );
+         errint_c ( naif_state, "#", i                                   );
+         sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"                  );
+         chkout_c ( naif_state, "limb_pl02"                              );
          return;
       }
 
@@ -1103,17 +1103,17 @@
 
       if ( failed_c() ) 
       {
-         chkout_c ( "limb_pl02" );
+         chkout_c ( naif_state, "limb_pl02" );
          return;
       }
 
       if ( !found )
       {
-         setmsg_c ( "Could not find ray-ellipsoid intercept "
+         setmsg_c ( naif_state, "Could not find ray-ellipsoid intercept "
                     "for the limb point at index #."         );
-         errint_c ( "#", i                                   );
-         sigerr_c ( "SPICE(DEGENERATECASE)"                  );
-         chkout_c ( "limb_pl02"                              );
+         errint_c ( naif_state, "#", i                                   );
+         sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"                  );
+         chkout_c ( naif_state, "limb_pl02"                              );
          return;
       }
 
@@ -1130,7 +1130,7 @@
 
    if ( failed_c() ) 
    {
-      chkout_c ( "limb_pl02" );
+      chkout_c ( naif_state, "limb_pl02" );
       return;
    }
 
@@ -1151,10 +1151,10 @@
    
    if ( !lonLatGridPtr )
    {
-      setmsg_c ( "Call to malloc to allocate # bytes of memory "
+      setmsg_c ( naif_state, "Call to malloc to allocate # bytes of memory "
                  "for the lon/lat array failed."                 );
-      errint_c ( "#",  nBytes                                    );
-      chkout_c ( "limb_pl02"                                     );
+      errint_c ( naif_state, "#",  nBytes                                    );
+      chkout_c ( naif_state, "limb_pl02"                                     );
       return;
    }
 
@@ -1201,6 +1201,6 @@
    */
    free ( lonLatGridPtr );
 
-   chkout_c ( "limb_pl02" );
+   chkout_c ( naif_state, "limb_pl02" );
 
 } /* End limb_pl02 */

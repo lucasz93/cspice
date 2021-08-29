@@ -48,7 +48,8 @@
    #undef    nearpt_c
 
 
-   void nearpt_c ( ConstSpiceDouble    positn[3],
+   void nearpt_c ( void              * naif_state,
+                   ConstSpiceDouble    positn[3],
                    SpiceDouble         a,
                    SpiceDouble         b,
                    SpiceDouble         c,
@@ -215,7 +216,7 @@
  
          nearpt_c ( p,    a,  b,     c,   q,  &alt  );
          surfnm_c (       a,  b,     c    q,  nrml  );
-         reclat_c ( nrml, &r, &long, &lat           );
+         reclat_c ( naif_state,nrml, &r, &long, &lat           );
 
       The Gaussian coordinates are long, lat, alt.
 
@@ -281,7 +282,8 @@
    /*
    Call the f2c'd nearpt.
    */
-   nearpt_( (doublereal *)  positn,
+   nearpt_( naif_state,
+            (doublereal *)  positn,
             (doublereal *)  &a,
             (doublereal *)  &b,
             (doublereal *)  &c,
@@ -289,7 +291,7 @@
             (doublereal *)  alt     );
 
 
-   chkout_c ( "nearpt_c" );
+   chkout_c ( naif_state, "nearpt_c" );
 
 
 } /* End nearpt_c */

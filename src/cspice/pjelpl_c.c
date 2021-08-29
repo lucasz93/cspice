@@ -49,7 +49,8 @@
    #undef    pjelpl_c
    
 
-   void pjelpl_c ( ConstSpiceEllipse  * elin,
+   void pjelpl_c ( void               * naif_state,
+                   ConstSpiceEllipse  * elin,
                    ConstSpicePlane    * plane,
                    SpiceEllipse       * elout  ) 
 
@@ -304,13 +305,13 @@
    /*
    Find generating vectors of the input ellipse.
    */
-   el2cgv_c ( elin, center, smajor, sminor );
+   el2cgv_c ( naif_state, elin, center, smajor, sminor );
  
     
    /*
    Find a normal vector for the input plane.
    */
-   pl2nvc_c ( plane, normal, &cnst );
+   pl2nvc_c ( naif_state, plane, normal, &cnst );
  
  
    /*
@@ -318,8 +319,8 @@
    input plane's normal vector.  The components are generating
    vectors for the projected plane.
    */
-   vperp_c ( smajor,  normal,  prjvc1 );
-   vperp_c ( sminor,  normal,  prjvc2 );
+   vperp_c ( naif_state, smajor,  normal,  prjvc1 );
+   vperp_c ( naif_state, sminor,  normal,  prjvc2 );
  
  
    /*
@@ -372,15 +373,15 @@
    as claimed.
    */
    
-   vprjp_c ( center, plane, prjctr );
+   vprjp_c ( naif_state, center, plane, prjctr );
  
  
    /*
    Put together the projected ellipse.
    */
-   cgv2el_c ( prjctr, prjvc1, prjvc2, elout );
+   cgv2el_c ( naif_state, prjctr, prjvc1, prjvc2, elout );
  
 
-   chkout_c ( "pjelpl_c" );
+   chkout_c ( naif_state, "pjelpl_c" );
 
 } /* End pjelpl_c */

@@ -47,7 +47,8 @@
    #undef    unormg_c
 
 
-   void unormg_c ( ConstSpiceDouble  * v1,
+   void unormg_c ( void              * naif_state,
+                   ConstSpiceDouble  * v1,
                    SpiceInt            ndim,
                    SpiceDouble       * vout,
                    SpiceDouble       * vmag )
@@ -164,10 +165,10 @@
    if ( ndim <= 0 )
       {
 
-      chkin_c    ( "unormg_c"                                    );
-      SpiceError ( "Vector dimension less than or equal to zero",
+      chkin_c    ( naif_state, "unormg_c"                                    );
+      SpiceError ( naif_state, "Vector dimension less than or equal to zero",
                    "BADDIMENSION"                                );
-      chkout_c   ( "unormg_c"                                    );
+      chkout_c   ( naif_state, "unormg_c"                                    );
       return;
 
       }
@@ -176,7 +177,7 @@
 
    /* Get the magnitude of the vector. */
 
-   *vmag = vnormg_c ( v1, ndim );
+   *vmag = vnormg_c ( naif_state, v1, ndim );
 
 
    /*

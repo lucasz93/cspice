@@ -211,7 +211,7 @@
       allocated memory, so we won't attempt to free the
       C string. 
       */
-      chkout_c ( "zzgfdsps_" );
+      chkout_c ( naif_state, "zzgfdsps_" );
 
       return (-1);
    }
@@ -226,7 +226,7 @@
       */
       free ( CStringPtr );
 
-      chkout_c ( "zzgfdsps_" );
+      chkout_c ( naif_state, "zzgfdsps_" );
 
       return(-1);
    }
@@ -288,7 +288,7 @@
    free ( CStringPtr );
    free ( CFmtPtr    );
    
-   chkout_c ( "zzgfdsps_" );
+   chkout_c ( naif_state, "zzgfdsps_" );
 
    return ( 0 );
 

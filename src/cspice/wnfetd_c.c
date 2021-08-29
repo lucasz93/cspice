@@ -46,7 +46,8 @@
    #include "SpiceZmc.h"
 
 
-   void wnfetd_c ( SpiceCell    * window,
+   void wnfetd_c ( void         * naif_state,
+                  SpiceCell    * window,
                    SpiceInt       n,
                    SpiceDouble  * left,
                    SpiceDouble  * right   ) 
@@ -166,7 +167,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
       {
       return;
       }
@@ -176,25 +177,26 @@
    /*
    Make sure the window's data type is d.p. 
    */
-   CELLTYPECHK ( CHK_STANDARD, "wnfetd_c", SPICE_DP, window );
+   CELLTYPECHK ( naif_state, CHK_STANDARD, "wnfetd_c", SPICE_DP, window );
 
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( window );
+   CELLINIT ( naif_state, window );
 
    /*
    Map the index to a Fortran-style index.  
    */
    fn = n + 1;
 
-   wnfetd_ ( ( doublereal * ) window->base, 
+   wnfetd_ ( naif_state,
+             ( doublereal * ) window->base, 
              ( integer    * ) &fn,
              ( doublereal * ) left,
              ( doublereal * ) right        );
 
 
-   chkout_c ( "wnfetd_c" );
+   chkout_c ( naif_state, "wnfetd_c" );
 
 } /* End wnfetd_c */

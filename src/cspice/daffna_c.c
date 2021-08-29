@@ -45,7 +45,7 @@
    #include "SpiceZfc.h"
 
 
-   void daffna_c ( SpiceBoolean  * found )
+   void daffna_c ( void *naif_state, SpiceBoolean  * found )
 
 /*
 
@@ -400,11 +400,11 @@
    chkin_c ( naif_state, "daffna_c" );
 
 
-   daffna_ ( ( logical * ) &fnd );
+   daffna_ ( naif_state, ( logical * ) &fnd );
 
    *found = fnd;
 
 
-   chkout_c ( "daffna_c" );
+   chkout_c ( naif_state, "daffna_c" );
 
 } /* End daffna_c */

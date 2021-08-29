@@ -1,6 +1,6 @@
 /*
 
--Procedure errint_c ( Insert Integer into Error Message Text )
+-Procedure errint_c ( naif_state, Insert Integer into Error Message Text )
 
 -Abstract
 
@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void errint_c ( ConstSpiceChar  * marker,
+   void errint_c ( void            * naif_state,
+                   ConstSpiceChar  * marker,
                    SpiceInt          number  )
 
 /*
@@ -128,7 +129,7 @@
          After the call,
 
 
-            errint_c ( "#",  5  );
+            errint_c ( naif_state, "#",  5  );
 
          The long error message becomes:
 
@@ -147,7 +148,7 @@
 
          After the call,
 
-            errint_c ( "XX",  5  );
+            errint_c ( naif_state, "XX",  5  );
 
          The long error message becomes:
 
@@ -192,13 +193,14 @@
    and the string length is non-zero.  Since we don't check in
    prior to this, use the discovery check-in option.
    */
-   CHKFSTR ( CHK_DISCOVER, "errint_c", marker );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "errint_c", marker );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   errint_ ( ( char    * ) marker,
+   errint_ ( naif_state,
+             ( char    * ) marker,
              ( integer * ) &number,
              ( ftnlen    ) strlen(marker)  );
 

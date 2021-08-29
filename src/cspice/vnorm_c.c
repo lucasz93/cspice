@@ -46,7 +46,7 @@
    #undef    vnorm_c
 
 
-   SpiceDouble vnorm_c ( ConstSpiceDouble v1[3] )
+   SpiceDouble vnorm_c ( void *naif_state, ConstSpiceDouble v1[3] )
 
 /*
 

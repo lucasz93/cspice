@@ -50,7 +50,8 @@
    #undef    bschoi_c
 
 
-   SpiceInt bschoi_c ( SpiceInt          value,
+   SpiceInt bschoi_c ( void            * naif_state,
+                       SpiceInt          value,
                        SpiceInt          ndim,
                        ConstSpiceInt   * array,
                        ConstSpiceInt   * order  ) 
@@ -202,13 +203,13 @@
 
    if ( ordvec == 0 )
    {
-      chkin_c  ( "bschoi_c"                                );
-      setmsg_c ( "Failure on malloc call to create array "
+      chkin_c  ( naif_state, "bschoi_c"                                );
+      setmsg_c ( naif_state, "Failure on malloc call to create array "
                  "for Fortran-style order vector.  Tried "
                  "to allocate # bytes."                    );
-      errint_c ( "#",  vSize                               );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                     );
-      chkout_c ( "bschoi_c"                                );
+      errint_c ( naif_state, "#",  vSize                               );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                     );
+      chkout_c ( naif_state, "bschoi_c"                                );
       
       return   ( -1 );
    }
@@ -218,7 +219,8 @@
       ordvec[i] = order[i] + 1;
    }
   
-   loc  =  bschoi_ ( (integer *) &value,
+   loc  =  bschoi_ ( naif_state,
+                     (integer *) &value,
                      (integer *) &ndim,
                      (integer *) array,
                      (integer *) ordvec   )   -  1; 

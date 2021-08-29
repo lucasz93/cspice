@@ -51,7 +51,8 @@
    #undef    ckw02_c
 
 
-   void ckw02_c ( SpiceInt            handle, 
+   void ckw02_c ( void              * naif_state,
+                  SpiceInt            handle, 
                   SpiceDouble         begtim,
                   SpiceDouble         endtim,
                   SpiceInt            inst,
@@ -514,8 +515,8 @@
    Check the input strings to make sure the pointers
    are non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ckw02_c", ref   );
-   CHKFSTR ( CHK_STANDARD, "ckw02_c", segid );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckw02_c", ref   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckw02_c", segid );
  
  
    /*
@@ -523,7 +524,8 @@
    arrays DO NOT require transposition!
    */
    
-   ckw02_( ( integer    * ) &handle, 
+   ckw02_( naif_state,
+           ( integer    * ) &handle, 
            ( doublereal * ) &begtim, 
            ( doublereal * ) &endtim, 
            ( integer    * ) &inst, 
@@ -539,6 +541,6 @@
            ( ftnlen       ) strlen(segid)  );
 
 
-   chkout_c ( "ckw02_c" );
+   chkout_c ( naif_state, "ckw02_c" );
 
 } /* End ckw02_c */

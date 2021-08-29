@@ -47,7 +47,8 @@
   #include "SpiceZmc.h" 
 
 
-   void ktotal_c ( ConstSpiceChar   * kind,
+   void ktotal_c ( void             * naif_state,
+                   ConstSpiceChar   * kind,
                    SpiceInt         * count ) 
 
 /*
@@ -190,10 +191,11 @@
    Check the input file kind to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_DISCOVER, "ktotal_c", kind );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "ktotal_c", kind );
    
    
-   ktotal_ (  ( char    * ) kind,
+   ktotal_ (  naif_state,
+              ( char    * ) kind,
               ( integer * ) count,
               ( ftnlen    ) strlen(kind)  );
 

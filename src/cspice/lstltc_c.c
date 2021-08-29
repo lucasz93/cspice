@@ -48,9 +48,12 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
    #include "f2cMang.h"
+   #include "f2c.h"
+   #include "__cspice_state.h"
    #undef    lstltc_c
 
-   SpiceInt lstltc_c ( ConstSpiceChar  * string,
+   SpiceInt lstltc_c ( void            * naif_state,
+                       ConstSpiceChar  * string,
                        SpiceInt          n,   
                        SpiceInt          lenvals,
                        const void      * array   ) 
@@ -194,13 +197,14 @@
 */
 
 { /* Begin lstltc_c */
+   cspice_t * state = (cspice_t *)naif_state;
 
    /*
    f2c library utility prototypes 
    */
-   logical          l_gt   (char *a, char *b, ftnlen la, ftnlen lb ); 
-   logical          l_le   (char *a, char *b, ftnlen la, ftnlen lb ); 
-   logical          l_lt   (char *a, char *b, ftnlen la, ftnlen lb ); 
+   logical          l_gt   (f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb ); 
+   logical          l_le   (f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb ); 
+   logical          l_lt   (f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb ); 
 
    /*
    Local macros 
@@ -234,14 +238,14 @@
    Make sure the pointer for the key value is non-null 
    and that the length is adequate.  
    */
-   CHKPTR_VAL ( CHK_DISCOVER, "lstltc_c", string, -1 );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "lstltc_c", string, -1 );
 
    
    /*
    Make sure the pointer for the string array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR_VAL ( CHK_DISCOVER, "lstltc_c", array, lenvals, -1 );   
+   CHKOSTR_VAL ( naif_state, CHK_DISCOVER, "lstltc_c", array, lenvals, -1 );   
 
 
    /*
@@ -252,7 +256,8 @@
    begin  = 0;
    end    = n - 1;
 
-   if (  l_le( ( char * )string, 
+   if (  l_le( &state->f2c,
+               ( char * )string, 
                ( char * )ARRAY(begin), 
                ( ftnlen )keylen, 
                ( ftnlen )strlen(ARRAY(begin)) )  )
@@ -264,7 +269,8 @@
    /*
    Return if the key string is greater than all of the array's elements. 
    */
-   if (  l_gt( ( char * )string, 
+   if (  l_gt( &state->f2c,
+               ( char * )string, 
                ( char * )ARRAY(end), 
                ( ftnlen )keylen, 
                ( ftnlen )strlen(ARRAY(end)) )  )
@@ -293,7 +299,8 @@
       /*
       Narrow the search area.
       */
-      if (  l_lt ( (char    * ) ARRAY(middle),  
+      if (  l_lt ( &state->f2c,
+                   (char    * ) ARRAY(middle),  
                    (char    * ) string,
                    (ftnlen    ) strlen( ARRAY(middle) ),
                    (ftnlen    ) keylen                   )  )

@@ -48,7 +48,8 @@
    #include "SpiceZfc.h"
    #undef    polyds_c
 
-   void polyds_c ( ConstSpiceDouble    * coeffs,
+   void polyds_c ( void                * naif_state,
+                   ConstSpiceDouble    * coeffs,
                    SpiceInt              deg,
                    SpiceInt              nderiv,
                    SpiceDouble           t,
@@ -250,12 +251,13 @@
 
    chkin_c ( naif_state, "polyds_c" );
 
-   polyds_( ( doublereal * ) coeffs,
+   polyds_( naif_state,
+            ( doublereal * ) coeffs,
             ( integer    * ) &deg,
             ( integer    * ) &nderiv,
             ( doublereal * ) &t,
             ( doublereal * ) p );
 
-   chkout_c ( "polyds_c" );
+   chkout_c ( naif_state, "polyds_c" );
 
 } /* End polyds_c */

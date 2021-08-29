@@ -46,7 +46,8 @@
    #undef    vlcom3_c
 
 
-   void vlcom3_c ( SpiceDouble        a, 
+   void vlcom3_c ( void             * naif_state,
+                   SpiceDouble        a, 
                    ConstSpiceDouble   v1 [3], 
                    SpiceDouble        b, 
                    ConstSpiceDouble   v2 [3], 

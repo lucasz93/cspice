@@ -48,10 +48,13 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
    #include "f2cMang.h"
+   #include "f2c.h"
+   #include "__cspice_state.h"
    #undef    isrchc_c
 
 
-   SpiceInt isrchc_c ( ConstSpiceChar  * value,
+   SpiceInt isrchc_c ( void            * naif_state,
+                       ConstSpiceChar  * value,
                        SpiceInt          ndim,   
                        SpiceInt          lenvals,
                        const void      * array   ) 
@@ -175,12 +178,12 @@
 */
 
 { /* Begin isrchc_c */
-
+   cspice_t * state = (cspice_t *)naif_state;
 
    /*
    f2c library utility prototypes 
    */
-   extern integer   s_cmp  (char *a, char *b, ftnlen la, ftnlen lb ); 
+   extern integer   s_cmp  (f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb ); 
 
    /*
    Local macros 
@@ -208,19 +211,20 @@
    Make sure the input pointer for the key value is non-null 
    and that the length is adequate.  
    */
-   CHKPTR_VAL ( CHK_DISCOVER, "isrchc_c", value, -1 );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "isrchc_c", value, -1 );
 
    
    /*
    Make sure the input pointer for the string array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR_VAL ( CHK_DISCOVER, "isrchc_c", array, lenvals, -1 );
+   CHKOSTR_VAL ( naif_state, CHK_DISCOVER, "isrchc_c", array, lenvals, -1 );
    
 
    for ( i = 0;  i < ndim;  i++ )
    {
-      if (  s_cmp ( (char   *) value,
+      if (  s_cmp ( &state->f2c,
+                    (char   *) value,
                     (char   *) ARRAY(i),
                     (ftnlen  ) strlen(value),
                     (ftnlen  ) strlen(ARRAY(i)) )  == 0  )

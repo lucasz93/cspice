@@ -46,7 +46,8 @@
    #include "SpiceZmc.h"
    #include "SpiceZst.h"
 
-   void pckopn_c ( ConstSpiceChar   * name,
+   void pckopn_c ( void             * naif_state,
+                   ConstSpiceChar   * name,
                    ConstSpiceChar   * ifname,
                    SpiceInt           ncomch,
                    SpiceInt         * handle  ) 
@@ -173,19 +174,20 @@
    Check the input string name to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pckopn_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pckopn_c", name );
    
    /*
    Check the input string ifname to make sure the pointer is 
    non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pckopn_c", ifname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pckopn_c", ifname );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   pckopn_ ( (char       *) name,
+   pckopn_ ( naif_state,
+             (char       *) name,
              (char       *) ifname,
              (integer    *) &ncomch,
              (integer    *) handle,
@@ -193,6 +195,6 @@
              (ftnlen      ) strlen(ifname) );
 
 
-   chkout_c ( "pckopn_c" );
+   chkout_c ( naif_state, "pckopn_c" );
 
 } /* End pckopn_c */

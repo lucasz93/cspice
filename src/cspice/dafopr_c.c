@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void dafopr_c ( ConstSpiceChar    * fname,
+   void dafopr_c ( void              * naif_state,
+                   ConstSpiceChar    * fname,
                    SpiceInt          * handle  )
 /*
 
@@ -338,14 +339,15 @@
    Check the file name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "dafopr_c", fname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dafopr_c", fname );
 
 
-   dafopr_ ( ( char    * ) fname,
+   dafopr_ ( naif_state,
+             ( char    * ) fname,
              ( integer * ) handle,
              ( ftnlen    ) strlen(fname) );
 
 
-   chkout_c ( "dafopr_c" );
+   chkout_c ( naif_state, "dafopr_c" );
 
 } /* End dafopr_c */

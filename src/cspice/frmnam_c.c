@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
 
 
-   void frmnam_c ( SpiceInt      frcode,
+   void frmnam_c ( void      *   naif_state,
+                   SpiceInt      frcode,
                    SpiceInt      lenout,
                    SpiceChar *   frname  )
 /*
@@ -225,13 +226,14 @@
    Make sure the output frmnam has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "frmnam_c", frname, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "frmnam_c", frname, lenout );
 
 
    /*
    Do the conversion.
    */
-   frmnam_ ( ( integer * ) &frcode, 
+   frmnam_ ( naif_state,
+             ( integer * ) &frcode, 
              ( char    * ) frname, 
              ( ftnlen    ) lenout-1 );
       
@@ -243,7 +245,7 @@
    F2C_ConvertStr ( lenout, frname );
 
 
-   chkout_c ( "frmnam_c" );
+   chkout_c ( naif_state, "frmnam_c" );
 
 } /* End frmnam_c */
 

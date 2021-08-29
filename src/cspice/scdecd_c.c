@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void scdecd_c ( SpiceInt       sc, 
+   void scdecd_c ( void         * naif_state,
+                   SpiceInt       sc, 
                    SpiceDouble    sclkdp, 
                    SpiceInt       lenout,
                    SpiceChar    * sclkch  ) 
@@ -448,13 +449,14 @@
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "scdecd_c", sclkch, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "scdecd_c", sclkch, lenout );
    
 
    /*
    Decode the encoded SCLK value.
    */
-   scdecd_ (  ( integer    * ) &sc,
+   scdecd_ (  naif_state,
+              ( integer    * ) &sc,
               ( doublereal * ) &sclkdp,
               ( char       * ) sclkch,
               ( ftnlen       ) lenout-1  ); 
@@ -467,7 +469,7 @@
    F2C_ConvertStr ( lenout, sclkch );
    
               
-   chkout_c ( "scdecd_c");
+   chkout_c ( naif_state, "scdecd_c");
 
 
 } /* End scdecd_c */

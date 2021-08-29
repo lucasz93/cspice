@@ -46,7 +46,8 @@
    #undef    vdotg_c
    
 
-   SpiceDouble vdotg_c ( ConstSpiceDouble   * v1,
+   SpiceDouble vdotg_c ( void               * naif_state,
+                         ConstSpiceDouble   * v1,
                          ConstSpiceDouble   * v2,
                          SpiceInt             ndim )
 /*
@@ -166,10 +167,10 @@
    if ( ndim <= 0 )
       {
       
-      chkin_c    ( "vdotg_c"                                      );
-      SpiceError ( "Vector dimension less than or equal to zero",
+      chkin_c    ( naif_state, "vdotg_c"                                      );
+      SpiceError ( naif_state, "Vector dimension less than or equal to zero",
                    "BADDIMENSION"                                 );
-      chkout_c   ( "vdotg_c"                                      );
+      chkout_c   ( naif_state, "vdotg_c"                                      );
       return     ( 0.                                             );
       
       }

@@ -45,7 +45,8 @@
    #undef    unorm_c
 
 
-   void unorm_c ( ConstSpiceDouble     v1[3],
+   void unorm_c ( void               * naif_state,
+                  ConstSpiceDouble     v1[3],
                   SpiceDouble          vout[3],
                   SpiceDouble        * vmag    ) 
 
@@ -138,7 +139,7 @@
    value of what vmag is pointing at is *vmag.
    */
 
-   *vmag = vnorm_c( v1 );
+   *vmag = vnorm_c( naif_state, v1 );
 
 
 

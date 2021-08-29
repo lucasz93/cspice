@@ -51,7 +51,8 @@
    #undef    lmpool_c
 
 
-   void lmpool_c ( const void  * cvals,
+   void lmpool_c ( void        * naif_state,
+                   const void  * cvals,
                    SpiceInt      lenvals,
                    SpiceInt      n       ) 
 
@@ -226,7 +227,7 @@
    Make sure the input string pointer is non-null and that the
    length lenvals is sufficient.  
    */
-   CHKOSTR ( CHK_STANDARD, "lmpool_c", cvals, lenvals );
+   CHKOSTR ( naif_state, CHK_STANDARD, "lmpool_c", cvals, lenvals );
 
 
    /*
@@ -234,9 +235,9 @@
    */
    C2F_MapStrArr ( "lmpool_c", n, lenvals, cvals, &fCvalsLen, &fCvalsArr );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "lmpool_c" );
+      chkout_c ( naif_state, "lmpool_c" );
       return;
    }
 
@@ -244,7 +245,8 @@
    /*
    Call the f2c'd routine.
    */
-   lmpool_ (  ( char       * ) fCvalsArr,
+   lmpool_ (  naif_state,
+              ( char       * ) fCvalsArr,
               ( integer    * ) &n,
               ( ftnlen       ) fCvalsLen );
 
@@ -254,7 +256,7 @@
    */
    free ( fCvalsArr );
    
-   chkout_c ( "lmpool_c" );
+   chkout_c ( naif_state, "lmpool_c" );
 
 } /* End lmpool_c */
 

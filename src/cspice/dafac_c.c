@@ -49,7 +49,8 @@
    #include "SpiceZst.h"
    #undef   dafac_c
 
-   void dafac_c ( SpiceInt      handle,
+   void dafac_c ( void        * naif_state,
+                  SpiceInt      handle,
                   SpiceInt      n,
                   SpiceInt      lenvals,
                   const void  * buffer  ) 
@@ -223,7 +224,7 @@
    Make sure the input string pointer for the `buffer' array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR ( CHK_STANDARD, "dafac_c", buffer, lenvals );
+   CHKOSTR ( naif_state, CHK_STANDARD, "dafac_c", buffer, lenvals );
    
    /*
    The input buffer contains C-style strings; we must pass a 
@@ -232,9 +233,9 @@
    C2F_MapStrArr ( "dafac_c", 
                    n, lenvals, buffer, &fCvalsLen, &fCvalsArr );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "dafac_c" );
+      chkout_c ( naif_state, "dafac_c" );
       return;
    }
 
@@ -242,7 +243,8 @@
    /*
    Call the f2c'd routine.
    */
-   dafac_ ( ( integer * ) &handle,
+   dafac_ ( naif_state,
+            ( integer * ) &handle,
             ( integer * ) &n,
             ( char    * ) fCvalsArr,
             ( ftnlen    ) fCvalsLen );
@@ -253,6 +255,6 @@
    free ( fCvalsArr );
 
 
-   chkout_c ( "dafac_c" );
+   chkout_c ( naif_state, "dafac_c" );
 
 } /* End dafac_c */

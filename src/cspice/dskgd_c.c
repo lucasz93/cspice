@@ -54,7 +54,8 @@
    #undef dskgd_c
 
 
-   void dskgd_c ( SpiceInt               handle,
+   void dskgd_c ( void                 * naif_state,
+                  SpiceInt               handle,
                   ConstSpiceDLADescr   * dladsc,
                   SpiceDSKDescr        * dskdsc ) 
 /*
@@ -408,8 +409,8 @@
             }
             else if ( corsys == SPICE_DSK_CYLSYS )
             {
-               setmsg_c ( "Coordinate system was Cylindrical." );
-               sigerr_c ( "SPICE(NOTSUPPORTED)" );
+               setmsg_c ( naif_state, "Coordinate system was Cylindrical." );
+               sigerr_c ( naif_state, "SPICE(NOTSUPPORTED)" );
             }
             else if ( corsys == SPICE_DSK_RECSYS )
             {
@@ -599,7 +600,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -622,7 +623,8 @@
    /*
    Call the f2c'd "get DSK descriptor" routine.
    */
-   dskgd_ ( ( integer    * ) &handle,
+   dskgd_ ( naif_state,
+            ( integer    * ) &handle,
             ( integer    * ) fDLADescr,
             ( doublereal * ) fDSKDescr  );
 
@@ -651,6 +653,6 @@
    dskdsc->start  = fDSKDescr[SPICE_DSK_BTMIDX];
    dskdsc->stop   = fDSKDescr[SPICE_DSK_ETMIDX];
 
-   chkout_c ( "dskgd_c" );
+   chkout_c ( naif_state, "dskgd_c" );
 
 } /* End dskgd_c */

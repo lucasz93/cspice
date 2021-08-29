@@ -57,7 +57,8 @@
    #include "SpiceZmc.h"
    #include "zzalloc.h"
 
-   void gfsep_c (  ConstSpiceChar     * targ1,
+   void gfsep_c (  void               * naif_state,
+                   ConstSpiceChar     * targ1,
                    ConstSpiceChar     * shape1,
                    ConstSpiceChar     * frame1,
                    ConstSpiceChar     * targ2,
@@ -930,7 +931,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
       {
       return;
       }
@@ -940,26 +941,26 @@
    /*
    Make sure cell data types are d.p.
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "gfsep_c", SPICE_DP, cnfine, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "gfsep_c", SPICE_DP, cnfine, result );
 
    /*
    Initialize the input cells if necessary.
    */
-   CELLINIT2 ( cnfine, result );
+   CELLINIT2 ( naif_state, cnfine, result );
 
    /*
    Check the input strings to make sure each pointer is non-null
    and each string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gfsep_c", targ1  );
-   CHKFSTR ( CHK_STANDARD, "gfsep_c", shape1 );
-   CHKFSTR ( CHK_STANDARD, "gfsep_c", frame1 );
-   CHKFSTR ( CHK_STANDARD, "gfsep_c", targ2  );
-   CHKFSTR ( CHK_STANDARD, "gfsep_c", shape2 );
-   CHKFSTR ( CHK_STANDARD, "gfsep_c", frame2 );
-   CHKFSTR ( CHK_STANDARD, "gfsep_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "gfsep_c", obsrvr );
-   CHKFSTR ( CHK_STANDARD, "gfsep_c", relate );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfsep_c", targ1  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfsep_c", shape1 );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfsep_c", frame1 );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfsep_c", targ2  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfsep_c", shape2 );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfsep_c", frame2 );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfsep_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfsep_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfsep_c", relate );
 
    /*
    Check the workspace size; some mallocs have a violent
@@ -969,11 +970,11 @@
 
    if ( nintvls < 1 )
       {
-      setmsg_c ( "The specified workspace interval count # was "
+      setmsg_c ( naif_state, "The specified workspace interval count # was "
                  "less than the minimum allowed value of one (1)." );
-      errint_c ( "#",  nintvls                              );
-      sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                   );
-      chkout_c ( "gfsep_c"                                 );
+      errint_c ( naif_state, "#",  nintvls                              );
+      sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                   );
+      chkout_c ( naif_state, "gfsep_c"                                 );
       return;
       }
 
@@ -987,15 +988,15 @@
 
    nBytes = ( nintvls + SPICE_CELL_CTRLSZ ) * nw * sizeof(SpiceDouble);
 
-   work   = (doublereal *) alloc_SpiceMemory( nBytes );
+   work   = (doublereal *) alloc_SpiceMemory( naif_state, nBytes );
 
    if ( !work )
       {
-      setmsg_c ( "Workspace allocation of # bytes failed due to "
+      setmsg_c ( naif_state, "Workspace allocation of # bytes failed due to "
                  "malloc failure"                               );
-      errint_c ( "#",  nBytes                                   );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                          );
-      chkout_c ( "gfsep_c"                                      );
+      errint_c ( naif_state, "#",  nBytes                                   );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                          );
+      chkout_c ( naif_state, "gfsep_c"                                      );
       return;
       }
 
@@ -1003,7 +1004,8 @@
    Let the f2'd routine do the work.
    */
 
-   gfsep_( ( char          * ) targ1,
+   gfsep_( naif_state,
+           ( char          * ) targ1,
            ( char          * ) shape1,
            ( char          * ) frame1,
            ( char          * ) targ2,
@@ -1033,18 +1035,18 @@
    /*
    De-allocate the workspace.
    */
-   free_SpiceMemory( work );
+   free_SpiceMemory( naif_state, work );
 
    /*
    Sync the output cell.
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
       {
-      zzsynccl_c ( F2C, result ) ;
+      zzsynccl_c ( naif_state, F2C, result ) ;
       }
 
    ALLOC_CHECK;
 
-   chkout_c ( "gfsep_c" );
+   chkout_c ( naif_state, "gfsep_c" );
 
    } /* End gfsep_c */

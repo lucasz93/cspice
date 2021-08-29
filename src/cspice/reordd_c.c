@@ -47,7 +47,8 @@
    #include "SpiceZim.h"
    #undef    reordd_c
 
-   void reordd_c ( ConstSpiceInt      * iorder,
+   void reordd_c ( void               * naif_state,
+                   ConstSpiceInt      * iorder,
                    SpiceInt             ndim,
                    SpiceDouble        * array  ) 
 
@@ -197,13 +198,13 @@
 
    if ( ordvec == 0 )
    {
-      chkin_c  ( "reordd_c"                                ); 
-      setmsg_c ( "Failure on malloc call to create array "
+      chkin_c  ( naif_state, "reordd_c"                                ); 
+      setmsg_c ( naif_state, "Failure on malloc call to create array "
                  "for Fortran-style order vector.  Tried "
                  "to allocate # bytes."                    );
-      errint_c ( "#",  vSize                               );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                     );
-      chkout_c ( "reordd_c"                                );
+      errint_c ( naif_state, "#",  vSize                               );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                     );
+      chkout_c ( naif_state, "reordd_c"                                );
       return;
    }
 
@@ -213,7 +214,8 @@
    }
 
 
-   reordd_ ( ( integer    * ) ordvec,
+   reordd_ ( naif_state,
+             ( integer    * ) ordvec,
              ( integer    * ) &ndim,
              ( doublereal * ) array );
 

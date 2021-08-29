@@ -1,6 +1,6 @@
 /*
 
--Procedure sigerr_c ( Signal Error Condition )
+-Procedure sigerr_c ( naif_state, Signal Error Condition )
 
 -Abstract
  
@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void sigerr_c ( ConstSpiceChar * message )
+   void sigerr_c ( void           * naif_state,
+                   ConstSpiceChar * message )
 
 /*
 
@@ -164,10 +165,10 @@
  
        if ( x > MAXVAL )
        {
-          setmsg_c ( "Variable x = #; maximum allowed value is #" );
+          setmsg_c ( naif_state, "Variable x = #; maximum allowed value is #" );
           errdp_c  ( "#",  x                                      );
           errdp_c  ( "#",  MAXVAL                                 );
-          sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                     ) ;
+          sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                     ) ;
           return; 
        }
         
@@ -217,12 +218,13 @@
    Check the input string to make sure the pointer is non-null 
    and the string length is non-zero.   
    */
-   CHKFSTR ( CHK_DISCOVER, "sigerr_c", message );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "sigerr_c", message );
 
    /*
    Call the f2c'd Fortran routine.
    */
-   sigerr_ ( ( char  * ) message,
+   sigerr_ ( naif_state,
+             ( char  * ) message,
              ( ftnlen  ) strlen(message) );
 
 

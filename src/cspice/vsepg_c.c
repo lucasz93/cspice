@@ -48,7 +48,8 @@
    #include "SpiceUsr.h"
    #undef   vsepg_c
 
-   SpiceDouble vsepg_c ( ConstSpiceDouble * v1,
+   SpiceDouble vsepg_c ( void             * naif_state,
+                         ConstSpiceDouble * v1,
                          ConstSpiceDouble * v2,
                          SpiceInt           ndim )
 
@@ -179,8 +180,8 @@
    SpiceDouble       r2;
    SpiceInt          i;
 
-   mag1 = vnormg_c( v1, ndim);
-   mag2 = vnormg_c( v2, ndim);
+   mag1 = vnormg_c( naif_state, v1, ndim);
+   mag2 = vnormg_c( naif_state, v2, ndim);
 
 
    /*
@@ -191,7 +192,7 @@
       return 0;
       }
 
-   if ( vdotg_c( v1, v2, ndim ) < 0. )
+   if ( vdotg_c( naif_state, v1, v2, ndim ) < 0. )
       {
       r1      = 1./mag1;
       r2      = 1./mag2;
@@ -207,7 +208,7 @@
       return ( 2. * asin (0.5 * mag_dif) );
 
       }
-   else if ( vdotg_c (v1, v2, ndim) > 0. )
+   else if ( vdotg_c (naif_state, v1, v2, ndim) > 0. )
       {
       r1      = 1./mag1;
       r2      = 1./mag2;
@@ -220,10 +221,10 @@
 
       mag_dif = sqrt(mag_dif);
 
-      return ( pi_c() - 2. * asin (0.5 * mag_dif) );
+      return ( pi_c(naif_state) - 2. * asin (0.5 * mag_dif) );
       }
 
-   return ( halfpi_c());
+   return ( halfpi_c(naif_state));
 
 
 

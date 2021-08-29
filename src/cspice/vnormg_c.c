@@ -47,7 +47,8 @@
    #undef    vnormg_c
    
 
-   SpiceDouble vnormg_c ( ConstSpiceDouble   * v1,
+   SpiceDouble vnormg_c ( void               * naif_state,
+                          ConstSpiceDouble   * v1,
                           SpiceInt             ndim ) 
 
 /*
@@ -166,10 +167,10 @@
    if ( ndim <= 0 )
       {
       
-      chkin_c    ( "vnormg_c"                                     );
-      SpiceError ( "Vector dimension less than or equal to zero",
+      chkin_c    ( naif_state, "vnormg_c"                                     );
+      SpiceError ( naif_state, "Vector dimension less than or equal to zero",
                    "BADDIMENSION"                                 );
-      chkout_c   ( "vnormg_c"                                     );
+      chkout_c   ( naif_state, "vnormg_c"                                     );
       return     ( 0.                                             );
       
       }

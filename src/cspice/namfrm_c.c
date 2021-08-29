@@ -46,7 +46,8 @@
    #include "SpiceZmc.h"
    #include "SpiceZst.h"
 
-   void namfrm_c ( ConstSpiceChar   * frname,
+   void namfrm_c ( void             * naif_state,
+                   ConstSpiceChar   * frname,
                    SpiceInt         * frcode  ) 
 
 /*
@@ -178,13 +179,14 @@
    Check the input string to make sure the pointer
    is non-null and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "namfrm_c", frname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "namfrm_c", frname );
    
-   namfrm_ ( ( char    * ) frname,
+   namfrm_ ( naif_state,
+             ( char    * ) frname,
              ( integer * ) frcode,
              ( ftnlen    ) strlen(frname) );
 
 
-   chkout_c ( "namfrm_c" );
+   chkout_c ( naif_state, "namfrm_c" );
 
 } /* End namfrm_c */

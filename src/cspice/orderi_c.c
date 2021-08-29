@@ -47,7 +47,8 @@
    #undef    orderi_c
 
 
-   void orderi_c ( ConstSpiceInt  * array,
+   void orderi_c ( void           * naif_state,
+                   ConstSpiceInt  * array,
                    SpiceInt         ndim,
                    SpiceInt       * iorder ) 
 
@@ -165,7 +166,8 @@
    /*
    Call the f2c'd routine. 
    */
-   orderi_ ( ( integer * ) array,
+   orderi_ ( naif_state,
+             ( integer * ) array,
              ( integer * ) &ndim,
              ( integer * ) iorder );
 

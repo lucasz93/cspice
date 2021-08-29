@@ -48,7 +48,8 @@
    #include "SpiceZfc.h"
    #undef    hrmint_c
 
-   void hrmint_c ( SpiceInt            n,
+   void hrmint_c ( void              * naif_state,
+                   SpiceInt            n,
                    ConstSpiceDouble  * xvals,
                    ConstSpiceDouble  * yvals,
                    SpiceDouble         x,
@@ -256,7 +257,8 @@
    /*
    The f2c'd routine does the work.
    */
-   hrmint_( (integer *   ) &n,
+   hrmint_( naif_state,
+            (integer *   ) &n,
             (doublereal *) xvals,
             (doublereal *) yvals,
             (doublereal *) &x,
@@ -264,6 +266,6 @@
             (doublereal *) f,
             (doublereal *) df);
 
-   chkout_c ( "hrmint_c" );
+   chkout_c ( naif_state, "hrmint_c" );
 
 } /* End hrmint_c */

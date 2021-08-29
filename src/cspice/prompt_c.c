@@ -47,7 +47,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZmc.h"
 
-   SpiceChar * prompt_c ( ConstSpiceChar * prmptStr,
+   SpiceChar * prompt_c ( void           * naif_state,
+                          ConstSpiceChar * prmptStr,
                           SpiceInt         lenout,
                           SpiceChar      * buffer )
 
@@ -211,7 +212,7 @@
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR_VAL ( CHK_STANDARD, "prompt_c", buffer, lenout, NULLCPTR );
+   CHKOSTR_VAL ( naif_state, CHK_STANDARD, "prompt_c", buffer, lenout, NULLCPTR );
 
 
    /*
@@ -270,7 +271,7 @@
    /*
    Done.  Checkout.
    */
-   chkout_c ( "prompt_c");
+   chkout_c ( naif_state, "prompt_c");
 
 
    /*

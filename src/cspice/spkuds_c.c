@@ -47,7 +47,8 @@
    #undef    spkuds_c
 
 
-   void spkuds_c ( ConstSpiceDouble     descr [5],
+   void spkuds_c ( void               * naif_state,
+                   ConstSpiceDouble     descr [5],
                    SpiceInt           * body,
                    SpiceInt           * center,
                    SpiceInt           * frame,
@@ -198,7 +199,8 @@
    chkin_c ( naif_state, "spkuds_c" );
 
 
-   spkuds_ (  ( doublereal  * ) descr,
+   spkuds_ (  naif_state,
+              ( doublereal  * ) descr,
               ( integer     * ) body,
               ( integer     * ) center,
               ( integer     * ) frame,
@@ -209,7 +211,7 @@
               ( integer     * ) end    );
                  
               
-   chkout_c ( "spkuds_c" );
+   chkout_c ( naif_state, "spkuds_c" );
 
 } /* End spkuds_c */
 

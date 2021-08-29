@@ -52,7 +52,8 @@
    #include "__cspice_state.h"
 
 
-   void zzgfsavh_c ( SpiceBoolean status ) 
+   void zzgfsavh_c ( void         * naif_state,
+                     SpiceBoolean   status ) 
 
 /*
 
@@ -128,13 +129,13 @@
 */
 
 { /* Begin zzgfsavh_c */
-   cspice_user_state_t* user = &__cspice_get_state()->user;
+   cspice_t *state = (cspice_t *)naif_state;
 
    /*
    Simply save the input status value. 
    */
 
-   user->zzgfsavh.signalStatus = status;
+   state->user.zzgfsavh.signalStatus = status;
 
 
 } /* End zzgfsavh_c */
@@ -192,7 +193,7 @@
  
 */
 
-   SpiceBoolean zzgfgeth_c ( void ) 
+   SpiceBoolean zzgfgeth_c ( void     * naif_state ) 
 
 /*
 
@@ -265,13 +266,13 @@
 */
 
 { /* Begin zzgfgeth_c */
-   cspice_user_state_t* user = &__cspice_get_state()->user;
+   cspice_t *state = (cspice_t *)naif_state;
 
    /*
    Simply return the saved status value. 
    */
 
-   return ( user->zzgfsavh.signalStatus );
+   return ( state->user.zzgfsavh.signalStatus );
 
 
 } /* End zzgfgeth_c */

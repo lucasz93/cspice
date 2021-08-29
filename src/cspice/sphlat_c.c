@@ -44,7 +44,8 @@
    #include "SpiceUsr.h"
 
 
-   void sphlat_c ( SpiceDouble     r, 
+   void sphlat_c ( void          * naif_state,
+                   SpiceDouble     r, 
                    SpiceDouble     colat, 
                    SpiceDouble     lons,
                    SpiceDouble   * radius,
@@ -163,7 +164,7 @@
    SpiceDouble    lattud;
 
    rr     = r;
-   lattud = halfpi_c() - colat;
+   lattud = halfpi_c(naif_state) - colat;
 
 
    /* Move the results to the output variables. */

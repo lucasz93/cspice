@@ -55,7 +55,8 @@
    #undef dsksrf_c
 
 
-   void dsksrf_c ( ConstSpiceChar  * dsk,
+   void dsksrf_c ( void            * naif_state,
+                   ConstSpiceChar  * dsk,
                    SpiceInt          bodyid,
                    SpiceCell       * srfids ) 
 /*
@@ -258,23 +259,24 @@
    Check the input string to make sure the pointer is non-null and
    the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "dsksrf_c", dsk );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dsksrf_c", dsk );
 
    /*
    Make sure cell data type is integer.
    */
-   CELLTYPECHK ( CHK_STANDARD, "dsksrf_c", SPICE_INT, srfids );
+   CELLTYPECHK ( naif_state, CHK_STANDARD, "dsksrf_c", SPICE_INT, srfids );
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( srfids );
+   CELLINIT ( naif_state, srfids );
 
    /*
    The f2c'd routine will operate on the integer array associated
    with the input cell. 
    */
-   dsksrf_ ( (char     *) dsk,
+   dsksrf_ ( naif_state,
+             (char     *) dsk,
              (integer  *) &bodyid,
              (integer  *) srfids->base,
              (ftnlen    ) strlen(dsk)   );
@@ -282,11 +284,11 @@
    /*
    Sync the cell. 
    */      
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, srfids );
+      zzsynccl_c ( naif_state, F2C, srfids );
    }
 
-   chkout_c ( "dsksrf_c" );
+   chkout_c ( naif_state, "dsksrf_c" );
 
 } /* End dsksrf_c */

@@ -48,7 +48,7 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void ldpool_c ( ConstSpiceChar * filename )
+   void ldpool_c ( void *naif_state, ConstSpiceChar * filename )
 
 /*
 
@@ -187,17 +187,17 @@
    Check the input string filename to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ldpool_c", filename );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ldpool_c", filename );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   ldpool_ ( ( char   * ) filename, 
+   ldpool_ ( naif_state, ( char   * ) filename, 
              ( ftnlen   ) strlen(filename) );
 
 
-   chkout_c ( "ldpool_c" );
+   chkout_c ( naif_state, "ldpool_c" );
    
 
 } /* End ldpool_c */

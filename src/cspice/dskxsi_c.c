@@ -60,7 +60,8 @@
    #undef dskxsi_c
 
 
-   void dskxsi_c ( SpiceBoolean         pri,
+   void dskxsi_c ( void               * naif_state,
+                   SpiceBoolean         pri,
                    ConstSpiceChar     * target,
                    SpiceInt             nsurf,
                    ConstSpiceInt        srflst [],
@@ -621,14 +622,14 @@
                    dsk1, filtyp, source, &handle, &found );
          if ( !found )
          {
-            sigerr_c ( "SPICE(NOINFO)" );
+            sigerr_c ( naif_state, "SPICE(NOINFO)" );
          }
 
          dlabfs_c ( handle, &dladsc, &found );
 
          if ( !found )
          {
-            sigerr_c ( "SPICE(NOSEGMENT)" );
+            sigerr_c ( naif_state, "SPICE(NOSEGMENT)" );
          }
 
          dskgd_c ( handle, &dladsc, &dskdsc );
@@ -641,18 +642,18 @@
 
          if ( !found )
          {
-            setmsg_c ( "Cannot map body ID # to a name." );
-            errint_c ( "#", bodyid                       );
-            sigerr_c ( "SPICE(BODYNAMENOTFOUND)"         );
+            setmsg_c ( naif_state, "Cannot map body ID # to a name." );
+            errint_c ( naif_state, "#", bodyid                       );
+            sigerr_c ( naif_state, "SPICE(BODYNAMENOTFOUND)"         );
          }
 
          frmnam_c ( framid, FRNMLN, fixref );
 
          if ( eqstr_c( fixref, " " ) )
          {
-            setmsg_c ( "Cannot map frame ID # to a name." );
-            errint_c ( "#", framid                        );
-            sigerr_c ( "SPICE(BODYNAMENOTFOUND)"          );
+            setmsg_c ( naif_state, "Cannot map frame ID # to a name." );
+            errint_c ( naif_state, "#", framid                        );
+            sigerr_c ( naif_state, "SPICE(BODYNAMENOTFOUND)"          );
          }
 
          /.
@@ -770,13 +771,13 @@
                the intercept. Make sure these agree
                well with those of the vertex.
                ./
-               reclat_c ( xpt, latcrd, latcrd+1, latcrd+2 );
+               reclat_c ( naif_state,xpt, latcrd, latcrd+1, latcrd+2 );
                radius = latcrd[0];
 
                /.
                Recover the vertex longitude and latitude.
                ./
-               reclat_c ( vtxarr[i], &vrad, &vlon, &vlat  );
+               reclat_c ( naif_state,vtxarr[i], &vrad, &vlon, &vlat  );
                latrec_c ( radius,     vlon,  vlat, xyzhit );
 
                d = vdist_c( xpt, xyzhit );
@@ -900,8 +901,8 @@
    at least one data character: that is, one character 
    preceding the null terminator.
    */
-   CHKFSTR ( CHK_STANDARD, "dskxsi_c", target );
-   CHKFSTR ( CHK_STANDARD, "dskxsi_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dskxsi_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "dskxsi_c", fixref );
 
 
    /*
@@ -910,7 +911,8 @@
    */
    priFlag = (logical)pri;
 
-   dskxsi_ ( (logical     *) &priFlag,
+   dskxsi_ ( naif_state,
+             (logical     *) &priFlag,
              (char        *) target,
              (integer     *) &nsurf,
              (integer     *) srflst,
@@ -975,6 +977,6 @@
    *found = (SpiceBoolean) foundFlag;
 
 
-   chkout_c ( "dskxsi_c" );
+   chkout_c ( naif_state, "dskxsi_c" );
 
 } /* End dskxsi_c */

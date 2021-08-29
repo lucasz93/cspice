@@ -47,7 +47,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void gipool_c ( ConstSpiceChar * name,
+   void gipool_c ( void           * naif_state,
+                   ConstSpiceChar * name,
                    SpiceInt         start,
                    SpiceInt         room,
                    SpiceInt       * n,
@@ -293,14 +294,15 @@
    Check the input string name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gipool_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gipool_c", name );
 
 
    /*
    Call the f2c'd routine
    */
 
-   gipool_( ( char    * ) name,
+   gipool_( naif_state,
+            ( char    * ) name,
             ( integer * ) &start,
             ( integer * ) &room,
             ( integer * ) n,
@@ -313,7 +315,7 @@
    *found = yes;
 
 
-   chkout_c ( "gipool_c");
+   chkout_c ( naif_state, "gipool_c");
 
 
 } /* End gipool_c */

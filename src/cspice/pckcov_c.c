@@ -53,7 +53,8 @@
    #include "SpiceZmc.h"
 
 
-   void pckcov_c ( ConstSpiceChar   * pck,
+   void pckcov_c ( void             * naif_state,
+                   ConstSpiceChar   * pck,
                    SpiceInt           idcode,
                    SpiceCell        * cover   ) 
 /*
@@ -437,7 +438,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return; 
    }
@@ -448,22 +449,23 @@
    Check the input string `pck' to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pckcov_c", pck );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pckcov_c", pck );
    
    /*
    Make sure cell data type is d.p. 
    */
-   CELLTYPECHK ( CHK_STANDARD, "pckcov_c", SPICE_DP, cover );
+   CELLTYPECHK ( naif_state, CHK_STANDARD, "pckcov_c", SPICE_DP, cover );
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( cover );   
+   CELLINIT ( naif_state, cover );   
 
    /*
    Call the f2c'd Fortran routine.
    */
-   pckcov_ ( ( char       * ) pck,
+   pckcov_ ( naif_state,
+             ( char       * ) pck,
              ( integer    * ) &idcode,
              ( doublereal * ) (cover->base),
              ( ftnlen       ) strlen(pck)   );
@@ -471,13 +473,13 @@
    /*
    Sync the output cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, cover );
+      zzsynccl_c ( naif_state, F2C, cover );
    }
 
 
-   chkout_c ( "pckcov_c" );
+   chkout_c ( naif_state, "pckcov_c" );
 
 } /* End pckcov_c */
 

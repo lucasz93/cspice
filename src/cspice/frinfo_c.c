@@ -46,7 +46,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void frinfo_c ( SpiceInt       frcode,
+   void frinfo_c ( void          *naif_state,
+                   SpiceInt       frcode,
                    SpiceInt      *cent,
                    SpiceInt      *frclss,
                    SpiceInt      *clssid,
@@ -181,7 +182,8 @@
    chkin_c ( naif_state, "frinfo_c" );
 
 
-   frinfo_ ( ( integer  * ) &frcode,
+   frinfo_ ( naif_state,
+             ( integer  * ) &frcode,
              ( integer  * ) cent,
              ( integer  * ) frclss,
              ( integer  * ) clssid,
@@ -190,7 +192,7 @@
 
    *found = fnd;
 
-   chkout_c ( "frinfo_c" );
+   chkout_c ( naif_state, "frinfo_c" );
 
 } /* End frinfo_c */
 

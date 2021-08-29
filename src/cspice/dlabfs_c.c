@@ -50,7 +50,8 @@
    #include "SpiceDLA.h"
 
 
-   void dlabfs_c ( SpiceInt          handle,
+   void dlabfs_c ( void            * naif_state,
+                   SpiceInt          handle,
                    SpiceDLADescr   * descr,
                    SpiceBoolean    * found  ) 
 
@@ -277,7 +278,8 @@
    /*
    Call the f2c'd routine.
    */
-   dlabfs_ ( ( integer    * ) &handle,
+   dlabfs_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) fDLADescr,
              ( logical    * ) &fnd       );
 
@@ -307,6 +309,6 @@
    }
 
 
-   chkout_c ( "dlabfs_c" );
+   chkout_c ( naif_state, "dlabfs_c" );
 
 } /* End dlabfs_c */

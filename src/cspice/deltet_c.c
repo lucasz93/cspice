@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void deltet_c ( SpiceDouble      epoch,
+   void deltet_c ( void           * naif_state,
+                   SpiceDouble      epoch,
                    ConstSpiceChar * eptype,
                    SpiceDouble    * delta ) 
 
@@ -183,7 +184,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() ) 
+   if ( return_c(naif_state) ) 
    {
       return;
    }
@@ -194,18 +195,19 @@
    Check the input string `eptype' to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "deltet_c", eptype );
+   CHKFSTR ( naif_state, CHK_STANDARD, "deltet_c", eptype );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   deltet_ ( ( doublereal * ) &epoch,
+   deltet_ ( naif_state,
+             ( doublereal * ) &epoch,
              ( char       * ) eptype,
              ( doublereal * ) delta,
              ( ftnlen       ) strlen(eptype) );
 
 
-   chkout_c ( "deltet_c" );
+   chkout_c ( naif_state, "deltet_c" );
 
 } /* End deltet_c */

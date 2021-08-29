@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void chkout_c ( ConstSpiceChar  * module )
+   void chkout_c ( void            * naif_state, 
+                   ConstSpiceChar  * module )
 
 /*
 
@@ -103,7 +104,7 @@
    have a call to chkin_c as the second executable statement.
    The first executable statements should be:
 
-      if ( return_c() )
+      if ( return_c(naif_state) )
          {
          return;
          }
@@ -162,7 +163,7 @@
 -Restrictions
 
    Routines that call this routine must call chkin_c as the second
-   executable statement. (The first is a call to return_c() ).
+   executable statement. (The first is a call to return_c(naif_state) ).
 
 -Literature_References
 
@@ -203,12 +204,13 @@
    error is found, this wrapper will be called recursively, but that
    should not cause a problem.
    */
-   CHKFSTR ( CHK_DISCOVER, "chkout_c", module );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "chkout_c", module );
 
    /*
    Call the f2c'd Fortran routine.
    */
-   chkout_ ( ( char   * ) module,
+   chkout_ ( naif_state,
+             ( char   * ) module,
              ( ftnlen   ) strlen(module) );
 
 

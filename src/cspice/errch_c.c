@@ -1,6 +1,6 @@
 /*
 
--Procedure errch_c  ( Insert String into Error Message Text )
+-Procedure errch_c  ( naif_state, Insert String into Error Message Text )
 
 -Abstract
 
@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
 
 
-   void errch_c ( ConstSpiceChar * marker,
+   void errch_c ( void           * naif_state,
+                  ConstSpiceChar * marker,
                   ConstSpiceChar * string )
 
 /*
@@ -155,9 +156,9 @@
 
            ./
 
-           setmsg_c ( "File open error.  File is #." );
-           errch_c  ( "#",  FILE                     );
-           sigerr_c ( "SPICE(FILEOPENFAILED)"        );
+           setmsg_c ( naif_state, "File open error.  File is #." );
+           errch_c  ( naif_state, "#",  FILE                     );
+           sigerr_c ( naif_state, "SPICE(FILEOPENFAILED)"        );
 
 
    2)   Same example as (1), except this time we'll use a better-
@@ -171,9 +172,9 @@
            file name.
            ./
 
-           setmsg_c ( "File open error. File is FILENAME.");
-           errch_c  ( "FILENAME",  FILE                   );
-           sigerr_c ( "SPICE(FILEOPENFAILED)"             );
+           setmsg_c ( naif_state, "File open error. File is FILENAME.");
+           errch_c  ( naif_state, "FILENAME",  FILE                   );
+           sigerr_c ( naif_state, "SPICE(FILEOPENFAILED)"             );
 
 
    3)   Same example as (2), except this time there's a problem with
@@ -184,8 +185,8 @@
            The character string variable FILE contains the
            file name.
            ./
-           setmsg_c ( "File open error. File is FILENAME." );
-           errch_c  ( "FILENAME",  FILE                    );
+           setmsg_c ( naif_state, "File open error. File is FILENAME." );
+           errch_c  ( naif_state, "FILENAME",  FILE                    );
 
         sets the long error message to
 
@@ -231,14 +232,15 @@
    and the string lengths are non-zero.  Since we don't check in
    prior to this, use the discovery check-in option.
    */
-   CHKFSTR ( CHK_DISCOVER, "errch_c", marker );
-   CHKFSTR ( CHK_DISCOVER, "errch_c", string );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "errch_c", marker );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "errch_c", string );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   errch_ ( ( char * ) marker,
+   errch_ ( naif_state,
+            ( char * ) marker,
             ( char * ) string,
             ( ftnlen ) strlen(marker),
             ( ftnlen ) strlen(string) );

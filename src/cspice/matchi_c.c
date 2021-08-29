@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   SpiceBoolean matchi_c ( ConstSpiceChar      * string,
+   SpiceBoolean matchi_c ( void                * naif_state,
+                           ConstSpiceChar      * string,
                            ConstSpiceChar      * templ,
                            SpiceChar             wstr,
                            SpiceChar             wchr   )
@@ -184,14 +185,15 @@
    Check the input strings string and templ to make sure the pointers
    are non-null and the strings are non-empty.
    */
-   CHKFSTR_VAL ( CHK_DISCOVER, "matchi_c", string, SPICEFALSE );
-   CHKFSTR_VAL ( CHK_DISCOVER, "matchi_c", templ,  SPICEFALSE );
+   CHKFSTR_VAL ( naif_state, CHK_DISCOVER, "matchi_c", string, SPICEFALSE );
+   CHKFSTR_VAL ( naif_state, CHK_DISCOVER, "matchi_c", templ,  SPICEFALSE );
 
    /*
    Call the f2c'd routine if we got this far.
    */
    
-   return (   matchi_ (  ( char    * ) string,
+   return (   matchi_ (  naif_state,
+                         ( char    * ) string,
                          ( char    * ) templ,
                          ( char    * ) &wstr,
                          ( char    * ) &wchr,

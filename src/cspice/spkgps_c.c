@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void spkgps_c ( SpiceInt           targ,
+   void spkgps_c ( void             * naif_state,
+                   SpiceInt           targ,
                    SpiceDouble        et,
                    ConstSpiceChar   * ref,
                    SpiceInt           obs,
@@ -263,13 +264,14 @@
    Check the input string ref to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkgps_c", ref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkgps_c", ref );
 
    /*
    Call the f2c'd routine.
    */
    
-   spkgps_ (  ( integer     * ) &targ,
+   spkgps_ (  naif_state,
+              ( integer     * ) &targ,
               ( doublereal  * ) &et,
               ( char        * ) ref,
               ( integer     * ) &obs,
@@ -277,6 +279,6 @@
               ( doublereal  * ) lt,
               ( ftnlen        ) strlen(ref)  );
               
-   chkout_c ( "spkgps_c" );
+   chkout_c ( naif_state, "spkgps_c" );
 
 } /* End spkgps_c */

@@ -45,7 +45,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void gfstol_c ( SpiceDouble value )
+   void gfstol_c ( void *naif_state, SpiceDouble value )
 
 /*
 
@@ -285,7 +285,7 @@
    Participate in error tracing.
    */
 
-   if ( return_c() )
+   if ( return_c(naif_state) )
       {
       return;
       }
@@ -296,8 +296,8 @@
    Let the f2c'd routine do the work.
    */
 
-   gfstol_ (  (doublereal * ) &value );
+   gfstol_ ( naif_state, (doublereal * ) &value );
 
-   chkout_c ( "gfstol_c" );
+   chkout_c ( naif_state, "gfstol_c" );
 
    } /* End gfstol_c */

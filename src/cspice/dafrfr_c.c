@@ -45,7 +45,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void dafrfr_c ( SpiceInt     handle,
+   void dafrfr_c ( void       * naif_state,
+                   SpiceInt     handle,
                    SpiceInt     lenout,
                    SpiceInt   * nd,
                    SpiceInt   * ni,
@@ -221,7 +222,8 @@
    */
    chkin_c ( naif_state, "dafrfr_c" );
 
-   dafrfr_ ( (integer *) &handle,
+   dafrfr_ ( naif_state,
+             (integer *) &handle,
              (integer *) nd,
              (integer *) ni,
              (char    *) ifname,
@@ -236,7 +238,7 @@
    F2C_ConvertStr ( lenout, ifname );
 
 
-   chkout_c ( "dafrfr_c" );
+   chkout_c ( naif_state, "dafrfr_c" );
 
 } /* End dafrfr_c */
 

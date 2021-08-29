@@ -47,7 +47,8 @@
    #undef    vdot_c
    
 
-   SpiceDouble vdot_c ( ConstSpiceDouble   v1[3], 
+   SpiceDouble vdot_c ( void             * naif_state,
+                        ConstSpiceDouble   v1[3], 
                         ConstSpiceDouble   v2[3] )
 /*
 

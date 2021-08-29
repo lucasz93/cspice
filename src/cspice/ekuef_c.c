@@ -47,7 +47,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void ekuef_c ( SpiceInt handle ) 
+   void ekuef_c ( void *naif_state, SpiceInt handle ) 
 
 /*
 
@@ -137,9 +137,9 @@
    /*
    Call the f2c'd Fortran routine.  
    */
-   ekuef_ ( (integer *) &handle );
+   ekuef_ ( naif_state, (integer *) &handle );
 
 
-   chkout_c ( "ekuef_c" );
+   chkout_c ( naif_state, "ekuef_c" );
 
 } /* End ekuef_c */

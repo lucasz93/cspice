@@ -48,7 +48,8 @@
    #include "SpiceZim.h"
    #undef   isrchd_c
 
-   SpiceInt isrchd_c ( SpiceDouble         value,
+   SpiceInt isrchd_c ( void              * naif_state,
+                       SpiceDouble         value,
                        SpiceInt            ndim,
                        ConstSpiceDouble  * array  ) 
 
@@ -143,7 +144,8 @@
    /*
    Call the f2c'd routine. 
    */
-   loc =  (SpiceInt) isrchd_ ( (doublereal *) &value, 
+   loc =  (SpiceInt) isrchd_ ( naif_state,
+                               (doublereal *) &value, 
                                (integer    *) &ndim, 
                                (doublereal *) array   ); 
 

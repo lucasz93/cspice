@@ -45,7 +45,7 @@
    #include "SpiceUsr.h"
    #undef    vzerog_c
 
-   SpiceBoolean vzerog_c ( ConstSpiceDouble * v, SpiceInt ndim )
+   SpiceBoolean vzerog_c ( void * naif_state, ConstSpiceDouble * v, SpiceInt ndim )
 
 /*
 

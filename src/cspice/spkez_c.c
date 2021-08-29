@@ -52,7 +52,8 @@
    #include "SpiceZst.h"
 
 
-   void spkez_c ( SpiceInt            targ,
+   void spkez_c ( void               *naif_state,
+                  SpiceInt            targ,
                   SpiceDouble         et,
                   ConstSpiceChar     *ref,
                   ConstSpiceChar     *abcorr,
@@ -861,8 +862,8 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkez_c", ref    );
-   CHKFSTR ( CHK_STANDARD, "spkez_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkez_c", ref    );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkez_c", abcorr );
 
 
    /*
@@ -870,7 +871,8 @@
    type defined by f2c.
    */
 
-   spkez_ (  ( integer    * )  &targ,
+   spkez_ (  naif_state,
+             ( integer    * )  &targ,
              ( doublereal * )  &et,
              ( char       * )  ref,
              ( char       * )  abcorr,
@@ -881,7 +883,7 @@
              ( ftnlen       )  strlen(abcorr) );
 
 
-   chkout_c ( "spkez_c" );
+   chkout_c ( naif_state, "spkez_c" );
 
 
 } /* End spkez_c */

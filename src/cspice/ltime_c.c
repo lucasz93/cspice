@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
 
 
-   void ltime_c ( SpiceDouble        etobs,
+   void ltime_c ( void             * naif_state,
+                  SpiceDouble        etobs,
                   SpiceInt           obs,
                   ConstSpiceChar   * dir,
                   SpiceInt           targ,
@@ -298,13 +299,14 @@
    Check the input direction string.  The pointer must be non-null
    and the string length must be at least 1.
    */
-   CHKFSTR ( CHK_STANDARD, "ltime_c", dir );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ltime_c", dir );
 
 
    /*
    Call the f2c'd routine.
    */
-   ltime_ (  ( doublereal   * ) &etobs,
+   ltime_ (  naif_state,
+             ( doublereal   * ) &etobs,
              ( integer      * ) &obs,   
              ( char         * ) dir,
              ( integer      * ) &targ,   
@@ -313,6 +315,6 @@
              ( ftnlen         ) strlen(dir) );
       
       
-   chkout_c ( "ltime_c" );
+   chkout_c ( naif_state, "ltime_c" );
 
 } /* End ltime_c */

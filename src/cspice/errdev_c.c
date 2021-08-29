@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void errdev_c ( ConstSpiceChar * op,
+   void errdev_c ( void           * naif_state,
+                   ConstSpiceChar * op,
                    SpiceInt         lenout,
                    SpiceChar      * device )
 
@@ -203,7 +204,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() ) 
+   if ( return_c(naif_state) ) 
       {
       return;
       }
@@ -215,29 +216,30 @@
    Check the input string op to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "errdev_c", op );
+   CHKFSTR ( naif_state, CHK_STANDARD, "errdev_c", op );
 
 
-   if( eqstr_c (op, "SET") )
+   if( eqstr_c (naif_state, op, "SET") )
       {
 
       /*
       The operation is SET. The argument "device" will be an input
       string.
       */
-      CHKFSTR ( CHK_STANDARD, "errdev_c", device );
+      CHKFSTR ( naif_state, CHK_STANDARD, "errdev_c", device );
 
       /*
       Call the f2c'd Fortran routine.
       */
-      errdev_ ( ( char   * ) op,
+      errdev_ ( naif_state,
+                ( char   * ) op,
                 ( char   * ) device,
                 ( ftnlen   ) strlen(op),
                 ( ftnlen   ) strlen(device) );
 
       }
 
-   else if ( eqstr_c (op, "GET") )
+   else if ( eqstr_c (naif_state, op, "GET") )
       {
 
       /*
@@ -247,13 +249,14 @@
       output character and a null terminator.  Also check for a null
       pointer.
       */
-      CHKOSTR ( CHK_STANDARD, "errdev_c", device, lenout );
+      CHKOSTR ( naif_state, CHK_STANDARD, "errdev_c", device, lenout );
 
       /*
       After the routine call, create a C string from the
       Fortran output string.
       */
-      errdev_( ( char * ) op,
+      errdev_( naif_state,
+               ( char * ) op,
                ( char * ) device,
                ( ftnlen ) strlen(op),
                ( ftnlen ) lenout-1     );
@@ -264,14 +267,14 @@
 
    else
       {
-      setmsg_c ( "Input argument op had value: # "
+      setmsg_c ( naif_state, "Input argument op had value: # "
                  "Valid choices are GET or SET."   );   
-      errch_c  ( "#",  op                          );
-      sigerr_c ( "SPICE(INVALIDOPERATION)"         );
-      chkout_c ( "errdev_c"                        );
+      errch_c  ( naif_state, "#",  op                          );
+      sigerr_c ( naif_state, "SPICE(INVALIDOPERATION)"         );
+      chkout_c ( naif_state, "errdev_c"                        );
       return;
       }
 
-   chkout_c ( "errdev_c" );
+   chkout_c ( naif_state, "errdev_c" );
 
 } /* End errdev_c */

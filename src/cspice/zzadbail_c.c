@@ -146,13 +146,13 @@
    */
    logical                 retval;
 
-   SpiceBoolean        ( * fPtr ) ();
+   SpiceBoolean        ( * fPtr ) (void*);
             
 
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return ( (logical)SPICEFALSE );
    }
@@ -165,16 +165,16 @@
    list matches that of gfbail_c.
    */
 
-   fPtr = (  SpiceBoolean (*) ()  )  zzadget_c ( naif_state,  ( UDBAIL );
+   fPtr = (  SpiceBoolean (*) (void *)  )  zzadget_c ( naif_state, UDBAIL );
  
    /*
    Call the CSPICE-style bail-out function. 
    */
 
-   retval = (logical) (  ( *fPtr )()  );
+   retval = (logical) (  ( *fPtr )(naif_state)  );
               
 
-   chkout_c ( "zzadbail_c" );
+   chkout_c ( naif_state, "zzadbail_c" );
 
    return ( retval );
 

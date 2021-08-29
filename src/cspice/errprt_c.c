@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void errprt_c ( ConstSpiceChar * op,
+   void errprt_c ( void           * naif_state,
+                   ConstSpiceChar * op,
                    SpiceInt         lenout,
                    SpiceChar      * list  )
 
@@ -303,7 +304,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() ) 
+   if ( return_c(naif_state) ) 
    {
       return;
    }
@@ -315,26 +316,27 @@
    Check the input string op to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "errprt_c", op );
+   CHKFSTR ( naif_state, CHK_STANDARD, "errprt_c", op );
    
 
-   if ( eqstr_c ( op, "SET") )
+   if ( eqstr_c ( naif_state, op, "SET") )
    {
 
       /*
       Operation is SET. The argument "list" will be an input string.
       Check "list" as well.
       */
-      CHKFSTR ( CHK_STANDARD, "errprt_c", list );
+      CHKFSTR ( naif_state, CHK_STANDARD, "errprt_c", list );
 
 
-      errprt_( ( char * ) op,
+      errprt_( naif_state,
+               ( char * ) op,
                ( char * ) list,
                ( ftnlen ) strlen(op),
                ( ftnlen ) strlen(list) );
    }
 
-   else if ( eqstr_c (op, "GET" ) )
+   else if ( eqstr_c (naif_state, op, "GET" ) )
    {
 
       /*
@@ -344,13 +346,14 @@
       output character and a null terminator.  Also check for a null 
       pointer.
       */
-      CHKOSTR ( CHK_STANDARD, "errprt_c", list, lenout );
+      CHKOSTR ( naif_state, CHK_STANDARD, "errprt_c", list, lenout );
         
       /*
       After the routine call, create a C string from the
       Fortran output string.
       */
-      errprt_( ( char * ) op,
+      errprt_( naif_state,
+               ( char * ) op,
                ( char * ) list,
                ( ftnlen ) strlen(op),
                ( ftnlen ) lenout-1     );
@@ -361,16 +364,16 @@
 
    else
    {
-      setmsg_c ( "Input argument op had value: # "
+      setmsg_c ( naif_state, "Input argument op had value: # "
                  "Valid choices are GET or SET."   );   
-      errch_c  ( "#",  op                          );
-      sigerr_c ( "SPICE(INVALIDOPERATION)"         );
-      chkout_c ( "errprt_c"                        );
+      errch_c  ( naif_state, "#",  op                          );
+      sigerr_c ( naif_state, "SPICE(INVALIDOPERATION)"         );
+      chkout_c ( naif_state, "errprt_c"                        );
       return;
    }
 
 
-   chkout_c ( "errprt_c" );
+   chkout_c ( naif_state, "errprt_c" );
    
 
 } /* End errprt_c */

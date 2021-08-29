@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
    #undef    spkw10_c
    
-   void spkw10_c ( SpiceInt           handle,
+   void spkw10_c ( void             * naif_state,
+                   SpiceInt           handle,
                    SpiceInt           body, 
                    SpiceInt           center, 
                    ConstSpiceChar   * frame, 
@@ -260,14 +261,15 @@
    Check the input strings to make sure the pointers
    are non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkw10_c", frame );
-   CHKFSTR ( CHK_STANDARD, "spkw10_c", segid );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkw10_c", frame );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkw10_c", segid );
 
 
    /*
    Write the segment. 
    */
-   spkw10_ ( ( integer    * ) &handle,
+   spkw10_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) &body,
              ( integer    * ) &center,
              ( char       * ) frame,
@@ -282,6 +284,6 @@
              ( ftnlen       ) strlen(segid)  );
 
 
-   chkout_c ( "spkw10_c" );
+   chkout_c ( naif_state, "spkw10_c" );
 
 } /* End spkw10_c */

@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
 
 
-   void xfmsta_c ( ConstSpiceDouble     input_state[6],
+   void xfmsta_c ( void               * naif_state,
+                   ConstSpiceDouble     input_state[6],
                    ConstSpiceChar     * input_coord_sys,
                    ConstSpiceChar     * output_coord_sys,
                    ConstSpiceChar     * body,
@@ -555,7 +556,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -565,15 +566,16 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "xfmsta_c", input_coord_sys  );
-   CHKFSTR ( CHK_STANDARD, "xfmsta_c", output_coord_sys );
-   CHKFSTR ( CHK_STANDARD, "xfmsta_c", body             );
+   CHKFSTR ( naif_state, CHK_STANDARD, "xfmsta_c", input_coord_sys  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "xfmsta_c", output_coord_sys );
+   CHKFSTR ( naif_state, CHK_STANDARD, "xfmsta_c", body             );
 
    /*
    Call the f2c'd Fortran routine. Use explicit type casts for every
    type defined by f2c.
    */
-   xfmsta_ ( ( doublereal * )  input_state,
+   xfmsta_ ( naif_state,
+             ( doublereal * )  input_state,
              ( char       * )  input_coord_sys,
              ( char       * )  output_coord_sys,
              ( char       * )  body,
@@ -583,7 +585,7 @@
              ( ftnlen       )  strlen(body)              );
  
  
-   chkout_c ( "xfmsta_c" );
+   chkout_c ( naif_state, "xfmsta_c" );
  
 
 } /* End xfmsta_c */

@@ -50,7 +50,8 @@
    #include "SpiceZmc.h"
 
 
-   void ekcii_c ( ConstSpiceChar   * table,
+   void ekcii_c ( void             * naif_state,
+                  ConstSpiceChar   * table,
                   SpiceInt           cindex,
                   SpiceInt           lenout,
                   SpiceChar        * column,
@@ -311,7 +312,7 @@
    Make sure the output column has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "ekcii_c", column, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ekcii_c", column, lenout );
 
    /*
    Map the column index to a Fortran-style index. 
@@ -323,7 +324,8 @@
    attributes which we'll use to populate the output attribute
    descriptor. 
    */
-   ekcii_ (  ( char    * ) table, 
+   ekcii_ (  naif_state,
+             ( char    * ) table, 
              ( integer * ) &cindex, 
              ( char    * ) column,
              ( integer * ) fAttDsc,
@@ -354,6 +356,6 @@
    attdsc->nullok  = ( SpiceBoolean    ) ( fAttDsc[NULIDX] >= 0 );
 
 
-   chkout_c ( "ekcii_c" );
+   chkout_c ( naif_state, "ekcii_c" );
 
 } /* End ekcii_c */

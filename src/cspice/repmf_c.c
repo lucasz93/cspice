@@ -49,7 +49,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void repmf_c ( ConstSpiceChar     * in,
+   void repmf_c ( void               * naif_state,
+                  ConstSpiceChar     * in,
                   ConstSpiceChar     * marker,
                   SpiceDouble          value,
                   SpiceInt             sigdig,
@@ -359,9 +360,9 @@
 
    Make sure no string argument pointers are null.
    */
-   CHKPTR( CHK_DISCOVER, "repmf_c", in     );
-   CHKPTR( CHK_DISCOVER, "repmf_c", marker );
-   CHKPTR( CHK_DISCOVER, "repmf_c", out    );
+   CHKPTR( naif_state, CHK_DISCOVER, "repmf_c", in     );
+   CHKPTR( naif_state, CHK_DISCOVER, "repmf_c", marker );
+   CHKPTR( naif_state, CHK_DISCOVER, "repmf_c", out    );
 
 
 
@@ -371,12 +372,12 @@
    */
    if ( lenout < 1 )
    {
-      chkin_c  ( "repmf_c"                                    );
-      setmsg_c ( "String length lenout must be >= 1; actual "
+      chkin_c  ( naif_state, "repmf_c"                                    );
+      setmsg_c ( naif_state, "String length lenout must be >= 1; actual "
                  "value = #."                                 );
-      errint_c ( "#", lenout                                  );
-      sigerr_c ( "SPICE(STRINGTOOSHORT)"                      );
-      chkout_c ( "repmf_c"                                    );
+      errint_c ( naif_state, "#", lenout                                  );
+      sigerr_c ( naif_state, "SPICE(STRINGTOOSHORT)"                      );
+      chkout_c ( naif_state, "repmf_c"                                    );
       return;
    }
 
@@ -420,7 +421,8 @@
    /*
    Simply call the f2c'd routine. 
    */
-   repmf_ ( ( char        * ) in,
+   repmf_ ( naif_state,
+            ( char        * ) in,
             ( char        * ) marker,
             ( doublereal  * ) &value,
             ( integer     * ) &sigdig,

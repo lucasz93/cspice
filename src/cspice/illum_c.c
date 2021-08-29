@@ -56,7 +56,8 @@
    #undef    illum_c
 
 
-   void illum_c  ( ConstSpiceChar          * target,
+   void illum_c  ( void                    * naif_state,
+                   ConstSpiceChar          * target,
                    SpiceDouble               et,
                    ConstSpiceChar          * abcorr, 
                    ConstSpiceChar          * obsrvr, 
@@ -613,15 +614,16 @@
    none of the pointers are null and that each string contains at 
    least one non-null character.
    */
-   CHKFSTR ( CHK_STANDARD, "illum_c", target );
-   CHKFSTR ( CHK_STANDARD, "illum_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "illum_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "illum_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "illum_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "illum_c", obsrvr );
 
 
    /*
    Call the f2c'd routine.
    */
-   illum_ (  ( char         * ) target,
+   illum_ (  naif_state,
+             ( char         * ) target,
              ( doublereal   * ) &et, 
              ( char         * ) abcorr, 
              ( char         * ) obsrvr, 
@@ -634,7 +636,7 @@
              ( ftnlen         ) strlen(obsrvr)  );
                          
 
-   chkout_c ( "illum_c" );
+   chkout_c ( naif_state, "illum_c" );
 
 } /* End illum_c */
 

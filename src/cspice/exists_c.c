@@ -45,7 +45,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   SpiceBoolean exists_c ( ConstSpiceChar  * fname )
+   SpiceBoolean exists_c ( void *naif_state, ConstSpiceChar  * fname )
 
 /*
 
@@ -105,8 +105,8 @@
          }
       else
          {
-         setmsg_c ( "Input file does not exist." );
-         sigerr_c ( "FILENOTFOUND"               );
+         setmsg_c ( naif_state, "Input file does not exist." );
+         sigerr_c ( naif_state, "FILENOTFOUND"               );
          return;
          }
 
@@ -166,16 +166,17 @@
    Check the input string to make sure the pointer
    is non-null and the string length is non-zero.
    */
-   CHKFSTR_VAL ( CHK_STANDARD, "exists_c", fname, SPICEFALSE );
+   CHKFSTR_VAL ( naif_state, CHK_STANDARD, "exists_c", fname, SPICEFALSE );
 
 
    /*
    Do the existence test.
    */
-   fileExists = (SpiceBoolean) exists_( ( char * ) fname,
+   fileExists = (SpiceBoolean) exists_( naif_state,
+                                        ( char * ) fname,
                                         ( ftnlen ) strlen(fname) );
 
-   chkout_c ( "exists_c" );
+   chkout_c ( naif_state, "exists_c" );
    return   ( fileExists );
 
 

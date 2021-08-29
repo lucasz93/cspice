@@ -45,7 +45,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void ckopn_c (  ConstSpiceChar   * fname, 
+   void ckopn_c (  void             * naif_state,
+                   ConstSpiceChar   * fname, 
                    ConstSpiceChar   * ifname, 
                    SpiceInt           ncomch, 
                    SpiceInt         * handle  ) 
@@ -177,11 +178,12 @@
    Check the input strings fname and ifname to make sure the pointers
    are non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ckopn_c", fname  );
-   CHKFSTR ( CHK_STANDARD, "ckopn_c", ifname );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckopn_c", fname  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckopn_c", ifname );
    
    
-   ckopn_ ( ( char     * )  fname,
+   ckopn_ ( naif_state,
+            ( char     * )  fname,
             ( char     * )  ifname,
             ( integer  * )  &ncomch,
             ( integer  * )  handle,
@@ -189,6 +191,6 @@
             ( ftnlen     )  strlen(ifname) );
             
    
-   chkout_c ( "ckopn_c" );
+   chkout_c ( naif_state, "ckopn_c" );
 
 } /* End ckopn_c */

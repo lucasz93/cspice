@@ -47,7 +47,7 @@
    #include "SpiceZmc.h"
    
 
-   SpiceDouble mind_c ( SpiceInt  n,  ... ) 
+   SpiceDouble mind_c ( void *naif_state, SpiceInt  n,  ... ) 
 
 /*
 

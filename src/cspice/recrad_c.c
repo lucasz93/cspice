@@ -46,7 +46,8 @@
    #undef    recrad_c
 
 
-   void recrad_c ( ConstSpiceDouble    rectan[3],
+   void recrad_c ( void              * naif_state,
+                   ConstSpiceDouble    rectan[3],
                    SpiceDouble       * range,
                    SpiceDouble       * ra,
                    SpiceDouble       * dec      ) 
@@ -190,7 +191,7 @@
    Call reclat_c to perform the conversion to angular terms.
    */
 
-   reclat_c ( rectan, range, ra, dec );
+   reclat_c ( naif_state,rectan, range, ra, dec );
 
 
    /*
@@ -201,7 +202,7 @@
 
    if ( *ra < 0. )
       {
-      *ra = *ra + twopi_c();
+      *ra = *ra + twopi_c(naif_state);
       }
 
 

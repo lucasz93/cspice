@@ -44,7 +44,7 @@
 
    #include "SpiceUsr.h"
 
-   SpiceInt intmax_c () 
+   SpiceInt intmax_c (void *naif_state) 
 
 /*
 
@@ -198,7 +198,7 @@
 
    if ( first )
    {
-      value = intmax_();
+      value = intmax_(naif_state);
       first = SPICEFALSE;
    }
    

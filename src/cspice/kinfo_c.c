@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
    
 
-   void kinfo_c ( ConstSpiceChar  * file,
+   void kinfo_c ( void            * naif_state,
+                  ConstSpiceChar  * file,
                   SpiceInt          typlen,
                   SpiceInt          srclen,
                   SpiceChar       * filtyp,
@@ -273,7 +274,7 @@
    Check the input string file to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "kinfo_c", file );
+   CHKFSTR ( naif_state, CHK_STANDARD, "kinfo_c", file );
    
    
    /*
@@ -281,7 +282,7 @@
    output character and a null terminator.  Also check for a null 
    pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "kinfo_c", filtyp, typlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "kinfo_c", filtyp, typlen );
 
 
    /*
@@ -289,12 +290,13 @@
    output character and a null terminator.  Also check for a null 
    pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "kinfo_c", source, srclen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "kinfo_c", source, srclen );
 
    /*
    Call the f2c'd routine.
    */
-   kinfo_ (  ( char      * ) file,
+   kinfo_ (  naif_state,
+             ( char      * ) file,
              ( char      * ) filtyp,
              ( char      * ) source,
              ( integer   * ) handle,
@@ -314,6 +316,6 @@
    *found = fnd;
 
 
-   chkout_c ( "kinfo_c" );
+   chkout_c ( naif_state, "kinfo_c" );
 
 } /* End kinfo_c */

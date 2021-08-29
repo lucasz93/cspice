@@ -45,7 +45,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void ekntab_c ( SpiceInt   * n ) 
+   void ekntab_c ( void *naif_state, SpiceInt   * n ) 
 
 /*
 
@@ -143,9 +143,9 @@
    chkin_c ( naif_state, "ekntab_c" );
 
 
-   ekntab_ (  (integer *) n );
+   ekntab_ ( naif_state, (integer *) n );
 
 
-   chkout_c ( "ekntab_c" );
+   chkout_c ( naif_state, "ekntab_c" );
 
 } /* End ekntab_c */ 

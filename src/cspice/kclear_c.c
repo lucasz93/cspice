@@ -46,7 +46,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void kclear_c ( void ) 
+   void kclear_c ( void *naif_state ) 
 
 /*
 
@@ -164,9 +164,9 @@
    chkin_c ( naif_state, "kclear_c" );
 
 
-   kclear_();
+   kclear_(naif_state);
 
 
-   chkout_c ( "kclear_c" );
+   chkout_c ( naif_state, "kclear_c" );
 
 } /* End kclear_c */

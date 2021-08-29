@@ -46,7 +46,8 @@
    #undef    ucrss_c
 
 
-   void ucrss_c ( ConstSpiceDouble   v1[3],
+   void ucrss_c ( void             * naif_state,
+                  ConstSpiceDouble   v1[3],
                   ConstSpiceDouble   v2[3], 
                   SpiceDouble        vout[3] ) 
 /*
@@ -197,7 +198,7 @@
    Get the magnitude of vcross and normalize it
    */
 
-   vmag = vnorm_c( vcross );
+   vmag = vnorm_c( naif_state, vcross );
  
    if ( vmag > 0. )
       {

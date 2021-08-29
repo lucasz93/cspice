@@ -46,7 +46,8 @@
    #include "SpiceZmc.h"
 
 
-   SpiceBoolean elemd_c ( SpiceDouble     item,
+   SpiceBoolean elemd_c ( void          * naif_state,
+                          SpiceDouble     item,
                           SpiceCell     * set   )
 
 /*
@@ -148,23 +149,23 @@
 
    Make sure we're working with a double precision cell. 
    */
-   CELLTYPECHK_VAL ( CHK_DISCOVER, "elemd_c", SPICE_DP, set, SPICEFALSE );
+   CELLTYPECHK_VAL ( naif_state, CHK_DISCOVER, "elemd_c", SPICE_DP, set, SPICEFALSE );
 
    /*
    Make sure the input cell is a set.
    */
-   CELLISSETCHK_VAL ( CHK_DISCOVER, "elemd_c", set, SPICEFALSE );
+   CELLISSETCHK_VAL ( naif_state, CHK_DISCOVER, "elemd_c", set, SPICEFALSE );
 
    /*
    Initialize the set if necessary. 
    */
-   CELLINIT ( set );
+   CELLINIT ( naif_state, set );
 
    /*
    The routine bsrchd_c returns the index of the item in the set,
    or -1 if the item is not present.
    */
-   return (  bsrchd_c ( item,  set->card,  set->data )  !=  -1 );
+   return (  bsrchd_c ( naif_state, item,  set->card,  set->data )  !=  -1 );
 }
 
 

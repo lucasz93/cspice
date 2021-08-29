@@ -46,9 +46,11 @@
 #include "SpiceZfc.h"
 #include "SpiceZmc.h"
 #include "f2cMang.h"
+#include "f2c.h"
+#include "__cspice_state.h"
 
-
-   void appndc_c ( ConstSpiceChar   * item,
+   void appndc_c ( void             * naif_state,
+                   ConstSpiceChar   * item,
                    SpiceCell        * cell  )
    
 /*
@@ -198,16 +200,16 @@
 
 { /* Begin appndc_c */
 
-
    /*
    f2c library utility prototypes 
    */
-   extern integer   s_cmp  (char *a, char *b, ftnlen la, ftnlen lb ); 
+   extern integer   s_cmp  (f2c_state_t *f2c, char *a, char *b, ftnlen la, ftnlen lb ); 
 
 
    /*
    Local variables 
    */
+   cspice_t              * state = (cspice_t *)naif_state;
    SpiceChar             * sPtr;
 
    SpiceInt                card;
@@ -217,7 +219,7 @@
    /*
    Use discovery check-in. 
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -226,19 +228,19 @@
    /*
    Check the input string pointer to make sure it's not null.
    */
-   CHKPTR ( CHK_DISCOVER, "appndc_c", item );
+   CHKPTR ( naif_state, CHK_DISCOVER, "appndc_c", item );
 
 
    /*
    Make sure we're working with a character cell. 
    */
-   CELLTYPECHK ( CHK_DISCOVER, "appndc_c", SPICE_CHR, cell );
+   CELLTYPECHK ( naif_state, CHK_DISCOVER, "appndc_c", SPICE_CHR, cell );
 
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( cell );
+   CELLINIT ( naif_state, cell );
 
    
    card = cell->card;
@@ -246,11 +248,11 @@
    if ( card == cell->size )
    {
       chkin_c  ( naif_state, "appndc_c"                                        );
-      setmsg_c ( "The cell cannot accommodate the addition of the "
+      setmsg_c ( naif_state, "The cell cannot accommodate the addition of the "
                  "element *"                                       );
-      errch_c  ( "*", item                                         );
-      sigerr_c ( "SPICE(CELLTOOSMALL)"                             );
-      chkout_c ( "appndc_c"                                        );
+      errch_c  ( naif_state, "*", item                                         );
+      sigerr_c ( naif_state, "SPICE(CELLTOOSMALL)"                             );
+      chkout_c ( naif_state, "appndc_c"                                        );
       return;
    }
 
@@ -263,7 +265,8 @@
       */
       sPtr = SPICE_CELL_ELEM_C(cell, card-1 );
       
-      diff = s_cmp ( (char     *) item,
+      diff = s_cmp ( &state->f2c,
+                     (char     *) item,
                      (char     *) sPtr,
                      (ftnlen    ) strlen(item),
                      (ftnlen    ) strlen(sPtr)  );
@@ -278,7 +281,7 @@
    /*
    Append the item to the cell and increment the cell's cardinality.
    */
-   SPICE_CELL_SET_C ( item, card, cell );
+   SPICE_CELL_SET_C ( naif_state, item, card, cell );
 
    (cell->card) ++;
 

@@ -54,7 +54,8 @@
    #undef   spkcvo_c
 
 
-   void spkcvo_c ( ConstSpiceChar       * target,
+   void spkcvo_c ( void                 * naif_state,
+                   ConstSpiceChar       * target,
                    SpiceDouble            et,
                    ConstSpiceChar       * outref,
                    ConstSpiceChar       * refloc,
@@ -759,7 +760,7 @@
             observer-target position in the local
             topocentric reference frame DSS-14_TOPO.
             ./
-            reclat_c ( state0, &r, &lon, &lat );
+            reclat_c ( naif_state,state0, &r, &lon, &lat );
 
             /.
             Compute solar azimuth. The latitude we've
@@ -867,7 +868,7 @@
             /.
             Compute azimuth and elevation.
             ./
-            reclat_c ( topvec, &r, &lon, &lat );
+            reclat_c ( naif_state,topvec, &r, &lon, &lat );
 
             el =   lat * dpr_c();
             az = - lon * dpr_c();
@@ -1236,7 +1237,7 @@
             ./
             vminus_c ( state3, obsvec );
 
-            reclat_c ( obsvec, &r, &lon, &lat );
+            reclat_c ( naif_state,obsvec, &r, &lon, &lat );
 
             printf ( "\n\n"
                      " Frame evaluation locus:     %s\n"
@@ -1402,28 +1403,29 @@
    /*
    Check the input state pointer.
    */
-   CHKPTR ( CHK_STANDARD, "spkcvo_c", obssta );
+   CHKPTR ( naif_state, CHK_STANDARD, "spkcvo_c", obssta );
 
    /*
    Check the input strings.
    */
-   CHKFSTR ( CHK_STANDARD, "spkcvo_c", target );
-   CHKFSTR ( CHK_STANDARD, "spkcvo_c", outref );
-   CHKFSTR ( CHK_STANDARD, "spkcvo_c", refloc );
-   CHKFSTR ( CHK_STANDARD, "spkcvo_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "spkcvo_c", obsctr );
-   CHKFSTR ( CHK_STANDARD, "spkcvo_c", obsref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvo_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvo_c", outref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvo_c", refloc );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvo_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvo_c", obsctr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkcvo_c", obsref );
 
    /*
    Check the output pointers.
    */
-   CHKPTR ( CHK_STANDARD, "spkcvo_c", state );
-   CHKPTR ( CHK_STANDARD, "spkcvo_c", lt    );
+   CHKPTR ( naif_state, CHK_STANDARD, "spkcvo_c", state );
+   CHKPTR ( naif_state, CHK_STANDARD, "spkcvo_c", lt    );
 
    /*
    Let the f2c'd routine do the work.
    */
-   spkcvo_ ( ( char       * ) target,
+   spkcvo_ ( naif_state,
+             ( char       * ) target,
              ( doublereal * ) &et,
              ( char       * ) outref,
              ( char       * ) refloc,
@@ -1441,6 +1443,6 @@
              ( ftnlen       ) strlen(obsctr),
              ( ftnlen       ) strlen(obsref)  );
 
-   chkout_c ( "spkcvo_c" );
+   chkout_c ( naif_state, "spkcvo_c" );
 
 } /* End spkcvo_c */

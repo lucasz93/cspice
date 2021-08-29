@@ -56,7 +56,8 @@
    #include "SpiceZmc.h"
    
 
-   void subsol_c ( ConstSpiceChar   * method,
+   void subsol_c ( void             * naif_state,
+                   ConstSpiceChar   * method,
                    ConstSpiceChar   * target,
                    SpiceDouble        et,
                    ConstSpiceChar   * abcorr,
@@ -384,7 +385,7 @@
             Convert rectangular coordinates to planetocentric 
             latitude and longitude.  Convert radians to degrees. 
             ./
-            reclat_c ( spoint, &radius, &lon, &lat );
+            reclat_c ( naif_state,spoint, &radius, &lon, &lat );
  
             lon = lon * dpr_c ();
             lat = lat * dpr_c ();
@@ -474,16 +475,17 @@
    sure none of the pointers are null and that each string contains at
    least one non-null character.
    */
-   CHKFSTR ( CHK_STANDARD, "subsol_c", method );
-   CHKFSTR ( CHK_STANDARD, "subsol_c", target );
-   CHKFSTR ( CHK_STANDARD, "subsol_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "subsol_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subsol_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subsol_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subsol_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "subsol_c", obsrvr );
  
  
    /*
    Call the f2c'd routine.
    */
-   subsol_ (  ( char         * ) method,
+   subsol_ (  naif_state,
+              ( char         * ) method,
               ( char         * ) target,
               ( doublereal   * ) &et,
               ( char         * ) abcorr,
@@ -496,6 +498,6 @@
  
 
 
-   chkout_c ( "subsol_c" );
+   chkout_c ( naif_state, "subsol_c" );
 
 } /* End subsol_c */

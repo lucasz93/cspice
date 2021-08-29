@@ -49,7 +49,8 @@
    #undef   surfpv_c
 
 
-   void surfpv_c ( ConstSpiceDouble      stvrtx[6],
+   void surfpv_c ( void                * naif_state,
+                   ConstSpiceDouble      stvrtx[6],
                    ConstSpiceDouble      stdir [6],
                    SpiceDouble           a,
                    SpiceDouble           b,
@@ -499,7 +500,8 @@
    chkin_c ( naif_state, "surfpv_c" );
 
 
-   surfpv_ (  (doublereal *)  stvrtx,
+   surfpv_ (  naif_state,
+              (doublereal *)  stvrtx,
               (doublereal *)  stdir,
               (doublereal *)  &a,
               (doublereal *)  &b,
@@ -511,6 +513,6 @@
    *found = (SpiceBoolean) fnd;
  
 
-   chkout_c ( "surfpv_c" );
+   chkout_c ( naif_state, "surfpv_c" );
 
 } /* End surfpv_c */

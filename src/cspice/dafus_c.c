@@ -49,7 +49,8 @@
    #undef    dafus_c
 
 
-   void dafus_c ( ConstSpiceDouble   sum [],
+   void dafus_c ( void             * naif_state,
+                  ConstSpiceDouble   sum [],
                   SpiceInt           nd,
                   SpiceInt           ni,
                   SpiceDouble        dc  [],
@@ -330,13 +331,14 @@
    chkin_c ( naif_state, "dafus_c" );
 
 
-   dafus_ (  ( doublereal  * ) sum,
+   dafus_ (  naif_state,
+             ( doublereal  * ) sum,
              ( integer     * ) &nd,
              ( integer     * ) &ni,
              ( doublereal  * ) dc,
              ( integer     * ) ic  );
 
 
-   chkout_c ( "dafus_c" );
+   chkout_c ( naif_state, "dafus_c" );
 
 } /* End dafus_c */

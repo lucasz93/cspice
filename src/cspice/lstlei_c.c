@@ -48,7 +48,8 @@
    #include "SpiceZim.h"
    #undef    lstlei_c
 
-   SpiceInt lstlei_c ( SpiceInt            x,
+   SpiceInt lstlei_c ( void              * naif_state,
+                       SpiceInt            x,
                        SpiceInt            n,
                        ConstSpiceInt     * array ) 
 /*
@@ -171,7 +172,8 @@
   The return value -1 indicates "not found." 
   */
  
-  return ( (SpiceInt) lstlei_ (  (integer *) &x,
+  return ( (SpiceInt) lstlei_ (  naif_state,
+                                 (integer *) &x,
                                  (integer *) &n,
                                  (integer *) array )   -  1 );
 

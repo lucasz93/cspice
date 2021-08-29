@@ -45,7 +45,8 @@
    #undef    sumai_c
    
    
-   SpiceInt sumai_c ( ConstSpiceInt   * array,
+   SpiceInt sumai_c ( void            * naif_state,
+                      ConstSpiceInt   * array,
                       SpiceInt          n     ) 
 
 /*

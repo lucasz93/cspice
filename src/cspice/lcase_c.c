@@ -46,7 +46,8 @@
    #include "SpiceZmc.h"
 
 
-   void lcase_c ( SpiceChar       * in,
+   void lcase_c ( void            * naif_state,
+                  SpiceChar       * in,
                   SpiceInt          lenout, 
                   SpiceChar       * out    ) 
 
@@ -174,14 +175,14 @@
    /*
    Check the input string pointer to make sure it's non-null.
    */
-   CHKPTR( CHK_DISCOVER, "lcase_c", in );
+   CHKPTR( naif_state, CHK_DISCOVER, "lcase_c", in );
    
 
    /*
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_DISCOVER, "lcase_c", out, lenout );
+   CHKOSTR ( naif_state, CHK_DISCOVER, "lcase_c", out, lenout );
 
    
    /*

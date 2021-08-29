@@ -49,7 +49,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
    
-   void hx2dp_c ( ConstSpiceChar  * string,
+   void hx2dp_c ( void            * naif_state,
+                  ConstSpiceChar  * string,
                   SpiceInt          lenout,
                   SpiceDouble     * number,
                   SpiceBoolean    * error,
@@ -263,19 +264,20 @@
    Check the input time string to make sure the pointer is non-null and
    the string length is non-zero.
    */
-   CHKFSTR ( CHK_DISCOVER, "hx2dp_c", string );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "hx2dp_c", string );
 
    /*
    Check the output error message string to make sure the pointer is 
    non-null and the string length is at least 2.
    */
-   CHKOSTR ( CHK_DISCOVER, "hx2dp_c", errmsg, lenout );
+   CHKOSTR ( naif_state, CHK_DISCOVER, "hx2dp_c", errmsg, lenout );
 
    /*
    Call the f2c'd routine.
    */ 
 
-   (void) hx2dp_ ( ( char        * ) string,
+   (void) hx2dp_ ( naif_state,
+                   ( char        * ) string,
                    ( doublereal  * ) number,
                    ( logical     * ) error,
                    ( char        * ) errmsg,
@@ -287,7 +289,7 @@
    */
    F2C_ConvertStr ( lenout, errmsg );
 
-   chkout_c ( "hx2dp_c" );
+   chkout_c ( naif_state, "hx2dp_c" );
    
 } /* End hx2dp_c */
 

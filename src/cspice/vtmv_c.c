@@ -45,9 +45,10 @@
    #include "SpiceUsr.h"
    #undef    vtmv_c
 
-   SpiceDouble vtmv_c ( ConstSpiceDouble v1     [3],
-                        ConstSpiceDouble matrix [3][3],
-                        ConstSpiceDouble v2     [3] ) 
+   SpiceDouble vtmv_c ( void             * naif_state,
+                        ConstSpiceDouble   v1     [3],
+                        ConstSpiceDouble   matrix [3][3],
+                        ConstSpiceDouble   v2     [3] ) 
 
 /*
 

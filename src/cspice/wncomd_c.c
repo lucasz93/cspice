@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void wncomd_c ( SpiceDouble    left,
+   void wncomd_c ( void         * naif_state,
+                   SpiceDouble    left,
                    SpiceDouble    right,
                    SpiceCell    * window,
                    SpiceCell    * result ) 
@@ -186,7 +187,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -196,18 +197,19 @@
    /*
    Make sure data types are d.p. 
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "wncomd_c", SPICE_DP, window, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "wncomd_c", SPICE_DP, window, result );
 
    
    /*
    Initialize the cells if necessary. 
    */
-   CELLINIT2 ( window, result );
+   CELLINIT2 ( naif_state, window, result );
    
    /*
    Let the f2c'd routine do the work. 
    */
-   wncomd_ ( (doublereal * )  &left,
+   wncomd_ ( naif_state,
+             (doublereal * )  &left,
              (doublereal * )  &right,
              (doublereal * )  (window->base),
              (doublereal * )  (result->base)  );
@@ -215,11 +217,11 @@
    /*
    Sync the output cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, result );
+      zzsynccl_c ( naif_state, F2C, result );
    }
 
-   chkout_c ( "wncomd_c" );
+   chkout_c ( naif_state, "wncomd_c" );
 
 } /* End wncomd_c */

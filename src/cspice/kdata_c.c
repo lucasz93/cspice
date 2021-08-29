@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
    
 
-   void kdata_c ( SpiceInt          which,
+   void kdata_c ( void            * naif_state,
+                  SpiceInt          which,
                   ConstSpiceChar  * kind,
                   SpiceInt          fillen,
                   SpiceInt          typlen,
@@ -297,7 +298,7 @@
    Check the input string kind to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "kdata_c", kind );
+   CHKFSTR ( naif_state, CHK_STANDARD, "kdata_c", kind );
 
 
    /*
@@ -305,7 +306,7 @@
    output character and a null terminator.  Also check for a null 
    pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "kdata_c", file, fillen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "kdata_c", file, fillen );
 
 
    /*
@@ -313,7 +314,7 @@
    output character and a null terminator.  Also check for a null 
    pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "kdata_c", filtyp, typlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "kdata_c", filtyp, typlen );
 
 
    /*
@@ -321,7 +322,7 @@
    output character and a null terminator.  Also check for a null 
    pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "kdata_c", source, srclen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "kdata_c", source, srclen );
 
 
    /*
@@ -334,7 +335,8 @@
    /*
    Call the f2c'd routine.
    */
-   kdata_ (  ( integer   * ) &which,
+   kdata_ (  naif_state,
+             ( integer   * ) &which,
              ( char      * ) kind,
              ( char      * ) file,
              ( char      * ) filtyp,
@@ -358,6 +360,6 @@
    *found = fnd;
    
              
-   chkout_c ( "kdata_c" );
+   chkout_c ( naif_state, "kdata_c" );
 
 } /* End kdata_c */

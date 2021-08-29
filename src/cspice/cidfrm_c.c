@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
    
 
-   void cidfrm_c ( SpiceInt        cent,
+   void cidfrm_c ( void          * naif_state,
+                   SpiceInt        cent,
                    SpiceInt        lenout,
                    SpiceInt      * frcode,
                    SpiceChar     * frname,
@@ -185,14 +186,15 @@
    Check the output string to make sure the pointer is non-null and that
    there is room for at least one character plus a null terminator.
    */
-   CHKOSTR ( CHK_STANDARD, "cidfrm_c", frname, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "cidfrm_c", frname, lenout );
    
 
    /*
    Call the f2c'd routine.  
    */
    
-   cidfrm_ (  ( integer   * ) &cent,
+   cidfrm_ (  naif_state,
+              ( integer   * ) &cent,
               ( integer   * ) frcode,
               ( char      * ) frname,
               ( logical   * ) &fnd,
@@ -211,6 +213,6 @@
    *found = fnd;
    
 
-   chkout_c ( "cidfrm_c" );
+   chkout_c ( naif_state, "cidfrm_c" );
 
 } /* End cidfrm_c */

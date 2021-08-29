@@ -47,7 +47,8 @@
    #undef    recsph_c
 
 
-   void recsph_c ( ConstSpiceDouble     rectan[3], 
+   void recsph_c ( void               * naif_state,
+                   ConstSpiceDouble     rectan[3], 
                    SpiceDouble        * r, 
                    SpiceDouble        * colat,
                    SpiceDouble        * lon      ) 

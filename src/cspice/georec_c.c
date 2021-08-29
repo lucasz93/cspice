@@ -45,7 +45,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void georec_c ( SpiceDouble lon,
+   void georec_c ( void      * naif_state,
+                   SpiceDouble lon,
                    SpiceDouble lat,
                    SpiceDouble alt,
                    SpiceDouble re,
@@ -249,7 +250,8 @@
    Call the f2c'd routine.
    */
 
-   georec_( ( doublereal * ) &lon,
+   georec_( naif_state,
+            ( doublereal * ) &lon,
             ( doublereal * ) &lat,
             ( doublereal * ) &alt,
             ( doublereal * ) &re,
@@ -257,7 +259,7 @@
             ( doublereal * ) rectan );
 
 
-   chkout_c ( "georec_c");
+   chkout_c ( naif_state, "georec_c");
 
 
 } /* End georec_c */

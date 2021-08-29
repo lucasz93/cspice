@@ -202,10 +202,10 @@
    
    if ( status == TIME_ERROR )
    {
-      setmsg_c ( "C function \"time\" returned status #." );
-      errint_c ( "#",  status                             );
-      sigerr_c ( "SPICE(CLIBCALLFAILED)"                  );
-      chkout_c ( "zzcputim_"                              );
+      setmsg_c ( naif_state, "C function \"time\" returned status #." );
+      errint_c ( naif_state, "#",  status                             );
+      sigerr_c ( naif_state, "SPICE(CLIBCALLFAILED)"                  );
+      chkout_c ( naif_state, "zzcputim_"                              );
       return   ( status                                   );
    }
    
@@ -217,9 +217,9 @@
 
    if (  timeStruct == (struct tm *) NULL  )
    {
-      setmsg_c ( "C function \"localtime\" returned null pointer." );
-      sigerr_c ( "SPICE(CLIBCALLFAILED)"                           );
-      chkout_c ( "zzcputim_"                                       );
+      setmsg_c ( naif_state, "C function \"localtime\" returned null pointer." );
+      sigerr_c ( naif_state, "SPICE(CLIBCALLFAILED)"                           );
+      chkout_c ( naif_state, "zzcputim_"                                       );
       return   ( TIME_ERROR                                        );
    }
 
@@ -235,7 +235,7 @@
    tvec[5] = timeStruct-> tm_sec;
 
 
-   chkout_c ( "zzcputim_" );
+   chkout_c ( naif_state, "zzcputim_" );
    return   ( 0         );
 
 } /* End zzcputim_ */

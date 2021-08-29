@@ -47,7 +47,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void gfrefn_c ( SpiceDouble     t1,
+   void gfrefn_c ( void          * naif_state,
+                   SpiceDouble     t1,
                    SpiceDouble     t2,
                    SpiceBoolean    s1,
                    SpiceBoolean    s2,
@@ -174,7 +175,8 @@
    ls1 = (logical) s1;
    ls2 = (logical) s2;
 
-   gfrefn_ ( ( doublereal * ) &t1,
+   gfrefn_ ( naif_state,
+             ( doublereal * ) &t1,
              ( doublereal * ) &t2,
              ( logical    * ) &ls1,
              ( logical    * ) &ls2,

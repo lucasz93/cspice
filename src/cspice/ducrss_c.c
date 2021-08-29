@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    #undef   ducrss_c
 
-   void ducrss_c ( ConstSpiceDouble s1  [6],
+   void ducrss_c ( void           * naif_state,
+                   ConstSpiceDouble s1  [6],
                    ConstSpiceDouble s2  [6],
                    SpiceDouble      sout[6] ) 
 
@@ -181,8 +182,8 @@
    Not much to this. Just get the cross product and its derivative.
    Using that, get the associated unit vector and its derivative.
    */
-   dvcrss_c ( s1, s2, tmpsta );
-   dvhat_c  ( tmpsta, sout   );
+   dvcrss_c ( naif_state, s1, s2, tmpsta );
+   dvhat_c  ( naif_state, tmpsta, sout   );
 
 } /* End ducrss_c */
 

@@ -46,7 +46,8 @@
    #include "SpiceUsr.h"
    #undef   dvhat_c
 
-   void dvhat_c ( ConstSpiceDouble s1  [6],
+   void dvhat_c ( void           * naif_state,
+                  ConstSpiceDouble s1  [6],
                   SpiceDouble      sout[6] )
 
 /*
@@ -231,7 +232,7 @@
    Get the position portion of the output state and the length of
    the input position.
    */
-   unorm_c ( posin, posout, &length );
+   unorm_c ( naif_state, posin, posout, &length );
 
    if ( length == 0. )
       {
@@ -240,7 +241,7 @@
       If the length of the input position is zero, just copy
       the input velocity to the output velocity.
       */
-      vequ_c ( velin, velout );
+      vequ_c ( naif_state, velin, velout );
 
       }
    else
@@ -252,8 +253,8 @@
       position, scaled by the reciprocal of the length of the
       input position.
       */
-      vperp_c ( velin    , posout, velout );
-      vscl_c  ( 1./length, velout, velout );
+      vperp_c ( naif_state, velin    , posout, velout );
+      vscl_c  ( naif_state, 1./length, velout, velout );
 
       }
 

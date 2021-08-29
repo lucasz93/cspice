@@ -45,7 +45,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void daffpa_c ( SpiceBoolean  * found )
+   void daffpa_c ( void *naif_state, SpiceBoolean  * found )
 
 /*
 
@@ -401,11 +401,11 @@
    chkin_c ( naif_state, "daffpa_c" );
 
 
-   daffpa_ ( ( logical * ) &fnd );
+   daffpa_ ( naif_state, ( logical * ) &fnd );
 
    *found = fnd;
 
 
-   chkout_c ( "daffpa_c" );
+   chkout_c ( naif_state, "daffpa_c" );
 
 } /* End daffpa_c */

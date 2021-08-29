@@ -46,7 +46,9 @@
    #include "SpiceZfc.h"
    #undef   uddf_c
 
-   void uddf_c (  void             ( * udfunc ) ( SpiceDouble    et,
+   void uddf_c (  void               * naif_state,
+                  void             ( * udfunc ) ( void         * naif_state,
+                                                  SpiceDouble    et,
                                                   SpiceDouble  * value ),
                   SpiceDouble          x,
                   SpiceDouble          dx,
@@ -244,7 +246,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
       {
       return;
       }
@@ -258,10 +260,11 @@
    */
    n = 1;
 
-   udfunc ( x - dx, &(udval[0]) );
-   udfunc ( x + dx, &(udval[1]) );
+   udfunc ( naif_state, x - dx, &(udval[0]) );
+   udfunc ( naif_state, x + dx, &(udval[1]) );
 
-   (void) qderiv_( (integer    *) &n, 
+   (void) qderiv_( naif_state,
+                   (integer    *) &n, 
                    (doublereal *) &(udval[0]), 
                    (doublereal *) &(udval[1]), 
                    (doublereal *) &dx, 
@@ -269,6 +272,6 @@
 
    *deriv = dfdx[0];
 
-   chkout_c (  "uddf_c" );
+   chkout_c ( naif_state,  "uddf_c" );
    }
    

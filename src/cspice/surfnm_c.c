@@ -47,7 +47,8 @@
    #undef    surfnm_c
  
  
-   void surfnm_c ( SpiceDouble        a, 
+   void surfnm_c ( void             * naif_state,
+                   SpiceDouble        a, 
                    SpiceDouble        b, 
                    SpiceDouble        c, 
                    ConstSpiceDouble   point[3], 
@@ -177,14 +178,15 @@
    /*
    Call the f2c'd surfpt.
    */ 
-   surfnm_( (doublereal *)  &a, 
+   surfnm_( naif_state,
+            (doublereal *)  &a, 
             (doublereal *)  &b,
             (doublereal *)  &c, 
             (doublereal *)  point, 
             (doublereal *)  normal );
 
 
-   chkout_c ( "surfnm_c" );
+   chkout_c ( naif_state, "surfnm_c" );
    
 
 } /* End surfnm_c */

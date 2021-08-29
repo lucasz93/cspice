@@ -46,7 +46,8 @@
    #include "SpiceZmc.h"
    #undef  vproj_c
 
-   void vproj_c ( ConstSpiceDouble   a[3],
+   void vproj_c ( void             * naif_state,
+                  ConstSpiceDouble   a[3],
                   ConstSpiceDouble   b[3],
                   SpiceDouble        p[3] )
 
@@ -168,12 +169,12 @@
       }
 
 
-   vscl_c ( 1./biga, a, t );
-   vscl_c ( 1./bigb, b, r );
+   vscl_c ( naif_state, 1./biga, a, t );
+   vscl_c ( naif_state, 1./bigb, b, r );
 
-   scale = vdot_c (t,r) * biga  / vdot_c (r,r);
+   scale = vdot_c (naif_state,t,r) * biga  / vdot_c (naif_state,r,r);
 
-   vscl_c ( scale, r, p );
+   vscl_c ( naif_state, scale, r, p );
 
 
 } /* End vproj_c */

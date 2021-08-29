@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void errdp_c ( ConstSpiceChar  * marker,
+   void errdp_c ( void            * naif_state,
+                  ConstSpiceChar  * marker,
                   SpiceDouble       number  )
 
 /*
@@ -194,13 +195,14 @@
    and the string length is non-zero.  Since we don't check in
    prior to this, use the discovery check-in option.
    */
-   CHKFSTR ( CHK_DISCOVER, "errdp_c", marker );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "errdp_c", marker );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   errdp_ ( ( char       * ) marker,
+   errdp_ ( naif_state,
+            ( char       * ) marker,
             ( doublereal * ) &number,
             ( ftnlen       ) strlen(marker)  );
 

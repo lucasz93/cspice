@@ -57,7 +57,8 @@
    #undef   srfxpt_c
 
 
-   void srfxpt_c ( ConstSpiceChar      * method,
+   void srfxpt_c ( void                * naif_state,
+                   ConstSpiceChar      * method,
                    ConstSpiceChar      * target,
                    SpiceDouble           et,
                    ConstSpiceChar      * abcorr,
@@ -616,10 +617,10 @@
 
          if ( !found )
          {
-             setmsg_c ( "Could not find ID code for "
+             setmsg_c ( naif_state, "Could not find ID code for "
                         "instrument #."               );
-             errch_c  ( "#", camera                   );
-             sigerr_c ( "SPICE(NOTRANSLATION)"        );
+             errch_c  ( naif_state, "#", camera                   );
+             sigerr_c ( naif_state, "SPICE(NOTRANSLATION)"        );
          }
 
          getfov_c ( camid, NCORNR, SHPLEN, NAMLEN,
@@ -676,7 +677,7 @@
                Convert rectangular coordinates to planetocentric 
                latitude and longitude.  Convert radians to degrees. 
                ./ 
-               reclat_c ( spoint, &radius, &lon, &lat );
+               reclat_c ( naif_state,spoint, &radius, &lon, &lat );
 
                lon *= dpr_c ();
                lat *= dpr_c ();
@@ -942,7 +943,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -961,16 +962,17 @@
    at least one data character:  that is, one character 
    preceding the null terminator.
    */
-   CHKFSTR ( CHK_STANDARD, "srfxpt_c", method );
-   CHKFSTR ( CHK_STANDARD, "srfxpt_c", target );
-   CHKFSTR ( CHK_STANDARD, "srfxpt_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "srfxpt_c", obsrvr );
-   CHKFSTR ( CHK_STANDARD, "srfxpt_c", dref   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "srfxpt_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "srfxpt_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "srfxpt_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "srfxpt_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "srfxpt_c", dref   );
    
    /*
    Call the f2c'd SPICELIB function.
    */
-   srfxpt_ ( (char       *) method,
+   srfxpt_ ( naif_state,
+             (char       *) method,
              (char       *) target,
              (doublereal *) &et,
              (char       *) abcorr,
@@ -996,6 +998,6 @@
    
    *found = fnd;
 
-   chkout_c ( "srfxpt_c" );
+   chkout_c ( naif_state, "srfxpt_c" );
 
 } /* End srfxpt_c */

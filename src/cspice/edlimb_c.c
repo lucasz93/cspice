@@ -51,7 +51,8 @@
    #undef    edlimb_c
    
    
-   void edlimb_c ( SpiceDouble           a,
+   void edlimb_c ( void                * naif_state,
+                   SpiceDouble           a,
                    SpiceDouble           b,
                    SpiceDouble           c,
                    ConstSpiceDouble      viewpt[3],
@@ -246,12 +247,12 @@
           ||    ( b <= 0. )            
           ||    ( c <= 0. )   )    
    {
-      setmsg_c  ( "Semi-axis lengths: a = #,  b = #,  c = #."  );
-      errdp_c   ( "#", a                                       );
-      errdp_c   ( "#", b                                       );
-      errdp_c   ( "#", c                                       );
-      sigerr_c  ( "SPICE(DEGENERATECASE)"                      );
-      chkout_c  ( "edlimb_c"                                   );
+      setmsg_c  ( naif_state, "Semi-axis lengths: a = #,  b = #,  c = #."  );
+      errdp_c   ( naif_state, "#", a                                       );
+      errdp_c   ( naif_state, "#", b                                       );
+      errdp_c   ( naif_state, "#", c                                       );
+      sigerr_c  ( naif_state, "SPICE(DEGENERATECASE)"                      );
+      chkout_c  ( naif_state, "edlimb_c"                                   );
       return;
    }
 
@@ -278,16 +279,16 @@
          ||   ( sclb2   ==   0. )
          ||   ( sclc2   ==   0. )   )    
    {
-      setmsg_c ( "Semi-axis too small:  a = #, b = #, c = #. " );
-      errdp_c  ( "#", a                                        );
-      errdp_c  ( "#", b                                        );
-      errdp_c  ( "#", c                                        );
-      sigerr_c ( "SPICE(DEGENERATECASE)"                       );
-      chkout_c ( "edlimb_c"                                    );
+      setmsg_c ( naif_state, "Semi-axis too small:  a = #, b = #, c = #. " );
+      errdp_c  ( naif_state, "#", a                                        );
+      errdp_c  ( naif_state, "#", b                                        );
+      errdp_c  ( naif_state, "#", c                                        );
+      sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"                       );
+      chkout_c ( naif_state, "edlimb_c"                                    );
       return;
    }
 
-   vscl_c ( 1. / scale,  viewpt,  v );
+   vscl_c ( naif_state, 1. / scale,  viewpt,  v );
 
 
    /*
@@ -302,9 +303,9 @@
 
    if ( level < 1. ) 
    {
-      setmsg_c ( "Viewing point is inside the ellipsoid." );
-      sigerr_c ( "SPICE(DEGENERATECASE)"                  );
-      chkout_c ( "edlimb_c"                               );
+      setmsg_c ( naif_state, "Viewing point is inside the ellipsoid." );
+      sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"                  );
+      chkout_c ( naif_state, "edlimb_c"                               );
       return;
    }
 
@@ -372,13 +373,13 @@
    normal[1]  =  v[1] / sclb2;
    normal[2]  =  v[2] / sclc2;
 
-   nvc2pl_c ( normal, 1.0, &lplane );
+   nvc2pl_c ( naif_state, normal, 1.0, &lplane );
    
 
    /*
    Find the limb by intersecting the limb plane with the ellipsoid.
    */
-   inedpl_c ( scla,  sclb,  sclc,  &lplane,  limb,  &found );
+   inedpl_c ( naif_state, scla,  sclb,  sclc,  &lplane,  limb,  &found );
    
 
    /*
@@ -387,10 +388,10 @@
    
    if ( !found ) 
    {
-      setmsg_c ( "Ellipsoid shape and viewing geometry are too " 
+      setmsg_c ( naif_state, "Ellipsoid shape and viewing geometry are too " 
                  "extreme; the limb was not found. "             );
-      sigerr_c ( "SPICE(DEGENERATECASE)"                         );
-      chkout_c ( "edlimb_c"                                      );
+      sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"                         );
+      chkout_c ( naif_state, "edlimb_c"                                      );
       return;
    }
 
@@ -399,12 +400,12 @@
    Undo the scaling before returning the limb.
    */
 
-   vscl_c ( scale,  limb->center,     limb->center    );
-   vscl_c ( scale,  limb->semiMajor,  limb->semiMajor );
-   vscl_c ( scale,  limb->semiMinor,  limb->semiMinor );
+   vscl_c ( naif_state, scale,  limb->center,     limb->center    );
+   vscl_c ( naif_state, scale,  limb->semiMajor,  limb->semiMajor );
+   vscl_c ( naif_state, scale,  limb->semiMinor,  limb->semiMinor );
  
 
-   chkout_c ( "edlimb_c" );
+   chkout_c ( naif_state, "edlimb_c" );
 
 } /* End edlimb_c */
 

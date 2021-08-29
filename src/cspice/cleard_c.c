@@ -44,7 +44,8 @@
    #include "SpiceUsr.h"
 
 
-   void cleard_c ( SpiceInt       ndim,
+   void cleard_c ( void         * naif_state,
+                   SpiceInt       ndim,
                    SpiceDouble  * array ) 
 /*
 

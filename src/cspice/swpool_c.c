@@ -51,7 +51,8 @@
    #undef    swpool_c
    
 
-   void swpool_c ( ConstSpiceChar    * agent,
+   void swpool_c ( void              * naif_state,
+                   ConstSpiceChar    * agent,
                    SpiceInt            nnames,
                    SpiceInt            lenvals,
                    const void        * names   ) 
@@ -247,13 +248,13 @@
    Make sure the input string pointer for agent is non-null 
    and that the length is sufficient.  
    */
-   CHKFSTR ( CHK_STANDARD, "swpool_c", agent );
+   CHKFSTR ( naif_state, CHK_STANDARD, "swpool_c", agent );
 
    /*
    Make sure the input string pointer for the names array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR ( CHK_STANDARD, "swpool_c", names, lenvals );
+   CHKOSTR ( naif_state, CHK_STANDARD, "swpool_c", names, lenvals );
 
    /*
    Create a Fortran-style string array.
@@ -261,9 +262,9 @@
    C2F_MapStrArr ( "swpool_c", 
                    nnames, lenvals, names, &fCvalsLen,  &fCvalsArr );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "swpool_c" );
+      chkout_c ( naif_state, "swpool_c" );
       return;
    }
 
@@ -271,7 +272,8 @@
    /*
    Call the f2c'd routine.
    */
-   swpool_ (  ( char       * ) agent,
+   swpool_ (  naif_state,
+              ( char       * ) agent,
               ( integer    * ) &nnames,
               ( char       * ) fCvalsArr,
               ( ftnlen       ) strlen(agent),
@@ -284,7 +286,7 @@
    free ( fCvalsArr );
 
 
-   chkout_c ( "swpool_c" );
+   chkout_c ( naif_state, "swpool_c" );
 
 } /* End swpool_c */
 

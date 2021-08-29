@@ -17100,6 +17100,91 @@ integer smlint;
 
 /* -------------------------------------------------------------------------- */
 typedef struct {
+    /*
+        The variable read_non_native is set via the function zzsetnnread_.
+        This variable has file scope; functions in this file use it 
+        to decide whether to handle non-native line termination.
+        The functions rdknew_ and rdkdat_ should turn on non-native
+        line termination handling before calling rdtext_ and turn this
+        feature off immediately after rdtext_ returns.
+    */
+    logical read_non_native;
+	flag f__init;   /*0 on entry, 1 after initializations*/
+    char f__buf0[400];
+    char* f__buf;
+    int f__buflen;
+
+    cllist xx;
+
+#ifdef MSDOS
+    double t0;
+#else
+    struct tms t0;
+#endif
+
+    unit f__units[MXUNIT];   /*unit table*/
+    cilist *f__elist;   /*active external io list*/
+    icilist *f__svic;   /*active internal io list*/
+    flag f__reading;   /*1 if reading, 0 if writing*/
+    flag f__cplus,f__cblank;
+    char *f__fmtbuf;
+    flag f__external;   /*1 if external io, 0 if internal */
+
+    int (*f__getn)(void);   /* for formatted input */
+    void (*f__putn)(int);   /* for formatted output */
+    int (*f__doed)(struct syl*, char*, ftnlen),(*f__doned)(struct syl*);
+    int (*f__dorevert)(void),(*f__donewrec)(void),(*f__doend)(void);
+
+    flag f__sequential;   /*1 if sequential io, 0 if direct*/
+    flag f__formatted;   /*1 if formatted io, 0 if unformatted*/
+    FILE *f__cf;   /*current file*/
+    unit *f__curunit;   /*current unit*/
+    int f__recpos;   /*place in current record*/
+    int f__cursor, f__hiwater, f__scale;
+    char *f__icptr;
+
+    struct syl f__syl[SYLMX];
+    int f__parenlvl,f__pc,f__revloc;
+
+#define STKSZ 10
+    int f__cnt[STKSZ],f__ret[STKSZ],f__cp,f__rp;
+    flag f__workdone, f__nonl;
+
+    char *f__icend;
+    int f__icnum;
+
+#ifdef Allow_TYQUAD
+    longint f__llx;
+#endif
+    int l_eof;
+#ifdef KR_headers
+     int (*f__lioproc)(), (*l_getc)(), (*l_ungetc)();
+#else
+     int (*f__lioproc)(ftnint*, char*, ftnlen, ftnint), (*l_getc)(void), (*l_ungetc)(int,FILE*);
+#endif
+
+    flag f__lquit;
+    int f__lcount,f__ltype,nml_read;
+    char *f__lchar;
+    double f__lx,f__ly;
+
+    ftnint L_len;
+    int f__Aquote;
+
+    long f__recloc;
+
+    uiolen f__reclen;
+
+    char buf[MAXINTLENGTH+1];
+
+    hashtab *nl_cache;
+    int n_nlcache;
+    hashentry **zot;
+    int colonseen;
+} f2c_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
     f2c_state_t f2c;
 	accept_state_t* accept;
 	ana_state_t* ana;

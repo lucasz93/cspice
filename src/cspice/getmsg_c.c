@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
    
 
-   void getmsg_c ( ConstSpiceChar  * option,
+   void getmsg_c ( void            * naif_state,
+                   ConstSpiceChar  * option,
                    SpiceInt          lenout,
                    SpiceChar       * msg     ) 
 
@@ -199,7 +200,7 @@
       
       ckopn_c ( filename, ifname, ncomch, &handle ); 
 
-      if ( failed_c() ) 
+      if ( failed_c(naif_state) ) 
       {
          /.
          Get explanation text for the current short message 
@@ -253,19 +254,20 @@
    Check the input string op to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "getmsg_c", option );
+   CHKFSTR ( naif_state, CHK_STANDARD, "getmsg_c", option );
 
    /*
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "getmsg_c", msg, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "getmsg_c", msg, lenout );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   getmsg_ ( ( char * ) option,
+   getmsg_ ( naif_state,
+             ( char * ) option,
              ( char * ) msg,
              ( ftnlen ) strlen(option),
              ( ftnlen ) lenout-1       );
@@ -276,7 +278,7 @@
    F2C_ConvertStr( lenout, msg );
    
 
-   chkout_c ( "getmsg_c" );
+   chkout_c ( naif_state, "getmsg_c" );
 
 } /* End getmsg_c */
 

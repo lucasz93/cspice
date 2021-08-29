@@ -49,7 +49,8 @@
    #undef    reccyl_c
 
 
-   void reccyl_c ( ConstSpiceDouble     rectan[3], 
+   void reccyl_c ( void               * naif_state,
+                   ConstSpiceDouble     rectan[3], 
                    SpiceDouble        * r, 
                    SpiceDouble        * lon, 
                    SpiceDouble        * z         ) 
@@ -201,7 +202,7 @@
 
    if ( *lon < 0.)
       {
-      *lon += twopi_c();
+      *lon += twopi_c(naif_state);
       }
 
 

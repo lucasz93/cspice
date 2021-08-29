@@ -57,7 +57,8 @@
    #include "SpiceZmc.h"
 
 
-   void llgrid_pl02 ( SpiceInt               handle,
+   void llgrid_pl02 ( void                 * naif_state,
+                      SpiceInt               handle,
                       ConstSpiceDLADescr   * dladsc,
                       SpiceInt               npoints,
                       ConstSpiceDouble       grid     [][2],
@@ -265,9 +266,9 @@
             contains no segments.  This is
             unexpected, but we're prepared for it.
             ./
-            setmsg_c ( "No segments found in DSK file #.");
-            errch_c  ( "#",  dsk                         );
-            sigerr_c ( "SPICE(NODATA)"                   );
+            setmsg_c ( naif_state, "No segments found in DSK file #.");
+            errch_c  ( naif_state, "#",  dsk                         );
+            sigerr_c ( naif_state, "SPICE(NODATA)"                   );
          }
 
          /.
@@ -356,7 +357,7 @@
 
             if ( fabs(xlat-lat) > TOL ) 
             {
-               sigerr_c ( "Latitude error!" );
+               sigerr_c ( naif_state, "Latitude error!" );
             }
 
             if (  (xlon - lon)  > pi_c()  )
@@ -366,7 +367,7 @@
 
             if (  (xlon - lon)  > TOL  )
             {
-               sigerr_c ( "Longitude error!" );
+               sigerr_c ( naif_state, "Longitude error!" );
             }
 
          }
@@ -518,7 +519,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c()  )
+   if ( return_c(naif_state)  )
    {
       return;
    }
@@ -548,13 +549,14 @@
    /*
    Call the f2c'd "get DSK descriptor" routine.
    */
-   dskgd_ ( ( integer    * ) &handle,
+   dskgd_ ( naif_state,
+            ( integer    * ) &handle,
             ( integer    * ) fDLADescr,
             ( doublereal * ) fDSKDescr  );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "llgrid_pl02" );
+      chkout_c ( naif_state, "llgrid_pl02" );
       return;
    }
 
@@ -567,11 +569,11 @@
 
    if ( dataType != 2 ) 
    {
-      setmsg_c ( "Input segment has DSK data type #.  A segment of "
+      setmsg_c ( naif_state, "Input segment has DSK data type #.  A segment of "
                  "type 2 is required."                               );
-      errint_c ( "#", dataType                                       );
-      sigerr_c ( "SPICE(WRONGDATATYPE)"                              );
-      chkout_c ( "llgrid_pl02"                                       );
+      errint_c ( naif_state, "#", dataType                                       );
+      sigerr_c ( naif_state, "SPICE(WRONGDATATYPE)"                              );
+      chkout_c ( naif_state, "llgrid_pl02"                                       );
       return;
    }
 
@@ -581,11 +583,11 @@
    Get the maximum radius value associated with the target body.  
    We'll use this later to compute a numerically safe ray vertex.
    */
-   maxrad = zzdsksgr_ ( fDSKDescr );
+   maxrad = zzdsksgr_ ( naif_state, fDSKDescr );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "llgrid_pl02" );
+      chkout_c ( naif_state, "llgrid_pl02" );
       return;
    }
    
@@ -595,44 +597,44 @@
       Find the outward unit vector corresponding to the ith lon/lat pair.
       Note:  longitude comes first!
       */
-      latrec_c ( 1.0, grid[i][0], grid[i][1], vertex );
+      latrec_c ( naif_state, 1.0, grid[i][0], grid[i][1], vertex );
 
-      vminus_c ( vertex, raydir );
+      vminus_c ( naif_state, vertex, raydir );
 
       /*
       To avoid numerical problems, we pick a vertex that is guaranteed
       to be a reasonable distance away from the target's surface.
       */ 
-      scale = maxd_c ( 2,  1.0,  2.0*maxrad );
+      scale = maxd_c ( naif_state, 2,  1.0,  2.0*maxrad );
 
-      vscl_c ( scale, vertex, vertex );
+      vscl_c ( naif_state, scale, vertex, vertex );
 
 
       /*
       Find the surface intercept defined by the vertex, ray direction,
       and surface plate model.
       */
-      dskx02_c ( handle,       dladsc,      vertex,  raydir, 
+      dskx02_c ( naif_state,   handle,      dladsc,  vertex,  raydir, 
                  plateIDs+i,   spoints[i],  &found          );
 
-      if ( failed_c() )
+      if ( failed_c(naif_state) )
       {
-         chkout_c ( "llgrid_pl02" );
+         chkout_c ( naif_state, "llgrid_pl02" );
          return;
       }
 
       if ( !found  )
       { 
-         setmsg_c ( "Ray from vertex number # having longitude # "
+         setmsg_c ( naif_state, "Ray from vertex number # having longitude # "
                     "and latitude # (radians) to center "
                     "of target # did not intersect the surface  "
                     "defined by the input handle and descriptor."  );    
-         errint_c ( "#", i                                         );
-         errdp_c  ( "#", grid[i][0]                                );
-         errdp_c  ( "#", grid[i][1]                                );
-         errint_c ( "#", centerID                                  );
-         sigerr_c ( "SPICE(NOINTERCEPT)"                           );
-         chkout_c ( "llgrid_pl02"                                  );
+         errint_c ( naif_state, "#", i                                         );
+         errdp_c  ( naif_state, "#", grid[i][0]                                );
+         errdp_c  ( naif_state, "#", grid[i][1]                                );
+         errint_c ( naif_state, "#", centerID                                  );
+         sigerr_c ( naif_state, "SPICE(NOINTERCEPT)"                           );
+         chkout_c ( naif_state, "llgrid_pl02"                                  );
          return;
       }
    }
@@ -642,6 +644,6 @@
    At this point, `spoints' and `plateIDs' are set.
    */
 
-   chkout_c ( "llgrid_pl02" );
+   chkout_c ( naif_state, "llgrid_pl02" );
  
 } /* End llgrid_pl02 */

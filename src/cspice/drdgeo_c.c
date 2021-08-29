@@ -47,7 +47,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void drdgeo_c ( SpiceDouble    lon,
+   void drdgeo_c ( void         * naif_state,
+                   SpiceDouble    lon,
                    SpiceDouble    lat,
                    SpiceDouble    alt,
                    SpiceDouble    re,
@@ -235,7 +236,8 @@
    chkin_c ( naif_state, "drdgeo_c" );
 
 
-   drdgeo_ ( (doublereal *) &lon,
+   drdgeo_ ( naif_state,
+             (doublereal *) &lon,
              (doublereal *) &lat,
              (doublereal *) &alt,
              (doublereal *) &re,
@@ -245,9 +247,9 @@
    /*
    Transpose the Jacobian to create a C-style matrix.
    */
-   xpose_c ( jacobi, jacobi );
+   xpose_c ( naif_state, jacobi, jacobi );
 
 
-   chkout_c ( "drdgeo_c" );
+   chkout_c ( naif_state, "drdgeo_c" );
    
 } /* End drdgeo_c */

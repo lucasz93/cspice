@@ -48,7 +48,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void ekops_c ( SpiceInt   * handle ) 
+   void ekops_c ( void *naif_state, SpiceInt   * handle ) 
 
 /*
 
@@ -144,9 +144,9 @@
    chkin_c ( naif_state, "ekops_c" );
 
 
-   ekops_ ( ( integer * ) handle );
+   ekops_ ( naif_state, ( integer * ) handle );
 
 
-   chkout_c ( "ekops_c" );
+   chkout_c ( naif_state, "ekops_c" );
 
 } /* End ekops_c */

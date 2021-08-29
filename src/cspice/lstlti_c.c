@@ -48,7 +48,8 @@
    #undef    lstlti_c
 
 
-   SpiceInt lstlti_c ( SpiceInt          x,
+   SpiceInt lstlti_c ( void            * naif_state,
+                       SpiceInt          x,
                        SpiceInt          n,
                        ConstSpiceInt   * array )      
 
@@ -172,7 +173,8 @@
 { /* Begin lstlti_c */
 
 
-   return  (   lstlti_ ( (integer *) &x, 
+   return  (   lstlti_ ( naif_state,
+                         (integer *) &x, 
                          (integer *) &n, 
                          (integer *) array )  -  1   );
 

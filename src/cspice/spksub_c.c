@@ -47,7 +47,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void spksub_c ( SpiceInt            handle,
+   void spksub_c ( void              * naif_state,
+                   SpiceInt            handle,
                    SpiceDouble         descr[5],
                    ConstSpiceChar    * ident,
                    SpiceDouble         begin,
@@ -219,10 +220,11 @@
    Check the input strings to make sure the pointers
    are non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spksub_c", ident );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spksub_c", ident );
 
 
-   spksub_ (  ( integer    * ) &handle,
+   spksub_ (  naif_state,
+              ( integer    * ) &handle,
               ( doublereal * ) descr,
               ( char       * ) ident,
               ( doublereal * ) &begin,
@@ -231,6 +233,6 @@
               ( ftnlen       ) strlen(ident) );
 
 
-   chkout_c ( "spksub_c" );
+   chkout_c ( naif_state, "spksub_c" );
 
 } /* End spksub_c */

@@ -44,7 +44,7 @@
 
    #include "SpiceUsr.h"
 
-   SpiceInt intmin_c () 
+   SpiceInt intmin_c (void *naif_state) 
 
 /*
 
@@ -193,7 +193,7 @@
 
    if ( first )
    {
-      value = intmin_();
+      value = intmin_(naif_state);
       first = SPICEFALSE;
    }
    

@@ -45,7 +45,8 @@
    #undef   vupack_c
    
 
-   void vupack_c ( ConstSpiceDouble     v[3],
+   void vupack_c ( void               * naif_state,
+                  ConstSpiceDouble      v[3],
                    SpiceDouble        * x,
                    SpiceDouble        * y,
                    SpiceDouble        * z     ) 

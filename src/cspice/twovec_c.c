@@ -48,7 +48,8 @@
    #undef    twovec_c
    
 
-   void twovec_c ( ConstSpiceDouble    axdef  [3],
+   void twovec_c ( void              * naif_state,
+                   ConstSpiceDouble    axdef  [3],
                    SpiceInt            indexa,
                    ConstSpiceDouble    plndef [3],
                    SpiceInt            indexp,
@@ -190,7 +191,8 @@
    /*
    Call the f2c'd routine.
    */
-   twovec_ ( ( doublereal * )  axdef,
+   twovec_ ( naif_state,
+             ( doublereal * )  axdef,
              ( integer    * )  &indexa,
              ( doublereal * )  plndef,
              ( integer    * )  &indexp,
@@ -200,9 +202,9 @@
    Transpose the output matrix to put it in row-major
    order.
    */
-   xpose_c ( mout, mout );
+   xpose_c ( naif_state, mout, mout );
    
 
-   chkout_c ( "twovec_c" );
+   chkout_c ( naif_state, "twovec_c" );
 
 } /* End twovec_c */

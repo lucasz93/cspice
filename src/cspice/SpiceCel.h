@@ -373,12 +373,12 @@
    "Fetch" macros: 
    */
 
-   #define SPICE_CELL_GET_C( cell, i, lenout, item )                        \
+   #define SPICE_CELL_GET_C( naif, cell, i, lenout, item )                  \
                                                                             \
        {                                                                    \
           SpiceInt    nBytes;                                               \
                                                                             \
-          nBytes   =    brckti_c ( (cell)->length,  0, (lenout-1)  )        \
+          nBytes   =    brckti_c ( naif, (cell)->length,  0, (lenout-1)  )  \
                      *  sizeof   ( SpiceChar );                             \
                                                                             \
           memmove ( (item),  SPICE_CELL_ELEM_C((cell), (i)),  nBytes );     \
@@ -401,13 +401,13 @@
    Assignment macros: 
    */
 
-   #define SPICE_CELL_SET_C( item, i, cell )                                \
+   #define SPICE_CELL_SET_C( naif, item, i, cell )                          \
                                                                             \
        {                                                                    \
           SpiceChar   * sPtr;                                               \
           SpiceInt      nBytes;                                             \
                                                                             \
-          nBytes   =    brckti_c ( strlen(item), 0, (cell)->length - 1 )    \
+          nBytes   =    brckti_c ( naif, strlen(item), 0, (cell)->length - 1 ) \
                       * sizeof   ( SpiceChar );                             \
                                                                             \
           sPtr     =    SPICE_CELL_ELEM_C((cell), (i));                     \

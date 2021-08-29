@@ -47,7 +47,8 @@
    #undef    nvp2pl_c
    
 
-   void nvp2pl_c ( ConstSpiceDouble    normal[3],
+   void nvp2pl_c ( void              * naif_state,
+                   ConstSpiceDouble    normal[3],
                    ConstSpiceDouble    point [3],
                    SpicePlane        * plane     ) 
 
@@ -167,7 +168,7 @@
    This routine checks in only if an error is discovered.
    */
 
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -177,19 +178,19 @@
    The normal vector must be non-zero.
    */
    
-   if ( vzero_c (normal) )
+   if ( vzero_c (naif_state, normal) )
    {
-      chkin_c  ( "nvp2pl_c"                         );
-      setmsg_c ( "Plane's normal must be non-zero." );
-      sigerr_c ( "SPICE(ZEROVECTOR)"                );
-      chkout_c ( "nvp2pl_c"                         );
+      chkin_c  ( naif_state, "nvp2pl_c"                         );
+      setmsg_c ( naif_state, "Plane's normal must be non-zero." );
+      sigerr_c ( naif_state, "SPICE(ZEROVECTOR)"                );
+      chkout_c ( naif_state, "nvp2pl_c"                         );
       return;
    }
  
    
-   vhat_c ( normal, plane->normal );
+   vhat_c ( naif_state, normal, plane->normal );
  
-   plane->constant  =  vdot_c ( point, plane->normal );
+   plane->constant  =  vdot_c ( naif_state, point, plane->normal );
  
  
    /*
@@ -202,7 +203,7 @@
    {
       plane->constant  =   - (plane->constant);
       
-      vminus_c ( plane->normal, plane->normal );
+      vminus_c ( naif_state, plane->normal, plane->normal );
    }
  
 

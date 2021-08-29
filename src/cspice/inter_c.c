@@ -46,7 +46,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void inter_c (  SpiceCell   * a,
+   void inter_c (  void        * naif_state,
+                   SpiceCell   * a,
                    SpiceCell   * b,
                    SpiceCell   * c  ) 
 
@@ -233,7 +234,7 @@
    /*
    Standard SPICE error handling. 
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -243,17 +244,17 @@
    /*
    Make sure data types match. 
    */
-   CELLMATCH3 ( CHK_STANDARD, "inter_c", a, b, c );
+   CELLMATCH3 ( naif_state, CHK_STANDARD, "inter_c", a, b, c );
 
    /*
    Make sure the input cells are sets.
    */
-   CELLISSETCHK2 ( CHK_STANDARD, "inter_c", a, b );
+   CELLISSETCHK2 ( naif_state, CHK_STANDARD, "inter_c", a, b );
 
    /*
    Initialize the cells if necessary. 
    */
-   CELLINIT3 ( a, b, c );
+   CELLINIT3 ( naif_state, a, b, c );
 
    /*
    Call the intersection routine appropriate for the data type of the
@@ -265,18 +266,19 @@
       /*
       Construct Fortran-style sets suitable for passing to interc_. 
       */
-      C2F_MAP_CELL3 (  "", 
+      C2F_MAP_CELL3 ( naif_state,  "", 
                        a, fCell,   fLen,
                        b, fCell+1, fLen+1,   
                        c, fCell+2, fLen+2  );
 
-      if ( failed_c() )
+      if ( failed_c(naif_state) )
       {
-         chkout_c ( "inter_c" );
+         chkout_c ( naif_state, "inter_c" );
          return;
       }
 
-      interc_ ( (char    * )  fCell[0],
+      interc_ ( naif_state,
+                (char    * )  fCell[0],
                 (char    * )  fCell[1],
                 (char    * )  fCell[2],
                 (ftnlen    )  fLen[0],
@@ -286,7 +288,7 @@
       /*
       Map the intersection back to a C style cell. 
       */
-      F2C_MAP_CELL ( fCell[2], fLen[2], c );
+      F2C_MAP_CELL ( naif_state, fCell[2], fLen[2], c );
 
 
       /*
@@ -301,40 +303,42 @@
 
    else if ( a->dtype == SPICE_DP )
    {
-      interd_ ( (doublereal * )  (a->base),
+      interd_ ( naif_state,
+                (doublereal * )  (a->base),
                 (doublereal * )  (b->base),
                 (doublereal * )  (c->base)  );
       /*
       Sync the output cell. 
       */
-      if ( !failed_c() )
+      if ( !failed_c(naif_state) )
       {
-         zzsynccl_c ( F2C, c );
+         zzsynccl_c ( naif_state, F2C, c );
       }
 
    }
 
    else if ( a->dtype == SPICE_INT )
    {
-      interi_ ( (integer * )  (a->base),
+      interi_ ( naif_state,
+                (integer * )  (a->base),
                 (integer * )  (b->base),
                 (integer * )  (c->base)  );      
 
       /*
       Sync the output cell. 
       */
-      if ( !failed_c() )
+      if ( !failed_c(naif_state) )
       {
-         zzsynccl_c ( F2C, c );
+         zzsynccl_c ( naif_state, F2C, c );
       }
    }
 
    else
    {
-     setmsg_c ( "Cell a contains unrecognized data type code #." );
-     errint_c ( "#",  (SpiceInt) (a->dtype)                      );
-     sigerr_c ( "SPICE(NOTSUPPORTED)"                            );
-     chkout_c ( "inter_c"                                        );
+     setmsg_c ( naif_state, "Cell a contains unrecognized data type code #." );
+     errint_c ( naif_state, "#",  (SpiceInt) (a->dtype)                      );
+     sigerr_c ( naif_state, "SPICE(NOTSUPPORTED)"                            );
+     chkout_c ( naif_state, "inter_c"                                        );
      return;
    }
 
@@ -345,6 +349,6 @@
    c->isSet = SPICETRUE;
 
 
-   chkout_c ( "inter_c" );   
+   chkout_c ( naif_state, "inter_c" );   
 
 } /* End inter_c */

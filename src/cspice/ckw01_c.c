@@ -51,7 +51,8 @@
    #undef    ckw01_c
    
 
-   void ckw01_c ( SpiceInt            handle, 
+   void ckw01_c ( void              * naif_state,
+                  SpiceInt            handle, 
                   SpiceDouble         begtim,
                   SpiceDouble         endtim,
                   SpiceInt            inst,
@@ -512,8 +513,8 @@
    Check the input strings to make sure the pointers
    are non-null and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ckw01_c", ref   );
-   CHKFSTR ( CHK_STANDARD, "ckw01_c", segid );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckw01_c", ref   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ckw01_c", segid );
  
    /*
    Get a type logical copy of the a.v. flag.
@@ -526,7 +527,8 @@
    arrays DO NOT require transposition!
    */
 
-   ckw01_( ( integer    * ) &handle, 
+   ckw01_( naif_state,
+           ( integer    * ) &handle, 
            ( doublereal * ) &begtim, 
            ( doublereal * ) &endtim, 
            ( integer    * ) &inst, 
@@ -541,6 +543,6 @@
            ( ftnlen       ) strlen(segid)  );
 
 
-   chkout_c ( "ckw01_c" );
+   chkout_c ( naif_state, "ckw01_c" );
 
 } /* End ckw01_c */

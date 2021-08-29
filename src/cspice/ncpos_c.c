@@ -51,7 +51,8 @@
    #include "SpiceZmc.h"
 
 
-   SpiceInt ncpos_c ( ConstSpiceChar    * str,
+   SpiceInt ncpos_c ( void              * naif_state,
+                      ConstSpiceChar    * str,
                       ConstSpiceChar    * chars,
                       SpiceInt            start  )
 
@@ -194,8 +195,8 @@
 
    Check for null pointers.
    */
-   CHKPTR_VAL ( CHK_DISCOVER, "ncpos_c",  str,   -1 );
-   CHKPTR_VAL ( CHK_DISCOVER, "ncpos_c",  chars, -1 );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "ncpos_c",  str,   -1 );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "ncpos_c",  chars, -1 );
 
 
    /*
@@ -214,7 +215,8 @@
 
    fstart =  start + 1;
 
-   retval =  ncpos_ ( (char     *) str,
+   retval =  ncpos_ ( naif_state,
+                      (char     *) str,
                       (char     *) chars,
                       (integer  *) &fstart,
                       (ftnlen    ) strlen(str), 

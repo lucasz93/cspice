@@ -50,7 +50,8 @@
    #include "SpiceZmc.h"
 
 
-   SpiceInt ordd_c ( SpiceDouble     item,
+   SpiceInt ordd_c ( void          * naif_state,
+                     SpiceDouble     item,
                      SpiceCell     * set  )
 
 /*
@@ -183,12 +184,12 @@
 
                if (  ordd_c(dElt, &set)  !=  expected[i]  )
                {
-                  setmsg_c ( "Position of # was expected to be # "
+                  setmsg_c ( naif_state, "Position of # was expected to be # "
                              "but was actually #."                 );
                   errdp_c  ( "#",  dElt                            );
                   errdp_c  ( "#",  expected[i]                     );
-                  errint_c ( "#",  ordd_c(dElt,&set)               );
-                  sigerr_c ( "INVALID LOCATION"                    );
+                  errint_c ( naif_state, "#",  ordd_c(dElt,&set)               );
+                  sigerr_c ( naif_state, "INVALID LOCATION"                    );
                }
             }
 
@@ -231,23 +232,23 @@
 
    Make sure we're working with a double precision cell. 
    */
-   CELLTYPECHK_VAL ( CHK_DISCOVER, "ordd_c", SPICE_DP, set, -1 );
+   CELLTYPECHK_VAL ( naif_state, CHK_DISCOVER, "ordd_c", SPICE_DP, set, -1 );
 
    /*
    Initialize the set if necessary. 
    */
-   CELLINIT ( set );
+   CELLINIT ( naif_state, set );
 
    /*
    Make sure the cell is really a set. 
    */
-   CELLISSETCHK_VAL ( CHK_DISCOVER, "ordd_c", set, -1 );
+   CELLISSETCHK_VAL ( naif_state, CHK_DISCOVER, "ordd_c", set, -1 );
 
    /*
    The routine bsrchd_c returns the index of the item in the set,
    or -1 if the item is not present.
    */
-   return (  bsrchd_c ( item,  set->card,  set->data ) );
+   return (  bsrchd_c ( naif_state, item,  set->card,  set->data ) );
 
 
 } /* End ordd_c */

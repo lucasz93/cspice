@@ -47,7 +47,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h" 
 
-   void trcnam_c ( SpiceInt       index,
+   void trcnam_c ( void         * naif_state,
+                   SpiceInt       index,
                    SpiceInt       namelen,
                    SpiceChar    * name     )
 /*
@@ -198,7 +199,7 @@
 
             spkezr_c ( target, et, frame, abcorr, obsrvr, state, &lt );
 
-            if ( failed_c() ) 
+            if ( failed_c(naif_state) ) 
             {
                /.
                An error has been signaled. First fetch the long
@@ -323,12 +324,12 @@
       We must reset the error handling status in order to
       be able to signal an error.       
       */
-      reset_c  ();
+      reset_c  (naif_state);
 
-      chkin_c  ( "trcnam_c"                                  );
-      setmsg_c ( "The output string pointer 'name' is null." );
-      sigerr_c ( "SPICE(NULLPOINTER)"                        );
-      chkout_c ( "trcnam_c"                                  );
+      chkin_c  ( naif_state, "trcnam_c"                                  );
+      setmsg_c ( naif_state, "The output string pointer 'name' is null." );
+      sigerr_c ( naif_state, "SPICE(NULLPOINTER)"                        );
+      chkout_c ( naif_state, "trcnam_c"                                  );
       return;
    }
 
@@ -338,14 +339,14 @@
       We must reset the error handling status in order to
       be able to signal an error.       
       */
-      reset_c  ();
+      reset_c  (naif_state);
 
-      chkin_c  ( "trcnam_c"                                    );
-      setmsg_c ( "The output string 'name' has length #; the "
+      chkin_c  ( naif_state, "trcnam_c"                                    );
+      setmsg_c ( naif_state, "The output string 'name' has length #; the "
                  "minimum allowed length is 2 characters."     );
-      errint_c ( "#",  namelen                                 );
-      sigerr_c ( "SPICE(STRINGTOOSHORT)"                       );
-      chkout_c ( "trcnam_c"                                    );
+      errint_c ( naif_state, "#",  namelen                                 );
+      sigerr_c ( naif_state, "SPICE(STRINGTOOSHORT)"                       );
+      chkout_c ( naif_state, "trcnam_c"                                    );
       return;
    }
 
@@ -353,7 +354,7 @@
    /*
    Check the module index. 
    */
-   trcdep_c ( &depth );
+   trcdep_c ( naif_state, &depth );
 
    if (  ( index < 0 ) || ( index >= depth )  )
    {
@@ -361,16 +362,16 @@
       We must reset the error handling status in order to
       be able to signal an error.       
       */
-      reset_c  ();
+      reset_c  (naif_state);
       
-      chkin_c  ( "trcnam_c"                               );
-      setmsg_c ( "Module index must be in the range #:# "
+      chkin_c  ( naif_state, "trcnam_c"                               );
+      setmsg_c ( naif_state, "Module index must be in the range #:# "
                  "but is #."                              );
-      errint_c ( "#",  0                                  );
-      errint_c ( "#",  depth - 1                          );
-      errint_c ( "#",  index                              );
-      sigerr_c ( "SPICE(INDEXOUTOFRANGE)"                 );
-      chkout_c ( "trcnam_c"                               );
+      errint_c ( naif_state, "#",  0                                  );
+      errint_c ( naif_state, "#",  depth - 1                          );
+      errint_c ( naif_state, "#",  index                              );
+      sigerr_c ( naif_state, "SPICE(INDEXOUTOFRANGE)"                 );
+      chkout_c ( naif_state, "trcnam_c"                               );
       return;
    }
 
@@ -383,7 +384,8 @@
    /*
    Fetch the module name. 
    */
-   trcnam_ ( ( integer    * ) &i,
+   trcnam_ ( naif_state,
+             ( integer    * ) &i,
              ( char       * ) name,
              ( ftnlen       ) namelen-1 );
 

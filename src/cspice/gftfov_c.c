@@ -60,7 +60,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void gftfov_c ( ConstSpiceChar     * inst,
+   void gftfov_c ( void               * naif_state,
+                   ConstSpiceChar     * inst,
                    ConstSpiceChar     * target,
                    ConstSpiceChar     * tshape,
                    ConstSpiceChar     * tframe,
@@ -821,7 +822,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -830,12 +831,12 @@
    /*
    Make sure cell data types are d.p. 
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "gftfov_c", SPICE_DP, cnfine, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "gftfov_c", SPICE_DP, cnfine, result );
 
    /*
    Initialize the input cells if necessary. 
    */
-   CELLINIT2 ( cnfine, result );
+   CELLINIT2 ( naif_state, cnfine, result );
 
    /*
    The input frame name is a special case because we allow the caller
@@ -845,7 +846,7 @@
 
    First make sure the frame name pointer is non-null.
    */
-   CHKPTR ( CHK_STANDARD, "gftfov_c", tframe );
+   CHKPTR ( naif_state, CHK_STANDARD, "gftfov_c", tframe );
 
    /*
    Use the input frame string if it's non-empty; otherwise
@@ -866,17 +867,18 @@
    Check the other input strings to make sure each pointer is non-null 
    and each string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gftfov_c", inst   );
-   CHKFSTR ( CHK_STANDARD, "gftfov_c", target );
-   CHKFSTR ( CHK_STANDARD, "gftfov_c", tshape );
-   CHKFSTR ( CHK_STANDARD, "gftfov_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "gftfov_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gftfov_c", inst   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gftfov_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gftfov_c", tshape );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gftfov_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gftfov_c", obsrvr );
 
 
    /*
    Let the f2c'd routine do the work. 
    */
-   gftfov_ ( (char         *) inst,
+   gftfov_ ( naif_state,
+             (char         *) inst,
              (char         *) target,
              (char         *) tshape,
              (char         *) tFrameStr,
@@ -895,11 +897,11 @@
    /*
    Sync the output result cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, result );
+      zzsynccl_c ( naif_state, F2C, result );
    }
 
-   chkout_c ( "gftfov_c" );
+   chkout_c ( naif_state, "gftfov_c" );
 
 } /* End gftfov_c */

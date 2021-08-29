@@ -50,7 +50,8 @@
    #include "SpiceZmc.h"   
 
 
-   void tisbod_c ( ConstSpiceChar   * ref,    
+   void tisbod_c ( void             * naif_state,
+                   ConstSpiceChar   * ref,    
                    SpiceInt           body,
                    SpiceDouble        et,     
                    SpiceDouble        tsipm[6][6] )
@@ -481,7 +482,7 @@
    Check the input string ref to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "tisbod_c", ref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "tisbod_c", ref );
 
 
    /*
@@ -497,9 +498,9 @@
    Transpose the output from tisbod_ to put the matrix in row-major
    order, which is what C uses.
    */
-   xpose6_c ( tsipm, tsipm );
+   xpose6_c ( naif_state, tsipm, tsipm );
    
    
-   chkout_c ( "tisbod_c" );
+   chkout_c ( naif_state, "tisbod_c" );
 
 } /* End tisbod_c */

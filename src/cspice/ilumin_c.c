@@ -57,7 +57,8 @@
    #undef ilumin_c
 
 
-   void ilumin_c ( ConstSpiceChar        * method,
+   void ilumin_c ( void                  * naif_state,
+                   ConstSpiceChar        * method,
                    ConstSpiceChar        * target,
                    SpiceDouble             et,
                    ConstSpiceChar        * fixref,
@@ -1176,16 +1177,17 @@
    sure none of the pointers are null and that each string contains at
    least one non-null character.
    */
-   CHKFSTR ( CHK_STANDARD, "ilumin_c", method );
-   CHKFSTR ( CHK_STANDARD, "ilumin_c", target );
-   CHKFSTR ( CHK_STANDARD, "ilumin_c", fixref );
-   CHKFSTR ( CHK_STANDARD, "ilumin_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "ilumin_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ilumin_c", method );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ilumin_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ilumin_c", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ilumin_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ilumin_c", obsrvr );
 
    /*
    Call the f2c'd routine.
    */
-   ilumin_ ( ( char         * ) method,
+   ilumin_ ( naif_state,
+             ( char         * ) method,
              ( char         * ) target,
              ( doublereal   * ) &et, 
              ( char         * ) fixref, 
@@ -1203,6 +1205,6 @@
              ( ftnlen         ) strlen(abcorr), 
              ( ftnlen         ) strlen(obsrvr)  );
                          
-   chkout_c ( "ilumin_c" );
+   chkout_c ( naif_state, "ilumin_c" );
 
 } /* End ilumin_c */

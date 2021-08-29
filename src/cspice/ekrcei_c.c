@@ -47,7 +47,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void ekrcei_c ( SpiceInt           handle,
+   void ekrcei_c ( void             * naif_state,
+                   SpiceInt           handle,
                    SpiceInt           segno,
                    SpiceInt           recno,
                    ConstSpiceChar   * column,
@@ -209,7 +210,8 @@
    segno++;
    recno++;
 
-   ekrcei_  (  ( integer * ) &handle,
+   ekrcei_  (  naif_state,
+               ( integer * ) &handle,
                ( integer * ) &segno,
                ( integer * ) &recno,
                ( char    * ) column,
@@ -224,6 +226,6 @@
    
    *isnull = null;
 
-   chkout_c ( "ekrcei_c" );
+   chkout_c ( naif_state, "ekrcei_c" );
 
 } /* End ekrcei_c */

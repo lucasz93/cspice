@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void getfat_c ( ConstSpiceChar   * file,
+   void getfat_c ( void             * naif_state,
+                   ConstSpiceChar   * file,
                    SpiceInt           arclen,
                    SpiceInt           typlen,
                    SpiceChar        * arch,
@@ -243,23 +244,24 @@
    Check the input file name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "getfat_c", file );
+   CHKFSTR ( naif_state, CHK_STANDARD, "getfat_c", file );
    
    /*
    Make sure the output architecture string has at least enough room 
    for one output character and a null terminator.  Also check for a 
    null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "getfat_c", arch, arclen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "getfat_c", arch, arclen );
 
    /*
    Make sure the output file type string has at least enough room 
    for one output character and a null terminator.  Also check for a 
    null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "getfat_c", type, typlen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "getfat_c", type, typlen );
 
-   getfat_ (  ( char   * ) file,
+   getfat_ (  naif_state,
+              ( char   * ) file,
               ( char   * ) arch,
               ( char   * ) type,
               ( ftnlen   ) strlen(file),
@@ -277,6 +279,6 @@
    F2C_ConvertStr ( typlen, type );
                
 
-   chkout_c ( "getfat_c" );
+   chkout_c ( naif_state, "getfat_c" );
 
 } /* End getfat_c */

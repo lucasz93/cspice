@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
 
 
-   void cklpf_c ( ConstSpiceChar * filename,
+   void cklpf_c ( void           * naif_state,
+                  ConstSpiceChar * filename,
                   SpiceInt       * handle    )
 
 /*
@@ -174,17 +175,18 @@
    Check the input string filename to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "cklpf_c", filename );
+   CHKFSTR ( naif_state, CHK_STANDARD, "cklpf_c", filename );
    
 
    /*
    Call the f2c'd Fortran routine.
    */
-   cklpf_ ( ( char     * )  filename, 
+   cklpf_ ( naif_state,
+            ( char     * )  filename, 
             ( integer  * )  handle, 
             ( ftnlen     )  strlen(filename) );
 
 
-   chkout_c ( "cklpf_c" );   
+   chkout_c ( naif_state, "cklpf_c" );   
 
 } /* end cklpf_c */

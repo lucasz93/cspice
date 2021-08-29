@@ -44,7 +44,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void shelli_c ( SpiceInt     ndim,
+   void shelli_c ( void       * naif_state,
+                   SpiceInt     ndim,
                    SpiceInt   * array ) 
 
 /*
@@ -133,7 +134,8 @@
 
 { /* Begin shelli_c */
 
-   shelli_ ( ( integer * ) &ndim,
+   shelli_ ( naif_state,
+             ( integer * ) &ndim,
              ( integer * ) array  );
 
 } /* End shelli_c */

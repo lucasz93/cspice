@@ -59,7 +59,8 @@
    #include "SpiceZmc.h"
 
 
-   void term_pl02 ( SpiceInt              handle,
+   void term_pl02 ( void                * naif_state,
+                    SpiceInt              handle,
                     ConstSpiceDLADescr  * dladsc,
                     ConstSpiceChar      * trmtyp,
                     ConstSpiceChar      * source,
@@ -652,9 +653,9 @@
                 contains no segments.  This is
                 unexpected, but we're prepared for it.
                 ./
-                setmsg_c ( "No segments found in DSK file #.");
-                errch_c  ( "#",  dsk                         );
-                sigerr_c ( "SPICE(NODATA)"                   );
+                setmsg_c ( naif_state, "No segments found in DSK file #.");
+                errch_c  ( naif_state, "#",  dsk                         );
+                sigerr_c ( naif_state, "SPICE(NODATA)"                   );
              }
 
              /.
@@ -1000,31 +1001,31 @@
    Check the input strings. Make sure none of the pointers are null and
    that each string contains at least one non-null character.
    */
-   CHKFSTR ( CHK_STANDARD, "term_pl02", trmtyp );
-   CHKFSTR ( CHK_STANDARD, "term_pl02", source );
-   CHKFSTR ( CHK_STANDARD, "term_pl02", target );
-   CHKFSTR ( CHK_STANDARD, "term_pl02", fixref );
-   CHKFSTR ( CHK_STANDARD, "term_pl02", abcorr );
-   CHKFSTR ( CHK_STANDARD, "term_pl02", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "term_pl02", trmtyp );
+   CHKFSTR ( naif_state, CHK_STANDARD, "term_pl02", source );
+   CHKFSTR ( naif_state, CHK_STANDARD, "term_pl02", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "term_pl02", fixref );
+   CHKFSTR ( naif_state, CHK_STANDARD, "term_pl02", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "term_pl02", obsrvr );
 
    /*
    Map the target name to an ID code.
    */
-   bods2c_c ( target, &trgcde, &found );
+   bods2c_c ( naif_state, target, &trgcde, &found );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
-      chkout_c ( "term_pl02" );
+      chkout_c ( naif_state, "term_pl02" );
       return;
    }
 
    if ( !found ) 
    {
-      setmsg_c ( "The target name # could not be mapped "
+      setmsg_c ( naif_state, "The target name # could not be mapped "
                  "to an ID code."                        );
-      errch_c  ( "#", target                             );
-      sigerr_c ( "SPICE(IDCODENOTFOUND)"                 );
-      chkout_c ( "term_pl02"                             );
+      errch_c  ( naif_state, "#", target                             );
+      sigerr_c ( naif_state, "SPICE(IDCODENOTFOUND)"                 );
+      chkout_c ( naif_state, "term_pl02"                             );
       return;      
    }
 
@@ -1032,21 +1033,21 @@
    Check the DSK descriptor of the DSK segment; make sure it's
    for the correct body.
    */
-   dskgd_c ( handle, dladsc, &dskdsc );
+   dskgd_c ( naif_state, handle, dladsc, &dskdsc );
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
-      chkout_c ( "term_pl02" );
+      chkout_c ( naif_state, "term_pl02" );
       return;
    }
 
    if ( dskdsc.center != trgcde )
    {
-      setmsg_c ( "The target is # but the input DSK "
+      setmsg_c ( naif_state, "The target is # but the input DSK "
                  "segment is for body #."            );
-      errint_c ( "#", dskdsc.center                  );
-      sigerr_c ( "SPICE(DSKTARGETMISMATCH)"          );
-      chkout_c ( "term_pl02"                         );
+      errint_c ( naif_state, "#", dskdsc.center                  );
+      sigerr_c ( naif_state, "SPICE(DSKTARGETMISMATCH)"          );
+      chkout_c ( naif_state, "term_pl02"                         );
       return;            
    }
 
@@ -1059,7 +1060,8 @@
    Note in particular that if a PCK file providing radii for the target
    reference ellipsoid hasn't been loaded, we'll find out here.
    */
-   edterm_ (  ( char       * ) trmtyp, 
+   edterm_ (  naif_state,
+              ( char       * ) trmtyp, 
               ( char       * ) source, 
               ( char       * ) target, 
               ( doublereal * ) &et, 
@@ -1077,9 +1079,9 @@
               ( ftnlen       ) strlen(abcorr), 
               ( ftnlen       ) strlen(obsrvr)   );        
 
-   if ( failed_c() ) 
+   if ( failed_c(naif_state) ) 
    {
-      chkout_c ( "term_pl02" );
+      chkout_c ( naif_state, "term_pl02" );
       return;
    }
 
@@ -1101,10 +1103,10 @@
    
    if ( !lonLatGridPtr )
    {
-      setmsg_c ( "Call to malloc to allocate # bytes of memory "
+      setmsg_c ( naif_state, "Call to malloc to allocate # bytes of memory "
                  "for the lon/lat array failed."                 );
-      errint_c ( "#",  nBytes                                    );
-      chkout_c ( "term_pl02"                                     );
+      errint_c ( naif_state, "#",  nBytes                                    );
+      chkout_c ( naif_state, "term_pl02"                                     );
       return;
    }
 
@@ -1117,7 +1119,8 @@
       Convert the ith terminator point on the reference ellipsoid
       from rectangular to latitudinal coordinates.   
       */
-      reclat_c (  trmpts[i], 
+      reclat_c (  naif_state,
+                  trmpts[i], 
                   &radius, 
                   &( lonLatGridPtr[i][0] ),
                   &( lonLatGridPtr[i][1] )   );      
@@ -1132,7 +1135,8 @@
    SpiceDoubles" for compatibility with the prototype of llgrid_pl02.
    Only the const qualifier is new; the size is unchanged.
    */
-   llgrid_pl02 ( handle,                                  
+   llgrid_pl02 ( naif_state,
+                 handle,                                  
                  dladsc,  
                  npoints, 
                  (ConstSpiceDouble (*)[2]) lonLatGridPtr,  
@@ -1151,6 +1155,6 @@
    */
    free ( lonLatGridPtr );
 
-   chkout_c ( "term_pl02" );
+   chkout_c ( naif_state, "term_pl02" );
 
 } /* End term_pl02_c */

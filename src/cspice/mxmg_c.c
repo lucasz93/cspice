@@ -46,7 +46,8 @@
    #include "SpiceZim.h"
    #undef    mxmg_c
 
-   void mxmg_c ( const void    * m1,
+   void mxmg_c ( void          * naif_state,
+                 const void    * m1,
                  const void    * m2,
                  SpiceInt        nrow1,
                  SpiceInt        ncol1,
@@ -245,10 +246,10 @@
 
    if ( tmpmat == (SpiceDouble *)0 )
    {
-      chkin_c  ( "mxmg_c"                                          );
-      setmsg_c ( "An attempt to create a temporary matrix failed." );
-      sigerr_c ( "SPICE(MEMALLOCFAILED)"                           );
-      chkout_c ( "mxmg_c"                                          );
+      chkin_c  ( naif_state, "mxmg_c"                                          );
+      setmsg_c ( naif_state, "An attempt to create a temporary matrix failed." );
+      sigerr_c ( naif_state, "SPICE(MEMALLOCFAILED)"                           );
+      chkout_c ( naif_state, "mxmg_c"                                          );
       return;
    }
 

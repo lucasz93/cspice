@@ -58,7 +58,8 @@
    #include "SpiceZmc.h"
    #include "zzalloc.h"
 
-   void gfpa_c ( ConstSpiceChar     * target,
+   void gfpa_c ( void               * naif_state,
+                 ConstSpiceChar     * target,
                  ConstSpiceChar     * illmn,
                  ConstSpiceChar     * abcorr,
                  ConstSpiceChar     * obsrvr,
@@ -833,7 +834,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
       {
       return;
       }
@@ -843,22 +844,22 @@
    /*
    Make sure cell data types are d.p.
    */
-   CELLTYPECHK2 ( CHK_STANDARD, "gfpa_c", SPICE_DP, cnfine, result );
+   CELLTYPECHK2 ( naif_state, CHK_STANDARD, "gfpa_c", SPICE_DP, cnfine, result );
 
    /*
    Initialize the input cells if necessary.
    */
-   CELLINIT2 ( cnfine, result );
+   CELLINIT2 ( naif_state, cnfine, result );
 
    /*
    Check the input strings to make sure each pointer is non-null
    and each string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "gfpa_c", target );
-   CHKFSTR ( CHK_STANDARD, "gfpa_c", illmn  );
-   CHKFSTR ( CHK_STANDARD, "gfpa_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "gfpa_c", obsrvr );
-   CHKFSTR ( CHK_STANDARD, "gfpa_c", relate );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfpa_c", target );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfpa_c", illmn  );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfpa_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfpa_c", obsrvr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gfpa_c", relate );
 
    /*
    Check the workspace size; some mallocs have a violent
@@ -867,11 +868,11 @@
    */
    if ( nintvls < 1 )
       {
-      setmsg_c ( "The specified workspace interval count # was "
+      setmsg_c ( naif_state, "The specified workspace interval count # was "
                  "less than the minimum allowed value (1)."     );
-      errint_c ( "#",  nintvls                                  );
-      sigerr_c ( "SPICE(VALUEOUTOFRANGE)"                       );
-      chkout_c ( "gfpa_c"                                      );
+      errint_c ( naif_state, "#",  nintvls                                  );
+      sigerr_c ( naif_state, "SPICE(VALUEOUTOFRANGE)"                       );
+      chkout_c ( naif_state, "gfpa_c"                                      );
       return;
       }
 
@@ -887,22 +888,23 @@
 
    nBytes  = ( nintvls + SPICE_CELL_CTRLSZ ) * nw * sizeof(SpiceDouble);
 
-   work    = (doublereal *) alloc_SpiceMemory( nBytes );
+   work    = (doublereal *) alloc_SpiceMemory( naif_state, nBytes );
 
    if ( !work )
       {
-      setmsg_c ( "Workspace allocation of # bytes failed due to "
+      setmsg_c ( naif_state, "Workspace allocation of # bytes failed due to "
                  "malloc failure"                                 );
-      errint_c ( "#",  nBytes                                     );
-      sigerr_c ( "SPICE(MALLOCFAILURE)"                           );
-      chkout_c ( "gfpa_c"                                         );
+      errint_c ( naif_state, "#",  nBytes                                     );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILURE)"                           );
+      chkout_c ( naif_state, "gfpa_c"                                         );
       return;
       }
 
    /*
    Let the f2'd routine do the work.
    */
-   gfpa_ ( ( char          * ) target,
+   gfpa_ ( naif_state,
+           ( char          * ) target,
            ( char          * ) illmn,
            ( char          * ) abcorr,
            ( char          * ) obsrvr,
@@ -924,19 +926,19 @@
    /*
    De-allocate the workspace.
    */
-   free_SpiceMemory( work );
+   free_SpiceMemory( naif_state, work );
 
    /*
    Sync the output cell.
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
       {
-      zzsynccl_c ( F2C, result ) ;
+      zzsynccl_c ( naif_state, F2C, result ) ;
       }
 
    ALLOC_CHECK;
 
-   chkout_c ( "gfpa_c" );
+   chkout_c ( naif_state, "gfpa_c" );
 
 } /* End gfpa_c */
 

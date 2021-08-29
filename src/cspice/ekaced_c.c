@@ -50,7 +50,8 @@
    #undef    ekaced_c
 
 
-   void ekaced_c  ( SpiceInt            handle,
+   void ekaced_c  ( void              * naif_state,
+                    SpiceInt            handle,
                     SpiceInt            segno,
                     SpiceInt            recno,
                     ConstSpiceChar    * column,
@@ -360,7 +361,7 @@
    Check the column name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekaced_c", column );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekaced_c", column );
 
    /*
    Convert the null flag to type logical before passing it to
@@ -373,7 +374,8 @@
    segno++;
    recno++;
 
-   ekaced_  (  ( integer    * ) &handle,
+   ekaced_  (  naif_state,
+               ( integer    * ) &handle,
                ( integer    * ) &segno,
                ( integer    * ) &recno,
                ( char       * )  column,
@@ -383,7 +385,7 @@
                ( ftnlen       ) strlen(column) );
 
 
-   chkout_c ( "ekaced_c" );
+   chkout_c ( naif_state, "ekaced_c" );
 
 } /* End ekaced_c */
 

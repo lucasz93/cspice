@@ -46,7 +46,8 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void ekinsr_c ( SpiceInt  handle,
+   void ekinsr_c ( void    * naif_state,
+                   SpiceInt  handle,
                    SpiceInt  segno,
                    SpiceInt  recno ) 
 
@@ -286,9 +287,9 @@
    segno++;
    recno++;
 
-   ekinsr_ ( &handle, &segno, &recno );
+   ekinsr_ ( naif_state, &handle, &segno, &recno );
 
 
-   chkout_c ( "ekinsr_c" );
+   chkout_c ( naif_state, "ekinsr_c" );
 
 } /* End ekinsr_c */

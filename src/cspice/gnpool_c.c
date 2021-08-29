@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
  
  
-   void gnpool_c ( ConstSpiceChar    * name,
+   void gnpool_c ( void              * naif_state,
+                   ConstSpiceChar    * name,
                    SpiceInt            start,
                    SpiceInt            room,
                    SpiceInt            lenout,
@@ -314,7 +315,7 @@
    Check the input string to make sure the pointer is non-null and
    the string is non-empty.
    */
-   CHKFSTR ( CHK_STANDARD, "gnpool_c", name );
+   CHKFSTR ( naif_state, CHK_STANDARD, "gnpool_c", name );
  
  
    /*
@@ -322,7 +323,7 @@
    and that each string has room for at least one character plus a null
    terminator.
    */
-   CHKOSTR ( CHK_STANDARD, "gnpool_c", kvars, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "gnpool_c", kvars, lenout );
  
  
    /*
@@ -332,7 +333,8 @@
  
    fstart = start + 1;
  
-   gnpool_ (  ( char      * ) name,
+   gnpool_ (  naif_state,
+              ( char      * ) name,
               ( integer   * ) &fstart,
               ( integer   * ) &room,
               ( integer   * ) n,
@@ -375,6 +377,6 @@
    *found = fnd;
  
  
-   chkout_c ( "gnpool_c" );
+   chkout_c ( naif_state, "gnpool_c" );
  
 } /* End gnpool_c */

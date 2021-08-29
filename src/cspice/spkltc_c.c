@@ -50,7 +50,8 @@
    #undef spkltc_c
 
 
-   void spkltc_c ( SpiceInt           targ,
+   void spkltc_c ( void             * naif_state,
+                   SpiceInt           targ,
                    SpiceDouble        et,
                    ConstSpiceChar   * ref,
                    ConstSpiceChar   * abcorr,
@@ -512,11 +513,12 @@
    Check the input strings to make sure the pointers are non-null
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkltc_c", ref    );
-   CHKFSTR ( CHK_STANDARD, "spkltc_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkltc_c", ref    );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkltc_c", abcorr );
 
 
-   spkltc_ ( (integer    *) &targ,
+   spkltc_ ( naif_state,
+             (integer    *) &targ,
              (doublereal *) &et,
              (char       *) ref,
              (char       *) abcorr,
@@ -527,6 +529,6 @@
              (ftnlen      ) strlen(ref),
              (ftnlen      ) strlen(abcorr) );
 
-   chkout_c ( "spkltc_c" );
+   chkout_c ( naif_state, "spkltc_c" );
 
 } /* End spkltc_c */

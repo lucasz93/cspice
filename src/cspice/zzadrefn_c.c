@@ -49,7 +49,8 @@
    #include "SpiceZad.h"
 
 
-   int zzadrefn_c ( doublereal  * t1, 
+   int zzadrefn_c ( void        * naif_state,
+                    doublereal  * t1, 
                     doublereal  * t2, 
                     logical     * s1, 
                     logical     * s2, 
@@ -152,7 +153,8 @@
    SpiceBoolean            bs1;
    SpiceBoolean            bs2;
 
-   void                ( * fPtr ) ( SpiceDouble,
+   void                ( * fPtr ) ( void *,
+                                    SpiceDouble,
                                     SpiceDouble,
                                     SpiceBoolean,
                                     SpiceBoolean,
@@ -161,7 +163,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return ( 0 );
    }
@@ -174,11 +176,12 @@
    list matches that of gfrefn_c.
    */
 
-   fPtr = (  void (*) ( SpiceDouble, 
+   fPtr = (  void (*) ( void*,
+                        SpiceDouble, 
                         SpiceDouble,
                         SpiceBoolean,
                         SpiceBoolean,
-                        SpiceDouble * )  )   zzadget_c ( naif_state,  ( UDREFN );
+                        SpiceDouble * )  )   zzadget_c ( naif_state, UDREFN );
 
    /*
    Call the stored function. 
@@ -187,14 +190,15 @@
    bs1 = (SpiceBoolean) (*s1);
    bs2 = (SpiceBoolean) (*s2);
 
-   (*fPtr) ( (SpiceDouble  ) (*t1),
+   (*fPtr) ( naif_state,
+             (SpiceDouble  ) (*t1),
              (SpiceDouble  ) (*t2),
              bs1,
              bs2,
              (SpiceDouble *) t       );
 
 
-   chkout_c ( "zzadrefn_c" );
+   chkout_c ( naif_state, "zzadrefn_c" );
 
    return ( 0 );
 

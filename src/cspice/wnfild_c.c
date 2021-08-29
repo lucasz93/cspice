@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void wnfild_c ( SpiceDouble     small,
+   void wnfild_c ( void          * naif_state,
+                   SpiceDouble     small,
                    SpiceCell     * window ) 
 
 /*
@@ -156,25 +157,26 @@
  
    Make sure cell data type is d.p. 
    */
-   CELLTYPECHK ( CHK_DISCOVER, "wnfild_c", SPICE_DP, window );
+   CELLTYPECHK ( naif_state, CHK_DISCOVER, "wnfild_c", SPICE_DP, window );
 
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( window );
+   CELLINIT ( naif_state, window );
    
 
    /*
    Let the f2c'd routine do the work. 
    */
-   wnfild_ ( (doublereal * )  &small,
+   wnfild_ ( naif_state,
+             (doublereal * )  &small,
              (doublereal * )  (window->base) );
 
    /*
    Sync the output cell. 
    */
-   zzsynccl_c ( F2C, window );
+   zzsynccl_c ( naif_state, F2C, window );
 
 
 } /* End wnfild_c */

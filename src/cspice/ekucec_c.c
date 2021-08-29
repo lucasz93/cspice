@@ -51,7 +51,8 @@
    #undef    ekucec_c
 
 
-   void ekucec_c  ( SpiceInt          handle,
+   void ekucec_c  ( void            * naif_state,
+                    SpiceInt          handle,
                     SpiceInt          segno,
                     SpiceInt          recno,
                     ConstSpiceChar  * column,
@@ -280,14 +281,14 @@
    Check the column name to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekucec_c", column );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekucec_c", column );
 
    /*
    Check the value array to make sure the pointer is non-null 
    and the string length is non-zero.  Note:  this check is normally
    done for output strings:  CHKOSTR is the macro that does the job.
    */
-   CHKOSTR ( CHK_STANDARD, "ekucec_c", cvals, vallen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ekucec_c", cvals, vallen );
 
    /*
    We need to make a blank-padded version of the cvals array.
@@ -299,10 +300,10 @@
 
    if ( cvalsPtr == 0 )
    {     
-      setmsg_c ( "Failure on malloc call to create pointer array "
+      setmsg_c ( naif_state, "Failure on malloc call to create pointer array "
                  "for column values."                              );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                             );
-      chkout_c ( "ekucec_c"                                        );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                             );
+      chkout_c ( naif_state, "ekucec_c"                                        );
       return;
    }
    
@@ -317,11 +318,11 @@
                           &fCvalsLen, 
                           &fCvalsArr                      );
    
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       free ( cvalsPtr );
       
-      chkout_c ( "ekucec_c" );
+      chkout_c ( naif_state, "ekucec_c" );
       return;
    }
 
@@ -334,7 +335,8 @@
 
    null = isnull;
    
-   ekucec_ ( ( integer    * ) &handle,
+   ekucec_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) &segno,
              ( integer    * ) &recno,
              ( char       * ) column,
@@ -352,6 +354,6 @@
    free ( fCvalsArr    );
    
 
-   chkout_c ( "ekucec_c" );
+   chkout_c ( naif_state, "ekucec_c" );
 
 } /* End ekucec_c */

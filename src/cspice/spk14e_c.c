@@ -46,7 +46,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void spk14e_c ( SpiceInt   handle ) 
+   void spk14e_c ( void *naif_state, SpiceInt   handle ) 
 
 /*
 
@@ -373,10 +373,10 @@
    chkin_c ( naif_state, "spk14e_c" );
 
 
-   spk14e_ ( ( integer * ) &handle );
+   spk14e_ ( naif_state, ( integer * ) &handle );
    
 
-   chkout_c ( "spk14e_c" );
+   chkout_c ( naif_state, "spk14e_c" );
 
 } /* End spk14e_c */
 

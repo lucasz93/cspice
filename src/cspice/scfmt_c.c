@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void scfmt_c ( SpiceInt      sc, 
+   void scfmt_c ( void        * naif_state,
+                  SpiceInt      sc, 
                   SpiceDouble   ticks, 
                   SpiceInt      lenout,
                   SpiceChar   * clkstr  )
@@ -334,13 +335,14 @@
    Make sure the output clkstr has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "scfmt_c", clkstr, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "scfmt_c", clkstr, lenout );
 
 
    /*
    Do the conversion.
    */
-   scfmt_ ( ( integer    * ) &sc, 
+   scfmt_ ( naif_state,
+            ( integer    * ) &sc, 
             ( doublereal * ) &ticks, 
             ( char       * ) clkstr, 
             ( ftnlen       ) lenout-1 );
@@ -353,7 +355,7 @@
    F2C_ConvertStr ( lenout, clkstr );
    
 
-   chkout_c ( "scfmt_c");
+   chkout_c ( naif_state, "scfmt_c");
 
 
 } /* End scfmt_c */

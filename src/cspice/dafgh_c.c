@@ -45,7 +45,7 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void dafgh_c ( SpiceInt  * handle ) 
+   void dafgh_c ( void *naif_state, SpiceInt  * handle ) 
 
 /*
 
@@ -178,9 +178,9 @@
    chkin_c ( naif_state, "dafgh_c" );
 
    
-   dafgh_ ( (integer *) handle );
+   dafgh_ ( naif_state, (integer *) handle );
 
 
-   chkout_c ( "dafgh_c" );
+   chkout_c ( naif_state, "dafgh_c" );
 
 } /* End dafgh_c */

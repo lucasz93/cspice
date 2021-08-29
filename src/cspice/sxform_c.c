@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void sxform_c ( ConstSpiceChar  * from, 
+   void sxform_c ( void            * naif_state,
+                   ConstSpiceChar  * from, 
                    ConstSpiceChar  * to, 
                    SpiceDouble       et, 
                    SpiceDouble       xform[6][6] ) 
@@ -211,14 +212,15 @@
    Check the input strings to make sure the pointers are non-null 
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "sxform_c", from );
-   CHKFSTR ( CHK_STANDARD, "sxform_c", to   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "sxform_c", from );
+   CHKFSTR ( naif_state, CHK_STANDARD, "sxform_c", to   );
 
    
    /*
    Get the desired matrix from sxform_.
    */
-   sxform_ (  ( char           * ) from,
+   sxform_ (  naif_state,
+              ( char           * ) from,
               ( char           * ) to,
               ( doublereal     * ) &et,
               ( doublereal     * ) xform,
@@ -228,9 +230,9 @@
    /*
    Transpose the matrix on output.
    */ 
-   xpose6_c ( xform, xform );
+   xpose6_c ( naif_state, xform, xform );
    
    
-   chkout_c ( "sxform_c");
+   chkout_c ( naif_state, "sxform_c");
 
 } /* End sxform_c */

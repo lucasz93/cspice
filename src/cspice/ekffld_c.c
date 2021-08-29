@@ -45,7 +45,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void ekffld_c ( SpiceInt     handle,
+   void ekffld_c ( void       * naif_state,
+                   SpiceInt     handle,
                    SpiceInt     segno,
                    SpiceInt   * rcptrs ) 
 /*
@@ -406,11 +407,12 @@
 
    fSegno = segno + 1;
    
-   ekffld_ (  ( integer * ) &handle,
+   ekffld_ (  naif_state,
+              ( integer * ) &handle,
               ( integer * ) &fSegno,
               ( integer * ) rcptrs  );
 
 
-   chkout_c ( "ekffld_c" );
+   chkout_c ( naif_state, "ekffld_c" );
 
 } /* End ekffld_c */

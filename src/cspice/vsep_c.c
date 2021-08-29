@@ -48,7 +48,7 @@
    #undef    vsep_c
 
 
-   SpiceDouble vsep_c ( ConstSpiceDouble v1[3], ConstSpiceDouble v2[3] ) 
+   SpiceDouble vsep_c ( void *naif_state, ConstSpiceDouble v1[3], ConstSpiceDouble v2[3] ) 
 
 /*
 
@@ -186,7 +186,7 @@
    Calculate the magnitudes of v1 and v2; if either is 0, vsep = 0
    */
 
-   unorm_c ( v1, u1, &dmag1 );
+   unorm_c ( naif_state, v1, u1, &dmag1 );
 
    if ( dmag1 == 0.0 )
       {
@@ -194,7 +194,7 @@
       return vsep;
       }
  
-      unorm_c ( v2, u2, &dmag2 );
+      unorm_c ( naif_state, v2, u2, &dmag2 );
 
    if ( dmag2 == 0.0 )
       {
@@ -202,27 +202,27 @@
       return vsep;
       }
  
-   if ( vdot_c(u1,u2) > 0. )
+   if ( vdot_c(naif_state, u1,u2) > 0. )
       {
       vtemp[0] = u1[0] - u2[0];
       vtemp[1] = u1[1] - u2[1];
       vtemp[2] = u1[2] - u2[2];
  
-      vsep = 2.00 * asin (0.50 * vnorm_c(vtemp));
+      vsep = 2.00 * asin (0.50 * vnorm_c(naif_state, vtemp));
       }
  
-   else if ( vdot_c(u1,u2) < 0. )
+   else if ( vdot_c(naif_state, u1,u2) < 0. )
       {
       vtemp[0] = u1[0] + u2[0];
       vtemp[1] = u1[1] + u2[1];
       vtemp[2] = u1[2] + u2[2];
  
-      vsep = pi_c() - 2.00 * asin (0.50 * vnorm_c(vtemp));
+      vsep = pi_c(naif_state) - 2.00 * asin (0.50 * vnorm_c(naif_state, vtemp));
       }
 
    else
       {
-      vsep = halfpi_c();
+      vsep = halfpi_c(naif_state);
       }
  
 

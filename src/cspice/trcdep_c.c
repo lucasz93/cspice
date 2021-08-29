@@ -44,7 +44,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void trcdep_c ( SpiceInt  * depth ) 
+   void trcdep_c ( void *naif_state, SpiceInt  * depth ) 
 
 /*
 
@@ -163,7 +163,7 @@
 
             spkezr_c ( target, et, frame, abcorr, obsrvr, state, &lt );
 
-            if ( failed_c() ) 
+            if ( failed_c(naif_state) ) 
             {
                /.
                An error has been signaled. First fetch the long
@@ -266,7 +266,7 @@
    This routine does not check in.
    */
    
-   trcdep_ ( (integer *) depth );
+   trcdep_ ( naif_state, (integer *) depth );
    
 
 } /* End trcdep_c */

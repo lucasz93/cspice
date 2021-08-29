@@ -45,7 +45,7 @@
    #include <math.h>
    #include "SpiceUsr.h"
 
-   SpiceDouble halfpi_c ( void ) 
+   SpiceDouble halfpi_c ( void *naif_state ) 
 
 /*
 

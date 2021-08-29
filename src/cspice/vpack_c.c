@@ -44,7 +44,8 @@
    #include "SpiceUsr.h"
 
 
-   void vpack_c ( SpiceDouble   x,
+   void vpack_c ( void        * naif_state,
+                  SpiceDouble   x,
                   SpiceDouble   y,
                   SpiceDouble   z,
                   SpiceDouble   v[3] ) 

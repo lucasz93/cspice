@@ -48,7 +48,8 @@
    #undef    rotmat_c
 
 
-   void rotmat_c ( ConstSpiceDouble   m1[3][3], 
+   void rotmat_c ( void             * naif_state,
+                   ConstSpiceDouble   m1[3][3], 
                    SpiceDouble        angle, 
                    SpiceInt           iaxis, 
                    SpiceDouble        mout[3][3] ) 
@@ -174,13 +175,14 @@
    /*
    Transpose the input matrix to put it in column-major order.
    */
-   xpose_c ( m1, loc_mat );
+   xpose_c ( naif_state, m1, loc_mat );
    
    /*
    Call the f2c'd version of the routine. Note that the Fortran version
    ROTMAT works in place.
    */ 
-   rotmat_ ( (doublereal *)  loc_mat,
+   rotmat_ ( naif_state,
+             (doublereal *)  loc_mat,
              (doublereal *) &angle,
              (integer    *) &iaxis,
              (doublereal *)  loc_mat    );
@@ -188,7 +190,7 @@
    /*
    Transpose the output matrix to put it in row-major order.
    */
-   xpose_c ( loc_mat, mout );
+   xpose_c ( naif_state, loc_mat, mout );
    
 
 } /* End rotmat_c */

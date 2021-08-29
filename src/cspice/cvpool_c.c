@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
    
 
-   void cvpool_c ( ConstSpiceChar  * agent,
+   void cvpool_c ( void            * naif_state,
+                   ConstSpiceChar  * agent,
                    SpiceBoolean    * update ) 
 
 /*
@@ -235,13 +236,14 @@
    Check the input agent name to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_DISCOVER, "cvpool_c", agent );
+   CHKFSTR ( naif_state, CHK_DISCOVER, "cvpool_c", agent );
 
 
    /* 
    Call the f2c'd routine.
    */
-   cvpool_ (  ( char    * ) agent,
+   cvpool_ (  naif_state,
+              ( char    * ) agent,
               ( logical * ) &upd,
               ( ftnlen    ) strlen(agent)  );
    

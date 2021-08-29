@@ -51,7 +51,8 @@
    #undef    reordc_c
 
 
-   void reordc_c ( ConstSpiceInt  * iorder,
+   void reordc_c ( void           * naif_state,
+                   ConstSpiceInt  * iorder,
                    SpiceInt         ndim,
                    SpiceInt         lenvals,
                    void           * array    ) 
@@ -209,7 +210,7 @@
    Make sure the input pointer for the string array is non-null 
    and that the length lenvals is sufficient.  
    */
-   CHKOSTR ( CHK_DISCOVER, "reordc_c", array, lenvals );
+   CHKOSTR ( naif_state, CHK_DISCOVER, "reordc_c", array, lenvals );
    
 
    /*
@@ -218,7 +219,7 @@
    C2F_MapStrArr ( "reordc_c", 
                    ndim, lenvals, array, &fCvalsLen, &fCvalsArr );
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       return;
    }
@@ -236,13 +237,13 @@
    {
       free ( fCvalsArr );
 
-      chkin_c  ( "reordc_c"                                ); 
-      setmsg_c ( "Failure on malloc call to create array "
+      chkin_c  ( naif_state, "reordc_c"                                ); 
+      setmsg_c ( naif_state, "Failure on malloc call to create array "
                  "for Fortran-style order vector.  Tried "
                  "to allocate # bytes."                    );
-      errint_c ( "#",  vSize                               );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                     );
-      chkout_c ( "reordc_c"                                );
+      errint_c ( naif_state, "#",  vSize                               );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                     );
+      chkout_c ( naif_state, "reordc_c"                                );
       return;
    }
 
@@ -255,7 +256,8 @@
    /*
    Call the f2c'd routine.
    */
-   reordc_ (  ( integer    * ) ordvec,
+   reordc_ (  naif_state,
+              ( integer    * ) ordvec,
               ( integer    * ) &ndim,
               ( char       * ) fCvalsArr,     
               ( ftnlen       ) fCvalsLen  );

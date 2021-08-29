@@ -46,7 +46,8 @@
 #include "SpiceZmc.h"
 
 
-   void insrti_c ( SpiceInt        item,
+   void insrti_c ( void          * naif_state,
+                   SpiceInt        item,
                    SpiceCell     * set  )
 
 /*
@@ -175,24 +176,24 @@
    /*
    Make sure we're working with an integer cell. 
    */
-   CELLTYPECHK ( CHK_DISCOVER, "insrti_c", SPICE_INT, set );
+   CELLTYPECHK ( naif_state, CHK_DISCOVER, "insrti_c", SPICE_INT, set );
 
    idata = (SpiceInt *) (set->data);
 
    /*
    Make sure the cell is really a set. 
    */
-   CELLISSETCHK ( CHK_DISCOVER, "insrti_c", set );
+   CELLISSETCHK ( naif_state, CHK_DISCOVER, "insrti_c", set );
  
    /*
    Initialize the set if necessary. 
    */
-   CELLINIT ( set );
+   CELLINIT ( naif_state, set );
  
    /*
    Is the item already in the set? If not, it needs to be inserted.
    */
-   loc   =  lstlei_c ( item,  set->card,  idata );
+   loc   =  lstlei_c ( naif_state, item,  set->card,  idata );
 
    inSet =  (  loc  >  -1  ) && ( item == idata[loc] );
  
@@ -206,12 +207,12 @@
    */
    if ( set->card == set->size )
    {
-      chkin_c  ( "insrti_c"                                       );
-      setmsg_c ( "An element could not be inserted into the set "
+      chkin_c  ( naif_state, "insrti_c"                                       );
+      setmsg_c ( naif_state, "An element could not be inserted into the set "
                  "due to lack of space; set size is #."           );
-      errint_c ( "#", set->size                                   );
-      sigerr_c ( "SPICE(SETEXCESS)"                               );
-      chkout_c ( "insrti_c"                                       );
+      errint_c ( naif_state, "#", set->size                                   );
+      sigerr_c ( naif_state, "SPICE(SETEXCESS)"                               );
+      chkout_c ( naif_state, "insrti_c"                                       );
       return;
    }
 
@@ -235,7 +236,7 @@
    /*
    Sync the set. 
    */
-   zzsynccl_c ( C2F, set );
+   zzsynccl_c ( naif_state, C2F, set );
 }
 
 

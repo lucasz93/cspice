@@ -47,7 +47,8 @@
    #undef    mxvg_c
 
 
-   void mxvg_c ( const void   * m1,
+   void mxvg_c ( void         * naif_state,
+                 const void   * m1,
                  const void   * v2,
                  SpiceInt       nrow1,
                  SpiceInt       nc1r2,
@@ -222,10 +223,10 @@
 
    if ( tmpvec == (SpiceDouble *)0 )
    {
-      chkin_c  ( "mxvg_c"                                          );
-      setmsg_c ( "An attempt to create a temporary vector failed." );
-      sigerr_c ( "SPICE(MEMALLOCFAILED)"                           );
-      chkout_c ( "mxvg_c"                                          );
+      chkin_c  ( naif_state, "mxvg_c"                                          );
+      setmsg_c ( naif_state, "An attempt to create a temporary vector failed." );
+      sigerr_c ( naif_state, "SPICE(MEMALLOCFAILED)"                           );
+      chkout_c ( naif_state, "mxvg_c"                                          );
       return;
    }
 

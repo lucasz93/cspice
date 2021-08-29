@@ -45,7 +45,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZmc.h"
 
-   SpiceInt lastnb_c ( ConstSpiceChar * string )
+   SpiceInt lastnb_c ( void *naif_state, ConstSpiceChar * string )
 
 /*
 
@@ -150,7 +150,7 @@
    /*
    Check the input string pointer to make sure it's non-null.
    */
-   CHKPTR_VAL ( CHK_DISCOVER, "lastnb_c", string, -1 );
+   CHKPTR_VAL ( naif_state, CHK_DISCOVER, "lastnb_c", string, -1 );
    
 
    i = strlen(string) - 1;

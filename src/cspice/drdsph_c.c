@@ -48,7 +48,8 @@
    #include "SpiceZfc.h"
 
 
-   void drdsph_c ( SpiceDouble    r,
+   void drdsph_c ( void         * naif_state,
+                   SpiceDouble    r,
                    SpiceDouble    colat,
                    SpiceDouble    lon,
                    SpiceDouble    jacobi[3][3] )  
@@ -206,7 +207,8 @@
    Don't participate in error tracing; the underlying routine is 
    error-free.
    */
-   drdsph_ ( (doublereal *) &r,
+   drdsph_ ( naif_state,
+             (doublereal *) &r,
              (doublereal *) &colat,
              (doublereal *) &lon,
              (doublereal *) jacobi  );
@@ -214,7 +216,7 @@
    /*
    Transpose the Jacobian to create a C-style matrix.
    */
-   xpose_c ( jacobi, jacobi );
+   xpose_c ( naif_state, jacobi, jacobi );
 
 
 } /* End drdsph_c */

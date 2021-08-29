@@ -46,7 +46,8 @@
 
    #include "SpiceUsr.h"
 
-   void getcml_c ( SpiceInt     * argc,
+   void getcml_c ( void         * naif_state,
+                   SpiceInt     * argc,
                    SpiceChar  *** argv )
 
 /*
@@ -169,11 +170,11 @@
    putcml_c.c
    */
 
-   chkin_c ( naif_state,"getcml_c" );
+   chkin_c ( naif_state, "getcml_c" );
 
-   zzgetcml_c ( argc, argv, SPICEFALSE );
+   zzgetcml_c ( naif_state, argc, argv, SPICEFALSE );
 
-   chkout_c( "getcml_c" );
+   chkout_c( naif_state, "getcml_c" );
 
 }
 

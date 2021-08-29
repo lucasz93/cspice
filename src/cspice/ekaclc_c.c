@@ -50,7 +50,8 @@
    #undef    ekaclc_c
    
 
-   void ekaclc_c ( SpiceInt                handle,
+   void ekaclc_c ( void                  * naif_state,
+                   SpiceInt                handle,
                    SpiceInt                segno,
                    ConstSpiceChar        * column,
                    SpiceInt                vallen,
@@ -525,7 +526,7 @@
    Check the column name to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekaclc_c", column );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekaclc_c", column );
 
 
    /*
@@ -533,13 +534,13 @@
    and the string length is non-zero.  Note:  this check is normally
    done for output strings:  CHKOSTR is the macro that does the job.
    */
-   CHKOSTR ( CHK_STANDARD, "ekaclc_c", cvals, vallen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ekaclc_c", cvals, vallen );
 
 
    /*
    Get the row count for this segment.
    */ 
-   ekssum_c ( handle, segno, &summary );
+   ekssum_c ( naif_state, handle, segno, &summary );
    
    nrows = summary.nrows;
    
@@ -553,7 +554,7 @@
    
    while (  ( i < ncols ) && ( !fnd ) )
    {
-      if (  eqstr_c( column, summary.cnames[i] )  )
+      if (  eqstr_c( naif_state, column, summary.cnames[i] )  )
       {
          fnd = SPICETRUE;
       }
@@ -566,11 +567,11 @@
    
    if ( !fnd )
    {
-      setmsg_c ( "Column <#> does not belong to segment #. "  );
-      errch_c  ( "#",  column                                 );
-      errint_c ( "#",  segno                                  );
-      sigerr_c ( "SPICE(NOCOLUMN)"                            );
-      chkout_c ( "ekaclc_c"                                   );
+      setmsg_c ( naif_state, "Column <#> does not belong to segment #. "  );
+      errch_c  ( naif_state, "#",  column                                 );
+      errint_c ( naif_state, "#",  segno                                  );
+      sigerr_c ( naif_state, "SPICE(NOCOLUMN)"                            );
+      chkout_c ( naif_state, "ekaclc_c"                                   );
       return;
    }
    
@@ -591,7 +592,7 @@
    
    if ( size == SPICE_EK_VARSIZ )
    {
-      nelts = sumai_c ( entszs, nrows );
+      nelts = sumai_c ( naif_state, entszs, nrows );
    }
    else
    {
@@ -607,10 +608,10 @@
 
    if ( !logicalFlags )
    {
-      setmsg_c ( "Failure on malloc call to create null flag array "
+      setmsg_c ( naif_state, "Failure on malloc call to create null flag array "
                  "for column values."                              );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                             );
-      chkout_c ( "ekaclc_c"                                        );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                             );
+      chkout_c ( naif_state, "ekaclc_c"                                        );
       return;
    }
       
@@ -638,10 +639,10 @@
       free ( logicalFlags );
       
       
-      setmsg_c ( "Failure on malloc call to create pointer array "
+      setmsg_c ( naif_state, "Failure on malloc call to create pointer array "
                  "for column values."                              );
-      sigerr_c ( "SPICE(MALLOCFAILED)"                             );
-      chkout_c ( "ekaclc_c"                                        );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILED)"                             );
+      chkout_c ( naif_state, "ekaclc_c"                                        );
       return;
    }
    
@@ -656,12 +657,12 @@
                           &fCvalsLen, 
                           &fCvalsArr                      );
    
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       free ( logicalFlags );
       free ( cvalsPtr     );
       
-      chkout_c ( "ekaclc_c" );
+      chkout_c ( naif_state, "ekaclc_c" );
       return;
    }
 
@@ -671,7 +672,8 @@
    fSegno = segno + 1;
    
    
-   ekaclc_ ( ( integer    * ) &handle,
+   ekaclc_ ( naif_state,
+             ( integer    * ) &handle,
              ( integer    * ) &fSegno,
              ( char       * ) column,
              ( char       * ) fCvalsArr,
@@ -691,6 +693,6 @@
    free ( logicalFlags );
    
 
-   chkout_c ( "ekaclc_c" );
+   chkout_c ( naif_state, "ekaclc_c" );
 
 } /* End ekaclc_c */

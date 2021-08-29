@@ -50,7 +50,8 @@
    #include "SpiceZim.h"
    #undef    prop2b_c
 
-   void prop2b_c ( SpiceDouble         gm,
+   void prop2b_c ( void              * naif_state,
+                   SpiceDouble         gm,
                    ConstSpiceDouble    pvinit[6],
                    SpiceDouble         dt,
                    SpiceDouble         pvprop[6] )
@@ -208,13 +209,14 @@
    chkin_c ( naif_state, "prop2b_c");
 
 
-   prop2b_ ( ( doublereal * ) &gm,
+   prop2b_ ( naif_state,
+             ( doublereal * ) &gm,
              ( doublereal * ) pvinit,
              ( doublereal * ) &dt,
              ( doublereal * ) pvprop );
 
 
-   chkout_c ( "prop2b_c");
+   chkout_c ( naif_state, "prop2b_c");
 
 
 } /* End prop2b_c */

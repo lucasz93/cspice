@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
    #undef dskb02_c
 
-   void dskb02_c ( SpiceInt               handle,
+   void dskb02_c ( void                 * naif_state,
+                   SpiceInt               handle,
                    ConstSpiceDLADescr   * dladsc,
                    SpiceInt             * nv,
                    SpiceInt             * np,
@@ -230,9 +231,9 @@
 
             if ( !found )
             { 
-               setmsg_c ( "No segment found in file #." );
-               errch_c  ( "#",  dsk                     );
-               sigerr_c ( "SPICE(NOSEGMENT)"            );
+               setmsg_c ( naif_state, "No segment found in file #." );
+               errch_c  ( naif_state, "#",  dsk                     );
+               sigerr_c ( naif_state, "SPICE(NOSEGMENT)"            );
             }
 
             /.
@@ -373,7 +374,8 @@
    /*
    Call the f2c'd routine. 
    */
-   dskb02_ ( ( integer     * ) &handle,
+   dskb02_ ( naif_state,
+             ( integer     * ) &handle,
              ( integer     * ) fDLADescr,
              ( integer     * ) nv,
              ( integer     * ) np,
@@ -401,6 +403,6 @@
    */
 
 
-   chkout_c ( "dskb02_c" );
+   chkout_c ( naif_state, "dskb02_c" );
 
 } /* End dskb02_c */

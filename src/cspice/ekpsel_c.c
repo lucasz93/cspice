@@ -48,7 +48,8 @@
    #include "SpiceZmc.h"
 
 
-   void ekpsel_c ( ConstSpiceChar        * query,
+   void ekpsel_c ( void                  * naif_state,
+                   ConstSpiceChar        * query,
                    SpiceInt                msglen,
                    SpiceInt                tablen,
                    SpiceInt                collen,
@@ -636,7 +637,7 @@
    Check the input query string to make sure the pointer is non-null and 
    the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekpsel_c", query );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekpsel_c", query );
    
 
    /*
@@ -644,13 +645,14 @@
    for one output character and a null terminator.  Also check for a 
    null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "ekpsel_c", errmsg, msglen );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ekpsel_c", errmsg, msglen );
       
    
    /*
    Call the f2c'd function.
    */
-   ekpsel_ ( ( char    * ) query,
+   ekpsel_ ( naif_state,
+             ( char    * ) query,
              ( integer * ) n,
              ( integer * ) xbegs,
              ( integer * ) xends,
@@ -675,9 +677,9 @@
    *error = err;
    
 
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
-      chkout_c ( "ekpsel_c" );
+      chkout_c ( naif_state, "ekpsel_c" );
       return;
    }
 
@@ -693,7 +695,7 @@
    */
    if ( *error ) 
    {
-      chkout_c ( "ekpsel_c" );
+      chkout_c ( naif_state, "ekpsel_c" );
       return;
    }
 
@@ -718,34 +720,34 @@
    
    for ( i = 0;  i < *n;  i++ )
    {
-      if (  eqstr_c( locXtypes[i], "CHR" )  )
+      if (  eqstr_c( naif_state, locXtypes[i], "CHR" )  )
       {
          xtypes[i] = SPICE_CHR;
       }
 
-      else if (  eqstr_c( locXtypes[i], "DP" )  )
+      else if (  eqstr_c( naif_state, locXtypes[i], "DP" )  )
       {
          xtypes[i] = SPICE_DP;
       }
 
-      else if (  eqstr_c( locXtypes[i], "INT" )  )
+      else if (  eqstr_c( naif_state, locXtypes[i], "INT" )  )
       {
          xtypes[i] = SPICE_INT;
       }
 
-      else if (  eqstr_c( locXtypes[i], "TIME" )  )
+      else if (  eqstr_c( naif_state, locXtypes[i], "TIME" )  )
       {
          xtypes[i] = SPICE_TIME;
       }
       
       else
       {
-         setmsg_c ( "Unrecognized data type string <#> returned "
+         setmsg_c ( naif_state, "Unrecognized data type string <#> returned "
                     "by ekpsel_ for item #."                     );
-         errch_c  ( "#",  locXtypes[i]                           );
-         errint_c ( "#",  i                                      );
-         sigerr_c ( "SPICE(BUG)"                                 );
-         chkout_c ( "ekpsel_c"                                   );
+         errch_c  ( naif_state, "#",  locXtypes[i]                           );
+         errint_c ( naif_state, "#",  i                                      );
+         sigerr_c ( naif_state, "SPICE(BUG)"                                 );
+         chkout_c ( naif_state, "ekpsel_c"                                   );
          return;
       }
    }
@@ -759,29 +761,29 @@
    
    for ( i = 0;  i < *n;  i++ )
    {
-      if (  eqstr_c( locXclass[i], "COL" )  )
+      if (  eqstr_c( naif_state, locXclass[i], "COL" )  )
       {
          xclass[i] = SPICE_EK_EXP_COL;
       }
 
-      else if (  eqstr_c( locXclass[i], "FUNC" )  )
+      else if (  eqstr_c( naif_state, locXclass[i], "FUNC" )  )
       {
          xclass[i] = SPICE_EK_EXP_FUNC;
       }
 
-      else if (  eqstr_c( locXclass[i], "EXPR" )  )
+      else if (  eqstr_c( naif_state, locXclass[i], "EXPR" )  )
       {
          xclass[i] = SPICE_EK_EXP_EXPR;
       }
 
       else
       {
-         setmsg_c ( "Unrecognized item class string <#> returned "
+         setmsg_c ( naif_state, "Unrecognized item class string <#> returned "
                     "by ekpsel_ for item #."                     );
-         errch_c  ( "#",  locXclass[i]                           );
-         errint_c ( "#",  i                                      );
-         sigerr_c ( "SPICE(BUG)"                                 );
-         chkout_c ( "ekpsel_c"                                   );
+         errch_c  ( naif_state, "#",  locXclass[i]                           );
+         errint_c ( naif_state, "#",  i                                      );
+         sigerr_c ( naif_state, "SPICE(BUG)"                                 );
+         chkout_c ( naif_state, "ekpsel_c"                                   );
          return;
       }
    }
@@ -818,6 +820,6 @@
    }
 
    
-   chkout_c ( "ekpsel_c" );
+   chkout_c ( naif_state, "ekpsel_c" );
 
 } /* End ekpsel_c */

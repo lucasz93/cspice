@@ -50,7 +50,8 @@
    #undef   pltnrm_c
 
 
-   void pltnrm_c ( ConstSpiceDouble    v1[3],
+   void pltnrm_c ( void              * naif_state,
+                   ConstSpiceDouble    v1[3],
                    ConstSpiceDouble    v2[3],
                    ConstSpiceDouble    v3[3],
                    SpiceDouble         normal[3] ) 
@@ -175,11 +176,12 @@
    */
    chkin_c ( naif_state, "pltnrm_c" );
 
-   pltnrm_ ( (SpiceDouble *) v1,
+   pltnrm_ ( naif_state,
+             (SpiceDouble *) v1,
              (SpiceDouble *) v2,
              (SpiceDouble *) v3,
              (SpiceDouble *) normal );
 
-   chkout_c ( "pltnrm_c" );
+   chkout_c ( naif_state, "pltnrm_c" );
 
 } /* End pltnrm_c */

@@ -50,7 +50,8 @@
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
 
-   void pckfrm_c ( ConstSpiceChar  * pck,
+   void pckfrm_c ( void            * naif_state,
+                   ConstSpiceChar  * pck,
                    SpiceCell       * ids  ) 
 
 /*
@@ -290,7 +291,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return; 
    }
@@ -301,33 +302,34 @@
    Check the input string `pck' to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pckfrm_c", pck );
+   CHKFSTR ( naif_state, CHK_STANDARD, "pckfrm_c", pck );
    
    /*
    Make sure cell data type is SpiceInt. 
    */
-   CELLTYPECHK ( CHK_STANDARD, "pckfrm_c", SPICE_INT, ids );
+   CELLTYPECHK ( naif_state, CHK_STANDARD, "pckfrm_c", SPICE_INT, ids );
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( ids );   
+   CELLINIT ( naif_state, ids );   
 
    /*
    Call the f2c'd Fortran routine.
    */
-   pckfrm_ ( ( char       * ) pck,
+   pckfrm_ ( naif_state,
+             ( char       * ) pck,
              ( integer    * ) (ids->base),
              ( ftnlen       ) strlen(pck)   );
 
    /*
    Sync the output cell. 
    */
-   if ( !failed_c() )
+   if ( !failed_c(naif_state) )
    {
-      zzsynccl_c ( F2C, ids );
+      zzsynccl_c ( naif_state, F2C, ids );
    }
 
-   chkout_c ( "pckfrm_c" );
+   chkout_c ( naif_state, "pckfrm_c" );
 
 } /* End pckfrm_c */

@@ -45,7 +45,8 @@
 #include "SpiceZmc.h"
 
 
-   void appndd_c ( SpiceDouble     item,
+   void appndd_c ( void          * naif_state,
+                   SpiceDouble     item,
                    SpiceCell     * cell )
 
 
@@ -164,17 +165,17 @@
    /*
    Make sure we're working with a DP cell. 
    */
-   CELLTYPECHK ( CHK_DISCOVER, "appndd_c", SPICE_DP, cell );
+   CELLTYPECHK ( naif_state, CHK_DISCOVER, "appndd_c", SPICE_DP, cell );
 
 
    if ( cell->card == cell->size )
    {
-      chkin_c  ( "appndd_c"                                        );
-      setmsg_c ( "The cell cannot accommodate the addition of the "
+      chkin_c  ( naif_state, "appndd_c"                                        );
+      setmsg_c ( naif_state, "The cell cannot accommodate the addition of the "
                  "element *"                                       );
       errdp_c  ( "*", item                                         );
-      sigerr_c ( "SPICE(CELLTOOSMALL)"                             );
-      chkout_c ( "appndd_c"                                        );
+      sigerr_c ( naif_state, "SPICE(CELLTOOSMALL)"                             );
+      chkout_c ( naif_state, "appndd_c"                                        );
       return;
    }
 
@@ -182,7 +183,7 @@
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( cell );
+   CELLINIT ( naif_state, cell );
 
 
    /*
@@ -209,7 +210,7 @@
    /*
    Sync the cell. 
    */
-   zzsynccl_c ( C2F, cell );
+   zzsynccl_c ( naif_state, C2F, cell );
 
 
 } /* End appndd_c */

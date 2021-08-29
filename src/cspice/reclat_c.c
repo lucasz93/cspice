@@ -49,7 +49,8 @@
    #undef    reclat_c
    
 
-   void reclat_c ( ConstSpiceDouble    rectan[3],
+   void reclat_c ( void              * naif_state,
+                   ConstSpiceDouble    rectan[3],
                    SpiceDouble       * radius,
                    SpiceDouble       * longitude,
                    SpiceDouble       * latitude  )

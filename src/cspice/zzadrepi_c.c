@@ -49,7 +49,8 @@
    #include "SpiceZad.h"
    #undef   zzadrepi_c
 
-   int zzadrepi_c ( doublereal  * cnfine, 
+   int zzadrepi_c ( void        * naif_state,
+                    doublereal  * cnfine, 
                     char        * begmss,
                     char        * endmss,
                     ftnlen        begmssLen,
@@ -185,14 +186,15 @@
    Function pointer for CSPICE-style progress reporting
    initialization function:
    */
-   void           ( * fPtr ) ( ConstSpiceCell *,
+   void           ( * fPtr ) ( void *,
+                               ConstSpiceCell *,
                                ConstSpiceChar *,
                                ConstSpiceChar * );
 
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return ( 0 );
    }
@@ -209,8 +211,8 @@
    */
    cnfineCell.dtype   =  SPICE_DP;
    cnfineCell.length  =  0;
-   cnfineCell.size    =  sized_(cnfine);
-   cnfineCell.card    =  cardd_(cnfine);
+   cnfineCell.size    =  sized_(naif_state, cnfine);
+   cnfineCell.card    =  cardd_(naif_state, cnfine);
    cnfineCell.isSet   =  SPICEFALSE;
    cnfineCell.adjust  =  SPICEFALSE;
    cnfineCell.init    =  SPICETRUE;
@@ -228,11 +230,11 @@
 
    if ( !prefstr )
    {
-      setmsg_c ( "Could not allocate # bytes for progress report "
+      setmsg_c ( naif_state, "Could not allocate # bytes for progress report "
                  "prefix string."                                  );
-      errint_c ( "#",  nBytes                                      );
-      sigerr_c ( "SPICE(MALLOCFAILURE)"                            );
-      chkout_c ( "zzadrepi_c"                                      );
+      errint_c ( naif_state, "#",  nBytes                                      );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILURE)"                            );
+      chkout_c ( naif_state, "zzadrepi_c"                                      );
 
       /*
       Return status of "0" because we don't want to invoke any f2c
@@ -261,11 +263,11 @@
       free ( prefstr );
 
 
-      setmsg_c ( "Could not allocate # bytes for progress report "
+      setmsg_c ( naif_state, "Could not allocate # bytes for progress report "
                  "suffix string."                                  );
-      errint_c ( "#",  nBytes                                      );
-      sigerr_c ( "SPICE(MALLOCFAILURE)"                            );
-      chkout_c ( "zzadrepi_c"                                      );
+      errint_c ( naif_state, "#",  nBytes                                      );
+      sigerr_c ( naif_state, "SPICE(MALLOCFAILURE)"                            );
+      chkout_c ( naif_state, "zzadrepi_c"                                      );
 
       return   ( 0 );
    }
@@ -279,15 +281,17 @@
    list matches that of gfrepi_c.
    */
 
-   fPtr = (  void (*) ( ConstSpiceCell *, 
+   fPtr = (  void (*) ( void*,
+                        ConstSpiceCell *, 
                         ConstSpiceChar *,
-                        ConstSpiceChar *  )  )  zzadget_c ( naif_state,  ( UDREPI );
+                        ConstSpiceChar *  )  )  zzadget_c ( naif_state, UDREPI );
    /*
    At this point we have the inputs required by the saved
    GF progress report initialization function.
    */
    
-   ( *fPtr ) ( (ConstSpiceCell *) &cnfineCell, 
+   ( *fPtr ) ( naif_state,
+               (ConstSpiceCell *) &cnfineCell, 
                (ConstSpiceChar *) prefstr, 
                (ConstSpiceChar *) suffstr      );
 
@@ -298,7 +302,7 @@
    free ( suffstr );
 
 
-   chkout_c ( "zzadrepi_c" );
+   chkout_c ( naif_state, "zzadrepi_c" );
 
    return ( 0 );
 

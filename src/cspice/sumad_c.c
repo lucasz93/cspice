@@ -45,7 +45,8 @@
    #undef    sumad_c
    
    
-   SpiceDouble sumad_c ( ConstSpiceDouble   * array,
+   SpiceDouble sumad_c ( void               * naif_state,
+                         ConstSpiceDouble   * array,
                          SpiceInt             n     ) 
 
 /*

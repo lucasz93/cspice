@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void removd_c ( SpiceDouble     item,
+   void removd_c ( void          * naif_state,
+                   SpiceDouble     item,
                    SpiceCell     * set  )
 
 /*
@@ -192,7 +193,7 @@
 
    Make sure we're working with a double precision cell. 
    */
-   CELLTYPECHK ( CHK_DISCOVER, "removd_c", SPICE_DP, set );
+   CELLTYPECHK ( naif_state, CHK_DISCOVER, "removd_c", SPICE_DP, set );
 
    ddata = (SpiceDouble *) (set->data);
 
@@ -200,19 +201,19 @@
    /*
    Make sure the cell is really a set. 
    */
-   CELLISSETCHK ( CHK_DISCOVER, "removd_c", set );
+   CELLISSETCHK ( naif_state, CHK_DISCOVER, "removd_c", set );
 
 
    /*
    Initialize the set if necessary. 
    */
-   CELLINIT ( set );
+   CELLINIT ( naif_state, set );
 
 
    /*
    Is the item in the set? If not, we're done now.
    */
-   loc   =  lstled_c ( item,  set->card,  ddata );
+   loc   =  lstled_c ( naif_state, item,  set->card,  ddata );
 
    inSet =  (  loc  >  -1  ) && ( item == ddata[loc] );
  
@@ -239,6 +240,6 @@
    /*
    Sync the set. 
    */
-   zzsynccl_c ( C2F, set );
+   zzsynccl_c ( naif_state, C2F, set );
 }
 

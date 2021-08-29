@@ -49,7 +49,8 @@
    #include "SpiceZmc.h"
 
 
-   void drdpgr_c ( ConstSpiceChar  * body,
+   void drdpgr_c ( void            * naif_state,
+                   ConstSpiceChar  * body,
                    SpiceDouble       lon,
                    SpiceDouble       lat,
                    SpiceDouble       alt,
@@ -540,7 +541,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c()  )
+   if ( return_c(naif_state)  )
    {
       return; 
    }
@@ -551,13 +552,14 @@
    Check the input string body to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "drdpgr_c", body );
+   CHKFSTR ( naif_state, CHK_STANDARD, "drdpgr_c", body );
    
 
    /*
    Call the f2c'd Fortran routine.
    */
-   drdpgr_ ( ( char       * ) body,
+   drdpgr_ ( naif_state,
+             ( char       * ) body,
              ( doublereal * ) &lon,
              ( doublereal * ) &lat,
              ( doublereal * ) &alt,
@@ -569,9 +571,9 @@
    /*
    Convert Jacobian matrix to row-major order. 
    */
-   xpose_c ( jacobi, jacobi );
+   xpose_c ( naif_state, jacobi, jacobi );
 
 
-   chkout_c ( "drdpgr_c" );
+   chkout_c ( naif_state, "drdpgr_c" );
 
 } /* End drdpgr_c */

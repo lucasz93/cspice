@@ -47,7 +47,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void ekgc_c ( SpiceInt          selidx,
+   void ekgc_c ( void            * naif_state,
+                 SpiceInt          selidx,
                  SpiceInt          row,
                  SpiceInt          elment,
                  SpiceInt          lenout,
@@ -393,7 +394,7 @@
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "ekgc_c", cdata, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ekgc_c", cdata, lenout );
 
 
    /*
@@ -407,7 +408,8 @@
    /*
    Call the f2c'd routine.
    */
-   ekgc_  ( ( integer * ) &selidx,
+   ekgc_  ( naif_state,
+            ( integer * ) &selidx,
             ( integer * ) &row,
             ( integer * ) &elment,
             ( char    * ) cdata,
@@ -430,6 +432,6 @@
    *found  =  fnd;
    
    
-   chkout_c ( "ekgc_c" );
+   chkout_c ( naif_state, "ekgc_c" );
 
 } /* End ekgc_c */

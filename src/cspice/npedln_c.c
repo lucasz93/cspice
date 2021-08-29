@@ -50,7 +50,8 @@
    #undef    npedln_c
    
 
-   void npedln_c ( SpiceDouble         a,
+   void npedln_c ( void              * naif_state,
+                   SpiceDouble         a,
                    SpiceDouble         b,
                    SpiceDouble         c,
                    ConstSpiceDouble    linept[3],
@@ -395,13 +396,13 @@
    We need a valid normal vector.
    */
    
-   unorm_c ( linedr, udir, &mag );
+   unorm_c ( naif_state, linedr, udir, &mag );
 
    if ( mag == 0. )
    {
-      setmsg_c( "Line direction vector is the zero vector. " );
-      sigerr_c( "SPICE(ZEROVECTOR)"                          );
-      chkout_c( "npedln_c"                                   );
+      setmsg_c( naif_state,  "Line direction vector is the zero vector. " );
+      sigerr_c( naif_state, "SPICE(ZEROVECTOR)"                          );
+      chkout_c( naif_state, "npedln_c"                                   );
       return;
    }
 
@@ -410,12 +411,12 @@
           ||    ( b <= 0. )            
           ||    ( c <= 0. )   )    
    {
-      setmsg_c  ( "Semi-axis lengths: a = #,  b = #,  c = #."  );
-      errdp_c   ( "#", a                                       );
-      errdp_c   ( "#", b                                       );
-      errdp_c   ( "#", c                                       );
-      sigerr_c  ( "SPICE(INVALIDAXISLENGTH)"                   );
-      chkout_c  ( "npedln_c"                                   );
+      setmsg_c  ( naif_state, "Semi-axis lengths: a = #,  b = #,  c = #."  );
+      errdp_c   ( naif_state, "#", a                                       );
+      errdp_c   ( naif_state, "#", b                                       );
+      errdp_c   ( naif_state, "#", c                                       );
+      sigerr_c  ( naif_state, "SPICE(INVALIDAXISLENGTH)"                   );
+      chkout_c  ( naif_state, "npedln_c"                                   );
       return;
    }
 
@@ -427,7 +428,7 @@
    scale the viewing point too.
    */
 
-   scale  =  maxd_c ( 3, a, b, c );
+   scale  =  maxd_c ( naif_state, 3, a, b, c );
 
    scla   =  a / scale;
    sclb   =  b / scale;
@@ -437,16 +438,16 @@
    sclb2  =  sclb*sclb;
    sclc2  =  sclc*sclc;
 
-   if (       ( (SpiceDouble)touchd_(&scla2)   ==   0. )
-         ||   ( (SpiceDouble)touchd_(&sclb2)   ==   0. )
-         ||   ( (SpiceDouble)touchd_(&sclc2)   ==   0. )   )    
+   if (       ( (SpiceDouble)touchd_(naif_state, &scla2)   ==   0. )
+         ||   ( (SpiceDouble)touchd_(naif_state, &sclb2)   ==   0. )
+         ||   ( (SpiceDouble)touchd_(naif_state, &sclc2)   ==   0. )   )    
    {
-      setmsg_c ( "Semi-axis too small:  a = #, b = #, c = #. " );
-      errdp_c  ( "#", a                                        );
-      errdp_c  ( "#", b                                        );
-      errdp_c  ( "#", c                                        );
-      sigerr_c ( "SPICE(DEGENERATECASE)"                       );
-      chkout_c ( "npedln_c"                                    );
+      setmsg_c ( naif_state, "Semi-axis too small:  a = #, b = #, c = #. " );
+      errdp_c  ( naif_state, "#", a                                        );
+      errdp_c  ( naif_state, "#", b                                        );
+      errdp_c  ( naif_state, "#", c                                        );
+      sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"                       );
+      chkout_c ( naif_state, "npedln_c"                                    );
       return;
    }
 
@@ -464,10 +465,10 @@
    of rays.
    */
 
-   vminus_c ( udir, oppdir );
+   vminus_c ( naif_state, udir, oppdir );
 
-   surfpt_c ( sclpt, udir,   scla, sclb, sclc, pt[0], &(found[0]) );
-   surfpt_c ( sclpt, oppdir, scla, sclb, sclc, pt[1], &(found[1]) );
+   surfpt_c ( naif_state, sclpt, udir,   scla, sclb, sclc, pt[0], &(found[0]) );
+   surfpt_c ( naif_state, sclpt, oppdir, scla, sclb, sclc, pt[1], &(found[1]) );
 
    for ( i = 0;  i < 2;  i++ )
    {
@@ -475,9 +476,9 @@
       {
          *dist  =  0.0;
 
-         vequ_c   ( pt[i],  pnear         );
-         vscl_c   ( scale,  pnear,  pnear );
-         chkout_c ( "npedln_c"            );
+         vequ_c   ( naif_state, pt[i],  pnear         );
+         vscl_c   ( naif_state, scale,  pnear,  pnear );
+         chkout_c ( naif_state, "npedln_c"            );
          return;
       }
    }
@@ -497,15 +498,15 @@
    normal[1]  =  udir[1] / sclb2;
    normal[2]  =  udir[2] / sclc2;
 
-   nvc2pl_c ( normal, 0., &candpl );
+   nvc2pl_c ( naif_state, normal, 0., &candpl );
 
-   inedpl_c ( scla, sclb, sclc, &candpl, &cand, &xfound );
+   inedpl_c ( naif_state, scla, sclb, sclc, &candpl, &cand, &xfound );
 
    if ( !xfound ) 
    {
-      setmsg_c ( "Candidate ellipse could not be found."  );
-      sigerr_c ( "SPICE(DEGENERATECASE)"                  );
-      chkout_c ( "npedln_c"                               );
+      setmsg_c ( naif_state, "Candidate ellipse could not be found."  );
+      sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"                  );
+      chkout_c ( naif_state, "npedln_c"                               );
       return;
    }
    
@@ -513,8 +514,8 @@
    Project the candidate ellipse onto a plane orthogonal to the
    line.  We'll call the plane prjpl and the projected ellipse prjel.
    */
-   nvc2pl_c ( udir,   0.,     &prjpl );
-   pjelpl_c ( &cand,  &prjpl, &prjel );
+   nvc2pl_c ( naif_state, udir,   0.,     &prjpl );
+   pjelpl_c ( naif_state, &cand,  &prjpl, &prjel );
  
  
    /*
@@ -524,8 +525,8 @@
    The distance between PRJPT and PRJNPT is DIST.
    */
 
-   vprjp_c  ( sclpt,   &prjpl,  prjpt         );
-   npelpt_c ( prjpt,   &prjel,  prjnpt,  dist );
+   vprjp_c  ( naif_state, sclpt,   &prjpl,  prjpt         );
+   npelpt_c ( naif_state, prjpt,   &prjel,  prjnpt,  dist );
  
    
    /*
@@ -539,13 +540,13 @@
    when the input ellipsoid is extremely flat or needle-shaped).
    */
    
-   vprjpi_c ( prjnpt, &prjpl, &candpl, pnear, &ifound );
+   vprjpi_c ( naif_state, prjnpt, &prjpl, &candpl, pnear, &ifound );
  
    if ( !ifound )
    {
-      setmsg_c ( "Inverse projection could not be found."  );
-      sigerr_c ( "SPICE(DEGENERATECASE)"                   );
-      chkout_c ( "npedln_c"                                );
+      setmsg_c ( naif_state, "Inverse projection could not be found."  );
+      sigerr_c ( naif_state, "SPICE(DEGENERATECASE)"                   );
+      chkout_c ( naif_state, "npedln_c"                                );
       return;
    }
  
@@ -553,12 +554,12 @@
    Undo the scaling.
    */
    
-   vscl_c ( scale,  pnear,  pnear );
+   vscl_c ( naif_state, scale,  pnear,  pnear );
 
    *dist *= scale;
  
  
-   chkout_c ( "npedln_c" );
+   chkout_c ( naif_state, "npedln_c" );
 
 } /* End npedln_c */
 

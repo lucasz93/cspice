@@ -49,7 +49,7 @@
    #include "SpiceZmc.h"
    #include "SpiceZst.h"
 
-   void gfrepf_c ( void ) 
+   void gfrepf_c ( void *naif_state ) 
 
 /*
 
@@ -188,7 +188,7 @@
    /*
    Participate in error tracing.
    */
-   if ( return_c() )
+   if ( return_c(naif_state) )
    {
       return;
    }
@@ -198,9 +198,9 @@
    /*
    Let the f2c'd routine do the work.
    */
-   gfrepf_ () ;
+   gfrepf_ (naif_state) ;
 
 
-   chkout_c ( "gfrepf_c" );
+   chkout_c ( naif_state, "gfrepf_c" );
 
 } /* End gfrepf_c */

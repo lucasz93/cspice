@@ -124,7 +124,6 @@ Literature_References
    logical  zzadbail_c ( void         * naif_state );
 
 
-// LUCAS - YOU'RE UP TO THIS ONE!
    int      zzadstep_c ( void         * naif_state,
                          doublereal   * et,
                          doublereal   * step );

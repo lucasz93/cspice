@@ -46,7 +46,7 @@
    #include "SpiceZfc.h"
 
 
-   SpiceInt eknseg_c ( SpiceInt handle )
+   SpiceInt eknseg_c ( void *naif_state, SpiceInt handle )
 
 /*
 
@@ -140,13 +140,13 @@
    directly, so we can check out.
    */
    
-   n  =  eknseg_ ( (integer *) &handle );
+   n  =  eknseg_ ( naif_state, (integer *) &handle );
    
    
    /*
    Check out here, since it's our last chance.
    */
-   chkout_c ( "eknseg_c" );
+   chkout_c ( naif_state, "eknseg_c" );
    
    
    return (n);

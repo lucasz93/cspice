@@ -49,7 +49,8 @@
    #include "SpiceZst.h"
    #include "SpiceZad.h"
 
-   int zzadfunc_c ( doublereal   * et,
+   int zzadfunc_c ( void         * naif_state,
+                    doublereal   * et,
                     doublereal   * value )
 
 /*
@@ -135,14 +136,15 @@
    /*
    Local variables 
    */
-   void           ( * fPtr ) ( SpiceDouble,
+   void           ( * fPtr ) ( void *,
+                               SpiceDouble,
                                SpiceDouble * );
 
    /*
    Participate in error tracing.
    */
 
-   if ( return_c() )
+   if ( return_c(naif_state) )
       {
       return ( 0 );
       }
@@ -154,16 +156,16 @@
    list matches that of "udfunc."
    */
 
-   fPtr = (  void (*) (SpiceDouble, SpiceDouble*)  ) zzadget_c ( naif_state,  ( UDFUNC );
+   fPtr = (  void (*) (void*, SpiceDouble, SpiceDouble*)  ) zzadget_c ( naif_state, UDFUNC );
 
    /*
    Call the stored function. 
    */
    
-   (*fPtr) ( (SpiceDouble)(*et), (SpiceDouble *)value );
+   (*fPtr) ( naif_state, (SpiceDouble)(*et), (SpiceDouble *)value );
 
 
-   chkout_c ( "zzadfunc_c" );
+   chkout_c ( naif_state, "zzadfunc_c" );
 
    return ( 0 );
 

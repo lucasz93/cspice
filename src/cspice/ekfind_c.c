@@ -48,7 +48,8 @@
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
 
-   void ekfind_c ( ConstSpiceChar    * query,
+   void ekfind_c ( void              * naif_state,
+                   ConstSpiceChar    * query,
                    SpiceInt            lenout, 
                    SpiceInt          * nmrows,
                    SpiceBoolean      * error,
@@ -625,19 +626,20 @@
    Check the query string to make sure the pointer is non-null 
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "ekfind_c", query );
+   CHKFSTR ( naif_state, CHK_STANDARD, "ekfind_c", query );
 
    /*
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "ekfind_c", errmsg, lenout );
+   CHKOSTR ( naif_state, CHK_STANDARD, "ekfind_c", errmsg, lenout );
 
    /*
    Call the f2c'd Fortran routine.  Use explicit type casts for every
    type defined by f2c.
    */
-   ekfind_ (  ( char     * )  query,
+   ekfind_ (  naif_state,
+              ( char     * )  query,
               ( integer  * )  nmrows, 
               ( logical  * )  &fError,
               ( char     * )  errmsg,
@@ -669,6 +671,6 @@
    *error = fError;
    
 
-   chkout_c ( "ekfind_c" );
+   chkout_c ( naif_state, "ekfind_c" );
 
 } /* End ekfind_c */

@@ -50,7 +50,8 @@
    #undef   saelgv_c
    
 
-   void saelgv_c ( ConstSpiceDouble   vec1  [3],
+   void saelgv_c ( void             * naif_state,
+                   ConstSpiceDouble   vec1  [3],
                    ConstSpiceDouble   vec2  [3],
                    SpiceDouble        smajor[3],
                    SpiceDouble        sminor[3]  ) 
@@ -420,14 +421,14 @@
    We avoid using the quotient 1/SCALE, as this value may overflow.
    No need to go further if SCALE turns out to be zero.
    */
-   scale = MaxAbs (  vnorm_c ( tmpvc1 ),   vnorm_c ( tmpvc2 )  );
+   scale = MaxAbs (  vnorm_c ( naif_state, tmpvc1 ),   vnorm_c ( naif_state, tmpvc2 )  );
 
    if ( scale == 0.0 ) 
    {
       CLEAR_VEC ( smajor );
       CLEAR_VEC ( sminor );
 
-      chkout_c ( "saelgv_c" );
+      chkout_c ( naif_state, "saelgv_c" );
       return;
    }
  
@@ -441,13 +442,13 @@
    /*
    Compute S and diagonalize it:
    */
-   s[0][0]  =  vdot_c ( tmpvc1, tmpvc1 );
-   s[1][0]  =  vdot_c ( tmpvc1, tmpvc2 );
+   s[0][0]  =  vdot_c ( naif_state, tmpvc1, tmpvc1 );
+   s[1][0]  =  vdot_c ( naif_state, tmpvc1, tmpvc2 );
    s[0][1]  =  s[1][0];
-   s[1][1]  =  vdot_c ( tmpvc2, tmpvc2 );
+   s[1][1]  =  vdot_c ( naif_state, tmpvc2, tmpvc2 );
 
 
-   diags2_c ( s, eigval, c );
+   diags2_c ( naif_state, s, eigval, c );
     
  
    /*
@@ -473,17 +474,17 @@
    } 
  
  
-   vlcom_c ( c[0][major], tmpvc1, c[1][major], tmpvc2, smajor );
-   vlcom_c ( c[0][minor], tmpvc1, c[1][minor], tmpvc2, sminor );
+   vlcom_c ( naif_state, c[0][major], tmpvc1, c[1][major], tmpvc2, smajor );
+   vlcom_c ( naif_state, c[0][minor], tmpvc1, c[1][minor], tmpvc2, sminor );
 
 
    /*
    Undo the initial scaling.
    */
-   vscl_c ( scale, smajor, smajor );
-   vscl_c ( scale, sminor, sminor );
+   vscl_c ( naif_state, scale, smajor, smajor );
+   vscl_c ( naif_state, scale, sminor, sminor );
  
 
-   chkout_c ( "saelgv_c" );
+   chkout_c ( naif_state, "saelgv_c" );
 
 } /* End saelgv_c */

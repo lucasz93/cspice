@@ -44,7 +44,8 @@
    #include "SpiceUsr.h"
 
 
-   void latsph_c ( SpiceDouble    radius,
+   void latsph_c ( void        *  naif_state,
+                   SpiceDouble    radius,
                    SpiceDouble    lon,
                    SpiceDouble    lat,
                    SpiceDouble *  rho,
@@ -172,7 +173,7 @@
    temporary variables
    */
 
-   th = halfpi_c() - lat;
+   th = halfpi_c(naif_state) - lat;
    ph = lon;
 
 

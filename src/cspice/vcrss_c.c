@@ -46,7 +46,8 @@
    #undef    vcrss_c
    
 
-   void vcrss_c ( ConstSpiceDouble   v1[3],
+   void vcrss_c ( void             * naif_state,
+                  ConstSpiceDouble   v1[3],
                   ConstSpiceDouble   v2[3],
                   SpiceDouble        vout[3] )
 /*

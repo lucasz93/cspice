@@ -47,7 +47,8 @@
    #include "SpiceZmc.h"
 
 
-   void wnextd_c ( SpiceChar     side,
+   void wnextd_c ( void        * naif_state,
+                   SpiceChar     side,
                    SpiceCell   * window ) 
 
 /*
@@ -155,7 +156,7 @@
    /*
    Participate in error tracing.
    */
-   if ( failed_c() )
+   if ( failed_c(naif_state) )
    {
       return;
    }
@@ -165,16 +166,17 @@
    /*
    Make sure data type is d.p. 
    */
-   CELLTYPECHK ( CHK_STANDARD, "wnextd_c", SPICE_DP, window );
+   CELLTYPECHK ( naif_state, CHK_STANDARD, "wnextd_c", SPICE_DP, window );
 
 
    /*
    Initialize the cell if necessary. 
    */
-   CELLINIT ( window );
+   CELLINIT ( naif_state, window );
 
 
-   wnextd_ ( ( char       * ) &side,  
+   wnextd_ ( naif_state,
+             ( char       * ) &side,  
              ( doublereal * ) window->base,
              ( ftnlen       ) 1             );
 
@@ -184,6 +186,6 @@
    are unchanged. 
    */
 
-   chkout_c ( "wnextd_c" );
+   chkout_c ( naif_state, "wnextd_c" );
 
 } /* End wnextd_c */

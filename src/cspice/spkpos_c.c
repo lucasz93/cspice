@@ -51,7 +51,8 @@
    #include "SpiceZmc.h"
    
 
-   void spkpos_c ( ConstSpiceChar   * targ,
+   void spkpos_c ( void             * naif_state,
+                   ConstSpiceChar   * targ,
                    SpiceDouble        et,
                    ConstSpiceChar   * ref,
                    ConstSpiceChar   * abcorr,
@@ -805,17 +806,18 @@
    Check the input strings to make sure the pointers are non-null 
    and the string lengths are non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "spkpos_c", targ   );
-   CHKFSTR ( CHK_STANDARD, "spkpos_c", ref    );
-   CHKFSTR ( CHK_STANDARD, "spkpos_c", abcorr );
-   CHKFSTR ( CHK_STANDARD, "spkpos_c", obs    );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkpos_c", targ   );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkpos_c", ref    );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkpos_c", abcorr );
+   CHKFSTR ( naif_state, CHK_STANDARD, "spkpos_c", obs    );
 
 
    /*
    Call the f2c'd Fortran routine.  Use explicit type casts for every
    type defined by f2c.
    */
-   spkpos_ ( ( char       * )  targ, 
+   spkpos_ ( naif_state,
+             ( char       * )  targ, 
              ( doublereal * )  &et, 
              ( char       * )  ref, 
              ( char       * )  abcorr, 
@@ -828,6 +830,6 @@
              ( ftnlen       )  strlen(obs)    );
 
 
-   chkout_c ( "spkpos_c" );
+   chkout_c ( naif_state, "spkpos_c" );
 
 } /* End spkpos_c */

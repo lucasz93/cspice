@@ -51,7 +51,8 @@
    #undef dskrb2_c
 
 
-   void dskrb2_c ( SpiceInt           nv,
+   void dskrb2_c ( void             * naif_state,
+                   SpiceInt           nv,
                    ConstSpiceDouble   vrtces[][3],
                    SpiceInt           np,
                    ConstSpiceInt      plates[][3],
@@ -510,7 +511,8 @@
    chkin_c ( naif_state, "dskrb2_c" );
 
    
-   dskrb2_ ( (SpiceInt      *) &nv,
+   dskrb2_ ( naif_state,
+             (SpiceInt      *) &nv,
              (SpiceDouble   *) vrtces,
              (SpiceInt      *) &np,
              (SpiceInt      *) plates,
@@ -520,6 +522,6 @@
              (SpiceDouble   *) mxcor3  );
            
    
-   chkout_c ( "dskrb2_c" );
+   chkout_c ( naif_state, "dskrb2_c" );
 
 } /* End dskrb2_c */
