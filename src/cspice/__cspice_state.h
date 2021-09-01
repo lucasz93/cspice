@@ -4257,6 +4257,23 @@ char srcsuf[13*2*8];
 typedef struct {
 /* Table of constant values */
 
+integer c__0;
+logical c_false;
+doublereal c_b16;
+} gffove_init_t;
+
+typedef struct {
+/* Table of constant values */
+
+integer c__0;
+logical c_false;
+doublereal c_b16;
+} gffove_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
+/* Table of constant values */
+
 integer c__5;
 integer c__3;
 integer c_n1;
@@ -11391,6 +11408,56 @@ integer prvbod;
 
 /* -------------------------------------------------------------------------- */
 typedef struct {
+integer nft;
+integer nbt;
+integer next;
+logical pass1;
+integer savep;
+char status[40];
+/* Table of constant values */
+
+integer c__10000;
+integer c__5000;
+integer c__8;
+integer c__24;
+} zzdskbsr_init_t;
+
+typedef struct {
+integer nft;
+integer nbt;
+integer next;
+logical pass1;
+integer savep;
+char status[40];
+/* Table of constant values */
+
+integer c__10000;
+integer c__5000;
+integer c__8;
+integer c__24;
+integer btbeg[100];
+integer btbod[100];
+integer fthan[5000];
+integer bthfs[100];
+integer btlfs[100];
+integer sthan[10000];
+integer btexp[100];
+integer ftnum[5000];
+logical begsch;
+integer bindex;
+integer findex;
+integer dskctr[2];
+doublereal stdskd[240000]	/* was [24][10000] */;
+integer stdlad[80000]	/* was [8][10000] */;
+integer stpool[20012]	/* was [2][10006] */;
+integer svbody;
+logical fnd;
+integer top;
+
+} zzdskbsr_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
 /* Table of constant values */
 
 integer c__2;
@@ -14316,6 +14383,35 @@ doublereal c_b39;
 
 /* -------------------------------------------------------------------------- */
 typedef struct {
+char cnames[6*7];
+char rptpre[55*3];
+char rptsuf[13*3];
+/* Table of constant values */
+
+integer c__15;
+integer c__7;
+integer c__0;
+integer c__1;
+logical c_false;
+doublereal c_b36;
+} zzgfcslv_init_t;
+
+typedef struct {
+char cnames[6*7];
+char rptpre[55*3];
+char rptsuf[13*3];
+/* Table of constant values */
+
+integer c__15;
+integer c__7;
+integer c__0;
+integer c__1;
+logical c_false;
+doublereal c_b36;
+} zzgfcslv_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
 /* Table of constant values */
 
 integer c__0;
@@ -14422,6 +14518,33 @@ doublereal svsspt[3];
 
 /* -------------------------------------------------------------------------- */
 typedef struct {
+char ops[6*7];
+doublereal y[3];
+/* Table of constant values */
+
+integer c__15;
+integer c__7;
+integer c__0;
+integer c__1;
+doublereal c_b69;
+doublereal c_b70;
+} zzgflong_init_t;
+
+typedef struct {
+char ops[6*7];
+doublereal y[3];
+/* Table of constant values */
+
+integer c__15;
+integer c__7;
+integer c__0;
+integer c__1;
+doublereal c_b69;
+doublereal c_b70;
+} zzgflong_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
 integer ncalls;
 doublereal svorig[3];
 char svtyps[7*4];
@@ -14502,6 +14625,52 @@ integer c__2;
 
 /* -------------------------------------------------------------------------- */
 typedef struct {
+char cnames[80*7];
+logical cstep;
+/* Table of constant values */
+
+integer c__5;
+integer c__7;
+integer c__0;
+logical c_true;
+} zzgfrel_init_t;
+
+typedef struct {
+char cnames[80*7];
+logical cstep;
+/* Table of constant values */
+
+integer c__5;
+integer c__7;
+integer c__0;
+logical c_true;
+} zzgfrel_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
+char cnames[80*7];
+logical cstep;
+/* Table of constant values */
+
+integer c__5;
+integer c__7;
+integer c__0;
+logical c_true;
+} zzgfrelx_init_t;
+
+typedef struct {
+char cnames[80*7];
+logical cstep;
+/* Table of constant values */
+
+integer c__5;
+integer c__7;
+integer c__0;
+logical c_true;
+} zzgfrelx_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
 integer calls;
 integer stdout;
 doublereal step;
@@ -14577,6 +14746,19 @@ typedef struct {
 
 integer c__1000;
 } zzgfsolv_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
+/* Table of constant values */
+
+integer c__1000;
+} zzgfsolvx_init_t;
+
+typedef struct {
+/* Table of constant values */
+
+integer c__1000;
+} zzgfsolvx_state_t;
 
 /* -------------------------------------------------------------------------- */
 typedef struct {
@@ -14687,6 +14869,36 @@ typedef struct {
 
 integer c__3;
 } zzgftreb_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
+/* Table of constant values */
+
+logical c_false;
+doublereal c_b10;
+} zzgfudb_init_t;
+
+typedef struct {
+/* Table of constant values */
+
+logical c_false;
+doublereal c_b10;
+} zzgfudb_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
+/* Table of constant values */
+
+integer c_n1;
+integer c__2;
+} zzgfudlt_init_t;
+
+typedef struct {
+/* Table of constant values */
+
+integer c_n1;
+integer c__2;
+} zzgfudlt_state_t;
 
 /* -------------------------------------------------------------------------- */
 typedef struct {
@@ -16090,6 +16302,28 @@ doublereal dlt;
 typedef struct {
 logical pass1;
 char prvcor[5];
+/* Table of constant values */
+
+integer c__6;
+integer c__3;
+doublereal c_b15;
+} zzspkfao_init_t;
+
+typedef struct {
+logical pass1;
+char prvcor[5];
+/* Table of constant values */
+
+integer c__6;
+integer c__3;
+doublereal c_b15;
+logical usestl;
+} zzspkfao_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
+logical pass1;
+char prvcor[5];
 } zzspkfap_init_t;
 
 typedef struct {
@@ -16122,6 +16356,86 @@ integer c__3;
 doublereal c_b15;
 logical usestl;
 } zzspkfat_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
+logical pass1;
+char prvcor[5];
+/* Table of constant values */
+
+integer c__6;
+doublereal c_b19;
+} zzspkflt_init_t;
+
+typedef struct {
+logical pass1;
+char prvcor[5];
+/* Table of constant values */
+
+integer c__6;
+doublereal c_b19;
+logical xmit;
+logical usecn;
+logical uselt;
+} zzspkflt_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
+logical pass1;
+char prvcor[5];
+/* Table of constant values */
+
+integer c__6;
+} zzspkfzo_init_t;
+
+typedef struct {
+logical pass1;
+char prvcor[5];
+/* Table of constant values */
+
+integer c__6;
+integer fj2000;
+logical xmit;
+logical usegeo;
+} zzspkfzo_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
+logical first;
+char prvcor[5];
+/* Table of constant values */
+
+integer c__6;
+} zzspkfzt_init_t;
+
+typedef struct {
+logical first;
+char prvcor[5];
+/* Table of constant values */
+
+integer c__6;
+integer fj2000;
+integer type__;
+logical xmit;
+logical found;
+doublereal state[6];
+doublereal stemp[6];
+doublereal stobs[6];
+doublereal xform[36]	/* was [6][6] */;
+integer center;
+logical attblk[15];
+logical usegeo;
+doublereal ltcent;
+doublereal dltctr;
+doublereal corxfm[36]	/* was [6][6] */;
+integer reqfrm;
+integer ltsign;
+integer typeid;
+integer trgctr;
+doublereal sttctr[6];
+doublereal dlt;
+
+} zzspkfzt_state_t;
 
 /* -------------------------------------------------------------------------- */
 typedef struct {
@@ -16460,6 +16774,19 @@ typedef struct {
 integer c__0;
 doublereal c_b9;
 } zztangnt_state_t;
+
+/* -------------------------------------------------------------------------- */
+typedef struct {
+/* Table of constant values */
+
+integer c__1000;
+} zztanslv_init_t;
+
+typedef struct {
+/* Table of constant values */
+
+integer c__1000;
+} zztanslv_state_t;
 
 /* -------------------------------------------------------------------------- */
 typedef struct {
@@ -16950,6 +17277,7 @@ typedef struct {
 	getmsg_state_t* getmsg;
 	gfdist_state_t* gfdist;
 	gfevnt_state_t* gfevnt;
+	gffove_state_t* gffove;
 	gfilum_state_t* gfilum;
 	gfocce_state_t* gfocce;
 	gfoclt_state_t* gfoclt;
@@ -17282,6 +17610,7 @@ typedef struct {
 	zzddhppf_state_t* zzddhppf;
 	zzdiv_state_t* zzdiv;
 	zzdskbbl_state_t* zzdskbbl;
+	zzdskbsr_state_t* zzdskbsr;
 	zzdskbun_state_t* zzdskbun;
 	zzdskbux_state_t* zzdskbux;
 	zzdsksba_state_t* zzdsksba;
@@ -17422,20 +17751,27 @@ typedef struct {
 	zzgfcoq_state_t* zzgfcoq;
 	zzgfcou_state_t* zzgfcou;
 	zzgfcprx_state_t* zzgfcprx;
+	zzgfcslv_state_t* zzgfcslv;
 	zzgfdiu_state_t* zzgfdiu;
 	zzgffvu_state_t* zzgffvu;
 	zzgfilu_state_t* zzgfilu;
+	zzgflong_state_t* zzgflong;
 	zzgfocu_state_t* zzgfocu;
 	zzgfpau_state_t* zzgfpau;
 	zzgfref_state_t* zzgfref;
+	zzgfrel_state_t* zzgfrel;
+	zzgfrelx_state_t* zzgfrelx;
 	zzgfrpwk_state_t* zzgfrpwk;
 	zzgfrru_state_t* zzgfrru;
 	zzgfsolv_state_t* zzgfsolv;
+	zzgfsolvx_state_t* zzgfsolvx;
 	zzgfspq_state_t* zzgfspq;
 	zzgfspu_state_t* zzgfspu;
 	zzgfssin_state_t* zzgfssin;
 	zzgfssob_state_t* zzgfssob;
 	zzgftreb_state_t* zzgftreb;
+	zzgfudb_state_t* zzgfudb;
+	zzgfudlt_state_t* zzgfudlt;
 	zzgfwsts_state_t* zzgfwsts;
 	zzholdd_state_t* zzholdd;
 	zzhsi_state_t* zzhsi;
@@ -17487,8 +17823,12 @@ typedef struct {
 	zzspkas1_state_t* zzspkas1;
 	zzspkez0_state_t* zzspkez0;
 	zzspkez1_state_t* zzspkez1;
+	zzspkfao_state_t* zzspkfao;
 	zzspkfap_state_t* zzspkfap;
 	zzspkfat_state_t* zzspkfat;
+	zzspkflt_state_t* zzspkflt;
+	zzspkfzo_state_t* zzspkfzo;
+	zzspkfzt_state_t* zzspkfzt;
 	zzspkgo0_state_t* zzspkgo0;
 	zzspkgo1_state_t* zzspkgo1;
 	zzspkgp0_state_t* zzspkgp0;
@@ -17504,6 +17844,7 @@ typedef struct {
 	zzsrftrn_state_t* zzsrftrn;
 	zzstelab_state_t* zzstelab;
 	zztangnt_state_t* zztangnt;
+	zztanslv_state_t* zztanslv;
 	zztanutl_state_t* zztanutl;
 	zzteme_state_t* zzteme;
 	zztime_state_t* zztime;

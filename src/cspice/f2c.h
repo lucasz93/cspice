@@ -536,7 +536,7 @@ typedef real (*R_fp)(void *state);
 typedef doublereal (*D_fp)(void *state), (*E_fp)(void *state);
 typedef /* Complex */ VOID (*C_fp)(void *state);
 typedef /* Double Complex */ VOID (*Z_fp)(void *state);
-typedef logical (*L_fp)(void *state);
+typedef logical (*L_fp)(void *state, ...);
 typedef shortlogical (*K_fp)(void *state);
 typedef /* Character */ VOID (*H_fp)(void *state);
 typedef /* Subroutine */ int (*S_fp)(void *state, ...);
